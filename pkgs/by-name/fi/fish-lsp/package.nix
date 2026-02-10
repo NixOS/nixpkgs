@@ -12,21 +12,22 @@
   which,
   yarnBuildHook,
   yarnConfigHook,
+  testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish-lsp";
-  version = "1.0.10";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "ndonfris";
     repo = "fish-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OZiqEef4jE1H47mweVCzhaRCSsFdpgUdCSuhWRz2n2M=";
+    hash = "sha256-G0RaDXn3UNkdrlnjNH75ftvcLgAuiY09aXY3MXjaLEE=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-N9P2mmqAfbg/Kpqx+vZbb+fhaD1I/3UjiJaEqFPJyO0=";
+    hash = "sha256-uLrdja3G/OwHZXkQbKXsPmGRIs08b3sCPtxtP1a52fg=";
   };
 
   nativeBuildInputs = [
@@ -39,16 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     fish
   ];
 
-  yarnBuildScript = "setup";
-
-  postBuild = ''
-    yarn --offline compile
-  '';
-
-  # We do it in postPatch, since it needs to be fixed before buildPhase
-  postPatch = ''
-    patchShebangs bin/fish-lsp
-  '';
+  yarnBuildScript = "build:npm";
 
   installPhase = ''
     runHook preInstall
@@ -61,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r . $out/share/fish-lsp
 
     makeWrapper ${lib.getExe nodejs} "$out/bin/fish-lsp" \
-      --add-flags "$out/share/fish-lsp/out/cli.js" \
+      --add-flags "$out/share/fish-lsp/dist/fish-lsp" \
       --prefix PATH : "${
         lib.makeBinPath [
           fish
@@ -79,15 +71,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   doDist = false;
 
-  # fish-lsp adds tags for all its pre-release versions, which leads to
-  # incorrect r-ryantm bumps. This regex allows a dash at the end followed by a
-  # number (like `v1.0.9-1`). but it prevents matches with a dash followed by
-  # text (like `v1.0.11-pre.10`). or, of course, no dash at all
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "v(\\d+\\.\\d+\\.\\d+(?:-\\d+)?)$"
-    ];
+  passthru = {
+    # fish-lsp adds tags for all its pre-release versions, which leads to
+    # incorrect r-ryantm bumps. This regex allows a dash at the end followed by a
+    # number (like `v1.0.9-1`). but it prevents matches with a dash followed by
+    # text (like `v1.0.11-pre.10`). or, of course, no dash at all
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(\\d+\\.\\d+\\.\\d+(?:-\\d+)?)$"
+      ];
+    };
+
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        version = finalAttrs.version;
+      };
+    };
   };
 
   meta = {

@@ -145,14 +145,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  # The build system uses custom logic - defined in
-  # cmake/modules/FindNLopt.cmake in the package source - for finding the nlopt
-  # library, which doesn't pick up the package in the nix store.  We
-  # additionally need to set the path via the NLOPT environment variable.
-  NLOPT = nlopt;
-
-  # prusa-slicer uses dlopen on `libudev.so` at runtime
-  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
+  env = {
+    # The build system uses custom logic - defined in
+    # cmake/modules/FindNLopt.cmake in the package source - for finding the nlopt
+    # library, which doesn't pick up the package in the nix store.  We
+    # additionally need to set the path via the NLOPT environment variable.
+    NLOPT = nlopt;
+  }
+  // lib.optionalAttrs withSystemd {
+    # prusa-slicer uses dlopen on `libudev.so` at runtime
+    NIX_LDFLAGS = "-ludev";
+  };
 
   prePatch = ''
     # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx

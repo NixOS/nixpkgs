@@ -6,7 +6,7 @@
   makePkgconfigItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "symfpu";
   version = "0-unstable-2019-05-17";
 
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   pkgconfigItems = [
     (makePkgconfigItem {
       name = "symfpu";
-      inherit version;
+      inherit (finalAttrs) version;
       cflags = [ "-I\${includedir}" ];
       variables = {
         includedir = "@includedir@";
       };
-      inherit (meta) description;
+      inherit (finalAttrs.meta) description;
     })
   ];
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ shadaj ];
   };
-}
+})

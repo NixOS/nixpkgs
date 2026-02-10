@@ -11,8 +11,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-appcontainers";
   version = "3.2.0";
-  format = "setuptools";
-  pyroject = true;
+  pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_appcontainers";

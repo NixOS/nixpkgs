@@ -6,8 +6,12 @@
   # nativeBuildInputs
   rustPlatform,
 
-  # tests
+  # dependencies
   anyio,
+  pythonOlder,
+  exceptiongroup,
+
+  # tests
   objsize,
   pydantic,
   pytestCheckHook,
@@ -16,16 +20,16 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycrdt";
-  version = "0.12.44";
+  version = "0.12.46";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "pycrdt";
-    tag = version;
-    hash = "sha256-7kfLi0am/rE4QwLdLCGDjfMhAjrKBPNH+3yPRoYxTtA=";
+    tag = finalAttrs.version;
+    hash = "sha256-rL6heeHg5uhLFt3qY+NKIEA4FLIR/MtwEqleq29DPA8=";
   };
 
   postPatch = ''
@@ -39,7 +43,7 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  dependencies = [ anyio ];
+  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
   pythonImportsCheck = [ "pycrdt" ];
 
@@ -60,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "CRDTs based on Yrs";
     homepage = "https://github.com/jupyter-server/pycrdt";
-    changelog = "https://github.com/jupyter-server/pycrdt/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/pycrdt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

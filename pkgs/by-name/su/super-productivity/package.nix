@@ -1,7 +1,7 @@
 {
   buildNpmPackage,
   copyDesktopItems,
-  electron_37,
+  electron_39,
   fetchFromGitHub,
   lib,
   makeDesktopItem,
@@ -13,12 +13,12 @@
   nodejs_22,
 }:
 let
-  electron = electron_37;
+  electron = electron_39;
   nodejs = nodejs_22;
 in
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "17.0.2";
+  version = "17.1.5";
 
   inherit nodejs;
 
@@ -26,7 +26,7 @@ buildNpmPackage rec {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-3NbWdKWLSqPyZfZmLzrkqwA/yEI4quhfnvtIhgbRPFA=";
+    hash = "sha256-ECUn+0RFNYc5QgJYXMYQ0fWZ39WVErCNCIIkrual1P4=";
 
     postFetch = ''
       find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
@@ -69,7 +69,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-mWx0pNxTthqSeSwNM8BrsAf/hzbsclEqMFxGicKosZw=";
+      hash = "sha256-tDQd3HVktivwyPaLF88fLLDwU6H7yX03DWrpFVkdDXk=";
     }
   );
 

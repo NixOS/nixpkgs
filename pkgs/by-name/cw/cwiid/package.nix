@@ -45,8 +45,10 @@ stdenv.mkDerivation {
     flex
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  NIX_LDFLAGS = "-lbluetooth";
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    NIX_LDFLAGS = "-lbluetooth";
+  };
 
   postInstall = ''
     # Some programs (for example, cabal-install) have problems with the double 0

@@ -1,10 +1,10 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   giflib,
   imlib2Full,
-  libXft,
+  libxft,
   libexif,
   libwebp,
   libinotify-kqueue,
@@ -15,8 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "nsxiv";
   version = "33";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "nsxiv";
     repo = "nsxiv";
     rev = "v${finalAttrs.version}";
@@ -32,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     giflib
     imlib2Full
-    libXft
+    libxft
     libexif
     libwebp
   ]

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     sed -i 's#URL \+${openloco-objects.url}#URL ${openloco-objects}#' CMakeLists.txt
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=null-dereference";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=null-dereference";
 
   cmakeFlags = [
     "-DOPENLOCO_BUILD_TESTS=NO"

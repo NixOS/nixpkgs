@@ -17,8 +17,8 @@ in
 
 {
   name = "systemd-coredump";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ squalus ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes.machine1 = { pkgs, lib, ... }: commonConfig;

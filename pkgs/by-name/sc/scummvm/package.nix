@@ -16,7 +16,7 @@
   libvorbis,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   SDL2,
   zlib,
   cctools,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       libtheora
       libvorbis
       SDL2
-      libX11
+      libx11
       zlib
     ];
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail ${stdenv.hostPlatform.config}-ranlib ${cctools}/bin/ranlib
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
   passthru = {
     updateScript = nix-update-script { };

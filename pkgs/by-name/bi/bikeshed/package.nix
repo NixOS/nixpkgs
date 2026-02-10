@@ -4,13 +4,13 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bikeshed";
   version = "7.0.7";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-s+NHSOHqJl89/sB5b3SWS+dT7WpsSv9tedoOfuDA2ls=";
   };
 
@@ -78,4 +78,4 @@ python3Packages.buildPythonApplication rec {
       hemera
     ];
   };
-}
+})

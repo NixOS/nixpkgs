@@ -8,7 +8,7 @@
   pkg-config,
   freetype,
   SDL,
-  libX11,
+  libx11,
 }:
 let
   stdenv = gccStdenv;
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ];
 
   postPatch = ''
@@ -51,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-examples=no"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "--x-includes=${lib.getDev libX11}/include"
-    "--x-libraries=${lib.getLib libX11}/lib"
+    "--x-includes=${lib.getDev libx11}/include"
+    "--x-libraries=${lib.getLib libx11}/lib"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
   # libtool --tag=CXX --mode=link g++ -g -O2 libexamples.la ../src/platform/X11/libaggplatformX11.la ../src/libagg.la -o alpha_mask2 alpha_mask2.o
   # libtool: error: cannot find the library 'libexamples.la'
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     license = lib.licenses.gpl2Plus;
-    homepage = "http://www.antigrain.com/";
+    homepage = "https://agg.sourceforge.net/antigrain.com/index.html";
     platforms = lib.platforms.unix;
     hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };

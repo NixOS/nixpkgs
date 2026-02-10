@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "enumer";
   version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "dmarkham";
     repo = "enumer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VowZcDNksa4ncydzdWyCDMcyEIujUmfVlf4SDEGPpVg=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "enumer";
   };
-}
+})

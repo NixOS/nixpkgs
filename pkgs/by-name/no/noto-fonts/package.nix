@@ -17,24 +17,24 @@
     weights, and freely available to all.
   '',
 }:
-
-stdenvNoCC.mkDerivation rec {
+let
+  _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noto-fonts${suffix}";
-  version = "2026.01.01";
+  version = "2026.02.01";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notofonts.github.io";
-    rev = "noto-monthly-release-${version}";
-    hash = "sha256-CePEUiNyXm0UXo0wJ5CGMkJBNIhdTrEeuIu/8E7uPOc=";
+    tag = "noto-monthly-release-${finalAttrs.version}";
+    hash = "sha256-vhu3jojG6QlgY5gP4bCbpJznsQ1gExAfcRT42FcZUp4=";
   };
 
   outputs = [
     "out"
     "megamerge" # Experimental fonts created by merging regular notofonts
   ];
-
-  _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
 
   installPhase = ''
     # We check availability in order of variable -> otf -> ttf
@@ -61,7 +61,7 @@ stdenvNoCC.mkDerivation rec {
       ''
     else
       ''
-        for variant in $_variants; do
+        for variant in ${lib.concatStringsSep " " _variants}; do
           if [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
             install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable-ttf/*.ttf
           elif [[ -d fonts/"$variant"/unhinted/otf ]]; then
@@ -91,4 +91,4 @@ stdenvNoCC.mkDerivation rec {
       jopejoe1
     ];
   };
-}
+})

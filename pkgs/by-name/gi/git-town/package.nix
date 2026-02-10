@@ -11,14 +11,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-town";
   version = "22.2.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JY0zWWMln4r2ga1jwxK+RTp8izATyovRHBf4A29pXW4=";
   };
 
@@ -33,12 +33,12 @@ buildGoModule rec {
 
   ldflags =
     let
-      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}";
+      modulePath = "github.com/git-town/git-town/v${lib.versions.major finalAttrs.version}";
     in
     [
       "-s"
       "-w"
-      "-X ${modulePath}/src/cmd.version=v${version}"
+      "-X ${modulePath}/src/cmd.version=v${finalAttrs.version}"
       "-X ${modulePath}/src/cmd.buildDate=nix"
     ];
 
@@ -79,7 +79,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = git-town;
     command = "git-town --version";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
   meta = {
@@ -92,4 +92,4 @@ buildGoModule rec {
     ];
     mainProgram = "git-town";
   };
-}
+})

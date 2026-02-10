@@ -8,14 +8,14 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "earthlyls";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "glehmann";
     repo = "earthlyls";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GnFzfCjT4kjb9WViKIFDkIU7zVpiI6HDuUeddgHGQuc=";
   };
 
@@ -29,10 +29,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Earthly language server";
     homepage = "https://github.com/glehmann/earthlyls";
-    changelog = "https://github.com/glehmann/earthlyls/releases/tag/${version}";
+    changelog = "https://github.com/glehmann/earthlyls/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "earthlyls";
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

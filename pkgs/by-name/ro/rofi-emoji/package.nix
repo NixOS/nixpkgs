@@ -23,14 +23,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-emoji";
   version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = "rofi-emoji";
-    rev = "v${final.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Amaz+83mSPue+pjZq/pJiCxu5QczYvmJk6f96eraaK8=";
   };
 

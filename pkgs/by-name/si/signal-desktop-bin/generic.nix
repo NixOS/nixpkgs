@@ -22,19 +22,19 @@
   freetype,
   fontconfig,
   dbus,
-  libX11,
+  libx11,
   libxshmfence,
   libxcb,
-  libXi,
-  libXcursor,
-  libXdamage,
-  libXrandr,
-  libXcomposite,
-  libXext,
-  libXfixes,
-  libXrender,
-  libXtst,
-  libXScrnSaver,
+  libxi,
+  libxcursor,
+  libxdamage,
+  libxrandr,
+  libxcomposite,
+  libxext,
+  libxfixes,
+  libxrender,
+  libxtst,
+  libxscrnsaver,
   nss,
   nspr,
   alsa-lib,
@@ -168,17 +168,17 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     glib
     gtk3
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     libappindicator-gtk3
     libpulseaudio
     libnotify

@@ -10,14 +10,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "maddy";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+tj2h1rAdr0SPgLGGzVf5sdFmhcwY76fkMm2P/gYFuo=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/foxcpp/maddy.Version=${version}"
+    "-X github.com/foxcpp/maddy.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/maddy" ];
@@ -70,4 +70,4 @@ buildGoModule rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

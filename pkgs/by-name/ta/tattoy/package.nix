@@ -11,14 +11,14 @@
   watch,
 }:
 
-rustPlatform.buildRustPackage (attrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tattoy";
   version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "tattoy-org";
     repo = "tattoy";
-    tag = "tattoy-v${attrs.version}";
+    tag = "tattoy-v${finalAttrs.version}";
     hash = "sha256-44rXygZVbwwC/jOB69iHydsjYr/WeVU4Eky3BPqJzyc=";
   };
 

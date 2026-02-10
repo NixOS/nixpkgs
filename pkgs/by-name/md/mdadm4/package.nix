@@ -43,12 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
     "INSTALL=install"
     "BINDIR=$(out)/sbin"
     "SYSTEMD_DIR=$(out)/lib/systemd/system"
-    "MANDIR=$(out)/share/man"
+    "MANDIR=$(man)/share/man"
     "RUN_DIR=/dev/.mdadm"
     "STRIP="
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
+
+  outputs = [
+    "out"
+    "man"
   ];
 
   installFlags = [ "install-systemd" ];

@@ -35,7 +35,7 @@
   harfbuzz,
   libepoxy,
   pango,
-  libX11,
+  libx11,
   xorgproto,
   libdeflate,
   zlib,
@@ -93,7 +93,7 @@ let
     harfbuzz
     libepoxy
     pango
-    libX11
+    libx11
     libdeflate
   ];
 
@@ -120,7 +120,7 @@ let
   # They must be manually included.
   appStaticBuildDeps =
     (lib.optionals supportsLinuxDesktopTarget [
-      libX11
+      libx11
       xorgproto
       zlib
     ])

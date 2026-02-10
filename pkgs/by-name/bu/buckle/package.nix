@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "buckle";
   version = "1.1.0";
 
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "benbrittain";
     repo = "buckle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eWhcDzw+6I5N0dse5avwhcQ/y6YZ6b3QKyBwWBrA/xo=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ cbarrete ];
     mainProgram = "buckle";
   };
-}
+})

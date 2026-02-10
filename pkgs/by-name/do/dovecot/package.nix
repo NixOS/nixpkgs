@@ -44,7 +44,7 @@
   lua5_3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dovecot";
   version = "2.3.21.1";
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withLua lua5_3;
 
   src = fetchurl {
-    url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
+    url = "https://dovecot.org/releases/${lib.versions.majorMinor finalAttrs.version}/dovecot-${finalAttrs.version}.tar.gz";
     hash = "sha256-LZCheMQpdhEIi/farlSSo7w9WrYyjDoDLrQl0sJJCX4=";
   };
 
@@ -202,4 +202,4 @@ stdenv.mkDerivation rec {
     opensmtpd-interaction = nixosTests.opensmtpd;
     inherit (nixosTests) dovecot;
   };
-}
+})

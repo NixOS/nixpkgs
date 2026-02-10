@@ -19,7 +19,7 @@
   seatd,
   wayland,
   wayland-protocols,
-  xcbutilcursor,
+  libxcb-cursor,
 
   demoSupport ? true,
   jpegSupport ? true,
@@ -43,7 +43,7 @@
   webpSupport ? true,
   libwebp,
   xwaylandSupport ? true,
-  libXcursor,
+  libxcursor,
   xwayland,
 }:
 
@@ -103,8 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional webpSupport libwebp
   ++ lib.optionals xwaylandSupport [
-    libXcursor
-    xcbutilcursor
+    libxcursor
+    libxcb-cursor
     xwayland
   ];
 

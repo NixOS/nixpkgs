@@ -4,8 +4,8 @@
   fetchurl,
   autoconf,
   pkg-config,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libGLU,
   libGL,
   imagemagick6,
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGLU
     libGL
-    libX11
-    libXext
+    libx11
+    libxext
     imagemagick6
     libtiff
     bzip2

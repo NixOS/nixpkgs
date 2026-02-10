@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tsgolint";
-  version = "0.11.2";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "tsgolint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gby8JW3bwVOIuNgLCIIt0y3egdljrR5cgbqAGqqqzpI=";
+    hash = "sha256-/1od2yijBSTi5PFhEQ95KTjQJYYgXRX4v6M/lIfQXtM=";
     fetchSubmodules = true;
   };
 

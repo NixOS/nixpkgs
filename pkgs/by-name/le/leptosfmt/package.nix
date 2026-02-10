@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leptosfmt";
   version = "0.1.33";
 
   src = fetchFromGitHub {
     owner = "bram209";
     repo = "leptosfmt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+trLQFU8oP45xHQ3DsEESQzQX2WpvQcfpgGC9o5ITcY=";
     fetchSubmodules = true;
   };
@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
     description = "Formatter for the leptos view! macro";
     mainProgram = "leptosfmt";
     homepage = "https://github.com/bram209/leptosfmt";
-    changelog = "https://github.com/bram209/leptosfmt/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bram209/leptosfmt/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = [ ];
   };
-}
+})

@@ -5,7 +5,7 @@
   icmake,
   yodl,
   libmilter,
-  libX11,
+  libx11,
   openssl,
   readline,
   util-linux,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libmilter
-    libX11
+    libx11
     openssl
     readline
     util-linux

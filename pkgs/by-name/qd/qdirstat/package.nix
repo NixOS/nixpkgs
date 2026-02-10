@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  libsForQt5,
+  qt6Packages,
   coreutils,
   xdg-utils,
   bash,
@@ -13,20 +13,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdirstat";
-  version = "1.9";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "shundhammer";
     repo = "qdirstat";
     rev = finalAttrs.version;
-    hash = "sha256-pwdmltHDNwUMx1FNOoiXl5Pna0zlKqahmicBCN6UVSU=";
+    hash = "sha256-qkXu3W6umAlSVlTXaQT/UmC3gzVt6BVy4EZzLBYI94s=";
   };
 
   nativeBuildInputs = [
     makeWrapper
   ]
-  ++ (with libsForQt5; [
+  ++ (with qt6Packages; [
     qmake
+    qt5compat
     wrapQtAppsHook
   ]);
 

@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "crawley";
   version = "1.7.16";
 
   src = fetchFromGitHub {
     owner = "s0rg";
     repo = "crawley";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/94ynxbH06JFzx3TZDRxvx9inbP+xiOVOqRxpopocjE=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ltstf1re ];
     mainProgram = "crawley";
   };
-}
+})

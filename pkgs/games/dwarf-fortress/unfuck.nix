@@ -5,7 +5,7 @@
   fetchpatch,
   cmake,
   libGL,
-  libSM,
+  libsm,
   SDL,
   SDL_image,
   SDL_ttf,
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    libSM
+    libsm
     SDL
     SDL_image
     SDL_ttf

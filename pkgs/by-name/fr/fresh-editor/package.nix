@@ -2,29 +2,31 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  gzip,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
-  gzip,
   gitMinimal,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.1.97";
+  version = "0.1.99";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iXa+hMXPIsRYaTUTBE3hWx08NG0igRFew6OaEpFDUjg=";
+    hash = "sha256-E0W4f6J20OGa0jqvhMfBb+cO/RQ66C5yx0Ln+faKYc4=";
   };
 
-  cargoHash = "sha256-I7/M1wo3s+6M1AKc4JReMb9tHuLuzQlHIXVPdigCvFQ=";
+  cargoHash = "sha256-NbbT7CX1OS/OFbC9KC9NBAwh85so3jhGinc7+qgUtBs=";
 
   nativeBuildInputs = [
-    pkg-config
     gzip
+    makeBinaryWrapper
+    pkg-config
   ];
 
   nativeCheckInputs = [
@@ -41,6 +43,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
+      --add-flags "--no-upgrade-check"
     rm -rf $out/bin/fresh.dSYM
   '';
 

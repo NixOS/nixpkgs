@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  xorgserver,
+  xorg-server,
   xorgproto,
-  utilmacros,
+  util-macros,
   libgestures,
   libevdevc,
 }:
@@ -27,9 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorgserver
+    xorg-server
     xorgproto
-    utilmacros
+    util-macros
     libgestures
     libevdevc
   ];

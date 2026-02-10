@@ -61,14 +61,14 @@ let
     )
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ns-3";
   version = "44";
 
   src = fetchFromGitLab {
     owner = "nsnam";
     repo = "ns-3-dev";
-    rev = "ns-3.${version}";
+    rev = "ns-3.${finalAttrs.version}";
     hash = "sha256-rw/WAMk4ZitULqkdyEh9vAFp1UrD1tw2JqgxOT5JQ5I=";
   };
 
@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
     "-DNS3_GTK3=ON"
     "-DGTK3_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ]
-  ++ lib.optional doCheck "-DNS3_TESTS=ON";
+  ++ lib.optional finalAttrs.doCheck "-DNS3_TESTS=ON";
 
   # strictoverflow prevents clang from discovering pyembed when bindings
   hardeningDisable = [
@@ -174,4 +174,4 @@ stdenv.mkDerivation rec {
       (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
       || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
-}
+})

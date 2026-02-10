@@ -63,23 +63,6 @@
 
   testScript =
     { nodes, ... }:
-    let
-      narinfoName =
-        (lib.strings.removePrefix "/nix/store/" (
-          lib.strings.removeSuffix "-empty-file" pkgs.emptyFile.outPath
-        ))
-        + ".narinfo";
-
-      narinfoNameChars = lib.strings.stringToCharacters narinfoName;
-
-      narinfoPath = lib.concatStringsSep "/" [
-        nodes.ncps.services.ncps.cache.storage.local
-        "store/narinfo"
-        (lib.lists.elemAt narinfoNameChars 0)
-        ((lib.lists.elemAt narinfoNameChars 0) + (lib.lists.elemAt narinfoNameChars 1))
-        narinfoName
-      ];
-    in
     ''
       start_all()
 
@@ -92,6 +75,9 @@
       client.succeed("cat /etc/nix/nix.conf >&2")
       client.succeed("nix-store --realise ${pkgs.emptyFile}")
 
-      ncps.succeed("cat ${narinfoPath} >&2")
+      # Verify that the NAR file exists in the cache storage
+      # We query the NAR hash from the client and then check if a file with that hash exists in the ncps storage
+      nar_hash = client.succeed("nix-store -q --hash ${pkgs.emptyFile}").strip().split(":")[1]
+      ncps.succeed(f"find ${nodes.ncps.services.ncps.cache.storage.local} -type f | grep {nar_hash}")
     '';
 }

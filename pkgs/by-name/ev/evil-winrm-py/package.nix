@@ -8,7 +8,7 @@
   enableKerberos ? true,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "evil-winrm-py";
   version = "1.5.0";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "adityatelange";
     repo = "evil-winrm-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IACFPPlkgyJh78p6Jy740CQqcySkMTV/8VVPSRJKTPI=";
   };
 
@@ -48,9 +48,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Execute commands interactively on remote Windows machines using the WinRM protocol";
     homepage = "https://github.com/adityatelange/evil-winrm-py";
-    changelog = "https://github.com/adityatelange/evil-winrm-py/releases/tag/v${version}";
+    changelog = "https://github.com/adityatelange/evil-winrm-py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ letgamer ];
     mainProgram = "evil-winrm-py";
   };
-}
+})

@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   makeDesktopItem,
   pkg-config,
@@ -9,17 +9,16 @@
   libGL,
   vulkan-loader,
   wayland,
-  libXrandr,
-  libXcursor,
-  libX11,
-  libXi,
+  libxrandr,
+  libxcursor,
+  libx11,
+  libxi,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "outfly";
   version = "0.14.0";
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "outfly";
     repo = "outfly";
     tag = "v${version}";
@@ -29,15 +28,15 @@ rustPlatform.buildRustPackage rec {
   runtimeInputs = [
     libxkbcommon
     libGL
-    libXrandr
-    libX11
+    libxrandr
+    libx11
     vulkan-loader
   ];
 
   buildInputs = [
     alsa-lib.dev
-    libXcursor
-    libXi
+    libxcursor
+    libxi
     wayland
   ];
 

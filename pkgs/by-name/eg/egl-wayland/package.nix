@@ -8,7 +8,7 @@
   ninja,
   wayland-scanner,
   libGL,
-  libX11,
+  libx11,
   libdrm,
   wayland,
   wayland-protocols,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
-    libX11
+    libx11
     libdrm
     wayland
     wayland-protocols

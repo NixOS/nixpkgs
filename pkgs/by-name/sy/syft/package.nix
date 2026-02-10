@@ -6,15 +6,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "syft";
-  version = "1.41.0";
+  version = "1.41.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "syft";
-    tag = "v${version}";
-    hash = "sha256-ytABOKqW1wUl715JW9QD3twwXLq77x0PlIlFwQbfjjc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2mNGKftkqRGrAstjEmVuzix4Ls75vYsop+E9EyBWwrw=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -38,8 +38,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.gitDescription=v${version}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.gitDescription=v${finalAttrs.version}"
     "-X=main.gitTreeState=clean"
   ];
 
@@ -69,7 +69,7 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/syft --help
-    $out/bin/syft version | grep "${version}"
+    $out/bin/syft version | grep "${finalAttrs.version}"
 
     runHook postInstallCheck
   '';
@@ -77,7 +77,7 @@ buildGoModule rec {
   meta = {
     description = "CLI tool and library for generating a Software Bill of Materials from container images and filesystems";
     homepage = "https://github.com/anchore/syft";
-    changelog = "https://github.com/anchore/syft/releases/tag/v${version}";
+    changelog = "https://github.com/anchore/syft/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       A CLI tool and Go library for generating a Software Bill of Materials
       (SBOM) from container images and filesystems. Exceptional for
@@ -91,4 +91,4 @@ buildGoModule rec {
     ];
     mainProgram = "syft";
   };
-}
+})

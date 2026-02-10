@@ -832,7 +832,7 @@ in
     # FIXME: somehow check for unknown driver names.
     services.xserver.drivers = flip concatMap cfg.videoDrivers (
       name:
-      lib.optional (videoDrivers ? name) (
+      lib.optional (videoDrivers ? ${name}) (
         {
           inherit name;
           modules = [ ];

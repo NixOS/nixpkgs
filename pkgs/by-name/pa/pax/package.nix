@@ -16,7 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_LDFLAGS = "-lfts";
+  };
 
   buildPhase = ''
     sh Build.sh -r -tpax

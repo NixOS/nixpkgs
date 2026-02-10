@@ -6,7 +6,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fromager";
   version = "0.71.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "python-wheel-build";
     repo = "fromager";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3zz37BZx8FcKNl8mSmClIrZxvL+2AS0hJDct6K7BhBE=";
   };
 
@@ -80,4 +80,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ booxter ];
     mainProgram = "fromager";
   };
-}
+})

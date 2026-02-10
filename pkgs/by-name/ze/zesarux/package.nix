@@ -5,8 +5,8 @@
   SDL2,
   aalib,
   alsa-lib,
-  libXext,
-  libXxf86vm,
+  libxext,
+  libxxf86vm,
   libcaca,
   libpulseaudio,
   libsndfile,
@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     aalib
     alsa-lib
-    libXxf86vm
-    libXext
+    libxxf86vm
+    libxext
     libcaca
     libpulseaudio
     libsndfile

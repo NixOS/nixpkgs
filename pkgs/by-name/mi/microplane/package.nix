@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "microplane";
   version = "0.0.37";
 
   src = fetchFromGitHub {
     owner = "Clever";
     repo = "microplane";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-TwNwXMQGsD9Kx5uH+kAOGlwCF1t1oAefVCbKmRtZ4Vc=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dbirks ];
   };
-}
+})

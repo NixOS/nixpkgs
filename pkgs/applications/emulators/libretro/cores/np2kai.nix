@@ -5,13 +5,13 @@
 }:
 mkLibretroCore rec {
   core = "np2kai";
-  version = "0-unstable-2026-01-19";
+  version = "0-unstable-2026-02-01";
 
   src = fetchFromGitHub {
     owner = "AZO234";
     repo = "NP2kai";
-    rev = "e2138c44ea539b36b2d1fc17b70c14fcedfd9784";
-    hash = "sha256-59u8UWk2KNtZNAUcMql0BaCY+VtDs7GssrQRbXbqB3c=";
+    rev = "15676585b9a370e874ea9309252bd8236df3f642";
+    hash = "sha256-Zaay3JYCjv1eohNTC/9AYD0ZrvNaz9X4A4D6CkB/n+4=";
     fetchSubmodules = true;
   };
 

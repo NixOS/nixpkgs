@@ -7,11 +7,11 @@
   pkg-config,
   python3,
   wayland,
-  libX11,
+  libx11,
   libxcb,
   lz4,
   vulkan-loader,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   zlib,
   zstd,
 }:
@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libxcb
     lz4
     python3
     wayland
-    xcbutilkeysyms
+    libxcb-keysyms
     zlib
     zstd
   ];

@@ -14,7 +14,7 @@
   gnome-settings-daemon,
   dbus,
   json-glib,
-  libICE,
+  libice,
   xmlto,
   docbook_xsl,
   docbook_xml_dtd_412,
@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-session";
-  version = "0.9.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-session";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mz+Yh3NK2Tag+MWVofFFXYYXspxhmYBD6YCiuATpZSI=";
+    hash = "sha256-KBNX1jbQ2yv+5rymoB9/w5V3bRZhBdZIJoysp9cNgn4=";
   };
 
   outputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk3
-    libICE
+    libice
     gnome-desktop
     json-glib
     xtrans

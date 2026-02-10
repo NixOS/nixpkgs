@@ -11,13 +11,14 @@
   fetchFromGitLab,
   lib,
   liblinphone,
-  libsForQt5,
   lime,
+  linphoneSdkVersion,
   mediastreamer2,
   minizip-ng,
   msopenh264,
   python3,
   python3Packages,
+  qt6Packages,
   stdenv,
   symlinkJoin,
   xercesc,
@@ -39,23 +40,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linphone-desktop";
-  version = "5.3.1";
+  version = "6.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = "linphone-desktop";
-    rev = finalAttrs.version;
-    hash = "sha256-TO9JNsOnx4sTJEkai0nDKNyZWcLuGoWfuKLBM79tQvs=";
+    tag = finalAttrs.version;
+    hash = "sha256-jCnovCFdPJExD0+ZLhU9np1R5uN+mPlSPi/Nb1aOD0U=";
   };
 
   patches = [
-    ./require-finding-packages.patch
-    ./remove-bc-versions.patch
     ./do-not-override-install-prefix.patch
-    ./fix-translation-dirs.patch
-    ./unset-qml-dir.patch
+    ./do-not-manually-compute-sdk-version.patch
+    ./always-install-desktop-files.patch
 
     # .mkv recordings are broken in NixOS and other distros (see
     # https://github.com/NixOS/nixpkgs/issues/219551), and simply changing the
@@ -67,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     # Made by BC
     bctoolbox
-    belcard
     belle-sip
     belr
     liblinphone
@@ -79,9 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     xercesc
     minizip-ng
-    libsForQt5.qtgraphicaleffects
-    libsForQt5.qtmultimedia
-    libsForQt5.qtquickcontrols2
+    qt6Packages.qtbase
+    qt6Packages.qtnetworkauth
     zxing-cpp
     boost
 
@@ -91,8 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.qttools
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
     python3
     doxygen
   ];
@@ -115,18 +112,26 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLINPHONEAPP_VERSION=${finalAttrs.version}"
     "-DLINPHONE_QT_ONLY=ON"
     "-DLINPHONEAPP_INSTALL_PREFIX=${placeholder "out"}"
-    "-DLINPHONE_QML_DIR=${placeholder "out"}/${libsForQt5.qtbase.qtQmlPrefix}/ui"
+    "-DLINPHONE_QML_DIR=${placeholder "out"}/${qt6Packages.qtbase.qtQmlPrefix}/ui"
+    "-DLINPHONESDK_VERSION=${linphoneSdkVersion}"
+    "-DENABLE_APP_PACKAGE_ROOTCA=OFF"
 
     # normally set by the custom find modules, which we have disabled
     "-DLibLinphone_TARGET=liblinphone"
     "-DLinphoneCxx_TARGET=liblinphone++"
     "-DISpell_SOURCE_DIR=${bc-ispell.src}"
+
+    # used in Linphone's CMakeLists.txt
+    "-DLINPHONEAPP_VERSION=${finalAttrs.version}"
   ];
+
+  # error: invalid conversion from 'int' to 'const char*'
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   preConfigure = ''
     # custom "find" modules are causing issues during build,
     # as they are blinding cmake to nix dependencies
-    rm -rf linphone-app/cmake
+    rm -rf cmake/Modules
   '';
 
   preInstall = ''

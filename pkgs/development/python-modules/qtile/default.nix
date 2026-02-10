@@ -29,8 +29,8 @@
   wayland-protocols,
   wayland-scanner,
   wlroots,
-  xcbutilcursor,
-  xcbutilwm,
+  libxcb-cursor,
+  libxcb-wm,
   xcffib,
   nixosTests,
   extraPackages ? [ ],
@@ -89,7 +89,7 @@ buildPythonPackage (finalAttrs: {
     "--config-setting=GOBJECT=${lib.getLib glib}/lib/libgobject-2.0.so"
     "--config-setting=PANGO=${lib.getLib pango}/lib/libpango-1.0.so"
     "--config-setting=PANGOCAIRO=${lib.getLib pango}/lib/libpangocairo-1.0.so"
-    "--config-setting=XCBCURSOR=${lib.getLib xcbutilcursor}/lib/libxcb-cursor.so"
+    "--config-setting=XCBCURSOR=${lib.getLib libxcb-cursor}/lib/libxcb-cursor.so"
   ];
 
   dependencies = extraPackages ++ [
@@ -112,7 +112,7 @@ buildPythonPackage (finalAttrs: {
     libxkbcommon
     wayland
     wlroots
-    xcbutilwm
+    libxcb-wm
   ];
 
   propagatedBuildInputs = [

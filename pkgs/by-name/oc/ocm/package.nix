@@ -8,14 +8,14 @@
   ocm,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ocm";
   version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-tY7THl1mv9XTL6KVO1/lvZpcNimk3M8pmCbXoH0oet0=";
   };
 
@@ -61,4 +61,4 @@ buildGoModule rec {
       jfchevrette
     ];
   };
-}
+})

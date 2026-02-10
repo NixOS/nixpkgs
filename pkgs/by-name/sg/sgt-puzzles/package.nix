@@ -4,7 +4,7 @@
   fetchurl,
   desktop-file-utils,
   gtk3,
-  libX11,
+  libx11,
   cmake,
   imagemagick,
   pkg-config,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libX11
+    libx11
   ];
 
   postInstall = ''

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "asn1editor";
   version = "0.8.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Futsch1";
     repo = "asn1editor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mgluhC2DMS4OyS/BoWqBdVf7GcxquOtOKTHZ/hbiHQM=";
   };
 
@@ -39,4 +39,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "asn1editor";
     maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})

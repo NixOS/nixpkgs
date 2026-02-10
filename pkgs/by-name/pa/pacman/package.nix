@@ -39,7 +39,7 @@
   sysHookDir ? "/usr/share/libalpm/hooks/",
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pacman";
   version = "7.0.0";
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (final: {
     domain = "gitlab.archlinux.org";
     owner = "pacman";
     repo = "pacman";
-    rev = "v${final.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ejOBxN2HjV4dZwFA7zvPz3JUJa0xiJ/jZ+evEQYG1Mc=";
   };
 
@@ -132,7 +132,7 @@ stdenv.mkDerivation (final: {
   meta = {
     description = "Simple library-based package manager";
     homepage = "https://archlinux.org/pacman/";
-    changelog = "https://gitlab.archlinux.org/pacman/pacman/-/raw/v${final.version}/NEWS";
+    changelog = "https://gitlab.archlinux.org/pacman/pacman/-/raw/v${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     mainProgram = "pacman";

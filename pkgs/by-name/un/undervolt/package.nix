@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "undervolt";
   version = "0.4.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "georgewhewell";
     repo = "undervolt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-G+CK/lnZXkQdyNZPqY9P3owVJsd22H3K8wSpjHFG0ow=";
   };
 
@@ -34,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

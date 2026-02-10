@@ -13,14 +13,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kraft";
   version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/ReHXxvn/6dDJVxk5BOvxSZrlkDkZEfr+qM5raf2a3A=";
   };
 
@@ -47,7 +47,7 @@ buildGoModule rec {
     "-X kraftkit.sh/internal/cli/kraft.sentryDsn="
     "-X kraftkit.sh/internal/version.buildTime=1970-01-01T00:00:00Z"
     "-X kraftkit.sh/internal/version.commit=nixpkgs"
-    "-X kraftkit.sh/internal/version.version=${version}"
+    "-X kraftkit.sh/internal/version.version=${finalAttrs.version}"
   ];
 
   tags = [
@@ -106,4 +106,4 @@ buildGoModule rec {
     ];
     mainProgram = "kraft";
   };
-}
+})

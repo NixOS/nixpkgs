@@ -14,12 +14,12 @@ in
   inherit useVSCodeRipgrep;
   commandLineArgs = extraCommandLineArgs;
 
-  version = "0.8.140";
+  version = "0.9.2";
   pname = "kiro";
 
   # You can find the current VSCode version in the About dialog:
   # workbench.action.showAboutDialog (Help: About)
-  vscodeVersion = "1.103.2";
+  vscodeVersion = "1.107.1";
 
   executableName = "kiro";
   longName = "Kiro";

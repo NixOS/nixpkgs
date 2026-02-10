@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "yaralyzer";
-  version = "1.3.10";
+  version = "1.3.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "yaralyzer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OhZ1TG1dqxlUoW+OI+BFn0LsujLytqg6L7aNdYnfRPQ=";
+    hash = "sha256-ze6s/XCxW/Lf5fiFEI8tmgd5DRAPVD6Z9Xo/ayI5fAc=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];

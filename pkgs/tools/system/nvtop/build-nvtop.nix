@@ -20,6 +20,9 @@
   ascend ? false,
   v3d ? false,
   tpu ? false,
+  rockchip ? false,
+  metax ? false,
+  enflame ? false,
 }:
 
 let
@@ -39,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvtop";
-  version = "3.2.0";
+  version = "3.3.1";
 
   # between generation of multiple update PRs for each package flavor and manual updates I choose manual updates
   # nixpkgs-update: no auto update
@@ -47,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Syllo";
     repo = "nvtop";
     rev = finalAttrs.version;
-    hash = "sha256-8iChT55L2NSnHg8tLIry0rgi/4966MffShE0ib+2ywc=";
+    hash = "sha256-+SvEp8pbauSLbDuPZqGMTyL2EZecz1VKCJgC+xjV/vQ=";
   };
 
   cmakeFlags = with lib.strings; [
@@ -63,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ASCEND_SUPPORT" ascend)
     (cmakeBool "V3D_SUPPORT" v3d)
     (cmakeBool "TPU_SUPPORT" tpu) # requires libtpuinfo which is not packaged yet
+    (cmakeBool "ROCKCHIP_SUPPORT" rockchip)
+    (cmakeBool "METAX_SUPPORT" metax)
+    (cmakeBool "ENFLAME_SUPPORT" enflame)
   ];
   nativeBuildInputs = [
     cmake

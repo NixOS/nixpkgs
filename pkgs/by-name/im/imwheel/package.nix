@@ -2,12 +2,12 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libXext,
-  libXi,
-  libXmu,
-  libXt,
-  libXtst,
+  libx11,
+  libxext,
+  libxi,
+  libxmu,
+  libxt,
+  libxtst,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
-    libXext
-    libXi
-    libXmu
-    libXt
-    libXtst
+    libx11
+    libxext
+    libxi
+    libxmu
+    libxt
+    libxtst
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";

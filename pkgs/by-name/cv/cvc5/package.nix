@@ -6,6 +6,7 @@
   cmake,
   flex,
   cadical,
+  cadical' ? cadical.override { version = "2.1.3"; },
   symfpu,
   gmp,
   python3,
@@ -26,25 +27,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     cmake
     flex
-  ];
-  buildInputs = [
-    cadical.dev
-    symfpu
-    gmp
-    gtest
-    boost
-    jdk
-    libpoly
     (python3.withPackages (
       ps: with ps; [
         pyparsing
         tomli
       ]
     ))
+  ];
+  buildInputs = [
+    cadical'.dev
+    symfpu
+    gmp
+    gtest
+    boost
+    jdk
+    libpoly
   ];
 
   preConfigure = ''

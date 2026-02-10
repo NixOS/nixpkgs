@@ -93,7 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL}/lib/pkgconfig"
   '';
 
-  NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lX11";
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    NIX_LDFLAGS = "-lX11";
+  };
 
   meta = {
     homepage = "https://icculus.org/smpeg/";

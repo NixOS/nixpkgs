@@ -45,15 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
     gtk2
   ];
 
-  RTE_SDK = dpdk;
-  GUI = lib.optionalString withGtk "true";
+  env = {
+    RTE_SDK = dpdk;
+    GUI = lib.optionalString withGtk "true";
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=sign-compare"
-  ];
-
-  # requires symbols from this file
-  NIX_LDFLAGS = "-lrte_net_bond";
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=sign-compare"
+    ];
+    # requires symbols from this file
+    NIX_LDFLAGS = "-lrte_net_bond";
+  };
 
   postPatch = ''
     substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${util-linux}/bin/lscpu

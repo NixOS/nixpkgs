@@ -6,14 +6,14 @@
   pik,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pik";
   version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "jacek-kurlit";
     repo = "pik";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-pDfqqQcYrK78OylwOiKc/Orul03MjdZxEHhpr8obm84=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ bew ];
     mainProgram = "pik";
   };
-}
+})

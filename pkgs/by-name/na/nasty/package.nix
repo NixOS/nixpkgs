@@ -5,12 +5,12 @@
   gpgme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nasty";
   version = "0.6";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/nasty/${pname}-${version}.tgz";
+    url = "https://www.vanheusden.com/nasty/nasty-${finalAttrs.version}.tgz";
     sha256 = "1dznlxr728k1pgy1kwmlm7ivyl3j3rlvkmq34qpwbwbj8rnja1vn";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ davidak ];
     platforms = lib.platforms.unix;
   };
-}
+})

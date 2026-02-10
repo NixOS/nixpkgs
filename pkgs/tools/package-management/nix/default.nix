@@ -206,26 +206,17 @@ lib.makeExtensible (
 
       nixComponents_2_33 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.33.1";
+          version = "2.33.2";
           inherit (self.nix_2_32.meta) teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_33";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-TVKn52SoKq8mMyW/x3NPPskGVurFdnGGV0DGvnL0gak=";
+            hash = "sha256-bjkycwYUs2TS5pYcqlJ2yA2W8gc6iq+Is1kNSY+QPHk=";
           };
         }).appendPatches
-          (
-            patches_common
-            ++ [
-              (fetchpatch2 {
-                name = "nix-2.33-15012-missing-include-glibc-2.42.patch";
-                url = "https://github.com/NixOS/nix/commit/c0c13d73233c740b7d278c71b161da7b16217564.patch?full_index=1";
-                hash = "sha256-iRMg36UMs5WmUfNxz4zoZq6mM3dwo2NiR8s1cM/uooU=";
-              })
-            ]
-          );
+          patches_common;
 
       nix_2_33 = addTests "nix_2_33" self.nixComponents_2_33.nix-everything;
 

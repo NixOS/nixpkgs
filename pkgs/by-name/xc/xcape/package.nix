@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXtst,
+  libx11,
+  libxtst,
   xorgproto,
-  libXi,
+  libxi,
 }:
 
 stdenv.mkDerivation {
@@ -23,10 +23,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXtst
+    libx11
+    libxtst
     xorgproto
-    libXi
+    libxi
   ];
 
   makeFlags = [

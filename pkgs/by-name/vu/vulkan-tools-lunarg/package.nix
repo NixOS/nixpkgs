@@ -7,16 +7,16 @@
   jq,
   expat,
   jsoncpp,
-  libX11,
-  libXdmcp,
-  libXrandr,
+  libx11,
+  libxdmcp,
+  libxrandr,
   libffi,
   libxcb,
   pkg-config,
   wayland,
   which,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-keysyms,
+  libxcb-wm,
   valijson,
   vulkan-headers,
   vulkan-loader,
@@ -48,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     expat
     jsoncpp
-    libX11
-    libXdmcp
-    libXrandr
+    libx11
+    libxdmcp
+    libxrandr
     libffi
     libxcb
     valijson
@@ -58,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
     vulkan-utility-libraries
     wayland
-    xcbutilkeysyms
-    xcbutilwm
+    libxcb-keysyms
+    libxcb-wm
     qt6.qtbase
     qt6.qtwayland
   ];

@@ -7,7 +7,7 @@
   gtk3,
   libwnck,
   libfakekey,
-  libXtst,
+  libxtst,
   mate,
   wrapGAppsHook3,
   gitUpdater,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libwnck
     libfakekey
-    libXtst
+    libxtst
     mate.mate-panel
   ];
 

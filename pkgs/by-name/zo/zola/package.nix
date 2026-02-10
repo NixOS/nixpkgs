@@ -10,14 +10,14 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zola";
   version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = "zola";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mynoXNJE7IcP/0bMLUr/pJQbaEVEj2q/488Z4c9Tr5A=";
   };
 
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     description = "Fast static site generator with everything built-in";
     mainProgram = "zola";
     homepage = "https://www.getzola.org/";
-    changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/getzola/zola/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dandellion
@@ -55,4 +55,4 @@ rustPlatform.buildRustPackage rec {
       _0x4A6F
     ];
   };
-}
+})

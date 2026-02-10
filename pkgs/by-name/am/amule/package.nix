@@ -19,7 +19,7 @@
   libpng,
   pkg-config,
   makeWrapper,
-  libX11,
+  libx11,
 }:
 
 # daemon and client are not build monolithic
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost186
   ]
   ++ lib.optional httpServer libpng
-  ++ lib.optional client libX11;
+  ++ lib.optional client libx11;
 
   cmakeFlags = [
     "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"

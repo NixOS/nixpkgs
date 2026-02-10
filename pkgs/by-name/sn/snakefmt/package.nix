@@ -6,7 +6,7 @@
   versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "snakefmt";
   version = "0.11.3";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   disabled = python3.pythonOlder "3.11";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PvuC9mwFl3EhJq1UDsFc7iTXl+RDiU/YbM9qqQdQbsA=";
   };
 
@@ -40,9 +40,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Uncompromising Snakemake code formatter";
     homepage = "https://pypi.org/project/snakefmt/";
-    changelog = "https://github.com/snakemake/snakefmt/releases/tag/v${version}";
+    changelog = "https://github.com/snakemake/snakefmt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jolars ];
     mainProgram = "snakefmt";
   };
-}
+})

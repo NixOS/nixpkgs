@@ -10,14 +10,14 @@
   libxkbcommon,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cantus";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "CodedNil";
     repo = "cantus";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dAMphU+voDUwFzlPuV6nCUg0RaVVyRJLoM6IwjUtvA4=";
   };
 
@@ -48,4 +48,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ CodedNil ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-shadowsocks2";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "shadowsocks";
     repo = "go-shadowsocks2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-z2+5q8XlxMN7x86IOMJ0qbrW4Wrm1gp8GWew51yBRFg=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ oxzi ];
     mainProgram = "go-shadowsocks2";
   };
-}
+})

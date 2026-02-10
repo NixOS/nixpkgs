@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustc-demangle";
   version = "0.1.26";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustc-demangle";
-    tag = "rustc-demangle-v${version}";
+    tag = "rustc-demangle-v${finalAttrs.version}";
     hash = "sha256-4/x3kUIKi3xnDRznr+6xmPeWHmhlpbuwSNH3Ej6+Ifc=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ _1000teslas ];
   };
-}
+})

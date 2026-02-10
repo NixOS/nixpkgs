@@ -22,7 +22,7 @@
   libiconv,
   libogg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libvorbis,
   libzip,
   nlohmann_json,
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
     libogg
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libvorbis
     libzip
     nlohmann_json

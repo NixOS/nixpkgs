@@ -5,14 +5,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation (finalAttr: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtbitcointrader";
   version = "1.42.21";
 
   src = fetchFromGitHub {
     owner = "JulyIGHOR";
     repo = "QtBitcoinTrader";
-    tag = "v${finalAttr.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-u3+Kwn8KunYUpWCd55TQuVVfoSp8hdti93d6hk7Uqx8=";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttr: {
     libsForQt5.qtscript
   ];
 
-  sourceRoot = "${finalAttr.src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   configurePhase = ''
     runHook preConfigure

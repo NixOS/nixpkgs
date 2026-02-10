@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "heisenbridge";
   version = "1.15.4";
   pyproject = true;
@@ -13,12 +13,12 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hifi";
     repo = "heisenbridge";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-Aan3dtixy1xT9kPU/XxgbUvri9NS/WKiO/atmpPY/m8=";
   };
 
   postPatch = ''
-    echo "${version}" > heisenbridge/version.txt
+    echo "${finalAttrs.version}" > heisenbridge/version.txt
   '';
 
   build-system = with python3.pkgs; [
@@ -49,4 +49,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ lib.maintainers.sumnerevans ];
     mainProgram = "heisenbridge";
   };
-}
+})

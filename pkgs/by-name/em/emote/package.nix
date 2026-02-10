@@ -12,7 +12,7 @@
   wl-clipboard,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "emote";
   version = "4.1.0";
   pyproject = false; # Built with meson
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tom-james-watson";
     repo = "Emote";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-c5EY1Cc3oD8EG1oTChbl10jJlNeAETQbAFGoA9Lw5PY=";
   };
 
@@ -82,4 +82,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

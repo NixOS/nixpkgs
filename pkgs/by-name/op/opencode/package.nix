@@ -14,12 +14,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.1.41";
+  version = "1.1.53";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p4mZRJ+BQs790hjCOJ9iXzg3JoCa4lqOdCqDRkoEfWw=";
+    hash = "sha256-VddWpvtoDJlbbesJL6VlP99/NJqkHbN8Rdv1XccNRZM=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -68,7 +68,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-bjSPHxPTyzhMOztd7HjUl/lvMZYVk944xPj8ADDn5Y4=";
+    outputHash =
+      if stdenvNoCC.hostPlatform.isDarwin then
+        "sha256-m0vAVv8zS8RgU6YpEVbf6l6vilkU+CP/PtAD6U5g/F8="
+      else
+        "sha256-S69x2yRym+h0hbc6wHFOeTxYi9nbBgEJGaZKhUbmdxI=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -114,18 +118,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
-    install -Dm644 schema.json $out/share/opencode/schema.json
-
-    runHook postInstall
-  '';
-
-  postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
-    installShellCompletion --cmd opencode \
-      --bash <($out/bin/opencode completion) \
-      --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
-  '';
-
-  postFixup = ''
     wrapProgram $out/bin/opencode \
      --prefix PATH : ${
        lib.makeBinPath (
@@ -137,6 +129,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
          ]
        )
      }
+
+    install -Dm644 schema.json $out/share/opencode/schema.json
+
+    runHook postInstall
+  '';
+
+  postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+    installShellCompletion --cmd opencode \
+      --bash <($out/bin/opencode completion) \
+      --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
   '';
 
   nativeInstallCheckInputs = [

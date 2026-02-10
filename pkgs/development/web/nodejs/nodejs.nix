@@ -9,6 +9,7 @@
   brotli,
   c-ares,
   libuv,
+  lief,
   llhttp,
   nghttp2,
   nghttp3,
@@ -124,6 +125,7 @@ let
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
   useSharedAdaAndSimd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.2";
+  useSharedLief = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "25.6";
   useSharedSQLite = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.5";
   useSharedZstd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.15";
 
@@ -160,6 +162,9 @@ let
     })
     // (lib.optionalAttrs useSharedSQLite {
       inherit sqlite;
+    })
+    // (lib.optionalAttrs useSharedLief {
+      inherit lief;
     })
     // (lib.optionalAttrs useSharedZstd {
       inherit zstd;

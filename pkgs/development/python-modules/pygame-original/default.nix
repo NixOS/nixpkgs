@@ -20,7 +20,7 @@
   freetype,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   portmidi,
   SDL2_image,
   SDL2_mixer,
@@ -97,7 +97,7 @@ buildPythonPackage rec {
     freetype
     libjpeg
     libpng
-    libX11
+    libx11
     portmidi
     SDL2
     (SDL2_image.override { enableSTB = false; })

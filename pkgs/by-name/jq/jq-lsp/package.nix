@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jq-lsp";
   version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "jq-lsp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tuB5RxJSYGHLPPd3v0xrmqX6Ywxw6V8BQEHkkiAsBTA=";
   };
 
@@ -23,8 +23,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
     "-X main.builtBy=Nix"
   ];
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sysedwinistrator ];
     mainProgram = "jq-lsp";
   };
-}
+})

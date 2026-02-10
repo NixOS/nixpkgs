@@ -39,7 +39,7 @@ maven.buildMavenPackage rec {
 
   src = fetchFromGitHub {
     owner = "theotherp";
-    repo = pname;
+    repo = "nzbhydra2";
     tag = "v${version}";
     hash = "sha256-7CYMh/viZ/9bVZ4gNNZRnKHh4uDH4E5Td2oVC4Rok0M=";
   };

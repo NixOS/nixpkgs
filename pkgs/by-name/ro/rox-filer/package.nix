@@ -7,7 +7,7 @@
   wrapGAppsHook3,
   libxml2,
   gtk2,
-  libSM,
+  libsm,
   shared-mime-info,
 }:
 
@@ -28,10 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     gtk2
     shared-mime-info
-    libSM
+    libsm
   ];
-  NIX_LDFLAGS = "-lm";
-  NIX_CFLAGS_COMPILE = " -fpermissive";
+
+  env = {
+    NIX_LDFLAGS = "-lm";
+    NIX_CFLAGS_COMPILE = "-fpermissive";
+  };
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch

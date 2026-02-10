@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flashfocus";
   version = "2.4.1";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-O6jRQ6e96b8CuumTD6TGELaz26No7WFZgGSnNSlqzuE=";
   };
 
@@ -65,4 +65,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ artturin ];
   };
-}
+})

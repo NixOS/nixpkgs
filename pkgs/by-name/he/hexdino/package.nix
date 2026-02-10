@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hexdino";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "Luz";
     repo = "hexdino";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-M1lUm8rJj9c+9MgU7AJvk/ZVuTC1QYPsHRQxCQTc3WI=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.luz ];
     mainProgram = "hexdino";
   };
-}
+})

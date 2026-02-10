@@ -4,14 +4,14 @@
   buildGoModule,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hysteria";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "apernet";
     repo = "hysteria";
-    rev = "app/v${version}";
+    rev = "app/v${finalAttrs.version}";
     hash = "sha256-eObMqyYCyrt5TemNK5AVZlO01wPjb5QscV6BSnAhQF8=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${cmd}.appVersion=${version}"
+      "-X ${cmd}.appVersion=${finalAttrs.version}"
       "-X ${cmd}.appType=release"
     ];
 
@@ -46,4 +46,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "hysteria";
   };
-}
+})

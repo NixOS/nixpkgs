@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "threatest";
   version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "threatest";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rVRBrf/RTcHvKOLHNASzvij3fV+uQEuIVKb07CZ/cT0=";
   };
 
@@ -35,8 +35,8 @@ buildGoModule rec {
     description = "Framework for end-to-end testing threat detection rules";
     mainProgram = "threatest";
     homepage = "https://github.com/DataDog/threatest";
-    changelog = "https://github.com/DataDog/threatest/releases/tag/v${version}";
+    changelog = "https://github.com/DataDog/threatest/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

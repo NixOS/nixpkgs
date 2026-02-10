@@ -5,7 +5,7 @@
   cmake,
   libprojectm,
   libGL,
-  libX11,
+  libx11,
   poco,
   utf8proc,
   SDL2,
@@ -46,12 +46,12 @@ stdenv.mkDerivation {
     poco
     utf8proc
     libGL
-    libX11
+    libx11
     SDL2
   ];
 
   # poco 1.14 requires c++17
-  NIX_CFLAGS_COMPILE = [ "-std=gnu++17" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu++17" ];
 
   strictDeps = true;
 

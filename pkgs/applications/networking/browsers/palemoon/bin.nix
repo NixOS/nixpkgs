@@ -13,7 +13,7 @@
   withGTK3 ? true,
   gtk3,
   libglvnd,
-  libXt,
+  libxt,
   libpulseaudio,
   makeDesktopItem,
   wrapGAppsHook3,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     dbus-glib
     gtk2-x11
-    libXt
+    libxt
     (lib.getLib stdenv.cc.cc)
   ]
   ++ lib.optionals withGTK3 [

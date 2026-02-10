@@ -10,12 +10,12 @@
 let
   jdk = jdk11;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.6.1";
   pname = "keystore-explorer";
   src = fetchzip {
-    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-${
-      lib.replaceStrings [ "." ] [ "" ] version
+    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${finalAttrs.version}/kse-${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
     sha256 = "sha256-yhYQpeBoicILYEXpW+oqDdF+KieDbNmTFpxL+aA8vTw=";
   };
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.numinit ];
     platforms = lib.platforms.unix;
   };
-}
+})

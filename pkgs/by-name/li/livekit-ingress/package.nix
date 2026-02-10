@@ -8,14 +8,14 @@
   gst_all_1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "livekit-ingress";
   version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "ingress";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gt1oIAKEBwQWqDCLSsRgoe7oIk5jDNReN+dFYUNnRUc=";
   };
 
@@ -49,10 +49,10 @@ buildGoModule rec {
 
   meta = {
     description = "Ingest streams (RTMP/WHIP) or files (HLS, MP4) to LiveKit WebRTC";
-    changelog = "https://github.com/livekit/ingress/releases/tag/${src.tag}";
+    changelog = "https://github.com/livekit/ingress/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/livekit/ingress";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ k900 ];
     mainProgram = "ingress";
   };
-}
+})

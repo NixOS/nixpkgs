@@ -5,14 +5,14 @@
   libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lprobe";
   version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "fivexl";
     repo = "lprobe";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5ho5S6zkmA204mUaz/JqWhhuzJl0KwRKmU1lNegwg6c=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ cageyv ];
     mainProgram = "lprobe";
   };
-}
+})

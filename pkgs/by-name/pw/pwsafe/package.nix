@@ -8,10 +8,10 @@
   gettext,
   perl,
   wxGTK32,
-  libXext,
-  libXi,
-  libXt,
-  libXtst,
+  libxext,
+  libxi,
+  libxt,
+  libxtst,
   xercesc,
   qrencode,
   libuuid,
@@ -54,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     file
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libXext
-    libXi
-    libXt
-    libXtst
+    libxext
+    libxi
+    libxt
+    libxtst
     libuuid
     libyubikey
     yubikey-personalization

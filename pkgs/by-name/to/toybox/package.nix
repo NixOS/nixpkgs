@@ -15,14 +15,14 @@ let
   inherit (lib) optionals;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "toybox";
   version = "0.8.13";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = "toybox";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-b5sigIxyg4T4wVc5z8Das+RdEXmNBPFsXpWwXxU/ERE=";
   };
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hhm ];
     priority = 10;
   };
-}
+})

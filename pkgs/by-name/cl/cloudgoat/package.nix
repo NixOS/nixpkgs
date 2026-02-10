@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cloudgoat";
   version = "2.3.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "cloudgoat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GYhi4rh+JXyUQkRkE5XsbczWbGEt1zqsALBQcwRWJbI=";
   };
 
@@ -33,9 +33,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "AWS deployment tool for a vulnerable environment";
     homepage = "https://github.com/RhinoSecurityLabs/cloudgoat";
-    changelog = "https://github.com/RhinoSecurityLabs/cloudgoat/releases/tag/${src.tag}";
+    changelog = "https://github.com/RhinoSecurityLabs/cloudgoat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cloudgoat";
   };
-}
+})

@@ -19,9 +19,9 @@
   libjpeg,
   libpng,
   libtiff,
-  libX11,
-  libXi,
-  libXmu,
+  libx11,
+  libxi,
+  libxmu,
   libGLU,
   libGL,
   openexr,
@@ -30,7 +30,8 @@
   sqlite,
   vigra,
   wrapGAppsHook3,
-  wxGTK,
+  wxGTK32,
+  wxGTK' ? wxGTK32,
   zlib,
 }:
 
@@ -56,16 +57,16 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libtiff
-    libX11
-    libXi
-    libXmu
+    libx11
+    libxi
+    libxmu
     libGLU
     libGL
     openexr
     panotools
     sqlite
     vigra
-    wxGTK
+    wxGTK'
     zlib
   ];
 
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     wrapGAppsHook3
-    wxGTK
+    wxGTK'
   ];
 
   strictDeps = true;

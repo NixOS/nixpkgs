@@ -13,8 +13,9 @@ let
   mkPlugin =
     name:
     stdenv.mkDerivation {
-      name = "vdr-${name}-${vdr.version}";
-      inherit (vdr) src;
+      pname = name;
+      inherit (vdr) src version;
+
       buildInputs = [ vdr ];
       preConfigure = "cd PLUGINS/src/${name}";
       installFlags = [ "DESTDIR=$(out)" ];

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chess-tui";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "thomas-mauran";
     repo = "chess-tui";
     tag = finalAttrs.version;
-    hash = "sha256-g+rKib+ZoBa2ssYKgS0tg0xngurY1z3DbBZZEn/LJU4=";
+    hash = "sha256-Vv+sO4XeCqv0Fq698ep4wj4A1ajjxqSST3RyKwr/im4=";
   };
 
-  cargoHash = "sha256-Brj+9AS0ZR/b188jkJa84WRHk0HtiKpMlyMUSLmzBfA=";
+  cargoHash = "sha256-IpGrImZbdckWgUVBpYpEt0XaM7LJxSOMo792mw8AA8A=";
 
   checkFlags = [
     # assertion failed: result.is_ok()

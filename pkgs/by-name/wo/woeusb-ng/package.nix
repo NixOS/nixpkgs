@@ -8,27 +8,20 @@
   grub2,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "woeusb-ng";
-  version = "0.2.12";
+  version = "0.2.12-unstable-2026-01-25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WoeUSB";
     repo = "WoeUSB-ng";
-    tag = "v${version}";
-    hash = "sha256-2opSiXbbk0zDRt6WqMh97iAt6/KhwNDopOas+OZn6TU=";
+    # tag = "v${finalAttrs.version}";
+    rev = "cc52ffc6aedad12540c2315c9101e4a4b919d4be";
+    hash = "sha256-TfrXq8zYtlqcA/jbxQul7HIGdYrn73ljKVY2x4BfS2E=";
   };
 
   build-system = [ python3Packages.setuptools ];
-
-  postPatch = ''
-    substituteInPlace setup.py WoeUSB/utils.py \
-      --replace-fail "/usr/local/" "$out/" \
-      --replace-fail "/usr/" "$out/"
-    substituteInPlace miscellaneous/WoeUSB-ng.desktop \
-      --replace-fail "/usr/" "$out/" \
-  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -68,4 +61,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ lib.maintainers.stunkymonkey ];
     platforms = lib.platforms.linux;
   };
-}
+})

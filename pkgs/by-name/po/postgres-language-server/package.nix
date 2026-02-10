@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-language-server";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchgit {
     url = "https://github.com/supabase-community/postgres-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-0zmH9hYwmKYTRR1MxaHZcm7B2SzgCxYjLM4GCK61c7s=";
+    hash = "sha256-d6h/Igh5DtpMHRFSCVbEooY/mqltXhT91iP4DrOH5SE=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-2PEyKjHWEkGEgRy0l6nIhARN0qoR4CIv/Qo+xHucgEc=";
+  cargoHash = "sha256-JRWe0D+H9MhVDva5rY8iRr/icLbVYGMjbwa3KSAori4=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

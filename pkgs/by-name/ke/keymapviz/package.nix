@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "keymapviz";
   version = "1.14.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yskoht";
     repo = "keymapviz";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-eCvwgco22uPEDDsT8FfTRon1xCGy5p1PBp0pDfNprMs=";
   };
 
@@ -29,4 +29,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "keymapviz";
   };
-}
+})

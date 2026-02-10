@@ -8,7 +8,7 @@
   tor,
   qt5,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "onionshare";
   inherit (onionshare)
     src
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     ;
   pyproject = true;
 
-  sourceRoot = "${src.name}/desktop";
+  sourceRoot = "${finalAttrs.src.name}/desktop";
 
   patches = [
     # hardcode store paths of dependencies
@@ -64,4 +64,4 @@ python3Packages.buildPythonApplication rec {
   meta = onionshare.meta // {
     mainProgram = "onionshare";
   };
-}
+})

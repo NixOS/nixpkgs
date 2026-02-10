@@ -12,10 +12,10 @@
   opencv4,
   procps,
   eigen,
-  libXdmcp,
+  libxdmcp,
   libevdev,
   makeDesktopItem,
-  wineWowPackages,
+  wineWow64Packages,
   onnxruntime,
   nix-update-script,
   withWine ? stdenv.targetPlatform.isx86_64,
@@ -49,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.wrapQtAppsHook
   ]
-  ++ lib.optionals withWine [ wineWowPackages.stable ];
+  ++ lib.optionals withWine [ wineWow64Packages.stable ];
 
   buildInputs = [
     finalAttrs.aruco
     eigen
-    libXdmcp
+    libxdmcp
     libevdev
     onnxruntime
     opencv4

@@ -54,7 +54,7 @@
   libx11,
   xorgproto,
   libxkbfile,
-  xorgserver,
+  xorg-server,
   xxHash,
   clang,
   withHtml ? true,
@@ -76,9 +76,9 @@ let
 
   xorgModulePaths = writeText "module-paths" ''
     Section "Files"
-      ModulePath "${xorgserver}/lib/xorg/modules"
-      ModulePath "${xorgserver}/lib/xorg/modules/extensions"
-      ModulePath "${xorgserver}/lib/xorg/modules/drivers"
+      ModulePath "${xorg-server}/lib/xorg/modules"
+      ModulePath "${xorg-server}/lib/xorg/modules/extensions"
+      ModulePath "${xorg-server}/lib/xorg/modules/drivers"
       ModulePath "${xf86videodummy}/lib/xorg/modules/drivers"
     EndSection
   '';
@@ -254,7 +254,7 @@ effectiveBuildPythonApplication rec {
       --prefix PATH : ${
         lib.makeBinPath [
           getopt
-          xorgserver
+          xorg-server
           xauth
           which
           util-linux

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "4ti2";
-  version = "1.6.13";
+  version = "1.6.14";
 
   src = fetchFromGitHub {
     owner = "4ti2";
     repo = "4ti2";
-    rev = "Release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-gbYG55LfVhjJJFJu0L8AWIAnFDViHIW2N1qtS8xOFAc=";
+    tag = "Release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-bFvq90hLLGty7p6NLxOARVvKdizg3bp2NkP9nZpVFzQ=";
   };
 
   nativeBuildInputs = [

@@ -26,13 +26,13 @@
   gdk-pixbuf,
   nss,
   nspr,
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
   libxkbfile,
   pango,
   systemd,
@@ -62,13 +62,13 @@ let
     gtk4
     nss
     nspr
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXrandr
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
     libxkbfile
     pango
     pciutils
@@ -87,7 +87,7 @@ let
     vulkan-loader
   ];
 in
-buildNpmPackage (self: {
+buildNpmPackage (finalAttrs: {
   pname = "tidal-hifi";
   inherit version;
 
@@ -125,12 +125,12 @@ buildNpmPackage (self: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = self.pname;
+      name = finalAttrs.pname;
       desktopName = "TIDAL Hi-Fi";
       genericName = "Music Player";
-      comment = self.meta.description;
+      comment = finalAttrs.meta.description;
       icon = "tidal-hifi";
-      exec = self.meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       terminal = false;
       mimeTypes = [ "x-scheme-handler/tidal" ];
       categories = [

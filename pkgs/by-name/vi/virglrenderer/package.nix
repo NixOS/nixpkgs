@@ -8,7 +8,7 @@
   buildPackages,
   libGLU,
   libepoxy,
-  libX11,
+  libx11,
   libdrm,
   libgbm,
   libva,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGLU
-    libX11
+    libx11
     libdrm
     libgbm
   ]

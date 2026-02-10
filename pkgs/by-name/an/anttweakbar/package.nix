@@ -8,7 +8,7 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "AntTweakBar";
   version = "1.16";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/anttweakbar/AntTweakBar_${
-      lib.replaceStrings [ "." ] [ "" ] version
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
     sha256 = "0z3frxpzf54cjs07m6kg09p7nljhr7140f4pznwi7srwq4cvgkpv";
   };
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.razvan ];
     platforms = lib.platforms.linux;
   };
-}
+})

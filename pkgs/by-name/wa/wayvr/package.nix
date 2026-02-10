@@ -3,9 +3,9 @@
   dbus,
   fetchFromGitHub,
   lib,
-  libX11,
-  libXext,
-  libXrandr,
+  libx11,
+  libxext,
+  libxrandr,
   libxcb,
   libxkbcommon,
   nix-update-script,
@@ -23,14 +23,14 @@
   wayvr,
   withOpenVR ? !stdenv.hostPlatform.isAarch64,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayvr";
   version = "26.1.2";
 
   src = fetchFromGitHub {
     owner = "wlx-team";
     repo = "wayvr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UZ5zcalez6B+212OqCaEXSoRfhaExuy0W8HX8b4flSU=";
   };
 
@@ -44,9 +44,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     alsa-lib
     dbus
-    libX11
-    libXext
-    libXrandr
+    libx11
+    libxext
+    libxrandr
     libxcb
     libxkbcommon
     openssl
@@ -93,4 +93,4 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isAarch64 && withOpenVR;
     mainProgram = "wayvr";
   };
-}
+})

@@ -1,5 +1,4 @@
 {
-  mkDerivation,
   lib,
   stdenv,
   fetchurl,
@@ -9,13 +8,13 @@
   dbus,
   getconf,
   glibc,
-  libXrandr,
-  libX11,
-  libXext,
-  libXdamage,
-  libXtst,
-  libSM,
-  libXfixes,
+  libxrandr,
+  libx11,
+  libxext,
+  libxdamage,
+  libxtst,
+  libsm,
+  libxfixes,
   coreutils,
   wrapQtAppsHook,
   icu63,
@@ -23,7 +22,7 @@
   minizip,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
   outputs = [
@@ -127,13 +126,13 @@ mkDerivation rec {
     }"
     "--prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
-        libXrandr
-        libX11
-        libXext
-        libXdamage
-        libXtst
-        libSM
-        libXfixes
+        libxrandr
+        libx11
+        libxext
+        libxdamage
+        libxtst
+        libsm
+        libxfixes
         dbus
         icu63
       ]

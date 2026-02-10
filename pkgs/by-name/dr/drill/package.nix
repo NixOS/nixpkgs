@@ -7,14 +7,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "drill";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "fcsonline";
     repo = "drill";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-jBnRVTnrSfEpN7xgMrlAsCwl62kZpHMI4IeT0rPb+zg=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     mainProgram = "drill";
   };
-}
+})

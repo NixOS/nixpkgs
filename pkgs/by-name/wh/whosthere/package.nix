@@ -1,24 +1,35 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   lib,
+  stdenv,
   nix-update-script,
-  testers,
-  whosthere,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "whosthere";
-  version = "0.2.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "ramonvermeulen";
     repo = "whosthere";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-jwXJ+mF3r+Xg3lyQzwzfGp3TmfVjnxO9Lg272zeTREY=";
+    hash = "sha256-EuEq3HG7j5kz0GomJELcVy+POtbA+NtIM/Y/G3kGZn4=";
   };
 
-  vendorHash = "sha256-ZiomQ+Md0kFkq7nERsnLZwkA9nlcvglMtzJV7NX3Igs=";
+  vendorHash = "sha256-YVPsWpIXC5SLm+T2jEGqF4MBcKOAAk0Vpc7zCIFkNw8=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  ldflags = [
+    "-s"
+    "-X"
+    "main.versionStr=${finalAttrs.version}"
+  ];
 
   checkFlags =
     let
@@ -30,8 +41,19 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd whosthere \
+      --bash <("$out/bin/whosthere" completion bash) \
+      --fish <("$out/bin/whosthere" completion fish) \
+      --zsh <("$out/bin/whosthere" completion zsh)
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
-  passthru.tests.version = testers.testVersion { package = whosthere; };
 
   meta = {
     description = "Local Area Network discovery tool";

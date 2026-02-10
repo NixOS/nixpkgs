@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.26rc2";
+  version = "1.26rc3";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-4lzIxf/hJBpdhxmSCSQ9cMJIRyYPsep7FjqVtTfeZaw=";
+    hash = "sha256-t32nB+A4hWXdgUcCPE1cRsTAA6bh9xNQ9jfPXYCtLps=";
   };
 
   strictDeps = true;

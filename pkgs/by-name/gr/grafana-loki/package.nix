@@ -11,15 +11,15 @@
   grafana-loki,
 }:
 
-buildGoModule rec {
-  version = "3.6.4";
+buildGoModule (finalAttrs: {
+  version = "3.6.5";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
-    rev = "v${version}";
-    hash = "sha256-zzYW0zg0Cg18aDNS4cGDeTW21K/sDB/BkpsoPpxgFok=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-f9YijC8MH+vPxh6N/LKQIhsSWM6uEqIyHY+5J3mu+aQ=";
   };
 
   vendorHash = null;
@@ -62,7 +62,7 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.BuildUser=nix@nixpkgs"
       "-X ${t}.BuildDate=unknown"
       "-X ${t}.Branch=unknown"
@@ -77,7 +77,7 @@ buildGoModule rec {
       asl20
     ];
     homepage = "https://grafana.com/oss/loki/";
-    changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
+    changelog = "https://github.com/grafana/loki/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       globin
       mmahut
@@ -85,4 +85,4 @@ buildGoModule rec {
       ryan4yin
     ];
   };
-}
+})

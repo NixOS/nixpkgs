@@ -5,10 +5,10 @@
   libglut,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXmu,
+  libx11,
+  libxext,
+  libxi,
+  libxmu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,10 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     libglut
     libGLU
     libGL
-    libXmu
-    libXext
-    libX11
-    libXi
+    libxmu
+    libxext
+    libx11
+    libxi
   ];
 
   installPhase = ''

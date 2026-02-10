@@ -75,6 +75,7 @@ mapAliases {
   asyncio-nats-client = throw "'asyncio-nats-client' has been renamed to/replaced by 'nats-py'"; # Converted to throw 2025-10-29
   atsim_potentials = throw "'atsim_potentials' has been renamed to/replaced by 'atsim-potentials'"; # Converted to throw 2025-10-29
   autotrash = throw "'autotrash' has been renamed to/replaced by 'super.pkgs.autotrash'"; # Converted to throw 2025-10-29
+  av_13 = throw "'av_13' has been renamed to/replaced by 'av'"; # Added 2026-02-01
   Babel = throw "'Babel' has been renamed to/replaced by 'babel'"; # Converted to throw 2025-10-29
   backports-functools-lru-cache = throw "'backports-functools-lru-cache' has been removed from nixpkgs as it was not longer used in python2"; # Added 2026-01-14
   backports_shutil_get_terminal_size = throw "'backports_shutil_get_terminal_size' has been renamed to/replaced by 'backports-shutil-get-terminal-size'"; # Converted to throw 2025-10-29
@@ -96,6 +97,7 @@ mapAliases {
   bugzilla = throw "'bugzilla' has been renamed to/replaced by 'python-bugzilla'"; # Converted to throw 2025-10-29
   bunch = throw "bunch has been removed as it is unmaintained since inception"; # added 2025-05-31
   bz2file = throw "'bz2file' has beem removed, as it was not longed maintained upstream since 2020"; # added 2025-08-26
+  calysto-scheme = throw "'calysto-scheme' has been removed as it is no longer maintained upstream"; # Added 2026-01-31
   can = throw "'can' has been renamed to/replaced by 'python-can'"; # Converted to throw 2025-10-29
   casbin = pycasbin; # added 2025-06-12
   cchardet = throw "'cchardet' has been renamed to/replaced by 'faust-cchardet'"; # Converted to throw 2025-10-29
@@ -110,6 +112,7 @@ mapAliases {
   configshell = throw "'configshell' has been renamed to/replaced by 'configshell-fb'"; # Converted to throw 2025-10-29
   cx_Freeze = throw "'cx_Freeze' has been renamed to/replaced by 'cx-freeze'"; # Converted to throw 2025-10-29
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
+  datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
   debian = throw "'debian' has been renamed to/replaced by 'python-debian'"; # Converted to throw 2025-10-29
   dictpath = throw "'dictpath' has been renamed to/replaced by 'pathable'"; # Converted to throw 2025-10-29
@@ -471,6 +474,7 @@ mapAliases {
   sip_4 = throw "'sip_4' has been renamed to/replaced by 'sip4'"; # Converted to throw 2025-10-29
   sipsimple = lib.warnOnInstantiate "'sipsimple' has been renamed to 'python3-sipsimple' to fit upstream naming" python3-sipsimple; # added 2026-01-05
   slackclient = throw "'slackclient' has been renamed to/replaced by 'slack-sdk'"; # Converted to throw 2025-10-29
+  sleekxmpp = throw "'sleekxmpp' has been removed because it was deprecated in favor of 'slixmpp'"; # added 2026-01-19
   smart_open = throw "'smart_open' has been renamed to/replaced by 'smart-open'"; # Converted to throw 2025-10-29
   smpp_pdu = throw "'smpp_pdu' has been renamed to/replaced by 'smpp-pdu'"; # Converted to throw 2025-10-29
   sorl_thumbnail = throw "'sorl_thumbnail' has been renamed to/replaced by 'sorl-thumbnail'"; # Converted to throw 2025-10-29
@@ -515,6 +519,7 @@ mapAliases {
   tweedledum = throw "'tweedledum' has been removed due to lack of upstream maintenance."; # Added 2025-11-22
   typed-ast = throw "typed-ast was removed because it went end of life in July 2023"; # added 2025-05-24
   types-typed-ast = throw "types-typed-ast was removed because so was typed-ast"; # added 2025-05-24
+  typesentry = throw "typesentry was removed because it was broken and unmaintained"; # added 2026-02-02
   typesystem = throw "'typesystem' has been removed as it was broken, unmaintained, and archived upstream"; # Added 2025-11-27
   typical = throw "'typical' has been removed as it was broken and archived upstream"; # Added 2025-11-27
   uamqp = throw "'uamqp' has been removed because it is broken and unmaintained."; # added 2025-06-11
@@ -540,11 +545,13 @@ mapAliases {
   XlsxWriter = throw "'XlsxWriter' has been renamed to/replaced by 'xlsxwriter'"; # Converted to throw 2025-10-29
   y-py = throw "'y-py' has been removed as it was archived upstream; consider using 'pycrdt' instead"; # Added 2026-01-21
   Yapsy = throw "'Yapsy' has been renamed to/replaced by 'yapsy'"; # Converted to throw 2025-10-29
+  yasi = throw "'yasi' has been removed as it is unmaintained upstream"; # Added 2026-01-31
   ypy-websocket = throw "'ypy-websocket' has been removed as it was archived upstream; consider using 'pycrdt-websocket' instead"; # Added 2026-01-21
   z3 = throw "'z3' has been renamed to/replaced by 'z3-solver'"; # Converted to throw 2025-10-29
   zc-buildout221 = throw "'zc-buildout221' has been renamed to/replaced by 'zc-buildout'"; # Converted to throw 2025-10-29
   zc_lockfile = throw "'zc_lockfile' has been renamed to/replaced by 'zc-lockfile'"; # Converted to throw 2025-10-29
   zetup = "'zetup' has been removed because it is unmaintained"; # Added 2026-01-19
+  zeversolarlocal = throw "'zeversolarlocal' has been removed because it is unmaintained"; # Added 2026-01-28
   zope_component = throw "'zope_component' has been renamed to/replaced by 'zope-component'"; # Converted to throw 2025-10-29
   zope_configuration = throw "'zope_configuration' has been renamed to/replaced by 'zope-configuration'"; # Converted to throw 2025-10-29
   zope_contenttype = throw "'zope_contenttype' has been renamed to/replaced by 'zope-contenttype'"; # Converted to throw 2025-10-29

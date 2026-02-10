@@ -7,7 +7,7 @@
   libvncserver,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "blink-qt";
   version = "6.0.4";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "blink-qt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QESg9yo5oddYqSKuFLSMI2Oju3FCq97+j0uJDK85Yy8=";
   };
 
@@ -76,10 +76,10 @@ python3Packages.buildPythonApplication rec {
     description = "Blink SIP Client";
     homepage = "https://icanblink.com";
     downloadPage = "https://github.com/agprojects/blink-qt";
-    changelog = "https://github.com/AGProjects/blink-qt/releases/tag/${version}";
+    changelog = "https://github.com/AGProjects/blink-qt/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "blink";
   };
-}
+})

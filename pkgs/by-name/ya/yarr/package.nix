@@ -8,14 +8,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yarr";
   version = "2.6";
 
   src = fetchFromGitHub {
     owner = "nkanaev";
     repo = "yarr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-D/049qH6CFNL7MY5e54guA9i84pbAwGf2UPHnVQWCkU=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
     "-X main.GitHash=none"
   ];
 
@@ -45,11 +45,11 @@ buildGoModule rec {
     description = "Yet another rss reader";
     mainProgram = "yarr";
     homepage = "https://github.com/nkanaev/yarr";
-    changelog = "https://github.com/nkanaev/yarr/blob/v${version}/doc/changelog.txt";
+    changelog = "https://github.com/nkanaev/yarr/blob/v${finalAttrs.version}/doc/changelog.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sikmir
       christoph-heiss
     ];
   };
-}
+})

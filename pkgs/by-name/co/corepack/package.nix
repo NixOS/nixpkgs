@@ -3,13 +3,16 @@
   stdenvNoCC,
   cacert,
   yarn-berry,
-  nodejs,
+  nodejs-slim, # no need for NPM
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
   fetchpatch2,
 }:
 
+let
+  nodejs = nodejs-slim;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "corepack";
   version = "0.34.6";

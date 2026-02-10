@@ -9,14 +9,14 @@
   curl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sheldon";
   version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "rossmacarthur";
     repo = "sheldon";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-zVwqVYaUY8LJhWENDiD89p/CzvsEVkpaPnYVyCJUf3s=";
   };
 
@@ -72,4 +72,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "sheldon";
   };
-}
+})

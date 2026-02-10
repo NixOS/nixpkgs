@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   ddt,
   openstackdocstheme,
   osc-lib,
@@ -32,16 +32,19 @@
   testers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-openstackclient";
   version = "8.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "python_openstackclient";
-    inherit version;
-    hash = "sha256-zHsy5F8Lju2SFeAhiuoCUmYZpeewaCsngXaRNK/Xb/g=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-openstackclient";
+    tag = finalAttrs.version;
+    hash = "sha256-CEz1v4e4NadSZ+qhotFtLB4y/KdhDZbDOohN8D9FB30=";
   };
+
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     openstackdocstheme
@@ -68,10 +71,11 @@ buildPythonPackage rec {
     stestr
   ];
 
+  # test_module failures under python 3.14: https://bugs.launchpad.net/python-openstackclient/+bug/2137223
   checkPhase = ''
     runHook preCheck
     stestr run -E \
-      "openstackclient.tests.unit.volume.v3.test_volume.(TestVolumeCreate|TestVolumeShow)"
+      "openstackclient.tests.unit.(volume.v3.test_volume.(TestVolumeCreate|TestVolumeShow)|common.test_module.TestModuleList)"
     runHook postCheck
   '';
 
@@ -107,8 +111,9 @@ buildPythonPackage rec {
   meta = {
     description = "OpenStack Command-line Client";
     mainProgram = "openstack";
-    homepage = "https://github.com/openstack/python-openstackclient";
+    homepage = "https://docs.openstack.org/python-openstackclient/latest/";
+    downloadPage = "https://github.com/openstack/python-openstackclient/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

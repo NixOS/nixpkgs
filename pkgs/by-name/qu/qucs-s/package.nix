@@ -4,7 +4,7 @@
   fetchFromGitHub,
   flex,
   bison,
-  libX11,
+  libx11,
   cmake,
   gperf,
   adms,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       qtwayland
-      libX11
+      libx11
     ]
     ++ kernels;
 

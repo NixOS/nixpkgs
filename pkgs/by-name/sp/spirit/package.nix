@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "spirit";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "spirit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vGrIDXm3QXOitzIGV3Plt+SmUEih4gPJGTv6bGBwITE=";
+    hash = "sha256-lgDEYIc6NgDkqoYdwluaZ9VCockE3gbyP8O7LfoTrl0=";
   };
 
   vendorHash = "sha256-WSMziaE6ldYa915fAAecXGmJkFhh8Sk/IHjfBqXf9FI=";

@@ -7,12 +7,12 @@
   ffmpeg,
 }:
 let
-  version = "3.3.1";
+  version = "3.4.3";
   src = fetchFromGitHub {
     owner = "5rahim";
     repo = "seanime";
     rev = "v${version}";
-    hash = "sha256-kK5f/71/LuBVNJLiMfPJsJjxvf6ZorGxtVwC9rX2MEk=";
+    hash = "sha256-MrO8SuS6d1v3SKmnGBDXGHmxhYdPxr11FdKKZrGU9Hc=";
   };
 
   seanime-web = buildNpmPackage {
@@ -54,7 +54,7 @@ buildGoModule {
 
   inherit src version;
 
-  vendorHash = "sha256-6KM3fGpK78wRnP+PKSY/NKexzz/3WxBDRkhnQzoE5KY=";
+  vendorHash = "sha256-LFilsAAuPbNg2KI4aPUbNYjufPk1P3VLcAv1qfMu0p0=";
 
   preBuild = ''
     cp -r ${seanime-web}/web .

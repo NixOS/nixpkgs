@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "argo-rollouts";
   version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-rollouts";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OCFbnBSFSXcbXHT48sS8REAt6CtNFPCNTIfKRBj19DM=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ psibi ];
   };
-}
+})

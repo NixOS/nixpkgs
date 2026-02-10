@@ -11,7 +11,7 @@ let
     packageOverrides = self: super: { sqlalchemy = super.sqlalchemy_1_4; };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pacu";
   version = "1.6.0";
   pyproject = true;
@@ -19,7 +19,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "pacu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Td5H4O6/7Gh/rvP191xjCJmIbyc4ezZC5Fh4FZ39ZUM=";
   };
 
@@ -76,9 +76,9 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "AWS exploitation framework";
     homepage = "https://github.com/RhinoSecurityLabs/pacu";
-    changelog = "https://github.com/RhinoSecurityLabs/pacu/releases/tag/v${version}";
+    changelog = "https://github.com/RhinoSecurityLabs/pacu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pacu";
   };
-}
+})

@@ -9,11 +9,11 @@
   glib,
   gtk2,
   alsa-lib,
-  libSM,
-  libX11,
+  libsm,
+  libx11,
   gdk-pixbuf,
   pango,
-  libXinerama,
+  libxinerama,
   mpg123,
   runtimeShell,
 }:
@@ -26,11 +26,11 @@ let
     glib
     gtk2
     alsa-lib
-    libSM
-    libX11
+    libsm
+    libx11
     gdk-pixbuf
     pango
-    libXinerama
+    libxinerama
   ];
 
 in

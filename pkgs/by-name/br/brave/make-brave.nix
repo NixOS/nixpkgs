@@ -21,17 +21,17 @@
   gtk3,
   gtk4,
   qt6,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libdrm,
   libkrb5,
   libuuid,
@@ -110,20 +110,20 @@ let
     gtk3
     gtk4
     libdrm
-    libX11
+    libx11
     libGL
     libxkbcommon
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
     libxshmfence
-    libXtst
+    libxtst
     libuuid
     libgbm
     nspr

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gimoji";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "zeenix";
     repo = "gimoji";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-9ixaLo3rafOwsPtu+kJodjPBn7AKX/It/0jsnLwCHF4=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "gimoji";
     maintainers = with lib.maintainers; [ a-kenji ];
   };
-}
+})

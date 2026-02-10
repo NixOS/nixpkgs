@@ -5,18 +5,18 @@
   perl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "managarr";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "Dark-Alex-17";
     repo = "managarr";
-    tag = "v${version}";
-    hash = "sha256-6aqJxnhc1eXqJIuX07aKSEooNeVwnq8ic7yZnJaokR8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bKW67cpLbnBxF5gbpwfCNe2QkxKYvooWEM3yKrbj7Q8=";
   };
 
-  cargoHash = "sha256-BdgJVByyJ7Nq8gjPXxSaeQQYVQRM/leTd9AxWd7IpDw=";
+  cargoHash = "sha256-CDhFj7lP65wlLkSWGcQ8YBK4umSyQsBGF/Sn85gy5hE=";
 
   nativeBuildInputs = [ perl ];
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "managarr";
   };
-}
+})

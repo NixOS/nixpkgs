@@ -13,13 +13,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname dotnet-sdk;
-  version = "2025-12-13";
+  version = "2026-02-08";
 
   src = fetchFromGitHub {
     owner = "artempyanykh";
     repo = "marksman";
     tag = finalAttrs.version;
-    hash = "sha256-HgRovSdalRRG1Gx0vNYhRDTbYO/vpz4hB1pgqcVjWF4=";
+    hash = "sha256-xebt55WKHOKwA6QIkW5mnvqUGHeGRzINCWfViA4cfJ0=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";
@@ -62,6 +62,6 @@ buildDotnetModule (finalAttrs: {
       plusgut
     ];
     platforms = dotnet-sdk.meta.platforms;
-    mainProgram = pname;
+    mainProgram = "marksman";
   };
 })

@@ -22,9 +22,9 @@
   libstartup_notification,
   libwacom,
   libxcvt,
-  libXdamage,
+  libxdamage,
   libxkbcommon,
-  libXtst,
+  libxtst,
   mesa-gl-headers,
   meson,
   ninja,
@@ -36,12 +36,12 @@
   wayland-protocols,
   wayland-scanner,
   wrapGAppsHook3,
-  xorgserver,
+  xorg-server,
   xwayland,
   zenity,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "muffin";
   version = "6.6.3";
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "muffin";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-PNL6PAZinds+kqCUCesJkTS+93juhm35sPE7RFUdxeU=";
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook3
-    xorgserver # for cvt command
+    xorg-server # for cvt command
     gobject-introspection
     wayland-scanner
   ];
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libwacom
     libxcvt
-    libXdamage
+    libxdamage
     libxkbcommon
     pipewire
     udev
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # required for pkg-config to detect muffin-clutter
     json-glib
-    libXtst
+    libxtst
     graphene
     mesa-gl-headers
   ];
@@ -127,4 +127,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

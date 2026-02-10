@@ -10,7 +10,7 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dockbarx";
   version = "1.0-beta4";
   pyproject = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "xuzhen";
     repo = "dockbarx";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-J/5KpHptGzgRF1qIGrgjkRR3in5pE0ffkiYVTR3iZKY=";
   };
 
@@ -68,4 +68,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

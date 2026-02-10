@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  NIX_LDFLAGS = "-lcrypt";
+  env.NIX_LDFLAGS = "-lcrypt";
 
   installFlags = [
     "sysconfdir=$(out)/etc"

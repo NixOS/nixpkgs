@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wingpanel-quick-settings";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "quick-settings";
     rev = finalAttrs.version;
-    hash = "sha256-82XlZDnXuUB0PPmInrSQh1vrwnOYt9RplKWwYxIirVo=";
+    hash = "sha256-J40h/4xhs12FmaaBpQ+0/KGCtRLmP592TS3xHeoxGIE=";
   };
 
   patches = [

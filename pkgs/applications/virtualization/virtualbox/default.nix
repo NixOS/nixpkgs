@@ -10,12 +10,12 @@
   pam,
   libxslt,
   libxml2,
-  libX11,
+  libx11,
   xorgproto,
-  libXext,
-  libXcursor,
-  libXfixes,
-  libXmu,
+  libxext,
+  libxcursor,
+  libxfixes,
+  libxmu,
   SDL2,
   libcap,
   libGL,
@@ -23,8 +23,8 @@
   libpng,
   glib,
   lvm2,
-  libXrandr,
-  libXinerama,
+  libxrandr,
+  libxinerama,
   libopus,
   libtpms,
   qt6,
@@ -72,9 +72,9 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.2.4";
+  virtualboxVersion = "7.2.6";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "d281ec981b5f580211a0cedd1b75a1adcb0fbfcbb768d8c2bf4429f4763e8bbd";
+  virtualboxSha256 = "c58443a0e6fcc7fc7e84c1011a10823b3540c6a2b8f2e27c4d8971272baf09f7";
 
   kvmPatchVboxVersion = "7.2.4";
   kvmPatchVersion = "20251103";
@@ -144,9 +144,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     libxml2
     xorgproto
-    libX11
-    libXext
-    libXcursor
+    libx11
+    libxext
+    libxcursor
     libcap
     glib
     lvm2
@@ -156,8 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     makeself
     perl
-    libXmu
-    libXrandr
+    libxmu
+    libxrandr
     libpng
     libopus
     libtpms
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qttools
     qtscxml
-    libXinerama
+    libxinerama
     SDL2
     libGLU
   ]
@@ -208,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
 
     grep 'libXfixes\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
-      s@"libXfixes\.so\.3"@"${libXfixes.out}/lib/libXfixes.so.3"@g'
+      s@"libXfixes\.so\.3"@"${libxfixes.out}/lib/libXfixes.so.3"@g'
 
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
       s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'
@@ -230,14 +230,6 @@ stdenv.mkDerivation (finalAttrs: {
       (fetchpatch {
         url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/8028d88e6876ca5977de13c58b54e243229efe98/debian/patches/16-no-update.patch";
         hash = "sha256-AGtFsRjwd8Yw296eqX3NC2TUptAhpFTRaOMutiheQ6Y=";
-      })
-      # NAT network shouldn't fully saturate one CPU
-      # https://github.com/VirtualBox/virtualbox/issues/356
-      (fetchpatch {
-        name = "vbox-nat-cpu.patch";
-        url = "https://github.com/VirtualBox/virtualbox/commit/efa378dadd192af8fbce331e9ec66fb36d65ad3d.diff";
-        hash = "sha256-7u3kSszv77leZdMs911TzAchU5mBqmNpgvuZDQaY9To=";
-        hunks = [ "2-" ];
       })
     ]
     ++ [ ./extra_symbols.patch ]
@@ -264,11 +256,6 @@ stdenv.mkDerivation (finalAttrs: {
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
       ./fix-audio-driver-loading.patch
-      # curl 8.16 upgrade breakage
-      (fetchpatch {
-        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/dbf9a6ef75380ebd2705df0198c6ac8073d0b4cb/debian/patches/new-curl.patch";
-        hash = "sha256-WWnCWdXlJo9jTr8yXA0NxcDQBScryuu/53wyX0rhszk=";
-      })
     ];
 
   postPatch = ''

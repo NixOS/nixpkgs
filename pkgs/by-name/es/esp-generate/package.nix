@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "esp-generate";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "esp-generate";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JNSz/HRO8qxVaRZLL4qgYF3BIYVkrzyRc3wAWd+dAMo=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ lib.maintainers.eymeric ];
   };
-}
+})

@@ -4,13 +4,13 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "texsurgery";
   version = "0.6.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-zoOeTRHcpDnXJ1QC7BIz9guzqL9Q7kmJ5VSGEyqanfY=";
   };
 
@@ -36,4 +36,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "texsurgery";
     maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

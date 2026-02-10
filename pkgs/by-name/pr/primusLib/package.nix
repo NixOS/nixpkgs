@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  libX11,
+  libx11,
   libGL,
   linuxPackages,
   nvidia_x11 ? linuxPackages.nvidia_x11.override { libsOnly = true; },
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libGL
   ];
 

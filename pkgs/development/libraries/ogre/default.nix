@@ -16,15 +16,15 @@
   libglut,
   libGL,
   libGLU,
-  libICE,
-  libSM,
-  libX11,
-  libXaw,
-  libXmu,
-  libXrandr,
-  libXrender,
-  libXt,
-  libXxf86vm,
+  libice,
+  libsm,
+  libx11,
+  libxaw,
+  libxmu,
+  libxrandr,
+  libxrender,
+  libxt,
+  libxxf86vm,
   xorgproto,
   # optional
   withNvidiaCg ? false,
@@ -84,15 +84,15 @@ let
         libglut
         libGL
         libGLU
-        libICE
-        libSM
-        libX11
-        libXaw
-        libXmu
-        libXrandr
-        libXrender
-        libXt
-        libXxf86vm
+        libice
+        libsm
+        libx11
+        libxaw
+        libxmu
+        libxrandr
+        libxrender
+        libxt
+        libxxf86vm
         xorgproto
       ]
       ++ lib.optionals withNvidiaCg [

@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sphinxygen";
   version = "1.0.12";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = "sphinxygen";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-54D7h6JCsUEh3y6WmpSaMFlRBElve1lscbQtJz+OJTQ=";
   };
 
@@ -23,9 +23,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Generates Sphinx markup from an XML description extracted by Doxygen";
     homepage = "https://gitlab.com/drobilla/sphinxygen";
-    changelog = "https://gitlab.com/drobilla/sphinxygen/-/releases/v${version}";
+    changelog = "https://gitlab.com/drobilla/sphinxygen/-/releases/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ samueltardieu ];
     mainProgram = "sphinxygen";
   };
-}
+})

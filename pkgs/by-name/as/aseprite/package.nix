@@ -17,13 +17,13 @@
   libjpeg,
   libpng,
   libwebp,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxxf86vm,
   libxcb,
-  libXrandr,
+  libxrandr,
   ninja,
   pcre2,
   pixman,
@@ -87,13 +87,13 @@ clangStdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libwebp
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxxf86vm
     libxcb
-    libXrandr
+    libxrandr
     pcre2
     pixman
     skia-aseprite

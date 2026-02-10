@@ -13,8 +13,8 @@
   graphicsmagick,
   ffmpeg,
   zlib,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   stb,
   openssl,
   xxHash,
@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     graphicsmagick
     ffmpeg
     zlib
-    libSM
-    libICE
+    libsm
+    libice
     stb
     openssl
     xxHash

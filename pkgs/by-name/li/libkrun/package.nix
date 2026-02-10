@@ -17,6 +17,7 @@
   withNet ? false,
   withGpu ? false,
   withSound ? false,
+  withInput ? false,
   withTimesync ? false,
   variant ? null,
 }:
@@ -32,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun" + lib.optionalString (variant != null) "-${variant}";
-  version = "1.15.1";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VhlFyYJ/TH12I3dUq0JTus60rQEJq5H4Pm1puCnJV5A=";
+    hash = "sha256-6HBSL5Zu29sDoEbZeQ6AsNIXUcqXVVGMk0AR2X6v1yU=";
   };
 
   outputs = [
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-dK3V7HCCvTqmQhB5Op2zmBPa9FO3h9gednU9tpQk+1U=";
+    hash = "sha256-UIzbtBJH6aivoIxko1Wxdod/jUN44pERX9Hd+v7TC3Q=";
   };
 
   # Make sure libkrunfw can be found by dlopen()
@@ -88,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withNet "NET=1"
   ++ lib.optional withGpu "GPU=1"
   ++ lib.optional withSound "SND=1"
+  ++ lib.optional withInput "INPUT=1"
   ++ lib.optional withTimesync "TIMESYNC=1"
   ++ lib.optional (variant == "sev") "SEV=1"
   ++ lib.optional (variant == "tdx") "TDX=1";

@@ -22,7 +22,7 @@
   casilda,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cambalache";
   version = "0.99.3";
   pyproject = false;
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "jpu";
     repo = "cambalache";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1X7fXYSIXoj8qhQLIfz2gMrCnNBZ7OJCeMykBSpnYD4=";
   };
 
@@ -98,4 +98,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

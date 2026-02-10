@@ -16623,6 +16623,52 @@ with self;
     };
   };
 
+  HTTPDaemonSSL = buildPerlPackage {
+    pname = "HTTP-Daemon-SSL";
+    version = "1.05-01-5";
+    src = fetchurl {
+      url = "https://salsa.debian.org/perl-team/modules/packages/libhttp-daemon-ssl-perl/-/archive/debian/1.05-01-5/libhttp-daemon-ssl-perl-debian-1.05-01-5.tar.gz";
+      hash = "sha256-2J4W3SAPgktQ8N+CTSm9fddaUlfzq074sj14fe5zHVc=";
+    };
+    patches = [
+      # Several Debian patches to fix test suite
+      # https://sources.debian.org/patches/libhttp-daemon-ssl-perl/1.05-01-5/
+      (fetchpatch2 {
+        name = "testmodule.diff";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/testmodule.diff";
+        hash = "sha256-pVPtQLlMYr7Bm8QprJbCyfY+6SyZ/v7uuqvX3k/GnGs=";
+      })
+      (fetchpatch2 {
+        name = "testpost.diff";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/testpost.diff";
+        hash = "sha256-clI4u2uYGPow8k3YjnjQFam5IK/xlW8SsJvJ/pwMm4o=";
+      })
+      (fetchpatch2 {
+        name = "IO-Socket-SSL_2.078.patch";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/IO-Socket-SSL_2.078.patch";
+        hash = "sha256-EoZPj7mlDm+KKAuXTdIhlyWAFjG9H8tqeZj42ZwV4no=";
+      })
+      (fetchpatch2 {
+        name = "IO-Socket-SSL_2.079.patch";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/IO-Socket-SSL_2.079.patch";
+        hash = "sha256-xT533707i+ZCn1/qDZJU/oW8j+Sk8WWbIPulddJPb1w=";
+      })
+    ];
+    propagatedBuildInputs = [
+      HTTPDaemon
+      IOSocketSSL
+    ];
+    __darwinAllowLocalNetworking = true;
+    meta = {
+      description = "Simple http server class with SSL support";
+      homepage = "https://github.com/aufflick/p5-http-daemon-ssl";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   HTTPDate = buildPerlPackage {
     pname = "HTTP-Date";
     version = "6.06";

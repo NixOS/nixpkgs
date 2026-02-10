@@ -6,7 +6,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lexy";
   version = "0.5.2";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "antoniorodr";
     repo = "lexy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ff+4QymAAxLK61Zdic26TcUzFEvH1A8X6puynMivKaY=";
   };
 
@@ -51,9 +51,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Lightweight CLI tool that fetches programming tutorials from \"Learn X in Y Minutes\" directly into your terminal";
     homepage = "https://github.com/antoniorodr/lexy.git";
-    changelog = "https://github.com/antoniorodr/lexy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/antoniorodr/lexy/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ puiyq ];
     mainProgram = "lexy";
   };
-}
+})

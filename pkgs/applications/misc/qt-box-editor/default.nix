@@ -1,15 +1,16 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
   qtbase,
   qtsvg,
-  qmake,
   leptonica,
   tesseract4,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "qt-box-editor";
   version = "unstable-2019-07-14";
 
@@ -20,14 +21,17 @@ mkDerivation {
     hash = "sha256-3dWnAu0CLO3atjbC1zJEnL3vzsIEecDDDhW3INMfCv4=";
   };
 
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
     qtbase
     qtsvg
     leptonica
     tesseract4
   ];
-
-  nativeBuildInputs = [ qmake ];
 
   # https://github.com/zdenop/qt-box-editor/issues/87
   postPatch = ''

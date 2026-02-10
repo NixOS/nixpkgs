@@ -28,10 +28,10 @@
   atkmm,
   libdrm,
   libxkbcommon,
-  xcbutilwm,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
+  libxcb-wm,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
   libgbm,
   alsa-lib,
   wayland,
@@ -84,10 +84,10 @@ let
     stdenv.cc.libc
     pango
     zlib
-    xcbutilwm
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
+    libxcb-wm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
     libx11
     libxt
     libxext

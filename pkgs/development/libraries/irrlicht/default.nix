@@ -4,9 +4,9 @@
   fetchzip,
   libGLU,
   libGL,
-  libXrandr,
-  libX11,
-  libXxf86vm,
+  libxrandr,
+  libx11,
+  libxxf86vm,
   zlib,
 }:
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation {
   buildInputs = [
     libGLU
     libGL
-    libXrandr
-    libX11
-    libXxf86vm
+    libxrandr
+    libx11
+    libxxf86vm
   ]
   ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
 

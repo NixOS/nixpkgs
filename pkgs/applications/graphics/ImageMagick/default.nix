@@ -9,9 +9,9 @@
   zlibSupport ? true,
   zlib,
   libX11Support ? !stdenv.hostPlatform.isMinGW,
-  libX11,
+  libx11,
   libXtSupport ? !stdenv.hostPlatform.isMinGW,
-  libXt,
+  libxt,
   fontconfigSupport ? true,
   fontconfig,
   freetypeSupport ? true,
@@ -158,8 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional freetypeSupport freetype
   ++ lib.optional libjpegSupport libjpeg
   ++ lib.optional lcms2Support lcms2
-  ++ lib.optional libX11Support libX11
-  ++ lib.optional libXtSupport libXt
+  ++ lib.optional libX11Support libx11
+  ++ lib.optional libXtSupport libxt
   ++ lib.optional libwebpSupport libwebp
   ++ lib.optional fftwSupport fftw;
 

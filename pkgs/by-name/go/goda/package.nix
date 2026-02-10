@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goda";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "loov";
     repo = "goda";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Cwt2tIP8S+76meuUT/GDUcMGKhJKBg3qGFwen2sEG8I=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "goda";
   };
-}
+})

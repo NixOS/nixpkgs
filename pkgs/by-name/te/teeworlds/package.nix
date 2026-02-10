@@ -7,7 +7,7 @@
   pkg-config,
   python3,
   alsa-lib,
-  libX11,
+  libx11,
   libGLU,
   SDL2,
   lua5_3,
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libGLU
       alsa-lib
-      libX11
+      libx11
     ]
   );
 

@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   setuptools,
   setuptools-scm,
   hypothesis,
@@ -15,8 +15,7 @@ buildPythonPackage rec {
   version = "1.1.1";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "miurahr";
     repo = "pyppmd";
     tag = "v${version}";

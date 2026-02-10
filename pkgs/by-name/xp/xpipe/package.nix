@@ -11,17 +11,17 @@
   freetype,
   alsa-lib,
   makeShellWrapper,
-  libX11,
-  libXext,
-  libXdamage,
-  libXfixes,
+  libx11,
+  libxext,
+  libxdamage,
+  libxfixes,
   libxcb,
-  libXcomposite,
-  libXcursor,
-  libXi,
-  libXrender,
-  libXtst,
-  libXxf86vm,
+  libxcomposite,
+  libxcursor,
+  libxi,
+  libxrender,
+  libxtst,
+  libxxf86vm,
   util-linux,
   socat,
 }:
@@ -70,18 +70,18 @@ stdenvNoCC.mkDerivation rec {
     freetype
     gtk3
     alsa-lib
-    libX11
-    libX11
-    libXext
-    libXdamage
-    libXfixes
+    libx11
+    libx11
+    libxext
+    libxdamage
+    libxfixes
     libxcb
-    libXcomposite
-    libXcursor
-    libXi
-    libXrender
-    libXtst
-    libXxf86vm
+    libxcomposite
+    libxcursor
+    libxi
+    libxrender
+    libxtst
+    libxxf86vm
     util-linux
     socat
   ];

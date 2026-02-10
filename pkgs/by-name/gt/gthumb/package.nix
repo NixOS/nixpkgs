@@ -18,7 +18,7 @@
   libjxl,
   librsvg,
   libwebp,
-  libX11,
+  libx11,
   lcms2,
   bison,
   brasero,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     libtiff
     libwebp
-    libX11
+    libx11
   ];
 
   postPatch = ''

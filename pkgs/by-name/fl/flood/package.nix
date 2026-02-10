@@ -10,13 +10,13 @@
 }:
 buildNpmPackage rec {
   pname = "flood";
-  version = "4.11.0";
+  version = "4.12.2";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "flood";
     rev = "v${version}";
-    hash = "sha256-RBWDEFhLEZdC7luGFGx3qY0Hk7nM44RZgRyCWXFPh1k=";
+    hash = "sha256-N+6MFxFDfrrp8MLUMjtzdUMDsJGvRPE7SdTedOlrRX4=";
   };
 
   nativeBuildInputs = [ pnpm_9 ];
@@ -31,7 +31,7 @@ buildNpmPackage rec {
       ;
     pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-MnsUTXcLMT0Q2bQ/rRD4FfJx8XP9TLiv1oTHIgnMZCQ=";
+    hash = "sha256-m7YNBHEz5g1AjDVECrGL+xJfSXaTnUPPY679ENjR+l8=";
   };
 
   passthru = {

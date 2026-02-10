@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpuid";
   version = "20250513";
 
   src = fetchurl {
-    url = "http://etallen.com/cpuid/${pname}-${version}.src.tar.gz";
+    url = "http://etallen.com/cpuid/cpuid-${finalAttrs.version}.src.tar.gz";
     sha256 = "sha256-b0dKIrWEhIjkVLAaMduA65WNVWdLUzlTP8DmrreTYms=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

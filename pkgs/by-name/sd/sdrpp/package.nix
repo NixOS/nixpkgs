@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
   glfw,
   glew,
   fftwFloat,
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     volk
     zstd
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libX11
+  ++ lib.optional stdenv.hostPlatform.isLinux libx11
   ++ lib.optional airspy_source airspy
   ++ lib.optional airspyhf_source airspyhf
   ++ lib.optional bladerf_source libbladeRF

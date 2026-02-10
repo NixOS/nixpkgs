@@ -14,14 +14,14 @@
   xmlto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guilt";
   version = "0.37-rc1";
 
   src = fetchFromGitHub {
     owner = "jeffpc";
     repo = "guilt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7OgRbMGYWtGvrZxKfJe0CkpmU3AUkPebF5NyTsfXeGA=";
   };
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/guilt --prefix PATH : ${lib.makeBinPath buildInputs}
+    wrapProgram $out/bin/guilt --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
   meta = {
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "guilt";
   };
-}
+})

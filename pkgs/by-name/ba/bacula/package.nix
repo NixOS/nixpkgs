@@ -12,12 +12,12 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bacula";
   version = "15.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/bacula/bacula-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-KUr9PS651bccPQ6I/fGetRO/24Q7KNNcBVLkrgYoJ6E=";
   };
 
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

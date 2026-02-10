@@ -40,22 +40,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uiprotect";
-  version = "10.0.1";
+  version = "10.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pxxl/NhvJh2Ur8g+25padewvshqSUZmB7vpGmVlH15k=";
+    hash = "sha256-tQeDZMukKg3xL/tGeQ7+Rm3lzNJQEcDkErbLfKnaxN8=";
   };
 
   build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [
-    "aiofiles"
-    "pydantic"
-  ];
 
   dependencies = [
     aiofiles

@@ -7,7 +7,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kcl-language-server";
   version = "0.11.2-unstable-2025-10-26";
 
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5yX9TYmn0nGlSI8jiAwxuYpBXq9ie+yVDHwcC1FLcBk=";
   };
 
-  sourceRoot = "${src.name}/kclvm";
+  sourceRoot = "${finalAttrs.src.name}/kclvm";
 
   cargoHash = "sha256-FulW9qNVVZtOoRfm+NPwQENJU9Ib1GBzcjHxk5QS70g=";
 
@@ -41,13 +41,13 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/kcl-lang/kcl/releases/tag/v${version}";
+    changelog = "https://github.com/kcl-lang/kcl/releases/tag/v${finalAttrs.version}";
     description = "High-performance implementation of KCL written in Rust that uses LLVM as the compiler backend";
-    downloadPage = "https://github.com/kcl-lang/kcl/tree/v${version}/kclvm/tools/src/LSP";
+    downloadPage = "https://github.com/kcl-lang/kcl/tree/v${finalAttrs.version}/kclvm/tools/src/LSP";
     homepage = "https://www.kcl-lang.io/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = kcl.meta.maintainers;
     mainProgram = "kcl-language-server";
   };
-}
+})

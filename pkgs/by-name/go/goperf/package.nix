@@ -7,7 +7,7 @@
   sd,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goperf";
   version = "0-unstable-2026-01-12";
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   passthru.updateScript = writeShellScript "update-goperf" ''
     export UPDATE_NIX_ATTR_PATH=goperf
     ${lib.escapeShellArgs (unstableGitUpdater {
-      inherit (src) url;
+      inherit (finalAttrs.src) url;
     })}
     set -x
     oldhash="$(nix-instantiate . --eval --strict -A "goperf.goModules.drvAttrs.outputHash" | cut -d'"' -f2)"
@@ -38,4 +38,4 @@ buildGoModule rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

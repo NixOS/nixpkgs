@@ -21,12 +21,12 @@
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libaom";
   version = "3.12.1";
 
   src = fetchzip {
-    url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
+    url = "https://aomedia.googlesource.com/aom/+archive/v${finalAttrs.version}.tar.gz";
     hash = "sha256-AAS6wfq4rZ4frm6+gwKoIS3+NVzPhhfW428WXJQ2tQ8=";
     stripRoot = false;
   };
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     # build uses `git describe` to set the build version
     cat > $NIX_BUILD_TOP/git << "EOF"
     #!${stdenv.shell}
-    echo v${version}
+    echo v${finalAttrs.version}
     EOF
     chmod +x $NIX_BUILD_TOP/git
     export PATH=$NIX_BUILD_TOP:$PATH
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
       an encoder (aomenc) and a decoder (aomdec).
     '';
     homepage = "https://aomedia.org/av1-features/get-started/";
-    changelog = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
+    changelog = "https://aomedia.googlesource.com/aom/+/refs/tags/v${finalAttrs.version}/CHANGELOG";
     maintainers = with lib.maintainers; [
       kiloreux
       dandellion
@@ -132,4 +132,4 @@ stdenv.mkDerivation rec {
     outputsToInstall = [ "bin" ];
     license = lib.licenses.bsd2;
   };
-}
+})

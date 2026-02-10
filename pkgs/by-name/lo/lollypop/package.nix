@@ -26,7 +26,7 @@
   kid3Support ? true,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lollypop";
   version = "1.4.40";
 
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "lollypop";
-    rev = version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-hdReviNgcigXuNqJns6aPW+kixlpmRXtqrLlm/LGHBo=";
   };
@@ -109,7 +109,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
+    changelog = "https://gitlab.gnome.org/World/lollypop/tags/${finalAttrs.version}";
     description = "Modern music player for GNOME";
     homepage = "https://gitlab.gnome.org/World/lollypop";
     license = lib.licenses.gpl3Plus;
@@ -117,4 +117,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "lollypop";
   };
-}
+})

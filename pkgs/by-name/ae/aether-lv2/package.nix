@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   lv2,
-  libX11,
+  libx11,
   libGL,
   libGLU,
   libgbm,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     lv2
-    libX11
+    libx11
     libGL
     libGLU
     libgbm

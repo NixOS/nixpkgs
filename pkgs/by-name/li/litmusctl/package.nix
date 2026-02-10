@@ -7,7 +7,7 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "litmusctl";
   version = "1.22.0";
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "litmuschaos";
     repo = "litmusctl";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-wf/y74ST4H6w8f/AyA2QIvLmQusyOALPY95qVtHF6Ac=";
   };
 
@@ -45,4 +45,4 @@ buildGoModule rec {
       sailord
     ];
   };
-}
+})

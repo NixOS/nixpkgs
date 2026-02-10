@@ -4,14 +4,14 @@
   fetchFromGitLab,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "watchlog";
   version = "1.252.0";
 
   src = fetchFromGitLab {
     owner = "kevincox";
     repo = "watchlog";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZDT98pxtpoEenJPwz4Ws2kkTqJ0lTWvxv3LfjBsCvZo=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     platforms = with lib.platforms; linux ++ windows;
     mainProgram = "wl";
   };
-}
+})

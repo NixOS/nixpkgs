@@ -7,14 +7,14 @@
   serie,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "serie";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "serie";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iHhm71z1DH2oDcgl5bwFVO0U5ks0LmoqMrlUZfIQkf4=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "serie";
   };
-}
+})

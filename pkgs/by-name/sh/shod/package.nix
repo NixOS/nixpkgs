@@ -4,11 +4,11 @@
   fetchFromGitHub,
   writeText,
   fontconfig,
-  libX11,
-  libXft,
-  libXpm,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxft,
+  libxpm,
+  libxrandr,
+  libxrender,
   conf ? null,
 }:
 
@@ -25,11 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libX11
-    libXft
-    libXpm
-    libXrandr
-    libXrender
+    libx11
+    libxft
+    libxpm
+    libxrandr
+    libxrender
   ];
 
   postPatch =

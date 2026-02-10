@@ -8,7 +8,7 @@
   rapidjson,
   libjack2,
   lv2,
-  libX11,
+  libx11,
   cairo,
   openssl,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     libjack2
     lv2
-    libX11
+    libx11
     cairo
     openssl
   ];

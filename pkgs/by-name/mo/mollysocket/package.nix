@@ -8,14 +8,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mollysocket";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "mollyim";
     repo = "mollysocket";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-F80XRQn3h1Y6dE8PVLGMTY29yZomrwqFAsm7h8euHw8=";
   };
 
@@ -45,11 +45,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/mollyim/mollysocket/releases/tag/${version}";
+    changelog = "https://github.com/mollyim/mollysocket/releases/tag/${finalAttrs.version}";
     description = "Get Signal notifications via UnifiedPush";
     homepage = "https://github.com/mollyim/mollysocket";
     license = lib.licenses.agpl3Plus;
     mainProgram = "mollysocket";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

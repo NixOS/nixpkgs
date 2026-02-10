@@ -340,19 +340,19 @@ let
             --replace-fail 'web/' '${webui}/'
         '';
 
-        nativeBuildInputs = [
-          prev.hatchling
-          prev.pythonRelaxDepsHook
+        build-system = [
+          final.hatchling
         ];
 
         pythonRemoveDeps = [ "dumb-init" ];
 
         pythonRelaxDeps = true;
 
-        propagatedBuildInputs =
+        dependencies =
           with final;
           [
             argon2-cffi
+            cachetools
             channels
             cryptography
             dacite

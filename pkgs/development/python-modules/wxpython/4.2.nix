@@ -25,10 +25,10 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
+  libsm,
+  libxinerama,
+  libxtst,
+  libxxf86vm,
   libglvnd,
   libgbm,
   pango,
@@ -102,10 +102,10 @@ buildPythonPackage rec {
     gst_all_1.gstreamer
     libGL
     libGLU
-    libSM
-    libXinerama
-    libXtst
-    libXxf86vm
+    libsm
+    libxinerama
+    libxtst
+    libxxf86vm
     libglvnd
     libgbm
     webkitgtk_4_1

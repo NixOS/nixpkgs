@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "thrift-ls";
   version = "0.2.10";
 
   src = fetchFromGitHub {
     owner = "joyme123";
     repo = "thrift-ls";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-v1PUrIHgdKqH7D5/KkJuNYYPMbjY817BGOix8B64sOA=";
   };
 
@@ -36,4 +36,4 @@ buildGoModule rec {
     ];
     mainProgram = "thriftls";
   };
-}
+})

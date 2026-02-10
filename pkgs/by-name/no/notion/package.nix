@@ -6,12 +6,12 @@
   fontconfig,
   gettext,
   groff,
-  libSM,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrandr,
+  libsm,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
+  libxrandr,
   lua,
   makeWrapper,
   pkg-config,
@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libSM
-    libX11
-    libXext
-    libXft
-    libXinerama
-    libXrandr
+    libsm
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxrandr
     lua
     readline
   ];

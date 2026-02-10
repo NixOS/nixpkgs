@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitlab-clippy";
   version = "1.0.3";
 
   src = fetchFromGitLab {
     owner = "dlalic";
     repo = "gitlab-clippy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-d7SmlAWIV4SngJhIvlud90ZUSF55FWIrzFpkfSXIy2Y=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wucke13 ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "litefs";
   version = "0.5.14";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "litefs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-URwHnOvvz/UnrxoFIuUYpw10uPHgxQf9LPO1xECixDE=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
     "-extldflags=-static"
   ];
 
@@ -42,4 +42,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "litefs";
   };
-}
+})

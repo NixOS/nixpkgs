@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mmtc";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "figsoda";
     repo = "mmtc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-gs6uytX4rm2JrJ4UbtHJDg+b+Z1ZjcsuUR0b13jQIy4=";
   };
 
@@ -30,9 +30,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Minimal mpd terminal client that aims to be simple yet highly configurable";
     homepage = "https://github.com/figsoda/mmtc";
-    changelog = "https://github.com/figsoda/mmtc/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/figsoda/mmtc/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = [ ];
     mainProgram = "mmtc";
   };
-}
+})

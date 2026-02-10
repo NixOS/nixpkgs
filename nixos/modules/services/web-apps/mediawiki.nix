@@ -231,6 +231,9 @@ let
         $wgRightsText = "";
         $wgRightsIcon = "";
 
+        # Enable APCU caching
+        $wgMainCacheType = CACHE_ACCEL;
+
         # Enabled skins.
         ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
 
@@ -256,8 +259,10 @@ in
       package = mkPackageOption pkgs "mediawiki" { };
 
       # https://www.mediawiki.org/wiki/Compatibility#PHP
-      phpPackage = mkPackageOption pkgs "php" {
-        default = "php83";
+      phpPackage = mkPackageOption pkgs "php" { } // {
+        default = pkgs.php83.buildEnv {
+          extensions = { all, enabled }: enabled ++ (with all; [ apcu ]);
+        };
       };
 
       finalPackage = mkOption {
@@ -730,7 +735,7 @@ in
 
         echo "exit( \$this->getPrimaryDB()->tableExists( 'user' ) ? 1 : 0 );" | \
         ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
-        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
           --dbserver ${lib.escapeShellArg dbAddr} \

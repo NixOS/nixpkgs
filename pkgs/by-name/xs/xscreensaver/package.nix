@@ -11,14 +11,14 @@
   intltool,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXft,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXt,
-  libXxf86vm,
+  libx11,
+  libxext,
+  libxft,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxt,
+  libxxf86vm,
   libxml2,
   makeWrapper,
   pam,
@@ -61,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libGL
     libGLU
-    libX11
-    libXext
-    libXft
-    libXi
-    libXinerama
-    libXrandr
-    libXt
-    libXxf86vm
+    libx11
+    libxext
+    libxft
+    libxi
+    libxinerama
+    libxrandr
+    libxt
+    libxxf86vm
     libxml2
     pam
     perlPackages.LWPProtocolHttps

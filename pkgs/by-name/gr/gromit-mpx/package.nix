@@ -7,7 +7,7 @@
   gtk3,
   glib,
   libappindicator-gtk3,
-  libpthreadstubs,
+  libpthread-stubs,
   libxdmcp,
   libxkbcommon,
   libepoxy,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     glib
     libappindicator-gtk3
-    libpthreadstubs
+    libpthread-stubs
     libxdmcp
     libxkbcommon
     libepoxy

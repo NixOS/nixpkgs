@@ -24,14 +24,14 @@
   haskellPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpcap";
   version = "1.10.6";
 
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
+    url = "https://www.tcpdump.org/release/libpcap-${finalAttrs.version}.tar.gz";
     hash = "sha256-hy3REzf+GrAq2dT+4EfJ2iRNaVxt3zTi67cz79Ttiqk=";
   };
 
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.bsd3;
   };
-}
+})

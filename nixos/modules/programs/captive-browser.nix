@@ -142,19 +142,8 @@ in
         else if config.networking.useNetworkd then
           "${cfg.package}/bin/systemd-networkd-dns ${iface [ ]}"
         else
-          "${config.security.wrapperDir}/udhcpc --quit --now -f ${iface [ "-i" ]} -O dns --script ${pkgs.writeShellScript "udhcp-script" ''
-            if [ "$1" = bound ]; then
-              echo "$dns"
-            fi
-          ''}"
+          throw "programs.captive-browser.dhcp-dns must be set"
       );
-
-    security.wrappers.udhcpc = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_net_raw+p";
-      source = "${pkgs.busybox}/bin/udhcpc";
-    };
 
     security.wrappers.captive-browser = mkIf requiresSetcapWrapper {
       owner = "root";

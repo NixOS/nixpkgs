@@ -6,15 +6,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "arkade";
-  version = "0.11.65";
+  version = "0.11.70";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
-    tag = version;
-    hash = "sha256-52yP/SV7xEIb6/w2C/JZcxiiI5Tem2pHsKNLyPFvmOY=";
+    tag = finalAttrs.version;
+    hash = "sha256-M4W1vcAgIE8XzpyBjW2EuqTySNyDRQuQ8rpCpn4TiFY=";
   };
 
   env.CGO_ENABLED = 0;
@@ -39,8 +39,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/alexellis/arkade/pkg.GitCommit=ref/tags/${version}"
-    "-X github.com/alexellis/arkade/pkg.Version=${version}"
+    "-X github.com/alexellis/arkade/pkg.GitCommit=ref/tags/${finalAttrs.version}"
+    "-X github.com/alexellis/arkade/pkg.Version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -61,4 +61,4 @@ buildGoModule rec {
       qjoly
     ];
   };
-}
+})

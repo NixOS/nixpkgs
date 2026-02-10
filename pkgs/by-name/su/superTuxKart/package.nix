@@ -15,7 +15,7 @@
   freetype,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   harfbuzz,
   mcpp,
   wiiuse,
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libjpeg
     libpng
-    libX11
+    libx11
     harfbuzz
     mcpp
     wiiuse

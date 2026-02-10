@@ -272,6 +272,9 @@ It must be one of the following:
 	When set, *nixos-rebuild* prefixes activation commands with sudo.
 	Setting this option allows deploying as a non-root user.
 
+	You can set sudo options by defining the NIX_SUDOOPTS environment
+	variable.
+
 *--ask-sudo-password*, *-S*
 	When set, *nixos-rebuild* will ask for sudo password for remote
 	activation (i.e.: on *--target-host*) at the start of the build process.
@@ -338,6 +341,9 @@ NIX_PATH
 
 NIX_SSHOPTS
 	Additional options to be passed to ssh on the command line.
+
+NIX_SUDOOPTS
+	Additional options to be passed to sudo on the command line.
 
 # FILES
 

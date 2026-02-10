@@ -10,14 +10,14 @@
   gitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-msrv";
   version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = "cargo-msrv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-dvCKi40c9PmM05MK+0VGWxny0ZA+9YO/M3zmv5Qv6b0=";
   };
 
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

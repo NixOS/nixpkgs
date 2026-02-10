@@ -18,10 +18,10 @@
   vulkan-loader,
   libxkbcommon,
   withX11 ? !stdenv.hostPlatform.isDarwin,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
   libxcb,
   withWayland ? !stdenv.hostPlatform.isDarwin,
   wayland,
@@ -38,10 +38,10 @@ let
       vulkan-loader
     ]
     ++ lib.optionals withX11 [
-      libX11
-      libXcursor
-      libXi
-      libXrandr
+      libx11
+      libxcursor
+      libxi
+      libxrandr
       libxcb
     ]
     ++ lib.optionals withWayland [

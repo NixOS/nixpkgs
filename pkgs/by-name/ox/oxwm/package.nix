@@ -3,9 +3,9 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXft,
-  libXrender,
+  libx11,
+  libxft,
+  libxrender,
   freetype,
   fontconfig,
   versionCheckHook,
@@ -26,9 +26,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXft
-    libXrender
+    libx11
+    libxft
+    libxrender
     freetype
     fontconfig
   ];

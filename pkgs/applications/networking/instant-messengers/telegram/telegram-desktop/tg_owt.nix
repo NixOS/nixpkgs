@@ -13,14 +13,14 @@
   openh264,
   crc32c,
   libvpx,
-  libX11,
-  libXtst,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXrender,
-  libXrandr,
-  libXi,
+  libx11,
+  libxtst,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxrender,
+  libxrandr,
+  libxi,
   glib,
   abseil-cpp,
   pipewire,
@@ -80,14 +80,14 @@ stdenv.mkDerivation {
     abseil-cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXtst
-    libXcomposite
-    libXdamage
-    libXext
-    libXrender
-    libXrandr
-    libXi
+    libx11
+    libxtst
+    libxcomposite
+    libxdamage
+    libxext
+    libxrender
+    libxrandr
+    libxi
     glib
     pipewire
     libgbm

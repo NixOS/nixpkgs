@@ -8,11 +8,11 @@
   python3,
   glslang,
   libffi,
-  libX11,
-  libXau,
+  libx11,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXrandr,
+  libxdmcp,
+  libxrandr,
   vulkan-headers,
   vulkan-loader,
   vulkan-volk,
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libffi
-    libX11
-    libXau
+    libx11
+    libxau
     libxcb
-    libXdmcp
-    libXrandr
+    libxdmcp
+    libxrandr
     wayland
     wayland-protocols
   ]

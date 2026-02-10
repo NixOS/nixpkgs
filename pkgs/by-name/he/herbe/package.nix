@@ -2,8 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   freetype,
   patches ? [ ],
   extraLibs ? [ ],
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    libX11
-    libXft
+    libx11
+    libxft
     freetype
   ]
   ++ extraLibs;

@@ -92,22 +92,6 @@ in
 
   patches =
     base.patches
-    ++ lib.optionals (lib.versionOlder info.version "38") [
-      # Fix build with Rust 1.89.0
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6624733
-      (fetchpatch {
-        name = "Define-rust-no-alloc-shim-is-unstable-v2.patch";
-        url = "https://github.com/chromium/chromium/commit/6aae0e2353c857d98980ff677bf304288d7c58de.patch";
-        hash = "sha256-Dd38c/0hiH+PbGPJhhEFuW6kUR45A36XZqOVExoxlhM=";
-      })
-      # Fix build with LLVM 21+
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
-      (fetchpatch {
-        name = "Dont-return-an-enum-from-EnumSizeTraits-Count.patch";
-        url = "https://github.com/chromium/chromium/commit/b0ff8c3b258a8816c05bdebf472dbba719d3c491.patch";
-        hash = "sha256-YIWcsCj5w0jUd7D67hsuk0ljTA/IbHwA6db3eK4ggUY=";
-      })
-    ]
     ++ lib.optionals (lib.versionOlder info.version "39") [
       # Fix build with Rust 1.90.0
       # https://chromium-review.googlesource.com/c/chromium/src/+/6875644
@@ -280,9 +264,6 @@ in
     # other
     enable_widevine = false;
     override_electron_version = info.version;
-  }
-  // lib.optionalAttrs (lib.versionOlder info.version "38") {
-    content_enable_legacy_ipc = true;
   };
 
   installPhase = ''

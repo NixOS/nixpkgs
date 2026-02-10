@@ -339,6 +339,7 @@ stdenv.mkDerivation {
         inherit (builtins) storeDir;
       }
     }
+    patch -p1 -d swift -i ${./patches/swift-Frontend-Fix-a-small-unique_ptr-array-access.patch}
 
     # This patch needs to know the lib output location, so must be substituted
     # in the same derivation as the compiler.

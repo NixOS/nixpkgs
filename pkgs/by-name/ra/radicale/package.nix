@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "radicale";
   version = "3.6.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FzCNmmlQeka+Z7h1Dp631coKPF7gc0LOWnyca994bgs=";
   };
 
@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://radicale.org/v3.html";
-    changelog = "https://github.com/Kozea/Radicale/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Kozea/Radicale/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "CalDAV and CardDAV server";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -56,4 +56,4 @@ python3.pkgs.buildPythonApplication rec {
       erictapen
     ];
   };
-}
+})

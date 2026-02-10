@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-backend-influxdb";
   version = "1.4.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-backend-influxdb";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-OwIVaWy3rgnn9Cm7sqBvFua2FOCgMQBoxPh+8HkvpB0=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

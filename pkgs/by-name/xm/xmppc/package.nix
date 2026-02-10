@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoconf-archive,
   autoreconfHook,
   pkg-config,
@@ -14,8 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xmppc";
   version = "0.1.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Anoxinon_e.V.";
     repo = "xmppc";
     rev = finalAttrs.version;

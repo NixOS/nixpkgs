@@ -36,6 +36,8 @@ coq.withPackages (
 )
 ```
 
+If you install the `vsrocq-language-server` or `rocq-lsp` server, make sure to list them as part of the above `coq.withPackages` expression instead of installing them separately if you want them to find your Coq/Rocq packages.
+
 ## Rocq packages attribute sets: `rocqPackages` {#rocq-packages-attribute-sets-rocqpackages}
 
 The recommended way of defining a derivation for a Rocq library, is to use the `rocqPackages.mkRocqDerivation` function, which is essentially a specialization of `mkDerivation` taking into account most of the specifics of Rocq libraries. The following attributes are supported:

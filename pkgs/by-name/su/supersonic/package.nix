@@ -22,18 +22,18 @@
   waylandSupport ? false,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.20.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
-    tag = "v${version}";
-    hash = "sha256-/zHqD5e3ZmLoaY3/KJSBtQpF0fzAr2kG1FSauzSduvo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q9g59TVo8Y7cKdSnyrsTQEIpB+f/+pcaobBFynnAgwY=";
   };
 
-  vendorHash = "sha256-hDE0ZKZLAUgztLqxMHtTj8AU0sIAX26bi7eCb2JFo3Q=";
+  vendorHash = "sha256-x8eq1ZGitBoq+N1QOIYLZRLIta3gbfpn2xZsqkj4cGo=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -71,21 +71,21 @@ buildGoModule rec {
     for dimension in 128 256 512;do
         dimensions=''${dimension}x''${dimension}
         mkdir -p $out/share/icons/hicolor/$dimensions/apps
-        cp res/appicon-$dimension.png $out/share/icons/hicolor/$dimensions/apps/${meta.mainProgram}.png
+        cp res/appicon-$dimension.png $out/share/icons/hicolor/$dimensions/apps/${finalAttrs.meta.mainProgram}.png
     done
   ''
   + lib.optionalString waylandSupport ''
-    mv $out/bin/supersonic $out/bin/${meta.mainProgram}
+    mv $out/bin/supersonic $out/bin/${finalAttrs.meta.mainProgram}
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = meta.mainProgram;
-      exec = meta.mainProgram;
-      icon = meta.mainProgram;
+      name = finalAttrs.meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
+      icon = finalAttrs.meta.mainProgram;
       desktopName = "Supersonic" + lib.optionalString waylandSupport " (Wayland)";
       genericName = "Subsonic Client";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       type = "Application";
       categories = [
         "Audio"
@@ -98,12 +98,13 @@ buildGoModule rec {
     mainProgram = "supersonic" + lib.optionalString waylandSupport "-wayland";
     description = "Lightweight cross-platform desktop client for Subsonic music servers";
     homepage = "https://github.com/dweymouth/supersonic";
-    changelog = "https://github.com/dweymouth/supersonic/releases/tag/${src.tag}";
+    changelog = "https://github.com/dweymouth/supersonic/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux ++ lib.optionals (!waylandSupport) lib.platforms.darwin;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       zane
       sochotnicky
+      toasteruwu
     ];
   };
-}
+})

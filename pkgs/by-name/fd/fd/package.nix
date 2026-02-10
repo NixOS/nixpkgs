@@ -9,14 +9,14 @@
   fd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fd";
   version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rUoR8LHtzwGQBwJGEsWpMYKG6HcGKcktcyF7TxTDJs8=";
   };
 
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
       it provides sensible (opinionated) defaults for 80% of the use cases.
     '';
     homepage = "https://github.com/sharkdp/fd";
-    changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sharkdp/fd/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -70,4 +70,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "fd";
   };
-}
+})

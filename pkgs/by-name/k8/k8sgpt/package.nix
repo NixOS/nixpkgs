@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k8sgpt";
   version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "k8sgpt-ai";
     repo = "k8sgpt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TaJBGU+nLMVOL1uiHPan8p2DfuAWTr57Lt2BtfNq6dA=";
   };
 
@@ -24,8 +24,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=v${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
     "-X main.date=1970-01-01-00:00:01"
   ];
 
@@ -33,7 +33,7 @@ buildGoModule rec {
     description = "Giving Kubernetes Superpowers to everyone";
     mainProgram = "k8sgpt";
     homepage = "https://k8sgpt.ai";
-    changelog = "https://github.com/k8sgpt-ai/k8sgpt/releases/tag/v${version}";
+    changelog = "https://github.com/k8sgpt-ai/k8sgpt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       developer-guy
@@ -41,4 +41,4 @@ buildGoModule rec {
       mrgiles
     ];
   };
-}
+})

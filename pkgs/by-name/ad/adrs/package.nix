@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "adrs";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "joshrotenberg";
     repo = "adrs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PAvn1yIptyiVG96BNXHPgc5rYEHyCTo42hh88dwxrhA=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dannixon ];
     mainProgram = "adrs";
   };
-}
+})

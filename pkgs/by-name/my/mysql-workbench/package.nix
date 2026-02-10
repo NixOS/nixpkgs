@@ -20,7 +20,7 @@
   python3Packages,
 
   cairo,
-  mysql,
+  mysql80,
   libiodbc,
   proj,
 
@@ -41,8 +41,12 @@
 }:
 
 let
+  mysql = mysql80;
+  gdal' = gdal.override { libmysqlclient = mysql; };
+  antlr = antlr4_13;
+
   # for some reason the package doesn't build with swig 4.3.0
-  swig_4_2 = swig.overrideAttrs (prevAttrs: {
+  swig' = swig.overrideAttrs (prevAttrs: {
     version = "4.2.1";
     src = prevAttrs.src.override {
       hash = "sha256-VlUsiRZLScmbC7hZDzKqUr9481YXVwo0eXT/jy6Fda8=";
@@ -99,14 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
     jre
     ninja
     pkg-config
-    swig_4_2
+    swig'
     wrapGAppsHook3
   ];
 
   buildInputs = [
-    antlr4_13.runtime.cpp
+    antlr.runtime.cpp
     boost
-    gdal
+    gdal'
     gtkmm3
     libiodbc
     libmysqlconnectorcpp
@@ -147,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "MySQL_CONFIG_PATH" (lib.getExe' mysql "mysql_config"))
     (lib.cmakeFeature "IODBC_CONFIG_PATH" (lib.getExe' libiodbc "iodbc-config"))
-    (lib.cmakeFeature "ANTLR_JAR_PATH" "${antlr4_13.jarLocation}")
+    (lib.cmakeFeature "ANTLR_JAR_PATH" "${antlr.jarLocation}")
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.

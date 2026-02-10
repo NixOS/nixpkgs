@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-fftw=${fftwSinglePrec.dev}" ];
 
-  NIX_LDFLAGS = "-lopenal";
+  env.NIX_LDFLAGS = "-lopenal";
 
   meta = {
     homepage = "http://scorched3d.co.uk/";

@@ -10,7 +10,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-weather";
   version = "0.0.4";
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cafkafk";
     repo = "nix-weather";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-15FUA4fszbAVXop3IyOHfxroyTt9/SkWZsSTUh9RtwY=";
   };
 
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
       Heavily inspired by guix weather.
     '';
     homepage = "https://git.fem.gg/cafkafk/nix-weather";
-    changelog = "https://git.fem.gg/cafkafk/nix-weather/releases/tag/v${version}";
+    changelog = "https://git.fem.gg/cafkafk/nix-weather/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.eupl12;
     mainProgram = "nix-weather";
     maintainers = with lib.maintainers; [
@@ -77,4 +77,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

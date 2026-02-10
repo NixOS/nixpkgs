@@ -20,7 +20,7 @@
   bash,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "variety";
   version = "0.9.0-b1";
   pyproject = true;
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uDQZfWY0RuTsdD/IxpjzSTMMtNq632VAwAjB+CeUIbw=";
   };
 
@@ -89,6 +89,14 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "{VARIETY_PATH}" "variety"
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/applications
+    intltool-merge --desktop-style po variety.desktop.in $out/share/applications/variety.desktop
+
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp variety/data/icons/scalable/apps/variety.svg $out/share/icons/hicolor/scalable/apps/variety.svg
+  '';
+
   pythonImportsCheck = [ "variety" ];
 
   meta = {
@@ -111,6 +119,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       p3psi
       zfnmxt
+      willfish
     ];
   };
-}
+})

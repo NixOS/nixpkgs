@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   libGL,
-  libX11,
-  libXext,
-  libXrandr,
+  libx11,
+  libxext,
+  libxrandr,
   pkg-config,
   python3,
 }:
@@ -27,9 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXext
-    libXrandr
+    libx11
+    libxext
+    libxrandr
   ];
 
   enableParallelBuilding = true;

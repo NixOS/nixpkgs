@@ -13,15 +13,7 @@ let
   python = python3.override {
     self = python3;
     packageOverrides = self: super: {
-      pyrate-limiter = super.pyrate-limiter.overridePythonAttrs (oldAttrs: rec {
-        version = "2.10.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-CPusPeyTS+QyWiMHsU0ii9ZxPuizsqv0wQy3uicrDw0=";
-        };
-        doCheck = false;
-      });
+      pyrate-limiter = super.pyrate-limiter_2;
     };
   };
 

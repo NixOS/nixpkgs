@@ -10,14 +10,14 @@
   fontconfig,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wgpu-utils";
   version = "25.0.2";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
-    tag = "wgpu-v${version}";
+    tag = "wgpu-v${finalAttrs.version}";
     hash = "sha256-Na8UWMEzY0mvw8YERZ86PH79Z5YlXITPdOYha7Ahn7k=";
   };
 
@@ -52,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "wgpu-info";
   };
-}
+})

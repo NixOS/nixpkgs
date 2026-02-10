@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsvc";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "https://downloads.apache.org//commons/daemon/source/commons-daemon-${finalAttrs.version}-src.tar.gz";
-    sha256 = "sha256-yPsiNFbqbfDGHzxlr7So8sZt395BABYEJ7jOmLEhUTE=";
+    url = "mirror://apache/commons/daemon/source/commons-daemon-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-SPnE5jrw1zAy7vIzGrjp0+B4SwCLoufLef3XUcUgK6Y=";
   };
 
   buildInputs = [ commonsDaemon ];
@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     export JAVA_HOME=${jre}
   '';
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 
   installPhase = ''
     runHook preInstall

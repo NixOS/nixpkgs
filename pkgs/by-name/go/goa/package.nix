@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goa";
   version = "3.23.4";
 
   src = fetchFromGitHub {
     owner = "goadesign";
     repo = "goa";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7+hOXJU2a39ytn08FlR/YAhOnAmVL5JxdcvF1AlOxHk=";
   };
   vendorHash = "sha256-VSjiEgkjLMFRThNI4G7O91wpF8CYaIVYOrtE49S/o3w=";
@@ -25,4 +25,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rushmorem ];
   };
-}
+})

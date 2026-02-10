@@ -22,7 +22,7 @@ in
   buildEnv,
   libunwind,
   fetchpatch,
-  libX11,
+  libx11,
   xorgproto,
   useX11 ? safeX11 stdenv && lib.versionOlder version "4.09",
   aflSupport ? false,
@@ -72,7 +72,7 @@ let
   x11env = buildEnv {
     name = "x11env";
     paths = [
-      libX11
+      libx11
       xorgproto
     ];
   };
@@ -167,7 +167,7 @@ stdenv.mkDerivation (
     buildInputs =
       optional (lib.versionOlder version "4.07") ncurses
       ++ optionals useX11 [
-        libX11
+        libx11
         xorgproto
       ];
     depsBuildBuild = lib.optionals (!stdenv.hostPlatform.isDarwin) [ binutils ];

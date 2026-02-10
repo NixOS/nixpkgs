@@ -87,7 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = "MinSizeRel";
 
   # https://github.com/emsec/hal/issues/598
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.hostPlatform.isAarch64 "-flax-vector-conversions";
+  env = lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+    NIX_CFLAGS_COMPILE = "-flax-vector-conversions";
+  };
 
   # some plugins depend on other plugins and need to be able to load them
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''

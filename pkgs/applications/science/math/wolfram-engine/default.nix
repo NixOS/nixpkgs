@@ -45,7 +45,9 @@ let
   dirName = "WolframEngine";
 in
 stdenv.mkDerivation rec {
-  inherit (l10n) version name src;
+  pname = "wolfram-engine";
+
+  inherit (l10n) version src;
 
   nativeBuildInputs = [
     autoPatchelfHook

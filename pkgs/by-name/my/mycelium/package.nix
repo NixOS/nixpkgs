@@ -8,16 +8,16 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mycelium";
   version = "0.7.1";
 
-  sourceRoot = "${src.name}/myceliumd";
+  sourceRoot = "${finalAttrs.src.name}/myceliumd";
 
   src = fetchFromGitHub {
     owner = "threefoldtech";
     repo = "mycelium";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9/9vPUGIEGzbD8uMu3J8uQvNItc7UB4+X21riYjtDD8=";
   };
 
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "End-2-end encrypted IPv6 overlay network";
     homepage = "https://github.com/threefoldtech/mycelium";
-    changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/threefoldtech/mycelium/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       flokli
@@ -52,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "mycelium";
   };
-}
+})

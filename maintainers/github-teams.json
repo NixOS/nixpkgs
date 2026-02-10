@@ -209,9 +209,11 @@
       "domenkozar": 126339,
       "donn": 12652988,
       "dwt": 57199,
+      "eclairevoyant": 848000,
       "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
+      "fulsomenko": 14945057,
       "gador": 1883533,
       "griff": 4368,
       "groodt": 343415,
@@ -240,7 +242,6 @@
       "mstone": 412508,
       "n8henrie": 1234956,
       "ofalvai": 1694986,
-      "pasqui23": 6931743,
       "prusnak": 42201,
       "reckenrode": 7413633,
       "ryand56": 22267679,
@@ -422,8 +423,7 @@
     "maintainers": {
       "Mic92": 96200,
       "kalbasit": 87115,
-      "katexochen": 49727155,
-      "zowoq": 59103226
+      "katexochen": 49727155
     },
     "members": {
       "mfrw": 4929861,
@@ -524,7 +524,7 @@
     "members": {
       "K900": 386765,
       "Ma27": 6025220,
-      "TredwellGit": 61860346
+      "zowoq": 59103226
     },
     "name": "Linux kernel"
   },
@@ -550,8 +550,7 @@
     "members": {
       "9999years": 15312184,
       "Qyriad": 1542224,
-      "RaitoBezarius": 314564,
-      "alois31": 36605164
+      "RaitoBezarius": 314564
     },
     "name": "Lix maintainers"
   },
@@ -691,7 +690,6 @@
       "0x4A6F": 9675338,
       "MattSturgeon": 5046562,
       "Sereja313": 112060595,
-      "dasJ": 4971975,
       "dyegoaurelio": 42411160
     },
     "name": "nix-formatting"
@@ -707,6 +705,7 @@
       "Mic92": 96200,
       "Radvendii": 1239929,
       "edolstra": 1148549,
+      "lovesegfault": 7243783,
       "xokdvium": 145775305
     },
     "name": "Nix team"
@@ -740,8 +739,7 @@
     "id": 14317027,
     "maintainers": {
       "alyssais": 2768870,
-      "emilazy": 18535642,
-      "wolfgangwalther": 9132420
+      "emilazy": 18535642
     },
     "members": {},
     "name": "Nixpkgs core"

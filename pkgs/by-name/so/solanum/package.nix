@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation {
   pname = "solanum";
-  version = "0-unstable-2026-01-22";
+  version = "0-unstable-2026-02-03";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
     repo = "solanum";
-    rev = "fd89d4e837fe2e98cb273c340ddf4762ce1eb070";
-    hash = "sha256-QMGbNCWbg6ODZHVM+A2hwm/okIXGYULCS2nZrGX2xco=";
+    rev = "9778247c3dca59370b21c4f34f328c52e8b8c669";
+    hash = "sha256-qeAO4AcrPPUW+5TA20GcLSzTKGC51IrK53K9qtBxnH4=";
   };
 
   patches = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
+    substituteInPlace include/defaults.h --replace-fail 'ETCPATH "' '"/etc/solanum'
   '';
 
   preConfigure = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     "--enable-ipv6"
     "--enable-openssl=${openssl.dev}"
     "--with-program-prefix=solanum-"
-    "--localstatedir=/var/lib"
+    "--localstatedir=/var"
     "--with-rundir=/run"
     "--with-logdir=/var/log"
   ]

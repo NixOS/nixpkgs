@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "smbcrawler";
   version = "1.2.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SySS-Research";
     repo = "smbcrawler";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9hom/4wNCiBp70s0a3K4dq1BOcoVV+yAeiPQlvQ7yUw=";
   };
 
@@ -52,9 +52,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool that takes credentials and a list of hosts and crawls through shares";
     homepage = "https://github.com/SySS-Research/smbcrawler";
-    changelog = "https://github.com/SySS-Research/smbcrawler/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/SySS-Research/smbcrawler/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "smbcrawler";
   };
-}
+})

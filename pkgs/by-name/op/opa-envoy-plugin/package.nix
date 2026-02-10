@@ -12,18 +12,18 @@ assert
   enableWasmEval && stdenv.hostPlatform.isDarwin
   -> throw "building with wasm on darwin is failing in nixpkgs";
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "opa-envoy-plugin";
-  version = "1.12.2-envoy";
+  version = "1.13.1-envoy";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa-envoy-plugin";
-    tag = "v${version}";
-    hash = "sha256-9S4W/YCrlLonzTn2T8mha0j41P+yJf0l1UOgcdG+L30=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XG1xnPOE922H/yMNyY0M8x5KW90TPZlq5UAXCEtgR18=";
   };
 
-  vendorHash = "sha256-8gDHfC9UfN4Vz6f34gaQyxCLlQWg/F3QglSvM/bTUec=";
+  vendorHash = "sha256-vZgDQYkid1xNJhmefifcp695R672mz6tpo3g/gzrdBg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,7 +32,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/open-policy-agent/opa/v1/version.Version=${version}"
+    "-X github.com/open-policy-agent/opa/v1/version.Version=${finalAttrs.version}"
   ];
 
   tags = lib.optional enableWasmEval (
@@ -53,7 +53,7 @@ buildGoModule rec {
 
     $out/bin/opa-envoy-plugin --help
     $out/bin/opa-envoy-plugin version
-    $out/bin/opa-envoy-plugin version | grep "Version: ${version}"
+    $out/bin/opa-envoy-plugin version | grep "Version: ${finalAttrs.version}"
 
     ${lib.optionalString enableWasmEval ''
       # If wasm is enabled verify it works
@@ -66,7 +66,7 @@ buildGoModule rec {
   meta = {
     mainProgram = "opa";
     homepage = "https://www.openpolicyagent.org/docs/latest/envoy-introduction/";
-    changelog = "https://github.com/open-policy-agent/opa-envoy-plugin/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/open-policy-agent/opa-envoy-plugin/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Plugin to enforce OPA policies with Envoy";
     longDescription = ''
       OPA-Envoy extends OPA with a gRPC server that implements the Envoy
@@ -79,4 +79,4 @@ buildGoModule rec {
       charlieegan3
     ];
   };
-}
+})

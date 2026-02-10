@@ -18,14 +18,14 @@
   rclone,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "celeste";
   version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "hwittenborn";
     repo = "celeste";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Yj2PvAlAkwLaSE27KnzEmiRAD5K/YVGbF4+N3uhDVT8=";
   };
 
@@ -92,11 +92,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/hwittenborn/celeste/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/hwittenborn/celeste/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "GUI file synchronization client that can sync with any cloud provider";
     mainProgram = "celeste";
     homepage = "https://github.com/hwittenborn/celeste";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

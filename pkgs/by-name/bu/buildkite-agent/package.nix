@@ -12,14 +12,14 @@
   gitUpdater,
   nixosTests,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "buildkite-agent";
   version = "3.89.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5COo5vXecXLhYAy3bcaYvmluFdfEKGgiTbhat8T3AV8=";
   };
 
@@ -83,4 +83,4 @@ buildGoModule rec {
     ];
     platforms = with lib.platforms; unix ++ darwin;
   };
-}
+})

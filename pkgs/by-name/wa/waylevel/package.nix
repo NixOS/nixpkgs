@@ -4,14 +4,14 @@
   rustPlatform,
   wayland,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "waylevel";
   version = "1.0.0";
 
   src = fetchFromSourcehut {
     owner = "~shinyzenith";
     repo = "waylevel";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-T2gqiRcKrKsvwGNnWrxR1Ga/VX4AyllYn1H25aIKt5s=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "waylevel";
   };
-}
+})

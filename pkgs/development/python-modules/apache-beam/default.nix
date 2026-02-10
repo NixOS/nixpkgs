@@ -21,10 +21,10 @@
   crcmod,
   cryptography,
   dill,
+  envoy-data-plane,
   fastavro,
   fasteners,
   grpcio,
-  hdfs,
   httplib2,
   numpy,
   objsize,
@@ -63,52 +63,33 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apache-beam";
-  version = "2.70.0";
+  version = "2.71.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
-    tag = "v${version}";
-    hash = "sha256-sySHoknK2FmiAEOpRdF9i3vA6NvnDrZyBCghVoyEzLw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pIuRaBN1lmC3EMuUnBovl/pBmNwsDZ/vh/OM/sD9SrI=";
   };
 
-  sourceRoot = "${src.name}/sdks/python";
+  sourceRoot = "${finalAttrs.src.name}/sdks/python";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "==" ">=" \
-      --replace-fail ",<2.3.0" ""
+      --replace-fail "==" ">="
 
     substituteInPlace setup.py \
       --replace-fail "  copy_tests_from_docs()" ""
   '';
 
   pythonRelaxDeps = [
-    "beartype"
-    "grpcio"
+    "envoy-data-plane"
     "jsonpickle"
     "objsize"
-
-    # As of apache-beam v2.55.1, the requirement is cloudpickle~=2.2.1, but
-    # the current (2024-04-20) nixpkgs's pydot version is 3.0.0.
-    "cloudpickle"
-
-    # See https://github.com/NixOS/nixpkgs/issues/156957
-    "dill"
-
-    "numpy"
-
-    "protobuf"
-
-    # As of apache-beam v2.45.0, the requirement is pyarrow<10.0.0,>=0.15.1, but
-    # the current (2023-02-22) nixpkgs's pyarrow version is 11.0.0.
     "pyarrow"
-
-    "pydot"
-    "redis"
   ];
 
   build-system = [
@@ -129,10 +110,10 @@ buildPythonPackage rec {
     crcmod
     cryptography
     dill
+    envoy-data-plane
     fastavro
     fasteners
     grpcio
-    hdfs
     httplib2
     numpy
     objsize
@@ -258,6 +239,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # AssertionError: Lists differ:
+    # ['pickled_main_session', 'submission_environment_dependencies.txt'] != ['pickled_main_session']
+    "test_main_session_staged_when_using_cloudpickle"
+
+    # TypeError: NoneType takes no arguments
+    "test_run_inference_with_rate_limiter"
+    "test_run_inference_with_rate_limiter_exceeded"
+
     # RuntimeError: This pipeline runs with the pipeline option --update_compatibility_version=2.67.0 or earlier.
     # When running with this option on SDKs 2.68.0 or later, you must ensure dill==0.3.1.1 is installed. Error
     "test_reshuffle_custom_window_preserves_metadata_1"
@@ -328,13 +317,56 @@ buildPythonPackage rec {
 
     # TypeError: Expected Iterator in return type annotatio
     "test_get_output_batch_type"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: Could not determine schema for type hint Any.
+    # Did you mean to create a schema-aware PCollection? See https://s.apache.org/beam-python-schemas
+    "test_dataframes"
+    "test_dataframes_same_cell_twice"
+
+    # AssertionError: 'OptionalUnionType(unnamed: int | str | None)' not found in ('OptionalUnionType(unnamed: typing.Union[int, str, NoneType])', 'OptionalUnionType(unnamed: typing.Union[str, int, NoneType])')
+    "test_pformat_namedtuple_with_unnamed_fields"
+
+    # AssertionError: Lists differ:
+    # ['ref[26 chars]_Coder_FastPrimitivesCoder_3', 'ref_Coder_GlobalWindowCoder_2']
+    # != ['ref[26 chars]_Coder_GlobalWindowCoder_2', 'ref_Coder_VersionedCoder_v269_3']
+    "test_coder_version_tag_included_in_runner_api_key"
+
+    # AttributeError: 'int' object has no attribute 'upper' [while running 'Map(<lambda at core_test.py:555>)']
+    "test_typecheck_with_default"
+
+    # AssertionError: Any != <class 'int'> (or similar type mismatches)
+    "test_child_without_output_hints_infers_partial_types_from_dofn"
+    "test_combine_properly_pipeline_type_checks_using_decorator"
+    "test_combine_properly_pipeline_type_checks_without_decorator"
+    "test_filter_typehint"
+    "test_mean_globally_pipeline_checking_satisfied"
+    "test_mean_globally_runtime_checking_satisfied"
+    "test_pardo_type_inference"
+    "test_pipeline_inference"
+    "test_ptransform_override_type_hints"
+    "test_type_inference"
+
+    # AssertionError: TypeCheckError not raised
+    "test_inferred_bad_kv_type"
+
+    # RuntimeError: NotImplementedError [while running 'WithKeys(<lambda at...y:232>)/Map(<lambda at util.py:1193>)']
+    "test_co_group_by_key_on_unpickled"
+
+    # TypeError: object of type 'member_descriptor' has no len()
+    "test_convert_bare_types_fail"
+    # TypeError: Parameter to List hint must be a non-sequence, a type, or a TypeConstraint.
+    # ForwardRef('int') is an instance of ForwardRef
+    "test_forward_reference"
+    # TypeError: Unable to deterministically encode ...
+    "test_deterministic_key"
   ];
 
   meta = {
     description = "Unified model for defining both batch and streaming data-parallel processing pipelines";
     homepage = "https://beam.apache.org/";
-    changelog = "https://github.com/apache/beam/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/apache/beam/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

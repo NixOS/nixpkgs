@@ -16,12 +16,19 @@ let
 
   configFile = pkgs.writeText "chrony.conf" ''
     ${lib.concatMapStringsSep "\n" (
-      server: "server " + server + " " + cfg.serverOption + lib.optionalString (cfg.enableNTS) " nts"
+      server:
+      (if lib.strings.hasInfix "pool" server then "pool " else "server ")
+      + server
+      + " "
+      + cfg.serverOption
+      + lib.optionalString (cfg.enableNTS) " nts"
     ) cfg.servers}
 
     ${lib.optionalString (
       cfg.initstepslew.enabled && (cfg.servers != [ ])
     ) "initstepslew ${toString cfg.initstepslew.threshold} ${lib.concatStringsSep " " cfg.servers}"}
+
+    ${lib.optionalString cfg.makestep.enable "makestep ${toString cfg.makestep.threshold} ${toString cfg.makestep.limit}"}
 
     driftfile ${driftFile}
     keyfile ${keyFile}
@@ -43,6 +50,20 @@ let
   ]
   ++ lib.optional cfg.enableMemoryLocking "-m"
   ++ cfg.extraFlags;
+
+  dispathcerScriptFile = pkgs.callPackage (
+    {
+      runCommand,
+      srcOnly,
+    }:
+    runCommand "10-chrony-onoffline" { } ''
+      cp ${srcOnly chronyPkg}/examples/chrony.nm-dispatcher.onoffline $out
+      substituteInPlace $out \
+        --replace-fail '/usr/bin/chronyc' '${chronyPkg}/bin/chronyc'
+      chmod +x $out
+      patchShebangs $out
+    ''
+  ) { };
 in
 {
   options = {
@@ -134,8 +155,9 @@ in
       initstepslew = {
         enabled = lib.mkOption {
           type = lib.types.bool;
-          default = true;
+          default = false;
           description = ''
+            DEPRECATED. Consider using `services.chrony.makestep` instead.
             Allow chronyd to make a rapid measurement of the system clock error
             at boot time, and to correct the system clock by stepping before
             normal operation begins.
@@ -153,10 +175,49 @@ in
         };
       };
 
+      makestep = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            Allow chronyd to step the system clock if the error is larger than
+            the specified threshold.
+          '';
+        };
+
+        threshold = lib.mkOption {
+          type = lib.types.either lib.types.float lib.types.int;
+          default = 0.1;
+          description = ''
+            The threshold of system clock error (in seconds) above which the
+            clock will be stepped. If the correction required is less than the
+            threshold, a slew is used instead.
+          '';
+        };
+
+        limit = lib.mkOption {
+          type = lib.types.ints.positive;
+          default = 3;
+          description = ''
+            The maximum number of times the system clock will be stepped.
+          '';
+        };
+      };
+
       directory = lib.mkOption {
         type = lib.types.str;
         default = "/var/lib/chrony";
         description = "Directory where chrony state is stored.";
+      };
+
+      dispatcherScript = lib.mkOption {
+        type = lib.types.bool;
+        default = config.networking.networkmanager.enable;
+        defaultText = lib.literalExpression "config.networking.networkmanager.enable";
+        description = ''
+          Whether to install the chrony NetworkManager dispatcher script
+          to handle connectivity changes.
+        '';
       };
 
       extraConfig = lib.mkOption {
@@ -193,6 +254,13 @@ in
       description = "chrony daemon user";
       home = stateDir;
     };
+
+    networking.networkmanager.dispatcherScripts = lib.mkIf cfg.dispatcherScript [
+      {
+        type = "basic";
+        source = dispathcerScriptFile;
+      }
+    ];
 
     services.timesyncd.enable = lib.mkForce false;
 

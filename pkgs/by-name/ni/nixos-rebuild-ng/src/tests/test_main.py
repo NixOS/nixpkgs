@@ -97,13 +97,8 @@ def test_parse_args() -> None:
         "foo2",
         "bar2",
     ]
-    assert nr.utils.dict_to_flags(g1.flake_common_flags) == [
-        "--option",
-        "foo1",
-        "bar1",
-        "--option",
-        "foo2",
-        "bar2",
+    # flake_eval_flags contains only eval-specific flags
+    assert nr.utils.dict_to_flags(g1.flake_eval_flags) == [
         "--update-input",
         "input1",
         "--update-input",
@@ -114,6 +109,15 @@ def test_parse_args() -> None:
         "--override-input",
         "override2",
         "input2",
+    ]
+    # flake_build_flags contains common build flags (for remote builds)
+    assert nr.utils.dict_to_flags(g1.flake_build_flags) == [
+        "--option",
+        "foo1",
+        "bar1",
+        "--option",
+        "foo2",
+        "bar2",
     ]
 
     r2, g2 = nr.parse_args(

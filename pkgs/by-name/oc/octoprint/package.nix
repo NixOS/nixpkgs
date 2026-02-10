@@ -92,14 +92,14 @@ let
       (self: super: {
         octoprint = self.buildPythonPackage rec {
           pname = "OctoPrint";
-          version = "1.11.5";
+          version = "1.11.6";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
             rev = version;
-            hash = "sha256-mGEKmmtLOYwqx8ezienZz6aaEmYGJkKKuyenq4rqarg=";
+            hash = "sha256-iCxxfW5mPYoOfdsBxeAp+kUFU9hMHq+2RcGekITyMFI=";
           };
 
           propagatedBuildInputs =
@@ -160,6 +160,7 @@ let
           nativeCheckInputs = with self; [
             ddt
             mock
+            time-machine
             pytestCheckHook
           ];
 

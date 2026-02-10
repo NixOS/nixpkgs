@@ -31,17 +31,16 @@
   mainProgram ? "qsv",
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qsv";
   version = "14.0.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version buildFeatures;
+
+  inherit buildFeatures;
 
   src = fetchFromGitHub {
     owner = "dathere";
     repo = "qsv";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Y/rCNG74R9EZMp+vLdGr+62HRM5Y4LpXq2C9S7gZ3fM=";
   };
 
@@ -70,7 +69,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "CSVs sliced, diced & analyzed";
     homepage = "https://github.com/dathere/qsv";
-    changelog = "https://github.com/dathere/qsv/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dathere/qsv/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       # or
@@ -82,4 +81,4 @@ rustPlatform.buildRustPackage {
       misuzu
     ];
   };
-}
+})

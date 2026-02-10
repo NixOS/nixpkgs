@@ -77,11 +77,14 @@ buildPythonPackage {
   passthru.updateScript = ./update.py;
 
   meta = {
+    broken = stdenv.isDarwin; # elftools.common.exceptions.ELFError: Magic number does not match
+    changelog = "https://github.com/google-ai-edge/LiteRT/releases/tag/v${release.version}";
     description = "LiteRT is for mobile and embedded devices";
     downloadPage = "https://github.com/google-ai-edge/LiteRT";
     homepage = "https://www.tensorflow.org/lite/";
     license = lib.licenses.asl20;
     platforms = lib.attrNames platforms;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -8,6 +8,7 @@
   yq,
   protobuf,
   installShellFiles,
+  makeBinaryWrapper,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
@@ -67,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # required by deno_kv crate
     protobuf
     installShellFiles
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
@@ -215,6 +217,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     # Remove non-essential binaries like denort and test_server
     find $out/bin/* -not -name "deno" -delete
+
+    # Do what `deno x --install-alias` would do (it doesn't work with Nix-packaged Deno)
+    makeBinaryWrapper $out/bin/deno $out/bin/dx --add-flags "x"
   ''
   + lib.optionalString canExecute ''
     installShellCompletion --cmd deno \

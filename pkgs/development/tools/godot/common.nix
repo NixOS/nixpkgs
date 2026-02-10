@@ -14,6 +14,7 @@
   fetchpatch,
   fontconfig,
   freetype,
+  gettext,
   glib,
   glslang,
   graphite2,
@@ -28,15 +29,15 @@
   libpulseaudio,
   libtheora,
   libwebp,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
   libxkbcommon,
-  libXrandr,
-  libXrender,
+  libxrandr,
+  libxrender,
   makeWrapper,
   mbedtls,
   miniupnpc,
@@ -322,11 +323,11 @@ let
                       prev.runtimeDependencies or [ ]
                       ++ map lib.getLib [
                         libpulseaudio
-                        libX11
-                        libXcursor
-                        libXext
-                        libXi
-                        libXrandr
+                        libx11
+                        libxcursor
+                        libxext
+                        libxi
+                        libxrandr
                         vulkan-loader
                       ]
                       ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -462,6 +463,14 @@ let
         patches = [
           ./Linux-fix-missing-library-with-builtin_glslang-false.patch
         ]
+        ++ lib.optionals (lib.versionAtLeast version "4.6") [
+          # https://github.com/godotengine/godot/pull/115450
+          (fetchpatch {
+            name = "fix-tls-handshake-fail-preventing-assetlib-use.patch";
+            url = "https://github.com/godotengine/godot/commit/29acd734c71f06268d6ef4715d7df70b14731f48.patch";
+            hash = "sha256-wxkr6jPtutUTG+mYrXoxcDcWIIZghlSJ79XqhFh/0P4=";
+          })
+        ]
         ++ lib.optionals (lib.versionOlder version "4.4") [
           (fetchpatch {
             name = "wayland-header-fix.patch";
@@ -578,14 +587,14 @@ let
           ++ lib.optional withAlsa alsa-lib
           ++ lib.optional (withX11 || withWayland) libxkbcommon
           ++ lib.optionals withX11 [
-            libX11
-            libXcursor
-            libXext
-            libXfixes
-            libXi
-            libXinerama
-            libXrandr
-            libXrender
+            libx11
+            libxcursor
+            libxext
+            libxfixes
+            libxi
+            libxinerama
+            libxrandr
+            libxrender
           ]
           ++ lib.optionals withWayland [
             libdecor
@@ -609,6 +618,7 @@ let
           ];
 
         nativeBuildInputs = [
+          gettext
           installShellFiles
           perl
           pkg-config

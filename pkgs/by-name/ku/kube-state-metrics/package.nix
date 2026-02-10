@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kube-state-metrics";
   version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kube-state-metrics";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-w55FOWw9p7yV/bt4leZucOLqjVyHYFF+gVLWLGQKF9M=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.eskytthe ];
     platforms = lib.platforms.unix;
   };
-}
+})

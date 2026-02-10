@@ -31,7 +31,7 @@ in
 with python3Packages;
 buildPythonApplication rec {
   pname = "platformio";
-  version = "6.1.18";
+  version = "6.1.19";
   pyproject = true;
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
@@ -39,7 +39,7 @@ buildPythonApplication rec {
     owner = "platformio";
     repo = "platformio-core";
     tag = "v${version}";
-    hash = "sha256-h9/xDWXCoGHQ9r2f/ZzAtwTAs4qzDrvVAQ2kuLS9Lk8=";
+    hash = "sha256-9pv2fbShddfYqBFxsQEj7nU1e772gUQEQINXRO/RMcQ=";
   };
 
   outputs = [
@@ -94,6 +94,7 @@ buildPythonApplication rec {
     intelhex
     lockfile
     marshmallow
+    packaging
     pip
     pyelftools
     pyparsing
@@ -130,6 +131,11 @@ buildPythonApplication rec {
   postInstall = ''
     mkdir -p $udev/lib/udev/rules.d
     cp platformio/assets/system/99-platformio-udev.rules $udev/lib/udev/rules.d/99-platformio-udev.rules
+
+    # Avoid platformio writing state into /build/.home when generating completions.
+    export HOME=$TMPDIR
+    export PLATFORMIO_CORE_DIR=$TMPDIR/platformio-core
+    mkdir -p "$PLATFORMIO_CORE_DIR"
 
     installShellCompletion --cmd platformio \
       --bash <(_PLATFORMIO_COMPLETE=bash_source $out/bin/platformio) \

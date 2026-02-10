@@ -19,6 +19,7 @@
   ocamlPackages_4_10,
   ocamlPackages_4_12,
   ocamlPackages_4_14,
+  ocamlPackages_5_4,
   rocqPackages, # for versions >= 9.0 that are transition shims on top of Rocq
   ncurses,
   buildIde ? null, # default is true for Coq < 8.14 and false for Coq >= 8.14
@@ -73,6 +74,7 @@ let
     "9.0.0".sha256 = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
     "9.0.1".sha256 = "sha256-gRgQhFiYvGR/Z46TmTl1bgN9O32nifxQGdrzfw0WHrk=";
     "9.1.0".sha256 = "sha256-+QL7I1/0BfT87n7lSaOmpHj2jJuDB4idWhAxwzvVQOE=";
+    "9.2+rc1".sha256 = "sha256-zKVhnBid5LOcd7uHWFGmUdHpyNLxIyB7RNNz5btz0mI=";
   };
   releaseRev = v: "V${v}";
   fetched =
@@ -111,7 +113,7 @@ let
     else
       lib.switch coq-version [
         {
-          case = lib.versions.range "8.16" "8.18";
+          case = lib.versions.range "8.16" "9.1";
           out = ocamlPackages_4_14;
         }
         {
@@ -126,7 +128,7 @@ let
           case = lib.versions.range "8.7" "8.10";
           out = ocamlPackages_4_09;
         }
-      ] ocamlPackages_4_14;
+      ] ocamlPackages_5_4;
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib

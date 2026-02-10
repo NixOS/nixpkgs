@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.27.1";
+  version = "0.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mirumee";
     repo = "ariadne";
     tag = version;
-    hash = "sha256-Ew01tj/UzZw3IBY33tDfLihWKImjKTZfFcfThphk+H8=";
+    hash = "sha256-7rDlt+f+53UXUa3IpGzm0AX/pqnzDc8b3nwpY1TRAZs=";
   };
 
   patches = [ ./remove-opentracing.patch ];

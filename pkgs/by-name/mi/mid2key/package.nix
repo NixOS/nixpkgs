@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   alsa-lib,
-  libX11,
-  libXi,
-  libXtst,
+  libx11,
+  libxi,
+  libxtst,
   xorgproto,
 }:
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    libX11
-    libXi
-    libXtst
+    libx11
+    libxi
+    libxtst
     xorgproto
   ];
 

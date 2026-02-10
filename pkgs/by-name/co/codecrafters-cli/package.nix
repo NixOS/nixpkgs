@@ -5,14 +5,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "codecrafters-cli";
   version = "46";
 
   src = fetchFromGitHub {
     owner = "codecrafters-io";
     repo = "cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XG85j9iay0+bQIoUeCrvO+rCch9ONXRAtoXjXI2Rt9s=";
     # A shortened git commit hash is part of the version output, and is
     # needed at build time. Use the `.git` directory to retrieve the
@@ -30,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/codecrafters-io/cli/internal/utils.Version=${version}"
+    "-X github.com/codecrafters-io/cli/internal/utils.Version=${finalAttrs.version}"
   ];
 
   # ldflags based on metadata from git
@@ -51,4 +51,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ builditluc ];
     license = lib.licenses.mit;
   };
-}
+})

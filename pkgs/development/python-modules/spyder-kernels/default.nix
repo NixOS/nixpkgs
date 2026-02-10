@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -32,7 +33,7 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spyder-kernels";
   version = "3.1.2";
   pyproject = true;
@@ -40,15 +41,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = "spyder-kernels";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HqjgeCmjQfwSVaJNWnDYHGeC81/iLzmAmnFrPhpwfLY=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [
-    "ipython"
-  ];
 
   dependencies = [
     cloudpickle
@@ -89,16 +86,22 @@ buildPythonPackage rec {
     "test_multiprocessing"
     "test_np_threshold"
     "test_runfile"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: 'Frame' object has no attribute 'f_locals'. Did you mean: 'f_globals'?
+    "test_functions_with_locals_in_pdb"
   ];
 
   pythonImportsCheck = [ "spyder_kernels" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Jupyter kernels for Spyder's console";
     homepage = "https://docs.spyder-ide.org/current/ipythonconsole.html";
     downloadPage = "https://github.com/spyder-ide/spyder-kernels/releases";
-    changelog = "https://github.com/spyder-ide/spyder-kernels/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/spyder-ide/spyder-kernels/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

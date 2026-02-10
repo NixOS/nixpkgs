@@ -4,14 +4,14 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pipes-rs";
   version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "lhvy";
     repo = "pipes-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7FdC/VY1ZO4E/qDdeKzsIai8h5ZgMrSr1C+Ny4fYh38=";
   };
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-    if [[ "$("$out/bin/pipes-rs" --version)" == "pipes-rs ${version}" ]]; then
+    if [[ "$("$out/bin/pipes-rs" --version)" == "pipes-rs ${finalAttrs.version}" ]]; then
       echo 'pipes-rs smoke check passed'
     else
       echo 'pipes-rs smoke check failed'
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.blueOak100;
     maintainers = [ lib.maintainers.vanilla ];
   };
-}
+})

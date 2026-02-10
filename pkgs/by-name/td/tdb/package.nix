@@ -26,12 +26,12 @@ let
       or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tdb";
   version = "1.4.15";
 
   src = fetchurl {
-    url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
+    url = "mirror://samba/tdb/tdb-${finalAttrs.version}.tar.gz";
     hash = "sha256-+6CdjfHxuQcq6ujniyvUPFr+8gsvbe76YzqhSjd6jdI=";
   };
 
@@ -83,15 +83,18 @@ stdenv.mkDerivation rec {
     else
       null;
 
-  # python-config from build Python gives incorrect values when cross-compiling.
-  # If python-config is not found, the build falls back to using the sysconfig
-  # module, which works correctly in all cases.
-  PYTHON_CONFIG = "/invalid";
-
-  # https://reviews.llvm.org/D135402
-  NIX_LDFLAGS = lib.optional (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  env = {
+    # python-config from build Python gives incorrect values when cross-compiling.
+    # If python-config is not found, the build falls back to using the sysconfig
+    # module, which works correctly in all cases.
+    PYTHON_CONFIG = "/invalid";
+  }
+  //
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        # https://reviews.llvm.org/D135402
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
   meta = {
     description = "Trivial database";
@@ -105,4 +108,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
   };
-}
+})

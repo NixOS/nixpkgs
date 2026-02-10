@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phpstan";
-  version = "2.1.37";
+  version = "2.1.38";
 
   src = fetchFromGitHub {
     owner = "phpstan";
     repo = "phpstan";
     tag = finalAttrs.version;
-    hash = "sha256-Ov4wCIKHuVtVKCTLBR9d2W2yNw49U2gGZkygEPhXTRA=";
+    hash = "sha256-yN/pnY0kVTHSb7Pi8LQGsLWvc/f3gfVgIwf7n1ty/UI=";
   };
 
   nativeBuildInputs = [

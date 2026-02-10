@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-frISiZ89ei7XfI5F2nJJehfQZsk0Mlb4n91q/AiZ2vA=";
   };
 
-  NIX_LDFLAGS = "-lfftw3_threads";
+  env.NIX_LDFLAGS = "-lfftw3_threads";
 
   patches = [
     # proper pthread return value (https://github.com/clearscene/pHash/pull/20)

@@ -9,19 +9,19 @@
   ffmpeg,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flac2all";
   version = "5.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "sha256-UGrkCQcpNzWH2hIRd1oTDryUeDumgHKuuxsbC87xaUI=";
   };
 
   # Not sure why this is needed, but setup.py expects this to be set
   postPatch = ''
-    echo ${version} > ./flac2all_pkg/version
+    echo ${finalAttrs.version} > ./flac2all_pkg/version
   '';
 
   build-system = [
@@ -62,4 +62,4 @@ python3Packages.buildPythonApplication rec {
     # TODO: This has only been tested on Linux, but may work on Mac too.
     platforms = lib.platforms.linux;
   };
-}
+})

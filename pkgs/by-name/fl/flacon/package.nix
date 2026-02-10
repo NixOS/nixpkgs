@@ -14,7 +14,7 @@
   taglib,
   wavpack,
   vorbisgain,
-  monkeysAudio,
+  monkeys-audio,
   sox,
   gtk3,
   libsForQt5,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     mp3gain
     lame
     wavpack
-    monkeysAudio
+    monkeys-audio
     vorbisgain
     sox
   ];

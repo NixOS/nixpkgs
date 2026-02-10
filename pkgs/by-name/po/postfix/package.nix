@@ -147,7 +147,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
+  env = lib.optionalAttrs withLDAP {
+    NIX_LDFLAGS = "-llber";
+  };
 
   installTargets = [ "non-interactive-package" ];
 

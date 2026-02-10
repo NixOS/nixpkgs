@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "doggo";
   version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "mr-karan";
     repo = "doggo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yKEjTaDwJVycsGeoJTVMjN9D4AzRLXZAY5fVIp+B14c=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X main.buildVersion=v${version}"
+    "-X main.buildVersion=v${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -50,4 +50,4 @@ buildGoModule rec {
       ma27
     ];
   };
-}
+})

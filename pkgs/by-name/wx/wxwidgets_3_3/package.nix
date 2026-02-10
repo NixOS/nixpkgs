@@ -9,10 +9,10 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
+  libsm,
+  libxinerama,
+  libxtst,
+  libxxf86vm,
   libnotify,
   libpng,
   libsecret,
@@ -57,10 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     gspell # wxTextCtrl spell checking
     gtk3
-    libSM
-    libXinerama
-    libXtst
-    libXxf86vm
+    libsm
+    libxinerama
+    libxtst
+    libxxf86vm
     libnotify # wxNotificationMessage backend
     libsecret # wxSecretStore backend
     libxkbcommon # proper key codes in key events

@@ -8,7 +8,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "coqui-tts";
   version = "0.26.2";
   pyproject = true;
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-TTS";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-U/U3aXFvqnaV/Msy5wyzAKCUw9XUNplugig6nv5nfZY=";
   };
 
@@ -185,9 +185,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/idiap/coqui-ai-TTS";
-    changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/${src.tag}";
+    changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/${finalAttrs.src.tag}";
     description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = lib.licenses.mpl20;
     teams = [ lib.teams.tts ];
   };
-}
+})

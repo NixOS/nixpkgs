@@ -9,7 +9,7 @@
   withInotify ? stdenv.hostPlatform.isLinux,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pyrosimple";
   version = "2.14.2";
   pyproject = true;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kannibalox";
     repo = "pyrosimple";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qER73B6wuRczwV23A+NwfDL4oymvSwmauA0uf2AE+kY=";
   };
 
@@ -66,8 +66,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "RTorrent client";
     homepage = "https://kannibalox.github.io/pyrosimple/";
-    changelog = "https://github.com/kannibalox/pyrosimple/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kannibalox/pyrosimple/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ vamega ];
   };
-}
+})

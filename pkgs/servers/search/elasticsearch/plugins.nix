@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   stdenv,
   fetchurl,
   unzip,
@@ -74,25 +75,6 @@ in
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-kuromoji";
       description = "Japanese (kuromoji) Analysis plugin integrates Lucene kuromoji analysis module into Elasticsearch";
       license = lib.licenses.asl20;
-    };
-  };
-
-  analysis-lemmagen = esPlugin rec {
-    pluginName = "analysis-lemmagen";
-    version = esVersion;
-    src = fetchurl {
-      url = "https://github.com/vhyza/elasticsearch-${pluginName}/releases/download/v${version}/elasticsearch-${pluginName}-${version}-plugin.zip";
-      hash =
-        if version == "7.17.9" then
-          "sha256-iY25apDkS6s0RoR9dVL2o/hFuUo6XhMzLjl8wDSFejk="
-        else
-          throw "unsupported version ${version} for plugin ${pluginName}";
-    };
-    meta = {
-      homepage = "https://github.com/vhyza/elasticsearch-analysis-lemmagen";
-      description = "LemmaGen Analysis plugin provides jLemmaGen lemmatizer as Elasticsearch token filter";
-      license = lib.licenses.asl20;
-      broken = true; # Not released yet for ES 7.17.10
     };
   };
 
@@ -230,4 +212,7 @@ in
         license = lib.licenses.asl20;
       };
     };
+}
+// lib.optionalAttrs config.allowAliases {
+  analysis-lemmagen = throw "elasticsearchPlugins.analysis-lemmagen has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
 }

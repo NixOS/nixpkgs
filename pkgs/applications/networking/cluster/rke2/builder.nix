@@ -4,7 +4,7 @@ lib:
   rke2Commit,
   rke2TarballHash,
   rke2VendorHash,
-  updateScript,
+  updateScript ? null,
   k8sImageTag,
   etcdVersion,
   pauseVersion,

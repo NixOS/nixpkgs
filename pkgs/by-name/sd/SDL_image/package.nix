@@ -3,7 +3,7 @@
   SDL,
   fetchFromGitHub,
   giflib,
-  libXpm,
+  libxpm,
   libjpeg,
   libpng,
   libtiff,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL
     giflib
-    libXpm
+    libxpm
     libjpeg
     libpng
     libtiff

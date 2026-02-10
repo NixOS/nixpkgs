@@ -9,12 +9,12 @@
   kind,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kind";
   version = "0.31.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "kubernetes-sigs";
     repo = "kind";
     hash = "sha256-3icwtfwlSkYOEw9bzEhKJC7OtE1lnBjZSYp+cC/2XNc=";
@@ -62,4 +62,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "kind";
   };
-}
+})

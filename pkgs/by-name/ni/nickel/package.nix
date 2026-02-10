@@ -26,8 +26,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-uCy/Qo92yZ4pjjgW64nWYH21EbdMMwGXP5522tl8MAE=";
 
   cargoBuildFlags = [
-    "-p nickel-lang-cli"
-    "-p nickel-lang-lsp"
+    "--package"
+    "nickel-lang-cli"
+    "--package"
+    "nickel-lang-lsp"
   ];
 
   nativeBuildInputs = [

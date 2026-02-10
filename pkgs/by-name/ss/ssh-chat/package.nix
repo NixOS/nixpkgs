@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ssh-chat";
   version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "shazow";
     repo = "ssh-chat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LgrqIuM/tLC0JqDai2TLu6G/edZ5Q7WFXjX5bzc0Bcc=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

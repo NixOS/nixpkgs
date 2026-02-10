@@ -12,7 +12,7 @@
 
 let
   pname = "freeplane";
-  version = "1.12.14";
+  version = "1.12.16";
 
   jdk = jdk17;
   gradle = gradle_9;
@@ -21,7 +21,7 @@ let
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-hoQFtxJ5FghvSKSOzcf1Yt8H948Ij/r+MKifvnkUjvA=";
+    hash = "sha256-I7vp67UXoiBDxmIOlgCWk6sKOZSWHHI7A2Sdu6cl488=";
   };
 
 in

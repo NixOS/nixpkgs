@@ -6,14 +6,14 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "framework-tool";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "framework-system";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wgleuZ0txkmv0+tyr31PiVTNyTSc+OPy/jJwL1Ryyu4=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "framework_tool";
   };
-}
+})

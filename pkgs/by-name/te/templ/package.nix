@@ -2,16 +2,17 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "templ";
   version = "0.3.977";
 
   src = fetchFromGitHub {
     owner = "a-h";
     repo = "templ";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KABEveISMy31B4kXoYY5IwFouoI4L9Jco5qMcnpeL2s=";
   };
 
@@ -27,6 +28,8 @@ buildGoModule rec {
     "-extldflags -static"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Language for writing HTML user interfaces in Go";
     homepage = "https://github.com/a-h/templ";
@@ -34,4 +37,4 @@ buildGoModule rec {
     mainProgram = "templ";
     maintainers = with lib.maintainers; [ luleyleo ];
   };
-}
+})

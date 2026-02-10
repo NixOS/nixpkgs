@@ -6,14 +6,14 @@
   ghr,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ghr";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "tcnksm";
     repo = "ghr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Is0D8tElv86s++NV6upu8RXvce65uPWQGIOl0Ftxf/M=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = ghr;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "ghr";
   };
-}
+})

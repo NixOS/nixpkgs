@@ -33,7 +33,9 @@ const fixupYarnLock = async (lockContents, verbose) => {
       if (hash)
         pkg.resolved += `#${hash}`
 
-      return [dep, pkg]
+      // Rewrite key to remove git+ prefix and .git suffix to prevent yarn git resolver
+      let fixedDep = dep.replace(/@git\+/, '@').replace(/\.git(#|$)/, '$1')
+      return [fixedDep, pkg]
     })
   )
 

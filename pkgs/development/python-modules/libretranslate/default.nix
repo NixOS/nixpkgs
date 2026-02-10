@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.8.3";
+  version = "1.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
     tag = "v${version}";
-    hash = "sha256-nWm0h/ceGDtoUVqYPkIC+anXrneJsxlZ4DN3Wge0NCk=";
+    hash = "sha256-9neXSbupZFLhpkc4HUY4l0c/Vtfrf7ve9VMfaOCSA2A=";
   };
 
   build-system = [

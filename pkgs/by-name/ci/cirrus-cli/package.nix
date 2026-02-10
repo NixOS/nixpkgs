@@ -6,22 +6,22 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cirrus-cli";
-  version = "0.161.5";
+  version = "0.162.0";
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
     repo = "cirrus-cli";
-    rev = "v${version}";
-    hash = "sha256-9mv6bGJDEv4ji4N7YFJYVjvYfRnqR9gsMP/JJ0NhobI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2YIStmYuJK4k7TUyMTHx8IozoqxQlcp/QvzYq2dOrBw=";
   };
 
-  vendorHash = "sha256-X7nziUeOJTMUhEQuF48ghVTuffOmsRtQrE3H4sqrObw=";
+  vendorHash = "sha256-YIDWRKbnXOWrQdjXz/GYzTIduSGQBaeCo21gp469VHc=";
 
   ldflags = [
-    "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${version}"
-    "-X github.com/cirruslabs/cirrus-cli/internal/version.Commit=v${version}"
+    "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${finalAttrs.version}"
+    "-X github.com/cirruslabs/cirrus-cli/internal/version.Commit=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -42,4 +42,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ techknowlogick ];
     mainProgram = "cirrus";
   };
-}
+})

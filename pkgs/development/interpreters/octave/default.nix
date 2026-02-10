@@ -12,7 +12,7 @@
   qhull,
   libsndfile,
   portaudio,
-  libX11,
+  libx11,
   graphicsmagick,
   pcre2,
   pkg-config,
@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libGLU
-    libX11
+    libx11
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -171,11 +171,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lobjc";
-
-  # See https://savannah.gnu.org/bugs/?50339
-  F77_INTEGER_8_FLAG = lib.optionalString use64BitIdx "-fdefault-integer-8";
+  env =
+    lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
+      NIX_LDFLAGS = "-lobjc";
+    }
+    // lib.optionalAttrs use64BitIdx {
+      # See https://savannah.gnu.org/bugs/?50339
+      F77_INTEGER_8_FLAG = "-fdefault-integer-8";
+    };
 
   configureFlags = [
     "--with-blas=blas"

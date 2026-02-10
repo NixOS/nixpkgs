@@ -29,14 +29,14 @@ let
     };
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bulloak";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "alexfertel";
     repo = "bulloak";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8Qp8ceafAkw7Tush/dvBl27q5oNDzbOqyvSLXhjf4fo=";
   };
 
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bulloak";
     maintainers = with lib.maintainers; [ beeb ];
   };
-}
+})

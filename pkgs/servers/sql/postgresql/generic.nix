@@ -664,7 +664,8 @@ let
     let
       installedExtensions = f postgresql.pkgs;
       finalPackage = buildEnv {
-        name = "${postgresql.pname}-and-plugins-${postgresql.version}";
+        pname = "${postgresql.pname}-and-plugins";
+        inherit (postgresql) version;
         paths = installedExtensions ++ [
           # consider keeping in-sync with `postBuild` below
           postgresql
@@ -694,7 +695,6 @@ let
           inherit (postgresql)
             pkgs
             psqlSchema
-            version
             ;
 
           pg_config = postgresql.pg_config.override {

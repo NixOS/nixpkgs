@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build build_odin.sh
   '';
 
-  LLVM_CONFIG = lib.getExe' llvmPackages.llvm.dev "llvm-config";
+  env.LLVM_CONFIG = lib.getExe' llvmPackages.llvm.dev "llvm-config";
 
   dontConfigure = true;
 

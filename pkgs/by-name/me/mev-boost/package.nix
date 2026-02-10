@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mev-boost";
   version = "1.10.1";
   src = fetchFromGitHub {
     owner = "flashbots";
     repo = "mev-boost";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Fm/zeaFJTtevEMZPK0O1QyfF7KXKcpqS2SC3DW7dn3Y=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ekimber ];
     platforms = lib.platforms.unix;
   };
-}
+})

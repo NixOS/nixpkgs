@@ -7,11 +7,22 @@
 let
   cfg = config.services.n8n;
 
-  envVarToCredName = varName: lib.toLower varName;
-
   # Partition environment variables into regular and file-based (_FILE suffix)
-  regularEnv = lib.filterAttrs (name: _value: !(lib.hasSuffix "_FILE" name)) cfg.environment;
-  fileBasedEnv = lib.filterAttrs (name: _value: lib.hasSuffix "_FILE" name) cfg.environment;
+  envVarToCredName = varName: lib.toLower varName;
+  partitionEnv =
+    env:
+    let
+      regular = lib.filterAttrs (name: _value: !(lib.hasSuffix "_FILE" name)) env;
+      fileBased = lib.filterAttrs (name: _value: lib.hasSuffix "_FILE" name) env;
+      fileBasedTransformed = lib.mapAttrs' (
+        varName: _secretPath: lib.nameValuePair varName "%d/${envVarToCredName varName}"
+      ) fileBased;
+    in
+    {
+      inherit regular fileBased fileBasedTransformed;
+    };
+
+  n8nEnv = partitionEnv cfg.environment;
 
   customNodesDir = pkgs.linkFarm "n8n-custom-nodes" (
     map (pkg: {
@@ -19,12 +30,6 @@ let
       path = "${pkg}/lib/node_modules/${pkg.pname}";
     }) cfg.customNodes
   );
-
-  # Transform file-based env vars to point to credentials directory
-  fileBasedEnvTransformed = lib.mapAttrs' (
-    varName: _secretPath: lib.nameValuePair varName "%d/${envVarToCredName varName}"
-  ) fileBasedEnv;
-
 in
 {
   imports = [
@@ -135,14 +140,14 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment =
-        regularEnv
+        n8nEnv.regular
         // {
-          HOME = config.services.n8n.environment.N8N_USER_FOLDER;
+          HOME = cfg.environment.N8N_USER_FOLDER;
         }
         // lib.optionalAttrs (cfg.customNodes != [ ]) {
           N8N_CUSTOM_EXTENSIONS = toString customNodesDir;
         }
-        // fileBasedEnvTransformed;
+        // n8nEnv.fileBasedTransformed;
       serviceConfig = {
         Type = "simple";
         ExecStart = lib.getExe cfg.package;
@@ -151,7 +156,7 @@ in
 
         LoadCredential = lib.mapAttrsToList (
           varName: secretPath: "${envVarToCredName varName}:${secretPath}"
-        ) fileBasedEnv;
+        ) n8nEnv.fileBased;
 
         # Basic Hardening
         NoNewPrivileges = "yes";

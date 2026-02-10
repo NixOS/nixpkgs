@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
 }:
 
@@ -9,8 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gumbo";
   version = "0.13.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "gumbo-parser";
     repo = "gumbo-parser";
     rev = finalAttrs.version;

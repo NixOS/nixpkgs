@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubexporter";
   version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "bakito";
     repo = "kubexporter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GSM4sO28RpCSAJRhhntkqD3RrMyZ1zEaEVeWFTqArAE=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/bakito/kubexporter/version.Version=${version}"
+    "-X github.com/bakito/kubexporter/version.Version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -33,9 +33,9 @@ buildGoModule rec {
   meta = {
     description = "Tool for exporting Kubernetes resources as YAML or JSON files";
     homepage = "https://github.com/bakito/kubexporter";
-    changelog = "https://github.com/bakito/kubexporter/releases/tag/v${version}";
+    changelog = "https://github.com/bakito/kubexporter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bakito ];
     mainProgram = "kubexporter";
   };
-}
+})

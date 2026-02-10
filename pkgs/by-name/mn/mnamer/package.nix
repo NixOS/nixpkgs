@@ -4,7 +4,7 @@
   lib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mnamer";
   version = "2.6.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jkwill87";
     repo = "mnamer";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-lu1DWbR7LkaRddeAAHBWM61cnEZG4KVZdQWWRsbghb8=";
   };
 
@@ -53,4 +53,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urlordjames ];
   };
-}
+})

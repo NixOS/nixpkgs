@@ -9,7 +9,7 @@
   gtk3,
   ant,
   jdk,
-  libXtst,
+  libxtst,
   coreutils,
   gnugrep,
   zulu,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           glib
           gtk'
-          libXtst
+          libxtst
         ]
       }
 

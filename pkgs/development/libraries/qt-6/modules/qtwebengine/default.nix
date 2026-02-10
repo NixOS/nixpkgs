@@ -21,12 +21,12 @@
   xrandr,
   libxkbfile,
   libpciaccess,
-  libXcursor,
-  libXScrnSaver,
-  libXrandr,
-  libXtst,
+  libxcursor,
+  libxscrnsaver,
+  libxrandr,
+  libxtst,
   libxshmfence,
-  libXi,
+  libxi,
   cups,
   fontconfig,
   freetype,
@@ -260,17 +260,17 @@ qtModule {
 
     # X11 libs
     xrandr
-    libXScrnSaver
-    libXcursor
-    libXrandr
+    libxscrnsaver
+    libxcursor
+    libxrandr
     libpciaccess
-    libXtst
+    libxtst
     libxcomposite
     libxdamage
     libdrm
     libxkbfile
     libxshmfence
-    libXi
+    libxi
     libxext
 
     # Pipewire

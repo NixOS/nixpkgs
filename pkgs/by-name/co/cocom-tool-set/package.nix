@@ -16,11 +16,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     RANLIB = "${stdenv.cc.targetPrefix}gcc-ranlib";
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=implicit-int"
-      "-Wno-error=implicit-function-declaration"
-      "-std=gnu17"
-    ];
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        "-Wno-error=implicit-int"
+        "-Wno-error=implicit-function-declaration"
+      ]
+      ++ lib.optional stdenv.cc.isGNU "-std=gnu17"
+    );
   };
 
   autoreconfFlags = "REGEX";

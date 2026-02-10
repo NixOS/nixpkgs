@@ -8,7 +8,7 @@
   ladspaH,
   libGL,
   libGLU,
-  libXrandr,
+  libxrandr,
   libsndfile,
   lv2,
   php84,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     ladspaH
     libGL
     libGLU
-    libXrandr
+    libxrandr
     libsndfile
     lv2
   ];

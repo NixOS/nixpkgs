@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchurl,
   extra-cmake-modules,
   kdoctools,
+  wrapQtAppsHook,
   qtscript,
   kconfig,
   kinit,
@@ -17,7 +18,7 @@
   shared-mime-info,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "okteta";
   version = "0.26.24";
 
@@ -30,6 +31,7 @@ mkDerivation rec {
     qtscript
     extra-cmake-modules
     kdoctools
+    wrapQtAppsHook
   ];
   buildInputs = [ shared-mime-info ];
 

@@ -1,13 +1,13 @@
 [
   {
     "pname": "AAXClean",
-    "version": "2.1.1.1",
-    "hash": "sha256-SjM74bfcqb3L6Ux+crofEsOWoHB0O78afNrld9WEFY0="
+    "version": "3.0.2",
+    "hash": "sha256-orz5qHU440qYIPKP92aPHUALHP6+RphJWU8vYGl/2Qo="
   },
   {
     "pname": "AAXClean.Codecs",
-    "version": "2.1.3.2",
-    "hash": "sha256-la4yuCQi75bCRr700CDD2huNEjk5ZKrTzwrtuUjyWAk="
+    "version": "3.0.2",
+    "hash": "sha256-IGWRj+Nr+bNMDNWSCj24LHAYkCZWpQXpimPzopg+hlg="
   },
   {
     "pname": "AudibleApi",
@@ -211,8 +211,8 @@
   },
   {
     "pname": "Microsoft.Build.Tasks.Git",
-    "version": "8.0.0",
-    "hash": "sha256-vX6/kPij8vNAu8f7rrvHHhPrNph20IcufmrBgZNxpQA="
+    "version": "10.0.102",
+    "hash": "sha256-JobfcsngZ3NjWtrfb03ZiGQ0xLEXUeFjC5MRjBEJ+Qo="
   },
   {
     "pname": "Microsoft.CodeAnalysis.Analyzers",
@@ -496,13 +496,13 @@
   },
   {
     "pname": "Microsoft.SourceLink.Common",
-    "version": "8.0.0",
-    "hash": "sha256-AfUqleVEqWuHE7z2hNiwOLnquBJ3tuYtbkdGMppHOXc="
+    "version": "10.0.102",
+    "hash": "sha256-1aeVLhXNi4Fpi0w4zQ+85L7Sphe7k4gmMfxwWiFierM="
   },
   {
     "pname": "Microsoft.SourceLink.GitHub",
-    "version": "8.0.0",
-    "hash": "sha256-hNTkpKdCLY5kIuOmznD1mY+pRdJ0PKu2HypyXog9vb0="
+    "version": "10.0.102",
+    "hash": "sha256-5aBeXy674sKp6wrlpPb4Psht43mF1OMJkmEggsTGUDg="
   },
   {
     "pname": "Microsoft.VisualStudio.SolutionPersistence",

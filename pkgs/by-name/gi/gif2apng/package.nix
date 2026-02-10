@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
 
-  NIX_CFLAGS_COMPILE = "-DENABLE_LOCAL_ZOPFLI";
+  env.NIX_CFLAGS_COMPILE = "-DENABLE_LOCAL_ZOPFLI";
 
   installPhase = ''
     runHook preInstall

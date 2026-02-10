@@ -160,3 +160,21 @@ def test_ssh_host() -> None:
         remote = m.Remote.from_arg(host_input, None, False)
         assert remote is not None
         assert remote.ssh_host() == expected
+
+
+@patch("subprocess.run", autospec=True)
+def test_custom_sudo_args(mock_run: Any) -> None:
+    with patch.dict(p.os.environ, {"NIX_SUDOOPTS": "--custom sudo --args"}):
+        p.run_wrapper(
+            ["test"],
+            check=False,
+            sudo=True,
+        )
+    mock_run.assert_called_with(
+        ["sudo", "--custom", "sudo", "--args", "test"],
+        check=False,
+        env=None,
+        input=None,
+        text=True,
+        errors="surrogateescape",
+    )

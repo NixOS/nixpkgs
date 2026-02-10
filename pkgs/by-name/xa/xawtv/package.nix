@@ -4,19 +4,19 @@
   fetchurl,
   ncurses,
   libjpeg,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
   alsa-lib,
   aalib,
-  libXft,
+  libxft,
   xorgproto,
   libv4l,
-  libFS,
-  libXaw,
-  libXpm,
-  libXext,
-  libSM,
-  libICE,
+  libfs,
+  libxaw,
+  libxpm,
+  libxext,
+  libsm,
+  libice,
   perl,
 }:
 
@@ -33,24 +33,24 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Fix-build-for-glibc-2.32.patch
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   buildInputs = [
     ncurses
     libjpeg
-    libX11
-    libXt
-    libXft
+    libx11
+    libxt
+    libxft
     xorgproto
-    libFS
+    libfs
     perl
     alsa-lib
     aalib
-    libXaw
-    libXpm
-    libXext
-    libSM
-    libICE
+    libxaw
+    libxpm
+    libxext
+    libsm
+    libice
     libv4l
   ];
 

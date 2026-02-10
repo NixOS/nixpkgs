@@ -4,14 +4,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "di-tui";
   version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "acaloiaro";
     repo = "di-tui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8aNwEDxaNUS909gRZ1PGEIKHIK8NmlxM6zwvc2xBlzc=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.acaloiaro ];
     mainProgram = "di-tui";
   };
-}
+})

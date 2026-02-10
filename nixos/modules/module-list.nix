@@ -74,6 +74,7 @@
   ./hardware/gpgsmartcards.nix
   ./hardware/graphics.nix
   ./hardware/hackrf.nix
+  ./hardware/hid-fanatecff.nix
   ./hardware/i2c.nix
   ./hardware/infiniband.nix
   ./hardware/inputmodule.nix
@@ -557,6 +558,7 @@
   ./services/desktops/blueman.nix
   ./services/desktops/bonsaid.nix
   ./services/desktops/cpupower-gui.nix
+  ./services/desktops/crossmacro.nix
   ./services/desktops/dleyna.nix
   ./services/desktops/dunst.nix
   ./services/desktops/espanso.nix
@@ -779,7 +781,7 @@
   ./services/mail/rss2email.nix
   ./services/mail/schleuder.nix
   ./services/mail/spamassassin.nix
-  ./services/mail/stalwart-mail.nix
+  ./services/mail/stalwart.nix
   ./services/mail/sympa.nix
   ./services/mail/tlsrpt.nix
   ./services/mail/zeyple.nix
@@ -843,6 +845,7 @@
   ./services/misc/dump1090-fa.nix
   ./services/misc/dwm-status.nix
   ./services/misc/dysnomia.nix
+  ./services/misc/elephant.nix
   ./services/misc/errbot.nix
   ./services/misc/ersatztv.nix
   ./services/misc/etebase-server.nix

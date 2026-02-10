@@ -10,7 +10,7 @@ buildGoModule rec {
   version = "1.43.0";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "scalingo";
     repo = "cli";
     rev = version;
     hash = "sha256-A1kz4Zh6SiXcsmFqHuldRTa1qI8+bJBALjweWYBvnTo=";

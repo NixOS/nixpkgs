@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scc";
   version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "boyter";
     repo = "scc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tFhYFHMscK3zfoQlaSxnA0pVuNQC1Xjn9jcZWkEV6XI=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
       mit
     ];
   };
-}
+})

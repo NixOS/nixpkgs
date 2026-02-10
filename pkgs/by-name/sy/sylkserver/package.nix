@@ -6,7 +6,7 @@
   fetchpatch2,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sylkserver";
   version = "6.5.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "sylkserver";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A15EJs35ZgXy9db3+XC0q5fTlemLJsA945nvIY50Pa4=";
   };
 
@@ -53,9 +53,9 @@ python3Packages.buildPythonApplication rec {
     description = "SIP/XMPP/WebRTC Application Server";
     homepage = "https://sylkserver.com/";
     downloadPage = "https://github.com/AGProjects/sylkserver";
-    changelog = "https://github.com/AGProjects/sylkserver/releases/tag/${version}";
+    changelog = "https://github.com/AGProjects/sylkserver/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.ngi ];
     mainProgram = "sylk-server";
   };
-}
+})

@@ -21,8 +21,8 @@
   libxcb,
   libstartup_notification,
   libxdg_basedir,
-  libpthreadstubs,
-  xcb-util-cursor,
+  libpthread-stubs,
+  libxcb-cursor,
   makeWrapper,
   pango,
   gobject-introspection,
@@ -123,13 +123,13 @@ stdenv.mkDerivation rec {
     dbus
     gdk-pixbuf
     luaEnv
-    libpthreadstubs
+    libpthread-stubs
     libstartup_notification
     libxdg_basedir
     lua
     net-tools
     pango
-    xcb-util-cursor
+    libxcb-cursor
     libxau
     libxdmcp
     libxcb

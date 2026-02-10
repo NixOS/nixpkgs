@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "typr";
   version = "1.0.1.21";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "DriftingOtter";
     repo = "Typr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-49e5tnX/vea3xLJP62Sj2gCdjbfsulIU48X/AR/3IBI=";
   };
 
@@ -29,4 +29,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ artur-sannikov ];
     mainProgram = "typr";
   };
-}
+})

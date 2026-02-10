@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libxcb,
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libxcb
   ];
 

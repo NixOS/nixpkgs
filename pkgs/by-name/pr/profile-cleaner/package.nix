@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.45";
+  version = "2.46";
   pname = "profile-cleaner";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-cleaner";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-10e1S+li7SXKJX2lETSdx84GavWqQYQqyLoBIVToTBI=";
+    sha256 = "sha256-gY6fmm6B6H7tg3xENnqaoy1QEMIf+a3k/C+JcnkyZwo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

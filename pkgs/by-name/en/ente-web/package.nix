@@ -1,9 +1,15 @@
 {
   lib,
   stdenv,
+  binaryen,
+  cargo,
   fetchFromGitHub,
   fetchYarnDeps,
   nodejs,
+  rustPlatform,
+  rustc,
+  wasm-bindgen-cli_0_2_106,
+  wasm-pack,
   yarnConfigHook,
   yarnBuildHook,
   nix-update-script,
@@ -19,43 +25,73 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.2.22";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
-    sparseCheckout = [ "web" ];
+    sparseCheckout = [
+      "rust"
+      "web"
+    ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ckrACrgQ9qj6e44QifiUPtldBbDVrKv29s5oQ1Y+gvk=";
+    hash = "sha256-2f4A8RQFhXjPpHKvZACUmUcoukJ800yqTTMWBtLyIlI=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      sourceRoot
+      cargoRoot
+      ;
+    hash = "sha256-dedLmQP15V+gAtycXx1fpWfjXWsTPLXPPcCIAcr/ME0=";
+  };
+  cargoRoot = "packages/wasm";
+
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/web/yarn.lock";
-    hash = "sha256-omFNobZ+2hb1cEO2Gfn+F3oYy7UDSrtIY4cliQ80CUs=";
+    hash = "sha256-H9ZNnbY22BddJl3SDhg+cEN0IaBZtilBFBDUf+zOzV0=";
   };
 
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
+    binaryen
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
+    rustc.llvmPackages.lld
     nodejs
+    wasm-bindgen-cli_0_2_106
+    wasm-pack
   ];
 
   # See: https://github.com/ente-io/ente/blob/main/web/apps/photos/.env
   env = extraBuildEnv;
 
-  # Replace hardcoded ente.io urls if desired
-  postPatch = lib.optionalString (enteMainUrl != null) ''
-    substituteInPlace \
-      apps/payments/src/services/billing.ts \
-      apps/photos/src/pages/shared-albums.tsx \
-      --replace-fail "https://ente.io" ${lib.escapeShellArg enteMainUrl}
+  postPatch =
+    # Use our `wasm-pack` binary, rather than the Node version, which is
+    # just a wrapper that tries to download the actual binary
+    ''
+      substituteInPlace \
+        packages/wasm/package.json \
+        --replace-fail "wasm-pack " ${lib.escapeShellArg "${wasm-pack}/bin/wasm-pack "}
+    ''
+    # Replace hardcoded ente.io urls if desired
+    + lib.optionalString (enteMainUrl != null) ''
+      substituteInPlace \
+        apps/payments/src/services/billing.ts \
+        apps/photos/src/pages/shared-albums.tsx \
+        --replace-fail "https://ente.io" ${lib.escapeShellArg enteMainUrl}
 
-    substituteInPlace \
-      apps/accounts/src/pages/index.tsx \
-      --replace-fail "https://web.ente.io" ${lib.escapeShellArg enteMainUrl}
-  '';
+      substituteInPlace \
+        apps/accounts/src/pages/index.tsx \
+        --replace-fail "https://web.ente.io" ${lib.escapeShellArg enteMainUrl}
+    '';
 
   yarnBuildScript = "build:${enteApp}";
   installPhase =
@@ -85,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pinpox
       oddlama
+      nicegamer7
     ];
     platforms = lib.platforms.all;
   };

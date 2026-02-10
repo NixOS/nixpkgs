@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-insta";
   version = "1.45.1";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uNf2KkwgRCBCVFDN5ql8MisfAoU4+z7XLWogyx8sgKw=";
   };
 
@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo subcommand for snapshot testing";
     mainProgram = "cargo-insta";
     homepage = "https://github.com/mitsuhiko/insta";
-    changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mitsuhiko/insta/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       oxalica
       matthiasbeyer
     ];
   };
-}
+})

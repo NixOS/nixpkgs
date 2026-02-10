@@ -5,24 +5,27 @@
   perl,
   perlPackages,
   stdenv,
+  procps,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imapsync";
-  version = "2.290";
+  version = "2.314";
 
   src = fetchurl {
     url = "https://imapsync.lamiral.info/dist/old_releases/${finalAttrs.version}/imapsync-${finalAttrs.version}.tgz";
-    hash = "sha256-uFhTxnaUDP793isfpF/7T8d4AnXDL4uN6zU8igY+EFE=";
+    hash = "sha256-NOFxXGWEiJ/zvZwKzC+rJURGKCvtqQyOWnGoOzpZ28o=";
   };
 
   postPatch = ''
     sed -i -e s@/usr@$out@ Makefile
-    substituteInPlace INSTALL.d/prerequisites_imapsync --replace "PAR::Packer" ""
+    substituteInPlace INSTALL.d/prerequisites_imapsync --replace-fail "PAR::Packer" ""
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/imapsync --set PERL5LIB $PERL5LIB
+    wrapProgram $out/bin/imapsync \
+      --set PERL5LIB $PERL5LIB \
+      --prefix PATH : ${lib.makeBinPath [ procps ]}
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,9 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     CryptOpenSSLRSA
     DataUniqid
     DistCheckConflicts
+    EmailAddress
     EncodeIMAPUTF7
     FileCopyRecursive
     FileTail
+    HTTPDaemon
+    HTTPDaemonSSL
     IOSocketINET6
     IOTee
     JSONWebToken
@@ -43,8 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     MailIMAPClient
     ModuleImplementation
     ModuleScanDeps
-    NetServer
     NTLM
+    NetDNS
+    NetServer
     PackageStash
     PackageStashXS
     ProcProcessTable
@@ -64,13 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Mail folder synchronizer between IMAP servers";
-    mainProgram = "imapsync";
-    homepage = "https://imapsync.lamiral.info/";
+    homepage = "https://imapsync.lamiral.info";
     license = lib.licenses.nlpl;
     maintainers = with lib.maintainers; [
       pSub
       motiejus
     ];
     platforms = lib.platforms.unix;
+    mainProgram = "imapsync";
   };
 })

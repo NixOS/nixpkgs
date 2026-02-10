@@ -32,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/benhoyt/inih";
     changelog = "https://github.com/benhoyt/inih/releases/tag/r${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ TredwellGit ];
     platforms = lib.platforms.all;
   };
 })

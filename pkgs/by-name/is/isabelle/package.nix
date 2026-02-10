@@ -51,28 +51,33 @@ let
   # Isabelle uses a branch of vampire that is not in the normal release line
   # that adds support for higher order goals
   vampireStdenv = if stdenv.hostPlatform.isLinux then gcc14Stdenv else stdenv;
-  vampire' = (vampire.override { stdenv = vampireStdenv; }).overrideAttrs (_: {
-    pname = "vampire-for-isabelle";
-    version = "4.8";
+  vampire' =
+    (vampire.override {
+      stdenv = vampireStdenv;
+      z3' = null;
+    }).overrideAttrs
+      (_: {
+        pname = "vampire-for-isabelle";
+        version = "4.8";
 
-    src = fetchFromGitHub {
-      owner = "vprover";
-      repo = "vampire";
-      tag = "v4.8HO4Sledgahammer";
-      hash = "sha256-CmppaGa4M9tkE1b25cY1LSPFygJy5yV4kpHKbPqvcVE=";
-    };
+        src = fetchFromGitHub {
+          owner = "vprover";
+          repo = "vampire";
+          tag = "v4.8HO4Sledgahammer";
+          hash = "sha256-CmppaGa4M9tkE1b25cY1LSPFygJy5yV4kpHKbPqvcVE=";
+        };
 
-    patches = [ ./vampire-add-install-directive.patch ];
+        patches = [ ./vampire-add-install-directive.patch ];
 
-    postInstall = ''
-      mv $out/bin/vampire_rel $out/bin/vampire
-    '';
+        postInstall = ''
+          mv $out/bin/vampire_rel $out/bin/vampire
+        '';
 
-    cmakeFlags = [
-      (lib.cmakeFeature "CMAKE_BUILD_HOL" "On")
-      (lib.cmakeFeature "CMAKE_DISABLE_FIND_PACKAGE_Z3" "On")
-    ];
-  });
+        cmakeFlags = [
+          (lib.cmakeFeature "CMAKE_BUILD_HOL" "On")
+          (lib.cmakeFeature "CMAKE_DISABLE_FIND_PACKAGE_Z3" "On")
+        ];
+      });
 
   sha1 = stdenv.mkDerivation {
     pname = "isabelle-sha1";

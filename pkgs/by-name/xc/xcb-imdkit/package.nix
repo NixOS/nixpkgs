@@ -5,8 +5,8 @@
   cmake,
   extra-cmake-modules,
   uthash,
-  xcbutil,
-  xcbutilkeysyms,
+  libxcb-util,
+  libxcb-keysyms,
   xorgproto,
 }:
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xcbutil
-    xcbutilkeysyms
+    libxcb-util
+    libxcb-keysyms
   ];
 
   meta = {

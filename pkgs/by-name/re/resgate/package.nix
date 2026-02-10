@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "resgate";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "resgateio";
     repo = "resgate";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HQgBWH6dqfmAfKMezUjPbwXif8bqAClns589la2lBVA=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ farcaller ];
     mainProgram = "resgate";
   };
-}
+})

@@ -6,14 +6,14 @@
   alsa-lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hyprnotify";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "codelif";
     repo = "hyprnotify";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+vBOHXaCWEoQ/Lk9VwP55XqlhSzSS9hoVg4FQOj8dIU=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bloeckchengrafik ];
     mainProgram = "hyprnotify";
   };
-}
+})

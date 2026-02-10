@@ -8,20 +8,20 @@
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lowfi";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "talwat";
     repo = "lowfi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RSdfZ0GrNhPcqDWutJW0VlplbpBNBCpSvw91fpl0d4E=";
   };
 
   cargoHash = "sha256-OAg3ZpBmuINkc6KZJGKvYFnpv9hVbwlnOEP5ICtYh28=";
 
-  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
+  buildFeatures = [ "scrape" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ zsenai ];
     mainProgram = "lowfi";
   };
-}
+})

@@ -11,13 +11,13 @@
   imagemagick,
   libstartup_notification,
   libGL,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   libxkbcommon,
-  libXi,
-  libXext,
+  libxi,
+  libxext,
   wayland-protocols,
   wayland,
   xxHash,
@@ -87,13 +87,13 @@ buildPythonApplication rec {
     fontconfig
     libunistring
     libcanberra
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
     libxkbcommon
-    libXi
-    libXext
+    libxi
+    libxext
     wayland-protocols
     wayland
     dbus

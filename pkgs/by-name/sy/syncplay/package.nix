@@ -7,7 +7,7 @@
   enableGUI ? true,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "syncplay";
   version = "1.7.4";
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Syncplay";
     repo = "syncplay";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-23OTj+KUmYtrhzIS4A9Gq/tClOLwaeo50+Fcm1tn47M=";
   };
 
@@ -55,4 +55,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ assistant ];
   };
-}
+})

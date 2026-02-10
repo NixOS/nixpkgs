@@ -4,19 +4,19 @@
   libGLU,
   libGL,
   libglut,
-  libX11,
+  libx11,
   plib,
   openal,
   freealut,
-  libXrandr,
+  libxrandr,
   xorgproto,
-  libXext,
-  libSM,
-  libICE,
-  libXi,
-  libXt,
-  libXrender,
-  libXxf86vm,
+  libxext,
+  libsm,
+  libice,
+  libxi,
+  libxt,
+  libxrender,
+  libxxf86vm,
   openscenegraph,
   expat,
   libpng12,
@@ -45,18 +45,18 @@ let
     libglut
   ];
   runtimeLibs = glLibs ++ [
-    libX11
+    libx11
     plib
     openal
     freealut
-    libXrandr
-    libXext
-    libSM
-    libICE
-    libXi
-    libXt
-    libXrender
-    libXxf86vm
+    libxrandr
+    libxext
+    libsm
+    libice
+    libxi
+    libxt
+    libxrender
+    libxxf86vm
     openscenegraph
     expat
     libpng12
@@ -85,7 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-ZY/0tf0wFbepEUNqpaBA4qgkWDij/joqPtbiF/48oN4=";
     fetchSubmodules = true;
   };
-  NIX_CFLAGS_COMPILE = "-I${finalAttrs.src}/src/libs/tgf -I${finalAttrs.src}/src/libs/tgfdata -I${finalAttrs.src}/src/interfaces -I${finalAttrs.src}/src/libs/math -I${finalAttrs.src}/src/libs/portability";
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-I${finalAttrs.src}/src/libs/tgf"
+    "-I${finalAttrs.src}/src/libs/tgfdata"
+    "-I${finalAttrs.src}/src/interfaces"
+    "-I${finalAttrs.src}/src/libs/math"
+    "-I${finalAttrs.src}/src/libs/portability"
+  ];
 
   patches = [
     ./darwin-gl-compat.patch
@@ -126,19 +133,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libpng12
-    libX11
+    libx11
     plib
     openal
     freealut
-    libXrandr
+    libxrandr
     xorgproto
-    libXext
-    libSM
-    libICE
-    libXi
-    libXt
-    libXrender
-    libXxf86vm
+    libxext
+    libsm
+    libice
+    libxi
+    libxt
+    libxrender
+    libxxf86vm
     zlib
     bash
     expat

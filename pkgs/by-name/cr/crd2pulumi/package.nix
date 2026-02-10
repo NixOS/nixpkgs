@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "crd2pulumi";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "crd2pulumi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-0D5U3Ie9h5R0kTLb5YHshtYrwuoXxPX0fYAJGqUw35w=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/pulumi/crd2pulumi/gen.Version=${src.rev}"
+    "-X github.com/pulumi/crd2pulumi/gen.Version=${finalAttrs.src.rev}"
   ];
 
   subPackages = [ "." ];
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

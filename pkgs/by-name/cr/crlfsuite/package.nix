@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "crlfsuite";
   version = "2.5.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nefcore";
     repo = "CRLFsuite";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-mK20PbVGhTEjhY5L6coCzSMIrG/PHHmNq30ZoJEs6uI=";
   };
 
@@ -42,4 +42,4 @@ python3.pkgs.buildPythonApplication rec {
       fab
     ];
   };
-}
+})

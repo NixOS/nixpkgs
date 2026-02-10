@@ -5,18 +5,18 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex-acp";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "codex-acp";
-    tag = "v${version}";
-    hash = "sha256-Ejqu8NU6lRUMbke/jrilIUkrVF5gAk5y19Jj1ftTVd8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QQye6H5XCHDsqypXK5ROQ27PYk/W0Cip61sjECZDQo4=";
   };
 
-  cargoHash = "sha256-S3S9bpGrAAV0+vQ+N/jx5bkG2X5eFsQ8It5eiOjyi/o=";
+  cargoHash = "sha256-pHJhzPSLX9lKa9FXuauF0brwgFSQgPIHOVo6l+PqnnI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "An ACP-compatible coding agent powered by Codex";
     homepage = "https://github.com/zed-industries/codex-acp";
-    changelog = "https://github.com/zed-industries/codex-acp/releases/tag/v${version}";
+    changelog = "https://github.com/zed-industries/codex-acp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tlvince ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "codex-acp";
   };
-}
+})

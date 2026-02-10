@@ -243,5 +243,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ vcunat ];
     platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version;
   };
 }

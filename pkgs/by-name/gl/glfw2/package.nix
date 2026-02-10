@@ -4,8 +4,8 @@
   fetchurl,
   libGLU,
   libGL,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGLU
     libGL
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   buildPhase = ''

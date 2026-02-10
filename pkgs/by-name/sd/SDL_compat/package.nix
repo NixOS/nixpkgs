@@ -6,7 +6,7 @@
   fetchFromGitHub,
   libGLU,
   libiconv,
-  libX11,
+  libx11,
   mesa,
   pkg-config,
   pkg-config-unwrapped,
@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_compat";
-  version = "1.2.72";
+  version = "1.2.74";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + finalAttrs.version;
-    hash = "sha256-dTBsbLJFQSaWWhn1+CCQopq7sBONxvlaAximmo3iYVM=";
+    hash = "sha256-nKEUCI6qPM2x8qPzPyZX9gDSjoWszsADSEQG65hSuA8=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedNativeBuildInputs = [ pkg-config-unwrapped ];
 
   buildInputs = [
-    libX11
+    libx11
     sdl2-compat
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

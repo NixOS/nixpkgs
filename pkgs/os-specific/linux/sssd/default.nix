@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  replaceVars,
   autoreconfHook,
   makeWrapper,
   glibc,
@@ -64,30 +63,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.11.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
     tag = finalAttrs.version;
-    hash = "sha256-JN4GVx5rBfNBLaMpLcKgyd+CyNDafz85BXUcfg5kDXQ=";
+    hash = "sha256-9F+D7qZKwnP1U0zJbvzy0f7dQSKkfgJrewDJ4p+Svgk=";
   };
 
   patches = [
+    # Keep in mind to check /src/external/pac_responder.m4 for Kerberos compatibility before update Kerberos !!!
     # Fix Kerberos Support version for PAC responder
-    ./fix-kerberos-version.patch
-
-    (replaceVars ./fix-ldb-modules-path.patch {
-      inherit ldb;
-      out = null; # will be replaced in postPatch https://github.com/NixOS/nixpkgs/pull/446589#discussion_r2384899857
-    })
+    #./fix-kerberos-version.patch
   ];
 
   postPatch = ''
     patchShebangs ./sbus_generate.sh.in
-
-    substituteInPlace src/confdb/confdb.c \
-      --replace-fail "@out@" "${placeholder "out"}"
   '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
@@ -116,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
       --with-sssd-user=root
+      --with-ldb-modules-path="${placeholder "out"}/modules/ldb:${ldb}/modules/ldb"
     )
   ''
   + lib.optionalString withSudo ''

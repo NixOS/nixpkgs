@@ -10,14 +10,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-lfs";
   version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-N5ckTnyA3mueZre+rMhFZBiAFgEu4pmtzkiUidXnan8=";
   };
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/git-lfs/git-lfs/v${lib.versions.major version}/config.Vendor=${version}"
+    "-X github.com/git-lfs/git-lfs/v${lib.versions.major finalAttrs.version}/config.Vendor=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
@@ -105,9 +105,9 @@ buildGoModule rec {
   meta = {
     description = "Git extension for versioning large files";
     homepage = "https://git-lfs.github.com/";
-    changelog = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/git-lfs/git-lfs/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ twey ];
     mainProgram = "git-lfs";
   };
-}
+})

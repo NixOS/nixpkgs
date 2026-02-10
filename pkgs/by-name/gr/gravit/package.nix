@@ -6,8 +6,8 @@
   SDL,
   SDL_ttf,
   SDL_image,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   libGLU,
   libGL,
   libpng,
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_image
     lua5
     libpng
-    libSM
-    libICE
+    libsm
+    libice
   ];
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSDL_INCLUDE_GLU_H"
   ];
 

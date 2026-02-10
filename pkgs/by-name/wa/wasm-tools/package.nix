@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-tools";
   version = "1.244.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-tools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XZ3X+KTfiYdUP4jMlkjDpapTOGBucgTmmQoOzizPG+s=";
     fetchSubmodules = true;
   };
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ ereslibre ];
     mainProgram = "wasm-tools";
   };
-}
+})

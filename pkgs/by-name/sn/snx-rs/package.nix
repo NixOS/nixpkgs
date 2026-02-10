@@ -13,15 +13,15 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snx-rs";
   version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
-    tag = "v${version}";
-    hash = "sha256-TtYTxiAPRkWtonkznGDPPlznEqF2sYKoyvMGUoo39H8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7qmwi/hV8Ev+rdG00hIrQ8yMkb/yxAvG49SAvjsO4GQ=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -58,10 +58,10 @@ rustPlatform.buildRustPackage rec {
     description = "Open source Linux client for Checkpoint VPN tunnels";
     homepage = "https://github.com/ancwrd1/snx-rs";
     license = lib.licenses.agpl3Plus;
-    changelog = "https://github.com/ancwrd1/snx-rs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ancwrd1/snx-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       shavyn
     ];
     mainProgram = "snx-rs";
   };
-}
+})

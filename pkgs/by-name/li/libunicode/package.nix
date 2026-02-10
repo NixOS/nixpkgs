@@ -19,14 +19,14 @@ let
     stripRoot = false;
   };
 in
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libunicode";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "libunicode";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-J8qawT1oiUO9xTVEMQvsY0K2NtIfkUq9PoCbFt6wqek=";
   };
 

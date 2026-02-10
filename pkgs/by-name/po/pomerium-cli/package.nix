@@ -12,14 +12,14 @@ let
     mapAttrsToList
     ;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pomerium-cli";
   version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dxN3pVDt6v/xEnBwvmOFf8gf6YZWv23a4K6mTRovv+k=";
   };
 
@@ -34,7 +34,7 @@ buildGoModule rec {
       # Set a variety of useful meta variables for stamping the build with.
       setVars = {
         "github.com/pomerium/cli/version" = {
-          Version = "v${version}";
+          Version = "v${finalAttrs.version}";
           BuildMeta = "nixpkgs";
           ProjectName = "pomerium-cli";
           ProjectURL = "github.com/pomerium/cli";
@@ -69,4 +69,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ lukegb ];
     platforms = lib.platforms.unix;
   };
-}
+})

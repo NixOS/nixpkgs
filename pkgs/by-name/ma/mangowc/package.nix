@@ -1,6 +1,6 @@
 {
   lib,
-  libX11,
+  libx11,
   libinput,
   libxcb,
   libxkbcommon,
@@ -12,7 +12,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
   enableXWayland ? true,
   meson,
@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
   ]
   ++ lib.optionals enableXWayland [
-    libX11
-    xcbutilwm
+    libx11
+    libxcb-wm
     xwayland
   ];
 

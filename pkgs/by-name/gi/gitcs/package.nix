@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitcs";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "knbr13";
     repo = "gitcs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IyhVVRTKftZIzqMH5pBUMLPIk8bk0rVAxPKD6bABP68=";
   };
 
@@ -21,10 +21,10 @@ buildGoModule rec {
 
   meta = {
     description = "Scan local git repositories and generate a visual contributions graph";
-    changelog = "https://github.com/knbr13/gitcs/releases/tag/v${version}";
+    changelog = "https://github.com/knbr13/gitcs/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/knbr13/gitcs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "gitcs";
   };
-}
+})

@@ -13,7 +13,6 @@ let
     mkOptionDefault
     mkIf
     literalExpression
-    optionalString
     types
     ;
   inherit (lib.generators)
@@ -79,7 +78,6 @@ let
       mkSection = (
         depth: attrs:
         let
-          atoms = extractAtoms attrs;
           sections = extractSections attrs;
           sectionHeadingLeft = lib.concatStrings (lib.replicate (depth + 1) "[");
           sectionHeadingRight = lib.concatStrings (lib.replicate (depth + 1) "]");
@@ -103,7 +101,8 @@ let
     else
       (configObjIni { }).generate "public-settings.ini" allSettings;
 
-  sabnzbdIniPath = "/var/lib/${cfg.stateDir}/sabnzbd.ini";
+  sabnzbdIniPath =
+    if cfg.configFile != null then cfg.configFile else "/var/lib/${cfg.stateDir}/sabnzbd.ini";
 in
 
 {
@@ -115,8 +114,12 @@ in
 
       configFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
-        description = "Path to config file (deprecated, use `settings` instead)";
+        default =
+          if lib.versionOlder config.system.stateVersion "26.05" then
+            "/var/lib/sabnzbd/sabnzbd.ini"
+          else
+            null;
+        description = "Path to config file (deprecated, use `settings` instead and set this value to null)";
       };
 
       stateDir = mkOption {
@@ -511,7 +514,10 @@ in
     systemd.services.sabnzbd =
       let
         files =
-          (lib.optional cfg.allowConfigWrite sabnzbdIniPath) ++ [ publicSettingsIni ] ++ cfg.secretFiles;
+          if cfg.configFile != null then
+            [ sabnzbdIniPath ]
+          else
+            (lib.optional cfg.allowConfigWrite sabnzbdIniPath) ++ [ publicSettingsIni ] ++ cfg.secretFiles;
         iniPathQuoted = lib.escapeShellArg sabnzbdIniPath;
       in
       {
@@ -531,11 +537,20 @@ in
 
           ${lib.toShellVar "files" files}
 
+          tmpfile=$(mktemp)
+
           ${lib.getExe (pkgs.python3.withPackages (py: [ py.configobj ]))} \
             ${./config_merge.py} \
-            "''${files[@]}" | \
-          install -D -m ${if cfg.allowConfigWrite then "600" else "400"} \
-            -o '${cfg.user}' -g '${cfg.group}' /dev/stdin ${iniPathQuoted}
+            "''${files[@]}" \
+            > "$tmpfile"
+
+          install -D \
+            -m ${if cfg.allowConfigWrite then "600" else "400"} \
+            -o '${cfg.user}' -g '${cfg.group}' \
+            "$tmpfile" \
+            ${iniPathQuoted}
+
+          rm "$tmpfile"
         '';
       };
 

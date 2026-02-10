@@ -18,7 +18,7 @@
   pkg-config,
   libGL,
   libvorbis,
-  libX11,
+  libx11,
   libzip,
   nlohmann_json,
   SDL2,
@@ -173,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Recent builds enabled LTO which won't build with nix
-  NIX_CFLAGS_COMPILE = "-fno-lto";
+  env.NIX_CFLAGS_COMPILE = "-fno-lto";
 
   nativeBuildInputs = [
     cmake
@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libvorbis
-    libX11
+    libx11
     libzip
     nlohmann_json
     SDL2

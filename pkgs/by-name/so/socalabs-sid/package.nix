@@ -152,18 +152,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcomposite"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-      "-lXtst"
-      "-lXdmcp"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcomposite"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+    "-lXtst"
+    "-lXdmcp"
+  ];
 
   meta = {
     description = "Socalabs Commodore 64 SID Emulation Plugin";

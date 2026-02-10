@@ -26,11 +26,11 @@
   libuv,
   libuvc,
   libv4l,
-  libXau,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXext,
-  libXrandr,
+  libxdmcp,
+  libxext,
+  libxrandr,
   nix-update-script,
   onnxruntime,
   opencv4,
@@ -108,11 +108,11 @@ stdenv.mkDerivation (finalAttrs: {
     libuv
     libuvc
     libv4l
-    libXau
+    libxau
     libxcb
-    libXdmcp
-    libXext
-    libXrandr
+    libxdmcp
+    libxext
+    libxrandr
     onnxruntime
     opencv4
     openvr

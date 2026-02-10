@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenith";
   version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = "zenith";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-D/o8JmKLiT8LhmJ6q2h7f5vJQNXAN5aCislxwDw9yqo=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = if nvidiaSupport then lib.platforms.linux else lib.platforms.unix;
   };
-}
+})

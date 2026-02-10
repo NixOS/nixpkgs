@@ -47,14 +47,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.7.5";
+  version = "2.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-iWdOGdmPJO7Pjdn8UjuSOhWnRGBFjmARFsuHmP6IP58=";
+    hash = "sha256-tAzCEU8jFWENOy0WaAchuhQGjmQl8BTW9TuGZPJByPw=";
   };
 
   patches = [
@@ -101,7 +101,6 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "aiohttp"
     "aiosqlite"
-    "aiovban" # PyPi and GitHub versioning is out of sync
     "certifi"
     "colorlog"
     "cryptography"

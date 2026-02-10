@@ -9,18 +9,18 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "release-plz";
-  version = "0.3.153";
+  version = "0.3.154";
 
   src = fetchFromGitHub {
     owner = "MarcoIeni";
     repo = "release-plz";
-    rev = "release-plz-v${version}";
-    hash = "sha256-/1Fuu1v8kNu0BUFNqhzy7Nexob29NDo/vEOWfQSPF88=";
+    rev = "release-plz-v${finalAttrs.version}";
+    hash = "sha256-sg5i7JwDkhvEBYZtm6USCDDWWnI97IIKeXHhpDP3V/o=";
   };
 
-  cargoHash = "sha256-cosUcBEb/hRcQ0s/1f30917gDQzGmRKmPNJ4/ASAl+4=";
+  cargoHash = "sha256-O+JdsbpxDsdEAFdkvxXCNkjIAPaJvVKkbP8FXK542yo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,16 +36,16 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd ${meta.mainProgram} \
-      --bash <($out/bin/${meta.mainProgram} generate-completions bash) \
-      --fish <($out/bin/${meta.mainProgram} generate-completions fish) \
-      --zsh <($out/bin/${meta.mainProgram} generate-completions zsh)
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      --bash <($out/bin/${finalAttrs.meta.mainProgram} generate-completions bash) \
+      --fish <($out/bin/${finalAttrs.meta.mainProgram} generate-completions fish) \
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} generate-completions zsh)
   '';
 
   meta = {
     description = "Publish Rust crates from CI with a Release PR";
     homepage = "https://release-plz.ieni.dev";
-    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${version}/CHANGELOG.md";
+    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -57,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "release-plz";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -204,7 +204,6 @@ in
     with lib.maintainers;
     [
       ppom
-      phanirithvij
     ]
     ++ lib.teams.ngi.members;
 }

@@ -10,8 +10,8 @@
   wrapGAppsHook3,
   glib,
   gtk3,
-  libX11,
-  libXtst,
+  libx11,
+  libxtst,
   libxfce4ui,
   libxfce4util,
   qrencode,
@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk3
-    libX11
-    libXtst
+    libx11
+    libxtst
     libxfce4ui
     libxfce4util
     qrencode

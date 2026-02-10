@@ -837,6 +837,7 @@ in
   kimai = runTest ./kimai.nix;
   kismet = runTest ./kismet.nix;
   kmonad = runTest ./kmonad.nix;
+  kmscon = runTest ./kmscon.nix;
   knot = runTest ./knot.nix;
   komga = runTest ./komga.nix;
   komodo-periphery = runTest ./komodo-periphery.nix;
@@ -950,7 +951,10 @@ in
   mealie = runTest ./mealie.nix;
   mediamtx = runTest ./mediamtx.nix;
   mediatomb = runTest ./mediatomb.nix;
-  mediawiki = handleTest ./mediawiki.nix { };
+  mediawiki = import ./mediawiki.nix {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
   merecat = runTest ./merecat.nix;
@@ -1408,6 +1412,7 @@ in
   rspamd-trainer = runTest ./rspamd-trainer.nix;
   rss-bridge = handleTest ./web-apps/rss-bridge { };
   rss2email = handleTest ./rss2email.nix { };
+  rstp = runTest ./rstp.nix;
   rstudio-server = runTest ./rstudio-server.nix;
   rsync = runTest ./rsync.nix;
   rsyncd = runTest ./rsyncd.nix;
@@ -1478,7 +1483,7 @@ in
   sslh = handleTest ./sslh.nix { };
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
   sssd-legacy-config = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-legacy-config.nix { };
-  stalwart-mail = runTest ./stalwart/stalwart-mail.nix;
+  stalwart = runTest ./stalwart/stalwart.nix;
   stargazer = runTest ./web-servers/stargazer.nix;
   starship = runTest ./starship.nix;
   startx = import ./startx.nix { inherit pkgs runTest; };
@@ -1630,7 +1635,7 @@ in
   traefik = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./traefik.nix;
   trafficserver = runTest ./trafficserver.nix;
   transfer-sh = runTest ./transfer-sh.nix;
-  transmission_4 = handleTest ./transmission.nix { };
+  transmission_4 = runTest ./transmission.nix;
   trezord = runTest ./trezord.nix;
   trickster = runTest ./trickster.nix;
   trilium-server = runTestOn [ "x86_64-linux" ] ./trilium-server.nix;

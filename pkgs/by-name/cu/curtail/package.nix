@@ -20,7 +20,7 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "curtail";
   version = "1.14.0";
   pyproject = false;
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-AxQe7abHZp4SRp90fkFbmXf3ZQH3VmxQVkpxRcit+54=";
   };
 
@@ -88,4 +88,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

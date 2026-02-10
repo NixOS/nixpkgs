@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clapboard";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "clapboard";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vRIwdbt8f9/K7QAfFtBXrr4ezymlnzarq08W7J3aRiU=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "clapboard";
   };
-}
+})

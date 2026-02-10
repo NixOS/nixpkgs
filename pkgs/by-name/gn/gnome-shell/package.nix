@@ -61,8 +61,8 @@
   lcms2,
   libgbm,
   libGL,
-  libXi,
-  libX11,
+  libxi,
+  libx11,
   libxkbcommon,
   libsoup_3,
   libxml2,
@@ -168,8 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2 # required by mutter-clutter
     libgbm
     libGL # for egl, required by mutter-clutter
-    libXi # required by libmutter
-    libX11
+    libxi # required by libmutter
+    libx11
     libxkbcommon
     libsoup_3
     libxml2

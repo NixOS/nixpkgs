@@ -146,7 +146,7 @@ let
             '';
 
             phpWithExtensions = symlinkJoin {
-              name = "php-with-extensions-${version}";
+              pname = "php-with-extensions";
               inherit (php) version;
               nativeBuildInputs = [ makeBinaryWrapper ];
               passthru = php.passthru // {

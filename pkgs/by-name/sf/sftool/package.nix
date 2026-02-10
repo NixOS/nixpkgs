@@ -10,15 +10,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftool";
-  version = "0.1.19";
+  version = "0.2.1";
   src = fetchFromGitHub {
     owner = "OpenSiFli";
     repo = "sftool";
     tag = finalAttrs.version;
-    hash = "sha256-64U7meXI8BTpve7nKmizR857QgFH9sjHVvCIfSK2dFQ=";
+    hash = "sha256-scHvBbpIZXwRC7lpY2lj0mN/ECj+uDxN4DF9sxOzy6o=";
   };
 
-  cargoHash = "sha256-FdGr0n+PvE6mFx+F4Fdhq7bbCQ2AwGEnroWjpzFH6vI=";
+  cargoHash = "sha256-ysuSGXHtpDKW3p18EgZUd0biqfK685BxKseQVHmWOWI=";
 
   nativeBuildInputs = [
     pkg-config

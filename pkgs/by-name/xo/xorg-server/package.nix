@@ -11,7 +11,7 @@
   # deps
   dbus,
   dri-pkgconfig-stub,
-  fontutil,
+  font-util,
   libdrm,
   libepoxy,
   libgbm,
@@ -42,14 +42,14 @@
   pixman,
   udev,
   xkbcomp,
-  xkeyboardconfig,
+  xkeyboard-config,
   xorgproto,
   xtrans,
   zlib,
 
   # darwin specific deps
   darwin,
-  utilmacros,
+  util-macros,
   libapplewm,
 
   writeScript,
@@ -84,11 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.bootstrap_cmds
-    utilmacros
+    util-macros
   ];
 
   buildInputs = [
-    fontutil
+    font-util
     libx11
     libxau
     libxcb
@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddefault_font_path="
 
     "-Dxkb_bin_dir=${xkbcomp}/bin"
-    "-Dxkb_dir=${xkeyboardconfig}/share/X11/xkb"
+    "-Dxkb_dir=${xkeyboard-config}/share/X11/xkb"
     "-Dxkb_output_dir=$out/share/X11/xkb/compiled"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [

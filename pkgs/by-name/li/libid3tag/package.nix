@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchpatch,
   cmake,
   gperf,
@@ -17,8 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tenacityteam";
     repo = "libid3tag";
     rev = finalAttrs.version;

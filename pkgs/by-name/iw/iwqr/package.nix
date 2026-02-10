@@ -7,7 +7,7 @@
   iwqr,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwqr";
   version = "0.1.1";
 
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     domain = "git.kroner.dev";
     owner = "kreny";
     repo = "iwqr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-z9CjCJvi6MlZGghZKx13gGSKwUnECAf0cr9P2ABskh0=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ h7x4 ];
     mainProgram = "iwqr";
   };
-}
+})

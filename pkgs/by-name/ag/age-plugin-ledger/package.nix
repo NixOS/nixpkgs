@@ -8,14 +8,14 @@
   rage,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "age-plugin-ledger";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "Ledger-Donjon";
     repo = "age-plugin-ledger";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-g5GbWXhaGEafiM3qkGlRXHcOzPZl2pbDWEBPg4gQWcg=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ erdnaxe ];
   };
-}
+})

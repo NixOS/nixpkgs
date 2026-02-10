@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-DkfpMK0T67B4mnriignf4hx6Ifddls0rN0SxyfEsPZg=";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
 
   makeFlags = [
     "DESTDIR=\${out}"

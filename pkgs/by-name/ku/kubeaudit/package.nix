@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubeaudit";
   version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "kubeaudit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zQAM/NtDBFJZmwJYGNuYIaxv058X0URzMByPut+18TA=";
   };
 
@@ -27,9 +27,9 @@ buildGoModule rec {
   meta = {
     description = "Audit tool for Kubernetes";
     homepage = "https://github.com/Shopify/kubeaudit";
-    changelog = "https://github.com/Shopify/kubeaudit/releases/tag/v${version}";
+    changelog = "https://github.com/Shopify/kubeaudit/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kubeaudit";
   };
-}
+})

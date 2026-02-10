@@ -5,14 +5,14 @@
   libpcap,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dnspeep";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "jvns";
     repo = "dnspeep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-QpUbHiMDQFRCTVyjrO9lfQQ62Z3qanv0j+8eEXjE3n4=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -11,20 +11,18 @@
 buildHomeAssistantComponent rec {
   owner = "pymitsubishi";
   domain = "mitsubishi";
-  version = "0.4.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "pymitsubishi";
     repo = "homeassistant-mitsubishi";
     tag = "v${version}";
-    hash = "sha256-jhcclDealb1T84zNse2tpT3MDvDaOqhTMGrBhiUXHPc=";
+    hash = "sha256-qP2jLkDeiNMdTlHg0G8AryRb2v0ohGnkIoQWIWvbTbs=";
   };
 
   dependencies = [
     pymitsubishi
   ];
-
-  doCheck = false; # TODO: remove in the next release after 0.4.0
 
   nativeCheckInputs = [
     pytest-cov-stub

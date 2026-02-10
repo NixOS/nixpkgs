@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fierce";
   version = "1.6.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mschwager";
     repo = "fierce";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-y5ZSDJCTqslU78kXGyk6DajBpX7xz1CVmbhYerHmyis=";
   };
 
@@ -30,9 +30,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "DNS reconnaissance tool for locating non-contiguous IP space";
     homepage = "https://github.com/mschwager/fierce";
-    changelog = "https://github.com/mschwager/fierce/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mschwager/fierce/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ c0bw3b ];
     mainProgram = "fierce";
   };
-}
+})

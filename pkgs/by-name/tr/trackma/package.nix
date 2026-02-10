@@ -30,7 +30,7 @@ let
       categories = [ "Network" ];
     };
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "trackma";
   version = "0.9";
   pyproject = true;
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "z411";
     repo = "trackma";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "Hov9qdVabu1k3SIoUmvcRtSK8TcETqGPXI2RqN/bei4=";
     fetchSubmodules = true; # for anime-relations submodule
   };
@@ -115,4 +115,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

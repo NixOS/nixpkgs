@@ -142,7 +142,8 @@ def run_wrapper(
         if extra_env:
             env = os.environ | extra_env
         if sudo:
-            run_args = ["sudo", *run_args]
+            sudo_args = shlex.split(os.getenv("NIX_SUDOOPTS", ""))
+            run_args = ["sudo", *sudo_args, *run_args]
 
     logger.debug(
         "calling run with args=%r, kwargs=%r, extra_env=%r",

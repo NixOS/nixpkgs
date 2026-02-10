@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oha";
-  version = "1.12.1";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "hatoo";
     repo = "oha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Yz9RuYUwwvXef0XzVHCv5/uzT6KGz+tQVMRVUJN81zU=";
+    hash = "sha256-fjWfv/RuEqU0krVfHNxByzHdREVL7dD/tSEw7X1gaGk=";
   };
 
-  cargoHash = "sha256-suHyApGbRF8KaH9Xb47zvnoenPIA7NdiULuvUXViLu0=";
+  cargoHash = "sha256-v+OfQEfAwHxX+FfC0UK2F8/e2tJKaI3zQpg+3hk2hV4=";
 
   CARGO_PROFILE_RELEASE_LTO = "fat";
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";

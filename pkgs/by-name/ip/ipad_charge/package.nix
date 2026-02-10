@@ -5,7 +5,7 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipad_charge";
   version = "2015-02-03";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Apple device USB charging utility for Linux";
     longDescription = ''
       USB charging control utility used to enable/disable charging of an Apple
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ipad_charge";
   };
-}
+})

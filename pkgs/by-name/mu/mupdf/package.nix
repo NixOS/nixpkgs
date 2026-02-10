@@ -17,10 +17,10 @@
   libjpeg,
   gumbo,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
+  libx11,
+  libxext,
+  libxi,
+  libxrandr,
   enableCurl ? true,
   curl,
   openssl,
@@ -160,10 +160,10 @@ stdenv.mkDerivation rec {
     gumbo
   ]
   ++ lib.optionals enableX11 [
-    libX11
-    libXext
-    libXi
-    libXrandr
+    libx11
+    libxext
+    libxi
+    libxrandr
   ]
   ++ lib.optionals enableCurl [
     curl

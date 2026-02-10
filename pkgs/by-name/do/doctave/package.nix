@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "doctave";
   version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "doctave";
     repo = "doctave";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-8mGSFQozyLoGua9mwyqfDcYNMtbeWp9Phb0vaje+AJ0=";
   };
 
@@ -20,9 +20,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Batteries-included developer documentation site generator";
     homepage = "https://github.com/doctave/doctave";
-    changelog = "https://github.com/doctave/doctave/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/doctave/doctave/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "doctave";
   };
-}
+})

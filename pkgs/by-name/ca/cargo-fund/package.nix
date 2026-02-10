@@ -9,14 +9,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-fund";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "acfoltzer";
     repo = "cargo-fund";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8mnCwWwReNH9s/gbxIhe7XdJRIA6BSUKm5jzykU5qMU=";
   };
 
@@ -45,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ johntitor ];
   };
-}
+})

@@ -8,14 +8,14 @@
   fontconfig,
   freetype,
   gettext,
-  libX11,
-  libXau,
-  libXdmcp,
-  libXext,
-  libXft,
-  libXinerama,
-  libXmu,
-  libXpm,
+  libx11,
+  libxau,
+  libxdmcp,
+  libxext,
+  libxft,
+  libxinerama,
+  libxmu,
+  libxpm,
   libjpeg,
   libpng,
   librsvg,
@@ -50,14 +50,14 @@ stdenv.mkDerivation rec {
     expat
     fontconfig
     freetype
-    libX11
-    libXau
-    libXdmcp
-    libXext
-    libXft
-    libXinerama
-    libXmu
-    libXpm
+    libx11
+    libxau
+    libxdmcp
+    libxext
+    libxft
+    libxinerama
+    libxmu
+    libxpm
     libjpeg
     libpng
     librsvg

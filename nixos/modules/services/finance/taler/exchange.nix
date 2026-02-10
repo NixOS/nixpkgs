@@ -91,7 +91,7 @@ in
       type = lib.types.lines;
       defaultText = "None, you must set this yourself.";
       example = ''
-        [COIN-KUDOS-n1-t1718140083]
+        [COIN_KUDOS-n1-t1718140083]
         VALUE = KUDOS:0.1
         DURATION_WITHDRAW = 7 days
         DURATION_SPEND = 2 years

@@ -1061,5 +1061,6 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
       lib.systems.inspect.platformPatterns.isStatic
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "systemd_project" finalAttrs.version;
   };
 })

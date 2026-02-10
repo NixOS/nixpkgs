@@ -5,8 +5,8 @@
   fetchFromGitHub,
   libGL,
   libGLU,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   makeBinaryWrapper,
 }:
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   enableParallelBuilding = true;

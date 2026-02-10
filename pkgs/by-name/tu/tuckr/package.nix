@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuckr";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "RaphGL";
     repo = "Tuckr";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-X2/pOzGUGc5FI0fyn6PB+9duMBdoggjvGxssDXKppWU=";
   };
 
@@ -22,9 +22,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Super powered replacement for GNU Stow";
     homepage = "https://github.com/RaphGL/Tuckr";
-    changelog = "https://github.com/RaphGL/Tuckr/releases/tag/${version}";
+    changelog = "https://github.com/RaphGL/Tuckr/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mimame ];
     mainProgram = "tuckr";
   };
-}
+})

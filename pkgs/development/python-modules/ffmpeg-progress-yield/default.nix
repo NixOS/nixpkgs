@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slhck";
     repo = "ffmpeg-progress-yield";
     tag = "v${version}";
-    hash = "sha256-lAnTDA8YAqT7ZtRyxTtEZ8vK/OSz6mhpFXy6LURsU3E=";
+    hash = "sha256-Cy2ShWEwtfk/eDCXZL3qPrTRMJZtCtjOVHfmW0NbuN4=";
   };
 
   build-system = [ uv-build ];

@@ -8,11 +8,11 @@
   cmake,
   freetype,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   libjack2,
   libopus,
   curl,
@@ -66,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDependencies = [
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
   ];
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${lib.makeLibraryPath (finalAttrs.runtimeDependencies)}";

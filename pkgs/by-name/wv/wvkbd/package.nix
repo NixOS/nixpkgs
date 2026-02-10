@@ -13,14 +13,14 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wvkbd";
   version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
     repo = "wvkbd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PHbgARSy2Zlr1dgzuUFbPxtqFvOYoayMK9vGLR6yaTA=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     mainProgram = "wvkbd-mobintl";
     maintainers = with lib.maintainers; [ colinsane ];
   };
-}
+})
