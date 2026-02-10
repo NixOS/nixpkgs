@@ -32,6 +32,11 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-CrK/6BaKmKIxlohEZdGEEKJkioszBUupyKQx4nBeLqI=";
 
+  postBuild = ''
+    mv dist/monacoeditorwork/* dist/assets/
+    rmdir dist/monacoeditorwork
+  '';
+
   installPhase = ''
     cp -rv dist/ $out
   '';
