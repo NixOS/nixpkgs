@@ -79,9 +79,9 @@ class Driver:
 
     def __init__(
         self,
-        vm_names: list[str] | None,
+        vm_names: list[str],
         vm_start_scripts: list[str],
-        container_names: list[str] | None,
+        container_names: list[str],
         container_start_scripts: list[str],
         vlans: list[int],
         tests: str,
@@ -116,9 +116,7 @@ class Driver:
                 out_dir=self.out_dir,
                 logger=self.logger,
             )
-            for name, vm_start_script in zip(
-                vm_names or (len(vm_start_scripts) * [None]), vm_start_scripts
-            )
+            for name, vm_start_script in zip(vm_names, vm_start_scripts)
         ]
 
         if len(container_start_scripts) > 0:
@@ -135,7 +133,7 @@ class Driver:
                 out_dir=self.out_dir,
             )
             for name, container_start_script in zip(
-                container_names or (len(container_start_scripts) * [None]),
+                container_names,
                 container_start_scripts,
             )
         ]

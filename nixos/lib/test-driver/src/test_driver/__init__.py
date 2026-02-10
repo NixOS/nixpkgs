@@ -178,20 +178,18 @@ def main() -> None:
     if args.debug_hook_attach is not None:
         debugger = Debug(logger, args.debug_hook_attach)
 
-    if args.vm_names is not None and args.vm_start_scripts is not None:
-        assert len(args.vm_names) == len(args.vm_start_scripts), (
-            f"the number of vm names and vm start scripts must be the same: {args.vm_names} vs. {args.vm_start_scripts}"
-        )
-    if args.container_names is not None and args.container_start_scripts is not None:
-        assert len(args.container_names) == len(args.container_start_scripts), (
-            f"the number of container names and container start scripts must be the same: {args.container_names} vs. {args.container_start_scripts}"
-        )
+    assert len(args.vm_names) == len(args.vm_start_scripts), (
+        f"the number of vm names and vm start scripts must be the same: {args.vm_names} vs. {args.vm_start_scripts}"
+    )
+    assert len(args.container_names) == len(args.container_start_scripts), (
+        f"the number of container names and container start scripts must be the same: {args.container_names} vs. {args.container_start_scripts}"
+    )
 
     with Driver(
         vm_names=args.vm_names,
-        vm_start_scripts=args.vm_start_scripts or [],
+        vm_start_scripts=args.vm_start_scripts,
         container_names=args.container_names,
-        container_start_scripts=args.container_start_scripts or [],
+        container_start_scripts=args.container_start_scripts,
         vlans=args.vlans,
         tests=args.testscript.read_text(),
         out_dir=output_directory,
