@@ -21,7 +21,7 @@ let
   isNixfmt = p: p.meta.mainProgram or null == "nixfmt";
 
   treefmtWithConfig = treefmt.withConfig {
-    name = "nixfmt-tree";
+    name = "nixfmt-tree-${nixfmtPackage.version}";
 
     settings = lib.mkMerge [
       # Default settings
