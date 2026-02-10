@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "spherogram";
-  version = "2.3";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "spherogram";
     tag = "${version}_as_released";
-    hash = "sha256-uqc+3xS4xulXR0tZlNuyC5Zz5OztR6c4PZWpsvU+4Pw=";
+    hash = "sha256-zQoNuy2rj02GAuRNDufMwA/wQ4U8ZeIADb8LpIvMFOY=";
   };
 
   build-system = [
