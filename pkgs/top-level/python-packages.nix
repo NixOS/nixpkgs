@@ -11181,6 +11181,8 @@ self: super: with self; {
 
   ocifs = callPackage ../development/python-modules/ocifs { };
 
+  ocp-gordon = callPackage ../development/python-modules/ocp-gordon { };
+
   ocpsvg = callPackage ../development/python-modules/ocpsvg { };
 
   ocrmypdf = callPackage ../development/python-modules/ocrmypdf { tesseract = pkgs.tesseract5; };
