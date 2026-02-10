@@ -2,15 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  wrapQtAppsHook,
   cmake,
   bzip2,
-  qtbase,
-  qttools,
   libnova,
   proj,
   libpng,
   openjpeg,
+  qt5,
 }:
 
 stdenv.mkDerivation {
@@ -26,12 +24,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
     bzip2
-    qtbase
+    qt5.qtbase
     libnova
     proj
     openjpeg
