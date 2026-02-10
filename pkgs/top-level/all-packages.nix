@@ -11446,8 +11446,6 @@ with pkgs;
     xppen_4
     ;
 
-  xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
-
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
   yokadi = python3Packages.callPackage ../applications/misc/yokadi { };
