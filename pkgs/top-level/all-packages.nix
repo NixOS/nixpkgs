@@ -12774,7 +12774,11 @@ with pkgs;
 
   vimb = wrapFirefox vimb-unwrapped { };
 
-  vivisect = with python3Packages; toPythonApplication (vivisect.override { withGui = true; });
+  vivisect = with python3Packages; toPythonApplication (vivisect.override {
+    # https://github.com/vivisect/vivisect/issues/683
+    # gui currently requires qt5 webengine, which has been removed
+    # withGui = true;
+  });
 
   py-wacz = with python3Packages; toPythonApplication wacz;
 
