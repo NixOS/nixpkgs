@@ -11,6 +11,7 @@
   pkg-config,
   stdenv,
   stoken,
+  unstableGitUpdater,
   useDefaultExternalBrowser ?
     stdenv.hostPlatform.isLinux && stdenv.buildPlatform == stdenv.hostPlatform, # xdg-utils doesn't cross-compile
   vpnc-scripts,
@@ -60,6 +61,10 @@ let
         pkg-config
         autoreconfHook
       ];
+
+      passthru.updateScript = unstableGitUpdater {
+        tagPrefix = "v";
+      };
 
       meta = {
         description = "VPN Client for Cisco's AnyConnect SSL VPN";
