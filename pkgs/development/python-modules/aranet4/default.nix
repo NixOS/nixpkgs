@@ -3,7 +3,6 @@
   bleak,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   requests,
   setuptools,
@@ -11,24 +10,15 @@
 
 buildPythonPackage rec {
   pname = "aranet4";
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Anrijs";
     repo = "Aranet4-Python";
     tag = "v${version}";
-    hash = "sha256-/FBrP4aceIX9dcZmm+k13PSAPuK4SQenjWqOAFPSvL8=";
+    hash = "sha256-9dVa2RCsA+cs0fA8rLaOnikedEDz6fSfQ1tfAV0A7Eo=";
   };
-
-  patches = [
-    # https://github.com/Anrijs/Aranet4-Python/pull/62
-    (fetchpatch {
-      name = "fix-for-failing-test-with-bleak-1.1.0.patch";
-      url = "https://github.com/Anrijs/Aranet4-Python/pull/62/commits/0117633682050c77cd00ead1bce93375367d7a3c.patch";
-      hash = "sha256-S4Di6bKbapCpDdOIy4sSiG9dO7OZq5ixjjK+ux4EEp0=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -49,7 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Aranet4 devices";
     homepage = "https://github.com/Anrijs/Aranet4-Python";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/Anrijs/Aranet4-Python/releases/tag/v${version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "aranetctl";
   };
