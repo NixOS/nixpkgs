@@ -14465,10 +14465,6 @@ self: super: with self; {
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
-  pyqtwebengine = callPackage ../development/python-modules/pyqtwebengine {
-    inherit (pkgs) mesa;
-  };
-
   pyquaternion = callPackage ../development/python-modules/pyquaternion { };
 
   pyquery = callPackage ../development/python-modules/pyquery { };

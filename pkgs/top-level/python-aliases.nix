@@ -378,6 +378,7 @@ mapAliases {
   pyqt5_sip = throw "'pyqt5_sip' has been renamed to/replaced by 'pyqt5-sip'"; # Converted to throw 2025-10-29
   pyqt5_with_qtmultimedia = throw "'pyqt5_with_qtmultimedia' has been renamed to/replaced by 'pyqt5-multimedia'"; # Converted to throw 2025-10-29
   pyqt5_with_qtwebkit = throw "'pyqt5_with_qtwebkit' has been renamed to/replaced by 'pyqt5-webkit'"; # Converted to throw 2025-10-29
+  pyqtwebengine = "'pyqtwebengine' has been removed as it depended on the removed qt5 webengine"; # Added 2026-02-10
   pyramid_beaker = throw "'pyramid_beaker' has been renamed to/replaced by 'pyramid-beaker'"; # Converted to throw 2025-10-29
   pyramid_chameleon = throw "'pyramid_chameleon' has been renamed to/replaced by 'pyramid-chameleon'"; # Converted to throw 2025-10-29
   pyramid_exclog = throw "'pyramid_exclog' has been renamed to/replaced by 'pyramid-exclog'"; # Converted to throw 2025-10-29
