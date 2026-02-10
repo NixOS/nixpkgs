@@ -22,14 +22,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.36.0";
+  version = "0.36.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     tag = "v${version}";
-    hash = "sha256-J00GRIM9AemLkKHoyKqLR2U2aEBwNy/a5hbGjLRrO8w=";
+    hash = "sha256-+XBFENCAKP8Z+5dviBervDXHOM2qY3lfDFsDKVjzMbM=";
   };
 
   patches = [
