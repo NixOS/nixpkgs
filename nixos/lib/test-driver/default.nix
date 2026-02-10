@@ -24,6 +24,7 @@
   util-linux,
   vde2,
 
+  enableNspawn ? false,
   enableOCR ? false,
   extraPythonPackages ? (_: [ ]),
 }:
@@ -55,6 +56,8 @@ buildPythonApplication {
     socat
     util-linux
     vde2
+  ]
+  ++ lib.optionals enableNspawn [
     systemd
   ]
   ++ lib.optionals enableOCR [

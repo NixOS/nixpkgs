@@ -14,6 +14,8 @@ let
     qemu_pkg = config.qemu.package;
     imagemagick_light = hostPkgs.imagemagick_light.override { inherit (hostPkgs) libtiff; };
     tesseract4 = hostPkgs.tesseract4.override { enableLanguages = [ "eng" ]; };
+
+    enableNspawn = config.containers != { };
     # We want `pkgs.systemd`, *not* `python3Packages.system`.
     systemd = hostPkgs.systemd;
   };
