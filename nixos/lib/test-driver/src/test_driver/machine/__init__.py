@@ -1534,7 +1534,16 @@ class NspawnMachine(BaseMachine):
         # Using a loop here handles cases where journalctl might exit unexpectedly
         while self.process.poll() is None:  # While the container is still running
             with subprocess.Popen(
-                ["journalctl", "-f", "-D", journal_path, "-o", "short-monotonic"],
+                [
+                    "journalctl",
+                    "-f",
+                    "-D",
+                    journal_path,
+                    "--lines",
+                    "all",
+                    "-o",
+                    "short-monotonic",
+                ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
