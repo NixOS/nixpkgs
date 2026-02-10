@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python,
   buildPythonPackage,
+  nix-update-script,
   fetchurl,
   fetchpatch,
 
@@ -77,6 +78,13 @@ buildPythonPackage rec {
     ${python.interpreter} -P -m cypari.test
     runHook postCheck
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)_as_released"
+    ];
+  };
 
   meta = {
     description = "Sage's PARI extension, modified to stand alone";
