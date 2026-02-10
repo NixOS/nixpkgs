@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  cacert,
   cryptography,
   fetchFromGitHub,
   mock,
@@ -11,6 +12,7 @@
   pytest-randomly,
   pytest-timeout,
   pytestCheckHook,
+  python,
   six,
 }:
 
@@ -59,6 +61,12 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [ "python2" ];
+
+  # Replace the bundled cacerts.txt with the one from cacert.
+  postFixup = ''
+    rm $out/${python.sitePackages}/httplib2/cacerts.txt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/${python.sitePackages}/httplib2/cacerts.txt
+  '';
 
   pythonImportsCheck = [ "httplib2" ];
 
