@@ -229,6 +229,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useNextest = true;
 
+  remoteServerExecutableName = "zed-remote-server-${channel}-${finalAttrs.version}+${channel}";
   installPhase = ''
     runHook preInstall
 
@@ -286,7 +287,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   ''
   + lib.optionalString buildRemoteServer ''
-    install -Dm755 $release_target/remote_server $remote_server/bin/zed-remote-server-${channel}-$version+${channel}
+    install -Dm755 $release_target/remote_server $remote_server/bin/${finalAttrs.remoteServerExecutableName}
   ''
   + ''
     runHook postInstall
@@ -321,7 +322,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = {
       remoteServerVersion = testers.testVersion {
         package = finalAttrs.finalPackage.remote_server;
-        command = "zed-remote-server-${channel}-${finalAttrs.version}+${channel} version";
+        command = "${finalAttrs.remoteServerExecutableName} version";
       };
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
