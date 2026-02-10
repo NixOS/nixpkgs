@@ -133,6 +133,9 @@ in
       # > kind of unit allocation or registration with systemd-machined.
       "--keep-unit"
       "--register=no"
+
+      # Send a READY=1 notification to a socket when the container is fully booted.
+      "--notify-ready=yes"
     ];
 
     system.build.nspawn =

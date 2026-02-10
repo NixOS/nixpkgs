@@ -1384,6 +1384,9 @@ class NspawnMachine(BaseMachine):
     process: subprocess.Popen | None
     pid: int | None
 
+    machine_sock_path: Path
+    machine_sock: socket.socket | None
+
     @staticmethod
     def machine_name_from_start_command(start_command: str) -> str:
         match = re.search("run-(.+)-nspawn", os.path.basename(start_command))
@@ -1415,6 +1418,8 @@ class NspawnMachine(BaseMachine):
         self.process = None
         self.pid = None
 
+        self.machine_sock_path = self.tmp_dir / f"{self.name}-nspawn.sock"
+
     def ssh_backdoor_command(self, index: int) -> str:
         # documented in systemd-ssh-generator(8) and https://systemd.io/CONTAINER_INTERFACE/
         socket_path = f"/run/systemd/nspawn/unix-export/{self.name}/ssh"
@@ -1425,6 +1430,9 @@ class NspawnMachine(BaseMachine):
         if self.pid is None:
             return
 
+        if self.machine_sock:
+            self.machine_sock.close()
+
         self.logger.info(f"kill NspawnMachine (pid {self.pid})")
         assert self.process is not None
         self.process.terminate()
@@ -1433,43 +1441,49 @@ class NspawnMachine(BaseMachine):
     def is_up(self) -> bool:
         return self.process is not None
 
+    def _poll_socket(self) -> tuple[bool, int | None]:
+        """Non-blocking check of container status via socket.
+        Returns (is_ready, leader_pid).
+        """
+        assert self.machine_sock is not None
+        ready = False
+        leader_pid = None
+        try:
+            data, _ = self.machine_sock.recvfrom(4096)
+            msg = data.decode()
+            for line in msg.splitlines():
+                if line == "READY=1":
+                    ready = True
+                if line.startswith("X_NSPAWN_LEADER_PID="):
+                    leader_pid = int(line.split("=")[1])
+        except OSError:
+            pass
+        return ready, leader_pid
+
     @cached_property
     def get_systemd_process(self) -> int:
-        assert self.process is not None, "Machine not started"
-        assert self.process.stdout is not None, "Machine has no stdout"
+        """Block until startup is complete and return the PID of the container's systemd process."""
+        assert self.process is not None
 
-        systemd_nspawn_pid = None
-        for line_bytes in self.process.stdout:
-            line = line_bytes.decode()
-            self.log(line.rstrip())
+        container_pid: int | None = None
+        is_ready = False
 
-            systemd_nspawn_pid_prefix = "systemd-nspawn's PID is "
-            if line.startswith(systemd_nspawn_pid_prefix):
-                systemd_nspawn_pid = int(line.removeprefix(systemd_nspawn_pid_prefix))
+        while not is_ready or container_pid is None:
+            # Poll the socket until we have the container leader PID
+            if self.process.poll() is not None:
+                raise MachineError("systemd-nspawn process exited unexpectedly")
 
-            if (
-                line.startswith("systemd[1]: Startup finished in")
-                or "Welcome to NixOS" in line
-            ):
-                assert systemd_nspawn_pid is not None, "Must find systemd-nspawn PID"
-                break
-        else:
-            raise RuntimeError(f"Failed to start container {self.name}")
+            # Poll and update our local tracking variables
+            ready_now, pid_now = self._poll_socket()
+            if ready_now:
+                is_ready = True
+            if pid_now:
+                container_pid = pid_now
 
-        children = (
-            Path(f"/proc/{systemd_nspawn_pid}/task/{systemd_nspawn_pid}/children")
-            .read_text()
-            .split()
-        )
-        assert len(children) == 1, (
-            f"Expected exactly one child process for systemd-nspawn, got {children}"
-        )
-        (child,) = children
+            if not (is_ready and container_pid):
+                time.sleep(0.05)
 
-        try:
-            return int(child)
-        except ValueError as e:
-            raise RuntimeError(f"Failed to parse child process id {child}") from e
+        return container_pid
 
     def _execute(
         self,
@@ -1570,11 +1584,19 @@ class NspawnMachine(BaseMachine):
         if self.process is not None:
             return
 
+        if self.machine_sock_path is not None and self.machine_sock_path.exists():
+            self.machine_sock_path.unlink()
+
+        self.machine_sock = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_DGRAM)
+        self.machine_sock.bind(str(self.machine_sock_path))
+        self.machine_sock.setblocking(False)
+
         self.process = subprocess.Popen(
             [self.start_command],
             env={
                 "RUN_NSPAWN_ROOT_DIR": str(self.state_dir),
                 "RUN_NSPAWN_SHARED_DIR": str(self.shared_dir),
+                "NOTIFY_SOCKET": self.machine_sock_path.as_posix(),
             },
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,

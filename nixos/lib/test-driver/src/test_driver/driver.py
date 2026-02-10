@@ -333,8 +333,16 @@ class Driver:
     def start_all(self) -> None:
         """Start all machines"""
         with self.logger.nested("start all VMs"):
+            threads = []
             for machine in self.machines:
-                machine.start()
+                # Create a thread for each machine's start method
+                t = threading.Thread(target=machine.start, name=f"start-{machine.name}")
+                threads.append(t)
+                t.start()
+
+            # Wait for all startup threads to complete before proceeding
+            for t in threads:
+                t.join()
 
     def join_all(self) -> None:
         """Wait for all machines to shut down"""
