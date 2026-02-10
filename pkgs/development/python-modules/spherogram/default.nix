@@ -14,6 +14,11 @@
   networkx,
   snappy-15-knots,
   snappy-manifolds,
+
+  # tests
+  runCommand,
+  sage,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -49,6 +54,25 @@ buildPythonPackage rec {
     ${python.interpreter} -m spherogram.test
     runHook postCheck
   '';
+
+  passthru.tests.sage =
+    let
+      sage' = sage.override {
+        extraPythonPackages = ps: [ ps.spherogram ];
+        requireSageTests = false;
+      };
+    in
+    runCommand "spherogram-sage-tests"
+      {
+        nativeBuildInputs = [
+          sage'
+          writableTmpDirAsHomeHook
+        ];
+      }
+      ''
+        sage -python -m spherogram.test
+        touch $out
+      '';
 
   meta = {
     description = "Spherical diagrams for 3-manifold topology";
