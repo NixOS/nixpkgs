@@ -1,9 +1,8 @@
 {
   lib,
   fetchFromGitHub,
-  stdenvNoCC,
-  nodejs,
   fetchNpmDeps,
+  nodejs,
   buildPackages,
   php84,
   nixosTests,
@@ -11,7 +10,7 @@
   dataDir ? "/var/lib/firefly-iii",
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+php84.buildComposerProject2 (finalAttrs: {
   pname = "firefly-iii";
   version = "6.4.14";
 
@@ -22,22 +21,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-hXqLy0i1q2RRx0yg67zOPZPxEQ2c+VsFp90LFIXOE2w=";
   };
 
-  buildInputs = [ php84 ];
+  vendorHash = "sha256-fLL0FAhd8r2igiZZ+wb1gse+vembHS6rzUnKe9LXXmI=";
 
   nativeBuildInputs = [
     nodejs
     nodejs.python
     buildPackages.npmHooks.npmConfigHook
-    php84.packages.composer
-    php84.composerHooks2.composerInstallHook
   ];
-
-  composerVendor = php84.mkComposerVendor {
-    inherit (finalAttrs) pname src version;
-    composerStrictValidation = true;
-    strictDeps = true;
-    vendorHash = "sha256-fLL0FAhd8r2igiZZ+wb1gse+vembHS6rzUnKe9LXXmI=";
-  };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
@@ -45,9 +35,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-kmYxC5+Vi/wCP/mT4n7JtxbzW4nVHOsA4xFpNMn0Li8=";
   };
 
-  preInstall = ''
+  postBuild = ''
     npm run prod --workspace=v1
     npm run build --workspace=v2
+  '';
+
+  postInstall = ''
+    chmod -R u+w $out/share
+    mv $out/share/php/firefly-iii/* $out/
+    rm -R $out/share $out/storage $out/bootstrap/cache $out/node_modules
+    ln -s ${dataDir}/storage $out/storage
+    ln -s ${dataDir}/cache $out/bootstrap/cache
   '';
 
   passthru = {
@@ -60,14 +58,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ];
     };
   };
-
-  postInstall = ''
-    chmod -R u+w $out/share
-    mv $out/share/php/firefly-iii/* $out/
-    rm -R $out/share $out/storage $out/bootstrap/cache $out/node_modules
-    ln -s ${dataDir}/storage $out/storage
-    ln -s ${dataDir}/cache $out/bootstrap/cache
-  '';
 
   meta = {
     changelog = "https://github.com/firefly-iii/firefly-iii/releases/tag/v${finalAttrs.version}";
