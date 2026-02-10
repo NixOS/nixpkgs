@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tricktron
       pentane
+      jeffdess
     ];
     platforms = lib.platforms.unix;
     mainProgram = "openconnect";
