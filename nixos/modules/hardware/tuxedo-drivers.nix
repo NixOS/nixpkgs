@@ -42,7 +42,7 @@ in
       - SysFS control of brightness/color/mode for most TUXEDO keyboards
       - Hardware I/O driver for TUXEDO Control Center
 
-      For more inforation it is best to check at the source code description: <https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers>
+      For more information it is best to check at the source code description: <https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers>
     '';
     settings = {
       charging-profile = lib.mkOption {

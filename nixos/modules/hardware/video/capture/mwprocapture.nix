@@ -26,7 +26,7 @@ in
       # Set the png picture to be displayed when an unsupported input signal is detected.
       options ProCapture unsupported_file=${kernelPackages.mwprocapture}/res/Unsupported.png
 
-      # Set the png picture to be displayed when an loking input signal is detected.
+      # Set the png picture to be displayed when an looking input signal is detected.
       options ProCapture locking_file=${kernelPackages.mwprocapture}/res/Locking.png
 
       # Message signaled interrupts switch

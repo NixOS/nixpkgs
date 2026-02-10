@@ -109,7 +109,7 @@ let
     in
     keepNames (filterChanges (zipLists (tryCollectOptions old) (tryCollectOptions new)));
 
-  # Create a list of modules where each module contains only one failling
+  # Create a list of modules where each module contains only one failing
   # options.
   introspectionModules =
     let

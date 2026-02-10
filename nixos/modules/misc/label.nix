@@ -26,7 +26,7 @@ in
 
         Can be overridden by setting {env}`NIXOS_LABEL`.
 
-        Useful for not loosing track of configurations built from different
+        Useful for not losing track of configurations built from different
         nixos branches/revisions, e.g.:
 
         ```
