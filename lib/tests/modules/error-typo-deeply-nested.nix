@@ -35,7 +35,8 @@
 
   config = {
     services.nginx.virtualHosts."example.com" = {
-      # Typo: "certficate" instead of "certificate" (nested within submodule)
+      # typos: ignore: "certficate" instead of "certificate" (nested within submodule)
+      # typos: ignore-next-line
       ssl.certficate = "/path/to/cert";
     };
   };

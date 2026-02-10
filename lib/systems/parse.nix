@@ -414,6 +414,7 @@ rec {
       || (cpu.family == "m68k" && cpu.bits == 32)
       || (cpu.family == "x86" && cpu.bits == 32)
     then
+      # typos: ignore-next-line
       execFormats.aout
     else
       execFormats.elf;
@@ -522,6 +523,7 @@ rec {
   types.execFormat = enum (attrValues execFormats);
 
   execFormats = setTypes types.openExecFormat {
+    # typos: ignore-next-line
     aout = { }; # a.out
     elf = { };
     macho = { };

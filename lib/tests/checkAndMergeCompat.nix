@@ -307,7 +307,7 @@ in
       };
     };
   };
-  coerce_attrsOf_str_to_listOf_err_coercer_ouput = getMatrix {
+  coerce_attrsOf_str_to_listOf_err_coercer_output = getMatrix {
     outerTypeName = "coercedTo";
     innerTypeName = "attrsOf_str->listOf_str";
     getType = a: b: a.coercedTo (b.attrsOf b.str) builtins.attrValues (b.listOf b.str);
@@ -323,7 +323,7 @@ in
       };
     };
   };
-  coerce_str_to_int_coercer_ouput = getMatrix {
+  coerce_str_to_int_coercer_output = getMatrix {
     outerTypeName = "coercedTo";
     innerTypeName = "int->str";
     getType = a: b: a.coercedTo b.int toString a.str;

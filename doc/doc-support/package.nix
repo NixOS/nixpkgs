@@ -132,6 +132,7 @@ stdenvNoCC.mkDerivation (
       mv out "$dest"
       cp "$dest/index.html" "$dest/manual.html"
 
+      # typos: ignore-next-line
       cp ${roboto.src}/web/Roboto\[ital\,wdth\,wght\].ttf "$dest/Roboto.ttf"
 
       cp ${epub} "$dest/nixpkgs-manual.epub"

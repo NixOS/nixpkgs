@@ -174,8 +174,8 @@ provided Xcode installation. The script can be started as follows:
 ./result/bin/run-test-simulator
 ```
 
-By default, the script will show an overview of UDID for all available simulator
-instances and asks you to pick one. You can also provide a UDID as a
+By default, the script will show an overview of UUID for all available simulator
+instances and asks you to pick one. You can also provide a UUID as a
 command-line parameter to launch an instance automatically:
 
 ```bash

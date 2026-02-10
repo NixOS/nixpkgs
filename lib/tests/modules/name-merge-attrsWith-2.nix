@@ -11,7 +11,7 @@ in
         options.mergedName = mkOption {
           default = { };
           type = types.attrsWith {
-            placeholder = "id"; # <- this is beeing tested
+            placeholder = "id"; # <- this is being tested
             elemType = types.submodule {
               options.nested = mkOption {
                 type = types.int;

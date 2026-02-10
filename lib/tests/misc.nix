@@ -2528,6 +2528,7 @@ runTests {
       let
         vals = {
           int = 42;
+          # typos: ignore-next-line
           string = ''fo"o'';
           bool = true;
           bool2 = false;
@@ -2538,6 +2539,7 @@ runTests {
       mapAttrs (const (generators.mkValueStringDefault { })) vals;
     expected = {
       int = "42";
+      # typos: ignore-next-line
       string = ''fo"o'';
       bool = "true";
       bool2 = "false";
@@ -3393,7 +3395,7 @@ runTests {
     ];
   };
 
-  testDocOptionVisiblity = {
+  testDocOptionVisibility = {
     expr =
       let
         submodule =
