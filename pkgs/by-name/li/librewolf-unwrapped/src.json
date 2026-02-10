@@ -1,0 +1,11 @@
+{
+  "packageVersion": "147.0.3-2",
+  "source": {
+    "rev": "147.0.3-2",
+    "hash": "sha256-Gnsk+dY0B0j/0npy//y/UItKvPrI9HELrH86x0QklBk="
+  },
+  "firefox": {
+    "version": "147.0.3",
+    "hash": "sha512-N+OcR9aU7M3Ku32KCkz+GwKGCpf2BGU/Nkxg9OmHlv/H8carUSJrLlA0pLSAXMxuw5g/DYMMnzZpLfLsJhJz2Q=="
+  }
+}

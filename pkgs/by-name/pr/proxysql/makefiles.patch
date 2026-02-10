@@ -1,0 +1,199 @@
+diff --git a/Makefile b/Makefile
+index 01aa5730..6c71b3a5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -81,10 +81,7 @@ endif
+ export MAKEOPT := -j${NPROCS}
+ 
+ ### systemd
+-SYSTEMD := 0
+-ifeq ($(wildcard /usr/lib/systemd/system), /usr/lib/systemd/system)
+-	SYSTEMD := 1
+-endif
++SYSTEMD := 1
+ 
+ ### check user/group
+ USERCHECK := $(shell getent passwd proxysql)
+@@ -415,16 +412,10 @@ cleanbuild:
+ 
+ .PHONY: install
+ install: src/proxysql
+-	install -m 0755 src/proxysql /usr/bin
+-	install -m 0600 etc/proxysql.cnf /etc
+-	if [ ! -d /var/lib/proxysql ]; then mkdir /var/lib/proxysql ; fi
+-ifeq ($(findstring proxysql,$(USERCHECK)),)
+-	@echo "Creating proxysql user and group"
+-	useradd -r -U -s /bin/false proxysql
+-endif
++	install -m 0755 src/proxysql $(out)/bin
++	install -m 0600 etc/proxysql.cnf $(out)/etc
+ ifeq ($(SYSTEMD), 1)
+-	install -m 0644 systemd/system/proxysql.service /usr/lib/systemd/system/
+-	systemctl enable proxysql.service
++	install -m 0644 systemd/system/proxysql.service $(out)/lib/systemd/system/
+ else
+ 	install -m 0755 etc/init.d/proxysql /etc/init.d
+ ifeq ($(DISTRO),"CentOS Linux")
+diff --git a/deps/Makefile b/deps/Makefile
+index 87d2a20e..505e069a 100644
+--- a/deps/Makefile
++++ b/deps/Makefile
+@@ -61,27 +61,22 @@ default: $(targets)
+ ### deps targets
+ 
+ libinjection/libinjection/src/libinjection.a:
+-	cd libinjection && rm -rf libinjection-*/ || true
+-	cd libinjection && tar -zxf libinjection-3.10.0.tar.gz
+ ifneq ($(CENTOSVER),6)
+-	cd libinjection/libinjection && patch -p1 < ../update-build-py3.diff
+ 	cd libinjection/libinjection && patch -p1 < ../libinjection_sqli.c.patch
+ endif
+ ifeq ($(UNAME_S),Darwin)
+ 	sed -i '' 's/CC=/CC?=/' libinjection/libinjection/src/Makefile
+ else
+ 	sed -i -e 's/CC=/CC?=/' libinjection/libinjection/src/Makefile
+ endif
+ 	cd libinjection/libinjection && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ libinjection: libinjection/libinjection/src/libinjection.a
+ 
+ include ../common_mk/openssl_flags.mk
+ include ../common_mk/openssl_version_check.mk
+ 
+ libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a: libmicrohttpd/libmicrohttpd/src/microhttpd/.libs/libmicrohttpd.a re2/re2/obj/libre2.a
+-	cd libhttpserver && rm -rf libhttpserver-*/ || true
+-	cd libhttpserver && tar -zxf libhttpserver-*.tar.gz
+ 	cd libhttpserver/libhttpserver && patch -p1 < ../noexcept.patch
+ 	cd libhttpserver/libhttpserver && patch -p1 < ../re2_regex.patch
+ 	cd libhttpserver/libhttpserver && patch -p1 < ../final_val_post_process.patch
+@@ -99,77 +94,66 @@ libhttpserver: libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a
+ 
+ 
+ libev/libev/.libs/libev.a:
+-	cd libev && rm -rf libev-*/ || true
+-	cd libev && tar -zxf libev-*.tar.gz
+ 	cd libev/libev && patch ev.c < ../ev.c-multiplication-overflow.patch
+ 	cd libev/libev && ./configure
+ 	cd libev/libev && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ ev: libev/libev/.libs/libev.a
+ 
+ 
+ coredumper/coredumper/src/libcoredumper.a:
+ 	cd coredumper && rm -rf coredumper-*/ || true
+ 	cd coredumper && tar -zxf coredumper-*.tar.gz
+ 	cd coredumper/coredumper && patch -p1 < ../includes.patch
+-	cd coredumper/coredumper && cmake . -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug
++	cd coredumper/coredumper && cmake . -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+ 	cd coredumper/coredumper && CC=${CC} CXX=${CXX} ${MAKE}
+ coredumper: coredumper/coredumper/src/libcoredumper.a
+ 
+ curl/curl/lib/.libs/libcurl.a:
+-	cd curl && rm -rf curl-*/ || true
+-	cd curl && tar -zxf curl-*.tar.gz
+ #	cd curl/curl && ./configure --disable-debug --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher --disable-manual --disable-ipv6 --disable-sspi --disable-crypto-auth --disable-ntlm-wb --disable-tls-srp --without-nghttp2 --without-libidn2 --without-libssh2 --without-brotli --with-ssl=$(shell pwd)/../../libssl/openssl/ && CC=${CC} CXX=${CXX} ${MAKE}
+ 	cd curl/curl && autoreconf -fi
+ ifeq ($(UNAME_S),Darwin)
+ 	cd curl/curl && patch configure < ../configure.patch
+ endif
+ 	cd curl/curl && CPPFLAGS="-I$(SSL_IDIR)" LDFLAGS="$(LIB_SSL_PATH) $(LIB_CRYPTO_PATH)" ./configure --disable-debug --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher --disable-manual --disable-ipv6 --disable-sspi --disable-ntlm-wb --disable-tls-srp --without-nghttp2 --without-libidn2 --without-libssh2 --without-brotli --without-librtmp --without-libpsl --without-zstd --with-ssl --enable-shared=yes
+ 	cd curl/curl && CFLAGS=-fPIC CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ curl: curl/curl/lib/.libs/libcurl.a
+ 
+ 
+ libmicrohttpd/libmicrohttpd/src/microhttpd/.libs/libmicrohttpd.a:
+-	cd libmicrohttpd && rm -rf libmicrohttpd-*/ || true
+-	cd libmicrohttpd && tar -zxf libmicrohttpd-*.tar.gz
+-#	cd libmicrohttpd/libmicrohttpd && patch src/microhttpd/connection.c < ../connection.c-snprintf-overflow.patch
+ 	cd libmicrohttpd/libmicrohttpd && ./configure --enable-https && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ microhttpd: libmicrohttpd/libmicrohttpd/src/microhttpd/.libs/libmicrohttpd.a
+ 
+ 
+ cityhash/cityhash/src/.libs/libcityhash.a:
+ 	cd cityhash && rm -rf cityhash-*/ || true
+ 	cd cityhash && tar -zxf cityhash-*.tar.gz
+ 	cd cityhash/cityhash && cp ../config.guess . && chmod +x config.guess && cp ../config.sub . && chmod +x config.sub
+ 	cd cityhash/cityhash && ./configure && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ cityhash: cityhash/cityhash/src/.libs/libcityhash.a
+ 
+ 
+ lz4/lz4/lib/liblz4.a:
+-	cd lz4 && rm -rf lz4-*/ || true
+-	cd lz4 && tar -zxf lz4-*.tar.gz
+ 	cd lz4/lz4 && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ lz4: lz4/lz4/lib/liblz4.a
+ 
+ 
+ clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-static.a:
+ 	cd clickhouse-cpp && rm -rf clickhouse-cpp-*/ || true
+ 	cd clickhouse-cpp && tar -zxf v2.3.0.tar.gz
+ 	cd clickhouse-cpp && ln -fs clickhouse-cpp-*/ clickhouse-cpp
+ 	cd clickhouse-cpp/clickhouse-cpp && patch clickhouse/base/wire_format.h < ../wire_format.patch
+-	cd clickhouse-cpp/clickhouse-cpp && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo .
++	cd clickhouse-cpp/clickhouse-cpp && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .
+ 	cd clickhouse-cpp/clickhouse-cpp && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ clickhouse-cpp: clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-static.a
+ 
+ 
+ libdaemon/libdaemon/libdaemon/.libs/libdaemon.a:
+-	cd libdaemon && rm -rf libdaemon-*/ || true
+-	cd libdaemon && tar -zxf libdaemon-0.14.tar.gz
+ 	cd libdaemon/libdaemon && patch -p0 < ../daemon_fork_umask.patch
+ 	cd libdaemon/libdaemon && cp ../config.guess . && chmod +x config.guess && cp ../config.sub . && chmod +x config.sub && ./configure --disable-examples
+ 	cd libdaemon/libdaemon && CC=${CC} CXX=${CXX} ${MAKE}
+@@ -194,7 +178,7 @@ mariadb-client-library/mariadb_client/libmariadb/libmariadbclient.a:
+ 	cd mariadb-client-library && rm -rf mariadb-connector-c-*/ || true
+ 	cd mariadb-client-library && tar -zxf mariadb-connector-c-3.3.8-src.tar.gz
+ 	cd mariadb-client-library/mariadb_client && patch -p0 < ../plugin_auth_CMakeLists.txt.patch
+-	cd mariadb-client-library/mariadb_client && cmake . -Wno-dev -DCMAKE_BUILD_TYPE=RelWithDebInfo -DOPENSSL_ROOT_DIR=$(SSL_IDIR) -DOPENSSL_LIBRARIES=$(SSL_LDIR) -DICONV_LIBRARIES=$(brew --prefix libiconv)/lib -DICONV_INCLUDE=$(brew --prefix libiconv)/include .
++	cd mariadb-client-library/mariadb_client && cmake . -Wno-dev -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DOPENSSL_ROOT_DIR=$(SSL_IDIR) -DOPENSSL_LIBRARIES=$(SSL_LDIR) -DICONV_LIBRARIES=$(brew --prefix libiconv)/lib -DICONV_INCLUDE=$(brew --prefix libiconv)/include .
+ ifeq ($(PROXYDEBUG),1)
+ 	cd mariadb-client-library/mariadb_client && patch -p0 < ../ma_context.h.patch
+ else ifeq ($(USEVALGRIND),1)
+@@ -253,18 +237,13 @@ sqlite3/sqlite3/sqlite3.o:
+ sqlite3: sqlite3/sqlite3/sqlite3.o
+ 
+ libconfig/libconfig/lib/.libs/libconfig++.a:
+-	cd libconfig && rm -rf libconfig-*/ || true
+-	cd libconfig && tar -zxf libconfig-*.tar.gz
+ 	cd libconfig/libconfig && ./configure --disable-examples
+ 	cd libconfig/libconfig && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ libconfig: libconfig/libconfig/lib/.libs/libconfig++.a
+ 
+ 
+ prometheus-cpp/prometheus-cpp/lib/libprometheus-cpp-core.a:
+-	cd prometheus-cpp && rm -rf prometheus-cpp-*/ || true
+-	cd prometheus-cpp && tar -zxf prometheus-cpp-*.tar.gz
+-	cd prometheus-cpp && tar --strip-components=1 -zxf civetweb-*.tar.gz -C prometheus-cpp/3rdparty/civetweb
+ 	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../serial_exposer.patch
+ 	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../registry_counters_reset.patch
+ 	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../fix_old_distros.patch
+@@ -293,17 +272,13 @@ re2: re2/re2/obj/libre2.a
+ 
+ 
+ pcre/pcre/.libs/libpcre.a:
+-	cd pcre && rm -rf pcre-*/ || true
+-	cd pcre && tar -zxf pcre-*.tar.gz
+ 	cd pcre/pcre && patch pcretest.c < ../pcretest.c-multiplication-overflow.patch
+ 	cd pcre/pcre && ./configure
+ 	cd pcre/pcre && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ pcre: pcre/pcre/.libs/libpcre.a
+ 
+ postgresql/postgresql/src/interfaces/libpq/libpq.a:
+-	cd postgresql && rm -rf postgresql-*/ || true
+-	cd postgresql && tar -zxf postgresql-*.tar.gz
+ 	cd postgresql/postgresql && patch -p0 < ../get_result_from_pgconn.patch
+ 	cd postgresql/postgresql && patch -p0 < ../handle_row_data.patch
+ 	cd postgresql/postgresql && patch -p0 < ../fmt_err_msg.patch
+@@ -361,4 +336,3 @@ cleanall:
+ 	cd libusual && rm -rf libusual-*/ || true
+ 	cd libscram && rm -rf lib/* obj/* || true
+ .PHONY: cleanall
+-

@@ -1,0 +1,21 @@
+diff -Naur gpsd-3.25.orig/SConscript gpsd-3.25/SConscript
+--- gpsd-3.25.orig/SConscript	2025-03-29 13:33:34
++++ gpsd-3.25/SConscript	2025-03-29 13:34:24
+@@ -15,6 +15,7 @@
+ import os
+ import pickle
+ import re
++import platform
+ # replacement for functions from the commands module, which is deprecated.
+ import subprocess
+ import sys
+@@ -399,7 +400,7 @@
+     def_group = "dialout"
+ 
+ # darwin and BSDs do not have /run, maybe others.
+-if os.path.exists("/run"):
++if "BSD" in os.uname().sysname or platform.system() == "Darwin":
+     rundir = "/run"
+ else:
+     rundir = "/var/run"
+     

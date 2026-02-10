@@ -1,0 +1,162 @@
+From 4fe3f21bf8b20c766877d2251d61118d0ff36688 Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Wed, 7 Dec 2022 14:56:51 -0500
+Subject: [PATCH] [compiler-rt][builtins] Do not use ldrexd or strexd on ARMv6
+
+The ldrexd and strexd instructions are not available on base ARMv6, and were
+only added in ARMv6K (see [1]). This patch solves this problem once and for all
+using the __ARM_FEATURE_LDREX macro (see [2]) defined in the ARM C Language
+Extensions (ACLE). Although this macro is technically deprecated in the ACLE,
+it allows compiler-rt to reliably detect whether ldrexd and strexd are supported
+without complicated conditionals to detect different ARM architecture variants.
+
+[1] https://developer.arm.com/documentation/dht0008/a/ch01s02s01
+[2] https://arm-software.github.io/acle/main/acle.html#ldrexstrex
+
+Differential Revision: https://reviews.llvm.org/D139585
+---
+ compiler-rt/lib/builtins/arm/sync_fetch_and_add_8.S  | 2 +-
+ compiler-rt/lib/builtins/arm/sync_fetch_and_and_8.S  | 2 +-
+ compiler-rt/lib/builtins/arm/sync_fetch_and_max_8.S  | 2 +-
+ compiler-rt/lib/builtins/arm/sync_fetch_and_min_8.S  | 2 +-
+ compiler-rt/lib/builtins/arm/sync_fetch_and_nand_8.S | 2 +-
+ compiler-rt/lib/builtins/arm/sync_fetch_and_or_8.S   | 2 +-
+ compiler-rt/lib/builtins/arm/sync_fetch_and_sub_8.S  | 2 +-
+ compiler-rt/lib/builtins/arm/sync_fetch_and_umax_8.S | 2 +-
+ compiler-rt/lib/builtins/arm/sync_fetch_and_umin_8.S | 2 +-
+ compiler-rt/lib/builtins/arm/sync_fetch_and_xor_8.S  | 2 +-
+ 10 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/lib/builtins/arm/sync_fetch_and_add_8.S b/lib/builtins/arm/sync_fetch_and_add_8.S
+index 18bdd875b8b7..bee6f7ba0f34 100644
+--- a/lib/builtins/arm/sync_fetch_and_add_8.S
++++ b/lib/builtins/arm/sync_fetch_and_add_8.S
+@@ -13,7 +13,7 @@
+ 
+ #include "sync-ops.h"
+ 
+-#if __ARM_ARCH_PROFILE != 'M'
++#if __ARM_FEATURE_LDREX & 8
+ #define add_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI) \
+     adds rD_LO, rN_LO, rM_LO ; \
+     adc rD_HI, rN_HI, rM_HI
+diff --git a/lib/builtins/arm/sync_fetch_and_and_8.S b/lib/builtins/arm/sync_fetch_and_and_8.S
+index 3716eff809d5..b4e77a54edf6 100644
+--- a/lib/builtins/arm/sync_fetch_and_and_8.S
++++ b/lib/builtins/arm/sync_fetch_and_and_8.S
+@@ -13,7 +13,7 @@
+ 
+ #include "sync-ops.h"
+ 
+-#if __ARM_ARCH_PROFILE != 'M'
++#if __ARM_FEATURE_LDREX & 8
+ #define and_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI) \
+     and rD_LO, rN_LO, rM_LO ; \
+     and rD_HI, rN_HI, rM_HI
+diff --git a/lib/builtins/arm/sync_fetch_and_max_8.S b/lib/builtins/arm/sync_fetch_and_max_8.S
+index 06115ab55246..1813274cc649 100644
+--- a/lib/builtins/arm/sync_fetch_and_max_8.S
++++ b/lib/builtins/arm/sync_fetch_and_max_8.S
+@@ -13,7 +13,7 @@
+ 
+ #include "sync-ops.h"
+ 
+-#if __ARM_ARCH_PROFILE != 'M'
++#if __ARM_FEATURE_LDREX & 8
+ #define max_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI)         MINMAX_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI, gt)
+ 
+ SYNC_OP_8(max_8)
+diff --git a/lib/builtins/arm/sync_fetch_and_min_8.S b/lib/builtins/arm/sync_fetch_and_min_8.S
+index 4f3e299d95cc..fa8f3477757b 100644
+--- a/lib/builtins/arm/sync_fetch_and_min_8.S
++++ b/lib/builtins/arm/sync_fetch_and_min_8.S
+@@ -13,7 +13,7 @@
+ 
+ #include "sync-ops.h"
+ 
+-#if __ARM_ARCH_PROFILE != 'M'
++#if __ARM_FEATURE_LDREX & 8
+ #define min_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI)         MINMAX_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI, lt)
+ 
+ SYNC_OP_8(min_8)
+diff --git a/lib/builtins/arm/sync_fetch_and_nand_8.S b/lib/builtins/arm/sync_fetch_and_nand_8.S
+index 425c94474af7..fb27219ee200 100644
+--- a/lib/builtins/arm/sync_fetch_and_nand_8.S
++++ b/lib/builtins/arm/sync_fetch_and_nand_8.S
+@@ -13,7 +13,7 @@
+ 
+ #include "sync-ops.h"
+ 
+-#if __ARM_ARCH_PROFILE != 'M'
++#if __ARM_FEATURE_LDREX & 8
+ #define nand_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI) \
+     bic rD_LO, rN_LO, rM_LO ; \
+     bic rD_HI, rN_HI, rM_HI
+diff --git a/lib/builtins/arm/sync_fetch_and_or_8.S b/lib/builtins/arm/sync_fetch_and_or_8.S
+index 4f18dcf84df9..3b077c8737b1 100644
+--- a/lib/builtins/arm/sync_fetch_and_or_8.S
++++ b/lib/builtins/arm/sync_fetch_and_or_8.S
+@@ -13,7 +13,7 @@
+ 
+ #include "sync-ops.h"
+ 
+-#if __ARM_ARCH_PROFILE != 'M'
++#if __ARM_FEATURE_LDREX & 8
+ #define or_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI) \
+     orr rD_LO, rN_LO, rM_LO ; \
+     orr rD_HI, rN_HI, rM_HI
+diff --git a/lib/builtins/arm/sync_fetch_and_sub_8.S b/lib/builtins/arm/sync_fetch_and_sub_8.S
+index 25a4a1076555..c171607eabd8 100644
+--- a/lib/builtins/arm/sync_fetch_and_sub_8.S
++++ b/lib/builtins/arm/sync_fetch_and_sub_8.S
+@@ -13,7 +13,7 @@
+ 
+ #include "sync-ops.h"
+ 
+-#if __ARM_ARCH_PROFILE != 'M'
++#if __ARM_FEATURE_LDREX & 8
+ #define sub_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI) \
+     subs rD_LO, rN_LO, rM_LO ; \
+     sbc rD_HI, rN_HI, rM_HI
+diff --git a/lib/builtins/arm/sync_fetch_and_umax_8.S b/lib/builtins/arm/sync_fetch_and_umax_8.S
+index aa5213ff1def..d1224f758049 100644
+--- a/lib/builtins/arm/sync_fetch_and_umax_8.S
++++ b/lib/builtins/arm/sync_fetch_and_umax_8.S
+@@ -13,7 +13,7 @@
+ 
+ #include "sync-ops.h"
+ 
+-#if __ARM_ARCH_PROFILE != 'M'
++#if __ARM_FEATURE_LDREX & 8
+ #define umax_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI)         MINMAX_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI, hi)
+ 
+ SYNC_OP_8(umax_8)
+diff --git a/lib/builtins/arm/sync_fetch_and_umin_8.S b/lib/builtins/arm/sync_fetch_and_umin_8.S
+index 8b40541ab47d..595444e6d053 100644
+--- a/lib/builtins/arm/sync_fetch_and_umin_8.S
++++ b/lib/builtins/arm/sync_fetch_and_umin_8.S
+@@ -13,7 +13,7 @@
+ 
+ #include "sync-ops.h"
+ 
+-#if __ARM_ARCH_PROFILE != 'M'
++#if __ARM_FEATURE_LDREX & 8
+ #define umin_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI)         MINMAX_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI, lo)
+ 
+ SYNC_OP_8(umin_8)
+diff --git a/lib/builtins/arm/sync_fetch_and_xor_8.S b/lib/builtins/arm/sync_fetch_and_xor_8.S
+index 7436eb1d4cae..9fc3d85cef75 100644
+--- a/lib/builtins/arm/sync_fetch_and_xor_8.S
++++ b/lib/builtins/arm/sync_fetch_and_xor_8.S
+@@ -13,7 +13,7 @@
+ 
+ #include "sync-ops.h"
+ 
+-#if __ARM_ARCH_PROFILE != 'M'
++#if __ARM_FEATURE_LDREX & 8
+ #define xor_8(rD_LO, rD_HI, rN_LO, rN_HI, rM_LO, rM_HI) \
+     eor rD_LO, rN_LO, rM_LO ; \
+     eor rD_HI, rN_HI, rM_HI
+-- 
+2.38.1
+

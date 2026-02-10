@@ -1,0 +1,82 @@
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+
+  enableWasmEval ? false,
+}:
+
+assert
+  enableWasmEval && stdenv.hostPlatform.isDarwin
+  -> throw "building with wasm on darwin is failing in nixpkgs";
+
+buildGoModule (finalAttrs: {
+  pname = "opa-envoy-plugin";
+  version = "1.13.1-envoy";
+
+  src = fetchFromGitHub {
+    owner = "open-policy-agent";
+    repo = "opa-envoy-plugin";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XG1xnPOE922H/yMNyY0M8x5KW90TPZlq5UAXCEtgR18=";
+  };
+
+  vendorHash = "sha256-vZgDQYkid1xNJhmefifcp695R672mz6tpo3g/gzrdBg=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  subPackages = [ "./cmd/opa-envoy-plugin" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/open-policy-agent/opa/v1/version.Version=${finalAttrs.version}"
+  ];
+
+  tags = lib.optional enableWasmEval (
+    builtins.trace (
+      "Warning: enableWasmEval breaks reproducability, "
+      + "ensure you need wasm evaluation. "
+      + "`opa build` does not need this feature."
+    ) "opa_wasm"
+  );
+
+  checkPhase = ''
+    go test -v $(go list ./.../ | grep -v 'vendor')
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/opa-envoy-plugin --help
+    $out/bin/opa-envoy-plugin version
+    $out/bin/opa-envoy-plugin version | grep "Version: ${finalAttrs.version}"
+
+    ${lib.optionalString enableWasmEval ''
+      # If wasm is enabled verify it works
+      $out/bin/opa eval -t wasm 'trace("hello from wasm")'
+    ''}
+
+    runHook postInstallCheck
+  '';
+
+  meta = {
+    mainProgram = "opa";
+    homepage = "https://www.openpolicyagent.org/docs/latest/envoy-introduction/";
+    changelog = "https://github.com/open-policy-agent/opa-envoy-plugin/blob/v${finalAttrs.version}/CHANGELOG.md";
+    description = "Plugin to enforce OPA policies with Envoy";
+    longDescription = ''
+      OPA-Envoy extends OPA with a gRPC server that implements the Envoy
+      External Authorization API. You can use this version of OPA to enforce
+      fine-grained, context-aware access control policies with Envoy without
+      modifying your microservice.
+    '';
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      charlieegan3
+    ];
+  };
+})

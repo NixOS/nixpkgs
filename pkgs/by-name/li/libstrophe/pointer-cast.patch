@@ -1,0 +1,65 @@
+diff --git a/src/handler.c b/src/handler.c
+index 1c9bf9f..168df75 100644
+--- a/src/handler.c
++++ b/src/handler.c
+@@ -320,7 +320,7 @@ static void _timed_handler_delete(xmpp_ctx_t *ctx,
+  */
+ void xmpp_timed_handler_delete(xmpp_conn_t *conn, xmpp_timed_handler handler)
+ {
+-    _timed_handler_delete(conn->ctx, &conn->timed_handlers, handler);
++    _timed_handler_delete(conn->ctx, &conn->timed_handlers, (xmpp_void_handler)handler);
+ }
+ 
+ static void _id_handler_add(xmpp_conn_t *conn,
+@@ -349,7 +349,7 @@ static void _id_handler_add(xmpp_conn_t *conn,
+         return;
+ 
+     item->user_handler = user_handler;
+-    item->handler = handler;
++    item->handler = (xmpp_void_handler)handler;
+     item->userdata = userdata;
+     item->enabled = 0;
+     item->next = NULL;
+@@ -451,7 +451,7 @@ static void _handler_add(xmpp_conn_t *conn,
+ 
+     memset(item, 0, sizeof(*item));
+     item->user_handler = user_handler;
+-    item->handler = handler;
++    item->handler = (xmpp_void_handler)handler;
+     item->userdata = userdata;
+ 
+     if (_dup_string(conn->ctx, ns, &item->u.ns))
+@@ -530,7 +530,7 @@ void xmpp_timed_handler_add(xmpp_conn_t *conn,
+                             unsigned long period,
+                             void *userdata)
+ {
+-    _timed_handler_add(conn->ctx, &conn->timed_handlers, handler, period,
++    _timed_handler_add(conn->ctx, &conn->timed_handlers, (xmpp_void_handler)handler, period,
+                        userdata, 1);
+ }
+ 
+@@ -548,7 +548,7 @@ void handler_add_timed(xmpp_conn_t *conn,
+                        unsigned long period,
+                        void *userdata)
+ {
+-    _timed_handler_add(conn->ctx, &conn->timed_handlers, handler, period,
++    _timed_handler_add(conn->ctx, &conn->timed_handlers, (xmpp_void_handler)handler, period,
+                        userdata, 0);
+ }
+ 
+@@ -747,7 +747,7 @@ void xmpp_global_timed_handler_add(xmpp_ctx_t *ctx,
+                                    unsigned long period,
+                                    void *userdata)
+ {
+-    _timed_handler_add(ctx, &ctx->timed_handlers, handler, period, userdata, 1);
++    _timed_handler_add(ctx, &ctx->timed_handlers, (xmpp_void_handler)handler, period, userdata, 1);
+ }
+ 
+ /** Delete a global timed handler.
+@@ -760,5 +760,5 @@ void xmpp_global_timed_handler_add(xmpp_ctx_t *ctx,
+ void xmpp_global_timed_handler_delete(xmpp_ctx_t *ctx,
+                                       xmpp_global_timed_handler handler)
+ {
+-    _timed_handler_delete(ctx, &ctx->timed_handlers, handler);
++    _timed_handler_delete(ctx, &ctx->timed_handlers, (xmpp_void_handler)handler);
+ }

@@ -1,0 +1,100 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  jq,
+  expat,
+  jsoncpp,
+  libx11,
+  libxdmcp,
+  libxrandr,
+  libffi,
+  libxcb,
+  pkg-config,
+  wayland,
+  which,
+  libxcb-keysyms,
+  libxcb-wm,
+  valijson,
+  vulkan-headers,
+  vulkan-loader,
+  vulkan-utility-libraries,
+  writeText,
+  qt6,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "vulkan-tools-lunarg";
+  version = "1.4.335.0";
+
+  src = fetchFromGitHub {
+    owner = "LunarG";
+    repo = "VulkanTools";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-2DUxlGH9Yco64Y74QByVniWXiYYy+e4MfyN4S+E6KKA=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    python3
+    jq
+    which
+    pkg-config
+    qt6.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    expat
+    jsoncpp
+    libx11
+    libxdmcp
+    libxrandr
+    libffi
+    libxcb
+    valijson
+    vulkan-headers
+    vulkan-loader
+    vulkan-utility-libraries
+    wayland
+    libxcb-keysyms
+    libxcb-wm
+    qt6.qtbase
+    qt6.qtwayland
+  ];
+
+  cmakeFlags = [
+    "-DVULKAN_HEADERS_INSTALL_DIR=${vulkan-headers}"
+  ];
+
+  preConfigure = ''
+    patchShebangs scripts/*
+  '';
+
+  # Include absolute paths to layer libraries in their associated
+  # layer definition json files.
+  preFixup = ''
+    for f in "$out"/share/vulkan/explicit_layer.d/*.json "$out"/share/vulkan/implicit_layer.d/*.json; do
+      jq <"$f" >tmp.json ".layer.library_path = \"$out/lib/\" + .layer.library_path"
+      mv tmp.json "$f"
+    done
+  '';
+
+  # Help vulkan-loader find the validation layers
+  setupHook = writeText "setup-hook" ''
+    export XDG_CONFIG_DIRS=@out@/etc''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
+  '';
+
+  meta = {
+    description = "LunarG Vulkan Tools and Utilities";
+    longDescription = ''
+      Tools to aid in Vulkan development including useful layers, trace and
+      replay, and tests.
+    '';
+    homepage = "https://github.com/LunarG/VulkanTools";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+  };
+})

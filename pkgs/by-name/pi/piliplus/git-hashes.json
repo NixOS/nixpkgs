@@ -1,0 +1,20 @@
+{
+  "auto_orientation": "sha256-0QOEW8+0PpBIELmzilZ8+z7ozNRxKgI0BzuBS8c1Fng=",
+  "canvas_danmaku": "sha256-C3No/hLtf/TpPJHXXfPqHjUKI1vck++UWqvkAX9EzYM=",
+  "chat_bottom_container": "sha256-+R1MiDMO4onCMXiJ7MJtJVAwyEJcikTyONwp+HibqA0=",
+  "extended_nested_scroll_view": "sha256-Vjv5zp5c0Xob1H8/U0+lUueLqOKo7qwusOCchdt3Z7M=",
+  "file_picker": "sha256-QyK0htCnWRszAMzGebvqshpAWRI4TtSvyROCNDhkYsg=",
+  "floating": "sha256-0Xd9dsXJCQ/r/8Nb16oM+M8Jdw+r4QzGmU++HpqF/v0=",
+  "flutter_sortable_wrap": "sha256-Qj9Lzh+pJy+vHznGt5M3xwoJtaVtt00fxm4JJXL4bFI=",
+  "get": "sha256-/E/HFW3Ls8p5RyNqiz7hFwW/XKiyrRU5BZWRXvd2yVU=",
+  "material_design_icons_flutter": "sha256-KMwjnzJJj8nemCqUCSwYafPOwTYbtoHNenxstocJtz4=",
+  "media_kit": "sha256-SazwW0/PatPtykG3WXJxDpmfYaP8emh1rKljpOZeqmQ=",
+  "media_kit_libs_android_video": "sha256-SazwW0/PatPtykG3WXJxDpmfYaP8emh1rKljpOZeqmQ=",
+  "media_kit_libs_video": "sha256-SazwW0/PatPtykG3WXJxDpmfYaP8emh1rKljpOZeqmQ=",
+  "media_kit_libs_windows_video": "sha256-SazwW0/PatPtykG3WXJxDpmfYaP8emh1rKljpOZeqmQ=",
+  "media_kit_native_event_loop": "sha256-SazwW0/PatPtykG3WXJxDpmfYaP8emh1rKljpOZeqmQ=",
+  "media_kit_video": "sha256-SazwW0/PatPtykG3WXJxDpmfYaP8emh1rKljpOZeqmQ=",
+  "super_sliver_list": "sha256-G24uRql1aIc1TDJwKqwQ72Pi4YbJybMn6lxOUySSDwk=",
+  "webdav_client": "sha256-euNF7HdDtZ68BqSEq9BvO10BK09MxX2wWGoElFS0yeE=",
+  "window_manager": "sha256-UAN3uOXKMfWk+G9GTHyhD2dGDojKA76mGbUR+EFc2Qo="
+}

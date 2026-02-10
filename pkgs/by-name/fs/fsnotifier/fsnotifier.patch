@@ -1,0 +1,288 @@
+diff --git a/fsnotifier.h b/fsnotifier.h
+index e7b2a42456bc..9dfb61d8d5d0 100644
+--- a/fsnotifier.h
++++ b/fsnotifier.h
+@@ -61,7 +61,7 @@ bool init_inotify(void);
+ void set_inotify_callback(void (*callback)(const char *, uint32_t));
+ int get_inotify_fd(void);
+ int watch(const char* root, array* mounts);
+-void unwatch(int id);
++void unwatch(int id, char* path, unsigned int path_len);
+ bool process_inotify_input(void);
+ void close_inotify(void);
+ 
+diff --git a/inotify.c b/inotify.c
+index a42846379476..0a33eded78bf 100644
+--- a/inotify.c
++++ b/inotify.c
+@@ -22,6 +22,8 @@ typedef struct watch_node_str {
+   struct watch_node_str* parent;
+   array* kids;
+   unsigned int path_len;
++  struct watch_node_str* prev;
++  struct watch_node_str* next;
+   char path[];
+ } watch_node;
+ 
+@@ -102,7 +104,7 @@ int get_inotify_fd(void) {
+ 
+ #define EVENT_MASK (IN_MODIFY | IN_ATTRIB | IN_CREATE | IN_DELETE | IN_MOVE | IN_DELETE_SELF | IN_MOVE_SELF)
+ 
+-static int add_watch(unsigned int path_len, watch_node* parent) {
++static int add_watch(unsigned int path_len, watch_node* parent, watch_node** out) {
+   int wd = inotify_add_watch(inotify_fd, path_buf, EVENT_MASK);
+   if (wd < 0) {
+     if (errno == EACCES || errno == ENOENT) {
+@@ -123,36 +125,39 @@ static int add_watch(unsigned int path_len, watch_node* parent) {
+     userlog(LOG_INFO, "watching %s: %d", path_buf, wd);
+   }
+ 
+-  watch_node* node = table_get(watches, wd);
+-  if (node != NULL) {
+-    if (node->wd != wd) {
+-      userlog(LOG_ERR, "table error: corruption at %d:%s / %d:%s / %d", wd, path_buf, node->wd, node->path, watch_count);
+-      return ERR_ABORT;
+-    }
+-    else if (strcmp(node->path, path_buf) != 0) {
+-      char buf1[PATH_MAX], buf2[PATH_MAX];
+-      const char* normalized1 = realpath(node->path, buf1);
+-      const char* normalized2 = realpath(path_buf, buf2);
+-      if (normalized1 == NULL || normalized2 == NULL || strcmp(normalized1, normalized2) != 0) {
+-        userlog(LOG_ERR, "table error: collision at %d (new %s, existing %s)", wd, path_buf, node->path);
+-        return ERR_ABORT;
+-      }
+-      else {
+-        userlog(LOG_INFO, "intersection at %d: (new %s, existing %s, real %s)", wd, path_buf, node->path, normalized1);
+-        return ERR_IGNORE;
+-      }
+-    }
+-
+-    return wd;
+-  }
+-
+-  node = malloc(sizeof(watch_node) + path_len + 1);
++  watch_node* existing = table_get(watches, wd);
++  if (existing != NULL) {
++     for (;;) {
++         if (existing->wd != wd) {
++           userlog(LOG_ERR, "table error: corruption at %d:%s / %d:%s / %d", wd, path_buf, existing->wd, existing->path, watch_count);
++           return ERR_ABORT;
++         }
++         if (existing->path_len == path_len && strncmp(existing->path, path_buf, path_len) == 0) {
++           return wd;
++         }
++         char buf1[PATH_MAX], buf2[PATH_MAX];
++         const char* normalized1 = realpath(existing->path, buf1);
++         const char* normalized2 = realpath(path_buf, buf2);
++         if (normalized1 != NULL && normalized2 != NULL && strcmp(normalized1, normalized2) == 0) {
++            userlog(LOG_INFO, "intersection at %d: (new %s, existing %s, real %s)", wd, path_buf, existing->path, normalized1);
++            return ERR_IGNORE;
++         }
++         if (existing->next == NULL) {
++           break;
++         }
++         existing = existing->next;
++     }
++  }
++
++  watch_node* node = malloc(sizeof(watch_node) + path_len + 1);
+   CHECK_NULL(node, ERR_ABORT)
+   memcpy(node->path, path_buf, path_len + 1);
+   node->path_len = path_len;
+   node->wd = wd;
+   node->parent = parent;
+   node->kids = NULL;
++  node->prev = existing;
++  node->next = NULL;
+ 
+   if (parent != NULL) {
+     if (parent->kids == NULL) {
+@@ -162,11 +167,15 @@ static int add_watch(unsigned int path_len, watch_node* parent) {
+     CHECK_NULL(array_push(parent->kids, node), ERR_ABORT)
+   }
+ 
+-  if (table_put(watches, wd, node) == NULL) {
++  if (existing != NULL) {
++    existing->next = node;
++  }
++  else if (table_put(watches, wd, node) == NULL) {
+     userlog(LOG_ERR, "table error: unable to put (%d:%s)", wd, path_buf);
+     return ERR_ABORT;
+   }
+ 
++  *out = node;
+   return wd;
+ }
+ 
+@@ -177,22 +186,27 @@ static void watch_limit_reached(void) {
+   }
+ }
+ 
+-static void rm_watch(int wd, bool update_parent) {
+-  watch_node* node = table_get(watches, wd);
+-  if (node == NULL) {
+-    return;
++static void rm_watch(watch_node* node, bool update_parent) {
++  if (node->prev != NULL) {
++     node->prev->next = node->next;
++     node->next->prev = node->prev;
+   }
+-
+-  userlog(LOG_INFO, "unwatching %s: %d (%p)", node->path, node->wd, node);
+-
+-  if (inotify_rm_watch(inotify_fd, node->wd) < 0) {
+-    userlog(LOG_INFO, "inotify_rm_watch(%d:%s): %s", node->wd, node->path, strerror(errno));
++  else if (node->next != NULL) {
++     table_put(watches, node->wd, node->next);
++     node->next->prev = NULL;
++  }
++  else {
++    userlog(LOG_INFO, "unwatching %s: %d (%p)", node->path, node->wd, node);
++    if (inotify_rm_watch(inotify_fd, node->wd) < 0) {
++      userlog(LOG_INFO, "inotify_rm_watch(%d:%s): %s", node->wd, node->path, strerror(errno));
++    }
++    table_put(watches, node->wd, NULL);
+   }
+ 
+   for (int i = 0; i < array_size(node->kids); i++) {
+     watch_node* kid = array_get(node->kids, i);
+     if (kid != NULL) {
+-      rm_watch(kid->wd, false);
++      rm_watch(kid, false);
+     }
+   }
+ 
+@@ -207,7 +221,6 @@ static void rm_watch(int wd, bool update_parent) {
+ 
+   array_delete(node->kids);
+   free(node);
+-  table_put(watches, wd, NULL);
+ }
+ 
+ 
+@@ -234,7 +247,9 @@ static int walk_tree(unsigned int path_len, watch_node* parent, bool recursive,
+     }
+   }
+ 
+-  int id = add_watch(path_len, parent);
++
++  watch_node* node;
++  int id = add_watch(path_len, parent, &node);
+ 
+   if (dir == NULL) {
+     return id;
+@@ -271,7 +286,7 @@ static int walk_tree(unsigned int path_len, watch_node* parent, bool recursive,
+ 
+     int subdir_id = walk_tree(path_len + 1 + name_len, table_get(watches, id), recursive, mounts);
+     if (subdir_id < 0 && subdir_id != ERR_IGNORE) {
+-      rm_watch(id, true);
++      rm_watch(node, true);
+       id = subdir_id;
+       break;
+     }
+@@ -323,47 +338,49 @@ int watch(const char* root, array* mounts) {
+ }
+ 
+ 
+-void unwatch(int id) {
+-  rm_watch(id, true);
++void unwatch(int wd, char* path, unsigned int path_len) {
++  for (watch_node* node = table_get(watches, wd); node != NULL; node = node->next) {
++    if (node->path_len == path_len && strncmp(node->path, path, path_len) == 0) {
++      rm_watch(node, true);
++      return;
++    }
++  }
+ }
+ 
+ 
+ static bool process_inotify_event(struct inotify_event* event) {
+-  watch_node* node = table_get(watches, event->wd);
+-  if (node == NULL) {
+-    return true;
+-  }
+-
+-  bool is_dir = (event->mask & IN_ISDIR) == IN_ISDIR;
+-  userlog(LOG_INFO, "inotify: wd=%d mask=%d dir=%d name=%s", event->wd, event->mask & (~IN_ISDIR), is_dir, node->path);
+-
+-  unsigned int path_len = node->path_len;
+-  memcpy(path_buf, node->path, path_len + 1);
+-  if (event->len > 0) {
+-    path_buf[path_len] = '/';
+-    unsigned int name_len = strlen(event->name);
+-    memcpy(path_buf + path_len + 1, event->name, name_len + 1);
+-    path_len += name_len + 1;
+-  }
++  for (watch_node* node = table_get(watches, event->wd); node != NULL; node = node->next) {
++    bool is_dir = (event->mask & IN_ISDIR) == IN_ISDIR;
++    userlog(LOG_INFO, "inotify: wd=%d mask=%d dir=%d name=%s", event->wd, event->mask & (~IN_ISDIR), is_dir, node->path);
++
++    unsigned int path_len = node->path_len;
++    memcpy(path_buf, node->path, path_len + 1);
++    if (event->len > 0) {
++      path_buf[path_len] = '/';
++      unsigned int name_len = strlen(event->name);
++      memcpy(path_buf + path_len + 1, event->name, name_len + 1);
++      path_len += name_len + 1;
++    }
+ 
+-  if (callback != NULL) {
+-    (*callback)(path_buf, event->mask);
+-  }
++    if (callback != NULL) {
++      (*callback)(path_buf, event->mask);
++    }
+ 
+-  if (is_dir && event->mask & (IN_CREATE | IN_MOVED_TO)) {
+-    int result = walk_tree(path_len, node, true, NULL);
+-    if (result < 0 && result != ERR_IGNORE && result != ERR_CONTINUE) {
+-      return false;
++    if (is_dir && event->mask & (IN_CREATE | IN_MOVED_TO)) {
++      int result = walk_tree(path_len, node, true, NULL);
++      if (result < 0 && result != ERR_IGNORE && result != ERR_CONTINUE) {
++        return false;
++      }
+     }
+-  }
+ 
+-  if (is_dir && event->mask & (IN_DELETE | IN_MOVED_FROM)) {
+-    for (int i = 0; i < array_size(node->kids); i++) {
+-      watch_node* kid = array_get(node->kids, i);
+-      if (kid != NULL && strncmp(path_buf, kid->path, kid->path_len) == 0) {
+-        rm_watch(kid->wd, false);
+-        array_put(node->kids, i, NULL);
+-        break;
++    if (is_dir && event->mask & (IN_DELETE | IN_MOVED_FROM)) {
++      for (int i = 0; i < array_size(node->kids); i++) {
++        watch_node* kid = array_get(node->kids, i);
++        if (kid != NULL && strncmp(path_buf, kid->path, kid->path_len) == 0) {
++          rm_watch(kid, false);
++          array_put(node->kids, i, NULL);
++          break;
++        }
+       }
+     }
+   }
+diff --git a/main.c b/main.c
+index b6b2e6fdb5b0..32cc8efe7856 100644
+--- a/main.c
++++ b/main.c
+@@ -246,7 +246,7 @@ static void unregister_roots(void) {
+   watch_root* root;
+   while ((root = array_pop(roots)) != NULL) {
+     userlog(LOG_INFO, "unregistering root: %s", root->path);
+-    unwatch(root->id);
++    unwatch(root->id, root->path, strlen(root->path));
+     free(root->path);
+     free(root);
+   }
+@@ -422,7 +422,7 @@ static void check_root_removal(const char* path) {
+   for (int i = 0; i < array_size(roots); i++) {
+     watch_root* root = array_get(roots, i);
+     if (root->id >= 0 && strcmp(path, UNFLATTEN(root->path)) == 0) {
+-      unwatch(root->id);
++      unwatch(root->id, root->path, strlen(root->path));
+       root->id = -1;
+       userlog(LOG_INFO, "root deleted: %s\n", root->path);
+       report_event("DELETE", path);
+ 

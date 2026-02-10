@@ -1,0 +1,12 @@
+diff --git a/src/main.c b/src/main.c
+index 27f5614..2b45708 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -23,6 +23,7 @@
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
++#include <sys/sysmacros.h>
+ 
+ #include <signal.h>
+ 

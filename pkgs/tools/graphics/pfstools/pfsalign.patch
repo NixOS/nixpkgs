@@ -1,0 +1,12 @@
+--- a/src/camera/CMakeLists.txt 2017-11-13 18:38:27.000000000 +0100
++++ b/src/camera/CMakeLists.txt 2018-12-30 14:55:30.235571520 +0100
+@@ -9,7 +9,7 @@ target_link_libraries(${TRG} pfs)
+ install (TARGETS ${TRG} DESTINATION bin)
+ install (FILES ${TRG}.1 DESTINATION ${MAN_DIR})
+ 
+-if( OpenCV_FOUND AND EXIF_FOUND )
++if( OpenCV_FOUND AND MYPKG_FOUND )
+ 
+        set(TRG pfsalign)
+        add_executable(${TRG} ${TRG}.cpp  "${GETOPT_OBJECT}")
+

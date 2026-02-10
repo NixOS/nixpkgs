@@ -1,0 +1,22 @@
+diff --git a/torchao/csrc/cpu/CMakeLists.txt b/torchao/csrc/cpu/CMakeLists.txt
+index aaea27ec7..53dee80fd 100644
+--- a/torchao/csrc/cpu/CMakeLists.txt
++++ b/torchao/csrc/cpu/CMakeLists.txt
+@@ -49,16 +49,7 @@ if (NOT TARGET cpuinfo)
+     add_compile_options(-Wno-unused-function -Wno-unused-variable)
+ 
+     # set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+-    include(FetchContent)
+-    set(CPUINFO_BUILD_UNIT_TESTS OFF CACHE BOOL "" FORCE)
+-    set(CPUINFO_BUILD_MOCK_TESTS OFF CACHE BOOL "" FORCE)
+-    set(CPUINFO_BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE)
+-    FetchContent_Declare(cpuinfo
+-        GIT_REPOSITORY https://github.com/pytorch/cpuinfo.git
+-        GIT_TAG c61fe919607bbc534d7a5a5707bdd7041e72c5ff
+-    )
+-    FetchContent_MakeAvailable(
+-        cpuinfo)
++    find_package(cpuinfo REQUIRED)
+ 
+     cmake_policy(POP)
+ endif()

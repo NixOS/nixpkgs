@@ -1,0 +1,14 @@
+diff --git a/build.zig b/build.zig
+index 8093504..5ab12ca 100644
+--- a/build.zig
++++ b/build.zig
+@@ -27,6 +27,9 @@ pub fn build(b: *std.Build) void {
+     if (target.result.os.tag == .macos) {
+         exe.linkFramework("CoreFoundation");
+         exe.linkFramework("IOKit");
++        exe.root_module.addFrameworkPath(.{
++            .cwd_relative = "@darwin-frameworks@",
++        });
+     }
+ 
+     if (target.result.os.tag == .linux) {

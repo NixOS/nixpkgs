@@ -1,0 +1,16 @@
+[project]
+name = "nixos-render-docs-redirects"
+version = "0.0"
+description = "redirects manipulation for nixos manuals"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+redirects = "nixos_render_docs_redirects:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
