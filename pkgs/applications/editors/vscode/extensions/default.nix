@@ -5031,6 +5031,8 @@ let
         };
       };
 
+      vitest.explorer = callPackage ./vitest.explorer { };
+
       vlanguage.vscode-vlang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-vlang";
