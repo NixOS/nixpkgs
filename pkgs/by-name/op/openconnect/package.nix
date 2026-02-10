@@ -17,6 +17,7 @@
     stdenv.hostPlatform.isLinux && stdenv.buildPlatform == stdenv.hostPlatform, # xdg-utils doesn't cross-compile
   xdg-utils,
   autoreconfHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -62,6 +63,8 @@ stdenv.mkDerivation {
     pkg-config
     autoreconfHook
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
