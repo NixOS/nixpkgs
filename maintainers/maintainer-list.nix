@@ -21739,6 +21739,7 @@
     github = "qrzbing";
     githubId = 23500397;
     name = "qrzbing";
+  };
   qskkk = {
     email = "durand.romain.rd@gmail.com";
     github = "qskkk";

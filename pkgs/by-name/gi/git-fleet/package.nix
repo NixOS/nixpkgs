@@ -15,19 +15,19 @@ stdenv.mkDerivation (
     platformMap = {
       "x86_64-linux" = {
         name = "linux-amd64";
-        hash = "sha256-7+0OkWxNnzj8EpzL10LnHMbhO5EF8uhzlmmL9Klfl+E=";
+        hash = "sha256-cDh+46oPjLmR2jWN8u8IXLPdQZxADiwnyg/0ga/vO+M=";
       };
       "aarch64-linux" = {
         name = "linux-arm64";
-        hash = "sha256-hvkGRqn0Lm5Ch3L+2lcQcSO9LWmmAkIQQQ8vm+GKS88=";
+        hash = "sha256-1GM3PgzkSiaWbSCCrIT8emgT4Qez1zCsqVR4EFTyjPk=";
       };
       "x86_64-darwin" = {
         name = "darwin-amd64";
-        hash = "sha256-D4NAQBLXJSLxb4gZn4HcyRfq/hznbpCm+kzyZXQzMHo=";
+        hash = "sha256-oJD00U6phQ5uZQ7TDZBY0OJs4YKzY+YUehYGEZvRc/o=";
       };
       "aarch64-darwin" = {
         name = "darwin-arm64";
-        hash = "sha256-E/HrQ3ovhlR91Bjvq4654MzZaWYF8wdC9ChcEulsPiU=";
+        hash = "sha256-nHfxNPYuyVYCiUXr+sUCy6yBPqkID5Uy4WjHePzgOu4=";
       };
     };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "git-fleet";
-    version = "2.4.2";
+    version = "2.6.3";
 
     src = fetchurl {
       url = "https://github.com/qskkk/git-fleet/releases/download/v${finalAttrs.version}/git-fleet-v${finalAttrs.version}-${platformInfo.name}.tar.gz";
