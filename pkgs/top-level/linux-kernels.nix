@@ -312,6 +312,8 @@ in
         linux_rt_5_4 = throw "linux_rt 5.4 has been removed because it will reach its end of life within 25.11";
 
         linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
+
+        nvidia_x11_legacy535 = throw "nvidiaPackages.legacy_535 has reached end of life, see https://endoflife.date/nvidia";
       }
     )
   );
@@ -489,7 +491,6 @@ in
         nvidia_x11_legacy340 = nvidiaPackages.legacy_340;
         nvidia_x11_legacy390 = nvidiaPackages.legacy_390;
         nvidia_x11_legacy470 = nvidiaPackages.legacy_470;
-        nvidia_x11_legacy535 = nvidiaPackages.legacy_535;
         nvidia_x11_production = nvidiaPackages.production;
         nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
         nvidia_dc = nvidiaPackages.dc;
