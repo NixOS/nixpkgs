@@ -10623,8 +10623,6 @@ with pkgs;
 
   ncdu_1 = callPackage ../by-name/nc/ncdu/1.nix { };
 
-  notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
-
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     pythonPackages = python3Packages;
   };
