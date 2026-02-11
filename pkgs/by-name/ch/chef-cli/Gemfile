@@ -1,2 +1,4 @@
 source 'https://rubygems.org'
 gem "chef-cli"
+
+gem "syslog", "~> 0.4.0"

@@ -321,6 +321,8 @@ GEM
       unicode-display_width (>= 1.5, < 3.0)
       unicode_utils (~> 1.4)
     strings-ansi (0.2.0)
+    syslog (0.4.0)
+      logger
     syslog-logger (1.6.8)
     thor (1.2.2)
     time (0.4.1)
@@ -378,6 +380,7 @@ PLATFORMS
 
 DEPENDENCIES
   chef-cli
+  syslog (~> 0.4.0)
 
 BUNDLED WITH
-   2.6.6
+   2.7.2
