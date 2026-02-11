@@ -789,12 +789,12 @@ in
 
       pluginSettings = lib.mapAttrs (n: lib.mkDefault) (
         if versionAtLeast cfg.package.version "2.4" then
-          {
-            sieve_plugins = concatStringsSep " " cfg.sieve.plugins;
-            sieve_extensions = concatStringsSep " " cfg.sieve.extensions;
-            sieve_global_extensions = concatStringsSep " " cfg.sieve.globalExtensions;
-            sieve_pipe_bin_dir = sievePipeBinScriptDirectory;
-          }
+          (lib.concatMapAttrs (n: v: optionalAttrs (v != [ ]) { ${n} = concatStringsSep " " v; }) {
+            sieve_plugins = cfg.sieve.plugins;
+            sieve_extensions = cfg.sieve.extensions;
+            sieve_global_extensions = cfg.sieve.globalExtensions;
+          })
+          // (optionalAttrs (cfg.sieve.pipeBins != [ ]) { sieve_pipe_bin_dir = sievePipeBinScriptDirectory; })
           // sieveScriptSettings
           // imapSieveMailboxSettings
         else
