@@ -5,27 +5,35 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
+  pythonAtLeast,
   tenacity,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiokef";
   version = "0.2.17";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "basnijholt";
     repo = "aiokef";
-    rev = "v${version}";
-    sha256 = "0ms0dwrpj80w55svcppbnp7vyl5ipnjfp1c436k5c7pph4q5pxk9";
+    tag = "v${version}";
+    hash = "sha256-afZbMIH3HlamGYSF66S9sVC/z7XrXrZ1KRwgeTNvQFc=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   postPatch = ''
     substituteInPlace tox.ini \
       --replace "--mypy" ""
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     tenacity
   ];
