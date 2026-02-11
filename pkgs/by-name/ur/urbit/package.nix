@@ -11,16 +11,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "urbit";
-  version = "3.5";
+  version = "4.2";
 
   src = fetchzip {
     url = "https://github.com/urbit/vere/releases/download/vere-v${finalAttrs.version}/${platform}.tgz";
     sha256 =
       {
-        x86_64-linux = "sha256-eB80GuyNuVZbBsyNnek8UCtquZbNt5G4Co7IKqq7aeI=";
-        aarch64-linux = "sha256-imbzAsjjznLuxee9mWXpsG/dKEJxdEOTw+JFc4DbQ2Q=";
-        x86_64-darwin = "sha256-0c1ewdrVsfSUivrcLwVuxZdcyrOAKXF7P9W+B7o5aNU=";
-        aarch64-darwin = "sha256-j8PJ04zRz2sZdpetLyzwRasj0CkiRGY+GvzWXG90IaE=";
+        x86_64-linux = "sha256-UfQJgN1aMMzO1BRm8PZSrIX8EwdQAb4YVB/8tXouM1k=";
+        aarch64-linux = "sha256-4jXOnTJ8mjotRFMNpwDEAM4ZcQ71IKcRBEj9tjm4iJU=";
+        x86_64-darwin = "sha256-/dkUVj8rkpQUpAuvs5ZsqVHVlhLAPp7yd6MUN+mqn8Y=";
+        aarch64-darwin = "sha256-PTlYe5ryx5A0cSHSzbIT/Ux44eZYvt5y/edQP329/54=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
