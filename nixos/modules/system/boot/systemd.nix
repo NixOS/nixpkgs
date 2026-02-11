@@ -600,6 +600,12 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
+    environment.variables = {
+      SYSTEMD_XKB_DIRECTORY = "/etc/X11/xkb";
+      SYSTEMD_KEYMAP_DIRECTORIES = "/etc/kbd/keymaps";
+      SYSTEMD_LOCALE_DIRECTORY = "/run/current-system/sw/lib/locale";
+    };
+
     environment.etc =
       let
         # generate contents for /etc/systemd/${dir} from attrset of links and packages
