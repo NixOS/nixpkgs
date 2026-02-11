@@ -1,0 +1,14 @@
+{
+  "x86_64-linux": {
+    "url": "https://prod.download.desktop.kiro.dev/releases/stable/linux-x64/signed/0.9.2/tar/kiro-ide-0.9.2-stable-linux-x64.tar.gz",
+    "hash": "sha256-/dMABkSiselaWuLQOnxB4dCt0VnLMzKn2LkKMLSG9MM="
+  },
+  "x86_64-darwin": {
+    "url": "https://prod.download.desktop.kiro.dev/releases/stable/darwin-x64/signed/0.9.2/kiro-ide-0.9.2-stable-darwin-x64.dmg",
+    "hash": "sha256-3y2pmmjETqcTuQ85Nz/pK0m+UjjF+TzU+vhbuCsVzp8="
+  },
+  "aarch64-darwin": {
+    "url": "https://prod.download.desktop.kiro.dev/releases/stable/darwin-arm64/signed/0.9.2/kiro-ide-0.9.2-stable-darwin-arm64.dmg",
+    "hash": "sha256-YN8OT3w9ztMP+He53VBHVVA+0Yp8FBHZRpizEFQ84AU="
+  }
+}

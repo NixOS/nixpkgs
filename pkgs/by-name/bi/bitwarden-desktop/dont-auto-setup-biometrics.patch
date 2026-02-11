@@ -1,0 +1,13 @@
+diff --git a/apps/desktop/src/key-management/biometrics/os-biometrics-linux.service.ts b/apps/desktop/src/key-management/biometrics/os-biometrics-linux.service.ts
+index 791b4d6f88..dfee0bbf8d 100644
+--- a/apps/desktop/src/key-management/biometrics/os-biometrics-linux.service.ts
++++ b/apps/desktop/src/key-management/biometrics/os-biometrics-linux.service.ts
+@@ -115,7 +115,7 @@ export default class OsBiometricsServiceLinux implements OsBiometricService {
+     // The user needs to manually set up the polkit policy outside of the sandbox
+     // since we allow access to polkit via dbus for the sandboxed clients, the authentication works from
+     // the sandbox, once the policy is set up outside of the sandbox.
+-    return isLinux() && !isSnapStore() && !isFlatpak();
++    return false;
+   }
+ 
+   async osBiometricsSetup(): Promise<void> {
