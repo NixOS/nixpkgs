@@ -8,8 +8,8 @@ generic: {
     hash = "sha256-twEwY7nGJWoYX25gAe/31DuDGxg6o5Ez1u5STQVw6Fw=";
   };
   v70 = generic {
-    version = "7.0.22";
-    hash = "sha256-enR5SyEkYH2ANr42zBBNoFai+2U4EchKy+KfP22Xhgo=";
+    version = "7.0.23";
+    hash = "sha256-Q+pfyx5dsl50vcg+qJNtebgJO2FK9OiJQXSFvHTwYeI=";
   };
   v60 = generic {
     version = "6.0.43";
