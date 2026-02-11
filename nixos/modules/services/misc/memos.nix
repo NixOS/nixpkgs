@@ -179,5 +179,5 @@ in
     ];
   };
 
-  meta.maintainers = [ lib.maintainers.m0ustach3 ];
+  meta.maintainers = [ lib.maintainers.M0ustach3 ];
 }
