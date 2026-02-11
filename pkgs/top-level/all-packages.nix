@@ -8928,9 +8928,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_5_3;
   };
 
-  sgx-psw = callPackage ../os-specific/linux/sgx/psw {
-    protobuf = protobuf_21;
-  };
+  sgx-psw = callPackage ../os-specific/linux/sgx/psw { };
 
   sinit = callPackage ../os-specific/linux/sinit {
     rcinit = "/etc/rc.d/rc.init";
