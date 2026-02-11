@@ -4,71 +4,13 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  callPackage,
 }:
 let
-  generic =
-    {
-      version,
-      sha256,
-      rev ? version,
-      ...
-    }@attrs:
-    let
-      attrs' = removeAttrs attrs [
-        "version"
-        "sha256"
-        "rev"
-      ];
-    in
-    buildGoModule {
-      pname = "kops";
-      inherit version;
-
-      src = fetchFromGitHub {
-        rev = rev;
-        owner = "kubernetes";
-        repo = "kops";
-        inherit sha256;
-      };
-
-      vendorHash = null;
-
-      nativeBuildInputs = [ installShellFiles ];
-
-      subPackages = [ "cmd/kops" ];
-
-      ldflags = [
-        "-s"
-        "-w"
-        "-X k8s.io/kops.Version=${version}"
-        "-X k8s.io/kops.GitVersion=${version}"
-      ];
-
-      doCheck = false;
-
-      postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-        installShellCompletion --cmd kops \
-          --bash <($GOPATH/bin/kops completion bash) \
-          --fish <($GOPATH/bin/kops completion fish) \
-          --zsh <($GOPATH/bin/kops completion zsh)
-      '';
-
-      meta = {
-        description = "Easiest way to get a production Kubernetes up and running";
-        mainProgram = "kops";
-        homepage = "https://github.com/kubernetes/kops";
-        changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
-        license = lib.licenses.asl20;
-        maintainers = with lib.maintainers; [
-          zimbatm
-          yurrriq
-        ];
-      };
-    }
-    // attrs';
+  mkKops = callPackage ./mkkops.nix { };
 in
-rec {
-  mkKops = generic;
+{
+  inherit mkKops;
 
   kops_1_31 = mkKops rec {
     version = "1.31.0";
