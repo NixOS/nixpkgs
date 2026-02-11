@@ -27,6 +27,7 @@
   xdg-desktop-portal,
   libseccomp,
   libglycin,
+  buildPackages,
   glycin-loaders,
   libwebp,
 }:
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     grass-sass
     gtk4
-    libglycin.patchVendorHook
+    buildPackages.libglycin.patchVendorHook
     meson
     ninja
     pkg-config
