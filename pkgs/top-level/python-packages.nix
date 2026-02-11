@@ -16055,6 +16055,8 @@ self: super: with self; {
 
   pyzmq = callPackage ../development/python-modules/pyzmq { };
 
+  pyzotero = callPackage ../development/python-modules/pyzotero { };
+
   pyzstd = callPackage ../development/python-modules/pyzstd { zstd-c = pkgs.zstd; };
 
   pyzx = callPackage ../development/python-modules/pyzx { };
