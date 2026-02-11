@@ -8,25 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "acme-dns";
-  # Unstable version to allow building with toolchains later than EOL Go 1.22,
-  # see https://github.com/joohoi/acme-dns/issues/365
-  version = "1.1-unstable-2024-12-15";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
-    owner = "joohoi";
+    owner = "acme-dns";
     repo = "acme-dns";
-    rev = "b7a0a8a7bcef39f6158dd596fe716594a170d362";
-    hash = "sha256-UApFNcU6a6nzpwbIJv1LLmXVTGLzY0HQBlRATq2s9x8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tjVI+CaQTN1SB/RkTg0CJ1o9azb2ULwR1uKK5fJZ8fw=";
   };
 
-  # Fetching of goModules fails with 'go: updates to go.mod needed'
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail 'go 1.22' 'go 1.22.0' \
-      --replace-fail 'toolchain go1.22.0' 'toolchain go1.24.1'
-  '';
-
-  vendorHash = "sha256-pKEOmMF1lvm/CU1n3ykh6YvtRNH/2i+0AvOJzq8eets=";
+  vendorHash = "sha256-n3icQQkdA0nCkvthsFsUTrYg0B3t8hROL4QXgBQRbSg=";
 
   postInstall = ''
     install -D -m0444 -t $out/lib/systemd/system ./acme-dns.service
@@ -37,8 +28,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Limited DNS server to handle ACME DNS challenges easily and securely";
-    homepage = "https://github.com/joohoi/acme-dns";
-    changelog = "https://github.com/joohoi/acme-dns/releases/tag/${finalAttrs.src.rev}";
+    homepage = "https://github.com/acme-dns/acme-dns";
+    changelog = "https://github.com/acme-dns/acme-dns/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilylange ];
     mainProgram = "acme-dns";

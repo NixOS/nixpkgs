@@ -95,12 +95,12 @@ buildGoModule (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted comment engine that embeds a statically built frontend";
     homepage = "https://remark42.com/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "remark42";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ janhencic ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ janhencic ];
   };
 })

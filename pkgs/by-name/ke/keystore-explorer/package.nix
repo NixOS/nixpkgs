@@ -2,13 +2,13 @@
   fetchzip,
   lib,
   stdenv,
-  jdk11,
+  jdk17,
   runtimeShell,
   glib,
   wrapGAppsHook3,
 }:
 let
-  jdk = jdk11;
+  jdk = jdk17;
 in
 stdenv.mkDerivation (finalAttrs: {
   version = "5.6.1";

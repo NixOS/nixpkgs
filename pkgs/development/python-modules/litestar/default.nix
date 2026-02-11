@@ -62,14 +62,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "litestar";
-  version = "2.19.0";
+  version = "2.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "litestar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZKvHsHkGEqDEDUz1JosBd3Thc+9D/gZmcACkyOWN8As=";
+    hash = "sha256-a72CUCwxeBluJI7kYShg0RuPEA58j52AkgHnokI4E28=";
   };
 
   build-system = [ hatchling ];

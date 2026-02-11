@@ -39,14 +39,13 @@ stdenv.mkDerivation {
     ./build-use-optional-freetype-with-pkg-config.patch
   ];
 
-  postPatch = [
-    (lib.optionalString withExtensions ''
+  postPatch =
+    lib.optionalString withExtensions ''
       cp ./extensions_v5/extensions.cpp .
-    '')
-    (lib.optionalString (pluginsFile != null) ''
+    ''
+    + lib.optionalString (pluginsFile != null) ''
       cp ${pluginsFile} ./plugins.cpp
-    '')
-  ];
+    '';
 
   preConfigure = ''
     patchShebangs build.sh

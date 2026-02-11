@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvtop";
-  version = "3.3.1";
+  version = "3.3.2";
 
   # between generation of multiple update PRs for each package flavor and manual updates I choose manual updates
   # nixpkgs-update: no auto update
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Syllo";
     repo = "nvtop";
     rev = finalAttrs.version;
-    hash = "sha256-+SvEp8pbauSLbDuPZqGMTyL2EZecz1VKCJgC+xjV/vQ=";
+    hash = "sha256-w3g/9VbZz1qrEMaBBHEf9Y93z0vo8LbWnENL2wEEaSw=";
   };
 
   cmakeFlags = with lib.strings; [

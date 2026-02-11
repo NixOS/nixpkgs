@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # nativeBuildInputs
   cargo,
@@ -91,6 +92,10 @@ buildPythonPackage (finalAttrs: {
     "python/torch_tests/test_llamacpp.py"
     "python/torch_tests/test_tiktoken.py"
     "scripts/tokenizer_test.py"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: torch.compile is not supported on Python 3.14+
+    "python/torch_tests/test_bitmask.py"
   ];
 
   meta = {

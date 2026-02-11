@@ -86,6 +86,7 @@ in
   exec ${bin}/bin/vdrift "$@"
 '').overrideAttrs
   (_: {
+    inherit (bin) pname version;
     name = wrappedName;
     meta = bin.meta // {
       hydraPlatforms = [ ];

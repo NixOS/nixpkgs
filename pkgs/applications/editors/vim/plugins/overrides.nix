@@ -72,6 +72,7 @@
   gitMinimal,
   # opencode-nvim,
   opencode,
+  lsof,
   # Preview-nvim dependencies
   md-tui,
   # sidekick-nvim dependencies
@@ -299,6 +300,10 @@ assertNoAdditions {
       "nvchad.configs.nvimtree"
       "nvchad.configs.telescope"
     ];
+  };
+
+  blink-cmp-conventional-commits = super.blink-cmp-conventional-commits.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
   };
 
   blink-cmp-copilot = super.blink-cmp-copilot.overrideAttrs {
@@ -2017,6 +2022,19 @@ assertNoAdditions {
     checkInputs = [ self.lualine-nvim ];
   };
 
+  mcphub-nvim = super.mcphub-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    checkInputs = [
+      # Required by mcphub.extensions.luali
+      self.lualine-nvim
+    ];
+
+    nvimSkipModules = [
+      # ENOENT: no such file or directory (cmd): 'npm'
+      "bundled_build"
+    ];
+  };
+
   mind-nvim = super.mind-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -2978,6 +2996,7 @@ assertNoAdditions {
     runtimeDeps = [
       curl
       opencode
+      lsof
     ];
   };
 

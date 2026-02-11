@@ -63,7 +63,7 @@ in
         inherit (format) type;
         default = { };
         description = ''
-          Additional attributes to be merged with the configuration options and written to Pangolin's `config.yml` file.
+          Additional attributes to be merged with the configuration options and written to Pangolin's {file}`config.yml` file.
         '';
         example = {
           app = {
@@ -201,13 +201,10 @@ in
           isSystemUser = true;
         };
       };
-      groups.fossorial = {
-        members = [
-          "pangolin"
-          "gerbil"
-          "traefik"
-        ];
-      };
+      groups.fossorial.members = [
+        "pangolin"
+        "gerbil"
+      ];
     };
     # order is as follows
     # "pangolin.service"
@@ -431,9 +428,9 @@ in
 
     services.traefik = {
       enable = true;
-      group = "fossorial";
+      supplementaryGroups = [ "fossorial" ];
       dataDir = "${cfg.dataDir}/config/traefik";
-      staticConfigOptions = {
+      static.settings = {
         providers.http = {
           endpoint = "http://localhost:${toString finalSettings.server.internal_port}/api/v1/traefik-config";
           pollInterval = "5s";
@@ -471,7 +468,7 @@ in
           };
         };
       };
-      dynamicConfigOptions = {
+      dynamic.files."pangolin".settings = {
         http = {
           middlewares.redirect-to-https.redirectScheme.scheme = "https";
           routers = {

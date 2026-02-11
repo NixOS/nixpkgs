@@ -125,7 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://aomedia.org/av1-features/get-started/";
     changelog = "https://aomedia.googlesource.com/aom/+/refs/tags/v${finalAttrs.version}/CHANGELOG";
     maintainers = with lib.maintainers; [
-      kiloreux
       dandellion
     ];
     platforms = lib.platforms.all;

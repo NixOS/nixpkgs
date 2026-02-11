@@ -4,40 +4,23 @@
   php,
   versionCheckHook,
 }:
-
-let
+php.buildComposerProject2 (finalAttrs: {
   pname = "psysh";
   version = "0.12.19";
 
   src = fetchFromGitHub {
     owner = "bobthecow";
     repo = "psysh";
-    tag = "v${version}";
-    hash = "sha256-Gdye6+fdqqxgHqq79XJgSkywP1IMMAIVexh0kEol0Jw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j2AcpbptbsdK/GOIuglMBwklTZSAEa8oD7g/H9oibUo=";
     forceFetchGit = true;
-  };
-in
-php.buildComposerProject2 (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    ;
-
-  composerVendor = php.mkComposerVendor {
-    inherit
-      src
-      version
-      pname
-      ;
-
-    preConfigure = ''
-      cp build/composer.json .
-      cp build/composer.lock .
+    postFetch = ''
+      cp $out/build/composer.json $out/
+      cp $out/build/composer.lock $out/
     '';
-
-    vendorHash = "sha256-MbYMFQVUmRAV7qttJBEJxzimeFIA0K8wbrwC9yDirf8=";
   };
+
+  vendorHash = "sha256-MbYMFQVUmRAV7qttJBEJxzimeFIA0K8wbrwC9yDirf8=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

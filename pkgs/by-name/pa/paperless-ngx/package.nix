@@ -16,7 +16,6 @@
   pngquant,
   qpdf,
   tesseract5,
-  unpaper,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
@@ -69,7 +68,6 @@ let
     pngquant
     qpdf
     tesseract5
-    unpaper
     poppler-utils
   ];
 

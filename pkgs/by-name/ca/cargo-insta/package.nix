@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       oxalica
       matthiasbeyer
+      figsoda
     ];
   };
 })

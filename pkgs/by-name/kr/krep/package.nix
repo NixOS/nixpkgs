@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "ENABLE_ARCH_DETECTION=0"
+    "HAS_AVX512=0"
+    "HAS_AVX2=0"
   ];
 
   installFlags = [

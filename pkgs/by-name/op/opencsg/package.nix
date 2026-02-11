@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencsg";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchurl {
     url = "http://www.opencsg.org/OpenCSG-${finalAttrs.version}.tar.gz";
-    hash = "sha256-r8wASontO8R4qeS6ObIPPVibJOI+J1tzg/kaWQ1NV8U=";
+    hash = "sha256-WsXfc7GtM0DdZwX/kOAJ8alGu5U2whwiY6b5dCZWZMA=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./opencsgexample.patch ];

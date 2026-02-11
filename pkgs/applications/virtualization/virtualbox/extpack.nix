@@ -3,12 +3,11 @@
   lib,
   virtualbox,
 }:
-let
-  virtualboxExtPackVersion = "7.2.6";
-in
 fetchurl rec {
-  name = "Oracle_VirtualBox_Extension_Pack-${virtualboxExtPackVersion}.vbox-extpack";
-  url = "https://download.virtualbox.org/virtualbox/${virtualboxExtPackVersion}/${name}";
+  pname = "virtualbox-extpack";
+  version = "7.2.6";
+  name = "Oracle_VirtualBox_Extension_Pack-${version}.vbox-extpack";
+  url = "https://download.virtualbox.org/virtualbox/${version}/${name}";
   sha256 =
     # Manually sha256sum the extensionPack file, must be hex!
     # Thus do not use `nix-prefetch-url` but instead plain old `sha256sum`.

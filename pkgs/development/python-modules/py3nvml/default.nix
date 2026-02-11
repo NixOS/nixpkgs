@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace py3nvml/py3nvml.py \
-      --replace-fail "libnvidia-ml.so.1" "${addDriverRunpath.driverLink}/lib/libnvidia-ml-so.1"
+      --replace-fail "libnvidia-ml.so.1" "${addDriverRunpath.driverLink}/lib/libnvidia-ml.so.1"
   '';
 
   build-system = [ setuptools ];

@@ -9,12 +9,12 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "paqet";
-  version = "1.0.0-alpha.14";
+  version = "1.0.0-alpha.15";
   src = fetchFromGitHub {
     owner = "hanselime";
     repo = "paqet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U5NBbXkyYcEemKgApNeDvxe3dKAt6HViUXlYcvvK0UU=";
+    hash = "sha256-ryspYKbnDT7emEftRWCZLVNFDEOvAv7IhdM4VBRQjKc=";
   };
 
   vendorHash = "sha256-Vf3bKdhlM4vqzBv5RAwHeShGHudEh1VNTCFxAL/cwLw=";

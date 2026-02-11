@@ -740,7 +740,7 @@ with self;
     pname = "AnyEvent-BDB";
     version = "1.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-BDB-${version}.tar.gz";
       hash = "sha256-k+NgEJQEZGJuXzG5+u3WXhLtjRq/Fs4FL+vyP0la78g=";
     };
     buildInputs = [ CanaryStability ];
@@ -841,7 +841,7 @@ with self;
     pname = "AnyEvent-IRC";
     version = "0.97";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EL/ELMEX/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/E/EL/ELMEX/AnyEvent-IRC-${version}.tar.gz";
       hash = "sha256-v9fPZFw8jGEUcQVxKGEUR+IPGt8BUWxpYky9i8d/W/A=";
     };
     propagatedBuildInputs = [
@@ -2432,7 +2432,7 @@ with self;
     pname = "BDB";
     version = "1.92";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/BDB-${version}.tar.gz";
       hash = "sha256-o/LKnSuu/BqqQJCLL5y5KS/aPn15fji7146rudna62s=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.db4.dev}/include";
@@ -5758,7 +5758,7 @@ with self;
     pname = "Compress-LZF";
     version = "3.8";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Compress-LZF-${version}.tar.gz";
       hash = "sha256-XR9d9IzhO03uHMnyeOzb+Bd4d7C5iBWk6zyRw0ZnFvI=";
     };
     meta = {
@@ -9405,7 +9405,7 @@ with self;
     pname = "Deliantra";
     version = "2.01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Deliantra-${version}.tar.gz";
       hash = "sha256-JxbZsfBWJ9YJQs4GNLnBolEJsWSBgoXUW2Ca6FluKxc=";
     };
     propagatedBuildInputs = [
@@ -18472,7 +18472,7 @@ with self;
     pname = "LaTeXML";
     version = "0.8.8";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/B/BR/BRMILLER/LaTeXML-${version}.tar.gz";
       hash = "sha256-fSu+LOJSuvhro/OIzQ3sOqSDj0nWErnsfMT/iBBbrcw=";
     };
     outputs = [
@@ -18587,7 +18587,7 @@ with self;
     pname = "libapreq2";
     version = "2.17";
     src = fetchurl {
-      url = "mirror://apache/httpd/libapreq/${pname}-${version}.tar.gz";
+      url = "mirror://apache/httpd/libapreq/libapreq2-${version}.tar.gz";
       hash = "sha256-BGSH8ITBL6HIIq/8X33lbv7ZtIkFpCbmMaa5ScEU2Gw=";
     };
     outputs = [ "out" ];
@@ -26546,7 +26546,7 @@ with self;
     pname = "Object-Event";
     version = "1.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EL/ELMEX/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/E/EL/ELMEX/Object-Event-${version}.tar.gz";
       hash = "sha256-q2u4BQj0/dry1RsgyodqqwOFgqhrUijmQ1QRNIr1PII=";
     };
     propagatedBuildInputs = [
@@ -33132,7 +33132,7 @@ with self;
     pname = "Term-ReadPassword";
     version = "0.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PH/PHOENIX/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/P/PH/PHOENIX/Term-ReadPassword-${version}.tar.gz";
       hash = "sha256-4ahmNFs1+f/vfQA34T1tTLKAMQCJ+YwgcTiAvHD7QyM=";
     };
 
@@ -35460,7 +35460,7 @@ with self;
     pname = "Test-UNIXSock";
     version = "0.4";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FU/FUJIWARA/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/F/FU/FUJIWARA/Test-UNIXSock-${version}.tar.gz";
       hash = "sha256-NzC0zBA0Es+/b+JHvbwwC+l94wnMmxxcvVc3E7hojz8=";
     };
     buildInputs = [ ModuleBuildTiny ];

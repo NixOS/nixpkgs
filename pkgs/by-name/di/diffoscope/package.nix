@@ -211,11 +211,9 @@ python.pkgs.buildPythonApplication rec {
     ])
     ++ lib.optionals enableBloat (
       [
-        aapt
         abootimg
         apksigcopier
         apksigner
-        apktool
         cbfstool
         colord
         enjarify
@@ -259,6 +257,12 @@ python.pkgs.buildPythonApplication rec {
       ])
       # oggvideotools is broken on Darwin, please put it back when it will be fixed?
       ++ lib.optionals stdenv.hostPlatform.isLinux [ oggvideotools ]
+      # Causes an eval failure
+      # See https://github.com/NixOS/nixpkgs/issues/463873
+      ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch64) [
+        aapt
+        apktool
+      ]
     )
   );
 

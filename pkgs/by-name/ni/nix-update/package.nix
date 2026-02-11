@@ -52,6 +52,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/Mic92/nix-update/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      figsoda
       mdaniels5757
       mic92
     ];

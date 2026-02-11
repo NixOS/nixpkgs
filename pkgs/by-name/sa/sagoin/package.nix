@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/figsoda/sagoin";
     changelog = "https://github.com/figsoda/sagoin/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "sagoin";
   };
 })

@@ -74,7 +74,8 @@ let
     "9.0.0".sha256 = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
     "9.0.1".sha256 = "sha256-gRgQhFiYvGR/Z46TmTl1bgN9O32nifxQGdrzfw0WHrk=";
     "9.1.0".sha256 = "sha256-+QL7I1/0BfT87n7lSaOmpHj2jJuDB4idWhAxwzvVQOE=";
-    "9.2+rc1".sha256 = "sha256-zKVhnBid5LOcd7uHWFGmUdHpyNLxIyB7RNNz5btz0mI=";
+    "9.1.1".sha256 = "sha256-aFsGsFzexyDnOVarHPKs35HjiV8uUCpeOKSl15wXZ4s=";
+    "9.2+rc2".sha256 = "sha256-L6V9Vyv8Q0IWpGfXqL/YKcpx/gLBa7k9rnPvRGvAO+M=";
   };
   releaseRev = v: "V${v}";
   fetched =

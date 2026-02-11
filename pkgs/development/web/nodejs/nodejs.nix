@@ -11,6 +11,7 @@
   libuv,
   lief,
   llhttp,
+  merve,
   nghttp2,
   nghttp3,
   ngtcp2,
@@ -125,6 +126,7 @@ let
 
   useSharedAdaAndSimd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.2";
   useSharedLief = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "25.6";
+  useSharedMerve = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "25.6.1";
   useSharedSQLite = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.5";
   useSharedZstd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.15";
 
@@ -164,6 +166,9 @@ let
     })
     // (lib.optionalAttrs useSharedLief {
       inherit lief;
+    })
+    // (lib.optionalAttrs useSharedMerve {
+      inherit merve;
     })
     // (lib.optionalAttrs useSharedZstd {
       inherit zstd;

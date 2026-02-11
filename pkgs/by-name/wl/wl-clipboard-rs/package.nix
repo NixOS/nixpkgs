@@ -82,7 +82,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "wl-clip";
     maintainers = with lib.maintainers; [
-      thiagokokada
       donovanglover
     ];
   };

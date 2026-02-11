@@ -361,7 +361,7 @@ in
                 '';
                 description = ''
                   Additional configuration that exists before the first start and
-                  later overrides the existing values in `config.json`.
+                  later overrides the existing values in {file}`config.json`.
 
                   It is mostly helpful to manage configuration ignored/not yet implemented
                   outside of `netbird up` invocation.
@@ -369,9 +369,9 @@ in
                   WARNING: this is not an upstream feature, it could break in the future
                   (by having lower priority) after upstream implements an equivalent.
 
-                  It is implemented as a `preStart` script which overrides `config.json`
-                  with content of `/etc/${client.dir.baseName}/config.d/*.json` files.
-                  This option manages specifically `50-nixos.json` file.
+                  It is implemented as a `preStart` script which overrides {file}`config.json`
+                  with content of {file}`/etc/${client.dir.baseName}/config.d/*.json` files.
+                  This option manages specifically {file}`50-nixos.json` file.
 
                   Consult [the source code](https://github.com/netbirdio/netbird/blob/88747e3e0191abc64f1e8c7ecc65e5e50a1527fd/client/internal/config.go#L49-L82)
                   or inspect existing file for a complete list of available configurations.
@@ -396,7 +396,7 @@ in
                 type = path;
                 default = "/var/lib/${client.dir.baseName}";
                 description = ''
-                  A state directory used by NetBird client to store `config.json`, `state.json` & `resolv.conf`.
+                  A state directory used by NetBird client to store {file}`config.json`, {file}`state.json` & {file}`resolv.conf`.
                 '';
               };
               dir.runtime = mkOption {
@@ -471,8 +471,8 @@ in
         2. run as a `netbird-<name>.service`,
         3. listen for incoming remote connections on the port `51820` (`openFirewall` by default),
         4. manage the `netbird-<name>` wireguard interface,
-        5. use the `/var/lib/netbird-<name>/config.json` configuration file,
-        6. override `/var/lib/netbird-<name>/config.json` with values from `/etc/netbird-<name>/config.d/*.json`,
+        5. use the {file}`/var/lib/netbird-<name>/config.json` configuration file,
+        6. override {file}`/var/lib/netbird-<name>/config.json` with values from {file}`/etc/netbird-<name>/config.d/*.json`,
         7. (`hardened`) be locally manageable by `netbird-<name>` system group,
 
         With following caveats:

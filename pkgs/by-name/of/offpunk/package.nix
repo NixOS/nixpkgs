@@ -3,6 +3,7 @@
   python3Packages,
   fetchFromSourcehut,
   file,
+  gettext,
   installShellFiles,
   less,
   offpunk,
@@ -14,19 +15,22 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "offpunk";
-  version = "2.8";
+  version = "3.0";
   pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-s/pEN7n/g9o8a/hYTC39PgbBLyCUwN5LIggqUSMKRS4=";
+    hash = "sha256-5SoMa93QbwbsryeHGc3pkkDA8v9eonZvuflSuDV2hmI=";
   };
 
   build-system = with python3Packages; [ hatchling ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    gettext
+    installShellFiles
+  ];
 
   dependencies = [
     file

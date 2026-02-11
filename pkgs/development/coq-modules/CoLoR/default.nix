@@ -16,6 +16,7 @@ mkCoqDerivation {
     in
     with lib.versions;
     lib.switch coq.version [
+      (case (range "9.0" "9.2") "1.8.6")
       (case (range "8.14" "9.1") "1.8.5")
       (case (range "8.12" "8.16") "1.8.2")
       (case (range "8.10" "8.11") "1.7.0")
@@ -23,6 +24,7 @@ mkCoqDerivation {
       (case (range "8.6" "8.7") "1.4.0")
     ] null;
 
+  release."1.8.6".sha256 = "sha256-EgqJUf82FbPkfL4ZmQIP/73IoFhfQGkeUeaKV3KQ/fA=";
   release."1.8.5".sha256 = "sha256-zKAyj6rKAasDF+iKExmpVHMe2WwgAwv2j1mmiVAl7ys=";
   release."1.8.4".sha256 = "sha256-WlRiaLgnFFW5AY0z6EzdP1mevNe1GHsik6wULJLN4k0=";
   release."1.8.3".sha256 = "sha256-mMUzIorkQ6WWQBJLk1ioUNwAdDdGHJyhenIvkAjALVU=";

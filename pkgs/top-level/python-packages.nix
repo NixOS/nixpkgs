@@ -1806,10 +1806,6 @@ self: super: with self; {
 
   base64io = callPackage ../development/python-modules/base64io { };
 
-  basedmypy = callPackage ../development/python-modules/basedmypy { };
-
-  basedtyping = callPackage ../development/python-modules/basedtyping { };
-
   baseline = callPackage ../development/python-modules/baseline { };
 
   baselines = callPackage ../development/python-modules/baselines { };
@@ -3615,6 +3611,8 @@ self: super: with self; {
   datashape = callPackage ../development/python-modules/datashape { };
 
   datashaper = callPackage ../development/python-modules/datashaper { };
+
+  datasketch = callPackage ../development/python-modules/datasketch { };
 
   datauri = callPackage ../development/python-modules/datauri { };
 
@@ -13161,6 +13159,8 @@ self: super: with self; {
 
   pybloom-live = callPackage ../development/python-modules/pybloom-live { };
 
+  pybloomfilter3 = callPackage ../development/python-modules/pybloomfilter3 { };
+
   pyblu = callPackage ../development/python-modules/pyblu { };
 
   pybluez = callPackage ../development/python-modules/pybluez { inherit (pkgs) bluez; };
@@ -15648,6 +15648,8 @@ self: super: with self; {
   python-pptx = callPackage ../development/python-modules/python-pptx { };
 
   python-prctl = callPackage ../development/python-modules/python-prctl { };
+
+  python-pskc = callPackage ../development/python-modules/python-pskc { };
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 

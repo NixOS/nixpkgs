@@ -35,7 +35,7 @@ buildNpmPackage rec {
     description = "AI agent CLI powered by Grok";
     homepage = "https://github.com/superagent-ai/grok-cli";
     license = lib.licenses.mit;
-    maintainers = with lib; [ maintainers.madebydamo ];
+    maintainers = with lib.maintainers; [ madebydamo ];
     mainProgram = "grok";
     platforms = lib.platforms.all;
   };

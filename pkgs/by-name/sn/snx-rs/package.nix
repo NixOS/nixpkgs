@@ -9,18 +9,19 @@
   rustPlatform,
   wrapGAppsHook4,
   graphene,
+  sqlite,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snx-rs";
-  version = "4.9.1";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7qmwi/hV8Ev+rdG00hIrQ8yMkb/yxAvG49SAvjsO4GQ=";
+    hash = "sha256-M0F5mJAVPWjT00jmgRC5rlWlN5Q5G5B63DETwJz0TfU=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     kdePackages.kstatusnotifieritem
     openssl
     graphene
+    sqlite
   ];
 
   checkFlags = [
@@ -47,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
 
-  cargoHash = "sha256-RRmssKIzxhcmZjTqF0fRmw8XyyHFRwLJtGOF/xeD78w=";
+  cargoHash = "sha256-zOKXs4bw1JF2uZN0qvID2lYtH4/d5hOihENFSeq9oe8=";
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/snx-rs";

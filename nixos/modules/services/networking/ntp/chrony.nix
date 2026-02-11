@@ -225,7 +225,7 @@ in
         default = "";
         description = ''
           Extra configuration directives that should be added to
-          `chrony.conf`
+          {file}`chrony.conf`
         '';
       };
 

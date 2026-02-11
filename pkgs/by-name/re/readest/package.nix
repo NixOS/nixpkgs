@@ -1,6 +1,6 @@
 {
   rustPlatform,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   cargo-tauri,
@@ -18,38 +18,41 @@
   moreutils,
   jq,
   gst_all_1,
+
+  # NOTE: this is enabled by default for better compatibility, but it may slow
+  # down performance.
+  withNvidiaFix ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.98";
+  version = "0.9.99";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qhV2ZEMcnn+0IePaIIvTcCYGCdLAUhtC0GEQAuXWUC8=";
+    hash = "sha256-Fcil35siaGrooW8+R2WrZaR5qHPJXIYOU/Au1YKlb2M=";
     fetchSubmodules = true;
   };
 
   postUnpack = ''
-    # pnpm.configHook has to write to ../.., as our sourceRoot is set to apps/readest-app
+    # pnpm.configHook has to write to ../.., as our sourceRoot is set to
+    # apps/readest-app
     chmod -R +w .
   '';
 
   sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
 
+  pnpmRoot = "../..";
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-3eYWN5ZZByOO2UFJ7X4PdBr/fNtnBmhrzx4J9IFxiNw=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-/bzjOdpvuPLBMvX/q1WaO3lFg5/jLz5Ypr5OojssXUI=";
   };
 
-  pnpmRoot = "../..";
-
-  cargoHash = "sha256-qYBHYjwfGkKmGXN8caamZ6/XGtnxe+lmy6dIpdMwS/I=";
-
   cargoRoot = "../..";
+  cargoHash = "sha256-qYBHYjwfGkKmGXN8caamZ6/XGtnxe+lmy6dIpdMwS/I=";
 
   buildAndTestSubdir = "src-tauri";
 
@@ -67,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-tauri.hook
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     pkg-config
     wrapGAppsHook3
     autoPatchelfHook
@@ -92,7 +95,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpm setup-vendors
   '';
 
-  preFixup = ''
+  preFixup = lib.optionalString withNvidiaFix ''
+    # fix Nvidia issues with Tauri
+    # https://github.com/tauri-apps/tauri/issues/9394
+    # https://github.com/tauri-apps/tauri/issues/9304
     gappsWrapperArgs+=(
       --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
     )

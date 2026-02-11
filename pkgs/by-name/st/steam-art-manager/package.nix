@@ -24,11 +24,11 @@ appimageTools.wrapType2 {
       --replace 'Icon=Steam Art Manager' 'Icon=steam-art-manager'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A tool to manage and change Steam library artwork";
     homepage = "https://github.com/Tormak9970/Steam-Art-Manager";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ adam-tj ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ adam-tj ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "steam-art-manager";
   };
