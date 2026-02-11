@@ -12457,6 +12457,8 @@ self: super: with self; {
 
   praw = callPackage ../development/python-modules/praw { };
 
+  presidio-analyzer = callPackage ../development/python-modules/presidio-analyzer { };
+
   prawcore = callPackage ../development/python-modules/prawcore { };
 
   prayer-times-calculator-offline =
