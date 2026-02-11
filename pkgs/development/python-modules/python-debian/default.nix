@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "python-debian";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "python-debian-team";
     repo = "python-debian";
     tag = version;
-    hash = "sha256-lSKtlBqAa8cJZZHMVb90eYIGem4DwVZLldaYSAJBNek=";
+    hash = "sha256-v2b9xobxCrSz0tOEBo6awmQuTyykyJlsryPBMRU9EmM=";
   };
 
   build-system = [
