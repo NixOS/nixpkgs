@@ -1,15 +1,16 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  setuptools,
 }:
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "dazel";
   version = "0.0.43";
   pyproject = true;
 
-  build-system = [ setuptools ];
+  build-system = [
+    python3Packages.setuptools
+  ];
 
   src = fetchPypi {
     inherit pname version;
