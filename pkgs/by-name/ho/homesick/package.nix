@@ -6,6 +6,7 @@
 }:
 bundlerEnv {
   pname = "homesick";
+  version = "1.1.6";
 
   gemdir = ./.;
 
