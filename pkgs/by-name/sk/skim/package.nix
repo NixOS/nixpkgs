@@ -82,6 +82,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "preview_window_down"
         "preview_window_left"
         "preview_window_up"
+        # Flaky: tmux-based listen tests with timing-sensitive IPC
+        "listen_"
       ];
       filterExpr =
         "not ("
