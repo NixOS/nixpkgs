@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ;
 
   cargoRoot = "packages/desktop/src-tauri";
-  cargoHash = "sha256-zdqquibtTpMAoY9qjzjGNnq3+GFXKYGj9K3+hKpcsag=";
+  cargoHash = "sha256-4uW6HssksoYxHpDvKEarlh/X36uDXsJeYg6nEcZcLPE=";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   nativeBuildInputs = [
