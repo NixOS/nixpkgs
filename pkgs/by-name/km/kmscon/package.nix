@@ -18,6 +18,8 @@
   ninja,
   check,
   bash,
+  gawk,
+  inotify-tools,
   buildPackages,
   nix-update-script,
   nixosTests,
@@ -76,6 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" \
                        "${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd"
     done
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/bin/kmscon \
+      --replace-fail "awk" "${lib.getExe gawk}"
+    substituteInPlace $out/bin/kmscon-launch-gui \
+      --replace-fail "inotifywait" "${lib.getExe' inotify-tools "inotifywait"}"
   '';
 
   passthru = {
