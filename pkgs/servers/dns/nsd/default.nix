@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
   '';
 
-  nativeBuildInputs = lib.optionals withSystemd [
+  nativeBuildInputs = [
     pkg-config
   ];
 
