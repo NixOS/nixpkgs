@@ -14,7 +14,6 @@
   stdenv,
   zig_0_15,
   pkg-config,
-  breakpointHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fancy-cat";
@@ -40,22 +39,18 @@ stdenv.mkDerivation (finalAttrs: {
     gumbo
     mujs
     libz
-    # breakpointHook
   ];
-
-  # zigBuildFlags = [
-  #   "--release=fast"
-  #   "-Dcpu=skylake"
-  # ];
 
   dontSetZigDefaultFlags = true;
 
-  postConfigure = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  deps = callPackage ./deps.nix { };
+
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+  ];
 
   meta = {
-    # broken = true; # build phase wants to fetch from github
     description = "PDF viewer for terminals using the Kitty image protocol";
     homepage = "https://github.com/freref/fancy-cat";
     license = lib.licenses.agpl3Plus;
