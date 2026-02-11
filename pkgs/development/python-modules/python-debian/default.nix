@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-debian";
   version = "1.1.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     domain = "salsa.debian.org";
     owner = "python-debian-team";
     repo = "python-debian";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-v2b9xobxCrSz0tOEBo6awmQuTyykyJlsryPBMRU9EmM=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})
