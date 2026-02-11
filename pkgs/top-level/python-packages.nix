@@ -17631,6 +17631,8 @@ self: super: with self; {
 
   spacy-models = callPackage ../development/python-modules/spacy/models.nix { inherit (pkgs) jq; };
 
+  en_core_web_lg = spacy-models.en_core_web_lg;
+
   spacy-pkuseg = callPackage ../development/python-modules/spacy-pkuseg { };
 
   spacy-transformers = callPackage ../development/python-modules/spacy-transformers { };
