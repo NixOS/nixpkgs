@@ -6,6 +6,7 @@
   dotnetCorePackages,
   copyDesktopItems,
   makeDesktopItem,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
@@ -15,7 +16,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "KnossosNET";
     repo = "Knossos.NET";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XaCBuZ4Hf2ISw3hVQ1s2Hp8PLxp2eFr+I7U5ttUDQvU=";
   };
 
@@ -41,14 +42,18 @@ buildDotnetModule rec {
   ];
 
   postInstall = ''
-    install -Dm644 $src/packaging/linux/knossos-512.png $out/share/icons/hicolor/512x512/apps/knossos.png
+    install -Dm444 $src/packaging/linux/knossos-512.png $out/share/icons/hicolor/512x512/apps/knossos.png
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    homepage = "https://github.com/KnossosNET/Knossos.NET";
+    changelog = "https://github.com/KnossosNET/Knossos.NET/releases/tag/v${version}";
     description = "Multi-platform launcher for Freespace 2 Open";
+    homepage = "https://fsnebula.org/knossos/";
     license = lib.licenses.gpl3Only;
     mainProgram = "Knossos.NET";
     maintainers = with lib.maintainers; [ cdombroski ];
+    platforms = lib.platforms.unix;
   };
 }
