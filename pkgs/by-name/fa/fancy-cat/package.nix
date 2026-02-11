@@ -17,7 +17,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fancy-cat";
-  version = "0.5.0";
+  version = "0.5.0-unstable-2025-11-17";
 
   src = fetchFromGitHub {
     owner = "freref";
