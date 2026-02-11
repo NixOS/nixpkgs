@@ -1,55 +1,105 @@
 {
-  lib,
-  rustPlatform,
+  buildFeatures ? [ ],
+  buildNoDefaultFeatures ? false,
+  buildPackages,
+  dbus,
   fetchFromGitHub,
-  stdenv,
-  installShellFiles,
-  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  withTcp ? true,
-}:
+  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  installShellFiles,
+  lib,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  ...
+}@args:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+let
+  version = "1.0.0";
+  hash = "sha256-EF7eDNc4HFGZZw+f2RZ9LhPOcgKbuPq2Ckc0R+sC9pU=";
+  cargoHash = "sha256-u4n4wGhb7BasEEM1C//As8K0eOp1GCVJWhCkqR9Z+II=";
+
+  inherit (stdenv.hostPlatform)
+    isLinux
+    isWindows
+    isx86_64
+    isAarch64
+    ;
+
+  emulator = stdenv.hostPlatform.emulator buildPackages;
+  exe = stdenv.hostPlatform.extensions.executable;
+
+  # TODO: remove warning for the next release
+  buildDeprecatedFeature = lib.warnIf (args ? withTcp) "withTcp is no longer needed, remove it" true;
+  # notify feature is part of default cargo features
+  hasNotifyFeature = !buildNoDefaultFeatures || builtins.elem "notify" buildFeatures;
+
+  dbus' = dbus.overrideAttrs (old: {
+    env = (old.env or { }) // {
+      NIX_CFLAGS_COMPILE =
+        (old.env.NIX_CFLAGS_COMPILE or "")
+        # required for D-Bus on Linux AArch64
+        + lib.optionalString (isLinux && isAarch64) " -mno-outline-atomics";
+    };
+  });
+
+in
+rustPlatform.buildRustPackage {
+  inherit cargoHash version buildNoDefaultFeatures;
+
   pname = "comodoro";
-  version = "0.1.2";
 
   src = fetchFromGitHub {
-    owner = "soywod";
+    inherit hash;
+    owner = "pimalaya";
     repo = "comodoro";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-FnNNJ6WHR8KCsW+1hPIYddxQlUvpPc+SRbaxAcdVEUk=";
+    rev = "v${version}";
   };
 
-  cargoHash = "sha256-2Drty/dj9HCG86rPt4RgexU83vKMnGFETbOT11Puy/0=";
+  nativeBuildInputs =
+    [ ]
+    ++ lib.optional hasNotifyFeature pkg-config
+    ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
-  nativeBuildInputs = lib.optional (installManPages || installShellCompletions) installShellFiles;
+  buildInputs =
+    # D-Bus is provided by vendors on Windows
+    lib.optional (hasNotifyFeature && !isWindows) dbus';
 
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "hook-command"
-    "hook-notify"
-  ]
-  ++ lib.optional withTcp "tcp";
+  buildFeatures =
+    [ ]
+    ++ buildFeatures
+    ++ lib.optional buildDeprecatedFeature ""
+    # D-Bus is provided by vendors on Windows
+    ++ lib.optional (hasNotifyFeature && isWindows) "vendored";
+
+  doCheck = false;
 
   postInstall =
-    lib.optionalString installManPages ''
-      mkdir -p $out/man
-      $out/bin/comodoro man $out/man
-      installManPage $out/man/*
+    lib.optionalString (lib.hasInfix "wine" emulator) ''
+      export WINEPREFIX="''${WINEPREFIX:-$(mktemp -d)}"
+      mkdir -p $WINEPREFIX
+    ''
+    + ''
+      mkdir -p $out/share/{completions,man}
+      ${emulator} "$out"/bin/comodoro${exe} manuals "$out"/share/man
+      ${emulator} "$out"/bin/comodoro${exe} completions -d "$out"/share/completions bash elvish fish powershell zsh
+    ''
+    + lib.optionalString installManPages ''
+      installManPage "$out"/share/man/*
     ''
     + lib.optionalString installShellCompletions ''
       installShellCompletion --cmd comodoro \
-        --bash <($out/bin/comodoro completion bash) \
-        --fish <($out/bin/comodoro completion fish) \
-        --zsh <($out/bin/comodoro completion zsh)
+        --bash "$out"/share/completions/comodoro.bash \
+        --fish "$out"/share/completions/comodoro.fish \
+        --zsh "$out"/share/completions/_comodoro
     '';
 
   meta = {
-    description = "CLI to manage your time";
-    homepage = "https://github.com/pimalaya/comodoro";
-    changelog = "https://github.com/soywod/comodoro/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soywod ];
+    description = "CLI to manage timers";
     mainProgram = "comodoro";
+    homepage = "https://github.com/pimalaya/comodoro";
+    changelog = "https://github.com/pimalaya/comodoro/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ soywod ];
   };
-})
+}
