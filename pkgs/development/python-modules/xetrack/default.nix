@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, setuptools
-, wheel
-, pandas
-, cloudpickle
-, coolname
-, loguru
-, psutil
-, tabulate
-, typer
-, xxhash
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  setuptools,
+  wheel,
+  pandas,
+  cloudpickle,
+  coolname,
+  loguru,
+  psutil,
+  tabulate,
+  typer,
+  xxhash,
 }:
 
 buildPythonPackage rec {

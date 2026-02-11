@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, poetry-core
-, presidio-analyzer
-, spacy
-, cryptography
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  poetry-core,
+  presidio-analyzer,
+  spacy,
+  cryptography,
 }:
 
 buildPythonPackage rec {

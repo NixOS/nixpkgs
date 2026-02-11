@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, poetry-core
-, phonenumbers
-, pyyaml
-, regex
-, spacy
-, tldextract
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  poetry-core,
+  phonenumbers,
+  pyyaml,
+  regex,
+  spacy,
+  tldextract,
 }:
 
 buildPythonPackage rec {
