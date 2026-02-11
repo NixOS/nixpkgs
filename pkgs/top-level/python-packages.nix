@@ -12459,6 +12459,8 @@ self: super: with self; {
 
   presidio-analyzer = callPackage ../development/python-modules/presidio-analyzer { };
 
+  presidio-anonymizer = callPackage ../development/python-modules/presidio-anonymizer { };
+
   prawcore = callPackage ../development/python-modules/prawcore { };
 
   prayer-times-calculator-offline =
