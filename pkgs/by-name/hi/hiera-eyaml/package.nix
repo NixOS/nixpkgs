@@ -8,6 +8,7 @@
 bundlerEnv {
   inherit ruby;
   pname = "hiera-eyaml";
+  version = "4.3.0";
   gemdir = ./.;
 
   passthru.updateScript = bundlerUpdateScript "hiera-eyaml";
