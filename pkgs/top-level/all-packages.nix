@@ -8924,10 +8924,6 @@ with pkgs;
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
-  sgx-sdk = callPackage ../os-specific/linux/sgx/sdk {
-    ocamlPackages = ocaml-ng.ocamlPackages_5_3;
-  };
-
   sgx-psw = callPackage ../os-specific/linux/sgx/psw { };
 
   sinit = callPackage ../os-specific/linux/sinit {
