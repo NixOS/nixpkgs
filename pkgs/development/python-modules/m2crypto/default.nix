@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "m2crypto";
-  version = "0.46.2";
+  version = "0.47.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "m2crypto";
     repo = "m2crypto";
     tag = finalAttrs.version;
-    hash = "sha256-XV9aILSWfQ/xKDySflG3wiNRP4YVPVujuhIz2VdPuBc=";
+    hash = "sha256-yOpejD2lYbv8JrTXxXOwjAgftb9xojAYgC3iKu3bDSQ=";
   };
 
   build-system = [ setuptools ];
