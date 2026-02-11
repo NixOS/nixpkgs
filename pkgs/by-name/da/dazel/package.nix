@@ -3,7 +3,7 @@
   python3Packages,
   fetchPypi,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dazel";
   version = "0.0.43";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2enQRKg4CAPGHte02io+EfiW9AmuP3Qi41vNQeChg+8=";
   };
 
@@ -25,4 +25,4 @@ python3Packages.buildPythonApplication rec {
       malt3
     ];
   };
-}
+})
