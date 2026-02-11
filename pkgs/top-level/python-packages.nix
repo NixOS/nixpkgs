@@ -20737,6 +20737,8 @@ self: super: with self; {
 
   xcffib = callPackage ../development/python-modules/xcffib { };
 
+  xetrack = callPackage ../development/python-modules/xetrack { };
+
   xclim = callPackage ../development/python-modules/xclim { };
 
   xdg = callPackage ../development/python-modules/xdg { };
