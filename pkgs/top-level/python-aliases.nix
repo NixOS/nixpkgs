@@ -308,8 +308,8 @@ mapAliases {
   openbabel-bindings = openbabel; # added 2025-09-17
   opsdroid_get_image_size = throw "'opsdroid_get_image_size' has been renamed to/replaced by 'opsdroid-get-image-size'"; # Converted to throw 2025-10-29
   orange3 = throw "'orange3' has been removed as it was unmaintained and depended on qt5 webengine"; # Added 2026-02-10
-  orange-widgets-base = throw "'orange-widgets-base' has been removed as it was unmaintained and depended on qt5 webengine"; # Added 2026-02-10
   orange-canvas-core = throw "'orange-canvas-core' has been removed as it was unmaintained unused outside orange3"; # Added 2026-02-10
+  orange-widgets-base = throw "'orange-widgets-base' has been removed as it was unmaintained and depended on qt5 webengine"; # Added 2026-02-10
   orderedset = throw "orderedset has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   paho-mqtt_2 = throw "'paho-mqtt_2' has been renamed to/replaced by 'paho-mqtt'"; # Converted to throw 2025-10-29
