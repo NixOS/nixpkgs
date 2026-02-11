@@ -38,7 +38,7 @@
   vulkan-loader,
   wayland,
   wayland-scanner,
-  zenity,
+  yad,
   # for passthru.tests
   SDL_compat,
   sdl2-compat,
@@ -92,11 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
     ''
+    # Use `yad` -- gtk3 fork of zenity, to not increase closure size unnecessarily with gtk4
     + lib.optionalString waylandSupport ''
-      substituteInPlace src/dialog/unix/SDL_zenitymessagebox.c \
-        --replace-fail '"zenity"' '"${lib.getExe zenity}"'
-      substituteInPlace src/dialog/unix/SDL_zenitydialog.c \
-        --replace-fail '"zenity"' '"${lib.getExe zenity}"'
+      substituteInPlace src/dialog/unix/{SDL_zenitydialog,SDL_zenitymessagebox}.c \
+        --replace-fail '"zenity"' '"${lib.getExe yad}"'
     ''
     # https://github.com/libsdl-org/SDL/issues/14805
     + lib.optionalString vulkanSupport ''
