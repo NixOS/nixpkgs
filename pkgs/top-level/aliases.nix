@@ -1846,6 +1846,7 @@ mapAliases {
   StormLib = throw "'StormLib' has been renamed to/replaced by 'stormlib'"; # Converted to throw 2025-10-27
   strawberry-qt5 = throw "strawberry-qt5 has been replaced by strawberry"; # Converted to throw 2025-07-19
   strawberry-qt6 = throw "strawberry-qt6 has been replaced by strawberry"; # Added 2025-07-19
+  stremio = throw "'stremio' has been removed as it depended on the vulnerable and outdated qt5 webengine. On Linux, consider using 'stremio-linux-shell' instead."; # Added 2026-02-11
   stringsWithDeps = warnAlias "'stringsWithDeps' has been removed from pkgs, use `lib.stringsWithDeps` instead" lib.stringsWithDeps; # Added 2025-10-30
   subberthehut = throw "'subberthehut' has been removed as it was unmaintained upstream"; # Added 2025-05-17
   sublime-music = throw "`sublime-music` has been removed because upstream has announced it is no longer maintained. Upstream suggests using `supersonic` instead."; # Added 2025-09-20
