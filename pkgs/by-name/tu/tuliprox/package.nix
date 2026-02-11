@@ -7,7 +7,7 @@
   ffmpeg,
   which,
   rustc,
-  wasm-bindgen-cli_0_2_104,
+  wasm-bindgen-cli_0_2_105,
   trunk,
   binaryen,
   dart-sass,
@@ -15,14 +15,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuliprox";
   version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "euzu";
     repo = "tuliprox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-G+bVKBAxviyJShq2BG4vjMiTzHhoYaiP6FXrSWeTvkU=";
   };
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     ffmpeg
     which
-    wasm-bindgen-cli_0_2_104
+    wasm-bindgen-cli_0_2_105
     trunk
     rustc.llvmPackages.lld
     binaryen
@@ -56,6 +56,9 @@ rustPlatform.buildRustPackage rec {
     popd
   '';
 
+  # Tests don't compile in 3.2.0
+  doCheck = lib.versionAtLeast finalAttrs.version "3.2.1";
+
   checkFlags = [
     "--skip=processing::parser::xmltv::tests::normalize"
     "--skip=processing::parser::xtream::tests::test_read_json_file_into_struct"
@@ -76,9 +79,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Flexible IPTV playlist processor & proxy in Rust";
     homepage = "https://github.com/euzu/tuliprox";
-    changelog = "https://github.com/euzu/tuliprox/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/euzu/tuliprox/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "tuliprox";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ nyanloutre ];
   };
-}
+})

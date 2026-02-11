@@ -11,14 +11,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-browsed";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "OpenPrinting";
     repo = "cups-browsed";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Cfk28rxxgzzQs7B+tNmeUzDYL1eCx9zYwRsS/J6QX9s=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     mainProgram = "cups-browsed";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -2,10 +2,10 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libX11,
-  libXcursor,
-  libXmu,
-  libXpm,
+  libx11,
+  libxcursor,
+  libxmu,
+  libxpm,
   libheif,
   pkg-config,
   wayland,
@@ -38,10 +38,10 @@ buildGoModule (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXcursor
-    libXmu
-    libXpm
+    libx11
+    libxcursor
+    libxmu
+    libxpm
     libheif
     wayland
     xbitmaps

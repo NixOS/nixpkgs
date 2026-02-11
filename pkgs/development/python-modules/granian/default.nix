@@ -1,5 +1,6 @@
 {
   lib,
+  fetchurl,
   fetchFromGitHub,
   rustPlatform,
   cacert,
@@ -34,6 +35,11 @@ buildPythonPackage rec {
   # and allow the final application to make the allocator decision
   # via LD_PRELOAD or similar.
   patches = [
+    (fetchurl {
+      # Refresh expired TLS certificates for tests
+      url = "https://github.com/emmett-framework/granian/commit/189f1bed2effb4a8a9cba07b2c5004e599a6a890.patch";
+      hash = "sha256-7FgVR7/lAh2P5ptGx6jlFzWuk24RY7wieN+aLaAEY+c=";
+    })
     ./no-alloc.patch
   ];
 
@@ -85,9 +91,15 @@ buildPythonPackage rec {
     "test_rsgi_ws_scope"
   ];
 
-  pythonImportsCheck = [ "granian" ];
+  # This is a measure of last resort. Granian tests fully lock up
+  # on shutdown in >90% of cases, which makes the whole thing
+  # impossible to build without restarting it double digits
+  # numbers of times. The issue has not been fully identified,
+  # and upstream claims it does not exist.
+  # FIXME: root cause and fix this.
+  doCheck = false;
 
-  versionCheckProgramArg = "--version";
+  pythonImportsCheck = [ "granian" ];
 
   passthru.updateScript = nix-update-script { };
 

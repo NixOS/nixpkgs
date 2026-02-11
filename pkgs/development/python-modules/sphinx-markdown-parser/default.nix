@@ -6,7 +6,6 @@
   markdown,
   pydash,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   recommonmark,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage {
   pname = "sphinx-markdown-parser";
   version = "0.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "clayrisser";

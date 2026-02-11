@@ -124,3 +124,19 @@ self: super:
   # android is not currently allowed as 'supported-platforms' by hackage2nix
   android-activity = unmarkBroken super.android-activity;
 }
+// lib.optionalAttrs (with pkgs.stdenv.hostPlatform; !isDarwin) {
+  # 2026-01-09: RNG tests that need rng-instruction support fail on NixOS's
+  #             aarch64-linux build infrastructure
+  botan-low = overrideCabal (drv: {
+    testFlags =
+      drv.testFlags or [ ]
+      ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
+        # botan-low-rng-tests
+        "/rdrand/rngInit/"
+        "/rdrand/rngGet/"
+        "/rdrand/rngReseed/"
+        "/rdrand/rngReseedFromRNGCtx/"
+        "/rdrand/rngAddEntropy/"
+      ]);
+  }) super.botan-low;
+}

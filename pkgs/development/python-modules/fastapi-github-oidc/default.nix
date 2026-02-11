@@ -10,7 +10,7 @@
   pytestCheckHook,
   lib,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastapi-github-oidc";
   version = "0.3.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "fastapi-github-oidc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FS50++Hy9h0RFrSnc4PbXFPh/1OO0JOaFdIZwoXa86A=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "FastAPI compatible middleware to authenticate Github OIDC Tokens";
     homepage = "https://github.com/atopile/fastapi-github-oidc";
-    changelog = "https://github.com/atopile/fastapi-github-oidc/releases/tag/${src.tag}";
+    changelog = "https://github.com/atopile/fastapi-github-oidc/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

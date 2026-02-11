@@ -1,5 +1,6 @@
 {
   buildPackages,
+  writeText,
   fontconfig,
   lib,
   runCommand,
@@ -13,15 +14,16 @@ in
   fontDirectories,
 }:
 
+let
+  fontDirsPath = writeText "font-dirs" ''
+    <!-- Font directories -->
+    ${lib.concatStringsSep "\n" (map (font: "<dir>${font}</dir>") fontDirectories)}
+  '';
+in
 runCommand "fc-cache"
   {
     preferLocalBuild = true;
     allowSubstitutes = false;
-    passAsFile = [ "fontDirs" ];
-    fontDirs = ''
-      <!-- Font directories -->
-      ${lib.concatStringsSep "\n" (map (font: "<dir>${font}</dir>") fontDirectories)}
-    '';
   }
   ''
     export FONTCONFIG_FILE=$(pwd)/fonts.conf
@@ -33,7 +35,7 @@ runCommand "fc-cache"
       <include>${fontconfig.out}/etc/fonts/fonts.conf</include>
       <cachedir>$out</cachedir>
     EOF
-    cat "$fontDirsPath" >> fonts.conf
+    cat "${fontDirsPath}" >> fonts.conf
     echo "</fontconfig>" >> fonts.conf
 
     # N.B.: fc-cache keys its cache entries by architecture.

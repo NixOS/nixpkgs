@@ -13,20 +13,14 @@
 
   inherit version;
   defaultVersion =
-    with lib.versions;
+    let
+      case = case: out: { inherit case out; };
+      inherit (lib.versions) range;
+    in
     lib.switch coq.version [
-      {
-        case = isGe "9.0";
-        out = "0.0.7";
-      }
-      {
-        case = range "8.18" "8.20";
-        out = "0.0.6";
-      }
-      {
-        case = range "8.17" "8.20";
-        out = "0.0.5";
-      }
+      (case (range "9.0" "9.1") "0.0.7")
+      (case (range "8.18" "8.20") "0.0.6")
+      (case (range "8.17" "8.20") "0.0.5")
     ] null;
 
   releaseRev = v: "v${v}";

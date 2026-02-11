@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flying-carpet";
-  version = "9.0.9";
+  version = "9.0.10";
 
   src = fetchFromGitHub {
     owner = "spieglt";
     repo = "FlyingCarpet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XwhK0/eK8KxVf4aZUY2qgc6IMPnixxdwwrm3dl5Sfmk=";
+    hash = "sha256-7yGU4HCuP8/6UC1J6fNA5CpppJGGhS/ywThXRToDTqo=";
   };
 
-  cargoHash = "sha256-BtL6tAKIaj7wtJ9VTRbR3Kx8mGi56h9oBG63suCl1OA=";
+  cargoHash = "sha256-/Z+0hdQ1H9R7FMLunGT5WgQKFY0b0b6gzrR2CNMe2II=";
 
   nativeBuildInputs = [
     cargo-tauri.hook

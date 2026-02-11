@@ -4,23 +4,23 @@
   fetchFromGitHub,
   cmake,
   boost,
-  catch2,
+  catch2_3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcppt";
-  version = "4.2.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "freundlich";
     repo = "fcppt";
-    rev = version;
-    sha256 = "1pcmi2ck12nanw1rnwf8lmyx85iq20897k6daxx3hw5f23j1kxv6";
+    rev = finalAttrs.version;
+    hash = "sha256-8dBG6LdSngsutBboqb3WVVg3ylayoUYDOJV6p/ZFkoE=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     boost
-    catch2
+    catch2_3
   ];
 
   cmakeFlags = [
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
       "x86_64-windows"
     ];
   };
-}
+})

@@ -2,17 +2,15 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  importlib-resources,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tzdata";
   version = "2025.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -24,8 +22,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-subtests
-  ]
-  ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
+  ];
 
   pythonImportsCheck = [ "tzdata" ];
 
@@ -33,6 +30,6 @@ buildPythonPackage rec {
     description = "Provider of IANA time zone data";
     homepage = "https://github.com/python/tzdata";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

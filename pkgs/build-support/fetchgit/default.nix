@@ -2,7 +2,6 @@
   config,
   lib,
   stdenvNoCC,
-  writeText,
   git,
   git-lfs,
   cacert,
@@ -83,6 +82,8 @@ lib.makeOverridable (
           # run operations between the checkout completing and deleting the .git
           # directory.
           preFetch ? "",
+          # Shell code executed after `git checkout` and before .git directory removal/sanitization.
+          postCheckout ? "",
           # Shell code executed after the file has been fetched
           # successfully. This can do things like check or transform the file.
           postFetch ? "",
@@ -138,6 +139,8 @@ lib.makeOverridable (
 
         derivationArgs
         // {
+          __structuredAttrs = true;
+
           inherit name;
 
           builder = ./builder.sh;
@@ -189,6 +192,7 @@ lib.makeOverridable (
             deepClone
             branchName
             preFetch
+            postCheckout
             postFetch
             fetchTags
             rootDir
@@ -243,7 +247,15 @@ lib.makeOverridable (
               "FETCHGIT_HTTP_PROXIES"
             ];
 
-          inherit preferLocalBuild meta allowedRequisites;
+          outputChecks.out = {
+            ${if allowedRequisites != null then "allowedRequisites" else null} = allowedRequisites;
+          };
+
+          inherit preferLocalBuild meta;
+
+          env = {
+            NIX_PREFETCH_GIT_CHECKOUT_HOOK = finalAttrs.postCheckout;
+          };
 
           passthru = {
             gitRepoUrl = url;

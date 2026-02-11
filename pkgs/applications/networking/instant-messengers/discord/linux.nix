@@ -32,17 +32,17 @@
   libpulseaudio,
   libuuid,
   libva,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libxcb,
   libxshmfence,
   libgbm,
@@ -116,10 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     libdrm
     libuuid
-    libXdamage
-    libX11
-    libXScrnSaver
-    libXtst
+    libxdamage
+    libx11
+    libxscrnsaver
+    libxtst
     libxcb
     libxshmfence
     libgbm
@@ -153,24 +153,24 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3
       libglvnd
       libnotify
-      libX11
-      libXcomposite
+      libx11
+      libxcomposite
       libunity
       libuuid
       libva
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXrandr
-      libXrender
-      libXtst
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxrender
+      libxtst
       nspr
       libxcb
       pango
       pipewire
-      libXScrnSaver
+      libxscrnsaver
       libappindicator-gtk3
       libdbusmenu
       wayland

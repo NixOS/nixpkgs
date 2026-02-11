@@ -15,19 +15,23 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "2.6.3";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = "tev";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-2jUUipT6xE/8qxWaMsUmrEf2qmDcE93vp2nME01B34A=";
+    hash = "sha256-ODLtCCCIoHMDxyCRTA0bWK0c5RPOZ3aWIKpYpfZUbGE=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux (
@@ -61,11 +65,11 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     wayland-scanner
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
   ];
 
   cmakeFlags = [

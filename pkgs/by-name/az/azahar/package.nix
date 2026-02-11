@@ -31,9 +31,13 @@
   stdenv,
   vulkan-headers,
   xbyak,
-  xorg,
+  libxext,
+  libx11,
+  libxcb,
   enableQtTranslations ? true,
   qt6,
+  gtk3,
+  gsettings-desktop-schemas,
   enableCubeb ? true,
   cubeb,
   useDiscordRichPresence ? true,
@@ -42,7 +46,6 @@
   gamemode,
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
   nix-update-script,
-  fetchpatch2,
 }:
 let
   inherit (lib)
@@ -54,23 +57,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2123.3";
+  version = "2124.3";
 
   src = fetchzip {
     url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-iFYA4qbeMHIV5nPlRc0OSnb4D5y6WacPIXvt/1ZwnTA=";
+    hash = "sha256-JpqEJIKdmSJ5D9Q+a6YbHMJNTCK3+vDaSCSI23i60pk=";
   };
-
-  patches = [
-    # https://github.com/azahar-emu/azahar/pull/1305
-    ./fix-zstd-seekable-include.patch
-
-    # TODO: Remove in next release
-    (fetchpatch2 {
-      url = "https://github.com/azahar-emu/azahar/commit/1f483e1d335374482845d0325ac8b13af3162c53.patch?full_index=1";
-      hash = "sha256-9rmRbv7VFMhHly5qTGaeBLpvtWMu6HkCGUUM+t78Meg=";
-    })
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -109,8 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     xbyak
 
-    # https://github.com/azahar-emu/azahar/pull/1281
+    # https://github.com/azahar-emu/azahar/issues/1283
     # spirv-tools
+    # spirv-headers
 
     # Azahar uses zstd_seekable which is not currently packaged in nixpkgs
     # zstd
@@ -121,9 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isLinux [
     pipewire
     qt6.qtwayland
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXext
+    libx11
+    libxcb
+    libxext
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
@@ -152,16 +145,20 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
 
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+    )
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open-source 3DS emulator project based on Citra";
     homepage = "https://github.com/azahar-emu/azahar";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
-      arthsmn
-      marcin-serwin
-    ];
+    maintainers = with lib.maintainers; [ marcin-serwin ];
     mainProgram = "azahar";
     platforms = with lib.platforms; linux ++ darwin;
   };

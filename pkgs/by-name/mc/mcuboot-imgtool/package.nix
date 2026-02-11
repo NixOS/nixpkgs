@@ -5,15 +5,15 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcuboot-imgtool";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "imgtool";
-    hash = "sha256-XIc6EYleNtDrmeg2akOjriJwzE9Bnja2k0KJGCVRZM8=";
+    hash = "sha256-//cuTnk6wOwCpJPBlUhxXMwKI1ivruqhC0nMwuC9EpU=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -35,4 +35,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "imgtool";
   };
-}
+})

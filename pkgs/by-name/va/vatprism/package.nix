@@ -9,12 +9,12 @@
   libxkbcommon,
   wayland,
   fontconfig,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXxf86vm,
-  libXtst,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxxf86vm,
+  libxtst,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -23,12 +23,12 @@ let
     libGL
     libxkbcommon
     wayland
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXxf86vm
-    libXtst
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxxf86vm
+    libxtst
     fontconfig
   ];
   jdkWithFX = jdk.override { enableJavaFX = true; };
@@ -73,7 +73,7 @@ maven.buildMavenPackage rec {
     if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
       "sha256-gerjxTj8UQEVthMO3unWPEG7SPseMt5JPPureC/wUsw="
     else
-      "sha256-QH14GJ8JUYuu5XWnSKPYsamFeP0o+5Sobl+a0FUOIzs=";
+      "sha256-LoOiLisqc99gIGClpVe8tq5/2prmyyOzLDkpmuSgwVo=";
 
   installPhase = ''
     runHook preInstall

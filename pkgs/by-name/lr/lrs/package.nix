@@ -14,6 +14,11 @@ stdenv.mkDerivation {
     sha256 = "sha256-xJpOvYVhg0c9HVpieF/N/hBX1dZx1LlvOhJQ6xr+ToM=";
   };
 
+  patches = [
+    # fix passing argument 2 of 'signal' from incompatible pointer type error
+    ./fix-signal-handler-type.patch
+  ];
+
   buildInputs = [ gmp ];
 
   makeFlags = [

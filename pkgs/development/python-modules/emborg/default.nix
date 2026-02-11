@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   borgbackup,
   appdirs,
   arrow,
@@ -21,9 +20,7 @@
 buildPythonPackage rec {
   pname = "emborg";
   version = "1.42";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";

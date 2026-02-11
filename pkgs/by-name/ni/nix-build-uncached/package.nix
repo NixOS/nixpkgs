@@ -5,14 +5,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nix-build-uncached";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-build-uncached";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-n9Koi01Te77bpYbRX46UThyD2FhCu9OGHd/6xDQLqjQ=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     homepage = "https://github.com/Mic92/nix-build-uncached";
     maintainers = [ lib.maintainers.mic92 ];
   };
-}
+})

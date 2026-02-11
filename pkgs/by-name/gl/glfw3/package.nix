@@ -6,13 +6,13 @@
   pkg-config,
   libGL,
   vulkan-loader,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libX11,
-  libXi,
-  libXext,
-  libXxf86vm,
+  libxrandr,
+  libxinerama,
+  libxcursor,
+  libx11,
+  libxi,
+  libxext,
+  libxxf86vm,
   fixDarwinDylibNames,
   wayland,
   wayland-scanner,
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
-  patches = [ ./x11.patch ];
+  patches = [ ./x11.patch ] ++ (lib.optional withMinecraftPatch ./window-position.patch);
   prePatch = lib.optionalString withMinecraftPatch ''
     patches+=(${minecraftPatches}/patches/*.patch)
   '';
@@ -60,13 +60,13 @@ stdenv.mkDerivation {
     wayland
     wayland-protocols
     libxkbcommon
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libXext
-    libXxf86vm
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
+    libxxf86vm
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

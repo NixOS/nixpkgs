@@ -19,6 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-HiMMLzVE/Qw/PR7LXACyfzblxrGYrbMoi3/e/QzqF34=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="0.15"' 'version="${version}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ urwid ];

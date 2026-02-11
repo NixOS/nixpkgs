@@ -7,7 +7,14 @@
   libz,
   icu,
   openssl,
-  xorg,
+  libgbm,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   gtk3,
   glib,
   nss,
@@ -22,7 +29,6 @@
   cairo,
   udev,
   alsa-lib,
-  mesa,
   libGL,
   libsecret,
   nix-update-script,
@@ -35,13 +41,13 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "12";
+  version = "13";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-KVmik/YaJAr76QwXYRajXj7EVTJBs2NdbkDvIpLxlFc=";
+    hash = "sha256-cnOhyaeoDXPaeRJnJpx1HcegWitcfMJe/vezxZ/zpFQ=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -68,12 +74,12 @@ buildDotnetModule (finalAttrs: {
 
   buildInputs = [
     openssl
+    libgbm
     libgcc
-    xorg.libX11
+    libx11
     gtk3
     glib
     alsa-lib
-    mesa
     nspr
     nss
     icu
@@ -155,12 +161,12 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [
     libz
 
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxcb
 
     dbus
     atk
@@ -181,10 +187,10 @@ buildDotnetModule (finalAttrs: {
         "--subpackage"
         "frontend"
         "--url"
-        "https://github.com/futo-org/Grayjay.Desktop"
+        "https://gitlab.futo.org/api/v4/projects/videostreaming%2FGrayjay%2EDesktop/repository/archive.tar.gz?sha=refs%2Ftags%2F10"
       ];
     })
-    (finalAttrs.passthru.fetch-deps)
+    finalAttrs.passthru.fetch-deps
   ];
 
   meta = {

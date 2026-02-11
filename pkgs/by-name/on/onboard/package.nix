@@ -26,7 +26,8 @@
   procps,
   python3,
   wrapGAppsHook3,
-  xorg,
+  libxtst,
+  libxkbfile,
   yelp,
 }:
 
@@ -37,13 +38,13 @@ let
   majorVersion = "1.4";
 
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "onboard";
   version = "${majorVersion}.1";
   format = "setuptools";
 
   src = fetchurl {
-    url = "https://launchpad.net/onboard/${majorVersion}/${version}/+download/${pname}-${version}.tar.gz";
+    url = "https://launchpad.net/onboard/${majorVersion}/${finalAttrs.version}/+download/onboard-${finalAttrs.version}.tar.gz";
     sha256 = "0r9q38ikmr4in4dwqd8m9gh9xjbgxnfxglnjbfcapw8ybfnf3jh1";
   };
 
@@ -92,8 +93,8 @@ python3.pkgs.buildPythonApplication rec {
     libxkbcommon
     mousetweaks
     udev
-    xorg.libXtst
-    xorg.libxkbfile
+    libxtst
+    libxkbfile
   ]
   ++ lib.optional atspiSupport at-spi2-core;
 
@@ -195,4 +196,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     license = lib.licenses.gpl3;
   };
-}
+})

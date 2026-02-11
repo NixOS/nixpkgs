@@ -3,27 +3,38 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
   flit-core,
-  packaging,
+
+  # dependencies
+  backports-datetime-fromisoformat,
+  typing-extensions,
+
+  # tests
   pytestCheckHook,
   simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "3.26.1";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "marshmallow";
     tag = version;
-    hash = "sha256-l5pEhv8D6jRlU24SlsGQEkXda/b7KUdP9mAqrZCbl38=";
+    hash = "sha256-qEjq1tEWoYqlN7L/cECnpFGPinSdZXexJHZfXreLAZc=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ packaging ];
+  dependencies = lib.optionals (pythonOlder "3.11") [
+    backports-datetime-fromisoformat
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

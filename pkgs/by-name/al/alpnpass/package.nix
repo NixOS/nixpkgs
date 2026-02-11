@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "alpnpass";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "VerSprite";
     repo = "alpnpass";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hNZqGTV17rFSKLhZzNqH2E4SSb6Jhk7YQ4TN0HnE+9g=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.raboof ];
     mainProgram = "alpnpass";
   };
-}
+})

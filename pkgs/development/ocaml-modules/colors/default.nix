@@ -1,5 +1,6 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
   fetchurl,
   mdx,
@@ -16,7 +17,7 @@ buildDunePackage rec {
     hash = "sha256-fY1j9FODVnifwsI8qkKm0QSmssgWqYFXJ7y8o7/KmEY=";
   };
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "5.1";
 
   checkInputs = [
     mdx

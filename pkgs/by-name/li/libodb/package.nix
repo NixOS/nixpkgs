@@ -6,7 +6,7 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? !enableShared,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libodb";
   version = "2.5.0-b.27";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://pkg.cppget.org/1/beta/odb/libodb-${version}.tar.gz";
+    url = "https://pkg.cppget.org/1/beta/odb/libodb-${finalAttrs.version}.tar.gz";
     hash = "sha256-04Et/wHYsWvJPLlcL0J2iOPV2SBFC6J32EleGw38K2Q=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ r-burns ];
     platforms = lib.platforms.all;
   };
-}
+})

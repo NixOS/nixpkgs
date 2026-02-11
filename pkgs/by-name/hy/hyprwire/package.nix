@@ -11,13 +11,13 @@
 
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprwire";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprwire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9UcCdwe7vPgEcJJ64JseBQL0ZJZoxp/2iFuvfRI+9zk=";
+    hash = "sha256-PR/KER+yiHabFC/h1Wjb+9fR2Uy0lWM3Qld7jPVaWkk=";
   };
 
   nativeBuildInputs = [

@@ -13,14 +13,14 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntfs2btrfs";
   version = "20250616";
 
   src = fetchFromGitHub {
     owner = "maharmstone";
     repo = "ntfs2btrfs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hRPidvpBVm42Rg+acwHQ6b8WHGMPbE6SHwlrQrB+fD8=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ntfs2btrfs";
     platforms = lib.platforms.linux;
   };
-}
+})

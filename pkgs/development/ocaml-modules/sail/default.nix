@@ -16,7 +16,7 @@
   lem,
   linksem,
   yojson,
-  version ? "0.20",
+  version ? "0.20.1",
 }:
 
 buildDunePackage {
@@ -25,7 +25,7 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/rems-project/sail/releases/download/${version}/sail-${version}.tbz";
-    hash = "sha256-WTmYltCrNkt/OeST79Z1xMC2YDgN2HxLJ3PrE7k+R9M=";
+    hash = "sha256-uoG416pXBeBAZAE6sgwAa4DG20T5UiWsT79gQil+UOs=";
   };
 
   minimalOCamlVersion = "4.08";
@@ -79,7 +79,7 @@ buildDunePackage {
   meta = {
     homepage = "https://github.com/rems-project/sail";
     description = "Language for describing the instruction-set architecture (ISA) semantics of processors";
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     license = lib.licenses.bsd2;
   };
 }

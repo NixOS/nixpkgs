@@ -11,12 +11,12 @@
   freetype,
   glib,
   gtk3,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
+  libxrender,
   libxkbcommon,
   libgit2,
   libglvnd,
@@ -86,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
         freetype
         glib
         gtk3
-        libX11
-        libXcursor
-        libXext
-        libXi
-        libXrandr
-        libXrender
+        libx11
+        libxcursor
+        libxext
+        libxi
+        libxrandr
+        libxrender
         libxkbcommon
         libglvnd
         libuuid

@@ -7,7 +7,6 @@
   lxml,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zarr,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "tifffile";
   version = "2025.6.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

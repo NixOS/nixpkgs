@@ -2,21 +2,16 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   azure-common,
   azure-mgmt-core,
   isodate,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-appcontainers";
   version = "3.2.0";
-  format = "setuptools";
-  pyroject = true;
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_appcontainers";
@@ -30,8 +25,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   # no tests included
   doCheck = false;

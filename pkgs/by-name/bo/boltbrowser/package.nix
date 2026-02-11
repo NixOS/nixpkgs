@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "boltbrowser";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "br0xen";
     repo = "boltbrowser";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-3t0U1bSJbo3RJZe+PwaUeuzSt23Gs++WRe/uehfa4cA=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "boltbrowser";
   };
-}
+})

@@ -15,8 +15,13 @@
   stdenvNoCC,
   unzip,
   writeShellApplication,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxcb,
   zlib,
+  dbus,
   metaCommon ? { },
 }:
 
@@ -44,12 +49,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     freetype
     libGL
     libxkbcommon
-    xorg.libxcb
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+    libxcb
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     zlib
+    dbus
   ];
 
   installPhase = ''

@@ -5,7 +5,8 @@
   which,
   gfortran,
   libGLU,
-  xorg,
+  libxmu,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,14 +22,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gfortran
     libGLU
-    xorg.libX11
-    xorg.libXmu
+    libx11
+    libxmu
   ];
 
   patches = [ ./dont_register_file_types.patch ];
 
-  # fix build with GCC 14
-  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int -Wno-return-mismatch";
+  # fix build with GCC 14+
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int -Wno-return-mismatch -std=gnu17";
 
   postPatch = ''
     substituteInPlace ./makefile --replace '-L/usr/X11R6/lib'  "" \

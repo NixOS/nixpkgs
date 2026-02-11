@@ -18,11 +18,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jenkins";
-  version = "2.528.2";
+  version = "2.541.1";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${finalAttrs.version}/jenkins.war";
-    hash = "sha256-YiWtzsAQ6gdcLWmP69vXLfduIV3WtsocV5u07Osq1cc=";
+    hash = "sha256-ixJniqb5VQsGglsAb5CWGGsXp7hX6baK0/mA2fQw/JQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -81,6 +81,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       earldouglas
+      felixsinger
     ];
     changelog = "https://www.jenkins.io/changelog-stable/#v${finalAttrs.version}";
     mainProgram = "jenkins-cli";

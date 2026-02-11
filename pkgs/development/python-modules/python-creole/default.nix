@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "python-creole";
   version = "1.4.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jedie";

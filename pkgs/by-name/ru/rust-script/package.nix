@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-script";
   version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "fornwall";
     repo = "rust-script";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Bb8ULD2MmZiSW/Tx5vAAHv95OMJ0EdWgR+NFhBkTlDU=";
   };
 
@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     description = "Run Rust files and expressions as scripts without any setup or compilation step";
     mainProgram = "rust-script";
     homepage = "https://rust-script.org";
-    changelog = "https://github.com/fornwall/rust-script/releases/tag/${version}";
+    changelog = "https://github.com/fornwall/rust-script/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = [ ];
   };
-}
+})

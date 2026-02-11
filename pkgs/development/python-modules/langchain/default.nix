@@ -2,40 +2,40 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
 
   # dependencies
-  aiohttp,
-  async-timeout,
   langchain-core,
-  langchain-text-splitters,
   langgraph,
-  langsmith,
-  numpy,
   pydantic,
-  pyyaml,
-  requests,
-  sqlalchemy,
-  tenacity,
+
+  # Optional dependencies
+  langchain-anthropic,
+  langchain-aws,
+  langchain-community,
+  langchain-deepseek,
+  langchain-fireworks,
+  langchain-google-genai,
+  langchain-groq,
+  langchain-huggingface,
+  langchain-mistralai,
+  langchain-ollama,
+  langchain-openai,
+  langchain-perplexity,
+  langchain-xai,
 
   # runtime
   runtimeShell,
 
   # tests
-  blockbuster,
-  freezegun,
-  httpx,
-  lark,
-  pandas,
+  langchain-tests,
   pytest-asyncio,
   pytest-mock,
   pytest-socket,
+  pytest-xdist,
   pytestCheckHook,
-  requests-mock,
-  responses,
   syrupy,
   toml,
 
@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "1.0.2";
+  version = "1.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-NQra/L7OfnVyFTbGkSDcG30r8W733eAs9abII53wy4g=";
+    hash = "sha256-vwd8FoXeMLQyFcEViXx/3LqpNieyp4HHevMAv2AxNVY=";
   };
 
   sourceRoot = "${src.name}/libs/langchain_v1";
@@ -73,36 +73,38 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    aiohttp
     langchain-core
-    langchain-text-splitters
     langgraph
-    langsmith
-    numpy
     pydantic
-    pyyaml
-    requests
-    sqlalchemy
-    tenacity
-  ]
-  ++ lib.optional (pythonOlder "3.11") async-timeout;
+  ];
 
   optional-dependencies = {
-    numpy = [ numpy ];
+    anthropic = [ langchain-anthropic ];
+    aws = [ langchain-aws ];
+    # azure-ai = [langchain-azure-ai];
+    community = [ langchain-community ];
+    deepseek = [ langchain-deepseek ];
+    fireworks = [ langchain-fireworks ];
+    google-genai = [ langchain-google-genai ];
+    # google-vertexai = [langchain-google-vertexai];
+    groq = [ langchain-groq ];
+    huggingface = [ langchain-huggingface ];
+    mistralai = [ langchain-mistralai ];
+    ollama = [ langchain-ollama ];
+    openai = [ langchain-openai ];
+    perplexity = [ langchain-perplexity ];
+    # together = [langchain-together];
+    xai = [ langchain-xai ];
   };
 
   nativeCheckInputs = [
-    blockbuster
-    freezegun
-    httpx
-    lark
-    pandas
+    langchain-tests
+    # langchain-openai -- causes recursion error
     pytest-asyncio
     pytest-mock
     pytest-socket
+    pytest-xdist
     pytestCheckHook
-    requests-mock
-    responses
     syrupy
     toml
   ];
@@ -111,6 +113,7 @@ buildPythonPackage rec {
     "--only-core"
   ];
 
+  # Note: Not testing with optional dependencies due to mutual recursion
   enabledTestPaths = [
     # integration_tests require network access, database access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
@@ -124,13 +127,13 @@ buildPythonPackage rec {
     "test_timeout_returns_error"
     # Can't see the shell session results when sandboxed
     "test_startup_and_shutdown_commands"
+    # Timing sensitive tests
+    "test_tool_retry_constant_backoff"
   ];
 
   disabledTestPaths = [
     # Their configuration tests don't place nicely with nixpkgs
     "tests/unit_tests/test_pytest_config.py"
-    # comparison to magic time values, fails under load such as on Hydra
-    "tests/unit_tests/agents/middleware/test_tool_retry.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];

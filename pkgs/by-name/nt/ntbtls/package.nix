@@ -9,12 +9,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntbtls";
   version = "0.3.2";
 
   src = fetchurl {
-    url = "mirror://gnupg/ntbtls/ntbtls-${version}.tar.bz2";
+    url = "mirror://gnupg/ntbtls/ntbtls-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-vfy5kCSs7JxsS5mK1juzkh30z+5KdyrWwMoyTbvysHw=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ joachifm ];
   };
-}
+})

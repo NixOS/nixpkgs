@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   runCommandLocal,
   makeWrapper,
   replaceVars,
@@ -50,6 +51,12 @@ stdenv.mkDerivation rec {
   libipasir = callPackage ./libipasirglucose4 { };
 
   patches = [
+    # The upstream fix for the input-files macro regression
+    (fetchpatch {
+      url = "https://github.com/acl2/acl2/commit/be39e7835f1c68008c17188d2f65eeaef61632fa.patch";
+      hash = "sha256-pZ/r0vlyJz7ymYfrVtHDxsLdw0M/MJStBH42ZLO7Fs4=";
+    })
+
     (replaceVars ./0001-path-changes-for-nix.patch {
       libipasir = "${libipasir}/lib/${libipasir.libname}";
       libssl = "${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -146,7 +153,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/${pname}/books
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interpreter and prover for a Lisp dialect";
     mainProgram = "acl2";
     longDescription = ''
@@ -182,7 +189,7 @@ stdenv.mkDerivation rec {
         # ACL2 itself is bsd3
         bsd3
       ]
-      ++ optionals certifyBooks [
+      ++ lib.optionals certifyBooks [
         # The community books are mostly bsd3 or mit but with a few
         # other things thrown in.
         mit

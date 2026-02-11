@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "brig";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "brig";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0gi39jmnzqrgj146yw8lcmgmvzx7ii1dgw4iqig7kx8c0jiqi600";
   };
 
@@ -27,12 +27,12 @@ buildGoModule rec {
     "-w"
   ]
   ++ lib.mapAttrsToList (n: v: "-X github.com/sahib/brig/version.${n}=${v}") {
-    Major = lib.versions.major version;
-    Minor = lib.versions.minor version;
-    Patch = lib.versions.patch version;
+    Major = lib.versions.major finalAttrs.version;
+    Minor = lib.versions.minor finalAttrs.version;
+    Patch = lib.versions.patch finalAttrs.version;
     ReleaseType = "";
     BuildTime = "1970-01-01T00:00:00+0000";
-    GitRev = src.rev;
+    GitRev = finalAttrs.src.rev;
   };
 
   postInstall = ''
@@ -53,9 +53,9 @@ buildGoModule rec {
       or as a peer to peer alternative to Dropbox.
     '';
     homepage = "https://brig.readthedocs.io";
-    changelog = "https://github.com/sahib/brig/releases/tag/${src.rev}";
+    changelog = "https://github.com/sahib/brig/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ offline ];
     mainProgram = "brig";
   };
-}
+})

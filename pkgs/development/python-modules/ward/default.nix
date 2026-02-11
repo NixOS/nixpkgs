@@ -9,7 +9,6 @@
   pluggy,
   poetry-core,
   pprintpp,
-  pythonOlder,
   rich,
   tomli,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "ward";
   version = "0.68.0b0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "darrenburns";
@@ -46,7 +43,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ward" ];
 
-  meta = with lib; {
+  meta = {
     description = "Test framework for Python";
     homepage = "https://github.com/darrenburns/ward";
     changelog = "https://github.com/darrenburns/ward/releases/tag/release%2F${version}";
@@ -55,6 +52,6 @@ buildPythonPackage rec {
     mainProgram = "ward";
     # Old requirements (cucumber-tag-expressions and rich)
     # https://github.com/darrenburns/ward/issues/380
-    broken = versionAtLeast rich.version "13.0.0";
+    broken = lib.versionAtLeast rich.version "13.0.0";
   };
 }

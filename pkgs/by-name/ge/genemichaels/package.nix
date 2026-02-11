@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "genemichaels";
-  version = "0.8.5";
+  version = "0.9.5";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-5cM5VyS5w92CjP3nVumuUNkCFlhipukRhM8ERhE36n4=";
+    hash = "sha256-KaGG2amPk/+fL7xLAfZw4SmCzXc+hS/9IkBG7G6sngI=";
   };
 
-  cargoHash = "sha256-aJDtXsGVUxUrh3yLWEcobvFUqy/7PGFQHWIWU54zYdE=";
+  cargoHash = "sha256-RkGKzE/EKA1VUkVTTMdMKhtUrs3kmy4uDAHq2hJs5yk=";
 
   passthru.updateScript = nix-update-script { };
 

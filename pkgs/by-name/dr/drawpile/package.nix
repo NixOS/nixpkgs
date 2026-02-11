@@ -63,19 +63,19 @@ let
   ++ lib.optional withSystemd systemd;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "drawpile";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0paLKxAEvlbExq426xTekBt+Dkphx7Wg/AtpYN3f/4w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-u9fRbxKeQSou9Umw4EaqzzzDiN4zhyfx9sWnlZpfpxU=";
   };
 
@@ -94,12 +94,7 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     rustc
     rustPlatform.cargoSetupHook
-    (
-      if buildClient || buildServerGui then
-        qt6Packages.wrapQtAppsHook
-      else
-        qt6Packages.wrapQtAppsNoGuiHook
-    )
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -135,4 +130,4 @@ stdenv.mkDerivation rec {
   // lib.optionalAttrs buildClient {
     mainProgram = "drawpile";
   };
-}
+})

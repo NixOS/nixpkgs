@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-core_1.16.1";
     hash = "sha256-gMINz3bH80l0QYX3iKJlL962WIMujR1wuN+t4t7g7qg=";
   };
-  sourceRoot = "source/sdk/core/azure-core";
+  sourceRoot = "${finalAttrs.src.name}/sdk/core/azure-core";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

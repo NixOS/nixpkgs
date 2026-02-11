@@ -15,14 +15,14 @@
   withLatex ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linuxdoc-tools";
   version = "0.9.86";
 
   src = fetchFromGitLab {
     owner = "agmartin";
     repo = "linuxdoc-tools";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-AsTlrjTYuuLB2jF0zKPVrxOZ2ygUIyMJFV6qDd7ODwA=";
   };
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ p-h ];
   };
-}
+})

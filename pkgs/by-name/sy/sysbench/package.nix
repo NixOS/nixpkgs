@@ -12,7 +12,7 @@
   sysbench,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sysbench";
   version = "1.0.20";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "akopytov";
     repo = "sysbench";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1sanvl2a52ff4shj62nw395zzgdgywplqvwip74ky8q7s6qjf5qy";
   };
 
@@ -87,9 +87,9 @@ stdenv.mkDerivation rec {
       server.
     '';
     homepage = "https://github.com/akopytov/sysbench";
-    downloadPage = "https://github.com/akopytov/sysbench/releases/tag/${version}";
-    changelog = "https://github.com/akopytov/sysbench/blob/${version}/ChangeLog";
+    downloadPage = "https://github.com/akopytov/sysbench/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/akopytov/sysbench/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

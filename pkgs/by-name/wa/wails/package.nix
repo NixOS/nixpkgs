@@ -14,18 +14,18 @@
   webkitgtk_4_1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wails";
   version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "wailsapp";
     repo = "wails";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H1Nml2vhCx4IB/CT+kDro5joAw8ewpxoQjDgvqamAr8=";
   };
 
-  sourceRoot = "${src.name}/v2";
+  sourceRoot = "${finalAttrs.src.name}/v2";
 
   vendorHash = "sha256-RgRrKok06HDg6j5tbOmtX9mOl/t6eXuCwQ2OhOXbHUU=";
 
@@ -94,4 +94,4 @@ buildGoModule rec {
     mainProgram = "wails";
     platforms = lib.platforms.unix;
   };
-}
+})

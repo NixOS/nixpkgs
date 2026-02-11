@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ironwail";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "https://github.com/andrei-drexler/ironwail/archive/refs/tags/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-IcODVQ0FgfTi74cvJnM6cPh/Der1bbltdTTo5hITUeI=";
+    hash = "sha256-TlEMuwmpQIoIyjyQo9T/h3T7rPHX+K8TqHKSt+UtMBg=";
   };
 
   sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}/Quake";

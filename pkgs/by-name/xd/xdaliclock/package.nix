@@ -7,13 +7,13 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdaliclock";
-  version = "2.48";
+  version = "2.49";
 
   src = fetchurl {
-    url = "https://www.jwz.org/xdaliclock/xdaliclock-${version}.tar.gz";
-    hash = "sha256-BZiqjTSSAgvT/56OJDcKh4pDP9uqVhR5cCx89H+5FLQ=";
+    url = "https://www.jwz.org/xdaliclock/xdaliclock-${finalAttrs.version}.tar.gz";
+    hash = "sha256-jRTlt8IYZZ6EDLyU7kLQ2bktQztnj15IUpqUBvntXU8=";
   };
 
   # Note: don't change this to set sourceRoot, or updateAutotoolsGnuConfigScriptsHook
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     downloadPage = "http://www.jwz.org/xdaliclock/";
     mainProgram = "xdaliclock";
   };
-}
+})

@@ -14,18 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "your_spotify_server";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "Yooooomi";
     repo = "your_spotify";
     tag = finalAttrs.version;
-    hash = "sha256-i/R5tvt+9DD/ZUPLBq6EOJjuyHSv5zljTWuLwo+JBYA=";
+    hash = "sha256-eVKBrYE6U80G1SS/7nIl4fZb2BELb9lQizKcdcEIJIM=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-2Z5bOiPenlDTzOAMrIt73k4pi0v3SAN7HXXJDoOo8Qc=";
+    hash = "sha256-JP5enfy8yyMjZpp0U72S0uR5zJkhpvxog38icOBtQRQ=";
   };
 
   nativeBuildInputs = [

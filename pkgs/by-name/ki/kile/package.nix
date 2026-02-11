@@ -7,12 +7,12 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kile";
   version = "2.9.94";
 
   src = fetchurl {
-    url = "mirror://sourceforge/kile/kile-${version}.tar.bz2";
+    url = "mirror://sourceforge/kile/kile-${finalAttrs.version}.tar.bz2";
     sha256 = "U8Z0K9g/sJXL3ImLA/344Vq2gKgWk8yvnFB2uTrRo8o=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "kile";
   };
-}
+})

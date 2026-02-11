@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "memtester";
   version = "4.7.1";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://pyropus.ca/software/memtester/old-versions/memtester-${version}.tar.gz";
+    url = "http://pyropus.ca/software/memtester/old-versions/memtester-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-5CfeZj970i0evuivElBqhSwBC9T8vKHg5rApctKYtbs=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "memtester";
   };
-}
+})

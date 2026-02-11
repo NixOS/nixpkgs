@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "Free MASM-compatible assembler based on JWasm";
     mainProgram = "uasm";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thiagokokada ];
+    maintainers = [ ];
     license = lib.licenses.watcom;
     broken = stdenv.hostPlatform.isDarwin;
   };

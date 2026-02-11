@@ -6,14 +6,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tpmmanager";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Rohde-Schwarz";
     repo = "TPMManager";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FhdrUJQq4us6BT8CxgWqWiXnbl900204yjyS3nnQACU=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

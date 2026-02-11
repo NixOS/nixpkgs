@@ -5,16 +5,16 @@
   git,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-delete-merged-branches";
-  version = "7.5.0";
+  version = "7.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hartwork";
     repo = "git-delete-merged-branches";
-    tag = version;
-    sha256 = "sha256-2MSdUpToOiurtiL0Ws2dLEWqd6wj4nQ2RsEepBytgAk=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-wy5SLaw6QBvbmcFFgtIQ9MhGliW2/ZmCozEa2ZF0Lnc=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -32,4 +32,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

@@ -1,36 +1,41 @@
 {
-  lib,
   buildPythonPackage,
   fetchFromGitHub,
+  lib,
+
+  # build system
+  setuptools,
+
+  # test dependencies
   pytestCheckHook,
-  packaging,
 }:
 let
   pname = "lazy-imports";
-  version = "0.3.1";
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "telekom";
+    owner = "bachorp";
     repo = "lazy-imports";
     tag = version;
-    hash = "sha256-i+VPlBoxNqk56U4oiEgS1Ayhi1t2O8PtLZ/bzEurUY8=";
+    hash = "sha256-KtKqR/e0ldpsrz3dyY1ehF4cM5k7jDziiB+8uV0HEwc=";
   };
+in
+buildPythonPackage {
+  inherit pname version src;
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "lazy_imports" ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    packaging
   ];
 
   meta = {
-    description = "Python tool to support lazy imports";
-    homepage = "https://github.com/telekom/lazy-imports";
-    changelog = "https://github.com/telekom/lazy-imports/releases/tag/${version}";
+    description = "Utility package to create lazy modules, deferring associated imports until attribute access";
+    homepage = "https://github.com/bachorp/lazy-imports";
+    changelog = "https://github.com/bachorp/lazy-imports/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };

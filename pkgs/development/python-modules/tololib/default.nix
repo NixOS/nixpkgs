@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitLab,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -13,12 +12,10 @@ buildPythonPackage rec {
   version = "1.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitLab {
     owner = "MatthiasLohr";
     repo = "tololib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dfyc96VcauERv2E5I6nOIXAHbmTHiRLqS+0XH0GB5HM=";
   };
 

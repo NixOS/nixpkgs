@@ -14,14 +14,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jj-fzf";
   version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "tim-janik";
     repo = "jj-fzf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aJyKVMg/yI2CmAx5TxN0w670Rq26ESdLzESgh8Jr4nE=";
   };
 
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tim-janik/jj-fzf";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ bbigras ];
+    mainProgram = "jj-fzf";
     platforms = lib.platforms.all;
   };
-}
+})

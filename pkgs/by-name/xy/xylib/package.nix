@@ -8,12 +8,12 @@
   wxGTK32,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xylib";
   version = "1.6";
 
   src = fetchurl {
-    url = "https://github.com/wojdyr/xylib/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/wojdyr/xylib/releases/download/v${finalAttrs.version}/xylib-${finalAttrs.version}.tar.bz2";
     sha256 = "1iqfrfrk78mki5csxysw86zm35ag71w0jvim0f12nwq1z8rwnhdn";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

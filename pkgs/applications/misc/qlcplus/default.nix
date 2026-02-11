@@ -1,43 +1,47 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
   pkg-config,
+  udevCheckHook,
+  wrapQtAppsHook,
   udev,
   qtmultimedia,
   qtscript,
   qtserialport,
+  qtwebsockets,
   alsa-lib,
   ola,
   libftdi1,
   libusb-compat-0_1,
   libsndfile,
   libmad,
-  udevCheckHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qlcplus";
-  version = "4.13.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    sha256 = "sha256-AKmPxHOlMtea3q0NDULp3XfJ0JnYeF/iFUJw0dDOiio=";
+    hash = "sha256-gEwcTIJhY78Ts0lUn4MVciV7sPIBkqlxPMa9I1nTHO0=";
   };
 
   nativeBuildInputs = [
     qmake
     pkg-config
     udevCheckHook
+    wrapQtAppsHook
   ];
   buildInputs = [
     udev
     qtmultimedia
     qtscript
     qtserialport
+    qtwebsockets
     alsa-lib
     ola
     libftdi1

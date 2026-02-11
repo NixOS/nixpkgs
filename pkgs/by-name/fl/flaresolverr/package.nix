@@ -8,7 +8,7 @@
   chromium,
   python3,
   undetected-chromedriver,
-  xorg,
+  xvfb,
 
   nixosTests,
 }:
@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flaresolverr";
-  version = "3.4.3";
+  version = "3.4.6";
 
   src = fetchFromGitHub {
     owner = "FlareSolverr";
     repo = "FlareSolverr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5insO3XfIN9vGuPIeVBcLhsYPCO29mR41MFtIy8jeXE=";
+    hash = "sha256-DeFp76VwMGBAWOsI3S3jm1qNbPw554zJZfE7hotUedY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${python}/bin/python $out/bin/flaresolverr \
       --add-flags "$out/share/flaresolverr-${finalAttrs.version}/src/flaresolverr.py" \
-      --prefix PATH : "${lib.makeBinPath [ xorg.xvfb ]}"
+      --prefix PATH : "${lib.makeBinPath [ xvfb ]}"
   '';
 
   passthru = {

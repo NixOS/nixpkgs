@@ -726,10 +726,7 @@ let
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
-                  (nixos-rebuild-ng.override {
-                    withNgSuffix = false;
-                    withReexec = true;
-                  })
+                  nixos-rebuild-ng
                   ntp
                   perlPackages.ConfigIniFiles
                   perlPackages.FileSlurp
@@ -743,7 +740,7 @@ let
                   switch-to-configuration-ng
                   texinfo
                   unionfs-fuse
-                  xorg.lndir
+                  lndir
                   shellcheck-minimal
 
                   # Only the out output is included here, which is what is

@@ -817,20 +817,17 @@
     },
     "x11": {
       "attrPath": [
-        "xorg",
-        "libX11"
+        "libx11"
       ]
     },
     "xau": {
       "attrPath": [
-        "xorg",
-        "libXau"
+        "libxau"
       ]
     },
     "xcursor": {
       "attrPath": [
-        "xorg",
-        "libXcursor"
+        "libxcursor"
       ]
     },
     "xerces-c": {
@@ -840,26 +837,22 @@
     },
     "xext": {
       "attrPath": [
-        "xorg",
-        "libXext"
+        "libxext"
       ]
     },
     "xft": {
       "attrPath": [
-        "xorg",
-        "libXft"
+        "libxft"
       ]
     },
     "xi": {
       "attrPath": [
-        "xorg",
-        "libXi"
+        "libxi"
       ]
     },
     "xinerama": {
       "attrPath": [
-        "xorg",
-        "libXinerama"
+        "libxinerama"
       ]
     },
     "xkbcommon": {
@@ -869,38 +862,32 @@
     },
     "xpm": {
       "attrPath": [
-        "xorg",
-        "libXpm"
+        "libxpm"
       ]
     },
     "xrandr": {
       "attrPath": [
-        "xorg",
-        "libXrandr"
+        "libxrandr"
       ]
     },
     "xrender": {
       "attrPath": [
-        "xorg",
-        "libXrender"
+        "libxrender"
       ]
     },
     "xscrnsaver": {
       "attrPath": [
-        "xorg",
-        "libXScrnSaver"
+        "libxscrnsaver"
       ]
     },
     "xtst": {
       "attrPath": [
-        "xorg",
-        "libXtst"
+        "libxtst"
       ]
     },
     "xxf86vm": {
       "attrPath": [
-        "xorg",
-        "libXxf86vm"
+        "libxxf86vm"
       ]
     },
     "yaml-0.1": {

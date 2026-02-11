@@ -106,6 +106,7 @@ in
   ghc-exactprint = doDistribute super.ghc-exactprint_1_8_0_0;
 
   haddock-library = doJailbreak super.haddock-library;
+  ghc-lib = doDistribute self.ghc-lib_9_8_5_20250214;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_5_20250214;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
   inherit
@@ -121,6 +122,7 @@ in
         apply-refact = addBuildDepend self.data-default-class super.apply-refact;
         floskell = doJailbreak super.floskell;
         fourmolu = dontCheck (doJailbreak self.fourmolu_0_15_0_0);
+        ghcide = super.ghcide;
         haskell-language-server = addBuildDepends [
           self.retrie
           self.floskell
@@ -128,6 +130,7 @@ in
         ] super.haskell-language-server;
         hls-plugin-api = super.hls-plugin-api;
         hlint = self.hlint_3_8;
+        lsp-types = super.lsp-types;
         ormolu = self.ormolu_0_7_4_0;
         retrie = doJailbreak (unmarkBroken super.retrie);
         stylish-haskell = self.stylish-haskell_0_14_6_0;
@@ -136,9 +139,11 @@ in
     apply-refact
     floskell
     fourmolu
+    ghcide
     haskell-language-server
     hls-plugin-api
     hlint
+    lsp-types
     ormolu
     retrie
     stylish-haskell

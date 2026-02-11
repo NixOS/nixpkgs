@@ -9,12 +9,12 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avro-c++";
   version = "1.12.0";
 
   src = fetchurl {
-    url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";
+    url = "mirror://apache/avro/avro-${finalAttrs.version}/cpp/avro-cpp-${finalAttrs.version}.tar.gz";
     hash = "sha256-8u33cSanWw7BrRZncr4Fg1HOo9dESL5+LO8gBQwPmKs=";
   };
 
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/avrogencpp";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "C++ library which implements parts of the Avro Specification";
@@ -53,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

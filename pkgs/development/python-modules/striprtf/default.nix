@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "striprtf";
   version = "0.0.29";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

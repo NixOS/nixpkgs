@@ -54,12 +54,12 @@ buildPythonPackage rec {
     "tests/SMB_RPC/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network protocols Constructors and Dissectors";
     homepage = "https://github.com/SecureAuthCorp/impacket";
     changelog =
       "https://github.com/fortra/impacket/releases/tag/impacket_"
-      + replaceStrings [ "." ] [ "_" ] version;
+      + lib.replaceStrings [ "." ] [ "_" ] version;
     # Modified Apache Software License, Version 1.1
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ fab ];

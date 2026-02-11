@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   babel,
   buildPythonPackage,
   cssselect,
@@ -17,18 +18,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "agate";
-  version = "1.13.0";
+  version = "1.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wireservice";
     repo = "agate";
-    tag = version;
-    hash = "sha256-jDeme5eOuX9aQ+4A/pLnH/SuCOztyZzKdSBYKVC63Bk=";
+    tag = finalAttrs.version;
+    hash = "sha256-REo26vSWFzWsvJzmqlc5A5xEYA2TebQFW6jFRIbH53I=";
   };
 
   build-system = [ setuptools ];
@@ -50,13 +49,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Output is slightly different on macOS
+    "test_cast_format_locale"
+  ];
+
   pythonImportsCheck = [ "agate" ];
 
   meta = {
     description = "Python data analysis library that is optimized for humans instead of machines";
     homepage = "https://github.com/wireservice/agate";
-    changelog = "https://github.com/wireservice/agate/blob/${version}/CHANGELOG.rst";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/wireservice/agate/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

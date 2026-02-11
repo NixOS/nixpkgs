@@ -16,18 +16,22 @@
   iniparser,
   libmemcached,
   mapnik,
+  ps,
+  jq,
+  memcached,
+  iana-etc,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
-  version = "0.7.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
     tag = "v${version}";
-    hash = "sha256-JC275LKsCeEo5DcIX0X7kcLoijQJqfJvBvw8xi2gwpk=";
+    hash = "sha256-zDe+pFzK16K+8I0v1Z7p83PIgQlVDbjcnD4vzwdB1Oo=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +71,15 @@ stdenv.mkDerivation rec {
   doCheck = true;
   # Do not run tests in parallel
   enableParallelChecking = false;
+
+  nativeCheckInputs = [
+    iana-etc
+    ps
+  ]
+  ++ lib.filter (pkg: !pkg.meta.broken) [
+    jq
+    memcached
+  ];
 
   passthru.updateScript = nix-update-script { };
 

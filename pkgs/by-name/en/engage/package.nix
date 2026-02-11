@@ -28,6 +28,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-n7ypFJBYT712Uzh1NnWWSOIpEDKR0e6sQxbiIN6pZgo=";
   };
 
+  patches = [
+    # Support mdbook 0.5.x - remove deprecated multilingual field
+    ./mdbook-0.5-support.patch
+  ];
+
   cargoHash = "sha256-UTIxxPBtxzsZilxriAT8ksl2ovoDzIhB+8f+b2cGN3k=";
 
   nativeBuildInputs = [

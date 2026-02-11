@@ -913,11 +913,12 @@ in
         ]
         ++ lib.optional (useSendmail && config.services.postfix.enable) "/var/lib/postfix/queue/maildrop";
         UMask = "0027";
-        # Capabilities
-        CapabilityBoundingSet = "";
-        # Security
-        NoNewPrivileges = !useSendmail;
+        # one mid size deployments, Gitea already gets killed when doing DB migrations
+        TimeoutStartSec = "3m";
+
         # Sandboxing
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = !useSendmail;
         ProtectSystem = "strict";
         ProtectHome = true;
         PrivateTmp = true;

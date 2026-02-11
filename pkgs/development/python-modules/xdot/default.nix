@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "xdot";
-  version = "1.4";
+  version = "1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jrfonseca";
     repo = "xdot.py";
     rev = version;
-    hash = "sha256-fkO1bINRkCCzVRrQg9+vIODbN+bpXq2OHBKkzzZUZNA=";
+    hash = "sha256-eOuD8q7qN2MAFklIy28lfR0nEMsKDqVO+HE3+M0k5T0=";
   };
 
   build-system = [ setuptools ];

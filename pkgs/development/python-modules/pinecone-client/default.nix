@@ -7,7 +7,6 @@
   numpy,
   poetry-core,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "pinecone-client";
   version = "7.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pinecone-io";

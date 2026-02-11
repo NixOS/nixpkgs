@@ -12,14 +12,14 @@
   eigen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsurvive";
   version = "1.01";
 
   src = fetchFromGitHub {
     owner = "cntools";
     repo = "libsurvive";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # Fixes 'Unknown CMake command "cnkalman_generate_code"'
     fetchSubmodules = true;
     hash = "sha256-NcxdTKra+YkLt/iu9+1QCeQZLV3/qlhma2Ns/+ZYVsk=";
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

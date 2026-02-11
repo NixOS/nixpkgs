@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gomtree";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "vbatts";
     repo = "go-mtree";
-    rev = "v${version}";
-    hash = "sha256-SCjmyvZZGI/vQg2Ok4vw6v4Om8pNgdWDBwWVB/LIKaA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-MLZybHyYxRxxRy0/pd1n8apcfzrNVu2joP2S2P4KRHU=";
   };
 
   vendorHash = null;
@@ -24,15 +24,15 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "File systems verification utility and library, in likeness of mtree(8)";
-    changelog = "https://github.com/vbatts/go-mtree/releases/tag/v${version}";
+    changelog = "https://github.com/vbatts/go-mtree/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/vbatts/go-mtree";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "gomtree";
   };
-}
+})

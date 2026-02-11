@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "docstrfmt";
   version = "1.11.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "LilSpazJoekp";
     repo = "docstrfmt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5Yx+omXZSlpJSzA4dTY/JdfmHQshM7qI++OVvqYg1jc=";
   };
 
@@ -43,9 +43,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Formatter for reStructuredText";
     homepage = "https://github.com/LilSpazJoekp/docstrfmt";
-    changelog = "https://github.com/LilSpazJoekp/docstrfmt/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/LilSpazJoekp/docstrfmt/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "docstrfmt";
   };
-}
+})

@@ -49,7 +49,8 @@ let
 in
 
 symlinkJoin {
-  name = "unicode-emoji-${version}";
+  inherit version;
+  pname = "unicode-emoji";
 
   paths = lib.attrValues srcs;
 

@@ -29,47 +29,50 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.10.3";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-o55S9Fr1gnyuXFAVgugrnFyJIv7nKMZ3Lc4+m/aVrII=";
+    hash = "sha256-SItYudhY+4JQ8Qrm2FgR5se9blETE5y0i1nnjZNQli4=";
   };
 
-  npmDepsHash = "sha256-0vqH3nAB4HqfwS7Oy/qewzLyx48vS+rKiAwwbTkSOOc=";
+  npmDepsHash = "sha256-4uGIR0KnVl0SvTnD14bavqlv00aX91s2caPPLPdlhO4=";
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  prePatch = ''
-    cat > server/db/index.ts << EOF
-    export * from "./${db false}";
-    EOF
-  '';
-
   # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
   # Based on pkgs.nextjs-ollama-llm-ui.
   postPatch = ''
     substituteInPlace src/app/layout.tsx --replace-fail \
-      "{ Inter } from \"next/font/google\"" \
+      "{ Geist, Inter, Manrope, Open_Sans } from \"next/font/google\"" \
       "localFont from \"next/font/local\""
 
     substituteInPlace src/app/layout.tsx --replace-fail \
-      "Inter({ subsets: [\"latin\"] })" \
-      "localFont({ src: './Inter.ttf' })"
+      "const font = Inter({${"\n"}    subsets: [\"latin\"]${"\n"}});" \
+      "const font = localFont({ src: './Inter.ttf' });"
 
     cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
   '';
 
-  preBuild = "npx drizzle-kit generate --dialect ${db true} --schema ./server/db/${db false}/schema.ts --name migration --out init";
+  preBuild = ''
+    npm run set:oss
+    npm run set:${db true}
+    npx drizzle-kit generate --dialect ${db true} --schema ./server/db/${db false}/schema/ --name migration --out init
+  '';
 
-  npmBuildScript = "build:${db false}";
+  buildPhase = ''
+    runHook preBuild
 
-  postBuild = "npm run build:cli";
+    npm run build:${db false}
+    npm run build:cli
+
+    runHook postBuild
+  '';
 
   preInstall = "mkdir -p $out/{bin,share/pangolin}";
 
@@ -88,6 +91,8 @@ buildNpmPackage (finalAttrs: {
     cp -r init $out/share/pangolin/dist/init
 
     cp server/db/names.json $out/share/pangolin/dist/names.json
+    cp server/db/ios_models.json $out/share/pangolin/dist/ios_models.json
+    cp server/db/mac_models.json $out/share/pangolin/dist/mac_models.json
 
     runHook postInstall
   '';
@@ -164,13 +169,9 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       jackr
-      sigmasquadron
+      water-sucks
     ];
     platforms = lib.platforms.linux;
     mainProgram = "pangolin";
-    insecure = true;
-    knownVulnerabilities = [
-      "CVE-2025-55182"
-    ];
   };
 })

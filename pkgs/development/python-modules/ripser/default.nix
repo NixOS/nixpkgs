@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ripser";
-  version = "0.6.13";
+  version = "0.6.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "ripser.py";
     tag = "v${version}";
-    hash = "sha256-m6EJrz0RBuKlzDX41Gm/W2k71YQK9CgfZN4o84cQYCs=";
+    hash = "sha256-p47vhrG8+B226/no4PD7+XFNccbNJvi45Luwu287ygI=";
   };
 
   build-system = [

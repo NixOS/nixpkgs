@@ -34,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       marcweber
       pSub
-      shamilton
     ];
     platforms = lib.platforms.linux;
   };

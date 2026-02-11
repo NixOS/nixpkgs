@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tox-node";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "tox-rs";
     repo = "tox";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3ZRpri3WxwHjMq88TxRJAaTXMui8N1uLek+q8g5PGD4=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "tox-node";
   };
-}
+})

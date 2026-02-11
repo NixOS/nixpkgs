@@ -51,6 +51,7 @@ crystal.buildCrystalPackage rec {
       # This always uses the latest commit which invalidates the cache even if
       # the assets were not changed
       assetCommitTemplate = ''{{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}'';
+      tagTemplate = ''{{ "#{`git tag --points-at HEAD`.strip}" }}'';
 
       inherit (versions.invidious) commit date;
     in
@@ -63,7 +64,8 @@ crystal.buildCrystalPackage rec {
           --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
           --replace-fail ${lib.escapeShellArg commitTemplate} '"${commit}"' \
           --replace-fail ${lib.escapeShellArg versionTemplate} '"${date}"' \
-          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"'
+          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"' \
+          --replace-fail ${lib.escapeShellArg tagTemplate} '"v${version}"'
 
       # Patch the assets and locales paths to be absolute
       substituteInPlace src/invidious.cr \

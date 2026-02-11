@@ -8,14 +8,14 @@
   html-tidy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "html-tidy";
   version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "htacg";
     repo = "tidy-html5";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-vzVWQodwzi3GvC9IcSQniYBsbkJV20iZanF33A0Gpe0=";
   };
 
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.libpng; # very close to it - the 3 clauses are identical
     homepage = "http://html-tidy.org";
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ edwtjo ];
     mainProgram = "tidy";
   };
-}
+})

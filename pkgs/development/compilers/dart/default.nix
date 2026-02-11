@@ -8,24 +8,43 @@
   runCommand,
   cctools,
   darwin,
-  sources ? import ./sources.nix { inherit fetchurl; },
-  version ? sources.versionUsed,
 }:
 
-assert sources != null && (builtins.isAttrs sources);
 stdenv.mkDerivation (finalAttrs: {
   pname = "dart";
-  inherit version;
-
-  nativeBuildInputs = [ unzip ];
+  version = "3.10.9";
 
   src =
-    sources."${version}-${stdenv.hostPlatform.system}"
-      or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
+    let
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      system = selectSystem {
+        x86_64-linux = "linux-x64";
+        aarch64-linux = "linux-arm64";
+        x86_64-darwin = "macos-x64";
+        aarch64-darwin = "macos-arm64";
+      };
+      hash = selectSystem {
+        x86_64-linux = "sha256-1DudOiG4LvKjfTGUW5nmuI9fjcROwZG0c/1inXjQuZQ=";
+        aarch64-linux = "sha256-Z8mPnmppTtPLNiY0Ny1pRzBAs3EoNtQsr82zxWwKBOs=";
+        x86_64-darwin = "sha256-pd37vWDOIKGdek/CuUSH7sVyiKqlLOW6GLT4IkzkwYA=";
+        aarch64-darwin = "sha256-99gMhvkzSJmYEsGuD3kBN1e3l685Xyy6cNICegC+Vk4=";
+      };
+    in
+    fetchurl {
+      url = "https://storage.googleapis.com/dart-archive/channels/${
+        if lib.strings.hasSuffix ".beta" finalAttrs.version then "beta" else "stable"
+      }/release/${finalAttrs.version}/sdk/dartsdk-${system}-release.zip";
+      inherit hash;
+    };
+
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     runHook preInstall
 
+    rm LICENSE README revision
     cp -R . $out
   ''
   + lib.optionalString (stdenv.hostPlatform.isLinux) ''
@@ -40,8 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
 
   passthru = {
     fetchGitHashesScript = ./fetch-git-hashes.py;
@@ -81,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://dart.dev";
-    maintainers = with lib.maintainers; [ grburst ];
+    maintainers = [ ];
     description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''
       Dart is a class-based, single inheritance, object-oriented language
@@ -97,5 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
+    teams = [ lib.teams.flutter ];
   };
 })

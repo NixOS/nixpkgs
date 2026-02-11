@@ -2,27 +2,27 @@
   lib,
   stdenv,
   fetchurl,
-  fltk13,
+  fltk_1_3,
   libjpeg,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.9";
   pname = "fllog";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/fldigi/fllog-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-3eJvT9PjHTrMn0/pArUDIIE7T7y1YnayG5PuGokwtRk=";
   };
 
   buildInputs = [
-    fltk13
+    fltk_1_3
     libjpeg
   ];
 
   nativeBuildInputs = [
-    fltk13 # fltk-config
+    fltk_1_3 # fltk-config
     pkg-config
   ];
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "fllog";
   };
-}
+})

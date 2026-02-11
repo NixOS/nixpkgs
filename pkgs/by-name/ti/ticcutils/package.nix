@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ticcutils";
-  version = "0.36";
+  version = "0.37";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "ticcutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iehbLpVdcJ9PPI4iwUweZjsD+r1dNFoOr38W53JpGdU=";
+    hash = "sha256-jpwiRVpzALBUf4DxpRblEPLgXXOh2luHnTQg8nuQAwo=";
   };
 
   nativeBuildInputs = [

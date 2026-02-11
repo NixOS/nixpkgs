@@ -109,7 +109,7 @@ let
     # times out after spending many hours
     #wezterm.pkg = p: p.wezterm;
 
-    xfce4-terminal.pkg = p: p.xfce.xfce4-terminal;
+    xfce4-terminal.pkg = p: p.xfce4-terminal;
 
     xterm.pkg = p: p.xterm;
 
@@ -183,8 +183,6 @@ mapAttrs (
 
     testScript =
       { nodes, ... }:
-      let
-      in
       ''
         with subtest("wait for x"):
             start_all()

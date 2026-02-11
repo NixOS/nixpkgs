@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   cython,
   pkgconfig,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "uharfbuzz";
   version = "0.51.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "harfbuzz";

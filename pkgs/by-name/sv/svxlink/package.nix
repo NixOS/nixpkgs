@@ -36,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "DO_INSTALL_CHOWN" false)
-    (lib.cmakeFeature "RTLSDR_LIBRARIES" "${rtl-sdr}/lib/librtlsdr.so")
-    (lib.cmakeFeature "RTLSDR_INCLUDE_DIRS" "${rtl-sdr}/include")
+    (lib.cmakeFeature "RTLSDR_LIBRARIES" "${lib.getLib rtl-sdr}/lib/librtlsdr.so")
+    (lib.cmakeFeature "RTLSDR_INCLUDE_DIRS" "${lib.getInclude rtl-sdr}/include")
   ];
 
   dontWrapQtApps = true;

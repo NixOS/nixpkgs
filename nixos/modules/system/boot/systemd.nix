@@ -164,9 +164,10 @@ let
     "systemd-creds@.service"
     "systemd-creds.socket"
   ]
-  ++ lib.optional cfg.package.withTpm2Units [
+  ++ lib.optionals cfg.package.withTpm2Units [
     "systemd-pcrlock@.service"
     "systemd-pcrlock.socket"
+    "systemd-tpm2-clear.service"
   ]
   ++ [
 
@@ -213,6 +214,11 @@ let
     # Capsule support
     "capsule@.service"
     "capsule.slice"
+
+    # Factory reset
+    "factory-reset.target"
+    "systemd-factory-reset-request.service"
+    "systemd-factory-reset-reboot.service"
   ]
   ++ cfg.additionalUpstreamSystemUnits;
 
@@ -222,6 +228,7 @@ let
     "local-fs.target.wants"
     "multi-user.target.wants"
     "timers.target.wants"
+    "factory-reset.target.wants"
   ];
 
   proxy_env = config.networking.proxy.envVars;

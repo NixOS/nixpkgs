@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   msrest,
   azure-common,
@@ -11,8 +10,6 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-msi";
   version = "7.0.0";
-
-  disabled = pythonOlder "3.6";
 
   format = "setuptools";
 

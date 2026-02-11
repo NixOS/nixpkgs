@@ -6,7 +6,7 @@
   cabextract,
   curl,
   gnupg,
-  libX11,
+  libx11,
   libGLU,
   libGL,
   wine-staging,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wine_custom
-    libX11
+    libx11
     libGLU
     libGL
     curl

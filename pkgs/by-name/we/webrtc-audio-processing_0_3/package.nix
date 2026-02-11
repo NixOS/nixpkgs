@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webrtc-audio-processing";
   version = "0.3.1";
 
   src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/webrtc-audio-processing/webrtc-audio-processing-${version}.tar.xz";
+    url = "https://freedesktop.org/software/pulseaudio/webrtc-audio-processing/webrtc-audio-processing-${finalAttrs.version}.tar.xz";
     sha256 = "1gsx7k77blfy171b6g3m0k0s0072v6jcawhmx1kjs9w5zlwdkzd0";
   };
 
@@ -58,13 +58,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "More Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
     license = lib.licenses.bsd3;
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/v0.3.1/webrtc/typedefs.h
     # + our patches
-    platforms = intersectLists lib.platforms.unix (
+    platforms = lib.intersectLists lib.platforms.unix (
       lib.platforms.arm
       ++ lib.platforms.aarch64
       ++ lib.platforms.mips
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
       ++ lib.platforms.x86
     );
   };
-}
+})

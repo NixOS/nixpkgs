@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ekey-bionyxpy";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "richardpolzer";
     repo = "ekey-bionyx-api";
     tag = version;
-    hash = "sha256-wKgIQp+E1fzOrp2Xx14RXvtxQMOb0rFkI55q2Rw+JNg=";
+    hash = "sha256-V4xYv+mjU4QO/+hOq3TH8b/X9PVP95i6apYkcqVDIWY=";
   };
 
   build-system = [ setuptools ];

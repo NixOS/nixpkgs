@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typical";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "typical";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-y7PWTzD9+rkC4wZYhecmDTa3AoWl4Tgh7QXbSK4Qq5Q=";
   };
 
@@ -44,8 +44,8 @@ rustPlatform.buildRustPackage rec {
     description = "Data interchange with algebraic data types";
     mainProgram = "typical";
     homepage = "https://github.com/stepchowfun/typical";
-    changelog = "https://github.com/stepchowfun/typical/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/stepchowfun/typical/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

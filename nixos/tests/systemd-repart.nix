@@ -277,4 +277,106 @@ in
         assert "Adding new partition 2 to partition table." in systemd_repart_logs
       '';
   };
+
+  factory-reset = makeTest {
+    name = "systemd-repart-factory-reset";
+    meta.maintainers = with maintainers; [ willibutz ];
+
+    nodes.machine =
+      { pkgs, lib, ... }:
+      {
+        imports = [ common ];
+
+        virtualisation = {
+          useEFIBoot = true;
+          tpm.enable = true;
+          efi.OVMF = pkgs.OVMFFull;
+          useDefaultFilesystems = false;
+          fileSystems = {
+            "/state" = {
+              device = "/dev/mapper/state";
+              fsType = "ext4";
+            };
+          };
+        };
+
+        boot = {
+          loader.systemd-boot.enable = true;
+
+          initrd = {
+            systemd = {
+              enable = true;
+              # avoids reaching cryptsetup.target before recreation of the
+              # "state" volume completed, during the factory reset
+              services.systemd-repart.before = [
+                "systemd-cryptsetup@state.service"
+              ];
+              repart = {
+                enable = true;
+                extraArgs = [
+                  "--tpm2-pcrs=platform-code"
+                ];
+              };
+            };
+            luks.devices = lib.mkVMOverride {
+              state = {
+                device = "/dev/disk/by-partlabel/state";
+                crypttabExtraOpts = [ "tpm2-device=auto" ];
+              };
+            };
+          };
+        };
+
+        systemd.repart.partitions = {
+          "10-esp".Type = "esp";
+          "20-root".Type = "linux-generic";
+          "30-state" = {
+            Type = "linux-generic";
+            Label = "state";
+            Format = "ext4";
+            Encrypt = "tpm2";
+            SizeMinBytes = "64M";
+            SizeMaxBytes = "64M";
+            FactoryReset = true;
+          };
+        };
+
+        # doesn't actually reboot through the service because otherwise the test
+        # instrumentation becomes very unreliable, instead uses machine.reboot()
+        systemd.services.systemd-factory-reset-reboot.enable = false;
+      };
+
+    testScript =
+      { nodes, ... }:
+      # python
+      ''
+        ${useDiskImage {
+          inherit (nodes) machine;
+          sizeDiff = "+64M";
+        }}
+
+        machine.start(allow_reboot=True)
+        machine.wait_for_unit("default.target")
+
+        first_uuid = machine.succeed("blkid -s UUID -o value /dev/disk/by-label/state")
+
+        machine.succeed("mountpoint /state")
+        machine.succeed("touch /state/foo")
+
+        with subtest("factory reset requested through target"):
+          machine.systemctl("start factory-reset.target")
+
+        # reboot manually to keep control over test vm
+        machine.reboot()
+        machine.wait_for_unit("default.target")
+
+        with subtest("state partition recreated and empty after reset"):
+          second_uuid = machine.succeed("blkid -s UUID -o value /dev/disk/by-label/state")
+          t.assertNotEqual(first_uuid, second_uuid)
+
+          machine.succeed("mountpoint /state")
+          machine.fail("test -e /state/foo")
+      '';
+  };
+
 }

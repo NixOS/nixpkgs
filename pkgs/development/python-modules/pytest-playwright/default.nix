@@ -7,7 +7,6 @@
   pytest,
   pytest-base-url,
   python-slugify,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pytest-playwright";
   version = "0.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "microsoft";

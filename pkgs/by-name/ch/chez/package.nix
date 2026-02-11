@@ -10,7 +10,7 @@
   darwin,
   ncurses,
   libiconv,
-  libX11,
+  libx11,
   testers,
   writableTmpDirAsHomeHook,
   buildPackages,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
   ]
   ++ lib.optionals stdenv.hostPlatform.isUnix [
-    libX11
+    libx11
   ];
 
   /*

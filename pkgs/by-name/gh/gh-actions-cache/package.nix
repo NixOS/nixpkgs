@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh-actions-cache";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "gh-actions-cache";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GVha3xxLTBTiKfAjGb2q9btsGYzWQivGLyZ4Gg0s/N0=";
   };
 
@@ -29,9 +29,9 @@ buildGoModule rec {
   meta = {
     description = "gh extension to manage GitHub Actions caches";
     homepage = "https://github.com/actions/gh-actions-cache";
-    changelog = "https://github.com/actions/gh-actions-cache/releases/tag/${src.rev}";
+    changelog = "https://github.com/actions/gh-actions-cache/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amesgen ];
     mainProgram = "gh-actions-cache";
   };
-}
+})

@@ -3,10 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
-  libxcrypt,
   numpy,
   qt6,
   qtpy,
@@ -20,8 +18,6 @@ buildPythonPackage rec {
   pname = "echo";
   version = "0.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "glue-viz";
@@ -38,8 +34,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
   ];
-
-  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   dependencies = [
     qt6.qtconnectivity

@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
   version = "2025.5";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gi-docgen/${lib.versions.major version}/gi-docgen-${version}.tar.xz";
@@ -33,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     markupsafe
     packaging
     pygments
-    toml # remove once python311 is the default
     typogrify
   ];
 

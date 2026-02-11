@@ -10,14 +10,14 @@
   requests-oauthlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "garth";
-  version = "0.5.19";
+  version = "0.5.21";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-no9qxDtk6k5YXOEwFfwPJb4EylQRKOGorVIgvhwd4dY=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-jZeVldHU6iOhtGarSmCVXRObcfiG9GSQvhQPzuWE2rQ=";
   };
 
   pythonRelaxDeps = [ "requests-oauthlib" ];
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Garmin SSO auth and connect client";
     homepage = "https://github.com/matin/garth";
-    changelog = "https://github.com/matin/garth/releases/tag/${version}";
+    changelog = "https://github.com/matin/garth/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

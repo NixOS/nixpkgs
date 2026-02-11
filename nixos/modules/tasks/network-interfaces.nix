@@ -205,7 +205,7 @@ let
         tempAddress = mkOption {
           type = types.enum (lib.attrNames tempaddrValues);
           default = cfg.tempAddresses;
-          defaultText = literalExpression ''config.networking.tempAddresses'';
+          defaultText = literalExpression "config.networking.tempAddresses";
           description = ''
             When IPv6 is enabled with SLAAC, this option controls the use of
             temporary address (aka privacy extensions) on this
@@ -348,9 +348,10 @@ let
 
         virtualOwner = mkOption {
           default = "root";
-          type = types.str;
+          type = types.nullOr types.str;
           description = ''
             In case of a virtual device, the user who owns it.
+            `null` will not set owner, allowing access to any user.
           '';
         };
 
@@ -1769,13 +1770,9 @@ in
 
     environment.corePackages = [
       pkgs.host
-      pkgs.hostname-debian
+      pkgs.hostname
       pkgs.iproute2
-      pkgs.iputils
-    ]
-    ++ optionals config.networking.wireless.enable [
-      pkgs.wirelesstools # FIXME: obsolete?
-      pkgs.iw
+      pkgs.iputils # ping
     ]
     ++ bridgeStp;
 

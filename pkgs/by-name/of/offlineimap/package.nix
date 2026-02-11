@@ -13,7 +13,7 @@
   fetchpatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "offlineimap";
   version = "8.0.0";
   pyproject = true;
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap3";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XLxKqO5OCXsFu8S3lMp2Ke5hp6uer9npZ3ujmL6Kb3g=";
   };
 
@@ -94,4 +94,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ stephen-huan ];
     mainProgram = "offlineimap";
   };
-}
+})

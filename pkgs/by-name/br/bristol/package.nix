@@ -5,20 +5,20 @@
   alsa-lib,
   libjack2,
   pkg-config,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   xorgproto,
   libpulseaudio,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bristol";
   version = "0.60.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bristol/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/bristol/bristol-${finalAttrs.version}.tar.gz";
     hash = "sha256-fR8LvQ19MD/HfGuVSbYXCNeoO03AB4GAEbH1XR+pIro=";
   };
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
     libpulseaudio
-    libX11
-    libXext
+    libx11
+    libxext
     xorgproto
   ];
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ ];
   };
-}
+})

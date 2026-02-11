@@ -4,7 +4,7 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -12,7 +12,8 @@ buildPythonPackage rec {
   version = "3.13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  # https://github.com/maxfischer2781/asyncstdlib/issues/189
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "maxfischer2781";

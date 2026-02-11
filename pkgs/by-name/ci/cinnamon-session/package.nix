@@ -17,7 +17,13 @@
   systemd,
   wrapGAppsHook3,
   xapp,
-  xorg,
+  libxtst,
+  libxrender,
+  libxext,
+  libxcomposite,
+  libxau,
+  libx11,
+  xtrans,
   libexecinfo,
   pango,
 }:
@@ -31,15 +37,15 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-session";
-  version = "6.4.2";
+  version = "6.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-session";
-    tag = version;
-    hash = "sha256-zv1X1MLZBg+Bayd4hjsmrdXkFTRkH4kz7PJe6mFTBqc=";
+    tag = finalAttrs.version;
+    hash = "sha256-5Cbx0SNBcTovRvxwPSqR4SM/FBLXrfkS5RZGXeU1ULY=";
   };
 
   buildInputs = [
@@ -49,17 +55,17 @@ stdenv.mkDerivation rec {
     glib
     libcanberra
     pango
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
     xapp
-    xorg.libXau
-    xorg.libXcomposite
+    libxau
+    libxcomposite
 
     systemd
 
-    xorg.libXtst
-    xorg.libXrender
-    xorg.xtrans
+    libxtst
+    libxrender
+    xtrans
 
     # other (not meson.build)
     cinnamon-settings-daemon
@@ -102,4 +108,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

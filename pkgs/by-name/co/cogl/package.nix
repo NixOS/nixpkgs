@@ -6,7 +6,10 @@
   libGL,
   glib,
   gdk-pixbuf,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxdamage,
+  libxcomposite,
   libintl,
   pangoSupport ? true,
   pango,
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
   version = "1.22.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/cogl-${version}.tar.xz";
+    url = "mirror://gnome/sources/cogl/${lib.versions.majorMinor version}/cogl-${version}.tar.xz";
     sha256 = "0nfph4ai60ncdx7hy6hl1i1cmp761jgnyjfhagzi0iqq36qb41d8";
   };
 
@@ -87,10 +90,10 @@ stdenv.mkDerivation rec {
     libgbm
     mesa-gl-headers
     libGL
-    xorg.libXrandr
-    xorg.libXfixes
-    xorg.libXcomposite
-    xorg.libXdamage
+    libxrandr
+    libxfixes
+    libxcomposite
+    libxdamage
   ]
   ++ lib.optionals gstreamerSupport [
     gst_all_1.gstreamer
@@ -111,9 +114,16 @@ stdenv.mkDerivation rec {
         "-I${harfbuzz.dev}/include/harfbuzz"
       ]
     );
-  }
-  // lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    NIX_CFLAGS_COMPILE = toString (
+      [ ]
+      ++ lib.optional stdenv.cc.isGNU [
+        # Fix build with gcc15
+        "-std=gnu17"
+      ]
+      ++ lib.optional stdenv.cc.isClang [
+        "-Wno-error=implicit-function-declaration"
+      ]
+    );
   };
 
   #doCheck = true; # all tests fail (no idea why)

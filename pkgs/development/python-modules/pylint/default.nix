@@ -13,26 +13,26 @@
   pytest-timeout,
   pytest-xdist,
   pytest7CheckHook,
+  pythonAtLeast,
   pythonOlder,
   requests,
   setuptools,
   tomli,
   tomlkit,
   typing-extensions,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylint";
-  version = "3.3.7";
+  version = "4.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pylint-dev";
     repo = "pylint";
-    tag = "v${version}";
-    hash = "sha256-EMLnwFurIhTdUJqy9/DLTuucDhlmA5fCPZZ6TA87nEU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mKI/sRYl2ZwZ3JklmqBTs7vRG9EA4zDHaW61d/Xozb4=";
   };
 
   build-system = [ setuptools ];
@@ -45,8 +45,7 @@ buildPythonPackage rec {
     platformdirs
     tomlkit
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     gitpython
@@ -57,6 +56,7 @@ buildPythonPackage rec {
     pytest7CheckHook
     requests
     typing-extensions
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlags = [
@@ -67,10 +67,6 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
     "-v"
   ];
-
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
 
   disabledTestPaths = [
     "tests/benchmark"
@@ -96,6 +92,10 @@ buildPythonPackage rec {
     # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
     "test_functional_relation_extraction"
   ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ModuleNotFoundError: No module named 'completely_unknown'
+    "test_do_not_import_files_from_local_directory"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_parallel_execution"
     "test_py3k_jobs_option"
@@ -104,7 +104,7 @@ buildPythonPackage rec {
   meta = {
     description = "Bug and style checker for Python";
     homepage = "https://pylint.readthedocs.io/en/stable/";
-    changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
+    changelog = "https://github.com/pylint-dev/pylint/releases/tag/${finalAttrs.src.tag}";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
       helps enforcing a coding standard, sniffs for code smells and offers simple
@@ -118,4 +118,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "pylint";
   };
-}
+})

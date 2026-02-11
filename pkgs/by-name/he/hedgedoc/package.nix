@@ -2,35 +2,31 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitMinimal,
-  cacert,
   makeBinaryWrapper,
   nodejs,
   python3,
   nixosTests,
   yarn-berry_4,
-  writableTmpDirAsHomeHook,
 }:
 
-let
-  version = "1.10.4";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "hedgedoc";
+  version = "1.10.6";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
-    tag = version;
-    hash = "sha256-ysiHvRMOgVFTFKeMWjshZpIZAOTf+EbBQQm3dDeMB3I=";
+    tag = finalAttrs.version;
+    hash = "sha256-Utun/xGSYV20HJNwvV8q4iekRNE+oBx1kSo3rx5IZTQ=";
   };
+
+  # Generate this file with:
+  # nix run nixpkgs#yarn-berry_4.yarn-berry-fetcher missing-hashes yarn.lock
   missingHashes = ./missing-hashes.json;
 
-in
-stdenv.mkDerivation {
-  pname = "hedgedoc";
-  inherit version src missingHashes;
-
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit src missingHashes;
-    hash = "sha256-jMJXNWvmlweCJu+xs2ucMtB6N+0r1cgP/aGt2zfH4iQ=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-7QJu6HSXCNameGq/NZpq7V0VHam7qRWzQQfzkzvARs4=";
   };
 
   nativeBuildInputs = [
@@ -87,4 +83,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     platforms = lib.platforms.linux;
   };
-}
+})

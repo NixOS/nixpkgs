@@ -3,10 +3,12 @@
   buildNpmPackage,
   fetchNpmDeps,
   fetchFromGitHub,
+  nodejs_22,
   pkg-config,
   node-gyp,
   vips,
   nix-update-script,
+  nixosTests,
 }:
 
 buildNpmPackage rec {
@@ -51,6 +53,9 @@ buildNpmPackage rec {
     patches = [ ./0004-fix-deps-v080.patch ];
   };
 
+  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
+
   nativeBuildInputs = [
     pkg-config
     node-gyp
@@ -83,6 +88,9 @@ buildNpmPackage rec {
         "--version-regex"
         "^v(\\d+\\.\\d+\\.\\d+)$"
       ];
+    };
+    tests = {
+      inherit (nixosTests) librechat;
     };
   };
 

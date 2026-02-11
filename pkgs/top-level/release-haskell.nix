@@ -68,7 +68,8 @@ let
     ghc984
     ghc9102
     ghc9103
-    ghc9122
+    ghc9122 # TODO(@sternenseemann): drop
+    ghc9123
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -428,38 +429,9 @@ let
                 postgrest
                 ;
             };
-
-            haskell.packages.native-bignum.ghc9103 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc9103)
-                hello
-                random
-                QuickCheck
-                terminfo # isn't bundled for cross
-                ;
-            };
           };
 
       pkgsCross = {
-        aarch64-android-prebuilt.pkgsStatic =
-          removePlatforms
-            [
-              # Android NDK package doesn't support building on
-              "aarch64-darwin"
-              "aarch64-linux"
-
-              "x86_64-darwin"
-            ]
-            {
-              haskell.packages.ghc912 = {
-                inherit
-                  (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.pkgsStatic.haskell.packages.ghc912)
-                  ghc
-                  hello
-                  microlens
-                  ;
-              };
-            };
-
         ghcjs =
           removePlatforms
             [
@@ -520,7 +492,24 @@ let
               ghc948
               ;
           };
-        };
+        }
+        //
+          removePlatforms
+            [
+              # Testing cross from x86_64-linux
+              "aarch64-darwin"
+              "aarch64-linux"
+              "x86_64-darwin"
+            ]
+            {
+              haskellPackages = {
+                inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskellPackages)
+                  ghc
+                  hello
+                  th-orphans
+                  ;
+              };
+            };
       };
     })
     (versionedCompilerJobs {
@@ -540,6 +529,7 @@ let
       Cabal_3_10_3_0 = lib.subtractLists [
         # time < 1.13 conflicts with time == 1.14.*
         compilerNames.ghc9122
+        compilerNames.ghc9123
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
@@ -547,17 +537,13 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
-      git-annex = [
-        # for 9.10, test that using filepath (instead of filepath-bytestring) works.
-        compilerNames.ghc9102
-        compilerNames.ghc9103
-      ];
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
         compilerNames.ghc9102
         compilerNames.ghc9103
         compilerNames.ghc9122
+        compilerNames.ghc9123
       ] released;
       hpack = released;
       hsdns = released;
@@ -570,9 +556,11 @@ let
       ghc-lib-parser-ex = released;
       ghc-source-gen = lib.subtractLists [
         compilerNames.ghc9122
+        compilerNames.ghc9123
       ] released;
       ghc-tags = lib.subtractLists [
         compilerNames.ghc9122
+        compilerNames.ghc9123
       ] released;
       hashable = released;
       primitive = released;
@@ -585,6 +573,7 @@ let
         compilerNames.ghc9102
         compilerNames.ghc9103
         compilerNames.ghc9122
+        compilerNames.ghc9123
       ] released;
     })
     {
@@ -664,7 +653,6 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc9103
         ];
       };
     }

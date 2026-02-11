@@ -482,7 +482,7 @@ in
                   `ike:` prefix are configured any signature scheme
                   constraint (without `ike:` prefix) will also apply to
                   IKEv2 authentication, unless this is disabled in
-                  `strongswan.conf`. To use RSASSA-PSS signatures use
+                  {file}`strongswan.conf`. To use RSASSA-PSS signatures use
                   `rsa/pss` instead of `pubkey` or
                   `rsa` as in e.g.
                   `ike:rsa/pss-sha256`. If `pubkey` or
@@ -628,7 +628,7 @@ in
                 `pubkey-sha256-sha512`,
                 `rsa-2048-sha256-sha384-sha512` or
                 `rsa-2048-sha256-ecdsa-256-sha256-sha384`).
-                Unless disabled in `strongswan.conf`, or explicit IKEv2
+                Unless disabled in {file}`strongswan.conf`, or explicit IKEv2
                 signature constraints are configured (refer to the description of the
                 {option}`local` section's {option}`auth` keyword for
                 details), such key types and hash algorithms are also applied as

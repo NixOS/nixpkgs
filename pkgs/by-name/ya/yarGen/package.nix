@@ -4,15 +4,15 @@
   fetchFromGitHub,
   fetchpatch,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "yarGen";
   version = "0.23.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Neo23x0";
     repo = "yarGen";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "6PJNAeeLAyUlZcIi0g57sO1Ex6atn7JhbK9kDbNrZ6A=";
   };
 
@@ -57,4 +57,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

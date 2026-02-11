@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprland-autoname-workspaces";
-  version = "1.1.16";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "hyprland-autoname-workspaces";
-    rev = version;
-    hash = "sha256-M/3mqO7G2E5NW2uE+X8P4UhEl0r1fPXuxyb1NowJQnY=";
+    rev = finalAttrs.version;
+    hash = "sha256-2pRtbzG/kGxucigK/tctCQZttf/QYZoCMnUv+6Hpi7I=";
   };
 
-  cargoHash = "sha256-GwLyC1G2RAIvb7c8vFRAUErp1ychY9mSAWhBNzX4Kvk=";
+  cargoHash = "sha256-91UxBjKSg/fAtiEqvyassIzeZYUc7SYbv5N+WF0vqGM=";
 
   doCheck = false;
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hyprland-autoname-workspaces";
     platforms = lib.platforms.linux;
   };
-}
+})

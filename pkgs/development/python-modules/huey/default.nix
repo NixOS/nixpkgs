@@ -3,38 +3,35 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
   redis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "huey";
-  version = "2.5.5";
-
-  format = "pyproject";
+  version = "2.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "huey";
-    tag = version;
-    hash = "sha256-fpnaf0hk26Sm+d3pggW/GfT0oSbYpSm5xotejbOWeJY=";
+    tag = finalAttrs.version;
+    hash = "sha256-vXp8xISf8g1VjIus/Xr4wKFFaVg5x4CXgP8IUUKYl+o=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ redis ];
+  dependencies = [ redis ];
 
   # connects to redis
   doCheck = false;
 
+  pythonImportsCheck = [ "huey" ];
+
   meta = {
-    changelog = "https://github.com/coleifer/huey/blob/${src.tag}/CHANGELOG.md";
-    description = "Little task queue for python";
+    description = "Module to queue tasks";
     homepage = "https://github.com/coleifer/huey";
+    changelog = "https://github.com/coleifer/huey/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

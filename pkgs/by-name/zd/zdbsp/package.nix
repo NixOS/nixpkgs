@@ -6,12 +6,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zdbsp";
   version = "1.19";
 
   src = fetchzip {
-    url = "https://zdoom.org/files/utils/zdbsp/zdbsp-${version}-src.zip";
+    url = "https://zdoom.org/files/utils/zdbsp/zdbsp-${finalAttrs.version}-src.zip";
     sha256 = "sha256-DTj0jMNurvwRwMbo0L4+IeNlbfIwUbqcG1LKd68C08g=";
     stripRoot = false;
   };
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

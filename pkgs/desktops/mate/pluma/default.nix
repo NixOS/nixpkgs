@@ -1,48 +1,52 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
   pkg-config,
   gettext,
   perl,
   itstool,
   isocodes,
   enchant,
+  gtk-doc,
   libxml2,
+  mate-common,
   python3,
   gtksourceview4,
   libpeas,
   mate-desktop,
   wrapGAppsHook3,
-  mateUpdateScript,
+  yelp-tools,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pluma";
-  version = "1.28.0";
+  version = "1.28.1";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "qorflYk0UJOlDjCyft5KeKJCHRcnwn9GX8h8Q1llodQ=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "pluma";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-+3zY3A7JRc7utYMNiQBnsy0lZr1PuDSOtdP+iigNRDQ=";
   };
 
-  patches = [
-    # Switch to girepository-2.0
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/pluma/raw/55b770fa4d899bd92aa5ce94f3be7e2e3523a096/f/libpeas1_pygobject352.patch";
-      hash = "sha256-uNGz6LEnJU4HxU1yzcm2mmrGM6QyuRSwc3w7XDYCNaQ=";
-    })
-  ];
-
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     gettext
     isocodes
     itstool
+    gtk-doc
+    mate-common # mate-common.m4 macros
     perl
     pkg-config
     python3.pkgs.wrapPython
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [
@@ -58,15 +62,17 @@ stdenv.mkDerivation rec {
 
   pythonPath = with python3.pkgs; [
     pycairo
-    six
   ];
 
   postFixup = ''
-    buildPythonPath "$pythonPath"
+    buildPythonPath "''${pythonPath[*]}"
     patchPythonScript $out/lib/pluma/plugins/snippets/Snippet.py
   '';
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Powerful text editor for the MATE desktop";
@@ -80,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})

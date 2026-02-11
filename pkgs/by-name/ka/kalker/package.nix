@@ -8,14 +8,14 @@
   libmpc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kalker";
   version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "PaddiM8";
     repo = "kalker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fFeHL+Q1Y0J3rOgbFA952rjae/OQgHTznDI0Kya1KMQ=";
   };
 
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://kalker.strct.net";
-    changelog = "https://github.com/PaddiM8/kalker/releases/tag/v${version}";
+    changelog = "https://github.com/PaddiM8/kalker/releases/tag/v${finalAttrs.version}";
     description = "Command line calculator";
     longDescription = ''
       A command line calculator that supports math-like syntax with user-defined
@@ -62,4 +62,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "kalker";
   };
-}
+})

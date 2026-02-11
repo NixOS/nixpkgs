@@ -3,8 +3,6 @@
   fetchFromGitHub,
   gitUpdater,
   lib,
-  shortenPerlShebang,
-  stdenv,
   versionCheckHook,
   ArchiveZip,
   CompressRawLzma,
@@ -27,18 +25,12 @@ buildPerlPackage rec {
     patchShebangs exiftool
   '';
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-
   propagatedBuildInputs = [
     ArchiveZip
     CompressRawLzma
     IOCompress
     IOCompressBrotli
   ];
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/exiftool
-  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -68,7 +60,6 @@ buildPerlPackage rec {
       artistic2
     ];
     maintainers = with lib.maintainers; [
-      kiloreux
       anthonyroussel
     ];
     mainProgram = "exiftool";

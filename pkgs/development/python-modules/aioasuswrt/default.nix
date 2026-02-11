@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aioasuswrt";
-  version = "1.5.1";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kennedyshead";
     repo = "aioasuswrt";
-    tag = "v${version}";
-    hash = "sha256-4bVDho1JtNoWW3ueDgfu+GfRtrxWP6XxIK5R3BXgqfQ=";
+    tag = "V${version}";
+    hash = "sha256-tsvtOe3EX/Z7g6Z0MM2npYOTEJoKV9wUbhkhcROILxE=";
   };
 
   build-system = [ setuptools ];

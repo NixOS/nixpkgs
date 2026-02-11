@@ -106,11 +106,11 @@ let
       with pkgs;
       [
         libdrm
-        xorg.libXext
-        xorg.libX11
-        xorg.libXv
-        xorg.libXrandr
-        xorg.libxcb
+        libxext
+        libx11
+        libxv
+        libxrandr
+        libxcb
         zlib
         stdenv.cc.cc
         wayland
@@ -340,6 +340,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
     maintainers = with lib.maintainers; [
       kiskae
+      edwtjo
     ];
     priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
     inherit broken;

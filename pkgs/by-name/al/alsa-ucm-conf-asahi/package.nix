@@ -35,7 +35,7 @@ let
       homepage = "https://github.com/AsahiLinux/alsa-ucm-conf-asahi";
       changelog = "https://github.com/AsahiLinux/alsa-ucm-conf-asahi/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ normalcea ];
+      maintainers = [ ];
       platforms = [ "aarch64-linux" ];
     };
   });

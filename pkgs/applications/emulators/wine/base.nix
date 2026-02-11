@@ -18,19 +18,26 @@
   pkg-config,
   nixosTests,
   supportFlags,
-  wineRelease,
+  pnameSuffix ? "",
   patches,
   moltenvk,
   buildScript ? null,
   configureFlags ? [ ],
   mainProgram ? "wine",
+  # Staging support
+  useStaging ? false,
+  autoconf,
+  hexdump,
+  perl,
+  python3,
+  gitMinimal,
 }:
-
-with import ./util.nix { inherit lib; };
 
 let
   prevName = pname;
   prevConfigFlags = configureFlags;
+
+  toBuildInputs = pkgArches: archPkgs: lib.concatLists (map archPkgs pkgArches);
 
   setupHookDarwin = makeSetupHook {
     name = "darwin-mingw-hook";
@@ -61,7 +68,15 @@ let
   badPlatforms = lib.optional (
     !supportFlags.mingwSupport || lib.any (flag: supportFlags.${flag}) darwinUnsupportedFlags
   ) "x86_64-darwin";
+
+  # Staging patches (from src.staging when useStaging is true)
+  stagingPatches = src.staging or null;
 in
+assert
+  useStaging
+  ->
+    stagingPatches != null
+    && lib.versions.majorMinor version == lib.versions.majorMinor stagingPatches.version;
 stdenv.mkDerivation (
   finalAttrs:
   lib.optionalAttrs (buildScript != null) { builder = buildScript; }
@@ -80,16 +95,21 @@ stdenv.mkDerivation (
   // {
     inherit version src;
 
-    pname =
-      prevName
-      + lib.optionalString (wineRelease != "stable" && wineRelease != "unstable") "-${wineRelease}";
+    pname = prevName + pnameSuffix;
 
     # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
     strictDeps = true;
 
     nativeBuildInputs =
       with supportFlags;
-      [
+      lib.optionals useStaging [
+        autoconf
+        hexdump
+        perl
+        python3
+        gitMinimal
+      ]
+      ++ [
         bison
         flex
         fontforge
@@ -101,9 +121,20 @@ stdenv.mkDerivation (
         mingwGccs ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin
       );
 
-    buildInputs = toBuildInputs pkgArches (
-      with supportFlags;
-      (
+    buildInputs =
+      lib.optionals useStaging (
+        toBuildInputs pkgArches (
+          pkgs:
+          [
+            pkgs.perl
+            pkgs.autoconf
+            pkgs.gitMinimal
+          ]
+          ++ lib.optional stdenv.hostPlatform.isLinux pkgs.util-linux
+        )
+      )
+      ++ toBuildInputs pkgArches (
+        with supportFlags;
         pkgs:
         [
           pkgs.freetype
@@ -127,7 +158,7 @@ stdenv.mkDerivation (
         ++ lib.optional fontconfigSupport pkgs.fontconfig
         ++ lib.optional alsaSupport pkgs.alsa-lib
         ++ lib.optional pulseaudioSupport pkgs.libpulseaudio
-        ++ lib.optional (xineramaSupport && x11Support) pkgs.xorg.libXinerama
+        ++ lib.optional (xineramaSupport && x11Support) pkgs.libxinerama
         ++ lib.optional udevSupport pkgs.udev
         ++ lib.optional vulkanSupport (
           if stdenv.hostPlatform.isDarwin then moltenvk else pkgs.vulkan-loader
@@ -163,17 +194,17 @@ stdenv.mkDerivation (
           pkgs.libdrm
         ]
         ++ lib.optionals x11Support (
-          with pkgs.xorg;
+          with pkgs;
           [
-            libX11
-            libXcomposite
-            libXcursor
-            libXext
-            libXfixes
-            libXi
-            libXrandr
-            libXrender
-            libXxf86vm
+            libx11
+            libxcomposite
+            libxcursor
+            libxext
+            libxfixes
+            libxi
+            libxrandr
+            libxrender
+            libxxf86vm
           ]
         )
         ++ lib.optionals waylandSupport (
@@ -191,10 +222,23 @@ stdenv.mkDerivation (
         ++ lib.optionals ffmpegSupport [
           pkgs.ffmpeg-headless
         ]
-      )
-    );
+      );
 
     inherit patches;
+
+    prePatch =
+      if !useStaging then
+        null
+      else
+        ''
+          patchShebangs tools
+          cp -r ${stagingPatches}/patches ${stagingPatches}/staging .
+          chmod +w patches
+          patchShebangs ./patches/gitapply.sh
+          python3 ./staging/patchinstall.py DESTDIR="$PWD" --all ${
+            lib.concatMapStringsSep " " (ps: "-W ${ps}") stagingPatches.disabledPatchsets
+          }
+        '';
 
     configureFlags =
       prevConfigFlags
@@ -207,7 +251,7 @@ stdenv.mkDerivation (
     # Wine locates a lot of libraries dynamically through dlopen().  Add
     # them to the RPATH so that the user doesn't have to set them in
     # LD_LIBRARY_PATH.
-    NIX_LDFLAGS = toString (
+    env.NIX_LDFLAGS = toString (
       map (path: "-rpath " + path) (
         map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ finalAttrs.buildInputs)
         # libpulsecommon.so is linked but not found otherwise
@@ -221,6 +265,8 @@ stdenv.mkDerivation (
         )
       )
     );
+    # Just here to avoid rebuilds for now.
+    env.NIX_CFLAGS_COMPILE = "";
 
     # Don't shrink the ELF RPATHs in order to keep the extra RPATH
     # elements specified above.
@@ -290,7 +336,9 @@ stdenv.mkDerivation (
         fromSource
         binaryNativeCode # mono, gecko
       ];
-      description = "Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
+      description =
+        "Open Source implementation of the Windows API on top of X, OpenGL, and Unix"
+        + lib.optionalString useStaging " (with staging patches)";
       inherit badPlatforms platforms;
       maintainers = with lib.maintainers; [
         avnik

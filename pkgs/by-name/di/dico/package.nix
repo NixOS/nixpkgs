@@ -15,12 +15,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dico";
   version = "2.12";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/dico/dico-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-couJxQ4JC/+Dno97MEO1xwI/hhqSEckwSLQqtFWGavc=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
       remote dictionary servers.
     '';
   };
-}
+})

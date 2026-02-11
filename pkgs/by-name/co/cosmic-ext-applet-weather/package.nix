@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "cosmic-ext-applet-weather";
-  version = "0-unstable-2025-08-23";
+  version = "0-unstable-2026-02-03";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "cosmic-ext-applet-weather";
-    rev = "f613c9dd156e84290765c34ca98ff8ede3b530fa";
-    hash = "sha256-VHCgMw4nWTKAbanEnMS/xCUzEW3NeWGmVkBqU2bJP/c=";
+    rev = "ea8a506a6ca56b6ac6c4952012880bf1d6227631";
+    hash = "sha256-DnYOOeCcf/fuNuPJ8MeolfAyGJdNWONawaF1HV8mr4k=";
   };
 
-  cargoHash = "sha256-CS4P1DHzTmkZdANw6UQsB0kjKTeaf3cAQ/2EiPHSg7g=";
+  cargoHash = "sha256-tj0skQNt0p6UMUnU6HXw6ZAjEkCuuF4vg1aoWytqCos=";
 
   nativeBuildInputs = [
     libcosmicAppHook

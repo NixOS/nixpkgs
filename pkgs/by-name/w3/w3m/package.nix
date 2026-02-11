@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  fetchpatch,
   ncurses,
   boehmgc,
   gettext,
@@ -12,7 +11,7 @@
   graphicsSupport ? !stdenv.hostPlatform.isDarwin,
   imlib2,
   x11Support ? graphicsSupport,
-  libX11,
+  libx11,
   mouseSupport ? !stdenv.hostPlatform.isDarwin,
   gpm-ncurses,
   perl,
@@ -66,11 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./RAND_egd.libressl.patch
-    (fetchpatch {
-      name = "https.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/https.patch?h=w3m-mouse&id=5b5f0fbb59f674575e87dd368fed834641c35f03";
-      sha256 = "08skvaha1hjyapsh8zw5dgfy433mw2hk7qy9yy9avn8rjqj7kjxk";
-    })
+    ./https.patch
   ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -94,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional sslSupport openssl
   ++ lib.optional mouseSupport gpm-ncurses
   ++ lib.optional graphicsSupport imlib2
-  ++ lib.optional x11Support libX11;
+  ++ lib.optional x11Support libx11;
 
   postInstall = lib.optionalString graphicsSupport ''
     ln -s $out/libexec/w3m/w3mimgdisplay $out/bin

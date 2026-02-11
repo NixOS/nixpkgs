@@ -8,11 +8,11 @@
   integers,
   patch,
   libGL,
-  libX11,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxinerama,
+  libxrandr,
 }:
 
 buildDunePackage rec {
@@ -45,11 +45,11 @@ buildDunePackage rec {
     ctypes
     integers
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
   ];
 
   meta = {

@@ -4,7 +4,7 @@
   src,
   pkg-config,
   tcl,
-  libXft,
+  libxft,
   zip,
   zlib,
   patches ? [ ],
@@ -80,7 +80,7 @@ tcl.mkTclDerivation {
   ];
 
   propagatedBuildInputs = [
-    libXft
+    libxft
   ];
 
   enableParallelBuilding = true;
@@ -88,6 +88,10 @@ tcl.mkTclDerivation {
   doCheck = false; # fails. can't find itself
 
   inherit tcl;
+
+  env = lib.optionalAttrs (lib.versionOlder tcl.version "8.6") {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
 
   passthru = rec {
     inherit (tcl) release version;

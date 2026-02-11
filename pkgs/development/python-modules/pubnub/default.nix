@@ -15,16 +15,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pubnub";
-  version = "10.5.0";
+  version = "10.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pubnub";
     repo = "python";
-    tag = version;
-    hash = "sha256-4EqP3HZuSXYB5P6xvPuwTou/2zHS0ClaAy42knbCMhc=";
+    tag = finalAttrs.version;
+    hash = "sha256-LInaKPvdRdVI71UpVZRKjRPvqGiQ4qzRC1uTTzFmHmA=";
   };
 
   pythonRelaxDeps = [ "httpx" ];
@@ -66,10 +66,10 @@ buildPythonPackage rec {
   meta = {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
-    changelog = "https://github.com/pubnub/python/releases/tag/${src.tag}";
+    changelog = "https://github.com/pubnub/python/releases/tag/${finalAttrs.src.tag}";
     # PubNub Software Development Kit License Agreement
     # https://github.com/pubnub/python/blob/master/LICENSE
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

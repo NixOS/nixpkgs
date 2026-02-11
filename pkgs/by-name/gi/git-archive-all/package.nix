@@ -5,7 +5,7 @@
   git,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-archive-all";
   version = "1.23.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Kentzo";
     repo = "git-archive-all";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fIPjggOx+CEorj1bazz8s81ZdppkTL0OlA5tRqCYZyc=";
   };
 
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "git-archive-all";
   };
-}
+})

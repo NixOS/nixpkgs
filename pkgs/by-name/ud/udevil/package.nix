@@ -10,15 +10,15 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "udevil";
   version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "IgnorantGuru";
     repo = "udevil";
-    rev = version;
-    sha256 = "0nd44r8rbxifx4x4m24z5aji1c6k1fhw8cmf5s43wd5qys0bcdad";
+    tag = finalAttrs.version;
+    hash = "sha256-TTW2gPa4ND6ILq4yxKEL07AQpSqfiEo66S72lVEmpFk=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
   patches = [
     # sys/stat.h header missing on src/device-info.h
     ./device-info-sys-stat.patch
+
+    ./fix-gcc15.patch
   ];
 
   meta = {
@@ -62,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   # native deps.
   runCommand,
   pkg-config,
@@ -14,32 +15,32 @@
   libuv,
   gnutls,
   lmdb,
+  # optionals, in principle
   jemalloc,
   systemdMinimal,
   libcap_ng,
   dns-root-data,
-  nghttp2, # optionals, in principle
+  nghttp2,
+  ngtcp2-gnutls,
   fstrm,
-  protobufc, # more optionals
+  protobufc,
   # test-only deps.
   cmocka,
   which,
   cacert,
-  extraFeatures ? false, # catch-all if defaults aren't enough
 }:
 let
-  result = if extraFeatures then wrapped-full else unwrapped;
-
   inherit (lib) optional optionals optionalString;
   lua = luajitPackages;
 
+  # TODO: we could cut the `let` short here, but it would de-indent everything.
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "knot-resolver_6";
-    version = "6.0.17";
+    version = "6.2.0";
 
     src = fetchurl {
       url = "https://secure.nic.cz/files/knot-resolver/knot-resolver-${finalAttrs.version}.tar.xz";
-      hash = "sha256-E9RJbvh66y+9OwBX4iEdRYUgUkHlCaDNQ0Hb5ejLXBw=";
+      hash = "sha256-tEYzvIQxgMC8fHfPexX+VxJDrpkrTdt0r97kz6gDcBs=";
     };
 
     outputs = [
@@ -48,18 +49,13 @@ let
       "config_py"
     ];
 
-    # Path fixups for the NixOS service.
+    patches = [
+      # Install-time paths sometimes differ from run-time paths in nixpkgs.
+      ./paths.patch
+    ];
+
     # systemd Exec* options are difficult to override in NixOS *if present*, so we drop them.
     postPatch = ''
-      patch meson.build <<EOF
-      @@ -50,2 +50,3 @@
-      -systemd_work_dir = prefix / get_option('localstatedir') / 'lib' / 'knot-resolver'
-      -systemd_cache_dir = prefix / get_option('localstatedir') / 'cache' / 'knot-resolver'
-      +systemd_work_dir  = '/var/lib/knot-resolver'
-      +systemd_cache_dir = '/var/cache/knot-resolver'
-      +run_dir = '/run/knot-resolver'
-      EOF
-
       sed -e '/^ExecStart=/d' -e '/^ExecReload=/d' \
         -i systemd/knot-resolver.service.in
     ''
@@ -78,6 +74,7 @@ let
       pkg-config
       meson
       ninja
+      protobufc
     ];
 
     # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
@@ -97,12 +94,11 @@ let
     ++ [
       jemalloc
       nghttp2
-    ]
-    ++ [
+      ngtcp2-gnutls
+      # dnstap support
       fstrm
       protobufc
-    ] # dnstap support
-    ;
+    ];
 
     mesonFlags = [
       "-Dkeyfile_default=${dns-root-data}/root.ds"
@@ -127,16 +123,25 @@ let
 
     doInstallCheck = with stdenv; hostPlatform == buildPlatform;
     nativeInstallCheckInputs = [
-      cmocka
       which
       cacert
       lua.cqueues
       lua.basexx
       lua.http
     ];
+    installCheckInputs = [
+      cmocka
+    ];
     installCheckPhase = ''
       meson test --print-errorlogs --no-suite snowflake
     '';
+
+    strictDeps = true;
+
+    passthru = {
+      inherit lua;
+      inherit (finalAttrs) finalPackage;
+    };
 
     meta = {
       description = "Caching validating DNS resolver, from .cz domain registry";
@@ -145,45 +150,12 @@ let
       platforms = lib.platforms.unix;
       maintainers = [
         lib.maintainers.vcunat # upstream developer
+        lib.maintainers.leona
+        lib.maintainers.osnyx
       ];
-      teams = [ lib.teams.flyingcircus ];
       mainProgram = "kresd";
     };
   });
 
-  wrapped-full =
-    runCommand unwrapped.name
-      {
-        nativeBuildInputs = [ makeWrapper ];
-        buildInputs = with luajitPackages; [
-          # For http module, prefill module, trust anchor bootstrap.
-          # It brings lots of deps; some are useful elsewhere (e.g. cqueues).
-          http
-          # used by policy.slice_randomize_psl()
-          psl
-        ];
-        preferLocalBuild = true;
-        allowSubstitutes = false;
-        inherit (unwrapped) meta;
-      }
-      (
-        ''
-          mkdir -p "$out"/bin
-          makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
-            --set LUA_PATH  "$LUA_PATH" \
-            --set LUA_CPATH "$LUA_CPATH"
-
-          ln -sr '${unwrapped}/bin/kres-cache-gc' "$out"/bin/
-          ln -sr '${unwrapped}/share' "$out"/
-          ln -sr '${unwrapped}/lib'   "$out"/ # useful in NixOS service
-          ln -sr "$out"/{bin,sbin}
-        ''
-        + lib.optionalString unwrapped.doInstallCheck ''
-          echo "Checking that 'http' module loads, i.e. lua search paths work:"
-          echo "modules.load('http')" > test-http.lua
-          echo -e 'quit()' | env -i "$out"/bin/kresd -a 127.0.0.1#53535 -c test-http.lua
-        ''
-      );
-
 in
-result
+unwrapped

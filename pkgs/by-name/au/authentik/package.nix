@@ -8,7 +8,7 @@
   bash,
   chromedriver,
   nodejs_24,
-  python312,
+  python3,
   makeWrapper,
 }:
 
@@ -202,11 +202,11 @@ let
     ];
   };
 
-  python = python312.override {
+  python = python3.override {
     self = python;
     packageOverrides = final: prev: {
       # https://github.com/goauthentik/authentik/pull/16324
-      django = final.django_5_2;
+      django = final.django_5;
 
       django-channels-postgres = final.buildPythonPackage {
         pname = "django-channels-postgres";
@@ -340,19 +340,19 @@ let
             --replace-fail 'web/' '${webui}/'
         '';
 
-        nativeBuildInputs = [
-          prev.hatchling
-          prev.pythonRelaxDepsHook
+        build-system = [
+          final.hatchling
         ];
 
         pythonRemoveDeps = [ "dumb-init" ];
 
         pythonRelaxDeps = true;
 
-        propagatedBuildInputs =
+        dependencies =
           with final;
           [
             argon2-cffi
+            cachetools
             channels
             cryptography
             dacite

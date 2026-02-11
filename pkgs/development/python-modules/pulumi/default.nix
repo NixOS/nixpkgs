@@ -3,7 +3,6 @@
   pkgs,
   pulumiPackages,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   protobuf,
   grpcio,
@@ -37,8 +36,6 @@ buildPythonPackage {
   ];
 
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   build-system = [ hatchling ];
 

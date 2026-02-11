@@ -17,7 +17,9 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm,
   rust,
   rustPlatform,
   turbo,
@@ -27,7 +29,6 @@
 }:
 
 let
-  pnpm = pnpm_10;
   excludeSpec = spec: [
     "--exclude"
     spec
@@ -65,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-H8YR+euwMGiGckURAWJIE9fOcu/ddJ6ENcnA1gHD9B8=";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-I55RNWP6csT08SBIFEyUp9JTC5EzQXjKIPPSxkSpg7Y=";
@@ -80,7 +81,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     moreutils
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     turbo
     wrapGAppsHook4
     yq # For `tomlq`
@@ -130,7 +132,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # https://github.com/gitbutlerapp/gitbutler/blob/56b64d778042d0e93fa362f808c35a7f095ab1d1/crates/gitbutler-tauri/inject-git-binaries.sh#L10C10-L10C26
     TRIPLE_OVERRIDE = rust.envVars.rustHostPlatformSpec;
 
-    # `pnpm`'s `fetchDeps` and `configHook` uses a specific version of pnpm, not upstream's
+    # `fetchPnpmDeps` and `pnpmConfigHook` use a specific version of pnpm, not upstream's
     COREPACK_ENABLE_STRICT = 0;
 
     # We depend on nightly features

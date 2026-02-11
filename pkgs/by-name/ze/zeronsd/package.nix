@@ -7,14 +7,14 @@
   rustfmt,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeronsd";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "zeronsd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TL0bgzQgge6j1SpZCdxv/s4pBMSg4/3U5QisjkVE6BE=";
   };
 
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.dstengele ];
   };
-}
+})

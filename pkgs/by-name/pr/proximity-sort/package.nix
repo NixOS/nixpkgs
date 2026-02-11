@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proximity-sort";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = "proximity-sort";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MRLQvspv6kjirljhAkk1KT+hPA4hdjA1b7RL9eEyglQ=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "proximity-sort";
   };
-}
+})

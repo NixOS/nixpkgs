@@ -42,7 +42,7 @@ buildPythonPackage rec {
     description = "Dissect module implementing a parser for various database formats";
     homepage = "https://github.com/fox-it/dissect.database";
     changelog = "https://github.com/fox-it/dissect.database/releases/tag/${src.tag}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

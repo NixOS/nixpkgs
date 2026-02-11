@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpp-redis";
   version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "cpp-redis";
     repo = "cpp_redis";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dLAnxgldylWWKO3WIyx+F7ylOpRH+0nD7NZjWSOxuwQ=";
     fetchSubmodules = true;
   };
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C++11 Lightweight Redis client: async, thread-safe, no dependency, pipelining, multi-platform";
     homepage = "https://github.com/cpp-redis/cpp_redis";
-    changelog = "https://github.com/cpp-redis/cpp_redis/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/cpp-redis/cpp_redis/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ poelzi ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -6,9 +6,10 @@
   esbuild,
   nix-update-script,
   versionCheckHook,
-  rescript-editor-analysis,
+  vscode-extensions,
 }:
 let
+  inherit (vscode-extensions.chenglou92.rescript-vscode) rescript-editor-analysis;
   platformDir =
     if stdenv.hostPlatform.isLinux then
       "linux"
@@ -54,13 +55,12 @@ buildNpmPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "([0-9]+\.[0-9]+\.[0-9]+)"
+      "([0-9]+\\.[0-9]+\\.[0-9]+)"
     ];
   };
 

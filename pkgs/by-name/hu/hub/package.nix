@@ -11,7 +11,7 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hub";
   version = "unstable-2022-12-01";
 
@@ -39,7 +39,7 @@ buildGoModule rec {
 
   postPatch = ''
     patchShebangs script/
-    sed -i 's/^var Version = "[^"]\+"$/var Version = "${version}"/' version/version.go
+    sed -i 's/^var Version = "[^"]\+"$/var Version = "${finalAttrs.version}"/' version/version.go
   '';
 
   vendorHash = "sha256-wQH8V9jRgh45JGs4IfYS1GtmCIYdo93JG1UjJ0BGxXk=";
@@ -79,4 +79,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

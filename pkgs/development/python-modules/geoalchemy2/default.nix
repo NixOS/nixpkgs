@@ -10,15 +10,12 @@
   alembic,
   pytest-benchmark,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
   version = "0.18.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "geoalchemy";

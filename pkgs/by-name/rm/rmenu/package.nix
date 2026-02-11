@@ -14,12 +14,12 @@
   xdotool,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rmenu";
   version = "1.3.0";
 
   src = fetchFromGitHub {
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     owner = "imgurbot12";
     repo = "rmenu";
     hash = "sha256-cmuB7JfHQuDFo8YaenTDwpe+TxKFaoJM5YwrT7eAfPM=";
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/imgurbot12/rmenu/releases/tag/v${version}";
+    changelog = "https://github.com/imgurbot12/rmenu/releases/tag/v${finalAttrs.version}";
     description = "Another customizable Application-Launcher written in Rust";
     homepage = "https://github.com/imgurbot12/rmenu";
     license = lib.licenses.mit;
@@ -93,4 +93,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ grimmauld ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -21,14 +21,14 @@
 
 buildPythonPackage {
   pname = "notobuilder";
-  version = "0-unstable-2025-09-29";
+  version = "0-unstable-2026-01-30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notobuilder";
-    rev = "39cc80d40b046765a46f77771430622d6e11d179";
-    hash = "sha256-/miHt4AOjaU1iflsjP5Z3TwBygXcfSllUQAxtiTS5pM=";
+    rev = "0fa2bd755e02d57630d1f5ff7cda965454e68022";
+    hash = "sha256-ZqB/jv3KwRIiZST2Ghe3DLxnfeRDpx83LooCAdYwh5E=";
   };
 
   postPatch = ''
@@ -52,7 +52,6 @@ buildPythonPackage {
     ufo2ft
     gftools
     fontbakery
-    diffenator2
     chevron
     sh
   ]

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "credential-detector";
   version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "ynori7";
     repo = "credential-detector";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-20ySTLpjTc1X0iJsbzbeLmWF0xYzzREGOqEWrB2X1GQ=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

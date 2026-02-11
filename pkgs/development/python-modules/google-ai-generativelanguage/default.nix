@@ -3,9 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   google-api-core,
+  google-auth,
   google-cloud-testutils,
   grpcio,
-  grpcio-status,
   mock,
   proto-plus,
   protobuf,
@@ -29,11 +29,12 @@ buildPythonPackage rec {
 
   dependencies = [
     google-api-core
+    google-auth
     grpcio
-    grpcio-status
     proto-plus
     protobuf
-  ];
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     google-cloud-testutils

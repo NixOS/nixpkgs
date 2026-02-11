@@ -6,14 +6,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bzmenu";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "e-tho";
     repo = "bzmenu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5Xb/7DhwZ3hLO1rAceMaR3ifgI36Sn+W+S7PN8EOdOQ=";
   };
 
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ vuimuich ];
   };
-}
+})

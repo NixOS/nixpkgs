@@ -26,14 +26,14 @@
   gifski,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "peek";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "phw";
     repo = "peek";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1xwlfizga6hvjqq127py8vabaphsny928ar7mwqj9cyqfl6fx41x";
   };
 
@@ -97,4 +97,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "peek";
   };
-}
+})

@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hynek/stamina";
     changelog = "https://github.com/hynek/stamina/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

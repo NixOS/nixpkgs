@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "multirun";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "nicolas-van";
     repo = "multirun";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-I95nxZD65tHiok4MzsGG7gyaxPHbqQLuRWdHUPNhLu8=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     mainProgram = "multirun";
     platforms = lib.platforms.all;
   };
-}
+})

@@ -6,19 +6,27 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "tclint";
-  version = "0.6.2";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nmoroze";
     repo = "tclint";
-    tag = "v${version}";
-    hash = "sha256-z0ytMK3xxqXZJTMuY2wiBFo8LXAUZZBb13kr/kXtyjI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GkWQlOmPh/IpkdcNKkaHJoVDD2r5wCSFeMZA96dxiXM=";
   };
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     setuptools
     setuptools-scm
   ];
@@ -27,12 +35,12 @@ python3Packages.buildPythonApplication rec {
     "importlib-metadata"
     "pathspec"
   ];
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     importlib-metadata
     pathspec
     ply
-    pygls_1
-    lsprotocol_2023
+    pygls
+    lsprotocol
     tomli
     voluptuous
   ];
@@ -41,7 +49,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     addBinToPathHook
-    python3Packages.pytestCheckHook
+    pythonPackages.pytestCheckHook
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
@@ -56,9 +64,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Modern dev tools for Tcl. Includes a linter, formatter, and editor integration";
     homepage = "https://github.com/nmoroze/tclint";
-    changelog = "https://github.com/nmoroze/tclint/releases/tag/${src.tag}";
+    changelog = "https://github.com/nmoroze/tclint/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "tclint";
   };
-}
+})

@@ -10,14 +10,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.6.5";
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zCaM3fMittoEzuMRELqc1ES8QPgZRXVjyHUfMsS5tJA=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "whois";
   };
-}
+})

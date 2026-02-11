@@ -1,7 +1,7 @@
-From 2db52008be2e2d504889f4f19318c2ba5a2a4797 Mon Sep 17 00:00:00 2001
+From 99dcf18f8c66c25e17e0b84c005b03000312eb8f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
 Date: Sat, 24 Apr 2021 10:20:16 +0200
-Subject: [PATCH 2/3] Remove impure dirs
+Subject: [PATCH 2/5] Remove impure dirs
 
 Purity: don't look for library dependencies (of the form `-lfoo') in
 /lib and /usr/lib. It's a stupid feature anyway. Likewise, when
@@ -40,5 +40,5 @@ index fe67ab28..1b76560c 100644
  #if defined(WINDOWS32) && !defined(LIBDIR)
  /*
 -- 
-2.44.1
+2.51.2
 

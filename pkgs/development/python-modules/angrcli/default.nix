@@ -7,7 +7,6 @@
   fetchFromGitHub,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   stdenv,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "angrcli";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "fmagin";

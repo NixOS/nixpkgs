@@ -8,7 +8,6 @@
   perl,
   perlPackages,
   stdenv,
-  shortenPerlShebang,
   installShellFiles,
 }:
 
@@ -34,8 +33,7 @@ perlPackages.buildPerlPackage rec {
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+  ];
 
   buildInputs = [
     gnuplot
@@ -57,18 +55,14 @@ perlPackages.buildPerlPackage rec {
   # Tests require gnuplot 4.6.4 and are completely skipped with gnuplot 5.
   doCheck = false;
 
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/feedgnuplot
-    ''
-    + ''
-      wrapProgram $out/bin/feedgnuplot \
-          --prefix "PATH" ":" "$PATH" \
-          --prefix "PERL5LIB" ":" "$PERL5LIB"
+  postInstall = ''
+    wrapProgram $out/bin/feedgnuplot \
+        --prefix "PATH" ":" "$PATH" \
+        --prefix "PERL5LIB" ":" "$PERL5LIB"
 
-      installShellCompletion --bash --name feedgnuplot.bash completions/bash/feedgnuplot
-      installShellCompletion --zsh completions/zsh/_feedgnuplot
-    '';
+    installShellCompletion --bash --name feedgnuplot.bash completions/bash/feedgnuplot
+    installShellCompletion --zsh completions/zsh/_feedgnuplot
+  '';
 
   meta = {
     description = "General purpose pipe-oriented plotting tool";

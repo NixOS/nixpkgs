@@ -15,14 +15,14 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.1.1";
   pname = "t4kcommon";
 
   src = fetchFromGitHub {
     owner = "tux4kids";
     repo = "t4kcommon";
-    rev = "upstream/${version}";
+    rev = "upstream/${finalAttrs.version}";
     sha256 = "13q02xpmps9qg8zrzzy2gzv4a6afgi28lxk4z242j780v0gphchp";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

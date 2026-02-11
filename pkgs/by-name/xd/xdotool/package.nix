@@ -3,24 +3,24 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
+  libx11,
   perl,
-  libXtst,
+  libxtst,
   xorgproto,
-  libXi,
-  libXinerama,
+  libxi,
+  libxinerama,
   libxkbcommon,
-  libXext,
+  libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdotool";
   version = "3.20211022.1";
 
   src = fetchFromGitHub {
     owner = "jordansissel";
     repo = "xdotool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-XFiaiHHtUSNFw+xhUR29+2RUHOa+Eyj1HHfjCUjwd9k=";
   };
 
@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     perl
   ];
   buildInputs = [
-    libX11
-    libXtst
+    libx11
+    libxtst
     xorgproto
-    libXi
-    libXinerama
+    libxi
+    libxinerama
     libxkbcommon
-    libXext
+    libxext
   ];
 
   preBuild = ''
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "xdotool";
   };
-}
+})

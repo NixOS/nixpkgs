@@ -8,14 +8,14 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oo7";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "bilelmoussaoui";
     repo = "oo7";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-FIHXjbxAqEH3ekTNL0/TBFZoeDYZ84W2+UeJDxcauk8=";
   };
 
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "James Bond went on a new mission as a Secret Service provider";
     homepage = "https://github.com/bilelmoussaoui/oo7";
-    changelog = "https://github.com/bilelmoussaoui/oo7/releases/tag/${src.rev}";
+    changelog = "https://github.com/bilelmoussaoui/oo7/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       getchoo
@@ -45,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "oo7-cli";
   };
-}
+})

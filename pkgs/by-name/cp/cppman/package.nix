@@ -7,7 +7,7 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cppman";
   version = "0.5.9";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aitjcize";
     repo = "cppman";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iPJR4XAjNrBhFHZVOATPi3WwTC1/Y6HK3qmKLqbaK98=";
   };
 
@@ -55,16 +55,15 @@ python3Packages.buildPythonApplication rec {
   ];
   # Writable $HOME is required for `cppman --version` to work
   versionCheckKeepEnvironment = "HOME";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal viewer for C++ 98/11/14 manual pages";
     homepage = "https://github.com/aitjcize/cppman";
-    changelog = "https://github.com/aitjcize/cppman/blob/${src.tag}/ChangeLog";
+    changelog = "https://github.com/aitjcize/cppman/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ryan4yin ];
     mainProgram = "cppman";
   };
-}
+})

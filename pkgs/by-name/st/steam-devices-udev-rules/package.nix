@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "steam-devices-udev-rules";
-  version = "1.0.0.61-unstable-2025-10-18";
+  version = "1.0.0.61-unstable-2026-01-23";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "steam-devices";
-    rev = "4d7e6c1d8c54ec10fdb29daca679307ac5194825";
-    hash = "sha256-KzDzZ03g1xil4G6yw67KGEHnWIWg6VZIkMy8n/kSgMs=";
+    rev = "e0ab31454b1c55468af14d08740b51f11581a324";
+    hash = "sha256-tuQu6s16bupaHw/u64VJxLC4qMdMBvgx7Df8LaPa0Sg=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,9 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/ValveSoftware/steam-devices";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ azuwis ];
+    maintainers = with lib.maintainers; [
+      azuwis
+      yuannan
+    ];
   };
 }

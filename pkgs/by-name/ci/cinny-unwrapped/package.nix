@@ -6,6 +6,7 @@
   python3,
   pkg-config,
   pixman,
+  nodejs_22,
   cairo,
   pango,
   stdenv,
@@ -21,6 +22,8 @@ buildNpmPackage rec {
     tag = "v${version}";
     hash = "sha256-RPFEquxMRnNW+L6azcDmrIKXG27DAF2PxDmSB3ErOHk=";
   };
+
+  nodejs = nodejs_22;
 
   npmDepsHash = "sha256-h4Ipmmo0Jf6/rzCAKtLLCYrUi1anVKZSgy/kcEKDQJg=";
 

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   parver,
   pulumi,
-  pythonOlder,
   semver,
   setuptools,
 }:
@@ -12,19 +11,25 @@
 buildPythonPackage rec {
   pname = "pulumi-aws";
   # Version is independent of pulumi's.
-  version = "7.7.0";
+  version = "7.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-aws";
     tag = "v${version}";
-    hash = "sha256-GLtl9799lQv+Wus/rvUOd/FkRaja7tJddD8ffIhCCdo=";
+    hash = "sha256-aCTXhaWQgYcDyUMc6ulo/PtEGU/6Mb5MlIjtJI/V1Mw=";
   };
 
   sourceRoot = "${src.name}/sdk/python";
+
+  postPatch = ''
+    # We need the version of pulumi-aws in its package metadata to be accurate
+    # as this seems to be used to determine which version of the
+    # pulumi-resource-aws plugin to be dynamically downloaded by the pulumi CLI
+    substituteInPlace pyproject.toml \
+      --replace-fail "7.0.0a0+dev" "${version}"
+  '';
 
   build-system = [ setuptools ];
 

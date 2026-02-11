@@ -8,11 +8,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "tutanota-desktop";
-  version = "315.251204.0";
+  version = "325.260127.0";
 
   src = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-linux.AppImage";
-    hash = "sha256-abXveYT07uLrM5jJb9gd/u+CzhFnFQj2Zcg+AMp+UC4=";
+    hash = "sha256-WZYJ5C8xVoD+XMbjcKcIQw3C8YObinK6wBWBMd6bssU=";
   };
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
@@ -26,6 +26,7 @@ appimageTools.wrapType2 rec {
     ''
       install -Dm 444 ${appimageContents}/tutanota-desktop.desktop -t $out/share/applications
       install -Dm 444 ${appimageContents}/tutanota-desktop.png -t $out/share/pixmaps
+      cp -r ${appimageContents}/usr/share/icons/. $out/share/icons
 
       substituteInPlace $out/share/applications/tutanota-desktop.desktop \
         --replace 'Exec=AppRun' 'Exec=${pname}'

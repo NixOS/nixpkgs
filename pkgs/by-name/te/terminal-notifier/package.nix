@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/julienXX/terminal-notifier";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
+    mainProgram = "terminal-notifier";
   };
 }

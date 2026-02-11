@@ -3,8 +3,9 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  autoconf,
   sane-backends,
-  libX11,
+  libx11,
   gtk2,
   pkg-config,
   libusb-compat-0_1 ? null,
@@ -63,13 +64,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     sane-backends
-    libX11
+    libx11
     gtk2
   ]
   ++ lib.optional (libusb-compat-0_1 != null) libusb-compat-0_1;
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+  ];
 
   enableParallelBuilding = true;
+
+  # https://bugzilla.redhat.com/show_bug.cgi?id=2341321
+  preConfigure = ''
+    autoconf
+  '';
 
   meta = {
     description = "Scanner Access Now Easy";

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   pytestCheckHook,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   version = "2.2.1";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

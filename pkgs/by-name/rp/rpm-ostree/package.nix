@@ -40,7 +40,7 @@
   cppunit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpm-ostree";
   version = "2024.8";
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://github.com/coreos/rpm-ostree/releases/download/v${version}/rpm-ostree-${version}.tar.xz";
+    url = "https://github.com/coreos/rpm-ostree/releases/download/v${finalAttrs.version}/rpm-ostree-${finalAttrs.version}.tar.xz";
     hash = "sha256-6aCGP3SJ0DegmhiQkiqBr733C5vuDGTjLMaxNtai3G0=";
   };
 
@@ -129,4 +129,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "rpm-ostree";
   };
-}
+})

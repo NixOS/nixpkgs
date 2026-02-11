@@ -17,7 +17,7 @@
   uhd,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "urh";
   version = "2.9.8-unstable-2025-07-31";
   pyproject = true;
@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
         "Network"
         "HamRadio"
       ];
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
     })
   ];
 
@@ -95,4 +95,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

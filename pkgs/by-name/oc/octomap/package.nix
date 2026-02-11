@@ -5,18 +5,18 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "octomap";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "OctoMap";
     repo = "octomap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QxQHxxFciR6cvB/b8i0mr1hqGxOXhXmB4zgdsD977Mw=";
   };
 
-  sourceRoot = "${src.name}/octomap";
+  sourceRoot = "${finalAttrs.src.name}/octomap";
 
   nativeBuildInputs = [ cmake ];
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lopsided98 ];
     platforms = lib.platforms.unix;
   };
-}
+})

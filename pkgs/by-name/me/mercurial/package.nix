@@ -47,7 +47,7 @@ let
       hash = "sha256-6NkgyDw4xHXY6XO+YHYKSdw1w3ldZL1oduVq26Yi5cs=";
     };
 
-    format = "other";
+    pyproject = false;
 
     passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
@@ -62,6 +62,10 @@ let
       else
         null;
     cargoRoot = if rustSupport then "rust" else null;
+
+    # enable building with Python 3.14
+    # FIXME remove once PyO3 is updated in Cargo.lock
+    env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = 1;
 
     propagatedBuildInputs =
       lib.optional re2Support google-re2

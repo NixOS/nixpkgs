@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aeacus";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "elysium-suite";
     repo = "aeacus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LMsfogcz3CoShQDqyshMshb+iz2r0k5I7NDLXevMakI=";
   };
 
@@ -28,10 +28,10 @@ buildGoModule rec {
   meta = {
     description = "Vulnerability remediation scoring system";
     homepage = "https://github.com/elysium-suite/aeacus";
-    changelog = "https://github.com/elysium-suite/aeacus/releases/tag/v${version}";
+    changelog = "https://github.com/elysium-suite/aeacus/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "aeacus";
     platforms = lib.platforms.linux;
   };
-}
+})

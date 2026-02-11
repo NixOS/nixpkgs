@@ -5,14 +5,14 @@
   perl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "XD";
   version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "majestrate";
     repo = "XD";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-bBA2CEeijXg+9ohiMWkQWAsN7OUSyUsFbliNz8gpVMM=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "colorama";
   version = "0.4.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

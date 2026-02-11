@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "16.1.0";
+  version = "17.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-9zBpq4/jAH441eeMMV2WS767Rz+1qCX/QIfbToUHnAQ=";
+    hash = "sha256-mucJ0mMDoxyIRs3aZm3vFQ0Q0hOa2bhZHCc+e8cvvOA=";
   };
 
   postPatch = ''
@@ -35,8 +35,6 @@ buildPythonPackage rec {
     touch setup/__init__.py
     substituteInPlace setup.py \
       --replace-fail "from setup_utils" "from setup.setup_utils"
-
-    echo 'version_number = "${version}"' > version.py
 
     patchShebangs internal_documentation/scripts
   '';

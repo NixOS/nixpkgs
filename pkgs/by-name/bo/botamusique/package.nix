@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share $out/bin
     cp -r . $out/share/botamusique
     chmod +x $out/share/botamusique/mumbleBot.py
-    wrapPythonProgramsIn $out/share/botamusique "$out $pythonPath"
+    wrapPythonProgramsIn $out/share/botamusique "$out ''${pythonPath[*]}"
 
     # Convenience binary and wrap with ffmpeg dependency
     makeWrapper $out/share/botamusique/mumbleBot.py $out/bin/botamusique \

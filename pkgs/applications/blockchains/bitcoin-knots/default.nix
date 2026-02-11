@@ -164,9 +164,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_GUI" true)
   ];
 
-  NIX_LDFLAGS = lib.optionals (
-    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
-  ) "-levent_core";
+  env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) {
+    NIX_LDFLAGS = "-levent_core";
+  };
 
   nativeCheckInputs = [ python3 ];
 
@@ -187,7 +187,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/bitcoin-cli";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

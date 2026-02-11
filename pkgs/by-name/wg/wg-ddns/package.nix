@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wg-ddns";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "fernvenue";
     repo = "wg-ddns";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BV57jidn6bPWU/IhhQvIeMF4xHtTm2WZKm4MQRSMM5Y=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "wg-ddns";
   };
-}
+})

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "alabaster";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-aQEhFZUJs0TptfpjQVoIVI9V9a+xKjE2OfStSaJKHGI=";
   };
 
@@ -29,6 +29,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/sphinx-doc/alabaster";
     description = "Light, configurable Sphinx theme";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.sphinx ];
   };
 }

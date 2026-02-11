@@ -9,7 +9,7 @@
   libzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ideviceinstaller";
   version = "1.1.1+date=2023-04-30";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   meta = {
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "ideviceinstaller";
   };
-}
+})

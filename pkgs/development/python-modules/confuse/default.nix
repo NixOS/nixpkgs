@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
-  flit-core,
+  poetry-core,
 
   # dependencies
   pyyaml,
@@ -16,20 +15,18 @@
 
 buildPythonPackage rec {
   pname = "confuse";
-  version = "2.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "confuse";
     rev = "v${version}";
-    hash = "sha256-TVx0cBXv/fIuli/xrFXBAmwJ1rQr5xJL1Q67FaDr4ow=";
+    hash = "sha256-RKiHYAFEvksRLsXC1VrlrKzkPl72dDI4O0Y+X3MrpSs=";
   };
 
   build-system = [
-    flit-core
+    poetry-core
   ];
 
   dependencies = [

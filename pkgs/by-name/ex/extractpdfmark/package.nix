@@ -9,14 +9,14 @@
   texlive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "extractpdfmark";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "trueroad";
     repo = "extractpdfmark";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pNc/SWAtQWMbB2+lIQkJdBYSZ97iJXK71mS59qQa7Hs=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "extractpdfmark";
   };
-}
+})

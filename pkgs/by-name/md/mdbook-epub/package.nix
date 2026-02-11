@@ -6,14 +6,14 @@
   bzip2,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-epub";
   version = "0.4.37";
 
   src = fetchFromGitHub {
     owner = "michael-f-bryan";
     repo = "mdbook-epub";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ddWClkeGabvqteVUtuwy4pWZGnarrKrIbuPEe62m6es=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

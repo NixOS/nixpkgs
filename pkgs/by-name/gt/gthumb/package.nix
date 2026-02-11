@@ -18,7 +18,7 @@
   libjxl,
   librsvg,
   libwebp,
-  libX11,
+  libx11,
   lcms2,
   bison,
   brasero,
@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
-  version = "3.12.8.2";
+  version = "3.12.9";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-q8V7EQMWXdaRU1eW99vbp2hiF8fQael07Q89gA/oh5Y=";
+    sha256 = "sha256-13+ItWneSSV4BzDnhnspB3GNpmBowkLd6bvaEH4YP/o=";
   };
 
   strictDeps = true;
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     libtiff
     libwebp
-    libX11
+    libx11
   ];
 
   postPatch = ''

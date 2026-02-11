@@ -10,7 +10,14 @@
   pkg-config,
   libdrm,
   elfutils,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   glib,
   nss,
   nspr,
@@ -20,7 +27,6 @@
   gtk3,
   pango,
   cairo,
-  mesa,
   expat,
   libxkbcommon,
   eudev,
@@ -56,7 +62,7 @@
   libffi,
   stdenv,
 }:
-intel-oneapi.mkIntelOneApi (fa: {
+intel-oneapi.mkIntelOneApi (finalAttrs: {
   pname = "intel-oneapi-base-toolkit";
 
   src = fetchurl {
@@ -86,18 +92,17 @@ intel-oneapi.mkIntelOneApi (fa: {
       fontconfig
       glib
       freetype
-      xorg.libX11
-      xorg.libXxf86vm
-      xorg.libXext
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxxf86vm
+      libxext
+      libxcb
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxrandr
       nss
       dbus
       cups
-      mesa
       expat
       libxkbcommon
       eudev
@@ -134,13 +139,13 @@ intel-oneapi.mkIntelOneApi (fa: {
       libdrm
       elfutils
       zlib
-      xorg.libX11
-      xorg.libXext
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxext
+      libxcb
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxrandr
       glib
       nss
       dbus
@@ -149,7 +154,6 @@ intel-oneapi.mkIntelOneApi (fa: {
       gtk3
       pango
       cairo
-      mesa
       expat
       libxkbcommon
       eudev
@@ -176,7 +180,7 @@ intel-oneapi.mkIntelOneApi (fa: {
   ];
 
   passthru.updateScript = intel-oneapi.mkUpdateScript {
-    inherit (fa) pname;
+    inherit (finalAttrs) pname;
     file = "base.nix";
     downloadPage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&oneapi-toolkit-os=linux&oneapi-lin=offline";
   };

@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   z3-solver,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "deal-solver";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "life4";

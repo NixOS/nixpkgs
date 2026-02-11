@@ -5,12 +5,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mtools";
   version = "4.0.49";
 
   src = fetchurl {
-    url = "mirror://gnu/mtools/${pname}-${version}.tar.bz2";
+    url = "mirror://gnu/mtools/mtools-${finalAttrs.version}.tar.bz2";
     hash = "sha256-b+UZNYPW58Wdp15j1yNPdsCwfK8zsQOJT0b2aocf/J8=";
   };
 
@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
 
   # fails to find X on darwin
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--without-x";
+
+  outputs = [
+    "out"
+    "info"
+    "man"
+  ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
@@ -35,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
   };
-}
+})

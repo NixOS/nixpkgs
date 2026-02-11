@@ -8,14 +8,14 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "airspy";
   version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "airspy";
     repo = "airspyone_host";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1v7sfkkxc6f8ny1p9xrax1agkl6q583mjx8k0lrrwdz31rf9qgw9";
   };
 
@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/airspy/airspyone_host/commit/f467acd587617640741ecbfade819d10ecd032c2.patch";
       hash = "sha256-qfJrxM1hq7NScxN++d9IH+fwFfXf/YwZZUDDOVbwIJk=";
+    })
+
+    (fetchpatch {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/9abb6b5fd1a02a7310226d03337f288be71f1d43/community/airspyone-host/gcc-15.patch";
+      hash = "sha256-TFtDLT94kXZswnm8K9+U1YV+T+0fbj6oB6rbRdEpSOQ=";
     })
   ];
 
@@ -59,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

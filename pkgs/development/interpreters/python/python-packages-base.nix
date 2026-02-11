@@ -23,7 +23,11 @@ let
       origArgs:
       let
         result = f origArgs;
-        overrideWith = newArgs: origArgs // lib.toFunction newArgs origArgs;
+        overrideWith =
+          if lib.isFunction origArgs then
+            newArgs: lib.extends (_: lib.toFunction newArgs) origArgs
+          else
+            newArgs: origArgs // lib.toFunction newArgs origArgs;
       in
       if lib.isAttrs result then
         result
@@ -38,25 +42,45 @@ let
     // {
       # Support overriding `f` itself, e.g. `buildPythonPackage.override { }`.
       # Ensure `makeOverridablePythonPackage` is applied to the result.
-      override = lib.mirrorFunctionArgs f.override (fdrv: makeOverridablePythonPackage (f.override fdrv));
+      override = lib.mirrorFunctionArgs f.override (
+        newArgs: makeOverridablePythonPackage (f.override newArgs)
+      );
     };
 
   overrideStdenvCompat =
     f:
-    lib.setFunctionArgs (
-      args:
-      if !(lib.isFunction args) && (args ? stdenv) then
-        lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
-          Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
-            buildPythonPackage.override { stdenv = customStdenv; } { }
-        '' (f.override { stdenv = args.stdenv; } args)
-      else
-        f args
-    ) (removeAttrs (lib.functionArgs f) [ "stdenv" ])
-    // {
-      # Intentionally drop the effect of overrideStdenvCompat when calling `buildPython*.override`.
-      inherit (f) override;
-    };
+    lib.fix (
+      f':
+      lib.mirrorFunctionArgs f (
+        args:
+        let
+          result = f args;
+          getName = x: x.pname or (lib.getName (x.name or "<unnamed>"));
+          applyMsgStdenvArg =
+            name:
+            lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
+              ${name}: Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
+                buildPythonPackage.override { stdenv = customStdenv; } { }
+            '';
+        in
+        if lib.isFunction args && result ? __stdenvPythonCompat then
+          # Less reliable, as constructing with the wrong `stdenv` might lead to evaluation errors in the package definition.
+          f'.override { stdenv = applyMsgStdenvArg (getName result) result.__stdenvPythonCompat; } (
+            finalAttrs: removeAttrs (args finalAttrs) [ "stdenv" ]
+          )
+        else if (!lib.isFunction args) && (args ? stdenv) then
+          # More reliable, but only works when args is not `(finalAttrs: { })`
+          f'.override { stdenv = applyMsgStdenvArg (getName args) args.stdenv; } (
+            removeAttrs args [ "stdenv" ]
+          )
+        else
+          result
+      )
+      // {
+        # Preserve the effect of overrideStdenvCompat when calling `buildPython*.override`.
+        override = lib.mirrorFunctionArgs f.override (newArgs: overrideStdenvCompat (f.override newArgs));
+      }
+    );
 
   mkPythonDerivation =
     if python.isPy3k then ./mk-python-derivation.nix else ./python2/mk-python-derivation.nix;

@@ -8,15 +8,12 @@
   pytestCheckHook,
   setuptools-scm,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-functools";
   version = "4.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jaraco_functools";

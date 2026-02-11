@@ -167,14 +167,15 @@ in
           spectacle
           ffmpegthumbs
           krdp
+          kconfig # required for xdg-terminal from xdg-utils
         ]
         ++ lib.optionals config.hardware.sensor.iio.enable [
           # This is required for autorotation in Plasma 6
           qtsensors
         ]
-        ++ lib.optionals config.services.flatpak.enable [
+        ++ lib.optionals (config.services.flatpak.enable || config.services.fwupd.enable) [
           # Since PackageKit Nix support is not there yet,
-          # only install discover if flatpak is enabled.
+          # only install discover if flatpak or fwupd is enabled.
           discover
         ];
       in

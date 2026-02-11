@@ -14,9 +14,9 @@
   systemd,
   libusb-compat-0_1,
   libftdi1,
-  libICE,
-  libSM,
-  libX11,
+  libice,
+  libsm,
+  libx11,
 }:
 
 let
@@ -27,12 +27,12 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lirc";
   version = "0.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lirc/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/lirc/lirc-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-PUTsgnSIHPJi8WCAVkHwgn/8wgreDYXn5vO5Dg09Iio=";
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
     # cant import '/build/lirc-0.10.1/python-pkg/lirc/_client.so' while cross-compiling to check the version
     substituteInPlace python-pkg/setup.py \
-      --replace "VERSION='0.0.0'" "VERSION='${version}'"
+      --replace "VERSION='0.0.0'" "VERSION='${finalAttrs.version}'"
   '';
 
   preConfigure = ''
@@ -90,9 +90,9 @@ stdenv.mkDerivation rec {
     systemd
     libusb-compat-0_1
     libftdi1
-    libICE
-    libSM
-    libX11
+    libice
+    libsm
+    libx11
   ];
 
   DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";
@@ -122,4 +122,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

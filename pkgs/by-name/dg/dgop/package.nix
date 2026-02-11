@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dgop";
-  version = "0.1.11";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "AvengeMedia";
     repo = "dgop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QhzRn7pYN35IFpKjjxJAj3GPJECuC+VLhoGem3ezycc=";
+    hash = "sha256-CxTvTx7WYKj9usa1uZDUmCqS9+W0QoIeTGDlkhHLVho=";
   };
 
-  vendorHash = "sha256-kO8b/eV5Vm/Fwzyzb0p8N9SkNlhkJLmEiPYmR2m5+po=";
+  vendorHash = "sha256-4GslUKwUCO8oOqylsclJmAZL/ds0plenzcTAwAXKtrc=";
 
   ldflags = [
     "-w"
@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/AvengeMedia/dgop";
     changelog = "https://github.com/AvengeMedia/dgop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ luckshiba ];
+    teams = [ lib.teams.danklinux ];
     mainProgram = "dgop";
     platforms = lib.platforms.unix;
   };

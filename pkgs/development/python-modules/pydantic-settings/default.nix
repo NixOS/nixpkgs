@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
   pydantic,
   python-dotenv,
@@ -16,8 +15,6 @@ let
     pname = "pydantic-settings";
     version = "2.10.1";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "pydantic";

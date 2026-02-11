@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "python-xapp";
-  version = "3.0.0";
+  version = "3.0.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
     rev = version;
-    hash = "sha256-OvYbMu/2cQLTHHbHh4zESf1X22AfZe8ZEfzeOBDcU90=";
+    hash = "sha256-+wN4BYAS7KYQT0vhyOSdyrJpOhGyv+2FAloClgZOyH0=";
   };
 
   nativeBuildInputs = [

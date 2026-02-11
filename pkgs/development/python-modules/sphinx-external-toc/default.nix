@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   flit-core,
   click,
@@ -13,9 +12,7 @@ buildPythonPackage rec {
   pname = "sphinx-external-toc";
   version = "1.0.1";
 
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

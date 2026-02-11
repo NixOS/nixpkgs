@@ -7,7 +7,12 @@
 }:
 
 lib.appendToName "with-fonts" (symlinkJoin {
-  inherit (lilypond) meta name version;
+  inherit (lilypond)
+    pname
+    outputs
+    version
+    meta
+    ;
 
   paths = [ lilypond ] ++ openlilylib-fonts.all;
 
@@ -15,7 +20,9 @@ lib.appendToName "with-fonts" (symlinkJoin {
 
   postBuild = ''
     for p in $out/bin/*; do
-        wrapProgram "$p" --set LILYPOND_DATADIR "$out/share/lilypond/${lilypond.version}"
+      wrapProgram "$p" --set LILYPOND_DATADIR "$out/share/lilypond/${lilypond.version}"
     done
+
+    ln -s ${lilypond.man} $man
   '';
 })

@@ -9,20 +9,20 @@
   shellcheck,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "actionlint";
-  version = "1.7.9";
+  version = "1.7.10";
 
   subPackages = [ "cmd/actionlint" ];
 
   src = fetchFromGitHub {
     owner = "rhysd";
     repo = "actionlint";
-    tag = "v${version}";
-    hash = "sha256-QZVZ4pF69rtdXmFIMXooTpAjzPM4TTzUKVVMWYqmUvQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KnvFzV1VDivt7JL1lavM9wgaxdsdnEiLAk/pmzkXi+c=";
   };
 
-  vendorHash = "sha256-oejeEImMgNXnbDIFg7MslcisVJj4Pl150ZMJ0YqGdLM=";
+  vendorHash = "sha256-McXlYsJvANyPAXAaXM8/NCFxbDs9IgSgFvt68h8mGek=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -45,15 +45,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/rhysd/actionlint.version=${version}"
+    "-X github.com/rhysd/actionlint.version=${finalAttrs.version}"
   ];
 
   meta = {
     homepage = "https://rhysd.github.io/actionlint/";
     description = "Static checker for GitHub Actions workflow files";
-    changelog = "https://github.com/rhysd/actionlint/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rhysd/actionlint/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ momeemt ];
     mainProgram = "actionlint";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hcl2json";
   version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "tmccombs";
     repo = "hcl2json";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-jE106vWj1uVPmN9iofg/sWZCpSYDyh2/SHwPg5xHatE=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "hcl2json";
   };
-}
+})

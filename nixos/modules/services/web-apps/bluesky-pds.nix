@@ -17,6 +17,7 @@ let
     concatMapStringsSep
     types
     literalExpression
+    optional
     ;
 
   pdsadminWrapper =
@@ -32,7 +33,7 @@ let
           ${getExe pkgs.bluesky-pdsadmin} "$@"
     '';
 in
-# All defaults are from https://github.com/bluesky-social/pds/blob/8b9fc24cec5f30066b0d0b86d2b0ba3d66c2b532/installer.sh
+# All defaults are from https://github.com/bluesky-social/pds/blob/9a72155fee4e7e1de0e0add5454c5571b89e05e0/installer.sh
 {
   imports = [
     (lib.mkRenamedOptionModule [ "services" "pds" "enable" ] [ "services" "bluesky-pds" "enable" ])
@@ -130,6 +131,12 @@ in
             default = "true";
             description = "Enable logging";
           };
+
+          PDS_RATE_LIMITS_ENABLED = mkOption {
+            type = types.nullOr types.str;
+            default = "true";
+            description = "Enable rate limiting";
+          };
         };
       };
 
@@ -164,17 +171,25 @@ in
     pdsadmin = {
       enable = mkOption {
         type = types.bool;
+        default = false;
+        defaultText = false;
+        description = "Add pdsadmin script to PATH";
+      };
+    };
+
+    goat = {
+      enable = mkOption {
+        type = types.bool;
         default = cfg.enable;
         defaultText = literalExpression "config.services.bluesky-pds.enable";
-        description = "Add pdsadmin script to PATH";
+        description = "Add goat to PATH";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    environment = mkIf cfg.pdsadmin.enable {
-      systemPackages = [ pdsadminWrapper ];
-    };
+    environment.systemPackages =
+      optional cfg.pdsadmin.enable pdsadminWrapper ++ optional cfg.goat.enable pkgs.atproto-goat;
 
     systemd.services.bluesky-pds = {
       description = "bluesky pds";

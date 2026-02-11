@@ -21,15 +21,15 @@
   unrarSupport ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dtrx";
   version = "8.7.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dtrx-py";
     repo = "dtrx";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-FNSFEGIK0vDNlvqc8BKDCB/0hoxrITfeh59JcyzX3jY=";
   };
 
@@ -71,4 +71,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ colinsane ];
     mainProgram = "dtrx";
   };
-}
+})

@@ -12,8 +12,8 @@
   fontconfig,
   glm,
   installShellFiles,
-  libXi,
-  libXinerama,
+  libxi,
+  libxinerama,
   libjpeg,
   libpcap,
   libpulseaudio,
@@ -37,14 +37,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.283";
+  version = "0.285";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-ePOmBX21XsS+FTABIswjRp8hlcbkMtkW5mJLwt4LhTA=";
+    hash = "sha256-vuGQ1VOjIAEopV4X+qP1k+bgH7lJJLZ9RtYevUxgIQg=";
   };
 
   outputs = [
@@ -93,8 +93,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libpulseaudio
-    libXinerama
-    libXi
+    libxinerama
+    libxi
     fontconfig
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

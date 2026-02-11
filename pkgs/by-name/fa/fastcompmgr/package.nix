@@ -1,7 +1,11 @@
 {
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libxrender,
+  libxfixes,
+  libxdamage,
+  libxcomposite,
+  libx11,
   pkgs,
   lib,
 }:
@@ -19,11 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkgs.pkg-config ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXfixes
-    xorg.libXrender
+    libx11
+    libxcomposite
+    libxdamage
+    libxfixes
+    libxrender
   ];
 
   installPhase = ''

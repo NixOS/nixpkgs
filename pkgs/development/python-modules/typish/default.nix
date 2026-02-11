@@ -5,7 +5,6 @@
   numpy,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,14 +12,16 @@ buildPythonPackage rec {
   version = "1.9.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
     repo = "typish";
     tag = "v${version}";
     hash = "sha256-LnOg1dVs6lXgPTwRYg7uJ3LCdExYrCxS47UEJxKHhVU=";
   };
+
+  # Tests fail on Python 3.14
+  # TypeError: 'member_descriptor' object is not iterable
+  disabled = pythonAtLeast "3.14";
 
   nativeCheckInputs = [
     numpy

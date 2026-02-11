@@ -5,17 +5,17 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "onestepback";
   version = "0.997";
 
   srcs = [
     (fetchurl {
-      url = "http://www.vide.memoire.free.fr/pages/onestepback/OneStepBack-v${version}.zip";
+      url = "http://www.vide.memoire.free.fr/pages/onestepback/OneStepBack-v${finalAttrs.version}.zip";
       hash = "sha256-uB6pfnTkMKeP71rAvn1olJJeCL84222UT5uxG72sywE=";
     })
     (fetchurl {
-      url = "http://www.vide.memoire.free.fr/pages/onestepback/OneStepBack-wm2-v${version}.zip";
+      url = "http://www.vide.memoire.free.fr/pages/onestepback/OneStepBack-wm2-v${finalAttrs.version}.zip";
       hash = "sha256-Zdv4ZrQPficbCxPBKF3RFNavlSn/VV/efiZVUT86zRc=";
     })
   ];
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

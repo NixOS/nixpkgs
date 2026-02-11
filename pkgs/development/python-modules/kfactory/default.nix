@@ -30,22 +30,22 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kfactory";
-  version = "2.0.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "kfactory";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # kfactory uses `.git` to infer the project directory.
     # https://github.com/gdsfactory/kfactory/blob/v2.0.0/src/kfactory/conf.py#L318-L327
     # Otherwise, tests fail with:
     # assert kf.config.project_dir is not None
     # E   AssertionError: assert None is not None
     leaveDotGit = true;
-    hash = "sha256-eZRNUb2Qw2HcR2W1pf15ulEt7ZCJwi60SuGdte/cG8E=";
+    hash = "sha256-6z2JlndmuegpCAf74YRa/qVVjFOWv1Xy3dabeWlOmbs=";
   };
 
   build-system = [
@@ -55,7 +55,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pydantic"
+    "klayout"
   ];
+
   dependencies = [
     aenum
     cachetools
@@ -143,8 +145,8 @@ buildPythonPackage rec {
   meta = {
     description = "KLayout API implementation of gdsfactory";
     homepage = "https://github.com/gdsfactory/kfactory";
-    changelog = "https://github.com/gdsfactory/kfactory/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/gdsfactory/kfactory/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fbeffa ];
   };
-}
+})

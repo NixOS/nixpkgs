@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+  pythonAtLeast,
 
   # build inputs
   cargo,
@@ -65,21 +66,24 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chromadb";
-  version = "1.3.5";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
-    tag = version;
-    hash = "sha256-pIVoPW7Sdc3XN66SuA6IILQkhoNwqy/X4OWgW08CC58=";
+    tag = finalAttrs.version;
+    hash = "sha256-mtUxyuLiwA4l9u+pTPVIsYcvsLPPCI6c8iWK6Lgbwjc=";
   };
 
+  # https://github.com/chroma-core/chroma/issues/5996
+  disabled = pythonAtLeast "3.14";
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-3cY9d28dE7Ndh0o1MiBLSwRggkjjnXRcnmsvC2t5S7A=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-WdWc/8vNzcEtdxmAAbBDWxhMamxSnK2YaZPWwQ2zzU4=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -91,7 +95,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
     substituteInPlace pyproject.toml \
-      --replace-fail "dynamic = [\"version\"]" "version = \"${version}\""
+      --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
 
     # Flip anonymized telemetry to opt in versus current opt-in out for privacy
     substituteInPlace chromadb/config.py \
@@ -104,9 +108,7 @@ buildPythonPackage rec {
     "posthog"
   ];
 
-  build-system = [
-    rustPlatform.maturinBuildHook
-  ];
+  build-system = [ rustPlatform.maturinBuildHook ];
 
   nativeBuildInputs = [
     cargo
@@ -173,14 +175,14 @@ buildPythonPackage rec {
 
   # Disable on aarch64-linux due to broken onnxruntime
   # https://github.com/microsoft/onnxruntime/issues/10038
-  pythonImportsCheck = lib.optionals doCheck [ "chromadb" ];
+  pythonImportsCheck = lib.optionals finalAttrs.doCheck [ "chromadb" ];
 
   # Test collection breaks on aarch64-linux
   doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
+    SWAGGER_UI_DOWNLOAD_URL = "file://${finalAttrs.swagger-ui}";
   };
 
   pytestFlags = [
@@ -216,6 +218,9 @@ buildPythonPackage rec {
     # No such file or directory: 'openssl'
     "test_ssl_self_signed_without_ssl_verify"
     "test_ssl_self_signed"
+
+    # https://github.com/chroma-core/chroma/issues/6029
+    "test_embedding_function_config_roundtrip"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in nixpkgs-review on Darwin due to concurrent copies running and the lack of network namespaces.
@@ -236,6 +241,10 @@ buildPythonPackage rec {
 
     # ValueError: An instance of Chroma already exists for ephemeral with different settings
     "chromadb/test/test_chroma.py"
+
+    # pytest can't tell which test_schema.py to load
+    # https://github.com/chroma-core/chroma/issues/6031
+    "chromadb/test/property/test_schema.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -258,7 +267,7 @@ buildPythonPackage rec {
   meta = {
     description = "AI-native open-source embedding database";
     homepage = "https://github.com/chroma-core/chroma";
-    changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
+    changelog = "https://github.com/chroma-core/chroma/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
@@ -266,4 +275,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "chroma";
   };
-}
+})

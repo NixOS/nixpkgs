@@ -6,16 +6,16 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lue";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "superstarryeyes";
     repo = "lue";
-    tag = "v${version}";
-    hash = "sha256-D1y7nu3WIsnShy2ruyF06iVusD8leuaAUi0M8I1hVqQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-T7uh9PSCTkT+jYxQYC4ebPkabDz3pc6JjCGtgNatIAM=";
   };
 
   build-system = with python3.pkgs; [
@@ -54,4 +54,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "lue";
   };
-}
+})

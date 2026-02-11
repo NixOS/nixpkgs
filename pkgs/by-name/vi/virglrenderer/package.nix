@@ -8,7 +8,7 @@
   buildPackages,
   libGLU,
   libepoxy,
-  libX11,
+  libx11,
   libdrm,
   libgbm,
   libva,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGLU
-    libX11
+    libx11
     libdrm
     libgbm
   ]
@@ -82,9 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Virtual 3D GPU for use inside QEMU virtual machines";
     homepage = "https://docs.mesa3d.org/drivers/virgl";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      normalcea
-    ];
+    maintainers = [ ];
     mainProgram = "virgl_test_server";
     platforms = lib.platforms.unix;
   };

@@ -5,7 +5,6 @@
   jax,
   jaxlib,
   lib,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "augmax";
   version = "0.3.3";
   pyproject = true;
-
-  disbaled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "khdlr";

@@ -9,6 +9,9 @@
 }:
 
 let
+  # tests can be based on builtins.derivation and bootstrapTools directly to minimize rebuilds
+  # see test 'make-symlinks-relative' in ./hooks.nix as an example.
+  bootstrapTools = stdenv.bootstrapTools;
   # early enough not to rebuild gcc but late enough to have patchelf
   earlyPkgs = stdenv.__bootPackages.stdenv.__bootPackages or pkgs;
   earlierPkgs =
@@ -216,6 +219,22 @@ let
         touch $out
       '';
     };
+
+  testInputDerivationDep = stdenv.mkDerivation {
+    name = "test-input-derivation-dependency";
+    buildCommand = "touch $out";
+  };
+  testInputDerivation =
+    attrs:
+    (stdenv.mkDerivation (
+      attrs
+      // {
+        buildInputs = [ testInputDerivationDep ];
+      }
+    )).inputDerivation
+    // {
+      meta = { };
+    };
 in
 
 {
@@ -224,7 +243,7 @@ in
     import ./hooks.nix {
       stdenv = bootStdenv;
       pkgs = earlyPkgs;
-      inherit lib;
+      inherit bootstrapTools lib;
     }
   );
 
@@ -356,6 +375,55 @@ in
         touch $out
       '';
 
+  test-inputDerivation-structured = testInputDerivation {
+    name = "test-inDrv-structured";
+    __structuredAttrs = true;
+  };
+
+  test-inputDerivation-allowedReferences = testInputDerivation {
+    name = "test-inDrv-allowedReferences";
+    allowedReferences = [ ];
+  };
+
+  test-inputDerivation-disallowedReferences = testInputDerivation {
+    name = "test-inDrv-disallowedReferences";
+    disallowedReferences = [ "${testInputDerivationDep}" ];
+  };
+
+  test-inputDerivation-allowedRequisites = testInputDerivation {
+    name = "test-inDrv-allowedRequisites";
+    allowedRequisites = [ ];
+  };
+
+  test-inputDerivation-disallowedRequisites = testInputDerivation {
+    name = "test-inDrv-disallowedRequisites";
+    disallowedRequisites = [ "${testInputDerivationDep}" ];
+  };
+
+  test-inputDerivation-structured-allowedReferences = testInputDerivation {
+    name = "test-inDrv-structured-allowedReferences";
+    __structuredAttrs = true;
+    outputChecks.out.allowedReferences = [ ];
+  };
+
+  test-inputDerivation-structured-disallowedReferences = testInputDerivation {
+    name = "test-inDrv-structured-disallowedReferences";
+    __structuredAttrs = true;
+    outputChecks.out.disallowedReferences = [ "${testInputDerivationDep}" ];
+  };
+
+  test-inputDerivation-structured-allowedRequisites = testInputDerivation {
+    name = "test-inDrv-structured-allowedRequisites";
+    __structuredAttrs = true;
+    outputChecks.out.allowedRequisites = [ ];
+  };
+
+  test-inputDerivation-structured-disallowedRequisites = testInputDerivation {
+    name = "test-inDrv-structured-disallowedRequisites";
+    __structuredAttrs = true;
+    outputChecks.out.disallowedRequisites = [ "${testInputDerivationDep}" ];
+  };
+
   test-prepend-append-to-var = testPrependAndAppendToVar {
     name = "test-prepend-append-to-var";
     stdenv' = bootStdenv;
@@ -383,6 +451,8 @@ in
     name = "test-cc-wrapper-substitutions";
     stdenv' = bootStdenv;
   };
+
+  tests-stdenv-gcc-stageCompare = pkgs.callPackage ./gcc-stageCompare.nix { };
 
   ensure-no-execve-in-setup-sh =
     derivation {
@@ -434,7 +504,7 @@ in
       import ./hooks.nix {
         stdenv = bootStdenvStructuredAttrsByDefault;
         pkgs = earlyPkgs;
-        inherit lib;
+        inherit bootstrapTools lib;
       }
     );
 

@@ -28,13 +28,13 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dnsmasq";
-  version = "2.91";
+  version = "2.92";
 
   src = fetchurl {
-    url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    hash = "sha256-9iJoKEizNnetsratCCZGGKKuCgHaSGqT/YzZEYaz0VM=";
+    url = "https://www.thekelleys.org.uk/dnsmasq/dnsmasq-${finalAttrs.version}.tar.xz";
+    hash = "sha256-S/UMLBAY+fvCYDffUbkOzqDLc9RhYoRnY7kt8NbDpFg=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -119,4 +119,4 @@ stdenv.mkDerivation rec {
       fpletz
     ];
   };
-}
+})

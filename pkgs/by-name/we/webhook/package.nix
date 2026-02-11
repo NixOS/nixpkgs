@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "webhook";
   version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "adnanh";
     repo = "webhook";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-3Ew72ADGTlvp6w37nYbCng7HHCZ0a7kVf3DNRNyCkZU=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ azahi ];
   };
-}
+})

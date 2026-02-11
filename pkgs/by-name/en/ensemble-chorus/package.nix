@@ -5,9 +5,9 @@
   fltk,
   alsa-lib,
   freetype,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   lv2,
   libjack2,
   cmake,
@@ -29,6 +29,7 @@ stdenv.mkDerivation {
   patches = [
     # fix compile error regarding packed attribute in 3rd party juice library
     ./juice-cxx-packing-fix.diff
+    ./add-missing-cstdint-includes.patch
   ];
 
   nativeBuildInputs = [
@@ -40,9 +41,9 @@ stdenv.mkDerivation {
     fltk
     alsa-lib
     freetype
-    libXrandr
-    libXinerama
-    libXcursor
+    libxrandr
+    libxinerama
+    libxcursor
     lv2
     libjack2
   ];

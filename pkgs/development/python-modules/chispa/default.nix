@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   setuptools,
   prettytable,
 }:
@@ -11,9 +10,7 @@
 buildPythonPackage rec {
   pname = "chispa";
   version = "0.11.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MrPowers";

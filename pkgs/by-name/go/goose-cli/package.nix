@@ -5,9 +5,10 @@
   fetchurl,
   rustPlatform,
   dbus,
-  xorg,
+  libxcb,
   pkg-config,
   protobuf,
+  openssl,
   writableTmpDirAsHomeHook,
   nix-update-script,
   llvmPackages,
@@ -27,23 +28,34 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.13.1";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-61MFtAhz7yq2wStNWDIlBo+OubBVor0NnpOAX8nQ8K0=";
+    hash = "sha256-Zwb3y9XhtmKxJG6XOIHl49YVZMBsYtOPePM7heJfEvE=";
   };
 
-  cargoHash = "sha256-YR/QUEE+EbwytiL0xkCr/EYE0O2/B/KmuLaF6TA7N6I=";
+  cargoHash = "sha256-G6Jok2OfSlOVlkF62gxivrKM0VlGqWFNdR0pQh79A0Q=";
+
+  cargoBuildFlags = [
+    "--bin"
+    "goose"
+    "--bin"
+    "goosed"
+  ];
 
   nativeBuildInputs = [
     pkg-config
     protobuf
   ];
 
-  buildInputs = [ dbus ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libxcb ];
+  buildInputs = [
+    dbus
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
   env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
 
@@ -83,6 +95,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=transport::streamable_http::tests::test_handle_outgoing_message_successful_request"
     "--skip=routes::audio::tests::test_transcribe_endpoint_requires_auth"
     "--skip=routes::config_management::tests::test_get_provider_models_openai_configured"
+    # tunnel tests that need external connectivity to Cloudflare
+    "--skip=tunnel::lapstone_test::test_tunnel_end_to_end"
+    "--skip=tunnel::lapstone_test::test_tunnel_post_request"
     # integration tests that need network access
     "--skip=test_replayed_session::vec_uvx_mcp_server_fetch_vec_calltoolrequestparam_name_fetch_into_arguments_some_object_url_https_example_com_vec_expects"
     "--skip=test_replayed_session::vec_github_mcp_server_stdio_vec_calltoolrequestparam_name_get_file_contents_into_arguments_some_object_owner_block_repo_goose_path_readme_md_sha_ab62b863c1666232a67048b6c4e10007a2a5b83c_vec_github_personal_access_token_expects"
@@ -98,6 +113,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_basic"
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_with_additional_sub_recipes"
     "--skip=recipes::recipe::tests::load_recipe::test_load_recipe_success"
+    "--skip=test_session_id_matches_across_calls"
+    "--skip=test_session_id_propagation_to_llm"
   ];
 
   passthru.updateScript = nix-update-script { };

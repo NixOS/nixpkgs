@@ -255,17 +255,14 @@
       "mini_portile2"
       "racc"
     ];
-    groups = [
-      "default"
-      "development"
-    ];
+    groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0rb306hbky6cxfyc8vrwpvl40fdapjvhsk62h08gg9wwbn3n8x4c";
+      sha256 = "1hcwwr2h8jnqqxmf8mfb52b0dchr7pm064ingflb78wa00qhgk6m";
       type = "gem";
     };
-    version = "1.18.8";
+    version = "1.18.10";
   };
   octokit = {
     dependencies = [

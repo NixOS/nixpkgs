@@ -21,7 +21,13 @@
   nspr,
   nss,
   pango,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   writeScript,
 }:
 let
@@ -58,13 +64,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nspr
     nss
     pango
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libxcb
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
+    libx11
+    libxcomposite
+    libxcb
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
   ];
 
   dontBuild = true;

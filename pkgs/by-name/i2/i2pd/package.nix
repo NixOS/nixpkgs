@@ -10,15 +10,15 @@
   miniupnpc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i2pd";
-  version = "2.58.0";
+  version = "2.59.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = "i2pd";
-    tag = version;
-    hash = "sha256-moUcivW3YIE2SvjS7rCXTjeCKUW/u/NXWH3VmJ9x6jg=";
+    tag = finalAttrs.version;
+    hash = "sha256-PBwjP54gVtMduN//OXxd35KnRJv7sbA1MIUU+1KNUac=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
     homepage = "https://i2pd.website";
     description = "Minimal I2P router written in C++";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ edwtjo ];
     platforms = lib.platforms.unix;
     mainProgram = "i2pd";
   };
-}
+})

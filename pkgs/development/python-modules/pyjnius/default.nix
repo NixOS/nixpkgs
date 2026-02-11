@@ -4,15 +4,12 @@
   cython,
   fetchPypi,
   jdk,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyjnius";
   version = "1.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

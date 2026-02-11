@@ -9,13 +9,13 @@
   fetchpatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "scriv";
   version = "1.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-fBqL5jUdA2kuXnV4Te6g2PEbLJD5G+GLD7OjdVVbUl4=";
   };
 
@@ -69,9 +69,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Command-line tool for helping developers maintain useful changelogs";
     homepage = "https://github.com/nedbat/scriv";
-    changelog = "https://github.com/nedbat/scriv/releases/tag/${version}";
+    changelog = "https://github.com/nedbat/scriv/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ amesgen ];
     mainProgram = "scriv";
   };
-}
+})

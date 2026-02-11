@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matugen";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "InioX";
     repo = "matugen";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TD9XyqFdLIOLRZM7ozQ8gz4PyEQbLGLxB4MbzjLccg4=";
   };
 
@@ -20,9 +20,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Material you color generation tool";
     homepage = "https://github.com/InioX/matugen";
-    changelog = "https://github.com/InioX/matugen/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/InioX/matugen/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ lampros ];
     mainProgram = "matugen";
   };
-}
+})

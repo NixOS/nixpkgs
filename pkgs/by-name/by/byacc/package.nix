@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     urls = [
       "https://invisible-mirror.net/archives/byacc/byacc-${finalAttrs.version}.tgz"
-      "ftp://ftp.invisible-island.net/byacc/byacc-${finalAttrs.version}.tgz"
+      "https://invisible-island.net/archives/byacc/byacc-${finalAttrs.version}.tgz"
     ];
     hash = "sha256-GSwvrgSNTn9RS6RRYn+cTmEnZQmfgZwZGR+f3j5glnM=";
   };

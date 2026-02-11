@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghciwatch";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = "ghciwatch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-K7BNGRilzi01loE0yS4CZFDNz8TQ9Z+fELO5HUvGObE=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
   };
 
   passthru.updateScript = nix-update-script { };
-}
+})

@@ -15,12 +15,12 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "2.0.12";
-  format = "pyproject";
+  version = "2.0.13";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z2LOj7NW1S1C6hSsaeBKXYnrwS0XskOK9idwIfiA9Do=";
+    hash = "sha256-0Prjgh/L5nCo3CNXZccNW9Dz3d6jIfrXDZmy5fL6zrU=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -59,7 +59,8 @@ python3Packages.buildPythonApplication rec {
   postInstall =
     lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd borgmatic \
-        --bash <($out/bin/borgmatic --bash-completion)
+        --bash <($out/bin/borgmatic --bash-completion) \
+        --fish <($out/bin/borgmatic --fish-completion)
     ''
     + lib.optionalString enableSystemd ''
       mkdir -p $out/lib/systemd/system

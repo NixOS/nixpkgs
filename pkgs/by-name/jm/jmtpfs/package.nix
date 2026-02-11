@@ -9,13 +9,13 @@
   libmtp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jmtpfs";
   version = "0.5";
 
   src = fetchFromGitHub {
     sha256 = "1pm68agkhrwgrplrfrnbwdcvx5lrivdmqw8pb5gdmm3xppnryji1";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "jmtpfs";
     owner = "JasonFerrara";
   };
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.coconnor ];
     mainProgram = "jmtpfs";
   };
-}
+})

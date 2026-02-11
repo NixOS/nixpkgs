@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libXft,
+  libxft,
   imlib2,
   giflib,
   libexif,
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   preBuild = lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
   buildInputs = [
-    libXft
+    libxft
     imlib2
     giflib
     libexif

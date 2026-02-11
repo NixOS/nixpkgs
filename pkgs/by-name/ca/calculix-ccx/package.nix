@@ -11,12 +11,12 @@
 
 assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !blas.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calculix-ccx";
   version = "2.22";
 
   src = fetchurl {
-    url = "http://www.dhondt.de/ccx_${version}.src.tar.bz2";
+    url = "http://www.dhondt.de/ccx_${finalAttrs.version}.src.tar.bz2";
     hash = "sha256-OpTcx3WjH1cCKXNLNB1rBjAevcdZhj35Aci5vxhUwLw=";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm0755 ccx_${version} $out/bin/ccx
+    install -Dm0755 ccx_${finalAttrs.version} $out/bin/ccx
 
     runHook postInstall
   '';
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

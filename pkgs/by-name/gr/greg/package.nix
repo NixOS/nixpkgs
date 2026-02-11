@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "greg";
   version = "0.4.8";
   format = "setuptools";
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "manolomartinez";
     repo = "greg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o4+tXVJTgT52JyJOC+Glr2cvZjbTaZL8TIsmz+A4vE4=";
   };
 
@@ -28,5 +28,6 @@ python3Packages.buildPythonApplication rec {
     description = "Command-line podcast aggregator";
     mainProgram = "greg";
     license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
-}
+})

@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubevela";
   version = "1.10.6";
 
   src = fetchFromGitHub {
     owner = "kubevela";
     repo = "kubevela";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lY+gz/rv+UcIDFOIa7jFoYsFRSBcHSzET+LZH/HC1PM=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/oam-dev/kubevela/version.VelaVersion=${version}"
+    "-X github.com/oam-dev/kubevela/version.VelaVersion=${finalAttrs.version}"
   ];
 
   subPackages = [ "references/cmd/cli" ];
@@ -63,4 +63,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "vela";
   };
-}
+})

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "hadiasghari";
     repo = "pyasn";
     rev = version;
-    hash = "sha256-R7Vi1Mn44Mg3HQLDk9O43MkXXwbLRr/jjVKSHJvgYj0";
+    hash = "sha256-7zpaxDe5qHUy/ekOJLxKawjaPQnByrOVj+m2bsUqfdg=";
   };
 
   postInstall = ''

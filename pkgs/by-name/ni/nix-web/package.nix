@@ -2,7 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   openssl,
   nixVersions,
@@ -15,15 +15,14 @@ let
     "nix-web"
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-web";
   version = "0.4.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "gorgon";
     repo = "gorgon";
-    rev = "nix-web-v${version}";
+    rev = "nix-web-v${finalAttrs.version}";
     hash = "sha256-lAk2VfhclHswsctA0RQgEj5oEX1fowh8TCaKykGEioY=";
   };
 
@@ -53,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ embr ];
     mainProgram = "nix-web";
   };
-}
+})

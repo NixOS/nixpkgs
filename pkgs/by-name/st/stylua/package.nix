@@ -42,7 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/johnnymorganz/stylua";
     changelog = "https://github.com/johnnymorganz/stylua/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.LunNova ];
+    maintainers = with lib.maintainers; [
+      LunNova
+      figsoda
+    ];
     mainProgram = "stylua";
   };
 })

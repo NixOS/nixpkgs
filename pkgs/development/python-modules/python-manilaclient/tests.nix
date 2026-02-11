@@ -11,7 +11,7 @@
 buildPythonPackage {
   pname = "python-manilaclient-tests";
   inherit (python-manilaclient) version src;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;

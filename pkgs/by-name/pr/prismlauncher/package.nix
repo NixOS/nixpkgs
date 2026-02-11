@@ -10,11 +10,11 @@
   kdePackages,
   lib,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrandr,
+  libxxf86vm,
   libjack2,
   libpulseaudio,
   libusb1,
@@ -51,7 +51,7 @@ assert lib.assertMsg (
 ) "textToSpeechSupport only has an effect on Linux.";
 
 let
-  prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
+  prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID; };
 in
 
 symlinkJoin {
@@ -64,11 +64,10 @@ symlinkJoin {
 
   buildInputs = [
     kdePackages.qtbase
+    kdePackages.qtimageformats
     kdePackages.qtsvg
   ]
-  ++ lib.optional (
-    lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.hostPlatform.isLinux
-  ) kdePackages.qtwayland;
+  ++ lib.optional stdenv.hostPlatform.isLinux kdePackages.qtwayland;
 
   postBuild = ''
     wrapQtAppsHook
@@ -90,11 +89,11 @@ symlinkJoin {
 
         ## glfw
         libGL
-        libX11
-        libXcursor
-        libXext
-        libXrandr
-        libXxf86vm
+        libx11
+        libxcursor
+        libxext
+        libxrandr
+        libxxf86vm
 
         udev # oshi
 

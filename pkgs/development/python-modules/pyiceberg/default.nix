@@ -6,7 +6,6 @@
 
   # build-system
   cython,
-  poetry-core,
   setuptools,
 
   # dependencies
@@ -19,7 +18,6 @@
   pyroaring,
   requests,
   rich,
-  sortedcontainers,
   strictyaml,
   tenacity,
   zstandard,
@@ -27,18 +25,16 @@
   # optional-dependencies
   adlfs,
   google-cloud-bigquery,
-  # bodo,
-  # daft,
   datafusion,
   duckdb,
   pyarrow,
   boto3,
+  azure-identity,
   google-auth,
   gcsfs,
   huggingface-hub,
   thrift,
   kerberos,
-  # thrift-sasl,
   pandas,
   polars,
   pyiceberg-core,
@@ -62,39 +58,25 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iceberg-python";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
-    tag = "pyiceberg-${version}";
-    hash = "sha256-uR8nmKVjYjiArcNaf/Af2kGh14p59VV9g2mKPKmiJnc=";
+    tag = "pyiceberg-${finalAttrs.version}";
+    hash = "sha256-sej0RJuoTnpX0DXC54RTacZNJIxzorcG4xlxByNUxc4=";
   };
-
-  patches = [
-    # Build script fails to build the cython extension on python 3.11 (no issues with python 3.12):
-    # distutils.errors.DistutilsSetupError: each element of 'ext_modules' option must be an Extension instance or 2-tuple
-    # This error vanishes if Cython and setuptools imports are swapped
-    # https://stackoverflow.com/a/53356077/11196710
-    ./reorder-imports-in-build-script.patch
-  ];
 
   build-system = [
     cython
-    poetry-core
     setuptools
   ];
 
   # Prevents the cython build to fail silently
   env.CIBUILDWHEEL = "1";
-
-  pythonRelaxDeps = [
-    "cachetools"
-    "rich"
-  ];
 
   dependencies = [
     cachetools
@@ -106,7 +88,6 @@ buildPythonPackage rec {
     pyroaring
     requests
     rich
-    sortedcontainers
     strictyaml
     tenacity
     zstandard
@@ -134,6 +115,9 @@ buildPythonPackage rec {
     ];
     dynamodb = [
       boto3
+    ];
+    entra-auth = [
+      azure-identity
     ];
     gcp-auth = [
       google-auth
@@ -190,9 +174,6 @@ buildPythonPackage rec {
     sql-sqlite = [
       sqlalchemy
     ];
-    zstandard = [
-      zstandard
-    ];
   };
 
   pythonImportsCheck = [
@@ -215,18 +196,24 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
   ]
-  ++ optional-dependencies.bigquery
-  ++ optional-dependencies.hive
-  ++ optional-dependencies.pandas
-  ++ optional-dependencies.pyarrow
-  ++ optional-dependencies.s3fs
-  ++ optional-dependencies.sql-sqlite
+  ++ finalAttrs.passthru.optional-dependencies.adlfs
+  ++ finalAttrs.passthru.optional-dependencies.bigquery
+  ++ finalAttrs.passthru.optional-dependencies.entra-auth
+  ++ finalAttrs.passthru.optional-dependencies.hive
+  ++ finalAttrs.passthru.optional-dependencies.pandas
+  ++ finalAttrs.passthru.optional-dependencies.pyarrow
+  ++ finalAttrs.passthru.optional-dependencies.s3fs
+  ++ finalAttrs.passthru.optional-dependencies.sql-sqlite
   ++ moto.optional-dependencies.server;
 
   pytestFlags = [
     # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
     "-Wignore::ResourceWarning"
   ];
+
+  preCheck = ''
+    rm -rf pyiceberg
+  '';
 
   disabledTestPaths = [
     # Several errors:
@@ -237,6 +224,12 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # assert "Expected '<=' | '<>' | '<' | '>=' | '>' | '==' | '=' | '!=', found '.'" in str(exc_info.value)
+    "test_quoted_column_with_dots"
+
+    # AssertionError: assert 'grant_type=c...scope=catalog' == 'grant_type=c...scope=catalog'
+    "test_auth_header"
+
     # KeyError: 'authorization'
     "test_token_200"
     "test_token_200_without_optional_fields"
@@ -304,6 +297,8 @@ buildPythonPackage rec {
     "test_identity_transform_columns_projection"
     "test_in_memory_catalog_context_manager"
     "test_inspect_partition_for_nested_field"
+    "test_inspect_partitions_respects_partition_evolution"
+    "test_partition_column_projection_with_schema_evolution"
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     # AssertionError:
@@ -316,8 +311,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for programmatic access to Apache Iceberg";
     homepage = "https://github.com/apache/iceberg-python";
-    changelog = "https://github.com/apache/iceberg-python/releases/tag/pyiceberg-${version}";
+    changelog = "https://github.com/apache/iceberg-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

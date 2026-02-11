@@ -15,7 +15,16 @@
 
   # optional-dependencies
   tree-sitter,
-  tree-sitter-languages,
+  tree-sitter-c-sharp,
+  tree-sitter-html,
+  tree-sitter-javascript,
+  tree-sitter-make,
+  tree-sitter-markdown,
+  tree-sitter-python,
+  tree-sitter-rust,
+  tree-sitter-sql,
+  tree-sitter-yaml,
+  tree-sitter-zeek,
 
   # tests
   jinja2,
@@ -24,20 +33,18 @@
   pytestCheckHook,
   syrupy,
   time-machine,
-  tree-sitter-markdown,
-  tree-sitter-python,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "6.8.0";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-2SIh7HeWQAd6bHVGzbIRDxkiQy5g0FFq0PjY21NcQEI=";
+    hash = "sha256-1QtWrh05ATKLIVSByWusYcEHEeH8+9qsSdyTNBzh9L0=";
   };
 
   build-system = [ poetry-core ];
@@ -58,8 +65,17 @@ buildPythonPackage rec {
   optional-dependencies = {
     syntax = [
       tree-sitter
-    ]
-    ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
+      tree-sitter-c-sharp
+      tree-sitter-html
+      tree-sitter-javascript
+      tree-sitter-make
+      tree-sitter-markdown
+      tree-sitter-python
+      tree-sitter-rust
+      tree-sitter-sql
+      tree-sitter-yaml
+      tree-sitter-zeek
+    ];
   };
 
   nativeCheckInputs = [

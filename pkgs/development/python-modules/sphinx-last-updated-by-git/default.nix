@@ -10,7 +10,7 @@
   sphinx-pytest,
   pytest-cov-stub,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-last-updated-by-git";
   version = "0.3.8";
   pyproject = true;
@@ -55,10 +55,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/mgeier/sphinx-last-updated-by-git/blob/${version}/NEWS.rst";
+    changelog = "https://github.com/mgeier/sphinx-last-updated-by-git/blob/${finalAttrs.version}/NEWS.rst";
     description = "Get the last updated time for each Sphinx page from Git";
     homepage = "https://github.com/mgeier/sphinx-last-updated-by-git";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

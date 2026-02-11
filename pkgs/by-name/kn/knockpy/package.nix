@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "knockpy";
   version = "7.0.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "guelfoweb";
     repo = "knock";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tJNosM8zGzH0uMvVawoBl2d+8xkVzTIjycnHHjnMzSo=";
   };
 
@@ -44,9 +44,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to scan subdomains";
     homepage = "https://github.com/guelfoweb/knock";
-    changelog = "https://github.com/guelfoweb/knock/releases/tag/${version}";
+    changelog = "https://github.com/guelfoweb/knock/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "knockpy";
   };
-}
+})

@@ -5,11 +5,11 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.99";
   pname = "barcode";
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/barcode/barcode-${finalAttrs.version}.tar.xz";
     sha256 = "1indapql5fjz0bysyc88cmc54y8phqrbi7c76p71fgjp45jcyzp8";
   };
   patches = [
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/barcode/";
     license = lib.licenses.gpl3;
   };
-}
+})

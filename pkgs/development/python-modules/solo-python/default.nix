@@ -17,20 +17,18 @@
 buildPythonPackage rec {
   pname = "solo-python";
   version = "0.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "solokeys";
     repo = "solo-python";
-    rev = version;
+    tag = version;
     hash = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
 
-  nativeBuildInputs = [ flit ];
+  build-system = [ flit ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cryptography
     ecdsa
@@ -53,7 +51,7 @@ buildPythonPackage rec {
     "solo.operations"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tool and library for SoloKeys Solo 1";
     homepage = "https://github.com/solokeys/solo1-cli";
     maintainers = with lib.maintainers; [ wucke13 ];
@@ -63,6 +61,6 @@ buildPythonPackage rec {
     ];
     # not compatible with fido2 >= 1.0.0
     # https://github.com/solokeys/solo1-cli/issues/157
-    broken = versionAtLeast fido2.version "1.0.0";
+    broken = lib.versionAtLeast fido2.version "1.0.0";
   };
 }

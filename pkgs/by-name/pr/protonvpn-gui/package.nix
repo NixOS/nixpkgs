@@ -3,29 +3,29 @@
   python3Packages,
   fetchFromGitHub,
   gobject-introspection,
-  wrapGAppsHook3,
-  libnotify,
-  withIndicator ? true,
   libappindicator-gtk3,
   libayatana-appindicator,
+  libnotify,
+  wrapGAppsHook4,
+  withIndicator ? true,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "protonvpn-gui";
-  version = "4.12.0";
+  version = "4.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
-    tag = "v${version}";
-    hash = "sha256-pDTzqTiGAisVEHwez526z9C9GzNkMWl6Cui8E6siIXo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0VshVHhJlxMb31L/gF3ujvGnsH6IMtMGwdvEpdXDwiQ=";
   };
 
   nativeBuildInputs = [
     # Needed for the NM namespace
     gobject-introspection
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -49,7 +49,6 @@ python3Packages.buildPythonApplication rec {
     proton-keyring-linux
     proton-vpn-api-core
     proton-vpn-local-agent
-    proton-vpn-network-manager
     pycairo
     pygobject3
   ];
@@ -64,18 +63,26 @@ python3Packages.buildPythonApplication rec {
     mkdir -p $out/share/{applications,pixmaps}
 
     # Fix the desktop file to correctly identify the wrapped app and show the icon during runtime
-    substitute ${src}/rpmbuild/SOURCES/proton.vpn.app.gtk.desktop $out/share/applications/proton.vpn.app.gtk.desktop \
+    substitute ${finalAttrs.src}/rpmbuild/SOURCES/proton.vpn.app.gtk.desktop $out/share/applications/proton.vpn.app.gtk.desktop \
       --replace-fail "StartupWMClass=protonvpn-app" "StartupWMClass=.protonvpn-app-wrapped"
-    install -Dm 644 ${src}/rpmbuild/SOURCES/proton-vpn-logo.svg $out/share/pixmaps
+    install -Dm 644 ${finalAttrs.src}/rpmbuild/SOURCES/proton-vpn-logo.svg $out/share/pixmaps
   '';
 
   preCheck = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
-  # Gets a segmentation fault after the widgets test
-  doCheck = false;
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
+
+  disabledTestPaths = [
+    # Segmentation fault during widgets tests
+    "tests/unit/widgets"
+  ];
 
   meta = {
     description = "Proton VPN GTK app for Linux";
@@ -84,8 +91,9 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "protonvpn-app";
     maintainers = with lib.maintainers; [
+      anthonyroussel
       sebtm
       rapiteanu
     ];
   };
-}
+})

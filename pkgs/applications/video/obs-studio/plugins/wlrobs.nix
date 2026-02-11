@@ -7,7 +7,7 @@
   ninja,
   wayland,
   obs-studio,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -30,13 +30,12 @@ stdenv.mkDerivation {
   buildInputs = [
     wayland
     obs-studio
-    libX11
+    libx11
   ];
 
   meta = {
     description = "Obs-studio plugin that allows you to screen capture on wlroots based wayland compositors";
     homepage = "https://hg.sr.ht/~scoopta/wlrobs";
-    maintainers = with lib.maintainers; [ grahamc ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };

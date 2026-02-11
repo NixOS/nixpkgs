@@ -342,11 +342,11 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Basic Linear Algebra Subprograms";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/OpenMathLib/OpenBLAS";
-    platforms = attrNames configs;
+    platforms = lib.attrNames configs;
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

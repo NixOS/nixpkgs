@@ -6,14 +6,25 @@
   tree-sitter,
   symlinkJoin,
   writeTextDir,
-  pythonOlder,
   # `name`: grammar derivation pname in the format of `tree-sitter-<lang>`
   name,
   grammarDrv,
 }:
 let
-  inherit (grammarDrv) version;
-
+  # Map nix style `0-unstable-YYYY-MM-DD` version identifiers to a PEP 440
+  # compatible form (`0+unstableYYYYMMDD`).
+  version = lib.pipe grammarDrv [
+    lib.getVersion
+    (lib.splitString "-")
+    (
+      parts:
+      let
+        version = lib.head parts;
+        metadata = lib.join "" (lib.tail parts);
+      in
+      if (metadata == "") then version else "${version}+${metadata}"
+    )
+  ];
   snakeCaseName = lib.replaceStrings [ "-" ] [ "_" ] name;
   drvPrefix = "python-${name}";
   # If the name of the grammar attribute differs from the grammar's symbol name,
@@ -159,8 +170,6 @@ buildPythonPackage {
     # https://github.com/NixOS/nixpkgs/issues/255262
     rm -r ${snakeCaseName}
   '';
-
-  disabled = pythonOlder "3.8";
 
   nativeCheckInputs = [
     tree-sitter

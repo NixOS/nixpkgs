@@ -3,26 +3,17 @@
   stdenv,
   nix-update-script,
   fetchFromGitHub,
-  fetchpatch2,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oscar64";
-  version = "1.32.265";
+  version = "1.32.267";
 
   src = fetchFromGitHub {
     owner = "drmortalwombat";
     repo = "oscar64";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nPwebydRFHoIWp2sbfPaudKj/sPZRKamYdIuSVZ9dcc=";
+    hash = "sha256-SxjR+HAUJrjBPCn5doEx+6lzUikG55/KgiV/e3Vg/tQ=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "fix-make-install.patch";
-      url = "https://github.com/drmortalwombat/oscar64/commit/af9e06a467be07422bc87058bebdef79e0a94ea1.patch?full_index=1";
-      hash = "sha256-YsbdYi+dwLQSGOT8krJsFqJxS0EpIiQqavQpH0nl7S0=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace ./oscar64.1 \

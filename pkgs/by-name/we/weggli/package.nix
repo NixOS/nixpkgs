@@ -6,14 +6,14 @@
   weggli,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weggli";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "weggli-rs";
     repo = "weggli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6XSedsTUjcZzFXaNitsXlUBpxC6TYVMCB+AfH3x7c5E=";
   };
 
@@ -22,13 +22,13 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion {
     package = weggli;
     command = "weggli -V";
-    version = "weggli ${version}";
+    version = "weggli ${finalAttrs.version}";
   };
 
   meta = {
     description = "Fast and robust semantic search tool for C and C++ codebases";
     homepage = "https://github.com/weggli-rs/weggli";
-    changelog = "https://github.com/weggli-rs/weggli/releases/tag/v${version}";
+    changelog = "https://github.com/weggli-rs/weggli/releases/tag/v${finalAttrs.version}";
     mainProgram = "weggli";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
       mfrw
     ];
   };
-}
+})

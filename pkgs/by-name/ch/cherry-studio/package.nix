@@ -4,7 +4,8 @@
   fetchFromGitHub,
   yarn-berry_4,
   nodejs,
-  electron_37,
+  electron_38,
+  cctools,
   autoPatchelfHook,
   makeWrapper,
   writableTmpDirAsHomeHook,
@@ -14,18 +15,18 @@
 }:
 
 let
-  electron = electron_37;
+  electron = electron_38;
   yarn-berry = yarn-berry_4;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.7.1";
+  version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A+J00wHJyCrxZSG80FKHw/c9EUfJP53v0KLjE9Jgmp8=";
+    hash = "sha256-q/heW5o2IWFjsDed/SaMv5Xfm5kAP14RD1hALkipu+Q=";
   };
 
   postPatch = ''
@@ -42,19 +43,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-UZm0XJ/pjfADETd6sFoMCRB0axod3WybVW+RcPuX8ms=";
+    hash = "sha256-AYKgGe9iTcXJqS019D064TRb5aY/XTS8u847LcYisa4=";
   };
 
   nativeBuildInputs = [
     yarn-berry.yarnBerryConfigHook
     yarn-berry
-    autoPatchelfHook
     makeWrapper
     writableTmpDirAsHomeHook
     copyDesktopItems
     nodejs
     (nodejs.python.withPackages (ps: with ps; [ setuptools ]))
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ]
+  ++ lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isElf [ stdenv.cc.cc.lib ];
+
+  strictDeps = true;
 
   env = {
     YARN_ENABLE_SCRIPTS = "false";

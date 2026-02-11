@@ -11,7 +11,7 @@
   jre,
   gtk3,
   glib,
-  libXtst,
+  libxtst,
 }:
 
 let
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     glib
-    libXtst
+    libxtst
   ];
 
   dontWrapGApps = true;
@@ -123,7 +123,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      flokli
       r3dl3g
     ];
     mainProgram = "jameica";

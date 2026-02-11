@@ -1,5 +1,4 @@
 {
-  pkgs,
   nodejs,
   lib,
   python3Packages,
@@ -18,7 +17,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "posativ";
-    repo = pname;
+    repo = "isso";
     tag = version;
     sha256 = "sha256-kZNf7Rlb1DZtQe4dK1B283OkzQQcCX+pbvZzfL65gsA=";
   };

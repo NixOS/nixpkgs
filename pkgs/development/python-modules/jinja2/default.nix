@@ -3,7 +3,6 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   flit-core,
   babel,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "jinja2";
   version = "3.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -58,8 +55,8 @@ buildPythonPackage rec {
     # Forge look and feel of multi-output derivation as best as we can.
     #
     # Using 'outputs = [ "doc" ];' breaks a lot of assumptions.
-    name = "${pname}-${version}-doc";
-    inherit src pname version;
+    pname = "${pname}-doc";
+    inherit src version;
 
     patches = [
       # Fix import of "sphinxcontrib-log-cabinet"

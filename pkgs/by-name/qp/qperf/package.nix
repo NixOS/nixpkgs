@@ -9,14 +9,14 @@
   rdma-core,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qperf";
   version = "0.4.11";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "qperf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-x9l8xqwMDHlXRZpWt3XiqN5xyCTV5rk8jp/ClRPPECI=";
   };
 
@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linux-rdma/qperf";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
-}
+})

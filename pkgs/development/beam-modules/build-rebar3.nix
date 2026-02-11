@@ -56,6 +56,7 @@ let
       attrs
       // {
 
+        pname = name;
         name = "${name}-${version}";
         inherit version;
 
@@ -88,6 +89,14 @@ let
           rm -f rebar rebar3
         ''
         + postPatch;
+
+        preConfigure = ''
+          # Copy the source so it can be used by mix projects
+          # do this before building to avoid build artifacts but after patching
+          # to include any modifications
+          mkdir -p $out/src
+          cp -r "." "$out/src"
+        '';
 
         buildPhase = ''
           runHook preBuild

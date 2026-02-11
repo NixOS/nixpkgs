@@ -7,18 +7,18 @@
   alsa-lib,
   libjack2,
   libclxclient,
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   readline,
   aeolus-stops,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aeolus";
   version = "0.10.4";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/aeolus-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-J9xrd/N4LrvGgi89Yj4ob4ZPUAEchrXJJQ+YVJ29Qhk=";
   };
 
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
     libclxclient
-    libX11
-    libXft
+    libx11
+    libxft
     readline
   ];
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "aeolus";
   };
-}
+})

@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwe";
-  version = "0.0.56";
+  version = "0.0.60";
 
   src = fetchFromGitHub {
     owner = "iwe-org";
     repo = "iwe";
     tag = "iwe-v${finalAttrs.version}";
-    hash = "sha256-nEn2iR2/ROboalMAXJV4y8qZiN36QkaWin+sMLZSKMQ=";
+    hash = "sha256-PSSH8uytCPtTgxte/wc0TfTiKD96DiVrWFJN9QjuHo8=";
   };
 
-  cargoHash = "sha256-fi16wLc/ZQV2bJHiIo7HVP+IS8zuoJeQQ7kV0cJ9GZ8=";
+  cargoHash = "sha256-PqINghZ88FsXj4HEFp0ugFH30lbQfBcoiv86PPOCzLI=";
 
   cargoBuildFlags = [
     "--package=iwe"
@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {

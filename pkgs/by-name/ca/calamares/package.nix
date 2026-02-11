@@ -5,7 +5,7 @@
   writeShellScriptBin,
   xdg-utils,
 
-  fetchFromGitea,
+  fetchFromCodeberg,
 
   cmake,
   ninja,
@@ -38,8 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "calamares";
   version = "3.4.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Calamares";
     repo = "calamares";
     tag = "v${finalAttrs.version}";
@@ -126,7 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
       cc0
     ];
     maintainers = with lib.maintainers; [
-      manveru
       vlinkz
     ];
     platforms = lib.platforms.linux;

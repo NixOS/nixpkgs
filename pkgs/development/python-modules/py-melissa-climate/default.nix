@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "py-melissa-climate";
-  version = "3.0.2";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kennedyshead";
     repo = "py-melissa-climate";
-    tag = "v${version}";
-    hash = "sha256-VSKSa7K2fF6NMLN39HzkqK7/9vGHmmmPFw6mIiJNZ84=";
+    tag = "V${version}";
+    hash = "sha256-vKnIFrviCJLMqYUdKKJtqOmD1ZtgtMBMLApG+YiqZdY=";
   };
 
   build-system = [ setuptools ];

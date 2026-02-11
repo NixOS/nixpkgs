@@ -142,7 +142,7 @@ let
         luarocksConfig =
           let
             externalDepsGenerated = lib.filter (drv: !drv ? luaModule) (
-              self.nativeBuildInputs ++ self.propagatedBuildInputs ++ self.buildInputs
+              self.finalPackage.nativeBuildInputs ++ self.propagatedBuildInputs ++ self.buildInputs
             );
 
             generatedConfig = luaLib.generateLuarocksConfig {
@@ -157,7 +157,7 @@ let
               # closure, as it doesn't have a rock tree :)
               # luaLib.hasLuaModule
               requiredLuaRocks = lib.filter luaLib.hasLuaModule (
-                lua.pkgs.requiredLuaModules (self.nativeBuildInputs ++ self.propagatedBuildInputs)
+                lua.pkgs.requiredLuaModules (self.finalPackage.nativeBuildInputs ++ self.propagatedBuildInputs)
               );
             };
 

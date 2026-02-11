@@ -44,7 +44,6 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -53,6 +52,9 @@ buildGoModule (finalAttrs: {
     description = "Tail-sampling proxy for OpenTelemetry";
     mainProgram = "refinery";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.mercury ];
+    maintainers = with lib.maintainers; [
+      jkachmar
+      lf-
+    ];
   };
 })

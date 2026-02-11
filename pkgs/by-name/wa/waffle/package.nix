@@ -13,7 +13,7 @@
   python3,
   x11Support ? true,
   libxcb,
-  libX11,
+  libx11,
   waylandSupport ? true,
   wayland,
   wayland-protocols,
@@ -23,15 +23,15 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "waffle";
   version = "1.8.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "libgbm";
+    owner = "Mesa";
     repo = "waffle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Y7GRYLqSO572qA1eZ3jS8QlZ1X9xKpDtScaySTuPK/U=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libglvnd
   ]
   ++ lib.optionals x11Support [
-    libX11
+    libx11
     libxcb
   ]
   ++ lib.optionals waylandSupport [
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
+  env.PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
 
   postInstall = ''
     wrapProgram $out/bin/wflinfo \
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     inherit (libgbm.meta) platforms;
     maintainers = with lib.maintainers; [ Flakebi ];
   };
-}
+})

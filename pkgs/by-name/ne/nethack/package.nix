@@ -12,9 +12,9 @@
   buildPackages,
   x11Mode ? false,
   qtMode ? false,
-  libXaw,
-  libXext,
-  libXpm,
+  libxaw,
+  libxext,
+  libxpm,
   bdftopcf,
   mkfontdir,
   pkg-config,
@@ -67,13 +67,18 @@ stdenvUsed.mkDerivation (finalAttrs: {
     hash = "sha256-mM9n323r+WaKYXRaqEwJvKs2Ll0z9blE7FFV1E0qrLI=";
   };
 
+  patches = [
+    # Newer GCC rejects function declarations without explicit parameters.
+    ./function-parameters.patch
+  ];
+
   buildInputs = [
     ncurses
   ]
   ++ lib.optionals x11Mode [
-    libXaw
-    libXext
-    libXpm
+    libxaw
+    libxext
+    libxpm
   ]
   ++ lib.optionals qtMode [
     gzip

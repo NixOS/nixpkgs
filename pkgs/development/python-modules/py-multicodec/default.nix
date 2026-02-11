@@ -4,7 +4,6 @@
   fetchFromGitHub,
   morphys,
   pytestCheckHook,
-  pythonOlder,
   six,
   varint,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "py-multicodec";
   version = "0.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "multiformats";

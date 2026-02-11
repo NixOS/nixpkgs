@@ -8,7 +8,7 @@
   ruby,
   libGL,
   libuv,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "${pname}-build";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
     sha256 = "sha256-rIb6tQimwrUj+623IU5zDyKNWsNYYBElLQClOsP+5Dc=";
   };
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGL
     libuv
-    libX11
+    libx11
   ];
 
   # Force optimization to fix:

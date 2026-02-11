@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Infers date format from examples";
     homepage = "https://pypi.org/project/pydateinfer/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

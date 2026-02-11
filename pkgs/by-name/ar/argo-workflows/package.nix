@@ -7,14 +7,14 @@
   pkgsBuildBuild,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "argo-workflows";
   version = "3.6.10";
 
   src = fetchFromGitHub {
     owner = "argoproj";
-    repo = "argo";
-    tag = "v${version}";
+    repo = "argo-workflows";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TM/eK8biMxKV4SFJ1Lys+NPPeaHVjbBo83k2RH1Xi40=";
   };
 
@@ -34,14 +34,14 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X github.com/argoproj/argo-workflows/v3.buildDate=unknown"
-    "-X github.com/argoproj/argo-workflows/v3.gitCommit=${src.rev}"
-    "-X github.com/argoproj/argo-workflows/v3.gitTag=${src.rev}"
+    "-X github.com/argoproj/argo-workflows/v3.gitCommit=${finalAttrs.src.rev}"
+    "-X github.com/argoproj/argo-workflows/v3.gitTag=${finalAttrs.src.rev}"
     "-X github.com/argoproj/argo-workflows/v3.gitTreeState=clean"
-    "-X github.com/argoproj/argo-workflows/v3.version=${version}"
+    "-X github.com/argoproj/argo-workflows/v3.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
-    for shell in bash zsh; do
+    for shell in bash zsh fish; do
       ${
         if (stdenv.buildPlatform == stdenv.hostPlatform) then
           "$out/bin/argo"
@@ -55,10 +55,10 @@ buildGoModule rec {
   meta = {
     description = "Container native workflow engine for Kubernetes";
     mainProgram = "argo";
-    homepage = "https://github.com/argoproj/argo";
-    changelog = "https://github.com/argoproj/argo-workflows/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/argoproj/argo-workflows";
+    changelog = "https://github.com/argoproj/argo-workflows/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ groodt ];
     platforms = lib.platforms.unix;
   };
-}
+})

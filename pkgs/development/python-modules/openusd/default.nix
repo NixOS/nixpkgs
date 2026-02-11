@@ -17,8 +17,8 @@
   jinja2,
   lib,
   libGL,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
   materialx,
   ninja,
   numpy,
@@ -33,6 +33,7 @@
   python,
   qt6,
   setuptools,
+  stdenv,
   onetbb,
   withDocs ? false,
   withOsl ? true,
@@ -60,8 +61,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
   };
-
-  stdenv = python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
@@ -129,8 +128,8 @@ buildPythonPackage rec {
     onetbb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXt
+    libx11
+    libxt
   ]
   ++ lib.optionals withOsl [ osl ]
   ++ lib.optionals withUsdView [ qt6.qtbase ]

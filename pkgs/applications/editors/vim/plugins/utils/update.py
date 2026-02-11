@@ -82,8 +82,8 @@ class VimEditor(nixpkgs_plugin_update.Editor):
                 {
                   lib,
                   buildVimPlugin,
-                  buildNeovimPlugin,
                   fetchFromGitHub,
+                  fetchgit,
                 }:
 
                 final: prev: {

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "paperless-asn-qr-codes";
   version = "0.2.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "entropia";
     repo = "paperless-asn-qr-codes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/xCU6xDrmhkua4Iw/BCzhOuqO5GT/0rTJ+Y59wuMz6E=";
   };
 
@@ -40,4 +40,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ xanderio ];
     mainProgram = "paperless-asn-qr-codes";
   };
-}
+})

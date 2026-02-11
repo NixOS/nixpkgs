@@ -6,16 +6,16 @@
   makeDesktopItem,
   copyDesktopItems,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "labelle";
-  version = "1.4.2";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labelle-org";
     repo = "labelle";
-    tag = "v${version}";
-    hash = "sha256-p+V6ihFDxhG7t4LiwTJVfJTk6rxJxGHqxTdplbLZR2Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yYhtA7Rxg95HCOIKTak172tcuTnWlCbSDlPQ9VOpoWE=";
   };
 
   postPatch = ''
@@ -54,11 +54,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://github.com/labelle-org/labelle/releases/tag/${src.tag}";
+    changelog = "https://github.com/labelle-org/labelle/releases/tag/${finalAttrs.src.tag}";
     description = "Print labels with LabelManager PnP from Dymo";
     homepage = "https://github.com/labelle-org/labelle";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fabianrig ];
     mainProgram = "labelle";
   };
-}
+})

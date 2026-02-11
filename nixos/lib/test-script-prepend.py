@@ -13,7 +13,7 @@ from unittest import TestCase
 
 
 class RetryProtocol(Protocol):
-    def __call__(self, fn: Callable, timeout: int = 900) -> None:
+    def __call__(self, fn: Callable, timeout_seconds: int = 900) -> None:
         raise Exception("This is just type information for the Nix test driver")
 
 

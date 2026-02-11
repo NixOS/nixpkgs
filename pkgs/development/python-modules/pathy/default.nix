@@ -5,7 +5,6 @@
   mock,
   pathlib-abc,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   smart-open,
   typer,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pathy";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -55,6 +52,5 @@ buildPythonPackage rec {
     mainProgram = "pathy";
     homepage = "https://github.com/justindujardin/pathy";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

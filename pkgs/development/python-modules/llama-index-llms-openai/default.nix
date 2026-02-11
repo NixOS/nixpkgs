@@ -7,15 +7,15 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-llms-openai";
-  version = "0.6.10";
+  version = "0.6.17";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_llms_openai";
-    inherit version;
-    hash = "sha256-vOJiHLZQ2P7WntonErgE5us0VZ/K66ksVKO1s7PGkWE=";
+    inherit (finalAttrs) version;
+    hash = "sha256-YylMHY0iHSAJAjssKUyRn2FB9M3OnNSL/+cA2L4qN+A=";
   };
 
   pythonRemoveDeps = [
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

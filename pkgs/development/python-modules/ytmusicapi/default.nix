@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ytmusicapi";
-  version = "1.11.3";
+  version = "1.11.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sigma67";
     repo = "ytmusicapi";
     tag = version;
-    hash = "sha256-q0VVoKj0N9dvp57Qah4Aeba/JG29Wp8ptIuHz8AvLeM=";
+    hash = "sha256-csTe1fxoqc2/sDIq/2aVFvhfdhHpXlCrMkPoxZtScnY=";
   };
 
   build-system = [ setuptools-scm ];

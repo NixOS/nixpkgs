@@ -6,19 +6,19 @@
   libGL,
   libGLU,
   pkg-config,
-  xorg,
+  libx11,
   autoreconfHook,
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxmacmolplt";
   version = "7.7.3";
 
   src = fetchFromGitHub {
     owner = "brettbode";
     repo = "wxmacmolplt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gFGstyq9bMmBaIS4QE6N3EIC9GxRvyJYUr8DUvwRQBc=";
   };
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     wxGTK32
     libGL
     libGLU
-    xorg.libX11
-    xorg.libX11.dev
+    libx11
+    libx11.dev
   ];
 
   configureFlags = [ "LDFLAGS=-lGL" ];
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
       markuskowa
     ];
   };
-}
+})

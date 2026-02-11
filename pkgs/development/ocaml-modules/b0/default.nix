@@ -9,13 +9,13 @@
   cmdliner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "ocaml${ocaml.version}-b0";
   version = "0.0.5";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/b0-${version}.tbz";
+    url = "https://erratique.ch/software/b0/releases/b0-${finalAttrs.version}.tbz";
     sha256 = "sha256-ty04JQcP4RCme/VQw0ko2IBebWWX5cBU6nRTTeV1I/I=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.Julow ];
     broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
-}
+})

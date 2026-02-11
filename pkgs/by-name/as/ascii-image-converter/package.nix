@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ascii-image-converter";
   version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "TheZoraiz";
     repo = "ascii-image-converter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-svM/TzGQU/QgjqHboy0470+A6p4kR76typ9gnfjfAJk=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ danth ];
     mainProgram = "ascii-image-converter";
   };
-}
+})

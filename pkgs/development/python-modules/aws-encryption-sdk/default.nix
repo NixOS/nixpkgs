@@ -8,7 +8,6 @@
   mock,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wrapt,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aws-encryption-sdk";
   version = "4.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";

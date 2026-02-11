@@ -3,6 +3,9 @@
   lib,
   makeWrapper,
   writeTextFile,
+  copyDesktopItems,
+  makeDesktopItem,
+  imagemagick,
 
   curl,
   hexdump,
@@ -48,7 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./no-update-check.patch ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+    imagemagick
+  ];
 
   buildInputs = [
     curl
@@ -58,6 +65,17 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     zlib
     libGL
+  ];
+
+  icon = "${finalAttrs.src}/res/icon.ico";
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      desktopName = "Super Mario 64 Coop Deluxe";
+      exec = "sm64coopdx";
+      icon = finalAttrs.pname;
+      categories = [ "Game" ];
+    })
   ];
 
   enableParallelBuilding = true;
@@ -91,6 +109,12 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.optionalString enableDiscord ''
       cp $built/libdiscord_game_sdk* $share
     ''}
+
+    magick ${finalAttrs.icon} icon.png
+    for size in 16 24 32 48 64 128 256 512; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      magick icon-0.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/${finalAttrs.pname}.png
+    done
 
     # coopdx always tries to load resources from the binary's directory, with no obvious way to change. Thus this small wrapper script to always run from the /share directory that has all the resources
     mkdir -p $out/bin

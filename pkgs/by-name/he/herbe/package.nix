@@ -2,21 +2,21 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   freetype,
   patches ? [ ],
   extraLibs ? [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "herbe";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "dudik";
     repo = "herbe";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0358i5jmmlsvy2j85ij7m1k4ar2jr5lsv7y1c58dlf9710h186cv";
   };
 
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libX11
-    libXft
+    libx11
+    libxft
     freetype
   ]
   ++ extraLibs;
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wishfort36 ];
     mainProgram = "herbe";
   };
-}
+})

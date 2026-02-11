@@ -3,18 +3,18 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pmtiles";
-  version = "1.28.3";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "protomaps";
     repo = "go-pmtiles";
-    tag = "v${version}";
-    hash = "sha256-9deO1SXhQ3/oZg2BC/IWbHb5KKQ7qAklrR956lj8IFY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7Xkkna85ls5kRelar2DMf+U/4tCa9up/H+uuDJTXJr8=";
   };
 
-  vendorHash = "sha256-6zsX7rU+D+RUHwXfFZzLQftQ6nSYJhvKIDdsO2vow4A=";
+  vendorHash = "sha256-UzpyvWsfbzYTngMdWU+fgZj/yQvSfJzhFWpFRsD24GE=";
 
   overrideModAttrs = old: {
     # https://gitlab.com/cznic/libc/-/merge_requests/10
@@ -26,8 +26,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=v${version}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -42,4 +42,4 @@ buildGoModule rec {
     teams = [ lib.teams.geospatial ];
     mainProgram = "pmtiles";
   };
-}
+})

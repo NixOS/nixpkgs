@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "simple-http-server";
   version = "0.6.13";
 
   src = fetchFromGitHub {
     owner = "TheWaWaR";
     repo = "simple-http-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-uTzzQg1UJ+PG2poIKd+LO0T0y7z48ZK0f196zIgeZhs=";
   };
 
@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Simple HTTP server in Rust";
     homepage = "https://github.com/TheWaWaR/simple-http-server";
-    changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${version}";
+    changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mephistophiles
     ];
     mainProgram = "simple-http-server";
   };
-}
+})

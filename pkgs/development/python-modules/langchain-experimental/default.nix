@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pdm-backend,
@@ -20,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-experimental";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-experimental";
     tag = "libs/experimental/v${version}";
-    hash = "sha256-A5qCTOCmKt/a1DTKVOC/WwuLCqOYI5pGhAGo/Y4C/FY=";
+    hash = "sha256-3hz63DCoym2V4b6Wzi0eH+B8mvGu7pqRNj3Ltk04UTk=";
   };
 
   sourceRoot = "${src.name}/libs/experimental";
@@ -61,6 +62,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_experimental" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: module 'ast' has no attribute 'Str'
+    # https://github.com/langchain-ai/langchain-community/issues/492
+    "test_color_question_1"
+    "test_color_question_2"
+  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "libs/experimental/v";

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tml";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "tml";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QMXEKjOKYQlzXc2ds8OAAL5xUxayGb6mxxyeHsCkfwo=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
     description = "Tiny markup language for terminal output";
     mainProgram = "tml";
     homepage = "https://github.com/liamg/tml";
-    changelog = "https://github.com/liamg/tml/releases/tag/v${version}";
+    changelog = "https://github.com/liamg/tml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.unlicense;
     maintainers = [ ];
   };
-}
+})

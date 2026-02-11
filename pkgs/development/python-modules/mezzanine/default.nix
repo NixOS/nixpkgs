@@ -14,7 +14,6 @@
   pytestCheckHook,
   pytest-cov-stub,
   pytest-django,
-  pythonOlder,
   pytz,
   requests,
   requests-oauthlib,
@@ -28,7 +27,7 @@ buildPythonPackage rec {
   version = "6.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" || isPyPy;
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "stephenmcd";
@@ -68,6 +67,8 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    # not updated to django 5.x
+    broken = lib.versionAtLeast django.version "5";
     description = "Content management platform built using the Django framework";
     mainProgram = "mezzanine-project";
     longDescription = ''

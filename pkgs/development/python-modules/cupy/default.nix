@@ -49,12 +49,10 @@ let
       outpaths ++ lib.concatMap (outpath: lib.map (output: outpath.${output}) outpath.outputs) outpaths;
   };
 in
-buildPythonPackage rec {
+buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } rec {
   pname = "cupy";
   version = "13.6.0";
   pyproject = true;
-
-  stdenv = cudaPackages.backendStdenv;
 
   src = fetchFromGitHub {
     owner = "cupy";
@@ -131,6 +129,6 @@ buildPythonPackage rec {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = with lib.maintainers; [ hyphon81 ];
+    maintainers = [ ];
   };
 }

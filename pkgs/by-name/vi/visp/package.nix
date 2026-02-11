@@ -14,7 +14,7 @@
   libpng,
   librealsense,
   libxml2,
-  libX11,
+  libx11,
   nlohmann_json,
   #ogre,
   openblas,
@@ -24,7 +24,7 @@
   stdenv,
   texliveSmall,
   v4l-utils,
-  xorg,
+  libpthread-stubs,
   zbar,
   zlib,
 }:
@@ -79,14 +79,14 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     librealsense
-    libX11
+    libx11
     libxml2
     nlohmann_json
     #ogre
     openblas
     opencv
     python3Packages.numpy
-    xorg.libpthreadstubs
+    libpthread-stubs
     zbar
     zlib
   ]

@@ -15,15 +15,15 @@
   lvm2, # lvs
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.83";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.84";
   pname = "os-prober";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "os-prober";
-    rev = version;
-    sha256 = "sha256-cTufM82YE1L7d3kIOtncICInBPEw4o4NzQXB4uDrMKI=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-91UTiwg4qIi+aCzAto7tCd5WZFjI15XxR1/hZQ0fUa4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ symphorien ];
     platforms = lib.platforms.linux;
   };
-}
+})

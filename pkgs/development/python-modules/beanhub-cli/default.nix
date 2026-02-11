@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
 
   # dependencies
@@ -42,8 +41,6 @@ buildPythonPackage rec {
   pname = "beanhub-cli";
   version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";

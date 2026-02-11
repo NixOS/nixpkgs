@@ -4,11 +4,11 @@
   fetchurl,
   writeText,
   pkg-config,
-  libX11,
-  libXft,
-  libXi,
-  libXinerama,
-  libXtst,
+  libx11,
+  libxft,
+  libxi,
+  libxinerama,
+  libxtst,
   layout ? "mobile-intl",
   conf ? null,
   patches ? [ ],
@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXft
-    libXi
-    libXinerama
-    libXtst
+    libx11
+    libxft
+    libxi
+    libxinerama
+    libxtst
   ];
 
   makeFlags = [

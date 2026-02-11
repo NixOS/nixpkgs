@@ -1,8 +1,8 @@
 {
   stdenv,
   boost,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   linuxPackages,
   openssl,
   tuxclocker-plugins,
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     boost
-    libX11
-    libXext
+    libx11
+    libxext
     linuxPackages.nvidia_x11
     linuxPackages.nvidia_x11.settings.libXNVCtrl
     openssl

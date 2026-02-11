@@ -2,24 +2,24 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.2";
   pname = "sselp";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/tools/${pname}-${version}.tar.gz";
+    url = "https://dl.suckless.org/tools/sselp-${finalAttrs.version}.tar.gz";
     sha256 = "08mqp00lrh1chdrbs18qr0xv63h866lkmfj87kfscwdm1vn9a3yd";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   patchPhase = ''
     sed -i "s@/usr/local@$out@g" config.mk
-    sed -i "s@/usr/X11R6/include@${libX11}/include@g" config.mk
-    sed -i "s@/usr/X11R6/lib@${libX11}/lib@g" config.mk
+    sed -i "s@/usr/X11R6/include@${libx11}/include@g" config.mk
+    sed -i "s@/usr/X11R6/lib@${libx11}/lib@g" config.mk
   '';
 
   meta = {
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "sselp";
   };
-}
+})

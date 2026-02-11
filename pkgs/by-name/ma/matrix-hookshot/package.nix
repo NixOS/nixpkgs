@@ -6,7 +6,6 @@
   makeWrapper,
   matrix-sdk-crypto-nodejs,
   yarnConfigHook,
-  yarnInstallHook,
   cargo,
   rustPlatform,
   rustc,
@@ -19,23 +18,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-hookshot";
-  version = "7.1.0";
+  version = "7.3.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     tag = finalAttrs.version;
-    hash = "sha256-jRLax1vqC0K3XvAWrH1J7nqtFioLr4n6Df9Kra/KKKU=";
+    hash = "sha256-FHxR0rUrony/z8Nxv4HA0XCDlwsdoLXK/yBQlfkC6U4=";
   };
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-bxSeaJyQojfqIl/X4pjG+QRATKYKjsQhTQ3JOY/HDFQ=";
+    hash = "sha256-Qodvybg0G2a6Jtcd89Mci/PoLXrozTJCRRVh/fedngk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-1eBiLZHGNJxXNCVavkKt0xckAD2cilOW2wNCtqJ8O4g=";
+    hash = "sha256-X0k60VOG/VoffE5+pCJ33C0Oxjr7NsOHHsLNWFb/z6s=";
   };
 
   buildInputs = [ openssl ];
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     yarnConfigHook
-    yarnInstallHook
     pkg-config
     cargo
     rustc
@@ -71,9 +69,31 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  installPhase = ''
+    runHook preInstall
+
+    rm -rf ./node_modules
+    yarn install --production --offline --force --ignore-engines --no-bin-links --frozen-lockfile
+
+    # Re-install matrix-sdk-crypto-nodejs
+    rm -rf node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+
+    mkdir -p $out/lib/node_modules/matrix-hookshot/
+    mkdir $out/bin
+
+    mv ./lib/* $out/lib/node_modules/matrix-hookshot
+    mv ./public ./assets ./node_modules ./package.json $out/lib/node_modules/matrix-hookshot
+
+    runHook postInstall
+  '';
+
   postInstall = ''
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" --add-flags \
-        "$out/lib/node_modules/matrix-hookshot/lib/App/BridgeApp.js"
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" \
+      --set NODE_ENV "production" \
+      --add-flags "$out/lib/node_modules/matrix-hookshot/App/BridgeApp.js"
   '';
 
   passthru.updateScript = nix-update-script { };

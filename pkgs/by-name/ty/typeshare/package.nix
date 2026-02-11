@@ -6,18 +6,18 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typeshare";
-  version = "1.13.3";
+  version = "1.13.4";
 
   src = fetchFromGitHub {
     owner = "1password";
     repo = "typeshare";
-    rev = "v${version}";
-    hash = "sha256-80wfQGfmzAuxAFS5jRlxLHh39G/5il6EXlrqeoNtkrk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8Pm+z407FDBLy0Hq2+T1rttFKnRWTNPPYTCn11SHcS8=";
   };
 
-  cargoHash = "sha256-Hmgg+nLtAmOB0h91wwQc2jZLibpWptPpf8Vizuz0jVE=";
+  cargoHash = "sha256-t5OJ4chxVhCRczfRPTZe2mkIDevSp7+1aVdplvJFCfg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,11 +34,11 @@ rustPlatform.buildRustPackage rec {
     description = "Command Line Tool for generating language files with typeshare";
     mainProgram = "typeshare";
     homepage = "https://github.com/1password/typeshare";
-    changelog = "https://github.com/1password/typeshare/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/1password/typeshare/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
     maintainers = [ ];
   };
-}
+})

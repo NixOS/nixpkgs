@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   httpx,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pyprusalink";
   version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

@@ -3,7 +3,7 @@
   buildPythonPackage,
   setuptools,
   pytestCheckHook,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gitUpdater,
 }:
 buildPythonPackage rec {
@@ -11,8 +11,7 @@ buildPythonPackage rec {
   version = "1.0.2025051200";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "vula";
     repo = "highctidh";
     tag = "v${version}";

@@ -3,16 +3,18 @@
   stdenv,
   makeWrapper,
   buildEnv,
-  bash,
+  bashNonInteractive,
   breezy,
   cacert,
   coreutils,
   cvs,
   darcs,
   findutils,
+  fossil,
   gawk,
   gitMinimal,
   git-lfs,
+  gnugrep,
   gnused,
   jq,
   mercurial,
@@ -24,26 +26,19 @@ let
   mkPrefetchScript =
     tool: src: deps:
     stdenv.mkDerivation {
-      name = "nix-prefetch-${tool}";
+      inherit (lib.trivial) version;
+      pname = "nix-prefetch-${tool}";
 
       strictDeps = true;
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ bash ];
+      buildInputs = [ bashNonInteractive ];
 
       dontUnpack = true;
 
       installPhase = ''
-        install -vD ${src} $out/bin/$name;
-        wrapProgram $out/bin/$name \
-          --prefix PATH : ${
-            lib.makeBinPath (
-              deps
-              ++ [
-                coreutils
-                gnused
-              ]
-            )
-          } \
+        install -vD ${src} $out/bin/$pname;
+        wrapProgram $out/bin/$pname \
+          --prefix PATH : ${lib.makeBinPath (deps ++ [ coreutils ])} \
           --set HOME /homeless-shelter
       '';
 
@@ -63,6 +58,7 @@ rec {
   # we expect people to have a Nix implementation available ambiently.
   nix-prefetch-bzr = mkPrefetchScript "bzr" ../../../build-support/fetchbzr/nix-prefetch-bzr [
     breezy
+    gnused
   ];
   nix-prefetch-cvs = mkPrefetchScript "cvs" ../../../build-support/fetchcvs/nix-prefetch-cvs [ cvs ];
   nix-prefetch-darcs = mkPrefetchScript "darcs" ../../../build-support/fetchdarcs/nix-prefetch-darcs [
@@ -71,16 +67,24 @@ rec {
     gawk
     jq
   ];
+  nix-prefetch-fossil =
+    mkPrefetchScript "fossil" ../../../build-support/fetchfossil/nix-prefetch-fossil
+      [
+        fossil
+      ];
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [
     findutils
     gawk
     gitMinimal
     git-lfs
+    gnused
   ];
   nix-prefetch-hg = mkPrefetchScript "hg" ../../../build-support/fetchhg/nix-prefetch-hg [
     mercurial
   ];
   nix-prefetch-svn = mkPrefetchScript "svn" ../../../build-support/fetchsvn/nix-prefetch-svn [
+    gnugrep
+    gnused
     subversion
   ];
   nix-prefetch-pijul = mkPrefetchScript "pijul" ../../../build-support/fetchpijul/nix-prefetch-pijul [
@@ -97,6 +101,7 @@ rec {
       nix-prefetch-bzr
       nix-prefetch-cvs
       nix-prefetch-darcs
+      nix-prefetch-fossil
       nix-prefetch-git
       nix-prefetch-hg
       nix-prefetch-svn

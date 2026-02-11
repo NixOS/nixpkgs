@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mmtui";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "SL-RU";
     repo = "mmtui";
-    tag = "v${version}";
-    hash = "sha256-s+50kz6OODZ0xKz8oNF2YEzk+mLZ6gXXynl8g6Uwdo4=";
+    tag = "mmt-v${finalAttrs.version}";
+    hash = "sha256-ESnxy3TUWBb0akP471dK6wFQyJQSnjlIevA7ndLAjoE=";
   };
 
-  cargoHash = "sha256-9F1YMepkWksTQRrkziNhLxVJnhoDH17lSKef5kOjp3Y=";
+  cargoHash = "sha256-Ck2mQ8PuA4apF6XKDtISmEtNFEHFRRlZwpYCDKCR/rc=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/SL-RU/mmtui/releases/tag/v${version}";
+    changelog = "https://github.com/SL-RU/mmtui/releases/tag/v${finalAttrs.version}";
     description = "TUI disk mount manager for TUI file managers";
     homepage = "https://github.com/SL-RU/mmtui";
     license = lib.licenses.mit;
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mmtui";
     platforms = lib.platforms.linux;
   };
-}
+})

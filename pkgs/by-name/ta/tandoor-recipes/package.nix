@@ -19,7 +19,7 @@ python.pkgs.buildPythonPackage {
 
   inherit (common) version src;
 
-  format = "other";
+  pyproject = false;
 
   patches = [
     ./pytest-xdist.patch # adapt pytest.ini the use $NIX_BUILD_CORES
@@ -166,7 +166,7 @@ python.pkgs.buildPythonPackage {
     updateScript = ./update.sh;
 
     tests = {
-      inherit (nixosTests) tandoor-recipes tandoor-recipes-script-name;
+      inherit (nixosTests) tandoor-recipes tandoor-recipes-script-name tandoor-recipes-media;
     };
   };
 

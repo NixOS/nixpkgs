@@ -7,14 +7,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pet";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "knqyf263";
     repo = "pet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-B0ilobUlp6UUXu6+lVqIHkbFnxVu33eXZFf+F7ODoQU=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/knqyf263/pet/cmd.version=${version}"
+    "-X=github.com/knqyf263/pet/cmd.version=${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -50,4 +50,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kalbasit ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

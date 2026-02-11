@@ -19,12 +19,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hashcat";
   version = "7.1.2";
 
   src = fetchurl {
-    url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
+    url = "https://hashcat.net/files/hashcat-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-lUamMm10dTC0T8wHm6utQDBKh/MtPJCAAW1Ys5z8i5Y=";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "COMPTIME=1337"
-    "VERSION_TAG=${version}"
+    "VERSION_TAG=${finalAttrs.version}"
     "USE_SYSTEM_OPENCL=1"
     "USE_SYSTEM_XXHASH=1"
     "USE_SYSTEM_ZLIB=1"
@@ -127,4 +127,4 @@ stdenv.mkDerivation rec {
       zimbatm
     ];
   };
-}
+})

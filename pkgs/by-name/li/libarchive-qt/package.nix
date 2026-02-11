@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    qt6.wrapQtAppsNoGuiHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [

@@ -4,7 +4,6 @@
   dulwich,
   fetchFromGitHub,
   gitpython,
-  pythonOlder,
   requests,
   setuptools-scm,
   voluptuous,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "dvc-studio-client";
   version = "0.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
@@ -43,6 +40,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/iterative/dvc-studio-client";
     changelog = "https://github.com/iterative/dvc-studio-client/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

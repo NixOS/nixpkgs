@@ -14,34 +14,55 @@ let
     types
     optional
     optionals
+    mapAttrs
+    mapAttrs'
+    filterAttrs
     ;
 
   cfg = config.programs.dms-shell;
 
+  path = [
+    "programs"
+    "dms-shell"
+  ];
+
+  builtInRemovedMsg = "This is now built-in in DMS and doesn't need additional dependencies.";
+
   optionalPackages =
     optionals cfg.enableSystemMonitoring [ pkgs.dgop ]
-    ++ optionals cfg.enableClipboard [
-      pkgs.cliphist
-      pkgs.wl-clipboard
-    ]
     ++ optionals cfg.enableVPN [
       pkgs.glib
       pkgs.networkmanager
     ]
-    ++ optional cfg.enableBrightnessControl pkgs.brightnessctl
-    ++ optional cfg.enableColorPicker pkgs.hyprpicker
     ++ optional cfg.enableDynamicTheming pkgs.matugen
     ++ optional cfg.enableAudioWavelength pkgs.cava
     ++ optional cfg.enableCalendarEvents pkgs.khal
-    ++ optional cfg.enableSystemSound pkgs.kdePackages.qtmultimedia;
+    ++ optional cfg.enableClipboardPaste pkgs.wtype;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule (path ++ [ "enableBrightnessControl" ]) builtInRemovedMsg)
+    (lib.mkRemovedOptionModule (path ++ [ "enableColorPicker" ]) builtInRemovedMsg)
+    (lib.mkRemovedOptionModule (
+      path ++ [ "enableSystemSound" ]
+    ) "qtmultimedia is now included on dms-shell package.")
+    (lib.mkRemovedOptionModule (path ++ [ "enableClipboard" ]) builtInRemovedMsg)
+  ];
+
   options.programs.dms-shell = {
     enable = mkEnableOption "DankMaterialShell, a complete desktop shell for Wayland compositors";
 
     package = mkPackageOption pkgs "dms-shell" { };
 
     systemd = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable DankMaterialShell systemd startup service.
+        '';
+      };
+
       target = mkOption {
         type = types.str;
         default = "graphical-session.target";
@@ -76,17 +97,6 @@ in
       '';
     };
 
-    enableClipboard = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to install dependencies required for clipboard management widgets.
-        This enables clipboard history and clipboard manager functionality.
-
-        Requires: cliphist, wl-clipboard
-      '';
-    };
-
     enableVPN = mkOption {
       type = types.bool;
       default = true;
@@ -95,28 +105,6 @@ in
         This enables VPN status monitoring and management through NetworkManager.
 
         Requires: glib, networkmanager
-      '';
-    };
-
-    enableBrightnessControl = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to install dependencies required for brightness and backlight control.
-        This enables screen brightness adjustment widgets.
-
-        Requires: brightnessctl
-      '';
-    };
-
-    enableColorPicker = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to install dependencies required for color picking functionality.
-        This enables on-screen color picker tools.
-
-        Requires: hyprpicker
       '';
     };
 
@@ -153,50 +141,90 @@ in
       '';
     };
 
-    enableSystemSound = mkOption {
+    enableClipboardPaste = mkOption {
       type = types.bool;
       default = true;
       description = ''
-        Whether to install dependencies required for system sound support.
-        This enables audio playback for system notifications and events.
+        Whether to install dependencies required for pasting directly from the clipboard history support.
+        This enables pressing Shift+Return for pasting entries from the clipboard history.
 
-        Requires: qtmultimedia
+        Requires: wtype
       '';
     };
 
     quickshell = {
       package = mkPackageOption pkgs "quickshell" { };
     };
+
+    plugins = mkOption {
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            enable = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Whether to enable this plugin";
+            };
+            src = mkOption {
+              type = types.either types.package types.path;
+              description = "Source of the plugin package or path";
+            };
+          };
+        }
+      );
+      default = { };
+      description = "DMS Plugins to install and enable";
+      example = lib.literalExpression ''
+        {
+          DockerManager = {
+            src = pkgs.fetchFromGitHub {
+              owner = "LuckShiba";
+              repo = "DmsDockerManager";
+              rev = "v1.2.0";
+              sha256 = "sha256-VoJCaygWnKpv0s0pqTOmzZnPM922qPDMHk4EPcgVnaU=";
+            };
+          };
+          AnotherPlugin = {
+            enable = true;
+            src = pkgs.another-plugin;
+          };
+        }
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
-    environment.etc."xdg/quickshell/dms".source = "${cfg.package}/share/quickshell/dms";
+    systemd.packages = lib.mkIf cfg.systemd.enable [ cfg.package ];
 
-    systemd.packages = [ cfg.package ];
-
-    systemd.user.services.dms = {
+    systemd.user.services.dms = lib.mkIf cfg.systemd.enable {
       wantedBy = [ cfg.systemd.target ];
-      restartTriggers = optional cfg.systemd.restartIfChanged "${cfg.package}/share/quickshell/dms";
+      restartIfChanged = cfg.systemd.restartIfChanged;
       path = lib.mkForce [ ];
     };
 
     environment.systemPackages = [
       cfg.package
       cfg.quickshell.package
-      pkgs.ddcutil
-      pkgs.libsForQt5.qt5ct
-      pkgs.kdePackages.qt6ct
     ]
     ++ optionalPackages;
 
-    fonts.packages = with pkgs; [
-      fira-code
-      inter
-      material-symbols
-    ];
+    environment.etc =
+      mapAttrs'
+        (name: value: {
+          name = "xdg/quickshell/dms-plugins/${name}";
+          inherit value;
+        })
+        (
+          mapAttrs (name: plugin: {
+            source = plugin.src;
+          }) (filterAttrs (n: v: v.enable) cfg.plugins)
+        );
 
+    services.power-profiles-daemon.enable = lib.mkDefault true;
+    services.accounts-daemon.enable = lib.mkDefault true;
+    hardware.i2c.enable = lib.mkDefault true;
     hardware.graphics.enable = lib.mkDefault true;
   };
 
-  meta.maintainers = with lib.maintainers; [ luckshiba ];
+  meta.maintainers = lib.teams.danklinux.members;
 }

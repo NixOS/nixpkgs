@@ -27,7 +27,15 @@
   brotli,
   libxkbcommon,
   libxcb,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  xrandr,
+  libxkbfile,
   wayland,
   libudev0-shim,
   bubblewrap,
@@ -150,18 +158,16 @@ let
         brotli
         libxkbcommon
         libxcb
-      ]
-      ++ (with pkgs.xorg; [
-        libX11
-        libXdamage
+        libx11
+        libxdamage
         xrandr
-        libXtst
-        libXcomposite
-        libXext
-        libXfixes
-        libXrandr
+        libxtst
+        libxcomposite
+        libxext
+        libxfixes
+        libxrandr
         libxkbfile
-      ]);
+      ];
 
     profile = ''
       export QT_QPA_PLATFORM_PLUGIN_PATH=/opt/PixInsight/bin/lib/qt-plugins/platforms

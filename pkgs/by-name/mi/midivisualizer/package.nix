@@ -4,26 +4,26 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
   libnotify,
   glfw,
   makeWrapper,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   gtk3,
   ffmpeg-full,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "midivisualizer";
-  version = "7.2";
+  version = "7.3";
 
   src = fetchFromGitHub {
     owner = "kosua20";
     repo = "MIDIVisualizer";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ilsqc14PBTqreLhrEpvMOZAp37xOY/OwuhHTjeOjqm8=";
+    sha256 = "sha256-ljDdbpvXJXv7YPgxwXELee06NNOwqIBP8C/IbL7qBuk=";
   };
 
   nativeBuildInputs = [
@@ -38,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
     gtk3
   ];
 

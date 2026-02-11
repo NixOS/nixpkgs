@@ -4,7 +4,6 @@
   cryptography,
   fetchFromGitHub,
   getmac,
-  pythonOlder,
   requests,
   setuptools,
   zeroconf,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "boschshcpy";
-  version = "0.2.107";
+  version = "0.2.109";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tschamm";
     repo = "boschshcpy";
     tag = version;
-    hash = "sha256-JHOaviN8pjG/VcYCZUk7vRTLKCfj5TMCQYo+dNDdX5I=";
+    hash = "sha256-CHACdcFYmtDgq2eGMa8f5nsIbl8murFsieG2xA5/tVc=";
   };
 
   build-system = [ setuptools ];

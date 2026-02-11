@@ -9,14 +9,14 @@
   kopia,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kopia";
   version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5oNam99Mij78snSO6jiGPYzeD68sXEBKM2dGQtTUrww=";
   };
 
@@ -25,8 +25,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [
-    "-X github.com/kopia/kopia/repo.BuildVersion=${version}"
-    "-X github.com/kopia/kopia/repo.BuildInfo=${src.rev}"
+    "-X github.com/kopia/kopia/repo.BuildVersion=${finalAttrs.version}"
+    "-X github.com/kopia/kopia/repo.BuildInfo=${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -54,7 +54,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://kopia.io";
-    changelog = "https://github.com/kopia/kopia/releases/tag/v${version}";
+    changelog = "https://github.com/kopia/kopia/releases/tag/v${finalAttrs.version}";
     description = "Cross-platform backup tool with fast, incremental backups, client-side end-to-end encryption, compression and data deduplication";
     mainProgram = "kopia";
     license = lib.licenses.asl20;
@@ -64,4 +64,4 @@ buildGoModule rec {
       nadir-ishiguro
     ];
   };
-}
+})

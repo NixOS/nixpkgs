@@ -11,14 +11,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "youki";
   version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "youki";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-b2R9/ADoZfRSu1Qh7hImR1Y+ZX15Uhk7JFwD8ipec6o=";
   };
 
@@ -58,10 +58,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Container runtime written in Rust";
     homepage = "https://containers.github.io/youki/";
-    changelog = "https://github.com/containers/youki/releases/tag/v${version}";
+    changelog = "https://github.com/containers/youki/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ builditluc ];
     platforms = lib.platforms.linux;
     mainProgram = "youki";
   };
-}
+})

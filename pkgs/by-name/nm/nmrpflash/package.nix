@@ -6,14 +6,14 @@
   pkg-config,
   stdenv,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nmrpflash";
   version = "0.9.26";
 
   src = fetchFromGitHub {
     owner = "jclehner";
     repo = "nmrpflash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-I+6bZtiwR1DbZ8ykIBVBqo1LdQftUaU301aMh01StqU=";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   PREFIX = "${placeholder "out"}";
-  STANDALONE_VERSION = version;
+  STANDALONE_VERSION = finalAttrs.version;
 
   preInstall = ''
     mkdir -p $out/bin
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nmrpflash";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,15 +4,15 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "butane";
-  version = "0.25.1";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "butane";
-    rev = "v${version}";
-    hash = "sha256-HrLnXkaayCmMrvW79NSYrmI0ujfHtRwWmonkbvTXEXY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-htD/FecmBVUp0bmzDJpUNw8rVr9mheFwagUISFu8lJM=";
   };
 
   vendorHash = null;
@@ -22,7 +22,7 @@ buildGoModule rec {
   subPackages = [ "internal" ];
 
   ldflags = [
-    "-X github.com/coreos/butane/internal/version.Raw=v${version}"
+    "-X github.com/coreos/butane/internal/version.Raw=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -39,4 +39,4 @@ buildGoModule rec {
       ruuda
     ];
   };
-}
+})

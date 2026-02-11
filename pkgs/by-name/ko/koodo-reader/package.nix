@@ -14,30 +14,32 @@
   wrapGAppsHook3,
   xcbuild,
 
-  electron_37,
+  electron_39,
+
+  nix-update-script,
 }:
 
 let
-  electron = electron_37; # don't use latest electron to avoid going over the supported abi numbers
+  electron = electron_39; # don't use latest electron to avoid going over the supported abi numbers
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "2.0.9";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t93yRd9TrtGZogjpSy0Bse0cM5BFyMaSxFYQFZZyvPM=";
+    hash = "sha256-KUcI+0+ICMdwAF30CLM3QdS+X8UnYiHhcYkvEQ6WgS8=";
   };
 
   patches = [
-    ./bump-node-abi.patch
+    ./bump-abi-compat.patch
   ];
 
-  offlineCache = fetchYarnDeps {
+  yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-gRaHVWSTBwjVcswy6DVk5yLympudbDcKkvWDry4rsvI=";
+    hash = "sha256-XyFcY0XeNdNzLuqfv9Z2/41875Nl5OrAT/QVyI/+OQc=";
   };
 
   nativeBuildInputs = [
@@ -133,6 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
       terminal = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/${finalAttrs.src.tag}";

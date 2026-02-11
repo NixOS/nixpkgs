@@ -1,26 +1,29 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   celery,
   cron-descriptor,
   django-timezone-field,
+  python-crontab,
+  tzdata,
+
+  # tests
   ephem,
-  fetchFromGitHub,
   pytest-django,
   pytest-timeout,
   pytestCheckHook,
-  python-crontab,
-  pythonOlder,
-  setuptools,
-  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "django-celery-beat";
   version = "2.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "celery";
@@ -34,23 +37,28 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    cron-descriptor
-    python-crontab
     celery
+    cron-descriptor
     django-timezone-field
+    python-crontab
     tzdata
   ];
 
   nativeCheckInputs = [
     ephem
-    pytest-timeout
     pytest-django
+    pytest-timeout
     pytestCheckHook
   ];
 
   disabledTestPaths = [
     # Connection error
     "t/unit/test_schedulers.py"
+  ];
+
+  disabledTests = [
+    # AssertionError: 'At 02:00, only on Monday UTC' != 'At 02:00 AM, only on Monday UTC'
+    "test_long_name"
   ];
 
   pythonImportsCheck = [ "django_celery_beat" ];

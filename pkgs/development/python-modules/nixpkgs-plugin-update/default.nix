@@ -3,6 +3,7 @@
   buildPythonPackage,
   uv-build,
   gitpython,
+  packaging,
   ruff,
   mypy,
 }:
@@ -10,7 +11,7 @@
 buildPythonPackage {
   pname = "nixpkgs-plugin-update";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = ./nixpkgs-plugin-update;
 
@@ -18,6 +19,7 @@ buildPythonPackage {
 
   dependencies = [
     gitpython
+    packaging
   ];
 
   nativeCheckInputs = [

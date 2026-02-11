@@ -11,14 +11,14 @@
 
 assert blas.isILP64 == lapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mopac";
   version = "23.2.2";
 
   src = fetchFromGitHub {
     owner = "openmopac";
     repo = "mopac";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VBbW0N67ZbTymYfLrT625rkWeeYbFrEdTxPOCanFT0c=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
       markuskowa
     ];
   };
-}
+})

@@ -20,16 +20,16 @@
   withGlow ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nixpkgs-review";
-  version = "3.5.1";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
-    tag = version;
-    hash = "sha256-43+H68OPABAqg9GQZJ+XehyWmUWk+EWiHzSxyc55luY=";
+    tag = finalAttrs.version;
+    hash = "sha256-AYizZ36di7DOtmaqMtWTvMVfe4DqJfCdhvxypweEArs=";
   };
 
   build-system = [
@@ -50,7 +50,6 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   makeWrapperArgs =
     let
@@ -80,14 +79,15 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
+    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${finalAttrs.version}";
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = lib.licenses.mit;
     mainProgram = "nixpkgs-review";
     maintainers = with lib.maintainers; [
+      figsoda
       mdaniels5757
       mic92
     ];
   };
-}
+})

@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hexyl";
   version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "hexyl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TmFvv+jzOSM8kKCxBbUoDsUjKRPTplhWheVfIjS5nsY=";
   };
 
@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -34,7 +33,7 @@ rustPlatform.buildRustPackage rec {
       characters and non-ASCII).
     '';
     homepage = "https://github.com/sharkdp/hexyl";
-    changelog = "https://github.com/sharkdp/hexyl/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sharkdp/hexyl/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -45,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "hexyl";
   };
-}
+})

@@ -62,7 +62,7 @@
 #    KERNEL=="*", SUBSYSTEMS=="usb", MODE="0664", GROUP="usb"
 #  '';
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spice-gtk";
   version = "0.42";
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/gtk/${pname}-${version}.tar.xz";
+    url = "https://www.spice-space.org/download/gtk/spice-gtk-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-k4ARfxgRrR+qGBLLZgJHm2KQ1KDYzEQtREJ/f2wOelg=";
   };
 
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+  env.PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   mesonFlags = [
     "-Dusb-acl-helper-dir=${placeholder "out"}/bin"
@@ -184,4 +184,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.xeji ];
     platforms = lib.platforms.unix;
   };
-}
+})

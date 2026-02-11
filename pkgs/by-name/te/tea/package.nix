@@ -6,7 +6,7 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tea";
   version = "0.11.1";
 
@@ -14,14 +14,14 @@ buildGoModule rec {
     domain = "gitea.com";
     owner = "gitea";
     repo = "tea";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-bphXaE5qPNzqn+PlzESZadpwbS6KryJEnL7hH/CBoTI=";
   };
 
   vendorHash = "sha256-Y9YDwfubT+RR1v6BTFD+A8GP2ArQaIIoMJmak+Vcx88=";
 
   ldflags = [
-    "-X code.gitea.io/tea/cmd.Version=${version}"
+    "-X code.gitea.io/tea/cmd.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -48,4 +48,4 @@ buildGoModule rec {
     ];
     mainProgram = "tea";
   };
-}
+})

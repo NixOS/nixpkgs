@@ -9,14 +9,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-du";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nix-du";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/Afp0InA/0xXdombAzylYJF9wcv5WwYizVsP+fHTDrM=";
   };
 
@@ -46,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.symphorien ];
     platforms = lib.platforms.unix;
     mainProgram = "nix-du";
-    changelog = "https://github.com/symphorien/nix-du/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/symphorien/nix-du/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})

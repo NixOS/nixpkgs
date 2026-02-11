@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conmon";
-  version = "2.1.13";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "conmon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/Kt49c8a+R/+Z3KmFLpRTG+BdfPDAOEUtSis3alLAUQ=";
+    hash = "sha256-RVzjqTqw1NGAzXwiAKekByXA1aGgFrfwo3RtGKrfODk=";
     leaveDotGit = true;
     postFetch = ''
       cd $out

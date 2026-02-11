@@ -1,8 +1,11 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
+  gtk-doc,
+  mate-common,
   pkg-config,
   gettext,
   itstool,
@@ -18,31 +21,31 @@
   mate-desktop,
   hicolor-icon-theme,
   wrapGAppsHook3,
-  mateUpdateScript,
+  yelp-tools,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eom";
-  version = "1.28.0";
+  version = "1.28.1";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "mgHKsplaGoxyWMhl6uXxgu1HMMRGcq/cOgfkI+3VOrw=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "eom";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2MO8z30Styv5vAnNVFpETAZtZ+LMbgBSDq1mUQZ9X1c=";
   };
 
-  patches = [
-    # Switch to girepository-2.0
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/eom/raw/84b45dc6302f378926be390d39a7cca3ec4f26ea/f/libpeas1_pygobject352.patch";
-      hash = "sha256-HcwWXAnVzz5uuAz8Mljci2FA72TZJTD28qLvczXVtZU=";
-    })
-  ];
-
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
+    gtk-doc
+    mate-common # mate-common.m4 macros
     pkg-config
     gettext
     itstool
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [
@@ -61,7 +64,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Image viewing and cataloging program for the MATE desktop";
@@ -71,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})

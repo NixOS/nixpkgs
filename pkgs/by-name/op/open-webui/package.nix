@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.41";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-/RpLiTz8WiI2fTJuLcksbB0pa5HOR13ci4G2LjdZu7Y=";
+    hash = "sha256-BS/EB64y/ytHqfKdAmTV0ahT6HQPo96cs+O1CYwd8Rs=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-n31+P5QU0XsuyNvipUU2A9f7CE3jKQa8ZAfwFuS3SXg=";
+    npmDepsHash = "sha256-OH0TuHN324Ef7ZX2JpWVi5q0ycgf1E+UXJj2b3ubMd4=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -75,8 +75,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ hatchling ];
 
-  patches = [ ./langchain-v1.patch ];
-
   # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -114,7 +112,6 @@ python3Packages.buildPythonApplication rec {
       ddgs
       docx2txt
       einops
-      extract-msg
       fake-useragent
       fastapi
       faster-whisper
@@ -128,11 +125,11 @@ python3Packages.buildPythonApplication rec {
       google-generativeai
       googleapis-common-protos
       httpx
-      iso-639
       itsdangerous
       langchain
       langchain-classic
       langchain-community
+      langchain-text-splitters
       langdetect
       ldap3
       loguru
@@ -157,7 +154,6 @@ python3Packages.buildPythonApplication rec {
       opentelemetry-instrumentation-httpx
       opentelemetry-instrumentation-aiohttp-client
       pandas
-      passlib
       peewee
       peewee-migrate
       pgvector
@@ -173,6 +169,7 @@ python3Packages.buildPythonApplication rec {
       pypdf
       python-dotenv
       python-jose
+      python-mimeparse
       python-multipart
       python-pptx
       python-socketio

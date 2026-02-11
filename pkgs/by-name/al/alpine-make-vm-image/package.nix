@@ -16,14 +16,14 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alpine-make-vm-image";
   version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "alpinelinux";
     repo = "alpine-make-vm-image";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AIwT2JAGnMeMXUXZ0FRJthf22FvFfTTw/2LtZKPSj6g=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "alpine-make-vm-image";
   };
-}
+})

@@ -9,14 +9,14 @@
   lapack,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "greenx";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "nomad-coe";
     repo = "greenx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-otIs2Y79KoEL4ut8YQe7Y27LpmpId8h/X8B6GIg8l+E=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

@@ -3,25 +3,27 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  aiohttp,
   mashumaro,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "py-opensonic";
-  version = "7.0.2";
+  version = "8.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "khers";
     repo = "py-opensonic";
     tag = "v${version}";
-    hash = "sha256-t+MftumVBcIOO8WvWZcLXLp5Iq87Vpvqc4cxH+yTBAo=";
+    hash = "sha256-/P/7ytA0YHuJZEq7KQosPBQM2vo6VAss1G8pTIEswJA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    aiohttp
     mashumaro
     requests
   ];

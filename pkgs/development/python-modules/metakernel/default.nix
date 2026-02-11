@@ -7,15 +7,12 @@
   jedi,
   jupyter-core,
   pexpect,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "metakernel";
   version = "0.30.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

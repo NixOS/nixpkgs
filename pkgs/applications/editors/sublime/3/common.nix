@@ -9,7 +9,7 @@
   fetchurl,
   lib,
   stdenv,
-  xorg,
+  libx11,
   glib,
   glibcLocales,
   gtk3,
@@ -47,7 +47,7 @@ let
   arch = if stdenv.hostPlatform.system == "i686-linux" then "x32" else "x64";
 
   libPath = lib.makeLibraryPath [
-    xorg.libX11
+    libx11
     glib
     gtk3
     cairo

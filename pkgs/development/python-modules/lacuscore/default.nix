@@ -4,7 +4,6 @@
   buildPythonPackage,
   defang,
   dnspython,
-  eval-type-backport,
   fetchFromGitHub,
   orjson,
   playwrightcapture,
@@ -18,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "lacuscore";
-  version = "1.20.1";
+  version = "1.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "LacusCore";
     tag = "v${version}";
-    hash = "sha256-L7hmqNymXkZD/NQk1OQ9H34aJcCa6W23gkQSjomv7Iw=";
+    hash = "sha256-I6Qh7AzcTYDxNmvgTNVVPSenLfAbdLawdiN8JrrF25s=";
   };
 
   pythonRelaxDeps = [
@@ -51,8 +50,7 @@ buildPythonPackage rec {
   ++ playwrightcapture.optional-dependencies.recaptcha
   ++ redis.optional-dependencies.hiredis
   ++ ua-parser.optional-dependencies.regex
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
-  ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   # Module has no tests
   doCheck = false;

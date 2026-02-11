@@ -10,14 +10,14 @@
 let
   jdk = jdk11;
 in
-stdenv.mkDerivation rec {
-  version = "5.6.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "5.6.1";
   pname = "keystore-explorer";
   src = fetchzip {
-    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-${
-      lib.replaceStrings [ "." ] [ "" ] version
+    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${finalAttrs.version}/kse-${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
-    sha256 = "sha256-+ZgALJaZodLmAtdCIE1SG6D0lzlETg4mMPXheXmGhPc=";
+    sha256 = "sha256-yhYQpeBoicILYEXpW+oqDdF+KieDbNmTFpxL+aA8vTw=";
   };
 
   # glib is necessary so file dialogs don't hang.
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.numinit ];
     platforms = lib.platforms.unix;
   };
-}
+})

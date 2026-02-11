@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pdm-backend,
@@ -107,6 +109,14 @@ buildPythonPackage rec {
     # flaky
     "test_llm_caching"
     "test_llm_caching_async"
+    # Triggered by https://github.com/Mause/duckdb_engine/issues/1379
+    "test_table_info"
+    "test_sql_database_run"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: module 'ast' has no attribute 'Str'
+    # https://github.com/langchain-ai/langchain-community/issues/492
+    "test_no_dynamic__all__"
   ];
 
   disabledTestPaths = [

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Footage";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VEL96JrJ5eJEoX2miiB4dqGUXizNlYWCUZkkYkh09B8=";
   };
 
@@ -94,5 +94,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/adhami3310/Footage";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ onny ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

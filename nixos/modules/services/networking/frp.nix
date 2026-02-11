@@ -43,6 +43,17 @@ in
                 '';
               };
 
+              environmentFiles = lib.mkOption {
+                type = lib.types.listOf lib.types.path;
+                description = ''
+                  List of paths files that follows systemd environmentfile structure.
+                  Can be used to pass secrets to settings attribute.
+
+                  Example content of a file: SECRET_TOKEN=1234
+                '';
+                default = [ ];
+              };
+
               settings = lib.mkOption {
                 type = settingsFormat.type;
                 default = { };
@@ -100,6 +111,7 @@ in
           RestartSec = 15;
           ExecStart = "${cfg.package}/bin/${executableFile} --strict_config -c ${configFile}";
           DynamicUser = true;
+          EnvironmentFile = options.environmentFiles;
           # Hardening
           CapabilityBoundingSet = serviceCapability;
           AmbientCapabilities = serviceCapability;

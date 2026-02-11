@@ -1,10 +1,10 @@
 mod activate;
-mod chroot_realpath;
 mod config;
 mod find_etc;
 mod fs;
 mod init;
 mod initrd_init;
+mod path;
 mod proc_mounts;
 mod switch_root;
 
@@ -14,10 +14,10 @@ use anyhow::{Context, Result, bail};
 
 pub use crate::{
     activate::activate,
-    chroot_realpath::{canonicalize_in_chroot, chroot_realpath},
     find_etc::find_etc,
     init::init,
     initrd_init::initrd_init,
+    path::{resolve_in_prefix, resolve_in_root},
     switch_root::switch_root,
 };
 
@@ -77,7 +77,7 @@ pub fn verify_init_is_nixos(prefix: &str, path: impl AsRef<Path>) -> Result<Path
 pub fn find_init_in_prefix(prefix: &str) -> Result<PathBuf> {
     let cmdline = std::fs::read_to_string("/proc/cmdline")?;
     let init = extract_init(&cmdline)?;
-    let canonicalized_init = canonicalize_in_chroot(prefix, &init)?;
+    let canonicalized_init = resolve_in_prefix(prefix, &init)?;
     log::info!("Found init: {}.", canonicalized_init.display());
     Ok(canonicalized_init)
 }

@@ -7,13 +7,11 @@
   django,
   fetchFromGitHub,
   httpx,
-  importlib-metadata,
   jsonpickle,
   pymysql,
   pytest-asyncio_0,
   pynamodb,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   sqlalchemy,
@@ -25,8 +23,6 @@ buildPythonPackage rec {
   pname = "aws-xray-sdk";
   version = "2.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";
@@ -42,8 +38,7 @@ buildPythonPackage rec {
     jsonpickle
     requests
     wrapt
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     aiohttp

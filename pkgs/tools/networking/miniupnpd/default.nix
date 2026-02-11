@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
     "--firewall=${firewall}"
     # allow using various config options
     "--ipv6"
+    "--igd2"
     "--leasefile"
     "--regex"
     "--vendorcfg"

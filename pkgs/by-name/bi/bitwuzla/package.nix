@@ -11,6 +11,7 @@
   gtest,
   gmp,
   cadical,
+  cadical' ? cadical.override { version = "2.1.3"; },
   cryptominisat,
   kissat,
   zlib,
@@ -26,11 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-v5r+BWXUUbKtkos6qmGMC9MMytS/h759SHY6lsTHU1k=";
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     meson
@@ -41,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cadical
+    cadical'
     cryptominisat
     btor2tools
     symfpu

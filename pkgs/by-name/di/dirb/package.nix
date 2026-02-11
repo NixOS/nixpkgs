@@ -10,12 +10,12 @@ let
   major = "2";
   minor = "22";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dirb";
   version = "${major}.${minor}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dirb/${version}/dirb${major}${minor}.tar.gz";
+    url = "mirror://sourceforge/dirb/${finalAttrs.version}/dirb${major}${minor}.tar.gz";
     sha256 = "0b7wc2gvgnyp54rxf1n9arn6ymrvdb633v6b3ah138hw4gg8lx7k";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ gpl2Only ];
     platforms = lib.platforms.unix;
   };
-}
+})

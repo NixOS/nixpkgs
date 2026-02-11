@@ -15,17 +15,18 @@
   gfortran,
   criterion,
   mpfr,
+  enableZimpl ? (!stdenv.hostPlatform.isDarwin),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-scip";
-  version = "9.2.4";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "scip";
-    tag = "v${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-nwFRtP63/HPfk9JhcyLKApicgqE9IF+7s5MGGrVJrpM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YbPGJl2q9Ja1WRhcmpMJgmfE8crY/dH05ayj/N2pQAY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,7 +34,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     scipopt-soplex
     scipopt-papilo
-    scipopt-zimpl
     ipopt
     gmp
     readline
@@ -42,17 +42,21 @@ stdenv.mkDerivation rec {
     boost
     gfortran
     criterion
-    mpfr # if not included, throws fatal error: mpfr.h not found
-  ];
+  ]
+  ++ lib.optional enableZimpl scipopt-zimpl;
+
+  cmakeFlags = lib.optional (!enableZimpl) "-DZIMPL=OFF";
+
+  propagatedBuildInputs = [ mpfr ];
 
   doCheck = true;
 
   meta = {
     maintainers = with lib.maintainers; [ fettgoenner ];
-    changelog = "https://scipopt.org/doc-${version}/html/RN${lib.versions.major version}.php";
+    changelog = "https://scipopt.org/doc-${finalAttrs.version}/html/RN${lib.versions.major finalAttrs.version}.php";
     description = "Solving Constraint Integer Programs";
     license = lib.licenses.asl20;
     homepage = "https://github.com/scipopt/scip";
     mainProgram = "scip";
   };
-}
+})

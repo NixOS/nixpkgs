@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yubihsm-connector";
   version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-connector";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-hiCh/TG1epSmJtaptfVzcPklDTaBh0biKqfM01YoWo0=";
   };
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "yubihsm-connector";
   };
-}
+})

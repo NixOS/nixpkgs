@@ -7,16 +7,20 @@
   fetchpatch,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fcp";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "svetlitski";
     repo = "fcp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0f242n8w88rikg1srimdifadhggrb2r1z0g65id60ahb4bjm8a0x";
   };
+
+  patches = [
+    ./0002-trailing-semicolon-in-macro.patch
+  ];
 
   cargoPatches = [
     (fetchpatch {
@@ -44,10 +48,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Significantly faster alternative to the classic Unix cp(1) command";
     homepage = "https://github.com/svetlitski/fcp";
-    changelog = "https://github.com/svetlitski/fcp/releases/tag/v${version}";
+    changelog = "https://github.com/svetlitski/fcp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "fcp";
   };
-}
+})

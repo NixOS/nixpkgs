@@ -20,7 +20,7 @@ in
 buildPythonPackage rec {
   pname = "deepwave";
   version = "0.0.18";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ar4";
@@ -63,11 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deepwave" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wave propagation modules for PyTorch";
     homepage = "https://github.com/ar4/deepwave";
     license = lib.licenses.mit;
-    platforms = intersectLists lib.platforms.x86_64 lib.platforms.linux;
+    platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
     maintainers = with lib.maintainers; [ atila ];
   };
 }

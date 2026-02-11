@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sniffglue";
   version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "sniffglue";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Pp/SJJQFpEU/4GKZQB8BjRGS4hqB850QbSb5WoG6Wh4=";
   };
 
@@ -38,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "sniffglue";
   };
-}
+})

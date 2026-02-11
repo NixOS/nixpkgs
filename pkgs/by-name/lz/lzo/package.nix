@@ -5,12 +5,12 @@
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lzo";
   version = "2.10";
 
   src = fetchurl {
-    url = "https://www.oberhumer.com/opensource/lzo/download/${pname}-${version}.tar.gz";
+    url = "https://www.oberhumer.com/opensource/lzo/download/lzo-${finalAttrs.version}.tar.gz";
     sha256 = "0wm04519pd3g8hqpjqhfr72q8qmbiwqaxcs3cndny9h86aa95y60";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.all;
   };
-}
+})

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   numpy,
 }:
@@ -16,12 +15,10 @@ buildPythonPackage {
   # Pypi source package doesn't contain tests
   src = fetchFromGitHub {
     owner = "dorianbrown";
-    repo = "rank-bm25";
-    rev = version;
+    repo = "rank_bm25";
+    tag = version;
     hash = "sha256-+BxQBflMm2AvCLAFFj52Jpkqn+KErwYXU1wztintgOg=";
   };
-
-  disabled = pythonOlder "3.7";
 
   postPatch = ''
     # Upstream doesn't provide a PKG-INFO file

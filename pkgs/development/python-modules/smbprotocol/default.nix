@@ -7,21 +7,18 @@
   pyspnego,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "smbprotocol";
-  version = "1.15.0";
+  version = "1.16.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "smbprotocol";
     tag = "v${version}";
-    hash = "sha256-4BIrJAYazU4Bm6V1bYW/Bw2MXpR7CQpGQ6JammJ75HI=";
+    hash = "sha256-OZedYBOMBO/EegSvg7aq5lIOWdxSOHh+yHDFZ7bwLec=";
   };
 
   propagatedBuildInputs = [

@@ -6,7 +6,6 @@
   pkg-config,
   alsa-lib,
   ladspa-sdk,
-  lash,
   libarchive,
   libjack2,
   liblo,
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     ladspa-sdk
-    lash
     libarchive
     libjack2
     liblo

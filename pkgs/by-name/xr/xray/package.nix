@@ -13,18 +13,18 @@
   ],
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xray";
-  version = "25.12.2";
+  version = "26.1.13";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
-    rev = "v${version}";
-    hash = "sha256-QP6sPeh5j8FJ8sBxYLWB/y66BwAjRk+wJiivGC2xEls=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Sb9Q+HUDdvyDIMpKaNWvc4BipAxmITeGkOl09dPLs9k=";
   };
 
-  vendorHash = "sha256-LzCjzEOREqR108v7zR5jWuDwcrb1K58rpv9RyQUxgic=";
+  vendorHash = "sha256-mWZwzuEYbmNcrpRGvvZVJ7be7nRQLo7m2MM1OM3Lqzs=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -64,4 +64,4 @@ buildGoModule rec {
     license = with lib.licenses; [ mpl20 ];
     maintainers = with lib.maintainers; [ iopq ];
   };
-}
+})

@@ -7,13 +7,13 @@
 }:
 buildGoModule {
   pname = "terraform-config-inspect";
-  version = "0-unstable-2025-08-28";
+  version = "0-unstable-2026-02-04";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-config-inspect";
-    rev = "225c06ed5fd99341e37f199aed9c91e829c14be1";
-    hash = "sha256-3zl2rGij/DBwFOKCLQIkadgKhHYOA+e7v5qrU2qbd+g=";
+    rev = "477360eb0c774b44c9769c270aa701536576cbd7";
+    hash = "sha256-ingQyP+DhVvvz9rL+Pbec3dAYS5Qo5b5l75J98KWws4=";
   };
 
   vendorHash = "sha256-iYrSk9JqxvhYSJuSv/nhZep41gRr644ZzGFWXMGQgyc=";

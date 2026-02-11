@@ -31,11 +31,16 @@ stdenv.mkDerivation {
     "OUTPUT=$(libName)"
     "HIDOBJ="
   ];
-  NIX_LDFLAGS = [
-    "-lpugixml"
-    "-lhidapi${hidapiDriver}"
-  ];
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${hidapi}/include/hidapi" ];
+
+  env = {
+    NIX_LDFLAGS = toString [
+      "-lpugixml"
+      "-lhidapi${hidapiDriver}"
+    ];
+    NIX_CFLAGS_COMPILE = toString [
+      "-I${hidapi}/include/hidapi"
+    ];
+  };
 
   patches = [ ./bsl430.patch ];
 

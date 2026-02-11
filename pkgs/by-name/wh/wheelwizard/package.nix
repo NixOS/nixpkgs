@@ -19,7 +19,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "TeamWheelWizard";
     repo = "WheelWizard";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-DuEI6bmvNP6wRuZX9Do0FGDsu80ldy0SCefBk6gqT9s=";
   };
   postPatch = ''
