@@ -1,0 +1,28 @@
+diff --git a/setup.py b/setup.py
+index e9b36e2a2..bc9e2f1e3 100644
+--- a/setup.py
++++ b/setup.py
+@@ -20,6 +20,15 @@ from setuptools.command.build_ext import build_ext
+ from setuptools_scm import get_version
+ from torch.utils.cpp_extension import CUDA_HOME, ROCM_HOME
+ 
++import os
++import json
++
++if "NIX_ATTRS_JSON_FILE" in os.environ:
++    with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
++        NIX_ATTRS = json.load(f)
++else:
++    NIX_ATTRS = { "cmakeFlags": os.environ.get("cmakeFlags", "").split() }
++
+ 
+ def load_module_from_path(module_name, path):
+     spec = importlib.util.spec_from_file_location(module_name, path)
+@@ -151,6 +160,7 @@ class cmake_build_ext(build_ext):
+         cmake_args = [
+             "-DCMAKE_BUILD_TYPE={}".format(cfg),
+             "-DVLLM_TARGET_DEVICE={}".format(VLLM_TARGET_DEVICE),
++            *NIX_ATTRS["cmakeFlags"],
+         ]
+ 
+         verbose = envs.VERBOSE

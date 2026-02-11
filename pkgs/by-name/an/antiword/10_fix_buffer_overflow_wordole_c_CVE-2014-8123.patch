@@ -1,0 +1,18 @@
+Description: Add check for buffer overflow with malformed input files
+Author: <eriks@debian.org>
+Bug-Debian: http://bugs.debian.org/407015
+Last-Update: 2009-06-03
+
+--- antiword-0.37~/wordole.c	2005-08-26 21:49:57.000000000 +0200
++++ antiword-0.37/wordole.c	2009-06-03 22:31:15.948014682 +0200
+@@ -259,6 +259,10 @@
+ 		}
+ 		tNameSize = (size_t)usGetWord(0x40, aucBytes);
+ 		tNameSize = (tNameSize + 1) / 2;
++		if ( tNameSize > sizeof(atPPSlist[iIndex].szName)) {
++			werr(0, "Name Size of PPS %d is too large", iIndex);
++			tNameSize = sizeof(atPPSlist[iIndex].szName);
++		}
+ 		vName2String(atPPSlist[iIndex].szName, aucBytes, tNameSize);
+ 		atPPSlist[iIndex].ucType = ucGetByte(0x42, aucBytes);
+ 		if (atPPSlist[iIndex].ucType == 5) {

@@ -1,0 +1,60 @@
+{
+  buildGoModule,
+  fetchFromCodeberg,
+  lib,
+  jq,
+  installShellFiles,
+  makeBinaryWrapper,
+  scdoc,
+  nix-update-script,
+}:
+
+buildGoModule (finalAttrs: {
+  pname = "ijq";
+  version = "1.2.0";
+
+  src = fetchFromCodeberg {
+    owner = "gpanders";
+    repo = "ijq";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PT7WnCZL4Cfo/+VW3ImOloDOI9d0GX4UTcC8Bf3OVAU=";
+  };
+
+  vendorHash = "sha256-1R3rv3FraT53dqGECRr+ulhplmmByqRW+VJ+y6nFR+Y=";
+
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+    scdoc
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${finalAttrs.version}"
+  ];
+
+  postBuild = ''
+    scdoc < ijq.1.scd > ijq.1
+    installManPage ijq.1
+  '';
+
+  postInstall = ''
+    wrapProgram "$out/bin/ijq" \
+      --prefix PATH : "${lib.makeBinPath [ jq ]}"
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Interactive wrapper for jq";
+    mainProgram = "ijq";
+    homepage = "https://codeberg.org/gpanders/ijq";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      justinas
+      mattpolzin
+      SuperSandro2000
+    ];
+  };
+})

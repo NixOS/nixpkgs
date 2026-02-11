@@ -1,0 +1,37 @@
+diff --git a/config/meson.build b/config/meson.build
+index f54857ee..aaafdb03 100644
+--- a/config/meson.build
++++ b/config/meson.build
+@@ -56,9 +56,12 @@ jonquil_dep = dependency(
+   'jonquil',
+   required: get_option('json'),
+   fallback: ['jonquil','jonquil_dep'],
+-  default_options: [
+-    'default_library=static',
+-  ],
+-  static: get_option('default_library') != 'dynamic',
+ )
+ lib_deps += jonquil_dep
++
++tomlf_dep = dependency(
++  'toml-f',
++  required: get_option('json'),
++  fallback: ['toml-f','toml-f_dep'],
++)
++lib_deps += tomlf_dep
+diff --git a/meson.build b/meson.build
+index 16797c47..6e5290d9 100644
+--- a/meson.build
++++ b/meson.build
+@@ -25,11 +25,6 @@ project(
+ )
+ install = not (meson.is_subproject() and get_option('default_library') == 'static')
+ 
+-# Check for specific unsupported meson versions
+-if meson.version().version_compare('==1.8.0')
+-  error('Meson version 1.8.0 has a known issue — please use any other version ≥ 0.55.0')
+-endif
+-
+ # General configuration information
+ lib_deps = []
+ subdir('config')
