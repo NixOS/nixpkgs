@@ -11,7 +11,7 @@
   qttools,
   libidn,
   qca-qt5,
-  libXScrnSaver,
+  libxscrnsaver,
   hunspell,
   libsecret,
   libgcrypt,
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     qtx11extras
     libidn
     qca-qt5
-    libXScrnSaver
+    libxscrnsaver
     hunspell
     libsecret
     libgcrypt

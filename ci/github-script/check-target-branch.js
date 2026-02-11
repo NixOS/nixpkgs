@@ -122,7 +122,11 @@ async function checkTargetBranch({ github, context, core, dry }) {
     ].join('\n'),
   )
 
-  if (maxRebuildCount >= 1000 && !isExemptHomeAssistantUpdate) {
+  if (
+    maxRebuildCount >= 1000 &&
+    !isExemptHomeAssistantUpdate &&
+    !isExemptKernelUpdate
+  ) {
     const desiredBranch =
       base === 'master' ? 'staging' : `staging-${split(base).version}`
     const body = [

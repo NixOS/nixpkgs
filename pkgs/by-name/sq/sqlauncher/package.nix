@@ -36,12 +36,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple QT6 Program Launcher";
     homepage = "https://codeberg.org/ItsZariep/SQLauncher";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "sqlauncher";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.reylak ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.reylak ];
   };
 }

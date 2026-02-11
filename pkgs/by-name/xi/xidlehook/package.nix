@@ -12,7 +12,7 @@
   patchelf,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xidlehook";
   version = "0.10.0";
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "jD91mZM2";
     repo = "xidlehook";
-    rev = version;
+    rev = finalAttrs.version;
 
     sha256 = "1pl7f8fhxfcy0c6c08vkagp0x1ak96vc5wgamigrk1nkd6l371lb";
   };
@@ -57,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     badPlatforms = lib.platforms.darwin;
     mainProgram = "xidlehook";
   };
-}
+})

@@ -11,14 +11,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termscp";
   version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = "termscp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/smeK7qCw1EgADc7bgC1xUep3hPj7gOddanbaTjbGgs=";
   };
 
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/veeso/termscp/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Feature rich terminal UI file transfer and explorer with support for SCP/SFTP/FTP/S3/SMB";
     homepage = "https://github.com/veeso/termscp";
     license = lib.licenses.mit;
@@ -73,4 +73,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

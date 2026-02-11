@@ -44,7 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = toString [
+      "-framework"
+      "AppKit"
+    ];
+  };
 
   # ECWolf installs its binary to the games/ directory, but Nix only adds bin/
   # directories to the PATH.

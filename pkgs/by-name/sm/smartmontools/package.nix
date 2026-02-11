@@ -50,6 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-update-smart-drivedb"
   ];
 
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdLibs) [ systemdLibs ];
   enableParallelBuilding = true;

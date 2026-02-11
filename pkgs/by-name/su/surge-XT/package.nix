@@ -9,11 +9,11 @@
   freetype,
   libjack2,
   lv2,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
 
   buildVST3 ? true,
   buildLV2 ? true,
@@ -59,11 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     freetype
     libjack2
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
   ]
   ++ lib.optionals buildLV2 [ lv2 ];
 

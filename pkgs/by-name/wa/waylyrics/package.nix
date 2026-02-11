@@ -8,14 +8,14 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "waylyrics";
   version = "0.3.21";
 
   src = fetchFromGitHub {
     owner = "waylyrics";
     repo = "waylyrics";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uXAcoy5fnnkqtmGmaEC6Ceu+dwmZKDPOFzxC4COuDbk=";
   };
 
@@ -76,4 +76,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -33,23 +33,23 @@ let
   ) "" (builtins.attrNames skipTests);
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "berglas";
-  version = "2.0.9";
+  version = "2.0.10";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "berglas";
-    rev = "v${version}";
-    sha256 = "sha256-VlVqbFaNT66THEZ79ob1hKq2rywSkb1V3Xo1U+ZGeBc=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-zrNHBlq8ZdsviXws29Dui51HOLJxy5B0OkrRZR8lUdQ=";
   };
 
-  vendorHash = "sha256-XEZ0sLvC7PwNarYa9xdKUOguJKEK50vWW0g2jnWJMu0=";
+  vendorHash = "sha256-tTZQZv5b68AaMLbVtddmlbWerbwvIeYSIX8/Vy0P0HU=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/GoogleCloudPlatform/berglas/v2/internal/version.version=${version}"
+    "-X github.com/GoogleCloudPlatform/berglas/v2/internal/version.version=${finalAttrs.version}"
   ];
 
   postPatch = skipTestsCommand;
@@ -66,4 +66,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "berglas";
   };
-}
+})

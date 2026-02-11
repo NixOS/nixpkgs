@@ -11,7 +11,7 @@
   jupyter-core,
   jupyter-client,
   pygments,
-  pyqt5,
+  pyqt6,
   qtpy,
   traitlets,
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     jupyter-core
     jupyter-client
     pygments
-    pyqt5
+    pyqt6
     qtpy
     traitlets
   ];

@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "keepassxc-go";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "MarkusFreitag";
     repo = "keepassxc-go";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Z4SbPxhs+umsUlby7idxofCjP+uLPvp/2oUCpnAS2/A=";
   };
 
@@ -37,9 +37,9 @@ buildGoModule rec {
   meta = {
     description = "Library and basic CLI tool to interact with KeepassXC via unix socket";
     homepage = "https://github.com/MarkusFreitag/keepassxc-go";
-    changelog = "https://github.com/MarkusFreitag/keepassxc-go/releases/tag/v${version}";
+    changelog = "https://github.com/MarkusFreitag/keepassxc-go/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xgwq ];
     mainProgram = "keepassxc-go";
   };
-}
+})

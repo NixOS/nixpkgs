@@ -6,14 +6,14 @@
   openssl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tootik";
   version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "tootik";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zkKkHzgIBHg0FH07KNr7jGNZU4QUbl6udoD7hLaDOL0=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
     go generate ./migrations
   '';
 
-  ldflags = [ "-X github.com/dimkr/tootik/buildinfo.Version=${version}" ];
+  ldflags = [ "-X github.com/dimkr/tootik/buildinfo.Version=${finalAttrs.version}" ];
 
   tags = [ "fts5" ];
 
@@ -40,4 +40,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "tootik";
   };
-}
+})

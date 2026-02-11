@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libXext,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxrandr,
+  libxrender,
   xorgproto,
   patches ? [ ],
 }:
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11
-    libXext
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxrandr
+    libxrender
     xorgproto
   ];
 

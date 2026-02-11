@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gokart";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "gokart";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-G1IjlJ/rmviFWy6RFfLtP+bhfYcDuB97leimU39YCoQ=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

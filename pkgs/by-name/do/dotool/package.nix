@@ -8,14 +8,14 @@
   scdoc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dotool";
   version = "1.5";
 
   src = fetchFromSourcehut {
     owner = "~geb";
     repo = "dotool";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4QmTHeU3TnpRATKIvilkIA3i2hDjM5zQwSvmRvoWuNE=";
   };
 
@@ -39,7 +39,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -52,8 +52,8 @@ buildGoModule rec {
   meta = {
     description = "Command to simulate input anywhere";
     homepage = "https://git.sr.ht/~geb/dotool";
-    changelog = "https://git.sr.ht/~geb/dotool/tree/${version}/item/CHANGELOG.md";
+    changelog = "https://git.sr.ht/~geb/dotool/tree/${finalAttrs.version}/item/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "promql-cli";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "nalbury";
     repo = "promql-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-EV63fdG+GF+kVLH2TxHPhRcUU5xBvkW5bhHC1lEoj84=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ arikgrahl ];
     mainProgram = "promql";
   };
-}
+})

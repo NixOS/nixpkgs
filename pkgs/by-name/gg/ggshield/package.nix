@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ggshield";
   version = "1.45.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9UjdAnDcUxs/2pdhnJYncw2NBPiLpxUL5T74qbX5AcY=";
   };
 
@@ -84,9 +84,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to find and fix various types of hardcoded secrets and infrastructure-as-code misconfigurations";
     homepage = "https://github.com/GitGuardian/ggshield";
-    changelog = "https://github.com/GitGuardian/ggshield/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/GitGuardian/ggshield/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ggshield";
   };
-}
+})

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kotlin";
-  version = "2.3.0";
+  version = "2.3.10";
 
   src = fetchurl {
     url = "https://github.com/JetBrains/kotlin/releases/download/v${finalAttrs.version}/kotlin-compiler-${finalAttrs.version}.zip";
-    sha256 = "sha256-6harHKsp1Bm/QbYOzA4wXUSfpmHZwF+8xbKmZyUFRWo=";
+    sha256 = "sha256-yNVG+f9DO1KfsK1D/s6zmDEEDK4sqNF+ffRjZDaMmp4=";
   };
 
   propagatedBuildInputs = [ jre ];

@@ -8,14 +8,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clipcat";
   version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = "clipcat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EEM2gwr5j3umpZqHnxCO81EZbLQ3nYGcxb6DBJ7AbC8=";
   };
 
@@ -57,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "clipcatd";
   };
-}
+})

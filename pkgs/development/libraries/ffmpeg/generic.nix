@@ -310,11 +310,11 @@
   libvpl,
   libvpx,
   libwebp,
-  libX11,
+  libx11,
   libxcb,
-  libXext,
+  libxext,
   libxml2,
-  libXv,
+  libxv,
   nv-codec-headers,
   nv-codec-headers-12,
   ocl-icd, # OpenCL ICD
@@ -971,9 +971,9 @@ stdenv.mkDerivation (
       ++ optionals withXevd [ xevd ]
       ++ optionals withXeve [ xeve ]
       ++ optionals withXlib [
-        libX11
-        libXv
-        libXext
+        libx11
+        libxv
+        libxext
       ]
       ++ optionals withXml2 [ libxml2 ]
       ++ optionals withXvid [ xvidcore ]

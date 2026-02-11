@@ -13,14 +13,14 @@ let
   ];
 
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-ethereum";
   version = "1.16.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "go-ethereum";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eMvLhOSWGC31ezZeqMMt8kmFHq9NU0kh5s2IBiw46NY=";
   };
 
@@ -71,4 +71,4 @@ buildGoModule rec {
     ];
     mainProgram = "geth";
   };
-}
+})

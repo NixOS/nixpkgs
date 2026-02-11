@@ -6,14 +6,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "conmon-rs";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "conmon-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fs+IcibhyoC5+Sbr9lWtBbb0Sk6Uf+YVockXNbCLXCY=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     teams = [ lib.teams.podman ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,12 +6,12 @@
 }:
 
 let
-  version = "2.1.20";
+  version = "2.1.21";
   pname = "lunatask";
 
   src = fetchurl {
     url = "https://github.com/lunatask/lunatask/releases/download/v${version}/Lunatask-${version}.AppImage";
-    hash = "sha256-9VRBNbvlPCgdFnDR9kPv0p0vPzcS1NZbo/yuxMkZz5A=";
+    hash = "sha256-q+GnztAetorwEywBYmjEjFl4PLqTj+v0igQB3toFRTg=";
   };
 
   appimageContents = appimageTools.extract {
@@ -41,7 +41,10 @@ appimageTools.wrapType2 {
     changelog = "https://lunatask.app/releases/${version}";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ zi3m5f ];
+    maintainers = with lib.maintainers; [
+      MrSom3body
+      zi3m5f
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "lunatask";
   };

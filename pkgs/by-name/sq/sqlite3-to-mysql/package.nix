@@ -8,7 +8,7 @@
   mysql80,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlite3-to-mysql";
   version = "2.5.1";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "techouse";
     repo = "sqlite3-to-mysql";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2SoLiqOLuGcB4IV2CPud+mjc5s8mqobD72kkx0WCwVU=";
   };
 
@@ -67,4 +67,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ gador ];
     mainProgram = "sqlite3mysql";
   };
-}
+})

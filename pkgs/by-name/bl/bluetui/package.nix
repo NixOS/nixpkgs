@@ -6,14 +6,14 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bluetui";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "pythops";
     repo = "bluetui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-K+QAU9/XdGZonsKjBXbPbpJhWIHyaqxP6eb670n81LU=";
   };
 
@@ -38,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bluetui";
     platforms = lib.platforms.linux;
   };
-}
+})

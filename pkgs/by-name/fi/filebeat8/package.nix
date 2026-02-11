@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "filebeat";
   version = "8.19.10";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "beats";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ky1oWqQXIjno14ZBfxR1FoXEkSn1kScdQQTyGDRvMTo=";
   };
 
@@ -37,9 +37,9 @@ buildGoModule rec {
   meta = {
     description = "Tails and ships log files";
     homepage = "https://github.com/elastic/beats";
-    changelog = "https://www.elastic.co/guide/en/beats/libbeat/${version}/release-notes-${version}.html";
+    changelog = "https://www.elastic.co/guide/en/beats/libbeat/${finalAttrs.version}/release-notes-${finalAttrs.version}.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ srhb ];
     mainProgram = "filebeat";
   };
-}
+})

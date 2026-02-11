@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
-  libX11,
+  libx11,
   libxcb,
   perl, # For pod2man
   qt6,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libxcb
     qt6.qtbase
   ];

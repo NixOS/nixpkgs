@@ -93,13 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-spooldir=${dataDir}/spool"
     "--with-expldir=${dataDir}/list_data"
   ];
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ perlEnv ];
-  patches = [ ./make-docs.patch ];
-
-  prePatch = ''
-    patchShebangs po/sympa/add-lang.pl
-  '';
+  nativeBuildInputs = [
+    autoreconfHook
+    perlEnv
+  ];
+  strictDeps = true;
+  patches = [
+    ./make-docs.patch
+    ./gettext-0.25.patch
+  ];
 
   preInstall = ''
     mkdir "$TMP/bin"

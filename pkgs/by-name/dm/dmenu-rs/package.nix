@@ -13,8 +13,8 @@
   # buildInputs
   expat,
   fontconfig,
-  libXft,
-  libXinerama,
+  libxft,
+  libxinerama,
   libxcb,
   aspell,
   xclip,
@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     expat
     fontconfig
-    libXft
-    libXinerama
+    libxft
+    libxinerama
     libxcb
   ]
   ++ lib.optionals enablePlugins [

@@ -12,16 +12,16 @@
   libusb1,
   libjpeg,
   libmodule,
-  libXdmcp,
+  libxdmcp,
   util-linux,
-  libpthreadstubs,
+  libpthread-stubs,
   enableDdc ? true,
   ddcutil,
   enableDpms ? true,
-  libXext,
+  libxext,
   enableGamma ? true,
   libdrm,
-  libXrandr,
+  libxrandr,
   libiio,
   wayland,
   enableScreen ? true,
@@ -81,13 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
     libmodule
     libiio
 
-    libXdmcp
+    libxdmcp
     util-linux
-    libpthreadstubs
+    libpthread-stubs
   ]
   ++ lib.optionals enableDdc [ ddcutil ]
-  ++ lib.optionals enableDpms [ libXext ]
-  ++ lib.optionals enableGamma [ libXrandr ]
+  ++ lib.optionals enableDpms [ libxext ]
+  ++ lib.optionals enableGamma [ libxrandr ]
   ++ lib.optionals (enableDpms || enableGamma || enableScreen) [
     libdrm
     wayland

@@ -18,7 +18,7 @@ let
     hash = "sha256-f0vd/Xp/kBbZkg6CBM4cZPlwg5WUL/zv3mCAEmugzCE=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "incus-ui-canonical";
   version = "0.19.3";
 
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     owner = "zabbly";
     repo = "incus-ui-canonical";
     # only use tags prefixed by incus- they are the tested fork versions
-    tag = "incus-${version}";
+    tag = "incus-${finalAttrs.version}";
     hash = "sha256-wibBuvGABMGTjuYFYjV9mbNVNXm78LX9VAgM2H8b7e4=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-08G3jYj7N9h6aBnqwGQQtpYOP/wP/k2VRY7dgmpxXZw=";
   };
 
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
   };
-}
+})

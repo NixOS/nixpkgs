@@ -26,12 +26,12 @@
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elfutils";
   version = "0.194";
 
   src = fetchurl {
-    url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
+    url = "https://sourceware.org/elfutils/ftp/${finalAttrs.version}/elfutils-${finalAttrs.version}.tar.bz2";
     hash = "sha256-CeL/Az05uqiziKLX+8U5C/3pmuO3xnx9qvdDP7zw8B4=";
   };
 
@@ -155,5 +155,6 @@ stdenv.mkDerivation rec {
       gpl3Plus
     ];
     maintainers = with lib.maintainers; [ r-burns ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "elfutils_project" finalAttrs.version;
   };
-}
+})

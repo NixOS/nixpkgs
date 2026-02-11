@@ -216,5 +216,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
     mainProgram = "gpg";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" version;
   };
 }

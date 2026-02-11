@@ -14,14 +14,14 @@
   ],
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "v2ray-core";
   version = "5.44.1";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y/8rZYNoN5jr7+Q4IMj+uTGo7KfE5LKwUIEuSMROj5c=";
   };
 
@@ -75,4 +75,4 @@ buildGoModule rec {
       ryan4yin
     ];
   };
-}
+})

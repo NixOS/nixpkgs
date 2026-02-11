@@ -10,19 +10,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "parseable";
   version = "2.5.10";
 
   src = fetchFromGitHub {
     owner = "parseablehq";
     repo = "parseable";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Asb6064TqvL9kNkWBMj4Z+1j1yIM+iBWsN+R5EuMOVA=";
   };
 
   LOCAL_ASSETS_PATH = fetchzip {
-    url = "https://parseable-prism-build.s3.us-east-2.amazonaws.com/v${version}/build.zip";
+    url = "https://parseable-prism-build.s3.us-east-2.amazonaws.com/v${finalAttrs.version}/build.zip";
     hash = "sha256-gWzfucetsJJSSjI9nGm7I8xLo0t1VKb4AertiEGuLWA=";
   };
 
@@ -47,9 +47,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Disk less, cloud native database for logs, observability, security, and compliance";
     homepage = "https://www.parseable.com";
-    changelog = "https://github.com/parseablehq/parseable/releases/tag/v${version}";
+    changelog = "https://github.com/parseablehq/parseable/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ilyakooo0 ];
     mainProgram = "parseable";
   };
-}
+})

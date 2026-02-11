@@ -16,14 +16,14 @@
 let
   desc = "Private, polished note-taking platform";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lockbook-desktop";
   version = "26.1.31";
 
   src = fetchFromGitHub {
     owner = "lockbook";
     repo = "lockbook";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Bx84e5/foF4XxRZJve0YhiikZJa3mqxOHuk9bsPxjag=";
   };
 
@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://lockbook.net";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.linux;
-    changelog = "https://github.com/lockbook/lockbook/releases/tag/${version}";
+    changelog = "https://github.com/lockbook/lockbook/releases/tag/${finalAttrs.version}";
     maintainers = [ lib.maintainers.parth ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libjack2,
   pkg-config,
-  wineWowPackages,
+  wineWow64Packages,
   pkgsi686Linux,
   python3,
   python3Packages,
@@ -53,7 +53,7 @@ multiStdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wineWowPackages.stable
+    wineWow64Packages.stable
   ];
 
   buildInputs = [
@@ -63,7 +63,7 @@ multiStdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = [ "PREFIX=${wineWowPackages.stable}" ];
+  makeFlags = [ "PREFIX=${wineWow64Packages.stable}" ];
 
   buildPhase = ''
     runHook preBuild

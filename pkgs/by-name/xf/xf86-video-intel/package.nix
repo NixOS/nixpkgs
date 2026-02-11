@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Comment from 037167ae17fefe6b5dc86dc05f0dd168031c3c68:
     #
-    # The i965 driver was removed in Mesa 22, but the xf86videointel driver
+    # The i965 driver was removed in Mesa 22, but the xf86-video-intel driver
     # hasn't been updated to reflect this. This leads to the following error
     # when used with the affected hardware:
     #

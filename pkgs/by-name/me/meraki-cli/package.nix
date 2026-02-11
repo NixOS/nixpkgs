@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "meraki-cli";
   version = "1.5.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "meraki_cli";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-FHcKgppclc0L6yuCkpVYfr+jq8hNkt7Hq/44mpHMR20=";
   };
 
@@ -51,4 +51,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "meraki";
   };
-}
+})

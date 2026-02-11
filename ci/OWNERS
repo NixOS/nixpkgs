@@ -247,7 +247,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /pkgs/applications/networking/browsers/firefox/update.nix
 /pkgs/applications/networking/browsers/firefox/packages/firefox.nix @mweinelt
 /pkgs/applications/networking/browsers/firefox/packages/firefox-esr-*.nix @mweinelt
-/pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz
 /pkgs/applications/networking/browsers/chromium @emilylange @networkException
 /nixos/tests/chromium.nix @emilylange @networkException
 

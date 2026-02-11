@@ -20,9 +20,9 @@
     ]
   },
   "calendar": {
-    "hash": "sha256-Z8bqjnjYewOukbRJpLBHKC0rht4HTNobuQJlIEecG0s=",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v5.5.13/calendar-v5.5.13.tar.gz",
-    "version": "5.5.13",
+    "hash": "sha256-Z3wkgstg+BcpLHI4bGkccvYpu8enijY6HnxpqfYxrBI=",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v5.5.14/calendar-v5.5.14.tar.gz",
+    "version": "5.5.14",
     "description": "A Calendar app for Nextcloud. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Like Contacts, Talk, Tasks, Deck and Circles\n* 🌐 **WebCal Support!** Want to see your favorite team's matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 **Search!** Find your events at ease\n* ☑️ **Tasks!** See tasks or Deck cards with a due date directly in the calendar\n* 🔈 **Talk rooms!** Create an associated Talk room when booking a meeting with just one click\n* 📆 **Appointment booking** Send people a link so they can book an appointment with you [using this app](https://apps.nextcloud.com/apps/appointments)\n* 📎 **Attachments!** Add, upload and view event attachments\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -40,9 +40,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-Y0K1+bdyjC2tdnhYCzJp5QhEVVIW3ooZEwfGXfVI8dU=",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v7.3.11/contacts-v7.3.11.tar.gz",
-    "version": "7.3.11",
+    "hash": "sha256-eWV+M+yWymUwWonSqy/eQ8EuQy+1ZojIL2DWVMOFAjY=",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v7.3.12/contacts-v7.3.12.tar.gz",
+    "version": "7.3.12",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "end_to_end_encryption": {
-    "hash": "sha256-Wojv/UzDT9v9bVaC8K7GqaQYVTE4GoRG2ztHALZktLk=",
-    "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v1.17.0/end_to_end_encryption-v1.17.0.tar.gz",
-    "version": "1.17.0",
+    "hash": "sha256-rVIB/pCv5tMLMFpyIQCQ0/0bHIrgnE/s5J3ZIvu3Ktg=",
+    "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v1.17.1/end_to_end_encryption-v1.17.1.tar.gz",
+    "version": "1.17.1",
     "description": "This app provides all the necessary APIs to implement End-to-End encryption on the client side.\nAdditionally it implements Secure FileDrop and makes sure that End-to-End encrypted files are neither accessible via the web interface nor other WebDAV clients.",
     "homepage": "https://github.com/nextcloud/end_to_end_encryption",
     "licenses": [
@@ -100,9 +100,9 @@
     ]
   },
   "files_automatedtagging": {
-    "hash": "sha256-JoIweqA2YBF80PU3BjkqARvKqpKlrYt8n6t0Zc/0Ouk=",
-    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v2.0.2/files_automatedtagging-v2.0.2.tar.gz",
-    "version": "2.0.2",
+    "hash": "sha256-wvzX0n7SnEyOSSNJ826IF+JO8npNnvh2W3trJKGW79g=",
+    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v2.0.3/files_automatedtagging-v2.0.3.tar.gz",
+    "version": "2.0.3",
     "description": "An app for Nextcloud that automatically assigns tags to newly uploaded files based on some conditions.\n\nThe tags can later be used to control retention, file access, automatic script execution and more.\n\n## How it works\nTo define tags, administrators can create and manage a set of rule groups. Each rule group consists of one or more rules combined through operators. Rules can include criteria like file type, size, time and more. A request matches a group if all rules evaluate to true. On uploading a file all defined groups are evaluated and when matching, the given tags are assigned to the file.",
     "homepage": "https://github.com/nextcloud/files_automatedtagging",
     "licenses": [
@@ -130,10 +130,10 @@
     ]
   },
   "forms": {
-    "hash": "sha256-yCyGcCHTmgSjZ7U3h79jeYW69oIIVF4kd5wGxDBmK2s=",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v5.2.3/forms-v5.2.3.tar.gz",
-    "version": "5.2.3",
-    "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
+    "hash": "sha256-pPq35QtolbjBPiaILAvf7RA2uG3otiAyIRcU3AYwb5E=",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v5.2.4/forms-v5.2.4.tar.gz",
+    "version": "5.2.4",
+    "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API_v3.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
       "agpl"
@@ -150,10 +150,10 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-LgoYv/7q0EnATUY3NCQ0nICaURCL6iKQWK0xIPo3c3Q=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v19.1.13/groupfolders-v19.1.13.tar.gz",
-    "version": "19.1.13",
-    "description": "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.",
+    "hash": "sha256-h0cbOO8Upq9sDA+kT84HVwRyCGeTJuounyKK3j61wMQ=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v19.1.15/groupfolders-v19.1.15.tar.gz",
+    "version": "19.1.15",
+    "description": "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
       "agpl"
@@ -190,9 +190,9 @@
     ]
   },
   "integration_paperless": {
-    "hash": "sha256-srDdT0TgZ21HUXdesISGy8g/1MfBNUMaAnOmxm0qWbQ=",
-    "url": "https://github.com/nextcloud-releases/integration_paperless/releases/download/v1.0.8/integration_paperless-v1.0.8.tar.gz",
-    "version": "1.0.8",
+    "hash": "sha256-j+X0JyLA2BgtPZcKQ5kqpk6LJevAgE6cbgdOF1IE6eo=",
+    "url": "https://github.com/nextcloud-releases/integration_paperless/releases/download/v1.0.10/integration_paperless-v1.0.10.tar.gz",
+    "version": "1.0.10",
     "description": "Integration with the [Paperless](https://docs.paperless-ngx.com) Document Management System.\nIt adds a file action menu item that can be used to upload a file from your Nextcloud Files to Paperless.",
     "homepage": "",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-wMHupvXkKWsqtze+urDC5TFRkdU7TsKTag0JIm8l59U=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.6.7/mail-v5.6.7.tar.gz",
-    "version": "5.6.7",
+    "hash": "sha256-+Lulu5ZJcQnhp1hcT94UxbaYHmwqrOwx7Z0Kz6Mrc8s=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.6.10/mail-v5.6.10.tar.gz",
+    "version": "5.6.10",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://www.horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -240,9 +240,9 @@
     ]
   },
   "nextpod": {
-    "hash": "sha256-2IvsEv3teTGITE6ilaN3RHUtNpxDk3iCLEq5sAmJ+Y4=",
-    "url": "https://github.com/pbek/nextcloud-nextpod/releases/download/v0.7.8/nextpod-nc.tar.gz",
-    "version": "0.7.8",
+    "hash": "sha256-aMdPr3EKTZLfCBMHwzfMf6rY0vE9a5DBHPtZH3Nh2w0=",
+    "url": "https://github.com/pbek/nextcloud-nextpod/releases/download/v0.7.10/nextpod-nc.tar.gz",
+    "version": "0.7.10",
     "description": "This Nextcloud app lets you visualize your podcast subscriptions and episode downloads from\n[GPodderSync](https://apps.nextcloud.com/apps/gpoddersync), which acts as a basic gpodder.net\napi to sync podcast consumer apps (podcatchers) like AntennaPod.\n\nYou need to have [GPodderSync](https://apps.nextcloud.com/apps/gpoddersync) installed to use this app!",
     "homepage": "https://github.com/pbek/nextcloud-nextpod",
     "licenses": [
@@ -250,9 +250,9 @@
     ]
   },
   "notes": {
-    "hash": "sha256-iiNXIvq+rUbbecU646pyRpHP0EjUdQT1ybKMS2JQbwc=",
-    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.12.4/notes-v4.12.4.tar.gz",
-    "version": "4.12.4",
+    "hash": "sha256-GXltbtQV15oKNz+PUdvXYOOKxgkVGPhLHUUlkvvDRss=",
+    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.13.0/notes-v4.13.0.tar.gz",
+    "version": "4.13.0",
     "description": "The Notes app is a distraction free notes taking app for [Nextcloud](https://www.nextcloud.com/). It provides categories for better organization and supports formatting using [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax. Notes are saved as files in your Nextcloud, so you can view and edit them with every Nextcloud client. Furthermore, a separate [REST API](https://github.com/nextcloud/notes/blob/master/docs/api/README.md) allows for an easy integration into apps ([Android](https://github.com/nextcloud/notes-android), [iOS](https://github.com/nextcloud/notes-ios), as well as [3rd-party apps](https://github.com/nextcloud/notes/wiki#3rd-party-clients) which allow convenient access to your Nextcloud notes). Further features include marking notes as favorites.",
     "homepage": "https://github.com/nextcloud/notes",
     "licenses": [
@@ -260,10 +260,10 @@
     ]
   },
   "oidc_login": {
-    "hash": "sha256-iuJUhVU3PYFUddczyoJI1jnx7cWrgyN1X7dsQakyrl8=",
-    "url": "https://github.com/pulsejet/nextcloud-oidc-login/releases/download/v3.2.3/oidc_login.tar.gz",
-    "version": "3.2.2",
-    "description": "# OpenID Connect Login\n\nProvides user creation and login via one single OpenID Connect provider. Even though this is a fork of [nextcloud-social-login](https://github.com/zorn-v/nextcloud-social-login), it fundamentally differs in two ways - aims for simplistic, single provider login (and hence is very minimalistic), and it supports having LDAP as the primary user backend. This way, you can use OpenID Connect to login to Nextcloud while maintaining an LDAP backend with attributes with the LDAP plugin.\n\n### Features\n\n- Automatic [Identity provider endpoints discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)\n- User creation at first login\n- User profile update at login (name, email, avatar, groups etc.)\n- Group creation\n- Automatic redirection from the nextcloud login page to the Identity Provider login page\n- WebDAV endpoints `Bearer` and `Basic` authentication",
+    "hash": "sha256-AU938duXaI625chqgnnqnvOB0bMgRM3ZQVilstb4yRI=",
+    "url": "https://github.com/pulsejet/nextcloud-oidc-login/releases/download/v3.3.0/oidc_login.tar.gz",
+    "version": "3.3.0",
+    "description": "# OpenID Connect Login\n\nProvides user creation and login via one single OpenID Connect provider. Even though this is a fork of [nextcloud-social-login](https://github.com/zorn-v/nextcloud-social-login), it fundamentally differs in two ways - aims for simplistic, single provider login (and hence is very minimalistic), and it supports having LDAP as the primary user backend. This way, you can use OpenID Connect to login to Nextcloud while maintaining an LDAP backend with attributes with the LDAP plugin.\n\n### Features\n\n- Automatic [Identity provider endpoints discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)\n- User creation at first login\n- User profile update at login (name, email, avatar, groups etc.)\n- Group creation\n- Automatic redirection from the nextcloud login page to the Identity Provider login page\n- WebDAV endpoints `Bearer` and `Basic` authentication\n- Optional removal of special characters in UID\n- Mapping of multiple names to a single display name\n- Mapping for birthdate",
     "homepage": "https://github.com/pulsejet/nextcloud-single-openid-connect",
     "licenses": [
       "agpl"
@@ -290,9 +290,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-xhnTAdsM9EKR7BFW0GMyyUptvjgevZU567c++c0GuqM=",
-    "url": "https://github.com/nextcloud-releases/polls/releases/download/v8.6.2/polls-v8.6.2.tar.gz",
-    "version": "8.6.2",
+    "hash": "sha256-u+/MGjmFX5xRCcECDlqkM2C0xPY4QiCVj7GXgD3iNXo=",
+    "url": "https://github.com/nextcloud-releases/polls/releases/download/v8.6.3/polls-v8.6.3.tar.gz",
+    "version": "8.6.3",
     "description": "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -310,9 +310,9 @@
     ]
   },
   "qownnotesapi": {
-    "hash": "sha256-zaASURjhqeiz8eYc0HmhYDOF5Z+kIjhggEcJFe96GA8=",
-    "url": "https://github.com/pbek/qownnotesapi/releases/download/v25.8.0/qownnotesapi-nc.tar.gz",
-    "version": "25.8.0",
+    "hash": "sha256-5BsiSZ7J5qHhDWEItrtOT98p04oTVQUT7O92BaT4zho=",
+    "url": "https://github.com/pbek/qownnotesapi/releases/download/v26.2.2/qownnotesapi-nc.tar.gz",
+    "version": "26.2.2",
     "description": "QOwnNotesAPI is the Nextcloud/ownCloud API for [QOwnNotes](http://www.qownnotes.org), the open source notepad for Linux, macOS and Windows, that works together with the notes application of Nextcloud/ownCloud.\n\nThe only purpose of this App is to provide API access to your Nextcloud/ownCloud server for your QOwnNotes desktop installation, you cannot use this App for anything else, if you don't have QOwnNotes installed on your desktop computer!",
     "homepage": "https://github.com/pbek/qownnotesapi",
     "licenses": [
@@ -320,9 +320,9 @@
     ]
   },
   "quota_warning": {
-    "hash": "sha256-tJtblNz6Yv0cXcr8cxHuXq/9Otz4C2ahFLtUp0Zwpd4=",
-    "url": "https://github.com/nextcloud-releases/quota_warning/releases/download/v1.22.0/quota_warning-v1.22.0.tar.gz",
-    "version": "1.22.0",
+    "hash": "sha256-OgFXI7FD7skHcot0Fb636ScCimL1ArzD/3FDjRB7iCA=",
+    "url": "https://github.com/nextcloud-releases/quota_warning/releases/download/v1.23.0/quota_warning-v1.23.0.tar.gz",
+    "version": "1.23.0",
     "description": "This app sends notifications to users when they reached 85, 90 and 95% of their quota (checked once a day).\nIn addition an email can be sent to the users. The three percentages can be changed in the admin settings.\nIt is also possible to have a link in the email and the notification for upsell options.",
     "homepage": "https://github.com/nextcloud/quota_warning",
     "licenses": [
@@ -380,9 +380,9 @@
     ]
   },
   "tables": {
-    "hash": "sha256-CrzPF/cSfARid5zgZA8YV8LM0GFrwbgDWCLVHBufNt0=",
-    "url": "https://github.com/nextcloud-releases/tables/releases/download/v1.0.2/tables-v1.0.2.tar.gz",
-    "version": "1.0.2",
+    "hash": "sha256-ejjmOawjeAFPOrl9myorm9ZLaNVS7obx6ojWi/qy8BI=",
+    "url": "https://github.com/nextcloud-releases/tables/releases/download/v1.0.3/tables-v1.0.3.tar.gz",
+    "version": "1.0.3",
     "description": "Manage data the way you need it.\n\nWith this app you are able to create your own tables with individual columns. You can start with a template or from scratch and add your wanted columns.\nYou can choose from the following column types:\n- Text line or rich text\n- Link to urls or other nextcloud resources\n- Numbers\n- Progress bar\n- Stars rating\n- Yes/No tick\n- Date and/or time\n- (Multi) selection\n- Users, groups and teams\n\nShare your tables and views with users and groups within your cloud.\n\nHave a good time and manage whatever you want.",
     "homepage": "https://github.com/nextcloud/tables",
     "licenses": [
@@ -470,9 +470,9 @@
     ]
   },
   "user_saml": {
-    "hash": "sha256-FWC1n/23XmqGKmq+BDkdor6IbkN8Q7IYyayHqtdnlFg=",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v7.1.1/user_saml-v7.1.1.tar.gz",
-    "version": "7.1.1",
+    "hash": "sha256-oezyc/YXOG1vlw8kNLfVkhA7/WVWfTnL/hb1KSY78ho=",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v7.1.3/user_saml-v7.1.3.tar.gz",
+    "version": "7.1.3",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [
@@ -480,9 +480,9 @@
     ]
   },
   "whiteboard": {
-    "hash": "sha256-uohvZiSkSmUdp7/EbEtkD/DJ6KCxV5bagmJ68lXoq+w=",
-    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.5.2/whiteboard-v1.5.2.tar.gz",
-    "version": "1.5.2",
+    "hash": "sha256-8NlFJF3DBCH7fBqNJiv37/xQw2IiYogE6ZYbp4WiLuQ=",
+    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.5.5/whiteboard-v1.5.5.tar.gz",
+    "version": "1.5.5",
     "description": "The official whiteboard app for Nextcloud. It allows users to create and share whiteboards with other users and collaborate in real-time.\n\n**Whiteboard requires a separate collaboration server to work.** Please see the [documentation](https://github.com/nextcloud/whiteboard?tab=readme-ov-file#backend) on how to install it.\n\n- 🎨 Drawing shapes, writing text, connecting elements\n- 📝 Real-time collaboration\n- 🖼️ Add images with drag and drop\n- 📊 Easily add mermaid diagrams\n- ✨ Use the Smart Picker to embed other elements from Nextcloud\n- 📦 Image export\n- 💪 Strong foundation: We use Excalidraw as our base library",
     "homepage": "https://github.com/nextcloud/whiteboard",
     "licenses": [

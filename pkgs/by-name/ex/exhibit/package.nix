@@ -11,7 +11,7 @@
   libadwaita,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exhibit";
   version = "1.2.0";
   pyproject = false; # Built with meson
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "Exhibit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yNS6q7XbWda2+so9QRS/c4uYaVPo7b4JCite5nzc3Eo=";
   };
 
@@ -56,4 +56,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

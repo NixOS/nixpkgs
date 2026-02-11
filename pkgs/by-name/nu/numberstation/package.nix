@@ -14,7 +14,7 @@
   wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "numberstation";
   version = "1.4.0";
 
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "numberstation";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-0T/Dc2i6auuZiWjcPR72JT8yOrzmdEmbW2PS5YhmEwI=";
   };
 
@@ -61,11 +61,11 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = {
-    changelog = "https://git.sr.ht/~martijnbraam/numberstation/refs/${version}";
+    changelog = "https://git.sr.ht/~martijnbraam/numberstation/refs/${finalAttrs.version}";
     description = "TOTP Authentication application for mobile";
     mainProgram = "numberstation";
     homepage = "https://sr.ht/~martijnbraam/numberstation/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

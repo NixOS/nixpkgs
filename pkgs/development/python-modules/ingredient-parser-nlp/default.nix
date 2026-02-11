@@ -15,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "ingredient-parser-nlp";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strangetom";
     repo = "ingredient-parser";
     tag = version;
-    hash = "sha256-E5YHLRtUKtokAc+QUpF4Pd7hOZyFx6IIB1AadyIRWpI=";
+    hash = "sha256-xJ+WuTi/vihuliwSOvFWXk23uMUPUQIGP/WeaChwL4U=";
   };
 
   build-system = [ setuptools ];

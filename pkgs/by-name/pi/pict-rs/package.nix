@@ -11,7 +11,7 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pict-rs";
   version = "0.5.19";
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     domain = "git.asonix.dog";
     owner = "asonix";
     repo = "pict-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ifuN3Kb7Hhq8H/eoZcumO5yyrxOCA+nWQQvAdFk7w2Q=";
   };
 
@@ -52,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ agpl3Plus ];
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

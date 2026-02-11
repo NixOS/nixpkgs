@@ -7,14 +7,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-shell";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixos-shell";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-plRKXQqww7easx0wgGKAkOJH1TW/PeeB20dq9XUN8J4=";
   };
 
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Spawns lightweight nixos vms in a shell";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.unix;
     mainProgram = "nixos-shell";
   };
-}
+})

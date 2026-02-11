@@ -6,6 +6,7 @@ flutter:
 
 let
   self = symlinkJoin {
+    inherit (flutter) pname;
     name = "${flutter.name}-sdk-links";
     paths = [
       flutter

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   glibc,
-  libX11,
+  libx11,
   runtimeShell,
   libGLU,
   libGL,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
              --set-rpath ${
                lib.makeLibraryPath [
                  stdenv.cc.cc
-                 libX11
+                 libx11
                  libGLU
                  libGL
                ]

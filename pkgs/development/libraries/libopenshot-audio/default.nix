@@ -5,12 +5,12 @@
   alsa-lib,
   cmake,
   doxygen,
-  libX11,
-  libXcursor,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxft,
+  libxinerama,
+  libxrandr,
   pkg-config,
   zlib,
 }:
@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       else
         [
-          libX11
-          libXcursor
-          libXext
-          libXft
-          libXinerama
-          libXrandr
+          libx11
+          libxcursor
+          libxext
+          libxft
+          libxinerama
+          libxrandr
         ]
     );
 

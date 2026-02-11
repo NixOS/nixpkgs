@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "jefferson";
   version = "0.4.6";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "jefferson";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6eh4i9N3aArU8+W8K341pp9J0QYEojDiMrEc8yax4SY=";
   };
 
@@ -48,4 +48,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "jefferson";
   };
-}
+})

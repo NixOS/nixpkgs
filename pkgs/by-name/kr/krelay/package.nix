@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "krelay";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "knight42";
     repo = "krelay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-v7yX5wDf3d07TiWe+9iTkGhc8LqfU1hUkxuf5ZBVcYE=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/knight42/krelay/pkg/constants.ClientVersion=${version}"
+    "-X github.com/knight42/krelay/pkg/constants.ClientVersion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -32,9 +32,9 @@ buildGoModule rec {
   meta = {
     description = "Drop-in replacement for `kubectl port-forward` with some enhanced features";
     homepage = "https://github.com/knight42/krelay";
-    changelog = "https://github.com/knight42/krelay/releases/tag/v${version}";
+    changelog = "https://github.com/knight42/krelay/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ivankovnatsky ];
     mainProgram = "kubectl-relay";
   };
-}
+})

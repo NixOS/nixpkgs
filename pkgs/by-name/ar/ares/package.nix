@@ -8,8 +8,8 @@
   gtksourceview3,
   libGL,
   libGLU,
-  libX11,
-  libXv,
+  libx11,
+  libxv,
   libao,
   libpulseaudio,
   libretro-shaders-slang,
@@ -62,8 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview3
     libGL
     libGLU
-    libX11
-    libXv
+    libx11
+    libxv
     libpulseaudio
     openal
     udev

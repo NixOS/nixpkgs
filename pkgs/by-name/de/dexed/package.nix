@@ -5,11 +5,11 @@
   gitUpdater,
   cmake,
   pkg-config,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
   freetype,
   alsa-lib,
   libjack2,
@@ -43,36 +43,37 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXext
-    libXcursor
-    libXinerama
-    libXrandr
+    libx11
+    libxext
+    libxcursor
+    libxinerama
+    libxrandr
     freetype
     alsa-lib
     libjack2
   ];
 
-  # JUCE insists on only dlopen'ing these
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux (toString [
-    "-lX11"
-    "-lXext"
-    "-lXcursor"
-    "-lXinerama"
-    "-lXrandr"
-    "-ljack"
-  ]);
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux (toString [
-    # juce, compiled in this build as part of a Git submodule, uses `-flto` as
-    # a Link Time Optimization flag, and instructs the plugin compiled here to
-    # use this flag to. This breaks the build for us. Using _fat_ LTO allows
-    # successful linking while still providing LTO benefits. If our build of
-    # `juce` was used as a dependency, we could have patched that `-flto` line
-    # in our juce's source, but that is not possible because it is used as a
-    # Git Submodule.
-    "-ffat-lto-objects"
-  ]);
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    # JUCE insists on only dlopen'ing these
+    NIX_LDFLAGS = toString [
+      "-lX11"
+      "-lXext"
+      "-lXcursor"
+      "-lXinerama"
+      "-lXrandr"
+      "-ljack"
+    ];
+    NIX_CFLAGS_COMPILE = toString [
+      # juce, compiled in this build as part of a Git submodule, uses `-flto` as
+      # a Link Time Optimization flag, and instructs the plugin compiled here to
+      # use this flag to. This breaks the build for us. Using _fat_ LTO allows
+      # successful linking while still providing LTO benefits. If our build of
+      # `juce` was used as a dependency, we could have patched that `-flto` line
+      # in our juce's source, but that is not possible because it is used as a
+      # Git Submodule.
+      "-ffat-lto-objects"
+    ];
+  };
 
   installPhase =
     let

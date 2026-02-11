@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "swego";
   version = "1.14";
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Swego";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-28PU7jAVnWfRbFmTE2pmwJO1Zi+ceyFrzY5MiRt+91Y=";
   };
 
@@ -34,7 +34,7 @@ buildGoModule rec {
       SimpleHTTPServer but with many features.
     '';
     homepage = "https://github.com/nodauf/Swego";
-    changelog = "https://github.com/nodauf/Swego/releases/tag/${src.tag}";
+    changelog = "https://github.com/nodauf/Swego/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     # darwin crashes with:
@@ -42,4 +42,4 @@ buildGoModule rec {
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "swego";
   };
-}
+})

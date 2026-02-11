@@ -16,6 +16,7 @@
   matplotlib,
   numpy,
   pandas,
+  platformdirs,
   scipy,
   typing-extensions,
   xarray,
@@ -41,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz";
-  version = "0.23.1";
+  version = "0.23.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-twAYCH8jsOnXVD3+sstOLEGG1Enbq8M8ZQWffFVzS48=";
+    hash = "sha256-YQ5i+CSuznbWAQ29jgqrOs+zgOAS5U4wSNEIquJQkvY=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +70,7 @@ buildPythonPackage (finalAttrs: {
     matplotlib
     numpy
     pandas
+    platformdirs
     scipy
     typing-extensions
     xarray

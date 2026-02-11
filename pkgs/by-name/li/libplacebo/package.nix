@@ -12,7 +12,7 @@
   shaderc,
   lcms2,
   libGL,
-  libX11,
+  libx11,
   libunwind,
   libdovi,
   xxHash,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     shaderc
     lcms2
     libGL
-    libX11
+    libx11
     libunwind
     libdovi
     xxHash

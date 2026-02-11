@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-tools";
   version = "2025.1.1";
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "go-tools";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ekSOXaVSFdzM76tcj1hbtzhYw4fnFX3VkTnsGtJanXg=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
       smasher164
     ];
   };
-}
+})

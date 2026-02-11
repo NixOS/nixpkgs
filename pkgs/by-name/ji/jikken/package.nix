@@ -8,14 +8,14 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jikken";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "jikkenio";
     repo = "jikken";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8A9b9Ms/unv+qQRd5jiTV/6SJa6ZYLsE0fK97ohacPI=";
   };
 
@@ -35,9 +35,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Powerful, source control friendly REST API testing toolkit";
     homepage = "https://jikken.io/";
-    changelog = "https://github.com/jikkenio/jikken/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jikkenio/jikken/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "jk";
   };
-}
+})

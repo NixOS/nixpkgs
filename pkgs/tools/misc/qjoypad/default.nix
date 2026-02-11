@@ -6,8 +6,8 @@
   cmake,
   qttools,
   wrapQtAppsHook,
-  libX11,
-  libXtst,
+  libx11,
+  libxtst,
   qtbase,
   qtx11extras,
 }:
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
   buildInputs = [
-    libX11
-    libXtst
+    libx11
+    libxtst
     qtbase
     qtx11extras
   ];

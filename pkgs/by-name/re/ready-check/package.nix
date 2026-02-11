@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ready-check";
   version = "1.2.6";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sesh";
     repo = "ready";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-j0UY2Q1jYGRtjvaWMwgMJrNaQZQnEJ5ST4o4PAVYWVc=";
   };
 
@@ -33,9 +33,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to check readiness of websites";
     homepage = "https://github.com/sesh/ready";
-    changelog = "https://github.com/sesh/ready/releases/tag/v${version}";
+    changelog = "https://github.com/sesh/ready/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ready";
   };
-}
+})

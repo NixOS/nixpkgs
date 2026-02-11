@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fcast-client";
   version = "0.1.0-unstable-2024-05-23";
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vsD4xgrC5KbnZT6hPX3fi3M/CH39LtoRfa6nYD0iFew=";
   };
 
-  sourceRoot = "${src.name}/clients/terminal";
+  sourceRoot = "${finalAttrs.src.name}/clients/terminal";
 
   cargoHash = "sha256-yzsAe+fr1yX8RBJPtXSr/R7W0iJpeF3JW3E4ius+8nU=";
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ yusufraji ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

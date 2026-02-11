@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cheat";
   version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "cheat";
     repo = "cheat";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-GUU6VWfTmNS6ny12HnMr3uQmS7HI86Oupcmqx0MVAvE=";
   };
 
@@ -51,7 +51,7 @@ buildGoModule rec {
       gpl3
       mit
     ];
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     mainProgram = "cheat";
   };
-}
+})

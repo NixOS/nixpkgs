@@ -70,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Fix-building-with-bison-3.7.patch
   ];
 
-  NIX_LDFLAGS = "-lz -lgsl -lblas";
+  env.NIX_LDFLAGS = toString [
+    "-lz"
+    "-lgsl"
+    "-lblas"
+  ];
 
   qtWrapperArgs = [
     "--prefix"

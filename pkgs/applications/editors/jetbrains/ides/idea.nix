@@ -55,7 +55,7 @@ mkJetBrainsProduct {
     ''--set M2 "${maven}/maven/bin"''
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     lldb
     musl
   ];

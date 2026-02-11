@@ -4,7 +4,7 @@
   python3Packages,
   xrdb,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "posting";
   version = "2.9.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "posting";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BX1D9XgBqRIfavDxAQH7mPP/dnayQu3xSSAF6/JSM54=";
   };
 
@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     description = "Modern API client that lives in your terminal";
     mainProgram = "posting";
     homepage = "https://posting.sh/";
-    changelog = "https://github.com/darrenburns/posting/releases/tag/${src.tag}";
+    changelog = "https://github.com/darrenburns/posting/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jorikvanveen
@@ -61,4 +61,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -9,7 +9,7 @@
   alsa-lib,
   freetype,
   nghttp2,
-  libX11,
+  libx11,
   expat,
 }:
 
@@ -71,7 +71,7 @@ buildFHSEnv {
     decent-sampler
     freetype
     nghttp2
-    libX11
+    libx11
     expat
   ];
 

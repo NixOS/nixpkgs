@@ -16,7 +16,7 @@
   libpaper,
   makeWrapper,
   ghostscript,
-  libXft,
+  libxft,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "2.23";
 
   src = fetchurl {
-    url = "http://ftp.nluug.nl/pub/editors/${pname}/${pname}-${version}.src.tar.gz";
+    url = "http://ftp.nluug.nl/pub/editors/ted/ted-${version}.src.tar.gz";
     hash = "sha256-P6mSwryWrzyniO+UHLUxT0odhDIC79AgG4tO6a2/MWw=";
   };
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     libpng
     gtk2-x11
     libpaper
-    libXft
+    libxft
   ];
 
   meta = {

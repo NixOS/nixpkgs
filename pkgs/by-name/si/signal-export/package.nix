@@ -5,13 +5,13 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "signal-export";
   version = "3.8.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "signal_export";
     hash = "sha256-o+Z4vSqu2avQyzf93o5s2hKmCK2I8aoF4JGlLzM/9xI=";
   };
@@ -42,4 +42,4 @@ python3.pkgs.buildPythonApplication rec {
       picnoir
     ];
   };
-}
+})

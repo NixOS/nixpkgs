@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "isponsorblocktv";
   version = "2.6.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dmunozv04";
     repo = "iSponsorBlockTV";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AGjLehhGYz8FyojSFmSYKLCkHAExtpQiukQnTNt1YoY=";
   };
 
@@ -48,11 +48,11 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/dmunozv04/iSponsorBlockTV";
-    changelog = "https://github.com/dmunozv04/iSponsorBlockTV/releases/tag/${src.tag}";
+    changelog = "https://github.com/dmunozv04/iSponsorBlockTV/releases/tag/${finalAttrs.src.tag}";
     description = "SponsorBlock client for all YouTube TV clients";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ lukegb ];
     mainProgram = "iSponsorBlockTV";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

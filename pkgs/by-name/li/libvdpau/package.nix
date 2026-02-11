@@ -11,12 +11,12 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvdpau";
   version = "1.5";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/${version}/${pname}-${version}.tar.bz2";
+    url = "https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/${finalAttrs.version}/libvdpau-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-pdUKQrjCiP68BxUatkOsjeBqGERpZcckH4m06BCCGRM=";
   };
   patches = [ ./tracing.patch ];
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ];
   };
-}
+})

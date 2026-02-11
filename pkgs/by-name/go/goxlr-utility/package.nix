@@ -11,14 +11,14 @@
   udevCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goxlr-utility";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "GoXLR-on-Linux";
     repo = "goxlr-utility";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+hwNevUT9AwMXHUxmjYVrJ3AKaxICrOJZ642GPRq17Q=";
   };
 
@@ -67,4 +67,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ errnoh ];
   };
-}
+})

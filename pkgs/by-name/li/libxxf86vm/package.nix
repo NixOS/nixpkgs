@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   xorgproto,
   writeScript,
   testers,
@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
     xorgproto
   ];
 

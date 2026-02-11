@@ -20,14 +20,14 @@
   desktopToDarwinBundle,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "meld";
   version = "3.23.1";
 
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/meld/${lib.versions.majorMinor version}/meld-${version}.tar.xz";
+    url = "mirror://gnome/sources/meld/${lib.versions.majorMinor finalAttrs.version}/meld-${finalAttrs.version}.tar.xz";
     hash = "sha256-c/gnkkZjx8a0UadMg4UwTZn+qhPIH04KFx2ll8aENXQ=";
   };
 
@@ -85,4 +85,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "meld";
   };
-}
+})

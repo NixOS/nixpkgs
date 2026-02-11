@@ -8,14 +8,14 @@
   enableNVML ? config.cudaSupport,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fan2go";
   version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = "fan2go";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CHBJhG10RD5rQW1SFk7ffV9M4t6LtJR6xQrw47KQzC0=";
     leaveDotGit = true;
     postFetch = ''
@@ -73,4 +73,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mtoohey ];
     platforms = lib.platforms.linux;
   };
-}
+})

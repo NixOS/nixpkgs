@@ -4,17 +4,14 @@
   fetchFromGitHub,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "gate";
   version = "0.62.3";
-in
-buildGoModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "minekube";
     repo = "gate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tOyXVqmexAWpC2s86aUUjmDp6V+qvP3ve8FrqdtexvU=";
   };
 
@@ -44,4 +41,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ XBagon ];
     mainProgram = "gate";
   };
-}
+})

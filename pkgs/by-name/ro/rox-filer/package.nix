@@ -7,7 +7,7 @@
   wrapGAppsHook3,
   libxml2,
   gtk2,
-  libSM,
+  libsm,
   shared-mime-info,
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     gtk2
     shared-mime-info
-    libSM
+    libsm
   ];
 
   env = {

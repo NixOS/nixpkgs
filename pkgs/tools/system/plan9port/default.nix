@@ -4,9 +4,9 @@
   fetchFromGitHub,
   fontconfig,
   freetype,
-  libX11,
-  libXext,
-  libXt,
+  libx11,
+  libxext,
+  libxt,
   xorgproto,
   perl, # For building web manuals
   which,
@@ -53,9 +53,9 @@ stdenv.mkDerivation {
       [
         fontconfig
         freetype # fontsrv uses these
-        libX11
-        libXext
-        libXt
+        libx11
+        libxext
+        libxt
         xorgproto
       ]
     else
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     CC9='$(command -v $CC)'
     CFLAGS='$NIX_CFLAGS_COMPILE'
     LDFLAGS='$(for f in $NIX_LDFLAGS; do echo "-Wl,$f"; done | xargs echo)'
-    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "X11='${libXt.dev}/include'"}
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "X11='${libxt.dev}/include'"}
     EOF
 
     # make '9' available in the path so there's some way to find out $PLAN9

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gjo";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "skanehira";
     repo = "gjo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-vEk5MZqwAMgqMLjwRJwnbx8nVyF3U2iUz0S3L0GmCh4=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

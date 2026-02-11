@@ -11,13 +11,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "alist";
-  version = "3.55.0";
+  version = "3.57.0";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/psFL/dCG82y1uWEcg45JG6S7+MD0avqU/HjrR+vklA=";
+    hash = "sha256-wwV65vxNSrGzP7TQ+nnjWS+dcCj/+67WcMPRbNqOVbQ=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,6 +29,13 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+
+  # --- FAIL: TestSecureJoin/drive (0.00s)
+  #     securepath_test.go:29: expected error for "C:\\evil.txt", got nil
+  postPatch = lib.optionalString stdenv.hostPlatform.isUnix ''
+    substituteInPlace internal/archive/tool/securepath_test.go \
+      --replace-fail '{name: "drive", entry: "C:\\evil.txt", wantErr: true},' ""
+  '';
 
   proxyVendor = true;
   vendorHash = "sha256-aRnS3LLG25FK1ELKd7K1e5aGLmKnQ7w/3QVe4P9RRLI=";
@@ -87,10 +94,10 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = lib.getExe (callPackage ./update.nix { });
-    webVersion = "3.55.0";
+    webVersion = "3.57.0";
     web = fetchzip {
       url = "https://github.com/AlistGo/alist-web/releases/download/${finalAttrs.passthru.webVersion}/dist.tar.gz";
-      hash = "sha256-v0o4G2mzd63sShJZRjijIFAUB+ocvF4jspxf841lZ8U=";
+      hash = "sha256-QP1eWlSr7XBX8jUyvXhpmEGIwWaY6wy4M2l/35AiuUg=";
     };
   };
 

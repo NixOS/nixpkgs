@@ -9,10 +9,10 @@
   libGL,
   vulkan-loader,
   wayland,
-  libXrandr,
-  libXcursor,
-  libX11,
-  libXi,
+  libxrandr,
+  libxcursor,
+  libx11,
+  libxi,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,15 +28,15 @@ rustPlatform.buildRustPackage rec {
   runtimeInputs = [
     libxkbcommon
     libGL
-    libXrandr
-    libX11
+    libxrandr
+    libx11
     vulkan-loader
   ];
 
   buildInputs = [
     alsa-lib.dev
-    libXcursor
-    libXi
+    libxcursor
+    libxi
     wayland
   ];
 

@@ -15,7 +15,7 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rclone";
   version = "1.73.0";
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rclone";
     repo = "rclone";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-g/ofD/KsUOXVTOveHKddPN9PP5bx7HWFPct1IhJDZYE=";
   };
 
@@ -49,7 +49,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/rclone/rclone/fs.Version=${src.tag}"
+    "-X github.com/rclone/rclone/fs.Version=${finalAttrs.src.tag}"
   ];
 
   postConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -89,7 +89,7 @@ buildGoModule rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "version";
 
   passthru = {
@@ -102,11 +102,11 @@ buildGoModule rec {
   meta = {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
-    changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
+    changelog = "https://github.com/rclone/rclone/blob/v${finalAttrs.version}/docs/content/changelog.md";
     license = lib.licenses.mit;
     mainProgram = "rclone";
     maintainers = with lib.maintainers; [
       SuperSandro2000
     ];
   };
-}
+})

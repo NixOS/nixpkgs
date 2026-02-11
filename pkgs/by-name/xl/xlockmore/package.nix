@@ -3,11 +3,11 @@
   lib,
   fetchurl,
   pam ? null,
-  libX11,
-  libXext,
-  libXinerama,
-  libXdmcp,
-  libXt,
+  libx11,
+  libxext,
+  libxinerama,
+  libxdmcp,
+  libxt,
   autoreconfHook,
 }:
 
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   # Optionally, it can use GTK.
   buildInputs = [
     pam
-    libX11
-    libXext.dev
-    libXinerama
-    libXdmcp
-    libXt
+    libx11
+    libxext.dev
+    libxinerama
+    libxdmcp
+    libxt
   ];
   nativeBuildInputs = [ autoreconfHook ];
 

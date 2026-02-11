@@ -13,7 +13,7 @@
   python3,
   x11Support ? true,
   libxcb,
-  libX11,
+  libx11,
   waylandSupport ? true,
   wayland,
   wayland-protocols,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd
   ]
   ++ lib.optionals x11Support [
-    libX11
+    libx11
     libxcb
   ]
   ++ lib.optionals waylandSupport [

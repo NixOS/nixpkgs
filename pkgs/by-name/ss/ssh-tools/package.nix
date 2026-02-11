@@ -7,14 +7,14 @@
   perl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ssh-tools";
   version = "1.9";
 
   src = fetchFromCodeberg {
     owner = "vaporup";
     repo = "ssh-tools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZMjpc2zjvuLJES5ixEHvo7oAx1JGzy60LzN09Ykn/54=";
   };
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

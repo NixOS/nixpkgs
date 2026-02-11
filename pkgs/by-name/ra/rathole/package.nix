@@ -9,7 +9,7 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rathole";
   version = "0.5.0-unstable-2025-07-29";
 
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     VERGEN_BUILD_TIMESTAMP = "0";
-    VERGEN_BUILD_SEMVER = version;
+    VERGEN_BUILD_SEMVER = finalAttrs.version;
     VERGEN_GIT_COMMIT_TIMESTAMP = "0";
     VERGEN_GIT_BRANCH = "main";
     VERGEN_RUSTC_SEMVER = rustc.version;
@@ -75,4 +75,4 @@ rustPlatform.buildRustPackage rec {
       xokdvium
     ];
   };
-}
+})

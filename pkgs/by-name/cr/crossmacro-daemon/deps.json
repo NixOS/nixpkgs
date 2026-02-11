@@ -1,0 +1,42 @@
+[
+  {
+    "pname": "Serilog",
+    "version": "4.0.0",
+    "hash": "sha256-j8hQ5TdL1TjfdGiBO9PyHJFMMPvATHWN1dtrrUZZlNw="
+  },
+  {
+    "pname": "Serilog",
+    "version": "4.1.0",
+    "hash": "sha256-r89nJ5JE5uZlsRrfB8QJQ1byVVfCWQbySKQ/m9PYj0k="
+  },
+  {
+    "pname": "Serilog",
+    "version": "4.2.0",
+    "hash": "sha256-7f3EpCsEbDxXgsuhE430KVI14p7oDUuCtwRpOCqtnbs="
+  },
+  {
+    "pname": "Serilog",
+    "version": "4.3.0",
+    "hash": "sha256-jyIy4BjsyFXge3aO4GRFAdnX4/rz1MHfBkBDIpCDsTw="
+  },
+  {
+    "pname": "Serilog.Sinks.Async",
+    "version": "2.1.0",
+    "hash": "sha256-LDoLpXkleD2MVPK2KBsLGRf5yqrwckBiAnYDbuIbaUM="
+  },
+  {
+    "pname": "Serilog.Sinks.Console",
+    "version": "6.1.1",
+    "hash": "sha256-CfIg4Us4kSMQAn6rU2rsAeE22g6MpFiZdhoZWySpZeY="
+  },
+  {
+    "pname": "Serilog.Sinks.File",
+    "version": "7.0.0",
+    "hash": "sha256-LxZYUoUPkCjIIVarJilnXnqQiMrFNJtoRilmzTNtUjo="
+  },
+  {
+    "pname": "Tmds.DBus",
+    "version": "0.23.0",
+    "hash": "sha256-BwWQSqOOMS+Cf2fM8MIuiHey8QnGH4WvYjOn9haq5e0="
+  }
+]

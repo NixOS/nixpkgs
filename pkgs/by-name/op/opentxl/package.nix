@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.factorial = callPackage ./factorial-test.nix { opentxl = finalAttrs.finalPackage; };
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source compiler for the Txl language";
     mainProgram = "txl";
     platforms = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/CordyJ/OpenTxl";
     downloadPage = "https://github.com/CordyJ/OpenTxl/releases";
     changelog = "https://github.com/CordyJ/OpenTxl/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ MysteryBlokHed ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ MysteryBlokHed ];
   };
 })

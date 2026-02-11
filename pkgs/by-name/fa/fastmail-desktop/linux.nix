@@ -11,8 +11,8 @@
   autoPatchelfHook,
   makeWrapper,
   electron,
-  libXScrnSaver,
-  libXtst,
+  libxscrnsaver,
+  libxtst,
   libappindicator,
   libgcc,
   musl,
@@ -42,8 +42,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   libPath = lib.makeLibraryPath [
-    libXScrnSaver
-    libXtst
+    libxscrnsaver
+    libxtst
     libappindicator
   ];
 

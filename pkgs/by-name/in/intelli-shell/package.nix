@@ -9,14 +9,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "intelli-shell";
   version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "lasantosr";
     repo = "intelli-shell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TrT2gMc23m4xZ/fxxHqEkGpq3VBeLfkPXC9H1sSSOaQ=";
   };
 
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lasantosr ];
     mainProgram = "intelli-shell";
   };
-}
+})

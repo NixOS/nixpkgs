@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "3.1.7";
+  version = "3.1.8";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AzXBANUcm/DYYkNlO7q++/Dx826o5Hg/1cYJ84rMY0U=";
+    hash = "sha256-OcD4xcD/A48oJcsKuhYBc/UigK+1NfTEuJivL+qdfeA=";
   };
 
   postPatch = ''

@@ -6,9 +6,9 @@
   pkg-config,
   glib,
   gtk2,
-  libX11,
-  libSM,
-  libICE,
+  libx11,
+  libsm,
+  libice,
   which,
   copyDesktopItems,
   makeDesktopItem,
@@ -35,20 +35,20 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     gtk2
-    libX11
-    libSM
-    libICE
+    libx11
+    libsm
+    libice
   ];
 
   hardeningDisable = [ "format" ];
 
   # Makefiles are patched to fix references to `/usr/X11R6' and to add
-  # `-lX11' to make sure libX11's store path is in the RPATH.
+  # `-lX11' to make sure libx11's store path is in the RPATH.
   postPatch = ''
     echo "patching makefiles..."
     for i in Makefile src/Makefile server/Makefile
     do
-      sed -i "$i" -e "s|/usr/X11R6|${libX11.dev}|g ; s|-lICE|-lX11 -lICE|g"
+      sed -i "$i" -e "s|/usr/X11R6|${libx11.dev}|g ; s|-lICE|-lX11 -lICE|g"
     done
   '';
 

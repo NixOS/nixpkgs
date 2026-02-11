@@ -20,14 +20,14 @@
   withNotmuch ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3status-rust";
   version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = "i3status-rust";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Eam0MDACJN/a8J1Za7Xwy0Jlv/KGNn4M13C2yaCgLnU=";
   };
 
@@ -96,4 +96,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

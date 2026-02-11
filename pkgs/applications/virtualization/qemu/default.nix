@@ -249,8 +249,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontAddStaticConfigureFlags = true;
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc" ++ lib.optional guestAgentSupport "ga";
-  # On aarch64-linux we would shoot over the Hydra's 2G output limit.
-  separateDebugInfo = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
+  separateDebugInfo = true;
 
   patches = [
     ./fix-qemu-ga.patch

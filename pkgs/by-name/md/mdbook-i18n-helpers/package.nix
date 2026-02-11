@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-i18n-helpers";
   version = "0.4.0";
 
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "google";
     repo = "mdbook-i18n-helpers";
     # TODO fix once upstream uses semver for tags again
-    tag = "mdbook-i18n-helpers-${version}";
+    tag = "mdbook-i18n-helpers-${finalAttrs.version}";
     hash = "sha256-q1Bpj0R4AkGbmAkCKtmF8X/LCxxeDJp+719xKZld6rs=";
   };
 
@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Helpers for a mdbook i18n workflow based on Gettext";
     homepage = "https://github.com/google/mdbook-i18n-helpers";
-    changelog = "https://github.com/google/mdbook-i18n-helpers/releases/tag/${version}";
+    changelog = "https://github.com/google/mdbook-i18n-helpers/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       teutat3s
       matthiasbeyer
     ];
   };
-}
+})

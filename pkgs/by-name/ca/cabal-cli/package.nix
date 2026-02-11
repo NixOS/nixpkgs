@@ -4,17 +4,14 @@
   fetchFromGitHub,
 }:
 
-let
-  version = "15.0.2";
+buildNpmPackage (finalAttrs: {
   pname = "cabal-cli";
-in
-buildNpmPackage {
-  inherit version pname;
+  version = "15.0.2";
 
   src = fetchFromGitHub {
     owner = "cabal-club";
     repo = "cabal-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DZ+F+pgPc8WuiBhLgxNO5es5lA996fJdvZyg6QjfrHg=";
   };
 
@@ -30,4 +27,4 @@ buildNpmPackage {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ kototama ];
   };
-}
+})

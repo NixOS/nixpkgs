@@ -79,12 +79,16 @@ let
       ]
       ++ extraNativeBuildInputs;
 
+      propagatedBuildInputs = [
+        # The headers of wlroots #include <libinput.h>, and consumers of `wlroots` need not add it explicitly, hence we propagate it.
+        libinput
+      ];
+
       buildInputs = [
         libliftoff
         libdisplay-info
         libGL
         libcap
-        libinput
         libxkbcommon
         libgbm
         pixman

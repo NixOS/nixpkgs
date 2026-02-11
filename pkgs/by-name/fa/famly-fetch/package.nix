@@ -5,16 +5,16 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "famly-fetch";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jacobbunk";
     repo = "famly-fetch";
-    tag = "v${version}";
-    hash = "sha256-Ua2g+YGzMHfMGZrOSKzeqdT/ppanZZWJHjrRxfwVDmE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uyLGBNV+GiYNqy4wWxPNx/xQL0lnMsIHfPIlaIu85HA=";
   };
 
   build-system = with python3Packages; [
@@ -40,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ tlvince ];
     mainProgram = "famly-fetch";
   };
-}
+})

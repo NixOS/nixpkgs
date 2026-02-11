@@ -390,9 +390,9 @@
   };
 
   hcl = {
-    version = "1.1.0";
+    version = "1.2.0";
     url = "github:tree-sitter-grammars/tree-sitter-hcl";
-    hash = "sha256-saVKSYUJY7OuIuNm9EpQnhFO/vQGKxCXuv3EKYOJzfs=";
+    hash = "sha256-Kq0KtkF6xtZcN2s8KzYGyguJH2iOTlA2WRytZ+KGTUE=";
     meta = {
       license = lib.licenses.asl20;
     };
@@ -1092,7 +1092,7 @@
   };
 
   turtle = {
-    version = "0-unstable-2024-07-02";
+    version = "0.1.0-unstable-2024-07-02";
     url = "github:GordianDziwis/tree-sitter-turtle/7f789ea7ef765080f71a298fc96b7c957fa24422";
     hash = "sha256-z6f73euFAG9du5owz7V9WLbWK81Jg0DwxN1metKPbTA=";
     meta = {
@@ -1146,7 +1146,7 @@
   };
 
   vim = {
-    version = "0-unstable-2023-05-05";
+    version = "0.2.0-unstable-2023-05-05";
     url = "github:vigoux/tree-sitter-viml/7c317fbade4b40baa7babcd6c9097c157d148e60";
     hash = "sha256-/TyPUBsKRcF9Ig8psqd4so2IMbHtTu4weJXgfd96Vrs=";
     meta = {

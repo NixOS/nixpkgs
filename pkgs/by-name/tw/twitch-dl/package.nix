@@ -8,7 +8,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "twitch-dl";
   version = "3.3.1";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "twitch-dl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-scGTGlAt1k6eS8O3thrlJpVv3vZe2lKNBxtDYIBWOPg=";
   };
 
@@ -74,7 +74,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "CLI tool for downloading videos from Twitch";
     homepage = "https://github.com/ihabunek/twitch-dl";
-    changelog = "https://github.com/ihabunek/twitch-dl/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ihabunek/twitch-dl/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       pbsds
@@ -82,4 +82,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "twitch-dl";
   };
-}
+})

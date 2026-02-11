@@ -13,11 +13,11 @@
   freetype,
   lcms2,
   libGL,
-  libX11,
-  libXScrnSaver,
-  libXext,
-  libXpresent,
-  libXrandr,
+  libx11,
+  libxscrnsaver,
+  libxext,
+  libxpresent,
+  libxrandr,
   libarchive,
   libass,
   libbluray,
@@ -30,7 +30,7 @@
   libdvdnav,
   libjack2,
   libplacebo,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libsixel,
   libuchardet,
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libass
     libplacebo
-    libpthreadstubs
+    libpthread-stubs
     libuchardet
     luaEnv
     python3
@@ -217,12 +217,12 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
   ]
   ++ lib.optionals x11Support [
-    libX11
-    libXext
+    libx11
+    libxext
     libGL
-    libXrandr
-    libXpresent
-    libXScrnSaver
+    libxrandr
+    libxpresent
+    libxscrnsaver
   ]
   ++ lib.optionals zimgSupport [ zimg ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];

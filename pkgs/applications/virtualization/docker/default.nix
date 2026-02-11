@@ -67,10 +67,10 @@ let
       docker-meta = {
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
-          offline
           vdemeester
           teutat3s
         ];
+        identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "docker" version;
       };
 
       docker-runc = runc.overrideAttrs {
@@ -248,6 +248,7 @@ let
           meta = docker-meta // {
             homepage = "https://mobyproject.org/";
             description = "Collaborative project for the container ecosystem to assemble container-based systems";
+            identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mobyproject" version;
           };
         }
       );

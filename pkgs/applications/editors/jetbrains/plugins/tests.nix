@@ -6,12 +6,12 @@
   fetchzip,
   fetchurl,
   # If not set, all IDEs are tested.
-  ideName ? null,
+  ide ? null,
 }:
 
 let
   ides =
-    if ideName == null then
+    if ide == null then
       with jetbrains;
       [
         clion
@@ -31,7 +31,7 @@ let
         webstorm
       ]
     else
-      [ (jetbrains.${ideName}) ];
+      [ ide ];
 in
 {
   # Check to see if the process for adding plugins is breaking anything, instead of the plugins themselves

@@ -22,7 +22,7 @@
   enableBuildstreamPlugins ? true,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "buildstream";
   version = "2.6.0";
   pyproject = true;
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "buildstream";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2Z+s0dQB85MBO06llhIEO3jwWfL53n74S28ENHcbe/Q=";
   };
 
@@ -130,4 +130,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "bst";
     maintainers = with lib.maintainers; [ shymega ];
   };
-}
+})

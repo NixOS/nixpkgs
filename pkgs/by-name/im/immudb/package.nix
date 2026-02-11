@@ -13,14 +13,14 @@ let
     sha256 = "sha256-4BhTK+gKO8HW1CelGa30THpfkqfqFthK+b7p9QWl4Pw=";
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "immudb";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = "immudb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-RsDM+5/a3huBJ6HfaALpw+KpcIfg198gZfC4c4DsDlU=";
   };
 
@@ -45,7 +45,7 @@ buildGoModule rec {
 
   tags = [ "webconsole" ];
 
-  ldflags = [ "-X github.com/codenotary/immudb/cmd/version.Version=${version}" ];
+  ldflags = [ "-X github.com/codenotary/immudb/cmd/version.Version=${finalAttrs.version}" ];
 
   subPackages = [
     "cmd/immudb"
@@ -69,4 +69,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

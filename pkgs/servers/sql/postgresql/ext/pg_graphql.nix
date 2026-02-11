@@ -1,6 +1,6 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_16_0,
+  cargo-pgrx_0_16_1,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -8,21 +8,19 @@
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_16_0;
+  cargo-pgrx = cargo-pgrx_0_16_1;
 
   pname = "pg_graphql";
-  version = "1.5.12-unstable-2025-09-01";
+  version = "1.5.12";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "pg_graphql";
-    # ToDo: 1.5.12 has not been tagged in Git yet, hence `rev` is used instead for now
-    #tag = "v${finalAttrs.version}";
-    rev = "bae1cb506d48d14ccf2b05f6a42331f3c9c71a76";
-    hash = "sha256-aJPstwzizWzVIo1N/4CHKgJBJ7DJpRkrwYrzNL+z7zQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mJBxen6Gg1LbzIF+WKThrs+wPD01a6WjZ+AHrGdWL4Q=";
   };
 
-  cargoHash = "sha256-Gfvu6YY+pRGrcAXAgEIa1iZKLJlbkvMv0F3pg3X/CXQ=";
+  cargoHash = "sha256-GZjoHGqNhZOuMbHji1Y3xKmdJ1GB1KasT+47P2e83sU=";
 
   # pgrx tests try to install the extension into postgresql nix store
   doCheck = false;
@@ -36,15 +34,6 @@ buildPgrxExtension (finalAttrs: {
     homepage = "https://supabase.github.io/pg_graphql";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ julm ];
-    broken =
-      lib.versionOlder postgresql.version "14"
-      || (
-        # ToDo: check after next package update.
-        lib.versionAtLeast postgresql.version "18"
-        && (
-          finalAttrs.version == "1.5.12-unstable-2025-09-01"
-          || lib.warn "Is postgresql18Packages.pg_graphql still broken?" false
-        )
-      );
+    broken = lib.versionOlder postgresql.version "14";
   };
 })

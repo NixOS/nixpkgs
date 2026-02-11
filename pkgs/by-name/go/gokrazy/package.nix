@@ -5,7 +5,7 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gokrazy";
   version = "0-unstable-2026-01-09";
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/gok" ];
@@ -42,4 +42,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ shayne ];
     mainProgram = "gok";
   };
-}
+})

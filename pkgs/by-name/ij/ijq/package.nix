@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ijq";
   version = "1.2.0";
 
   src = fetchFromCodeberg {
     owner = "gpanders";
     repo = "ijq";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PT7WnCZL4Cfo/+VW3ImOloDOI9d0GX4UTcC8Bf3OVAU=";
   };
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   postBuild = ''
@@ -57,4 +57,4 @@ buildGoModule rec {
       SuperSandro2000
     ];
   };
-}
+})

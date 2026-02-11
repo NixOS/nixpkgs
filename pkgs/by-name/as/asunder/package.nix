@@ -20,7 +20,7 @@
   wavpack,
   #, musepackSupport ? false, TODO: mpcenc
   monkeysAudioSupport ? false,
-  monkeysAudio,
+  monkeys-audio,
   #, aacSupport ? false, TODO: neroAacEnc
 }:
 
@@ -31,7 +31,7 @@ let
     ++ lib.optional flacSupport flac
     ++ lib.optional opusSupport opusTools
     ++ lib.optional wavpackSupport wavpack
-    ++ lib.optional monkeysAudioSupport monkeysAudio
+    ++ lib.optional monkeysAudioSupport monkeys-audio
     ++ [ cdparanoia ];
 in
 

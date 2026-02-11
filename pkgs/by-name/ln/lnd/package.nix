@@ -21,14 +21,14 @@
   ],
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lnd";
   version = "0.20.0-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-N8eZacu8BHMiI8RyueBv+Y1bWlaEuCQLRsfIj5WviV4=";
   };
 
@@ -53,4 +53,4 @@ buildGoModule rec {
       prusnak
     ];
   };
-}
+})

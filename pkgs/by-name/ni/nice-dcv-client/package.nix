@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   glib,
-  libX11,
+  libx11,
   gst_all_1,
   libepoxy,
   pango,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libxml2
     libva
     e2fsprogs
-    libX11
+    libx11
     openssl
     pcsclite
     gtk3

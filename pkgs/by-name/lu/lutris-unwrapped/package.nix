@@ -32,7 +32,7 @@
   gettext,
   libstrangle,
   fluidsynth,
-  xorgserver,
+  xorg-server,
   xkbcomp,
   setxkbmap,
   util-linux,
@@ -54,21 +54,21 @@ let
     xgamma
     libstrangle
     fluidsynth
-    xorgserver
+    xorg-server
     setxkbmap
     xkbcomp
     # bypass mount suid wrapper which does not work in fhsenv
     util-linux
   ];
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lutris-unwrapped";
   version = "0.5.19";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CAXKnx5+60MITRM8enkYgFl5ZKM6HCXhCYNyG7kHhuQ=";
   };
 
@@ -141,4 +141,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "lutris";
   };
-}
+})

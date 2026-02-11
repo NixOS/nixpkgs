@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zs";
   version = "0.4.1";
 
@@ -14,7 +14,7 @@ buildGoModule rec {
     domain = "git.mills.io";
     owner = "prologic";
     repo = "zs";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-V8+p19kvVh64yCreNVp4RVdkJkjrq8Q5VbjaJWekZHY=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
 
   ldflags = [
     "-w"
-    "-X=main.Version=${version}"
-    "-X=main.Commit=${src.rev}"
+    "-X=main.Version=${finalAttrs.version}"
+    "-X=main.Commit=${finalAttrs.src.rev}"
     "-X=main.Build=1970-01-01T00:00:00+00:00"
   ];
 
@@ -39,9 +39,9 @@ buildGoModule rec {
   meta = {
     description = "Extremely minimal static site generator written in Go";
     homepage = "https://git.mills.io/prologic/zs";
-    changelog = "https://git.mills.io/prologic/zs/releases/tag/${version}";
+    changelog = "https://git.mills.io/prologic/zs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ adtya ];
     mainProgram = "zs";
   };
-}
+})

@@ -4,9 +4,9 @@
   fetchFromGitHub,
   xorgproto,
   motif,
-  libX11,
-  libXt,
-  libXpm,
+  libx11,
+  libxt,
+  libxpm,
   bison,
   flex,
   automake,
@@ -38,9 +38,9 @@ stdenv.mkDerivation {
   buildInputs = [
     xorgproto
     motif
-    libX11
-    libXt
-    libXpm
+    libx11
+    libxt
+    libxpm
     bison
   ];
 

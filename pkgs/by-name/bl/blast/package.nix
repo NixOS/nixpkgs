@@ -12,7 +12,6 @@
   curl,
   sqlite,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "blast";
   version = "2.17.0";
@@ -132,6 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Version 2.10.0 fails on Darwin
     # See https://github.com/NixOS/nixpkgs/pull/61430
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ luispedro ];
+    maintainers = with lib.maintainers; [
+      luispedro
+      mulatta
+    ];
   };
 })

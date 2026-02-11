@@ -17,7 +17,7 @@ let
     ln -s ${boringssl.dev}/include include
   '';
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
     owner = "signalapp";
     repo = "libsignal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XVq1fvhUF0WqSs1lJRCBRuhOW4idY6Nm21UdX4/6TE8=";
   };
 
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
       SchweGELBin
     ];
   };
-}
+})

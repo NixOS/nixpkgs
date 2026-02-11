@@ -17,12 +17,12 @@
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trigger-rally";
   version = "0.6.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/trigger-rally/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/trigger-rally/trigger-rally-${finalAttrs.version}.tar.gz";
     sha256 = "016bc2hczqscfmngacim870hjcsmwl8r3aq8x03vpf22s49nw23z";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

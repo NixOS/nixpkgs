@@ -1,10 +1,11 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   lib,
+  stdenv,
   nix-update-script,
-  testers,
-  whosthere,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,6 +21,16 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-YVPsWpIXC5SLm+T2jEGqF4MBcKOAAk0Vpc7zCIFkNw8=";
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  ldflags = [
+    "-s"
+    "-X"
+    "main.versionStr=${finalAttrs.version}"
+  ];
+
   checkFlags =
     let
       # Skip tests that require filesystem access
@@ -30,8 +41,19 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd whosthere \
+      --bash <("$out/bin/whosthere" completion bash) \
+      --fish <("$out/bin/whosthere" completion fish) \
+      --zsh <("$out/bin/whosthere" completion zsh)
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
-  passthru.tests.version = testers.testVersion { package = whosthere; };
 
   meta = {
     description = "Local Area Network discovery tool";

@@ -6,14 +6,14 @@
   scdoc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shfmt";
   version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3a0N5GsqZvJVx1qhsTzwtC2SBtexdXJMalerM+joNIc=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -51,4 +51,4 @@ buildGoModule rec {
     ];
     mainProgram = "shfmt";
   };
-}
+})

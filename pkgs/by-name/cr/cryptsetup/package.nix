@@ -116,5 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
       raitobezarius
     ];
     platforms = with lib.platforms; linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "cryptsetup_project" finalAttrs.version;
   };
 })

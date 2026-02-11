@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "minetest-mapserver";
   version = "4.9.4";
 
   src = fetchFromGitHub {
     owner = "minetest-mapserver";
     repo = "mapserver";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YKJbqD0dtQGLXDRLOwLl6E5R36gftDD98+/XpTGwZSk=";
   };
 
@@ -21,11 +21,11 @@ buildGoModule rec {
     description = "Realtime mapserver for minetest";
     mainProgram = "mapserver";
     homepage = "https://github.com/minetest-mapserver/mapserver/blob/master/readme.md";
-    changelog = "https://github.com/minetest-mapserver/mapserver/releases/tag/v${version}";
+    changelog = "https://github.com/minetest-mapserver/mapserver/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       cc-by-sa-30
     ];
     platforms = lib.platforms.all;
   };
-}
+})

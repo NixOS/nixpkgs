@@ -63,9 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple shell based CA utility";
     homepage = "https://openvpn.net/";
     license = lib.licenses.gpl2Only;
-    maintainers = [
-      lib.maintainers.offline
-      lib.maintainers.numinit
+    maintainers = with lib.maintainers; [
+      numinit
     ];
     platforms = lib.platforms.unix;
   };

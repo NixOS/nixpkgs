@@ -5,13 +5,13 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "legit";
   version = "1.2.0.post0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-lJOWtoApqK9AWrIMkBkCNB72vVXH/sbatxFB1j1AaxE=";
   };
 
@@ -40,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ryneeverett ];
     mainProgram = "legit";
   };
-}
+})

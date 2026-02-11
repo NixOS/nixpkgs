@@ -9,9 +9,9 @@
   pkg-config,
   gtk3,
   libayatana-appindicator,
-  libX11,
-  libXcursor,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxxf86vm,
   versionCheckHook,
   netbird-management,
   netbird-relay,
@@ -68,25 +68,25 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.64.1";
+  version = "0.64.5";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fxQ6x/MN3FKRiGgb8OPjLnHCVjYnI4vBLwjDKAxrUQY=";
+    hash = "sha256-v35IS3Yt2wo7Xvmnjiew1daw7KcS+y+BZYbiwyJVuL0=";
   };
 
-  vendorHash = "sha256-suQPYxZo1R2Jh4N2ulOysfhRKAnVUUMzJoj+5lmhwDk=";
+  vendorHash = "sha256-n0s2K+qbMiNfbkPbqvvXpvFvL5PkCkuJJ2CH3bEUCOk=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (componentName == "ui") pkg-config;
 
   buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && componentName == "ui") [
     gtk3
     libayatana-appindicator
-    libX11
-    libXcursor
-    libXxf86vm
+    libx11
+    libxcursor
+    libxxf86vm
   ];
 
   subPackages = [ component.module ];

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "savepagenow";
   version = "1.3.1";
   pyproject = true;
@@ -12,11 +12,11 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pastpages";
     repo = "savepagenow";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-ztM1g71g8SN1LTyFF7sxaLhC3+nVsC9fJwfYPjkUsdE=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   build-system = with python3Packages; [ setuptools-scm ];
 
@@ -37,4 +37,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "savepagenow";
   };
-}
+})

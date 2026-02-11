@@ -17,7 +17,7 @@
   itstool,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "drawing";
   version = "1.0.2";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "maoschanz";
     repo = "drawing";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kNF9db8NoHWW1A0WEFQzxHqAQ4A7kxInMRZFJOXQX/k=";
   };
 
@@ -73,9 +73,9 @@ python3.pkgs.buildPythonApplication rec {
     description = "Free basic image editor, similar to Microsoft Paint, but aiming at the GNOME desktop";
     mainProgram = "drawing";
     homepage = "https://maoschanz.github.io/drawing/";
-    changelog = "https://github.com/maoschanz/drawing/releases/tag/${version}";
+    changelog = "https://github.com/maoschanz/drawing/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ mothsart ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

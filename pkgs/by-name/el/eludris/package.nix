@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eludris";
   version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "eludris";
     repo = "eludris";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TVYgimkGUSITB3IaMlMd10PWomqyJRvONvJwiW85U4M=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ooliver1 ];
   };
-}
+})

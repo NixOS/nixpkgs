@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hyprmon";
   version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "erans";
     repo = "hyprmon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jZUtdOMmpd75CyjaXdrqXcYxcQ9q7G2YGBHoUUvycX8=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ onatustun ];
     mainProgram = "hyprmon";
   };
-}
+})

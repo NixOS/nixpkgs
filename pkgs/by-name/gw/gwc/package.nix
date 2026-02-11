@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gwc";
-  version = "0.22-06";
+  version = "0.22-07";
 
   src = fetchFromGitHub {
     owner = "AlisterH";
     repo = "gwc";
     rev = finalAttrs.version;
-    sha256 = "sha256-hRwy++gZiW/olIIeiVTpdIjPLIHgvgVUGEaUX9tpFbY=";
+    sha256 = "sha256-fOUFaJarqL++0PtkphyqjrG96POlP9hqGH5pbCzYSMw=";
   };
 
   nativeBuildInputs = [

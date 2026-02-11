@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "klassy";
-  version = "6.4.breeze6.4.0";
+  version = "6.5";
 
   src = fetchFromGitHub {
     owner = "paulmcauley";
     repo = "klassy";
-    tag = finalAttrs.version;
-    hash = "sha256-+bYS2Upr84BS0IdA0HlCK0FF05yIMVbRvB8jlN5EOUM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zf+RO+GolA9Gnf1/izIG7jCSu8Qlo0d0kRc90llMRIc=";
   };
 
   nativeBuildInputs = [

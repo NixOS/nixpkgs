@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.1.97";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iXa+hMXPIsRYaTUTBE3hWx08NG0igRFew6OaEpFDUjg=";
+    hash = "sha256-wsv5NjNp6jBp8DsqBIAj42yq2lY6fA6v3ADmuaQ0h0Q=";
   };
 
-  cargoHash = "sha256-I7/M1wo3s+6M1AKc4JReMb9tHuLuzQlHIXVPdigCvFQ=";
+  cargoHash = "sha256-L2aZPIfHFZMksgqRSBvYYSPO2rHGuTMf60f4b56ELUU=";
 
   nativeBuildInputs = [
     gzip
@@ -80,7 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      binaryNativeCode # librusty_v8.a
     ];
   };
 })

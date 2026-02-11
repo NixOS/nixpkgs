@@ -5,8 +5,8 @@
   ffmpeg,
   glib,
   libGLU,
-  libICE,
-  libX11,
+  libice,
+  libx11,
   libgbm,
   perl,
   pkg-config,
@@ -17,12 +17,12 @@
   wxGTK32,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "survex";
   version = "1.4.19";
 
   src = fetchurl {
-    url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
+    url = "https://survex.com/software/${finalAttrs.version}/survex-${finalAttrs.version}.tar.gz";
     hash = "sha256-X8FZCZTJ7DkZeYnrzaLCukRhs/kTHwre9F1TTRlK2ro=";
   };
 
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     # (#233265); is it required for anything?
     libGLU
     libgbm
-    libICE
-    libX11
+    libice
+    libx11
   ];
 
   strictDeps = true;
@@ -71,9 +71,9 @@ stdenv.mkDerivation rec {
       variety of platforms, including Linux/Unix, macOS, and Microsoft Windows.
     '';
     homepage = "https://survex.com/";
-    changelog = "https://github.com/ojwb/survex/raw/v${version}/NEWS";
+    changelog = "https://github.com/ojwb/survex/raw/v${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.matthewcroughan ];
     platforms = lib.platforms.all;
   };
-}
+})

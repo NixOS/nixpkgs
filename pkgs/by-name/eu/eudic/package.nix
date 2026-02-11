@@ -7,10 +7,10 @@
   dpkg,
   makeWrapper,
   libnotify,
-  libX11,
-  libXScrnSaver,
-  libXext,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxext,
+  libxtst,
   libuuid,
   libsecret,
   xdg-utils,
@@ -45,10 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libnotify
-    libX11
-    libXScrnSaver
-    libXext
-    libXtst
+    libx11
+    libxscrnsaver
+    libxext
+    libxtst
     libuuid
     libsecret
     xdg-utils

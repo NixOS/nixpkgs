@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "olm";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "olm";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-yzs+mveiZQ+7+hln3H3C5m7nSDdIIzwzSuuw7QlS9H0=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   meta = {
     description = "Tunneling client for Pangolin";
     homepage = "https://github.com/fosrl/olm";
-    changelog = "https://github.com/fosrl/olm/releases/tag/${src.tag}";
+    changelog = "https://github.com/fosrl/olm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       jackr
@@ -35,4 +35,4 @@ buildGoModule rec {
     ];
     mainProgram = "olm";
   };
-}
+})

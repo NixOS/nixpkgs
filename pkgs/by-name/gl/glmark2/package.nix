@@ -9,7 +9,7 @@
   wayland-scanner,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   libGL,
   libdrm,
   udev,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libjpeg
     libpng
-    libX11
+    libx11
     libdrm
     udev
     wayland

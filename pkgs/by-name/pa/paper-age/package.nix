@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "paper-age";
   version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "matiaskorhonen";
     repo = "paper-age";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xoxrNNlpDFXuQwltZ52SkGe0z6+B4h1Jy4XRtvQDiAg=";
   };
 
@@ -20,9 +20,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Easy and secure paper backups of secrets";
     homepage = "https://github.com/matiaskorhonen/paper-age";
-    changelog = "https://github.com/matiaskorhonen/paper-age/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/matiaskorhonen/paper-age/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "paper-age";
   };
-}
+})

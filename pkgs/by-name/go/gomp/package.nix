@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gomp";
   version = "1.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "sha256-Ixq9jtV56FKbh68jqmRd3lwpbMG00GcOUIpjzJhnSp0=";
   };
 
@@ -28,4 +28,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "gomp";
   };
-}
+})

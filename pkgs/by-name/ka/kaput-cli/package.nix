@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kaput-cli";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "davidchalifoux";
     repo = "kaput-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sy8k9L9rmiRFzvhLc+hYl9OqmmP8INLxMNRjAx7/V8g=";
   };
 
@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/davidchalifoux/kaput-cli/releases/tag/v${version}";
+    changelog = "https://github.com/davidchalifoux/kaput-cli/releases/tag/v${finalAttrs.version}";
     description = "Unofficial CLI client for Put.io";
     homepage = "https://kaput.sh/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
     mainProgram = "kaput";
   };
-}
+})

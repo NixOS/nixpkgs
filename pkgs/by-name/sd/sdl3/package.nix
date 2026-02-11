@@ -17,14 +17,14 @@
   libusb1,
   libxkbcommon,
   libgbm,
-  libX11,
+  libx11,
   libxcb,
-  libXScrnSaver,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
+  libxscrnsaver,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
   libxtst,
   ninja,
   nix-update-script,
@@ -50,13 +50,15 @@
   ibusSupport ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin,
   jackSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libdecorSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
+  libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
+  libusbSupport ? stdenv.hostPlatform.isLinux,
   openglSupport ? lib.meta.availableOn stdenv.hostPlatform libGL,
   pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   pulseaudioSupport ?
     config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
   traySupport ? true,
+  vulkanSupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
 }:
@@ -97,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail '"zenity"' '"${lib.getExe zenity}"'
     ''
     # https://github.com/libsdl-org/SDL/issues/14805
-    + ''
+    + lib.optionalString vulkanSupport ''
       substituteInPlace src/video/x11/SDL_x11vulkan.c \
                         src/video/wayland/SDL_waylandvulkan.c \
                         src/video/offscreen/SDL_offscreenvulkan.c \
@@ -108,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString x11Support ''
       substituteInPlace src/video/x11/SDL_x11vulkan.c \
-        --replace-fail 'libX11-xcb.so' '${lib.getLib libX11}/lib/libX11-xcb.so'
+        --replace-fail 'libX11-xcb.so' '${lib.getLib libx11}/lib/libX11-xcb.so'
     '';
 
   strictDeps = true;
@@ -121,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional waylandSupport wayland-scanner;
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
+    lib.optionals libusbSupport [
       libusb1
     ]
     ++ lib.optional (
@@ -145,17 +147,17 @@ stdenv.mkDerivation (finalAttrs: {
       wayland
     ]
     ++ lib.optionals x11Support [
-      libX11
+      libx11
       libxcb
-      libXScrnSaver
-      libXcursor
-      libXext
-      libXfixes
-      libXi
-      libXrandr
+      libxscrnsaver
+      libxcursor
+      libxext
+      libxfixes
+      libxi
+      libxrandr
       libxtst
     ]
-    ++ [
+    ++ lib.optionals vulkanSupport [
       vulkan-headers
       vulkan-loader
     ]
@@ -196,7 +198,11 @@ stdenv.mkDerivation (finalAttrs: {
       && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
       && !(x11Support || waylandSupport)
     ))
-  ];
+  ]
+  ++ lib.optional (libusbSupport != stdenv.hostPlatform.isLinux) (
+    lib.cmakeBool "SDL_HIDAPI_LIBUSB" libusbSupport
+  )
+  ++ lib.optional (!vulkanSupport) (lib.cmakeBool "SDL_VULKAN" vulkanSupport);
 
   doCheck = true;
 

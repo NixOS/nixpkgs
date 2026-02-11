@@ -7,10 +7,10 @@
   openssl,
   fontconfig,
   nasm,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXi,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxi,
   libGL,
   libxkbcommon,
   wayland,
@@ -51,10 +51,10 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
     gtk3
     libxkbcommon
     wayland

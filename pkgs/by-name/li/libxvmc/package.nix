@@ -4,9 +4,9 @@
   fetchurl,
   pkg-config,
   xorgproto,
-  libX11,
-  libXext,
-  libXv,
+  libx11,
+  libxext,
+  libxv,
   writeScript,
   testers,
 }:
@@ -31,9 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
-    libXext
-    libXv
+    libx11
+    libxext
+    libxv
   ];
 
   propagatedBuildInputs = [ xorgproto ];

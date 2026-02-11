@@ -11,14 +11,14 @@
   wtype,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "snippetexpanderd";
   version = "1.0.3";
 
   src = fetchFromSourcehut {
     owner = "~ianmjones";
     repo = "snippetexpander";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NIMuACrq8RodtjeBbBY42VJ8xqj7fZvdQ2w/5QsjjJI=";
   };
 
@@ -44,7 +44,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'main.version=${src.rev}'"
+    "-X 'main.version=${finalAttrs.src.rev}'"
   ];
 
   postInstall = ''
@@ -73,4 +73,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderd";
   };
-}
+})

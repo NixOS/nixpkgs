@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gosec";
   version = "2.22.11";
 
   src = fetchFromGitHub {
     owner = "securego";
     repo = "gosec";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xCCZUM88z6sSFEo2XQJNx0fTh6KBer7oBSnBEZr3xk0=";
   };
 
@@ -24,8 +24,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X main.GitTag=${src.rev}"
+    "-X main.Version=${finalAttrs.version}"
+    "-X main.GitTag=${finalAttrs.src.rev}"
     "-X main.BuildDate=unknown"
   ];
 
@@ -39,4 +39,4 @@ buildGoModule rec {
       nilp0inter
     ];
   };
-}
+})

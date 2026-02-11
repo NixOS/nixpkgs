@@ -8,14 +8,14 @@
   minify,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "minify";
   version = "2.24.8";
 
   src = fetchFromGitHub {
     owner = "tdewolff";
     repo = "minify";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sCEKc9WjLaryz8RAxUqftLySgsv50SQ9b+Q6DzDNbxI=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/minify" ];
@@ -34,7 +34,7 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = minify;
       command = "minify --version";
     };
@@ -48,9 +48,9 @@ buildGoModule rec {
     description = "Go minifiers for web formats";
     homepage = "https://go.tacodewolff.nl/minify";
     downloadPage = "https://github.com/tdewolff/minify";
-    changelog = "https://github.com/tdewolff/minify/releases/tag/v${version}";
+    changelog = "https://github.com/tdewolff/minify/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "minify";
   };
-}
+})

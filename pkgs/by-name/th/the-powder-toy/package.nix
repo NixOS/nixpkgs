@@ -7,7 +7,7 @@
   jsoncpp,
   lib,
   libpng,
-  libX11,
+  libx11,
   lua5_2,
   luajit,
   meson,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat
     jsoncpp
     libpng
-    libX11
+    libx11
     lua5_2
     luajit
     SDL2

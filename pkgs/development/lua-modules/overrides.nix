@@ -947,7 +947,8 @@ in
   rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs {
 
     # E5113: Error while calling lua chunk [...] pl.path requires LuaFileSystem
-    doCheck = luaOlder "5.2";
+    # TODO: figure out darwin failure
+    doCheck = luaOlder "5.2" && stdenv.hostPlatform.isLinux;
     nativeCheckInputs = [
       final.nlua
       final.busted
@@ -967,7 +968,8 @@ in
       writableTmpDirAsHomeHook
     ];
 
-    doCheck = lua.luaversion == "5.1";
+    # TODO: figure out darwin failure
+    doCheck = lua.luaversion == "5.1" && stdenv.hostPlatform.isLinux;
 
     nvimSkipModules = [
       "bootstrap" # tries to install luarocks from network

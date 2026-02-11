@@ -8,14 +8,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shavee";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "ashuio";
     repo = "shavee";
-    rev = "shavee-v${version}";
+    rev = "shavee-v${finalAttrs.version}";
     hash = "sha256-FxZXJ1cSq0rOiClDgJ1r+nv7aJSiTXyKChh/wFDKSxs=";
   };
 
@@ -48,4 +48,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "shavee";
   };
-}
+})

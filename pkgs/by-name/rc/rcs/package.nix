@@ -8,12 +8,12 @@
   lzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rcs";
   version = "5.10.1";
 
   src = fetchurl {
-    url = "mirror://gnu/rcs/${pname}-${version}.tar.lz";
+    url = "mirror://gnu/rcs/rcs-${finalAttrs.version}.tar.lz";
     sha256 = "sha256-Q93+EHJKi4XiRo9kA7YABzcYbwHmDgvWL95p2EIjTMU=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

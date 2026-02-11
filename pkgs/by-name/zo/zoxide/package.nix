@@ -9,14 +9,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zoxide";
   version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2scJ5/+A3ZSpIdce5GLYqxjc0so9sVsYiXNULmjMzLY=";
   };
 
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
-    changelog = "https://github.com/ajeetdsouza/zoxide/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ajeetdsouza/zoxide/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       ysndr
@@ -53,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "zoxide";
   };
-}
+})

@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "numbat";
   version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "numbat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Wh7HmE9UPu7+/aguaqON2/pmEHulYw69O0YjoKeDuRg=";
   };
 
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
       with first class support for physical dimensions and units
     '';
     homepage = "https://numbat.dev";
-    changelog = "https://github.com/sharkdp/numbat/releases/tag/v${version}";
+    changelog = "https://github.com/sharkdp/numbat/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -70,4 +70,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "numbat";
   };
-}
+})

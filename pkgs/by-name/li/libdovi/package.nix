@@ -7,13 +7,13 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libdovi";
   version = "3.3.1";
 
   src = fetchCrate {
     pname = "dolby_vision";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ecd+r0JWZtP/rxt4Y3Cj2TkygXIMy5KZhZpXBwJNPx4=";
   };
 
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

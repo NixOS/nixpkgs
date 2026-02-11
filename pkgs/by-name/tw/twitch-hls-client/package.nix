@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "twitch-hls-client";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "2bc4";
     repo = "twitch-hls-client";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jApBFe9GeXkkNO+oODpYt+FArsU441lJhxnwzL4vwPk=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.all;
   };
-}
+})

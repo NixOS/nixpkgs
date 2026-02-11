@@ -10,14 +10,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "below";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "below";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tPweJFqhZMOL+M08bDjW6HPmtuhr9IXJNP0c938O7Cg=";
   };
 
@@ -66,4 +66,4 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/facebookincubator/below";
     mainProgram = "below";
   };
-}
+})

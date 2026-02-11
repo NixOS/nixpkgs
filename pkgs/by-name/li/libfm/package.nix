@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if extraOnly then "libfm-extra" else "libfm";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "libfm";
     tag = finalAttrs.version;
-    hash = "sha256-dmu5ygPuZe2YWAzIVPx5zskQeB51hXcLbMczxWgCr78=";
+    hash = "sha256-HOx3L5IYPD/3Ez5Sb3nshfisIt1cIZJmdfGE6+q5gWE=";
   };
 
   nativeBuildInputs = [

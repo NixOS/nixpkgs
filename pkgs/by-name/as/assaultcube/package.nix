@@ -11,7 +11,7 @@
   SDL2,
   SDL2_image,
   libGL,
-  libX11,
+  libx11,
   makeWrapper,
   zlib,
   file,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     libGL
-    libX11
+    libx11
     libogg
     libvorbis
   ];

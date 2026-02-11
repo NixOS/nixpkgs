@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "netbox2netshot";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "netbox2netshot";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4Leg7MaLSos2RjmxB6yVzxGju6OzNrChXdw5htppuZU=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "netbox2netshot";
   };
-}
+})

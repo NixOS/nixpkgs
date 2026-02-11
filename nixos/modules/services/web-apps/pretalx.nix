@@ -53,6 +53,17 @@ in
       '';
     };
 
+    environmentFiles = lib.mkOption {
+      description = ''
+        Environment files that allow passing secret configuration values.
+
+        Each line must follow the `PRETALX_SECTION_KEY=value` pattern.
+      '';
+      type = lib.types.listOf lib.types.path;
+      default = [ ];
+      example = [ "/run/secrets/pretalx/env" ];
+    };
+
     group = lib.mkOption {
       type = lib.types.str;
       default = "pretalx";
@@ -320,6 +331,9 @@ in
         if [[ "$USER" != ${cfg.user} ]]; then
           sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env=PRETALX_CONFIG_FILE'
         fi
+        set -a
+        ${lib.concatMapStringsSep "\n" (file: ". ${lib.escapeShellArg file}") cfg.environmentFiles}
+        set +a
         export PRETALX_CONFIG_FILE=${configFile}
         $sudo ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
       '')
@@ -393,6 +407,7 @@ in
           serviceConfig = {
             User = "pretalx";
             Group = "pretalx";
+            EnvironmentFile = cfg.environmentFiles;
             StateDirectory = [
               "pretalx"
               "pretalx/media"

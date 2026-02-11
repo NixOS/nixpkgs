@@ -12,7 +12,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "serigy";
   version = "1.1";
   pyproject = false; # uses meson
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CleoMenezesJr";
     repo = "Serigy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1PlGR7aX7Ekrbe7+Qm0E1h6yl6CzdIcV2R3MSIIeH6o=";
   };
 
@@ -62,4 +62,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

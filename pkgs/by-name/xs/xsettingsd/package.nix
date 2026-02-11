@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   # we end up with symlinked unit files if we don't move them around ourselves
   postFixup = ''

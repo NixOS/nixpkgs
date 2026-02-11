@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -51,7 +52,7 @@
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kserve";
   version = "0.16.0";
   pyproject = true;
@@ -59,23 +60,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f6ILZMLxfckEpy7wSgCqUx89JWSnn0DbQiqRSHcQHms=";
   };
 
-  # Fix vllm 0.12.0 compatibility
-  # Patch submitted upstream: https://github.com/kserve/kserve/pull/4882
-  postPatch = ''
-    substituteInPlace kserve/protocol/rest/openai/types/__init__.py \
-      --replace-fail \
-        "from vllm.entrypoints.openai.protocol import EmbeddingRequest, EmbeddingResponse as Embedding, EmbeddingResponseData, EmbeddingCompletionRequest" \
-        "from vllm.entrypoints.pooling.embed.protocol import EmbeddingRequest, EmbeddingResponse as Embedding, EmbeddingResponseData, EmbeddingCompletionRequest" \
-      --replace-fail \
-        "from vllm.entrypoints.openai.protocol import RerankRequest, RerankResponse as Rerank" \
-        "from vllm.entrypoints.pooling.score.protocol import RerankRequest, RerankResponse as Rerank"
-  '';
+  patches = [
+    # Fix vllm imports in python/kserve/kserve/protocol/rest/openai/types/__init__.py
+    # Submitted upstream: https://github.com/kserve/kserve/pull/4882
+    (fetchpatch2 {
+      name = "update-vllm-imports-to-fix-compat";
+      url = "https://github.com/kserve/kserve/commit/dd1575501e56f588103f448efca684bc54569b81.patch";
+      stripLen = 2;
+      hash = "sha256-K0ImsDADhH6G3R+27nRX/sD7UdRXptYIkLaoxuwB8+M=";
+    })
+  ];
 
-  sourceRoot = "${src.name}/python/kserve";
+  sourceRoot = "${finalAttrs.src.name}/python/kserve";
 
   pythonRelaxDeps = [
     "fastapi"
@@ -142,7 +142,7 @@ buildPythonPackage rec {
     pytestCheckHook
     tomlkit
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "kserve" ];
 
@@ -205,8 +205,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standardized Serverless ML Inference Platform on Kubernetes";
     homepage = "https://github.com/kserve/kserve/tree/master/python/kserve";
-    changelog = "https://github.com/kserve/kserve/releases/tag/${src.tag}";
+    changelog = "https://github.com/kserve/kserve/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

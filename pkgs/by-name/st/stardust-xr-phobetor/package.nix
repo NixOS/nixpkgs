@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-phobetor";
   version = "0-unstable-2024-02-10";
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7CWOoirQ/8zKCO7lBA9snyShlwsKYONiYkl39lQrpTY=";
   };
 
-  env.STARDUST_RES_PREFIXES = "${src}/res";
+  env.STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
 
   cargoHash = "sha256-H65uAHMAIkJ9D5q/5HxMEbvcfoRhYdFgTQejp6bvu5w=";
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -15,14 +15,14 @@
   hicolor-icon-theme,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "diffuse";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "MightyCreak";
     repo = "diffuse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "Svt+llBwJKGXRJZ96dzzdzpL/5jrzXXM/FPZwA7Es8s=";
   };
 
@@ -78,4 +78,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ k3a ];
     platforms = lib.platforms.unix;
   };
-}
+})

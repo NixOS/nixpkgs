@@ -12,14 +12,14 @@
   libx11,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "restish";
   version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "restish";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-C+fB9UeEq+h6SlBtVPPZWs5fCCsJVe/TJFy4KhhaItU=";
   };
 
@@ -36,7 +36,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -51,9 +51,9 @@ buildGoModule rec {
   meta = {
     description = "CLI tool for interacting with REST-ish HTTP APIs";
     homepage = "https://rest.sh/";
-    changelog = "https://github.com/danielgtaylor/restish/releases/tag/v${version}";
+    changelog = "https://github.com/danielgtaylor/restish/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "restish";
   };
-}
+})

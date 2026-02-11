@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "colorz";
   version = "1.0.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "0ghd90lgplf051fs5n5bb42zffd3fqpgzkbv6bhjw7r8jqwgcky0";
   };
 
@@ -34,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ skykanin ];
     mainProgram = "colorz";
   };
-}
+})

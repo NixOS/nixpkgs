@@ -2762,6 +2762,9 @@
     "index.html#zig-exclusive-variables",
     "index.html#zig-hook-exclusive-variables"
   ],
+  "dont-use-zig-configure": [
+    "index.html#dont-use-zig-configure"
+  ],
   "dont-use-zig-build": [
     "index.html#dont-use-zig-build"
   ],

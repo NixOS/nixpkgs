@@ -6,10 +6,10 @@
   pkg-config,
   extra-cmake-modules,
   dbus,
-  libX11,
+  libx11,
   libxcb,
-  libXi,
-  libXtst,
+  libxi,
+  libxtst,
   libnotify,
   libxkbcommon,
   libpng,
@@ -82,9 +82,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wl-clipboard
   ]
   ++ lib.optionals x11Support [
-    libXi
-    libXtst
-    libX11
+    libxi
+    libxtst
+    libx11
     libxcb
     xclip
     xdotool

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "metabigor";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "j3ssie";
     repo = "metabigor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3bIU1eVsVhXEazcvlhTbuBLBSdjTxEuO2SXjdcUUyNs=";
   };
 
@@ -28,9 +28,9 @@ buildGoModule rec {
   meta = {
     description = "Tool to perform OSINT tasks";
     homepage = "https://github.com/j3ssie/metabigor";
-    changelog = "https://github.com/j3ssie/metabigor/releases/tag/v${version}";
+    changelog = "https://github.com/j3ssie/metabigor/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "metabigor";
   };
-}
+})

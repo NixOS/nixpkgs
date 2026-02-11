@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "busypie";
-  version = "0.5.2";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rockem";
     repo = "busypie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LaPgK36ieHKAbm9btx6t//dMdSGdzcaDJVou96D6J3U=";
+    hash = "sha256-dw0Sc/a27/EYY7LVMQqDkYuxrUFYK+N6XLk6A7A/eS8=";
   };
 
   postPatch = ''

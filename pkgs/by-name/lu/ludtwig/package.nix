@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ludtwig";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "MalteJanz";
     repo = "ludtwig";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-V0T+yinjTVkAXA604bfEGDzpCd0saNt5S71XFaFqdxg=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ludtwig";
   };
-}
+})

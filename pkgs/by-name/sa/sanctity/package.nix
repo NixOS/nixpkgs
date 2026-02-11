@@ -4,14 +4,14 @@
   fetchFromCodeberg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sanctity";
   version = "1.3.1";
 
   src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "sanctity";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-y6xj4A5SHcW747aFE9TfuurNnuUxjTUeKJmzxeiWqVc=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "sanctity";
   };
-}
+})

@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "desync";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aRxWq9gGfglfBixS7xOoj8r29rJRAfGj4ydcSFf/7P0=";
   };
 
@@ -39,8 +39,8 @@ buildGoModule rec {
     mainProgram = "desync";
     longDescription = "An alternate implementation of the casync protocol and storage mechanism with a focus on production-readiness";
     homepage = "https://github.com/folbricht/desync";
-    changelog = "https://github.com/folbricht/desync/releases/tag/v${version}";
+    changelog = "https://github.com/folbricht/desync/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ chaduffy ];
   };
-}
+})

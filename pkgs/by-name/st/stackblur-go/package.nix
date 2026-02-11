@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "stackblur-go";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "esimov";
     repo = "stackblur-go";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-y1Fov81mholhz+bLRYl+G7jhzcsFS5TUjQ3SUntD8E0=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sodiboo ];
     mainProgram = "stackblur";
   };
-}
+})

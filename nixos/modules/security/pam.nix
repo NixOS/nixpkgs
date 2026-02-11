@@ -772,7 +772,7 @@ let
               }
               {
                 name = "kanidm";
-                enable = config.services.kanidm.enablePam;
+                enable = config.services.kanidm.unix.enable;
                 control = "sufficient";
                 modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so";
                 settings = {
@@ -1139,7 +1139,7 @@ let
                 }
                 {
                   name = "kanidm";
-                  enable = config.services.kanidm.enablePam;
+                  enable = config.services.kanidm.unix.enable;
                   control = "sufficient";
                   modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so";
                   settings = {
@@ -1248,7 +1248,7 @@ let
               }
               {
                 name = "kanidm";
-                enable = config.services.kanidm.enablePam;
+                enable = config.services.kanidm.unix.enable;
                 control = "sufficient";
                 modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so";
               }
@@ -1412,7 +1412,7 @@ let
               }
               {
                 name = "kanidm";
-                enable = config.services.kanidm.enablePam;
+                enable = config.services.kanidm.unix.enable;
                 control = "optional";
                 modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so";
               }
@@ -2339,7 +2339,7 @@ in
       # Include the PAM modules in the system path mostly for the manpages.
       [ package ]
       ++ lib.optional config.users.ldap.enable pam_ldap
-      ++ lib.optional config.services.kanidm.enablePam config.services.kanidm.package
+      ++ lib.optional config.services.kanidm.unix.enable config.services.kanidm.package
       ++ lib.optional config.services.sssd.enable pkgs.sssd
       ++ lib.optionals config.security.pam.krb5.enable [
         pam_krb5

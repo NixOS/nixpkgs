@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "3.9.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/weka/${lib.replaceStrings [ "." ] [ "-" ] "${pname}-${version}"}.zip";
+    url = "mirror://sourceforge/weka/${lib.replaceStrings [ "." ] [ "-" ] "weka-${version}"}.zip";
     sha256 = "sha256-8fVN4MXYqXNEmyVtXh1IrauHTBZWgWG8AvsGI5Y9Aj0=";
   };
 

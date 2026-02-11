@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "macchina";
   version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "Macchina-CLI";
     repo = "macchina";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GZO9xGc3KGdq2WdA10m/XV8cNAlQjUZFUVu1CzidJ5c=";
   };
 
@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast, minimal and customizable system information fetcher";
     homepage = "https://github.com/Macchina-CLI/macchina";
-    changelog = "https://github.com/Macchina-CLI/macchina/releases/tag/v${version}";
+    changelog = "https://github.com/Macchina-CLI/macchina/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       _414owen
     ];
     mainProgram = "macchina";
   };
-}
+})

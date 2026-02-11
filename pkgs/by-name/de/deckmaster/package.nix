@@ -6,14 +6,14 @@
   roboto,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "deckmaster";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "deckmaster";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1hZ7yAKTvkk20ho+QOqFEtspBvFztAtfmITs2uxhdmQ=";
   };
 
@@ -40,9 +40,9 @@ buildGoModule rec {
     description = "Application to control your Elgato Stream Deck on Linux";
     mainProgram = "deckmaster";
     homepage = "https://github.com/muesli/deckmaster";
-    changelog = "https://github.com/muesli/deckmaster/releases/tag/v${version}";
+    changelog = "https://github.com/muesli/deckmaster/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

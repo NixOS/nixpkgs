@@ -4,8 +4,8 @@
   vdr,
   alsa-lib,
   fetchFromGitHub,
-  xcbutilwm,
-  xorgserver,
+  libxcb-wm,
+  xorg-server,
   ffmpeg,
   libva,
   libvdpau,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     vdr
-    xcbutilwm
+    libxcb-wm
     ffmpeg
     alsa-lib
     libva
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace softhddev.c \
-      --replace "LOCALBASE \"/bin/X\"" "\"${xorgserver}/bin/X\""
+      --replace "LOCALBASE \"/bin/X\"" "\"${xorg-server}/bin/X\""
   '';
 
   meta = {

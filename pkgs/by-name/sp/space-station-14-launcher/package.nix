@@ -8,13 +8,13 @@
   iconConvTools,
   copyDesktopItems,
   makeDesktopItem,
-  libX11,
-  libICE,
-  libSM,
-  libXi,
-  libXcursor,
-  libXext,
-  libXrandr,
+  libx11,
+  libice,
+  libsm,
+  libxi,
+  libxcursor,
+  libxext,
+  libxrandr,
   libGL,
   freetype,
   glib,
@@ -86,13 +86,13 @@ buildDotnetModule rec {
     libGL
     freetype
     glib
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
+    libx11
+    libice
+    libsm
+    libxi
+    libxcursor
+    libxext
+    libxrandr
     at-spi2-atk
     at-spi2-core
     libxkbcommon

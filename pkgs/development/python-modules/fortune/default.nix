@@ -26,6 +26,6 @@ buildPythonPackage {
     mainProgram = "fortune";
     homepage = "https://codeberg.org/jamesansley/fortune";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
   };
 }

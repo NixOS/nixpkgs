@@ -21,7 +21,7 @@
   libgbm,
   openssl,
   systemd,
-  xcb-util-cursor,
+  libxcb-cursor,
   libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     openssl
     stdenv.cc.cc
     systemd
-    xcb-util-cursor
+    libxcb-cursor
     libx11
     libxcb-wm
     libxcb-image

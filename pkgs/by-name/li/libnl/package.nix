@@ -72,5 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libnl_project" finalAttrs.version;
   };
 })

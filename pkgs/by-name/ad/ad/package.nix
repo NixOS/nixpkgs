@@ -6,14 +6,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ad";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "sminez";
     repo = "ad";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0rd4krklpnvaimzblqx2ckab6lk4apkmvnqr618gnx8i5f4nyl6m";
   };
 
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/sminez/ad/issues/28
     platforms = lib.platforms.unix;
   };
-}
+})

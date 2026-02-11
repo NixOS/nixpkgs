@@ -17,7 +17,7 @@
   nixosTests,
 }:
 
-python311Packages.buildPythonApplication rec {
+python311Packages.buildPythonApplication (finalAttrs: {
   pname = "guake";
   version = "3.10.1";
 
@@ -26,7 +26,7 @@ python311Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Guake";
     repo = "guake";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TTDVJeM37SbpWucJGYoeYX9t4r1k3ldru9Cd02hBrU4=";
   };
 
@@ -104,4 +104,4 @@ python311Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

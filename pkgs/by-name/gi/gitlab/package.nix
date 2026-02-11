@@ -47,7 +47,7 @@ let
     owner = data.owner;
     repo = data.repo;
     rev = data.rev;
-    sha256 = data.repo_hash;
+    hash = data.repo_hash;
   };
 
   rubyEnv = bundlerEnv rec {
@@ -108,6 +108,54 @@ let
         '';
       };
 
+      gitlab_query_language = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          src = stdenv.mkDerivation {
+            inherit (buildRubyGem { inherit (attrs) gemName version source; })
+              name
+              src
+              unpackPhase
+              nativeBuildInputs
+              ;
+            installPhase = ''
+              mkdir -p $out
+              cp -R ext $out
+              cp Cargo.* $out
+            '';
+          };
+          hash = "sha256-XGeFht5QRYb4Cu3n9nt4euUeNXHh1kJ6pQ5LJjnVhzc=";
+        };
+
+        dontBuild = false;
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        # The gem builder wrongly copies Cargo.lock within the gem, while it's missing in the outer rust project
+        # before rustc ran.
+        # This fixes this and makes the rustc invocation work.
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+          # Unpack
+          tar xvf $gempkg
+          # Modify
+          gzip -d data.tar.gz
+          chmod +w data.tar
+          mv Cargo.lock ./ext/gitlab_query_language
+          tar rf data.tar ./ext/gitlab_query_language/Cargo.lock
+          # Repack
+          gzip data.tar
+          tar -cf $gempkg data.tar.gz metadata.gz
+        '';
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+
       static_holmes = attrs: {
         nativeBuildInputs = [
           icu
@@ -143,11 +191,13 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/yarn.lock";
-      sha256 = data.yarn_hash;
+      hash = data.yarn_hash;
     };
     frontendIslandsYarnOfflineCache = fetchYarnDeps {
-      yarnLock = src + "/ee/frontend_islands/yarn.lock";
-      sha256 = data.frontend_islands_yarn_hash;
+      # Revert to this when GitLab fixes their frontend_islands yarn.lock
+      # yarnLock = src + "/ee/frontend_islands/yarn.lock";
+      yarnLock = ./ee-frontend-islands-yarn.lock;
+      hash = data.frontend_islands_yarn_hash;
     };
 
     nativeBuildInputs = [
@@ -170,6 +220,14 @@ let
       # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
       ./Remove-unsupported-database-names.patch
     ];
+
+    # Remove once GitLab fixed their frontend_islands yarn.lock
+    postPatch = ''
+      rm ee/frontend_islands/yarn.lock
+      cp ${./ee-frontend-islands-yarn.lock} ee/frontend_islands/yarn.lock
+      chmod 777 ee/frontend_islands/yarn.lock
+    '';
+
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";

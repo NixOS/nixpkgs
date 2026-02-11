@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-diorqwDEBdzcBteKvhRisQaY3bx5seaOaWSaPwBkWDo=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   installPhase = ''
     mkdir -p $out/bin

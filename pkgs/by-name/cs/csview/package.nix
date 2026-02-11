@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "csview";
   version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "csview";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-JFuqaGwCSfEIncBgLu6gGaOvAC5vojKFjruWcuSghS0=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

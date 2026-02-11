@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wit-bindgen";
   version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wit-bindgen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-S3iOmkAg1H6sEcXhC/7cQcrwH5OwR5ZROn0iPkUrwEY=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "wit-bindgen";
   };
-}
+})

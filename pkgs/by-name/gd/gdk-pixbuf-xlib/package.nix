@@ -9,7 +9,7 @@
   docbook_xml_dtd_43,
   gtk-doc,
   gdk-pixbuf,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     gdk-pixbuf
-    libX11
+    libx11
   ];
 
   mesonFlags = [

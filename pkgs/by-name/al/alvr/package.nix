@@ -15,10 +15,10 @@
   gmp,
   jack2,
   lame,
-  libX11,
-  libXi,
-  libXrandr,
-  libXcursor,
+  libx11,
+  libxi,
+  libxrandr,
+  libxcursor,
   libdrm,
   libglvnd,
   libogg,
@@ -40,14 +40,14 @@
   x264,
   xvidcore,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alvr";
   version = "20.14.1";
 
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # TODO devendor openvr
     hash = "sha256-9fckUhUPAbcmbqOdUO8RlwuK8/nf1fc7XQBrAu5YaR4=";
   };
@@ -111,10 +111,10 @@ rustPlatform.buildRustPackage rec {
     gmp
     jack2
     lame
-    libX11
-    libXcursor
-    libXi
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
     libdrm
     libglvnd
     libogg
@@ -142,8 +142,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -Dm755 ${src}/alvr/xtask/resources/alvr.desktop $out/share/applications/alvr.desktop
-    install -Dm644 ${src}/resources/ALVR-Icon.svg $out/share/icons/hicolor/scalable/apps/alvr.svg
+    install -Dm755 ${finalAttrs.src}/alvr/xtask/resources/alvr.desktop $out/share/applications/alvr.desktop
+    install -Dm644 ${finalAttrs.src}/resources/ALVR-Icon.svg $out/share/icons/hicolor/scalable/apps/alvr.svg
 
     # Install SteamVR driver
     mkdir -p $out/{libexec,lib/alvr,share}
@@ -158,7 +158,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Stream VR games from your PC to your headset via Wi-Fi";
     homepage = "https://github.com/alvr-org/ALVR/";
-    changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${version}";
+    changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "alvr_dashboard";
     maintainers = with lib.maintainers; [
@@ -167,4 +167,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

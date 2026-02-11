@@ -293,9 +293,6 @@ let
         ) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
         ${lib.optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('dbpass'),"}
         'dbtype' => '${c.dbtype}',
-        ${lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (name: credential: "'${name}' => nix_read_secret('${name}'),") cfg.secrets
-        )}
         ${objectstoreConfig}
       ];
 
@@ -303,6 +300,12 @@ let
         "${jsonFormat.generate "nextcloud-settings.json" cfg.settings}",
         "impossible: this should never happen (decoding generated settings file %s failed)"
       ));
+
+      $CONFIG = array_replace_recursive($CONFIG, [
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (name: credential: "'${name}' => nix_read_secret('${name}'),") cfg.secrets
+        )}
+      ]);
 
       ${lib.optionalString (cfg.secretFile != null) ''
         $CONFIG = array_replace_recursive($CONFIG, nix_read_secret_and_decode_json_file('secret_file'));

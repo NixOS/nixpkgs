@@ -36,12 +36,12 @@
   zug,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "krita-unwrapped";
 
   version = "5.2.14";
   src = fetchurl {
-    url = "mirror://kde/stable/krita/${version}/krita-${version}.tar.gz";
+    url = "mirror://kde/stable/krita/${finalAttrs.version}/krita-${finalAttrs.version}.tar.gz";
     hash = "sha256-VWkAcmwv8U5g97rB6OkVAQDyzZJmnKXcdKxYUe+sKIc=";
   };
 
@@ -159,4 +159,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
   };
-}
+})

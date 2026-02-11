@@ -8,8 +8,8 @@
   curl,
   SDL2,
   SDL2_image,
-  libSM,
-  libXext,
+  libsm,
+  libxext,
   libpng,
   freetype,
   libGLU,
@@ -67,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     SDL2
     SDL2_image
-    libSM
-    libXext
+    libsm
+    libxext
     libpng
     freetype
     libGL

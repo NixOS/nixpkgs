@@ -5,14 +5,14 @@
   cargo-expand,
   stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flutter_rust_bridge_codegen";
   version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "fzyzcjy";
     repo = "flutter_rust_bridge";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Us+LwT6tjBcTl2xclVsiLauSlIO8w+PiokpiDB+h1fI=";
     fetchSubmodules = true;
   };
@@ -50,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.eymeric ];
   };
-}
+})

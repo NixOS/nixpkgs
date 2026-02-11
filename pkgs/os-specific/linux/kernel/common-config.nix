@@ -591,6 +591,8 @@ let
         DRM_VC4_HDMI_CEC = yes;
         # Enable HDMI out on platforms using the RK3588 lineup of SoCs.
         ROCKCHIP_DW_HDMI_QP = whenAtLeast "6.13" yes;
+        # Enable DSI out on platforms using the RK3588 lineup of SoCs.
+        ROCKCHIP_DW_MIPI_DSI2 = whenAtLeast "6.16" yes;
       };
 
     # Enable Rust and features that depend on it

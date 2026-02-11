@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "X FreeType library";
     longDescription = ''
-      libXft is the client side font rendering library, using libfreetype, libX11, and the
+      libxft is the client side font rendering library, using libfreetype, libx11, and the
       X Render extension to display anti-aliased text.
     '';
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxft";

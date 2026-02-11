@@ -5,7 +5,7 @@
   slurp,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "swaytools";
   version = "0.1.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tmccombs";
     repo = "swaytools";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-UoWK53B1DNmKwNLFwJW1ZEm9dwMOvQeO03+RoMl6M0Q=";
   };
 
@@ -30,4 +30,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ atila ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -11,7 +11,7 @@
   graphicsSupport ? !stdenv.hostPlatform.isDarwin,
   imlib2,
   x11Support ? graphicsSupport,
-  libX11,
+  libx11,
   mouseSupport ? !stdenv.hostPlatform.isDarwin,
   gpm-ncurses,
   perl,
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional sslSupport openssl
   ++ lib.optional mouseSupport gpm-ncurses
   ++ lib.optional graphicsSupport imlib2
-  ++ lib.optional x11Support libX11;
+  ++ lib.optional x11Support libx11;
 
   postInstall = lib.optionalString graphicsSupport ''
     ln -s $out/libexec/w3m/w3mimgdisplay $out/bin

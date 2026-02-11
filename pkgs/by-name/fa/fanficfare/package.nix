@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fanficfare";
   version = "4.53.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-lUeMP7wWs5+ZzP4pEr0BUvzAIo+NKAqs4bGSGcSmi/k=";
   };
 
@@ -40,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dwarfmaster ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "norminette";
   version = "3.3.59";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "42School";
     repo = "norminette";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XPaMQCziL9/h+AHx6I6MIRAlzscWvOTkxUP9dMI4y0o=";
   };
 
@@ -38,4 +38,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

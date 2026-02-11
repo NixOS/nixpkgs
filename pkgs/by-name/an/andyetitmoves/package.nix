@@ -6,10 +6,10 @@
   libogg,
   libtheora,
   SDL,
-  libXft,
+  libxft,
   SDL_image,
   zlib,
-  libX11,
+  libx11,
   libpng,
   openal,
   runtimeShell,
@@ -80,10 +80,10 @@ stdenv.mkDerivation rec {
     libogg
     libtheora
     SDL
-    libXft
+    libxft
     SDL_image
     zlib
-    libX11
+    libx11
     libpng
     openal
   ];

@@ -1,10 +1,15 @@
 {
   lib,
   stdenv,
+  gcc14Stdenv,
   fetchurl,
   fetchpatch,
   buildPackages,
-}:
+}@args:
+
+let
+  stdenv = if args.stdenv.cc.isGNU then gcc14Stdenv else args.stdenv;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "procmail";

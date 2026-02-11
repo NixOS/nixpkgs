@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  darwin,
   fetchFromGitHub,
   callPackage,
   buildGoModule,
@@ -26,7 +27,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate";
-  version = "1.2.0";
+  version = "1.4.2";
 
   outputs = [
     "out"
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "lexiforest";
     repo = "curl-impersonate";
     tag = "v${version}";
-    hash = "sha256-tAQdTRGAOD2rpLZvoLQ2YL0wrohXEcmChMZBvYjsMhE=";
+    hash = "sha256-c24KaYc0cH6b+92kg02mMtTp7ZVu36LeDpW5xjxuzk4=";
   };
 
   # Disable blanket -Werror to fix build on `gcc-13` related to minor
@@ -74,6 +75,9 @@ stdenv.mkDerivation rec {
     zlib
     zstd
     sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.ICU
   ];
 
   configureFlags = [
@@ -157,6 +161,7 @@ stdenv.mkDerivation rec {
     let
       libext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
+    # sh
     ''
       # If libnssckbi.so is needed, link libnssckbi.so without needing nss in closure
       if grep -F nssckbi $out/lib/libcurl-impersonate${libext} &>/dev/null; then
@@ -165,6 +170,9 @@ stdenv.mkDerivation rec {
           patchelf --add-needed libnssckbi${libext} $out/lib/libcurl-impersonate${libext}
         ''}
       fi
+
+      # installPhase already installs curl headers in $dev, better to override those
+      rm -rf "$dev/include/curl"
     '';
 
   disallowedReferences = [ go ];
@@ -197,7 +205,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://github.com/lexiforest/curl-impersonate/releases/tag/${src.tag}";
-    description = "Special build of curl that can impersonate Chrome & Firefox";
+    description = "Special build of curl that can impersonate Chrome, Edge, Safari and Firefox";
     homepage = "https://github.com/lexiforest/curl-impersonate";
     license = with lib.licenses; [
       curl

@@ -1563,6 +1563,8 @@ let
 
         ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
+        ocplib-simplex_0_4 = callPackage ../development/ocaml-modules/ocplib-simplex/0_4.nix { };
+
         ocsigen-ppx-rpc = callPackage ../development/ocaml-modules/ocsigen-ppx-rpc { };
 
         ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
@@ -2040,6 +2042,8 @@ let
         stringext = callPackage ../development/ocaml-modules/stringext { };
 
         swhid_core = callPackage ../development/ocaml-modules/swhid_core { };
+
+        symex = callPackage ../development/ocaml-modules/symex { };
 
         synchronizer = callPackage ../development/ocaml-modules/synchronizer { };
 

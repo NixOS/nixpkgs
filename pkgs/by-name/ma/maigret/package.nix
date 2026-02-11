@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "maigret";
   version = "0.5.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "soxoj";
     repo = "maigret";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y5b7t4ji72o1PXoqEQ0vNHqE1vwdkB/3gtsCj5GZ4Xg=";
   };
 
@@ -111,7 +111,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to collect details about an username";
     homepage = "https://maigret.readthedocs.io";
-    changelog = "https://github.com/soxoj/maigret/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/soxoj/maigret/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
@@ -119,4 +119,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

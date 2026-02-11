@@ -8,27 +8,28 @@
   python3,
   cacert,
   versionCheckHook,
+  nodejs_22,
 }:
 
-buildNpmPackage (finalAttrs: {
+buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
   pname = "homebridge-config-ui-x";
-  version = "5.14.0";
+  version = "5.16.0";
 
   src = fetchFromGitHub {
     owner = "homebridge";
     repo = "homebridge-config-ui-x";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CAdzkFuVuJtHoUUDBIRRzxRJiOtGUJFzS/lczYXTfRw=";
+    hash = "sha256-LXOfpOmYEeHDL0uMvRSG4q51k00tyKBEU6XP6UFm/RY=";
   };
 
   # Deps hash for the root package
-  npmDepsHash = "sha256-73Xt2R3COL0WPgtqn3ZwGTmOHrNqHONrX3hQCU/v5y0=";
+  npmDepsHash = "sha256-MUfDMHxnwEBjv76NoJ6CYP3YJ+us0Nn/MUFcR1NFQAE=";
 
   # Deps src and hash for ui subdirectory
   npmDeps_ui = fetchNpmDeps {
     name = "npm-deps-ui";
     src = "${finalAttrs.src}/ui";
-    hash = "sha256-xtXAeTBryQt4FMvK3oXHJ3DdB/3umrSrmqZ3IIDgq2s=";
+    hash = "sha256-GB17rJ2D1yXl/lxM8pQl2e2xnakgA8JLX7sbbdk3P5M=";
   };
 
   # Need to also run npm ci in the ui subdirectory
@@ -58,6 +59,8 @@ buildNpmPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Configure Homebridge, monitor and backup from a browser";

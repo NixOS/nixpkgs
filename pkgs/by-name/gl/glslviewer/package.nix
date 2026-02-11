@@ -5,12 +5,12 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libXi,
-  libXext,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
+  libxi,
+  libxext,
   libGLU,
   ffmpeg_7,
   ncurses,
@@ -32,12 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libXext
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
     libGLU
     ncurses
     ffmpeg_7

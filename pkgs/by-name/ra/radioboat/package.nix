@@ -11,14 +11,14 @@
   radioboat,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "radioboat";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "slashformotion";
     repo = "radioboat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4k+WK2Cxu1yBWgvEW9LMD2RGfiY7XDAe0qqph82zvlI=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/slashformotion/radioboat/internal/buildinfo.Version=${version}"
+    "-X github.com/slashformotion/radioboat/internal/buildinfo.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -62,4 +62,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

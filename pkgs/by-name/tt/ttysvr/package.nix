@@ -13,14 +13,14 @@
   vulkan-headers,
   vulkan-loader,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ttysvr";
   version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "cxreiff";
     repo = "ttysvr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W8IglZVvhFqn0TH1ZBGWERizCxCQ+C4SckYFLCzB3yc=";
   };
 
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Screen saver for your terminal";
     homepage = "https://github.com/cxreiff/ttysvr";
-    changelog = "https://github.com/cxreiff/ttysvr/releases/tag/v${version}";
+    changelog = "https://github.com/cxreiff/ttysvr/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "ttysvr";
     platforms = with lib.platforms; linux;
   };
-}
+})

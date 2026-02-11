@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rewatch";
   version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "rescript-lang";
     repo = "rewatch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UoUL3zeyrs3FdQVyAo0FsuNiPtiITbuNDdEXxWg3yiY=";
   };
 
@@ -25,9 +25,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Alternative build system for the Rescript Compiler";
     homepage = "https://github.com/rescript-lang/rewatch";
-    changelog = "https://github.com/rescript-lang/rewatch/releases/tag/v${version}";
+    changelog = "https://github.com/rescript-lang/rewatch/releases/tag/v${finalAttrs.version}";
     mainProgram = "rewatch";
     maintainers = with lib.maintainers; [ r17x ];
     license = lib.licenses.mit;
   };
-}
+})

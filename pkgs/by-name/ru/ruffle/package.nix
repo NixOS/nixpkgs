@@ -8,10 +8,10 @@
   autoPatchelfHook,
   alsa-lib,
   wayland,
-  libXcursor,
-  libXrandr,
-  libXi,
-  libX11,
+  libxcursor,
+  libxrandr,
+  libxi,
+  libx11,
   libxcb,
   vulkan-loader,
   udev,
@@ -87,10 +87,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       openh264
     ]
     ++ lib.optionals withX11 [
-      libXcursor
-      libXrandr
-      libXi
-      libX11
+      libxcursor
+      libxrandr
+      libxi
+      libx11
       libxcb
     ]
   );

@@ -59,9 +59,9 @@
   glib,
   gtk3,
   dbus-glib,
-  libXScrnSaver,
-  libXcursor,
-  libXtst,
+  libxscrnsaver,
+  libxcursor,
+  libxtst,
   libxshmfence,
   libGLU,
   libGL,
@@ -70,7 +70,7 @@
   pciutils,
   protobuf,
   speechd-minimal,
-  libXdamage,
+  libxdamage,
   at-spi2-core,
   pipewire,
   libva,
@@ -365,9 +365,9 @@ let
       glib
       gtk3
       dbus-glib
-      libXScrnSaver
-      libXcursor
-      libXtst
+      libxscrnsaver
+      libxcursor
+      libxtst
       libxshmfence
       libGLU
       libGL
@@ -375,7 +375,7 @@ let
       pciutils
       protobuf
       speechd-minimal
-      libXdamage
+      libxdamage
       at-spi2-core
       pipewire
       libva
@@ -425,9 +425,9 @@ let
       glib
       gtk3
       dbus-glib
-      libXScrnSaver
-      libXcursor
-      libXtst
+      libxscrnsaver
+      libxcursor
+      libxtst
       libxshmfence
       libGLU
       libGL
@@ -436,7 +436,7 @@ let
       pciutils
       protobuf
       speechd-minimal
-      libXdamage
+      libxdamage
       at-spi2-core
       pipewire
       libva
@@ -557,6 +557,22 @@ let
       # Patch rustc_nightly_capability to eval to false instead of true.
       # https://chromium-review.googlesource.com/c/chromium/src/+/7022369
       ./patches/chromium-144-rustc_nightly_capability.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "144.0.7559.132" && !ungoogled) [
+      # Rollup was swapped with esbuild because of compile failures on Windows,
+      # which is not compatible with our build yet. So let's revert it for now.
+      # Ungoogled ships its own variant of this patch upstream.
+      # https://issues.chromium.org/issues/461602362
+      (fetchpatch {
+        name = "revert-devtools-frontend-esbuild-instead-of-rollup.patch";
+        # https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/7526345
+        url = "https://chromium.googlesource.com/devtools/devtools-frontend/+/f130475580017f9f87502343dbcfc0c76dccefe8^!?format=TEXT";
+        decode = "base64 -d";
+        stripLen = 1;
+        extraPrefix = "third_party/devtools-frontend/src/";
+        revert = true;
+        hash = "sha256-k+xCfhDuHxtuGhY7LVE8HvbDJt8SEFkslBcJe7t5CAg=";
+      })
     ];
 
     postPatch =

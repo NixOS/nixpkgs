@@ -21,16 +21,16 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "piccolo";
-  version = "1.30.0";
+  version = "1.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "piccolo-orm";
     repo = "piccolo";
-    tag = version;
-    hash = "sha256-CR6zdaWFwhCGQsSxxUU9f3+A3RcuksG0+EUN2IotovA=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZREsvxj9fWNwbbO2erUchiXCuaFh9vziWQjdaJBl/QI=";
   };
 
   build-system = [ setuptools ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "piccolo" ];
 
@@ -99,8 +99,8 @@ buildPythonPackage rec {
   meta = {
     description = "ORM and query builder which supports asyncio";
     homepage = "https://github.com/piccolo-orm/piccolo";
-    changelog = "https://github.com/piccolo-orm/piccolo/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/piccolo-orm/piccolo/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

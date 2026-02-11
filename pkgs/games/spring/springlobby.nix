@@ -9,7 +9,7 @@
   curl,
   libtorrent-rasterbar,
   libpng,
-  libX11,
+  libx11,
   gettext,
   boost,
   libnotify,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     jsoncpp
     boost
     libpng
-    libX11
+    libx11
     libnotify
     gtk3
     glib

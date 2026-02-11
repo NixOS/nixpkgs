@@ -8,16 +8,14 @@
   libbpf,
   clangStdenv,
 }:
-let
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   pname = "bpftop";
   version = "0.7.1";
-in
-rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
-  inherit pname version;
+
   src = fetchFromGitHub {
     owner = "Netflix";
     repo = "bpftop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8vb32+wHOnADpIIfO9mMlGu7GdlA0hS9ij0zSLcrO7A=";
   };
 
@@ -46,4 +44,4 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
     ];
     mainProgram = "bpftop";
   };
-}
+})

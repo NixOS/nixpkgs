@@ -7,8 +7,8 @@
   copyDesktopItems,
   libglvnd,
   libjack2,
-  libX11,
-  libXi,
+  libx11,
+  libxi,
   makeDesktopItem,
   makeWrapper,
   SDL2,
@@ -59,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libglvnd
-    libX11
-    libXi
+    libx11
+    libxi
     SDL2
   ];
 

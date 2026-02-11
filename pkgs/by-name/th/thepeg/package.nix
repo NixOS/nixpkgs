@@ -13,12 +13,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thepeg";
   version = "2.3.0";
 
   src = fetchurl {
-    url = "https://www.hepforge.org/archive/thepeg/ThePEG-${version}.tar.bz2";
+    url = "https://www.hepforge.org/archive/thepeg/ThePEG-${finalAttrs.version}.tar.bz2";
     hash = "sha256-rDWXmuicKWCMqSwVakn/aKrOeloSoMkvCgGoM9LTRXI=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})

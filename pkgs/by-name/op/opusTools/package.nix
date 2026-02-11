@@ -10,12 +10,12 @@
   libopusenc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opus-tools";
   version = "0.2";
 
   src = fetchurl {
-    url = "https://downloads.xiph.org/releases/opus/${pname}-${version}.tar.gz";
+    url = "https://downloads.xiph.org/releases/opus/opus-tools-${finalAttrs.version}.tar.gz";
     sha256 = "11pzl27s4vcz4m18ch72nivbhww2zmzn56wspb7rll1y1nq6rrdl";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
-}
+})

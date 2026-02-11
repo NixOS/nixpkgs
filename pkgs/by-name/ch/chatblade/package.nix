@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "chatblade";
   version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-v6X5aqArhp33bm8JELDCUoxE3nsvla4I3n0ZLLMMeJI=";
   };
 
@@ -40,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ deejayem ];
   };
-}
+})

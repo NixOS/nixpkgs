@@ -8,14 +8,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mchprs";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "MCHPR";
     repo = "MCHPRS";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jm9ZsqCKOIxZsXQbCluYu7MgOD7hXYljcv/URaNVUW0=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gdd ];
   };
-}
+})

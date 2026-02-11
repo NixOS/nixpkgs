@@ -6,12 +6,12 @@
   git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fac-build";
   version = "0.5.4";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     crateName = "fac";
     hash = "sha256-+JJVuKUdnjJoQJ4a2EE0O6jZdVoFxPwbPgfD2LfiDPI=";
   };
@@ -54,4 +54,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dpercy ];
     mainProgram = "fac";
   };
-}
+})

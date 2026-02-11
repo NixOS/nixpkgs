@@ -11,14 +11,14 @@
 # You must build at one type of library
 assert enableShared || enableStatic;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redis-plus-plus";
   version = "1.3.15";
 
   src = fetchFromGitHub {
     owner = "sewenew";
     repo = "redis-plus-plus";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0q+pQ2tS04RYKsikTG5QMuTPW3f6+fFIPuJZVf/aIw0=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ wheelsandmetal ];
   };
-}
+})

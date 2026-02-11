@@ -8,14 +8,14 @@
   pluginsDir ? null,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "helmfile";
   version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WatJSiNi/rUaoBGgIdRjczpMiXAwRQ21ck/ATVKyZe0=";
   };
 
@@ -30,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X go.szostok.io/version.version=v${version}"
+    "-X go.szostok.io/version.version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (pluginsDir != null) makeWrapper;
@@ -61,4 +61,4 @@ buildGoModule rec {
       yurrriq
     ];
   };
-}
+})

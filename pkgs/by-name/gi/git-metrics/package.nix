@@ -7,14 +7,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-metrics";
   version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "jdrouet";
     repo = "git-metrics";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SdA/FpdrbC36Ny7aBpTUvFldbYXyajSqWGheaDPHYoE=";
   };
 
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "git-metrics";
   };
-}
+})

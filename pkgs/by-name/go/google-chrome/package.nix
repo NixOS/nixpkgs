@@ -25,20 +25,20 @@
   libdrm,
   libglvnd,
   libkrb5,
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   libxkbcommon,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
   libxshmfence,
-  libXtst,
+  libxtst,
   libgbm,
   nspr,
   nss,
@@ -135,20 +135,20 @@ let
     libglvnd
     libkrb5
     libpng
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
     libxkbcommon
-    libXrandr
-    libXrender
-    libXScrnSaver
+    libxrandr
+    libxrender
+    libxscrnsaver
     libxshmfence
-    libXtst
+    libxtst
     libgbm
     nspr
     nss
@@ -179,11 +179,11 @@ let
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "144.0.7559.132";
+    version = "145.0.7632.45";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-5VuJaixlw9o+oD1bp6S3o2kR8KcolomSFyWpMZQydwM=";
+      hash = "sha256-au1T/nd8qaWKaAuEioACIwBWb7kCQkKR4FSYSnhMc6I=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly

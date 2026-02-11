@@ -6,7 +6,7 @@
   pkg-config,
 }:
 let
-  version = "1.24.36";
+  version = "1.24.47";
 in
 rustPlatform.buildRustPackage {
   pname = "websurfx";
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
     owner = "neon-mmd";
     repo = "websurfx";
     tag = "v${version}";
-    hash = "sha256-Iw/wG6IKp+KdBVhmC/wVU55h9B/Ew8qrb4ZrMfVF+Ic=";
+    hash = "sha256-CIGq1uQl5RcxzoX7mnruFDNlgP5RlVLT6/e2ClGaQGE=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
     openssl
   ];
 
-  cargoHash = "sha256-S8XGsOfYK1Ua2rCt7kKyLKXMXs1G1G7M6kqJ9UcdBjc=";
+  cargoHash = "sha256-8zp8qsD2D9wSaeXY2JQuP4evXFDASOwMeOYe3HbHYp4=";
 
   postPatch = ''
     substituteInPlace src/handler.rs \

@@ -3,14 +3,14 @@
   lib,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tfswitch";
   version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "warrensbox";
     repo = "terraform-switcher";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rS7VJQdRzrEK1ZlpmdbAf32vKuyK9I0tflDIC1Nb2OY=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psibi ];
   };
-}
+})

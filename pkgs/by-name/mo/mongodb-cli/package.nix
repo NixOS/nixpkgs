@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mongodb-cli";
   version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongodb-cli";
-    tag = "mongocli/v${version}";
+    tag = "mongocli/v${finalAttrs.version}";
     hash = "sha256-vytc/e+e6JE5bwh5hny9C7LWenGctQLUso8GAXgk4j8=";
   };
 
@@ -35,9 +35,9 @@ buildGoModule rec {
   meta = {
     description = "Manage your MongoDB via ops manager and cloud manager";
     homepage = "https://github.com/mongodb/mongodb-cli";
-    changelog = "https://www.mongodb.com/docs/mongocli/current/release-notes/#mongodb-cli-${version}";
+    changelog = "https://www.mongodb.com/docs/mongocli/current/release-notes/#mongodb-cli-${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.iamanaws ];
     mainProgram = "mongocli";
   };
-}
+})

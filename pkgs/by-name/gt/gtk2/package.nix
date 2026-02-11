@@ -12,13 +12,13 @@
   gettext,
   glib,
   gobject-introspection,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   pango,
   perl,
   pkg-config,
@@ -89,16 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
     pango
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) [
-    libXcomposite
-    libXcursor
-    libXi
-    libXrandr
-    libXrender
+    libxcomposite
+    libxcursor
+    libxi
+    libxrandr
+    libxrender
   ]
-  ++ lib.optional xineramaSupport libXinerama
+  ++ lib.optional xineramaSupport libxinerama
   ++ lib.optional cupsSupport cups
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libXdamage
+    libxdamage
   ];
 
   preConfigure = lib.optionalString (

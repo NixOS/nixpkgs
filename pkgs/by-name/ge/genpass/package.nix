@@ -4,13 +4,13 @@
   rustPlatform,
   zlib,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "genpass";
   version = "0.5.1";
 
   src = fetchgit {
     url = "https://git.sr.ht/~cyplo/genpass";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "UyEgOlKtDyneRteN3jHA2BJlu5U1HFL8HA2MTQz5rns=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ cyplo ];
   };
-}
+})

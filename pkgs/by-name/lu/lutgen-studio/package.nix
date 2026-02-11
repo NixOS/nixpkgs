@@ -17,14 +17,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lutgen-studio";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ozwaldorf";
     repo = "lutgen-rs";
-    tag = "lutgen-studio-v${version}";
+    tag = "lutgen-studio-v${finalAttrs.version}";
     hash = "sha256-ENhaJTbaAv52YFNjce9Ln/LQvP/Nw2Tk5eMmr8mKwQ0=";
   };
 
@@ -72,4 +72,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "lutgen-studio";
     license = lib.licenses.mit;
   };
-}
+})

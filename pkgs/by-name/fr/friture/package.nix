@@ -5,7 +5,7 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "friture";
   version = "0.54";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = "friture";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KWj2AhPloomjYwd7besX5QIG8snZe1L2hATEfm/HaIE=";
   };
 
@@ -74,4 +74,4 @@ python3Packages.buildPythonApplication rec {
       pentane
     ];
   };
-}
+})

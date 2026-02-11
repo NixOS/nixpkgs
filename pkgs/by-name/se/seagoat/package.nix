@@ -12,7 +12,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "seagoat";
   version = "1.0.26";
   pyproject = true;
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XXKLvm3sEYgfLojtYKI3i8o3HERdH4+FRSo28FBqONg=";
   };
 
@@ -94,9 +94,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Local-first semantic code search engine";
     homepage = "https://kantord.github.io/SeaGOAT/";
-    changelog = "https://github.com/kantord/SeaGOAT/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/kantord/SeaGOAT/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lavafroth ];
     mainProgram = "seagoat";
   };
-}
+})

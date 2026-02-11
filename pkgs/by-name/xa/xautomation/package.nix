@@ -4,10 +4,10 @@
   fetchurl,
   pkg-config,
   libpng,
-  libX11,
-  libXext,
-  libXi,
-  libXtst,
+  libx11,
+  libxext,
+  libxi,
+  libxtst,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,10 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libpng
-    libX11
-    libXext
-    libXi
-    libXtst
+    libx11
+    libxext
+    libxi
+    libxtst
   ];
 
   meta = {

@@ -9,14 +9,14 @@
   dejavu_fonts,
   fetchpatch,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qr-backup";
   version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "za3k";
     repo = "qr-backup";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Sre8cHbrRqJTX6+3HiLj6Ky8Bw+hg6UXItwRUtLzHZA=";
   };
 
@@ -93,11 +93,11 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Utility to generate paper backup of files using QR codes";
     homepage = "https://github.com/za3k/qr-backup";
-    changelog = "https://github.com/za3k/qr-backup/blob/v${version}/docs/CHANGELOG";
+    changelog = "https://github.com/za3k/qr-backup/blob/v${finalAttrs.version}/docs/CHANGELOG";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
       acuteaangle
     ];
     mainProgram = "qr-backup";
   };
-}
+})

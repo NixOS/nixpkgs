@@ -13,16 +13,16 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whirlpool-sixth-sense";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
-    tag = version;
-    hash = "sha256-n+PZHk64F7azgqeio8F5b/AheaZMh5TjvUXTgTc7q4A=";
+    tag = finalAttrs.version;
+    hash = "sha256-uX1Q4F6pcc/mPdopPgyU63p4yeo9YPmUGbn0sxW09Yo=";
   };
 
   build-system = [ setuptools ];
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Whirlpool 6th Sense appliances";
     homepage = "https://github.com/abmantis/whirlpool-sixth-sense/";
-    changelog = "https://github.com/abmantis/whirlpool-sixth-sense/releases/tag/${src.tag}";
+    changelog = "https://github.com/abmantis/whirlpool-sixth-sense/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

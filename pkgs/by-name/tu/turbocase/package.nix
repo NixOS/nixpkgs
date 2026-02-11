@@ -4,7 +4,7 @@
   fetchFromCodeberg,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "turbocase";
   version = "1.8.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromCodeberg {
     owner = "MartijnBraam";
     repo = "TurboCase";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-mwWN7XYKr/BD9r935oElqoQN87kdrrWjkmhURkAkjj4=";
   };
 
@@ -29,4 +29,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ MayNiklas ];
     mainProgram = "turbocase";
   };
-}
+})

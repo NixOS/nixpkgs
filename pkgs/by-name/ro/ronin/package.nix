@@ -9,7 +9,7 @@
 }:
 
 bundlerEnv rec {
-  name = "ronin";
+  pname = "ronin";
   version = "2.1.1";
   gemdir = ./.;
 

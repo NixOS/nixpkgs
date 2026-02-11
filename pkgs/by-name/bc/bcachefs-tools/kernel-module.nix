@@ -44,6 +44,6 @@ stdenv.mkDerivation {
       platforms
       ;
 
-    broken = !(lib.versionAtLeast kernel.version "6.16" && lib.versionOlder kernel.version "6.19");
+    broken = !(lib.versionAtLeast kernel.version "6.16" && lib.versionOlder kernel.version "6.20");
   };
 }

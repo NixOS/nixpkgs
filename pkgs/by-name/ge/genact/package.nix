@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "genact";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "genact";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-D1uecxrRR49EUa2fHm/ieQ4Gp0m5p0ncj5YiINwlvN8=";
   };
 
@@ -34,9 +34,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Nonsense activity generator";
     homepage = "https://github.com/svenstaro/genact";
-    changelog = "https://github.com/svenstaro/genact/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/svenstaro/genact/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "genact";
   };
-}
+})

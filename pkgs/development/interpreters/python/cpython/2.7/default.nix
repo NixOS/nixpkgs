@@ -15,7 +15,7 @@
   tcl ? null,
   tk ? null,
   tclPackages,
-  libX11 ? null,
+  libx11 ? null,
   x11Support ? false,
   zlib,
   self,
@@ -46,7 +46,7 @@
   pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}",
 }:
 
-assert x11Support -> tcl != null && tk != null && libX11 != null;
+assert x11Support -> tcl != null && tk != null && libx11 != null;
 
 assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
   "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
@@ -279,7 +279,7 @@ let
     ++ lib.optionals x11Support [
       tcl
       tk
-      libX11
+      libx11
     ];
   nativeBuildInputs = [
     autoreconfHook

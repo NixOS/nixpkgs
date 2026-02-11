@@ -6,14 +6,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lazydocker";
   version = "0.24.4";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazydocker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cW90/yblSLBkcR4ZdtcSI9MXFjOUxyEectjRn9vZwvg=";
   };
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -47,4 +47,4 @@ buildGoModule rec {
     ];
     mainProgram = "lazydocker";
   };
-}
+})

@@ -6,12 +6,12 @@
   autoreconfHook,
   installShellFiles,
   pixman,
-  xcbutil,
-  xcbutilimage,
+  libxcb-util,
+  libxcb-image,
   libseccomp,
   libjpeg,
   libpng,
-  libXpm,
+  libxpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,12 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     pixman
-    xcbutilimage
-    xcbutil
+    libxcb-image
+    libxcb-util
     libseccomp
     libjpeg
     libpng
-    libXpm
+    libxpm
   ];
 
   postInstall = ''

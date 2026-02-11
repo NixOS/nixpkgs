@@ -26,23 +26,23 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "paisa";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "ananthakumaran";
     repo = "paisa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nJpyqEOlXNvnMvheWtfUMARBgQRk8TpXHyVsXDxJ3oo=";
+    hash = "sha256-GuD0X1Im8pc8arVX/c2KMBZwp/yXyaqPnRObvPe4G5c=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-KnHJ6+aMahTeNdbRcRAgBERGVYen/tM/tDcFI/NyLdE=";
+  vendorHash = "sha256-5jrxI+zSKbopGs5GmGVyqQcMHNZJbCsiFEH/LPXWxpk=";
   frontend = buildNpmPackage' {
     pname = "paisa-frontend";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-8LPW9pcipVMWuZ4wOlpAOaRdT5o1gom39gqcfmhY1eE=";
+    npmDepsHash = "sha256-86LvGTSs2PaxrYMGaU7yOUGiAMZY1MfFIexpYVNwvZ8=";
 
     buildInputs = [
       # needed for building node-canvas from source which is a dependency of

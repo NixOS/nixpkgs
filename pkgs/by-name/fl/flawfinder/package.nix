@@ -4,13 +4,13 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "flawfinder";
   version = "2.0.19";
   pyproject = true;
 
   src = fetchurl {
-    url = "https://dwheeler.com/flawfinder/flawfinder-${version}.tar.gz";
+    url = "https://dwheeler.com/flawfinder/flawfinder-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-/lUJgdNwq/oKKWcTRswLA4Ipqb2QsjnqsPAfEiEt9hg=";
   };
 
@@ -31,4 +31,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.all;
   };
-}
+})

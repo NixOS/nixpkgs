@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "openpomodoro-cli";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "open-pomodoro";
     repo = "openpomodoro-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h/o4yxrZ8ViHhN2JS0ZJMfvcJBPCsyZ9ZQw9OmKnOfY=";
   };
 
@@ -20,15 +20,15 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Command-line Pomodoro tracker which uses the Open Pomodoro Format";
     homepage = "https://github.com/open-pomodoro/openpomodoro-cli";
-    changelog = "https://github.com/open-pomodoro/openpomodoro-cli/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/open-pomodoro/openpomodoro-cli/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gdifolco ];
     mainProgram = "openpomodoro-cli";
   };
-}
+})

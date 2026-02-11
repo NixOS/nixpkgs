@@ -25,8 +25,8 @@
   libsysprof-capture,
   libthai,
   libxkbcommon,
-  libXdmcp,
-  libXtst,
+  libxdmcp,
+  libxtst,
   pcre2,
   sqlite,
   util-linux,
@@ -100,8 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     sqlite
     util-linux
-    libXdmcp
-    libXtst
+    libxdmcp
+    libxtst
     vulkan-headers
     wayland
   ];

@@ -8,24 +8,25 @@
   hatchling,
 
   # dependencies
+  anyio,
   pycrdt,
-  pytestCheckHook,
 
   # tests
   pycrdt-websocket,
+  pytestCheckHook,
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-ydoc";
-  version = "3.3.4";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_ydoc";
-    tag = "v${version}";
-    hash = "sha256-hcIBLhwRLyDdl7LemK8Et10aS2AVPM0wmHAcnmpA9Zg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k6qrkXnrz6gunqh6bx5/fLLfBBQOYJVOnJifP3aRmLI=";
   };
 
   build-system = [
@@ -33,7 +34,10 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [ pycrdt ];
+  dependencies = [
+    anyio
+    pycrdt
+  ];
 
   pythonImportsCheck = [ "jupyter_ydoc" ];
 
@@ -47,10 +51,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/jupyter-server/jupyter_ydoc/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/jupyter_ydoc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Document structures for collaborative editing using Yjs/pycrdt";
     homepage = "https://github.com/jupyter-server/jupyter_ydoc";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

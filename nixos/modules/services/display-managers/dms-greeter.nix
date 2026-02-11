@@ -12,8 +12,6 @@ let
     mkOption
     mkIf
     mkDefault
-    mkPackageOption
-    mkRemovedOptionModule
     literalExpression
     getExe
     makeBinPath
@@ -22,6 +20,7 @@ let
     ;
 
   cfg = config.services.displayManager.dms-greeter;
+  cfgDms = config.programs.dms-shell;
   cfgAutoLogin = config.services.displayManager.autoLogin;
 
   cacheDir = "/var/lib/dms-greeter";
@@ -69,7 +68,21 @@ in
   options.services.displayManager.dms-greeter = {
     enable = mkEnableOption "DankMaterialShell greeter";
 
-    package = mkPackageOption pkgs "dms-shell" { };
+    package = mkOption {
+      type = types.package;
+      default = if cfgDms.enable then cfgDms.package else pkgs.dms-shell;
+      defaultText = literalExpression ''
+        if config.programs.dms-shell.enable
+        then config.programs.dms-shell.package
+        else pkgs.dms-shell;
+      '';
+      description = ''
+        The DankMaterialShell package to use for the greeter.
+
+        Defaults to the package from `programs.dms-shell` if it is enabled,
+        otherwise defaults to `pkgs.dms-shell`.
+      '';
+    };
 
     compositor = {
       name = mkOption {
@@ -159,7 +172,21 @@ in
     };
 
     quickshell = {
-      package = mkPackageOption pkgs "quickshell" { };
+      package = mkOption {
+        type = types.package;
+        default = if cfgDms.enable then cfgDms.quickshell.package else pkgs.quickshell;
+        defaultText = literalExpression ''
+          if config.programs.dms-shell.enable
+          then config.programs.dms-shell.quickshell.package
+          else pkgs.quickshell;
+        '';
+        description = ''
+          The Quickshell package to use for the greeter.
+
+          Defaults to the quickshell package from `programs.dms-shell` if it is enabled,
+          otherwise defaults to `pkgs.quickshell`.
+        '';
+      };
     };
 
     logs = {

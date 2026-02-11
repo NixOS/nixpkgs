@@ -16,7 +16,7 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "portfolio";
   version = "1.0.2";
 
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tchx84";
     repo = "Portfolio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-v86pQbj5+SqdzsW0Ko5TW/12NsFVNSPyX6g0e+MdzHE=";
   };
 
@@ -75,7 +75,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Minimalist file manager for those who want to use Linux mobile devices";
     homepage = "https://github.com/tchx84/Portfolio";
-    changelog = "https://github.com/tchx84/Portfolio/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/tchx84/Portfolio/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "dev.tchx84.Portfolio";
@@ -84,4 +84,4 @@ python3.pkgs.buildPythonApplication rec {
       chuangzhu
     ];
   };
-}
+})

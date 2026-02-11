@@ -15,7 +15,7 @@
   gobject-introspection,
   gtk-doc,
   docbook_xsl,
-  xorgserver,
+  xorg-server,
   dbus,
   python3,
   wrapGAppsHook3,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     which
     wrapGAppsHook3
-    xorgserver
+    xorg-server
   ];
 
   buildInputs = [

@@ -26,12 +26,12 @@
   harfbuzz,
   icu,
   libdrm,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrender,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrender,
   libjpeg,
   libpng,
   libxcb,
@@ -42,11 +42,11 @@
   pcre2,
   sqlite,
   udev,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   zlib,
   at-spi2-core,
 
@@ -124,18 +124,18 @@ stdenv.mkDerivation (
           libdrm
 
           # X11 libs
-          libX11
-          libXcomposite
-          libXext
-          libXi
-          libXrender
+          libx11
+          libxcomposite
+          libxext
+          libxi
+          libxrender
           libxcb
           libxkbcommon
-          xcbutil
-          xcbutilimage
-          xcbutilkeysyms
-          xcbutilrenderutil
-          xcbutilwm
+          libxcb-util
+          libxcb-image
+          libxcb-keysyms
+          libxcb-render-util
+          libxcb-wm
         ]
         ++ lib.optional libGLSupported libGL
       );
@@ -318,9 +318,9 @@ stdenv.mkDerivation (
             "-w"
           ]
           ++ [
-            ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
+            ''-DNIXPKGS_QTCOMPOSE="${libx11.out}/share/X11/locale"''
             ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
-            ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
+            ''-DNIXPKGS_LIBXCURSOR="${libxcursor.out}/lib/libXcursor"''
           ]
           ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
           ++ lib.optional stdenv.hostPlatform.isLinux "-DUSE_X11"
@@ -459,17 +459,17 @@ stdenv.mkDerivation (
             "-xcb"
             "-qpa xcb"
             "-L"
-            "${libX11.out}/lib"
+            "${libx11.out}/lib"
             "-I"
-            "${libX11.out}/include"
+            "${libx11.out}/include"
             "-L"
-            "${libXext.out}/lib"
+            "${libxext.out}/lib"
             "-I"
-            "${libXext.out}/include"
+            "${libxext.out}/include"
             "-L"
-            "${libXrender.out}/lib"
+            "${libxrender.out}/lib"
             "-I"
-            "${libXrender.out}/include"
+            "${libxrender.out}/include"
 
             "-${lib.optionalString (cups == null) "no-"}cups"
             "-dbus-linked"

@@ -10,14 +10,14 @@
   libusb1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bettercap";
   version = "2.41.5";
 
   src = fetchFromGitHub {
     owner = "bettercap";
     repo = "bettercap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-mw2Fe/7kSowozUpmXC5tMHZ02bF5+UHmy+lmkJ6SeLM=";
   };
 
@@ -49,4 +49,4 @@ buildGoModule rec {
     # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

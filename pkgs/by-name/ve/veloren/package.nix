@@ -10,10 +10,10 @@
   libxcb,
   libxkbcommon,
   autoPatchelfHook,
-  libX11,
-  libXi,
-  libXcursor,
-  libXrandr,
+  libx11,
+  libxi,
+  libxcursor,
+  libxrandr,
   wayland,
   stdenv,
 }:
@@ -95,10 +95,10 @@ rustPlatform.buildRustPackage {
   appendRunpaths = [
     (lib.makeLibraryPath (
       [
-        libX11
-        libXi
-        libXcursor
-        libXrandr
+        libx11
+        libxi
+        libxcursor
+        libxrandr
         vulkan-loader
       ]
       ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [

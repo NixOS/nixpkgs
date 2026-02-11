@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bento";
   version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "warpstreamlabs";
     repo = "bento";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hnDWnN07sf8ymSbwrVIQJrgiEKr81osswcGi8emSGac=";
   };
 
@@ -28,8 +28,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/warpstreamlabs/bento/internal/cli.Version=${version}"
-    "-X main.Version=${version}"
+    "-X github.com/warpstreamlabs/bento/internal/cli.Version=${finalAttrs.version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -40,9 +40,9 @@ buildGoModule rec {
   meta = {
     description = "High performance and resilient stream processor";
     homepage = "https://warpstreamlabs.github.io/bento/";
-    changelog = "https://github.com/warpstreamlabs/bento/releases/tag/v${version}";
+    changelog = "https://github.com/warpstreamlabs/bento/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "bento";
   };
-}
+})

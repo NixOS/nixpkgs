@@ -7,14 +7,14 @@
   little_boxes,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "little_boxes";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "giodamelio";
     repo = "little_boxes";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Quh09K5meiA39ih/orJWF2WfkuZdymxub1dZvns/q3E=";
   };
 
@@ -55,4 +55,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ giodamelio ];
     mainProgram = "little_boxes";
   };
-}
+})

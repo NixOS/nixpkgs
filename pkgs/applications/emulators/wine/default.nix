@@ -48,11 +48,38 @@
 }:
 
 let
-  wine-build =
-    build: release:
-    lib.getAttr build (
-      callPackage ./packages.nix {
-        wineRelease = release;
+  sources = callPackage ./sources.nix { };
+
+  # Map user-facing release names to sources, pname suffix, and staging flag
+  releaseInfo = {
+    stable = {
+      src = sources.stable;
+      useStaging = false;
+    };
+    unstable = {
+      src = sources.unstable;
+      useStaging = false;
+    };
+    # Many versions have a "staging" variant, but when we say "staging",
+    # the version we want to use is "unstable".
+    staging = {
+      src = sources.unstable;
+      pnameSuffix = "-staging";
+      useStaging = true;
+    };
+    # "yabridge" enables staging too --- we are not interested in
+    # yabridge without the staging patches applied.
+    yabridge = {
+      src = sources.yabridge;
+      pnameSuffix = "-yabridge";
+      useStaging = true;
+    };
+  };
+
+  baseWine = lib.getAttr wineBuild (
+    callPackage ./packages.nix (
+      releaseInfo.${wineRelease}
+      // {
         supportFlags = {
           inherit
             alsaSupport
@@ -90,20 +117,14 @@ let
         };
         inherit moltenvk;
       }
-    );
-
-  baseRelease =
-    {
-      staging = "unstable";
-      yabridge = "yabridge";
-    }
-    .${wineRelease} or null;
+    )
+  );
 in
-if baseRelease != null then
-  callPackage ./staging.nix {
-    wineUnstable = (wine-build wineBuild baseRelease).override {
-      inherit wineRelease;
+if wineRelease == "yabridge" then
+  baseWine.overrideAttrs (old: {
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-std=gnu17";
     };
-  }
+  })
 else
-  wine-build wineBuild wineRelease
+  baseWine

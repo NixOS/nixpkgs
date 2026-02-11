@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblsl";
-  version = "1.16.2";
+  version = "1.17.5";
 
   src = fetchFromGitHub {
     owner = "sccn";
     repo = "liblsl";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-nmu7Kxk4U5sGO8Od9JR4id4V4mjeibj4AHjUYhpGPeo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xu/Bdv+aA+XG/fPBNDPcHELem17vaV86e6F8zfVI//o=";
   };
   passthru.updateScript = nix-update-script { };
 

@@ -4,7 +4,7 @@
   fetchurl,
   autoreconfHook,
   pkg-config,
-  libX11,
+  libx11,
   guile,
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    libX11
+    libx11
     guile
   ];
 

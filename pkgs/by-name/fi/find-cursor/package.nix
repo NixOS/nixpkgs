@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXdamage,
-  libXrender,
-  libXcomposite,
-  libXext,
+  libx11,
+  libxdamage,
+  libxrender,
+  libxcomposite,
+  libxext,
   installShellFiles,
   git,
 }:
@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     git
   ];
   buildInputs = [
-    libX11
-    libXdamage
-    libXrender
-    libXcomposite
-    libXext
+    libx11
+    libxdamage
+    libxrender
+    libxcomposite
+    libxext
   ];
   preInstall = "mkdir -p $out/share/man/man1";
   installFlags = [ "PREFIX=${placeholder "out"}" ];

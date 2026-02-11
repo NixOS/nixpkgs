@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "coolreader";
-  version = "3.2.58";
+  version = "3.2.59";
 
   src = fetchFromGitHub {
     owner = "buggins";
     repo = "coolreader";
     rev = "cr${version}";
-    sha256 = "sha256-DUcYUFxPPSPvoEUEbKYEAGxFeFGQCfOFA0+SegoC4oI=";
+    sha256 = "sha256-RgVEOaNBaEuPBC75B8PdCkbqMvEzNmnEYmiI1ny/WFQ=";
   };
 
   patches = [ ./cmake_policy_version_3_5.patch ];

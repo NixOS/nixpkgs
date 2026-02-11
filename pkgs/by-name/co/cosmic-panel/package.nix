@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-panel";
-  version = "1.0.3";
+  version = "1.0.5";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {

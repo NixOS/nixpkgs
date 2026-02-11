@@ -8,7 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
   vencord,
-  electron,
+  electron_40,
   libicns,
   pipewire,
   libpulseaudio,
@@ -17,6 +17,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
+  jq,
   nix-update-script,
   withTTS ? true,
   withMiddleClickScroll ? false,
@@ -24,6 +25,9 @@
   # letting vesktop manage it's own version
   withSystemVencord ? false,
 }:
+let
+  electron = electron_40;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
   version = "1.6.4";
@@ -51,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpmConfigHook
     pnpm_10
+    jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # vesktop uses venmic, which is a shipped as a prebuilt node module
@@ -89,15 +94,22 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # electron builds must be writable
-  preBuild =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp -r ${electron.dist}/Electron.app .
-      chmod -R u+w Electron.app
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      cp -r ${electron.dist} electron-dist
-      chmod -R u+w electron-dist
-    '';
+  preBuild = ''
+    # Validate electron version matches upstream package.json
+    if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1 | tr -d '^'`" != "${lib.versions.major electron.version}" ]
+    then
+      echo "ERROR: electron version mismatch between package.json and nixpkgs"
+      exit 1
+    fi
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cp -r ${electron.dist}/Electron.app .
+    chmod -R u+w Electron.app
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  '';
 
   buildPhase = ''
     runHook preBuild

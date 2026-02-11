@@ -24,7 +24,7 @@
   qtsvg,
   qttools,
   qtpositioning,
-  libXcomposite,
+  libxcomposite,
   bluez,
   writeScript,
 }:
@@ -89,7 +89,7 @@ let
     buildInputs = [
       qtbase
       qtlocation
-      libXcomposite
+      libxcomposite
     ];
 
     dontWrapQtApps = true;

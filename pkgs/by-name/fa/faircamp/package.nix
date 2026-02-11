@@ -13,14 +13,14 @@
   faircamp,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "faircamp";
   version = "1.7.0";
 
   src = fetchFromCodeberg {
     owner = "simonrepp";
     repo = "faircamp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-r5r7vfTbMPjAqMg5f7L/YfSzlxZgrSFjO6WHO64wfIo=";
   };
 
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

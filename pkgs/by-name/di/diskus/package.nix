@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diskus";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "diskus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-z0w2wzlbF7mY8kr6N//Rsm8G5P1jhrEwoOJ7MYrbKIE=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     '';
     mainProgram = "diskus";
   };
-}
+})

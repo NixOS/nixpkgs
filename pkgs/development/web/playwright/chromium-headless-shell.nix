@@ -11,10 +11,10 @@
   alsa-lib,
   at-spi2-atk,
   glib,
-  libXcomposite,
-  libXdamage,
-  libXfixes,
-  libXrandr,
+  libxcomposite,
+  libxdamage,
+  libxfixes,
+  libxrandr,
   libgbm,
   libgcc,
   libxkbcommon,
@@ -45,10 +45,10 @@ let
       alsa-lib
       at-spi2-atk
       glib
-      libXcomposite
-      libXdamage
-      libXfixes
-      libXrandr
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxrandr
       libgbm
       libgcc.lib
       libxkbcommon

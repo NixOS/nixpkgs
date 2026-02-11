@@ -11,7 +11,7 @@
   gtk3,
   intltool,
   libGLU,
-  libXmu,
+  libxmu,
   libpcap,
   libtool,
   lua,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     gtk3
     libGLU
-    libXmu
+    libxmu
     libpcap
     openal
     soundtouch
