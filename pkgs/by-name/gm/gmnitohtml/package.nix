@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gmnitohtml";
   version = "0.1.3";
 
   src = fetchFromSourcehut {
     owner = "~adnano";
     repo = "gmnitohtml";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-9lsZgh/OyxAu1rsixD6XUgQzR1xDGOxGt0sR12zrs2M=";
   };
   vendorHash = "sha256-ppplXXqb2DM/AU+B+LefndrBiiTgCRNw6hEupfeWr+o=";
@@ -59,4 +59,4 @@ buildGoModule rec {
     ];
     mainProgram = "gmnitohtml";
   };
-}
+})

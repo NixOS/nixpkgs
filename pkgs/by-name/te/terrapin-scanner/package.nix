@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "terrapin-scanner";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "RUB-NDS";
     repo = "Terrapin-Scanner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PmKfHvad+YAwLcdoiDSOBMQFgOKzJ6NbGbt4v570gyI=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "Terrapin-Scanner";
   };
-}
+})

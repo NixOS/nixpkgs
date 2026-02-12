@@ -6,14 +6,14 @@
   mermerd,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mermerd";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "KarnerTh";
     repo = "mermerd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xyqWGK9Ko4kdHMC6pbXXxdzIufsOb7Vq2Nh45f45D9w=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
   ];
 
   # the tests expect a database to be running
@@ -40,8 +40,8 @@ buildGoModule rec {
     description = "Create Mermaid-Js ERD diagrams from existing tables";
     mainProgram = "mermerd";
     homepage = "https://github.com/KarnerTh/mermerd";
-    changelog = "https://github.com/KarnerTh/mermerd/releases/tag/v${version}";
+    changelog = "https://github.com/KarnerTh/mermerd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ austin-artificial ];
   };
-}
+})

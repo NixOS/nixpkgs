@@ -5,14 +5,14 @@
   nix-update-script,
   versionCheckHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mpls";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "mhersson";
     repo = "mpls";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DDvjTbACn9qCmfJR6rcGQxVNik9wUCiNYxiYMsEkMXc=";
   };
 
@@ -21,8 +21,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mhersson/mpls/cmd.Version=${version}"
-    "-X github.com/mhersson/mpls/internal/mpls.Version=${version}"
+    "-X github.com/mhersson/mpls/cmd.Version=${finalAttrs.version}"
+    "-X github.com/mhersson/mpls/internal/mpls.Version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -33,9 +33,9 @@ buildGoModule rec {
   meta = {
     description = "Live preview of markdown using Language Server Protocol";
     homepage = "https://github.com/mhersson/mpls";
-    changelog = "https://github.com/mhersson/mpls/releases/tag/${src.tag}";
+    changelog = "https://github.com/mhersson/mpls/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jervw ];
     mainProgram = "mpls";
   };
-}
+})

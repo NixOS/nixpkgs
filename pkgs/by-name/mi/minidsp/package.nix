@@ -6,14 +6,14 @@
   libusb1,
   pkg-config,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "minidsp";
   version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "mrene";
     repo = "minidsp-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8bKP9/byVRKj1P1MP3ZVg8yw0WaNB0BcqarCti7B8CA=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
       lib.maintainers.mrene
     ];
   };
-}
+})

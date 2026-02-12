@@ -6,8 +6,8 @@
   bison,
   fftw,
   withNgshared ? true,
-  libXaw,
-  libXext,
+  libxaw,
+  libxext,
   llvmPackages,
   readline,
 }:
@@ -21,6 +21,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8arYq6woKKe3HaZkEd6OQGUk518wZuRnVUOcSQRC1zQ=";
   };
 
+  patches = [
+    (builtins.toFile "fix-cppduals.patch" ''
+      --- a/src/include/cppduals/duals/dual
+      +++ b/src/include/cppduals/duals/dual
+      @@ -485,10 +485,6 @@ struct is_arithmetic<duals::dual<T>> : is_arithmetic<T> {};
+
+       #endif // CPPDUALS_ENABLE_IS_ARITHMETIC
+
+      -/// Duals are compound types.
+      -template <class T>
+      -struct is_compound<duals::dual<T>> : true_type {};
+      -
+       // Modification of std::numeric_limits<> per
+       // C++03 17.4.3.1/1, and C++11 18.3.2.3/1.
+       template <class T>
+    '')
+  ];
+
   nativeBuildInputs = [
     flex
     bison
@@ -31,8 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ]
   ++ lib.optionals (!withNgshared) [
-    libXaw
-    libXext
+    libxaw
+    libxext
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp

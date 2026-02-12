@@ -8,7 +8,7 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
 
   pname = "rescrobbled";
   version = "0.8.0";
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "InputUsername";
     repo = "rescrobbled";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+5BkM4L2eB54idZ6X2ESw6ERMhG5CM4AF4BMEJm3xLU=";
   };
 
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ negatethis ];
   };
-}
+})

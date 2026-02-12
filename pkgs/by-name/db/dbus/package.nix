@@ -139,5 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus; # most is also under AFL-2.1
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.unix;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "freedesktop" finalAttrs.version;
   };
 })

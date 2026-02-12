@@ -5,6 +5,7 @@
   fetchFromGitHub,
   mashumaro,
   pytestCheckHook,
+  python-dateutil,
   pyyaml,
   requests,
   setuptools,
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyvesync";
-  version = "3.4.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "webdjoe";
     repo = "pyvesync";
     tag = version;
-    hash = "sha256-G1Ov8xXIVkklxfLqhHiYbRgHEsjTQhG7k1V6Amtc+w4=";
+    hash = "sha256-fruuFt7Zb5ZDX8MmEXB4rypuYON3UG50mExnMpMQct4=";
   };
 
   build-system = [ setuptools ];
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     mashumaro
+    python-dateutil
   ]
   ++ mashumaro.optional-dependencies.orjson;
 

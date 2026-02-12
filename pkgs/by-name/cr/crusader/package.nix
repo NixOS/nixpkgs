@@ -22,18 +22,18 @@
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crusader";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Zoxc";
     repo = "crusader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M5zMOOYDS91p0EuDSlQ3K6eiVQpbX6953q+cXBMix2s=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   cargoHash = "sha256-f0TWiRX203/gNsa9UEr/1Bv+kUxLAK/Zlw+S693xZlE=";
 
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Network throughput and latency tester";
     homepage = "https://github.com/Zoxc/crusader";
-    changelog = "https://github.com/Zoxc/crusader/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Zoxc/crusader/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
@@ -88,4 +88,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "crusader";
   };
-}
+})

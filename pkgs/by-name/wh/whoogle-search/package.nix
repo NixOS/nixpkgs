@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "whoogle-search";
   version = "0.9.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "whoogle_search";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-EvmNDU1hRUIy+CTwECLzIdcEjzcJgiiFYd2iMy0wDG0=";
   };
 
@@ -74,4 +74,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ malte-v ];
     mainProgram = "whoogle-search";
   };
-}
+})

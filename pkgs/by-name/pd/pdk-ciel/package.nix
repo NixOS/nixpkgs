@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ciel";
   version = "2.4.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fossi-foundation";
     repo = "ciel";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AWbkHL0zO3tD0mE3dZIcj8mVND7o3imTxOpEfOtlRDI=";
   };
 
@@ -34,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ gonsolo ];
     mainProgram = "ciel";
   };
-}
+})

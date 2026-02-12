@@ -18,7 +18,7 @@
   webkitgtk_6_0,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gnome-feeds";
   version = "2.2.0";
   pyproject = false;
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gfeeds";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-XKwRFjz4ocH01mj8KshLGmGxbm/uvDiyYRf65KL0UFw=";
   };
 
@@ -91,4 +91,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

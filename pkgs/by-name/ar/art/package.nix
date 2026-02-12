@@ -12,13 +12,13 @@
   lerc,
   libxkbcommon,
   libepoxy,
-  libXtst,
+  libxtst,
   wrapGAppsHook3,
   pixman,
-  libpthreadstubs,
+  libpthread-stubs,
   gtkmm3,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   lcms2,
   libraw,
   libiptcdata,
@@ -72,12 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     lerc
     libxkbcommon
     libepoxy
-    libXtst
+    libxtst
     pixman
-    libpthreadstubs
+    libpthread-stubs
     gtkmm3
-    libXau
-    libXdmcp
+    libxau
+    libxdmcp
     lcms2
     libraw
     libiptcdata

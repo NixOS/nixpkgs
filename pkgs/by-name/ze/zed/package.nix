@@ -6,14 +6,14 @@
   zed,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zed";
   version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "brimdata";
     repo = "zed-archive";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-NCoeTeOkxkCsj/nRBhMJeEshFuwozOXNJvgp8vyCQDk=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/brimdata/zed/cli.version=${version}"
+    "-X=github.com/brimdata/zed/cli.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -43,11 +43,11 @@ buildGoModule rec {
   meta = {
     description = "Novel data lake based on super-structured data";
     homepage = "https://zed.brimdata.io";
-    changelog = "https://github.com/brimdata/zed/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/brimdata/zed/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       dit7ya
       knl
     ];
   };
-}
+})

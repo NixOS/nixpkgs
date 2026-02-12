@@ -21,9 +21,9 @@
   boost,
   msgpack-cxx,
   sqlite,
-  # TODO(@LunNova): Swap to `oneDNN` once v3 is supported
+  # TODO(@LunNova): Swap to `onednn` once v3 is supported
   # Upstream issue: https://github.com/ROCm/AMDMIGraphX/issues/4351
-  oneDNN_2,
+  onednn_2,
   blaze,
   texliveSmall,
   doxygen,
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     msgpack-cxx
     sqlite
-    oneDNN_2
+    onednn_2
     blaze
     python3Packages.pybind11
     python3Packages.onnx
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMIGRAPHX_ENABLE_GPU=ON"
     "-DMIGRAPHX_ENABLE_CPU=ON"
     "-DMIGRAPHX_ENABLE_FPGA=ON"
-    "-DMIGRAPHX_ENABLE_MLIR=OFF" # LLVM or rocMLIR mismatch?
+    "-DMIGRAPHX_ENABLE_MLIR=ON"
     "-DCMAKE_C_COMPILER=amdclang"
     "-DCMAKE_CXX_COMPILER=amdclang++"
     "-DCMAKE_VERBOSE_MAKEFILE=ON"

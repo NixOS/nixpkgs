@@ -11,7 +11,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "screenkey";
   version = "1.5";
   pyproject = true;
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "screenkey";
     repo = "screenkey";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kWktKzRyWHGd1lmdKhPwrJoSzAIN2E5TKyg30uhM4Ug=";
   };
 
@@ -73,4 +73,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "screenkey";
   };
-}
+})

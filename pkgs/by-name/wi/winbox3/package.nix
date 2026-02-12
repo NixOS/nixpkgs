@@ -5,11 +5,11 @@
   copyDesktopItems,
   makeDesktopItem,
   makeBinaryWrapper,
-  wineWowPackages,
+  wineWow64Packages,
 }:
 
 let
-  wine = wineWowPackages.stable;
+  wine = wineWow64Packages.stable;
   # The icon is also from the winbox AUR package (see above).
   icon = fetchurl {
     name = "winbox.png";
@@ -22,15 +22,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "3.43";
 
   src = fetchurl (
-    if (wine.meta.mainProgram == "wine64") then
-      {
-        url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/winbox64.exe";
-        hash = "sha256-W0HPUf2B6NCCaH9rUiFZz0q6IubfjtxIZyHU4JUHtuk=";
-      }
-    else
+    if (builtins.elem "i686-linux" wine.meta.platforms) then
       {
         url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/winbox.exe";
         hash = "sha256-pAOOTgmjQoXI2o2MKTDuOOpb7q0rb/zWATDNyAMOLms=";
+      }
+    else
+      {
+        url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/winbox64.exe";
+        hash = "sha256-W0HPUf2B6NCCaH9rUiFZz0q6IubfjtxIZyHU4JUHtuk=";
       }
   );
 

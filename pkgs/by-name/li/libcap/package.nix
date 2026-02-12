@@ -143,5 +143,6 @@ stdenv.mkDerivation rec {
       "libcap"
       "libpsx"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap_project" version;
   };
 }

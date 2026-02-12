@@ -16,7 +16,7 @@
   rapidjson,
   ogre-next,
   ninja,
-  libX11,
+  libx11,
 }:
 
 let
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     bullet
     openal
     tinyxml-2
-    libX11
+    libx11
   ];
 
   installPhase = ''

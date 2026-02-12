@@ -9,12 +9,12 @@
   elfutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "strace";
   version = "6.18";
 
   src = fetchurl {
-    url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
+    url = "https://strace.io/files/${finalAttrs.version}/strace-${finalAttrs.version}.tar.xz";
     hash = "sha256-CtXcupc6aed5ZQ7xyzNbEu5gcW/HMmYJiVvTPm0qcyU=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "strace";
   };
-}
+})

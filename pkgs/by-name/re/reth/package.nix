@@ -5,14 +5,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reth";
   version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "paradigmxyz";
     repo = "reth";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zTSwRSSZDINHEkbtTiLP3mgod9lDzFrPxMXq88NTOAM=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mitchmindtree ];
     platforms = lib.platforms.unix;
   };
-}
+})

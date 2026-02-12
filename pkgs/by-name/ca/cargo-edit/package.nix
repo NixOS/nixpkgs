@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-edit";
   version = "0.13.8";
 
   src = fetchFromGitHub {
     owner = "killercup";
     repo = "cargo-edit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+CWCWhdb7S4QSNAfzL2+YMTF7oKQvk18NSxSSTQtQBc=";
   };
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Utility for managing cargo dependencies from the command line";
     homepage = "https://github.com/killercup/cargo-edit";
-    changelog = "https://github.com/killercup/cargo-edit/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/killercup/cargo-edit/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -48,4 +48,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

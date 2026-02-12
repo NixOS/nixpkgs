@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "toot";
   version = "0.51.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "toot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A3ValIMDPcfrvOdOJIkeurT+fAj1TzGf6cy12yaaBQE=";
   };
 
@@ -48,11 +48,11 @@ python3Packages.buildPythonApplication rec {
     description = "Mastodon CLI interface";
     mainProgram = "toot";
     homepage = "https://github.com/ihabunek/toot";
-    changelog = "https://github.com/ihabunek/toot/blob/refs/tags/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ihabunek/toot/blob/refs/tags/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       matthiasbeyer
       aleksana
     ];
   };
-}
+})

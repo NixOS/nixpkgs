@@ -4,19 +4,19 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "do-agent";
   version = "3.18.8";
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "do-agent";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-uOZTiP+2r5wTPuYXcPc3bShfTIlQMkcfwiuBqUeLxPA=";
   };
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   vendorHash = null;
@@ -40,4 +40,4 @@ buildGoModule rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

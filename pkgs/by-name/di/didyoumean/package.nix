@@ -9,14 +9,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "didyoumean";
   version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "hisbaan";
     repo = "didyoumean";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-PSEoh1OMElFJ8m4er1vBMkQak3JvLjd+oWNWA46cows=";
   };
 
@@ -53,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "dym";
   };
-}
+})

@@ -10,7 +10,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (final: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "helix";
   version = "25.07.1";
   outputs = [
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (final: {
   # This release tarball includes source code for the tree-sitter grammars,
   # which is not ordinarily part of the repository.
   src = fetchzip {
-    url = "https://github.com/helix-editor/helix/releases/download/${final.version}/helix-${final.version}-source.tar.xz";
+    url = "https://github.com/helix-editor/helix/releases/download/${finalAttrs.version}/helix-${finalAttrs.version}-source.tar.xz";
     hash = "sha256-Pj/lfcQXRWqBOTTWt6+Gk61F9F1UmeCYr+26hGdG974=";
     stripRoot = false;
   };
@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage (final: {
   meta = {
     description = "Post-modern modal text editor";
     homepage = "https://helix-editor.com";
-    changelog = "https://github.com/helix-editor/helix/blob/${final.version}/CHANGELOG.md";
+    changelog = "https://github.com/helix-editor/helix/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     mainProgram = "hx";
     maintainers = with lib.maintainers; [

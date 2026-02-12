@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/scobal/seyren";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.offline ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

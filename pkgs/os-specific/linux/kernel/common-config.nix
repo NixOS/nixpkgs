@@ -565,6 +565,10 @@ let
         # Enable CEC over DisplayPort
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
+
+        # Do not enable Nova drivers, which are still WIP. This is the Kconfig default.
+        NOVA_CORE = whenAtLeast "6.15" no;
+        DRM_NOVA = whenAtLeast "6.16" no;
       }
       //
         lib.optionalAttrs
@@ -587,6 +591,8 @@ let
         DRM_VC4_HDMI_CEC = yes;
         # Enable HDMI out on platforms using the RK3588 lineup of SoCs.
         ROCKCHIP_DW_HDMI_QP = whenAtLeast "6.13" yes;
+        # Enable DSI out on platforms using the RK3588 lineup of SoCs.
+        ROCKCHIP_DW_MIPI_DSI2 = whenAtLeast "6.16" yes;
       };
 
     # Enable Rust and features that depend on it
@@ -987,6 +993,9 @@ let
       XEN_PVH = option yes;
       XEN_PVHVM = option yes;
       XEN_SAVE_RESTORE = option yes;
+
+      # Disabled by default on POWER
+      VIRTIO_MENU = yes;
 
       # Enable device detection on virtio-mmio hypervisors
       VIRTIO_MMIO_CMDLINE_DEVICES = yes;
@@ -1435,6 +1444,10 @@ let
         # Enable coreboot firmware drivers.
         # While these are called CONFIG_GOOGLE_*, they apply to coreboot systems in general.
         GOOGLE_FIRMWARE = yes;
+
+        # Disabled by default on POWER
+        ATA_BMDMA = yes;
+        ATA_SFF = yes;
       }
       //
         lib.optionalAttrs
@@ -1550,6 +1563,20 @@ let
 
         # Enable Intel Turbo Boost Max 3.0
         INTEL_TURBO_MAX_3 = yes;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.isPower64) {
+        # avoid driver/FS trouble arising from unusual page size
+        PPC_64K_PAGES = no;
+        PPC_4K_PAGES = yes;
+
+        # Does not get auto-loaded on relevant systems, makes fans stuck at max speed.
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=713943 (2014 :<)
+        # > This module ought to be auto-loaded where it's needed, but somehow that
+        # > has broken.  I asked Benjamin Herrenschmidt (upstream powerpc maintainer
+        # > and the last person to touch it) and he was aware of this but hadn't got
+        # > round to working out why.  The workaround is to build it in[…].
+        # > (It won't do any harm on non-Mac systems.)
+        I2C_POWERMAC = yes;
       };
 
     accel = {

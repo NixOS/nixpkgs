@@ -9,13 +9,13 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "basex";
   version = "12.2";
 
   src = fetchurl {
-    url = "http://files.basex.org/releases/${version}/BaseX${
-      builtins.replaceStrings [ "." ] [ "" ] version
+    url = "http://files.basex.org/releases/${finalAttrs.version}/BaseX${
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
     hash = "sha256-zD6aYVYIrF6sZD5R6NNBSH8GGgKfDPus9zsBWtv+Oyw=";
   };
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

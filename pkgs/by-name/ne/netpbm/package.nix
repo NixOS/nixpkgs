@@ -13,7 +13,7 @@
   makeWrapper,
   libtiff,
   enableX11 ? false,
-  libX11,
+  libx11,
   buildPackages,
 }:
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     jbigkit
   ]
-  ++ lib.optional enableX11 libX11;
+  ++ lib.optional enableX11 libx11;
 
   strictDeps = true;
 

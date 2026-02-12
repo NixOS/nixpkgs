@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "arsenal";
   version = "1.2.7";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "arsenal";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-C8DEB/xojU7vGvmeBF+PBD6KWMaJgwa7PpRS5+YzQ6c=";
   };
 
@@ -42,4 +42,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "arsenal";
   };
-}
+})

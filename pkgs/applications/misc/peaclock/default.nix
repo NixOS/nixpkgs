@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libpthreadstubs,
+  libpthread-stubs,
   icu,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    libpthreadstubs
+    libpthread-stubs
     icu
   ];
 

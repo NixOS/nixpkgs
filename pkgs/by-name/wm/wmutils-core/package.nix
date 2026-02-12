@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  xcbutil,
-  xcb-util-cursor,
+  libxcb-util,
+  libxcb-cursor,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    xcbutil
-    xcb-util-cursor
+    libxcb-util
+    libxcb-cursor
   ];
 
   installFlags = [ "PREFIX=$(out)" ];

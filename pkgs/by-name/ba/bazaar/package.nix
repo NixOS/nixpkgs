@@ -9,7 +9,6 @@
   pkg-config,
   wrapGAppsHook4,
   appstream,
-  bubblewrap,
   flatpak,
   glib-networking,
   glycin-loaders,
@@ -18,6 +17,7 @@
   libadwaita,
   libdex,
   libglycin,
+  libglycin-gtk4,
   libsoup_3,
   libxmlb,
   libyaml,
@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libdex
     libglycin
+    libglycin-gtk4
+    glycin-loaders
     libsoup_3
     libxmlb
     libyaml
@@ -64,15 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
   ];
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "$out/bin:${lib.makeBinPath [ bubblewrap ]}"
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
-
   passthru = {
-    inherit (libglycin) glycinPathsPatch;
     updateScript = nix-update-script { };
   };
 

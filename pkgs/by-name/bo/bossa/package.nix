@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   wxGTK32,
-  libX11,
+  libx11,
   readline,
   fetchpatch,
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ bin2c ];
   buildInputs = [
     wxGTK32
-    libX11
+    libx11
     readline
   ];
 

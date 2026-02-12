@@ -13,7 +13,7 @@
   gtk4-layer-shell,
   harfbuzz,
   libGL,
-  libX11,
+  libx11,
   libadwaita,
   ncurses,
   nixosTests,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # GTK frontend
     libadwaita
-    libX11
+    libx11
     gtk4-layer-shell
 
     # OpenGL renderer

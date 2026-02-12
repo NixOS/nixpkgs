@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-xwin";
   version = "0.21.4";
 
   src = fetchFromGitHub {
     owner = "rust-cross";
     repo = "cargo-xwin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mgFMjNxjB4S9/nou6S8NN8ZpXX7K49lLArt/cXcSPIE=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ shivaraj-bh ];
   };
-}
+})

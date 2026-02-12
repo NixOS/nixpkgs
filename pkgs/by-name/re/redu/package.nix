@@ -3,6 +3,7 @@
   fetchFromGitHub,
   nix-update-script,
   rustPlatform,
+  restic,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,6 +18,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-JnjXe2CHO9Namp++UI/V6ND2Y0/WQtaVA2EcUyXUnjQ=";
+
+  buildInputs = [ restic ];
 
   passthru.updateScript = nix-update-script { };
 

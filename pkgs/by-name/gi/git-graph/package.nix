@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-graph";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mlange-42";
     repo = "git-graph";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9GFwxWYDnH3kKDWpxgh7ciSLB1Zr2zExxIrIrhycmZY=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "git-graph";
   };
-}
+})

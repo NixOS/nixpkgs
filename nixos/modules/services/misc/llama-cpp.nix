@@ -8,6 +8,12 @@
 
 let
   cfg = config.services.llama-cpp;
+
+  modelsPresetFile =
+    if cfg.modelsPreset != null then
+      pkgs.writeText "llama-models.ini" (lib.generators.toINI { } cfg.modelsPreset)
+    else
+      null;
 in
 {
 
@@ -19,9 +25,43 @@ in
       package = lib.mkPackageOption pkgs "llama-cpp" { };
 
       model = lib.mkOption {
-        type = lib.types.path;
+        type = lib.types.nullOr lib.types.path;
         example = "/models/mistral-instruct-7b/ggml-model-q4_0.gguf";
         description = "Model path.";
+        default = null;
+      };
+
+      modelsDir = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        example = "/models/";
+        description = "Models directory.";
+        default = null;
+      };
+
+      modelsPreset = lib.mkOption {
+        type = lib.types.nullOr (lib.types.attrsOf lib.types.attrs);
+        default = null;
+        description = ''
+          Models preset configuration as a Nix attribute set.
+          This is converted to an INI file and passed to llama-server via --model-preset.
+          See llama-server documentation for available options.
+        '';
+        example = lib.literalExpression ''
+          {
+            "Qwen3-Coder-Next" = {
+              hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
+              hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
+              alias = "unsloth/Qwen3-Coder-Next";
+              fit = "on";
+              seed = "3407";
+              temp = "1.0";
+              top-p = "0.95";
+              min-p = "0.01";
+              top-k = "40";
+              jinja = "on";
+            };
+          }
+        '';
       };
 
       extraFlags = lib.mkOption {
@@ -61,7 +101,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-
     systemd.services.llama-cpp = {
       description = "LLaMA C++ server";
       after = [ "network.target" ];
@@ -70,7 +109,33 @@ in
       serviceConfig = {
         Type = "idle";
         KillSignal = "SIGINT";
-        ExecStart = "${cfg.package}/bin/llama-server --log-disable --host ${cfg.host} --port ${toString cfg.port} -m ${cfg.model} ${utils.escapeSystemdExecArgs cfg.extraFlags}";
+        StateDirectory = "llama-cpp";
+        CacheDirectory = "llama-cpp";
+        WorkingDirectory = "/var/lib/llama-cpp";
+        Environment = [ "LLAMA_CACHE=/var/cache/llama-cpp" ];
+        ExecStart =
+          let
+            args = [
+              "--host"
+              cfg.host
+              "--port"
+              (toString cfg.port)
+            ]
+            ++ lib.optionals (cfg.model != null) [
+              "-m"
+              cfg.model
+            ]
+            ++ lib.optionals (cfg.modelsDir != null) [
+              "--models-dir"
+              cfg.modelsDir
+            ]
+            ++ lib.optionals (cfg.modelsPreset != null) [
+              "--models-preset"
+              modelsPresetFile
+            ]
+            ++ cfg.extraFlags;
+          in
+          "${cfg.package}/bin/llama-server ${utils.escapeSystemdExecArgs args}";
         Restart = "on-failure";
         RestartSec = 300;
 

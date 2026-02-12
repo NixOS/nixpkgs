@@ -4,9 +4,9 @@
   fetchFromGitHub,
   cmake,
   python3,
-  libX11,
-  libXxf86vm,
-  libXrandr,
+  libx11,
+  libxxf86vm,
+  libxrandr,
   vulkan-headers,
   libGL,
   vulkan-loader,
@@ -36,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
-    libXxf86vm
-    libXrandr
+    libx11
+    libxxf86vm
+    libxrandr
     wayland
   ];
 

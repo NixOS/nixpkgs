@@ -4,14 +4,14 @@
   fetchFromSourcehut,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayout";
   version = "1.1.3";
 
   src = fetchFromSourcehut {
     owner = "~shinyzenith";
     repo = "wayout";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-EzRetxx0NojhBlBPwhQ7p9rGXDUBlocVqxcEVGIF3+0=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wayout";
   };
 
-}
+})

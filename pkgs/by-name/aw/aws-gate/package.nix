@@ -6,7 +6,7 @@
   ssm-session-manager-plugin,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "aws-gate";
   version = "0.11.3";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "xen0l";
     repo = "aws-gate";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9w2jP4s1HXf1gYiXX05Dt2iXt0bR0U48yc8h9T5M+EQ=";
   };
 
@@ -66,4 +66,4 @@ python3Packages.buildPythonApplication rec {
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "aws-gate";
   };
-}
+})

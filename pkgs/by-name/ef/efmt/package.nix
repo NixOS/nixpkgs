@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "efmt";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "sile";
     repo = "efmt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-cRiYOJiBIRHm9s3EFhRNTvLXw66Svu1vc4ipWYKDo1s=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ haruki7049 ];
     mainProgram = "efmt";
   };
-}
+})

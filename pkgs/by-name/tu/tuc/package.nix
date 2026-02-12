@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuc";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "riquito";
     repo = "tuc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+QkkwQfp818bKVo1yUkWKLMqbdzRJ+oHpjxB+UFDRsU=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

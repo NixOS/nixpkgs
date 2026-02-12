@@ -30,14 +30,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-settings-daemon";
   version = "6.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-settings-daemon";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sa3DYH4/yRycHyrAG8IfCCpHhFNKwq8yOgLoKHprGfk=";
   };
 
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

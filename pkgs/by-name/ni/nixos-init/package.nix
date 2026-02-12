@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   binaries = [
     "initrd-init"
     "find-etc"
-    "chroot-realpath"
+    "resolve-in-root"
   ];
 
   postInstall = ''

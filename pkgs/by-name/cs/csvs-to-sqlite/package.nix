@@ -5,7 +5,7 @@
   fetchpatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "csvs-to-sqlite";
   version = "1.3";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "csvs-to-sqlite";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-wV6htULG3lg2IhG2bXmc/9vjcK8/+WA7jm3iJu4ZoOE=";
   };
 
@@ -64,4 +64,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ lib.maintainers.costrouc ];
     mainProgram = "csvs-to-sqlite";
   };
-}
+})

@@ -11,8 +11,8 @@
   fetchFromGitHub,
   freezegun,
   grpcio,
+  icmplib,
   josepy,
-  litellm,
   pycognito,
   pyjwt,
   pytest-aiohttp,
@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "1.7.0";
+  version = "1.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = version;
-    hash = "sha256-22DCn6ITrpH4bevAvfogA1f4llwuk5vIn3rKieedVfg=";
+    hash = "sha256-hBfO/dHsoMwUKcJf+6wGmS2+GWXauMu5FC527X3Ygow=";
   };
 
   postPatch = ''
@@ -65,8 +65,8 @@ buildPythonPackage rec {
     ciso8601
     cryptography
     grpcio
+    icmplib
     josepy
-    litellm
     pycognito
     pyjwt
     sentence-stream

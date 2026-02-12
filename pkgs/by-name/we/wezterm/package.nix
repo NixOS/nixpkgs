@@ -5,7 +5,7 @@
   fontconfig,
   installShellFiles,
   libGL,
-  libX11,
+  libx11,
   libxcb,
   libxkbcommon,
   ncurses,
@@ -19,10 +19,10 @@
   vulkan-loader,
   wayland,
   wezterm,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-wm,
   zlib,
 }:
 
@@ -74,14 +74,14 @@ rustPlatform.buildRustPackage rec {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libxcb
     libxkbcommon
     wayland
-    xcbutil
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilwm # contains xcb-ewmh among others
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-wm # contains xcb-ewmh among others
   ];
 
   buildFeatures = [ "distro-defaults" ];

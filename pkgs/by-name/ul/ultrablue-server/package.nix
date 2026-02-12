@@ -4,7 +4,7 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ultrablue-server";
   version = "unstable-fosdem2023";
 
@@ -17,7 +17,7 @@ buildGoModule rec {
     # rev = "6de04af6e353e38c030539c5678e5918f64be37e";
   };
 
-  sourceRoot = "${src.name}/server";
+  sourceRoot = "${finalAttrs.src.name}/server";
 
   vendorHash = "sha256-249LWguTHIF0HNIo8CsE/HWpAtBw4P46VPvlTARLTpw=";
   doCheck = false;
@@ -30,4 +30,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ raitobezarius ];
   };
-}
+})

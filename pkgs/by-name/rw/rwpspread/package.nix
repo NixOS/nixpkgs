@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rwpspread";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "0xk1f0";
     repo = "rwpspread";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lp9XvILpvNZtffJLyDUCo5Xyor4X4bwsfxAIqS8Hf7M=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "rwpspread";
   };
-}
+})

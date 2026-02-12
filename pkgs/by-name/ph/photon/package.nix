@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "photon";
   version = "1.3.0";
   pyproject = false;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "s0md3v";
     repo = "Photon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "02z1xj72bq35dilr4b6njry4kixz6j2a3ag02nla98q0fvgmgnvy";
   };
 
@@ -41,4 +41,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "photon";
   };
-}
+})

@@ -69,27 +69,36 @@
   nix-update-script,
 }:
 
+let
+  libcava =
+    let
+      version = "0.10.7-beta";
+    in
+    {
+      inherit version;
+
+      src = fetchFromGitHub {
+        owner = "LukashonakV";
+        repo = "cava";
+        tag = "v${version}";
+        hash = "sha256-IX1B375gTwVDRjpRfwKGuzTAZOV2pgDWzUd4bW2cTDU=";
+      };
+    };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     tag = finalAttrs.version;
-    hash = "sha256-mGiBZjfvtZZkSHrha4UF2l1Ogbij8J//r2h4gcZAJ6w=";
-  };
-
-  libcavaSrc = fetchFromGitHub {
-    owner = "LukashonakV";
-    repo = "cava";
-    tag = "0.10.4";
-    hash = "sha256-9eTDqM+O1tA/3bEfd1apm8LbEcR9CVgELTIspSVPMKM=";
+    hash = "sha256-49ZKgK96a9uFip+svOdnw397xcEjiftXzd9gyv1H3sU=";
   };
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${finalAttrs.libcavaSrc} subprojects/cava-0.10.4
+    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-${libcava.version}
     patchShebangs .
     popd
   '';

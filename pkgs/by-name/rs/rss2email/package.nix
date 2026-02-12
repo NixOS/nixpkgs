@@ -6,13 +6,13 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rss2email";
   version = "3.14";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RwORS2PHquxBZLNKqCJtR5XX4SHqPCb/Fn+Y68dfI/g=";
   };
 
@@ -80,4 +80,4 @@ python3Packages.buildPythonApplication rec {
   passthru.tests = {
     smoke-test = nixosTests.rss2email;
   };
-}
+})

@@ -19,6 +19,7 @@
   wget,
   gpu-screen-recorder,
   python3,
+  wayland-scanner,
 
   # calendar support
   evolution-data-server,
@@ -64,13 +65,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noctalia-shell";
-  version = "4.3.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia-shell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u+M2dCw9PznZTgn51DwHpX4VcU9ZC9Acub7qKhCpr3c=";
+    hash = "sha256-ozr4zO+T7o7FkPRTLpAymnb3K9+hc9OIN1lq0i5oWbs=";
   };
 
   nativeBuildInputs = [
@@ -100,6 +101,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preFixup = ''
     qtWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
+      --prefix XDG_DATA_DIRS : ${wayland-scanner}/share
       --add-flags "-p $out/share/noctalia-shell"
       ${lib.optionalString calendarSupport "--prefix GI_TYPELIB_PATH : ${giTypelibPath}"}
     )
@@ -108,6 +110,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/noctalia-dev/noctalia-shell/releases/tag/v${finalAttrs.version}";
     description = "Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell";
     homepage = "https://github.com/noctalia-dev/noctalia-shell";
     license = lib.licenses.mit;

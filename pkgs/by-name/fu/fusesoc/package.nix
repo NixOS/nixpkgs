@@ -9,13 +9,13 @@
   openssh,
   writableTmpDirAsHomeHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fusesoc";
   version = "2.4.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-VBjJ7wiEz441iVquLMGabtdYbK07+dtHY05x8QzdSL8=";
   };
 
@@ -71,4 +71,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.bsd3;
     mainProgram = "fusesoc";
   };
-}
+})

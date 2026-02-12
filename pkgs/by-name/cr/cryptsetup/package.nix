@@ -56,7 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/unit-utils-io.c --replace "| O_DIRECT" ""
   '';
 
-  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
+  env = lib.optionalAttrs (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) {
+    NIX_LDFLAGS = "-lgcc_s";
+  };
 
   configureFlags = [
     "--with-crypto_backend=openssl"
@@ -116,5 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
       raitobezarius
     ];
     platforms = with lib.platforms; linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "cryptsetup_project" finalAttrs.version;
   };
 })

@@ -6,14 +6,14 @@
   makeWrapper,
   valgrind,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-valgrind";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "jfrimmel";
     repo = "cargo-valgrind";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-sVW3zNe0a9iQQ0vRWJofqG4gwUJ/w0U4ugVyMNtWX98=";
   };
 
@@ -52,4 +52,4 @@ rustPlatform.buildRustPackage rec {
       chrjabs
     ];
   };
-}
+})

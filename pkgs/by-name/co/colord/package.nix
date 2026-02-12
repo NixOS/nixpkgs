@@ -36,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "colord";
-  version = "1.4.6";
+  version = "1.4.8";
 
   outputs = [
     "out"
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/colord/releases/colord-${finalAttrs.version}.tar.xz";
-    sha256 = "dAdjGie/5dG2cueuQndwAcEF2GC3tzkig8jGMA3ojm8=";
+    hash = "sha256-IVAL1ol1MSp/DzzmAZ2fdfQqrKp1ynEV7HILVEVAaJY=";
   };
 
   patches = [
@@ -126,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
     PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
     PKG_CONFIG_SYSTEMD_TMPFILESDIR = "${placeholder "out"}/lib/tmpfiles.d";
+    PKG_CONFIG_SYSTEMD_SYSUSERSDIR = "${placeholder "out"}/lib/sysusers.d";
     PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
     PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
   };

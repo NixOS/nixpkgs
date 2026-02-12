@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typos";
   version = "1.42.3";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "typos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-u9hjY/d4Ul+EvZIoTJzWkUl4j+Vzcvu61x2USP0hGiw=";
   };
 
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     description = "Source code spell checker";
     mainProgram = "typos";
     homepage = "https://github.com/crate-ci/typos";
-    changelog = "https://github.com/crate-ci/typos/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/crate-ci/typos/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
       chrjabs
     ];
   };
-}
+})

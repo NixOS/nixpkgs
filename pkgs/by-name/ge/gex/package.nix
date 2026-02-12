@@ -9,14 +9,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gex";
   version = "0.6.4";
 
   src = fetchFromCodeberg {
     owner = "Piturnah";
     repo = "gex";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Xer7a3UtFIv3idchI7DfZ5u6qgDW/XFWi5ihtcREXqo=";
   };
 
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";
     homepage = "https://codeberg.org/Piturnah/gex";
-    changelog = "https://codeberg.org/Piturnah/gex/releases/tag/${src.tag}";
+    changelog = "https://codeberg.org/Piturnah/gex/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -55,4 +55,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "gex";
   };
-}
+})

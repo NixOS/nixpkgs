@@ -41,12 +41,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Markdown editor with support for multi-tab";
     homepage = "https://codeberg.org/ItsZariep/Phantom";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "phantom";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ reylak ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ reylak ];
   };
 }

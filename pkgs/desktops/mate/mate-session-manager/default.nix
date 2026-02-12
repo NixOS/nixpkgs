@@ -7,8 +7,8 @@
   xtrans,
   dbus-glib,
   systemd,
-  libSM,
-  libXtst,
+  libsm,
+  libxtst,
   glib,
   gtk3,
   libepoxy,
@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dbus-glib
     systemd
-    libSM
-    libXtst
+    libsm
+    libxtst
     gtk3
     mate-desktop
     mate-screensaver # for gsm_manager_init

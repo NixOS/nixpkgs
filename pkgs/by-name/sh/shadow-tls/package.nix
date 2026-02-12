@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shadow-tls";
   version = "0.2.25";
 
   src = fetchFromGitHub {
     owner = "ihciah";
     repo = "shadow-tls";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-T+GPIrcME6Wq5sdfIt4t426/3ew5sUQMykYeZ6zw1ko=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ oluceps ];
     platforms = lib.platforms.linux;
   };
-}
+})

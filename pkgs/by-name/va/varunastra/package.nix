@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "varunastra";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "redhuntlabs";
     repo = "Varunastra";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nyvTbfKEwUwHwuKSRaABigM6eG6LFGd9HwGpATUg/5E=";
   };
 
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "Tool to enhance the security of Docker environments";
     homepage = "https://github.com/redhuntlabs/Varunastra";
-    changelog = "https://github.com/redhuntlabs/Varunastra/releases/tag/${src.tag}";
+    changelog = "https://github.com/redhuntlabs/Varunastra/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "varunastra";
   };
-}
+})

@@ -5,7 +5,7 @@
   meson,
   ninja,
   libdrm,
-  libX11,
+  libx11,
   libGL,
   libgbm,
   pkg-config,
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     libdrm
-    libX11
+    libx11
     libGL
     libgbm
   ]

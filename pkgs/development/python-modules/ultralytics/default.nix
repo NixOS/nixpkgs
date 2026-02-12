@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ultralytics";
-  version = "8.4.9";
+  version = "8.4.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultralytics";
     repo = "ultralytics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yZI0lvmXC2yFH8qiDPgCMN+7gxd4BwidwDrLoDDr1Mc=";
+    hash = "sha256-P6NNEWCpwSN2FU9Nc+XHwjx3xC2kmhbZ/71utEBBjuM=";
   };
 
   build-system = [ setuptools ];
@@ -134,6 +134,14 @@ buildPythonPackage (finalAttrs: {
     description = "Train YOLO models for computer vision tasks";
     mainProgram = "yolo";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ osbm ];
+    maintainers = with lib.maintainers; [
+      osbm
+      mana-byte
+    ];
+    badPlatforms = [
+      # Tests crash with:
+      # Fatal Python error: Segmentation fault for x86_64 Darwin in tests/python.py
+      "x86_64-darwin"
+    ];
   };
 })

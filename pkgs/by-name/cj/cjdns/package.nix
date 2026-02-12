@@ -13,14 +13,14 @@
   replaceVars,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cjdns";
   version = "22.1";
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
     repo = "cjdns";
-    tag = "cjdns-v${version}";
+    tag = "cjdns-v${finalAttrs.version}";
     hash = "sha256-0imQrkcvIA+2Eq/zlC65USMR7T3OUKwQxrB1KtVexyU=";
   };
 
@@ -88,8 +88,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Encrypted networking for regular people";
     homepage = "https://github.com/cjdelisle/cjdns";
-    changelog = "https://github.com/cjdelisle/cjdns/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/cjdelisle/cjdns/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

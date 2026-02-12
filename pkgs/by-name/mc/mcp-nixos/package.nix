@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-nixos";
   version = "2.1.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZScQ79z7SwjpI5ZnrwXhRNqOnYQTI9MayvPjv00hiyY=";
   };
 
@@ -47,9 +47,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "MCP server for NixOS";
     homepage = "https://github.com/utensils/mcp-nixos";
-    changelog = "https://github.com/utensils/mcp-nixos/releases/tag/${src.tag}";
+    changelog = "https://github.com/utensils/mcp-nixos/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.amadejkastelic ];
     mainProgram = "mcp-nixos";
   };
-}
+})

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   makeWrapper,
   cmake,
   ninja,
@@ -42,15 +42,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.21.0";
+    version = "0.21.1";
 
-    src = fetchFromGitea {
-      domain = "codeberg.org";
+    src = fetchFromCodeberg {
       owner = "AdamCake";
       repo = "Bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-QQJKUCxeff56ghwP00uF4GI35vSAPWM+JphTEUfWOUo=";
+      hash = "sha256-yrfTKrzwglCkPveKEiT1WRBLAVxiFsHaj6984QY2ZJ8=";
     };
 
     nativeBuildInputs = [
@@ -153,7 +152,8 @@ buildFHSEnv {
   runScript = "${bolt.name}";
 
   meta = {
-    homepage = "https://github.com/Adamcake/Bolt";
+    homepage = "https://codeberg.org/Adamcake/Bolt";
+    changelog = "https://codeberg.org/Adamcake/Bolt/releases/tag/${bolt.version}";
     description = "Alternative launcher for RuneScape";
     longDescription = ''
       Bolt Launcher supports HDOS/RuneLite by default with an optional feature flag for RS3 (enableRS3).

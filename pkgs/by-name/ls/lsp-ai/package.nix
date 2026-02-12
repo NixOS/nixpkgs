@@ -11,13 +11,13 @@
   gitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lsp-ai";
   version = "0.7.1";
   src = fetchFromGitHub {
     owner = "SilasMarvin";
     repo = "lsp-ai";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mBbaJn4u+Wlu/Y4G4a6YUBWnmN143INAGm0opiAjnIk=";
   };
 
@@ -75,8 +75,8 @@ rustPlatform.buildRustPackage rec {
     description = "Open-source language server that serves as a backend for AI-powered functionality";
     homepage = "https://github.com/SilasMarvin/lsp-ai";
     mainProgram = "lsp-ai";
-    changelog = "https://github.com/SilasMarvin/lsp-ai/releases/v${version}";
+    changelog = "https://github.com/SilasMarvin/lsp-ai/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ projectinitiative ];
   };
-}
+})

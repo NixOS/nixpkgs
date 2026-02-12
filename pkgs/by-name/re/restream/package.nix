@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "restream";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "rien";
     repo = "restream";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-AXHKOfdIM3LsHF6u3M/lMhhcuPZADoEal7de3zlx7L4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rJYdmBQrDH/oURXVO8WWTxgvibcpNC8yxno6pZPl6No=";
   };
 
   dontConfigure = true;

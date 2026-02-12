@@ -11,11 +11,11 @@
   openjdk17,
   freetype,
   fontconfig,
-  libXi,
-  libX11,
-  libXext,
-  libXtst,
-  libXrender,
+  libxi,
+  libx11,
+  libxext,
+  libxtst,
+  libxrender,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     freetype
     fontconfig
-    libXi
-    libX11
-    libXext
-    libXtst
-    libXrender
+    libxi
+    libx11
+    libxext
+    libxtst
+    libxrender
   ];
 
   unpackPhase = ''

@@ -10,14 +10,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "thanos";
   version = "0.40.1";
 
   src = fetchFromGitHub {
     owner = "thanos-io";
     repo = "thanos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-g0xvtBwPoX906xHdyOEUfudio/9MZhkzdBp5FcATRsM=";
   };
 
@@ -36,7 +36,7 @@ buildGoModule rec {
       t = "github.com/prometheus/common/version";
     in
     [
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
@@ -65,7 +65,7 @@ buildGoModule rec {
   meta = {
     description = "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
-    changelog = "https://github.com/thanos-io/thanos/releases/tag/v${version}";
+    changelog = "https://github.com/thanos-io/thanos/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "thanos";
     maintainers = with lib.maintainers; [
@@ -73,4 +73,4 @@ buildGoModule rec {
       anthonyroussel
     ];
   };
-}
+})

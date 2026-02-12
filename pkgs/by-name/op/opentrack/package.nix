@@ -12,10 +12,10 @@
   opencv4,
   procps,
   eigen,
-  libXdmcp,
+  libxdmcp,
   libevdev,
   makeDesktopItem,
-  wineWowPackages,
+  wineWow64Packages,
   onnxruntime,
   nix-update-script,
   withWine ? stdenv.targetPlatform.isx86_64,
@@ -40,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     meta.license = lib.licenses.free;
   };
 
+  patches = [
+    # calls `app.setDesktopFileName("opentrack");` - distros that don't wrap the binary apparently don't need this.
+    ./desktop-filename.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -49,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.wrapQtAppsHook
   ]
-  ++ lib.optionals withWine [ wineWowPackages.stable ];
+  ++ lib.optionals withWine [ wineWow64Packages.stable ];
 
   buildInputs = [
     finalAttrs.aruco
     eigen
-    libXdmcp
+    libxdmcp
     libevdev
     onnxruntime
     opencv4
@@ -64,13 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "OPENTRACK_COMMIT" "opentrack-${finalAttrs.version}")
     (lib.cmakeBool "SDK_WINE" withWine)
     (lib.cmakeFeature "SDK_ARUCO_LIBPATH" "${finalAttrs.aruco}/lib/libaruco.a")
     (lib.cmakeFeature "SDK_XPLANE" finalAttrs.xplaneSdk.outPath)
   ];
 
   postInstall = ''
-    install -Dt $out/share/icons/hicolor/256x256 $src/gui/images/opentrack.png
+    install -Dt $out/share/icons/hicolor/256x256/apps ../gui/images/opentrack.png
   '';
 
   # manually wrap just the main binary

@@ -4,7 +4,7 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aws-assume-role";
   version = "0.3.2";
 
@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "remind101";
     repo = "assume-role";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-7+9qi9lYzv1YCFhUyla+5Gqs5nBUiiazhFwiqHzMFd4=";
   };
 
@@ -41,4 +41,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ averyvigolo ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,10 +4,10 @@
   fetchzip,
   pkg-config,
   writeText,
-  libX11,
+  libx11,
   libxcb,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   config,
   conf ? config.slstatus.conf or null,
   patches ? config.slstatus.patches or [ ],
@@ -39,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     libxcb
-    libXau
-    libXdmcp
+    libxau
+    libxdmcp
   ]
   ++ extraLibs;
 

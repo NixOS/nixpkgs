@@ -18,11 +18,11 @@
   libglvnd,
   libjpeg,
   libxkbcommon,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
   makeWrapper,
   ninja,
   pkg-config,
@@ -114,11 +114,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
           ++ lib.optionals clangStdenv.hostPlatform.isLinux [
             libglvnd
             libxkbcommon
-            libX11
-            libXcursor
-            libXext
-            libXrandr
-            libXi
+            libx11
+            libxcursor
+            libxext
+            libxrandr
+            libxi
             wayland
           ]
         )

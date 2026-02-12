@@ -5,7 +5,7 @@
   # error: future-1.0.0 not supported for interpreter python3.13
   python312Packages,
 }:
-python312Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication (finalAttrs: {
   pname = "sccmhunter";
   version = "1.1.10";
   pyproject = true;
@@ -13,7 +13,7 @@ python312Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "garrettfoster13";
     repo = "sccmhunter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-657xwD5Sk8vU3MSGj7Yuu/lh7SRS25VFk/igKhq1pks=";
   };
 
@@ -43,9 +43,9 @@ python312Packages.buildPythonApplication rec {
   meta = {
     description = "Post exploitation tool to identify and attack SCCM related assets in an Active Directory domain";
     homepage = "https://github.com/garrettfoster13/sccmhunter";
-    changelog = "https://github.com/garrettfoster13/sccmhunter/blob/${src.tag}/changelog.md";
+    changelog = "https://github.com/garrettfoster13/sccmhunter/blob/${finalAttrs.src.tag}/changelog.md";
     license = lib.licenses.mit;
     mainProgram = "sccmhunter.py";
     maintainers = with lib.maintainers; [ purpole ];
   };
-}
+})

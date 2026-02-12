@@ -11,14 +11,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixseparatedebuginfod2";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nixseparatedebuginfod2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-INY9mLJ+7i3BoShqFZMELm9aXiDbZkuLyokgm42kEbo=";
   };
 
@@ -52,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "nixseparatedebuginfod2";
   };
-}
+})

@@ -14,7 +14,7 @@
   libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "epick";
   version = "0.9.0";
 
@@ -55,9 +55,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Simple color picker that lets the user create harmonic palettes with ease";
     homepage = "https://github.com/vv9k/epick";
-    changelog = "https://github.com/vv9k/epick/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/vv9k/epick/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "epick";
   };
-}
+})

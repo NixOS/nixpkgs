@@ -7,11 +7,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shen-sbcl";
-  version = "40";
+  version = "41";
 
   src = fetchzip {
     url = "https://www.shenlanguage.org/Download/S${finalAttrs.version}.zip";
-    hash = "sha256-Ldz4NV+1Hf7FCDis+oeDt8mNuMe37jpaBMJlQ1XQaa0=";
+    hash = "sha256-uWGMET1zjGbI/+yM1zeMfhVYBgrGawafAEBBGXANXGE=";
   };
 
   nativeBuildInputs = [ sbcl ];

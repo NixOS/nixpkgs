@@ -8,13 +8,13 @@
   meson,
   ninja,
   pkg-config,
-  wineWowPackages,
+  wineWow64Packages,
   libxcb,
   nix-update-script,
 }:
 
 let
-  wine = wineWowPackages.yabridge;
+  wine = wineWow64Packages.yabridge;
 
   # Derived from subprojects/asio.wrap
   asio = fetchFromGitHub {

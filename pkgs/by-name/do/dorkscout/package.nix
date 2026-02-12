@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dorkscout";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "R4yGM";
     repo = "dorkscout";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-v0OgEfl6L92ux+2GbSPHEgkmA/ZobQHB66O2LlEhVUA=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

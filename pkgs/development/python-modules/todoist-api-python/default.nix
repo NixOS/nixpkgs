@@ -1,8 +1,10 @@
 {
   lib,
+  annotated-types,
   buildPythonPackage,
+  dataclass-wizard,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -12,21 +14,23 @@
 
 buildPythonPackage rec {
   pname = "todoist-api-python";
-  version = "2.1.7";
+  version = "3.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Doist";
     repo = "todoist-api-python";
     tag = "v${version}";
-    hash = "sha256-qOb9qAwjQ0MqR+mdNEkt7W8SiBhZ8gRf01TsHDkLPS4=";
+    hash = "sha256-udYFWTrWW2G6JBKQUkiqKpyBz1D4dwq7Pix6bzuWnDY=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  dependencies = [ requests ];
+  dependencies = [
+    annotated-types
+    dataclass-wizard
+    requests
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -39,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for the Todoist REST API";
     homepage = "https://github.com/Doist/todoist-api-python";
-    changelog = "https://github.com/Doist/todoist-api-python/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/Doist/todoist-api-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

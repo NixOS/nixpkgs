@@ -7,7 +7,7 @@
   bash,
   perl,
   perlPackages,
-  libHX,
+  libhx,
   nix-update-script,
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Perl and Bash are pulled to make patchShebangs work.
     perl
     bash
-    libHX
+    libhx
   ]
   ++ (with perlPackages; [ TextCSV_XS ]);
 

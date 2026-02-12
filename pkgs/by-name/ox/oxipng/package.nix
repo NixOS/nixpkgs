@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   version = "10.1.0";
   pname = "oxipng";
 
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "shssoichiro";
     repo = "oxipng";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fPzdko8qcg9zcr79SrEakLqTFj9hDCakl6hTVpW9al8=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dywedir ];
     mainProgram = "oxipng";
   };
-}
+})

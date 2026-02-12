@@ -17,7 +17,7 @@
   imagemagick,
   curl,
   sane-backends,
-  libXpm,
+  libxpm,
   libepoxy,
   pixman,
   poppler,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     sane-backends
     libdrm
-    libXpm
+    libxpm
     libepoxy
     pixman
     poppler

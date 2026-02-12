@@ -9,13 +9,13 @@
 
 with python3Packages;
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "vcstool";
   version = "0.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "04b3a963e15386660f139e5b95d293e43e3cb414e3b13e14ee36f5223032ee2c";
   };
 
@@ -47,4 +47,4 @@ buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sivteck ];
   };
-}
+})

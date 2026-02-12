@@ -6,8 +6,8 @@
   SDL,
   SDL_ttf,
   SDL_image,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   libGLU,
   libGL,
   libpng,
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_image
     lua5
     libpng
-    libSM
-    libICE
+    libsm
+    libice
   ];
 
   nativeBuildInputs = [

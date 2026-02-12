@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   gccmakedep,
-  libX11,
-  libXext,
-  libXpm,
+  libx11,
+  libxext,
+  libxpm,
   imake,
   installShellFiles,
 }:
@@ -25,9 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gccmakedep
-    libX11
-    libXext
-    libXpm
+    libx11
+    libxext
+    libxpm
     imake
   ];
 

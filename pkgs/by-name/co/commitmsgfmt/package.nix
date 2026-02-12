@@ -6,14 +6,14 @@
   commitmsgfmt,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "commitmsgfmt";
   version = "1.7.0";
 
   src = fetchFromGitLab {
     owner = "mkjeldsen";
     repo = "commitmsgfmt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6mMjDMWkpaKXqmyE2taV4pDa92Tdt4VEHHLdOpRHung=";
   };
 
@@ -27,10 +27,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://gitlab.com/mkjeldsen/commitmsgfmt";
-    changelog = "https://gitlab.com/mkjeldsen/commitmsgfmt/-/raw/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/mkjeldsen/commitmsgfmt/-/raw/v${finalAttrs.version}/CHANGELOG.md";
     description = "Formats commit messages better than fmt(1) and Vim";
     mainProgram = "commitmsgfmt";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mmlb ];
   };
-}
+})

@@ -8,9 +8,9 @@
   setuptools,
 
   # dependencies
-  av,
   ctranslate2,
   faster-whisper,
+  huggingface-hub,
   nltk,
   numpy,
   pandas,
@@ -38,14 +38,14 @@ let
 in
 buildPythonPackage rec {
   pname = "whisperx";
-  version = "3.7.4";
+  version = "3.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-bain";
     repo = "whisperX";
     tag = "v${version}";
-    hash = "sha256-wmCGHRx1JaOs5+7fp2jeh8PIR5dlmOl8hKrIw2550Bk=";
+    hash = "sha256-ZHPGQP5HIuFafHGS6ykiSNtHY6QHh0o8DUE2lV41lUI=";
   };
 
   # As `makeWrapperArgs` does not apply to the module, and whisperx depends on `ffmpeg`,
@@ -60,7 +60,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
-    "av"
     "numpy"
     "pandas"
     "pyannote-audio"
@@ -68,9 +67,9 @@ buildPythonPackage rec {
     "torchaudio"
   ];
   dependencies = [
-    av
     ctranslate
     faster-whisper
+    huggingface-hub
     nltk
     numpy
     pandas
@@ -83,13 +82,6 @@ buildPythonPackage rec {
     triton
   ];
 
-  # Import check fails due on `aarch64-linux` ONLY in the sandbox due to onnxruntime
-  # not finding its default logger, which then promptly segfaults.
-  # Simply run the import check on every other platform instead.
-  pythonImportsCheck = lib.optionals (
-    !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
-  ) [ "whisperx" ];
-
   # No tests in repository
   doCheck = false;
 
@@ -100,5 +92,14 @@ buildPythonPackage rec {
     changelog = "https://github.com/m-bain/whisperX/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bengsparks ];
+
+    # nixpkgs has `pyannote-audio` >= 4.0.0, but `whisperx`'s `pyproject.toml` specifies <4.0.0.
+    #
+    # See https://github.com/m-bain/whisperX/issues/1240 for a serious discussion,
+    # and a potential upgrade in https://github.com/m-bain/whisperX/pull/1243.
+    # Alternatively read https://github.com/m-bain/whisperX/issues/1336 if you prefer a more humorous perspective.
+    #
+    # Failure was first documented in nixpkgs under https://github.com/NixOS/nixpkgs/issues/460172.
+    broken = true;
   };
 }

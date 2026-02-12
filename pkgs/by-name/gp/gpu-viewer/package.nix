@@ -27,7 +27,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gpu-viewer";
   version = "3.23";
   pyproject = false;
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";
     repo = "gpu-viewer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+x+e/GCNBpZTpExVwY6gm+/20pU5dg34+qMQIDWEf0E=";
   };
 
@@ -87,10 +87,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/arunsivaramanneo/GPU-Viewer";
     description = "Front-end to glxinfo, vulkaninfo, clinfo and es2_info";
-    changelog = "https://github.com/arunsivaramanneo/GPU-Viewer/releases/tag/v${version}";
+    changelog = "https://github.com/arunsivaramanneo/GPU-Viewer/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ GaetanLepage ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     mainProgram = "gpu-viewer";
   };
-}
+})

@@ -4,14 +4,14 @@
   lib,
   gitUpdater,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-grip";
   version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "chrishrb";
     repo = "go-grip";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-c3tl5nALPqIAMSqjbbQDi6mN6M1mKJvzxxDHcj/QyuY=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ heisfer ];
     mainProgram = "go-grip";
   };
-}
+})

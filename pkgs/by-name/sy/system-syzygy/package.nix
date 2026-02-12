@@ -17,14 +17,14 @@ let
     categories = [ "Game" ];
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "system-syzygy";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "mdsteele";
     repo = "syzygy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wxe9+r3tWRXiznvjvxsmTgUC7YVKgbt+I3Q8A/WtcN0=";
   };
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/share/syzygy/
-    cp -r ${src}/data/* $out/share/syzygy/
+    cp -r ${finalAttrs.src}/data/* $out/share/syzygy/
     wrapProgram $out/bin/syzygy --set SYZYGY_DATA_DIR $out/share/syzygy
     mkdir -p $out/share/applications
     substituteAll ${desktopFile}/share/applications/system-syzygy.desktop $out/share/applications/system-syzygy.desktop
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.marius851000 ];
   };
-}
+})

@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (finalAttrs) pname version;
     in
     fetchurl {
-      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+      url = "mirror://gnome/sources/gdk-pixbuf/${lib.versions.majorMinor version}/gdk-pixbuf-${version}.tar.xz";
       hash = "sha256-k6Gqw/FCeuc0Vzl1gqLDjQSWOKgBeIzL1fSMpge9vRc=";
     };
 

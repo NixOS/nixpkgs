@@ -6,14 +6,14 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amidst";
   version = "4.7";
 
   src = fetchurl {
     # TODO: Compile from src
-    url = "https://github.com/toolbox4minecraft/amidst/releases/download/v${version}/amidst-v${
-      lib.replaceStrings [ "." ] [ "-" ] version
+    url = "https://github.com/toolbox4minecraft/amidst/releases/download/v${finalAttrs.version}/amidst-v${
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }.jar";
     sha256 = "sha256-oecRjD7JUuvFym8N/hSE5cbAFQojS6yxOuxpwWRlW9M=";
   };
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

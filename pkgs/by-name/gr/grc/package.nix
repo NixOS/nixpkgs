@@ -5,7 +5,7 @@
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "grc";
   version = "1.13";
   pyproject = false;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "garabik";
     repo = "grc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1h0h88h484a9796hai0wasi1xmjxxhpyxgixn6fgdyc5h69gv8nl";
   };
 
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "grc";
   };
-}
+})

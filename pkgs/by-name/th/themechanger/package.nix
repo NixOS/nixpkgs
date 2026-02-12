@@ -17,7 +17,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "themechanger";
   version = "0.12.1";
   pyproject = false;
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ALEX11BR";
     repo = "ThemeChanger";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+uTofigS1F/nBNs/OyJ+RSz10DNnqgvNjWpkTXAvARM=";
   };
 
@@ -71,4 +71,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

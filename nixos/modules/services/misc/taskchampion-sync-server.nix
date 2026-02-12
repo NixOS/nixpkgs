@@ -7,6 +7,9 @@
 let
   inherit (lib) types;
   cfg = config.services.taskchampion-sync-server;
+  defaultUser = "taskchampion";
+  defaultGroup = "taskchampion";
+  defaultDir = "/var/lib/taskchampion-sync-server";
 in
 {
   options.services.taskchampion-sync-server = {
@@ -15,12 +18,12 @@ in
     user = lib.mkOption {
       description = "Unix User to run the server under";
       type = types.str;
-      default = "taskchampion";
+      default = defaultUser;
     };
     group = lib.mkOption {
       description = "Unix Group to run the server under";
       type = types.str;
-      default = "taskchampion";
+      default = defaultGroup;
     };
     host = lib.mkOption {
       description = "Host address on which to serve";
@@ -37,7 +40,7 @@ in
     dataDir = lib.mkOption {
       description = "Directory in which to store data";
       type = types.path;
-      default = "/var/lib/taskchampion-sync-server";
+      default = defaultDir;
     };
     snapshot = {
       versions = lib.mkOption {
@@ -59,22 +62,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    users.users.${cfg.user} = {
+    users.users.${cfg.user} = lib.mkIf (cfg.user == defaultUser) {
       isSystemUser = true;
       inherit (cfg) group;
     };
-    users.groups.${cfg.group} = { };
+    users.groups.${cfg.group} = lib.mkIf (cfg.group == defaultGroup) { };
     networking.firewall.allowedTCPPorts = lib.mkIf (cfg.openFirewall) [ cfg.port ];
-    systemd.tmpfiles.settings = {
-      "10-taskchampion-sync-server" = {
-        "${cfg.dataDir}" = {
-          d = {
-            inherit (cfg) group user;
-            mode = "0750";
-          };
-        };
-      };
-    };
 
     systemd.services.taskchampion-sync-server = {
       wantedBy = [ "multi-user.target" ];
@@ -82,7 +75,13 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        # If we enable DynamicUser, users need to move
+        # /var/lib/taskchampion-sync-server to
+        # /var/lib/private/taskchampion-sync-server manually, which is a
+        # breakage. So we keep the old behavior and we'll do the migration in
+        # another PR.
         DynamicUser = false;
+        StateDirectory = lib.mkIf (cfg.dataDir == defaultDir) "taskchampion-sync-server";
         ExecStart = ''
           ${lib.getExe cfg.package} \
             --listen "${cfg.host}:${toString cfg.port}" \

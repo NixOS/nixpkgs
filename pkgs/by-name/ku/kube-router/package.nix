@@ -6,14 +6,14 @@
   kube-router,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kube-router";
   version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "cloudnativelabs";
     repo = "kube-router";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0UuUDIIDedHDo2gVNg/4Ilcyw7BzUCJFdhn/GOi5QNs=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.Version=${version}"
+    "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.Version=${finalAttrs.version}"
     "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.BuildDate=Nix"
   ];
 
@@ -40,4 +40,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ johanot ];
     platforms = lib.platforms.linux;
   };
-}
+})

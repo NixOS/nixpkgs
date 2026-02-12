@@ -5,7 +5,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlit-tui";
   version = "1.3.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Maxteabag";
     repo = "sqlit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+7mv5aNJuNEudFARSZdB9/yedvqk6UHbfGku8J7Ye1g=";
   };
 
@@ -61,9 +61,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Lightweight TUI for SQL Server, PostgreSQL, MySQL, SQLite, and more";
     homepage = "https://github.com/Maxteabag/sqlit";
-    changelog = "https://github.com/Maxteabag/sqlit/releases/tag/${src.tag}";
+    changelog = "https://github.com/Maxteabag/sqlit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gaelj ];
     mainProgram = "sqlit";
   };
-}
+})

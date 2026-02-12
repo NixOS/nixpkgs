@@ -19,14 +19,14 @@
   xdelta,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwup";
   version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kVkw+/Z3+ZM1wXV/OmfaVPoUKc6MRuz8GRwpvOscuEM=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     unzip
     zip
   ]
-  ++ lib.optionals doCheck [
+  ++ lib.optionals finalAttrs.doCheck [
     mtools
     dosfstools
   ];
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
-    changelog = "https://github.com/fwup-home/fwup/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/fwup-home/fwup/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Configurable embedded Linux firmware update creator and runner";
     homepage = "https://github.com/fhunleth/fwup";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.georgewhewell ];
     platforms = lib.platforms.all;
   };
-}
+})

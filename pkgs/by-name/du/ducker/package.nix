@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ducker";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "robertpsoane";
     repo = "ducker";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-mC6MWVg6T8w9YQvu1UDpiDplsoKb3UN+LFgzveBgyew=";
   };
 
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal app for managing docker containers, inspired by K9s";
     homepage = "https://github.com/robertpsoane/ducker";
-    changelog = "https://github.com/robertpsoane/ducker/releases/tag/v${version}";
+    changelog = "https://github.com/robertpsoane/ducker/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "ducker";
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [ anas ];
   };
-}
+})

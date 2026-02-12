@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dyff";
   version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-tMb/SjrD1Sruvb/qeKu75EwTg4MyX9rCT0T4cJzIyko=";
   };
 
@@ -30,13 +30,13 @@ buildGoModule rec {
   # test fails with the injected version
   postPatch = ''
     substituteInPlace internal/cmd/cmds_test.go \
-      --replace "version (development)" ${version}
+      --replace "version (development)" ${finalAttrs.version}
   '';
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/homeport/dyff/internal/cmd.version=${version}"
+    "-X=github.com/homeport/dyff/internal/cmd.version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -64,4 +64,4 @@ buildGoModule rec {
       jceb
     ];
   };
-}
+})

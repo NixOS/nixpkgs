@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ghmap";
   version = "2.0.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "uhourri";
     repo = "ghmap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3y7ENSqcyfQTb78ELoZse9TksPT0zrsLD2YVEfjJ2Y8=";
   };
 
@@ -39,4 +39,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "ghmap";
   };
-}
+})

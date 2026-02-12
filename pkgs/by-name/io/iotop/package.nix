@@ -5,13 +5,13 @@
   fetchpatch,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "iotop";
   version = "0.6";
   pyproject = true;
 
   src = fetchurl {
-    url = "http://guichaz.free.fr/iotop/files/iotop-${version}.tar.bz2";
+    url = "http://guichaz.free.fr/iotop/files/iotop-${finalAttrs.version}.tar.bz2";
     sha256 = "0nzprs6zqax0cwq8h7hnszdl3d2m4c2d4vjfxfxbnjfs9sia5pis";
   };
 
@@ -36,4 +36,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
-}
+})

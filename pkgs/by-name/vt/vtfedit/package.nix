@@ -7,11 +7,11 @@
 
   copyDesktopItems,
   makeWrapper,
-  wineWowPackages,
+  wineWow64Packages,
   winetricks,
 }:
 let
-  wine = wineWowPackages.staging;
+  wine = wineWow64Packages.staging;
 in
 stdenv.mkDerivation rec {
   pname = "vtfedit";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/vtfedit
 
     cp ${icon} $out/share/icons/hicolor/256x256/apps/vtfedit.png
-    cp -r ${if wine.meta.mainProgram == "wine64" then "x64" else "x86"}/* $out/share/lib
+    cp -r ${if builtins.elem "i686-linux" wine.meta.platforms then "x86" else "x64"}/* $out/share/lib
     cp ${./mimetype.xml} $out/share/mime/packages/vtfedit.xml
 
     runHook postInstall

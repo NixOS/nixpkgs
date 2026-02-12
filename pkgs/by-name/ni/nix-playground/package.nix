@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nix-playground";
   version = "1.0.3";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "nix-playground";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WiQlqQHW4RNvk79cs3B6+Tg1STYXj2tq2+Pvu82saxk=";
   };
 
@@ -46,8 +46,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command line tools for patching nixpkgs package source code easily";
     mainProgram = "np";
     homepage = "https://github.com/LaunchPlatform/nix-playground";
-    changelog = "https://github.com/LaunchPlatform/nix-playground/releases/tag/${src.tag}";
+    changelog = "https://github.com/LaunchPlatform/nix-playground/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fangpen ];
   };
-}
+})

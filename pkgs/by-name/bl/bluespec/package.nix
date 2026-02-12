@@ -6,7 +6,7 @@
   autoconf,
   automake,
   fontconfig,
-  libX11,
+  libx11,
   perl,
   flex,
   bison,
@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = yices.buildInputs ++ [
     fontconfig
-    libX11 # tcltk
+    libx11 # tcltk
     tcl
     tk
     which

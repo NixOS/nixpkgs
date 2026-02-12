@@ -1,4 +1,5 @@
 {
+  defaultGemConfig,
   lib,
   stdenvNoCC,
   fetchurl,
@@ -6,10 +7,15 @@
   ruby_3_3,
   makeWrapper,
   nixosTests,
+  openssl,
+  rustc,
+  cargo,
+  rustPlatform,
+  buildRubyGem,
 }:
 
 let
-  version = "6.0.8";
+  version = "6.1.1";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -23,6 +29,38 @@ let
       "minimagick"
       "test"
     ];
+    gemConfig = defaultGemConfig // {
+      trilogy = attrs: {
+        buildInputs = [ openssl ];
+      };
+      commonmarker = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit (buildRubyGem { inherit (attrs) gemName version source; })
+            name
+            src
+            unpackPhase
+            nativeBuildInputs
+            ;
+          hash = "sha256-rUNsf7DUVueD9revOR6Mab36XnVEmjL4bVv6TIMMqjM=";
+        };
+        dontBuild = false;
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+    };
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -31,7 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-5DCIUq/2Yylqn3fTEwL00BjgQwXtAwq9R5gtXdoDzEY=";
+    hash = "sha256-Hy5t0GlwYvxzNwH4i1BB3A38a1NiVet5AvIfsJcOYD4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,10 +78,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rubyEnv.wrappedRuby
     rubyEnv.bundler
   ];
-
-  # taken from https://www.redmine.org/issues/33784
-  # can be dropped when the upstream bug is closed and the fix is present in the upstream release
-  patches = [ ./0001-python3.patch ];
 
   buildPhase = ''
     mv config config.dist

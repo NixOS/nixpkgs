@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "parlay";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "parlay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-x/piB2rjluIcqlSn+nwWd4J2Nu6Z/RtL54SPq23pZV0=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     mainProgram = "parlay";
     platforms = lib.platforms.unix;
   };
-}
+})

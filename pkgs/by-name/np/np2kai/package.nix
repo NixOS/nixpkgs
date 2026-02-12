@@ -10,7 +10,7 @@
   glib,
   gtk2,
   libusb1,
-  libX11,
+  libx11,
   openssl,
   pkg-config,
   SDL2,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     glib
     gtk2
-    libX11
+    libx11
   ];
 
   cmakeFlags = [

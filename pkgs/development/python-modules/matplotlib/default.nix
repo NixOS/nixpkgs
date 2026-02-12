@@ -64,7 +64,7 @@
   ipykernel,
 
   # required for headless detection
-  libX11,
+  libx11,
   wayland,
 
   # Reverse dependency
@@ -107,7 +107,7 @@ buildPythonPackage rec {
     + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
       # fix paths to libraries in dlopen calls (headless detection)
       substituteInPlace src/_c_internal_utils.cpp \
-        --replace-fail libX11.so.6 ${libX11}/lib/libX11.so.6 \
+        --replace-fail libX11.so.6 ${libx11}/lib/libX11.so.6 \
         --replace-fail libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
     '';
 

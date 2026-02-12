@@ -3,13 +3,13 @@
   stdenv,
   fetchurl,
   makeWrapper,
-  libX11,
-  libXext,
-  libXrandr,
+  libx11,
+  libxext,
+  libxrandr,
   freetype,
   fontconfig,
-  libXrender,
-  libXinerama,
+  libxrender,
+  libxinerama,
   autoPatchelfHook,
   libglvnd,
   openal,
@@ -81,14 +81,14 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     stdenv.cc.cc
-    libXext
-    libXrandr
+    libxext
+    libxrandr
     freetype
     fontconfig
-    libXrender
-    libXinerama
+    libxrender
+    libxinerama
   ];
 
   dontUnpack = true;

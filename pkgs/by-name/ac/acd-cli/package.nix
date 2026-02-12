@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "acd-cli";
   version = "0.3.2";
   format = "setuptools";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yadayada";
     repo = "acd_cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-132CW5EcsgDZOeauBpNyXoFS2Q5rKPqqHIoIKobJDig=";
   };
 
@@ -47,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/yadayada/acd_cli";
     license = lib.licenses.gpl2;
   };
-}
+})

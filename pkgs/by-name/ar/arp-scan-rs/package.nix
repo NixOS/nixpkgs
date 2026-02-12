@@ -7,14 +7,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arp-scan-rs";
   version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "kongbytes";
     repo = "arp-scan-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cTV1mJjHXT3LHFpzOC867VNnhaBo7zuinT8qqd4joY0=";
   };
 
@@ -37,10 +37,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "ARP scan tool for fast local network scans";
     homepage = "https://github.com/kongbytes/arp-scan-rs";
-    changelog = "https://github.com/kongbytes/arp-scan-rs/releases/tag/v${version}";
+    changelog = "https://github.com/kongbytes/arp-scan-rs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "arp-scan";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

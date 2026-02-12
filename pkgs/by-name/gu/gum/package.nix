@@ -6,14 +6,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gum";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "gum";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TbheGevUrUKwT97JayW7rfAEgAfRnpOvHyvAxt27sIg=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
     "-linkmode=external"
@@ -46,11 +46,11 @@ buildGoModule rec {
   meta = {
     description = "Tasty Bubble Gum for your shell";
     homepage = "https://github.com/charmbracelet/gum";
-    changelog = "https://github.com/charmbracelet/gum/releases/tag/v${version}";
+    changelog = "https://github.com/charmbracelet/gum/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       savtrip
     ];
     mainProgram = "gum";
   };
-}
+})

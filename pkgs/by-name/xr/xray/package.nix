@@ -13,14 +13,14 @@
   ],
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xray";
   version = "26.1.13";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Sb9Q+HUDdvyDIMpKaNWvc4BipAxmITeGkOl09dPLs9k=";
   };
 
@@ -64,4 +64,4 @@ buildGoModule rec {
     license = with lib.licenses; [ mpl20 ];
     maintainers = with lib.maintainers; [ iopq ];
   };
-}
+})

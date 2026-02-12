@@ -17,6 +17,7 @@
   libadwaita,
   libarchive,
   libglycin,
+  libglycin-gtk4,
   libhighscore,
   libmanette,
   sqlite,
@@ -92,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libarchive
     libglycin
+    libglycin-gtk4
     libhighscore
     libmanette-1-alpha
     sqlite

@@ -31,6 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   preCheck = ''
     sed -i 's#/bin/date#${lib.getExe' coreutils "date"}#' test/*.sh
     # Exiting with 77 signals that a test is skipped, and we only place it on line 2 because the shebang is on line 1

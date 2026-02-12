@@ -5,11 +5,11 @@
   gawk,
   cmake,
   gnugrep,
-  libXext,
-  libXft,
-  libXinerama,
-  libXpm,
-  libXrandr,
+  libxext,
+  libxft,
+  libxinerama,
+  libxpm,
+  libxrandr,
   libjpeg,
   libpng,
   pkg-config,
@@ -34,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libXext
-    libXft
-    libXinerama
-    libXpm
-    libXrandr
+    libxext
+    libxft
+    libxinerama
+    libxpm
+    libxrandr
     libjpeg
     libpng
   ];

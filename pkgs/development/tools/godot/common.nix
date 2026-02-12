@@ -29,15 +29,15 @@
   libpulseaudio,
   libtheora,
   libwebp,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
   libxkbcommon,
-  libXrandr,
-  libXrender,
+  libxrandr,
+  libxrender,
   makeWrapper,
   mbedtls,
   miniupnpc,
@@ -323,11 +323,11 @@ let
                       prev.runtimeDependencies or [ ]
                       ++ map lib.getLib [
                         libpulseaudio
-                        libX11
-                        libXcursor
-                        libXext
-                        libXi
-                        libXrandr
+                        libx11
+                        libxcursor
+                        libxext
+                        libxi
+                        libxrandr
                         vulkan-loader
                       ]
                       ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -587,14 +587,14 @@ let
           ++ lib.optional withAlsa alsa-lib
           ++ lib.optional (withX11 || withWayland) libxkbcommon
           ++ lib.optionals withX11 [
-            libX11
-            libXcursor
-            libXext
-            libXfixes
-            libXi
-            libXinerama
-            libXrandr
-            libXrender
+            libx11
+            libxcursor
+            libxext
+            libxfixes
+            libxi
+            libxinerama
+            libxrandr
+            libxrender
           ]
           ++ lib.optionals withWayland [
             libdecor

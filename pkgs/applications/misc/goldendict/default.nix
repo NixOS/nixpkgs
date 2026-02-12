@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libXtst,
+  libxtst,
   libvorbis,
   hunspell,
   lzo,
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtx11extras
-    libXtst
+    libxtst
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     bzip2

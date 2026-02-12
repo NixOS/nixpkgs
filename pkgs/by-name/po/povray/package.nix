@@ -6,9 +6,9 @@
   automake,
   boost,
   zlib,
-  libX11,
-  libICE,
-  libSM,
+  libx11,
+  libice,
+  libsm,
   libpng,
   libjpeg,
   libtiff,
@@ -35,9 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    libX11
-    libICE
-    libSM
+    libx11
+    libice
+    libsm
     libpng
     libjpeg
     libtiff

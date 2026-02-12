@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cel-go";
   version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cel-go";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-t451e3Pkkt4pmBvS0DBSHOVg7P8ipJd28XyiQ6P/QIQ=";
   };
 
@@ -36,8 +36,8 @@ buildGoModule rec {
     description = "Fast, portable, non-Turing complete expression evaluation with gradual typing";
     mainProgram = "cel-go";
     homepage = "https://github.com/google/cel-go";
-    changelog = "https://github.com/google/cel-go/releases/tag/${src.rev}";
+    changelog = "https://github.com/google/cel-go/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

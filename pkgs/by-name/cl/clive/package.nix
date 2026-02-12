@@ -9,14 +9,14 @@
   versionCheckHook,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clive";
   version = "0.12.16";
 
   src = fetchFromGitHub {
     owner = "koki-develop";
     repo = "clive";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bZzK7RLAStRb9R3V/TK6tZV6yv1C7MGslAhhpWDzdWk=";
   };
 
@@ -29,7 +29,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X github.com/koki-develop/clive/cmd.version=v${version}"
+    "-X github.com/koki-develop/clive/cmd.version=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -50,9 +50,9 @@ buildGoModule rec {
   meta = {
     description = "Automates terminal operations";
     homepage = "https://github.com/koki-develop/clive";
-    changelog = "https://github.com/koki-develop/clive/releases/tag/v${version}";
+    changelog = "https://github.com/koki-develop/clive/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ misilelab ];
     mainProgram = "clive";
   };
-}
+})

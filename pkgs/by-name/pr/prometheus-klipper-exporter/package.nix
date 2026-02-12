@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus-klipper-exporter";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "scross01";
     repo = "prometheus-klipper-exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-2BJkSKchUkLbUJke+4nB49MFp8OPPcytYAhtxCEdXO4=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ wulfsta ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -13,7 +13,7 @@
   withVLC ? stdenv.hostPlatform.isLinux,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pympress";
   version = "1.8.6";
   pyproject = true;
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cimbali";
     repo = "pympress";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rIlYd5SMWYeqdMHyW3d1ggKnUMCJCDP5uw25d7zG2DU=";
   };
 
@@ -79,4 +79,4 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://cimbali.github.io/pympress/";
     maintainers = with lib.maintainers; [ tbenst ];
   };
-}
+})

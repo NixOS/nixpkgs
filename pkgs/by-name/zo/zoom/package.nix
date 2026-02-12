@@ -13,8 +13,6 @@
   libice,
 }:
 
-# !!! assert freetype == xorg.freetype
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "zoom";
   version = "1.1.5";

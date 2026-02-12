@@ -8,14 +8,14 @@
   kubernetes-kcp,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubernetes-kcp";
   version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "kcp-dev";
     repo = "kcp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rZLav2JOKzG5vW/wyfk7EIkOawsYOmG32OHXxkyyb3Y=";
   };
   vendorHash = "sha256-IuQzGme+CZqqD1VMO+rumbbc+ziPQaVJCyJNhMdU3jE=";
@@ -27,13 +27,13 @@ buildGoModule rec {
   ldflags = [
     "-X k8s.io/client-go/pkg/version.gitCommit=unknown"
     "-X k8s.io/client-go/pkg/version.gitTreeState=clean"
-    "-X k8s.io/client-go/pkg/version.gitVersion=v${version}"
+    "-X k8s.io/client-go/pkg/version.gitVersion=v${finalAttrs.version}"
     # "-X k8s.io/client-go/pkg/version.gitMajor=${KUBE_MAJOR_VERSION}"
     # "-X k8s.io/client-go/pkg/version.gitMinor=${KUBE_MINOR_VERSION}"
     "-X k8s.io/client-go/pkg/version.buildDate=unknown"
     "-X k8s.io/component-base/version.gitCommit=unknown"
     "-X k8s.io/component-base/version.gitTreeState=clean"
-    "-X k8s.io/component-base/version.gitVersion=v${version}"
+    "-X k8s.io/component-base/version.gitVersion=v${finalAttrs.version}"
     # "-X k8s.io/component-base/version.gitMajor=${KUBE_MAJOR_VERSION}"
     # "-X k8s.io/component-base/version.gitMinor=${KUBE_MINOR_VERSION}"
     "-X k8s.io/component-base/version.buildDate=unknown"
@@ -55,7 +55,7 @@ buildGoModule rec {
     command = "kcp --version";
     # NOTE: Once the go.mod version is pulled in, the version info here needs
     # to be also updated.
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -67,4 +67,4 @@ buildGoModule rec {
       rytswd
     ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubedock";
   version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "joyrex2001";
     repo = "kubedock";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-DoAvM+/yGr34qOjC9LevYtiUmhnkh7dR90kG2TPZxWg=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/joyrex2001/kubedock/internal/config.Version=${version}"
+    "-X github.com/joyrex2001/kubedock/internal/config.Version=${finalAttrs.version}"
   ];
 
   env.CGO_ENABLED = 0;
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mausch ];
     mainProgram = "kubedock";
   };
-}
+})

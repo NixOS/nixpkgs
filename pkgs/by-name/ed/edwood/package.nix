@@ -6,14 +6,14 @@
   plan9port,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "edwood";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "rjkroege";
     repo = "edwood";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jKDwNq/iMFqVpPq14kZa+T5fES54f4BAujXUwGlbiTE=";
   };
 
@@ -49,4 +49,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "edwood";
   };
-}
+})

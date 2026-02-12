@@ -7,11 +7,11 @@
 let
   src = mkJetBrainsSource {
     # update-script-start: source-args
-    version = "2025.3.1.1";
-    buildNumber = "253.29346.308";
+    version = "2025.3.2.1";
+    buildNumber = "253.30387.173";
     buildType = "pycharm";
-    ideaHash = "sha256-sx/yLkMsjOQWAMJztoI0T6xQ66pnjnQejgc85PGod2s=";
-    androidHash = "sha256-quMCzrjCKIo1pkzw4PWewAs5tz7A2aq7TI5zd+QaaUY=";
+    ideaHash = "sha256-13da6xCaZfS7zwesqGJpwsKfUK61Vi7gtMgPKtve43U=";
+    androidHash = "sha256-FA/6ry1M7+RISJL+2SR9QkDvAGJAkXhFMh9YoOEU5nk=";
     jpsHash = "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=";
     restarterHash = "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=";
     mvnDeps = ../source/pycharm_maven_artefacts.json;

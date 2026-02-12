@@ -43,6 +43,8 @@ let
           // {
             pname = namePrefix + pluginName;
 
+            strictDeps = true;
+
             inherit
               pluginName
               unpackPhase

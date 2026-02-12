@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ponyc";
-  version = "0.60.4";
+  version = "0.60.6";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
     tag = version;
-    hash = "sha256-L5qqAu0OozsN6zxC3iwdYTLdd1ux4Dl3bFx6XDD3ZbY=";
+    hash = "sha256-mBtSoFOX0dHtb0ojdT+uB1Lmu7Cak/3A8808dv3o1ik=";
     fetchSubmodules = true;
   };
 

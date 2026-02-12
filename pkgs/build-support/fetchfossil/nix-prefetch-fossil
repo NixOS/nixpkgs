@@ -1,0 +1,131 @@
+#!/bin/sh -e
+
+url=
+rev=
+expHash=
+hashType="${NIX_HASH_ALGO:-sha256}"
+
+# Parse command line arguments
+argi=0
+argfun=""
+for arg; do
+    if test -z "$argfun"; then
+        case $arg in
+            --url) argfun=set_url;;
+            --rev) argfun=set_rev;;
+            --hash) argfun=set_expHash;;
+            --help|-h)
+                echo "Usage: nix-prefetch-fossil [options] [URL [REVISION [EXPECTED-HASH]]]"
+                echo ""
+                echo "Options:"
+                echo "  --url URL       Fossil repository URL"
+                echo "  --rev REV       Fossil revision/tag/branch (default: trunk)"
+                echo "  --hash HASH     Expected hash"
+                echo "  --help          Show this help message"
+                exit 0
+                ;;
+            *)
+                argi=$((argi + 1))
+                case $argi in
+                    1) url=$arg;;
+                    2) rev=$arg;;
+                    3) expHash=$arg;;
+                    *) echo "Too many arguments" >&2; exit 1;;
+                esac
+                ;;
+        esac
+    else
+        case $argfun in
+            set_*)
+                var=${argfun#set_}
+                eval "$var='$arg'"
+                ;;
+        esac
+        argfun=""
+    fi
+done
+
+if test -z "$url"; then
+    echo "error: URL is required" >&2
+    echo "Usage: nix-prefetch-fossil [URL [REVISION [EXPECTED-HASH]]]" >&2
+    exit 1
+fi
+
+# Default to trunk if no revision specified
+if test -z "$rev"; then
+    rev="trunk"
+fi
+
+# If the hash was given, check if we already have it in store
+if test -n "$expHash"; then
+    finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" fossil-archive)
+    if nix-store --check-validity "$finalPath" 2> /dev/null; then
+        echo "$expHash"
+        exit 0
+    fi
+fi
+
+# Create temporary directory for cloning
+tmpPath="$(mktemp -d --tmpdir fossil-checkout-tmp-XXXXXXXX)"
+cleanup() { rm -rf "$tmpPath"; }
+trap cleanup EXIT
+
+# Fossil wants to write global configuration to $HOME/.fossil
+# We'll let it write to the temp directory instead
+export HOME="$tmpPath"
+
+echo "Fetching Fossil repository $url at revision $rev..." >&2
+
+# Clone the repository
+fossil clone -A nobody "$url" "$tmpPath/fossil-clone.fossil" >&2
+
+# Create directory for checkout
+checkoutDir="$tmpPath/checkout"
+mkdir -p "$checkoutDir"
+
+# Open the repository at the specified revision
+cd "$checkoutDir"
+fossil open "$tmpPath/fossil-clone.fossil" "$rev" >&2
+
+# Get the actual commit hash and date
+checkoutLine=$(fossil info | grep ^checkout:)
+# Remove 'checkout:' prefix & remove whitespace
+checkoutData=$(echo "$checkoutLine" | sed 's/^checkout:[[:space:]]*//' | tr -s ' ')
+# Extract fields: HASH YYYY-MM-DD HH:MM:SS UTC
+actualRev=$(echo "$checkoutData" | cut -d' ' -f1)
+# Get datetime parts
+rawDate=$(echo "$checkoutData" | cut -d' ' -f2)
+rawTime=$(echo "$checkoutData" | cut -d' ' -f3)
+# Combine into ISO 8601 RFC 3339 format
+actualDatetime="${rawDate}T${rawTime}Z"
+cd - >/dev/null
+
+# Remove the fossil checkout file
+rm -f "$checkoutDir/.fslckout"
+
+# Calculate the hash
+hash=$(nix-hash --type "$hashType" --base32 "$checkoutDir")
+echo "hash is $hash" >&2
+
+# Add to store if we don't have an expected hash or if it matches
+if test -z "$expHash" || test "$expHash" = "$hash"; then
+    finalPath=$(nix-store --add-fixed --recursive "$hashType" "$checkoutDir")
+    echo "path is $finalPath" >&2
+elif test -n "$expHash" && test "$expHash" != "$hash"; then
+    echo "error: hash mismatch for Fossil repository $url" >&2
+    echo "  expected: $expHash" >&2
+    echo "  actual:   $hash" >&2
+    exit 1
+fi
+
+# Output JSON result
+cat <<EOF
+{
+  "url": "$url",
+  "rev": "$actualRev",
+  "date": "$actualDatetime",
+  "path": "$finalPath",
+  "$hashType": "$hash",
+  "hash": "$(nix-hash --to-sri --type $hashType $hash)"
+}
+EOF

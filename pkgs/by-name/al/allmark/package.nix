@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "allmark";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "andreaskoch";
     repo = "allmark";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JfNn/e+cSq1pkeXs7A2dMsyhwOnh7x2bwm6dv6NOjLU=";
   };
 
@@ -32,11 +32,11 @@ buildGoModule rec {
   meta = {
     description = "Cross-platform markdown web server";
     homepage = "https://github.com/andreaskoch/allmark";
-    changelog = "https://github.com/andreaskoch/allmark/-/releases/v${version}";
+    changelog = "https://github.com/andreaskoch/allmark/-/releases/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
     ];
     mainProgram = "allmark";
   };
-}
+})

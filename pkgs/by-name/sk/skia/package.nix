@@ -11,7 +11,7 @@
   libGL,
   libjpeg,
   libwebp,
-  libX11,
+  libx11,
   ninja,
   python3,
   testers,
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libjpeg
     libwebp
-    libX11
+    libx11
   ]
   ++ lib.optionals enableVulkan [
     vulkan-headers

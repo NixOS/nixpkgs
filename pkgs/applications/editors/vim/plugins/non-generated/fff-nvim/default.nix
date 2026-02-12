@@ -10,12 +10,12 @@
   vimUtils,
 }:
 let
-  version = "0523fe3-unstable-2026-01-25";
+  version = "896355b-unstable-2026-02-07";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
-    rev = "0523fe39ffc59373de0648ba636705d35a6fdfc2";
-    hash = "sha256-7rP6C/zPhpTMcsewR9LZlB23Ot7W23E2WM7Fnj89rlA=";
+    rev = "d7bc72786d4362ca70aa05d397f8d08bbaf39604";
+    hash = "sha256-CqX2QoDO7InjXYMzvljufA0QYhvFbsht2auE0+nVktw=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";

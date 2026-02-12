@@ -4,7 +4,7 @@
   fetchFromCodeberg,
   giflib,
   imlib2Full,
-  libXft,
+  libxft,
   libexif,
   libwebp,
   libinotify-kqueue,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     giflib
     imlib2Full
-    libXft
+    libxft
     libexif
     libwebp
   ]

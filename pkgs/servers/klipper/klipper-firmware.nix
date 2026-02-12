@@ -26,8 +26,8 @@ let
     "lib/rp2040_flash/rp2040_flash"
   ];
 in
-stdenv.mkDerivation rec {
-  name = "klipper-firmware-${mcu}-${version}";
+stdenv.mkDerivation {
+  pname = "klipper-firmware-${mcu}";
   version = klipper.version;
   src = klipper.src;
 

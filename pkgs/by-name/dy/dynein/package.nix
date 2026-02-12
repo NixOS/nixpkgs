@@ -7,14 +7,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dynein";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "dynein";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GU/zZ7IJPfpRbrWjrVwPDSFjFfMLoG/c8DDWlN6nZ94=";
   };
 
@@ -50,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

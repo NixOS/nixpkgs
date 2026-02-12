@@ -129,6 +129,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     # Flakey on aarch64-linux
+    "--skip=sources::exec::tests::test_run_command_linux"
     "--skip=topology::test::backpressure::buffer_drop_fan_out"
     "--skip=topology::test::backpressure::default_fan_out"
     "--skip=topology::test::backpressure::serial_backpressure"

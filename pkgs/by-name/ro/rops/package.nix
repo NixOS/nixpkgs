@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rops";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "gibbz00";
     repo = "rops";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Nqtwc9QSafvr0N8G6LKZBG4pZHzut3t85qwgVAw59iU=";
   };
 
@@ -26,9 +26,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "SOPS alternative in pure rust";
     homepage = "https://gibbz00.github.io/rops";
-    changelog = "https://github.com/gibbz00/rops/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/gibbz00/rops/blob/${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "rops";
     maintainers = with lib.maintainers; [ r17x ];
     license = lib.licenses.mpl20;
   };
-}
+})

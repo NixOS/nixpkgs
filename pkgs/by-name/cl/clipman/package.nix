@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clipman";
   version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "clipman";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fAiXivLXpxezvMUKv0HfDvzSN60G4RFfgi6/fO0C1p8=";
   };
 
@@ -46,4 +46,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "clipman";
   };
-}
+})

@@ -30,7 +30,7 @@ let
     );
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pytrainer";
   version = "2.2.1";
   pyproject = true;
@@ -38,7 +38,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-t61vHVTKN5KsjrgbhzljB7UZdRask7qfYISd+++QbV0=";
   };
 
@@ -127,4 +127,4 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

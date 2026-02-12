@@ -4,13 +4,13 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  libX11,
-  libXcomposite,
-  libXft,
-  libXmu,
-  libXrandr,
-  libXext,
-  libXScrnSaver,
+  libx11,
+  libxcomposite,
+  libxft,
+  libxmu,
+  libxrandr,
+  libxext,
+  libxscrnsaver,
   pam,
   apacheHttpd,
   pamtester,
@@ -37,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXcomposite
-    libXft
-    libXmu
-    libXrandr
-    libXext
-    libXScrnSaver
+    libx11
+    libxcomposite
+    libxft
+    libxmu
+    libxrandr
+    libxext
+    libxscrnsaver
     pam
     apacheHttpd
     pamtester

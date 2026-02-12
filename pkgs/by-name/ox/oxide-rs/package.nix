@@ -9,14 +9,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxide-rs";
   version = "0.14.0+20251008.0.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "oxide.rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/xFtANxapsPU99Lj8TN+ZFcLy0AOyq+lcqhqIt3ZWgs=";
   };
 
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "oxide";
   };
-}
+})

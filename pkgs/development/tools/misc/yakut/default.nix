@@ -55,5 +55,6 @@ buildPythonApplication rec {
     '';
     homepage = "https://github.com/OpenCyphal/yakut/";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

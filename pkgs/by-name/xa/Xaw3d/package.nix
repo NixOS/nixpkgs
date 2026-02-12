@@ -5,11 +5,11 @@
   bison,
   flex,
   pkg-config,
-  libXext,
-  libXmu,
-  libXpm,
-  libXp,
-  libXt,
+  libxext,
+  libxmu,
+  libxpm,
+  libxp,
+  libxt,
   xorgproto,
 }:
 
@@ -27,13 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
   buildInputs = [
-    libXext
-    libXpm
-    libXp
+    libxext
+    libxpm
+    libxp
   ];
   propagatedBuildInputs = [
-    libXmu
-    libXt
+    libxmu
+    libxt
     xorgproto
   ];
 

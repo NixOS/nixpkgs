@@ -8,6 +8,9 @@
   napari, # a reverse-dependency, for tests
   psygnal,
   pyside2,
+  pyside6,
+  pyqt6,
+  pyqt5,
   pytestCheckHook,
   superqt,
   typing-extensions,
@@ -33,10 +36,16 @@ buildPythonPackage rec {
   dependencies = [
     typing-extensions
     superqt
-    pyside2
     psygnal
     docstring-parser
   ];
+
+  optional-dependencies = {
+    pyside2 = [ pyside2 ];
+    pyside6 = [ pyside6 ];
+    pyqt6 = [ pyqt6 ];
+    pyqt5 = [ pyqt5 ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 

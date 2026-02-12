@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pgsrip";
   version = "0.1.12";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "pgsrip";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8UzElhMdhjZERdogtAbkcfw67blk9lOTQ09vjF5SXm4=";
   };
 
@@ -41,9 +41,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Rip your PGS subtitles";
     homepage = "https://github.com/ratoaq2/pgsrip";
-    changelog = "https://github.com/ratoaq2/pgsrip/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ratoaq2/pgsrip/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eljamm ];
     mainProgram = "pgsrip";
   };
-}
+})

@@ -7,7 +7,7 @@
   wrapGAppsNoGuiHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "proton-vpn-cli";
   version = "0.1.5";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ercX9CLpV8ICpevS73Bl6WyG0fnjyaxf5u/dz2WPyhw=";
   };
 
@@ -69,4 +69,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "protonvpn";
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
-}
+})

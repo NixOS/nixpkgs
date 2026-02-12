@@ -12,7 +12,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hatch";
   version = "1.16.2";
   pyproject = true;
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
-    tag = "hatch-v${version}";
+    tag = "hatch-v${finalAttrs.version}";
     hash = "sha256-A91tpoNBTerB2e09dmvgwealId8mnjxcyiVyCkMxQlY=";
   };
 
@@ -190,9 +190,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Modern, extensible Python project manager";
     homepage = "https://hatch.pypa.io/latest/";
-    changelog = "https://github.com/pypa/hatch/blob/hatch-v${version}/docs/history/hatch.md";
+    changelog = "https://github.com/pypa/hatch/blob/hatch-v${finalAttrs.version}/docs/history/hatch.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "hatch";
   };
-}
+})

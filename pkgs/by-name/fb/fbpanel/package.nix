@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXmu,
-  libXpm,
+  libx11,
+  libxmu,
+  libxpm,
   gtk2,
   libpng,
   libjpeg,
@@ -30,9 +30,9 @@ stdenv.mkDerivation {
     pypy2
   ];
   buildInputs = [
-    libX11
-    libXmu
-    libXpm
+    libx11
+    libxmu
+    libxpm
     gtk2
     libpng
     libjpeg

@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.12.0";
+  version = "2.12.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = "pyscf";
     tag = "v${version}";
-    hash = "sha256-/C8BKUNtp8QoSjbcSZGH2Si4JjygIygW04wtL8vGXLk=";
+    hash = "sha256-voiXNoJ7lHQeqroOs9AxqX55NDEhHVNMLeB+XzJgBQM=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
@@ -96,6 +96,7 @@ buildPythonPackage rec {
     "test_collinear_kgks_gga"
     "test_libxc_gga_deriv4"
     "test_sacasscf_grad"
+    "test_sparse_dot"
   ];
 
   disabledTestPaths = [

@@ -11,14 +11,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pokefinder";
   version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "Admiral-Fish";
     repo = "PokeFinder";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "wjHqox0Vxc73/UTcE7LSo/cG9o4eOqkcjTIW99BxsAc=";
     fetchSubmodules = true;
   };
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ leo60228 ];
   };
-}
+})

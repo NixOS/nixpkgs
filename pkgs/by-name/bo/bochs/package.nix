@@ -8,8 +8,8 @@
   gtk3,
   libGL,
   libGLU,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
   libtool,
   ncurses,
   pkg-config,
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableX11 [
     libGL
     libGLU
-    libX11
-    libXpm
+    libx11
+    libxpm
   ];
 
   configureFlags = [

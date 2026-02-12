@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liburing";
   version = "2.13";
 
   src = fetchFromGitHub {
     owner = "axboe";
     repo = "liburing";
-    tag = "liburing-${version}";
+    tag = "liburing-${finalAttrs.version}";
     hash = "sha256-ZWM+SKeRw5iivyj0mHSxC6yw492N7CThx/pp4FJhkCo=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
       nickcao
     ];
   };
-}
+})

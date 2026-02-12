@@ -8,7 +8,7 @@
   zlib,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   SDL2,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libGLU
     libGL
-    libX11
+    libx11
     SDL2
   ];
 

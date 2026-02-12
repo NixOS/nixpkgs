@@ -386,7 +386,6 @@ with lib.maintainers;
     members = [
       leona
       theCapypara
-      thiagokokada
       jamesward
     ];
     shortName = "Jetbrains";

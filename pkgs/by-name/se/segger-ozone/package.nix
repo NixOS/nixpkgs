@@ -6,13 +6,13 @@
   copyDesktopItems,
   fontconfig,
   freetype,
-  libICE,
-  libSM,
-  libX11,
-  libXcursor,
-  libXfixes,
-  libXrandr,
-  libXrender,
+  libice,
+  libsm,
+  libx11,
+  libxcursor,
+  libxfixes,
+  libxrandr,
+  libxrender,
   makeDesktopItem,
 }:
 
@@ -35,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     freetype
-    libICE
-    libSM
-    libX11
-    libXcursor
-    libXfixes
-    libXrandr
-    libXrender
+    libice
+    libsm
+    libx11
+    libxcursor
+    libxfixes
+    libxrandr
+    libxrender
     (lib.getLib stdenv.cc.cc)
   ];
 

@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "portunus";
   version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = "portunus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xZb2+IIZkZd/yGr0+FK7Bi3sZpPMfGz/QmUKn/clrwE=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
       SuperSandro2000
     ];
   };
-}
+})

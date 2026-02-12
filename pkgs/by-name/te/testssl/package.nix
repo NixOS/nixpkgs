@@ -11,14 +11,14 @@
   procps,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "testssl.sh";
   version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "drwetter";
     repo = "testssl.sh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zPqGCcWRwTYl7cGnrv9a5KOMe75xzU2xvf5z+Nqwfb0=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     install -D testssl.sh $out/bin/testssl.sh
     cp -r etc $out
 
-    wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath buildInputs}
+    wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
   meta = {
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "testssl.sh";
   };
-}
+})

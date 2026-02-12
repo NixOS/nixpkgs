@@ -9,14 +9,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "novops";
   version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "PierreBeucher";
     repo = "novops";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-F3MtDTaeLoI54/xbbIU61hb+qLDn2u4lRv+3kU5c/D0=";
   };
 
@@ -54,4 +54,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pbeucher ];
     mainProgram = "novops";
   };
-}
+})

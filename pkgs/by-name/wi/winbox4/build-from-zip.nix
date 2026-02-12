@@ -21,6 +21,7 @@
   libxcb-image,
   libxcb,
   zlib,
+  dbus,
   metaCommon ? { },
 }:
 
@@ -54,6 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libxcb-render-util
     libxcb-wm
     zlib
+    dbus
   ];
 
   installPhase = ''

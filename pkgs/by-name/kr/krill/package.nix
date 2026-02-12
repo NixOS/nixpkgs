@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "krill";
   version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "krill";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Egy/knMiu+Pglx4v62lPZ87daRKida8W05qu+5yGt1g=";
   };
 
@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage rec {
       Authorisations (ROAs) on your own servers or with a third party.
     '';
     homepage = "https://github.com/NLnetLabs/krill";
-    changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${version}";
+    changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ steamwalker ];
   };
-}
+})

@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freenet";
-  version = "01504";
+  version = "01505";
 
   src = fetchFromGitHub {
     owner = "hyphanet";
     repo = "fred";
     tag = "build${version}";
-    hash = "sha256-a+yRsJ4+gi2UiVeWLsbTgFbzekCSnOJO++9fLVWX0C0=";
+    hash = "sha256-0ffYQ+8hZqFLjMk6A2rapKZsz/lZNpbG6K0wDqBSdY8=";
   };
 
   nativeBuildInputs = [

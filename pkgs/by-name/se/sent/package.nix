@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   farbfeld,
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   makeWrapper,
   patches ? [ ],
 }:
@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
-    libXft
+    libx11
+    libxft
   ];
   nativeBuildInputs = [ makeWrapper ];
 

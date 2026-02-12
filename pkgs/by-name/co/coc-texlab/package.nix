@@ -36,18 +36,18 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coc-texlab";
-  version = "0-unstable-2025-07-22";
+  version = "0-unstable-2026-01-28";
 
   src = fetchFromGitHub {
     owner = "fannheyward";
     repo = "coc-texlab";
-    rev = "a4ad3f259d94086f4971b22b97833e8a72226782";
-    hash = "sha256-6W+L/LdF6g0Xwhv+9VtjjfzRjlbN7OaqHbSXtO3cfZ0=";
+    rev = "b31f2e761bcc9add3f10ef926b1b7bd3d7eb634c";
+    hash = "sha256-5HnoNVECMtqW3ZtSblGE6vSE2tEVvM99oIwdVRtK108=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-g2IwfO1IMktTtflR2m7c99wOYLJYmD2I7hBbCNy+XFA=";
+    hash = "sha256-EjLjtluJZpueWb3+2vWwUXrG6DOHjmdkTm8yzWbiDkQ=";
   };
 
   nativeBuildInputs = [

@@ -17,10 +17,10 @@
   lua,
   withCaca ? false,
   libcaca,
-  libX11,
-  libXt,
-  libXpm,
-  libXaw,
+  libx11,
+  libxt,
+  libxpm,
+  libxaw,
   aquaterm ? false,
   withWxGTK ? false,
   wxGTK32,
@@ -68,10 +68,10 @@ stdenv.mkDerivation rec {
   ++ lib.optional withLua lua
   ++ lib.optional withCaca libcaca
   ++ lib.optionals withX [
-    libX11
-    libXpm
-    libXt
-    libXaw
+    libx11
+    libxpm
+    libxt
+    libxaw
   ]
   ++ lib.optionals withQt [
     qtbase

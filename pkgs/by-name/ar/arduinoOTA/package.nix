@@ -4,14 +4,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "arduinoOTA";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "arduinoOTA";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HaNMkeV/PDEotYp8+rUKFaBxGbZO8qA99Yp2sa6glz8=";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace version/version.go \
-      --replace 'versionString        = ""' 'versionString        = "${version}"'
+      --replace 'versionString        = ""' 'versionString        = "${finalAttrs.version}"'
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ poelzi ];
     platforms = lib.platforms.all;
   };
-}
+})

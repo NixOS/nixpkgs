@@ -4,9 +4,9 @@
   fetchFromGitHub,
   writeText,
   fontconfig,
-  libX11,
-  libXft,
-  libXinerama,
+  libx11,
+  libxft,
+  libxinerama,
   conf ? null,
   nix-update-script,
 }:
@@ -24,9 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libX11
-    libXft
-    libXinerama
+    libx11
+    libxft
+    libxinerama
   ];
 
   postPatch = ''

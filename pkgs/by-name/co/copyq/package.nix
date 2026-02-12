@@ -6,21 +6,21 @@
   cmake,
   ninja,
   qt6,
-  libXfixes,
-  libXtst,
+  libxfixes,
+  libxtst,
   wayland,
   pkg-config,
   kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "CopyQ";
   version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wxjUL5mGXAMNVGP+dAh1NrE9tw71cJW9zmLsaCVphTo=";
   };
 
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     qt6.qtsvg
     qt6.qttools
     qt6.qtdeclarative
-    libXfixes
-    libXtst
+    libxfixes
+    libxtst
     qt6.qtwayland
     wayland
     kdePackages.kconfig
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "copyq";
   };
-}
+})

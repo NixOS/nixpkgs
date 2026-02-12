@@ -5,14 +5,14 @@
   lib,
   stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "srgn";
   version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "alexpovel";
     repo = "srgn";
-    rev = "srgn-v${version}";
+    rev = "srgn-v${finalAttrs.version}";
     hash = "sha256-bwrV6wj9PrX2cYAnqB0fXiG/vuL28M0q9a+WER0A/9w=";
   };
 
@@ -31,8 +31,8 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ magistau ];
     mainProgram = "srgn";
-    homepage = "https://github.com/${src.owner}/${src.repo}/";
-    downloadPage = "https://github.com/${src.owner}/${src.repo}/releases/tag/${src.rev}";
-    changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/";
+    downloadPage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/blob/${finalAttrs.src.rev}/CHANGELOG.md";
   };
-}
+})

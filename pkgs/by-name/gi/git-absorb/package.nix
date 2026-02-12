@@ -9,14 +9,14 @@
   which,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-absorb";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "tummychow";
     repo = "git-absorb";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-O9bJMYhIyCtztswvL0JQ4ZtsAAI9TlHzWDeGdTHEmP4=";
   };
 
@@ -54,4 +54,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "git-absorb";
   };
-}
+})

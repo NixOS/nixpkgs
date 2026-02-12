@@ -5,11 +5,11 @@
   lib,
   pam,
   libxslt,
-  libXext,
-  libXcursor,
-  libXmu,
+  libxext,
+  libxcursor,
+  libxmu,
   glib,
-  libXrandr,
+  libxrandr,
   dbus,
   xz,
   pkg-config,
@@ -58,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dbus
     libxslt
-    libXext
-    libXcursor
+    libxext
+    libxcursor
     pam
-    libXmu
-    libXrandr
+    libxmu
+    libxrandr
   ];
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";

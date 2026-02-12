@@ -73,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ckolivas/cgminer";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
-      offline
       mmahut
     ];
     platforms = lib.platforms.linux;

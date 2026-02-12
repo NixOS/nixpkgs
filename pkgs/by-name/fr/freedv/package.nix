@@ -34,12 +34,6 @@ let
     rev = "v1.2.6";
     hash = "sha256-UKO2k+kKH/dwt2xfaYMrH/GXjEkIrnxh1kGG/3P5d3Y=";
   };
-  mimallocSrc = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    tag = "v2.2.4";
-    hash = "sha256-+8xZT+mVEqlqabQc+1buVH/X6FZxvCd0rWMyjPu9i4o=";
-  };
   opusSrc = fetchFromGitHub {
     owner = "xiph";
     repo = "opus";
@@ -57,19 +51,27 @@ let
   radaeSrc = fetchFromGitHub {
     owner = "drowe67";
     repo = "radae";
-    rev = "0f26661b26d02e6963353dce7ad1bbe3f4791ab2";
-    hash = "sha256-0pCH+oyVChWdOL5o6Uhb9DDSw4AqCfcsEKw2SZs3K4w=";
+    rev = "5d640a028ab2b8e4ff23ed7136caee396cdcb844";
+    # upstream repository archive fetching is broken
+    forceFetchGit = true;
+    hash = "sha256-+Sd+FWycEJabT3RN/zyKXS2Xzr060/ekYdzg6s1gQcM=";
+  };
+  radeInteg = fetchFromGitHub {
+    owner = "drowe67";
+    repo = "radae";
+    rev = "7bd3ae2401fcba58e314755576a2940085835312";
+    hash = "sha256-WVYKvttiNh6uEzw0b27winyDfzzGkEEhYq7DIwfZW74=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3nLO0UHoIjPN5liz3XJ7r9/Qo+a64ewqvzWPZuFG2SY=";
+    hash = "sha256-7SOGz2+MzAkXd5JDKasSJcKVXcnuYk+C0S9N/NPRfOM=";
   };
 
   patches = [
@@ -78,19 +80,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     cp -R ${ebur128Src} ebur128
-    cp -R ${mimallocSrc} mimalloc
     cp -R ${radaeSrc} radae
-    chmod -R u+w ebur128 mimalloc radae
+    cp -R ${radeInteg} rade_integ
+    chmod -R u+w ebur128 radae rade_integ
     substituteInPlace cmake/BuildEbur128.cmake \
       --replace-fail "GIT_REPOSITORY https://github.com/jiixyj/libebur128.git" "URL $(realpath ebur128)" \
       --replace-fail 'GIT_TAG "v''${EBUR128_VERSION}"' "" \
       --replace-fail "git apply" "patch -p1 <"
-    substituteInPlace cmake/BuildMimalloc.cmake \
-      --replace-fail "GIT_REPOSITORY https://github.com/microsoft/mimalloc.git" "URL $(realpath mimalloc)" \
-      --replace-fail "GIT_TAG        v2.2.4" ""
     substituteInPlace cmake/BuildRADE.cmake \
       --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
       --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath radae)" \
+      --replace-fail "GIT_TAG main" ""
+    substituteInPlace cmake/BuildRADEForIntegrations.cmake \
+      --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
+      --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath rade_integ)" \
       --replace-fail "GIT_TAG ms-disable-python-gc" ""
     patchShebangs test/test_*.sh
     substituteInPlace cmake/CheckGit.cmake \

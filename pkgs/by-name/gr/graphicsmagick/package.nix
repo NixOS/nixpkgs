@@ -8,7 +8,7 @@
   freetype,
   ghostscript,
   graphviz,
-  libX11,
+  libx11,
   libjpeg,
   libpng,
   libtiff,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     ghostscript
     graphviz
-    libX11
+    libx11
     libjpeg
     libpng
     libtiff

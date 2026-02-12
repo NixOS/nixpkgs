@@ -150,6 +150,11 @@
     "hash": "sha256-ISDd8fS6/cIJIXBFDd7F3FQ0wzWkAo4r8dvycb8iT6c="
   },
   {
+    "pname": "BouncyCastle.Cryptography",
+    "version": "2.6.2",
+    "hash": "sha256-Yjk2+x/RcVeccGOQOQcRKCiYzyx1mlFnhS5auCII+Ms="
+  },
+  {
     "pname": "CoCoL",
     "version": "1.8.4",
     "hash": "sha256-TehRVGWOO/dTRRBbGzpIqhMTfJhZtwB+2QV5lNavn5I="
@@ -1011,13 +1016,13 @@
   },
   {
     "pname": "SSH.NET",
-    "version": "2025.0.0",
-    "hash": "sha256-pcmHLjYymuxo8vtzKJUeHi4kJ8RfzeyMFl4cGyuiEhU="
+    "version": "2025.1.0",
+    "hash": "sha256-vtpvE5B+IxoMkq9CQMehoR5ZRtihaHQ4VyhmkkIjL98="
   },
   {
     "pname": "SshNet.Agent",
-    "version": "2024.2.0",
-    "hash": "sha256-pgyYBMnX8SpOT+NrHinAx2LDWliNEwHZndfUgO6q2Cs="
+    "version": "2024.2.0.1",
+    "hash": "sha256-uUoFNQkAEG8d16TkEKfiU3hgoIIIE62o9129BzWIbjA="
   },
   {
     "pname": "Stub.System.Data.SQLite.Core.NetStandard",
@@ -1511,13 +1516,13 @@
   },
   {
     "pname": "uplink.NET",
-    "version": "2.13.3484",
-    "hash": "sha256-YyZ0MQ0olVkCwoujLng+/wlQ3xEwAs7R9yYODoabimw="
+    "version": "2.14.3623",
+    "hash": "sha256-fsOlOkZceVTiJVo6p6CqYcXrUZqO/IaDpDcMBSHkcc0="
   },
   {
     "pname": "uplink.NET.Linux",
-    "version": "2.13.3484",
-    "hash": "sha256-WwzN4fagyy+KnGSylK06jn9t0xvR1mJOJpn1xwd7934="
+    "version": "2.14.3623",
+    "hash": "sha256-GIeD1Lip+MkRrHbOwwsbbKNZnlnxOiAhhVTyByY1O70="
   },
   {
     "pname": "uplink.NET.Mac",
@@ -1526,8 +1531,8 @@
   },
   {
     "pname": "uplink.NET.Win",
-    "version": "2.13.3484",
-    "hash": "sha256-dfRkYTFQrvtX/xvxPjwrbLPFjAPJIMN1ennUnqgvSC4="
+    "version": "2.14.3623",
+    "hash": "sha256-Rv5/hVXKrSOOCn9aHbaH6TmB9H2Xvq1kyJv5sQRygRo="
   },
   {
     "pname": "VaultSharp",

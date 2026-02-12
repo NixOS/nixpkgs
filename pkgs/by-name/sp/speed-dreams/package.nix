@@ -4,19 +4,19 @@
   libGLU,
   libGL,
   libglut,
-  libX11,
+  libx11,
   plib,
   openal,
   freealut,
-  libXrandr,
+  libxrandr,
   xorgproto,
-  libXext,
-  libSM,
-  libICE,
-  libXi,
-  libXt,
-  libXrender,
-  libXxf86vm,
+  libxext,
+  libsm,
+  libice,
+  libxi,
+  libxt,
+  libxrender,
+  libxxf86vm,
   openscenegraph,
   expat,
   libpng12,
@@ -45,18 +45,18 @@ let
     libglut
   ];
   runtimeLibs = glLibs ++ [
-    libX11
+    libx11
     plib
     openal
     freealut
-    libXrandr
-    libXext
-    libSM
-    libICE
-    libXi
-    libXt
-    libXrender
-    libXxf86vm
+    libxrandr
+    libxext
+    libsm
+    libice
+    libxi
+    libxt
+    libxrender
+    libxxf86vm
     openscenegraph
     expat
     libpng12
@@ -133,19 +133,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libpng12
-    libX11
+    libx11
     plib
     openal
     freealut
-    libXrandr
+    libxrandr
     xorgproto
-    libXext
-    libSM
-    libICE
-    libXi
-    libXt
-    libXrender
-    libXxf86vm
+    libxext
+    libsm
+    libice
+    libxi
+    libxt
+    libxrender
+    libxxf86vm
     zlib
     bash
     expat

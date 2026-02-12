@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  env.NIX_CFLAGS_COMPILE = "-std=c++20 -Wno-error";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=tautological-overlap-compare";
 
   meta = {
     description = "C++, header-only library for constructing JSON and JSON-like data formats";

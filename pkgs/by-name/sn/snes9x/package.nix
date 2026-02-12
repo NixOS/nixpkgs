@@ -6,12 +6,12 @@
   fetchFromGitHub,
   gtkmm3,
   libGLX,
-  libX11,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXv,
+  libx11,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxv,
   libepoxy,
   libpng,
   libselinux,
@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXv
+    libx11
+    libxv
     minizip
     zlib
   ]
@@ -66,14 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!withGtk) [
     libpng
-    libXext
-    libXinerama
+    libxext
+    libxinerama
   ]
   ++ lib.optionals withGtk [
     gtkmm3
     libepoxy
-    libXdmcp
-    libXrandr
+    libxdmcp
+    libxrandr
     pcre2
     portaudio
     SDL2

@@ -4,7 +4,7 @@
   python3,
 }:
 with python3.pkgs;
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "expliot";
   version = "0.11.1";
   pyproject = true;
@@ -12,7 +12,7 @@ buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "expliot_framework";
     repo = "expliot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aFJVT5vE9YKirZEINKFzYWDffoVgluoUyvMmOifLq1M=";
   };
 
@@ -72,4 +72,4 @@ buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "expliot";
   };
-}
+})

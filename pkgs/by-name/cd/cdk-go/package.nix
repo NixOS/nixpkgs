@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cdk-go";
   version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "cdk-team";
     repo = "CDK";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mknmpRp8IcqSz7HrD8ertEfv+j6lNVjvjxTWa/qqWR0=";
   };
 
@@ -24,10 +24,10 @@ buildGoModule rec {
   meta = {
     description = "Container penetration toolkit";
     homepage = "https://github.com/cdk-team/CDK";
-    changelog = "https://github.com/cdk-team/CDK/releases/tag/v${version}";
+    changelog = "https://github.com/cdk-team/CDK/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cdk";
     broken = stdenv.hostPlatform.isDarwin; # needs to update gopsutil to at least v3.21.3 to include https://github.com/shirou/gopsutil/pull/1042
   };
-}
+})

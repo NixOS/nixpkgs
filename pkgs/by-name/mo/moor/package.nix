@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "moor";
-  version = "2.10.3";
+  version = "2.10.4";
 
   src = fetchFromGitHub {
     owner = "walles";
     repo = "moor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ip9QcpPeojOdvUX7PMt3owSvMCy6hpsyxtAAsIWM8f4=";
+    hash = "sha256-UEOp+ht+F4uh48OcERRCuKZEt3cM2SAaVF9Hb3/U/NA=";
   };
 
   vendorHash = "sha256-lz3cq2xL9byhLNbAwEvYOsP9WQsu0hqrWe2EDaLSeOQ=";

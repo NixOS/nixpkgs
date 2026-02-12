@@ -12,19 +12,19 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvme-cli";
   version = "2.15";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zXzNjEpxioqYoSHDzimCnP/tKbi0H+GTH4xZ0g1+XnU=";
   };
 
   mesonFlags = [
-    "-Dversion-tag=${version}"
+    "-Dversion-tag=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   meta = {
-    inherit (src.meta) homepage; # https://nvmexpress.org/
+    inherit (finalAttrs.src.meta) homepage; # https://nvmexpress.org/
     description = "NVM-Express user space tooling for Linux";
     longDescription = ''
       NVM-Express is a fast, scalable host controller interface designed to
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "nvme";
   };
-}
+})

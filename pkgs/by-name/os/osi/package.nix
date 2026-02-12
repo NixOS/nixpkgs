@@ -47,10 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-cplex-lib=-lcplex${cplex.libSuffix}"
     ];
 
-  NIX_LDFLAGS = lib.optionalString withCplex "-L${cplex}/cplex/bin/${cplex.libArch}";
+  env = {
+    # Compile errors
+    NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
+  }
+  // lib.optionalAttrs withCplex {
+    NIX_LDFLAGS = "-L${cplex}/cplex/bin/${cplex.libArch}";
+  };
 
-  # Compile errors
-  env.NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;

@@ -6,13 +6,13 @@
   optipng,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sacad";
   version = "2.8.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-6bKxFOP4hPbU5d1J/wro1BM/Bh9W//QzcZ4YbfaaqYY=";
   };
 
@@ -43,4 +43,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ moni ];
   };
-}
+})

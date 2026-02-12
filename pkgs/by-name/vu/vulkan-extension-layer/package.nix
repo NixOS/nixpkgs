@@ -8,8 +8,8 @@
   vulkan-headers,
   vulkan-utility-libraries,
   jq,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   libxcb,
   wayland,
 }:
@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     vulkan-headers
     vulkan-utility-libraries
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     libxcb
     wayland
   ];

@@ -5,13 +5,13 @@
   fetchzip,
   fontconfig,
   lib,
-  libICE,
-  libSM,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libice,
+  libsm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
   liberation_ttf,
   makeFontsConf,
   nodejs,
@@ -81,15 +81,15 @@ stdenvNoCC.mkDerivation (
         patchShebangs build.sh
 
         substituteInPlace src/Avalonia.X11/ICELib.cs \
-          --replace-fail '"libICE.so.6"' '"${lib.getLib libICE}/lib/libICE.so.6"'
+          --replace-fail '"libICE.so.6"' '"${lib.getLib libice}/lib/libICE.so.6"'
         substituteInPlace src/Avalonia.X11/SMLib.cs \
-          --replace-fail '"libSM.so.6"' '"${lib.getLib libSM}/lib/libSM.so.6"'
+          --replace-fail '"libSM.so.6"' '"${lib.getLib libsm}/lib/libSM.so.6"'
         substituteInPlace src/Avalonia.X11/XLib.cs \
-          --replace-fail '"libX11.so.6"' '"${lib.getLib libX11}/lib/libX11.so.6"' \
-          --replace-fail '"libXrandr.so.2"' '"${lib.getLib libXrandr}/lib/libXrandr.so.2"' \
-          --replace-fail '"libXext.so.6"' '"${lib.getLib libXext}/lib/libXext.so.6"' \
-          --replace-fail '"libXi.so.6"' '"${lib.getLib libXi}/lib/libXi.so.6"' \
-          --replace-fail '"libXcursor.so.1"' '"${lib.getLib libXcursor}/lib/libXcursor.so.1"'
+          --replace-fail '"libX11.so.6"' '"${lib.getLib libx11}/lib/libX11.so.6"' \
+          --replace-fail '"libXrandr.so.2"' '"${lib.getLib libxrandr}/lib/libXrandr.so.2"' \
+          --replace-fail '"libXext.so.6"' '"${lib.getLib libxext}/lib/libXext.so.6"' \
+          --replace-fail '"libXi.so.6"' '"${lib.getLib libxi}/lib/libXi.so.6"' \
+          --replace-fail '"libXcursor.so.1"' '"${lib.getLib libxcursor}/lib/libXcursor.so.1"'
 
         # from RestoreAdditionalProjectSources, which isn't supported by nuget-to-json
         dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8-transport/nuget/v3/index.json

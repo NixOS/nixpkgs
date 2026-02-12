@@ -4,14 +4,14 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprland-monitor-attached";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "coffebar";
     repo = "hyprland-monitor-attached";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+bgOOm1B513COcWdUIJ/+GREQH5CR8/RNOcZVkjO2hI=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hyprland-monitor-attached";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -10,15 +10,15 @@
 
 buildDunePackage rec {
   pname = "tezt";
-  version = "4.2.0";
+  version = "4.3.0";
 
-  minimalOCamlVersion = "4.12";
+  minimalOCamlVersion = "4.13";
 
   src = fetchFromGitLab {
     owner = "nomadic-labs";
-    repo = pname;
-    rev = version;
-    hash = "sha256-8+q/A1JccH3CfWxfNhgJU5X+KEp+Uw7nvS72ZcPRsd8=";
+    repo = "tezt";
+    tag = version;
+    hash = "sha256-BF+hNqTm9r2S3jGjmjrw+/SHrr87WSe4YUjkc9WRgNo=";
   };
 
   propagatedBuildInputs = [

@@ -4,14 +4,14 @@
   lib,
   nixosTests,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nar-serve";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nar-serve";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8QuMS00EutmqzAIPxyJEPxM8EHiWlSKs6E2Htoh3Kes=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
       zimbatm
     ];
   };
-}
+})

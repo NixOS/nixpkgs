@@ -6,7 +6,7 @@
   gtk2,
   cmake,
   pkg-config,
-  libXdamage,
+  libxdamage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     gtk2
-    libXdamage
+    libxdamage
   ];
 
   postPatch = ''

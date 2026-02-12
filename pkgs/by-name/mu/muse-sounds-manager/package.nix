@@ -6,12 +6,12 @@
   fontconfig,
   zlib,
   icu,
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
-  libICE,
-  libSM,
+  libx11,
+  libxext,
+  libxi,
+  libxrandr,
+  libice,
+  libsm,
   openssl,
   unzip,
   xdg-utils,
@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = map lib.getLib [
     icu
-    libX11
-    libXext
-    libXi
-    libXrandr
-    libICE
-    libSM
+    libx11
+    libxext
+    libxi
+    libxrandr
+    libice
+    libsm
     openssl
   ];
 

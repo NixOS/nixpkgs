@@ -7,14 +7,14 @@
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-typify";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "typify";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vokhWIY5iikTyADrqxp6DIq+tJ+xdFPebDFTddJnstA=";
   };
 
@@ -55,4 +55,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ david-r-cox ];
   };
-}
+})

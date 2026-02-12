@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pipr";
   version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "ElKowar";
     repo = "pipr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6jtUNhib6iveuZ7qUKK7AllyMKFpZ8OUUaIieFqseY8=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ elkowar ];
     platforms = lib.platforms.all;
   };
-}
+})

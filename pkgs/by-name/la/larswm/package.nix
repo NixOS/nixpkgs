@@ -4,9 +4,9 @@
   fetchurl,
   imake,
   gccmakedep,
-  libX11,
-  libXext,
-  libXmu,
+  libx11,
+  libxext,
+  libxmu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     gccmakedep
   ];
   buildInputs = [
-    libX11
-    libXext
-    libXmu
+    libx11
+    libxext
+    libxmu
   ];
 
   makeFlags = [

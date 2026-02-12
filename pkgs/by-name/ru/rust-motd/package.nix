@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-motd";
   version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "rust-motd";
     repo = "rust-motd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xZwp4bCG9BMqFmLa89fh/wAkM42Vx3+vNq+AnnDa620=";
   };
 
@@ -32,9 +32,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Beautiful, useful MOTD generation with zero runtime dependencies";
     homepage = "https://github.com/rust-motd/rust-motd";
-    changelog = "https://github.com/rust-motd/rust-motd/releases/tag/v${version}";
+    changelog = "https://github.com/rust-motd/rust-motd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "rust-motd";
   };
-}
+})

@@ -226,6 +226,19 @@ in
           machine.succeed(dbus_command)  # as root
           machine.succeed(f"sudo -g wpa_supplicant {dbus_command}")  # as wpa_supplicant group
 
+      with subtest("D-Bus auto-starting is working"):
+          # stop service
+          machine.systemctl("stop wpa_supplicant.service")
+          machine.require_unit_state("wpa_supplicant.service", "inactive")
+
+          # send wake up
+          dbus_command = "dbus-send --system --print-reply --dest=fi.w1.wpa_supplicant1 " \
+                         "/fi/w1/wpa_supplicant1 fi.w1.wpa_supplicant1.GetInterface string:wlan0"
+          machine.succeed(dbus_command)
+
+          # should be up again
+          machine.require_unit_state("wpa_supplicant.service", "active")
+
       # generated configuration file
       config_file = "/etc/static/wpa_supplicant/nixos.conf"
 

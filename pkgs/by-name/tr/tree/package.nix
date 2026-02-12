@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tree";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitLab {
     owner = "OldManProgrammer";
     repo = "unix-tree";
     rev = finalAttrs.version;
-    hash = "sha256-sC3XdZWJSXyCIYr/Y41ogz5bNBTfwKjOFtYwhayXPhY=";
+    hash = "sha256-ks3bj916tDdizywQnZKNSAfA2AzWh3np2F6QN5eOzIc=";
   };
 
   preConfigure = ''
@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "PREFIX=${placeholder "out"}"
+  ];
+
+  outputs = [
+    "out"
+    "man"
   ];
 
   meta = {

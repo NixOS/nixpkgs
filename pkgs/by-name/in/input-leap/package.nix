@@ -4,14 +4,14 @@
   fetchFromGitHub,
   cmake,
   curl,
-  libICE,
-  libSM,
-  libX11,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libice,
+  libsm,
+  libx11,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   libei,
   libportal,
   openssl,
@@ -49,14 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     qt6.qtbase
     avahi'
-    libX11
-    libXext
-    libXtst
-    libXinerama
-    libXrandr
-    libXdmcp
-    libICE
-    libSM
+    libx11
+    libxext
+    libxtst
+    libxinerama
+    libxrandr
+    libxdmcp
+    libice
+    libsm
   ]
   ++ lib.optionals withLibei [
     libei

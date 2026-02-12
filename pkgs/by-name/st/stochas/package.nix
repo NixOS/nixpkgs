@@ -4,11 +4,11 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
   freetype,
   alsa-lib,
   libjack2,
@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
     freetype
     alsa-lib
     libjack2

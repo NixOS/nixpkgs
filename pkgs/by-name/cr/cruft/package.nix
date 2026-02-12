@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cruft";
   version = "2.16.0";
   pyproject = true;
@@ -11,13 +11,13 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cruft";
     repo = "cruft";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hUucSfgDBlT5jVk/oF8JjbcYhjHgkprfGRwsSNfgjfg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = with python3Packages; [
@@ -60,11 +60,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://github.com/cruft/cruft/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/cruft/cruft/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Allows you to maintain all the necessary boilerplate for building projects";
     homepage = "https://github.com/cruft/cruft";
     license = lib.licenses.mit;
     mainProgram = "cruft";
     maintainers = with lib.maintainers; [ PerchunPak ];
   };
-}
+})

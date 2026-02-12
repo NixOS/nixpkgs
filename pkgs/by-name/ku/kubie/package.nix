@@ -7,12 +7,12 @@
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kubie";
   version = "0.26.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "sbstp";
     repo = "kubie";
     sha256 = "sha256-eSzNCH0MiGvLKHrSXFSXQq4lN5tfmr0NcuGaN96Invs=";
@@ -45,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ zlib ];
     maintainers = with lib.maintainers; [ illiusdope ];
   };
-}
+})

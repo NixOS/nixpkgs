@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yewtube";
   version = "2.12.1";
   format = "setuptools";
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mps-youtube";
     repo = "yewtube";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+V9t71Z8PKioM7HWlzTB6X7EokAWgqC3fQJr5tkPdq8=";
   };
 
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     # Don't try to detect the version at runtime with pip
     substituteInPlace mps_youtube/__init__.py \
       --replace "from pip._vendor import pkg_resources" "" \
-      --replace "__version__ =" "__version__ = '${version}' #"
+      --replace "__version__ =" "__version__ = '${finalAttrs.version}' #"
   '';
 
   propagatedBuildInputs = with python3Packages; [
@@ -53,4 +53,4 @@ python3Packages.buildPythonApplication rec {
       koral
     ];
   };
-}
+})

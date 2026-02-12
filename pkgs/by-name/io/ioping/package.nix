@@ -17,6 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     description = "Disk I/O latency measuring tool";
     maintainers = with lib.maintainers; [ raskin ];

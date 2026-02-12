@@ -11,7 +11,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "uni-vga";
+  pname = "uni-vga";
+  version = "0-unstable-2002-10-31";
 
   src = fetchurl {
     url = "http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz";

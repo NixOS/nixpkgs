@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "matcha-rss-digest";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "piqoni";
     repo = "matcha";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ezwZmJVJjbrrWJAsZ3+CUZ7K4WpA1HLKL9V+kTZTfj8=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     mainProgram = "matcha";
     maintainers = [ ];
   };
-}
+})

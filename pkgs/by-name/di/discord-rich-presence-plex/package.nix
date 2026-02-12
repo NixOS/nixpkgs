@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "discord-rich-presence-plex";
   version = "2.16.0";
   pyproject = false;
   src = fetchFromGitHub {
     owner = "phin05";
     repo = "discord-rich-presence-plex";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-e1r0w72IOEY5XsjANkAHbfPYEf1B8n6KYVLMWFSLs0g=";
   };
 
@@ -53,10 +53,10 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/phin05/discord-rich-presence-plex";
-    changelog = "https://github.com/phin05/discord-rich-presence-plex/releases/tag/v${version}";
+    changelog = "https://github.com/phin05/discord-rich-presence-plex/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     description = "Displays your Plex status on Discord using Rich Presence";
     maintainers = with lib.maintainers; [ hogcycle ];
     mainProgram = "discord-rich-presence-plex";
   };
-}
+})

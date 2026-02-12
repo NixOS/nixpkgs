@@ -26,17 +26,17 @@
   gtk3,
   krb5,
   libGL,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libdrm,
   libgbm,
   libgnome-keyring,
@@ -110,15 +110,15 @@ let
       stdenv.cc.cc
       curlWithGnuTls
       udev
-      libX11
-      libXext
-      libXcursor
-      libXi
+      libx11
+      libxext
+      libxcursor
+      libxi
       libxcb
       glib
-      libXScrnSaver
+      libxscrnsaver
       libxkbfile
-      libXtst
+      libxtst
       nss
       nspr
       cups
@@ -126,16 +126,16 @@ let
       expat
       gdk-pixbuf
       dbus
-      libXdamage
-      libXrandr
+      libxdamage
+      libxrandr
       atk
       pango
       cairo
       freetype
       fontconfig
-      libXcomposite
-      libXfixes
-      libXrender
+      libxcomposite
+      libxfixes
+      libxrender
       gtk3
       libgnome-keyring
       openssl

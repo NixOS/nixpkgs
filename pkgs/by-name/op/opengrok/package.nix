@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   pname = "opengrok";
-  version = "1.14.10";
+  version = "1.14.11";
 
   # binary distribution
   src = fetchurl {
     url = "https://github.com/oracle/opengrok/releases/download/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-3ZxbbTSrXzUNHQp5cC81zznucpJ2nHp+0U01tJ+/Cu0=";
+    hash = "sha256-05Aw44JmTHyy6JRWPk5+gv5BDN/W1ci0ddjPfvww0zI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -18,7 +18,7 @@
   pkg-config,
   libGL,
   libvorbis,
-  libX11,
+  libx11,
   libzip,
   nlohmann_json,
   SDL2,
@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libvorbis
-    libX11
+    libx11
     libzip
     nlohmann_json
     SDL2

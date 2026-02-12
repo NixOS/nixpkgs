@@ -57,7 +57,7 @@ runTest (
       stalwart =
         { pkgs, ... }:
         {
-          imports = [ ../stalwart/stalwart-mail-config.nix ];
+          imports = [ ../stalwart/stalwart-config.nix ];
 
           networking.firewall.allowedTCPPorts = [ 587 ];
 

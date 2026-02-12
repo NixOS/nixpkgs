@@ -10,14 +10,14 @@
   gitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "veilid";
   version = "0.5.2";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = "veilid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BND2Io3V5GtSqh9cTJ9SJ4jgfv6TZQGpYebO4f2YdMA=";
   };
 
@@ -66,4 +66,4 @@ rustPlatform.buildRustPackage rec {
       qbit
     ];
   };
-}
+})

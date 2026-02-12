@@ -6,18 +6,18 @@
 
 let
   pname = "swayest-workstyle";
-  version = "1.3.6";
+  version = "1.3.8";
   src = fetchFromGitHub {
     owner = "Lyr-7D1h";
     repo = "swayest_workstyle";
     rev = version;
-    hash = "sha256-0IFEVk6LQagwbm/QZG+dzYFfNhb7ieMxaCbFdeoZWwc=";
+    hash = "sha256-n4hQG3rZ5gVLfknQr+NOyOtRPiYgBOeIYM5f6RUuet0=";
   };
 in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-Txyj2o4Ew8VPKV/UCNiLhosgm5kuSl+na2l4H3yl/Yc=";
+  cargoHash = "sha256-qJ9MDpDLu6WuD8u98ef32jIJE/RZI3fYaEIa+9whB+M=";
 
   # No tests
   doCheck = false;

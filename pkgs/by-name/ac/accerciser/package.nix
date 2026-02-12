@@ -17,14 +17,14 @@
   librsvg,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "accerciser";
   version = "3.48.0";
 
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/accerciser/${lib.versions.majorMinor version}/accerciser-${version}.tar.xz";
+    url = "mirror://gnome/sources/accerciser/${lib.versions.majorMinor finalAttrs.version}/accerciser-${finalAttrs.version}.tar.xz";
     hash = "sha256-kCiOiQCidKOu4gUw6zkWRZlK6YZyIJFroPXEZ3v+n00=";
   };
 
@@ -71,11 +71,11 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/accerciser";
-    changelog = "https://gitlab.gnome.org/GNOME/accerciser/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/accerciser/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Interactive Python accessibility explorer";
     mainProgram = "accerciser";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
   };
-}
+})

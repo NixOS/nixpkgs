@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   sfml,
-  libX11,
+  libx11,
   glew,
   python3,
   glm_1_0_1,
@@ -41,7 +41,7 @@ let
     nativeBuildInputs = [ cmake ];
     buildInputs = [
       sfml
-      libX11
+      libx11
       glm_1_0_1
       SDL2
     ];
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     serious-proton
     sfml
     glew
-    libX11
+    libx11
     python3
     glm_1_0_1
     SDL2

@@ -101,7 +101,6 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "aiohttp"
     "aiosqlite"
-    "aiovban" # PyPi and GitHub versioning is out of sync
     "certifi"
     "colorlog"
     "cryptography"

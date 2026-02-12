@@ -6,12 +6,12 @@
   pkg-config,
   cairo,
   libxkbcommon,
-  xcbutilcursor,
-  xcbutilkeysyms,
-  xcbutil,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libxcb-cursor,
+  libxcb-keysyms,
+  libxcb-util,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   alsa-lib,
   libjack2,
   lv2,
@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     libxkbcommon
-    xcbutilcursor
-    xcbutilkeysyms
-    xcbutil
-    libXrandr
-    libXinerama
-    libXcursor
+    libxcb-cursor
+    libxcb-keysyms
+    libxcb-util
+    libxrandr
+    libxinerama
+    libxcursor
     alsa-lib
     libjack2
     lv2

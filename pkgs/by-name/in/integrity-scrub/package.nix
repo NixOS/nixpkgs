@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "integrity-scrub";
   version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "illdefined";
     repo = "integrity-scrub";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-OLO64R9AYpHSkIwk2arka5EEzCWusZPWsBhy5HEDIQI=";
   };
 
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "integrity-scrub";
   };
-}
+})

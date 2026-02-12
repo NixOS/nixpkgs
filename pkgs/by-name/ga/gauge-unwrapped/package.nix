@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gauge";
   version = "1.6.22";
 
@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "getgauge";
     repo = "gauge";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6RJj+sDffqzdMlMkE/rJ7AEKYcxDQBR86fjlaNDb6M0=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
       marie
     ];
   };
-}
+})

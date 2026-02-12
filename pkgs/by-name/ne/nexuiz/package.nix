@@ -13,13 +13,13 @@
   libogg,
   libmodplug,
   # glx
-  libX11,
+  libx11,
   libGLU,
   libGL,
-  libXpm,
-  libXext,
-  libXxf86vm,
-  libXxf86dga,
+  libxpm,
+  libxext,
+  libxxf86vm,
+  libxxf86dga,
   alsa-lib,
   # sdl
   SDL,
@@ -48,13 +48,13 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     # glx
-    libX11
+    libx11
     libGLU
     libGL
-    libXpm
-    libXext
-    libXxf86vm
-    libXxf86dga
+    libxpm
+    libxext
+    libxxf86vm
+    libxxf86dga
     alsa-lib
     # sdl
     SDL
@@ -66,16 +66,16 @@ stdenv.mkDerivation {
     cd ../../
   '';
 
-  NIX_LDFLAGS = ''
-    -rpath ${zlib.out}/lib
-    -rpath ${curl.out}/lib
-    -rpath ${libjpeg.out}/lib
-    -rpath ${libpng.out}/lib
-    -rpath ${libvorbis.out}/lib
-    -rpath ${libtheora.out}/lib
-    -rpath ${libogg.out}/lib
-    -rpath ${libmodplug.out}/lib
-  '';
+  env.NIX_LDFLAGS = toString [
+    "-rpath ${zlib.out}/lib"
+    "-rpath ${curl.out}/lib"
+    "-rpath ${libjpeg.out}/lib"
+    "-rpath ${libpng.out}/lib"
+    "-rpath ${libvorbis.out}/lib"
+    "-rpath ${libtheora.out}/lib"
+    "-rpath ${libogg.out}/lib"
+    "-rpath ${libmodplug.out}/lib"
+  ];
 
   buildPhase = ''
     cd sources/darkplaces/

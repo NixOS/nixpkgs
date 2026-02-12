@@ -2473,6 +2473,27 @@
   "setup-hook-gdk-pixbuf": [
     "index.html#setup-hook-gdk-pixbuf"
   ],
+  "libglycin-hooks": [
+    "index.html#libglycin-hooks"
+  ],
+  "libglycin-setup-hook": [
+    "index.html#libglycin-setup-hook"
+  ],
+  "libglycin-patch-vendor-hook": [
+    "index.html#libglycin-patch-vendor-hook"
+  ],
+  "libglycin-hooks-example-code-snippet": [
+    "index.html#libglycin-hooks-example-code-snippet"
+  ],
+  "libglycin-hook-variables-controlling": [
+    "index.html#libglycin-hook-variables-controlling"
+  ],
+  "glycin-cargo-deps-path": [
+    "index.html#glycin-cargo-deps-path"
+  ],
+  "glycin-dont-wrap": [
+    "index.html#glycin-dont-wrap"
+  ],
   "ghc": [
     "index.html#ghc"
   ],
@@ -2740,6 +2761,9 @@
   "zig-exclusive-variables": [
     "index.html#zig-exclusive-variables",
     "index.html#zig-hook-exclusive-variables"
+  ],
+  "dont-use-zig-configure": [
+    "index.html#dont-use-zig-configure"
   ],
   "dont-use-zig-build": [
     "index.html#dont-use-zig-build"
@@ -3172,6 +3196,9 @@
   ],
   "ssec-gnome-hooks-gst-grl-plugins": [
     "index.html#ssec-gnome-hooks-gst-grl-plugins"
+  ],
+  "ssec-gnome-hooks-libglycin": [
+    "index.html#ssec-gnome-hooks-libglycin"
   ],
   "ssec-gnome-updating": [
     "index.html#ssec-gnome-updating"
@@ -4268,6 +4295,18 @@
   "neovim-plugin-treesitter": [
     "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
+  ],
+  "neovim-plugin-nvim-treesitter": [
+    "index.html#neovim-plugin-nvim-treesitter",
+    "index.html#vim-plugin-nvim-treesitter"
+  ],
+  "neovim-plugin-treesitter-standalone": [
+    "index.html#neovim-plugin-treesitter-standalone",
+    "index.html#vim-plugin-treesitter-standalone"
+  ],
+  "neovim-plugin-treesitter-grammar-dependencies": [
+    "index.html#neovim-plugin-treesitter-grammar-dependencies",
+    "index.html#vim-plugin-treesitter-grammar-dependencies"
   ],
   "managing-plugins-with-vim-plug": [
     "index.html#managing-plugins-with-vim-plug"

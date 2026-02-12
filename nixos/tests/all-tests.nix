@@ -788,6 +788,7 @@ in
   installer-systemd-stage-1 = handleTest ./installer-systemd-stage-1.nix { };
   intune = runTest ./intune.nix;
   invidious = runTest ./invidious.nix;
+  invoiceplane = runTest ./invoiceplane.nix;
   iodine = runTest ./iodine.nix;
   iosched = runTest ./iosched.nix;
   ipget = runTest ./ipget.nix;
@@ -837,6 +838,7 @@ in
   kimai = runTest ./kimai.nix;
   kismet = runTest ./kismet.nix;
   kmonad = runTest ./kmonad.nix;
+  kmscon = runTest ./kmscon.nix;
   knot = runTest ./knot.nix;
   komga = runTest ./komga.nix;
   komodo-periphery = runTest ./komodo-periphery.nix;
@@ -950,7 +952,10 @@ in
   mealie = runTest ./mealie.nix;
   mediamtx = runTest ./mediamtx.nix;
   mediatomb = runTest ./mediatomb.nix;
-  mediawiki = handleTest ./mediawiki.nix { };
+  mediawiki = import ./mediawiki.nix {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
   merecat = runTest ./merecat.nix;
@@ -1227,6 +1232,10 @@ in
   pass-secret-service = runTest ./pass-secret-service.nix;
   password-option-override-ordering = runTest ./password-option-override-ordering.nix;
   patroni = handleTestOn [ "x86_64-linux" ] ./patroni.nix { };
+  pdfding = import ./web-apps/pdfding {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   pdns-recursor = runTest ./pdns-recursor.nix;
   peerflix = runTest ./peerflix.nix;
   peering-manager = runTest ./web-apps/peering-manager.nix;

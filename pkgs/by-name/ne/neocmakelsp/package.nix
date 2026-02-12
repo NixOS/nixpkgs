@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neocmakelsp";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "neocmakelsp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dviHzaBqsE3NKRf4AeQme/oOcu5GyKjGJBui4ZjjDv8=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "neocmakelsp";
   };
-}
+})

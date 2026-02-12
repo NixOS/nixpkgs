@@ -50,6 +50,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "urwid"
     "zstandard"
 
     # requested by maintainer

@@ -10,14 +10,14 @@
   nmap,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "unimap";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "Edu4rdSHL";
     repo = "unimap";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-QQZNeZUB6aHnYz7B7uqL8I9gkk4JvQJ4TD9NxECd6JA=";
   };
 
@@ -49,9 +49,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Scan only once by IP address and reduce scan times with Nmap for large amounts of data";
     homepage = "https://github.com/Edu4rdSHL/unimap";
-    changelog = "https://github.com/Edu4rdSHL/unimap/releases/tag/${src.rev}";
+    changelog = "https://github.com/Edu4rdSHL/unimap/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "unimap";
   };
-}
+})

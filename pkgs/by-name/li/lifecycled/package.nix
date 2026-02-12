@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lifecycled";
   version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "lifecycled";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zskN2T0+1xZPjppggeGpPFuQ8/AgPNyN77F33rDoghc=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
       cole-h
     ];
   };
-}
+})

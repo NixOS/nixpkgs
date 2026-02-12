@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "buffrs";
   version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "helsing-ai";
     repo = "buffrs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xwIJeXbXBotx/1ZsvCSaUlttkTYi2Ceq6MvFPwp2bj8=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "buffrs";
     maintainers = with lib.maintainers; [ danilobuerger ];
   };
-}
+})

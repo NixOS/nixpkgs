@@ -345,6 +345,15 @@ in
           NOTE: this will override default listening on all local addresses and port 22.
           NOTE: setting this option won't automatically enable given ports
           in firewall configuration.
+          NOTE: If the IP address is not available at boot time, the following has
+          to be added to make sure sshd will wait for dhcp configuration:
+          ```nix
+          systemd.services.sshd = {
+            wants = [ "network-online.target" ];
+            after = [ "network-online.target" ];
+          };
+          ```
+          See the following issue for details: <https://github.com/NixOS/nixpkgs/issues/105570>
         '';
       };
 

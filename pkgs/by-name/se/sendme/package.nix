@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sendme";
   version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
     repo = "sendme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zh0YYJoljcOQz0ltAk+UBScSGZhsoSqIa+F0Qm4/3iw=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ cameronfyfe ];
     mainProgram = "sendme";
   };
-}
+})

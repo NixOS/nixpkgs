@@ -21,11 +21,11 @@
   libsepol,
   libthai,
   libdatrie,
-  libXdmcp,
+  libxdmcp,
   lerc,
   libxkbcommon,
   libepoxy,
-  libXtst,
+  libxtst,
   sqlite,
   fontconfig,
   versionCheckHook,
@@ -74,9 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
     util-linuxMinimal
     libselinux
     libsepol
-    libXdmcp
+    libxdmcp
     libxkbcommon
-    libXtst
+    libxtst
   ];
 
   propagatedBuildInputs = [ fontconfig ];

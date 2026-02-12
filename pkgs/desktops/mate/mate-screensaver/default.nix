@@ -6,7 +6,7 @@
   gettext,
   gtk3,
   dbus-glib,
-  libXScrnSaver,
+  libxscrnsaver,
   libnotify,
   libxml2,
   mate-desktop,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk3
     dbus-glib
-    libXScrnSaver
+    libxscrnsaver
     libnotify
     mate-desktop
     mate-menus

@@ -6,10 +6,10 @@
   wrapQtAppsHook,
   patchelf,
   qt5,
-  libXtst,
-  libXext,
-  libX11,
-  libXScrnSaver,
+  libxtst,
+  libxext,
+  libx11,
+  libxscrnsaver,
   writeScript,
   common-updater-scripts,
   curl,
@@ -53,10 +53,10 @@ stdenv.mkDerivation rec {
       --set-rpath "${
         lib.makeLibraryPath [
           qt5.qtbase
-          libXtst
-          libXext
-          libX11
-          libXScrnSaver
+          libxtst
+          libxext
+          libx11
+          libxscrnsaver
         ]
       }" \
       $out/bin/rescuetime

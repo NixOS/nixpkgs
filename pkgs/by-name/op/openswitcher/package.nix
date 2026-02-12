@@ -14,7 +14,7 @@
   udevCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openswitcher";
   version = "0.13.0";
   pyproject = false;
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "pyatem";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-eEn09e+ZED4DGEWTUou9CRgazngHIXZv51CLhX9YuBI=";
   };
 
@@ -81,4 +81,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "switcher-control";
   };
-}
+})

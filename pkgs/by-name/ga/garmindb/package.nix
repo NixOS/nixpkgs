@@ -5,7 +5,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "garmindb";
   version = "3.6.7";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tcgoetz";
     repo = "garmindb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Dosw6/n4GYYJR3KFP4RdNOUpACpRAfMMmyNj/J54TMk=";
   };
 
@@ -68,7 +68,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Download and parse data from Garmin Connect or a Garmin watch";
     homepage = "https://github.com/tcgoetz/GarminDB";
-    changelog = "https://github.com/tcgoetz/GarminDB/releases/tag/${src.tag}";
+    changelog = "https://github.com/tcgoetz/GarminDB/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -77,4 +77,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "garmindb";
   };
-}
+})

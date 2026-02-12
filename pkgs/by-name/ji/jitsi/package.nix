@@ -21,14 +21,14 @@
 let
   jdk = jdk8;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jitsi";
   version = "2.11.5633";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi";
-    tag = lib.versions.patch version;
+    tag = lib.versions.patch finalAttrs.version;
     hash = "sha256-CN4o0VfHdoUteI2wyJ2hFJ9UsQ2wWUzcvrLMbR/l36M=";
   };
 
@@ -96,4 +96,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.jitsi ];
   };
-}
+})

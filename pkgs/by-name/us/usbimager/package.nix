@@ -9,7 +9,7 @@
   withUdisks ? stdenv.hostPlatform.isLinux,
   udisks,
   glib,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       udisks
       glib
     ]
-    ++ lib.optional (!withLibui) libX11
+    ++ lib.optional (!withLibui) libx11
     ++ lib.optional withLibui gtk3;
   # libui is bundled with the source of usbimager as a compiled static library
 

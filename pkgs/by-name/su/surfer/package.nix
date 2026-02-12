@@ -8,9 +8,9 @@
   autoPatchelfHook,
   libxkbcommon,
   libGL,
-  libX11,
-  libXcursor,
-  libXi,
+  libx11,
+  libxcursor,
+  libxi,
   stdenv,
   makeWrapper,
   zenity,
@@ -43,9 +43,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
     libxkbcommon
     libGL
-    libX11
-    libXcursor
-    libXi
+    libx11
+    libxcursor
+    libxi
   ];
 
   cargoHash = "sha256-E+9u7t6bLzORL2HiG4iT5pT4nGftyOgO2/eXHuQK4pQ=";

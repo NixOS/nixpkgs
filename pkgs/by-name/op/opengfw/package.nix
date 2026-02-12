@@ -3,21 +3,21 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-let
+
+buildGoModule (finalAttrs: {
   pname = "opengfw";
   version = "0.4.1";
-in
-buildGoModule {
-  inherit pname version;
-  env.CGO_ENABLED = 0;
-  vendorHash = "sha256-F8jTvgxOhOGVtl6B8u0xAIvjNwVjBtvAhApzjIgykpY=";
 
   src = fetchFromGitHub {
     owner = "apernet";
     repo = "opengfw";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6PFfsPfLzzeaImcteX9u/k5pwe3cvSQwT90TCizA3gI=";
   };
+
+  vendorHash = "sha256-F8jTvgxOhOGVtl6B8u0xAIvjNwVjBtvAhApzjIgykpY=";
+
+  env.CGO_ENABLED = 0;
 
   meta = {
     mainProgram = "OpenGFW";
@@ -34,4 +34,4 @@ buildGoModule {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ eum3l ];
   };
-}
+})

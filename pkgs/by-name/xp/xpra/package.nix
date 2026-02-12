@@ -18,7 +18,7 @@
   gst_all_1,
   gtk3,
   libappindicator,
-  libfakeXinerama,
+  libfakexinerama,
   librsvg,
   libvpx,
   libwebp,
@@ -54,7 +54,7 @@
   libx11,
   xorgproto,
   libxkbfile,
-  xorgserver,
+  xorg-server,
   xxHash,
   clang,
   withHtml ? true,
@@ -76,9 +76,9 @@ let
 
   xorgModulePaths = writeText "module-paths" ''
     Section "Files"
-      ModulePath "${xorgserver}/lib/xorg/modules"
-      ModulePath "${xorgserver}/lib/xorg/modules/extensions"
-      ModulePath "${xorgserver}/lib/xorg/modules/drivers"
+      ModulePath "${xorg-server}/lib/xorg/modules"
+      ModulePath "${xorg-server}/lib/xorg/modules/extensions"
+      ModulePath "${xorg-server}/lib/xorg/modules/drivers"
       ModulePath "${xf86videodummy}/lib/xorg/modules/drivers"
     EndSection
   '';
@@ -250,11 +250,11 @@ effectiveBuildPythonApplication rec {
       --set XPRA_COMMAND "$out/bin/xpra"
       --set XPRA_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb"
       --set XORG_CONFIG_PREFIX ""
-      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
+      --prefix LD_LIBRARY_PATH : ${libfakexinerama}/lib
       --prefix PATH : ${
         lib.makeBinPath [
           getopt
-          xorgserver
+          xorg-server
           xauth
           which
           util-linux
@@ -300,7 +300,6 @@ effectiveBuildPythonApplication rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      offline
       numinit
       mvnetbiz
       lucasew

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-cover-treemap";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "nikolaydubina";
     repo = "go-cover-treemap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MSkPot8uYcr8pxsIkJh2FThVK9xpzkN9Y69KeiQnQlA=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "go-cover-treemap";
   };
-}
+})

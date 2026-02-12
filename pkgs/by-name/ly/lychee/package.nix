@@ -15,14 +15,14 @@ let
   canRun = stdenv.hostPlatform.emulatorAvailable buildPackages;
   lychee = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/lychee${stdenv.hostPlatform.extensions.executable}";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lychee";
   version = "0.22.0-unstable-2025-12-05";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = "lychee";
-    # tag = "lychee-v${version}"; # use again with next release
+    # tag = "lychee-v${finalAttrs.version}"; # use again with next release
     rev = "db0f8a842f594e0a879563caf7d183266c02ca95"; # one revision after 0.22.0
     leaveDotGit = true;
     postFetch = ''
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
-    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${version}";
+    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -99,4 +99,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "lychee";
   };
-}
+})

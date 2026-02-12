@@ -108,19 +108,9 @@ respective package block.
 
 ```nix
 {
-  rke2_1_34 =
-    (common (
-      (import ./1_34/versions.nix)
-      // {
-        updateScript = [
-          ./update-script.sh
-          "34"
-        ];
-      }
-    ) extraArgs).overrideAttrs
-      {
-        meta.knownVulnerabilities = [ "rke2_1_34 has reached end-of-life on 2026-10-27" ];
-      };
+  rke2_1_34 = (common (import ./1_34/versions.nix) extraArgs).overrideAttrs {
+    meta.knownVulnerabilities = [ "rke2_1_34 has reached end-of-life on 2026-10-27" ];
+  };
 }
 ```
 

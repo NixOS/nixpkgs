@@ -17,7 +17,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gnome-graphs";
   version = "1.8.4";
   pyproject = false;
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Graphs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-up4Hv2gndekDQzEnf7kkskDyRGJ/mqEji7dsuLgnUVI=";
   };
 
@@ -78,4 +78,4 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux; # locale.bindtextdomain only available on linux
   };
-}
+})

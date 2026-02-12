@@ -18,7 +18,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wike";
   version = "3.2.0";
   pyproject = false; # built with meson
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4J23dUK844ZYQp9LAvaQgN2cnGaPt7eWGOFSAe7WRH8=";
   };
 
@@ -76,4 +76,4 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "wike";
   };
-}
+})

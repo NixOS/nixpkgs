@@ -9,7 +9,7 @@
   withDriver ? false,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "chipsec";
   version = "1.13.20";
   pyproject = true;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TSw/1NdPGefWXRMleXTeLWDgRw/m+luIQ0lF8UlgfLs=";
   };
 
@@ -88,4 +88,4 @@ python3.pkgs.buildPythonApplication rec {
     broken = withDriver && kernel.kernelOlder "5.4" && kernel.isHardened;
     mainProgram = "chipsec_main";
   };
-}
+})

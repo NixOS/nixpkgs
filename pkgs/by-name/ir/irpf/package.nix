@@ -91,6 +91,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [
       atila
+      rafaelrc
     ];
     mainProgram = "irpf";
   };

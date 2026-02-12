@@ -7,10 +7,10 @@
   alsa-lib,
   libgbm,
   libGLU,
-  libX11,
-  libXmu,
-  libXext,
-  libXi,
+  libx11,
+  libxmu,
+  libxext,
+  libxi,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,10 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     libGLU
     libsndfile
-    libX11
-    libXmu
-    libXext
-    libXi
+    libx11
+    libxmu
+    libxext
+    libxi
   ];
   buildFlags = [ "linux-alsa" ];
 

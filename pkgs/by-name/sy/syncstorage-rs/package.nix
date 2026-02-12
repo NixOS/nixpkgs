@@ -21,7 +21,7 @@ let
   ]);
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syncstorage-rs";
   version = "0.21.1-unstable-2026-01-26";
 
@@ -60,10 +60,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Mozilla Sync Storage built with Rust";
     homepage = "https://github.com/mozilla-services/syncstorage-rs";
-    changelog = "https://github.com/mozilla-services/syncstorage-rs/releases/tag/${version}";
+    changelog = "https://github.com/mozilla-services/syncstorage-rs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "syncserver";
   };
-}
+})

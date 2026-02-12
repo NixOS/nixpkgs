@@ -57,7 +57,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit
     autobrr-web
     pname
@@ -72,7 +72,7 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.commit=${src.tag}"
   ];
 
@@ -97,9 +97,9 @@ buildGoModule rec {
     description = "Modern, easy to use download automation for torrents and usenet";
     license = lib.licenses.gpl2Plus;
     homepage = "https://autobrr.com/";
-    changelog = "https://autobrr.com/release-notes/v${version}";
+    changelog = "https://autobrr.com/release-notes/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ av-gal ];
     mainProgram = "autobrr";
     platforms = with lib.platforms; darwin ++ freebsd ++ linux;
   };
-}
+})

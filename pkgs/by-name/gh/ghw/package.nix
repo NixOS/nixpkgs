@@ -6,15 +6,15 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ghw";
-  version = "0.21.2";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "jaypipes";
     repo = "ghw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WZGEhrgHmJ/4puvDPYLq3iU+Ddf1PnptRj0ehcDbjZQ=";
+    hash = "sha256-W3a6hKX8vsWe02uLUx9zIOmJiivIOa4Ja++iXVd8J3E=";
   };
-  vendorHash = "sha256-lItNgi65HQASNQufUdhvEoNtrltkW+0hBHUlFZjfneE=";
+  vendorHash = "sha256-REgtByhTlYQ3XyYleWAcrCymIWtWmltjx21tr2mtF7k=";
 
   subPackages = [ "cmd/..." ];
   doCheck = false; # wants to read from /sys and other places not allowed

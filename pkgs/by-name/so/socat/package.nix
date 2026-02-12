@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.8.0.3";
 
   src = fetchurl {
-    url = "http://www.dest-unreach.org/socat/download/${pname}-${version}.tar.bz2";
+    url = "http://www.dest-unreach.org/socat/download/socat-${version}.tar.bz2";
     hash = "sha256-AesBc2HZW7OmlB6EC1nkRjo/q/kt9BVO0CsWou1qAJU=";
   };
 

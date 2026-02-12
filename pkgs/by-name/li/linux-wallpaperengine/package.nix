@@ -18,11 +18,11 @@
   glm,
   gmp,
   kissfftFloat,
-  libXau,
-  libXdmcp,
-  libXpm,
-  libXrandr,
-  libXxf86vm,
+  libxau,
+  libxdmcp,
+  libxpm,
+  libxrandr,
+  libxxf86vm,
   libdecor,
   libffi,
   libglut,
@@ -80,11 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     glm
     gmp
     kissfftFloat
-    libXau
-    libXdmcp
-    libXpm
-    libXrandr
-    libXxf86vm
+    libxau
+    libxdmcp
+    libxpm
+    libxrandr
+    libxxf86vm
     libdecor
     libffi
     libglut

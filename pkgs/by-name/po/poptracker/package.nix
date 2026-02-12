@@ -6,7 +6,7 @@
   SDL2,
   SDL2_ttf,
   SDL2_image,
-  libX11,
+  libx11,
   openssl,
   zlib,
   which,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_ttf
     SDL2_image
-    libX11
+    libx11
     openssl
     zlib
   ];

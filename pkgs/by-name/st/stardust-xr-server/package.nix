@@ -15,14 +15,14 @@
   libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-server";
   version = "0.44.1";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "server";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sCatpWDdy7NFWOWUARjN3fZMDVviX2iV79G0HTxfYZU=";
   };
 
@@ -64,4 +64,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "esbuild-config";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "bpierre";
     repo = "esbuild-config";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-u3LgecKfgPSN5xMyqBjeAn4/XswM3iEGbZ+JGrVF1Co=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "esbuild-config";
   };
-}
+})

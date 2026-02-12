@@ -11,14 +11,14 @@
   gitMinimal,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-crev";
   version = "0.26.5";
 
   src = fetchFromGitHub {
     owner = "crev-dev";
     repo = "cargo-crev";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-P6i2RvosI36rrg52kUcdrb5y4Fg0ms/mH5hcOWNgSik=";
   };
 
@@ -59,4 +59,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})
