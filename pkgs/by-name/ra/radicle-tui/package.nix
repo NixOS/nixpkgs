@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-tui";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z39mP9rQAaGmERfUMPULfPUi473tY";
-    node = "z6MkswQE8gwZw924amKatxnNCXA55BMupMmRg7LvJuim2C1V";
-    tag = finalAttrs.version;
-    hash = "sha256-rz9l9GtycqZoROUI6Hn0Fv5Br0YCIrcHlEWLMP4hasQ=";
+    node = "z6MkgFq6z5fkF2hioLLSNu1zP2qEL1aHXHZzGH1FLFGAnBGz";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-2/pLlhilJyrZl9eLFWIh4YxlJwBbzjmb1Cg1xFSSl5k=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-f9D4RKWw7y6z9rERuF7F6soyNITvKa6QVt34biZZ5JY=";
+  cargoHash = "sha256-U5Gt8o2OLiJwpDkSK+dNlIx7PtbcBbg61s9GpLG50Vg=";
 
   postPatch = ''
     substituteInPlace build.rs \
