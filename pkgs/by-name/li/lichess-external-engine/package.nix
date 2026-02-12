@@ -43,5 +43,4 @@ python3Packages.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [ malix ];
     mainProgram = "lichess-external-engine";
   };
-
 })
