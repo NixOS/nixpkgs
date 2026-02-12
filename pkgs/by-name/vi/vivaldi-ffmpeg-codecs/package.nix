@@ -1,7 +1,7 @@
 {
   fetchurl,
   lib,
-  squashfsTools,
+  squashfs-tools,
   stdenv,
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = sources."${stdenv.hostPlatform.system}";
 
-  buildInputs = [ squashfsTools ];
+  buildInputs = [ squashfs-tools ];
 
   unpackPhase = ''
     unsquashfs -dest . $src

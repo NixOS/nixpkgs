@@ -6,7 +6,7 @@
   gawk,
   libarchive,
   pv,
-  squashfsTools,
+  squashfs-tools,
   buildFHSEnv,
   pkgs,
 }:
@@ -25,7 +25,7 @@ rec {
         gawk
         libarchive
         pv
-        squashfsTools
+        squashfs-tools
       ];
     };
   };
