@@ -12,6 +12,9 @@
   writeShellScriptBin,
   gclient2nix,
   rustc,
+  apple-sdk,
+  xcodebuild,
+  llvmPackages,
 }:
 
 let
@@ -49,12 +52,22 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     pkg-config
     gclient2nix.gclientUnpackHook
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    apple-sdk
+    xcodebuild
   ];
 
   buildInputs = [
     glib
-    alsa-lib
     pulseaudio
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    llvmPackages.clang
+    llvmPackages.compiler-rt
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    alsa-lib
   ];
 
   postPatch = ''
@@ -64,6 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace modules/audio_device/linux/pulseaudiosymboltable_linux.cc \
       --replace-fail "libpulse.so.0" "${pulseaudio}/lib/libpulse.so.0"
+    substituteInPlace build/config/compiler/BUILD.gn \
+      --replace-fail 'clang_rt_library_dir = ""' 'clang_rt_library_dir="${llvmPackages.compiler-rt}/lib/clang/${llvmPackages.clang.version}/lib/darwin"'
+  ''
+  + lib.optionalString stdenv.isLinux ''
     substituteInPlace modules/audio_device/linux/alsasymboltable_linux.cc \
       --replace-fail "libasound.so.2" "${alsa-lib}/lib/libasound.so.2"
   '';
@@ -73,46 +90,58 @@ stdenv.mkDerivation (finalAttrs: {
     echo "generate_location_tags = true" >> build/config/gclient_args.gni
   '';
 
-  gnFlags = [
-    # webrtc uses chromium's `src/build/BUILDCONFIG.gn`. many of these flags
-    # are copied from pkgs/applications/networking/browsers/chromium/common.nix.
-    ''target_os="linux"''
-    ''target_cpu="${chromiumRosettaStone.cpu stdenv.hostPlatform}"''
-    ''pkg_config="${stdenv.cc.targetPrefix}pkg-config"''
-    "use_sysroot=false"
-    "is_clang=false"
-    "treat_warnings_as_errors=false"
-    "use_llvm_libatomic=false"
-    "use_custom_libcxx=false"
+  gnFlags =
+    lib.optionals stdenv.isLinux [
+      # webrtc uses chromium's `src/build/BUILDCONFIG.gn`. many of these flags
+      # are copied from pkgs/applications/networking/browsers/chromium/common.nix.
+      ''target_os="linux"''
+      ''target_cpu="${chromiumRosettaStone.cpu stdenv.hostPlatform}"''
+      ''pkg_config="${stdenv.cc.targetPrefix}pkg-config"''
+      "use_sysroot=false"
+      "is_clang=false"
+      "treat_warnings_as_errors=false"
+      "use_llvm_libatomic=false"
+      "use_custom_libcxx=false"
 
-    # https://github.com/signalapp/ringrtc/blob/main/bin/build-desktop
-    "rtc_build_examples=false"
-    "rtc_build_tools=false"
-    "rtc_use_x11=false"
-    "rtc_enable_sctp=false"
-    "rtc_libvpx_build_vp9=true"
-    "rtc_disable_metrics=true"
-    "rtc_disable_trace_events=true"
-    "is_debug=false"
-    "symbol_level=1"
-    "rtc_include_tests=false"
-    "rtc_enable_protobuf=false"
-
-    ''rust_sysroot_absolute="${buildPackages.rustc}"''
-
-    # Build using the system toolchain (for Linux distributions):
-    #
-    # What you would expect to be called "target_toolchain" is
-    # actually called either "default_toolchain" or "custom_toolchain",
-    # depending on which part of the codebase you are in; see:
-    # https://chromium.googlesource.com/chromium/src/build/+/3c4595444cc6d514600414e468db432e0f05b40f/config/BUILDCONFIG.gn#17
-    ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
-    ''host_toolchain="//build/toolchain/linux/unbundle:default"''
-  ]
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    ''host_toolchain="//build/toolchain/linux/unbundle:host"''
-    ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:host"''
-  ];
+      # Build using the system toolchain (for Linux distributions):
+      #
+      # What you would expect to be called "target_toolchain" is
+      # actually called either "default_toolchain" or "custom_toolchain",
+      # depending on which part of the codebase you are in; see:
+      # https://chromium.googlesource.com/chromium/src/build/+/3c4595444cc6d514600414e468db432e0f05b40f/config/BUILDCONFIG.gn#17
+      ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
+      ''host_toolchain="//build/toolchain/linux/unbundle:default"''
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      ''target_os="mac"''
+      ''target_cpu="${chromiumRosettaStone.cpu stdenv.hostPlatform}"''
+      "use_sysroot=true"
+      "is_clang=true"
+      ''clang_base_path="${llvmPackages.clang}/bin"''
+      ''custom_toolchain="//build/toolchain/mac:clang_x64"''
+      "treat_warnings_as_errors=false"
+      "use_llvm_libatomic=false"
+      "use_custom_libcxx=false"
+    ]
+    ++ [
+      # https://github.com/signalapp/ringrtc/blob/main/bin/build-desktop
+      "rtc_build_examples=false"
+      "rtc_build_tools=false"
+      "rtc_use_x11=false"
+      "rtc_enable_sctp=false"
+      "rtc_libvpx_build_vp9=true"
+      "rtc_disable_metrics=true"
+      "rtc_disable_trace_events=true"
+      "is_debug=false"
+      "symbol_level=1"
+      "rtc_include_tests=false"
+      "rtc_enable_protobuf=false"
+      ''rust_sysroot_absolute="${buildPackages.rustc}"''
+    ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
+      ''host_toolchain="//build/toolchain/linux/unbundle:host"''
+      ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:host"''
+    ];
   ninjaFlags = [ "webrtc" ];
 
   installPhase = ''
@@ -128,6 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/SignalApp/webrtc";
     license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
