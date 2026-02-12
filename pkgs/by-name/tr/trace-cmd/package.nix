@@ -11,7 +11,7 @@
   libtraceevent,
   libtracefs,
   zstd,
-  sourceHighlight,
+  source-highlight,
   gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     xmlto
     docbook_xsl
     docbook_xml_dtd_45
-    sourceHighlight
+    source-highlight
   ];
 
   buildInputs = [

@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   pname = "source-highlight";
   version = "3.1.9";
 
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "doc"

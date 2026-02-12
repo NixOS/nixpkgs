@@ -21,7 +21,7 @@
   zstd,
   xz,
   dejagnu,
-  sourceHighlight,
+  source-highlight,
   libiconv,
   xxhash,
 
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
     xz
-    sourceHighlight
+    source-highlight
     xxhash
     dejagnu # for tests
   ]
