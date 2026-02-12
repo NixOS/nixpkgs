@@ -2123,6 +2123,7 @@ mapAliases {
   steamPackages.steam-fhsenv = throw "'steamPackages.steam-fhsenv' has been renamed to/replaced by 'steam'"; # Converted to throw 2025-10-27
   steamPackages.steam-fhsenv-small = throw "'steamPackages.steam-fhsenv-small' has been renamed to/replaced by 'steam'"; # Converted to throw 2025-10-27
   steamPackages.steamcmd = throw "'steamPackages.steamcmd' has been renamed to/replaced by 'steamcmd'"; # Converted to throw 2025-10-27
+  storeBackup = storebackup; # Added 2026-07-05
   StormLib = throw "'StormLib' has been renamed to/replaced by 'stormlib'"; # Converted to throw 2025-10-27
   strawberry-qt5 = throw "strawberry-qt5 has been replaced by strawberry"; # Converted to throw 2025-07-19
   strawberry-qt6 = throw "strawberry-qt6 has been replaced by strawberry"; # Added 2025-07-19

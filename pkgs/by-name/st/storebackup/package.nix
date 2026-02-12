@@ -25,11 +25,10 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-
   version = "3.5.2";
+  pname = "storebackup";
 
-  pname = "store-backup";
-
+  __structuredAttrs = true;
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper ];
