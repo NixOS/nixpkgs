@@ -695,7 +695,7 @@ let
       pkg-config
     ];
     n1qn1 = [ pkgs.gfortran ];
-    odbc = [ pkgs.unixODBC ];
+    odbc = [ pkgs.unixodbc ];
     opencv = [ pkgs.pkg-config ];
     pak = [ pkgs.curl.dev ];
     pander = with pkgs; [

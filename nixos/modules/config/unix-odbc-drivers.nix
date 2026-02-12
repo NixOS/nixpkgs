@@ -1,5 +1,5 @@
 { config, lib, ... }:
-# unixODBC drivers (this solution is not perfect.. Because the user has to
+# unixodbc drivers (this solution is not perfect.. Because the user has to
 # ask the admin to add a driver.. but it's simple and works
 
 let
@@ -21,7 +21,7 @@ in
       description = ''
         Specifies Unix ODBC drivers to be registered in
         {file}`/etc/odbcinst.ini`.  You may also want to
-        add `pkgs.unixODBC` to the system path to get
+        add `pkgs.unixodbc` to the system path to get
         a command line client to connect to ODBC databases.
       '';
     };

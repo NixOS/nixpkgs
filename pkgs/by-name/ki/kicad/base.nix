@@ -20,7 +20,7 @@
   graphviz,
   libpthread-stubs,
   libxdmcp,
-  unixODBC,
+  unixodbc,
   libgit2,
   libsecret,
   libgcrypt,
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     swig
     python
-    unixODBC
+    unixodbc
     libdeflate
     opencascade-occt
     protobuf_29
