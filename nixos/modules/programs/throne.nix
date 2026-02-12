@@ -23,7 +23,7 @@ in
         enable = lib.mkEnableOption "TUN mode of Throne";
 
         setuid = lib.mkEnableOption ''
-          setting suid bit for throne-core to run as root, which is less
+          setting suid bit for ThroneCore to run as root, which is less
           secure than default setcap method but closer to upstream assumptions.
           Enable this if you find the default setcap method configured in
           this module doesn't work for you
@@ -36,8 +36,8 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    security.wrappers.throne-core = lib.mkIf cfg.tunMode.enable {
-      source = "${cfg.package}/share/throne/Core";
+    security.wrappers."ThroneCore" = lib.mkIf cfg.tunMode.enable {
+      source = "${cfg.package}/share/throne/ThroneCore";
       owner = "root";
       group = "root";
       setuid = lib.mkIf cfg.tunMode.setuid true;
@@ -49,7 +49,7 @@ in
 
     # avoid resolvectl password prompt popping up three times
     # https://github.com/SagerNet/sing-tun/blob/0686f8c4f210f4e7039c352d42d762252f9d9cf5/tun_linux.go#L1062
-    # We use a hack here to determine whether the requested process is throne-core
+    # We use a hack here to determine whether the requested process is ThroneCore
     # Detect whether its capabilities contain at least `net_admin` and `net_raw`.
     # This does not reduce security, as we can already bypass `resolved` with them.
     # Alternatives to consider:
@@ -61,7 +61,7 @@ in
     #    change its own cmdline. `/proc/<pid>/exe` is reliable but kernel forbids
     #    checking that entry of process from different users, and polkit runs `spawn`
     #    as an unprivileged user.
-    # 3. Put throne-core into a systemd service, and let polkit check service name.
+    # 3. Put ThroneCore into a systemd service, and let polkit check service name.
     #    This is the most secure and convenient way but requires heavy modification
     #    to Throne source code. Would be good to let upstream support that eventually.
     security.polkit.extraConfig =
