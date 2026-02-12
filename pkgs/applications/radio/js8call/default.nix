@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   prePatch = ''
     substituteInPlace CMakeLists.txt \
         --replace "/usr/share/applications" "$out/share/applications" \
-        --replace "/usr/share/pixmaps" "$out/share/pixmaps" \
+        --replace "/usr/share/pixmaps" "$out/share/icons/hicolor/128x128/apps" \
         --replace "/usr/bin/" "$out/bin"
   '';
 

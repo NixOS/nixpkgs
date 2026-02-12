@@ -22,6 +22,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "go-md2man";
     license = lib.licenses.mit;
     homepage = "https://github.com/cpuguy83/go-md2man";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
   };
 })

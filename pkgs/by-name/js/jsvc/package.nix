@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  commonsDaemon,
+  commons-daemon,
   jdk,
   makeWrapper,
   jre,
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SPnE5jrw1zAy7vIzGrjp0+B4SwCLoufLef3XUcUgK6Y=";
   };
 
-  buildInputs = [ commonsDaemon ];
+  buildInputs = [ commons-daemon ];
   nativeBuildInputs = [
     jdk
     makeWrapper

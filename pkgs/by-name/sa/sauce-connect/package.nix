@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     homepage = "https://docs.saucelabs.com/reference/sauce-connect/";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = builtins.attrNames passthru.sources;
   };
 }

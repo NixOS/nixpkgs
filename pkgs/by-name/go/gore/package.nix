@@ -24,6 +24,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "gore";
     homepage = "https://github.com/motemen/gore";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
   };
 })

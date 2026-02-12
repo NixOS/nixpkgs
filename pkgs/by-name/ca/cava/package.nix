@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/karlstav/cava";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      offline
       mirrexagon
     ];
     platforms = lib.platforms.unix;

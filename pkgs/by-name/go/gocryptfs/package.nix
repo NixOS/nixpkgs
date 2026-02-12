@@ -69,7 +69,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://nuetzlich.net/gocryptfs/";
     maintainers = with lib.maintainers; [
       flokli
-      offline
       prusnak
     ];
     platforms = lib.platforms.unix;

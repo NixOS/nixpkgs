@@ -67,7 +67,6 @@ let
       docker-meta = {
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
-          offline
           vdemeester
           teutat3s
         ];

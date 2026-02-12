@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ushironoko";
     repo = "octorus";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-20HVES8XgZEgKIijTzo9rV5IRfhyZlY1noX6yHSUf8g=";
   };
 
@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "TUI PR review tool for GitHub";
     homepage = "https://github.com/ushironoko/octorus";
+    changelog = "https://github.com/ushironoko/octorus/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       matthiasbeyer

@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-town";
-  version = "22.2.0";
+  version = "22.5.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JY0zWWMln4r2ga1jwxK+RTp8izATyovRHBf4A29pXW4=";
+    hash = "sha256-7+KCk46TOnOVmmhYtqzC6kC3wQUdWkQKoSpoyb9D9tQ=";
   };
 
   vendorHash = null;
@@ -61,6 +61,8 @@ buildGoModule (finalAttrs: {
         "TestMockingRunner/MockCommitMessage"
         "TestMockingRunner/QueryWith"
         "TestTestCommands/CreateChildFeatureBranch"
+        "TestTestCommands/CreateChildBranch"
+        "TestTestCommands/CreateLocalBranchUsingGitTown"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

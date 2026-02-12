@@ -21,6 +21,10 @@
 
   # optional dependencies
   google-auth,
+  boto3,
+  botocore,
+  aiohttp,
+  httpx-aiohttp,
 
   # test
   dirty-equals,
@@ -32,16 +36,16 @@
   respx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anthropic";
-  version = "0.76.0";
+  version = "0.78.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
-    tag = "v${version}";
-    hash = "sha256-QEwUOPL/9ROV/UgD6KF2ePzjXDKHYrYrFvbJpVV8MO0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IN+vlP10KxkuzTgGRKr2k7hBnGTGFWdsW9ams6W+7Ak=";
   };
 
   postPatch = ''
@@ -67,7 +71,15 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    vertex = [ google-auth ];
+    aiohttp = [
+      aiohttp
+      httpx-aiohttp
+    ];
+    bedrock = [
+      boto3
+      botocore
+    ];
+    vertex = [ google-auth ] ++ google-auth.optional-dependencies.requests;
   };
 
   nativeCheckInputs = [
@@ -105,11 +117,11 @@ buildPythonPackage rec {
   meta = {
     description = "Anthropic's safety-first language model APIs";
     homepage = "https://github.com/anthropics/anthropic-sdk-python";
-    changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.natsukium
       lib.maintainers.sarahec
     ];
   };
-}
+})

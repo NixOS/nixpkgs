@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://github.com/golang-migrate/migrate";
     description = "Database migrations. CLI and Golang library";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     license = lib.licenses.mit;
     mainProgram = "migrate";
   };

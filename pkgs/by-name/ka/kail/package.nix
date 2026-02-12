@@ -28,7 +28,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/boz/kail";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      offline
       vdemeester
     ];
     mainProgram = "kail";

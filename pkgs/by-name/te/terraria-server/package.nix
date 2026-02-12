@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "terraria-server";
-  version = "1.4.5.4";
+  version = "1.4.5.5";
   urlVersion = lib.replaceStrings [ "." ] [ "" ] finalAttrs.version;
 
   src = fetchurl {
     url = "https://terraria.org/api/download/pc-dedicated-server/terraria-server-${finalAttrs.urlVersion}.zip";
-    hash = "sha256-VLBjt8t3Z/aVZJs9gfiQLEHVx0/CsgNiaO5nBrKysHI=";
+    hash = "sha256-BmLT5ATBviSfYuc3Cx/aMHUNTBs6S56GHJF8YIJXhtU=";
   };
 
   nativeBuildInputs = [

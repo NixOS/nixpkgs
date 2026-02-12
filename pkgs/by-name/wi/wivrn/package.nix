@@ -4,7 +4,6 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
-  fetchpatch,
   applyPatches,
   autoAddDriverRunpath,
   avahi,
@@ -34,7 +33,6 @@
   makeDesktopItem,
   nix-update-script,
   nlohmann_json,
-  onnxruntime,
   opencomposite,
   openxr-loader,
   ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
@@ -43,7 +41,6 @@
   python3,
   qt6,
   shaderc,
-  spdlog,
   systemd,
   udev,
   vulkan-headers,
@@ -56,13 +53,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "25.12";
+  version = "26.2";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gadfW3/PXi9SEztaHbi4U29Vj7ik/ia8BVDTy8P5aJE=";
+    hash = "sha256-wVFC8VDtALHI6e0655Ytc4gNOPnJP65XWNzlhzH2eoc=";
   };
 
   monado = applyPatches {
@@ -70,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "20e0dacbdd2de863923790326beec76e848b056a";
-      hash = "sha256-wiXdMgp3bKW17KqLnSn6HHhz7xbQtjp4c3aU7qp+2BE=";
+      rev = "9dcc3e1de2f7449d9757f5db332c867b4d794fb3";
+      hash = "sha256-ueg/GDnKP4nRVepdNE3sgK8sYckZc0aaC0CQc3tuxik=";
     };
 
     postPatch = ''

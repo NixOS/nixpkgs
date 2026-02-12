@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/dmtrKovalenko/odiff/releases";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ddogfoodd ];
-    platforms = lib.platforms.linux;
+    platforms = (lib.platforms.linux ++ lib.platforms.darwin);
     mainProgram = "odiff";
   };
 })

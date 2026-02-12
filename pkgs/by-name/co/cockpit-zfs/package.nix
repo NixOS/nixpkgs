@@ -1,9 +1,9 @@
 {
   acl,
   bash,
+  cockpit,
   coreutils,
   fetchFromGitHub,
-  firewalld,
   getent,
   glibc,
   iproute2,
@@ -15,7 +15,6 @@
   msmtp,
   nodejs,
   openssh,
-  python312,
   samba,
   shadow,
   smartmontools,
@@ -27,15 +26,6 @@
   zfs,
 }:
 
-let
-  # Using python312 because py-libzfs is not compatible with newer versions
-  python = (
-    python312.withPackages (ps: [
-      ps.pyudev
-      ps.py-libzfs
-    ])
-  );
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-zfs";
   version = "1.2.12-2";
@@ -67,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     acl
     bash
     coreutils
-    firewalld
     getent
     glibc
     iproute2
@@ -76,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     msmtp
     nodejs
     openssh
-    python
     samba
     shadow
     smartmontools
@@ -84,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     util-linux
     zfs
+    cockpit.passthru.python3Packages.pyudev
+    cockpit.passthru.python3Packages.py-libzfs
   ];
 
   env = {
@@ -151,11 +141,12 @@ stdenv.mkDerivation (finalAttrs: {
     for script in $out/etc/zfs/zed.d/*; do
       if [ -f "$script" ]; then
         wrapProgram "$script" \
+          --set PYTHONPATH "/etc/cockpit/${cockpit.passthru.python3Packages.python.sitePackages}" \
           --set PATH "${
             lib.makeBinPath [
+              "/etc/cockpit"
               coreutils
               bash
-              python
               jq
             ]
           }"

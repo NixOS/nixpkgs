@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kbst";
     repo = "kbst";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tbSYNJp/gzEz+wEAe3bvIiZL5axZvW+bxqTOBkYSpMY=";
   };
 
@@ -32,11 +32,6 @@ buildGoModule (finalAttrs: {
     ];
 
   doCheck = false;
-
-  doPostInstallCheck = true;
-  PostInstallCheckPhase = ''
-    $out/bin/kbst help | grep v${finalAttrs.version} > /dev/null
-  '';
 
   meta = {
     description = "Kubestack framework CLI";

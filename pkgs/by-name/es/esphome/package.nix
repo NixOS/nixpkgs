@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2026.1.4";
+  version = "2026.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-j7PlHGLBY9M5jxzvOt6H+zr3nCNPpM/FCMLgevt6MnM=";
+    hash = "sha256-leQkNa2FK7Wagpr+TKbfg/qkRMII03+dnWXoFZwwn9w=";
   };
 
   patches = [
@@ -195,6 +195,7 @@ python.pkgs.buildPythonApplication rec {
     ];
     maintainers = with lib.maintainers; [
       hexa
+      picnoir
       thanegill
     ];
     mainProgram = "esphome";

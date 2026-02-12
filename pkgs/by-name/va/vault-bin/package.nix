@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [
-      offline
       psyanticy
       Chili-Man
       techknowlogick

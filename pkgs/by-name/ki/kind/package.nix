@@ -56,7 +56,6 @@ buildGoModule (finalAttrs: {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
     homepage = "https://github.com/kubernetes-sigs/kind";
     maintainers = with lib.maintainers; [
-      offline
       rawkode
     ];
     license = lib.licenses.asl20;

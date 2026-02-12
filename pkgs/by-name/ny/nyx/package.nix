@@ -28,6 +28,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "nyx";
     homepage = "https://nyx.torproject.org/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
   };
 })

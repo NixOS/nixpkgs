@@ -34,7 +34,7 @@ let
         nativeBuildInputs = [ unzip ];
         meta = a.meta // {
           platforms = elasticsearch.meta.platforms;
-          maintainers = (a.meta.maintainers or [ ]) ++ (with lib.maintainers; [ offline ]);
+          maintainers = a.meta.maintainers or [ ];
         };
       }
     );

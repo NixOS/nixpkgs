@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://brig.readthedocs.io";
     changelog = "https://github.com/sahib/brig/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     mainProgram = "brig";
   };
 })

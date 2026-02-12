@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = [ lib.maintainers.offline ];
+    maintainers = [ ];
     mainProgram = "wagyu";
   };
 })

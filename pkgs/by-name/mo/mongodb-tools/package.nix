@@ -6,6 +6,7 @@
   pkg-config,
   libpcap,
   nix-update-script,
+  krb5,
 }:
 
 buildGoModule (finalAttrs: {
@@ -25,6 +26,7 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     openssl
     libpcap
+    krb5
   ];
 
   # Mongodb incorrectly names all of their binaries main
@@ -47,7 +49,7 @@ buildGoModule (finalAttrs: {
       runHook preBuild
 
       ${lib.concatMapStrings (t: ''
-        go build -o "$out/bin/${t}" -tags ssl -ldflags "-s -w" ./${t}/main
+        go build -o "$out/bin/${t}" -tags "gssapi ssl" -ldflags "-s -w" ./${t}/main
       '') tools}
 
       runHook postBuild

@@ -26,8 +26,8 @@ python.pkgs.buildPythonPackage (finalAttrs: {
     # fixes two tests, remove patch in the next version
     # https://github.com/mrmn2/PdfDing/pull/248
     (fetchpatch2 {
-      url = "https://github.com/mrmn2/PdfDing/pull/248/commits/8f6900dddd1dbbe1a1024a484f63b792dd022f99.patch?full_index=1";
-      hash = "sha256-5oUC2TKL4X5IFy/41qViaafyUr4+bLBIovk9AWQmxZc=";
+      url = "https://github.com/mrmn2/PdfDing/commit/24df5a82ffb1d60162978791b716f67d20128a22.patch?full_index=1";
+      hash = "sha256-N3FtPQGSOFeUbVcinXK9kJM6hZOn4YdJJVWe4VXb8pE=";
     })
   ];
 
