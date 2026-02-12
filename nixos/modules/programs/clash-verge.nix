@@ -100,8 +100,5 @@
       };
     };
 
-  meta.maintainers = with lib.maintainers; [
-    bot-wxt1221
-    Guanran928
-  ];
+  meta.maintainers = pkgs.clash-verge-rev.meta.maintainers;
 }
