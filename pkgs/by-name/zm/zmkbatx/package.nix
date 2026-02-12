@@ -9,8 +9,7 @@
   simpleDBus,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "zmkBATx";
-
+  pname = "zmkbatx";
   version = "1.0.1";
 
   src = fetchFromGitHub {

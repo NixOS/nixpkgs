@@ -2374,6 +2374,7 @@ mapAliases {
   zigbee2mqtt_2 = zigbee2mqtt; # Added 2025-08-11
   zinc = throw "'zinc' has been renamed to/replaced by 'zincsearch'"; # Converted to throw 2025-10-27
   zint = throw "'zint' has been renamed to/replaced by 'zint-qt'"; # Converted to throw 2025-10-27
+  zmkBATx = warnAlias "'zmkBATx' has been renamed to 'zmkbatx'" zmkbatx; # Added 2026-02-12
   zombietrackergps = throw "'zombietrackergps' has been dropped, as it depends on KDE Gear 5 and is unmaintained"; # Added 2025-08-20
   zotero_7 = throw "'zotero_7' has been renamed to/replaced by 'zotero'"; # Added 2025-12-09
   zotify = throw "zotify has been removed due to lack of upstream maintenance"; # Added 2025-09-26
