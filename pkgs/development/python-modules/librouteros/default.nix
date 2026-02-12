@@ -11,7 +11,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "librouteros";
   version = "3.4.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "luqasz";
     repo = "librouteros";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5b/f8B0npEF81nfYGpQ6vT9Px45m0ACQry6CJUXjIiI=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the MikroTik RouterOS API";
     homepage = "https://librouteros.readthedocs.io/";
-    changelog = "https://github.com/luqasz/librouteros/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/luqasz/librouteros/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
