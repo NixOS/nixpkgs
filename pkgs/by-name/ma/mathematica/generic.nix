@@ -41,7 +41,7 @@
   openssl,
   pciutils,
   tre,
-  unixODBC,
+  unixodbc,
   libxcb-image,
   libxcb-keysyms,
   xkeyboard_config,
@@ -126,7 +126,7 @@ stdenv.mkDerivation {
     openssl
     pciutils
     tre
-    unixODBC
+    unixodbc
     libxcb-image
     libxcb-keysyms
     xkeyboard_config

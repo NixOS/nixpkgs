@@ -11,7 +11,7 @@
   expat,
   sqlite,
   openssl,
-  unixODBC,
+  unixodbc,
   libmysqlclient,
   writableTmpDirAsHomeHook,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    unixODBC
+    unixodbc
     libmysqlclient
   ];
 

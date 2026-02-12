@@ -63,7 +63,7 @@
   libxcb-wm,
   zlib,
   at-spi2-core,
-  unixODBC,
+  unixodbc,
   unixODBCDrivers,
   libGL,
   # darwin
@@ -121,8 +121,8 @@ stdenv.mkDerivation rec {
     libproxy
     dbus
     glib
-    # unixODBC drivers
-    unixODBC
+    # unixodbc drivers
+    unixodbc
     unixODBCDrivers.psql
     unixODBCDrivers.sqlite
     unixODBCDrivers.mariadb

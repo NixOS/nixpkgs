@@ -22,7 +22,7 @@
   nss,
   htmlRendererSupport ? false,
 
-  unixODBC,
+  unixodbc,
   sqaplSupport ? false,
 
   zeroFootprintRideSupport ? false,
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     nss
   ]
-  ++ lib.optional sqaplSupport unixODBC;
+  ++ lib.optional sqaplSupport unixodbc;
 
   # See which files are not really important: `https://github.com/Dyalog/DyalogDocker/blob/master/rmfiles.sh`
   installPhase = ''

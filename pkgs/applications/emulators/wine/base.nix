@@ -146,7 +146,7 @@ stdenv.mkDerivation (
         ++ lib.optional cupsSupport pkgs.cups
         ++ lib.optional dbusSupport pkgs.dbus
         ++ lib.optional cairoSupport pkgs.cairo
-        ++ lib.optional odbcSupport pkgs.unixODBC
+        ++ lib.optional odbcSupport pkgs.unixodbc
         ++ lib.optional netapiSupport pkgs.samba4
         ++ lib.optional cursesSupport pkgs.ncurses
         ++ lib.optional vaSupport pkgs.libva

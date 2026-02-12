@@ -3,7 +3,7 @@
   fetchpatch,
   fetchurl,
   stdenv,
-  unixODBC,
+  unixodbc,
   cmake,
   mariadb,
   sqlite,
@@ -73,7 +73,7 @@
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [
-      unixODBC
+      unixodbc
       openssl
       libiconv
       zlib
@@ -82,10 +82,10 @@
 
     cmakeFlags = [
       "-DWITH_EXTERNAL_ZLIB=ON"
-      "-DODBC_LIB_DIR=${lib.getLib unixODBC}/lib"
-      "-DODBC_INCLUDE_DIR=${lib.getDev unixODBC}/include"
+      "-DODBC_LIB_DIR=${lib.getLib unixodbc}/lib"
+      "-DODBC_INCLUDE_DIR=${lib.getDev unixodbc}/include"
       "-DWITH_OPENSSL=ON"
-      # on darwin this defaults to ON but we want to build against unixODBC
+      # on darwin this defaults to ON but we want to build against unixodbc
       "-DWITH_IODBC=OFF"
     ];
 
@@ -130,14 +130,14 @@
     ];
 
     buildInputs = [
-      unixODBC
+      unixodbc
       sqlite
       zlib
       libxml2
     ];
 
     configureFlags = [
-      "--with-odbc=${unixODBC}"
+      "--with-odbc=${unixodbc}"
       "--with-sqlite3=${sqlite.dev}"
     ];
 
@@ -195,7 +195,7 @@
     postFixup = ''
       patchelf --set-rpath ${
         lib.makeLibraryPath [
-          unixODBC
+          unixodbc
           openssl
           libkrb5
           libuuid
@@ -283,14 +283,14 @@
     fixupPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
       ${stdenv.cc.bintools.targetPrefix}install_name_tool \
         -change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib \
-        -change /opt/homebrew/lib/libodbcinst.2.dylib ${unixODBC}/lib/libodbcinst.2.dylib \
+        -change /opt/homebrew/lib/libodbcinst.2.dylib ${unixodbc}/lib/libodbcinst.2.dylib \
         $out/${finalAttrs.passthru.driver}
     '';
 
     postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
       patchelf --set-rpath ${
         lib.makeLibraryPath [
-          unixODBC
+          unixodbc
           openssl
           libkrb5
           libuuid
@@ -337,18 +337,18 @@
       cd src
     '';
 
-    # `unixODBC` is loaded with `dlopen`, so `autoPatchElfHook` cannot see it, and `patchELF` phase would strip the manual patchelf. Thus:
+    # `unixodbc` is loaded with `dlopen`, so `autoPatchElfHook` cannot see it, and `patchELF` phase would strip the manual patchelf. Thus:
     # - Manually patchelf with `unixODCB` libraries
     # - Disable automatic `patchELF` phase
     installPhase = ''
       mkdir -p $out/lib
       cp opt/amazon/redshiftodbc/lib/64/* $out/lib
-      patchelf --set-rpath ${unixODBC}/lib/ $out/lib/libamazonredshiftodbc64.so
+      patchelf --set-rpath ${unixodbc}/lib/ $out/lib/libamazonredshiftodbc64.so
     '';
 
     dontPatchELF = true;
 
-    buildInputs = [ unixODBC ];
+    buildInputs = [ unixodbc ];
 
     # see the top of the file for an explanation
     passthru = {
