@@ -10,7 +10,7 @@
   capstone,
   jansson,
   libunistring,
-  wxGTK32,
+  wxwidgets_3_2,
   lua53Packages,
   perlPackages,
   gtk3,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     capstone
     jansson
     libunistring
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ (with lua53Packages; [
     lua

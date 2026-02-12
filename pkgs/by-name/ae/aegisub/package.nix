@@ -28,7 +28,7 @@
   python3,
   stdenv,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   zlib,
   # Boolean guard flags
   alsaSupport ? stdenv.hostPlatform.isLinux,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
-    wxGTK32
+    wxwidgets_3_2
     wrapGAppsHook3
   ];
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libass
     libuchardet
-    wxGTK32
+    wxwidgets_3_2
     zlib
   ]
   ++ lib.optionals alsaSupport [ alsa-lib ]

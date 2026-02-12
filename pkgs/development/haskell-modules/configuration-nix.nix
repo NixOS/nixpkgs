@@ -628,8 +628,8 @@ builtins.intersectAttrs super {
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
-  wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK32; };
-  wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
+  wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxwidgets_3_2; };
+  wxcore = super.wxcore.override { wxGTK = pkgs.wxwidgets_3_2; };
 
   shellify = enableSeparateBinOutput super.shellify;
   specup = enableSeparateBinOutput super.specup;

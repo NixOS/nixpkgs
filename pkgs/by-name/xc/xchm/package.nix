@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  wxGTK32,
+  wxwidgets_3_2,
   chmlib,
   desktopToDarwinBundle,
 }:
@@ -27,14 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     chmlib
   ];
 
-  configureFlags = [ "--with-wx-prefix=${wxGTK32}" ];
+  configureFlags = [ "--with-wx-prefix=${wxwidgets_3_2}" ];
 
   preConfigure = ''
-    export LDFLAGS="$LDFLAGS $(${wxGTK32}/bin/wx-config --libs std,aui | sed -e s@-pthread@@)"
+    export LDFLAGS="$LDFLAGS $(${wxwidgets_3_2}/bin/wx-config --libs std,aui | sed -e s@-pthread@@)"
   '';
 
   meta = {

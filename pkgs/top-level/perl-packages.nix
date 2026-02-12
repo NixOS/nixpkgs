@@ -604,7 +604,7 @@ with self;
     propagatedBuildInputs = [
       pkgs.pkg-config
       pkgs.gtk3
-      pkgs.wxGTK32
+      pkgs.wxwidgets_3_2
       ModulePluggable
     ];
     buildInputs = [ LWPProtocolHttps ];

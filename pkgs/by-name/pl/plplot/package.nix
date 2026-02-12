@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   enableWX ? false,
-  wxGTK32,
+  wxwidgets_3_2,
   enableXWin ? false,
   libx11,
   enablePNG ? false,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optional enableWX wxGTK32
+    lib.optional enableWX wxwidgets_3_2
     ++ lib.optional enableXWin libx11
     ++ lib.optionals enablePNG [
       cairo

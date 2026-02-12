@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libsndfile,
-  wxGTK32,
+  wxwidgets_3_2,
   SDL,
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsndfile
     SDL
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   src = fetchurl {
