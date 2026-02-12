@@ -4,7 +4,7 @@
   flet-client-flutter,
 
   # build-system
-  poetry-core,
+  setuptools,
 
   flet,
 }:
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/sdk/python/packages/flet-desktop";
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [ flet ];
 
@@ -25,6 +25,10 @@ buildPythonPackage rec {
       os.environ['FLET_VIEW_PATH'] = '${flet-client-flutter}/bin'
   '';
   postPatch = ''
+    # pin release version in packaged builds
+    substituteInPlace src/flet_desktop/version.py \
+      --replace-fail 'version = ""' 'version = "${version}"'
+
     echo "$_flet_setup_view" >> src/flet_desktop/__init__.py
   '';
 
