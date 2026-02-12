@@ -1,12 +1,49 @@
-tests: Remove bogus test for unsorted file listing
+tests: Remove bogus test for unsorted file listing and tests for -u and -c, which fail on apfs.
 
 Minimized from what Debian applies:
 https://git.hadrons.org/cgit/debian/pkgs/inetutils.git/tree/debian/patches/local/0006-tests-Remove-bogus-test-for-unsorted-file-listing.patch?id=8ab7f49fe5cf194e989ae6ae6a78eb65397c5778
 --- a/tests/libls.sh
 +++ b/tests/libls.sh
-@@ -91,1 +91,0 @@
+@@ -91,7 +91,6 @@ REPLY_a1=`$LS -a1 $LSDIR`
+ REPLY_A1=`$LS -A1 $LSDIR`
+
+ REPLY_C=`$LS -C $LSDIR`
 -REPLY_Cf=`$LS -Cf $LSDIR`
-@@ -130,3 +129,0 @@
+ REPLY_Cr=`$LS -Cr $LSDIR`
+ REPLY_Ct=`$LS -Ct $LSDIR`
+ REPLY_x=`$LS -x $LSDIR`
+@@ -101,13 +100,6 @@ REPLY_l=`$LS -l $LSDIR`
+ REPLY_lT=`$LS -l $LSDIR`
+ REPLY_n=`$LS -n $LSDIR`
+
+-# In an attempt to counteract lack of subsecond accuracy,
+-# probe the parent directory where timing is known to be more
+-# varied, than in the subdirectory "tests/".
+-#
+-REPLY_Ccts=`$LS -Ccts $LSDIR`
+-REPLY_Cuts=`$LS -Cuts $LSDIR`
+-
+ # All the following failure causes are checked and possibly
+ # brought to attention, independently of the other instances.
+ #
+@@ -130,9 +122,6 @@ test `echo "$diff" | $GREP -c -v '^[.]\{1,2\}$'` -eq 0 ||
+     fi
+   }
+
 -test x"$REPLY_C" != x"$REPLY_Cf" ||
 -  { errno=1; echo >&2 'Failed to disable sorting with "-f".'; }
 -
+ test x"$REPLY_C" != x"$REPLY_Cr" ||
+   { errno=1; echo >&2 'Failed to reverse sorting with "-r".'; }
+
+@@ -150,9 +139,6 @@ test x"$REPLY_l" != x"$REPLY_n" ||
+   { id -u && ! id -u -n ;} ||
+   { errno=1; echo >&2 'Failed to distinguish "-l" from "-n".'; }
+
+-test x"$REPLY_Ccts" != x"$REPLY_Cuts" ||
+-  { errno=1; echo >&2 'Failed to distinguish "-u" from "-c".'; }
+-
+ test $errno -ne 0 || $silence echo "Successful testing".
+
+ exit $errno
+
