@@ -30,15 +30,15 @@ let
     encfs
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "backintime-common";
   version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "bit-team";
     repo = "backintime";
-    rev = "v${version}";
-    sha256 = "sha256-y9uo/6R9OXK9hqUD0pCLJXF2B80lr2gXf6v8+Ca6u5M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y9uo/6R9OXK9hqUD0pCLJXF2B80lr2gXf6v8+Ca6u5M=";
   };
 
   nativeBuildInputs = [
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
       done by taking snapshots of a specified set of directories.
     '';
   };
-}
+})
