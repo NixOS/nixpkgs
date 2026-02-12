@@ -471,6 +471,22 @@ let
       '';
     };
 
+    packageOverrides = mkOption {
+      type = types.functionTo types.attrs;
+      default = pkgs: { };
+      description = ''
+        A function to replace or add packages in `pkgs` expects an attrset to be returned when called.
+      '';
+    };
+
+    perlPackageOverrides = mkOption {
+      type = types.functionTo types.attrs;
+      default = pkgs: { };
+      description = ''
+        The same as `packageOverrides` but for packages in the perl package set.
+      '';
+    };
+
     problems = (import ../stdenv/generic/problems.nix { inherit lib; }).configOptions;
   };
 
