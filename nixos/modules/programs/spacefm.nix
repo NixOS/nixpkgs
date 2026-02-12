@@ -51,7 +51,7 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.spaceFM ];
+    environment.systemPackages = [ pkgs.spacefm ];
 
     environment.etc."spacefm/spacefm.conf".text = lib.concatStrings (
       lib.mapAttrsToList (n: v: "${n}=${toString v}\n") cfg.settings
