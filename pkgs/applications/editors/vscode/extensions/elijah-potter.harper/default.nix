@@ -23,7 +23,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."harper.path".default = "${harper}/bin/harper-ls"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."harper.path".default = "${lib.getExe harper}"' package.json | sponge package.json
+
+    rm ./bin/harper-ls
   '';
   passthru.updateScript = vscode-extension-update-script { };
 
