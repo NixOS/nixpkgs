@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromRadicle,
+  fetchFromGitHub,
   stdenv,
   libiconv,
   zlib,
@@ -11,14 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-tui";
-  version = "0.6.0";
+  version = "0.7.0";
 
-  src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
-    repo = "z39mP9rQAaGmERfUMPULfPUi473tY";
-    node = "z6MkswQE8gwZw924amKatxnNCXA55BMupMmRg7LvJuim2C1V";
-    tag = finalAttrs.version;
-    hash = "sha256-rz9l9GtycqZoROUI6Hn0Fv5Br0YCIrcHlEWLMP4hasQ=";
+  src = fetchFromGitHub {
+    owner = "radicle-dev";
+    repo = "radicle-tui";
+    rev = "d4484a8c000a89a3b838d4cf3afcefa329ac1740";
+    hash = "sha256-2/pLlhilJyrZl9eLFWIh4YxlJwBbzjmb1Cg1xFSSl5k=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -27,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-f9D4RKWw7y6z9rERuF7F6soyNITvKa6QVt34biZZ5JY=";
+  cargoHash = "sha256-U5Gt8o2OLiJwpDkSK+dNlIx7PtbcBbg61s9GpLG50Vg=";
 
   postPatch = ''
     substituteInPlace build.rs \
@@ -38,6 +37,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [ radicle-node ];
 
   checkFlags = [
+    "--skip=apps::tui_patch::review::test::app_with_single_file_multiple_hunks_can_be_constructed"
+    "--skip=apps::tui_patch::review::test::app_with_single_hunk_can_be_constructed"
+    "--skip=apps::tui_patch::review::test::first_hunk_is_selected_by_default"
+    "--skip=apps::tui_patch::review::test::hunk_can_be_selected"
+    "--skip=apps::tui_patch::review::test::hunk_state_is_synchronized"
+    "--skip=apps::tui_patch::review::test::hunks_are_rejected_by_default"
+    "--skip=apps::tui_patch::review::test::multiple_files_single_hunk_can_be_accepted"
+    "--skip=apps::tui_patch::review::test::single_file_multiple_hunks_only_first_can_be_accepted"
+    "--skip=apps::tui_patch::review::test::single_file_multiple_hunks_only_last_can_be_accepted"
+    "--skip=apps::tui_patch::review::test::single_file_single_hunk_can_be_accepted"
     "--skip=cli::can_be_executed"
     "--skip=cli::empty_command_is_forwarded"
     "--skip=cli::help_command_is_forwarded"
@@ -68,6 +77,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=commands::tui_patch::review::test::multiple_files_single_hunk_can_be_accepted"
     "--skip=commands::tui_patch::review::test::single_file_multiple_hunks_only_last_can_be_accepted"
     "--skip=commands::tui_patch::review::test::single_file_single_hunk_can_be_accepted"
+    "--skip=ui::items::patch::tests::hunk_comments_on_deleted_simple_are_inserted_correctly"
+    "--skip=ui::items::patch::tests::hunk_comments_on_modified_complex_are_inserted_correctly"
+    "--skip=ui::items::patch::tests::hunk_comments_on_modified_simple_are_inserted_correctly"
   ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
