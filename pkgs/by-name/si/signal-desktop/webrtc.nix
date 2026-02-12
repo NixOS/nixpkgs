@@ -4,6 +4,7 @@
   buildPackages,
   ninja,
   gn,
+  symlinkJoin,
   python3,
   pkg-config,
   glib,
@@ -18,6 +19,14 @@
 }:
 
 let
+  llvmCcAndBintools = symlinkJoin {
+    name = "signal-webrtc-llvm-cc-and-bintools";
+    paths = [
+      buildPackages.rustc.llvmPackages.llvm
+      buildPackages.rustc.llvmPackages.stdenv.cc
+    ];
+  };
+
   chromiumRosettaStone = {
     cpu =
       platform:
@@ -41,6 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   gclientDeps = gclient2nix.importGclientDeps ./webrtc-sources.json;
   sourceRoot = "src";
+
+  # Chromium's Darwin toolchain defines _LIBCPP_HARDENING_MODE itself; keep
+  # cc-wrapper from injecting a conflicting default.
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "libcxxhardeningfast"
+    "libcxxhardeningextensive"
+  ];
 
   nativeBuildInputs = [
     gn
@@ -77,8 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace modules/audio_device/linux/pulseaudiosymboltable_linux.cc \
       --replace-fail "libpulse.so.0" "${pulseaudio}/lib/libpulse.so.0"
-    substituteInPlace build/config/compiler/BUILD.gn \
-      --replace-fail 'clang_rt_library_dir = ""' 'clang_rt_library_dir="${llvmPackages.compiler-rt}/lib/clang/${llvmPackages.clang.version}/lib/darwin"'
+  ''
+  + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace build/config/clang/BUILD.gn \
+      --replace-fail '_clang_lib_dir = "$clang_base_path/lib/clang/$clang_version/lib"' '_clang_lib_dir = "${llvmPackages.compiler-rt}/lib"'
+
+    # Keep target triple aligned with nix cc-wrapper expectations to avoid
+    # arm64-apple-macos vs arm64-apple-darwin warning spam.
+    substituteInPlace build/config/mac/BUILD.gn \
+      --replace-fail "apple-macos" "apple-darwin"
   ''
   + lib.optionalString stdenv.isLinux ''
     substituteInPlace modules/audio_device/linux/alsasymboltable_linux.cc \
@@ -117,8 +140,11 @@ stdenv.mkDerivation (finalAttrs: {
       ''target_cpu="${chromiumRosettaStone.cpu stdenv.hostPlatform}"''
       "use_sysroot=true"
       "is_clang=true"
-      ''clang_base_path="${llvmPackages.clang}/bin"''
-      ''custom_toolchain="//build/toolchain/mac:clang_x64"''
+      "clang_use_chrome_plugins=false"
+      "clang_use_raw_ptr_plugin=false"
+      "use_clang_modules=false"
+      ''clang_base_path="${llvmCcAndBintools}"''
+      ''custom_toolchain="//build/toolchain/mac:clang_${chromiumRosettaStone.cpu stdenv.hostPlatform}"''
       "treat_warnings_as_errors=false"
       "use_llvm_libatomic=false"
       "use_custom_libcxx=false"
