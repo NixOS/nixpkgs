@@ -66,7 +66,7 @@
   zlib,
   at-spi2-core,
   unixodbc,
-  unixODBCDrivers,
+  unixodbcDrivers,
   libGL,
   # darwin
   moltenvk,
@@ -129,9 +129,9 @@ stdenv.mkDerivation {
     glib
     # unixodbc drivers
     unixodbc
-    unixODBCDrivers.psql
-    unixODBCDrivers.sqlite
-    unixODBCDrivers.mariadb
+    unixodbcDrivers.psql
+    unixodbcDrivers.sqlite
+    unixodbcDrivers.mariadb
   ]
   ++ lib.optionals systemdSupport [
     systemd

@@ -368,5 +368,5 @@
   };
 }
 // lib.optionalAttrs config.allowAliases {
-  mysql = throw "unixODBCDrivers.mysql has been removed because it has been marked as broken since 2016."; # Added 2025-10-11
+  mysql = throw "unixodbcDrivers.mysql has been removed because it has been marked as broken since 2016."; # Added 2025-10-11
 }
