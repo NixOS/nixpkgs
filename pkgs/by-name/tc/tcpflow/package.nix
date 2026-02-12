@@ -14,13 +14,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcpflow";
-  version = "1.6.1";
+  version = "1.6.1-unstable-2026-01-29";
 
   src = fetchFromGitHub {
     owner = "simsong";
     repo = "tcpflow";
-    tag = "tcpflow-${finalAttrs.version}";
-    sha256 = "0vbm097jhi5n8pg08ia1yhzc225zv9948blb76f4br739l9l22vq";
+    ## Upstream updated the version inside the repository but did not tag
+    # tag = "tcpflow-${finalAttrs.version}";
+    rev = "8d47b53a54da58e9c9b78efed8b379d98c6113e4";
+    hash = "sha256-fGKclipEU/5oAUwUWnyCVAuDjmzdExWC26qgobybz8s=";
     fetchSubmodules = true;
   };
 
@@ -40,10 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace bootstrap.sh \
       --replace ".git" "" \
       --replace "/bin/rm" "rm"
-    # Temporary fix for a build error:
-    # https://src.fedoraproject.org/rpms/tcpflow/blob/979e250032b90de2d6b9e5b94b5203d98cccedad/f/tcpflow-1.6.1-format.patch
-    substituteInPlace src/datalink.cpp \
-      --replace 'DEBUG(6)(s.c_str());' 'DEBUG(6) ("%s", s.c_str());'
   '';
 
   preConfigure = "bash ./bootstrap.sh";
