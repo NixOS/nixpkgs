@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sagittarius-scheme";
   version = "0.9.12";
   src = fetchurl {
-    url = "https://bitbucket.org/ktakashi/sagittarius-scheme/downloads/sagittarius-${finalAttrs.version}.tar.gz";
+    url = "https://github.com/ktakashi/sagittarius-scheme/releases/download/v${finalAttrs.version}/sagittarius-${finalAttrs.version}.tar.gz";
     hash = "sha256-w6aQkC7/vKO8exvDpsSsLyLXrm4FSKh8XYGJgseEII0=";
   };
   preBuild = ''
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       -  mostly works O(n)
       -  Replaceable reader
     '';
-    homepage = "https://bitbucket.org/ktakashi/sagittarius-scheme";
+    homepage = "https://github.com/ktakashi/sagittarius-scheme";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ abbe ];
