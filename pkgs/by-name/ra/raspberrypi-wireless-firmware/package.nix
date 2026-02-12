@@ -8,6 +8,9 @@ stdenvNoCC.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
   version = "0-unstable-2025-04-08";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   srcs = [
     (fetchFromGitHub {
       name = "bluez-firmware";
