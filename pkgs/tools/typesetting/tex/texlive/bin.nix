@@ -42,7 +42,7 @@
   clisp,
   biber,
   woff2,
-  xxHash,
+  xxhash,
   makeWrapper,
   useFixedHashes ? true,
   asymptote,
@@ -602,7 +602,7 @@ rec {
       ttfautohint
       woff2
       potrace
-      xxHash
+      xxhash
       mupdf-headless
     ];
 

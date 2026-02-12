@@ -9,7 +9,7 @@
 
   # dependencies
   pcre2,
-  xxHash,
+  xxhash,
 
   # update script
   gitUpdater,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xxHash
+    xxhash
   ];
 
   propagatedBuildInputs = [

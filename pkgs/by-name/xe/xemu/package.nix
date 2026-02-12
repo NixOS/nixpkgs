@@ -30,7 +30,7 @@
   cacert,
   darwin,
   desktopToDarwinBundle,
-  xxHash,
+  xxhash,
   tomlplusplus,
 }:
 
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     vulkan-headers
     vulkan-loader
-    xxHash
+    xxhash
     tomlplusplus
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
