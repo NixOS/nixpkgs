@@ -8,8 +8,9 @@
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "simpleBluez";
+  pname = "simplebluez";
 
+  # warning: updating to >=0.9.0 changes the license
   version = "0.7.3";
 
   src = fetchFromGitHub {

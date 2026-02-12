@@ -5,7 +5,7 @@
   qt6,
   pkg-config,
   dbus,
-  simpleBluez,
+  simplebluez,
   simpleDBus,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtconnectivity
     dbus.lib
-    simpleBluez
+    simplebluez
     simpleDBus
   ];
 
