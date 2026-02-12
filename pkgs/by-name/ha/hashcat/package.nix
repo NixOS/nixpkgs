@@ -14,7 +14,7 @@
   python3,
   rocmPackages ? { },
   rocmSupport ? config.rocmSupport,
-  xxHash,
+  xxhash,
   zlib,
   libiconv,
 }:
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
         simplejson
       ]
     ))
-    xxHash
+    xxhash
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
