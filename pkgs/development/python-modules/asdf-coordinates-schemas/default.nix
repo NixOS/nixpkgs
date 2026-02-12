@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "asdf-coordinates-schemas";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asdf-format";
     repo = "asdf-coordinates-schemas";
     tag = finalAttrs.version;
-    hash = "sha256-gz4SmhPHevcn+40ODcSEdmzlGQFSQaoME64dWCNJKFI=";
+    hash = "sha256-GkYbUCuyDW2t8boYi+dknQ+0Pt6MjvU1PxOYcPfbFLw=";
   };
 
   build-system = [

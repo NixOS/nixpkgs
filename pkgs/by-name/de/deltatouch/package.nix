@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltatouch";
-  version = "2.25.1";
+  version = "2.35.0";
 
   src = fetchFromCodeberg {
     owner = "lk108";
     repo = "deltatouch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0+5wZCadYHmZjp/Za0LmK7FWq9nfyhXZFAx0lGqfRK0=";
+    hash = "sha256-6jzGwOkO14P7rZSBGZ6/Mzda/PM6ZVQeUCb7yfQtbkQ=";
   };
 
   nativeBuildInputs = [

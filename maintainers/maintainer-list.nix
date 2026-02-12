@@ -20498,6 +20498,11 @@
     githubId = 943430;
     name = "David Hagege";
   };
+  pdg137 = {
+    name = "Paul Grayson";
+    github = "pdg137";
+    githubId = 466760;
+  };
   peat-psuwit = {
     name = "Ratchanan Srirattanamet";
     email = "peat@peat-network.xyz";

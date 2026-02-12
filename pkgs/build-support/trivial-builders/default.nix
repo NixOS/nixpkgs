@@ -111,7 +111,7 @@ rec {
       allowSubstitutes ? false,
       preferLocalBuild ? true,
       derivationArgs ? { },
-    }:
+    }@args:
     assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
       destination must be an absolute path, relative to the derivation's out path,
       got '${destination}' instead.
@@ -125,6 +125,7 @@ rec {
     runCommand name
       (
         {
+          pos = builtins.unsafeGetAttrPos "name" args;
           inherit
             text
             executable
@@ -333,7 +334,7 @@ rec {
          Type: Bool
       */
       inheritPath ? true,
-    }:
+    }@args:
     writeTextFile {
       inherit
         name
@@ -613,6 +614,13 @@ rec {
           "failOnMissing"
         ]
         // {
+          # Allow getting the proper position of the output derivation.
+          # Since one of these are required, it should be fairly accurate.
+          pos =
+            if args_ ? pname then
+              builtins.unsafeGetAttrPos "pname" args_
+            else
+              builtins.unsafeGetAttrPos "name" args_;
           inherit preferLocalBuild allowSubstitutes;
           paths = mapPaths (path: "${path}${stripPrefix}") paths;
           passAsFile = [ "paths" ];
@@ -675,6 +683,14 @@ rec {
     in
     runCommand name
       {
+        # Get the position from the `entries` attrset if it exists.
+        # This is the best we can do since the other attrs are either defined here, or curried values that
+        # we cannot extract a position from
+        pos =
+          if lib.isAttrs entries then
+            builtins.unsafeGetAttrPos (builtins.head (builtins.attrNames entries)) entries
+          else
+            null;
         preferLocalBuild = true;
         allowSubstitutes = false;
         passthru.entries = entries';
@@ -744,12 +760,15 @@ rec {
       meta ? { },
       passthru ? { },
       substitutions ? { },
-    }:
+    }@args:
     script:
     runCommand name
       (
         substitutions
         // {
+          # Make the position of the derivation accurate.
+          # Since not having `name` is deprecated, this should be fairly accurate.
+          pos = lib.unsafeGetAttrPos "name" args;
           # TODO(@Artturin:) substitutions should be inside the env attrset
           # but users are likely passing non-substitution arguments through substitutions
           # turn off __structuredAttrs to unbreak substituteAll
@@ -1000,76 +1019,70 @@ rec {
       ];
     }
   */
-  applyPatches =
-    {
-      src,
-      name ?
-        (
-          if builtins.typeOf src == "path" then
-            baseNameOf src
-          else if builtins.isAttrs src && builtins.hasAttr "name" src then
-            src.name
-          else
-            throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
-        )
-        + "-patched",
-      patches ? [ ],
-      prePatch ? "",
-      postPatch ? "",
-      ...
-    }@args:
-    assert lib.assertMsg (
-      !args ? meta
-    ) "applyPatches will not merge 'meta', change it in 'src' instead";
-    assert lib.assertMsg (
-      !args ? passthru
-    ) "applyPatches will not merge 'passthru', change it in 'src' instead";
-    if patches == [ ] && prePatch == "" && postPatch == "" then
-      src # nothing to do, so use original src to avoid additional drv
-    else
+  applyPatches = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        src,
+        ...
+      }@args:
+      assert lib.assertMsg (
+        !args ? meta
+      ) "applyPatches will not merge 'meta', change it in 'src' instead";
+      assert lib.assertMsg (
+        !args ? passthru
+      ) "applyPatches will not merge 'passthru', change it in 'src' instead";
       let
         keepAttrs = names: lib.filterAttrs (name: val: lib.elem name names);
         # enables tools like nix-update to determine what src attributes to replace
-        extraPassthru = lib.optionalAttrs (lib.isAttrs src) (
+        extraPassthru = lib.optionalAttrs (lib.isAttrs finalAttrs.src) (
           keepAttrs [
             "rev"
             "tag"
             "url"
             "outputHash"
             "outputHashAlgo"
-          ] src
+          ] finalAttrs.src
         );
       in
-      stdenvNoCC.mkDerivation (
-        {
-          inherit
-            name
-            src
-            patches
-            prePatch
-            postPatch
-            ;
-          preferLocalBuild = true;
-          allowSubstitutes = false;
-          phases = "unpackPhase patchPhase installPhase";
-          installPhase = "cp -R ./ $out";
-        }
+      {
+        name =
+          args.name or (
+            if builtins.isPath finalAttrs.src then
+              baseNameOf finalAttrs.src + "-patched"
+            else if builtins.isAttrs finalAttrs.src && (finalAttrs.src ? name) then
+              let
+                srcName = builtins.parseDrvName finalAttrs.src.name;
+              in
+              "${srcName.name}-patched${lib.optionalString (srcName.version != "") "-${srcName.version}"}"
+            else
+              throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
+          );
+
+        # Manually setting `name` can mess up positioning.
+        # This should fix it.
+        pos = builtins.unsafeGetAttrPos "src" args;
+
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+
+        dontConfigure = true;
+        dontBuild = true;
+        doCheck = false;
+
+        installPhase = "cp -R ./ $out";
+
+        # passthru the git and hash info for nix-update, as well
+        # as all the src's passthru attrs.
+        passthru = extraPassthru // finalAttrs.src.passthru or { };
+
         # Carry (and merge) information from the underlying `src` if present.
-        // (optionalAttrs (src ? meta) {
-          inherit (src) meta;
-        })
-        // (optionalAttrs (extraPassthru != { } || src ? passthru) {
-          passthru = extraPassthru // src.passthru or { };
-        })
-        # Forward any additional arguments to the derivation
-        // (removeAttrs args [
-          "src"
-          "name"
-          "patches"
-          "prePatch"
-          "postPatch"
-        ])
-      );
+        # If there is not src.meta, this meta block will be blank regardless.
+        meta = lib.optionalAttrs (finalAttrs.src ? meta) removeAttrs finalAttrs.src.meta [ "position" ];
+      };
+  };
 
   # TODO: move docs to Nixpkgs manual
   # An immutable file in the store with a length of 0 bytes.

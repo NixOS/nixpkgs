@@ -17,16 +17,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "agent-client-protocol";
-  version = "0.7.1";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "python-sdk";
-    tag = version;
-    hash = "sha256-pUOs6TUc0qmY+/AWTtm5kKouHKL8cLMhJ+nZT4r+6sI=";
+    tag = finalAttrs.version;
+    hash = "sha256-MFfHr0bPBSMxb6HMndbrw/Aidd8TXUKwFam6+TroXkI=";
   };
 
   build-system = [
@@ -56,11 +56,13 @@ buildPythonPackage rec {
     "test_spawn_agent_process_roundtrip"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Python SDK for ACP clients and agents";
     homepage = "https://github.com/agentclientprotocol/python-sdk";
-    changelog = "https://github.com/agentclientprotocol/python-sdk/releases/tag/${src.tag}";
+    changelog = "https://github.com/agentclientprotocol/python-sdk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
