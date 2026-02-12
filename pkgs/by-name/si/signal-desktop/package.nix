@@ -105,9 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     pnpm
     makeWrapper
-    copyDesktopItems
     python3
     jq
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
   ];
   buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
@@ -134,6 +136,17 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/signalapp/Signal-Desktop/issues/7667
     substituteInPlace ts/util/version.std.ts \
       --replace-fail 'isAdhoc(version)' 'true'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Nix builds do not need upstream release hooks (notarization and
+    # language-pack postprocessing), and they expect a different macOS
+    # app layout than nixpkgs' Electron provides.
+    substituteInPlace package.json \
+      --replace-fail '"artifactBuildCompleted": "ts/scripts/artifact-build-completed.node.js",' "" \
+      --replace-fail '"afterSign": "ts/scripts/after-sign.node.js",' "" \
+      --replace-fail '"afterPack": "ts/scripts/after-pack.node.js",' "" \
+      --replace-fail '"sign": "./ts/scripts/sign-macos.node.js",' "" \
+      --replace-fail '"afterAllArtifactBuild": "ts/scripts/after-all-artifact-build.node.js",' ""
   '';
 
   pnpmDeps = fetchPnpmDeps {
@@ -156,6 +169,10 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
     SOURCE_DATE_EPOCH = 1770853842;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Disable code signing during local macOS builds.
+    CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
   preBuild = ''
@@ -200,6 +217,30 @@ stdenv.mkDerivation (finalAttrs: {
 
     rm -r node_modules/@signalapp/sqlcipher
     cp -r ${signal-sqlcipher} node_modules/@signalapp/sqlcipher
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # fs-xattr is required at runtime by preload.wrapper.js,
+    # but with npmRebuild disabled its native binding is missing.
+    # Build it explicitly against Electron headers ahead of packaging.
+    export npm_config_nodedir=${electron.headers}
+    pushd node_modules/fs-xattr
+    pnpm exec node-gyp rebuild
+    popd
+    test -f node_modules/fs-xattr/build/Release/xattr.node
+
+    # These hooks expect upstream release/signing layout and can fail in
+    # nixpkgs builds. Drop them from the effective electron-builder config.
+    jq '
+      .build
+      |= del(
+        .artifactBuildCompleted,
+        .afterSign,
+        .afterPack,
+        .afterAllArtifactBuild
+      ) |
+      .build.mac |= del(.sign)
+    ' package.json > package.json.tmp
+    mv package.json.tmp package.json
   '';
 
   buildPhase = ''
@@ -212,19 +253,31 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm run generate
     pnpm exec electron-builder \
-      --linux "dir:${stdenv.hostPlatform.node.arch}" \
+      ${
+        if stdenv.hostPlatform.isDarwin then "--mac" else "--linux"
+      } "dir:${stdenv.hostPlatform.node.arch}" \
       --config.extraMetadata.environment=$SIGNAL_ENV \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.npmRebuild=false"} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
 
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -r dist/mac*/Signal.app $out/Applications
+    makeWrapper "$out/Applications/Signal.app/Contents/MacOS/Signal" "$out/bin/signal-desktop" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p $out/share/
-    cp -r dist/*-unpacked/resources $out/share/signal-desktop
+    mkdir -p $out/share/signal-desktop
+    cp -r dist/*-unpacked/resources/* $out/share/signal-desktop
 
     for icon in build/icons/png/*
     do
@@ -236,7 +289,8 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
-
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -300,6 +354,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 })
