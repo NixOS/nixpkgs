@@ -1,0 +1,32 @@
+Fix UB: vector::reserve() followed by operator[] access
+
+reserve() only sets capacity, not size. Accessing elements via operator[]
+beyond size() is undefined behavior. With libc++ hardening
+(_LIBCPP_HARDENING_MODE_EXTENSIVE), this triggers __builtin_trap().
+
+Use resize() instead, which sets both capacity and size.
+
+diff --git a/aten/src/ATen/native/CPUBlas.cpp b/aten/src/ATen/native/CPUBlas.cpp
+--- a/aten/src/ATen/native/CPUBlas.cpp
++++ b/aten/src/ATen/native/CPUBlas.cpp
+@@ -1086,7 +1086,7 @@
+     // Create a scratchpad buffer for the brgemm execution
+     scratchpad = std::vector<uint8_t>(brg.get_scratchpad_size());
+     // Prepare default vector of pairs of tensors A and B offsets for each batch.
+-    A_B_offsets.reserve(1);
++    A_B_offsets.resize(1);
+     A_B_offsets[0] = std::make_pair(0, 0);
+   }
+   dnnl::ukernel::brgemm brg;
+diff --git a/aten/src/ATen/native/mps/operations/Shape.mm b/aten/src/ATen/native/mps/operations/Shape.mm
+--- a/aten/src/ATen/native/mps/operations/Shape.mm
++++ b/aten/src/ATen/native/mps/operations/Shape.mm
+@@ -271,7 +271,7 @@
+     auto cachedGraph = LookUpOrCreateCachedGraph<CachedGraph>(key, [&](auto mpsGraph, auto newCachedGraph) {
+       auto len_tensor_array = inputs.size() - skipped_tensor_indices.size();
+       std::vector<MPSGraphTensor*> castInputTensors(len_tensor_array);
+-      newCachedGraph->inputTensors_.reserve(len_tensor_array);
++      newCachedGraph->inputTensors_.resize(len_tensor_array);
+
+       for (const auto idx : c10::irange(len_tensor_array)) {
+         const Tensor& tensor = input_tensors[idx];

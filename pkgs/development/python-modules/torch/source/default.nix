@@ -302,6 +302,15 @@ buildPythonPackage.override { inherit stdenv; } rec {
 
   patches = [
     ./clang19-template-warning.patch
+
+    # Fix UB: std::vector::reserve() followed by operator[] access beyond size().
+    # reserve() only allocates capacity without changing size, so operator[] past
+    # size() is undefined behavior. nixpkgs' libc++ hardening
+    # (_LIBCPP_HARDENING_MODE_EXTENSIVE) catches this at runtime via
+    # __builtin_trap(), causing SIGTRAP (exit code 133) on aarch64-darwin MPS.
+    # Affects: aten/src/ATen/native/mps/operations/Shape.mm (MPS cat op)
+    #          aten/src/ATen/native/CPUBlas.cpp (brgemm, not triggered on darwin)
+    ./fix-vector-reserve-ub.patch
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
