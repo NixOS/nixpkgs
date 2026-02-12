@@ -1771,10 +1771,9 @@ with pkgs;
 
   inherit (go-containerregistry) crane gcrane;
 
-  geekbench_4 = callPackage ../tools/misc/geekbench/4.nix { };
-  geekbench_5 = callPackage ../tools/misc/geekbench/5.nix { };
-  geekbench_6 = callPackage ../tools/misc/geekbench/6.nix { };
-  geekbench = geekbench_6;
+  geekbench_4 = callPackage ../by-name/ge/geekbench/4.nix { };
+  geekbench_5 = callPackage ../by-name/ge/geekbench/5.nix { };
+  geekbench_6 = geekbench;
 
   ghidra = callPackage ../tools/security/ghidra/build.nix {
     protobuf = protobuf_21;
