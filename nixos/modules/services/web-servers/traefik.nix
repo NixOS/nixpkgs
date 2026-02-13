@@ -61,8 +61,6 @@ let
       format.generate "install_config.json" cfg.install.settings
     else
       cfg.install.file;
-
-  finalInstallFile = if cfg.useEnvSubst then "/run/traefik/config.json" else installFile;
 in
 {
   imports = [
@@ -132,7 +130,7 @@ in
           Path to Traefik's install configuration file.
 
           ::: {.note}
-          Using this option has precedence over {option}`services.traefik.install.settings`.
+          You cannot use this option alongside the declarative configuration options.
           :::
         '';
       };
@@ -181,8 +179,8 @@ in
         '';
       };
       dir = mkOption {
-        default = null;
-        example = literalExpression "/var/lib/traefik/routing";
+        default = "/var/lib/traefik/routing";
+        example = literalExpression "/etc/traefik/";
         type = nullOr path;
         description = ''
           Path to the directory Traefik should watch for configuration files.
@@ -325,33 +323,7 @@ in
         ::: {.warn}
         The traefik install configuration methods (env, CLI, and file) are mutually exclusive.
         :::
-
-        Rather than setting secret values with the traefik environment variable syntax,
-        it is recommended to set arbitrary environment variables, then reference them with `$VARNAME` in e.g.
-        {option}`services.traefik.install.settings`, like so:
-        ```nix
-        {
-          services.traefik = {
-            install.settings.somesecretvalue = "$SECRETNAME";
-            useEnvSubst = true; # Necessary in order to use environment variables in the Traefik config.
-            environmentFiles = [ /path/to/file/that/defines/SECRETNAME ];
-          };
-        }
         ```
-      '';
-    };
-
-    useEnvSubst = mkOption {
-      default = cfg.environmentFiles != [ ];
-      defaultText = "config.services.traefik.environmentFiles != [ ]";
-      type = bool;
-      example = true;
-      description = ''
-        Whether to use `envSubst` in the `ExecStartPre` phase to augment the generated install config. See {option}`services.traefik.environmentFiles`.
-
-        ::: {.note}
-        If you use environment files with Traefik but *do not* utilise environment variables in the install config, this can safely be disabled to reduce startup time.
-        :::
       '';
     };
   };
@@ -366,33 +338,33 @@ in
           It is recommended to use 'settings'.
         '';
       }
-      # {
-      #   assertion =
-      #     (!(isDefault "install.file"))
-      #     -> (
-      #       builtins.all (map isDefault [
-      #       "routing.files"
-      #       "routing.dir"
-      #       "routing.file"
-      #       ])
-      #     );
-      #   message = ''
-      #     None of the routing configuration options may be used if Traefik is being managed imperatively.
-      #     The following options have non-default values:
-      #       - ${
-      #         concatMapStringsSep "\n  - " (str: "'services.traefik.routing.${str}'") (
-      #           filter (attr: !(isDefault "routing.${attr}")) [
-      #             "files"
-      #             "dir"
-      #             "file"
-      #             "settings" # TODO: Drop in 26.11.
-      #           ]
-      #         )
-      #       }
-      #   '';
-      # }
       {
-        assertion = !(isDefault "routing.file") -> isDefault "routing.dir";
+        assertion =
+          (!(isDefault "install.file"))
+          -> (builtins.all (
+            map isDefault [
+              "routing.files"
+              "routing.dir"
+              "routing.file"
+            ]
+          ));
+        message = ''
+          None of the routing configuration options may be used if Traefik is being managed imperatively.
+          The following options have non-default values:
+            - ${
+              concatMapStringsSep "\n  - " (str: "'services.traefik.routing.${str}'") (
+                filter (attr: !(isDefault "routing.${attr}")) [
+                  "files"
+                  "dir"
+                  "file"
+                  "settings" # TODO: Drop in 27.05.
+                ]
+              )
+            }
+        '';
+      }
+      {
+        assertion = !(isDefault "routing.file") -> cfg.routing.dir == null;
         message = ''
           The 'services.traefik.routing.file' and 'services.traefik.routing.dir' options
           are mutually exclusive for the Traefik routing config. It is recommended to use
@@ -446,13 +418,16 @@ in
       routing.files = mkIf (!(isDefault "install.file")) {
         "custom-migrated".settings = cfg.routing.settings;
       };
-      install.settings = mkIf (!(isDefault "routing.dir") || !(isDefault "routing.file")) {
-        providers.file = {
-          directory = mkIf (!(isDefault "routing.dir")) cfg.routing.dir;
-          filename = mkIf (!(isDefault "routing.file")) cfg.routing.file;
-          watch = mkDefault true;
-        };
-      };
+      install.settings =
+        mkIf (!(isDefault "routing.dir") || !(isDefault "routing.file")) mkIf
+          (cfg.routing.dir != null || !(isDefault "routing.file"))
+          {
+            providers.file = {
+              directory = mkIf (!(isDefault "routing.dir")) cfg.routing.dir;
+              filename = mkIf (!(isDefault "routing.file")) cfg.routing.file;
+              watch = mkDefault true;
+            };
+          };
     };
 
     systemd.services.traefik = {
@@ -462,11 +437,10 @@ in
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 86400;
       startLimitBurst = 5;
+      unitConfig.Documentation = "https://doc.traefik.io/traefik/";
       serviceConfig = {
-        Documentation = "https://doc.traefik.io/traefik/";
         EnvironmentFile = cfg.environmentFiles;
-        ExecStartPre = optional cfg.useEnvSubst "${getExe pkgs.envsubst} -i '${installFile}' > '${finalInstallFile}'";
-        ExecStart = "${getExe cfg.package} --configfile=${finalInstallFile}";
+        ExecStart = "${getExe cfg.package} --configfile=${installFile}";
         Type = "notify";
         User = cfg.user;
         Group = cfg.group;
