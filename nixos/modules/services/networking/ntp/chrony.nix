@@ -276,7 +276,7 @@ in
     systemd.tmpfiles.rules = [
       "d ${stateDir} 0750 chrony chrony - -"
       "f ${driftFile} 0640 chrony chrony - -"
-      "f ${keyFile} 0640 chrony chrony - -"
+      "f ${keyFile} 0640 root chrony - -"
     ]
     ++ lib.optionals cfg.enableRTCTrimming [
       "f ${rtcFile} 0640 chrony chrony - -"
