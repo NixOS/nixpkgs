@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0-unstable-2026-02-10";
 
   patches = [
+    # https://invent.kde.org/kde-linux/kapsule/-/merge_requests/2
     ./path-fix.patch
   ];
 
