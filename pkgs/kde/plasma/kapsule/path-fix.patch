@@ -1,0 +1,26 @@
+diff --git a/src/daemon/container_service.py b/src/daemon/container_service.py
+index 72e1b969a1..88a43810d8 100644
+--- a/src/daemon/container_service.py
++++ b/src/daemon/container_service.py
+@@ -49,6 +49,7 @@
+     "LS_COLORS",      # Often huge and causes issues
+     "LESS_TERMCAP_mb", "LESS_TERMCAP_md", "LESS_TERMCAP_me",  # Less colors
+     "LESS_TERMCAP_se", "LESS_TERMCAP_so", "LESS_TERMCAP_ue", "LESS_TERMCAP_us",
++    "PATH",           # Only used to look up su, set by shell afterwards.
+ })
+ 
+ 
+@@ -672,6 +673,13 @@
+             env_args.extend(["--env", f"{key}={value}"])
+             whitelist_keys.append(key)
+ 
++            
++        # Set fixed PATH for su lookup.
++        # Our host system PATH might not have the right PATH to find su inside the container.
++        # e.g. NixOS on the host, Arch as the guest.
++        # NixOS does not have /usr/bin in PATH, so finding su in the guest would fail.
++        env_args.extend(["--env", "PATH=/usr/bin:/bin"])
++
+         # Build the command to run inside the container.
+         #
+         # Always use su -l for consistent behavior whether entering a
