@@ -315,7 +315,11 @@
       # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
       ++ [ ./ghc-9.6-or-later-docs-sphinx-9.patch ]
 
-      ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
+      ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; })
+      # Allow configuring a separate assembler via an optional "assembler command"
+      # settings key in the GHC settings file, falling back to the C compiler.
+      # This is used to bypass the cc-wrapper for assembly (see postInstall).
+      ++ [ ./ghc-settings-separate-assembler.patch ];
 
     stdenv = stdenvNoCC;
   },
@@ -855,6 +859,15 @@ stdenv.mkDerivation (
         "Merge objects command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
         "ar command" "${toolPath "ar" installCC}" \
         "ranlib command" "${toolPath "ranlib" installCC}"
+    ''
+    # Point the assembler directly at the unwrapped compiler binary, bypassing the
+    # cc-wrapper. The cc-wrapper adds ~20ms overhead per invocation for flag
+    # processing (hardening, include paths, library paths) that is irrelevant when
+    # assembling .s files. Both clang (integrated assembler) and gcc (--with-as
+    # baked in at build time) work without the wrapper for assembly.
+    + ''
+      ghc-settings-edit "$settingsFile" \
+        "assembler command" "${getToolExe installCC.cc (if installCC.isClang then "clang" else "gcc")}"
     ''
     + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
       ghc-settings-edit "$settingsFile" \
