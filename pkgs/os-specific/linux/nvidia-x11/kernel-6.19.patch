@@ -1,0 +1,130 @@
+From c9457ce40a6af2ce74c520564e2d8775f49e3d27 Mon Sep 17 00:00:00 2001
+From: Eric Naim <dnaim@cachyos.org>
+Date: Thu, 18 Dec 2025 12:36:06 +0800
+Subject: [PATCH 3/3] Fix compile for 6.19
+
+Contains:
+- Rename page_free callback -> folio_free callback for 6.19+
+- Adjust zone_device_page_init() call for 6.19; it has one extra argument now
+- 6.19-rc8 introduced yet another argument for zone_device_page_init()
+
+Link: https://github.com/torvalds/linux/commit/12b2285bf3d14372238d36215b73af02ac3bdfc1
+Signed-off-by: Eric Naim <dnaim@cachyos.org>
+---
+ kernel-open/nvidia-uvm/uvm_hmm.c     |  4 ++++
+ kernel-open/nvidia-uvm/uvm_pmm_gpu.c | 34 ++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
+
+diff --git a/kernel-open/nvidia-uvm/uvm_hmm.c b/kernel-open/nvidia-uvm/uvm_hmm.c
+index 9b676f971385..22db001384a4 100644
+--- a/kernel-open/nvidia-uvm/uvm_hmm.c
++++ b/kernel-open/nvidia-uvm/uvm_hmm.c
+@@ -2140,7 +2140,11 @@ static void fill_dst_pfn(uvm_va_block_t *va_block,
+ 
+         UVM_ASSERT(!page_count(dpage));
+         UVM_ASSERT(!dpage->zone_device_data);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
++        zone_device_page_init(dpage, page_pgmap(dpage), 0);
++#else
+         zone_device_page_init(dpage);
++#endif
+         dpage->zone_device_data = gpu_chunk;
+         atomic64_inc(&va_block->hmm.va_space->hmm.allocated_page_count);
+     }
+diff --git a/kernel-open/nvidia-uvm/uvm_pmm_gpu.c b/kernel-open/nvidia-uvm/uvm_pmm_gpu.c
+index 97ff13dcdd04..98423002776b 100644
+--- a/kernel-open/nvidia-uvm/uvm_pmm_gpu.c
++++ b/kernel-open/nvidia-uvm/uvm_pmm_gpu.c
+@@ -177,6 +177,8 @@
+ #include "uvm_test.h"
+ #include "uvm_linux.h"
+ 
++#include <linux/version.h>
++
+ #if defined(CONFIG_PCI_P2PDMA) && defined(NV_STRUCT_PAGE_HAS_ZONE_DEVICE_DATA)
+ #include <linux/pci-p2pdma.h>
+ #endif
+@@ -2999,8 +3001,14 @@ static bool uvm_pmm_gpu_check_orphan_pages(uvm_pmm_gpu_t *pmm)
+     return ret;
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
++static void devmem_folio_free(struct folio *folio)
++{
++    struct page *page = &folio->page;
++#else
+ static void devmem_page_free(struct page *page)
+ {
++#endif
+     uvm_gpu_chunk_t *chunk = uvm_pmm_devmem_page_to_chunk(page);
+     uvm_gpu_t *gpu = uvm_gpu_chunk_get_gpu(chunk);
+ 
+@@ -3060,7 +3068,11 @@ static vm_fault_t devmem_fault_entry(struct vm_fault *vmf)
+ 
+ static const struct dev_pagemap_ops uvm_pmm_devmem_ops =
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
++    .folio_free = devmem_folio_free,
++#else
+     .page_free = devmem_page_free,
++#endif
+     .migrate_to_ram = devmem_fault_entry,
+ };
+ 
+@@ -3148,8 +3160,14 @@ static void device_p2p_page_free_wake(struct nv_kref *ref)
+     wake_up(&p2p_mem->waitq);
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
++static void device_p2p_folio_free(struct folio *folio)
++{
++    struct page *page = &folio->page;
++#else
+ static void device_p2p_page_free(struct page *page)
+ {
++#endif
+     uvm_device_p2p_mem_t *p2p_mem = page->zone_device_data;
+ 
+     page->zone_device_data = NULL;
+@@ -3158,14 +3176,26 @@ static void device_p2p_page_free(struct page *page)
+ #endif
+ 
+ #if UVM_CDMM_PAGES_SUPPORTED()
++
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
++static void device_coherent_folio_free(struct folio *folio)
++{
++    device_p2p_folio_free(folio);
++}
++#else
+ static void device_coherent_page_free(struct page *page)
+ {
+     device_p2p_page_free(page);
+ }
++#endif
+ 
+ static const struct dev_pagemap_ops uvm_device_coherent_pgmap_ops =
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
++    .folio_free = device_coherent_folio_free,
++#else
+     .page_free = device_coherent_page_free,
++#endif
+ };
+ 
+ static NV_STATUS uvm_pmm_cdmm_init(uvm_parent_gpu_t *parent_gpu)
+@@ -3302,7 +3332,11 @@ static bool uvm_pmm_gpu_check_orphan_pages(uvm_pmm_gpu_t *pmm)
+ 
+ static const struct dev_pagemap_ops uvm_device_p2p_pgmap_ops =
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
++    .folio_free = device_p2p_folio_free,
++#else
+     .page_free = device_p2p_page_free,
++#endif
+ };
+ 
+ void uvm_pmm_gpu_device_p2p_init(uvm_parent_gpu_t *parent_gpu)
+-- 
+2.52.0
+

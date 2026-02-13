@@ -283,7 +283,11 @@ stdenv.mkDerivation (finalAttrs: {
               from = "kernel";
               to = "kernel-open";
             }) patches)
-            ++ patchesOpen;
+            ++ patchesOpen
+            ++ lib.optionals (lib.versionAtLeast kernel.modDirVersion "6.19") [
+              # THIS PATCH SHOULD BE REMOVED IF THIS IS EVER MERGED INTO MAINLINE NVIDIA-OPEN
+              ./kernel-6.19.patch
+            ];
           broken = brokenOpen;
         }
       ) openSha256;
