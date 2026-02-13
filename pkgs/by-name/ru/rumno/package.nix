@@ -33,6 +33,12 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     substituteInPlace src/common/daemon.rs \
       --replace-fail "        .umask(0o777)" "        .umask(0o077)"
+
+    # Under Wayland (wlroots compositors), rumno uses layer-shell. The upstream default anchored
+    # the surface to the top edge; for volume/brightness OSD we want it centered.
+    substituteInPlace src/ui/app.rs \
+      --replace-fail "            window.set_anchor(Edge::Top, true);" "            window.set_anchor(Edge::Top, false);" \
+      --replace-fail "            window.set_layer_shell_margin(Edge::Top, 60);" "            window.set_layer_shell_margin(Edge::Top, 0);"
   '';
 
   nativeBuildInputs = [
