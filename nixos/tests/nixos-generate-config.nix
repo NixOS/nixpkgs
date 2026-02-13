@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   name = "nixos-generate-config";
   meta.maintainers = with lib.maintainers; [ basvandijk ];
@@ -19,6 +19,8 @@
         services.desktopManager.gnome.enable = true;
       ''
     ];
+    environment.systemPackages = with pkgs; [ cryptsetup ];
+    virtualisation.emptyDiskImages = [ 32 ];
   };
   testScript = ''
     start_all()
@@ -52,5 +54,31 @@
     machine.succeed("nixos-generate-config")
     machine.succeed("nix-instantiate --parse /etc/nixos/flake.nix /etc/nixos/configuration.nix /etc/nixos/hardware-configuration.nix")
     machine.succeed("diff -r /etc/nixos /etc/nixos-with-flake-arg")
+
+    ### Test if script finds LVM on LUKS
+    # Set up LUKS device
+    machine.succeed("echo -n testpassword | cryptsetup luksFormat --batch-mode /dev/vdb -")
+    machine.succeed("echo -n testpassword | cryptsetup luksOpen /dev/vdb crypttest -")
+
+    # Create LVM on top of LUKS
+    machine.succeed("pvcreate /dev/mapper/crypttest")
+    machine.succeed("vgcreate testvg /dev/mapper/crypttest")
+    machine.succeed("lvcreate -l 100%FREE -n testlv testvg")
+
+    # Format and mount
+    machine.succeed("mkfs.ext4 /dev/testvg/testlv")
+    machine.succeed("mkdir -p /mnt/test")
+    machine.succeed("mount /dev/testvg/testlv /mnt/test")
+
+    # Re-run nixos-generate-config and check it found the LUKS device
+    machine.succeed("nixos-generate-config")
+    machine.succeed("grep 'luks' /etc/nixos/hardware-configuration.nix")
+    machine.succeed("grep 'crypttest' /etc/nixos/hardware-configuration.nix")
+
+    # Clean up
+    machine.succeed("umount /mnt/test")
+    machine.succeed("lvchange -an testvg/testlv")
+    machine.succeed("vgchange -an testvg")
+    machine.succeed("cryptsetup luksClose crypttest")
   '';
 }
