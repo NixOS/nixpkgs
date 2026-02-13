@@ -29,12 +29,12 @@
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YqtQp1goJSPEUBFEufMUIh27rtBAPBL9cPak/MUy7CQ=";
+    hash = "sha256-jNJez+61EF1WMjfX9k60dIBY+6m7qas4kqH/YeF3zhY=";
   };
 
   build-system = [
