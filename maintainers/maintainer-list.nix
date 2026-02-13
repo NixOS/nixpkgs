@@ -12900,6 +12900,13 @@
     github = "jordanisaacs";
     githubId = 19742638;
   };
+  jordansteinke = {
+    name = "Jordan Steinke";
+    email = "jordan@steinke.foo";
+    github = "jordan-steinke";
+    githubId = 260565855;
+    keys = [ { fingerprint = "4996 B415 EF24 F3FF 2ECF  920A 72E7 0CA1 0D93 27DA"; } ];
+  };
   jorikvanveen = {
     email = "vanveenjorik@protonmail.com";
     github = "jorikvanveen";
