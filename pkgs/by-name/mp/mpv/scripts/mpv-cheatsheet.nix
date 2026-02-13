@@ -2,8 +2,8 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
-  nodePackages,
   stdenvNoCC,
+  webpack-cli,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mpv-cheatsheet";
@@ -17,12 +17,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  nativeBuildInputs = [ nodePackages.browserify ];
+  nativeBuildInputs = [ webpack-cli ];
 
   buildPhase = ''
     runHook preBuild
 
-    make dist/${finalAttrs.passthru.scriptName}
+    # Generate readable output, similar to upstream's use of `browserify`
+    webpack --devtool source-map --mode development
 
     runHook postBuild
   '';
@@ -30,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -D dist/${finalAttrs.passthru.scriptName} $out/share/mpv/scripts/${finalAttrs.passthru.scriptName}
+    install -D dist/main.js $out/share/mpv/scripts/${finalAttrs.passthru.scriptName}
 
     runHook postInstall
   '';
