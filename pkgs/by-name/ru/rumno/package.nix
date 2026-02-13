@@ -28,6 +28,13 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-1FyDMdOO7m6y2oX/+VH5LxBwimz7fXM59eOeiffBnOI=";
 
+  # rumno-background uses daemonize and sets an overly restrictive umask (0o777),
+  # resulting in an unreadable/unwritable PID file under /tmp/rumno.
+  postPatch = ''
+    substituteInPlace src/common/daemon.rs \
+      --replace-fail "        .umask(0o777)" "        .umask(0o077)"
+  '';
+
   nativeBuildInputs = [
     pkg-config
   ];

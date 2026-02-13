@@ -38,9 +38,12 @@ in
       after = [ "graphical-session-pre.target" ];
 
       serviceConfig = {
-        Type = "dbus";
-        BusName = "de.rumno.v1";
-        ExecStart = "${cfg.package}/bin/rumno daemon --foreground ${lib.escapeShellArgs cfg.extraArgs}";
+        Type = "forking";
+        PIDFile = "/tmp/rumno/rumno.pid";
+
+        # rumno-background daemonizes itself; make systemd track the daemon via PIDFile.
+        ExecStartPre = "${pkgs.coreutils}/bin/rm -f /tmp/rumno/rumno.pid";
+        ExecStart = "${cfg.package}/bin/rumno-background ${lib.escapeShellArgs cfg.extraArgs}";
         Restart = "on-failure";
         RestartSec = 1;
 
