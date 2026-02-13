@@ -30,6 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     zig_0_15
+  ];
+
+  buildInputs = [
     mupdf
     harfbuzz
     freetype
