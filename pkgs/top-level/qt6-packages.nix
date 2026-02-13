@@ -142,7 +142,7 @@ makeScopeWithSplicing' {
       sddm = kdePackages.callPackage ../applications/display-managers/sddm { };
 
       sierra-breeze-enhanced =
-        kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced
+        kdePackages.callPackage ../by-name/si/sierra-breeze-enhanced/package.nix
           { };
 
       signond = callPackage ../development/libraries/signond { };

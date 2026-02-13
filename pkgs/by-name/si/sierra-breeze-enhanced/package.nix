@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "sierra-breeze-enhanced";
-  version = "2.1.1";
+  version = "2.1.1-unstable-2025-10-14";
 
   src = fetchFromGitHub {
     owner = "kupiqu";
     repo = "SierraBreezeEnhanced";
-    rev = if version == "2.1.1" then "V.2.1.1" else "V${version}";
-    hash = "sha256-7mQnJCQr/zm9zEdg2JPr7jQn8uajyCXvyYRQZWxG+Q8=";
+    rev = "4a4f085aa5c48ad11071dee4e92289c2cc4a36cd";
+    hash = "sha256-dOIC2EQqninEIktVK6dLctzN/IiQIRvp1Qmcop9h7Dw=";
   };
 
   nativeBuildInputs = [
