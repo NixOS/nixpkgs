@@ -352,6 +352,34 @@ sub findStableDevPath {
     return $dev;
 }
 
+# Recursively searches for any LUKS devices that would need to be decrypted
+# in order to accesss the passed in device
+sub findLuksDevices {
+    my ($deviceName) = @_;
+    my @entries;
+
+    my $dmUuid = read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet');
+    if ($dmUuid =~ /^CRYPT-LUKS/)
+    {
+        my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
+        if (scalar @slaves == 1) {
+            my $slave = "/dev/" . basename($slaves[0]);
+            if (-e $slave) {
+                my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
+                chomp $dmName;
+                push @entries, { name => $dmName, slave => $slave }
+            }
+        }
+    }
+
+    my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
+    for my $slave (@slaves) {
+        push @entries, findLuksDevices(basename($slave))
+    }
+
+    return @entries
+}
+
 push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
 
 # Generate the swapDevices option from the currently activated swap
@@ -544,21 +572,12 @@ EOF
     # boot.initrd.luks.devices entry.
     if (-e $device) {
         my $deviceName = basename(abs_path($device));
-        my $dmUuid = read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet');
-        if ($dmUuid =~ /^CRYPT-LUKS/)
-        {
-            my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
-            if (scalar @slaves == 1) {
-                my $slave = "/dev/" . basename($slaves[0]);
-                if (-e $slave) {
-                    my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
-                    chomp $dmName;
-                    # Ensure to add an entry only once
-                    my $luksDevice = "  boot.initrd.luks.devices.\"$dmName\".device";
-                    if ($fileSystems !~ /^\Q$luksDevice\E/m) {
-                        $fileSystems .= "$luksDevice = \"${\(findStableDevPath $slave)}\";\n\n";
-                    }
-                }
+        my @luksEntries = findLuksDevices($deviceName);
+        for my $entry (@luksEntries) {
+            # Ensure to add an entry only once
+            my $luksDevice = "  boot.initrd.luks.devices.\"$entry->{name}\".device";
+            if($fileSystems !~ /^\Q$luksDevice\E/m) {
+                $fileSystems .= "$luksDevice = \"${\(findStableDevPath $entry->{slave})}\";\n\n";
             }
         }
         if (-e "/sys/class/block/$deviceName/md/uuid") {
