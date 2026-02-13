@@ -61,8 +61,6 @@ let
       format.generate "static_config.json" cfg.static.settings
     else
       cfg.static.file;
-
-  finalStaticFile = if cfg.useEnvSubst then "/run/traefik/config.json" else staticFile;
 in
 {
   imports = [
@@ -132,7 +130,7 @@ in
           Path to Traefik's static configuration file.
 
           ::: {.note}
-          Using this option has precedence over {option}`services.traefik.static.settings`.
+          You cannot use this option alongside the declarative configuration options.
           :::
         '';
       };
@@ -181,8 +179,8 @@ in
         '';
       };
       dir = mkOption {
-        default = null;
-        example = literalExpression "/var/lib/traefik/dynamic";
+        default = "/var/lib/traefik/dynamic";
+        example = literalExpression "/etc/traefik/";
         type = nullOr path;
         description = ''
           Path to the directory Traefik should watch for configuration files.
@@ -325,33 +323,7 @@ in
         ::: {.warn}
         The traefik static configuration methods (env, CLI, and file) are mutually exclusive.
         :::
-
-        Rather than setting secret values with the traefik environment variable syntax,
-        it is recommended to set arbitrary environment variables, then reference them with `$VARNAME` in e.g.
-        {option}`services.traefik.static.settings`, like so:
-        ```nix
-        {
-          services.traefik = {
-            static.settings.somesecretvalue = "$SECRETNAME";
-            useEnvSubst = true; # Necessary in order to use environment variables in the Traefik config.
-            environmentFiles = [ /path/to/file/that/defines/SECRETNAME ];
-          };
-        }
         ```
-      '';
-    };
-
-    useEnvSubst = mkOption {
-      default = cfg.environmentFiles != [ ];
-      defaultText = "config.services.traefik.environmentFiles != [ ]";
-      type = bool;
-      example = true;
-      description = ''
-        Whether to use `envSubst` in the `ExecStartPre` phase to augment the generated static config. See {option}`services.traefik.environmentFiles`.
-
-        ::: {.note}
-        If you use environment files with Traefik but *do not* utilise environment variables in the static config, this can safely be disabled to reduce startup time.
-        :::
       '';
     };
   };
@@ -366,33 +338,33 @@ in
           It is recommended to use 'settings'.
         '';
       }
-      # {
-      #   assertion =
-      #     (!(isDefault "static.file"))
-      #     -> (
-      #       builtins.all (map isDefault [
-      #       "dynamic.files"
-      #       "dynamic.dir"
-      #       "dynamic.file"
-      #       ])
-      #     );
-      #   message = ''
-      #     None of the dynamic configuration options may be used if Traefik is being managed imperatively.
-      #     The following options have non-default values:
-      #       - ${
-      #         concatMapStringsSep "\n  - " (str: "'services.traefik.dynamic.${str}'") (
-      #           filter (attr: !(isDefault "dynamic.${attr}")) [
-      #             "files"
-      #             "dir"
-      #             "file"
-      #             "settings" # TODO: Drop in 26.11.
-      #           ]
-      #         )
-      #       }
-      #   '';
-      # }
       {
-        assertion = !(isDefault "dynamic.file") -> isDefault "dynamic.dir";
+        assertion =
+          (!(isDefault "static.file"))
+          -> (builtins.all (
+            map isDefault [
+              "dynamic.files"
+              "dynamic.dir"
+              "dynamic.file"
+            ]
+          ));
+        message = ''
+          None of the dynamic configuration options may be used if Traefik is being managed imperatively.
+          The following options have non-default values:
+            - ${
+              concatMapStringsSep "\n  - " (str: "'services.traefik.dynamic.${str}'") (
+                filter (attr: !(isDefault "dynamic.${attr}")) [
+                  "files"
+                  "dir"
+                  "file"
+                  "settings" # TODO: Drop in 26.11.
+                ]
+              )
+            }
+        '';
+      }
+      {
+        assertion = !(isDefault "dynamic.file") -> cfg.dynamic.dir == null;
         message = ''
           The 'services.traefik.dynamic.file' and 'services.traefik.dynamic.dir' options
           are mutually exclusive for the Traefik dynamic config. It is recommended to use
@@ -446,13 +418,16 @@ in
       dynamic.files = mkIf (!(isDefault "static.file")) {
         "custom-migrated".settings = cfg.dynamic.settings;
       };
-      static.settings = mkIf (!(isDefault "dynamic.dir") || !(isDefault "dynamic.file")) {
-        providers.file = {
-          directory = mkIf (!(isDefault "dynamic.dir")) cfg.dynamic.dir;
-          filename = mkIf (!(isDefault "dynamic.file")) cfg.dynamic.file;
-          watch = mkDefault true;
-        };
-      };
+      static.settings =
+        mkIf (!(isDefault "dynamic.dir") || !(isDefault "dynamic.file")) mkIf
+          (cfg.dynamic.dir != null || !(isDefault "dynamic.file"))
+          {
+            providers.file = {
+              directory = mkIf (!(isDefault "dynamic.dir")) cfg.dynamic.dir;
+              filename = mkIf (!(isDefault "dynamic.file")) cfg.dynamic.file;
+              watch = mkDefault true;
+            };
+          };
     };
 
     systemd.services.traefik = {
@@ -462,11 +437,10 @@ in
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 86400;
       startLimitBurst = 5;
+      unitConfig.Documentation = "https://doc.traefik.io/traefik/";
       serviceConfig = {
-        Documentation = "https://doc.traefik.io/traefik/";
         EnvironmentFile = cfg.environmentFiles;
-        ExecStartPre = optional cfg.useEnvSubst "${getExe pkgs.envsubst} -i '${staticFile}' > '${finalStaticFile}'";
-        ExecStart = "${getExe cfg.package} --configfile=${finalStaticFile}";
+        ExecStart = "${getExe cfg.package} --configfile=${staticFile}";
         Type = "notify";
         User = cfg.user;
         Group = cfg.group;

@@ -429,7 +429,6 @@ in
     services.traefik = {
       enable = true;
       supplementaryGroups = [ "fossorial" ];
-      dataDir = "${cfg.dataDir}/config/traefik";
       static.settings = {
         providers.http = {
           endpoint = "http://localhost:${toString finalSettings.server.internal_port}/api/v1/traefik-config";
