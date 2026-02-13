@@ -1,5 +1,5 @@
 {
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   k3s,
   lib,
@@ -35,7 +35,7 @@ let
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
-  etcdserver = buildGo124Module {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
     inherit
@@ -62,7 +62,7 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGo124Module {
+  etcdutl = buildGoModule {
     pname = "etcdutl";
 
     inherit
@@ -77,7 +77,7 @@ let
     modRoot = "./etcdutl";
   };
 
-  etcdctl = buildGo124Module {
+  etcdctl = buildGoModule {
     pname = "etcdctl";
 
     inherit
