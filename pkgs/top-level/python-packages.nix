@@ -2393,6 +2393,8 @@ self: super: with self; {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
+  cadquery-ocp = callPackage ../development/python-modules/cadquery-ocp { };
+
   cadwyn = callPackage ../development/python-modules/cadwyn { };
 
   caffe = toPythonModule (
