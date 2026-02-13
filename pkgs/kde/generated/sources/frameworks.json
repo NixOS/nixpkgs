@@ -175,9 +175,9 @@
     "hash": "sha256-1u7emnWqSzPD6K/evcyWZM9CPv/qvmhLIdwcyXKKIHM="
   },
   "kio": {
-    "version": "6.22.0",
-    "url": "mirror://kde/stable/frameworks/6.22/kio-6.22.0.tar.xz",
-    "hash": "sha256-SwPxoHD3isKjQ/E4rF+Nm8zRGSdkqqRa5Jqn9JWZJpQ="
+    "version": "6.22.1",
+    "url": "mirror://kde/stable/frameworks/6.22/kio-6.22.1.tar.xz",
+    "hash": "sha256-BKr46ys7ysbZIfw6HQM9Z9+J2a+PaTVRhe3xr2HJM3A="
   },
   "kirigami": {
     "version": "6.22.0",
