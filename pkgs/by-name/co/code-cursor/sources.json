@@ -1,0 +1,22 @@
+{
+  "version": "2.4.31",
+  "vscodeVersion": "1.105.1",
+  "sources": {
+    "x86_64-linux": {
+      "url": "https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/linux/x64/Cursor-2.4.31-x86_64.AppImage",
+      "hash": "sha256-4cEa5SsbE2QFfmcndnVI5QQIS9DPjFQ6u/iQO9P8SEk="
+    },
+    "aarch64-linux": {
+      "url": "https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/linux/arm64/Cursor-2.4.31-aarch64.AppImage",
+      "hash": "sha256-b66KmFN92HZRyZnlFVMxCCgX0bWBktfKojtnXF7c+Qg="
+    },
+    "x86_64-darwin": {
+      "url": "https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/darwin/x64/Cursor-darwin-x64.dmg",
+      "hash": "sha256-JQq73IqSAlkedhCuxr+uIpWPEAslnMPxciDDQYHWU6o="
+    },
+    "aarch64-darwin": {
+      "url": "https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/darwin/arm64/Cursor-darwin-arm64.dmg",
+      "hash": "sha256-xXzWWDfU00IDx3vqnB0A4mItSyvfRqasUhqOAj8U5aE="
+    }
+  }
+}

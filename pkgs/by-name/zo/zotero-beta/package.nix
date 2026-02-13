@@ -1,0 +1,140 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wrapGAppsHook3,
+  makeDesktopItem,
+  alsa-lib,
+  atk,
+  cairo,
+  dbus-glib,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libGL,
+  libxtst,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
+  libgbm,
+  pango,
+  pciutils,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "zotero";
+  version = "7.0.0-beta.111+b4f6c050e";
+
+  src =
+    let
+      escapedVersion = lib.replaceStrings [ "+" ] [ "%2B" ] finalAttrs.version;
+    in
+    fetchurl {
+      url = "https://download.zotero.org/client/beta/${escapedVersion}/Zotero-${escapedVersion}_linux-x86_64.tar.bz2";
+      hash = "sha256-pZsmS4gKCT8UAjz9IJg5C7n4kk7bWT/7H5ONF20CzPM=";
+    };
+
+  dontPatchELF = true;
+  nativeBuildInputs = [ wrapGAppsHook3 ];
+
+  libPath =
+    lib.makeLibraryPath [
+      alsa-lib
+      atk
+      cairo
+      dbus-glib
+      gdk-pixbuf
+      glib
+      gtk3
+      libGL
+      libx11
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxtst
+      libxcb
+      libgbm
+      pango
+      pciutils
+    ]
+    + ":"
+    + lib.makeSearchPathOutput "lib" "lib" [ stdenv.cc.cc ];
+
+  desktopItem = makeDesktopItem {
+    name = "zotero";
+    exec = "zotero -url %U";
+    icon = "zotero";
+    comment = finalAttrs.meta.description;
+    desktopName = "Zotero";
+    genericName = "Reference Management";
+    categories = [
+      "Office"
+      "Database"
+    ];
+    startupNotify = true;
+    mimeTypes = [
+      "x-scheme-handler/zotero"
+      "text/plain"
+    ];
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    # Copy package contents to the output directory
+    mkdir -p "$prefix/usr/lib/zotero-bin-${finalAttrs.version}"
+    cp -r * "$prefix/usr/lib/zotero-bin-${finalAttrs.version}"
+    mkdir -p "$out/bin"
+    ln -s "$prefix/usr/lib/zotero-bin-${finalAttrs.version}/zotero" "$out/bin/"
+
+    # Install desktop file and icons
+    mkdir -p $out/share/applications
+    cp ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
+    for size in 32 64 128; do
+      install -Dm444 icons/icon''${size}.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png
+    done
+    install -Dm444 icons/symbolic.svg \
+      $out/share/icons/hicolor/symbolic/apps/zotero-symbolic.svg
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    for executable in \
+      zotero-bin plugin-container updater vaapitest \
+      minidump-analyzer glxtest
+    do
+      if [ -e "$out/usr/lib/zotero-bin-${finalAttrs.version}/$executable" ]; then
+        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+          "$out/usr/lib/zotero-bin-${finalAttrs.version}/$executable"
+      fi
+    done
+    find . -executable -type f -exec \
+      patchelf --set-rpath "$libPath" \
+        "$out/usr/lib/zotero-bin-${finalAttrs.version}/{}" \;
+  '';
+
+  meta = {
+    homepage = "https://www.zotero.org";
+    description = "Collect, organize, cite, and share your research sources";
+    mainProgram = "zotero";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.agpl3Only;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      atila
+      justanotherariel
+    ];
+  };
+})

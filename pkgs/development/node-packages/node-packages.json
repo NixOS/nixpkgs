@@ -1,0 +1,12 @@
+[
+  "@tailwindcss/aspect-ratio"
+, "@tailwindcss/forms"
+, "@tailwindcss/line-clamp"
+, "@tailwindcss/typography"
+, "browserify"
+, "coc-go"
+, "coc-tsserver"
+, "node2nix"
+, "sass"
+, "semver"
+]

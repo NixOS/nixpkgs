@@ -1,0 +1,40 @@
+{
+  flutterPackages,
+  stdenv,
+  cacert,
+  writableTmpDirAsHomeHook,
+}:
+let
+  flutterCompactVersion = "@flutter_compact_version@";
+  inherit (flutterPackages."v${flutterCompactVersion}") dart;
+in
+stdenv.mkDerivation (finalAttrs: {
+  name = "pubspec-lock";
+  src = @flutter_src@;
+
+  nativeBuildInputs = [
+    dart
+    writableTmpDirAsHomeHook
+  ];
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "@hash@";
+
+  buildPhase = ''
+    runHook preBuild
+
+    cd packages/flutter_tools
+    dart --root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt pub get
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    cp pubspec.lock $out
+
+    runHook postInstall
+  '';
+})

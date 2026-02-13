@@ -1,0 +1,80 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  geoarrow-c,
+  pyarrow,
+  pyarrow-hotfix,
+  numpy,
+  pandas,
+  geoarrow-types,
+  geopandas,
+  pyogrio,
+  pyproj,
+  setuptools-scm,
+}:
+buildPythonPackage rec {
+  pname = "geoarrow-pyarrow";
+  version = "0.2.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    repo = "geoarrow-python";
+    owner = "geoarrow";
+    tag = "geoarrow-pyarrow-${version}";
+    hash = "sha256-tgeWrVpGIyRqRGk1y9OdS/eYMJjt80sXHt6VCx8RWys=";
+  };
+
+  sourceRoot = "${src.name}/geoarrow-pyarrow";
+
+  build-system = [ setuptools-scm ];
+
+  disabledTests = [
+    # these tests are incompatible with arrow 17
+    "test_make_point"
+    "test_point_with_offset"
+    "test_linestring_with_offset"
+    "test_polygon_with_offset"
+    "test_multipoint_with_offset"
+    "test_multilinestring_with_offset"
+    "test_multipolygon_with_offset"
+    "test_multipolygon_with_offset_nonempty_inner_lists"
+    "test_interleaved_multipolygon_with_offset"
+    "test_readpyogrio_table_gpkg"
+    "test_geometry_type_basic"
+  ];
+
+  dependencies = [
+    geoarrow-c
+    pyarrow
+    pyarrow-hotfix
+  ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  checkInputs = [
+    geoarrow-types
+    numpy
+    pandas
+    geopandas
+    pyogrio
+    pyproj
+  ];
+
+  pythonImportsCheck = [ "geoarrow.pyarrow" ];
+
+  meta = {
+    description = "PyArrow implementation of geospatial data types";
+    homepage = "https://github.com/geoarrow/geoarrow-python";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      cpcloud
+    ];
+    teams = [ lib.teams.geospatial ];
+  };
+}

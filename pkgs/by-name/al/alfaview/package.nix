@@ -1,0 +1,105 @@
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  wrapGAppsHook3,
+  alsa-lib,
+  dbus,
+  fontconfig,
+  freetype,
+  glib,
+  gst_all_1,
+  libGL,
+  libinput,
+  libpulseaudio,
+  libsecret,
+  libtiff,
+  libxkbcommon,
+  libgbm,
+  openssl,
+  systemd,
+  libxcb-cursor,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libx11,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "alfaview";
+  version = "9.24.1";
+
+  src = fetchurl {
+    url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
+    hash = "sha256-vRo5ZD3yYTWhR6fbc/HFtBBbYuq3cGbxPuDlSt5D8XM=";
+  };
+
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    autoPatchelfHook
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    alsa-lib
+    dbus
+    fontconfig
+    freetype
+    glib
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
+    libGL
+    libinput
+    libpulseaudio
+    libsecret
+    libtiff
+    libxkbcommon
+    libgbm
+    openssl
+    stdenv.cc.cc
+    systemd
+    libxcb-cursor
+    libx11
+    libxcb-wm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+  ];
+
+  libPath = lib.makeLibraryPath buildInputs;
+
+  dontBuild = true;
+  dontConfigure = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mv usr $out
+    mv opt $out
+
+    substituteInPlace $out/share/applications/alfaview.desktop \
+      --replace "/opt/alfaview" "$out/bin" \
+      --replace "/usr/share/pixmaps/alfaview_production.png" alfaview_production
+
+    makeWrapper $out/opt/alfaview/alfaview $out/bin/alfaview \
+      --prefix LD_LIBRARY_PATH : ${libPath}
+
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "Video-conferencing application, specialized in virtual online meetings, seminars, training sessions and conferences";
+    homepage = "https://alfaview.com";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ ];
+    mainProgram = "alfaview";
+    platforms = [ "x86_64-linux" ];
+  };
+}

@@ -1,0 +1,137 @@
+From bf670a5af2a78f81ee9396b5b5da49b2df07fcfd Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Tue, 9 Sep 2025 08:31:22 +0900
+Subject: [PATCH 11/30] musl: make strptime() accept "%z"
+
+musl v1.2.5 does not support %z specifier in strptime(). Since
+https://github.com/kraj/musl/commit/fced99e93daeefb0192fd16304f978d4401d1d77
+%z is supported, but it only supports strict RFC-822/ISO 8601 format,
+that is, 4 digits with sign (e.g. +0900 or -1400), but does not support
+extended format: 2 digits or colon separated 4 digits (e.g. +09 or -14:00).
+Let's add fallback logic to make it support the extended timezone spec.
+---
+ src/include/musl/time.h   |  7 ++++
+ src/libc/musl/meson.build |  1 +
+ src/libc/musl/time.c      | 86 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 94 insertions(+)
+ create mode 100644 src/include/musl/time.h
+ create mode 100644 src/libc/musl/time.c
+
+diff --git a/src/include/musl/time.h b/src/include/musl/time.h
+new file mode 100644
+index 0000000000..349f9a3577
+--- /dev/null
++++ b/src/include/musl/time.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include_next <time.h>
++
++char* strptime_fallback(const char *s, const char *format, struct tm *tm);
++#define strptime strptime_fallback
+diff --git a/src/libc/musl/meson.build b/src/libc/musl/meson.build
+index a64f292081..5fb590e868 100644
+--- a/src/libc/musl/meson.build
++++ b/src/libc/musl/meson.build
+@@ -8,4 +8,5 @@ libc_wrapper_sources += files(
+         'printf.c',
+         'stdio.c',
+         'string.c',
++        'time.c',
+ )
+diff --git a/src/libc/musl/time.c b/src/libc/musl/time.c
+new file mode 100644
+index 0000000000..12108166b2
+--- /dev/null
++++ b/src/libc/musl/time.c
+@@ -0,0 +1,86 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++
++#include <stdbool.h>
++#include <string.h>
++#include <time.h>
++
++/* The header time.h overrides strptime with strerror_fallback, hence we need to undef it here. */
++#undef strptime
++
++char* strptime_fallback(const char *s, const char *format, struct tm *tm) {
++        /* First try native strptime() as is, and if it succeeds, return the resuit as is. */
++        char *k = strptime(s, format, tm);
++        if (k)
++                return k;
++
++        /* Check inputs for safety. */
++        if (!s || !format || !tm)
++                return NULL;
++
++        /* We only fallback if the format is exactly "%z". */
++        if (strcmp(format, "%z") != 0)
++                return NULL;
++
++        /* In the below, we parse timezone specifiction compatible with RFC-822/ISO 8601 and its extensions
++         * (e.g. +06, +0900, or -03:00). */
++
++        bool positive;
++        switch (*s) {
++        case '+':
++                positive = true;
++                break;
++        case '-':
++                positive = false;
++                break;
++        default:
++                return NULL;
++        }
++
++        s++;
++
++        if (*s < '0' || *s > '9')
++                return NULL;
++        long t = (*s - '0') * 10 * 60 * 60;
++
++        s++;
++
++        if (*s < '0' || *s > '9')
++                return NULL;
++        t += (*s - '0') * 60 * 60;
++
++        s++;
++
++        if (*s == '\0') /* 2 digits case */
++                goto finalize;
++
++        if (*s == ':') /* skip colon */
++                s++;
++
++        if (*s < '0' || *s >= '6') /* refuse minutes equal to or larger than 60 */
++                return NULL;
++        t += (*s - '0') * 10 * 60;
++
++        s++;
++
++        if (*s < '0' || *s > '9')
++                return NULL;
++        t += (*s - '0') * 60;
++
++        s++;
++
++        if (*s != '\0')
++                return NULL;
++
++finalize:
++        if (t > 24 * 60 * 60) /* refuse larger than 24 hours */
++                return NULL;
++
++        if (!positive)
++                t = -t;
++
++        *tm = (struct tm) {
++                .tm_gmtoff = t,
++        };
++
++        return (char*) s;
++}
+-- 
+2.51.0
+

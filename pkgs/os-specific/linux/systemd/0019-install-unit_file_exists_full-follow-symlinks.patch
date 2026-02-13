@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marie Ramlow <me@nycode.dev>
+Date: Fri, 10 Jan 2025 15:51:33 +0100
+Subject: [PATCH] install: unit_file_exists_full: follow symlinks
+
+---
+ src/shared/install.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/shared/install.c b/src/shared/install.c
+index 8195436564..dfbc35f357 100644
+--- a/src/shared/install.c
++++ b/src/shared/install.c
+@@ -3227,7 +3227,7 @@ int unit_file_exists_full(RuntimeScope scope, const LookupPaths *lp, const char
+                         &c,
+                         lp,
+                         name,
+-                        /* flags= */ 0,
++                        /* flags= */ SEARCH_FOLLOW_CONFIG_SYMLINKS,
+                         ret_path ? &info : NULL,
+                         /* changes= */ NULL,
+                         /* n_changes= */ NULL);

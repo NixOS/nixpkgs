@@ -1,0 +1,91 @@
+From b9904ed6818232d9ad9bb496747b79a6c9606819 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 9 Jun 2025 13:00:37 +0900
+Subject: [PATCH 06/30] musl: meson: check existence of renameat2()
+
+musl-1.2.5 does not provide renameat2(). Note, it is added by
+https://github.com/kraj/musl/commit/05ce67fea99ca09cd4b6625cff7aec9cc222dd5a,
+hence hopefully it will be provided by musl-1.2.6 or newer.
+---
+ meson.build               |  5 +++++
+ src/include/musl/stdio.h  | 13 +++++++++++++
+ src/libc/musl/meson.build |  4 ++++
+ src/libc/musl/stdio.c     | 11 +++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 src/include/musl/stdio.h
+ create mode 100644 src/libc/musl/stdio.c
+
+diff --git a/meson.build b/meson.build
+index 37fb1c2765..71e422f545 100644
+--- a/meson.build
++++ b/meson.build
+@@ -581,6 +581,7 @@ assert(long_max > 100000)
+ conf.set_quoted('LONG_MAX_STR', '@0@'.format(long_max))
+ 
+ foreach ident : [
++        ['renameat2',         '''#include <stdio.h>''',         get_option('libc') == 'musl'], # since musl-1.2.6
+         ['set_mempolicy',     '''#include <sys/syscall.h>'''],  # declared at numaif.h provided by libnuma, which we do not use
+         ['get_mempolicy',     '''#include <sys/syscall.h>'''],  # declared at numaif.h provided by libnuma, which we do not use
+         ['strerrorname_np',   '''#include <string.h>'''],       # since glibc-2.32
+@@ -614,6 +615,10 @@ foreach ident : [
+         ['pivot_root',        '''#include <unistd.h>'''],       # no known header declares pivot_root
+ ]
+ 
++        if ident.length() >= 3 and not ident[2]
++                continue
++        endif
++
+         have = cc.has_function(ident[0], prefix : ident[1], args : '-D_GNU_SOURCE')
+         conf.set10('HAVE_' + ident[0].to_upper(), have)
+ endforeach
+diff --git a/src/include/musl/stdio.h b/src/include/musl/stdio.h
+new file mode 100644
+index 0000000000..d677201f45
+--- /dev/null
++++ b/src/include/musl/stdio.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include_next <stdio.h>
++
++#if !HAVE_RENAMEAT2
++#  define RENAME_NOREPLACE (1 << 0)
++#  define RENAME_EXCHANGE  (1 << 1)
++#  define RENAME_WHITEOUT  (1 << 2)
++
++int missing_renameat2(int __oldfd, const char *__old, int __newfd, const char *__new, unsigned __flags);
++#  define renameat2 missing_renameat2
++#endif
+diff --git a/src/libc/musl/meson.build b/src/libc/musl/meson.build
+index a876230c67..8d06d919ef 100644
+--- a/src/libc/musl/meson.build
++++ b/src/libc/musl/meson.build
+@@ -3,3 +3,7 @@
+ if get_option('libc') != 'musl'
+         subdir_done()
+ endif
++
++libc_wrapper_sources += files(
++        'stdio.c',
++)
+diff --git a/src/libc/musl/stdio.c b/src/libc/musl/stdio.c
+new file mode 100644
+index 0000000000..102a22cd5c
+--- /dev/null
++++ b/src/libc/musl/stdio.c
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++
++#include <stdio.h>
++#include <sys/syscall.h>
++#include <unistd.h>
++
++#if !HAVE_RENAMEAT2
++int missing_renameat2(int __oldfd, const char *__old, int __newfd, const char *__new, unsigned __flags) {
++        return syscall(__NR_renameat2, __oldfd, __old, __newfd, __new, __flags);
++}
++#endif
+-- 
+2.51.0
+
