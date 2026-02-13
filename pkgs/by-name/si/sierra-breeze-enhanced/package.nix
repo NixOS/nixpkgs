@@ -2,12 +2,11 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
-  wrapQtAppsHook,
-  kwin,
+  kdePackages,
   lib,
+  unstableGitUpdater,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sierra-breeze-enhanced";
   version = "2.1.1-unstable-2025-10-14";
 
@@ -20,10 +19,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    wrapQtAppsHook
+    kdePackages.extra-cmake-modules
+    kdePackages.wrapQtAppsHook
   ];
-  buildInputs = [ kwin ];
+  buildInputs = [
+    kdePackages.kwin
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=$out"
@@ -31,11 +32,15 @@ stdenv.mkDerivation rec {
     "-DKDE_INSTALL_USE_QT_SYS_PATHS=ON"
   ];
 
+  passthru.updateScript = unstableGitUpdater {
+    branch = "master";
+  };
+
   meta = {
     description = "OSX-like window decoration for KDE Plasma written in C++";
     homepage = "https://github.com/kupiqu/SierraBreezeEnhanced";
-    changelog = "https://github.com/kupiqu/SierraBreezeEnhanced/releases/tag/V${version}";
+    changelog = "https://github.com/kupiqu/SierraBreezeEnhanced/compare/V.2.1.1...${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ A1ca7raz ];
   };
-}
+})
