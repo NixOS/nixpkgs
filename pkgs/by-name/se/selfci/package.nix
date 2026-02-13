@@ -1,30 +1,28 @@
 {
   lib,
-  fetchgit,
+  fetchFromRadicle,
   nix-update-script,
   rustPlatform,
   git,
   makeWrapper,
+  cargoHash ? "sha256-4fCQCEgT9uDnPx9YkShcwHQdgfOMr09IENb65mxJjPo=",
+  hash ? "sha256-XiJ2BqkNfapqP7j4+cdaEbBgdG6joc6KbgXqNlLpR1Y=",
+  version ? "0.4.0",
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "selfci";
-  version = "0-unstable-2026-01-17";
+  inherit cargoHash version;
 
-  src = fetchgit {
-    url = "https://radicle.dpc.pw/z2tDzYbAXxTQEKTGFVwiJPajkbeDU.git";
-    rev = "83e693dada851ce0da32713869d3da02c52ed257";
-    hash = "sha256-f0BfHvIQnhhiPie3a+9MeEGzZ+/KcgrbKBneu8Jo+xs=";
+  src = fetchFromRadicle {
+    seed = "radicle.dpc.pw";
+    repo = "z2tDzYbAXxTQEKTGFVwiJPajkbeDU";
+    tag = "v${version}";
+    inherit hash;
   };
-
-  cargoHash = "sha256-Z3f35HIZiNeKeDNFPUVkFvL2OpMWzqRvxOL5/hUEzJw=";
 
   nativeBuildInputs = [
     makeWrapper
-  ];
-
-  patches = [
-    ./Cargo.toml.patch
   ];
 
   doCheck = false;
