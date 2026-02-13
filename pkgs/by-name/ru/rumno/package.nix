@@ -7,6 +7,7 @@
   gdk-pixbuf,
   glib,
   gtk3,
+  gtk-layer-shell,
   cairo,
   atk,
   pango,
@@ -16,16 +17,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "rumno";
-  version = "0-unstable-2025-08-13";
+  version = "0-unstable-2026-02-13";
 
   src = fetchFromGitLab {
     owner = "ivanmalison";
     repo = "rumno";
-    rev = "a70bf6f05976b07ae5fdced2ab80d2b9e684fb92";
-    hash = "sha256-reJIYlTR6fI42EcYGwb5BmEPVtls+s1+mFd7/34oXBw=";
+    rev = "89b3df9f1e1a00418b2bf41f6de392956f1425b5";
+    hash = "sha256-vR6+dNq0sdVtzdBL6GTzqAhl0fE6ulF6UCqIH1fSte4=";
   };
 
-  cargoHash = "sha256-z9nGePcVc+RPSMPb7CAPOfUMoVlP1MKo57aVFkd1DmE=";
+  cargoHash = "sha256-1FyDMdOO7m6y2oX/+VH5LxBwimz7fXM59eOeiffBnOI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage {
     gdk-pixbuf
     glib
     gtk3
+    gtk-layer-shell
     cairo
     atk
     pango
