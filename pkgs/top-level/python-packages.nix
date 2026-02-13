@@ -9299,6 +9299,8 @@ self: super: with self; {
 
   logging-tree = callPackage ../development/python-modules/logging-tree { };
 
+  logic2-automation = callPackage ../development/python-modules/logic2-automation { };
+
   logical-unification = callPackage ../development/python-modules/logical-unification { };
 
   logilab-common = callPackage ../development/python-modules/logilab/common.nix {
