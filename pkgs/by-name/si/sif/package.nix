@@ -7,16 +7,16 @@
 
 buildGoModule {
   pname = "sif";
-  version = "0-unstable-2026-01-11";
+  version = "0-unstable-2026-02-13";
 
   src = fetchFromGitHub {
     owner = "vmfunc";
     repo = "sif";
-    tag = "automated-release-c988e54";
-    hash = "sha256-/9LRmSrji/8SCD9aHx82HwBfBRPVKzOnogw+uvDI+WI=";
+    rev = "03bfe70cff2249cef6e52679aba3d411916a4dd1";
+    hash = "sha256-tIV9h5kaXq4CKDDexSxiDXcWD2l510qXt5BBxwFV8Nw=";
   };
 
-  vendorHash = "sha256-ztKXnOjZS/jMxsRjtF0rIZ3lKv4YjMdZd6oQFRuAtR4=";
+  vendorHash = "sha256-kbFNnPf8A4dtTnk/XBArgM6yOE2gbW6mXR5oevkQ6Ms=";
 
   subPackages = [ "cmd/sif" ];
 
@@ -30,7 +30,12 @@ buildGoModule {
   # network-dependent tests
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=(0-unstable-.*)"
+    ];
+  };
 
   meta = {
     description = "Modular pentesting toolkit written in Go";

@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-clone-git-repo.patch
   ];
 
-  sourceRoot = finalAttrs.src.name;
+  sourceRoot = "source";
 
   buildFlags = [ "install-git" ];
   GIT_REPO_PATH = finalAttrs.src;

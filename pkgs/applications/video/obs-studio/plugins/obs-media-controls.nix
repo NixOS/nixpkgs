@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-media-controls";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-media-controls";
     tag = finalAttrs.version;
-    hash = "sha256-r9fqpg0G9rzGSqq5FUS8ul58rj0796aGZIND8PCJ9jk=";
+    hash = "sha256-CElK9e+wpnMiup6DwdQpQfVMm6atXvz+JYHsGnv3lFo=";
   };
 
   nativeBuildInputs = [ cmake ];

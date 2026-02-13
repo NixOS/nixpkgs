@@ -36,26 +36,26 @@
   signxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhanko";
-  version = "0.32.0";
+  version = "0.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
-    tag = "v${version}";
-    hash = "sha256-UyJ9odchy63CcCkJVtBgraRQuD2fxqCciwLuhN4+8aw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+576MAbtWFGaPu/HqhdeeRNHi84pLnDaMDa0e/J/CUs=";
   };
 
-  sourceRoot = "${src.name}/pkgs/pyhanko";
+  sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko";
 
   postPatch = ''
     substituteInPlace src/pyhanko/version/__init__.py \
-      --replace-fail "0.0.0.dev1" "${version}" \
-      --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${version}\".split(\".\"))"
+      --replace-fail "0.0.0.dev1" "${finalAttrs.version}" \
+      --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${finalAttrs.version}\".split(\".\"))"
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0.dev1" "${version}"
+      --replace-fail "0.0.0.dev1" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
@@ -96,18 +96,14 @@ buildPythonPackage rec {
     pytestCheckHook
     python-pae
     requests-mock
-    passthru.testData
+    finalAttrs.passthru.testData
     signxml
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'csc_dummy'
     "tests/test_csc.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # OSError: One or more parameters passed to a function were not valid.
-    "tests/cli_tests"
   ];
 
   disabledTests = [
@@ -134,29 +130,19 @@ buildPythonPackage rec {
     "test_ocsp_embed"
     "test_ts_fetch_aiohttp"
     "test_ts_fetch_requests"
-
-    # https://github.com/MatthiasValvekens/pyHanko/pull/595
-    "test_simple_text_stamp_on_page_with_leaky_graphics_state"
-    "test_simple_text_stamp_on_page_with_leaky_graphics_state_without_coord_correction"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # OSError: One or more parameters passed to a function were not valid.
-    "test_detached_cms_with_duplicated_attr"
-    "test_detached_cms_with_wrong_tst"
-    "test_diff_analysis_add_extensions_dict"
-    "test_diff_analysis_update_indirect_extensions_not_all_path"
-    "test_no_certificates"
-    "test_ocsp_without_nextupdate_embed"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pyhanko" ];
 
   passthru = {
     testData = buildPythonPackage {
       pname = "common-test-utils";
-      inherit version pyproject src;
+      inherit (finalAttrs) version src;
+      pyproject = true;
 
-      sourceRoot = "${src.name}/internal/common-test-utils";
+      sourceRoot = "${finalAttrs.src.name}/internal/common-test-utils";
       # Include the test pdf/xml files etc. in the build output
       postPatch = ''
         echo "graft src/test_data" > MANIFEST.in
@@ -176,8 +162,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sign and stamp PDF files";
     homepage = "https://github.com/MatthiasValvekens/pyHanko";
-    changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/${src.tag}/docs/changelog.rst#pyhanko";
+    changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/${finalAttrs.src.tag}/docs/changelog.rst#pyhanko";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antonmosich ];
   };
-}
+})

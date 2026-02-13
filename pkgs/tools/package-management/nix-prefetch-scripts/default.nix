@@ -71,6 +71,8 @@ rec {
     mkPrefetchScript "fossil" ../../../build-support/fetchfossil/nix-prefetch-fossil
       [
         fossil
+        gnugrep
+        gnused
       ];
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [
     findutils

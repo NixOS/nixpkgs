@@ -24,6 +24,6 @@ buildNpmPackage {
     description = "Rust-analyzer extension for coc.nvim";
     homepage = "https://github.com/fannheyward/coc-rust-analyzer";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

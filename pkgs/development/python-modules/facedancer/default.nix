@@ -2,10 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   pyusb,
   pyserial,
   prompt-toolkit,
   libusb1,
+  hid-parser,
   setuptools,
 }:
 
@@ -36,6 +38,7 @@ buildPythonPackage rec {
     pyserial
     prompt-toolkit
     libusb1
+    hid-parser
   ];
 
   pythonImportsCheck = [
@@ -51,5 +54,7 @@ buildPythonPackage rec {
       mog
       carlossless
     ];
+    # https://github.com/greatscottgadgets/facedancer/issues/172
+    broken = pythonAtLeast "3.14";
   };
 }

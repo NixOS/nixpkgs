@@ -13,14 +13,14 @@
   ounit,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dose3";
   version = "7.0.0";
 
   src = fetchFromGitLab {
     owner = "irill";
     repo = "dose3";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-K0fYSAWV48Rers/foDrEIqieyJ0PvpXkuYrFrZGBkkE=";
   };
 
@@ -60,4 +60,4 @@ buildDunePackage rec {
       * dose-deb-coinstall, a Debian-specific tool for checking whether a set of packages can be installed all together.
     '';
   };
-}
+})

@@ -295,6 +295,11 @@
     "hash": "sha256-sc2wvyV8cGm1FrNP2GGHEI584RCvRPu15erYCsgw5QY="
   },
   {
+    "pname": "Microsoft.NETCore.App.Host.win-x64",
+    "version": "8.0.23",
+    "hash": "sha256-vIDCQTTBNhOchF0H7voWbnaiJNM5z7ivJOjHyLdtvAs="
+  },
+  {
     "pname": "Microsoft.TestPlatform.ObjectModel",
     "version": "17.13.0",
     "hash": "sha256-6S0fjfj8vA+h6dJVNwLi6oZhYDO/I/6hBZaq2VTW+Uk="

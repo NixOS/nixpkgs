@@ -6,7 +6,7 @@
   containers,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "decoders-ezxmlm";
 
   # sub-package built separately from the same source
@@ -27,8 +27,8 @@ buildDunePackage rec {
   meta = {
     description = "Ezxmlm backend for decoders";
     homepage = "https://github.com/mattjbray/ocaml-decoders";
-    changelog = "https://github.com/mattjbray/ocaml-decoders/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/mattjbray/ocaml-decoders/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ infinidoge ];
   };
-}
+})

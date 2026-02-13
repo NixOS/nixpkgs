@@ -111,7 +111,7 @@ rec {
       allowSubstitutes ? false,
       preferLocalBuild ? true,
       derivationArgs ? { },
-    }:
+    }@args:
     assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
       destination must be an absolute path, relative to the derivation's out path,
       got '${destination}' instead.
@@ -125,6 +125,7 @@ rec {
     runCommand name
       (
         {
+          pos = builtins.unsafeGetAttrPos "name" args;
           inherit
             text
             executable
@@ -333,7 +334,7 @@ rec {
          Type: Bool
       */
       inheritPath ? true,
-    }:
+    }@args:
     writeTextFile {
       inherit
         name
@@ -613,6 +614,13 @@ rec {
           "failOnMissing"
         ]
         // {
+          # Allow getting the proper position of the output derivation.
+          # Since one of these are required, it should be fairly accurate.
+          pos =
+            if args_ ? pname then
+              builtins.unsafeGetAttrPos "pname" args_
+            else
+              builtins.unsafeGetAttrPos "name" args_;
           inherit preferLocalBuild allowSubstitutes;
           paths = mapPaths (path: "${path}${stripPrefix}") paths;
           passAsFile = [ "paths" ];
@@ -675,6 +683,14 @@ rec {
     in
     runCommand name
       {
+        # Get the position from the `entries` attrset if it exists.
+        # This is the best we can do since the other attrs are either defined here, or curried values that
+        # we cannot extract a position from
+        pos =
+          if lib.isAttrs entries then
+            builtins.unsafeGetAttrPos (builtins.head (builtins.attrNames entries)) entries
+          else
+            null;
         preferLocalBuild = true;
         allowSubstitutes = false;
         passthru.entries = entries';
@@ -744,12 +760,15 @@ rec {
       meta ? { },
       passthru ? { },
       substitutions ? { },
-    }:
+    }@args:
     script:
     runCommand name
       (
         substitutions
         // {
+          # Make the position of the derivation accurate.
+          # Since not having `name` is deprecated, this should be fairly accurate.
+          pos = lib.unsafeGetAttrPos "name" args;
           # TODO(@Artturin:) substitutions should be inside the env attrset
           # but users are likely passing non-substitution arguments through substitutions
           # turn off __structuredAttrs to unbreak substituteAll

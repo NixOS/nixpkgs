@@ -29,16 +29,16 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docling-core";
-  version = "2.63.0";
+  version = "2.64.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-core";
-    tag = "v${version}";
-    hash = "sha256-j1z9xxlUeuVEu2EtfsnCFm0WQc4nhulQSv0dAbBYXBY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-22UJuHKUKyaIXcFOJvBWZibxBpibENZqVVFmZalWGx0=";
   };
 
   build-system = [
@@ -85,10 +85,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/docling-project/docling-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/docling-project/docling-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Python library to define and validate data types in Docling";
     homepage = "https://github.com/docling-project/docling-core";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -176,18 +176,19 @@ buildGoModule (finalAttrs: {
       name = "podman-helper-binary-wrapper";
 
       # this only works for some binaries, others may need to be added to `binPath` or in the modules
-      paths = [
-        gvproxy
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-        netavark
-        passt
-        conmon
-        crun
-      ]
-      ++ extraRuntimes;
+      paths =
+        lib.optionals stdenv.hostPlatform.isDarwin [
+          gvproxy
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          aardvark-dns
+          catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+          netavark
+          passt
+          conmon
+          crun
+        ]
+        ++ extraRuntimes;
     };
   };
 

@@ -30,12 +30,12 @@
   replaceVars,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "carton";
   version = "0.7.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-git/releases/download/${pname}-v${version}/git-${pname}-v${version}.tbz";
+    url = "https://github.com/mirage/ocaml-git/releases/download/carton-v${finalAttrs.version}/git-carton-v${finalAttrs.version}.tbz";
     hash = "sha256-vWkBJdP4ZpRCEwzrFMzsdHay4VyiXix/+1qzk+7yDvk=";
   };
 
@@ -92,4 +92,4 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/ocaml-git";
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

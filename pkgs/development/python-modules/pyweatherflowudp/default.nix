@@ -4,26 +4,30 @@
   fetchFromGitHub,
   pint,
   poetry-core,
+  poetry-dynamic-versioning,
   psychrolib,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyweatherflowudp";
-  version = "1.4.5";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "briis";
     repo = "pyweatherflowudp";
-    tag = "v${version}";
-    hash = "sha256-aTwGFYTtd07BsWFaFc7ns+8oh2AxTUfRFSu81Zv5OoA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mo42Y6vPREuH5EaoALTJdzoaQLVEvfTeuJqV+N+PFRE=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pint
     psychrolib
   ];
@@ -48,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to receive UDP Packets from Weatherflow Weatherstations";
     homepage = "https://github.com/briis/pyweatherflowudp";
-    changelog = "https://github.com/briis/pyweatherflowudp/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/briis/pyweatherflowudp/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,37 +1,15 @@
-# Do not use overrides in this file to add  `meta.mainProgram` to packages. Use `./main-programs.nix`
-# instead.
 { pkgs, nodejs }:
 
 let
   inherit (pkgs)
-    stdenv
     lib
-    callPackage
     fetchFromGitHub
-    fetchurl
     fetchpatch
-    nixosTests
     ;
-
-  since = version: lib.versionAtLeast nodejs.version version;
-  before = version: lib.versionOlder nodejs.version version;
 in
 
 final: prev: {
   inherit nodejs;
-
-  "@angular/cli" = prev."@angular/cli".override {
-    prePatch = ''
-      export NG_CLI_ANALYTICS=false
-    '';
-    nativeBuildInputs = [ pkgs.installShellFiles ];
-    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      for shell in bash zsh; do
-        installShellCompletion --cmd ng \
-          --$shell <($out/bin/ng completion script)
-      done
-    '';
-  };
 
   node2nix = prev.node2nix.override {
     # Get latest commit for misc fixes
@@ -74,9 +52,5 @@ final: prev: {
         )}
         wrapProgram "$out/bin/node2nix" --prefix PATH : ${lib.makeBinPath [ pkgs.nix ]}
       '';
-  };
-
-  rush = prev."@microsoft/rush".override {
-    name = "rush";
   };
 }

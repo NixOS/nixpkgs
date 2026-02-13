@@ -1152,15 +1152,6 @@ with pkgs;
 
   gitRepo = git-repo;
 
-  merge-fmt = callPackage ../applications/version-management/merge-fmt {
-    inherit (ocamlPackages)
-      buildDunePackage
-      cmdliner
-      base
-      stdio
-      ;
-  };
-
   svn-all-fast-export =
     libsForQt5.callPackage ../applications/version-management/svn-all-fast-export
       { };
@@ -1229,8 +1220,6 @@ with pkgs;
   kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
-
-  mame = libsForQt5.callPackage ../applications/emulators/mame { };
 
   mame-tools = lib.addMetaAttrs {
     description = mame.meta.description + " (tools only)";
@@ -1562,10 +1551,6 @@ with pkgs;
     withLibdnssdCompat = true;
   };
 
-  axel = callPackage ../tools/networking/axel {
-    libssl = openssl;
-  };
-
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
   bat-extras = recurseIntoAttrs (lib.makeScope newScope (import ../tools/misc/bat-extras));
@@ -1612,20 +1597,6 @@ with pkgs;
   cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables (
     haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix
   );
-
-  cabal2nix = symlinkJoin {
-    inherit (cabal2nix-unwrapped) name meta;
-    nativeBuildInputs = [ buildPackages.makeWrapper ];
-    paths = [ cabal2nix-unwrapped ];
-    postBuild = ''
-      wrapProgram $out/bin/cabal2nix \
-        --prefix PATH ":" "${
-          lib.makeBinPath [
-            nix-prefetch-scripts
-          ]
-        }"
-    '';
-  };
 
   stack2nix =
     with haskell.lib;
@@ -1709,8 +1680,6 @@ with pkgs;
   };
 
   dino = callPackage ../applications/networking/instant-messengers/dino { };
-
-  dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
 
   inherit (ocamlPackages) dot-merlin-reader;
 
@@ -4319,10 +4288,9 @@ with pkgs;
   ghc =
     targetPackages.haskellPackages.ghc or (
       # Prefer native-bignum to avoid linking issues with gmp;
-      # TemplateHaskell doesn't work with hadrian built GHCs yet
-      # https://github.com/NixOS/nixpkgs/issues/275304
-      if stdenv.targetPlatform.isStatic then
-        haskell.compiler.native-bignum.ghc94
+      # GHC 9.10 doesn't work too well with iserv-proxy.
+      if stdenv.hostPlatform.isStatic then
+        haskell.packages.native-bignum.ghc912
       # JS backend can't use GMP
       else if stdenv.targetPlatform.isGhcjs then
         haskell.compiler.native-bignum.ghc910
@@ -4392,12 +4360,6 @@ with pkgs;
   };
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { });
-
-  gopro-tool = callPackage ../by-name/go/gopro-tool/package.nix {
-    vlc = vlc.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [ x264 ];
-    });
-  };
 
   gwe = callPackage ../tools/misc/gwe {
     nvidia_x11 = linuxPackages.nvidia_x11;
@@ -5079,6 +5041,7 @@ with pkgs;
 
   inherit (beam.interpreters)
     erlang
+    erlang_29
     erlang_28
     erlang_27
     erlang_26
@@ -5117,10 +5080,12 @@ with pkgs;
   beam26Packages = recurseIntoAttrs beam.packages.erlang_26.beamPackages;
   beam27Packages = recurseIntoAttrs beam.packages.erlang_27.beamPackages;
   beam28Packages = recurseIntoAttrs beam.packages.erlang_28.beamPackages;
+  beam29Packages = dontRecurseIntoAttrs beam.packages.erlang_29.beamPackages;
 
   beamMinimal26Packages = recurseIntoAttrs beam_minimal.packages.erlang_26.beamPackages;
   beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27.beamPackages;
   beamMinimal28Packages = recurseIntoAttrs beam_minimal.packages.erlang_28.beamPackages;
+  beamMinimal29Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_29.beamPackages;
 
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
@@ -5992,10 +5957,6 @@ with pkgs;
     )
       haskellPackages.haskell-ci;
 
-  nixbang = callPackage ../development/tools/misc/nixbang {
-    pythonPackages = python3Packages;
-  };
-
   nexusmods-app-unfree = nexusmods-app.override {
     pname = "nexusmods-app-unfree";
     _7zz = _7zz-rar;
@@ -6652,19 +6613,6 @@ with pkgs;
 
   grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
-  glib = callPackage ../by-name/gl/glib/package.nix (
-    let
-      glib-untested = glib.overrideAttrs { doCheck = false; };
-    in
-    {
-      # break dependency cycles
-      # these things are only used for tests, they don't get into the closure
-      shared-mime-info = shared-mime-info.override { glib = glib-untested; };
-      desktop-file-utils = desktop-file-utils.override { glib = glib-untested; };
-      dbus = dbus.override { enableSystemd = false; };
-    }
-  );
-
   glirc = haskell.lib.compose.justStaticExecutables haskellPackages.glirc;
 
   # Not moved to aliases while we decide if we should split the package again.
@@ -6847,9 +6795,9 @@ with pkgs;
 
   libchipcard = callPackage ../development/libraries/aqbanking/libchipcard.nix { };
 
-  libdbiDriversBase = libdbiDrivers.override {
-    libmysqlclient = null;
-    sqlite = null;
+  libdbi-drivers-base = libdbi-drivers.override {
+    withMysql = false;
+    withSqlite = false;
   };
 
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
@@ -8353,14 +8301,20 @@ with pkgs;
       kanidm_1_8 = callPackage ../servers/kanidm/1_8.nix {
         kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_8;
       };
+      kanidm_1_9 = callPackage ../servers/kanidm/1_9.nix {
+        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_8;
+      };
 
       kanidmWithSecretProvisioning_1_7 = kanidm_1_7.override { enableSecretProvisioning = true; };
       kanidmWithSecretProvisioning_1_8 = kanidm_1_8.override { enableSecretProvisioning = true; };
+      kanidmWithSecretProvisioning_1_9 = kanidm_1_9.override { enableSecretProvisioning = true; };
     })
     kanidm_1_7
     kanidm_1_8
+    kanidm_1_9
     kanidmWithSecretProvisioning_1_7
     kanidmWithSecretProvisioning_1_8
+    kanidmWithSecretProvisioning_1_9
     ;
 
   leafnode = callPackage ../servers/news/leafnode { };
@@ -9610,10 +9564,6 @@ with pkgs;
 
   awesomebump = libsForQt5.callPackage ../applications/graphics/awesomebump { };
 
-  backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
-
-  backintime-qt = qt6.callPackage ../applications/networking/sync/backintime/qt.nix { };
-
   backintime = backintime-qt;
 
   bespokesynth-with-vst2 = bespokesynth.override {
@@ -10274,8 +10224,6 @@ with pkgs;
 
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
-  js8call = qt5.callPackage ../applications/radio/js8call { };
-
   jwm = callPackage ../applications/window-managers/jwm { };
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
@@ -10692,9 +10640,6 @@ with pkgs;
     };
   };
 
-  palemoon-bin = callPackage ../applications/networking/browsers/palemoon/bin.nix { };
-  palemoon-gtk2-bin = palemoon-bin.override { withGTK3 = false; };
-
   pantalaimon = callPackage ../applications/networking/instant-messengers/pantalaimon { };
 
   pantalaimon-headless = callPackage ../applications/networking/instant-messengers/pantalaimon {
@@ -10952,15 +10897,6 @@ with pkgs;
 
   curaPlugins = recurseIntoAttrs (callPackage ../applications/misc/cura/plugins.nix { });
 
-  prusa-slicer = callPackage ../applications/misc/prusa-slicer {
-    # Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
-    # on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
-    # with --cores 32 on clang).
-    stdenv = clangStdenv;
-  };
-
-  super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
-
   super-slicer-beta = super-slicer.beta;
 
   super-slicer-latest = super-slicer.latest;
@@ -11030,11 +10966,6 @@ with pkgs;
     syncthing-discovery
     syncthing-relay
     ;
-
-  syncthingtray = kdePackages.callPackage ../applications/misc/syncthingtray {
-    # renamed in KF5 -> KF6
-    plasma-framework = kdePackages.libplasma;
-  };
 
   synergyWithoutGUI = synergy.override { withGUI = false; };
 
@@ -11934,8 +11865,6 @@ with pkgs;
     gnome49Extensions
     ;
 
-  gnome-extensions-cli = python3Packages.callPackage ../desktops/gnome/misc/gnome-extensions-cli { };
-
   gnome-session-ctl = callPackage ../by-name/gn/gnome-session/ctl.nix { };
 
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
@@ -12007,10 +11936,6 @@ with pkgs;
   siesta-mpi = callPackage ../by-name/si/siesta/package.nix { useMpi = true; };
 
   ### SCIENCE/BIOLOGY
-
-  cd-hit = callPackage ../applications/science/biology/cd-hit {
-    inherit (llvmPackages) openmp;
-  };
 
   deepdiff = with python3Packages; toPythonApplication deepdiff;
 
@@ -12674,6 +12599,7 @@ with pkgs;
     nix-prefetch-bzr
     nix-prefetch-cvs
     nix-prefetch-darcs
+    nix-prefetch-fossil
     nix-prefetch-git
     nix-prefetch-hg
     nix-prefetch-pijul

@@ -25,6 +25,6 @@ buildNpmPackage {
     description = "Pyright extension for coc.nvim";
     homepage = "https://github.com/fannheyward/coc-pyright";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

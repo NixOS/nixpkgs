@@ -123,28 +123,31 @@ stdenv.mkDerivation (
 
     buildInputs = buildInputs ++ lib.optionals (escriptBinName != null) [ erlang ];
 
-    MIX_ENV = mixEnv;
-    MIX_TARGET = mixTarget;
-    MIX_BUILD_PREFIX = (if mixTarget == "host" then "" else "${mixTarget}_") + "${mixEnv}";
-    MIX_DEBUG = if enableDebugInfo then 1 else 0;
-    HEX_OFFLINE = 1;
-
     __darwinAllowLocalNetworking = true;
 
-    DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
-    # The API with `mix local.rebar rebar path` makes a copy of the binary
-    # some older dependencies still use rebar.
-    MIX_REBAR = "${rebar}/bin/rebar";
-    MIX_REBAR3 = "${rebar3}/bin/rebar3";
+    env = {
+      MIX_ENV = mixEnv;
+      MIX_TARGET = mixTarget;
+      MIX_BUILD_PREFIX = (if mixTarget == "host" then "" else "${mixTarget}_") + "${mixEnv}";
+      MIX_DEBUG = if enableDebugInfo then 1 else 0;
+      HEX_OFFLINE = 1;
 
-    ERL_COMPILER_OPTIONS =
-      let
-        options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];
-      in
-      "[${lib.concatStringsSep "," options}]";
+      DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
+      # The API with `mix local.rebar rebar path` makes a copy of the binary
+      # some older dependencies still use rebar.
+      MIX_REBAR = "${rebar}/bin/rebar";
+      MIX_REBAR3 = "${rebar3}/bin/rebar3";
 
-    LANG = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "C";
-    LC_CTYPE = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "UTF-8";
+      ERL_COMPILER_OPTIONS =
+        let
+          options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];
+        in
+        "[${lib.concatStringsSep "," options}]";
+
+      LANG = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "C";
+      LC_CTYPE = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "UTF-8";
+    }
+    // (attrs.env or { });
 
     postUnpack = ''
       # Mix and Hex

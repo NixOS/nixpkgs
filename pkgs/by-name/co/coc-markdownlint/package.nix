@@ -24,6 +24,6 @@ buildNpmPackage {
     description = "Markdownlint extension for coc.nvim";
     homepage = "https://github.com/fannheyward/coc-markdownlint";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

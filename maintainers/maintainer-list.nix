@@ -7240,6 +7240,11 @@
     name = "Duncan Dean";
     keys = [ { fingerprint = "9484 44FC E03B 05BA 5AB0  591E C37B 1C1D 44C7 86EE"; } ];
   };
+  DuskyElf = {
+    name = "jan Lemata";
+    github = "DuskyElf";
+    githubId = 91879372;
+  };
   dustyhorizon = {
     name = "Kenneth Tan";
     email = "i.am@kennethtan.xyz";
@@ -12924,6 +12929,12 @@
     github = "jooooscha";
     githubId = 57965027;
   };
+  josephschmitt = {
+    name = "Joseph Schmitt";
+    email = "dev@joe.sh";
+    github = "josephschmitt";
+    githubId = 136007;
+  };
   josephst = {
     name = "Joseph Stahl";
     email = "hello@josephstahl.com";
@@ -14271,6 +14282,13 @@
     github = "KristianAN";
     githubId = 80984519;
     name = "Kristian Alvestad Nedevold-Hansen";
+  };
+  KristijanZic = {
+    name = "Kristijan Zic";
+    github = "KristijanZic";
+    githubId = 10299892;
+    email = "maintainer@zic.email";
+    matrix = "@kristijan.zic:matrix.org";
   };
   kristoff3r = {
     email = "k.soeholm@gmail.com";
@@ -20497,6 +20515,11 @@
     github = "pcboy";
     githubId = 943430;
     name = "David Hagege";
+  };
+  pdg137 = {
+    name = "Paul Grayson";
+    github = "pdg137";
+    githubId = 466760;
   };
   peat-psuwit = {
     name = "Ratchanan Srirattanamet";

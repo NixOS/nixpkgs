@@ -22,8 +22,6 @@
   gnome,
   replaceVars,
   bubblewrap,
-  jq,
-  moreutils,
   common-updater-scripts,
   _experimental-update-script-combinators,
   buildPackages,
@@ -140,8 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
         (
           replaceVars ./patch-vendor-hook.sh {
             bwrap = "${bubblewrap}/bin/bwrap";
-            jq = "${jq}/bin/jq";
-            sponge = "${moreutils}/bin/sponge";
+            jq = "${buildPackages.jq}/bin/jq";
+            sponge = "${buildPackages.moreutils}/bin/sponge";
           }
         );
 

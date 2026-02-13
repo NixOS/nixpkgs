@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zapzap";
-  version = "6.2.9";
+  version = "6.2.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
     tag = finalAttrs.version;
-    hash = "sha256-UEnl76QnxDtcdHFoP/RLUAqkZCBer6qqcIjGWVZGVdg=";
+    hash = "sha256-dNHDR9sZWPetdwpS5u0UCn5sCkDMEw5YoE4QBerU2Sg=";
   };
 
   nativeBuildInputs = [

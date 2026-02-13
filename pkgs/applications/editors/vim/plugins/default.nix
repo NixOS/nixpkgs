@@ -27,10 +27,6 @@ let
     inherit (neovimUtils) buildNeovimPlugin;
   };
 
-  nodePackagePlugins = callPackage ./nodePackagePlugins.nix {
-    inherit buildVimPlugin;
-  };
-
   nonGeneratedPlugins =
     self: super:
     let
@@ -65,7 +61,6 @@ lib.pipe initialPackages [
   (extends plugins)
   (extends cocPlugins)
   (extends luaPackagePlugins)
-  (extends nodePackagePlugins)
   (extends nonGeneratedPlugins)
   (extends corePlugins)
   (extends overrides)

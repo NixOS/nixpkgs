@@ -34,6 +34,10 @@ in
     #
     # Three versions are supported according to https://github.com/erlang/otp/security
 
+    erlang_29 = callErlang ../development/interpreters/erlang/29.nix {
+      inherit wxSupport systemdSupport;
+    };
+
     erlang_28 = callErlang ../development/interpreters/erlang/28.nix {
       inherit wxSupport systemdSupport;
     };
@@ -69,6 +73,7 @@ in
   # appropriate Erlang/OTP version.
   packages = {
     erlang = self.packages.${self.latestVersion};
+    erlang_29 = self.packagesWith self.interpreters.erlang_29;
     erlang_28 = self.packagesWith self.interpreters.erlang_28;
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;

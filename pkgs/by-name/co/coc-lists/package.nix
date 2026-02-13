@@ -26,6 +26,6 @@ buildNpmPackage (finalAttrs: {
     description = "Common lists for coc.nvim";
     homepage = "https://github.com/neoclide/coc-lists";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

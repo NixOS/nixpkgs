@@ -94,5 +94,6 @@ buildPythonPackage {
     homepage = "https://pythonnet.github.io/clr-loader/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mdarocha ];
+    broken = true;
   };
 }

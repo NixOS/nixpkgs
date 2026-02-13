@@ -4296,6 +4296,18 @@
     "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
   ],
+  "neovim-plugin-nvim-treesitter": [
+    "index.html#neovim-plugin-nvim-treesitter",
+    "index.html#vim-plugin-nvim-treesitter"
+  ],
+  "neovim-plugin-treesitter-standalone": [
+    "index.html#neovim-plugin-treesitter-standalone",
+    "index.html#vim-plugin-treesitter-standalone"
+  ],
+  "neovim-plugin-treesitter-grammar-dependencies": [
+    "index.html#neovim-plugin-treesitter-grammar-dependencies",
+    "index.html#vim-plugin-treesitter-grammar-dependencies"
+  ],
   "managing-plugins-with-vim-plug": [
     "index.html#managing-plugins-with-vim-plug"
   ],

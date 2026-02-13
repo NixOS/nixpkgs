@@ -8,6 +8,7 @@
   fiona,
   geodatasets,
   geopandas,
+  jinja2,
   numpy,
   packaging,
   pandas,
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     beautifulsoup4
     fiona
     geopandas
+    jinja2
     numpy
     packaging
     pandas

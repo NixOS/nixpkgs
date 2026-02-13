@@ -2,44 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
-
-  # build-system
-  setuptools,
-
-  # dependencies
   jinja2,
-  prettytable,
-  simplejson,
-
-  # optional-dependencies
-  pillow,
-
-  # tests
   numpy,
   pandas,
+  pillow,
+  prettytable,
   pytestCheckHook,
+  pythonAtLeast,
   requests,
+  setuptools-scm,
+  setuptools,
+  simplejson,
 }:
 
-let
-  optional-dependencies = {
-    images = [ pillow ];
-  };
-in
 buildPythonPackage (finalAttrs: {
   pname = "pyecharts";
-  version = "2.0.9";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyecharts";
     repo = "pyecharts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AMdPsTQsndc0fr4NF2AnJy98k4I2832/GNWeY4IWSRA=";
+    hash = "sha256-49ALxObzUuw3N81ZTgtQYtqTA1CTu7Qz9E6OkkJyEnc=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     jinja2
@@ -47,7 +38,9 @@ buildPythonPackage (finalAttrs: {
     simplejson
   ];
 
-  inherit optional-dependencies;
+  optional-dependencies = {
+    images = [ pillow ];
+  };
 
   nativeCheckInputs = [
     numpy
@@ -55,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     requests
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "pyecharts" ];
 

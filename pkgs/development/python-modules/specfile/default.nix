@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "specfile";
-  version = "0.38.0";
+  version = "0.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "packit";
     repo = "specfile";
     tag = finalAttrs.version;
-    hash = "sha256-crrCHEwAWQclr7aY9nT1VyQ4PZh9Z02yfhtbwIrLnwc=";
+    hash = "sha256-CVzGdfsJeWqC3SwQZX2lCIefEFdSp+Xep/Kqw1dGrrc=";
   };
 
   build-system = [

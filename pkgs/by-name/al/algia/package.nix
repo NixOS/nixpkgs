@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "algia";
   version = "0.0.102";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "algia";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vpZL4UNDtcJRsBA0th6/YccE/3GG7kzHrgJ3RWpgSk8=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ haruki7049 ];
     mainProgram = "algia";
   };
-}
+})

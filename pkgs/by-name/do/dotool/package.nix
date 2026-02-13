@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dotool";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromSourcehut {
     owner = "~geb";
     repo = "dotool";
     rev = finalAttrs.version;
-    hash = "sha256-4QmTHeU3TnpRATKIvilkIA3i2hDjM5zQwSvmRvoWuNE=";
+    hash = "sha256-KI3vA45/MvFRV8Fr3Q4yd/argDy1PpFHCT3KA9VDP80=";
   };
 
   vendorHash = "sha256-IQ847LHDYJPboWL/6lQNJ4vPPD/+xkrGI2LSZ7kBnp4=";

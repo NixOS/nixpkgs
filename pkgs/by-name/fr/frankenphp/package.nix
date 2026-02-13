@@ -30,7 +30,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "frankenphp";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "php";

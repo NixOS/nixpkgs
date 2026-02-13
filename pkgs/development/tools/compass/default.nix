@@ -7,7 +7,6 @@
 
 bundlerEnv {
   pname = "compass";
-  version = "1.0.3";
 
   inherit ruby;
   gemdir = ./.;

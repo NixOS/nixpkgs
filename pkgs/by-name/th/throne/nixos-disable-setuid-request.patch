@@ -36,7 +36,7 @@ index d31c311..ce4c357 100644
 +    QMessageBox::critical(
 +        GetMessageBoxParent(),
 +        tr("Unable to elevate privileges when installed with Nix"),
-+        tr("Due to the read-only property of Nix store, we cannot set suid for throne-core. If you are using NixOS, please set `programs.throne.tunMode.enable` option to elevate privileges."),
++        tr("Due to the read-only property of Nix store, we cannot set suid for throne-core. If you are using NixOS, please install Throne via `programs.throne.enable` and then set the `programs.throne.tunMode.enable` option to elevate privileges."),
 +        QMessageBox::Ok
 +    );
 +    return false;

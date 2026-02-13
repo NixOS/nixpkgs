@@ -30,9 +30,9 @@
     ]
   },
   "collectives": {
-    "hash": "sha256-DFyyXpUxqC9wI0SUTTkBtur6JfzFlACPrMjIoeQ0wlU=",
-    "url": "https://github.com/nextcloud/collectives/releases/download/v3.5.0/collectives-3.5.0.tar.gz",
-    "version": "3.5.0",
+    "hash": "sha256-E40twWESLa11AuIfTjpqE2RF3WT9cZB4PgSyJDJFmeQ=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v3.6.1/collectives-3.6.1.tar.gz",
+    "version": "3.6.1",
     "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
     "homepage": "https://github.com/nextcloud/collectives",
     "licenses": [
@@ -40,9 +40,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-eWV+M+yWymUwWonSqy/eQ8EuQy+1ZojIL2DWVMOFAjY=",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v7.3.12/contacts-v7.3.12.tar.gz",
-    "version": "7.3.12",
+    "hash": "sha256-LOFfHKt0+DUYLyzbzihaggytQQpFcipce0KaoAVCL1E=",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v7.3.13/contacts-v7.3.13.tar.gz",
+    "version": "7.3.13",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -93,7 +93,7 @@
     "hash": "sha256-rVIB/pCv5tMLMFpyIQCQ0/0bHIrgnE/s5J3ZIvu3Ktg=",
     "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v1.17.1/end_to_end_encryption-v1.17.1.tar.gz",
     "version": "1.17.1",
-    "description": "This app provides all the necessary APIs to implement End-to-End encryption on the client side.\nAdditionally it implements Secure FileDrop and makes sure that End-to-End encrypted files are neither accessible via the web interface nor other WebDAV clients.",
+    "description": "## **End-to-End Encryption**\n\n### For End Users\n\n**Protect your most sensitive files with strong encryption.**\n\nThe End-to-End Encryption app gives you complete control over your data privacy.\nWith this app, you can encrypt specific folders so that only you (and those you trust) can access their contents.\nYour files are encrypted on your device before they reach the server, ensuring that no one—not even the server administrator—can read them.\n\n**Benefits:**\n- 🔒 **True privacy**: Files are encrypted on your device and can only be decrypted by you\n- 📱 **Works across all platforms**: Fully supported on desktop, Android, iOS clients, and as you wish even in the browser\n- 🎯 **Selective encryption**: Choose which folders to encrypt\n- 🛡️ **Secure sharing**: Share encrypted files with other users or even secure public upload using the encrypted file drop\n\n---\n\n### For Administrators\n\n**Enterprise-ready end-to-end encryption infrastructure for your Nextcloud instance.**\n\nThis app provides all the necessary server-side APIs and infrastructure to enable End-to-End encryption (E2EE) for your users.\nIt ensures that encrypted data remains secure throughout its lifecycle on your server.\n\n**Technical highlights:**\n- 🔐 **Complete API suite**: Provides all client-side APIs needed for E2EE implementation\n- 🔒 **Secure FileDrop integration**: Enables secure file sharing with encryption\n- 🛡️ **Zero-knowledge architecture**: Server never has access to encryption keys\n- ⚙️ **Group restrictions**: Limit app usage to specific user groups if needed\n- 🔄 **Background job management**: Automatic rollback handling for failed operations\n\n### Setup\nThis application provides the server-side infrastructure for end-to-end encryption, but it requires client support to function.\nTo enable end-to-end encryption, users will need to install the corresponding client-side app on their devices (desktop, Android, iOS) or use the web client.\n\nUsing the web interface, after enabling it in the personal settings, allows you to encrypt files and folders directly in the browser,\nproviding a seamless experience without needing additional software. But also requires some kind of trust in the server as the code is delivered by the server and could be manipulated.\n\nOnce enable through clients or the web interface, you can create encrypted folders and upload or move files into them.\nThe clients and the web interface will handle the encryption and decryption processes automatically.\n\n⚠️ This comes with some limitations and caveats, as only normal file operations can be handled.\nMeaning that some apps in the web interface do not work with encrypted files.",
     "homepage": "https://github.com/nextcloud/end_to_end_encryption",
     "licenses": [
       "agpl"
@@ -200,9 +200,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-+Lulu5ZJcQnhp1hcT94UxbaYHmwqrOwx7Z0Kz6Mrc8s=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.6.10/mail-v5.6.10.tar.gz",
-    "version": "5.6.10",
+    "hash": "sha256-7d95EVvFsfv66clvBjBhS0/O0b/nWyRopx/CL9XkqDg=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.6.12/mail-v5.6.12.tar.gz",
+    "version": "5.6.12",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://www.horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -300,10 +300,10 @@
     ]
   },
   "previewgenerator": {
-    "hash": "sha256-ZZl3Zt1lOmEWgX0zSegXKGiAyF9Uz0ZE3GXfX7Ex41I=",
-    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.11.0/previewgenerator-v5.11.0.tar.gz",
-    "version": "5.11.0",
-    "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**./occ preview:generate-all -vvv**\n\n**Important**: To enable pre-generation of previews you must add **php /var/www/nextcloud/occ preview:pre-generate** to a system cron job that runs at times of your choosing.",
+    "hash": "sha256-KZP/MK4JbqbTKAL5VllC8tcPB9HD/suLB0MxqpdUvq8=",
+    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.12.1/previewgenerator-v5.12.1.tar.gz",
+    "version": "5.12.1",
+    "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**occ preview:generate-all -vvv**\n\nThe preview queue will be processed automatically by a background job if the system cron background job mode is configured in Nextcloud. Additionally, you may run **occ preview:pre-generate -vvv** to a process the queue of pending previews immediately.",
     "homepage": "https://github.com/nextcloud/previewgenerator",
     "licenses": [
       "agpl"
@@ -340,9 +340,9 @@
     ]
   },
   "repod": {
-    "hash": "sha256-fjGlFyZJAuD6nd8NaVFLu8c7p0U3rzQBowetCQ7jknk=",
-    "url": "https://git.crystalyx.net/Xefir/repod/releases/download/3.9.0/repod.tar.gz",
-    "version": "3.9.0",
+    "hash": "sha256-FFTRr6RH2t5Z/pV4+Sh621SSIzwzxlvRJWxP+DRgXRo=",
+    "url": "https://git.crystalyx.net/Xefir/repod/releases/download/4.0.0/repod.tar.gz",
+    "version": "4.0.0",
     "description": "## Features\n- 🔍 Browse and subscribe huge collection of podcasts\n- 🔊 Listen to episodes directly in Nextcloud\n- 🌐 Sync your activity with [AntennaPod](https://antennapod.org/) and [other apps](https://git.crystalyx.net/Xefir/repod#clients-supporting-sync-of-gpoddersync)\n- 📱 Mobile friendly interface\n- 📡 Import and export your subscriptions\n- ➡️ Full features comparison [here](https://git.crystalyx.net/Xefir/repod#comparaison-with-similar-apps-for-nextcloud)\n\n## Requirements\nYou need to have [GPodderSync](https://apps.nextcloud.com/apps/gpoddersync) installed to use this app!",
     "homepage": "https://git.crystalyx.net/Xefir/repod",
     "licenses": [
@@ -360,9 +360,9 @@
     ]
   },
   "sociallogin": {
-    "hash": "sha256-1wyQlxuyYFbAB9KLq2VSWZ/8zbdGmzq7UlkAYuZUgJc=",
-    "url": "https://github.com/zorn-v/nextcloud-social-login/releases/download/v6.3.0/release.tar.gz",
-    "version": "6.3.0",
+    "hash": "sha256-BBl1zvZvggoznheW/p7re3/8dUYyybOhCYVLNLnAA64=",
+    "url": "https://github.com/zorn-v/nextcloud-social-login/releases/download/v6.3.1/release.tar.gz",
+    "version": "6.3.1",
     "description": "# Social Login\n\nMake it possible to create users and log in via Telegram, OAuth, or OpenID.\n\nFor OAuth, you must create an app with certain providers. Login buttons will appear on the login page if an app ID is specified. Settings are located in the \"Social login\" section of the settings page.\n\n## Installation\n\nLog in to your Nextcloud installation as an administrator. Under \"Apps\", click \"Download and enable\" next to the \"Social Login\" app.\n\nSee below for setup and configuration instructions.\n\n## Custom OAuth2/OIDC Groups\n\nYou can use groups from your custom provider. For this, specify the \"Groups claim\" in the custom OAuth2/OIDC provider settings. This claim should be returned from the provider in the `id_token` or at the user info endpoint. The format should be an `array` or a comma-separated string. E.g., (with a claim named `roles`):\n\n```json\n{\"roles\": [\"admin\", \"user\"]}\n```\nor\n```json\n{\"roles\": \"admin,user\"}\n```\n\nNested claims are also supported. For example, `resource_access.client-id.roles` for:\n\n```json\n\"resource_access\": {\n   \"client-id\": {\n     \"roles\": [\n       \"client-role-1\",\n       \"client-role-2\"\n     ]\n   }\n}\n```\n\n**DisplayName** support is also available:\n```json\n{\"roles\": [{\"gid\": 1, \"displayName\": \"admin\"}, {\"gid\": 2, \"displayName\": \"user\"}]}\n```\n\nYou can use provider groups in two ways:\n\n1. Map provider groups to existing Nextcloud groups.\n2. Create provider groups in Nextcloud and associate them with users (if the appropriate option is enabled).\n\nTo sync groups on every login, ensure the \"Update user profile every login\" setting is checked.\n\n## Examples for Groups\n\n* Configure WSO2IS to return a roles claim with OIDC [here](https://medium.com/@dewni.matheesha/claim-mapping-and-retrieving-end-user-information-in-wso2is-cffd5f3937ff).\n* [GitLab OIDC configuration to allow specific GitLab groups](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/gitlab.md).\n\n## Built-in OAuth Providers\n\nCopy the link from a specific login button to get the correct \"redirect URL\" for OAuth app settings.\n\n* [Amazon](https://developer.amazon.com/loginwithamazon/console/site/lwa/overview.html)\n* [Apple](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/apple.md)\n* [Codeberg](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/codeberg.md)\n* [Discord](#configure-discord)\n* [Facebook](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/facebook.md)\n* [GitHub](https://github.com/settings/developers)\n* [GitLab](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/gitlab.md)\n* [Google](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/google.md)\n* [Keycloak](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/keycloak.md)\n* [Mail.ru](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/mailru.md)\n* **PlexTv**: Use any title as the app ID.\n* [Telegram](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/telegram.md)\n* [Twitter](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/twitter.md)\n\nFor details about Google's \"Allow login only from specified domain\" setting, see [#44](https://github.com/zorn-v/nextcloud-social-login/issues/44). Use a comma-separated list for multiple domains.\n\n## Configuration\n\nAdd `'social_login_auto_redirect' => true` to `config.php` to automatically redirect unauthorized users to social login if only one provider is configured. To temporarily disable this (e.g., for local admin login), add `noredir=1` to the login URL: `https://cloud.domain.com/login?noredir=1`.\n\nConfigure HTTP client options using:\n```php\n  'social_login_http_client' => [\n    'timeout' => 45,\n    'proxy' => 'socks4://127.0.0.1:9050', // See <https://curl.se/libcurl/c/CURLOPT_PROXY.html> for allowed formats\n  ],\n```\nin `config.php`.\n\n### Configure a Provider via CLI\n\nUse the `occ` utility to configure providers via the command line. Replace variables and URLs with your deployment values:\n```bash\nphp occ config:app:set sociallogin custom_providers --value='{\"custom_oidc\": [{\"name\": \"gitlab_oidc\", \"title\": \"Gitlab\", \"authorizeUrl\": \"https://gitlab.my-domain.org/oauth/authorize\", \"tokenUrl\": \"https://gitlab.my-domain.org/oauth/token\", \"userInfoUrl\": \"https://gitlab.my-domain.org/oauth/userinfo\", \"logoutUrl\": \"\", \"clientId\": \"$my_application_id\", \"clientSecret\": \"$my_super_secret_secret\", \"scope\": \"openid\", \"groupsClaim\": \"groups\", \"style\": \"gitlab\", \"defaultGroup\": \"\"}]}'\n```\nFor Docker, prepend `docker exec -t -uwww-data CONTAINER_NAME` to the command or run interactively via `docker exec -it -uwww-data CONTAINER_NAME sh`.\n\nTo inspect configurations:\n```sql\nmysql -u nextcloud -p nextcloud\nPassword: <yourpassword>\n\n> SELECT * FROM oc_appconfig WHERE appid='sociallogin';\n```\nOr run:\n```bash\ndocker exec -t -uwww-data CONTAINER_NAME php occ config:app:get sociallogin custom_providers\n```\n\n### Configure Discord\n\n1. Create a Discord application at [Discord Developer Portal](https://discord.com/developers/applications).\n2. Navigate to `Settings > OAuth2 > General`. Add a redirect URL: `https://nextcloud.mydomain.com/apps/sociallogin/oauth/discord`.\n3. Copy the `CLIENT ID` and generate a `CLIENT SECRET`.\n4. In Nextcloud, go to `Settings > Social Login`. Paste the `CLIENT ID` into \"App id\" and `CLIENT SECRET` into \"Secret\".\n5. Select a default group for new users.\n6. For group mapping, see [#395](https://github.com/zorn-v/nextcloud-social-login/pull/395).\n\n## Hint\n\n### Callback (Reply) URL\nCopy the link from a login button on the Nextcloud login page and use it as the callback URL on your provider's site. To make the button visible temporarily, fill provider settings with placeholder data and update later.\n\nIf you encounter callback URL errors despite correct settings, ensure your Nextcloud server generates HTTPS URLs by adding `'overwriteprotocol' => 'https'` to `config.php`.",
     "homepage": "https://github.com/zorn-v/nextcloud-social-login",
     "licenses": [
@@ -370,9 +370,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-MrzQQB+GCVhLIWpLgxb6fMx+ZfAJJNFX1ssraZrImeg=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v21.1.8/spreed-v21.1.8.tar.gz",
-    "version": "21.1.8",
+    "hash": "sha256-BpRdTq9MYZwcTC8gTNuynVm1lLh58Jbj/L530paUYYQ=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v21.1.9/spreed-v21.1.9.tar.gz",
+    "version": "21.1.9",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -380,9 +380,9 @@
     ]
   },
   "tables": {
-    "hash": "sha256-ejjmOawjeAFPOrl9myorm9ZLaNVS7obx6ojWi/qy8BI=",
-    "url": "https://github.com/nextcloud-releases/tables/releases/download/v1.0.3/tables-v1.0.3.tar.gz",
-    "version": "1.0.3",
+    "hash": "sha256-VjTNJ79LNZ5oBff2mAILiYnGB843V2LgN+Wxb0yG1XU=",
+    "url": "https://github.com/nextcloud-releases/tables/releases/download/v1.0.4/tables-v1.0.4.tar.gz",
+    "version": "1.0.4",
     "description": "Manage data the way you need it.\n\nWith this app you are able to create your own tables with individual columns. You can start with a template or from scratch and add your wanted columns.\nYou can choose from the following column types:\n- Text line or rich text\n- Link to urls or other nextcloud resources\n- Numbers\n- Progress bar\n- Stars rating\n- Yes/No tick\n- Date and/or time\n- (Multi) selection\n- Users, groups and teams\n\nShare your tables and views with users and groups within your cloud.\n\nHave a good time and manage whatever you want.",
     "homepage": "https://github.com/nextcloud/tables",
     "licenses": [
@@ -480,9 +480,9 @@
     ]
   },
   "whiteboard": {
-    "hash": "sha256-8NlFJF3DBCH7fBqNJiv37/xQw2IiYogE6ZYbp4WiLuQ=",
-    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.5.5/whiteboard-v1.5.5.tar.gz",
-    "version": "1.5.5",
+    "hash": "sha256-thJL8fZCh7pIOt+GZT5TNVlVshyaxkPufIcHUdiVeRY=",
+    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.5.6/whiteboard-v1.5.6.tar.gz",
+    "version": "1.5.6",
     "description": "The official whiteboard app for Nextcloud. It allows users to create and share whiteboards with other users and collaborate in real-time.\n\n**Whiteboard requires a separate collaboration server to work.** Please see the [documentation](https://github.com/nextcloud/whiteboard?tab=readme-ov-file#backend) on how to install it.\n\n- 🎨 Drawing shapes, writing text, connecting elements\n- 📝 Real-time collaboration\n- 🖼️ Add images with drag and drop\n- 📊 Easily add mermaid diagrams\n- ✨ Use the Smart Picker to embed other elements from Nextcloud\n- 📦 Image export\n- 💪 Strong foundation: We use Excalidraw as our base library",
     "homepage": "https://github.com/nextcloud/whiteboard",
     "licenses": [

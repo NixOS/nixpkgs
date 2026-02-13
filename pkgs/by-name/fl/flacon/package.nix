@@ -7,7 +7,7 @@
   pkg-config,
   shntool,
   flac,
-  opusTools,
+  opus-tools,
   vorbis-tools,
   mp3gain,
   lame,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   bin_path = lib.makeBinPath [
     shntool
     flac
-    opusTools
+    opus-tools
     vorbis-tools
     mp3gain
     lame

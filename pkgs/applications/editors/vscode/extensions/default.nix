@@ -1094,8 +1094,8 @@ let
         mktplcRef = {
           name = "csharpier-vscode";
           publisher = "csharpier";
-          version = "10.0.0";
-          hash = "sha256-2yL9G6A67KsBmWdG8AKIjcP2HUqUuoYRGb4vunh9AwU=";
+          version = "10.0.1";
+          hash = "sha256-yO8qnL2/OKE8mAU19y+rDfS5G3zPZ0MQi81n/Bs9jFM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/csharpier.csharpier-vscode/changelog";
@@ -1458,8 +1458,8 @@ let
         mktplcRef = {
           name = "vscode-html-css";
           publisher = "ecmel";
-          version = "2.0.13";
-          hash = "sha256-2BtvIyeUaABsWjQNCSAk0WaGD75ecRA6yWbM/OiMyM0=";
+          version = "2.0.14";
+          hash = "sha256-0IAwX/KPh1CKCQENcztDnCkbYDWipO09zl3Qcb1RPfA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ecmel.vscode-html-css/changelog";
@@ -1711,8 +1711,8 @@ let
         mktplcRef = {
           name = "vscode-jest-runner";
           publisher = "firsttris";
-          version = "0.4.123";
-          hash = "sha256-QQX201DtAnzML9HeMMtXgm2IJ1K8BNDXcZd3iPFg2pw=";
+          version = "0.4.131";
+          hash = "sha256-vneMRR1nHtPkK9L2WIG2nHJn8igcE45eUeiFsnvRDcM=";
         };
         meta = {
           description = "Simple way to run or debug a single (or multiple) tests from context-menu";
@@ -1965,8 +1965,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.68.1";
-          hash = "sha256-ZNdtaVo3KFGhGX99fGv/aSUcjy636W5e4DctPCMrRtY=";
+          version = "6.69.3";
+          hash = "sha256-u9f743vZar9FYWXam94wdF6wBZxp6/fikZM0rGXfces=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";

@@ -447,7 +447,8 @@ let
           // lib.optionalAttrs (lib.versionAtLeast version "4.5") {
             redirect_build_objects = false; # Avoid copying build objects to output
           }
-          // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+          # see postBuild
+          // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && !(editor && withMono)) {
             generate_bundle = "yes";
           }
         );
@@ -640,12 +641,19 @@ let
           ]
         );
 
-        postBuild = lib.optionalString (editor && withMono) ''
-          echo "Generating Glue"
-          bin/${binary} --headless --generate-mono-glue modules/mono/glue
-          echo "Building C#/.NET Assemblies"
-          python modules/mono/build_scripts/build_assemblies.py --godot-output-dir bin --precision=${withPrecision}
-        '';
+        postBuild = lib.optionalString (editor && withMono) (
+          ''
+            echo "Generating Glue"
+            bin/${binary} --headless --generate-mono-glue modules/mono/glue
+            echo "Building C#/.NET Assemblies"
+            python modules/mono/build_scripts/build_assemblies.py --godot-output-dir bin --precision=${withPrecision}
+          ''
+          # when building the mono editor, we need to build the assemblies
+          # before generating the bundle
+          + lib.optionalString stdenv.hostPlatform.isDarwin ''
+            scons $sconsFlags generate_bundle=yes
+          ''
+        );
 
         installPhase = ''
           runHook preInstall
@@ -686,7 +694,7 @@ let
             ''
             + lib.optionalString stdenv.hostPlatform.isDarwin ''
               mkdir -p "$out"/Applications
-              cp -r bin/godot_macos_editor.app "$out"/Applications/Godot.app
+              cp -r bin/godot_macos_editor${lib.optionalString withMono "_mono"}.app "$out"/Applications/GodotMono.app
             ''
           else
             let

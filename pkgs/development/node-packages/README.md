@@ -61,8 +61,7 @@ To add a package from npm to Nixpkgs:
     ```
 
     If the package doesn't build, you may need to add an override as explained above.
-4. If the package's name doesn't match any of the executables it provides, add an entry in [pkgs/development/node-packages/main-programs.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/main-programs.nix). This will be the case for all scoped packages, e.g., `@angular/cli`.
-5. Add and commit all modified and generated files.
+4. Add and commit all modified and generated files.
 
 For more information about the generation process, consult the [README.md](https://github.com/svanderburg/node2nix) file of the `node2nix` tool.
 

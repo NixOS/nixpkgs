@@ -555,64 +555,64 @@ let
           (withBlocksize == null && withWalBlocksize == null);
       installCheckTarget = "check-world";
 
-      passthru =
-        let
-          this = self.callPackage generic args;
-        in
-        {
-          inherit dlSuffix;
+      passthru = {
+        inherit dlSuffix;
 
-          psqlSchema = lib.versions.major version;
+        psqlSchema = lib.versions.major version;
 
-          withJIT = if jitSupport then this.withPackages (_: [ this.jit ]) else null;
-          withoutJIT = this;
+        withJIT =
+          if jitSupport then
+            finalAttrs.finalPackage.withPackages (_: [ finalAttrs.finalPackage.jit ])
+          else
+            null;
+        withoutJIT = finalAttrs.finalPackage;
 
-          pkgs =
-            let
-              scope = {
-                inherit
-                  jitSupport
-                  pythonSupport
-                  perlSupport
-                  tclSupport
-                  ;
-                inherit (llvmPackages) llvm;
-                postgresql = this;
-                stdenv = stdenv';
-                postgresqlTestExtension = newSuper.callPackage ./postgresqlTestExtension.nix { };
-                postgresqlBuildExtension = newSuper.callPackage ./postgresqlBuildExtension.nix { };
-              };
-              newSelf = self // scope;
-              newSuper = {
-                callPackage = newScope (scope // this.pkgs);
-              };
-            in
-            import ./ext.nix newSelf newSuper;
-
-          withPackages = postgresqlWithPackages {
-            inherit buildEnv lib makeBinaryWrapper;
-            postgresql = this;
-          };
-
-          pg_config = buildPackages.callPackage ./pg_config.nix {
-            inherit (finalAttrs) finalPackage;
-            outputs = {
-              out = lib.getOutput "out" finalAttrs.finalPackage;
-              man = lib.getOutput "man" finalAttrs.finalPackage;
+        pkgs =
+          let
+            scope = {
+              inherit
+                jitSupport
+                pythonSupport
+                perlSupport
+                tclSupport
+                ;
+              inherit (llvmPackages) llvm;
+              postgresql = finalAttrs.finalPackage;
+              stdenv = stdenv';
+              postgresqlTestExtension = newSuper.callPackage ./postgresqlTestExtension.nix { };
+              postgresqlBuildExtension = newSuper.callPackage ./postgresqlBuildExtension.nix { };
             };
-          };
+            newSelf = self // scope;
+            newSuper = {
+              callPackage = newScope (scope // finalAttrs.finalPackage.pkgs);
+            };
+          in
+          import ./ext.nix newSelf newSuper;
 
-          tests = {
-            postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
-            postgresql-replication = nixosTests.postgresql.postgresql-replication.passthru.override finalAttrs.finalPackage;
-            postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
-            postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
-            pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-          }
-          // lib.optionalAttrs jitSupport {
-            postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
+        withPackages = postgresqlWithPackages {
+          inherit buildEnv lib makeBinaryWrapper;
+          postgresql = finalAttrs.finalPackage;
+        };
+
+        pg_config = buildPackages.callPackage ./pg_config.nix {
+          inherit (finalAttrs) finalPackage;
+          outputs = {
+            out = lib.getOutput "out" finalAttrs.finalPackage;
+            man = lib.getOutput "man" finalAttrs.finalPackage;
           };
         };
+
+        tests = {
+          postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+          postgresql-replication = nixosTests.postgresql.postgresql-replication.passthru.override finalAttrs.finalPackage;
+          postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
+          postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
+          pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+        }
+        // lib.optionalAttrs jitSupport {
+          postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
+        };
+      };
 
       meta = {
         homepage = "https://www.postgresql.org";

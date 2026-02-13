@@ -9,12 +9,10 @@
   # dependencies
   eval-type-backport,
   httpx,
-  httpcore,
   invoke,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-sdk,
-  opentelemetry-semantic-conventions,
   pydantic,
   python-dateutil,
   pyyaml,
@@ -33,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "1.12.0";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6OAMNlOLaa1GYkdA4zX/cUc3lX2T1VbuMZ6f9SshEt8=";
+    hash = "sha256-95aHaZx4nZjqX456CGB7gAeoxkMu4tN7TMUbmxajgKU=";
   };
 
   preBuild = ''
@@ -53,7 +51,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "opentelemetry-exporter-otlp-proto-http"
-    "opentelemetry-semantic-conventions"
   ];
   dependencies = [
     eval-type-backport
@@ -62,7 +59,6 @@ buildPythonPackage (finalAttrs: {
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-http
     opentelemetry-sdk
-    opentelemetry-semantic-conventions
     pydantic
     python-dateutil
     pyyaml

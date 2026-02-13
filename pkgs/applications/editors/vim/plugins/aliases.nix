@@ -41,8 +41,10 @@ mapAliases (
   {
     # keep-sorted start case=no
     blueballs-neovim = throw "`blueballs-neovim` has been removed"; # added 2025-06-17
+    coc-go = throw "`vimPlugins.coc-go` was removed, as it was unmaintained"; # added 2026-02-12
     coc-rls = throw "coc-rls has been removed, as rls has been archived since 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # added 2025-10-01
     coc-sumneko-lua = throw "'vimPlugins.coc-sumneko-lua' was removed, as it is unmaintained and broken. You should switch to lua_ls"; # added 2026-02-04
+    coc-tsserver = throw "`vimPlugins.coc-tsserver` was removed, as it was unmaintained"; # added 2026-02-12
     coc-vetur = throw "coc-vetur was removed, as vetur is unmaintained by Vue. You should switch to Volar, which supports Vue 3"; # added 2025-10-01
     completion-treesitter = throw "completion-treesitter has been archived since 2024-01"; # Added 2025-12-18
     feline-nvim = throw "feline.nvim has been removed: upstream deleted repository. Consider using lualine"; # Added 2025-02-09

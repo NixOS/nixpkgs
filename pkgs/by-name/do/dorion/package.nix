@@ -188,5 +188,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.sourceTypes.binaryBytecode # actually, minified JS
       lib.sourceTypes.fromSource
     ];
+    broken = true;
   };
 })

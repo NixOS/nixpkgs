@@ -788,6 +788,7 @@ in
   installer-systemd-stage-1 = handleTest ./installer-systemd-stage-1.nix { };
   intune = runTest ./intune.nix;
   invidious = runTest ./invidious.nix;
+  invoiceplane = runTest ./invoiceplane.nix;
   iodine = runTest ./iodine.nix;
   iosched = runTest ./iosched.nix;
   ipget = runTest ./ipget.nix;

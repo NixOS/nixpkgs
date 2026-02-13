@@ -19,18 +19,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "devcontainer";
-  version = "0.82.0";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
     owner = "devcontainers";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ztHlP3LxjxNDPnNWZqSkAN4+AiRA6j5cwDZrmwB4PDM=";
+    hash = "sha256-rFp7u+swJdA3wKR6bAfPUIXomwyN5v1oKfu/Y/hflx0=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-bK8M2oZJT0Jr6nqHPOixg+22OWALFiPORiBmd3CHV08=";
+    hash = "sha256-aVjhIb46CjUS+IEfS5O7I2apAC51UfjPj16q/GNsIzI=";
   };
 
   nativeBuildInputs = [

@@ -36,6 +36,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "VimTeX extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-vimtex";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })
