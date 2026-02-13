@@ -13,17 +13,21 @@
 
 let
   pname = "clr-loader";
-  version = "0.2.7.post0";
+  version = "0.2.10";
   src = fetchPypi {
     pname = "clr_loader";
     inherit version;
-    hash = "sha256-t6iz+PuxvLu2OC2IfiHRdC1PELXqIJ5K2VVo/pfhx8Y=";
+    hash = "sha256-gfEUr7xQBbr8Xv5a8TQdQA4iE34nWwQqiXnz/rn8lEY=";
   };
-  patches = [ ./dotnet-8-upgrade.patch ];
   # This stops msbuild from picking up $version from the environment
   postPatch = ''
     echo '<Project><PropertyGroup><Version/></PropertyGroup></Project>' > \
       Directory.Build.props
+
+    # The netfx_loader builds Windows-only .NET Framework DLLs (net472)
+    # which are not needed on Linux
+    substituteInPlace setup.py \
+      --replace-fail 'dotnet_libs = [' 'dotnet_libs = []; _dotnet_libs = ['
   '';
 
   # This buildDotnetModule is used only to get nuget sources, the actual
@@ -33,11 +37,9 @@ let
       pname
       version
       src
-      patches
       postPatch
       ;
     projectFile = [
-      "netfx_loader/ClrLoader.csproj"
       "example/example.csproj"
     ];
     nugetDeps = ./deps.json;
@@ -49,20 +51,20 @@ buildPythonPackage {
     pname
     version
     src
-    patches
     postPatch
     ;
 
   pyproject = true;
 
-  buildInputs = dotnetCorePackages.sdk_8_0.packages ++ dotnet-build.nugetDeps;
+  buildInputs = dotnet-build.nugetDeps;
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
     wheel
     dotnetCorePackages.sdk_8_0
-  ];
+  ]
+  ++ dotnetCorePackages.sdk_8_0.packages;
 
   propagatedBuildInputs = [ cffi ];
 
@@ -74,14 +76,12 @@ buildPythonPackage {
     "test_mono_debug"
     "test_mono_signal_chaining"
     "test_mono_set_dir"
+    # Pickling error with Python 3.13 multiprocessing
+    "test_coreclr_properties"
   ];
 
   # Perform dotnet restore based on the nuget-source
   preConfigure = ''
-    dotnet restore "netfx_loader/ClrLoader.csproj" \
-      -p:ContinuousIntegrationBuild=true \
-      -p:Deterministic=true
-
     dotnet restore "example/example.csproj" \
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true
@@ -94,6 +94,5 @@ buildPythonPackage {
     homepage = "https://pythonnet.github.io/clr-loader/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mdarocha ];
-    broken = true;
   };
 }
