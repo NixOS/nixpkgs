@@ -13,6 +13,9 @@
 
   # For tests
   testers,
+
+  # To auto-update
+  nix-update-script,
 }:
 
 let
@@ -28,14 +31,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "25.01";
+  version = "26.00";
 
   src = fetchzip {
-    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
+    url = "https://github.com/ip7z/7zip/releases/download/${finalAttrs.version}/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash =
       {
-        free = "sha256-A1BBdSGepobpguzokL1zpjce5EOl0zqABYciv9zCOac=";
-        unfree = "sha256-Jkj6T4tMols33uyJSOCcVmxh5iBYYCO/rq9dF4NDMko=";
+        free = "sha256-p914FrQPb+h1a+7YIL8ms2YoIfoS1hTCeLLeBF4DjwY=";
+        unfree = "sha256-CIgPhjRSE9A0ABQQx1YTZgO+DNb3BDxRo5xOQmuzBuI=";
       }
       .${if enableUnfree then "unfree" else "free"};
     stripRoot = false;
@@ -48,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  patches = [
+  patches = lib.optionals stdenv.hostPlatform.isMinGW [
     ./fix-cross-mingw-build.patch
   ];
 
@@ -115,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "7zz --help";

@@ -1,27 +1,6 @@
---- a/C/7zip_gcc_c.mak
-+++ b/C/7zip_gcc_c.mak
-@@ -106,7 +106,7 @@
- endif
- 
- 
--LIB2 = -lOle32 -loleaut32 -luuid -ladvapi32 -lUser32 -lShell32
-+LIB2 = -lole32 -loleaut32 -luuid -ladvapi32 -luser32 -lshell32
- 
- CFLAGS_EXTRA = -DUNICODE -D_UNICODE
- # -Wno-delete-non-virtual-dtor
---- a/C/7zVersion.rc
-+++ b/C/7zVersion.rc
-@@ -5,7 +5,7 @@
- #define MY_VFT_APP  0x00000001L
- #define MY_VFT_DLL  0x00000002L
- 
--// #include <WinVer.h>
-+// #include <winver.h>
- 
- #ifndef MY_VERSION
- #include "7zVersion.h"
---- a/C/Util/7zipInstall/resource.rc
-+++ b/C/Util/7zipInstall/resource.rc
+diff -Naur test-patch-orig/C/Util/7zipInstall/resource.rc test-patch/C/Util/7zipInstall/resource.rc
+--- test-patch-orig/C/Util/7zipInstall/resource.rc	2026-02-13 10:56:35.641911991 +0100
++++ test-patch/C/Util/7zipInstall/resource.rc	2026-02-13 10:56:37.940846112 +0100
 @@ -1,7 +1,7 @@
  #include <windows.h>
  // #include <winnt.h>
@@ -31,21 +10,9 @@
  
  #define USE_COPYRIGHT_CR
  #include "../../7zVersion.rc"
---- a/C/Util/7zipInstall/resource.rc.rej
-+++ b/C/Util/7zipInstall/resource.rc.rej
-@@ -0,0 +1,10 @@
-+--- C/Util/7zipInstall/resource.rc
-++++ C/Util/7zipInstall/resource.rc
-+@@ -1,6 +1,6 @@
-+ #include <winnt.h>
-+ #include <WinUser.h>
-+-#include <CommCtrl.h>
-++#include <commctrl.h>
-+ 
-+ #define USE_COPYRIGHT_CR
-+ #include "../../7zVersion.rc"
---- a/C/Util/7zipUninstall/resource.rc
-+++ b/C/Util/7zipUninstall/resource.rc
+diff -Naur test-patch-orig/C/Util/7zipUninstall/resource.rc test-patch/C/Util/7zipUninstall/resource.rc
+--- test-patch-orig/C/Util/7zipUninstall/resource.rc	2026-02-13 10:56:35.642411594 +0100
++++ test-patch/C/Util/7zipUninstall/resource.rc	2026-02-13 10:56:37.940994503 +0100
 @@ -1,7 +1,7 @@
  #include <windows.h>
  // #include <winnt.h>
@@ -55,45 +22,9 @@
  
  #define USE_COPYRIGHT_CR
  #include "../../7zVersion.rc"
---- a/C/Util/7zipUninstall/resource.rc.rej
-+++ b/C/Util/7zipUninstall/resource.rc.rej
-@@ -0,0 +1,10 @@
-+--- C/Util/7zipUninstall/resource.rc
-++++ C/Util/7zipUninstall/resource.rc
-+@@ -1,6 +1,6 @@
-+ #include <winnt.h>
-+ #include <WinUser.h>
-+-#include <CommCtrl.h>
-++#include <commctrl.h>
-+ 
-+ #define USE_COPYRIGHT_CR
-+ #include "../../7zVersion.rc"
---- a/CPP/7zip/7zip_gcc.mak
-+++ b/CPP/7zip/7zip_gcc.mak
-@@ -142,8 +142,8 @@
- DEL_OBJ_EXE = -$(RM) $(O)\*.o $(O)\$(PROG).exe $(O)\$(PROG).dll
- endif
- 
--LIB2_GUI = -lOle32 -lGdi32 -lComctl32 -lComdlg32 -lShell32 $(LIB_HTMLHELP)
--LIB2 = -loleaut32 -luuid -ladvapi32 -lUser32 $(LIB2_GUI)
-+LIB2_GUI = -lole32 -lgdi32 -lcomctl32 -lcomdlg32 -lshell32 $(LIB_HTMLHELP)
-+LIB2 = -loleaut32 -luuid -ladvapi32 -luser32 $(LIB2_GUI)
- 
- # v24.00: -DUNICODE and -D_UNICODE are defined in precompilation header files
- # CXXFLAGS_EXTRA = -DUNICODE -D_UNICODE
---- a/CPP/7zip/Crypto/RandGen.cpp
-+++ b/CPP/7zip/Crypto/RandGen.cpp
-@@ -19,7 +19,7 @@
- 
- #ifdef USE_STATIC_RtlGenRandom
- 
--// #include <NTSecAPI.h>
-+// #include <ntsecapi.h>
- 
- EXTERN_C_BEGIN
- #ifndef RtlGenRandom
---- a/CPP/7zip/GuiCommon.rc
-+++ b/CPP/7zip/GuiCommon.rc
+diff -Naur test-patch-orig/CPP/7zip/GuiCommon.rc test-patch/CPP/7zip/GuiCommon.rc
+--- test-patch-orig/CPP/7zip/GuiCommon.rc	2026-02-13 10:56:35.659762553 +0100
++++ test-patch/CPP/7zip/GuiCommon.rc	2026-02-13 10:56:37.941068290 +0100
 @@ -4,7 +4,7 @@
  // #include <WinUser.h>
  
@@ -103,8 +34,9 @@
  
  
  LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
---- a/CPP/7zip/UI/FileManager/PanelItemOpen.cpp
-+++ b/CPP/7zip/UI/FileManager/PanelItemOpen.cpp
+diff -Naur test-patch-orig/CPP/7zip/UI/FileManager/PanelItemOpen.cpp test-patch/CPP/7zip/UI/FileManager/PanelItemOpen.cpp
+--- test-patch-orig/CPP/7zip/UI/FileManager/PanelItemOpen.cpp	2026-02-13 10:56:35.668303663 +0100
++++ test-patch/CPP/7zip/UI/FileManager/PanelItemOpen.cpp	2026-02-13 10:56:37.944973625 +0100
 @@ -4,7 +4,7 @@
  
  #include "../../../Common/MyWindows.h"
@@ -114,8 +46,9 @@
  
  #include "../../../Common/IntToString.h"
  
---- a/CPP/7zip/UI/FileManager/SysIconUtils.h
-+++ b/CPP/7zip/UI/FileManager/SysIconUtils.h
+diff -Naur test-patch-orig/CPP/7zip/UI/FileManager/SysIconUtils.h test-patch/CPP/7zip/UI/FileManager/SysIconUtils.h
+--- test-patch-orig/CPP/7zip/UI/FileManager/SysIconUtils.h	2026-02-13 10:56:35.670523698 +0100
++++ test-patch/CPP/7zip/UI/FileManager/SysIconUtils.h	2026-02-13 10:56:37.941136283 +0100
 @@ -5,7 +5,7 @@
  
  #include "../../../Common/MyWindows.h"
@@ -125,8 +58,9 @@
  
  #include "../../../Common/MyString.h"
  
---- a/CPP/Windows/Control/ComboBox.h
-+++ b/CPP/Windows/Control/ComboBox.h
+diff -Naur test-patch-orig/CPP/Windows/Control/ComboBox.h test-patch/CPP/Windows/Control/ComboBox.h
+--- test-patch-orig/CPP/Windows/Control/ComboBox.h	2026-02-13 10:56:35.676322052 +0100
++++ test-patch/CPP/Windows/Control/ComboBox.h	2026-02-13 10:56:37.941211028 +0100
 @@ -5,7 +5,7 @@
  
  #include "../../Common/MyWindows.h"
@@ -136,8 +70,9 @@
  
  #include "../Window.h"
  
---- a/CPP/Windows/Control/ImageList.h
-+++ b/CPP/Windows/Control/ImageList.h
+diff -Naur test-patch-orig/CPP/Windows/Control/ImageList.h test-patch/CPP/Windows/Control/ImageList.h
+--- test-patch-orig/CPP/Windows/Control/ImageList.h	2026-02-13 10:56:35.676476306 +0100
++++ test-patch/CPP/Windows/Control/ImageList.h	2026-02-13 10:56:37.941536358 +0100
 @@ -3,7 +3,7 @@
  #ifndef ZIP7_INC_WINDOWS_CONTROL_IMAGE_LIST_H
  #define ZIP7_INC_WINDOWS_CONTROL_IMAGE_LIST_H
@@ -147,8 +82,9 @@
  
  #include "../Defs.h"
  
---- a/CPP/Windows/Control/ListView.h
-+++ b/CPP/Windows/Control/ListView.h
+diff -Naur test-patch-orig/CPP/Windows/Control/ListView.h test-patch/CPP/Windows/Control/ListView.h
+--- test-patch-orig/CPP/Windows/Control/ListView.h	2026-02-13 10:56:35.676528815 +0100
++++ test-patch/CPP/Windows/Control/ListView.h	2026-02-13 10:56:37.941655415 +0100
 @@ -5,7 +5,7 @@
  
  #include "../../Common/MyWindows.h"
@@ -158,8 +94,9 @@
  
  #include "../Window.h"
  
---- a/CPP/Windows/Control/ProgressBar.h
-+++ b/CPP/Windows/Control/ProgressBar.h
+diff -Naur test-patch-orig/CPP/Windows/Control/ProgressBar.h test-patch/CPP/Windows/Control/ProgressBar.h
+--- test-patch-orig/CPP/Windows/Control/ProgressBar.h	2026-02-13 10:56:35.676556782 +0100
++++ test-patch/CPP/Windows/Control/ProgressBar.h	2026-02-13 10:56:37.941746329 +0100
 @@ -5,7 +5,7 @@
  
  #include "../../Common/MyWindows.h"
@@ -168,15 +105,4 @@
 +#include <commctrl.h>
  
  #include "../Window.h"
- 
---- a/CPP/Windows/SecurityUtils.h
-+++ b/CPP/Windows/SecurityUtils.h
-@@ -3,7 +3,7 @@
- #ifndef ZIP7_INC_WINDOWS_SECURITY_UTILS_H
- #define ZIP7_INC_WINDOWS_SECURITY_UTILS_H
- 
--#include <NTSecAPI.h>
-+#include <ntsecapi.h>
- 
- #include "Defs.h"
  
