@@ -62,8 +62,6 @@ rustPlatform.buildRustPackage {
     rm crates/librqbit/build.rs
   '';
 
-  doCheck = false;
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
