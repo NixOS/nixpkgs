@@ -15,13 +15,13 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnutar";
   version = "1.35";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-${version}.tar.xz";
-    sha256 = "sha256-TWL/NzQux67XSFNTI5MMfPlKz3HDWRiCsmp+pQ8+3BY=";
+    url = "mirror://gnu/tar/tar-${finalAttrs.version}.tar.xz";
+    hash = "sha256-TWL/NzQux67XSFNTI5MMfPlKz3HDWRiCsmp+pQ8+3BY=";
   };
 
   # GNU tar fails to link libiconv even though the configure script detects it.
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
 
     priority = 10;
   };
-}
+})
