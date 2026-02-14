@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow-control";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "neurocyte";
     repo = "flow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-89tFSZRLJeenKgqT4J0I93rNXLDZ9dDgG4BlGqvXnwE=";
+    hash = "sha256-5+F0DKb4LXtcMXNutUSJuIe7cdBoFUoJhCs8vbm20jg=";
   };
 
   deps = callPackage ./build.zig.zon.nix {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--system"
     "${finalAttrs.deps}"
     "-Dcpu=baseline"
-    "-Doptimize=ReleaseSafe"
+    "-Doptimize=ReleaseFast"
   ];
 
   env.VERSION = finalAttrs.version;
