@@ -34,16 +34,34 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    renpy
   ];
 
-  dontBuild = true;
+  configurePhase = ''
+    runHook preConfigure
+
+    substituteInPlace game/config.rpy --replace-fail 0.0.0-localbuild ${finalAttrs.version}
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    renpy . compile
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    makeWrapper ${lib.getExe' renpy "renpy"} $out/bin/${finalAttrs.meta.mainProgram} \
-      --add-flags ${finalAttrs.src} --add-flags run
+    phome=$out/share/kataswa-shoujo-re-engineered
+    mkdir -p $phome
+    cp -r game $phome
+    find $phome -type f -name "*.rpy" -delete
+    makeWrapper ${lib.getExe renpy} $out/bin/${finalAttrs.meta.mainProgram} \
+      --add-flags $phome --add-flags run
     install -D $src/web-icon.png $out/share/icons/hicolor/512x512/apps/${finalAttrs.meta.mainProgram}.png
 
     runHook postInstall
@@ -64,6 +82,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       quantenzitrone
       rapiteanu
+      ulysseszhan
     ];
     platforms = renpy.meta.platforms;
   };
