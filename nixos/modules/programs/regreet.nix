@@ -168,6 +168,10 @@ in
           settingsFormat.generate "regreet.toml" cfg.settings;
     };
 
+    # link related .desktop files from compositors so that the program uses it
+    # it's expected that regreet is compiled with correct SESSION_DIRS
+    environment.pathsToLink = ["/share/xsessions" "/share/wayland-sessions"];
+
     systemd.tmpfiles.settings."10-regreet" =
       let
         defaultConfig = {

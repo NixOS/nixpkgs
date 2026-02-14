@@ -37,6 +37,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     librsvg
   ];
 
+  # default dirs doesn't exists on nixos, set dirs that will be created when using
+  # environment.pathsToLink = ["/share/xsessions" "/share/wayland-sessions"]
+  # default dirs is: /usr/share/xsessions:/usr/share/wayland-sessions
+  SESSION_DIRS = lib.strings.join ":" [
+    "/run/current-system/sw/share/xsessions"
+    "/run/current-system/sw/share/wayland-sessions"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
