@@ -19,6 +19,7 @@
   procps,
   qrencode,
   makeWrapper,
+  installShellFiles,
   pass,
 
   xclip ? null,
@@ -95,7 +96,10 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin ./no-darwin-getopt.patch;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   buildInputs = [ bash ];
 
@@ -104,7 +108,13 @@ stdenv.mkDerivation rec {
     "WITH_ALLCOMP=yes"
   ];
 
-  postInstall = lib.optionalString dmenuSupport ''
+  postInstall = ''
+    installShellCompletion --cmd pass \
+      --bash ./src/completion/pass.bash-completion \
+      --fish ./src/completion/pass.fish-completion \
+      --zsh  ./src/completion/pass.zsh-completion
+  ''
+  + lib.optionalString dmenuSupport ''
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
