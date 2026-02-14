@@ -163,13 +163,13 @@ assert lib.elem mallocImplementation [
 ];
 
 let
-  mallocPackage =
+  mallocPackages =
     if (mallocImplementation == "jemalloc") then
-      jemalloc
+      [ jemalloc ]
     else if (mallocImplementation == "tcmalloc") then
-      gperftools
+      [ gperftools ]
     else
-      null;
+      [ ];
 
   cryptoLibraryPackages =
     if (cryptoLibrary == "cryptopp") then
@@ -483,12 +483,8 @@ stdenv.mkDerivation {
       lua5_4
       lvm2 # according to `debian/control` file, e.g. `pvs` command used by `src/ceph-volume/ceph_volume/api/lvm.py`
       lz4
-      mallocPackage
       oath-toolkit
       openldap
-      (if withLibatomic_ops then libatomic_ops else null)
-      (if withLibs3 then libs3 else null)
-      (if withYasm then yasm else null)
       parted # according to `debian/control` file, used by `src/ceph-volume/ceph_volume/util/disk.py`
       rdkafka
       rocksdb'
@@ -500,26 +496,36 @@ stdenv.mkDerivation {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      keyutils
-      libcap_ng
-      (if withLiburing then liburing else null)
-      libuuid
-      linuxHeaders
-      (if withLibaio then libaio else null)
-      (if withLibxfs then libxfs else null)
-      (if withZfs then zfs else null)
-      rabbitmq-c
-      rdma-core
-      udev
-      util-linux
-    ]
-    ++ lib.optionals withRadosgw [
-      curl
-      expat
-      (if withFuse then fuse else null)
-      libedit
-    ];
+    # optional dependencies
+    ++ mallocPackages
+    ++ lib.optional withLibatomic_ops libatomic_ops
+    ++ lib.optional withLibs3 libs3
+    ++ lib.optional withYasm yasm
+    ++ lib.optionals withRadosgw (
+      [
+        curl
+        expat
+        libedit
+      ]
+      ++ lib.optional withFuse fuse
+    )
+    # linux deps
+    ++ lib.optionals stdenv.hostPlatform.isLinux (
+      [
+        keyutils
+        libcap_ng
+        libuuid
+        linuxHeaders
+        rabbitmq-c
+        rdma-core
+        udev
+        util-linux
+      ]
+      ++ lib.optional withLiburing liburing
+      ++ lib.optional withLibaio libaio
+      ++ lib.optional withLibxfs libxfs
+      ++ lib.optional withZfs zfs
+    );
 
   # Picked up, amongst others, by `wrapPythonPrograms`.
   pythonPath = [
