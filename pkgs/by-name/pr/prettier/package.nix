@@ -122,17 +122,17 @@ let
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
       '' throw "${plugin.pname}: does not provide parse-able entry point";
-  yarnHash = "sha256-dpxzbtWyXsHS6tH6DJ9OqSsUSc+YqYeAPJYb95Qy5wQ=";
+  yarnHash = "sha256-WncAReGKs9cZvPTf87bKKOrmte5ORyHOb5pTAgHsb8M=";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
-  version = "3.6.2";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "prettier";
     repo = "prettier";
     tag = finalAttrs.version;
-    hash = "sha256-uMLRFBZP7/42R6nReONcb9/kVGCn3yGHLcLFajMZLmQ=";
+    hash = "sha256-SzrpkWyT/Vdt21KUQ0cTQ0QmCivazY6rrgmApsvXZWs=";
   };
 
   missingHashes = ./missing-hashes.json;
