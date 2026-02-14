@@ -3005,6 +3005,11 @@
     github = "joealsubash";
     githubId = 98759349;
   };
+  basicallygit = {
+    name = "basicallygit";
+    github = "basicallygit";
+    githubId = 91993321;
+  };
   bastaynav = {
     name = "Ivan Bastrakov";
     email = "bastaynav@proton.me";
