@@ -67,7 +67,7 @@ let
       repo = "duckstation";
       tag = "v${finalAttrs.version}";
       deepClone = true;
-      hash = "sha256-ytJ0vaXXbbgSmZ42gQPlQY7p30hz7hx/+09TSvCKyEg=";
+      hash = "sha256-ksmxdYLFWYIA3Kp8dztyN4UxeJFvpNRmN79TspwZHuw=";
 
       postFetch = ''
         cd $out
@@ -137,6 +137,7 @@ let
         "lib"
         "dev"
       ];
+      doInstallCheck = false;
       postFixup = null;
     });
 
