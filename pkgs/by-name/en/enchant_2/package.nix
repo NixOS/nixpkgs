@@ -25,7 +25,7 @@ assert withAppleSpell -> stdenv.hostPlatform.isDarwin;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "enchant";
-  version = "2.6.9";
+  version = "2.8.15";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/rrthomas/enchant/releases/download/v${finalAttrs.version}/enchant-${finalAttrs.version}.tar.gz";
-    hash = "sha256-2aWhDcmzikOzoPoix27W67fgnrU1r/YpVK/NvUDv/2s=";
+    hash = "sha256-0/2eQXC/tRELC9pXf+dko4+2BrPCXS8MOEAjRSH/ElI=";
   };
 
   strictDeps = true;
