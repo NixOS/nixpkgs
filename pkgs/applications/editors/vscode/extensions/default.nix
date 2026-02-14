@@ -2516,6 +2516,8 @@ let
         };
       };
 
+      jetpack-io.devbox = callPackage ./jetpack-io.devbox { };
+
       jkillian.custom-local-formatters = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "jkillian";
