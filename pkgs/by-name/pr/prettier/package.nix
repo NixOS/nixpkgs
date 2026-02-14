@@ -5,14 +5,18 @@
 
   ```nix
   pkgs.prettier.override {
-    plugins = with pkgs.nodePackages; [
-      prettier-plugin-toml
+    plugins = with pkgs.prettier.plugins; [
+      prettier-plugin-php
+      prettier-plugin-pug
+      prettier-plugin-ruby
+      prettier-plugin-xml
       # ...
     ];
   }
   ```
 */
 {
+  config,
   fetchFromGitHub,
   lib,
   makeBinaryWrapper,
@@ -20,6 +24,7 @@
   stdenv,
   versionCheckHook,
   yarn-berry,
+  pkgs,
   plugins ? [ ],
 }:
 let
@@ -171,7 +176,18 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    plugins = import ./plugins {
+      inherit
+        config
+        pkgs
+        lib
+        nodejs
+        stdenv
+        ;
+    };
+  };
 
   meta = {
     changelog = "https://github.com/prettier/prettier/blob/${finalAttrs.version}/CHANGELOG.md";
