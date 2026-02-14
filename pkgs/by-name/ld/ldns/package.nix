@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "drill";
+    outputsToInstall = finalAttrs.outputs;
     platforms = lib.platforms.unix;
   };
 })
