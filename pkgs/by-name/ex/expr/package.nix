@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/expr-lang/expr";
     changelog = "https://github.com/expr-lang/expr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     mainProgram = "expr";
   };
 })
