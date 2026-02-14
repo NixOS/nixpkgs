@@ -114,7 +114,7 @@ buildGoModule rec {
       --set PYTHONPATH "$out/${python.sitePackages}"''
   + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${
      lib.makeLibraryPath [
-       (lib.getLib systemd)
+       systemd
        rtloader
      ]
    }";

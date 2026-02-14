@@ -31,7 +31,7 @@
   nixosTests,
   pipewire,
   sndio,
-  systemdLibs,
+  systemd,
   testers,
   validatePkgConfig,
   vulkan-headers,
@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional jackSupport libjack2
     ++ lib.optional libdecorSupport libdecor
-    ++ lib.optional libudevSupport systemdLibs
+    ++ lib.optional libudevSupport systemd
     ++ lib.optional openglSupport libGL
     ++ lib.optional pipewireSupport pipewire
     ++ lib.optional pulseaudioSupport libpulseaudio

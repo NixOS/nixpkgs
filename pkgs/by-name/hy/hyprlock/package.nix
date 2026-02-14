@@ -12,7 +12,7 @@
   hyprwayland-scanner,
   pam,
   sdbus-cpp_2,
-  systemdLibs,
+  systemd,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -59,7 +59,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     pam
     pango
     sdbus-cpp_2
-    systemdLibs
+    systemd
     wayland
     wayland-protocols
   ];

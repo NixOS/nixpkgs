@@ -9,7 +9,7 @@
   libmicrohttpd,
   sqlite,
   nixosTests,
-  systemdMinimal,
+  systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     libmicrohttpd
     sqlite.dev
   ]
-  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdMinimal) [
-    systemdMinimal
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemd) [
+    systemd
   ];
 
   patches = [

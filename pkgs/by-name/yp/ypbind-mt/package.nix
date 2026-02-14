@@ -8,7 +8,7 @@
   libxcrypt,
   pkg-config,
   rpcbind,
-  systemdLibs,
+  systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtirpc
     libxcrypt
     rpcbind
-    systemdLibs
+    systemd
   ];
 
   meta = {

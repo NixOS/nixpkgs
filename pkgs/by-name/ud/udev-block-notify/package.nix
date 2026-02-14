@@ -4,7 +4,7 @@
   multimarkdown,
   libnotify,
   udev,
-  systemdLibs,
+  systemd,
   glib,
   pkg-config,
   lib,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libnotify
     udev
-    systemdLibs
+    systemd
     glib
   ];
 

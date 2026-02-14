@@ -3,7 +3,7 @@
   pkg-config,
   rustPlatform,
   stdenv,
-  systemdLibs,
+  udev,
   fetchFromGitHub,
   nix-update-script,
 }:
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    systemdLibs # libudev-sys
+    udev
   ];
 
   passthru.updateScript = nix-update-script { };

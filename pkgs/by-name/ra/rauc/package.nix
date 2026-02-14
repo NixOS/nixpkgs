@@ -14,7 +14,7 @@
   ninja,
   util-linux,
   libnl,
-  systemdLibs,
+  systemd,
   nixosTests,
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     util-linux
     libnl
-    systemdLibs
+    systemd
   ];
 
   mesonFlags = [

@@ -6,7 +6,7 @@
   glib-networking,
   nodejs,
   libgudev,
-  systemdLibs,
+  systemd,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib-networking # Most Tauri apps need networking
     webkitgtk_4_1
     libgudev
-    systemdLibs
+    systemd
   ];
 
   # Set our Tauri source directory

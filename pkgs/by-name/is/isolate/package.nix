@@ -5,7 +5,7 @@
   asciidoc,
   libcap,
   pkg-config,
-  systemdLibs,
+  systemd,
   installShellFiles,
   nixosTests,
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libcap.dev
-    systemdLibs.dev
+    systemd.dev
   ];
 
   patches = [

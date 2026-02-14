@@ -11,7 +11,7 @@
   unixODBC,
   jsoncons,
   curl,
-  systemdLibs,
+  systemd,
   openssl,
   boost183,
   nlohmann_json,
@@ -44,7 +44,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     unixODBC
     jsoncons
     curl
-    systemdLibs
+    systemd
   ];
 
   propagatedBuildInputs = [

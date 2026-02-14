@@ -10,10 +10,10 @@
   python3,
   dbus,
   polkit,
-  systemdLibs,
+  systemd,
   udev,
   dbusSupport ? stdenv.hostPlatform.isLinux,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   udevSupport ? dbusSupport,
   libusb1,
   testers,
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     python3
   ]
-  ++ lib.optionals systemdSupport [ systemdLibs ]
+  ++ lib.optionals systemdSupport [ systemd ]
   ++ lib.optionals (!systemdSupport && udevSupport) [ udev ]
   ++ lib.optionals dbusSupport [ dbus ]
   ++ lib.optionals polkitSupport [ polkit ]

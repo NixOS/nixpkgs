@@ -5,8 +5,8 @@
   pam,
   bison,
   flex,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  systemdLibs,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
   musl-fts,
   autoreconfHook,
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     pam
   ]
-  ++ lib.optional enableSystemd systemdLibs
+  ++ lib.optional enableSystemd systemd
   ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   postPatch = ''

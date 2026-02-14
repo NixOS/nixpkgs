@@ -21,8 +21,8 @@
   socat,
   sqlite,
   stdenv,
-  systemd,
   tigervnc,
+  udev,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     qemu
     socat
     sqlite
-    systemd # for libudev
     tigervnc
+    udev
   ];
 
   runtimeDependencies = [

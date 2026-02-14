@@ -51,7 +51,7 @@ rec {
     buildInputs = [ systemd ];
     tags = [ "withjournald" ];
     postFixup = ''
-      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemd) ]} "$out/bin/filebeat"
+      patchelf --set-rpath ${lib.makeLibraryPath [ systemd ]} "$out/bin/filebeat"
     '';
   };
   heartbeat7 = beat "heartbeat" {

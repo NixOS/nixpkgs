@@ -81,7 +81,7 @@ lib:
   sqlite,
   stdenv,
   shadow,
-  systemdMinimal,
+  systemd,
   util-linuxMinimal,
   yq-go,
   zstd,
@@ -429,7 +429,7 @@ buildGoModule (finalAttrs: {
 
   k3sKillallDeps = [
     bash
-    systemdMinimal
+    systemd
     procps
     coreutils
     gnugrep

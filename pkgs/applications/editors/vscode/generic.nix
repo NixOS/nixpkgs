@@ -23,7 +23,7 @@
   libx11,
   libxkbfile,
   libxcb,
-  systemdLibs,
+  systemd,
   fontconfig,
   imagemagick,
   libdbusmenu,
@@ -248,13 +248,13 @@ stdenv.mkDerivation (
       libgbm
       nss
       nspr
-      systemdLibs
+      systemd
       webkitgtk_4_1
       libxkbfile
     ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
-      systemdLibs
+      (lib.getLib systemd)
       fontconfig.lib
       libdbusmenu
       wayland

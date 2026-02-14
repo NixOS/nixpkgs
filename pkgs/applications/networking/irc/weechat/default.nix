@@ -32,7 +32,7 @@
   tcl,
   phpSupport ? !stdenv.hostPlatform.isDarwin,
   php,
-  systemdLibs,
+  systemd,
   libxml2,
   pcre2,
   libargon2,
@@ -94,7 +94,7 @@ let
         pcre2
         libargon2
       ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ];
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
     }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;

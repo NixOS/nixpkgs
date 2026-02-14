@@ -7,7 +7,7 @@
   libx86emu,
   perl,
   kmod,
-  systemdMinimal,
+  systemd,
   testers,
   binutils,
   writeText,
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/hd/hd_int.h \
       --replace-fail "/sbin/modprobe" "${kmod}/bin/modprobe" \
       --replace-fail "/sbin/rmmod" "${kmod}/bin/rmmod" \
-      --replace-fail "/usr/bin/udevinfo" "${systemdMinimal}/bin/udevinfo" \
-      --replace-fail "/usr/bin/udevadm" "${systemdMinimal}/bin/udevadm"
+      --replace-fail "/usr/bin/udevinfo" "${systemd}/bin/udevinfo" \
+      --replace-fail "/usr/bin/udevadm" "${systemd}/bin/udevadm"
 
     # Replace /usr/bin/perl
     patchShebangs src/ids/convert_hd
@@ -80,8 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     # since we don't have .git, we cannot run this.
     rm git2log
     pushd src/ids
-    cp ${systemdMinimal.src}/hwdb.d/pci.ids src/pci
-    cp ${systemdMinimal.src}/hwdb.d/usb.ids src/usb
+    cp ${systemd.src}/hwdb.d/pci.ids src/pci
+    cp ${systemd.src}/hwdb.d/usb.ids src/usb
     # taken from https://github.com/openSUSE/hwinfo/blob/c87f449f1d4882c71b0a1e6dc80638224a5baeed/src/ids/update_pci_usb
     perl -pi -e 'undef $_ if /^C\s/..1' src/usb
     perl ./convert_hd src/pci

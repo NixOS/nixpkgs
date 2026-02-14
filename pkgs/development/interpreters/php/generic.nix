@@ -25,7 +25,7 @@ let
       libargon2,
       libxml2,
       pcre2,
-      systemdLibs,
+      systemd,
       system-sendmail,
       valgrind,
       xcbuild,
@@ -61,7 +61,7 @@ let
       ipv6Support ? true,
       zendSignalsSupport ? true,
       zendMaxExecutionTimersSupport ? false,
-      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
       valgrindSupport ?
         !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind,
       ztsSupport ? apxs2Support,
@@ -254,7 +254,7 @@ let
             # Misc deps
             ++ lib.optional apxs2Support apacheHttpd
             ++ lib.optional argon2Support libargon2
-            ++ lib.optional systemdSupport systemdLibs
+            ++ lib.optional systemdSupport systemd
             ++ lib.optional valgrindSupport valgrind;
 
           CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";

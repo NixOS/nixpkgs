@@ -23,8 +23,8 @@
   libxi,
   libxext,
   gnome,
-  systemdLibs,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals systemdSupport [
     # libsystemd is a needed for dbus-broker support
-    systemdLibs
+    systemd
   ];
 
   # In atspi-2.pc dbus-1 glib-2.0

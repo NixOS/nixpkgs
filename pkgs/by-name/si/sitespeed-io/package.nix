@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  systemdLibs,
+  systemd,
   coreutils,
   ffmpeg-headless,
   imagemagick_light,
@@ -44,7 +44,7 @@ buildNpmPackage (finalAttrs: {
   };
 
   buildInputs = [
-    systemdLibs
+    systemd
   ];
 
   dontNpmBuild = true;

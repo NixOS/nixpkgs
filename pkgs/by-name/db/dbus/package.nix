@@ -4,8 +4,9 @@
   fetchurl,
   pkg-config,
   expat,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  systemdMinimal,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  systemdMinimal, # used at build time; don't add to buildInputs!
   audit,
   libcap_ng,
   libapparmor,
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libsm
   ]
-  ++ lib.optional enableSystemd systemdMinimal
+  ++ lib.optional enableSystemd systemd
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     audit
     libapparmor
@@ -123,12 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
       [binaries]
       launchctl = 'true'
     ''}"
-  ]
-  ++ lib.optionals enableSystemd [
-    "--cross-file=${writeText "crossfile.ini" ''
-      [binaries]
-      systemctl = '${systemdMinimal}/bin/systemctl'
-    ''}"
   ];
 
   doCheck = true;
@@ -143,6 +138,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
     substituteInPlace ./tools/dbus-launch.c \
       --replace-fail 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
+  ''
+  # The reference to systemctl is only used in the ExecStartPost of a socket
+  # file, so it's fine to leave it as just an executable name; systemd will
+  # resolve the binary.
+  + lib.optionalString enableSystemd ''
+    substituteInPlace meson.build \
+      --replace-fail "systemctl = '/usr/bin/systemctl'" "systemctl = 'systemctl'"
   '';
 
   postFixup = ''

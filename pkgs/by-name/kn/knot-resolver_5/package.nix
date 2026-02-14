@@ -16,7 +16,7 @@
   gnutls,
   lmdb,
   jemalloc,
-  systemdMinimal,
+  systemd,
   libcap_ng,
   dns-root-data,
   nghttp2, # optionals, in principle
@@ -106,7 +106,7 @@ let
     ## the rest are optional dependencies
     ++ optionals stdenv.hostPlatform.isLinux [
       # lib
-      systemdMinimal
+      systemd
       libcap_ng
     ]
     ++ [

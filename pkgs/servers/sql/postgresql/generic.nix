@@ -148,8 +148,8 @@ let
       libselinux,
 
       # Systemd
-      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-      systemdLibs,
+      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+      systemd,
 
       # Uring
       uringSupport ? lib.versionAtLeast version "18" && lib.meta.availableOn stdenv.hostPlatform liburing,
@@ -286,7 +286,7 @@ let
       ++ lib.optionals jitSupport [ llvmPackages.llvm ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
-      ++ lib.optionals systemdSupport [ systemdLibs ]
+      ++ lib.optionals systemdSupport [ systemd ]
       ++ lib.optionals uringSupport [ liburing ]
       ++ lib.optionals curlSupport [ curl ]
       ++ lib.optionals numaSupport [ numactl ]

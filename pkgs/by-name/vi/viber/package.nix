@@ -50,7 +50,7 @@
   openssl,
   snappy,
   speex,
-  systemdLibs,
+  systemd,
   tslib,
   twolame,
   wavpack,
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     snappy
     speex
     stdenv.cc.cc
-    systemdLibs
+    systemd
     tslib
     twolame
     wavpack

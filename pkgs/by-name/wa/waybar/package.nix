@@ -35,7 +35,7 @@
   scdoc,
   sndio,
   spdlog,
-  systemdMinimal,
+  systemd,
   udev,
   upower,
   versionCheckHook,
@@ -60,7 +60,7 @@
   rfkillSupport ? true,
   runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   sndioSupport ? true,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   traySupport ? true,
   udevSupport ? true,
   upowerSupport ? true,
@@ -145,9 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional nlSupport libnl
   ++ lib.optional pulseSupport libpulseaudio
   ++ lib.optional sndioSupport sndio
-  ++ lib.optional systemdSupport systemdMinimal
   ++ lib.optional traySupport libdbusmenu-gtk3
-  ++ lib.optional udevSupport udev
+  ++ lib.optional (systemdSupport || udevSupport) udev
   ++ lib.optional upowerSupport upower
   ++ lib.optional wireplumberSupport wireplumber
   ++ lib.optional (cavaSupport || pipewireSupport) pipewire

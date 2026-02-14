@@ -75,7 +75,7 @@
   speex,
   srt,
   stdenv,
-  systemdLibs,
+  systemd,
   taglib_1,
   unzip,
   wayland,
@@ -191,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     schroedinger
     speex
     srt
-    systemdLibs
+    systemd
     taglib_1
     libxcb-keysyms
     zlib

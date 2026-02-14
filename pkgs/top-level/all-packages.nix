@@ -9185,6 +9185,11 @@ with pkgs;
 
   libsysprof-capture = callPackage ../development/tools/profiling/sysprof/capture.nix { };
 
+  # Which Systemd Package Should I Take as a Dependency?
+  #
+  # * If you are a dependency of systemd, and you need to use systemd binaries: systemdMinimal
+  # * If all you need is libudev, and you want to use it on not-Linux: udev
+  # * Otherwise: systemd
   systemd = callPackage ../os-specific/linux/systemd {
     # break some cyclic dependencies
     util-linux = util-linuxMinimal;
@@ -9253,7 +9258,7 @@ with pkgs;
     withUkify = true;
   };
 
-  udev = if lib.meta.availableOn stdenv.hostPlatform systemdLibs then systemdLibs else libudev-zero;
+  udev = if lib.meta.availableOn stdenv.hostPlatform systemd then systemd.lib else libudev-zero;
 
   sysvtools = sysvinit.override {
     withoutInitTools = true;

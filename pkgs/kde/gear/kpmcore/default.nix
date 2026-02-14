@@ -7,7 +7,7 @@
   lvm2,
   mdadm,
   smartmontools,
-  systemdMinimal,
+  systemd,
   util-linux,
   bcachefs-tools,
   btrfs-progs,
@@ -30,7 +30,7 @@ let
     lvm2
     mdadm
     smartmontools
-    systemdMinimal
+    systemd
     util-linux
 
     bcachefs-tools

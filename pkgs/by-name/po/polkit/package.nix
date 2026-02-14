@@ -22,8 +22,8 @@
   docbook_xml_dtd_412,
   gtk-doc,
   coreutils,
-  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  systemdMinimal,
+  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
   elogind,
   buildPackages,
   withIntrospection ?
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # On Linux, fall back to elogind when systemd support is off.
-    (if useSystemd then systemdMinimal else elogind)
+    (if useSystemd then systemd else elogind)
   ];
 
   propagatedBuildInputs = [

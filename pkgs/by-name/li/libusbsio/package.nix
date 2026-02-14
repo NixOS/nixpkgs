@@ -5,7 +5,7 @@
   pkg-config,
   fixDarwinDylibNames,
   libusb1,
-  systemdMinimal,
+  udev,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
 
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    systemdMinimal # libudev
+    udev
   ];
 
   installPhase = ''

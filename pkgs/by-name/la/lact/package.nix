@@ -14,7 +14,7 @@
   vulkan-loader,
   vulkan-tools,
   coreutils,
-  systemdMinimal,
+  systemd,
   nix-update-script,
   nixosTests,
   hwdata,
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace lact-daemon/src/server/handler.rs \
-      --replace-fail 'run_command("journalctl",'  'run_command("${systemdMinimal}/bin/journalctl",'
+      --replace-fail 'run_command("journalctl",'  'run_command("${systemd}/bin/journalctl",'
 
     substituteInPlace lact-daemon/src/server/handler.rs \
       --replace-fail 'Command::new("sh")' 'Command::new("${bashNonInteractive}/bin/bash")'

@@ -63,7 +63,7 @@
   bubblewrap,
   libseccomp,
   libbacktrace,
-  systemdLibs,
+  systemd,
   xdg-dbus-proxy,
   replaceVars,
   glib,
@@ -72,7 +72,7 @@
   enableGeoLocation ? true,
   enableExperimental ? false,
   withLibsecret ? true,
-  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
+  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
   testers,
   fetchpatch,
 }:
@@ -189,7 +189,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libx11
   ]
   ++ lib.optionals systemdSupport [
-    systemdLibs
+    systemd
   ]
   ++ lib.optionals enableGeoLocation [
     geoclue2

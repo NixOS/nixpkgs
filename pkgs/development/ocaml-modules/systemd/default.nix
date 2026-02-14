@@ -2,7 +2,7 @@
   lib,
   buildDunePackage,
   fetchFromGitHub,
-  systemdLibs,
+  pkgs,
 }:
 buildDunePackage {
   pname = "systemd";
@@ -14,7 +14,7 @@ buildDunePackage {
     hash = "sha256-/FV+mFhuB3mEZv34XZrA4gO6+QIYssXqurnvkNBTJ2o=";
   };
   minimalOCamlVersion = "4.06";
-  propagatedBuildInputs = [ systemdLibs ];
+  propagatedBuildInputs = [ pkgs.systemd ];
   meta = {
     platforms = lib.platforms.linux;
     description = "OCaml module for native access to the systemd facilities";

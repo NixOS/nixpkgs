@@ -7,10 +7,10 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
-  systemdMinimal,
+  systemd,
   nixosTests,
   nix-update-script,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigbee2mqtt";
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals withSystemd [
-    systemdMinimal
+    systemd
   ];
 
   buildPhase = ''

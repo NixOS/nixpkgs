@@ -42,7 +42,7 @@
   libxslt,
   libgbm,
   sqlite,
-  systemdLibs,
+  systemd,
   wayland-scanner,
   woff2,
   zlib,
@@ -184,7 +184,7 @@ let
       libxslt
       libgbm
       sqlite
-      systemdLibs
+      systemd
       wayland-scanner
       woff2.lib
       libxkbcommon

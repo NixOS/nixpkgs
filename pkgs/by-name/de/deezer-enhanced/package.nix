@@ -26,7 +26,7 @@
   pango,
   cairo,
   expat,
-  systemdLibs,
+  systemd,
   alsa-lib,
   nwjs,
   libGL,
@@ -62,7 +62,7 @@ stdenvNoCC.mkDerivation rec {
     libxcb
 
     ### Systemd libs
-    systemdLibs
+    systemd
     dbus
 
     ### Other libs
@@ -105,7 +105,7 @@ stdenvNoCC.mkDerivation rec {
           libxcb
 
           ### Systemd libs
-          systemdLibs
+          systemd
           dbus
 
           ### Other libs
