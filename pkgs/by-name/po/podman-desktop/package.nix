@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./extension-no-download-podman.patch
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
     makeBinaryWrapper
