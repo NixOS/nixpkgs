@@ -88,25 +88,50 @@
   rustPlatform,
 
   # Optional Dependencies
-  curl ? null,
-  expat ? null,
-  fuse ? null,
-  libatomic_ops ? null,
-  libedit ? null,
-  libs3 ? null,
-  yasm ? null,
+  withRadosgw ?
+    lib.meta.availableOn stdenv.hostPlatform expat
+    && lib.meta.availableOn stdenv.hostPlatform curl
+    && lib.meta.availableOn stdenv.hostPlatform libedit,
+  curl,
+  expat,
+  libedit,
+  withFuse ? lib.meta.availableOn stdenv.hostPlatform fuse,
+  fuse,
+  withLibatomic_ops ? lib.meta.availableOn stdenv.hostPlatform libatomic_ops,
+  libatomic_ops,
+  withLibs3 ? lib.meta.availableOn stdenv.hostPlatform libs3,
+  libs3,
+  withYasm ? lib.meta.availableOn stdenv.hostPlatform yasm,
+  yasm,
 
   # Mallocs
-  gperftools ? null,
-  jemalloc ? null,
+  mallocImplementation ?
+    if lib.meta.availableOn stdenv.hostPlatform jemalloc then
+      "jemalloc"
+    else if lib.meta.availableOn stdenv.hostPlatform gperftools then
+      "tcmalloc"
+    else
+      "none",
+  gperftools,
+  jemalloc,
 
   # Crypto Dependencies
-  cryptopp ? null,
-  nspr ? null,
-  nss ? null,
+  cryptoLibrary ?
+    if
+      lib.meta.availableOn stdenv.hostPlatform nss && lib.meta.availableOn stdenv.hostPlatform nspr
+    then
+      "nss"
+    else if lib.meta.availableOn stdenv.hostPlatform cryptopp then
+      "cryptopp"
+    else
+      "error",
+  cryptopp,
+  nspr,
+  nss,
 
   # Linux Only Dependencies
   linuxHeaders,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   util-linux,
   libuuid,
@@ -114,38 +139,48 @@
   keyutils,
   rdma-core,
   rabbitmq-c,
-  libaio ? null,
-  libxfs ? null,
-  liburing ? null,
-  zfs ? null,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withLibaio ? lib.meta.availableOn stdenv.hostPlatform libaio,
+  libaio,
+  withLibxfs ? lib.meta.availableOn stdenv.hostPlatform libxfs,
+  libxfs,
+  withLiburing ? true,
+  liburing,
+  withZfs ? lib.meta.availableOn stdenv.hostPlatform zfs,
+  zfs,
 }:
 
-# We must have one crypto library
-assert cryptopp != null || (nss != null && nspr != null);
+# we must have one crypto library
+assert lib.elem cryptoLibrary [
+  "cryptopp"
+  "nss"
+];
+
+# mallocImplementation can be jemalloc, tcmalloc or none
+assert lib.elem mallocImplementation [
+  "jemalloc"
+  "tcmalloc"
+  "none"
+];
 
 let
-  shouldUsePkg =
-    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+  mallocPackage =
+    if (mallocImplementation == "jemalloc") then
+      jemalloc
+    else if (mallocImplementation == "tcmalloc") then
+      gperftools
+    else
+      null;
 
-  optYasm = shouldUsePkg yasm;
-  optExpat = shouldUsePkg expat;
-  optCurl = shouldUsePkg curl;
-  optFuse = shouldUsePkg fuse;
-  optLibedit = shouldUsePkg libedit;
-  optLibatomic_ops = shouldUsePkg libatomic_ops;
-  optLibs3 = shouldUsePkg libs3;
-
-  optJemalloc = shouldUsePkg jemalloc;
-  optGperftools = shouldUsePkg gperftools;
-
-  optCryptopp = shouldUsePkg cryptopp;
-  optNss = shouldUsePkg nss;
-  optNspr = shouldUsePkg nspr;
-
-  optLibaio = shouldUsePkg libaio;
-  optLibxfs = shouldUsePkg libxfs;
-  optZfs = shouldUsePkg zfs;
+  cryptoLibraryPackages =
+    if (cryptoLibrary == "cryptopp") then
+      [ cryptopp ]
+    else if (cryptoLibrary == "nss") then
+      [
+        nss
+        nspr
+      ]
+    else
+      [ ]; # impossible case
 
   # Downgrade rocksdb, 7.10 breaks ceph
   rocksdb' = rocksdb.overrideAttrs {
@@ -156,29 +191,6 @@ let
       tag = "v7.9.2";
       hash = "sha256-5P7IqJ14EZzDkbjaBvbix04ceGGdlWBuVFH/5dpD5VM=";
     };
-  };
-
-  hasRadosgw = optExpat != null && optCurl != null && optLibedit != null;
-
-  # Malloc implementation (can be jemalloc, tcmalloc or null)
-  malloc = if optJemalloc != null then optJemalloc else optGperftools;
-
-  # We prefer nss over cryptopp
-  cryptoStr =
-    if optNss != null && optNspr != null then
-      "nss"
-    else if optCryptopp != null then
-      "cryptopp"
-    else
-      "none";
-
-  cryptoLibsMap = {
-    nss = [
-      optNss
-      optNspr
-    ];
-    cryptopp = [ optCryptopp ];
-    none = [ ];
   };
 
   getMeta = description: {
@@ -446,7 +458,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    cryptoLibsMap.${cryptoStr}
+    cryptoLibraryPackages
     ++ [
       ceph-arrow-cpp
       babeltrace
@@ -471,12 +483,12 @@ stdenv.mkDerivation {
       lua5_4
       lvm2 # according to `debian/control` file, e.g. `pvs` command used by `src/ceph-volume/ceph_volume/api/lvm.py`
       lz4
-      malloc
+      mallocPackage
       oath-toolkit
       openldap
-      optLibatomic_ops
-      optLibs3
-      optYasm
+      (if withLibatomic_ops then libatomic_ops else null)
+      (if withLibs3 then libs3 else null)
+      (if withYasm then yasm else null)
       parted # according to `debian/control` file, used by `src/ceph-volume/ceph_volume/util/disk.py`
       rdkafka
       rocksdb'
@@ -491,22 +503,22 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       keyutils
       libcap_ng
-      liburing
+      (if withLiburing then liburing else null)
       libuuid
       linuxHeaders
-      optLibaio
-      optLibxfs
-      optZfs
+      (if withLibaio then libaio else null)
+      (if withLibxfs then libxfs else null)
+      (if withZfs then zfs else null)
       rabbitmq-c
       rdma-core
       udev
       util-linux
     ]
-    ++ lib.optionals hasRadosgw [
-      optCurl
-      optExpat
-      optFuse
-      optLibedit
+    ++ lib.optionals withRadosgw [
+      curl
+      expat
+      (if withFuse then fuse else null)
+      libedit
     ];
 
   # Picked up, amongst others, by `wrapPythonPrograms`.
@@ -594,7 +606,7 @@ stdenv.mkDerivation {
     # TODO breaks with sandbox, tries to download stuff with npm
     "-DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF"
     # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
-    "-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}"
+    "-DWITH_XFS=${if withLibxfs then "ON" else "OFF"}"
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
