@@ -974,6 +974,41 @@ rec {
     in
     "${cpuName}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
 
+  # This is a function from parsed platforms (like stdenv.hostPlatform.parsed)
+  # to parsed platforms.
+  makeMuslParsedPlatform =
+    parsed:
+    # The following line guarantees that the output of this function
+    # is a well-formed platform with no missing fields.
+    (
+      x:
+      lib.trivial.pipe x [
+        (x: removeAttrs x [ "_type" ])
+        mkSystem
+      ]
+    )
+      (
+        parsed
+        // {
+          abi =
+            {
+              gnu = abis.musl;
+              gnueabi = abis.musleabi;
+              gnueabihf = abis.musleabihf;
+              gnuabin32 = abis.muslabin32;
+              gnuabi64 = abis.muslabi64;
+              gnuabielfv2 = abis.musl;
+              gnuabielfv1 = abis.musl;
+              # The following entries ensure that this function is idempotent.
+              musleabi = abis.musleabi;
+              musleabihf = abis.musleabihf;
+              muslabin32 = abis.muslabin32;
+              muslabi64 = abis.muslabi64;
+            }
+            .${parsed.abi.name} or abis.musl;
+        }
+      );
+
   ################################################################################
 
 }
