@@ -1,0 +1,35 @@
+--- a/kernel-open/nvidia-uvm/uvm_hmm.c	1970-01-01 01:00:01.000000000 +0100
++++ b/kernel-open/nvidia-uvm/uvm_hmm.c	2026-02-14 22:47:12.157977258 +0100
+@@ -56,6 +56,7 @@
+ #include <linux/userfaultfd_k.h>
+ #include <linux/memremap.h>
+ #include <linux/wait.h>
++#include <linux/version.h>
+ 
+ #include "uvm_common.h"
+ #include "uvm_gpu.h"
+@@ -78,12 +79,22 @@
+ // Pass 0 as the order, when actual large order support is added this
+ // function will need to be revisited
+ //
++
+ #if defined(NV_ZONE_DEVICE_PAGE_INIT_HAS_ORDER_ARG)
+-#define ZONE_DEVICE_PAGE_INIT(page)   zone_device_page_init(page, 0)
++# if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
++#  define ZONE_DEVICE_PAGE_INIT(page) zone_device_page_init(page, page_pgmap(page), 0)
++# else
++#  define ZONE_DEVICE_PAGE_INIT(page) zone_device_page_init(page, 0)
++# endif
+ #else
+-#define ZONE_DEVICE_PAGE_INIT(page)   zone_device_page_init(page)
++# if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
++#  define ZONE_DEVICE_PAGE_INIT(page) zone_device_page_init(page, page_pgmap(page), 0)
++# else
++#  define ZONE_DEVICE_PAGE_INIT(page) zone_device_page_init(page)
++# endif
+ #endif
+ 
++
+ // The function nv_PageSwapCache() wraps the check for page swap cache flag in
+ // order to support a wide variety of kernel versions.
+ // The function PageSwapCache() is removed after 32f51ead3d77 ("mm: remove
