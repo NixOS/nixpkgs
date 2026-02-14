@@ -1,4 +1,4 @@
-{
+args@{
   stdenv,
   lib,
   nixosTests,
@@ -88,6 +88,9 @@
   # Needed to produce a ukify that works for cross compiling UKIs.
   targetPackages,
 
+  # If you are adding a build option to this list, consider also adding it to
+  # the set of overrides in libsOnly below.
+
   withAcl ? true,
   withAnalyze ? true,
   withApparmor ? true,
@@ -97,7 +100,7 @@
     withEfi
     # "Unknown 64-bit data model"
     && !stdenv.hostPlatform.isRiscV32,
-  # adds bzip2, lz4, xz and zstd
+  # adds bzip2, lz4, xz, zlib, and zstd
   withCompression ? true,
   withCoredump ? true,
   withCryptsetup ? true,
@@ -134,7 +137,7 @@
   withLogind ? true,
   withMachined ? true,
   withNetworkd ? true,
-  withNspawn ? !buildLibsOnly,
+  withNspawn ? true,
   withNss ? !stdenv.hostPlatform.isMusl,
   withOomd ? true,
   withOpenSSL ? true,
@@ -171,6 +174,8 @@
   withTests ? false,
   # build only libudev and libsystemd
   buildLibsOnly ? false,
+  # verify that the libsOnly overrides are harmless during postFixup
+  checkLibsystemdCorrectness ? true,
 
   # yes, pname is an argument here
   pname ? "systemd",
@@ -190,7 +195,7 @@ assert withHomed -> withOpenSSL;
 assert withFido2 -> withOpenSSL;
 assert withSysupdate -> withOpenSSL;
 assert withImportd -> (withGcrypt || withOpenSSL);
-assert withUkify -> (withEfi && withBootloader);
+assert withUkify -> withBootloader;
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 
@@ -203,9 +208,101 @@ let
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1766012573";
+
+  # We somewhat awkwardly split this derivation into two: one containing
+  # libsystemd.so and libudev.so, the two public shared libraries in systemd;
+  # and one containing everything but those libraries. buildLibsOnly determines
+  # which of the two variants are being built. The libsOnly variant takes fewer
+  # dependencies, so that some external packages (libfido2, for example) can
+  # have a dependency on libsOnly but be dependencies of the main derivation.
+  # But to prevent a proliferation of systemd derivations in a closure, we try
+  # to build libsOnly with all of the relevant flags that the main derivation
+  # will use. The set of irrelevant flags is specified below — flags that only
+  # affect the contents of the main derivation, and which can safely be
+  # disabled in libsOnly without affecting any functionality. This way, the
+  # same libsOnly derivation can be used by dependencies of the main derivation
+  # and by the rest of the system closure. As a convenient hack, a passthru.lib
+  # property allows the libsOnly derivation to be consumed as if it was the lib
+  # output of the main derivation.
+  #
+  # (An alternate design, putting libsystemd.so and libudev.so into a true lib
+  # output, would not have broken the dependency cycle between systemd.lib ->
+  # libfido2 -> systemd.out without also putting a second copy of the systemd
+  # libs in the final closure.)
+
+  libsOnly =
+    assert lib.assertMsg (!buildLibsOnly) "libsOnly should not be used when buildLibsOnly is true";
+    import ./. (
+      args
+      // {
+        buildLibsOnly = true;
+
+        # Every flag that gets added to this set becomes one that can be
+        # overridden in systemd while sharing the same libsOnly derivation, so
+        # the more the merrier, as long as it wouldn't affect the libsOnly
+        # build. (systemdVerifyLibEquality verifies this.)
+        withAcl = false;
+        withAnalyze = false;
+        withApparmor = false;
+        withAudit = false;
+        withBootloader = false;
+        withCoredump = false;
+        withCryptsetup = false;
+        withDocumentation = false;
+        withEfi = false;
+        withFido2 = false;
+        withFirstboot = false;
+        withHomed = false;
+        withHostnamed = false;
+        withHwdb = false;
+        withImportd = false;
+        withKernelInstall = false;
+        withKexectools = false;
+        withKmod = false;
+        withLibarchive = false;
+        withLibseccomp = false;
+        withLibidn2 = false;
+        withLocaled = false;
+        withLogind = false;
+        withMachined = false;
+        withNetworkd = false;
+        withNspawn = false;
+        withNss = false;
+        withOomd = false;
+        withOpenSSL = false;
+        withPam = false;
+        withPasswordQuality = false;
+        withPCRE2 = false;
+        withPolkit = false;
+        withPortabled = false;
+        withQrencode = false;
+        withRemote = false;
+        withRepart = false;
+        withResolved = false;
+        withSelinux = false;
+        withShellCompletions = false;
+        withSysupdate = false;
+        withSysusers = false;
+        withTests = false;
+        withTimedated = false;
+        withTimesyncd = false;
+        withTpm2Tss = false;
+        withUkify = false;
+        withUserDb = false;
+        withUtmp = false;
+        withVConsole = false;
+        withVmspawn = false;
+      }
+    );
+
+  libsOnlyTargets = [
+    "devel"
+    "libsystemd"
+    "libudev"
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname;
+  pname = if buildLibsOnly then "lib${pname}" else pname;
   version = "259";
 
   src = fetchFromGitHub {
@@ -232,7 +329,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0006-hostnamed-localed-timedated-disable-methods-that-cha.patch
     ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0008-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0009-add-rootprefix-to-lookup-dir-paths.patch
+    ./0009-add-current-system-to-lookup-dir-paths.patch
     ./0010-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
     ./0011-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
@@ -254,7 +351,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/core/systemd.pc.in --replace-fail '{{PREFIX_NOSLASH}}' /run/current-system/systemd
+    substituteInPlace src/libsystemd/sd-path/{path-lookup,sd-path}.c \
+      --replace-fail SYSTEM_DATA_UNIT_DIR     '"/run/current-system/systemd/lib/systemd/system"' \
+      --replace-fail USER_DATA_UNIT_DIR       '"/run/current-system/systemd/lib/systemd/user"' \
+      --replace-fail SYSTEM_GENERATOR_DIR     '"/run/current-system/systemd/lib/systemd/system-generators"' \
+      --replace-fail USER_GENERATOR_DIR       '"/run/current-system/systemd/lib/systemd/user-generators"' \
+      --replace-fail SYSTEM_ENV_GENERATOR_DIR '"/run/current-system/systemd/lib/systemd/system-environment-generators"' \
+      --replace-fail USER_ENV_GENERATOR_DIR   '"/run/current-system/systemd/lib/systemd/user-environment-generators"'
+    substituteInPlace src/libsystemd/sd-path/sd-path.c \
+      --replace-fail LIBDIR                   '"/run/current-system/systemd/lib"' \
+      --replace-fail PREFIX_NOSLASH           '"/run/current-system/systemd"'
+    substituteInPlace src/libsystemd/sd-hwdb/hwdb-internal.h \
+      --replace-fail UDEVLIBEXECDIR           '"/run/current-system/systemd/lib/udev"'
+    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" /run/current-system/systemd/bin/
   ''
   + lib.optionalString withLibBPF ''
     substituteInPlace meson.build \
@@ -279,9 +389,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-    "dev"
   ]
-  ++ (lib.optional (!buildLibsOnly) "man");
+  ++ (
+    if buildLibsOnly then
+      [
+        "dev"
+      ]
+    else
+      [
+        "man"
+      ]
+  );
   separateDebugInfo = true;
   __structuredAttrs = true;
 
@@ -340,7 +458,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgpg-error
   ]
-  ++ lib.optionals withOpenSSL [ openssl ]
+  ++ lib.optional withOpenSSL openssl
   ++ lib.optional withTests glib
   ++ lib.optional withAcl acl
   ++ lib.optional withApparmor libapparmor
@@ -354,7 +472,10 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ lib.optional withCoredump elfutils
-  ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+  ++ lib.optionals withCryptsetup [
+    (lib.getDev cryptsetup)
+    p11-kit
+  ]
   ++ lib.optional withKexectools kexec-tools
   ++ lib.optional withKmod kmod
   ++ lib.optional withLibidn2 libidn2
@@ -366,14 +487,13 @@ stdenv.mkDerivation (finalAttrs: {
     libmicrohttpd
     gnutls
   ]
-  ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
-  ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
-  ++ lib.optionals withLibBPF [ libbpf ]
+  ++ lib.optional withFido2 libfido2
+  ++ lib.optional withLibBPF libbpf
   ++ lib.optional withTpm2Tss tpm2-tss
   ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
-  ++ lib.optionals withPasswordQuality [ libpwquality ]
-  ++ lib.optionals withQrencode [ qrencode ]
-  ++ lib.optionals withLibarchive [ libarchive ]
+  ++ lib.optional withPasswordQuality libpwquality
+  ++ lib.optional withQrencode qrencode
+  ++ lib.optional withLibarchive libarchive
   ++ lib.optional (withBootloader && stdenv.targetPlatform.useLLVM or false) (
     llvmPackages.compiler-rt.override {
       doFakeLibgcc = true;
@@ -420,8 +540,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
 
     # pkgconfig
-    (lib.mesonOption "pkgconfiglibdir" "${placeholder "dev"}/lib/pkgconfig")
-    (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
+    (lib.mesonOption "pkgconfiglibdir" (
+      if buildLibsOnly then "${placeholder "dev"}/lib/pkgconfig" else "no"
+    ))
+    (lib.mesonOption "pkgconfigdatadir" (
+      if buildLibsOnly then "${placeholder "dev"}/share/pkgconfig" else "no"
+    ))
 
     # SBAT
     (lib.mesonOption "sbat-distro" "nixos")
@@ -481,7 +605,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Cryptsetup
     (lib.mesonEnable "libcryptsetup" withCryptsetup)
     (lib.mesonEnable "libcryptsetup-plugins" withCryptsetup)
-    (lib.mesonEnable "p11kit" (withHomed || withCryptsetup))
+    (lib.mesonEnable "p11kit" withCryptsetup)
 
     # FIDO2
     (lib.mesonEnable "libfido2" withFido2)
@@ -619,7 +743,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optionals withNspawn [
         {
           # we only need to patch getent when nspawn will actually be built/installed
-          # as of systemd 257.x, nspawn will not be installed on systemdLibs, so we don't need to patch it
+          # as of systemd 257.x, nspawn will not be installed on libsOnly, so we don't need to patch it
           # patching getent unconditionally here introduces infinite recursion on musl
           search = "/usr/bin/getent";
           replacement = "${getent}/bin/getent";
@@ -707,7 +831,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.concatMapStringsSep "\n" mkEnsureSubstituted binaryReplacements}
 
       substituteInPlace src/libsystemd/sd-journal/catalog.c \
-        --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+        --replace /usr/lib/systemd/catalog/ /run/current-system/systemd/lib/systemd/catalog/
 
       substituteInPlace src/import/pull-tar.c \
         --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
@@ -720,7 +844,25 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
       --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
       --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
-  '';
+  ''
+  # This is some silliness to make the systemdVerifyLibEquality check work.
+  # Meson generates a build file that links more libraries than are actually
+  # used by the public libraries, which results in a larger .dynstr section in
+  # the compiled binaries when more dependencies are enabled for the entire
+  # project. Filtering out these unused dependencies is harmless (if it
+  # weren't, the link would fail), if not marginally beneficial; and results in
+  # binaries that are near-identical (the remaining differences can be patched
+  # post-compilation).
+  + lib.optionalString (!buildLibsOnly) (
+    let
+      allowedPaths = lib.concatMapStringsSep "|" (
+        x: lib.escapeRegex (lib.getLib x).outPath
+      ) libsOnly.buildInputs;
+    in
+    ''
+      sed -Ei '/^build lib(systemd|udev)\.so/,+1s#( *(${allowedPaths})/lib/lib[^ .]*\.so)| */nix/store/[^ /]*/lib/lib[^ .]*\.so|( *[^ ]+)#\1\3#g' build.ninja
+    ''
+  );
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Can't say ${polkit.bin}/bin/pkttyagent here because that would
@@ -738,6 +880,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
   ];
 
+  env.NIX_NO_SELF_RPATH = true;
+
   doCheck = false;
 
   # trigger the test -n "$DESTDIR" || mutate in upstreams build system
@@ -745,17 +889,17 @@ stdenv.mkDerivation (finalAttrs: {
     export DESTDIR=/
   '';
 
-  mesonInstallTags = lib.optionals buildLibsOnly [
-    "devel"
-    "libudev"
-    "libsystemd"
-  ];
+  ${if buildLibsOnly then "ninjaFlags" else null} = libsOnlyTargets;
+  ${if buildLibsOnly then "mesonInstallTags" else null} = libsOnlyTargets;
 
   postInstall =
     lib.optionalString (!buildLibsOnly) ''
       mkdir -p $out/example/systemd
       mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
       mv $out/lib/systemd/{system,user} $out/example/systemd
+
+      progs=$(ls -m -w0 $out/bin | sed 's/[$*.[\^@]/\\&/g;s/, /\\|/g')
+      find $out/example/systemd -type f -exec sed -e 's@^\(Exec\w*=[@:+!|-]*\)\('"$progs"'\)@\1'"$out"'/bin/\2@' -i '{}' \;
 
       rm -rf $out/etc/systemd/system
 
@@ -779,7 +923,7 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString (withKmod && !buildLibsOnly) ''
       mv $out/lib/modules-load.d $out/example
     ''
-    + lib.optionalString withSysusers ''
+    + lib.optionalString (withSysusers && !buildLibsOnly) ''
       mv $out/lib/sysusers.d $out/example
     '';
 
@@ -795,6 +939,45 @@ stdenv.mkDerivation (finalAttrs: {
     ) "$out/bin/udevadm verify --resolve-names=late --no-style $out/lib/udev/rules.d"}
 
     runHook postInstallCheck
+  '';
+
+  # Verify that the libraries built in the main derivation don't differ in any
+  # important ways from their libsOnly equivalents (before deleting them). This
+  # needs to happen after autoPatchelfHook, which acts in postFixup, and this
+  # logic belongs in postFixup itself. But setup hooks will run after their
+  # corresponding attributes in a derivation, so this verify-and-delete step
+  # has to be manually inserted into the hooks array after the setup hooks are
+  # sourced.
+  ${if buildLibsOnly then null else "preFixup"} = ''
+    getBuildIdPerl() {
+      readelf -n "$1" | sed -n 's/^ *Build ID: \(.*\)$/\1/;T;s/../\\x&/g;p'
+    }
+
+    systemdVerifyLibEquality() {
+      ${lib.optionalString checkLibsystemdCorrectness ''
+        for name in $(ls ${libsOnly}/lib); do
+          lib1=${libsOnly}/lib/$name
+          lib2=$out/lib/$name
+          if ! [ -L "$lib1" ]; then
+            perl -gpi -e "s/$(getBuildIdPerl "$lib2")/$(getBuildIdPerl "$lib1")/s" "$lib2"
+            if ! cmp -b "$lib1" "$lib2"; then
+              echo "The locally-built copy of '$name' doesn't match '$lib1'."
+              echo "Perhaps there is an overridden flag in libsOnly that shouldn't be there."
+              return 1
+            fi
+          fi
+        done
+      ''}
+      rm "$out"/lib/lib{systemd,udev}.so*
+      rm -rf "$out"/include
+      rm "$debug"/lib/debug/lib{systemd,udev}.so.*
+      while read -r -d $'\0' f; do
+        rm "''${f%.*}".*
+        rmdir --ignore-fail-on-non-empty "''${f%/*}"
+      done < <(find "$debug/lib/debug" -! -xtype f -a \( -lname '*/libsystemd.so.*' -o -lname '*/libudev.so.*' \) -print0)
+    }
+
+    postFixupHooks+=(systemdVerifyLibEquality)
   '';
 
   # Avoid *.EFI binary stripping.
@@ -962,6 +1145,14 @@ stdenv.mkDerivation (finalAttrs: {
 
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       };
+  }
+  // lib.optionalAttrs (!buildLibsOnly) {
+    # These are not real outputs of this derivation, but the names are chosen
+    # so that they masquerade as such, so that packages can include systemd in
+    # their buildInputs and get the corresponding libsOnly package
+    # automatically.
+    lib = libsOnly;
+    inherit (libsOnly) dev;
   };
 
   meta = {

@@ -1,12 +1,13 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Thu, 9 May 2019 11:15:22 +0200
-Subject: [PATCH] add rootprefix to lookup dir paths
+Subject: [PATCH] add current-system to lookup dir paths
 
 systemd does not longer use the UDEVLIBEXEC directory as root for
-discovery default udev rules. By adding `$out/lib` to the lookup paths
-we should again be able to discover the udev rules amongst other default
-files that I might have missed.
+discovery default udev rules. By adding
+`/run/current-system/systemd/lib` to the lookup paths we should again be
+able to discover the udev rules amongst other default files that I might
+have missed.
 ---
  src/basic/constants.h | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
@@ -21,7 +22,7 @@ index a26cff4062..3800c37e1b 100644
          "/usr/local/lib/" n "\0"                \
 -        "/usr/lib/" n "\0"
 +        "/usr/lib/" n "\0"                      \
-+        PREFIX "/lib/" n "\0"
++        "/run/current-system/systemd/lib/" n "\0"
  
  #define CONF_PATHS(n)                           \
          "/etc/" n,                              \
@@ -29,7 +30,7 @@ index a26cff4062..3800c37e1b 100644
          "/usr/local/lib/" n,                    \
 -        "/usr/lib/" n
 +        "/usr/lib/" n,                          \
-+        PREFIX "/lib/" n
++        "/run/current-system/systemd/lib/" n
  
  #define CONF_PATHS_STRV(n)                      \
          STRV_MAKE(CONF_PATHS(n))

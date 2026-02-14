@@ -494,7 +494,16 @@ in
         fsck = "${cfg.package.util-linux}/bin/fsck";
       };
 
-      managerEnvironment.PATH = "/bin:/sbin";
+      managerEnvironment = {
+        PATH = "/bin:/sbin";
+
+        # systemd is now built to look for these things under
+        # /run/current-system/systemd, but /run/current-system isn't available
+        # when PID 1 is launched, so we need to give it some clues.
+        SYSTEMD_UNIT_PATH = "${cfg.package}/lib/systemd/system:";
+        SYSTEMD_GENERATOR_PATH = "${cfg.package}/lib/systemd/system-generators:";
+        SYSTEMD_ENVIRONMENT_GENERATOR_PATH = "${cfg.package}/lib/systemd/system-environment-generators:";
+      };
       settings.Manager.ManagerEnvironment = lib.concatStringsSep " " (
         lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
       );
@@ -697,6 +706,26 @@ in
           before = [ "initrd-fs.target" ];
         }
       ];
+
+      services.link-run-current-system-systemd = {
+        description = "Temporary /run/current-system/systemd Symlink";
+        requiredBy = [ "sysinit.target" ];
+        before = [ "systemd-udevd.service" ];
+        conflicts = [ "initrd-nixos-activation.service" ];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = ''
+          mkdir /run/current-system
+          ln -s ${cfg.package} /run/current-system/systemd
+        '';
+        preStop = ''
+          rm /run/current-system/systemd
+          rmdir /run/current-system
+        '';
+      };
 
       services.initrd-nixos-activation = lib.mkIf (!config.system.nixos-init.enable) {
         after = [ "initrd-switch-root.target" ];
