@@ -12870,6 +12870,12 @@
     github = "jordanisaacs";
     githubId = 19742638;
   };
+  jordycoding = {
+    name = "Jordy";
+    github = "jordycoding";
+    githubId = 6128820;
+    email = "dev@alkema.co";
+  };
   jorikvanveen = {
     email = "vanveenjorik@protonmail.com";
     github = "jorikvanveen";
