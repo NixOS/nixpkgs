@@ -399,6 +399,7 @@ stdenv.mkDerivation (finalAttrs: {
       [
         "man"
       ]
+      ++ lib.optional withTimesyncd "timesyncd"
   );
   separateDebugInfo = true;
   __structuredAttrs = true;
@@ -925,7 +926,45 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString (withSysusers && !buildLibsOnly) ''
       mv $out/lib/sysusers.d $out/example
-    '';
+    ''
+    + (
+      let
+        customOutputs = {
+          timesyncd = [
+            "example/systemd/system/systemd-timesyncd.service"
+            "example/sysusers.d/systemd-timesync.conf" # this file seems to be unused regardless of whether it is moved...
+            "lib/systemd/ntp-units.d"
+            "lib/systemd/systemd-timesyncd"
+            "share/dbus-1/system.d/org.freedesktop.timesync1.conf"
+            "share/dbus-1/system-services/org.freedesktop.timesync1.service"
+            "share/polkit-1/actions/org.freedesktop.timesync1.policy"
+          ];
+        };
+        filtered = lib.filterAttrs (name: _: builtins.elem name finalAttrs.outputs) customOutputs;
+      in
+      lib.optionalString (!buildLibsOnly && filtered != { }) ''
+        systemdMoveTo() {
+          local dst=$1 path dst_path
+          shift
+          for path; do
+            dst_path=''${path/#example/lib}
+            mkdir -p "$dst/$(dirname "$dst_path")"
+            mv "$out/$path" "$dst/$dst_path"
+          done
+          for path; do
+            dst_path=''${path/#example/lib}
+            case $path in
+              *.*) ;;
+              *) find "$dst" -type f -name '*.service' -exec sed -i "s#$out/$path#$dst/$dst_path#g" '{}' \; ;;
+            esac
+          done
+        }
+
+        ${lib.concatMapAttrsStringSep "\n" (
+          output: paths: "systemdMoveTo \"\$${output}\" ${lib.concatStringsSep " " paths}"
+        ) filtered}
+      ''
+    );
 
   doInstallCheck = true;
 
