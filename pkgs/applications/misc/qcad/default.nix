@@ -102,8 +102,7 @@ stdenv.mkDerivation rec {
     install -Dm555 -t $out/lib release/libqcadecmaapi${stdenv.hostPlatform.extensions.sharedLibrary}
 
     install -Dm444 -t $out/share/applications qcad.desktop
-    install -Dm644 -t $out/share/pixmaps      scripts/qcad_icon.png
-
+    install -Dm644 scripts/qcad_icon.png $out/share/icons/hicolor/256x256/apps/org.qcad.QCAD.png
     cp -r scripts $out/lib
     cp -r plugins $out/lib/plugins
     cp -r patterns $out/lib/patterns
@@ -122,7 +121,7 @@ stdenv.mkDerivation rec {
     rm -r $out/lib/plugins/imageformats
     ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/imageformats
 
-    install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/qcad.svg
+    install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/org.qcad.QCAD.svg
 
     installManPage qcad.1
 

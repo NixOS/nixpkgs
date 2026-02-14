@@ -55,14 +55,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "UHDR_BUILD_TESTS" true)
+    # Build disables install target in cross-compilation mode so
+    # cross-compilation would fail on NixOS. Force flag to false.
+    # See https://github.com/google/libultrahdr/blob/8cbc983d2f6c2171af5cbcdb8801102f83fe92ab/CMakeLists.txt#L153
+    (lib.cmakeBool "CMAKE_CROSSCOMPILING" false)
   ];
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
-    libjpeg
+  ];
+
+  buildInputs = [
     gtest
+    libjpeg
   ];
 
   nativeCheckInputs = [

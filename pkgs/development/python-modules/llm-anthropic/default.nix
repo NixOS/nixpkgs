@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  json-schema-to-pydantic,
   llm,
   llm-anthropic,
   anthropic,
@@ -12,7 +13,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-anthropic";
   version = "0.23";
   pyproject = true;
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-anthropic";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZO9hoDv3YLl8ZCcd5UEDdD5VNPa83N639z1ZxJaFt7Y=";
   };
 
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   dependencies = [
     anthropic
+    json-schema-to-pydantic
     llm
   ];
 
@@ -40,6 +42,15 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  disabledTests = [
+    # Need to be run as a passthru test
+    "test_async_prompt"
+    "test_image_prompt"
+    "test_prompt"
+    "test_schema_prompt"
+    "test_thinking_prompt"
+  ];
+
   pythonImportsCheck = [ "llm_anthropic" ];
 
   passthru.tests = llm.mkPluginTest llm-anthropic;
@@ -47,8 +58,11 @@ buildPythonPackage rec {
   meta = {
     description = "LLM access to models by Anthropic, including the Claude series";
     homepage = "https://github.com/simonw/llm-anthropic";
-    changelog = "https://github.com/simonw/llm-anthropic/releases/tag/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-anthropic/releases/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aos ];
+    maintainers = with lib.maintainers; [
+      aos
+      sarahec
+    ];
   };
-}
+})

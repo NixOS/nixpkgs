@@ -6084,6 +6084,12 @@
     githubId = 10701143;
     name = "David Crompton";
   };
+  davidlghellin = {
+    email = "hola@devel0pez.com";
+    github = "davidlghellin";
+    githubId = 1321512;
+    name = "David López";
+  };
   davidrusu = {
     email = "davidrusu.me@gmail.com";
     github = "davidrusu";

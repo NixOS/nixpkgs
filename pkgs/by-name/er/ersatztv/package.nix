@@ -32,6 +32,8 @@ buildDotnetModule rec {
     "ErsatzTV.Scanner"
   ];
   nugetDeps = ./nuget-deps.json;
+
+  dotnetFlags = [ "-p:TreatWarningsAsErrors=false" ];
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 

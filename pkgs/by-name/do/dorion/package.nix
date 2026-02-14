@@ -20,6 +20,8 @@
   webkitgtk_4_1,
   cargo-tauri,
   desktop-file-utils,
+  fetchpatch,
+  pipewire,
 }:
 
 let
@@ -28,8 +30,8 @@ let
   };
 
   shelter = fetchurl {
-    url = "https://raw.githubusercontent.com/uwu/shelter-builds/1b35b8802a85809742af99f454bb941f56f759a3/shelter.js";
-    hash = "sha256-g4xe4Wj8OSaA/btlv2O8aawi+Bx8qttL95mnINOrTgg=";
+    url = "https://raw.githubusercontent.com/uwu/shelter-builds/7a1beaff4bb4ec5e8590d069549686fda4200e82/shelter.js";
+    hash = "sha256-LeZTxrGRQb0rl3BMP34UFHIEFnil4k3Fet3MTujvVB8=";
     meta = {
       homepage = "https://github.com/uwu/shelter";
       sourceProvenance = [ lib.sourceTypes.binaryBytecode ]; # actually, minified JS
@@ -40,25 +42,38 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.11.0";
+  version = "6.12.0";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-be21MAAVfxouO1relcqLLbB9W8w5iDRe0Yr6snSKyq0=";
+    hash = "sha256-pykmoSiV3iSaD/V/Sd5GSV/BZWhk9XVg8io1j8wZv5k=";
   };
+
+  patches = [
+    # https://github.com/SpikeHD/Dorion/issues/419
+    (fetchpatch {
+      url = "https://github.com/SpikeHD/Dorion/commit/98d50dadd1a7fb018698a3fe61ac104cbe89b5d4.patch";
+      hash = "sha256-1VbB2CVMUWw18lWC4EL83VS4SdC03AxDUKRq/hQNAAg=";
+    })
+  ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-9zH0Coiyoz6NK2go2XVL5xYaCrXzrOMKaK+3pDXqrGs=";
+  cargoHash = "sha256-FJ4gQKgZkYqvjcqcRapJ8IQWP52kIg4uOTxifKG8zyo=";
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
     pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-SO/9GkjNP+7IEeULCyWAp32RYIxyzgmbc8YZiTCTjF8=";
+    hash = "sha256-fX48yZKntte4OxLjXqepZQyGdN/bv4o+n+v5ZT5lXMo=";
   };
 
   # CMake (webkit extension)
@@ -90,6 +105,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     webkitgtk_4_1'
+    gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-good
@@ -97,6 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib-networking
     libsysprof-capture
     libayatana-appindicator
+    pipewire
   ];
 
   postPatch = ''
@@ -172,9 +189,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     changelog = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
     downloadPage = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      gpl3Only
-      cc0 # Shelter
+    license = [
+      lib.licenses.gpl3Only
+      shelter.meta.license
     ];
     mainProgram = "Dorion";
     maintainers = with lib.maintainers; [
@@ -188,6 +205,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.sourceTypes.binaryBytecode # actually, minified JS
       lib.sourceTypes.fromSource
     ];
-    broken = true;
   };
 })

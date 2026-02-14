@@ -425,12 +425,12 @@ in
 
   ukiyo = mkTmuxPlugin {
     pluginName = "ukiyo";
-    version = "0-unstable-2026-01-30";
+    version = "0-unstable-2026-02-02";
     src = fetchFromGitHub {
       owner = "Nybkox";
       repo = "tmux-ukiyo";
-      rev = "14fdf51ad16f7b81019c53b987877e78e697f51b";
-      hash = "sha256-ILQVOQ6cfG7I7hFN72mgSTc0AZZW4WWHSxwWKbK0piY=";
+      rev = "dd8730a2a41da79425c11c0cea69e0bd81545e19";
+      hash = "sha256-jOcGNKb8QrIgT7l3D3RiJOPIC9JU1rOy8tk0x5ULrdc=";
     };
     meta = {
       homepage = "https://github.com/Nybkox/tmux-ukiyo";

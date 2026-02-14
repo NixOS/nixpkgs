@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2025.11.12";
+  version = "2026.02.09";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "wntrblm";
     repo = "nox";
     tag = version;
-    hash = "sha256-GYVCM4AX18ryODx0GSm0hRwr1wdluqllsc+iEmLTl6U=";
+    hash = "sha256-RaB0q9gCoYqKAI8IzNh5qUd0SrzsPeOa3C6IGxpcbwE=";
   };
 
   build-system = [ hatchling ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    tox_to_nox = [
+    tox-to-nox = [
       jinja2
       tox
     ];
