@@ -68,7 +68,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pillow
     pillow-heif
     psutil
-    psd-tools
     pympler
     pyopenssl
     pyqt6
