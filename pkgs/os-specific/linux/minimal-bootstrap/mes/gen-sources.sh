@@ -13,7 +13,7 @@
 set -eu
 
 # Supported platforms
-ARCHS="x86 x86_64"
+ARCHS="aarch64 x86 x86_64"
 KERNELS="linux"
 COMPILERS="mescc gcc"
 

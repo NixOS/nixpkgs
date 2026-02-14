@@ -79,6 +79,13 @@ bash.runCommand "${pname}-${version}"
     rm src/math/i386/*.c
     rm src/math/x86_64/*.c
 
+    # TODO: Implement p2align in tcc to fill with nops.
+    # Right now it just fills with undefined instructions,
+    # which is a big no-no.
+    sed -i 's|.p2align 4||' src/string/aarch64/memset.S
+    sed -i 's|.p2align 3||' src/string/aarch64/memcpy.S
+    sed -i 's|.p2align 4||' src/string/aarch64/memcpy.S
+
     # Configure
     bash ./configure \
       --prefix=$out \
