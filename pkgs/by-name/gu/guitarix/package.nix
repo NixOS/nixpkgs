@@ -8,7 +8,7 @@
   curl,
   eigen,
   faust,
-  fftw,
+  fftwSinglePrec,
   gettext,
   glib,
   glib-networking,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     eigen
     faust
-    fftw
+    fftwSinglePrec
     glib
     glib-networking.out
     glibmm
