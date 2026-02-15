@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "brax";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
     tag = "v${version}";
-    hash = "sha256-CkRXEYtlP8IhEZ7lVnpxlwiyLdICAfILwHfRUfuub08=";
+    hash = "sha256-08t5hYG9aAY1Adp2QO9vmkcH0fH09Dr213pfvdhAaGY=";
   };
 
   build-system = [
