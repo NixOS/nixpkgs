@@ -5,7 +5,6 @@
   pkgs,
   ...
 }:
-
 let
   inherit (lib)
     literalExpression
@@ -21,7 +20,6 @@ let
   format = pkgs.formats.yaml { };
   configFile = format.generate "go2rtc.yaml" cfg.settings;
 in
-
 {
   meta.buildDocsInSandbox = false;
 
@@ -110,6 +108,38 @@ in
         ];
         StateDirectory = "go2rtc";
         ExecStart = "${cfg.package}/bin/go2rtc -config ${configFile}";
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ]
+        ++ lib.optionals (cfg.settings.api.unix_listen != "") [ "AF_UNIX" ];
+        SystemCallFilter = [
+          "@system-service"
+          "@resources"
+          "~@privileged"
+        ];
+        SystemCallArchitectures = "native";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateMounts = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        ProtectSystem = "strict";
+        UMask = "0017";
       };
     };
   };
