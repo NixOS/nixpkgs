@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/trunk";
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     gettext
     hicolor-icon-theme
@@ -64,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     wafHook
     wrapGAppsHook3
+    faust
+    sassc
   ];
 
   buildInputs = [
@@ -72,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     curl
     eigen
-    faust
     fftw
     glib
     glib-networking.out
@@ -87,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     lilv
     lrdf
     lv2
-    sassc
     serd
     sord
     sratom
@@ -102,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-nls"
     "--install-roboto-font"
   ]
+  ++ optional (!stdenv.hostPlatform.isx86) "--disable-sse"
   ++ optional optimizationSupport "--optimization";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
