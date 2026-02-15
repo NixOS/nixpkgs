@@ -11273,6 +11273,12 @@
     githubId = 49095435;
     name = "imsuck";
   };
+  imsugeno = {
+    email = "g.tokyo.kazusa@gmail.com";
+    github = "imsugeno";
+    githubId = 52691115;
+    name = "Kazusa Sugeno";
+  };
   imuli = {
     email = "i@imu.li";
     github = "imuli";
