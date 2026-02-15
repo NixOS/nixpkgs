@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "r2modman";
     maintainers = with lib.maintainers; [
       huantian
+      hythera
     ];
     inherit (electron.meta) platforms;
   };
