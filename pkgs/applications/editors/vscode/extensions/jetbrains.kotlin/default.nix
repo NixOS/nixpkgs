@@ -62,6 +62,8 @@ vscode-utils.buildVscodeExtension {
     rm -rf server/jre
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Official Kotlin Language Server extension for VSCode from JetBrains";
     homepage = "https://github.com/Kotlin/kotlin-lsp";
