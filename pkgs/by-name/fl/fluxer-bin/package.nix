@@ -23,6 +23,6 @@ appimageTools.wrapType2 {
     license = licenses.agpl3Only;
     platforms = platforms.linux;
     mainProgram = "fluxer-bin";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
