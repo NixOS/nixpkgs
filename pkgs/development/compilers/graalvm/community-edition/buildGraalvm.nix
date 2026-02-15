@@ -19,7 +19,7 @@
   libxi,
   libxext,
   libx11,
-  zlib,
+  pkgsStatic,
   # extra params
   extraCLibs ? [ ],
   gtkSupport ? stdenv.hostPlatform.isLinux,
@@ -51,7 +51,7 @@ let
     "libxi"
     "libxext"
     "libx11"
-    "zlib"
+    "pkgsStatic"
     "extraCLibs"
     "gtkSupport"
     "useMusl"
@@ -62,7 +62,7 @@ let
   cLibs = lib.optionals stdenv.hostPlatform.isLinux (
     [
       glibc
-      zlib.static
+      pkgsStatic.zlib
     ]
     ++ lib.optionals (!useMusl) [ glibc.static ]
     ++ lib.optionals useMusl [ musl ]
@@ -129,7 +129,7 @@ let
 
       propagatedBuildInputs = [
         setJavaClassPath
-        zlib
+        pkgsStatic.zlib
       ];
 
       buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
