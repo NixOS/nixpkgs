@@ -898,6 +898,7 @@ mapAliases {
   highlight-assertions = throw "'highlight-assertions' has been removed as it has been unmaintained upstream since March 2023"; # Added 2026-02-15
   himitsu-firefox = throw "himitsu-firefox has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
   hiPrio = warnAlias "'hiPrio' has been removed from pkgs, use `lib.hiPrio` instead" lib.hiPrio; # Added 2025-10-30
+  hmm = throw "'hmm' has been removed as it has been unmaintained upstream since June 2023"; # Added 2026-02-15
   hobbes = throw "hobbes has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-20
   hop = throw "'hop' has been removed due to lack of maintenance"; # Added 2025-11-08
   hostPlatform = warnAlias "'hostPlatform' has been renamed to/replaced by 'stdenv.hostPlatform'" stdenv.hostPlatform; # Converted to warning 2025-10-28
