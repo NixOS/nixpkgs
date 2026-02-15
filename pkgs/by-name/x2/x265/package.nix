@@ -93,6 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/Version.cmake \
       --replace-fail "unknown" "${finalAttrs.version}" \
       --replace-fail "0.0" "${finalAttrs.version}"
+
+    substituteInPlace x265.pc.in \
+      --replace-fail 'includedir=''${prefix}' 'includedir=${placeholder "dev"}'
   ''
   # There is broken and complicated logic when setting X265_LATEST_TAG for
   # mingwW64 builds. This bypasses the logic by setting it at the end of the
