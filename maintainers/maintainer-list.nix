@@ -27174,6 +27174,11 @@
     github = "vtourneur";
     githubId = 48284424;
   };
+  toXel = {
+    name = "Timo Arlt";
+    github = "toXel";
+    githubId = 2300709;
+  };
   ToxicFrog = {
     email = "toxicfrog@ancilla.ca";
     github = "ToxicFrog";
