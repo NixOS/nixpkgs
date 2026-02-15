@@ -1,0 +1,118 @@
+{
+  "Pengli": {
+    "version": "v1.029",
+    "sources": {
+      "PengliWenKai-Regular": {
+        "url": "https://github.com/lxgw/Pengli/releases/download/v1.029/PengliWenKai-Regular.ttf",
+        "sha256": "e11807ce9418a0c5b5e55c28d5838f77dd6b530e5789de45b2cfca95c809f853"
+      }
+    }
+  },
+  "LxgwZhenKai": {
+    "version": "v0.821",
+    "sources": {
+      "LXGWZhenKaiGB-Regular": {
+        "url": "https://github.com/lxgw/LxgwZhenKai/releases/download/v0.821/LXGWZhenKaiGB-Regular.ttf",
+        "sha256": "6c1a94dd1e5db1f354ee1a2722a76fb3ecd7baa438d94c51bbbaf07ed0f9e1c4"
+      },
+      "LXGWZhenKaiSlabGB-Regular": {
+        "url": "https://github.com/lxgw/LxgwZhenKai/releases/download/v0.821/LXGWZhenKaiSlabGB-Regular.ttf",
+        "sha256": "f80764588513dfcb850c6cc0f048cd279d7ac677090a2eed0278d8cfd483c959"
+      },
+      "ZhenKai_GBK-Regular": {
+        "url": "https://github.com/lxgw/LxgwZhenKai/releases/download/v0.821/ZhenKai_GBK-Regular.ttf",
+        "sha256": "da6c8bcb294539d0e88811868237f9e6452f86abecbcf733297c22931b649524"
+      }
+    }
+  },
+  "kose-font": {
+    "version": "v3.126",
+    "sources": {
+      "Xiaolai-Regular": {
+        "url": "https://github.com/lxgw/kose-font/releases/download/v3.126/Xiaolai-Regular.ttf",
+        "sha256": "e2f68daf0e72777a8cf58bc83de1b98634b251e537ddbfca24b0ae50d1802da2"
+      },
+      "XiaolaiMono-Regular": {
+        "url": "https://github.com/lxgw/kose-font/releases/download/v3.126/XiaolaiMono-Regular.ttf",
+        "sha256": "802b658db492e02ae5b659f5b56d7d4ef8f77609515bdcc82f462ae912888c33"
+      }
+    }
+  },
+  "yozai-font": {
+    "version": "v0.868",
+    "sources": {
+      "Yozai-Light": {
+        "url": "https://github.com/lxgw/yozai-font/releases/download/v0.868/Yozai-Light.ttf",
+        "sha256": "0efc843308810c04ec394d8af27d0871ada3a9cc4860a226abde88a1bc67b3bd"
+      },
+      "Yozai-Medium": {
+        "url": "https://github.com/lxgw/yozai-font/releases/download/v0.868/Yozai-Medium.ttf",
+        "sha256": "05f50f252b45197d0d6148a4abc3e37c7cd4cfdf03c955b57c25d53d924f835f"
+      },
+      "Yozai-Regular": {
+        "url": "https://github.com/lxgw/yozai-font/releases/download/v0.868/Yozai-Regular.ttf",
+        "sha256": "25071998a0fe6a72f54c235e714986d259633e5ff670b1a2b5e264387f3316ac"
+      }
+    }
+  },
+  "LxgwBright": {
+    "version": "v5.527",
+    "sources": {
+      "LXGWBright": {
+        "url": "https://github.com/lxgw/LxgwBright/releases/download/v5.527/LXGWBright.7z",
+        "sha256": "08e0458c2e38ba2014cff0d2527681fe569096ae102bc837f7d1cb8879f34ced"
+      },
+      "LXGWBrightGB": {
+        "url": "https://github.com/lxgw/LxgwBright/releases/download/v5.527/LXGWBrightGB.7z",
+        "sha256": "7e3a742824da8d76fc4a805e53651cb8fbf8fce899081efd15d21cf8247ef678"
+      },
+      "LXGWBrightTC": {
+        "url": "https://github.com/lxgw/LxgwBright/releases/download/v5.527/LXGWBrightTC.7z",
+        "sha256": "4112c0d503614639364e102136963063898e52bee9029dcf03f67f565ef6ce7a"
+      }
+    }
+  },
+  "LxgwBright-Code": {
+    "version": "v2.822",
+    "sources": {
+      "LxgwBrightCode": {
+        "url": "https://github.com/lxgw/LxgwBright-Code/releases/download/v2.822/LxgwBrightCode.7z",
+        "sha256": "85388410472dac1586a34ca23f67c9ef98cb19959f0fd5b1d37945dc60e7bc7b"
+      },
+      "LxgwBrightCodeGB": {
+        "url": "https://github.com/lxgw/LxgwBright-Code/releases/download/v2.822/LxgwBrightCodeGB.7z",
+        "sha256": "586732dedd6918a1300b90e3d2ea3ef4a848d8ff31a96294eb272d177ff238e8"
+      },
+      "LxgwBrightCodeTC": {
+        "url": "https://github.com/lxgw/LxgwBright-Code/releases/download/v2.822/LxgwBrightCodeTC.7z",
+        "sha256": "ca78c41d8d9a7d677147568002f7e13f620f1fca7f809176aab1477eb1901da4"
+      }
+    }
+  },
+  "FusionKai": {
+    "version": "v24.134",
+    "sources": {
+      "FusionKai": {
+        "url": "https://github.com/lxgw/FusionKai/archive/refs/tags/v24.134.tar.gz",
+        "hash": "sha256-Xmiuog04fxQjAPBOq1kc+lyX2WsfNWDCCeG6eE2FMno="
+      },
+      "FusionKaiJ-Regular": {
+        "url": "https://raw.githubusercontent.com/lxgw/FusionKai/refs/tags/v24.134/FusionKaiJ-Regular.ttf",
+        "hash": "sha256-/U6wWorhSAlXv+A3Jyi/3hFxAVx0saw0nIia50B1EBg="
+      },
+      "FusionKaiT-Regular": {
+        "url": "https://raw.githubusercontent.com/lxgw/FusionKai/refs/tags/v24.134/FusionKaiT-Regular.ttf",
+        "hash": "sha256-MEOnY3/dXjrh1V7mggtBOWx9ct4FdbiknCTQkFP19UI="
+      }
+    }
+  },
+  "LxgwMarkerGothic": {
+    "version": "v1.003",
+    "sources": {
+      "LXGWMarkerGothic-Regular": {
+        "url": "https://raw.githubusercontent.com/lxgw/LxgwMarkerGothic/refs/tags/v1.003/fonts/ttf/LXGWMarkerGothic-Regular.ttf",
+        "hash": "sha256-387yB0/NZpWovRKP4aGpbDdrY2Fxp5hbaDZEgiG1qHo="
+      }
+    }
+  }
+}
