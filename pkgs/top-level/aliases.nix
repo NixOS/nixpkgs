@@ -914,6 +914,7 @@ mapAliases {
   icebreaker = throw "'icebreaker' has been removed as it has been unmaintained upstream since August 2023"; # Added 2026-02-15
   igvm-tooling = throw "'igvm-tooling' has been removed as it is poorly maintained upstream and a dependency has been marked insecure."; # Added 2025-09-03
   ikos = throw "ikos has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
+  image-roll = throw "'image-roll' has been removed as it has been unmaintained upstream since July 2022"; # Added 2026-02-15
   imagemagick6 = throw "'imagemagick6' was removed because it is outdated. Use 'imagemagick' instead."; # added 2026-02-27
   imagemagick6_light = throw "'imagemagick6_light' was removed because it is outdated. Use 'imagemagick_light' instead."; # added 2026-02-27
   imagemagick6Big = throw "'imagemagick6Big' was removed because it is outdated. Use 'imagemagickBig' instead."; # added 2026-02-27
