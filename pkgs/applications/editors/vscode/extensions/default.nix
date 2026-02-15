@@ -2499,6 +2499,8 @@ let
         };
       };
 
+      jetbrains.kotlin = callPackage ./jetbrains.kotlin { };
+
       jetmartin.bats = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "bats";
