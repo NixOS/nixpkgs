@@ -11,7 +11,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqwikswitch";
   version = "1.0.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kellerza";
     repo = "pyqwikswitch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yx3rCPVuhsemAtFuEhPvFPHOFm2UWrXmWF3d/ZtPGo8=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "QwikSwitch USB Modem API binding for Python";
     homepage = "https://github.com/kellerza/pyqwikswitch";
-    changelog = "https://github.com/kellerza/pyqwikswitch/blob/v${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/kellerza/pyqwikswitch/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.home-assistant ];
   };
-}
+})
