@@ -42,6 +42,7 @@
     else
       false,
   enableNSM ? true, # Enables NSM support
+  enableSse ? stdenv.hostPlatform.isx86, # Enables support for SSE CPU extensions
   optimizationSupport ? null,
   withAvahi ? true,
   withBluez ? stdenv.hostPlatform.isLinux,
@@ -66,12 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/trunk";
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     gettext
     hicolor-icon-theme
     intltool
     pkg-config
     python3
+    sassc
     wafHook
     wrapGAppsHook3
   ]
@@ -98,7 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     lilv
     lrdf
     lv2
-    sassc
   ]
   ++ lib.optional withAvahi avahi
   ++ lib.optional withBluez bluez
@@ -124,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!enableFaust) "--no-faust"
   ++ lib.optional (!enableNSM) "--no-nsm"
   ++ lib.optional enableOptimization "--optimization"
+  ++ lib.optional (!enableSse) "--disable-sse"
   ++ lib.optional (!withAvahi) "--no-avahi"
   ++ lib.optional (!withBluez) "--no-bluez"
   ++ lib.optional (!withZitaConvolver) "--includeconvolver"
