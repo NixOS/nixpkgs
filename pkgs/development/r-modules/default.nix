@@ -568,6 +568,7 @@ let
       cargo
       rustc
     ];
+    harbinger = [ pkgs.glibcLocales ];
     haven = with pkgs; [ zlib.dev ];
     hellorust = [ pkgs.cargo ];
     hgwrr = [ pkgs.gsl ];
@@ -2257,6 +2258,12 @@ let
 
     cisPath = old.cisPath.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
+    });
+
+    harbinger = old.harbinger.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        LC_ALL =  "en_US.UTF-8";
+      };
     });
 
     HilbertVis = old.HilbertVis.overrideAttrs (attrs: {
