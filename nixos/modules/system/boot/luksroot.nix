@@ -1337,42 +1337,58 @@ in
     boot.initrd.systemd.services =
       let
         devicesWithClevis = filterAttrs (device: _: (hasAttr device clevis.devices)) luks.devices;
+        devicesWithTimeout = filterAttrs (_: dev: dev.timeout != null) luks.devices;
       in
-      mkIf (clevis.enable && systemd.enable) (
-        mapAttrs' (
-          name: _:
-          nameValuePair "cryptsetup-clevis-${name}" {
-            wantedBy = [ "systemd-cryptsetup@${utils.escapeSystemdPath name}.service" ];
-            before = [
-              "systemd-cryptsetup@${utils.escapeSystemdPath name}.service"
-              "initrd-switch-root.target"
-              "shutdown.target"
-            ];
-            wants = optional clevis.useTang "network-online.target";
-            after = [
-              "systemd-modules-load.service"
-              "tpm2.target"
-            ]
-            ++ optional clevis.useTang "network-online.target";
-            script = ''
-              mkdir -p /clevis-${name}
-              mount -t ramfs none /clevis-${name}
-              umask 277
-              clevis decrypt < /etc/clevis/${name}.jwe > /clevis-${name}/decrypted
-            '';
-            conflicts = [
-              "initrd-switch-root.target"
-              "shutdown.target"
-            ];
-            unitConfig.DefaultDependencies = "no";
-            serviceConfig = {
-              Type = "oneshot";
-              RemainAfterExit = true;
-              ExecStop = "${config.boot.initrd.systemd.package.util-linux}/bin/umount /clevis-${name}";
-            };
-          }
-        ) devicesWithClevis
-      );
+      mkMerge [
+        (mkIf (clevis.enable && systemd.enable) (
+          mapAttrs' (
+            name: _:
+            nameValuePair "cryptsetup-clevis-${name}" {
+              wantedBy = [ "systemd-cryptsetup@${utils.escapeSystemdPath name}.service" ];
+              before = [
+                "systemd-cryptsetup@${utils.escapeSystemdPath name}.service"
+                "initrd-switch-root.target"
+                "shutdown.target"
+              ];
+              wants = optional clevis.useTang "network-online.target";
+              after = [
+                "systemd-modules-load.service"
+                "tpm2.target"
+              ]
+              ++ optional clevis.useTang "network-online.target";
+              script = ''
+                mkdir -p /clevis-${name}
+                mount -t ramfs none /clevis-${name}
+                umask 277
+                clevis decrypt < /etc/clevis/${name}.jwe > /clevis-${name}/decrypted
+              '';
+              conflicts = [
+                "initrd-switch-root.target"
+                "shutdown.target"
+              ];
+              unitConfig.DefaultDependencies = "no";
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                ExecStop = "${config.boot.initrd.systemd.package.util-linux}/bin/umount /clevis-${name}";
+              };
+            }
+          ) devicesWithClevis
+        ))
+
+        (mkIf systemd.enable (
+          mapAttrs' (
+            name: dev:
+            nameValuePair "systemd-cryptsetup@${utils.escapeSystemdPath name}" {
+              overrideStrategy = "asDropin";
+              unitConfig = {
+                JobTimeoutSec = dev.timeout;
+                JobTimeoutAction = "poweroff";
+              };
+            }
+          ) devicesWithTimeout
+        ))
+      ];
 
     environment.systemPackages = [ pkgs.cryptsetup ];
   };
