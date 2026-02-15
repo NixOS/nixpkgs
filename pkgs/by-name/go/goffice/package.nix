@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goffice";
-  version = "0.10.59";
+  version = "0.10.60";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/goffice/${lib.versions.majorMinor finalAttrs.version}/goffice-${finalAttrs.version}.tar.xz";
-    hash = "sha256-sI9xczJVlLcfu+pHajC1sxIMPa3/XAom0UDk5SSRZiI=";
+    hash = "sha256-ARVDOMv/rBcvxTM467nVJ8gh/8IZhaLM+oSSPua3YcU=";
   };
 
   nativeBuildInputs = [
