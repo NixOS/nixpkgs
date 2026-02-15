@@ -766,6 +766,7 @@ mapAliases {
   fzf-zsh = throw "'fzf-zsh' has been removed because it was superseed by its builtin equivalent and archived upstream."; # Added 2026-01-17
   g4music = throw "'g4music' has been renamed to/replaced by 'gapless'"; # Converted to throw 2025-10-27
   galene-stt = throw "'galene-stt' has been removed as it is unmaintained and broken"; # Added 2026-01-27
+  gambit-chess = throw "'gambit-chess' has been removed as it has been unmaintained upstream since November 2023"; # Added 2026-02-15
   gamecube-tools = throw "gamecube-tools was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   gandi-cli = throw "'gandi-cli' has been removed as it is unmaintained upstream"; # Added 2026-01-11
   garage_0_8 = throw "'garage_0_8' has been removed as it is unmaintained upstream"; # Added 2025-06-23
