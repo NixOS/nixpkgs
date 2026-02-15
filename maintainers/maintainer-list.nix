@@ -14807,6 +14807,11 @@
     githubId = 736291;
     name = "Lee Machin";
   };
+  lefaucheur0769 = {
+    name = "LeFaucheur0769";
+    github = "LeFaucheur0769";
+    githubId = 90474269;
+  };
   legojames = {
     github = "jrobinson-uk";
     githubId = 4701504;
