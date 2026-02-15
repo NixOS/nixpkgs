@@ -57,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-USYSCONFDIR"
+    "-DSYSCONFDIR=\"${placeholder "out"}/etc\""
+  ];
+
   mesonFlags = [
     (lib.mesonEnable "xwayland" enableXWayland)
   ];
