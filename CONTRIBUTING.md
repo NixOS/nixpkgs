@@ -570,7 +570,10 @@ If a contributor does not want committers to push to their branch, they must unc
 
 ### Release notes
 
-If you removed packages or made some major NixOS changes, write about it in the next release notes in [`nixos/doc/manual/release-notes`](./nixos/doc/manual/release-notes).
+If you added or removed a NixOS module, or made other breaking or significant NixOS changes, write about it in the next NixOS release notes in [`nixos/doc/manual/release-notes`](./nixos/doc/manual/release-notes).
+
+If you made major or breaking changes to a package (other than removal), write about it in the next Nixpkgs release notes in [`doc/release-notes`](./doc/release-notes).
+Package removals should not get a Nixpkgs release note, as long as [an alias is added](./pkgs/README.md#steps-to-remove-a-package-from-nixpkgs).
 
 ### File naming and organisation
 
