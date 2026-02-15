@@ -10,17 +10,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libp11";
-  version = "0.4.13";
+  version = "0.4.17";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "libp11";
     rev = "${pname}-${version}";
-    sha256 = "sha256-xH5Ic8HpWB5O2MWXf2A9FUiV10VZajDdPqEVF0Hs6u0=";
+    sha256 = "sha256-ST1st+bktGu4G7m8BXuUk+WsTDBj7BcfNFGiiZt1obU=";
   };
 
   configureFlags = [
     "--with-enginesdir=${placeholder "out"}/lib/engines"
+    "--with-modulesdir=${placeholder "out"}/lib/ossl-module"
   ];
 
   nativeBuildInputs = [
