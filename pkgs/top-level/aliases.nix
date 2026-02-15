@@ -868,6 +868,7 @@ mapAliases {
   graalvm-ce = throw "'graalvm-ce' has been renamed to/replaced by 'graalvmPackages.graalvm-ce'"; # Converted to throw 2025-10-27
   graalvm-oracle = throw "'graalvm-oracle' has been renamed to/replaced by 'graalvmPackages.graalvm-oracle'"; # Converted to throw 2025-10-27
   graalvmCEPackages = throw "'graalvmCEPackages' has been renamed to/replaced by 'graalvmPackages'"; # Converted to throw 2025-10-27
+  gradescope-submit = throw "'gradescrope-submit' has been removed as it has been unmaintained upstream since August 2023"; # Added 2026-02-15
   gradience = throw "`gradience` has been removed because it was archived upstream."; # Added 2025-09-20
   gradleGen = throw "'gradleGen' has been moved to `gradle-packages.mkGradle`."; # Added 2025-11-02
   grafana_reporter = throw "'grafana_reporter' has been renamed to/replaced by 'grafana-reporter'"; # Converted to throw 2025-10-27
