@@ -1,0 +1,84 @@
+{
+  "LxgwNeoZhiSong": {
+    "version": "v1.061",
+    "sources": {
+      "LXGWNeoZhiSong": {
+        "url": "https://github.com/lxgw/LxgwNeoZhiSong/releases/download/v1.061/LXGWNeoZhiSong.ttf",
+        "sha256": "f6282228285bcaac0699bff68f4d5aff50bde784ca10b017ae2762fea9e59c63"
+      },
+      "LXGWNeoZhiSongPlus": {
+        "url": "https://github.com/lxgw/LxgwNeoZhiSong/releases/download/v1.061/LXGWNeoZhiSongPlus.ttf",
+        "sha256": "cc2cda4de2963090b1d6caaf5572140865c901e9a4480c7382b5c6b31d6f3bc3"
+      }
+    }
+  },
+  "LxgwNeoXiHei": {
+    "version": "v1.241",
+    "sources": {
+      "LXGWNeoXiHei": {
+        "url": "https://github.com/lxgw/LxgwNeoXiHei/releases/download/v1.241/LXGWNeoXiHei.ttf",
+        "sha256": "f72c8eba6c19f557a1d06c0747db05a6c0a7d5d2cd3757b5e8c2f672b199c426"
+      },
+      "LXGWNeoXiHeiPlus": {
+        "url": "https://github.com/lxgw/LxgwNeoXiHei/releases/download/v1.241/LXGWNeoXiHeiPlus.ttf",
+        "sha256": "7f93bd11b03330aa9aebe74ddacd2c3779e103380c021cce97084287fbb08215"
+      }
+    }
+  },
+  "LxgwNeoXiZhi-Screen": {
+    "version": "26.02.09",
+    "sources": {
+      "LXGWNeoXiHeiScreen": {
+        "url": "https://github.com/lxgw/LxgwNeoXiZhi-Screen/releases/download/26.02.09/LXGWNeoXiHeiScreen.ttf",
+        "sha256": "b8d12ec5a439b23121d9a507d09240779c78607929fdc5f0cd3c65af8868bf7a"
+      },
+      "LXGWNeoXiHeiScreenFull": {
+        "url": "https://github.com/lxgw/LxgwNeoXiZhi-Screen/releases/download/26.02.09/LXGWNeoXiHeiScreenFull.ttf",
+        "sha256": "789d65336e4d968941710b8057aca18af0794f557b2f38cfaee56c400e627088"
+      },
+      "LXGWNeoZhiSongScreen": {
+        "url": "https://github.com/lxgw/LxgwNeoXiZhi-Screen/releases/download/26.02.09/LXGWNeoZhiSongScreen.ttf",
+        "sha256": "53d17e0b85be830f83554c9368f1d734af4f604c37d8d7a392e23ff5e9008015"
+      },
+      "LXGWNeoZhiSongScreenFull": {
+        "url": "https://github.com/lxgw/LxgwNeoXiZhi-Screen/releases/download/26.02.09/LXGWNeoZhiSongScreenFull.ttf",
+        "sha256": "e465d516a58631e15d0cd90084bbf7f6e67e806f9749cb6b6b67bf02c61af302"
+      }
+    }
+  },
+  "LxgwXiHei": {
+    "version": "v0.526",
+    "sources": {
+      "LXGWXiHeiCL": {
+        "url": "https://github.com/lxgw/LxgwXiHei/releases/download/v0.526/LXGWXiHeiCL.ttf",
+        "sha256": "c308795064a7cf74937ad4908bc368da88f2479786515280670d59f5cc137318"
+      },
+      "LXGWXiHeiMN": {
+        "url": "https://github.com/lxgw/LxgwXiHei/releases/download/v0.526/LXGWXiHeiMN.ttf",
+        "sha256": "a5f596f2167f3f95a2c790d79579ca0a53e8d8de8ea2432b705427af90f7ee2d"
+      }
+    }
+  },
+  "LxgwZhiSong": {
+    "version": "v0.525",
+    "sources": {
+      "LXGWZhiSongCL": {
+        "url": "https://github.com/lxgw/LxgwZhiSong/releases/download/v0.525/LXGWZhiSongCL.ttf",
+        "sha256": "50a5000ad0eaa10671371d7ec6cfdbd48c68954c87214b2fd3ce9f20fca6f20c"
+      },
+      "LXGWZhiSongMN": {
+        "url": "https://github.com/lxgw/LxgwZhiSong/releases/download/v0.525/LXGWZhiSongMN.ttf",
+        "sha256": "8e721d949c6226d61d56ae694212c5bcfe0757c00fdd3d0836ff6cd59c8a5503"
+      }
+    }
+  },
+  "NeoXiHei-Code": {
+    "version": "v1.241",
+    "sources": {
+      "NeoXiHeiCode-Regular": {
+        "url": "https://raw.githubusercontent.com/lxgw/NeoXiHei-Code/refs/tags/v1.241/NeoXiHeiCode-Regular.ttf",
+        "hash": "sha256-43SoU/CymBetVFLPE4xul6iDVZyqpxe6V2wb6Ll8d8E="
+      }
+    }
+  }
+}
