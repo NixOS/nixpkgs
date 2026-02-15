@@ -748,7 +748,7 @@ in
             ];
           in
           if cfg.graphics then consoles else reverseList consoles;
-        example = [ "console=tty1" ];
+        example = [ "tty1" ];
         description = ''
           The output console devices to pass to the kernel command line via the
           `console` parameter, the primary console is the last
