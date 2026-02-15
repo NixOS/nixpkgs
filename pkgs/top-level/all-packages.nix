@@ -2040,8 +2040,6 @@ with pkgs;
 
   unify = with python3Packages; toPythonApplication unify;
 
-  persistent-evdev = python3Packages.callPackage ../servers/persistent-evdev { };
-
   inherit (import ../development/libraries/libsbsms pkgs)
     libsbsms
     libsbsms_2_0_2
@@ -3173,8 +3171,6 @@ with pkgs;
     inherit (llvmPackages) stdenv;
   };
 
-  namespaced-openvpn = python3Packages.callPackage ../tools/networking/namespaced-openvpn { };
-
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
 
   update-nix-fetchgit = haskell.lib.compose.justStaticExecutables haskellPackages.update-nix-fetchgit;
@@ -3243,8 +3239,6 @@ with pkgs;
     polkitSupport = true;
   };
 
-  pdd = python3Packages.callPackage ../tools/misc/pdd { };
-
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
   pdfium-binaries-v8 = pdfium-binaries.override { withV8 = true; };
@@ -3291,8 +3285,6 @@ with pkgs;
   plexRaw = callPackage ../servers/plex/raw.nix { };
 
   tabview = with python3Packages; toPythonApplication tabview;
-
-  tautulli = python3Packages.callPackage ../servers/tautulli { };
 
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_8
