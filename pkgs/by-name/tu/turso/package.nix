@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turso";
-  version = "0.4.0";
+  version = "0.5.0-pre.11";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-94ow9LUouifdE3ml2iyo72Y0nQSSLfnU5qnNHiJHqKw=";
+    hash = "sha256-cqxeOTb/0Ub8sq+3XUHSlZxk+w/AoHWjrGhN2XS3SVs=";
   };
 
-  cargoHash = "sha256-c6PIrbRclU/l7wuhOIANBgCnRu2Y/UoUeZA/eg13KoA=";
+  cargoHash = "sha256-vwKNLgQKma6s6JWM0MzVdH+aFCCCvPSqsN1Nnk1vzD0=";
 
   cargoBuildFlags = [
     "-p"
