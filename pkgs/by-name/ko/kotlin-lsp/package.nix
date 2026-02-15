@@ -122,6 +122,8 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Official Kotlin Language Server from JetBrains (pre-alpha)";
     homepage = "https://github.com/Kotlin/kotlin-lsp";
