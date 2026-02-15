@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "pev";
+  pname = "readpe";
   version = "0.85.1";
 
   src = fetchFromGitHub {
