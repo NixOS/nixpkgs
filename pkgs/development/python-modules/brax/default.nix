@@ -36,7 +36,7 @@
   transforms3d,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "brax";
   version = "0.14.1";
   pyproject = true;
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-08t5hYG9aAY1Adp2QO9vmkcH0fH09Dr213pfvdhAaGY=";
   };
 
@@ -105,9 +105,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/google/brax/blob/main/docs/release-notes/${finalAttrs.version}.md";
     description = "Massively parallel rigidbody physics simulation on accelerator hardware";
     homepage = "https://github.com/google/brax";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})
