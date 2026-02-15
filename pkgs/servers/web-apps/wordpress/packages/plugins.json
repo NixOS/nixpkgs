@@ -114,10 +114,10 @@
     "version": "5.10.1"
   },
   "merge-minify-refresh": {
-    "path": "merge-minify-refresh/trunk",
-    "rev": "3126978",
-    "sha256": "1xrr7ddriagd8hh6f0n9bkfqsc32rvzb9prbrh1r1k6qr84z0pi6",
-    "version": "2.12"
+    "path": "merge-minify-refresh/tags/2.15",
+    "rev": "3432380",
+    "sha256": "13p324apg3rpb3ssr8d1kmbm51i2bmpn4z6xzardsl10nw79yy1f",
+    "version": "2.15"
   },
   "opengraph": {
     "path": "opengraph/tags/2.0.2",
