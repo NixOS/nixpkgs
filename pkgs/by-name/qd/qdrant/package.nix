@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   protobuf,
   pkg-config,
   openssl,
@@ -23,6 +24,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-U5CPqwsYW6QCGg2mFKzX50imnrvfGNSuFtYkwAB1OE4=";
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-25628.patch";
+      url = "https://github.com/qdrant/qdrant/commit/32b7fdfb7f542624ecd1f7c8d3e2b13c4e36a2c1.patch";
+      hash = "sha256-dXbWWRzODpUU3PhTD8935KH9G2I+sw/l/hKGECN5yVw=";
+    })
+  ];
 
   nativeBuildInputs = [
     protobuf
