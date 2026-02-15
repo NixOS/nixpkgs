@@ -2822,6 +2822,8 @@ self: super: with self; {
 
   clip-anytorch = callPackage ../development/python-modules/clip-anytorch { };
 
+  clipman = callPackage ../development/python-modules/clipman { };
+
   clize = callPackage ../development/python-modules/clize { };
 
   clldutils = callPackage ../development/python-modules/clldutils { };
@@ -6568,8 +6570,6 @@ self: super: with self; {
   granian = callPackage ../development/python-modules/granian { };
 
   graph-tool = callPackage ../development/python-modules/graph-tool { inherit (pkgs) cgal graphviz; };
-
-  grapheme = callPackage ../development/python-modules/grapheme { };
 
   graphemeu = callPackage ../development/python-modules/graphemeu { };
 
@@ -13455,6 +13455,8 @@ self: super: with self; {
 
   pyecowitt = callPackage ../development/python-modules/pyecowitt { };
 
+  pyedbglib = callPackage ../development/python-modules/pyedbglib { };
+
   pyedflib = callPackage ../development/python-modules/pyedflib { };
 
   pyedimax = callPackage ../development/python-modules/pyedimax { };
@@ -14000,6 +14002,8 @@ self: super: with self; {
   pymbolic = callPackage ../development/python-modules/pymbolic { };
 
   pymc = callPackage ../development/python-modules/pymc { };
+
+  pymcuprog = callPackage ../development/python-modules/pymcuprog { };
 
   pymdown-extensions = callPackage ../development/python-modules/pymdown-extensions { };
 

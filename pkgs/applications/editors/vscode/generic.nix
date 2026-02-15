@@ -226,7 +226,6 @@ stdenv.mkDerivation (
         exec = executableName + " --open-url %U";
         icon = iconName;
         startupNotify = true;
-        startupWMClass = shortName;
         categories = [
           "Utility"
           "TextEditor"

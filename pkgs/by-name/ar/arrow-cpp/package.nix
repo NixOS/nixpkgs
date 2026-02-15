@@ -99,34 +99,66 @@ stdenv.mkDerivation (finalAttrs: {
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
 
-  # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
-  # collisions as well as custom build flags
-  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = fetchurl {
-    url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
-    hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
-  };
+  env =
+    lib.optionalAttrs enableJemalloc {
+      # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
+      # collisions as well as custom build flags
+      ARROW_JEMALLOC_URL = fetchurl {
+        url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
+        hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
+      };
+    }
+    // {
+      # mimalloc: arrow uses custom build flags for mimalloc
+      ARROW_MIMALLOC_URL = fetchFromGitHub {
+        owner = "microsoft";
+        repo = "mimalloc";
+        tag = "v3.1.5";
+        hash = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
+      };
 
-  # mimalloc: arrow uses custom build flags for mimalloc
-  ARROW_MIMALLOC_URL = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    tag = "v3.1.5";
-    hash = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
-  };
+      ARROW_XSIMD_URL = fetchFromGitHub {
+        owner = "xtensor-stack";
+        repo = "xsimd";
+        tag = "13.0.0";
+        hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
+      };
 
-  ARROW_XSIMD_URL = fetchFromGitHub {
-    owner = "xtensor-stack";
-    repo = "xsimd";
-    tag = "13.0.0";
-    hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
-  };
+      ARROW_SUBSTRAIT_URL = fetchFromGitHub {
+        owner = "substrait-io";
+        repo = "substrait";
+        tag = "v0.44.0";
+        hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
+      };
 
-  ARROW_SUBSTRAIT_URL = fetchFromGitHub {
-    owner = "substrait-io";
-    repo = "substrait";
-    tag = "v0.44.0";
-    hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
-  };
+      # apache-orc looks for things in caps
+      LZ4_ROOT = lz4;
+      ZSTD_ROOT = zstd.dev;
+    }
+    // lib.optionalAttrs finalAttrs.doInstallCheck {
+      ARROW_TEST_DATA = "${arrow-testing}/data";
+      PARQUET_TEST_DATA = "${parquet-testing}/data";
+      GTEST_FILTER =
+        let
+          # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
+          filteredTests =
+            lib.optionals stdenv.hostPlatform.isAarch64 [
+              "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+              "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+              "TestCompareKernel.PrimitiveRandomTests"
+            ]
+            ++ lib.optionals enableS3 [
+              "S3OptionsTest.FromUri"
+              "S3RegionResolutionTest.NonExistentBucket"
+              "S3RegionResolutionTest.PublicBucket"
+              "S3RegionResolutionTest.RestrictedBucket"
+              "TestMinioServer.Connect"
+              "TestS3FS.*"
+              "TestS3FSGeneric.*"
+            ];
+        in
+        "-${lib.concatStringsSep ":" filteredTests}";
+    };
 
   nativeBuildInputs = [
     cmake
@@ -179,12 +211,6 @@ stdenv.mkDerivation (finalAttrs: {
     azure-sdk-for-cpp.storage-blobs
     azure-sdk-for-cpp.storage-files-datalake
   ];
-
-  # apache-orc looks for things in caps
-  env = {
-    LZ4_ROOT = lz4;
-    ZSTD_ROOT = zstd.dev;
-  };
 
   # fails tests on glibc with this enabled
   hardeningDisable = [ "glibcxxassertions" ];
@@ -254,28 +280,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  ARROW_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${arrow-testing}/data";
-  PARQUET_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${parquet-testing}/data";
-  GTEST_FILTER =
-    let
-      # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
-      filteredTests =
-        lib.optionals stdenv.hostPlatform.isAarch64 [
-          "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
-          "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
-          "TestCompareKernel.PrimitiveRandomTests"
-        ]
-        ++ lib.optionals enableS3 [
-          "S3OptionsTest.FromUri"
-          "S3RegionResolutionTest.NonExistentBucket"
-          "S3RegionResolutionTest.PublicBucket"
-          "S3RegionResolutionTest.RestrictedBucket"
-          "TestMinioServer.Connect"
-          "TestS3FS.*"
-          "TestS3FSGeneric.*"
-        ];
-    in
-    lib.optionalString finalAttrs.doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
 
   __darwinAllowLocalNetworking = true;
 

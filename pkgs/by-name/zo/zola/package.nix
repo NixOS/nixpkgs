@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     oniguruma
   ];
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd zola \

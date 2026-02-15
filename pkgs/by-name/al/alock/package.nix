@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xfPhsXZrTlEqea75SvacDfjM9o21MTudrqfNN9xtdcg=";
   };
 
-  PAM_DEFAULT_SERVICE = "login";
+  env.PAM_DEFAULT_SERVICE = "login";
 
   configureFlags = [
     "--enable-pam"

@@ -11,6 +11,9 @@ let
   callPackageWithScope =
     scope: drv: args:
     lib.callPackageWith scope drv args;
+  callPackagesWithScope =
+    scope: drv: args:
+    lib.callPackagesWith scope drv args;
   mkScope = scope: pkgs // scope;
 
   packages =
@@ -18,6 +21,7 @@ let
     let
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
+      callPackages = drv: args: callPackagesWithScope defaultScope drv args;
     in
     rec {
       inherit callPackage erlang;
@@ -95,6 +99,14 @@ let
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
       webdriver = callPackage ./webdriver { };
+
+      inherit (callPackages ./hooks { })
+        beamCopySourceHook
+        beamModuleInstallHook
+        mixBuildDirHook
+        mixCompileHook
+        mixAppConfigPatchHook
+        ;
     };
 in
 makeExtensible packages

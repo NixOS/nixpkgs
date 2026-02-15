@@ -6,33 +6,22 @@
   rustc,
   makeWrapper,
   nix-update-script,
-  nodePackages,
   rustPlatform,
   tailwindcss_3,
-  wasm-bindgen-cli_0_2_100,
+  wasm-bindgen-cli_0_2_106,
 }:
-let
-  tailwindcss = tailwindcss_3.overrideAttrs (_prev: {
-    plugins = [
-      nodePackages."@tailwindcss/aspect-ratio"
-      nodePackages."@tailwindcss/forms"
-      nodePackages."@tailwindcss/line-clamp"
-      nodePackages."@tailwindcss/typography"
-    ];
-  });
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "idmail";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "idmail";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9rl2UG8DeWd8hVh3N+dqyV5gO0LErok+kZ1vQZnVAe8=";
+    hash = "sha256-b18Ic+wffCPfp1cDTxDe7IBigbS4X6t7KaAy7P4Uh28=";
   };
 
-  cargoHash = "sha256-UcS2gAoa2fzPu6hh8I5sXSHHbAmzsecT44Ju2CVsK0Q=";
+  cargoHash = "sha256-FU9CfOJ9tNY+97OZDw2qYZHTPoFp9Ch2VigXaxBnFCw=";
 
   env = {
     RUSTC_BOOTSTRAP = 1;
@@ -40,11 +29,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    wasm-bindgen-cli_0_2_100
+    wasm-bindgen-cli_0_2_106
     binaryen
     cargo-leptos
     rustc.llvmPackages.lld
-    tailwindcss
+    tailwindcss_3
     makeWrapper
   ];
   buildPhase = ''

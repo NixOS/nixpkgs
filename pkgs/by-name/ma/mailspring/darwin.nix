@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${finalAttrs.version}/Mailspring-AppleSilicon.zip";
-    hash = "sha256-jbsU8pSvhPFKFjIr+2ZHETOihKKoqQiZmKQ6eGtAIKk=";
+    hash = "sha256-AwP5gVyqO3pjIXom5VQjxSZWu4IsG5O9zulqmC24lk0=";
   };
   dontUnpack = true;
 

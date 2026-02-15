@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "slidev-cli";
-  version = "52.11.5";
+  version = "52.12.0";
 
   src = fetchFromGitHub {
     owner = "slidevjs";
     repo = "slidev";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m8h5bFanJsi85B5DJuAK+YbY+GY/DDvLqpnB/U3XtG4=";
+    hash = "sha256-VYeDQ1Ieam0vJB3P1RvVbatAsZ0HtzX3ZP4Ws9aXO5Y=";
   };
 
   pnpmWorkspaces = [ "@slidev/cli..." ];

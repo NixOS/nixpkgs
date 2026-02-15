@@ -18,7 +18,7 @@
   xfceSupport ? true,
   mateSupport ? true,
   gtk3,
-  mate,
+  marco,
   gtkNextSupport ? false,
   plankSupport ? false,
   steamSupport ? false,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals mateSupport [
     gtk3
-    mate.marco
+    marco
   ]
   ++ lib.optional telegramSupport zip;
 

@@ -66,6 +66,7 @@
   libxkbcommon,
   libsoup_3,
   libxml2,
+  webkitgtk_6_0,
 }:
 
 let
@@ -73,7 +74,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "49.3";
+  version = "49.4";
 
   outputs = [
     "out"
@@ -82,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KPDb1kRS8AVxKfImdTyV0nJt4H8fX0c63cfDxQem0xo=";
+    hash = "sha256-nW8MovAUDBFPEU9nB0E2EfYU+x6mwxeo0fzEDDxZWwg=";
   };
 
   patches = [
@@ -110,15 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/dcd112d9708954187e7490564c2229d82ba5326f/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
       hash = "sha256-mgXty5HhiwUO1UV3/eDgWtauQKM0cRFQ0U7uocST25s=";
-    })
-
-    # Fix crash when switching to hands-free mode on a bluetooth headset
-    (fetchpatch {
-      name = "fix-bluetooth-handsfree-crash.patch";
-      url = "https://gitlab.gnome.org/GNOME/libgnome-volume-control/-/merge_requests/31.patch";
-      hash = "sha256-jFbItlXT05nnp825R/HvsWDFxAMzL4z36CsxhQ2sEIY=";
-      stripLen = 1;
-      extraPrefix = "subprojects/gvc/";
     })
   ];
 
@@ -183,6 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     # not declared at build time, but typelib is needed at runtime
     libgweather
     libnma-gtk4
+    webkitgtk_6_0 # for gnome-shell-portal-helper
 
     # for gnome-extension tool
     bash-completion

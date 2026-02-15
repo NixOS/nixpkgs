@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tldr";
-  version = "3.4.3";
+  version = "3.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tldr-python-client";
     tag = finalAttrs.version;
-    hash = "sha256-YdVmgV7N67XswcGlUN1hhXpRXGMHhY34VBxfr7i/MBs=";
+    hash = "sha256-xFRpw6H4xriuwHWAGeWks/vJOzpW3+AEH/QZ0uPYtiI=";
   };
 
   build-system = with python3Packages; [

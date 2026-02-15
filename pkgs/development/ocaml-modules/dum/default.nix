@@ -33,6 +33,6 @@ buildDunePackage (finalAttrs: {
       objects or exceptions in depth and without risk.
     '';
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ alexfmpe ];
+    maintainers = [ ];
   };
 })

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-mev/ipxAmD0MvG1lrNYzcphg4rp5+ET6nnnaTYX5T/4=";
 
-  PIMSYNC_VERSION = finalAttrs.version;
+  env.PIMSYNC_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     pkg-config

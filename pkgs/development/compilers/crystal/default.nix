@@ -199,15 +199,17 @@ let
         "progress=1"
       ];
 
-      LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
+      env = {
+        LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
-      FLAGS = [
-        "--single-module" # needed for deterministic builds
-      ];
+        FLAGS = [
+          "--single-module" # needed for deterministic builds
+        ];
 
-      # This makes sure we don't keep depending on the previous version of
-      # crystal used to build this one.
-      CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
+        # This makes sure we don't keep depending on the previous version of
+        # crystal used to build this one.
+        CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
+      };
 
       # We *have* to add `which` to the PATH or crystal is unable to build
       # stuff later if which is not available.

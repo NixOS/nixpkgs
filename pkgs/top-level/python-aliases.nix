@@ -203,6 +203,7 @@ mapAliases {
   gplaycli = throw "'gplaycli' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
   gpy = throw "'gpy' has been removed as it is based on 'paramz', which was removed"; # added 2025-11-10
   gradient_statsd = throw "'gradient_statsd' has been renamed to/replaced by 'gradient-statsd'"; # Converted to throw 2025-10-29
+  grapheme = throw "'grapheme' has been removed as it is unmaintained upstream. Consider using 'graphemeu' instead."; # Converted to throw 2025-12-22
   grappelli_safe = throw "'grappelli_safe' has been renamed to/replaced by 'grappelli-safe'"; # Converted to throw 2025-10-29
   groestlcoin_hash = throw "'groestlcoin_hash' has been renamed to/replaced by 'groestlcoin-hash'"; # Converted to throw 2025-10-29
   grpc_google_iam_v1 = throw "'grpc_google_iam_v1' has been renamed to/replaced by 'grpc-google-iam-v1'"; # Converted to throw 2025-10-29

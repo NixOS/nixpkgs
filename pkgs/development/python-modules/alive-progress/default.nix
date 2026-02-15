@@ -19,7 +19,12 @@ buildPythonPackage rec {
     owner = "rsalmei";
     repo = "alive-progress";
     tag = "v${version}";
-    hash = "sha256-DxyTGY72uVKHqZZQ4jj4jVdfZAKkgAtHJ7VBI/dM6DQ=";
+    hash = "sha256-2ymLdmaV7mO6tp5bjmbL/67xLP7Srfpt5m8YhOHGmWQ=";
+    # Avoid downloading heavy images in img directory
+    sparseCheckout = [
+      "alive_progress"
+      "tests"
+    ];
   };
 
   postInstall = ''

@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # Manually set version because pbr wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
-  PBR_VERSION = finalAttrs.version;
+  env.PBR_VERSION = finalAttrs.version;
 
   # fetchFromGitea fails trying to download archive file
   src = fetchgit {

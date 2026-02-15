@@ -8,6 +8,7 @@
   makeBinaryWrapper,
   coreutils,
   nix-prefetch-darcs,
+  nix-prefetch-fossil,
   nix-prefetch-git,
   nix-prefetch-pijul,
   testers,
@@ -16,7 +17,7 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "0.3.1-beta";
+  version = "1.0.0";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -25,7 +26,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-ePJs3HygB1xwDzVM4KiqmhiLdZHUpZyzybEf23wmKm8=";
+    hash = "sha256-PJ03psJhRHq0ud/mXuUZSzpQ9RhO3p4s+lrGcHek3Rc=";
   };
 
   nativeBuildInputs = [
@@ -76,6 +77,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
       lib.makeBinPath [
         coreutils
         nix-prefetch-darcs
+        nix-prefetch-fossil
         nix-prefetch-git
         nix-prefetch-pijul
       ]
@@ -100,7 +102,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
       • Automate the manual work of input pinning, allowing to lock & refresh inputs
       • Declaritive KDL manifest file over imperative CLI flags
       • Host, forge, VCS-agnostic
-      • Choose eval time fetchers (builtins) or build time fetchers (Nixpkgs, default) — which opens up fetching Darcs & Pijul
+      • Choose eval time fetchers (builtins) or build time fetchers (Nixpkgs, default) — which opens up fetching Darcs, Pijul, & Fossil
       • Supports mirrors
       • Override hash algorithm on a per-project & per-input basis — including BLAKE3 support
       • Custom freshness commands

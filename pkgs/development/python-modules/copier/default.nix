@@ -42,7 +42,7 @@ buildPythonPackage rec {
     hash = "sha256-/7Bl01kuZVqVhXPnIwNL3mwt8DOPK02Qd/85J1zX4q4=";
   };
 
-  POETRY_DYNAMIC_VERSIONING_BYPASS = version;
+  env.POETRY_DYNAMIC_VERSIONING_BYPASS = version;
 
   build-system = [
     hatchling

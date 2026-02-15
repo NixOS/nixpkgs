@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "agent-client-protocol"
     "gitpython"
     "mistralai"
     "pydantic"

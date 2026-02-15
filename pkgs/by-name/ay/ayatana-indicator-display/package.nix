@@ -20,7 +20,8 @@
   librda,
   libsForQt5,
   lomiri,
-  mate,
+  marco,
+  mate-settings-daemon,
   pkg-config,
   properties-cpp,
   python3,
@@ -78,8 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-schemas # lomiri schema
   ])
   ++ [
-    mate.marco # marco schema
-    mate.mate-settings-daemon # mate mouse schema
+    marco # marco schema
+    mate-settings-daemon # mate mouse schema
   ];
 
   nativeCheckInputs = [

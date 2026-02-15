@@ -34,7 +34,6 @@ buildDunePackage (finalAttrs: {
     description = "Network connection establishment library";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      alexfmpe
       vbgl
     ];
     homepage = "https://github.com/mirage/ocaml-conduit";

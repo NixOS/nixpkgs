@@ -91,7 +91,7 @@ buildGoModule {
     "cmd/telemetryd"
   ];
 
-  PKG_CONFIG_PATH = "${flux}/pkgconfig";
+  env.PKG_CONFIG_PATH = "${flux}/pkgconfig";
 
   postPatch = ''
     # use go-bindata from environment

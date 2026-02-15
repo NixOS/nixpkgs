@@ -10,7 +10,8 @@
   glib,
   gnome,
   gtk3,
-  mate,
+  mate-desktop,
+  mate-settings-daemon,
   python3,
   gsettings-desktop-schemas,
   python3Packages,
@@ -44,8 +45,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     glib
     gnome.nixos-gsettings-overrides
     gtk3
-    mate.mate-desktop
-    mate.mate-settings-daemon
+    mate-desktop
+    mate-settings-daemon
     python3
     gsettings-desktop-schemas
   ];

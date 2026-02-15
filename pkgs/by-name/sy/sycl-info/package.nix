@@ -50,7 +50,11 @@ stdenv.mkDerivation {
   ];
 
   # Required for ronn to compile the manpage.
-  RUBYOPT = "-KU -E utf-8:utf-8";
+  env.RUBYOPT = toString [
+    "-KU"
+    "-E"
+    "utf-8:utf-8"
+  ];
 
   meta = {
     homepage = "https://github.com/codeplaysoftware/sycl-info";

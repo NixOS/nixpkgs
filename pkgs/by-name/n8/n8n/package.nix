@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-nViKshhkBL8odVDqKGTJTMjVpYtI0Qp3z59VI+DNsms=";
+    hash = "sha256-t3zwxyjiocVoq7wbH4WYiUggaZFHlV9/vzrIorH7jPc=";
   };
 
   pnpmDeps = fetchPnpmDeps {

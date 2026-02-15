@@ -6809,8 +6809,6 @@ with pkgs;
     extraOnly = true;
   };
 
-  libfive = libsForQt5.callPackage ../development/libraries/libfive { };
-
   # Use Apple’s fork of libffi by default, which provides APIs and trampoline functionality that is not yet
   # merged upstream. This is needed by some packages (such as cffi).
   #
@@ -7724,10 +7722,6 @@ with pkgs;
     hdf5 = hdf5.override { usev110Api = true; };
   };
 
-  # Temporarily use python 3.12
-  # See: https://github.com/vllm-project/vllm/issues/12083
-  vllm = with python312Packages; toPythonApplication vllm;
-
   vte-gtk4 = vte.override {
     gtkVersion = "4";
   };
@@ -8302,7 +8296,7 @@ with pkgs;
         kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_8;
       };
       kanidm_1_9 = callPackage ../servers/kanidm/1_9.nix {
-        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_8;
+        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_9;
       };
 
       kanidmWithSecretProvisioning_1_7 = kanidm_1_7.override { enableSecretProvisioning = true; };

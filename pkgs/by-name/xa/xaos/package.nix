@@ -33,12 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ qt6.qtbase ];
 
-  QMAKE_LRELEASE = "lrelease";
+  env = {
+    QMAKE_LRELEASE = "lrelease";
 
-  DEFINES = [
-    "USE_OPENGL"
-    "USE_FLOAT128"
-  ];
+    DEFINES = toString [
+      "USE_OPENGL"
+      "USE_FLOAT128"
+    ];
+  };
 
   postPatch = ''
     substituteInPlace src/include/config.h \

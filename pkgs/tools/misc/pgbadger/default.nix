@@ -29,7 +29,7 @@ buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  PERL_MM_OPT = "INSTALL_BASE=${placeholder "out"}";
+  env.PERL_MM_OPT = "INSTALL_BASE=${placeholder "out"}";
 
   buildInputs = [
     JSONXS

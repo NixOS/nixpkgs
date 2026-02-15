@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Prevent Python from writing bytecode to ensure build determinism
-  PYTHONDONTWRITEBYTECODE = "1";
+  env.PYTHONDONTWRITEBYTECODE = "1";
 
   installPhase = ''
     runHook preInstall

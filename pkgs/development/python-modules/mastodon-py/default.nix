@@ -5,7 +5,7 @@
   blurhash,
   cryptography,
   decorator,
-  grapheme,
+  graphemeu,
   http-ece,
   python-dateutil,
   python-magic,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     blurhash = [ blurhash ];
-    grapheme = [ grapheme ];
+    grapheme = [ graphemeu ];
     webpush = [
       http-ece
       cryptography

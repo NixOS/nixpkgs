@@ -47,6 +47,7 @@ mapAliases (
     coc-tsserver = throw "`vimPlugins.coc-tsserver` was removed, as it was unmaintained"; # added 2026-02-12
     coc-vetur = throw "coc-vetur was removed, as vetur is unmaintained by Vue. You should switch to Volar, which supports Vue 3"; # added 2025-10-01
     completion-treesitter = throw "completion-treesitter has been archived since 2024-01"; # Added 2025-12-18
+    ctags-lsp-nvim = throw "`vimPlugins.ctags-lsp-nvim` has been removed, upstream deleted the repository"; # added 2026-02-14
     feline-nvim = throw "feline.nvim has been removed: upstream deleted repository. Consider using lualine"; # Added 2025-02-09
     floating-nvim = throw "floating.nvim has been removed: abandoned by upstream. Use popup-nvim or nui-nvim"; # Added 2024-11-26
     fruzzy = throw "vimPlugins.fruzzy did not update since 2019-10-28 and uses EOL version of Nim"; # Added 2025-11-12

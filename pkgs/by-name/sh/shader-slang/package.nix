@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2026.1.2";
+  version = "2026.2.1";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PaxE6C6pjLQ5rBeJDZBILvbQf2buYGWjTyZZaxG6/cI=";
+    hash = "sha256-UY1nmkXAtxKycqAq7dcErX7afadYgqwWAUahfVI9ZB8=";
     fetchSubmodules = true;
   };
 
