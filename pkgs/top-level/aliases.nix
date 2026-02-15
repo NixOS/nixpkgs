@@ -870,6 +870,7 @@ mapAliases {
   gwrap = warnAlias "The 'gwrap' alias has been removed. The correct name of the package is 'g-wrap'" g-wrap; # Added 2026-01-25
   gxneur = throw "'gxneur' has been removed due to lack of maintenance and reliance on gnome2 and 2to3."; # Added 2025-08-17
   hacpack = throw "hacpack has been removed from nixpkgs, as it has been taken down upstream"; # Added 2025-09-26
+  hap-py = throw "hap-py has been removed from nixpkgs, as it is unmaintained upstream, and is failing to build"; # Added 2026-02-15
   harmony-music = throw "harmony-music is unmaintained and has been removed"; # Added 2025-08-26
   helix-gpt = throw "helix-gpt was deprecated in January 2026 and has been since removed"; # Added 2026-02-05
   HentaiAtHome = throw "'HentaiAtHome' has been renamed to/replaced by 'hentai-at-home'"; # Converted to throw 2025-10-27
