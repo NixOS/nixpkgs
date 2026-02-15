@@ -1288,6 +1288,7 @@ mapAliases {
   lxgw-neoxihei = warnAlias "'lxgw-neoxihei' has been renamed to/replaced by 'lxgw-fonts.neoxihei'" lxgw-fonts.neoxihei; # Added 2026-02-14
   lxgw-wenkai = warnAlias "'lxgw-wenkai' has been renamed to/replaced by 'lxgw-fonts.wenkai-full'" lxgw-fonts.wenkai-full; # Added 2026-02-14
   lxgw-wenkai-screen = warnAlias "'lxgw-wenkai-screen' has been renamed to/replaced by 'lxgw-fonts.wenkai-screen'" lxgw-fonts.wenkai-screen; # Added 2026-02-14
+  lxgw-wenkai-tc = warnAlias "'lxgw-wenkai-tc' has been renamed to/replaced by 'lxgw-fonts.wenkai-tc-full'" lxgw-fonts.wenkai-tc-full; # Added 2026-02-14
   LycheeSlicer = warnAlias "'LycheeSlicer' has been renamed to 'lycheeslicer'" lycheeslicer; # Added 2026-02-08
   mac = throw "'mac' has been renamed to/replaced by 'monkeysAudio'"; # Converted to throw 2025-10-27
   MACS2 = throw "'MACS2' has been renamed to/replaced by 'macs2'"; # Converted to throw 2025-10-27
