@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "elasticmq-server";
-  version = "1.6.15";
+  version = "1.6.16";
 
   src = fetchurl {
     url = "https://s3-eu-west-1.amazonaws.com/softwaremill-public/elasticmq-server-${finalAttrs.version}.jar";
-    sha256 = "sha256-alxRZFx+Ulk4KYnlIVOClajk2MmfnfUooku2dMJd7c4=";
+    sha256 = "sha256-MKgfVqQLZw+vw/MrDwnzuvWa0mRe2vF7wueRcMdUefI=";
   };
 
   # don't do anything?
