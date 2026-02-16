@@ -4215,6 +4215,8 @@ self: super: with self; {
 
   django-mfa3 = callPackage ../development/python-modules/django-mfa3 { };
 
+  django-migration-linter = callPackage ../development/python-modules/django-migration-linter { };
+
   django-minify-html = callPackage ../development/python-modules/django-minify-html { };
 
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
