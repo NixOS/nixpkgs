@@ -15,7 +15,30 @@ let
     };
   };
 
-  tests = { };
+  tests-name = {
+    testNameFromNameArg = {
+      expr =
+        (buildEnv {
+          name = "test-env";
+          paths = [ ];
+        }).name;
+      expected = "test-env";
+    };
+
+    testNameFromPnameVersion = {
+      expr =
+        (buildEnv {
+          pname = "test-env";
+          version = "1.0";
+          paths = [ ];
+        }).name;
+      expected = "test-env-1.0";
+    };
+
+    testMissingNameThrows = testingThrow (buildEnv { paths = [ ]; }).drvPath;
+  };
+
+  tests = tests-name;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
