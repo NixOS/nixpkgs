@@ -11490,10 +11490,6 @@ with pkgs;
     withGui = false;
   };
 
-  zcash = callPackage ../applications/blockchains/zcash {
-    stdenv = llvmPackages.stdenv;
-  };
-
   beancount = with python3.pkgs; toPythonApplication beancount;
 
   beancount_2 = with python3.pkgs; toPythonApplication beancount_2;

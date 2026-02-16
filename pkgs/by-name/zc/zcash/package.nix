@@ -16,7 +16,7 @@
   rustc,
   rustPlatform,
   pkg-config,
-  stdenv,
+  llvmPackages,
   testers,
   tl-expected,
   utf8cpp,
@@ -24,7 +24,9 @@
   zcash,
   zeromq,
 }:
-
+let
+  stdenv = llvmPackages.stdenv;
+in
 stdenv.mkDerivation rec {
   pname = "zcash";
   version = "5.4.2";
