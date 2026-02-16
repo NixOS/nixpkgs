@@ -38,7 +38,36 @@ let
     testMissingNameThrows = testingThrow (buildEnv { paths = [ ]; }).drvPath;
   };
 
-  tests = tests-name;
+  tests-passthru-paths = {
+    testPathsInPassthru = {
+      expr =
+        let
+          env = buildEnv {
+            name = "test-env";
+            paths = [ pkgs.hello ];
+          };
+        in
+        builtins.length env.paths > 0;
+      expected = true;
+    };
+
+    testPassthruPathsOverridable = {
+      expr =
+        let
+          env = buildEnv {
+            name = "test-env";
+            paths = [ pkgs.hello ];
+          };
+          overridden = env.overrideAttrs {
+            passthru.paths = [ pkgs.figlet ];
+          };
+        in
+        builtins.length overridden.paths == 1;
+      expected = true;
+    };
+  };
+
+  tests = tests-name // tests-passthru-paths;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
