@@ -4630,6 +4630,8 @@ self: super: with self; {
 
   dremel3dpy = callPackage ../development/python-modules/dremel3dpy { };
 
+  drf-dynamic-fields = callPackage ../development/python-modules/drf-dynamic-fields { };
+
   drf-extra-fields = callPackage ../development/python-modules/drf-extra-fields { };
 
   drf-flex-fields = callPackage ../development/python-modules/drf-flex-fields { };
