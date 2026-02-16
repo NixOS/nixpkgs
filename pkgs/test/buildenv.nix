@@ -82,7 +82,43 @@ let
     };
   };
 
-  tests = tests-name // tests-passthru-paths // tests-finalAttrs;
+  tests-overrideAttrs =
+    let
+      base = buildEnv {
+        name = "test-env";
+        paths = [ pkgs.hello ];
+        passthru.custom = "original";
+      };
+      overridden = base.overrideAttrs (
+        finalAttrs: prev: {
+          passthru = prev.passthru // {
+            custom = "modified";
+          };
+        }
+      );
+    in
+    {
+      testOverrideAttrsChangesPassthru = {
+        expr = overridden.custom;
+        expected = "modified";
+      };
+
+      testOverrideAttrsPreservesName = {
+        expr = overridden.name;
+        expected = "test-env";
+      };
+
+      testOverrideAttrsAffectsDrv = {
+        expr =
+          let
+            withPostBuild = base.overrideAttrs { postBuild = "echo overridden"; };
+          in
+          base.drvPath != withPostBuild.drvPath;
+        expected = true;
+      };
+    };
+
+  tests = tests-name // tests-passthru-paths // tests-finalAttrs // tests-overrideAttrs;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
