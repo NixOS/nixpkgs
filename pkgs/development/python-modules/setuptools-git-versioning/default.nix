@@ -9,7 +9,6 @@
   pytestCheckHook,
   pytest-rerunfailures,
   setuptools,
-  tomli,
   tomli-w,
 }:
 
@@ -33,9 +32,6 @@ buildPythonPackage rec {
   build-system = [
     packaging
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ];
 
   dependencies = [
