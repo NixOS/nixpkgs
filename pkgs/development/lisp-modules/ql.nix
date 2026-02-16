@@ -191,9 +191,6 @@ let
           "iolib/pathnames"
         ];
       });
-      cl-ana_dot_makeres = super.cl-ana_dot_makeres.overrideLispAttrs (o: {
-        patches = (o.patches or [ ]) ++ [ ./patches/cl-ana-fix-type-error.patch ];
-      });
       cl-ana_dot_hdf-cffi = super.cl-ana_dot_hdf-cffi.overrideLispAttrs (o: {
         nativeBuildInputs = [ pkgs.hdf5 ];
         nativeLibs = [ pkgs.hdf5 ];
