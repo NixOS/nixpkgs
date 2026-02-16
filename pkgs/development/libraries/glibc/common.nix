@@ -208,7 +208,11 @@ stdenv.mkDerivation (
 
     makeFlags =
       (args.makeFlags or [ ])
-      ++ [ "OBJCOPY=${stdenv.cc.targetPrefix}objcopy" ]
+      ++ [
+        "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+        # zonedir does nothing on NixOS but is important for non-NixOS.
+        "zonedir=/usr/share/zoneinfo"
+      ]
       ++ lib.optionals (stdenv.cc.libc != null) [
         "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
         "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"
