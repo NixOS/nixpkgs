@@ -20599,6 +20599,12 @@
     githubId = 121009904;
     name = "penalty1083";
   };
+  peng0in = {
+    matrix = "@peng0in:skyoasis.de";
+    github = "JulHee";
+    githubId = 9954356;
+    name = "peng0in";
+  };
   pentane = {
     email = "cyclopentane@aidoskyneen.eu";
     github = "cyclic-pentane";
