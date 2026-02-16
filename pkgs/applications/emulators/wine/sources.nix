@@ -61,7 +61,7 @@ let
         nix
       ]
     }
-    sources_file=${__curPos.file}
+    sources_file=./pkgs/applications/emulators/wine/sources.nix
     source ${./update-lib.sh}
   '';
 
