@@ -534,9 +534,9 @@
   };
 
   koka = {
-    version = "0-unstable-2025-07-26";
-    url = "github:mtoohey31/tree-sitter-koka/6dce132911ac375ac1a3591c868c47a2a84b30aa";
-    hash = "sha256-QXKfXg1qs3HNvjk1J8Kzm6uwR0frXXEONlJQPCqioNA=";
+    version = "0-unstable-2026-02-13";
+    url = "github:koka-community/tree-sitter-koka/33df0ee12208058a02acfa1843f087a63cec4441";
+    hash = "sha256-XnmusI32yWA4ki7xOnJOmxvG0kMVLETCyWMyVzsx7nE=";
     meta = {
       license = lib.licenses.mit;
     };
