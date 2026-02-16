@@ -20572,6 +20572,10 @@ self: super: with self; {
 
   viaggiatreno-ha = callPackage ../development/python-modules/viaggiatreno-ha { };
 
+  victron-ble = callPackage ../development/python-modules/victron-ble { };
+
+  victron-ble-ha-parser = callPackage ../development/python-modules/victron-ble-ha-parser { };
+
   victron-mqtt = callPackage ../development/python-modules/victron-mqtt { };
 
   victron-vrm = callPackage ../development/python-modules/victron-vrm { };
