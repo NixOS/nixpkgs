@@ -189,6 +189,115 @@ let
       };
     };
 
+  # Build tests: derivations that build a buildEnv and verify its output.
+  # These are exposed via passthru.buildTests and checked in buildCommand.
+  buildTests = {
+    basic-symlinking =
+      pkgs.runCommand "test-buildenv-basic-symlinking"
+        {
+          testEnv = buildEnv {
+            name = "test-env";
+            paths = [ pkgs.hello ];
+          };
+        }
+        ''
+          # With a single package, buildEnv symlinks the directory itself
+          test -L "$testEnv/bin" || { echo "FAIL: $testEnv/bin is not a symlink"; exit 1; }
+
+          # The symlink should point into the store
+          target=$(readlink "$testEnv/bin")
+          case "$target" in
+            /nix/store/*) ;;
+            *) echo "FAIL: symlink target '$target' is not a store path"; exit 1 ;;
+          esac
+
+          # The binary should be accessible and executable through the symlink
+          test -x "$testEnv/bin/hello" || { echo "FAIL: hello binary not executable"; exit 1; }
+          "$testEnv/bin/hello" > /dev/null || { echo "FAIL: hello binary did not run"; exit 1; }
+
+          touch $out
+        '';
+
+    pathsToLink =
+      pkgs.runCommand "test-buildenv-pathsToLink"
+        {
+          testEnv = buildEnv {
+            name = "test-env";
+            paths = [ pkgs.hello ];
+            pathsToLink = [ "/bin" ];
+          };
+        }
+        ''
+          # /bin should exist
+          test -d "$testEnv/bin" || { echo "FAIL: $testEnv/bin missing"; exit 1; }
+
+          # Other directories from hello (like /share) should NOT exist
+          test ! -e "$testEnv/share" || { echo "FAIL: $testEnv/share should not exist with pathsToLink = [\"/bin\"]"; exit 1; }
+
+          touch $out
+        '';
+
+    extraPrefix =
+      pkgs.runCommand "test-buildenv-extraPrefix"
+        {
+          testEnv = buildEnv {
+            name = "test-env";
+            paths = [ pkgs.hello ];
+            extraPrefix = "/myprefix";
+          };
+        }
+        ''
+          # Content should be under the extra prefix
+          test -e "$testEnv/myprefix/bin/hello" || { echo "FAIL: $testEnv/myprefix/bin/hello missing"; exit 1; }
+          test -x "$testEnv/myprefix/bin/hello" || { echo "FAIL: $testEnv/myprefix/bin/hello not executable"; exit 1; }
+
+          # Content should NOT be at the top level
+          test ! -e "$testEnv/bin" || { echo "FAIL: $testEnv/bin should not exist at top level with extraPrefix"; exit 1; }
+
+          touch $out
+        '';
+
+    postBuild =
+      pkgs.runCommand "test-buildenv-postBuild"
+        {
+          testEnv = buildEnv {
+            name = "test-env";
+            paths = [ ];
+            postBuild = ''
+              echo "postBuild was here" > $out/marker
+            '';
+          };
+        }
+        ''
+          # postBuild should have created the marker file
+          test -f "$testEnv/marker" || { echo "FAIL: $testEnv/marker missing; postBuild did not run"; exit 1; }
+          content=$(cat "$testEnv/marker")
+          test "$content" = "postBuild was here" || { echo "FAIL: marker content wrong: $content"; exit 1; }
+
+          touch $out
+        '';
+
+    ignoreCollisions =
+      pkgs.runCommand "test-buildenv-ignoreCollisions"
+        {
+          # Two copies of hello with different priorities that collide
+          testEnv = buildEnv {
+            name = "test-env-ignore";
+            paths = [
+              pkgs.hello
+              (lib.meta.setPrio 1 pkgs.hello)
+            ];
+            ignoreCollisions = true;
+          };
+        }
+        ''
+          # Should succeed because ignoreCollisions = true
+          test -x "$testEnv/bin/hello" || { echo "FAIL: hello not present with ignoreCollisions"; exit 1; }
+
+          touch $out
+        '';
+  };
+
   tests =
     tests-name
     // tests-passthru-paths
@@ -202,7 +311,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   name = "test-buildenv";
   passthru = {
-    inherit tests;
+    inherit tests buildTests;
     failures = lib.runTests finalAttrs.passthru.tests;
   };
   testResults = lib.mapAttrs (_: test: test.expr == test.expected) finalAttrs.passthru.tests;
