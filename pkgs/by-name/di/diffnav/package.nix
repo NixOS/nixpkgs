@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "diffnav";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "diffnav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EkJim0YCdImlf7cNELMwXMQEJPZxSBbmUH0rnNkCuOM=";
+    hash = "sha256-hoikRqhVjbd7hH4H+f5OGq0KdIX1etAJhrRL+QsAkx8=";
   };
 
-  vendorHash = "sha256-/GwIxSyH7maY2m9CcqUs3aeX/5OX0VsvUoOGWkBzJ9M=";
+  vendorHash = "sha256-VNpmcniSpeocl9B+aNwLh4XPyPnYC8SXowJPYWHyzWs=";
 
   ldflags = [
     "-s"
