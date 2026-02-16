@@ -264,7 +264,7 @@ stdenv.mkDerivation (
             # Have to double-wrap it...
             installPhase = oa.installPhase + ''
               wrapProgram $out/bin/update-source-version \
-                --add-flag '--file=${lib.strings.removeSuffix "/common.nix" __curPos.file}/default.nix'
+                --add-flag '--file=pkgs/servers/mir/default.nix'
             '';
           });
         in
