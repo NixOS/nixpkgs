@@ -7,7 +7,7 @@
   gnused,
   hostname,
   mailutils,
-  systemdLibs,
+  systemd,
   writeShellScript,
   nix-update,
 }:
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdLibs) [ systemdLibs ];
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemd) [ systemd ];
   enableParallelBuilding = true;
 
   drivedb = fetchFromGitHub {

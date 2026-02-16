@@ -11,8 +11,8 @@
   openssl,
   pkg-config,
   stdenv,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  systemdMinimal,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optionals withSystemd [
-    systemdMinimal
+    systemd
   ];
 
   postPatch = ''

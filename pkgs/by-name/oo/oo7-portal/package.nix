@@ -7,7 +7,7 @@
   rustPlatform,
   rustc,
   stdenv,
-  systemdLibs,
+  systemd,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oo7-portal";
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    systemdLibs
+    systemd
   ];
 
   meta = {

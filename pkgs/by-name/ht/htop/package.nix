@@ -10,8 +10,8 @@
   libnl,
   sensorsSupport ? stdenv.hostPlatform.isLinux,
   lm_sensors,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
   withVimKeys ? false,
 }:
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnl
   ]
   ++ lib.optional sensorsSupport lm_sensors
-  ++ lib.optional systemdSupport systemdLibs;
+  ++ lib.optional systemdSupport systemd;
 
   configureFlags = [
     "--enable-unicode"
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     lib.optionalString (!stdenv.hostPlatform.isStatic) ''
       ${optionalPatch sensorsSupport "${lib.getLib lm_sensors}/lib/libsensors.so"}
-      ${optionalPatch systemdSupport "${systemdLibs}/lib/libsystemd.so"}
+      ${optionalPatch systemdSupport "${lib.getLib systemd}/lib/libsystemd.so"}
     '';
 
   meta = {

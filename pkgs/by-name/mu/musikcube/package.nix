@@ -24,8 +24,8 @@
   pulseaudio,
   sndioSupport ? true,
   sndio,
-  systemdLibs,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 let
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     portaudio
     taglib
   ]
-  ++ lib.optionals systemdSupport [ systemdLibs ]
+  ++ lib.optionals systemdSupport [ systemd ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     pulseaudio

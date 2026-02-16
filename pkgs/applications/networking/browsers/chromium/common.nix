@@ -97,8 +97,8 @@
   ungoogled-chromium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 }:
 
 buildFun:
@@ -388,7 +388,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemdLibs
+    ++ lib.optional systemdSupport systemd
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -449,7 +449,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemdLibs
+    ++ lib.optional systemdSupport systemd
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups

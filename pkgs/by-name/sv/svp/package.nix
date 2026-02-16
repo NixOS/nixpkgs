@@ -15,7 +15,7 @@
   libusb1,
   vapoursynth,
   libx11,
-  systemdLibs,
+  systemd,
   openssl,
   p7zip,
 }:
@@ -54,7 +54,7 @@ let
     libusb1
     vapoursynth
     libx11
-    systemdLibs
+    (lib.getLib systemd)
     openssl
   ];
 

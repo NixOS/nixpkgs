@@ -46,7 +46,7 @@
   libgbm,
   libwebp,
   # Runtime dependencies:
-  systemdLibs,
+  systemd,
   libnotify,
   libdbusmenu,
   libpulseaudio,
@@ -187,13 +187,13 @@ stdenv.mkDerivation (finalAttrs: {
     nspr
     nss
     pango
-    systemdLibs
+    systemd
     libxcb
     libxshmfence
   ];
 
   runtimeDependencies = [
-    systemdLibs
+    (lib.getLib systemd)
     libappindicator-gtk3
     libnotify
     libdbusmenu

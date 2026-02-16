@@ -12,9 +12,8 @@
   pkg-config,
   readline,
   stdenv,
-  systemdLibs,
+  systemd,
   testers,
-  udev,
   wpa_supplicant,
   relyUdev ? true,
 }:
@@ -52,8 +51,7 @@ stdenv.mkDerivation {
     iproute2
     libtool
     readline
-    systemdLibs
-    udev
+    systemd
     wpa_supplicant
   ];
 

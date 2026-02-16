@@ -636,6 +636,11 @@ in
         "systemd/user-preset/00-nixos.preset".text = ''
           ignore *
         '';
+      }
+      // lib.optionalAttrs cfg.package.withTimedated {
+        "systemd/ntp-units.d" = {
+          source = hooks "ntp-units.d" { };
+        };
       };
 
     services.dbus.enable = true;

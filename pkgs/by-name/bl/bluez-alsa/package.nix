@@ -17,7 +17,7 @@
   sbc,
   python3,
   systemdSupport ? true,
-  systemdLibs,
+  systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
   ]
-  ++ lib.optional systemdSupport systemdLibs;
+  ++ lib.optional systemdSupport systemd;
 
   buildInputs = [
     alsa-lib

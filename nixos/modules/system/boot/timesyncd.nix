@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.timesyncd;
+  package = config.systemd.package.timesyncd;
 in
 {
 
@@ -61,7 +62,8 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.additionalUpstreamSystemUnits = [ "systemd-timesyncd.service" ];
+    systemd.packages = [ package ];
+    environment.systemPackages = [ package ]; # for dbus and polkit
 
     systemd.services.systemd-timesyncd = {
       wantedBy = [ "sysinit.target" ];

@@ -10,8 +10,8 @@
   wayland,
   wayland-protocols,
   runtimeShell,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
   ]
-  ++ lib.optionals systemdSupport [ systemdLibs ];
+  ++ lib.optionals systemdSupport [ systemd ];
 
   mesonFlags = [
     "-Dman-pages=enabled"

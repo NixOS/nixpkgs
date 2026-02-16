@@ -208,7 +208,7 @@ stdenv.mkDerivation rec {
     sane-backends
     speex
     stdenv.cc.cc
-    (lib.getLib systemd)
+    systemd
     woff2
     libxscrnsaver
     libxaw

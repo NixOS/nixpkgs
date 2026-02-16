@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   dbus,
-  systemdLibs,
+  systemd,
 }:
 
 rustPlatform.buildRustPackage {
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     dbus
-    systemdLibs
+    systemd
   ];
 
   meta = {

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   writableTmpDirAsHomeHook,
-  systemdLibs,
+  systemd,
   nix-update-script,
 }:
 
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  buildInputs = [ systemdLibs ];
+  buildInputs = [ systemd ];
 
   checkFlags = [
     # can't run on sandbox

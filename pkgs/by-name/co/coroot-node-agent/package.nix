@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  systemdLibs,
+  systemd,
 }:
 
 buildGoModule (finalAttrs: {
@@ -18,9 +18,9 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-OOd3OctfklHzpMVDCnnb8HYPYqWQgBe+8HfbSm7dXzg=";
 
-  buildInputs = [ systemdLibs ];
+  buildInputs = [ systemd ];
 
-  CGO_CFLAGS = "-I ${systemdLibs}/include";
+  CGO_CFLAGS = "-I ${lib.getDev systemd}/include";
 
   ldflags = [
     "-extldflags='-Wl,-z,lazy'"

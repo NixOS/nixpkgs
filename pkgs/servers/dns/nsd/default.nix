@@ -5,7 +5,7 @@
   libevent,
   openssl,
   pkg-config,
-  systemdMinimal,
+  systemd,
   nixosTests,
   bind8Stats ? false,
   checking ? false,
@@ -18,7 +18,7 @@
   rootServer ? false,
   rrtypes ? false,
   zoneStats ? false,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   configFile ? "/etc/nsd/nsd.conf",
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     openssl
   ]
   ++ lib.optionals withSystemd [
-    systemdMinimal
+    systemd
   ];
 
   enableParallelBuilding = true;

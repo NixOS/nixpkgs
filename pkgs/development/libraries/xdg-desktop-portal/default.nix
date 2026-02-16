@@ -5,7 +5,7 @@
   fuse3,
   bubblewrap,
   docutils,
-  systemdMinimal,
+  systemd,
   geoclue2,
   glib,
   gsettings-desktop-schemas,
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     geoclue2
   ]
   ++ lib.optionals enableSystemd [
-    systemdMinimal # libsystemd
+    systemd
   ];
 
   nativeCheckInputs = [

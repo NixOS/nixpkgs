@@ -10,7 +10,7 @@
   polkit,
   samba,
   stdenv,
-  systemdLibs,
+  systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     openldap
     polkit
     samba
-    systemdLibs
+    systemd
   ];
 
   configureFlags = [

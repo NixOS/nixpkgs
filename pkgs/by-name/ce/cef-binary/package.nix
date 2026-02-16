@@ -20,7 +20,7 @@
   cups,
   libGL,
   udev,
-  systemdLibs,
+  systemd,
   libxrandr,
   libxfixes,
   libxext,
@@ -61,7 +61,7 @@ let
     cups
     libGL
     udev
-    systemdLibs
+    systemd
     libxcb
     libx11
     libxcomposite

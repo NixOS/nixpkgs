@@ -14,7 +14,7 @@
   jansson,
   libopus,
   nixosTests,
-  systemdLibs,
+  systemd,
   which,
   python3Packages,
   withSystemd ? true,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   )
   ++ lib.optionals withSystemd [
-    systemdLibs
+    systemd
   ]
   ++ lib.optionals withJanus [
     janus-gateway

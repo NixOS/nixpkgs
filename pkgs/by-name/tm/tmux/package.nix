@@ -8,8 +8,8 @@
   ncurses,
   pkg-config,
   runCommand,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  systemdLibs,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
   # broken on i686-linux https://github.com/tmux/tmux/issues/4597
   withUtf8proc ? !(stdenv.hostPlatform.is32bit),
   utf8proc, # gets Unicode updates faster than glibc
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     libevent
   ]
-  ++ lib.optionals withSystemd [ systemdLibs ]
+  ++ lib.optionals withSystemd [ systemd ]
   ++ lib.optionals withUtf8proc [ utf8proc ]
   ++ lib.optionals withUtempter [ libutempter ];
 

@@ -17,8 +17,8 @@
   libv4l,
   net-snmp,
   curl,
-  systemdLibs,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   libxml2,
   poppler,
   gawk,
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     net-snmp
   ]
   ++ lib.optionals withSystemd [
-    systemdLibs
+    systemd
   ];
 
   enableParallelBuilding = true;

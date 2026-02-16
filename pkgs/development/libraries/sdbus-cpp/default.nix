@@ -5,7 +5,7 @@
   cmake,
   expat,
   pkg-config,
-  systemdLibs,
+  systemd,
 }:
 let
   generic =
@@ -31,7 +31,7 @@ let
 
       buildInputs = [
         expat
-        systemdLibs
+        systemd
       ];
 
       cmakeFlags = [

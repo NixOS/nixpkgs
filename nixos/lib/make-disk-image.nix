@@ -400,7 +400,7 @@ let
       config.system.build.nixos-install
       nixos-enter
       nix
-      systemdMinimal
+      systemd
     ]
     ++ lib.optional deterministic gptfdisk
     ++ stdenv.initialPath

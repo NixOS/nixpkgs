@@ -13,7 +13,7 @@
   libnetfilter_cthelper,
   libtirpc,
   systemdSupport ? true,
-  systemdLibs,
+  systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtirpc
   ]
   ++ lib.optionals systemdSupport [
-    systemdLibs
+    systemd
   ];
   nativeBuildInputs = [
     flex

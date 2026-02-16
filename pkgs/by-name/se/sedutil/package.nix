@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  systemdLibs,
+  systemd,
   libnvme,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
-    systemdLibs
+    systemd
     libnvme
   ];
 

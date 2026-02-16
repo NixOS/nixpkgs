@@ -13,8 +13,8 @@
   util-linux,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  systemdMinimal,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
   ncurses,
   udevCheckHook,
   buildPackages,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     tcl # For TCL bindings
   ]
   ++ lib.optional alsaSupport alsa-lib
-  ++ lib.optional systemdSupport systemdMinimal;
+  ++ lib.optional systemdSupport systemd;
 
   doInstallCheck = true;
 
@@ -139,6 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
      )
      substituteInPlace $out/libexec/brltty/systemd-wrapper \
        --replace 'logger' "${util-linux}/bin/logger" \
-       --replace 'udevadm' "${systemdMinimal}/bin/udevadm"
+       --replace 'udevadm' "${systemd}/bin/udevadm"
   '';
 })

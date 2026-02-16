@@ -4,7 +4,7 @@
   bash,
   linux-pam,
   rustPlatform,
-  systemdMinimal,
+  systemd,
   versionCheckHook,
   nixosTests,
 }:
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bash
     linux-pam
-    systemdMinimal
+    systemd
   ];
 
   doInstallCheck = true;

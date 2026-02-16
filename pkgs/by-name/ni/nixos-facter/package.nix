@@ -10,7 +10,7 @@
   makeWrapper,
   nixosTests,
   stdenv,
-  systemdMinimal,
+  systemd,
 }:
 let
   # We are waiting on some changes to be merged upstream: https://github.com/openSUSE/hwinfo/pulls
@@ -52,7 +52,7 @@ buildGoModule (finalAttrs: {
   # nixos-facter calls systemd-detect-virt
   postInstall = ''
     wrapProgram "$out/bin/nixos-facter" \
-        --prefix PATH : "${lib.makeBinPath [ systemdMinimal ]}"
+        --prefix PATH : "${lib.makeBinPath [ systemd ]}"
   '';
 
   ldflags = [

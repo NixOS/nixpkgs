@@ -19,7 +19,7 @@
   nlohmann_json,
   openssl,
   ostree,
-  systemdLibs,
+  systemd,
   tl-expected,
   uncrustify,
   xz,
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     ostree
     qt6Packages.qtbase
-    systemdLibs
+    systemd
     tl-expected
     uncrustify
     xz

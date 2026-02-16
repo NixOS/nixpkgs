@@ -107,9 +107,7 @@ buildGoModule (finalAttrs: rec {
   # Add to RUNPATH so it can be found.
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
-      --set-rpath "${
-        lib.makeLibraryPath [ (lib.getLib systemd) ]
-      }:$(patchelf --print-rpath $out/bin/alloy)" \
+      --set-rpath "${lib.makeLibraryPath [ systemd ]}:$(patchelf --print-rpath $out/bin/alloy)" \
       $out/bin/alloy
   '';
 

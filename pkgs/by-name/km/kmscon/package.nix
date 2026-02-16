@@ -4,7 +4,7 @@
   fetchFromGitHub,
   meson,
   libtsm,
-  systemdLibs,
+  systemd,
   libxkbcommon,
   libdrm,
   libGLU,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtsm
     libxkbcommon
     pango
-    systemdLibs
+    systemd
     libgbm
     check
     # Needed for autoPatchShebangs when strictDeps = true

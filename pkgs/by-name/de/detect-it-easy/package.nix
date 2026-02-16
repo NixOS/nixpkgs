@@ -7,7 +7,7 @@
   graphite2,
   icu,
   krb5,
-  systemdLibs,
+  systemd,
   imagemagick,
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     icu
     krb5
-    systemdLibs
+    systemd
   ];
   nativeBuildInputs = [
     libsForQt5.wrapQtAppsHook

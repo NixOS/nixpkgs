@@ -12,7 +12,6 @@
   pkgsCross,
   sphinx,
   systemd,
-  systemdLibs,
   testers,
   opensslSupport ? true,
 }:
@@ -58,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libcap
-    systemdLibs
+    systemd
   ]
   ++ lib.optional opensslSupport openssl;
 

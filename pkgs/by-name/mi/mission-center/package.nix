@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchFromGitLab,
   rustPlatform,
-  systemdMinimal,
+  systemd,
   symlinkJoin,
 
   # nativeBuildInputs
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Inject the absolute path to the udevadm binary in magpie's source code
     + ''
       substituteInPlace subprojects/magpie/platform-linux/src/memory.rs \
-        --replace-fail "udevadm" "${lib.getExe' systemdMinimal "udevadm"}"
+        --replace-fail "udevadm" "${lib.getExe' systemd "udevadm"}"
     '';
 
   cargoDeps = symlinkJoin {

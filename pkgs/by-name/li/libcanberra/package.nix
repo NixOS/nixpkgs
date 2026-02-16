@@ -12,8 +12,7 @@
   gst_all_1,
   libvorbis,
   libcap,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  udev,
   withAlsa ? stdenv.hostPlatform.isLinux,
   alsa-lib,
 }:
@@ -38,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libvorbis
     libtool # in buildInputs rather than nativeBuildInputs since libltdl is used (not libtool itself)
+    udev
   ]
   ++ (with gst_all_1; [
     gstreamer
@@ -46,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
   ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
   ++ lib.optional stdenv.hostPlatform.isLinux libcap
-  ++ lib.optional withSystemd systemd
   ++ lib.optional withAlsa alsa-lib;
 
   configureFlags = [

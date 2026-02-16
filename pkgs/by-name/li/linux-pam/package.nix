@@ -15,7 +15,7 @@
   nixosTests,
   meson,
   pkg-config,
-  systemdLibs,
+  systemd,
   docbook5,
   libxslt,
   libxml2,
@@ -23,7 +23,7 @@
   findXMLCatalogs,
   docbook_xsl_ns,
   nix-update-script,
-  withLogind ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  withLogind ? lib.meta.availableOn stdenv.hostPlatform systemd,
   withAudit ?
     lib.meta.availableOn stdenv.hostPlatform audit
     # cross-compilation only works from platforms with linux headers
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     audit
   ]
   ++ lib.optionals withLogind [
-    systemdLibs
+    systemd
   ];
 
   enableParallelBuilding = true;

@@ -14,7 +14,7 @@
   pkg-config,
   python3,
   replaceVars,
-  systemdMinimal,
+  systemd,
   usbutils,
   vala,
   which,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     # umockdev will just work without having to provide it in their test environment
     # $PATH.
     (replaceVars ./substitute-udevadm.patch {
-      udevadm = "${systemdMinimal}/bin/udevadm";
+      udevadm = "${systemd}/bin/udevadm";
     })
   ];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemdMinimal
+    systemd
     libpcap
   ];
 
