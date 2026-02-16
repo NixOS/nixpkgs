@@ -23797,6 +23797,12 @@
     githubId = 70169773;
     name = "Tarun Chinmai Sekar";
   };
+  schlich = {
+    email = "ty.schlich@gmail.com";
+    github = "schlich";
+    githubId = 21191435;
+    name = "Tyler Schlichenmeyer";
+  };
   schmitthenner = {
     email = "development@schmitthenner.eu";
     github = "fkz";
