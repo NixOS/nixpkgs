@@ -18697,6 +18697,8 @@ self: super: with self; {
 
   tccbox = callPackage ../development/python-modules/tccbox { };
 
+  tcia-utils = callPackage ../development/python-modules/tcia-utils { };
+
   tcolorpy = callPackage ../development/python-modules/tcolorpy { };
 
   tcxfile = callPackage ../development/python-modules/tcxfile { };
