@@ -2,7 +2,12 @@
   lib,
   buildGo125Module,
   fetchFromGitHub,
+  _experimental-update-script-combinators,
   nix-update-script,
+  writeShellApplication,
+  nix,
+  gnugrep,
+  gnused,
 }:
 
 let
@@ -44,9 +49,33 @@ buildGoModule {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
-    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--version=branch"
+          "--src-only"
+        ];
+      })
+
+      (lib.getExe (writeShellApplication {
+        name = "typescript-go-go-version-updater";
+        runtimeInputs = [
+          nix
+          gnugrep
+          gnused
+        ];
+        text = ''
+          new_src="$(nix-build --attr 'pkgs.typescript-go.src' --no-out-link)"
+          new_go_major_minor="$(grep --only-matching --perl-regexp '^go \K([0-9]+\.[0-9]+)' "$new_src/go.mod")"
+          sed -i -E "s/buildGo[0-9]+Module/buildGo''${new_go_major_minor//./}Module/g" '${toString ./package.nix}'
+        '';
+      }))
+
+      # Update vendorHash
+      (nix-update-script {
+        extraArgs = [ "--version=skip" ];
+      })
+    ];
   };
 
   meta = {
