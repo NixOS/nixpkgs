@@ -27,12 +27,12 @@ Unless otherwise noted, arguments can be overridden directly using [`<pkg>.overr
 -   `extraOutputsToInstall` (default to `[ ]`):
     Package outputs to include in addition to what `meta.outputsToInstall` specifies.
 
--   `includeClosure` (default to `false`):
+-   `includeClosures` (default to `false`):
     Whether to include closures of all input paths.
     The list of the closure paths are constructed with `writeClosure`.
     They are installed with lower priority and with build-time exceptions silenced.
 
--   `extraPrefix` (default to `[ ]`):
+-   `extraPrefix` (default to `""`):
     Root the result in directory `"$out${extraPrefix}"`, e.g. `"/share"`.
 
 -   `ignoreCollisions` (default: `false`):
@@ -95,5 +95,5 @@ And [`lib.meta.setPrio`](#function-library-lib.meta.setPrio)-related Nixpkgs Lib
 When an output path provides a single file instead of a directory, it inherently cannot merge into the result layout.
 All discoverable packages should configure their `meta.outputsToInstall` correctly, so that single-file outputs won't be installed into a profile.
 
-The `ignoreSingleFileOutputs` To drop all single-file output paths silently.
+Set `ignoreSingleFileOutputs` to `true` to drop all single-file output paths silently.
 This option is useful when the specified paths contain the output paths of package tests.
