@@ -7824,6 +7824,8 @@ self: super: with self; {
 
   jschon = callPackage ../development/python-modules/jschon { };
 
+  jsf = callPackage ../development/python-modules/jsf { };
+
   jsmin = callPackage ../development/python-modules/jsmin { };
 
   json-api-doc = callPackage ../development/python-modules/json-api-doc { };
