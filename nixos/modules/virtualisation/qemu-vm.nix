@@ -1236,11 +1236,25 @@ in
     # allow `system.build.toplevel' to be included.  (If we had a direct
     # reference to ${regInfo} here, then we would get a cyclic
     # dependency.)
-    boot.postBootCommands = lib.mkIf config.nix.enable ''
-      if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
-        ${config.nix.package.out}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}
-      fi
-    '';
+    systemd.services.register-nix-paths = lib.mkIf config.nix.enable {
+      wantedBy = [
+        "multi-user.target"
+      ];
+      after = [
+        "nix-daemon.service"
+        "nix-daemon.socket"
+      ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
+          ${config.nix.package.out}/bin/nix-store --load-db < "''${BASH_REMATCH[1]}"
+        fi
+      '';
+    };
 
     boot.initrd.availableKernelModules =
       optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis";
