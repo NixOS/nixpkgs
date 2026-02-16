@@ -13,6 +13,7 @@
   makeDesktopItem,
   makeWrapper,
   p7zip,
+  gnutar,
   writeShellScript,
 }:
 let
@@ -46,9 +47,17 @@ let
 
       pname = "pianoteq-${name}";
 
-      unpackPhase = ''
-        ${p7zip}/bin/7z x $src
-      '';
+      unpackPhase =
+        if lib.hasSuffix ".7z" src then
+          ''
+            ${p7zip}/bin/7z x $src
+          ''
+        else if lib.hasSuffix ".tar.xz" src then
+          ''
+            ${gnutar}/bin/tar -xf $src
+          ''
+        else
+          throw "unexpected file format";
 
       nativeBuildInputs = [
         autoPatchelfHook
@@ -243,6 +252,7 @@ let
   version6 = "6.7.3";
   version7 = "7.5.4";
   version8 = "8.4.0";
+  version9 = "9.1.2";
 
   mkStandard =
     version: hash:
@@ -292,8 +302,22 @@ let
         inherit hash;
       };
     };
+  mkTrial9 =
+    hash:
+    mkPianoteq {
+      name = "trial";
+      version = version9;
+      mainProgram = "Pianoteq 9";
+      startupWMClass = "Pianoteq Trial";
+      src = fetchPianoteqTrial {
+        name = "pianoteq_trial_v${versionForFile version9}.tar.xz";
+        inherit hash;
+      };
+    };
 in
 {
+  trial_9 = mkTrial9 "sha256-1ofPL6F12Gv+k2rZBadOa5Iyukuji6vdww87ufdKjM8=";
+
   standard_8 = mkStandard version8 "sha256-ZDGB/SOOz+sWz7P+sNzyaipEH452n8zq5LleO3ztSXc=";
   stage_8 = mkStage version8 "";
   standard-trial_8 = mkStandardTrial version8 "sha256-K3LbAWxciXt9hVAyRayxSoE/IYJ38Fd03+j0s7ZsMuw=";
