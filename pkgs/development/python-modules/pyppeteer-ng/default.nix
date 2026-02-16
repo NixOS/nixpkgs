@@ -26,7 +26,6 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   readme-renderer,
   sphinx,
   sphinxcontrib-asyncio,

@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://liblas.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ michelk ];
+    maintainers = [ ];
     teams = with lib.teams; [ geospatial ];
   };
 })

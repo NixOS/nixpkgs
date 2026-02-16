@@ -9,9 +9,6 @@
   # build-system
   setuptools,
 
-  # dependencies
-  async-timeout,
-
   # optional-dependencies
   cryptography,
   pyopenssl,
@@ -50,8 +47,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   optional-dependencies = {
     # TODO: libvalkey = [ libvalkey ];

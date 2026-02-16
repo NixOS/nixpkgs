@@ -1,10 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
-  typing-extensions,
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
@@ -24,8 +22,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook

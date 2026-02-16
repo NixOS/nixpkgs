@@ -353,13 +353,6 @@ stdenv.mkDerivation rec {
         "test_inspect"
         "test_pydoc"
         "test_warnings"
-      ]
-      ++ lib.optionals isPy310 [
-        "test_contextlib_async"
-        "test_future"
-        "test_lzma"
-        "test_module"
-        "test_typing"
       ];
     in
     ''

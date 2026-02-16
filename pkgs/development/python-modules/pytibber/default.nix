@@ -6,7 +6,6 @@
   gql,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   websockets,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pytibber";
   version = "0.35.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";

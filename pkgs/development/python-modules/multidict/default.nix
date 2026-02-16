@@ -8,9 +8,7 @@
   pytestCheckHook,
   pytest-codspeed,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -32,10 +30,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";

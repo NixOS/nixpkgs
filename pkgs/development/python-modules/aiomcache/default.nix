@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
   python-memcached,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +24,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ python-memcached ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  dependencies = [ python-memcached ];
 
   doCheck = false; # executes memcached in docker
 

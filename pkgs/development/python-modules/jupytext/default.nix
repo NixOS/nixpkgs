@@ -17,8 +17,6 @@
   nbformat,
   packaging,
   pyyaml,
-  pythonOlder,
-  tomli,
 
   # tests
   addBinToPathHook,
@@ -85,8 +83,7 @@ buildPythonPackage rec {
     nbformat
     packaging
     pyyaml
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     addBinToPathHook

@@ -7,7 +7,6 @@
   cffi,
   fetchPypi,
   pycparser,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pyvex";
   version = "9.2.154";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;

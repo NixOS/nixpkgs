@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  pythonOlder,
   flit-core,
   setuptools-scm,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -23,14 +21,12 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     flit-core
     setuptools-scm
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   propagatedBuildInputs = [
     flit-core
     setuptools-scm
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   pythonImportsCheck = [ "flit_scm" ];
 

@@ -8,7 +8,6 @@
   netifaces,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
   setuptools,
   tenacity,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pydaikin";
   version = "2.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fredrike";

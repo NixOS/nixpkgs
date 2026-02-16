@@ -5,11 +5,9 @@
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
-  tomli,
   tomli-w,
   types-pyyaml,
   types-toml,
@@ -45,8 +43,7 @@ buildPythonPackage rec {
     pytest-httpserver
     pytestCheckHook
     tomli-w
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   pythonImportsCheck = [ "responses" ];
 

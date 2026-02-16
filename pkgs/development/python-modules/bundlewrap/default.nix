@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   bcrypt,
   cryptography,
   jinja2,
@@ -12,7 +11,6 @@
   passlib,
   pyyaml,
   requests,
-  rtoml,
   setuptools,
   tomlkit,
   pytestCheckHook,
@@ -44,8 +42,7 @@ buildPythonPackage (finalAttrs: {
     requests
     tomlkit
     librouteros
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
+  ];
 
   pythonImportsCheck = [ "bundlewrap" ];
 

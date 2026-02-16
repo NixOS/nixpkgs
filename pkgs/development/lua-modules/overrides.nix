@@ -1050,10 +1050,9 @@ in
   });
 
   toml-edit = prev.toml-edit.overrideAttrs (old: {
-
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
-      hash = "sha256-ow0zefFFrU91Q2PJww2jtd6nqUjwXUtfQzjkzl/AXuo=";
+      hash = "sha256-8lYvdraKEd1nf8dkZuSDQRVJvX56gHCcTZVtyoy/0IM=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
@@ -1065,7 +1064,6 @@ in
       rustPlatform.cargoSetupHook
       lua.pkgs.luarocks-build-rust-mlua
     ];
-
   });
 
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {

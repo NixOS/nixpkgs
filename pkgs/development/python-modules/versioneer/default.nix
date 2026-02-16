@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -19,11 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-3b7Wfhd24Vym5XCeN/M1832Q1VzvlWi3quTRaZrID2s=";
   };
 
-  nativeBuildInputs = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
-
-  optional-dependencies = {
-    toml = lib.optionals (pythonOlder "3.11") [ tomli ];
-  };
+  nativeBuildInputs = [ setuptools ];
 
   # Couldn't get tests to work because, for instance, they used virtualenv and pip
   doCheck = false;

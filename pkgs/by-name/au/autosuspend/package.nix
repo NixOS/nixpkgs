@@ -10,8 +10,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "9.0.1";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "languitar";
     repo = "autosuspend";

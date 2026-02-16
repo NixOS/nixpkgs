@@ -2,6 +2,7 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildHomeAssistantComponent rec {
@@ -14,6 +15,10 @@ buildHomeAssistantComponent rec {
     repo = "ha-mcp";
     tag = "v${version}";
     hash = "sha256-yAJbvfIH5ewRTip8whbOKxE479qAihESaiLFTnhpRkY=";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$" ];
   };
 
   meta = {

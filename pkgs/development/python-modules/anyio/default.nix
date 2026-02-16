@@ -51,9 +51,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
   ];
 
   optional-dependencies = {

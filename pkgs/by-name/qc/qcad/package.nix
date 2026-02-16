@@ -4,29 +4,22 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  qmake,
-  qttools,
+  qt5,
   boost,
   libGLU,
   muparser,
-  qtbase,
-  qtscript,
-  qtsvg,
-  qtxmlpatterns,
-  qtmacextras,
-  wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qcad";
-  version = "3.32.5.0";
+  version = "3.32.6.0";
 
   src = fetchFromGitHub {
-    name = "qcad-${version}-src";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-src";
     owner = "qcad";
     repo = "qcad";
-    rev = "v${version}";
-    hash = "sha256-sg9Vrekh57JAQb1o8AWDkDuOs3ovELJ2WTTXPa+e3JU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7PckPPD7CWd+IQWTLhr5+vizIjPpRdva2yDOyC6t0Uc=";
   };
 
   patches = [
@@ -35,33 +28,33 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    if ! [ -d src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version} ]; then
-      mkdir src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version}
+    if ! [ -d src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version} ]; then
+      mkdir src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}
       cp \
         src/3rdparty/qt-labs-qtscriptgenerator-5.14.0/qt-labs-qtscriptgenerator-5.14.0.pro \
-        src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version}/qt-labs-qtscriptgenerator-${qtbase.version}.pro
+        src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}/qt-labs-qtscriptgenerator-${qt5.qtbase.version}.pro
     fi
   '';
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-    qmake
-    qttools
-    wrapQtAppsHook
+    qt5.qmake
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     boost
     libGLU
     muparser
-    qtbase
-    qtscript
-    qtsvg
-    qtxmlpatterns
+    qt5.qtbase
+    qt5.qtscript
+    qt5.qtsvg
+    qt5.qtxmlpatterns
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    qtmacextras
+    qt5.qtmacextras
   ];
 
   qmakeFlags = [
@@ -113,13 +106,13 @@ stdenv.mkDerivation rec {
 
     # workaround to fix the library browser:
     rm -r $out/lib/plugins/sqldrivers
-    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/sqldrivers
+    ln -s -t $out/lib/plugins ${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}/sqldrivers
 
     rm -r $out/lib/plugins/printsupport
-    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/printsupport
+    ln -s -t $out/lib/plugins ${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}/printsupport
 
     rm -r $out/lib/plugins/imageformats
-    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/imageformats
+    ln -s -t $out/lib/plugins ${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}/imageformats
 
     install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/org.qcad.QCAD.svg
 
@@ -134,6 +127,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     mainProgram = "qcad";
     maintainers = with lib.maintainers; [ yvesf ];
-    platforms = qtbase.meta.platforms;
+    platforms = qt5.qtbase.meta.platforms;
   };
-}
+})

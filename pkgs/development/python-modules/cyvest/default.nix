@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyvest";
-  version = "5.2.0";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PakitoSec";
     repo = "cyvest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AfTeZj7GFLoaLRImGbiFqbaw4AxjHUZSBDwGFY9sA1s=";
+    hash = "sha256-fYFYIcjbO9dyOFiuKU077T/88fo6A6nIr04kZgL8ta0=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];

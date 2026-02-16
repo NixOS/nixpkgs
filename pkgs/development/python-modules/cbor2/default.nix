@@ -5,7 +5,6 @@
   hypothesis,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   withCExtensions ? true,

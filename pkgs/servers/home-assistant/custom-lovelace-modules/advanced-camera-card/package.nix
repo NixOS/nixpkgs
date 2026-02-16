@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "advanced-camera-card";
-  version = "7.27.0";
+  version = "7.27.2";
 
   src = fetchzip {
     url = "https://github.com/dermotduffy/advanced-camera-card/releases/download/v${version}/advanced-camera-card.zip";
-    hash = "sha256-t41bbAqQOuGhUJ3Tu0uh9FsBzc09iJylghQkqt6632k=";
+    hash = "sha256-NNWjDV0tKtFHkg2Zob86J0rtTYV/LKwhNTL8cvqS+Ns=";
   };
 
   # TODO: build from source once yarn berry support lands in nixpkgs

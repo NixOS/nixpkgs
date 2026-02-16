@@ -5,14 +5,12 @@
   fetchFromGitHub,
   setuptools,
   attrs,
-  exceptiongroup,
   pexpect,
   doCheck ? true,
   pytestCheckHook,
   pytest-xdist,
   sortedcontainers,
   pythonAtLeast,
-  pythonOlder,
   tzdata,
 }:
 
@@ -48,8 +46,7 @@ buildPythonPackage rec {
   dependencies = [
     attrs
     sortedcontainers
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
   nativeCheckInputs = [
     pexpect

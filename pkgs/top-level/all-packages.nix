@@ -5261,7 +5261,6 @@ with pkgs;
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters)
     python27
-    python310
     python311
     python312
     python313
@@ -5278,7 +5277,6 @@ with pkgs;
 
   # Python package sets.
   python27Packages = python27.pkgs;
-  python310Packages = python310.pkgs;
   python311Packages = python311.pkgs;
   python312Packages = python312.pkgs;
   python313Packages = recurseIntoAttrs python313.pkgs;
@@ -10691,8 +10689,6 @@ with pkgs;
   qbittorrent-nox = qbittorrent.override { guiSupport = false; };
 
   qbittorrent-enhanced-nox = qbittorrent-enhanced.override { guiSupport = false; };
-
-  qcad = libsForQt5.callPackage ../applications/misc/qcad { };
 
   qctools = libsForQt5.callPackage ../applications/video/qctools { };
 

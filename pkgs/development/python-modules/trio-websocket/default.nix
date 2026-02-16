@@ -3,9 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
-  exceptiongroup,
   pytest-trio,
   pytestCheckHook,
   trio,
@@ -30,8 +28,7 @@ buildPythonPackage rec {
   dependencies = [
     trio
     wsproto
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
   nativeCheckInputs = [
     pytest-trio

@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -36,6 +37,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # Tests require a running Home Assistant instance
   doCheck = false;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$" ];
+  };
 
   pythonImportsCheck = [ "ha_mcp" ];
 

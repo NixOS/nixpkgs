@@ -876,13 +876,19 @@ in
 
             secret_key = mkOption {
               description = ''
-                Secret key used for signing. Please note that the contents of this option
+                Secret key used for signing data source settings like secrets and passwords.
+                Set this to a unique, random string in production, generated for example by running `openssl rand -hex 32`.
+
+                If you change this later you will need to update data source settings to re-encode them.
+
+                <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#secret_key>
+
+                Please note that the contents of this option
                 will end up in a world-readable Nix store. Use the file provider
                 pointing at a reasonably secured file in the local filesystem
                 to work around that. Look at the documentation for details:
                 <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
               '';
-              default = "SW2YcwTIb9zpOOhoPsMm";
               type = types.str;
             };
 

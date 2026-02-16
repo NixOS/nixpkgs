@@ -17,10 +17,8 @@
   notebook-shim,
   packaging,
   setuptools,
-  tomli,
   tornado,
   traitlets,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -73,8 +71,7 @@ buildPythonPackage rec {
     setuptools
     tornado
     traitlets
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   makeWrapperArgs = [
     "--set"

@@ -1,13 +1,11 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -24,8 +22,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   optional-dependencies = {
     aiohttp = [ aiohttp ];

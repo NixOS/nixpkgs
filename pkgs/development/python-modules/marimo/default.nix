@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchpatch2,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   uv-build,
@@ -24,7 +23,6 @@
   ruff,
   starlette,
   tomlkit,
-  typing-extensions,
   uvicorn,
   websockets,
 
@@ -72,8 +70,7 @@ buildPythonPackage rec {
     tomlkit
     uvicorn
     websockets
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   pythonImportsCheck = [ "marimo" ];
 

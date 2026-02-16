@@ -6,7 +6,6 @@
   pythonOlder,
   pytest,
   setuptools-scm,
-  backports-asyncio-runner,
   typing-extensions,
 }:
 
@@ -33,13 +32,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  dependencies =
-    lib.optionals (pythonOlder "3.11") [
-      backports-asyncio-runner
-    ]
-    ++ lib.optionals (pythonOlder "3.13") [
-      typing-extensions
-    ];
+  dependencies = lib.optionals (pythonOlder "3.13") [
+    typing-extensions
+  ];
 
   postInstall = ''
     mkdir $testout

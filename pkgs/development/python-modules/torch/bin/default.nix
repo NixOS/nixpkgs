@@ -3,7 +3,6 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   fetchurl,
 
@@ -45,7 +44,7 @@ buildPythonPackage {
 
   format = "wheel";
 
-  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
+  disabled = pythonAtLeast "3.15";
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 

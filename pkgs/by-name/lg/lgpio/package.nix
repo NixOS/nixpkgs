@@ -36,6 +36,8 @@ mkDerivation rec {
     swig
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   preConfigure = lib.optionalString (pyProject != "") ''
     cd ${pyProject}
   '';

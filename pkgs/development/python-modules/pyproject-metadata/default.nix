@@ -5,8 +5,6 @@
   flit-core,
   packaging,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +22,7 @@ buildPythonPackage rec {
 
   dependencies = [ packaging ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Many broken tests, and missing test files
   doCheck = false;

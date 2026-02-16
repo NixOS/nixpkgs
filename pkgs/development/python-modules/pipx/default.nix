@@ -9,8 +9,6 @@
   packaging,
   platformdirs,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
   userpath,
   git,
 }:
@@ -37,8 +35,7 @@ buildPythonPackage rec {
     packaging
     platformdirs
     userpath
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeBuildInputs = [
     installShellFiles

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatch-vcs,
@@ -13,7 +12,6 @@
   # dependencies
   packaging,
   pathspec,
-  exceptiongroup,
 
   # tests
   build,
@@ -23,7 +21,6 @@
   pytest-subprocess,
   pytestCheckHook,
   setuptools,
-  tomli,
   virtualenv,
   wheel,
 }:
@@ -40,10 +37,7 @@ buildPythonPackage rec {
     hash = "sha256-zBTDacTkeclz+/X0SUl1xkxLz4zsfeLOD4Ew0V1Y1iU=";
   };
 
-  postPatch = lib.optionalString (pythonOlder "3.11") ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"error",' '"error", "ignore::UserWarning",'
-  '';
+  postPatch = "";
 
   build-system = [
     hatch-vcs
@@ -53,10 +47,6 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     pathspec
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
   ];
 
   nativeCheckInputs = [

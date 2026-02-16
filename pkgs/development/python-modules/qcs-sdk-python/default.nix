@@ -7,7 +7,6 @@
   opentelemetry-sdk,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   qcs-api-client-common,
   quil,
   rustPlatform,

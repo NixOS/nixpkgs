@@ -13,7 +13,6 @@
   pandas,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   scipy,
   setuptools,

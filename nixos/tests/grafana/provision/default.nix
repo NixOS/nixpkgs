@@ -19,6 +19,7 @@ import ../../make-test-python.nix (
           security = {
             admin_user = "testadmin";
             admin_password = "$__file{${pkgs.writeText "pwd" "snakeoilpwd"}}";
+            secret_key = "11111111111111111111";
           };
         };
       };

@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-you-should-use";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "MichaelAquilina";
     repo = "zsh-you-should-use";
     tag = finalAttrs.version;
-    hash = "sha256-u3abhv9ewq3m4QsnsxT017xdlPm3dYq5dqHNmQhhcpI=";
+    hash = "sha256-5dl6NJD0DWSDlWE1Ua8EviQWmWDW7kWBH0OB5A5UOZQ=";
   };
 
   strictDeps = true;

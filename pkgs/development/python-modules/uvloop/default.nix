@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
 
@@ -73,9 +72,6 @@ buildPythonPackage rec {
     # Fails randomly on hydra
     # https://github.com/MagicStack/uvloop/issues/709
     "tests/test_process.py::TestAsyncio_AIO_Process::test_cancel_post_init"
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    "tests/test_tcp.py::Test_UV_TCPSSL::test_create_connection_ssl_failed_certificat"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # Segmentation fault

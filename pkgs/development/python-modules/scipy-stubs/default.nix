@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   uv-build,
   optype,
   scipy,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.9.0,<0.10.0" "uv_build"
   '';
-
-  disabled = pythonOlder "3.11";
 
   build-system = [
     uv-build

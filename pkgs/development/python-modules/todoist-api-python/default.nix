@@ -7,7 +7,6 @@
   hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
 }:

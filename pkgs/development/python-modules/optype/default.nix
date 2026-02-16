@@ -8,15 +8,12 @@
   numpy-typing-compat,
   beartype,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "optype";
   version = "0.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jorenham";

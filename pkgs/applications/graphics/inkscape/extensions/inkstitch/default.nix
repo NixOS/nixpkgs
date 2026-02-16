@@ -8,30 +8,26 @@
 let
   version = "3.2.2";
 
-  dependencies =
-    with python3.pkgs;
-    [
-      pyembroidery
-      inkex
-      wxpython
-      networkx
-      platformdirs
-      shapely
-      lxml
-      appdirs
-      numpy
-      jinja2
-      requests
-      colormath2
-      flask
-      fonttools
-      trimesh
-      scipy
-      diskcache
-      flask-cors
-    ]
-    # Inkstitch uses the builtin tomllib instead when Python >=3.11
-    ++ lib.optional (pythonOlder "3.11") tomli;
+  dependencies = with python3.pkgs; [
+    pyembroidery
+    inkex
+    wxpython
+    networkx
+    platformdirs
+    shapely
+    lxml
+    appdirs
+    numpy
+    jinja2
+    requests
+    colormath2
+    flask
+    fonttools
+    trimesh
+    scipy
+    diskcache
+    flask-cors
+  ];
   pyEnv = python3.withPackages (_: dependencies);
 in
 python3.pkgs.buildPythonApplication {

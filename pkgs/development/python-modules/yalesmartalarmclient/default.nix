@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   requests,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "yalesmartalarmclient";
   version = "0.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "domwillcode";

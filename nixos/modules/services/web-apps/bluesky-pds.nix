@@ -33,7 +33,7 @@ let
           ${getExe pkgs.bluesky-pdsadmin} "$@"
     '';
 in
-# All defaults are from https://github.com/bluesky-social/pds/blob/9a72155fee4e7e1de0e0add5454c5571b89e05e0/installer.sh
+# All defaults are from https://github.com/bluesky-social/pds/blob/0b5cd1179f4fcf2643e5ead5cf4ac56c5cdeda3b/installer.sh
 {
   imports = [
     (lib.mkRenamedOptionModule [ "services" "pds" "enable" ] [ "services" "bluesky-pds" "enable" ])
@@ -136,6 +136,12 @@ in
             type = types.nullOr types.str;
             default = "true";
             description = "Enable rate limiting";
+          };
+
+          PDS_INVITE_REQUIRED = mkOption {
+            type = types.nullOr types.str;
+            default = "true";
+            description = "Require invite code for registration";
           };
         };
       };

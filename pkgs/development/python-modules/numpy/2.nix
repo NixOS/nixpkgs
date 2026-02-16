@@ -4,7 +4,6 @@
   fetchFromGitHub,
   python,
   pythonAtLeast,
-  pythonOlder,
   buildPythonPackage,
   writeTextFile,
 
@@ -38,8 +37,6 @@ buildPythonPackage (finalAttrs: {
   pname = "numpy";
   version = "2.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "numpy";

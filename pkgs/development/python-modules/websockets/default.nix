@@ -5,7 +5,6 @@
   fetchFromGitHub,
   unittestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   werkzeug,
 }:
@@ -38,10 +37,6 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonAtLeast "3.13") [
     # https://github.com/python-websockets/websockets/issues/1569
     "test_writing_in_send_context_fails"
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    # Our Python 3.10 and older raise SSLError instead of SSLCertVerificationError
-    "test_reject_invalid_server_certificate"
   ];
 
   nativeCheckInputs = [

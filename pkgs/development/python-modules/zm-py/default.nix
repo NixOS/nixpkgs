@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "zm-py";
   version = "0.5.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "rohankapoorcom";

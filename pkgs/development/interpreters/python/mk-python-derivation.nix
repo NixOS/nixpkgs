@@ -82,17 +82,12 @@ let
     "installer"
   ];
 
-  isBootstrapPackage' = flip elem (
-    [
-      "build"
-      "packaging"
-      "pyproject-hooks"
-      "wheel"
-    ]
-    ++ optionals (python.pythonOlder "3.11") [
-      "tomli"
-    ]
-  );
+  isBootstrapPackage' = flip elem [
+    "build"
+    "packaging"
+    "pyproject-hooks"
+    "wheel"
+  ];
 
   isSetuptoolsDependency' = flip elem [
     "setuptools"

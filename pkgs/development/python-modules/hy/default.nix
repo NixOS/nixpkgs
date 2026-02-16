@@ -7,7 +7,6 @@
   hy,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
   testers,
 }:

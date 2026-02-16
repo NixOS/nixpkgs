@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  pythonOlder,
   replaceVars,
 
   # build
@@ -16,7 +15,6 @@
 
   # psycopg-c
   cython,
-  tomli,
 
   # docs
   furo,
@@ -76,9 +74,6 @@ let
     build-system = [
       cython
       setuptools
-    ]
-    ++ lib.optional (pythonOlder "3.11") [
-      tomli
     ];
 
     nativeBuildInputs = [

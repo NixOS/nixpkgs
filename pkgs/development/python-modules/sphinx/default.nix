@@ -27,7 +27,6 @@
   sphinxcontrib-qthelp,
   sphinxcontrib-serializinghtml,
   sphinxcontrib-websupport,
-  tomli,
 
   # check phase
   defusedxml,
@@ -82,8 +81,7 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   __darwinAllowLocalNetworking = true;
 

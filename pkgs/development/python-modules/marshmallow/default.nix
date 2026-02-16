@@ -3,14 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
-
-  # dependencies
-  backports-datetime-fromisoformat,
-  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -30,11 +25,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ flit-core ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    backports-datetime-fromisoformat
-    typing-extensions
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -18,6 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CElK9e+wpnMiup6DwdQpQfVMm6atXvz+JYHsGnv3lFo=";
   };
 
+  patches = [
+    # Fix cmake build with qt 6.10
+    # Submitted upstream: https://github.com/exeldro/obs-media-controls/pull/28
+    ./fix-cmake.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     obs-studio

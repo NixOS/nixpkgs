@@ -19,7 +19,11 @@ buildPythonPackage (finalAttrs: {
     owner = "packit";
     repo = "specfile";
     tag = finalAttrs.version;
-    hash = "sha256-CVzGdfsJeWqC3SwQZX2lCIefEFdSp+Xep/Kqw1dGrrc=";
+    postFetch = ''
+      # export-subst prevents reproducibility
+      rm "$out/.git_archival.txt"
+    '';
+    hash = "sha256-apGGUVBFNRknQvyBCVZerw0/MctWDTDcz4y/7tRp46s=";
   };
 
   build-system = [

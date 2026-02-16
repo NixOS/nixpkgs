@@ -2,11 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   packaging,
-  tomli,
 
   # tests
   poppler-qt5,
@@ -32,8 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   # There aren't tests
   doCheck = false;
