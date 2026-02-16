@@ -121,6 +121,10 @@ lib.makeOverridable (
           (lib.remove null)
         ];
       in
+      assert
+        args ? name
+        || (args ? pname && args ? version)
+        || throw "buildEnv: expects arguments 'pname' and 'version', or 'name'";
       compatArgs
       // derivationArgs
       // {
@@ -158,6 +162,7 @@ lib.makeOverridable (
           # The `paths` attribute is referenced and overridden from passthru
           inherit paths;
         }
+        // derivationArgs.passthru or { }
         // passthru;
       };
 
