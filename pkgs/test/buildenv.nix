@@ -118,7 +118,53 @@ let
       };
     };
 
-  tests = tests-name // tests-passthru-paths // tests-finalAttrs // tests-overrideAttrs;
+  tests-passthru-merging =
+    let
+      env = buildEnv {
+        name = "test-env";
+        paths = [ pkgs.hello ];
+        derivationArgs.passthru.fromDerivationArgs = "a";
+        passthru.fromPassthru = "b";
+      };
+    in
+    {
+      testPassthruMergingAutoPathsPresent = {
+        expr = env ? paths;
+        expected = true;
+      };
+
+      testPassthruMergingDerivationArgs = {
+        expr = env.fromDerivationArgs;
+        expected = "a";
+      };
+
+      testPassthruMergingDirectPassthru = {
+        expr = env.fromPassthru;
+        expected = "b";
+      };
+
+      # Direct passthru takes precedence over derivationArgs.passthru
+      testPassthruMergingPrecedence = {
+        expr =
+          let
+            env' = buildEnv {
+              name = "test-env";
+              paths = [ ];
+              derivationArgs.passthru.key = "from-derivationArgs";
+              passthru.key = "from-passthru";
+            };
+          in
+          env'.key;
+        expected = "from-passthru";
+      };
+    };
+
+  tests =
+    tests-name
+    // tests-passthru-paths
+    // tests-finalAttrs
+    // tests-overrideAttrs
+    // tests-passthru-merging;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
