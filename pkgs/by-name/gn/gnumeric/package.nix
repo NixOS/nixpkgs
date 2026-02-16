@@ -27,14 +27,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnumeric";
-  version = "1.12.59";
+  version = "1.12.60";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnumeric";
     tag = "GNUMERIC_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-7xCDOqPx3QLDHLoKG46e8te4smSFrLOgCcWkiJXGjDQ=";
+    hash = "sha256-fv4RlIfJiLY3MbsAsgRgJ010/Ob1X1be29XfoweCMpI=";
   };
 
   preConfigure = ''
