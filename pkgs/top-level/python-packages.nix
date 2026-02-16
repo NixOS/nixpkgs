@@ -4289,6 +4289,10 @@ self: super: with self; {
 
   django-q2 = callPackage ../development/python-modules/django-q2 { };
 
+  django-ranged-fileresponse =
+    callPackage ../development/python-modules/django-ranged-fileresponse
+      { };
+
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
 
   django-raster = callPackage ../development/python-modules/django-raster { };
