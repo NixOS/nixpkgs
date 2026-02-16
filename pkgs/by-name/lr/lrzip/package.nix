@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lrzip";
-  version = "0.651";
+  version = "0.660";
 
   src = fetchFromGitHub {
     owner = "ckolivas";
     repo = "lrzip";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Mb324ojtLV0S10KhL7Vjf3DhSOtCy1pFMTzvLkTnpXM=";
+    sha256 = "sha256-6nNGmruJBim34EqbgJ+hnLTfylEz6t6jLh3O9RcUY34=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
