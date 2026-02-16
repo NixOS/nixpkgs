@@ -18039,6 +18039,12 @@
     github = "MrTarantoga";
     githubId = 53876219;
   };
+  mrtipson = {
+    email = "mr@tipson.xyz";
+    github = "MrTipson";
+    githubId = 37011447;
+    name = "MrTipson";
+  };
   mrtnvgr = {
     name = "Egor Martynov";
     github = "mrtnvgr";
