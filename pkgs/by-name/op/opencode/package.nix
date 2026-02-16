@@ -167,6 +167,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       delafthi
       graham33
       DuskyElf
+      staticdev
     ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
