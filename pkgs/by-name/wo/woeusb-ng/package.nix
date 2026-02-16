@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "woeusb-ng";
-  version = "0.2.12-unstable-2026-01-25";
+  version = "0.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
