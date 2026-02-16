@@ -159,12 +159,43 @@ let
       };
     };
 
+  tests-derivationArgs =
+    let
+      env = buildEnv {
+        name = "test-env";
+        paths = [ ];
+        derivationArgs.allowSubstitutes = true;
+      };
+    in
+    {
+      # derivationArgs.allowSubstitutes overrides the default (false)
+      testDerivationArgsForwarded = {
+        expr = env.allowSubstitutes;
+        expected = true;
+      };
+
+      # Backward compat: top-level nativeBuildInputs still works
+      testCompatNativeBuildInputs = {
+        expr =
+          let
+            env' = buildEnv {
+              name = "test-env";
+              paths = [ ];
+              nativeBuildInputs = [ pkgs.hello ];
+            };
+          in
+          builtins.length env'.nativeBuildInputs > 0;
+        expected = true;
+      };
+    };
+
   tests =
     tests-name
     // tests-passthru-paths
     // tests-finalAttrs
     // tests-overrideAttrs
-    // tests-passthru-merging;
+    // tests-passthru-merging
+    // tests-derivationArgs;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
