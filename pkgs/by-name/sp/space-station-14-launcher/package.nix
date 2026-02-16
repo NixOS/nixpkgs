@@ -37,16 +37,16 @@
   soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
 }:
 let
-  version = "0.37.1";
   pname = "space-station-14-launcher";
+  version = "0.37.1";
 in
 buildDotnetModule rec {
   inherit pname;
 
   # Workaround to prevent buildDotnetModule from overriding assembly versions.
+  # If you inherit version it will break loading Robust.LoaderApi when connecting to a server!
   name = "${pname}-${version}";
 
-  # A bit redundant but I don't trust this package to be maintained by anyone else.
   src = fetchFromGitHub {
     owner = "space-wizards";
     repo = "SS14.Launcher";
@@ -128,7 +128,7 @@ buildDotnetModule rec {
     mkdir -p $out/lib/space-station-14-launcher/loader
     cp -r SS14.Loader/bin/${buildType}/*/*/* $out/lib/space-station-14-launcher/loader/
 
-    icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico space-station-14-launcher $out
+    icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico ${pname} $out
   '';
 
   meta = {
