@@ -178,6 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
       jedsek
       kashw2
       bot-wxt1221
+      mio
     ];
     platforms = [
       "x86_64-linux"
