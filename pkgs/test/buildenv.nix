@@ -67,7 +67,22 @@ let
     };
   };
 
-  tests = tests-name // tests-passthru-paths;
+  tests-finalAttrs = {
+    testFinalAttrsSelfReference = {
+      expr =
+        let
+          env = buildEnv (finalAttrs: {
+            name = "test-env";
+            paths = [ ];
+            passthru.description = "An env named ${finalAttrs.name}";
+          });
+        in
+        env.description;
+      expected = "An env named test-env";
+    };
+  };
+
+  tests = tests-name // tests-passthru-paths // tests-finalAttrs;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
