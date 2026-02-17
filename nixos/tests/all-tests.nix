@@ -1399,6 +1399,7 @@ in
   redlib = runTest ./redlib.nix;
   redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix { };
   refind = runTest ./refind.nix;
+  relay-server = runTest ./relay-server.nix;
   remark42 = runTest ./remark42.nix;
   renovate = runTest ./renovate.nix;
   repath-studio = runTest ./repath-studio.nix;

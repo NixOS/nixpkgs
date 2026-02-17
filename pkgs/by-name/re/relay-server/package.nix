@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -31,6 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Sets the value of the "relay-server-version" HTTP response header
   env.GIT_VERSION = finalAttrs.version;
+
+  passthru.tests.nixos = nixosTests.relay-server;
 
   meta = {
     description = "Self-hosted document collaboration server for Relay.md";
