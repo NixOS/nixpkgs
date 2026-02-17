@@ -11,10 +11,10 @@
   json-glib,
   glib,
   gettext,
+  gweather-locations,
   libsoup_3,
   gi-docgen,
   gobject-introspection,
-  python3,
   tzdata,
   geocode-glib_2,
   vala,
@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
   ];
 
   depsBuildBuild = [
-    makeWrapper
     pkg-config
   ];
 
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     glib
-    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
   ]
   ++ lib.optionals withIntrospection [
     gi-docgen
@@ -67,6 +65,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    gweather-locations
     libsoup_3
     libxml2
     json-glib
@@ -82,10 +81,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs --build build-aux/meson/gen_locations_variant.py
-    wrapProgram $PWD/build-aux/meson/gen_locations_variant.py \
-      --prefix GI_TYPELIB_PATH : ${lib.getLib buildPackages.glib}/lib/girepository-1.0 \
-
     # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
     # it should be a build-time dep for build
     # TODO: send upstream
