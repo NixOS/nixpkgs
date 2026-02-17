@@ -30,24 +30,27 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wagtail";
-  version = "7.2.2";
+  version = "7.3";
   pyproject = true;
 
   # The GitHub source requires some assets to be compiled, which in turn
   # requires fixing the upstream package lock. We need to use the PyPI release
   # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-v2rao6zZDZ7nc0dW3XAxsJAe7bgKSqTlGIqx5IHOML4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-gcNEllKxc0H8eU1lvdIIrp4V8hdD6KbKa8LOLntzEs4=";
   };
 
   build-system = [
     setuptools
   ];
 
-  pythonRelaxDeps = [ "django-tasks" ];
+  pythonRelaxDeps = [
+    "django-tasks"
+    "modelsearch"
+  ];
 
   dependencies = [
     anyascii
@@ -83,8 +86,8 @@ buildPythonPackage rec {
     description = "Django content management system focused on flexibility and user experience";
     mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
-    changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";
+    changelog = "https://github.com/wagtail/wagtail/blob/v${finalAttrs.version}/CHANGELOG.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})
