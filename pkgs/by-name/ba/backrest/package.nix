@@ -1,7 +1,8 @@
 {
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   gzip,
+  fetchurl,
   iana-etc,
   lib,
   libredirect,
@@ -18,14 +19,26 @@
 }:
 let
   pname = "backrest";
-  version = "1.10.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-8WWs7XEVKAc/XmeL+dsw25azfLjUbHKp2MsB6Be14VE=";
+    hash = "sha256-wtvHIR0Bag8tJVWEwEq8PcT1zHsD670pIidp/OCLk7g=";
   };
+
+  # we need to pin the inlang plugins to specific versions because
+  # the remote ones are not pinned and we can't fetch them in the sandbox.
+  inlang-plugins = lib.mapAttrs (remote: info: fetchurl { inherit (info) url hash; }) (
+    lib.importJSON ./inlang-plugins.json
+  );
+
+  pnpmDepsHash-webui =
+    if stdenv.hostPlatform.isLinux then
+      "sha256-i+mirOEvzo4XvlPxGeNx7Em5k97b3vfRnXact1P1SeY="
+    else
+      "sha256-RzwOmY0NKrmT6Spw+2Ce1xYJoFRJwIvtl4gkDu/+0ck=";
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit version;
@@ -42,8 +55,18 @@ let
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_9;
       fetcherVersion = 1;
-      hash = "sha256-vJgsU0OXyAKjUJsPOyIY8o3zfNW1BUZ5IL814wmJr3o=";
+      hash = pnpmDepsHash-webui;
     };
+
+    postPatch = ''
+      # Replace remote inlang plugins with local ones
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (remote: local: ''
+          substituteInPlace project.inlang/settings.json \
+            --replace-fail "${remote}" "${local}"
+        '') inlang-plugins
+      )}
+    '';
 
     buildPhase = ''
       runHook preBuild
@@ -60,7 +83,7 @@ let
     '';
   });
 in
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   inherit
     pname
     src
@@ -76,7 +99,7 @@ buildGoModule (finalAttrs: {
   '';
 
   proxyVendor = true;
-  vendorHash = "sha256-cYqK/sddLI38K9bzCpnomcZOYbSRDBOEru4Y26rBLFw=";
+  vendorHash = "sha256-NC2VohNkU5MKUSguY83/j4Fb1CkZajw3gzHm4qnj5gM=";
 
   nativeBuildInputs = [
     gzip
@@ -111,6 +134,7 @@ buildGoModule (finalAttrs: {
         "TestMultihostIndexSnapshots"
         "TestRunCommand"
         "TestSnapshot"
+        "TestServeIndexGzip" # e2e test requires networking
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestBackup" # relies on ionice
