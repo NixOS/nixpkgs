@@ -38,6 +38,10 @@ mkMesonLibrary (finalAttrs: {
 
   workDir = ./.;
 
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isMusl [
+    "fortify"
+  ];
+
   nativeBuildInputs = [
     bison
     flex
