@@ -74,5 +74,8 @@ buildGoModule (finalAttrs: {
     ];
     license = lib.licenses.agpl3Plus;
     mainProgram = "minio";
+    knownVulnerabilities = [
+      "minio has been abandoned by upstream, to be removed for 26.05"
+    ];
   };
 })
