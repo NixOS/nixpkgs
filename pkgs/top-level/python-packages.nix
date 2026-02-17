@@ -8271,6 +8271,8 @@ self: super: with self; {
 
   la-panic = callPackage ../development/python-modules/la-panic { };
 
+  label-studio-sdk = callPackage ../development/python-modules/label-studio-sdk { };
+
   labelbox = callPackage ../development/python-modules/labelbox { };
 
   labgrid = callPackage ../development/python-modules/labgrid { };
