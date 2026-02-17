@@ -16777,6 +16777,8 @@ self: super: with self; {
 
   rosbags = callPackage ../development/python-modules/rosbags { };
 
+  rosdistro = callPackage ../development/python-modules/rosdistro { };
+
   rospkg = callPackage ../development/python-modules/rospkg { };
 
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
