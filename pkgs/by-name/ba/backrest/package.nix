@@ -75,6 +75,7 @@ buildGoModule (finalAttrs: {
       internal/resticinstaller/resticinstaller.go
   '';
 
+  proxyVendor = true;
   vendorHash = "sha256-cYqK/sddLI38K9bzCpnomcZOYbSRDBOEru4Y26rBLFw=";
 
   nativeBuildInputs = [
