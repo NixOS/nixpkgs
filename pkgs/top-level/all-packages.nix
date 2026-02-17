@@ -9077,6 +9077,12 @@ with pkgs;
     else
       unixtools.procps;
 
+  qemu_ga = lowPrio (
+    qemu.override {
+      minimal = true;
+      guestAgentSupport = true;
+    }
+  );
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
   qemu_full = lowPrio (
     qemu.override {
