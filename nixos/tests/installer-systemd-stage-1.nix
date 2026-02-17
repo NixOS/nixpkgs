@@ -40,6 +40,8 @@
     zfsroot
     clevisLuks
     clevisLuksFallback
+    clevisLuksAskpass
+    clevisLuksAskpassFallback
     clevisZfs
     clevisZfsFallback
     clevisZfsParentDataset

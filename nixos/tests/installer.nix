@@ -21,6 +21,7 @@ let
       forceGrubReinstallCount ? 0,
       withTestInstrumentation ? true,
       clevisTest,
+      clevisAskpassTest ? false,
     }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
@@ -73,7 +74,12 @@ let
           boot.kernelParams = [ "console=tty0" "ip=192.168.1.1:::255.255.255.0::eth1:none" ];
           boot.initrd = {
             availableKernelModules = [ "tpm_tis" ];
-            clevis = { enable = true; useTang = true; };
+            ${
+              if clevisAskpassTest then
+                "clevisLuksAskpass = { enable = true; useTang = true; };"
+              else
+                "clevis = { enable = true; useTang = true; };"
+            }
             network.enable = true;
           };
         ''}
@@ -108,6 +114,7 @@ let
       testFlakeSwitch,
       testByAttrSwitch,
       clevisTest,
+      clevisAskpassTest ? false,
       clevisFallbackTest,
       disableFileSystems,
     }:
@@ -190,6 +197,7 @@ let
                     grubUseEfi
                     extraConfig
                     clevisTest
+                    clevisAskpassTest
                     ;
                 }
               }",
@@ -197,11 +205,20 @@ let
           )
           installer.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
 
-      ${optionalString clevisTest ''
-        with subtest("Create the Clevis secret with Tang"):
+      ${optionalString (clevisTest && !clevisAskpassTest)
+        ''
+          with subtest("Create the Clevis secret with Tang"):
+               installer.systemctl("start network-online.target")
+               installer.wait_for_unit("network-online.target")
+               installer.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''
+      }
+
+      ${optionalString clevisAskpassTest ''
+        with subtest("Bind Clevis to LUKS header"):
              installer.systemctl("start network-online.target")
              installer.wait_for_unit("network-online.target")
-             installer.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''}
+             installer.succeed("echo -n password | clevis luks bind -y -k - -d /dev/vda3 sss '{\"t\": 2, \"pins\": {\"tpm2\": {}, \"tang\": {\"url\": \"http://192.168.1.2\"}}}'")
+      ''}
 
       ${optionalString clevisFallbackTest ''
         with subtest("Shutdown Tang to check fallback to interactive prompt"):
@@ -283,6 +300,7 @@ let
                     grubUseEfi
                     extraConfig
                     clevisTest
+                    clevisAskpassTest
                     ;
                   forceGrubReinstallCount = 1;
                 }
@@ -316,6 +334,7 @@ let
                 grubUseEfi
                 extraConfig
                 clevisTest
+                clevisAskpassTest
                 ;
               forceGrubReinstallCount = 2;
             }
@@ -384,6 +403,7 @@ let
                 grubUseEfi
                 extraConfig
                 clevisTest
+                clevisAskpassTest
                 ;
               forceGrubReinstallCount = 1;
               withTestInstrumentation = false;
@@ -482,6 +502,7 @@ let
                 grubUseEfi
                 extraConfig
                 clevisTest
+                clevisAskpassTest
                 ;
               forceGrubReinstallCount = 1;
             }
@@ -518,6 +539,7 @@ let
                 grubUseEfi
                 extraConfig
                 clevisTest
+                clevisAskpassTest
                 ;
               forceGrubReinstallCount = 1;
               withTestInstrumentation = false;
@@ -637,6 +659,7 @@ let
       testFlakeSwitch ? false,
       testByAttrSwitch ? false,
       clevisTest ? false,
+      clevisAskpassTest ? false,
       clevisFallbackTest ? false,
       disableFileSystems ? false,
       selectNixPackage ? pkgs: pkgs.nixVersions.stable,
@@ -818,6 +841,7 @@ let
           testFlakeSwitch
           testByAttrSwitch
           clevisTest
+          clevisAskpassTest
           clevisFallbackTest
           disableFileSystems
           ;
@@ -1027,6 +1051,43 @@ let
               target.wait_for_text("Passphrase for")
             ''
         }
+        target.send_chars("password\n")
+      '';
+    };
+
+  mkClevisLuksAskpassTest =
+    {
+      fallback ? false,
+    }:
+    makeInstallerTest "clevis-luks-askpass${optionalString fallback "-fallback"}" {
+      clevisTest = true;
+      clevisAskpassTest = true;
+      clevisFallbackTest = fallback;
+      enableOCR = fallback;
+      extraInstallerConfig = {
+        environment.systemPackages = with pkgs; [ clevis ];
+      };
+      createPartitions = ''
+        installer.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          + " mkpart primary ext2 1M 100MB"
+          + " mkpart primary linux-swap 100M 1024M"
+          + " mkpart primary 1024M -1s",
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "modprobe dm_mod dm_crypt",
+          "echo -n password | cryptsetup luksFormat -q /dev/vda3 -",
+          "echo -n password | cryptsetup luksOpen --key-file - /dev/vda3 crypt-root",
+          "mkfs.ext3 -L nixos /dev/mapper/crypt-root",
+          "mount LABEL=nixos /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
+          "udevadm settle")
+      '';
+      postBootCommands = optionalString fallback ''
+        target.wait_for_text("Please enter")
         target.send_chars("password\n")
       '';
     };
@@ -1723,6 +1784,9 @@ in
   };
 }
 // optionalAttrs systemdStage1 {
+  clevisLuksAskpass = mkClevisLuksAskpassTest { };
+  clevisLuksAskpassFallback = mkClevisLuksAskpassTest { fallback = true; };
+
   stratisRoot = makeInstallerTest "stratisRoot" {
     createPartitions = ''
       installer.succeed(
