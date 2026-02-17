@@ -437,6 +437,29 @@ let
         ];
       });
 
+      prompter = build-asdf-system {
+        pname = "prompter";
+        version = "20260217-git";
+        src = pkgs.fetchFromGitHub {
+          owner = "atlas-engineer";
+          repo = "prompter";
+          rev = "fb0302dd94c5be20674e07038419e27eac79f406";
+          sha256 = "sha256-eiUngOi5dwt6cve676kkYdB45GQzUD/NBz63EcLkqLA=";
+        };
+        lispLibs = with self; [
+          alexandria
+          calispel
+          cl-containers
+          closer-mop
+          lparallel
+          moptilities
+          nclasses
+          serapeum
+          str
+          trivial-package-local-nicknames
+        ];
+      };
+
       polyclot = build-asdf-system {
         pname = "polyclot";
         version = "trunk";
