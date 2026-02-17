@@ -25649,6 +25649,11 @@
     githubId = 7543617;
     name = "Struan Robertson";
   };
+  structix = {
+    github = "STRUCTiX";
+    githubId = 15931333;
+    name = "Janek";
+  };
   stteague = {
     email = "stteague505@yahoo.com";
     github = "stteague";
