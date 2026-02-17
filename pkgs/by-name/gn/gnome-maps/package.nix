@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  blueprint-compiler,
   meson,
   ninja,
   gettext,
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
+    blueprint-compiler
     gettext
     meson
     ninja
