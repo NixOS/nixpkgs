@@ -1,17 +1,18 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   makeWrapper,
   python3,
   qtbase,
   qmake,
   qtserialport,
+  wrapQtAppsHook,
   ctags,
   gdb,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gede";
   version = "2.22.1";
 
@@ -28,6 +29,7 @@ mkDerivation rec {
     python3
     qmake
     qtserialport
+    wrapQtAppsHook
   ];
 
   strictDeps = true;

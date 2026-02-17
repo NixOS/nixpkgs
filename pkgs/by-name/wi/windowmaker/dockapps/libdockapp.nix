@@ -3,10 +3,10 @@
   stdenv,
   autoreconfHook,
   dockapps-sources,
-  fontutil,
-  libX11,
-  libXext,
-  libXpm,
+  font-util,
+  libx11,
+  libxext,
+  libxpm,
   mkfontdir,
   pkg-config,
 }:
@@ -24,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXext
-    libXpm
-    fontutil
+    libx11
+    libxext
+    libxpm
+    font-util
     mkfontdir
   ];
 

@@ -12,17 +12,18 @@
   desktop-file-utils,
   appstream,
   appstream-glib,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-ps";
-  version = "0.2.9";
+  version = "2026.02.03";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-ps";
     tag = finalAttrs.version;
-    hash = "sha256-YQtMfHhPAe8LtJfcw8LRGe5LvtPY7DjYKFaWOYlveeI=";
+    hash = "sha256-5i3LvdjcAdofc0oZCBSm2qn/29UR1Yiia3OmVjFC4ZI=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://pwmt.org/projects/zathura-ps/";

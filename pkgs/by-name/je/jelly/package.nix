@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "jelly";
   version = "0.1.31";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DennisMitchell";

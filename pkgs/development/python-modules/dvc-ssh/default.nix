@@ -6,15 +6,12 @@
   fetchPypi,
   setuptools-scm,
   sshfs,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dvc-ssh";
   version = "4.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "dvc_ssh";

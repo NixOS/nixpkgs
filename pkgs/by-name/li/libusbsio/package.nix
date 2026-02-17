@@ -8,12 +8,12 @@
   systemdMinimal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libusbsio";
   version = "2.1.11";
 
   src = fetchzip {
-    url = "https://www.nxp.com/downloads/en/libraries/libusbsio-${version}-src.zip";
+    url = "https://www.nxp.com/downloads/en/libraries/libusbsio-${finalAttrs.version}-src.zip";
     sha256 = "sha256-qgoeaGWTWdTk5XpJwoauckEQlqB9lp5x2+TN09vQttI=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
       sbruder
     ];
   };
-}
+})

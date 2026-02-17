@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-health-check";
-  version = "3.20.0";
+  version = "3.20.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KristianOellegaard";
     repo = "django-health-check";
     tag = version;
-    hash = "sha256-qgABCDWKGYZ67sKvCozUQfmYcKWMpEVNLxInTnIaojk=";
+    hash = "sha256-voB3shugfM/nO0vPd9yA4NOUB+E9aVcFnqG1mtfRYFc=";
   };
 
   build-system = [

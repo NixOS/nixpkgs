@@ -4,15 +4,15 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.9.8";
-  format = "pyproject";
+  pyproject = true;
   pname = "canto-daemon";
 
   src = fetchFromGitHub {
     owner = "themoken";
     repo = "canto-next";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0fmsdn28z09bvivdkqcla5bnalky7k744iir25z70bv4pz1jcvnk";
   };
 
@@ -39,4 +39,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ devhell ];
   };
-}
+})

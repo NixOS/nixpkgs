@@ -323,6 +323,7 @@ let
         postMountCommands
         preFailCommands
         kernelModules
+        stage1Greeting
         ;
 
       resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}") (
@@ -683,6 +684,15 @@ in
 
         - `boot.consoleLogLevel = 0;`
         - `boot.kernelParams = [ "quiet" "udev.log_level=3" ];`
+      '';
+    };
+
+    boot.initrd.stage1Greeting = mkOption {
+      type = types.str;
+      default = "<<< ${config.system.nixos.distroName} Stage 1 >>>";
+      defaultText = literalExpression ''"<<< ''${config.system.nixos.distroName} Stage 1 >>>"'';
+      description = ''
+        The greeting message displayed during NixOS stage 1 boot.
       '';
     };
 

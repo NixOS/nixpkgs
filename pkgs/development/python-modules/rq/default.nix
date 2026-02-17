@@ -47,7 +47,10 @@ buildPythonPackage rec {
     redisTestHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+
+  preCheck = ''
+    redisTestPort=6379
+  '';
 
   __darwinAllowLocalNetworking = true;
 

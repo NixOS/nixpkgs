@@ -44,7 +44,7 @@
   imagemagick,
   imlib2,
   vips,
-  xfce,
+  xfwm4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -212,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
         vips
         ;
       inherit (enlightenment) efl;
-      inherit (xfce) xfwm4;
+      inherit xfwm4;
       ffmpeg = ffmpeg.override { withSvg = true; };
     };
   };

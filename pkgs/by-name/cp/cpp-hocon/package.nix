@@ -8,13 +8,13 @@
   leatherman,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpp-hocon";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     sha256 = "0b24anpwkmvbsn5klnr58vxksw00ci9pjhwzx7a61kplyhsaiydw";
-    rev = version;
+    rev = finalAttrs.version;
     repo = "cpp-hocon";
     owner = "puppetlabs";
   };
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "C++ port of the Typesafe Config library";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.womfoo ];
     platforms = lib.platforms.unix;
   };
 
-}
+})

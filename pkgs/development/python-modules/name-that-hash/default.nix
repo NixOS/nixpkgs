@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "name-that-hash";
   version = "1.11.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HashPals";

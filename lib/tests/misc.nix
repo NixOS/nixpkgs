@@ -203,6 +203,85 @@ runTests {
     };
   };
 
+  testOverridePreserveFunctionMetadata =
+    let
+      toCallableAttrs = f: setFunctionArgs f (functionArgs f);
+      constructDefinition =
+        {
+          a ? 3,
+        }:
+        toCallableAttrs (
+          {
+            b ? 5,
+          }:
+          {
+            inherit a b;
+          }
+        )
+        // {
+          inherit a;
+          c = 7;
+        };
+      construct0 = makeOverridable constructDefinition { };
+      construct1 = makeOverridable construct0;
+      construct0p = construct0.override { a = 11; };
+      construct1p = construct1.override { a = 11; };
+    in
+    {
+      expr = {
+        construct-metadata = {
+          inherit (construct1) a c;
+        };
+        construct-overridden-metadata = {
+          v = construct0p.a;
+          inherit (construct1p) a c;
+        };
+        construct-overridden-result-overrider = {
+          result-overriders-exist = mapAttrs (_: f: (f { }) ? override) {
+            inherit construct1 construct1p;
+          };
+          result-overrider-functionality = {
+            overridden = {
+              inherit ((construct1p { }).override { b = 13; }) a b;
+            };
+            direct = {
+              inherit (construct1p { b = 13; }) a b;
+            };
+            v = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+          };
+        };
+      };
+      expected = {
+        construct-metadata = {
+          inherit (construct0) a c;
+        };
+        construct-overridden-metadata = {
+          v = 11;
+          inherit (construct0p) a c;
+        };
+        construct-overridden-result-overrider = {
+          result-overriders-exist = {
+            construct1 = true;
+            construct1p = true;
+          };
+          result-overrider-functionality = {
+            overridden = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+            direct = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+            v = {
+              a = 11;
+              b = 13;
+            };
+          };
+        };
+      };
+    };
+
   testCallPackageWithOverridePreservesArguments =
     let
       f =
@@ -784,6 +863,21 @@ runTests {
   testEscapeShellArgsUnicode = {
     expr = strings.escapeShellArg "á";
     expected = "'á'";
+  };
+
+  testEscapeNixIdentifierNoQuote = {
+    expr = strings.escapeNixIdentifier "foo";
+    expected = "foo";
+  };
+
+  testEscapeNixIdentifierNumber = {
+    expr = strings.escapeNixIdentifier "1foo";
+    expected = ''"1foo"'';
+  };
+
+  testEscapeNixIdentifierKeyword = {
+    expr = strings.escapeNixIdentifier "assert";
+    expected = ''"assert"'';
   };
 
   testSplitStringsDerivation = {
@@ -2540,7 +2634,7 @@ runTests {
       sections = {
       };
     };
-    expected = '''';
+    expected = "";
   };
 
   testToINIWithGlobalSectionGlobalEmptyIsTheSameAsToINI =
@@ -2706,6 +2800,7 @@ runTests {
         ];
         emptylist = [ ];
         attrs = {
+          "assert" = false;
           foo = null;
           "foo b/ar" = "baz";
         };
@@ -2725,7 +2820,7 @@ runTests {
         functionArgs = "<function, args: {arg?, foo}>";
         list = "[ 3 4 ${function} [ false ] ]";
         emptylist = "[ ]";
-        attrs = "{ foo = null; \"foo b/ar\" = \"baz\"; }";
+        attrs = "{ \"assert\" = false; foo = null; \"foo b/ar\" = \"baz\"; }";
         emptyattrs = "{ }";
         drv = "<derivation ${deriv.name}>";
       };
@@ -2907,12 +3002,12 @@ runTests {
 
   testToLuaEmptyAttrSet = {
     expr = generators.toLua { } { };
-    expected = ''{}'';
+    expected = "{}";
   };
 
   testToLuaEmptyList = {
     expr = generators.toLua { } [ ];
-    expected = ''{}'';
+    expected = "{}";
   };
 
   testToLuaListOfVariousTypes = {
@@ -2957,7 +3052,7 @@ runTests {
       41
       43
     ];
-    expected = ''{ 41, 43 }'';
+    expected = "{ 41, 43 }";
   };
 
   testToLuaEmptyBindings = {
@@ -4814,4 +4909,17 @@ runTests {
       targetTarget = "prefix-tt";
     };
   };
+
+  testReplaceElemAt = {
+    expr = lib.replaceElemAt [ 1 2 3 ] 1 "a";
+    expected = [
+      1
+      "a"
+      3
+    ];
+  };
+
+  testReplaceElemAtOutOfRange = testingThrow (lib.replaceElemAt [ 1 2 3 ] 5 "a");
+
+  testReplaceElemAtNegative = testingThrow (lib.replaceElemAt [ 1 2 3 ] (-1) "a");
 }

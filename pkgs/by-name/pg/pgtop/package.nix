@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   perlPackages,
   fetchFromGitHub,
-  shortenPerlShebang,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -26,11 +24,6 @@ perlPackages.buildPerlPackage rec {
     JSON
     LWP
   ];
-
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/pgtop
-  '';
 
   meta = {
     description = "PostgreSQL clone of `mytop', which in turn is a `top' clone for MySQL";

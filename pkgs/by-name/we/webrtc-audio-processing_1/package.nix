@@ -9,7 +9,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webrtc-audio-processing";
   version = "1.3";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "pulseaudio";
     repo = "webrtc-audio-processing";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8CDt4kMt2Owzyv22dqWIcFuHeg4Y3FxB405cLw3FZ+g=";
   };
 
@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     (fetchurl {
       url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/0630fa25465530c0e7358f00016bdc812894f67f/community/webrtc-audio-processing-1/add-loongarch-support.patch";
       hash = "sha256-Cn3KwKSSV/QJm1JW0pkEWB6OmeA0fRlVkiMU8OzXNzY=";
+    })
+    # Fix compilation against gcc15
+    (fetchurl {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/webrtc-audio-processing-1/-/raw/9de1306d3a6a78f435666453b85ba8ede0dd91ea/0001-Fix-compilation-with-GCC-15.patch";
+      hash = "sha256-Ws7FRBX5+nIKWJv6cROqO5eSm5AJGyZVWrAjQ4R3n0I=";
     })
   ];
 
@@ -77,4 +82,4 @@ stdenv.mkDerivation rec {
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/31
     badPlatforms = lib.platforms.bigEndian;
   };
-}
+})

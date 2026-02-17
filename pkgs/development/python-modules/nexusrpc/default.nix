@@ -4,22 +4,19 @@
   fetchFromGitHub,
   hatchling,
   nix-update-script,
-  pythonOlder,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "nexus-rpc";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nexus-rpc";
     repo = "sdk-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-AHyue0s0bb28WoUnSghpYI3Sh/FyS6FFSM9g0ElYs4I=";
+    tag = version;
+    hash = "sha256-i2FfJ3aCncbqLY2oBG8zAPTbgxzH30MSmZxhDltN4JA=";
     fetchSubmodules = true;
   };
 

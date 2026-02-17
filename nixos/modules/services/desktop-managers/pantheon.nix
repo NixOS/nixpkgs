@@ -208,6 +208,13 @@ in
         "org.gnome.SettingsDaemon.XSettings.service"
       ];
 
+      systemd.user.services."io.elementary.settings-daemon" = {
+        # https://github.com/NixOS/nixpkgs/issues/81138
+        wantedBy = [ "gnome-session-initialized.target" ];
+        # The daemon might launch external applications via g_app_info_launch.
+        environment.PATH = lib.mkForce null;
+      };
+
       # Global environment
       environment.systemPackages =
         (with pkgs.pantheon; [

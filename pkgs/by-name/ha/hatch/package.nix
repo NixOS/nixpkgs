@@ -12,16 +12,16 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hatch";
-  version = "1.16.1";
+  version = "1.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
-    tag = "hatch-v${version}";
-    hash = "sha256-HreVb+RZzQV3p9TaoHDZLHBQFifyH+hocP01u5yU+ms=";
+    tag = "hatch-v${finalAttrs.version}";
+    hash = "sha256-A91tpoNBTerB2e09dmvgwealId8mnjxcyiVyCkMxQlY=";
   };
 
   patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
@@ -75,8 +75,6 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.ps
     ];
-
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # AssertionError: assert (1980, 1, 2, 0, 0, 0) == (2020, 2, 2, 0, 0, 0)
@@ -192,9 +190,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Modern, extensible Python project manager";
     homepage = "https://hatch.pypa.io/latest/";
-    changelog = "https://github.com/pypa/hatch/blob/hatch-v${version}/docs/history/hatch.md";
+    changelog = "https://github.com/pypa/hatch/blob/hatch-v${finalAttrs.version}/docs/history/hatch.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "hatch";
   };
-}
+})

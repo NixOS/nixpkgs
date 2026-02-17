@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylgnetcast";
   version = "0.3.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Drafteed";

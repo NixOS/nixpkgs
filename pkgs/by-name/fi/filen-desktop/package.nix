@@ -48,8 +48,10 @@ buildNpmPackage {
   npmDepsHash = "sha256-+Ul2z6faZvAeCHq35janVTUNoqTQ5JNDeLbCV220nFU=";
   npmBuildScript = "build";
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+  };
 
   nativeBuildInputs = [
     pkgs.pkg-config

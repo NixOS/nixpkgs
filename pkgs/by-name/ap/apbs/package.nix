@@ -19,13 +19,16 @@ let
     src = fetchFromGitHub {
       owner = "Electrostatics";
       repo = "fetk";
-      rev = "refs/tags/${finalAttrs.version}";
+      tag = finalAttrs.version;
       hash = "sha256-uFA1JRR05cNcUGaJj9IyGNONB2hU9IOBPzOj/HucNH4=";
     };
 
     nativeBuildInputs = [
       cmake
     ];
+
+    # Required for gcc-15 compatibility
+    env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
     cmakeFlags = [
       "-DBLAS_LIBRARIES=${blas}/lib"
@@ -57,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Electrostatics";
     repo = "apbs";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2DnHU9hMDl4OJBaTtcRiB+6R7gAeFcuOUy7aI63A3gQ=";
   };
 

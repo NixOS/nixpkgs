@@ -6,12 +6,15 @@
   quilt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ucspi-tcp";
   version = "0.88";
 
+  # Uses K&R C style function declarations which GCC 14+ rejects
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
+
   src = fetchurl {
-    url = "https://cr.yp.to/ucspi-tcp/ucspi-tcp-${version}.tar.gz";
+    url = "https://cr.yp.to/ucspi-tcp/ucspi-tcp-${finalAttrs.version}.tar.gz";
     sha256 = "171yl9kfm8w7l17dfxild99mbf877a9k5zg8yysgb1j8nz51a1ja";
   };
 
@@ -91,4 +94,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vcs_query";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "mageta";
     repo = "vcs_query";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "05va0na9yxkpqhm9v0x3k58148qcf2bbcv5bnmj7vn9r7fwyjrlx";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ma27 ];
     mainProgram = "vcs_query";
   };
-}
+})

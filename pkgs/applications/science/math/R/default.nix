@@ -4,9 +4,9 @@
   fetchurl,
   bzip2,
   gfortran,
-  libX11,
-  libXmu,
-  libXt,
+  libx11,
+  libxmu,
+  libxt,
   libjpeg,
   libpng,
   libtiff,
@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "man"
     "tex"
   ];
 
@@ -72,10 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     gfortran
-    libX11
-    libXmu
-    libXt
-    libXt
+    libx11
+    libxmu
+    libxt
+    libxt
     libjpeg
     libpng
     libtiff

@@ -8,7 +8,7 @@
   wrapGAppsHook3,
   v2ray-geoip,
   v2ray-domain-list-community,
-  libsoup,
+  libsoup_3,
 }:
 let
   pname = "clash-verge-rev";
@@ -38,7 +38,7 @@ let
       pnpm-hash
       vendor-hash
       meta
-      libsoup
+      libsoup_3
       ;
   };
 

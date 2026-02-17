@@ -5,7 +5,6 @@
   aiohttp,
   aiozoneinfo,
   lxml,
-  pythonOlder,
   poetry-core,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pytrafikverket";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

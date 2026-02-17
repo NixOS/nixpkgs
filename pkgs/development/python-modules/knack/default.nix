@@ -12,15 +12,12 @@
   mock,
   vcrpy,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "knack";
   version = "0.13.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

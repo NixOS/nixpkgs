@@ -12,14 +12,14 @@
   withKerberos ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ksmbd-tools";
   version = "3.5.6";
 
   src = fetchFromGitHub {
     owner = "cifsd-team";
     repo = "ksmbd-tools";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-JwfxYFBwrMtP2D7GcDpW44WYbLJyxZy3Jhgi+7HsIng=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

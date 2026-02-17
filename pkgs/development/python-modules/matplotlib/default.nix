@@ -4,7 +4,6 @@
   fetchPypi,
   buildPythonPackage,
   isPyPy,
-  pythonOlder,
 
   # build-system
   certifi,
@@ -39,9 +38,6 @@
   pyparsing,
   python-dateutil,
 
-  # optional
-  importlib-resources,
-
   # GTK3
   enableGtk3 ? false,
   cairo,
@@ -68,7 +64,7 @@
   ipykernel,
 
   # required for headless detection
-  libX11,
+  libx11,
   wayland,
 
   # Reverse dependency
@@ -80,15 +76,13 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.10.5";
+  version = "3.10.8";
   pname = "matplotlib";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NS7WzPt5mKAIgWkvOLTKCDxpHT4nW0FFQjcEw0yQkHY=";
+    hash = "sha256-Ipk3LBnVa801zwWic4MIdY0yuertI3GJjY9b0z8ISqM=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -99,18 +93,23 @@ buildPythonPackage rec {
   # installed under the same path which is not true in Nix.
   # With the following patch we just hard-code these paths into the install
   # script.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
+  postPatch =
+    lib.optionalString isPyPy ''
+      substituteInPlace tools/generate_matplotlibrc.py \
+        --replace-fail "/usr/bin/env python3" "/usr/bin/env pypy3"
+    ''
+    + ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
 
-    patchShebangs tools
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
-    # fix paths to libraries in dlopen calls (headless detection)
-    substituteInPlace src/_c_internal_utils.cpp \
-      --replace-fail libX11.so.6 ${libX11}/lib/libX11.so.6 \
-      --replace-fail libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
-  '';
+      patchShebangs tools
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
+      # fix paths to libraries in dlopen calls (headless detection)
+      substituteInPlace src/_c_internal_utils.cpp \
+        --replace-fail libX11.so.6 ${libx11}/lib/libX11.so.6 \
+        --replace-fail libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
+    '';
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableGtk3 [ gobject-introspection ];
 
@@ -147,7 +146,6 @@ buildPythonPackage rec {
     pyparsing
     python-dateutil
   ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
   ++ lib.optionals enableGtk3 [
     pycairo
     pygobject3

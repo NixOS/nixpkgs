@@ -6,6 +6,30 @@
 }:
 let
   cfg = config.services.n8n;
+
+  # Partition environment variables into regular and file-based (_FILE suffix)
+  envVarToCredName = varName: lib.toLower varName;
+  partitionEnv =
+    env:
+    let
+      regular = lib.filterAttrs (name: _value: !(lib.hasSuffix "_FILE" name)) env;
+      fileBased = lib.filterAttrs (name: _value: lib.hasSuffix "_FILE" name) env;
+      fileBasedTransformed = lib.mapAttrs' (
+        varName: _secretPath: lib.nameValuePair varName "%d/${envVarToCredName varName}"
+      ) fileBased;
+    in
+    {
+      inherit regular fileBased fileBasedTransformed;
+    };
+
+  n8nEnv = partitionEnv cfg.environment;
+
+  customNodesDir = pkgs.linkFarm "n8n-custom-nodes" (
+    map (pkg: {
+      name = pkg.pname;
+      path = "${pkg}/lib/node_modules/${pkg.pname}";
+    }) cfg.customNodes
+  );
 in
 {
   imports = [
@@ -22,6 +46,17 @@ in
 
     package = lib.mkPackageOption pkgs "n8n" { };
 
+    customNodes = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.n8n-nodes-carbonejs ]";
+      description = ''
+        List of custom n8n community node packages to load.
+        Each package is expected to be an npm package with an `n8n.nodes` entry in its `package.json`.
+        The packages are made available to n8n via the `N8N_CUSTOM_EXTENSIONS` environment variable.
+      '';
+    };
+
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -32,9 +67,27 @@ in
       description = ''
         Environment variables to pass to the n8n service.
         See <https://docs.n8n.io/hosting/configuration/environment-variables/> for available options.
+
+        Environment variables ending with `_FILE` are automatically handled as secrets:
+        they are loaded via systemd credentials for secure access with `DynamicUser=true`.
+
+        This can be useful to pass secrets via tools like `agenix` or `sops-nix`.
+      '';
+      example = lib.literalExpression ''
+        {
+          N8N_ENCRYPTION_KEY_FILE = "/run/n8n/encryption_key";
+          DB_POSTGRESDB_PASSWORD_FILE = "/run/n8n/db_postgresdb_password";
+          WEBHOOK_URL = "https://n8n.example.com";
+        }
       '';
       type = lib.types.submodule {
-        freeformType = with lib.types; attrsOf str;
+        freeformType =
+          with lib.types;
+          attrsOf (oneOf [
+            str
+            (coercedTo int toString str)
+            (coercedTo bool builtins.toJSON str)
+          ]);
         options = {
           GENERIC_TIMEZONE = lib.mkOption {
             type = with lib.types; nullOr str;
@@ -61,7 +114,7 @@ in
             readOnly = true;
           };
           N8N_DIAGNOSTICS_ENABLED = lib.mkOption {
-            type = with lib.types; coercedTo bool toString str;
+            type = with lib.types; coercedTo bool builtins.toJSON str;
             default = false;
             description = ''
               Whether to share selected, anonymous telemetry with n8n.
@@ -69,7 +122,7 @@ in
             '';
           };
           N8N_VERSION_NOTIFICATIONS_ENABLED = lib.mkOption {
-            type = with lib.types; coercedTo bool toString str;
+            type = with lib.types; coercedTo bool builtins.toJSON str;
             default = false;
             description = ''
               When enabled, n8n sends notifications of new versions and security updates.
@@ -86,14 +139,24 @@ in
       description = "n8n service";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = cfg.environment // {
-        HOME = config.services.n8n.environment.N8N_USER_FOLDER;
-      };
+      environment =
+        n8nEnv.regular
+        // {
+          HOME = cfg.environment.N8N_USER_FOLDER;
+        }
+        // lib.optionalAttrs (cfg.customNodes != [ ]) {
+          N8N_CUSTOM_EXTENSIONS = toString customNodesDir;
+        }
+        // n8nEnv.fileBasedTransformed;
       serviceConfig = {
         Type = "simple";
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
         StateDirectory = "n8n";
+
+        LoadCredential = lib.mapAttrsToList (
+          varName: secretPath: "${envVarToCredName varName}:${secretPath}"
+        ) n8nEnv.fileBased;
 
         # Basic Hardening
         NoNewPrivileges = "yes";

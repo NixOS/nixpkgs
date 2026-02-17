@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   python,
-  pythonOlder,
   fetchFromGitHub,
   cmake,
   sip4,
@@ -12,7 +11,7 @@
 buildPythonPackage rec {
   pname = "libsavitar";
   version = "4.12.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ultimaker";

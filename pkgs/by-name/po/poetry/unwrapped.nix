@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   findpython,
   installShellFiles,
@@ -26,27 +25,24 @@
   trove-classifiers,
   virtualenv,
   xattr,
-  tomli,
-  importlib-metadata,
   deepdiff,
   pytestCheckHook,
   httpretty,
   pytest-mock,
   pytest-xdist,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.2.1";
+  version = "2.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-oPHRDYci4lrZBY3MC4QU1juwbMJYFDJjARg1Y8us4FQ=";
+    hash = "sha256-zJ7HA/NNBh9gy0WUXTxKBUsC74Yt+ANZuBxMrQrS6XU=";
   };
 
   build-system = [
@@ -55,11 +51,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ];
-
-  pythonRelaxDeps = [
-    "dulwich"
-    "keyring"
   ];
 
   dependencies = [
@@ -87,12 +78,6 @@ buildPythonPackage rec {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     xattr
   ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ]
   ++ cachecontrol.optional-dependencies.filecache
   ++ pbs-installer.optional-dependencies.download
   ++ pbs-installer.optional-dependencies.install;
@@ -110,6 +95,7 @@ buildPythonPackage rec {
     httpretty
     pytest-mock
     pytest-xdist
+    responses
   ];
 
   preCheck = (

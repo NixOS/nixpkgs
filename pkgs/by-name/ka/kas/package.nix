@@ -6,15 +6,15 @@
   kas,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kas";
   version = "5.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "siemens";
     repo = "kas";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-SQeoRm2bjcQmhfMUJCSxgKu7/qcIEv9ItWcLWkkNwAs=";
   };
 
@@ -48,4 +48,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bachp ];
   };
-}
+})

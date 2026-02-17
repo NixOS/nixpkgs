@@ -35,6 +35,11 @@ qtModule {
     })
     # add version specific QML import path
     ./use-versioned-import-path.patch
+
+    # Backport of https://codereview.qt-project.org/c/qt/qtdeclarative/+/704031
+    # Fixes common Plasma crash
+    # FIXME: remove in 6.10.3
+    ./another-crash-fix.patch
   ];
 
   cmakeFlags = [

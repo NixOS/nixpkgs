@@ -11,7 +11,6 @@
   pbr,
   requests,
   prettytable,
-  pythonOlder,
   reno,
   requests-mock,
   setuptools,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "python-cinderclient";
   version = "9.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "python_cinderclient";

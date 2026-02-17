@@ -5,15 +5,12 @@
   dnspython,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "localzone";
   version = "0.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ags-slc";
@@ -42,6 +39,5 @@ buildPythonPackage rec {
     homepage = "https://localzone.iomaestro.com";
     changelog = "https://github.com/ags-slc/localzone/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ flyfloh ];
   };
 }

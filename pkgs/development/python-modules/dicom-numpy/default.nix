@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   numpy,
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   pname = "dicom-numpy";
   version = "0.6.5";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "innolitics";

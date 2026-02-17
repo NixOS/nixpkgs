@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "librespeed-rust";
   version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "librespeed";
     repo = "speedtest-rust";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TINIKZefT4ngnEtlMjxO56PrQxW5gyb1+higiSnkE3Q=";
   };
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     description = "Very lightweight speed test implementation in Rust";
     homepage = "https://github.com/librespeed/speedtest-rust";
     license = lib.licenses.lgpl3Plus;
-    teams = with lib.teams; [ c3d2 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "librespeed-rs";
   };
-}
+})

@@ -12,7 +12,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.7-2";
   pname = "fbterm";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "fbterm";
-    rev = "debian/${version}";
+    rev = "debian/${finalAttrs.version}";
     hash = "sha256-vRUZgFpA1IkzkLzl7ImT+Yff5XqjFbUlkHmj/hd7XDE=";
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

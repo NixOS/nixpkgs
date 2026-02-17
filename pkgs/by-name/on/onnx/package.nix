@@ -1,12 +1,18 @@
 {
-  cmake,
-  fetchFromGitHub,
-  gtest,
   lib,
-  ninja,
-  protobuf,
-  python3Packages,
   stdenv,
+  python3Packages,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
+
+  # buildInputs
+  protobuf,
+
+  # checkInputs
+  gtest,
 }:
 let
   inherit (lib)
@@ -27,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "onnx";
-  version = "1.20.0";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oWbrBx1jWznzeT2N+VrFH8LIqdzY/aXH5N0kb/vbg2M=";
+    hash = "sha256-XZJXD6sBvVJ6cLPyDkKOW8oSkjqcw9whUqDWd7dxY3c=";
   };
 
   outputs = [
@@ -49,18 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     python
     setuptools
   ];
-
-  # NOTE: Darwin requires a static build, so this patch is unnecessary on that platform.
-  prePatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    nixLog "patching $PWD/CMakeLists.txt to fix symbol visibility"
-    substituteInPlace "$PWD/CMakeLists.txt" \
-      --replace-fail \
-        'set_target_properties(onnx_object PROPERTIES CXX_VISIBILITY_PRESET hidden)' \
-        '# set_target_properties(onnx_object PROPERTIES CXX_VISIBILITY_PRESET hidden)' \
-      --replace-fail \
-        'set_target_properties(onnx_object PROPERTIES VISIBILITY_INLINES_HIDDEN ON)' \
-        '# set_target_properties(onnx_object PROPERTIES VISIBILITY_INLINES_HIDDEN ON)'
-  '';
 
   # NOTE: python3Packages.protobuf does not propagate a dependency on protobuf's dev output, so we must bring it in
   # for the CMake files.

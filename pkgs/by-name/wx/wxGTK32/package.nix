@@ -9,10 +9,10 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
+  libsm,
+  libxinerama,
+  libxtst,
+  libxxf86vm,
   libnotify,
   libpng,
   libsecret,
@@ -45,14 +45,14 @@ let
     hash = "sha256-ymziU0NgGqxPOKHwGm0QyEdK/8jL/QYk5UdIQ3Tn8jw=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxwidgets";
   version = "3.2.8.1";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aXI59oN5qqds6u2/6MI7BYLbFPy3Yrfn2FGTfxlPG7o=";
   };
 
@@ -71,10 +71,10 @@ stdenv.mkDerivation rec {
     curl
     gspell # wxTextCtrl spell checking
     gtk3
-    libSM
-    libXinerama
-    libXtst
-    libXxf86vm
+    libsm
+    libxinerama
+    libxtst
+    libxxf86vm
     libnotify # wxNotificationMessage backend
     libsecret # wxSecretStore backend
     libxkbcommon # proper key codes in key events
@@ -157,4 +157,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

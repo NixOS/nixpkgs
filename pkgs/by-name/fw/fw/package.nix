@@ -8,14 +8,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fw";
   version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "brocode";
     repo = "fw";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tqtiAw4+bnCJMF37SluAE9NM55MAjBGkJTvGLcmYFnA=";
   };
 
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "fw";
   };
-}
+})

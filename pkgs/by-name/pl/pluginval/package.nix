@@ -7,14 +7,14 @@
   alsa-lib,
   fontconfig,
   freetype,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   ladspaH,
 }:
 
@@ -38,14 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     fontconfig
     freetype
-    libX11
-    libXcomposite
-    libXcursor
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libx11
+    libxcomposite
+    libxcursor
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
     ladspaH
   ];
 

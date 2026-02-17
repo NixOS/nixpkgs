@@ -22,14 +22,14 @@
 let
   self = python3.pkgs.buildPythonApplication rec {
     pname = "duplicity";
-    version = "3.0.6.3";
+    version = "3.0.7";
     format = "setuptools";
 
     src = fetchFromGitLab {
       owner = "duplicity";
       repo = "duplicity";
       rev = "rel.${version}";
-      hash = "sha256-WY2pQlWlqdsFGONUBdAoJM1sNr+Hu496pThhn8IKSXE=";
+      hash = "sha256-t2YFp/AuQ9xKZSPmNA/IuQYNOcnPO0l8xhXyLBKSuqA=";
     };
 
     patches = [
@@ -143,7 +143,7 @@ let
       # tests need writable $HOME
       HOME=$PWD/.home
 
-      wrapPythonProgramsIn "$PWD/testing/overrides/bin" "$pythonPath"
+      wrapPythonProgramsIn "$PWD/testing/overrides/bin" "''${pythonPath[*]}"
     '';
 
     doCheck = true;

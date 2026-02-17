@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ord";
   version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "ordinals";
     repo = "ord";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-wGwetpZwYuQ6NhZ5to6PTQdhlEz+66iM26x0ZqNfwH0=";
   };
 
@@ -36,9 +36,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Index, block explorer, and command-line wallet for Ordinals";
     homepage = "https://github.com/ordinals/ord";
-    changelog = "https://github.com/ordinals/ord/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ordinals/ord/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "ord";
   };
-}
+})

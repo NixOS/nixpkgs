@@ -7,7 +7,7 @@
 buildPythonPackage rec {
   pname = "flit-core";
   inherit (flit) version;
-  format = "pyproject";
+  pyproject = true;
 
   inherit (flit) src patches;
 

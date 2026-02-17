@@ -33,35 +33,35 @@
   nss,
   pango,
   zlib,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libxshmfence,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   p7zip,
   onetbb,
   wayland,
-  libXScrnSaver,
+  libxscrnsaver,
 }:
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "45.10.0.33234";
+  version = "45.10.1.33646";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20251014140645/Webex_ubuntu.7z";
-    sha256 = "126ac38dbf659d26c213a9ccd5930f6a88d1aa90fd9de90cba74b2f2bfbe7793";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20251205014600/Webex_ubuntu.7z";
+    sha256 = "59894d56ed2d55df1ca908d8b6993c208d685f6e77b8c315e370471e616cfd8d";
   };
 
   nativeBuildInputs = [
@@ -99,23 +99,23 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbcommon
     libxcrypt-legacy
-    libX11
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     libxshmfence
-    xcbutil
-    xcbutilimage
-    libXScrnSaver
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-util
+    libxcb-image
+    libxscrnsaver
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     onetbb
     wayland
   ];

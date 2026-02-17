@@ -5,15 +5,12 @@
   fetchpatch,
   numpy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "opytimark";
   version = "1.0.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gugarosa";

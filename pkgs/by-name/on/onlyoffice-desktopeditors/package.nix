@@ -35,7 +35,18 @@
   qt5,
   wrapGAppsHook3,
   xkeyboard_config,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
 }:
 let
 
@@ -106,18 +117,18 @@ let
       qt5.qtdeclarative
       qt5.qtsvg
       qt5.qtwayland
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXScrnSaver
-      xorg.libXtst
+      libx11
+      libxcb
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxrender
+      libxscrnsaver
+      libxtst
     ];
 
     dontWrapQtApps = true;
@@ -150,7 +161,7 @@ let
       gappsWrapperArgs+=(
         --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
-        --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+        --set QTCOMPOSE "${libx11.out}/share/X11/locale" \
         --set QT_QPA_PLATFORM "xcb"
         # the bundled version of qt does not support wayland
       )

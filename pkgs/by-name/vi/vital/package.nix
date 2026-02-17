@@ -8,7 +8,9 @@
   alsa-lib,
   libjack2,
   curl,
-  xorg,
+  libx11,
+  libsm,
+  libice,
   libGL,
   freetype,
   zenity,
@@ -56,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     (lib.getLib stdenv.cc.cc)
     libGL
-    xorg.libSM
-    xorg.libICE
-    xorg.libX11
+    libsm
+    libice
+    libx11
     freetype
     libjack2
   ];

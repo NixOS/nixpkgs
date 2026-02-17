@@ -38,11 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  CFLAGS = [
-    "-O3"
-    "-funroll-loops"
-  ];
-  CXXFLAGS = [ "-O3" ];
+  env = {
+    CFLAGS = toString [
+      "-O3"
+      "-funroll-loops"
+    ];
+    CXXFLAGS = toString [ "-O3" ];
+  };
 
   patches = [ ./package.patch ];
   doCheck = true;
@@ -57,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

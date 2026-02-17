@@ -43,6 +43,5 @@ buildPythonPackage rec {
       isc
       bsdOriginal
     ];
-    teams = [ lib.teams.wdz ];
   };
 }

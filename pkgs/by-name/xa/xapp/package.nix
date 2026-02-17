@@ -6,7 +6,7 @@
   libgnomekbd,
   gdk-pixbuf,
   cairo,
-  xorg,
+  libxkbfile,
   meson,
   ninja,
   pkg-config,
@@ -17,14 +17,14 @@
   wrapGAppsHook3,
   file,
   inxi,
-  mate,
+  mate-panel,
   dbus,
   libdbusmenu-gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xapp";
-  version = "3.2.0";
+  version = "3.2.2";
 
   outputs = [
     "out"
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xapp";
-    rev = version;
-    hash = "sha256-jO1FyJfAg/kZExAS6gT0u15ans8cDsXfBE5V+w2fQXU=";
+    rev = finalAttrs.version;
+    hash = "sha256-xVGIrK7koqX6xKoanVHWQMBUusUjtvHzQg2OV0E0b78=";
   };
 
   # Recommended by upstream, which enables the build of xapp-debug.
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
     ))
     libgnomekbd
     gdk-pixbuf
-    xorg.libxkbfile
+    libxkbfile
     python3.pkgs.pygobject3 # for .pc file
-    mate.mate-panel # for gobject-introspection
+    mate-panel # for gobject-introspection
     dbus
     libdbusmenu-gtk3
   ];
@@ -107,4 +107,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

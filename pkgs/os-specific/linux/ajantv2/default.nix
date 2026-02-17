@@ -4,8 +4,10 @@
   kernelModuleMakeFlags,
   libajantv2,
 }:
-stdenv.mkDerivation {
-  name = "ajantv2-module-${libajantv2.version}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.version}-${finalAttrs.version}-${kernel.version}";
+  pname = "ajantv2-module";
+  version = libajantv2.version;
 
   inherit (libajantv2) src;
   sourceRoot = "${libajantv2.src.name}/driver/linux";
@@ -46,4 +48,4 @@ stdenv.mkDerivation {
     # FTB for hardened 5.10/5.15 kernels
     broken = kernel.kernelOlder "6" && kernel.isHardened;
   };
-}
+})

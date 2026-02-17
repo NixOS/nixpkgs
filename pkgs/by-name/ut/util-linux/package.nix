@@ -40,11 +40,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.41.2";
+  version = "2.41.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YGKh2JtXGmGTLm/AIR82BgxBg1aLge6GbPNjvOn2WD4=";
+    hash = "sha256-MzDYc/D861VguJp9wU5PMoi72IDpaQPtm1DsK1eZ5Ys=";
   };
 
   patches = [
@@ -183,6 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
     ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
 
+    rm -f bash-completion/Makemodule.am
     installShellCompletion --bash bash-completion/*
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -40,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.12.0";
+  version = "2026.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-oGBOt2ULLn0Kx1rOVNWaC3l1ECotMC2yNeCHya9Tx+s=";
+    hash = "sha256-PCxIryFPwoSQ4xUA2lM6cPVzgBvr6RYikxvpjLXxjwQ=";
   };
 
   build-system = [
@@ -102,7 +103,6 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.array
   ++ optional-dependencies.dataframe;
-  versionCheckProgramArg = "--version";
 
   pytestFlags = [
     # Rerun failed tests up to three times
@@ -112,6 +112,11 @@ buildPythonPackage rec {
   disabledTestMarks = [
     # Don't run tests that require network access
     "network"
+  ];
+
+  # https://github.com/dask/dask/issues/12042
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    "test_multiple_repartition_partition_size"
   ];
 
   __darwinAllowLocalNetworking = true;

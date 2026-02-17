@@ -81,14 +81,14 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.40.13";
+  version = "3.40.15";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-2VPgD7ycj26cTpl16BSEukNEuUXtP25HwG2fRWBXNrU=";
+    hash = "sha256-N1ip6lMMpACDCr/Za26LGP455+iZiZe24s2MCkrYm8A=";
   };
 
   passthru = {
@@ -145,6 +145,9 @@ mkDerivation rec {
     (replaceVars ./set-pyqt-package-dirs-ltr.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
+    })
+    (replaceVars ./spatialite-path.patch {
+      spatialiteLib = "${libspatialite}/lib/mod_spatialite.so";
     })
   ];
 

@@ -4,24 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "gendarme";
-  version = "0.3";
+  version = "0.4";
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.13";
 
   src = fetchFromGitHub {
     owner = "bensmrs";
     repo = "gendarme";
-    tag = version;
-    hash = "sha256-GWWAbYevd74YYRpyUjEI4rtzuXGZPp4Wa4uUqD6D7l8=";
+    tag = finalAttrs.version;
+    hash = "sha256-yiHBAhnWYntv+5fKG7Sa1RqsnvWIsW0YDqp+uAzpg/s=";
   };
 
   meta = {
     description = "Marshalling library for OCaml";
     homepage = "https://github.com/bensmrs/gendarme";
-    changelog = "https://github.com/bensmrs/gendarme/releases/tag/${version}";
+    changelog = "https://github.com/bensmrs/gendarme/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ethancedwards8 ];
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    teams = with lib.teams; [ ngi ];
   };
-}
+})

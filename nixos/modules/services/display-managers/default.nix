@@ -29,10 +29,10 @@ let
           done
 
           if test -d ${pkg}/share/xsessions; then
-            ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+            ${pkgs.buildPackages.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
           fi
           if test -d ${pkg}/share/wayland-sessions; then
-            ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+            ${pkgs.buildPackages.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
           fi
         '') cfg.sessionPackages}
       '';
@@ -40,26 +40,7 @@ in
 {
   options = {
     services.displayManager = {
-      enable = lib.mkEnableOption "systemd's display-manager service";
-
-      preStart = lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        example = "rm -f /var/log/my-display-manager.log";
-        description = "Script executed before the display manager is started.";
-      };
-
-      execCmd = lib.mkOption {
-        type = lib.types.str;
-        example = lib.literalExpression ''"''${pkgs.lightdm}/bin/lightdm"'';
-        description = "Command to start the display manager.";
-      };
-
-      environment = lib.mkOption {
-        type = with lib.types; attrsOf unspecified;
-        default = { };
-        description = "Additional environment variables needed by the display manager.";
-      };
+      enable = lib.mkEnableOption "shared display manager integration";
 
       hiddenUsers = lib.mkOption {
         type = with lib.types; listOf str;
@@ -249,51 +230,6 @@ in
           lib.head cfg.sessionData.sessionNames
         else
           null;
-    };
-
-    # so that the service won't be enabled when only startx is used
-    systemd.services.display-manager.enable =
-      let
-        dmConf = config.services.xserver.displayManager;
-        noDmUsed =
-          !(
-            cfg.gdm.enable
-            || cfg.sddm.enable
-            || dmConf.xpra.enable
-            || dmConf.lightdm.enable
-            || cfg.ly.enable
-            || cfg.lemurs.enable
-          );
-      in
-      lib.mkIf noDmUsed (lib.mkDefault false);
-
-    systemd.services.display-manager = {
-      description = "Display Manager";
-      after = [
-        "acpid.service"
-        "systemd-logind.service"
-        "systemd-user-sessions.service"
-        "autovt@tty1.service"
-      ];
-      conflicts = [
-        "autovt@tty1.service"
-      ];
-      restartIfChanged = false;
-
-      environment = cfg.environment;
-
-      preStart = cfg.preStart;
-      script = lib.mkIf (config.systemd.services.display-manager.enable == true) cfg.execCmd;
-
-      # Stop restarting if the display manager stops (crashes) 2 times
-      # in one minute. Starting X typically takes 3-4s.
-      startLimitIntervalSec = 30;
-      startLimitBurst = 3;
-      serviceConfig = {
-        Restart = "always";
-        RestartSec = "200ms";
-        SyslogIdentifier = "display-manager";
-      };
     };
   };
 }

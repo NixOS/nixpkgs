@@ -11,7 +11,6 @@
   pyspnego,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   requests-credssp,
@@ -21,9 +20,7 @@
 buildPythonPackage rec {
   pname = "pypsrp";
   version = "0.8.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jborean93";

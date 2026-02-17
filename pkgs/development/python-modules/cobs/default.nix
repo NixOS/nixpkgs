@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cobs";
   version = "1.2.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,6 +36,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/cmcqueen/cobs-python/";
     license = lib.licenses.mit;
-    teams = [ lib.teams.ororatech ];
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

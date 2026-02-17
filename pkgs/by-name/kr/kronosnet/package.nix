@@ -19,14 +19,14 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kronosnet";
   version = "1.32";
 
   src = fetchFromGitHub {
     owner = "kronosnet";
     repo = "kronosnet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-g2AgVAFEmRlMaqH7uRabSNJP0ehUQ6Iws4LT2iB8kTA=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ ryantm ];
   };
-}
+})

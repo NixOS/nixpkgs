@@ -16,16 +16,16 @@
   perl,
   tcl,
   ruby,
-  libX11,
-  libXext,
-  libSM,
-  libXpm,
-  libXt,
-  libXaw,
-  libXau,
-  libXmu,
+  libx11,
+  libxext,
+  libsm,
+  libxpm,
+  libxt,
+  libxaw,
+  libxau,
+  libxmu,
   libsodium,
-  libICE,
+  libice,
   wayland-scanner,
   vimPlugins,
   makeWrapper,
@@ -168,7 +168,8 @@ stdenv.mkDerivation {
   ++ lib.optional wrapPythonDrv makeWrapper
   ++ lib.optional nlsSupport gettext
   ++ lib.optional perlSupport perl
-  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook3;
+  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook3
+  ++ lib.optional waylandSupport wayland-scanner;
 
   buildInputs = [
     ncurses
@@ -176,19 +177,18 @@ stdenv.mkDerivation {
   ]
   # All X related dependencies
   ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
-    libSM
-    libICE
-    libX11
-    libXext
-    libXpm
-    libXt
-    libXaw
-    libXau
-    libXmu
+    libsm
+    libice
+    libx11
+    libxext
+    libxpm
+    libxt
+    libxaw
+    libxau
+    libxmu
   ]
   ++ lib.optional (guiSupport == "gtk2") gtk2-x11
   ++ lib.optional (guiSupport == "gtk3") gtk3-x11
-  ++ lib.optional waylandSupport wayland-scanner
   ++ lib.optional luaSupport lua
   ++ lib.optional pythonSupport python3
   ++ lib.optional tclSupport tcl

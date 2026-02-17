@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitLab,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -12,12 +11,10 @@ buildPythonPackage rec {
   version = "0.8.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitLab {
     owner = "dangass";
     repo = "plum";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gZSRqijKdjqOZe1+4aeycpCPsh6HC5sRbyVjgK+g4wM=";
   };
 

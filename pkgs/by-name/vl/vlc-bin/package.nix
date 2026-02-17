@@ -20,15 +20,15 @@ assert builtins.elem variant [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "vlc-bin-${variant}";
-  version = "3.0.21";
+  version = "3.0.23";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${finalAttrs.version}/macosx/vlc-${finalAttrs.version}-${variant}.dmg";
     hash =
       {
-        "arm64" = "sha256-Fd1lv2SJ2p7Gpn9VhcdMQKWJk6z/QagpWKkW3XQXgEQ=";
-        "intel64" = "sha256-1DH9BRw9x68CvTE8bQXZDPYEtw7T7Fu6b9TEnvPmONk=";
-        "universal" = "sha256-UDgOVvgdYw41MUJqJlq/iz3ubAgiu3yeMLUyx9aaZcA=";
+        "arm64" = "sha256-/G+sCNh/U4UX1ErKDF56JEtnyMTLWJv0eDY6cxX9Xg0=";
+        "intel64" = "sha256-7AFTDOadhJ3QV/uoh25orDm/J53CjeTpwE5K7BH8mNs=";
+        "universal" = "sha256-Vu5lfDqvXHG0q31uT0p39uylRjPgv0KpO4EW6x0fbsk=";
       }
       .${variant};
   };

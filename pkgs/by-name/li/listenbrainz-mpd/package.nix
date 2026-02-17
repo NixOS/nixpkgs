@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   stdenv,
   openssl,
@@ -11,15 +11,14 @@
   asciidoctor,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "listenbrainz-mpd";
   version = "2.3.9";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j9MlvE2upocwC5xxroms3am6tqJX30sSw7PFNw8Ofog=";
   };
 
@@ -64,10 +63,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://codeberg.org/elomatreb/listenbrainz-mpd";
-    changelog = "https://codeberg.org/elomatreb/listenbrainz-mpd/src/tag/v${version}/CHANGELOG.md";
+    changelog = "https://codeberg.org/elomatreb/listenbrainz-mpd/src/tag/v${finalAttrs.version}/CHANGELOG.md";
     description = "ListenBrainz submission client for MPD";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ DeeUnderscore ];
     mainProgram = "listenbrainz-mpd";
   };
-}
+})

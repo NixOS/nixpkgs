@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "planarity";
   version = "4.0.1.0";
 
   src = fetchFromGitHub {
     owner = "graph-algorithms";
     repo = "edge-addition-planarity-suite";
-    rev = "Version_${version}";
+    rev = "Version_${finalAttrs.version}";
     sha256 = "sha256-uSCQSn3LRi3eQynh71fs1xhVIrPcOqVyGzdHAK9xj7E=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

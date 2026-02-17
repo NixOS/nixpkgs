@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "su-exec";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "ncopa";
     repo = "su-exec";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VUaparvPZhVOtAVPULIDQmpLUypl9aYYZlZrIIxuoTI=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ zimbatm ];
     platforms = lib.platforms.linux;
   };
-}
+})

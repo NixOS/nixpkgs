@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   packaging,
-  tomli,
   pytestCheckHook,
   pip,
 }:
@@ -25,10 +23,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     packaging
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -39,6 +34,11 @@ buildPythonPackage rec {
     # TypeError: dist must be a Distribution instance
     "test_old_example"
     "test_old_example_file_name"
+  ];
+
+  disabledTestPaths = [
+    # network access to install setuptools, likely due to pip update
+    "tests/test_examples.py"
   ];
 
   pythonImportsCheck = [ "argparse_manpage" ];

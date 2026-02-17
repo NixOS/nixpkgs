@@ -70,7 +70,10 @@ import ../make-test-python.nix (
   { pkgs, lib, ... }:
   {
     name = "lvm2-${flavour}-systemd-stage-1";
-    meta.maintainers = lib.teams.helsinki-systems.members;
+    meta.maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
 
     nodes.machine =
       { pkgs, lib, ... }:

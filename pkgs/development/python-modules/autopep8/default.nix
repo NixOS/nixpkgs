@@ -5,17 +5,13 @@
   glibcLocales,
   pycodestyle,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "autopep8";
   version = "2.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hhatto";
@@ -26,7 +22,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pycodestyle ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  propagatedBuildInputs = [ pycodestyle ];
 
   nativeCheckInputs = [
     glibcLocales

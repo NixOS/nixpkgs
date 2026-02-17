@@ -3,23 +3,22 @@
   buildPythonPackage,
   fetchPypi,
   requests,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wazeroutecalculator";
-  version = "0.15";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.16";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "WazeRouteCalculator";
-    inherit version;
-    hash = "sha256-DB5oWthWNwamFG3kNxA/kmUBOVogoSg5LI2KrI39s4M=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-tJip0tSlwr7a5UVH77dAPNHag4v1JShU1vHA9xKhbwg=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # there are no tests
   doCheck = false;
@@ -32,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
-}
+})

@@ -5,7 +5,7 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alacritty-theme";
   version = "0-unstable-2025-11-16";
 
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (self: {
   dontBuild = true;
   preferLocalBuild = true;
 
-  sourceRoot = "${self.src.name}/themes";
+  sourceRoot = "${finalAttrs.src.name}/themes";
   installPhase = ''
     runHook preInstall
     install -Dt $out/share/alacritty-theme *.toml

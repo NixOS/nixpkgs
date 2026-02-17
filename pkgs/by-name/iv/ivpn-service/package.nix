@@ -9,6 +9,7 @@
   obfs4,
   iproute2,
   dnscrypt-proxy,
+  v2ray,
   iptables,
   gawk,
   util-linux,
@@ -37,25 +38,27 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace daemon/service/platform/platform_linux.go \
-      --replace 'openVpnBinaryPath = "/usr/sbin/openvpn"' \
+      --replace-fail 'openVpnBinaryPath = "/usr/sbin/openvpn"' \
       'openVpnBinaryPath = "${openvpn}/bin/openvpn"' \
-      --replace 'routeCommand = "/sbin/ip route"' \
+      --replace-fail 'routeCommand = "/sbin/ip route"' \
       'routeCommand = "${iproute2}/bin/ip route"'
 
     substituteInPlace daemon/netinfo/netinfo_linux.go \
-      --replace 'retErr := shell.ExecAndProcessOutput(log, outParse, "", "/sbin/ip", "route")' \
+      --replace-fail 'retErr := shell.ExecAndProcessOutput(log, outParse, "", "/sbin/ip", "route")' \
       'retErr := shell.ExecAndProcessOutput(log, outParse, "", "${iproute2}/bin/ip", "route")'
 
     substituteInPlace daemon/service/platform/platform_linux_release.go \
-      --replace 'installDir := "/opt/ivpn"' "installDir := \"$out\"" \
-      --replace 'obfsproxyStartScript = path.Join(installDir, "obfsproxy/obfs4proxy")' \
+      --replace-fail 'installDir := "/opt/ivpn"' "installDir := \"$out\"" \
+      --replace-fail 'obfsproxyStartScript = path.Join(installDir, "obfsproxy/obfs4proxy")' \
       'obfsproxyStartScript = "${lib.getExe obfs4}"' \
-      --replace 'wgBinaryPath = path.Join(installDir, "wireguard-tools/wg-quick")' \
+      --replace-fail 'wgBinaryPath = path.Join(installDir, "wireguard-tools/wg-quick")' \
       'wgBinaryPath = "${wireguard-tools}/bin/wg-quick"' \
-      --replace 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \
+      --replace-fail 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \
       'wgToolBinaryPath = "${wireguard-tools}/bin/wg"' \
-      --replace 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
-      'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"'
+      --replace-fail 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
+      'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"' \
+      --replace-fail 'v2rayBinaryPath = path.Join(installDir, "v2ray/v2ray")' \
+      'v2rayBinaryPath = "${v2ray}/bin/v2ray"'
   '';
 
   ldflags = [
@@ -82,6 +85,7 @@ buildGoModule (finalAttrs: {
           iptables
           gawk
           util-linux
+          iproute2
         ]
       }
   '';
@@ -94,7 +98,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      urandom
       blenderfreaky
     ];
     mainProgram = "ivpn-service";

@@ -1,17 +1,16 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inhibridge";
   version = "0.3.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Scrumplex";
     repo = "inhibridge";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-cKVw3Gd4Ml8BeXjZqTN6ToeRzO9PI+Sn45gpltlRuWM=";
   };
 
@@ -25,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ Scrumplex ];
     mainProgram = "inhibridge";
   };
-}
+})

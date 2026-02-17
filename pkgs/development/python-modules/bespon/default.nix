@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   version = "0.7.0";
   pname = "bespon";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -6,7 +6,6 @@
   numpy,
   pyaudio,
   pydub,
-  pythonOlder,
   unittestCheckHook,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "auditok";
   version = "0.1.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;

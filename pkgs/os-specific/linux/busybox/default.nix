@@ -20,10 +20,7 @@ assert stdenv.hostPlatform.libc == "musl" -> useMusl;
 let
   configParser = ''
     function parseconfig {
-        while read LINE; do
-            NAME=`echo "$LINE" | cut -d \  -f 1`
-            OPTION=`echo "$LINE" | cut -d \  -f 2`
-
+        while IFS=" " read NAME OPTION; do
             if ! [[ "$NAME" =~ ^CONFIG_ ]]; then continue; fi
 
             echo "parseconfig: removing $NAME"
@@ -57,14 +54,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "busybox";
-  version = "1.36.1";
+  version = "1.37.0";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-uMwkyVdNgJ5yecO+NJeVxdXOtv3xnKcJ+AzeUOR94xQ=";
+    sha256 = "sha256-MxHf8y50ZJn03w1d8E1+s5Y4LX4Qi7klDntRm4NwQ6Q=";
   };
 
   hardeningDisable = [
@@ -77,52 +74,21 @@ stdenv.mkDerivation rec {
     # necessary when it's run from the Nix store as <hash>-busybox during
     # stdenv bootstrap.
     ./busybox-in-store.patch
-    # libbb: sockaddr2str: ensure only printable characters are returned for the hostname part
-    (fetchurl {
-      name = "CVE-2022-28391.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0001-libbb-sockaddr2str-ensure-only-printable-characters-.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
-      sha256 = "sha256-yviw1GV+t9tbHbY7YNxEqPi7xEreiXVqbeRyf8c6Awo=";
-    })
-    # nslookup: sanitize all printed strings with printable_string
-    (fetchurl {
-      name = "CVE-2022-28391.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0002-nslookup-sanitize-all-printed-strings-with-printable.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
-      sha256 = "sha256-vl1wPbsHtXY9naajjnTicQ7Uj3N+EQ8pRNnrdsiow+w=";
-    })
-    # shell: avoid segfault on ${0::0/0~09J}
-    # See also: https://bugs.busybox.net/show_bug.cgi?id=15216
+    # Fix aarch64 build failure: sha1_process_block64_shaNI is x86-specific
+    # https://lists.busybox.net/pipermail/busybox/2024-September/090943.html
+    ./fix-aarch64-sha1.patch
+    # archival: disallow path traversals (CVE-2023-39810)
     (fetchpatch {
-      name = "CVE-2022-48174.patch";
-      url = "https://git.busybox.net/busybox/patch/?id=d417193cf37ca1005830d7e16f5fa7e1d8a44209";
-      hash = "sha256-mpDEwYncpU6X6tmtj9xM2KCrB/v2ys5bYxmPPrhm6es=";
+      name = "CVE-2023-39810.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=9a8796436b9b0641e13480811902ea2ac57881d3";
+      hash = "sha256-pOARbCwiucrkNITBoOMpLF3GniYvJiyBeBi2/Aw2JY8=";
     })
-    # Make sure we don't read past the end of the string in next_token()
-    # when backslash is the last character in an (invalid) regexp.
-    # See also: https://bugs.busybox.net/show_bug.cgi?id=15874
-    # This patch is also used by Alpine, see https://git.alpinelinux.org/aports/tree/main/busybox/0037-awk.c-fix-CVE-2023-42366-bug-15874.patch
+    # tar: strip unsafe hardlink components - GNU tar does the same
     (fetchpatch {
-      name = "CVE-2023-42366.patch";
-      url = "https://bugs.busybox.net/attachment.cgi?id=9697";
-      hash = "sha256-2eYfLZLjStea9apKXogff6sCAdG9yHx0ZsgUBaGfQIA=";
-    })
-    # awk: fix use after free (CVE-2023-42363)
-    # See also: https://bugs.busybox.net/show_bug.cgi?id=15865
-    (fetchpatch {
-      name = "CVE-2023-42363.patch";
-      url = "https://git.launchpad.net/ubuntu/+source/busybox/plain/debian/patches/CVE-2023-42363.patch?id=c9d8a323b337d58e302717d41796aa0242963d5a";
-      hash = "sha256-1W9Q8+yFkYQKzNTrvndie8QuaEbyAFL1ZASG2fPF+Z4=";
-    })
-    # awk: fix ternary operator and precedence of =
-    # See also: https://bugs.busybox.net/show_bug.cgi?id=15871 https://bugs.busybox.net/show_bug.cgi?id=15868
-    (fetchpatch {
-      name = "CVE-2023-42364_CVE-2023-42365.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/CVE-2023-42364-CVE-2023-42365.patch?id=8a4bf5971168bf48201c05afda7bee0fbb188e13";
-      hash = "sha256-nQPgT9eA1asCo38Z9X7LR9My0+Vz5YBPba3ARV3fWcc=";
-    })
-    # tar: fix TOCTOU symlink race condition
-    (fetchurl {
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0001-tar-fix-TOCTOU-symlink-race-condition.patch?id=9e42dea5fba84a8afad1f1910b7d3884128a567e";
-      hash = "sha256-GmXQhwB1/IPVjXXpGi5RjRvuGJgIMIb7lQKB63m306g=";
+      name = "CVE-2026-26157_CVE-2026-26158.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=3fb6b31c716669e12f75a2accd31bb7685b1a1cb";
+      excludes = [ "networking/httpd_ratelimit_cgi.c" ]; # New since release.
+      hash = "sha256-Msm9sDZrVx7ofunnvnTS73SPKUUpR3Tv5xZ/wBd+rts=";
     })
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;

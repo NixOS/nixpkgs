@@ -10,19 +10,16 @@
   nbformat,
   sphinx,
   traitlets,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.9.7";
+  version = "0.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q9KYpobVX6iU72l8UdRPJOU6oxLa2uOOgpIPJQpUVv4=";
+    hash = "sha256-0HZZCDmajuK1e+euiBzy6ljWbbOve78z5utI+DvqVJU=";
   };
   patches = [
     (fetchpatch {

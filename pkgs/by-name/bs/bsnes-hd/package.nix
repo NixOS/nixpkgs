@@ -5,8 +5,8 @@
   fetchFromGitHub,
   gtk3,
   gtksourceview3,
-  libX11,
-  libXv,
+  libx11,
+  libxv,
   libao,
   libicns,
   libpulseaudio,
@@ -59,8 +59,8 @@ stdenv.mkDerivation {
     libao
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXv
+    libx11
+    libxv
     udev
     gtk3
     gtksourceview3

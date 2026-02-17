@@ -43,13 +43,13 @@ assert lib.warnIf enableMixmaster
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20250905";
+  version = "20260105";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     tag = finalAttrs.version;
-    hash = "sha256-RLyszU2u5jV/o6LrmZFkLx/Wu94Yq3JlXNgpe4agOZI=";
+    hash = "sha256-rdnk1wESnnoaxctkR6WvWpq+DUg86PbH9f1EtpSL5uk=";
   };
 
   buildInputs = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace auto.def --replace /usr/sbin/sendmail sendmail
-    substituteInPlace contrib/smime_keys \
+    substituteInPlace smime/smime_keys \
       --replace /usr/bin/openssl ${openssl}/bin/openssl
 
     for f in doc/*.{xml,xsl}*  ; do
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
   ''
   + lib.optionalString enableSmimeKeys ''
-    install -m 755 $src/contrib/smime_keys $out/bin;
+    install -m 755 $src/smime/smime_keys $out/bin;
     substituteInPlace $out/bin/smime_keys \
       --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl';
   ''

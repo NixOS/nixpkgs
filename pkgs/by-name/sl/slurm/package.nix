@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   runCommand,
   config,
   pkg-config,
@@ -35,11 +36,13 @@
   enableX11 ? true,
   enableNVML ? config.cudaSupport,
   cudaPackages,
+  symlinkJoin,
+  s2n-tls,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";
-  version = "25.05.3.1";
+  version = "25.11.2.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -48,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-W/q9eN4Ov3pxp2qyr3b7G4ayDaNtFUPQeAcOHCB23Q8=";
+    hash = "sha256-ukQlxKD+XhvL/sh15g3Tk5drsgXkK3hV+PFa1d2y9mk=";
   };
 
   outputs = [
@@ -105,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libbpf
     http-parser
+    s2n-tls
   ]
   ++ lib.optionals enableX11 [ xauth ]
   ++ lib.optionals enableNVML [
@@ -128,6 +132,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc/slurm"
     "--with-pmix=${lib.getDev pmix}"
     "--with-bpf=${libbpf}"
+    "--with-s2n=${
+      symlinkJoin {
+        name = s2n-tls.name;
+        paths = [
+          s2n-tls
+          (lib.getDev s2n-tls)
+        ];
+      }
+    }"
     "--without-rpath" # Required for configure to pick up the right dlopen path
   ]
   ++ (lib.optional (!enableX11) "--disable-x11")

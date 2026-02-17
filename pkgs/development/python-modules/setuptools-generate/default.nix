@@ -2,13 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools-scm,
   click,
   help2man,
   markdown-it-py,
   shtab,
-  tomli,
   pytestCheckHook,
 }:
 
@@ -16,8 +14,6 @@ buildPythonPackage rec {
   pname = "setuptools-generate";
   version = "0.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Freed-Wu";
@@ -33,8 +29,7 @@ buildPythonPackage rec {
     help2man
     markdown-it-py
     shtab
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -4,6 +4,8 @@ let
 
     argsStdenv@{
       name ? "stdenv",
+      pname ? name,
+      version ? lib.trivial.version,
       preHook ? "",
       initialPath,
 
@@ -102,7 +104,7 @@ let
         outputHashMode = "recursive";
       }
       // {
-        inherit name;
+        inherit name pname version;
         inherit disallowedRequisites;
 
         # Nix itself uses the `system` field of a derivation to decide where to
@@ -214,6 +216,9 @@ let
       shellDryRun = "${stdenv.shell} -n -O extglob";
 
       tests = {
+        inputDerivationRequiredSystemFeatures = import ../tests/inputDerivationRequiredSystemFeatures.nix {
+          inherit lib stdenv;
+        };
         succeedOnFailure = import ../tests/succeedOnFailure.nix { inherit stdenv; };
       };
       passthru.tests = lib.warn "Use `stdenv.tests` instead. `passthru` is a `mkDerivation` detail." stdenv.tests;

@@ -132,18 +132,36 @@
   invalidateFetcherByDrvHash =
     f: args:
     let
-      drvPath = (f args).drvPath;
+      optionalFix = if lib.isFunction args then lib.id else lib.fix;
+      unsalted = f args;
+      drvPath = unsalted.drvPath;
       # It's safe to discard the context, because we don't access the path.
       salt = builtins.unsafeDiscardStringContext (lib.substring 0 12 (baseNameOf drvPath));
+      saltName = name: "${name}-salted-${salt}";
+      getSaltedNames =
+        args:
+        if args.pname or null != null then
+          { pname = saltName args.pname; }
+        else
+          { name = saltName args.name or "source"; };
       # New derivation incorporating the original drv hash in the name
-      salted = f (args // { name = "${args.name or "source"}-salted-${salt}"; });
-      # Make sure we did change the derivation. If the fetcher ignores `name`,
+      saltedByArgs = f (optionalFix (lib.extends (lib.toExtension getSaltedNames) (lib.toFunction args)));
+      saltedByOverrideAttrs = unsalted.overrideAttrs (previousAttrs: getSaltedNames previousAttrs);
+      saltedByOverrideAttrsForced = unsalted.overrideAttrs (previousAttrs: {
+        name = saltName unsalted.name;
+      });
+      # Make sure we did change the derivation.
+      # If the fetcher ignores `pname` and `name` and provide a broken `overrideAttrs`,
       # `invalidateFetcherByDrvHash` doesn't work.
       checked =
-        if salted.drvPath == drvPath then
-          throw "invalidateFetcherByDrvHash: Adding the derivation hash to the fixed-output derivation name had no effect. Make sure the fetcher's name argument ends up in the derivation name. Otherwise, the fetcher will not be re-run when its implementation changes. This is important for testing."
+        if saltedByArgs.drvPath != drvPath then
+          saltedByArgs
+        else if saltedByOverrideAttrs.drvPath != drvPath then
+          saltedByOverrideAttrs
+        else if saltedByOverrideAttrsForced.drvPath != drvPath then
+          saltedByOverrideAttrsForced
         else
-          salted;
+          throw "invalidateFetcherByDrvHash: Neither adding pname/name to the fetcher args nor overriding with overrideAttrs change the result drvPath.";
     in
     checked;
 

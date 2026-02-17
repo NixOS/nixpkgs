@@ -3,7 +3,7 @@
   python3,
   fetchFromGitHub,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "perfect-hash";
   version = "0.4.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ilanschnell";
     repo = "perfect-hash";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0gkc3n613hl0q4jknrh2nm1n96j97p36q9jjgarb9d8yii9q7792";
   };
 
@@ -40,4 +40,4 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/ilanschnell/perfect-hash";
     platforms = lib.platforms.unix;
   };
-}
+})

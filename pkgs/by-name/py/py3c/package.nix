@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "py3c";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "encukou";
     repo = "py3c";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-v8+0J56sZVbGdBlOotObUa10/zFMTvfXdMYRsKhyZaY=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

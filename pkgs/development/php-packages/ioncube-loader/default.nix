@@ -49,6 +49,7 @@ stdenv.mkDerivation {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ neverbehave ];
+    broken = lib.versionAtLeast php.version "8.5";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

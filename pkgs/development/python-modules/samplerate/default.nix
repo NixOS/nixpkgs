@@ -32,6 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-7FAdIqsYCapmEAYiAuoS5m/jFExXZX3hn3kwxn9NWEc=";
   };
 
+  patches = [
+    # https://github.com/tuxu/python-samplerate/pull/33
+    ./numpy-2.4-compat.patch
+  ];
+
   postPatch = ''
     # unvendor pybind11, libsamplerate
     rm -r external

@@ -18,9 +18,9 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-tepl";
-  version = "6.13.0";
+  version = "6.14.0";
 
   outputs = [
     "out"
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "gedit";
     repo = "libgedit-tepl";
-    tag = version;
-    hash = "sha256-YWONsw5+gq5Uew6xB76pKsGTJmI83zAssO5WX6aP7ZM=";
+    tag = finalAttrs.version;
+    hash = "sha256-KtmExJCEfa4c6alrtWOLNSKZUs65tZ7p9zcT9f8ZC+k=";
   };
 
   strictDeps = true;
@@ -68,10 +68,9 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-tepl";
     description = "Text editor product line";
     maintainers = with lib.maintainers; [
-      manveru
       bobby285271
     ];
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

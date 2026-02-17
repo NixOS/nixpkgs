@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kshutdown";
-  version = "6.0";
+  version = "6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/kshutdown/KShutdown/${finalAttrs.version}/kshutdown-source-${finalAttrs.version}.zip";
-    hash = "sha256-GXs0Cb1gtlPy8fxy3CJ10t97BENMWFsRJHij+104BLA=";
+    hash = "sha256-wV9CWS2I5DGt6oolXAyUqvN4OkV8M3MumflveGlNg5Y=";
     name = "kshutdown-source-${finalAttrs.version}.zip";
   };
 

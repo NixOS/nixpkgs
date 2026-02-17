@@ -5,7 +5,6 @@
   pyserial,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   standard-telnetlib,
 }:
@@ -15,12 +14,10 @@ buildPythonPackage rec {
   version = "0.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "joopert";
     repo = "nad_receiver";
-    rev = version;
+    tag = version;
     hash = "sha256-jRMk/yMA48ei+g/33+mMYwfwixaKTMYcU/z/VOoJbvY=";
   };
 

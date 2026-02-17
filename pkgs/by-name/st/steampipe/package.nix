@@ -9,20 +9,20 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "steampipe";
-  version = "2.3.2";
+  version = "2.3.5";
 
   env.CGO_ENABLED = 0;
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
-    tag = "v${version}";
-    hash = "sha256-RAMCbajhXzJDeDuNy0rE6jJDkw3NOw0dC4jLafkNmJc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nQd+ay5t3rNSCHzhmBNF7sheESrD6KnhRDdm5KZHUI4=";
   };
 
-  vendorHash = "sha256-1o7ANCyz19WSIkYYoA0DpYzkY2qBXHHSfAGrAG2+k88=";
+  vendorHash = "sha256-YetZI3zWZlTZxrj7H7owSWarhq0VrXzbSOow596doT0=";
   proxyVendor = true;
 
   postPatch = ''
@@ -40,8 +40,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
     "-X main.date=unknown"
     "-X main.builtBy=nixpkgs"
   ];
@@ -53,6 +53,10 @@ buildGoModule rec {
       skippedTests = [
         # panic: could not create backups directory: mkdir /var/empty/.steampipe: operation not permitted
         "TestTrimBackups"
+        # Requires network access
+        "TestVersionCheckerBodyReadFailure"
+        "TestVersionCheckerNetworkFailures"
+        "TestVersionCheckerTimeout"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -73,13 +77,13 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       command = "${lib.getExe steampipe} --version";
       package = steampipe;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
     updateScript = nix-update-script { };
   };
 
   meta = {
-    changelog = "https://github.com/turbot/steampipe/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/turbot/steampipe/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Dynamically query your cloud, code, logs & more with SQL";
     homepage = "https://steampipe.io/";
     license = lib.licenses.agpl3Only;
@@ -89,4 +93,4 @@ buildGoModule rec {
       anthonyroussel
     ];
   };
-}
+})

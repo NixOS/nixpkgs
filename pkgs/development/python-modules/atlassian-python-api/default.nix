@@ -13,15 +13,12 @@
   six,
   typing-extensions,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
   version = "4.0.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "atlassian-api";

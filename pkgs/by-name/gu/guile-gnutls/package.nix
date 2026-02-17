@@ -10,12 +10,12 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-gnutls";
   version = "5.0.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gnutls/guile-gnutls-${version}.tar.gz";
+    url = "mirror://gnu/gnutls/guile-gnutls-${finalAttrs.version}.tar.gz";
     hash = "sha256-zABn8+60IbwXJHFAlipJCG31RQ8NPnHFW/VBotK57ys=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/gnutls/guile/";
     description = "Guile bindings for GnuTLS library";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

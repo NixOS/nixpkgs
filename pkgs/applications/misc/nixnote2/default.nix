@@ -1,17 +1,18 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
   boost,
   qtbase,
   qtwebkit,
   poppler,
-  qmake,
   hunspell,
   html-tidy,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nixnote2";
   version = "2.0.2";
 
@@ -22,6 +23,11 @@ mkDerivation rec {
     sha256 = "0cfq95mxvcgby66r61gclm1a2c6zck5aln04xmg2q8kg6p9d31fr";
   };
 
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
     boost
     qtbase
@@ -29,8 +35,6 @@ mkDerivation rec {
     poppler
     hunspell
   ];
-
-  nativeBuildInputs = [ qmake ];
 
   postPatch = ''
     # Fix location of poppler-qt5.h

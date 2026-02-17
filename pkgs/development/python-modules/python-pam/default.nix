@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "python-pam";
   version = "2.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FirefighterBlu3";

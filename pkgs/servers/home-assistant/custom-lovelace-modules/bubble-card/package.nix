@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "bubble-card";
-  version = "3.0.4";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "Clooos";
     repo = "Bubble-Card";
     rev = "v${version}";
-    hash = "sha256-444QWl3i1kYkdkUrhDi+BxN9IB6JttHtX8fn23uPcBE=";
+    hash = "sha256-8sSYqrcfWwnxJ0QGrPdjtAj2FG1TGINIgrvgqFncrIU=";
   };
 
-  npmDepsHash = "sha256-NSHsw/+dmdc2+yo4/NgT0YMMrCuL8JjRR6MSJ5xQTiE=";
+  npmDepsHash = "sha256-zkZfyNeJgk0eQkMVptuH7iN5/J/EicGeYHTAF09gLM4=";
 
   preBuild = ''
     rm -rf dist

@@ -3,19 +3,20 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.16.2";
+  version = "2.16.3";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "astro";
     rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-ZH+g1pnasVvbNVg3Id6/rlwqjIr7qRgitqOSilgpX64=";
+    hash = "sha256-ONpSW6VMoiW1Q0Aa5Dp1pZx3LAQ2Kzv5YHKxHOxbXdo=";
   };
 
   # https://pnpm.io/filtering#--filter-package_name-1
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm approve-builds @emmetio/css-parser
   '';
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -33,13 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       prePnpmInstall
       ;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-M2Xef5yTEQCLPzzx7WGQYplTrND+DPMy1hyEuahK+kM=";
+    hash = "sha256-Kqw4W3ZWRHWNnJYLGks9IHjCYAYEIigskwb//yKvb6c=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   buildInputs = [ nodejs ];
@@ -72,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
+      "--use-github-releases"
       "--version-regex"
       "@astrojs/language-server@(.*)"
     ];
@@ -79,10 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Astro language server";
-    homepage = "https://github.com/withastro/language-tools";
-    changelog = "https://github.com/withastro/language-tools/blob/@astrojs/language-server@${finalAttrs.version}/packages/language-server/CHANGELOG.md";
+    homepage = "https://github.com/withastro/astro/tree/main/packages/language-tools";
+    changelog = "https://github.com/withastro/astro/blob/%40astrojs/language-server%40${finalAttrs.version}/packages/language-tools/language-server/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "astro-ls";
     platforms = lib.platforms.unix;
   };

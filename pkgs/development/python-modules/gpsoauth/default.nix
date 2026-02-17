@@ -4,7 +4,6 @@
   fetchPypi,
   poetry-core,
   pycryptodomex,
-  pythonOlder,
   requests,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "gpsoauth";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

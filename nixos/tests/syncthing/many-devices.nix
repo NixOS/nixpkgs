@@ -42,9 +42,9 @@ let
     # Generates a few folders with IDs and paths as written...
     folders = lib.pipe 6 [
       (builtins.genList (x: {
-        name = "/var/lib/syncthing/test_folder${builtins.toString x}";
+        name = "/var/lib/syncthing/test_folder${toString x}";
         value = {
-          id = "DontDeleteMe${builtins.toString x}";
+          id = "DontDeleteMe${toString x}";
         };
       }))
       builtins.listToAttrs
@@ -198,7 +198,7 @@ in
       checkSettingWithoutId {
         t = (builtins.elemAt path 0);
         n = (builtins.elemAt path 1);
-        v = (builtins.toString value);
+        v = (toString value);
       }
     ))
     # Get all the values we applied the above function upon

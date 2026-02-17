@@ -36,7 +36,7 @@ buildDunePackage rec {
     description = "Bindings to Signal11's hidapi library";
     homepage = "https://github.com/vbmithr/ocaml-hidapi";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.alexfmpe ];
+    maintainers = [ ];
     mainProgram = "ocaml-hid-enumerate";
   };
 }

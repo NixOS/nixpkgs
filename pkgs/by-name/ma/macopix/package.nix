@@ -8,14 +8,14 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "macopix";
   version = "3.4.0";
 
   # GitHub does not contain tags
   # https://github.com/chimari/MaCoPiX/issues/6
   src = fetchurl {
-    url = "http://rosegray.sakura.ne.jp/macopix/macopix-${version}.tar.gz";
+    url = "http://rosegray.sakura.ne.jp/macopix/macopix-${finalAttrs.version}.tar.gz";
     hash = "sha256-1AjqdPPCc9UQWqLdWlA+Va+MmvKL8dAIfJURPifN7RI=";
   };
 
@@ -32,12 +32,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Workaround build failure on -fno-common toolchains:
-  #   ld: dnd.o:src/main.h:136: multiple definition of
-  #     `MENU_EXT'; main.o:src/main.h:136: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
-
-  NIX_LDFLAGS = "-lX11";
+  env = {
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: dnd.o:src/main.h:136: multiple definition of
+    #     `MENU_EXT'; main.o:src/main.h:136: first defined here
+    NIX_CFLAGS_COMPILE = "-fcommon";
+    NIX_LDFLAGS = "-lX11";
+  };
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -51,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

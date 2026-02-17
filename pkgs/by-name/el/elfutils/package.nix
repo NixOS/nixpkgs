@@ -26,12 +26,12 @@
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elfutils";
   version = "0.194";
 
   src = fetchurl {
-    url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
+    url = "https://sourceware.org/elfutils/ftp/${finalAttrs.version}/elfutils-${finalAttrs.version}.tar.bz2";
     hash = "sha256-CeL/Az05uqiziKLX+8U5C/3pmuO3xnx9qvdDP7zw8B4=";
   };
 
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
       sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
     })
+    # https://patchwork.sourceware.org/project/elfutils/patch/20251205145241.1165646-1-arnout@bzzt.net/
+    ./test-run-sysroot-reliability.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 
@@ -153,5 +155,6 @@ stdenv.mkDerivation rec {
       gpl3Plus
     ];
     maintainers = with lib.maintainers; [ r-burns ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "elfutils_project" finalAttrs.version;
   };
-}
+})

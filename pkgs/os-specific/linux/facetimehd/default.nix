@@ -7,7 +7,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "facetimehd-${version}-${kernel.version}";
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "facetimehd";
   version = "0.6.13";
 
   # Note: When updating this revision:
@@ -45,7 +46,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       womfoo
-      grahamc
       kraem
     ];
     platforms = [

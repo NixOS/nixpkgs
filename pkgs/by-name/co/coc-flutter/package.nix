@@ -67,6 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Flutter support for (Neo)vim";
     homepage = "https://github.com/iamcco/coc-flutter";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

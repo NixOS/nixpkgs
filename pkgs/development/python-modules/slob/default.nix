@@ -2,26 +2,40 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
+
+  # dependencies
   pyicu,
+
+  # build-system
+  setuptools,
+
+  # tests
   python,
 }:
 
 buildPythonPackage {
   pname = "slob";
-  version = "unstable-2020-06-26";
-  format = "setuptools";
-  disabled = !isPy3k;
+  version = "0-unstable-2024-04-19";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "itkach";
     repo = "slob";
-    rev = "018588b59999c5c0eb42d6517fdb84036f3880cb";
-    sha256 = "01195hphjnlcvgykw143rf06s6y955sjc1r825a58vhjx7hj54zh";
+    rev = "c21d695707db7d2fe4ec7ec27a018bb7b0fcc209";
+    hash = "sha256-dy/EaRLx0LwMklk4h2eL8CsyvWN4swcJNs5cULmh46g=";
   };
 
-  propagatedBuildInputs = [ pyicu ];
+  build-system = [
+    setuptools
+  ];
 
+  dependencies = [
+    pyicu
+  ];
+
+  # The tests are part of the same slob.py file, so unittestCheckHook which
+  # runs python -m unittest with the `discover` argument which doesn't discover
+  # any tests.
   checkPhase = ''
     ${python.interpreter} -m unittest slob
   '';
@@ -33,5 +47,6 @@ buildPythonPackage {
     description = "Reference implementation of the slob (sorted list of blobs) format";
     mainProgram = "slob";
     license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

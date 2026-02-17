@@ -3,21 +3,21 @@
   stdenv,
   fetchFromGitHub,
   gccmakedep,
-  libX11,
-  libXext,
-  libXpm,
+  libx11,
+  libxext,
+  libxpm,
   imake,
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlvwm";
   version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "morgant";
     repo = "mlvwm";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
   };
 
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gccmakedep
-    libX11
-    libXext
-    libXpm
+    libx11
+    libxext
+    libxpm
     imake
   ];
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.j0hax ];
     mainProgram = "mlvwm";
   };
-}
+})

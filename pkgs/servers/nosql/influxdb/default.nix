@@ -26,10 +26,11 @@ let
       # https://github.com/influxdata/flux/pull/5542
       ../influxdb2/fix-unsigned-char.patch
     ];
-    # Don't fail on missing code documentation and allow dead_code/lifetime warnings
+
+    # Don't fail on missing code documentation and allow dead_code/lifetime/unused_assignments warnings
     postPatch = ''
       substituteInPlace flux-core/src/lib.rs \
-        --replace-fail "deny(warnings, missing_docs))]" "deny(warnings), allow(dead_code, mismatched_lifetime_syntaxes))]"
+        --replace-fail "deny(warnings, missing_docs))]" "deny(warnings), allow(dead_code, mismatched_lifetime_syntaxes, unused_assignments))]"
     '';
     sourceRoot = "${src.name}/libflux";
 
@@ -57,20 +58,20 @@ let
 in
 buildGoModule rec {
   pname = "influxdb";
-  version = "1.12.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    hash = "sha256-jSv3zzU/jIqALF9mb4gV7zyQvm8pIwJU6Y4ADBlpVOE=";
+    hash = "sha256-Q05mKmAXxrk7IVNxUD8HHNKnWCxmNCdsr6NK7d7vOHM=";
   };
 
-  vendorHash = "sha256-tPw/1vkUTwmRHrnENDG3NJTV6RplI4pCP6GueRT8dbc=";
+  vendorHash = "sha256-+6fOq/2YVz74Loy1pVLVRTr4OQm/fEBNtHy3+FQn51A=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  PKG_CONFIG_PATH = "${flux}/pkgconfig";
+  env.PKG_CONFIG_PATH = "${flux}/pkgconfig";
 
   # Check that libflux is at the right version
   preBuild = ''
@@ -100,7 +101,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     homepage = "https://influxdata.com/";
     maintainers = with lib.maintainers; [
-      offline
       zimbatm
     ];
   };

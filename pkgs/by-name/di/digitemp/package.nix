@@ -4,14 +4,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "digitemp";
   version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "bcl";
     repo = "digitemp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "19zka5fcdxhhginaspak76l984iqq9v2j6qrwvi5mvca7bcj8f72";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

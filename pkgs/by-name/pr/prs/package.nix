@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prs";
-  version = "0.5.4";
+  version = "0.5.6";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "prs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RWquV2apUazgGiwzTc0cMzKNItJOBZDSRMp13k+mhS0=";
+    hash = "sha256-oV5i93+4+ZI1ngZX6A68vXQ3NtjChK8AzgjZC3URmBw=";
   };
 
-  cargoHash = "sha256-v5jZJQHXxMENJ5EbZjoI4sZ0EpCfVZOkOX442S1TReU=";
+  cargoHash = "sha256-430/6Ww+PUBwyDs5vWLsMyHDEfF9wxgYZd455G5sj/w=";
 
   nativeBuildInputs = [
     gpgme
@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

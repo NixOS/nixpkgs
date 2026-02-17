@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "pycangjie";
   version = "1.5.0";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

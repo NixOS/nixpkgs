@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   nix-update-script,
   setuptools,
 
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "timple";
   version = "0.1.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "theOehrly";

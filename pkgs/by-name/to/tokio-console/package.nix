@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tokio-console";
   version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "tokio-rs";
     repo = "console";
-    rev = "tokio-console-v${version}";
+    rev = "tokio-console-v${finalAttrs.version}";
     hash = "sha256-mZCYdz0AQhCBqbvcjXNp2bXSKf7tJ/01fz2W4wpjVX8=";
   };
 
@@ -28,13 +28,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # uses currently unstable tokio features
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env.RUSTFLAGS = "--cfg tokio_unstable";
 
   checkFlags = [
     # tests depend upon git repository at test execution time
-    "--skip bootstrap"
-    "--skip config::tests::args_example_changed"
-    "--skip config::tests::toml_example_changed"
+    "--skip=bootstrap"
+    "--skip=config::tests::args_example_changed"
+    "--skip=config::tests::toml_example_changed"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -51,4 +51,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ max-niederman ];
   };
-}
+})

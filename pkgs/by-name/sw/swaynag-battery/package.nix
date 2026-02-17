@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "swaynag-battery";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "m00qek";
     repo = "swaynag-battery";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7f9+4Fzw5B5ATuud4MJC3iyuNRTx6kwJ7/KsusGtQM8=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "swaynag-battery";
   };
-}
+})

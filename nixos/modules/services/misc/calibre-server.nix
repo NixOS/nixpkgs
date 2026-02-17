@@ -155,7 +155,7 @@ in
 
     };
 
-    environment.systemPackages = [ pkgs.calibre ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users = lib.optionalAttrs (cfg.user == "calibre-server") {
       calibre-server = {
@@ -176,5 +176,5 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ gaelreyrol ];
+  meta.maintainers = [ ];
 }

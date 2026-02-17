@@ -305,6 +305,9 @@ stdenv.mkDerivation (
       # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129 krank:ignore-line
       ./docs-sphinx-7.patch
 
+      # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
+      ./ghc-9.4-docs-sphinx-9.patch
+
       # Correctly record libnuma's library and include directories in the
       # package db. This fixes linking whenever stdenv and propagation won't
       # quite pass the correct -L flags to the linker, e.g. when using GHC
@@ -536,6 +539,8 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals enableUnregisterised [
       "--enable-unregisterised"
+      # The C backend generates code incompatible with gnu23
+      "CONF_CC_OPTS_STAGE2=-std=gnu17"
     ];
 
     # Make sure we never relax`$PATH` and hooks support for compatibility.

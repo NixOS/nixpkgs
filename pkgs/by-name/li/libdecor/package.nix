@@ -14,16 +14,16 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdecor";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libdecor";
     repo = "libdecor";
-    rev = version;
-    hash = "sha256-l0MmNpC+449BaluynbzG5d0/v57F5rltOIBzBagkYbc=";
+    rev = finalAttrs.version;
+    hash = "sha256-sUktv/k+4IdJ55uH3F6z8XqaAOTic6miuyZ9U+NhtQQ=";
   };
 
   outputs = [
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ artturin ];
   };
-}
+})

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "114";
+  version = "115";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boxine";
     repo = "bx_py_utils";
     tag = "v${version}";
-    hash = "sha256-AAn1e5HuSngEnCoCpOvVjxavZbiH2YL+38gXxhqLLBo=";
+    hash = "sha256-CTVjpXlypalhzyFEQOqs5Zf5HMcBX+AyF9QCVe5WbwA=";
   };
 
   postPatch = ''
@@ -74,6 +74,8 @@ buildPythonPackage rec {
     "test_assert_html_snapshot_by_css_selector"
     # test accesses the internet
     "test_happy_path"
+    # cli_base module not found
+    "test_doctests"
   ];
 
   disabledTestPaths = [

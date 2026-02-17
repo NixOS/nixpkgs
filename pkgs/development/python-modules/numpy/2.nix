@@ -3,9 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python,
-  numpy_2,
   pythonAtLeast,
-  pythonOlder,
   buildPythonPackage,
   writeTextFile,
 
@@ -35,42 +33,17 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-let
-  cfg = writeTextFile {
-    name = "site.cfg";
-    text = lib.generators.toINI { } {
-      ${blas.implementation} = {
-        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
-        library_dirs = "${blas}/lib:${lapack}/lib";
-        runtime_library_dirs = "${blas}/lib:${lapack}/lib";
-        libraries = "lapack,lapacke,blas,cblas";
-      };
-      lapack = {
-        include_dirs = "${lib.getDev lapack}/include";
-        library_dirs = "${lapack}/lib";
-        runtime_library_dirs = "${lapack}/lib";
-      };
-      blas = {
-        include_dirs = "${lib.getDev blas}/include";
-        library_dirs = "${blas}/lib";
-        runtime_library_dirs = "${blas}/lib";
-      };
-    };
-  };
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.3.4";
+  version = "2.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "numpy";
     repo = "numpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-MfL7UQeSuxJIEQzY/0LIuScyBCilINt8e+zAeUNPmH0=";
+    hash = "sha256-HFNa7siXRIBBjWrkqQd8QAPWQQsTrYFXNq2DRzVmkQk=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -113,7 +86,7 @@ buildPythonPackage rec {
   ];
 
   preBuild = ''
-    ln -s ${cfg} site.cfg
+    ln -s ${finalAttrs.finalPackage.passthru.cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
@@ -179,18 +152,39 @@ buildPythonPackage rec {
     # just for backwards compatibility
     blas = blas.provider;
     blasImplementation = blas.implementation;
-    inherit cfg;
-    coreIncludeDir = "${numpy_2}/${python.sitePackages}/numpy/_core/include";
+    buildConfig = {
+      ${blas.implementation} = {
+        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
+        library_dirs = "${blas}/lib:${lapack}/lib";
+        runtime_library_dirs = "${blas}/lib:${lapack}/lib";
+        libraries = "lapack,lapacke,blas,cblas";
+      };
+      lapack = {
+        include_dirs = "${lib.getDev lapack}/include";
+        library_dirs = "${lapack}/lib";
+        runtime_library_dirs = "${lapack}/lib";
+      };
+      blas = {
+        include_dirs = "${lib.getDev blas}/include";
+        library_dirs = "${blas}/lib";
+        runtime_library_dirs = "${blas}/lib";
+      };
+    };
+    cfg = writeTextFile {
+      name = "site.cfg";
+      text = lib.generators.toINI { } finalAttrs.finalPackage.buildConfig;
+    };
+    coreIncludeDir = "${finalAttrs.finalPackage}/${python.sitePackages}/numpy/_core/include";
     tests = {
       inherit sage;
     };
   };
 
   meta = {
-    changelog = "https://github.com/numpy/numpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/numpy/numpy/releases/tag/${finalAttrs.src.tag}";
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

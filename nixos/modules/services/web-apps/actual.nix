@@ -17,7 +17,6 @@ let
     ;
 
   cfg = config.services.actual;
-  dataDir = "/var/lib/actual";
 
   formatType = pkgs.formats.json { };
 in
@@ -30,6 +29,26 @@ in
       default = false;
       type = types.bool;
       description = "Whether to open the firewall for the specified port.";
+    };
+
+    user = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        User account under which Actual runs.
+
+        If null is specified (default), a temporary user will be created by systemd. Otherwise won't be automatically created by the service.
+      '';
+    };
+
+    group = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        Group account under which Actual runs.
+
+        If null is specified (default), a temporary user will be created by systemd. Otherwise won't be automatically created by the service.
+      '';
     };
 
     settings = mkOption {
@@ -53,12 +72,34 @@ in
             description = "The port to listen on";
             default = 3000;
           };
-        };
 
-        config = {
-          serverFiles = mkDefault "${dataDir}/server-files";
-          userFiles = mkDefault "${dataDir}/user-files";
-          dataDir = mkDefault dataDir;
+          dataDir = lib.mkOption {
+            type = lib.types.str;
+            default = "/var/lib/actual";
+            description = ''
+              Directory under which Actual runs and saves its data.
+
+              Changing this after you already have a working instance may make Actual fail to start, even if you move all files in the data dir. If migration is needed, refer to [this comment](https://github.com/actualbudget/actual/issues/3957#issuecomment-2567076794) for a fix.
+            '';
+          };
+
+          serverFiles = lib.mkOption {
+            type = lib.types.str;
+            default = "${cfg.settings.dataDir}/server-files";
+            defaultText = "\${cfg.settings.dataDir}/server-files";
+            description = ''
+              The server will put an account.sqlite file in this directory, which will contain the (hashed) server password, a list of all the budget files the server knows about, and the active session token (along with anything else the server may want to store in the future).
+            '';
+          };
+
+          userFiles = lib.mkOption {
+            type = lib.types.str;
+            default = "${cfg.settings.dataDir}/user-files";
+            defaultText = "\${cfg.settings.dataDir}/user-files";
+            description = ''
+              The server will put all the budget files in this directory as binary blobs.
+            '';
+          };
         };
       };
     };
@@ -80,12 +121,9 @@ in
 
       serviceConfig = {
         ExecStart = getExe cfg.package;
-        DynamicUser = true;
-        User = "actual";
-        Group = "actual";
         StateDirectory = "actual";
         RuntimeDirectory = "actual";
-        WorkingDirectory = dataDir;
+        WorkingDirectory = cfg.settings.dataDir;
         LimitNOFILE = "1048576";
         PrivateTmp = true;
         PrivateDevices = true;
@@ -107,6 +145,11 @@ in
         ProtectProc = "invisible";
         ProcSubset = "pid";
         ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.settings.dataDir
+          cfg.settings.serverFiles
+          cfg.settings.userFiles
+        ];
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
@@ -120,7 +163,21 @@ in
           "@pkey"
         ];
         UMask = "0077";
-      };
+      }
+      // (
+        if cfg.user != null then
+          {
+            DynamicUser = false;
+            Group = cfg.group;
+            User = cfg.user;
+          }
+        else
+          {
+            DynamicUser = true;
+            User = "actual";
+            Group = "actual";
+          }
+      );
     };
   };
 

@@ -9,14 +9,14 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csdr";
   version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "csdr";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-LdVzeTTIvDQIXRdcz/vpQu/fUgtE8nx1kIEfoiwxrUg=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -24,8 +24,6 @@
   ladspaH,
   jackSupport ? true,
   libjack2,
-  lashSupport ? false,
-  lash,
   ossSupport ? true,
   portaudioSupport ? true,
   portaudio,
@@ -38,8 +36,8 @@
   fltk,
   libGL,
   libjpeg,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
   ntk,
 
   # Test dependencies
@@ -113,22 +111,21 @@ stdenv.mkDerivation rec {
     ladspaH
   ]
   ++ lib.optionals jackSupport [ libjack2 ]
-  ++ lib.optionals lashSupport [ lash ]
   ++ lib.optionals portaudioSupport [ portaudio ]
   ++ lib.optionals sndioSupport [ sndio ]
   ++ lib.optionals (guiModule == "fltk") [
     fltk
     libjpeg
-    libXpm
+    libxpm
   ]
   ++ lib.optionals (guiModule == "ntk") [
     ntk
     cairo
-    libXpm
+    libxpm
   ]
   ++ lib.optionals (guiModule == "zest") [
     libGL
-    libX11
+    libx11
   ];
 
   cmakeFlags = [

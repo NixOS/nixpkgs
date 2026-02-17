@@ -14,7 +14,7 @@
   stdenv,
   unstableGitUpdater,
   util-linux,
-  xorg,
+  xset,
   xxd,
 }:
 
@@ -30,7 +30,7 @@ let
     pciutils
     powertop
     util-linux
-    xorg.xset
+    xset
     xxd
   ];
 in

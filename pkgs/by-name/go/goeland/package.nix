@@ -4,23 +4,23 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goeland";
-  version = "0.20.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "slurdge";
     repo = "goeland";
-    rev = "v${version}";
-    sha256 = "sha256-5MKkjUOAXz6R7PdChuJA4ybc07gHdO9BF68CpI7OExA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Yw9FRI4TdfqCLdZCTA+y1y8TaD0flp1sP1aKYvd8PGM=";
   };
 
-  vendorHash = "sha256-Jnui1toAV4VvPs6T7UqgAUarFjuik/OnLUrF5VqI+EU=";
+  vendorHash = "sha256-FfdHOYrpVilter80arOtwn+qJV56gIh6Ml64ekPs+DE=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/slurdge/goeland/version.GitCommit=${version}"
+    "-X github.com/slurdge/goeland/version.GitCommit=${finalAttrs.version}"
   ];
 
   meta = {
@@ -33,8 +33,8 @@ buildGoModule rec {
       It can also consume other sources, such as Imgur tags.
     '';
     homepage = "https://github.com/slurdge/goeland";
-    changelog = "https://github.com/slurdge/goeland/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/slurdge/goeland/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = [ lib.maintainers.sweenu ];
   };
-}
+})

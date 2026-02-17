@@ -13,13 +13,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensaml-cpp";
   version = "3.0.1";
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-opensaml.git";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0ms3sqmwqkrqb92d7jy2hqwnz5yd7cbrz73n321jik0jilrwl5w8";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

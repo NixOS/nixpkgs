@@ -109,10 +109,8 @@ in
             chown -R dkimproxy-out:dkimproxy-out "${keydir}"
           fi
         '';
-        script = ''
-          exec ${pkgs.dkimproxy}/bin/dkimproxy.out --conf_file=${configfile}
-        '';
         serviceConfig = {
+          ExecStart = "${pkgs.dkimproxy}/bin/dkimproxy.out --conf_file=${configfile}";
           User = "dkimproxy-out";
           PermissionsStartOnly = true;
         };

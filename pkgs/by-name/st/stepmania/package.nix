@@ -16,7 +16,7 @@
   libpulseaudio,
   libvorbis,
   udev,
-  xorg,
+  libxtst,
   zlib,
 }:
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     libpulseaudio
     libvorbis
     udev
-    xorg.libXtst
+    libxtst
     zlib
   ];
 

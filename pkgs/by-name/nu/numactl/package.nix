@@ -6,14 +6,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "numactl";
   version = "2.0.18";
 
   src = fetchFromGitHub {
     owner = "numactl";
     repo = "numactl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ry29RUNa0Hv5gIhy2RTVT94mHhgfdIwb5aqjBycxxj0=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     ]; # libnuma is lgpl21
     platforms = lib.platforms.linux;
   };
-}
+})

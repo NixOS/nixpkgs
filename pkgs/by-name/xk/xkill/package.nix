@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xkill";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xkill-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5aiqeMR1Z3sRUEZG2o2T2swwdEJYB2ospBiiRDiuuQc=";
+    hash = "sha256-X/JkvE7rwEWSVakgNtyNyEttSMrvhQn4ing76q3qdQs=";
   };
 
   strictDeps = true;

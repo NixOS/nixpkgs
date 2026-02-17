@@ -37,6 +37,7 @@ buildPythonPackage rec {
     description = "SBOM generator for files within a directory";
     homepage = "https://github.com/anthonyharrison/sbom4files";
     license = lib.licenses.asl20;
+    mainProgram = "sbom4files";
     maintainers = [ ];
   };
 }

@@ -9,19 +9,19 @@
   nodejs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pxder";
   version = "2.12.8";
 
   src = fetchFromGitHub {
     owner = "Tsuk1ko";
     repo = "pxder";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+WZbs10+id+nohTZzLjEofb6k8PMGd73YhY3FUTXx5Q=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-++MqWIUntXQwOYpgAJ3nhAtZ5nxmEreioVHQokYkw7w=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ vanilla ];
     platforms = lib.platforms.all;
   };
-}
+})

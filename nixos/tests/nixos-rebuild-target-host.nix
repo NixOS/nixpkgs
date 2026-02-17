@@ -31,6 +31,8 @@
         system.build.privateKey = snakeOilPrivateKey;
         system.build.publicKey = snakeOilPublicKey;
         system.switch.enable = true;
+
+        services.getty.autologinUser = lib.mkForce "root";
       };
 
     target =
@@ -147,6 +149,7 @@
 
       deployer.copy_from_host("${configFile "config-1-deployed"}", "/root/configuration-1.nix")
       deployer.copy_from_host("${configFile "config-2-deployed"}", "/root/configuration-2.nix")
+      deployer.copy_from_host("${configFile "config-3-deployed"}", "/root/configuration-3.nix")
       deployer.copy_from_host("${targetNetworkJSON}", "/root/target-network.json")
       deployer.copy_from_host("${targetConfigJSON}", "/root/target-configuration.json")
 
@@ -163,6 +166,15 @@
         deployer.succeed("nixos-rebuild switch -I nixos-config=/root/configuration-2.nix --target-host alice@target --sudo &>/dev/console")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-2-deployed", f"{target_hostname=}"
+
+      with subtest("Deploy to bob@target with password-based sudo"):
+        deployer.wait_for_unit("multi-user.target")
+        deployer.send_chars("nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --ask-sudo-password\n")
+        deployer.wait_until_tty_matches("1", "password for bob")
+        deployer.send_chars("${nodes.target.users.users.bob.password}\n")
+        deployer.wait_until_tty_matches("1", "Done. The new configuration is /nix/store/.*config-3-deployed")
+        target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
+        assert target_hostname == "config-3-deployed", f"{target_hostname=}"
 
       with subtest("Deploy works with very long TMPDIR"):
         tmp_dir = "/var/folder/veryveryveryveryverylongpathnamethatdoesnotworkwithcontrolpath"

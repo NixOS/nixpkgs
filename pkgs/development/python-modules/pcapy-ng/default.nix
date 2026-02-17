@@ -6,15 +6,12 @@
   libpcap,
   pkgconfig,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pcapy-ng";
   version = "1.0.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stamparm";
@@ -38,7 +35,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pcapy" ];
 
-  doCheck = pythonOlder "3.10";
+  doCheck = false;
 
   enabledTestPaths = [ "pcapytests.py" ];
 

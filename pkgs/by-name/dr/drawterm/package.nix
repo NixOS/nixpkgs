@@ -5,7 +5,8 @@
   unstableGitUpdater,
   installShellFiles,
   makeWrapper,
-  xorg,
+  libxt,
+  libx11,
   pkg-config,
   wayland-scanner,
   pipewire,
@@ -22,13 +23,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "drawterm";
-  version = "0-unstable-2025-10-11";
+  version = "0-unstable-2026-01-11";
 
   src = fetchFrom9Front {
     owner = "plan9front";
     repo = "drawterm";
-    rev = "48d53278a8273bb39ca295e8f163563ab04b3530";
-    hash = "sha256-SReZ6A5xEpi0vL2bchVszRl3Dvm4Rw8e/5TQa+8TPto=";
+    rev = "8a88fb5b8c75450d2e20ae1c7839d823bb1f6fad";
+    hash = "sha256-hejdFLYJvANKOC4Jgr9XvYl/5kU9PiKSH5cWE6d6e/o=";
   };
 
   enableParallelBuilding = true;
@@ -51,8 +52,8 @@ stdenv.mkDerivation {
       libdecor
     ]
     ++ lib.optionals withXorg [
-      xorg.libX11
-      xorg.libXt
+      libx11
+      libxt
     ];
 
   makeFlags =

@@ -10,12 +10,12 @@
   libwnck,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "devilspie2";
   version = "0.44";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://savannah/devilspie2/devilspie2-${finalAttrs.version}.tar.xz";
     hash = "sha256-Cp8erdKyKjGBY+QYAGXUlSIboaQ60gIepoZs0RgEJkA=";
   };
 
@@ -47,8 +47,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.nongnu.org/devilspie2/";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.ebzzry ];
     platforms = lib.platforms.linux;
     mainProgram = "devilspie2";
   };
-}
+})

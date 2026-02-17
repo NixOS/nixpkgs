@@ -9,23 +9,20 @@
   mkdocs,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   validator-collection,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.17.4";
+  version = "1.17.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
     tag = version;
-    hash = "sha256-K+cqBJmTz4WzkeXp3pGQoizfLMuxR17Q33Fc0xc5eWo=";
+    hash = "sha256-rUMjS0+895SsU7qNckLL3BprUQa/3lJDjpwhMkF0jYg=";
   };
 
   build-system = [ setuptools ];

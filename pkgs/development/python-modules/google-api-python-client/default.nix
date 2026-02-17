@@ -10,16 +10,20 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-api-python-client";
-  version = "2.185.0";
+  version = "2.188.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-api-python-client";
-    tag = "v${version}";
-    hash = "sha256-uItN7P6tZTxEHfma+S0p4grRRnAaIhuTezvJzWjvkfE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uNvsWCfoT+wp6UnbDP5QS7Os2FnEsTzusdGZ9lD/LwY=";
+    # Remove mixed-case files that cause hash differences between platforms
+    postFetch = ''
+      rm -rf $out/docs/
+    '';
   };
 
   build-system = [ setuptools ];
@@ -43,8 +47,8 @@ buildPythonPackage rec {
       any new features.
     '';
     homepage = "https://github.com/google/google-api-python-client";
-    changelog = "https://github.com/googleapis/google-api-python-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/googleapis/google-api-python-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

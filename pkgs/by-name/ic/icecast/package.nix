@@ -2,35 +2,47 @@
   lib,
   stdenv,
   fetchurl,
-  libxml2,
-  libxslt,
+  pkg-config,
   curl,
-  libvorbis,
-  libtheora,
-  speex,
+  libigloo,
   libkate,
   libopus,
+  libtheora,
+  libvorbis,
+  libxml2,
+  libxslt,
+  rhash,
+  speex,
+  nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icecast";
-  version = "2.4.4";
+  version = "2.5.0";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/icecast/icecast-${version}.tar.gz";
-    sha256 = "0i2d9rhav0x6js2qhjf5iy6j2a7f0d11ail0lfv40hb1kygrgda9";
+    url = "http://downloads.xiph.org/releases/icecast/icecast-${finalAttrs.version}.tar.gz";
+    hash = "sha256-2aoHx0Ka7BnZUP9v1CXDcfdxWM00/yIPwZGywYbGfHo=";
   };
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
-    libxml2
-    libxslt
     curl
-    libvorbis
-    libtheora
-    speex
+    libigloo
     libkate
     libopus
+    libtheora
+    libvorbis
+    libxml2
+    libxslt
+    rhash
+    speex
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) icecast;
+  };
 
   meta = {
     description = "Server software for streaming multimedia";
@@ -50,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jcumming ];
     platforms = with lib.platforms; unix;
   };
-}
+})

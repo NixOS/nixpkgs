@@ -6,12 +6,12 @@
   read-edid,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i2c-tools";
   version = "4.4";
 
   src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git/snapshot/i2c-tools-v${version}.tar.gz";
+    url = "https://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git/snapshot/i2c-tools-v${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Zm83gxdZH2XQCc/Dihp7vumF9WAvKgt6OORns5Mua7M=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.dezgeg ];
     platforms = lib.platforms.linux;
   };
-}
+})

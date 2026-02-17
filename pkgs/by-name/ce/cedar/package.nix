@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cedar";
   version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "cedar-policy";
     repo = "cedar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f8d7KL1DzEfJqEJ5uwwOJCgePE/frOXIFcXuoybIp2U=";
   };
 
@@ -28,9 +28,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Implementation of the Cedar Policy Language";
     homepage = "https://github.com/cedar-policy/cedar";
-    changelog = "https://github.com/cedar-policy/cedar/releases/tag/v${version}";
+    changelog = "https://github.com/cedar-policy/cedar/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ meain ];
     mainProgram = "cedar";
   };
-}
+})

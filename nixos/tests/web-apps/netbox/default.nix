@@ -157,7 +157,7 @@ import ../../make-test-python.nix (
         '';
       in
       builtins.replaceStrings
-        [ "$\{changePassword}" "$\{testUser}" "$\{testPassword}" "$\{testGroup}" ]
+        [ "\${changePassword}" "\${testUser}" "\${testPassword}" "\${testGroup}" ]
         [ "${changePassword}" "${testUser}" "${testPassword}" "${testGroup}" ]
         (lib.readFile "${./testScript.py}");
   }

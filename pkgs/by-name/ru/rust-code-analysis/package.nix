@@ -4,13 +4,13 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-code-analysis";
   version = "0.0.25";
 
   src = fetchCrate {
     pname = "rust-code-analysis-cli";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-/Irmtsy1PdRWQ7dTAHLZJ9M0J7oi2IiJyW6HeTIDOCs=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "rust-code-analysis-cli";
   };
-}
+})

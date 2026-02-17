@@ -5,22 +5,19 @@
   fetchFromGitHub,
   poetry-core,
   python,
-  pythonOlder,
   ua-parser,
 }:
 
 buildPythonPackage rec {
   pname = "django-sesame";
-  version = "3.2.3";
+  version = "3.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = "django-sesame";
     tag = version;
-    hash = "sha256-JpbmcV5hAZkW15cizsAJhmTda4xtML0EY/PJdVSInUs=";
+    hash = "sha256-q9LvsPyFEbaE/TEOlQ5WodVvzAiv4x7C4vaiz1RJLu4=";
   };
 
   nativeBuildInputs = [ poetry-core ];

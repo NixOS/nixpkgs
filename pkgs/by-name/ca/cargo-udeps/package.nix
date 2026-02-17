@@ -8,14 +8,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-udeps";
   version = "0.1.60";
 
   src = fetchFromGitHub {
     owner = "est31";
     repo = "cargo-udeps";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-NW9yjFUV+o7vv5bYD8nxSWHOXOBnDEk36xze90wYuNg=";
   };
 
@@ -41,7 +41,8 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       b4dm4n
       matthiasbeyer
+      chrjabs
     ];
     mainProgram = "cargo-udeps";
   };
-}
+})

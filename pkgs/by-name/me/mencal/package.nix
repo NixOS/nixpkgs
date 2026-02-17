@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mencal";
   version = "3.0";
 
   src = fetchurl {
-    url = "http://kyberdigi.cz/projects/mencal/files/mencal-${version}.tar.gz";
+    url = "http://kyberdigi.cz/projects/mencal/files/mencal-${finalAttrs.version}.tar.gz";
     sha256 = "9328d0b2f3f57847e8753c5184531f4832be7123d1b6623afdff892074c03080";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "mencal";
   };
-}
+})

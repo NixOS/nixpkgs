@@ -106,7 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.makeWrapper =
     {
-      pname,
       desktopName,
       version,
       zip,
@@ -116,12 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
     }@extraArgs:
     stdenv.mkDerivation (
       {
-        inherit pname version;
+        inherit version;
 
         desktopItem = makeDesktopItem {
           name = desktopName;
-          exec = pname;
-          genericName = pname;
+          exec = "alephone";
+          genericName = "alephone";
           categories = [ "Game" ];
           comment = meta.description;
           inherit desktopName icon;
@@ -138,11 +137,11 @@ stdenv.mkDerivation (finalAttrs: {
         dontBuild = true;
 
         installPhase = ''
-          mkdir -p $out/bin $out/data/$pname $out/share/applications
-          cp -a * $out/data/$pname
+          mkdir -p $out/bin $out/data/alephone $out/share/applications
+          cp -a * $out/data/alephone
           cp $desktopItem/share/applications/* $out/share/applications
-          makeWrapper ${finalAttrs.finalPackage}/bin/alephone $out/bin/$pname \
-            --add-flags $out/data/$pname
+          makeWrapper ${finalAttrs.finalPackage}/bin/alephone $out/bin/alephone \
+            --add-flags $out/data/alephone
         '';
       }
       // extraArgs
@@ -151,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
           finalAttrs.finalPackage.meta
           // {
             license = lib.licenses.free;
-            mainProgram = pname;
+            mainProgram = "alephone";
             hydraPlatforms = [ ];
           }
           // meta;

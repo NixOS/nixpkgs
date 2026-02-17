@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hl-log-viewer";
-  version = "0.32.3";
+  version = "0.35.3";
 
   src = fetchFromGitHub {
     owner = "pamburus";
     repo = "hl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BYSVzLh/GGC5BK0Q2xyZ54AA6UUxmWNFj9mH8gGvLXQ=";
+    hash = "sha256-eEILIQ24QG2zAafex9dGQxQyXB6W8QVgqST3nL9hsI0=";
   };
 
-  cargoHash = "sha256-F9C6OeU0lxVdollldL1PV/wTo5+3j+MGZg9lkJVVvFI=";
+  cargoHash = "sha256-KPI5rDDbc9WY/S1axMPPCN7ltkwg8W+9Zwm4EiNBZ+k=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,7 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/hl";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

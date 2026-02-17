@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   siosocks,
   trustme,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "aioftp";
   version = "0.27.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

@@ -10,14 +10,14 @@
   withGui ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alfis";
   version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gRk4kvIV+5cCUFaJvGbTAR44678Twa28iMGZ75lJz2c=";
   };
 
@@ -47,10 +47,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Alternative Free Identity System";
     homepage = "https://alfis.name";
-    changelog = "https://github.com/Revertron/Alfis/releases/tag/v${version}";
+    changelog = "https://github.com/Revertron/Alfis/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ misuzu ];
     platforms = lib.platforms.unix;
     mainProgram = "alfis";
   };
-}
+})

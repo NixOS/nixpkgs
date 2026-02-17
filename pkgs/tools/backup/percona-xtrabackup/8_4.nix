@@ -12,6 +12,6 @@ callPackage ./generic.nix (
     extraPatches = [
     ];
 
-    extraPostInstall = '''';
+    extraPostInstall = "";
   }
 )

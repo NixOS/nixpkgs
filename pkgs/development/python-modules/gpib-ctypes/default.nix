@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   pytestCheckHook,
   linux-gpib,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "gpib-ctypes";
   version = "0.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "gpib_ctypes";

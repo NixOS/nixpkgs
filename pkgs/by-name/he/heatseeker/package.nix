@@ -5,18 +5,18 @@
   coreutils,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "heatseeker";
-  version = "1.7.3";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "rschmitt";
     repo = "heatseeker";
-    rev = "v${version}";
-    sha256 = "sha256-ZKwRXtfIYEblsGjSSiVCl9XztM43rzBofQpPNGMPu+w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hfx2QTfSJ6lh/K3ZdJzXqgxGOVbC2i2ZqZKH8Wtj/6k=";
   };
 
-  cargoHash = "sha256-X4OTzgInh0D+EYCPkN2qyizzhARIOGwxJ2N9ZcrX/Ak=";
+  cargoHash = "sha256-8ZrPHm+W4lxVzupgeLcCQmpNRJS3aEaSWWKPkGVZVTg=";
 
   # https://github.com/rschmitt/heatseeker/issues/42
   # I've suggested using `/usr/bin/env stty`, but doing that isn't quite as simple
@@ -25,9 +25,11 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/screen/unix.rs --replace "/bin/stty" "${coreutils}/bin/stty"
   '';
 
-  # some tests require a tty, this variable turns them off for Travis CI,
-  # which we can also make use of
-  TRAVIS = "true";
+  # skip the TTY-only test
+  checkFlags = [
+    "--skip"
+    "screen::unix::tests::winsize_test"
+  ];
 
   meta = {
     description = "General-purpose fuzzy selector";
@@ -37,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hs";
     platforms = lib.platforms.unix;
   };
-}
+})

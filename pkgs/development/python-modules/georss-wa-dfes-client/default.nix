@@ -4,15 +4,12 @@
   fetchFromGitHub,
   georss-client,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "georss-wa-dfes-client";
   version = "0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";

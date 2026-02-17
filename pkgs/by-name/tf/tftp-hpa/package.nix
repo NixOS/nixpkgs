@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "tftp-hpa";
-  version = "5.2-untagged-2024-06-10";
+  version = "5.2-unstable-2024-06-10";
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git";
     hash = "sha256-lTMldYO/cZdLj0UjOPPBHfYf2GBG0O+5lhP9ikqn3tY=";

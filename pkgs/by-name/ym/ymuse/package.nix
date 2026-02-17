@@ -12,14 +12,14 @@
   librsvg,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ymuse";
   version = "0.22";
 
   src = fetchFromGitHub {
     owner = "yktoo";
     repo = "ymuse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WbIeqOAhdqxU8EvHEsG7ASwy5xZG1domZKT5ccOggHg=";
   };
 
@@ -68,8 +68,8 @@ buildGoModule rec {
     homepage = "https://yktoo.com/en/software/ymuse/";
     description = "GTK client for Music Player Daemon (MPD)";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
     mainProgram = "ymuse";
     platforms = lib.platforms.unix;
   };
-}
+})

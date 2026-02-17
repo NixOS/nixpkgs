@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
-  testers,
   nodejs,
   node-gyp,
   gnutar,
@@ -13,19 +12,19 @@
   srcOnly,
   removeReferencesTo,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  versionCheckHook,
 }:
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.29.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-mOIX9pNVESRPD2Jjdr014NyYO/3rSvYpr4RP34RKE8c=";
+    tag = "cli/v${finalAttrs.version}";
+    hash = "sha256-Ssr/KcQHRtEloz4YPAUfUmcbicMumkIQ+wOjxe9PTXM=";
   };
 
   patches = [
@@ -44,15 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     nodejs
     node-gyp
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildInputs = [
     gnutar
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version;
+    pnpm = pnpm_9;
 
     # We need to pass the patched source code, so pnpm sees the patched version
     src = stdenv.mkDerivation {
@@ -63,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-    fetcherVersion = 1;
-    hash = "sha256-rFMLmqPEvP6Vn7VNmE2tGsnv9YPMaL1aktwTsnjv5+M=";
+    fetcherVersion = 3;
+    hash = "sha256-ZCsG+Zjiy3hmROgBKnqxGlJjvIYqAeQMlfXUnNQIsiI=";
   };
   buildPhase = ''
     runHook preBuild
@@ -120,9 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
       HELPER_SCRIPT_NAME="$(basename "$HELPER_SCRIPT")"
       cp "$HELPER_SCRIPT" "$KARAKEEP_LIB_PATH/"
       substituteInPlace "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME" \
-        --replace-warn "KARAKEEP_LIB_PATH=" "KARAKEEP_LIB_PATH=$KARAKEEP_LIB_PATH" \
-        --replace-warn "RELEASE=" "RELEASE=${finalAttrs.version}" \
-        --replace-warn "NODEJS=" "NODEJS=${nodejs}"
+        --subst-var-by KARAKEEP_LIB_PATH "$KARAKEEP_LIB_PATH" \
+        --subst-var-by VERSION "${finalAttrs.version}" \
+        --subst-var-by NODEJS "${nodejs}"
       chmod +x "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
       patchShebangs "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
     done
@@ -142,21 +143,22 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -type l ! -exec test -e {} \; -delete
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   passthru = {
     tests = {
       inherit (nixosTests) karakeep;
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        # remove hardcoded version if upstream syncs general version with cli
-        # version
-        version = "0.27.1";
-      };
     };
     updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://karakeep.app/";
+    changelog = "https://github.com/karakeep-app/karakeep/releases/tag/v${finalAttrs.version}";
     description = "Self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.three ];

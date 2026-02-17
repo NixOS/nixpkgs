@@ -1,8 +1,6 @@
 {
   lib,
   clangStdenv,
-  buildPackages,
-  runCommand,
   fetchurl,
   perl,
   python3,
@@ -23,8 +21,8 @@
   wayland-protocols,
   wayland-scanner,
   libwebp,
-  enchant2,
-  xorg,
+  enchant,
+  libx11,
   libxkbcommon,
   libavif,
   libepoxy,
@@ -39,7 +37,7 @@
   hyphen,
   icu,
   libsysprof-capture,
-  libpthreadstubs,
+  libpthread-stubs,
   nettle,
   libtasn1,
   p11-kit,
@@ -65,7 +63,7 @@
   bubblewrap,
   libseccomp,
   libbacktrace,
-  systemd,
+  systemdLibs,
   xdg-dbus-proxy,
   replaceVars,
   glib,
@@ -74,7 +72,7 @@
   enableGeoLocation ? true,
   enableExperimental ? false,
   withLibsecret ? true,
-  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
+  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
   testers,
   fetchpatch,
 }:
@@ -86,7 +84,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.3";
+  version = "2.50.5";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -101,7 +99,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-cKAGtGlbtrLhV+gB9aDQKfQRDwUMbwiC3s2KO/WU1U8=";
+    hash = "sha256-hzdjG6w+nHrT5SCPk3DgdsCdnEWzmYACHOVO2tzG+U8=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -143,7 +141,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     at-spi2-core
     cairo # required even when using skia
-    enchant2
+    enchant
     flite
     libavif
     libepoxy
@@ -162,7 +160,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libidn
     libintl
     lcms2
-    libpthreadstubs
+    libpthread-stubs
     libsysprof-capture
     libtasn1
     libwebp
@@ -188,10 +186,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     libseccomp
     libmanette
     wayland
-    xorg.libX11
+    libx11
   ]
   ++ lib.optionals systemdSupport [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals enableGeoLocation [
     geoclue2

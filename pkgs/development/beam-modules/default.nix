@@ -11,6 +11,9 @@ let
   callPackageWithScope =
     scope: drv: args:
     lib.callPackageWith scope drv args;
+  callPackagesWithScope =
+    scope: drv: args:
+    lib.callPackagesWith scope drv args;
   mkScope = scope: pkgs // scope;
 
   packages =
@@ -18,6 +21,7 @@ let
     let
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
+      callPackages = drv: args: callPackagesWithScope defaultScope drv args;
     in
     rec {
       inherit callPackage erlang;
@@ -47,6 +51,11 @@ let
 
       # BEAM-based languages.
       elixir = elixir_1_18;
+
+      elixir_1_20 = callPackage ../interpreters/elixir/1.20.nix {
+        inherit erlang;
+        debugInfo = true;
+      };
 
       elixir_1_19 = callPackage ../interpreters/elixir/1.19.nix {
         inherit erlang;
@@ -90,6 +99,14 @@ let
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
       webdriver = callPackage ./webdriver { };
+
+      inherit (callPackages ./hooks { })
+        beamCopySourceHook
+        beamModuleInstallHook
+        mixBuildDirHook
+        mixCompileHook
+        mixAppConfigPatchHook
+        ;
     };
 in
 makeExtensible packages

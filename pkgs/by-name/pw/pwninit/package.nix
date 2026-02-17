@@ -9,14 +9,14 @@
   xz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pwninit";
   version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "io12";
     repo = "pwninit";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-WKOndOkaKr+dUnx61LW6ZZxUFUESerjE5W6hgLA3n1o=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.scoder12 ];
     platforms = lib.platforms.all;
   };
-}
+})

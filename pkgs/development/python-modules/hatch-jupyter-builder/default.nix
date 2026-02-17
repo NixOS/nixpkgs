@@ -5,9 +5,7 @@
   hatchling,
   pytest-mock,
   pytestCheckHook,
-  tomli,
   twine,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "hatch-jupyter-builder";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QDWHVdjtexUNGRL+dVehdBwahSW2HmNkZKkQyuOghyI=";
   };
 
@@ -30,8 +28,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     twine
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   disabledTests = [
     # tests pip install, which unsurprisingly fails

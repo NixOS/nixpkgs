@@ -22,16 +22,16 @@ let
   ];
 in
 with python3.pkgs;
-buildPythonApplication rec {
-  version = "5.0";
+buildPythonApplication (finalAttrs: {
+  version = "5.1.1";
   pname = "buku";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
-    tag = "v${version}";
-    sha256 = "sha256-b3j3WLMXl4sXZpIObC+F7RRpo07cwJpAK7lQ7+yIzro=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-7dxe1GUdBDP/mNfYKkJzKNTgzXLfVQxp4REEkFIh4Bs=";
   };
 
   nativeBuildInputs = [
@@ -60,16 +60,7 @@ buildPythonApplication rec {
   ]
   ++ lib.optionals withServer serverRequire;
 
-  preCheck = ''
-    # Disables a test which requires internet
-    substituteInPlace tests/test_bukuDb.py \
-      --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \
-      --replace "self.assertEqual(shorturl, \"http://tny.im/yt\")" "" \
-      --replace "self.assertEqual(url, \"https://www.google.com\")" ""
-    substituteInPlace setup.py \
-      --replace mypy-extensions==0.4.1 mypy-extensions>=0.4.1
-  ''
-  + lib.optionalString (!withServer) ''
+  preCheck = lib.optionalString (!withServer) ''
     rm tests/test_{server,views}.py
   '';
 
@@ -93,4 +84,4 @@ buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

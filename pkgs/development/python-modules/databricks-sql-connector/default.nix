@@ -10,8 +10,9 @@
   pandas,
   poetry-core,
   pyarrow,
+  pybreaker,
+  pyjwt,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
   thrift,
   requests,
@@ -20,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "4.0.5";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "4.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-python";
     tag = "v${version}";
-    hash = "sha256-CzS6aVOFkBSJ9+0KJOaJLxK2ZiRY4OybNkCX5VdybqY=";
+    hash = "sha256-QoauhA2Zx2UvlCuKe9mxaOFJKpglVHQmPVVS56np4A0=";
   };
 
   pythonRelaxDeps = [
@@ -38,11 +37,11 @@ buildPythonPackage rec {
     "thrift"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alembic
     lz4
     numpy
@@ -50,6 +49,8 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pyarrow
+    pybreaker
+    pyjwt
     sqlalchemy
     thrift
     requests

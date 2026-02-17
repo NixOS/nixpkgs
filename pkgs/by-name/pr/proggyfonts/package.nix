@@ -5,12 +5,12 @@
   mkfontscale,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proggyfonts";
   version = "0.1";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20150801042353/http://kaictl.net/software/proggyfonts-${version}.tar.gz";
+    url = "https://web.archive.org/web/20150801042353/http://kaictl.net/software/proggyfonts-${finalAttrs.version}.tar.gz";
     hash = "sha256-SsLzZdR5icVJNbr5rcCPbagPPtWghbqs2Jxmrtufsa4=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.myrl ];
   };
-}
+})

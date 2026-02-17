@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # build inputs
   starlette,
   brotli,
@@ -14,19 +13,17 @@
 }:
 let
   pname = "brotli-asgi";
-  version = "1.5.0";
+  version = "1.6.0";
 in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "fullonic";
     repo = "brotli-asgi";
     rev = "v${version}";
-    hash = "sha256-jOow5xrRvuBdg/dVEzAUgs1SxNLZqEItyW9OcvniTSY=";
+    hash = "sha256-cF7A3mnkQmvtc9DgHiwqYEQQ6QagjoBGTmcBzUm6vvs=";
   };
 
   propagatedBuildInputs = [

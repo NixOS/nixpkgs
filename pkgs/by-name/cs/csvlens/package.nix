@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "csvlens";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "YS-L";
     repo = "csvlens";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8NEZH+a1HBQ7lVcJlIEaeDjFU8c+4Zm6JOe0IiK0nIU=";
   };
 
@@ -20,9 +20,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command line csv viewer";
     homepage = "https://github.com/YS-L/csvlens";
-    changelog = "https://github.com/YS-L/csvlens/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/YS-L/csvlens/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "csvlens";
   };
-}
+})

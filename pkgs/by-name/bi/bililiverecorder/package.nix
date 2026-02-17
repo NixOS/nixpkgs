@@ -14,12 +14,12 @@ let
       aspnetcore_8_0-bin
     ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bililiverecorder";
   version = "2.18.0";
 
   src = fetchzip {
-    url = "https://github.com/BililiveRecorder/BililiveRecorder/releases/download/v${version}/BililiveRecorder-CLI-any.zip";
+    url = "https://github.com/BililiveRecorder/BililiveRecorder/releases/download/v${finalAttrs.version}/BililiveRecorder-CLI-any.zip";
     hash = "sha256-b1hHLf0w+XwBBbnvP07Ik6bwIWSs13MPVjIN5b1n+C4=";
     stripRoot = false;
   };
@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Convenient free open source bilibili live recording tool";
     homepage = "https://rec.danmuji.org/";
-    changelog = "https://github.com/BililiveRecorder/BililiveRecorder/releases/tag/${version}";
+    changelog = "https://github.com/BililiveRecorder/BililiveRecorder/releases/tag/${finalAttrs.version}";
     mainProgram = "BililiveRecorder";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ zaldnoay ];
     platforms = lib.platforms.unix;
   };
-}
+})

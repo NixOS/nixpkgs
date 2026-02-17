@@ -9,21 +9,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.59.0";
+  version = "2.62.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_container";
     inherit version;
-    hash = "sha256-ZsTKUV0zzGbzf9jltrqJBjsG66sz4UlbjEJMcgs/tgM=";
+    hash = "sha256-O647Jw3v9kD1Pn0naPvAP/vzUxqIZWD7nk97VRRs1T8=";
   };
 
   build-system = [ setuptools ];

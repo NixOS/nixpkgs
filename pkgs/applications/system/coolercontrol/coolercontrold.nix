@@ -7,6 +7,7 @@
   addDriverRunpath,
   python3Packages,
   liquidctl,
+  protobuf,
 }:
 
 {
@@ -20,11 +21,12 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-teKMz6ruTSwQ76dMXoupS3D7n1ashfHPpxMGo3Qm6FI=";
+  cargoHash = "sha256-5YYodScAAs6ERVbj+irvyNS9IOkVaBHR4DCXTrrtyVI=";
 
   buildInputs = [ libdrm ];
 
   nativeBuildInputs = [
+    protobuf
     addDriverRunpath
     python3Packages.wrapPython
   ];
@@ -50,7 +52,7 @@ rustPlatform.buildRustPackage {
   postFixup = ''
     addDriverRunpath "$out/bin/coolercontrold"
 
-    buildPythonPath "$pythonPath"
+    buildPythonPath "''${pythonPath[*]}"
     wrapProgram "$out/bin/coolercontrold" \
       --prefix PATH : $program_PATH \
       --prefix PYTHONPATH : $program_PYTHONPATH

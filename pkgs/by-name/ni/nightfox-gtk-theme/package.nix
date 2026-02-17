@@ -120,6 +120,6 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       homepage = "https://github.com/Fausto-Korpsvart/Nightfox-GTK-Theme";
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ d3vil0p3r ];
+      maintainers = [ ];
     };
   }

@@ -1,10 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
-  typing-extensions,
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
@@ -13,19 +11,17 @@
 
 buildPythonPackage rec {
   pname = "async-lru";
-  version = "2.0.5";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "async-lru";
     tag = "v${version}";
-    hash = "sha256-FJ1q6W9IYs0OSMZc+bI4v22hOAAWAv2OW3BAqixm8Hs=";
+    hash = "sha256-ab0l3JrjMPudfMsn0Tu2UpvSt8HePEl8tYF2EybmXak=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook

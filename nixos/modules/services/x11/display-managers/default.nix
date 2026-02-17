@@ -24,7 +24,6 @@ let
     ;
 
   cfg = config.services.xserver;
-  xorg = pkgs.xorg;
 
   fontconfig = config.fonts.fontconfig;
   xresourcesXft = pkgs.writeText "Xresources-Xft" ''
@@ -90,11 +89,11 @@ let
     ''}
 
     # Load X defaults. This should probably be safe on wayland too.
-    ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
+    ${pkgs.xrdb}/bin/xrdb -merge ${xresourcesXft}
     if test -e ~/.Xresources; then
-        ${xorg.xrdb}/bin/xrdb -merge ~/.Xresources
+        ${pkgs.xrdb}/bin/xrdb -merge ~/.Xresources
     elif test -e ~/.Xdefaults; then
-        ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
+        ${pkgs.xrdb}/bin/xrdb -merge ~/.Xdefaults
     fi
 
     # Import environment variables into the systemd user environment.
@@ -147,8 +146,8 @@ in
 
       xauthBin = mkOption {
         internal = true;
-        default = "${xorg.xauth}/bin/xauth";
-        defaultText = literalExpression ''"''${pkgs.xorg.xauth}/bin/xauth"'';
+        default = "${pkgs.xauth}/bin/xauth";
+        defaultText = literalExpression ''"''${pkgs.xauth}/bin/xauth"'';
         description = "Path to the {command}`xauth` program used by display managers.";
       };
 
@@ -236,7 +235,7 @@ in
   config = {
     services.displayManager.sessionData.wrapper = xsessionWrapper;
 
-    services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
+    services.xserver.displayManager.xserverBin = "${pkgs.xorg-server.out}/bin/X";
 
     services.xserver.displayManager.importedVariables = [
       # This is required by user units using the session bus.

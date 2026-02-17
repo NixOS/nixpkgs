@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchurl,
   extra-cmake-modules,
   kdoctools,
+  wrapQtAppsHook,
   qtscript,
   kconfig,
   kinit,
@@ -17,19 +18,20 @@
   shared-mime-info,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "okteta";
-  version = "0.26.24";
+  version = "0.26.25";
 
   src = fetchurl {
     url = "mirror://kde/stable/okteta/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-MbIyPwL01PyHLD/BNdVLuQklglaB5ZHdJfSmgMDSZWo=";
+    sha256 = "sha256-K+GJG/SYyzgDDKXbGtAixQJVfBwLj/asP9rIJUpbt2s=";
   };
 
   nativeBuildInputs = [
     qtscript
     extra-cmake-modules
     kdoctools
+    wrapQtAppsHook
   ];
   buildInputs = [ shared-mime-info ];
 

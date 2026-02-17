@@ -1,18 +1,18 @@
 {
-  mkDerivation,
   lib,
   stdenv,
   fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
   qtbase,
   qtquickcontrols,
-  qmake,
   makeDesktopItem,
 }:
 
 # we now have libqmatrixclient so a future version of tensor that supports it
 # should use that
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "tensor";
   version = "unstable-2017-02-21";
 
@@ -24,11 +24,15 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
     qtbase
     qtquickcontrols
   ];
-  nativeBuildInputs = [ qmake ];
 
   desktopItem = makeDesktopItem {
     name = "tensor";

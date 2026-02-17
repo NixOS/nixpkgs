@@ -38,13 +38,15 @@ rustPlatform.buildRustPackage {
     install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/git-rustfmt"
   '';
 
-  # As of 1.0.0 and rustc 1.30 rustfmt requires a nightly compiler
-  RUSTC_BOOTSTRAP = 1;
+  env = {
+    # As of 1.0.0 and rustc 1.30 rustfmt requires a nightly compiler
+    RUSTC_BOOTSTRAP = 1;
 
-  # As of rustc 1.45.0, these env vars are required to build rustfmt (due to
-  # https://github.com/rust-lang/rust/pull/72001)
-  CFG_RELEASE = rustc.version;
-  CFG_RELEASE_CHANNEL = if asNightly then "nightly" else "stable";
+    # As of rustc 1.45.0, these env vars are required to build rustfmt (due to
+    # https://github.com/rust-lang/rust/pull/72001)
+    CFG_RELEASE = rustc.version;
+    CFG_RELEASE_CHANNEL = if asNightly then "nightly" else "stable";
+  };
 
   postInstall = ''
     wrapProgram $out/bin/cargo-fmt \

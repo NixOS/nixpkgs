@@ -11,17 +11,18 @@
   libgbm,
   openxr-loader,
   pkg-config,
-  xorg,
+  libxfixes,
+  libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-server";
   version = "0.44.1";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "server";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sCatpWDdy7NFWOWUARjN3fZMDVviX2iV79G0HTxfYZU=";
   };
 
@@ -39,8 +40,8 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     libgbm
     openxr-loader
-    xorg.libX11
-    xorg.libXfixes
+    libx11
+    libxfixes
   ];
 
   CPM_SOURCE_CACHE = "./build";
@@ -63,4 +64,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

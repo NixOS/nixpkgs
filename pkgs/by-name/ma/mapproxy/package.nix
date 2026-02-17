@@ -5,16 +5,15 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mapproxy";
   version = "5.1.1";
   pyproject = true;
-  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4TRaY/NfOjmq5v+6Rv2UGwF1rqnw4UggVOX2HMa5mVI=";
   };
 
@@ -52,4 +51,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ rakesh4g ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

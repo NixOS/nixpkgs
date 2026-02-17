@@ -7,12 +7,12 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "urbackup-client";
   version = "2.5.25";
 
   src = fetchzip {
-    url = "https://hndl.urbackup.org/Client/${version}/urbackup-client-${version}.tar.gz";
+    url = "https://hndl.urbackup.org/Client/${finalAttrs.version}/urbackup-client-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-+xm2mBcTLMvrstCq2sLgJiU3zbFCassKvln3SMmRH9s=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.mgttlinger ];
   };
-}
+})

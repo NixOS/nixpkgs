@@ -3,14 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymata-express";
   version = "1.21";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MrYsLab";

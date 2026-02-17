@@ -12,14 +12,14 @@
   xclip,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "license-cli";
   version = "3.1.0";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "license";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-OGS26mE5rjxlZOaBWhYc7C8aM3Lq2xX0f31LgckjJF8=";
   };
 
@@ -60,6 +60,6 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line tool to easily add license to your project";
     license = lib.licenses.mpl20;
     mainProgram = "license";
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
   };
-}
+})

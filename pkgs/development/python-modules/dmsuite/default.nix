@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   numpy,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   setuptools-scm,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "dmsuite";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

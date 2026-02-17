@@ -2,12 +2,11 @@
   cmake,
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   ninja,
   sdl3,
   stdenv,
   testers,
-  libX11,
+  libx11,
   libGL,
   nix-update-script,
 
@@ -31,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
-  version = "2.32.58";
+  version = "2.32.64";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl2-compat";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-Ngmr/KG5dQ1IDVafn2Jw/29hFCzPGKc9GOenT/4fsIM=";
+    hash = "sha256-1K+KW5cK3YgcZtrMqJ7VxKGsYnZR/fJmQtRZbWk2TGM=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     sdl3'
   ]
-  ++ lib.optional x11Support libX11;
+  ++ lib.optional x11Support libx11;
 
   checkInputs = [ libGL ];
 
@@ -74,12 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./find-headers.patch
-
-    # https://github.com/libsdl-org/sdl2-compat/pull/545
-    (fetchpatch2 {
-      url = "https://github.com/libsdl-org/sdl2-compat/commit/b799076c72c2492224e81544f58f92b737cccbd3.patch?full_index=1";
-      hash = "sha256-fAc8yBlT+XFHDKcF4MFgBAz2WtXGmhYzNNrjaGSr+do=";
-    })
   ];
   setupHook = ./setup-hook.sh;
 

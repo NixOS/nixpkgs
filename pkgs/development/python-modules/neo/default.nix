@@ -5,7 +5,6 @@
   numpy,
   packaging,
   quantities,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   pillow,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "neo";
   version = "0.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "NeuralEnsemble";

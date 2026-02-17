@@ -9,17 +9,18 @@
   freetype,
   jellyfin-web,
   sqlite,
+  versionCheckHook,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "jellyfin";
-  version = "10.11.4"; # ensure that jellyfin-web has matching version
+  version = "10.11.6"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
-    rev = "v${version}";
-    hash = "sha256-Hs7G8igW7TJBTYuv83AhN/YhpLcO5pwuU5vYwDUEsUQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bF/N6FC1/qfBar2KNut8KY3Rz+pqArCt4HV3NAH8eaU=";
   };
 
   propagatedBuildInputs = [ sqlite ];
@@ -43,6 +44,11 @@ buildDotnetModule rec {
     "--webdir=${jellyfin-web}/share/jellyfin-web"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru.tests = {
     smoke-test = nixosTests.jellyfin;
   };
@@ -61,6 +67,6 @@ buildDotnetModule rec {
       jojosch
     ];
     mainProgram = "jellyfin";
-    platforms = dotnet-runtime.meta.platforms;
+    platforms = finalAttrs.dotnet-runtime.meta.platforms;
   };
-}
+})

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "00303.01";
 
   src = fetchurl {
-    url = "mirror://ubuntu/pool/universe/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.gz";
+    url = "mirror://ubuntu/pool/universe/f/fonts-takao/fonts-takao_${version}.orig.tar.gz";
     hash = "sha256-0wjHNv1yStp0q9D0WfwjgUYoUKcCrXA5jFO8PEVgq5k=";
   };
 

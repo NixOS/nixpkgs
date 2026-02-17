@@ -262,12 +262,7 @@ builtins.intersectAttrs super {
   ghc-debug-brick = enableSeparateBinOutput super.ghc-debug-brick;
   nixfmt = enableSeparateBinOutput super.nixfmt;
   calligraphy = enableSeparateBinOutput super.calligraphy;
-  niv = overrideCabal (drv: {
-    buildTools = (drv.buildTools or [ ]) ++ [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram ''${!outputBin}/bin/niv --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
-    '';
-  }) (enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv));
+  niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
   ghcid = enableSeparateBinOutput super.ghcid;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (
     enableSeparateBinOutput super.ormolu
@@ -459,6 +454,9 @@ builtins.intersectAttrs super {
     }))
   ];
 
+  # Wants to execute cabal-install
+  ghci-quickfix = dontCheck super.ghci-quickfix;
+
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
   amqp-conduit = dontCheck super.amqp-conduit;
@@ -500,18 +498,46 @@ builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # Some test cases require network access
+  hpack_0_39_1 = doDistribute (
+    overrideCabal (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        "--skip=/EndToEnd/hpack/defaults/fails if defaults don't exist/"
+        "--skip=/Hpack.Defaults/ensureFile/downloads file if missing/"
+        "--skip=/Hpack.Defaults/ensureFile/with 404/does not create any files/"
+      ];
+    }) super.hpack_0_39_1
+  );
+
   # Tries accessing the GitHub API
   github-app-token = dontCheck super.github-app-token;
 
-  # The curl executable is required for withApplication tests.
-  warp = addTestToolDepend pkgs.curl super.warp;
+  warp = lib.pipe super.warp [
+    # The curl executable is required for withApplication tests.
+    (addTestToolDepend pkgs.curl)
+    # Avoids much closure size of downstream deps on macOS: https://github.com/yesodweb/wai/pull/1044
+    (disableCabalFlag "include-warp-version")
+  ];
 
   lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
 
-  safe-exceptions = overrideCabal (drv: {
-    # Fix strictDeps build error "could not execute: hspec-discover"
-    testToolDepends = drv.testToolDepends or [ ] ++ [ self.hspec-discover ];
-  }) super.safe-exceptions;
+  # Package does not declare tool dependency hspec-discover
+  hspec-wai = addTestToolDepends [ self.hspec-discover ] super.hspec-wai;
+
+  # Package does not declare tool dependency hspec-discover
+  http-date = addTestToolDepends [ self.hspec-discover ] super.http-date;
+
+  # Package does not declare tool dependency hspec-discover
+  http-types = addTestToolDepends [ self.hspec-discover ] super.http-types;
+
+  # Package does not declare tool dependency hspec-discover
+  safe-exceptions = addTestToolDepends [ self.hspec-discover ] super.safe-exceptions;
+
+  # Package does not declare tool dependency hspec-discover
+  unliftio = addTestToolDepends [ self.hspec-discover ] super.unliftio;
+
+  # Package does not declare tool dependency hspec-discover
+  word8 = addTestToolDepends [ self.hspec-discover ] super.word8;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
@@ -582,9 +608,9 @@ builtins.intersectAttrs super {
       testDepends =
         drv.testDepends or [ ]
         ++ map lib.getBin [
-          pkgs.xorg.xorgserver
-          pkgs.xorg.xprop
-          pkgs.xorg.xrandr
+          pkgs.xorg-server
+          pkgs.xprop
+          pkgs.xrandr
           pkgs.xdummy
           pkgs.xterm
           pkgs.dbus
@@ -715,7 +741,7 @@ builtins.intersectAttrs super {
   pcap = addExtraLibrary pkgs.libpcap super.pcap;
 
   # https://github.com/NixOS/nixpkgs/issues/53336
-  greenclip = addExtraLibrary pkgs.xorg.libXdmcp super.greenclip;
+  greenclip = addExtraLibrary pkgs.libxdmcp super.greenclip;
 
   # The cabal files for these libraries do not list the required system dependencies.
   libjwt-typed = addExtraLibrary pkgs.libjwt super.libjwt-typed;
@@ -760,7 +786,7 @@ builtins.intersectAttrs super {
   fltkhs = overrideCabal (drv: {
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.buildPackages.autoconf ];
     librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [
-      pkgs.fltk13
+      pkgs.fltk_1_3
       pkgs.libGL
       pkgs.libjpeg
     ];
@@ -902,6 +928,10 @@ builtins.intersectAttrs super {
   splitmix = dontCheck super.splitmix;
   splitmix_0_1_1 = dontCheck super.splitmix_0_1_1;
 
+  # Break infinite recursion
+  # hedgehog (dep)→ async (dep)→ unordered-containers (test)→ nothunks (test)→ hedgehog
+  nothunks = dontCheck super.nothunks;
+
   # Break infinite recursion cycle with OneTuple and quickcheck-instances.
   foldable1-classes-compat = dontCheck super.foldable1-classes-compat;
 
@@ -936,13 +966,17 @@ builtins.intersectAttrs super {
     ];
   }) super.liquid-fixpoint;
 
-  # overrideCabal because the tests need to execute the built executable "liquid"
+  # overrideCabal because
+  # - tests need to execute the built executable "liquid"
+  # - LiquidHaskell needs an SMT solver. We use Z3.
+  # - LiquidHaskell clash with Haddock as of now, see https://github.com/ucsd-progsys/liquidhaskell/issues/2188
   liquidhaskell = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/liquid:$PATH
     ''
     + (drv.preCheck or "");
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.z3 ];
+    doHaddock = false;
   }) super.liquidhaskell;
 
   # Break cyclic reference that results in an infinite recursion.
@@ -1005,6 +1039,11 @@ builtins.intersectAttrs super {
     '';
   }) super.sbv;
 
+  # Don't use vendored (and outdated) c-blosc library
+  hblosc = addPkgconfigDepends [
+    pkgs.c-blosc
+  ] (enableCabalFlag "externalBlosc" super.hblosc);
+
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
@@ -1026,6 +1065,8 @@ builtins.intersectAttrs super {
     (disableCabalFlag "no-exe")
     enableSeparateBinOutput
     (addBuildDepend self.optparse-applicative)
+    # Package does not declare tool dependency hspec-discover
+    (addTestToolDepend self.hspec-discover)
   ];
 
   # Compile manpages (which are in RST and are compiled with Sphinx).
@@ -1157,6 +1198,11 @@ builtins.intersectAttrs super {
         }
       );
 
+  # Don't use vendored copy of zxcvbn-c
+  zxcvbn-c = addBuildDepends [
+    pkgs.zxcvbn-c
+  ] (enableCabalFlag "use-shared-lib" super.zxcvbn-c);
+
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
 
@@ -1176,8 +1222,7 @@ builtins.intersectAttrs super {
   http-download = dontCheck super.http-download;
   http-download_0_2_1_0 = doDistribute (dontCheck super.http-download_0_2_1_0);
   pantry = dontCheck super.pantry;
-  pantry_0_9_3_1 = dontCheck super.pantry_0_9_3_1;
-  pantry_0_10_0 = dontCheck super.pantry_0_10_0;
+  pantry_0_11_2 = doDistribute (dontCheck super.pantry_0_11_2);
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
@@ -1323,6 +1368,8 @@ builtins.intersectAttrs super {
     ];
     doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
   }) super.haskell-pgmq;
+  # Needs pgmq available at test time with somehow preinitialized database (?)
+  stakhanov = dontCheck super.stakhanov;
 
   migrant-postgresql-simple = lib.pipe super.migrant-postgresql-simple [
     (overrideCabal {
@@ -1551,6 +1598,18 @@ builtins.intersectAttrs super {
     };
   }) (enableSeparateBinOutput super.cabal2nix-unstable);
 
+  # Cabal doesn't allow us to properly specify the test dependency
+  # on nix-instantiate(1). Even though we're just evaluating pure code,
+  # it absolutely wants to write to disk.
+  language-nix-unstable = overrideCabal (drv: {
+    testDepends = drv.testDepends or [ ] ++ [ pkgs.nix ];
+    preCheck = ''
+      export TMP_NIX_DIR="$(mktemp -d)"
+      export NIX_STORE_DIR="$TMP_NIX_DIR/store"
+      export NIX_STATE_DIR="$TMP_NIX_DIR/state"
+    '';
+  }) super.language-nix-unstable;
+
   # test suite needs local redis daemon
   nri-redis = dontCheck super.nri-redis;
 
@@ -1574,7 +1633,6 @@ builtins.intersectAttrs super {
           wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
             pkgs.lib.makeBinPath [
               pkgs.nvchecker
-              pkgs.nix # nix-prefetch-url
               pkgs.nix-prefetch-git
               pkgs.nix-prefetch-docker
             ]
@@ -1635,7 +1693,7 @@ builtins.intersectAttrs super {
     overrideCabal
       (old: {
         passthru = old.passthru or { } // {
-          nixPackage = pkgs.nixVersions.nix_2_28;
+          nixPackage = pkgs.nixVersions.nix_2_31;
         };
       })
       (
@@ -1714,6 +1772,9 @@ builtins.intersectAttrs super {
 
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
+
+  # Wants anthropic API key
+  claude = dontCheck super.claude;
 
   # Test suite requires network access
   minicurl = dontCheck super.minicurl;
@@ -1905,7 +1966,7 @@ builtins.intersectAttrs super {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
         postInstall = (old.postInstall or "") + ''
           nodePath=""
-          for p in "$out" "${pkgs.nodePackages.postcss}" $plugins; do
+          for p in "$out" "${pkgs.postcss}" $plugins; do
             nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
           done
           makeWrapper "$out/bin/tailwindcss" "$out/bin/tailwind" --prefix NODE_PATH : "$nodePath"
@@ -1955,6 +2016,7 @@ builtins.intersectAttrs super {
     gi-gtksource5
     gi-gsk
     gi-adwaita
+    gi-ostree
     sdl2-ttf
     sdl2
     dear-imgui
@@ -1962,13 +2024,13 @@ builtins.intersectAttrs super {
     ;
 
   webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
-    (addBuildDepend pkgs.xorg.libXtst)
+    (addBuildDepend pkgs.libxtst)
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
 
   gi-webkit2 = lib.pipe super.gi-webkit2 [
-    (addBuildDepend pkgs.xorg.libXtst)
+    (addBuildDepend pkgs.libxtst)
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
@@ -2130,6 +2192,45 @@ builtins.intersectAttrs super {
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
 
+  # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
+  # These in particular can't rely on template haskell for cross-compilation anyway as they can't rely on iserv-proxy.
+  inherit
+    (
+      let
+        noExternalInterpreter = overrideCabal {
+          enableExternalInterpreter = false;
+        };
+      in
+      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy network; }
+    )
+    iserv-proxy
+    network
+    ;
+
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
 }
+
+// lib.optionalAttrs pkgs.config.allowAliases (
+  lib.genAttrs
+    [
+      "2captcha"
+      "3d-graphics-examples"
+      "3dmodels"
+      "4Blocks"
+      "assert"
+      "if"
+    ]
+    (
+      old:
+      let
+        new = "_" + old;
+      in
+      {
+        name = old;
+        value =
+          lib.warnOnInstantiate "haskell.packages.*.${old} has been renamed to haskell.packages.*.${new}"
+            self.${new};
+      }
+    )
+)

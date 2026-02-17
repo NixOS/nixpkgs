@@ -4,26 +4,26 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "double-entry-generator";
-  version = "2.12.0";
+  version = "2.15.0";
   src = fetchFromGitHub {
     owner = "deb-sig";
     repo = "double-entry-generator";
-    hash = "sha256-j/iShGFfuk4iIGFv+S5sxXCyJ2f0xbJVYOSFtsijjq0=";
-    rev = "v${version}";
+    hash = "sha256-w2OKKSsz9t/4+aKPWq04+Sk0lJbxYeVah+o00T5YWQM=";
+    rev = "v${finalAttrs.version}";
   };
 
-  vendorHash = "sha256-CJ+mfH9qJXYhicxrL9+i8H6CVKZua40D1/Sg3vWQs68=";
+  vendorHash = "sha256-aOzqxXGBjrIZcE0GfnPC3B3GrbSUgkvimkzLTcthspM=";
 
   excludedPackages = [ "hack" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/deb-sig/double-entry-generator/pkg/version.VERSION=${version}"
+    "-X=github.com/deb-sig/double-entry-generator/pkg/version.VERSION=${finalAttrs.version}"
     "-X=github.com/deb-sig/double-entry-generator/pkg/version.REPOROOT=github.com/deb-sig/double-entry-generator"
-    "-X=github.com/deb-sig/double-entry-generator/pkg/version.COMMIT=${src.rev}"
+    "-X=github.com/deb-sig/double-entry-generator/pkg/version.COMMIT=${finalAttrs.src.rev}"
   ];
 
   doInstallCheck = true;
@@ -46,4 +46,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ rennsax ];
     mainProgram = "double-entry-generator";
   };
-}
+})

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   wxGTK32,
-  libX11,
+  libx11,
   readline,
   fetchpatch,
 }:
@@ -21,14 +21,14 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bossa";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "shumatech";
     repo = "BOSSA";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-8M3MU/+Y1L6SaQ1yoC9Z27A/gGruZdopLnL1z7h7YJw=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bin2c ];
   buildInputs = [
     wxGTK32
-    libX11
+    libx11
     readline
   ];
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})

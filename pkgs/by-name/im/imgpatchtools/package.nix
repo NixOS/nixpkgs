@@ -7,14 +7,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imgpatchtools";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "erfanoabdi";
     repo = "imgpatchtools";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-7TOkqaXPui14VcSmMmYJ1Wg+s85wrgp+E0XcCB0Ml7M=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

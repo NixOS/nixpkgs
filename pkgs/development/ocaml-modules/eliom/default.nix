@@ -17,14 +17,14 @@
   ocsipersist,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "eliom";
   version = "11.1.1";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "eliom";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ALuoyO6axNQEeBteBVIFwdoSrbLxxcaSTObAcLPGIvo=";
   };
 
@@ -69,7 +69,7 @@ buildDunePackage rec {
     '';
 
     license = lib.licenses.lgpl21;
-    broken = lib.versionAtLeast ocaml.version "5.3";
+    broken = true;
     maintainers = [ lib.maintainers.gal_bolle ];
   };
-}
+})

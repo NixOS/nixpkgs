@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/adamchainz/pytest-reverse";
     changelog = "https://github.com/adamchainz/pytest-reverse/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

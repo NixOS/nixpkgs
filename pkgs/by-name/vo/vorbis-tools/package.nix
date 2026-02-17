@@ -13,12 +13,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vorbis-tools";
   version = "1.4.3";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/vorbis/vorbis-tools-${version}.tar.gz";
+    url = "http://downloads.xiph.org/releases/vorbis/vorbis-tools-${finalAttrs.version}.tar.gz";
     hash = "sha256-of493Gd3vc6/a3l+ft/gQ3lUskdW/8yMa4FrY+BGDd4=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
   };
-}
+})

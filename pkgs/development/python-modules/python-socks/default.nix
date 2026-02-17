@@ -8,7 +8,6 @@
   flask,
   pytest-asyncio,
   pytest-trio,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   trio,
@@ -18,10 +17,8 @@
 
 buildPythonPackage rec {
   pname = "python-socks";
-  version = "2.7.3";
+  version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6.2";
 
   __darwinAllowLocalNetworking = true;
 
@@ -29,7 +26,7 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = "python-socks";
     tag = "v${version}";
-    hash = "sha256-n+RFHFGXy6/H3KwiK2kxY9KTe7PcYDcIoAYhnv7X62A=";
+    hash = "sha256-b19DfvoJo/9NCjgZ+07WdZGnXNS7/f+FgGdU8s1k2io=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +38,6 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    asyncio = lib.optionals (pythonOlder "3.11") [ async-timeout ];
     trio = [ trio ];
     curio = [ curio ];
     anyio = [ anyio ];

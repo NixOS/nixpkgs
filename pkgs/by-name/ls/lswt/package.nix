@@ -7,14 +7,14 @@
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lswt";
   version = "2.0.0";
 
   src = fetchFromSourcehut {
     owner = "~leon_plickat";
     repo = "lswt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8jP6I2zsDt57STtuq4F9mcsckrjvaCE5lavqKTjhNT0=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "lswt";
   };
-}
+})

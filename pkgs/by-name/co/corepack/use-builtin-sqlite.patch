@@ -1,35 +1,25 @@
 diff --git a/package.json b/package.json
-index fc8f2469ed5..7b3881e2a5d 100644
+index f2778bc2031..10496858378 100644
 --- a/package.json
 +++ b/package.json
-@@ -26,7 +26,6 @@
-     "@yarnpkg/eslint-config": "^3.0.0",
-     "@yarnpkg/fslib": "^3.0.0-rc.48",
+@@ -28,3 +28,2 @@
      "@zkochan/cmd-shim": "^6.0.0",
 -    "better-sqlite3": "^11.7.2",
      "clipanion": "patch:clipanion@npm%3A3.2.1#~/.yarn/patches/clipanion-npm-3.2.1-fc9187f56c.patch",
-     "debug": "^4.1.1",
-     "esbuild": "^0.25.0",
 diff --git a/tests/recordRequests.js b/tests/recordRequests.js
 index b78edad0e44..27667abbae4 100644
 --- a/tests/recordRequests.js
 +++ b/tests/recordRequests.js
-@@ -1,7 +1,7 @@
- "use strict";
- const path = require(`node:path`);
+@@ -3,3 +3,3 @@ const path = require(`node:path`);
  const crypto = require(`node:crypto`);
 -const SQLite3 = require(`better-sqlite3`);
 +const { DatabaseSync: SQLite3 } = require(`node:sqlite`);
  
- const db = new SQLite3(path.join(__dirname, `nocks.db`));
- process.once(`exit`, () => {
 diff --git a/yarn.lock b/yarn.lock
-index fc5bd2b1248..46777cbe979 100644
+index a2f193d1ee0..74f52dc46d9 100644
 --- a/yarn.lock
 +++ b/yarn.lock
-@@ -1145,44 +1145,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -1147,40 +1147,2 @@ __metadata:
  
 -"base64-js@npm:^1.3.1":
 -  version: 1.5.1
@@ -70,11 +60,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "brace-expansion@npm:^1.1.7":
-   version: 1.1.12
-   resolution: "brace-expansion@npm:1.1.12"
-@@ -1211,16 +1173,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -1213,12 +1175,2 @@ __metadata:
  
 -"buffer@npm:^5.5.0":
 -  version: 5.7.1
@@ -87,11 +73,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "cac@npm:^6.7.14":
-   version: 6.7.14
-   resolution: "cac@npm:6.7.14"
-@@ -1316,13 +1268,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -1318,9 +1270,2 @@ __metadata:
  
 -"chownr@npm:^1.1.1":
 -  version: 1.1.4
@@ -101,19 +83,11 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "chownr@npm:^3.0.0":
-   version: 3.0.0
-   resolution: "chownr@npm:3.0.0"
-@@ -1394,7 +1339,6 @@ __metadata:
-     "@yarnpkg/eslint-config": "npm:^3.0.0"
-     "@yarnpkg/fslib": "npm:^3.0.0-rc.48"
+@@ -1396,3 +1341,2 @@ __metadata:
      "@zkochan/cmd-shim": "npm:^6.0.0"
 -    better-sqlite3: "npm:^11.7.2"
      clipanion: "patch:clipanion@npm%3A3.2.1#~/.yarn/patches/clipanion-npm-3.2.1-fc9187f56c.patch"
-     debug: "npm:^4.1.1"
-     esbuild: "npm:^0.25.0"
-@@ -1468,15 +1412,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -1470,11 +1414,2 @@ __metadata:
  
 -"decompress-response@npm:^6.0.0":
 -  version: 6.0.0
@@ -125,11 +99,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "deep-eql@npm:^5.0.1":
-   version: 5.0.2
-   resolution: "deep-eql@npm:5.0.2"
-@@ -1484,13 +1419,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -1486,9 +1421,2 @@ __metadata:
  
 -"deep-extend@npm:^0.6.0":
 -  version: 0.6.0
@@ -139,11 +109,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "deep-is@npm:^0.1.3":
-   version: 0.1.4
-   resolution: "deep-is@npm:0.1.4"
-@@ -1520,13 +1448,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -1522,9 +1450,2 @@ __metadata:
  
 -"detect-libc@npm:^2.0.0":
 -  version: 2.1.2
@@ -153,11 +119,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "doctrine@npm:^2.1.0":
-   version: 2.1.0
-   resolution: "doctrine@npm:2.1.0"
-@@ -1577,15 +1498,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -1579,11 +1500,2 @@ __metadata:
  
 -"end-of-stream@npm:^1.1.0, end-of-stream@npm:^1.4.1":
 -  version: 1.4.5
@@ -169,11 +131,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "env-paths@npm:^2.2.0":
-   version: 2.2.1
-   resolution: "env-paths@npm:2.2.1"
-@@ -2004,13 +1916,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -2006,9 +1918,2 @@ __metadata:
  
 -"expand-template@npm:^2.0.3":
 -  version: 2.0.3
@@ -183,11 +141,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "expect-type@npm:^1.2.1":
-   version: 1.2.2
-   resolution: "expect-type@npm:1.2.2"
-@@ -2089,13 +1994,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -2091,9 +1996,2 @@ __metadata:
  
 -"file-uri-to-path@npm:1.0.0":
 -  version: 1.0.0
@@ -197,11 +151,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "fill-range@npm:^7.1.1":
-   version: 7.1.1
-   resolution: "fill-range@npm:7.1.1"
-@@ -2151,13 +2049,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -2153,9 +2051,2 @@ __metadata:
  
 -"fs-constants@npm:^1.0.0":
 -  version: 1.0.0
@@ -211,11 +161,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "fs-minipass@npm:^3.0.0":
-   version: 3.0.3
-   resolution: "fs-minipass@npm:3.0.3"
-@@ -2272,13 +2163,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -2274,9 +2165,2 @@ __metadata:
  
 -"github-from-package@npm:0.0.0":
 -  version: 0.0.0
@@ -225,11 +171,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "glob-parent@npm:^5.1.2":
-   version: 5.1.2
-   resolution: "glob-parent@npm:5.1.2"
-@@ -2451,13 +2335,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -2453,9 +2337,2 @@ __metadata:
  
 -"ieee754@npm:^1.1.13":
 -  version: 1.2.1
@@ -239,11 +181,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "ignore@npm:^5.2.0":
-   version: 5.3.2
-   resolution: "ignore@npm:5.3.2"
-@@ -2489,20 +2366,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -2491,16 +2368,2 @@ __metadata:
  
 -"inherits@npm:^2.0.3, inherits@npm:^2.0.4":
 -  version: 2.0.4
@@ -260,11 +198,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "internal-slot@npm:^1.1.0":
-   version: 1.1.0
-   resolution: "internal-slot@npm:1.1.0"
-@@ -2982,13 +2845,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -2984,9 +2847,2 @@ __metadata:
  
 -"mimic-response@npm:^3.1.0":
 -  version: 3.1.0
@@ -273,12 +207,8 @@ index fc5bd2b1248..46777cbe979 100644
 -  languageName: node
 -  linkType: hard
 -
- "minimatch@npm:^10.0.3":
-   version: 10.1.1
-   resolution: "minimatch@npm:10.1.1"
-@@ -3016,13 +2872,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+ "minimatch@npm:^10.1.1":
+@@ -3018,9 +2874,2 @@ __metadata:
  
 -"minimist@npm:^1.2.0, minimist@npm:^1.2.3":
 -  version: 1.2.8
@@ -288,11 +218,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "minipass-collect@npm:^2.0.1":
-   version: 2.0.1
-   resolution: "minipass-collect@npm:2.0.1"
-@@ -3099,13 +2948,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -3101,9 +2950,2 @@ __metadata:
  
 -"mkdirp-classic@npm:^0.5.2, mkdirp-classic@npm:^0.5.3":
 -  version: 0.5.3
@@ -302,11 +228,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "ms@npm:^2.1.3":
-   version: 2.1.3
-   resolution: "ms@npm:2.1.3"
-@@ -3122,13 +2964,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -3124,9 +2966,2 @@ __metadata:
  
 -"napi-build-utils@npm:^2.0.0":
 -  version: 2.0.0
@@ -316,11 +238,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "natural-compare@npm:^1.4.0":
-   version: 1.4.0
-   resolution: "natural-compare@npm:1.4.0"
-@@ -3143,15 +2978,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -3145,11 +2980,2 @@ __metadata:
  
 -"node-abi@npm:^3.3.0":
 -  version: 3.85.0
@@ -332,11 +250,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "node-gyp@npm:latest":
-   version: 12.1.0
-   resolution: "node-gyp@npm:12.1.0"
-@@ -3254,15 +3080,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -3256,11 +3082,2 @@ __metadata:
  
 -"once@npm:^1.3.1, once@npm:^1.4.0":
 -  version: 1.4.0
@@ -348,11 +262,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "optionator@npm:^0.9.3":
-   version: 0.9.4
-   resolution: "optionator@npm:0.9.4"
-@@ -3413,28 +3230,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -3415,24 +3232,2 @@ __metadata:
  
 -"prebuild-install@npm:^7.1.1":
 -  version: 7.1.3
@@ -377,11 +287,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "prelude-ls@npm:^1.2.1":
-   version: 1.2.1
-   resolution: "prelude-ls@npm:1.2.1"
-@@ -3477,16 +3272,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -3479,12 +3274,2 @@ __metadata:
  
 -"pump@npm:^3.0.0":
 -  version: 3.0.3
@@ -394,11 +300,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "punycode@npm:^2.1.0":
-   version: 2.3.1
-   resolution: "punycode@npm:2.3.1"
-@@ -3501,20 +3286,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -3503,16 +3288,2 @@ __metadata:
  
 -"rc@npm:^1.2.7":
 -  version: 1.2.8
@@ -415,11 +317,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "react-is@npm:^16.13.1":
-   version: 16.13.1
-   resolution: "react-is@npm:16.13.1"
-@@ -3522,17 +3293,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -3524,13 +3295,2 @@ __metadata:
  
 -"readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0":
 -  version: 3.6.2
@@ -433,11 +331,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "reflect.getprototypeof@npm:^1.0.6, reflect.getprototypeof@npm:^1.0.9":
-   version: 1.0.10
-   resolution: "reflect.getprototypeof@npm:1.0.10"
-@@ -3720,13 +3480,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -3722,9 +3482,2 @@ __metadata:
  
 -"safe-buffer@npm:^5.0.1, safe-buffer@npm:~5.2.0":
 -  version: 5.2.1
@@ -447,11 +341,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "safe-push-apply@npm:^1.0.0":
-   version: 1.0.0
-   resolution: "safe-push-apply@npm:1.0.0"
-@@ -3888,24 +3641,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -3890,20 +3643,2 @@ __metadata:
  
 -"simple-concat@npm:^1.0.0":
 -  version: 1.0.1
@@ -472,11 +362,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "smart-buffer@npm:^4.2.0":
-   version: 4.2.0
-   resolution: "smart-buffer@npm:4.2.0"
-@@ -4074,15 +3809,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -4076,11 +3811,2 @@ __metadata:
  
 -"string_decoder@npm:^1.1.1":
 -  version: 1.3.0
@@ -488,11 +374,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "strip-ansi-cjs@npm:strip-ansi@^6.0.1, strip-ansi@npm:^6.0.0, strip-ansi@npm:^6.0.1":
-   version: 6.0.1
-   resolution: "strip-ansi@npm:6.0.1"
-@@ -4108,13 +3834,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -4110,9 +3836,2 @@ __metadata:
  
 -"strip-json-comments@npm:~2.0.1":
 -  version: 2.0.1
@@ -502,11 +384,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "strip-literal@npm:^3.0.0":
-   version: 3.1.0
-   resolution: "strip-literal@npm:3.1.0"
-@@ -4147,31 +3866,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -4149,27 +3868,2 @@ __metadata:
  
 -"tar-fs@npm:^2.0.0":
 -  version: 2.1.4
@@ -533,12 +411,8 @@ index fc5bd2b1248..46777cbe979 100644
 -  languageName: node
 -  linkType: hard
 -
- "tar@npm:^7.4.0, tar@npm:^7.5.2":
-   version: 7.5.2
-   resolution: "tar@npm:7.5.2"
-@@ -4271,15 +3965,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+ "tar@npm:^7.5.2, tar@npm:^7.5.4":
+@@ -4273,11 +3967,2 @@ __metadata:
  
 -"tunnel-agent@npm:^0.6.0":
 -  version: 0.6.0
@@ -550,11 +424,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "typanion@npm:^3.8.0":
-   version: 3.14.0
-   resolution: "typanion@npm:3.14.0"
-@@ -4422,13 +4107,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -4424,9 +4109,2 @@ __metadata:
  
 -"util-deprecate@npm:^1.0.1":
 -  version: 1.0.2
@@ -564,11 +434,7 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "v8-compile-cache@npm:^2.3.0":
-   version: 2.4.0
-   resolution: "v8-compile-cache@npm:2.4.0"
-@@ -4697,13 +4375,6 @@ __metadata:
-   languageName: node
-   linkType: hard
+@@ -4699,9 +4377,2 @@ __metadata:
  
 -"wrappy@npm:1":
 -  version: 1.0.2
@@ -578,5 +444,3 @@ index fc5bd2b1248..46777cbe979 100644
 -  linkType: hard
 -
  "yallist@npm:^4.0.0":
-   version: 4.0.0
-   resolution: "yallist@npm:4.0.0"

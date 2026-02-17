@@ -8,20 +8,17 @@
   pyasynchat,
   pyopenssl,
   pysendfile,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyftpdlib";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7w0XKoK/rhDi3sIi6HUzUUYJ1Bv0sP0PB+KdQ4D7lr8=";
+    hash = "sha256-XpLnujfD5FjsRY5cIB4t65kstgEclj5qhRKmNNjYARY=";
   };
 
   build-system = [ setuptools ];

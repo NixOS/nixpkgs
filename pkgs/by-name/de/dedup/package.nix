@@ -10,12 +10,12 @@
   gawk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dedup";
   version = "2.0";
 
   src = fetchurl {
-    url = "https://dl.2f30.org/releases/${pname}-${version}.tar.gz";
+    url = "https://dl.2f30.org/releases/dedup-${finalAttrs.version}.tar.gz";
     sha256 = "0n5kkni4d6blz3s94y0ddyhijb74lxv7msr2mvdmj8l19k0lrfh1";
   };
 
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
       bsd0
       isc
     ];
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
-}
+})

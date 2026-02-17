@@ -7,15 +7,12 @@
   mock,
   python-dateutil,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "messagebird";
   version = "2.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "messagebird";

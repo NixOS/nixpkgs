@@ -5,15 +5,12 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dingz";
   version = "0.5.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";

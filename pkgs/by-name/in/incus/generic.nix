@@ -1,8 +1,9 @@
 {
   hash,
   lts ? false,
-  patches ? [ ],
   nixUpdateExtraArgs ? [ ],
+  patches ? [ ],
+  rev ? null,
   vendorHash,
   version,
 }:
@@ -65,12 +66,14 @@ buildGoModule (finalAttrs: {
     "doc"
   ];
 
-  src = fetchFromGitHub {
-    owner = "lxc";
-    repo = "incus";
-    tag = "v${version}";
-    inherit hash;
-  };
+  src = fetchFromGitHub (
+    {
+      owner = "lxc";
+      repo = "incus";
+      inherit hash;
+    }
+    // (if (rev == null) then { tag = "v${version}"; } else { inherit rev; })
+  );
 
   patches = [ ./docs.patch ] ++ patches;
 
@@ -107,6 +110,17 @@ buildGoModule (finalAttrs: {
 
   # required for go-cowsql.
   CGO_LDFLAGS_ALLOW = "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
+
+  # add our lxc location to incus's acceptable rootFsPaths
+  # this is necessary for tmpfs/tmpfs-overlay to work
+  postPatch =
+    if (lib.versionAtLeast finalAttrs.version "6.16") then
+      ''
+        substituteInPlace internal/server/device/disk.go \
+          --replace-fail '"/opt/incus/lib/lxc/rootfs/"' '"${lxc}/lib/lxc/rootfs/"'
+      ''
+    else
+      null;
 
   postBuild = ''
     # build docs

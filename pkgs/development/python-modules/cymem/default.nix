@@ -5,21 +5,18 @@
   setuptools,
   cython,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cymem";
-  version = "2.0.11";
+  version = "2.0.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cymem";
     tag = "release-v${version}";
-    hash = "sha256-4srwdQS06KeBAIaJm6XxmsHEZto0eiXBznrCHgT/BAc=";
+    hash = "sha256-n65tkACZi1G4qS/VQWB5ghopzCd5QHRyp9qit+yENIs=";
   };
 
   build-system = [

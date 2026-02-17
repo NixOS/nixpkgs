@@ -6,10 +6,10 @@
   gtk3,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   pkg-config,
   upx,
-  xcbutil,
+  libxcb-util,
 }:
 
 stdenv.mkDerivation {
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
     gtk3
     libGL
     libGLU
-    libX11
-    xcbutil
+    libx11
+    libxcb-util
   ];
 
   nativeBuildInputs = [

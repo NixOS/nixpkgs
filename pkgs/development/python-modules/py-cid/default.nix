@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   base58,
   py-multibase,
@@ -14,15 +13,14 @@
 
 buildPythonPackage rec {
   pname = "py-cid";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ipld";
     repo = "py-cid";
-    rev = "v${version}";
-    hash = "sha256-aN7ee25ghKKa90+FoMDCdGauToePc5AzDLV3tONvh4U=";
+    tag = "v${version}";
+    hash = "sha256-IYjk7sajHFWgsOMxwk1tWvKtTfPN8vHoNeENQed7MiU=";
   };
 
   postPatch = ''

@@ -5,18 +5,14 @@
   fetchFromGitHub,
   gitMinimal,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
   version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
@@ -27,7 +23,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ ruamel-yaml ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [ ruamel-yaml ];
 
   nativeCheckInputs = [
     gitMinimal

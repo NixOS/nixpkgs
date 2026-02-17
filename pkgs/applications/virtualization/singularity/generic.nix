@@ -199,7 +199,7 @@ in
           lib.concatStringsSep " " [
             "--replace-fail"
             (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-            (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
+            (addShellDoubleQuotes "$systemDefaultPath\${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}\${inputsDefaultPath:+:}$inputsDefaultPath")
           ]
         ) originalDefaultPaths}
     '') sourceFilesWithDefaultPaths}
@@ -277,7 +277,6 @@ in
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-applehelp";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "sphinxcontrib_applehelp";
@@ -31,6 +28,5 @@ buildPythonPackage rec {
     description = "Sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-applehelp";
     license = lib.licenses.bsd2;
-    teams = [ lib.teams.sphinx ];
   };
 }

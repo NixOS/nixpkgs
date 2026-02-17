@@ -7,7 +7,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pwdsphinx";
   version = "2.0.3";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "stef";
     repo = "pwdsphinx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-COSfA5QqIGWEnahmo5klFECK7XjyabGs1nG9vyhj/DM=";
   };
 
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
 
   preCheck = ''
     mkdir -p ~/.config/sphinx
-    cp ${src}/configs/config ~/.config/sphinx/config
+    cp ${finalAttrs.src}/configs/config ~/.config/sphinx/config
     # command fails without key but the command generates the key, so always pass
     $out/bin/sphinx init || true
   '';
@@ -66,9 +66,9 @@ python3Packages.buildPythonApplication rec {
     description = "Native backend for web-extensions for Sphinx-based password storage";
     homepage = "https://www.ctrlc.hu/~stef/blog/posts/sphinx.html";
     downloadPage = "https://github.com/stef/pwdsphinx";
-    changelog = "https://github.com/stef/pwdsphinx/releases/tag/v${version}";
+    changelog = "https://github.com/stef/pwdsphinx/releases/tag/v${finalAttrs.version}";
     teams = [ lib.teams.ngi ];
     license = lib.licenses.gpl3Plus;
     mainProgram = "sphinx";
   };
-}
+})

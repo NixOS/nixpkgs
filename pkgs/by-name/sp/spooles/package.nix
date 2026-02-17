@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spooles";
   version = "2.2";
 
   src = fetchurl {
-    url = "http://www.netlib.org/linalg/spooles/spooles.${version}.tgz";
+    url = "http://www.netlib.org/linalg/spooles/spooles.${finalAttrs.version}.tgz";
     sha256 = "1pf5z3vvwd8smbpibyabprdvcmax0grzvx2y0liy98c7x6h5jid8";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

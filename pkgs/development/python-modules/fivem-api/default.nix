@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "fivem-api";
   version = "0.1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

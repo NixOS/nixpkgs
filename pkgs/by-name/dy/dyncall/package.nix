@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dyncall";
   version = "1.4";
 
   src = fetchurl {
-    url = "https://www.dyncall.org/r${version}/dyncall-${version}.tar.gz";
+    url = "https://www.dyncall.org/r${finalAttrs.version}/dyncall-${finalAttrs.version}.tar.gz";
     # https://www.dyncall.org/r1.4/SHA256
     sha256 = "sha256-FEN9u+87bckkg/ZQfq+CWrl5ZKie7K6Ms0emvsnDKq4=";
   };
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "Highly dynamic multi-platform foreign function call interface library";
     homepage = "https://www.dyncall.org";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
-}
+})

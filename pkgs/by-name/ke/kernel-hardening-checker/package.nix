@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kernel-hardening-checker";
-  version = "0.6.10.2";
-  format = "pyproject";
+  version = "0.6.17.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "a13xp0p0v";
     repo = "kernel-hardening-checker";
-    rev = "v${version}";
-    hash = "sha256-9FhDDKTx/YwlEuGf7fgugC5tPgslzXZdlXCCfuM09Dg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wkRbiXHLtTDYBrxn9ZPxXMmWJiIBI5AImjFo6NVaKRM=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -28,4 +28,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ erdnaxe ];
     mainProgram = "kernel-hardening-checker";
   };
-}
+})

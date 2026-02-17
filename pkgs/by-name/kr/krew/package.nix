@@ -6,14 +6,14 @@
   gitMinimal,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "krew";
   version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "krew";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3GoC2HEp9XJe853/JYvX9kAAcFf7XxglVEeU9oQ/5Ms=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ vdemeester ];
     license = lib.licenses.asl20;
   };
-}
+})

@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = with ocamlPackages; [
+    camlzip
     dune-site
     dune-configurator
     ocamlgraph
@@ -137,5 +138,6 @@ stdenv.mkDerivation rec {
       amiddelk
     ];
     platforms = lib.platforms.unix;
+    broken = !lib.versionAtLeast ocamlPackages.ocaml.version "4.14";
   };
 }

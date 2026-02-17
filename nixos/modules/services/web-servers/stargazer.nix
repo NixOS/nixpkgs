@@ -31,7 +31,7 @@ let
         section:
         let
           name = section.route;
-          params = builtins.removeAttrs section [ "route" ];
+          params = removeAttrs section [ "route" ];
         in
         genINI {
           "${name}" = params;

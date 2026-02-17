@@ -6,15 +6,12 @@
   buildPythonPackage,
   fetchPypi,
   flask,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flask-testing";
   version = "0.8.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-Testing";

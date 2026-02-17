@@ -8,7 +8,7 @@
   miniz,
   lz4,
   libxml2,
-  libX11,
+  libx11,
   glslang,
   unordered_dense,
   versionCheckHook,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.24";
+  version = "2026.2.1";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lOvPEUsweyBIf/ryoCDnwBTkvz4J9xatkNSWDvM8zWc=";
+    hash = "sha256-UY1nmkXAtxKycqAq7dcErX7afadYgqwWAUahfVI9ZB8=";
     fetchSubmodules = true;
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     unordered_dense
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ]
   ++ lib.optionals withGlslang [
     # SPIRV-tools is included in glslang.

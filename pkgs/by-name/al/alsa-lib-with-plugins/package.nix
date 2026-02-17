@@ -15,6 +15,7 @@ let
 in
 runCommand "${alsa-lib.pname}-${alsa-lib.version}"
   {
+    inherit (alsa-lib) pname version;
     meta = {
       description = "Wrapper to ease access to ALSA plugins";
       mainProgram = "aserver";

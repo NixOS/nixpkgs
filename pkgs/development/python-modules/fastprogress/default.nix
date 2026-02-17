@@ -2,22 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  fastcore,
   numpy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fastprogress";
-  version = "1.0.3";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "1.1.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ehfStDiJD4OMBI7vzjLE3tRxl+zI6gQs7MM9PeuAIvU=";
+    hash = "sha256-L3Bxvrk84mHdtR1mskOoUXtCFWOgEHSY5Yhe0tkTb8o=";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    fastcore
+    numpy
+  ];
 
   # no real tests
   doCheck = false;

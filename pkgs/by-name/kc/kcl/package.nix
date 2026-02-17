@@ -9,24 +9,24 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kcl";
-  version = "0.12.1";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-dwJkV5/MCUhjralKtnlmqSrb2C0kMZ1eO+6nTnenWZw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vOdL+It8wY+U0Jt68KPAxMe3th0muaCXlEkuEphCVVY=";
   };
 
-  vendorHash = "sha256-1O1oTJCdGwA0TgI8dScZq7+yfumbzyi8rD4VJkFgn5E=";
+  vendorHash = "sha256-NfRVgGtm8w/K0utb3/AlBfT71txpmJlOaFrdqGC8Dkg=";
 
   subPackages = [ "cmd/kcl" ];
 
   ldflags = [
     "-w -s"
-    "-X=kcl-lang.io/cli/pkg/version.version=v${version}"
+    "-X=kcl-lang.io/cli/pkg/version.version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ buildGoModule rec {
 
   meta = {
     description = "Command line interface for KCL programming language";
-    changelog = "https://github.com/kcl-lang/cli/releases/tag/v${version}";
+    changelog = "https://github.com/kcl-lang/cli/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/kcl-lang/cli";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
@@ -74,4 +74,4 @@ buildGoModule rec {
     mainProgram = "kcl";
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
-}
+})

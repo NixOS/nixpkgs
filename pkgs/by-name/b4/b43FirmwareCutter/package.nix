@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "b43-fwcutter";
   version = "019";
 
   src = fetchurl {
-    url = "https://bues.ch/b43/fwcutter/b43-fwcutter-${version}.tar.bz2";
+    url = "https://bues.ch/b43/fwcutter/b43-fwcutter-${finalAttrs.version}.tar.bz2";
     sha256 = "1ki1f5fy3yrw843r697f8mqqdz0pbsbqnvg4yzkhibpn1lqqbsnn";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
   };
-}
+})

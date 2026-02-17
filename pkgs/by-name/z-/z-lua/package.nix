@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "z-lua";
   version = "1.8.24";
 
   src = fetchFromGitHub {
     owner = "skywind3000";
     repo = "z.lua";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-1wsBXJd6QXgK4BCg+VTVDY95DP4+xFp0vAbKmztoREI=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "z.lua";
   };
-}
+})

@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bump";
   version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "mroth";
     repo = "bump";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OD/ZAVLhezhmFSaWyka5kKwEU5FXH3KuzS91eAteR8Y=";
   };
 
@@ -20,8 +20,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-X main.buildVersion=${version}"
-    "-X main.buildCommit=${version}"
+    "-X main.buildVersion=${finalAttrs.version}"
+    "-X main.buildCommit=${finalAttrs.version}"
     "-X main.buildDate=1970-01-01"
   ];
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     mainProgram = "bump";
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

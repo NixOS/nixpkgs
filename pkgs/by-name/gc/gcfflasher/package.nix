@@ -7,14 +7,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcfflasher";
   version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
     repo = "gcfflasher";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nYLGKem4+Ty2QyhDQIyo9wLEKrbumYKuoGIA9Ore7XM=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "GCFFlasher";
   };
-}
+})

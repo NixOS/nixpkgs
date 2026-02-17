@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "corallium";
   version = "2.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
@@ -29,9 +29,6 @@ buildPythonPackage rec {
     beartype
     pydantic
     rich
-  ]
-  ++ lib.optionals (python.pythonOlder "3.11") [
-    tomli
   ];
 
   meta = {

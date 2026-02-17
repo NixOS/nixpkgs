@@ -31,7 +31,7 @@ let
 
     inherit (pkgs.formats.yaml { }) type;
   };
-  initrdInterfaceTypes = builtins.map (interface: interface.link.kind) (
+  initrdInterfaceTypes = map (interface: interface.link.kind) (
     builtins.attrValues initrdCfg.settings.interfaces
   );
   # IfState interface kind to kernel modules mapping
@@ -228,7 +228,7 @@ in
               type:
               if builtins.hasAttr type interfaceKernelModules then interfaceKernelModules."${type}" else [ ];
           in
-          lib.flatten (builtins.map enableModule initrdInterfaceTypes);
+          lib.flatten (map enableModule initrdInterfaceTypes);
 
         systemd = {
           storePaths = [

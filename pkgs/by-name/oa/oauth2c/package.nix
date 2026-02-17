@@ -4,15 +4,15 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "oauth2c";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "cloudentity";
     repo = "oauth2c";
-    rev = "v${version}";
-    hash = "sha256-1l7NtRKOCUuVsGC7K/TmSbzwGGybJ3owMDn2b4b/BeU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Bh4gWskmY2nWTckUT1FX7vRDz/gg670A77CQTZhz3mg=";
   };
 
   vendorHash = "sha256-I2pOyjKghvHHGEuVqODhysD++f2hD+BF7WJxWbrLcWA=";
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.flokli ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})

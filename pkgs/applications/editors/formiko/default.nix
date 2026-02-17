@@ -48,7 +48,6 @@ buildPythonApplication rec {
     description = "reStructuredText editor and live previewer";
     homepage = "https://github.com/ondratu/formiko";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
   };
 }

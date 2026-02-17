@@ -4,14 +4,14 @@
   rustPlatform,
   cmake,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "unused";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "unused-code";
     repo = "unused";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-+1M8dUfjjrT4llS0C6WYDyNxJ9QZ5s9v+W185TbgwMw=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

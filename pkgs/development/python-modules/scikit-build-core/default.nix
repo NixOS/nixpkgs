@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatch-vcs,
@@ -13,7 +12,6 @@
   # dependencies
   packaging,
   pathspec,
-  exceptiongroup,
 
   # tests
   build,
@@ -23,27 +21,23 @@
   pytest-subprocess,
   pytestCheckHook,
   setuptools,
-  tomli,
   virtualenv,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.11.5";
+  version = "0.11.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-build";
     repo = "scikit-build-core";
     tag = "v${version}";
-    hash = "sha256-4DwODJw1U/0+K/d7znYtDO2va71lzp1gDm4Bg9OBjQY=";
+    hash = "sha256-zBTDacTkeclz+/X0SUl1xkxLz4zsfeLOD4Ew0V1Y1iU=";
   };
 
-  postPatch = lib.optionalString (pythonOlder "3.11") ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"error",' '"error", "ignore::UserWarning",'
-  '';
+  postPatch = "";
 
   build-system = [
     hatch-vcs
@@ -53,10 +47,6 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     pathspec
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
   ];
 
   nativeCheckInputs = [

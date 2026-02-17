@@ -14,7 +14,7 @@
   libmediainfo,
   libusb1,
   vapoursynth,
-  xorg,
+  libx11,
   systemdLibs,
   openssl,
   p7zip,
@@ -53,7 +53,7 @@ let
     libmediainfo
     libusb1
     vapoursynth
-    xorg.libX11
+    libx11
     systemdLibs
     openssl
   ];

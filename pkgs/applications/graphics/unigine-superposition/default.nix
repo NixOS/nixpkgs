@@ -7,20 +7,19 @@
   fontconfig,
   zlib,
   qtquickcontrols2,
-  libXinerama,
+  libxinerama,
   libxcb,
-  libSM,
-  libXi,
+  libsm,
+  libxi,
   libglvnd,
-  libXext,
-  libXrandr,
+  libxext,
+  libxrandr,
   mailspring,
-  libX11,
-  libICE,
-  libXrender,
+  libx11,
+  libice,
+  libxrender,
   autoPatchelfHook,
   makeWrapper,
-  mkDerivation,
   xkeyboard_config,
   fetchurl,
   buildFHSEnv,
@@ -37,7 +36,7 @@ let
 
     src = fetchurl {
       url = "https://assets.unigine.com/d/Unigine_Superposition-${version}.run";
-      sha256 = "12hzlz792pf8pvxf13fww3qhahqzwzkxq9q3mq20hbhvaphbg7nd";
+      hash = "sha256-dJThxzv1nvIWFRPV1cudm/+9hHmSnUl2rFO2lV3lgPg=";
     };
 
     nativeBuildInputs = [
@@ -53,17 +52,17 @@ let
       fontconfig
       zlib
       qtquickcontrols2
-      libXinerama
+      libxinerama
       libxcb
-      libSM
-      libXi
+      libsm
+      libxi
       libglvnd
-      libXext
-      libXrandr
+      libxext
+      libxrandr
       mailspring
-      libX11
-      libICE
-      libXrender
+      libx11
+      libice
+      libxrender
     ];
 
     installPhase = ''
@@ -110,17 +109,17 @@ buildFHSEnv {
     fontconfig
     zlib
     qtquickcontrols2
-    libXinerama
+    libxinerama
     libxcb
-    libSM
-    libXi
+    libsm
+    libxi
     libglvnd
-    libXext
-    libXrandr
+    libxext
+    libxrandr
     mailspring
-    libX11
-    libICE
-    libXrender
+    libx11
+    libice
+    libxrender
     openal
   ];
   runScript = "superposition";

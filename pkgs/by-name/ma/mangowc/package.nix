@@ -1,6 +1,6 @@
 {
   lib,
-  libX11,
+  libx11,
   libinput,
   libxcb,
   libxkbcommon,
@@ -12,7 +12,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
   enableXWayland ? true,
   meson,
@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangowc";
-  version = "0.10.7";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "DreamMaoMao";
     repo = "mangowc";
     tag = finalAttrs.version;
-    hash = "sha256-WYDatin9vLiFWr7PU2n4JxoXEzyX/Wdu7w5RRFTnkoA=";
+    hash = "sha256-Py8gfpkp+oYAnaCiFGytyLkxTd1DqFr/NH3DUma8meI=";
   };
 
   nativeBuildInputs = [
@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
   ]
   ++ lib.optionals enableXWayland [
-    libX11
-    xcbutilwm
+    libx11
+    libxcb-wm
     xwayland
   ];
 

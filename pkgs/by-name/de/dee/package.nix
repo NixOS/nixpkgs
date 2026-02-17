@@ -14,7 +14,7 @@
   gtk-doc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dee";
   version = "unstable-2017-06-16";
 
@@ -26,16 +26,11 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dee";
-    rev = "import/1.2.7+17.10.20170616-4ubuntu3";
-    sha256 = "09blrdj7229vscp4mkg0fabmcvc6jdpamvblrq86rbky7j2nnwlk";
+    rev = "applied/1.2.7+17.10.20170616-8build1";
+    hash = "sha256-ttfppqb0t8cOhWaB97uyD9heVZKlBKYF2zD6yRwPyos=";
   };
 
   patches = [
-    "${src}/debian/patches/gtkdocize.patch"
-    "${src}/debian/patches/strict-prototype.patch"
-    "${src}/debian/patches/vapi-skip-properties.patch"
-    ./0001-Fix-build-with-Vala-0.54.patch
-
     # Fixes glib 2.62 deprecations
     (fetchpatch {
       name = "dee-1.2.7-deprecated-g_type_class_add_private.patch";

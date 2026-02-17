@@ -20,19 +20,24 @@
   gnugrep,
   gnused,
   makeWrapper,
+
+  # test dependencies
+  which,
+  util-linux,
+  tcpdump,
 }:
 let
   withOpensslConfigureFlag = "--with-openssl=${lib.getLib openssl.dev}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
-  version = "25.09.1";
+  version = "25.09.2";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-utNMWYMjm511+mkHC/Fe6wJ11vk1HAi0dHlk9JwBYl0=";
+    hash = "sha256-JcOc9rNtpGhr+dn+dXltA+WTJZa3bEgqyS4zjlVM+Uc=";
     fetchSubmodules = true;
   };
 
@@ -72,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     makeWrapper
+    # NOTE: remove if OVN switches to `command -v`:
+    # https://patchwork.ozlabs.org/project/ovn/patch/20260205004956.84602-3-ihar.hrachyshka@gmail.com/
+    which # used in test suite to detect presence of commands
   ];
 
   buildInputs = [
@@ -108,8 +116,18 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [
-    openssl # used to generate certificates used for test services
+    # used to generate certificates used for test services
+    openssl
     procps
+
+    # some tests may need tcpdump to run
+    tcpdump
+
+    # scapy-server imports scapy module
+    (python3.withPackages (ps: with ps; [ scapy ]))
+
+    # scapy tests use flock to start scapy-server
+    util-linux
   ];
 
   postInstall = ''
@@ -152,6 +170,8 @@ stdenv.mkDerivation (finalAttrs: {
     # hack to stop tests from trying to read /etc/resolv.conf
     export OVS_RESOLV_CONF="$PWD/resolv.conf"
     touch $OVS_RESOLV_CONF
+
+    patchShebangs --build tests/scapy-server.py
   '';
 
   checkPhase = ''

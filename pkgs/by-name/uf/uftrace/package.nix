@@ -14,14 +14,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uftrace";
   version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "namhyung";
     repo = "uftrace";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9fVBV23gVN1kSkdqBlWV0oEIj6ew6yVO4edUTTHV5H0=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.nthorne ];
   };
-}
+})

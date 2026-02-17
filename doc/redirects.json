@@ -20,6 +20,12 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "coq-withPackages": [
+    "index.html#coq-withPackages"
+  ],
+  "coq-withPackages-usage": [
+    "index.html#coq-withPackages-usage"
+  ],
   "cuda": [
     "index.html#cuda"
   ],
@@ -112,6 +118,12 @@
   ],
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
+  ],
+  "friction-graphics": [
+    "index.html#friction-graphics"
+  ],
+  "friction-graphics-wayland": [
+    "index.html#friction-graphics-wayland"
   ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
@@ -305,7 +317,12 @@
     "release-notes.html#sec-nixpkgs-release-26.05-highlights"
   ],
   "sec-nixpkgs-release-26.05-incompatibilities": [
-    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities"
+    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities",
+    "index.html#sec-xorg",
+    "index.html#katamari-tarballs",
+    "index.html#individual-tarballs",
+    "index.html#generating-nix-expressions",
+    "index.html#overriding-the-generator"
   ],
   "sec-nixpkgs-release-26.05-lib": [
     "release-notes.html#sec-nixpkgs-release-26.05-lib"
@@ -314,7 +331,8 @@
     "release-notes.html#sec-nixpkgs-release-26.05-lib-breaking"
   ],
   "sec-nixpkgs-release-26.05-lib-deprecations": [
-    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations"
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations",
+    "index.html#fetchfromsavannah"
   ],
   "sec-nixpkgs-release-26.05-lib-additions-improvements": [
     "release-notes.html#sec-nixpkgs-release-26.05-lib-additions-improvements"
@@ -787,6 +805,9 @@
   ],
   "var-stdenv-depsTargetTargetPropagated": [
     "index.html#var-stdenv-depsTargetTargetPropagated"
+  ],
+  "var-stdenv-strictDeps": [
+    "index.html#var-stdenv-strictDeps"
   ],
   "ssec-stdenv-attributes": [
     "index.html#ssec-stdenv-attributes"
@@ -1776,9 +1797,6 @@
   "fetchfrombitbucket": [
     "index.html#fetchfrombitbucket"
   ],
-  "fetchfromsavannah": [
-    "index.html#fetchfromsavannah"
-  ],
   "fetchfromrepoorcz": [
     "index.html#fetchfromrepoorcz"
   ],
@@ -2461,6 +2479,27 @@
   "setup-hook-gdk-pixbuf": [
     "index.html#setup-hook-gdk-pixbuf"
   ],
+  "libglycin-hooks": [
+    "index.html#libglycin-hooks"
+  ],
+  "libglycin-setup-hook": [
+    "index.html#libglycin-setup-hook"
+  ],
+  "libglycin-patch-vendor-hook": [
+    "index.html#libglycin-patch-vendor-hook"
+  ],
+  "libglycin-hooks-example-code-snippet": [
+    "index.html#libglycin-hooks-example-code-snippet"
+  ],
+  "libglycin-hook-variables-controlling": [
+    "index.html#libglycin-hook-variables-controlling"
+  ],
+  "glycin-cargo-deps-path": [
+    "index.html#glycin-cargo-deps-path"
+  ],
+  "glycin-dont-wrap": [
+    "index.html#glycin-dont-wrap"
+  ],
   "ghc": [
     "index.html#ghc"
   ],
@@ -2659,6 +2698,9 @@
   "dont-tauri-build": [
     "index.html#dont-tauri-build"
   ],
+  "dont-tauri-fixup": [
+    "index.html#dont-tauri-fixup"
+  ],
   "dont-tauri-install": [
     "index.html#dont-tauri-install"
   ],
@@ -2710,17 +2752,24 @@
   "waf-hook-honored-variables": [
     "index.html#waf-hook-honored-variables"
   ],
-  "zig-hook": [
+  "zig": [
+    "index.html#zig",
     "index.html#zig-hook"
   ],
-  "zig-hook-example-code-snippet": [
+  "zig-example-code-snippet": [
+    "index.html#zig-example-code-snippet",
     "index.html#zig-hook-example-code-snippet"
   ],
-  "zig-hook-variables-controlling": [
+  "zig-variables-controlling": [
+    "index.html#zig-variables-controlling",
     "index.html#zig-hook-variables-controlling"
   ],
-  "zig-hook-exclusive-variables": [
+  "zig-exclusive-variables": [
+    "index.html#zig-exclusive-variables",
     "index.html#zig-hook-exclusive-variables"
+  ],
+  "dont-use-zig-configure": [
+    "index.html#dont-use-zig-configure"
   ],
   "dont-use-zig-build": [
     "index.html#dont-use-zig-build"
@@ -2731,10 +2780,15 @@
   "dont-use-zig-install": [
     "index.html#dont-use-zig-install"
   ],
-  "zig-hook-similar-variables": [
+  "dont-set-zig-default-flags": [
+    "index.html#dont-set-zig-default-flags"
+  ],
+  "zig-similar-variables": [
+    "index.html#zig-similar-variables",
     "index.html#zig-hook-similar-variables"
   ],
-  "zig-hook-variables-honored": [
+  "zig-variables-honored": [
+    "index.html#zig-variables-honored",
     "index.html#zig-hook-variables-honored"
   ],
   "xcbuildhook": [
@@ -2917,25 +2971,32 @@
   "sec-chicken-override-scope": [
     "index.html#sec-chicken-override-scope"
   ],
-  "sec-language-coq": [
+  "sec-language-rocq": [
+    "index.html#sec-language-rocq",
     "index.html#sec-language-coq"
   ],
-  "coq-derivation-coq": [
+  "rocq-derivation-rocq": [
+    "index.html#rocq-derivation-rocq",
     "index.html#coq-derivation-coq"
   ],
-  "coq-packages-attribute-sets-coqpackages": [
+  "rocq-packages-attribute-sets-rocqpackages": [
+    "index.html#rocq-packages-attribute-sets-rocqpackages",
     "index.html#coq-packages-attribute-sets-coqpackages"
   ],
-  "coq-overriding-packages": [
+  "rocq-overriding-packages": [
+    "index.html#rocq-overriding-packages",
     "index.html#coq-overriding-packages"
   ],
-  "coq-override": [
+  "rocq-override": [
+    "index.html#rocq-override",
     "index.html#coq-override"
   ],
-  "coq-overrideCoqDerivation": [
+  "rocq-overrideRocqDerivation": [
+    "index.html#rocq-overrideRocqDerivation",
     "index.html#coq-overrideCoqDerivation"
   ],
-  "coq-overrideAttrs": [
+  "rocq-overrideAttrs": [
+    "index.html#rocq-overrideAttrs",
     "index.html#coq-overrideAttrs"
   ],
   "crystal": [
@@ -3141,6 +3202,9 @@
   ],
   "ssec-gnome-hooks-gst-grl-plugins": [
     "index.html#ssec-gnome-hooks-gst-grl-plugins"
+  ],
+  "ssec-gnome-hooks-libglycin": [
+    "index.html#ssec-gnome-hooks-libglycin"
   ],
   "ssec-gnome-updating": [
     "index.html#ssec-gnome-updating"
@@ -4238,6 +4302,18 @@
     "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
   ],
+  "neovim-plugin-nvim-treesitter": [
+    "index.html#neovim-plugin-nvim-treesitter",
+    "index.html#vim-plugin-nvim-treesitter"
+  ],
+  "neovim-plugin-treesitter-standalone": [
+    "index.html#neovim-plugin-treesitter-standalone",
+    "index.html#vim-plugin-treesitter-standalone"
+  ],
+  "neovim-plugin-treesitter-grammar-dependencies": [
+    "index.html#neovim-plugin-treesitter-grammar-dependencies",
+    "index.html#vim-plugin-treesitter-grammar-dependencies"
+  ],
   "managing-plugins-with-vim-plug": [
     "index.html#managing-plugins-with-vim-plug"
   ],
@@ -4395,6 +4471,9 @@
   "sec-linux-kernel-developing-modules": [
     "index.html#sec-linux-kernel-developing-modules"
   ],
+  "sec-linux-new-kernels": [
+    "index.html#sec-linux-new-kernels"
+  ],
   "ex-edit-compile-run-kernel-modules": [
     "index.html#ex-edit-compile-run-kernel-modules"
   ],
@@ -4475,21 +4554,6 @@
   ],
   "sec-weechat": [
     "index.html#sec-weechat"
-  ],
-  "sec-xorg": [
-    "index.html#sec-xorg"
-  ],
-  "katamari-tarballs": [
-    "index.html#katamari-tarballs"
-  ],
-  "individual-tarballs": [
-    "index.html#individual-tarballs"
-  ],
-  "generating-nix-expressions": [
-    "index.html#generating-nix-expressions"
-  ],
-  "overriding-the-generator": [
-    "index.html#overriding-the-generator"
   ],
   "sec-build-support": [
     "index.html#sec-build-support"
@@ -4663,12 +4727,8 @@
     "index.html#reviewing-contributions--merging-pull-requests"
   ],
   "chap-contributing": [
-    "index.html#chap-contributing"
-  ],
-  "sec-contributing-devmode": [
-    "index.html#sec-contributing-devmode"
-  ],
-  "sec-contributing-markup": [
+    "index.html#chap-contributing",
+    "index.html#sec-contributing-devmode",
     "index.html#sec-contributing-markup"
   ],
   "part-interoperability": [

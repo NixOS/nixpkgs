@@ -255,7 +255,7 @@ in
             runCheck = lib.mkOption {
               type = lib.types.bool;
               default = builtins.length config.services.restic.backups.${name}.checkOpts > 0;
-              defaultText = lib.literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
+              defaultText = lib.literalExpression "builtins.length config.services.backups.${name}.checkOpts > 0";
               description = "Whether to run the `check` command with the provided `checkOpts` options.";
               example = true;
             };
@@ -494,7 +494,7 @@ in
               ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
             ''}
             ${lib.optionalString fileBackup ''
-              rm ${filesFromTmpFile}
+              rm -f ${filesFromTmpFile}
             ''}
           '';
         }

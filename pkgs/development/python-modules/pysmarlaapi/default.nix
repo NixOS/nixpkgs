@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pysmarlaapi";
-  version = "0.9.2";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Explicatis-GmbH";
     repo = "pysmarlaapi";
     tag = version;
-    hash = "sha256-UNI0T9YVvtfPJJQIA04ofZ42ZvYo7Kli3+snY5RlVBU=";
+    hash = "sha256-paOBRcTpVMLHB3HCP8JolvebC+xD19x1wieFjZCw4Ko=";
   };
 
   build-system = [ flit-core ];

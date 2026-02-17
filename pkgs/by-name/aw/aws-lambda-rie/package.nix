@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aws-lambda-runtime-interface-emulator";
-  version = "1.30";
+  version = "1.31";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-runtime-interface-emulator";
-    rev = "v${version}";
-    sha256 = "sha256-2GVxcJohh+lLYdx0f4qjIRQNvwKEQNCVD6dQQwNySo8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-T+a6qbdAtdtihf903C8en4dPChB87Qd32iBbTbUnhkA=";
   };
 
   vendorHash = "sha256-+7BuDaN1ns63cQOMKuRMjBo9GnLrmsubx/KppUsyheY=";
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

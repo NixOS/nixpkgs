@@ -9,7 +9,7 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncpp";
   version = "1.9.6";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "open-source-parsers";
     repo = "jsoncpp";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-3msc3B8NyF8PUlNaAHdUDfCpcUmz8JVW2X58USJ5HRw=";
   };
 
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
     --reflink=auto flag, which is used in the default unpackPhase for dirs
   */
   unpackPhase = ''
-    cp -a ${src} ${src.name}
-    chmod -R +w ${src.name}
-    export sourceRoot=${src.name}
+    cp -a ${finalAttrs.src} ${finalAttrs.src.name}
+    chmod -R +w ${finalAttrs.src.name}
+    export sourceRoot=${finalAttrs.src.name}
   '';
 
   postPatch = lib.optionalString secureMemory ''
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

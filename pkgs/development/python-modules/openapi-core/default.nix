@@ -30,21 +30,17 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.19.5";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
     tag = version;
-    hash = "sha256-Q7Z6bq8TztNm2QLL7g23rOGnXVfiTDjquHAhcSWYlC4=";
+    hash = "sha256-fdONzFde9k2NAd5Rd8vTLt/lQX72JdNSFJhPVWryRQw=";
   };
 
   build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [
-    "werkzeug"
-  ];
 
   dependencies = [
     isodate

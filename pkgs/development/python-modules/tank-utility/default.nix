@@ -4,7 +4,6 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "tank-utility";
   version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "krismolendyke";

@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Achno/gocheat";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      adamperkowski
+      koi
       sebaguardian
     ];
     mainProgram = "gocheat";

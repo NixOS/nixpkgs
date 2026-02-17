@@ -18,13 +18,13 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-/m0+z2fSwX77zRY4Yg4xdyI/ZEzAKNUuicaqz0b8f5w=";
 
-  passthru.update-script = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Formatter plugin for Jinja2 template files";
     homepage = "https://github.com/davidodenwald/prettier-plugin-jinja-template";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ adamperkowski ];
+    maintainers = with lib.maintainers; [ koi ];
     mainProgram = "prettier-plugin-jinja-template";
   };
 })

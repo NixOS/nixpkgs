@@ -14,59 +14,94 @@
   packaging,
   pyyaml,
   regex,
-  requests,
-  tokenizers,
   safetensors,
+  tokenizers,
   tqdm,
+  typer-slim,
 
   # optional-dependencies
-  diffusers,
+  # sklearn
   scikit-learn,
-  tensorflow,
-  onnxconverter-common,
-  opencv4,
-  tf2onnx,
+  # torch
   torch,
   accelerate,
+  # deepspeed
+  # deepspeed,
+  # codecarbon
+  # codecarbon,
+  # retrieval
   faiss,
   datasets,
-  jax,
-  jaxlib,
-  flax,
-  optax,
-  ftfy,
-  onnxruntime,
-  onnxruntime-tools,
-  cookiecutter,
+  # ja
+  fugashi,
+  ipadic,
+  sudachipy,
+  # sudachidict_core,
+  # unidic_lite,
+  unidic,
+  # rhoknp,
+  # sagemaker
   sagemaker,
-  fairscale,
+  # optuna
   optuna,
+  # ray
   ray,
+  # kernels
+  kernels,
+  # serving
+  openai,
   pydantic,
   uvicorn,
   fastapi,
   starlette,
+  rich,
+  # audio
   librosa,
+  # pyctcdecode,
   phonemizer,
+  # kenlm,
   torchaudio,
+  # vision
   pillow,
+  # timm
   timm,
+  # torch-vision
   torchvision,
+  # video
   av,
+  # num2words
+  num2words,
+  # sentencepiece
   sentencepiece,
-  hf-xet,
+  # tiktoken
+  tiktoken,
+  blobfile,
+  # mistral-common
+  mistral-common,
+  # chat_template
+  jinja2,
+  jmespath,
+  # quality
+  ruff,
+  gitpython,
+  urllib3,
+  libcst,
+  # opentelemetry
+  opentelemetry-api,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "transformers";
-  version = "4.57.3";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
-    tag = "v${version}";
-    hash = "sha256-QqlNE2UJqn5ylVhSX5qak62ooda5IQbsc1F7SYU8Kjw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DMm85M47hMWhqbwY3k3F5nbkbctM23K6wnmIUa2O43g=";
   };
 
   build-system = [ setuptools ];
@@ -78,112 +113,97 @@ buildPythonPackage rec {
     packaging
     pyyaml
     regex
-    requests
-    tokenizers
     safetensors
+    tokenizers
     tqdm
+    typer-slim
   ];
 
-  optional-dependencies =
-    let
-      audio = [
-        librosa
-        # pyctcdecode
-        phonemizer
-        # kenlm
-      ];
-      vision = [ pillow ];
-    in
-    {
-      agents = [
-        diffusers
-        accelerate
-        datasets
-        torch
-        sentencepiece
-        opencv4
-        pillow
-      ];
-      ja = [
-        # fugashi
-        # ipadic
-        # rhoknp
-        # sudachidict_core
-        # sudachipy
-        # unidic
-        # unidic_lite
-      ];
-      sklearn = [ scikit-learn ];
-      tf = [
-        tensorflow
-        onnxconverter-common
-        tf2onnx
-        # tensorflow-text
-        # keras-nlp
-      ];
-      torch = [
-        torch
-        accelerate
-      ];
-      retrieval = [
-        faiss
-        datasets
-      ];
-      flax = [
-        jax
-        jaxlib
-        flax
-        optax
-      ];
-      hf_xet = [
-        hf-xet
-      ];
-      tokenizers = [ tokenizers ];
-      ftfy = [ ftfy ];
-      onnxruntime = [
-        onnxruntime
-        onnxruntime-tools
-      ];
-      onnx = [
-        onnxconverter-common
-        tf2onnx
-        onnxruntime
-        onnxruntime-tools
-      ];
-      modelcreation = [ cookiecutter ];
-      sagemaker = [ sagemaker ];
-      deepspeed = [
-        # deepspeed
-        accelerate
-      ];
-      fairscale = [ fairscale ];
-      optuna = [ optuna ];
-      ray = [ ray ] ++ ray.optional-dependencies.tune;
-      # sigopt = [ sigopt ];
-      # integrations = ray ++ optuna ++ sigopt;
-      serving = [
-        pydantic
-        uvicorn
-        fastapi
-        starlette
-      ];
-      audio = audio;
-      speech = [ torchaudio ] ++ audio;
-      torch-speech = [ torchaudio ] ++ audio;
-      tf-speech = audio;
-      flax-speech = audio;
-      timm = [ timm ];
-      torch-vision = [ torchvision ] ++ vision;
-      # natten = [ natten ];
-      # codecarbon = [ codecarbon ];
-      video = [
-        av
-      ];
-      sentencepiece = [
-        sentencepiece
-        protobuf
-      ];
-    };
+  optional-dependencies = lib.fix (self: {
+    ja = [
+      fugashi
+      ipadic
+      # unidic_lite
+      unidic
+      # rhoknp
+      sudachipy
+      # sudachidict_core
+    ];
+    sklearn = [ scikit-learn ];
+    torch = [
+      torch
+      accelerate
+    ];
+    accelerate = [ accelerate ];
+    retrieval = [
+      faiss
+      datasets
+    ];
+    sagemaker = [ sagemaker ];
+    deepspeed = [
+      # deepspeed
+    ]
+    ++ self.accelerate;
+    optuna = [ optuna ];
+    ray = [ ray ] ++ ray.optional-dependencies.tune;
+    kernels = [ kernels ];
+    codecarbon = [
+      # codecarbon
+    ];
+    integrations = self.kernels ++ self.optuna ++ self.codecarbon ++ self.ray;
+    serving = [
+      openai
+      pydantic
+      uvicorn
+      fastapi
+      starlette
+      rich
+    ]
+    ++ self.torch;
+    audio = [
+      torchaudio
+      librosa
+      # pyctcdecode
+      phonemizer
+      # kenlm
+    ];
+    vision = [
+      torchvision
+      pillow
+    ];
+    timm = [ timm ];
+    video = [ av ];
+    num2words = [ num2words ];
+    sentencepiece = [
+      sentencepiece
+      protobuf
+    ];
+    tiktoken = [
+      tiktoken
+      blobfile
+    ];
+    mistral-common = [ mistral-common ] ++ mistral-common.optional-dependencies.image;
+    chat_template = [
+      jinja2
+      jmespath
+    ];
+    quality = [
+      datasets
+      ruff
+      gitpython
+      urllib3
+      libcst
+      rich
+    ];
+    benchmark = [
+      # optimum-benchmark
+    ];
+    open-telemetry = [
+      opentelemetry-api
+      opentelemetry-exporter-otlp
+      opentelemetry-sdk
+    ];
+  });
 
   # Many tests require internet access.
   doCheck = false;
@@ -194,12 +214,13 @@ buildPythonPackage rec {
     homepage = "https://github.com/huggingface/transformers";
     description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";
     mainProgram = "transformers-cli";
-    changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/transformers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+      GaetanLepage
       pashashocky
       happysalada
     ];
   };
-}
+})

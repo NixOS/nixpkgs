@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustdress";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "niteshbalusu11";
     repo = "rustdress";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vADuzT1q6nzNMtSykhmfaX6SMkWxQHHpKD/NrfWsCgI=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ jordan-bravo ];
     mainProgram = "rustdress";
   };
-}
+})

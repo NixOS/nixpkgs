@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "g-ls";
   version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "Equationzhao";
     repo = "g";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cHB9oW4vF00hvhZ7KNY5TUjIjLjEoiJb/psMSq+kSHU=";
   };
 
@@ -40,9 +40,9 @@ buildGoModule rec {
   meta = {
     description = "Powerful ls alternative written in Go";
     homepage = "https://github.com/Equationzhao/g";
-    changelog = "https://github.com/Equationzhao/g/releases/tag/${src.tag}";
+    changelog = "https://github.com/Equationzhao/g/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "g";
     maintainers = with lib.maintainers; [ Ruixi-rebirth ];
   };
-}
+})

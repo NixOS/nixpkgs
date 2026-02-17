@@ -65,7 +65,6 @@ buildGoModule {
     homepage = "https://github.com/t2bot/matrix-media-repo";
     changelog = "https://github.com/t2bot/matrix-media-repo/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "media_repo";
   };
 }

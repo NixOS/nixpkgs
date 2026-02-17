@@ -7,14 +7,14 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rmate";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "aurora";
     repo = "rmate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fmK6h9bqZ0zO3HWfZvPdYuZ6i/0HZ1CA3FUnkS+E9ns=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "rmate";
   };
-}
+})

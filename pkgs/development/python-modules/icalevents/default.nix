@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   poetry-core,
   icalendar,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "icalevents";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";

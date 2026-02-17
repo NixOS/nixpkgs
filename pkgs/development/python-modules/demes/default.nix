@@ -5,7 +5,6 @@
   setuptools-scm,
   ruamel-yaml,
   attrs,
-  pythonOlder,
   pytest7CheckHook,
   pytest-cov-stub,
   pytest-xdist,
@@ -15,8 +14,7 @@
 buildPythonPackage rec {
   pname = "demes";
   version = "0.2.3";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -410,7 +410,7 @@ let
           stringOrDefault (concatStringsSep " | " (
             imap1 (
               index: name:
-              ''${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})''
+              "${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})"
             ) (attrNames secrets)
           )) "."
         )

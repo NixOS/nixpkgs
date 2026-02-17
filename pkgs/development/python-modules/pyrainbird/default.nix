@@ -15,7 +15,6 @@
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   requests-mock,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "pyrainbird";
   version = "6.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";

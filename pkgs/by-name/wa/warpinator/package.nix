@@ -40,15 +40,15 @@ let
     ++ qrcode.optional-dependencies.pil
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "warpinator";
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "warpinator";
-    rev = version;
-    hash = "sha256-HfOxEVzMmZ7lqT6M3sT5FxynqKFQHHmzvHA4Wu4NPr8=";
+    rev = finalAttrs.version;
+    hash = "sha256-3ZkufMZFTn8BQO9DHr3s9ELRuDrTflE4Ym73dO7rrKs=";
   };
 
   nativeBuildInputs = [
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

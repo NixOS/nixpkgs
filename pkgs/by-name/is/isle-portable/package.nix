@@ -10,13 +10,19 @@
   pkg-config,
 
   # Build Inputs
-  xorg,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
   wayland,
   libxkbcommon,
   wayland-protocols,
   glew,
   qt6,
-  mesa,
   alsa-lib,
   sdl3,
   iniparser,
@@ -28,7 +34,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
-  name = "isle-portable";
+  pname = "isle-portable";
   version = "0-unstable-2025-11-15";
 
   src = fetchFromGitHub {
@@ -62,19 +68,18 @@ stdenv.mkDerivation (finalAttrs: {
     iniparser
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXcursor
+    libx11
+    libxext
+    libxrandr
+    libxrender
+    libxfixes
+    libxi
+    libxinerama
+    libxcursor
     wayland
     libxkbcommon
     wayland-protocols
     glew
-    mesa
     alsa-lib
   ];
 

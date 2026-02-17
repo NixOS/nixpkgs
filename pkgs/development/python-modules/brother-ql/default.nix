@@ -42,7 +42,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/LunarEclipse363/brother_ql_next";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ grahamc ];
     mainProgram = "brother_ql";
   };
 }

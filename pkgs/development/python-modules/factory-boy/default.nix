@@ -8,7 +8,6 @@
   flask-sqlalchemy,
   mongoengine,
   pytestCheckHook,
-  pythonOlder,
   mongomock,
   sqlalchemy,
   sqlalchemy-utils,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "factory-boy";
   version = "3.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "factory_boy";

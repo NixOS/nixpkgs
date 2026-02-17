@@ -26,16 +26,21 @@
   pipewire,
   udev,
   libGL,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxfixes,
+  libxdamage,
+  libx11,
+  libxshmfence,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "teamspeak6-client";
-  version = "6.0.0-beta3.3";
+  version = "6.0.0-beta3.4";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.gz";
-    hash = "sha256-ElPfy3A/wazuEkB1D2UuoijLMpKfQTmKc1FRfgWh8po=";
+    hash = "sha256-ubpAigtYFwzjI4T8i7pWgAhA1pS9MQBQy63QkkbUvyc=";
   };
 
   sourceRoot = ".";
@@ -59,12 +64,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libvdpau
     nss
     pipewire
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXdamage
-    xorg.libXfixes
-    xorg.libxshmfence
-    xorg.libXtst
+    libx11
+    libxscrnsaver
+    libxdamage
+    libxfixes
+    libxshmfence
+    libxtst
   ];
 
   nativeBuildInputs = [
@@ -86,6 +91,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         "Chat"
         "Network"
       ];
+      startupWMClass = "teamspeak-client";
     })
   ];
 

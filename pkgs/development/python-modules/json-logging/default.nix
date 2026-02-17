@@ -6,7 +6,6 @@
   flask,
   httpx,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
   quart,
   requests,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "json-logging";
   version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bobbui";

@@ -11,14 +11,14 @@
   libpulseaudio,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "songrec";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = "songrec";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-pTonrxlYvfuLRKMXW0Lao4KCoNFlMzE9rH+hwpa60JY=";
   };
 
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tcbravo ];
     mainProgram = "songrec";
   };
-}
+})

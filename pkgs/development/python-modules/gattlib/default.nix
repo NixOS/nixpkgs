@@ -7,7 +7,6 @@
 
   # build
   pkg-config,
-  glibc,
   python,
   setuptools,
   bluez,
@@ -46,7 +45,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    glibc
   ];
 
   buildInputs = [

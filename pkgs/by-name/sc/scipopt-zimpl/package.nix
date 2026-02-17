@@ -9,18 +9,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-zimpl";
-  version = "362";
-
-  # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.4";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "zimpl";
-    tag = "v${version}";
-    hash = "sha256-juqAwzqBArsFXmz7L7RQaE78EhQdP5P51wQFlCoo7/o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ataepqBfdA7CgqPhbw+Xy7PC3VZTLcSrF2/xnFyx+YI=";
   };
 
   postPatch = ''
@@ -48,7 +45,9 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     maintainers = with lib.maintainers; [ fettgoenner ];
-    changelog = "https://scipopt.org/doc-${scipVersion}/html/RN${lib.versions.major scipVersion}.php";
+    platforms = lib.platforms.linux;
+    broken = stdenv.isDarwin;
+    changelog = "https://zimpl.zib.de/download/CHANGELOG.txt";
     description = "Zuse Institut Mathematical Programming Language";
     longDescription = ''
       ZIMPL is a little language to translate the mathematical model of a
@@ -72,4 +71,4 @@ stdenv.mkDerivation rec {
     homepage = "https://zimpl.zib.de";
     mainProgram = "zimpl";
   };
-}
+})

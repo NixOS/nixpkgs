@@ -272,7 +272,7 @@ in
 
     filterFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      description = ''Filename for the include exclude filter.'';
+      description = "Filename for the include exclude filter.";
       default = null;
       example = lib.literalExpression ''
         pkgs.writeText "filterFile" '''
@@ -285,7 +285,7 @@ in
 
     robotsFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      description = ''Provides /robots.txt for net crawlers.'';
+      description = "Provides /robots.txt for net crawlers.";
       default = null;
       example = lib.literalExpression ''pkgs.writeText "robots.txt" "# my custom robots.txt ..."'';
     };
@@ -956,7 +956,7 @@ in
       serviceConfig = {
         Restart = "on-abnormal";
         Nice = 5;
-        ExecStart = ''${cfg.package}/bin/athens -config_file=${configFile}'';
+        ExecStart = "${cfg.package}/bin/athens -config_file=${configFile}";
 
         KillMode = "mixed";
         KillSignal = "SIGINT";

@@ -16,6 +16,7 @@
   recutils,
   wget,
   jq,
+  uncrustify,
   gettext,
   texinfo,
   libtool,
@@ -24,16 +25,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-exchange";
-  version = "1.0.4";
+  version = "1.3.0";
 
   src = fetchgit {
     url = "https://git.taler.net/exchange.git";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-k2e9pzy7vSIjCVGOVif9ntYvLcvoJA6J63vB/lg3iwA=";
+    hash = "sha256-FePuJUEa01E2jlAOdHryzkFwXqNcU+AkMKs1pamNJn8=";
   };
 
   patches = [ ./0001-add-TALER_TEMPLATING_init_path.patch ];
+
+  postPatch = ''
+    substituteInPlace contrib/gana-generate.sh \
+      --replace-fail "existence git" "true" \
+      --replace-fail "uncrustify.cfg" "contrib/uncrustify.cfg"
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -43,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo # makeinfo
     # jq is necessary for some tests and is checked by configure script
     jq
+    uncrustify
   ];
 
   buildInputs = [

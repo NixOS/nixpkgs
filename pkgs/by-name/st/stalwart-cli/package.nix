@@ -2,11 +2,11 @@
   lib,
   rustPlatform,
   versionCheckHook,
-  stalwart-mail,
+  stalwart,
 }:
 
 rustPlatform.buildRustPackage {
-  inherit (stalwart-mail) src version cargoDeps;
+  inherit (stalwart) src version cargoDeps;
   pname = "stalwart-cli";
 
   cargoBuildFlags = [
@@ -20,13 +20,12 @@ rustPlatform.buildRustPackage {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   # Prerelease reports incorrect version
   dontVersionCheck = true;
 
   meta = {
-    inherit (stalwart-mail.meta) license homepage changelog;
+    inherit (stalwart.meta) license homepage changelog;
     description = "Stalwart Mail Server CLI";
     mainProgram = "stalwart-cli";
     maintainers = with lib.maintainers; [

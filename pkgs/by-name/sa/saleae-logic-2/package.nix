@@ -6,10 +6,10 @@
 }:
 let
   pname = "saleae-logic-2";
-  version = "2.4.36";
+  version = "2.4.40";
   src = fetchurl {
     url = "https://downloads2.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
-    hash = "sha256-M6sjmFHonByjh3rHnAMuSpFKkvOsXqd4XevFDxuEOp4=";
+    hash = "sha256-TG7fH8b0L/O8RjlMB3QJM3/8my49uBX2RwufrVWDgpI=";
   };
   desktopItem = makeDesktopItem {
     name = "saleae-logic-2";
@@ -41,16 +41,16 @@ appimageTools.wrapType2 {
       wget
       unzip
       glib
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libx11
+      libxcb
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrender
+      libxtst
       nss
       nspr
       dbus
@@ -60,8 +60,8 @@ appimageTools.wrapType2 {
       atk
       cairo
       expat
-      xorg.libXrandr
-      xorg.libXScrnSaver
+      libxrandr
+      libxscrnsaver
       alsa-lib
       at-spi2-core
       cups

@@ -5,7 +5,6 @@
   chardet,
   humanfriendly,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   smartmontools,
 }:
@@ -13,9 +12,7 @@
 buildPythonPackage rec {
   pname = "pysmart";
   version = "1.4.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "truenas";

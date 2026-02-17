@@ -8,7 +8,6 @@
   mock,
   py-vapid,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   six,
@@ -16,14 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "2.0.3";
+  version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WEh448JD6HOiLbiJVQXZVxW8eW73TMG4/pn1lhdBYeM=";
+    hash = "sha256-1MDuSYHnrAjPFHKf7ItsOu7FjVTm2jiGNcVwb8wts/Y=";
   };
 
   build-system = [ setuptools ];

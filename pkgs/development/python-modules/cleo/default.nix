@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "cleo";
   version = "2.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";

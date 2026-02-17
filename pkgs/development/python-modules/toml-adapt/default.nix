@@ -5,7 +5,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   toml,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "toml-adapt";
   version = "0.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";

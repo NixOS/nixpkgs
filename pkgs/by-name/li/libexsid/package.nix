@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   docSupport ? true,
@@ -9,16 +10,24 @@
   libftdi1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libexsid";
   version = "2.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "exsid-driver";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1qbiri549fma8c72nmj3cpz3sn1vc256kfafnygkmkzg7wdmgi7r";
   };
+
+  patches = [
+    # fix build with GCC 15 by removing unneeded argument
+    (fetchpatch {
+      url = "https://github.com/libsidplayfp/exsid-driver/commit/99bfaf25f73f96d588a38a4309fa5f18c364f4d4.patch";
+      hash = "sha256-wg/oJieejyXiP5Ff9FRfACNELUt5021kXS1/zT7dMgA=";
+    })
+  ];
 
   outputs = [ "out" ] ++ lib.optional docSupport "doc";
 
@@ -46,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
   };
-}
+})

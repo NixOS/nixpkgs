@@ -9,27 +9,24 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohue";
-  version = "4.8.0";
+  version = "4.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aiohue";
-    tag = version;
-    hash = "sha256-IL9kKc2IHJJmlAYxC5hZPsgOhtfr14yD7VbEsWX2Klw=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ex1ofLnpoO2oVQ3bc0Fy1kaSd1JGoL8DmnOgFRwz3D8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -60,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package to talk to Philips Hue";
     homepage = "https://github.com/home-assistant-libs/aiohue";
-    changelog = "https://github.com/home-assistant-libs/aiohue/releases/tag/${version}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/home-assistant-libs/aiohue/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

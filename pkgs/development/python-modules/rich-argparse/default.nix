@@ -4,22 +4,19 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   rich,
 }:
 
 buildPythonPackage rec {
   pname = "rich-argparse";
-  version = "1.7.1";
+  version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hamdanal";
     repo = "rich-argparse";
     tag = "v${version}";
-    hash = "sha256-gLXFiWgGMDOUbTyoSgTr0XfotVfDxwMqPdsfE4KHzXM=";
+    hash = "sha256-gzPz8vRxZyZ6Du2r4PdqHjeeLkXZV8eDdX0d+TMrVUc=";
   };
 
   build-system = [ hatchling ];
@@ -27,6 +24,11 @@ buildPythonPackage rec {
   dependencies = [ rich ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # coloring mismatch in fixture
+    "test_subparsers_usage"
+  ];
 
   pythonImportsCheck = [ "rich_argparse" ];
 

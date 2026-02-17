@@ -11,16 +11,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-auth-oauthlib";
-  version = "1.2.3";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-auth-library-python-oauthlib";
-    tag = "v${version}";
-    hash = "sha256-1BBtEZfCVTLnbIJQV2o0uXNuAic/ArmgHoAIIJVKRrg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-itnkKMHTpJNjMVvpXYq9V/ybaE/Ekt3uED1IoVebRcg=";
   };
 
   build-system = [ setuptools ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ optional-dependencies.tool;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = [
     # Flaky test. See https://github.com/NixOS/nixpkgs/issues/288424#issuecomment-1941609973.
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Google Authentication Library: oauthlib integration";
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
-    changelog = "https://github.com/googleapis/google-auth-library-python-oauthlib/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-auth-library-python-oauthlib/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       sarahec
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "google-oauthlib-tool";
   };
-}
+})

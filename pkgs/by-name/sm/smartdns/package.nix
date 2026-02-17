@@ -7,14 +7,14 @@
   smartdns,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smartdns";
   version = "47";
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = "smartdns";
-    rev = "Release${version}";
+    rev = "Release${finalAttrs.version}";
     hash = "sha256-8OK1OV3Jvj/5nUOxnWTTQAa1Qe3RGxNwJhYEZ7O1RIE=";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}/lib/systemd/system"
     "RUNSTATEDIR=/run"
     # by default it is the build time... weird... https://github.com/pymumu/smartdns/search?q=ver
-    "VER=${version}"
+    "VER=${finalAttrs.version}"
   ];
 
   installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "smartdns";
   };
-}
+})

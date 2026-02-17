@@ -50,14 +50,14 @@ let
     inherit gemfile lockfile gemset;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "whatweb";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "urbanadventurer";
     repo = "whatweb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-EFQ4RHI1+kmlz/Bm+9KXbmY0iEBJnKfdQL5YGDWCfJQ=";
   };
 
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

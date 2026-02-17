@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linux development manual pages";
     homepage = "https://www.kernel.org/doc/man-pages/";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.unix;
     priority = 30; # if a package comes with its own man page, prefer it
   };

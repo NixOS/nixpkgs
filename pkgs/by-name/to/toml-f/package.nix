@@ -18,14 +18,14 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "toml-f";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "toml-f";
     repo = "toml-f";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QRghnzsLGuQ5MHoVVTDg6ACtwVIkIRexNx/zrrQ0Icc=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

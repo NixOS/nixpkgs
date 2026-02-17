@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "1.1.0";
+  version = "1.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${version}";
-    hash = "sha256-vszpWFKuDZb7DvUhnCROgKJdbyA+slyIhCcIOEuPPhA=";
+    hash = "sha256-mOK7rTDJPU4eS5jCzQ+yUDl2fkY3x4Mpl5bGEF3eLFc=";
   };
 
   postPatch = ''
@@ -66,6 +66,11 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+  ];
 
   pythonImportsCheck = [ "langchain_aws" ];
 

@@ -7,9 +7,7 @@
   django,
   django-cache-url,
   fetchPypi,
-  importlib-metadata,
   mock,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -18,8 +16,6 @@ buildPythonPackage rec {
   version = "2.5.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-blCDdX4rvfm7eFBWdTa5apNRX2sXUD10ko/2KNsuDpQ=";
@@ -27,7 +23,7 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ django ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs = [ django ];
 
   nativeCheckInputs = [
     mock

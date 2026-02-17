@@ -32,14 +32,14 @@ let
     ];
   });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "piper-phonemize";
   version = "2023.11.14-4";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper-phonemize";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pj1DZUhy3XWGn+wNtxKKDWET9gsfofEB0NZ+EEQz9q0=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

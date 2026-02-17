@@ -35,7 +35,7 @@ let
   packagesWithSingleLineConfigs = with vimPlugins; [
     {
       plugin = vim-obsession;
-      config = ''map <Leader>$ <Cmd>Obsession<CR>'';
+      config = "map <Leader>$ <Cmd>Obsession<CR>";
     }
     {
       plugin = trouble-nvim;

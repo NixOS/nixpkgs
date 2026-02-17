@@ -11,7 +11,7 @@
   iw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "networkd-dispatcher";
   version = "2.2.4";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "craftyguy";
     repo = "networkd-dispatcher";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-yO9/HlUkaQmW/n9N3vboHw//YMzBjxIHA2zAxgZNEv0=";
   };
 
@@ -57,10 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = with python3Packages; [
-    dbus-python
-    iw
     mock
-    pygobject3
     pytestCheckHook
   ];
 
@@ -88,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

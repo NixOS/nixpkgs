@@ -8,7 +8,6 @@
   ruamel-yaml,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   glibcLocales,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyspnego";
   version = "0.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jborean93";

@@ -17,8 +17,6 @@
   nbformat,
   packaging,
   pyyaml,
-  pythonOlder,
-  tomli,
 
   # tests
   addBinToPathHook,
@@ -33,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.17.3";
+  version = "1.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = "jupytext";
     tag = "v${version}";
-    hash = "sha256-qxQU3b+u9sQD0mtvZz6fw0jYmdfQmwtKaGxUc/qOcTE=";
+    hash = "sha256-D7Ps/lHF3F/7Jm4ozcjO8YsTPA1GQPqZVpPod/riGvA=";
   };
 
   patches = [
@@ -85,8 +83,7 @@ buildPythonPackage rec {
     nbformat
     packaging
     pyyaml
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     addBinToPathHook
@@ -99,7 +96,6 @@ buildPythonPackage rec {
     # Tests that use a Jupyter notebook require $HOME to be writable
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     substituteInPlace tests/functional/contents_manager/test_async_and_sync_contents_manager_are_in_sync.py \

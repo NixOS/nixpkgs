@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fbmark";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "caramelli";
     repo = "fbmark";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0n2czl2sy1k6r5ri0hp7jgq84xcwrx4x43bqvw1b4na99mqhyahn";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ davidak ];
     platforms = lib.platforms.linux;
   };
-}
+})

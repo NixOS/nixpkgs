@@ -8,7 +8,10 @@
   libGL,
   libxkbcommon,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
@@ -16,16 +19,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "par-lang";
-  version = "0-unstable-2025-12-04";
+  version = "0-unstable-2026-02-10";
 
   src = fetchFromGitHub {
     owner = "faiface";
     repo = "par-lang";
-    rev = "9056718048a5c8d1ff32c60f9fc5db5af36a0259";
-    hash = "sha256-uerYlhUqwpt3BbYiN6+CubhZAcMRXTFKqKSqyqh5WYY=";
+    rev = "0bea31c716761fb608a1a43013e5c6b30ad6bd7f";
+    hash = "sha256-1dqQ8h2F7erKeZAL8RRdG/uCBF39gyunS2Jna8lcv0k=";
   };
 
-  cargoHash = "sha256-sW+gAIp/DjlTo44QDXpP6COrCK/CcDlx3no284MEQJo=";
+  cargoHash = "sha256-Z0aTVloZY3UQWkL3+cMqxfzACLwD7OayjBPZbQ0bk1c=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,10 +43,10 @@ rustPlatform.buildRustPackage {
         libGL
         libxkbcommon
         wayland
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrandr
+        libx11
+        libxcursor
+        libxi
+        libxrandr
       ];
     in
     lib.optionalString stdenv.hostPlatform.isLinux ''

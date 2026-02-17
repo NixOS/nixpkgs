@@ -21,7 +21,7 @@
   config,
   stdenv,
   qt5,
-  xorg,
+  libsm,
   cudaSupport ? config.cudaSupport,
   cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   cudaPackages,
@@ -105,7 +105,7 @@ stdenv'.mkDerivation {
     cgal
     gmp
     mpfr
-    xorg.libSM
+    libsm
   ]
   ++ depsAlsoForPycolmap;
 

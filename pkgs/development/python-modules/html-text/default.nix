@@ -5,25 +5,22 @@
   lxml,
   lxml-html-clean,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
+  hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "html-text";
-  version = "0.6.2";
+  version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zytedata";
     repo = "html-text";
-    tag = version;
-    hash = "sha256-e9gkibQv8mn1Jbt77UmpauOeTqhJQhY9R5Sge/iYi+U=";
+    tag = finalAttrs.version;
+    hash = "sha256-KLWgdVHGYRiQ61hMNx+Kcx9mE7d/TsBe110TfCe+ejU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     lxml
@@ -37,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extract text from HTML";
     homepage = "https://github.com/zytedata/html-text";
-    changelog = "https://github.com/zytedata/html-text/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zytedata/html-text/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

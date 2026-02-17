@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   nix-update-script,
   hatchling,
@@ -11,15 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pcffont";
-  version = "0.0.21";
+  version = "0.0.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "pcffont";
     inherit version;
-    hash = "sha256-RWmR6shNFuJytOfRAVTiNdIJMRpkBchBj8zOy4ybE9o=";
+    hash = "sha256-Sax3bUs6ogQ+LuUAy6k1zEfN4WT81zm1LzP2s/6Pecg=";
   };
 
   build-system = [ hatchling ];

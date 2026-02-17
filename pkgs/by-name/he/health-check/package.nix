@@ -6,14 +6,14 @@
   libbsd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "health-check";
   version = "0.04.01";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "health-check";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-sBhFH9BNRQ684ydqh8p4TtFwO+Aygu4Ke4+/nNMlZ/E=";
   };
 
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/health-check";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
-}
+})

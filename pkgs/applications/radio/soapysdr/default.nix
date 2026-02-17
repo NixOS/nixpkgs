@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Join all plugins via symlinking
     lib.pipe extraPackages [
       (map (pkg: ''
-        ${buildPackages.xorg.lndir}/bin/lndir -silent ${pkg} $out
+        ${buildPackages.lndir}/bin/lndir -silent ${pkg} $out
       ''))
       lib.concatStrings
     ]

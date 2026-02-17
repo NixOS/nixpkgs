@@ -15,14 +15,14 @@ assert cudaSupport -> torch.cudaSupport;
 
 buildPythonPackage rec {
   pname = "pytorch3d";
-  version = "0.7.8";
+  version = "0.7.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "pytorch3d";
-    rev = "V${version}";
-    hash = "sha256-DEEWWfjwjuXGc0WQInDTmtnWSIDUifyByxdg7hpdHlo=";
+    tag = "v${version}";
+    hash = "sha256-k+hqAy0T5ZReJ8jWuKJ/VTzjqd4qo8rrcFo8y4LJhhY=";
   };
 
   nativeBuildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];

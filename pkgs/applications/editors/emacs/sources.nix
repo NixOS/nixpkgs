@@ -45,7 +45,7 @@ let
         homepage =
           {
             "mainline" = "https://www.gnu.org/software/emacs/";
-            "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
+            "macport" = "https://github.com/jdtsmith/emacs-mac";
           }
           .${variant};
         description =

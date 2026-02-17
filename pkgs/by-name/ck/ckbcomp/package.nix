@@ -6,7 +6,7 @@
   xkeyboard_config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ckbcomp";
   version = "1.242";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "console-setup";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-5PV1Mbg7ZGQsotwnBVz8DI77Y8ULCnoTANqBLlP3YrE=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "ckbcomp";
   };
-}
+})

@@ -205,10 +205,15 @@ sub pciCheck {
         ($device eq "0x4229" || $device eq "0x4230" ||
          $device eq "0x4222" || $device eq "0x4227");
 
-    push @attrs, "hardware.cpu.intel.npu.enable = true;" if
-        $vendor eq "0x8086" &&
-        ($device eq "0x7d1d" || $device eq "0xad1d" ||
-         $device eq "0x643e" || $device eq "0xb03e");
+    # Intel NPU driver
+    # list taken from linux(v6.18): drivers/accel/ivpu/ivpu_drv.h
+    if ($vendor eq "0x8086" &&
+        ($device eq "0xfd3e" || $device eq "0x7d1d" || $device eq "0xad1d" ||
+         $device eq "0x643e" || $device eq "0xb03e"))
+    {
+        push @imports, "(modulesPath + \"/hardware/cpu/intel-npu.nix\")";
+        push @attrs, "hardware.cpu.intel.npu.enable = true;";
+    }
 
     # Assume that all NVIDIA cards are supported by the NVIDIA driver.
     # There may be exceptions (e.g. old cards).
@@ -295,7 +300,7 @@ if ($virt eq "oracle") {
 # It is blocked by https://github.com/systemd/systemd/pull/23859
 if ($virt eq "parallels") {
     push @attrs, "hardware.parallels.enable = true;";
-    push @attrs, "nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ \"prl-tools\" ];";
+    push @attrs, "nixpkgs.config.allowUnfreePackages = [ \"prl-tools\" ];";
 }
 
 # Likewise for QEMU.

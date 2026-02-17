@@ -11,12 +11,12 @@
 let
   inherit (lib.versions) majorMinor;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.7";
   pname = "ferm";
 
   src = fetchurl {
-    url = "http://ferm.foo-projects.org/download/${majorMinor version}/ferm-${version}.tar.xz";
+    url = "http://ferm.foo-projects.org/download/${majorMinor finalAttrs.version}/ferm-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-wA2RDVOU5pZ1YI617g9QTVz9pB6ZCi2akbqsbfk+P5I=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.linux;
   };
-}
+})

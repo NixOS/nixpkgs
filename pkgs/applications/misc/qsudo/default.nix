@@ -1,13 +1,14 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
+  wrapQtAppsHook,
   qtbase,
   sudo,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qsudo";
   version = "2020.03.27";
 
@@ -22,6 +23,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
+    wrapQtAppsHook
   ];
 
   buildInputs = [

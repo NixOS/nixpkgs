@@ -3,16 +3,16 @@
   stdenv,
   fetchurl,
   motif,
-  libXpm,
-  libXt,
+  libxpm,
+  libxt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nedit";
   version = "5.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nedit/nedit-source/${pname}-${version}-src.tar.gz";
+    url = "mirror://sourceforge/nedit/nedit-source/nedit-${finalAttrs.version}-src.tar.gz";
     sha256 = "0ym1zhjx9976rf2z5nr7dj4mjkxcicimhs686snjhdcpzxwsrndd";
   };
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     motif
-    libXpm
-    libXt
+    libxpm
+    libxt
   ];
 
   # the linux config works fine on darwin too!
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.gpl2;
   };
-}
+})

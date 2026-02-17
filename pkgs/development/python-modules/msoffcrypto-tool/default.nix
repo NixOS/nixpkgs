@@ -6,22 +6,19 @@
   poetry-core,
   cryptography,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "msoffcrypto-tool";
-  version = "5.4.2";
+  version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nolze";
     repo = "msoffcrypto-tool";
-    tag = "v${version}";
-    hash = "sha256-nwCjgcZqD0hptHC0WqIodHC5m/JHYyUdfEngIoXzNqA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qhnQXLkEeMfuPl2FJGX19M2B+StlzGU/wHgmRn9jcxc=";
   };
 
   build-system = [ poetry-core ];
@@ -44,9 +41,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python tool and library for decrypting MS Office files with passwords or other keys";
     homepage = "https://github.com/nolze/msoffcrypto-tool";
-    changelog = "https://github.com/nolze/msoffcrypto-tool/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/nolze/msoffcrypto-tool/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "msoffcrypto-tool";
   };
-}
+})

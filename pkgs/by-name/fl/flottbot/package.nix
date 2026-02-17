@@ -5,22 +5,22 @@
   nix-update-script,
   replaceVars,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "flottbot";
   version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "target";
     repo = "flottbot";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-gOy03qrAzkZk99hVNe/tG1YLoUD5CMCE9AeONAJyeE4=";
   };
 
   patches = [
     # patch out debug.ReadBuildInfo since version information is not available with buildGoModule
     (replaceVars ./version.patch {
-      version = version;
-      vcsHash = version; # Maybe there is a way to get the git ref from src? idk.
+      version = finalAttrs.version;
+      vcsHash = finalAttrs.version; # Maybe there is a way to get the git ref from src? idk.
     })
   ];
 
@@ -41,4 +41,4 @@ buildGoModule rec {
     mainProgram = "flottbot";
     platforms = lib.platforms.unix;
   };
-}
+})

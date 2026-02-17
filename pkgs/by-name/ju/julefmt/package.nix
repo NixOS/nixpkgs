@@ -18,7 +18,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ julec.hook ];
 
-  JULE_OUT_NAME = "julefmt";
+  env.JULE_OUT_NAME = "julefmt";
 
   meta = {
     description = "Official formatter tool for the Jule programming language";

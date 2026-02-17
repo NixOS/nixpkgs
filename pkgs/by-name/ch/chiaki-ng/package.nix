@@ -90,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     xxHash
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   cmakeFlags = [
     "-Wno-dev"
     (lib.cmakeFeature "CHIAKI_USE_SYSTEM_CURL" "true")

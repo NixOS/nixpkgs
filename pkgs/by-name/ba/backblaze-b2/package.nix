@@ -9,7 +9,7 @@
   execName ? "backblaze-b2",
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "backblaze-b2";
   version = "4.4.2";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ut1e/A36Tp4pgwZx+S8nYmjg3k/2CmRpdUfz3iOXTz0=";
   };
 
@@ -103,8 +103,8 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
-    changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "backblaze-b2";
   };
-}
+})

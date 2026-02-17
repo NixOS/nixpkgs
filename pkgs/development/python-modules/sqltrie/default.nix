@@ -3,7 +3,6 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pygtrie,
   orjson,
   setuptools-scm,
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   pname = "sqltrie";
   version = "0.11.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";

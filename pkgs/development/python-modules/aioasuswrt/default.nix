@@ -1,6 +1,7 @@
 {
   lib,
   asyncssh,
+  bcrypt,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-cov-stub,
@@ -12,19 +13,22 @@
 
 buildPythonPackage rec {
   pname = "aioasuswrt";
-  version = "1.5.2";
+  version = "2.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kennedyshead";
     repo = "aioasuswrt";
     tag = "V${version}";
-    hash = "sha256-vvOTHHB1FPjTenbVAHUSsFeoUVmkeGvpcXjET0Kd0Fg=";
+    hash = "sha256-ax2XvZjZ1P8p80JW2WZAy2pdBKgwxuEaf6Erdna8E1s=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ asyncssh ];
+  dependencies = [
+    asyncssh
+    bcrypt
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

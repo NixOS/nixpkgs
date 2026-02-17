@@ -55,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  # Fix build with gcc15 (-std=gnu23)
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   cmakeFlags = [
     "-DSRB2_ASSET_DIRECTORY=${finalAttrs.assets}"
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"

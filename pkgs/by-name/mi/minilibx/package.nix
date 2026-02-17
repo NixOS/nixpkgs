@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   unstableGitUpdater,
 }:
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   dontConfigure = true;
@@ -41,6 +41,8 @@ stdenv.mkDerivation {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 
   installPhase = ''
     runHook preInstall

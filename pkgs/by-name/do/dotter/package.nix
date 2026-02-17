@@ -8,14 +8,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dotter";
   version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cxabaCxbwP2YbnG2XfmVJWFTw9LGO0D1dlLy6fuux+M=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "dotter";
   };
-}
+})

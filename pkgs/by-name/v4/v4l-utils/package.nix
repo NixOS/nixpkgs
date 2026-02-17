@@ -18,6 +18,7 @@
   udevCheckHook,
   withUtils ? true,
   withGUI ? true,
+  withBPF ? true,
   alsa-lib,
   libGLU,
   qt6Packages,
@@ -29,7 +30,7 @@
 
 let
   withQt = withUtils && withGUI;
-
+  isCrossBuild = !(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 in
 # we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
 stdenv.mkDerivation (finalAttrs: {
@@ -62,14 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gconv" stdenv.hostPlatform.isGnu)
     (lib.mesonEnable "qv4l2" withQt)
     (lib.mesonEnable "qvidcap" withQt)
+    (lib.mesonEnable "bpf" withBPF)
     (lib.mesonOption "udevdir" "${placeholder "out"}/lib/udev")
   ]
   ++ lib.optionals stdenv.hostPlatform.isGnu [
     (lib.mesonOption "gconvsysdir" "${glibc.out}/lib/gconv")
-  ]
-  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # BPF support fail to cross compile, unable to find `linux/lirc.h`
-    (lib.mesonOption "bpf" "disabled")
   ];
 
   postFixup = ''
@@ -78,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    clang
     doxygen
     meson
     ninja
@@ -86,15 +83,18 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     udevCheckHook
   ]
+  ++ lib.optional withBPF clang
   ++ lib.optional withQt qt6Packages.wrapQtAppsHook;
 
   buildInputs = [
     json_c
-    libbpf
-    libelf
     udev
   ]
   ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
+  ++ lib.optionals withBPF [
+    libbpf
+    libelf
+  ]
   ++ lib.optionals withQt [
     alsa-lib
     qt6Packages.qt5compat
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Meson unable to find moc/uic/rcc in case of cross-compilation
   # https://github.com/mesonbuild/meson/issues/13018
-  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preConfigure = lib.optionalString (isCrossBuild && withQt) ''
     export PATH=${buildPackages.qt6Packages.qtbase}/libexec:$PATH
   '';
 

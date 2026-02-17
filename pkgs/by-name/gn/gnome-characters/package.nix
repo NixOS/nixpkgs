@@ -20,12 +20,12 @@
   gnome-desktop,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-characters";
   version = "49.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/gnome-characters-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-characters/${lib.versions.major finalAttrs.version}/gnome-characters-${finalAttrs.version}.tar.xz";
     hash = "sha256-eVwP5DTmAtx4M5H7WDDbx9jh6gXKdyEPsUDi9vQKFFw=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

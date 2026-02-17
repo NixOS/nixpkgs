@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tinycompress";
   version = "1.2.13";
 
   src = fetchurl {
-    url = "mirror://alsa/tinycompress/tinycompress-${version}.tar.bz2";
+    url = "mirror://alsa/tinycompress/tinycompress-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Dv5svXv/MZg+DUFt8ENnZ2ZcxM1w0njAbODoPg7qtds=";
   };
 
@@ -20,4 +20,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ k900 ];
   };
-}
+})

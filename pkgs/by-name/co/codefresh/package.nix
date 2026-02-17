@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codefresh";
-  version = "0.89.2";
+  version = "0.89.6";
 
   src = fetchFromGitHub {
     owner = "codefresh-io";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Cf3I+w0rVsjsu+m+vE/pOcASYTmsRi0yAQVpJkYbzUU=";
+    hash = "sha256-MlK+vWS2ylrWjnsNFP/FRr6YWXlpfE3Z6vMiNJvvdv0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-wD3BmWjrFGkNqUhbo2TrWLwgo2o2MiQn7X3fyDYt5dw=";
+    hash = "sha256-CZFS13UqPiJtLFCkeSTp2GSJw+QY48ob4zgfaPm057U=";
   };
   nativeBuildInputs = [
     yarnConfigHook
@@ -42,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/codefresh-io/cli";
     license = lib.licenses.mit;
     mainProgram = "codefresh";
-    maintainers = [ lib.maintainers.takac ];
+    maintainers = [
+      lib.maintainers.burdzwastaken
+      lib.maintainers.takac
+    ];
   };
 })

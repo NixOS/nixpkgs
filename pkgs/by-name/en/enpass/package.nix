@@ -2,7 +2,17 @@
   stdenv,
   fetchurl,
   dpkg,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxscrnsaver,
+  libxrender,
+  libxi,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   glib,
   libGLU,
   libGL,
@@ -42,38 +52,35 @@ let
   baseUrl = "https://apt.enpass.io";
 
   # used of both wrappers and libpath
-  libPath = lib.makeLibraryPath (
-    with xorg;
-    [
-      libGLU
-      libGL
-      fontconfig
-      freetype
-      libpulseaudio
-      zlib
-      dbus
-      libX11
-      libXi
-      libSM
-      libICE
-      libXrender
-      libXScrnSaver
-      libxcb
-      libcap
-      glib
-      gtk3
-      pango
-      curl
-      libuuid
-      cups
-      xcbutilwm # libxcb-icccm.so.4
-      xcbutilimage # libxcb-image.so.0
-      xcbutilkeysyms # libxcb-keysyms.so.1
-      xcbutilrenderutil # libxcb-render-util.so.0
-      xz
-      libxkbcommon
-    ]
-  );
+  libPath = lib.makeLibraryPath [
+    libGLU
+    libGL
+    fontconfig
+    freetype
+    libpulseaudio
+    zlib
+    dbus
+    libx11
+    libxi
+    libsm
+    libice
+    libxrender
+    libxscrnsaver
+    libxcb
+    libcap
+    glib
+    gtk3
+    pango
+    curl
+    libuuid
+    cups
+    libxcb-wm # libxcb-icccm.so.4
+    libxcb-image # libxcb-image.so.0
+    libxcb-keysyms # libxcb-keysyms.so.1
+    libxcb-render-util # libxcb-render-util.so.0
+    xz
+    libxkbcommon
+  ];
   package = stdenv.mkDerivation {
 
     inherit (data) version;

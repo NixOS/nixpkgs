@@ -33,7 +33,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/thombashi/tabledata";
     description = "Library to represent tabular data";
     changelog = "https://github.com/thombashi/tabledata/releases/tag/${src.tag}";
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     license = lib.licenses.mit;
   };
 }

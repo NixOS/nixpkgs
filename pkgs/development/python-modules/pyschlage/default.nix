@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pycognito,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pyschlage";
   version = "2025.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dknowles2";

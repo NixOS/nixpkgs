@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
@@ -10,23 +10,28 @@
   libcap,
   polkit,
   systemd,
+  fetchpatch,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtkit";
-  version = "0.13";
+  version = "0.14";
 
-  src = fetchFromGitHub {
-    owner = "heftig";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pipewire";
     repo = "rtkit";
-    rev = "c295fa849f52b487be6433e69e08b46251950399";
-    sha256 = "0yfsgi3pvg6dkizrww1jxpkvcbhzyw9110n1dypmzq0c5hlzjxcd";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y952SHbUWIjg1BKqenHABVWm0S5d/sBac1zRp9BpXB8=";
   };
 
   patches = [
-    ./meson-actual-use-systemd_systemunitdir.patch
-    ./meson-fix-librt-find_library-check.patch
-    ./rtkit-daemon-dont-log-debug-messages-by-default.patch
+    # Let us override the `sysusersdir` path
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pipewire/rtkit/-/commit/621fdc3f2c037781dc279760cfbff64974fdbe77.patch";
+      hash = "sha256-Ffdi6dfZmdBpClpJkPNISmEoeUkIufrObz5g7RSPqLw=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -35,6 +40,7 @@ stdenv.mkDerivation {
     pkg-config
     unixtools.xxd
   ];
+
   buildInputs = [
     dbus
     libcap
@@ -43,23 +49,26 @@ stdenv.mkDerivation {
   ];
 
   mesonFlags = [
-    "-Dinstalled_tests=false"
-
-    "-Ddbus_systemservicedir=${placeholder "out"}/share/dbus-1/system-services"
-    "-Ddbus_interfacedir=${placeholder "out"}/share/dbus-1/interfaces"
-    "-Ddbus_rulesdir=${placeholder "out"}/etc/dbus-1/system.d"
-    "-Dpolkit_actiondir=${placeholder "out"}/share/polkit-1/actions"
-    "-Dsystemd_systemunitdir=${placeholder "out"}/etc/systemd/system"
+    (lib.mesonBool "installed_tests" false)
+    (lib.mesonOption "dbus_systemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
+    (lib.mesonOption "dbus_interfacedir" "${placeholder "out"}/share/dbus-1/interfaces")
+    (lib.mesonOption "dbus_rulesdir" "${placeholder "out"}/etc/dbus-1/system.d")
+    (lib.mesonOption "polkit_actiondir" "${placeholder "out"}/share/polkit-1/actions")
+    (lib.mesonOption "systemd_systemunitdir" "${placeholder "out"}/etc/systemd/system")
+    (lib.mesonOption "systemd_sysusersdir" "${placeholder "out"}/lib/sysusers.d")
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    homepage = "https://github.com/heftig/rtkit";
+    homepage = "https://gitlab.freedesktop.org/pipewire/rtkit";
     description = "Daemon that hands out real-time priority to processes";
     mainProgram = "rtkitctl";
     license = with lib.licenses; [
-      gpl3
-      bsd0
-    ]; # lib is bsd license
+      gpl3Plus
+      mit
+    ];
     platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.Gliczy ];
   };
-}
+})

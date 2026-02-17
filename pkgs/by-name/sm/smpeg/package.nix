@@ -15,14 +15,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smpeg";
   version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "icculus";
     repo = "smpeg";
-    rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "sha256-nq/i7cFGpJXIuTwN/ScLMX7FN8NMdgdsRM9xOD3uycs=";
   };
 
@@ -93,7 +93,9 @@ stdenv.mkDerivation rec {
       --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL}/lib/pkgconfig"
   '';
 
-  NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lX11";
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    NIX_LDFLAGS = "-lX11";
+  };
 
   meta = {
     homepage = "https://icculus.org/smpeg/";
@@ -101,4 +103,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

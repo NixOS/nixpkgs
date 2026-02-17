@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonPath = with python3.pkgs; requiredPythonModules extraPythonPackages;
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
     )

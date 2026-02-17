@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "wireviz";
   version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-DiWtjC46Jpp91Kf0Xk6NME234EMrGEOmIKz6a+cFcOE=";
   };
 
@@ -39,4 +39,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ pinpox ];
     mainProgram = "wireviz";
   };
-}
+})

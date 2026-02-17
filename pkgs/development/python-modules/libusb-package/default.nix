@@ -38,6 +38,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pyocd/libusb-package/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brianmcgillion ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

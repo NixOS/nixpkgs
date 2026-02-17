@@ -5,7 +5,14 @@
   imake,
   bison,
   flex,
-  xorg,
+  libxt,
+  libxpm,
+  libxmu,
+  libxext,
+  libxaw,
+  libx11,
+  libsm,
+  libice,
 }:
 
 stdenv.mkDerivation {
@@ -24,14 +31,14 @@ stdenv.mkDerivation {
     flex
   ];
   buildInputs = [
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXaw
-    xorg.libXext
-    xorg.libXmu
-    xorg.libXpm
-    xorg.libXt
+    libice
+    libsm
+    libx11
+    libxaw
+    libxext
+    libxmu
+    libxpm
+    libxt
   ];
 
   preConfigure = ''

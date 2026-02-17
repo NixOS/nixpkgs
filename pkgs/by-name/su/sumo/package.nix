@@ -14,7 +14,7 @@
   jdk,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libjpeg,
   libpng,
   libtiff,
@@ -26,19 +26,24 @@
   stdenv,
   swig,
   xercesc,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxft,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sumo";
-  version = "1.24.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
-    owner = "eclipse";
+    owner = "eclipse-sumo";
     repo = "sumo";
-    tag = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-xf7/hUJpl+XmXx5MmFzYu2geFNe7JVaxDrraoqLrSuk=";
+    tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-HMuUQeme/cmJFR71bxsgr1tqtewl3vmsclGhc6ygiyk=";
     fetchSubmodules = true;
   };
 
@@ -70,16 +75,14 @@ stdenv.mkDerivation rec {
     xercesc
     zlib
     python3
-  ]
-  ++ (with xorg; [
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXft
-    libXrandr
-    libXrender
-  ]);
+    libx11
+    libxcursor
+    libxext
+    libxfixes
+    libxft
+    libxrandr
+    libxrender
+  ];
 
   meta = {
     description = "SUMO traffic simulator";
@@ -93,5 +96,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/eclipse/sumo";
     license = lib.licenses.epl20;
     maintainers = [ ];
+    teams = [ lib.teams.geospatial ];
   };
-}
+})

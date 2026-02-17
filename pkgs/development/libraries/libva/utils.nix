@@ -7,21 +7,21 @@
   pkg-config,
   libdrm,
   libva,
-  libX11,
-  libXext,
-  libXfixes,
+  libx11,
+  libxext,
+  libxfixes,
   wayland,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libva-utils";
-  version = "2.22.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libva-utils";
     rev = version;
-    sha256 = "sha256-CmhdhNNRO2j8lH7awp9YiKWMvV17GTBsXdrNY06jT2w=";
+    sha256 = "sha256-losxOPCrLCjtRKJ8RuwkjRllYYtJluKhscNfdxpC/xg=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libdrm
     libva
-    libX11
-    libXext
-    libXfixes
+    libx11
+    libxext
+    libxfixes
     wayland
   ];
 

@@ -57,7 +57,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://mgmtconfig.com";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      urandom
       karpfediem
     ];
     mainProgram = "mgmt";

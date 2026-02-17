@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fetchmail";
   version = "6.6.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
+    url = "mirror://sourceforge/fetchmail/fetchmail-${finalAttrs.version}.tar.xz";
     hash = "sha256-pRCSlewzGeDkXt0AnS2XcEKoMmq1LGqBeoL6mHED5PM=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "fetchmail";
   };
-}
+})

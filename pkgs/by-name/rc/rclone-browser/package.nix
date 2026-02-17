@@ -7,14 +7,14 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rclone-browser";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "kapitainsky";
     repo = "RcloneBrowser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Y0QFzpvAV01k9fYN5iMpxd8A+ThLePDtxdG7eX2bk5E=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qt5.qtbase ];
 
   meta = {
-    changelog = "https://github.com/kapitainsky/RcloneBrowser/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/kapitainsky/RcloneBrowser/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     homepage = "https://github.com/kapitainsky/RcloneBrowser";
     description = "Graphical Frontend to Rclone written in Qt";
     mainProgram = "rclone-browser";
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

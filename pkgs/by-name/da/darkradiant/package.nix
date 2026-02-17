@@ -16,7 +16,7 @@
   ftgl,
   freetype,
   glew,
-  libX11,
+  libx11,
   glib,
   python3,
   asciidoctor,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgit2
     python3
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   doCheck = true;
 

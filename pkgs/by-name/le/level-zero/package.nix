@@ -9,15 +9,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "level-zero";
-  version = "1.25.2";
+  version = "1.26.3";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
-    tag = "v${version}";
-    hash = "sha256-qB88S5k+HLBSOxNo6JBSGihJnY1jUdIpJTdLwgAP6bA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AFdACq4oooxv9XMrFjDwSXO+dIoGETqhuqgc0qENkNI=";
   };
 
   nativeBuildInputs = [
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "oneAPI Level Zero Specification Headers and Loader";
     homepage = "https://github.com/oneapi-src/level-zero";
-    changelog = "https://github.com/oneapi-src/level-zero/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/oneapi-src/level-zero/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.ziguana ];
   };
-}
+})

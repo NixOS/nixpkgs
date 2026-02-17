@@ -8,6 +8,7 @@
   autoPatchelfHook,
   alsa-lib,
   coreutils,
+  curl,
   db,
   dpkg,
   glib,
@@ -18,7 +19,11 @@
   nss,
   openssl,
   udev,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxdamage,
+  libxshmfence,
+  libxkbfile,
   libgbm,
   libdrm,
   libappindicator,
@@ -29,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${finalAttrs.version}/mailspring-${finalAttrs.version}-amd64.deb";
-    hash = "sha256-iJ6VzwvNTIRqUq9OWNOWOSuLbqhx+Lqx584kuyIslyA=";
+    hash = "sha256-PHxe44yzX9Zz+fQu30kX9epLEeG3wqqVL3p5+ZHMmos=";
   };
 
   nativeBuildInputs = [
@@ -46,13 +51,15 @@ stdenv.mkDerivation (finalAttrs: {
     libkrb5
     libsecret
     nss
-    xorg.libxkbfile
-    xorg.libXdamage
-    xorg.libXScrnSaver
-    xorg.libXtst
-    xorg.libxshmfence
+    libxkbfile
+    libxdamage
+    libxscrnsaver
+    libxtst
+    libxshmfence
     libgbm
     libdrm
+    openssl
+    curl
   ];
 
   runtimeDependencies = [

@@ -2,13 +2,19 @@
   lib,
   fetchFromGitLab,
   python3Packages,
-  python3,
   fetchPypi,
   apksigner,
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      sqlalchemy = self.sqlalchemy_1_4;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "fdroidserver";
   version = "2.4.3";
 
@@ -17,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9gRMjqxYKB/OSu1vn3jtNy1hROCpm8yJptlhkTt2hZw=";
   };
 
@@ -37,7 +43,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preConfigure = ''
-    ${python3.pythonOnBuildForHost.interpreter} setup.py compile_catalog
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} setup.py compile_catalog
   '';
 
   postInstall = ''
@@ -49,12 +55,12 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     setuptools
     babel
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     androguard
     biplist
     clint
@@ -100,7 +106,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://gitlab.com/fdroid/fdroidserver";
-    changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
@@ -109,4 +115,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "fdroid";
   };
-}
+})

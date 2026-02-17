@@ -10,14 +10,14 @@
   extraInputs ? [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "salt";
-  version = "3007.9";
+  version = "3007.11";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-H3cNa5ylVo+SbZjt/NJtznHAT2CUJD25EoV5U+PUpW0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-EAkO0/1kKSXRkEXNH6mJHznUkQR0AsQ2ijtzCrwUCAU=";
   };
 
   patches = [
@@ -74,9 +74,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://saltproject.io/";
-    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
+    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${finalAttrs.version}.html";
     description = "Portable, distributed, remote execution and configuration management system";
     maintainers = with lib.maintainers; [ Flakebi ];
     license = lib.licenses.asl20;
   };
-}
+})

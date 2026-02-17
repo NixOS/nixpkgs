@@ -4,7 +4,6 @@
   fetchFromGitHub,
   python-dateutil,
   python-mimeparse,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "django-tastypie";
   version = "0.15.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django-tastypie";

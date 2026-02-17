@@ -1,19 +1,21 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fixDarwinDylibNames,
   llvmPackages,
   withOpenMP ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsvm";
-  version = "3.33";
+  version = "333";
 
-  src = fetchurl {
-    url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
-    sha256 = "sha256-1doSzMPQ7thFP732+sfZ8AUvPopfB6IXTk7wqdg9zfg=";
+  src = fetchFromGitHub {
+    owner = "cjlin1";
+    repo = "libsvm";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eM7O/skOcxkKV4utlC7G9FvMO+d2yZm5D0BoIUhAPXo=";
   };
 
   patches = lib.optionals withOpenMP [ ./openmp.patch ];
@@ -65,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

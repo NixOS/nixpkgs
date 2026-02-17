@@ -73,6 +73,8 @@ in
 
 runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}"
   {
+    pname = wrappedPkgName;
+    version = wrappedPkgVersion;
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ vscode ];
     dontPatchELF = true;

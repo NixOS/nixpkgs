@@ -23,9 +23,9 @@
 # This package should be updated together with all related python grpc packages
 # to ensure compatibility.
 # nixpkgs-update: no auto update
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grpc";
-  version = "1.76.0"; # N.B: if you change this, please update:
+  version = "1.78.0"; # N.B: if you change this, please update:
   # pythonPackages.grpcio
   # pythonPackages.grpcio-channelz
   # pythonPackages.grpcio-health-checking
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
-    tag = "v${version}";
-    hash = "sha256-f25ccZC0pJw00ETgxBtXU6+0OnlJsV7zXjK/ayiCIJY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hupso9w++lYtAMoLS/qVmUYqZyQAX3rH0I8zCLyBo40=";
     fetchSubmodules = true;
   };
 
@@ -139,6 +139,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lnl7 ];
     homepage = "https://grpc.io/";
     platforms = lib.platforms.all;
-    changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
+    changelog = "https://github.com/grpc/grpc/releases/tag/v${finalAttrs.version}";
   };
-}
+})

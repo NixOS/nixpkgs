@@ -421,7 +421,7 @@ in
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e: "allow ${e}") cfg.allowedBridges;
       systemPackages = with pkgs; [
-        libressl.nc
+        netcat
         config.networking.firewall.package
         cfg.package
         cfg.qemu.package
@@ -573,7 +573,6 @@ in
 
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "libvirtd.service" ];
       after = [ "libvirtd.service" ];
       path = with pkgs; [
         coreutils

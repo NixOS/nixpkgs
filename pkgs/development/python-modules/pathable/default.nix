@@ -4,16 +4,13 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "pathable";
   version = "0.4.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";

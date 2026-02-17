@@ -5,7 +5,7 @@
   makeWrapper,
 }:
 {
-  name,
+  name ? "${args.pname}-${args.version}",
   src,
   buildInputs ? [ ],
   chickenInstallFlags ? [ ],

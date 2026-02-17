@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/cowsql/cowsql/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/cowsql/cowsql/releases/tag/v${finalAttrs.version}";
     description = "Embeddable, replicated and fault tolerant SQL engine";
     homepage = "https://github.com/cowsql/cowsql";
     license = lib.licenses.lgpl3Only;

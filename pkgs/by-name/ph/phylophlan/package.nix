@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "biobakery";
       repo = "phylophlan";
-      rev = "refs/tags/${finalAttrs.version}";
+      tag = finalAttrs.version;
       hash = "sha256-KlWKt2tH2lQBh/eQ2Hbcu2gXHEFfmFEc6LrybluxINc=";
     };
 

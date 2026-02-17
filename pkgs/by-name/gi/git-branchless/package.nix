@@ -10,14 +10,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-branchless";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8uv+sZRr06K42hmxgjrKk6FDEngUhN/9epixRYKwE3U=";
   };
 
@@ -78,4 +78,4 @@ rustPlatform.buildRustPackage rec {
       bryango
     ];
   };
-}
+})

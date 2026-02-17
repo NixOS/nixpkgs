@@ -74,19 +74,18 @@ let
     else
       throw "No GPU targets specified"
   );
-in
-buildPythonPackage rec {
-  pname = "torchaudio";
-  version = "2.9.1";
-  pyproject = true;
-
   stdenv = torch.stdenv;
+in
+buildPythonPackage.override { inherit stdenv; } rec {
+  pname = "torchaudio";
+  version = "2.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     tag = "v${version}";
-    hash = "sha256-tTilG/haU3OycSWqA5LR3egcxHVRg/yHJ8JB2rz3aKw=";
+    hash = "sha256-b1sjHVFXdNFDbdtXWSM2KisSRE/8IbzJI4rvzYQ4UMg=";
   };
 
   patches = [
@@ -157,7 +156,7 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
-    changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/audio/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     platforms =
       lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;

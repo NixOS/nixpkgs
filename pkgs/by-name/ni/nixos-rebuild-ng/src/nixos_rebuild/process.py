@@ -8,7 +8,7 @@ import subprocess
 from collections.abc import Sequence
 from dataclasses import dataclass
 from ipaddress import AddressValueError, IPv6Address
-from typing import Final, Self, TypedDict, Unpack
+from typing import Final, Self, TextIO, TypedDict, Unpack
 
 from . import tmpdir
 
@@ -85,8 +85,8 @@ class Remote:
 # Not exhaustive, but we can always extend it later.
 class RunKwargs(TypedDict, total=False):
     capture_output: bool
-    stderr: int | None
-    stdout: int | None
+    stderr: int | TextIO | None
+    stdout: int | TextIO | None
 
 
 def cleanup_ssh() -> None:
@@ -142,7 +142,8 @@ def run_wrapper(
         if extra_env:
             env = os.environ | extra_env
         if sudo:
-            run_args = ["sudo", *run_args]
+            sudo_args = shlex.split(os.getenv("NIX_SUDOOPTS", ""))
+            run_args = ["sudo", *sudo_args, *run_args]
 
     logger.debug(
         "calling run with args=%r, kwargs=%r, extra_env=%r",

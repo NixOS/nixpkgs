@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sd";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "chmln";
     repo = "sd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hC4VKEgrAVuqOX7b24XhtrxrnJW5kmlX4E6QbY9H8OA=";
   };
 
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
       amar1729
     ];
   };
-}
+})

@@ -12,14 +12,14 @@
   hexdump,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "translate-shell";
   version = "0.9.7.1";
 
   src = fetchFromGitHub {
     owner = "soimort";
     repo = "translate-shell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ILXE8cSrivYqMruE+xtNIInLdwdRfMX5dneY9Nn12Uk=";
   };
 
@@ -46,8 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.soimort.org/translate-shell";
     description = "Command-line translator using Google Translate, Bing Translator, Yandex.Translate, and Apertium";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ ebzzry ];
     mainProgram = "trans";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -8,14 +8,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcdio-paranoia";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "libcdio-paranoia";
-    rev = "release-10.2+${version}";
+    rev = "release-10.2+${finalAttrs.version}";
     hash = "sha256-n05PSVgh6z7BFPq4CjJa5DqCO7Huj8Bsg0x3HQPsbeI=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     mainProgram = "cd-paranoia";
     platforms = lib.platforms.unix;
   };
-}
+})

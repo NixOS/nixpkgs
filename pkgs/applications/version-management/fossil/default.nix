@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.fossil-scm.org/home/tarball/version-${finalAttrs.version}/fossil-${finalAttrs.version}.tar.gz";
-    hash = "sha256-1YVOgyNBDy/CeuVfrhE/D4LfQwv5uFfykoYwiZ3eFFY=";
+    hash = "sha256-XzP5IKhlYi+ZBpWrKO7xc2Nb4i0ylYctd2aUG8S31DQ=";
   };
 
   # required for build time tool `./tools/translate.c`

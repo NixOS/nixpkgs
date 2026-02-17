@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gemget";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "makeworld-the-better-one";
     repo = "gemget";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-P5+yRaf2HioKOclJMMm8bJ8/BtBbNEeYU57TceZVqQ8=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ amfl ];
     mainProgram = "gemget";
   };
-}
+})

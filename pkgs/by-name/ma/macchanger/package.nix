@@ -7,14 +7,14 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "macchanger";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "alobbs";
     repo = "macchanger";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1hypx6sxhd2b1nsxj314hpkhj7q4x9p2kfaaf20rjkkkig0nck9r";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "macchanger";
   };
-}
+})

@@ -108,7 +108,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://www.picotech.com/downloads/linux";
-    maintainers = with lib.maintainers; [ wirew0rm ] ++ lib.teams.lumiguide.members;
+    maintainers = with lib.maintainers; [ wirew0rm ];
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];

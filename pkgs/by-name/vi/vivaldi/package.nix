@@ -4,21 +4,21 @@
   coreutils,
   fetchurl,
   zlib,
-  libX11,
-  libXext,
-  libSM,
-  libICE,
+  libx11,
+  libxext,
+  libsm,
+  libice,
   libxkbcommon,
   libxshmfence,
-  libXfixes,
-  libXt,
-  libXi,
-  libXcursor,
-  libXScrnSaver,
-  libXcomposite,
-  libXdamage,
-  libXtst,
-  libXrandr,
+  libxfixes,
+  libxt,
+  libxi,
+  libxcursor,
+  libxscrnsaver,
+  libxcomposite,
+  libxdamage,
+  libxtst,
+  libxrandr,
   alsa-lib,
   dbus,
   cups,
@@ -29,8 +29,8 @@
   libGL,
   freetype,
   fontconfig,
-  libXft,
-  libXrender,
+  libxft,
+  libxrender,
   libxcb,
   expat,
   libuuid,
@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.7.3851.61";
+  version = "7.8.3925.66";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-zpo5GJjOsZlsj+UZX3Pj1dmrFL4MVIT+SVFC1hCXR3Y=";
-        x86_64-linux = "sha256-yCYskWEE6+rsKjWKa97ybmU041fVc88n4mFWAvR+IuY=";
+        aarch64-linux = "sha256-+gDl4+gtnEkSi29JT7zsDs29dabgfpzR2RIMlKglwoM=";
+        x86_64-linux = "sha256-RpIsJTUAKiD1GfF78RigrHtivqbW+qZuF+HUJsFcKI0=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -104,23 +104,23 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     stdenv.cc.libc
     zlib
-    libX11
-    libXt
-    libXext
-    libSM
-    libICE
+    libx11
+    libxt
+    libxext
+    libsm
+    libice
     libxcb
     libxkbcommon
     libxshmfence
-    libXi
-    libXft
-    libXcursor
-    libXfixes
-    libXScrnSaver
-    libXcomposite
-    libXdamage
-    libXtst
-    libXrandr
+    libxi
+    libxft
+    libxcursor
+    libxfixes
+    libxscrnsaver
+    libxcomposite
+    libxdamage
+    libxtst
+    libxrandr
     atk
     at-spi2-atk
     at-spi2-core
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     qt6.qtwayland
     freetype
     fontconfig
-    libXrender
+    libxrender
     libuuid
     expat
     glib

@@ -15,6 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OBlkk5Fq3ep+wZqFfSXNqrXtznisNFjn9uDVj/Q4Odk=";
   };
 
+  # TODO: remove once https://github.com/sshlien/abcmidi/pull/15 merged
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     homepage = "https://abc.sourceforge.net/abcMIDI/";
     downloadPage = "https://ifdo.ca/~seymour/runabc/top.html";

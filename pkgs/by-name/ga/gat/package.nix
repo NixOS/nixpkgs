@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gat";
-  version = "0.25.8";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "koki-develop";
     repo = "gat";
-    tag = "v${version}";
-    hash = "sha256-OT0TiYvbeybWPk2Sku38ip+qmUUuFRMu1wC9936EByY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tlRXWI8jdns+MFLBl5ZzcGo2qli6dKhlT9ekwSrxi+s=";
   };
 
-  vendorHash = "sha256-LOim/rW8Uz5stpIQj2Ubx4F3bTv6nNAn2ZbWqW6B4rU=";
+  vendorHash = "sha256-0kNtZOTpWpeFVyRHFIf6ybM7gAWb5/JWVljm0FO5fK8=";
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/koki-develop/gat/cmd.version=v${version}"
+    "-X github.com/koki-develop/gat/cmd.version=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ themaxmur ];
     mainProgram = "gat";
   };
-}
+})

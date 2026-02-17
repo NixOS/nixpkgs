@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "vgmplay-libvgm";
-  version = "0.51.1-unstable-2025-11-15";
+  version = "0.52.0-unstable-2026-01-31";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "vgmplay-libvgm";
-    rev = "5b2e6b7d978d2de060b4840929e64c5bb239bfe2";
-    hash = "sha256-wgi1PofdPG5JU4cYrTw7mIJKT8gxy6PTKBbiTd7wlpQ=";
+    rev = "2a8f3909bcfca4c595ca71c0f762ff495a29e130";
+    hash = "sha256-TJUhE4te/nZOsckgMksWcqawsWR8r3OInJoVrv+NVAQ=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,10 @@ stdenv.mkDerivation {
     libvgm
     inih
   ];
+
+  # https://github.com/ValleyBell/vgmplay-libvgm/issues/9
+  # Leftover that's still in use, missing documentation & integration into CMake script rn
+  env.NIX_CFLAGS_COMPILE = "-DSHARE_PREFIX=\"${placeholder "out"}\"";
 
   postInstall = ''
     install -Dm644 ../VGMPlay.ini $out/share/vgmplay/VGMPlay.ini

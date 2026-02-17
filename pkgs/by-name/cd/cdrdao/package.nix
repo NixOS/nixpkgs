@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
+  autoreconfHook,
   pkg-config,
   libiconv,
   libvorbis,
@@ -12,11 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdrdao";
-  version = "1.2.5";
+  version = "1.2.6";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/cdrdao/cdrdao-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-0ZtnyFPF26JAavqrbNeI53817r5jTKxGeVKEd8e+AbY=";
+  src = fetchFromGitHub {
+    owner = "cdrdao";
+    repo = "cdrdao";
+    tag = "rel_${lib.replaceString "." "_" finalAttrs.version}";
+    hash = "sha256-XEaJsv3c/xPO6jclJBbTopOnYamIOlumD2B+hJZraEE=";
   };
 
   makeFlags = [
@@ -26,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
   ];
 
@@ -38,22 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
-  patches = [
-    # Fix build on macOS SDK < 12
-    # https://github.com/cdrdao/cdrdao/pull/19
-    (fetchpatch {
-      url = "https://github.com/cdrdao/cdrdao/commit/105d72a61f510e3c47626476f9bbc9516f824ede.patch";
-      hash = "sha256-NVIw59CSrc/HcslhfbYQNK/qSmD4QbfuV8hWYhWelX4=";
-    })
-
-    # Fix undefined behaviour caused by uninitialized variable
-    # https://github.com/cdrdao/cdrdao/pull/21
-    (fetchpatch {
-      url = "https://github.com/cdrdao/cdrdao/commit/251a40ab42305c412674c7c2d391374d91e91c95.patch";
-      hash = "sha256-+nGlWw5rgc5Ns2l+6fQ4Hp2LbhO4R/I95h9WGIh/Ebw=";
-    })
-  ];
-
   # we have glibc/include/linux as a symlink to the kernel headers,
   # and the magic '..' points to kernelheaders, and not back to the glibc/include
   postPatch = ''
@@ -65,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
-    homepage = "https://cdrdao.sourceforge.net/";
+    homepage = "https://github.com/cdrdao/cdrdao";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };

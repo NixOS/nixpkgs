@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
       --subst-var-by kerberos ${kerberos}
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${_389-ds-base}/include/dirsrv";
+  env.NIX_CFLAGS_COMPILE = "-I${_389-ds-base}/include/dirsrv";
   pythonPath = pythonInputs;
 
   # Building and installing the server fails with silent Rhino errors, skipping
@@ -171,7 +171,6 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

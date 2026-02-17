@@ -3,25 +3,24 @@
   buildPythonPackage,
   docutils,
   fetchPypi,
-  pythonOlder,
   importlib-metadata,
   importlib-resources,
   setuptools,
   packaging,
+  typing-extensions,
+  appdirs,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pkg-about";
-  version = "2.0.1";
+  version = "2.0.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "pkg_about";
     inherit version;
-    hash = "sha256-hgQOmp+R4ZWbq8hKRUQQzMO4hl/pHAGiJK9c4lxEkaI=";
+    hash = "sha256-WFhOMeBvAPaU/AIGoGlSziJ633TrGBgOcbfBxAm3H8E=";
   };
 
   # tox is listed in build requirements but not actually used to build
@@ -41,9 +40,13 @@ buildPythonPackage rec {
     importlib-resources
     packaging
     setuptools
+    typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    appdirs
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pkg_about" ];
 
@@ -52,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/karpierz/pkg_about/";
     changelog = "https://github.com/karpierz/pkg_about/blob/${version}/CHANGES.rst";
     license = lib.licenses.zlib;
-    teams = [ lib.teams.ororatech ];
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

@@ -60,10 +60,10 @@ stdenv.mkDerivation rec {
     # a more conservative version of https://github.com/sagemath/sage/pull/37951
     ./patches/gap-element-crash.patch
 
-    # https://github.com/sagemath/sage/pull/40895, positively reviewed
+    # https://github.com/sagemath/sage/pull/40895, landed in 10.8.beta6
     (fetchpatch2 {
       name = "doctest-absolute-path.patch";
-      url = "https://github.com/sagemath/sage/commit/3de32dccd2e32e5452ca3adf5bd63cbacb64ba9d.patch?full_index=1";
+      url = "https://github.com/sagemath/sage/commit/3a5904d43f552bf63ed1eed9154f87b1f0de53fb.patch?full_index=1";
       hash = "sha256-rp+9d8Y6kifWzufE07GWU68txPn//w7uMn4LcpITaBs=";
     })
   ];
@@ -81,6 +81,20 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/54d4ddb132cc71ef26b4db1f48afd6736d41cc63.patch?full_index=1";
       hash = "sha256-PZyOXRsgcsPvgceGGZXet5URJgWiIlCfFx8tvwpLk5A=";
       excludes = [ "src/doc/zh/constructions/rep_theory.rst" ];
+    })
+
+    # https://github.com/sagemath/sage/pull/41141, landed in 10.8.beta9
+    (fetchpatch2 {
+      name = "ipython-9_7_0-unicode_to_str.patch";
+      url = "https://github.com/sagemath/sage/commit/fa00696112fde95e0c4241ad6063936200ce6f68.patch?full_index=1";
+      hash = "sha256-eFDpNu/2gcQATELmQ7/VzXI35xIzaVrD8bhhJ57e2gc=";
+    })
+
+    # https://github.com/sagemath/sage/pull/41233, landed in 10.8.rc0
+    (fetchpatch2 {
+      name = "flint-3.4-update.patch";
+      url = "https://github.com/sagemath/sage/commit/9bd5304f1a222e215d7006a04854ff66616748bf.patch?full_index=1";
+      hash = "sha256-7bgouXV3pM20IX5PM24ZpJWOBlZjQksGtjopgouEbyg=";
     })
   ];
 

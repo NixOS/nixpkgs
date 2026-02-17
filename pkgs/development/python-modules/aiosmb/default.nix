@@ -9,7 +9,6 @@
   minikerberos,
   prompt-toolkit,
   pycryptodomex,
-  pythonOlder,
   setuptools,
   six,
   tqdm,
@@ -19,14 +18,12 @@
 
 buildPythonPackage rec {
   pname = "aiosmb";
-  version = "0.4.13";
+  version = "0.4.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ytnzpUnshwKczXgqNPL0vouBMSgY52zONOrwraUVnk8=";
+    hash = "sha256-So6u+sX7EOEIjrYejfWK/z/mH9bxHOcu/YpjF1VfAsM=";
   };
 
   build-system = [ setuptools ];

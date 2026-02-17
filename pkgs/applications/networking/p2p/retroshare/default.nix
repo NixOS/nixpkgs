@@ -1,11 +1,12 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   fetchpatch2,
   qmake,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   miniupnpc,
   bzip2,
   speex,
@@ -14,14 +15,14 @@
   libxslt,
   sqlcipher,
   rapidjson,
-  libXScrnSaver,
+  libxscrnsaver,
   qtbase,
   qtx11extras,
   qtmultimedia,
   libgnome-keyring,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "retroshare";
   version = "0.6.7.2";
 
@@ -51,6 +52,7 @@ mkDerivation rec {
     pkg-config
     qmake
     cmake
+    wrapQtAppsHook
   ];
   buildInputs = [
     speex
@@ -60,7 +62,7 @@ mkDerivation rec {
     qtbase
     libgnome-keyring
     bzip2
-    libXScrnSaver
+    libxscrnsaver
     libxml2
     libxslt
     sqlcipher

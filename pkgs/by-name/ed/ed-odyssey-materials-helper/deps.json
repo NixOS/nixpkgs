@@ -1125,13 +1125,6 @@
    "module": "sha256-bMYa+9HB0MB2VrO9lcBhH6XfMGMxx5XROs1YZ7VDpH8=",
    "pom": "sha256-CCCnYjzmYx8Zfde+rTBQIYOfNJsnboNevcIS3BS9LEg="
   },
-  "jixxed/ed/awesome/ed-awesome-api/maven-metadata": {
-   "xml": {
-    "groupId": "nl.jixxed.ed.awesome",
-    "lastUpdated": "20250822121510",
-    "release": "1.5"
-   }
-  },
   "jixxed/ed/confidential#ed-confidential-api/1.3": {
    "jar": "sha256-iPBjgHIFGjuquG+zga0ZdTxMMIEqAquzGt41IDriGKw=",
    "module": "sha256-THaam0o2oBL75yHgsXW7+pPz3lbjf9ktcRL+N+WFs98=",

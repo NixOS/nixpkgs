@@ -19,8 +19,8 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "d38452e1ee03523a208362186fd42248ff2609f6";
-      hash = "sha256-SCQDORhmJmTb0CYm15zjEa7dkwc+lpW2s1d4DsMRovI=";
+      rev = "255c84dadd029fd8ad25c5efb5933e47beaa00c7";
+      hash = "sha256-TJT2Kzc64zI42FAbbGWP3Sshh1dU/D/AtEpgZrrhebg=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
@@ -37,8 +37,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "49623d0c4e1af3c680845191948d10f6d3e92f8a";
-      hash = "sha256-jmPPyOHNP8Lrk5BKMhWW6KzizLF4dJB3txqOi2zBW40=";
+      rev = "75bcd155c40cb48e647c87c3f29052360255bc9e";
+      hash = "sha256-ZBm3ac6Kt7gOqNip6PeNNMiOF0fwG+7PJYA47KT0ogI=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -87,7 +87,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.4.0";
+  version = "3.5.0";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-mW1AZKRo5rC3q7VARNI3HNKYGXxnAX6R1AfmY8J1D/Q=";
+    hash = "sha256-5i+QQIwu8olwsMaYvO8b1vLkOkA4jZVR0xcFMuieF5w=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];

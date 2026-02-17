@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   twisted,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "setuptools-trial";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "setuptools_trial";

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   libuuid,
   gnutls,
@@ -10,17 +11,26 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
   version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0YveqiylXJi4cdDCfnPtwCVOJbQrZYsxnXES+9B4Yfw=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/GothenburgBitFactory/libshared/commit/bde76fb717c8e56e5859472ba1e890abc5b94e63.patch";
+      sha256 = "sha256-6esIya9VATtDbL3jOpXZtvMoIJ8ztznqUju4d4lE49w=";
+      stripLen = 1;
+      extraPrefix = "src/libshared/";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/commands/CmdNews.cpp \
@@ -73,4 +83,4 @@ stdenv.mkDerivation rec {
     mainProgram = "task";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -29,6 +29,7 @@ crystal.buildCrystalPackage {
     openssl
     makeWrapper
   ];
+  env.LLVM_CONFIG = lib.getExe' (lib.getDev llvmPackages.llvm) "llvm-config";
 
   doCheck = false;
   doInstallCheck = false;
@@ -44,7 +45,11 @@ crystal.buildCrystalPackage {
   };
 
   postInstall = ''
-    wrapProgram "$out/bin/crystalline" --prefix PATH : '${lib.makeBinPath [ llvmPackages.llvm.dev ]}'
+    wrapProgram "$out/bin/crystalline" --prefix PATH : '${
+      lib.makeBinPath [
+        (lib.getDev llvmPackages.llvm)
+      ]
+    }'
   '';
 
   meta = {

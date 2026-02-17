@@ -7,15 +7,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libucontext";
-  version = "1.3.3";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "kaniini";
     repo = "libucontext";
-    rev = "libucontext-${version}";
-    hash = "sha256-MQCRRyA64MEtPoUtf1tFVbhiMDc4DlepSjMEFcb/Kh4=";
+    rev = "libucontext-${finalAttrs.version}";
+    hash = "sha256-asT0pV3s4L4zB2qtDJ+2XYxEP6agIEo1LtCuFeOjpRA=";
   };
 
   nativeBuildInputs = [
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lix ];
   };
-}
+})

@@ -5,14 +5,14 @@
   go-md2man,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.5.0";
   pname = "zfs-prune-snapshots";
 
   src = fetchFromGitHub {
     owner = "bahamas10";
     repo = "zfs-prune-snapshots";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-gCf/ZIeIh84WQNs5wZO1/l3zpnl2sNxsFO7cOa92JUM=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.ymarkus ];
     platforms = lib.platforms.all;
   };
-}
+})

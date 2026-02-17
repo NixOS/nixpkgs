@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   ncurses,
-  libX11,
+  libx11,
   xorgproto,
   buildEnv,
   useX11 ? stdenv.hostPlatform.isx86,
@@ -11,7 +11,7 @@
 
 let
   x11deps = [
-    libX11
+    libx11
     xorgproto
   ];
   inherit (lib) optionals;

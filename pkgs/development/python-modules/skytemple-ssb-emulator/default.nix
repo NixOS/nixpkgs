@@ -27,7 +27,7 @@
   # dependencies
   range-typed-integers,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skytemple-ssb-emulator";
   version = "1.8.2";
   pyproject = true;
@@ -35,13 +35,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple-ssb-emulator";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zmLEvE96gkElTggcRG9fZDrJPLOXeNuSk49zXQAB69Y=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src pname;
+    inherit (finalAttrs) src pname version;
     hash = "sha256-MSPqQmC70pq+sEM8zJrrFiz32dorOJxr2G/y2H4EUQI=";
+  };
+
+  env = {
+    # Python 3.14 compatibility
+    # error: the configured Python interpreter version (3.14) is newer than PyO3's maximum supported
+    # version (3.13)
+    PYO3_USE_ABI3_FORWARD_COMPATIBILITY = 1;
   };
 
   build-system = [
@@ -81,4 +88,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

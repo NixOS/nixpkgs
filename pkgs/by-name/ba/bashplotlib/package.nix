@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication {
   pname = "bashplotlib";
   version = "0.6.5-unstable-2021-03-31";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glamp";
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication {
   meta = {
     homepage = "https://github.com/glamp/bashplotlib";
     description = "Plotting in the terminal";
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
     license = lib.licenses.mit;
   };
 }

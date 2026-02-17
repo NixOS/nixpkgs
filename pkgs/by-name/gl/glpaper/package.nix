@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   wayland,
-  libX11,
+  libx11,
   libGL,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     wayland
-    libX11 # required by libglvnd
+    libx11 # required by libglvnd
     libGL
   ];
 

@@ -5,7 +5,6 @@
   colorama,
   fetchFromGitHub,
   pycryptodomex,
-  pythonOlder,
   setuptools,
   tqdm,
   unicrypto,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aesedb";
   version = "0.1.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "skelsec";

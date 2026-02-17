@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   pkg-config,
   autoconf,
   automake,
@@ -9,14 +9,16 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnet";
   version = "2.0.8";
-  src = fetchFromGitHub {
-    owner = "GNOME";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "Archive";
     repo = "gnet";
-    rev = "GNET_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "1cy78kglzi235md964ikvm0rg801bx0yk9ya8zavndjnaarzqq87";
+    rev = "GNET_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-B2H8s1JWNrvVR8qn6UFfAaCXQd0zEpNaLUPET99Ex7M=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +35,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Network library, written in C, object-oriented, and built upon GLib";
-    homepage = "https://developer.gnome.org/gnet/";
+    homepage = "https://gitlab.gnome.org/Archive/gnet";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

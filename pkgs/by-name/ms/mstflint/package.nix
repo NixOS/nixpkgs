@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   rdma-core,
   openssl,
   zlib,
@@ -24,15 +24,15 @@
   enableDPA ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mstflint";
+  version = "4.34.1-3";
 
-  # if you update the version of this package, also update the input hash in mstflint_access!
-  version = "4.34.0-1";
-
-  src = fetchurl {
-    url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
-    hash = "sha256-MOFfbrjwnWXVskFCF2pgjf1Z8nkZV0l+CLfGWzxmmIg=";
+  src = fetchFromGitHub {
+    owner = "Mellanox";
+    repo = finalAttrs.pname;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GvUCNPB8BJY8RhIT4/a5NXOG6jjFUs04NmBn7Np+lAM=";
   };
 
   nativeBuildInputs = [
@@ -130,4 +130,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ thillux ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "2.4.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/easytag/${lib.versions.majorMinor version}/easytag-${version}.tar.xz";
     hash = "sha256-/FHukqcF48WXnf8WVfdJbv+2i5jxraBUfoy7wDO2fdU=";
   };
 
@@ -40,7 +40,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_LDFLAGS = "-lid3tag -lz";
+  env = {
+    NIX_LDFLAGS = "-lid3tag -lz";
+    # Note: this allows id3lib to be found at configure time, and also prevents
+    # compilation errors on Linux (GCC 15). Clang / Darwin seems to be unaffected.
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=c17 -Wno-implicit-function-declaration";
+  };
 
   nativeBuildInputs = [
     pkg-config

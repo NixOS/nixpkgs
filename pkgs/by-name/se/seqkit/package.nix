@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "seqkit";
   version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "shenwei356";
     repo = "seqkit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9+eu4M58nG/tOdEW7fO8f+dMJewMjQsWfzH/KpSBDB8=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bzizou ];
   };
-}
+})

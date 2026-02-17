@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencl-caps-viewer";
-  version = "1.20";
+  version = "1.30";
 
   src = fetchFromGitHub {
     owner = "SaschaWillems";
     repo = "OpenCLCapsViewer";
     tag = finalAttrs.version;
-    hash = "sha256-P7G8FvVXzDAfN3d4pGXC+c9x4bY08/cJNYQ6lvjyVCQ=";
+    hash = "sha256-fQDBo1/mT6Re6FgdB8ImDRAIsnstnzQsz04cRGgjM/M=";
     fetchSubmodules = true;
   };
 

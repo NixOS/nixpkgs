@@ -15,7 +15,7 @@
 
 assert withFlint -> flint != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eclib";
   version = "20250627"; # upgrade might break the sage interface
   # sage tests to run:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     #
     # see https://github.com/JohnCremona/eclib/issues/64#issuecomment-789788561
     # for upstream's explanation of the above
-    url = "https://github.com/JohnCremona/eclib/releases/download/${version}/eclib-${version}.tar.bz2";
+    url = "https://github.com/JohnCremona/eclib/releases/download/${finalAttrs.version}/eclib-${finalAttrs.version}.tar.bz2";
     hash = "sha256-uI1LUmEuSRxUFZRtnjXyBiyhAV7n+74LYfFY+nTLS8k=";
   };
   buildInputs = [
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.all;
   };
-}
+})

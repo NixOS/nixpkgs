@@ -26,16 +26,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sagemaker-core";
-  version = "1.0.71";
+  version = "1.0.76";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-core";
-    tag = "v${version}";
-    hash = "sha256-pPNDdfSpU//L2WoFQAoBiEZPSMKb5XuSmUQlYE9ZdzE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IAgHAmmN00nyE1rcPV09DMb/LFCZnwrD0OhXTeNuTik=";
   };
 
   build-system = [
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     # Tries to import deprecated `sklearn`
@@ -89,8 +89,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python object-oriented interface for interacting with Amazon SageMaker resources";
     homepage = "https://github.com/aws/sagemaker-core";
-    changelog = "https://github.com/aws/sagemaker-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/aws/sagemaker-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

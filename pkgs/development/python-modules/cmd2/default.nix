@@ -9,7 +9,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   rich-argparse,
   setuptools-scm,
   wcwidth,
@@ -17,14 +16,12 @@
 
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "2.7.0";
+  version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gdgTW0YhDh0DpagQuvhZBppiIUeIzu7DWI9E7thvvus=";
+    hash = "sha256-zOOuzgGLCxBVmIraoraHrJwd84v9Kr/Cnb61GpcH3jM=";
   };
 
   build-system = [ setuptools-scm ];

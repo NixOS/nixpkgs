@@ -19,10 +19,13 @@
   pexpect,
   protego,
   pydispatcher,
+  pyftpdlib,
   pyopenssl,
+  pytest-asyncio,
+  pytest-twisted,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
+  pythonAtLeast,
   queuelib,
   service-identity,
   setuptools,
@@ -37,16 +40,14 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.13.4";
+  version = "2.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = "scrapy";
     tag = version;
-    hash = "sha256-ZWiJmve1EhtwP9xo39N4f24g0KQMTPKJ43sDSfzi6r8=";
+    hash = "sha256-KDci1Z5TZ+3svotYXkEG1s+bPWtxzIfQQwOgvI0k8w0=";
   };
 
   pythonRelaxDeps = [
@@ -62,7 +63,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     cssselect
     defusedxml
@@ -87,7 +88,10 @@ buildPythonPackage rec {
     glibcLocales
     jmespath
     pexpect
+    pytest-asyncio
+    pytest-twisted
     pytest-xdist
+    pyftpdlib
     pytestCheckHook
     sybil
     testfixtures
@@ -95,6 +99,11 @@ buildPythonPackage rec {
   ];
 
   LC_ALL = "en_US.UTF-8";
+
+  pytestFlags = [
+    # DeprecationWarning: There is no current event loop
+    "-Wignore::DeprecationWarning"
+  ];
 
   disabledTestPaths = [
     "tests/test_proxy_connect.py"
@@ -114,6 +123,9 @@ buildPythonPackage rec {
 
     # Don't test the documentation
     "docs"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "tests/test_feedexport.py"
   ];
 
   disabledTests = [
@@ -124,14 +136,20 @@ buildPythonPackage rec {
     "test_custom_asyncio_loop_enabled_true"
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
-    "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
+    # "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
     "test_persist"
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
     "test_unbounded_response"
     "CookiesMiddlewareTest"
+    "test_asyncio_enabled_reactor_same_loop"
+    "test_response_ip_address"
     # Test fails on Hydra
     "test_start_requests_laziness"
+
+    # Fails due to different path structure on NixOS
+    "test_start_deprecated_super"
+    "test_file_path"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_xmliter_encoding"
@@ -142,6 +160,9 @@ buildPythonPackage rec {
     # flaky on darwin-aarch64
     "test_fixed_delay"
     "test_start_requests_laziness"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "test_non_pickable_object"
   ];
 
   postInstall = ''

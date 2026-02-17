@@ -5,14 +5,14 @@
   ruby,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "h";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "zimbatm";
     repo = "h";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Iv+BqM6AF7wD5yyFSvA5pkG2yfQrNp6aBFV1OCUom5c=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.zimbatm ];
   };
-}
+})

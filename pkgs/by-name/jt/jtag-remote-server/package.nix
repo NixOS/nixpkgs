@@ -7,14 +7,14 @@
   libftdi1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jtag-remote-server";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "jiegec";
     repo = "jtag-remote-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qtgO0BO2hvWi/E2RzGTTuQynKbh7/OLeoLcm60dqro8=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = lib.platforms.unix;
   };
-}
+})

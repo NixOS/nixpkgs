@@ -5,8 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
-  typing-extensions,
   msrest,
 }:
 
@@ -14,8 +12,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-maps";
   version = "2.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,8 +23,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     msrest
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

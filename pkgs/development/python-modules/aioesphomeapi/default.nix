@@ -24,16 +24,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "43.2.1";
+  version = "44.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
-    tag = "v${version}";
-    hash = "sha256-OUmnamtVCMobTI99aRr81MECG51JHfzQ9bZs0C1Mmcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Su3tNBWJwPg4pluVNuBqlw132qBPDvnbhSVpSre28zg=";
   };
 
   build-system = [
@@ -76,11 +76,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
-    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
       hexa
     ];
   };
-}
+})

@@ -46,7 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace makefile \
-      --replace-fail 'cc' '${stdenv.cc.targetPrefix}cc'
+      --replace-fail 'cc' '${stdenv.cc.targetPrefix}cc' \
+      --replace-fail 'CFLAGS = ' 'CFLAGS = -std=c99 '
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace makefile \

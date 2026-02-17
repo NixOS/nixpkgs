@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nomad-driver-podman";
   version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "nomad-driver-podman";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fgJzlSJA2SMQU3aMUMoQEcVfkdPm5c8twWi97fxFQ3s=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

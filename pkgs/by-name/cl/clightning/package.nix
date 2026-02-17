@@ -27,13 +27,13 @@ let
     p.mako
   ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clightning";
-  version = "25.09.2";
+  version = "25.12.1";
 
   src = fetchurl {
-    url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    hash = "sha256-iLzVDWTdKkpAjmuyCnSnqyWiv6CgdzQwNTmWZH/x7gM=";
+    url = "https://github.com/ElementsProject/lightning/releases/download/v${finalAttrs.version}/clightning-v${finalAttrs.version}.zip";
+    hash = "sha256-50rcNH9dXeRezJ3nEW/cRK5uE+IpGoHAzkU3C7p44KY=";
   };
 
   # when building on darwin we need cctools to provide the correct libtool
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-valgrind" ];
 
-  makeFlags = [ "VERSION=v${version}" ];
+  makeFlags = [ "VERSION=v${finalAttrs.version}" ];
 
   enableParallelBuilding = true;
 
@@ -112,4 +112,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saga";
-  version = "9.10.2";
+  version = "9.11.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-fsMH2dXE0w1DsIYJC3RscT/aDDYeewXLo6MBLCL2zCo=";
+    hash = "sha256-cNk6/IcgqLgOrw2LaeM97pydFwLmDL6Mr169pjBNYDE=";
   };
 
   sourceRoot = "saga-${finalAttrs.version}/saga-gis";
@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog%20${finalAttrs.version}/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      michelk
       mpickering
     ];
     teams = [ lib.teams.geospatial ];

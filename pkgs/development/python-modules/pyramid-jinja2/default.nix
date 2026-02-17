@@ -9,15 +9,12 @@
   pytest-cov-stub,
   zope-deprecation,
   pyramid,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyramid-jinja2";
   version = "2.10.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pyramid_jinja2";

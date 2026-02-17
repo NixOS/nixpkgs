@@ -10,7 +10,6 @@
   jinja2,
   pkgs-docker,
   python-json-logger,
-  pythonOlder,
   requests,
   ruamel-yaml,
   semver,
@@ -21,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-repo2docker";
-  version = "2025.08.0";
+  version = "2025.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "repo2docker";
     tag = version;
-    hash = "sha256-vqLZbqshEl3xC5hcE4OkWfZpPSlSfv70oygEYPFqyFE=";
+    hash = "sha256-9ZRew9DspRENxhqpWFTSdP8KcQQHA4vMMECLikt+nsw=";
   };
 
   nativeBuildInputs = [ setuptools ];

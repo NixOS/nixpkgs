@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
@@ -11,9 +10,7 @@
 buildPythonPackage rec {
   pname = "pytest-datadir";
   version = "1.8.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gabrielcnr";

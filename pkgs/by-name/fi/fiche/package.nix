@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fiche";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "solusipse";
     repo = "fiche";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1102r39xw17kip7mjp987jy8na333gw9vxv31f7v8q05cr7d7kfb";
   };
 
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://github.com/solusipse/fiche";
-    changelog = "https://github.com/solusipse/fiche/releases/tag/${version}";
+    changelog = "https://github.com/solusipse/fiche/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pinpox ];
     platforms = lib.platforms.all;
     mainProgram = "fiche";
   };
-}
+})

@@ -10,14 +10,14 @@
   libva,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kmsvnc";
   version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "isjerryxiao";
     repo = "kmsvnc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fOryY9pkeRXjfOq4ZcUKBrBDMWEljLChwXSAbeMNXhw=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     mainProgram = "kmsvnc";
     platforms = lib.platforms.linux;
   };
-}
+})

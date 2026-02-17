@@ -6,11 +6,11 @@
 
 melpaBuild rec {
   pname = "ebuild-mode";
-  version = "1.79";
+  version = "1.81";
 
   src = fetchzip {
     url = "https://gitweb.gentoo.org/proj/ebuild-mode.git/snapshot/ebuild-mode-${version}.tar.bz2";
-    hash = "sha256-FV9e6QF85yPnowfmseo53/Q36W3wlOgTG0/X4r7OHiI=";
+    hash = "sha256-b+59Ec+NOHvFgbFOmnsvGjnq392VR1JCsPx/ORSdffo=";
   };
 
   meta = {

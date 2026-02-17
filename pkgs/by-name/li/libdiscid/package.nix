@@ -23,7 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lGq2iGt7c4h8HntEPeQcd7X+IykRLm0kvjrLswRWSSs=";
   };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation -framework IOKit";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = toString [
+      "-framework"
+      "CoreFoundation"
+      "-framework"
+      "IOKit"
+    ];
+  };
 
   passthru.updateScript = nix-update-script { };
 

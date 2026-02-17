@@ -46,6 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/c3d6b22b0032fd2b8772d99c2239c18473e197a7.patch";
       hash = "sha256-935KtaqPO2cghbD9Z8YMxGGOQJo1D1LqTje6/IL4bGI=";
     })
+
+    # Fix build with gcc15
+    # https://github.com/Reference-ScaLAPACK/scalapack/pull/139
+    (fetchpatch {
+      name = "scalapack-fix-function-declaration-arguments.patch";
+      url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/0cd017afa3eefd0597cfe71b7bcfd6356a258da2.patch";
+      hash = "sha256-uUdazKplDt8K5yuVaHX5pLFqDMh0F7eBBGEHfxOiM0Y=";
+    })
   ];
 
   # Required to activate ILP64.

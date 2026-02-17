@@ -3,7 +3,6 @@
   pkgs,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   click,
   joblib,
   regex,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "nltk";
   version = "3.9.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

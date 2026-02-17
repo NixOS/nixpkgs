@@ -4,23 +4,20 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "polyline";
-  version = "2.0.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frederickjansen";
     repo = "polyline";
     tag = "v${version}";
-    hash = "sha256-HUdjebUMcYGW+7dyOpVgBnBcesmqDWpw1NgYigOxmQ8=";
+    hash = "sha256-PaQLHz256ZZ+0PdSSeGM+rjubSnT4fQfpD1Uj3JfBt8=";
   };
 
   nativeBuildInputs = [

@@ -9,7 +9,6 @@
   poetry-core,
   pprintpp,
   pytestCheckHook,
-  pythonOlder,
   wrapt,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "tbm-utils";
   version = "2.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "thebigmunch";
@@ -45,6 +42,9 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail 'poetry>=1.0.0' 'poetry-core' \
       --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
+
+    substituteInPlace pytest.ini \
+      --replace-fail 'strict = True' 'strict = False'
   '';
 
   pythonRelaxDeps = [

@@ -56,10 +56,10 @@ let
     qemu
   ];
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mkosi";
-  version = "25.3";
-  format = "pyproject";
+  version = "26";
+  pyproject = true;
 
   outputs = [
     "out"
@@ -69,8 +69,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
-    rev = "21850673a7f75125d516268ce379dae776dd816a";
-    hash = "sha256-3dhr9lFJpI8aN8HILaMvGuuTbmTVUqdaLAGxSpqciTs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6DVIyFsEV2VkQ/kesn6cN+iH9MW+mmAZw5i0R5C4xaU=";
   };
 
   patches = [
@@ -123,7 +123,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Build legacy-free OS images";
     homepage = "https://github.com/systemd/mkosi";
-    changelog = "https://github.com/systemd/mkosi/releases/tag/v${version}";
+    changelog = "https://github.com/systemd/mkosi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl21Only;
     mainProgram = "mkosi";
     maintainers = with lib.maintainers; [
@@ -132,4 +132,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

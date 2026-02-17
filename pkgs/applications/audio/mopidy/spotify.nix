@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-spotify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pM+kqeWYiPXv9DZDBTgwiEwC6Sbqv6uz5vJ5odcixOw=";
   };
 

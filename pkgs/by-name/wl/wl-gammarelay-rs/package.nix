@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-gammarelay-rs";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "wl-gammarelay-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WdY90CUtphtUUFAh+daSQGmlWTn28Qc79A5yHTV3IOY=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.darwin;
   };
-}
+})

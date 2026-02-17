@@ -9,11 +9,15 @@
   lndir,
   perl,
   pkg-config,
+  copyPathToStore,
+  makeSetupHook,
   which,
   cmake,
   ninja,
   libproxy,
-  xorg,
+  libxcb-cursor,
+  libxtst,
+  libxdmcp,
   zstd,
   double-conversion,
   util-linux,
@@ -39,11 +43,11 @@
   glib,
   harfbuzz,
   icu,
-  libX11,
-  libXcomposite,
-  libXext,
-  libXi,
-  libXrender,
+  libx11,
+  libxcomposite,
+  libxext,
+  libxi,
+  libxrender,
   libjpeg,
   libpng,
   libxcb,
@@ -54,11 +58,11 @@
   pcre2,
   sqlite,
   udev,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   zlib,
   at-spi2-core,
   unixODBC,
@@ -88,8 +92,12 @@
 
 let
   isCrossBuild = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  fix_qt_builtin_paths = copyPathToStore ../../hooks/fix-qt-builtin-paths.sh;
+  fix_qt_module_paths = copyPathToStore ../../hooks/fix-qt-module-paths.sh;
+  qtPluginPrefix = "lib/qt-6/plugins";
+  qtQmlPrefix = "lib/qt-6/qml";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qtbase";
 
   inherit src version;
@@ -144,21 +152,21 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     # X11 libs
-    libX11
-    libXcomposite
-    libXext
-    libXi
-    libXrender
+    libx11
+    libxcomposite
+    libxext
+    libxi
+    libxrender
     libxcb
     libxkbcommon
-    xcbutil
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
-    xorg.libXdmcp
-    xorg.libXtst
-    xorg.xcbutilcursor
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
+    libxdmcp
+    libxtst
+    libxcb-cursor
     libepoxy
   ]
   ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
@@ -215,6 +223,9 @@ stdenv.mkDerivation rec {
     # allow translations to be found outside of install prefix, as is the case in our split builds
     ./allow-translations-outside-prefix.patch
 
+    # make internal find_package calls between Qt components work with split builds
+    ./use-cmake-path.patch
+
     # always link to libraries by name in qmake-generated build scripts
     ./qmake-always-use-libname.patch
     # always explicitly list includedir in qmake-generated pkg-config files
@@ -256,15 +267,10 @@ stdenv.mkDerivation rec {
       --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
   '';
 
-  fix_qt_builtin_paths = ../../hooks/fix-qt-builtin-paths.sh;
-  fix_qt_module_paths = ../../hooks/fix-qt-module-paths.sh;
   preHook = ''
-    . "$fix_qt_builtin_paths"
-    . "$fix_qt_module_paths"
+    . ${fix_qt_builtin_paths}
+    . ${fix_qt_module_paths}
   '';
-
-  qtPluginPrefix = "lib/qt-6/plugins";
-  qtQmlPrefix = "lib/qt-6/qml";
 
   cmakeFlags = [
     # makes Qt print the configure summary
@@ -324,7 +330,25 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  setupHook = ../../hooks/qtbase-setup-hook.sh;
+  setupHook =
+    let
+      hook = makeSetupHook {
+        name = "qtbase6-setup-hook";
+        substitutions = {
+          inherit
+            fix_qt_builtin_paths
+            fix_qt_module_paths
+            qtPluginPrefix
+            qtQmlPrefix
+            ;
+        };
+      } ../../hooks/qtbase-setup-hook.sh;
+    in
+    "${hook}/nix-support/setup-hook";
+
+  passthru = {
+    inherit qtPluginPrefix qtQmlPrefix;
+  };
 
   meta = {
     homepage = "https://www.qt.io/";

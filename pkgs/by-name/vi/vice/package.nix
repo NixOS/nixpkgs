@@ -27,12 +27,12 @@
   pulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vice";
   version = "3.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/vice-emu/vice-${version}.tar.gz";
+    url = "mirror://sourceforge/vice-emu/vice-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-QCArY0VeJrh+zGPrWlIyLG+j9XyrEqzwwifPn02uw3A=";
   };
 
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

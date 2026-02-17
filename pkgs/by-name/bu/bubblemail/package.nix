@@ -17,16 +17,16 @@
   bash,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bubblemail";
   version = "1.9";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "razer";
     repo = "bubblemail";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-eXEFBLo7CbLRlnI2nr7qWAdLUKe6PLQJ78Ho8MP9ShY=";
   };
 
@@ -78,4 +78,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/kittyandrew/grafana-to-ntfy";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     mainProgram = "grafana-to-ntfy";
   };
 }

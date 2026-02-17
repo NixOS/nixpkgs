@@ -3,18 +3,18 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qt5,
+  qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qmqtt";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "qmqtt";
-    rev = "v${version}";
-    hash = "sha256-JLGwEF5e/IKzPzCQBzB710REGWbc/MW+r5AHmyYUkUI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cIzBnJdMFY25cWf1rBoRQx1G0/5S32igF8vcte+nyHI=";
   };
 
   outputs = [
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt5.qtbase
+    qt6.qtbase
   ];
 
   meta = {
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.all;
   };
-}
+})

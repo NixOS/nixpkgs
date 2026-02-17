@@ -21,15 +21,15 @@
   enableAvx512 ? stdenv.hostPlatform.avx512Support,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srsran";
-  version = "23.11";
+  version = "25_10";
 
   src = fetchFromGitHub {
     owner = "srsran";
     repo = "srsran";
-    rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-3cQMZ75I4cyHpik2d/eBuzw7M4OgbKqroCddycw4uW8=";
+    rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    sha256 = "sha256-DwQ4u17m8D5RqX3OIYSyeE5+51sLah1qchRcwlX5i0A=";
   };
 
   outputs = [
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ hexagonal-sun ];
   };
-}
+})

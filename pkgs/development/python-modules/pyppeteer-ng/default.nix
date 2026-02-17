@@ -4,6 +4,7 @@
   aiohttp,
   appdirs,
   buildPythonPackage,
+  gitUpdater,
   certifi,
   diff-match-patch,
   fetchFromGitHub,
@@ -21,11 +22,10 @@
   pyee,
   pylint,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   readme-renderer,
   sphinx,
   sphinxcontrib-asyncio,
@@ -40,16 +40,14 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer-ng";
-  version = "2.0.0rc10";
+  version = "2.0.0rc13";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "pyppeteer-ng";
     tag = version;
-    hash = "sha256-NpxjKsh12pr/MCZ4gfoaa+3jTYyvQzHgSno1+rw2Wk0=";
+    hash = "sha256-zx3uzD0y5FIw2ZWU3fPzY3nmnuhLRo7Ml+rTY1HUA9Q=";
   };
 
   postPatch = ''
@@ -96,7 +94,7 @@ buildPythonPackage rec {
     pydocstyle
     pylint
     pytest
-    pytest-cov
+    pytest-cov-stub
     pytest-timeout
     pytest-xdist
     readme-renderer
@@ -148,6 +146,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pyppeteer" ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";

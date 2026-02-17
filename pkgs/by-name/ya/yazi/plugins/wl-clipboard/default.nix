@@ -22,6 +22,8 @@ mkYaziPlugin {
     hash = "sha256-3PRQl4TvuOe5DwVi1gmtmfTOEVZWRayijIbnPgaR3L8=";
   };
 
+  patches = [ ./0001-Fix-emit-function-call.patch ];
+
   meta = {
     description = "Wayland implementation of a simple system clipboard for yazi file manager";
     homepage = "https://github.com/grappas/wl-clipboard.yazi";

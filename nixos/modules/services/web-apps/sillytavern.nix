@@ -99,13 +99,13 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       # required by sillytavern's extension manager
-      path = [ pkgs.git ];
+      path = [ pkgs.gitMinimal ];
       environment.XDG_DATA_HOME = "%S";
       serviceConfig = {
         Type = "simple";
         ExecStart =
           let
-            f = x: name: lib.optional (x != null) "--${name}=${builtins.toString x}";
+            f = x: name: lib.optional (x != null) "--${name}=${toString x}";
           in
           lib.concatStringsSep " " (
             [

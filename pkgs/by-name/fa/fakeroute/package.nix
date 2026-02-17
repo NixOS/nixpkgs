@@ -5,12 +5,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fakeroute";
   version = "0.3";
 
   src = fetchurl {
-    url = "https://maxwell.eurofusion.eu/git/rnhmjoj/fakeroute/releases/download/v${version}/fakeroute-${version}.tar.gz";
+    url = "https://maxwell.eurofusion.eu/git/rnhmjoj/fakeroute/releases/download/v${finalAttrs.version}/fakeroute-${finalAttrs.version}.tar.gz";
     hash = "sha256-DoXGJm8vOlAD6ZuvVAt6bkgfahc8WgyYIXCrgqzfiWg=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "fakeroute";
   };
-}
+})

@@ -20,7 +20,7 @@
   faker,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nonbloat-db";
   version = "0.1.4";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PerchunPak";
     repo = "nonbloat-db";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x6QFOZ+RYdophuRXMKE4RNi1xDnsa3naUMDbn1vG7hM=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple key-value database for my small projects";
     homepage = "https://github.com/PerchunPak/nonbloat-db";
-    changelog = "https://github.com/PerchunPak/nonbloat-db/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/PerchunPak/nonbloat-db/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ PerchunPak ];
   };
-}
+})

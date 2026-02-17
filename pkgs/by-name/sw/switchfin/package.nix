@@ -15,15 +15,15 @@
   tweeny,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "switchfin";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "dragonflylee";
     repo = "switchfin";
-    rev = version;
-    hash = "sha256-G/kkiy0mWQwJchLc1bI1jhFXRoBCbw/CnV2R05esuqM=";
+    rev = finalAttrs.version;
+    hash = "sha256-EXYsx8y9tMOkuARe/ffon1IXicmwvZxByuze0wKeMh0=";
     fetchSubmodules = true;
   };
 
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Third-party native Jellyfin client for PC/PS4/PSVita/Nintendo Switch";
     homepage = "https://github.com/dragonflylee/switchfin";
-    changelog = "https://github.com/dragonflylee/switchfin/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/dragonflylee/switchfin/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.k900 ];
     mainProgram = "Switchfin";
     platforms = lib.platforms.all;
   };
-}
+})

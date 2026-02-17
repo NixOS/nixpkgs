@@ -31,9 +31,9 @@ let
     ${lib.concatLines (
       lib.mapAttrsToList (
         groupname: opts:
-        ''g ${groupname} ${
+        "g ${groupname} ${
           if opts.gid == null then "/var/lib/nixos/gid/${groupname}" else toString opts.gid
-        }''
+        }"
       ) userCfg.groups
     )}
 
@@ -152,7 +152,7 @@ in
           # systemd-sysusers cannot find it when we also pass another flag.
           ExecStart = lib.mkIf immutableEtc [
             ""
-            "${config.systemd.package}/bin/systemd-sysusers --root ${builtins.dirOf immutablePasswordFilesLocation} /etc/sysusers.d/00-nixos.conf"
+            "${config.systemd.package}/bin/systemd-sysusers --root ${dirOf immutablePasswordFilesLocation} /etc/sysusers.d/00-nixos.conf"
           ];
 
           # Make the source files writable before executing sysusers.

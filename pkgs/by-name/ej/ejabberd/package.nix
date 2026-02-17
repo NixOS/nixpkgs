@@ -140,7 +140,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "25.10";
+  version = "26.02";
 
   nativeBuildInputs = [
     makeWrapper
@@ -170,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-dTu3feSOakSHdk+hMDvYQwog64O3e/z5NOsGM3Rq7WY=";
+    hash = "sha256-izP7Rz65Lr4LDOCzZPdDWb3TyXDSTd/8gOPSfovVGM8=";
   };
 
   passthru.tests = {
@@ -199,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     touch _build/default/lib/.built
   '';
 
-  REBAR_IGNORE_DEPS = 1;
+  env.REBAR_IGNORE_DEPS = 1;
 
   postInstall = ''
     sed -i \

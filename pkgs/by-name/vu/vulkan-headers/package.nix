@@ -5,9 +5,9 @@
   cmake,
   ninja,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-headers";
-  version = "1.4.328.0";
+  version = "1.4.341.0";
 
   # Adding `ninja` here to enable Ninja backend. Otherwise on gcc-14 or
   # later the build fails as:
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Headers";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-Sg/zp6UhRC5wqBS3vdfs0sQL8cBgLiwvfG0oY0v9MWU=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-R/t0mAhNX+jREDVIFnv0agB9qtcnRb06K4OHtLRxWow=";
   };
 
   passthru.updateScript = ./update.sh;
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ralith ];
   };
-}
+})

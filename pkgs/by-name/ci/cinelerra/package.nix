@@ -25,12 +25,12 @@
   x264,
   gettext,
   openexr,
-  libXext,
-  libXxf86vm,
-  libXv,
-  libXi,
-  libX11,
-  libXft,
+  libxext,
+  libxxf86vm,
+  libxv,
+  libxi,
+  libx11,
+  libxft,
   xorgproto,
   libtheora,
   libpng,
@@ -96,12 +96,12 @@ stdenv.mkDerivation {
     x264
     gettext
     openexr
-    libXext
-    libXxf86vm
-    libXv
-    libXi
-    libX11
-    libXft
+    libxext
+    libxxf86vm
+    libxv
+    libxi
+    libx11
+    libxft
     xorgproto
     libtheora
     libpng

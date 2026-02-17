@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebels-in-the-sky";
-  version = "1.3.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "ricott1";
     repo = "rebels-in-the-sky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gMT62Uy9rFdtt2LnU7A9bPwH6lRrHVhzXQ03qUoS0CM=";
+    hash = "sha256-VyQfwZWvutc5BnAi6BbIfgRm5G4xBre76cyraQSvn6o=";
   };
 
-  cargoHash = "sha256-2Pn8QwviSgznchw56ZpU8J0+aGJOsGlr0OG0Uu5kpZs=";
+  cargoHash = "sha256-PL5WhqCLlH482uDoWETfwHarz3e2NJ0vezDMs52QavQ=";
 
   patches = lib.optionals (!withRadio) [
     ./disable-radio.patch
@@ -47,7 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/rebels";
-  versionCheckProgramArg = "--version";
   # Darwin: "Error: Operation not permitted (os error 1)"
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
 

@@ -10,14 +10,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hound";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "hound-search";
     repo = "hound";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Qdk57zLjTXLdDEmB6K+sZAym5s0BekJJa/CpYeOBOcY=";
   };
 
@@ -58,8 +58,7 @@ buildGoModule rec {
     homepage = "https://github.com/hound-search/hound";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      grahamc
       SuperSandro2000
     ];
   };
-}
+})

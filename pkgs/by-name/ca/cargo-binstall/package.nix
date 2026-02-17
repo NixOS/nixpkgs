@@ -9,18 +9,18 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-binstall";
-  version = "1.16.4";
+  version = "1.17.5";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
-    tag = "v${version}";
-    hash = "sha256-HF6SMGhtacSVt+YbrH7r0RIpGye6tWTbbSFuc4qNhCY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uYHaVNRq8iTeDs/EW5f5wp/fNBicNYzab4PgEHuY814=";
   };
 
-  cargoHash = "sha256-P8nA0PRf+kYxTZy5ZHkLUTf/E7SMQ3T6t/nWLNnRNLo=";
+  cargoHash = "sha256-IFYY3bSqm2OfbjmIHXbc0vIRhiw6Wwss8Sa3fx5s1Pk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -66,8 +66,8 @@ rustPlatform.buildRustPackage rec {
     description = "Tool for installing rust binaries as an alternative to building from source";
     mainProgram = "cargo-binstall";
     homepage = "https://github.com/cargo-bins/cargo-binstall";
-    changelog = "https://github.com/cargo-bins/cargo-binstall/releases/tag/v${version}";
+    changelog = "https://github.com/cargo-bins/cargo-binstall/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})

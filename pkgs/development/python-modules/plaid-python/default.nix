@@ -5,21 +5,18 @@
   nulltype,
   python-dateutil,
   urllib3,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "plaid-python";
-  version = "36.1.0";
+  version = "38.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "plaid_python";
     inherit version;
-    hash = "sha256-3TQ6jGsf+2ebYnAxRTKs4JrijDf3ojyfS4iBAMAG8FU=";
+    hash = "sha256-j/AypUXwsaeL6iYjW7xo53wwE+YGMLv8TRwSZ8CeGFk=";
   };
 
   build-system = [ setuptools ];

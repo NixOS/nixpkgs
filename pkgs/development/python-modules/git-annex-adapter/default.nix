@@ -8,7 +8,6 @@
   gitMinimal,
   pygit2,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   replaceVars,
   util-linux,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "git-annex-adapter";
   version = "0.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alpernebbi";

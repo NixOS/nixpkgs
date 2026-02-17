@@ -6,24 +6,22 @@
   setuptools,
   ipywidgets,
   fastcore,
+  fastgit,
   astunparse,
   watchdog,
   execnb,
   ghapi,
   pyyaml,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbdev";
-  version = "2.4.6";
+  version = "3.0.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nr5bHyhyJDFOilNOCW3DH67Q+J2n+jDvXhqPiXchUyQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-5NPOctZ68qS7ETEr/zwRY9Q66gjVa3F7gyc7cssyI4A=";
   };
 
   pythonRelaxDeps = [ "ipywidgets" ];
@@ -37,6 +35,7 @@ buildPythonPackage rec {
     astunparse
     execnb
     fastcore
+    fastgit
     ghapi
     ipywidgets
     pyyaml
@@ -51,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/fastai/nbdev";
     description = "Create delightful software with Jupyter Notebooks";
-    changelog = "https://github.com/fastai/nbdev/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/fastai/nbdev/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
-}
+})

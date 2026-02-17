@@ -6,7 +6,9 @@
   six,
   setuptools,
   setuptools-scm,
-  xorg,
+  libx11,
+  xvfb,
+  xauth,
   mock,
   pytestCheckHook,
   util-linux,
@@ -28,7 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   propagatedBuildInputs = [ six ];
 
@@ -38,8 +40,8 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     util-linux
-    xorg.xauth
-    xorg.xvfb
+    xauth
+    xvfb
   ];
 
   disabledTestPaths = [

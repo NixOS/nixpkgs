@@ -10,7 +10,7 @@
   liblo,
   lv2,
   qt6,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     liblo
     lv2
-    xorg.libX11
+    libx11
     qt6.qtbase
     qt6.qtwayland
     qt6.qtsvg

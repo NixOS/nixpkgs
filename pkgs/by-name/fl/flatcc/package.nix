@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flatcc";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "dvidelabs";
     repo = "flatcc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-0/IZ7eX6b4PTnlSSdoOH0FsORGK9hrLr1zlr/IHsJFQ=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     license = [ lib.licenses.asl20 ];
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

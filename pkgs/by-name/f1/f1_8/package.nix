@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://dotcolon.net/font/f1_8/";
+    homepage = "https://dotcolon.net/font/f1_8/";
     description = "Weighted decorative font";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ minijackson ];

@@ -7,9 +7,10 @@
   xdg-utils,
   electron_39,
   makeDesktopItem,
+  nodejs_22,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage.override { nodejs = nodejs_22; } rec {
   pname = "webcord";
   version = "4.12.1";
 

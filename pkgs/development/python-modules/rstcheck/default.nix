@@ -5,7 +5,6 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
   rstcheck-core,
   sphinx,
   typer,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "rstcheck";
   version = "6.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rstcheck";

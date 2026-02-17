@@ -12,19 +12,15 @@
 
 buildPythonPackage rec {
   pname = "python-pooldose";
-  version = "0.8.0";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmaertin";
     repo = "python-pooldose";
     tag = version;
-    hash = "sha256-zOl+c/bJmCH3ZUKcZDbRhnfctiQoq6z+C6LGHN6Jrhc=";
+    hash = "sha256-zhEUsbHIe31PQt4p0VhrZN3Y2ifE94br/D2ksRSh6Pg=";
   };
-
-  postPatch = ''
-    rm -r src/pooldose/values/__pycache__
-  '';
 
   build-system = [ setuptools ];
 

@@ -8,72 +8,83 @@
   symlinkJoin,
   autoAddDriverRunpath,
 
-  # build system
+  # nativeBuildInputs
+  which,
+
+  # build-system
   cmake,
+  grpcio-tools,
   jinja2,
   ninja,
   packaging,
   setuptools,
   setuptools-scm,
 
+  # buildInputs
+  onednn,
+  numactl,
+  llvmPackages,
+
   # dependencies
-  which,
-  torch,
-  outlines,
-  psutil,
-  ray,
-  pandas,
-  pyarrow,
-  sentencepiece,
-  numpy,
-  transformers,
-  xformers,
-  xgrammar,
-  numba,
-  fastapi,
-  uvicorn,
-  pydantic,
   aioprometheus,
   anthropic,
-  nvidia-ml-py,
-  openai,
-  pyzmq,
-  tiktoken,
-  torchaudio,
-  torchvision,
-  py-cpuinfo,
-  lm-format-enforcer,
-  prometheus-fastapi-instrumentator,
-  cupy,
-  cbor2,
-  pybase64,
-  gguf,
-  einops,
-  importlib-metadata,
-  partial-json-parser,
-  compressed-tensors,
-  mistral-common,
-  msgspec,
-  model-hosting-container-standards,
-  numactl,
-  tokenizers,
-  oneDNN,
+  bitsandbytes,
   blake3,
-  depyf,
-  opencv-python-headless,
   cachetools,
+  cbor2,
+  compressed-tensors,
+  depyf,
+  einops,
+  fastapi,
+  gguf,
+  grpcio,
+  grpcio-reflection,
+  ijson,
+  importlib-metadata,
   llguidance,
-  python-json-logger,
-  python-multipart,
-  llvmPackages,
-  opentelemetry-sdk,
+  lm-format-enforcer,
+  mcp,
+  mistral-common,
+  model-hosting-container-standards,
+  msgspec,
+  numba,
+  numpy,
+  openai,
+  openai-harmony,
+  opencv-python-headless,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
-  bitsandbytes,
-  flashinfer,
-  py-libnuma,
+  opentelemetry-sdk,
+  outlines,
+  pandas,
+  partial-json-parser,
+  prometheus-fastapi-instrumentator,
+  py-cpuinfo,
+  pyarrow,
+  pybase64,
+  pydantic,
+  python-json-logger,
+  python-multipart,
+  pyzmq,
+  ray,
+  sentencepiece,
   setproctitle,
-  openai-harmony,
+  tiktoken,
+  tokenizers,
+  torch,
+  torchaudio,
+  torchvision,
+  transformers,
+  uvicorn,
+  xformers,
+  xgrammar,
+  # linux-only
+  psutil,
+  py-libnuma,
+  # cuda-only
+  cupy,
+  flashinfer,
+  nvidia-ml-py,
 
   # optional-dependencies
   # audio
@@ -122,8 +133,8 @@ let
   cutlass-flashmla = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.9.0";
-    hash = "sha256-Q6y/Z6vahASeSsfxvZDwbMFHGx8CnsF90IlveeVLO9g=";
+    rev = "147f5673d0c1c3dcf66f78d677fd647e4a020219";
+    hash = "sha256-dHQto08IwTDOIuFUp9jwm1MWkFi8v2YJ/UESrLuG71g=";
   };
 
   flashmla = stdenv.mkDerivation {
@@ -137,8 +148,8 @@ let
       name = "FlashMLA-source";
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "46d64a8ebef03fa50b4ae74937276a5c940e3f95";
-      hash = "sha256-jtMzWB5hKz8mJGsdK6q4YpQbGp9IrQxbwmB3a64DIl0=";
+      rev = "c2afa9cb93e674d5a9120a170a6da57b89267208";
+      hash = "sha256-pKlwxV6G9iHag/jbu3bAyvYvnu5TbrQwUMFV0AlGC3s=";
     };
 
     dontConfigure = true;
@@ -152,6 +163,15 @@ let
     installPhase = ''
       cp -rva . $out
     '';
+  };
+
+  # grep for DEFAULT_TRITON_KERNELS_TAG in the following file
+  # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/triton_kernels.cmake
+  triton-kernels = fetchFromGitHub {
+    owner = "triton-lang";
+    repo = "triton";
+    tag = "v3.5.0";
+    hash = "sha256-F6T0n37Lbs+B7UHNYzoIQHjNNv3TcMtoXjNrT8ZUlxY=";
   };
 
   # grep for GIT_TAG in the following file
@@ -175,8 +195,8 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "58e0626a692f09241182582659e3bf8f16472659";
-      hash = "sha256-ewdZd7LuBKBV0y3AaGRWISJzjg6cu59D2OtgqoDjrbM=";
+      rev = "188be16520ceefdc625fdf71365585d2ee348fe2";
+      hash = "sha256-Osec+/IF3+UDtbIhDMBXzUeWJ7hDJNb5FpaVaziPSgM=";
     };
 
     patches = [
@@ -212,7 +232,7 @@ let
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
-  # https://github.com/pytorch/pytorch/blob/v2.8.0/torch/utils/cpp_extension.py#L2411-L2414
+  # https://github.com/pytorch/pytorch/blob/v2.9.1/torch/utils/cpp_extension.py#L2407-L2410
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -235,10 +255,10 @@ let
         "9.0a"
         "10.0"
         "10.0a"
-        "10.1"
-        "10.1a"
         "10.3"
         "10.3a"
+        "11.0"
+        "11.0a"
         "12.0"
         "12.0a"
         "12.1"
@@ -302,18 +322,16 @@ let
 
 in
 
-buildPythonPackage rec {
+buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.11.2";
+  version = "0.15.1";
   pyproject = true;
-
-  stdenv = torch.stdenv;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = "vllm";
-    tag = "v${version}";
-    hash = "sha256-DoSlkFmR3KKEtfSfdRB++0CZeeXgxmM3zZjONlxbe8U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qsAvcOB8ugGlBqBrLfNHqaIUcxLwaXBTg8xWRnGyd94=";
   };
 
   patches = [
@@ -345,10 +363,6 @@ buildPythonPackage rec {
       --replace-fail \
         'set(PYTHON_SUPPORTED_VERSIONS' \
         'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
-
-    # Pass build environment PYTHONPATH to vLLM's Python configuration scripts
-    substituteInPlace CMakeLists.txt \
-      --replace-fail '$PYTHONPATH' '$ENV{PYTHONPATH}'
   '';
 
   nativeBuildInputs = [
@@ -367,6 +381,7 @@ buildPythonPackage rec {
 
   build-system = [
     cmake
+    grpcio-tools
     jinja2
     ninja
     packaging
@@ -377,7 +392,7 @@ buildPythonPackage rec {
 
   buildInputs =
     lib.optionals cpuSupport [
-      oneDNN
+      onednn
     ]
     ++ lib.optionals (cpuSupport && stdenv.hostPlatform.isLinux) [
       numactl
@@ -407,18 +422,36 @@ buildPythonPackage rec {
   dependencies = [
     aioprometheus
     anthropic
+    bitsandbytes
     blake3
     cachetools
     cbor2
+    compressed-tensors
     depyf
+    einops
     fastapi
+    gguf
+    grpcio
+    grpcio-reflection
+    ijson
+    importlib-metadata
     llguidance
     lm-format-enforcer
+    mcp
+    mistral-common
+    model-hosting-container-standards
+    msgspec
+    numba
     numpy
     openai
+    openai-harmony
     opencv-python-headless
+    opentelemetry-api
+    opentelemetry-exporter-otlp
+    opentelemetry-sdk
     outlines
     pandas
+    partial-json-parser
     prometheus-fastapi-instrumentator
     py-cpuinfo
     pyarrow
@@ -429,43 +462,29 @@ buildPythonPackage rec {
     pyzmq
     ray
     sentencepiece
+    setproctitle
     tiktoken
     tokenizers
-    msgspec
-    gguf
-    einops
-    importlib-metadata
-    partial-json-parser
-    compressed-tensors
-    mistral-common
-    model-hosting-container-standards
     torch
+    # vLLM needs Torch's compiler to be present in order to use torch.compile
+    torch.stdenv.cc
     torchaudio
     torchvision
     transformers
     uvicorn
     xformers
     xgrammar
-    numba
-    opentelemetry-sdk
-    opentelemetry-api
-    opentelemetry-exporter-otlp
-    bitsandbytes
-    setproctitle
-    openai-harmony
-    # vLLM needs Torch's compiler to be present in order to use torch.compile
-    torch.stdenv.cc
   ]
   ++ uvicorn.optional-dependencies.standard
   ++ aioprometheus.optional-dependencies.starlette
   ++ lib.optionals stdenv.targetPlatform.isLinux [
-    py-libnuma
     psutil
+    py-libnuma
   ]
   ++ lib.optionals cudaSupport [
     cupy
-    nvidia-ml-py
     flashinfer
+    nvidia-ml-py
   ];
 
   optional-dependencies = {
@@ -500,6 +519,7 @@ buildPythonPackage rec {
     lib.optionalAttrs cudaSupport {
       VLLM_TARGET_DEVICE = "cuda";
       CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
+      TRITON_KERNELS_SRC_DIR = "${lib.getDev triton-kernels}/python/triton_kernels/triton_kernels";
     }
     // lib.optionalAttrs rocmSupport {
       VLLM_TARGET_DEVICE = "rocm";
@@ -509,7 +529,7 @@ buildPythonPackage rec {
     }
     // lib.optionalAttrs cpuSupport {
       VLLM_TARGET_DEVICE = "cpu";
-      FETCHCONTENT_SOURCE_DIR_ONEDNN = "${oneDNN.src}";
+      FETCHCONTENT_SOURCE_DIR_ONEDNN = "${onednn.src}";
     };
 
   preConfigure = ''
@@ -531,7 +551,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";
-    changelog = "https://github.com/vllm-project/vllm/releases/tag/v${version}";
+    changelog = "https://github.com/vllm-project/vllm/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/vllm-project/vllm";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
@@ -551,4 +571,4 @@ buildPythonPackage rec {
       "x86_64-darwin"
     ];
   };
-}
+})

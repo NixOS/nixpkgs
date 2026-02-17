@@ -15,7 +15,10 @@
   cosmic-settings,
   libGL,
   libxkbcommon,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   wayland,
   vulkan-loader,
 
@@ -36,10 +39,10 @@ makeSetupHook {
     [
       libGL
       libxkbcommon
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libxcb
+      libx11
+      libxcursor
+      libxi
+      libxcb
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       wayland
@@ -57,10 +60,7 @@ makeSetupHook {
       lib.makeSearchPath "share" (
         lib.optionals includeSettings [ fallbackThemes ] ++ [ targetPackages.cosmic-icons or cosmic-icons ]
       );
-    # Temporarily using RUSTFLAGS: https://github.com/NixOS/nixpkgs/issues/464392
-    # See ./libcosmic-app-hook.sh
-    # cargoLinkerVar = targetPackages.stdenv.hostPlatform.rust.cargoEnvVarTarget;
-
+    cargoLinkerVar = stdenv.targetPlatform.rust.cargoEnvVarTarget;
     # force linking for all libraries that may be dlopen'd by libcosmic/iced apps
     cargoLinkLibs = lib.escapeShellArgs (
       [

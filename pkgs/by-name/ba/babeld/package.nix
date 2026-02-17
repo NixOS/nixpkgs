@@ -5,14 +5,19 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "babeld";
   version = "1.13.1";
 
   src = fetchurl {
-    url = "https://www.irif.fr/~jch/software/files/${pname}-${version}.tar.gz";
+    url = "https://www.irif.fr/~jch/software/files/babeld-${finalAttrs.version}.tar.gz";
     hash = "sha256-FfJNJtoMz8Bzq83vAwnygeRoTyqnESb4JlcsTIRejdk=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile \
+      --replace-fail "-lrt" ""
+  '';
 
   outputs = [
     "out"
@@ -30,8 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.irif.fr/~jch/software/babel/";
     description = "Loop-avoiding distance-vector routing protocol";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hexa ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "babeld";
   };
-}
+})

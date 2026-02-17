@@ -18,7 +18,7 @@ If your package uses native addons, you need to examine what kind of native buil
 - `node-gyp-builder`
 - `node-pre-gyp`
 
-After you have identified the correct system, you need to override your package expression while adding in build system as a build input.
+After you have identified the correct system, you need to override your package expression while adding the build system as a build input.
 For example, `dat` requires `node-gyp-build`, so we override its expression in [pkgs/development/node-packages/overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix):
 
 ```nix
@@ -54,15 +54,14 @@ To add a package from npm to Nixpkgs:
    nix-build -A nodePackages.<new-or-updated-package>
    ```
 
-    To build against the latest stable Current Node.js version (e.g. 18.x):
+    To build against the latest stable current Node.js version (e.g. 18.x):
 
     ```sh
     nix-build -A nodePackages_latest.<new-or-updated-package>
     ```
 
     If the package doesn't build, you may need to add an override as explained above.
-4. If the package's name doesn't match any of the executables it provides, add an entry in [pkgs/development/node-packages/main-programs.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/main-programs.nix). This will be the case for all scoped packages, e.g., `@angular/cli`.
-5. Add and commit all modified and generated files.
+4. Add and commit all modified and generated files.
 
 For more information about the generation process, consult the [README.md](https://github.com/svanderburg/node2nix) file of the `node2nix` tool.
 

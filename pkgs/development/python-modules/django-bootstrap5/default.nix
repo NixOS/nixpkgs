@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap5";
-  version = "25.2";
+  version = "26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap5";
     tag = "v${version}";
-    hash = "sha256-aqP2IkAkZsw5vbQxhiy9L3giSgb0seub9gsxPTajiXo=";
+    hash = "sha256-kLq1BHN4PKwtAH/TqHn8B697K9Nk5mNMpjUsW5cCrj4=";
   };
 
   patches = [

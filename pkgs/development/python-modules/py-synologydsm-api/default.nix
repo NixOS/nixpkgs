@@ -7,7 +7,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   syrupy,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "py-synologydsm-api";
   version = "2.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mib1185";

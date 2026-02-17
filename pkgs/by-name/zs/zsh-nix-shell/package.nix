@@ -8,14 +8,14 @@
 # To make use of this derivation, use
 # `programs.zsh.interactiveShellInit = "source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh";`
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsh-nix-shell";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "chisui";
     repo = "zsh-nix-shell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Z6EYQdasvpl1P78poj9efnnLj7QQg13Me8x1Ryyw+dM=";
   };
 
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Zsh plugin that lets you use zsh in nix-shell shell";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aw ];
   };
-}
+})

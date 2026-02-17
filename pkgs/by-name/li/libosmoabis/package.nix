@@ -9,21 +9,21 @@
   linphonePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libosmoabis";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-abis";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-OdmegQXdbpwNBepY+7MeUjaEguVo2q9b8lSkRmlXHEc=";
   };
 
   configureFlags = [ "enable_dahdi=false" ];
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
       markuskowa
     ];
   };
-}
+})

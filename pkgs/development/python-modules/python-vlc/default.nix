@@ -5,7 +5,6 @@
   setuptools,
   libvlc,
   replaceVars,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

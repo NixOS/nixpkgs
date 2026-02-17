@@ -25,19 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VeB0R/6h9FXSzBfx0IgpGlBz16zQScDSiU7ZvTD/Cds=";
   };
 
-  postPatch = ''
+  postConfigure = ''
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
   nativeBuildInputs = [
     installShellFiles
-    zig.hook
+    zig
   ];
 
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     homepage = "https://tangled.sh/@rockorager.dev/lsr";

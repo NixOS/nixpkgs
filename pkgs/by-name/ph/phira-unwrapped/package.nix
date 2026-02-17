@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-6mRb3M56G20fA+px1cZyrGpel0v54qoVAQK2ZgTzkmI=";
 
   # The developer put assets necessary for this test in gitignore, so it cannot run.
-  checkFlags = [ "--skip test_parse_chart" ];
+  checkFlags = [ "--skip=test_parse_chart" ];
 
   desktopItems = [
     (makeDesktopItem {

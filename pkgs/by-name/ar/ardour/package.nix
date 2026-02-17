@@ -36,6 +36,7 @@
   libusb1,
   libuv,
   libwebsockets,
+  libxi,
   libxml2,
   libxslt,
   lilv,
@@ -59,7 +60,8 @@
   vamp-plugin-sdk,
   wafHook,
   xjadeo,
-  xorg,
+  libxrandr,
+  libxinerama,
   optimize ? true, # disable to print Lua DSP script output to stdout
   videoSupport ? true,
 }:
@@ -70,14 +72,14 @@ stdenv.mkDerivation (
   in
   {
     pname = "ardour";
-    version = "8.12";
+    version = "9.0";
 
     # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
     # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
     src = fetchgit {
       url = "git://git.ardour.org/ardour/ardour.git";
       rev = finalAttrs.version;
-      hash = "sha256-4IgBQ53cwPA35YwNQyo+qBqsMGv+TLn6w1zaDX97erE=";
+      hash = "sha256-zgWNKYN45qa2xLWnL3W/UWfRVBJN3+hya9dpIZLLJvo=";
     };
 
     bundledContent = fetchzip {
@@ -145,6 +147,7 @@ stdenv.mkDerivation (
       libusb1
       libuv
       libwebsockets
+      libxi
       libxml2
       libxslt
       lilv
@@ -164,8 +167,8 @@ stdenv.mkDerivation (
       suil
       taglib
       vamp-plugin-sdk
-      xorg.libXinerama
-      xorg.libXrandr
+      libxinerama
+      libxrandr
     ]
     ++ lib.optionals videoSupport [
       harvid
@@ -188,6 +191,15 @@ stdenv.mkDerivation (
       # "--use-external-libs"
     ]
     ++ lib.optional optimize "--optimize";
+
+    env.NIX_CFLAGS_COMPILE = toString [
+      # 'ioprio_set' syscall support:
+      "-D_GNU_SOURCE"
+      # compiler doesn't find headers without these:
+      "-I${lib.getDev serd}/include/serd-0"
+      "-I${lib.getDev sratom}/include/sratom-0"
+      "-I${lib.getDev sord}/include/sord-0"
+    ];
 
     postInstall = ''
       # wscript does not install these for some reason
@@ -230,7 +242,7 @@ stdenv.mkDerivation (
       '';
       homepage = "https://ardour.org/";
       license = lib.licenses.gpl2Plus;
-      mainProgram = "ardour8";
+      mainProgram = "ardour9";
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [
         magnetophon

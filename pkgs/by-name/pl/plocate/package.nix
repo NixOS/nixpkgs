@@ -9,14 +9,14 @@
   liburing,
   zstd,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plocate";
-  version = "1.1.23";
+  version = "1.1.24";
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
-    rev = version;
-    sha256 = "sha256-TWQ2mVzosB6sGNUXI2D9GGqgaRZcmiL9GSGrrusck5Q=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-VvHptw/PG2uWflTmGNCj1PXIguXv9Bikz8qj2hRMnaQ=";
   };
 
   postPatch = ''
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

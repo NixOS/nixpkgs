@@ -15,16 +15,18 @@
   fetchpatch,
   withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
   libutempter,
+  # build server binary only when set to false (useful for perlless systems)
+  withClient ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mosh";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mobile-shell";
     repo = "mosh";
-    rev = "mosh-${version}";
+    rev = "mosh-${finalAttrs.version}";
     hash = "sha256-tlSsHu7JnXO+sorVuWWubNUNdb9X0/pCaiGG5Y0X/g8=";
   };
 
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
     zlib
     openssl
     bash-completion
+  ]
+  ++ lib.optionals withClient [
     perl
   ]
   ++ lib.optional withUtempter libutempter;
@@ -70,9 +74,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-completion" ] ++ lib.optional withUtempter "--with-utempter";
 
-  postInstall = ''
-    wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
-  '';
+  postInstall =
+    if withClient then
+      ''
+        wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
+      ''
+    else
+      ''
+        rm $out/bin/mosh
+        rm $out/bin/mosh-client
+        rm -r $out/share/{man,bash-completion}
+      '';
 
   meta = {
     homepage = "https://mosh.org/";
@@ -89,4 +101,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ skeuchel ];
     platforms = lib.platforms.unix;
   };
-}
+})

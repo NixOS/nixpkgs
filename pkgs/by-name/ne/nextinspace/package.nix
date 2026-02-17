@@ -4,15 +4,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nextinspace";
   version = "2.0.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "not-stirred";
     repo = "nextinspace";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CrhzCvIA3YAFsWvdemvK1RLMacsM5RtgMjLeiqz5MwY=";
   };
 
@@ -43,4 +43,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

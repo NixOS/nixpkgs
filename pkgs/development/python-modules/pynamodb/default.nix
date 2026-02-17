@@ -8,17 +8,13 @@
   pytest-env,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pynamodb";
   version = "6.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pynamodb";
@@ -29,7 +25,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ botocore ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  dependencies = [ botocore ];
 
   optional-dependencies = {
     signal = [ blinker ];

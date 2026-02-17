@@ -4,7 +4,7 @@
   perl,
   fetchurl,
   python3,
-  fmt,
+  fmt_9,
   libidn,
   pkg-config,
   spidermonkey_115,
@@ -24,8 +24,8 @@
   libGLU,
   libGL,
   xorgproto,
-  libX11,
-  libXcursor,
+  libx11,
+  libxcursor,
   nspr,
   SDL2,
   gloox,
@@ -34,18 +34,18 @@
   cxxtest,
   freetype,
   withEditor ? true,
-  wxGTK,
+  wxGTK32,
 }:
 
 # You can find more instructions on how to build 0ad here:
 #    https://trac.wildfiregames.com/wiki/BuildInstructions
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "0ad";
   version = "0.27.1";
 
   src = fetchurl {
-    url = "https://releases.wildfiregames.com/0ad-${version}-unix-build.tar.xz";
+    url = "https://releases.wildfiregames.com/0ad-${finalAttrs.version}-unix-build.tar.xz";
     hash = "sha256-oKU1XutZaNJPKDdwc2FQ2XTa/sugd1TUZicH3BcBa/s=";
   };
 
@@ -73,26 +73,26 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     xorgproto
-    libX11
-    libXcursor
+    libx11
+    libxcursor
     nspr
     SDL2
     gloox
     nvidia-texture-tools
     libsodium
-    fmt
+    fmt_9
     freetype
     premake5
     cxxtest
   ]
-  ++ lib.optional withEditor wxGTK;
+  ++ lib.optional withEditor wxGTK32;
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${xorgproto}/include"
-    "-I${libX11.dev}/include"
-    "-I${libXcursor.dev}/include"
+    "-I${libx11.dev}/include"
+    "-I${libxcursor.dev}/include"
     "-I${SDL2}/include/SDL2"
-    "-I${fmt.dev}/include"
+    "-I${fmt_9.dev}/include"
     "-I${nvidia-texture-tools.dev}/include"
   ];
 
@@ -176,4 +176,4 @@ stdenv.mkDerivation rec {
     platforms = lib.subtractLists lib.platforms.i686 lib.platforms.linux;
     mainProgram = "0ad";
   };
-}
+})

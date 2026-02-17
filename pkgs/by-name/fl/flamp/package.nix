@@ -4,7 +4,7 @@
   fetchgit,
   autoreconfHook,
   pkg-config,
-  fltk13,
+  fltk_1_3,
   gettext,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fltk13
+    fltk_1_3
   ];
 
   enableParallelBuilding = true;

@@ -10,14 +10,14 @@
   libconfig,
 }:
 
-stdenv.mkDerivation (oldAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "logiops";
   version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "PixlOne";
     repo = "logiops";
-    tag = "v${oldAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GAnlPqjIFGyOWwYFs7gth2m9ITc1jyiaW0sWwQ2zFOs=";
     # In v0.3.0, the `ipcgull` submodule was added as a dependency
     # https://github.com/PixlOne/logiops/releases/tag/v0.3.0
@@ -40,11 +40,11 @@ stdenv.mkDerivation (oldAttrs: {
   ];
 
   cmakeFlags = [
-    "-DLOGIOPS_VERSION=${oldAttrs.version}"
+    "-DLOGIOPS_VERSION=${finalAttrs.version}"
     "-DDBUS_SYSTEM_POLICY_INSTALL_DIR=${placeholder "out"}/share/dbus-1/system.d"
   ];
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   meta = {
     description = "Unofficial userspace driver for HID++ Logitech devices";

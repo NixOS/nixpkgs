@@ -14,18 +14,18 @@
 let
   inherit (darwin) libresolv;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "onefetch";
-  version = "2.25.0";
+  version = "2.26.1";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = "onefetch";
-    rev = version;
-    hash = "sha256-ZaaSuHWkhJx0q1CBAiRhwoLeeyyoAj6/vP3AJwybjAo=";
+    rev = finalAttrs.version;
+    hash = "sha256-JT7iQRKOK/2Zh/IDMv1FM1szITeBaaMy+WuXHjpPkfY=";
   };
 
-  cargoHash = "sha256-56Net4nNRndePhdsQPbmqiPHpOUGMmnQt6BuplQpvSU=";
+  cargoHash = "sha256-VBbiOA/+SPcIvmhNQ71gUBOIWEWV1A86rljBfdAfhZM=";
 
   cargoPatches = [
     # enable pkg-config feature of zstd
@@ -67,11 +67,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
-    changelog = "https://github.com/o2sh/onefetch/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/o2sh/onefetch/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kloenk
     ];
     mainProgram = "onefetch";
   };
-}
+})

@@ -26,8 +26,9 @@ let
           "\"" + (toString v) + "\""
       )
     ) a;
-  nonBlockSettings = lib.filterAttrs (n: v: !(builtins.isAttrs v || builtins.isList v)) cfg.settings;
-  pureBlockSettings = builtins.removeAttrs cfg.settings (builtins.attrNames nonBlockSettings);
+  settings = lib.filterAttrs (n: v: !(isNull v)) cfg.settings;
+  nonBlockSettings = lib.filterAttrs (n: v: !(builtins.isAttrs v || builtins.isList v)) settings;
+  pureBlockSettings = removeAttrs settings (builtins.attrNames nonBlockSettings);
   blocks =
     pureBlockSettings
     // lib.optionalAttrs cfg.fluidsynth {
@@ -143,9 +144,13 @@ in
       };
 
       openFirewall = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Open ports in the firewall for mpd.";
+        type = lib.types.nullOr lib.types.bool;
+        default = null;
+        description = ''
+          Open ports in the firewall for mpd. If `null` (default), you might
+          get a warning asking you to set it explicitly to `true` or `false`,
+          depending upon the value of `services.mpd.settings.bind_to_address`.
+        '';
       };
 
       settings = lib.mkOption {
@@ -217,7 +222,7 @@ in
             };
 
             db_file = lib.mkOption {
-              type = lib.types.path;
+              type = lib.types.nullOr lib.types.path;
               default = "${cfg.dataDir}/tag_cache";
               defaultText = lib.literalExpression ''"''${dataDir}/tag_cache"'';
               description = ''
@@ -371,13 +376,16 @@ in
     warnings =
       lib.optional
         (
-          !(builtins.elem cfg.bind_to_address [
-            "localhost"
-            "127.0.0.1"
-          ])
-          && !cfg.openFirewall
+          !(
+            (builtins.elem cfg.settings.bind_to_address [
+              "localhost"
+              "127.0.0.1"
+            ])
+            || (lib.hasPrefix "/" cfg.settings.bind_to_address)
+          )
+          && (isNull cfg.openFirewall)
         )
-        "Using '${cfg.bind_to_address}' as services.mpd.settings.bind_to_address without enabling services.mpd.openFirewall, might prevent you from accessing MPD from other clients.";
+        "Using '${cfg.settings.bind_to_address}' as services.mpd.settings.bind_to_address without enabling services.mpd.openFirewall, might prevent you from accessing MPD from other clients. To suppress this warning, set services.mpd.openFirewall explicitly to `false`";
 
     # install mpd units
     systemd.packages = [ pkgs.mpd ];
@@ -408,7 +416,7 @@ in
         lib.concatStringsSep "\n" (
           lib.imap0 (
             i: c:
-            ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf''
+            "${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf"
           ) cfg.credentials
         )
       );
@@ -435,7 +443,9 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ cfg.settings.port ];
+    networking.firewall.allowedTCPPorts = lib.optionals (
+      builtins.isBool cfg.openFirewall && cfg.openFirewall
+    ) [ cfg.settings.port ];
 
     users.users = lib.optionalAttrs (cfg.user == name) {
       ${name} = {

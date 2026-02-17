@@ -37,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/illiliti/libudev-zero/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       qyliss
-      shamilton
     ];
     license = lib.licenses.isc;
     pkgConfigModules = [ "libudev" ];

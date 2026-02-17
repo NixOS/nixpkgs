@@ -12,13 +12,13 @@
   binutils,
   cairo,
   epoll-shim,
-  git,
   glaze,
   hyprcursor,
   hyprgraphics,
   hyprland-qtutils,
   hyprlang,
   hyprutils,
+  hyprwire,
   hyprwayland-scanner,
   libGL,
   libdrm,
@@ -38,7 +38,11 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xorg,
+  libxcb-wm,
+  libxcb-errors,
+  libxdmcp,
+  libxcursor,
+  libxcb,
   xwayland,
   debug ? false,
   enableXWayland ? true,
@@ -91,28 +95,34 @@ assert assertMsg (
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.52.2";
+  version = "0.53.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R2Hm7XbW8CTLEIeYCAlSQ3U5bFhn76FC17hEy/ws8EM=";
+    hash = "sha256-as2crdrJUVOawO8XkWJEZBUNaFdPS8QuQiccTkM1la0=";
   };
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
-    sed -i "s#/usr#$out#" src/render/OpenGL.cpp
+    substituteInPlace src/render/OpenGL.cpp \
+      --replace-fail /usr $out
 
     # Remove extra @PREFIX@ to fix pkg-config paths
-    sed -i "s#@PREFIX@/##g" hyprland.pc.in
+    substituteInPlace hyprland.pc.in \
+      --replace-fail  "@PREFIX@/" ""
+    substituteInPlace example/hyprland.desktop.in \
+      --replace-fail  "@PREFIX@/" ""
   '';
 
   # variables used by CMake, and shown in `hyprctl version`
   env = {
     GIT_BRANCH = info.branch;
-    GIT_COMMITS = info.commit_hash;
+    # The amount of commits altogether. Not really worth getting that info from
+    # GitHub's API, so we set a dummy value.
+    GIT_COMMITS = "-1";
     GIT_COMMIT_DATE = info.date;
     GIT_DIRTY = "clean";
     GIT_COMMIT_HASH = info.commit_hash;
@@ -127,6 +137,7 @@ customStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     hyprwayland-scanner
+    hyprwire
     makeWrapper
     cmake
     # meson + ninja are used to build the hyprland-protocols submodule
@@ -149,7 +160,6 @@ customStdenv.mkDerivation (finalAttrs: {
       aquamarine
       cairo
       glaze
-      git
       hyprcursor.dev
       hyprgraphics
       hyprlang
@@ -167,15 +177,15 @@ customStdenv.mkDerivation (finalAttrs: {
       tomlplusplus
       wayland
       wayland-protocols
-      xorg.libXcursor
+      libxcursor
     ]
     (optionals customStdenv.hostPlatform.isBSD [ epoll-shim ])
     (optionals customStdenv.hostPlatform.isMusl [ libexecinfo ])
     (optionals enableXWayland [
-      xorg.libxcb
-      xorg.libXdmcp
-      xorg.xcbutilerrors
-      xorg.xcbutilwm
+      libxcb
+      libxdmcp
+      libxcb-errors
+      libxcb-wm
       xwayland
     ])
     (optionals withSystemd [ systemd ])
@@ -187,13 +197,13 @@ customStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeFlags = mapAttrsToList cmakeBool {
+    "BUILT_WITH_NIX" = true;
     "NO_XWAYLAND" = !enableXWayland;
     "NO_SYSTEMD" = !withSystemd;
     "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
-    "NO_UWSM" = true;
+    "NO_UWSM" = !withSystemd;
     "NO_HYPRPM" = true;
     "TRACY_ENABLE" = false;
-    "BUILD_HYPRTESTER" = true;
   };
 
   postInstall = ''
@@ -211,7 +221,7 @@ customStdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    providedSessions = [ "hyprland" ];
+    providedSessions = [ "hyprland" ] ++ optionals withSystemd [ "hyprland-uwsm" ];
     updateScript = ./update.sh;
   };
 

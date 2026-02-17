@@ -16,11 +16,12 @@
   mpv-unwrapped,
 }:
 let
-  version = "0.3.10";
+  version = "0.3.21";
   url_base = "https://github.com/alexmercerind2/harmonoid-releases/releases/download/v${version}";
   url =
     rec {
       x86_64-linux = "${url_base}/harmonoid-linux-x86_64.tar.gz";
+      aarch64-linux = "${url_base}/harmonoid-linux-aarch64.tar.gz";
       x86_64-darwin = "${url_base}/harmonoid-macos-universal.dmg";
       aarch64-darwin = x86_64-darwin;
     }
@@ -28,8 +29,9 @@ let
       or (throw "${stdenv.hostPlatform.system} is an unsupported platform");
   hash =
     rec {
-      x86_64-linux = "sha256-GTF9KrcTolCc1w/WT0flwlBCBitskFPaJuNUdxCW9gs=";
-      x86_64-darwin = "sha256-7qcUnYBasUqisEW56fq4JGgojBmfqycrDIMpCCWLxlc=";
+      x86_64-linux = "sha256-RZDRb/afXbalNbLBGaQgx5Qd4UEbNrvIsa3h+e6osJE=";
+      aarch64-linux = "sha256-1ys7uyCjXe4IBeXRk8mFjqmP9OottNefQrrtTkxq/qU=";
+      x86_64-darwin = "sha256-mo7Rj6c89KZrsL29i99x4E7b6soWlGUsC6KpSB7y5iY=";
       aarch64-darwin = x86_64-darwin;
     }
     .${stdenv.hostPlatform.system};
@@ -90,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ ivyfanchiang ];
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "graspologic-native";
-  version = "1.2.1";
+  version = "1.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graspologic-org";
     repo = "graspologic-native";
     tag = version;
-    hash = "sha256-fgiBUzYBerYX59uj+I0Yret94vA+FpQK+MckskCBqj4=";
+    hash = "sha256-JIFg+JIxRKXgWLAGgOyKZTe2gXa8wZW5pEubTBLqwmQ=";
   };
 
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };

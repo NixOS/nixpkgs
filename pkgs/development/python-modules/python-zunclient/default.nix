@@ -11,7 +11,6 @@
   oslo-utils,
   pbr,
   prettytable,
-  pythonOlder,
   setuptools,
   sphinxHook,
   stestr,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "python-zunclient";
   version = "5.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openstack";

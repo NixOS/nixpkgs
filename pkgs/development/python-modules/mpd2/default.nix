@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   twisted,
   unittestCheckHook,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "python-mpd2";
   version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

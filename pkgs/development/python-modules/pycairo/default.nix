@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchFromGitHub,
   meson,
   ninja,
@@ -8,23 +7,20 @@
   pytestCheckHook,
   pkg-config,
   cairo,
-  libxcrypt,
   python,
 }:
 
 buildPythonPackage rec {
   pname = "pycairo";
-  version = "1.28.0";
+  version = "1.29.0";
 
-  disabled = pythonOlder "3.6";
-
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "pygobject";
     repo = "pycairo";
     tag = "v${version}";
-    hash = "sha256-OAF1Yv9aoUctklGzH2xM+cVu5csyEnX2AV9n0OeoFUw=";
+    hash = "sha256-ErWxSQFYpqTZ9TPrcEUjVTa0LU619nm04TWTshGgttQ=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +29,7 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ cairo ] ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  buildInputs = [ cairo ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

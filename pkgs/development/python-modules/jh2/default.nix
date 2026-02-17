@@ -5,7 +5,6 @@
   fetchFromGitHub,
   hypothesis,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "jh2";
   version = "5.0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jawah";

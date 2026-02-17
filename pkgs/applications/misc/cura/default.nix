@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   cmake,
   python3,
+  wrapQtAppsHook,
   qtbase,
   qtquickcontrols2,
   qtgraphicaleffects,
@@ -11,7 +12,7 @@
   plugins ? [ ],
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cura";
   version = "4.13.1";
 
@@ -52,6 +53,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     python3.pkgs.wrapPython
+    wrapQtAppsHook
   ];
 
   cmakeFlags = [

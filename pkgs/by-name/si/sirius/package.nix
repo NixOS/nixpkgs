@@ -53,13 +53,13 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
-  version = "7.9.0";
+  version = "7.10.0";
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = "SIRIUS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/bhY+LCxOikS1at0ONFAhmvfnWhAVHsRQ4GfXJOZbBA=";
+    hash = "sha256-cq4ajtAJXfIH1B866FYhgROMSwd7nsbXf/6kbSwJAso=";
   };
 
   outputs = [

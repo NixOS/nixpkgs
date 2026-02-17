@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   oldest-supported-numpy,
   setuptools,
   ansitable,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "spatialmath-python";
   version = "1.1.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "spatialmath_python";

@@ -26,7 +26,7 @@ index 6bb7b62..71b57b9 100644
  
        entries.splice(i + 1, 0, {
 diff --git i/packages/core-extensions/src/moonbase/native.ts w/packages/core-extensions/src/moonbase/native.ts
-index c6e068f..0adc765 100644
+index 51e347c..a6bdc58 100644
 --- i/packages/core-extensions/src/moonbase/native.ts
 +++ w/packages/core-extensions/src/moonbase/native.ts
 @@ -39,24 +39,7 @@ export default function getNatives(): MoonbaseNatives {
@@ -56,13 +56,13 @@ index c6e068f..0adc765 100644
  
      async updateMoonlight(overrideBranch?: MoonlightBranch) {
 diff --git i/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx w/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx
-index 133a98f..9414e7a 100644
+index 49d7fcb..a65b57c 100644
 --- i/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx
 +++ w/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx
-@@ -106,16 +106,6 @@ function ArrayFormItem({ config }: { config: "repositories" | "devSearchPaths" }
+@@ -107,16 +107,6 @@ function ArrayFormItem({ config }: { config: "repositories" | "devSearchPaths" }
  export default function ConfigPage() {
    return (
-     <>
+     <ErrorBoundary>
 -      <div className={Margins.marginTop20}>
 -        <FormSwitch
 -          checked={MoonbaseSettingsStore.getExtensionConfigRaw<boolean>("moonbase", "updateChecking", true) ?? true}

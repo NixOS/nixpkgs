@@ -4,15 +4,15 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "infrastructure-agent";
-  version = "1.71.3";
+  version = "1.72.2";
 
   src = fetchFromGitHub {
     owner = "newrelic";
     repo = "infrastructure-agent";
-    rev = version;
-    hash = "sha256-OWd1GNH+23nBL6uvWwL71rT2KPyzNVVTrK7nDlk8T3U=";
+    rev = finalAttrs.version;
+    hash = "sha256-GcQ/UUznuWdAtOyCC4qLQfItm81zwryV2gDDlYKFONI=";
   };
 
   vendorHash = "sha256-H41FxeJLrlaL/KbcBAS1WuMfVn6d+4So3egXb6E46/o=";
@@ -20,8 +20,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.buildVersion=${version}"
-    "-X main.gitCommit=${src.rev}"
+    "-X main.buildVersion=${finalAttrs.version}"
+    "-X main.gitCommit=${finalAttrs.src.rev}"
   ];
 
   env.CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ davsanchez ];
     mainProgram = "newrelic-infra";
   };
-}
+})

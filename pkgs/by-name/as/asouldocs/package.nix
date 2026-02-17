@@ -6,14 +6,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "asouldocs";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "asoul-sig";
     repo = "asouldocs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ctRE7aF3Qj+fI/m0CuLA6x7E+mY6s1+UfBJI5YFea4g=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "asouldocs";
   };
-}
+})

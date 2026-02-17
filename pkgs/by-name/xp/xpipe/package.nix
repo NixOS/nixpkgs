@@ -11,17 +11,17 @@
   freetype,
   alsa-lib,
   makeShellWrapper,
-  libX11,
-  libXext,
-  libXdamage,
-  libXfixes,
+  libx11,
+  libxext,
+  libxdamage,
+  libxfixes,
   libxcb,
-  libXcomposite,
-  libXcursor,
-  libXi,
-  libXrender,
-  libXtst,
-  libXxf86vm,
+  libxcomposite,
+  libxcursor,
+  libxi,
+  libxrender,
+  libxtst,
+  libxxf86vm,
   util-linux,
   socat,
 }:
@@ -39,7 +39,7 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-osr7GeDZ3uIJq9k1aP8JKiyKeslYpZ8yOHSeaew47yQ=";
+      x86_64-linux = "sha256-mkiVKp5zh4dZ9MHk8mIIZVvUzGH89AK7sWWuuxcAWWs=";
     }
     .${system} or throwSystem;
 
@@ -48,7 +48,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "xpipe";
-  version = "19.5";
+  version = "21.2.1";
 
   src = fetchzip {
     url = "https://github.com/xpipe-io/xpipe/releases/download/${version}/xpipe-portable-linux-${arch}.tar.gz";
@@ -70,18 +70,18 @@ stdenvNoCC.mkDerivation rec {
     freetype
     gtk3
     alsa-lib
-    libX11
-    libX11
-    libXext
-    libXdamage
-    libXfixes
+    libx11
+    libx11
+    libxext
+    libxdamage
+    libxfixes
     libxcb
-    libXcomposite
-    libXcursor
-    libXi
-    libXrender
-    libXtst
-    libXxf86vm
+    libxcomposite
+    libxcursor
+    libxi
+    libxrender
+    libxtst
+    libxxf86vm
     util-linux
     socat
   ];

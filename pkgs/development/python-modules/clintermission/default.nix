@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   prompt-toolkit,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "clintermission";
   version = "0.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sebageek";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   redis,
   requests,
   urllib3,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "spotipy";
   version = "2.25.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

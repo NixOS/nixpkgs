@@ -40,19 +40,23 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
     common_build_flags.add_argument("--show-trace", action="store_true")
 
+    # Flags that apply to both flake evaluation and building
     flake_common_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
-    flake_common_flags.add_argument("--accept-flake-config", action="store_true")
-    flake_common_flags.add_argument("--refresh", action="store_true")
-    flake_common_flags.add_argument("--impure", action="store_true")
     flake_common_flags.add_argument("--offline", action="store_true")
     flake_common_flags.add_argument("--no-net", action="store_true")
-    flake_common_flags.add_argument("--recreate-lock-file", action="store_true")
-    flake_common_flags.add_argument("--no-update-lock-file", action="store_true")
-    flake_common_flags.add_argument("--no-write-lock-file", action="store_true")
-    flake_common_flags.add_argument("--no-registries", action="store_true")
-    flake_common_flags.add_argument("--commit-lock-file", action="store_true")
-    flake_common_flags.add_argument("--update-input", action="append")
-    flake_common_flags.add_argument("--override-input", nargs=2, action="append")
+
+    # Flags that only apply during flake evaluation (and thus aren't passed to remote builders)
+    flake_eval_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
+    flake_eval_flags.add_argument("--accept-flake-config", action="store_true")
+    flake_eval_flags.add_argument("--refresh", action="store_true")
+    flake_eval_flags.add_argument("--impure", action="store_true")
+    flake_eval_flags.add_argument("--recreate-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--no-update-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--no-write-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--no-registries", action="store_true")
+    flake_eval_flags.add_argument("--commit-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--update-input", action="append")
+    flake_eval_flags.add_argument("--override-input", nargs=2, action="append")
 
     classic_build_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     classic_build_flags.add_argument(
@@ -74,6 +78,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "common_flags": common_flags,
         "common_build_flags": common_build_flags,
         "flake_common_flags": flake_common_flags,
+        "flake_eval_flags": flake_eval_flags,
         "classic_build_flags": classic_build_flags,
         "copy_flags": copy_flags,
     }
@@ -137,6 +142,11 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="Roll back to the previous configuration",
     )
     main_parser.add_argument(
+        "--store-path",
+        metavar="PATH",
+        help="Use a pre-built NixOS system store path instead of building",
+    )
+    main_parser.add_argument(
         "--upgrade",
         action="store_true",
         help="Update the root user's channel named 'nixos' before rebuilding "
@@ -186,6 +196,12 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--image-variant",
         help="Selects an image variant to build from the "
         "config.system.build.images attribute of the given configuration",
+    )
+    main_parser.add_argument(
+        "--diff",
+        action="store_true",
+        help="prints out the diff between the current system "
+        "and the newly built one using nix store diff-closures",
     )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
@@ -249,6 +265,20 @@ def parse_args(
     if args.no_build_nix:
         parser_warn("--no-build-nix is deprecated, we do not build nix anymore")
 
+    if args.diff and args.action not in (
+        # case for calling build_and_activate_system
+        # except excluding DRY_BUILD and DRY_ACTIVATE,
+        # in which --diff is uniquely a no-op
+        Action.SWITCH.value,
+        Action.BOOT.value,
+        Action.TEST.value,
+        Action.BUILD.value,
+        Action.BUILD_IMAGE.value,
+        Action.BUILD_VM.value,
+        Action.BUILD_VM_WITH_BOOTLOADER.value,
+    ):
+        parser_warn(f"--diff is a no-op with '{args.action}'")
+
     if args.action == Action.EDIT.value and (args.file or args.attr):
         parser.error("--file and --attr are not supported with 'edit'")
 
@@ -268,6 +298,22 @@ def parse_args(
 
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
+
+    if args.store_path:
+        if args.rollback:
+            parser.error("--store-path and --rollback are mutually exclusive")
+        if args.flake or args.file or args.attr:
+            parser.error("--store-path cannot be used with --flake, --file, or --attr")
+        if args.action not in (
+            Action.SWITCH.value,
+            Action.BOOT.value,
+            Action.TEST.value,
+            Action.DRY_ACTIVATE.value,
+        ):
+            parser.error(f"--store-path cannot be used with '{args.action}'")
+        if args.flake is None:
+            # Disable flake auto-detection since we're using a pre-built store path
+            args.flake = False
 
     return args, grouped_nix_args
 
@@ -297,7 +343,7 @@ def execute(argv: list[str]) -> None:
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 
-    if can_run and not flake:
+    if can_run and not flake and not args.store_path:
         services.write_version_suffix(grouped_nix_args)
 
     match action:
@@ -350,20 +396,20 @@ def main() -> None:
 
     try:
         execute(sys.argv)
+    except KeyboardInterrupt:
+        sys.exit(130)
     except CalledProcessError as ex:
-        _handle_called_process_error(ex)
-    except (Exception, KeyboardInterrupt) as ex:
+        sys.exit(_handle_called_process_error(ex))
+    except Exception as ex:
         if logger.isEnabledFor(logging.DEBUG):
             raise
         else:
             sys.exit(str(ex))
 
 
-def _handle_called_process_error(ex: CalledProcessError) -> None:
+def _handle_called_process_error(ex: CalledProcessError) -> int:
     if logger.isEnabledFor(logging.DEBUG):
-        import traceback
-
-        traceback.print_exception(ex)
+        sys.excepthook(*sys.exc_info())
     else:
         import shlex
 
@@ -384,4 +430,4 @@ def _handle_called_process_error(ex: CalledProcessError) -> None:
         print(str(ex), file=sys.stderr)
 
     # Exit with the error code of the process that failed
-    sys.exit(ex.returncode)
+    return ex.returncode

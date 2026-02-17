@@ -9,7 +9,6 @@
   pkg-config,
   protobuf,
   typing-extensions,
-  pythonOlder,
   setuptools,
   zlib,
 }:
@@ -19,15 +18,18 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.76.0";
+  version = "1.78.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e+eDiNbaGiXA1exQZSPbWLGL4i2cN9jToywIvkmHvXM=";
+    hash = "sha256-c4K5UYlUbzdcF09TpfqHPO+RxLgAX6oFzFs77qnE8cU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail cython==3.1.1 cython
+  '';
 
   outputs = [
     "out"

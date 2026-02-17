@@ -4,13 +4,11 @@
   decorator,
   fetchPypi,
   hatchling,
-  importlib-metadata,
   ipykernel,
   ipython,
   jupyter-client,
   psutil,
   python-dateutil,
-  pythonOlder,
   pyzmq,
   tornado,
   tqdm,
@@ -21,8 +19,6 @@ buildPythonPackage rec {
   pname = "ipyparallel";
   version = "9.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -50,8 +46,7 @@ buildPythonPackage rec {
     tornado
     tqdm
     traitlets
-  ]
-  ++ lib.optional (pythonOlder "3.10") importlib-metadata;
+  ];
 
   # Requires access to cluster
   doCheck = false;

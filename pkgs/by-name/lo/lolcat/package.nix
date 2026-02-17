@@ -18,7 +18,6 @@
     license = lib.licenses.bsd3;
     maintainers = [
       lib.maintainers.StillerHarpo
-      lib.maintainers.manveru
       lib.maintainers.nicknovitski
     ];
     mainProgram = "lolcat";

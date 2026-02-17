@@ -1,18 +1,22 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   fetchPypi,
   setuptools,
   ruamel-yaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ruamel-yaml-string";
   version = "0.1.1";
   pyproject = true;
 
+  # ImportError: cannot import name 'Str' from 'ast'
+  disabled = pythonAtLeast "3.14";
+
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "ruamel.yaml.string";
     hash = "sha256-enrtzAVdRcAE04t1b1hHTr77EGhR9M5WzlhBVwl4Q1A=";
   };
@@ -29,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fbeffa ];
   };
-}
+})

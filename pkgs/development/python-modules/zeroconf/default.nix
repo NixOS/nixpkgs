@@ -1,7 +1,6 @@
 {
   lib,
   cython,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   ifaddr,
@@ -10,7 +9,6 @@
   pytest-codspeed,
   pytest-cov-stub,
   pytest-timeout,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   pname = "zeroconf";
   version = "0.148.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jstasiak";
@@ -35,7 +31,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies = [ ifaddr ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  dependencies = [ ifaddr ];
 
   nativeCheckInputs = [
     pytest-asyncio

@@ -10,18 +10,18 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "eas-cli";
-  version = "16.23.1";
+  version = "16.32.0";
 
   src = fetchFromGitHub {
     owner = "expo";
     repo = "eas-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hMUDtl5lMAZzlvPdzO7J3JTw0B5/fjssuqQlg1MUO3w=";
+    hash = "sha256-FP3vZKiJeQmIh2zEMWJcgsJJfUI+YhB9IyQlfnbl7ys=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock"; # Point to the root lockfile
-    hash = "sha256-ybctj6TgW9JluDIsSaNm18wUXSBPuIT45te5HoQuz5s=";
+    hash = "sha256-IG13BEOH7BUi1HTcXebMQjXZJgIaWJ7hgX3GcmRB8hA=";
   };
 
   nativeBuildInputs = [

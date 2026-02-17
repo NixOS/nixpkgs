@@ -15,19 +15,25 @@
   python3,
   which,
   nodejs,
-  xorg,
-  libXcursor,
-  libXScrnSaver,
-  libXrandr,
-  libXtst,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
+  libxcursor,
+  libxscrnsaver,
+  libxrandr,
+  libxtst,
   libxshmfence,
-  libXi,
+  libxi,
   cups,
   fontconfig,
   freetype,
   harfbuzz,
   icu,
   dbus,
+  expat,
   libdrm,
   zlib,
   minizip,
@@ -226,6 +232,7 @@ qtModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
+    expat
     zlib
     minizip
     snappy
@@ -248,19 +255,19 @@ qtModule {
     pciutils
 
     # X11 libs
-    xorg.xrandr
-    libXScrnSaver
-    libXcursor
-    libXrandr
-    xorg.libpciaccess
-    libXtst
-    xorg.libXcomposite
-    xorg.libXdamage
+    xrandr
+    libxscrnsaver
+    libxcursor
+    libxrandr
+    libpciaccess
+    libxtst
+    libxcomposite
+    libxdamage
     libdrm
-    xorg.libxkbfile
+    libxkbfile
     libxshmfence
-    libXi
-    xorg.libXext
+    libxi
+    libxext
 
     # Pipewire
     pipewire

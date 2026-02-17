@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.12.0";
+  version = "0.13.0";
 in
 python3Packages.buildPythonApplication {
   pname = "whatsapp-chat-exporter";
@@ -16,15 +16,15 @@ python3Packages.buildPythonApplication {
     owner = "KnugiHK";
     repo = "Whatsapp-Chat-Exporter";
     tag = version;
-    hash = "sha256-0FJZqqmuSA+te5lzi1okkmuT3s2JNX7uHoYl9ayNt/Q=";
+    hash = "sha256-nD8rpA1BbKbHpjAuIDdhaiMUjQCypDuo0pNAYbkoOxo=";
   };
 
   propagatedBuildInputs = with python3Packages; [
     bleach
+    javaobj-py3
     jinja2
     pycryptodome
-    javaobj-py3
-    vobject
+    tqdm
   ];
 
   meta = {

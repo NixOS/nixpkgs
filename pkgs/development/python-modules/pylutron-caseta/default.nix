@@ -1,6 +1,5 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   click,
   cryptography,
@@ -10,7 +9,6 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   xdg,
   zeroconf,
 }:
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   pname = "pylutron-caseta";
   version = "0.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "gurumitts";
@@ -34,8 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     orjson
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   optional-dependencies = {
     cli = [
@@ -49,8 +44,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   pytestFlags = [ "--asyncio-mode=auto" ];
 

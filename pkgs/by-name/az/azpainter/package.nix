@@ -8,10 +8,10 @@
   ninja,
   pkg-config,
   libiconv,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
   freetype,
   fontconfig,
   libjpeg,
@@ -21,14 +21,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "azpainter";
   version = "3.0.12";
 
   src = fetchFromGitLab {
     owner = "azelpg";
     repo = "azpainter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cUq1UmS0k5eib0aJI1zOJbJRzErezfAAXOOIFrgUS6E=";
   };
 
@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
-    libX11
-    libXcursor
-    libXext
-    libXi
+    libx11
+    libxcursor
+    libxext
+    libxi
     freetype
     fontconfig
     libjpeg
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
     description = "Full color painting software for illustration drawing";
     homepage = "http://azsky2.html.xdomain.jp/soft/azpainter.html";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "azpainter";
   };
-}
+})

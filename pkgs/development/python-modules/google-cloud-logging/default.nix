@@ -17,22 +17,19 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   rich,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.12.1";
+  version = "3.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_logging";
     inherit version;
-    hash = "sha256-Nu/II5hQVbIDkE6D4cj5+ZmzxkJwvNo51XOGyk7/1ng=";
+    hash = "sha256-Oq4Fc7GhpPWezfRXH054gbWCO9Ep/kaVYcHEmn+opME=";
   };
 
   build-system = [ setuptools ];

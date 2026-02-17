@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aiooss2";
   version = "0.2.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "karajan1001";

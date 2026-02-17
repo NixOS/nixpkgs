@@ -8,30 +8,22 @@
   makeWrapper,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-mobile2";
-  version = "0.22.1";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.22.2";
+
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "cargo-mobile2";
-    rev = "cargo-mobile2-v${version}";
-    hash = "sha256-+U/uTbTGa3NPK5WpyvR5C5L1ozl+fa15pNNWYZJXgnk=";
+    rev = "cargo-mobile2-v${finalAttrs.version}";
+    hash = "sha256-pSp7w823Jjjg0PEnCc7jVLBbOgvR7JAjtD8OK5voC0A=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   # sourceRoot = "${src.name}/tooling/cli";
 
-  cargoHash = "sha256-fMtFvPrWMLHE4N9WJv6J4pqHbHPnNKhQWz5qEvB8jKQ=";
-
-  preBuild = ''
-    mkdir -p $out/share/
-    # during the install process tauri-mobile puts templates and commit information in CARGO_HOME
-    export CARGO_HOME=$out/share/
-  '';
+  cargoHash = "sha256-aci1QF/O2J6Yix4UkxPCVW+c+xoqm7AvdhlkF7y1GqA=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [
@@ -39,6 +31,12 @@ rustPlatform.buildRustPackage {
     git
     makeWrapper
   ];
+
+  preBuild = ''
+    mkdir -p $out/share/
+    # during the install process tauri-mobile puts templates and commit information in CARGO_HOME
+    export CARGO_HOME=$out/share/
+  '';
 
   preFixup = ''
     for bin in $out/bin/cargo-*; do
@@ -56,4 +54,4 @@ rustPlatform.buildRustPackage {
     ];
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

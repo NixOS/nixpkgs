@@ -6,7 +6,6 @@
   pynacl,
   typing-extensions,
   pyjwt,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pygithub";
   version = "2.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "PyGithub";

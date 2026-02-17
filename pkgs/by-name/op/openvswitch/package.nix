@@ -28,14 +28,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
   version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "openvswitch";
     repo = "ovs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I5ISLOu1MMT/mtyH4tcgdFe2zjSsutMWkJiPIbadbQI=";
   };
 
@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
     # 8: vsctl-bashcomp - argument completion FAILED (completion.at:664)
     ./patches/disable-bash-arg-completion-test.patch
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoconf
@@ -129,6 +131,7 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     iproute2
+    openssl
   ]
   ++ (with python3.pkgs; [
     netaddr
@@ -147,7 +150,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";
+    changelog = "https://www.openvswitch.org/releases/NEWS-${finalAttrs.version}.txt";
     description = "Multilayer virtual switch";
     longDescription = ''
       Open vSwitch is a production quality, multilayer virtual switch
@@ -174,4 +177,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

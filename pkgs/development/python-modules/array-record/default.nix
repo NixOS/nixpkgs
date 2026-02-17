@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   python,
   fetchPypi,
@@ -14,14 +13,15 @@ buildPythonPackage rec {
   version = "0.8.3";
   format = "wheel";
 
-  disabled = pythonOlder "3.11" || pythonAtLeast "3.15";
+  disabled = pythonAtLeast "3.15";
 
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
     in
     fetchPypi {
-      inherit version format;
+      inherit version;
+      format = "wheel";
       pname = "array_record";
       dist = pyShortVersion;
       python = pyShortVersion;

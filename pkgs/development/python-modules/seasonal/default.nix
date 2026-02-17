@@ -8,15 +8,12 @@
   pandas,
   matplotlib,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "seasonal";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "welch";
@@ -58,6 +55,6 @@ buildPythonPackage rec {
     description = "Robustly estimate trend and periodicity in a timeseries";
     homepage = "https://github.com/welch/seasonal";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

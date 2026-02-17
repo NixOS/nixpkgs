@@ -6,7 +6,6 @@
   setuptools,
   karton-core,
   malduck,
-  pythonOlder,
   regex,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "karton-autoit-ripper";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";

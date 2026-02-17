@@ -24,6 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-hyper/hyperlink";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ apeschar ];
+    maintainers = [ ];
   };
 }

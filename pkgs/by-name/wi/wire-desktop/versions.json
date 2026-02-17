@@ -1,10 +1,10 @@
 {
   "linux": {
-    "version": "3.40.3718",
-    "hash": "sha256-1jBhF+Rnys8C3DaVbCKHDiylox2WG1qRvwnDbQrp1Mk="
+    "version": "3.40.3882",
+    "hash": "sha256-8cZGbOngQ0LcUdCcalexkF2nEDb+u3I0zqEbRf/sRiw="
   },
   "macos": {
-    "version": "3.40.5285",
-    "hash": "sha256-pcWB3irdPyDj55dWmNyc+oThVGgHtIu//EAk1k/56is="
+    "version": "3.40.5442",
+    "hash": "sha256-BxGkAbkl5kgeHq4dgITYsU1fXFY8XDWEOfwjHnk6XtQ="
   }
 }

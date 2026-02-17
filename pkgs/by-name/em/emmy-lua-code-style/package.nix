@@ -6,15 +6,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emmy-lua-code-style";
-  version = "1.5.7";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "CppCXY";
     repo = "EmmyLuaCodeStyle";
-    tag = self.version;
-    hash = "sha256-Lzh4ruyrWRTwU95iTMQozpLT5w92owHsDQM874XIuOg=";
+    tag = finalAttrs.version;
+    hash = "sha256-FYtDO9ZL7MjC+vHzrylyYBQHTtef/GM9ipt//EcLr4w=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation (self: {
 
   meta = {
     homepage = "https://github.com/CppCXY/EmmyLuaCodeStyle";
-    changelog = "https://github.com/CppCXY/EmmyLuaCodeStyle/releases/tag/${self.version}";
+    changelog = "https://github.com/CppCXY/EmmyLuaCodeStyle/releases/tag/${finalAttrs.version}";
     description = "Fast, powerful, and feature-rich Lua formatting and checking tool";
     mainProgram = "CodeFormat";
     platforms = lib.platforms.unix;

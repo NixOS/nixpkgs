@@ -3,7 +3,7 @@
   python3Packages,
   fetchFromGitHub,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "doge";
   version = "3.9.0";
   pyproject = true;
@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Olivia5k";
     repo = "doge";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aJ1SFehjKiSc7osf5BOB1xjDnrkVXp37PQ5bNpbv1Mk=";
   };
 
@@ -36,4 +36,4 @@ python3Packages.buildPythonApplication rec {
       quantenzitrone
     ];
   };
-}
+})

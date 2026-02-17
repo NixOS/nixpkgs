@@ -5,21 +5,18 @@
   mdformat,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-toc";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-toc";
     tag = version;
-    hash = "sha256-3EX6kGez408tEYiR9VSvi3GTrb4ds+HJwpFflv77nkg=";
+    hash = "sha256-Rj1lp5Ub+UriOuE896tywN4myovna2RLYO3LRa96FCM=";
   };
 
   nativeBuildInputs = [ poetry-core ];

@@ -27,16 +27,16 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-bio";
-  version = "0.7.0";
+  version = "0.7.1.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-bio";
     repo = "scikit-bio";
-    tag = version;
-    hash = "sha256-M0P5DUAMlRTkaIPbxSvO99N3y5eTrkg4NMlkIpGr4/g=";
+    tag = finalAttrs.version;
+    hash = "sha256-fnZpLhn2F/KoP3q7WmdaDXeC9i7hduGRkUWlCwwME3Q=";
   };
 
   build-system = [
@@ -76,8 +76,8 @@ buildPythonPackage rec {
     description = "Data structures, algorithms and educational resources for bioinformatics";
     homepage = "http://scikit-bio.org/";
     downloadPage = "https://github.com/scikit-bio/scikit-bio";
-    changelog = "https://github.com/scikit-bio/scikit-bio/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/scikit-bio/scikit-bio/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

@@ -7,14 +7,14 @@
 
 assert !blas.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plumed";
   version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "plumed";
     repo = "plumed2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aFX8u+XNb7LARm1jtzWzIvZE5qHFaudtp45Om1Fridg=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

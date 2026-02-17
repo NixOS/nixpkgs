@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "33.0.1";
+  version = "34.0.5";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zHLyvFzLR7Ryk6eoD+Lp+w4bIj7MAeREK0YzRXYnx6c=";
+    hash = "sha256-DwFU3hb63Lf9Etr/I1lQ0SpkHfB1hRI+8V0ILk5a2C0=";
     fetchSubmodules = true;
   };
 
@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    kdePackages.qcoro
     kdePackages.qtkeychain
     libqalculate
     libarchive

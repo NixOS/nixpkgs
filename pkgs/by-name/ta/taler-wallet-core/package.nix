@@ -9,6 +9,8 @@
   removeReferencesTo,
   nodejs_20,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   gitMinimal,
   jq,
@@ -16,6 +18,7 @@
 }:
 let
   nodeSources = srcOnly nodejs_20;
+  pnpm' = pnpm_9.override { nodejs = nodejs_20; };
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -37,27 +40,29 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-wallet-core";
-  version = "1.0.12";
+  version = "1.3.1";
 
   src = fetchgit {
     url = "https://git.taler.net/taler-typescript-core.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lTFiaIgkPw0FhrpYPwg5/MMl8Yo1MfkDPYEDSJ11rQ8=";
+    hash = "sha256-YTFS4s8GuC3SQ/b4JJ5DbEbzc8hrywYaf6rtSKGiSpE=";
   };
 
   nativeBuildInputs = [
     customPython
     nodejs_20
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm'
     gitMinimal
     jq
     zip
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm';
     fetcherVersion = 1;
-    hash = "sha256-pLe5smsXdzSBgz/OYNO5FVEI2L6y/p+jMxEkzqUaX34=";
+    hash = "sha256-jwoSvqE0hqRxu76vDtUOpZxvi4SsmKukfpmp5G6ZV/I=";
   };
 
   buildInputs = [ nodejs_20 ];

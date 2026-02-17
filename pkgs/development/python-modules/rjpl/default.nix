@@ -3,15 +3,12 @@
   buildPythonPackage,
   requests,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rjpl";
   version = "0.3.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

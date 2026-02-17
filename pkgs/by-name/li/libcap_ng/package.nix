@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  pkg-config,
   swig,
   testers,
   nix-update-script,
@@ -10,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcap-ng";
-  version = "0.8.5";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "stevegrubb";
     repo = "libcap-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qcHIHG59PDPfPsXA1r4hG4QhK2qyE7AgXOwUDjIy7lE=";
+    hash = "sha256-KF4SaES6FYuoBoZB+hhWlFuQemWM4Vg8aybCOgXM+Uc=";
   };
 
   # NEWS needs to exist or else the build fails
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    pkg-config
     swig
   ];
 

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.13.4";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
     tag = "v${version}";
-    hash = "sha256-67Y0r4Po3z4YmnbWC0HBLmsKD68HMIGvHKo5SLe+KRc=";
+    hash = "sha256-9fq0PNgQmKOhFyaEQcRZa+v0HDUMirkzFZxWi6NP5wg=";
   };
 
   patches = [
@@ -84,6 +84,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/yanyongyu/githubkit";
     changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
 }

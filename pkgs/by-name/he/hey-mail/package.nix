@@ -30,7 +30,17 @@
   gdk-pixbuf,
   pango,
   cairo,
-  xorg,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   ffmpeg,
   http-parser,
   nss,
@@ -62,17 +72,17 @@ let
     gdk-pixbuf
     pango
     cairo
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libXrandr
+    libxcb
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrender
+    libxtst
+    libxrandr
     ffmpeg
     http-parser
     nss

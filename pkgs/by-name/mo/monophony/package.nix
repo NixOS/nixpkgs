@@ -10,19 +10,19 @@
   glib-networking,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "monophony";
-  version = "4.2.1";
+  version = "4.3.3";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
-    tag = "v${version}";
-    hash = "sha256-3RuAFg+9Mi+tBuLmXyWlFFNOfrUvrkNvedo9Au3tMYU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+K6spOP6m54jR7J0IvArZTZkowN4MzG02VnTDD9WqSY=";
   };
 
-  sourceRoot = "${src.name}/source";
+  sourceRoot = "${finalAttrs.src.name}/source";
 
   dependencies = with python3Packages; [
     mprisify
@@ -79,4 +79,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "monophony";
   };
-}
+})

@@ -175,7 +175,9 @@ stdenv.mkDerivation rec {
         --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
     '';
 
-  CXXFLAGS = lib.optionalString stdenv.hostPlatform.isAarch32 "-mfp16-format=ieee";
+  env = lib.optionalAttrs stdenv.hostPlatform.isAarch32 {
+    CXXFLAGS = "-mfp16-format=ieee";
+  };
 
   # FIXME x86_64-darwin:
   # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690

@@ -10,7 +10,6 @@
   molecule,
   packaging,
   pluggy,
-  pythonOlder,
   rich,
   setuptools,
   setuptools-scm,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "molecule";
   version = "25.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

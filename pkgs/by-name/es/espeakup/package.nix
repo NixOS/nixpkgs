@@ -11,14 +11,14 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "espeakup";
   version = "0.90";
 
   src = fetchFromGitHub {
     owner = "linux-speakup";
     repo = "espeakup";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Qjdg1kParsnpb8Lv51wXLdrLufxtbBTsP8B3t53islI=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   meta = {
     homepage = "https://github.com/linux-speakup/espeakup";
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "espeakup";
   };
-}
+})

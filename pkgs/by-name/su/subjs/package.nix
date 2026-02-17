@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "subjs";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "lc";
     repo = "subjs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-csxFn3YUnuYjZ5/4jIi7DfuujB/gFjHogLaV4XK5kQU=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.AppVersion=${version}"
+    "-X main.AppVersion=${finalAttrs.version}"
   ];
 
   meta = {
@@ -35,4 +35,4 @@ buildGoModule rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

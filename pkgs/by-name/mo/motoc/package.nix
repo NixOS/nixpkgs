@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "motoc";
   version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "motoc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ozC7Az7G7qGsGURJ6UaM6VZH4PEUTknYDPShtXEKmrA=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pandapip1 ];
     mainProgram = "motoc";
   };
-}
+})

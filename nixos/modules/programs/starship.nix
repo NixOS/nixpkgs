@@ -60,7 +60,7 @@ in
       inherit (settingsFormat) type;
       default = { };
       description = ''
-        Configuration included in `starship.toml`.
+        Configuration included in {file}`starship.toml`.
 
         See <https://starship.rs/config/#prompt> for documentation.
       '';
@@ -118,7 +118,7 @@ in
         if [[ ! -f "$HOME/.config/starship.toml" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
-        eval "$(${cfg.package}/bin/starship init bash)"
+        eval "$(${cfg.package}/bin/starship init bash --print-full-init)"
       fi
     '';
 

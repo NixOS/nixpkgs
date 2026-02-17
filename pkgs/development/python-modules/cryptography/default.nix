@@ -16,27 +16,24 @@
   pretend,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "46.0.2";
+  version = "46.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "cryptography";
     tag = version;
-    hash = "sha256-gsEHKEYiMw2eliEpxwzFGDetOp77PivlMoBD3HBbbFA=";
+    hash = "sha256-jzdkAVMnKr0z1MBUgs6xjLnTZrqNOBwq3w56JDwgFgk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-aCQzY2gBjVVwiqlqAxkH4y6yf4lqdQuSEnQSIjLPRJg=";
+    hash = "sha256-5ElDEl7MdcQfu/hy+POSBcvkNCFAMo6La5s6uRhZ/fM=";
   };
 
   postPatch = ''

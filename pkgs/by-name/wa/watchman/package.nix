@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.10.13.00";
+  version = "2026.01.19.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yD8OaA6n2aqwgyQ58VEiBw6+IbwUgXrWEUPinJDip+U=";
+    hash = "sha256-Eh7IHYEavgVd2p+r1PzQrAdqPD5FlYiTp4TCon55byE=";
   };
 
   patches = [
@@ -101,11 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail /usr/bin /var/empty
 
-    # Facebook Thrift requires C++20 now but Watchman hasn’t been
-    # updated yet… (Aren’t these things meant to be integrated together
-    # in a monorepo?)
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
   '';
 
   passthru.updateScript = ./update.sh;

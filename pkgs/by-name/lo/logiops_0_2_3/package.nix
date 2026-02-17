@@ -9,18 +9,18 @@
   libconfig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "logiops";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "pixlone";
     repo = "logiops";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1v728hbIM2ODtB+r6SYzItczRJCsbuTvhYD2OUM1+/E=";
   };
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   nativeBuildInputs = [
     cmake
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   python,
-  pythonOlder,
   setuptools,
   sgmllib3k,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "feedparser";
   version = "6.0.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

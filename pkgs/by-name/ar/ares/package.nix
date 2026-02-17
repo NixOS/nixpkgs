@@ -8,8 +8,8 @@
   gtksourceview3,
   libGL,
   libGLU,
-  libX11,
-  libXv,
+  libx11,
+  libxv,
   libao,
   libpulseaudio,
   libretro-shaders-slang,
@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "146";
+  version = "147";
 
   src = fetchzip {
     url = "https://github.com/ares-emulator/ares/releases/download/v${finalAttrs.version}/ares-source.tar.gz";
-    hash = "sha256-D4N0u9NNlhs4nMoUrAY+sg6Ybt1xQPMiH1u0cV0Qixs=";
+    hash = "sha256-KkcrcFshNesnSp5fl+as3HFXjytgODvMv8m73Ni2euw=";
     stripRoot = false;
   };
 
@@ -62,8 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview3
     libGL
     libGLU
-    libX11
-    libXv
+    libx11
+    libxv
     libpulseaudio
     openal
     udev
@@ -119,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ares-emu.net";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
     license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ nadiaholmquist ];
     mainProgram = "ares";
     platforms = lib.platforms.unix;
   };

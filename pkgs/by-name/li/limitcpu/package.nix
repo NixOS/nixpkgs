@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "limitcpu";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/limitcpu/cpulimit-${version}.tar.gz";
-    sha256 = "sha256-lGmU7GDznwMJW4m9dOZguJwUyCq6dUVmk5jjArx7I0w=";
+    url = "mirror://sourceforge/limitcpu/cpulimit-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-Wf/rGjUXr+RZmHFL6EGSYKQ2MvfOwI8LAmwezN/1fPw=";
   };
 
   buildFlags = with stdenv; [
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.rycee ];
     mainProgram = "cpulimit";
   };
-}
+})

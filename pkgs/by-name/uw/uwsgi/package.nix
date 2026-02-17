@@ -6,6 +6,7 @@
   jansson,
   pcre2,
   libxcrypt,
+  openssl,
   expat,
   zlib,
   # plugins: list of strings, eg. [ "python3" ]
@@ -64,6 +65,12 @@ let
       ]
       ++ php-embed.unwrapped.buildInputs;
     })
+    (lib.nameValuePair "http" {
+      # usage: https://uwsgi-docs.readthedocs.io/en/latest/HTTP.html
+      # usage: https://uwsgi-docs.readthedocs.io/en/latest/HTTPS.html
+      path = "plugins/http";
+      inputs = [ openssl.dev ];
+    })
   ];
 
   getPlugin =
@@ -119,7 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optional withPAM "pam" ++ lib.optional withSystemd "systemd_logger"
   );
 
-  UWSGI_INCLUDES = lib.optionalString withCap "${libcap.dev}/include";
+  # UWSGI_INCLUDES environment variable required for "auto" plugins
+  # to be detected. See uwsgiconfig.py for more details.
+  UWSGI_INCLUDES = lib.concatStringsSep "," (
+    map (p: "${lib.getDev p}/include") finalAttrs.buildInputs
+  );
 
   passthru = {
     inherit python3;

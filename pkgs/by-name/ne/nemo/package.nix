@@ -14,6 +14,7 @@
   cinnamon-desktop,
   xapp,
   xapp-symbolic-icons,
+  xdg-user-dirs,
   libexif,
   json-glib,
   exempi,
@@ -34,15 +35,15 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nemo";
-  version = "6.6.1";
+  version = "6.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo";
-    rev = version;
-    hash = "sha256-oJvGuPm6FOknSe+5TDLNf0eoE3xC+i78SkYdJUBY4PU=";
+    rev = finalAttrs.version;
+    hash = "sha256-jsAKNKpNsheyugI6dVQAYYrOTmHLDjJCbjlWmAChFgU=";
   };
 
   patches = [
@@ -86,22 +87,21 @@ stdenv.mkDerivation rec {
     "--localedir=${cinnamon-translations}/share/locale"
   ];
 
-  postInstall = ''
-    # This fixes open as root and handles nemo-with-extensions well.
-    # https://github.com/NixOS/nixpkgs/issues/297570
-    substituteInPlace $out/share/polkit-1/actions/org.nemo.root.policy \
-      --replace-fail "$out/bin/nemo" "/run/current-system/sw/bin/nemo"
-  '';
-
   preFixup = ''
     gappsWrapperArgs+=(
-       --prefix XDG_DATA_DIRS : ${
+       --prefix XDG_DATA_DIRS : "${
          lib.makeSearchPath "share" [
            # For non-fd.o icons.
            xapp
            xapp-symbolic-icons
          ]
-       }
+       }"
+       --prefix PATH : "${
+         lib.makeBinPath [
+           # For xdg-user-dirs-update.
+           xdg-user-dirs
+         ]
+       }"
     )
   '';
 
@@ -119,4 +119,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.cinnamon ];
     mainProgram = "nemo";
   };
-}
+})

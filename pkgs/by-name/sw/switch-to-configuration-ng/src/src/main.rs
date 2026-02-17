@@ -84,6 +84,15 @@ const RELOAD_BY_ACTIVATION_LIST_FILE: &str = "/run/nixos/activation-reload-list"
 const DRY_RESTART_BY_ACTIVATION_LIST_FILE: &str = "/run/nixos/dry-activation-restart-list";
 const DRY_RELOAD_BY_ACTIVATION_LIST_FILE: &str = "/run/nixos/dry-activation-reload-list";
 
+// Reuse the same default timeout that systemd uses. See https://github.com/systemd/systemd/blob/8b4278d12ec55cc3f96764bc8197e1055fbb6d3f/src/libsystemd/sd-bus/bus-internal.h#L312
+const BUS_TIMEOUT: Duration = Duration::from_secs(25);
+
+// Reuse the same daemon reload/reexecute timeout that systemd uses. See https://github.com/systemd/systemd/blob/5366dbdbd44ba4dc0c914dd4daa1a5297e0b2bde/src/basic/constants.h#L18
+const DAEMON_RELOAD_TIMEOUT: Duration = Duration::from_secs(180);
+
+// Used during times of waiting for D-Bus to process messages.
+const DBUS_PROCESS_TIME: Duration = Duration::from_millis(500);
+
 #[derive(Debug, Clone, PartialEq)]
 enum Action {
     Switch,
@@ -816,28 +825,14 @@ fn parse_fstab(fstab: impl BufRead) -> (HashMap<String, Filesystem>, HashMap<Str
     (filesystems, swaps)
 }
 
-// Converts a path to the name of a systemd mount unit that would be responsible for mounting this
-// path.
-fn path_to_unit_name(bin_path: &Path, path: &str, is_automount: bool) -> String {
-    let Ok(output) = std::process::Command::new(bin_path.join("systemd-escape"))
-        .arg(format!(
-            "--suffix={}",
-            if is_automount { "automount" } else { "mount" }
-        ))
-        .arg("-p")
-        .arg(path)
-        .output()
-    else {
-        eprintln!("Unable to escape {path}!");
-        die();
-    };
-
-    let Ok(unit) = String::from_utf8(output.stdout) else {
-        eprintln!("Unable to convert systemd-escape output to valid UTF-8");
-        die();
-    };
-
-    unit.trim().to_string()
+// Converts a path to the name of a systemd mount/automount unit that would be responsible for
+// mounting this path.
+fn path_to_unit_name(path: &str, is_automount: bool) -> String {
+    format!(
+        "{}.{}",
+        libsystemd::unit::escape_path(path),
+        if is_automount { "automount" } else { "mount" },
+    )
 }
 
 // Returns a HashMap containing the same contents as the passed in `units`, minus the units in
@@ -908,7 +903,7 @@ fn systemd1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
     conn.with_proxy(
         "org.freedesktop.systemd1",
         "/org/freedesktop/systemd1",
-        Duration::from_millis(10000),
+        BUS_TIMEOUT,
     )
 }
 
@@ -916,7 +911,7 @@ fn login1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
     conn.with_proxy(
         "org.freedesktop.login1",
         "/org/freedesktop/login1",
-        Duration::from_millis(10000),
+        BUS_TIMEOUT,
     )
 }
 
@@ -929,7 +924,7 @@ fn block_on_jobs(
             "waiting for submitted jobs to finish, still have {} job(s)",
             submitted_jobs.borrow().len()
         );
-        _ = conn.process(Duration::from_millis(500));
+        _ = conn.process(DBUS_PROCESS_TIME);
     }
 }
 
@@ -984,7 +979,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     log::debug!("waiting for nixos activation to finish");
     while !*nixos_activation_done.borrow() {
         _ = dbus_conn
-            .process(Duration::from_secs(500))
+            .process(DBUS_PROCESS_TIME)
             .context("Failed to process dbus messages")?;
     }
 
@@ -1112,11 +1107,6 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         std::process::exit(0);
     }
 
-    // Needs to be after the "boot" action exits, as this directory will not exist when doing a NIXOS_LUSTRATE install
-    let current_system_bin = std::path::PathBuf::from("/run/current-system/sw/bin")
-        .canonicalize()
-        .context("/run/current-system/sw/bin is missing")?;
-
     let current_init_interface_version =
         std::fs::read_to_string("/run/current-system/init-interface-version").unwrap_or_default();
 
@@ -1155,19 +1145,19 @@ won't take effect until you reboot the system.
     let submitted_jobs = Rc::new(RefCell::new(HashMap::new()));
     let finished_jobs = Rc::new(RefCell::new(HashMap::new()));
 
-    let systemd_reload_status = Rc::new(RefCell::new(false));
+    let systemd_is_reloading = Rc::new(RefCell::new(false));
 
     systemd
         .subscribe()
         .context("Failed to subscribe to systemd dbus messages")?;
 
-    let _systemd_reload_status = systemd_reload_status.clone();
+    let _systemd_is_reloading = systemd_is_reloading.clone();
     let reloading_token = systemd
         .match_signal(
             move |signal: OrgFreedesktopSystemd1ManagerReloading,
                   _: &LocalConnection,
                   _msg: &Message| {
-                *_systemd_reload_status.borrow_mut() = signal.active;
+                *_systemd_is_reloading.borrow_mut() = signal.active;
 
                 true
             },
@@ -1343,7 +1333,7 @@ won't take effect until you reboot the system.
         let is_automount = current_filesystem.options.contains("x-systemd.automount");
 
         // Use current version of systemctl binary before daemon is reexeced.
-        let unit = path_to_unit_name(&current_system_bin, &mountpoint, is_automount);
+        let unit = path_to_unit_name(&mountpoint, is_automount);
         if let Some(new_filesystem) = new_filesystems.get(&mountpoint) {
             if current_filesystem.fs_type != new_filesystem.fs_type
                 || current_filesystem.device != new_filesystem.device
@@ -1443,6 +1433,13 @@ won't take effect until you reboot the system.
             .map(|mut child| child.wait());
 
         // Handle the activation script requesting the restart or reload of a unit.
+
+        if std::fs::exists(DRY_RESTART_BY_ACTIVATION_LIST_FILE)?
+            || std::fs::exists(DRY_RELOAD_BY_ACTIVATION_LIST_FILE)?
+        {
+            eprintln!("WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11.");
+        }
+
         for unit in std::fs::read_to_string(DRY_RESTART_BY_ACTIVATION_LIST_FILE)
             .unwrap_or_default()
             .lines()
@@ -1607,6 +1604,12 @@ won't take effect until you reboot the system.
         }
     }
 
+    if std::fs::exists(RESTART_BY_ACTIVATION_LIST_FILE)?
+        || std::fs::exists(RELOAD_BY_ACTIVATION_LIST_FILE)?
+    {
+        eprintln!("WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11.");
+    }
+
     // Handle the activation script requesting the restart or reload of a unit.
     for unit in std::fs::read_to_string(RESTART_BY_ACTIVATION_LIST_FILE)
         .unwrap_or_default()
@@ -1687,13 +1690,23 @@ won't take effect until you reboot the system.
     // just in case the new one has trouble communicating with the running pid 1.
     if restart_systemd {
         eprintln!("restarting systemd...");
+        *systemd_is_reloading.borrow_mut() = true;
         _ = systemd.reexecute(); // we don't get a dbus reply here
 
         log::debug!("waiting for systemd restart to finish");
-        while !*systemd_reload_status.borrow() {
+
+        let mut reexec_time_waited = Duration::from_secs(0);
+        while *systemd_is_reloading.borrow() {
             _ = dbus_conn
-                .process(Duration::from_millis(500))
+                .process(DBUS_PROCESS_TIME)
                 .context("Failed to process dbus messages")?;
+            reexec_time_waited += DBUS_PROCESS_TIME;
+            if reexec_time_waited >= DAEMON_RELOAD_TIMEOUT {
+                anyhow::bail!(
+                    "systemd daemon reexecute failed, timeout after {:?}",
+                    DAEMON_RELOAD_TIMEOUT
+                );
+            }
         }
     }
 
@@ -1703,12 +1716,22 @@ won't take effect until you reboot the system.
         .context("Failed to reset failed units")?;
 
     // Make systemd reload its units.
+    *systemd_is_reloading.borrow_mut() = true;
     _ = systemd.reload(); // we don't get a dbus reply here
     log::debug!("waiting for systemd reload to finish");
-    while !*systemd_reload_status.borrow() {
+
+    let mut reload_time_waited = Duration::from_secs(0);
+    while *systemd_is_reloading.borrow() {
         _ = dbus_conn
-            .process(Duration::from_millis(500))
+            .process(DBUS_PROCESS_TIME)
             .context("Failed to process dbus messages")?;
+        reload_time_waited += DBUS_PROCESS_TIME;
+        if reload_time_waited >= DAEMON_RELOAD_TIMEOUT {
+            anyhow::bail!(
+                "systemd daemon reload failed, timeout after {:?}",
+                DAEMON_RELOAD_TIMEOUT
+            );
+        }
     }
 
     dbus_conn

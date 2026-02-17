@@ -6,12 +6,12 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "revanced-cli";
   version = "5.0.1";
 
   src = fetchurl {
-    url = "https://github.com/revanced/revanced-cli/releases/download/v${version}/revanced-cli-${version}-all.jar";
+    url = "https://github.com/revanced/revanced-cli/releases/download/v${finalAttrs.version}/revanced-cli-${finalAttrs.version}-all.jar";
     hash = "sha256-tq+DSWAPVupR2W1Jqk0vKI4ox5zWSTSbpwyLcs4EXa8=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jopejoe1 ];
     mainProgram = "revanced-cli";
   };
-}
+})

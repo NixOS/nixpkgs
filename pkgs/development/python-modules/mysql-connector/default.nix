@@ -4,7 +4,6 @@
   dnspython,
   fetchFromGitHub,
   protobuf,
-  pythonOlder,
   mysql80,
   openssl,
   pkgs,
@@ -12,10 +11,8 @@
 
 buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.33";
+  version = "9.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   setupPyBuildFlags = [
     "--with-mysql-capi=${mysql80}"
@@ -28,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
-    rev = version;
-    hash = "sha256-GtMq7E2qBqFu54hjUotzPyxScTKXNdEQcmgHnS7lBhc=";
+    tag = version;
+    hash = "sha256-EwdJpiyplck26Tc9SiczxGieJ3GcTGMQva/fDzhzWn4=";
   };
 
   patches = [
@@ -63,7 +60,7 @@ buildPythonPackage rec {
       implements the DB API v2.0 specification.
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
-    changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
+    changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${src.tag}/CHANGES.txt";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       neosimsim

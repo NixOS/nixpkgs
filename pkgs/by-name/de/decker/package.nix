@@ -8,14 +8,14 @@
   multimarkdown,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "decker";
   version = "1.60";
 
   src = fetchFromGitHub {
     owner = "JohnEarnest";
     repo = "Decker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-A8lsQs3fZm8XREHx2IPRNWZp4tTZ4Jya30+gBT6xME8=";
   };
 
@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     mainProgram = "decker";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
   };
-}
+})

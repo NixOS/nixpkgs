@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # patch from: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
     ./darwin.patch
   ];
 
@@ -107,8 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wayland.freedesktop.org/";
     license = lib.licenses.mit; # Expat version
     platforms = lib.platforms.unix;
-    # requires more work: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
-    badPlatforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       codyopel
       qyliss

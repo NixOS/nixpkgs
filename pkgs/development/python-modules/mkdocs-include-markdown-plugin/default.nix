@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-include-markdown-plugin";
-  version = "7.2.0";
+  version = "7.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mkdocs_include_markdown_plugin";
     inherit version;
-    hash = "sha256-SmepGt5oDcDhX2COW2NDvsAzcv+hEsQKQlTBv7EPQvM=";
+    hash = "sha256-XZTbh7Bs0wNhnbrrul9/Q6Pe1/13CUUdJvCMF2N2/+w=";
   };
 
   build-system = [
@@ -42,6 +42,9 @@ buildPythonPackage rec {
     description = "Mkdocs Markdown includer plugin";
     homepage = "https://pypi.org/project/mkdocs-include-markdown-plugin/";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.cyberus ];
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+    ];
   };
 }

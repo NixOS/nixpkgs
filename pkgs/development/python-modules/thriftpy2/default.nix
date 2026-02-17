@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   ply,
-  pythonOlder,
   six,
   setuptools,
   tornado,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "thriftpy2";
   version = "0.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Thriftpy";

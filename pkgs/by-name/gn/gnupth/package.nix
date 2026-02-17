@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pth";
   version = "2.0.7";
 
   src = fetchurl {
-    url = "mirror://gnu/pth/pth-${version}.tar.gz";
+    url = "mirror://gnu/pth/pth-${finalAttrs.version}.tar.gz";
     sha256 = "0ckjqw5kz5m30srqi87idj7xhpw6bpki43mj07bazjm2qmh3cdbj";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -35,7 +35,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ciferkey
       Gliczy
-      normalcea
     ];
   };
 })

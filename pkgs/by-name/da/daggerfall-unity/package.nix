@@ -6,12 +6,12 @@
   fetchzip,
   lib,
   libGL,
-  libXScrnSaver,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
+  libxscrnsaver,
+  libxcursor,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxxf86vm,
   libpulseaudio,
   libudev0-shim,
   makeDesktopItem,
@@ -56,12 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     libGL
-    libXScrnSaver
-    libXcursor
-    libXi
-    libXinerama
-    libXrandr
-    libXxf86vm
+    libxscrnsaver
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
+    libxxf86vm
     libpulseaudio
     libudev0-shim
     vulkan-loader

@@ -21,6 +21,11 @@ let
     if pkg ? meta.position && isString pkg.meta.position then "${prefix}${pkg.meta.position}" else "";
 in
 {
+  inherit (builtins)
+    addDrvOutputDependencies
+    unsafeDiscardOutputDependency
+    ;
+
   /**
     Restrict a derivation to a predictable set of attribute names, so
     that the returned attrset is not strict in the actual derivation,

@@ -50,7 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     # guglielmo opens SDR libraries at run time
-    patchelf --add-rpath "${airspy}/lib:${rtl-sdr}/lib" $out/bin/.guglielmo-wrapped
+    patchelf --add-rpath "${
+      lib.makeLibraryPath [
+        airspy
+        rtl-sdr
+      ]
+    }" $out/bin/.guglielmo-wrapped
   '';
 
   meta = {

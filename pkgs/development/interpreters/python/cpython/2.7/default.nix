@@ -15,7 +15,7 @@
   tcl ? null,
   tk ? null,
   tclPackages,
-  libX11 ? null,
+  libx11 ? null,
   x11Support ? false,
   zlib,
   self,
@@ -46,7 +46,7 @@
   pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}",
 }:
 
-assert x11Support -> tcl != null && tk != null && libX11 != null;
+assert x11Support -> tcl != null && tk != null && libx11 != null;
 
 assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
   "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
@@ -279,7 +279,7 @@ let
     ++ lib.optionals x11Support [
       tcl
       tk
-      libX11
+      libx11
     ];
   nativeBuildInputs = [
     autoreconfHook
@@ -296,7 +296,7 @@ let
 
   # Python 2.7 needs this
   crossCompileEnv = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-    _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
+    env._PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
   };
 
   # Build the basic Python interpreter without modules that have
@@ -318,14 +318,15 @@ stdenv.mkDerivation (
       configureFlags
       ;
 
-    LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
-    inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
-
-    env.NIX_CFLAGS_COMPILE =
-      lib.optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
-      + lib.optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000"
-      + " -std=gnu17";
-    DETERMINISTIC_BUILD = 1;
+    env = {
+      LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
+      inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
+      NIX_CFLAGS_COMPILE =
+        lib.optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
+        + lib.optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000"
+        + " -std=gnu17";
+      DETERMINISTIC_BUILD = 1;
+    };
 
     setupHook = python-setup-hook sitePackages;
 
@@ -397,6 +398,8 @@ stdenv.mkDerivation (
     enableParallelBuilding = true;
 
     doCheck = false; # expensive, and fails
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "http://python.org";

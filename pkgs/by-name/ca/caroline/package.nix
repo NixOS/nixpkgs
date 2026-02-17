@@ -11,14 +11,14 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caroline";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "dcharles525";
     repo = "caroline";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-v423h9EC/h6B9VABhkvmYcyYXKPpvqhI8O7ZjbO637k";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   postInstall = ''
     install -Dm444 tailord/com.tux.Tailor.conf -t $out/share/dbus-1/system.d
@@ -44,7 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      mrcjkb
       xaverdh
     ];
     platforms = lib.platforms.linux;

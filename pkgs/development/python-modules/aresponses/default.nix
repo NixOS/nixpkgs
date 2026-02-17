@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytest-asyncio_0,
   pytestCheckHook,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "aresponses";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aresponses";

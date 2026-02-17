@@ -21,7 +21,7 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bolt";
   version = "0.9.8";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sDPipSIT2MJMdsOjOQSB+uOe6KXzVnyAqcQxPPr2NsU=";
   };
 
@@ -90,8 +90,10 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
-  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+  env = {
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+    PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+  };
 
   meta = {
     description = "Thunderbolt 3 device management daemon";
@@ -101,4 +103,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ callahad ];
     platforms = lib.platforms.linux;
   };
-}
+})

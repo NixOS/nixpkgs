@@ -12,14 +12,14 @@
 let
   antlr4 = antlr4_9;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luaformatter";
   version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "Koihik";
     repo = "LuaFormatter";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "14l1f9hrp6m7z3cm5yl0njba6gfixzdirxjl8nihp9val0685vm0";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "lua-format";
   };
-}
+})

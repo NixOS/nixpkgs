@@ -9,7 +9,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   xmltodict,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "aio-georss-client";
   version = "0.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "exxamalte";

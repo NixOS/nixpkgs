@@ -5,7 +5,6 @@
   fetchFromGitHub,
   requests,
   requests-oauthlib,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "tellduslive";
   version = "0.10.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "molobrakos";

@@ -9,7 +9,7 @@
   cups,
   qt6,
   undmg,
-  xorg,
+  xkeyboard-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     qt6.qtbase
     qt6.qtwayland
-    xorg.xkeyboardconfig
+    xkeyboard-config
   ];
 
   installPhase =
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
         # Wrap binary: clean env, fix XKB lookup
         makeWrapper $out/opt/010editor $out/bin/010editor \
           --unset QT_PLUGIN_PATH \
-          --set XKB_CONFIG_ROOT ${xorg.xkeyboardconfig}/share/X11/xkb
+          --set XKB_CONFIG_ROOT ${xkeyboard-config}/share/X11/xkb
 
         # Install icon + desktop entry
         install -D $out/opt/010_icon_128x128.png $out/share/icons/hicolor/128x128/apps/010.png

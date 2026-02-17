@@ -9,15 +9,12 @@
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "zadnegoale";
   version = "0.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bieniu";

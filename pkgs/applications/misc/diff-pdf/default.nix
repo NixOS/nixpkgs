@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Simple tool for visually comparing two PDF files";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
     mainProgram = "diff-pdf";
   };
 }

@@ -1363,13 +1363,13 @@ in
           # see https://github.com/openwrt/openwrt/blob/539cb5389d9514c99ec1f87bd4465f77c7ed9b93/package/kernel/mac80211/files/lib/netifd/wireless/mac80211.sh#L158
           {
             assertion = length (filter (bss: bss == radio) (attrNames radioCfg.networks)) == 1;
-            message = ''hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.'';
+            message = "hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.";
           }
           {
             assertion =
               (radioCfg.wifi4.enable && builtins.elem "HT40-" radioCfg.wifi4.capabilities)
               -> radioCfg.channel != 0;
-            message = ''hostapd radio ${radio}: using ACS (channel = 0) together with HT40- (wifi4.capabilities) is unsupported by hostapd'';
+            message = "hostapd radio ${radio}: using ACS (channel = 0) together with HT40- (wifi4.capabilities) is unsupported by hostapd";
           }
         ]
         # BSS warnings
@@ -1391,42 +1391,42 @@ in
               }
               {
                 assertion = (length (attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);
-                message = ''hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.'';
+                message = "hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.";
               }
               {
                 assertion = countWpaPasswordDefinitions <= 1;
-                message = ''hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)'';
+                message = "hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)";
               }
               {
                 assertion =
                   auth.wpaPassword != null
                   -> (stringLength auth.wpaPassword >= 8 && stringLength auth.wpaPassword <= 63);
-                message = ''hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).'';
+                message = "hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).";
               }
               {
                 assertion = auth.saePasswords == [ ] || auth.saePasswordsFile == null;
-                message = ''hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)'';
+                message = "hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)";
               }
               {
                 assertion = auth.mode == "wpa3-sae" -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null);
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires defining a sae password option'';
+                message = "hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires defining a sae password option";
               }
               {
                 assertion =
                   auth.mode == "wpa3-sae-transition"
                   -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null) && countWpaPasswordDefinitions == 1;
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option'';
+                message = "hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option";
               }
               {
                 assertion =
                   (auth.mode == "wpa2-sha1" || auth.mode == "wpa2-sha256") -> countWpaPasswordDefinitions == 1;
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option'';
+                message = "hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option";
               }
             ]
             ++ optionals (auth.saePasswords != [ ]) (
               imap1 (i: entry: {
                 assertion = (entry.password == null) != (entry.passwordFile == null);
-                message = ''hostapd radio ${radio} bss ${bss} saePassword entry ${i}: must set exactly one of `password` or `passwordFile`'';
+                message = "hostapd radio ${radio} bss ${bss} saePassword entry ${i}: must set exactly one of `password` or `passwordFile`";
               }) auth.saePasswords
             )
           ) radioCfg.networks

@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   setuptools,
   lark,
   numpy,
@@ -11,15 +11,14 @@
 
 buildPythonPackage rec {
   pname = "liberty-parser";
-  version = "0.0.25";
+  version = "0.0.29";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tok";
     repo = "liberty-parser";
     tag = version;
-    hash = "sha256-Nl+FRG93DeP1ctDphaTKZqkukEywmGprj6JORJQTunw=";
+    hash = "sha256-rPEZIRxvmNrDTVD4NG7v2BT3jJXtTisfs4txCG4OfnQ=";
   };
 
   # Tests try to write to /tmp directly. use $TMPDIR instead.

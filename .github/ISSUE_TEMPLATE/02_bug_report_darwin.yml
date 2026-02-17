@@ -37,7 +37,6 @@ body:
         - "Please select a version."
         - "- Unstable (26.05)"
         - "- Stable (25.11)"
-        - "- Old Stable (25.05)"
       default: 0
     validations:
       required: true
@@ -132,7 +131,7 @@ body:
       options:
         - label: "I assert that this is a bug and not a support request."
           required: true
-        - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+label%3A%220.kind%3A+bug%22+label%3A%226.topic%3A+darwin%22). "
+        - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+label%3A%220.kind%3A+bug%22+label%3A%226.topic%3A+darwin%22). "
           required: true
         - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
           required: true

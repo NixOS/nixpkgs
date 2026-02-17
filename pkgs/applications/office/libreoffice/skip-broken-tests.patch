@@ -188,3 +188,15 @@ index e37df27fd817..937c12e8c4c5 100644
      saveAsPDF(u"tdf163105-kashida-spaces.fodt");
  
      auto pPdfDocument = parsePDFExport();
+diff --git a/sc/qa/unit/functions_array.cxx b/sc/qa/unit/functions_array.cxx
+index ef0da39f5..43caa9002 100644
+--- a/sc/qa/unit/functions_array.cxx
++++ b/sc/qa/unit/functions_array.cxx
+@@ -25,6 +25,7 @@ void ArrayFunctionsTest::testArrayFormulasFODS()
+ 
+ void ArrayFunctionsTest::testDubiousArrayFormulasFODS()
+ {
++    return; // flaky https://github.com/NixOS/nixpkgs/issues/398633
+     //TODO: sc/qa/unit/data/functions/array/dubious/fods/linest.fods produces widely different
+     // values when built with -ffp-contract enabled (-ffp-contract=on default on Clang 14,
+     // -ffp-contract=fast default when building with optimizations on GCC) on at least aarch64

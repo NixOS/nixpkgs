@@ -14,14 +14,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "elan";
   version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1pEa3uFO1lncCjOHEDM84A0p6xoOfZnU+OCS2j8cCK8=";
   };
 
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
   buildInputs = [
     curl
     zlib
@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Small tool to manage your installations of the Lean theorem prover";
     homepage = "https://github.com/leanprover/elan";
-    changelog = "https://github.com/leanprover/elan/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/leanprover/elan/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -92,4 +92,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "elan";
   };
-}
+})

@@ -1,4 +1,4 @@
-set -u
+runHook preFetch
 
 tagtext=""
 tagflags=""
@@ -17,16 +17,22 @@ fi
 # Repository list may contain ?. No glob expansion for that.
 set -o noglob
 
+success=
 for repository in $repositories; do
     echo "Trying to clone $repository $tagtext into $out …"
     if darcs clone --lazy $tagflags "$repository" "$out"; then
         # remove metadata, because it can change
         rm -rf "$out/_darcs"
-        exit 0
+        success=1
+        break
     fi
 done
 
 set +o noglob
 
-echo "Error: couldn’t clone repository from any mirror" 1>&2
-exit 1
+if [ -z "$success" ]; then
+    echo "Error: couldn’t clone repository from any mirror" 1>&2
+    exit 1
+fi
+
+runHook postFetch

@@ -55,7 +55,7 @@
   },
   "beam": {
     "description": "Maintain BEAM-related packages and modules.",
-    "id": 4502493,
+    "id": 15530553,
     "maintainers": {
       "happysalada": 5317234
     },
@@ -139,7 +139,7 @@
   },
   "crystal-lang": {
     "description": "The Crystal Lang eco-system",
-    "id": 3806663,
+    "id": 15530580,
     "maintainers": {
       "peterhoeg": 722550
     },
@@ -153,11 +153,12 @@
     "id": 5704451,
     "maintainers": {
       "ConnorBaker": 3880346,
+      "GaetanLepage": 33058747,
       "SomeoneSerge": 9720532,
+      "YorikSar": 428074,
       "samuela": 226872
     },
     "members": {
-      "GaetanLepage": 33058747,
       "prusnak": 42201
     },
     "name": "cuda-maintainers"
@@ -169,6 +170,7 @@
       "emilazy": 18535642
     },
     "members": {
+      "Samasaur1": 30577766,
       "reckenrode": 7413633,
       "toonn": 1486805
     },
@@ -207,10 +209,11 @@
       "domenkozar": 126339,
       "donn": 12652988,
       "dwt": 57199,
+      "eclairevoyant": 848000,
       "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
-      "frogamic": 10263813,
+      "fulsomenko": 14945057,
       "gador": 1883533,
       "griff": 4368,
       "groodt": 343415,
@@ -239,7 +242,6 @@
       "mstone": 412508,
       "n8henrie": 1234956,
       "ofalvai": 1694986,
-      "pasqui23": 6931743,
       "prusnak": 42201,
       "reckenrode": 7413633,
       "ryand56": 22267679,
@@ -275,9 +277,7 @@
   "documentation-team": {
     "description": "Maintain nixpkgs/NixOS documentation and tools for building it. https://nixos.org/community/teams/documentation",
     "id": 6590023,
-    "maintainers": {
-      "alejandrosame": 1078000
-    },
+    "maintainers": {},
     "members": {
       "hsjobeki": 50398876,
       "wamirez": 24505474
@@ -423,10 +423,9 @@
     "maintainers": {
       "Mic92": 96200,
       "kalbasit": 87115,
-      "zowoq": 59103226
+      "katexochen": 49727155
     },
     "members": {
-      "katexochen": 49727155,
       "mfrw": 4929861,
       "qbit": 68368
     },
@@ -483,9 +482,9 @@
       "wrmilling": 6162814
     },
     "members": {
-      "azey7f": 41077433,
       "frederictobiasc": 26125115,
       "heywoodlh": 18178614,
+      "maevii": 41077433,
       "rorosen": 76747196
     },
     "name": "k3s"
@@ -509,7 +508,6 @@
     "id": 5536808,
     "maintainers": {
       "johanot": 998763,
-      "offlinehacker": 585547,
       "saschagrunert": 695473,
       "srhb": 219362
     },
@@ -525,7 +523,7 @@
     "members": {
       "K900": 386765,
       "Ma27": 6025220,
-      "TredwellGit": 61860346
+      "zowoq": 59103226
     },
     "name": "Linux kernel"
   },
@@ -551,8 +549,7 @@
     "members": {
       "9999years": 15312184,
       "Qyriad": 1542224,
-      "RaitoBezarius": 314564,
-      "alois31": 36605164
+      "RaitoBezarius": 314564
     },
     "name": "Lix maintainers"
   },
@@ -565,7 +562,6 @@
     },
     "members": {
       "Ericson2314": 1055245,
-      "dtzWill": 817330,
       "emilazy": 18535642,
       "lovek323": 265084,
       "rrbutani": 7833358,
@@ -581,6 +577,7 @@
     },
     "members": {
       "Cryolitia": 23723294,
+      "Moraxyc": 69713071,
       "darkyzhou": 7220778,
       "dramforever": 2818072,
       "wegank": 9713184
@@ -692,7 +689,6 @@
       "0x4A6F": 9675338,
       "MattSturgeon": 5046562,
       "Sereja313": 112060595,
-      "dasJ": 4971975,
       "dyegoaurelio": 42411160
     },
     "name": "nix-formatting"
@@ -708,6 +704,7 @@
       "Mic92": 96200,
       "Radvendii": 1239929,
       "edolstra": 1148549,
+      "lovesegfault": 7243783,
       "xokdvium": 145775305
     },
     "name": "Nix team"
@@ -726,12 +723,14 @@
     "description": "Maintain Nixpkgs' in-tree Continuous Integration, including GitHub Actions",
     "id": 13362067,
     "maintainers": {
-      "philiptaron": 43863,
       "MattSturgeon": 5046562,
       "Mic92": 96200,
+      "philiptaron": 43863,
       "zowoq": 59103226
     },
-    "members": {},
+    "members": {
+      "mdaniels5757": 8762511
+    },
     "name": "Nixpkgs CI"
   },
   "nixpkgs-core": {
@@ -739,8 +738,7 @@
     "id": 14317027,
     "maintainers": {
       "alyssais": 2768870,
-      "emilazy": 18535642,
-      "wolfgangwalther": 9132420
+      "emilazy": 18535642
     },
     "members": {},
     "name": "Nixpkgs core"
@@ -830,7 +828,6 @@
       "K900": 386765,
       "LunNova": 782440,
       "NickCao": 15247171,
-      "SCOTT-HAMILTON": 24496705,
       "SuperSandro2000": 7258858,
       "bkchr": 5718007,
       "ilya-fedin": 17829319,
@@ -932,7 +929,6 @@
       "alyssais": 2768870,
       "basvandijk": 576355,
       "cdepillabout": 64804,
-      "dtzWill": 817330,
       "lorenzleutgeb": 542154,
       "matthewbauer": 19036,
       "r-burns": 52847440,

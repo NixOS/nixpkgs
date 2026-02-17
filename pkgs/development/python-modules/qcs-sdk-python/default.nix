@@ -7,7 +7,7 @@
   opentelemetry-sdk,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  pythonAtLeast,
   qcs-api-client-common,
   quil,
   rustPlatform,
@@ -18,6 +18,9 @@ buildPythonPackage rec {
   pname = "qcs-sdk-python";
   version = "0.21.22";
   pyproject = true;
+
+  # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "rigetti";

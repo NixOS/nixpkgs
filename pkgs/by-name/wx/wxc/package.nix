@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   libGL,
   wxGTK32,
@@ -11,8 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "wxc";
   version = "1.0.0.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "wxHaskell";
     repo = "wxHaskell";
     rev = "wxc-${finalAttrs.version}";

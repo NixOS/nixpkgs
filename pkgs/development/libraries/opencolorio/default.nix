@@ -23,26 +23,25 @@
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.4.2";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    hash = "sha256-+P7T8UZuQEVmsMykSWtUxg0vC7Sr4fQJpovCU5sKtsA=";
+    hash = "sha256-iI32dnGZdizLBOs7IQtmLUYMPWxadvWNeqZjy49AWb0=";
   };
-
-  patches = [
-    # Fix incorrect line number in test
-    ./line-numbers.patch
-  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # these tests don't like being run headless on darwin. no builtin
     # way of skipping tests so this is what we're reduced to.
     substituteInPlace tests/cpu/Config_tests.cpp \
-      --replace 'OCIO_ADD_TEST(Config, virtual_display)' 'static void _skip_virtual_display()' \
-      --replace 'OCIO_ADD_TEST(Config, virtual_display_with_active_displays)' 'static void _skip_virtual_display_with_active_displays()'
+      --replace-fail 'OCIO_ADD_TEST(Config, virtual_display)' 'static void _skip_virtual_display()' \
+      --replace-fail 'OCIO_ADD_TEST(Config, virtual_display_with_active_displays)' 'static void _skip_virtual_display_with_active_displays()'
+
+    # can't just use /tmp like that on macos
+    substituteInPlace tests/cpu/UnitTestUtils.cpp \
+      --replace-fail '"/tmp"' '"'"$(mktemp -d)"'"'
   '';
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals pythonBindings [ python3Packages.python ];
@@ -67,6 +66,9 @@ stdenv.mkDerivation rec {
     openexr
   ];
 
+  # Gcc blindly tries to optimize all float operations instead of just marked ones.
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122304
+  CXXFLAGS = "-ffp-contract=on";
   cmakeFlags = [
     "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
     "-DOCIO_USE_SSE2NEON=OFF"

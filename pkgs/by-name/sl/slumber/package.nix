@@ -8,21 +8,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slumber";
-  version = "4.2.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "LucasPickering";
     repo = "slumber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8uJGNiKhK/6wdUv95PtUEa8LcgDfdGzdRSSUmB2vCiw=";
+    hash = "sha256-gO2/rX4AL90+mFlSjmTGedOEOyDJpgODwbAq9IqtHnU=";
   };
 
-  cargoHash = "sha256-IR/In6zLZAOHEC0YAulbK60SUJKWnBtesst5mnWJARI=";
+  cargoHash = "sha256-vKo1KpDp/+LVx2Ap2GOiGsiBx03qUo5Z4YNoPFTc/3s=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

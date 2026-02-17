@@ -11,7 +11,10 @@
   ninja,
   pkg-config,
   python3Packages,
-  xorg,
+  libxfixes,
+  libxext,
+  libx11,
+  libxcb,
   zlib,
 }:
 let
@@ -45,10 +48,10 @@ stdenv.mkDerivation {
   buildInputs = [
     libxml2 # should be propagated from libllvm
     llvmPackages.libllvm
-    xorg.libX11
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libxcb
+    libx11
+    libxext
+    libxfixes
+    libxcb
     zlib
   ];
 

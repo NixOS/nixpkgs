@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
 
   # buildtime
   hatchling,
@@ -12,7 +11,6 @@
   # runtime deps
   click,
   ghp-import,
-  importlib-metadata,
   jinja2,
   markdown,
   markupsafe,
@@ -39,14 +37,17 @@ buildPythonPackage rec {
   version = "1.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = "mkdocs";
     tag = version;
     hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
+
+  patches = [
+    # https://github.com/mkdocs/mkdocs/pull/4065
+    ./click-8.3.0-compat.patch
+  ];
 
   build-system = [
     hatchling
@@ -69,8 +70,7 @@ buildPythonPackage rec {
     pyyaml
     pyyaml-env-tag
     watchdog
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     i18n = [ babel ];

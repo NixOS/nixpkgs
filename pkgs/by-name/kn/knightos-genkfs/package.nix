@@ -7,14 +7,14 @@
   libxslt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "genkfs";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "genkfs";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0f50idd2bb73b05qjmwlirjnhr1bp43zhrgy6z949ab9a7hgaydp";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.all;
   };
-}
+})

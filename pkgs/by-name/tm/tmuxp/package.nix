@@ -5,13 +5,13 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tmuxp";
   version = "1.56.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-6Nc6JHNZM6OUgoOfpD4wCDUlLAb2kLBplm1IjuVG/q8=";
   };
 
@@ -40,9 +40,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "tmux session manager";
     homepage = "https://tmuxp.git-pull.com/";
-    changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
+    changelog = "https://github.com/tmux-python/tmuxp/raw/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "tmuxp";
   };
-}
+})

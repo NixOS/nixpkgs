@@ -8,6 +8,19 @@ let
   callPackage = lua.pkgs.callPackage;
 in
 {
+  /**
+    Accepts "bustedFlags" as an array.
+    You can customize the call by setting "bustedFlags" and prevent the test from running by setting "dontBustedCheck"
+  */
+  bustedCheckHook = callPackage (
+    { busted }:
+    makeSetupHook {
+      name = "busted-check-hook";
+      propagatedBuildInputs = [
+        busted
+      ];
+    } ./busted-check-hook.sh
+  ) { };
 
   luarocksCheckHook = callPackage (
     { luarocks }:

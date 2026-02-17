@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # runtime
   editables,
   packaging,
   pathspec,
   pluggy,
-  tomli,
   trove-classifiers,
 
   # tests
@@ -21,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "hatchling";
-  version = "1.27.0";
+  version = "1.28.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lxwpbZgZq7OBERL8UsepdRyNOBiY82Uzuxb5eR6UH9Y=";
+    hash = "sha256-TVCwKuzmiSuM0LPObILLIYWU0+xYNtvedb9BohqwBMg=";
   };
 
   # listed in backend/pyproject.toml
@@ -36,8 +34,7 @@ buildPythonPackage rec {
     pathspec
     pluggy
     trove-classifiers
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   pythonImportsCheck = [
     "hatchling"

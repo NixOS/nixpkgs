@@ -106,9 +106,6 @@ let
         description = "Torrent client";
         homepage = "https://deluge-torrent.org";
         license = lib.licenses.gpl3Plus;
-        maintainers = with lib.maintainers; [
-          ebzzry
-        ];
         platforms = lib.platforms.all;
       };
     };

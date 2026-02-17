@@ -6,16 +6,16 @@
   addBinToPathHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gallia";
-  version = "2.0.0b3";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
-    tag = "v${version}";
-    hash = "sha256-/ql2EORU1oqZ/+90F0FFfRVdv6Esa5UqfaasLE4wf8k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2jiD2ZZGinfTT+35TYl3+okWkkTrY1IdfSYbjC+/cvs=";
   };
 
   postPatch = ''
@@ -32,7 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     argcomplete
     boltons
     construct
-    more-itertools
     platformdirs
     pydantic
     tabulate
@@ -56,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Extendable Pentesting Framework for the Automotive Domain";
     homepage = "https://github.com/Fraunhofer-AISEC/gallia";
-    changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/${src.tag}";
+    changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
@@ -64,4 +63,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

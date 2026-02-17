@@ -52,7 +52,7 @@ let
       ]
       ++ args.nativeBuildInputs or [ ];
 
-      JAVA_HOME = mvnJdk;
+      env.JAVA_HOME = mvnJdk;
 
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -131,7 +131,7 @@ stdenv.mkDerivation (
       maven
     ];
 
-    JAVA_HOME = mvnJdk;
+    env.JAVA_HOME = mvnJdk;
 
     buildPhase = ''
       runHook preBuild

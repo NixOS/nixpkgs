@@ -12,6 +12,7 @@
   curl,
   gsoap,
   rapidjson,
+  zlib,
   enableTools ? true,
   # Use libcurl instead of libneon
   # Note that the libneon used is bundled in the project
@@ -26,7 +27,7 @@
 let
   boolToUpper = b: lib.toUpper (lib.boolToString b);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.8.10";
   pname = "davix" + lib.optionalString enableThirdPartyCopy "-copy";
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     libxml2
     openssl
     rapidjson
+    zlib
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
   ++ lib.optional enableThirdPartyCopy gsoap;
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "davix";
-    rev = "refs/tags/R_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "R_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-n4NeHBgQwGwgHAFQzPc3oEP9k3F/sqrTmkI/zHW+Miw=";
   };
 
@@ -74,6 +76,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Transitive dependency of gsoap (only supports static library builds)
+  env.NIX_LDFLAGS = "-lz";
+
   meta = {
     description = "Toolkit for Http-based file management";
 
@@ -84,9 +89,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     homepage = "https://github.com/cern-fts/davix";
     changelog = "https://github.com/cern-fts/davix/blob/R_${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/RELEASE-NOTES.md";
     maintainers = with lib.maintainers; [ adev ];
     platforms = lib.platforms.all;
   };
-}
+})

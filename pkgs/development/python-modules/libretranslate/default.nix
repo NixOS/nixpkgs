@@ -29,19 +29,19 @@
   prometheus-client,
   polib,
   python,
-  xorg,
+  lndir,
 }:
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.8.3";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
     tag = "v${version}";
-    hash = "sha256-nWm0h/ceGDtoUVqYPkIC+anXrneJsxlZ4DN3Wge0NCk=";
+    hash = "sha256-bBs7gG42H4MNca5RUiedKNQkLjKpBm2SbPMRyh2gh6c=";
   };
 
   build-system = [
@@ -95,7 +95,7 @@ buildPythonPackage rec {
         {
           nativeBuildInputs = [
             pkgs.brotli
-            xorg.lndir
+            lndir
           ];
         }
         ''

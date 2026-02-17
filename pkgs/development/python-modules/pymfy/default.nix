@@ -5,7 +5,6 @@
   httpretty,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pymfy";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tetienne";

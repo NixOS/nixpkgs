@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "annextimelog";
   version = "0.15.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "nobodyinperson";

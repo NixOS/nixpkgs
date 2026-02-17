@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   tkinter,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "sv-ttk";
   version = "2.6.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version;

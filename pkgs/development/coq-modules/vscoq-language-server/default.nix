@@ -16,7 +16,6 @@ let
     in
     with lib.versions;
     lib.switch coq.coq-version [
-      (case (range "8.18" "9.1") "2.3.3")
       (case (range "8.18" "9.1") "2.2.6")
       (case (range "8.18" "8.20") "2.2.1")
       (case (range "8.18" "8.19") "2.1.2")
@@ -24,8 +23,8 @@ let
     ] null;
   location = {
     domain = "github.com";
-    owner = "coq-community";
-    repo = "vscoq";
+    owner = "rocq-prover";
+    repo = "vsrocq";
   };
   fetch = metaFetch {
     release."2.0.3+coq8.18".sha256 = "sha256-VXhHCP6Ni5/OcsgoI1EbJfYCpXzwkuR8kbbKrl6dfjU=";
@@ -42,8 +41,7 @@ let
     release."2.2.5".sha256 = "sha256-XyIjwem/yS7UIpQATNixgKkrMOHHs74nkAOvpU5WG1k=";
     release."2.2.6".rev = "v2.2.6";
     release."2.2.6".sha256 = "sha256-J8nRTAwN6GBEYgqlXa2kkkrHPatXsSObQg9QUQoZhgE=";
-    release."2.3.3".rev = "v2.3.3";
-    release."2.3.3".sha256 = "sha256-wgn28wqWhZS4UOLUblkgXQISgLV+XdSIIEMx9uMT/ig=";
+    # This is the last version of VsCoq. Now, new versions are for VsRocq.
     inherit location;
   };
   fetched = fetch (if version != null then version else defaultVersion);
@@ -62,7 +60,6 @@ ocamlPackages.buildDunePackage {
   ++ (with ocamlPackages; [
     findlib
     lablgtk3-sourceview3
-    yojson
     zarith
     ppx_inline_test
     ppx_assert
@@ -70,22 +67,22 @@ ocamlPackages.buildDunePackage {
     ppx_deriving
     ppx_import
     sexplib
-    ppx_yojson_conv
+    (ppx_yojson_conv.override {
+      ppx_yojson_conv_lib = ppx_yojson_conv_lib.override { yojson = yojson_2; };
+    })
     lsp
     sel
     ppx_optcomp
   ]);
 
-  meta =
-    with lib;
-    {
-      description = "Language server for the vscoq vscode/codium extension";
-      homepage = "https://github.com/coq-community/vscoq";
-      maintainers = with lib.maintainers; [ cohencyril ];
-      license = lib.licenses.mit;
-    }
-    // optionalAttrs (fetched.broken or false) {
-      coqFilter = true;
-      broken = true;
-    };
+  meta = {
+    description = "Language server for the vscoq vscode/codium extension";
+    homepage = "https://github.com/rocq-prover/vsrocq";
+    maintainers = with lib.maintainers; [ cohencyril ];
+    license = lib.licenses.mit;
+  }
+  // lib.optionalAttrs (fetched.broken or false) {
+    coqFilter = true;
+    broken = true;
+  };
 }

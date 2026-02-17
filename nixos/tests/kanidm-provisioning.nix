@@ -18,28 +18,32 @@ in
   name = "kanidm-provisioning-${kanidmPackage.version}";
   meta.maintainers = with pkgs.lib.maintainers; [ oddlama ];
 
-  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidmWithSecretProvisioning;
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidmWithSecretProvisioning_1_8;
 
   nodes.provision =
     { pkgs, lib, ... }:
     {
       services.kanidm = {
         package = kanidmPackage;
-        enableServer = true;
-        serverSettings = {
-          origin = "https://${serverDomain}";
-          domain = serverDomain;
-          bindaddress = "[::]:443";
-          ldapbindaddress = "[::1]:636";
-          tls_chain = "${certsPath}/snakeoil.crt";
-          tls_key = "${certsPath}/snakeoil.key";
+        server = {
+          enable = true;
+          settings = {
+            origin = "https://${serverDomain}";
+            domain = serverDomain;
+            bindaddress = "[::]:443";
+            ldapbindaddress = "[::1]:636";
+            tls_chain = "${certsPath}/snakeoil.crt";
+            tls_key = "${certsPath}/snakeoil.key";
+          };
         };
         # So we can check whether provisioning did what we wanted
-        enableClient = true;
-        clientSettings = {
-          uri = "https://${serverDomain}";
-          verify_ca = true;
-          verify_hostnames = true;
+        client = {
+          enable = true;
+          settings = {
+            uri = "https://${serverDomain}";
+            verify_ca = true;
+            verify_hostnames = true;
+          };
         };
       };
 
@@ -289,7 +293,7 @@ in
       # We need access to the config file in the test script.
       filteredConfig = pkgs.lib.converge (pkgs.lib.filterAttrsRecursive (
         _: v: v != null
-      )) nodes.provision.services.kanidm.serverSettings;
+      )) nodes.provision.services.kanidm.server.settings;
       serverConfigFile = (pkgs.formats.toml { }).generate "server.toml" filteredConfig;
 
       specialisations = "${nodes.provision.system.build.toplevel}/specialisation";

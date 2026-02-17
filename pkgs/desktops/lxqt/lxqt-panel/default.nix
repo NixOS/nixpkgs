@@ -9,12 +9,12 @@
   kguiaddons,
   kwindowsystem,
   layer-shell-qt,
-  libXdamage,
-  libXdmcp,
-  libXtst,
+  libxdamage,
+  libxdmcp,
+  libxtst,
   libdbusmenu,
   liblxqt,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libqtxdg,
   libstatgrab,
@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-panel";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-panel";
     tag = finalAttrs.version;
-    hash = "sha256-cwemHe092vNRDeseXkGoWAEXawNTVbSiB87owfaLeAo=";
+    hash = "sha256-n/U2EgEZfh8mJWtEX+HByqHqtm9NqIXnURqUzSOcvns=";
   };
 
   nativeBuildInputs = [
@@ -58,12 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     kguiaddons
     kwindowsystem
     layer-shell-qt
-    libXdamage
-    libXdmcp
-    libXtst
+    libxdamage
+    libxdmcp
+    libxtst
     libdbusmenu
     liblxqt
-    libpthreadstubs
+    libpthread-stubs
     libpulseaudio
     libqtxdg
     libstatgrab

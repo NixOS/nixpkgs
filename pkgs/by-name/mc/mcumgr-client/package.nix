@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcumgr-client";
   version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "vouch-opensource";
     repo = "mcumgr-client";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P5ykIVdWAxuCblMe7kzjswEca/+MsqpizCGUHIpR4qc=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "mcumgr-client";
   };
-}
+})

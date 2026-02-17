@@ -10,16 +10,16 @@
   zlib,
   libiconv,
   libpng,
-  libX11,
+  libx11,
   freetype,
   ttfautohint,
   gd,
-  libXaw,
+  libxaw,
   icu,
   ghostscript,
-  libXpm,
-  libXmu,
-  libXext,
+  libxpm,
+  libxmu,
+  libxext,
   perl,
   perlPackages,
   python3Packages,
@@ -37,13 +37,13 @@
   brotli,
   cairo,
   pixman,
-  xorg,
+  libxi,
+  libxfixes,
   clisp,
   biber,
   woff2,
   xxHash,
   makeWrapper,
-  shortenPerlShebang,
   useFixedHashes,
   asymptote,
   biber-ms,
@@ -177,6 +177,7 @@ let
       "--disable-texlive" # do not build the texlive (TeX Live scripts) package
       "--disable-linked-scripts" # do not install the linked scripts
       "-C" # use configure cache to speed up
+      "CFLAGS=-std=gnu17" # fix build with gcc15
     ]
     ++ withSystemLibs [
       # see "from TL tree" vs. "Using installed"  in configure output
@@ -414,7 +415,7 @@ rec {
       harfbuzz
       icu
       graphite2
-      libX11
+      libx11
       potrace
     ];
 
@@ -538,16 +539,16 @@ rec {
     let
       # The latest release of the context-packaging repo before the CTAN version in tlpdb.nix
       # https://github.com/gucci-on-fleek/context-packaging
-      context_packaging_release = "2025-06-12-14-21-B";
+      context_packaging_release = "2026-01-08-23-30-A";
     in
     stdenv.mkDerivation {
       pname = "luametatex";
-      version = "2.11.07";
+      version = "2.11.08";
 
       src = fetchzip {
         name = "luametatex.src.zip";
         url = "https://github.com/gucci-on-fleek/context-packaging/releases/download/${context_packaging_release}/luametatex.src.zip";
-        hash = "sha256-9TLTIUSqA3g8QP9EF+tQ4VfLLLQwMrbeXPPy58uFWDo=";
+        hash = "sha256-PY1rrgLFAXR7YRcJMx1ob9dQc1PFoBSpi1xLQGM4Lko=";
         stripRoot = false;
       };
 
@@ -570,14 +571,14 @@ rec {
 
   dvisvgm = stdenv.mkDerivation rec {
     pname = "dvisvgm";
-    version = "3.2.2";
+    version = "3.6";
 
     src =
       assert lib.assertMsg (version == texlive.pkgs.dvisvgm.version)
         "dvisvgm: TeX Live version (${texlive.pkgs.dvisvgm.version}) different from source (${version}), please update dvisvgm";
       fetchurl {
         url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
-        hash = "sha256-8GKL6lqjMUXXWwpqbdGPrYibdSc4y8AcGUGPNUc6HQA=";
+        hash = "sha256-JkRrs7EHOf8JJcnkFrdtLSIgdcnV3Pr+biFGCdBy7Ro=";
       };
 
     configureFlags = [
@@ -647,7 +648,7 @@ rec {
   pygmentex = python3Packages.buildPythonApplication rec {
     pname = "pygmentex";
     inherit (src) version;
-    format = "other";
+    pyproject = false;
 
     src = assertFixedHash pname texlive.pkgs.pygmentex.tex;
 
@@ -692,7 +693,7 @@ rec {
       # so that top level updates do not break texlive
       src = fetchurl {
         url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-+T0n2SX9C8Mz0Fb+vkny1x+TWETC+NN67MjfD+6Twys=";
+        hash = "sha256-NcFtCjvdhppW5O//Rjj4HDqIsva2ZNGWRxAV2/TGmoc=";
       };
 
       texContainer = texlive.pkgs.asymptote.tex;
@@ -739,17 +740,15 @@ rec {
       core # kpathsea
       freetype
       ghostscript
-    ]
-    ++ (with xorg; [
-      libX11
-      libXaw
-      libXi
-      libXpm
-      libXmu
-      libXaw
-      libXext
-      libXfixes
-    ]);
+      libx11
+      libxaw
+      libxi
+      libxpm
+      libxmu
+      libxaw
+      libxext
+      libxfixes
+    ];
 
     preConfigure = "cd texk/xdvik";
 
@@ -773,7 +772,7 @@ rec {
 
     inherit (common) src;
 
-    buildInputs = [ libX11 ];
+    buildInputs = [ libx11 ];
 
     preConfigure = "cd utils/xpdfopen";
 

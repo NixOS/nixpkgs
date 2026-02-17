@@ -49,7 +49,8 @@
   perl,
   appstream,
   desktop-file-utils,
-  xorg,
+  libxpm,
+  libxmu,
   glib-networking,
   json-glib,
   libmypaint,
@@ -68,6 +69,7 @@
   alsa-lib,
   desktopToDarwinBundle,
   fetchpatch,
+  qoi,
 }:
 
 let
@@ -187,11 +189,12 @@ stdenv.mkDerivation (finalAttrs: {
     libheif
     python
     libexif
-    xorg.libXpm
-    xorg.libXmu
+    libxpm
+    libxmu
     glib-networking
     libmypaint
     mypaint-brushes1
+    qoi
 
     # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
     adwaita-icon-theme

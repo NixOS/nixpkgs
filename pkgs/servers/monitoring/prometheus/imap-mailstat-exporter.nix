@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bt909";
     repo = "imap-mailstat-exporter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aR/94C9SI+FPs3zg3bpexmgGYrhxghyHwpXj25x0yuw=";
   };
 

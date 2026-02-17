@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "measurement";
   version = "4.0a8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = !isPy3k;
 

@@ -7,12 +7,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sitelen-seli-kiwen";
-  version = "1.8.1";
+  version = "2.0";
 
   src = fetchzip {
     url = "https://github.com/kreativekorp/sitelen-seli-kiwen/releases/download/${finalAttrs.version}/sitelenselikiwen.zip";
     stripRoot = false;
-    hash = "sha256-FqhUsA+q3ZLfJRMxi47rz3FOWnm1pfXxWnM1c8HQ7NY=";
+    hash = "sha256-Ku4+ETI5nXobavjuOnXPuvLHsH3gGsdHOUdv90afADM=";
   };
 
   installPhase = ''

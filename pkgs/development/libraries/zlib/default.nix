@@ -5,9 +5,6 @@
   shared ? !stdenv.hostPlatform.isStatic,
   static ? true,
   # If true, a separate .static output is created and the .a is moved there.
-  # In this case `pkg-config` auto detection does not currently work if the
-  # .static output is given as `buildInputs` to another package (#66461), because
-  # the `.pc` file lists only the main output's lib dir.
   # If false, and if `{ static = true; }`, the .a stays in the main output.
   splitStaticOutput ? shared && static,
   testers,
@@ -27,7 +24,7 @@ assert splitStaticOutput -> static;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src =
     let
@@ -40,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
         # Stable archive path, but captcha can be encountered, causing hash mismatch.
         "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
       ];
-      hash = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM=";
+      hash = "sha256-uzKaCizQJ00FUZ1hxmfAYuBpkNcuEl7i36jeZPARnRY=";
     };
 
   postPatch =
@@ -70,6 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     export CHOST=${stdenv.hostPlatform.config}
   '';
 
+  configureFlags = [
+    "--includedir=${placeholder "dev"}/include"
+    "--sharedlibdir=${placeholder "out"}/lib"
+    "--libdir=${placeholder (if splitStaticOutput then "static" else "out")}/lib"
+  ]
   # For zlib's ./configure (as of version 1.2.11), the order
   # of --static/--shared flags matters!
   # `--shared --static` builds only static libs, while
@@ -82,7 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
   # `--static --shared`, `--shared` and giving nothing.
   # Of these, we choose `--static --shared`, for clarity and simpler
   # conditions.
-  configureFlags = lib.optional static "--static" ++ lib.optional shared "--shared";
+  ++ lib.optional static "--static"
+  ++ lib.optional shared "--shared";
   # We do the right thing manually, above, so don't need these.
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
@@ -96,13 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
   # but we don't do it simply to avoid mass rebuilds.
 
   postInstall =
-    lib.optionalString splitStaticOutput ''
-      moveToOutput lib/libz.a "$static"
-    ''
     # jww (2015-01-06): Sometimes this library install as a .so, even on
     # Darwin; others time it installs as a .dylib.  I haven't yet figured out
     # what causes this difference.
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       for file in $out/lib/*.so* $out/lib/*.dylib* ; do
         ${stdenv.cc.bintools.targetPrefix}install_name_tool -id "$file" $file
       done
@@ -144,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${stdenv.cc.targetPrefix}"
+    "pkgconfigdir=${placeholder "dev"}/share/pkgconfig"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) [
     "-f"
@@ -171,5 +172,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     platforms = lib.platforms.all;
     pkgConfigModules = [ "zlib" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "zlib" finalAttrs.version;
   };
 })

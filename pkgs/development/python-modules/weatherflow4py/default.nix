@@ -36,6 +36,8 @@ buildPythonPackage rec {
     websockets
   ];
 
+  pythonRelaxDeps = [ "marshmallow" ];
+
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio

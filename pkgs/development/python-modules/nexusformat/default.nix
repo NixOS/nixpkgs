@@ -6,7 +6,6 @@
   hdf5plugin,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,
@@ -14,14 +13,12 @@
 
 buildPythonPackage rec {
   pname = "nexusformat";
-  version = "1.0.8";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zsIOnWgMbUaJl3tHnpQiF3+Qy48dwKDAvFlg6z8hW/M=";
+    hash = "sha256-mIGbmpT9+ZPD3X999fhZSdSg/XgI/SdbEoE/oarjuS0=";
   };
 
   build-system = [

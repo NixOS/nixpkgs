@@ -40,6 +40,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "vim-language-server extension for coc.nvim";
     homepage = "https://github.com/iamcco/coc-vimlsp";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

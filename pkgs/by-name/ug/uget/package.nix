@@ -17,14 +17,21 @@
   aria2Support ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uget";
   version = "2.2.3-1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/urlget/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/urlget/uget-${finalAttrs.version}.tar.gz";
     sha256 = "0jchvgkkphhwp2z7vd4axxr9ns8b6vqc22b2z8a906qm8916wd8i";
   };
+
+  patches = [
+    # Fix build with gcc15
+    #   UgtkMenubar.c:188:19: error: too many arguments to function 'ugtk_setting_dialog_new'; expected 0, have 2
+    #   UgtkSettingDialog.c:50:21: error: conflicting types for 'ugtk_setting_dialog_new'; have 'UgtkSettingDialog *(const gchar *, GtkWindow *)' {aka 'UgtkSettingDialog *(const char *, struct _GtkWindow *)'}
+    ./fix-match-ugtk_setting_dialog_new-declaration-with-d.patch
+  ];
 
   # Apply upstream fix for -fno-common toolchains.
   postPatch = ''
@@ -73,4 +80,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "uget-gtk";
   };
-}
+})

@@ -9,13 +9,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mediainfo";
-  version = "25.09";
+  version = "26.01";
 
   src = fetchurl {
-    url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    hash = "sha256-jUug2L19QJf9CjiNQTHeQMNaxdvlKkdgt52PHSnvLmM=";
+    url = "https://mediaarea.net/download/source/mediainfo/${finalAttrs.version}/mediainfo_${finalAttrs.version}.tar.xz";
+    hash = "sha256-FQZWytiO9O+k6Cmc/CTZt6cjVFdqaTSZIFiKzuLMPHY=";
   };
 
   nativeBuildInputs = [
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.devhell ];
     mainProgram = "mediainfo";
   };
-}
+})

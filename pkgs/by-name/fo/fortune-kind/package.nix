@@ -9,14 +9,14 @@
   fortuneAlias ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fortune-kind";
   version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "cafkafk";
     repo = "fortune-kind";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Tpg0Jq2EhkwQuz5ZOtv6Rb5YESSlmzLoJPTxYJNNgac=";
   };
 
@@ -67,10 +67,10 @@ rustPlatform.buildRustPackage rec {
       process to the fortune adoption workflow.
     '';
     homepage = "https://github.com/cafkafk/fortune-kind";
-    changelog = "https://github.com/cafkafk/fortune-kind/releases/tag/v${version}";
+    changelog = "https://github.com/cafkafk/fortune-kind/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "fortune-kind";
     maintainers = with lib.maintainers; [ cafkafk ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})

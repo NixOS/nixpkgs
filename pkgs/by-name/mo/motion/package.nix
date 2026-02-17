@@ -9,14 +9,14 @@
   libmicrohttpd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "motion";
   version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "Motion-Project";
     repo = "motion";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     sha256 = "sha256-NAzVFWWbys+jYYOifCOOoucAKfa19njIzXBQbtgGX9M=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "motion";
   };
-}
+})

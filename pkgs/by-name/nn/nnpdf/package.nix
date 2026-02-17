@@ -14,14 +14,14 @@
   swig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nnpdf";
   version = "4.0.9";
 
   src = fetchFromGitHub {
     owner = "NNPDF";
     repo = "nnpdf";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-PyhkHlOlzKfDxUX91NkeZWjdEzFR4PW0Yh5Yz6ZA27g=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.veprbl ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "minecraft-server-hibernation";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "gekware";
     repo = "minecraft-server-hibernation";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-b6LeqjIraIasHBpaVgy8esl4NV8rdBrfO7ewgeIocS8=";
   };
 
@@ -44,4 +44,4 @@ buildGoModule rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ squarepear ];
   };
-}
+})

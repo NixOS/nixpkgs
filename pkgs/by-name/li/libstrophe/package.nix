@@ -11,21 +11,28 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libstrophe";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "strophe";
     repo = "libstrophe";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-53O8hHyw9y0Bzs+BpGouAxuSGJxh6NSNNWZqi7RHAsY=";
   };
+
+  patches = [
+    # Newer GCC rejects implicitly weak-typed pointer casting.
+    # Upstream PR: https://github.com/strophe/libstrophe/pull/267
+    ./pointer-cast.patch
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [
     openssl
     expat
@@ -48,7 +55,7 @@ stdenv.mkDerivation rec {
       runs well on both Linux, Unix, and Windows based platforms.
     '';
     homepage = "https://strophe.im/libstrophe/";
-    changelog = "https://github.com/strophe/libstrophe/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/strophe/libstrophe/blob/${finalAttrs.src.rev}/ChangeLog";
     license = with lib.licenses; [
       gpl3Only
       mit
@@ -59,4 +66,4 @@ stdenv.mkDerivation rec {
       flosse
     ];
   };
-}
+})

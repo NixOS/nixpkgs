@@ -5,7 +5,10 @@
   copyDesktopItems,
   gtk3,
   libxkbcommon,
-  xorg,
+  libxinerama,
+  libxtst,
+  libxext,
+  libxi,
   libnotify,
   gobject-introspection, # needed to build gi-crystal
   openbox,
@@ -21,14 +24,6 @@
 let
   pname = "ahk_x11";
   version = "1.0.7";
-
-  inherit (xorg)
-    libXinerama
-    libXtst
-    libXext
-    libXi
-    ;
-
 in
 crystal.buildCrystalPackage {
   inherit pname version;
@@ -75,10 +70,10 @@ crystal.buildCrystalPackage {
   buildInputs = [
     gtk3
     libxkbcommon
-    libXinerama
-    libXtst
-    libXext
-    libXi
+    libxinerama
+    libxtst
+    libxext
+    libxi
     libnotify
   ];
   nativeBuildInputs = [

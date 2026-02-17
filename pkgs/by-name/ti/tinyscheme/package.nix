@@ -78,7 +78,6 @@ stdenv.mkDerivation rec {
     changelog = "https://tinyscheme.sourceforge.net/CHANGES";
     license = lib.licenses.bsdOriginal;
     mainProgram = "tinyscheme";
-    maintainers = [ lib.maintainers.ebzzry ];
     platforms = lib.platforms.unix;
   };
 }

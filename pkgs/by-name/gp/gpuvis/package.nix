@@ -11,14 +11,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpuvis";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "mikesart";
     repo = "gpuvis";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-a9eAYDsiwyzZc4FAPo0wANysisIT4qCHLh2PrYswJtw=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ emantor ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -7,10 +7,9 @@
   flit-core,
   matplotlib,
   pytest-xdist,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   numpy,
   pandas,
-  pythonOlder,
   scipy,
   statsmodels,
 }:
@@ -18,9 +17,7 @@
 buildPythonPackage rec {
   pname = "seaborn";
   version = "0.13.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwaskom";
@@ -42,6 +39,11 @@ buildPythonPackage rec {
       url = "https://github.com/mwaskom/seaborn/commit/385e54676ca16d0132434bc9df6bc41ea8b2a0d4.patch";
       hash = "sha256-nwGwTkP7W9QzgbbAVdb2rASgsMxqFnylMk8GnTE445w=";
     })
+    (fetchpatch2 {
+      name = "numpy-2.4-compat.patch";
+      url = "https://github.com/mwaskom/seaborn/commit/5023f2ee885a45200f5b63156a158ddf7272c29e.patch";
+      hash = "sha256-T3OfjEEsPRRv1J6gdq9XmwcWEpPMDzul+LmK8UtV7nk=";
+    })
   ];
 
   nativeBuildInputs = [ flit-core ];
@@ -61,7 +63,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-xdist
-    pytestCheckHook
+    pytest8_3CheckHook
   ];
 
   disabledTests = [

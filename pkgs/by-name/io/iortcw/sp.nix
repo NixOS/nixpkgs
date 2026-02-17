@@ -12,20 +12,20 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iortcw-sp";
   version = "1.51c";
 
   src = fetchFromGitHub {
     owner = "iortcw";
     repo = "iortcw";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0g5wgqb1gm34pd05dj2i8nj3qhsz0831p3m7bsgxpjcg9c00jpyw";
   };
 
   enableParallelBuilding = true;
 
-  sourceRoot = "${src.name}/SP";
+  sourceRoot = "${finalAttrs.src.name}/SP";
 
   makeFlags = [
     "USE_INTERNAL_LIBS=0"
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Single player version of game engine for Return to Castle Wolfenstein";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rjpcasalino ];
   };
-}
+})

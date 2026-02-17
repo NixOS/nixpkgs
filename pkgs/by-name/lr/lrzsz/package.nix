@@ -6,12 +6,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lrzsz";
   version = "0.12.20";
 
   src = fetchurl {
-    url = "https://ohse.de/uwe/releases/lrzsz-${version}.tar.gz";
+    url = "https://ohse.de/uwe/releases/lrzsz-${finalAttrs.version}.tar.gz";
     sha256 = "1wcgfa9fsigf1gri74gq0pa7pyajk12m4z69x7ci9c6x9fqkd2y2";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--program-transform-name=s/^l//" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=incompatible-pointer-types -std=gnu17";
 
   meta = {
     homepage = "https://ohse.de/uwe/software/lrzsz.html";
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bdfresize";
   version = "1.5";
 
   src = fetchzip {
-    url = "http://openlab.ring.gr.jp/efont/dist/tools/bdfresize/bdfresize-${version}.tar.gz";
+    url = "http://openlab.ring.gr.jp/efont/dist/tools/bdfresize/bdfresize-${finalAttrs.version}.tar.gz";
     hash = "sha256-C4ZLJIn6vVeVUCpNwMu0vdfQQ3qUz4EVIcPob9NejP0=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ malte-v ];
     mainProgram = "bdfresize";
   };
-}
+})

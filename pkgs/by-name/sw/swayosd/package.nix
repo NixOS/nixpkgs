@@ -22,18 +22,18 @@
 }:
 stdenv.mkDerivation rec {
   pname = "swayosd";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayOSD";
     rev = "v${version}";
-    hash = "sha256-O9A7+QvvhmH3LFLv8vufVCgNQJqKc3LJitCUHYaGHyE=";
+    hash = "sha256-DRJ4D+QcgkVZmlfbj2HEIUHnYldzIuSDcpsOAOuoaL0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-J2sl6/4+bRWlkvaTJtFsMqvvOxYtWLRjJcYWcu0loRE=";
+    hash = "sha256-t0IZvO7Wbx6A7v/sRZOSOLj0O/1m7vOBjZSd99TAutI=";
   };
 
   nativeBuildInputs = [

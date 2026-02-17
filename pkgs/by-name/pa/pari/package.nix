@@ -3,15 +3,15 @@
   stdenv,
   fetchurl,
   gmp,
-  libX11,
-  libpthreadstubs,
+  libx11,
+  libpthread-stubs,
   perl,
   readline,
   texliveBasic,
   withThread ? true,
 }:
 
-assert withThread -> libpthreadstubs != null;
+assert withThread -> libpthread-stubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gmp
-    libX11
+    libx11
     perl
     readline
     texliveBasic
   ]
   ++ lib.optionals withThread [
-    libpthreadstubs
+    libpthread-stubs
   ];
 
   configureScript = "./Configure";

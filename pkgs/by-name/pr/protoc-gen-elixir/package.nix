@@ -9,13 +9,13 @@ let
 in
 mixRelease rec {
   pname = "protoc-gen-elixir";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "elixir-protobuf";
     repo = "protobuf";
     tag = "v${version}";
-    hash = "sha256-khgK+hSNyQbM4JB8VuCpbLS0z4NlweORW9z2PdhZ/+Y=";
+    hash = "sha256-kyS9KZENdoEuB64k48RegtZQa57/RDnm8bY+piAAk2w=";
   };
 
   mixFodDeps = fetchMixDeps {

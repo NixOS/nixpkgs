@@ -7,25 +7,18 @@
 
 stdenv.mkDerivation {
   pname = "quadprogpp";
-  version = "unstable-2023-01-20";
+  version = "1.2.2-unstable-2025-12-03";
 
   src = fetchFromGitHub {
     owner = "liuq";
     repo = "QuadProgpp";
-    rev = "4c51d91deb5af251957edf9454bfb74279a4544e";
-    hash = "sha256-uozwuTAOPsRwYM9KyG3V0hwcmaPpfZPID9Wdd4olsvY=";
+    rev = "0c25447365c980876fdc395f55d60300a5e5793c";
+    hash = "sha256-yXKctOTBbUNiSM2j7hKfSvd1i7FH7kcgP990DXVkrRY=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
-
-  postPatch = ''
-    # Inline https://github.com/liuq/QuadProgpp/pull/32
-    substituteInPlace CMakeLists.txt --replace-fail \
-      'cmake_minimum_required(VERSION 3.0)' \
-      'cmake_minimum_required(VERSION 3.10)'
-  '';
 
   meta = {
     description = "C++ library for Quadratic Programming";

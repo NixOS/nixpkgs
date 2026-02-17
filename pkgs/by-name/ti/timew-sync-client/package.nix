@@ -4,14 +4,14 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "timew-sync-client";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "timewarrior-synchronize";
     repo = "timew-sync-client";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8Bw+BI7EiW9UcHo6gaDthX4VH4kAlycm4EvAJEEAOWc=";
   };
 
@@ -38,4 +38,4 @@ python3Packages.buildPythonApplication rec {
       errnoh
     ];
   };
-}
+})

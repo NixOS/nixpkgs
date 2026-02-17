@@ -30,7 +30,7 @@ appimageTools.wrapAppImage rec {
       --set APPIMAGE 1
   '';
 
-  extraPkgs = pkgs: [ pkgs.xorg.libxshmfence ];
+  extraPkgs = pkgs: [ pkgs.libxshmfence ];
 
   meta = {
     description = "Most Complete All-In-One Mod Library for Minecraft with 100+ Mods, FPS Improvements, and more";

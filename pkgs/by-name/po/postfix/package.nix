@@ -31,12 +31,13 @@
 }:
 
 let
+  cyrus_sasl' = cyrus_sasl.override { enableMySQL = true; };
   ccargs = lib.concatStringsSep " " (
     [
       "-DUSE_TLS"
       "-DUSE_SASL_AUTH"
       "-DUSE_CYRUS_SASL"
-      "-I${cyrus_sasl.dev}/include/sasl"
+      "-I${cyrus_sasl'.dev}/include/sasl"
       "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
       # Fix build with gcc15, no upstream fix for stable releases:
       # https://www.mail-archive.com/postfix-devel@postfix.org/msg01270.html
@@ -72,12 +73,12 @@ let
   );
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "postfix";
   version = "3.10.7";
 
   src = fetchurl {
-    url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
+    url = "https://de.postfix.org/ftpmirror/official/postfix-${finalAttrs.version}.tar.gz";
     hash = "sha256-/NP/cIBq5/CoLntcMB4vT8+mpomi27Oz8bXlIIEVeIo=";
   };
 
@@ -88,7 +89,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     db
     openssl
-    cyrus_sasl
+    cyrus_sasl'
     icu
     libnsl
     pcre2
@@ -147,7 +148,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
+  env = lib.optionalAttrs withLDAP {
+    NIX_LDFLAGS = "-llber";
+  };
 
   installTargets = [ "non-interactive-package" ];
 
@@ -191,7 +194,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.postfix.org/";
-    changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
+    changelog = "https://www.postfix.org/announcements/postfix-${finalAttrs.version}.html";
     description = "Fast, easy to administer, and secure mail server";
     license = with lib.licenses; [
       ipl10
@@ -203,4 +206,4 @@ stdenv.mkDerivation rec {
       lewo
     ];
   };
-}
+})

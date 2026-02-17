@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nerdfetch";
-  version = "8.4.2";
+  version = "8.5.1";
 
   src = fetchFromGitHub {
     owner = "ThatOneCalculator";
     repo = "NerdFetch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G1BWggVPxpIKK82pKHD4Jxyis4CY156Jox2/xHRQfrI=";
+    hash = "sha256-wt/VpieLuS8cAUlpCdiFysdrjXwgGZ436eMUycTl0S4=";
   };
 
   dontUnpack = true;

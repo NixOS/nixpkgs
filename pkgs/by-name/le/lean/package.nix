@@ -54,7 +54,13 @@ stdenv.mkDerivation rec {
         --subst-var-by GIT_SHA1 "${src.rev}"
     '';
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+
+    sed -e '1i #include <cstdint>' -i src/util/hash.{cpp,h}
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=template-body";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace $out/bin/leanpkg \

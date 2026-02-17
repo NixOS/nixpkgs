@@ -79,6 +79,10 @@ The [bundle type](https://tauri.app/v1/guides/building/) to build.
 
 Disables using `tauriBuildHook`.
 
+#### `dontTauriFixup` {#dont-tauri-fixup}
+
+Disables the `tauriFixupHook` pre fixup phase.
+
 #### `dontTauriInstall` {#dont-tauri-install}
 
 Disables using `tauriInstallPostBuildHook` and `tauriInstallHook`.

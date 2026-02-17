@@ -11,7 +11,7 @@
   visidata,
   stdenv,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "visidata";
   version = "3.3";
   format = "setuptools";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-y+HqRww/Fm+YeiNYH0a2TcUYOc72qL+9tC0PRudptrA=";
   };
 
@@ -127,7 +127,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion {
     package = visidata;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -139,6 +139,6 @@ python3Packages.buildPythonApplication rec {
       markus1189
     ];
     homepage = "https://visidata.org/";
-    changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/saulpw/visidata/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})

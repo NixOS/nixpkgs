@@ -8,14 +8,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "microbin";
   version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "szabodanika";
     repo = "microbin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fsRpqSYDsuV0M6Xar2GVoyTgCPT39dcKJ6eW4YXCkQ0=";
   };
 
@@ -76,11 +76,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Tiny, self-contained, configurable paste bin and URL shortener written in Rust";
     homepage = "https://github.com/szabodanika/microbin";
-    changelog = "https://github.com/szabodanika/microbin/releases/tag/v${version}";
+    changelog = "https://github.com/szabodanika/microbin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       dit7ya
     ];
     mainProgram = "microbin";
   };
-}
+})

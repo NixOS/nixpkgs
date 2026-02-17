@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ferium";
   version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "gorilla-devs";
     repo = "ferium";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eeQjezB6pRdnPADLgDLo8b+bUSP12gfBhFNt/uYCwHU=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
       soupglasses
     ];
   };
-}
+})

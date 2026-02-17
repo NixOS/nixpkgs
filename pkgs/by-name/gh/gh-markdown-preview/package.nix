@@ -6,14 +6,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh-markdown-preview";
   version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "yusukebe";
     repo = "gh-markdown-preview";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Q6rTkiklSU1lh4mEKYJYXOmGlRkNUYTC/jtMkVVFRu0=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/yusukebe/gh-markdown-preview/cmd.Version=${version}"
+    "-X github.com/yusukebe/gh-markdown-preview/cmd.Version=${finalAttrs.version}"
   ];
 
   # Tests need network
@@ -35,9 +35,9 @@ buildGoModule rec {
   meta = {
     description = "gh extension to preview Markdown looking like on GitHub";
     homepage = "https://github.com/yusukebe/gh-markdown-preview";
-    changelog = "https://github.com/yusukebe/gh-markdown-preview/releases/tag/${src.rev}";
+    changelog = "https://github.com/yusukebe/gh-markdown-preview/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amesgen ];
     mainProgram = "gh-markdown-preview";
   };
-}
+})

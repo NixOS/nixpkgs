@@ -200,7 +200,7 @@ let
     ## `sourceByRegex` usage example
 
     ```nix
-    src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
+    src = sourceByRegex ./my-subproject [".*\\.py$" "^database\\.sql$"]
     ```
 
     :::
@@ -529,4 +529,6 @@ in
 
     trace
     ;
+
+  inherit (builtins) filterSource;
 }

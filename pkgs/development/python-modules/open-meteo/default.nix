@@ -10,15 +10,12 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "open-meteo";
   version = "0.4.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";

@@ -47,14 +47,14 @@ let
     extension = "zip";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aircrack-ng";
   version = "1.7";
 
   src = fetchFromGitHub {
     owner = "aircrack-ng";
     repo = "aircrack-ng";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-niQDwiqi5GtBW5HIn0endnqPb/MqllcjsjXw4pTyFKY=";
   };
 
@@ -140,6 +140,6 @@ stdenv.mkDerivation rec {
         freebsd
         illumos
       ];
-    changelog = "https://github.com/aircrack-ng/aircrack-ng/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/aircrack-ng/aircrack-ng/blob/${finalAttrs.src.rev}/ChangeLog";
   };
-}
+})

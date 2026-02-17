@@ -12,17 +12,17 @@
   lerc,
   libxkbcommon,
   libepoxy,
-  libXtst,
+  libxtst,
   wrapGAppsHook3,
   pixman,
-  libpthreadstubs,
+  libpthread-stubs,
   gtkmm3,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   lcms2,
   libraw,
   libiptcdata,
-  fftw,
+  fftwSinglePrec,
   expat,
   pcre2,
   libsigcxx,
@@ -38,15 +38,15 @@
   color-transformation-language,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "art";
-  version = "1.25.11";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "artpixls";
     repo = "ART";
-    tag = version;
-    hash = "sha256-viX2GjPV4ZvaK7u6KgANbbMLCFRLbCwd48NiIcsHqSY=";
+    tag = finalAttrs.version;
+    hash = "sha256-Abh3Hj3wKdWNN7rdU61MgkZHmoa7ufYzZGKsrxplkj0=";
   };
 
   # Fix the build with CMake 4.
@@ -72,16 +72,16 @@ stdenv.mkDerivation rec {
     lerc
     libxkbcommon
     libepoxy
-    libXtst
+    libxtst
     pixman
-    libpthreadstubs
+    libpthread-stubs
     gtkmm3
-    libXau
-    libXdmcp
+    libxau
+    libxdmcp
     lcms2
     libraw
     libiptcdata
-    fftw
+    fftwSinglePrec
     expat
     pcre2
     libsigcxx
@@ -114,10 +114,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Raw converter based on RawTherapee";
-    homepage = "https://art.pixls.us";
+    homepage = "https://artraweditor.github.io";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "ART";
     platforms = lib.platforms.linux;
   };
-}
+})

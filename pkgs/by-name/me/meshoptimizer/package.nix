@@ -14,14 +14,14 @@ let
     hash = "sha256-o3dCxAAkpMoNkvkM7qD75cPn/obDc/fJ8u7KLPm1G6g=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "meshoptimizer";
-  version = "0.25";
+  version = "1.0.1";
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "meshoptimizer";
-    rev = "v${version}";
-    hash = "sha256-ac1qX7neAN5Okpe3EytZKOglesyAAnyQkNWXa7TnMcg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-t5cWeGf9YI9oG919c6mdXE+qnK2rkTLW0GJ52vw/HrI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "gltfpack";
   };
-}
+})

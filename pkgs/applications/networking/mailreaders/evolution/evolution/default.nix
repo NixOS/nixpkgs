@@ -47,9 +47,9 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evolution";
-  version = "3.58.2";
+  version = "3.58.3";
 
   outputs = [
     "out"
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-uhvDtXKKMbjJ6qDaHuiulG7dzFRO6CQtzMIJ2W3KozA=";
+    url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor finalAttrs.version}/evolution-${finalAttrs.version}.tar.xz";
+    hash = "sha256-XQG3mlvr3y06mHG2E1CTnPJQH26gPCQVQ/dEqShtTXk=";
   };
 
   nativeBuildInputs = [
@@ -144,8 +144,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  PKG_CONFIG_CAMEL_1_2_CAMEL_PROVIDERDIR = "${placeholder "out"}/lib/evolution-data-server/camel-providers";
-  PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
+  env = {
+    PKG_CONFIG_CAMEL_1_2_CAMEL_PROVIDERDIR = "${placeholder "out"}/lib/evolution-data-server/camel-providers";
+    PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
+  };
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/evolution";
@@ -155,4 +157,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

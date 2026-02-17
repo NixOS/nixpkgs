@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shisho";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "flatt-security";
     repo = "shisho";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-G7sHaDq+F5lXNaF1sSLUecdjZbCejJE79P4AQifKdFY=";
     fetchSubmodules = true;
   };
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     runHook preInstallCheck
 
     $out/bin/shisho --help
-    $out/bin/shisho --version | grep "${version}"
+    $out/bin/shisho --version | grep "${finalAttrs.version}"
 
     runHook postInstallCheck
   '';
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ jk ];
   };
-}
+})

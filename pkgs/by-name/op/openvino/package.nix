@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
   cudaSupport ? opencv.cudaSupport or false,
 
   # build
@@ -36,16 +34,11 @@
 let
   inherit (lib)
     cmakeBool
+    getLib
     ;
 
   # prevent scons from leaking in the default python version
   scons' = scons.override { inherit python3Packages; };
-
-  tbbbind_version = "2_5";
-  tbbbind = fetchurl {
-    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v4.tgz";
-    hash = "sha256-Tr8wJGUweV8Gb7lhbmcHxrF756ZdKdNRi1eKdp3VTuo=";
-  };
 
   python = python3Packages.python.withPackages (
     ps: with ps; [
@@ -60,25 +53,17 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvino";
-  version = "2025.2.1";
+  version = "2025.4.2";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-Bu0m7nGqyHwHsa7FKr4nvUh/poJxMTgwuAU81QBmI4g=";
+    hash = "sha256-DDzY3o3ehYf/JYxh3AK25z1/UcuDrbQpaYFRWxPvpmk=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "cmake4-compat.patch";
-      url = "https://github.com/openvinotoolkit/openvino/commit/677716c2471cadf1bf1268eca6343498a886a229.patch?full_index=1";
-      hash = "sha256-iaifJBdl7+tQZq1d8SiczUaXz+AdfMrLtwzfTmSG+XA=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -101,14 +86,6 @@ stdenv.mkDerivation rec {
     cudaPackages.cuda_nvcc
   ];
 
-  postPatch = ''
-    mkdir -p temp/tbbbind_${tbbbind_version}
-    pushd temp/tbbbind_${tbbbind_version}
-    bsdtar -xf ${tbbbind}
-    echo "${tbbbind.url}" > ie_dependency.info
-    popd
-  '';
-
   dontUseSconsCheck = true;
   dontUseSconsBuild = true;
   dontUseSconsInstall = true;
@@ -117,8 +94,8 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DCMAKE_MODULE_PATH:PATH=${placeholder "out"}/lib/cmake"
     "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
-    "-DOpenCV_DIR=${lib.getLib opencv}/lib/cmake/opencv4/"
-    "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DOpenCV_DIR=${getLib opencv}/lib/cmake/opencv4/"
+    "-DProtobuf_LIBRARIES=${getLib protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DPython_EXECUTABLE=${python.interpreter}"
 
     (cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
@@ -146,10 +123,6 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SYSTEM_PUGIXML" true)
     (cmakeBool "ENABLE_SYSTEM_SNAPPY" true)
     (cmakeBool "ENABLE_SYSTEM_TBB" true)
-  ];
-
-  autoPatchelfIgnoreMissingDeps = [
-    "libngraph_backend.so"
   ];
 
   # src/graph/src/plugins/intel_gpu/src/graph/include/reorder_inst.h:24:8: error: type 'struct typed_program_node' violates the C++ One Definition Rule [-Werror=odr]
@@ -187,7 +160,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
+    changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${finalAttrs.src.tag}";
     description = "Open-source toolkit for optimizing and deploying AI inference";
     longDescription = ''
       This toolkit allows developers to deploy pre-trained deep learning models through a high-level C++ Inference Engine API integrated with application logic.
@@ -201,4 +174,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };
-}
+})

@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  pythonAtLeast,
   setuptools,
   six,
 }:
@@ -16,6 +17,9 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-yfLI38j5bQ1YCCmZIHIb4wye7DfyOJ8okE9FRWXIoW4=";
   };
+
+  # Hasn't had a release in six years. Effectively unmaintained.
+  disabled = pythonAtLeast "3.14";
 
   postPatch = ''
     substituteInPlace pasta/augment/inline_test.py \

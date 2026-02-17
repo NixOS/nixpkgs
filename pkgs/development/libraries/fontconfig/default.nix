@@ -98,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "bin"}/bin/fc-list";
-  versionCheckProgramArg = "--version";
 
   installCheckPhase = ''
     runHook preInstallCheck

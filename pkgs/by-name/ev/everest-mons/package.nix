@@ -4,12 +4,12 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "everest-mons";
   version = "2.0.0";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "mons";
     hash = "sha256-E1yBTwZ4T2C3sXoLGz0kAcvas0q8tO6Aaiz3SHrT4ZE=";
   };
@@ -45,4 +45,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ulysseszhan ];
     mainProgram = "mons";
   };
-}
+})

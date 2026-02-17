@@ -5,14 +5,14 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scd2html";
   version = "1.0.0";
 
   src = fetchFromSourcehut {
     owner = "~bitfehler";
     repo = "scd2html";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oZSHv5n/WOrvy77tC94Z8pYugLpHkcv7U1PrzR+8fHM=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "scd2html";
   };
-}
+})

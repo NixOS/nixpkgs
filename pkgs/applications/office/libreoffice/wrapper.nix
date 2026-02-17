@@ -4,7 +4,7 @@
   # The unwrapped libreoffice derivation
   unwrapped,
   makeWrapper,
-  xorg, # for lndir
+  lndir,
   runCommand,
   # For Emulating wrapGAppsHook3
   gsettings-desktop-schemas,
@@ -121,11 +121,11 @@ let
 in
 runCommand "${unwrapped.name}-wrapped"
   {
-    inherit (unwrapped) meta;
+    inherit (unwrapped) meta pname version;
     paths = [ unwrapped ];
     nativeBuildInputs = [
       makeWrapper
-      xorg.lndir
+      lndir
     ];
     passthru = {
       inherit unwrapped;

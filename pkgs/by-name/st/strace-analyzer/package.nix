@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "strace-analyzer";
   version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "wookietreiber";
     repo = "strace-analyzer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-KbdQeZoWFz4D5txu/411J0HNnIAs3t5IvO30/34vBek=";
   };
 
@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "strace-analyzer";
     homepage = "https://github.com/wookietreiber/strace-analyzer";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
-}
+})

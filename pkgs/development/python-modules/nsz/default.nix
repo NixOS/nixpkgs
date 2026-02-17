@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pycryptodome,
-  pythonOlder,
   enlighten,
   zstandard,
   withGUI ? true,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "nsz";
   version = "4.6.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nicoboss";

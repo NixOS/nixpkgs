@@ -5,14 +5,14 @@
   gtk-engine-murrine,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "layan-gtk-theme";
   version = "2023-05-23";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "layan-gtk-theme";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-R8QxDMOXzDIfioAvvescLAu6NjJQ9zhf/niQTXZr+yA=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.vanilla ];
   };
-}
+})

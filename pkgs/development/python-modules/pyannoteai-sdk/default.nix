@@ -11,15 +11,15 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyannoteai-sdk";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyannoteai_sdk";
-    inherit version;
-    hash = "sha256-QOA1ABzi3rNR/aDFNXxZhNzBrYL+JEexpi1fTOZYCa0=";
+    inherit (finalAttrs) version;
+    hash = "sha256-+9reButUNHN0rPEGmLjJwLzbWS+DOckMWhb6RB6oz50=";
   };
 
   build-system = [
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

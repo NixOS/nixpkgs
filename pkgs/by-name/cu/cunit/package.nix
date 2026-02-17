@@ -8,7 +8,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "CUnit";
   version = "2.1-3";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtool ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/cunit/CUnit/${version}/CUnit-${version}.tar.bz2";
+    url = "mirror://sourceforge/cunit/CUnit/${finalAttrs.version}/CUnit-${finalAttrs.version}.tar.bz2";
     sha256 = "057j82da9vv4li4z5ri3227ybd18nzyq81f6gsvhifs5z0vr3cpm";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

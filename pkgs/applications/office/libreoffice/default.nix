@@ -38,7 +38,15 @@
   jdk21,
   ant,
   cups,
-  xorg,
+  libxtst,
+  libxi,
+  libxinerama,
+  libxext,
+  libxdmcp,
+  libxaw,
+  libx11,
+  libpthread-stubs,
+  libxshmfence,
   fontforge,
   jre21_minimal,
   openssl,
@@ -66,7 +74,7 @@
   nspr,
   libwpg,
   dbus-glib,
-  clucene_core_2,
+  clucene-core_2,
   libcdr,
   lcms2,
   unixODBC,
@@ -93,6 +101,7 @@
   ncurses,
   libepoxy,
   gpgme,
+  gpgmepp,
   libwebp,
   abseil-cpp,
   libepubgen,
@@ -358,7 +367,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix this path to point to where the headers can actually be found instead.
     substituteInPlace configure.ac --replace-fail \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
-      'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+      'GPGMEPP_CFLAGS=-I${lib.getDev gpgmepp}/include/gpgme++'
 
     # Fix for Python 3.12
     substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
@@ -407,7 +416,7 @@ stdenv.mkDerivation (finalAttrs: {
       bluez5
       box2d_2
       cairo
-      clucene_core_2
+      clucene-core_2
       cppunit
       cups
       curl
@@ -422,6 +431,7 @@ stdenv.mkDerivation (finalAttrs: {
       glm
       adwaita-icon-theme
       gpgme
+      gpgmepp
       graphite2
       gtk3
       (harfbuzz.override { withIcu = true; })
@@ -431,13 +441,13 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
       libGLU
       libtool
-      xorg.libX11
-      xorg.libXaw
-      xorg.libXdmcp
-      xorg.libXext
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libXtst
+      libx11
+      libxaw
+      libxdmcp
+      libxext
+      libxi
+      libxinerama
+      libxtst
       libabw
       libargon2
       libatomic_ops
@@ -453,7 +463,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmspack
       libmwaw
       libodfgen
-      xorg.libpthreadstubs
+      libpthread-stubs
       librdf_redland
       librevenge
       librsvg
@@ -464,7 +474,7 @@ stdenv.mkDerivation (finalAttrs: {
       libwps
       libxcrypt
       libxml2
-      xorg.libxshmfence
+      libxshmfence
       libxslt
       libzmf
       libwebp

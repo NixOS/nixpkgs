@@ -6,7 +6,11 @@
   libpng,
   udunits,
   netcdf,
-  xorg,
+  libxt,
+  libxaw,
+  libx11,
+  libsm,
+  libice,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     netcdf
     udunits
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXaw
-    xorg.libXt
+    libice
+    libsm
+    libx11
+    libxaw
+    libxt
   ];
 
   meta = {

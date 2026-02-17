@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "translation-finder";
-  version = "2.23";
+  version = "2.24";
 
   pyproject = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "WeblateOrg";
     repo = "translation-finder";
     tag = version;
-    hash = "sha256-SmCADimYcSsD3iUt/QqF2SwJPzbFLw5v7SWVSeOyelQ=";
+    hash = "sha256-OVAsw+snISVyz3ZvcfqCpv0BRfTNzYSpI+YLafW5OQg=";
   };
 
   build-system = [ setuptools ];

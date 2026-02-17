@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   poetry-core,
   pytestCheckHook,
 }:
@@ -19,9 +18,7 @@ buildPythonPackage {
     sha256 = "sha256-GEhg2iMsYMfalT7L9TCd1KHU6oa/wTl5m3mRC0zOH9Q=";
   };
 
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   nativeBuildInputs = [ poetry-core ];
 

@@ -4,31 +4,24 @@
   fetchFromGitHub,
   pkgconfig,
   psutil,
+  pytest-cov-stub,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lz4";
-  version = "4.4.4";
+  version = "4.4.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  # get full repository in order to run tests
   src = fetchFromGitHub {
     owner = "python-lz4";
     repo = "python-lz4";
-    tag = "v${version}";
-    hash = "sha256-RoM2U47T5WLepJlbJhJAeqKRP8Zf3twndqmMSViI5Z8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2D30n5j5r4+gcrjEXPu+WpZ4QsugCPyC1xCZuJIPcI0=";
   };
-
-  postPatch = ''
-    sed -i '/pytest-cov/d' setup.py
-  '';
 
   build-system = [
     pkgconfig
@@ -45,6 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     psutil
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -58,10 +52,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    changelog = "https://github.com/python-lz4/python-lz4/releases/tag/${finalAttrs.src.tag}";
     description = "LZ4 Bindings for Python";
     homepage = "https://github.com/python-lz4/python-lz4";
-    changelog = "https://github.com/python-lz4/python-lz4/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

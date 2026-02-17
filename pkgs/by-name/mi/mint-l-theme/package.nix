@@ -6,15 +6,15 @@
   python3Packages,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mint-l-theme";
-  version = "2.0.3";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-l-theme";
-    rev = version;
-    hash = "sha256-RdcojX+8SQDJ9LPb81iMzdoCZBpoypf/+aQcgotnVGE=";
+    tag = finalAttrs.version;
+    hash = "sha256-Lss8P0L6gxbP88MiTfv3VfOFkvkEUDXIPBoFHPxLWqE=";
   };
 
   nativeBuildInputs = [
@@ -42,4 +42,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

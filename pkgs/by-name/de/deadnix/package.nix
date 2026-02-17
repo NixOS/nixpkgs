@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deadnix";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "astro";
     repo = "deadnix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WrzIqt28RhoFYhCMu5oY5jAdGh0Gv5uryW/1jTX99aY=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "deadnix";
     maintainers = with lib.maintainers; [ astro ];
   };
-}
+})

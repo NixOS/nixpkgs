@@ -29,7 +29,7 @@
 buildPythonPackage rec {
   pname = "pyqt5";
   version = "5.15.10";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = isPy27;
 

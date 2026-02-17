@@ -12,7 +12,7 @@
   zix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sord";
   version = "0.16.20";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "drobilla";
     repo = "sord";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+f3dxhcxVoub+KeI5c5/J87SVvAawrm5cZgo2qogdRM=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

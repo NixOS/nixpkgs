@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
 
   # build-system
   hatchling,
@@ -23,6 +23,7 @@
   pydub,
   pytest-asyncio,
   pytestCheckHook,
+  requests,
   rich,
   safehttpx,
   tomlkit,
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.12.1";
+  version = "2.0.1";
   pyproject = true;
 
   # no tests on pypi
@@ -39,12 +40,24 @@ buildPythonPackage rec {
     owner = "gradio-app";
     repo = "gradio";
     # not to be confused with @gradio/client@${version}
-    tag = "gradio_client@${version}";
-    sparseCheckout = [ "client/python" ];
-    hash = "sha256-Q0sEn7trWVVWh2XNZam10axuQBiPZvq//qTIR5WJn+4=";
+    # tag = "gradio_client@${version}";
+    # TODO: switch back to a tag next release, if they tag it.
+    rev = "7a8894d7249ee20c2f7a896237e290e99661fd43"; # 2.0.1
+    sparseCheckout = [
+      "client/python"
+      "gradio/media_assets"
+    ];
+    hash = "sha256-p3okK48DJjjyvUzedNR60r5P8aKUxjE+ocb3EplZ6Uk=";
   };
 
   sourceRoot = "${src.name}/client/python";
+
+  postPatch = ''
+    # Because we set sourceRoot above, the folders "client/python"
+    # don't exist, as far as this is concerned.
+    substituteInPlace test/conftest.py \
+      --replace-fail 'from client.python.test import media_data' 'import media_data'
+  '';
 
   # upstream adds upper constraints because they can, not because the need to
   # https://github.com/gradio-app/gradio/pull/4885
@@ -73,6 +86,7 @@ buildPythonPackage rec {
     pydub
     pytest-asyncio
     pytestCheckHook
+    requests
     rich
     safehttpx
     tomlkit
@@ -80,6 +94,11 @@ buildPythonPackage rec {
   ];
   # ensuring we don't propagate this intermediate build
   disallowedReferences = [ gradio.sans-reverse-dependencies ];
+
+  postInstall = ''
+    mkdir -p $out/lib/gradio
+    cp -r ../../gradio/media_assets $out/lib/gradio
+  '';
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
@@ -110,11 +129,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "gradio_client@(.*)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "gradio_client@";
+    ignoredVersions = ".*-(beta|dev).*";
   };
 
   meta = {

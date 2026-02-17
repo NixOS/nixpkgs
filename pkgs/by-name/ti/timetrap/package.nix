@@ -55,7 +55,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jerith666
-      manveru
       nicknovitski
     ];
     platforms = lib.platforms.unix;

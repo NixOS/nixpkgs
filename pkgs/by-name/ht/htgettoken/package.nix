@@ -5,16 +5,16 @@
   makeWrapper,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "htgettoken";
-  version = "2.5";
+  version = "2.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fermitools";
     repo = "htgettoken";
-    tag = "v${version}";
-    hash = "sha256-CUzkivrkvMr8EE00tjHswyK5WidQjmki5nLYpeb8jjU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jHKKTnFZ+6LHaB61wi5+Ht6ZHrE4dDqADIMfGWI47oM=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -39,4 +39,4 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/fermitools/htgettoken";
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

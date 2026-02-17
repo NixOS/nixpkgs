@@ -5,9 +5,9 @@
   fetchpatch,
   asciidoc,
   libxcb,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-keysyms,
+  libxcb-wm,
   nixosTests,
 }:
 
@@ -34,9 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    xcbutil
-    xcbutilkeysyms
-    xcbutilwm
+    libxcb-util
+    libxcb-keysyms
+    libxcb-wm
   ];
 
   strictDeps = true;

@@ -11,18 +11,20 @@
   ocl-icd,
   opencl-headers,
   libusb1,
-  xorg,
+  libxinerama,
+  libxext,
+  libx11,
   jansson,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cgminer";
   version = "4.11.1";
 
   src = fetchFromGitHub {
     owner = "ckolivas";
     repo = "cgminer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0l1ms3nxnjzh4mpiadikvngcr9k3jnjqy3yna207za0va0c28dj5";
   };
 
@@ -37,9 +39,9 @@ stdenv.mkDerivation rec {
     ncurses
     ocl-icd
     opencl-headers
-    xorg.libX11
-    xorg.libXext
-    xorg.libXinerama
+    libx11
+    libxext
+    libxinerama
     jansson
     libusb1
   ];
@@ -71,9 +73,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ckolivas/cgminer";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
-      offline
       mmahut
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,30 +6,30 @@
   pass,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "passff-host";
   version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "passff";
     repo = "passff-host";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-P5h0B5ilwp3OVyDHIOQ23Zv4eLjN4jFkdZF293FQnNE=";
   };
 
   buildInputs = [ python3 ];
-  makeFlags = [ "VERSION=${version}" ];
+  makeFlags = [ "VERSION=${finalAttrs.version}" ];
 
   patchPhase = ''
     sed -i 's#COMMAND = "pass"#COMMAND = "${pass}/bin/pass"#' src/passff.py
   '';
 
   installPhase = ''
-    substituteInPlace bin/${version}/passff.json \
+    substituteInPlace bin/${finalAttrs.version}/passff.json \
       --replace PLACEHOLDER $out/share/passff-host/passff.py
 
     install -Dt $out/share/passff-host \
-      bin/${version}/passff.{py,json}
+      bin/${finalAttrs.version}/passff.{py,json}
 
     nativeMessagingPaths=(
       /lib/mozilla/native-messaging-hosts
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

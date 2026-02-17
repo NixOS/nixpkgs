@@ -3,12 +3,12 @@
   stdenv,
   appstream-glib,
   blueprint-compiler,
+  bubblewrap,
   cargo,
   dbus,
   desktop-file-utils,
-  fetchFromGitea,
+  fetchFromCodeberg,
   glib,
-  libglycin,
   glycin-loaders,
   gst_all_1,
   gtk4,
@@ -21,18 +21,24 @@
   ninja,
   nix-update-script,
   pkg-config,
+  replaceVars,
   rustPlatform,
   rustc,
   sqlite,
   wrapGAppsHook4,
 }:
 
+let
+  glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
+    bwrap = "${bubblewrap}/bin/bwrap";
+  };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
   version = "0.10.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "edestcroix";
     repo = "Recordbox";
     tag = "v${finalAttrs.version}";
@@ -91,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Dirty approach to add patches after cargoSetupPostUnpackHook
     # We should eventually use a cargo vendor patch hook instead
     pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${libglycin.passthru.glycinPathsPatch}
+      patch -p3 < ${glycinPathsPatch}
     popd
   '';
   preFixup = ''

@@ -19,13 +19,13 @@ let
 in
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "fstar";
-  version = "2025.10.06";
+  version = "2025.12.15";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PH3ylEiUS+mfFtYV+KI7xrCewkEutM1c14A+ARsyOQY=";
+    hash = "sha256-UuwDX6178YMhEQqpEOATswzoUNpEECq7Nyh2yk5gKRg=";
   };
 
   nativeBuildInputs = [
@@ -105,7 +105,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v(\d{4}\.\d{2}\.\d{2})$"
+        "v(\\d{4}\\.\\d{2}\\.\\d{2})$"
       ];
     };
     z3 = fstarZ3;

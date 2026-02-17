@@ -1,18 +1,18 @@
 [
   {
     "pname": "Azure.Core",
-    "version": "1.47.3",
-    "hash": "sha256-fWyfqF1lpnap4cF3l9J0fYtZbxIqm6UFsuJgN+/hwW4="
+    "version": "1.50.0",
+    "hash": "sha256-8Pjz0/2wTLK5uY7G5qrxQr4CsmrjiR8gL4g6zJymj5s="
   },
   {
     "pname": "Azure.Storage.Blobs",
-    "version": "12.26.0",
-    "hash": "sha256-J6774WE6xlrsmhkmE1dapkrhK6dFByYxSHLs1OQPk48="
+    "version": "12.27.0",
+    "hash": "sha256-Ag8kMe/NBfq+HSchFzm0VAAo9xVnrKHFHUjbQ4KpSh0="
   },
   {
     "pname": "Azure.Storage.Common",
-    "version": "12.25.0",
-    "hash": "sha256-4eMv4oOumO6FFx0VMsuIr6sWtouu4f6AajebTQjhj9Q="
+    "version": "12.26.0",
+    "hash": "sha256-GPiEPi/caj5z2cMFP5TUx/Jrj/zXZmA/xqC9CEoI+qQ="
   },
   {
     "pname": "Castle.Core",
@@ -431,8 +431,8 @@
   },
   {
     "pname": "System.ClientModel",
-    "version": "1.6.1",
-    "hash": "sha256-OMnamkT9Nt5ZSR6xPKFmOQRUjdn0a4nP9jkD2eZxxc0="
+    "version": "1.8.0",
+    "hash": "sha256-ZWVhuw3IRk9rZXkXERhesEET2KMMzHjUH/HDI288WK8="
   },
   {
     "pname": "System.Collections",
@@ -581,8 +581,8 @@
   },
   {
     "pname": "System.IO.Hashing",
-    "version": "8.0.0",
-    "hash": "sha256-szOGt0TNBo6dEdC3gf6H+e9YW3Nw0woa6UnCGGGK5cE="
+    "version": "10.0.1",
+    "hash": "sha256-k8EHcxnLitXo0CxoDZAxFmUlJJdKZVsZJ2+9zDMYB94="
   },
   {
     "pname": "System.Linq",

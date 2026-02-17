@@ -3,7 +3,12 @@
   mkKdeDerivation,
   replaceVars,
   fontconfig,
-  xorg,
+  libxtst,
+  libxft,
+  libxcursor,
+  libsm,
+  xrdb,
+  xmessage,
   lsof,
   pkg-config,
   spirv-tools,
@@ -26,8 +31,8 @@ mkKdeDerivation {
       fcMatch = lib.getExe' fontconfig "fc-match";
       lsof = lib.getExe lsof;
       qdbus = lib.getExe' qttools "qdbus";
-      xmessage = lib.getExe xorg.xmessage;
-      xrdb = lib.getExe xorg.xrdb;
+      xmessage = lib.getExe xmessage;
+      xrdb = lib.getExe xrdb;
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })
@@ -37,6 +42,11 @@ mkKdeDerivation {
     # Prevent patching this shell file, it only is used by sourcing it from /bin/sh.
     chmod -x $out/libexec/plasma-sourceenv.sh
   '';
+
+  extraCmakeFlags = [
+    "-DGLIBC_LOCALE_GEN=OFF"
+    "-DGLIBC_LOCALE_PREGENERATED=ON"
+  ];
 
   extraNativeBuildInputs = [
     pkg-config
@@ -54,10 +64,10 @@ mkKdeDerivation {
     libqalculate
     pipewire
 
-    xorg.libSM
-    xorg.libXcursor
-    xorg.libXtst
-    xorg.libXft
+    libsm
+    libxcursor
+    libxtst
+    libxft
 
     gpsd
   ];
@@ -67,7 +77,7 @@ mkKdeDerivation {
   # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${lsof} ${xorg.xmessage} ${xorg.xrdb}" > $out/nix-support/depends
+    echo "${lsof} ${xmessage} ${xrdb}" > $out/nix-support/depends
   '';
 
   passthru.providedSessions = [

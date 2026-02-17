@@ -8,11 +8,11 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "briss";
   version = "0.9";
   src = fetchurl {
-    url = "mirror://sourceforge/briss/briss-${version}.tar.gz";
+    url = "mirror://sourceforge/briss/briss-${finalAttrs.version}.tar.gz";
     sha256 = "45dd668a9ceb9cd59529a9fefe422a002ee1554a61be07e6fc8b3baf33d733d9";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin";
     mkdir -p "$out/share";
     install -D -m444 -t "$out/share" *.jar
-    makeWrapper "${jre}/bin/java" "$out/bin/briss" --add-flags "-Xms128m -Xmx1024m -cp \"$out/share/\" -jar \"$out/share/briss-${version}.jar\""
+    makeWrapper "${jre}/bin/java" "$out/bin/briss" --add-flags "-Xms128m -Xmx1024m -cp \"$out/share/\" -jar \"$out/share/briss-${finalAttrs.version}.jar\""
   '';
 
   meta = {
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "briss";
   };
-}
+})

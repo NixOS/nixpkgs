@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   # Artifact tarball contains lt-localealias.h needed for darwin
   src = fetchurl {
-    url = "https://bitbucket.org/tagoh/liblangtag/downloads/${pname}-${version}.tar.bz2";
+    url = "https://bitbucket.org/tagoh/liblangtag/downloads/liblangtag-${version}.tar.bz2";
     hash = "sha256-Xta81K4/PAXJEuYvIWzRpEEjhGFH9ymkn7VmjaUeAw4=";
   };
 

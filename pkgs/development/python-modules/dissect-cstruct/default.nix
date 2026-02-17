@@ -32,7 +32,7 @@ buildPythonPackage rec {
     description = "Dissect module implementing a parser for C-like structures";
     homepage = "https://github.com/fox-it/dissect.cstruct";
     changelog = "https://github.com/fox-it/dissect.cstruct/releases/tag/${src.tag}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

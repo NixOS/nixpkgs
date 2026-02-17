@@ -3,14 +3,14 @@
   lib,
   fetchzip,
   libglut,
-  libXmu,
-  libXi,
-  libX11,
-  libICE,
+  libxmu,
+  libxi,
+  libx11,
+  libice,
   libGLU,
   libGL,
-  libSM,
-  libXext,
+  libsm,
+  libxext,
   glibc,
   lua,
   luabind,
@@ -21,15 +21,15 @@
 }:
 let
   lpath = lib.makeLibraryPath [
-    libXmu
-    libXi
-    libX11
+    libxmu
+    libxi
+    libx11
     libglut
-    libICE
+    libice
     libGLU
     libGL
-    libSM
-    libXext
+    libsm
+    libxext
     glibc
     lua
     glfw

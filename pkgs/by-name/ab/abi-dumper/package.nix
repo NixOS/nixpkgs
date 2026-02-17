@@ -8,14 +8,14 @@
   vtable-dumper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abi-dumper";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "abi-dumper";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-BefDMeKHx4MNU6SyX5UpQnwdI+zqap7zunsgdWG/2xc=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oed";
   version = "7.4";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "oed";
-    rev = "oed-${version}";
+    rev = "oed-${finalAttrs.version}";
     hash = "sha256-bbV89YhrmL7tOgKly5OfQDRz4QE0UzZrVsmoXiJ7ZZw=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ed";
     platforms = lib.platforms.unix;
   };
-}
+})

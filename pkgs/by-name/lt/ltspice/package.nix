@@ -11,10 +11,10 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ltspice";
-  version = "26.0.0";
+  version = "26.0.1";
   src = fetchurl {
-    url = "https://web.archive.org/web/20251210201306/https://ltspice.analog.com/software/LTspice64.msi";
-    hash = "sha256-fw4z9BlkMUR/z7u+wMx6S267jn8y+HzVgDkQ9rJTQ70=";
+    url = "https://ltspice.analog.com/download/${finalAttrs.version}/LTspice64.msi";
+    hash = "sha256-7DUCZpftMtKuV7F746PIh3tjH2QrZjJkkamAjEfsAIE=";
   };
   dontUnpack = true;
   dontConfigure = true;
@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out
-    install -Dm644 ltspice.png $out/share/pixmaps/ltspice.png
+    install -Dm644 ltspice.png $out/share/icons/hicolor/256x256/apps/ltspice.png
 
     install -m755 -d $out/libexec/ltspice
     install -m755 *.exe $out/libexec/ltspice
@@ -81,6 +81,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "SPICE simulator, schematic capture and waveform viewer";
     homepage = "https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html";
+    changelog = "https://ltspice.analog.com/download/updates.txt";
     license = lib.licenses.unfree;
     mainProgram = "ltspice";
     maintainers = [ lib.maintainers.zimward ];

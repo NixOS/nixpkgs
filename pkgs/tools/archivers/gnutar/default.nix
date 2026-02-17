@@ -5,6 +5,7 @@
   autoreconfHook,
   updateAutotoolsGnuConfigScriptsHook,
   libintl,
+  gettext,
   aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl,
   acl,
 }:
@@ -46,21 +47,19 @@ stdenv.mkDerivation rec {
   #  "_libintl_textdomain", referenced from:
   #    _main in tar.o
   #  ld: symbol(s) not found for architecture x86_64
-  buildInputs = lib.optional aclSupport acl ++ lib.optional stdenv.hostPlatform.isDarwin libintl;
+  buildInputs =
+    lib.optional aclSupport acl
+    ++ lib.optional stdenv.hostPlatform.isDarwin libintl
+    # gettext gets pulled in via autoreconfHook because strictDeps is not set,
+    # and is linked against. Without this, it doesn't end up in HOST_PATH.
+    # TODO: enable strictDeps, and either make this dependency explicit, or remove it
+    ++ lib.optional stdenv.hostPlatform.isCygwin gettext;
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
   FORCE_UNSAFE_CONFIGURE = lib.optionalString (
     stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.isSunOS
   ) "1";
-
-  preConfigure =
-    if stdenv.hostPlatform.isCygwin then
-      ''
-        sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
-      ''
-    else
-      null;
 
   doCheck = false; # fails
   doInstallCheck = false; # fails

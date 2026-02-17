@@ -7,7 +7,6 @@
   numpy,
   peft,
   protobuf,
-  pythonOlder,
   requests,
   six,
   toml,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "stanza";
   version = "1.11.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "range-typed-integers";
   version = "1.0.1";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "theCapypara";
     repo = "range-typed-integers";
@@ -20,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-4+XdalHq6Q2cBbuYi4x7kmCNQh1MwYf+XlLP9FzzzgE=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [ setuptools ];
 

@@ -5,9 +5,9 @@
   fetchpatch2,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   bzip2,
-  libX11,
-  mkDerivation,
+  libx11,
   qtbase,
   qttools,
   qtmultimedia,
@@ -22,7 +22,7 @@
   perl,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "eiskaltdcpp";
   version = "2.4.2";
 
@@ -43,6 +43,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase
@@ -50,7 +51,7 @@ mkDerivation rec {
     qtmultimedia
     qtscript
     bzip2
-    libX11
+    libx11
     pcre-cpp
     libidn
     lua5

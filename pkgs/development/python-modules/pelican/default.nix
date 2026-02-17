@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   pdm-backend,
@@ -39,8 +38,6 @@ buildPythonPackage rec {
   pname = "pelican";
   version = "4.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "getpelican";
@@ -134,7 +131,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/getpelican/pelican/blob/${src.tag}/docs/changelog.rst";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      offline
       prikhi
     ];
   };

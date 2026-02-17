@@ -5,18 +5,18 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cntr";
-  version = "1.6.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "cntr";
-    rev = version;
-    sha256 = "sha256-2tqPxbi8sKoEPq0/zQFsOrStEmQGlU8s81ohTfKeOmE=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-4HBOUx9086nn3hRBLA4zuH0Dq+qDZHgo3DivmiEMh3w=";
   };
 
-  cargoHash = "sha256-gWQ8seCuUSHuZUoNH9pnBTlzF9S0tHVLStnAiymLLbs=";
+  cargoHash = "sha256-FBlKxQcQRkz5dYInot2WtZfUSAaX+7qlin+cLf3h8f4=";
 
   passthru.tests = nixosTests.cntr;
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "cntr";
   };
-}
+})

@@ -9,12 +9,12 @@
   gnuplot,
   graphviz,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maelstrom";
   version = "0.2.4";
 
   src = fetchurl {
-    url = "https://github.com/jepsen-io/maelstrom/releases/download/v${version}/maelstrom.tar.bz2";
+    url = "https://github.com/jepsen-io/maelstrom/releases/download/v${finalAttrs.version}/maelstrom.tar.bz2";
     hash = "sha256-MB7HHWsSrw12XttBP1z1qhBGtWCb1OMTdqC1SVSOV5k=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jdk}/bin/java $out/bin/maelstrom \
       --add-flags -Djava.awt.headless=true \
       --add-flags "-jar $out/lib/maelstrom.jar" \
-      --set PATH ${lib.makeBinPath runtimeDependencies}
+      --set PATH ${lib.makeBinPath finalAttrs.runtimeDependencies}
 
     runHook postInstall
   '';
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Workbench for writing toy implementations of distributed systems";
     homepage = "https://github.com/jepsen-io/maelstrom";
-    changelog = "https://github.com/jepsen-io/maelstrom/releases/tag/${version}";
+    changelog = "https://github.com/jepsen-io/maelstrom/releases/tag/${finalAttrs.version}";
     mainProgram = "maelstrom";
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.epl10;
     maintainers = [ lib.maintainers.emilioziniades ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -6,7 +6,6 @@
   fetchPypi,
   lxml,
   python-slugify,
-  pythonOlder,
   setuptools,
   sphinx,
   unidecode,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "sphinx-material";
   version = "0.0.36";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "sphinx_material";

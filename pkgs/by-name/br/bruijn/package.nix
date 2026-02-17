@@ -10,8 +10,6 @@ let
   generated = haskellPackages.callPackage ./generated.nix { };
 
   overrides = {
-    version = lib.fileContents ./version.txt;
-
     passthru.updateScript = ./update.sh;
 
     description = "Purely functional programming language based on lambda calculus and de Bruijn indices";

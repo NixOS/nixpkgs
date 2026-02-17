@@ -11,14 +11,12 @@
   # dependencies
   exceptiongroup,
   idna,
-  sniffio,
   typing-extensions,
 
   # optionals
   trio,
 
   # tests
-  blockbuster,
   hypothesis,
   psutil,
   pytest-mock,
@@ -33,29 +31,23 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.11.0";
+  version = "4.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-TOXg9J/Z2S5/X7OBgU+J0HZNB3BDluaWTqDiqp3O4ek=";
+    hash = "sha256-7rfQ6mwB2sNKc28ZPMZNgVs7TFgBUBzH6xGXmtfzX9k=";
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
     idna
-    sniffio
   ]
   ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
   ];
 
   optional-dependencies = {
@@ -63,7 +55,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    blockbuster
     exceptiongroup
     hypothesis
     psutil
@@ -77,6 +68,9 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-Wignore::trio.TrioDeprecationWarning"
+    # DeprecationWarning for asyncio.iscoroutinefunction is propagated from uvloop used internally
+    # https://github.com/agronholm/anyio/commit/e7bb0bd496b1ae0d1a81b86de72312d52e8135ed
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestMarks = [
@@ -97,10 +91,6 @@ buildPythonPackage rec {
     "test_keyboardinterrupt_during_test"
     # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
     "test_multiple_threads"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
-    "test_is_block_device"
 
     # These tests become flaky under heavy load
     "test_asyncio_run_sync_called"
@@ -108,6 +98,10 @@ buildPythonPackage rec {
     "test_run_in_custom_limiter"
     "test_cancel_from_shielded_scope"
     "test_start_task_soon_cancel_later"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
+    "test_is_block_device"
 
     # AssertionError: assert 'wheel' == 'nixbld'
     "test_group"

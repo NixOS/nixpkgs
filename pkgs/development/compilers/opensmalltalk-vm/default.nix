@@ -15,7 +15,8 @@
   openssl,
   pango,
   pkg-config,
-  xorg,
+  libxrandr,
+  libx11,
 }:
 let
   buildVM =
@@ -91,8 +92,8 @@ let
         libuuid
         openssl
         pango
-        xorg.libX11
-        xorg.libXrandr
+        libx11
+        libxrandr
       ];
 
       postInstall = ''

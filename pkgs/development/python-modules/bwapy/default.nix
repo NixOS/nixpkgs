@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchPypi,
   bwa,
   cffi,
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   # uses the removed imp module
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

@@ -6,13 +6,13 @@
 }:
 
 let
-  version = "2.14.1";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "JonathonReinhart";
     repo = "scuba";
     tag = "v${version}";
-    hash = "sha256-AbaBTI/gz5lifjMx00sxuUl1MxhYM93iKfGdpHsLjzk=";
+    hash = "sha256-kYr7JyrwDDMJkazZ1cMZNkLo19stnOtc/gSp3nRWAuU=";
   };
 
   # This must be built statically because scuba will execute unknown docker environments

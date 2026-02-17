@@ -20,9 +20,10 @@ let
     makeTest {
       inherit name;
       meta.maintainers = [
+        lib.maintainers.das_j
         lib.maintainers.flokli
-      ]
-      ++ lib.teams.helsinki-systems.members;
+        lib.maintainers.helsinki-Jo
+      ];
 
       nodes = {
         machine =

@@ -8,7 +8,11 @@
     "."
     "netclient"
   ],
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
 }:
 
 buildGoModule rec {
@@ -30,11 +34,11 @@ buildGoModule rec {
 
   buildInputs = [
     libglvnd
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
   ];
 
   meta = {
@@ -43,7 +47,6 @@ buildGoModule rec {
     changelog = "https://github.com/gravitl/netmaker/-/releases/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      urandom
       qjoly
     ];
     mainProgram = "netmaker";

@@ -8,7 +8,10 @@
   makeWrapper,
   upx,
   boehmgc,
-  xorg,
+  libxdmcp,
+  libxau,
+  libx11,
+  xorgproto,
   binaryen,
 }:
 
@@ -76,10 +79,10 @@ stdenv.mkDerivation {
     binaryen
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.xorgproto
+    libx11
+    libxau
+    libxdmcp
+    xorgproto
   ];
 
   makeFlags = [

@@ -5,7 +5,6 @@
   stdenv,
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cmake,
   ninja,
@@ -16,7 +15,6 @@
   catch2,
   numpy,
   pytestCheckHook,
-  libxcrypt,
   makeSetupHook,
 }:
 let
@@ -51,7 +49,6 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
   propagatedNativeBuildInputs = [ setupHook ];
 
   dontUseCmakeBuildDir = true;

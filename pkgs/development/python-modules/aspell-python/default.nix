@@ -6,7 +6,6 @@
   fetchPypi,
   isPy27,
   pytestCheckHook,
-  pythonAtLeast,
   setuptools,
 }:
 
@@ -37,7 +36,7 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test/unittests.py" ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+  disabledTests = [
     # https://github.com/WojciechMula/aspell-python/issues/22
     "test_add"
     "test_get"

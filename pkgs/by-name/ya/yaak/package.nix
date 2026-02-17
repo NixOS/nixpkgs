@@ -15,6 +15,9 @@
   pango,
   cairo,
   pixman,
+  librsvg,
+  gdk-pixbuf,
+  adwaita-icon-theme,
   protobuf,
   perl,
   makeWrapper,
@@ -23,6 +26,7 @@
   lld,
   wasm-pack,
   wasm-bindgen-cli_0_2_100,
+  wrapGAppsHook3,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -57,6 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     lld
     wasm-pack
     wasm-bindgen-cli_0_2_100
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -66,6 +71,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pango
     cairo
     pixman
+    librsvg
+    gdk-pixbuf
+    adwaita-icon-theme
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
@@ -76,11 +84,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.NPM_CONFIG_IGNORE_SCRIPTS = "true";
 
   postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
+
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
+
     substituteInPlace src-tauri/tauri.commercial.conf.json \
       --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false' \
       --replace-fail '"https://update.yaak.app/check/{{target}}/{{arch}}/{{current_version}}"' '"https://non.existent.domain"'
+
     substituteInPlace package.json \
       --replace-fail '"bootstrap:vendor-node": "node scripts/vendor-node.cjs",' "" \
       --replace-fail '"bootstrap:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
@@ -128,7 +141,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/yaak-app \
       --inherit-argv0 \
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
+      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1 \
+      --set-default WEBKIT_DISABLE_COMPOSITING_MODE 1
   '';
 
   passthru.updateScript = nix-update-script { };

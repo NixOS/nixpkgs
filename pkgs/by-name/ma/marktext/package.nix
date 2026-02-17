@@ -8,7 +8,9 @@
   nodejs,
   electron,
   python3,
-  xorg,
+  libx11,
+  xorgproto,
+  libxkbfile,
   fontconfig,
   node-gyp-build,
   ripgrep,
@@ -58,10 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libsecret
-    xorg.libX11
-    xorg.libxkbfile
+    libx11
+    libxkbfile
     fontconfig
-    xorg.xorgproto
+    xorgproto
   ];
 
   postPatch = ''

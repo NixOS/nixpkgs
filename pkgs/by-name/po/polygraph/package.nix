@@ -7,12 +7,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polygraph";
   version = "4.13.0";
 
   src = fetchurl {
-    url = "http://www.web-polygraph.org/downloads/srcs/polygraph-${version}-src.tgz";
+    url = "http://www.web-polygraph.org/downloads/srcs/polygraph-${finalAttrs.version}-src.tgz";
     sha256 = "1rwzci3n7q33hw3spd79adnclzwgwlxcisc9szzjmcjqhbkcpj1a";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   mesonFlags = [
+    (lib.mesonBool "werror" false)
     (lib.mesonOption "programmer" "auto")
     (lib.mesonEnable "man-pages" true)
     (lib.mesonEnable "tests" (!stdenv.buildPlatform.isDarwin))
@@ -69,9 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $NIX_BUILD_TOP/$sourceRoot/util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin
-  ) "-Wno-gnu-folding-constant";
+  env = lib.optionalAttrs (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) {
+    NIX_CFLAGS_COMPILE = "-Wno-gnu-folding-constant";
+  };
 
   meta = {
     homepage = "https://www.flashrom.org";

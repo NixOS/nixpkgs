@@ -21,7 +21,7 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libaccounts-glib";
   version = "1.27";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "accounts-sso";
     repo = "libaccounts-glib";
-    rev = "VERSION_${version}";
+    rev = "VERSION_${finalAttrs.version}";
     hash = "sha256-mLhcwp8rhCGSB1K6rTWT0tuiINzgwULwXINfCbgPKEg=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
   };
-}
+})

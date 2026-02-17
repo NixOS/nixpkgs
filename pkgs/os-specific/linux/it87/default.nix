@@ -7,7 +7,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "it87-${version}-${kernel.version}";
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "it87";
   version = "unstable-2024-06-09";
 
   # Original is no longer maintained.
@@ -41,6 +42,5 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
-    teams = [ lib.teams.lumiguide ];
   };
 }

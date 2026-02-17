@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPypi,
   node-gyp,
-  nodejs_20,
+  nodejs,
   nixosTests,
   gettext,
   python3,
@@ -16,7 +16,8 @@
   pngquant,
   qpdf,
   tesseract5,
-  unpaper,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
   poppler-utils,
   liberation_ttf,
@@ -25,22 +26,22 @@
   pkg-config,
   symlinkJoin,
   nltk-data,
-  xorg,
+  lndir,
 }:
 let
-  version = "2.20.2";
+  version = "2.20.6";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-jsHGQ1xjHu+yagy73/eCB/3h7ZHasMdt4rWQuFvDfis=";
+    hash = "sha256-rTkkvSkgYQtT9KglXsyf4SWwjoJWtX5YwcVUbEbLac0=";
   };
 
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5_2;
+      django = prev.django_5;
 
       fido2 = prev.fido2.overridePythonAttrs {
         version = "1.2.0";
@@ -55,7 +56,7 @@ let
       };
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
-      ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
+      ocrmypdf = prev.ocrmypdf_16.override { tesseract = tesseract5; };
     };
   };
 
@@ -67,7 +68,6 @@ let
     pngquant
     qpdf
     tesseract5
-    unpaper
     poppler-utils
   ];
 
@@ -77,7 +77,8 @@ let
 
     src = src + "/src-ui";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
+      inherit pnpm;
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
       hash = "sha256-pG7olcBq5P52CvZYLqUjb+RwxjbQbSotlS50pvgm7WQ=";
@@ -85,9 +86,10 @@ let
 
     nativeBuildInputs = [
       node-gyp
-      nodejs_20
+      nodejs
       pkg-config
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -161,18 +163,22 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail '--maxprocesses=16' "--numprocesses=$NIX_BUILD_CORES"
   '';
 
+  build-system = [ python.pkgs.setuptools ];
+
   nativeBuildInputs = [
     gettext
-    xorg.lndir
+    lndir
   ];
 
   pythonRelaxDeps = [
     "celery"
     "django-allauth"
+    "django-auditlog"
     "drf-spectacular-sidecar"
     "python-dotenv"
     "gotenberg-client"
     "redis"
+    "scikit-learn"
     # requested by maintainer
     "ocrmypdf"
   ];
@@ -300,11 +306,11 @@ python.pkgs.buildPythonApplication rec {
     "src"
   ];
 
-  # The tests require:
-  # - PATH with runtime binaries
-  # - A temporary HOME directory for gnupg
-  # - XDG_DATA_DIRS with test-specific fonts
   preCheck = ''
+    # The tests require:
+    # - PATH with runtime binaries
+    # - A temporary HOME directory for gnupg
+    # - XDG_DATA_DIRS with test-specific fonts
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
@@ -313,27 +319,26 @@ python.pkgs.buildPythonApplication rec {
     # ocrmypdf has an internal limit of 256 jobs and will fail with more:
     # https://github.com/ocrmypdf/OCRmyPDF/blob/66308c281306302fac3470f587814c3b212d0c40/src/ocrmypdf/cli.py#L234
     export PAPERLESS_THREADS_PER_WORKER=$(( NIX_BUILD_CORES > 256 ? 256 : NIX_BUILD_CORES ))
+
+    # the generated pyc files conflict when running the tests
+    rm -r build/lib
   '';
 
   disabledTests = [
     # FileNotFoundError(2, 'No such file or directory'): /build/tmp...
     "test_script_with_output"
     "test_script_exit_non_zero"
-    "testDocumentPageCountMigrated"
-    # AssertionError: 10 != 4 (timezone/time issue)
-    # Due to getting local time from modification date in test_consumer.py
-    "testNormalOperation"
     # Something broken with new Tesseract and inline RTL/LTR overrides?
     "test_rtl_language_detection"
-    # django.core.exceptions.FieldDoesNotExist: Document has no field named 'transaction_id'
-    "test_convert"
     # Favicon tests fail due to static file handling in the test environment
+    # https://github.com/NixOS/nixpkgs/issues/421393
     "test_favicon_view"
     "test_favicon_view_missing_file"
     # Requires DNS
     "test_send_webhook_data_or_json"
-    "test_workflow_webhook_send_webhook_retry"
-    "test_workflow_webhook_send_webhook_task"
+    # execnet.gateway_base.DumpError: can't serialize <class 'pathlib._local.PosixPath'>
+    # https://github.com/pytest-dev/pytest-xdist/issues/384
+    "test_subdirectory_upload"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;

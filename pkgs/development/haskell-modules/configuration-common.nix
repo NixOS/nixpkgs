@@ -79,7 +79,7 @@ with haskellLib;
           }
         )
       );
-  Cabal_3_16_0_0 =
+  Cabal_3_16_1_0 =
     overrideCabal
       (drv: {
         # Revert increased lower bound on unix since we have backported
@@ -90,8 +90,8 @@ with haskellLib;
       })
       (
         doDistribute (
-          super.Cabal_3_16_0_0.override {
-            Cabal-syntax = self.Cabal-syntax_3_16_0_0;
+          super.Cabal_3_16_1_0.override {
+            Cabal-syntax = self.Cabal-syntax_3_16_1_0;
           }
         )
       );
@@ -113,8 +113,8 @@ with haskellLib;
       let
         # !!! Use cself/csuper inside for the actual overrides
         cabalInstallOverlay = cself: csuper: {
-          Cabal = cself.Cabal_3_16_0_0;
-          Cabal-syntax = cself.Cabal-syntax_3_16_0_0;
+          Cabal = cself.Cabal_3_16_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_16_1_0;
         };
       in
       {
@@ -173,10 +173,6 @@ with haskellLib;
         ;
     }
   );
-
-  # 2025-09-20: Too strict bound on filepath (<1.5)
-  # https://github.com/dan-t/cabal-cargs/issues/10
-  cabal-cargs = doJailbreak super.cabal-cargs;
 
   # Extensions wants a specific version of Cabal for its list of Haskell
   # language extensions.
@@ -257,6 +253,10 @@ with haskellLib;
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  # network < 3.2.8
+  # bound only required when running under WINE: https://github.com/haskell/network/issues/604
+  iserv-proxy = doJailbreak super.iserv-proxy;
+
   # Test ldap server test/ldap.js is missing from sdist
   # https://github.com/supki/ldap-client/issues/18
   ldap-client-og = dontCheck super.ldap-client-og;
@@ -273,9 +273,8 @@ with haskellLib;
       "vector-tests-O0"
       "vector-tests-O2"
     ];
-    # Ironically, we still need to build the doctest suite.
-    # vector-0.13.2.0 has a doctest < 0.24 constraint
-    jailbreak = true;
+    # inspection-testing doesn't work on all archs & ABIs
+    doCheck = !self.inspection-testing.meta.broken;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
@@ -312,15 +311,20 @@ with haskellLib;
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
 
-  # 2025-09-20: Restrictive upper bound on hashable.
-  # https://github.com/softwarefactory-project/matrix-client-haskell/issues/46
-  matrix-client = doJailbreak super.matrix-client;
-
   # 2025-02-10: Too strict bounds on tasty-quickcheck < 0.11
   tasty-discover = doJailbreak super.tasty-discover;
 
   # 2025-02-10: Too strict bounds on tasty < 1.5
   tasty-hunit-compat = doJailbreak super.tasty-hunit-compat;
+
+  # Makes cross-compilation hang
+  # https://github.com/composewell/streamly/issues/2840
+  streamly-core = overrideCabal (drv: {
+    postPatch = ''
+      substituteInPlace src/Streamly/Internal/Data/Array/Stream.hs \
+        --replace-fail '{-# INLINE splitAtArrayListRev #-}' ""
+    '';
+  }) super.streamly-core;
 
   # Expected failures are fixed as of GHC-9.10,
   # but the tests haven't been updated yet.
@@ -384,10 +388,6 @@ with haskellLib;
       sha256 = "sha256-okUn5ZuWcj8vPr0GWXvO1LygNCrDfttkDaUoOt+FLA0=";
     };
   }) super.leveldb-haskell;
-
-  # 2025-08-08: Allow inspection-testing >= 0.6 in fused-effects' test-suite
-  # https://github.com/fused-effects/fused-effects/pull/466
-  fused-effects = doJailbreak super.fused-effects;
 
   # 2025-08-08: Allow QuickCheck >= 2.15 in selective's test-suite
   # https://github.com/snowleopard/selective/pull/81
@@ -594,46 +594,36 @@ with haskellLib;
   # but we want e.g. completions as well. See
   # https://web.archive.org/web/20160724083703/https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
   # or git-annex @ 3571b077a1244330cc736181ee04b4d258a78476 doc/bugs/bash_completion_file_is_missing*
-  git-annex = lib.pipe super.git-annex (
-    [
-      (overrideCabal (drv: {
-        src = pkgs.fetchgit {
-          name = "git-annex-${super.git-annex.version}-src";
-          url = "git://git-annex.branchable.com/";
-          rev = "refs/tags/" + super.git-annex.version;
-          sha256 = "sha256-HkUrc9T8qpGsONIuM7ciKbx4vuJTOLFNxneIPte0wv4=";
-          # delete android and Android directories which cause issues on
-          # darwin (case insensitive directory). Since we don't need them
-          # during the build process, we can delete it to prevent a hash
-          # mismatch on darwin.
-          postFetch = ''
-            rm -r $out/doc/?ndroid*
-          '';
-        };
-
-        patches = drv.patches or [ ] ++ [
-          # Prevent .desktop files from being installed to $out/usr/share.
-          # TODO(@sternenseemann): submit upstreamable patch resolving this
-          # (this should be possible by also taking PREFIX into account).
-          ./patches/git-annex-no-usr-prefix.patch
-        ];
-
-        postPatch = ''
-          substituteInPlace Makefile \
-            --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
-                           'InstallDesktopFile git-annex'
+  git-annex = lib.pipe super.git-annex [
+    (overrideCabal (drv: {
+      src = pkgs.fetchgit {
+        name = "git-annex-${super.git-annex.version}-src";
+        url = "git://git-annex.branchable.com/";
+        tag = super.git-annex.version;
+        sha256 = "sha256-wH/As9KdHLlUgGUuIVjBjC8akqHfCZPBWABFXry6z28=";
+        # delete android and Android directories which cause issues on
+        # darwin (case insensitive directory). Since we don't need them
+        # during the build process, we can delete it to prevent a hash
+        # mismatch on darwin.
+        postFetch = ''
+          rm -r $out/doc/?ndroid*
         '';
-      }))
-    ]
-    ++ lib.optionals (lib.versionOlder self.ghc.version "9.10") [
-      (disableCabalFlag "OsPath")
-      (addBuildDepends [ self.filepath-bytestring ])
-    ]
-  );
+      };
 
-  # Too strict bounds on servant
-  # Pending a hackage revision: https://github.com/berberman/arch-web/commit/5d08afee5b25e644f9e2e2b95380a5d4f4aa81ea#commitcomment-89230555
-  arch-web = doJailbreak super.arch-web;
+      patches = drv.patches or [ ] ++ [
+        # Prevent .desktop files from being installed to $out/usr/share.
+        # TODO(@sternenseemann): submit upstreamable patch resolving this
+        # (this should be possible by also taking PREFIX into account).
+        ./patches/git-annex-no-usr-prefix.patch
+      ];
+
+      postPatch = ''
+        substituteInPlace Makefile \
+          --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
+                         'InstallDesktopFile git-annex'
+      '';
+    }))
+  ];
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal (drv: {
@@ -647,6 +637,16 @@ with haskellLib;
   # Too strict upper bounds on turtle and text
   # https://github.com/awakesecurity/nix-deploy/issues/35
   nix-deploy = doJailbreak super.nix-deploy;
+
+  call-stack = appendPatches [
+    # Fixes test suites with GHC >= 9.10
+    (pkgs.fetchpatch {
+      name = "call-stack-tests-normalize-pkg-name.patch";
+      url = "https://github.com/sol/call-stack/commit/cbbee23ce309d18201951e16a8b6d30b57e2bdf9.patch";
+      sha256 = "sha256-xkdjf8zXW+UMxot2Z8WYYmvAJsT+VGKXWGt19mZZwCg=";
+      includes = [ "test/Data/CallStackSpec.hs" ];
+    })
+  ] super.call-stack;
 
   # Too strict upper bound on algebraic-graphs
   # https://github.com/awakesecurity/nix-graph/issues/5
@@ -693,6 +693,16 @@ with haskellLib;
     url = "https://github.com/snowleopard/alga/commit/d4e43fb42db05413459fb2df493361d5a666588a.patch";
     hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
   }) super.algebraic-graphs;
+
+  inspection-testing = overrideCabal (drv: {
+    broken =
+      with pkgs.stdenv.hostPlatform;
+      # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
+      # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
+      !(isx86 || (isPower64 && isAbiElfv2) || isAarch64)
+      # We compile static with -fexternal-interpreter which is incompatible with plugins
+      || (isStatic && lib.versionAtLeast self.ghc.version "9.10");
+  }) super.inspection-testing;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
@@ -807,6 +817,12 @@ with haskellLib;
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
+  # Needs QuickCheck >= 2.16, but Stackage is currently on 2.15
+  integer-logarithms =
+    lib.warnIf (lib.versionAtLeast super.QuickCheck.version "2.16")
+      "override for haskellPackages.integer-logarithms may no longer be needed"
+      (dontCheck super.integer-logarithms);
+
   # Apply patch fixing an incorrect QuickCheck property which occasionally causes false negatives
   # https://github.com/Philonous/xml-picklers/issues/5
   xml-picklers = appendPatch (pkgs.fetchpatch {
@@ -841,10 +857,6 @@ with haskellLib;
       includes = [ "test/djot-reader.native" ];
     })
   ] super.pandoc;
-
-  # Too strict bounds on QuickCheck (<2.15), containers (<0.7), hashable (<1.5), pandoc (<3.7)
-  # https://github.com/jaspervdj/patat/issues/194
-  patat = doJailbreak super.patat;
 
   # Too strict upper bound on data-default-class (< 0.2)
   # https://github.com/stackbuilders/dotenv-hs/issues/203
@@ -1082,9 +1094,6 @@ with haskellLib;
   # https://github.com/pixbi/duplo/issues/25
   duplo = doJailbreak super.duplo;
 
-  # https://github.com/fgaz/dual/pull/3
-  dual-game = doJailbreak super.dual-game;
-
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary pkgs.libmikmod super.mikmod;
 
@@ -1149,12 +1158,6 @@ with haskellLib;
   #    else dontCheck super.doctest-discover);
   doctest-discover = dontCheck super.doctest-discover;
 
-  # 2025-02-10: Too strict bounds on doctest < 0.22
-  tasty-checklist = doJailbreak super.tasty-checklist;
-
-  # 2025-02-10: Too strict bounds on hedgehog < 1.5
-  tasty-sugar = doJailbreak super.tasty-sugar;
-
   # Known issue with nondeterministic test suite failure
   # https://github.com/nomeata/tasty-expected-failure/issues/21
   tasty-expected-failure = dontCheck super.tasty-expected-failure;
@@ -1208,49 +1211,6 @@ with haskellLib;
 
   # 2022-03-19: Testsuite is failing: https://github.com/puffnfresh/haskell-jwt/issues/2
   jwt = dontCheck super.jwt;
-
-  # Build Selda with the latest git version.
-  # See https://github.com/valderman/selda/issues/187
-  inherit
-    (
-      let
-        mkSeldaPackage =
-          name:
-          overrideCabal (drv: {
-            version = "2024-05-05-unstable";
-            src =
-              pkgs.fetchFromGitHub {
-                owner = "valderman";
-                repo = "selda";
-                rev = "50c3ba5c5da72bb758a4112363ba2fe1c0e968ea";
-                hash = "sha256-LEAJsSsDL0mmVHntnI16fH8m5DmePfcU0hFw9ErqTgQ=";
-              }
-              + "/${name}";
-            # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
-            # Note: jailbreak ignores constraints under an if(flag)
-            postPatch = ''
-              check_sed() {
-                if ! test -s "$1"; then
-                  echo "sed: pattern '$2' doesn't match anything" >&2
-                  exit 1
-                fi
-              }
-              sed -i ${name}.cabal \
-                -e 's/\(bytestring\) .*/\1/w c1' \
-                -e 's/\(text\) .*/\1/w c2' \
-                -e 's/\(aeson\) .*/\1/w c3'
-              check_sed c1 'bytestring .*'
-              check_sed c2 'text .*'
-              ${lib.optionalString (name == "selda-json") "check_sed c3 'aeson .*'"}
-            '';
-          }) super.${name};
-      in
-      lib.genAttrs [ "selda" "selda-sqlite" "selda-json" ] mkSeldaPackage
-    )
-    selda
-    selda-sqlite
-    selda-json
-    ;
 
   # 2024-03-10: Getting the test suite to run requires a correctly crafted GHC_ENVIRONMENT variable.
   graphql-client = dontCheck super.graphql-client;
@@ -1535,7 +1495,16 @@ with haskellLib;
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
   PortMidi = overrideCabal (drv: {
-    patches = (drv.patches or [ ]) ++ [ ./patches/portmidi-alsa-plugins.patch ];
+    patches = (drv.patches or [ ]) ++ [
+      ./patches/portmidi-alsa-plugins.patch
+      # Fixes compilation with GCC15 which defaults to C23
+      # https://github.com/PortMidi/PortMidi-haskell/pull/24
+      (pkgs.fetchpatch {
+        name = "PortMidi-C23.patch";
+        url = "https://github.com/PortMidi/PortMidi-haskell/commit/24b6ce1c77137b055ae57a99080d5f1616490197.patch";
+        sha256 = "sha256-PqnWA/DMW00Gtfa4YDV6iC/MXwQ3gFsNESbx+daw4C4=";
+      })
+    ];
     postPatch = (drv.postPatch or "") + ''
       substituteInPlace portmidi/pm_linux/pmlinuxalsa.c \
         --replace @alsa_plugin_dir@ "${pkgs.alsa-plugins}/lib/alsa-lib"
@@ -1605,6 +1574,15 @@ with haskellLib;
       tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
     '';
   }) (addExtraLibrary self.QuickCheck super.Chart-tests);
+
+  # 2026-01-17: too strict bounds on QuickCheck < 2.15
+  # https://github.com/hasufell/lzma-static/pull/15
+  xz = doJailbreak super.xz;
+
+  ghcup =
+    lib.throwIf pkgs.config.allowAliases
+      "ghcup cannot be used to install the haskell tool chain on NixOS because there is no compatible bindist. Please install ghc etc. via Nix. On non-NixOS systems you can use the ghcup shell installer"
+      super.ghcup;
 
   # This breaks because of version bounds, but compiles and runs fine.
   # Last commit is 5 years ago, so we likely won't get upstream fixed soon.
@@ -1704,6 +1682,21 @@ with haskellLib;
   pattern-arrows = lib.pipe super.pattern-arrows [
     doJailbreak
     (appendPatches [ ./patches/pattern-arrows-add-fix-import.patch ])
+  ];
+
+  # posix-waitpid - Fix CPid constructor import and version bounds
+  # Broken since 2011 (GHC 7.4+), marked broken in nixpkgs since 2016
+  # The original package has no repo however there's a fork with the
+  # fix at https://github.com/GaloisInc/posix-waitpid
+  posix-waitpid = lib.pipe super.posix-waitpid [
+    (overrideCabal (drv: {
+      postPatch = ''
+        substituteInPlace System/Posix/Waitpid.hs \
+          --replace 'import System.Posix.Types (CPid)' \
+                    'import System.Posix.Types (CPid(..))'
+      '';
+    }))
+    doJailbreak
   ];
 
   # 2024-03-19: Fix for mtl >= 2.3
@@ -1819,7 +1812,6 @@ with haskellLib;
       # PATH.
       deps = [
         pkgs.git
-        pkgs.nix
         pkgs.nix-prefetch-git
       ];
     in
@@ -1833,7 +1825,9 @@ with haskellLib;
           wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${lib.makeBinPath deps}"
         '';
       }))
-      (addTestToolDepends deps)
+      # pkgs.nix is not added to the wrapper since we can resonably expect it to be installed
+      # and we don't know which implementation the eventual user prefers
+      (addTestToolDepends (deps ++ [ pkgs.nix ]))
       # Patch for hnix compat.
       (appendPatches [
         (fetchpatch {
@@ -1954,9 +1948,6 @@ with haskellLib;
     "--haddock-option=--optghc=-fno-safe-haskell"
   ] super.alg;
 
-  # 2025-02-11: Too strict bounds on hedgehog < 1.5
-  nothunks = doJailbreak super.nothunks;
-
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
@@ -2003,16 +1994,13 @@ with haskellLib;
   cli-git = addBuildTool pkgs.git super.cli-git;
 
   cli-nix = addBuildTools [
+    # Required due to https://github.com/obsidiansystems/cli-nix/issues/11
     pkgs.nix
     pkgs.nix-prefetch-git
   ] super.cli-nix;
 
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);
-
-  # Too strict version bounds on ghc-events
-  # https://github.com/mpickering/hs-speedscope/issues/16
-  hs-speedscope = doJailbreak super.hs-speedscope;
 
   # Missing test files in sdist tarball:
   # https://gitlab.com/dpwiz/geomancy-layout/-/issues/1
@@ -2102,70 +2090,6 @@ with haskellLib;
   );
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  # stack-3.7.1 requires Cabal < 3.12
-  stack =
-    let
-      stack' = super.stack.overrideScope (self: super: { hpack = self.hpack_0_38_1; });
-    in
-    if lib.versionOlder self.ghc.version "9.10" then
-      stack'
-    else
-      lib.pipe
-        # to reduce rebuilds, don't override Cabal in the entire scope
-        ((stack'.override { Cabal = self.Cabal_3_10_3_0; }).overrideScope (
-          self: super:
-          let
-            downgradeCabal =
-              drv:
-              lib.pipe drv [
-                # Since Cabal and Cabal-syntax are in the global package db, we can't
-                # remove them from the available packages. Instead, we pass a constraint.
-                (appendConfigureFlags [
-                  "--constraint=Cabal<3.12"
-                  "--constraint=Cabal-syntax<3.12"
-                ])
-                (addBuildDepends [
-                  self.Cabal-syntax_3_10_3_0
-                  self.Cabal_3_10_3_0
-                ])
-              ];
-          in
-          lib.mapAttrs (_: downgradeCabal) {
-            inherit (super)
-              hpack
-              hackage-security
-              pantry
-              rio-prettyprint
-              ;
-          }
-        ))
-        [
-          # In order to apply a patch to a file with DOS line endings with GNU patch(1),
-          # we need to use --binary with a patch that has DOS line endings.
-          (overrideCabal (drv: {
-            prePatch = ''
-              ${drv.prePatch or ""}
-               patchFlags="--binary -p1"
-            '';
-          }))
-          (appendPatch (
-            pkgs.fetchpatch {
-              postFetch = ''
-                sed -e 's/$/\r/' -i "$out"
-              '';
-              # Type equality operator warning and failure with text >= 2.1.2
-              # We filter out all Cabal related changes from this patch as Cabal bumps may change the behavior of stack.
-              name = "stack-ghc-9.10.patch";
-              url = "https://github.com/commercialhaskell/stack/commit/6a672dd12f25151707cf45e9823447334728d245.patch";
-              hash = "sha256-MVwYIvFwiuBx9r6QUR0dHejmsQxVI6KFoZlujSXYJPM=";
-              includes = [
-                "src/Stack/Prelude.hs"
-                "src/Stack/Types/CompilerBuild.hs"
-              ];
-            }
-          ))
-        ];
-
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2024-03-21: pins specific version of ShellCheck
   # 2025-03-10: jailbreak, https://github.com/haskell-CI/haskell-ci/issues/771
@@ -2242,10 +2166,6 @@ with haskellLib;
   # https://github.com/hadolint/hadolint/issues/1127
   hadolint = doJailbreak super.hadolint;
 
-  # Too strict lower bounds on (test) deps
-  # https://github.com/phadej/puresat/issues/6
-  puresat = doJailbreak super.puresat;
-
   # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
   photoname = dontCheck super.photoname;
 
@@ -2289,14 +2209,6 @@ with haskellLib;
   }) super.json-to-haskell;
   # https://github.com/fieldstrength/aeson-deriving/issues/5
   aeson-deriving = dontCheck super.aeson-deriving;
-
-  # 2025-02-11: Too strict bounds on tasty < 1.5, all of the below.
-  morpheus-graphql-app = doJailbreak super.morpheus-graphql-app;
-  morpheus-graphql-client = doJailbreak super.morpheus-graphql-client;
-  morpheus-graphql-core = doJailbreak super.morpheus-graphql-core;
-  morpheus-graphql-server = doJailbreak super.morpheus-graphql-server;
-  morpheus-graphql-tests = doJailbreak super.morpheus-graphql-tests;
-  morpheus-graphql = doJailbreak super.morpheus-graphql;
 
   drunken-bishop = doJailbreak super.drunken-bishop;
   # https://github.com/SupercedeTech/dropbox-client/issues/1
@@ -2436,6 +2348,26 @@ with haskellLib;
     ))
   ];
 
+  # Test failures on various archs
+  # https://github.com/kazu-yamamoto/crypton/issues/49
+  crypton = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.crypton;
+
+  # Test failures on at least ppc64
+  # https://github.com/kazu-yamamoto/crypton-certificate/issues/25
+  # Likely related to the issues in crypton
+  # https://github.com/kazu-yamamoto/crypton/issues/49
+  crypton-x509-validation = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.crypton-x509-validation;
+
+  # Likely fallout from the crypton issues
+  # exception: HandshakeFailed (Error_Protocol "bad PubKeyALG_Ed448 signature for ecdhparams" DecryptError)
+  tls = dontCheckIf (
+    pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
+  ) super.tls;
+
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
   # Use crypton-connection instead of connection
@@ -2493,15 +2425,23 @@ with haskellLib;
   NGLess = dontCheck super.NGLess;
 
   # Too strict bound on network (<3.2)
-  hookup = appendPatches [
-    (pkgs.fetchpatch {
-      name = "hookup-network-3.2.patch";
-      url = "https://github.com/glguy/irc-core/commit/a3ec982e729b0f77b2db336ec32c5e4b7283bed5.patch";
-      sha256 = "0qc1qszn3l69xlbpfv8vz9ld0q7sghfcbp0wjds81kwcpdpl4jgv";
-      stripLen = 1;
-      includes = [ "hookup.cabal" ];
-    })
-  ] super.hookup;
+  hookup =
+    appendPatches
+      [
+        (pkgs.fetchpatch {
+          name = "hookup-network-3.2.patch";
+          url = "https://github.com/glguy/irc-core/commit/a3ec982e729b0f77b2db336ec32c5e4b7283bed5.patch";
+          sha256 = "0qc1qszn3l69xlbpfv8vz9ld0q7sghfcbp0wjds81kwcpdpl4jgv";
+          stripLen = 1;
+          includes = [ "hookup.cabal" ];
+        })
+      ]
+      (
+        overrideCabal {
+          revision = null;
+          editedCabalFile = null;
+        } super.hookup
+      );
 
   basic-sop = appendPatch (fetchpatch {
     # https://github.com/well-typed/basic-sop/pull/13
@@ -2543,27 +2483,8 @@ with haskellLib;
 
   clash-prelude = dontCheck super.clash-prelude;
 
-  krank = appendPatches [
-    # Deal with removed exports in base
-    (pkgs.fetchpatch {
-      name = "krank-issue-97.patch";
-      url = "https://github.com/guibou/krank/commit/f6b676774537f8e2357115fd8cd3c93fb68e8a85.patch";
-      sha256 = "0d85q2x37yhjwp17wmqvblkna7p7vnl7rwdqr3kday46wvdgblgl";
-      excludes = [ ".envrc" ];
-    })
-    # Fix build of tests with http-client >=0.7.16
-    (pkgs.fetchpatch {
-      name = "krank-http-client-0.7.16.patch";
-      url = "https://github.com/guibou/krank/commit/50fd3d08526f3ed6add3352460d3d1ce9dc15f6d.patch";
-      sha256 = "0h15iir2v4pli2b72gv69amxs277xmmzw3wavrix74h9prbs4pms";
-    })
-  ] super.krank;
-
   # 2025-08-06: Upper bounds on containers <0.7 and hedgehog < 1.5 too strict.
   hermes-json = doJailbreak super.hermes-json;
-
-  # Allow containers >= 0.7, https://github.com/nomeata/arbtt/issues/181
-  arbtt = doJailbreak super.arbtt;
 
   # hexstring is not compatible with newer versions of base16-bytestring
   # See https://github.com/solatis/haskell-hexstring/issues/3
@@ -2667,8 +2588,20 @@ with haskellLib;
   # hashable <1.4, mmorph <1.2
   composite-aeson = doJailbreak super.composite-aeson;
 
-  # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
-  hashable = doJailbreak super.hashable;
+  hashable = lib.pipe super.hashable [
+    # Big-endian POWER:
+    # Test suite xxhash-tests: RUNNING...
+    # xxhash
+    #   oneshot
+    #     w64-ref:      OK (0.03s)
+    #       +++ OK, passed 100 tests.
+    #     w64-examples: FAIL
+    #       tests/xxhash-tests.hs:21:
+    #       expected: 2768807632077661767
+    #        but got: 13521078365639231154
+    # https://github.com/haskell-unordered-containers/hashable/issues/323
+    (dontCheckIf pkgs.stdenv.hostPlatform.isBigEndian)
+  ];
 
   cborg = appendPatches [
     # This patch changes CPP macros form gating on the version of ghc-prim to base
@@ -2694,15 +2627,11 @@ with haskellLib;
 
   # Doesn't compile with tasty-quickcheck == 0.11 (see issue above)
   serialise = dontCheck super.serialise;
-  # https://github.com/Bodigrim/data-array-byte/issues/1
-  data-array-byte = doJailbreak super.data-array-byte;
   # 2025-02-06: Allow tasty-quickcheck == 0.11.*
   # https://github.com/google/ghc-source-gen/issues/120
   ghc-source-gen = doJailbreak super.ghc-source-gen;
   # https://github.com/byteverse/bytebuild/issues/20#issuecomment-2652113837
   bytebuild = doJailbreak super.bytebuild;
-  # https://github.com/haskellari/lattices/issues/132
-  lattices = doJailbreak super.lattices;
 
   # Too strict bounds on tasty <1.5 and tasty-quickcheck <0.11
   # https://github.com/phadej/aeson-extra/issues/62
@@ -2729,9 +2658,6 @@ with haskellLib;
   # tests can't find the test binary anymore - parseargs-example
   parseargs = dontCheck super.parseargs;
 
-  # base <4.14
-  decimal-literals = doJailbreak super.decimal-literals;
-
   # Test failure https://gitlab.com/lysxia/ap-normalize/-/issues/2
   ap-normalize = dontCheck super.ap-normalize;
 
@@ -2744,10 +2670,7 @@ with haskellLib;
     })
   ] super.heist;
 
-  heist-extra = doJailbreak super.heist-extra; # base <4.18.0.0.0
-  unionmount = doJailbreak super.unionmount; # base <4.18
   tailwind = doJailbreak super.tailwind; # base <=4.17.0.0
-  commonmark-wikilink = doJailbreak super.commonmark-wikilink; # base <4.18.0.0.0
 
   # 2025-09-03: Disable tests until this is solved:
   # https://github.com/clash-lang/ghc-typelits-extra/issues/60
@@ -2784,7 +2707,7 @@ with haskellLib;
           # Matching dependencies for hasql < 1.6.x
           hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements_0_3_1_5;
           hasql-implicits = dontCheck super.hasql-implicits_0_1_1_3;
-          hasql-notifications = dontCheck super.hasql-notifications_0_2_2_2;
+          hasql-notifications = unmarkBroken (dontCheck super.hasql-notifications_0_2_2_2);
           hasql-pool = dontCheck super.hasql-pool_1_0_1;
           hasql-transaction = dontCheck super.hasql-transaction_1_1_0_1;
           text-builder = super.text-builder_0_6_10;
@@ -2810,12 +2733,12 @@ with haskellLib;
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.0";
+          version = "14.5";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-GokYeVDuVdIbowU6xE3l8iaGbH4jnpqQFy/E+sb/Unw=";
+            hash = "sha256-qeFBq+d8AjwXp4YleOa0hLnBppI5+Tm1OEgB1QHWqY8=";
           };
         })
       ];
@@ -2851,10 +2774,6 @@ with haskellLib;
       "!/parsec-ansi-wl-pprint/"
     ];
   }) super.tree-diff;
-
-  # base <4.19
-  # https://github.com/well-typed/large-records/issues/168
-  large-generics = doJailbreak super.large-generics;
 
   # Too strict bound on bytestring < 0.12
   # https://github.com/raehik/heystone/issues/2
@@ -2954,49 +2873,11 @@ with haskellLib;
   # https://github.com/google/proto-lens/issues/403
   proto-lens-arbitrary = doJailbreak super.proto-lens-arbitrary;
 
-  # Forbids QuickCheck >= 2.15
-  # https://github.com/mchav/granite/issues/12#issuecomment-3360209408
-  granite = doJailbreak super.granite;
-
-  # Erroneously forbids vector >= 0.13.2.0
-  # https://github.com/mchav/snappy-hs/commit/400490df38e0db7f353c0427f034a231bdf73098#r167007963
-  snappy-hs = doJailbreak super.snappy-hs;
-
-  proto3-wire = appendPatches [
-    (fetchpatch {
-      # https://github.com/awakesecurity/proto3-wire/pull/108
-      name = "add-reverse-encoders-for-packed-repeated-fields.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/d4376fb6f1c1ac03ee8ec5c5793700ca6508ea70.patch";
-      hash = "sha256-vtEYg/jLoTn1YRVhQJi6kyta+U4XiWeS7i1ZSN7BYf8=";
-      includes = [
-        "**.cabal"
-        "*.hs"
-      ];
-    })
-    (fetchpatch {
-      # https://github.com/awakesecurity/proto3-wire/pull/111
-      name = "support-LTS-24.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/35fd88c4daf6643135db6da9ab6ed6d6f33eb3de.patch";
-      hash = "sha256-GzXlweRshVLA29xVHhJSRIU40y+KtAplIqfvp0I8cY0=";
-    })
-
-  ] super.proto3-wire;
-
   # 2024-07-27: building test component requires non-trivial custom build steps
   # https://github.com/awakesecurity/proto3-suite/blob/bec9d40e2767143deed5b2d451197191f1d8c7d5/nix/overlays/haskell-packages.nix#L311
-  # Hackage release trails a good deal behind master
   proto3-suite = lib.pipe super.proto3-suite [
     dontCheck
     doJailbreak
-    (overrideSrc {
-      version = "0.9.0-unstable-2025-04-10";
-      src = pkgs.fetchFromGitHub {
-        owner = "awakesecurity";
-        repo = "proto3-suite";
-        rev = "24bb3f9c6c83b4ecc31783fa5a8fa4406e6ef0d8";
-        hash = "sha256-009UNd1rEg/wDCCxReQWhPwHaONwlB6l6qoIPR0mVBU=";
-      };
-    })
   ];
 
   # Tests require docker
@@ -3040,7 +2921,7 @@ with haskellLib;
   http2-tls =
     lib.warnIf (lib.versionAtLeast self.tls.version "2.1.10")
       "haskellPackages.http2-tls: tls override can be removed"
-      (super.http2-tls.override { tls = self.tls_2_1_12; });
+      (super.http2-tls.override { tls = self.tls_2_2_1; });
 
   # Relax http2 version bound (5.3.9 -> 5.3.10)
   # https://github.com/well-typed/grapesy/issues/297
@@ -3049,9 +2930,6 @@ with haskellLib;
 
   # doctests are failing https://github.com/alpmestan/taggy-lens/issues/8
   taggy-lens = dontCheck super.taggy-lens;
-
-  # https://github.com/snoyberg/http-client/pull/563
-  http-client-tls = doJailbreak super.http-client-tls;
 
   # 2025-09-03: allow bytestring 0.12
   # https://github.com/wangbj/hashing/issues/4
@@ -3095,9 +2973,6 @@ with haskellLib;
   hw-int = warnAfterVersion "0.0.2.0" (doJailbreak super.hw-int);
 
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
-  chimera = warnAfterVersion "0.4.1.0" (doJailbreak super.chimera);
-
-  # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
 
   # 2025-07-29: test suite "test" fails to build because of missing source files,
@@ -3124,7 +2999,7 @@ with haskellLib;
       ]
     ) super)
     what4
-    what4_1_7
+    what4_1_7_3
     ;
 
   copilot-theorem = lib.pipe super.copilot-theorem [
@@ -3135,6 +3010,20 @@ with haskellLib;
   egison-pattern-src-th-mode = warnAfterVersion "0.2.1.2" (
     doJailbreak super.egison-pattern-src-th-mode
   );
+
+  # Missing test files, (and one the test suite needs stack)
+  # https://github.com/egison/egison/issues/283
+  egison = dontCheck super.egison;
+
+  # 2025-12-27: doctests broken with -Wx-partial warning
+  # https://github.com/junjihashimoto/th-cas/issues/1
+  th-cas = overrideCabal {
+    testTargets = [ "spec" ];
+  } super.th-cas;
+
+  # https://github.com/TristanCacqueray/haskell-xstatic/issues/5
+  # Test suite gets confused by mime-types >= 0.1.2.1
+  xstatic-th = dontCheck super.xstatic-th;
 
   # 2025-04-09: jailbreak to allow base >= 4.17, hasql >= 1.6, hasql-transaction-io >= 0.2
   hasql-streams-core = warnAfterVersion "0.1.0.0" (doJailbreak super.hasql-streams-core);
@@ -3147,9 +3036,6 @@ with haskellLib;
 
   # 2025-04-09: missing dependency - somehow it's not listed on hackage
   broadcast-chan = addExtraLibrary self.conduit super.broadcast-chan;
-
-  # 2025-04-09: jailbreak to allow template-haskell >= 2.21, th-abstraction >= 0.7
-  kind-generics-th = warnAfterVersion "0.2.3.3" (doJailbreak super.kind-generics-th);
 
   # 2025-04-09: jailbreak to allow aeson >= 2.2, base >= 4.19, text >= 2.1
   ebird-api = warnAfterVersion "0.2.0.0" (doJailbreak super.ebird-api);
@@ -3186,29 +3072,15 @@ with haskellLib;
       # https://github.com/tweag/monad-bayes/issues/378
       (doJailbreak super.monad-bayes);
 
-  crucible =
-    lib.pipe
-      (super.crucible.override {
-        what4 = self.what4_1_7;
-      })
-      [
-        # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
-        (warnAfterVersion "0.7.2")
-        doJailbreak
-
-        # Prevent clashes with now exported Prelude.foldl'
-        (appendPatch (
-          pkgs.fetchpatch {
-            name = "base-4.20-foldl'.patch";
-            url = "https://github.com/GaloisInc/crucible/commit/10f372e4b0389dd3966e04163dcd67d71e651709.patch";
-            relative = "crucible";
-            sha256 = "sha256-frxTs5SB1ENjH+X0lIlQ8k6pDIDOANylrqIOQpEtObU=";
-          }
-        ))
-      ];
+  # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
+  crucible = doJailbreak (
+    super.crucible.override {
+      what4 = self.what4_1_7_3;
+    }
+  );
 
   crucible-llvm = super.crucible-llvm.override {
-    what4 = self.what4_1_7;
+    what4 = self.what4_1_7_3;
   };
 
   # Test suite invokes cabal-install in a way incompatible with our generic builder
@@ -3262,15 +3134,8 @@ with haskellLib;
   # https://github.com/mrkkrp/wave/issues/48
   wave = doJailbreak super.wave;
 
-  # 2025-04-23: disable bounds microlens <0.5, QuickCheck < 2.16
-  # https://github.com/debug-ito/wild-bind/issues/7
-  wild-bind = doJailbreak super.wild-bind;
-
   # Test suite no longer compiles with hspec-hedgehog >= 0.3
   finitary = dontCheck super.finitary;
-
-  # 2025-04-13: jailbreak to allow bytestring >= 0.12, text >= 2.1
-  ktx-codec = warnAfterVersion "0.0.2.1" (doJailbreak super.ktx-codec);
 
   # 2025-04-13: jailbreak to allow template-haskell >= 2.17
   sr-extra = warnAfterVersion "1.88" (
@@ -3303,12 +3168,6 @@ with haskellLib;
 
   # 2025-5-15: Too strict bounds on base <4.19, see: https://github.com/zachjs/sv2v/issues/317
   sv2v = doJailbreak super.sv2v;
-
-  # 2025-09-20: New revision already on hackage.
-  nvfetcher = lib.pipe super.nvfetcher [
-    (warnAfterVersion "0.7.0.0")
-    doJailbreak
-  ];
 
   # 2025-06-25: Upper bounds of transformers and bytestring too strict,
   # as haskore 0.2.0.8 was released in 2016 and is quite outdated.
@@ -3345,165 +3204,6 @@ with haskellLib;
   stripe-concepts = doJailbreak super.stripe-concepts;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
-
-  # 2025-10-12: gi-gtk was renamed to gi-gtk3
-  # https://github.com/haskell-gi/haskell-gi/issues/478
-  gi-gtk-hs =
-    appendPatches
-      [
-        (pkgs.fetchpatch {
-          name = "gi-gtk-hs-use-gtk3.patch";
-          url = "https://github.com/haskell-gi/haskell-gi/commit/e2ed85835499f70e119f050a2f37f22481f93886.patch";
-          sha256 = "sha256-MzxXtBNBbJJaNwTOrq/CYqK4yGfS4Yk5fQ38ihFcclA=";
-          relative = "gi-gtk-hs";
-        })
-      ]
-      (
-        super.gi-gtk-hs.override {
-          gi-gdk = self.gi-gdk3;
-          gi-gtk = self.gi-gtk3;
-        }
-      );
-
-  # 2025-08-04: Disable failing testcases. It would feel bad to disable all the
-  # checks in a cryptography related package.
-  botan-low = overrideCabal (drv: {
-    testFlags =
-      drv.testFlags or [ ]
-      ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
-        # botan-low-cipher-tests
-        "/AES-128/SIV/can incrementally / online encipher a message/"
-        "/AES-128/SIV/can incrementally / online decipher a message/"
-        "/AES-128/SIV/has parity between online and offline/"
-        "/AES-192/SIV/can incrementally / online encipher a message/"
-        "/AES-192/SIV/can incrementally / online decipher a message/"
-        "/AES-192/SIV/has parity between online and offline/"
-        "/AES-256/SIV/can incrementally / online encipher a message/"
-        "/AES-256/SIV/can incrementally / online decipher a message/"
-        "/AES-256/SIV/has parity between online and offline/"
-        "/ARIA-128/SIV/can incrementally / online encipher a message/"
-        "/ARIA-128/SIV/can incrementally / online decipher a message/"
-        "/ARIA-128/SIV/has parity between online and offline/"
-        "/ARIA-192/SIV/can incrementally / online encipher a message/"
-        "/ARIA-192/SIV/can incrementally / online decipher a message/"
-        "/ARIA-192/SIV/has parity between online and offline/"
-        "/ARIA-256/SIV/can incrementally / online encipher a message/"
-        "/ARIA-256/SIV/can incrementally / online decipher a message/"
-        "/ARIA-256/SIV/has parity between online and offline/"
-        "/Camellia-128/SIV/can incrementally / online encipher a message/"
-        "/Camellia-128/SIV/can incrementally / online decipher a message/"
-        "/Camellia-128/SIV/has parity between online and offline/"
-        "/Camellia-192/SIV/can incrementally / online encipher a message/"
-        "/Camellia-192/SIV/can incrementally / online decipher a message/"
-        "/Camellia-192/SIV/has parity between online and offline/"
-        "/Camellia-256/SIV/can incrementally / online encipher a message/"
-        "/Camellia-256/SIV/can incrementally / online decipher a message/"
-        "/Camellia-256/SIV/has parity between online and offline/"
-        "/Noekeon/SIV/can incrementally / online encipher a message/"
-        "/Noekeon/SIV/can incrementally / online decipher a message/"
-        "/Noekeon/SIV/has parity between online and offline/"
-        "/SEED/SIV/can incrementally / online encipher a message/"
-        "/SEED/SIV/can incrementally / online decipher a message/"
-        "/SEED/SIV/has parity between online and offline/"
-        "/SM4/SIV/can incrementally / online encipher a message/"
-        "/SM4/SIV/can incrementally / online decipher a message/"
-        "/SM4/SIV/has parity between online and offline/"
-        "/Serpent/SIV/can incrementally / online encipher a message/"
-        "/Serpent/SIV/can incrementally / online decipher a message/"
-        "/Serpent/SIV/has parity between online and offline/"
-        "/Twofish/SIV/can incrementally / online encipher a message/"
-        "/Twofish/SIV/can incrementally / online decipher a message/"
-        "/Twofish/SIV/has parity between online and offline/"
-        "/AES-128/CCM/can incrementally / online encipher a message/"
-        "/AES-128/CCM/can incrementally / online decipher a message/"
-        "/AES-128/CCM/has parity between online and offline/"
-        "/AES-192/CCM/can incrementally / online encipher a message/"
-        "/AES-192/CCM/can incrementally / online decipher a message/"
-        "/AES-192/CCM/has parity between online and offline/"
-        "/AES-256/CCM/can incrementally / online encipher a message/"
-        "/AES-256/CCM/can incrementally / online decipher a message/"
-        "/AES-256/CCM/has parity between online and offline/"
-        "/ARIA-128/CCM/can incrementally / online encipher a message/"
-        "/ARIA-128/CCM/can incrementally / online decipher a message/"
-        "/ARIA-128/CCM/has parity between online and offline/"
-        "/ARIA-192/CCM/can incrementally / online encipher a message/"
-        "/ARIA-192/CCM/can incrementally / online decipher a message/"
-        "/ARIA-192/CCM/has parity between online and offline/"
-        "/ARIA-256/CCM/can incrementally / online encipher a message/"
-        "/ARIA-256/CCM/can incrementally / online decipher a message/"
-        "/ARIA-256/CCM/has parity between online and offline/"
-        "/Camellia-128/CCM/can incrementally / online encipher a message/"
-        "/Camellia-128/CCM/can incrementally / online decipher a message/"
-        "/Camellia-128/CCM/has parity between online and offline/"
-        "/Camellia-192/CCM/can incrementally / online encipher a message/"
-        "/Camellia-192/CCM/can incrementally / online decipher a message/"
-        "/Camellia-192/CCM/has parity between online and offline/"
-        "/Camellia-256/CCM/can incrementally / online encipher a message/"
-        "/Camellia-256/CCM/can incrementally / online decipher a message/"
-        "/Camellia-256/CCM/has parity between online and offline/"
-        "/Noekeon/CCM/can incrementally / online encipher a message/"
-        "/Noekeon/CCM/can incrementally / online decipher a message/"
-        "/Noekeon/CCM/has parity between online and offline/"
-        "/SEED/CCM/can incrementally / online encipher a message/"
-        "/SEED/CCM/can incrementally / online decipher a message/"
-        "/SEED/CCM/has parity between online and offline/"
-        "/SM4/CCM/can incrementally / online encipher a message/"
-        "/SM4/CCM/can incrementally / online decipher a message/"
-        "/SM4/CCM/has parity between online and offline/"
-        "/Serpent/CCM/can incrementally / online encipher a message/"
-        "/Serpent/CCM/can incrementally / online decipher a message/"
-        "/Serpent/CCM/has parity between online and offline/"
-        "/Twofish/CCM/can incrementally / online encipher a message/"
-        "/Twofish/CCM/can incrementally / online decipher a message/"
-        "/Twofish/CCM/has parity between online and offline/"
-        # botan-low-mpi-tests
-        "/can compute the modular inverse/"
-        # botan-low-pubkey-dsa-tests
-        "/modp/srp/1024/privKeyLoadDSA/"
-        "/modp/srp/1024/pubKeyLoadDSA/"
-        "/modp/srp/1536/privKeyLoadDSA/"
-        "/modp/srp/1536/pubKeyLoadDSA/"
-        "/modp/srp/2048/privKeyLoadDSA/"
-        "/modp/srp/2048/pubKeyLoadDSA/"
-        "/modp/srp/3072/privKeyLoadDSA/"
-        "/modp/srp/3072/pubKeyLoadDSA/"
-        "/modp/srp/4096/privKeyLoadDSA/"
-        "/modp/srp/4096/pubKeyLoadDSA/"
-        "/modp/srp/6144/privKeyLoadDSA/"
-        "/modp/srp/6144/pubKeyLoadDSA/"
-        "/modp/srp/8192/privKeyLoadDSA/"
-        "/modp/srp/8192/pubKeyLoadDSA/"
-        # botan-low-pubkey-decrypt-tests
-        "/SM2 sm2p256v1 SHA-256/decrypt/"
-        # botan-low-pubkey-encrypt-tests
-        "/SM2 sm2p256v1 SHA-256/encrypt/"
-        # botan-low-pwdhash-tests
-        "/Scrypt/pwdhashTimed/"
-        # botan-low-srp6-tests
-        "/ffdhe/ietf/2048/can negotiate a shared secret/"
-        "/ffdhe/ietf/3072/can negotiate a shared secret/"
-        "/ffdhe/ietf/4096/can negotiate a shared secret/"
-        "/ffdhe/ietf/6144/can negotiate a shared secret/"
-        "/ffdhe/ietf/8192/can negotiate a shared secret/"
-        "/modp/ietf/1024/can negotiate a shared secret/"
-        "/modp/ietf/1536/can negotiate a shared secret/"
-        "/modp/ietf/2048/can negotiate a shared secret/"
-        "/modp/ietf/3072/can negotiate a shared secret/"
-        "/modp/ietf/4096/can negotiate a shared secret/"
-        "/modp/ietf/6144/can negotiate a shared secret/"
-        "/modp/ietf/8192/can negotiate a shared secret/"
-        "/modp/srp/1024/can negotiate a shared secret/"
-        "/modp/srp/1536/can negotiate a shared secret/"
-        "/modp/srp/2048/can negotiate a shared secret/"
-        "/modp/srp/3072/can negotiate a shared secret/"
-        "/modp/srp/4096/can negotiate a shared secret/"
-        "/modp/srp/6144/can negotiate a shared secret/"
-        "/modp/srp/8192/can negotiate a shared secret/"
-        "/dsa/jce/1024/can negotiate a shared secret/"
-        "/dsa/botan/2048/can negotiate a shared secret/"
-        "/dsa/botan/3072/can negotiate a shared secret/"
-      ]);
-  }) super.botan-low;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
@@ -3904,13 +3604,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.9.1";
+    version = "1.10.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-IwnNtbNVrlZIHh7h4Wz6VP0Furxg9Hh0ycighvL5cZc=";
+      hash = "sha256-kNwoplCrqAymyFIzoR1rpEj0I1Ass+wuP8YsVS61630=";
     };
   in
   {

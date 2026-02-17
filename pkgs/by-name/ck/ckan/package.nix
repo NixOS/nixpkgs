@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ckan";
-  version = "1.36.0";
+  version = "1.36.2";
 
   src = fetchurl {
     url = "https://github.com/KSP-CKAN/CKAN/releases/download/v${version}/ckan.exe";
-    hash = "sha256-Tw8s86FtBz/92uq2imFZm4n88NCCpePTpydoAoYsE3U=";
+    hash = "sha256-EZSf+n6QUEZW2Bjl2ac/6e+Jo+PlxWd1Z1PKHvgC/Ko=";
   };
 
   icon = fetchurl {

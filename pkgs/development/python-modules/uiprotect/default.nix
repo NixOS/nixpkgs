@@ -11,6 +11,7 @@
   aiohttp,
   aioshutil,
   async-timeout,
+  av,
   convertertools,
   dateparser,
   orjson,
@@ -37,30 +38,26 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uiprotect";
-  version = "7.33.2";
+  version = "10.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
-    tag = "v${version}";
-    hash = "sha256-zGw77uP9Na+NnSzpxJ0Nf10L+nfbGuodVQNfomtaHhA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tQeDZMukKg3xL/tGeQ7+Rm3lzNJQEcDkErbLfKnaxN8=";
   };
 
   build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [
-    "aiofiles"
-    "pydantic"
-  ];
 
   dependencies = [
     aiofiles
     aiohttp
     aioshutil
     async-timeout
+    av
     convertertools
     dateparser
     orjson
@@ -95,8 +92,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for UniFi Protect (Unofficial)";
     homepage = "https://github.com/uilibs/uiprotect";
-    changelog = "https://github.com/uilibs/uiprotect/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/uilibs/uiprotect/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

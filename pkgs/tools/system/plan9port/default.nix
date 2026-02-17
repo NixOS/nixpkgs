@@ -4,9 +4,9 @@
   fetchFromGitHub,
   fontconfig,
   freetype,
-  libX11,
-  libXext,
-  libXt,
+  libx11,
+  libxext,
+  libxt,
   xorgproto,
   perl, # For building web manuals
   which,
@@ -14,15 +14,15 @@
   DarwinTools, # For building on Darwin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "plan9port";
-  version = "2025-01-29";
+  version = "0-unstable-2025-11-10";
 
   src = fetchFromGitHub {
     owner = "9fans";
-    repo = pname;
-    rev = "a5d6857a3b912b43c88ef298c28d13d4623f9ef0";
-    sha256 = "0c23z56zygrsyr96ml7907mpfgx80vnsy99nqr3nmfw1a045mjgv";
+    repo = "plan9port";
+    rev = "f39a2407b6e6ace6af68e466bfa2f362b9a9dd36";
+    hash = "sha256-YvrwUC+aMqp/Kvvfd7HGvYkbP8Dm/Z5/SVH4gG9BdRA=";
   };
 
   postPatch = ''
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
       [
         fontconfig
         freetype # fontsrv uses these
-        libX11
-        libXext
-        libXt
+        libx11
+        libxext
+        libxt
         xorgproto
       ]
     else
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     CC9='$(command -v $CC)'
     CFLAGS='$NIX_CFLAGS_COMPILE'
     LDFLAGS='$(for f in $NIX_LDFLAGS; do echo "-Wl,$f"; done | xargs echo)'
-    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "X11='${libXt.dev}/include'"}
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "X11='${libxt.dev}/include'"}
     EOF
 
     # make '9' available in the path so there's some way to find out $PLAN9

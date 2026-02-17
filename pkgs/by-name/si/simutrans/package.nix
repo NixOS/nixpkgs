@@ -114,7 +114,7 @@ let
   withPaks =
     paks:
     buildEnv {
-      inherit (binaries) name;
+      inherit (binaries) pname version;
       paths = [ binaries ] ++ paks;
       postBuild = ''
         rm "$out/bin" && mkdir "$out/bin"

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lzo,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "python-lzo";
   version = "1.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jd-boyd";

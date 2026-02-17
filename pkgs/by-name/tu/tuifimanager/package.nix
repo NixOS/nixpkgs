@@ -19,17 +19,17 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
   "Drag and drop support is only available for linux with xorg."
 
   python3Packages.buildPythonApplication
-  rec {
+  (finalAttrs: {
     pname = "tuifimanager";
-    version = "5.1.5";
+    version = "5.2.6";
 
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "GiorgosXou";
       repo = "TUIFIManager";
-      tag = "v.${version}";
-      hash = "sha256-5ShrmjEFKGdmaGBFjMnIfcM6p8AZd13uIEFwDVAkU/8=";
+      tag = "v.${finalAttrs.version}";
+      hash = "sha256-cN1I/bCOO2YdxdHGNVbDDH1+P1q+tU3gbEeQjl8jmNI=";
     };
 
     build-system = with python3Packages; [
@@ -86,4 +86,4 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
       ];
       mainProgram = "tuifi";
     };
-  }
+  })

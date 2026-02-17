@@ -4,10 +4,11 @@
   buildGoModule,
   enableWebui ? true,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   nixosTests,
 }:
-
 buildGoModule rec {
   pname = "rmfakecloud";
   version = "0.0.26";
@@ -24,10 +25,15 @@ buildGoModule rec {
   # if using webUI build it
   # use env because of https://github.com/NixOS/nixpkgs/issues/358844
   env.pnpmRoot = "ui";
-  env.pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  env.pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
     sourceRoot = "${src.name}/ui";
     pnpmLock = "${src}/ui/pnpm-lock.yaml";
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-uywmHN9HWKi0CaqTg9uEio2XCu6ap9v2xtbodW/6b4Q=";
   };
@@ -42,7 +48,8 @@ buildGoModule rec {
   '';
   nativeBuildInputs = lib.optionals enableWebui [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   # ... or don't embed it in the server

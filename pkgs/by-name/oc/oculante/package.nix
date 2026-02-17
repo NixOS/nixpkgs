@@ -7,10 +7,10 @@
   openssl,
   fontconfig,
   nasm,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXi,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxi,
   libGL,
   libxkbcommon,
   wayland,
@@ -51,10 +51,10 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
     gtk3
     libxkbcommon
     wayland
@@ -65,6 +65,18 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::net" # requires network access
     "--skip=tests::flathub"
     "--skip=thumbnails::test_thumbs" # broken as of v0.9.2
+  ];
+
+  patches = [
+    # The below patch is needed to fix this build, until the upstream dependency (libavif-rs) fixes the problem.
+    # The explicit `patchFlags` can also be removed when this patch becomes obsolete.
+    # <https://github.com/njaard/libavif-rs/issues/122>
+    ./libaom-sys-0.17.2+libaom.3.11.0-cmake-nasm-fix.patch
+  ];
+
+  patchFlags = [
+    "-p1"
+    "--directory=../${pname}-${version}-vendor"
   ];
 
   postInstall = ''

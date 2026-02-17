@@ -20,8 +20,8 @@
   protobuf,
   pyflakes,
   pyrsistent,
+  pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rdkafka,
   requests,
@@ -32,16 +32,14 @@
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
-  version = "2.11.1";
+  version = "2.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
     tag = "v${version}";
-    hash = "sha256-WpvWv6UG7T0yJ1ZKZweHbWjh+C0PbEIYbbMAS4yyhzg=";
+    hash = "sha256-VnZf6YvvpOs9/9uJHJvcmF56Ra9hhsoqrVisDuf+C6w=";
   };
 
   buildInputs = [ rdkafka ];
@@ -90,6 +88,7 @@ buildPythonPackage rec {
     cachetools
     orjson
     pyflakes
+    pytest-asyncio
     pytestCheckHook
     requests-mock
     respx

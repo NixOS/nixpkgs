@@ -6,7 +6,6 @@
   hatch-fancy-pypi-readme,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   trio,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "anysqlite";
   version = "0.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";

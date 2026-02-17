@@ -4,12 +4,12 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "boohu";
   version = "0.14.0";
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/boohu/downloads/boohu-${version}.tar.gz";
+    url = "https://download.tuxfamily.org/boohu/downloads/boohu-${finalAttrs.version}.tar.gz";
     hash = "sha256-IB59C5/uuHP6LtKLypjpgHOo0MR9bFdCbudaRa+h7lI=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

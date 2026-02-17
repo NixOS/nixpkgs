@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   lxml,
   setuptools,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "xmldiff";
   version = "2.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

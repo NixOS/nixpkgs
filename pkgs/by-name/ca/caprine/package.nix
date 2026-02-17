@@ -11,18 +11,18 @@
 
 buildNpmPackage rec {
   pname = "caprine";
-  version = "2.60.3";
+  version = "2.61.0";
 
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "caprine";
     rev = "v${version}";
-    hash = "sha256-yfCilJ62m7nKe8B+4puwAbNgr2g1P7HaKIhFINdv0/k=";
+    hash = "sha256-hBGsqOqKMHNy2SNw1kHCQq1lPDd2S36L5pdKgD2O8FA=";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  npmDepsHash = "sha256-hNOAplCSXrO4NZqDTkmhf0oZVeGRUHr2Y/Qdx2RIV9c=";
+  npmDepsHash = "sha256-FgOHuMMUX92VHF6hdznoi7bhO/27t6+l038kmpqjctQ=";
 
   nativeBuildInputs = [ copyDesktopItems ];
 

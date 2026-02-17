@@ -10,13 +10,13 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.9.0";
   pname = "stopmotion";
 
   src = fetchgit {
     url = "https://invent.kde.org/multimedia/stopmotion";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RsFqvAmTJBVg32bnY2eA9jWWnuHgv66rZiWMqa6sviw=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "stopmotion";
   };
-}
+})

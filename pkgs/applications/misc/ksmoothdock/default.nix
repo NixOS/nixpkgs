@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  wrapQtAppsHook,
   kactivities,
   qtbase,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "KSmoothDock";
   version = "6.3";
 
@@ -28,6 +29,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -42,7 +44,6 @@ mkDerivation rec {
     mainProgram = "ksmoothdock";
     license = lib.licenses.mit;
     homepage = "https://dangvd.github.io/ksmoothdock/";
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
   };
 }

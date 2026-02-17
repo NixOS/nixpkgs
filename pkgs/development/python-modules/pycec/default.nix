@@ -4,15 +4,12 @@
   fetchFromGitHub,
   libcec,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pycec";
   version = "0.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "konikvranik";

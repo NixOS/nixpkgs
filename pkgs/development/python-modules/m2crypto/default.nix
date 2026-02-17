@@ -2,25 +2,23 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  fetchurl,
+  fetchFromGitLab,
   openssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   swig,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "m2crypto";
-  version = "0.45.1";
+  version = "0.46.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0PyBqIKO2/QwhDKzBAvwa7JrrZWruefUaQthGFUeduw=";
+  src = fetchFromGitLab {
+    owner = "m2crypto";
+    repo = "m2crypto";
+    tag = finalAttrs.version;
+    hash = "sha256-XV9aILSWfQ/xKDySflG3wiNRP4YVPVujuhIz2VdPuBc=";
   };
 
   build-system = [ setuptools ];
@@ -45,13 +43,21 @@ buildPythonPackage rec {
     openssl
   ];
 
+  disabledTests = [
+    # Connection refused
+    "test_makefile_err"
+  ];
+
+  # Tests require localhost access
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "M2Crypto" ];
 
   meta = {
     description = "Python crypto and SSL toolkit";
     homepage = "https://gitlab.com/m2crypto/m2crypto";
-    changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
+    changelog = "https://gitlab.com/m2crypto/m2crypto/-/tags/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

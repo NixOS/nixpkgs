@@ -6,15 +6,12 @@
   msrestazure,
   azure-common,
   azure-mgmt-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerinstance";
   version = "10.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

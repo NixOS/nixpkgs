@@ -7,7 +7,6 @@
   pytest-httpserver,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "owslib";
   version = "0.35.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "geopython";

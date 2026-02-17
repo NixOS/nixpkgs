@@ -51,7 +51,7 @@ in
   config = mkMerge [
     {
       # minimal configuration file to make lvmconfig/lvm2-activation-generator happy
-      environment.etc."lvm/lvm.conf".text = "config {}";
+      environment.etc."lvm/lvm.conf".text = lib.mkBefore "config {}";
     }
     (mkIf cfg.enable {
       systemd.tmpfiles.packages = [ cfg.package.out ];
@@ -59,6 +59,8 @@ in
       systemd.packages = [ cfg.package ];
 
       services.udev.packages = [ cfg.package.out ];
+      environment.etc."lvm/lvm.conf".text =
+        "global/lvresize_fs_helper_executable = ${pkgs.lvm2.scripts}/libexec/lvresize_fs_helper";
     })
     (mkIf config.boot.initrd.services.lvm.enable {
       # We need lvm2 for the device-mapper rules
@@ -71,9 +73,7 @@ in
       systemd.sockets."dm-event".wantedBy = [ "sockets.target" ];
       systemd.services."lvm2-monitor".wantedBy = [ "sysinit.target" ];
 
-      environment.etc."lvm/lvm.conf".text = ''
-        dmeventd/executable = "${cfg.package}/bin/dmeventd"
-      '';
+      environment.etc."lvm/lvm.conf".text = "dmeventd/executable = ${cfg.package}/bin/dmeventd";
       services.lvm.package = mkDefault pkgs.lvm2_dmeventd;
     })
     (mkIf cfg.boot.thin.enable {
@@ -137,7 +137,8 @@ in
           '';
 
           extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
-            ls ${pkgs.vdo}/bin/ | grep -vE '(adaptlvm|vdorecover)' | while read BIN; do
+            exclude='adaptlvm|vdorecover|vdocalculatesize'
+            ls ${pkgs.vdo}/bin/ | grep -vE "($exclude)" | while read BIN; do
               $out/bin/$(basename $BIN) --help > /dev/null
             done
           '';

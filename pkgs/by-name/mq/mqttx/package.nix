@@ -35,7 +35,7 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: [ pkgs.xorg.libxshmfence ];
+  extraPkgs = pkgs: [ pkgs.libxshmfence ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
@@ -54,7 +54,7 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/emqx/MQTTX/releases/tag/v${version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "mqttx";
   };
 }

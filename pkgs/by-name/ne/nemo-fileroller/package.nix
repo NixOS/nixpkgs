@@ -12,18 +12,18 @@
   cinnamon-translations,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nemo-fileroller";
   version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
   };
 
-  sourceRoot = "${src.name}/nemo-fileroller";
+  sourceRoot = "${finalAttrs.src.name}/nemo-fileroller";
 
   nativeBuildInputs = [
     meson
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --replace "GNOMELOCALEDIR" "${cinnamon-translations}/share/locale"
   '';
 
-  PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
+  env.PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
 
   meta = {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-fileroller";
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

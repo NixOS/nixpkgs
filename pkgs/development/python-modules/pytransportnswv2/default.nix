@@ -8,15 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytransportnswv2";
-  version = "2.0.8";
+  version = "2.2.6";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "PyTransportNSWv2";
-    inherit version;
-    hash = "sha256-+hE5onXQ/Isv+U7y9+CphpYTOW7CsMxR7M8jZS1djSs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Aw6Um1TPcXlADndSAls0TS4/2QvNi9az5ceBv7wnBck=";
   };
 
   build-system = [ setuptools ];
@@ -38,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

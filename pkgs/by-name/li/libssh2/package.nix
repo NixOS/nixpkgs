@@ -14,12 +14,12 @@
   vlc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libssh2";
   version = "1.11.1";
 
   src = fetchurl {
-    url = "https://www.libssh2.org/download/libssh2-${version}.tar.gz";
+    url = "https://www.libssh2.org/download/libssh2-${finalAttrs.version}.tar.gz";
     hash = "sha256-2ex2y+NNuY7sNTn+LImdJrDIN8s+tGalaw8QnKv2WPc=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

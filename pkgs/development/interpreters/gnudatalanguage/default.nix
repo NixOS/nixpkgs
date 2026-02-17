@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     netcdf-custom
     plplot-with-drivers
   ]
-  ++ lib.optional enableXWin plplot-with-drivers.libX11
+  ++ lib.optional enableXWin plplot-with-drivers.libx11
   ++ lib.optional enableGRIB eccodes
   ++ lib.optional enableGLPK glpk
   ++ lib.optional enableWX wxGTK32
@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional enableSzip "-DSZIPDIR=${szip}"
     ++ lib.optionals enableXWin [
       "-DX11=ON"
-      "-DX11DIR=${plplot-with-drivers.libX11}"
+      "-DX11DIR=${plplot-with-drivers.libx11}"
     ]
     ++ lib.optionals enableMPI [
       "-DMPI=ON"

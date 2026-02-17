@@ -14,7 +14,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "aurea";
   version = "1.6.1";
   pyproject = false; # uses meson
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CleoMenezesJr";
     repo = "Aurea";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XoLqtuh4ZIeKo8xb1ccaK+9K3uGuQfZt9Fb6NeUDCjE=";
   };
 
@@ -66,4 +66,4 @@ python3Packages.buildPythonApplication rec {
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = [ ];
   };
-}
+})

@@ -10,14 +10,14 @@
   libsodium,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "prime-server";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "kevinkreiser";
     repo = "prime_server";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0izmmvi3pvidhlrgfpg4ccblrw6fil3ddxg5cfxsz4qbh399x83w";
     fetchSubmodules = true;
   };
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.Thra11 ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

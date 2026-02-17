@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stargazer";
   version = "1.3.4";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "stargazer";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-9JNOq9SV3sHDlVaPUnZRq/8WNPQ/iF3AdSvAoCEtg7k=";
   };
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "stargazer";
     homepage = "https://sr.ht/~zethra/stargazer/";
     license = lib.licenses.agpl3Plus;
-    changelog = "https://git.sr.ht/~zethra/stargazer/refs/${version}";
+    changelog = "https://git.sr.ht/~zethra/stargazer/refs/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ gaykitty ];
   };
-}
+})

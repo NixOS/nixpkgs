@@ -36,7 +36,7 @@ lib.checkListOfEnum "${pname}: theme variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "WhiteSur-icon-theme";
-      tag = "${version}";
+      tag = version;
       hash = "sha256-oBKDvCVHEjN6JT0r0G+VndzijEWU9L8AvDhHQTmw2E4=";
     };
 

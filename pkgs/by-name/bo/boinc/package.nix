@@ -9,19 +9,19 @@
   curl,
   libGLU,
   libGL,
-  libXmu,
-  libXi,
+  libxmu,
+  libxi,
   libglut,
   libjpeg,
   libtool,
   wxGTK32,
-  xcbutil,
+  libxcb-util,
   sqlite,
   gtk3,
   patchelf,
-  libXScrnSaver,
+  libxscrnsaver,
   libnotify,
-  libX11,
+  libx11,
   libxcb,
   headless ? false,
 }:
@@ -54,20 +54,22 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!headless) [
     libGLU
     libGL
-    libXmu
-    libXi
+    libxmu
+    libxi
     libglut
     libjpeg
     wxGTK32
     gtk3
-    libXScrnSaver
+    libxscrnsaver
     libnotify
-    libX11
+    libx11
     libxcb
-    xcbutil
+    libxcb-util
   ];
 
-  NIX_LDFLAGS = lib.optionalString (!headless) "-lX11";
+  env = lib.optionalAttrs (!headless) {
+    NIX_LDFLAGS = "-lX11";
+  };
 
   preConfigure = ''
     ./_autosetup

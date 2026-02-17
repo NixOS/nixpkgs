@@ -16,15 +16,15 @@
   darwinMinVersionHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vapoursynth";
-  version = "72";
+  version = "73";
 
   src = fetchFromGitHub {
     owner = "vapoursynth";
     repo = "vapoursynth";
-    rev = "R${version}";
-    hash = "sha256-LRRz4471Rl/HwJ14zAkU/f2Acuofja8c0pGkuWihhsM=";
+    rev = "R${finalAttrs.version}";
+    hash = "sha256-cs+MEnOi1bwA52fiTIlGGzYjy5/m/FdoK55WSADR/gQ=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = vapoursynth;
       # Check Core version to prevent false positive with API version
-      version = "Core R${version}";
+      version = "Core R${finalAttrs.version}";
     };
   };
 
@@ -118,4 +118,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "vspipe";
   };
-}
+})

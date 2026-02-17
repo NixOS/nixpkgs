@@ -9,7 +9,6 @@
   mock,
   prawcore,
   pytestCheckHook,
-  pythonOlder,
   requests-toolbelt,
   update-checker,
   websocket-client,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "praw";
   version = "7.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "praw-dev";

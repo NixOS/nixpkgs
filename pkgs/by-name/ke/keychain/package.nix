@@ -15,14 +15,14 @@
   gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keychain";
   version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "funtoo";
     repo = "keychain";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-xk3ooFhBkgv93Po5oC4TZRmMhJJXDv7yekoE102FQd8=";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sigma ];
     mainProgram = "keychain";
   };
-}
+})

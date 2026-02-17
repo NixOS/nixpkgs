@@ -13,14 +13,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-calc";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "rofi-calc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/UKOyJfCsV/+kZDndHZmrPdE2MjVlQWSiWQRIUPGz/I=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ albakham ];
     platforms = with lib.platforms; linux;
   };
-}
+})

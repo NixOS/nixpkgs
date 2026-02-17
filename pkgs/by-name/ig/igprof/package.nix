@@ -8,19 +8,22 @@
   gdb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.9.18";
   pname = "igprof";
 
   src = fetchFromGitHub {
     owner = "igprof";
     repo = "igprof";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UTrAaH8C79km78Z/7NxvQ6dnl4u4Ki80nORf4bsoSNw=";
   };
 
   postPatch = ''
-    substituteInPlace src/igprof --replace libigprof.so $out/lib/libigprof.so
+    substituteInPlace src/igprof \
+      --replace-fail libigprof.so $out/lib/libigprof.so
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
   '';
 
   buildInputs = [
@@ -58,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ktf ];
   };
-}
+})

@@ -20,7 +20,6 @@
   nghttp2,
   openjpeg,
   libcaca,
-  mesa,
   mesa_glu,
   xvidcore,
   openssl,
@@ -29,7 +28,9 @@
   pulseaudio,
   SDL2,
   curl,
-  xorg,
+  libxv,
+  libx11,
+  xorgproto,
 
   withFullDeps ? false,
   withFfmpeg ? withFullDeps,
@@ -62,12 +63,12 @@ let
     };
   };
   unstable = {
-    version = "2.4-unstable-2025-10-26";
+    version = "2.4.0-unstable-2026-01-30";
     src = fetchFromGitHub {
       owner = "gpac";
       repo = "gpac";
-      rev = "e1a54e81b3befba2b0bffd1d4c1cf50da516c5f3";
-      hash = "sha256-jSMBPuWPmTDCebImdmAcCZl0hEQpJK4QMNGcEXgs3A4=";
+      rev = "2166130136223373dad2ef3fb72e4cbd129cb468";
+      hash = "sha256-Iw4UAKjFnV+NiG77VOfHUHPle5+YAIavtGmtrD3Uebw=";
     };
     updateScript = unstableGitUpdater {
       tagFormat = "v*";
@@ -108,10 +109,9 @@ stdenv.mkDerivation (finalAttrs: {
     nghttp2
     openjpeg
     libcaca
-    xorg.libX11
-    xorg.libXv
-    xorg.xorgproto
-    mesa
+    libx11
+    libxv
+    xorgproto
     mesa_glu
     xvidcore
     openssl

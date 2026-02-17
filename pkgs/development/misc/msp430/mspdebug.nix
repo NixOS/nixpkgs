@@ -17,13 +17,13 @@ assert enableReadline -> readline != null;
 assert enableMspds -> mspds != null;
 
 stdenv.mkDerivation rec {
-  version = "0.25";
+  version = "0.26";
   pname = "mspdebug";
   src = fetchFromGitHub {
     owner = "dlbeer";
     repo = "mspdebug";
     rev = "v${version}";
-    sha256 = "0prgwb5vx6fd4bj12ss1bbb6axj2kjyriyjxqrzd58s5jyyy8d3c";
+    sha256 = "sha256-4TisC0Nm3lYMWCJ3TtaHDAfLDejMQZJIruh2f7fCndU=";
   };
 
   enableParallelBuilding = true;

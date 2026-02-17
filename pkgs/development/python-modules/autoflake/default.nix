@@ -5,13 +5,11 @@
   hatchling,
   pyflakes,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
 }:
 buildPythonPackage rec {
   pname = "autoflake";
   version = "2.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [ pyflakes ] ++ lib.optional (pythonOlder "3.11") tomli;
+  propagatedBuildInputs = [ pyflakes ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

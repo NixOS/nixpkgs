@@ -6,14 +6,14 @@
   eigen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spectra";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "yixuan";
     repo = "spectra";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-lfbOwnTP3GrN/1N/tyMXZrtEHIxAq3EjuHS8M+I87to=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ vonfry ];
     platforms = lib.platforms.unix;
   };
-}
+})

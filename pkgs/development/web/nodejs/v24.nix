@@ -6,7 +6,6 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
@@ -24,9 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "24.11.1";
-  sha256 = "ea4da35f1c9ca376ec6837e1e30cee30d491847fe152a3f0378dc1156d954bbd";
+  version = "24.13.1";
+  sha256 = "b227bc868fb5e9ec8670620e2b25530eb12c17d43e6c7bc51bb38a660684192d";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -66,6 +64,15 @@ buildNodejs {
         url = "https://github.com/nodejs/node/commit/869d0cbca3b0b5e594b3254869a34d549664e089.patch?full_index=1";
         hash = "sha256-BBBShQwU20TSY8GtPehQ9i3AH4ZKUGIr8O0bRsgrpNo=";
         revert = true;
+      })
+    ]
+    ++ lib.optionals stdenv.is32bit [
+      # see: https://github.com/nodejs/node/issues/58458
+      ./v24-32bit.patch
+      # TODO: remove once included in an future upstream release
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/f13d7bf69a7f1642fb5b1b624eff1a50ceb71849.patch?full_index=1";
+        hash = "sha256-4PZq1gG/K+FwAM06VIXYoSNJeOYe37kfKW0jqczeXbc=";
       })
     ];
 }

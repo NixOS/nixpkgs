@@ -13,21 +13,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaTraces";
-  version = "0.5.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaTraces";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RvP3hLM8SoDN91PATTI5RTKwnJsomBtWIakRlBprEPA=";
+    hash = "sha256-Hli0JNQ0XpLXI10ol5fdmhk35/SFSo1o/SiVmYVWlCs=";
   };
-
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.4" "go 1.25.3"
-    substituteInPlace vendor/modules.txt \
-      --replace-fail "go 1.25.4" "go 1.25.3"
-  '';
 
   vendorHash = null;
 

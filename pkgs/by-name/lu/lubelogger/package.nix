@@ -7,20 +7,20 @@
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.5.5";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-xoq1EgwA4MScuyVN4djqWPjlRXouMR3JnZviOIaDNUU=";
+    hash = "sha256-EVW14IkUO+qMDZLF6TghY3FYiyeMKJifGpa9Vt15OkU=";
   };
 
   projectFile = "CarCareTracker.sln";
   nugetDeps = ./deps.json; # File generated with `nix-build -A lubelogger.passthru.fetch-deps`.
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   makeWrapperArgs = [
     "--set DOTNET_WEBROOT ${placeholder "out"}/lib/lubelogger/wwwroot"

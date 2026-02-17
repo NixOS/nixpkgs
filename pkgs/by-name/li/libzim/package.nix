@@ -13,14 +13,14 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libzim";
   version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "libzim";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DZiFeZ2ry3JpXDs3mvf0q7diwhkjQ2730KQkDQPbgcY=";
   };
 
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Reference implementation of the ZIM specification";
     homepage = "https://github.com/openzim/libzim";
-    changelog = "https://github.com/openzim/libzim/releases/tag/${version}";
+    changelog = "https://github.com/openzim/libzim/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       fab
       greg
     ];
   };
-}
+})

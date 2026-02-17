@@ -6,15 +6,12 @@
   openslide,
   pillow,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "openslide";
   version = "1.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openslide";
@@ -36,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''rm -rf openslide/'';
+  preCheck = "rm -rf openslide/";
 
   meta = {
     description = "Python bindings to the OpenSlide library for reading whole-slide microscopy images";

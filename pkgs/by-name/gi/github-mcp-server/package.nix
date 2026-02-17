@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "github-mcp-server";
-  version = "0.20.2";
+  version = "0.30.3";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "github-mcp-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1xr0AUAfYrxR7koCn9S3VJAw8PaJvFLNyzsblqyGyC0=";
+    hash = "sha256-RqTwii79h7Kk1bpJT1uGG2ODZE5DtROZZyMDKvH3jmo=";
   };
 
-  vendorHash = "sha256-j0THkLxOcNTyUoyl3WkbjR+8urM4fmsg7Mt74S4wjqU=";
+  vendorHash = "sha256-rv7mZQ2/j4R9s3p+Psq5E2I99zFtnieGc3eaMT3ykqQ=";
 
   ldflags = [
     "-s"
@@ -31,7 +31,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sjasmplus";
-  version = "1.21.0";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "z00m128";
     repo = "sjasmplus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iPtH/Uviw9m3tcbG44aZO+I6vR95/waXUejpwPPCpqo=";
+    hash = "sha256-wD31GT88hOKhsaXTKEiVIkmZO5sYYv7xb7CjiS2G1W0=";
   };
 
   buildInputs = [ luabridge ];

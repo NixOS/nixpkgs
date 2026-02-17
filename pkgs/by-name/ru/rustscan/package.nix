@@ -7,14 +7,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustscan";
   version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "RustScan";
     repo = "RustScan";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+qPSeDpOeCq+KwZb5ANXx6z+pYbgdT1hVgcrSzxyGp0=";
   };
 
@@ -42,9 +42,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Faster Nmap Scanning with Rust";
     homepage = "https://github.com/RustScan/RustScan";
-    changelog = "https://github.com/RustScan/RustScan/releases/tag/${version}";
+    changelog = "https://github.com/RustScan/RustScan/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "rustscan";
   };
-}
+})

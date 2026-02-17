@@ -3,8 +3,6 @@
   fetchPypi,
   flit-core,
   lib,
-  pythonOlder,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -20,8 +18,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ flit-core ];
-
-  dependencies = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   # no test
   doCheck = false;

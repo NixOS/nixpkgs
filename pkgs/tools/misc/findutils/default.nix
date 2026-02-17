@@ -11,12 +11,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "findutils";
   version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
+    url = "mirror://gnu/findutils/findutils-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 
@@ -24,7 +24,14 @@ stdenv.mkDerivation rec {
     substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
   '';
 
-  patches = [ ./no-install-statedir.patch ];
+  patches = [
+    ./no-install-statedir.patch
+
+    # Fixes test-float failure on ppc64 with C23
+    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
+    # Multiple upstream commits squashed with adjustments, see header
+    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
+  ];
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
@@ -78,7 +85,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.gnu.org/software/findutils/";
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
-
     longDescription = ''
       The GNU Find Utilities are the basic directory searching
       utilities of the GNU operating system.  These programs are
@@ -96,11 +102,9 @@ stdenv.mkDerivation rec {
           * locate - list files in databases that match a pattern;
           * updatedb - update a file name database;
     '';
-
     platforms = lib.platforms.all;
-
     license = lib.licenses.gpl3Plus;
-
     mainProgram = "find";
+    maintainers = [ lib.maintainers.mdaniels5757 ];
   };
-}
+})

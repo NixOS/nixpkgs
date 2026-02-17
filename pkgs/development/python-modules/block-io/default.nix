@@ -7,15 +7,12 @@
   pycryptodome,
   requests,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "block-io";
   version = "2.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

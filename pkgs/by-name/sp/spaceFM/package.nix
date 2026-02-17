@@ -19,14 +19,14 @@
   udisks,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spacefm";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "IgnorantGuru";
     repo = "spacefm";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "089r6i40lxcwzp60553b18f130asspnzqldlpii53smz52kvpirx";
   };
 
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
       obadz
     ];
   };
-}
+})

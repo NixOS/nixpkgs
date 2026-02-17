@@ -24,7 +24,7 @@ let
     src = fetchFromGitHub {
       owner = "mzabani";
       repo = "codd";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-KdZCL09TERy/PolQyYYykEbPtG5yhxrLZSSo9n6p2WE=";
     };
 

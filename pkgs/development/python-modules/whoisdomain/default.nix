@@ -5,16 +5,16 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whoisdomain";
-  version = "1.20250929.1";
+  version = "1.20260106.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mboot-github";
     repo = "WhoisDomain";
-    tag = version;
-    hash = "sha256-dyppd/6cBIkiiGm4S3khaNZ2DDyRrxWjeMqGYOMZ9YM=";
+    tag = finalAttrs.version;
+    hash = "sha256-OQlOqDmBhqHVFs6U3lC1EryNu4UEi8fzKERkOE3uBaw=";
   };
 
   build-system = [ hatchling ];
@@ -27,9 +27,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module to perform whois lookups";
     homepage = "https://github.com/mboot-github/WhoisDomain";
-    changelog = "https://github.com/mboot-github/WhoisDomain/releases/tag/${src.tag}";
+    changelog = "https://github.com/mboot-github/WhoisDomain/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "whoisdomain";
   };
-}
+})

@@ -4,15 +4,12 @@
   fetchFromGitHub,
   setuptools,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ppk2-api";
   version = "0.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "IRNAS";

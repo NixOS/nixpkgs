@@ -8,7 +8,7 @@ buildGoModule rec {
   pname = "commitizen-go";
   version = "1.0.3";
 
-  # we can't obtain the commit hash when using fetchFromGithub
+  # we can't obtain the commit hash when using fetchFromGitHub
   commit_revision = "unspecified (nix build)";
 
   src = fetchFromGitHub {

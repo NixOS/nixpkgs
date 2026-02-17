@@ -10,16 +10,16 @@
   zlib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "conan";
-  version = "2.21.0";
+  version = "2.22.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
-    tag = version;
-    hash = "sha256-D76K7s6zUy3hMOwkKXbsF4asrr7tGwC28MW5VaJvFBY=";
+    tag = finalAttrs.version;
+    hash = "sha256-4OKrAfhHgtAS606P88JFYCjgYYlSAH8RReqFs6N2V5s=";
   };
 
   pythonRelaxDeps = [
@@ -117,14 +117,16 @@ python3Packages.buildPythonApplication rec {
     "test/functional/util/test_cmd_args_to_string.py"
     "test/performance/test_large_graph.py"
     "test/unittests/tools/env/test_env_files.py"
+    # pipenv will attempt to access the network.
+    "test/functional/tools/system/pip_manager_test.py"
   ];
 
   meta = {
     description = "Decentralized and portable C/C++ package manager";
     homepage = "https://conan.io";
-    changelog = "https://github.com/conan-io/conan/releases/tag/${src.tag}";
+    changelog = "https://github.com/conan-io/conan/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ HaoZeke ];
     mainProgram = "conan";
   };
-}
+})

@@ -3,20 +3,17 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asyncsleepiq";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fhs1vsAmuCKpkNr5paoY4JGoS8LQzkiZn+m5JWq6Hc0=";
+    hash = "sha256-1BQYO8Nr/pvV6fz3J+340nEZhbbfFp5rytdgRAyRr0o=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -1,7 +1,7 @@
 {
   lib,
   buildDunePackage,
-  fetchFromGitHub,
+  fetchurl,
   dune-configurator,
   ppxlib,
 }:
@@ -10,11 +10,11 @@ buildDunePackage (finalAttrs: {
   pname = "extunix";
   version = "0.4.4";
 
-  src = fetchFromGitHub {
-    owner = "ygrek";
-    repo = "extunix";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-7wJDGv19etkDHRwwQ+WONtJswxNMjr2Q2Vhis4WgFek=";
+  minimalOCamlVersion = "5.3.0";
+
+  src = fetchurl {
+    url = "https://github.com/ygrek/extunix/releases/download/v${finalAttrs.version}/extunix-${finalAttrs.version}.tbz";
+    hash = "sha256-kzTIkjFiI+aK73lcpystQp1O7Apkf0GLA142oFPRSX0=";
   };
 
   postPatch = ''

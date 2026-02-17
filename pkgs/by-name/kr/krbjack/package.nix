@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "krbjack";
   version = "1.2.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "almandin";
     repo = "krbjack";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rvK0I8WlXqJtau9f+6ximfzYCjX21dPIyDN56IMI0gE=";
   };
 
@@ -41,9 +41,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Kerberos AP-REQ hijacking tool with DNS unsecure updates abuse";
     homepage = "https://github.com/almandin/krbjack";
-    changelog = "https://github.com/almandin/krbjack/releases/tag/${version}}";
+    changelog = "https://github.com/almandin/krbjack/releases/tag/${finalAttrs.version}}";
     license = lib.licenses.beerware;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "krbjack";
   };
-}
+})

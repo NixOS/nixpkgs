@@ -8,9 +8,7 @@
   nodeenv,
   pydantic,
   python-dotenv,
-  pythonOlder,
   setuptools,
-  strenum,
   tomlkit,
   typing-extensions,
 }:
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   pname = "prisma";
   version = "0.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "RobertCraigie";
@@ -40,8 +36,7 @@ buildPythonPackage rec {
     python-dotenv
     tomlkit
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ strenum ];
+  ];
 
   # Building the client requires network access
   doCheck = false;

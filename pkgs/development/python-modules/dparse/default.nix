@@ -1,11 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   packaging,
-  tomli,
   pyyaml,
   pytestCheckHook,
 }:
@@ -14,8 +12,6 @@ buildPythonPackage rec {
   pname = "dparse";
   version = "0.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyupio";
@@ -26,7 +22,7 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [ packaging ];
 
   optional-dependencies = {
     # FIXME pipenv = [ pipenv ];

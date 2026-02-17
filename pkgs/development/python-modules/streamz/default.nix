@@ -7,7 +7,6 @@
   setuptools,
 
   # dependencies
-  six,
   toolz,
   tornado,
   zict,
@@ -18,25 +17,25 @@
   flaky,
   pandas,
   pyarrow,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamz";
-  version = "0.6.4";
+  version = "0.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-streamz";
     repo = "streamz";
-    tag = version;
-    hash = "sha256-lSb3gl+TSIzz4BZzxH8zXu74HvzSntOAoVQUUJKIEvA=";
+    tag = finalAttrs.version;
+    hash = "sha256-OoWFOACrJ8zXJJ1bmRukj04zx+s1Zgg9KqlJooLDRW0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    six
     toolz
     tornado
     zict
@@ -48,6 +47,7 @@ buildPythonPackage rec {
     flaky
     pandas
     pyarrow
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -74,4 +74,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

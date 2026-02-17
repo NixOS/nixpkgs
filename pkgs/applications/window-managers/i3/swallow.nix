@@ -12,7 +12,7 @@ buildPythonApplication {
   pname = "i3-swallow";
   version = "unstable-2022-02-19";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jamesofarrell";

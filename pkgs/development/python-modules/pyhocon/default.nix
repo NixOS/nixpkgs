@@ -6,15 +6,12 @@
   pyparsing,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyhocon";
   version = "0.3.61";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "chimpler";

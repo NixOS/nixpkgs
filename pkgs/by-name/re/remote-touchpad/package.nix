@@ -2,32 +2,32 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
-  libXi,
-  libXrandr,
-  libXt,
-  libXtst,
+  libxi,
+  libxrandr,
+  libxt,
+  libxtst,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "remote-touchpad";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "unrud";
     repo = "remote-touchpad";
-    rev = "v${version}";
-    sha256 = "sha256-mIPBUREv2uIiIiucPyKLBmf8OJPVPsbc8QI9v3NTBIQ=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-9K/AdkfpQbXPDIwai3h98G4lo4p8c/yTLxirhbo03U4=";
   };
 
   buildInputs = [
-    libXi
-    libXrandr
-    libXt
-    libXtst
+    libxi
+    libxrandr
+    libxt
+    libxtst
   ];
   tags = [ "portal,x11" ];
 
-  vendorHash = "sha256-d2kKF13ESntZ0pRTYs5eFpkCTuOhei/bTyTmdYWvvRY=";
+  vendorHash = "sha256-nkzvE59H7adyzveXYFI1NVwIh8chBRrVZZKfLY0fEaw=";
 
   meta = {
     description = "Control mouse and keyboard from the web browser of a smartphone";
@@ -37,4 +37,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ schnusch ];
     platforms = lib.platforms.linux;
   };
-}
+})

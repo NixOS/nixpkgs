@@ -6,7 +6,6 @@
   mock,
   pytest7CheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   sphinx-rtd-theme,
   typing-extensions,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pydash";
-  version = "8.0.5";
+  version = "8.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dgilland";
     repo = "pydash";
     tag = "v${version}";
-    hash = "sha256-u8vLE0kjsnV2HNt3N3kmnaabgQzW3FcH4qxycNdv1Ls=";
+    hash = "sha256-8DPeM9Q9NrlVF9a6vIfJLGyyB2SrWpZZRHZKqU/DT2w=";
   };
 
   build-system = [ setuptools ];

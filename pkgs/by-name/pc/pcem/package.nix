@@ -15,12 +15,12 @@
   withALSA ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcem";
   version = "17";
 
   src = fetchzip {
-    url = "https://pcem-emulator.co.uk/files/PCemV${version}Linux.tar.gz";
+    url = "https://pcem-emulator.co.uk/files/PCemV${finalAttrs.version}Linux.tar.gz";
     stripRoot = false;
     sha256 = "067pbnc15h6a4pnnym82klr1w8qwfm6p0pkx93gx06wvwqsxvbdv";
   };
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.terin ];
     platforms = lib.platforms.linux ++ lib.platforms.windows;
   };
-}
+})

@@ -7,15 +7,15 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freebayes";
   version = "1.3.1";
 
   src = fetchFromGitHub {
-    name = "freebayes-${version}-src";
+    name = "freebayes-${finalAttrs.version}-src";
     owner = "ekg";
     repo = "freebayes";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "035nriknjqq8gvil81vvsmvqwi35v80q8h1cw24vd1gdyn1x7bys";
     fetchSubmodules = true;
   };
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jdagilliland ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

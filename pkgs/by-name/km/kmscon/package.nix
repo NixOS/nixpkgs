@@ -10,24 +10,27 @@
   libGLU,
   libGL,
   pango,
-  pixman,
   pkg-config,
   docbook_xsl,
+  docbook_xml_dtd_42,
   libxslt,
   libgbm,
   ninja,
   check,
+  bash,
   buildPackages,
+  nix-update-script,
+  nixosTests,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "9.0.0-unstable-2025-01-09";
+  version = "9.3.1";
 
   src = fetchFromGitHub {
-    owner = "Aetf";
+    owner = "kmscon";
     repo = "kmscon";
-    rev = "a81941f4464e6f9cee75bfb8a1db88c253ede33d";
-    sha256 = "sha256-l7Prt7CsYi4VCnp9xktvqqNT+4djSdO2GvP1JdxhNSI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pH+dBcUKXrVh9/y6mNWmYBx6HVbuSZX/F2sCG/Yj5UQ=";
   };
 
   strictDeps = true;
@@ -43,10 +46,11 @@ stdenv.mkDerivation {
     libtsm
     libxkbcommon
     pango
-    pixman
     systemdLibs
     libgbm
     check
+    # Needed for autoPatchShebangs when strictDeps = true
+    bash
   ];
 
   nativeBuildInputs = [
@@ -57,22 +61,35 @@ stdenv.mkDerivation {
     libxslt # xsltproc
   ];
 
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.cc.isGNU "-O "
-    + "-Wno-error=maybe-uninitialized -Wno-error=unused-result -Wno-error=implicit-function-declaration";
-
-  enableParallelBuilding = true;
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patches = [
     ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
   ];
 
+  postPatch = ''
+    for i in ./docs/man/*.in; do
+      substituteInPlace "''${i}" \
+        --replace-fail "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" \
+                       "${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd"
+    done
+  '';
+
+  passthru = {
+    tests.kmscon = nixosTests.kmscon;
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  };
+
   meta = {
     description = "KMS/DRM based System Console";
     mainProgram = "kmscon";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/";
+    changelog = "https://github.com/kmscon/kmscon/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ccicnce113424 ];
     platforms = lib.platforms.linux;
   };
-}
+})

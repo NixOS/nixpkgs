@@ -13,14 +13,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kurve";
-  version = "2.2.0";
+  version = "3.4.0";
   dontWrapQtApps = true;
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "kurve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TWNgQUgjrlzQs+cjzfoD13dHG3M93Akxyg5VNB9Rp9E=";
+    hash = "sha256-yLe8K4DbVqOKunWNxLXdvjBtJBj87NJtSw9Dul0CrMg=";
   };
 
   installPhase = ''

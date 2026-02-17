@@ -6,7 +6,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   starlette,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "starlette-context";
   version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tomwojcik";

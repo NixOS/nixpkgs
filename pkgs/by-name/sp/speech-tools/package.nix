@@ -7,12 +7,12 @@
   alsa-lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "speech_tools";
   version = "2.5.0";
 
   src = fetchurl {
-    url = "http://www.festvox.org/packed/festival/${lib.versions.majorMinor version}/speech_tools-${version}-release.tar.gz";
+    url = "http://www.festvox.org/packed/festival/${lib.versions.majorMinor finalAttrs.version}/speech_tools-${finalAttrs.version}-release.tar.gz";
     sha256 = "1k2xh13miyv48gh06rgsq2vj25xwj7z6vwq9ilsn8i7ig3nrgzg4";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
       downloadPage = "http://www.festvox.org/packed/festival/";
     };
   };
-}
+})

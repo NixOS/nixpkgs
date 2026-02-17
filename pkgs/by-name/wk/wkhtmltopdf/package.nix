@@ -13,7 +13,8 @@
   fontconfig,
   stdenv,
   xar,
-  xorg,
+  libxrender,
+  libxext,
 }:
 
 let
@@ -50,8 +51,8 @@ let
     ];
 
     buildInputs = [
-      xorg.libXext
-      xorg.libXrender
+      libxext
+      libxrender
 
       freetype
       openssl
@@ -92,7 +93,7 @@ let
 in
 stdenv.mkDerivation (
   {
-    name = "wkhtmltopdf";
+    pname = "wkhtmltopdf";
 
     dontStrip = true;
 

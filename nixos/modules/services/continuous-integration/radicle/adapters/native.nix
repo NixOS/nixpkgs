@@ -129,7 +129,7 @@ in
     systemd.tmpfiles.settings.radicle-native-ci = lib.listToAttrs (
       map (
         instance:
-        lib.nameValuePair (builtins.dirOf instance.settings.log) {
+        lib.nameValuePair (dirOf instance.settings.log) {
           d = {
             user = config.users.users.radicle.name;
             group = config.users.groups.radicle.name;

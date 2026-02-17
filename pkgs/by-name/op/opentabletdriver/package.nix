@@ -10,8 +10,8 @@
   libappindicator,
   libevdev,
   libnotify,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   makeDesktopItem,
   nixosTests,
   udev,
@@ -60,8 +60,8 @@ buildDotnetModule (finalAttrs: {
     libappindicator
     libevdev
     libnotify
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     udev
   ];
 
