@@ -8,8 +8,8 @@ supported/expected by some projects.
 having a way to almost entirely short-circuit these headers (by
 disabling _FORTIFY_SOURCE) is therefore important.
 
---- a/include/fortify/wchar.h
-+++ b/include/fortify/wchar.h
+--- a/include/wchar.h
++++ b/include/wchar.h
 @@ -20,21 +20,23 @@
  #if !defined(__cplusplus) && !defined(__clang__)
  __extension__

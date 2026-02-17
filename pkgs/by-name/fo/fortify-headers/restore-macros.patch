@@ -5,8 +5,8 @@ some programs that define these miss them if removed
 push_macro and pop_macro pragmas allegedly well supported
 by gcc, clang and msvc
 
---- a/include/fortify/poll.h
-+++ b/include/fortify/poll.h
+--- a/include/poll.h
++++ b/include/poll.h
 @@ -29,6 +29,7 @@ __extension__
  extern "C" {
  #endif
@@ -24,8 +24,8 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/stdio.h
-+++ b/include/fortify/stdio.h
+--- a/include/stdio.h
++++ b/include/stdio.h
 @@ -29,12 +29,19 @@ __extension__
  extern "C" {
  #endif
@@ -61,8 +61,8 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/stdlib.h
-+++ b/include/fortify/stdlib.h
+--- a/include/stdlib.h
++++ b/include/stdlib.h
 @@ -38,7 +38,10 @@ extern "C" {
  
  /* FIXME clang */
@@ -84,8 +84,8 @@ by gcc, clang and msvc
  #endif
  
  #ifdef __cplusplus
---- a/include/fortify/string.h
-+++ b/include/fortify/string.h
+--- a/include/string.h
++++ b/include/string.h
 @@ -29,12 +29,19 @@ __extension__
  extern "C" {
  #endif
@@ -121,8 +121,8 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/strings.h
-+++ b/include/fortify/strings.h
+--- a/include/strings.h
++++ b/include/strings.h
 @@ -29,8 +29,12 @@ extern "C" {
  #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE) || defined(_POSIX_SOURCE) \
   || (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE+0 < 200809L) \
@@ -146,8 +146,8 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/sys/socket.h
-+++ b/include/fortify/sys/socket.h
+--- a/include/sys/socket.h
++++ b/include/sys/socket.h
 @@ -29,9 +29,13 @@ __extension__
  extern "C" {
  #endif
@@ -174,8 +174,8 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/unistd.h
-+++ b/include/fortify/unistd.h
+--- a/include/unistd.h
++++ b/include/unistd.h
 @@ -29,16 +29,27 @@ __extension__
  extern "C" {
  #endif
@@ -223,8 +223,8 @@ by gcc, clang and msvc
  #ifdef __cplusplus
  }
  #endif
---- a/include/fortify/wchar.h
-+++ b/include/fortify/wchar.h
+--- a/include/wchar.h
++++ b/include/wchar.h
 @@ -43,19 +43,33 @@ __extension__
  extern "C" {
  #endif
