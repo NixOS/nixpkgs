@@ -7514,7 +7514,6 @@
     name = "Evan Stoll";
   };
   evanlhatch = {
-    email = "evan@evanhatch.com";
     github = "evanlhatch";
     githubId = 44220750;
     name = "Evan Hatch";
