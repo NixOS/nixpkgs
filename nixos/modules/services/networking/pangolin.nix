@@ -139,6 +139,20 @@ in
         example = "/srv/pangolin";
         description = "Path to variable state data directory for Pangolin.";
       };
+
+      rawTCPResources = lib.mkOption {
+        type = with lib.types; listOf port;
+        default = [ ];
+        example = [ 7777 ];
+        description = "Raw TCP resources to expose for pangolin";
+      };
+
+      rawUDPResources = lib.mkOption {
+        type = with lib.types; listOf port;
+        default = [ ];
+        example = [ 25565 ];
+        description = "Raw UDP resources to expose for pangolin";
+      };
     };
     gerbil = {
       port = lib.mkOption {
@@ -177,14 +191,23 @@ in
             -> (cfg.dnsProvider != "" && config.services.traefik.environmentFiles != [ ]);
           message = "services.pangolin.dnsProvider and services.traefik.environmentFile must be provided when prefer_wildcard_cert is true.";
         }
+      ]
+      ++ [
+        {
+          assertion =
+            (cfg.rawTCPResources ++ cfg.rawUDPResources != [ ])
+            -> cfg.settings.flags.allow_raw_resources or false;
+          message = "services.pangolin.settings.flags.allow_raw_resources must be true in able to use raw resources";
+        }
       ];
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [
         80
         443
-      ];
-      allowedUDPPorts = [ 51820 ];
+      ]
+      ++ cfg.rawTCPResources;
+      allowedUDPPorts = [ 51820 ] ++ cfg.rawUDPResources;
     };
 
     users = {
@@ -460,14 +483,26 @@ in
             storage = "${cfg.dataDir}/config/letsencrypt/acme.json";
             caServer = "https://acme-v02.api.letsencrypt.org/directory";
           };
-        entryPoints = {
-          web.address = ":80";
-          websecure = {
-            address = ":443";
-            transport.respondingTimeouts.readTimeout = "30m";
-            http.tls.certResolver = "letsencrypt";
-          };
-        };
+        entryPoints = lib.mkMerge [
+          {
+            web.address = ":80";
+            websecure = {
+              address = ":443";
+              transport.respondingTimeouts.readTimeout = "30m";
+              http.tls.certResolver = "letsencrypt";
+            };
+          }
+          (lib.mkIf (cfg.rawTCPResources != [ ]) lib.mkMerge (
+            map (tcpPort: {
+              "tcp-${toString tcpPort}".address = ":${toString tcpPort}/tcp";
+            })
+          ))
+          (lib.mkIf (cfg.rawUDPResources != [ ]) lib.mkMerge (
+            map (udpPort: {
+              "udp-${toString udpPort}".address = ":${toString udpPort}/udp";
+            })
+          ))
+        ];
       };
       dynamic.files."pangolin".settings = {
         http = {
