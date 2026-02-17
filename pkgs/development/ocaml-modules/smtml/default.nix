@@ -23,6 +23,8 @@
   zarith,
   mdx,
   ounit2,
+  _experimental-update-script-combinators,
+  nix-update-script,
 }:
 
 buildDunePackage (finalAttrs: {
@@ -78,6 +80,18 @@ buildDunePackage (finalAttrs: {
       || lib.versions.majorMinor ocaml.version == "5.4"
       || stdenv.hostPlatform.isDarwin
     );
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      attrPath = "ocamlPackages.smtml";
+    })
+    (nix-update-script {
+      attrPath = "owi";
+      extraArgs = [
+        "--version=branch=main"
+      ];
+    })
+  ];
 
   meta = {
     description = "SMT solver frontend for OCaml";
