@@ -88,8 +88,6 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/stoatchat/for-desktop/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      heyimnova
-      magistau
       v3rm1n0
     ];
     platforms = lib.platforms.linux;
