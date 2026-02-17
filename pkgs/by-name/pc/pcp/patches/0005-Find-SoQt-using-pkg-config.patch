@@ -1,0 +1,39 @@
+From 0c7828dbf0e308e59fecded9fa7336fb65e24366 Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Wed, 4 Feb 2026 03:22:11 +0000
+Subject: [PATCH 5/8] Find SoQt using pkg-config
+
+---
+ configure.ac | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 987da3acc8..80961b358a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1662,12 +1662,18 @@ AC_SUBST(qmake)
+ 
+ enable_qt3d=false
+ AS_IF([test "x$do_qt3d" != "xno"], [
+-    if test -f /usr/include/Coin3/Inventor/Qt/SoQt.h -o -f /usr/include/Inventor/Qt/SoQt.h
++    PKG_CHECK_MODULES([SOQT], [SoQt], [enable_qt3d=$enable_qt], [enable_qt3d=false])
++
++    if test "$enable_qt3d" = "true"
+     then
+-	enable_qt3d=$enable_qt
+-    elif test x"$do_qt3d" = x"yes"
++        AC_SUBST(SOQT_CFLAGS)
++        AC_SUBST(SOQT_LIBS)
++	AC_DEFINE(HAVE_QT3D, [1], [3D scene graph API])
++    fi
++
++    if test "$do_qt3d" != "check" -a "$enable_qt3d" != "true"
+     then
+-	AC_MSG_ERROR([cannot enable support for 3D scene graph API])
++        AC_MSG_ERROR([cannot enable support for 3D scene graph API])
+     fi
+ ])
+ AC_SUBST(enable_qt3d)
+-- 
+2.52.0
+

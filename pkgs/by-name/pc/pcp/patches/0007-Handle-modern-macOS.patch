@@ -1,0 +1,35 @@
+From fb8a74347740b38cc81d4601932f98bdecfb5ed9 Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Wed, 4 Feb 2026 03:22:12 +0000
+Subject: [PATCH 7/8] Handle modern macOS
+
+---
+ src/pmdas/pmcd/src/objstyle | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/src/pmdas/pmcd/src/objstyle b/src/pmdas/pmcd/src/objstyle
+index 32ef783786..3537b4aada 100755
+--- a/src/pmdas/pmcd/src/objstyle
++++ b/src/pmdas/pmcd/src/objstyle
+@@ -61,6 +61,18 @@ done
+ # dummy.o: ELF 64-bit LSB relocatable, IA-64 (Intel 64 bit architecture), version 1 (SYSV), not stripped
+ #
+ 
++# Handle modern macOS
++# dummy.o: Mach-O 64-bit arm64 object, flags:<|SUBSECTIONS_VIA_SYMBOLS>
++if [ "$(uname -s)" = "Darwin" ]; then
++  if [ "$(arch)" = "arm64" ]; then
++    echo "arm64+x86_64"
++  else
++    arch | sed "s/x86-64/x86_64/"
++  fi
++  rm -f dummy.[co]
++  exit
++fi
++
+ if [ -n "$magic" ]
+ then
+     file -m $magic dummy.o
+-- 
+2.52.0
+
