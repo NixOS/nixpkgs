@@ -13,6 +13,8 @@
   stdenv,
   util-linux,
   makeBinaryWrapper,
+  nix-update-script,
+  _experimental-update-script-combinators,
 }:
 let
   pname = "backrest";
@@ -91,6 +93,16 @@ buildGoModule (finalAttrs: {
     util-linux
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    })
+    ./update-inlang-plugins.sh
+  ];
 
   checkFlags =
     let
