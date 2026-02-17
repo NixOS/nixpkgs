@@ -172,6 +172,26 @@ let
         nativeLibs = [ pkgs.fuse ];
       };
 
+      cl-colors-ng = build-asdf-system {
+        pname = "cl-colors-ng";
+        version = "20260217-git";
+        src = pkgs.fetchFromCodeberg {
+          owner = "cage";
+          repo = "cl-colors-ng";
+          rev = "310e6495e2";
+          hash = "sha256-6LmyvS6wQ2qJUmDn4oquXYHrPeVc6hWuT+v35z9X2VI=";
+        };
+        lispLibs = with self; [
+          alexandria
+          cl-ppcre
+          parse-number
+        ];
+        system = [
+          "cl-colors-ng"
+          "cl-colors-ng/tests"
+        ];
+      };
+
       cl-containers = build-asdf-system {
         inherit (super.cl-containers) pname version src;
         lispLibs = super.cl-containers.lispLibs ++ [ self.moptilities ];
