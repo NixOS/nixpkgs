@@ -100,6 +100,48 @@ in
         description = "Configure nginx as a reverse proxy for LibreTranslate.";
       };
 
+      # https://github.com/argosopentech/argos-translate/blob/master/docs/settings.md
+      argosSettings = {
+        computeType = lib.mkOption {
+          type = lib.types.enum [
+            "auto"
+            "float32"
+            "int8"
+            "int8_float32"
+          ];
+          description = ''
+            Translation model precision and quantization.
+
+            - `auto`: default
+            - `float32`: highest accuracy
+            - `int8`: fastest, some accuracy loss
+            - `int8_float32`: best balance of speed/accuracy
+          '';
+          default = "auto";
+          example = "int8_float32";
+        };
+        chunkType = lib.mkOption {
+          # NOTE: "none" is not included because it's not actually supported in argos-translate.
+          type = lib.types.enum [
+            "default"
+            "argostranslate"
+            "stanza"
+            "spacy"
+            "minisbd"
+          ];
+          description = ''
+            Sentence boundary detection.
+            - default: Argos's default behavior
+            - argostranslate: Argos's Translate's SBD
+            - stanza: use Stanza for sentence splitting
+            - spacy: use SPACY for sentence splitting
+            - minisbd: use minisbd for sentence splitting
+          '';
+          default = "default";
+          example = "spacy";
+        };
+      };
+
       extraArgs = lib.mkOption {
         type =
           with lib.types;
@@ -140,7 +182,9 @@ in
       wantedBy = [ "multi-user.target" ];
       environment = {
         HOME = cfg.dataDir;
-        PYTHONUNBUFFERED = "1"; # ensure stdout is logged to journal
+        PYTHONUNBUFFERED = "1";
+        ARGOS_COMPUTE_TYPE = cfg.argosSettings.computeType;
+        ARGOS_CHUNK_TYPE = lib.strings.toUpper cfg.argosSettings.chunkType; # ensure stdout is logged to journal
       };
       serviceConfig = lib.mkMerge [
         {
