@@ -13,6 +13,7 @@
   libei,
   libepoxy,
   libdrm,
+  libkrb5,
   libva,
   vulkan-loader,
   shaderc,
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libei
     libepoxy
     libdrm
+    libkrb5
     libva
     vulkan-loader
     nv-codec-headers-11
