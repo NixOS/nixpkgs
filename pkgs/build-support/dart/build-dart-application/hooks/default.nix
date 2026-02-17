@@ -1,7 +1,6 @@
 {
   lib,
   makeSetupHook,
-  dart,
   yq,
   jq,
   python3,
