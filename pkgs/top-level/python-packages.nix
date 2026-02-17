@@ -8408,6 +8408,8 @@ self: super: with self; {
 
   latexrestricted = callPackage ../development/python-modules/latexrestricted { };
 
+  launchdarkly-eventsource = callPackage ../development/python-modules/launchdarkly-eventsource { };
+
   launchpadlib = callPackage ../development/python-modules/launchpadlib { };
 
   laundrify-aio = callPackage ../development/python-modules/laundrify-aio { };
