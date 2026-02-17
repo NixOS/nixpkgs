@@ -12,6 +12,7 @@
   gettext,
   libxml2,
   gnome,
+  fribidi,
   gtk4,
   evolution-data-server-gtk4,
   libical,
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    fribidi
     gtk4
     evolution-data-server-gtk4
     libical
