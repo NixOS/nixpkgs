@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  ffmpeg,
   meson,
   ninja,
   gettext,
@@ -20,6 +21,7 @@
   gdk-pixbuf,
   geoclue2,
   gst_all_1,
+  icu,
   libgweather,
   libadwaita,
 }:
@@ -34,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    ffmpeg
     vala
     meson
     ninja
@@ -53,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     geocode-glib_2
     geoclue2
+    icu
     libgweather
     libadwaita
   ]
