@@ -11,21 +11,19 @@
   django-tasks,
 
   # tests
-  pytest-django,
-  pytestCheckHook,
   django-modelcluster,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "modelsearch";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "django-modelsearch";
-    tag = "v${version}";
-    hash = "sha256-tjwVepI9mdrMbTtxfe6yNUrSHWKndGxv2lJ8AfyNcr0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zmurjjiJO6A/9XuGsGQcBWRX4NW9xVCFkCVRUk0Ziro=";
   };
 
   build-system = [
@@ -47,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Index Django Models with Elasticsearch or OpenSearch and query them with the ORM";
     homepage = "https://github.com/wagtail/django-modelsearch";
-    changelog = "https://github.com/wagtail/django-modelsearch/releases/tag/${src.tag}";
+    changelog = "https://github.com/wagtail/django-modelsearch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
