@@ -8402,8 +8402,6 @@ with pkgs;
 
   nsdiff = perlPackages.nsdiff;
 
-  openafs = callPackage ../servers/openafs/1.8 { };
-
   openresty = callPackage ../servers/http/openresty {
     zlib-ng = zlib;
     withPerl = false;

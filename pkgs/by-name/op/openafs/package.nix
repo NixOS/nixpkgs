@@ -144,7 +144,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  passthru.cellservdb = callPackage ../cellservdb.nix { };
+  passthru.cellservdb = callPackage ./cellservdb.nix { };
 
   meta = {
     outputsToInstall = [
