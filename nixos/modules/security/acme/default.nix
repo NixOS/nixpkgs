@@ -252,6 +252,13 @@ let
             "--http.port"
             data.listenHTTP
           ]
+        else if data.eabKeyId != null then
+          [
+            "--eab"
+            "--kid"
+            data.eabKeyId
+            "--tls"
+          ]
         else
           [
             "--http"
@@ -751,6 +758,15 @@ let
           '';
         };
 
+        eabKeyId = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = ''
+            External Account Binding (EAB) key ID for challenge-free certificates.
+            The MAC key of the external CA needs to be provided via `credentialFiles` as "LEGO_EAB_HMAC_FILE".
+          '';
+        };
+
         environmentFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           inherit (defaultAndText "environmentFile" null) default defaultText;
@@ -768,9 +784,10 @@ let
           inherit (defaultAndText "credentialFiles" { }) default defaultText;
           description = ''
             Environment variables suffixed by "_FILE" to set for the cert's service
-            for your selected dnsProvider.
+            for your selected dnsProvider or eabKeyId.
             To find out what values you need to set, consult the documentation at
-            <https://go-acme.github.io/lego/dns/> for the corresponding dnsProvider.
+            <https://go-acme.github.io/lego/dns/> for the corresponding dnsProvider or set
+            `LEGO_EAB_HMAC_FILE` for the EAB key.
             This allows to securely pass credential files to lego by leveraging systemd
             credentials.
           '';
@@ -1110,6 +1127,13 @@ in
                 and remove the wildcard from the path.
               '';
             }
+            {
+              assertion = data.eabKeyId != null -> builtins.hasAttr "LEGO_EAB_HMAC_FILE" data.credentialFiles;
+              message = ''
+                If `eabKeyId` is set and external account binding is requested,
+                the secret key must be provided as `security.acme.certs.${cert}.credentialFiles.LEGO_EAB_HMAC_FILE`.
+              '';
+            }
             (
               let
                 exclusiveAttrs = {
@@ -1118,6 +1142,7 @@ in
                     webroot
                     listenHTTP
                     s3Bucket
+                    eabKeyId
                     ;
                 };
               in
@@ -1129,6 +1154,7 @@ in
                   `security.acme.certs.${cert}.webroot`,
                   `security.acme.certs.${cert}.listenHTTP` and
                   `security.acme.certs.${cert}.s3Bucket`
+                  `security.acme.certs.${cert}.eabKeyId`
                   is required.
                   Current values: ${(lib.generators.toPretty { } exclusiveAttrs)}.
                 '';
