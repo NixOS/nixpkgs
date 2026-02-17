@@ -16,7 +16,7 @@
   pkg-config,
   libsecret,
 
-  electron_37,
+  electron_38,
   http-server,
   jq,
   moreutils,
@@ -27,13 +27,13 @@
 }:
 
 let
-  version = "1.0.227";
+  version = "1.0.230";
 
   src = fetchFromGitHub {
     owner = "Eugeny";
     repo = "tabby";
     tag = "v${version}";
-    hash = "sha256-F8x+f5f+IQ8YpwYRKmtnegilMGwRRGt+e4sjFFfjGu0=";
+    hash = "sha256-bRlsDQPxHivVd4qJgcSdMuJgcWYwe+tXqMyQ1JATO78=";
   };
 
   pkgHashes = lib.importJSON ./pkg-hashes.json;
@@ -58,7 +58,7 @@ let
     "tabby-terminal"
   ];
 
-  electron = electron_37;
+  electron = electron_38;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tabby-terminal";
