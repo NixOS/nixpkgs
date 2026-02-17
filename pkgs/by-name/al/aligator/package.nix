@@ -17,7 +17,6 @@
   mimalloc,
 
   # propagatedBuildInputs
-  suitesparse,
   crocoddyl,
   pinocchio,
 
@@ -62,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     crocoddyl
     pinocchio
-    suitesparse
   ];
 
   checkInputs = [
