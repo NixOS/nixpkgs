@@ -27,7 +27,7 @@ assert splitStaticOutput -> static;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src =
     let
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
         # Stable archive path, but captcha can be encountered, causing hash mismatch.
         "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
       ];
-      hash = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM=";
+      hash = "sha256-uzKaCizQJ00FUZ1hxmfAYuBpkNcuEl7i36jeZPARnRY=";
     };
 
   postPatch =
