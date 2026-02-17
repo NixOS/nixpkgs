@@ -4,11 +4,8 @@
   pkgs ? import <nixpkgs> { },
   minica ? pkgs.minica,
   mkDerivation ? pkgs.stdenv.mkDerivation,
+  domain ? (import ./snakeoil-certs.nix).domain,
 }:
-let
-  conf = import ./snakeoil-certs.nix;
-  domain = conf.domain;
-in
 mkDerivation {
   name = "test-certs";
   buildInputs = [

@@ -103,14 +103,14 @@ let
     xfsprogs # xfs_info
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glusterfs";
   version = "11.2";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = "glusterfs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MGTntR9SVmejgpAkZnhJOaIkZeCMNBGaQSorLOStdjo=";
   };
   inherit buildInputs propagatedBuildInputs;
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
   # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
   preConfigure = ''
     patchShebangs build-aux/pkg-version
-    echo "v${version}" > VERSION
+    echo "v${finalAttrs.version}" > VERSION
     ./autogen.sh
     export PYTHON=${python3}/bin/python
   '';
@@ -225,15 +225,17 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  # Below we run Python programs. That generates .pyc/.pyo files.
-  # By default they are indeterministic because such files contain time stamps
-  # (see https://nedbatchelder.com/blog/200804/the_structure_of_pyc_files.html).
-  # So we use the same environment variables as in
-  #   https://github.com/NixOS/nixpkgs/blob/249b34aadca7038207492f29142a3456d0cecec3/pkgs/development/interpreters/python/mk-python-derivation.nix#L61
-  # to make these files deterministic.
-  # A general solution to this problem might be brought by #25707.
-  DETERMINISTIC_BUILD = 1;
-  PYTHONHASHSEED = 0;
+  env = {
+    # Below we run Python programs. That generates .pyc/.pyo files.
+    # By default they are indeterministic because such files contain time stamps
+    # (see https://nedbatchelder.com/blog/200804/the_structure_of_pyc_files.html).
+    # So we use the same environment variables as in
+    #   https://github.com/NixOS/nixpkgs/blob/249b34aadca7038207492f29142a3456d0cecec3/pkgs/development/interpreters/python/mk-python-derivation.nix#L61
+    # to make these files deterministic.
+    # A general solution to this problem might be brought by #25707.
+    DETERMINISTIC_BUILD = 1;
+    PYTHONHASHSEED = 0;
+  };
 
   installCheckPhase = ''
     # Tests that the above programs work without import errors.
@@ -259,11 +261,11 @@ stdenv.mkDerivation rec {
     glusterfs = nixosTests.glusterfs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distributed storage system";
     homepage = "https://www.gluster.org";
-    license = licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
-    maintainers = [ maintainers.raskin ];
-    platforms = with platforms; linux ++ freebsd;
+    license = lib.licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = with lib.platforms; linux ++ freebsd;
   };
-}
+})

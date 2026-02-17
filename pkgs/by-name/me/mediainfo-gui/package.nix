@@ -7,7 +7,7 @@
   libmediainfo,
   wxGTK32,
   desktop-file-utils,
-  libSM,
+  libsm,
   imagemagick,
   wrapGAppsHook3,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmediainfo
     wxGTK32
     desktop-file-utils
-    libSM
+    libsm
     imagemagick
   ];
 

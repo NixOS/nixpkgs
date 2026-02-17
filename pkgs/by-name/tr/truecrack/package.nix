@@ -12,14 +12,14 @@
 let
   stdenv = if cudaSupport then cudaPackages.backendStdenv else gccStdenv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "truecrack";
   version = "3.6";
 
   src = fetchFromGitLab {
     owner = "kalilinux";
     repo = "packages/truecrack";
-    tag = "kali/${version}+git20150326-0kali4";
+    tag = "kali/${finalAttrs.version}+git20150326-0kali4";
     hash = "sha256-d6ld6KHSqYM4RymHf5qcm2AWK6FHWC0rFaLRfIQ2m5Q=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     cudaPackages.cuda_cudart
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString [
     # Workaround build failure on -fno-common toolchains like upstream
     # gcc-10. Otherwise build fails as:
     #   ld: CpuAes.o:/build/source/src/Crypto/CpuAes.h:1233: multiple definition of
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     #   Common/Crypto.c:42:13: error: implicit declaration of function 'cpu_CipherInit'; did you mean 'CipherInit'? []
     # https://gitlab.com/kalilinux/packages/truecrack/-/commit/5b0e3a96b747013bded7b33f65bb42be2dbafc86
     "-Wno-error=implicit-function-declaration"
-  ]);
+  ];
 
   enableParallelBuilding = true;
 
@@ -73,14 +73,14 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     echo "Cracking test volumes"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_aes.test.tc -w test/passwords.txt | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_aes.test.tc -c test/tes -m 4 | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_aes.test.tc -w test/passwords.txt | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/whirlpool_aes.test.tc -w test/passwords.txt -k whirlpool | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/sha512_aes.test.tc -w test/passwords.txt -k sha512 | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_aes.test.tc -w test/passwords.txt | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_serpent.test.tc -w test/passwords.txt -e serpent | grep -aF "Found password"
-    $out/bin/${meta.mainProgram} -t test/ripemd160_twofish.test.tc -w test/passwords.txt -e twofish | grep -aF "Found password"
+    $out/bin/${finalAttrs.meta.mainProgram} -t test/ripemd160_aes.test.tc -w test/passwords.txt | grep -aF "Found password"
+    $out/bin/${finalAttrs.meta.mainProgram} -t test/ripemd160_aes.test.tc -c test/tes -m 4 | grep -aF "Found password"
+    $out/bin/${finalAttrs.meta.mainProgram} -t test/ripemd160_aes.test.tc -w test/passwords.txt | grep -aF "Found password"
+    $out/bin/${finalAttrs.meta.mainProgram} -t test/whirlpool_aes.test.tc -w test/passwords.txt -k whirlpool | grep -aF "Found password"
+    $out/bin/${finalAttrs.meta.mainProgram} -t test/sha512_aes.test.tc -w test/passwords.txt -k sha512 | grep -aF "Found password"
+    $out/bin/${finalAttrs.meta.mainProgram} -t test/ripemd160_aes.test.tc -w test/passwords.txt | grep -aF "Found password"
+    $out/bin/${finalAttrs.meta.mainProgram} -t test/ripemd160_serpent.test.tc -w test/passwords.txt -e serpent | grep -aF "Found password"
+    $out/bin/${finalAttrs.meta.mainProgram} -t test/ripemd160_twofish.test.tc -w test/passwords.txt -e twofish | grep -aF "Found password"
     echo "Finished cracking test volumes"
 
     runHook postInstallCheck
@@ -98,4 +98,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

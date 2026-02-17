@@ -17,14 +17,14 @@
 let
   luajit_lua52 = luajit.override { enable52Compat = true; };
 
-  version = "2025.08";
+  version = "2025.10";
 
   src_repo = fetchFromGitHub {
     repo = "koreader";
     owner = "koreader";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-lkXpmvde1PPJRocnRpmuu4AeCv/0Mql40Aw5WIZfj5s=";
+    hash = "sha256-uYKN5fgIdCVH+pXU2lmsGu7HxZbDld5EJVO9o7Tk8BA=";
   };
 in
 stdenv.mkDerivation {
@@ -45,9 +45,9 @@ stdenv.mkDerivation {
     fetchurl {
       url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-${arch}.deb";
       hash = selectSystem {
-        aarch64-linux = "sha256-OWhTlVEw1Sj7ZBE6/vTMwt67nP/qzBi47ZOtUZ2aBeo=";
-        armv7l-linux = "sha256-NOlyh+q0WAsSD8r4MH0jVfRvxBmqkxmMzUp9Jwn5u+s=";
-        x86_64-linux = "sha256-nzQdfc9bo0RCpa9sGH0rc7RBnR6Z0z6NIyJcYogNhCw=";
+        aarch64-linux = "sha256-z92sguFe5qcPmHk+Orm8vHJycVeZY3cYGByU6xIcrkA=";
+        armv7l-linux = "sha256-kVO+eUwGMULJZwbxZwbeooqRDF8oZPiuo47a7lNsl3I=";
+        x86_64-linux = "sha256-OYzMOUFzUzkYvcjjMX0FZBkZs//9ie3025lhhFOrt9M=";
       };
     };
 

@@ -9,8 +9,8 @@
 
 buildPythonApplication rec {
   pname = "Tautulli";
-  version = "2.16.0";
-  format = "other";
+  version = "2.16.1";
+  pyproject = false;
 
   pythonPath = [ setuptools ];
   nativeBuildInputs = [
@@ -20,9 +20,9 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "Tautulli";
-    repo = pname;
+    repo = "Tautulli";
     tag = "v${version}";
-    sha256 = "sha256-nqSqWRst+gx9aZ2Ko+/tKzpQX7wuU4Bn3vLR5F87aJA=";
+    sha256 = "sha256-Zct7EhnU5LROO23Joz6OxQTtC9uGZhtceSG+aX6MI2c=";
   };
 
   installPhase = ''
@@ -37,7 +37,7 @@ buildPythonApplication rec {
     # Can't just symlink to the main script, since it uses __file__ to
     # import bundled packages and manage the service
     makeWrapper $out/libexec/tautulli/Tautulli.py $out/bin/tautulli
-    wrapPythonProgramsIn "$out/libexec/tautulli" "$pythonPath"
+    wrapPythonProgramsIn "$out/libexec/tautulli" "''${pythonPath[*]}"
 
     # Creat backwards compatibility symlink to bin/plexpy
     ln -s $out/bin/tautulli $out/bin/plexpy
@@ -53,11 +53,11 @@ buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python based monitoring and tracking tool for Plex Media Server";
     homepage = "https://tautulli.com/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rhoriguchi ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
   };
 }

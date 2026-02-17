@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.0.3";
+  version = "8.2.3";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-e6pPsPz0huZyn14XO3uFUmJhBpMxhWLfyD0VBQXsJ1s=";
+    hash = "sha256-PsTAo92Vz+LNxOsbI9VVnx+rHFm67a3bBMeDcLdhXFA=";
   };
 
   patches = lib.optional useSystemJemalloc (fetchpatch2 {
@@ -65,8 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
-
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isFreeBSD "-lexecinfo";
 
@@ -106,7 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
       --tags -leaks \
       --skipunit integration/aof-multi-part \
       --skipunit integration/failover \
-      --skipunit integration/replication-rdbchannel
+      --skipunit integration/replication-rdbchannel \
+      --skiptest "Check MEMORY USAGE for embedded key strings with jemalloc"
+      # ^ breaks due to unexpected and varying address space sizes that jemalloc gets built with
 
     runHook postCheck
   '';
@@ -114,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/redis-server";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests.redis = nixosTests.redis;
@@ -128,10 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     changelog = "https://github.com/redis/redis/releases/tag/${finalAttrs.version}";
-    maintainers = with lib.maintainers; [
-      berdario
-      globin
-    ];
+    maintainers = [ ];
     mainProgram = "redis-cli";
   };
 })

@@ -3,31 +3,22 @@
   fetchFromGitHub,
   nix-update-script,
   rustPlatform,
-  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "systemd-lsp";
-  version = "0.1.0";
+  version = "2026.01.06";
 
   src = fetchFromGitHub {
     owner = "JFryy";
     repo = "systemd-lsp";
-    rev = "43e0a26b12653b97939612ce8f4e2f3bae562ea1";
-    hash = "sha256-l2/8khzXZjyga4nEdl4pcl3AOscCBxZHH3tW3Cv+RUk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wTqbktVaGUk3/cJ3oH1GXvddqVKJQe09sRiyaU+cqCg=";
   };
 
-  cargoHash = "sha256-bYksgHTXomeEJuSk800+/PYXzMvrixSjfPnoqxStWAA=";
+  cargoHash = "sha256-2+0+VeHEsUyTivDU7FQbm44RZe0t0hsVHNN2fplDlRI=";
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
-  passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
-    };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Language server implementation for systemd unit files made in Rust";

@@ -10,8 +10,8 @@
   libappindicator,
   libevdev,
   libnotify,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   makeDesktopItem,
   nixosTests,
   udev,
@@ -23,13 +23,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "OpenTabletDriver";
-  version = "0.6.6.0";
+  version = "0.6.6.2";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NS/r4FU3dT7UT+R7NryRnU5RfLEN0E6pSqtNDpKMS7U=";
+    hash = "sha256-OeioFdevYPiLl9w7FXVmpbcp1cIMoMYnSLgoBisOOOU=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -60,8 +60,8 @@ buildDotnetModule (finalAttrs: {
     libappindicator
     libevdev
     libnotify
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     udev
   ];
 

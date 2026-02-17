@@ -3,14 +3,14 @@
   lib,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tlafmt";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "domodwyer";
     repo = "tlafmt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-79tCH4O7VFqiYloCAGVw7JJ5WvsFnjjKdBNmMPar+sk=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ ciflire ];
     mainProgram = "tlafmt";
   };
-}
+})

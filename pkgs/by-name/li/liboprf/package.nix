@@ -20,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
+  patches = [
+    ./no-static.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [ pkgconf ];
@@ -27,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libsodium ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized";
 
   passthru.updateScript = nix-update-script { };
 

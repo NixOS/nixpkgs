@@ -5,23 +5,20 @@
   dissect-util,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-sql";
-  version = "3.12";
+  version = "3.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.sql";
     tag = version;
-    hash = "sha256-pkyiPyw6TOdi4kh/LusqWL2/UknQC48XkFiZr/4/fHg=";
+    hash = "sha256-ShyirE5gsACziciYrJIWweNCCe+0U+qJrc/9jsc1PPo=";
   };
 
   build-system = [
@@ -44,11 +41,11 @@ buildPythonPackage rec {
     "test_empty"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parsers for the SQLite database file format";
     homepage = "https://github.com/fox-it/dissect.sql";
     changelog = "https://github.com/fox-it/dissect.sql/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

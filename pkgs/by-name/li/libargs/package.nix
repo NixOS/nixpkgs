@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "args";
-  version = "6.4.7";
+  version = "6.4.8";
 
   src = fetchFromGitHub {
     owner = "Taywee";
     repo = "args";
-    rev = version;
-    sha256 = "sha256-IQzhbXl1CfEV164EjulKrOUdCTZNZAFgVyzxk4rTNlU=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-FUM2QXKveESKTL4svgCw/SpwHypsF7DCW+RMoTBnh3c=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple header-only C++ argument parser library";
     homepage = "https://github.com/Taywee/args";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

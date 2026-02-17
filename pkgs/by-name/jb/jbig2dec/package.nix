@@ -8,12 +8,12 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jbig2dec";
   version = "0.20";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/jbig2dec/archive/${version}/jbig2dec-${version}.tar.gz";
+    url = "https://github.com/ArtifexSoftware/jbig2dec/archive/${finalAttrs.version}/jbig2dec-${finalAttrs.version}.tar.gz";
     hash = "sha256-qXBTaaZjOrpTJpNFDsgCxWI5fhuCRmLegJ7ekvZ6/yE=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
   };
-}
+})

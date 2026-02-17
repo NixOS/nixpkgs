@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Brings PlantUML to MkDocs";
     homepage = "https://github.com/MikhailKravets/mkdocs_puml";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

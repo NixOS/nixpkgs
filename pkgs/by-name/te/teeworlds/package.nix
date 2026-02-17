@@ -7,7 +7,7 @@
   pkg-config,
   python3,
   alsa-lib,
-  libX11,
+  libx11,
   libGLU,
   SDL2,
   lua5_3,
@@ -19,14 +19,14 @@
   buildClient ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teeworlds";
   version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "teeworlds";
     repo = "teeworlds";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1l19ksmimg6b8zzjy0skyhh7z11ql7n5gvilkv7ay5x2b9ndbqwz";
     fetchSubmodules = true;
   };
@@ -40,6 +40,12 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/games-team/teeworlds/-/raw/a6c4b23c1ce73466e6d89bccbede70e61e8c9cba/debian/patches/CVE-2021-43518.patch";
       hash = "sha256-2MmsucaaYjqLgMww1492gNmHmvBJm/NED+VV5pZDnBY=";
     })
+    # Fix for CMake v4
+    # ref. https://github.com/teeworlds/teeworlds/pull/2821 merged upstream
+    (fetchpatch {
+      url = "https://github.com/teeworlds/teeworlds/commit/23f33517b4b0621253862b559f6ed0cd0146bae2.patch";
+      hash = "sha256-RZvq/my7N68Kea26WuzLmyaTNOm5eZL5Gw9SGYpTeoQ=";
+    })
   ];
 
   postPatch = ''
@@ -51,7 +57,7 @@ stdenv.mkDerivation rec {
     # Quote nonsense is a workaround for https://github.com/NixOS/nix/issues/661
     substituteInPlace 'other/bundle/client/Info.plist.in' \
       --replace ${"'"}''${TARGET_CLIENT}' 'teeworlds' \
-      --replace ${"'"}''${PROJECT_VERSION}' '${version}'
+      --replace ${"'"}''${PROJECT_VERSION}' '${finalAttrs.version}'
 
     # Make sure some bundled dependencies are actually unbundled.
     # This will fail compilation if one of these dependencies could not
@@ -84,7 +90,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libGLU
       alsa-lib
-      libX11
+      libx11
     ]
   );
 
@@ -144,4 +150,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

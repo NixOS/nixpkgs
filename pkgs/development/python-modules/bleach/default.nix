@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "bleach";
-  version = "6.2.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ej6JQRi4pZn9gNPsGm1Mx85OWIKxMXp+G6abVulfmR8=";
+    hash = "sha256-bzuRscCgK7mni1pFTJJQaqD98Zfh1eEU0uAMb2QwbSI=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bleach" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy, HTML5, whitelisting HTML sanitizer";
     longDescription = ''
       Bleach is an HTML sanitizing library that escapes or strips markup and
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/mozilla/bleach";
     downloadPage = "https://github.com/mozilla/bleach/releases";
     changelog = "https://github.com/mozilla/bleach/blob/v${version}/CHANGES";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ prikhi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ prikhi ];
   };
 }

@@ -4,15 +4,12 @@
   callPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   setuptools,
   build,
   coloredlogs,
-  importlib-metadata,
   packaging,
   pip,
-  toml,
   urllib3,
 }:
 
@@ -20,7 +17,6 @@ buildPythonPackage rec {
   pname = "bork";
   version = "9.0.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "duckinator";
@@ -45,9 +41,7 @@ buildPythonPackage rec {
     packaging
     pip
     urllib3
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ toml ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   pythonImportsCheck = [
     "bork"
@@ -66,11 +60,11 @@ buildPythonPackage rec {
 
   passthru.tests = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Python build and release management tool";
     mainProgram = "bork";
     homepage = "https://github.com/duckinator/bork";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nicoo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nicoo ];
   };
 }

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   boost,
-  libX11,
+  libx11,
   libGL,
   liblo,
   libjack2,
@@ -16,14 +16,14 @@
   libsamplerate,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zam-plugins";
   version = "4.4";
 
   src = fetchFromGitHub {
     owner = "zamaudio";
     repo = "zam-plugins";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pjnhDavKnyQjPF4nUO+j1J+Qtw8yIYMY9A5zBMb4zFU=";
     fetchSubmodules = true;
   };
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost
-    libX11
+    libx11
     libGL
     liblo
     libjack2
@@ -57,13 +57,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.zamaudio.com/?p=976";
     description = "Collection of LV2/LADSPA/VST/JACK audio plugins by ZamAudio";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
     # tries to run dpf/utils/lv2_ttl_generator (built for host)
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
-}
+})

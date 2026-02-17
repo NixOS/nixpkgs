@@ -7,12 +7,12 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "filebench";
   version = "1.4.9.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/filebench/filebench-${version}.tar.gz";
+    url = "mirror://sourceforge/filebench/filebench-${finalAttrs.version}.tar.gz";
     sha256 = "13hmx67lsz367sn8lrvz1780mfczlbiz8v80gig9kpkpf009yksc";
   };
 
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File system and storage benchmark that can generate both micro and macro workloads";
     homepage = "https://sourceforge.net/projects/filebench/";
-    license = licenses.cddl;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.cddl;
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.linux;
     mainProgram = "filebench";
   };
-}
+})

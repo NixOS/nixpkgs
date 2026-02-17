@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   linuxPackages,
 }:
 
@@ -24,17 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     linuxPackages.nvidia_x11.settings.libXNVCtrl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple library to adjust color saturation of X11 outputs";
     homepage = "https://github.com/libvibrant/libvibrant";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Scrumplex ];
     mainProgram = "vibrant-cli";
   };
 })

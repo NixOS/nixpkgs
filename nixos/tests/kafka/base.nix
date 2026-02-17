@@ -9,18 +9,15 @@ let
       kafkaPackage,
       mode ? "kraft",
     }:
-    (import ../make-test-python.nix ({
+    (import ../make-test-python.nix {
       inherit name;
-      meta = with pkgs.lib.maintainers; {
-        maintainers = [ nequissimus ];
-      };
 
       nodes = {
         kafka =
           { ... }:
           {
             services.apache-kafka = mkMerge [
-              ({
+              {
                 enable = true;
                 package = kafkaPackage;
                 settings = {
@@ -30,7 +27,7 @@ let
                     "/var/lib/kafka/logdir2"
                   ];
                 };
-              })
+              }
               (mkIf (mode == "zookeeper") {
                 settings = {
                   "zookeeper.session.timeout.ms" = 600000;
@@ -113,19 +110,11 @@ let
             + "--from-beginning --max-messages 1"
         )
       '';
-    }));
+    });
 
 in
 with pkgs;
 {
-  kafka_3_7 = makeKafkaTest "kafka_3_7" {
-    kafkaPackage = apacheKafka_3_7;
-    mode = "zookeeper";
-  };
-  kafka_3_8 = makeKafkaTest "kafka_3_8" {
-    kafkaPackage = apacheKafka_3_8;
-    mode = "zookeeper";
-  };
   kafka_3_9 = makeKafkaTest "kafka_3_9" {
     kafkaPackage = apacheKafka_3_9;
     mode = "zookeeper";

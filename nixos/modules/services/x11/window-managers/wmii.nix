@@ -8,7 +8,7 @@
 with lib;
 let
   cfg = config.services.xserver.windowManager.wmii;
-  wmii = pkgs.wmii_hg;
+  wmii = pkgs.wmii;
 in
 {
   options = {

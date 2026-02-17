@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     # Copy coreutils, bash, etc.
     cp -d ${coreutilsMinimal.out}/bin/* $out/bin
-    (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
+    (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk shuf who whoami shred users && rm -f runcon)
 
     cp ${bashNonInteractive.out}/bin/bash $out/bin
     cp ${findutils.out}/bin/find $out/bin

@@ -7,8 +7,8 @@
   gtksourceview3,
   libGL,
   libGLU,
-  libX11,
-  libXv,
+  libx11,
+  libxv,
   libao,
   libicns,
   libpulseaudio,
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview3
     libGL
     libGLU
-    libX11
-    libXv
+    libx11
+    libxv
     libpulseaudio
     openal
     udev
@@ -181,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
       Challenge V2.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

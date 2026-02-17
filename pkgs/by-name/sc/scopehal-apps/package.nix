@@ -88,6 +88,11 @@ stdenv.mkDerivation {
     "-DNGSCOPECLIENT_VERSION=${version}"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # error: variable 'empty_string' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
+    "-Wno-error=uninitialized"
+  ];
+
   patches = [
     ./remove-git-derived-version.patch
   ]
@@ -98,7 +103,7 @@ stdenv.mkDerivation {
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv -v $out/bin/ngscopeclient $out/bin/.ngscopeclient-unwrapped
     makeWrapper $out/bin/.ngscopeclient-unwrapped $out/bin/ngscopeclient \
-      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath ([ vulkan-loader ])}"
+      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

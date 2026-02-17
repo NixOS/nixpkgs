@@ -11,22 +11,22 @@
   graphviz,
   libexsid,
   libgcrypt,
+  libusb1,
   perl,
   pkg-config,
-  unittest-cpp,
   xa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.15.1";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-wnbQy0PHHpkgNm3SC7GZyxSAUYd5eexVY9Dg1oiCjRo=";
+    hash = "sha256-0eupR9HNhF8TERCtNTH8qx7mohLI7im8btJtByWHoY8=";
   };
 
   outputs = [ "out" ] ++ lib.optionals docSupport [ "doc" ];
@@ -51,9 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libexsid
     libgcrypt
+    libusb1
   ];
-
-  checkInputs = [ unittest-cpp ];
 
   enableParallelBuilding = true;
 
@@ -61,6 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.enableFeature true "hardsid")
     (lib.strings.withFeature true "gcrypt")
     (lib.strings.withFeature true "exsid")
+    (lib.strings.withFeature true "usbsid")
+    # Supposedly runtime detection only supported on GCC
+    # https://github.com/libsidplayfp/libsidplayfp/commit/65874166b14d44467782d2996f7b644fbde0ee87
+    # __builtin_cpu_supports on GCC's list of x86 built-in functions
+    (lib.strings.withFeatureAs true "simd" (
+      if (stdenv.cc.isGNU && stdenv.hostPlatform.isx86) then "runtime" else "none"
+    ))
     (lib.strings.enableFeature finalAttrs.finalPackage.doCheck "tests")
   ];
 
@@ -87,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = gitUpdater {
       rev-prefix = "v";
+      ignoredVersions = "rc$";
     };
   };
 

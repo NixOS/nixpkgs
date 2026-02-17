@@ -23,17 +23,20 @@ let
     lib.concatStringsSep "\n\n" extraCertificateStrings
   );
 
-  srcVersion = "3.115";
+  srcVersion = "3.119.1";
   version = if nssOverride != null then nssOverride.version else srcVersion;
-  meta = with lib; {
+  meta = {
     homepage = "https://curl.haxx.se/docs/caextract.html";
     description = "Bundle of X.509 certificates of public Certificate Authorities (CA)";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       fpletz
       lukegb
     ];
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mozilla" version // {
+      product = "nss";
+    };
   };
   certdata = stdenv.mkDerivation {
     pname = "nss-cacert-certdata";
@@ -47,7 +50,7 @@ let
           owner = "nss-dev";
           repo = "nss";
           rev = "NSS_${lib.replaceStrings [ "." ] [ "_" ] version}_RTM";
-          hash = "sha256-8PeFeaIOtjBZJLBx3ONwZlK5SaLnjKEFoZWvVsu/3tA=";
+          hash = "sha256-GxLTqHcVWGiFezcwdctXJ8k9wqizVJPHyLBPZzphLro=";
         };
 
     dontBuild = true;

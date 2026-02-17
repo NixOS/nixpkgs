@@ -57,11 +57,11 @@ rec {
         args
         ;
 
-      meta = with lib; {
+      meta = {
         description = "Collection of tools written for use in bootstrapping";
         homepage = "https://github.com/oriansj/stage0-posix";
-        license = licenses.gpl3Plus;
-        teams = [ teams.minimal-bootstrap ];
+        license = lib.licenses.gpl3Plus;
+        teams = [ lib.teams.minimal-bootstrap ];
         inherit platforms;
       };
     };
@@ -159,6 +159,7 @@ rec {
     "${src}/M2-Planet/cc_reader.c"
     "${src}/M2-Planet/cc_strings.c"
     "${src}/M2-Planet/cc_types.c"
+    "${src}/M2-Planet/cc_emit.c"
     "${src}/M2-Planet/cc_core.c"
     "${src}/M2-Planet/cc_macro.c"
     "${src}/M2-Planet/cc.c"
@@ -298,6 +299,8 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
+    "${m2libc}/sys/utsname.h"
+    "-f"
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
     "${m2libc}/${m2libcArch}/linux/fcntl.c"
@@ -306,7 +309,11 @@ rec {
     "-f"
     "${m2libc}/${m2libcArch}/linux/sys/stat.c"
     "-f"
+    "${m2libc}/ctype.c"
+    "-f"
     "${m2libc}/stdlib.c"
+    "-f"
+    "${m2libc}/stdarg.h"
     "-f"
     "${m2libc}/stdio.h"
     "-f"
@@ -379,13 +386,19 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
+    "${m2libc}/sys/utsname.h"
+    "-f"
     "${m2libc}/${m2libcArch}/linux/fcntl.c"
     "-f"
     "${m2libc}/fcntl.c"
     "-f"
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
+    "${m2libc}/stdarg.h"
+    "-f"
     "${m2libc}/string.c"
+    "-f"
+    "${m2libc}/ctype.c"
     "-f"
     "${m2libc}/stdlib.c"
     "-f"
@@ -456,6 +469,8 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
+    "${m2libc}/sys/utsname.h"
+    "-f"
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
     "${m2libc}/${m2libcArch}/linux/fcntl.c"
@@ -464,7 +479,11 @@ rec {
     "-f"
     "${m2libc}/${m2libcArch}/linux/sys/stat.c"
     "-f"
+    "${m2libc}/ctype.c"
+    "-f"
     "${m2libc}/stdlib.c"
+    "-f"
+    "${m2libc}/stdarg.h"
     "-f"
     "${m2libc}/stdio.h"
     "-f"
@@ -537,7 +556,7 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
-    "${m2libc}/string.c"
+    "${m2libc}/sys/utsname.h"
     "-f"
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
@@ -545,7 +564,13 @@ rec {
     "-f"
     "${m2libc}/fcntl.c"
     "-f"
+    "${m2libc}/ctype.c"
+    "-f"
     "${m2libc}/stdlib.c"
+    "-f"
+    "${m2libc}/string.c"
+    "-f"
+    "${m2libc}/stdarg.h"
     "-f"
     "${m2libc}/stdio.h"
     "-f"

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dog";
   version = "1.7";
 
   src = fetchurl {
-    url = "http://archive.debian.org/debian/pool/main/d/dog/dog_${version}.orig.tar.gz";
+    url = "http://archive.debian.org/debian/pool/main/d/dog/dog_${finalAttrs.version}.orig.tar.gz";
     sha256 = "3ef25907ec5d1dfb0df94c9388c020b593fbe162d7aaa9bd08f35d2a125af056";
   };
 
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lwn.net/Articles/421072/";
     description = "'cat' replacement";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qknight ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qknight ];
+    platforms = lib.platforms.all;
     mainProgram = "dog";
   };
-}
+})

@@ -2,14 +2,21 @@
   lib,
   stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  ninja,
   duckdb,
   fsspec,
   google-cloud-storage,
+  ipython,
   numpy,
   openssl,
   pandas,
   psutil,
+  pyarrow,
   pybind11,
+  pytz,
+  scikit-build-core,
   setuptools-scm,
   pytest-reraise,
   pytestCheckHook,
@@ -17,43 +24,73 @@
 
 buildPythonPackage rec {
   inherit (duckdb)
-    patches
     pname
-    rev
-    src
-    version
+    version # nixpkgs-update: no auto update
     ;
   pyproject = true;
 
-  postPatch = (duckdb.postPatch or "") + ''
-    # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
-    cd tools/pythonpkg
+  src = fetchFromGitHub {
+    owner = "duckdb";
+    repo = "duckdb-python";
+    tag = "v${version}";
+    hash = duckdb.passthru.pythonHash;
+  };
 
-    # 1. let nix control build cores
-    # 2. default to extension autoload & autoinstall disabled
-    substituteInPlace setup.py \
-      --replace-fail "ParallelCompile()" 'ParallelCompile("NIX_BUILD_CORES")' \
-      --replace-fail "define_macros.extend([('DUCKDB_EXTENSION_AUTOLOAD_DEFAULT', '1'), ('DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT', '1')])" "pass"
+  postPatch = ''
+    # The build depends on a duckdb git submodule
+    rm -r external/duckdb
+    ln -s ${duckdb.src} external/duckdb
 
+    # replace pybind11[global] with pybind11
     substituteInPlace pyproject.toml \
-      --replace-fail 'setuptools_scm>=6.4,<8.0' 'setuptools_scm'
+      --replace-fail "pybind11[global]" "pybind11"
+
+    # replace custom build backend with standard scikit-build-core
+    substituteInPlace pyproject.toml \
+      --replace-fail 'build-backend = "duckdb_packaging.build_backend"' \
+                     'build-backend = "scikit_build_core.build"' \
+      --replace-fail 'backend-path = ["./"]' \
+                     '# backend-path removed'
   '';
 
-  env = {
-    DUCKDB_BUILD_UNITY = 1;
-    OVERRIDE_GIT_DESCRIBE = "v${version}-0-g${rev}";
-  };
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+
+  dontUseCmakeConfigure = true;
 
   build-system = [
     pybind11
+    scikit-build-core
     setuptools-scm
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    duckdb
+    openssl
+  ];
 
-  dependencies = [
-    numpy
-    pandas
+  optional-dependencies = {
+    all = [
+      # FIXME package adbc_driver_manager
+      ipython
+      fsspec
+      numpy
+      pandas
+      pyarrow
+    ];
+  };
+
+  env = {
+    DUCKDB_BUILD_UNITY = 1;
+    # default to disabled extension autoload/autoinstall
+    CMAKE_DEFINE_DUCKDB_EXTENSION_AUTOLOAD_DEFAULT = "0";
+    CMAKE_DEFINE_DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT = "0";
+  };
+
+  cmakeFlags = [
+    (lib.cmakeFeature "OVERRIDE_GIT_DESCRIBE" "v${version}-0-g${duckdb.rev}")
   ];
 
   nativeCheckInputs = [
@@ -62,17 +99,21 @@ buildPythonPackage rec {
     psutil
     pytest-reraise
     pytestCheckHook
-  ];
-
-  pytestFlags = [ "--verbose" ];
+    pytz
+  ]
+  ++ optional-dependencies.all;
 
   # test flags from .github/workflows/Python.yml
-  pytestFlagsArray = [ "--verbose" ];
+  pytestFlags = [ "--verbose" ];
   enabledTestPaths = if stdenv.hostPlatform.isDarwin then [ "tests/fast" ] else [ "tests" ];
 
   disabledTestPaths = [
-    # avoid dependency on mypy
-    "tests/stubs/test_stubs.py"
+    # avoid dependency on adbc_driver_manager
+    "tests/fast/adbc"
+    # avoid dependency on pyotp
+    "tests/fast/test_pypi_cleanup.py"
+    # avoid test data download requiring network access
+    "tests/slow/test_h2oai_arrow.py"
   ];
 
   disabledTests = [
@@ -87,6 +128,9 @@ buildPythonPackage rec {
     # causing a later test to fail with a spurious KeyboardInterrupt
     "test_connection_interrupt"
     "test_query_interruption"
+
+    # flaky due to a race condition in checking whether a thread is alive
+    "test_query_progress"
   ];
 
   # remove duckdb dir to prevent import confusion by pytest
@@ -97,10 +141,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "duckdb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

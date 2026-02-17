@@ -26,14 +26,11 @@ mkMesonExecutable (finalAttrs: {
 
   workDir = ./.;
 
-  # Hack for sake of the dev shell
-  passthru.externalBuildInputs = [
+  buildInputs = [
     sqlite
     rapidcheck
     gtest
-  ];
 
-  buildInputs = finalAttrs.passthru.externalBuildInputs ++ [
     nix-store
     nix-store-c
     nix-store-test-support
@@ -65,13 +62,13 @@ mkMesonExecutable (finalAttrs: {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
             buildInputs = [ writableTmpDirAsHomeHook ];
           }
-          (''
+          ''
             export _NIX_TEST_UNIT_DATA=${data + "/src/libstore-tests/data"}
             export NIX_REMOTE=$HOME/store
             ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage} \
               --gtest_filter=-${lib.concatStringsSep ":" finalAttrs.excludedTestPatterns}
             touch $out
-          '');
+          '';
     };
   };
 

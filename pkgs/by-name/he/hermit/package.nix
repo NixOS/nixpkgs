@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "2.0";
 
   src = fetchzip {
-    url = "https://pcaro.es/d/otf-${pname}-${version}.tar.gz";
+    url = "https://pcaro.es/d/otf-hermit-${version}.tar.gz";
     stripRoot = false;
     hash = "sha256-RYXZ2yJ8BIxsgeEwhXz7g0NnWG3kMPZoJaOLMUQyWWQ=";
   };
@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monospace font designed to be clear, pragmatic and very readable";
     homepage = "https://pcaro.es/p/hermit";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

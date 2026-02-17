@@ -4,8 +4,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
-  isPy310,
   isPyPy,
+  pythonOlder,
 
   # build-system
   cython,
@@ -20,6 +20,7 @@
   aiosignal,
   async-timeout,
   attrs,
+  backports-zstd,
   frozenlist,
   multidict,
   propcache,
@@ -49,19 +50,15 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.12.15";
+  version = "3.13.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-nVDGSbzjCdyJFCsHq8kJigNA4vGs4Pg1Vyyvw+gKg2w=";
+    hash = "sha256-V+digrfigdA3hwd2xW47BACh3r07j6pGE8WFAGivZnA=";
   };
-
-  patches = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform isa-l) [
-    ./remove-isal.patch
-  ];
 
   postPatch = ''
     rm -r vendor
@@ -92,7 +89,6 @@ buildPythonPackage rec {
   dependencies = [
     aiohappyeyeballs
     aiosignal
-    async-timeout
     attrs
     frozenlist
     multidict
@@ -104,6 +100,9 @@ buildPythonPackage rec {
   optional-dependencies.speedups = [
     aiodns
     (if isPyPy then brotlicffi else brotli)
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    backports-zstd
   ];
 
   nativeCheckInputs = [
@@ -130,17 +129,13 @@ buildPythonPackage rec {
     "test_requote_redirect_url_default"
     "test_tcp_connector_ssl_shutdown_timeout_nonzero_passed"
     "test_tcp_connector_ssl_shutdown_timeout_zero_not_passed"
+    "test_invalid_idna"
     # don't run benchmarks
     "test_import_time"
     # racy
     "test_uvloop_secure_https_proxy"
     # Cannot connect to host example.com:443 ssl:default [Could not contact DNS servers]
     "test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection"
-  ]
-  # these tests fail with python310 but succeeds with 11+
-  ++ lib.optionals isPy310 [
-    "test_https_proxy_unsupported_tls_in_tls"
-    "test_tcp_connector_raise_connector_ssl_error"
   ]
   ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -162,11 +157,11 @@ buildPythonPackage rec {
     export TMPDIR="/tmp"
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

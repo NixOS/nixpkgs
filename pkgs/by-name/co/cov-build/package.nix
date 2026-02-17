@@ -8,7 +8,9 @@
   alsa-lib,
   libxcrypt-legacy,
   lttng-ust_2_12,
-  xorg,
+  libxtst,
+  libxrender,
+  libxext,
   zlib,
 }:
 
@@ -36,9 +38,9 @@ stdenv.mkDerivation rec {
     alsa-lib
     libxcrypt-legacy
     lttng-ust_2_12
-    xorg.libXext
-    xorg.libXrender
-    xorg.libXtst
+    libxext
+    libxrender
+    libxtst
     zlib
   ];
 

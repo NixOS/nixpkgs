@@ -26,6 +26,9 @@ let
   finalPackage = cfg.package.override {
     inherit (cfg) providers;
   };
+
+  # YouTube Music needs deno with JIT to solve yt-dlp challenges
+  useYTMusic = lib.elem "ytmusic" cfg.providers;
 in
 
 {
@@ -85,10 +88,14 @@ in
           lsof
         ]
         ++ lib.optionals (lib.elem "spotify" cfg.providers) [
-          librespot
+          librespot-ma
         ]
         ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
           snapcast
+        ]
+        ++ lib.optionals useYTMusic [
+          deno
+          ffmpeg
         ];
 
       serviceConfig = {
@@ -104,7 +111,7 @@ in
         CapabilityBoundingSet = [ "" ];
         DevicePolicy = "closed";
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = !useYTMusic;
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -118,6 +125,9 @@ in
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
+        ]
+        ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -125,6 +135,10 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged @resources"
+          "mbind"
+        ]
+        ++ lib.optionals useYTMusic [
+          "@pkey"
         ];
         RestrictSUIDSGID = true;
         UMask = "0077";

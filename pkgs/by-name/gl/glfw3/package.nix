@@ -6,13 +6,13 @@
   pkg-config,
   libGL,
   vulkan-loader,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libX11,
-  libXi,
-  libXext,
-  libXxf86vm,
+  libxrandr,
+  libxinerama,
+  libxcursor,
+  libx11,
+  libxi,
+  libxext,
+  libxxf86vm,
   fixDarwinDylibNames,
   wayland,
   wayland-scanner,
@@ -23,6 +23,12 @@
 }:
 let
   version = "3.4";
+  minecraftPatches = fetchFromGitHub {
+    owner = "BoyOrigin";
+    repo = "glfw-wayland";
+    rev = "f62b4ae8f93149fd754cadecd51d8b1a07d20522";
+    hash = "sha256-kvWP34rOD4HSTvnKb33nvVquTGZoqP8/l+8XQ0h3b7Y=";
+  };
 in
 stdenv.mkDerivation {
   pname = "glfw${lib.optionalString withMinecraftPatch "-minecraft"}";
@@ -36,12 +42,10 @@ stdenv.mkDerivation {
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
-  patches = [
-    ./x11.patch
-  ]
-  ++ lib.optionals withMinecraftPatch [
-    ./0009-Defer-setting-cursor-position-until-the-cursor-is-lo.patch
-  ];
+  patches = [ ./x11.patch ] ++ (lib.optional withMinecraftPatch ./window-position.patch);
+  prePatch = lib.optionalString withMinecraftPatch ''
+    patches+=(${minecraftPatches}/patches/*.patch)
+  '';
 
   propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ libGL ];
 
@@ -56,13 +60,13 @@ stdenv.mkDerivation {
     wayland
     wayland-protocols
     libxkbcommon
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libXext
-    libXxf86vm
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
+    libxxf86vm
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

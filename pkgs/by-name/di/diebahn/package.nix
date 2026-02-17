@@ -24,18 +24,18 @@
 
 stdenv.mkDerivation rec {
   pname = "diebahn";
-  version = "2.8.2";
+  version = "2.9.4";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "railway";
     tag = version;
-    hash = "sha256-pPjOl46R8hBpyKdwq/gwHv/qCtFkI0LVDsqxcQOgtkU=";
+    hash = "sha256-eGXTBrzKd7dV74wAOzZV9UnIhuR/Xtb20fIWOjfPqtM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-kxt6z2RaSnlso/Jz36B9VNwti2o3b8+Ggd4zDIjFf2c=";
+    hash = "sha256-YSki/pKhaKnUqyEMibpg/j06zR6E003AzRTK795NFQo=";
   };
 
   nativeBuildInputs = [
@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       dotlambda
       lilacious
+      cholli
     ];
     teams = [ lib.teams.gnome-circle ];
   };

@@ -13,11 +13,11 @@ let
     python3 = python;
   };
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "sss";
   inherit (sssdForPython) version;
 
-  format = "other";
+  pyproject = false;
   dontUnpack = true;
   dontBuild = true;
 

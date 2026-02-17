@@ -54,6 +54,7 @@ let
       cups-filters
       pkgs.ghostscript
     ]
+    ++ lib.optional cfg.browsed.enable cfg.browsed.package
     ++ cfg.drivers;
     pathsToLink = [
       "/lib"
@@ -139,7 +140,7 @@ let
       splitAddress = addr: strings.splitString ":" addr;
       extractPort = addr: builtins.foldl' (a: b: b) "" (splitAddress addr);
     in
-    builtins.map (address: strings.toInt (extractPort address)) addresses;
+    map (address: strings.toInt (extractPort address)) addresses;
 
 in
 
@@ -540,6 +541,6 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ matthewbauer ];
+  meta.maintainers = [ ];
 
 }

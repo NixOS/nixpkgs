@@ -14,7 +14,10 @@
   vulkan-loader,
   wayland,
   xdg-utils,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   zlib,
   makeWrapper,
   waylandSupport ? false,
@@ -62,10 +65,10 @@ let
       stdenv.cc.libc
       vulkan-loader
       xdg-utils
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcursor
-      xorg.libXi
+      libx11
+      libxcb
+      libxcursor
+      libxi
     ]
     ++ lib.optionals waylandSupport [ wayland ];
 
@@ -114,17 +117,18 @@ let
     '';
   });
 
-  meta = with lib; {
+  meta = {
     description = "Rust-based terminal";
     homepage = "https://www.warp.dev";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       imadnyc
       FlameFlag
       johnrtitor
+      logger
     ];
-    platforms = platforms.darwin ++ [
+    platforms = lib.platforms.darwin ++ [
       "x86_64-linux"
       "aarch64-linux"
     ];

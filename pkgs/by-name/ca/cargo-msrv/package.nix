@@ -10,14 +10,14 @@
   gitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-msrv";
   version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = "cargo-msrv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-dvCKi40c9PmM05MK+0VGWxny0ZA+9YO/M3zmv5Qv6b0=";
   };
 
@@ -45,17 +45,17 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/cargo-msrv --prefix PATH : ${lib.makeBinPath [ rustup ]};
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand \"msrv\": assists with finding your minimum supported Rust version (MSRV)";
     mainProgram = "cargo-msrv";
     homepage = "https://github.com/foresterre/cargo-msrv";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       otavio
       matthiasbeyer
     ];
   };
-}
+})

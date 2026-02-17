@@ -5,12 +5,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stone";
   version = "2.4";
 
   src = fetchurl {
-    url = "http://www.gcd.org/sengoku/stone/stone-${version}.tar.gz";
+    url = "http://www.gcd.org/sengoku/stone/stone-${finalAttrs.version}.tar.gz";
     hash = "sha256-1dwa9uxdpQPypAs98/4ZqPv5085pa49G9NU9KsjY628=";
   };
 
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TCP/IP repeater in the application layer";
     homepage = "http://www.gcd.org/sengoku/stone/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ corngood ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ corngood ];
     mainProgram = "stone";
   };
-}
+})

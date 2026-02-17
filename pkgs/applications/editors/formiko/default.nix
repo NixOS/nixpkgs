@@ -44,11 +44,10 @@ buildPythonApplication rec {
   # Needs a display
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "reStructuredText editor and live previewer";
     homepage = "https://github.com/ondratu/formiko";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

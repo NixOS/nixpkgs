@@ -12,18 +12,18 @@ let
     mapAttrsToList
     ;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pomerium-cli";
-  version = "0.30.1";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "cli";
-    rev = "v${version}";
-    sha256 = "sha256-zrmd/c1XVoD9oLbDBvbtPHQpbPLOvDRSV4CamViBd1w=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-dxN3pVDt6v/xEnBwvmOFf8gf6YZWv23a4K6mTRovv+k=";
   };
 
-  vendorHash = "sha256-G+XnzbkJw4ttif+OcTrHlhz9a3P/CVKnJ3IF3iPcaHM=";
+  vendorHash = "sha256-pDoV7CzQFiAi6OAqqW8b6/Sl9PSQou9pU2c5nU7Rt0A=";
 
   subPackages = [
     "cmd/pomerium-cli"
@@ -34,7 +34,7 @@ buildGoModule rec {
       # Set a variety of useful meta variables for stamping the build with.
       setVars = {
         "github.com/pomerium/cli/version" = {
-          Version = "v${version}";
+          Version = "v${finalAttrs.version}";
           BuildMeta = "nixpkgs";
           ProjectName = "pomerium-cli";
           ProjectURL = "github.com/pomerium/cli";
@@ -61,12 +61,12 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pomerium.io";
     description = "Client-side helper for Pomerium authenticating reverse proxy";
     mainProgram = "pomerium-cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lukegb ];
+    platforms = lib.platforms.unix;
   };
-}
+})

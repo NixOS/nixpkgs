@@ -35,6 +35,14 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  disabledTests = [
+    # Fails with `TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_std...`
+    # https://github.com/simonw/symbex/issues/48
+    "test_errors"
+    # Fails with AssertionError (SystemExit(1).stdout is '' not the expected message)
+    "test_output"
+  ];
+
   meta = {
     description = "Find the Python code for specified symbols";
     homepage = "https://github.com/simonw/symbex";

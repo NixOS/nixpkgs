@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "litecli";
   version = "1.12.3";
 
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "litecli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TPwzXfb4n6wTe6raQ5IowKdhGkKrf2pmSS2+Q03NKYk=";
   };
 
@@ -51,8 +51,8 @@ python3Packages.buildPythonApplication rec {
       A command-line client for SQLite databases that has auto-completion and syntax highlighting.
     '';
     homepage = "https://litecli.com";
-    changelog = "https://github.com/dbcli/litecli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/dbcli/litecli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
-}
+})

@@ -6,14 +6,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.36.0";
   pname = "geckodriver";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "geckodriver";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-rqJ6+QKfEhdHGZBT9yEWtsBlETxz4XeEZXisXf7RdIE=";
   };
 
@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers";
     homepage = "https://github.com/mozilla/geckodriver";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ jraygauthier ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ jraygauthier ];
     mainProgram = "geckodriver";
   };
-}
+})

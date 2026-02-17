@@ -5,12 +5,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aalib";
   version = "1.4rc5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/aa-project/aalib-${version}.tar.gz";
+    url = "mirror://sourceforge/aa-project/aalib-${finalAttrs.version}.tar.gz";
     sha256 = "1vkh19gb76agvh4h87ysbrgy82hrw88lnsvhynjf4vng629dmpgv";
   };
 
@@ -33,11 +33,13 @@ stdenv.mkDerivation rec {
 
   # The fuloong2f is not supported by aalib still
   preConfigure = ''
-    configureFlagsArray+=(
-      "--bindir=$bin/bin"
-      "--includedir=$dev/include"
+    # The configure script does the correct thing when 'system' is already set
+    # Export it explicitly in case __structuredAttrs is true.
+    export system
+    appendToVar configureFlags \
+      "--bindir=$bin/bin" \
+      "--includedir=$dev/include" \
       "--libdir=$out/lib"
-    )
   '';
 
   buildInputs = [ ncurses ];
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $dev/bin
     mv $bin/bin/aalib-config $dev/bin/aalib-config
-    substituteInPlace $out/lib/libaa.la --replace "${ncurses.dev}/lib" "${ncurses.out}/lib"
+    substituteInPlace $out/lib/libaa.la --replace-fail "${ncurses.dev}/lib" "${ncurses.out}/lib"
   '';
 
   meta = {
@@ -62,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
   };
-}
+})

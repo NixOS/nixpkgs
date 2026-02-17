@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
@@ -10,16 +10,20 @@
   gettext,
   libarchive,
   desktop-file-utils,
+  appstream,
   appstream-glib,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-cb";
-  version = "0.1.11";
+  version = "2026.02.03";
 
-  src = fetchurl {
-    url = "https://pwmt.org/projects/zathura-cb/download/zathura-cb-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TiAepUzcIKkyWMQ1VvY4lEGvmXQN59ymyh/1JBcvvUc=";
+  src = fetchFromGitHub {
+    owner = "pwmt";
+    repo = "zathura-cb";
+    tag = finalAttrs.version;
+    hash = "sha256-k5WbJR0PToiSQo00igH/3uHWp7z4dNxwSXiAos6OgJ8=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     desktop-file-utils
+    appstream
     appstream-glib
   ];
 
@@ -38,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://pwmt.org/projects/zathura-cb/";

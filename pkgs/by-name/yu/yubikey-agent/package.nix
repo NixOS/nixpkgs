@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yubikey-agent";
 
   version = "0.1.6";
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "yubikey-agent";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Knk1ipBOzjmjrS2OFUMuxi1TkyDcSYlVKezDWT//ERY=";
   };
 
@@ -36,7 +36,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -45,15 +45,15 @@ buildGoModule rec {
       --replace 'ExecStart=yubikey-agent' "ExecStart=$out/bin/yubikey-agent"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Seamless ssh-agent for YubiKeys";
     mainProgram = "yubikey-agent";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://filippo.io/yubikey-agent";
     maintainers = with lib.maintainers; [
       philandstuff
       rawkode
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})

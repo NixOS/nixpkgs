@@ -6,6 +6,7 @@
   nix-update-script,
   testers,
   python3,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    validatePkgConfig
   ];
 
   cmakeFlags = [
@@ -41,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      moduleNames = [ "libllhttp" ];
     };
   };
 
@@ -52,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aduh95 ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "libllhttp" ];
   };
 })

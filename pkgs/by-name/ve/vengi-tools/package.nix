@@ -20,7 +20,7 @@
   libjpeg,
   libuuid,
   libuv,
-  libX11,
+  libx11,
   lua5_4,
   lzfse,
   opencl-headers,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     lua5_4
     lzfse
     SDL2
-    libX11
+    libx11
     SDL2_mixer
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     run-voxedit = nixosTests.vengi-tools;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools from the vengi voxel engine, including a thumbnailer, a converter, and the VoxEdit voxel editor";
     longDescription = ''
       Tools from the vengi C++ voxel game engine. It includes a voxel editor
@@ -127,10 +127,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://vengi-voxel.github.io/vengi/";
     downloadPage = "https://github.com/vengi-voxel/vengi/releases";
     license = [
-      licenses.mit
-      licenses.cc-by-sa-30
+      lib.licenses.mit
+      lib.licenses.cc-by-sa-30
     ];
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 })

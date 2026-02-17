@@ -7,14 +7,14 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "beefi";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "jfeick";
     repo = "beefi";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "1180avalbw414q1gnfqdgc9zg3k9y0401kw9qvcn51qph81d04v5";
   };
 
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     installManPage beefi.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small script to create bootable EFISTUB kernel images";
     mainProgram = "beefi";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ tu-maurice ];
     homepage = "https://github.com/jfeick/beefi";
   };
-}
+})

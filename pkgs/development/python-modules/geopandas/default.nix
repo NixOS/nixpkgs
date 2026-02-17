@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   setuptools,
 
@@ -37,6 +38,15 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  patches = [
+    # fix tests for geos 3.14
+    # see https://github.com/geopandas/geopandas/pull/3645
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/geopandas/geopandas/pull/3645.patch";
+      hash = "sha256-TLJixFRR+g739PLgwhTGuwYTVJ4SRr2BMGD14CLgmcY=";
+    })
+  ];
 
   dependencies = [
     packaging
@@ -85,11 +95,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geopandas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
     changelog = "https://github.com/geopandas/geopandas/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    teams = [ teams.geospatial ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
 }

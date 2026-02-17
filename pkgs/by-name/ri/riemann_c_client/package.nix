@@ -15,7 +15,7 @@
   json_c,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "riemann-c-client";
   version = "2.2.2";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "git.madhouse-project.org";
     owner = "algernon";
     repo = "riemann-c-client";
-    rev = "riemann-c-client-${version}";
+    rev = "riemann-c-client-${finalAttrs.version}";
     hash = "sha256-l9iUDhagODi58FDT9vEb90tsiIcrcMmGYCmH3ML3RCM=";
   };
 
@@ -33,10 +33,13 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     check
     pkg-config
+    protobufc
   ];
   buildInputs = [
     file
@@ -52,11 +55,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.madhouse-project.org/algernon/riemann-c-client";
     description = "C client library for the Riemann monitoring system";
     mainProgram = "riemann-client";
-    license = licenses.eupl12;
-    platforms = platforms.linux;
+    license = lib.licenses.eupl12;
+    platforms = lib.platforms.linux;
   };
-}
+})

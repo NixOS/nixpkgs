@@ -8,7 +8,7 @@
   nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fail2ban";
   version = "1.1.0";
   format = "setuptools";
@@ -16,21 +16,31 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fail2ban";
     repo = "fail2ban";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-0xPNhbu6/p/cbHOr5Y+PXbMbt5q/S13S5100ZZSdylE=";
   };
 
   outputs = [
     "out"
     "man"
-  ];
+  ]
+  # From some reason upstream installs documentation only for Linux, solaris,
+  # sunos and any gnu system.
+  ++ lib.optionals (lib.pipe stdenv.hostPlatform [
+    (lib.attrVals [
+      "isLinux"
+      "isSunOS"
+      "isGnu"
+    ])
+    (builtins.any lib.id)
+  ]) [ "doc" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   pythonPath =
     with python3.pkgs;
     lib.optionals stdenv.hostPlatform.isLinux [
-      systemd
+      systemd-python
       pyinotify
 
       # https://github.com/fail2ban/fail2ban/issues/3787, remove it in the next release
@@ -89,6 +99,8 @@ python3.pkgs.buildPythonApplication rec {
       rm $out/bin/fail2ban-python
       ln -s ${python3.interpreter} $out/bin/fail2ban-python
 
+      # Irrelevant for NixOS
+      rm -r $out/var
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       # see https://github.com/NixOS/nixpkgs/issues/4968
@@ -97,10 +109,10 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests = { inherit (nixosTests) fail2ban; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.fail2ban.org/";
     description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ lovek323 ];
   };
-}
+})

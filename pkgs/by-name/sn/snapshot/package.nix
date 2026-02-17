@@ -2,12 +2,11 @@
   stdenv,
   lib,
   fetchurl,
+  libglycin,
   glycin-loaders,
   cargo,
   desktop-file-utils,
-  jq,
   meson,
-  moreutils,
   ninja,
   pkg-config,
   rustc,
@@ -18,6 +17,7 @@
   gtk4,
   libadwaita,
   libcamera,
+  lcms2,
   libseccomp,
   pipewire,
   gnome,
@@ -25,26 +25,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "48.0.1";
+  version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OTF2hZogt9I138MDAxuiDGhkQRBpiNyRHdkbe21m4f0=";
+    hash = "sha256-NVj2+ODTiylQtrrZue7COCSb7f7c5w+1iijK1pRebOk=";
   };
-
-  patches = [
-    # Fix paths in glycin library
-    glycin-loaders.passthru.glycinPathsPatch
-  ];
 
   cargoVendorDir = "vendor";
 
   nativeBuildInputs = [
     cargo
     desktop-file-utils
-    jq
+    libglycin.patchVendorHook
     meson
-    moreutils # sponge is used in postPatch
     ninja
     pkg-config
     rustc
@@ -54,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
+    libglycin.setupHook
+    glycin-loaders
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -62,18 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     libcamera # for the gstreamer plugin
+    lcms2
     libseccomp
     pipewire # for device provider
   ];
 
   postPatch = ''
-    # Replace hash of file we patch in vendored glycin.
-    jq \
-      --arg hash "$(sha256sum vendor/glycin/src/sandbox.rs | cut -d' ' -f 1)" \
-      '.files."src/sandbox.rs" = $hash' \
-      vendor/glycin/.cargo-checksum.json \
-      | sponge vendor/glycin/.cargo-checksum.json
-
     substituteInPlace src/meson.build --replace-fail \
       "'src' / rust_target / meson.project_name()" \
       "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
@@ -83,8 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       # vp8enc preset
       --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
-      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
 
@@ -95,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
     packageName = "snapshot";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/snapshot";
     description = "Take pictures and videos on your computer, tablet, or phone";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "snapshot";
   };
 })

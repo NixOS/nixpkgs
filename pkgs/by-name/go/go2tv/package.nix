@@ -2,7 +2,13 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   libglvnd,
   pkg-config,
   withGui ? true,
@@ -10,27 +16,27 @@
 
 buildGoModule rec {
   pname = "go2tv" + lib.optionalString (!withGui) "-lite";
-  version = "1.18.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "alexballas";
     repo = "go2tv";
     tag = "v${version}";
-    hash = "sha256-Ic4Kcc5Vx1QXFt28o5ItGwcvsKCB2HdZvILPRoEKbgI=";
+    hash = "sha256-oyd6H3U799el9xcte3mOJo0m2YQTZ/vZjFdM2F7Cha8=";
   };
 
-  vendorHash = "sha256-xp/zdkNV4z3rQMV0b/7TD+ApiaDWxR/aqOKvakGKAcI=";
+  vendorHash = "sha256-2eEB6yfWFD7X3+qQenRoMiyzHH9i/gDg0IuOo/gUBFw=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXi
-    xorg.libXext
-    xorg.libXxf86vm
+    libx11
+    libxcursor
+    libxrandr
+    libxinerama
+    libxi
+    libxext
+    libxxf86vm
     libglvnd
   ];
 

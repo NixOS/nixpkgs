@@ -9,7 +9,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "appindicator-sharp";
   version = "0-unstable-2016-01-18";
 

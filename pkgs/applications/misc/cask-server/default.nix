@@ -1,12 +1,13 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cask-server";
   version = "0.6.0";
 
@@ -20,18 +21,19 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Public server and API to interface with Cask features";
     mainProgram = "CaskServer";
     homepage = "https://github.com/Nitrux/cask-server";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       lgpl21Plus
       cc0
     ];
-    maintainers = with maintainers; [ onny ];
+    maintainers = with lib.maintainers; [ onny ];
   };
 
 }

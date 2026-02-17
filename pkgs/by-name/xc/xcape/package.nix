@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXtst,
+  libx11,
+  libxtst,
   xorgproto,
-  libXi,
+  libxi,
 }:
 
 stdenv.mkDerivation {
@@ -23,10 +23,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXtst
+    libx11
+    libxtst
     xorgproto
-    libXi
+    libxi
   ];
 
   makeFlags = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   postInstall = "install -Dm444 --target-directory $out/share/doc README.md";
 
-  meta = with lib; {
+  meta = {
     description = "Utility to configure modifier keys to act as other keys";
     longDescription = ''
       xcape allows you to use a modifier key as another key when
@@ -47,9 +47,9 @@ stdenv.mkDerivation {
       released on its own.
     '';
     homepage = "https://github.com/alols/xcape";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     mainProgram = "xcape";
   };
 }

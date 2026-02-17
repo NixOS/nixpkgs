@@ -13,15 +13,15 @@
   fulcio,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fulcio";
-  version = "1.7.1";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "fulcio";
-    tag = "v${version}";
-    hash = "sha256-UVUVT4RvNHvzIwV6azu2h1O9lnNu0PQnnkj4wbrY8BA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YMM517FpQvx3+8g2EuMmUo7cHTxaXUmCcszqnn3xs+c=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -33,7 +33,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-lNPRejC7Z3OHDvhJGzPIlgqi7eXjlqgeECJO/13gGt4=";
+  vendorHash = "sha256-FmHT3qLl42LXeU8RA3E8P2QyZyTfxA5b+vHg0EfDHmM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -42,7 +42,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${finalAttrs.version}"
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
@@ -79,12 +79,12 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = fulcio;
     command = "fulcio version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     homepage = "https://github.com/sigstore/fulcio";
-    changelog = "https://github.com/sigstore/fulcio/releases/tag/v${version}";
+    changelog = "https://github.com/sigstore/fulcio/releases/tag/v${finalAttrs.version}";
     description = "Root-CA for code signing certs - issuing certificates based on an OIDC email address";
     mainProgram = "fulcio";
     longDescription = ''
@@ -103,4 +103,4 @@ buildGoModule rec {
       jk
     ];
   };
-}
+})

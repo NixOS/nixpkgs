@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ezno";
   version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "kaleidawave";
     repo = "ezno";
-    rev = "release/ezno-${version}";
+    rev = "release/ezno-${finalAttrs.version}";
     hash = "sha256-0yLEpNkl7KjBEGxNONtfMjVlWMSKGZ6TbYJMsCeQ3ms=";
   };
 
@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
     "ezno"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript compiler and TypeScript checker with a focus on static analysis and runtime performance";
     mainProgram = "ezno";
     homepage = "https://github.com/kaleidawave/ezno";
-    changelog = "https://github.com/kaleidawave/ezno/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/kaleidawave/ezno/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

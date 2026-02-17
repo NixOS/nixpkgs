@@ -11,19 +11,19 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "radcli";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "radcli";
     repo = "radcli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YnZkFYTiU2VNKxuP+JTnH64XYTB/+imeMKN1mZN9VCQ=";
   };
 
   postUnpack = ''
-    touch ${src.name}/config.rpath
+    touch ${finalAttrs.src.name}/config.rpath
   '';
 
   nativeBuildInputs = [
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple RADIUS client library";
     homepage = "https://github.com/radcli/radcli";
-    changelog = "https://github.com/radcli/radcli/blob/${version}/NEWS";
+    changelog = "https://github.com/radcli/radcli/blob/${finalAttrs.version}/NEWS";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "radcli";
     platforms = lib.platforms.all;
   };
-}
+})

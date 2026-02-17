@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  callPackage,
+  buildVscode,
   fetchurl,
   nixosTests,
   srcOnly,
@@ -36,22 +36,22 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-0zgsR0nk9zsOeEcKhrmAFbAhvKKFNsC8fXjCnxFcndE=";
-      x86_64-darwin = "sha256-4+3T3axXNfePEkevhLwRPeqoxKs2OTL7B7TiV2BxZWc=";
-      aarch64-linux = "sha256-iGLtuVFA5NphiF1PU9Pus/nZ8PyCNNzDOpcQ+utYE2I=";
-      aarch64-darwin = "sha256-E4BopxbqH1lg1Q2NlyWjH8jytabiv5y4hG5ZJW4nqzs=";
-      armv7l-linux = "sha256-YIidKSsqK3DSAfPd7O1pbft1C/ny/iB+CFbR/T9u7L8=";
+      x86_64-linux = "sha256-ST5i8gvNtAaBbmcpcg9GJipr8e5d0A0qbdG1P9QViek=";
+      x86_64-darwin = "sha256-BRGXLasiHZSKsijq02bCa2RbaBc7iC1ZtLe29u4KTH0=";
+      aarch64-linux = "sha256-7plpHWoi8eYDKQZVV3OCXZJUk8j173M1xpRgTOTsPZ0=";
+      aarch64-darwin = "sha256-RgfhGjVFmaIAAotTYNPUDrJZ8qj8e4yR9bVfal/Hl6o=";
+      armv7l-linux = "sha256-Zzz4HsmiWcKiBRE19pGll8BRQy26wbmpuYSi89PDoBo=";
     }
     .${system} or throwSystem;
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.104.2";
+  version = "1.109.2";
 
   # This is used for VS Code - Remote SSH test
-  rev = "e3a5acfb517a443235981655413d566533107e92";
+  rev = "591199df409fbf59b4b52d5ad4ee0470152a9b31";
 in
-callPackage ./generic.nix {
+buildVscode {
   pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -82,7 +82,7 @@ callPackage ./generic.nix {
     src = fetchurl {
       name = "vscode-server-${rev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      hash = "sha256-Tz1P8eGokG+8thao9dRllAdTxvllhfOEDKH9lC2QwB0=";
+      hash = "sha256-CbU8VdJETTzpwCpzVgavoeSQMdz3RdwDYJ7wUqs8LJ8=";
     };
     stdenv = stdenvNoCC;
   };
@@ -116,6 +116,7 @@ callPackage ./generic.nix {
       bobby285271
       johnrtitor
       jefflabonte
+      wetrustinprize
     ];
     platforms = [
       "x86_64-linux"

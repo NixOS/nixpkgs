@@ -3,7 +3,6 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   fetchurl,
 
@@ -16,6 +15,7 @@
   cudaPackages,
 
   # dependencies
+  cuda-bindings,
   filelock,
   jinja2,
   networkx,
@@ -34,7 +34,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.8.0";
+  version = "2.10.0";
 in
 buildPythonPackage {
   inherit version;
@@ -44,7 +44,7 @@ buildPythonPackage {
 
   format = "wheel";
 
-  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.14");
+  disabled = pythonAtLeast "3.15";
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -65,13 +65,14 @@ buildPythonPackage {
       cuda_cupti
       cuda_nvrtc
       cudnn
-      cusparselt
       libcublas
       libcufft
       libcufile
       libcurand
       libcusolver
       libcusparse
+      libcusparse_lt
+      libnvshmem
       nccl
     ]
   );
@@ -94,6 +95,9 @@ buildPythonPackage {
     setuptools
     sympy
     typing-extensions
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cuda-bindings
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
 

@@ -19,21 +19,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jRe1lgzfhzBUsS6wwwlqxxomap2TIDOyF3YBv20GJ14=";
 
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   postInstall = ''
     install -D -m 0444 ../../README* -t "$out/share/doc/${pname}"
     install -D -m 0444 ../../LICEN* -t "$out/share/doc/${pname}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "9P2000.L server implementation in Rust";
     homepage = "https://github.com/pfpacket/rust-9p";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ raskin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ raskin ];
 
     # macOS build fails: https://github.com/pfpacket/rust-9p/issues/7
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     mainProgram = "unpfs";
   };
 }

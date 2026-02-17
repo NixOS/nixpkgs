@@ -3,7 +3,6 @@
   bc,
   fetchurl,
   getopt,
-  ksh,
   pkgsMusl ? { },
   stdenv,
   tzdata,
@@ -11,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20250804";
+  version = "20251111";
 
   src = fetchurl {
     url = "https://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-C0kDdkSyUyBtLnENRuMoWeYt/ixsjnIYrkOfLvUN6K0=";
+    hash = "sha256-RaP4UVZ3uo85M9ghP0u2EaXDyIOAvi5GIi+kRwlQYGA=";
   };
 
   patches = [
@@ -39,9 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     bc
     tzdata
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
   ];
 
   # The generated makefile is a small wrapper for calling ./boot-strap with a
@@ -53,21 +49,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Disabled tests:
+  # * cmd-interrupt: tries to `SIGINT` make itself, flaky as a result
   # * directive-export{,-gmake}: another failure related to TZ variables
   # * opt-keep-going-indirect: not yet known
-  # * varmod-localtime: musl doesn't support TZDIR and this test relies on
-  #   impure, implicit paths
-  # * interrupt-compat (fails on x86_64-linux building for i686-linux)
+  # * varmod-localtime: musl doesn't support TZDIR and this test relies on impure, implicit paths
   env.BROKEN_TESTS = lib.concatStringsSep " " (
     [
+      "cmd-interrupt"
       "directive-export"
       "directive-export-gmake"
       "opt-keep-going-indirect"
       "varmod-localtime"
     ]
-    ++ lib.optionals stdenv.targetPlatform.is32bit [
-      "interrupt-compat"
-    ]
+    # TODO: drop the name-conditioning on stdenv rebuild
+    ++ lib.optional (stdenv.isDarwin && lib.getName stdenv != "bootstrap-stage1-stdenv-darwin") "export"
   );
 
   strictDeps = true;

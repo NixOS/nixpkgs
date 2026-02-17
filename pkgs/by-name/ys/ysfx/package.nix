@@ -6,11 +6,11 @@
   pkg-config,
   freetype,
   juce,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   libglvnd,
 }:
 
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype
     juce
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
     libglvnd
   ];
 
@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hosting library for JSFX";
     homepage = "https://github.com/jpcima/ysfx";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

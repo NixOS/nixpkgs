@@ -2,48 +2,52 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  libsForQt5,
-  openrgb,
   glib,
   openal,
+  hidapi,
+  pipewire,
   pkg-config,
+  qt6Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb-plugin-effects";
-  version = "0.9";
+  version = "1.0rc2";
 
   src = fetchFromGitLab {
     owner = "OpenRGBDevelopers";
     repo = "OpenRGBEffectsPlugin";
-    rev = "release_${finalAttrs.version}";
-    hash = "sha256-8BnHifcFf7ESJgJi/q3ca38zuIVa++BoGlkWxj7gpog=";
+    tag = "release_candidate_${finalAttrs.version}";
+    hash = "sha256-0W0hO3PSMpPLc0a7g/Nn7GWMcwBXhOxh1Y2flpdcnfE=";
     fetchSubmodules = true;
   };
 
-  postPatch = ''
-    # Use the source of openrgb from nixpkgs instead of the submodule
-    rm -r OpenRGB
-    ln -s ${openrgb.src} OpenRGB
-  '';
-
-  nativeBuildInputs = with libsForQt5; [
-    qmake
-    pkg-config
-    wrapQtAppsHook
+  qmakeFlags = [
+    "CONFIG+=link_pkgconfig"
+    "PKGCONFIG+=libpipewire-0.3"
+    "QT_TOOL.lrelease.binary=${lib.getDev qt6Packages.qttools}/bin/lrelease"
   ];
 
-  buildInputs = with libsForQt5; [
-    qtbase
+  nativeBuildInputs = [
+    pkg-config
+    qt6Packages.wrapQtAppsHook
+    qt6Packages.qmake
+  ];
+
+  buildInputs = [
+    qt6Packages.qtbase
+    qt6Packages.qt5compat
     glib
     openal
+    hidapi
+    pipewire
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin";
     description = "Effects plugin for OpenRGB";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.linux;
   };
 })

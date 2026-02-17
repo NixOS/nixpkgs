@@ -1,26 +1,36 @@
 {
   lib,
   stdenvNoCC,
+  fetchpatch,
   fetchurl,
-  imagemagick,
   nixosTests,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.44.0";
+  version = "1.45.1";
 
   src = fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
-    hash = "sha256-eSF3gIw+CDGsy+IF1XtBMzma0UHw0KglRQohskAnWI8=";
+    hash = "sha256-4vEmsZrsQiBRoKUODGq36QTzOzmIpHudqK+/0MCiUsw=";
   };
 
-  postPatch = ''
-    sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
+  patches = [
+    # Fix installation with postgres
+    (fetchpatch {
+      url = "https://gerrit.wikimedia.org/r/changes/mediawiki%2Fcore~1231289/revisions/4/patch?download";
+      decode = "base64 -d";
+      postFetch = ''
+        substituteInPlace $out \
+          --replace "/Installer/" "/installer/"
+      '';
+      hash = "sha256-bhfw5CW4EEpr2GTGda3va+EmM/vK6AqBfyoCcsSiqNQ=";
+    })
+  ];
 
-    # fix generating previews for SVGs
-    substituteInPlace includes/config-schema.php \
-      --replace-fail "\$path/convert" "${imagemagick}/bin/convert"
+  postPatch = ''
+    substituteInPlace includes/installer/CliInstaller.php \
+      --replace-fail '$vars = Installer::getExistingLocalSettings();' '$vars = null;'
   '';
 
   installPhase = ''
@@ -39,11 +49,14 @@ stdenvNoCC.mkDerivation rec {
     inherit (nixosTests.mediawiki) mysql postgresql;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collaborative editing software that runs Wikipedia";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
-    platforms = platforms.all;
-    teams = [ teams.c3d2 ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      # for the C3D2
+      SuperSandro2000
+    ];
   };
 }

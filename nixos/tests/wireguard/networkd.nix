@@ -27,6 +27,7 @@ in
               "fc00::1/128"
             ];
             listenPort = 23542;
+            fwMark = "0x6e6978";
 
             # !!! Don't do this with real keys. The /nix store is world-readable!
             privateKeyFile = toString (pkgs.writeText "privateKey" wg-snakeoil-keys.peer0.privateKey);
@@ -60,6 +61,7 @@ in
               "fc00::2/128"
             ];
             listenPort = 23542;
+            fwMark = "30567";
 
             # !!! Don't do this with real keys. The /nix store is world-readable!
             privateKeyFile = toString (pkgs.writeText "privateKey" wg-snakeoil-keys.peer1.privateKey);
@@ -97,5 +99,9 @@ in
     with subtest("Has PSK set"):
       peer0.succeed("wg | grep 'preshared key'")
       peer1.succeed("wg | grep 'preshared key'")
+
+    with subtest("Has FwMark set"):
+      peer0.succeed("wg | grep '0x6e6978'")
+      peer1.succeed("wg | grep '0x7767'")
   '';
 }

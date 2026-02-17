@@ -5,23 +5,24 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyprland";
-  version = "2.4.7";
-  format = "pyproject";
-
-  disabled = python3Packages.pythonOlder "3.10";
+  version = "2.6.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "pyprland";
-    tag = version;
-    hash = "sha256-rtAw6tdZY0BKb6Qjk/LHYYMB9nCPzkmw95wdjhJ191s=";
+    tag = finalAttrs.version;
+    hash = "sha256-jvdXytMnNrINNkSNljYFS9uomPmQ0g2Bnje/8YbsAv8=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
-  propagatedBuildInputs = with python3Packages; [ aiofiles ];
+  propagatedBuildInputs = with python3Packages; [
+    aiofiles
+    pillow
+  ];
   pythonRelaxDeps = [
     "aiofiles"
   ];
@@ -32,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   # NOTE: this is required for the imports check below to work properly
-  HYPRLAND_INSTANCE_SIGNATURE = "dummy";
+  env.HYPRLAND_INSTANCE_SIGNATURE = "dummy";
 
   pythonImportsCheck = [
     "pyprland"
@@ -74,4 +75,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

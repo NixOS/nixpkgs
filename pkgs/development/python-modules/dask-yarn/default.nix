@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "dask-yarn";
   version = "0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
@@ -71,7 +68,7 @@ buildPythonPackage rec {
     "test_widget_and_html_reprs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Deploy dask on YARN clusters";
     mainProgram = "dask-yarn";
     longDescription = ''
@@ -81,7 +78,7 @@ buildPythonPackage rec {
             stop, and scale Dask clusters natively from Python.
     '';
     homepage = "https://yarn.dask.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ illustris ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ illustris ];
   };
 }

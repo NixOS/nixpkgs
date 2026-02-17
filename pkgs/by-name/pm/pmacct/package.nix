@@ -2,12 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   autoreconfHook,
   libtool,
   libpcap,
   libcdada,
   # Optional Dependencies
+  withKafka ? true,
+  rdkafka,
   withJansson ? true,
   jansson,
   withNflog ? true,
@@ -36,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3gV6GUhTQnH09NRIJQI0xBn05Bgo3AJsE2cSxNPXITo=";
   };
 
+  patches = [
+    # Fixes GCC15 compatability
+    # Can be removed with the next release
+    # Custom version of https://github.com/pmacct/pmacct/commit/6466578967d3d39c46f7ec10b308bca36568697d.patch
+    # without the copyright date changes.
+    ./gcc15-compat.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -45,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcdada
     libpcap
   ]
+  ++ lib.optional withKafka rdkafka
   ++ lib.optional withJansson jansson
   ++ lib.optional withNflog libnetfilter_log
   ++ lib.optional withSQLite sqlite
@@ -61,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-pcap-includes=${libpcap}/include"
   ]
+  ++ lib.optional withKafka "--enable-kafka"
   ++ lib.optional withJansson "--enable-jansson"
   ++ lib.optional withNflog "--enable-nflog"
   ++ lib.optional withSQLite "--enable-sqlite3"

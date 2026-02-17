@@ -7,18 +7,18 @@
   yt-dlp,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mpv-handler";
-  version = "0.3.16";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "akiirui";
     repo = "mpv-handler";
-    tag = "v${version}";
-    hash = "sha256-RpfHUVZmhtneeu8PIfxinYG3/groJPA9QveDSvzU6Zo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QoctjneJA7CdXqGm0ylAh9w6611vv2PD1fzS0exag5A=";
   };
 
-  cargoHash = "sha256-FrE1PSRc7GTNUum05jNgKnzpDUc3FiS5CEM18It0lYY=";
+  cargoHash = "sha256-gKDkDLTLzC53obDd7pORsqP6DhORTbx6tvQ4jq61znQ=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lonerOrz ];
     platforms = lib.platforms.linux;
   };
-}
+})

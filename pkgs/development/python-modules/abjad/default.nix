@@ -5,7 +5,6 @@
   ply,
   roman,
   uqbar,
-  pythonOlder,
   pythonAtLeast,
   pytestCheckHook,
   lilypond,
@@ -19,7 +18,7 @@ buildPythonPackage rec {
 
   # see issue upstream indicating Python 3.12 support will come
   # with version 3.20: https://github.com/Abjad/abjad/issues/1574
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

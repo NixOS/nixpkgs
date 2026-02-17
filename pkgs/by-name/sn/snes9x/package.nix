@@ -6,12 +6,12 @@
   fetchFromGitHub,
   gtkmm3,
   libGLX,
-  libX11,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXv,
+  libx11,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxv,
   libepoxy,
   libpng,
   libselinux,
@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXv
+    libx11
+    libxv
     minizip
     zlib
   ]
@@ -66,14 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!withGtk) [
     libpng
-    libXext
-    libXinerama
+    libxext
+    libxinerama
   ]
   ++ lib.optionals withGtk [
     gtkmm3
     libepoxy
-    libXdmcp
-    libXrandr
+    libxdmcp
+    libxrandr
     pcre2
     portaudio
     SDL2
@@ -90,6 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postPatch = lib.optionalString withGtk ''
+    # Please remove after snes9x > 1.63.  Fixed by upstream:
+    # https://github.com/snes9xgit/snes9x/commit/a4b4b98fffbde417ad550480021db89f18f11a5d.patch
+    substituteInPlace external/SPIRV-Cross/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.0)' 'cmake_minimum_required(VERSION 3.5)'
+
     substituteInPlace external/glad/src/egl.c \
       --replace-fail libEGL.so.1 "${lib.getLib libGLX}/lib/libEGL.so.1"
     substituteInPlace external/glad/src/glx.c \

@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "codebraid";
   version = "0.11.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gpoore";
     repo = "codebraid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-E9vzGK9ZEVwF+UBpSkdM+hm6vINen/A+LgnnPpc77QQ=";
   };
 
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   checkPhase = ''
     $out/bin/codebraid --help > /dev/null
   '';
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gpoore/codebraid";
     description = ''
       Live code in Pandoc Markdown.
@@ -39,8 +39,8 @@ python3Packages.buildPythonApplication rec {
       R, Bash, and JavaScript. Code can also be executed using Jupyter kernels,
       with support for rich output like plots.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ synthetica ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ synthetica ];
     mainProgram = "codebraid";
   };
-}
+})

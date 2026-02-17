@@ -24,12 +24,12 @@
 let
   inherit (lib) optional;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corosync";
   version = "3.1.9";
 
   src = fetchurl {
-    url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
+    url = "http://build.clusterlabs.org/corosync/releases/corosync-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-IDNUu93uGpezxQoHbq6JxjX0Bt1nTMrvyUu5CSrNlTU=";
   };
 
@@ -102,14 +102,14 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) pacemaker;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://corosync.org/";
     description = "Group Communication System with features for implementing high availability within applications";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       montag451
       ryantm
     ];
   };
-}
+})

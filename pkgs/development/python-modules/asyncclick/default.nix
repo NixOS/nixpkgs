@@ -5,7 +5,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   trio,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "asyncclick";
   version = "8.1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-trio";
@@ -43,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncclick" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python composable command line utility";
     homepage = "https://github.com/python-trio/asyncclick";
     changelog = "https://github.com/python-trio/asyncclick/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

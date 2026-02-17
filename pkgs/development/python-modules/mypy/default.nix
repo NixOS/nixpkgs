@@ -6,7 +6,6 @@
   fetchpatch,
   gitUpdater,
   pythonAtLeast,
-  pythonOlder,
   isPyPy,
 
   # build-system
@@ -73,8 +72,7 @@ buildPythonPackage rec {
     mypy-extensions
     pathspec
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   optional-dependencies = {
     dmypy = [ psutil ];
@@ -110,7 +108,7 @@ buildPythonPackage rec {
     setuptools
     tomli
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # fails with typing-extensions>=4.10

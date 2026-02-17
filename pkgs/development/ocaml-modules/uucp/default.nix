@@ -21,7 +21,7 @@ let
 in
 
 if lib.versionOlder ocaml.version minimalOCamlVersion then
-  builtins.throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
+  throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
 else
 
   stdenv.mkDerivation {
@@ -66,11 +66,11 @@ else
     '';
     checkInputs = [ uucd ];
 
-    meta = with lib; {
+    meta = {
       description = "OCaml library providing efficient access to a selection of character properties of the Unicode character database";
       homepage = webpage;
       inherit (ocaml.meta) platforms;
-      license = licenses.bsd3;
-      maintainers = [ maintainers.vbgl ];
+      license = lib.licenses.bsd3;
+      maintainers = [ lib.maintainers.vbgl ];
     };
   }

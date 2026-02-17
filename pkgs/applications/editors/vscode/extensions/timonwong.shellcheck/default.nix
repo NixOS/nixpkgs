@@ -26,6 +26,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck";
     homepage = "https://github.com/vscode-shellcheck/vscode-shellcheck";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.raroh73 ];
+    maintainers = [ ];
   };
 }

@@ -4,21 +4,18 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "asyncinotify";
-  version = "4.2.1";
+  version = "4.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "absperf";
     repo = "asyncinotify";
     tag = "v${version}";
-    hash = "sha256-X7R35LyrJaGJ70Houenpag0IMbqdsh+Sg9wMdzZmGfk=";
+    hash = "sha256-lIy9hZhTdXPt9gJGPDtfLttYQL8OiWfNcz3rT89QS7M=";
   };
 
   build-system = [ flit-core ];
@@ -29,7 +26,7 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test.py" ];
 
-  meta = with lib; {
+  meta = {
     badPlatforms = [
       # Unsupported and crashing on import in dlsym with symbol not found
       "aarch64-darwin"
@@ -37,8 +34,8 @@ buildPythonPackage rec {
     ];
     description = "Module for inotify";
     homepage = "https://github.com/absperf/asyncinotify/";
-    changelog = "https://github.com/absperf/asyncinotify/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ cynerd ];
+    changelog = "https://github.com/absperf/asyncinotify/releases/tag/${src.tag}";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ cynerd ];
   };
 }

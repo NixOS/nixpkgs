@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/your-editor/yed/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ uniquepointer ];
     mainProgram = "yed";
   };
 }

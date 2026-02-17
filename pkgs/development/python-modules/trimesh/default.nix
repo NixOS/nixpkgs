@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   numpy,
   lxml,
   trimesh,
@@ -24,21 +23,18 @@
   scipy,
   pillow,
   mapbox-earcut,
-  embreex,
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.8.3";
+  version = "4.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-ywLbXOE3qO3+hrqy/+cVGZA4V202eHaMUnn3Wz1iNLI=";
+    hash = "sha256-N9loKQ+xcUtug98K2nsCs5kXUnLLtxCqNH8L8wStb74=";
   };
 
   build-system = [ setuptools ];
@@ -63,9 +59,7 @@ buildPythonPackage rec {
       pillow
       # vhacdx # not packaged
       mapbox-earcut
-    ]
-    ++ lib.optionals embreex.meta.available [
-      embreex
+      # embreex # not packaged
     ];
   };
 

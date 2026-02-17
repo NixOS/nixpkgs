@@ -20,7 +20,7 @@ let
   mkMassRebuild =
     args:
     mkOption (
-      builtins.removeAttrs args [ "feature" ]
+      removeAttrs args [ "feature" ]
       // {
         type = args.type or (types.uniq types.bool);
         default = args.default or false;
@@ -139,6 +139,39 @@ let
           null;
     };
 
+    npmRegistryOverrides = mkOption {
+      type = types.attrsOf types.str;
+      description = ''
+        The default NPM registry overrides for all `fetchNpmDeps` calls, as an attribute set.
+
+        For each attribute, all files fetched from the host corresponding to the name will instead be fetched from the host (and sub-path) specified in the value.
+
+        For example, an override like `"registry.npmjs.org" = "my-mirror.local/registry.npmjs.org"` will replace a URL like `https://registry.npmjs.org/foo.tar.gz` with `https://my-mirror.local/registry.npmjs.org/foo.tar.gz`.
+
+        To set the string directly, see [`npmRegistryOverridesString`](#opt-npmRegistryOverridesString).
+      '';
+      default = { };
+      example = {
+        "registry.npmjs.org" = "my-mirror.local/registry.npmjs.org";
+      };
+    };
+
+    npmRegistryOverridesString = mkOption {
+      type = types.addCheck types.str (
+        s:
+        let
+          j = builtins.fromJSON s;
+        in
+        lib.isAttrs j && lib.all builtins.isString (builtins.attrValues j)
+      );
+      description = ''
+        A string containing a string with a JSON representation of NPM registry overrides for `fetchNpmDeps`.
+
+        This overrides the [`npmRegistryOverrides`](#opt-npmRegistryOverrides) option, see its documentation for more details.
+      '';
+      default = builtins.toJSON config.npmRegistryOverrides;
+    };
+
     doCheckByDefault = mkMassRebuild {
       feature = "run `checkPhase` by default";
     };
@@ -193,6 +226,23 @@ let
       '';
     };
 
+    allowUnfreePackages = mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      example = [ "ut1999" ];
+      description = ''
+        Allows specific unfree packages to be used.
+
+        This option composes with `nixpkgs.config.allowUnfreePredicate` by also allowing the listed package names.
+
+        Unlike `nixpkgs.config.allowUnfreePredicate`, this option merges additively, similar to `environment.systemPackages`.
+        This enables defining allowed unfree packages in multiple modules, close to where they are used.
+
+        This avoids the need to centralize all unfree package declarations or globally enable unfree packages via
+        `nixpkgs.config.allowUnfree = true`.
+      '';
+    };
+
     allowBroken = mkOption {
       type = types.bool;
       default = false;
@@ -233,6 +283,38 @@ let
       feature = "build packages with CUDA support by default";
     };
 
+    cudaCapabilities = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        A list of CUDA capabilities to build for.
+
+        Packages may use this option to control device code generation to
+        take advantage of architecture-specific functionality, speed up
+        compile times by producing less device code, or slim package closures.
+
+        For example, you can build for Ada Lovelace GPUs with
+        `cudaCapabilities = [ "8.9" ];`.
+
+        If not provided, the default value is calculated per-package set,
+        derived from a list of GPUs supported by that CUDA version.
+
+        See the [CUDA section](https://nixos.org/manual/nixpkgs/stable/#cuda) in
+        the Nixpkgs manual for more information.
+      '';
+    };
+
+    cudaForwardCompat = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable PTX support for future hardware.
+
+        When enabled, packages will include PTX code that can be JIT-compiled
+        for GPUs newer than those explicitly targeted by `cudaCapabilities`.
+      '';
+    };
+
     replaceBootstrapFiles = mkMassRebuild {
       type = types.functionTo (types.attrsOf types.package);
       default = lib.id;
@@ -261,6 +343,22 @@ let
       '';
     };
 
+    replaceStdenv = mkMassRebuild {
+      type = types.nullOr (types.functionTo types.package);
+      default = null;
+      defaultText = literalExpression "null";
+      description = ''
+        A function to replace the standard environment (stdenv).
+
+        The function receives an attribute set with `pkgs` and should return
+        a stdenv derivation.
+
+        This can be used to globally replace the stdenv with a custom one,
+        for example to use ccache or distcc.
+      '';
+      example = literalExpression "{ pkgs }: pkgs.ccacheStdenv";
+    };
+
     rocmSupport = mkMassRebuild {
       feature = "build packages with ROCm support by default";
     };
@@ -285,6 +383,19 @@ let
       default = false;
       description = ''
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
+      '';
+    };
+
+    hashedMirrors = mkOption {
+      type = types.listOf types.str;
+      default = [ "https://tarballs.nixos.org" ];
+      description = ''
+        The set of content-addressed/hashed mirror URLs used by [`pkgs.fetchurl`](#sec-pkgs-fetchers-fetchurl).
+        In case `pkgs.fetchurl` can't download from the given URLs,
+        it will try the hashed mirrors based on the expected output hash.
+
+        See [`copy-tarballs.pl`](https://github.com/NixOS/nixpkgs/blob/a2d829eaa7a455eaa3013c45f6431e705702dd46/maintainers/scripts/copy-tarballs.pl)
+        for more details on how hashed mirrors are constructed.
       '';
     };
 

@@ -8,12 +8,12 @@
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "routino";
   version = "3.4.3";
 
   src = fetchurl {
-    url = "https://routino.org/download/routino-${version}.tgz";
+    url = "https://routino.org/download/routino-${finalAttrs.version}.tgz";
     hash = "sha256-TroGfTLJfKk4itbpfA9aPBDUiCk2ckDXjFE3XYzBHlQ=";
   };
 
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.routino.org/";
     changelog = "http://routino.org/software/NEWS.txt";
     description = "OpenStreetMap Routing Software";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

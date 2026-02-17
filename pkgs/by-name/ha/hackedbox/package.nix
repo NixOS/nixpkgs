@@ -6,13 +6,13 @@
   freetype,
   fribidi,
   imlib2,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXpm,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
+  libxpm,
+  libxrandr,
+  libxrender,
   pkg-config,
   xorgproto,
 }:
@@ -39,26 +39,26 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fribidi
     imlib2
-    libX11
-    libXext
-    libXft
-    libXinerama
-    libXpm
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxpm
+    libxrandr
+    libxrender
     xorgproto
   ];
 
   configureFlags = [
-    "--x-includes=${libX11.dev}/include"
-    "--x-libraries=${libX11.out}/lib"
+    "--x-includes=${libx11.dev}/include"
+    "--x-libraries=${libx11.out}/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bastard hacked offspring of Blackbox";
     homepage = "https://github.com/museoa/hackedbox/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
-    inherit (libX11.meta) platforms;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    inherit (libx11.meta) platforms;
   };
 })

@@ -13,7 +13,7 @@ let
   python = python313.override {
     self = python;
     packageOverrides = final: prev: {
-      django = final.django_5_2;
+      django = final.django_5;
       django-csp = prev.django-csp.overridePythonAttrs rec {
         version = "4.0";
         src = fetchPypi {

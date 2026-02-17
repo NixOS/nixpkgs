@@ -1,7 +1,7 @@
 {
   lib,
   boost,
-  clucene_core_2,
+  clucene-core_2,
   cmake,
   docbook_xml_dtd_45,
   docbook_xsl_ns,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    clucene_core_2
+    clucene-core_2
     qtbase
     qtsvg
     qttools
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
-    export CLUCENE_HOME=${clucene_core_2};
+    export CLUCENE_HOME=${clucene-core_2};
     export SWORD_HOME=${sword};
   '';
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Powerful cross platform Bible study tool";
     license = lib.licenses.gpl2Plus;
     mainProgram = "bibletime";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

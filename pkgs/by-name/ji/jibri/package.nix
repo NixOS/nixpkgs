@@ -6,26 +6,27 @@
   jdk11_headless,
   makeWrapper,
   writeText,
-  xorg,
+  xorg-server,
+  xf86-video-dummy,
   nixosTests,
 }:
 
 let
   xorgModulePaths = writeText "module-paths" ''
     Section "Files"
-      ModulePath "${xorg.xorgserver}/lib/xorg/modules
-      ModulePath "${xorg.xorgserver}/lib/xorg/extensions
-      ModulePath "${xorg.xorgserver}/lib/xorg/drivers
-      ModulePath "${xorg.xf86videodummy}/lib/xorg/modules/drivers
+      ModulePath "${xorg-server}/lib/xorg/modules
+      ModulePath "${xorg-server}/lib/xorg/extensions
+      ModulePath "${xorg-server}/lib/xorg/drivers
+      ModulePath "${xf86-video-dummy}/lib/xorg/modules/drivers
     EndSection
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jibri";
   version = "8.0-183-g7b406bf";
   src = fetchurl {
-    url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
+    url = "https://download.jitsi.org/stable/jibri_${finalAttrs.version}-1_all.deb";
     sha256 = "QF7BkLizAsEzjC6PdTyPFAFf82AzukTnxHxLHyz5Kco=";
   };
 
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) jibri; };
 
-  meta = with lib; {
+  meta = {
     description = "JItsi BRoadcasting Infrastructure";
     mainProgram = "jibri";
     longDescription = ''
@@ -64,9 +65,9 @@ stdenv.mkDerivation rec {
       supported on a single jibri.
     '';
     homepage = "https://github.com/jitsi/jibri";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    teams = [ teams.jitsi ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.jitsi ];
+    platforms = lib.platforms.linux;
   };
-}
+})

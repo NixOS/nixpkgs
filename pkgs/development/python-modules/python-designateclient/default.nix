@@ -11,7 +11,6 @@
   oslo-utils,
   oslotest,
   pbr,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "python-designateclient";
   version = "6.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openstack";

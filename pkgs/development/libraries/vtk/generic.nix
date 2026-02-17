@@ -43,9 +43,7 @@
   # io modules
   cgns,
   adios2,
-  libLAS,
-  libgeotiff,
-  laszip_2,
+  liblas,
   gdal,
   pdal,
   alembic,
@@ -69,17 +67,17 @@
   opencascade-occt,
 
   # threading
-  tbb,
+  onetbb,
   llvmPackages,
 
   # rendering
   viskores,
   freetype,
   fontconfig,
-  libX11,
-  libXfixes,
-  libXrender,
-  libXcursor,
+  libx11,
+  libxfixes,
+  libxrender,
+  libxcursor,
   gl2ps,
   libGL,
   qt6,
@@ -98,7 +96,6 @@
 let
   vtkPackages = lib.makeScope newScope (self: {
     inherit
-      tbb
       mpi
       mpiSupport
       python3Packages
@@ -109,12 +106,13 @@ let
       inherit mpi mpiSupport;
       cppSupport = !mpiSupport;
     };
-    openvdb = self.callPackage openvdb.override { };
     netcdf = self.callPackage netcdf.override { };
     catalyst = self.callPackage catalyst.override { };
     adios2 = self.callPackage adios2.override { };
     cgns = self.callPackage cgns.override { };
     viskores = self.callPackage viskores.override { };
+    gdal = self.callPackage gdal.override { useMinimalFeatures = true; };
+    pdal = self.callPackage pdal.override { };
   });
   vtkBool = feature: bool: lib.cmakeFeature feature "${if bool then "YES" else "NO"}";
 in
@@ -140,11 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
   ) python3Packages.pythonImportsCheckHook;
 
   buildInputs = [
-    libLAS
-    libgeotiff
-    laszip_2
-    gdal
-    pdal
+    liblas
     alembic
     imath
     c-blosc
@@ -157,12 +151,14 @@ stdenv.mkDerivation (finalAttrs: {
     openturns
     libarchive
     libGL
-    vtkPackages.openvdb
+    openvdb
+    vtkPackages.gdal
+    vtkPackages.pdal
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libXfixes
-    libXrender
-    libXcursor
+    libxfixes
+    libxrender
+    libxcursor
   ]
   ++ lib.optional withQt6 qt6.qttools
   ++ lib.optional mpiSupport mpi
@@ -195,19 +191,19 @@ stdenv.mkDerivation (finalAttrs: {
     libtheora
     cli11
     openslide
+    onetbb
     vtkPackages.hdf5
     vtkPackages.cgns
     vtkPackages.adios2
     vtkPackages.netcdf
     vtkPackages.catalyst
     vtkPackages.viskores
-    vtkPackages.tbb
   ]
   ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     gl2ps
   ]
   # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do
@@ -225,12 +221,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  env = {
-    CMAKE_PREFIX_PATH = "${lib.getDev openvdb}/lib/cmake/OpenVDB";
-    NIX_LDFLAGS = "-L${lib.getLib libmysqlclient}/lib/mariadb";
-  };
-
   cmakeFlags = [
+    # During installPhase, keep rpath that came from target_link_libraries() of imported targets.
+    # Typically libgeotiff,liblaszip propagated from liblas and libmariadb found by pkg-config.
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    # Required for locating the findOpenVDB.cmake module
+    # TODO: Add a setup hook in openvdb to append CMAKE_MODULE_PATH to cmakeFlagsArray
+    (lib.cmakeFeature "CMAKE_MODULE_PATH" "${lib.getDev openvdb}/lib/cmake/OpenVDB")
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
@@ -284,7 +281,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove thirdparty find module that have been provided in nixpkgs.
     ''
       rm -rf $out/lib/cmake/vtk/patches
-      rm $out/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig}.cmake
+      rm $out/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig,TBB}.cmake
     ''
     # libvtkglad.so will find and load libGL.so at runtime.
     + lib.optionalString stdenv.hostPlatform.isLinux ''

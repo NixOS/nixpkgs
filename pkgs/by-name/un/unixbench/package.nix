@@ -6,7 +6,9 @@
   pandoc,
   installShellFiles,
   perl,
-  xorg,
+  libxext,
+  libx11,
+  x11perf,
   libGLX,
   coreutils,
   unixtools,
@@ -18,7 +20,7 @@
   withX11perf ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unixbench";
   version = "unstable-2023-02-27";
 
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "-p2" ];
 
-  sourceRoot = "${src.name}/UnixBench";
+  sourceRoot = "${finalAttrs.src.name}/UnixBench";
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -52,8 +54,8 @@ stdenv.mkDerivation rec {
     perl
   ]
   ++ lib.optionals withGL [
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
     libGLX
   ];
 
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
     gawk
   ]
   ++ lib.optionals withX11perf [
-    xorg.x11perf
+    x11perf
   ];
 
   makeFlags = [
@@ -102,15 +104,15 @@ stdenv.mkDerivation rec {
       --subst-var out
 
     wrapProgram $out/bin/ubench \
-      --prefix PATH : ${lib.makeBinPath runtimeDependencies}
+      --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDependencies}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Basic indicator of the performance of a Unix-like system";
     homepage = "https://github.com/kdlucas/byte-unixbench";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "ubench";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   smbus-cffi,
   urwid,
 }:
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "pijuice";
   version = "1.7";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "PiSupply";
@@ -29,8 +27,10 @@ buildPythonPackage rec {
     ./patch-shebang.diff
   ];
 
-  PIJUICE_BUILD_BASE = 1;
-  PIJUICE_VERSION = version;
+  env = {
+    PIJUICE_BUILD_BASE = 1;
+    PIJUICE_VERSION = version;
+  };
 
   preBuild = ''
     cd Software/Source
@@ -61,11 +61,11 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library and resources for PiJuice HAT for Raspberry Pi";
     mainProgram = "pijuice_cli";
     homepage = "https://github.com/PiSupply/PiJuice";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexagonal-sun ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexagonal-sun ];
   };
 }

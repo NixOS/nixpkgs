@@ -1,5 +1,6 @@
 {
   stdenv,
+  gcc14Stdenv,
   lib,
   buildBazelPackage,
   bazel_7,
@@ -7,7 +8,17 @@
   cctools,
 }:
 
-buildBazelPackage rec {
+let
+  # fails to build with gcc15, see https://github.com/NixOS/nixpkgs/issues/475586
+  buildBazelPackage' =
+    if stdenv.cc.isGNU then
+      buildBazelPackage.override {
+        stdenv = gcc14Stdenv;
+      }
+    else
+      buildBazelPackage;
+in
+buildBazelPackage' rec {
   pname = "protoc-gen-js";
   version = "3.21.4";
 
@@ -44,16 +55,16 @@ buildBazelPackage rec {
     install -Dm755 bazel-bin/generator/protoc-gen-js $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating JavaScript code";
     mainProgram = "protoc-gen-js";
     homepage = "https://github.com/protocolbuffers/protobuf-javascript";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = with licenses; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = with lib.licenses; [
       asl20
       bsd3
     ];
-    sourceProvenance = [ sourceTypes.fromSource ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ ];
   };
 }

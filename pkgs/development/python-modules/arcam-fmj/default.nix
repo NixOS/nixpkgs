@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "arcam-fmj";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "elupus";
@@ -63,12 +60,12 @@ buildPythonPackage rec {
     "arcam.fmj.utils"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for speaking to Arcam receivers";
     mainProgram = "arcam-fmj";
     homepage = "https://github.com/elupus/arcam_fmj";
     changelog = "https://github.com/elupus/arcam_fmj/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

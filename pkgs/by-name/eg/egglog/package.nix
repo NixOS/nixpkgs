@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "egglog";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "egraphs-good";
     repo = "egglog";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j+3qknmezKqHVxvfmG9oPFtWOzJsimGXYe5PWX694mI=";
   };
 
@@ -19,14 +19,13 @@ rustPlatform.buildRustPackage rec {
 
   useNextest = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fixpoint reasoning system that unifies Datalog and equality saturation";
     mainProgram = "egglog";
     homepage = "https://github.com/egraphs-good/egglog";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      figsoda
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       XBagon
     ];
   };
-}
+})

@@ -5,7 +5,7 @@
   ninja,
   python3,
   weston,
-  xorg,
+  xauth,
   xwayland,
   withCage ? false,
   cage,
@@ -25,7 +25,7 @@ let
   ++ lib.optional withMutter gnome.mutter
   ++ lib.optional withDbus dbus;
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xwayland-run";
   version = "0.0.4";
 
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.freedesktop.org";
     owner = "ofourdan";
     repo = "xwayland-run";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-FP/2KNPehZEGKXr+fKdVj4DXzRMpfc3x7K6vH6ZsGdo=";
   };
 
@@ -56,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
       --prefix PATH : ${
         lib.makeBinPath [
           xwayland
-          xorg.xauth
+          xauth
         ]
       }
     wrapProgram $out/bin/xwfb-run \
@@ -65,18 +65,18 @@ python3.pkgs.buildPythonApplication rec {
           compositors
           ++ [
             xwayland
-            xorg.xauth
+            xauth
           ]
         )
       }
   '';
 
   meta = {
-    changelog = "https://gitlab.freedesktop.org/ofourdan/xwayland-run/-/releases/${src.rev}";
+    changelog = "https://gitlab.freedesktop.org/ofourdan/xwayland-run/-/releases/${finalAttrs.src.rev}";
     description = "Set of small utilities revolving around running Xwayland and various Wayland compositor headless";
     homepage = "https://gitlab.freedesktop.org/ofourdan/xwayland-run";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

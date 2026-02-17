@@ -10,15 +10,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-lfs";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
-    tag = "v${version}";
-    hash = "sha256-EFuuyD83aYe6XMKbRfAykVMfGFOQ4I6ORvMRm0Q8vfM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N5ckTnyA3mueZre+rMhFZBiAFgEu4pmtzkiUidXnan8=";
   };
 
   vendorHash = "sha256-6H0KpLin+DqwEg5bdzaxj2CoNSneZ/ET43MTrrdF3h8=";
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/git-lfs/git-lfs/v${lib.versions.major version}/config.Vendor=${version}"
+    "-X github.com/git-lfs/git-lfs/v${lib.versions.major finalAttrs.version}/config.Vendor=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
@@ -94,7 +94,6 @@ buildGoModule rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -106,9 +105,9 @@ buildGoModule rec {
   meta = {
     description = "Git extension for versioning large files";
     homepage = "https://git-lfs.github.com/";
-    changelog = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/git-lfs/git-lfs/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ twey ];
     mainProgram = "git-lfs";
   };
-}
+})

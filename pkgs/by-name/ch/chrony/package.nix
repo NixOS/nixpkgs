@@ -12,12 +12,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chrony";
   version = "4.8";
 
   src = fetchurl {
-    url = "https://chrony-project.org/releases/${pname}-${version}.tar.gz";
+    url = "https://chrony-project.org/releases/chrony-${finalAttrs.version}.tar.gz";
     hash = "sha256-M+qOsqTa6qUG6Pyv1dbYkCftby8GCWRcbxSbVg0wFwY=";
   };
 
@@ -62,8 +62,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   passthru.tests = {
     inherit (nixosTests) chrony chrony-ptp;
   };
@@ -101,4 +99,4 @@ stdenv.mkDerivation rec {
       different computer.
     '';
   };
-}
+})

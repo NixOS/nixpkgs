@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   pname = "django-markup";
   version = "1.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bartTC";
@@ -73,11 +70,11 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=django_markup.tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generic Django application to convert text with specific markup to html";
     homepage = "https://github.com/bartTC/django-markup";
     changelog = "https://github.com/bartTC/django-markup/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -1,22 +1,34 @@
 {
   lib,
   stdenv,
+  swt,
   fetchurl,
   jre,
   wrapGAppsHook3,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "biglybt";
   version = "3.9.0.0";
 
   src = fetchurl {
-    url = "https://github.com/BiglySoftware/BiglyBT/releases/download/v${version}/GitHub_BiglyBT_unix.tar.gz";
+    url = "https://github.com/BiglySoftware/BiglyBT/releases/download/v${finalAttrs.version}/GitHub_BiglyBT_unix.tar.gz";
     hash = "sha256-NBXEY5f2kVPoZit7Gy4rM61bwQSdXovg0gURukhxJJ4=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    swt
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    swt
+  ];
+
+  runtimeDeps = [
+    swt
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -33,6 +45,11 @@ stdenv.mkDerivation rec {
     install -d $out/{share/{biglybt,applications,icons/hicolor/scalable/apps},bin}
 
     cp -r ./* $out/share/biglybt/
+
+    ln -s ${swt}/lib/* $out/share/biglybt/
+    rm -rf $out/share/biglybt/swt/*.jar $out/share/biglybt/swt/J17/*.jar
+    ln -s ${swt}/jars/swt.jar $out/share/biglybt/swt/swt-$(uname -m).jar
+    ln -s ${swt}/jars/swt.jar $out/share/biglybt/swt/J17/swt-$(uname -m).jar
 
     ln -s $out/share/biglybt/biglybt.desktop $out/share/applications/
 
@@ -53,7 +70,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://github.com/BiglySoftware/BiglyBT/releases/tag/v${version}";
+    changelog = "https://github.com/BiglySoftware/BiglyBT/releases/tag/v${finalAttrs.version}";
     description = "BitTorrent client based on the Azureus that supports I2P darknet for privacy";
     downloadPage = "https://github.com/BiglySoftware/BiglyBT";
     homepage = "https://www.biglybt.com/";
@@ -63,4 +80,4 @@ stdenv.mkDerivation rec {
     mainProgram = "biglybt";
     maintainers = with lib.maintainers; [ raspher ];
   };
-}
+})

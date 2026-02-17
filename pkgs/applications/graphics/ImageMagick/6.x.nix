@@ -9,9 +9,9 @@
   zlibSupport ? true,
   zlib,
   libX11Support ? !stdenv.hostPlatform.isMinGW,
-  libX11,
+  libx11,
   libXtSupport ? !stdenv.hostPlatform.isMinGW,
-  libXt,
+  libxt,
   fontconfigSupport ? true,
   fontconfig,
   freetypeSupport ? true,
@@ -70,13 +70,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "6.9.13-10";
+  version = "6.9.13-38";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
     rev = finalAttrs.version;
-    sha256 = "sha256-AdlJaCJOrN+NkkzzzgELtgAr5iZ9dvlVYVc7tYiM+R8=";
+    sha256 = "sha256-49o1jFFs7GrQMBvkoUvTmlI5TDnS1mVycghuaOfDrIc=";
   };
 
   outputs = [
@@ -130,8 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional freetypeSupport freetype
   ++ lib.optional libjpegSupport libjpeg
   ++ lib.optional lcms2Support lcms2
-  ++ lib.optional libX11Support libX11
-  ++ lib.optional libXtSupport libXt
+  ++ lib.optional libX11Support libx11
+  ++ lib.optional libXtSupport libxt
   ++ lib.optional libwebpSupport libwebp;
 
   doCheck = false; # fails 2 out of 76 tests
@@ -155,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://legacy.imagemagick.org/";
     changelog = "https://legacy.imagemagick.org/script/changelog.php";
     description = "Software suite to create, edit, compose, or convert bitmap images";
@@ -163,9 +163,9 @@ stdenv.mkDerivation (finalAttrs: {
       "ImageMagick"
       "MagickWand"
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     knownVulnerabilities = [
       "CVE-2019-13136"
       "CVE-2019-17547"

@@ -19,15 +19,15 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kronosnet";
-  version = "1.31";
+  version = "1.32";
 
   src = fetchFromGitHub {
     owner = "kronosnet";
     repo = "kronosnet";
-    rev = "v${version}";
-    sha256 = "sha256-PZWaKrCy0S8d/x3GMh7X2wEiHwgiuEFpfCwKpbLvhsc=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-g2AgVAFEmRlMaqH7uRabSNJP0ehUQ6Iws4LT2iB8kTA=";
   };
 
   nativeBuildInputs = [
@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
-  meta = with lib; {
+  meta = {
     description = "VPN on steroids";
     homepage = "https://kronosnet.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = with lib.maintainers; [ ryantm ];
   };
-}
+})

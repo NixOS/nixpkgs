@@ -11,7 +11,7 @@
   s2n-tls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-http";
   # nixpkgs-update: no auto update
   version = "0.10.4";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-http";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-t9PoxOjgV9qLris+C18SaEwXodBGcgK591LZl0dajxU=";
   };
 
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C99 implementation of the HTTP/1.1 and HTTP/2 specifications";
     homepage = "https://github.com/awslabs/aws-c-http";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
-}
+})

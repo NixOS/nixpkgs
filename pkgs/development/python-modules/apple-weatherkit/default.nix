@@ -5,7 +5,6 @@
   poetry-core,
   aiohttp,
   aiohttp-retry,
-  pythonOlder,
   pyjwt,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "apple-weatherkit";
   version = "1.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "tjhorner";
@@ -37,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apple_weatherkit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Apple WeatherKit";
     homepage = "https://github.com/tjhorner/python-weatherkit";
     changelog = "https://github.com/tjhorner/python-weatherkit/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -37,6 +37,9 @@ buildPythonPackage {
     homepage = "https://github.com/stckme/tiptapy";
     changelog = "https://github.com/stckme/tiptapy/blob/master/CHANGELOG.rst";
     license = lib.licenses.mit;
-    teams = [ lib.teams.apm ];
+    maintainers = with lib.maintainers; [
+      DutchGerman
+      friedow
+    ];
   };
 }

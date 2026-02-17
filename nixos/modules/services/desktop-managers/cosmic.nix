@@ -86,13 +86,17 @@ in
           cosmic-icons
           cosmic-player
           cosmic-randr
+          cosmic-reader
           cosmic-screenshot
           cosmic-term
           cosmic-wallpapers
+          glib
           hicolor-icon-theme
+          networkmanagerapplet
           playerctl
           pop-icon-theme
           pop-launcher
+          pulseaudio
           xdg-user-dirs
         ]
         ++ lib.optionals config.services.flatpak.enable [

@@ -9,14 +9,14 @@
   automake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nabi";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "libhangul";
     repo = "nabi";
-    tag = "nabi-${version}";
+    tag = "nabi-${finalAttrs.version}";
     hash = "sha256-C6K8sXVCGf45VZtGSCB5emFzZPV21kG9JxAwBHRiFsY=";
   };
 
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     description = "Easy Hangul XIM";
     mainProgram = "nabi";
     homepage = "https://github.com/libhangul/nabi";
-    changelog = "https://github.com/libhangul/nabi/blob/nabi-${version}/NEWS";
+    changelog = "https://github.com/libhangul/nabi/blob/nabi-${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ianwookim ];
     platforms = lib.platforms.linux;
   };
-}
+})

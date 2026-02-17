@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sift";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "svent";
     repo = "sift";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IZ4Hwg5NzdSXtrIDNxtkzquuiHQOmLV1HSx8gpwE/i0=";
   };
 
@@ -38,11 +38,11 @@ buildGoModule rec {
     installShellCompletion --cmd sift --bash sift-completion.bash
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and powerful alternative to grep";
     mainProgram = "sift";
     homepage = "https://sift-tool.org";
-    maintainers = with maintainers; [ viraptor ];
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ viraptor ];
+    license = lib.licenses.gpl3;
   };
-}
+})

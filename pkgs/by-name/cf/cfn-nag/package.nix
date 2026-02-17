@@ -5,9 +5,8 @@
   ruby,
 }:
 
-bundlerEnv rec {
+bundlerEnv {
   pname = "cfn-nag";
-  version = "0.8.10";
 
   inherit ruby;
   gemdir = ./.;

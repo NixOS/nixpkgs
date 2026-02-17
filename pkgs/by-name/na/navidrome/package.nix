@@ -1,10 +1,10 @@
 {
-  buildGo124Module,
+  buildGoModule,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
   lib,
-  nodejs,
+  nodejs_24,
   npmHooks,
   pkg-config,
   stdenv,
@@ -14,32 +14,33 @@
   nixosTests,
   nix-update-script,
   ffmpegSupport ? true,
+  versionCheckHook,
 }:
 
-buildGo124Module rec {
+buildGoModule (finalAttrs: {
   pname = "navidrome";
-  version = "0.58.0";
+  version = "0.60.0";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
-    rev = "v${version}";
-    hash = "sha256-MwFACp2RKXz6zTzjknC5nKzaTEG1NWtvYggRZRiX5t0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-K7Cen0gADYQc0jxd2keBpTJlyQyuYL02j7/yiNtjZvQ=";
   };
 
-  vendorHash = "sha256-CrZqVhvDYemnaCuveOXySqHZhW+nrgzdxaiJRuZfSaI=";
+  vendorHash = "sha256-DCz/WKZXnZy109WgStCK7NJg8VpR3IJEaQZLMDXdegk=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    sourceRoot = "${src.name}/ui";
-    hash = "sha256-tl6unHz0E0v0ObrfTiE0vZwVSyVFmrLggNM5QsUGsvI=";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/ui";
+    hash = "sha256-Z1kSRNSG1zeLA6rtbcTdLJnNWclsVTS5Xfc4D9M0dl4=";
   };
 
   nativeBuildInputs = [
     buildPackages.makeWrapper
-    nodejs
+    nodejs_24
     npmHooks.npmConfigHook
     pkg-config
   ];
@@ -54,9 +55,13 @@ buildGo124Module rec {
     zlib
   ];
 
+  excludedPackages = [
+    "plugins"
+  ];
+
   ldflags = [
-    "-X github.com/navidrome/navidrome/consts.gitSha=${src.rev}"
-    "-X github.com/navidrome/navidrome/consts.gitTag=v${version}"
+    "-X github.com/navidrome/navidrome/consts.gitSha=${finalAttrs.src.rev}"
+    "-X github.com/navidrome/navidrome/consts.gitTag=v${finalAttrs.version}"
   ];
 
   CGO_CFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-return-local-addr" ];
@@ -72,6 +77,9 @@ buildGo124Module rec {
   tags = [
     "netgo"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postFixup = lib.optionalString ffmpegSupport ''
     wrapProgram $out/bin/navidrome \
@@ -91,10 +99,9 @@ buildGo124Module rec {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [
       aciceri
-      squalus
       tebriel
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

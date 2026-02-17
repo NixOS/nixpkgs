@@ -217,7 +217,7 @@ in
     excalidraw.port = mkOption {
       type = types.port;
       default = 3002;
-      description = ''The port which the Excalidraw backend for Jitsi should listen to.'';
+      description = "The port which the Excalidraw backend for Jitsi should listen to.";
     };
 
     secureDomain = {
@@ -225,7 +225,7 @@ in
       authentication = mkOption {
         type = types.str;
         default = "internal_hashed";
-        description = ''The authentication type to be used by jitsi'';
+        description = "The authentication type to be used by jitsi";
       };
     };
   };

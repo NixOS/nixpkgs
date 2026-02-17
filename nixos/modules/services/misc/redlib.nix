@@ -20,10 +20,10 @@ let
 
   cfg = config.services.redlib;
 
-  args = concatStringsSep " " ([
+  args = concatStringsSep " " [
     "--port ${toString cfg.port}"
     "--address ${cfg.address}"
-  ]);
+  ];
 
   boolToString' = b: if b then "on" else "off";
 in

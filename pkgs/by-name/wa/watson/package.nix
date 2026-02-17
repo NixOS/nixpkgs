@@ -6,7 +6,7 @@
   fetchpatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "watson";
   version = "2.1.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "Watson";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
   };
 
@@ -53,15 +53,15 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "watson" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jazzband/Watson";
     description = "Wonderful CLI to track your time";
     mainProgram = "watson";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mguentner
       nathyong
       oxzi
     ];
   };
-}
+})

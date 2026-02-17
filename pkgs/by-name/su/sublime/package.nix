@@ -3,7 +3,7 @@
   lib,
   stdenv,
   glib,
-  xorg,
+  libx11,
   cairo,
   gtk2,
   makeDesktopItem,
@@ -11,7 +11,7 @@
 let
   libPath = lib.makeLibraryPath [
     glib
-    xorg.libX11
+    libx11
     gtk2
     cairo
   ];

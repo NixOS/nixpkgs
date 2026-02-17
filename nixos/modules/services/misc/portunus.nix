@@ -270,9 +270,9 @@ in
           PORTUNUS_SLAPD_USER = cfg.ldap.user;
           PORTUNUS_SLAPD_SCHEMA_DIR = "${cfg.ldap.package}/etc/schema";
         }
-        // (lib.optionalAttrs (cfg.seedPath != null) ({
+        // (lib.optionalAttrs (cfg.seedPath != null) {
           PORTUNUS_SEED_PATH = cfg.seedPath;
-        }))
+        })
         // (lib.optionalAttrs cfg.ldap.tls (
           let
             acmeDirectory = config.security.acme.certs."${cfg.domain}".directory;
@@ -313,5 +313,5 @@ in
     ];
   };
 
-  meta.maintainers = [ lib.maintainers.majewsky ] ++ lib.teams.c3d2.members;
+  meta.maintainers = pkgs.portunus.meta.maintainers;
 }

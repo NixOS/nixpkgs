@@ -8,14 +8,14 @@
 }:
 
 # Requires the acpi_call kernel module in order to run.
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tpacpi-bat";
   version = "3.2";
 
   src = fetchFromGitHub {
     owner = "teleshoes";
     repo = "tpacpi-bat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9XnvVNdgB5VeI3juZfc8N5weEyULXuqu1IDChZfQqFk=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tpacpi-bat";
     license = lib.licenses.gpl3Plus;
   };
-}
+})

@@ -9,18 +9,18 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "convco";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "convco";
     repo = "convco";
-    rev = "v${version}";
-    hash = "sha256-s0rcSekJLe99oxi6JD8VL1S6nqQTUFTn5pdgxnknbaY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-giVaDOYYH3YE9Gy0byt92vGEfyM4rTjpHDsKm5lqlP4=";
   };
 
-  cargoHash = "sha256-ClkpGHN2me+R3jX7S5hFR1FlsXGhHZ/y6iIGK08Mdfc=";
+  cargoHash = "sha256-DTeZDpS3OaGcem9AaAPFN+2AWuqWSGfk2KknbcgFzi0=";
 
   nativeBuildInputs = [
     cmake
@@ -37,16 +37,18 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # disable test requiring networking
     "--skip=git::tests::test_find_last_unordered_prerelease"
+    "--skip=git::tests::test_find_matching_prerelease"
+    "--skip=git::tests::test_find_matching_prerelease_without_matching_release"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Conventional commit cli";
     mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       hoverbear
       cafkafk
     ];
   };
-}
+})

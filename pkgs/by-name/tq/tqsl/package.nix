@@ -13,12 +13,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tqsl";
   version = "2.8.2";
 
   src = fetchurl {
-    url = "https://www.arrl.org/files/file/LoTW%20Instructions/${pname}-${version}.tar.gz";
+    url = "https://www.arrl.org/files/file/LoTW%20Instructions/tqsl-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-HH78pTeT/wW9dZggxcqRiZ3OqShU7B2uPWa4ya59LfA=";
   };
 
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     wxGTK32
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Software for using the ARRL Logbook of the World";
     mainProgram = "tqsl";
     homepage = "https://www.arrl.org/tqsl-download";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

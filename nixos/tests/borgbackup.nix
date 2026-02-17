@@ -9,6 +9,7 @@ let
   keepFile = "important_file";
   keepFileData = "important_data";
   localRepo = "/root/back:up";
+  localTarRepo = "/root/backup-tar";
   # a repository on a file system which is not mounted automatically
   localRepoMount = "/noAutoMount";
   archiveName = "my_archive";
@@ -41,13 +42,13 @@ let
 in
 {
   name = "borgbackup";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [ dotlambda ];
+  meta = {
+    maintainers = with pkgs.lib.maintainers; [ dotlambda ];
   };
 
   nodes = {
     client =
-      { ... }:
+      { lib, pkgs, ... }:
       {
         virtualisation.fileSystems.${localRepoMount} = {
           device = "tmpfs";
@@ -79,6 +80,8 @@ in
               "--exclude-if-present"
               ".dont backup"
             ];
+
+            wrapper = "borg-main";
             postHook = "echo post";
             startAt = [ ]; # Do not run automatically
           };
@@ -87,7 +90,22 @@ in
             paths = dataDir;
             repo = localRepoMount;
             encryption.mode = "none";
+            wrapper = null;
             startAt = [ ];
+          };
+
+          localTar = {
+            dumpCommand = pkgs.writeScript "createTarArchive" ''
+              ${lib.getExe pkgs.gnutar} cf - ${dataDir}
+            '';
+            createCommand = "import-tar";
+            repo = localTarRepo;
+            # Make sure in import-tar mode encryption flags are still respected.
+            encryption = {
+              mode = "repokey";
+              inherit passphrase;
+            };
+            startAt = [ ]; # Do not run automatically
           };
 
           remote = {
@@ -211,6 +229,9 @@ in
             "cat /mnt/borg/${dataDir}/${keepFile}"
         )
 
+        # Make sure custom wrapper name works
+        client.succeed("command -v borg-main")
+
     with subtest("localMount"):
         # the file system for the repo should not be already mounted
         client.fail("mount | grep ${localRepoMount}")
@@ -222,6 +243,22 @@ in
         # Make sure exactly one archive has been created
         assert int(client.succeed("{} list '${localRepoMount}' | wc -l".format(borg))) > 0
 
+        # Make sure disabling wrapper works
+        client.fail("command -v borg-job-localMount")
+
+    with subtest("localTar"):
+        borg = "BORG_PASSPHRASE='${passphrase}' borg"
+        client.systemctl("start --wait borgbackup-job-localTar")
+        client.fail("systemctl is-failed borgbackup-job-localTar")
+        archiveName, = client.succeed("{} list --format '{{archive}}{{NL}}' '${localTarRepo}'".format(borg)).strip().split("\n")
+        # Since excludes are not supported by import-tar, we expect to find exclude file, too
+        client.succeed(
+            "{} list '${localTarRepo}::{}' | grep -qF '${excludeFile}'".format(borg, archiveName)
+        )
+        # Make sure keepFile has the correct content
+        client.succeed("{} extract '${localTarRepo}::{}'".format(borg, archiveName))
+        assert "${keepFileData}" in client.succeed("cat ${dataDir}/${keepFile}")
+
     with subtest("remote"):
         borg = "BORG_RSH='ssh -oStrictHostKeyChecking=no -i /root/id_ed25519' borg"
         server.wait_for_unit("sshd.service")
@@ -231,6 +268,9 @@ in
 
         # Make sure we can't access repos other than the specified one
         client.fail("{} list borg\@server:wrong".format(borg))
+
+        # Make sure default wrapper works
+        client.succeed("command -v borg-job-remote")
 
         # TODO: Make sure that data is actually deleted
 

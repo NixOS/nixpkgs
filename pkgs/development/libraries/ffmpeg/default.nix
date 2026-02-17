@@ -21,17 +21,17 @@ let
   };
 
   v6 = {
-    version = "6.1.2";
-    hash = "sha256-h/N56iKkAR5kH+PRQceWZvHe3k+70KWMDEP5iVq/YFQ=";
+    version = "6.1.4";
+    hash = "sha256-hqLohRNkoy5jGlaNlCRVoPwwsW7TDgCX1OKsGIM6IYg=";
   };
 
   v7 = {
-    version = "7.1.1";
-    hash = "sha256-GyS8imOqfOUPxXrzCiQtzCQIIH6bvWmQAB0fKUcRsW4=";
+    version = "7.1.3";
+    hash = "sha256-1w4OSlz88D2pnZVXQcI4uyX+triNK0NXzlsyt7GGSLU=";
   };
   v8 = {
-    version = "8.0";
-    hash = "sha256-okNZ1/m/thFAY3jK/GSV0+WZFnjrMr8uBPsOdH6Wq9E=";
+    version = "8.0.1";
+    hash = "sha256-eA5fP/uZqF5+jDDt4tHArGqyt7zbrLZ21v+Lchr8OS8=";
   };
 in
 
@@ -65,7 +65,7 @@ rec {
   # unversioned aliases to allow for quicker migration to new releases,
   # but can pin one of the versioned variants if they do not work with
   # the current default version.
-  ffmpeg = ffmpeg_7;
-  ffmpeg-headless = ffmpeg_7-headless;
-  ffmpeg-full = ffmpeg_7-full;
+  ffmpeg = ffmpeg_8;
+  ffmpeg-headless = ffmpeg_8-headless;
+  ffmpeg-full = ffmpeg_8-full;
 }

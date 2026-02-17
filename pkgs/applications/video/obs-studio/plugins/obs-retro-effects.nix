@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-retro-effects";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "FiniteSingularity";
     repo = "obs-retro-effects";
     rev = "${version}";
-    sha256 = "sha256-bWUGuCgCNAaSc0+NRRYsx/8EhrlWuPcipkuUlQZvWDk=";
+    sha256 = "sha256-oQGXBd/KGPGTK+CoomMjjgrnxTqVIefEKqKH11SPHSY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/data
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of OBS filters to give your stream that retro feel";
     homepage = "https://github.com/FiniteSingularity/obs-retro-effects";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
     inherit (obs-studio.meta) platforms;
   };
 }

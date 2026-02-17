@@ -82,7 +82,7 @@ python3Packages.buildPythonApplication rec {
       requests
       softhsm
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export PATH="$out/bin:$PATH"
@@ -119,7 +119,6 @@ python3Packages.buildPythonApplication rec {
       dezgeg
       dotlambda
     ];
-    teams = [ lib.teams.lumiguide ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "esptool";
   };

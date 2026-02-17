@@ -11,14 +11,14 @@
   netpbm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yad";
   version = "14.1";
 
   src = fetchFromGitHub {
     owner = "v1cont";
     repo = "yad";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Y7bp20fkNdSgBcSV1kPEpWEP7ASwZcScVRaPauwI72M=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     intltoolize
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/yad-dialog/";
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
@@ -64,9 +64,9 @@ stdenv.mkDerivation rec {
       dialogs, pop-up menu in notification icon and more.
     '';
 
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "yad";
-    maintainers = with maintainers; [ smironov ];
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ smironov ];
+    platforms = with lib.platforms; linux;
   };
-}
+})

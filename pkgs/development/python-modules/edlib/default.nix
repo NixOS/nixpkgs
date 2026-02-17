@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   edlib,
   cython,
   python,

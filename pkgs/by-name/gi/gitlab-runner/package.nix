@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "18.3.1";
+  version = "18.8.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D8CNY+lQEK2DgiGfScPxDPday3re/LN4i5jEJTGbshY=";
+    hash = "sha256-rS7+BUdec+Z4G/dd5D/NHe3gbELWicg0Nmgx4zJAIX4=";
   };
 
-  vendorHash = "sha256-vP/htZiUp5qL4TMw6AgNW/TVcvx+pl6rxp41SK5g4XM=";
+  vendorHash = "sha256-Br9TW+sg7PDOE2d8lVQ9Xv9+UD7JHzitdTOcyodHr+s=";
 
   # For patchShebangs
   buildInputs = [ bash ];
@@ -100,8 +100,6 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

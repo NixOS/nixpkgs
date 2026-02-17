@@ -7,20 +7,21 @@
   installShellFiles,
   lima,
   makeWrapper,
+  procps,
   qemu,
   testers,
   colima,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "colima";
-  version = "0.8.4";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = "colima";
-    tag = "v${version}";
-    hash = "sha256-TNq0lHNF6jwUqamJXYTxuF0Q9mfVwi8BaesQv87eRiE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oRhpABYyP4T6kfmvJ4llPXcXWrSbxU7uUfvXQhm2huc=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
@@ -43,8 +44,16 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 1;
 
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace cmd/daemon/daemon.go \
+      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
+
+    substituteInPlace daemon/process/vmnet/vmnet.go \
+      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
+  '';
+
   preConfigure = ''
-    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \
+    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${finalAttrs.version} \
     -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
   '';
 
@@ -71,14 +80,14 @@ buildGoModule rec {
     command = "HOME=$(mktemp -d) colima version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Container runtimes with minimal setup";
     homepage = "https://github.com/abiosoft/colima";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aaschmid
       tricktron
     ];
     mainProgram = "colima";
   };
-}
+})

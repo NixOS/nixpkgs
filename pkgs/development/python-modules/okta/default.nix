@@ -6,7 +6,6 @@
   fetchPypi,
   flatdict,
   jwcrypto,
-  pycryptodome,
   pycryptodomex,
   pydash,
   pyfakefs,
@@ -15,8 +14,6 @@
   pytest-mock,
   pytest-recording,
   pytestCheckHook,
-  python-jose,
-  pythonOlder,
   pyyaml,
   setuptools,
   xmltodict,
@@ -27,8 +24,6 @@ buildPythonPackage rec {
   pname = "okta";
   version = "2.9.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,11 +37,9 @@ buildPythonPackage rec {
     aiohttp
     flatdict
     jwcrypto
-    pycryptodome
     pycryptodomex
     pydash
     pyjwt
-    python-jose
     pyyaml
     xmltodict
     yarl
@@ -82,11 +75,11 @@ buildPythonPackage rec {
     "okta.request_executor"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for the Okta Management API";
     homepage = "https://github.com/okta/okta-sdk-python";
     changelog = "https://github.com/okta/okta-sdk-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jbgosselin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jbgosselin ];
   };
 }

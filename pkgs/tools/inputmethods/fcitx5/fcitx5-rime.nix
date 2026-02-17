@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.1.11";
+  version = "5.1.12";
 
   src = fetchurl {
     url = "https://download.fcitx-im.org/fcitx5/${pname}/${pname}-${version}.tar.zst";
-    hash = "sha256-cc/B99tdVVWnvdl7dYYQlIvk8F2xXUOr6sF36yxQZfY=";
+    hash = "sha256-A7x7PQiyPAprJRg1tdk1Amq7pAhe8ney2KX9+9F0mK4=";
   };
 
   cmakeFlags = [
@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     cp -r "${rimeDataDrv}/share/rime-data/." $out/share/rime-data/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "RIME support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-rime";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

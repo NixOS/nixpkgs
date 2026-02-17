@@ -86,7 +86,7 @@ If both the dependency and depending packages aren't compilers or other machine-
 
 Finally, if the depending package is a compiler or other machine-code-producing tool, it might need dependencies that run at "emit time". This is for compilers that (regrettably) insist on being built together with their source languages' standard libraries. Assuming build != host != target, a run-time dependency of the standard library cannot be run at the compiler's build time or run time, but only at the run time of code emitted by the compiler.
 
-Putting this all together, that means that we have dependency types of the form "X→ E", which means that the dependency executes on X and emits code for E; each of X and E can be `build`, `host`, or `target`, and E can be `*` to indicate that the dependency is not a compiler-like package.
+Putting this all together, that means that we have dependency types of the form `X → E`, which means that the dependency executes on `X` and emits code for `E`; each of `X` and `E` can be `build`, `host`, or `target`, and `E` can be `*` to indicate that the dependency is not a compiler-like package.
 
 Dependency types describe the relationships that a package has with each of its transitive dependencies.  You could think of attaching one or more dependency types to each of the formal parameters at the top of a package's `.nix` file, as well as to all of *their* formal parameters, and so on.   Triples like `(foo, bar, baz)`, on the other hand, are a property of an instantiated derivation -- you could would attach a triple `(mips-linux, mips-linux, sparc-solaris)` to a `.drv` file in `/nix/store`.
 
@@ -94,17 +94,17 @@ Only nine dependency types matter in practice:
 
 #### Possible dependency types {#possible-dependency-types}
 
-| Dependency type | Dependency’s host platform | Dependency’s target platform |
-|-----------------|----------------------------|------------------------------|
-| build → *       | build                      | (none)                       |
-| build → build   | build                      | build                        |
-| build → host    | build                      | host                         |
-| build → target  | build                      | target                       |
-| host → *        | host                       | (none)                       |
-| host → host     | host                       | host                         |
-| host → target   | host                       | target                       |
-| target → *      | target                     | (none)                       |
-| target → target | target                     | target                       |
+| Dependency type   | Dependency’s host platform | Dependency’s target platform |
+|-------------------|----------------------------|------------------------------|
+| `build → *`       | `build`                    | (none)                       |
+| `build → build`   | `build`                    | `build`                      |
+| `build → host`    | `build`                    | `host`                       |
+| `build → target`  | `build`                    | `target`                     |
+| `host → *`        | `host`                     | (none)                       |
+| `host → host`     | `host`                     | `host`                       |
+| `host → target`   | `host`                     | `target`                     |
+| `target → *`      | `target`                   | (none)                       |
+| `target → target` | `target`                   | `target`                     |
 
 Let's use `g++` as an example to make this table clearer.  `g++` is a C++ compiler written in C.  Suppose we are building `g++` with a `(build, host, target)` platform triple of `(foo, bar, baz)`.  This means we are using a `foo`-machine to build a copy of `g++` which will run on a `bar`-machine and emit binaries for the `baz`-machine.
 
@@ -235,7 +235,7 @@ One would think that `localSystem` and `crossSystem` overlap horribly with the t
 
 ### Implementation of dependencies {#ssec-cross-dependency-implementation}
 
-The categories of dependencies developed in [](#ssec-cross-dependency-categorization) are specified as lists of derivations given to `mkDerivation`, as documented in [](#ssec-stdenv-dependencies). In short, each list of dependencies for "host → target" is called `deps<host><target>` (where `host`, and `target` values are either `build`, `host`, or `target`), with exceptions for backwards compatibility that `depsBuildHost` is instead called `nativeBuildInputs` and `depsHostTarget` is instead called `buildInputs`. Nixpkgs is now structured so that each `deps<host><target>` is automatically taken from `pkgs<host><target>`. (These `pkgs<host><target>`s are quite new, so there is no special case for `nativeBuildInputs` and `buildInputs`.) For example, `pkgsBuildHost.gcc` should be used at build-time, while `pkgsHostTarget.gcc` should be used at run-time.
+The categories of dependencies developed in [](#ssec-cross-dependency-categorization) are specified as lists of derivations given to `mkDerivation`, as documented in [](#ssec-stdenv-dependencies). In short, each list of dependencies for `host → target` is called `deps<host><target>` (where `host`, and `target` values are either `build`, `host`, or `target`), with exceptions for backwards compatibility that `depsBuildHost` is instead called `nativeBuildInputs` and `depsHostTarget` is instead called `buildInputs`. Nixpkgs is now structured so that each `deps<host><target>` is automatically taken from `pkgs<host><target>`. (These `pkgs<host><target>`s are quite new, so there is no special case for `nativeBuildInputs` and `buildInputs`.) For example, `pkgsBuildHost.gcc` should be used at build-time, while `pkgsHostTarget.gcc` should be used at run-time.
 
 Now, for most of Nixpkgs's history, there were no `pkgs<host><target>` attributes, and most packages have not been refactored to use it explicitly. Prior to those, there were just `buildPackages`, `pkgs`, and `targetPackages`. Those are now redefined as aliases to `pkgsBuildHost`, `pkgsHostTarget`, and `pkgsTargetTarget`. It is acceptable, even recommended, to use them for libraries to show that the host platform is irrelevant.
 

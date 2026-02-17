@@ -6,10 +6,10 @@
   extra-cmake-modules,
   libvlc,
   libv4l,
-  libX11,
+  libx11,
   kidletime,
   kdelibs4support,
-  libXScrnSaver,
+  libxscrnsaver,
   wrapQtAppsHook,
   qtx11extras,
 }:
@@ -35,19 +35,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libvlc
     libv4l
-    libX11
+    libx11
     kidletime
     qtx11extras
     kdelibs4support
-    libXScrnSaver
+    libxscrnsaver
   ];
 
-  meta = with lib; {
+  meta = {
     description = "KDE media player";
     homepage = "https://apps.kde.org/kaffeine/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.pasqui23 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.pasqui23 ];
+    platforms = lib.platforms.all;
     mainProgram = "kaffeine";
   };
 }

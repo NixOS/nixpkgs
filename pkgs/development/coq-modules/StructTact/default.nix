@@ -16,7 +16,7 @@ mkCoqDerivation {
     in
     with lib.versions;
     lib.switch coq.coq-version [
-      (case (range "8.9" "9.1") "20230107")
+      (case (range "8.9" "9.2") "20230107")
       (case (range "8.6" "8.16") "20210328")
       (case (range "8.5" "8.13") "20181102")
     ] null;

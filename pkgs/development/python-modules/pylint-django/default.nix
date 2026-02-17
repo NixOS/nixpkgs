@@ -9,21 +9,18 @@
   poetry-core,
   pylint-plugin-utils,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.6.1";
+  version = "2.6.1-unstable-2025-11-09";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pylint-django";
-    tag = "v${version}";
-    hash = "sha256-9b0Sbo6E036UmUmP/CVPrS9cxxKtkMMZtqJsI53g4sU=";
+    rev = "e40d785abbf26af0738c14247fb4ac0aa7265b24";
+    hash = "sha256-INQSQjubcwQwspaxevXQOF92L2K9WRLMLYsP18Ffhos=";
   };
 
   build-system = [ poetry-core ];
@@ -52,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylint_django" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pylint plugin to analyze Django applications";
     homepage = "https://github.com/PyCQA/pylint-django";
     changelog = "https://github.com/pylint-dev/pylint-django/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

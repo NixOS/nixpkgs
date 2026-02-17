@@ -6,7 +6,7 @@
   glibcLocales,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "topydo";
   version = "0.14";
   format = "setuptools";
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "topydo";
     repo = "topydo";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1lpfdai0pf90ffrzgmmkadbd86rb7250i3mglpkc82aj6prjm6yb";
   };
 
@@ -49,12 +49,12 @@ python3.pkgs.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  meta = with lib; {
+  meta = {
     description = "Cli todo application compatible with the todo.txt format";
     mainProgram = "topydo";
     homepage = "https://github.com/topydo/topydo";
-    changelog = "https://github.com/topydo/topydo/blob/${src.rev}/CHANGES.md";
-    license = licenses.gpl3Plus;
+    changelog = "https://github.com/topydo/topydo/blob/${finalAttrs.src.rev}/CHANGES.md";
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

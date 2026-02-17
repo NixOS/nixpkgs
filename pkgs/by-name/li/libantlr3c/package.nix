@@ -4,11 +4,11 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libantlr3c";
   version = "3.4";
   src = fetchurl {
-    url = "https://www.antlr3.org/download/C/libantlr3c-${version}.tar.gz";
+    url = "https://www.antlr3.org/download/C/libantlr3c-${finalAttrs.version}.tar.gz";
     sha256 = "0lpbnb4dq4azmsvlhp6khq1gy42kyqyjv8gww74g5lm2y6blm4fa";
   };
 
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     # https://github.com/antlr/antlr3/issues/205
     ++ lib.optional (!stdenv.hostPlatform.isx86) "--disable-abiflags";
 
-  meta = with lib; {
+  meta = {
     description = "C runtime libraries of ANTLR v3";
     homepage = "https://www.antlr3.org/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

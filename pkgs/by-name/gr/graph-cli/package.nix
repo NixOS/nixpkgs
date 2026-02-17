@@ -5,13 +5,13 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "graph-cli";
   version = "0.1.19";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "graph_cli";
     hash = "sha256-AOfUgeVgcTtuf5IuLYy1zFTBCjWZxu0OiZzUVXDIaSc=";
   };
@@ -38,11 +38,11 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "graph_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI to create graphs from CSV files";
     homepage = "https://github.com/mcastorina/graph-cli/";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ leungbk ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ leungbk ];
     mainProgram = "graph";
   };
-}
+})

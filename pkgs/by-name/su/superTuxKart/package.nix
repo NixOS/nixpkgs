@@ -15,7 +15,7 @@
   freetype,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   harfbuzz,
   mcpp,
   wiiuse,
@@ -28,8 +28,8 @@
 let
   assets = fetchsvn {
     url = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
-    rev = "18464";
-    sha256 = "1a84j3psl4cxzkn5ynakpjill7i2f9ki2p729bpmbrvg8fki95aa";
+    rev = "18621";
+    sha256 = "sha256-iqQSezGu0tecA53qhrtYA77SLj28WUUCcL4ZCJbK5C8=";
     name = "stk-assets";
   };
 
@@ -64,16 +64,16 @@ let
     "mojoal"
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "supertuxkart";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "supertuxkart";
     repo = "stk-code";
-    rev = version;
-    hash = "sha256-gqdaVvgNfCN40ZO/9y8+vTeIJPSq6udKxYZ/MAi4ZMM=";
+    tag = finalAttrs.version;
+    hash = "sha256-/fp5iqTHVrVcxRqbTy/3r+dp19oUj9MI2JauvtPWTWA=";
   };
 
   postPatch = ''
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     curl
     libjpeg
     libpng
-    libX11
+    libx11
     harfbuzz
     mcpp
     wiiuse
@@ -147,19 +147,20 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Free 3D kart racing game";
+    description = "3D open-source arcade racer";
     mainProgram = "supertuxkart";
     longDescription = ''
-      SuperTuxKart is a Free 3D kart racing game, with many tracks,
-      characters and items for you to try, similar in spirit to Mario
-      Kart.
+      Karts. Nitro. Action! SuperTuxKart is a 3D open-source arcade racer
+      with a variety of characters, tracks, and modes to play.
+      It aims to be more fun than realistic, and provides an enjoyable experience for all ages.
     '';
     homepage = "https://supertuxkart.net/";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
+      SchweGELBin
     ];
     platforms = with lib.platforms; unix;
-    changelog = "https://github.com/supertuxkart/stk-code/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/supertuxkart/stk-code/blob/${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})

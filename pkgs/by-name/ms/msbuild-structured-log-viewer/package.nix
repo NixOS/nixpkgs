@@ -14,14 +14,16 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "msbuild-structured-log-viewer";
-  version = "2.3.60";
+  version = "2.3.139";
 
   src = fetchFromGitHub {
     owner = "KirillOsenkov";
     repo = "MSBuildStructuredLog";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IjiZfsrkaTgqNBPD4Zw9t6DzAlMjnXZgkpFk7pwgsWI=";
+    hash = "sha256-5i5qEwUzk9bUn2F/wcMfIOodcfn4d9ApdADes5e1nIo=";
   };
+
+  env.AVALONIA_TELEMETRY_OPTOUT = "1";
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;

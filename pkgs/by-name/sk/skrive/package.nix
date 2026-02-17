@@ -5,13 +5,13 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "skrive";
   version = "0.10.0";
   src = fetchFromGitHub {
     owner = "VanuPhantom";
     repo = "skrive";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-thEq9mMQl9BNlc5PKbEjOoSsVO0ENSpDy0nQ7uplPus=";
   };
 
@@ -27,10 +27,10 @@ buildGoModule rec {
   meta = {
     description = "Secure and sleek dosage logging for the terminal";
     homepage = "https://github.com/VanuPhantom/skrive";
-    changelog = "https://github.com/VanuPhantom/skrive/releases/tag/v${version}";
+    changelog = "https://github.com/VanuPhantom/skrive/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ freyacodes ];
     mainProgram = "skrive";
     platforms = lib.platforms.all;
   };
-}
+})

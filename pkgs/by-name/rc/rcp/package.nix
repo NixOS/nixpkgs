@@ -5,20 +5,20 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
-  version = "0.18.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
-    rev = "v${version}";
-    hash = "sha256-hAm9dHxsIR5cJlZHvSUcj3FXBIF9g7klJ2gSg9vVQcE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ayT8lp8XqkvtUaff2Iy+5IVyJ/ukKl0qruEWjBlgAvo=";
   };
 
-  cargoHash = "sha256-iULpW3DiEUmKz5OKUeWfYNAfhrEECd2XijtYqfcbjB0=";
+  cargoHash = "sha256-AcH5V5hapVQgGrwWAEN6Xpj00RRNqZiCSn+/onpmd50=";
 
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env.RUSTFLAGS = "--cfg tokio_unstable";
 
   checkFlags = [
     # these tests set setuid permissions on a test file (3oXXX) which doesn't work in a sandbox
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/wykurz/rcp/releases/tag/v${version}";
+    changelog = "https://github.com/wykurz/rcp/releases/tag/v${finalAttrs.version}";
     description = "Tools to efficiently copy, remove and link large filesets";
     homepage = "https://github.com/wykurz/rcp";
     license = with lib.licenses; [ mit ];
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     # (Your current target_os is macos)
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

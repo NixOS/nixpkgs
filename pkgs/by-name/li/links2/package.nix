@@ -18,9 +18,9 @@
   enableDirectFB ? false,
   directfb,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
-  libX11,
-  libXt,
-  libXau, # GUI support
+  libx11,
+  libxt,
+  libxau, # GUI support
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ gpm ]
   ++ lib.optionals enableX11 [
-    libX11
-    libXau
-    libXt
+    libx11
+    libxau
+    libxt
   ]
   ++ lib.optionals enableDirectFB [ directfb ];
 
@@ -69,12 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://links.twibright.com/";
     description = "Small browser with some graphics support";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [ raskin ];
     mainProgram = "links";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 })

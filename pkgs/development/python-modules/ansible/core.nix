@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   python,
   pythonOlder,
   installShellFiles,
@@ -32,17 +32,16 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  # IMPORTANT: When bumping the minor version (2.XX.0 - the XX), please update pinned package in pkgs/top-level/all-packages.nix
-  # There are pinned packages called ansible_2_XX, create a new one with the previous minor version and then update the version here
-  version = "2.19.2";
+  version = "2.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
 
-  src = fetchPypi {
-    pname = "ansible_core";
-    inherit version;
-    hash = "sha256-h/y7xJLtFutq2wN5uuCtv2nzzoioRA5+iODc76n4pUw=";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible";
+    tag = "v${version}";
+    hash = "sha256-4kTBzDHDfdHR/W4edxrGtWhg6TRLMtdEgUZYcn8cFQg=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -102,12 +101,12 @@ buildPythonPackage rec {
   # internal import errors, missing dependencies
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       HarisDotParis
       robsliwi
     ];

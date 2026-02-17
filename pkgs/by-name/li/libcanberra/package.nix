@@ -18,12 +18,12 @@
   alsa-lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcanberra";
   version = "0.30";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/libcanberra/${pname}-${version}.tar.xz";
+    url = "http://0pointer.de/lennart/projects/libcanberra/libcanberra-${finalAttrs.version}.tar.xz";
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     gtkModule = if gtkSupport == "gtk2" then "/lib/gtk-2.0" else "/lib/gtk-3.0/";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the XDG Sound Theme and Name Specifications";
     mainProgram = "canberra-gtk-play";
     longDescription = ''
@@ -95,8 +95,8 @@ stdenv.mkDerivation rec {
       portable.
     '';
     homepage = "http://0pointer.de/lennart/projects/libcanberra/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ RossComputerGuy ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    platforms = lib.platforms.unix;
   };
-}
+})

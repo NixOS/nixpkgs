@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "uncover";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "uncover";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BRh25lvk3Zut5M6dedLuSET4514R9j0fUHmamw4rp5U=";
   };
 
@@ -40,9 +40,9 @@ buildGoModule rec {
       Currently, it supports shodan,shodan-internetdb, censys, and fofa search API.
     '';
     homepage = "https://github.com/projectdiscovery/uncover";
-    changelog = "https://github.com/projectdiscovery/uncover/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/uncover/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "uncover";
   };
-}
+})

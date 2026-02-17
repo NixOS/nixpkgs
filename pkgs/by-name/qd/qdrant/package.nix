@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qdrant";
-  version = "1.15.4";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t+j7gq0PidvBGkjkyU8Zny9bgjKGNITUJOmyFnneZVY=";
+    hash = "sha256-p2xQStTwbC6MoEsaM1JXlBHK2CqwIfD7x+WwciuY49s=";
   };
 
-  cargoHash = "sha256-bcPSHoUOUliAU+GersU4auzdUiv9PPuAjrPO/FxovB8=";
+  cargoHash = "sha256-DEOMoG13eDDEadScwQOD6jxuJBxaU2+fUNK/QLXLG8M=";
 
   nativeBuildInputs = [
     protobuf
@@ -47,7 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

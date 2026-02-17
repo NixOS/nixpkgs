@@ -1,9 +1,11 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   fetchurl,
   qmake,
+  copyDesktopItems,
+  wrapQtAppsHook,
   makeDesktopItem,
   qtbase,
   qtscript,
@@ -14,10 +16,9 @@
   diffutils,
   gawk,
   libnl,
-  copyDesktopItems,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ostinato";
   version = "1.3.0";
 
@@ -44,6 +45,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     copyDesktopItems
     qmake
+    wrapQtAppsHook
   ];
 
   patches = [ ./drone_ini.patch ];
@@ -83,11 +85,11 @@ mkDerivation rec {
   # pdmlprotocol.h:23:25: fatal error: protocol.pb.h: No such file or directory
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     description = "Packet traffic generator and analyzer";
     homepage = "https://ostinato.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rick68 ];
-    platforms = with platforms; linux ++ darwin ++ cygwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rick68 ];
+    platforms = with lib.platforms; linux ++ darwin ++ cygwin;
   };
 }

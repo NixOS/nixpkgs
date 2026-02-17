@@ -4,13 +4,13 @@
   fetchgit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ministat";
   version = "20150715-1";
 
   src = fetchgit {
     url = "https://git.decadent.org.uk/git/ministat.git";
-    tag = "debian/${version}";
+    tag = "debian/${finalAttrs.version}";
     sha256 = "1p4g0yqgsy4hiqhr8gqp8d38zxzrss5qz70s0bw3i2pg4w668k6f";
   };
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     cp ministat.1 $out/share/man/man1/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool for statistical comparison of data sets";
     homepage = "https://git.decadent.org.uk/gitweb/?p=ministat.git";
-    license = licenses.beerware;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.all;
+    license = lib.licenses.beerware;
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.all;
     mainProgram = "ministat";
   };
-}
+})

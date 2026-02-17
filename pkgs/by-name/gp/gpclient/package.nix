@@ -1,53 +1,77 @@
 {
+  lib,
   rustPlatform,
   glib-networking,
+  stdenv,
   gpauth,
   makeWrapper,
-  openconnect,
+  autoconf,
+  automake,
+  libtool,
   openssl,
   perl,
   pkg-config,
   vpnc-scripts,
-  fetchFromGitHub,
+  glib,
+  pango,
+  cairo,
+  atk,
+  gtk3,
+  libxml2,
+  p11-kit,
+  lz4,
+  gnutls,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "gpclient";
-  version = "2.4.1";
 
-  src = fetchFromGitHub {
-    owner = "yuezk";
-    repo = "GlobalProtect-openconnect";
-    rev = "v${version}";
-    hash = "sha256-MY4JvftrC6sR8M0dFvnGZOkvHIhPRcyct9AG/8527gw=";
-  };
-
-  inherit (gpauth) meta;
+  inherit (gpauth)
+    src
+    version
+    cargoHash
+    meta
+    ;
 
   buildAndTestSubdir = "apps/gpclient";
-
-  cargoHash = "sha256-8LSGuRnWRWeaY6t25GdZ2y4hGIJ+mP3UBXRjcvPuD6U=";
 
   nativeBuildInputs = [
     perl
     makeWrapper
     pkg-config
+
+    # used to build vendored openconnect
+    autoconf
+    automake
+    libtool
   ];
   buildInputs = [
     gpauth
-    openconnect
     openssl
     glib-networking
+    glib
+    pango
+    cairo
+    atk
+    gtk3
+
+    # used for vendored openconnect
+    libxml2
+    lz4
+    p11-kit
+    gnutls
   ];
 
-  preConfigure = ''
-    substituteInPlace crates/gpapi/src/lib.rs \
+  postPatch = ''
+    substituteInPlace crates/common/src/constants.rs \
       --replace-fail /usr/bin/gpauth ${gpauth}/bin/gpauth
-    substituteInPlace crates/common/src/vpn_utils.rs \
+    substituteInPlace crates/openconnect/src/vpn_utils.rs \
       --replace-fail /usr/sbin/vpnc-script ${vpnc-scripts}/bin/vpnc-script
+    substituteInPlace packaging/files/usr/share/applications/gpgui.desktop \
+      --replace-fail /usr/bin/gpclient gpclient
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p $out/share/applications
     cp packaging/files/usr/share/applications/gpgui.desktop $out/share/applications/gpgui.desktop
   '';
@@ -55,10 +79,5 @@ rustPlatform.buildRustPackage rec {
   preFixup = ''
     wrapProgram "$out/bin/gpclient" \
       --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules
-  '';
-
-  postFixup = ''
-    substituteInPlace $out/share/applications/gpgui.desktop \
-      --replace-fail /usr/bin/gpclient gpclient
   '';
 }

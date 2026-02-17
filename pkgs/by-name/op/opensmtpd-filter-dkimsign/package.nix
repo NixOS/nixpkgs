@@ -6,12 +6,12 @@
   openssl,
   mandoc,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensmtpd-filter-dkimsign";
   version = "0.6";
 
   src = fetchurl {
-    url = "https://imperialat.at/releases/filter-dkimsign-${version}.tar.gz";
+    url = "https://imperialat.at/releases/filter-dkimsign-${finalAttrs.version}.tar.gz";
     hash = "sha256-O18NtAuSNg82uKnUx+R4h3e1IBSElTrFWBBkr2AYNsM=";
   };
 
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     "LOCALBASE="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenSMTPD filter for DKIM signing";
     homepage = "http://imperialat.at/dev/filter-dkimsign/";
-    license = licenses.isc;
-    maintainers = with maintainers; [ malte-v ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ malte-v ];
   };
-}
+})

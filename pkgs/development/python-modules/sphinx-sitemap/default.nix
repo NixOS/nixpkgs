@@ -4,13 +4,14 @@
   fetchFromGitHub,
   setuptools,
   sphinx,
+  sphinx-last-updated-by-git,
   sphinx-pytest,
   defusedxml,
   pytestCheckHook,
 }:
 let
   pname = "sphinx-sitemap";
-  version = "2.7.2";
+  version = "2.9.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -20,12 +21,15 @@ buildPythonPackage rec {
     owner = "jdillard";
     repo = "sphinx-sitemap";
     tag = "v${version}";
-    hash = "sha256-b8eo77Ab9w8JR6mLqXcIWeTkuJFTHjJBk440fksBbyw=";
+    hash = "sha256-TiR6F9wMWOGYexSKDzbSPPq0oiIDrZwSiO3a9DajL+0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ sphinx ];
+  dependencies = [
+    sphinx
+    sphinx-last-updated-by-git
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -33,11 +37,11 @@ buildPythonPackage rec {
     defusedxml
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jdillard/sphinx-sitemap/releases/tag/${src.tag}";
     description = "Sitemap generator for Sphinx";
     homepage = "https://github.com/jdillard/sphinx-sitemap";
-    maintainers = with maintainers; [ alejandrosame ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ alejandrosame ];
+    license = lib.licenses.mit;
   };
 }

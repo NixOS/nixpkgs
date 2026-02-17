@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   aiodns,
   aiohttp,
   aresponses,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "forecast-solar";
   version = "4.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
@@ -63,11 +60,11 @@ buildPythonPackage rec {
     "test_status_429"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/home-assistant-libs/forecast_solar/releases/tag/v${version}";
     description = "Asynchronous Python client for getting forecast solar information";
     homepage = "https://github.com/home-assistant-libs/forecast_solar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

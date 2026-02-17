@@ -19,7 +19,6 @@
   libsoup_2_4,
   openssl,
   parallel-disk-usage,
-  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -82,7 +81,7 @@ rustPlatform.buildRustPackage rec {
     gtk3
     libsoup_2_4
     openssl
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   # Disable checkPhase, since the project doesn't contain tests
@@ -101,11 +100,13 @@ rustPlatform.buildRustPackage rec {
       makeWrapper "$out/Applications/SquirrelDisk.app/Contents/MacOS/SquirrelDisk" "$out/bin/squirrel-disk"
     '';
 
-  meta = with lib; {
+  meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Cross-platform disk usage analysis tool";
     homepage = "https://www.squirreldisk.com/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ peret ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ peret ];
     mainProgram = "squirrel-disk";
   };
 }

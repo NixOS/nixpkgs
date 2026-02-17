@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     sed -i "s~gvim ~${vim}/bin/vim -g ~g" src/config.cc
     sed -i "s~ -geom 10x10~~g" src/config.cc
+
+    # Switch to girepository-2.0
+    substituteInPlace src/plugin/gir_main.c \
+      --replace-fail "<girepository.h>" "<girepository/girepository.h>" \
+      --replace-fail "g_irepository_get_option_group" "gi_repository_get_option_group"
   '';
 
   nativeBuildInputs = [
@@ -71,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonPath = with python3.pkgs; requiredPythonModules extraPythonPackages;
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
     )

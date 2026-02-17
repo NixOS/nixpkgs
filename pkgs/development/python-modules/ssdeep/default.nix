@@ -6,15 +6,12 @@
   pytestCheckHook,
   six,
   ssdeep,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ssdeep";
   version = "3.4.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DinoTools";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ssdeep" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the ssdeep library";
     homepage = "https://github.com/DinoTools/python-ssdeep";
     changelog = "https://github.com/DinoTools/python-ssdeep/blob/${version}/CHANGELOG.rst";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

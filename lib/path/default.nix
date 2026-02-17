@@ -40,7 +40,7 @@ let
     isValid
     ;
 
-  # Return the reason why a subpath is invalid, or `null` if it's valid
+  # Returns the reason why a subpath is invalid, or `null` if it's valid
   subpathInvalidReason =
     value:
     if !isString value then
@@ -239,7 +239,7 @@ in
     # The subpath string to append
     subpath:
     assert assertMsg (isPath path)
-      ''lib.path.append: The first argument is of type ${builtins.typeOf path}, but a path was expected'';
+      "lib.path.append: The first argument is of type ${builtins.typeOf path}, but a path was expected";
     assert assertMsg (isValid subpath) ''
       lib.path.append: Second argument is not a valid subpath string:
           ${subpathInvalidReason subpath}'';

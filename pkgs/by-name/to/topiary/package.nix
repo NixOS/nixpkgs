@@ -3,41 +3,29 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  iconv,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "topiary";
-  version = "0.6.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "topiary";
-    tag = "v${version}";
-    hash = "sha256-CyqZhkzAOqC3xWhwUzCpkDO0UFsO0S4/3sV7zIILiVg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3zHO+a/m4Rv+pUm0Y1dBjFfHPZCfjsyAq56EiHSGJ1Y=";
   };
 
+  cargoHash = "sha256-oJoRuWzaP4F+bS2xdFsOWcuLGyTEcCIHLRdPjG8X2CU=";
+
   nativeBuildInputs = [ installShellFiles ];
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  cargoHash = "sha256-akAjn9a7dMwjPSNveDY2KJ62evjHCAWpRR3A7Ghkb5A=";
-
-  # https://github.com/NixOS/nixpkgs/pull/359145#issuecomment-2542418786
-  depsExtraArgs.postBuild = ''
-    find $out -name '*.ps1' -print | while read -r file; do
-      if [ "$(file --brief --mime-encoding "$file")" == utf-16be ]; then
-        ${iconv}/bin/iconv -f UTF-16BE -t UTF16LE "$file" > tmp && mv tmp "$file"
-      fi
-    done
-  '';
 
   cargoBuildFlags = [
     "-p"
     "topiary-cli"
   ];
-  cargoTestFlags = cargoBuildFlags;
 
   # Skip tests that cannot be executed in sandbox (operation not permitted)
   checkFlags = [
@@ -76,6 +64,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_vis"
     "--skip=test_vis_invalid"
   ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   env.TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
 
@@ -89,20 +78,20 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/topiary completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
-    mainProgram = "topiary";
     homepage = "https://github.com/tweag/topiary";
-    changelog = "https://github.com/tweag/topiary/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/tweag/topiary/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       nartsiss
     ];
+    mainProgram = "topiary";
   };
-}
+})

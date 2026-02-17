@@ -230,7 +230,7 @@ in
       '';
 
       type = lib.types.nullOr (
-        lib.types.submodule ({
+        lib.types.submodule {
           options = {
             certificate = lib.mkOption {
               type = lib.types.str;
@@ -258,7 +258,7 @@ in
               '';
             };
           };
-        })
+        }
       );
     };
 
@@ -274,7 +274,7 @@ in
         FoundationDB locality settings.
       '';
 
-      type = lib.types.submodule ({
+      type = lib.types.submodule {
         options = {
           machineId = lib.mkOption {
             default = null;
@@ -316,7 +316,7 @@ in
             '';
           };
         };
-      });
+      };
     };
 
     extraReadWritePaths = lib.mkOption {
@@ -442,7 +442,7 @@ in
             cf=/etc/foundationdb/fdb.cluster
             desc=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c8)
             rand=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c8)
-            echo ''${desc}:''${rand}@${initialIpAddr}:${builtins.toString cfg.listenPortStart} > $cf
+            echo ''${desc}:''${rand}@${initialIpAddr}:${toString cfg.listenPortStart} > $cf
             chmod 0664 $cf
             touch "${cfg.dataDir}/.first_startup"
         fi

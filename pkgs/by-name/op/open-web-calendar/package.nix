@@ -10,15 +10,13 @@
 let
   python = python3;
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "open-web-calendar";
   version = "1.49";
   pyproject = true;
 
-  disabled = python.pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "open_web_calendar";
     hash = "sha256-vtmIqiF85zn8CiMUWsCKJUzfiiK/j+xlZIyuIMGxR4I=";
   };
@@ -76,21 +74,21 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Highly customizable web calendar that can be embedded into websites using ICal source links";
     homepage = "https://open-web-calendar.quelltext.eu";
     changelog =
       let
-        v = builtins.replaceStrings [ "." ] [ "" ] version;
+        v = builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version;
       in
       "https://open-web-calendar.quelltext.eu/changelog/#v${v}";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       cc-by-sa-40
       cc0
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ erictapen ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "open-web-calendar";
   };
-}
+})

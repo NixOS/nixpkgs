@@ -1,5 +1,4 @@
 {
-  mkDerivation,
   lib,
   stdenv,
   fetchurl,
@@ -9,13 +8,13 @@
   dbus,
   getconf,
   glibc,
-  libXrandr,
-  libX11,
-  libXext,
-  libXdamage,
-  libXtst,
-  libSM,
-  libXfixes,
+  libxrandr,
+  libx11,
+  libxext,
+  libxdamage,
+  libxtst,
+  libsm,
+  libxfixes,
   coreutils,
   wrapQtAppsHook,
   icu63,
@@ -23,14 +22,14 @@
   minizip,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
   outputs = [
     "out"
     "dev"
   ];
-  version = "15.69.4";
+  version = "15.74.3";
 
   src =
     let
@@ -39,11 +38,11 @@ mkDerivation rec {
     {
       x86_64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_amd64.deb";
-        hash = "sha256-GNGmqgiu4Vk0X+KndCkEoryFHG/Vv/P2xYdlzUJT1wo=";
+        hash = "sha256-7QQlGzIr3BBFaur8ycGY0VuYz21cJI+EfCsRuCAr8XA=";
       };
       aarch64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_arm64.deb";
-        hash = "sha256-M6Q6HIp7TgtqzVduMJM1au0i4/hDUUwdIoe3q36YA/0=";
+        hash = "sha256-prz3RaeMykgLrK9ai3/ivzRsUFT1dyWP1xymEl3s4eA=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -103,12 +102,8 @@ mkDerivation rec {
       --replace '/opt/teamviewer/tv_bin/script/execscript' \
         "$out/share/teamviewer/tv_bin/script/execscript"
 
-    for i in 16 20 24 32 48 256; do
-      size=$i"x"$i
-
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      ln -s $out/share/teamviewer/tv_bin/desktop/teamviewer_$i.png $out/share/icons/hicolor/$size/apps/TeamViewer.png
-    done;
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    ln -s $out/share/teamviewer/tv_bin/desktop/TeamViewer.svg $out/share/icons/hicolor/scalable/apps/TeamViewer.svg
 
     sed -i "s,/opt/teamviewer,$out/share/teamviewer,g" $out/share/teamviewer/tv_bin/desktop/com.teamviewer.*.desktop
 
@@ -127,13 +122,13 @@ mkDerivation rec {
     }"
     "--prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
-        libXrandr
-        libX11
-        libXext
-        libXdamage
-        libXtst
-        libSM
-        libXfixes
+        libxrandr
+        libx11
+        libxext
+        libxdamage
+        libxtst
+        libsm
+        libxfixes
         dbus
         icu63
       ]
@@ -154,17 +149,16 @@ mkDerivation rec {
 
   passthru.updateScript = ./update-teamviewer.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.teamviewer.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
-      jagajaga
+    maintainers = with lib.maintainers; [
       jraygauthier
       gador
       c4patino

@@ -169,11 +169,11 @@ linkFarm name [
     };
   }
   {
-    name = "N-V-__8AANodAwDnyHwhlOv5cVRn2rx_dTvija-wy5YtTw1B";
+    name = "N-V-__8AAIdIAwDt5PxH-cwCxEcTfw4jBV8sR6fZ_XLh-cR7";
     path = fetchZigArtifact {
       name = "iterm2_themes";
-      url = "https://deps.files.ghostty.org/ghostty-themes-20250915-162204-b1fe546.tgz";
-      hash = "sha256-6rKNFpaUvSbvNZ0/+u0h4I/RRaV5V7xIPQ9y7eNVbCA=";
+      url = "https://github.com/mbadolato/iTerm2-Color-Schemes/releases/download/release-20260112-150707-28c8f5b/ghostty-themes.tgz";
+      hash = "sha256-NIqF12KqXhIrP+LyBtg6WtkHxNUdWOyziAdq8S45RrU=";
     };
   }
   {

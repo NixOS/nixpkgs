@@ -12,13 +12,13 @@
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adwaita-icon-theme";
-  version = "48.0";
+  version = "49.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/adwaita-icon-theme/${lib.versions.major version}/adwaita-icon-theme-${version}.tar.xz";
-    hash = "sha256-hHBoiIZQ2WcxFb5tvyv9wxpGrrxSimqdtEIOYOZWuNQ=";
+    url = "mirror://gnome/sources/adwaita-icon-theme/${lib.versions.major finalAttrs.version}/adwaita-icon-theme-${finalAttrs.version}.tar.xz";
+    hash = "sha256-ZRZkYdGyeKqUL1mqjQ/M8RCNccZfNyxiZuFyRJeRdVw=";
   };
 
   nativeBuildInputs = [
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme";
-    changelog = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     platforms = with lib.platforms; linux ++ darwin;
     teams = [ lib.teams.gnome ];
     license = lib.licenses.cc-by-sa-30;
   };
-}
+})

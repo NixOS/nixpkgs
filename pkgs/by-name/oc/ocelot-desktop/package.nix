@@ -15,11 +15,11 @@
   libpulseaudio,
   pipewire,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrandr,
+  libxxf86vm,
 
   # runtime (path)
   xrandr,
@@ -63,11 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
 
         # lwjgl
         libGL
-        libX11
-        libXcursor
-        libXext
-        libXrandr
-        libXxf86vm
+        libx11
+        libxcursor
+        libxext
+        libxrandr
+        libxxf86vm
       ];
       runtimePrograms = lib.optionals stdenv.hostPlatform.isLinux [
         # https://github.com/LWJGL/lwjgl/issues/128

@@ -47,12 +47,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern port of the classic 1982 text-mode game Snipes";
     mainProgram = "snipes";
     homepage = "https://www.vogons.org/viewtopic.php?f=7&t=49073";
-    license = licenses.free; # This reverse-engineered source code is released with the original authors' permission.
-    maintainers = with maintainers; [
+    license = lib.licenses.free; # This reverse-engineered source code is released with the original authors' permission.
+    maintainers = with lib.maintainers; [
       peterhoeg
       cybershadow
     ];

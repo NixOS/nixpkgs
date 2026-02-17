@@ -7,21 +7,21 @@
   perl,
   pkg-config,
   SDL2,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   utf8proc,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "schismtracker";
-  version = "20250825";
+  version = "20251014";
 
   src = fetchFromGitHub {
     owner = "schismtracker";
     repo = "schismtracker";
-    tag = version;
-    hash = "sha256-R1u0ZIWt4sG9cVhG9WhLdYVwAy7u62AT7E4ZwiTw1rY=";
+    tag = finalAttrs.version;
+    hash = "sha256-N1wCOR7Su3PllzrffkwB6LfhZlol1/4dVegySzJlH28=";
   };
 
   # If we let it try to get the version from git, it will fail and fall back
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   # in this assert: https://github.com/schismtracker/schismtracker/blob/a106b57e0f809b95d9e8bcf5a3975d27e0681b5a/schism/version.c#L112
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace-fail 'git log' 'echo ${version} #'
+      --replace-fail 'git log' 'echo ${finalAttrs.version} #'
   '';
 
   configureFlags = [
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
-    libX11
+    libx11
     utf8proc
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libXext
+    libxext
   ];
 
   enableParallelBuilding = true;
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ftrvxmtrx ];
     mainProgram = "schismtracker";
   };
-}
+})

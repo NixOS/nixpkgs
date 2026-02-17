@@ -5,8 +5,8 @@
   fetchzip,
   callPackage,
   newScope,
-  recurseIntoAttrs,
   ocamlPackages_4_14,
+  ocamlPackages_5_4,
   fetchpatch,
   makeWrapper,
 }@args:
@@ -38,9 +38,19 @@ let
 
       bignums = callPackage ../development/rocq-modules/bignums { };
       hierarchy-builder = callPackage ../development/rocq-modules/hierarchy-builder { };
+      mathcomp = callPackage ../development/rocq-modules/mathcomp { };
+      mathcomp-boot = self.mathcomp.boot;
+      mathcomp-order = self.mathcomp.order;
+      mathcomp-fingroup = self.mathcomp.fingroup;
+      mathcomp-algebra = self.mathcomp.algebra;
+      mathcomp-solvable = self.mathcomp.solvable;
+      mathcomp-field = self.mathcomp.field;
+      mathcomp-character = self.mathcomp.character;
       parseque = callPackage ../development/rocq-modules/parseque { };
+      relation-algebra = callPackage ../development/rocq-modules/relation-algebra { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
+      vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };
 
       filterPackages = doesFilter: if doesFilter then filterRocqPackages self else self;
     };
@@ -66,6 +76,7 @@ let
       inherit
         version
         ocamlPackages_4_14
+        ocamlPackages_5_4
         ;
     };
 in
@@ -89,10 +100,12 @@ rec {
 
   rocq-core_9_0 = mkRocq "9.0";
   rocq-core_9_1 = mkRocq "9.1";
+  rocq-core_9_2 = mkRocq "9.2";
 
   rocqPackages_9_0 = mkRocqPackages rocq-core_9_0;
   rocqPackages_9_1 = mkRocqPackages rocq-core_9_1;
+  rocqPackages_9_2 = mkRocqPackages rocq-core_9_2;
 
-  rocqPackages = recurseIntoAttrs rocqPackages_9_0;
+  rocqPackages = lib.recurseIntoAttrs rocqPackages_9_0;
   rocq-core = rocqPackages.rocq-core;
 }

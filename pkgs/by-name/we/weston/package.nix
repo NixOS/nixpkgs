@@ -10,7 +10,7 @@
   wayland-scanner,
   cairo,
   libGL,
-  libdisplay-info,
+  libdisplay-info_0_2,
   libdrm,
   libevdev,
   libinput,
@@ -19,7 +19,7 @@
   seatd,
   wayland,
   wayland-protocols,
-  xcbutilcursor,
+  libxcb-cursor,
 
   demoSupport ? true,
   jpegSupport ? true,
@@ -43,16 +43,16 @@
   webpSupport ? true,
   libwebp,
   xwaylandSupport ? true,
-  libXcursor,
+  libxcursor,
   xwayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "weston";
   version = "14.0.1";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
+    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${finalAttrs.version}/downloads/weston-${finalAttrs.version}.tar.xz";
     hash = "sha256-qBUFBbEmpZ33gf6MMMjm+H2nAT4XkDnrhEpbu8x8ebM=";
   };
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     libGL
-    libdisplay-info
+    libdisplay-info_0_2
     libdrm
     libevdev
     libinput
@@ -103,8 +103,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional webpSupport libwebp
   ++ lib.optionals xwaylandSupport [
-    libXcursor
-    xcbutilcursor
+    libxcursor
+    libxcb-cursor
     xwayland
   ];
 
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
 
   passthru.providedSessions = [ "weston" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and functional Wayland compositor";
     longDescription = ''
       Weston is the reference implementation of a Wayland compositor, as well
@@ -142,11 +142,11 @@ stdenv.mkDerivation rec {
       provided.
     '';
     homepage = "https://gitlab.freedesktop.org/wayland/weston";
-    license = licenses.mit; # Expat version
-    platforms = platforms.linux;
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.linux;
     mainProgram = "weston";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       qyliss
     ];
   };
-}
+})

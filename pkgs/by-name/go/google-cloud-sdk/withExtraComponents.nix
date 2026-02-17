@@ -43,11 +43,11 @@ let
 
   installCheck =
     let
-      compNames = builtins.map lib.getName comps_;
+      compNames = map lib.getName comps_;
     in
     ''
       $out/bin/gcloud components list --only-local-state --format 'value(id)' > component_list.txt
-      for comp in ${builtins.toString compNames}; do
+      for comp in ${toString compNames}; do
         snapshot_file="$out/google-cloud-sdk/.install/$comp.snapshot.json"
 
         if ! [ -f "$snapshot_file"  ]; then
@@ -77,6 +77,9 @@ symlinkJoin {
     google-cloud-sdk
   ]
   ++ comps;
+
+  # Prevent Python from writing bytecode to ensure build determinism
+  PYTHONDONTWRITEBYTECODE = "1";
 
   postBuild = ''
     sed -i ';' $out/google-cloud-sdk/bin/.gcloud-wrapped

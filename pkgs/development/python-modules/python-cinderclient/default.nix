@@ -11,7 +11,6 @@
   pbr,
   requests,
   prettytable,
-  pythonOlder,
   reno,
   requests-mock,
   setuptools,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "python-cinderclient";
   version = "9.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "python_cinderclient";
@@ -84,11 +81,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cinderclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Block Storage API Client Library";
     mainProgram = "cinder";
     homepage = "https://github.com/openstack/python-cinderclient";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

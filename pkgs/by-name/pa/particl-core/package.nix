@@ -16,14 +16,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "particl-core";
   version = "23.2.7.0";
 
   src = fetchFromGitHub {
     owner = "particl";
     repo = "particl-core";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RxkLt+7u+r5jNwEWiArTUpZ8ykYwWtvIDFXTSKhGN/w=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "--disable-bench"
     "--with-boost-libdir=${boost.out}/lib"
   ]
-  ++ lib.optionals (!doCheck) [
+  ++ lib.optionals (!finalAttrs.doCheck) [
     "--enable-tests=no"
   ];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   preCheck = "patchShebangs test";
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Privacy-Focused Marketplace & Decentralized Application Platform";
     longDescription = ''
@@ -72,8 +72,8 @@ stdenv.mkDerivation rec {
       RPC daemon and CLI client only.
     '';
     homepage = "https://particl.io/";
-    maintainers = with maintainers; [ demyanrogozhin ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ demyanrogozhin ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}
+})

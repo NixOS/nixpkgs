@@ -9,18 +9,19 @@
   cpio,
   gawk,
   coreutils,
+  curl,
+  sqlite,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blast";
-  version = "2.14.1";
+  version = "2.17.0";
 
   src = fetchurl {
-    url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-src.tar.gz";
-    sha256 = "sha256-cSwtvfD7E8wcLU9O9d0c5LBsO1fpbf6o8j5umfWxZQ4=";
+    url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${finalAttrs.version}/ncbi-blast-${finalAttrs.version}+-src.tar.gz";
+    sha256 = "sha256-UCBXqI6ZkONOYnWL4h6kdMwK1o1qY6LjeyNyrx5eoUc=";
   };
 
-  sourceRoot = "ncbi-blast-${version}+-src/c++";
+  sourceRoot = "ncbi-blast-${finalAttrs.version}+-src/c++";
 
   configureFlags = [
     # With flat Makefile we can use all_projects in order not to build extra.
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     "--with-flat-makefile"
     "--without-makefile-auto-update"
     "--with-dll" # build dynamic libraries (static are default)
+    "--with-sqlite3=${sqlite.dev}"
   ];
 
   makeFlags = [ "all_projects=app/" ];
@@ -46,14 +48,14 @@ stdenv.mkDerivation rec {
         scripts/common/impl/report_duplicates.awk; do
 
         substituteInPlace $awks \
-              --replace /usr/bin/awk ${gawk}/bin/awk
+              --replace-fail "/usr/bin/awk" "${gawk}/bin/awk"
     done
 
     for mk in src/build-system/Makefile.meta.in \
         src/build-system/helpers/run_with_lock.c ; do
 
         substituteInPlace $mk \
-        --replace /bin/rm ${coreutils}/bin/rm
+        --replace-fail "/bin/rm" "${coreutils}/bin/rm"
     done
 
     for mk in src/build-system/Makefile.meta.gmake=no \
@@ -63,27 +65,27 @@ stdenv.mkDerivation rec {
         src/build-system/Makefile.rules_with_autodep.in; do
 
         substituteInPlace $mk \
-            --replace /bin/echo ${coreutils}/bin/echo
+            --replace-fail "/bin/echo" "${coreutils}/bin/echo"
     done
     for mk in src/build-system/Makefile.meta_p \
         src/build-system/Makefile.rules_with_autodep.in \
         src/build-system/Makefile.protobuf.in ; do
 
         substituteInPlace $mk \
-            --replace /bin/mv ${coreutils}/bin/mv
+            --replace-fail "/bin/mv" "${coreutils}/bin/mv"
     done
 
 
     substituteInPlace src/build-system/configure \
-        --replace /bin/pwd ${coreutils}/bin/pwd \
-        --replace /bin/ln ${coreutils}/bin/ln
+        --replace-fail "/bin/pwd" "${coreutils}/bin/pwd" \
+        --replace-fail "/bin/ln" "${coreutils}/bin/ln"
 
     substituteInPlace src/build-system/configure.ac \
-        --replace /bin/pwd ${coreutils}/bin/pwd \
-        --replace /bin/ln ${coreutils}/bin/ln
+        --replace-fail "/bin/pwd" "${coreutils}/bin/pwd" \
+        --replace-fail "/bin/ln" "${coreutils}/bin/ln"
 
     substituteInPlace src/build-system/Makefile.meta_l \
-        --replace /bin/date ${coreutils}/bin/date
+        --replace-fail "/bin/date" "${coreutils}/bin/date"
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -100,6 +102,7 @@ stdenv.mkDerivation rec {
     gawk
     zlib
     bzip2
+    sqlite
   ];
 
   strictDeps = true;
@@ -108,7 +111,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/get_species_taxids.sh \
-        --replace /bin/rm ${lib.getExe' coreutils "rm"}
+        --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+
+    substituteInPlace $out/bin/update_blastdb.pl \
+        --replace-fail 'qw(/usr/local/bin /usr/bin)' 'qw(${lib.getBin curl}/bin)'
   '';
   patches = [ ./no_slash_bin.patch ];
 
@@ -117,14 +123,17 @@ stdenv.mkDerivation rec {
   # Many tests require either network access or locally available databases
   doCheck = false;
 
-  meta = with lib; {
-    description = ''Basic Local Alignment Search Tool (BLAST) finds regions of similarity between biological sequences'';
+  meta = {
+    description = "Basic Local Alignment Search Tool (BLAST) finds regions of similarity between biological sequences";
     homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
 
     # Version 2.10.0 fails on Darwin
     # See https://github.com/NixOS/nixpkgs/pull/61430
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ luispedro ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      luispedro
+      mulatta
+    ];
   };
-}
+})

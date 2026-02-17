@@ -20,14 +20,14 @@ let
   # Add services.udev.packages = [ pkgs.stlink ] to your configuration.nix
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stlink";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "stlink-org";
     repo = "stlink";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hlFI2xpZ4ldMcxZbg/T5/4JuFFdO9THLcU0DQKSFqrw=";
   };
 
@@ -61,14 +61,14 @@ stdenv.mkDerivation rec {
     "-DSTLINK_UDEV_RULES_DIR=${placeholder "out"}/lib/udev/rules.d"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "In-circuit debug and programming for ST-Link devices";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    badPlatforms = platforms.darwin;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
     maintainers = [
-      maintainers.bjornfor
-      maintainers.rongcuid
+      lib.maintainers.bjornfor
+      lib.maintainers.rongcuid
     ];
   };
-}
+})

@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
+  # tools/attr.c: Add missing libgen.h include for basename(3)
+  # Fixes compilation issue with musl and modern C99 compilers.
+  # See: https://bugs.gentoo.org/926294
   patches = [ ./musl.patch ];
 
   postPatch = ''
@@ -37,11 +40,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  # See nixos/tests/attr.nix
+  doCheck = false;
+
+  meta = {
     homepage = "https://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
-    platforms = platforms.linux;
-    badPlatforms = platforms.microblaze;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    badPlatforms = lib.platforms.microblaze;
+    license = lib.licenses.gpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "attr_project" version;
   };
 }

@@ -5,14 +5,14 @@
   makeWrapper,
   git,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "plandex-server";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "plandex-ai";
     repo = "plandex";
-    rev = "server/v${version}";
+    rev = "server/v${finalAttrs.version}";
     hash = "sha256-RVvgnQtb/asOjVpSZ3WndimsJ6foERMWS/YD20sghVE=";
   };
 
@@ -34,7 +34,7 @@ buildGoModule rec {
 
   nativeCheckInputs = [ git ];
 
-  sourceRoot = "${src.name}/app/server";
+  sourceRoot = "${finalAttrs.src.name}/app/server";
 
   vendorHash = "sha256-uarTWteOoAjzEHSnbZo+fEPELerpuL7UNA5pdGP5CMY=";
 
@@ -45,4 +45,4 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ viraptor ];
   };
-}
+})

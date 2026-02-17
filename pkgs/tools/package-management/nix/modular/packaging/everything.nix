@@ -4,7 +4,6 @@
   lndir,
   buildEnv,
 
-  maintainers,
   teams,
 
   version,
@@ -182,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (nix-cli) version;
+    inherit nix-cli;
     src = patchedSrc;
 
     /**
@@ -227,7 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = nix-cli.meta.longDescription;
     homepage = nix-cli.meta.homepage;
     license = nix-cli.meta.license;
-    maintainers = maintainers;
     teams = teams;
     platforms = nix-cli.meta.platforms;
     outputsToInstall = [
@@ -253,6 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
       "nix-util"
       "nix-util-c"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "nixos" version;
   };
 
 })

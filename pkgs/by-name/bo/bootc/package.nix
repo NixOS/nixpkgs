@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
   libz,
   zstd,
   pkg-config,
@@ -11,7 +12,7 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bootc";
   version = "1.6.0";
 
@@ -21,9 +22,16 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bootc-dev";
     repo = "bootc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TztsiC+DwD9yEAmjTuiuOi+Kf8WEYMsOVVnMKpSM3/g=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/bootc-dev/bootc/commit/ff8b1b411270275c49ee512d54b27ed7a2fca112.patch";
+      hash = "sha256-7UKquq6ZargQUDGZk22X9Co92v8e995bL+tuAjvh/7c=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -62,4 +70,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ thesola10 ];
     platforms = lib.platforms.linux;
   };
-}
+})

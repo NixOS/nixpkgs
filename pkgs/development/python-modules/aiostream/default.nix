@@ -5,23 +5,20 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aiostream";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = "aiostream";
     tag = "v${version}";
-    hash = "sha256-oOx1LG3UyMJRm/HvmrHT00jTp3+XzmvS2XRH4BJNyPE=";
+    hash = "sha256-AxisfmFZMEFJ/zfYCTfelvUGIoz56w6dKoZAMDKOZzk=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiostream" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generator-based operators for asynchronous iteration";
     homepage = "https://aiostream.readthedocs.io";
     changelog = "https://github.com/vxgmichel/aiostream/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ rmcgibbo ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ rmcgibbo ];
   };
 }

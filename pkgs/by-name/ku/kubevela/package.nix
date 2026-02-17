@@ -2,38 +2,38 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   lib,
   stdenv,
   testers,
   kubevela,
   nix-update-script,
 }:
-
-buildGoModule rec {
+let
+  canGenerateShellCompletions = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+in
+buildGoModule (finalAttrs: {
   pname = "kubevela";
-  version = "1.10.3";
+  version = "1.10.6";
 
   src = fetchFromGitHub {
     owner = "kubevela";
     repo = "kubevela";
-    rev = "v${version}";
-    hash = "sha256-ZOe22u0K760AsSWkKKhIqay6+zi4D0GpK9HAbDKi2Wo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-lY+gz/rv+UcIDFOIa7jFoYsFRSBcHSzET+LZH/HC1PM=";
   };
 
-  vendorHash = "sha256-e6buEk5snG199CIb5OGgghmkFCGY/wfNUbpxW9OUdWE=";
+  vendorHash = "sha256-MUfULgycZn8hFfWmtNeoFf21+g3gGpeKoBvL8qB/m80=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/oam-dev/kubevela/version.VelaVersion=${version}"
+    "-X github.com/oam-dev/kubevela/version.VelaVersion=${finalAttrs.version}"
   ];
 
   subPackages = [ "references/cmd/cli" ];
 
   env.CGO_ENABLED = 0;
-
-  # Workaround for permission issue in shell completion
-  HOME = "$TMPDIR";
 
   installPhase = ''
     runHook preInstall
@@ -41,8 +41,14 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals canGenerateShellCompletions [
+    writableTmpDirAsHomeHook # Workaround for permission issue in shell completion
+  ];
+
+  postInstall = lib.optionalString canGenerateShellCompletions ''
     installShellCompletion --cmd vela \
       --bash <($out/bin/vela completion bash) \
       --zsh <($out/bin/vela completion zsh)
@@ -63,4 +69,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "vela";
   };
-}
+})

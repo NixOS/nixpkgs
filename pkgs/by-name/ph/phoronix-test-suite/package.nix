@@ -10,12 +10,12 @@
   callPackage,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phoronix-test-suite";
   version = "10.8.4";
 
   src = fetchurl {
-    url = "https://phoronix-test-suite.com/releases/phoronix-test-suite-${version}.tar.gz";
+    url = "https://phoronix-test-suite.com/releases/phoronix-test-suite-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-HyCS1TbAoxk+/FPkpQ887mXA7xp40x5UBPHGY//3t/Q=";
   };
 
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     simple-execution = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-Source, Automated Benchmarking";
     homepage = "https://www.phoronix-test-suite.com/";
-    maintainers = with maintainers; [ davidak ];
-    license = licenses.gpl3;
-    platforms = with platforms; unix;
+    maintainers = with lib.maintainers; [ davidak ];
+    license = lib.licenses.gpl3;
+    platforms = with lib.platforms; unix;
     mainProgram = "phoronix-test-suite";
   };
-}
+})

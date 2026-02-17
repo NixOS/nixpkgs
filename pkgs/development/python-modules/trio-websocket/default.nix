@@ -3,9 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
-  exceptiongroup,
   pytest-trio,
   pytestCheckHook,
   trio,
@@ -30,8 +28,7 @@ buildPythonPackage rec {
   dependencies = [
     trio
     wsproto
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
   nativeCheckInputs = [
     pytest-trio
@@ -64,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trio_websocket" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/HyperionGray/trio-websocket/blob/${version}/CHANGELOG.md";
     description = "WebSocket client and server implementation for Python Trio";
     homepage = "https://github.com/HyperionGray/trio-websocket";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

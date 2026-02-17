@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spooles";
   version = "2.2";
 
   src = fetchurl {
-    url = "http://www.netlib.org/linalg/spooles/spooles.${version}.tgz";
+    url = "http://www.netlib.org/linalg/spooles/spooles.${finalAttrs.version}.tgz";
     sha256 = "1pf5z3vvwd8smbpibyabprdvcmax0grzvx2y0liy98c7x6h5jid8";
   };
 
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.netlib.org/linalg/spooles/";
     description = "Library for solving sparse real and complex linear systems of equations";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.publicDomain;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

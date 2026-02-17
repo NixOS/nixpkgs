@@ -5,15 +5,12 @@
   fetchFromGitHub,
   pillow,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ansi2image";
   version = "0.1.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "helviojunior";
@@ -33,12 +30,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to convert ANSI text to an image";
     mainProgram = "ansi2image";
     homepage = "https://github.com/helviojunior/ansi2image";
     changelog = "https://github.com/helviojunior/ansi2image/blob/${version}/CHANGELOG";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

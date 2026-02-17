@@ -9,7 +9,8 @@
 
   # dependencies
   glib,
-  libXinerama,
+  libxfixes,
+  libxinerama,
   catch2,
   gperf,
 
@@ -28,14 +29,18 @@
   ncurses ? null,
   x11Support ? true,
   freetype,
-  xorg,
+  libxft,
+  libxext,
+  libx11,
+  libsm,
+  libice,
   waylandSupport ? true,
   pango,
   wayland,
   wayland-protocols,
   wayland-scanner,
   xdamageSupport ? x11Support,
-  libXdamage ? null,
+  libxdamage ? null,
   doubleBufferSupport ? x11Support,
   imlib2Support ? x11Support,
   imlib2 ? null,
@@ -64,13 +69,14 @@
   extrasSupport ? true,
 
   versionCheckHook,
+  expat,
 }:
 
 assert docsSupport -> pandoc != null && python3 != null;
 
 assert ncursesSupport -> ncurses != null;
 
-assert xdamageSupport -> x11Support && libXdamage != null;
+assert xdamageSupport -> x11Support && libxdamage != null;
 assert imlib2Support -> x11Support && imlib2 != null;
 assert luaSupport -> lua != null;
 assert luaImlib2Support -> luaSupport && imlib2Support && toluapp != null;
@@ -124,23 +130,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    libXinerama
+    libxinerama
   ]
   ++ lib.optional ncursesSupport ncurses
   ++ lib.optionals x11Support [
     freetype
-    xorg.libICE
-    xorg.libX11
-    xorg.libXext
-    xorg.libXft
-    xorg.libSM
+    libxfixes
+    libice
+    libx11
+    libxext
+    libxft
+    libxfixes
+    libsm
+    expat
   ]
   ++ lib.optionals waylandSupport [
     pango
     wayland
     wayland-protocols
   ]
-  ++ lib.optional xdamageSupport libXdamage
+  ++ lib.optional xdamageSupport libxdamage
   ++ lib.optional imlib2Support imlib2
   ++ lib.optional luaSupport lua
   ++ lib.optional luaImlib2Support imlib2
@@ -180,7 +189,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

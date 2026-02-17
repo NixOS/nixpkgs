@@ -9,12 +9,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wdfs-fuse";
   version = "1.4.2";
 
   src = fetchurl {
-    url = "http://noedler.de/projekte/wdfs/wdfs-${version}.tar.gz";
+    url = "http://noedler.de/projekte/wdfs/wdfs-${finalAttrs.version}.tar.gz";
     sha256 = "fcf2e1584568b07c7f3683a983a9be26fae6534b8109e09167e5dff9114ba2e5";
   };
   nativeBuildInputs = [
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
       'export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH' ""
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://noedler.de/projekte/wdfs/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "User-space filesystem that allows to mount a webdav share";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "wdfs";
   };
-}
+})

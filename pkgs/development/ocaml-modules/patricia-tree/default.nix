@@ -1,5 +1,6 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
   fetchFromGitHub,
   findlib,
@@ -13,6 +14,11 @@ buildDunePackage rec {
   version = "0.11.0";
 
   minimalOCamlVersion = "4.14";
+
+  # Fix build with gcc15
+  env = lib.optionalAttrs (lib.versions.majorMinor ocaml.version == "5.0") {
+    NIX_CFLAGS_COMPILE = "-std=gnu11";
+  };
 
   src = fetchFromGitHub {
     owner = "codex-semantics-library";

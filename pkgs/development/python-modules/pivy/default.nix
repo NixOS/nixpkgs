@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pivy";
   version = "0.6.10";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "coin3d";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/coin3d/pivy/";
     description = "Python binding for Coin";
     license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

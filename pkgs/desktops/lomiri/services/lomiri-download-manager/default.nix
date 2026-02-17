@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   boost,
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-download-manager";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-download-manager";
     tag = finalAttrs.version;
-    hash = "sha256-dVyel4NL5LFORNTQzOyeTFkt9Wn23+4uwHsKcj+/0rk=";
+    hash = "sha256-/rb1Fx0TbBuff2dWAgxpd72opTnLe0itcGwLJ53Wu9U=";
   };
 
   outputs = [
@@ -43,15 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ]
   ++ lib.optionals withDocumentation [ "doc" ];
-
-  patches = [
-    # Remove when version > 0.2.1
-    (fetchpatch {
-      name = "0001-lomiri-download-manager-treewide-Make-pkg-config-includedir-values-reasonable.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/commit/230aa1965917f90d235f55477a257eca1f5eaf46.patch";
-      hash = "sha256-Kdmu4U98Yc213pHS0o4DjpG8T5p50Q5hijRgdvscA/c=";
-    })
-  ];
 
   postPatch = ''
     # Substitute systemd's prefix in pkg-config call
@@ -124,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Performs uploads and downloads from a centralized location";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-download-manager";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];

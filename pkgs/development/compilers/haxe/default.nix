@@ -4,6 +4,7 @@
   fetchFromGitHub,
   coreutils,
   ocaml-ng,
+  dune,
   zlib,
   pcre,
   pcre2,
@@ -23,7 +24,6 @@ let
         ptmap
         camlp5
         sha
-        dune_3
         luv
         extlib
       ]
@@ -37,7 +37,6 @@ let
         ptmap
         camlp5
         sha
-        dune_3
         luv
         extlib-1-7-7
       ];
@@ -61,6 +60,7 @@ let
       buildInputs = [
         zlib
         neko
+        dune
       ]
       ++ (if lib.versionAtLeast version "4.3" then [ pcre2 ] else [ pcre ])
       ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls_2
@@ -134,20 +134,20 @@ let
         popd > /dev/null
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = "https://haxe.org";
-        license = with licenses; [
+        license = with lib.licenses; [
           gpl2Plus
           mit
         ]; # based on upstream opam file
         maintainers = [
-          maintainers.marcweber
-          maintainers.locallycompact
-          maintainers.logo
-          maintainers.bwkam
+          lib.maintainers.marcweber
+          lib.maintainers.locallycompact
+          lib.maintainers.logo
+          lib.maintainers.bwkam
         ];
-        platforms = platforms.linux ++ platforms.darwin;
+        platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
     };
 in

@@ -6,17 +6,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "buildcatrust";
   version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-GYw/RN1OK5fqo3em8hia2l/IwN76hnPnFuYprqeX144=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
     "buildcatrust.cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Build SSL/TLS trust stores";
     mainProgram = "buildcatrust";
     homepage = "https://github.com/lukegb/buildcatrust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lukegb ];
   };
-}
+})

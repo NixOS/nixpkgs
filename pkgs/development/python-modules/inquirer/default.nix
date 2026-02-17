@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # native
   poetry-core,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "inquirer";
   version = "3.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "magmax";
@@ -48,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inquirer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of common interactive command line user interfaces, based on Inquirer.js";
     homepage = "https://github.com/magmax/python-inquirer";
     changelog = "https://github.com/magmax/python-inquirer/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mmahut ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mmahut ];
   };
 }

@@ -17,7 +17,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elastic";
   version = "0.1.9";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "elastic";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jK9RcZ5U1Dwkpu1mlfq/l4347eRCd3Y/KDYYIIkGytk=";
   };
 
@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Design spring animations";
     homepage = "https://gitlab.gnome.org/World/elastic/";
     mainProgram = "app.drey.Elastic";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ _0xMRTT ];
-    teams = [ teams.gnome-circle ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ _0xMRTT ];
+    teams = [ lib.teams.gnome-circle ];
   };
-}
+})

@@ -8,12 +8,12 @@
 }:
 buildPythonPackage rec {
   pname = "onigurumacffi";
-  version = "1.4.1";
-  format = "pyproject";
+  version = "1.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W/vB725dEXniJFP4JDeoJPnVdx4M5l86csprnGEiZTY=";
+    hash = "sha256-1Pqb7kSm04qYsiN8Z9ms3yftDDLWwhgSX+RmgaXt6k0=";
   };
 
   buildInputs = [
@@ -22,10 +22,10 @@ buildPythonPackage rec {
     cffi
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python cffi bindings for the oniguruma regex engine";
     homepage = "https://github.com/asottile/onigurumacffi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ melkor333 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ melkor333 ];
   };
 }

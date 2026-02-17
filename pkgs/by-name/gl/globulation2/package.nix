@@ -98,14 +98,14 @@ stdenv.mkDerivation rec {
     "DATADIR=${placeholder "out"}/share/globulation2/glob2"
   ];
 
-  NIX_LDFLAGS = "-lboost_system";
+  env.NIX_LDFLAGS = "-lboost_system";
 
-  meta = with lib; {
+  meta = {
     description = "RTS without micromanagement";
     mainProgram = "glob2";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
   passthru.updateInfo.downloadPage = "http://globulation2.org/wiki/Download_and_Install";

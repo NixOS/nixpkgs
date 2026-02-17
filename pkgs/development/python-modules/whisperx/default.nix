@@ -10,12 +10,16 @@
   # dependencies
   ctranslate2,
   faster-whisper,
+  huggingface-hub,
   nltk,
+  numpy,
+  omegaconf,
   pandas,
   pyannote-audio,
   torch,
   torchaudio,
   transformers,
+  triton,
 
   # native packages
   ffmpeg,
@@ -33,30 +37,17 @@ let
     };
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whisperx";
-  version = "3.4.3";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-bain";
     repo = "whisperX";
-    tag = "v${version}";
-    hash = "sha256-zx77Fx8KYTWCFcC6Uy6pbe8LJtXP3b6lkwuOSEEYJfU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2HjQtb8k3px0kqXowKtCXkiG2GuKLCuCtDOPYYa/tbc=";
   };
-
-  build-system = [ setuptools ];
-
-  dependencies = [
-    ctranslate
-    faster-whisper
-    nltk
-    pandas
-    pyannote-audio # Missing from pyproject.toml, but used in `whisperx/vad.py`
-    torch
-    torchaudio
-    transformers
-  ];
 
   # As `makeWrapperArgs` does not apply to the module, and whisperx depends on `ffmpeg`,
   # we replace the `"ffmpeg"` string in `subprocess.run` with the full path to the binary.
@@ -67,31 +58,40 @@ buildPythonPackage rec {
       '"ffmpeg"' '"${lib.getExe ffmpeg}"'
   '';
 
+  build-system = [ setuptools ];
+
   pythonRelaxDeps = [
-    # > Checking runtime dependencies for whisperx-3.3.2-py3-none-any.whl
-    # >   - faster-whisper==1.1.0 not satisfied by version 1.1.1
-    # This has been updated on main, so we expect this clause to be removed upon the next update.
-    "faster-whisper"
-
-    "ctranslate2"
+    "torch"
+    "torchaudio"
   ];
-
-  # Import check fails due on `aarch64-linux` ONLY in the sandbox due to onnxruntime
-  # not finding its default logger, which then promptly segfaults.
-  # Simply run the import check on every other platform instead.
-  pythonImportsCheck = lib.optionals (
-    !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
-  ) [ "whisperx" ];
+  dependencies = [
+    ctranslate
+    faster-whisper
+    huggingface-hub
+    nltk
+    numpy
+    omegaconf
+    pandas
+    pyannote-audio
+    torch
+    torchaudio
+    transformers
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    triton
+  ];
 
   # No tests in repository
   doCheck = false;
+
+  pythonImportsCheck = [ "whisperx" ];
 
   meta = {
     mainProgram = "whisperx";
     description = "Automatic Speech Recognition with Word-level Timestamps (& Diarization)";
     homepage = "https://github.com/m-bain/whisperX";
-    changelog = "https://github.com/m-bain/whisperX/releases/tag/${src.tag}";
+    changelog = "https://github.com/m-bain/whisperX/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bengsparks ];
   };
-}
+})

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "eq3btsmart";
-  version = "2.3.0";
+  version = "2.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EuleMitKeule";
     repo = "eq3btsmart";
     tag = version;
-    hash = "sha256-9x2uQUpLl0bSOiEBTvt6IPZCJ3Oj+U4knlvrTXPGs3I=";
+    hash = "sha256-jIQWh7z2bDwWXfirtIThVYUDvgaEMLoMumR4u3rnZ/0=";
   };
 
   build-system = [ setuptools ];

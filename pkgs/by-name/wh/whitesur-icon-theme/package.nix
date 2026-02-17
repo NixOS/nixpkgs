@@ -36,7 +36,7 @@ lib.checkListOfEnum "${pname}: theme variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "WhiteSur-icon-theme";
-      tag = "${version}";
+      tag = version;
       hash = "sha256-oBKDvCVHEjN6JT0r0G+VndzijEWU9L8AvDhHQTmw2E4=";
     };
 
@@ -61,7 +61,7 @@ lib.checkListOfEnum "${pname}: theme variants"
 
       ./install.sh --dest $out/share/icons \
         --name WhiteSur \
-        --theme ${builtins.toString themeVariants} \
+        --theme ${toString themeVariants} \
         ${lib.optionalString alternativeIcons "--alternative"} \
         ${lib.optionalString boldPanelIcons "--bold"} \
 
@@ -70,12 +70,12 @@ lib.checkListOfEnum "${pname}: theme variants"
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "MacOS Big Sur style icon theme for Linux desktops";
       homepage = "https://github.com/vinceliuice/WhiteSur-icon-theme";
-      license = licenses.gpl3Plus;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ icy-thought ];
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ icy-thought ];
     };
 
   }

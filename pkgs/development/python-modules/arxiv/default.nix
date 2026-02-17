@@ -4,7 +4,8 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
   feedparser,
@@ -16,17 +17,20 @@
 }:
 buildPythonPackage rec {
   pname = "arxiv";
-  version = "2.2.0";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lukasschwab";
     repo = "arxiv.py";
     tag = version;
-    hash = "sha256-/lXUWRJ1lbRPWUC/gMRA0NIcuV0HNzFlUVLyhcPAsCQ=";
+    hash = "sha256-96m2UHNoilRhbMnzArUFbm0wZDQS6j97etgOJ7qZmEc=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     feedparser

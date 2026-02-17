@@ -18,7 +18,7 @@
   ffmpeg,
   sqlite,
   zlib,
-  libX11,
+  libx11,
   libGLU,
   libGL,
 }:
@@ -36,22 +36,22 @@ let
     sqlite
     lua
     zlib
-    libX11
+    libx11
     libGLU
     libGL
     ffmpeg
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ultrastardx";
-  version = "2025.9.0";
+  version = "2026.2.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "v${version}";
-    hash = "sha256-SQqmcFchXaYNKzQHjBcisZTjAN9TTWuKXv657yWGghw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vcVHwdCNuwqn9wurLWU0Jv+A9aXIqmVNtSSDSRTbCxw=";
   };
 
   nativeBuildInputs = [
@@ -75,15 +75,15 @@ stdenv.mkDerivation rec {
   # dlopened libgcc requires the rpath not to be shrinked
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://usdx.eu/";
     description = "Free and open source karaoke game";
     mainProgram = "ultrastardx";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       diogotcorreia
       Profpatsch
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

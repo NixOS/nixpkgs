@@ -2,17 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "devour";
   version = "12";
 
   src = fetchFromGitHub {
     owner = "salman-abedin";
     repo = "devour";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1qq5l6d0fn8azg7sj7a4m2jsmhlpswl5793clcxs1p34vy4wb2lp";
   };
 
@@ -20,15 +20,15 @@ stdenv.mkDerivation rec {
     install -Dm555 -t $out/bin devour
   '';
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
-  meta = with lib; {
+  meta = {
     description = "Hides your current window when launching an external program";
     longDescription = "Devour hides your current window before launching an external program and unhides it after quitting";
     homepage = "https://github.com/salman-abedin/devour";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mazurel ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ mazurel ];
+    platforms = lib.platforms.unix;
     mainProgram = "devour";
   };
-}
+})

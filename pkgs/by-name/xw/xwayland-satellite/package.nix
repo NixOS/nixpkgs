@@ -6,20 +6,20 @@
   nix-update-script,
   pkg-config,
   rustPlatform,
-  xcb-util-cursor,
+  libxcb-cursor,
   xwayland,
   withSystemd ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xwayland-satellite";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xwayland-satellite";
-    tag = "v${version}";
-    hash = "sha256-m+9tUfsmBeF2Gn4HWa6vSITZ4Gz1eA1F5Kh62B0N4oE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Qz1WvGdawnoz4dG3JtCtlParmdQHM5xu6osnXeVOqYI=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/local/bin' "$out/bin"
   '';
 
-  cargoHash = "sha256-2+qQSCyWOtOJ4fTVCHbvHYO+k4vxC2nbEOJMdjQZOgY=";
+  cargoHash = "sha256-HGrMjNIsUqh8AFtSABk615x4B9ygrVEn26V0G1kX/nA=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libxcb
-    xcb-util-cursor
+    libxcb-cursor
   ];
 
   buildNoDefaultFeatures = true;
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
       Grants rootless Xwayland integration to any Wayland compositor implementing xdg_wm_base.
     '';
     homepage = "https://github.com/Supreeeme/xwayland-satellite";
-    changelog = "https://github.com/Supreeeme/xwayland-satellite/releases/tag/v${version}";
+    changelog = "https://github.com/Supreeeme/xwayland-satellite/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       if-loop69420
@@ -73,4 +73,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "xwayland-satellite";
     platforms = lib.platforms.linux;
   };
-}
+})

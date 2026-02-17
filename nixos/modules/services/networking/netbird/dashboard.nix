@@ -135,10 +135,12 @@ in
                 "$AUTH_SUPPORTED_SCOPES"
                 "$NETBIRD_DRAG_QUERY_PARAMS"
                 "$NETBIRD_GOOGLE_ANALYTICS_ID"
+                "$NETBIRD_GOOGLE_TAG_MANAGER_ID"
                 "$NETBIRD_HOTJAR_TRACK_ID"
                 "$NETBIRD_MGMT_API_ENDPOINT"
                 "$NETBIRD_MGMT_GRPC_API_ENDPOINT"
                 "$NETBIRD_TOKEN_SOURCE"
+                "$NETBIRD_WASM_PATH"
                 "$USE_AUTH0"
               ];
             }
@@ -166,13 +168,12 @@ in
       enable = true;
 
       virtualHosts.${cfg.domain} = {
-        locations = {
-          "/" = {
-            root = cfg.finalDrv;
-            tryFiles = "$uri $uri.html $uri/ =404";
-          };
+        root = cfg.finalDrv;
 
-          "/404.html".extraConfig = ''
+        locations = {
+          "/".tryFiles = "$uri $uri.html $uri/ =404";
+
+          "= /404.html".extraConfig = ''
             internal;
           '';
         };

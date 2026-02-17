@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "kytea";
   version = "0.4.7";
 
   src = fetchurl {
-    url = "http://www.phontron.com/kytea/download/${pname}-${version}.tar.gz";
+    url = "http://www.phontron.com/kytea/download/kytea-${finalAttrs.version}.tar.gz";
     sha256 = "0ilzzwn5vpvm65bnbyb9f5rxyxy3jmbafw9w0lgl5iad1ka36jjk";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.phontron.com/kytea/";
     description = "General toolkit developed for analyzing text";
 
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
       Chinese and other languages requiring word or morpheme segmentation.
     '';
 
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
 
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 
-}
+})

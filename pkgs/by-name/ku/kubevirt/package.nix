@@ -8,15 +8,15 @@
   kubevirt,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubevirt";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "kubevirt";
     repo = "kubevirt";
-    rev = "v${version}";
-    hash = "sha256-50OaBnQrYn3LZLvsfvGU5ZssPbdKyyAnebqn85iVoYk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0dfZbhcFSIU9TFxQ3UT8Sz+tgeiqVke+RxVwlxw49Hk=";
   };
 
   vendorHash = null;
@@ -26,9 +26,9 @@ buildGoModule rec {
   tags = [ "selinux" ];
 
   ldflags = [
-    "-X kubevirt.io/client-go/version.gitCommit=v${version}"
+    "-X kubevirt.io/client-go/version.gitCommit=v${finalAttrs.version}"
     "-X kubevirt.io/client-go/version.gitTreeState=clean"
-    "-X kubevirt.io/client-go/version.gitVersion=v${version}"
+    "-X kubevirt.io/client-go/version.gitVersion=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -43,14 +43,17 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = kubevirt;
     command = "virtctl version --client";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Client tool to use advanced features such as console access";
     homepage = "https://kubevirt.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ haslersn ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      haslersn
+      johanot
+    ];
     mainProgram = "virtctl";
   };
-}
+})

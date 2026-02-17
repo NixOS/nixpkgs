@@ -3,7 +3,7 @@
   fetchurl,
   tcl,
   tk,
-  libX11,
+  libx11,
   zlib,
   makeWrapper,
   which,
@@ -31,7 +31,7 @@ tcl.mkTclDerivation rec {
   ];
   buildInputs = [
     tk
-    libX11
+    libx11
     zlib
   ];
 
@@ -60,12 +60,12 @@ tcl.mkTclDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Chess database with play and training functionality";
     homepage = "https://scidvspc.sourceforge.net/";
     license = lib.licenses.gpl2Only;
     mainProgram = "scid";
-    maintainers = [ maintainers.paraseba ];
+    maintainers = [ lib.maintainers.paraseba ];
     platforms = lib.platforms.linux;
   };
 }

@@ -9,7 +9,7 @@
   gtk3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qwertone";
   version = "0.5.0";
 
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     domain = "gitlab.com";
     owner = "azymohliad";
     repo = "qwertone";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GD7iFDAaS6D7DGPvK+Cof4rVbUwPX9aCI1jfc0XTxn8=";
   };
 
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ linsui ];
   };
-}
+})

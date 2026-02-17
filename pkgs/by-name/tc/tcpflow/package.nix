@@ -12,14 +12,14 @@
   cairo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcpflow";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "simsong";
     repo = "tcpflow";
-    tag = "tcpflow-${version}";
+    tag = "tcpflow-${finalAttrs.version}";
     sha256 = "0vbm097jhi5n8pg08ia1yhzc225zv9948blb76f4br739l9l22vq";
     fetchSubmodules = true;
   };
@@ -48,20 +48,20 @@ stdenv.mkDerivation rec {
 
   preConfigure = "bash ./bootstrap.sh";
 
-  meta = with lib; {
+  meta = {
     description = "TCP stream extractor";
     longDescription = ''
       tcpflow is a program that captures data transmitted as part of TCP
       connections (flows), and stores the data in a way that is convenient for
       protocol analysis and debugging.
     '';
-    inherit (src.meta) homepage;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    inherit (finalAttrs.src.meta) homepage;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       raskin
       obadz
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "tcpflow";
   };
-}
+})

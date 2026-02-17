@@ -1,7 +1,6 @@
 {
   lib,
   apple-sdk,
-  apple-sdk_12,
   bison,
   buildPackages,
   flex,
@@ -14,10 +13,7 @@
 
 let
   Libc = apple-sdk.sourceRelease "Libc";
-
-  # Older versions of xnu are missing required headers. The one for the 11.3 SDK doesn’t define a needed function
-  # that was added in 11.3. This version of xnu has everything that’s needed.
-  xnu = apple-sdk_12.sourceRelease "xnu";
+  xnu = apple-sdk.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "adv_cmds-deps-private-headers";

@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   numpy,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pysrim";
   version = "0.5.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,10 +35,10 @@ buildPythonPackage rec {
   # pythonImportsCheck does not work
   # TypeError: load() missing 1 required positional argument: 'Loader'
 
-  meta = with lib; {
+  meta = {
     description = "Srim Automation of Tasks via Python";
     homepage = "https://gitlab.com/costrouc/pysrim";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

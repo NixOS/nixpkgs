@@ -73,11 +73,11 @@ buildPythonPackage rec {
     "nextcord.ext.tasks"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/nextcord/nextcord/blob/${src.tag}/docs/whats_new.rst";
     description = "Python wrapper for the Discord API forked from discord.py";
     homepage = "https://github.com/nextcord/nextcord";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

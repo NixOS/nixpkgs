@@ -1,6 +1,7 @@
 {
   lib,
-  flutter327,
+  callPackage,
+  flutter329,
   fetchFromGitHub,
   autoPatchelfHook,
   webkitgtk_4_1,
@@ -10,7 +11,7 @@
   mpv,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "bluebubbles";
   version = "1.15.4";
 
@@ -22,6 +23,8 @@ flutter327.buildFlutterApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  customSourceBuilders.objectbox_flutter_libs = callPackage ./objectbox_flutter_libs.nix { };
 
   gitHashes = {
     desktop_webview_auth = "sha256-n3lvYFUzm/1sCwQBJ3Ovup4Mq7lqGJ17ktk3TJrHhKE=";

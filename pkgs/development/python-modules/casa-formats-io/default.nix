@@ -6,7 +6,6 @@
   fetchPypi,
   numpy,
   oldest-supported-numpy,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   version = "0.3.0";
   format = "setuptools";
   prproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "casa_formats_io";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "casa_formats_io" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dask-based reader for CASA data";
     homepage = "https://casa-formats-io.readthedocs.io/";
     changelog = "https://github.com/radio-astro-tools/casa-formats-io/blob/v${version}/CHANGES.rst";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ smaret ];
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ smaret ];
   };
 }

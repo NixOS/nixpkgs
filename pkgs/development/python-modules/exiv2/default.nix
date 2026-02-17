@@ -8,30 +8,32 @@
   buildPythonPackage,
   setuptools,
   toml,
-  unittestCheckHook,
+  pytestCheckHook,
+  fetchpatch,
 }:
 buildPythonPackage rec {
   pname = "exiv2";
-  version = "0.17.5";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "python-exiv2";
     tag = version;
-    hash = "sha256-MQNovei1Y8EZTF8hEyIWLaL2NbQPCB6FGbVfDHIvNVo=";
+    hash = "sha256-lYz0TWiiBtpwZ56Oiy2v8DFBXoofMv60hxsG0q7Cx9Y=";
   };
 
-  # FAIL: test_localisation (test_types.TestTypesModule.test_localisation)
-  # FAIL: test_TimeValue (test_value.TestValueModule.test_TimeValue)
-  postPatch = ''
-    substituteInPlace tests/test_value.py \
-      --replace-fail "def test_TimeValue(self):" "@unittest.skip('skipping')
-        def test_TimeValue(self):"
-    substituteInPlace tests/test_types.py \
-      --replace-fail "def test_localisation(self):" "@unittest.skip('skipping')
-        def test_localisation(self):"
-  '';
+  patches = [
+    # Disable refcount tests for python >= 3.14
+    (fetchpatch {
+      url = "https://github.com/jim-easterbrook/python-exiv2/commit/fe98ad09ff30f1b6cc5fd5dcc0769f9505c09166.patch";
+      hash = "sha256-+KepYfzocG6qkak+DwXFtCaMiLEAE+FegONgL4vo21o=";
+    })
+    (fetchpatch {
+      url = "https://github.com/jim-easterbrook/python-exiv2/commit/e0a5284620e8d020771bf8c1fa73d6113e662ebf.patch";
+      hash = "sha256-n/yfhP/Z4Is/+2bKsFZtcNXnQe61DjoE9Ryi2q9yTSA=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -45,12 +47,7 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "exiv2" ];
-  nativeCheckInputs = [ unittestCheckHook ];
-  unittestFlagsArray = [
-    "-s"
-    "tests"
-    "-v"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   passthru.updateScript = gitUpdater { };
 

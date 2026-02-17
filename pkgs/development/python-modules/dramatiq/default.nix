@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   gevent,
   pika,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "dramatiq";
   version = "1.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bogdanp";
@@ -100,10 +97,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dramatiq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Background Processing for Python 3";
     homepage = "https://github.com/Bogdanp/dramatiq";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

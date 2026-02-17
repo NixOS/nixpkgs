@@ -123,16 +123,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools used to test a PC/SC driver, card or reader";
     homepage = "https://pcsc-tools.apdu.fr/";
     changelog = "https://github.com/LudovicRousseau/pcsc-tools/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "pcsc_scan";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       peterhoeg
       anthonyroussel
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

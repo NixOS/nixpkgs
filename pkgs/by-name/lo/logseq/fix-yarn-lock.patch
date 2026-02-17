@@ -1,0 +1,101 @@
+diff --git a/static/yarn.lock b/static/yarn.lock
+index 36b4476..0e7c5ee 100644
+--- a/static/yarn.lock
++++ b/static/yarn.lock
+@@ -1444,11 +1444,6 @@ ansi-regex@^5.0.1:
+   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-5.0.1.tgz#082cb2c89c9fe8659a311a53bd6a4dc5301db304"
+   integrity sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==
+ 
+-ansi-regex@^6.0.1:
+-  version "6.2.2"
+-  resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-6.2.2.tgz#60216eea464d864597ce2832000738a0589650c1"
+-  integrity sha512-Bq3SmSpyFHaWjPk8If9yc6svM8c56dB5BAtW4Qbw5jHTwwXXcTLoRMkpDJp6VL0XzlWaCHTXrkFURMYmD0sLqg==
+-
+ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
+   version "4.3.0"
+   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-4.3.0.tgz#edd803628ae71c04c85ae7a0906edad34b648937"
+@@ -1461,11 +1456,6 @@ ansi-styles@^6.0.0:
+   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.1.tgz#0e62320cf99c21afff3b3012192546aacbfb05c5"
+   integrity sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==
+ 
+-ansi-styles@^6.2.1:
+-  version "6.2.3"
+-  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.3.tgz#c044d5dcc521a076413472597a1acb1f103c4041"
+-  integrity sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==
+-
+ anymatch@~3.1.2:
+   version "3.1.3"
+   resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-3.1.3.tgz#790c58b19ba1720a84205b57c618d5ad8524973e"
+@@ -3081,11 +3071,6 @@ get-caller-file@^2.0.5:
+   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-2.0.5.tgz#4f94412a82db32f36e3b0b9741f8a97feb031f7e"
+   integrity sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==
+ 
+-get-east-asian-width@^1.3.0:
+-  version "1.4.0"
+-  resolved "https://registry.yarnpkg.com/get-east-asian-width/-/get-east-asian-width-1.4.0.tgz#9bc4caa131702b4b61729cb7e42735bc550c9ee6"
+-  integrity sha512-QZjmEOC+IT1uk6Rx0sX22V6uHWVwbdbxf1faPqJ1QhLdGgsRGCZoyaQBm/piRdJy/D2um6hM1UP7ZEeQ4EkP+Q==
+-
+ get-folder-size@^2.0.1:
+   version "2.0.1"
+   resolved "https://registry.yarnpkg.com/get-folder-size/-/get-folder-size-2.0.1.tgz#3fe0524dd3bad05257ef1311331417bcd020a497"
+@@ -5201,13 +5186,14 @@ stream-buffers@~2.2.0:
+     is-fullwidth-code-point "^3.0.0"
+     strip-ansi "^6.0.1"
+ 
+-string-width@8.1.0, string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3, string-width@^5.0.0, string-width@^5.1.2, string-width@^7.0.0:
+-  version "8.1.0"
+-  resolved "https://registry.yarnpkg.com/string-width/-/string-width-8.1.0.tgz#9e9fb305174947cf45c30529414b5da916e9e8d1"
+-  integrity sha512-Kxl3KJGb/gxkaUMOjRsQ8IrXiGW75O4E3RPjFIINOVH8AMl2SQ/yWdTzWwF3FevIX9LcMAjJW+GRwAlAbTSXdg==
++string-width@4.2.0, string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3, string-width@^5.0.0, string-width@^5.1.2:
++  version "4.2.0"
++  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.0.tgz#952182c46cc7b2c313d1596e623992bd163b72b5"
++  integrity sha512-zUz5JD+tgqtuDjMhwIg5uFVV3dtqZ9yQJlZVfq4I01/K5Paj5UHj7VyrQOJvzawSVlKpObApbfD0Ed6yJc+1eg==
+   dependencies:
+-    get-east-asian-width "^1.3.0"
+-    strip-ansi "^7.1.0"
++    emoji-regex "^8.0.0"
++    is-fullwidth-code-point "^3.0.0"
++    strip-ansi "^6.0.0"
+ 
+ string_decoder@^1.1.1:
+   version "1.3.0"
+@@ -5223,12 +5209,12 @@ string_decoder@^1.1.1:
+   dependencies:
+     ansi-regex "^5.0.1"
+ 
+-strip-ansi@7.1.2, strip-ansi@^6.0.0, strip-ansi@^6.0.1, strip-ansi@^7.0.1, strip-ansi@^7.1.0:
+-  version "7.1.2"
+-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-7.1.2.tgz#132875abde678c7ea8d691533f2e7e22bb744dba"
+-  integrity sha512-gmBGslpoQJtgnMAvOVqGZpEz9dyoKTCzy2nfz/n8aIFhN/jCE/rCmcxabB6jOOHV+0WNnylOxaxBQPSvcWklhA==
++strip-ansi@^6.0.0, strip-ansi@^6.0.1, strip-ansi@^7.0.1:
++  version "6.0.1"
++  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
++  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+   dependencies:
+-    ansi-regex "^6.0.1"
++    ansi-regex "^5.0.1"
+ 
+ strip-bom@^3.0.0:
+   version "3.0.0"
+@@ -5710,14 +5696,14 @@ word-wrap@^1.2.3:
+     string-width "^4.1.0"
+     strip-ansi "^6.0.0"
+ 
+-wrap-ansi@9.0.2, wrap-ansi@^6.2.0, wrap-ansi@^7.0.0, wrap-ansi@^8.0.1, wrap-ansi@^8.1.0:
+-  version "9.0.2"
+-  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-9.0.2.tgz#956832dea9494306e6d209eb871643bb873d7c98"
+-  integrity sha512-42AtmgqjV+X1VpdOfyTGOYRi0/zsoLqtXQckTmqTeybT+BDIbM/Guxo7x3pE2vtpr1ok6xRqM9OpBe+Jyoqyww==
++wrap-ansi@^6.2.0, wrap-ansi@^7.0.0, wrap-ansi@^8.0.1, wrap-ansi@^8.1.0:
++  version "7.0.0"
++  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
++  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
+   dependencies:
+-    ansi-styles "^6.2.1"
+-    string-width "^7.0.0"
+-    strip-ansi "^7.1.0"
++    ansi-styles "^4.0.0"
++    string-width "^4.1.0"
++    strip-ansi "^6.0.0"
+ 
+ wrappy@1:
+   version "1.0.2"

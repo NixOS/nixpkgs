@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   sphinx,
   pydata-sphinx-theme,
@@ -14,10 +13,9 @@ buildPythonPackage rec {
 
   format = "wheel";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit version format;
+    inherit version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
@@ -35,11 +33,11 @@ buildPythonPackage rec {
     inherit jupyter-book;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Clean book theme for scientific explanations and documentation with Sphinx";
     homepage = "https://github.com/executablebooks/sphinx-book-theme";
     changelog = "https://github.com/executablebooks/sphinx-book-theme/raw/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

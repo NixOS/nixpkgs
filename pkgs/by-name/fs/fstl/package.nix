@@ -6,7 +6,7 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fstl";
   version = "0.11.1";
 
@@ -27,16 +27,16 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fstl-app";
     repo = "fstl";
-    rev = "v" + version;
+    rev = "v" + finalAttrs.version;
     hash = "sha256-puDYXANiyTluSlmnT+gnNPA5eCcw0Ny6md6Ock6pqLc=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fastest STL file viewer";
     mainProgram = "fstl";
     homepage = "https://github.com/fstl-app/fstl";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ tweber ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ tweber ];
   };
-}
+})

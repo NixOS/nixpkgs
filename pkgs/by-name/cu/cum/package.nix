@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cum";
   version = "0.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "15qc6agka2g3kcnpnz0hbjic1s3260cr9bda0rlcyninxs1vndq0";
   };
 
@@ -38,12 +38,12 @@ python3Packages.buildPythonApplication rec {
     rm -rf $out/tests $out/LICENSE
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Comic updater, mangafied";
     mainProgram = "cum";
     homepage = "https://github.com/Hamuko/cum";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

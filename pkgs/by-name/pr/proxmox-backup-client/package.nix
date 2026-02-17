@@ -124,12 +124,13 @@ rustPlatform.buildRustPackage {
     "--bin=pxar"
   ];
 
-  RUSTFLAGS = [ "-L.dep-stubs" ];
+  env = {
+    RUSTFLAGS = toString [ "-L.dep-stubs" ];
+    # pbs-buildcfg requires this set, would be the git commit id
+    REPOID = "";
+  };
 
   doCheck = false;
-
-  # pbs-buildcfg requires this set, would be the git commit id
-  REPOID = "";
 
   nativeBuildInputs = [
     pkgconf
@@ -150,16 +151,16 @@ rustPlatform.buildRustPackage {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for Proxmox Backup Server";
     homepage = "https://pbs.proxmox.com/docs/backup-client.html";
     changelog = "https://git.proxmox.com/?p=proxmox-backup.git;a=blob;f=debian/changelog;hb=${proxmox-backup_src.rev}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       cofob
       christoph-heiss
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "proxmox-backup-client";
   };
 }

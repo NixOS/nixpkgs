@@ -8,10 +8,10 @@
   gettext,
   perl,
   wxGTK32,
-  libXext,
-  libXi,
-  libXt,
-  libXtst,
+  libxext,
+  libxi,
+  libxt,
+  libxtst,
   xercesc,
   qrencode,
   libuuid,
@@ -23,15 +23,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pwsafe";
-  version = "1.22.0fp"; # do NOT update to 3.x Windows releases
+  version = "1.23.0"; # do NOT update to 3.x Windows releases
 
   src = fetchFromGitHub {
     owner = "pwsafe";
     repo = "pwsafe";
-    rev = version;
-    hash = "sha256-oVhpdJPpGNMqL1y67Kv3osa1Cx5YM8SyaNuRWeMfd9g=";
+    rev = finalAttrs.version;
+    hash = "sha256-54cwQZi93p32JxxLc2Mql2XbJPvwqA2Rfne5G+5i6eU=";
   };
 
   strictDeps = true;
@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
     file
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libXext
-    libXi
-    libXt
-    libXtst
+    libxext
+    libxi
+    libxt
+    libxtst
     libuuid
     libyubikey
     yubikey-personalization
@@ -97,10 +97,10 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater {
     allowedVersions = "^1\\.";
-    url = src.gitRepoUrl;
+    url = finalAttrs.src.gitRepoUrl;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Password database utility";
     longDescription = ''
       Password Safe is a password database utility. Like many other
@@ -110,11 +110,11 @@ stdenv.mkDerivation rec {
       username/password combinations that you use.
     '';
     homepage = "https://pwsafe.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       c0bw3b
       pjones
     ];
-    platforms = platforms.unix;
-    license = licenses.artistic2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.artistic2;
   };
-}
+})

@@ -12,7 +12,7 @@
   nixosTests,
 }:
 let
-  version = "4.13.4";
+  version = "4.13.6";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -25,7 +25,7 @@ let
       owner = "DependencyTrack";
       repo = "frontend";
       rev = version;
-      hash = "sha256-CBO69GSUDENBRGDGn7nbxxh9++SAqcFgRBg/SYPze5U=";
+      hash = "sha256-SSnbmAFXQwxAZQzMZeDzf/ebbWUVRICAs1msFXMMi98=";
     };
 
     installPhase = ''
@@ -33,7 +33,7 @@ let
       cp -R ./dist $out/
     '';
 
-    npmDepsHash = "sha256-W3EkDJ0raRNXXZO9ajob+cVN6vcdoUrZYYmkiruSHCE=";
+    npmDepsHash = "sha256-2VK3LOqUxOJaR8cUuINhrhMkvHGyUr206RJR18NCvUo=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -50,7 +50,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-bEODby53pVg/3KVUbLJvDAqfpyc0G+iIUxpLKy7LwJc=";
+    hash = "sha256-EL0Yd8pfTG8/DlY9A3F0lRuPl/wU2/LyACclzttrsjw=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-zM4iPFwQV/sAX666SdfArcjJNVaWXAUeQoiNsYbv2GA=";
+  mvnHash = "sha256-UrLni4shNCv9aHvaGdkzFNBVe8BT4/z4cQ6Ekjr0l9s=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 
@@ -120,7 +120,10 @@ maven.buildMavenPackage rec {
     description = "Intelligent Component Analysis platform that allows organizations to identify and reduce risk in the software supply chain";
     homepage = "https://github.com/DependencyTrack/dependency-track";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.cyberus ];
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+    ];
     mainProgram = "dependency-track";
     inherit (jre_headless.meta) platforms;
   };

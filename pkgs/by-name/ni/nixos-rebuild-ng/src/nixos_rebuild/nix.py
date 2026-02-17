@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import sys
 import textwrap
 import uuid
 from concurrent.futures import ThreadPoolExecutor
@@ -37,6 +38,8 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "LOCALE_ARCHIVE",
     "-E",
     "NIXOS_INSTALL_BOOTLOADER",
+    "-E",
+    "NIXOS_NO_CHECK",
     "--collect",
     "--no-ask-password",
     "--pipe",
@@ -190,7 +193,7 @@ def copy_closure(
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
     extra_env = {
-        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [*SSH_DEFAULT_OPTS, sshopts]))
+        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))
     }
 
     def nix_copy_closure(host: Remote, to: bool) -> None:
@@ -222,7 +225,7 @@ def copy_closure(
         )
 
     match (to_host, from_host):
-        case (None, None):
+        case (x, y) if x == y:
             return
         case (Remote(_) as host, None) | (None, Remote(_) as host):
             nix_copy_closure(host, to=bool(to_host))
@@ -311,6 +314,7 @@ def get_build_image_name_flake(
     r = run_wrapper(
         [
             "nix",
+            *FLAKE_FLAGS,
             "eval",
             "--json",
             flake.to_attr(
@@ -362,6 +366,7 @@ def get_build_image_variants_flake(
     r = run_wrapper(
         [
             "nix",
+            *FLAKE_FLAGS,
             "eval",
             "--json",
             flake.to_attr("config.system.build.images"),
@@ -380,6 +385,9 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
 
     Can be used to generate `.version-suffix` file."""
     if not nixpkgs_path:
+        return None
+
+    if not (nixpkgs_path / ".git").exists():
         return None
 
     try:
@@ -531,6 +539,26 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
             key=lambda x: x["generation"],
             reverse=True,
         )
+
+
+def diff_closures(
+    current_config: Path,
+    new_config: Path,
+    target_host: Remote | None = None,
+) -> None:
+    print(f"<<< {current_config}\n>>> {new_config}", file=sys.stderr)
+    run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "store",
+            "diff-closures",
+            current_config,
+            new_config,
+        ],
+        remote=target_host,
+        stdout=sys.stderr,
+    )
 
 
 def repl(build_attr: BuildAttr, nix_flags: Args | None = None) -> None:

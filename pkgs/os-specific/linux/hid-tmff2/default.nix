@@ -9,13 +9,13 @@
 stdenv.mkDerivation {
   pname = "hid-tmff2";
   # https://github.com/Kimplul/hid-tmff2/blob/ca168637fbfb085ebc9ade0c47fa0653dac5d25b/dkms/dkms-install.sh#L12
-  version = "0-unstable-2025-07-28";
+  version = "0.83-unstable-2026-02-08";
 
   src = fetchFromGitHub {
     owner = "Kimplul";
     repo = "hid-tmff2";
-    rev = "e0a173f3265be8efcbd4a6f34df6c5713d988b15";
-    hash = "sha256-JZ7nNiNlUdzY9ZJ5AT/xMpSZYz8ej9LByybkBEaHHqk=";
+    rev = "f004195a73be722f6384ecae7d98161481151dff";
+    hash = "sha256-jKmWfBBT3md4kxw49iIwr2yM6Yhr31RLER1Mu/fhBmQ=";
     # For hid-tminit. Source: https://github.com/scarburato/hid-tminit
     fetchSubmodules = true;
   };
@@ -34,11 +34,11 @@ stdenv.mkDerivation {
 
   postPatch = "sed -i '/depmod -A/d' Makefile";
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel module for Thrustmaster T300RS, T248 and TX(experimental)";
     homepage = "https://github.com/Kimplul/hid-tmff2";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.rayslash ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.rayslash ];
+    platforms = lib.platforms.linux;
   };
 }

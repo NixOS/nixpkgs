@@ -662,15 +662,19 @@ rec {
     # On ARM, this corresponds to ARMEABI.
     eabi = {
       float = "soft";
+      eabi = true;
     };
     eabihf = {
       float = "hard";
+      eabi = true;
     };
 
     # Other architectures should use ELF in embedded situations.
     elf = { };
 
-    androideabi = { };
+    androideabi = {
+      eabi = true;
+    };
     android = {
       assertions = [
         {
@@ -684,9 +688,11 @@ rec {
 
     gnueabi = {
       float = "soft";
+      eabi = true;
     };
     gnueabihf = {
       float = "hard";
+      eabi = true;
     };
     gnu = {
       assertions = [
@@ -730,17 +736,21 @@ rec {
 
     musleabi = {
       float = "soft";
+      eabi = true;
     };
     musleabihf = {
       float = "hard";
+      eabi = true;
     };
     musl = { };
 
     uclibceabi = {
       float = "soft";
+      eabi = true;
     };
     uclibceabihf = {
       float = "hard";
+      eabi = true;
     };
     uclibc = { };
 
@@ -919,9 +929,9 @@ rec {
           else if isLinux parsed || isWindows parsed then
             if isAarch32 parsed then
               if versionAtLeast (parsed.cpu.version or "0") "6" then abis.gnueabihf else abis.gnueabi
-            # Default ppc64 BE to ELFv2
+            # Default ppc64 BE to ELFv1
             else if isPower64 parsed && isBigEndian parsed then
-              abis.gnuabielfv2
+              abis.gnuabielfv1
             else
               abis.gnu
           else

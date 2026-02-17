@@ -34,25 +34,25 @@
   libpng,
   libuuid,
   libsecret,
-  libX11,
+  libx11,
   libxcb,
   libxkbcommon,
   mesa-demos,
-  xcbutilwm,
-  xcbutilrenderutil,
-  xcbutilkeysyms,
-  xcbutilimage,
-  xcbutilcursor,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxcb-cursor,
   libxkbfile,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   makeWrapper,
   ncurses5,
   nspr,
@@ -70,7 +70,8 @@
   runCommand,
   wayland,
   xkeyboard_config,
-  xorg,
+  libsm,
+  libice,
   zlib,
   makeDesktopItem,
   tiling_wm, # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
@@ -80,11 +81,11 @@
 }:
 
 let
-  drvName = "android-studio-${channel}-${version}";
   filename = "android-studio-${version}-linux.tar.gz";
 
   androidStudio = stdenv.mkDerivation {
-    name = "${drvName}-unwrapped";
+    pname = "${pname}-unwrapped";
+    inherit version;
 
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/${filename}";
@@ -140,10 +141,10 @@ let
             # Crash at startup without these
             fontconfig
             freetype
-            libXext
-            libXi
-            libXrender
-            libXtst
+            libxext
+            libxi
+            libxrender
+            libxtst
             libsecret
 
             # No crash, but attempted to load at startup
@@ -158,7 +159,7 @@ let
             zlib
             pkgsi686Linux.zlib
             # Support multiple monitors
-            libXrandr
+            libxrandr
 
             # For Android emulator
             alsa-lib
@@ -167,21 +168,21 @@ let
             libbsd
             libpulseaudio
             libuuid
-            libX11
+            libx11
             libxcb
             libxkbcommon
-            xcbutilwm
-            xcbutilrenderutil
-            xcbutilkeysyms
-            xcbutilimage
-            xcbutilcursor
-            xorg.libICE
-            xorg.libSM
+            libxcb-wm
+            libxcb-render-util
+            libxcb-keysyms
+            libxcb-image
+            libxcb-cursor
+            libice
+            libsm
             libxkbfile
-            libXcomposite
-            libXcursor
-            libXdamage
-            libXfixes
+            libxcomposite
+            libxcursor
+            libxdamage
+            libxfixes
             libGL
             libdrm
             libpng
@@ -228,7 +229,7 @@ let
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
   fhsEnv = buildFHSEnv {
-    pname = "${drvName}-fhs-env";
+    pname = "${pname}-fhs-env";
     inherit version;
     multiPkgs = pkgs: [
       ncurses5
@@ -245,8 +246,9 @@ let
       androidStudio,
       androidSdk ? null,
     }:
-    runCommand drvName
+    runCommand "${pname}-${version}"
       {
+        inherit pname version;
         startScript =
           let
             hasAndroidSdk = androidSdk != null;
@@ -283,7 +285,7 @@ let
                 unset ANDROID_HOME
               fi
             ''}
-            exec ${fhsEnv}/bin/${drvName}-fhs-env ${lib.getExe androidStudio} "$@"
+            exec ${lib.getExe fhsEnv} ${lib.getExe androidStudio} "$@"
           '';
         preferLocalBuild = true;
         allowSubstitutes = false;
@@ -292,7 +294,6 @@ let
             withSdk = androidSdk: mkAndroidStudioWrapper { inherit androidStudio androidSdk; };
           in
           {
-            inherit version;
             unwrapped = androidStudio;
             full = withSdk androidenv.androidPkgs.androidsdk;
             inherit withSdk;

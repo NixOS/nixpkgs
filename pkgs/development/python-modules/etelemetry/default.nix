@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   ci-info,
   ci-py,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "etelemetry";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sensein";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
     "etelemetry.config"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight python client to communicate with the etelemetry server";
     homepage = "https://github.com/sensein/etelemetry-client";
     changelog = "https://github.com/sensein/etelemetry-client/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

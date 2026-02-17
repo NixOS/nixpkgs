@@ -17,7 +17,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   rich,
   setuptools,
 }:
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "google-cloud-logging";
   version = "3.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_logging";
@@ -85,11 +82,11 @@ buildPythonPackage rec {
     "google.cloud.logging_v2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/python-logging";
     changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

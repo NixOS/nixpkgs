@@ -1,18 +1,18 @@
 {
+  stdenv,
   cmake,
   fetchFromGitHub,
   fetchpatch,
   lib,
   libusb1,
-  mkDerivation,
   python3,
   qtbase,
   qttools,
+  wrapQtAppsHook,
   udev,
   zlib,
 }:
-
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openambit";
   version = "0.5";
 
@@ -33,9 +33,24 @@ mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.0)' 'cmake_minimum_required(VERSION 3.10)'
+
+    substituteInPlace src/libambit/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required (VERSION 3.1.3)' 'cmake_minimum_required(VERSION 3.10)'
+
+    substituteInPlace src/movescount/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.5)' 'cmake_minimum_required(VERSION 3.10)'
+
+    substituteInPlace src/openambit/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.5)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   nativeBuildInputs = [
     cmake
     qttools
+    wrapQtAppsHook
   ];
   buildInputs = [
     libusb1
@@ -63,11 +78,11 @@ mkDerivation rec {
           $out/lib/udev/rules.d/20-libambit.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helps fetch data from Suunto Ambit GPS watches";
     homepage = "https://github.com/openambitproject/openambit/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rycee ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rycee ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,7 +4,6 @@
   dnspython,
   fetchFromGitHub,
   protobuf,
-  pythonOlder,
   mysql80,
   openssl,
   pkgs,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "mysql-connector";
   version = "8.0.33";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   setupPyBuildFlags = [
     "--with-mysql-capi=${mysql80}"
@@ -56,7 +53,7 @@ buildPythonPackage rec {
   # Tests require a running MySQL instance
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "MySQL driver";
     longDescription = ''
       A MySQL driver that does not depend on MySQL C client libraries and
@@ -64,8 +61,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
     changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       neosimsim
     ];
   };

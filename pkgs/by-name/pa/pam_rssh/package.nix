@@ -10,14 +10,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pam_rssh";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "z4yx";
     repo = "pam_rssh";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VxbaxqyIAwmjjbgfTajqwPQC3bp7g/JNVNx9yy/3tus=";
     fetchSubmodules = true;
   };
@@ -68,14 +68,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "PAM module for authenticating via ssh-agent, written in Rust";
     homepage = "https://github.com/z4yx/pam_rssh";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      kranzes
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       xyenon
     ];
   };
-}
+})

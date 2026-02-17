@@ -22,14 +22,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poedit";
   version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
-    rev = "v${version}-oss";
+    rev = "v${finalAttrs.version}-oss";
     hash = "sha256-Lb1R7GMB0GeS2xZASR7w4ee33mMEKP9gPabRHkHlIJI=";
   };
 
@@ -77,14 +77,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform gettext catalogs (.po files) editor";
     mainProgram = "poedit";
     homepage = "https://www.poedit.net/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dasj19 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dasj19 ];
     # configure: error: GTK+ build of wxWidgets is required
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

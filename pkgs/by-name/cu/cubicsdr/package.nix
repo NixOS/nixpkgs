@@ -8,7 +8,7 @@
   hamlib,
   libpulseaudio,
   libGL,
-  libX11,
+  libx11,
   liquid-dsp,
   pkg-config,
   soapysdr-with-plugins,
@@ -16,14 +16,14 @@
   enableDigitalLab ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cubicsdr";
   version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "cjcliffe";
     repo = "CubicSDR";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0cyv1vk97x4i3h3hhh7dx8mv6d1ad0fypdbx5fl26bz661sr8j2n";
   };
 
@@ -50,21 +50,26 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     libGL
-    libX11
+    libx11
   ];
 
   cmakeFlags = [ "-DUSE_HAMLIB=ON" ] ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required (VERSION 3.10)"
+  '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libliquid.dylib ${lib.getLib liquid-dsp}/lib/libliquid.dylib ''${out}/bin/CubicSDR
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cubicsdr.com";
     description = "Software Defined Radio application";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lasandell ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ lasandell ];
+    platforms = lib.platforms.unix;
     mainProgram = "CubicSDR";
   };
-}
+})

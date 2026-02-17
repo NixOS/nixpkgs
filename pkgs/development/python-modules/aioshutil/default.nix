@@ -5,22 +5,19 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "aioshutil";
-  version = "1.6.a1";
+  version = "1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "kumaraditya303";
     repo = "aioshutil";
     tag = "v${version}";
-    hash = "sha256-KoKIlliWSbU8KY92SgFm4Wams87O22KVlE41q18Sk3I=";
+    hash = "sha256-+8BpL9CVH0X/9H7vL4xuV5CdA3A10a2A1q4wt1x1sSM=";
   };
 
   build-system = [ setuptools-scm ];
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioshutil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous version of function of shutil module";
     homepage = "https://github.com/kumaraditya303/aioshutil";
     changelog = "https://github.com/kumaraditya303/aioshutil/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

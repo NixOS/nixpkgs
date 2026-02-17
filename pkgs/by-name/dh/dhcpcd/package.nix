@@ -13,15 +13,15 @@
   enablePrivSep ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dhcpcd";
-  version = "10.2.4";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "dhcpcd";
-    rev = "v${version}";
-    sha256 = "sha256-ysaKgF4Cu/S6yhSn/4glA0+Ey54KNp3/1Oh82yE0/PY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-XbXZkws1eHvN7OEq7clq2kziwwdk04lNrWbJ9RdHExU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Client for the Dynamic Host Configuration Protocol (DHCP)";
     homepage = "https://roy.marples.name/projects/dhcpcd";
-    platforms = platforms.linux ++ platforms.freebsd ++ platforms.openbsd;
-    license = licenses.bsd2;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.openbsd;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "dhcpcd";
   };
-}
+})

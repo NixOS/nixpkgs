@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   oauthlib,
-  pythonOlder,
   requests,
   requests-oauthlib,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "ondilo";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "JeromeHXP";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ondilo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to access Ondilo ICO APIs";
     homepage = "https://github.com/JeromeHXP/ondilo";
     changelog = "https://github.com/JeromeHXP/ondilo/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

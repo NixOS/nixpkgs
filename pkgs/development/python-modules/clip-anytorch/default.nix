@@ -5,7 +5,6 @@
   fetchpatch,
   ftfy,
   packaging,
-  pythonOlder,
   regex,
   setuptools,
   torch,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "clip-anytorch";
   version = "2.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "rom1504";
@@ -52,10 +49,10 @@ buildPythonPackage rec {
   # All tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Contrastive Language-Image Pretraining";
     homepage = "https://github.com/rom1504/CLIP";
-    license = licenses.mit;
-    teams = [ teams.tts ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

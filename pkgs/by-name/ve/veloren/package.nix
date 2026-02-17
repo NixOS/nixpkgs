@@ -10,10 +10,10 @@
   libxcb,
   libxkbcommon,
   autoPatchelfHook,
-  libX11,
-  libXi,
-  libXcursor,
-  libXrandr,
+  libx11,
+  libxi,
+  libxcursor,
+  libxrandr,
   wayland,
   stdenv,
 }:
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage {
     ./fix-assets-path.patch
   ];
 
-  cargoHash = "sha256-Uj0gFcStWhIS+GbM/Hn/vD2PrA0ftzEnMnCwV0n0g7g=";
+  cargoHash = "sha256-hxDVFJxZQ2Seg4vapSE8PsT527GOs9DFWFnacKwWkiM=";
 
   postPatch = ''
     # Force vek to build in unstable mode
@@ -52,6 +52,8 @@ rustPlatform.buildRustPackage {
       println!("cargo:rustc-cfg=nightly");
     }
     EOF
+    # Fix assets path
+    substituteAllInPlace common/assets/src/lib.rs
   '';
 
   nativeBuildInputs = [
@@ -93,10 +95,10 @@ rustPlatform.buildRustPackage {
   appendRunpaths = [
     (lib.makeLibraryPath (
       [
-        libX11
-        libXi
-        libXcursor
-        libXrandr
+        libx11
+        libxi
+        libxcursor
+        libxrandr
         vulkan-loader
       ]
       ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [

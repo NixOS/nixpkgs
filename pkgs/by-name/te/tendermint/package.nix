@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tendermint";
   version = "0.35.9";
 
   src = fetchFromGitHub {
     owner = "tendermint";
     repo = "tendermint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3tggW+M3vZChDT1g77W5M3hchEN6pTSVvkrZda6ZTCY=";
   };
 
@@ -21,16 +21,16 @@ buildGoModule rec {
 
   preBuild = ''
     makeFlagsArray+=(
-      "-ldflags=-s -w -X github.com/tendermint/tendermint/version.GitCommit=${src.rev}"
+      "-ldflags=-s -w -X github.com/tendermint/tendermint/version.GitCommit=${finalAttrs.src.rev}"
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Byzantine-Fault Tolerant State Machines. Or Blockchain, for short";
     homepage = "https://tendermint.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ alexfmpe ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ alexfmpe ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "tendermint";
   };
-}
+})

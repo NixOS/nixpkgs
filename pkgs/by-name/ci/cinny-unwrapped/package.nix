@@ -6,6 +6,7 @@
   python3,
   pkg-config,
   pixman,
+  nodejs_22,
   cairo,
   pango,
   stdenv,
@@ -13,16 +14,18 @@
 
 buildNpmPackage rec {
   pname = "cinny-unwrapped";
-  version = "4.10.1";
+  version = "4.10.3";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
     tag = "v${version}";
-    hash = "sha256-Hn49a+nGtF5kJ1ZM+rOXWH+dFG1nMSI/rIDF+9qlQk4=";
+    hash = "sha256-ZztZ/znJUwgYlvv5h9uxNZvQrkUMVbMG6R+HbRtSXHM=";
   };
 
-  npmDepsHash = "sha256-896W5XbAGUcUa8gxeR72hg9fwTaUOR5a5hex8vS33gU=";
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-Spt2+sQcoPwy1tU8ztqJHZS9ITX9avueYDVKE7BFYy4=";
 
   nativeBuildInputs = [
     python3

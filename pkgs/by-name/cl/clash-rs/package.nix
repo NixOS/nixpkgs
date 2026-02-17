@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-asD7veAYdIF5biCbSXYvAyW/qBra3tvON9TQYCw6nB8=";
+    hash = "sha256-WtNnBw0/eAz/uO/dlD2yRZHW38CXIT8zhh4lZ3HaIFs=";
   };
 
-  cargoHash = "sha256-9zCQKxkjiskkBGxfnq2ANpqWobs+UJ5qCsbME2Z7GY4=";
+  cargoHash = "sha256-8SLBsYtO6qVihc/C9R3ZptHCKgl2iXiQrOWqgDBXdTc=";
 
   cargoPatches = [ ./Cargo.patch ];
 
@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

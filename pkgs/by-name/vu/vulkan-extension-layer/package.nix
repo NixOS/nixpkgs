@@ -8,21 +8,21 @@
   vulkan-headers,
   vulkan-utility-libraries,
   jq,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   libxcb,
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-extension-layer";
-  version = "1.4.321.0";
+  version = "1.4.335.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ExtensionLayer";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-tWUi+yCI7wNLVeGg/h5a+yvKWAu8KZqtgEujfCUtYQ4=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-1Ax/0W882nJFO2hVqXamT89lFu5ncnrytnwDdUIihnk=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     vulkan-headers
     vulkan-utility-libraries
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     libxcb
     wayland
   ];
@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Layers providing Vulkan features when native support is unavailable";
     homepage = "https://github.com/KhronosGroup/Vulkan-ExtensionLayer/";
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

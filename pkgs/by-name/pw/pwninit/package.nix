@@ -9,15 +9,15 @@
   xz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pwninit";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "io12";
     repo = "pwninit";
-    rev = version;
-    sha256 = "sha256-tbZS7PdRFvO2ifoHA/w3cSPfqqHrLeLHAg6V8oG9gVE=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-WKOndOkaKr+dUnx61LW6ZZxUFUESerjE5W6hgLA3n1o=";
   };
 
   buildInputs = [
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   '';
   doCheck = false; # there are no tests to run
 
-  cargoHash = "sha256-N0vje5ZU7B++f71BJKwkEfpbInpermH241f6oP1/fQE=";
+  cargoHash = "sha256-KMvaKTNC84K6N0NAZizK9M1nP4rV4cfwlOTI/HidQYc=";
 
   meta = {
     description = "Automate starting binary exploit challenges";
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.scoder12 ];
     platforms = lib.platforms.all;
   };
-}
+})

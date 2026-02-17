@@ -14,11 +14,11 @@ buildDunePackage rec {
     hash = "sha256-Bk9iRfWZXV0vTx+cbSmS4v2+Pd4ygha67Hz6vUhXlA0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Experimental OCaml library to work with DWARF format";
     homepage = "https://github.com/let-def/owee/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       vbgl
       alizter
     ];

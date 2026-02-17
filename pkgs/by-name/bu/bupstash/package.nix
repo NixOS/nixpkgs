@@ -7,14 +7,14 @@
   pkg-config,
   libsodium,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bupstash";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "andrewchambers";
     repo = "bupstash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Ekjxna3u+71s1q7jjXp7PxYUQIfbp2E+jAqKGuszU6g=";
   };
 
@@ -35,12 +35,12 @@ rustPlatform.buildRustPackage rec {
     installManPage doc/man/*.[1-9]
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easy and efficient encrypted backups";
     homepage = "https://bupstash.io";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ andrewchambers ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
     mainProgram = "bupstash";
   };
-}
+})

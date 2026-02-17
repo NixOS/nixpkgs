@@ -9,7 +9,9 @@
   raylib,
   SDL2,
   tkrzw,
-  xorg,
+  libxinerama,
+  libxft,
+  libx11,
 }:
 
 # The following is list of overrides that take two arguments each:
@@ -105,13 +107,11 @@
       ...
     }:
     {
-      buildInputs =
-        buildInputs
-        ++ (with xorg; [
-          libX11
-          libXft
-          libXinerama
-        ]);
+      buildInputs = buildInputs ++ [
+        libx11
+        libxft
+        libxinerama
+      ];
     };
 
   zippy =

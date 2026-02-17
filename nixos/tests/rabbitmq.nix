@@ -1,6 +1,6 @@
 # This test runs rabbitmq and checks if rabbitmq is up and running.
 
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   # in real life, you would keep this out of your repo and deploy it to a safe
   # location using safe means.
@@ -8,9 +8,6 @@ let
 in
 {
   name = "rabbitmq";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ offline ];
-  };
 
   nodes.machine = {
     services.rabbitmq = {
@@ -40,6 +37,8 @@ in
         ].
       '';
     };
+    systemd.services.rabbitmq.serviceConfig.Restart = lib.mkForce "no";
+
     # Ensure there is sufficient extra disk space for rabbitmq to be happy
     virtualisation.diskSize = 1024;
   };

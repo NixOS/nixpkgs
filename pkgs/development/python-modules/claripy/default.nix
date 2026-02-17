@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pysmt,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
   z3-solver,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "claripy";
   version = "9.2.154";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
@@ -46,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "claripy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python abstraction layer for constraint solvers";
     homepage = "https://github.com/angr/claripy";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

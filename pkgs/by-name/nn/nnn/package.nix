@@ -59,8 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isMusl musl-fts
   ++ lib.optional withPcre pcre;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-I${musl-fts}/include";
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_CFLAGS_COMPILE = "-I${musl-fts}/include";
+    NIX_LDFLAGS = "-lfts";
+  };
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -99,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/jarun/nnn/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "nnn";
   };
 })

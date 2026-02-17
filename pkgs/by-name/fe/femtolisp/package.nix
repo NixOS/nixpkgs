@@ -2,28 +2,35 @@
   lib,
   stdenv,
   fetchFromSourcehut,
+  meson,
+  ninja,
   unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "femtolisp";
-  version = "0-unstable-2024-06-18";
+  version = "0-unstable-2025-12-18";
 
   src = fetchFromSourcehut {
     owner = "~ft";
     repo = "femtolisp";
-    rev = "ee58f398fec62d3096b0e01da51a3969ed37a32d";
-    hash = "sha256-pfPD9TNLmrqhvJS/aVVmziMVApsiU5v1nAMqU+Kduzw=";
+    rev = "08f9a4fda14ceb9b1d5879b6631dca02ba818401";
+    hash = "sha256-xbkHlVUEpUOIMzEQy/90jMMD8J6cm0UNHAiCrfDDid8=";
   };
 
   strictDeps = true;
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin/ flisp
+    install -Dm755 -t $out/bin/ sl
 
     runHook postInstall
   '';
@@ -40,6 +47,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ moody ];
     broken = stdenv.hostPlatform.isDarwin;
     platforms = lib.platforms.unix;
-    mainProgram = "flisp";
+    mainProgram = "sl";
   };
 }

@@ -13,7 +13,7 @@ let
   opt = options.services.grafana;
   provisioningSettingsFormat = pkgs.formats.yaml { };
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (
-    builtins.map (pkg: {
+    map (pkg: {
       name = pkg.pname;
       path = pkg;
     }) cfg.declarativePlugins
@@ -85,7 +85,10 @@ let
       fi
     '';
   provisionConfDir =
-    pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; }
+    pkgs.runCommand "grafana-provisioning"
+      {
+        nativeBuildInputs = [ pkgs.lndir ];
+      }
       ''
         mkdir -p $out/{alerting,datasources,dashboards,plugins}
         ${ln {
@@ -126,7 +129,7 @@ let
       '';
 
   # Get a submodule without any embedded metadata:
-  _filter = x: filterAttrs (k: v: k != "_module") x;
+  _filter = x: removeAttrs x [ "_module" ];
 
   # https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
   grafanaTypes.datasourceConfig = types.submodule {
@@ -873,13 +876,19 @@ in
 
             secret_key = mkOption {
               description = ''
-                Secret key used for signing. Please note that the contents of this option
+                Secret key used for signing data source settings like secrets and passwords.
+                Set this to a unique, random string in production, generated for example by running `openssl rand -hex 32`.
+
+                If you change this later you will need to update data source settings to re-encode them.
+
+                <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#secret_key>
+
+                Please note that the contents of this option
                 will end up in a world-readable Nix store. Use the file provider
                 pointing at a reasonably secured file in the local filesystem
                 to work around that. Look at the documentation for details:
                 <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
               '';
-              default = "SW2YcwTIb9zpOOhoPsMm";
               type = types.str;
             };
 
@@ -1267,7 +1276,7 @@ in
                 No IP addresses are being tracked, only simple counters to track running instances, versions, dashboard and error counts.
                 Counters are sent every 24 hours.
               '';
-              default = true;
+              default = false;
               type = types.bool;
             };
 
@@ -1297,6 +1306,18 @@ in
             feedback_links_enabled = mkOption {
               description = "Set to `false` to remove all feedback links from the UI.";
               default = true;
+              type = types.bool;
+            };
+          };
+
+          plugins = {
+            preinstall_disabled = mkOption {
+              description = ''
+                When set to `true`, disables the Background Plugin Installer, which runs before Grafana starts.
+                This component causes issues with `declarativePlugins` and is disabled by default if those are used.
+              '';
+              default = cfg.declarativePlugins != null;
+              defaultText = literalExpression "cfg.declarativePlugins != null";
               type = types.bool;
             };
           };
@@ -2045,7 +2066,7 @@ in
       description = "Grafana Service Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [
-        "networking.target"
+        "network.target"
       ]
       ++ lib.optional usePostgresql "postgresql.target"
       ++ lib.optional useMysql "mysql.service";

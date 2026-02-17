@@ -9,7 +9,6 @@
   packaging,
   prance,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "apispec";
   version = "6.8.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,15 +40,15 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "apispec" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/marshmallow-code/apispec/blob/${version}/CHANGELOG.rst";
     description = "Pluggable API specification generator with support for the OpenAPI Specification";
     homepage = "https://github.com/marshmallow-code/apispec";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

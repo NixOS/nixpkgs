@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cryptsetup";
-  version = "2.8.1";
+  version = "2.8.3";
 
   outputs = [
     "bin"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor finalAttrs.version}/"
       + "cryptsetup-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LDN563ZZfcq1CRFEmwE+JpfEv/zHFtu/DZsOj7u0b7Q=";
+    hash = "sha256-SoojuLnRoyUEUuQKzq1EIaA+RaOJVK0FlWNPQmaqgA8=";
   };
 
   patches = [
@@ -56,7 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/unit-utils-io.c --replace "| O_DIRECT" ""
   '';
 
-  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
+  env = lib.optionalAttrs (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) {
+    NIX_LDFLAGS = "-lgcc_s";
+  };
 
   configureFlags = [
     "--with-crypto_backend=openssl"
@@ -116,5 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
       raitobezarius
     ];
     platforms = with lib.platforms; linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "cryptsetup_project" finalAttrs.version;
   };
 })

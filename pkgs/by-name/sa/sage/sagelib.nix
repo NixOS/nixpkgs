@@ -13,7 +13,6 @@
   gd,
   iml,
   libpng,
-  readline,
   blas,
   boost,
   brial,
@@ -23,7 +22,6 @@
   fflas-ffpack,
   flint,
   gap,
-  giac,
   givaro,
   glpk,
   gsl,
@@ -44,7 +42,6 @@
   planarity,
   ppl,
   rankwidth,
-  ratpoints,
   singular,
   sqlite,
   symmetrica,
@@ -60,7 +57,6 @@
   ipykernel,
   ipython,
   ipywidgets,
-  jinja2,
   jupyter-client,
   jupyter-core,
   lrcalc-python,
@@ -117,7 +113,6 @@ buildPythonPackage rec {
     gd
     iml
     libpng
-    readline
   ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
@@ -138,7 +133,6 @@ buildPythonPackage rec {
     fflas-ffpack
     flint
     gap
-    giac
     givaro
     glpk
     gsl
@@ -159,7 +153,6 @@ buildPythonPackage rec {
     planarity
     ppl
     rankwidth
-    ratpoints
     singular
     sqlite
     symmetrica
@@ -177,7 +170,6 @@ buildPythonPackage rec {
     ipykernel
     ipython
     ipywidgets
-    jinja2
     jupyter-client
     jupyter-core
     lrcalc-python

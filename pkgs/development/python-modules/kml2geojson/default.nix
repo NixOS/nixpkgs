@@ -4,16 +4,13 @@
   poetry-core,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   click,
 }:
 
 buildPythonPackage rec {
   pname = "kml2geojson";
   version = "5.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mrcagney";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kml2geojson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to convert KML to GeoJSON";
     mainProgram = "k2g";
     homepage = "https://github.com/mrcagney/kml2geojson";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

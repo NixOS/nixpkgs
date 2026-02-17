@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   undmg,
   pname,
   version,
@@ -7,7 +7,7 @@
   meta,
   ...
 }:
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit
     pname
     version

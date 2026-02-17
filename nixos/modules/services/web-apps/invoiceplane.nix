@@ -348,7 +348,6 @@ in
       };
 
       services.phpfpm = {
-        phpPackage = pkgs.php81;
         pools = mapAttrs' (
           hostName: cfg:
           (nameValuePair "invoiceplane-${hostName}" {

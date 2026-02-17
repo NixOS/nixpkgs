@@ -7,19 +7,22 @@
 let
   sanitizeUTF8Capitalization =
     lang: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] lang);
-  aggregatedLocales = [
-    "${config.i18n.defaultLocale}/${config.i18n.defaultCharset}"
-  ]
-  ++ lib.pipe config.i18n.extraLocaleSettings [
-    # See description of extraLocaleSettings for why is this ignored here.
-    (lib.filterAttrs (n: v: n != "LANGUAGE"))
-    (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
-    (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
-  ]
-  ++ (builtins.map sanitizeUTF8Capitalization (
-    lib.optionals (builtins.isList config.i18n.extraLocales) config.i18n.extraLocales
-  ))
-  ++ (lib.optional (builtins.isString config.i18n.extraLocales) config.i18n.extraLocales);
+  aggregatedLocales =
+    lib.optionals (config.i18n.defaultLocale != "C") [
+      "${config.i18n.defaultLocale}/${config.i18n.defaultCharset}"
+    ]
+    ++ lib.pipe config.i18n.extraLocaleSettings [
+      # See description of extraLocaleSettings for why is this ignored here.
+      (x: lib.removeAttrs x [ "LANGUAGE" ])
+      (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
+      # C locales are always installed
+      (lib.filterAttrs (n: v: v != "C"))
+      (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
+    ]
+    ++ (map sanitizeUTF8Capitalization (
+      lib.optionals (builtins.isList config.i18n.extraLocales) config.i18n.extraLocales
+    ))
+    ++ (lib.optional (builtins.isString config.i18n.extraLocales) config.i18n.extraLocales);
 in
 {
   ###### interface
@@ -30,12 +33,12 @@ in
       glibcLocales = lib.mkOption {
         type = lib.types.path;
         default = pkgs.glibcLocales.override {
-          allLocales = lib.any (x: x == "all") config.i18n.supportedLocales;
+          allLocales = lib.elem "all" config.i18n.supportedLocales;
           locales = config.i18n.supportedLocales;
         };
         defaultText = lib.literalExpression ''
           pkgs.glibcLocales.override {
-            allLocales = lib.any (x: x == "all") config.i18n.supportedLocales;
+            allLocales = lib.elem "all" config.i18n.supportedLocales;
             locales = config.i18n.supportedLocales;
           }
         '';
@@ -111,6 +114,9 @@ in
         description = ''
           Per each {option}`i18n.extraLocaleSettings`, choose the character set
           to use for it. Essentially defaults to UTF-8 for all of them.
+
+          Note that for a locale category that uses the `C` locale, setting a
+          character set to it via this setting is ignored.
         '';
       };
 
@@ -149,7 +155,7 @@ in
         (
           !(
             (lib.subtractLists config.i18n.supportedLocales aggregatedLocales) == [ ]
-            || lib.any (x: x == "all") config.i18n.supportedLocales
+            || lib.elem "all" config.i18n.supportedLocales
           )
         )
         ''

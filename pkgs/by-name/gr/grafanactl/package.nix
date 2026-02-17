@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafanactl";
-  version = "0.1.5";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafanactl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XHcNyPSN01CGkuj9p54yAAWFlwoWLF6cm5Q2f8iZtVM=";
+    hash = "sha256-TJoTxVKfG2mfV05pkAxUJR7NKZbD9VIqRW4H8lyP2As=";
   };
 
-  vendorHash = "sha256-fHlktADqw3p377g3vXr2LZdBfWfNZOHxnp9H8/C31Gg=";
+  vendorHash = "sha256-zEE4iaZJBneYgo6avCOTG7tWZ88NDskPTYiCMb8pRR4=";
 
   ldflags = [
     "-X main.version=v${finalAttrs.version}"
@@ -37,14 +37,13 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool designed to simplify interaction with Grafana instances";
     homepage = "https://github.com/grafana/grafanactl";
-    changelog = "https://github.com/grafana/grafanactl/tags/v${finalAttrs.version}";
+    changelog = "https://github.com/grafana/grafanactl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ wcarlsen ];
     mainProgram = "grafanactl";

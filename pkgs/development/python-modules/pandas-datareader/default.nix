@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   fetchPypi,
   setuptools,
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   version = "0.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,11 +33,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pandas_datareader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Up to date remote data access for pandas, works for multiple versions of pandas";
     homepage = "https://github.com/pydata/pandas-datareader";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ evax ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ evax ];
+    platforms = lib.platforms.unix;
   };
 }

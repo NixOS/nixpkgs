@@ -3,37 +3,24 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
-  deprecation,
-  poetry-core,
+  setuptools,
 
   # dependencies
   cloudevents,
   fastapi,
   grpc-interceptor,
   grpcio,
+  grpcio-tools,
   httpx,
   kubernetes,
   numpy,
   orjson,
   pandas,
-  uvicorn,
-
-  # optional-dependencies
-  azure-identity,
-  azure-storage-blob,
-  azure-storage-file-share,
-  boto3,
-  google-cloud-storage,
-  huggingface-hub,
-  asgi-logger,
-  ray,
-  vllm,
-
   prometheus-client,
   protobuf,
-  requests,
   psutil,
   pydantic,
   python-dateutil,
@@ -41,30 +28,54 @@
   six,
   tabulate,
   timing-asgi,
+  uvicorn,
+
+  # optional-dependencies
+  # storage
+  kserve-storage,
+  # logging
+  asgi-logger,
+  # ray
+  ray,
+  # llm
+  vllm,
 
   # tests
   avro,
   grpcio-testing,
+  jinja2,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-httpx,
   pytest-xdist,
   pytestCheckHook,
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kserve";
-  version = "0.15.2";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
-    tag = "v${version}";
-    hash = "sha256-NklR2Aoa5UdWkqNOfX+xl3R158JDSQtStXv9DkklOwM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f6ILZMLxfckEpy7wSgCqUx89JWSnn0DbQiqRSHcQHms=";
   };
 
-  sourceRoot = "${src.name}/python/kserve";
+  patches = [
+    # Fix vllm imports in python/kserve/kserve/protocol/rest/openai/types/__init__.py
+    # Submitted upstream: https://github.com/kserve/kserve/pull/4882
+    (fetchpatch2 {
+      name = "update-vllm-imports-to-fix-compat";
+      url = "https://github.com/kserve/kserve/commit/dd1575501e56f588103f448efca684bc54569b81.patch";
+      stripLen = 2;
+      hash = "sha256-K0ImsDADhH6G3R+27nRX/sD7UdRXptYIkLaoxuwB8+M=";
+    })
+  ];
+
+  sourceRoot = "${finalAttrs.src.name}/python/kserve";
 
   pythonRelaxDeps = [
     "fastapi"
@@ -77,8 +88,7 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    deprecation
-    poetry-core
+    setuptools
   ];
 
   dependencies = [
@@ -86,6 +96,7 @@ buildPythonPackage rec {
     fastapi
     grpc-interceptor
     grpcio
+    grpcio-tools
     httpx
     kubernetes
     numpy
@@ -101,21 +112,20 @@ buildPythonPackage rec {
     tabulate
     timing-asgi
     uvicorn
-  ];
+  ]
+  ++ uvicorn.optional-dependencies.standard;
 
   optional-dependencies = {
     storage = [
-      azure-identity
-      azure-storage-blob
-      azure-storage-file-share
-      boto3
-      huggingface-hub
-      google-cloud-storage
-      requests
+      kserve-storage
+    ];
+    logging = [
+      asgi-logger
+    ];
+    ray = [
+      ray
     ]
-    ++ huggingface-hub.optional-dependencies.hf_transfer;
-    logging = [ asgi-logger ];
-    ray = [ ray ];
+    ++ ray.optional-dependencies.serve;
     llm = [
       vllm
     ];
@@ -124,13 +134,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     avro
     grpcio-testing
+    jinja2
     pytest-asyncio
+    pytest-cov-stub
     pytest-httpx
     pytest-xdist
     pytestCheckHook
     tomlkit
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "kserve" ];
 
@@ -140,6 +152,9 @@ buildPythonPackage rec {
 
     # AssertionError
     "test/test_server.py::TestTFHttpServerLoadAndUnLoad::test_unload"
+
+    # Race condition when called concurrently between two instances of the same model (i.e. in nixpkgs-review)
+    "test/test_dataplane.py::TestDataPlane::test_model_metadata[TEST_RAY_SERVE_MODEL]"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Failed to start GCS
@@ -158,6 +173,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Started failing since vllm was updated to 0.13.0
+    # pydantic_core._pydantic_core.ValidationError: 1 validation error for RerankResponse
+    # usage.prompt_tokens
+    #   Field required [type=missing, input_value={'total_tokens': 100}, input_type=dict]
+    #     For further information visit https://errors.pydantic.dev/2.11/v/missing
+    "test_create_rerank"
+    "test_create_embedding"
+
     # AssertionError: assert CompletionReq...lm_xargs=None) == CompletionReq...lm_xargs=None)
     "test_convert_params"
 
@@ -182,8 +205,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standardized Serverless ML Inference Platform on Kubernetes";
     homepage = "https://github.com/kserve/kserve/tree/master/python/kserve";
-    changelog = "https://github.com/kserve/kserve/releases/tag/${src.tag}";
+    changelog = "https://github.com/kserve/kserve/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

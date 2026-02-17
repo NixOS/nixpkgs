@@ -8,15 +8,15 @@
   zlib,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   SDL2,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "golly";
-  version = "4.3";
+  version = "5.0";
 
   src = fetchurl {
-    hash = "sha256-UdJHgGPn7FDN4rYTgfPBAoYE5FGC43TP8OFBmYIqCB0=";
+    hash = "sha256-WDXN5CgVP5uEC6lKQ1nlyybrMC56wBoJfNf1pcgwNhE=";
     url = "mirror://sourceforge/project/golly/golly/golly-${finalAttrs.version}/golly-${finalAttrs.version}-src.tar.gz";
   };
 
@@ -26,12 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libGLU
     libGL
-    libX11
+    libx11
     SDL2
   ];
 
   nativeBuildInputs = [
-    (python3.withPackages (ps: [ ps.setuptools ]))
+    (python3.withPackages (ps: [
+      ps.setuptools
+      ps.distutils
+    ]))
     wrapGAppsHook3
   ];
 

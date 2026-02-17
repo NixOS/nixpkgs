@@ -18,9 +18,13 @@ makeScopeWithSplicing' {
           reposilite,
         }:
         lib.makeOverridable (
-          { name, hash }:
+          {
+            name,
+            hash,
+          }:
           let
             inherit (reposilite) version;
+            pname = name;
 
             fancyName = lib.concatStrings [
               (lib.toUpper (builtins.substring 0 1 name))
@@ -29,7 +33,7 @@ makeScopeWithSplicing' {
           in
           fetchurl {
             url = "https://maven.reposilite.com/releases/com/reposilite/plugin/${name}-plugin/${version}/${name}-plugin-${version}-all.jar";
-            inherit version hash;
+            inherit pname version hash;
 
             meta = {
               description = "${fancyName} plugin for Reposilite.";

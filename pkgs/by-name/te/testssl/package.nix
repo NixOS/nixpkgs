@@ -11,15 +11,15 @@
   procps,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "testssl.sh";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "drwetter";
     repo = "testssl.sh";
-    rev = "v${version}";
-    sha256 = "sha256-zPqGCcWRwTYl7cGnrv9a5KOMe75xzU2xvf5z+Nqwfb0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-hR+EhAkv7EXMhBu8wEF6yjpvMzLJZcjH+Jdji0EQkgY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,18 +42,18 @@ stdenv.mkDerivation rec {
     install -D testssl.sh $out/bin/testssl.sh
     cp -r etc $out
 
-    wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath buildInputs}
+    wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to check a server's TLS/SSL capabilities";
     longDescription = ''
       CLI tool which checks a server's service on any port for the support of
       TLS/SSL ciphers, protocols as well as recent cryptographic flaws and more.
     '';
     homepage = "https://testssl.sh/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
     mainProgram = "testssl.sh";
   };
-}
+})

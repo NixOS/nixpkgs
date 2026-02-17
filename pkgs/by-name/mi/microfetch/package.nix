@@ -1,22 +1,26 @@
 {
   lib,
   rustPlatform,
+  mold,
+  stdenv,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "microfetch";
-  version = "0.4.9";
+  version = "0.4.13";
 
   src = fetchFromGitHub {
     owner = "NotAShelf";
     repo = "microfetch";
-    tag = "v${version}";
-    hash = "sha256-F3yRJrOzBzSDLadVTZqOPMaqF+3NSzedi222EawqVWQ=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-aJ2QuMbUM/beMD8b62AqzTNljQ8RtBNOSvj9nJfRXbA=";
   };
 
-  cargoHash = "sha256-Ewtge3yaegzZM4DgUXSquyJM7xcpmSp6lLmMrfrgy4Y=";
+  cargoHash = "sha256-vGvpjRJr4ez322JWUwboVml22vnRVRlwpZ9W4F5wATA=";
+
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ mold ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -31,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "microfetch";
     platforms = lib.platforms.linux;
   };
-}
+})

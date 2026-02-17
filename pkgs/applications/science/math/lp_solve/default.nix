@@ -19,16 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bUq/9cxqqpM66ObBeiJt8PwLZxxDj2lxXUHQn+gfkC8=";
   };
 
-  nativeBuildInputs = [
-    binutils
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-    fixDarwinDylibNames
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    autoSignDarwinBinariesHook
-  ];
+  nativeBuildInputs =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      binutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+      fixDarwinDylibNames
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
   env = {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
@@ -72,12 +73,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mixed Integer Linear Programming (MILP) solver";
     mainProgram = "lp_solve";
     homepage = "https://lpsolve.sourceforge.net";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ smironov ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ smironov ];
+    platforms = lib.platforms.unix;
   };
 }

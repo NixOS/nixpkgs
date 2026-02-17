@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   makeWrapper,
   cmake,
@@ -18,7 +19,7 @@
   p7zip,
   xz,
   withTTYX ? true,
-  libX11,
+  libx11,
   withGUI ? true,
   wxGTK32,
   withUCD ? true,
@@ -43,13 +44,13 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.6.5";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
-    rev = "v_${version}";
-    sha256 = "sha256-a/k36O19z/lHnETOGIbTJ7BNAI5zOQxVUSp+nIM08i4=";
+    tag = "v_${version}";
+    hash = "sha256-pqyAZtVeE3awejx1/glJgAQN6fjAe4YHJX/fLHlF1+Y=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optional withTTYX libX11
+    lib.optional withTTYX libx11
     ++ lib.optional withGUI wxGTK32
     ++ lib.optional withUCD libuchardet
     ++ lib.optionals withColorer [
@@ -125,11 +126,11 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
     homepage = "https://github.com/elfmz/far2l";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ hypersw ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ hypersw ];
+    platforms = lib.platforms.unix;
   };
 }

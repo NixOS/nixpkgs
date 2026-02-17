@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   opentelemetry-api,
   opentelemetry-instrumentation,
@@ -17,8 +16,6 @@ buildPythonPackage {
   # but its version is synchronized with `opentelemetry-instrumentation` in another repository.
   version = opentelemetry-instrumentation.version;
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-prometheus";
 

@@ -14,11 +14,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
-  version = "2.28.6";
+  version = "2.30.3";
 
   src = fetchurl {
     url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
-    hash = "sha256-F6bYWVHtzXo6TH4CAvdF6qx7OCVvKACsh2KdRYFsxOw=";
+    hash = "sha256-dV+WxjY3dVF7oFpUNPyVk2nWupbn44dOff/Z6TUqPks=";
   };
   sourceRoot = ".";
 
@@ -45,16 +45,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "macOS and Linux VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
-    license = licenses.fairsource09;
-    maintainers = with maintainers; [
+    license = lib.licenses.fairsource09;
+    maintainers = with lib.maintainers; [
       emilytrau
       aduh95
     ];
     mainProgram = "tart";
-    platforms = platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

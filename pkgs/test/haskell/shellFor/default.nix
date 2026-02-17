@@ -1,6 +1,7 @@
 {
   lib,
   writeText,
+  srcOnly,
   haskellPackages,
   cabal-install,
 }:
@@ -20,9 +21,9 @@
     sourceRoot=$(pwd)/scratch
     mkdir -p "$sourceRoot"
     cd "$sourceRoot"
-    tar -xf ${haskellPackages.constraints.src}
-    tar -xf ${haskellPackages.cereal.src}
-    cp ${writeText "cabal.project" "packages: constraints* cereal*"} cabal.project
+    cp -r "${srcOnly haskellPackages.constraints}" constraints
+    cp -r "${srcOnly haskellPackages.cereal}" cereal
+    cp ${writeText "cabal.project" "packages: constraints cereal"} cabal.project
   '';
   buildPhase = ''
     export HOME=$(mktemp -d)

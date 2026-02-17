@@ -20,16 +20,16 @@
   bash,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gradia";
-  version = "1.9.0";
+  version = "1.11.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
-    tag = "v${version}";
-    hash = "sha256-iDldzS7LLJ/+CfKBpD50LW/YrZ2xb8aqZI9Bs1AOcCM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2PSpFmojAIyDNx5yYrLE3CjO/q5iBArmIRikxCGW1HM=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     pygobject3
     pillow
+    pytesseract
   ];
 
   postInstall = ''
@@ -76,7 +77,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Make your screenshots ready for the world";
     homepage = "https://github.com/AlexanderVanhee/Gradia";
-    changelog = "https://github.com/AlexanderVanhee/Gradia/releases/tag/${src.tag}";
+    changelog = "https://github.com/AlexanderVanhee/Gradia/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       Cameo007
@@ -85,4 +86,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "gradia";
     platforms = lib.platforms.linux;
   };
-}
+})

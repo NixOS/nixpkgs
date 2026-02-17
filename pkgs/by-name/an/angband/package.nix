@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "angband";
-  version = "4.2.5";
+  version = "4.2.6";
 
   src = fetchFromGitHub {
     owner = "angband";
     repo = "angband";
     rev = finalAttrs.version;
-    hash = "sha256-XH2FUTJJaH5TqV2UD1CKKAXE4CRAb6zfg1UQ79a15k0=";
+    hash = "sha256-lx2EfE3ylcH1vLAHwNT1me1l4e4Jspkw4YJIAOlu/0E=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "bindir=$(out)/bin" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://angband.github.io/angband";
     description = "Single-player roguelike dungeon exploration game";
     mainProgram = "angband";
-    maintainers = [ maintainers.kenran ];
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.kenran ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
   };
 })

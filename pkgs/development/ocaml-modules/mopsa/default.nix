@@ -39,14 +39,14 @@ buildDunePackage rec {
   buildInputs = [
     arg-complete
     camlidl
-    flint
-    libclang
     mpfr
-    pplite
   ];
 
   propagatedBuildInputs = [
     apron
+    flint
+    libclang
+    pplite
     yojson
     zarith
   ];

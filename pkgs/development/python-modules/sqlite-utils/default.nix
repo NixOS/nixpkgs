@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   click,
   click-default-group,
   python-dateutil,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
@@ -48,13 +45,13 @@ buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion { package = sqlite-utils; };
 
-  meta = with lib; {
+  meta = {
     description = "Python CLI utility and library for manipulating SQLite databases";
     mainProgram = "sqlite-utils";
     homepage = "https://github.com/simonw/sqlite-utils";
     changelog = "https://github.com/simonw/sqlite-utils/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       meatcar
       techknowlogick
     ];

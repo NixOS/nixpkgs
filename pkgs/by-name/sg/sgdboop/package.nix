@@ -6,14 +6,14 @@
   pkg-config,
   wrapGAppsHook3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sgdboop";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "SteamGridDB";
     repo = "SGDBoop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FpVQQo2N/qV+cFhYZ1FVm+xlPHSVMH4L+irnQEMlUQs=";
   };
 
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     # Hide the app from app launchers, as it is not meant to be run directly
     # Remove when https://github.com/SteamGridDB/SGDBoop/pull/112 is merged
     ./hide_desktop_entry.patch
+    # remove unused arg to fix build
+    ./remove-unused-arg.patch
   ];
 
   makeFlags = [
@@ -57,4 +59,4 @@ stdenv.mkDerivation rec {
     mainProgram = "SGDBoop";
     platforms = lib.platforms.linux;
   };
-}
+})

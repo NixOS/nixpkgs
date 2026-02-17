@@ -12,12 +12,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbutils";
   version = "018";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/usb/usbutils/usbutils-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/usb/usbutils/usbutils-${finalAttrs.version}.tar.xz";
     hash = "sha256-g/aLWbWFR1icACZugmcYZGJ1k6tDYtjIB/UO6pI8rZM=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "lsusb";
   };
-}
+})

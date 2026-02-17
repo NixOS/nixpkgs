@@ -8,15 +8,15 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ddev";
-  version = "1.24.8";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "ddev";
     repo = "ddev";
-    rev = "v${version}";
-    hash = "sha256-z0rxRY/Jxo+0aLj1vfODBVlmZYb3SOufctS7R9d/3gs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vRhFj2/lV34sDIDUxi2/zF9VJimhi6By6TQndl0O/Xg=";
   };
 
   nativeBuildInputs = [
@@ -27,8 +27,8 @@ buildGoModule rec {
 
   ldflags = [
     "-extldflags -static"
-    "-X github.com/ddev/ddev/pkg/versionconstants.DdevVersion=v${version}"
-    "-X github.com/ddev/ddev/pkg/versionconstants.SegmentKey=v${version}"
+    "-X github.com/ddev/ddev/pkg/versionconstants.DdevVersion=v${finalAttrs.version}"
+    "-X github.com/ddev/ddev/pkg/versionconstants.SegmentKey=v${finalAttrs.version}"
   ];
 
   # Tests need docker.
@@ -50,15 +50,14 @@ buildGoModule rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
-  meta = with lib; {
+  meta = {
     description = "Docker-based local PHP+Node.js web development environments";
     homepage = "https://ddev.com/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "ddev";
-    maintainers = with maintainers; [ remyvv ];
+    maintainers = with lib.maintainers; [ remyvv ];
   };
-}
+})

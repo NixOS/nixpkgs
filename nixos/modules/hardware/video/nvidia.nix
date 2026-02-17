@@ -333,7 +333,7 @@ in
     lib.mkIf cfg.enabled (
       lib.mkMerge [
         # Common
-        ({
+        {
           assertions = [
             {
               assertion = !(nvidiaEnabled && cfg.datacenter.enable);
@@ -350,6 +350,7 @@ in
           boot = {
             blacklistedKernelModules = [
               "nouveau"
+              "nova_core"
               "nvidiafb"
             ];
 
@@ -388,7 +389,7 @@ in
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
-        })
+        }
 
         # X11
         (lib.mkIf nvidiaEnabled {
@@ -487,7 +488,7 @@ in
             lib.optional primeEnabled {
               name = igpuDriver;
               display = offloadCfg.enable;
-              modules = lib.optional (igpuDriver == "amdgpu") pkgs.xorg.xf86videoamdgpu;
+              modules = lib.optional (igpuDriver == "amdgpu") pkgs.xf86-video-amdgpu;
               deviceSection = ''
                 BusID "${igpuBusId}"
               ''
@@ -537,7 +538,7 @@ in
               gpuProviderName =
                 if igpuDriver == "amdgpu" then
                   # find the name of the provider if amdgpu
-                  "`${lib.getExe pkgs.xorg.xrandr} --listproviders | ${lib.getExe pkgs.gnugrep} -i AMD | ${lib.getExe pkgs.gnused} -n 's/^.*name://p'`"
+                  "`${lib.getExe pkgs.xrandr} --listproviders | ${lib.getExe pkgs.gnugrep} -i AMD | ${lib.getExe pkgs.gnused} -n 's/^.*name://p'`"
                 else
                   igpuDriver;
               providerCmdParams =
@@ -547,8 +548,8 @@ in
               (syncCfg.enable || (reverseSyncCfg.enable && reverseSyncCfg.setupCommands.enable))
               ''
                 # Added by nvidia configuration module for Optimus/PRIME.
-                ${lib.getExe pkgs.xorg.xrandr} --setprovideroutputsource ${providerCmdParams}
-                ${lib.getExe pkgs.xorg.xrandr} --auto
+                ${lib.getExe pkgs.xrandr} --setprovideroutputsource ${providerCmdParams}
+                ${lib.getExe pkgs.xrandr} --auto
               '';
 
           environment.etc = {
@@ -709,7 +710,7 @@ in
                 "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
             services = lib.mkMerge [
-              ({
+              {
                 nvidia-fabricmanager = {
                   enable = true;
                   description = "Start NVIDIA NVLink Management";
@@ -736,7 +737,7 @@ in
                     LimitCORE = "infinity";
                   };
                 };
-              })
+              }
               (lib.mkIf cfg.nvidiaPersistenced {
                 "nvidia-persistenced" = {
                   description = "NVIDIA Persistence Daemon";

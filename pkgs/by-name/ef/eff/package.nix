@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  ocamlPackages,
+  ocaml-ng,
 }:
 
 let
-  inherit (ocamlPackages) buildDunePackage js_of_ocaml menhir;
+  inherit (ocaml-ng.ocamlPackages_5_2) buildDunePackage js_of_ocaml menhir;
 in
 
 buildDunePackage rec {
@@ -25,7 +25,7 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.eff-lang.org";
     description = "Functional programming language based on algebraic effects and their handlers";
     mainProgram = "eff";
@@ -35,7 +35,7 @@ buildDunePackage rec {
       handlers, you can simply implement transactions, redirections,
       backtracking, multi-threading, and much more...
     '';
-    license = licenses.bsd2;
-    maintainers = [ maintainers.jirkamarsik ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.jirkamarsik ];
   };
 }

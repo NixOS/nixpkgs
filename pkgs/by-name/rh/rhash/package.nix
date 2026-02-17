@@ -7,14 +7,14 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.4.4";
   pname = "rhash";
 
   src = fetchFromGitHub {
     owner = "rhash";
     repo = "RHash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
   };
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     "install-lib-so-link"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rhash.sourceforge.net/";
     description = "Console utility and library for computing and verifying hash sums of files";
-    license = licenses.bsd0;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ andrewrk ];
+    license = lib.licenses.bsd0;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
-}
+})

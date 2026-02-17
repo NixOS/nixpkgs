@@ -1,0 +1,181 @@
+From 06ce42e72324b32b1f4c37c646e99950c2bd5f6b Mon Sep 17 00:00:00 2001
+From: Max Rees <maxcrees@me.com>
+Date: Sun, 15 Mar 2020 15:13:27 -0400
+Subject: [PATCH] Fix test suite on big endian platforms
+
+---
+ glm/gtc/packing.inl      | 55 ++++++++++++++++++++++++++++++++++++++++
+ test/gtc/gtc_packing.cpp |  3 ++-
+ 2 files changed, 57 insertions(+), 1 deletion(-)
+
+diff --git a/glm/gtc/packing.inl b/glm/gtc/packing.inl
+index 8c906e16c1..b1c99a5076 100644
+--- a/glm/gtc/packing.inl
++++ b/glm/gtc/packing.inl
+@@ -9,6 +9,9 @@
+ #include "../detail/type_half.hpp"
+ #include <cstring>
+ #include <limits>
++extern "C" {
++#include <endian.h>
++}
+ 
+ namespace glm{
+ namespace detail
+@@ -183,9 +186,15 @@ namespace detail
+ 	{
+ 		struct
+ 		{
++#if BYTE_ORDER == LITTLE_ENDIAN
+ 			uint x : 3;
+ 			uint y : 3;
+ 			uint z : 2;
++#else
++			uint z : 2;
++			uint y : 3;
++			uint x : 3;
++#endif
+ 		} data;
+ 		uint8 pack;
+ 	};
+@@ -194,8 +203,13 @@ namespace detail
+ 	{
+ 		struct
+ 		{
++#if BYTE_ORDER == LITTLE_ENDIAN
+ 			uint x : 4;
+ 			uint y : 4;
++#else
++			uint y : 4;
++			uint x : 4;
++#endif
+ 		} data;
+ 		uint8 pack;
+ 	};
+@@ -204,10 +218,17 @@ namespace detail
+ 	{
+ 		struct
+ 		{
++#if BYTE_ORDER == LITTLE_ENDIAN
+ 			uint x : 4;
+ 			uint y : 4;
+ 			uint z : 4;
+ 			uint w : 4;
++#else
++			uint w : 4;
++			uint z : 4;
++			uint y : 4;
++			uint x : 4;
++#endif
+ 		} data;
+ 		uint16 pack;
+ 	};
+@@ -216,9 +237,15 @@ namespace detail
+ 	{
+ 		struct
+ 		{
++#if BYTE_ORDER == LITTLE_ENDIAN
+ 			uint x : 5;
+ 			uint y : 6;
+ 			uint z : 5;
++#else
++			uint z : 5;
++			uint y : 6;
++			uint x : 5;
++#endif
+ 		} data;
+ 		uint16 pack;
+ 	};
+@@ -227,10 +254,17 @@ namespace detail
+ 	{
+ 		struct
+ 		{
++#if BYTE_ORDER == LITTLE_ENDIAN
+ 			uint x : 5;
+ 			uint y : 5;
+ 			uint z : 5;
+ 			uint w : 1;
++#else
++			uint w : 1;
++			uint z : 5;
++			uint y : 5;
++			uint x : 5;
++#endif
+ 		} data;
+ 		uint16 pack;
+ 	};
+@@ -239,10 +273,17 @@ namespace detail
+ 	{
+ 		struct
+ 		{
++#if BYTE_ORDER == LITTLE_ENDIAN
+ 			uint x : 10;
+ 			uint y : 10;
+ 			uint z : 10;
+ 			uint w : 2;
++#else
++			uint w : 2;
++			uint z : 10;
++			uint y : 10;
++			uint x : 10;
++#endif
+ 		} data;
+ 		uint32 pack;
+ 	};
+@@ -251,10 +292,17 @@ namespace detail
+ 	{
+ 		struct
+ 		{
++#if BYTE_ORDER == LITTLE_ENDIAN
+ 			int x : 10;
+ 			int y : 10;
+ 			int z : 10;
+ 			int w : 2;
++#else
++			int w : 2;
++			int z : 10;
++			int y : 10;
++			int x : 10;
++#endif
+ 		} data;
+ 		uint32 pack;
+ 	};
+@@ -263,10 +311,17 @@ namespace detail
+ 	{
+ 		struct
+ 		{
++#if BYTE_ORDER == LITTLE_ENDIAN
+ 			uint x : 9;
+ 			uint y : 9;
+ 			uint z : 9;
+ 			uint w : 5;
++#else
++			uint w : 5;
++			uint z : 9;
++			uint y : 9;
++			uint x : 9;
++#endif
+ 		} data;
+ 		uint32 pack;
+ 	};
+diff --git a/test/gtc/gtc_packing.cpp b/test/gtc/gtc_packing.cpp
+index df5b3bb1a9..fbaaa5bccd 100644
+--- a/test/gtc/gtc_packing.cpp
++++ b/test/gtc/gtc_packing.cpp
+@@ -4,6 +4,7 @@
+ #include <glm/ext/vector_relational.hpp>
+ #include <cstdio>
+ #include <vector>
++#include <arpa/inet.h>
+ 
+ void print_bits(float const& s)
+ {
+@@ -156,7 +157,7 @@ int test_U3x10_1x2()
+ 
+ 	glm::u8vec4 const v0(0xff, 0x77, 0x0, 0x33);
+ 	glm::uint32 const p0 = *reinterpret_cast<glm::uint32 const*>(&v0[0]);
+-	glm::uint32 const r0 = 0x330077ff;
++	glm::uint32 const r0 = htonl(0xff770033);
+ 
+ 	Error += p0 == r0 ? 0 : 1;
+ 

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kwok";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kwok";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gtDGkAXbNCWUVGL4+C6mOkWwrPcik6+nGEQNrjLb57U=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
   meta = {
     description = "Simulate massive Kubernetes clusters with low resource usage locally without kubelet";
     homepage = "https://kwok.sigs.k8s.io";
-    changelog = "https://github.com/kubernetes-sigs/kwok/releases/tag/v${version}";
+    changelog = "https://github.com/kubernetes-sigs/kwok/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
-}
+})

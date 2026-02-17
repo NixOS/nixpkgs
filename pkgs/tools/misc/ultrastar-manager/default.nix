@@ -1,8 +1,9 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   pkg-config,
+  wrapQtAppsHook,
   symlinkJoin,
   qmake,
   diffPlugins,
@@ -46,9 +47,11 @@ let
         inherit rev sha256;
       };
     in
-    mkDerivation {
+    stdenv.mkDerivation {
       name = "${src.name}-patched";
       inherit src;
+
+      nativeBuildInputs = [ wrapQtAppsHook ];
 
       dontInstall = true;
 
@@ -80,9 +83,11 @@ let
 
   buildPlugin =
     name:
-    mkDerivation {
+    stdenv.mkDerivation {
       name = "ultrastar-manager-${name}-plugin-${version}";
       src = patchedSrc;
+
+      nativeBuildInputs = [ wrapQtAppsHook ];
 
       buildInputs = [ qmake ] ++ buildInputs;
 
@@ -107,7 +112,7 @@ let
   };
 
 in
-mkDerivation {
+stdenv.mkDerivation {
   pname = "ultrastar-manager";
   inherit version;
   src = patchedSrc;
@@ -134,14 +139,18 @@ mkDerivation {
     make install
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapQtAppsHook
+  ];
+
   inherit buildInputs;
 
-  meta = with lib; {
+  meta = {
     description = "Ultrastar karaoke song manager";
     mainProgram = "UltraStar-Manager";
     homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Manager";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ Profpatsch ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ Profpatsch ];
   };
 }

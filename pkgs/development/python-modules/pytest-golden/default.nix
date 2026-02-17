@@ -7,7 +7,6 @@
   poetry-core,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   testfixtures,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pytest-golden";
   version = "0.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "oprypin";
@@ -50,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_golden" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for pytest that offloads expected outputs to data files";
     homepage = "https://github.com/oprypin/pytest-golden";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

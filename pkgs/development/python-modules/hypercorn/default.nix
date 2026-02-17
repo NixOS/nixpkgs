@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   aioquic,
   cacert,
   h11,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "hypercorn";
   version = "0.17.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11"; # missing taskgroup dependency
 
   src = fetchFromGitHub {
     owner = "pgjones";
@@ -57,18 +54,18 @@ buildPythonPackage rec {
     pytest-trio
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "hypercorn" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
     homepage = "https://github.com/pgjones/hypercorn";
     description = "ASGI web server inspired by Gunicorn";
     mainProgram = "hypercorn";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dgliwka ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dgliwka ];
   };
 }

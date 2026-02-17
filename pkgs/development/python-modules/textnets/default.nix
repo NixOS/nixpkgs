@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  cython_0,
+  cython,
   pdm-backend,
   setuptools,
 
@@ -29,24 +29,23 @@
 
 buildPythonPackage rec {
   pname = "textnets";
-  version = "0.10.3";
+  version = "0.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jboynyc";
     repo = "textnets";
     tag = "v${version}";
-    hash = "sha256-BK0bBoe6GrZpVL4HvTwzRlXRWXfKdYJDhLD2UQctTjc=";
+    hash = "sha256-GbJH+6EqfP+miqpYitnBwNDO6uQQq3h9Fy58nVaF1vw=";
   };
 
   build-system = [
-    cython_0
+    cython
     pdm-backend
     setuptools
   ];
 
   pythonRelaxDeps = [
-    "pyarrow"
     "toolz"
   ];
 
@@ -67,6 +66,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     en_core_web_sm
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/jboynyc/textnets/issues/66
+    "test_textnet_save_and_load"
   ];
 
   pythonImportsCheck = [ "textnets" ];

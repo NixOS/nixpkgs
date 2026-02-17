@@ -27,16 +27,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dune3d";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "dune3d";
     repo = "dune3d";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9lBaenBxMoJgG5tMM+EZ87xcJ4HhFTA9RUNZt2Jx34Q=";
+    hash = "sha256-QaWdDz+cjceIKDJTZLEbPspClZKtP02YiMtu6mwI6/o=";
   };
 
   nativeBuildInputs = [
+    cmake
     gobject-introspection
     meson
     ninja
@@ -46,8 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
+  dontUseCmakeConfigure = true;
+
   buildInputs = [
-    cmake
     eigen
     glm
     gtkmm4

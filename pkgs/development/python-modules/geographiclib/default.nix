@@ -3,14 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geographiclib";
   version = "2.0";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geographiclib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://geographiclib.sourceforge.io";
     description = "Algorithms for geodesics (Karney, 2013) for solving the direct and inverse problems for an ellipsoid of revolution";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

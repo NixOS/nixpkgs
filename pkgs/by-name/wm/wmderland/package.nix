@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   libnotify,
-  libX11,
+  libx11,
   xorgproto,
   nixosTests,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    libX11
+    libx11
     xorgproto
   ];
 
@@ -48,12 +48,12 @@ stdenv.mkDerivation {
     providedSessions = [ "wmderland" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modern and minimal X11 tiling window manager";
     homepage = "https://github.com/aesophor/wmderland";
-    license = licenses.mit;
-    platforms = libX11.meta.platforms;
-    maintainers = with maintainers; [ takagiy ];
+    license = lib.licenses.mit;
+    platforms = libx11.meta.platforms;
+    maintainers = with lib.maintainers; [ takagiy ];
     mainProgram = "wmderland";
   };
 }

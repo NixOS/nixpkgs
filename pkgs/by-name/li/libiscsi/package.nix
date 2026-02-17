@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libiscsi";
   version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "sahlberg";
     repo = "libiscsi";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-idiK9JowKhGAk5F5qJ57X14Q2Y0TbIKRI02onzLPkas=";
   };
 
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=format";
   };
 
-  meta = with lib; {
+  meta = {
     description = "iSCSI client library and utilities";
     homepage = "https://github.com/sahlberg/libiscsi";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
-}
+})

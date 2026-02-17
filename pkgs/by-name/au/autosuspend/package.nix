@@ -2,22 +2,45 @@
   lib,
   dbus,
   fetchFromGitHub,
+  nixosTests,
   python3,
+  sphinxHook,
+  withDocs ? true,
+  withMan ? true,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "autosuspend";
-  version = "9.0.0";
+  version = "10.0.0";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.11";
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals withDocs [ "doc" ]
+  ++ lib.optionals withMan [ "man" ];
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = "autosuspend";
-    tag = "v${version}";
-    hash = "sha256-JOH4QzoiLR1Pp/RVz0nrLxjQw92pDxXTu414jbpCMqk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-o9Jpb4i2/SJ3s3h5sclNjpaN/UFk1YbpPf7b3rGXLRg=";
   };
+
+  postPatch = ''
+    # This mapping triggers network access on docs generation
+    substituteInPlace doc/source/conf.py \
+      --replace-fail 'intersphinx_mapping' '# intersphinx_mapping'
+  '';
+
+  nativeBuildInputs = lib.optionals (withDocs || withMan) (
+    [
+      sphinxHook
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.docs
+  );
+
+  sphinxBuilders = lib.optionals withDocs [ "html" ] ++ lib.optionals withMan [ "man" ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -29,14 +52,24 @@ python3.pkgs.buildPythonApplication rec {
     jsonpath-ng
     lxml
     mpd2
-    portalocker
     psutil
+    pygobject3
     python-dateutil
     requests
     requests-file
     tzdata
     tzlocal
   ];
+
+  optional-dependencies = {
+    docs = with python3.pkgs; [
+      furo
+      recommonmark
+      sphinx-autodoc-typehints
+      sphinx-issues
+      sphinxcontrib-plantuml
+    ];
+  };
 
   nativeCheckInputs = with python3.pkgs; [
     dbus
@@ -55,10 +88,14 @@ python3.pkgs.buildPythonApplication rec {
     "test_multiple_sessions"
   ];
 
+  passthru.tests = {
+    inherit (nixosTests) autosuspend;
+  };
+
   meta = {
     description = "Daemon to automatically suspend and wake up a system";
     homepage = "https://autosuspend.readthedocs.io";
-    changelog = "https://github.com/languitar/autosuspend/releases/tag/${src.tag}";
+    changelog = "https://github.com/languitar/autosuspend/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       bzizou
@@ -67,4 +104,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "autosuspend";
     platforms = lib.platforms.linux;
   };
-}
+})

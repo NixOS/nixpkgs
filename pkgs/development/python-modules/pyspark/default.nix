@@ -6,15 +6,12 @@
   pandas,
   py4j,
   pyarrow,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyspark";
   version = "3.5.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -57,14 +54,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyspark" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Apache Spark";
     homepage = "https://github.com/apache/spark/tree/master/python";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ shlevy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ shlevy ];
   };
 }

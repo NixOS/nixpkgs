@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-mock,
-  pythonOlder,
   six,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "cert-chain-resolver";
   version = "1.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rkoopmans";
@@ -39,12 +36,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cert_chain_resolver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Resolve / obtain the certificate intermediates of a x509 certificate";
     mainProgram = "cert-chain-resolver";
     homepage = "https://github.com/rkoopmans/python-certificate-chain-resolver";
     changelog = "https://github.com/rkoopmans/python-certificate-chain-resolver/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veehaitch ];
   };
 }

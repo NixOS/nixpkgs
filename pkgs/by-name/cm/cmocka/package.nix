@@ -5,14 +5,13 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmocka";
-  majorVersion = "1.1";
-  version = "${majorVersion}.7";
+  version = "2.0.1";
 
   src = fetchurl {
-    url = "https://cmocka.org/files/${majorVersion}/cmocka-${version}.tar.xz";
-    sha256 = "sha256-gQVw6wuNZIBDMfgrKf9Hx5DOnNaxY+mNR6SAcEfsrYI=";
+    url = "https://cmocka.org/files/${lib.versions.majorMinor finalAttrs.version}/cmocka-${finalAttrs.version}.tar.xz";
+    hash = "sha256-PzUzOCuimrOr9cT0snt50WXw31HqWH3nSbEbaLQBkYA=";
   };
 
   patches = [
@@ -22,12 +21,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags =
-    lib.optional doCheck "-DUNIT_TESTING=ON"
+    lib.optional finalAttrs.doCheck "-DUNIT_TESTING=ON"
     ++ lib.optional stdenv.hostPlatform.isStatic "-DBUILD_SHARED_LIBS=OFF";
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight library to simplify and generalize unit tests for C";
     longDescription = ''
       There are a variety of C unit testing frameworks available however
@@ -55,11 +54,10 @@ stdenv.mkDerivation rec {
       This is the successor of Google's Cmockery.
     '';
     homepage = "https://cmocka.org/";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       kragniz
-      rasendubi
     ];
   };
-}
+})

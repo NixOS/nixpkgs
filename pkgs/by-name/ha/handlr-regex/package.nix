@@ -9,14 +9,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handlr-regex";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Anomalocaridid";
     repo = "handlr-regex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7psjlu0qyoZYTVwq2JYJJkB76ejlmMtmstDw+liMcj8=";
   };
 
@@ -44,11 +44,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Fork of handlr with support for regex";
     homepage = "https://github.com/Anomalocaridid/handlr-regex";
-    license = licenses.mit;
-    maintainers = with maintainers; [ anomalocaris ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ anomalocaris ];
     mainProgram = "handlr";
   };
-}
+})

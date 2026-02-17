@@ -61,11 +61,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/test_glyphs3_roundtrip.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to load, examine, and save fonts in a variety of formats";
     mainProgram = "babelfont";
     homepage = "https://github.com/simoncozens/babelfont";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

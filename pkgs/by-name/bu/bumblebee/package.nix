@@ -26,10 +26,10 @@
   makeWrapper,
   glib,
   libbsd,
-  libX11,
-  xorgserver,
+  libx11,
+  xorg-server,
   kmod,
-  xf86videonouveau,
+  xf86-video-nouveau,
   nvidia_x11 ? linuxPackages.nvidia_x11,
   linuxPackages,
   pkgsi686Linux,
@@ -65,12 +65,12 @@ let
 
   bbdPath = lib.makeBinPath [
     kmod
-    xorgserver
+    xorg-server
   ];
 
   xmodules = lib.concatStringsSep "," (
     map (x: "${x.out or x}/lib/xorg/modules") (
-      [ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau
+      [ xorg-server ] ++ lib.optional (!useNvidia) xf86-video-nouveau
     )
   );
 
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
   # Build-time dependencies of bumblebeed and optirun.
   # Note that it has several runtime dependencies.
   buildInputs = [
-    libX11
+    libx11
     glib
     libbsd
     kmod
@@ -178,11 +178,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${virtualgl}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
     homepage = "https://github.com/Bumblebee-Project/Bumblebee";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

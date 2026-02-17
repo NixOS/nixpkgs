@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "volk";
-  version = "1.4.321.0";
+  version = "1.4.335.0";
 
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "volk";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-Revi0OVvLI23yh1R6mNfcUCo1DXlACLjIw+k6EZQb/U=";
+    hash = "sha256-qAMMhaeJweHNeW7+5RUpFh65jUnuw0TsYwq3PrKvCkM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,11 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DVOLK_INSTALL=1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Meta loader for Vulkan API";
     homepage = "https://github.com/zeux/volk";
-    platforms = platforms.all;
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
   };
 })

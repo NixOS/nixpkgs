@@ -8,12 +8,12 @@
   unibilium,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtermkey";
   version = "0.22";
 
   src = fetchzip {
-    url = "http://www.leonerd.org.uk/code/libtermkey/libtermkey-${version}.tar.gz";
+    url = "http://www.leonerd.org.uk/code/libtermkey/libtermkey-${finalAttrs.version}.tar.gz";
     sha256 = "02dks6bj7n23lj005yq41azf95wh3hapmgc2lzyh12vigkjh67rg";
   };
 
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal keypress reading library";
     homepage = "http://www.leonerd.org.uk/code/libtermkey";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,13 +6,13 @@
 
 with python3Packages;
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "miniplayer";
   version = "1.8.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-iUUsVIDLQAiaMomfA2LvvJZ2ePhgADtC6GCwIpRC1MA=";
   };
 
@@ -34,10 +34,10 @@ buildPythonApplication rec {
 
   # pythonImportsCheck is disabled because this package doesn't expose any modules.
 
-  meta = with lib; {
+  meta = {
     description = "Curses-based MPD client with basic functionality that can also display an album art";
     homepage = "https://github.com/GuardKenzie/miniplayer";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

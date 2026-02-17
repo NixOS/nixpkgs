@@ -8,15 +8,12 @@
   pyicu,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "natsort";
   version = "8.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,12 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "natsort" ];
 
-  meta = with lib; {
+  meta = {
     description = "Natural sorting for Python";
     mainProgram = "natsort";
     homepage = "https://github.com/SethMMorton/natsort";
     changelog = "https://github.com/SethMMorton/natsort/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

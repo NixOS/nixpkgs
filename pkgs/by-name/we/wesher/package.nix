@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wesher";
   version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "costela";
     repo = "wesher";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-EIajvcBhS5G9dJzRgXhnD1QKOAhmzngdyCU4L7itT8U=";
   };
 
@@ -20,15 +20,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wireguard overlay mesh network manager";
     homepage = "https://github.com/costela/wesher";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ tylerjl ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ tylerjl ];
+    platforms = lib.platforms.linux;
     mainProgram = "wesher";
   };
-}
+})

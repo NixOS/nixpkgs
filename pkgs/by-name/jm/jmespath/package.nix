@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jmespath";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jmespath";
     repo = "go-jmespath";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-djA/7TCmAqCsht28b1itoiWd8Mtdsn/5uLxyT23K/qM=";
   };
 
@@ -26,11 +26,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Golang implementation of JMESPath";
     homepage = "https://github.com/jmespath/go-jmespath";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cransom ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cransom ];
     mainProgram = "jpgo";
   };
-}
+})

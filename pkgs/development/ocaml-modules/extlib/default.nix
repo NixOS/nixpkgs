@@ -5,12 +5,12 @@
   cppo,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "extlib";
   version = "1.8.0";
 
   src = fetchurl {
-    url = "https://github.com/ygrek/ocaml-extlib/releases/download/${version}/extlib-${version}.tar.gz";
+    url = "https://github.com/ygrek/ocaml-extlib/releases/download/${finalAttrs.version}/extlib-${finalAttrs.version}.tar.gz";
     hash = "sha256-lkJ38AEoCo7d/AjgcB1Zygxr3F0FIxOz5A5QiPbUXXA=";
   };
 
@@ -24,4 +24,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

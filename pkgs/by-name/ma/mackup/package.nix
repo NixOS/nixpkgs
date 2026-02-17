@@ -1,29 +1,30 @@
 {
-  lib,
-  python3Packages,
   fetchFromGitHub,
+  lib,
   procps,
+  python3Packages,
+  stdenv,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mackup";
-  version = "0.8.41";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lra";
     repo = "mackup";
-    rev = "${version}";
-    hash = "sha256-eWSBl8BTg2FLI21DQcnepBFPF08bfm0V8lYB4mMbAiw=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-f2mbxehOMg9pZU7uQwWk9JjEa90d5YtS/Ha1m2wns+c=";
   };
 
   postPatch = ''
-    substituteInPlace mackup/utils.py \
+    substituteInPlace src/mackup/utils.py \
       --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"' \
   '';
 
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with python3Packages; [ hatchling ];
 
-  dependencies = with python3Packages; [ docopt ];
+  dependencies = with python3Packages; [ docopt-ng ];
 
   pythonImportsCheck = [ "mackup" ];
 
@@ -32,14 +33,14 @@ python3Packages.buildPythonApplication rec {
   enabledTestPaths = [ "tests/*.py" ];
 
   # Disabling tests failing on darwin due to a missing pgrep binary on procps
-  disabledTests = [ "test_is_process_running" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_is_process_running" ];
 
   meta = {
     description = "Tool to keep your application settings in sync (OS X/Linux)";
-    changelog = "https://github.com/lra/mackup/releases/tag/${version}";
+    changelog = "https://github.com/lra/mackup/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     homepage = "https://github.com/lra/mackup";
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "mackup";
   };
-}
+})

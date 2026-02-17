@@ -7,7 +7,14 @@
   alsa-lib,
   copyDesktopItems,
   makeDesktopItem,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxinerama,
+  libxdmcp,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  xvfb,
   freetype,
   expat,
   libGL,
@@ -71,14 +78,14 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXtst
-    xorg.libXdmcp
-    xorg.xvfb
+    libx11
+    libxcomposite
+    libxcursor
+    libxinerama
+    libxrandr
+    libxtst
+    libxdmcp
+    xvfb
     libGL
     libjack2
     libsysprof-capture
@@ -145,18 +152,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcomposite"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-      "-lXtst"
-      "-lXdmcp"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcomposite"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+    "-lXtst"
+    "-lXdmcp"
+  ];
 
   meta = {
     description = "Socalabs Commodore 64 SID Emulation Plugin";

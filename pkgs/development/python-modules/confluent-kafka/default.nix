@@ -21,7 +21,6 @@
   pyflakes,
   pyrsistent,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rdkafka,
   requests,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "confluent-kafka";
   version = "2.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
@@ -94,7 +91,7 @@ buildPythonPackage rec {
     requests-mock
     respx
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "confluent_kafka" ];
 
@@ -115,11 +112,11 @@ buildPythonPackage rec {
     "tests/test_kafka_error.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
     changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mlieberman85 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mlieberman85 ];
   };
 }

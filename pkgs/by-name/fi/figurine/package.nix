@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "figurine";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "arsham";
     repo = "figurine";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1q6Y7oEntd823nWosMcKXi6c3iWsBTxPnSH4tR6+XYs=";
   };
 
@@ -20,15 +20,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.currentSha=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.currentSha=${finalAttrs.src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/arsham/figurine";
     description = "Print your name in style";
     mainProgram = "figurine";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ironicbadger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ironicbadger ];
   };
-}
+})

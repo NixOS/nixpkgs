@@ -8,7 +8,7 @@
   pcsclite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "age-plugin-yubikey";
   version = "0.5.0-unstable-2024-11-02";
 
@@ -30,19 +30,19 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
-  meta = with lib; {
+  meta = {
     description = "YubiKey plugin for age";
     mainProgram = "age-plugin-yubikey";
     homepage = "https://github.com/str4d/age-plugin-yubikey";
-    changelog = "https://github.com/str4d/age-plugin-yubikey/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/str4d/age-plugin-yubikey/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kranzes
       vtuan10
       adamcstephens
     ];
   };
-}
+})

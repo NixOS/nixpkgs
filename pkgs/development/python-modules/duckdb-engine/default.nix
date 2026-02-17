@@ -81,6 +81,14 @@ buildPythonPackage rec {
     "test_get_foreign_keys"
     "test_get_check_constraints"
     "test_get_unique_constraints"
+    # https://github.com/Mause/duckdb_engine/issues/1379
+    "test_reflect"
+    "test_get_multi_columns"
+    "test_table_reflect"
+    "test_comment_support"
+    "test_361"
+    "test_reflection"
+    "test_fetch_arrow"
   ];
 
   pythonImportsCheck = [ "duckdb_engine" ];

@@ -36,13 +36,13 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.39.0";
+  version = "0.40.1";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     tag = "v${version}";
-    hash = "sha256-uooBZl4u9EHfs1DTI/dQ9Uz1uVOmRcIClEMB7D1q8Lk=";
+    hash = "sha256-+dLdQdq47M+HKjiMQI1/NJZqiRFuR8rnv/osCbFTpQE=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with
     # `max_output_size` of 3GB. The purpose of this `postFetch` step
@@ -53,7 +53,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-Vae7IFACioxH4E61GX/X7G19/ITbajp96VNUhliV8ls=";
+  vendorHash = "sha256-+962anRjsh1N0QHgEQIL8Dqwwsbps+LLEDpqCFBHksM=";
 
   patches = [
     ./0001-GNUmakefile.patch
@@ -139,11 +139,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tinygo.org/";
     description = "Go compiler for small places";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       muscaln
     ];
   };

@@ -21,14 +21,14 @@
 
 assert useUnrar -> unrar != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ahoviewer";
   version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "ahodesuka";
     repo = "ahoviewer";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1avdl4qcpznvf3s2id5qi1vnzy4wgh6vxpnrz777a1s4iydxpcd8";
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional useUnrar unrar;
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   postPatch = "patchShebangs version.sh";
 
@@ -66,14 +66,14 @@ stdenv.mkDerivation rec {
     --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ahodesuka/ahoviewer";
     description = "GTK2 image viewer, manga reader, and booru browser";
     mainProgram = "ahoviewer";
-    maintainers = with maintainers; [ xzfc ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ xzfc ];
+    license = lib.licenses.mit;
     # Unintentionally not working on Darwin:
     # https://github.com/ahodesuka/ahoviewer/issues/62
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

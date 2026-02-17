@@ -14,12 +14,12 @@
 }: # used to generate postInstall script.
 
 # FIXME: should add an option to choose between hotplug and udev.
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcmciautils";
   version = "018";
 
   src = fetchurl {
-    url = "https://kernel.org/pub/linux/utils/kernel/pcmcia/pcmciautils-${version}.tar.gz";
+    url = "https://kernel.org/pub/linux/utils/kernel/pcmcia/pcmciautils-${finalAttrs.version}.tar.gz";
     sha256 = "0sfm3w2n73kl5w7gb1m6q8gy5k4rgwvzz79n6yhs9w3sag3ix8sk";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

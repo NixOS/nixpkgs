@@ -50,12 +50,10 @@ let
   };
 in
 symlinkJoin {
-  name = "bird-lg-${bird-lg-frontend.version}";
+  pname = "bird-lg";
+  inherit (bird-lg-frontend) version meta;
   paths = [
     bird-lg-frontend
     bird-lg-proxy
   ];
-}
-// {
-  inherit (bird-lg-frontend) version meta;
 }

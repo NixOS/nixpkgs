@@ -116,7 +116,7 @@ in
         type = lib.types.path;
         description = "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
         default = defaultMasterCfg;
-        defaultText = lib.literalMD ''generated configuration file'';
+        defaultText = lib.literalMD "generated configuration file";
         example = "/etc/nixos/buildbot/master.cfg";
       };
 
@@ -245,7 +245,7 @@ in
 
       pythonPackages = lib.mkOption {
         type = lib.types.functionTo (lib.types.listOf lib.types.package);
-        default = pythonPackages: with pythonPackages; [ ];
+        default = pythonPackages: [ ];
         defaultText = lib.literalExpression "pythonPackages: with pythonPackages; [ ]";
         description = "Packages to add the to the PYTHONPATH of the buildbot process.";
         example = lib.literalExpression "pythonPackages: with pythonPackages; [ requests ]";

@@ -5,13 +5,13 @@
   fetchzip,
   fontconfig,
   lib,
-  libICE,
-  libSM,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libice,
+  libsm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
   liberation_ttf,
   makeFontsConf,
   nodejs,
@@ -46,14 +46,14 @@ stdenvNoCC.mkDerivation (
     }
     rec {
       pname = "Avalonia";
-      version = "11.3.6";
+      version = "11.3.12";
 
       src = fetchFromGitHub {
         owner = "AvaloniaUI";
         repo = "Avalonia";
         tag = version;
         fetchSubmodules = true;
-        hash = "sha256-ulGaYlhWxSWKLMh6Hy6gzFuDl4rmF3NDlcAL12YYtAg=";
+        hash = "sha256-pRIR4Hr/6YjOXmznBclTmQ+Ql7+wJAMANTXOJ/VDpYI=";
       };
 
       patches = [
@@ -62,28 +62,44 @@ stdenvNoCC.mkDerivation (
         # [ERR] Compile: [...]/Microsoft.NET.Sdk.targets(148,5): error MSB4018: The "GenerateDepsFile" task failed unexpectedly. [/build/source/src/tools/DevAnalyzers/DevAnalyzers.csproj]
         # [ERR] Compile: [...]/Microsoft.NET.Sdk.targets(148,5): error MSB4018: System.IO.IOException: The process cannot access the file '/build/source/src/tools/DevAnalyzers/bin/Release/netstandard2.0/DevAnalyzers.deps.json' because it is being used by another process. [/build/source/src/tools/DevAnalyzers/DevAnalyzers.csproj]
         ./0002-disable-parallel-compile.patch
+        # Microsoft.Common.CurrentVersion.targets(5034,5): error MSB3021: Unable to copy file "[...]/JetBrains.Annotations.dll" to "bin/Debug/JetBrains.Annotations.dll". Access to the path '/build/source/nukebuild/bin/Debug/JetBrains.Annotations.dll' is denied. [/build/source/nukebuild/_build.csproj]
+        # This happens because the source packages have symlinks due to linkNuGetPackagesAndSources.
+        ./0003-disable-hard-links.patch
+        # Remove dependencies on Microsoft.WindowsDesktop.App.Ref, which sdk
+        # specific and currently not packaged in nixpkgs
+        ./0004-disable-windows-desktop.patch
       ];
 
-      # this needs to be match the version being patched above
-      UNICODE_CHARACTER_DATABASE = fetchzip {
-        url = "https://www.unicode.org/Public/15.0.0/ucd/UCD.zip";
-        hash = "sha256-jj6bX46VcnH7vpc9GwM9gArG+hSPbOGL6E4SaVd0s60=";
-        stripRoot = false;
+      env = {
+        # this needs to be match the version being patched above
+        UNICODE_CHARACTER_DATABASE = fetchzip {
+          url = "https://www.unicode.org/Public/15.0.0/ucd/UCD.zip";
+          hash = "sha256-jj6bX46VcnH7vpc9GwM9gArG+hSPbOGL6E4SaVd0s60=";
+          stripRoot = false;
+        };
+        FONTCONFIG_FILE =
+          let
+            fc = makeFontsConf { fontDirectories = [ liberation_ttf ]; };
+          in
+          runCommand "fonts.conf" { } ''
+            substitute ${fc} $out \
+            --replace-fail "/etc/" "${fontconfig.out}/etc/"
+          '';
       };
 
       postPatch = ''
         patchShebangs build.sh
 
         substituteInPlace src/Avalonia.X11/ICELib.cs \
-          --replace-fail '"libICE.so.6"' '"${lib.getLib libICE}/lib/libICE.so.6"'
+          --replace-fail '"libICE.so.6"' '"${lib.getLib libice}/lib/libICE.so.6"'
         substituteInPlace src/Avalonia.X11/SMLib.cs \
-          --replace-fail '"libSM.so.6"' '"${lib.getLib libSM}/lib/libSM.so.6"'
+          --replace-fail '"libSM.so.6"' '"${lib.getLib libsm}/lib/libSM.so.6"'
         substituteInPlace src/Avalonia.X11/XLib.cs \
-          --replace-fail '"libX11.so.6"' '"${lib.getLib libX11}/lib/libX11.so.6"' \
-          --replace-fail '"libXrandr.so.2"' '"${lib.getLib libXrandr}/lib/libXrandr.so.2"' \
-          --replace-fail '"libXext.so.6"' '"${lib.getLib libXext}/lib/libXext.so.6"' \
-          --replace-fail '"libXi.so.6"' '"${lib.getLib libXi}/lib/libXi.so.6"' \
-          --replace-fail '"libXcursor.so.1"' '"${lib.getLib libXcursor}/lib/libXcursor.so.1"'
+          --replace-fail '"libX11.so.6"' '"${lib.getLib libx11}/lib/libX11.so.6"' \
+          --replace-fail '"libXrandr.so.2"' '"${lib.getLib libxrandr}/lib/libXrandr.so.2"' \
+          --replace-fail '"libXext.so.6"' '"${lib.getLib libxext}/lib/libXext.so.6"' \
+          --replace-fail '"libXi.so.6"' '"${lib.getLib libxi}/lib/libXi.so.6"' \
+          --replace-fail '"libXcursor.so.1"' '"${lib.getLib libxcursor}/lib/libXcursor.so.1"'
 
         # from RestoreAdditionalProjectSources, which isn't supported by nuget-to-json
         dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8-transport/nuget/v3/index.json
@@ -135,15 +151,6 @@ stdenvNoCC.mkDerivation (
       #  - Project assets file '/build/source/nukebuild/obj/project.assets.json'
       #  - NuGet packages config '/build/source/nukebuild/_build.csproj'
       linkNuGetPackagesAndSources = true;
-
-      FONTCONFIG_FILE =
-        let
-          fc = makeFontsConf { fontDirectories = [ liberation_ttf ]; };
-        in
-        runCommand "fonts.conf" { } ''
-          substitute ${fc} $out \
-            --replace-fail "/etc/" "${fontconfig.out}/etc/"
-        '';
 
       preConfigure = ''
         # closed source (telemetry?) https://github.com/AvaloniaUI/Avalonia/discussions/16878

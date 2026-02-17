@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libosmium";
-  version = "2.22.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "libosmium";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b4jdPh6lJ/ALPVblDt16Nabx9ZL8MW8/roI+NqTZshU=";
+    hash = "sha256-VYNNp7czQgIvPhYxXlPaY/qlVxoZZ6CiJXWrHW+zAD8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,7 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "INSTALL_GDALCPP" true) ];
+  cmakeFlags = [
+    (lib.cmakeBool "INSTALL_GDALCPP" true)
+  ];
 
   doCheck = true;
 

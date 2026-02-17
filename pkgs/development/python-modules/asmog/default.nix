@@ -4,15 +4,12 @@
   async-timeout,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "asmog";
   version = "0.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asmog" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Ampio Smog Sensors";
     homepage = "https://github.com/kstaniek/python-ampio-smog-api";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

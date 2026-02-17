@@ -12,14 +12,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-lambda";
   version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "cargo-lambda";
     repo = "cargo-lambda";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ocFD2FK1nlEJ8xXhDSxpSKYU8oZk/QwfojveypVt1GU=";
   };
 
@@ -77,4 +77,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

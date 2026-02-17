@@ -9,14 +9,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libixion";
   version = "0.19.0";
 
   src = fetchFromGitLab {
     owner = "ixion";
     repo = "ixion";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-BrexWRaxrLTWuoU62kqws3tlSqVOHecSV5MXc4ZezFs=";
   };
 
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     "--with-boost=${boost.dev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "General purpose formula parser, interpreter, formula cell dependency tracker and spreadsheet document model backend all in one package";
     homepage = "https://gitlab.com/ixion/ixion";
-    changelog = "https://gitlab.com/ixion/ixion/-/blob/${src.rev}/CHANGELOG";
-    license = licenses.mpl20;
+    changelog = "https://gitlab.com/ixion/ixion/-/blob/${finalAttrs.src.rev}/CHANGELOG";
+    license = lib.licenses.mpl20;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

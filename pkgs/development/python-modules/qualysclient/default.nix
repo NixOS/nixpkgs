@@ -9,7 +9,6 @@
   lxml,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   urllib3,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "qualysclient";
   version = "0.0.4.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "woodtechie1428";
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qualysclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for interacting with the Qualys API";
     homepage = "https://qualysclient.readthedocs.io/";
     changelog = "https://github.com/woodtechie1428/qualysclient/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

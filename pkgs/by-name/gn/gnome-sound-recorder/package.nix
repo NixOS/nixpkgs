@@ -19,12 +19,12 @@
   libadwaita,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-sound-recorder";
   version = "43.beta";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-sound-recorder/${lib.versions.major version}/gnome-sound-recorder-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-sound-recorder/${lib.versions.major finalAttrs.version}/gnome-sound-recorder-${finalAttrs.version}.tar.xz";
     hash = "sha256-bbbbmjsbUv0KtU+aW/Tymctx5SoTrF/fw+dOtGmFpOY=";
   };
 
@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
     description = "Simple and modern sound recorder";
     mainProgram = "gnome-sound-recorder";
     homepage = "https://gitlab.gnome.org/World/vocalis";
-    changelog = "https://gitlab.gnome.org/World/vocalis/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/World/vocalis/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

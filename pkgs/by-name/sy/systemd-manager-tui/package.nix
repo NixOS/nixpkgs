@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "systemd-manager-tui";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Matheus-git";
     repo = "systemd-manager-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SFzqjd9qxXxuadSxNaCM0eGEWIiGJdXqoyXYqWqKOAc=";
+    hash = "sha256-/KtvQBye5Z7xfCO57YhM/s+XOAT4ZIBU6Ycu398haXw=";
   };
 
-  cargoHash = "sha256-wMuEh2m07gsOj52Bhd5BnvVRu1uZqOiQurqmcpDylXM=";
+  cargoHash = "sha256-g6ES+A73E6k/TPw73azeYXj5R91Y98Im1enYKDqKTVk=";
 
   meta = {
     homepage = "https://github.com/Matheus-git/systemd-manager-tui";

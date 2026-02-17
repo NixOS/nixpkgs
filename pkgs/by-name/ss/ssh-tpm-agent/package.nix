@@ -7,14 +7,14 @@
   openssl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ssh-tpm-agent";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "ssh-tpm-agent";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CSxZctiQ/d4gzCUtfx9Oetb8s0XpHf3MPH/H0XaaVgg=";
   };
 
@@ -39,12 +39,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "SSH agent with support for TPM sealed keys for public key authentication";
     homepage = "https://github.com/Foxboron/ssh-tpm-agent";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sgo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sgo ];
     mainProgram = "ssh-tpm-agent";
   };
-}
+})

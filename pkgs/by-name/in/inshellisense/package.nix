@@ -3,6 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_22,
   cacert,
 }:
 
@@ -17,6 +18,10 @@ buildNpmPackage rec {
     hash = "sha256-zERwrvioPwGm/351kYuK9S3uOrrzs/6OFPRdNSSr7Tc=";
   };
 
+  # Building against nodejs-24 is not yet supported by upstream.
+  # https://github.com/microsoft/inshellisense/issues/369
+  nodejs = nodejs_22;
+
   npmDepsHash = "sha256-iD5SvkVbrHh0Hx44y6VtNerwBA8K7vSe/yfvhgndMEw=";
 
   # Needed for dependency `@homebridge/node-pty-prebuilt-multiarch`
@@ -29,10 +34,10 @@ buildNpmPackage rec {
   makeCacheWritable = stdenv.hostPlatform.isDarwin;
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin cacert;
 
-  meta = with lib; {
+  meta = {
     description = "IDE style command line auto complete";
     homepage = "https://github.com/microsoft/inshellisense";
-    license = licenses.mit;
-    maintainers = [ maintainers.malo ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.malo ];
   };
 }

@@ -12,9 +12,7 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  tomli,
   virtualenv,
   wheel,
 }:
@@ -38,8 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     pyproject-hooks
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   # We need to disable tests because this package is part of the bootstrap chain
   # and its test dependencies cannot be built yet when this is being built.
@@ -49,7 +46,7 @@ buildPythonPackage rec {
     pytest = buildPythonPackage {
       pname = "${pname}-pytest";
       inherit src version;
-      format = "other";
+      pyproject = false;
 
       dontBuild = true;
       dontInstall = true;
@@ -94,7 +91,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "build" ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "pyproject-build";
     description = "Simple, correct PEP517 package builder";
     longDescription = ''
@@ -103,8 +100,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pypa/build";
     changelog = "https://github.com/pypa/build/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = [ maintainers.fab ];
-    teams = [ teams.python ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.fab ];
+    teams = [ lib.teams.python ];
   };
 }

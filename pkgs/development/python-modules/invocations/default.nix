@@ -4,7 +4,6 @@
   blessed,
   fetchFromGitHub,
   invoke,
-  pythonOlder,
   releases,
   semantic-version,
   tabulate,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "invocations";
   version = "3.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pyinvoke";
@@ -69,11 +66,11 @@ buildPythonPackage rec {
     "status_"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Common/best-practice Invoke tasks and collections";
     homepage = "https://invocations.readthedocs.io/";
     changelog = "https://github.com/pyinvoke/invocations/blob/${version}/docs/changelog.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

@@ -16,14 +16,14 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tangara-companion";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "haileys";
     repo = "tangara-companion";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x/xB+itr1GVcaTEre3u6Lchg9VcSzWiNyWVGv5Aczgw=";
   };
 
@@ -49,9 +49,9 @@ rustPlatform.buildRustPackage rec {
     (makeDesktopItem {
       name = "tangara-companion";
       desktopName = "Tangara Companion";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       type = "Application";
-      exec = meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       terminal = false;
       categories = [
         "Utility"
@@ -74,4 +74,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ benpye ];
     platforms = lib.platforms.linux;
   };
-}
+})

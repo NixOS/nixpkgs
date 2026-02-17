@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-zjwajl+0ix4wnW0bf4MAuO9Lr9F8sBv87TIL5Ghmlxg=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   propagatedBuildInputs = [
     beancount
@@ -28,10 +28,10 @@ python3.pkgs.buildPythonApplication rec {
     poetry-core
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/siddhantgoel/beancount-ing-diba";
     description = "Beancount Importers for ING-DiBa (Germany) CSV Exports";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

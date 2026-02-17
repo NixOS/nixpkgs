@@ -7,7 +7,6 @@
   frelatage,
   libiconv,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "base2048";
   version = "0.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ionite34";
@@ -49,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "base2048" ];
 
-  meta = with lib; {
+  meta = {
     description = "Binary encoding with base-2048 in Python with Rust";
     homepage = "https://github.com/ionite34/base2048";
     changelog = "https://github.com/ionite34/base2048/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -17,7 +17,12 @@ in
       dataDir = lib.mkOption {
         type = lib.types.str;
         default = "/var/lib/sonarr/.config/NzbDrone";
-        description = "The directory where Sonarr stores its data files.";
+        description = ''
+          The Sonarr home directory used to store all data. If left as the default value
+          this directory will automatically be created before the Sonarr server starts, otherwise
+          you are responsible for ensuring the directory exists with appropriate ownership
+          and permissions.
+        '';
       };
 
       openFirewall = lib.mkOption {
@@ -35,13 +40,29 @@ in
       user = lib.mkOption {
         type = lib.types.str;
         default = "sonarr";
-        description = "User account under which Sonaar runs.";
+        description = ''
+          User account under which Sonarr runs.";
+
+          ::: {.note}
+          If left as the default value this user will automatically be created
+          on system activation, otherwise you are responsible for
+          ensuring the user exists before the Sonarr service starts.
+          :::
+        '';
       };
 
       group = lib.mkOption {
         type = lib.types.str;
         default = "sonarr";
-        description = "Group under which Sonaar runs.";
+        description = ''
+          Group account under which Sonarr runs.
+
+          ::: {.note}
+          If left as the default value this group will automatically be created
+          on system activation, otherwise you are responsible for
+          ensuring the group exists before the Sonarr service starts.
+          :::
+        '';
       };
 
       package = lib.mkPackageOption pkgs "sonarr" { };
@@ -49,10 +70,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
-
     systemd.services.sonarr = {
       description = "Sonarr";
       after = [ "network.target" ];
@@ -69,6 +86,9 @@ in
           "-data=${cfg.dataDir}"
         ];
         Restart = "on-failure";
+      }
+      // lib.optionalAttrs (cfg.dataDir == "/var/lib/sonarr/.config/NzbDrone") {
+        StateDirectory = "sonarr";
       };
     };
 

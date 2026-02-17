@@ -7,7 +7,7 @@
   yodl,
   perl,
   groff,
-  util-linux,
+  util-linuxMinimal,
   texinfo,
   ncurses,
   pcre2,
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
     pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    util-linux
+    util-linuxMinimal
     yodl
   ];
 
@@ -182,7 +182,7 @@ stdenv.mkDerivation {
       completion, shell functions (with autoloading), a history mechanism, and
       a host of other features.
     '';
-    license = "MIT-like";
+    license = lib.licenses.mit-modern;
     homepage = "https://www.zsh.org/";
     maintainers = with lib.maintainers; [
       pSub

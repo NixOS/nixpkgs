@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "london-tube-status";
-  version = "0.6.1";
+  version = "0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robmarkcole";
     repo = "London-tube-status";
     tag = version;
-    hash = "sha256-bdkGDVWcyJXH21qGrdJnSa4IW2kJskFTJ5ye6M6eOz4=";
+    hash = "sha256-0uDCrF3abx94X47LQxgALirSF/spJPVD91G2WqXaDVs=";
   };
 
   build-system = [

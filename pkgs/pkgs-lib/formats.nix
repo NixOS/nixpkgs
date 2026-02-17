@@ -40,6 +40,7 @@ let
     ;
 
   inherit (lib.types)
+    serializableValueWith
     attrsOf
     atom
     bool
@@ -130,23 +131,7 @@ optionalAttrs allowAliases aliases
     { }:
     {
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "JSON value";
-            };
-        in
-        valueType;
+      type = types.json;
 
       generate =
         name: value:
@@ -160,7 +145,7 @@ optionalAttrs allowAliases aliases
               preferLocalBuild = true;
             }
             ''
-              jq . "$valuePath"> $out
+              jq . "$valuePath" > $out
             ''
         ) { };
 
@@ -187,23 +172,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "YAML 1.1 value";
-            };
-        in
-        valueType;
+      type = serializableValueWith { typeName = "YAML 1.1"; };
 
     };
 
@@ -226,23 +195,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "YAML 1.2 value";
-            };
-        in
-        valueType;
+      type = serializableValueWith { typeName = "YAML 1.2"; };
 
     };
 
@@ -425,10 +378,22 @@ optionalAttrs allowAliases aliases
     let
       mkValueString = mkValueStringDefault { };
       mkKeyValue = k: v: if v == null then "# ${k} is unset" else "${k} = ${mkValueString v}";
+
+      rawFormat = ini {
+        listsAsDuplicateKeys = true;
+        inherit mkKeyValue;
+      };
     in
-    ini {
-      listsAsDuplicateKeys = true;
-      inherit mkKeyValue;
+    rawFormat
+    // {
+      generate =
+        name: value:
+        lib.warn
+          "Direct use of `pkgs.formats.systemd` has been deprecated, please use `pkgs.formats.systemd { }` instead."
+          rawFormat.generate
+          name
+          value;
+      __functor = self: { }: rawFormat;
     };
 
   keyValue =
@@ -491,23 +456,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type =
-        let
-          valueType =
-            oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ]
-            // {
-              description = "TOML value";
-            };
-        in
-        valueType;
+      type = types.toml;
 
       generate =
         name: value:
@@ -540,23 +489,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "CDN value";
-            };
-        in
-        valueType;
+      type = serializableValueWith { typeName = "CDN"; };
 
       generate =
         name: value:
@@ -708,7 +641,7 @@ optionalAttrs allowAliases aliases
               description = "Elixir value";
             };
         in
-        attrsOf (attrsOf (valueType));
+        attrsOf (attrsOf valueType);
 
       lib =
         let
@@ -971,23 +904,9 @@ optionalAttrs allowAliases aliases
   pythonVars =
     { }:
     {
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              float
-              int
-              path
-              str
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "Python value";
-            };
-        in
-        attrsOf valueType;
+      type = attrsOf (serializableValueWith {
+        typeName = "Python";
+      });
 
       lib = {
         mkRaw = value: {
@@ -1067,23 +986,7 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type =
-          let
-            valueType =
-              nullOr (oneOf [
-                bool
-                int
-                float
-                str
-                path
-                (attrsOf valueType)
-                (listOf valueType)
-              ])
-              // {
-                description = "XML value";
-              };
-          in
-          valueType;
+        type = serializableValueWith { typeName = "XML"; };
 
         generate =
           name: value:
@@ -1125,4 +1028,29 @@ optionalAttrs allowAliases aliases
     else
       throw "pkgs.formats.xml: Unknown format: ${format}";
 
+  plist =
+    {
+      escape ? true,
+    }:
+    {
+      type =
+        let
+          valueType =
+            nullOr (oneOf [
+              bool
+              int
+              float
+              str
+              path
+              (attrsOf valueType)
+              (listOf valueType)
+            ])
+            // {
+              description = "Property list (plist) value";
+            };
+        in
+        valueType;
+
+      generate = name: value: pkgs.writeText name (lib.generators.toPlist { inherit escape; } value);
+    };
 }

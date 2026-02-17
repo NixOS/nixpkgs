@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
   pytest-codspeed,
   pytest-snapshot,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "awesomeversion";
   version = "25.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to deal with versions";
     homepage = "https://github.com/ludeeus/awesomeversion";
     changelog = "https://github.com/ludeeus/awesomeversion/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

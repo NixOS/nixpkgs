@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
   pytestCheckHook,
   aiohttp,
   click,
@@ -19,17 +18,13 @@
   parameterized,
   platformdirs,
   tokenize-rt,
-  tomli,
-  typing-extensions,
   uvloop,
 }:
 
 buildPythonPackage rec {
   pname = "black";
   version = "25.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -66,10 +61,6 @@ buildPythonPackage rec {
     packaging
     pathspec
     platformdirs
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-    typing-extensions
   ];
 
   optional-dependencies = {
@@ -90,7 +81,7 @@ buildPythonPackage rec {
     pytestCheckHook
     parameterized
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
@@ -125,13 +116,13 @@ buildPythonPackage rec {
   # multiple tests exceed max open files on hydra builders
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
-  meta = with lib; {
+  meta = {
     description = "Uncompromising Python code formatter";
     homepage = "https://github.com/psf/black";
     changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "black";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sveitser
       autophagy
     ];

@@ -11,8 +11,8 @@
   cmake,
   openssl,
   xorgproto,
-  libX11,
-  libXScrnSaver,
+  libx11,
+  libxscrnsaver,
   xz,
   zlib,
 }:
@@ -39,17 +39,17 @@ stdenv.mkDerivation {
     qtwebkit
     openssl
     xorgproto
-    libX11
-    libXScrnSaver
+    libx11
+    libxscrnsaver
     xz
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "XMPP client fully composed of plugins";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
     homepage = "http://www.vacuum-im.org";
   };
 }

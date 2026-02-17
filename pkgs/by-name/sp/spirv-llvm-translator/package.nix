@@ -38,7 +38,12 @@ let
     };
   };
 
-  branch = versions."${llvmMajor}" or (throw "Incompatible LLVM version ${llvmMajor}");
+  branch =
+    versions."${llvmMajor}" or {
+      version = "${llvmMajor}.x.x";
+      rev = "";
+      hash = "";
+    };
 in
 stdenv.mkDerivation {
   pname = "SPIRV-LLVM-Translator";
@@ -100,20 +105,13 @@ stdenv.mkDerivation {
     version: pkgs.spirv-llvm-translator.override { llvm = pkgs."llvm_${version}"; }
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "Tool and a library for bi-directional translation between SPIR-V and LLVM IR";
     mainProgram = "llvm-spirv";
-    license = licenses.ncsa;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ gloaming ];
-
-    # For the LLVM 21 build some commits to spirv-headers
-    # are required that didn't make it into the final release of 1.4.321
-    # For example: 9e3836d Add SPV_INTEL_function_variants
-    # Once spirv-headers are released again and updated on nixpkgs,
-    # this will switch over to the nixpkgs version and should no
-    # longer be broken.
-    broken = llvmMajor == "21" && lib.versionOlder spirv-headers.version "1.4.322";
+    license = lib.licenses.ncsa;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ gloaming ];
+    broken = !(versions ? ${llvmMajor});
   };
 }

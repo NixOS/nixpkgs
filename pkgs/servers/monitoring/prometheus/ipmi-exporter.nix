@@ -38,12 +38,12 @@ buildGoModule rec {
     "-X github.com/prometheus/common/version.BuildDate=unknown"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IPMI exporter for Prometheus";
     mainProgram = "ipmi_exporter";
     homepage = "https://github.com/prometheus-community/ipmi_exporter";
     changelog = "https://github.com/prometheus-community/ipmi_exporter/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ snaar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ snaar ];
   };
 }

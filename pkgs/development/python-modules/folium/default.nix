@@ -12,7 +12,6 @@
   pillow,
   pixelmatch,
   pytestCheckHook,
-  pythonOlder,
   requests,
   selenium,
   setuptools,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "folium";
   version = "0.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-visualization";

@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     "PREFIX="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wayland roots protocol extensions";
     longDescription = ''
       wlr-protocols contains Wayland protocols that add functionality not
@@ -44,8 +44,8 @@ stdenv.mkDerivation {
       or some other protocol in wayland-protocols.
     '';
     homepage = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
-    license = licenses.mit; # See file headers
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.mit; # See file headers
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

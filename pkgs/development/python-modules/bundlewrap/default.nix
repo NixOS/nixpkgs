@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   cryptography,
   jinja2,
   librouteros,
@@ -11,7 +10,6 @@
   passlib,
   pyyaml,
   requests,
-  rtoml,
   setuptools,
   tomlkit,
   pytestCheckHook,
@@ -44,8 +42,7 @@ buildPythonPackage {
     requests
     tomlkit
     librouteros
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
+  ];
 
   pythonImportsCheck = [ "bundlewrap" ];
 
@@ -54,7 +51,6 @@ buildPythonPackage {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/bw";
-  versionCheckProgramArg = "--version";
 
   enabledTestPaths = [
     # only unit tests as integration tests need a OpenSSH client/server setup

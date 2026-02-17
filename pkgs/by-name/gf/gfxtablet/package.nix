@@ -5,7 +5,7 @@
   linuxHeaders,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.4";
   pname = "gfxtablet-uinput-driver";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rfc2822";
     repo = "GfxTablet";
-    rev = "android-app-${version}";
+    rev = "android-app-${finalAttrs.version}";
     sha256 = "1i2m98yypfa9phshlmvjlgw7axfisxmldzrvnbzm5spvv5s4kvvb";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
-}
+})

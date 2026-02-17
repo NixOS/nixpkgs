@@ -15,12 +15,12 @@ let
   remove_getaddrinfo_checks =
     stdenv.hostPlatform.isMips64 || !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dante";
   version = "1.4.4";
 
   src = fetchurl {
-    url = "https://www.inet.no/dante/files/${pname}-${version}.tar.gz";
+    url = "https://www.inet.no/dante/files/dante-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-GXPHcy8fnwpMDM8sHORix8JQYLJWQ+qQ+bmPU6gT+uw=";
   };
 
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     substituteInPlace include/redefgen.sh --replace 'PATH=/bin:/usr/bin:/sbin:/usr/sbin' ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Circuit-level SOCKS client/server that can be used to provide convenient and secure network connectivity";
     homepage = "https://www.inet.no/dante/";
-    maintainers = [ maintainers.arobyn ];
-    license = licenses.bsdOriginal;
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ lib.maintainers.arobyn ];
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

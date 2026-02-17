@@ -10,14 +10,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxsqliteplus";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "guanlisheng";
     repo = "wxsqliteplus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gyH1Wlmg9xQy7xm7rhKZa7BFTFFN4JQHp3CHmzMkVOg=";
   };
 
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
       install -Dm755 wxSQLitePlus $out/bin/wxSQLitePlus
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple SQLite database browser built with wxWidgets";
     mainProgram = "wxSQLitePlus";
     homepage = "https://github.com/guanlisheng/wxsqliteplus";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

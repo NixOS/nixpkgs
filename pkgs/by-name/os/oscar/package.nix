@@ -6,15 +6,15 @@
   libGLU,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oscar";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitLab {
     owner = "CrimsonNape";
     repo = "OSCAR-code";
-    rev = "v${version}";
-    hash = "sha256-idooSDmozMtf0akhbaQP1aBIv6Ae9UMhMmN1P48u7FE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4ekhhzX//u/UFrqIriPmhxdjEGJ1LXczZU2ZCmC+Uvo=";
   };
 
   buildInputs = [
@@ -58,14 +58,17 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.sleepfiles.com/OSCAR/";
     description = "Software for reviewing and exploring data produced by CPAP and related machines used in the treatment of sleep apnea";
     mainProgram = "OSCAR";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.roconnor ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      roconnor
+      ilkecan
+    ];
     # Someone needs to create a suitable installPhase for Darwin and Windows.
     # See https://gitlab.com/pholy/OSCAR-code/-/tree/master/Building.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

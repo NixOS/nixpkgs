@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyparsebluray";
   version = "0.1.4";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ichunjo";
     repo = "pyparsebluray";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9G+pf4kZnj5ZkJj8qmymqdxCRVUTfGy3m9iF5BjiCxM=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

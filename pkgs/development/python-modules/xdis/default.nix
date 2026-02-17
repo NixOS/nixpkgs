@@ -4,23 +4,20 @@
   click,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.1.6";
+  version = "6.1.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
     tag = version;
-    hash = "sha256-G4BpvMYjBUBfStP1csfFaFCin0eYEnXwsztCS4amvdY=";
+    hash = "sha256-sAL2D7Rg/iyob2nawXX/b5F/uOGCMsb1q0ZnPLIfh6o=";
   };
 
   build-system = [

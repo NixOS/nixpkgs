@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitLab,
   setuptools,
   dill,
@@ -24,13 +23,11 @@ buildPythonPackage rec {
   version = "3.23.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitLab {
     domain = "git.fmrib.ox.ac.uk";
     owner = "fsl";
     repo = "fslpy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lY/7TNOqGK0pRm5Rne1nrqXVQDZPkHwlZV9ITsOwp9Q=";
   };
 

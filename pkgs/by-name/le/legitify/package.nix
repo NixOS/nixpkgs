@@ -1,10 +1,10 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "legitify";
   version = "1.0.11";
 
@@ -30,7 +30,7 @@ buildGoModule rec {
   meta = {
     description = "Tool to detect and remediate misconfigurations and security risks of GitHub assets";
     homepage = "https://github.com/Legit-Labs/legitify";
-    changelog = "https://github.com/Legit-Labs/legitify/releases/tag/v${version}";
+    changelog = "https://github.com/Legit-Labs/legitify/releases/tag/v${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "legitify";

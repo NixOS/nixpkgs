@@ -3,23 +3,25 @@
   stdenv,
   fetchgit,
   cmake,
+  libubox,
   unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "odhcp6c";
-  version = "0-unstable-2025-02-06";
+  version = "0-unstable-2026-01-25";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/odhcp6c.git";
-    rev = "8aa8b706727a6a6a841be42ef35a629ed635db3e";
-    hash = "sha256-cFDiT8EC8/2yuLM6dTWTzwxSbFpc7zuUKx2SHbR4PfQ=";
+    rev = "24485bb4b35ab84c17c2e87bd561d026d4c15c00";
+    hash = "sha256-cfBKly95vI+8u6lZ4LyrSrNvCf3ogTKtLDzuodO26qw=";
   };
 
   nativeBuildInputs = [ cmake ];
+  buildInputs = [ libubox ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=$out"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
   ];
 
   passthru.updateScript = unstableGitUpdater { };

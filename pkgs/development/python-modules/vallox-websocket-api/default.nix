@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "vallox-websocket-api";
-  version = "5.4.0";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "vallox_websocket_api";
     tag = version;
-    hash = "sha256-L9duL8XfDUxHgJxVbG7PPPRJRzVEckxqbB+1vX0GalU=";
+    hash = "sha256-i4KUXvDz6FCdQguZtpNybyIPC/gn+O3SAYWh2CIbAeI=";
   };
 
   build-system = [

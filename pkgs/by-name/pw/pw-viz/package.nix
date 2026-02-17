@@ -10,17 +10,20 @@
   libxkbcommon,
   pipewire,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pw-viz";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ax9d";
     repo = "pw-viz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fB7PnWWahCMKhGREg6neLmOZjh2OWLu61Vpmfsl03wA=";
   };
 
@@ -37,10 +40,10 @@ rustPlatform.buildRustPackage rec {
     pipewire
     rustPlatform.bindgenHook
     wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ];
 
   postFixup = ''
@@ -58,11 +61,11 @@ rustPlatform.buildRustPackage rec {
   # fixes error caused by https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
   env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and elegant pipewire graph editor";
     homepage = "https://github.com/ax9d/pw-viz";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

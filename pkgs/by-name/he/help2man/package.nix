@@ -12,12 +12,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "help2man";
   version = "1.49.3";
 
   src = fetchurl {
-    url = "mirror://gnu/help2man/help2man-${version}.tar.xz";
+    url = "mirror://gnu/help2man/help2man-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-TX5P3vLspq/geiaCFRzqeHgeCk6PliIULZ9wwIOi/U8=";
   };
 
@@ -56,15 +56,15 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/help2man
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generate man pages from `--help' output";
     mainProgram = "help2man";
     longDescription = ''
       help2man produces simple manual pages from the ‘--help’ and ‘--version’ output of other commands.
     '';
     homepage = "https://www.gnu.org/software/help2man/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

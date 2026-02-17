@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "ansi";
   version = "0.3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tehmaze";
@@ -27,9 +27,9 @@ buildPythonPackage rec {
     "ansi.color"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ANSI cursor movement and graphics";
     homepage = "https://github.com/tehmaze/ansi/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

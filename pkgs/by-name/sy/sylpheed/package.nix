@@ -14,12 +14,12 @@
 assert gpgSupport -> gpgme != null;
 assert sslSupport -> openssl != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sylpheed";
   version = "3.7.0";
 
   src = fetchurl {
-    url = "https://sylpheed.sraoss.jp/sylpheed/v3.7/${pname}-${version}.tar.xz";
+    url = "https://sylpheed.sraoss.jp/sylpheed/v3.7/sylpheed-${finalAttrs.version}.tar.xz";
     sha256 = "0j9y5vdzch251s264diw9clrn88dn20bqqkwfmis9l7m8vmwasqd";
   };
 
@@ -54,14 +54,16 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional gpgSupport "--enable-gpgme" ++ lib.optional sslSupport "--enable-ssl";
 
   # Undefined symbols for architecture arm64: "_OBJC_CLASS_$_NSAutoreleasePool"
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework Foundation";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-framework Foundation";
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sylpheed.sraoss.jp/en/";
     description = "Lightweight and user-friendly e-mail client";
     mainProgram = "sylpheed";
     maintainers = [ ];
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl2;
   };
-}
+})

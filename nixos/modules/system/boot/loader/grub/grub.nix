@@ -472,7 +472,7 @@ in
         type = types.attrsOf types.path;
         default = { };
         example = literalExpression ''
-          { "memtest.bin" = "''${pkgs.memtest86plus}/memtest.bin"; }
+          { "memtest.bin" = pkgs.memtest86plus.efi; }
         '';
         description = ''
           A set of files to be copied to {file}`/boot`.

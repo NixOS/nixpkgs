@@ -7,15 +7,12 @@
   mkdocs,
   mkdocs-material,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-redoc-tag";
   version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Blueswen";
@@ -36,11 +33,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  pytestFlags = [ "-s" ];
+
+  meta = {
     description = "MkDocs plugin supports for add Redoc UI in page";
     homepage = "https://github.com/blueswen/mkdocs-redoc-tag";
     changelog = "https://github.com/blueswen/mkdocs-redoc-tag/blob/v${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ benhiemer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ benhiemer ];
   };
 }

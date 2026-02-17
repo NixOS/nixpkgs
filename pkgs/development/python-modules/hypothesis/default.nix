@@ -5,7 +5,6 @@
   fetchFromGitHub,
   setuptools,
   attrs,
-  exceptiongroup,
   pexpect,
   doCheck ? true,
   pytestCheckHook,
@@ -14,7 +13,6 @@
   sortedcontainers,
   stdenv,
   pythonAtLeast,
-  pythonOlder,
   sphinxHook,
   sphinx-rtd-theme,
   sphinx-hoverxref,
@@ -24,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.136.9";
+  version = "6.145.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     tag = "hypothesis-python-${version}";
-    hash = "sha256-Q1wxIJwAYKZ0x6c85CJSGgcdKw9a3xFw8YpJROElSNU=";
+    hash = "sha256-xyUR3yY2tmF4LGhZRUlv6fdcfVyVWwukodA0WIW0bXU=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -56,8 +52,7 @@ buildPythonPackage rec {
   dependencies = [
     attrs
     sortedcontainers
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
   nativeCheckInputs = [
     pexpect
@@ -104,13 +99,6 @@ buildPythonPackage rec {
     # calls script with the naked interpreter
     "test_constants_from_running_file"
   ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    # not sure why these tests fail with only 3.9
-    # FileNotFoundError: [Errno 2] No such file or directory: 'git'
-    "test_observability"
-    "test_assume_has_status_reason"
-    "test_observability_captures_stateful_reprs"
-  ]
   ++ lib.optionals (pythonAtLeast "3.12") [
     # AssertionError: assert [b'def      \...   f(): pass'] == [b'def\\', b'    f(): pass']
     # https://github.com/HypothesisWorks/hypothesis/issues/4355
@@ -138,6 +126,10 @@ buildPythonPackage rec {
     "test_resolving_standard_reversible_as_generic"
     "test_resolving_standard_sequence_as_generic"
     "test_specialised_collection_types"
+  ]
+  ++ lib.optionals isPyPy [
+    # hypothesis.errors.Unsatisfiable: Could not find any examples from datetimes(min_value=datetime.datetime(2003, 1, 1, 0, 0), max_value=datetime.datetime(2005, 12, 31, 23, 59, 59, 999999)) that satisfied lambda x: x.month == 2 and x.day == 29
+    "test_bordering_on_a_leap_year"
   ];
 
   pythonImportsCheck = [ "hypothesis" ];
@@ -147,8 +139,8 @@ buildPythonPackage rec {
       # Forge look and feel of multi-output derivation as best as we can.
       #
       # Using 'outputs = [ "doc" ];' breaks a lot of assumptions.
-      name = "${pname}-${version}-doc";
-      inherit src pname version;
+      pname = "${pname}-doc";
+      inherit src version;
 
       postInstallSphinx = ''
         mv $out/share/doc/* $out/share/doc/python$pythonVersion-$pname-$version

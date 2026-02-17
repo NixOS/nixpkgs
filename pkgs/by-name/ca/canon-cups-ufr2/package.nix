@@ -20,7 +20,7 @@
   cairo,
   atk,
   pkg-config,
-  libxml2,
+  libxml2_13,
   libredirect,
   ghostscript,
   pkgs,
@@ -57,7 +57,7 @@ let
     libgcrypt
     glib
     gtk3
-    libxml2
+    libxml2_13
     gdk-pixbuf
     pango
     cairo
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace $(find cnrdrvcups-lb-${version}/cngplp -name Makefile.am) \
-      --replace-quiet /usr/include/libxml2/ ${libxml2.dev}/include/libxml2/
+      --replace-quiet /usr/include/libxml2/ ${libxml2_13.dev}/include/libxml2/
 
     substituteInPlace \
       cnrdrvcups-common-${version}/{{backend,cngplp/src,rasterfilter}/Makefile.am,rasterfilter/cnrasterproc.h} \
@@ -207,11 +207,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CUPS Linux drivers for Canon printers";
     homepage = "http://www.canon.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ lluchs ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ lluchs ];
   };
 }

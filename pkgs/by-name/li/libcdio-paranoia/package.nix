@@ -8,14 +8,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcdio-paranoia";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "libcdio-paranoia";
-    rev = "release-10.2+${version}";
+    rev = "release-10.2+${finalAttrs.version}";
     hash = "sha256-n05PSVgh6z7BFPq4CjJa5DqCO7Huj8Bsg0x3HQPsbeI=";
   };
 
@@ -32,16 +32,16 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-ld-version-script" ];
 
-  meta = with lib; {
+  meta = {
     description = "CD paranoia on top of libcdio";
     longDescription = ''
       This is a port of xiph.org's cdda paranoia to use libcdio for CDROM
       access. By doing this, cdparanoia runs on platforms other than GNU/Linux.
     '';
     homepage = "https://github.com/rocky/libcdio-paranoia";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "cd-paranoia";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

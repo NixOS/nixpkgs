@@ -11,13 +11,13 @@ buildGoModule rec {
   '';
 
   pname = "script_exporter";
-  version = "3.0.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "ricoberger";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-09WpxXPNk2Pza9RrD3OLru4aY0LR98KgsHK7It/qRgs=";
+    hash = "sha256-TanhxXQYiMVkY89TfuzlHNrExe0u6FCPUlmuLgCN1RQ=";
   };
 
   postPatch = ''
@@ -26,16 +26,16 @@ buildGoModule rec {
     sed -i '/func TestHandler/a\\    t.Skip("skipped in Nix build")' prober/handler_test.go
   '';
 
-  vendorHash = "sha256-Rs7P7uVvfhWteiR10LeG4fWZqbNqDf3QQotgNvTMTX4=";
+  vendorHash = "sha256-g7Sd8rMqxFTNi3XsO05gyQ1d1icENx9FZthnGC2qQbM=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) script; };
 
-  meta = with lib; {
+  meta = {
     description = "Shell script prometheus exporter";
     mainProgram = "script_exporter";
     homepage = "https://github.com/ricoberger/script_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Flakebi ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -9,12 +9,12 @@
   cups,
   qt6,
   undmg,
-  xorg,
+  xkeyboard-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "010editor";
-  version = "16.0.1";
+  version = "16.0.2";
 
   src = finalAttrs.passthru.srcs.${stdenv.hostPlatform.system};
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     qt6.qtbase
     qt6.qtwayland
-    xorg.xkeyboardconfig
+    xkeyboard-config
   ];
 
   installPhase =
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
         # Wrap binary: clean env, fix XKB lookup
         makeWrapper $out/opt/010editor $out/bin/010editor \
           --unset QT_PLUGIN_PATH \
-          --set XKB_CONFIG_ROOT ${xorg.xkeyboardconfig}/share/X11/xkb
+          --set XKB_CONFIG_ROOT ${xkeyboard-config}/share/X11/xkb
 
         # Install icon + desktop entry
         install -D $out/opt/010_icon_128x128.png $out/share/icons/hicolor/128x128/apps/010.png
@@ -91,17 +91,17 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.srcs = {
     x86_64-linux = fetchzip {
       url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
-      hash = "sha256-fPQCVA9VrpNBTA7PiOsHwIiaZLKKoK817PtWNX8uHBQ=";
+      hash = "sha256-sFTP/z+aann3KdEVW+RSWhi/uyLZB4q3kBXaBkwHkKE=";
     };
 
     x86_64-darwin = fetchurl {
       url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
-      hash = "sha256-q/lfe4IWYJbxoGVBQju+t/w13UI3XHaVNPdTjnIQFw8=";
+      hash = "sha256-Ky7IvLeFogx6R2YAirASNNIClEL9/M0eEyCxbGAt0sU=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://download.sweetscape.com/010EditorMacARM64Installer${finalAttrs.version}.dmg";
-      hash = "sha256-kBrYSxTNz01pPaRfKZWE6dDoACgs5tlfb+M6A7R0Vo4=";
+      hash = "sha256-gtfTq/e/BHSxkCv/Qg/o8Naoao+I8fzKOmGB1PXPSwI=";
     };
   };
 

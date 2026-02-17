@@ -1,38 +1,56 @@
 {
   lib,
-  buildNpmPackage,
-  fetchzip,
-  nix-update-script,
+  stdenv,
+  autoPatchelfHook,
+  fetchurl,
+  versionCheckHook,
 }:
 
-buildNpmPackage (finalAttrs: {
+let
+  sources = lib.importJSON ./sources.json;
+  srcConfig =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "0.0.328";
+  inherit (sources) version;
 
-  src = fetchzip {
-    url = "https://registry.npmjs.org/@github/copilot/-/copilot-${finalAttrs.version}.tgz";
-    hash = "sha256-9oTaVjvwyS8KY8N5kUEiAs+l6vEd/BZ0AGJI0p9Jie0=";
+  src = fetchurl {
+    url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/${srcConfig.name}.tar.gz";
+    inherit (srcConfig) hash;
   };
 
-  npmDepsHash = "sha256-WK6t3IW4uF+MDu7Y5GRinbm8iDcYB8RhJ15GE9VBcjQ=";
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+  sourceRoot = ".";
+  dontStrip = true;
 
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 copilot $out/bin/copilot
+    runHook postInstall
   '';
 
-  dontNpmBuild = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal";
     homepage = "https://github.com/github/copilot-cli";
     changelog = "https://github.com/github/copilot-cli/releases/tag/v${finalAttrs.version}";
-    downloadPage = "https://www.npmjs.com/package/@github/copilot";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       dbreyfogle
     ];
     mainProgram = "copilot";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })

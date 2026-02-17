@@ -10,15 +10,15 @@
   net-tools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-ios";
-  version = "1.0.182";
+  version = "1.0.202";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
-    rev = "v${version}";
-    sha256 = "sha256-GUCZiuW6IDVxVsFZN7QMRt5EFovxjUopC4jQD+/lZv8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-GC0wNOnfT9eCDKvqVKbmuMOumRb4BN1uHAOoEOLwNYc=";
   };
 
   proxyVendor = true;
@@ -62,11 +62,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Operating system independent implementation of iOS device features";
     homepage = "https://github.com/danielpaulus/go-ios";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
     mainProgram = "ios";
   };
-}
+})

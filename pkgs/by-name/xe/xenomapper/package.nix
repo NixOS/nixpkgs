@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xenomapper";
   version = "1.0.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "genomematt";
     repo = "xenomapper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0mnmfzlq5mhih6z8dq5bkx95vb8whjycz9mdlqwbmlqjb3gb3zhr";
   };
 
@@ -25,11 +25,11 @@ python3.pkgs.buildPythonApplication rec {
     "xenomapper.mappability"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/genomematt/xenomapper";
     description = "Utility for post processing mapped reads that have been aligned to a primary genome and a secondary genome and binning reads into species specific, multimapping in each species, unmapped and unassigned bins";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.jbedo ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.jbedo ];
   };
-}
+})

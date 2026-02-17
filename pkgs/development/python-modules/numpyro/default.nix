@@ -28,16 +28,16 @@
   tensorflow-probability,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpyro";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
-    tag = version;
-    hash = "sha256-3kzaINsz1Mjk97ERQsQIYIBz7CVmXtVDn0edJFMHQWs=";
+    tag = finalAttrs.version;
+    hash = "sha256-lMga+mPQEh6RCeqXKa2KELR6RcksKJ/K32h7X7a1IcQ=";
   };
 
   build-system = [ setuptools ];
@@ -75,9 +75,17 @@ buildPythonPackage rec {
     # Chains will be drawn sequentially. If you are running MCMC in CPU, consider using `numpyro.set_host_device_count(2)` at the beginning of your program.
     # You can double-check how many devices are available in your system using `jax.local_device_count()`.
     "-Wignore::UserWarning"
+
+    # FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+    "-Wignore::FutureWarning"
   ];
 
   disabledTests = [
+    # ValueError: Found unexpected Arrays on value of type <class 'list'> in static attribute 'layers'
+    # of Pytree type '<class 'test_module.test_random_nnx_module_mcmc_sequence_params.<locals>.MLP'>'.
+    # This is an error starting from Flax version 0.12.0.
+    "test_random_nnx_module_mcmc_sequence_param"
+
     # AssertionError, assert GLOBAL["count"] == 4 (assert 5 == 4)
     "test_mcmc_parallel_chain"
 
@@ -94,6 +102,9 @@ buildPythonPackage rec {
 
     # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
     "test_chain"
+
+    # Failed: DID NOT RAISE <class 'UserWarning'>
+    "test_interval_censored_validate_sample"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Not equal to tolerance rtol=0.06, atol=0
@@ -108,8 +119,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for probabilistic programming with NumPy";
     homepage = "https://num.pyro.ai/";
-    changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${version}";
+    changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

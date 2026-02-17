@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p python3 gnupg
+#!nix-shell -i python3 -p python3 sequoia-sq
 import json
 import os
 import shutil
@@ -9,8 +9,7 @@ import tempfile
 from collections import OrderedDict
 
 DOWNLOADS_BASE_URL = "https://downloads.1password.com"
-OP_PGP_KEYID = "3FEF9748469ADBE15DA7CA80AC2D62742012EA22"
-
+OP_PGP_KEY_URL = "https://downloads.1password.com/linux/keys/1password.asc"
 
 class Sources(OrderedDict):
     def __init__(self):
@@ -21,43 +20,39 @@ class Sources(OrderedDict):
         with open("sources.json", "w") as fp:
             print(json.dumps(self, indent=2), file=fp)
 
-class GPG:
+
+class PGP:
     def __new__(cls):
         if not hasattr(cls, "_instance"):
             cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self):
-        if hasattr(self, "gnupghome"):
+        if hasattr(self, "signer_file"):
             return
 
-        self.gpg = shutil.which("gpg")
-        self.gpgv = shutil.which("gpgv")
-        self.gnupghome = tempfile.mkdtemp(prefix="1password-gui-gnupghome.")
-        self.env = {"GNUPGHOME": self.gnupghome}
-        self._run(
-            self.gpg,
-            "--no-default-keyring",
-            "--keyring",
-            "trustedkeys.kbx",
-            "--keyserver",
-            "keyserver.ubuntu.com",
-            "--receive-keys",
-            OP_PGP_KEYID,
-        )
+        self.sq = shutil.which("sq")
+        if (self.sq is None):
+            raise SystemExit(f"sequoia sq not found")
 
-    def __del__(self):
-        shutil.rmtree(self.gnupghome)
+        self.signer_file, _ = nix_store_prefetch(OP_PGP_KEY_URL)
 
-    def _run(self, *args):
+    def verify(self, sig, tarball):
+        args = [
+            self.sq,
+            "--batch",
+            "--home=none",
+            "verify",
+            f"--signer-file={self.signer_file}",
+            f"--signature-file={sig}",
+            tarball
+        ]
+
         try:
-            subprocess.run(args, env=self.env, check=True, capture_output=True)
+            subprocess.run(args, check=True, capture_output=True)
         except subprocess.CalledProcessError as cpe:
             print(cpe.stderr, file=sys.stderr)
-            raise SystemExit(f"gpg error: {cpe.cmd}")
-
-    def verify(self, sigfile, datafile):
-        return self._run(self.gpgv, sigfile, datafile)
+            raise SystemExit(f"sq error: {cpe.cmd}")
 
 
 def nix_store_prefetch(url):
@@ -89,7 +84,7 @@ def download(channel, os, version, arch):
     # Linux release tarballs come with detached PGP signatures.
     if os == "linux":
         store_path_sig, _ = nix_store_prefetch(url + ".sig")
-        GPG().verify(store_path_sig, store_path_tarball)
+        PGP().verify(store_path_sig, store_path_tarball)
 
     return url, hash
 

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pythonAtLeast,
   numpy,
 }:
@@ -27,7 +26,7 @@ buildPythonPackage {
       --replace "Py_TYPE(&NPyBfloat16_Descr) = &PyArrayDescr_Type" "Py_SET_TYPE(&NPyBfloat16_Descr, &PyArrayDescr_Type)"
   '';
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   propagatedBuildInputs = [ numpy ];
 
@@ -36,10 +35,10 @@ buildPythonPackage {
   # upstream has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Paddle numpy bfloat16 package";
     homepage = "https://pypi.org/project/paddle-bfloat";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -1,4 +1,4 @@
-From 86fc9ce2b381748813b372f7e86909be6f955cbd Mon Sep 17 00:00:00 2001
+From 0a1c3a87ff80f8295bc60624a4e354a9ee6c181d Mon Sep 17 00:00:00 2001
 From: Yureka <yuka@yuka.dev>
 Date: Sat, 7 Aug 2021 09:16:46 +0200
 Subject: [PATCH] emulate clang 'sysroot + /include' logic
@@ -16,14 +16,14 @@ in the include search order, right after the resource root.
 Hence usage of -idirafter. Clang also documents an -isystem-after flag
 but it doesn't appear to work
 ---
- emcc.py | 3 +++
+ tools/compile.py | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/emcc.py b/emcc.py
-index 279f6d4d9..26e20e2cc 100644
---- a/emcc.py
-+++ b/emcc.py
-@@ -400,6 +400,9 @@ def get_cflags(user_args, is_cxx):
+diff --git a/tools/compile.py b/tools/compile.py
+index 0cc5d33e3..e2586db0e 100644
+--- a/tools/compile.py
++++ b/tools/compile.py
+@@ -86,6 +86,9 @@ def get_cflags(user_args):
    # We add these to the user's flags (newargs), but not when building .s or .S assembly files
    cflags = get_clang_flags(user_args)
    cflags.append('--sysroot=' + cache.get_sysroot(absolute=True))
@@ -34,5 +34,5 @@ index 279f6d4d9..26e20e2cc 100644
    if settings.EMSCRIPTEN_TRACING:
      cflags.append('-D__EMSCRIPTEN_TRACING__=1')
 -- 
-2.42.0
+2.51.0
 

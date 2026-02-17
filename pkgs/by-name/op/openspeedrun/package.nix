@@ -6,6 +6,7 @@
   libxkbcommon,
   libGL,
   autoPatchelfHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   autoPatchelfIgnoreMissingDeps = [
     "libgcc_s.so.1"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/SrWither/OpenSpeedRun/releases/tag/v${finalAttrs.version}";

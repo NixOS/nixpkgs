@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "kustomize";
-  version = "5.7.1";
+  version = "5.8.1";
 
   ldflags =
     let
@@ -26,13 +26,13 @@ buildGoModule (finalAttrs: {
     owner = "kubernetes-sigs";
     repo = "kustomize";
     rev = "kustomize/v${finalAttrs.version}";
-    hash = "sha256-eLj9OQlHZph/rI3om6S5/0sYxjgYloUWag2mS0hEpCE=";
+    hash = "sha256-IFof+h6GBlI19ygufNvQ6HgwGbmS0xR5CmrFafknHf0=";
   };
 
   # avoid finding test and development commands
   modRoot = "kustomize";
   proxyVendor = true;
-  vendorHash = "sha256-OodR5WXEEn4ZlVRTsH2uSmuJuP+6PYRLvTEZCenx4XU=";
+  vendorHash = "sha256-0nlI8QmZCzSZXlQKs5ZkAwrRMKaQUoFpDuj60gURlf8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -64,7 +64,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       carlosdagos
       vdemeester
-      periklis
       zaninime
       Chili-Man
       saschagrunert

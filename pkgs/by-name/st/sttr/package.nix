@@ -6,25 +6,25 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sttr";
-  version = "0.2.27";
+  version = "0.2.30";
 
   src = fetchFromGitHub {
     owner = "abhimanyu003";
     repo = "sttr";
-    rev = "v${version}";
-    hash = "sha256-tJljVXyTIYFsjPTzmlzJ/jC9rm8DC2SA1eU6GTyXnG8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oZsciY9JCU1YjkhT6LEDclNC0ixOuZST5dnI9n0uzfo=";
   };
 
-  vendorHash = "sha256-QVLOcFRZ7Ovft7Tzn47+mstSikpqRVZAqyMEVgemwA8=";
+  vendorHash = "sha256-nVocBBMOVW4q55dkVnmySozCsAbNnYjgPjoWDsAl7Uo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -37,9 +37,9 @@ buildGoModule rec {
   meta = {
     description = "Cross-platform cli tool to perform various operations on string";
     homepage = "https://github.com/abhimanyu003/sttr";
-    changelog = "https://github.com/abhimanyu003/sttr/releases/tag/v${version}";
+    changelog = "https://github.com/abhimanyu003/sttr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "sttr";
   };
-}
+})

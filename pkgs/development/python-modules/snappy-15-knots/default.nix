@@ -24,11 +24,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snappy_15_knots" ];
 
-  meta = with lib; {
+  meta = {
     description = "Database of snappy manifolds";
     homepage = "https://snappy.computop.org";
     changelog = "https://github.com/3-manifolds/snappy_15_knots/releases/tag/${src.tag}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ noiioiu ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
   };
 }

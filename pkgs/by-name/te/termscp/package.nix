@@ -11,18 +11,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termscp";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = "termscp";
-    tag = "v${version}";
-    hash = "sha256-QBvxXl1+f2617dwoZzSJq9vQY6hOXeHZjEh4xqMyayA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/smeK7qCw1EgADc7bgC1xUep3hPj7gOddanbaTjbGgs=";
   };
 
-  cargoHash = "sha256-ghJdAou3IsDVmOnDYiYO1yR3BtkrfUek10Bh9GuVH1E=";
+  cargoHash = "sha256-zVkShePjUzagP8MAG5oq6hqm+lHxH++ufXkmetN+jvA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -48,6 +48,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=cli::remote::test::test_should_make_remote_args_from_one_bookmark_and_one_remote_with_local_dir"
     "--skip=cli::remote::test::test_should_make_remote_args_from_two_bookmarks_and_local_dir"
     "--skip=cli::remote::test::test_should_make_remote_args_from_two_remotes_and_local_dir"
+    "--skip=system::auto_update::test::test_should_check_whether_github_api_is_reachable"
+    "--skip=system::environment::tests::test_system_environment_get_config_dir_err"
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     "--skip=system::watcher::test::should_poll_file_removed"
@@ -60,7 +62,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/veeso/termscp/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Feature rich terminal UI file transfer and explorer with support for SCP/SFTP/FTP/S3/SMB";
     homepage = "https://github.com/veeso/termscp";
     license = lib.licenses.mit;
@@ -71,4 +73,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

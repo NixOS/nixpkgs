@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dtool";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "guoxbin";
     repo = "dtool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-m4H+ANwEbK6vGW3oIVZqnqvMiAKxNJf2TLIGh/G6AU4=";
   };
 
@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   checkType = "debug";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool collection to assist development written in RUST";
     homepage = "https://github.com/guoxbin/dtool";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ linuxissuper ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ linuxissuper ];
     mainProgram = "dtool";
   };
-}
+})

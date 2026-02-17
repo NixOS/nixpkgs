@@ -7,14 +7,14 @@
   mandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "owamp";
   version = "4.4.6";
 
   src = fetchFromGitHub {
     owner = "perfsonar";
     repo = "owamp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "5o85XSn84nOvNjIzlaZ2R6/TSHpKbWLXTO0FmqWsNMU=";
     fetchSubmodules = true;
   };
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://software.internet2.edu/owamp/";
     description = "Tool for performing one-way active measurements";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.teto ];
-    license = licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.teto ];
+    license = lib.licenses.asl20;
   };
-}
+})

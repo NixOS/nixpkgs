@@ -9,21 +9,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-webrisk";
-  version = "1.18.1";
+  version = "1.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_webrisk";
-    inherit version;
-    hash = "sha256-3OUxiDZtRfmipeyCW8in6+GkVnlilWgE8Hzr6G+1KQU=";
+    inherit (finalAttrs) version;
+    hash = "sha256-XjzgGju4J1oUnYPoX1DiW16Z1/4WCQh/cMqxRKhNpZ8=";
   };
 
   build-system = [ setuptools ];
@@ -48,11 +45,11 @@ buildPythonPackage rec {
     "google.cloud.webrisk_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Client for Web Risk";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-webrisk";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-webrisk-v${version}/packages/google-cloud-webrisk/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-webrisk-v${finalAttrs.version}/packages/google-cloud-webrisk/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

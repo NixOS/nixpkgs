@@ -195,6 +195,12 @@ let
         pythonOnHostForHost
         pythonOnTargetForTarget
         ;
+
+      pythonABITags = [
+        "abi3"
+        "none"
+        "cp${sourceVersion.major}${sourceVersion.minor}${lib.optionalString (!enableGIL) "t"}"
+      ];
     };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
@@ -202,10 +208,16 @@ let
   nativeBuildInputs = [
     nukeReferences
   ]
-  ++ optionals (!stdenv.hostPlatform.isDarwin && !withMinimalDeps) [
-    autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
-    autoreconfHook
-  ]
+  ++
+    optionals
+      (
+        (!stdenv.hostPlatform.isDarwin && !withMinimalDeps)
+        || (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD)
+      )
+      [
+        autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
+        autoreconfHook
+      ]
   ++
     optionals ((!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") && !withMinimalDeps)
       [
@@ -356,19 +368,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
   ]
-  ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.hostPlatform.isDarwin) [
-    # Stop checking for TCL/TK in global macOS locations
-    ./3.9/darwin-tcl-tk.patch
-  ]
   ++ optionals (hasDistutilsCxxPatch && pythonOlder "3.12") [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
     # only works for GCC and Apple Clang. This makes distutils to call C++
     # compiler when needed.
     (
-      if pythonAtLeast "3.7" && pythonOlder "3.11" then
-        ./3.7/python-3.x-distutils-C++.patch
-      else if pythonAtLeast "3.11" then
+      if pythonAtLeast "3.11" then
         ./3.11/python-3.x-distutils-C++.patch
       else
         fetchpatch {
@@ -393,6 +399,10 @@ stdenv.mkDerivation (finalAttrs: {
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
   ]
+  ++ optionals (version == "3.13.10" || version == "3.14.1") [
+    # https://github.com/python/cpython/issues/142218
+    ./${lib.versions.majorMinor version}/gh-142218.patch
+  ]
   ++ optionals (stdenv.hostPlatform.isMinGW) (
     let
       # https://src.fedoraproject.org/rpms/mingw-python3
@@ -403,7 +413,7 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-kpXoIHlz53+0FAm/fK99ZBdNUg0u13erOr1XP2FSkQY=";
       };
     in
-    (builtins.map (f: "${mingw-patch}/${f}") [
+    (map (f: "${mingw-patch}/${f}") [
       # The other patches in that repo are already applied to 3.11.10
       "mingw-python3_distutils.patch"
       "mingw-python3_frozenmain.patch"
@@ -510,8 +520,8 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_have_size_t_format=yes"
     "ac_cv_computed_gotos=yes"
     # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
-    "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
-    "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
+    "ac_cv_file__dev_ptmx=${lib.boolToYesNo (!stdenv.hostPlatform.isWindows)}"
+    "ac_cv_file__dev_ptc=${lib.boolToYesNo (!stdenv.hostPlatform.isWindows)}"
   ]
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
     "--with-build-python=${pythonOnBuildForHostInterpreter}"
@@ -577,9 +587,6 @@ stdenv.mkDerivation (finalAttrs: {
     optionalString enableNoSemanticInterposition ''
       export CFLAGS_NODIST="-fno-semantic-interposition"
     '';
-
-  # Our aarch64-linux bootstrap files lack Scrt1.o, which fails the config test
-  hardeningEnable = lib.optionals (!withMinimalDeps && !stdenv.hostPlatform.isAarch64) [ "pie" ];
 
   setupHook = python-setup-hook sitePackages;
 
@@ -787,11 +794,6 @@ stdenv.mkDerivation (finalAttrs: {
       inherit src;
       name = "python${pythonVersion}-${version}-doc";
 
-      postPatch = lib.optionalString (pythonAtLeast "3.9" && pythonOlder "3.11") ''
-        substituteInPlace Doc/tools/extensions/pyspecific.py \
-          --replace-fail "from sphinx.util import status_iterator" "from sphinx.util.display import status_iterator"
-      '';
-
       dontConfigure = true;
 
       dontBuild = true;
@@ -815,12 +817,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.python.org";
     changelog =
       let
-        majorMinor = versions.majorMinor version;
-        dashedVersion = replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
+        majorMinor = lib.versions.majorMinor version;
+        dashedVersion = lib.replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
       in
       if sourceVersion.suffix == "" then
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
@@ -836,9 +838,10 @@ stdenv.mkDerivation (finalAttrs: {
       hierarchical packages; exception-based error handling; and very
       high level dynamic data types.
     '';
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     pkgConfigModules = [ "python3" ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
+    platforms =
+      lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows ++ lib.platforms.freebsd;
     mainProgram = executable;
     teams = [ lib.teams.python ];
     # static build on x86_64-darwin/aarch64-darwin breaks with:

@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
@@ -6,14 +7,14 @@
   nasm,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sic-image-cli";
   version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = "sic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PFbHHO3m4mnV5s8DVev/iao9sC3FYht0whTHYzO25Yo=";
   };
 
@@ -36,12 +37,14 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Accessible image processing and conversion from the terminal";
     homepage = "https://github.com/foresterre/sic";
-    changelog = "https://github.com/foresterre/sic/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/foresterre/sic/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "sic";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
-}
+})

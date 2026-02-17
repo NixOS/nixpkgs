@@ -1,29 +1,54 @@
 {
   callPackage,
   lib,
-  rustPlatform,
+  stdenv,
+  buildPackages,
   fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
   pkg-config,
   openssl,
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  canRun = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  lychee = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/lychee${stdenv.hostPlatform.extensions.executable}";
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lychee";
-  version = "0.20.1";
+  version = "0.22.0-unstable-2025-12-05";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = "lychee";
-    rev = "lychee-v${version}";
-    hash = "sha256-yHIj45RfQch4y+V4Ht7cDMcg5MECejxsbjuE345I/to=";
+    # tag = "lychee-v${finalAttrs.version}"; # use again with next release
+    rev = "db0f8a842f594e0a879563caf7d183266c02ca95"; # one revision after 0.22.0
+    leaveDotGit = true;
+    postFetch = ''
+      GIT_DATE=$(git -C $out/.git show -s --format=%cs)
+      substituteInPlace $out/lychee-bin/build.rs \
+        --replace-fail \
+          '("cargo:rustc-env=GIT_DATE={}", git_date())' \
+          '("cargo:rustc-env=GIT_DATE={}", "'$GIT_DATE'")'
+      rm -rf $out/.git
+    '';
+    hash = "sha256-l8/llYq8rwt+UQMLnsva4/2m53cwqaJXD/XvgEfxXg4=";
   };
 
-  cargoHash = "sha256-d3umjtXPBJbPRtNCuktYhJUPgKFmB8UEeewWMekDZRE=";
+  cargoHash = "sha256-03eahQ6GvOPxnvC82lfT1J/XfOg9V7gOZeOEBJx8IYY=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   buildInputs = [ openssl ];
+
+  postFixup = lib.optionalString canRun ''
+    ${lychee} --generate man > lychee.1
+    installManPage lychee.1
+  '';
 
   cargoTestFlags = [
     # don't run doctests since they tend to use the network
@@ -44,6 +69,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=cli::test_local_file"
     "--skip=client::tests"
     "--skip=collector::tests"
+    "--skip=commands::generate::tests::test_examples_work"
     "--skip=src/lib.rs"
     # Color error for those tests as we are not in a tty
     "--skip=formatters::response::color::tests::test_format_response_with_error_status"
@@ -62,7 +88,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
-    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${version}";
+    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -73,4 +99,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "lychee";
   };
-}
+})

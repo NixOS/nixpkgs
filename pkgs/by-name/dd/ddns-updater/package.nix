@@ -5,14 +5,14 @@
   nixosTests,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ddns-updater";
   version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "qdm12";
     repo = "ddns-updater";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Vvk3owtSpwstmC5UaVyUEY+FW25KA+nYp2dOqiP4HTs=";
   };
 
@@ -32,11 +32,11 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Container to update DNS records periodically with WebUI for many DNS providers";
     homepage = "https://github.com/qdm12/ddns-updater";
-    license = licenses.mit;
-    maintainers = with maintainers; [ delliott ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ delliott ];
     mainProgram = "ddns-updater";
   };
-}
+})

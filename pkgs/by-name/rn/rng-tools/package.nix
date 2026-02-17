@@ -25,14 +25,14 @@
   withQrypt ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rng-tools";
   version = "6.17";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = "rng-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wqJvLvxmNG2nb5P525w25Y8byUUJi24QIHNJomCKeG8=";
   };
 
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    (lib.enableFeature (withJitterEntropy) "jitterentropy")
-    (lib.withFeature (withNistBeacon) "nistbeacon")
-    (lib.withFeature (withPkcs11) "pkcs11")
-    (lib.withFeature (withRtlsdr) "rtlsdr")
-    (lib.withFeature (withQrypt) "qrypt")
+    (lib.enableFeature withJitterEntropy "jitterentropy")
+    (lib.withFeature withNistBeacon "nistbeacon")
+    (lib.withFeature withPkcs11 "pkcs11")
+    (lib.withFeature withRtlsdr "rtlsdr")
+    (lib.withFeature withQrypt "qrypt")
   ];
 
   buildInputs = [
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Random number generator daemon";
     homepage = "https://github.com/nhorman/rng-tools";
-    changelog = "https://github.com/nhorman/rng-tools/releases/tag/v${version}";
+    changelog = "https://github.com/nhorman/rng-tools/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -113,4 +113,4 @@ stdenv.mkDerivation rec {
       c0bw3b
     ];
   };
-}
+})

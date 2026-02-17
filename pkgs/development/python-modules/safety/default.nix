@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   setuptools,
@@ -31,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.6.2";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "safety";
     tag = version;
-    hash = "sha256-oGz2ZHGYaHi4RusNbZ5iqxuz2JBbchP5ip+uHHV10U0=";
+    hash = "sha256-BPLK/V7YQBCGopfRFAWdra8ve8Ww5KN1+oZKyoEPiFc=";
   };
 
   patches = [

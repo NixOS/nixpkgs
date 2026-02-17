@@ -10,15 +10,12 @@
   pytest-tornasync,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nfcpy";
   version = "1.0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nfcpy";
@@ -51,11 +48,11 @@ buildPythonPackage rec {
     "tests/test_clf_udp.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to read/write NFC tags or communicate with another NFC device";
     homepage = "https://github.com/nfcpy/nfcpy";
     changelog = "https://github.com/nfcpy/nfcpy/blob/v${version}/HISTORY.rst";
-    license = licenses.eupl11;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.eupl11;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

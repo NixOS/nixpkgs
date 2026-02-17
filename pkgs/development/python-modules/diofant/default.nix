@@ -9,7 +9,6 @@
   mpmath,
   numpy,
   pexpect,
-  pythonOlder,
   pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "diofant";
   version = "0.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "diofant";
@@ -80,11 +77,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diofant" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://diofant.readthedocs.io/en/latest/release/notes-${src.tag}.html";
     description = "Python CAS library";
     homepage = "https://github.com/diofant/diofant";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ suhr ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ suhr ];
   };
 }

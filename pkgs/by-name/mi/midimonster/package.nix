@@ -60,12 +60,12 @@ stdenv.mkDerivation {
     cp assets/MIDIMonster.svg "$out/share/icons/hicolor/scalable/apps/"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://midimonster.net";
     description = "Multi-protocol translation tool";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ keldu ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ keldu ];
     mainProgram = "midimonster";
   };
 }

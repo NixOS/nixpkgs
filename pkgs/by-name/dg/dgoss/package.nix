@@ -17,7 +17,7 @@ resholve.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    sed -i '2i GOSS_PATH=${goss}/bin/goss' extras/dgoss/dgoss
+    sed -i '2i GOSS_PATH=\$\{GOSS_PATH:-${goss}/bin/goss\}' extras/dgoss/dgoss
     install -D extras/dgoss/dgoss $out/bin/dgoss
   '';
 

@@ -56,8 +56,8 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
       mkdir -p $out/share/themes
 
       name= ./install.sh \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + toString themeVariants} \
         --dest $out/share/themes
 
       mkdir -p $out/share/doc/matcha-gtk-theme
@@ -70,11 +70,11 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Stylish flat Design theme for GTK based desktop environments";
       homepage = "https://vinceliuice.github.io/theme-matcha";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = [ maintainers.romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.romildo ];
     };
   }

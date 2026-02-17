@@ -6,7 +6,7 @@
   pkg-config,
   dbus,
   simpleBluez,
-  simpleDBus,
+  simpledbus,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zmkBATx";
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtconnectivity
     dbus.lib
     simpleBluez
-    simpleDBus
+    simpledbus
   ];
 
   postPatch = ''
@@ -39,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace zmkBATx.pro --replace-fail "/usr/lib/x86_64-linux-gnu/dbus-1.0/include" "${dbus.lib}/lib/dbus-1.0/include"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Battery monitoring for ZMK split keyboards";
     longDescription = "Opensource tool for peripheral battery monitoring zmk split keyboard over BLE for linux.";
     homepage = "https://github.com/mh4x0f/zmkBATx";
     changelog = "https://github.com/mh4x0f/zmkBATx/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "zmkbatx";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ aciceri ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ aciceri ];
   };
 })

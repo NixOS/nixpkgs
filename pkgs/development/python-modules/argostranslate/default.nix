@@ -5,6 +5,7 @@
   pytestCheckHook,
   ctranslate2,
   ctranslate2-cpp,
+  sacremoses,
   sentencepiece,
   stanza,
 }:
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ctranslate2OneDNN
+    sacremoses
     sentencepiece
     stanza
   ];

@@ -8,54 +8,49 @@
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
-  nodePackages,
+  grunt-cli,
   fetchzip,
 }:
 let
-  version = "1.6.3";
+  version = "1.7.0";
   # Fetch release tarball which contains language files
   # https://github.com/InvoicePlane/InvoicePlane/issues/1170
   languages = fetchzip {
-    url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    hash = "sha256-MuqxbkayW3GeiaorxfZSJtlwCWvnIF2ED/UUqahyoIQ=";
+    #url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
+    url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v1.7.0/v1.7.0.zip";
+    hash = "sha256-D5wZg745xjbBsEPUbvle8ynErFB4xn9zdxOGh0xKCCU=";
   };
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "invoiceplane";
   inherit version;
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "InvoicePlane";
-      repo = "InvoicePlane";
-      tag = "v${version}";
-      hash = "sha256-XNjdFWP5AEulbPZcMDXYSdDhaLWlgu3nnCSFnjUjGpk=";
-    };
-    patches = [
-      # Fix composer.json validation
-      # See https://github.com/InvoicePlane/InvoicePlane/pull/1306
-      ./fix_composer_validation.patch
-    ];
+  src = fetchFromGitHub {
+    owner = "InvoicePlane";
+    repo = "InvoicePlane";
+    tag = "v${version}";
+    hash = "sha256-6fuUmXe8mFSnLYwQCwBzxmSQxM06rQXe00IKUZvWnpM=";
   };
 
-  patches = [
-    # yarn.lock missing some resolved attributes and fails
-    ./fix-yarn-lock.patch
-  ];
+  # Fixes error: Couldn't find any versions for "sass" that matches "^1.97" in our cache
+  patches = [ ./fix-yarn-lockfile.patch ];
 
-  vendorHash = "sha256-UCYAnECuIbIYg1T4I8I9maXVKXJc1zkyauBuIy5frTY=";
+  # Composer.lock validation currently fails for unknown reason
+  composerStrictValidation = false;
+
+  vendorHash = "sha256-/fNVq3WJCr9f/NE0s1x8N48W3ZMRUxdh1Qf3pLl0Lpg=";
 
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
     yarnInstallHook
     # Needed for executing package.json scripts
-    nodePackages.grunt-cli
+    grunt-cli
   ];
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-0fPdxOIeQBTulPUxHtaQylm4jevQTONSN1bChqbGbGs=";
+    hash = "sha256-YDknkQzdRKRRMXS6/cPRSrfhhIyTIDRnFPNGQueu74A=";
   };
 
   postBuild = ''

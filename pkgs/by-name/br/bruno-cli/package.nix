@@ -1,6 +1,9 @@
 {
   lib,
+  stdenv,
+  clang_20,
   buildNpmPackage,
+  nodejs_22,
   bruno,
   pkg-config,
   pango,
@@ -19,12 +22,16 @@ buildNpmPackage {
   # to keep them in sync with easier maintenance
   inherit (bruno) version src npmDepsHash;
 
+  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
+
   npmWorkspace = "packages/bruno-cli";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
-  ];
+  ]
+  ++ lib.optional stdenv.isDarwin clang_20; # clang_21 breaks gyp builds
 
   buildInputs = [
     pango
@@ -42,6 +49,7 @@ buildNpmPackage {
 
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
+    npm run build --workspace=packages/bruno-schema-types
     npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-query
     npm run build --workspace=packages/bruno-filestore
@@ -61,12 +69,12 @@ buildNpmPackage {
     pushd $out/lib/node_modules/usebruno
 
     # packages used by the GUI app, unused by CLI
-    rm -r packages/bruno-{app,electron,tests,toml,schema,docs}
+    rm -r packages/bruno-{app,electron,tests,toml,docs}
     rm node_modules/bruno
-    rm node_modules/@usebruno/{app,tests,toml,schema}
+    rm node_modules/@usebruno/{app,tests,toml}
 
     # heavy dependencies that seem to be unused
-    rm -rf node_modules/{@tabler,pdfjs-dist,*redux*,prettier,@types*,*react*,*graphiql*}
+    rm -rf node_modules/{@tabler,pdfjs-dist,*redux*,prettier,@types*,*react*,*graphiql*,@swagger-api}
     rm -r node_modules/.bin
 
     # unused file types

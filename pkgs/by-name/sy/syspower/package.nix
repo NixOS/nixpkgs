@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple power menu/shutdown screen for Hyprland";
-    homepage = "https://gihub.com/System64fumo/syspower";
+    homepage = "https://github.com/System64fumo/syspower";
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ justdeeevin ];
     mainProgram = "syspower";

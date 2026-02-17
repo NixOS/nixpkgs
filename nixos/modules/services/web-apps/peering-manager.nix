@@ -420,5 +420,5 @@ in
     ];
   };
 
-  meta.maintainers = with lib.maintainers; [ yuka ];
+  meta.maintainers = with lib.maintainers; [ yureka-wdz ];
 }

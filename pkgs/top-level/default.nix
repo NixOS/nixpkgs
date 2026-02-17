@@ -79,17 +79,12 @@ let
   inherit (lib) throwIfNot;
 
   checked =
-    throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list." lib.foldr
-      (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.")
-      (r: r)
-      overlays
-      throwIfNot
-      (lib.isList crossOverlays)
-      "The crossOverlays argument to nixpkgs must be a list."
-      lib.foldr
-      (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.")
-      (r: r)
-      crossOverlays;
+    (throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list.")
+      (throwIfNot (lib.all lib.isFunction overlays) "All overlays passed to nixpkgs must be functions.")
+      (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
+      (
+        throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions."
+      );
 
   localSystem = lib.systems.elaborate args.localSystem;
 
@@ -114,7 +109,7 @@ let
   # Allow both:
   # { /* the config */ } and
   # { pkgs, ... } : { /* the config */ }
-  config1 = if lib.isFunction config0 then config0 { inherit pkgs; } else config0;
+  config1 = if lib.isFunction config0 then config0 { inherit lib pkgs; } else config0;
 
   configEval = lib.evalModules {
     modules = [

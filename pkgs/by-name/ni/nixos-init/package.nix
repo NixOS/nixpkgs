@@ -7,7 +7,7 @@
 }:
 
 let
-  cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
+  cargoToml = fromTOML (builtins.readFile ./Cargo.toml);
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = cargoToml.package.name;
@@ -47,7 +47,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   binaries = [
     "initrd-init"
     "find-etc"
-    "chroot-realpath"
+    "resolve-in-root"
+    "env-generator"
   ];
 
   postInstall = ''

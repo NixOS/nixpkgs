@@ -5,7 +5,6 @@
   numpy,
   packaging,
   quantities,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   pillow,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "neo";
-  version = "0.14.2";
+  version = "0.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "NeuralEnsemble";
     repo = "python-neo";
     tag = version;
-    hash = "sha256-THAdUFCbteiUdfhjLzl6ocM2I0zFKHfFxJExCnK1z1Y=";
+    hash = "sha256-y2MGzIfF+KrEzdjUxiDaU1ZKBK5FksX1IBJdc9RvLhM=";
   };
 
   build-system = [ setuptools ];
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "neo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Package for representing electrophysiology data";
     homepage = "https://neuralensemble.org/neo/";
     changelog = "https://neo.readthedocs.io/en/${src.tag}/releases/${src.tag}.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

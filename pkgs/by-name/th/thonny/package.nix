@@ -8,7 +8,7 @@
   desktopToDarwinBundle,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "thonny";
   version = "4.1.7";
   pyproject = true;
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "thonny";
     repo = "thonny";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RnjnXB5jU13uwRpL/Pn14QY7fRbRkq09Vopc3fv+z+Y=";
   };
 
@@ -84,8 +84,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://www.thonny.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ leenaars ];
     platforms = lib.platforms.unix;
     mainProgram = "thonny";
   };
-}
+})

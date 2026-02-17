@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
+  pytest-asyncio,
   pythonAtLeast,
-  pythonOlder,
   defusedxml,
   setuptools,
   sphinx,
@@ -12,16 +12,16 @@
   unidecode,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uqbar";
-  version = "0.9.5";
+  version = "0.9.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MHSnuPiJu2p3NiG/bV6qFUO90xQEFcyQrcxMY0hw8E8=";
+  src = fetchFromGitHub {
+    owner = "supriya-project";
+    repo = "uqbar";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1rK40lwZ3YmQZXhia2+iYRZxDCYvijXgBMIL5p7KmR0=";
   };
 
   postPatch = ''
@@ -37,7 +37,10 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   checkInputs = [
     defusedxml
@@ -60,17 +63,22 @@ buildPythonPackage rec {
     "test_sphinx_style"
   ]
   ++ lib.optional (pythonAtLeast "3.12") [
-    # https://github.com/josiah-wolf-oberholtzer/uqbar/issues/93
+    # https://github.com/supriya-project/uqbar/issues/93
     "objects.get_vars"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/supriya-project/uqbar/issues/106
+    "test_04"
+    "SummarizingClassDocumenter"
   ];
 
   pythonImportsCheck = [ "uqbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for creating Sphinx and Graphviz documentation";
-    homepage = "https://github.com/josiah-wolf-oberholtzer/uqbar";
-    changelog = "https://github.com/josiah-wolf-oberholtzer/uqbar/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ davisrichard437 ];
+    homepage = "https://github.com/supriya-project/uqbar";
+    changelog = "https://github.com/supriya-project/uqbar/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ davisrichard437 ];
   };
-}
+})

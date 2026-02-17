@@ -17,6 +17,7 @@ let
     mkIf
     maintainers
     escape
+    replaceString
     collect
     mapAttrsRecursive
     optionals
@@ -43,7 +44,9 @@ let
           collect isString (
             mapAttrsRecursive (
               path: value:
-              "${escape [ sep ] (concatStringsSep "\\" ([ k ] ++ path))}${sep}${mkValueStringDefault { } value}"
+              "${escape [ sep ] (concatStringsSep "\\" ([ k ] ++ path))}${sep}${
+                replaceString "\n" "\\n" (mkValueStringDefault { } value)
+              }"
             ) v
           )
         )
@@ -96,7 +99,7 @@ in
         freeformType = attrsOf (attrsOf anything);
       };
       description = ''
-        Free-form settings mapped to the `qBittorrent.conf` file in the profile.
+        Free-form settings mapped to the {file}`qBittorrent.conf` file in the profile.
         Refer to [Explanation-of-Options-in-qBittorrent](https://github.com/qbittorrent/qBittorrent/wiki/Explanation-of-Options-in-qBittorrent).
         The Password_PBKDF2 format is oddly unique, you will likely want to use [this tool](https://codeberg.org/feathecutie/qbittorrent_password) to generate the format.
         Alternatively you can run qBittorrent independently first and use its webUI to generate the format.

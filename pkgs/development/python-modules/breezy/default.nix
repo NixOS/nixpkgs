@@ -19,7 +19,6 @@
   breezy,
   launchpadlib,
   testtools,
-  pythonOlder,
   installShellFiles,
   rustPlatform,
   rustc,
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   pname = "breezy";
   version = "3.3.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "breezy-team";
@@ -114,11 +111,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
-    changelog = "https://github.com/breezy-team/breezy/blob/${src.rev}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
-    license = licenses.gpl2Only;
+    changelog = "https://github.com/breezy-team/breezy/blob/${src.rev}/doc/en/release-notes/brz-${lib.versions.majorMinor version}.txt";
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
     mainProgram = "brz";
   };

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   glib,
   freetype,
@@ -34,12 +35,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "11.2.1";
+  version = "12.3.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CTcUyFSKKFCUaF8L3JmeIC1ma1nus98v+SGraLgzakk=";
+    hash = "sha256-hmDr08J9lAf8hDO10XK6+6XwMXywu0M58o5TcMk9Qrc=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/harfbuzz/harfbuzz/security/advisories/GHSA-xvjr-f2r9-c7ww
+      name = "CVE-2026-22693.patch";
+      url = "https://github.com/harfbuzz/harfbuzz/commit/1265ff8d990284f04d8768f35b0e20ae5f60daae.patch";
+      hash = "sha256-mdgIhp1ndPSfzplBRB7s+BN2T5Z9dEYZ0bAmSDCUPSE=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs src/*.py test
@@ -47,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \
-      --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
+      --replace-fail '#pragma GCC diagnostic error   "-Wcast-align"' ""
   '';
 
   outputs = [
@@ -126,13 +136,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "OpenType text shaping engine";
     homepage = "https://harfbuzz.github.io/";
     changelog = "https://github.com/harfbuzz/harfbuzz/raw/${finalAttrs.version}/NEWS";
-    maintainers = [ ];
-    license = licenses.mit;
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = [ lib.maintainers.cobalt ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [
       "harfbuzz"
       "harfbuzz-gobject"

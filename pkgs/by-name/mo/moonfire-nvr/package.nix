@@ -10,6 +10,8 @@
   moonfire-nvr,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
 
 let
@@ -27,10 +29,12 @@ let
     sourceRoot = "${src.name}/ui";
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      pnpm = pnpm_9;
       sourceRoot = "${finalAttrs.src.name}/ui";
       fetcherVersion = 1;
       hash = "sha256-7fMhUFlV5lz+A9VG8IdWoc49C2CTdLYQlEgBSBqJvtw=";
@@ -63,7 +67,7 @@ rustPlatform.buildRustPackage {
   ];
 
   postInstall = ''
-    mkdir -p $out/lib/ui
+    mkdir -p $out/lib
     ln -s ${ui} $out/lib/ui
   '';
 
@@ -72,9 +76,9 @@ rustPlatform.buildRustPackage {
   passthru = {
     inherit ui;
     tests.version = testers.testVersion {
-      inherit version;
       package = moonfire-nvr;
       command = "moonfire-nvr --version";
+      version = "Version: v${version}";
     };
   };
 
@@ -83,7 +87,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/scottlamb/moonfire-nvr";
     changelog = "https://github.com/scottlamb/moonfire-nvr/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "moonfire-nvr";
   };
 }

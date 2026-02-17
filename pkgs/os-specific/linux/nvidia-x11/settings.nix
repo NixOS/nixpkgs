@@ -12,10 +12,10 @@ nvidia_x11: sha256:
   dbus,
   vulkan-headers,
   gtk3,
-  libXv,
-  libXrandr,
-  libXext,
-  libXxf86vm,
+  libxv,
+  libxrandr,
+  libxext,
+  libxxf86vm,
   libvdpau,
   librsvg,
   libglvnd,
@@ -33,12 +33,9 @@ let
     inherit sha256;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
     platforms = nvidia_x11.meta.platforms;
-    maintainers = with maintainers; [
-      aidalgol
-    ];
   };
 
   libXNVCtrl = stdenv.mkDerivation {
@@ -47,8 +44,8 @@ let
     inherit src;
 
     buildInputs = [
-      libXrandr
-      libXext
+      libxrandr
+      libxext
     ];
 
     preBuild = ''
@@ -90,8 +87,8 @@ let
 
   runtimeDependencies = [
     libglvnd
-    libXrandr
-    libXv
+    libxrandr
+    libxv
   ];
 
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
@@ -146,10 +143,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     jansson
-    libXv
-    libXrandr
-    libXext
-    libXxf86vm
+    libxv
+    libxrandr
+    libxext
+    libxxf86vm
     libvdpau
     nvidia_x11
     dbus

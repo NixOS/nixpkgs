@@ -5,6 +5,7 @@
   meta,
   binaryName,
   desktopName,
+  self,
   autoPatchelfHook,
   makeDesktopItem,
   lib,
@@ -31,17 +32,17 @@
   libpulseaudio,
   libuuid,
   libva,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libxcb,
   libxshmfence,
   libgbm,
@@ -115,10 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     libdrm
     libuuid
-    libXdamage
-    libX11
-    libXScrnSaver
-    libXtst
+    libxdamage
+    libx11
+    libxscrnsaver
+    libxtst
     libxcb
     libxshmfence
     libgbm
@@ -152,24 +153,24 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3
       libglvnd
       libnotify
-      libX11
-      libXcomposite
+      libx11
+      libxcomposite
       libunity
       libuuid
       libva
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXrandr
-      libXrender
-      libXtst
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxrender
+      libxtst
       nspr
       libxcb
       pango
       pipewire
-      libXScrnSaver
+      libxscrnsaver
       libappindicator-gtk3
       libdbusmenu
       wayland
@@ -180,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps,share/icons/hicolor/256x256/apps}
+    mkdir -p $out/{bin,opt/${binaryName},share/icons/hicolor/256x256/apps}
     mv * $out/opt/${binaryName}
 
     chmod +x $out/opt/${binaryName}/${binaryName}
@@ -204,7 +205,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Without || true the install would fail on case-insensitive filesystems
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${lib.strings.toLower binaryName} || true
 
-    ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
     ln -s "$desktopItem/share/applications" $out/share/
@@ -252,13 +252,21 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
-    updateScript = writeScript "discord-update-script" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl gnugrep common-updater-scripts
-      set -eou pipefail;
-      url=$(curl -sI -o /dev/null -w '%header{location}' "https://discord.com/api/download/${branch}?platform=linux&format=tar.gz")
-      version=$(echo $url | grep -oP '/\K(\d+\.){2}\d+')
-      update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
-    '';
+    updateScript = ./update.py;
+
+    tests = {
+      withVencord = self.override {
+        withVencord = true;
+      };
+      withEquicord = self.override {
+        withEquicord = true;
+      };
+      withMoonlight = self.override {
+        withMoonlight = true;
+      };
+      withOpenASAR = self.override {
+        withOpenASAR = true;
+      };
+    };
   };
 })

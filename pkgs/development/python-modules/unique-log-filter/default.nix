@@ -4,15 +4,12 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "unique-log-filter";
   version = "0.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "twizmwazin";
@@ -27,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unique_log_filter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Log filter that removes duplicate log messages";
     homepage = "https://github.com/twizmwazin/unique_log_filter";
     changelog = "https://github.com/twizmwazin/unique_log_filter/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

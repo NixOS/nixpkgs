@@ -9,13 +9,13 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "nix-heuristic-gc";
-  version = "0.6.2";
+  version = "0.7.2";
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "risicle";
     repo = "nix-heuristic-gc";
     tag = "v${version}";
-    hash = "sha256-FHA1/zlBUr81wSWL0Cd5DVsxUDuUpD3UuLde8UgxOzQ=";
+    hash = "sha256-6qZG3bbiPu3lad1YHy7oyZ4uPu7sagxlE6qcC+irjII=";
   };
 
   # NIX_SYSTEM suggested at

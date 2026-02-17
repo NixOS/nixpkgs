@@ -21,7 +21,7 @@ in
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
   nodes.machine =
-    { config, ... }:
+    { pkgs, ... }:
     {
       imports = [ common ];
 
@@ -38,7 +38,7 @@ in
         inheritParentConfig = false;
         configuration = {
           nixpkgs = {
-            inherit (config.nixpkgs) hostPlatform;
+            inherit pkgs;
           };
           imports = [ common ];
 

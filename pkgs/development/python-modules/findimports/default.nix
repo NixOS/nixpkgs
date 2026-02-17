@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "findimports";
-  version = "2.6.0";
+  version = "2.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "findimports";
     tag = version;
-    hash = "sha256-2hhonlv7FF4s+wDOsBGnLsMxJEXlMlNbLEkI8HptyOI=";
+    hash = "sha256-ztbf9F1tz5EhqSkE8W6i7ihJYJTymKQdXI+K/G7DbHM=";
   };
 
   build-system = [ setuptools ];
@@ -34,15 +31,15 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Module for the analysis of Python import statements";
     homepage = "https://github.com/mgedmin/findimports";
-    changelog = "https://github.com/mgedmin/findimports/blob/${version}/CHANGES.rst";
-    license = with licenses; [
+    changelog = "https://github.com/mgedmin/findimports/blob/${src.tag}/CHANGES.rst";
+    license = with lib.licenses; [
       gpl2Only # or
       gpl3Only
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "findimports";
   };
 }

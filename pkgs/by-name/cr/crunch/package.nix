@@ -5,12 +5,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crunch";
   version = "3.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/crunch-wordlist/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/crunch-wordlist/crunch-${finalAttrs.version}.tgz";
     sha256 = "0mgy6ghjvzr26yrhj1bn73qzw6v9qsniskc5wqq1kk0hfhy6r3va";
   };
 
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wordlist generator";
     mainProgram = "crunch";
     homepage = "https://sourceforge.net/projects/crunch-wordlist/";
-    platforms = platforms.unix;
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ lnl7 ];
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ lnl7 ];
   };
-}
+})

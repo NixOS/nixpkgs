@@ -2,57 +2,63 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   accountsservice,
   alsa-lib,
-  budgie-screensaver,
+  budgie-desktop-services,
+  budgie-session,
   docbook-xsl-nons,
   glib,
   gnome-desktop,
   gnome-settings-daemon,
-  graphene,
+  gobject-introspection,
   gst_all_1,
   gtk-doc,
   gtk3,
+  gtk-layer-shell,
   ibus,
   intltool,
   libcanberra-gtk3,
   libgee,
-  libGL,
   libnotify,
-  libpeas,
+  libpeas2,
   libpulseaudio,
   libuuid,
+  libwacom,
   libwnck,
-  magpie,
-  libgbm,
+  libxfce4windowing,
   meson,
   mutter,
   ninja,
   nix-update-script,
-  nixosTests,
   pkg-config,
-  polkit,
+  python3,
   sassc,
   testers,
   upower,
   vala,
   validatePkgConfig,
-  xfce,
   wrapGAppsHook3,
-  zenity,
 }:
 
+let
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      psutil
+      pygobject3
+      systemd-python
+    ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.9.2";
+  version = "10.10.1";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-lDsQlUAa79gnM8wC5pwyquvFyEiayH4W4gD/uyC5Koo=";
+    hash = "sha256-6SRnub0FMRE9AcHwsnYH4WMdG2kqEpl5dfHy56FwrGU=";
   };
 
   outputs = [
@@ -63,36 +69,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./plugins.patch
-
-    # Adapt to libxfce4windowing v4.19.8
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/627
-    (fetchpatch {
-      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/ba8170b4f3108f9de28331b6a98a9d92bb0ed4de.patch";
-      hash = "sha256-T//1/NmaV81j0jiIYK7vEp8sgKCgF2i10D+Rk9qAAeE=";
-    })
-
-    # Resolve vala 0.56.18 compact class inheritance removal
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/679
-    (fetchpatch {
-      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/46c83b1265b4230668da472d9ef6926941678418.patch";
-      hash = "sha256-qnA8iBEctZbE86qIPudI1vMbgFy4xDWrxxej517ORws=";
-    })
-
-    # Add override for overlay-key to prevent crash with mutter-common v48-rc
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/683
-    (fetchpatch {
-      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/c24091bb424abe99ebcdd33eedd37068f735ad2a.patch";
-      hash = "sha256-4WEkscftOGZmzH7imMTmcTDPH6eHMeEhgto+R5NNlh0=";
-    })
   ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
+    gobject-introspection
     gtk-doc
     intltool
     meson
     ninja
     pkg-config
+    sassc
     vala
     validatePkgConfig
     wrapGAppsHook3
@@ -101,45 +88,50 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     accountsservice
     alsa-lib
-    budgie-screensaver
     glib
     gnome-desktop
     gnome-settings-daemon
-    mutter
-    zenity
-    graphene
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gtk3
+    gtk-layer-shell
     ibus
     libcanberra-gtk3
     libgee
-    libGL
     libnotify
     libpulseaudio
     libuuid
+    libwacom
     libwnck
-    magpie
-    libgbm
-    polkit
-    sassc
+    libxfce4windowing
+    mutter # org.gnome.mutter.keybindings
+    pythonEnv
     upower
-    xfce.libxfce4windowing
   ];
 
   propagatedBuildInputs = [
-    # budgie-1.0.pc, budgie-raven-plugin-1.0.pc
-    libpeas
+    # budgie-3.0.pc, budgie-raven-plugin-3.0.pc
+    libpeas2
   ];
+
+  mesonFlags = [
+    "-Dgsd-libexecdir=${gnome-settings-daemon}/libexec"
+    "-Dwith-runtime-dependencies=false"
+  ];
+
+  postPatch = ''
+    substituteInPlace src/session/budgie-desktop.in \
+      --replace-fail "@bindir@/org.buddiesofbudgie.Services" "${lib.getExe budgie-desktop-services}" \
+      --replace-fail "@gsd_libexecdir@/budgie-session-compositor-ready" "${budgie-session}/libexec/budgie-session-compositor-ready"
+
+    chmod +x src/bridges/labwc/labwc_bridge.py
+    substituteInPlace src/bridges/labwc/org.buddiesofbudgie.labwc-bridge.desktop.in \
+      --replace-fail "Exec=python3 @libexecdir@/labwc_bridge.py" "Exec=@libexecdir@/labwc_bridge.py"
+  '';
 
   passthru = {
     providedSessions = [ "budgie-desktop" ];
-
-    tests = {
-      inherit (nixosTests) budgie;
-      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
-    };
-
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
   };
 
@@ -155,8 +147,8 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "budgie-1.0"
-      "budgie-raven-plugin-1.0"
+      "budgie-3.0"
+      "budgie-raven-plugin-3.0"
       "budgie-theme-1.0"
     ];
   };

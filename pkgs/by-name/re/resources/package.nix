@@ -17,23 +17,24 @@
   libadwaita,
   dmidecode,
   util-linux,
+  systemd,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "resources";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "nokyan";
     repo = "resources";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z4ZVj/nS4n3oqENSK87YJ8sQRnqK7c4tWzKHUD0Qw2s=";
+    hash = "sha256-e8iUBmEqDlqwczpkkS9lI+oflyc95IxPhd8c9Vsw1LQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-jHdEiK3nu9mN2A6biHq9Iu4bSniD74hGnKFBTt5xVDM=";
+    hash = "sha256-6xIyLNblcTzB3V/LfbJkEEVB5KiR/RZccFG1l1ahlr0=";
   };
 
   nativeBuildInputs = [
@@ -55,18 +56,20 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
-  postPatch = ''
-    substituteInPlace src/utils/memory.rs \
-      --replace '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
-    substituteInPlace src/utils/cpu.rs \
-      --replace '"lscpu"' '"${util-linux}/bin/lscpu"'
-    substituteInPlace src/utils/memory.rs \
-      --replace '"pkexec"' '"/run/wrappers/bin/pkexec"'
-  '';
+  # Check all Command::new
+  runtimeDeps = [
+    dmidecode
+    util-linux # lscpu
+    systemd # udevadm
+  ];
 
   mesonFlags = [
     (lib.mesonOption "profile" "default")
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps})
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

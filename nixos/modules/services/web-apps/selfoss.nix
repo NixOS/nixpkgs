@@ -148,7 +148,11 @@ in
         ls | grep -v data | while read line; do rm -rf $line; done || true
 
         # Create the files
-        cp -r "${pkgs.selfoss}/"* "${dataDir}"
+        cp -r \
+          "${pkgs.selfoss}/.htaccess" \
+          "${pkgs.selfoss}/.nginx.conf" \
+          "${pkgs.selfoss}/"* \
+          "${dataDir}"
         ln -sf "${selfoss-config}" "${dataDir}/config.ini"
         chown -R "${cfg.user}" "${dataDir}"
         chmod -R 755 "${dataDir}"

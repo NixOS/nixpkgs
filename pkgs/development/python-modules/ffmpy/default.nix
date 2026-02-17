@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   uv-build,
   pytestCheckHook,
   go,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ffmpy";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8.1";
 
   src = fetchFromGitHub {
     owner = "Ch00k";
     repo = "ffmpy";
     tag = version;
-    hash = "sha256-u//L2vxucFlWmk1+pdp+iCrpzzMZUonDAn1LELgX86E=";
+    hash = "sha256-XFC7f8wdIsySIn4qXqo61GmRcaF0QciLYN5lwhzlIuA=";
   };
 
   postPatch =
@@ -60,10 +57,10 @@ buildPythonPackage rec {
     HOME=$(mktemp -d) go build -o tests/ffmpeg/ffmpeg tests/ffmpeg/ffmpeg.go
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple python interface for FFmpeg/FFprobe";
     homepage = "https://github.com/Ch00k/ffmpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

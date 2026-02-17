@@ -21,16 +21,16 @@
   squashfsTools,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gearlever";
-  version = "3.4.2";
+  version = "3.4.7";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
-    tag = version;
-    hash = "sha256-IC3ueAplQc5McGoJkHjjCAGvnLCH9+DUrB3cuKfwMno=";
+    tag = finalAttrs.version;
+    hash = "sha256-GW1jCZIr9oMAny7QKPkuYJxhGKDWxvoRviqr8q7GtdM=";
   };
 
   postPatch =
@@ -114,4 +114,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

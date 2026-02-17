@@ -20,7 +20,9 @@ ghc.section.md
 gnome.section.md
 haredo.section.md
 installShellFiles.section.md
+julec.section.md
 just.section.md
+libglycin.section.md
 libiconv.section.md
 libxml2.section.md
 meson.section.md

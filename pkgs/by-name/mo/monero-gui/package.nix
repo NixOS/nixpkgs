@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.18.4.2";
+  version = "0.18.4.5";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero-gui";
     rev = "v${version}";
-    hash = "sha256-FKQrB47q791lDaomI5A10qw1oGh5zp9TFPpFoX2ZAmc=";
+    hash = "sha256-K275qry6PWeEh3g0EofkD8E4pO5uWGFoAGzdkj9kuvA=";
   };
 
   nativeBuildInputs = [

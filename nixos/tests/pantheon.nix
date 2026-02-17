@@ -66,13 +66,14 @@
 
       with subtest("Login with elementary-greeter"):
           machine.send_chars("${user.password}\n")
-          machine.wait_until_succeeds('journalctl -t gnome-session-binary --grep "Entering running state"')
+          machine.wait_until_succeeds('journalctl -t gnome-session-service --grep "Entering running state"')
 
       with subtest("Wait for wayland server"):
           machine.wait_for_file("/run/user/${toString user.uid}/wayland-0")
 
       with subtest("Check that logging in has given the user ownership of devices"):
-          machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
+          # Change back to /dev/snd/timer after systemd-258.1
+          machine.succeed("getfacl -p /dev/dri/card0 | grep -q ${user.name}")
 
       with subtest("Check if Pantheon components actually start"):
           pgrep_list = [
@@ -84,6 +85,7 @@
               # https://github.com/elementary/gala/pull/2140
               "${pkgs.pantheon.gnome-settings-daemon}/libexec/gsd-xsettings",
               "${pkgs.pantheon.pantheon-agent-polkit}/libexec/policykit-1-pantheon/io.elementary.desktop.agent-polkit",
+              "${pkgs.pantheon.elementary-settings-daemon}/bin/io.elementary.settings-daemon",
               "${pkgs.pantheon.elementary-files}/libexec/io.elementary.files.xdg-desktop-portal"
           ]
           for i in pgrep_list:
@@ -99,6 +101,11 @@
           machine.succeed(f"{cmd} | grep '__NIXOS_SET_ENVIRONMENT_DONE' | grep '1'")
           # Hopefully from gcr-ssh-agent.
           machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
+
+      with subtest("Ensure custom keyboard shortcuts can launch external apps via settings-daemon"):
+          cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf ${pkgs.pantheon.elementary-settings-daemon}/bin/io.elementary.settings-daemon)/environ"
+          machine.succeed(f"{cmd} | grep '^PATH=' | grep '/run/current-system/sw/bin'")
+          machine.succeed(f"{cmd} | grep '^XDG_DATA_DIRS=' | grep '/run/current-system/sw/share'")
 
       with subtest("Wait for elementary videos autostart"):
           machine.wait_until_succeeds("pgrep -xf /run/current-system/sw/bin/io.elementary.videos")

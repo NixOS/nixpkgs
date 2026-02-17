@@ -11,18 +11,18 @@
   kubebuilder,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubebuilder";
-  version = "4.9.0";
+  version = "4.10.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
-    rev = "v${version}";
-    hash = "sha256-CokzuduRJyRYIrkqE+LJE6znskfZIJfU12m4vDhZB0k=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-GAHuaUVtdLvyWNeOxu46+IOw2Mf42z3yUjZNiyeE1xs=";
   };
 
-  vendorHash = "sha256-ValoM/qVrDKPjI5SOq4XkYNKPKjfQcrXKogfpd2aKLQ=";
+  vendorHash = "sha256-NsD2yt73+uRitegezTWwBhF0iMCQ8XhDf6WM/j7kT0o=";
 
   subPackages = [
     "cmd"
@@ -32,7 +32,7 @@ buildGoModule rec {
   allowGoReference = true;
 
   ldflags = [
-    "-X sigs.k8s.io/kubebuilder/v4/cmd.kubeBuilderVersion=v${version}"
+    "-X sigs.k8s.io/kubebuilder/v4/cmd.kubeBuilderVersion=v${finalAttrs.version}"
     "-X sigs.k8s.io/kubebuilder/v4/cmd.goos=${go.GOOS}"
     "-X sigs.k8s.io/kubebuilder/v4/cmd.goarch=${go.GOARCH}"
     "-X sigs.k8s.io/kubebuilder/v4/cmd.gitCommit=unknown"
@@ -64,15 +64,15 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     command = "${kubebuilder}/bin/kubebuilder version";
     package = kubebuilder;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     description = "SDK for building Kubernetes APIs using CRDs";
     mainProgram = "kubebuilder";
     homepage = "https://github.com/kubernetes-sigs/kubebuilder";
-    changelog = "https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v${version}";
+    changelog = "https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cmars ];
   };
-}
+})

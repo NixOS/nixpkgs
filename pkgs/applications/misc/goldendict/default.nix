@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libXtst,
+  libxtst,
   libvorbis,
   hunspell,
   lzo,
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtx11extras
-    libXtst
+    libxtst
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     bzip2
@@ -103,14 +103,14 @@ stdenv.mkDerivation rec {
     mv GoldenDict.app $out/Applications
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://goldendict.org/";
     description = "Feature-rich dictionary lookup program";
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "goldendict";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sikmir
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

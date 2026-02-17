@@ -24,14 +24,14 @@ let
     hash = "sha256-zUmYI6+0IdDkglLzzWHS8ZKmc5O6aJ2X4IwRBouRIxI=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geogram";
   version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "BrunoLevy";
     repo = "geogram";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-v7ChuE9F/z1MD5OUMiGXZWiGqjMauIka4sNXVDe/yYU=";
     fetchSubmodules = true;
   };
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Programming Library with Geometric Algorithms";
     longDescription = ''
       Geogram contains the main results in Geometry Processing from the former ALICE Inria project,
@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
       Symposium on Geometry Processing and Eurographics.
     '';
     homepage = "https://github.com/BrunoLevy/geogram";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
 
     platforms = [
       "x86_64-linux"
@@ -149,6 +149,6 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
-}
+})

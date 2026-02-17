@@ -22,8 +22,11 @@ lib.makeScope newScope (self: {
 
   # Upstream doesn't use tags, releases, or branches.
   src = fetchFromGitHub {
+    pname = "reason-native";
+    version = "0-unstable-2024-05-07";
     owner = "reasonml";
     repo = "reason-native";
+    # When updating this make sure to also update the `version` above
     rev = "20b1997b6451d9715dfdbeec86a9d274c7430ed8";
     hash = "sha256-96Ucq70eSy6pqh5ne9xoODWe/nPuriZnFAdx0OkLVCs=";
   };

@@ -5,25 +5,25 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gollama";
-  version = "v1.37.2";
+  version = "v2.0.4";
 
   src = fetchFromGitHub {
     owner = "sammcj";
     repo = "gollama";
-    tag = "v${version}";
-    hash = "sha256-vkAJOo8ZhnGHw/J/PULP1vrBZx7IZccVidF5EqVMYmk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-unvnFKkEWJnyzuNz8zekB8ZSXP/dUqv24qgyhkP3kkY=";
   };
 
-  vendorHash = "sha256-0aaxj5F6zEEO98isarLSbA1tn0e4Ue6Lhgi4CYKMjnQ=";
+  vendorHash = "sha256-t7Kl6WnS8vvLyvKzkDswv0yOaeTE3IgZCNAC3dD8euU=";
 
   doCheck = false;
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -31,9 +31,9 @@ buildGoModule rec {
   meta = {
     description = "Go manage your Ollama models";
     homepage = "https://github.com/sammcj/gollama";
-    changelog = "https://github.com/sammcj/gollama/releases/tag/v${version}";
+    changelog = "https://github.com/sammcj/gollama/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "gollama";
   };
-}
+})

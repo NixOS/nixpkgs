@@ -1,70 +1,49 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  ant,
-  jdk21_headless,
   jre_minimal,
   makeWrapper,
   stripJavaArchivesHook,
+  maven,
+  nix-update-script,
 }:
-let
-  jdk = jdk21_headless;
-  # Reduce closure size
-  jre = jre_minimal.override {
-    modules = [
-      "java.base"
-      "java.logging"
-    ];
-    jdk = jdk21_headless;
-  };
-in
-stdenv.mkDerivation (finalAttrs: {
+
+maven.buildMavenPackage rec {
   pname = "trimmomatic";
-  version = "0.39";
+  version = "0.40";
 
   src = fetchFromGitHub {
     owner = "usadellab";
     repo = "Trimmomatic";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-u+ubmacwPy/vsEi0YQCv0fTnVDesQvqeQDEwCbS8M6I=";
+    rev = "v${version}";
+    hash = "sha256-pLUjSVePN++G2XZrdKEdobgBO+UD0PZ9wlhSUlZ7na8=";
   };
 
-  # Remove jdk version requirement
-  postPatch = ''
-    substituteInPlace ./build.xml \
-      --replace 'source="1.5" target="1.5"' ""
-  '';
+  mvnHash = "sha256-1XnVdud8nI2SuEPXnwEmbudM+QAeoSVTn0UZ8PKJH44=";
 
   nativeBuildInputs = [
-    ant
-    jdk
     makeWrapper
     stripJavaArchivesHook
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    ant
-
-    runHook postBuild
-  '';
-
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 dist/jar/trimmomatic-*.jar -t $out/share/trimmomatic
+    install -Dm644 target/trimmomatic-${version}.jar -t $out/share/trimmomatic
     cp -r adapters $out/share/trimmomatic
 
-    makeWrapper ${jre}/bin/java $out/bin/trimmomatic \
-        --add-flags "-jar $out/share/trimmomatic/trimmomatic-*.jar"
+    makeWrapper ${lib.getBin jre_minimal}/bin/java $out/bin/trimmomatic \
+        --add-flags "-jar $out/share/trimmomatic/trimmomatic-${version}.jar"
 
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    changelog = "https://github.com/usadellab/Trimmomatic/blob/main/versionHistory.txt";
+    changelog = "https://github.com/usadellab/Trimmomatic/releases/tag/v${version}";
     description = "Flexible read trimming tool for Illumina NGS data";
     longDescription = ''
       Trimmomatic performs a variety of useful trimming tasks for illumina
@@ -82,4 +61,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "trimmomatic";
     maintainers = [ lib.maintainers.kupac ];
   };
-})
+}

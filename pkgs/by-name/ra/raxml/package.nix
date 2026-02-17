@@ -6,14 +6,14 @@
   mpi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "RAxML${lib.optionalString useMpi "-mpi"}";
   version = "8.2.13";
 
   src = fetchFromGitHub {
     owner = "stamatak";
     repo = "standard-RAxML";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-w+Eqi0GhVira1H6ZnMNeZGBMzDjiGT7JSFpQEVXONyk=";
   };
 
@@ -40,14 +40,14 @@ stdenv.mkDerivation rec {
         mkdir -p $out/bin && cp raxmlHPC-PTHREADS-SSE3 $out/bin
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for Phylogenetic Analysis and Post-Analysis of Large Phylogenies";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://sco.h-its.org/exelixis/web/software/raxml/";
-    maintainers = [ maintainers.unode ];
+    maintainers = [ lib.maintainers.unode ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
   };
-}
+})

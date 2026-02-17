@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  libSM,
-  libX11,
-  libXt,
+  libsm,
+  libx11,
+  libxt,
   libffi,
   ncurses,
 }:
@@ -19,9 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libSM
-    libX11
-    libXt
+    libsm
+    libx11
+    libxt
     libffi
     ncurses
   ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://2484.de/yabasic/whatsnew.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -17,6 +17,7 @@
   extraPrefix ? null,
   excludes ? [ ],
   includes ? [ ],
+  hunks ? [ ],
   revert ? false,
   postFetch ? "",
   nativeBuildInputs ? [ ],
@@ -88,8 +89,12 @@ lib.throwIfNot (excludes == [ ] || includes == [ ])
 
         filterdiff \
           -p1 \
-          ${builtins.toString (builtins.map (x: "-x ${lib.escapeShellArg x}") excludes)} \
-          ${builtins.toString (builtins.map (x: "-i ${lib.escapeShellArg x}") includes)} \
+          ${toString (map (x: "-x ${lib.escapeShellArg x}") excludes)} \
+          ${toString (map (x: "-i ${lib.escapeShellArg x}") includes)} \
+          ${
+            lib.optionalString (hunks != [ ])
+              "-# ${lib.escapeShellArg (lib.concatMapStringsSep "," toString hunks)}"
+          } \
           "$tmpfile" > "$out"
 
         if [ ! -s "$out" ]; then
@@ -106,13 +111,14 @@ lib.throwIfNot (excludes == [ ] || includes == [ ])
       ''
       + postFetch;
     }
-    // builtins.removeAttrs args [
+    // removeAttrs args [
       "relative"
       "stripLen"
       "decode"
       "extraPrefix"
       "excludes"
       "includes"
+      "hunks"
       "revert"
       "postFetch"
       "nativeBuildInputs"

@@ -16,12 +16,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tevent";
   version = "0.17.1";
 
   src = fetchurl {
-    url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
+    url = "mirror://samba/tevent/tevent-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-G+LepzfN4l/gZiH4SUXmPrcSWeDEPp+PXaSC2rGnvpI=";
   };
 
@@ -71,10 +71,10 @@ stdenv.mkDerivation rec {
     stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
   ) "--undefined-version";
 
-  meta = with lib; {
+  meta = {
     description = "Event system based on the talloc memory management library";
     homepage = "https://tevent.samba.org/";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

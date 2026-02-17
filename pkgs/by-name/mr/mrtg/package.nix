@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  makeWrapper,
   fetchurl,
   perl,
   gd,
@@ -15,14 +16,16 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mrtg";
   version = "2.17.10";
 
   src = fetchurl {
-    url = "https://oss.oetiker.ch/mrtg/pub/mrtg-${version}.tar.gz";
+    url = "https://oss.oetiker.ch/mrtg/pub/mrtg-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-x/EcteIXpQDYfuO10mxYqGUu28DTKRaIu3krAQ+uQ6w=";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     # add support for ipv6 snmp:
@@ -32,11 +35,28 @@ stdenv.mkDerivation rec {
     rrdtool
   ];
 
-  meta = with lib; {
+  patches = [
+    # gcc14 broke detection of printf format specifiers
+    # building from master seems to be fixed upstream, so next release can (likely) drop the patch
+    # just keep the CFLAGS below
+    ./configure-long-long-format-gcc14.patch
+  ];
+  env.NIX_CFLAGS_COMPILE = "-Werror";
+  env.NIX_CFLAGS_LINK = "-lm";
+
+  postInstall = ''
+    # mrtg wants plain C locale
+    wrapProgram $out/bin/mrtg  --set LANG C
+  '';
+
+  meta = {
     description = "Multi Router Traffic Grapher";
     homepage = "https://oss.oetiker.ch/mrtg/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ robberer ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      robberer
+      usovalx
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})

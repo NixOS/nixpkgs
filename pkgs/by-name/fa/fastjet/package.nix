@@ -7,12 +7,12 @@
   withPython ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastjet";
   version = "3.4.3";
 
   src = fetchurl {
-    url = "http://fastjet.fr/repo/fastjet-${version}.tar.gz";
+    url = "http://fastjet.fr/repo/fastjet-${finalAttrs.version}.tar.gz";
     hash = "sha256-zBdUcb+rhla4xhg6jl6a0F1fdQbkbzISqagjCQW49qM=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

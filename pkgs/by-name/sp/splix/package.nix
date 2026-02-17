@@ -27,7 +27,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "splix-svn";
   version = "315";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     # We build this from svn, because splix hasn't been in released in several years
     # although the community has been adding some new printer models.
     url = "svn://svn.code.sf.net/p/splix/code/splix";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "16wbm4xnz35ca3mw2iggf5f4jaxpyna718ia190ka6y4ah932jxl";
   };
 
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     jbigkit
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CUPS drivers for SPL (Samsung Printer Language) printers";
     homepage = "http://splix.ap2c.org";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

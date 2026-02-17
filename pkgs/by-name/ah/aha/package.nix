@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aha";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     sha256 = "1gywad0rvvz3c5balz8cxsnx0562hj2ngzqyr8zsy2mb4pn0lpgv";
-    tag = version;
+    tag = finalAttrs.version;
     repo = "aha";
     owner = "theZiz";
   };
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       aha takes ANSI SGR-coloured input and produces W3C-conformant HTML code.
     '';
     homepage = "https://github.com/theZiz/aha";
-    changelog = "https://github.com/theZiz/aha/blob/${version}/CHANGELOG";
+    changelog = "https://github.com/theZiz/aha/blob/${finalAttrs.version}/CHANGELOG";
     license = with lib.licenses; [
       lgpl2Plus
       mpl11
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.all;
   };
-}
+})

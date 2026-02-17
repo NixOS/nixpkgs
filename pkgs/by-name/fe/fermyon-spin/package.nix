@@ -19,27 +19,24 @@ let
     }
     .${system} or (throw "Unsupported system: ${system}");
 
-  # TODO: It'd be nice to write an update script that would update all of these
-  # hashes together.
-  packageHash =
-    {
-      x86_64-linux = "sha256-r/F3Tj3WeeL2R27ussX+ebFWpW+8z2e7tdBK4MHFMpk=";
-      aarch64-linux = "sha256-BSFxDJeY7fOOxDqAV+6FJf0hup1Y5IJ/czqwc4W7qSA=";
-      x86_64-darwin = "sha256-T6J9IjfXdt9DnZksndAmZRkYyH/5H60J7V6xU0ltD2A=";
-      aarch64-darwin = "sha256-6x+0PB5/2oqYDVNiNhc0xcs/ESCLvvSsWtm2KlTIeBo=";
-    }
-    .${system} or (throw "Unsupported system: ${system}");
+  packageHashes = {
+    x86_64-linux = "sha256-B+LKXK7DFakiFNdanaqMeGxnfxoEI4caNtxnyZEcWgQ=";
+    aarch64-linux = "sha256-FMYIO1miEulnz9logtXxau2mIuR1zS8oCG04DMx0HyQ=";
+    x86_64-darwin = "sha256-I3Z1QqIu0iJBZWq6fUWouGfTYzNr/wj+0UFfq0wSy4Y=";
+    aarch64-darwin = "sha256-AL1TUJO5jSNhjfZ/rLo9Do22oqVhpLqiRdGnvVaqvog=";
+  };
 
+  packageHash = packageHashes.${system} or (throw "Unsupported system: ${system}");
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fermyon-spin";
-  version = "3.0.0";
+  version = "3.5.1";
 
   # Use fetchurl rather than fetchzip as these tarballs are built by the project
   # and not by GitHub (and thus are stable) - this simplifies the update script
   # by allowing it to use the output of `nix store prefetch-file`.
   src = fetchurl {
-    url = "https://github.com/fermyon/spin/releases/download/v${version}/spin-v${version}-${platform}.tar.gz";
+    url = "https://github.com/spinframework/spin/releases/download/v${finalAttrs.version}/spin-v${finalAttrs.version}-${platform}.tar.gz";
     hash = packageHash;
   };
 
@@ -63,13 +60,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly";
-    homepage = "https://github.com/fermyon/spin";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [ asl20 ];
-    mainProgram = "spin";
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+  passthru = {
+    inherit packageHashes; # needed by updateScript
+    updateScript = ./update.py;
   };
-}
+
+  meta = {
+    description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly";
+    homepage = "https://github.com/spinframework/spin";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = with lib.licenses; [ asl20 ];
+    mainProgram = "spin";
+    maintainers = [ ];
+    platforms = builtins.attrNames packageHashes;
+  };
+})

@@ -5,18 +5,18 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "static-web-server";
-  version = "2.38.1";
+  version = "2.39.0";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
     repo = "static-web-server";
-    rev = "v${version}";
-    hash = "sha256-fcD1jd9kwm/jCYdvNGEnanLO/wUKeYy5OqOeQE2lGP4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iprQlSHO+ac7v1odVoS/9IU+Zov8/xh1l9pm1PJE8fs=";
   };
 
-  cargoHash = "sha256-rfhRMQb7MX2722wcMk35qATav6WFFULy3Ix3WcC7r4M=";
+  cargoHash = "sha256-rNrGlgUvPezX7RnKhprRjl9DiJ/Crt4phmxnfY9tNXA=";
 
   # Some tests rely on timestamps newer than 18 Nov 1974 00:00:00
   preCheck = ''
@@ -35,15 +35,14 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Asynchronous web server for static files-serving";
     homepage = "https://static-web-server.net/";
-    changelog = "https://github.com/static-web-server/static-web-server/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/static-web-server/static-web-server/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       misilelab
     ];
     mainProgram = "static-web-server";
   };
-}
+})

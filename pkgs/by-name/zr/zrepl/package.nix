@@ -6,14 +6,14 @@
   nixosTests,
   openssh,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zrepl";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "zrepl";
     repo = "zrepl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sFSWcJ0aBMay+ngUqnr0PKBMOfCcKHgBjff6KRpPZrg=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/zrepl/zrepl/version.zreplVersion=${version}"
+    "-X github.com/zrepl/zrepl/version.zreplVersion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -44,15 +44,15 @@ buildGoModule rec {
     inherit (nixosTests) zrepl;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zrepl.github.io/";
     description = "One-stop, integrated solution for ZFS replication";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cole-h
       mdlayher
     ];
     mainProgram = "zrepl";
   };
-}
+})

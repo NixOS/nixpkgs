@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   borgbackup,
   appdirs,
   arrow,
@@ -21,9 +20,7 @@
 buildPythonPackage rec {
   pname = "emborg";
   version = "1.42";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
@@ -61,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "emborg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive command line interface to Borg Backup";
     homepage = "https://github.com/KenKundert/emborg";
     changelog = "https://github.com/KenKundert/emborg/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jpetrucciani ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

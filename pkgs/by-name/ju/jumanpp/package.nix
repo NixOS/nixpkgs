@@ -2,46 +2,31 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   cmake,
   protobuf,
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jumanpp";
-  version = "2.0.0-rc3";
+  version = "2.0.0-rc4";
 
   src = fetchurl {
-    url = "https://github.com/ku-nlp/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-ASdr6qbkSe71M7QmuuwidCa4xQhDVoXBJ2XqvSY53pQ=";
+    url = "https://github.com/ku-nlp/jumanpp/releases/download/v${finalAttrs.version}/jumanpp-${finalAttrs.version}.tar.xz";
+    hash = "sha256-qyy0mTBrH3y8OBIVXuTHIDV+AbQIvCIA7rzhbI2b8y8=";
   };
 
-  patches = [
-    ./0001-Exclude-all-tests-from-the-build.patch
-    # https://github.com/ku-nlp/jumanpp/pull/132
-    (fetchpatch {
-      name = "fix-unused-warning.patch";
-      url = "https://github.com/ku-nlp/jumanpp/commit/cc0d555287c8b214e9d6f0279c449a4e035deee4.patch";
-      sha256 = "sha256-yRKwuUJ2UPXJcjxBGhSOmcQI/EOijiJDMmmmSRdNpX8=";
-    })
-    (fetchpatch {
-      name = "update-libs.patch";
-      url = "https://github.com/ku-nlp/jumanpp/commit/5e9068f56ae310ed7c1df185b14d49654ffe1ab6.patch";
-      sha256 = "sha256-X49/ZoLT0OGePLZYlgacNxA1dHM4WYdQ8I4LW3sW16E=";
-    })
-    (fetchpatch {
-      name = "fix-mmap-on-apple-m1.patch";
-      url = "https://github.com/ku-nlp/jumanpp/commit/0c22249f12928d0c962f03f229026661bf0c7921.patch";
-      sha256 = "sha256-g6CuruqyoMJxU/hlNoALx1QnFM8BlTsTd0pwlVrco3I=";
-    })
-  ];
-  cmakeFlags = [ "-DJPP_ENABLE_TESTS=OFF" ];
+  doCheck = true;
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace libs/pathie-cpp/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Japanese morphological analyser using a recurrent neural network language model (RNNLM)";
     mainProgram = "jumanpp";
     longDescription = ''
@@ -50,8 +35,8 @@ stdenv.mkDerivation rec {
       language model (RNNLM).
     '';
     homepage = "https://nlp.ist.i.kyoto-u.ac.jp/index.php?JUMAN++";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mt-caret ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mt-caret ];
+    platforms = lib.platforms.all;
   };
-}
+})

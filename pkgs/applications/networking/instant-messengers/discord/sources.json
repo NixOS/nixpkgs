@@ -1,0 +1,42 @@
+{
+  "linux-canary": {
+    "hash": "sha256-ogiHH8HYrHGb4r6ADSJG3LHUs7VLjqWwQqKBfHamCyk=",
+    "url": "https://canary.dl2.discordapp.net/apps/linux/0.0.871/discord-canary-0.0.871.tar.gz",
+    "version": "0.0.871"
+  },
+  "linux-development": {
+    "hash": "sha256-EVkjWoqWl9Z+iHCLPOLu4PIUb2wC3HVcPVjOVz++IVw=",
+    "url": "https://development.dl2.discordapp.net/apps/linux/0.0.94/discord-development-0.0.94.tar.gz",
+    "version": "0.0.94"
+  },
+  "linux-ptb": {
+    "hash": "sha256-OlNU/DUQxjwAf6Qjqi6vUHfH6IhYJ9zSKp19hTuzVjk=",
+    "url": "https://ptb.dl2.discordapp.net/apps/linux/0.0.177/discord-ptb-0.0.177.tar.gz",
+    "version": "0.0.177"
+  },
+  "linux-stable": {
+    "hash": "sha256-21ddAZveT1EXYr5cUoiIzD7uAbtF94EXW04VKGS5izM=",
+    "url": "https://stable.dl2.discordapp.net/apps/linux/0.0.124/discord-0.0.124.tar.gz",
+    "version": "0.0.124"
+  },
+  "osx-canary": {
+    "hash": "sha256-unXMbJ53+TFDtExOP13UdC4qA7mnu4z900gfEvN7Uys=",
+    "url": "https://canary.dl2.discordapp.net/apps/osx/0.0.975/DiscordCanary.dmg",
+    "version": "0.0.975"
+  },
+  "osx-development": {
+    "hash": "sha256-B1//zMlTv2+RWHfWZSaaU8ubVOwWob+EYjNdtFRwlgg=",
+    "url": "https://development.dl2.discordapp.net/apps/osx/0.0.107/DiscordDevelopment.dmg",
+    "version": "0.0.107"
+  },
+  "osx-ptb": {
+    "hash": "sha256-Ty6WSK5n+Gp/pEmmeayy+BgRz5rZFXuFTxcqCjzEkwY=",
+    "url": "https://ptb.dl2.discordapp.net/apps/osx/0.0.209/DiscordPTB.dmg",
+    "version": "0.0.209"
+  },
+  "osx-stable": {
+    "hash": "sha256-AbgvI8VJ1uRGFwglL1mqOLESliAlbFQdP4gcJf+t1PY=",
+    "url": "https://stable.dl2.discordapp.net/apps/osx/0.0.376/Discord.dmg",
+    "version": "0.0.376"
+  }
+}

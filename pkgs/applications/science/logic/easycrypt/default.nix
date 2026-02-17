@@ -4,25 +4,26 @@
   darwin,
   fetchFromGitHub,
   ocamlPackages,
+  dune,
   why3,
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easycrypt";
-  version = "2025.08";
+  version = "2026.02";
 
   src = fetchFromGitHub {
     owner = "easycrypt";
     repo = "easycrypt";
-    tag = "r${version}";
-    hash = "sha256-WUms6hh7T5/gxRLFvbJQiT1ErLr8KFilFNOMTT/fIyY=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-ii/msqNUPZ7jQXG2fEkEpsGXc4sw6DcyaTIw21lrl7M=";
   };
 
   nativeBuildInputs =
     with ocamlPackages;
     [
-      dune_3
+      dune
       findlib
       menhir
       ocaml
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
     batteries
     dune-build-info
     dune-site
-    inifiles
+    markdown
+    pcre2
     why3
     yojson
     zarith
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace dune-project --replace-fail '(name easycrypt)' '(name easycrypt)(version ${version})'
+    substituteInPlace dune-project --replace-fail '(name easycrypt)' '(name easycrypt)(version ${finalAttrs.version})'
   '';
 
   pythonPath = with python3.pkgs; [ pyyaml ];
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     dune install --prefix $out easycrypt
     rm $out/bin/ec-runtest
-    wrapPythonProgramsIn "$out/lib/easycrypt/commands" "$pythonPath"
+    wrapPythonProgramsIn "$out/lib/easycrypt/commands" "''${pythonPath[*]}"
     runHook postInstall
   '';
 
@@ -66,4 +68,4 @@ stdenv.mkDerivation rec {
     description = "Computer-Aided Cryptographic Proofs";
     mainProgram = "easycrypt";
   };
-}
+})

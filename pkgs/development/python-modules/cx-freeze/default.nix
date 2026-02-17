@@ -10,10 +10,8 @@
   # dependencies
   filelock,
   packaging,
-  tomli,
 
   distutils,
-  pythonOlder,
   ncurses,
   patchelf,
   dmgbuild,
@@ -65,9 +63,6 @@ buildPythonPackage rec {
     packaging
     setuptools
   ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     dmgbuild
   ];
@@ -90,7 +85,6 @@ buildPythonPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/cxfreeze";
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     rm -rf cx_Freeze

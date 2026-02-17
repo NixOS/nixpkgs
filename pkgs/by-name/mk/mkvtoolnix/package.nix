@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   autoreconfHook,
   rake,
@@ -52,14 +52,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkvtoolnix";
-  version = "95.0";
+  version = "97.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-FwOVqBHzgDveT8dGRfb2ONIAhCGEKU4UqpM3g7m0klA=";
+    hash = "sha256-M8A3d6BOed1A/Bvw25bNGphXNDXJvHdg26OjOdwsNf4=";
   };
 
   passthru = {

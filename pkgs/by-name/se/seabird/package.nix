@@ -13,14 +13,14 @@
   vte-gtk4,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "seabird";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "getseabird";
     repo = "seabird";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-z+XEOqr7JX376AyGr0zx3AV3P+YqFbyspXMoxidCWY0=";
   };
 
@@ -49,7 +49,7 @@ buildGoModule rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${version}"'
+    substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${finalAttrs.version}"'
   '';
 
   preBuild = ''
@@ -62,11 +62,11 @@ buildGoModule rec {
 
   desktopItems = [ "dev.skynomads.Seabird.desktop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Native Kubernetes desktop client";
     homepage = "https://getseabird.github.io";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nicolas-goudry ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nicolas-goudry ];
     mainProgram = "seabird";
   };
-}
+})

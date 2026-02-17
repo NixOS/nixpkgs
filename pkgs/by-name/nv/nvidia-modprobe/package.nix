@@ -4,15 +4,15 @@
   fetchFromGitHub,
   gnum4,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvidia-modprobe";
-  version = "580.82.09";
+  version = "590.48.01";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-modprobe";
-    rev = version;
-    hash = "sha256-ZWQfl0hlbJELPRjjPef3AyTUIN/8T0J82i1NM8iYUvY=";
+    rev = finalAttrs.version;
+    hash = "sha256-Vtp5FDDmzbwtDe11O0w/S8Mptpp8Li21/gBfJzfE0/g=";
   };
 
   nativeBuildInputs = [ gnum4 ];
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Load the NVIDIA kernel module and create NVIDIA character device files ";
+    description = "Load the NVIDIA kernel module and create NVIDIA character device files";
     homepage = "https://github.com/NVIDIA/nvidia-modprobe";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

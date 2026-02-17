@@ -26,6 +26,7 @@
   gtk3,
   hicolor-icon-theme,
   ilmbase,
+  libsecret,
   libpng,
   mpfr,
   nlopt,
@@ -34,10 +35,10 @@
   opencv,
   pcre,
   systemd,
-  tbb_2022,
+  onetbb,
   webkitgtk_4_1,
   wxGTK31,
-  xorg,
+  libx11,
   libnoise,
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
@@ -57,13 +58,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "v2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "SoftFever";
     repo = "OrcaSlicer";
-    tag = finalAttrs.version;
-    hash = "sha256-MEa57jFBJkqwoAkqI7wXOn1X1zxgLQt3SNeanfD88kU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RdMBx/onLq58oI1sL0cHmF2SGDfeI9KkPPCbjyMqECI=";
   };
 
   nativeBuildInputs = [
@@ -105,16 +106,17 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     hicolor-icon-theme
     ilmbase
+    libsecret
     libpng
     mpfr
     nlopt
     opencascade-occt_7_6
     openvdb
     pcre
-    tbb_2022
+    onetbb
     webkitgtk_4_1
     wxGTK'
-    xorg.libX11
+    libx11
     opencv.cxxdev
     libnoise
   ]
@@ -126,8 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     # Link opencv_core and opencv_imgproc instead of opencv_world
     ./patches/dont-link-opencv-world-orca.patch
-    # Don't link osmesa
-    ./patches/no-osmesa.patch
     # The changeset from https://github.com/SoftFever/OrcaSlicer/pull/7650, can be removed when that PR gets merged
     # Allows disabling the update nag screen
     (fetchpatch {
@@ -142,45 +142,48 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  NLOPT = nlopt;
+  env = {
+    NLOPT = nlopt;
 
-  NIX_CFLAGS_COMPILE = toString (
-    [
-      "-Wno-ignored-attributes"
-      "-I${opencv.out}/include/opencv4"
-      "-Wno-error=incompatible-pointer-types"
-      "-Wno-template-id-cdtor"
-      "-Wno-uninitialized"
-      "-Wno-unused-result"
-      "-Wno-deprecated-declarations"
-      "-Wno-use-after-free"
-      "-Wno-format-overflow"
-      "-Wno-stringop-overflow"
-      "-DBOOST_ALLOW_DEPRECATED_HEADERS"
-      "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
-      "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
-      "-DBOOST_MATH_DISABLE_FLOAT128"
-      "-DBOOST_MATH_NO_QUAD_SUPPORT"
-      "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
-      "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
-      "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
-    ]
-    # Making it compatible with GCC 14+, see https://github.com/SoftFever/OrcaSlicer/pull/7710
-    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14") [
-      "-Wno-error=template-id-cdtor"
-    ]
-  );
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        "-Wno-ignored-attributes"
+        "-I${opencv.out}/include/opencv4"
+        "-Wno-error=incompatible-pointer-types"
+        "-Wno-template-id-cdtor"
+        "-Wno-uninitialized"
+        "-Wno-unused-result"
+        "-Wno-deprecated-declarations"
+        "-Wno-use-after-free"
+        "-Wno-format-overflow"
+        "-Wno-stringop-overflow"
+        "-DBOOST_ALLOW_DEPRECATED_HEADERS"
+        "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
+        "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
+        "-DBOOST_MATH_DISABLE_FLOAT128"
+        "-DBOOST_MATH_NO_QUAD_SUPPORT"
+        "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
+        "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
+        "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
+      ]
+      # Making it compatible with GCC 14+, see https://github.com/SoftFever/OrcaSlicer/pull/7710
+      ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14") [
+        "-Wno-error=template-id-cdtor"
+      ]
+    );
 
-  NIX_LDFLAGS = toString [
-    (lib.optionalString withSystemd "-ludev")
-    "-L${boost186}/lib"
-    "-lboost_log"
-    "-lboost_log_setup"
-  ];
+    NIX_LDFLAGS = toString [
+      (lib.optionalString withSystemd "-ludev")
+      "-L${boost186}/lib"
+      "-lboost_log"
+      "-lboost_log_setup"
+    ];
+  };
 
   prePatch = ''
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
     sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/PerimeterGenerator.cpp
+    sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/Feature/FuzzySkin/FuzzySkin.cpp
   '';
 
   cmakeFlags = [
@@ -196,10 +199,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include/noise")
     (lib.cmakeFeature "LIBNOISE_LIBRARY" "${libnoise}/lib/libnoise-static.a")
     "-Wno-dev"
+
+    # cmake 4 compatibility, remove in next update
+    # see: https://github.com/SoftFever/OrcaSlicer/commit/883607e1d4a0b2bb719f2f4bcd9fd72f8c2174fa
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.13")
   ];
 
   # Generate translation files
-  postBuild = "( cd .. && ./run_gettext.sh )";
+  postBuild = "( cd .. && ./scripts/run_gettext.sh )";
 
   preFixup = ''
     gappsWrapperArgs+=(

@@ -11,12 +11,12 @@ let
   isMusl = stdenv.hostPlatform.isMusl;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libptytty";
   version = "2.0";
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/libptytty/${pname}-${version}.tar.gz";
+    url = "http://dist.schmorp.de/libptytty/libptytty-${finalAttrs.version}.tar.gz";
     sha256 = "1xrikmrsdkxhdy9ggc0ci6kg5b1hn3bz44ag1mk5k1zjmlxfscw0";
   };
 
@@ -32,15 +32,15 @@ stdenv.mkDerivation rec {
       "-DLASTLOG_SUPPORT=OFF"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "OS independent and secure pty/tty and utmp/wtmp/lastlog";
     homepage = "http://dist.schmorp.de/libptytty";
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.unix;
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2;
     # pkgsMusl.pkgsStatic errors as:
     #   ln: failed to create symbolic link './include': File exists
     broken = isStatic && isMusl;
   };
 
-}
+})

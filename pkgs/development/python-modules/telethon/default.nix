@@ -7,7 +7,6 @@
   rsa,
   pyaes,
   cryptg,
-  pythonOlder,
   setuptools,
   pytest-asyncio,
   pytestCheckHook,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "telethon";
   version = "1.41.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "LonamiWebs";

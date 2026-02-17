@@ -7,14 +7,14 @@
   libglibutil,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgbinder";
   version = "1.1.43";
 
   src = fetchFromGitHub {
     owner = "mer-hybris";
     repo = "libgbinder";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-a4lQzWOVdlXQeoJzvNaELiVXLvXsx4reigKrhsrcafM=";
   };
 
@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mer-hybris/libgbinder";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

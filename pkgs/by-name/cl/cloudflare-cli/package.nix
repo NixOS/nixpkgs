@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cloudflare-cli";
-  version = "5.1.0";
+  version = "5.1.2";
 
   src = fetchFromGitHub {
     owner = "danielpigott";
     repo = "cloudflare-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FE6LvzGd3Pl31vocXSZ6VY6P3iuVPxQR1eJwUSkXf70=";
+    hash = "sha256-KDL9UGsBVH+BxeMwpcwqH0P0Y8QbFMSqNT5FrTZxDog=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-dH0eW2IIxgqLiJHAmDKbeA0xz2EMWrZrKIf3P2mBDKU=";
+    hash = "sha256-30zvP1sYENfTh8o/RiSrYPZR3to3GF2m036q/+mrcSU=";
   };
 
   nativeBuildInputs = [

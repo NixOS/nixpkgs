@@ -5,7 +5,7 @@
   makeWrapper,
 }:
 {
-  name,
+  name ? "${args.pname}-${args.version}",
   src,
   buildInputs ? [ ],
   chickenInstallFlags ? [ ],
@@ -53,7 +53,7 @@ stdenv.mkDerivation (
     }
     // args.meta or { };
   }
-  // (builtins.removeAttrs args [
+  // (removeAttrs args [
     "name"
     "buildInputs"
     "meta"

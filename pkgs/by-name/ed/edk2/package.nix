@@ -33,14 +33,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edk2";
-  version = "202508";
+  version = "202511";
 
   srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     tag = "edk2-stable${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-YZcjPGPkUQ9CeJS9JxdHBmpdHsAj7T0ifSZWZKyNPMk=";
+    hash = "sha256-R/rgz8dWcDYVoiM67K2UGuq0xXbjjJYBPtJ1FmfGIaU=";
   };
 
   src = applyPatches {
@@ -55,6 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
       })
 
       ./fix-cross-compilation-antlr-dlg.patch
+
+      # fix compatibility with nasm 3.01 (https://github.com/tianocore/edk2/pull/11691)
+      # TODO: remove when updating beyond 202511
+      (fetchpatch {
+        name = "UefiCpuPkg-CpuExceptionHandlerLib-fix-push-instructions.patch";
+        url = "https://github.com/tianocore/edk2/commit/9ccf8751a74f26142e584c7b7c7572a182b67997.patch";
+        hash = "sha256-0aqpuQDxLdbSJMBXzY/57GzL2wLn0m8dkT7X6uXtKMg=";
+      })
     ];
 
     # FIXME: unvendor OpenSSL again once upstream updates
@@ -77,10 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   depsHostHost = [ libuuid ];
   strictDeps = true;
 
-  # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
-  ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
-
-  makeFlags = [ "-C BaseTools" ];
+  makeFlags = [ "--directory=BaseTools" ];
 
   env = {
     NIX_CFLAGS_COMPILE =
@@ -88,6 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
       + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation"
       + lib.optionalString (stdenv.hostPlatform.isDarwin) " -Wno-error=macro-redefined";
     PYTHON_COMMAND = lib.getExe pythonEnv;
+    # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
+    ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
+
   };
 
   hardeningDisable = [
@@ -133,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       #!nix-shell -i bash -p common-updater-scripts coreutils gnused
       set -eu -o pipefail
       version="$(list-git-tags --url="${finalAttrs.srcWithVendoring.url}" |
-                 sed -E --quiet 's/^edk2-stable([0-9]{6})$/\1/p' |
+                 sed -E --quiet 's/^edk2-stable([0-9\\.]+)$/\1/p' |
                  sort --reverse --numeric-sort |
                  head -n 1)"
       if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then

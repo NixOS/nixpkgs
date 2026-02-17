@@ -32,7 +32,8 @@
   openbox,
   fluxbox,
   enlightenment,
-  xorg,
+  libxft,
+  libxext,
   testers,
 
   gitUpdater,
@@ -60,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     libid3tag
   ]
   ++ optionals x11Support [
-    xorg.libXft
-    xorg.libXext
+    libxft
+    libxext
   ]
   ++ optional heifSupport libheif
   ++ optional svgSupport librsvg
@@ -107,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Image manipulation library";
 
     longDescription = ''
@@ -120,9 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://docs.enlightenment.org/api/imlib2/html";
     changelog = "https://git.enlightenment.org/old/legacy-imlib2/raw/tag/v${finalAttrs.version}/ChangeLog";
-    license = licenses.imlib2;
+    license = lib.licenses.imlib2;
     pkgConfigModules = [ "imlib2" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

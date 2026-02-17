@@ -41,6 +41,10 @@ buildPythonPackage rec {
     hash = "sha256-aLTeyDOo80p8xzl/IPnpT3BOjS2qOYn/Z7pidcLoEY8=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "-Wall -Wextra -Wpedantic -Werror" ""
+  '';
+
   build-system = [
     pybind11
     scikit-build-core

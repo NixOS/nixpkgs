@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "livekit-cli";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-J5tg3nm2pEemEZcIpObcxH+G4ByzvUtoSyy92CcWr6M=";
   };
 
@@ -19,11 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/livekit-cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface to LiveKit";
     homepage = "https://livekit.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mgdelacroix ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mgdelacroix ];
     mainProgram = "livekit-cli";
   };
-}
+})

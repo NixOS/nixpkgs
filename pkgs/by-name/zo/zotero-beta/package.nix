@@ -12,19 +12,28 @@
   glib,
   gtk3,
   libGL,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   libgbm,
   pango,
   pciutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zotero";
   version = "7.0.0-beta.111+b4f6c050e";
 
   src =
     let
-      escapedVersion = lib.replaceStrings [ "+" ] [ "%2B" ] version;
+      escapedVersion = lib.replaceStrings [ "+" ] [ "%2B" ] finalAttrs.version;
     in
     fetchurl {
       url = "https://download.zotero.org/client/beta/${escapedVersion}/Zotero-${escapedVersion}_linux-x86_64.tar.bz2";
@@ -44,16 +53,16 @@ stdenv.mkDerivation rec {
       glib
       gtk3
       libGL
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXtst
-      xorg.libxcb
+      libx11
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxtst
+      libxcb
       libgbm
       pango
       pciutils
@@ -65,7 +74,7 @@ stdenv.mkDerivation rec {
     name = "zotero";
     exec = "zotero -url %U";
     icon = "zotero";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     desktopName = "Zotero";
     genericName = "Reference Management";
     categories = [
@@ -83,14 +92,14 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     # Copy package contents to the output directory
-    mkdir -p "$prefix/usr/lib/zotero-bin-${version}"
-    cp -r * "$prefix/usr/lib/zotero-bin-${version}"
+    mkdir -p "$prefix/usr/lib/zotero-bin-${finalAttrs.version}"
+    cp -r * "$prefix/usr/lib/zotero-bin-${finalAttrs.version}"
     mkdir -p "$out/bin"
-    ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
+    ln -s "$prefix/usr/lib/zotero-bin-${finalAttrs.version}/zotero" "$out/bin/"
 
     # Install desktop file and icons
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
+    cp ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
     for size in 32 64 128; do
       install -Dm444 icons/icon''${size}.png \
         $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png
@@ -106,26 +115,26 @@ stdenv.mkDerivation rec {
       zotero-bin plugin-container updater vaapitest \
       minidump-analyzer glxtest
     do
-      if [ -e "$out/usr/lib/zotero-bin-${version}/$executable" ]; then
+      if [ -e "$out/usr/lib/zotero-bin-${finalAttrs.version}/$executable" ]; then
         patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          "$out/usr/lib/zotero-bin-${version}/$executable"
+          "$out/usr/lib/zotero-bin-${finalAttrs.version}/$executable"
       fi
     done
     find . -executable -type f -exec \
       patchelf --set-rpath "$libPath" \
-        "$out/usr/lib/zotero-bin-${version}/{}" \;
+        "$out/usr/lib/zotero-bin-${finalAttrs.version}/{}" \;
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
     mainProgram = "zotero";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.agpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       atila
       justanotherariel
     ];
   };
-}
+})

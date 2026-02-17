@@ -9,33 +9,33 @@
   curl,
   libGLU,
   libGL,
-  libXmu,
-  libXi,
+  libxmu,
+  libxi,
   libglut,
   libjpeg,
   libtool,
   wxGTK32,
-  xcbutil,
+  libxcb-util,
   sqlite,
   gtk3,
   patchelf,
-  libXScrnSaver,
+  libxscrnsaver,
   libnotify,
-  libX11,
+  libx11,
   libxcb,
   headless ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "boinc";
-  version = "8.2.5";
+  version = "8.2.8";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${lib.versions.majorMinor version}/${version}";
-    hash = "sha256-e5XkGAnMvqG/rRc9Vpw9QNPbpkTwcJ//DDuBqfrSRhE=";
+    hash = "sha256-yCsqkC6kle2oE29KP5qILe0F+5AOpFl2S3s2c09x7N4=";
   };
 
   nativeBuildInputs = [
@@ -54,20 +54,22 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!headless) [
     libGLU
     libGL
-    libXmu
-    libXi
+    libxmu
+    libxi
     libglut
     libjpeg
     wxGTK32
     gtk3
-    libXScrnSaver
+    libxscrnsaver
     libnotify
-    libX11
+    libx11
     libxcb
-    xcbutil
+    libxcb-util
   ];
 
-  NIX_LDFLAGS = lib.optionalString (!headless) "-lX11";
+  env = lib.optionalAttrs (!headless) {
+    NIX_LDFLAGS = "-lX11";
+  };
 
   preConfigure = ''
     ./_autosetup
@@ -85,11 +87,11 @@ stdenv.mkDerivation rec {
     install --mode=444 -D 'client/scripts/boinc-client.service' "$out/etc/systemd/system/boinc.service"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free software for distributed and grid computing";
     homepage = "https://boinc.berkeley.edu/";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

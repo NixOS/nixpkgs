@@ -62,21 +62,21 @@ in
 
 callPackage ./generic.nix {
   inherit cudaSupport cudaPackages;
-  inherit (found-version) version lang;
+  inherit (found-version) lang;
   src = if source == null then found-version.src else source;
-  name = (
-    "mathematica"
+  pname = "mathematica";
+  version =
+    found-version.version
     + lib.optionalString cudaSupport "-cuda"
-    + "-${found-version.version}"
-    + lib.optionalString (lang != "en") "-${lang}"
-  );
-  meta = with lib; {
+    + lib.optionalString (lang != "en") "-${lang}";
+  meta = {
     description = "Wolfram Mathematica computational software system";
     homepage = "https://www.wolfram.com/mathematica/";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [
       rafaelrc
+      sandarukasa
     ];
     platforms = [ "x86_64-linux" ];
   };

@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/tareqimbasher/cargo-seek";
     changelog = "https://github.com/tareqimbasher/cargo-seek/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eihqnh ];
+    maintainers = [ ];
     mainProgram = "cargo-seek";
   };
 })

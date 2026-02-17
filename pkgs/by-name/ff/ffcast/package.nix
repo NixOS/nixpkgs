@@ -14,14 +14,14 @@
   xwininfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ffcast";
   version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "ropery";
     repo = "FFcast";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-kxqwDGEguFTFHkQzXctXqxslt0+bYnfUdQ8C/8+eTXo=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ffcast";
   };
-}
+})

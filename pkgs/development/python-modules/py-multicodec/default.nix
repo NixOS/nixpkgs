@@ -4,7 +4,6 @@
   fetchFromGitHub,
   morphys,
   pytestCheckHook,
-  pythonOlder,
   six,
   varint,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "py-multicodec";
   version = "0.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "multiformats";
@@ -42,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multicodec" ];
 
-  meta = with lib; {
+  meta = {
     description = "Compact self-describing codecs";
     homepage = "https://github.com/multiformats/py-multicodec";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

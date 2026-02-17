@@ -45,11 +45,10 @@ buildPythonApplication rec {
 
   doCheck = false; # Flaky tests
 
-  meta = with lib; {
+  meta = {
     description = "ASN.1 compiler with a backend for Quick DER";
     homepage = "https://gitlab.com/arpa2/quick-der";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "knot-exporter";
-  version = "3.5.0";
+  version = "3.5.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "knot_exporter";
     inherit version;
-    hash = "sha256-uFCIM+pZiJ6nvapEKjgHRrIuc5p5uq5q1ToD36e19zk=";
+    hash = "sha256-sCmzYS6mjEUHomA25HRxJs2X+9Uv50ll4tqR2BAj0ro=";
   };
 
   build-system = [
@@ -32,11 +32,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) knot; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for Knot DNS";
     homepage = "https://gitlab.nic.cz/knot/knot-dns/-/tree/master/python/knot_exporter";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       ma27
       hexa
     ];

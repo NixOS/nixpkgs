@@ -9,14 +9,14 @@
   arpa2cm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quickmem";
   version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "Quick-MEM";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cqg8QN4/I+zql7lVDDAgFA05Dmg4ylBTvPSPP7WATdc=";
   };
 
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Memory pooling for ARPA2 projects";
     homepage = "https://gitlab.com/arpa2/Quick-MEM/";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ leungbk ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ leungbk ];
   };
-}
+})

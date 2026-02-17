@@ -15,7 +15,6 @@
   openssh,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +25,13 @@ buildPythonPackage rec {
   # Python 3.12 is not yet supported.
   # https://github.com/usnistgov/fipy/issues/997
   # https://github.com/usnistgov/fipy/pull/1023
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "fipy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-345YrGQgHNq0FULjJjLqHksyfm/EHl+KyGfxwS6xK9U=";
+    tag = version;
+    hash = "sha256-usuAj+bIzbCSxYuKeUDxEESbjxPCwYwdD/opaBbgl1w=";
   };
 
   propagatedBuildInputs = [
@@ -63,11 +62,11 @@ buildPythonPackage rec {
   # to start a daemon on the builder.
   # pythonImportsCheck = [ "fipy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ctcms.nist.gov/fipy/";
     description = "Finite Volume PDE Solver Using Python";
     changelog = "https://github.com/usnistgov/fipy/blob/${version}/CHANGELOG.rst";
-    license = licenses.free;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

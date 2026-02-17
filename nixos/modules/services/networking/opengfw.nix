@@ -390,7 +390,7 @@ in
 
         serviceConfig = rec {
           WorkingDirectory = cfg.dir;
-          ExecReload = "kill -HUP $MAINPID";
+          ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID";
           Restart = "always";
           User = cfg.user;
           StandardOutput = mkIf (cfg.logFile != null) "append:${cfg.logFile}";

@@ -29,138 +29,46 @@ let
     ) aliases;
 
   deprecations = lib.mapAttrs (
-    old: info: throw "${old} was renamed to ${info.new} on ${info.date}. Please update to ${info.new}."
+    old: info:
+    lib.warnOnInstantiate "'vimPlugins.${old}' was renamed to 'vimPlugins.${info.new}' on ${info.date}. Please update to 'vimPlugins.${info.new}'." (
+      builtins.getAttr info.new prev
+    )
   ) (lib.importJSON ./deprecated.json);
 
 in
 mapAliases (
   with prev;
   {
-    airline = vim-airline;
-    alternative = a-vim; # backwards compat, added 2014-10-21
-    bats = bats-vim;
+    # keep-sorted start case=no
     blueballs-neovim = throw "`blueballs-neovim` has been removed"; # added 2025-06-17
-    BufOnly = BufOnly-vim;
-    calendar = calendar-vim;
-    coc-rls = throw "coc-rls has been removed, as rls has been archived since 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # addedd 2025-10-01
+    coc-go = throw "`vimPlugins.coc-go` was removed, as it was unmaintained"; # added 2026-02-12
+    coc-rls = throw "coc-rls has been removed, as rls has been archived since 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # added 2025-10-01
+    coc-sumneko-lua = throw "'vimPlugins.coc-sumneko-lua' was removed, as it is unmaintained and broken. You should switch to lua_ls"; # added 2026-02-04
+    coc-tsserver = throw "`vimPlugins.coc-tsserver` was removed, as it was unmaintained"; # added 2026-02-12
     coc-vetur = throw "coc-vetur was removed, as vetur is unmaintained by Vue. You should switch to Volar, which supports Vue 3"; # added 2025-10-01
-    coffee-script = vim-coffee-script;
-    coffeeScript = vim-coffee-script; # backwards compat, added 2014-10-18
-    Solarized = vim-colors-solarized;
-    solarized = vim-colors-solarized;
-    spacevim = throw "this distribution was unmaintained for the last 6 years, please use top-level 'spacevim'"; # added 2024-11-27
-    SpaceVim = throw "this distribution didn't work properly in vimPlugins, please use top-level 'spacevim' instead"; # added 2024-11-27
-    sparkup = throw "the upstream repository got deleted"; # added 2025-08-06
-    colors-solarized = vim-colors-solarized;
-    caw = caw-vim;
-    chad = chadtree;
-    colorsamplerpack = Colour-Sampler-Pack;
-    Colour_Sampler_Pack = Colour-Sampler-Pack;
-    command_T = command-t; # backwards compat, added 2014-10-18
-    commentary = vim-commentary;
-    committia = committia-vim;
-    concealedyank = concealedyank-vim;
-    context-filetype = context_filetype-vim;
-    Cosco = cosco-vim;
-    css_color_5056 = vim-css-color;
-    CSApprox = csapprox;
-    csv = csv-vim;
-    ctrlp = ctrlp-vim;
-    cute-python = vim-cute-python;
-    denite = denite-nvim;
-    easy-align = vim-easy-align;
-    easygit = vim-easygit;
-    easymotion = vim-easymotion;
-    echodoc = echodoc-vim;
-    eighties = vim-eighties;
-    extradite = vim-extradite;
+    completion-treesitter = throw "completion-treesitter has been archived since 2024-01"; # Added 2025-12-18
+    ctags-lsp-nvim = throw "`vimPlugins.ctags-lsp-nvim` has been removed, upstream deleted the repository"; # added 2026-02-14
     feline-nvim = throw "feline.nvim has been removed: upstream deleted repository. Consider using lualine"; # Added 2025-02-09
-    fugitive = vim-fugitive;
     floating-nvim = throw "floating.nvim has been removed: abandoned by upstream. Use popup-nvim or nui-nvim"; # Added 2024-11-26
-    fzfWrapper = fzf-wrapper;
-    ghc-mod-vim = ghcmod-vim;
-    ghcmod = ghcmod-vim;
+    fruzzy = throw "vimPlugins.fruzzy did not update since 2019-10-28 and uses EOL version of Nim"; # Added 2025-11-12
     gleam-vim = throw "gleam.vim has been removed: its code was merged into vim."; # Added 2025-06-10
-    goyo = goyo-vim;
-    Gist = vim-gist;
-    gitgutter = vim-gitgutter;
-    gundo = gundo-vim;
-    Gundo = gundo-vim; # backwards compat, added 2015-10-03
-    haskellConceal = vim-haskellconceal; # backwards compat, added 2014-10-18
-    haskellConcealPlus = vim-haskellConcealPlus;
-    haskellconceal = vim-haskellconceal;
-    hier = vim-hier;
-    hlint-refactor = hlint-refactor-vim;
-    hoogle = vim-hoogle;
-    Hoogle = vim-hoogle;
-    indent-blankline-nvim-lua = indent-blankline-nvim; # backwards compat, added 2021-07-05
-    ipython = vim-ipython;
-    latex-live-preview = vim-latex-live-preview;
-    maktaba = vim-maktaba;
     minsnip-nvim = throw "the upstream repository got deleted"; # added 2025-08-30
-    multiple-cursors = vim-multiple-cursors;
-    necoGhc = neco-ghc; # backwards compat, added 2014-10-18
-    neocomplete = neocomplete-vim;
-    neoinclude = neoinclude-vim;
-    neomru = neomru-vim;
-    neosnippet = neosnippet-vim;
     neuron-nvim = throw "neuron.nvim has been removed: archived repository 2023-02-19"; # Added 2025-09-10
+    nvim-gps = throw "nvim-gps has been archived since 2022. Use nvim-navic instead."; # Added 2025-12-18
     nvim-ts-rainbow = throw "nvim-ts-rainbow has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
     nvim-ts-rainbow2 = throw "nvim-ts-rainbow2 has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
-    The_NERD_Commenter = nerdcommenter;
-    The_NERD_tree = nerdtree;
-    open-browser = open-browser-vim;
-    pathogen = vim-pathogen;
     peskcolor-vim = throw "peskcolor-vim has been removed: abandoned by upstream"; # Added 2024-08-23
-    polyglot = vim-polyglot;
-    prettyprint = vim-prettyprint;
-    quickrun = vim-quickrun;
-    rainbow_parentheses = rainbow_parentheses-vim;
-    repeat = vim-repeat;
-    riv = riv-vim;
-    rhubarb = vim-rhubarb;
-    sensible = vim-sensible;
-    signature = vim-signature;
-    snipmate = vim-snipmate;
-    sourcemap = sourcemap-vim;
-    "sourcemap.vim" = sourcemap-vim;
-    Spacegray-vim = throw "Spacegray-vim has been removed: abandoned by upstream"; # Added 2025-03-24
-    surround = vim-surround;
-    sleuth = vim-sleuth;
-    solidity = vim-solidity;
-    ssr = ssr-nvim; # Added 2025-08-31
-    stylish-haskell = vim-stylish-haskell;
-    stylishHaskell = vim-stylish-haskell; # backwards compat, added 2014-10-18
-    suda-vim = vim-suda; # backwards compat, added 2024-05-16
-    Supertab = supertab;
-    Syntastic = syntastic;
-    SyntaxRange = vim-SyntaxRange;
-    table-mode = vim-table-mode;
-    taglist = taglist-vim;
-    tabpagebuffer = tabpagebuffer-vim;
-    tabpagecd = vim-tabpagecd;
-    Tabular = tabular;
-    Tagbar = tagbar;
-    thumbnail = thumbnail-vim;
-    tlib = tlib_vim;
-    tmux-navigator = vim-tmux-navigator;
-    tmuxNavigator = vim-tmux-navigator; # backwards compat, added 2014-10-18
-    todo-nvim = throw "todo-nvim has been removed: abandoned by upstream"; # Added 2023-08-23
-    tslime = tslime-vim;
-    unite = unite-vim;
-    UltiSnips = ultisnips;
-    vim-addon-vim2nix = vim2nix;
-    vim-sourcetrail = throw "vim-sourcetrail has been removed: abandoned by upstream"; # Added 2022-08-14
-    vimproc = vimproc-vim;
-    vimshell = vimshell-vim;
-    vinegar = vim-vinegar;
-    watchdogs = vim-watchdogs;
-    WebAPI = webapi-vim;
-    wombat256 = wombat256-vim; # backwards compat, added 2015-7-8
-    yankring = YankRing-vim;
-    Yankring = YankRing-vim;
-    xterm-color-table = xterm-color-table-vim;
-    zeavim = zeavim-vim;
+    playground = throw "playground has been archived"; # Added 2025-12-18
+    pure-lua = lib.warnOnInstantiate "Please replace 'vimPlugins.pure-lua' with 'vimPlugins.moonlight-nvim' as this name was an error" moonlight-nvim; # Added 2025-11-17
+    rust-tools-nvim = lib.warnOnInstantiate "'vimPlugins.rust-tools-nvim' is abandoned by upstream; you should use 'vimPlugins.rustaceanvim'" rust-tools-nvim;
+    Spacegray-vim = throw "'vimPlugins.Spacegray-vim' has been removed: abandoned by upstream"; # Added 2025-03-24
+    SpaceVim = throw "this distribution didn't work properly in vimPlugins, please use top-level 'spacevim' instead"; # added 2024-11-27
+    spacevim = throw "this distribution was unmaintained for the last 6 years, please use top-level 'spacevim'"; # added 2024-11-27
+    sparkup = throw "'vimPlugins.sparkup' was removed: the upstream repository got deleted"; # added 2025-08-06
+    syntax-tree-surfer = throw "'vimPlugins.syntax-tree-surfer' has been archived"; # Added 2025-12-18
+    todo-nvim = throw "'vimPlugins.todo-nvim' has been removed: abandoned by upstream"; # Added 2023-08-23
+    vim-sourcetrail = throw "'vimPlugins.vim-sourcetrail' has been removed: abandoned by upstream"; # Added 2022-08-14
+    # keep-sorted end
   }
   // deprecations
 )

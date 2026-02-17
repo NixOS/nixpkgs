@@ -4,19 +4,19 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rw";
   version = "1.0";
 
   src = fetchurl {
-    url = "https://sortix.org/rw/release/rw-portable-${version}.tar.gz";
+    url = "https://sortix.org/rw/release/rw-portable-${finalAttrs.version}.tar.gz";
     # Use hash provided by upstream
     sha256 = "50009730e36991dfe579716f91f4f616f5ba05ffb7bf69c03d41bf305ed93b6d";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sortix.org/rw";
     description = "Block device and byte copying program similar to dd";
     longDescription = ''
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
       or byte streams. The rw command is designed to be a replacement for
       dd with standard style command line flags.
     '';
-    license = licenses.isc;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.isc;
+    maintainers = [ ];
     mainProgram = "rw";
   };
-}
+})

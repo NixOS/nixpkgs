@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "nginx_exporter";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "nginxinc";
     repo = "nginx-prometheus-exporter";
     rev = "v${version}";
-    sha256 = "sha256-N1+BfuhB0dZ8S88+onVwSiFABnFJjNlIVF/5puCuugs=";
+    sha256 = "sha256-BJf5gL+bkT6g28OVhGM29IwuLfFz3HPAo/DZzg5Eoqk=";
   };
 
-  vendorHash = "sha256-sT/hwqKJpQet1NgLuKvJDtB+y6mHCfHABMZ4PJNj490=";
+  vendorHash = "sha256-lMLJvfB85kGAaPffRd7fz+PAFddSnVS2kzJHRKdnGH4=";
 
   ldflags =
     let
@@ -33,12 +33,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) nginx; };
 
-  meta = with lib; {
+  meta = {
     description = "NGINX Prometheus Exporter for NGINX and NGINX Plus";
     mainProgram = "nginx-prometheus-exporter";
     homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       benley
       fpletz
       globin

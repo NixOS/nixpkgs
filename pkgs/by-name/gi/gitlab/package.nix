@@ -47,7 +47,7 @@ let
     owner = data.owner;
     repo = data.repo;
     rev = data.rev;
-    sha256 = data.repo_hash;
+    hash = data.repo_hash;
   };
 
   rubyEnv = bundlerEnv rec {
@@ -78,12 +78,12 @@ let
               ;
             dontBuilt = true;
             installPhase = ''
-              cp -R ext/glfm_markdown $out
+              cp -R ext/gitlab_glfm_markdown $out
               rm $out/Cargo.lock
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-NJLpfIgVgqbf1fHIzEKxzpHOKvtY9QHXVQPpRdvH0Uo=";
+          hash = "sha256-x97e5fg11IU63VZd1n3CHduVC7GQagI8MFiFwR+p0wk=";
         };
 
         dontBuild = false;
@@ -104,7 +104,54 @@ let
         '';
 
         postInstall = ''
-          mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+
+      gitlab_query_language = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          src = stdenv.mkDerivation {
+            inherit (buildRubyGem { inherit (attrs) gemName version source; })
+              name
+              src
+              unpackPhase
+              nativeBuildInputs
+              ;
+            installPhase = ''
+              mkdir -p $out
+              cp -R ext $out
+              cp Cargo.* $out
+            '';
+          };
+          hash = "sha256-XGeFht5QRYb4Cu3n9nt4euUeNXHh1kJ6pQ5LJjnVhzc=";
+        };
+
+        dontBuild = false;
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        # The gem builder wrongly copies Cargo.lock within the gem, while it's missing in the outer rust project
+        # before rustc ran.
+        # This fixes this and makes the rustc invocation work.
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+          # Unpack
+          tar xvf $gempkg
+          # Modify
+          gzip -d data.tar.gz
+          chmod +w data.tar
+          mv Cargo.lock ./ext/gitlab_query_language
+          tar rf data.tar ./ext/gitlab_query_language/Cargo.lock
+          # Repack
+          gzip data.tar
+          tar -cf $gempkg data.tar.gz metadata.gz
+        '';
+        postInstall = ''
           find $out -type f -name .rustc_info.json -delete
         '';
       };
@@ -144,7 +191,13 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/yarn.lock";
-      sha256 = data.yarn_hash;
+      hash = data.yarn_hash;
+    };
+    frontendIslandsYarnOfflineCache = fetchYarnDeps {
+      # Revert to this when GitLab fixes their frontend_islands yarn.lock
+      # yarnLock = src + "/ee/frontend_islands/yarn.lock";
+      yarnLock = ./ee-frontend-islands-yarn.lock;
+      hash = data.frontend_islands_yarn_hash;
     };
 
     nativeBuildInputs = [
@@ -167,10 +220,19 @@ let
       # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
       ./Remove-unsupported-database-names.patch
     ];
+
+    # Remove once GitLab fixed their frontend_islands yarn.lock
+    postPatch = ''
+      rm ee/frontend_islands/yarn.lock
+      cp ${./ee-frontend-islands-yarn.lock} ee/frontend_islands/yarn.lock
+      chmod 777 ee/frontend_islands/yarn.lock
+    '';
+
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
     FOSS_ONLY = !gitlabEnterprise;
+    SKIP_FRONTEND_ISLANDS_BUILD = lib.optionalString (!gitlabEnterprise) "true";
 
     SKIP_YARN_INSTALL = 1;
     NODE_OPTIONS = "--max-old-space-size=8192";
@@ -184,6 +246,26 @@ let
       mv config/gitlab.yml.example config/gitlab.yml
 
       patchShebangs scripts/frontend/
+      patchShebangs scripts/
+    ''
+    + lib.optionalString gitlabEnterprise ''
+      # Get node modules for frontend islands
+      export HOME=$(mktemp -d)
+      pushd ee/frontend_islands
+      yarn config --offline set yarn-offline-mirror "$frontendIslandsYarnOfflineCache"
+      fixup-yarn-lock yarn.lock
+      yarn install \
+          --frozen-lockfile \
+          --force \
+          --production=false \
+          --ignore-engines \
+          --ignore-platform \
+          --ignore-scripts \
+          --no-progress \
+          --non-interactive \
+          --offline
+      patchShebangs node_modules
+      popd
     '';
 
     buildPhase = ''
@@ -210,9 +292,9 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "gitlab${lib.optionalString gitlabEnterprise "-ee"}-${version}";
+  pname = "gitlab${lib.optionalString gitlabEnterprise "-ee"}";
 
-  inherit src;
+  inherit src version;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
@@ -296,21 +378,21 @@ stdenv.mkDerivation {
   };
 
   meta =
-    with lib;
+
     {
       homepage = "http://www.gitlab.com/";
-      platforms = platforms.linux;
-      teams = [ teams.gitlab ];
+      platforms = lib.platforms.linux;
+      teams = [ lib.teams.gitlab ];
     }
     // (
       if gitlabEnterprise then
         {
-          license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+          license = lib.licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
           description = "GitLab Enterprise Edition";
         }
       else
         {
-          license = licenses.mit;
+          license = lib.licenses.mit;
           description = "GitLab Community Edition";
           longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
         }

@@ -4,7 +4,6 @@
   aiohttp,
   aioresponses,
   buildPythonPackage,
-  cachetools,
   cryptography,
   flask,
   freezegun,
@@ -25,20 +24,19 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.40.3";
+  version = "2.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-auth-library-python";
     tag = "v${version}";
-    hash = "sha256-X1HTh24oos2GUxB9DDLtNH7BsBRLD0S/ngjsDAQYvhI=";
+    hash = "sha256-kgiqKeS8NTlz56yYKE8U/eKFQjHD6CJHOH5IKLgOeDk=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    cachetools
     pyasn1-modules
     rsa
   ];
@@ -77,7 +75,7 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     "samples/"

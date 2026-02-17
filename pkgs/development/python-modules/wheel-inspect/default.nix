@@ -10,7 +10,6 @@
   packaging,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   readme-renderer,
   setuptools,
   wheel-filename,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "wheel-inspect";
   version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jwodder";
@@ -59,12 +56,12 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract information from wheels";
     homepage = "https://github.com/jwodder/wheel-inspect";
     changelog = "https://github.com/wheelodex/wheel-inspect/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ayazhafiz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ayazhafiz ];
     mainProgram = "wheel2json";
   };
 }

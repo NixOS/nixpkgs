@@ -3,7 +3,6 @@
   stdenv,
   testers,
   buildPythonPackage,
-  pythonOlder,
   python,
   pytestCheckHook,
   # fetchers
@@ -205,11 +204,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Open source IFC library and geometry engine";
     homepage = "https://ifcopenshell.org/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ autra ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ autra ];
   };
 }

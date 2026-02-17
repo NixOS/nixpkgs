@@ -11,14 +11,14 @@
   catch2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eternal-terminal";
   version = "6.2.11";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
-    tag = "et-v${version}";
+    tag = "et-v${finalAttrs.version}";
     hash = "sha256-d3mCZQO12NUQjGIOX1FWTLUq+adMTNb9QYCSU3ibZMY=";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
-    changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${version}";
+    changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       dezgeg
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

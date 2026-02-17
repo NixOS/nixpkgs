@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
     sqlite
     libzip
     curl
@@ -79,17 +79,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     install -Dm755 pgloader-bundle-${finalAttrs.version}/bin/pgloader "$out/bin/pgloader"
-    wrapProgram $out/bin/pgloader --prefix LD_LIBRARY_PATH : "${finalAttrs.LD_LIBRARY_PATH}"
+    wrapProgram $out/bin/pgloader --prefix LD_LIBRARY_PATH : "${finalAttrs.env.LD_LIBRARY_PATH}"
     mkdir -p $out/bin $out/man/man1
     installManPage source/docs/_build/man/*.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pgloader.io/";
     description = "Loads data into PostgreSQL and allows you to implement Continuous Migration from your current database to PostgreSQL";
     mainProgram = "pgloader";
-    maintainers = with maintainers; [ mguentner ];
-    license = licenses.postgresql;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ mguentner ];
+    license = lib.licenses.postgresql;
+    platforms = lib.platforms.all;
   };
 })

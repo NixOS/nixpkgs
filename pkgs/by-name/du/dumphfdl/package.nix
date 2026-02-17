@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dumphfdl";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "szpajder";
     repo = "dumphfdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M4WjcGA15Kp+Hpp+I2Ndcx+oBqaGxEeQLTPcSlugLwQ=";
+    hash = "sha256-kbUCHddhkM3Cj39ac5GQM3hCihRERnzWdELtnHjaIgg=";
   };
 
   buildInputs = [

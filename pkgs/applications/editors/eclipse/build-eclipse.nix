@@ -4,14 +4,14 @@
   makeDesktopItem,
   freetype,
   fontconfig,
-  libX11,
-  libXrender,
+  libx11,
+  libxrender,
   zlib,
   jdk,
   glib,
   glib-networking,
   gtk,
-  libXtst,
+  libxtst,
   libsecret,
   gsettings-desktop-schemas,
   webkitgtk_4_1,
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk
     jdk
-    libX11
-    libXrender
-    libXtst
+    libx11
+    libxrender
+    libxtst
     libsecret
     zlib
   ]
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
       lib.makeLibraryPath [
         freetype
         fontconfig
-        libX11
-        libXrender
+        libx11
+        libxrender
         zlib
       ]
     } $libCairo
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
           [
             glib
             gtk
-            libXtst
+            libxtst
             libsecret
           ]
           ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1

@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   aiolifx,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "aiolifx-effects";
   version = "0.3.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
@@ -26,11 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiolifx_effects" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/amelchio/aiolifx_effects/releases/tag/v${version}";
     description = "Light effects (pulse, colorloop ...) for LIFX lights running on aiolifx";
     homepage = "https://github.com/amelchio/aiolifx_effects";
-    license = licenses.mit;
-    maintainers = with maintainers; [ netixx ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ netixx ];
   };
 }

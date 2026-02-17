@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "copier";
-  version = "9.10.2";
+  version = "9.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -39,10 +39,10 @@ buildPythonPackage rec {
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-vO807Jzl04DkiHPBhu3cGK0bhn2Cd2dT1nKznQKP/p0=";
+    hash = "sha256-/7Bl01kuZVqVhXPnIwNL3mwt8DOPK02Qd/85J1zX4q4=";
   };
 
-  POETRY_DYNAMIC_VERSIONING_BYPASS = version;
+  env.POETRY_DYNAMIC_VERSIONING_BYPASS = version;
 
   build-system = [
     hatchling
@@ -79,7 +79,10 @@ buildPythonPackage rec {
     homepage = "https://copier.readthedocs.io";
     changelog = "https://github.com/copier-org/copier/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      savtrip
+    ];
     mainProgram = "copier";
   };
 }

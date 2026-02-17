@@ -5,7 +5,7 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
-  xorg,
+  libx11,
   pkg-config,
   gpgme,
   btrfs-progs,
@@ -34,7 +34,7 @@ buildGoModule {
     gpgme
     btrfs-progs
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   ldflags = [
     "-s"
@@ -48,7 +48,6 @@ buildGoModule {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

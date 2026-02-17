@@ -1,15 +1,15 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
+  wrapQtAppsHook,
   makeDesktopItem,
-  libXrender,
-  libXrandr,
-  libXcursor,
-  libX11,
-  libXext,
-  libXi,
+  libxrender,
+  libxrandr,
+  libxcursor,
+  libx11,
+  libxext,
+  libxi,
   libxcb,
   libGL,
   glib,
@@ -27,12 +27,12 @@
 
 let
   libPath = lib.makeLibraryPath [
-    libXrender
-    libXrandr
-    libXcursor
-    libX11
-    libXext
-    libXi
+    libxrender
+    libxrandr
+    libxcursor
+    libx11
+    libxext
+    libxi
     libxcb
     libGL
     glib
@@ -48,7 +48,7 @@ let
     qtwebengine
   ];
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "eagle";
   version = "9.6.2";
 
@@ -69,13 +69,15 @@ mkDerivation rec {
     categories = [ "Development" ];
   };
 
+  nativeBuildInputs = [ wrapQtAppsHook ];
+
   buildInputs = [
-    libXrender
-    libXrandr
-    libXcursor
-    libX11
-    libXext
-    libXi
+    libxrender
+    libxrandr
+    libxcursor
+    libx11
+    libxext
+    libxi
     libxcb
     libGL
     glib
@@ -125,11 +127,11 @@ mkDerivation rec {
     ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/pixmaps/eagle.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Schematic editor and PCB layout tool from Autodesk (formerly CadSoft)";
     homepage = "https://www.autodesk.com/products/eagle/overview";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };

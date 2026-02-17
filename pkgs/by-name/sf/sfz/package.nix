@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sfz";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "weihanglo";
     repo = "sfz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mKH1vgk+3tZEnjJRkfa0dDR383VN1VLNd3HEzC7f8YI=";
   };
 
@@ -20,14 +20,14 @@ rustPlatform.buildRustPackage rec {
   # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple static file serving command-line tool written in Rust";
     homepage = "https://github.com/weihanglo/sfz";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "sfz";
   };
-}
+})

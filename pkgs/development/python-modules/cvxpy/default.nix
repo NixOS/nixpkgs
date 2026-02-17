@@ -12,6 +12,7 @@
   # dependencies
   clarabel,
   cvxopt,
+  highspy,
   osqp,
   scipy,
   scs,
@@ -23,16 +24,16 @@
   useOpenmp ? (!stdenv.hostPlatform.isDarwin),
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.7.3";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
-    tag = "v${version}";
-    hash = "sha256-ge1M5yAu7Dzkmun+Zy2rRyYVggcTZyG9JlI2B2Q6V38=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7bLvVvOthbEe+Ry/NQCxP5El9K8qITIGwJzypooT2mw=";
   };
 
   postPatch =
@@ -53,6 +54,7 @@ buildPythonPackage rec {
   dependencies = [
     clarabel
     cvxopt
+    highspy
     numpy
     osqp
     scipy
@@ -92,8 +94,8 @@ buildPythonPackage rec {
     description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
-    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
+    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = [ lib.maintainers.GaetanLepage ];
   };
-}
+})

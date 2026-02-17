@@ -37,14 +37,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-pE92mVI0KTHOVKBA4T5R1rHy5//uipOimas7DaTVe0U=";
-
-  postPatch = ''
-    # Disable experimental bounds safety stuff that’s not available in LLVM 16.
-    substituteInPlace removefile.h \
-      --replace-fail '__ptrcheck_abi_assume_single()' "" \
-      --replace-fail '__unsafe_indexable' ""
-  '';
+  xcodeHash = "sha256-7dNq0nE2MmFM9U+epTrkCoM1lrswm98m3RWuLDsAuDk=";
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 

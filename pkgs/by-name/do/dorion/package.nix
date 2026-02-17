@@ -15,9 +15,13 @@
   pkg-config,
   yq-go,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   webkitgtk_4_1,
   cargo-tauri,
   desktop-file-utils,
+  fetchpatch,
+  pipewire,
 }:
 
 let
@@ -26,8 +30,8 @@ let
   };
 
   shelter = fetchurl {
-    url = "https://raw.githubusercontent.com/uwu/shelter-builds/fab6f100bd0ab8583d67f792f66722a7d2a14bd1/shelter.js";
-    hash = "sha256-d9vaKLrl8RYNcHnE1iGN49ov6U/Y+9XpEsio+c1Sguc=";
+    url = "https://raw.githubusercontent.com/uwu/shelter-builds/7a1beaff4bb4ec5e8590d069549686fda4200e82/shelter.js";
+    hash = "sha256-LeZTxrGRQb0rl3BMP34UFHIEFnil4k3Fet3MTujvVB8=";
     meta = {
       homepage = "https://github.com/uwu/shelter";
       sourceProvenance = [ lib.sourceTypes.binaryBytecode ]; # actually, minified JS
@@ -38,28 +42,38 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.8.0";
+  version = "6.12.0";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RvaGCAqAcWYA3v7AkdKMiM10Cki0jI418pbHPlVUnCg=";
+    hash = "sha256-pykmoSiV3iSaD/V/Sd5GSV/BZWhk9XVg8io1j8wZv5k=";
   };
 
-  cargoPatches = [
-    ./no-cargo-patch.patch
+  patches = [
+    # https://github.com/SpikeHD/Dorion/issues/419
+    (fetchpatch {
+      url = "https://github.com/SpikeHD/Dorion/commit/98d50dadd1a7fb018698a3fe61ac104cbe89b5d4.patch";
+      hash = "sha256-1VbB2CVMUWw18lWC4EL83VS4SdC03AxDUKRq/hQNAAg=";
+    })
   ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-jLMXwW5q4MyCblw28tmheKGPAIn3BLuceyAtoS4J7bc=";
+  cargoHash = "sha256-FJ4gQKgZkYqvjcqcRapJ8IQWP52kIg4uOTxifKG8zyo=";
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs) pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-xBonUzA4+1zbViEsKap6CaG6ZRldW1LjNYIB+FmVRFs=";
+    hash = "sha256-fX48yZKntte4OxLjXqepZQyGdN/bv4o+n+v5ZT5lXMo=";
   };
 
   # CMake (webkit extension)
@@ -76,7 +90,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     cargo-tauri.hook
     nodejs
     pkg-config
@@ -90,6 +105,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     webkitgtk_4_1'
+    gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-good
@@ -97,14 +113,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib-networking
     libsysprof-capture
     libayatana-appindicator
+    pipewire
   ];
 
   postPatch = ''
     # remove updater
     rm -rf updater
-
-    # patch cargo-deps
-    patch -d $cargoDepsCopy/tauri-plugin-shell-* -p1 < ./src-tauri/patches/tauri-plugin-shell+*.patch
 
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
@@ -175,9 +189,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     changelog = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
     downloadPage = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      gpl3Only
-      cc0 # Shelter
+    license = [
+      lib.licenses.gpl3Only
+      shelter.meta.license
     ];
     mainProgram = "Dorion";
     maintainers = with lib.maintainers; [

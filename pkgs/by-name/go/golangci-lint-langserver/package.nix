@@ -6,14 +6,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "golangci-lint-langserver";
   version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "nametake";
     repo = "golangci-lint-langserver";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mwYhOUH5PAbPRfP86dw9w6lIZYz/iL+f863XWOhBFy0=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kirillrdy ];
     mainProgram = "golangci-lint-langserver";
   };
-}
+})

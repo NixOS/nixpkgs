@@ -5,29 +5,30 @@
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   zenity,
   withGui ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alfis";
-  version = "0.8.5";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
-    tag = "v${version}";
-    hash = "sha256-ettStNktSDZnYNN/IWqTB1Ou1g1QEGFabS4EatnDLaE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gRk4kvIV+5cCUFaJvGbTAR44678Twa28iMGZ75lJz2c=";
   };
 
-  cargoHash = "sha256-xe0YQCKnDV6M6IKWgljsuJ5ZevkdpxZDnNHAHKJyUec=";
+  cargoHash = "sha256-Ge0+7ClXlJFT6CyluHF7k4stsX+KuYp/riro1pvrcKM=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
   ];
-  buildInputs = lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_0;
+
+  buildInputs = lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_1;
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "doh" ] ++ lib.optional withGui "webgui";
@@ -46,11 +47,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Alternative Free Identity System";
     homepage = "https://alfis.name";
-    changelog = "https://github.com/Revertron/Alfis/releases/tag/v${version}";
+    changelog = "https://github.com/Revertron/Alfis/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ misuzu ];
     platforms = lib.platforms.unix;
     mainProgram = "alfis";
-    broken = withGui && stdenv.hostPlatform.isDarwin;
   };
-}
+})

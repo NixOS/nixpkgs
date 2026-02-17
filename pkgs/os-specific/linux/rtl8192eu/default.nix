@@ -42,12 +42,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Realtek rtl8192eu driver";
     homepage = "https://github.com/Mange/rtl8192eu-linux-driver";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isAarch64;
-    maintainers = with maintainers; [ troydm ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    broken = stdenv.hostPlatform.isAarch64 || kernel.kernelAtLeast "6.17";
+    maintainers = with lib.maintainers; [ troydm ];
   };
 }

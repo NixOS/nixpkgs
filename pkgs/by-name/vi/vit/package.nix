@@ -8,14 +8,14 @@
 
 with python3Packages;
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "vit";
   version = "2.3.3";
   pyproject = true;
   disabled = lib.versionOlder python.version "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+lrXGfhoB4z5IWkJTXMIm3GGVPfNGO9lUB3uFTx8hDY=";
   };
 
@@ -41,12 +41,12 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "vit" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/scottkosty/vit";
     description = "Visual Interactive Taskwarrior";
     mainProgram = "vit";
-    maintainers = with maintainers; [ arcnmx ];
-    platforms = platforms.all;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ arcnmx ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
   };
-}
+})

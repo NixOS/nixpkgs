@@ -35,6 +35,10 @@ stdenv.mkDerivation {
   ];
 
   patchPhase = ''
+    # fix 64-bit compilation error in picoapi.c: picoos_uint32 vs picoos_objsize_t
+    substituteInPlace svoxpico/picoapi.c \
+      --replace-fail 'picoos_uint32 rest_mem_size;' 'picoos_objsize_t rest_mem_size;'
+
     substituteInPlace "src/main.cpp" --replace "/usr/share/pico/lang" "$out/share/lang"
     echo "" > update_build_version.sh
   '';
@@ -44,6 +48,11 @@ stdenv.mkDerivation {
     install -Dm644 -t $out/share/lang $src/lang/*
     wrapProgram $out/bin/nanotts \
       --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
+  '';
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   meta = {

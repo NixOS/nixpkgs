@@ -9,14 +9,14 @@
 }:
 
 let
-  version = "15.0.2";
+  version = "17.0.2";
 
   twemojiSrc = fetchFromGitHub {
-    name = "twemoji";
+    name = "twemoji-src";
     owner = "jdecked";
     repo = "twemoji";
     rev = "v${version}";
-    hash = "sha256-FLOqXDpSFyClBlG5u3IRL0EKeu1mckCfRizJh++IWxo=";
+    hash = "sha256-LeAIXrPzp6rmmrz4ixehaD4/U1i15NDR0wvYyFOjw0U=";
   };
 in
 stdenvNoCC.mkDerivation rec {
@@ -76,7 +76,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 TwitterColorEmoji.ttf $out/share/fonts/truetype/TwitterColorEmoji.ttf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Color emoji font with a flat visual style, designed and used by Twitter";
     longDescription = ''
       A bitmap color emoji font built from Twitter's Twemoji emoji set
@@ -95,12 +95,12 @@ stdenvNoCC.mkDerivation rec {
     ## Non-artwork is MIT
     # In Fedora twitter-twemoji-fonts source
     ## spec files are MIT: https://fedoraproject.org/wiki/Licensing:Main#License_of_Fedora_SPEC_Files
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       ofl
       cc-by-40
       mit
     ];
-    maintainers = with maintainers; [ emily ];
+    maintainers = with lib.maintainers; [ emily ];
   };
 }

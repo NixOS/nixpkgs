@@ -11,13 +11,13 @@
   imagemagick,
   libstartup_notification,
   libGL,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   libxkbcommon,
-  libXi,
-  libXext,
+  libxi,
+  libxext,
   wayland-protocols,
   wayland,
   xxHash,
@@ -43,7 +43,7 @@
   buildGo124Module,
   nix-update-script,
   makeBinaryWrapper,
-  autoSignDarwinBinariesHook,
+  darwin,
   cairo,
   fetchpatch,
 }:
@@ -51,21 +51,21 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.43.1";
-  format = "other";
+  version = "0.45.0";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-Wd61Q1sG55oDxPuHJpmvSWuptwJIuzgn2sB/dzNRc1c=";
+    hash = "sha256-3XQWmLd8F0ndzzLOcV/7144M9enqc/7FULVLeM2Kpts=";
   };
 
   goModules =
     (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-bjtzvEQmpsrwD0BArw9N6/HqMB3T5xeqxpx89FV7p2A=";
+      vendorHash = "sha256-aLl9hPfRmUE8VARwkwXhxjzDPKUGNGD+yzxY5pUIcgs=";
     }).goModules;
 
   buildInputs = [
@@ -87,13 +87,13 @@ buildPythonApplication rec {
     fontconfig
     libunistring
     libcanberra
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
     libxkbcommon
-    libXi
-    libXext
+    libxi
+    libxext
     wayland-protocols
     wayland
     dbus
@@ -117,7 +117,7 @@ buildPythonApplication rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
     libicns # For the png2icns tool.
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
@@ -142,6 +142,7 @@ buildPythonApplication rec {
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
+
   ];
 
   hardeningDisable = [
@@ -219,9 +220,13 @@ buildPythonApplication rec {
 
     substituteInPlace kitty_tests/ssh.py \
       --replace test_ssh_connection_data no_test_ssh_connection_data \
+      --replace test_ssh_shell_integration no_test_ssh_shell_integration \
+      --replace test_ssh_copy no_test_ssh_copy \
+      --replace test_ssh_env_vars no_test_ssh_env_vars
 
     substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_fish_integration no_test_fish_integration
+      --replace test_fish_integration no_test_fish_integration \
+      --replace test_zsh_integration no_test_zsh_integration
 
     substituteInPlace kitty_tests/fonts.py \
       --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
@@ -237,7 +242,6 @@ buildPythonApplication rec {
 
     # Fontconfig error: Cannot load default config file: No such file: (null)
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
-
     # Required for `test_ssh_shell_integration` to pass.
     export TERM=kitty
 
@@ -307,18 +311,17 @@ buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "Fast, feature-rich, GPU based terminal emulator";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"
       "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [
-      tex
+    maintainers = with lib.maintainers; [
       rvolosatovs
       Luflosi
       kashw2

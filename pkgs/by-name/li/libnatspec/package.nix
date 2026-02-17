@@ -7,12 +7,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnatspec";
   version = "0.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/natspec/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/natspec/libnatspec-${finalAttrs.version}.tar.bz2";
     sha256 = "0wffxjlc8svilwmrcg3crddpfrpv35mzzjgchf8ygqsvwbrbb3b7";
   };
 
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libiconv ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://natspec.sourceforge.net/";
     description = "Library intended to smooth national specificities in using of programs";
     mainProgram = "natspec";
-    platforms = platforms.unix;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21;
   };
-}
+})

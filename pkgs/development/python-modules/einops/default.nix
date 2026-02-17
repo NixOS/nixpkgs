@@ -10,7 +10,6 @@
   pillow,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
-  pythonOlder,
   torch,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "einops";
   version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/arogozhnikov/einops/releases/tag/${src.tag}";
     description = "Flexible and powerful tensor operations for readable and reliable code";
     homepage = "https://github.com/arogozhnikov/einops";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yl3dy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yl3dy ];
   };
 }

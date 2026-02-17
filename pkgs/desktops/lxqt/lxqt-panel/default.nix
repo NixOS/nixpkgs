@@ -9,12 +9,12 @@
   kguiaddons,
   kwindowsystem,
   layer-shell-qt,
-  libXdamage,
-  libXdmcp,
-  libXtst,
+  libxdamage,
+  libxdmcp,
+  libxtst,
   libdbusmenu,
   liblxqt,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libqtxdg,
   libstatgrab,
@@ -33,15 +33,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-panel";
-  version = "2.2.2";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-panel";
-    rev = version;
-    hash = "sha256-ui+HD2igPiyIOgIKPbgfO4dnfm2rFP/R6oG2pH5g5VY=";
+    tag = finalAttrs.version;
+    hash = "sha256-n/U2EgEZfh8mJWtEX+HByqHqtm9NqIXnURqUzSOcvns=";
   };
 
   nativeBuildInputs = [
@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
     kguiaddons
     kwindowsystem
     layer-shell-qt
-    libXdamage
-    libXdmcp
-    libXtst
+    libxdamage
+    libxdmcp
+    libxtst
     libdbusmenu
     liblxqt
-    libpthreadstubs
+    libpthread-stubs
     libpulseaudio
     libqtxdg
     libstatgrab
@@ -80,12 +80,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-panel";
     description = "LXQt desktop panel";
     mainProgram = "lxqt-panel";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})

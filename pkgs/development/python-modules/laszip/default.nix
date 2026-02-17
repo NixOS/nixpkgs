@@ -9,15 +9,12 @@
   cmake,
   laszip,
   ninja,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "laszip-python";
   version = "0.2.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmontaigu";
@@ -55,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "laszip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial bindings between Python and LASzip made using pybind11";
     homepage = "https://github.com/tmontaigu/laszip-python";
     changelog = "https://github.com/tmontaigu/laszip-python/blob/${src.rev}/Changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

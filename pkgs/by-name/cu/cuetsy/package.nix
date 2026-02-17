@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cuetsy";
   version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "cuetsy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dirzVR4j5K1+EHbeRi4rHwRxkyveySoM7qJzvOlGp+0=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bryanhonof ];
     mainProgram = "cuetsy";
   };
-}
+})

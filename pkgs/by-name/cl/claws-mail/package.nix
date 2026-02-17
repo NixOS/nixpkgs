@@ -24,7 +24,7 @@
 
   # Arguments to include external libraries
   enableLibSM ? true,
-  xorg,
+  libsm,
   enableGnuTLS ? true,
   gnutls,
   enableEnchant ? enableSpellcheck,
@@ -179,7 +179,7 @@ let
     {
       flags = [ "libsm" ];
       enabled = enableLibSM;
-      deps = [ xorg.libSM ];
+      deps = [ libsm ];
     }
     {
       flags = [ "litehtml_viewer-plugin" ];
@@ -273,12 +273,12 @@ let
     }
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "claws-mail";
   version = "4.3.1";
 
   src = fetchurl {
-    url = "https://claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
+    url = "https://claws-mail.org/download.php?file=releases/claws-mail-${finalAttrs.version}.tar.xz";
     hash = "sha256-2K3yEMdnq1glLfxas8aeYD1//bcoGh4zQNLYYGL0aKY=";
   };
 
@@ -295,12 +295,12 @@ stdenv.mkDerivation rec {
     # autotools check tries to dlopen libpython as a requirement for the python plugin
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${python3}/lib
     # generate version without .git
-    [ -e version ] || echo "echo ${version}" > version
+    [ -e version ] || echo "echo ${finalAttrs.version}" > version
   '';
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace 'm4_esyscmd([./get-git-version])' '${version}'
+      --replace 'm4_esyscmd([./get-git-version])' '${finalAttrs.version}'
     substituteInPlace src/procmime.c \
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
@@ -343,18 +343,16 @@ stdenv.mkDerivation rec {
     cp claws-mail.desktop $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly, lightweight, and fast email client";
     mainProgram = "claws-mail";
     homepage = "https://www.claws-mail.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
-      orivej
       oxzi
       ajs124
     ];
   };
-}
+})

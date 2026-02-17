@@ -8,10 +8,8 @@
   packaging,
   pytestCheckHook,
   pytest-rerunfailures,
-  pythonOlder,
   setuptools,
   toml,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -41,8 +39,7 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   pythonImportsCheck = [ "setuptools_git_versioning" ];
 
@@ -70,12 +67,11 @@ buildPythonPackage rec {
     "test_config_not_used"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Use git repo data (latest tag, current commit hash, etc) for building a version number according PEP-440";
     mainProgram = "setuptools-git-versioning";
     homepage = "https://github.com/dolfinus/setuptools-git-versioning";
     changelog = "https://github.com/dolfinus/setuptools-git-versioning/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tjni ];
+    license = lib.licenses.mit;
   };
 }

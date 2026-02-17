@@ -7,7 +7,6 @@
   grpcio,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -15,9 +14,7 @@
 buildPythonPackage rec {
   pname = "gassist-text";
   version = "0.0.14";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gassist_text" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Google Assistant API via text";
     homepage = "https://github.com/tronikos/gassist_text";
     changelog = "https://github.com/tronikos/gassist_text/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

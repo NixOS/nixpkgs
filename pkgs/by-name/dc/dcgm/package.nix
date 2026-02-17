@@ -60,7 +60,7 @@ let
     in
     [
       (lib.cmakeFeature "CUDA${version}_INCLUDE_DIR" "${headers}")
-      (lib.cmakeFeature "CUDA${version}_LIBS" "${cudaPackages.cuda_cudart.stubs}/lib/stubs/libcuda.so")
+      (lib.cmakeFeature "CUDA${version}_LIBS" "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs/libcuda.so")
       (lib.cmakeFeature "CUDA${version}_STATIC_LIBS" "${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so")
       (lib.cmakeFeature "CUDA${version}_STATIC_CUBLAS_LIBS" (
         lib.concatStringsSep ";" [
@@ -70,7 +70,7 @@ let
       ))
     ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dcgm";
   version = "4.3.1"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 
@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./remove-cuda-11.patch
     ./dynamic-libs.patch
+    ./fix-gcc15.patch
     (replaceVars ./fix-paths.patch {
       inherit coreutils;
       inherit util-linux;
@@ -145,6 +146,9 @@ stdenv.mkDerivation rec {
     "DcgmModuleSysmon::ReadCoreSpeed"
     "DcgmModuleSysmon::ReadTemperature"
     "Sysmon: initialize module"
+    # Test assumes plugins are installed relative to the binary with a
+    # populated `cudaless/` directory
+    "GetPluginCudalessDir returns cudaless directory in plugin directory"
   ];
 
   # Add our paths to the CMake flags so FindCuda.cmake can find them.
@@ -166,12 +170,16 @@ stdenv.mkDerivation rec {
 
   __structuredAttrs = true;
 
-  meta = with lib; {
+  meta = {
     description = "Data Center GPU Manager (DCGM) is a daemon that allows users to monitor NVIDIA data-center GPUs";
     homepage = "https://developer.nvidia.com/dcgm";
-    license = licenses.asl20;
-    teams = [ teams.deshaw ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+      sinrohit-desco
+    ];
     mainProgram = "dcgmi";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

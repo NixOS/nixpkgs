@@ -151,7 +151,7 @@ in
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
         DynamicUser = true;
         PrivateTmp = true;
-        ExecStart = "${pkgs.nodejs_20}/bin/node ${pkgs.wiki-js}/server";
+        ExecStart = "${pkgs.lib.getExe pkgs.nodejs-slim} ${pkgs.wiki-js}/server";
       };
     };
   };

@@ -49,20 +49,20 @@ stdenv.mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${
+    "--prefix PATH : ${
       lib.makeBinPath [
         wirelesstools
         iw
       ]
-    }''
+    }"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical wireless scanning for Linux";
     homepage = "https://sourceforge.net/projects/linssid/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "linssid";
   };
 }

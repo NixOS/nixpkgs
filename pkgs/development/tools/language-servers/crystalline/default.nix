@@ -29,6 +29,7 @@ crystal.buildCrystalPackage {
     openssl
     makeWrapper
   ];
+  env.LLVM_CONFIG = lib.getExe' (lib.getDev llvmPackages.llvm) "llvm-config";
 
   doCheck = false;
   doInstallCheck = false;
@@ -44,14 +45,18 @@ crystal.buildCrystalPackage {
   };
 
   postInstall = ''
-    wrapProgram "$out/bin/crystalline" --prefix PATH : '${lib.makeBinPath [ llvmPackages.llvm.dev ]}'
+    wrapProgram "$out/bin/crystalline" --prefix PATH : '${
+      lib.makeBinPath [
+        (lib.getDev llvmPackages.llvm)
+      ]
+    }'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol implementation for Crystal";
     mainProgram = "crystalline";
     homepage = "https://github.com/elbywan/crystalline";
-    license = licenses.mit;
-    maintainers = with maintainers; [ donovanglover ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ donovanglover ];
   };
 }

@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "python-mistralclient";
-  version = "6.0.0";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-mistralclient";
     tag = version;
-    hash = "sha256-zdCqBua6S+a7iS3VzELM02oJKwLlI24tHWfx4Pt3nQw=";
+    hash = "sha256-8tB1QPaxdLdti96gOzaXuqLftmTJVM0bosJiKs+0CFs=";
   };
 
   env.PBR_VERSION = version;
@@ -81,11 +81,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mistralclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Mistral Command-line Client";
     homepage = "https://opendev.org/openstack/python-mistralclient/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "mistral";
-    teams = [ teams.openstack ];
+    teams = [ lib.teams.openstack ];
   };
 }

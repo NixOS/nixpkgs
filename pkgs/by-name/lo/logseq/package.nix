@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  clang_20,
 
   fetchFromGitHub,
   fetchYarnDeps,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
-  version = "0.10.12";
+  version = "0.10.15";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "logseq";
     tag = finalAttrs.version;
-    hash = "sha256-SUzt4hYHE6XJOEMxFp2a0om2oVUk1MHQUteGFiM9Lkc=";
+    hash = "sha256-knosNA2Gqy10Kr9HWnBdYNlV51zzgFuL8cdioVlAk0Q=";
   };
 
   patches = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./electron-forge-package-instead-of-make.patch
     ./electron-forge-disable-signing.patch
+    ./fix-yarn-lock.patch
   ];
 
   mavenRepo = stdenv.mkDerivation {
@@ -97,30 +99,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCacheRoot = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-root";
-    inherit (finalAttrs) src;
-    hash = "sha256-sbC6WQLjEHIKTuejSQXplQOWZwUmBJdGXuAkilQGjYs=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-xfAJ38shd92KdRfh/P7BH4eolZHQmzl4raoH1aZpGRk=";
   };
 
   # ./static and ./resources are combined into ./static by the build process
   # ./static contains the lockfile and ./resources contains everything else
   yarnOfflineCacheStaticResources = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-static-resources";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/static";
-    hash = "sha256-01t6lolMbBL5f6SFk4qTkTx6SQXWtHuVkBhDwW+HScc=";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ./static";
+    hash = "sha256-zAGEQlOqKfPDrIoZQUnjBifgdYDYRsiHH7PUNrd0u+8=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-amplify";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/packages/amplify";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ./packages/amplify";
     hash = "sha256-IOhSwIf5goXCBDGHCqnsvWLf3EUPqq75xfQg55snIp4=";
   };
 
   yarnOfflineCacheTldraw = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-tldraw";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/tldraw";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ./tldraw";
     hash = "sha256-CtMl3MPlyO5nWfFhCC1SLb/+1HUM3YfFATAPqJg3rUo=";
   };
 
@@ -153,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       cctools
       darwin.autoSignDarwinBinariesHook
       xcbuild
+      clang_20 # newer clang breaks node-addon-api on darwin
     ];
 
   # we'll run the hook manually multiple times

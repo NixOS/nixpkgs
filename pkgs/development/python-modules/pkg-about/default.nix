@@ -3,7 +3,6 @@
   buildPythonPackage,
   docutils,
   fetchPypi,
-  pythonOlder,
   importlib-metadata,
   importlib-resources,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pkg-about";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "pkg_about";
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pkg_about" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python metadata sharing at runtime";
     homepage = "https://github.com/karpierz/pkg_about/";
     changelog = "https://github.com/karpierz/pkg_about/blob/${version}/CHANGES.rst";
-    license = licenses.zlib;
-    teams = [ teams.ororatech ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

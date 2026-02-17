@@ -2,8 +2,8 @@
 
 {
   name = "cage";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ matthewbauer ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes.machine =

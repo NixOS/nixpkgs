@@ -8,17 +8,17 @@
   libpng,
   mkLibretroCore,
   nasm,
-  xorg,
+  libx11,
 }:
 mkLibretroCore {
   core = "mupen64plus-next";
-  version = "0-unstable-2025-08-20";
+  version = "0-unstable-2026-01-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "mupen64plus-libretro-nx";
-    rev = "222acbd3f98391458a047874d0372fe78e14fe94";
-    hash = "sha256-esssh/0nxNUDW/eMDQbWEdcSPuqLjnKLkK4mKN17HjQ=";
+    rev = "bc43bcedc276861254b48526f56799d63a30723b";
+    hash = "sha256-0dofQP35EmVY6i5muwIARuF1G4+92jhFjAiWcwyJDTs=";
   };
 
   # Fix for GCC 14
@@ -39,6 +39,8 @@ mkLibretroCore {
       url = "https://github.com/libretro/mupen64plus-libretro-nx/commit/3c3e7fbc70b8f533c09c964cf468ba5e8d61351c.patch?full_index=1";
       hash = "sha256-PCJLNYhhccnWLcnPaHL6tz+5qdjogJRYfzZIh3r+Vlk=";
     })
+    # Fix for GCC 15. See https://github.com/libretro/GLideN64/pull/1.
+    ./patches/mupen64plus-gcc-15.patch
   ];
 
   extraNativeBuildInputs = [
@@ -48,7 +50,7 @@ mkLibretroCore {
     libGLU
     libGL
     libpng
-    xorg.libX11
+    libx11
   ];
   makefile = "Makefile";
   makeFlags = [

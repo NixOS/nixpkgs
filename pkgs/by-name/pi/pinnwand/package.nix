@@ -6,7 +6,7 @@
 }:
 
 with python3.pkgs;
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "pinnwand";
   version = "1.6.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = "pinnwand";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oB7Dd1iVzGqr+5nG7BfZuwOQUgUnmg6ptQDZPGH7P5E=";
   };
 
@@ -46,19 +46,21 @@ buildPythonApplication rec {
   disabledTestPaths = [
     # out-of-date browser tests
     "test/e2e"
+    # click 8.2.0 exits with 2 instead of 0 when no args are passed
+    "test/integration/test_command.py::test_main"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = nixosTests.pinnwand;
 
-  meta = with lib; {
-    changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${finalAttrs.version}";
     description = "Python pastebin that tries to keep it simple";
     homepage = "https://github.com/supakeen/pinnwand";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "pinnwand";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -17,16 +17,16 @@
   x11Support ? true,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gscreenshot";
-  version = "3.9.2";
+  version = "3.11.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thenaterhood";
     repo = "gscreenshot";
-    tag = "v${version}";
-    sha256 = "sha256-u60wxtWE7VaAE/xKlcY9vE7Chs5TPd0BTe5zy1D7ZAQ=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-ZdywZhH59L5fk1EB+o6fSj9zCOljS7T/HWpUd2tTl0o=";
   };
 
   # needed for wrapGAppsHook3 to function
@@ -92,4 +92,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.davisrichard437 ];
   };
-}
+})

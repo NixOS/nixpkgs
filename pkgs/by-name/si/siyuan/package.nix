@@ -7,16 +7,17 @@
   pandoc,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   electron,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
+  xdg-utils,
 }:
 
 let
-  pnpm = pnpm_9;
-
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
@@ -35,20 +36,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.3.3";
+  version = "3.5.4";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J3IWPWa4L16kaapMifViFOVRP8OrWIN1F+v4CfPm3y8=";
+    hash = "sha256-uiI8cB/bi6P4PByOBUGK4d2DUelACThC+e5rBFv35ow=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-/mB0aQtTOTmaTEEkOIgwIcDDi4quxe5/ttvJJr3cnlQ=";
+    vendorHash = "sha256-SQ7QBtPwQaQgp6S54dnwfV44SLos1QY5NotnpEz4OPY=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -83,12 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     makeWrapper
     copyDesktopItems
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -96,8 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       postPatch
       ;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-QhgND6yxXEJYJM1jkbViAfxNr9FRklYk1YjrnDjZSPc=";
+    hash = "sha256-DxMeZqFqR5vybwEiYzYhYMn7S3P/boHrOXkS+57Yrz4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -138,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg

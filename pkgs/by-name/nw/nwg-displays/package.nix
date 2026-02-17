@@ -13,16 +13,16 @@
   wlr-randr,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nwg-displays";
-  version = "0.3.26";
+  version = "0.3.27";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-displays";
-    tag = "v${version}";
-    hash = "sha256-UeALCkmDAXb/gu+Mp3xnHmUPOvYHk3LzegO2CbIh4ak=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fAnLOgzNrM9eR1ErD1TWp7OrZDRX3fJcsxsujFL8WtQ=";
   };
 
   nativeBuildInputs = [
@@ -69,4 +69,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ qf0xb ];
     mainProgram = "nwg-displays";
   };
-}
+})

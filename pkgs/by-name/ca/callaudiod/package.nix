@@ -10,7 +10,7 @@
   libpulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "callaudiod";
   version = "0.1.10";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "mobian1";
     repo = "callaudiod";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-gc66XrrFyhF1TvrDECBfGQc+MiDtqZPxdCn0S/43XQU=";
   };
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for dealing with audio routing during phone calls";
     homepage = "https://gitlab.com/mobian1/callaudiod";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pacman99 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pacman99 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -13,19 +13,16 @@
   pytestCheckHook,
   replaceVars,
   rustPlatform,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hQxfOxlkpQdCWlGSdotZY6eHkJr6M3xkkRv4bR0urPM=";
+    hash = "sha256-dGn23K9XQv1i4OZu5EfFM4p0UgwZgqcHhOe3kN7y/dU=";
   };
 
   patches = [
@@ -41,7 +38,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src;
-    hash = "sha256-z0X9s36n1p31boxoe6Er0Ieirinaehoucsi89oDAS0c=";
+    hash = "sha256-eKXQeZ2RLHsTZmYszws4fCHgeiSO9wsrRbPkVV1gqZY=";
   };
 
   dependencies = [
@@ -57,7 +54,7 @@ buildPythonPackage rec {
     safer-xml-parserig = [ defusedxml ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # don't test against pure python version in the source tree
@@ -73,11 +70,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slixmpp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
     changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/slix-${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

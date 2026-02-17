@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   numpy,
   scipy,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "synergy";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "djwooten";
@@ -58,10 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "synergy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for calculating, analyzing, and visualizing drug combination synergy";
     homepage = "https://github.com/djwooten/synergy";
     maintainers = [ ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

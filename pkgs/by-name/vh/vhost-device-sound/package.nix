@@ -29,8 +29,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pipewire
   ];
 
-  cargoBuildFlags = "-p vhost-device-sound";
-  cargoTestFlags = "-p vhost-device-sound";
+  cargoBuildFlags = [
+    "--package"
+    "vhost-device-sound"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "vhost-device-sound"
+  ];
 
   # Runs dbus-daemon, which tries to load config from /etc.
   doCheck = false;

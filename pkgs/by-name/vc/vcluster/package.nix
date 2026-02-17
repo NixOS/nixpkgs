@@ -8,15 +8,15 @@
   vcluster,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vcluster";
-  version = "0.28.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = "vcluster";
-    tag = "v${version}";
-    hash = "sha256-ddt9UDLKlC16ki+D35Ct1uvygeFb++fNeHVps0vCsPA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yGvKZ70+x+PQiTCB8MxUplymlQLm9iT+ryBHFF1a/Os=";
   };
 
   vendorHash = null;
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.goVersion=${lib.getVersion go}"
   ];
 
@@ -49,15 +49,14 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/loft-sh/vcluster/releases/tag/v${version}";
+    changelog = "https://github.com/loft-sh/vcluster/releases/tag/v${finalAttrs.version}";
     description = "Create fully functional virtual Kubernetes clusters";
     downloadPage = "https://github.com/loft-sh/vcluster";
     homepage = "https://www.vcluster.com/";
     license = lib.licenses.asl20;
     mainProgram = "vcluster";
     maintainers = with lib.maintainers; [
-      peterromfeldhk
       qjoly
     ];
   };
-}
+})

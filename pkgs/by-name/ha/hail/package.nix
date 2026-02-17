@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   fontconfig,
   freetype,
@@ -15,17 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hail";
-  version = "0.2.2";
+  version = "0.3.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "periwinkle";
     repo = "hail";
     tag = finalAttrs.version;
-    hash = "sha256-LJodAS24x/dBNyrUxT9F0FHnu4s+Cb+CCtoe7nPM66w=";
+    hash = "sha256-PpZfOC4M6XNcdAWd2E8ONruOq9yOTRutjKi86mmoxAo=";
   };
 
-  cargoHash = "sha256-kEPnfRY2McSVNBuBC9VSKK5p8JIUeZh/LeFZQa1Hn5U=";
+  cargoHash = "sha256-+zxoICy3lrS+7fZU0yD1C4uKRj/JtDvizKla1xmz+PY=";
 
   nativeBuildInputs = [ pkg-config ];
 

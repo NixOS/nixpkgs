@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.11";
+  version = "1.14.13";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SxYUhu76vwgCQgjOYVpvdWsFpNcyzuSjZe3x/v566VU=";
+    hash = "sha256-59Tr2l2RHOW/TMgSW0HY0l60L7mBZKmYyx/r+Y0NatQ=";
   };
 
   prePatch = ''
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Only
       gpl2Only
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -6,12 +6,12 @@
   cutee,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mimetic";
   version = "0.9.8";
 
   src = fetchurl {
-    url = "http://www.codesink.org/download/${pname}-${version}.tar.gz";
+    url = "http://www.codesink.org/download/mimetic-${finalAttrs.version}.tar.gz";
     sha256 = "003715lvj4nx23arn1s9ss6hgc2yblkwfy5h94li6pjz2a6xc1rs";
   };
 
@@ -26,11 +26,10 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.hostPlatform.isAarch64 ./narrowing.patch;
 
-  meta = with lib; {
+  meta = {
     description = "MIME handling library";
     homepage = "https://www.codesink.org/mimetic_mime_library.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
-}
+})

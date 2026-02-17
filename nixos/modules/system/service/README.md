@@ -104,7 +104,7 @@ The modular service infrastructure avoids exposing `pkgs` as a module argument t
       lib,
       writeScript,
       runtimeShell,
-    # ... other dependencies
+      # ... other dependencies
     }:
     stdenv.mkDerivation (finalAttrs: {
       # ... package definition

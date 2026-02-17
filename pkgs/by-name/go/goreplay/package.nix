@@ -6,14 +6,14 @@
   libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goreplay";
   version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "buger";
     repo = "goreplay";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-FiY9e5FgpPu+K8eoO8TsU3xSaSoPPDxYEu0oi/S8Q1w=";
   };
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ lovek323 ];
     mainProgram = "goreplay";
   };
-}
+})

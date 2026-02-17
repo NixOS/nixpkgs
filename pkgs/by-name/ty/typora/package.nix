@@ -1,143 +1,140 @@
 {
+  lib,
   stdenv,
   fetchurl,
+  undmg,
   dpkg,
-  lib,
-  glib,
+  autoPatchelfHook,
+  makeShellWrapper,
+  # dependencies
+  alsa-lib,
   nss,
-  nspr,
+  gtk3,
+  libgbm,
+  libGL,
+  # runtime dependencies
   cups,
   dbus,
-  libdrm,
-  gtk3,
   pango,
-  cairo,
-  libxkbcommon,
-  libgbm,
-  expat,
-  alsa-lib,
-  buildFHSEnv,
-  writeTextFile,
 }:
 
 let
   pname = "typora";
-  version = "1.11.5";
-  src = fetchurl {
-    urls = [
-      "https://download.typora.io/linux/typora_${version}_amd64.deb"
-      "https://downloads.typoraio.cn/linux/typora_${version}_amd64.deb"
-    ];
-    hash = "sha256-CpUF8pRLzR3RzFD85Cobbmo3BInaeCee0NWKsmelPGs=";
+  version = "1.12.4";
+
+  passthru = {
+    sources = {
+      x86_64-linux = fetchurl {
+        urls = [
+          "https://download.typora.io/linux/typora_${version}_amd64.deb"
+          "https://downloads.typoraio.cn/linux/typora_${version}_amd64.deb"
+        ];
+        hash = "sha256-P3wgzMVcyvmXM/w24kPgYGOfSaAh+SFzgeoJoasEmH8=";
+      };
+      aarch64-linux = fetchurl {
+        urls = [
+          "https://download.typora.io/linux/typora_${version}_arm64.deb"
+          "https://downloads.typoraio.cn/linux/typora_${version}_arm64.deb"
+        ];
+        hash = "sha256-tQFCppOeeWJK8ovf71LPJRVteOJ8XbbNojhV4QLmVJ0=";
+      };
+      aarch64-darwin = fetchurl {
+        urls = [
+          "https://download.typora.io/mac/Typora-${version}.dmg"
+          "https://downloads.typoraio.cn/mac/Typora-${version}.dmg"
+        ];
+        hash = "sha256-XPaMUHmIz+pjT/JQVV9ddNpTWtBDLjyoi5W1Qz9gBAo=";
+      };
+    };
+    updateScript = ./update.sh;
   };
 
-  typoraBase = stdenv.mkDerivation {
-    inherit pname version src;
-
-    nativeBuildInputs = [ dpkg ];
-
-    dontConfigure = true;
-    dontBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/bin $out/share
-      mv usr/share $out
-      ln -s $out/share/typora/Typora $out/bin/Typora
-
-      runHook postInstall
-    '';
-  };
-
-  typoraFHS = buildFHSEnv {
-    pname = "typora-fhs";
-    inherit version;
-    targetPkgs =
-      pkgs:
-      (with pkgs; [
-        typoraBase
-        udev
-        alsa-lib
-        glib
-        nss
-        nspr
-        atk
-        cups
-        dbus
-        gtk3
-        libdrm
-        pango
-        cairo
-        libgbm
-        libGL
-        expat
-        libxkbcommon
-      ])
-      ++ (with pkgs.xorg; [
-        libX11
-        libXcursor
-        libXrandr
-        libXcomposite
-        libXdamage
-        libXext
-        libXfixes
-        libxcb
-      ]);
-    runScript = ''
-      Typora "$@"
-    '';
-  };
-
-  launchScript = writeTextFile {
-    name = "typora-launcher";
-    executable = true;
-    text = ''
-      #!${stdenv.shell}
-
-      # Configuration directory setup
-      XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-~/.config}
-      TYPORA_CONFIG_DIR="$XDG_CONFIG_HOME/Typora"
-      TYPORA_DICT_DIR="$TYPORA_CONFIG_DIR/typora-dictionaries"
-
-      # Create config directories with proper permissions
-      mkdir -p "$TYPORA_DICT_DIR"
-      chmod 755 "$TYPORA_CONFIG_DIR"
-      chmod 755 "$TYPORA_DICT_DIR"
-
-      # Read user flags if they exist
-      if [ -f "$XDG_CONFIG_HOME/typora-flags.conf" ]; then
-        TYPORA_USER_FLAGS="$(sed 's/#.*//' "$XDG_CONFIG_HOME/typora-flags.conf" | tr '\n' ' ')"
-      fi
-
-      exec ${typoraFHS}/bin/typora-fhs "$@" $TYPORA_USER_FLAGS
-    '';
-  };
-
-in
-stdenv.mkDerivation {
-  inherit pname version;
-
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    ln -s ${launchScript} $out/bin/typora
-    ln -s ${typoraBase}/share/ $out
-
-    runHook postInstall
-  '';
+  src =
+    passthru.sources.${stdenv.hostPlatform.system}
+      or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   meta = {
     description = "A minimal Markdown editor and reader.";
     homepage = "https://typora.io/";
+    changelog = "https://typora.io/releases/all";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ npulidomateo ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      npulidomateo
+      chillcicada
+    ];
+    platforms = builtins.attrNames passthru.sources;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     mainProgram = "typora";
   };
-}
+
+in
+
+if stdenv.hostPlatform.isDarwin then
+  stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      passthru
+      meta
+      ;
+
+    nativeBuildInputs = [ undmg ];
+    sourceRoot = ".";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/Applications
+      cp -a Typora.app $out/Applications
+
+      runHook postInstall
+    '';
+  }
+else
+
+  stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      passthru
+      meta
+      ;
+
+    nativeBuildInputs = [
+      dpkg
+      autoPatchelfHook
+      makeShellWrapper
+    ];
+
+    buildInputs = [
+      alsa-lib
+      nss
+      gtk3
+      libgbm
+    ];
+
+    runtimeDependencies = map lib.getLib [
+      cups
+      dbus
+      pango
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/{bin,share,opt}
+
+      cp -r usr/share/typora $out/opt
+      cp -r usr/share/{applications,icons} $out/share
+
+      sed -i '/Change Log/d' "$out/share/applications/typora.desktop"
+
+      makeShellWrapper $out/opt/typora/Typora $out/bin/typora \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}"
+
+      runHook postInstall
+    '';
+  }

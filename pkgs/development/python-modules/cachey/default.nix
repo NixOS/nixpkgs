@@ -5,13 +5,11 @@
   typing-extensions,
   heapdict,
   pytestCheckHook,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "cachey";
   version = "0.2.1";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
   src = fetchFromGitHub {
     owner = "dask";
     repo = "cachey";
@@ -24,10 +22,10 @@ buildPythonPackage rec {
   ];
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "cachey" ];
-  meta = with lib; {
+  meta = {
     description = "Caching based on computation time and storage space";
     homepage = "https://github.com/dask/cachey/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

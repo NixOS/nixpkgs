@@ -10,11 +10,11 @@ let
     self = python;
     packageOverrides = self: super: {
       impacket = super.impacket.overridePythonAttrs {
-        version = "0.12.0-unstable-2025-03-14";
+        version = "0.14.0-unstable-2025-12-03";
         src = fetchFromGitHub {
           owner = "fortra";
           repo = "impacket";
-          rev = "8b4566b12fc79acb520d045dbae8f13446a9d4d7";
+          rev = "caba5facdd3a01b5d0decc6daf5871839f22f792";
           hash = "sha256-jyn5qSSAipGYhHm2EROwDHa227mnmW+d+0H0/++i1OY=";
         };
         # Fix version to be compliant with Python packaging rules
@@ -26,16 +26,16 @@ let
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "netexec";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Pennyw0rth";
     repo = "NetExec";
-    tag = "v${version}";
-    hash = "sha256-1yNnnPntJ5aceX3Z8yYAMLv5bSFfCFVp0pgxAySlVfE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gGyaEifIveoeVdeviLiQ6ZIHku//h9Hp84ffktAgxDY=";
   };
 
   pythonRelaxDeps = true;
@@ -43,11 +43,18 @@ python.pkgs.buildPythonApplication rec {
   pythonRemoveDeps = [
     # Fail to detect dev version requirement
     "neo4j"
+    # No python package in nixpkgs; use bloodhound-py instead.
+    "bloodhound-ce"
   ];
 
   postPatch = ''
+    substituteInPlace nxc/first_run.py \
+      --replace-fail "from os import mkdir" "from os import mkdir, chmod" \
+      --replace-fail "shutil.copy(default_path, NXC_PATH)" $'shutil.copy(default_path, CONFIG_PATH)\n        chmod(CONFIG_PATH, 0o600)'
+
     substituteInPlace pyproject.toml \
-      --replace-fail " @ git+https://github.com/fortra/impacket.git" "" \
+      --replace-fail " @ git+https://github.com/Pennyw0rth/Certipy" "" \
+      --replace-fail " @ git+https://github.com/fortra/impacket" "" \
       --replace-fail " @ git+https://github.com/wbond/oscrypto" "" \
       --replace-fail " @ git+https://github.com/Pennyw0rth/NfsClient" ""
   '';
@@ -66,6 +73,7 @@ python.pkgs.buildPythonApplication rec {
     asyauth
     beautifulsoup4
     bloodhound-py
+    certipy-ad
     dploot
     dsinternals
     impacket
@@ -76,6 +84,7 @@ python.pkgs.buildPythonApplication rec {
     msldap
     neo4j
     paramiko
+    pefile
     pyasn1-modules
     pylnk3
     pynfsclient
@@ -100,7 +109,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Network service exploitation tool (maintained fork of CrackMapExec)";
     homepage = "https://github.com/Pennyw0rth/NetExec";
-    changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${version}";
+    changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ vncsb ];
     mainProgram = "nxc";
@@ -109,4 +118,4 @@ python.pkgs.buildPythonApplication rec {
     # $ /nix/store/<hash>-wrap-python-hook/nix-support/setup-hook: line 65: 47758 Killed: 9               sed -i "$f" -e "1 s^#!/nix/store/<hash>-python3-3.11.7^#!/nix/store/<hash>-python3-3.11.7^"
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

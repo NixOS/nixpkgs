@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromBitbucket,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,12 +11,10 @@ buildPythonPackage rec {
   version = "0.5.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromBitbucket {
     owner = "johannestaas";
     repo = "defang";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OJfayJeVf2H1/jg7/fu2NiHhRHNCaLGI29SY8BnJyxI=";
   };
 
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "defang" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to defang and refang malicious URLs";
     homepage = "https://bitbucket.org/johannestaas/defang";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

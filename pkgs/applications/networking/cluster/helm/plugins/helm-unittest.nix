@@ -2,20 +2,25 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  yq-go,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+let
+  version = "1.0.3";
+in
+buildGoModule {
   pname = "helm-unittest";
-  version = "0.7.2";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "helm-unittest";
     repo = "helm-unittest";
-    rev = "v${version}";
-    hash = "sha256-RWucFZlyVYV5pHFGP7x5I+SILAJ9k12R7l5o7WKGS/c=";
+    tag = "v${version}";
+    hash = "sha256-wArRsC52ga485rpm8ns99NY/qUZ/FImK4C/L1q460HI=";
   };
 
-  vendorHash = "sha256-tTM9n/ahtAJoQt0fwf1jrSokWER+cOnpPX7NTNrhKc4=";
+  vendorHash = "sha256-dkAzmFvLbhbIYCKsk1+TfckdNkNh6OkpDabJDDSwXJM=";
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''
@@ -29,10 +34,21 @@ buildGoModule rec {
     install -m644 -Dt $out/helm-unittest plugin.yaml
   '';
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    yq-go
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "BDD styled unit test framework for Kubernetes Helm charts as a Helm plugin";
     homepage = "https://github.com/helm-unittest/helm-unittest";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yurrriq ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      booxter
+      yurrriq
+    ];
   };
 }

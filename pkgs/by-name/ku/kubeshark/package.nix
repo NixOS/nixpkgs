@@ -9,15 +9,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubeshark";
-  version = "52.8.1";
+  version = "52.10.3";
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
-    rev = "v${version}";
-    hash = "sha256-o11gVE+s2tVd2RLD6Otd23wt3l6HxBwoOfwhaaqttn8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-n7AYUms6fn25UinLd5xFG2DfcpJU0/pR4JF3i1VY1hM=";
   };
 
   vendorHash = "sha256-4s1gxJo2w5BibZ9CJP7Jl9Z8Zzo8WpBokBnRN+zp8b4=";
@@ -29,11 +29,11 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}/misc.GitCommitHash=${src.rev}"
+      "-X ${t}/misc.GitCommitHash=${finalAttrs.src.rev}"
       "-X ${t}/misc.Branch=master"
       "-X ${t}/misc.BuildTimestamp=0"
       "-X ${t}/misc.Platform=unknown"
-      "-X ${t}/misc.Ver=${version}"
+      "-X ${t}/misc.Ver=${finalAttrs.version}"
     ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -54,13 +54,13 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = kubeshark;
       command = "kubeshark version";
-      inherit version;
+      inherit (finalAttrs) version;
     };
     updateScript = nix-update-script { };
   };
 
   meta = {
-    changelog = "https://github.com/kubeshark/kubeshark/releases/tag/v${version}";
+    changelog = "https://github.com/kubeshark/kubeshark/releases/tag/v${finalAttrs.version}";
     description = "API Traffic Viewer for Kubernetes";
     mainProgram = "kubeshark";
     homepage = "https://kubeshark.co/";
@@ -71,8 +71,7 @@ buildGoModule rec {
       capturing, dissecting and monitoring all traffic and payloads going in, out and across containers, pods, nodes and clusters.
     '';
     maintainers = with lib.maintainers; [
-      bryanasdev000
       qjoly
     ];
   };
-}
+})

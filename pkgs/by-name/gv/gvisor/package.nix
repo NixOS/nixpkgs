@@ -12,7 +12,7 @@
 
 buildGoModule {
   pname = "gvisor";
-  version = "20250512.0";
+  version = "20251110.0";
 
   # gvisor provides a synthetic go branch (https://github.com/google/gvisor/tree/go)
   # that can be used to build gvisor without bazel.
@@ -21,8 +21,8 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "google";
     repo = "gvisor";
-    rev = "2a7b5c7dece9218a44afb8c56e28f2aae8038f6b";
-    hash = "sha256-u2YMFesrtQX+eE0aKYiOr+4/khPtsH2P2EQWfvHs8nI=";
+    rev = "2617196c08506a30764bf6261b79d52797916dda";
+    hash = "sha256-qx1uCRTJVotSbTojBf/Nj8LfLdUvsnxMkPuyJjLLadM=";
   };
 
   # Replace the placeholder with the actual path to ldconfig
@@ -31,7 +31,7 @@ buildGoModule {
       --replace-fail '"/sbin/ldconfig"' '"${glibc}/bin/ldconfig"'
   '';
 
-  vendorHash = "sha256-3fKFr8viabGEwIHYxg9vjhKMVOxCjji3PDgs8wBBZzY=";
+  vendorHash = "sha256-Ey4M3NK/+AVkr7r0aA+kAfNk1yVfnDn3Izy7u74HFkE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -62,11 +62,11 @@ buildGoModule {
 
   passthru.tests = { inherit (nixosTests) gvisor; };
 
-  meta = with lib; {
+  meta = {
     description = "Application Kernel for Containers";
     homepage = "https://github.com/google/gvisor";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gpl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gpl ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

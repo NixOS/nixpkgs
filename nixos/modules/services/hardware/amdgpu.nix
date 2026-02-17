@@ -23,7 +23,7 @@ in
     '';
 
     overdrive = {
-      enable = lib.mkEnableOption ''`amdgpu` overdrive mode for overclocking'';
+      enable = lib.mkEnableOption "`amdgpu` overdrive mode for overclocking";
 
       ppfeaturemask = lib.mkOption {
         type = lib.types.str;
@@ -39,7 +39,7 @@ in
       };
     };
 
-    opencl.enable = lib.mkEnableOption ''OpenCL support using ROCM runtime library'';
+    opencl.enable = lib.mkEnableOption "OpenCL support using ROCM runtime library";
   };
 
   config = {

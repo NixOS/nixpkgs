@@ -10,22 +10,23 @@
   glib,
   gnome,
   gtk3,
-  mate,
+  mate-desktop,
+  mate-settings-daemon,
   python3,
   gsettings-desktop-schemas,
   python3Packages,
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "themechanger";
   version = "0.12.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "ALEX11BR";
     repo = "ThemeChanger";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+uTofigS1F/nBNs/OyJ+RSz10DNnqgvNjWpkTXAvARM=";
   };
 
@@ -44,8 +45,8 @@ python3Packages.buildPythonApplication rec {
     glib
     gnome.nixos-gsettings-overrides
     gtk3
-    mate.mate-desktop
-    mate.mate-settings-daemon
+    mate-desktop
+    mate-settings-daemon
     python3
     gsettings-desktop-schemas
   ];
@@ -58,7 +59,7 @@ python3Packages.buildPythonApplication rec {
     patchShebangs postinstall.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ALEX11BR/ThemeChanger";
     description = "Theme changing utility for Linux";
     mainProgram = "themechanger";
@@ -67,8 +68,8 @@ python3Packages.buildPythonApplication rec {
       It lets the user change GTK 2/3/4, Kvantum, icon and cursor themes, edit GTK CSS with live preview, and set some related options.
       It also lets the user install icon and widget theme archives.
     '';
-    maintainers = with maintainers; [ ALEX11BR ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ALEX11BR ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

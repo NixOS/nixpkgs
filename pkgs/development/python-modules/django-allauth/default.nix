@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   python,
 
   # build-system
@@ -41,15 +41,14 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.11.2";
+  version = "65.14.0";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "allauth";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-JqG4fAm5aOUbySQpgLi1NiSvip1/ndVGP6JCe8QmsRs=";
+    hash = "sha256-hoPNSMzn/bX98Qe+7guaLK8UhA5FfHpUCjzN6hCXVgs=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -69,6 +68,10 @@ buildPythonPackage rec {
   '';
 
   optional-dependencies = {
+    headless = [
+      pyjwt
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
     headless-spec = [ pyyaml ];
     idp-oidc = [
       oauthlib
@@ -102,7 +105,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Tests require network access

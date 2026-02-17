@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchpatch,
+  fetchurl,
   zstd,
   fetchFromGitiles,
   fetchNpmDeps,
@@ -59,9 +60,9 @@
   glib,
   gtk3,
   dbus-glib,
-  libXScrnSaver,
-  libXcursor,
-  libXtst,
+  libxscrnsaver,
+  libxcursor,
+  libxtst,
   libxshmfence,
   libGLU,
   libGL,
@@ -70,7 +71,7 @@
   pciutils,
   protobuf,
   speechd-minimal,
-  libXdamage,
+  libxdamage,
   at-spi2-core,
   pipewire,
   libva,
@@ -96,8 +97,8 @@
   ungoogled-chromium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 }:
 
 buildFun:
@@ -157,7 +158,11 @@ let
     # "snappy"
     "flac"
     "libjpeg"
+  ]
+  ++ lib.optionals needsLibpng [
     "libpng"
+  ]
+  ++ [
     # Use the vendored libwebp for M124+ until we figure out how to solve:
     # Running phase: configurePhase
     # ERROR Unresolved dependencies.
@@ -192,6 +197,14 @@ let
       }
     );
 
+  rustTools = symlinkJoin {
+    name = "rustTools";
+    paths = [
+      buildPackages.rust-bindgen
+      buildPackages.rustfmt
+    ];
+  };
+
   chromiumRosettaStone = {
     cpu =
       platform:
@@ -217,6 +230,9 @@ let
 
   isElectron = packageName == "electron";
   rustcVersion = buildPackages.rustc.version;
+  # libpng has been replaced by the png rust crate
+  # https://github.com/image-rs/image-png/discussions/562
+  needsLibpng = !chromiumVersionAtLeast "143";
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -256,7 +272,7 @@ let
           ''
         else
           ''
-            mkdir -p ${builtins.dirOf path}
+            mkdir -p ${dirOf path}
             cp -r ${dep}/. ${path}
           ''
       )
@@ -321,8 +337,10 @@ let
     # maintain a separate list of buildPlatform-dependencies, we
     # simply throw in the kitchen sink.
     # ** Because of overrides, we have to copy the list as it otherwise mess with splicing **
-    ++ [
+    ++ lib.optionals needsLibpng [
       (buildPackages.libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+    ]
+    ++ [
       (buildPackages.libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -348,9 +366,9 @@ let
       glib
       gtk3
       dbus-glib
-      libXScrnSaver
-      libXcursor
-      libXtst
+      libxscrnsaver
+      libxcursor
+      libxtst
       libxshmfence
       libGLU
       libGL
@@ -358,7 +376,7 @@ let
       pciutils
       protobuf
       speechd-minimal
-      libXdamage
+      libxdamage
       at-spi2-core
       pipewire
       libva
@@ -370,7 +388,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemd
+    ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -378,7 +396,11 @@ let
     ++ lib.optional pulseSupport libpulseaudio;
 
     buildInputs = [
+    ]
+    ++ lib.optionals needsLibpng [
       (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+    ]
+    ++ [
       (libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -404,9 +426,9 @@ let
       glib
       gtk3
       dbus-glib
-      libXScrnSaver
-      libXcursor
-      libXtst
+      libxscrnsaver
+      libxcursor
+      libxtst
       libxshmfence
       libGLU
       libGL
@@ -415,7 +437,7 @@ let
       pciutils
       protobuf
       speechd-minimal
-      libXdamage
+      libxdamage
       at-spi2-core
       pipewire
       libva
@@ -427,7 +449,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemd
+    ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -467,20 +489,18 @@ let
       # Chromium reads initial_preferences from its own executable directory
       # This patch modifies it to read /etc/chromium/initial_preferences
       ./patches/chromium-initial-prefs.patch
+    ]
+    ++ lib.optionals (!chromiumVersionAtLeast "142") [
       # https://github.com/chromium/chromium/commit/02b6456643700771597c00741937e22068b0f956
       # https://github.com/chromium/chromium/commit/69736ffe943ff996d4a88d15eb30103a8c854e29
       # Rebased variant of patch to build M126+ with LLVM 17.
       # staging-next will bump LLVM to 18, so we will be able to drop this soon.
+      # Started failing to apply with M142, but this is no longer needed anyway.
       ./patches/chromium-126-llvm-17.patch
     ]
-    ++ lib.optionals (!chromiumVersionAtLeast "140") [
+    ++ lib.optionals (versionRange "140" "141") [
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
-      ./patches/chromium-129-rust.patch
-    ]
-    ++ lib.optionals (versionRange "140" "141") [
-      # Rebased variant of the patch above due to
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6665907
       ./patches/chromium-140-rust.patch
     ]
     ++ lib.optionals (chromiumVersionAtLeast "141") [
@@ -488,11 +508,12 @@ let
       # https://chromium-review.googlesource.com/c/chromium/src/+/6897026
       ./patches/chromium-141-rust.patch
     ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    ++ lib.optionals (!chromiumVersionAtLeast "145" && stdenv.hostPlatform.isAarch64) [
       # Reverts decommit pooled pages which causes random crashes of tabs on systems
       # with page sizes different than 4k. It 'supports' runtime page sizes, but has
       # a hardcode for aarch64 systems.
       # https://issues.chromium.org/issues/378017037
+      # Started failing to apply with M145, but this is no longer needed anyway.
       (fetchpatch {
         name = "reverted-v8-decommit-pooled-paged-by-default.patch";
         # https://chromium-review.googlesource.com/c/v8/v8/+/5864909
@@ -511,7 +532,7 @@ let
       # exact version or even running a newer version.
       ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "138") [
+    ++ [
       (fetchpatch {
         # Unbreak building with Rust 1.89+ which introduced
         # a new mismatched_lifetime_syntaxes lint.
@@ -524,20 +545,58 @@ let
         hash = "sha256-xf1Jq5v3InXkiVH0uT7+h1HPwZse5MDcHKuJNjSLR6k=";
       })
     ]
-    ++ lib.optionals (!chromiumVersionAtLeast "138") [
-      # Rebased variant of the patch above for
-      # electron 35 (M134) and 36 (M136)
-      ./patches/chromium-134-rust-1.86-mismatched_lifetime_syntaxes.patch
-    ]
-    ++ lib.optionals (chromiumVersionAtLeast "141") [
+    ++ lib.optionals (versionRange "142" "143") [
       (fetchpatch {
-        # Fix "invalid application of 'sizeof' to an incomplete type 'blink::CSSStyleSheet'"
-        # by reverting https://chromium-review.googlesource.com/c/chromium/src/+/6892157
-        name = "chromium-141-Revert-Remove-unnecessary-include-in-tree_scope.h.patch";
-        url = "https://chromium.googlesource.com/chromium/src/+/0fc0e71aa1ca0419fae6d14255025543980d2cba^!?format=TEXT";
+        # Fix https://issues.chromium.org/issues/450752866 by backporting
+        # https://chromium-review.googlesource.com/c/chromium/src/+/7030724 from M143
+        name = "chromium-142-Backport-Add-missing-include-for-FormFieldData-type-completeness.patch";
+        url = "https://chromium.googlesource.com/chromium/src/+/069d424e41f42c6f4a4551334eafc7cfaed6e880^!?format=TEXT";
         decode = "base64 -d";
+        hash = "sha256-0ueOCHYheSFHRFzEat3TDhnU3Avf0TcNBBBpTkz+saw=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "144") [
+      # Patch rustc_nightly_capability to eval to false instead of true.
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7022369
+      ./patches/chromium-144-rustc_nightly_capability.patch
+    ]
+    ++ lib.optionals (versionRange "144.0.7559.132" "145" && !ungoogled) [
+      # Rollup was swapped with esbuild because of compile failures on Windows,
+      # which is not compatible with our build yet. So let's revert it for now.
+      # Ungoogled ships its own variant of this patch upstream.
+      # https://issues.chromium.org/issues/461602362
+      (fetchpatch {
+        name = "revert-devtools-frontend-esbuild-instead-of-rollup.patch";
+        # https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/7526345
+        url = "https://chromium.googlesource.com/devtools/devtools-frontend/+/f130475580017f9f87502343dbcfc0c76dccefe8^!?format=TEXT";
+        decode = "base64 -d";
+        stripLen = 1;
+        extraPrefix = "third_party/devtools-frontend/src/";
         revert = true;
-        hash = "sha256-pnEus2NHpNWZ6ZSXLgdTn+it7oy1MPZPbD8SOAKLWbw=";
+        hash = "sha256-k+xCfhDuHxtuGhY7LVE8HvbDJt8SEFkslBcJe7t5CAg=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "145" && !ungoogled) [
+      # Non-backported variant of the patch above for M145
+      (fetchpatch {
+        name = "revert-devtools-frontend-esbuild-instead-of-rollup.patch";
+        # https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/7485622
+        url = "https://chromium.googlesource.com/devtools/devtools-frontend/+/72846d78927b90a77b51b12d13009320a74067e0^!?format=TEXT";
+        decode = "base64 -d";
+        stripLen = 1;
+        extraPrefix = "third_party/devtools-frontend/src/";
+        revert = true;
+        hash = "sha256-vu60z6PuWavNoEoxW0thSy89WxztOEG50V1ZSfJRRug=";
+      })
+      (fetchpatch {
+        name = "revert-devtools-frontend-reland-use-native-rollup.patch";
+        # https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/7368549
+        url = "https://chromium.googlesource.com/devtools/devtools-frontend/+/7c2d912b52f18fff4a9ef7bd64608f2feefc0d83^!?format=TEXT";
+        decode = "base64 -d";
+        stripLen = 1;
+        extraPrefix = "third_party/devtools-frontend/src/";
+        revert = true;
+        hash = "sha256-Qa4GvamZ//0WTAZmDXOQJVz9dnYNzBkD8lYcWOHdVIY=";
       })
     ];
 
@@ -568,13 +627,22 @@ let
         /* Generated by lastchange.py, do not edit.*/
         #ifndef SKIA_EXT_SKIA_COMMIT_HASH_H_
         #define SKIA_EXT_SKIA_COMMIT_HASH_H_
-        #define SKIA_COMMIT_HASH "${upstream-info.DEPS."src/third_party/skia".rev}-"
+        #define SKIA_COMMIT_HASH "${upstream-info.DEPS."src/third_party/skia".rev}"
         #endif  // SKIA_EXT_SKIA_COMMIT_HASH_H_
         EOF
 
         echo -n '${upstream-info.DEPS."src/third_party/dawn".rev}' > gpu/webgpu/DAWN_VERSION
 
         mkdir -p third_party/jdk/current/bin
+      ''
+      + lib.optionalString (!isElectron) ''
+        cat << EOF > gpu/webgpu/dawn_commit_hash.h
+        /* Generated by lastchange.py, do not edit.*/
+        #ifndef GPU_WEBGPU_DAWN_COMMIT_HASH_H_
+        #define GPU_WEBGPU_DAWN_COMMIT_HASH_H_
+        #define DAWN_COMMIT_HASH "${upstream-info.DEPS."src/third_party/dawn".rev}"
+        #endif  // GPU_WEBGPU_DAWN_COMMIT_HASH_H_
+        EOF
       ''
       + ''
         # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
@@ -629,9 +697,19 @@ let
             '${glibc}/share/locale/'
 
       ''
-      + lib.optionalString systemdSupport ''
-        sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-          device/udev_linux/udev?_loader.cc
+      # Workaround (crimes) for our rollup/esbuild revert in M145.
+      # https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/7414812
+      # We cannot use fetchpatch{,2} because it silently drops blobs and messes up symlinks.
+      # We cannot use GNU patch (patchPhase) because it does not support git binary diffs.
+      # We cannot use Gerrit/Gitiles because the git sha lengths may change as the repo grows.
+      + lib.optionalString (chromiumVersionAtLeast "145" && !ungoogled) ''
+        ${lib.getExe buildPackages.git} apply --reverse --directory=third_party/devtools-frontend/src/ ${
+          fetchurl {
+            name = "revert-devtools-frontend-remove-rollup-wasm.patch";
+            url = "https://github.com/ChromeDevTools/devtools-frontend/commit/a377a8c570a370e1bfccaf82f128e3b977dbf866.patch?full_index=1";
+            hash = "sha256-83T37ts54iotGYQAAyVv5CF8fMVrh/tfVRhfWaOlUkI=";
+          }
+        }
       ''
       + ''
         # Allow to put extensions into the system-path.
@@ -645,7 +723,7 @@ let
 
         patchShebangs .
       ''
-      + lib.optionalString (ungoogled) ''
+      + lib.optionalString ungoogled ''
         # Prune binaries (ungoogled only) *before* linking our own binaries:
         ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ''
@@ -736,11 +814,6 @@ let
         use_gio = true;
         use_cups = cupsSupport;
       }
-      // lib.optionalAttrs (!chromiumVersionAtLeast "139") {
-        # Feature overrides:
-        # Native Client support was deprecated in 2020 and support will end in June 2021:
-        enable_nacl = false;
-      }
       // lib.optionalAttrs (packageName == "chromium") {
         # Enabling the Widevine here doesn't affect whether we can redistribute the chromium package.
         # Widevine in this drv is a bit more complex than just that. See Widevine patch somewhere above.
@@ -769,7 +842,8 @@ let
         use_system_libffi = true;
         # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
         rust_sysroot_absolute = "${buildPackages.rustc}";
-        rust_bindgen_root = "${buildPackages.rust-bindgen}";
+        rust_bindgen_root =
+          if chromiumVersionAtLeast "144" then "${rustTools}" else "${buildPackages.rust-bindgen}";
         enable_rust = true;
         # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
         # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
@@ -840,7 +914,12 @@ let
           TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
           bash -s << EOL
           (
-            source chrome/installer/linux/common/installer.include
+            source ${
+              if chromiumVersionAtLeast "144" then
+                "remoting/host/installer/linux/"
+              else
+                "chrome/installer/linux/common"
+            }/installer.include
             PACKAGE=$packageName
             MENUNAME="Chromium"
             process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"

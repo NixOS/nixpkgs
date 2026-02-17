@@ -4,11 +4,11 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcrackzip";
   version = "1.0";
   src = fetchurl {
-    url = "http://oldhome.schmorp.de/marc/data/${pname}-${version}.tar.gz";
+    url = "http://oldhome.schmorp.de/marc/data/fcrackzip-${finalAttrs.version}.tar.gz";
     sha256 = "0l1qsk949vnz18k4vjf3ppq8p497966x4c7f2yx18x8pk35whn2a";
   };
 
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   # Do not clash with unizp/zipinfo
   postInstall = "mv $out/bin/zipinfo $out/bin/fcrackzip-zipinfo";
 
-  meta = with lib; {
+  meta = {
     description = "Zip password cracker, similar to fzc, zipcrack and others";
     homepage = "http://oldhome.schmorp.de/marc/fcrackzip.html";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nico202 ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nico202 ];
+    platforms = with lib.platforms; unix;
   };
-}
+})

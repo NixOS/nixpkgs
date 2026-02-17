@@ -9,9 +9,9 @@
   zlibSupport ? true,
   zlib,
   libX11Support ? !stdenv.hostPlatform.isMinGW,
-  libX11,
+  libx11,
   libXtSupport ? !stdenv.hostPlatform.isMinGW,
-  libXt,
+  libxt,
   fontconfigSupport ? true,
   fontconfig,
   freetypeSupport ? true,
@@ -85,13 +85,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.2-3";
+  version = "7.1.2-12";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     tag = finalAttrs.version;
-    hash = "sha256-L4apUdF1VJXSVqWAyjYFG/4qDJoJ0ObmSOpd90kqXsU=";
+    hash = "sha256-0X8Zpr4frknRbWzAu1nprok2ceScTHV8d4+ktnBpQF0=";
   };
 
   outputs = [
@@ -158,8 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional freetypeSupport freetype
   ++ lib.optional libjpegSupport libjpeg
   ++ lib.optional lcms2Support lcms2
-  ++ lib.optional libX11Support libX11
-  ++ lib.optional libXtSupport libXt
+  ++ lib.optional libX11Support libx11
+  ++ lib.optional libXtSupport libxt
   ++ lib.optional libwebpSupport libwebp
   ++ lib.optional fftwSupport fftw;
 
@@ -194,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.imagemagick.org/";
     changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
     description = "Software suite to create, edit, compose, or convert bitmap images";
@@ -202,13 +202,13 @@ stdenv.mkDerivation (finalAttrs: {
       "ImageMagick"
       "MagickWand"
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       dotlambda
       rhendric
       faukah
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "magick";
   };
 })

@@ -100,7 +100,7 @@ in
         description = ''
           Configuration options in RabbitMQ's new config file format,
           which is a simple key-value format that can not express nested
-          data structures. This is known as the `rabbitmq.conf` file,
+          data structures. This is known as the {file}`rabbitmq.conf` file,
           although outside NixOS that filename may have Erlang syntax, particularly
           prior to RabbitMQ 3.7.0.
 
@@ -119,7 +119,7 @@ in
         type = lib.types.str;
         description = ''
           Verbatim advanced configuration file contents using the Erlang syntax.
-          This is also known as the `advanced.config` file or the old config format.
+          This is also known as the {file}`advanced.config` file or the old config format.
 
           `configItems` is preferred whenever possible. However, nested
           data structures can only be expressed properly using the `config` option.

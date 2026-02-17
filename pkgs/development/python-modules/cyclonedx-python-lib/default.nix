@@ -11,7 +11,6 @@
   py-serializable,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requirements-parser,
   sortedcontainers,
   setuptools,
@@ -23,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "11.1.0";
+  version = "11.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     tag = "v${version}";
-    hash = "sha256-XlsVJTyAeqYex5q/07mFLXfMc9vnS5X+stP77i4IbVc=";
+    hash = "sha256-LnXunfYUz76XIHEXhaFJymBMFln8sIH0yxCodRmKdY0=";
   };
 
   pythonRelaxDeps = [ "py-serializable" ];
@@ -70,7 +67,7 @@ buildPythonPackage rec {
     pytestCheckHook
     xmldiff
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "cyclonedx" ];
 
@@ -93,11 +90,11 @@ buildPythonPackage rec {
     "tests/test_output_xml.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for generating CycloneDX SBOMs";
     homepage = "https://github.com/CycloneDX/cyclonedx-python-lib";
     changelog = "https://github.com/CycloneDX/cyclonedx-python-lib/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -6,14 +6,14 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alchemy";
   version = "008";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = "http://al.chemy.org/files/Alchemy-${version}.tar.gz";
+    url = "http://al.chemy.org/files/Alchemy-${finalAttrs.version}.tar.gz";
     sha256 = "0449bvdccgx1jqnws1bckzs4nv2d230523qs0jx015gi81s1q7li";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/alchemy
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Drawing application";
     longDescription = ''
       Alchemy is an open drawing project aimed at exploring how we can sketch,
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
       an expanded range of ideas and possibilities in a serendipitous way.
     '';
     homepage = "http://al.chemy.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.linux;
     mainProgram = "alchemy";
   };
-}
+})

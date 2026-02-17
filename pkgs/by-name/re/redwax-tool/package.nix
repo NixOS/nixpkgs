@@ -16,12 +16,12 @@
   aprutil,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redwax-tool";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "https://archive.redwax.eu/dist/rt/redwax-tool-${version}/redwax-tool-${version}.tar.gz";
+    url = "https://archive.redwax.eu/dist/rt/redwax-tool-${finalAttrs.version}/redwax-tool-${finalAttrs.version}.tar.gz";
     hash = "sha256-KIVr0FnCmZUuxenXCvAlLxQVQJ5XndAidVaiGevENoM=";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "--with-bash-completion-dir=yes"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://redwax.eu/rt/";
     description = "Universal certificate conversion tool";
     mainProgram = "redwax-tool";
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       certificates and keys you're interested in, write those
       certificates and keys to the destinations of your choice.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ astro ];
   };
-}
+})

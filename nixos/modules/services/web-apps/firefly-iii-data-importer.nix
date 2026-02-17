@@ -267,6 +267,7 @@ in
           "${cfg.dataDir}/storage/framework/sessions"
           "${cfg.dataDir}/storage/framework/testing"
           "${cfg.dataDir}/storage/framework/views"
+          "${cfg.dataDir}/storage/import-jobs"
           "${cfg.dataDir}/storage/jobs"
           "${cfg.dataDir}/storage/logs"
           "${cfg.dataDir}/storage/submission-routines"

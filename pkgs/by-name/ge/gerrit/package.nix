@@ -1,23 +1,23 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   gitUpdater,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gerrit";
-  version = "3.12.2";
+  version = "3.13.3";
 
   src = fetchurl {
-    url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    hash = "sha256-jQydsKixNKY0PYXysPckcxrpFhDBLQmfN+x/tlfGdEk=";
+    url = "https://gerrit-releases.storage.googleapis.com/gerrit-${finalAttrs.version}.war";
+    hash = "sha256-kWS7bNE3WARqBGVesZIAvMAqjaJEvnAfwf9qihZ7nlI=";
   };
 
   buildCommand = ''
     mkdir -p "$out"/webapps/
-    ln -s ${src} "$out"/webapps/gerrit-${version}.war
+    ln -s ${finalAttrs.src} "$out"/webapps/gerrit-${finalAttrs.version}.war
   '';
 
   passthru = {
@@ -46,16 +46,17 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gerritcodereview.com/index.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Web based code review and repository management for the git version control system";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [
+    changelog = "https://www.gerritcodereview.com/${lib.versions.majorMinor finalAttrs.version}.html";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [
       flokli
       zimbatm
       felixsinger
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

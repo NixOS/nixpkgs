@@ -15,15 +15,15 @@
   makeDesktopItem,
   pango,
   unzip,
-  xorg,
+  libx11,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "mricron";
   version = "1.0.20190902";
   src = fetchurl {
-    url = "https://github.com/neurolabusc/MRIcron/releases/download/v${version}/MRIcron_linux.zip";
+    url = "https://github.com/neurolabusc/MRIcron/releases/download/v${finalAttrs.version}/MRIcron_linux.zip";
     hash = "sha256-C155u9dvYEyWRfTv3KNQFI6aMWIAjgvdSIqMuYVIOQA=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     glib
     gdk-pixbuf
     pango
-    xorg.libX11
+    libx11
     zlib
   ];
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ adriangl ];
     mainProgram = "mricron";
   };
-}
+})

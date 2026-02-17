@@ -16,7 +16,18 @@
   openssl,
   unixODBC,
   xkeyboard_config,
-  xorg,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxmu,
+  libxi,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
   libxml2,
   libuuid,
@@ -34,7 +45,9 @@ let
   dirName = "WolframEngine";
 in
 stdenv.mkDerivation rec {
-  inherit (l10n) version name src;
+  pname = "wolfram-engine";
+
+  inherit (l10n) version src;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -63,21 +76,19 @@ stdenv.mkDerivation rec {
     zlib
     libGL
     libGLU
-  ]
-  ++ (with xorg; [
-    libX11
-    libXext
-    libXtst
-    libXi
-    libXmu
-    libXrender
+    libx11
+    libxext
+    libxtst
+    libxi
+    libxmu
+    libxrender
     libxcb
-    libXcursor
-    libXfixes
-    libXrandr
-    libICE
-    libSM
-  ]);
+    libxcursor
+    libxfixes
+    libxrandr
+    libice
+    libsm
+  ];
 
   # some bundled libs are found through LD_LIBRARY_PATH
   autoPatchelfIgnoreMissingDeps = true;
@@ -146,12 +157,12 @@ stdenv.mkDerivation rec {
   # Stripping causes the program to core dump.
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "Wolfram Engine computational software system";
     homepage = "https://www.wolfram.com/engine/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ fbeffa ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ fbeffa ];
     platforms = [ "x86_64-linux" ];
   };
 }

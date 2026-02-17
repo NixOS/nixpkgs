@@ -4,17 +4,21 @@
   stdenv,
   fetchurl,
   pkg-config,
-  xorg,
+  libxtst,
+  libxi,
+  libxfixes,
+  libxext,
+  libx11,
   python3,
   frame,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grail";
   version = "3.1.1";
 
   src = fetchurl {
-    url = "https://launchpad.net/grail/trunk/${version}/+download/${pname}-${version}.tar.bz2";
+    url = "https://launchpad.net/grail/trunk/${finalAttrs.version}/+download/grail-${finalAttrs.version}.tar.bz2";
     sha256 = "1wwx5ibjdz5pyd0f5cd1n91y67r68dymxpm2lgd829041xjizvay";
   };
 
@@ -24,11 +28,11 @@ stdenv.mkDerivation rec {
     frame
   ]
   ++ lib.optionals enableX11 [
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXext
-    xorg.libXi
-    xorg.libXfixes
+    libx11
+    libxtst
+    libxext
+    libxi
+    libxfixes
   ];
 
   configureFlags = lib.optional enableX11 "--with-x11";
@@ -39,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

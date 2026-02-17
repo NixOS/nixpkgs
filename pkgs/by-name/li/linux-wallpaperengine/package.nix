@@ -16,12 +16,13 @@
   glew,
   glfw,
   glm,
+  gmp,
   kissfftFloat,
-  libXau,
-  libXdmcp,
-  libXpm,
-  libXrandr,
-  libXxf86vm,
+  libxau,
+  libxdmcp,
+  libxpm,
+  libxrandr,
+  libxxf86vm,
   libdecor,
   libffi,
   libglut,
@@ -33,33 +34,31 @@
   wayland-protocols,
   wayland-scanner,
   zlib,
+  nix-update-script,
 }:
 
 let
-  cef = cef-binary.overrideAttrs (oldAttrs: {
-    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/be0fc25e72203310f268221a132c5d765874b02c/CMakeLists.txt#L47
-    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
+  cef = cef-binary.override {
+    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/ef986841e2c43f9a387afa5f96237a859ad61e75/CMakeLists.txt#L47
     gitRevision = "cbc1c5b";
     chromiumVersion = "135.0.7049.52";
 
-    srcHash =
-      {
-        aarch64-linux = "sha256-LK5JvtcmuwCavK7LnWmMF2UDpM5iIZOmsuZS/t9koDs=";
-        x86_64-linux = "sha256-JKwZgOYr57GuosM31r1Lx3DczYs35HxtuUs5fxPsTcY=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-  });
+    srcHashes = {
+      aarch64-linux = "sha256-LK5JvtcmuwCavK7LnWmMF2UDpM5iIZOmsuZS/t9koDs=";
+      x86_64-linux = "sha256-JKwZgOYr57GuosM31r1Lx3DczYs35HxtuUs5fxPsTcY=";
+    };
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wallpaperengine";
-  version = "0-unstable-2025-05-17";
+  version = "0-unstable-2026-01-25";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    rev = "be0fc25e72203310f268221a132c5d765874b02c";
+    rev = "ef986841e2c43f9a387afa5f96237a859ad61e75";
     fetchSubmodules = true;
-    hash = "sha256-Wkxt6c5aSMJnQPx/n8MeNKLQ8YmdFilzhJ1wQooKprI=";
+    hash = "sha256-VUhEEHid23l+z4fj8PoovE8nafSQLr//BMVUBoCDd+I=";
   };
 
   nativeBuildInputs = [
@@ -79,12 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     glfw
     glm
+    gmp
     kissfftFloat
-    libXau
-    libXdmcp
-    libXpm
-    libXrandr
-    libXxf86vm
+    libxau
+    libxdmcp
+    libxpm
+    libxrandr
+    libxxf86vm
     libdecor
     libffi
     libglut
@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${cef.buildType}"
     "-DCEF_ROOT=${cef}"
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/share/linux-wallpaperengine"
   ];
@@ -117,12 +116,14 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = {
     description = "Wallpaper Engine backgrounds for Linux";
     homepage = "https://github.com/Almamu/linux-wallpaperengine";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "linux-wallpaperengine";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

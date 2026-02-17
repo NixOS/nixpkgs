@@ -6,14 +6,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amber";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "amber";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-q0o2PQngbDLumck27V0bIiB35zesn55Y+MwK2GjNVWo=";
   };
 
@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Code search-and-replace tool";
     homepage = "https://github.com/dalance/amber";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.bdesham ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ lib.maintainers.bdesham ];
   };
-}
+})

@@ -12,17 +12,17 @@
   gdk-pixbuf,
   glib,
   gtk3,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libdrm,
   libpulseaudio,
   libxcb,
@@ -48,13 +48,13 @@ let
     gdk-pixbuf
     glib
     gtk3
-    libX11
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
+    libx11
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
     libdrm
     libxcb
     libxkbcommon
@@ -64,10 +64,10 @@ let
     nss
     pango
     stdenv.cc.cc
-    libXScrnSaver
-    libXcursor
-    libXrender
-    libXtst
+    libxscrnsaver
+    libxcursor
+    libxrender
+    libxtst
     libpulseaudio
     udev
   ];
@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
   # autoPatchelfHook/patchelf are not used because they cause the binary to coredump.
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     description = "Note-taking tool for networked thought";
     homepage = "https://roamresearch.com/";
     maintainers = with lib.maintainers; [ dbalan ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "roam-research";
   };

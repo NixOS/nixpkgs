@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lsscsi";
   version = "0.32";
 
   src = fetchurl {
-    url = "http://sg.danny.cz/scsi/lsscsi-${version}.tgz";
+    url = "http://sg.danny.cz/scsi/lsscsi-${finalAttrs.version}.tgz";
     sha256 = "sha256-CoAOnpTcoqtwLWXXJ3eujK4Hjj100Ly+1kughJ6AKaE=";
   };
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.in --replace /usr "$out"
   '';
 
-  meta = with lib; {
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+  meta = {
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

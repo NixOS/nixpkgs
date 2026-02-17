@@ -5,10 +5,10 @@
   meson,
   ninja,
   pkg-config,
-  utilmacros,
+  util-macros,
   python3,
   libGL,
-  libX11,
+  libx11,
   x11Support ? !stdenv.hostPlatform.isDarwin,
   testers,
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    utilmacros
+    util-macros
     python3
   ];
 
@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
     ]
     ++ lib.optionals x11Support [
-      libX11
+      libx11
     ];
 
   mesonFlags = [
-    "-Degl=${if (x11Support && !stdenv.hostPlatform.isDarwin) then "yes" else "no"}"
-    "-Dglx=${if x11Support then "yes" else "no"}"
+    "-Degl=${lib.boolToYesNo (x11Support && !stdenv.hostPlatform.isDarwin)}"
+    "-Dglx=${lib.boolToYesNo x11Support}"
     "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-Dx11=${lib.boolToString x11Support}"
   ];
@@ -81,12 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for handling OpenGL function pointer management";
     homepage = "https://github.com/anholt/libepoxy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     pkgConfigModules = [ "epoxy" ];
   };
 })

@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   meson,
   ninja,
@@ -31,16 +31,15 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcft";
-  version = "3.3.2";
+  version = "3.3.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "fcft";
-    rev = version;
-    hash = "sha256-a+lELkEjMtqeBYGj6yl+OoQ+I6neyJt6a1T83B2KWOk=";
+    rev = finalAttrs.version;
+    hash = "sha256-MkGlph9WpqH4daov5ZZPO2ua2mUbrsuo8Xk6GoKhoxg=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -65,9 +64,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonEnable "system-nanosvg" true)
   ]
-  ++ builtins.map (
-    t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
-  ) availableShapingTypes;
+  ++ map (t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)) availableShapingTypes;
 
   doCheck = true;
 
@@ -84,7 +81,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://codeberg.org/dnkl/fcft";
-    changelog = "https://codeberg.org/dnkl/fcft/releases/tag/${version}";
+    changelog = "https://codeberg.org/dnkl/fcft/releases/tag/${finalAttrs.version}";
     description = "Simple library for font loading and glyph rasterization";
     maintainers = with lib.maintainers; [
       fionera
@@ -96,4 +93,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; linux;
   };
-}
+})

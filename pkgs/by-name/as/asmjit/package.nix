@@ -4,17 +4,18 @@
   cmake,
   ninja,
   lib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "asmjit";
-  version = "0-unstable-2025-02-12";
+  version = "0-unstable-2026-02-10";
 
   src = fetchFromGitHub {
     owner = "asmjit";
     repo = "asmjit";
-    rev = "029075b84bf0161a761beb63e6eda519a29020db";
-    hash = "sha256-/9F1rFNPwJUrVOVeK9sIA+Q7UrqQpQy8T6g4ywcoJc8=";
+    rev = "5fe1940275d04432da841896bac0a66cc2375551";
+    hash = "sha256-Oj8VP9rJXHQYP3aV8sm+XbyHXLvmC+7e+OGy5YQqFzQ=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +25,9 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  meta = {
     description = "Machine code generation for C++";
     longDescription = ''
       AsmJit is a lightweight library for machine code generation written in
@@ -33,7 +36,7 @@ stdenv.mkDerivation {
       extensions.
     '';
     homepage = "https://asmjit.com/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ thillux ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ thillux ];
   };
 }

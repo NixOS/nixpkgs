@@ -1,27 +1,29 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
-  qtbase,
   qmake,
   pkg-config,
+  wrapQtAppsHook,
+  qtbase,
   boost,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "twmn";
-  version = "2025_03_06";
+  version = "2025_10_23";
 
   src = fetchFromGitHub {
     owner = "sboli";
     repo = "twmn";
     tag = version;
-    hash = "sha256-JQhONBcTJUzsKJY6YstC6HB4d/t8vf155/lN4UUv4l4=";
+    hash = "sha256-/yQtwoolGhtn19I+vus27OjaZgXXfhnWKQi+rUMozCY=";
   };
 
   nativeBuildInputs = [
     pkg-config
     qmake
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase

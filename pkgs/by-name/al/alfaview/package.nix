@@ -21,17 +21,21 @@
   libgbm,
   openssl,
   systemd,
-  xcb-util-cursor,
-  xorg,
+  libxcb-cursor,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
-  version = "9.23.1";
+  version = "9.24.1";
 
   src = fetchurl {
     url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
-    hash = "sha256-T1RsG/8uuPtma7TCNww4V6tKzPK0Ds8zmdjk2duhMEw=";
+    hash = "sha256-vRo5ZD3yYTWhR6fbc/HFtBBbYuq3cGbxPuDlSt5D8XM=";
   };
 
   nativeBuildInputs = [
@@ -60,12 +64,12 @@ stdenv.mkDerivation rec {
     openssl
     stdenv.cc.cc
     systemd
-    xcb-util-cursor
-    xorg.libX11
-    xorg.xcbutilwm
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
+    libxcb-cursor
+    libx11
+    libxcb-wm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
   ];
 
   libPath = lib.makeLibraryPath buildInputs;
@@ -89,11 +93,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video-conferencing application, specialized in virtual online meetings, seminars, training sessions and conferences";
     homepage = "https://alfaview.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     maintainers = [ ];
     mainProgram = "alfaview";
     platforms = [ "x86_64-linux" ];

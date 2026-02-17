@@ -14,7 +14,14 @@
   gnused,
   gnugrep,
   findutils,
-  xorg,
+  font-util,
+  xwininfo,
+  xrandr,
+  xmodmap,
+  xkbcomp,
+  xinit,
+  xauth,
+  setxkbmap,
   net-tools,
   iproute2,
   bc,
@@ -86,14 +93,14 @@ let
     pwgen
     openssh
     sshfs
-    xorg.xauth
-    xorg.xinit
-    xorg.xrandr
-    xorg.xmodmap
-    xorg.xwininfo
-    xorg.fontutil
-    xorg.xkbcomp
-    xorg.setxkbmap
+    xauth
+    xinit
+    xrandr
+    xmodmap
+    xwininfo
+    font-util
+    xkbcomp
+    setxkbmap
   ];
 in
 stdenv.mkDerivation {
@@ -151,11 +158,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Remote desktop application, server component";
     homepage = "http://x2go.org/";
     platforms = lib.platforms.linux;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ averelld ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ averelld ];
   };
 }

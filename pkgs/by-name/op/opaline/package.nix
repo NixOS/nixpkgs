@@ -5,14 +5,14 @@
   ocamlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.3.3";
   pname = "opaline";
 
   src = fetchFromGitHub {
     owner = "jaapb";
     repo = "opaline";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6htaiFIcRMUYWn0U7zTNfCyDaTgDEvPch2q57qzvND4=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     mainProgram = "opaline";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     inherit (ocamlPackages.ocaml.meta) platforms;
   };
-}
+})

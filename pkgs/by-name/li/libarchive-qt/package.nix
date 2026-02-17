@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    qt6.wrapQtAppsNoGuiHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "archiver";
     homepage = "https://gitlab.com/marcusbritanicus/libarchive-qt";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

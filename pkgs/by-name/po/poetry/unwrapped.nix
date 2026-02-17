@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   findpython,
   installShellFiles,
@@ -26,8 +25,6 @@
   trove-classifiers,
   virtualenv,
   xattr,
-  tomli,
-  importlib-metadata,
   deepdiff,
   pytestCheckHook,
   httpretty,
@@ -39,8 +36,6 @@ buildPythonPackage rec {
   pname = "poetry";
   version = "2.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
@@ -60,6 +55,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "dulwich"
     "keyring"
+    "pbs-installer"
   ];
 
   dependencies = [
@@ -86,12 +82,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     xattr
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ]
   ++ cachecontrol.optional-dependencies.filecache
   ++ pbs-installer.optional-dependencies.download

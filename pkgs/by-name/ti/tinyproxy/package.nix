@@ -8,13 +8,13 @@
   withDebug ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tinyproxy";
   version = "1.11.2";
 
   src = fetchFromGitHub {
     hash = "sha256-bpr/O723FmW2gb+85aJrwW5/U7R2HwbePTx15i3rpsE=";
-    rev = version;
+    rev = finalAttrs.version;
     repo = "tinyproxy";
     owner = "tinyproxy";
   };
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
   passthru.tests = { inherit (nixosTests) tinyproxy; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tinyproxy.github.io/";
     description = "Light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.carlosdagos ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.carlosdagos ];
     mainProgram = "tinyproxy";
   };
-}
+})

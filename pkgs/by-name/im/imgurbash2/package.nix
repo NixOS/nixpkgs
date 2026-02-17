@@ -7,14 +7,14 @@
   xsel,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imgurbash2";
   version = "3.3";
 
   src = fetchFromGitHub {
     owner = "ram-on";
     repo = "imgurbash2";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-7J3LquzcYX0wBR6kshz7VuPv/TftTzKFdWcgsML2DnI=";
   };
 
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/imgurbash2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shell script that uploads images to imgur";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     homepage = "https://github.com/ram-on/imgurbash2";
     mainProgram = "imgurbash2";
   };
-}
+})

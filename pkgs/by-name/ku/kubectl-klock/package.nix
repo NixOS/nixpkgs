@@ -5,7 +5,7 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-klock";
   version = "0.8.2";
 
@@ -14,14 +14,14 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "applejag";
     repo = "kubectl-klock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Ajq3/JUnaIcz6FnC2nP9H/+oKJXQSca+mRpPSkG/xY0=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   vendorHash = "sha256-fuq073g1RG4cfFzs5eoMOytE9Ra32HgUFG/yQDYc2JE=";
@@ -33,11 +33,11 @@ buildGoModule rec {
   meta = {
     description = "Kubectl plugin to render watch output in a more readable fashion";
     homepage = "https://github.com/applejag/kubectl-klock";
-    changelog = "https://github.com/applejag/kubectl-klock/releases/tag/v${version}";
+    changelog = "https://github.com/applejag/kubectl-klock/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       scm2342
       applejag
     ];
   };
-}
+})

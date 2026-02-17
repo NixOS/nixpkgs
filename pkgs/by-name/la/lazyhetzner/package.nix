@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lazyhetzner";
-  version = "0.0.5";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "grammeaway";
     repo = "lazyhetzner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1FXltNM+M8Txp1xoTqKcNI14dvbRQHl7izXtBQLYZTc=";
+    hash = "sha256-krMA3QbeQGZCadP2sprITimh+K2XFYsN/sd29HVyd0U=";
 
     leaveDotGit = true;
     postFetch = ''

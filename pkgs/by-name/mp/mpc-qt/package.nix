@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
+  ninja,
   pkg-config,
+  boost,
   qt6Packages,
   mpv,
   gitUpdater,
@@ -10,18 +13,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpc-qt";
-  version = "24.12.1-flatpak";
+  version = "26.01";
 
   src = fetchFromGitHub {
     owner = "mpc-qt";
     repo = "mpc-qt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gn94kVs3Lbd+ggj4jTacHpmnVO2lH/QDhFk+hJC1N/c=";
+    hash = "sha256-tgCdPzolUlp3Cy1ZbDlMQvl/4WcTl86QTZ8F18f0JME=";
   };
 
   nativeBuildInputs = [
+    boost
+    ninja
+    cmake
     pkg-config
-    qt6Packages.qmake
     qt6Packages.qttools
     qt6Packages.wrapQtAppsHook
   ];
@@ -30,19 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     mpv
   ];
 
-  postPatch = ''
-    substituteInPlace lconvert.pri --replace "qtPrepareTool(LCONVERT, lconvert)" "qtPrepareTool(LCONVERT, lconvert, , , ${qt6Packages.qttools}/bin)"
-  '';
-
-  postConfigure = ''
-    substituteInPlace Makefile --replace ${qt6Packages.qtbase}/bin/lrelease ${qt6Packages.qttools.dev}/bin/lrelease
-  '';
-
-  qmakeFlags = [
-    "MPCQT_VERSION=${finalAttrs.version}"
+  cmakeFlags = [
+    "-DMPCQT_VERSION=${finalAttrs.version}"
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "master";
+  };
 
   meta = {
     description = "Media Player Classic Qute Theater";

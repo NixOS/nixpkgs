@@ -51,14 +51,14 @@ let
   inherit (lib) optional optionals;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
   version = "4.3.7";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bfOgUeUCxQeCmKKBlvIXptM5lJxgZiH4lOhLJSNih8g=";
   };
 
@@ -149,4 +149,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

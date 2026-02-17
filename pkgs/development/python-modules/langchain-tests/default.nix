@@ -4,25 +4,23 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   httpx,
   langchain-core,
-  syrupy,
-  pytest-benchmark,
-  pytest-codspeed,
+  numpy,
+  pytest-asyncio,
   pytest-recording,
+  pytest-socket,
+  syrupy,
   vcrpy,
 
   # buildInputs
-  pytest,
+  pytestCheckHook,
 
   # tests
-  numpy,
-  pytest-asyncio_0,
-  pytest-socket,
-  pytestCheckHook,
+  pytest-benchmark,
 
   # passthru
   gitUpdater,
@@ -30,46 +28,49 @@
 
 buildPythonPackage rec {
   pname = "langchain-tests";
-  version = "0.3.21";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-tests==${version}";
-    hash = "sha256-CufnUFhYTENuq4/32u0w3UZb7TdZxEpshyQqLH6NEZo=";
+    hash = "sha256-g5s7zL4l/kIUoIu7/3+Ve3SXW3O9tj8f2N3bZ0gbBts=";
   };
 
   sourceRoot = "${src.name}/libs/standard-tests";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
+
+  pythonRemoveDeps = [
+    "pytest-benchmark"
+    "pytest-codspeed"
+  ];
 
   pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-    "numpy"
+    "syrupy"
   ];
 
   dependencies = [
     httpx
     langchain-core
-    pytest-asyncio_0
+    numpy
+    pytest-asyncio
     pytest-benchmark
-    pytest-codspeed
     pytest-recording
     pytest-socket
     syrupy
     vcrpy
   ];
 
-  buildInputs = [ pytest ];
-
   pythonImportsCheck = [ "langchain_tests" ];
 
   nativeBuildInputs = [
-    numpy
     pytestCheckHook
+  ];
+
+  disabledTestMarks = [
+    "benchmark"
   ];
 
   passthru = {

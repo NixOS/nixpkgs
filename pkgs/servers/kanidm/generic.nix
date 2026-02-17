@@ -82,11 +82,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
         server_admin_bind_path = socket_path;
         server_config_path = "/etc/kanidm/server.toml";
         server_ui_pkg_path = "@htmx_ui_pkg_path@";
+      }
+      // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.8") {
+        resolver_service_account_token_path = "/etc/kanidm/token";
+      }
+      // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.9") {
+        server_migration_path = "/etc/kanidm/migrations.d";
       };
     in
     ''
       cp ${format profile} libs/profiles/${finalAttrs.env.KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${finalAttrs.env.KANIDM_BUILD_PROFILE}.toml --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg"
+    ''
+    + lib.optionalString (lib.versionAtLeast finalAttrs.version "1.9") ''
+      substituteInPlace Cargo.toml \
+        --replace-fail 'rust-version = "1.93"' 'rust-version = "1.91"'
     '';
 
   nativeBuildInputs = [
@@ -126,7 +136,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preFixup = ''
     installShellCompletion \
       --bash $releaseDir/build/completions/*.bash \
-      --zsh $releaseDir/build/completions/_*
+      --zsh $releaseDir/build/completions/_* \
+      --fish $releaseDir/build/completions/*.fish
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # PAM and NSS need fix library names
@@ -149,7 +160,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "-vr"
         "v(${lib.versions.major finalAttrs.version}\\.${lib.versions.minor finalAttrs.version}\\.[0-9]*)"
         "--override-filename"
-        "pkgs/by-name/ka/kanidm/${versionUnderscored finalAttrs}.nix"
+        "pkgs/servers/kanidm/${versionUnderscored finalAttrs}.nix"
       ];
     });
 

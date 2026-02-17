@@ -8,7 +8,6 @@
   netifaces,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
   setuptools,
   tenacity,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pydaikin";
-  version = "2.17.0";
+  version = "2.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pydaikin";
     tag = "v${version}";
-    hash = "sha256-sX+YJ5uYQqVr9QPkx22IlgpI3nCHiN3XzrkUyY7ECDM=";
+    hash = "sha256-JESTwtrDuBydXIzRfbtnvbb4Hsumt1wMRpppU2xdWJQ=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -54,12 +51,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydaikin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Daikin HVAC appliances interface";
     homepage = "https://github.com/fredrike/pydaikin";
     changelog = "https://github.com/fredrike/pydaikin/releases/tag/${src.tag}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pydaikin";
   };
 }

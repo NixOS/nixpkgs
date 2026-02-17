@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   id,
-  importlib-metadata,
   keyring,
   packaging,
   pkginfo,
@@ -26,7 +24,6 @@ buildPythonPackage rec {
   pname = "twine";
   version = "6.1.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,9 +46,6 @@ buildPythonPackage rec {
     rfc3986
     rich
     urllib3
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [

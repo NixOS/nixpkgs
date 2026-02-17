@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-tinyxml2"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hfst/hfst-ospell/";
     description = "HFST spell checker library and command line tool";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lurkki ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lurkki ];
+    platforms = lib.platforms.unix;
   };
 })

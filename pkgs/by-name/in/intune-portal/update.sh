@@ -1,7 +1,7 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p curl gzip dpkg common-updater-scripts
 
-index_file=$(curl -sL https://packages.microsoft.com/ubuntu/22.04/prod/dists/jammy/main/binary-amd64/Packages.gz | gzip -dc)
+index_file=$(curl -sL https://packages.microsoft.com/ubuntu/24.04/prod/dists/noble/main/binary-amd64/Packages.gz | gzip -dc)
 
 latest_version="0"
 

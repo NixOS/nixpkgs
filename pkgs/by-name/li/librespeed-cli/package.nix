@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "librespeed-cli";
   version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "librespeed";
     repo = "speedtest-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-njaQ/Be5rDCqkZJkij0nRi8aIO5uZYo8t3BjIcdKoCM=";
   };
 
@@ -25,13 +25,13 @@ buildGoModule rec {
     mv $out/bin/speedtest-cli $out/bin/librespeed-cli
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for LibreSpeed";
     homepage = "https://github.com/librespeed/speedtest-cli";
-    changelog = "https://github.com/librespeed/speedtest-cli/releases/tag/${src.tag}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/librespeed/speedtest-cli/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "librespeed-cli";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

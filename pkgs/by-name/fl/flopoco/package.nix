@@ -74,6 +74,10 @@ stdenv.mkDerivation {
     ./flopoco BuildAutocomplete
   '';
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
+
   installPhase = ''
     runHook preInstall
 
@@ -84,11 +88,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "FloPoCo arithmetic core generator";
     homepage = "https://flopoco.org/";
-    license = licenses.unfree;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

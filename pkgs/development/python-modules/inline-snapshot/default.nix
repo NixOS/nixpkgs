@@ -16,7 +16,6 @@
   pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rich,
   time-machine,
   toml,
@@ -24,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.24.0";
+  version = "0.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-UiVxG9W1lwvvoflVey4250iL8gL8Tm41LBo0ab0tTqk=";
+    hash = "sha256-f572H7jeolv9nONuRBtZR/pcVDs5oX/dOiEjXlJyiio=";
   };
 
   build-system = [ hatchling ];
@@ -40,9 +39,6 @@ buildPythonPackage rec {
     asttokens
     executing
     rich
-    toml
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
     toml
   ];
 
@@ -58,7 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
     time-machine
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     black = [ black ];
@@ -72,11 +68,11 @@ buildPythonPackage rec {
     "tests/test_typing.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Create and update inline snapshots in Python tests";
     homepage = "https://github.com/15r10nk/inline-snapshot/";
     changelog = "https://github.com/15r10nk/inline-snapshot/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation {
   pname = "solanum";
-  version = "0-unstable-2025-09-20";
+  version = "0-unstable-2026-02-12";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
     repo = "solanum";
-    rev = "380dca67c2f270f1b60634b6ed9a90c80884684d";
-    hash = "sha256-R+TXRFzTVWxWVRSmPgmFjYplEonDKszsBckPWUS+gOU=";
+    rev = "59e35e3f5e0943729f2b55f860416b63c4a0e73f";
+    hash = "sha256-sK0cbVP8IcPhSfBgO70Y7gXYaar6Ua7OZM1HzU0rk9Y=";
   };
 
   patches = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
+    substituteInPlace include/defaults.h --replace-fail 'ETCPATH "' '"/etc/solanum'
   '';
 
   preConfigure = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     "--enable-ipv6"
     "--enable-openssl=${openssl.dev}"
     "--with-program-prefix=solanum-"
-    "--localstatedir=/var/lib"
+    "--localstatedir=/var"
     "--with-rundir=/run"
     "--with-logdir=/var/log"
   ]
@@ -81,11 +81,11 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.unix;
   };
 }

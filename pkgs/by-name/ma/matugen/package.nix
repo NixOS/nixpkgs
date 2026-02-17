@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matugen";
-  version = "2.4.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "InioX";
     repo = "matugen";
-    tag = "v${version}";
-    hash = "sha256-+UibbVz5CTisKMms/5VXGe39FYr56qzaEtX4TWQPkjk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TD9XyqFdLIOLRZM7ozQ8gz4PyEQbLGLxB4MbzjLccg4=";
   };
 
-  cargoHash = "sha256-ZCH8ka740X/yRbn4Mbno63jZifPMEaDABsftS3juDTo=";
+  cargoHash = "sha256-OdJxr01wHqPHgEGIVrLcUv5h1JaYrY1zW9NrYO114OM=";
 
   meta = {
     description = "Material you color generation tool";
     homepage = "https://github.com/InioX/matugen";
-    changelog = "https://github.com/InioX/matugen/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/InioX/matugen/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ lampros ];
     mainProgram = "matugen";
   };
-}
+})

@@ -17,10 +17,10 @@
   nix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-crt-cpp";
   # nixpkgs-update: no auto update
-  version = "0.33.1";
+  version = "0.34.3";
 
   outputs = [
     "out"
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-crt-cpp";
-    rev = "v${version}";
-    sha256 = "sha256-C8KWe5+CXujD8nN3gLkjaaMld15sat/ohwEKhyWELKI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-jKmIsWAzxnfsNgHavR6crhIQXVJq/PbQgaj4KVGrMP0=";
   };
 
   postPatch = ''
@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ wrapper around the aws-c-* libraries";
     homepage = "https://github.com/awslabs/aws-crt-cpp";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
-}
+})

@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildGoModule,
   fetchFromGitHub,
@@ -6,14 +7,14 @@
   yaegi,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yaegi";
   version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "traefik";
     repo = "yaegi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jpLx2z65KeCPC4AQgFmUUphmmiT4EeHwrYn3/rD4Rzg=";
   };
 
@@ -26,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -36,12 +37,14 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Go interpreter";
     mainProgram = "yaegi";
     homepage = "https://github.com/traefik/yaegi";
-    changelog = "https://github.com/traefik/yaegi/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/traefik/yaegi/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

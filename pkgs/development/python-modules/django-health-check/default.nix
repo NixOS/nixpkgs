@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-health-check";
-  version = "3.20.0";
+  version = "3.20.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KristianOellegaard";
     repo = "django-health-check";
     tag = version;
-    hash = "sha256-qgABCDWKGYZ67sKvCozUQfmYcKWMpEVNLxInTnIaojk=";
+    hash = "sha256-voB3shugfM/nO0vPd9yA4NOUB+E9aVcFnqG1mtfRYFc=";
   };
 
   build-system = [
@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "health_check" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pluggable app that runs a full check on the deployment";
     homepage = "https://github.com/KristianOellegaard/django-health-check";
     changelog = "https://github.com/revsys/django-health-check/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

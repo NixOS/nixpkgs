@@ -9,12 +9,12 @@ let
   arch = if stdenv.hostPlatform.isAarch64 then "aarch64" else "x86_64";
   platform = "${os}-${arch}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "urbit";
   version = "3.5";
 
   src = fetchzip {
-    url = "https://github.com/urbit/vere/releases/download/vere-v${version}/${platform}.tgz";
+    url = "https://github.com/urbit/vere/releases/download/vere-v${finalAttrs.version}/${platform}.tgz";
     sha256 =
       {
         x86_64-linux = "sha256-eB80GuyNuVZbBsyNnek8UCtquZbNt5G4Co7IKqq7aeI=";
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
   };
 
   postInstall = ''
-    install -m755 -D vere-v${version}-${platform} $out/bin/urbit
+    install -m755 -D vere-v${finalAttrs.version}-${platform} $out/bin/urbit
   '';
 
   passthru.updateScript = ./update-bin.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://urbit.org";
     description = "Operating function";
     platforms = [
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = [ maintainers.matthew-levan ];
-    license = licenses.mit;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = [ lib.maintainers.matthew-levan ];
+    license = lib.licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "urbit";
   };
-}
+})

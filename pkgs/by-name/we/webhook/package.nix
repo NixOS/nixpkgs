@@ -5,15 +5,15 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "webhook";
-  version = "2.8.2";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "adnanh";
     repo = "webhook";
-    rev = version;
-    sha256 = "sha256-3Ew72ADGTlvp6w37nYbCng7HHCZ0a7kVf3DNRNyCkZU=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-P+uLVv0YMlTXrbWVapXRXc+VvQZxUiimLG0EX9tDxpM=";
   };
 
   vendorHash = null;
@@ -24,11 +24,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) webhook; };
 
-  meta = with lib; {
+  meta = {
     description = "Incoming webhook server that executes shell commands";
     mainProgram = "webhook";
     homepage = "https://github.com/adnanh/webhook";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
   };
-}
+})

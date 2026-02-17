@@ -7,32 +7,37 @@
   asciidoc,
   databasePath ? "/etc/secureboot",
   nix-update-script,
+  pkg-config,
+  pcsclite,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sbctl";
-  version = "0.17";
+  version = "0.18";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "sbctl";
-    tag = version;
-    hash = "sha256-7dCaWemkus2GHxILBEx5YvzdAmv89JfcPbqZZ6QwriI";
+    tag = finalAttrs.version;
+    hash = "sha256-Q8uQ74XvteMRcnUPu1PjLAPWt3jeI7aF4m3QMjiZJis=";
   };
 
-  vendorHash = "sha256-gpHEJIbLnB0OiYB00rHK6OwrnHTHCj/tTVlUzuFjFKY=";
+  vendorHash = "sha256-PwLdWoC8tjdKoUAg2xvopggpgZ9WKaUslO3ZBtBah2k=";
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/foxboron/sbctl.DatabasePath=${databasePath}"
-    "-X github.com/foxboron/sbctl.Version=${version}"
+    "-X github.com/foxboron/sbctl.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
     installShellFiles
     asciidoc
+    pkg-config
   ];
+
+  buildInputs = [ pcsclite ];
 
   postBuild = ''
     make docs/sbctl.conf.5 docs/sbctl.8
@@ -70,4 +75,4 @@ buildGoModule rec {
     # see upstream on https://github.com/Foxboron/go-uefi/issues/13
     platforms = lib.platforms.linux;
   };
-}
+})

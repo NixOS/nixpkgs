@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxysql";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = "proxysql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yGxn46Vm8YdtIvvoTlOHQ1aAP2J/h/kFqr4ehruDsTw=";
+    hash = "sha256-kbfuUulEDPx/5tpp7uOkIXQuyaFYzos3crCvkWHSmHg=";
   };
 
   patches = [
@@ -221,13 +221,12 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i s_/usr/bin/proxysql_$out/bin/proxysql_ $out/lib/systemd/system/*.service
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "High-performance MySQL proxy";
     mainProgram = "proxysql";
     homepage = "https://proxysql.com/";
-    license = with licenses; [ gpl3Only ];
-    teams = [ teams.helsinki-systems ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ gpl3Only ];
+    platforms = lib.platforms.unix;
   };
 })

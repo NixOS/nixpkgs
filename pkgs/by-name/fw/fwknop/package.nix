@@ -15,14 +15,14 @@
   buildClient ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwknop";
   version = "2.6.11";
 
   src = fetchFromGitHub {
     owner = "mrash";
     repo = "fwknop";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jnEBRJCt7pAmXRIBVT2OwJqT5Zr/JaRgPDqccx0W/9o=";
   };
 
@@ -64,15 +64,15 @@ stdenv.mkDerivation rec {
       "wknopddir = $out/etc/fwknop"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Single Packet Authorization (and Port Knocking) server/client";
     longDescription = ''
       fwknop stands for the "FireWall KNock OPerator", and implements an
       authorization scheme called Single Packet Authorization (SPA).
     '';
     homepage = "https://www.cipherdyne.org/fwknop/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

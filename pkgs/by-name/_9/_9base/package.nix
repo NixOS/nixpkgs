@@ -3,6 +3,7 @@
   stdenv,
   fetchgit,
   pkg-config,
+  unstableGitUpdater,
   patches ? [ ],
   pkgsBuildHost,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -10,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "9base";
-  version = "unstable-2019-09-11";
+  version = "6-unstable-2019-09-13";
 
   src = fetchgit {
     url = "https://git.suckless.org/9base";
@@ -29,6 +30,10 @@ stdenv.mkDerivation {
     # https://github.com/9fans/plan9port/commit/540caa5873bcc3bc2a0e1896119f5b53a0e8e630
     # https://github.com/9fans/plan9port/commit/323e1a8fac276f008e6d5146a83cbc88edeabc87
     ./getcallerpc-use-macro-or-stub.patch
+    # fix build with c23
+    #   dd.c:315:30: error: expected identifier or '*' before 'true'
+    #   n5.c:690:22: error: lvalue required as left operand of assignment
+    ./fix-build-with-c23.patch
   ]
   ++ patches;
 
@@ -41,7 +46,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   strictDeps = true;
   nativeBuildInputs = [ pkg-config ];
-  env.NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString [
     # workaround build failure on -fno-common toolchains like upstream
     # gcc-10. Otherwise build fails as:
     #   ld: diffio.o:(.bss+0x16): multiple definition of `bflag'; diffdir.o:(.bss+0x6): first defined here
@@ -51,7 +56,7 @@ stdenv.mkDerivation {
     "-D_DEFAULT_SOURCE"
     # error: call to undeclared function 'p9mbtowc'; ISO C99 and later do not support implicit function declarations
     "-Wno-error=implicit-function-declaration"
-  ]);
+  ];
   env.LDFLAGS = lib.optionalString enableStatic "-static";
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -65,6 +70,8 @@ stdenv.mkDerivation {
     "man"
     "troff"
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://tools.suckless.org/9base/";

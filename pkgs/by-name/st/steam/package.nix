@@ -25,7 +25,7 @@ let
       ...
     }@args:
     buildFHSEnv (
-      (builtins.removeAttrs args [
+      (removeAttrs args [
         "extraPkgs"
         "extraLibraries"
         "extraProfile"
@@ -51,6 +51,7 @@ let
             lsb-release # not documented, called from Big Picture
             pciutils # not documented, complains about lspci on startup
             glibc_multi.bin
+            usbutils # not documented, complains about lsusb on startup (needed for the 'Enter VR Mode' button to appear)
             xdg-utils # calls xdg-open occasionally
             xz
             zenity
@@ -61,10 +62,10 @@ let
               ln -s /bin/ldconfig $out/sbin/ldconfig
             '')
 
-            # crashes on startup if it can't find libX11 locale files
+            # crashes on startup if it can't find libx11 locale files
             (pkgs.runCommand "xorg-locale" { } ''
               mkdir -p $out
-              ln -s ${xorg.libX11}/share $out/share
+              ln -s ${libx11}/share $out/share
             '')
           ]
           ++ extraPkgs pkgs;
@@ -167,7 +168,8 @@ buildRuntimeEnv {
       makeSteamRun =
         package:
         buildRuntimeEnv {
-          name = "steam-run";
+          inherit (steam-unwrapped) version;
+          pname = "steam-run";
 
           extraPkgs = pkgs: package ++ extraPkgs pkgs;
 

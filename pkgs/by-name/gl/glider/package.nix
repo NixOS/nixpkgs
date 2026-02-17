@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "glider";
   version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "nadoo";
     repo = "glider";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LrIHdI1/55llENjDgFJxh2KKsJf/tLT3P9L9jhLhfS0=";
   };
 
@@ -27,12 +27,12 @@ buildGoModule rec {
     install -Dm444 -t "$out/lib/systemd/system/" systemd/glider@.service
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nadoo/glider";
     description = "Forward proxy with multiple protocols support";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "glider";
-    maintainers = with maintainers; [ oluceps ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ oluceps ];
+    platforms = lib.platforms.linux;
   };
-}
+})

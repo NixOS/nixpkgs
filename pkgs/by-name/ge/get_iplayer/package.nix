@@ -4,7 +4,6 @@
   fetchFromGitHub,
   makeWrapper,
   stdenv,
-  shortenPerlShebang,
   perl,
   atomicparsley,
   ffmpeg,
@@ -23,7 +22,7 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-O/mVtbudrYw0jKeSckZlgonFDiWxfeiVc8gdcy4iNBw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
     LWP
@@ -54,23 +53,19 @@ perlPackages.buildPerlPackage rec {
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/.get_iplayer-wrapped
-  '';
-
   passthru.tests.version = testers.testVersion {
     package = get_iplayer;
     command = "HOME=$(mktemp -d) get_iplayer --help";
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Downloads TV and radio programmes from BBC iPlayer and BBC Sounds";
     mainProgram = "get_iplayer";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/get-iplayer/get_iplayer";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       rika
       chewblacka
     ];

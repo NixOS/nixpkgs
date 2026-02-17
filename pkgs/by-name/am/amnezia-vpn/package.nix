@@ -81,13 +81,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.10.0";
+  version = "4.8.11.4";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-w1uBhp47XRinZpSuKeFaASOIOyjRDkDA81uqW4pK3F4=";
+    hash = "sha256-LNzXYNhW1fbQhEkailqmX69MgPGJfJAu6KhGh5oSlJc=";
     fetchSubmodules = true;
   };
 
@@ -151,11 +151,11 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/libexec $out/share/applications $out/share/pixmaps $out/lib/systemd/system
+    mkdir -p $out/bin $out/libexec $out/share/applications $out/lib/systemd/system
     install -m555 client/AmneziaVPN service/server/AmneziaVPN-service $out/bin/
     install -m555 ../deploy/data/linux/client/bin/update-resolv-conf.sh $out/libexec/
     install -m444 ../AppDir/AmneziaVPN.desktop $out/share/applications/
-    install -m444 ../deploy/data/linux/AmneziaVPN.png $out/share/pixmaps/
+    install -Dm444 ../deploy/data/linux/AmneziaVPN.png -t $out/share/icons/hicolor/512x512/apps
     install -m444 ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
 
     runHook postInstall
@@ -175,13 +175,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Amnezia VPN Client";
     downloadPage = "https://amnezia.org/en/downloads";
     homepage = "https://github.com/amnezia-vpn/amnezia-client";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "AmneziaVPN";
-    maintainers = with maintainers; [ sund3RRR ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ sund3RRR ];
+    platforms = lib.platforms.linux;
   };
 })

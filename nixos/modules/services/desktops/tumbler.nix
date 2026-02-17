@@ -17,8 +17,8 @@ in
     (lib.mkRemovedOptionModule [ "services" "tumbler" "package" ] "")
   ];
 
-  meta = with lib; {
-    maintainers = with lib.maintainers; [ ] ++ lib.teams.pantheon.members;
+  meta = {
+    maintainers = [ ] ++ lib.teams.pantheon.members;
   };
 
   ###### interface
@@ -37,11 +37,11 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs.xfce; [
+    environment.systemPackages = with pkgs; [
       tumbler
     ];
 
-    services.dbus.packages = with pkgs.xfce; [
+    services.dbus.packages = with pkgs; [
       tumbler
     ];
 

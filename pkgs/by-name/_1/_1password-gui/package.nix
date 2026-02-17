@@ -33,7 +33,6 @@ let
     maintainers = with lib.maintainers; [
       khaneliman
       timstott
-      savannidgerinel
       sebtm
       bdd
     ];

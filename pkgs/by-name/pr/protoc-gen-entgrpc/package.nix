@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protoc-gen-entgrpc";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "ent";
     repo = "contrib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kI+/qbWvOxcHKee7jEFBs5Bb+5MPGunAsB6d1j9fhp8=";
   };
 
@@ -24,12 +24,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generator of an implementation of the service interface for ent protobuff";
     mainProgram = "protoc-gen-entgrpc";
     downloadPage = "https://github.com/ent/contrib/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://entgo.io/";
     maintainers = [ ];
   };
-}
+})

@@ -1,19 +1,19 @@
 {
   lib,
-  __splicedPackages,
+  pkgs,
   erlang,
 }:
 
 let
-  pkgs = __splicedPackages;
   inherit (lib) makeExtensible;
-
-  lib' = pkgs.callPackage ./lib.nix { };
 
   # FIXME: add support for overrideScope
   callPackageWithScope =
     scope: drv: args:
     lib.callPackageWith scope drv args;
+  callPackagesWithScope =
+    scope: drv: args:
+    lib.callPackagesWith scope drv args;
   mkScope = scope: pkgs // scope;
 
   packages =
@@ -21,6 +21,7 @@ let
     let
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
+      callPackages = drv: args: callPackagesWithScope defaultScope drv args;
     in
     rec {
       inherit callPackage erlang;
@@ -45,39 +46,38 @@ let
       fetchMixDeps = callPackage ./fetch-mix-deps.nix { };
       mixRelease = callPackage ./mix-release.nix { };
 
-      erlang-ls = callPackage ./erlang-ls { };
       erlfmt = callPackage ./erlfmt { };
       elvis-erlang = callPackage ./elvis-erlang { };
 
       # BEAM-based languages.
       elixir = elixir_1_18;
 
-      elixir_1_19 = lib'.callElixir ../interpreters/elixir/1.19.nix {
+      elixir_1_20 = callPackage ../interpreters/elixir/1.20.nix {
         inherit erlang;
         debugInfo = true;
       };
 
-      elixir_1_18 = lib'.callElixir ../interpreters/elixir/1.18.nix {
+      elixir_1_19 = callPackage ../interpreters/elixir/1.19.nix {
         inherit erlang;
         debugInfo = true;
       };
 
-      elixir_1_17 = lib'.callElixir ../interpreters/elixir/1.17.nix {
+      elixir_1_18 = callPackage ../interpreters/elixir/1.18.nix {
         inherit erlang;
         debugInfo = true;
       };
 
-      elixir_1_16 = lib'.callElixir ../interpreters/elixir/1.16.nix {
+      elixir_1_17 = callPackage ../interpreters/elixir/1.17.nix {
         inherit erlang;
         debugInfo = true;
       };
 
-      elixir_1_15 = lib'.callElixir ../interpreters/elixir/1.15.nix {
+      elixir_1_16 = callPackage ../interpreters/elixir/1.16.nix {
         inherit erlang;
         debugInfo = true;
       };
 
-      elixir_1_14 = lib'.callElixir ../interpreters/elixir/1.14.nix {
+      elixir_1_15 = callPackage ../interpreters/elixir/1.15.nix {
         inherit erlang;
         debugInfo = true;
       };
@@ -91,15 +91,22 @@ let
 
       elixir-ls = callPackage ./elixir-ls { inherit elixir; };
 
-      lfe = lfe_2_1;
-      lfe_2_1 = lib'.callLFE ../interpreters/lfe/2.1.nix { inherit erlang buildRebar3 buildHex; };
+      lfe = callPackage ../interpreters/lfe { inherit erlang buildRebar3 buildHex; };
 
-      livebook = callPackage ./livebook { };
+      livebook = callPackage ./livebook { inherit beamPackages; };
 
       # Non hex packages. Examples how to build Rebar/Mix packages with and
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
       webdriver = callPackage ./webdriver { };
+
+      inherit (callPackages ./hooks { })
+        beamCopySourceHook
+        beamModuleInstallHook
+        mixBuildDirHook
+        mixCompileHook
+        mixAppConfigPatchHook
+        ;
     };
 in
 makeExtensible packages

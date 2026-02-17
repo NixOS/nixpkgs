@@ -3,6 +3,9 @@
   buildPackages,
   pkgs,
   targetPackages,
+  libc,
+  preLibcHeaders,
+  darwin,
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   stdenv,
@@ -39,14 +42,10 @@ makeScopeWithSplicing' {
         callPackage = self.callPackage;
         directory = ../os-specific/darwin/apple-source-releases;
       };
-
-      # Must use pkgs.callPackage to avoid infinite recursion.
-      impure-cmds = pkgs.callPackage ../os-specific/darwin/impure-cmds { };
     in
 
     lib.recurseIntoAttrs (
-      impure-cmds
-      // apple-source-packages
+      apple-source-packages
       // {
 
         inherit (self.adv_cmds) ps;
@@ -57,7 +56,7 @@ makeScopeWithSplicing' {
         };
 
         binutils = pkgs.wrapBintoolsWith {
-          inherit (targetPackages) libc;
+          libc = targetPackages.libc or libc;
           bintools = self.binutils-unwrapped;
         };
 
@@ -88,7 +87,7 @@ makeScopeWithSplicing' {
         };
 
         binutilsNoLibc = pkgs.wrapBintoolsWith {
-          libc = targetPackages.preLibcHeaders;
+          libc = targetPackages.preLibcHeaders or preLibcHeaders;
           bintools = self.binutils-unwrapped;
         };
 
@@ -101,6 +100,8 @@ makeScopeWithSplicing' {
 
         libunwind = callPackage ../os-specific/darwin/libunwind { };
 
+        libcxx = callPackage ../os-specific/darwin/libcxx { };
+
         sigtool = callPackage ../os-specific/darwin/sigtool { };
 
         signingUtils = callPackage ../os-specific/darwin/signing-utils { };
@@ -112,13 +113,11 @@ makeScopeWithSplicing' {
 
         iosSdkPkgs = callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
           buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
-          targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
+          targetIosSdkPkgs = (targetPackages.darwin or darwin).iosSdkPkgs;
           inherit (pkgs.llvmPackages) clang-unwrapped;
         };
 
         lsusb = callPackage ../os-specific/darwin/lsusb { };
-
-        openwith = callPackage ../os-specific/darwin/openwith { };
 
         trash = callPackage ../os-specific/darwin/trash { };
 
@@ -174,6 +173,14 @@ makeScopeWithSplicing' {
           xcode_16_4
           xcode_26
           xcode_26_Apple_silicon
+          xcode_26_0_1
+          xcode_26_0_1_Apple_silicon
+          xcode_26_1
+          xcode_26_1_Apple_silicon
+          xcode_26_1_1
+          xcode_26_1_1_Apple_silicon
+          xcode_26_2
+          xcode_26_2_Apple_silicon
           xcode
           requireXcode
           ;

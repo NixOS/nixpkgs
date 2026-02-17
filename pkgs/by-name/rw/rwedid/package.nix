@@ -1,21 +1,20 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   udevCheckHook,
   xz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rwedid";
   version = "0.3.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ral";
     repo = "rwedid";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lbZD/QLCgkD5OQZdn6oCjry9edMcJ+q9qGF7IbY36U4=";
   };
 
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     echo 'SUBSYSTEM=="i2c-dev",KERNEL=="i2c-[0-9]*", ATTRS{class}=="0x030000", TAG+="uaccess"' > $out/etc/udev/rules.d/60-rwedid.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Read and write EDID data over an I2C bus";
     longDescription = ''
       To install udev rules, you also have to add `services.udev.packages = [ pkgs.rwedid ]` into your configuration.
@@ -45,8 +44,8 @@ rustPlatform.buildRustPackage rec {
       And you will have to load i2c-dev kernel module, for that add `boot.initrd.availableKernelModules = [ i2c-dev ] to your config.
     '';
     homepage = "https://codeberg.org/ral/rwedid";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

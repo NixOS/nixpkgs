@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spit";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "spit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bvcx+bQyi5tWDwuqdOv2h6q1ZSEHO9bHV2lfvRhL7iw=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     mainProgram = "spit";
   };
-}
+})

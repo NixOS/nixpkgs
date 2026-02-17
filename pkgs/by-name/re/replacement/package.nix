@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "replacement";
   version = "0.4.4";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "siriobalmelli";
     repo = "replacement";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0j4lvn3rx1kqvxcsd8nhc2lgk48jyyl7qffhlkvakhy60f9lymj3";
   };
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     sh
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/siriobalmelli/replacement";
     description = "Tool to execute yaml templates and output text";
     mainProgram = "replacement";
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
       This tool is useful in generating configuration files,
       static websites and the like.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ siriobalmelli ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ siriobalmelli ];
   };
-}
+})

@@ -13,7 +13,6 @@
   # Python deps
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   python,
   # Python libraries
   numpy,
@@ -132,7 +131,7 @@ let
     }
   ];
 
-  withTensorboard = (pythonOlder "3.6") || tensorboardSupport;
+  withTensorboard = tensorboardSupport;
 
   cudaComponents = with cudaPackages; [
     (cuda_nvcc.__spliced.buildHost or cuda_nvcc)
@@ -211,7 +210,8 @@ let
   ]);
 
   rules_cc_darwin_patched = stdenv.mkDerivation {
-    name = "rules_cc-${pname}-${version}";
+    pname = "rules_cc-${pname}";
+    inherit version;
 
     src = _bazel-build.deps;
 
@@ -245,7 +245,8 @@ let
     '';
   };
   llvm-raw_darwin_patched = stdenv.mkDerivation {
-    name = "llvm-raw-${pname}-${version}";
+    pname = "llvm-raw-${pname}";
+    inherit version;
 
     src = _bazel-build.deps;
 
@@ -285,7 +286,7 @@ let
       _bazel-build;
 
   _bazel-build = buildBazelPackage.override { inherit stdenv; } {
-    name = "${pname}-${version}";
+    inherit pname version;
     #bazel = bazel_5;
     bazel = bazel;
 
@@ -328,8 +329,10 @@ let
       jsoncpp
       libjpeg_turbo
       libpng
-      (pybind11.overridePythonAttrs (_: {
-        inherit stdenv;
+      (pybind11.override (prev: {
+        buildPythonPackage = prev.buildPythonPackage.override {
+          inherit stdenv;
+        };
       }))
       snappy-cpp
       sqlite
@@ -498,7 +501,7 @@ let
       # workaround for https://github.com/bazelbuild/bazel/issues/15359
       "--spawn_strategy=sandboxed"
     ]
-    ++ lib.optionals (mklSupport) [ "--config=mkl" ];
+    ++ lib.optionals mklSupport [ "--config=mkl" ];
 
     bazelTargets = [
       "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow"

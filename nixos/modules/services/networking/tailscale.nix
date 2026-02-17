@@ -147,7 +147,7 @@ in
       after = lib.mkIf (config.networking.networkmanager.enable) [ "NetworkManager-wait-online.service" ];
       wantedBy = [ "multi-user.target" ];
       path = [
-        (builtins.dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
+        (dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
         pkgs.procps # for collecting running services (opt-in feature)
         pkgs.getent # for `getent` to look up user shells
         pkgs.kmod # required to pass tailscale's v6nat check
@@ -213,7 +213,7 @@ in
             if [[ "$state" != "$lastState" ]]; then
               # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
               case "$state" in
-                NeedsLogin)
+                NeedsLogin|NeedsMachineAuth|Stopped)
                   echo "Server needs authentication, sending auth key"
                   tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
                   ;;
@@ -226,8 +226,8 @@ in
                   echo "Waiting for Tailscale State = Running or systemd timeout"
                   ;;
               esac
+              echo "State = $state"
             fi
-            echo "State = $state"
             lastState="$state"
             sleep .5
           done
@@ -235,7 +235,10 @@ in
     };
 
     systemd.services.tailscaled-set = mkIf (cfg.extraSetFlags != [ ]) {
-      after = [ "tailscaled.service" ];
+      after = [
+        "tailscaled.service"
+        "tailscaled-autoconnect.service"
+      ];
       wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

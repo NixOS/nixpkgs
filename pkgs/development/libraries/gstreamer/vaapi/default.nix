@@ -13,7 +13,13 @@
   wayland-scanner,
   libdrm,
   udev,
-  xorg,
+  libxv,
+  libxrandr,
+  libxext,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   libGLU,
   libGL,
   gstreamer,
@@ -63,13 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     libdrm
     udev
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXv
-    xorg.libXrandr
-    xorg.libSM
-    xorg.libICE
+    libx11
+    libxcb
+    libxext
+    libxv
+    libxrandr
+    libsm
+    libice
     nasm
     libvpx
   ]
@@ -97,11 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 })

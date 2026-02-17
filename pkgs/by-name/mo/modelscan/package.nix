@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "modelscan";
   version = "0.8.5";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "protectai";
     repo = "modelscan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8VupkPiHebVtOqMdtkBflAI1zPRdDSvHCEq3ghjASaE=";
   };
 
@@ -41,19 +41,19 @@ python3.pkgs.buildPythonApplication rec {
       dill
       pytestCheckHook
     ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   # tensorflow doesn0t support Python 3.12
   doCheck = false;
 
   pythonImportsCheck = [ "modelscan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protection against Model Serialization Attacks";
     homepage = "https://github.com/protectai/modelscan";
-    changelog = "https://github.com/protectai/modelscan/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/protectai/modelscan/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "modelscan";
   };
-}
+})

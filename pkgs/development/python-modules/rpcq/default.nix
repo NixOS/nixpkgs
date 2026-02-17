@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-rapidjson,
-  pythonOlder,
   pyzmq,
   ruamel-yaml,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "rpcq";
   version = "3.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rigetti";
@@ -55,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rpcq" ];
 
-  meta = with lib; {
+  meta = {
     description = "RPC framework and message specification for rigetti Quantum Cloud services";
     homepage = "https://github.com/rigetti/rpcq";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

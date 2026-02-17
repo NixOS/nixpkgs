@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "0-unstable-2025-09-05";
+  version = "0-unstable-2025-12-28";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "bb0ed9d5709afd30e928d2d11f7b650e03c8c72b";
-    hash = "sha256-ySIj9ZSIwdsn3WDFZ48xUGTFLA1BMU+hjvpDwifq4k4=";
+    rev = "2dd31d98c8a26e156f06bbcfb7a957fb452e2f83";
+    hash = "sha256-vqOBRfbzMtQ27T9Bmeop8KDw7c83scM4c/n3VjKKHSI=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -40,18 +40,18 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = with lib; {
+  meta = {
     description = "Backport of the latest Realtek RTW88 driver from wireless-next for older kernels";
     homepage = "https://github.com/lwfinger/rtw88";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl2Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tvorog
       atila
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "4.20";
     priority = -1;
   };

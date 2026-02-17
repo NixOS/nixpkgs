@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ghmap";
-  version = "1.0.4";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uhourri";
     repo = "ghmap";
-    tag = "v${version}";
-    hash = "sha256-liwkJfNp2Ozph3ummrh2GEshIlmVsG8Y8Pmm4lw2Ya8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UF7Zxrm+thZeAKPiCaI5t4NbDzuUU3oosPsb0Cgv9t0=";
   };
 
   build-system = with python3Packages; [
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     description = "Python tool for mapping GitHub events to contributor activities";
     homepage = "https://github.com/uhourri/ghmap";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ghmap";
   };
-}
+})

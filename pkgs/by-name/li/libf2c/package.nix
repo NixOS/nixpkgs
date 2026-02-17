@@ -5,7 +5,7 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libf2c";
   version = "20160102";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     mkdir build
     cd build
-    unzip ${src}
+    unzip ${finalAttrs.src}
   '';
 
   postPatch = ''
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
       (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
       || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "glibc");
   };
-}
+})

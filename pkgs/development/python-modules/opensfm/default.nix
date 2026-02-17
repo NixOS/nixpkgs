@@ -57,6 +57,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    substituteInPlace opensfm/src/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+
     rm opensfm/src/cmake/FindGlog.cmake
     rm opensfm/src/cmake/FindGflags.cmake
 

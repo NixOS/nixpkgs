@@ -16,17 +16,17 @@
   ifuseSupport ? false,
   ifuse ? null,
   lsof,
-  udisks2,
+  udisks,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spacefm";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "IgnorantGuru";
     repo = "spacefm";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "089r6i40lxcwzp60553b18f130asspnzqldlpii53smz52kvpirx";
   };
 
@@ -80,13 +80,13 @@ stdenv.mkDerivation rec {
     ffmpegthumbnailer
     jmtpfs
     lsof
-    udisks2
+    udisks
   ]
   ++ (lib.optionals ifuseSupport [ ifuse ]);
   # Introduced because ifuse doesn't build due to CVEs in libplist
   # Revert when libplist builds again…
 
-  meta = with lib; {
+  meta = {
     description = "Multi-panel tabbed file manager";
     longDescription = ''
       Multi-panel tabbed file and desktop manager for Linux
@@ -94,11 +94,10 @@ stdenv.mkDerivation rec {
       customizable menu system, and bash integration
     '';
     homepage = "http://ignorantguru.github.io/spacefm/";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      jagajaga
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       obadz
     ];
   };
-}
+})

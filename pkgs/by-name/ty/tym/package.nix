@@ -10,14 +10,14 @@
   pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tym";
   version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "endaaman";
     repo = "tym";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ySriCBmwDiDmAkIIByaZgmK0nUyYiVb0VAV5bi38JGw=";
   };
 
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
     pcre2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lua-configurable terminal emulator";
     homepage = "https://github.com/endaaman/tym";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       wesleyjrz
       kashw2
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "tym";
   };
-}
+})

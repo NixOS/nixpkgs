@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     (makeDesktopItem {
       name = "BlueJ";
       desktopName = "BlueJ";
-      exec = "BlueJ";
+      exec = "bluej";
       icon = "bluej";
       comment = "A simple powerful Java IDE";
       categories = [
