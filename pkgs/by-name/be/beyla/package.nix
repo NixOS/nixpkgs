@@ -7,6 +7,7 @@
   zlib,
   pkg-config,
 }:
+
 buildGoModule (finalAttrs: {
   pname = "beyla";
   version = "2.8.5";
@@ -21,9 +22,9 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
-  subPackages = ["cmd/beyla"];
+  subPackages = [ "cmd/beyla" ];
 
-  nativeBuildInputs = [pkg-config];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libbpf
@@ -52,7 +53,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/grafana/beyla";
     changelog = "https://github.com/grafana/beyla/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [evanlhatch];
+    maintainers = with lib.maintainers; [ evanlhatch ];
     mainProgram = "beyla";
     platforms = lib.platforms.linux;
   };
