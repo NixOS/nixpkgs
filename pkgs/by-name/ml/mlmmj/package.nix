@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlmmj";
-  version = "1.5.0";
+  version = "1.7.1";
 
   src = fetchFromCodeberg {
     owner = "mlmmj";
     repo = "mlmmj";
     tag = "RELEASE_" + lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
-    hash = "sha256-kAo04onxVve3kCaM4h1APsjs3C4iePabkBFJeqvnPxo=";
+    hash = "sha256-Ivo+eX/TXFHi49IQWr/B1XjZl4y19xOsr+y1MNj5fhE=";
   };
 
   nativeBuildInputs = [
