@@ -74,7 +74,7 @@ ocamlPackages.buildDunePackage {
   doCheck = false;
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = ocamlPackages.smtml.passthru.updateScript;
     tests = { inherit (nixosTests) owi; };
   };
 
