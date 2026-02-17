@@ -101,6 +101,8 @@ buildGo125Module (finalAttrs: {
   proxyVendor = true;
   vendorHash = "sha256-NC2VohNkU5MKUSguY83/j4Fb1CkZajw3gzHm4qnj5gM=";
 
+  subPackages = [ "cmd/backrest" ];
+
   nativeBuildInputs = [
     gzip
     makeBinaryWrapper
