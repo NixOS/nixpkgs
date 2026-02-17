@@ -10,6 +10,6 @@ index f26791d73..f03e8ddb9 100644
 +		 (LANDLOCK_ACCESS_FS_EXECUTE |
 +		  LANDLOCK_ACCESS_FS_READ_FILE |
 +		  LANDLOCK_ACCESS_FS_READ_DIR) },
- 		/* Allow access to the executable itself */
- 		{ LIBEXECDIR "/localsearch-extractor-3",
+ 		/* Library dirs, as we shockingly use libraries. Extends to /usr */
+ 		{ PREFIX "/" LIBDIR,
  		  LANDLOCK_ACCESS_FS_READ_FILE |
