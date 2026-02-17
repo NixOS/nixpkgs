@@ -5,6 +5,7 @@
   cryptsetup,
   curl,
   fetchFromGitHub,
+  gawk,
   gnugrep,
   gnused,
   jansson,
@@ -17,6 +18,7 @@
   nixosTests,
   pkg-config,
   stdenv,
+  systemd,
   tpm2-tools,
 }:
 
@@ -52,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     jose
     libpwquality
     luksmeta
+    systemd
     tpm2-tools
   ];
 
@@ -74,11 +77,26 @@ stdenv.mkDerivation (finalAttrs: {
   # The xargs command is a little bit convoluted because a simpler version would
   # be vulnerable to code injection. This hint is a courtesy of Stack Exchange:
   # https://unix.stackexchange.com/a/267438
+  #
+  # Meson's find_program only searches paths relative to the build prefix
+  # and /usr/lib, neither of which contain systemd-reply-password in the
+  # nix store. Prepend the actual nix store path so meson can find it.
+  #
+  # The systemd pkgconfig variable 'systemdsystemunitdir' points into the
+  # read-only systemd store path. Redirect unit installation to $out.
   postPatch = ''
     for f in $(find src/ -type f -print0 |\
                  xargs -0 -I@ sh -c 'grep -q "/bin/cat" "$1" && echo "$1"' sh @); do
       substituteInPlace "$f" --replace-fail '/bin/cat' '${lib.getExe' coreutils "cat"}'
     done
+
+    substituteInPlace src/luks/systemd/meson.build \
+      --replace-fail "sd_reply_pass = find_program(" \
+        "sd_reply_pass = find_program('${systemd}/lib/systemd/systemd-reply-password',"
+
+    substituteInPlace src/luks/systemd/meson.build \
+      --replace-fail "unitdir = systemd.get_pkgconfig_variable('systemdsystemunitdir')" \
+        "unitdir = join_paths(get_option('prefix'), 'lib', 'systemd', 'system')"
   '';
 
   # We wrap the main clevis binary entrypoint but not the sub-binaries.
@@ -94,10 +112,23 @@ stdenv.mkDerivation (finalAttrs: {
         luksmeta
         tpm2-tools
       ];
+      askpassPath = [
+        coreutils
+        cryptsetup
+        curl
+        gawk
+        gnugrep
+        gnused
+        jose
+        luksmeta
+      ];
     in
     ''
       wrapProgram $out/bin/clevis \
         --prefix PATH ':' "${lib.makeBinPath includeIntoPath}:${placeholder "out"}/bin"
+
+      wrapProgram $out/libexec/clevis-luks-askpass \
+        --prefix PATH ':' "${lib.makeBinPath askpassPath}:${placeholder "out"}/bin"
     '';
 
   passthru.tests = {
@@ -111,6 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     clevisLuksSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuks;
     clevisLuksFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuksFallback;
+    clevisLuksAskpassSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuksAskpass;
+    clevisLuksAskpassFallbackSystemdStage1 =
+      nixosTests.installer-systemd-stage-1.clevisLuksAskpassFallback;
     clevisZfsSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfs;
     clevisZfsFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfsFallback;
   };
