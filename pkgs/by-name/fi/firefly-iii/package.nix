@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchzip,
   stdenvNoCC,
   nodejs,
   fetchNpmDeps,
@@ -11,9 +12,19 @@
   dataDir ? "/var/lib/firefly-iii",
 }:
 
+let
+  version = "6.4.14";
+
+  # Release tarball contains translations downloaded from crowdin
+  releaseTarball = fetchzip {
+    url = "https://github.com/firefly-iii/firefly-iii/releases/download/v${version}/FireflyIII-v${version}.tar.gz";
+    stripRoot = false;
+    hash = "sha256-/PAo09a4hEHL91czYoXxJ4kfhsrnYsc34y7YKMVbA54=";
+  };
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii";
-  version = "6.4.14";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
@@ -64,6 +75,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postInstall = ''
     chmod -R u+w $out/share
     mv $out/share/php/firefly-iii/* $out/
+
+    # Copy language files from release tarball (contains all translations)
+    cp -r ${releaseTarball}/resources/lang/* $out/resources/lang/
+
     rm -R $out/share $out/storage $out/bootstrap/cache $out/node_modules
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/cache $out/bootstrap/cache
