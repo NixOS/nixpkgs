@@ -1,17 +1,12 @@
 {
   lib,
-  buildPythonApplication,
-  click,
-  i3ipc,
-  psutil,
-  natsort,
+  python3Packages,
   fetchPypi,
   xprop,
   xdotool,
-  importlib-metadata,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "i3-resurrect";
   version = "1.4.5";
   format = "setuptools";
@@ -22,13 +17,13 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    click
-    psutil
+    python3Packages.click
+    python3Packages.psutil
     xprop
-    natsort
-    i3ipc
+    python3Packages.natsort
+    python3Packages.i3ipc
     xdotool
-    importlib-metadata
+    python3Packages.importlib-metadata
   ];
   doCheck = false; # no tests
 
