@@ -285,6 +285,10 @@ in
       "zfs"
       "enableUnstable"
     ] "Instead set `boot.zfs.package = pkgs.zfs_unstable;`")
+    (lib.mkRenamedOptionModule
+      [ "boot" "zfs" "allowHibernation" ]
+      [ "boot" "zfs" "unsafeAllowHibernation" ]
+    )
   ];
 
   ###### interface
@@ -313,12 +317,12 @@ in
         description = "True if ZFS filesystem support is enabled";
       };
 
-      allowHibernation = lib.mkOption {
+      unsafeAllowHibernation = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = ''
-          Allow hibernation support, this may be a unsafe option depending on your
-          setup. Make sure to NOT use Swap on ZFS.
+          Allow hibernation (suspend to disk) support. This is generally considered **UNSAFE**,
+          is not well supported by openzfs, and could lead to corruption and data loss.
         '';
       };
 
@@ -683,8 +687,8 @@ in
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
         {
-          assertion = cfgZfs.allowHibernation -> !cfgZfs.forceImportRoot && !cfgZfs.forceImportAll;
-          message = "boot.zfs.allowHibernation while force importing is enabled will cause data corruption";
+          assertion = cfgZfs.unsafeAllowHibernation -> !cfgZfs.forceImportRoot && !cfgZfs.forceImportAll;
+          message = "boot.zfs.unsafeAllowHibernation while force importing is enabled will cause data corruption";
         }
         {
           assertion = !(lib.elem "" allPools);
@@ -711,10 +715,11 @@ in
 
       boot = {
         kernelModules = [ "zfs" ];
-        # https://github.com/openzfs/zfs/issues/260
+        # https://github.com/openzfs/zfs/issues/260#issuecomment-982142240
         # https://github.com/openzfs/zfs/issues/12842
+        # https://github.com/openzfs/zfs/issues/14118#issuecomment-1301576647
         # https://github.com/NixOS/nixpkgs/issues/106093
-        kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
+        kernelParams = lib.optionals (!config.boot.zfs.unsafeAllowHibernation) [ "nohibernate" ];
 
         extraModulePackages = [
           cfgZfs.modulePackage
