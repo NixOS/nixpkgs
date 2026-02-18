@@ -734,9 +734,9 @@
   };
 
   ghostty = {
-    version = "0-unstable-2025-11-27";
-    url = "github:bezhermoso/tree-sitter-ghostty/c2f7af6d7250f63f01401a6d84b3e353e71ff3c3";
-    hash = "sha256-d9cJWhEHiAMxyNhUt7VR5IU5z/5oXn3m9aMsknexaNM=";
+    version = "1.2-unstable-2026-01-02";
+    url = "github:bezhermoso/tree-sitter-ghostty/c14d6cb4dd36ff9dd569978491aa52e4726cbe86";
+    hash = "sha256-sVPr8jR6z0G68z3ZTdlMOXWguNGbZ/5apffNefm9apU=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
