@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "stb_2025";
+  pname = "stb";
   version = "0-unstable-2025-10-26";
 
   src = fetchFromGitHub {
