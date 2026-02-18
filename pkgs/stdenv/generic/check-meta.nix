@@ -90,6 +90,8 @@ let
       && (
         if isList attrs.meta.license then
           any (l: elem l list) attrs.meta.license
+        else if attrs.meta.license ? "type" then
+          lib.licenses.containsLicenses list attrs.meta.license
         else
           elem attrs.meta.license list
       );
@@ -105,7 +107,9 @@ let
 
   isUnfree =
     licenses:
-    if isAttrs licenses then
+    if isAttrs licenses && licenses ? "type" then
+      !(lib.licenses.isFree licenses)
+    else if isAttrs licenses then
       !(licenses.free or true)
     # TODO: Returning false in the case of a string is a bug that should be fixed.
     # In a previous implementation of this function the function body
