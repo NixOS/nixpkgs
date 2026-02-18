@@ -509,6 +509,10 @@ with haskellLib;
 
   ] super.basement;
 
+  # Repo is archived, package is abandoned: https://github.com/haskell-foundation/foundation
+  # Fixes compilation on ghcjs
+  foundation = appendPatch ./patches/foundation-ghcjs.patch super.foundation;
+
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
   # https://github.com/vincenthz/hs-memory/pull/99
   memory = appendPatches [
