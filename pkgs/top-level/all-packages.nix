@@ -9999,8 +9999,6 @@ with pkgs;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
 
-  i3 = callPackage ../applications/window-managers/i3 { };
-
   i3-auto-layout = callPackage ../applications/window-managers/i3/auto-layout.nix { };
 
   i3-rounded = callPackage ../applications/window-managers/i3/rounded.nix { };
