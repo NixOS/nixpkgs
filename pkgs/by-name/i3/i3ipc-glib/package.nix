@@ -12,15 +12,15 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i3ipc-glib";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "i3ipc-glib";
-    rev = "v${version}";
-    sha256 = "01fzvrbnzcwx0vxw29igfpza9zwzp2s7msmzb92v01z0rz0y5m0p";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-F9Tiwc/gB7BFWr/qerS4n/+k/nUvJsH7Bp2zb1fe3wU=";
   };
 
   strictDeps = true;
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };
-}
+})
