@@ -2025,6 +2025,12 @@
     name = "Austin Lund";
     keys = [ { fingerprint = "7083 E268 4BFD 845F 2B84  9E74 B695 8918 ED23 32CE"; } ];
   };
+  aporro = {
+    email = "git@aporro.dev";
+    github = "aporro1";
+    githubId = 124402746;
+    name = "Apollon Tsikas";
+  };
   appleboblin = {
     email = "github@appleboblin.com";
     github = "appleboblin";
