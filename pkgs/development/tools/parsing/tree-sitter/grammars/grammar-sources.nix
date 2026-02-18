@@ -1895,7 +1895,7 @@
   };
 
   properties = {
-    version = "0-unstable-2025-07-14";
+    version = "0.3.0-unstable-2025-07-14";
     url = "github:tree-sitter-grammars/tree-sitter-properties/6310671b24d4e04b803577b1c675d765cbd5773b";
     hash = "sha256-LRutvpXXVK7z+xrnLQVvLY+VRg8IB/VK572PNgvsQfc=";
     meta = {
