@@ -144,7 +144,7 @@ let
     ++ google-api-core.optional-dependencies.grpc
     ++ unstructured.optional-dependencies.all-docs
   );
-  version = "0.0.92";
+  version = "0.1.1";
   unstructured_api_nltk_data = python3.pkgs.nltk.dataDir (d: [
     d.punkt
     d.averaged-perceptron-tagger
@@ -158,7 +158,7 @@ stdenvNoCC.mkDerivation {
     owner = "Unstructured-IO";
     repo = "unstructured-api";
     rev = version;
-    hash = "sha256-kPPgLb6J0vg2bpFl85N+sVrapnozS/7pCcqG0xHYcMY=";
+    hash = "sha256-xQwgk7cjerKxLn1P5ogVbNHuHCFijai13n/1bBNvsYo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

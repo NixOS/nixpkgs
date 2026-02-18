@@ -26,7 +26,7 @@ let
   mkPrefetchScript =
     tool: src: deps:
     stdenv.mkDerivation {
-      inherit (lib.trivial) version;
+      version = lib.trivial.release;
       pname = "nix-prefetch-${tool}";
 
       strictDeps = true;

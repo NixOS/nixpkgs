@@ -21,10 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "verilator";
   version = "5.044";
 
-  # Verilator gets the version from this environment variable
-  # if it can't do git describe while building.
-  VERILATOR_SRC_VERSION = "v${finalAttrs.version}";
-
   src = fetchFromGitHub {
     owner = "verilator";
     repo = "verilator";
@@ -88,6 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env = {
+    # Verilator gets the version from this environment variable
+    # if it can't do git describe while building.
+    VERILATOR_SRC_VERSION = "v${finalAttrs.version}";
+
     SYSTEMC_INCLUDE = "${lib.getDev systemc}/include";
     SYSTEMC_LIBDIR = "${lib.getLib systemc}/lib";
   };

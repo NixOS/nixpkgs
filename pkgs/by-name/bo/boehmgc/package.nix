@@ -120,5 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.boehmGC;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    identifiers.cpeParts =
+      lib.meta.cpeFullVersionWithVendor "boehm-demers-weiser" finalAttrs.version
+      // {
+        product = "garbage_collector";
+      };
   };
 })

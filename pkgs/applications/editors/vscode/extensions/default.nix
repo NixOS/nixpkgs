@@ -989,6 +989,8 @@ let
         };
       };
 
+      claui.packaging = callPackage ./claui.packaging { };
+
       cmschuetz12.wal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "wal";
@@ -1141,8 +1143,8 @@ let
         mktplcRef = {
           publisher = "DanielGavin";
           name = "ols";
-          version = "0.1.44";
-          hash = "sha256-b8zf6p5N51VHSgyFWsFBmCd3GvRgBeFpikt8GfoG7J0=";
+          version = "0.1.45";
+          hash = "sha256-YfaP9QCLW4vZKfMyE/MEqEyiA9M5xlnS5Uxph+RT89s=";
         };
         meta = {
           description = "Visual Studio Code extension for Odin language";
@@ -2516,6 +2518,8 @@ let
         };
       };
 
+      jjk.jjk = callPackage ./jjk.jjk { };
+
       jkillian.custom-local-formatters = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "jkillian";
@@ -2611,8 +2615,8 @@ let
         mktplcRef = {
           name = "language-julia";
           publisher = "julialang";
-          version = "1.180.2";
-          hash = "sha256-4F4xZrB13+jAt/LhYigLygZoGZqQPfs8LJJzRqMUFaQ=";
+          version = "1.182.2";
+          hash = "sha256-PIhaYlGxOGycuE9YKyJ0xD7QEjKgmtHX7l4x/xs0GjU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
@@ -4629,8 +4633,8 @@ let
         mktplcRef = {
           name = "ayu";
           publisher = "teabyii";
-          version = "1.1.8";
-          sha256 = "sha256-md6G6Zf9E8oVyBvDQZfu9jTO6ZseNM+xJ/kx9efkuHA=";
+          version = "1.1.9";
+          sha256 = "sha256-mxypPqumN9SvgaFLItGmILH7PtRehgnnzkGtG3C07QI=";
         };
         meta = {
           description = "Simple theme with bright colors and comes in three versions — dark, light and mirage for all day long comfortable work";

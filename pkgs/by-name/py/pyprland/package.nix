@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   # NOTE: this is required for the imports check below to work properly
-  HYPRLAND_INSTANCE_SIGNATURE = "dummy";
+  env.HYPRLAND_INSTANCE_SIGNATURE = "dummy";
 
   pythonImportsCheck = [
     "pyprland"

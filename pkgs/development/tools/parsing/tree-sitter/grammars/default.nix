@@ -3,6 +3,7 @@
   fetchFromGitHub,
   fetchFromGitLab,
   fetchFromSourcehut,
+  fetchFromCodeberg,
   nix-update-script,
 }:
 
@@ -74,6 +75,7 @@ lib.mapAttrs' (
             github = fetchFromGitHub;
             gitlab = fetchFromGitLab;
             sourcehut = fetchFromSourcehut;
+            codeberg = fetchFromCodeberg;
             # NOTE: include other types here as required
           };
         in

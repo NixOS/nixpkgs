@@ -14,12 +14,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.2.1";
+  version = "1.2.5";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/D0tn09kC1AClJI3uFzMMWBvVWMYvvw52YrRD+dw0D4=";
+    hash = "sha256-0Zr7705Ya9Aj6ZmwVL6t289JN4XwDYafgGA5cuYOJh4=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -68,11 +68,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash =
-      if stdenvNoCC.hostPlatform.isDarwin then
-        "sha256-2zl08cUvIGwK843o+7NcPBOscoSasXzYNLy30htgvYE="
-      else
-        "sha256-2zl08cUvIGwK843o+7NcPBOscoSasXzYNLy30htgvYE=";
+    outputHash = "sha256-hK7ad7tG60K0VARAlZJsSxKjiHU78XQYl/tbIReBusc=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };

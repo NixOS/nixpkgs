@@ -2,10 +2,11 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  pythonAtLeast,
   pytestCheckHook,
   pycparser,
   psutil,
-  dotnet-sdk_6,
+  dotnet-sdk_10,
   buildDotnetModule,
   clr-loader,
   setuptools,
@@ -28,24 +29,39 @@ let
     projectFile = "src/runtime/Python.Runtime.csproj";
     testProjectFile = "src/testing/Python.Test.csproj";
     nugetDeps = ./deps.json;
-    dotnet-sdk = dotnet-sdk_6;
+    dotnet-sdk = dotnet-sdk_10;
   };
 in
 buildPythonPackage {
   inherit pname version src;
 
+  disabled = pythonAtLeast "3.14";
+
   pyproject = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+
+    # .NET SDK 10 uses a newer toolchain that triggers NonCopyableAnalyzer failures
+    # in this release; disable analyzers for the Nix build to keep the package building.
+    substituteInPlace Directory.Build.props \
+      --replace-fail '</PropertyGroup>' $'  <RunAnalyzers>false</RunAnalyzers>\n  </PropertyGroup>'
+
+    # Tests (run with --runtime=coreclr) need a CoreCLR target; net6.0 requires a
+    # runtime that isn't shipped with the .NET 10 SDK, so target net10.0 instead.
+    substituteInPlace src/testing/Python.Test.csproj \
+      --replace-fail 'netstandard2.0;net6.0' 'netstandard2.0;net10.0'
+
+    substituteInPlace tests/conftest.py \
+      --replace-fail '        # fw = "net6.0"' '        fw = "net10.0"'
   '';
 
   buildInputs = dotnet-build.nugetDeps;
 
   nativeBuildInputs = [
     setuptools
-    dotnet-sdk_6
+    dotnet-sdk_10
   ];
 
   propagatedBuildInputs = [

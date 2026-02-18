@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IVizzc2dKZ83dz3KBMDDiaFNdnS40cS++k8AywyvakQ=";
   };
 
-  ZSTD_SYS_USE_PKG_CONFIG = true;
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   enableParallelBuilding = true;
 

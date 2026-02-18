@@ -25,15 +25,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     # disable fetching and building of tree-sitter grammars in the helix-term build.rs
     HELIX_DISABLE_AUTO_GRAMMAR_BUILD = "1";
-    HELIX_DEFAULT_RUNTIME = "${placeholder "out"}/lib/runtime";
+    HELIX_DEFAULT_RUNTIME = helix.runtime;
   };
 
   postInstall = ''
     mkdir -p $out/lib
-    cp -r runtime $out/lib
-    # copy tree-sitter grammars from helix package
-    # TODO: build it from source instead
-    cp -r ${helix}/lib/runtime/grammars/* $out/lib/runtime/grammars/
     installShellCompletion contrib/completion/hx.{bash,fish,zsh}
     mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
     cp contrib/Helix.desktop $out/share/applications

@@ -48,6 +48,7 @@ let
 
   apparmorRules = apparmorRulesFromClosure { name = "transmission-daemon"; } (
     [
+      crc32c
       curl
       libdeflate
       libevent

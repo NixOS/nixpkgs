@@ -196,7 +196,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Some crates define extra types or enum values in test configuration which then lead
   # to type checking errors in other crates unless this feature is enabled.
-  checkFeatures = [ "visual-tests" ];
+  # gpui/runtime_shaders is required on darwin for the same reason as buildFeatures above:
+  # without it, build.rs invokes the proprietary Metal shader compiler.
+  checkFeatures = [
+    "visual-tests"
+  ]
+  ++ finalAttrs.buildFeatures;
 
   env = {
     ALLOW_MISSING_LICENSES = true;

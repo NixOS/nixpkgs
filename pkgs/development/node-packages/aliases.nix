@@ -104,6 +104,7 @@ mapAliases {
   inherit (pkgs) coc-explorer; # added 2025-10-01
   inherit (pkgs) coc-flutter; # Added 2025-11-05
   inherit (pkgs) coc-git; # added 2025-10-01
+  coc-go = throw "coc-go has been removed because it was unmaintained in nixpkgs"; # Added 2026-02-14
   inherit (pkgs) coc-haxe; # Added 2025-11-05
   inherit (pkgs) coc-highlight; # Added 2025-11-05
   inherit (pkgs) coc-html; # Added 2025-11-05
@@ -135,6 +136,7 @@ mapAliases {
   inherit (pkgs) coc-toml;
   coc-tslint = throw "coc-tslint was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
   coc-tslint-plugin = throw "coc-tslint-plugin was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
+  coc-tsserver = throw "coc-tsserver has been removed because it was unmaintained in nixpkgs"; # Added 2026-02-14
   coc-ultisnips = throw "'coc-ultisnips' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   coc-vetur = throw "coc-vetur was removed because vetur was deprecated by Vue in favor of volar. Use coc-volar instead, which supports Vue 3"; # added 2025-10-01
   inherit (pkgs) coc-vimlsp; # Added 2025-11-05

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     xapian
     zlib
   ];
-  XAPIAN_CONFIG = "${xapian}/bin/xapian-config";
+  env.XAPIAN_CONFIG = "${xapian}/bin/xapian-config";
   meta = {
     description = "Synchronize maildirs and notmuch databases";
     mainProgram = "muchsync";

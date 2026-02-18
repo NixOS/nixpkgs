@@ -255,8 +255,8 @@ in
       "sha256-S2NgrjralqxjjGo39TwaUSStqspnhI/E2/BLXUGP0Hc=";
 
   mypy-boto3-cloudwatch =
-    buildMypyBoto3Package "cloudwatch" "1.42.7"
-      "sha256-gYIRjb+Uyfn5JRrq14CjoxQZx3BMsun1ABNVHPk67wQ=";
+    buildMypyBoto3Package "cloudwatch" "1.42.49"
+      "sha256-KNDilDGBVmsRbN4IL6LF0MqE0oisoEzVGqnt8MDQl8c=";
 
   mypy-boto3-codeartifact =
     buildMypyBoto3Package "codeartifact" "1.42.3"
@@ -335,8 +335,8 @@ in
       "sha256-HQUL0R1NWP6DXQ26iS9k6lIAVdwK899fwLGH4/Z4U8Q=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.42.46"
-      "sha256-SlI76r826jhF6EkTzRq6lExh/46FhSQgexVO7QXWlrs=";
+    buildMypyBoto3Package "connect" "1.42.49"
+      "sha256-miEf5/952QG2ckUVrQ0D2eff+t6Xv2f4kC1hGbZZEVE=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.42.3"
@@ -443,8 +443,8 @@ in
       "sha256-92qhSUqTiLgbtvCdi/Mmgve18mcYR00ABL+bNy7/OnY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.42.48"
-      "sha256-ZGYD/z4Euykz2L+/Wni/8vk37pp/sMtndNSkzsOusJg=";
+    buildMypyBoto3Package "ec2" "1.42.49"
+      "sha256-HN4TRMVlleWZuhYnuTPxFz1bxP3KIdmchROom9g5jWM=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.42.3"
@@ -622,8 +622,8 @@ in
       "sha256-9I+RMsF8b8PK2OsmtgX8v6C6gvZ3h8zB9fQQF5CWh2o=";
 
   mypy-boto3-inspector2 =
-    buildMypyBoto3Package "inspector2" "1.42.4"
-      "sha256-PFz6OXCgWjHOwStPVozdx8cwLnBbViOr39DPR388CMk=";
+    buildMypyBoto3Package "inspector2" "1.42.49"
+      "sha256-iCLS3XGlO6FBe9ADkRKGQxPEuOfd2sVRkLiHhMrGZ3M=";
 
   mypy-boto3-internetmonitor =
     buildMypyBoto3Package "internetmonitor" "1.42.3"
@@ -1170,8 +1170,8 @@ in
       "sha256-juVfwdjPDNPaT5tvyXpzDtomugqxeu++AERLkVtFIxw=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.42.44"
-      "sha256-suSqZZnf8DCgfMZTBhIpXc6R/vgZ2KGmpX7zeIryy4o=";
+    buildMypyBoto3Package "sagemaker" "1.42.49"
+      "sha256-mRYxS3oZYjViDoCQEcdBiujOXEMUw/GaeXpO/sAO4EI=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.42.3"

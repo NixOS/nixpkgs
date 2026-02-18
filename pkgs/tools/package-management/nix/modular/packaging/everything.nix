@@ -252,6 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
       "nix-util"
       "nix-util-c"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "nixos" version;
   };
 
 })

@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${finalAttrs.src}/ui/yarn.lock";
-      hash = "sha256-ekhSPWzIgFhwSw0bIlBqu8LTYk3vuJ9VM8eHc3mnHGM=";
+      hash = "sha256-kqBolkQiwZUBic0f+Ek5HwYsOmro1+FStkDLXAre79o=";
     };
 
     nativeBuildInputs = [

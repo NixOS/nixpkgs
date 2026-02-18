@@ -70,11 +70,21 @@ stdenvNoCC.mkDerivation (
         ./0004-disable-windows-desktop.patch
       ];
 
-      # this needs to be match the version being patched above
-      UNICODE_CHARACTER_DATABASE = fetchzip {
-        url = "https://www.unicode.org/Public/15.0.0/ucd/UCD.zip";
-        hash = "sha256-jj6bX46VcnH7vpc9GwM9gArG+hSPbOGL6E4SaVd0s60=";
-        stripRoot = false;
+      env = {
+        # this needs to be match the version being patched above
+        UNICODE_CHARACTER_DATABASE = fetchzip {
+          url = "https://www.unicode.org/Public/15.0.0/ucd/UCD.zip";
+          hash = "sha256-jj6bX46VcnH7vpc9GwM9gArG+hSPbOGL6E4SaVd0s60=";
+          stripRoot = false;
+        };
+        FONTCONFIG_FILE =
+          let
+            fc = makeFontsConf { fontDirectories = [ liberation_ttf ]; };
+          in
+          runCommand "fonts.conf" { } ''
+            substitute ${fc} $out \
+            --replace-fail "/etc/" "${fontconfig.out}/etc/"
+          '';
       };
 
       postPatch = ''
@@ -141,15 +151,6 @@ stdenvNoCC.mkDerivation (
       #  - Project assets file '/build/source/nukebuild/obj/project.assets.json'
       #  - NuGet packages config '/build/source/nukebuild/_build.csproj'
       linkNuGetPackagesAndSources = true;
-
-      FONTCONFIG_FILE =
-        let
-          fc = makeFontsConf { fontDirectories = [ liberation_ttf ]; };
-        in
-        runCommand "fonts.conf" { } ''
-          substitute ${fc} $out \
-            --replace-fail "/etc/" "${fontconfig.out}/etc/"
-        '';
 
       preConfigure = ''
         # closed source (telemetry?) https://github.com/AvaloniaUI/Avalonia/discussions/16878

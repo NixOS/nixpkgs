@@ -43,7 +43,7 @@ jobs:
             ci/github-script
 
       - name: Install dependencies
-        run: npm install bottleneck
+        run: npm install bottleneck@2.19.5
 
       - name: Log current API rate limits
         env:
@@ -85,7 +85,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
+      - uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd # v31.9.1
 
       - uses: cachix/cachix-action@3ba601ff5bbb07c7220846facfa2cd81eeee15a1 # v16
         continue-on-error: true

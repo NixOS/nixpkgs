@@ -9,7 +9,7 @@ kubernetes.overrideAttrs (_: {
     "convert"
   ];
 
-  WHAT = lib.concatStringsSep " " [
+  env.WHAT = toString [
     "cmd/kubectl"
     "cmd/kubectl-convert"
   ];

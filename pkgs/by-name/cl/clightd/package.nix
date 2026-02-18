@@ -39,10 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LOhBBd7QL5kH4TzMFgrh70C37WsFdsiKArP+tIEiPWo=";
   };
 
-  # dbus-1.pc has datadir=/etc
-  SYSTEM_BUS_DIR = "${placeholder "out"}/share/dbus-1/system-services";
-  # polkit-gobject-1.pc has prefix=${polkit.out}
-  POLKIT_ACTION_DIR = "${placeholder "out"}/share/polkit-1/actions";
+  env = {
+    # dbus-1.pc has datadir=/etc
+    SYSTEM_BUS_DIR = "${placeholder "out"}/share/dbus-1/system-services";
+    # polkit-gobject-1.pc has prefix=${polkit.out}
+    POLKIT_ACTION_DIR = "${placeholder "out"}/share/polkit-1/actions";
+  };
 
   postPatch = ''
     sed -i "s@pkg_get_variable(SYSTEM_BUS_DIR.*@set(SYSTEM_BUS_DIR $SYSTEM_BUS_DIR)@" CMakeLists.txt
