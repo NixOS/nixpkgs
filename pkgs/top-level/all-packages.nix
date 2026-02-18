@@ -10007,8 +10007,6 @@ with pkgs;
 
   i3-ratiosplit = callPackage ../applications/window-managers/i3/i3-ratiosplit.nix { };
 
-  i3-swallow = python3Packages.callPackage ../applications/window-managers/i3/swallow.nix { };
-
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
 
   i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };

@@ -1,14 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  poetry-core,
-  i3ipc,
-  xlib,
-  six,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "i3-swallow";
   version = "unstable-2022-02-19";
 
@@ -22,13 +18,13 @@ buildPythonApplication {
   };
 
   nativeBuildInputs = [
-    poetry-core
+    python3Packages.poetry-core
   ];
 
   propagatedBuildInputs = [
-    i3ipc
-    xlib
-    six
+    python3Packages.i3ipc
+    python3Packages.xlib
+    python3Packages.six
   ];
 
   # No tests available
