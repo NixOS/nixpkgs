@@ -13,7 +13,7 @@ libfprint.overrideAttrs (
     ...
   }:
   let
-    version = "1.94.9+tod1";
+    version = "1.94.10";
   in
   {
     pname = "libfprint-tod";
@@ -24,7 +24,7 @@ libfprint.overrideAttrs (
       owner = "3v1n0";
       repo = "libfprint";
       rev = "v${version}";
-      hash = "sha256-xkywuFbt8EFJOlIsSN2hhZfMUhywdgJ/uT17uiO3YV4=";
+      hash = "sha256-aNBUIKY3PP5A07UNg3N0qq+2cwb6Fk67oKQcXgr2G/4=";
     };
 
     mesonFlags = [
