@@ -20478,9 +20478,9 @@ self: super: with self; {
 
   vharfbuzz = callPackage ../development/python-modules/vharfbuzz { };
 
-  victron-mqtt = callPackage ../development/python-modules/victron-mqtt { };
-
   viaggiatreno-ha = callPackage ../development/python-modules/viaggiatreno-ha { };
+
+  victron-mqtt = callPackage ../development/python-modules/victron-mqtt { };
 
   victron-vrm = callPackage ../development/python-modules/victron-vrm { };
 
