@@ -377,7 +377,7 @@
   };
 
   d = {
-    version = "0-unstable-2025-06-29";
+    version = "0.8.2-unstable-2025-06-29";
     url = "github:gdamore/tree-sitter-d/fb028c8f14f4188286c2eef143f105def6fbf24f";
     hash = "sha256-Xi8out5j4L5pAArA9zmLA7aGhma++G+AaVLgFW+TEAo=";
     meta = {
