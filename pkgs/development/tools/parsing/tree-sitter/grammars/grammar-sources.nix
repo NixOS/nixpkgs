@@ -1017,7 +1017,7 @@
   };
 
   hoon = {
-    version = "0-unstable-2024-12-17";
+    version = "0.0.3-unstable-2024-12-17";
     url = "github:urbit-pilled/tree-sitter-hoon/1545137aadcc63660c47db9ad98d02fa602655d0";
     hash = "sha256-RkSPoscrinmuSTWHzXkRNaiqECDXpKAbQ4z7a6Tpvek=";
     meta = {
