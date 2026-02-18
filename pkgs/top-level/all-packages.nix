@@ -9999,8 +9999,6 @@ with pkgs;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
 
-  i3ipc-glib = callPackage ../applications/window-managers/i3/i3ipc-glib.nix { };
-
   i3lock-blur = callPackage ../applications/window-managers/i3/lock-blur.nix { };
 
   i3lock-color = callPackage ../applications/window-managers/i3/lock-color.nix { };
