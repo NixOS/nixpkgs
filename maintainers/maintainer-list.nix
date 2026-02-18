@@ -5012,6 +5012,12 @@
     githubId = 1448923;
     name = "Christian Kauhaus";
   };
+  ckgxrg = {
+    email = "ckgxrg@ckgxrg.io";
+    github = "ckgxrg-salt";
+    githubId = 165614491;
+    name = "ckgxrg";
+  };
   cko = {
     email = "christine.koppelt@gmail.com";
     github = "cko";
