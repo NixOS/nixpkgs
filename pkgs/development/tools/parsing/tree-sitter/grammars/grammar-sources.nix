@@ -68,7 +68,7 @@
   };
 
   awk = {
-    version = "0-unstable-2024-11-02";
+    version = "0.7.2-unstable-2024-11-02";
     url = "github:Beaglefoot/tree-sitter-awk/34bbdc7cce8e803096f47b625979e34c1be38127";
     hash = "sha256-MDfAtG6ZC0KttJ5bdW71Jgts+SAJitRnwu8xQ26N9K0=";
     meta = {
