@@ -18,7 +18,7 @@
     if localSystem.isAarch64 then
       import ./bootstrap-files/aarch64-apple-darwin.nix
     else
-      import ./bootstrap-files/x86_64-apple-darwin.nix
+      throw "Unsupported platform for the Darwin stdenv"
   ),
 }:
 
