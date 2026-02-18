@@ -108,6 +108,7 @@ stubs
 
   ### C ###
 
+  Csu = throw "darwin.Csu has been removed, as it was only used on `x86_64-darwin`, which is no longer supported"; # added 2026-06-26
   cctools = pkgs.cctools; # added 2024-07-17
   cctools-apple = pkgs.cctools; # added 2024-07-01
   cctools-llvm = pkgs.cctools; # added 2024-07-01
