@@ -14,14 +14,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jwm-settings-manager";
   version = "2019-01-27";
 
   src = fetchbzr {
-    url = "lp:${pname}";
+    url = "lp:jwm-settings-manager";
     rev = "292";
-    sha256 = "1yqc1ac2pbkc88z7p1qags1jygdlr5y1rhc5mx6gapcf54bk0lmi";
+    hash = "sha256-sVIwFymOXfVMr4XBHHzJtD0vg34Kh3s+QmyuK5gKDPs=";
   };
 
   nativeBuildInputs = [
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})
