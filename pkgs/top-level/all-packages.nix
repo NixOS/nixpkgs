@@ -9999,8 +9999,6 @@ with pkgs;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
 
-  i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
-
   i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };
 
   i3ipc-glib = callPackage ../applications/window-managers/i3/i3ipc-glib.nix { };
