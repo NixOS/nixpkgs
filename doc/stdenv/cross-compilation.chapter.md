@@ -48,7 +48,7 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 
 `system`
 
-: This is a two-component shorthand for the platform. Examples of this would be "x86_64-darwin" and "i686-linux"; see `lib.systems.doubles` for more. The first component corresponds to the CPU architecture of the platform and the second to the operating system of the platform (`[cpu]-[os]`). This format has built-in support in Nix, such as the `builtins.currentSystem` impure string.
+: This is a two-component shorthand for the platform. Examples of this would be "aarch64-darwin" and "i686-linux"; see `lib.systems.doubles` for more. The first component corresponds to the CPU architecture of the platform and the second to the operating system of the platform (`[cpu]-[os]`). This format has built-in support in Nix, such as the `builtins.currentSystem` impure string.
 
 `config`
 
