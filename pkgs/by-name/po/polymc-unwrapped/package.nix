@@ -43,13 +43,13 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "polymc-unwrapped";
-  version = "7.0-unstable-2025-11-15";
+  version = "7.0-unstable-2026-03-04";
 
   src = fetchFromGitHub {
     owner = "PolyMC";
     repo = "PolyMC";
-    rev = "8b0558142f995dffdd3daef5fce54377d5fcb9ac";
-    hash = "sha256-pqR8JneWelshuaZj9y/Fo3BLjaMYphnDZuBKGccO2FM=";
+    rev = "5603242bf3b70d83a8dbd171b52be5f4fcedfc1c";
+    hash = "sha256-iPOTfk1seKcKdus3+ksnZUUr3NFxwsz9d93vtxSmg5c=";
   };
 
   nativeBuildInputs = [
@@ -84,11 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch = ''
-    ### This fix will be upstreamed. PolyMC hasn't updated the MangoHud functionality for a while.
-
-    substituteInPlace launcher/Application.cpp launcher/minecraft/MinecraftInstance.cpp \
-        --replace-fail "libMangoHud_dlsym.so" "libMangoHud_shim.so" \
-
     ### Metadata & branding
 
     substituteInPlace buildconfig/BuildConfig.cpp.in \
