@@ -139,6 +139,20 @@ in
         example = "/srv/pangolin";
         description = "Path to variable state data directory for Pangolin.";
       };
+
+      rawTCPResources = lib.mkOption {
+        type = with lib.types; listOf port;
+        default = [ ];
+        example = [ 7777 ];
+        description = "Raw TCP resources to expose for pangolin";
+      };
+
+      rawUDPResources = lib.mkOption {
+        type = with lib.types; listOf port;
+        default = [ ];
+        example = [ 25565 ];
+        description = "Raw UDP resources to expose for pangolin";
+      };
     };
     gerbil = {
       port = lib.mkOption {
@@ -177,14 +191,23 @@ in
             -> (cfg.dnsProvider != "" && config.services.traefik.environmentFiles != [ ]);
           message = "services.pangolin.dnsProvider and services.traefik.environmentFile must be provided when prefer_wildcard_cert is true.";
         }
+      ]
+      ++ [
+        {
+          assertion =
+            (cfg.rawTCPResources ++ cfg.rawUDPResources != [ ])
+            -> cfg.settings.flags.allow_raw_resources or false;
+          message = "services.pangolin.settings.flags.allow_raw_resources must be true in able to use raw resources";
+        }
       ];
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [
         80
         443
-      ];
-      allowedUDPPorts = [ 51820 ];
+      ]
+      ++ cfg.rawTCPResources;
+      allowedUDPPorts = [ 51820 ] ++ cfg.rawUDPResources;
     };
 
     users = {
@@ -201,13 +224,10 @@ in
           isSystemUser = true;
         };
       };
-      groups.fossorial = {
-        members = [
-          "pangolin"
-          "gerbil"
-          "traefik"
-        ];
-      };
+      groups.fossorial.members = [
+        "pangolin"
+        "gerbil"
+      ];
     };
     # order is as follows
     # "pangolin.service"
@@ -217,21 +237,23 @@ in
     # make tunnels declarative by calling API
     ###
     systemd = {
-      tmpfiles.settings."10-fossorial-paths" = {
-        "${cfg.dataDir}".d = {
-          user = "pangolin";
-          group = "fossorial";
-          mode = "0770";
-        };
-        "${cfg.dataDir}/config".d = {
-          user = "pangolin";
-          group = "fossorial";
-          mode = "0770";
-        };
-        "${cfg.dataDir}/config/letsencrypt".d = {
-          user = "traefik";
-          group = "fossorial";
-          mode = "0700";
+      tmpfiles.settings = {
+        "10-fossorial-paths" = {
+          "${cfg.dataDir}".d = {
+            user = "pangolin";
+            group = "fossorial";
+            mode = "0770";
+          };
+          "${cfg.dataDir}/config".d = {
+            user = "pangolin";
+            group = "fossorial";
+            mode = "0770";
+          };
+          "${cfg.dataDir}/config/letsencrypt".d = {
+            user = "traefik";
+            group = "fossorial";
+            mode = "0770";
+          };
         };
       };
       services = {
@@ -241,9 +263,11 @@ in
           requires = [ "network.target" ];
           after = [ "network.target" ];
 
+          # need to do the symlinks here because of strict
+          # systemd tmpfiles unsafe path transitions
           preStart = ''
-            mkdir -p ${cfg.dataDir}/config
-            cp -f ${cfgFile} ${cfg.dataDir}/config/config.yml
+            ln -sf  ${cfgFile} ${cfg.dataDir}/config/config.yml
+            ln -sft ${cfg.dataDir}/config/ ${config.services.traefik.dataDir}
           '';
 
           serviceConfig = {
@@ -429,19 +453,16 @@ in
       };
     };
 
+    # needed so that traefik can write to the acme.json
+    systemd.services.traefik.serviceConfig.ReadWritePaths = [ "${cfg.dataDir}/config/letsencrypt/" ];
     services.traefik = {
       enable = true;
-      group = "fossorial";
-      dataDir = "${cfg.dataDir}/config/traefik";
-      staticConfigOptions = {
+      supplementaryGroups = [ "fossorial" ];
+      localPlugins = [ pkgs.fosrl-badger ];
+      static.settings = {
         providers.http = {
           endpoint = "http://localhost:${toString finalSettings.server.internal_port}/api/v1/traefik-config";
           pollInterval = "5s";
-        };
-        # TODO to change this once #437073 is merged.
-        experimental.plugins.badger = {
-          moduleName = "github.com/fosrl/badger";
-          version = "v1.2.0";
         };
         certificatesResolvers.letsencrypt.acme =
           (
@@ -462,16 +483,28 @@ in
             storage = "${cfg.dataDir}/config/letsencrypt/acme.json";
             caServer = "https://acme-v02.api.letsencrypt.org/directory";
           };
-        entryPoints = {
-          web.address = ":80";
-          websecure = {
-            address = ":443";
-            transport.respondingTimeouts.readTimeout = "30m";
-            http.tls.certResolver = "letsencrypt";
-          };
-        };
+        entryPoints = lib.mkMerge [
+          {
+            web.address = ":80";
+            websecure = {
+              address = ":443";
+              transport.respondingTimeouts.readTimeout = "30m";
+              http.tls.certResolver = "letsencrypt";
+            };
+          }
+          (lib.mkIf (cfg.rawTCPResources != [ ]) lib.mkMerge (
+            map (tcpPort: {
+              "tcp-${toString tcpPort}".address = ":${toString tcpPort}/tcp";
+            })
+          ))
+          (lib.mkIf (cfg.rawUDPResources != [ ]) lib.mkMerge (
+            map (udpPort: {
+              "udp-${toString udpPort}".address = ":${toString udpPort}/udp";
+            })
+          ))
+        ];
       };
-      dynamicConfigOptions = {
+      dynamic.files."pangolin".settings = {
         http = {
           middlewares.redirect-to-https.redirectScheme.scheme = "https";
           routers = {
