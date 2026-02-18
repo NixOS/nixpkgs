@@ -10003,8 +10003,6 @@ with pkgs;
 
   i3-rounded = callPackage ../applications/window-managers/i3/rounded.nix { };
 
-  i3altlayout = callPackage ../applications/window-managers/i3/altlayout.nix { };
-
   i3-balance-workspace =
     python3Packages.callPackage ../applications/window-managers/i3/balance-workspace.nix
       { };
