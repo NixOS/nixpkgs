@@ -75,7 +75,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     mainProgram = "minio";
     knownVulnerabilities = [
-      "minio has been abandoned by upstream, to be removed for 26.05"
+      "minio has been abandoned by upstream and will be removed for 26.05. Users should migrate to alternatives such as Garage, SeaweedFS, or Ceph. S3-compatible clients such as rclone can be used to move data."
     ];
   };
 })
