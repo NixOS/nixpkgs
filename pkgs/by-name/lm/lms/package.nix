@@ -15,7 +15,7 @@
   zlib,
   libsm,
   libice,
-  stb,
+  stb_2023,
   openssl,
   xxHash,
   pugixml,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libsm
     libice
-    stb
+    stb_2023
     openssl
     xxHash
     pugixml

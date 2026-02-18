@@ -3,7 +3,7 @@
   lib,
   libpng,
   nix-update-script,
-  stb,
+  stb_2023,
   stdenv,
   testers,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildOutputs = [ ];
 
   makeFlags = [
-    "CFLAGS=-I${lib.getDev stb}/include/stb"
+    "CFLAGS=-I${lib.getDev stb_2023}/include/stb"
     "PREFIX=${placeholder "dev"}"
     "BINDIR=${placeholder "out"}/bin"
   ];

@@ -18,7 +18,7 @@
   lunasvg,
   nanopb,
   linalg,
-  stb,
+  stb_2023,
 }:
 
 let
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtbase
     qt6Packages.qtserialport
     sdbus-cpp_2
-    stb
+    stb_2023
     xz
   ];
 

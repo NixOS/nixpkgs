@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   libarcus,
-  stb,
+  stb_2023,
   protobuf,
   fetchpatch,
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libarcus
-    stb
+    stb_2023
     protobuf
   ];
 
