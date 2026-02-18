@@ -559,15 +559,24 @@ in
             assertion = false;
             inherit message;
           })
-          (concatLists [
-            (optional
-              (
-                (builtins.elem "network-interfaces.target" service.after)
-                || (builtins.elem "network-interfaces.target" service.wants)
+          (
+            let
+              dynamicUser = service.serviceConfig.DynamicUser or false;
+              user = service.serviceConfig.User or "";
+            in
+            concatLists [
+              (optional
+                (
+                  (builtins.elem "network-interfaces.target" service.after)
+                  || (builtins.elem "network-interfaces.target" service.wants)
+                )
+                "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
               )
-              "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
-            )
-          ])
+              (optional (dynamicUser == true && user != "" && builtins.hasAttr user config.users.users)
+                "Service '${name}.service' has 'DynamicUser=true' but 'User' is set to '${user}', which is defined in 'users.users'. DynamicUser is for ephemeral auto-allocated users and must not be combined with pre-existing users — it poisons systemd's userdb and breaks $HOME resolution. Either remove 'DynamicUser=true' or don't set 'User' to an existing system user."
+              )
+            ]
+          )
       ) cfg.services
     );
 
