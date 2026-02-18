@@ -92,6 +92,7 @@ let
     # Declare root explicitly to avoid shellcheck warnings, it comes from the env
     declare root
 
+    mkdir -p "$root/usr/bin"
     mkdir -p "$root/etc" "$root/var/lib"
     chmod 0755 "$root/etc" "$root/var/lib"
     mkdir -p "$root/var/lib/private" "$root/root" /run/nixos-containers

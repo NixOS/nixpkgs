@@ -29,8 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Build parameters
-  CFGPATH = cfgPath;
-  SENDMAIL = "sendmail";
+  env = {
+    CFGPATH = cfgPath;
+    SENDMAIL = "sendmail";
+  };
 
   preConfigure = "export GOCACHE=$NIX_BUILD_TOP/gocache";
 

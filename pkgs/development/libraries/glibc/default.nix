@@ -216,5 +216,6 @@ in
 
     meta = (previousAttrs.meta or { }) // {
       description = "GNU C Library";
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" previousAttrs.passthru.minorRelease;
     };
   })

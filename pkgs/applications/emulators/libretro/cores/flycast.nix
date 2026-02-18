@@ -8,13 +8,13 @@
 }:
 mkLibretroCore {
   core = "flycast";
-  version = "0-unstable-2026-02-06";
+  version = "0-unstable-2026-02-16";
 
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
-    rev = "c577e29f43edc5a86c6ed4edca46706000d214b2";
-    hash = "sha256-nHMtXwtrgxoN/tuY1d+DqZAJFag8vmHAP/9tS2j3ErU=";
+    rev = "ba5b3c71ecc966e52f698f41443e7cc9b81bf824";
+    hash = "sha256-tbq+NgbZDKMg0K0cWF1+7h80QTaAaO5BD9nf94z5fc0=";
     fetchSubmodules = true;
   };
 

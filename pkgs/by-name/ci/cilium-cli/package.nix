@@ -5,6 +5,7 @@
   cilium-cli,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   testers,
 }:
 
@@ -21,6 +22,10 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  # Required to workaround install check error:
+  # 2022/06/25 10:36:22 Unable to start gops: mkdir /homeless-shelter: permission denied
+  nativeInstallCheckInputs = [ writableTmpDirAsHomeHook ];
+
   vendorHash = null;
 
   subPackages = [ "cmd/cilium" ];
@@ -30,10 +35,6 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X=github.com/cilium/cilium/cilium-cli/defaults.CLIVersion=${finalAttrs.version}"
   ];
-
-  # Required to workaround install check error:
-  # 2022/06/25 10:36:22 Unable to start gops: mkdir /homeless-shelter: permission denied
-  HOME = "$TMPDIR";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cilium \

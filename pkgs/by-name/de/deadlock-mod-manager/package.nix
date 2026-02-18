@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./no-updater-artifacts.patch
   ];
 
-  VITE_API_URL = "https://api.deadlockmods.app";
+  env.VITE_API_URL = "https://api.deadlockmods.app";
 
   # Skip tests that require network access
   checkFlags = [

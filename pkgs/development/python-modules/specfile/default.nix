@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "specfile";
-  version = "0.39.0";
+  version = "0.39.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
       # export-subst prevents reproducibility
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-apGGUVBFNRknQvyBCVZerw0/MctWDTDcz4y/7tRp46s=";
+    hash = "sha256-z9HGnBLdtJ4uzm1DJFD0QN/DZNTdBbZcPx/kefCYnkc=";
   };
 
   build-system = [

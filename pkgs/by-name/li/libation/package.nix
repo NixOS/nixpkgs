@@ -26,6 +26,8 @@ buildDotnetModule rec {
 
   sourceRoot = "${src.name}/Source";
 
+  env.AVALONIA_TELEMETRY_OPTOUT = "1";
+
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   dotnet-runtime = dotnetCorePackages.runtime_10_0;

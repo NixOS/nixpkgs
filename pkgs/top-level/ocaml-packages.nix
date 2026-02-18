@@ -459,6 +459,8 @@ let
 
         domain_shims = callPackage ../development/ocaml-modules/domain_shims { };
 
+        domainpc = callPackage ../development/ocaml-modules/domainpc { };
+
         domainslib = callPackage ../development/ocaml-modules/domainslib { };
 
         dose3 = callPackage ../development/ocaml-modules/dose3 { };

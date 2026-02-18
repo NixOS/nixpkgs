@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ jdk17_headless ];
 
-  _JAVA_HOME = "${jdk17_headless}/";
+  env._JAVA_HOME = "${jdk17_headless}/";
 
   postPatch = ''
     substituteInPlace bin/lfc \

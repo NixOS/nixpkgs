@@ -56,9 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # Environment variables
-  STRIPPROG = "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip";
-
   postPatch = ''
     # Install libnetpbm.so symlink to correct destination
     substituteInPlace lib/Makefile \
@@ -102,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
+  env = {
+    STRIPPROG = "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip";
+  }
+  // lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   };
 

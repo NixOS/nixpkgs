@@ -386,6 +386,8 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
                     "eval",
                     "--json",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.images',
@@ -412,6 +414,8 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
                     "eval",
                     "--json",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure.passthru.filePath',

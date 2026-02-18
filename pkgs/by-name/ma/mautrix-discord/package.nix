@@ -43,7 +43,6 @@ buildGoModule rec {
     changelog = "https://github.com/mautrix/discord/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      MoritzBoehme
       sumnerevans
     ];
     mainProgram = "mautrix-discord";

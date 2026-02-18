@@ -11,6 +11,7 @@
 
   # optional-dependencies
   cryptography,
+  libvalkey,
   pyopenssl,
   requests,
 
@@ -49,7 +50,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   optional-dependencies = {
-    # TODO: libvalkey = [ libvalkey ];
+    libvalkey = [ libvalkey ];
     ocsp = [
       cryptography
       pyopenssl

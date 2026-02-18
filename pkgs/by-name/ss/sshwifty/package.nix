@@ -69,7 +69,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/nirui/sshwifty";
     changelog = "https://github.com/nirui/sshwifty/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ungeskriptet ];
     mainProgram = "sshwifty";
   };

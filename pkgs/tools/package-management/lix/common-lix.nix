@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lix";
 
   version = "${version}${suffix}";
-  VERSION_SUFFIX = suffix;
+  env.VERSION_SUFFIX = suffix;
 
   inherit src patches;
 

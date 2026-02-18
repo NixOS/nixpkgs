@@ -572,69 +572,76 @@ rec {
     other derivations.  A derivation created with linkFarm is often used in CI
     as a easy way to build multiple derivations at once.
   */
-  symlinkJoin =
-    args_@{
-      name ?
-        assert lib.assertMsg (
-          args_ ? pname && args_ ? version
-        ) "symlinkJoin requires either a `name` OR `pname` and `version`";
-        "${args_.pname}-${args_.version}",
-      paths,
-      stripPrefix ? "",
-      preferLocalBuild ? true,
-      allowSubstitutes ? false,
-      postBuild ? "",
-      failOnMissing ? stripPrefix == "",
-      ...
-    }:
-    assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
-      stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
+  symlinkJoin = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-      Ensure that the path starts with / and specifies path to the subdirectory.
-    '';
+    excludeDrvArgNames = [
+      "postBuild"
+      "stripPrefix"
+      "paths"
+      "failOnMissing"
+    ];
 
-    let
-      mapPaths =
-        f: paths:
-        map (
-          path:
-          if path == null then
-            null
-          else if isList path then
-            mapPaths f path
-          else
-            f path
-        ) paths;
-      args =
-        removeAttrs args_ [
-          "name"
-          "postBuild"
-          "stripPrefix"
-          "paths"
-          "failOnMissing"
-        ]
-        // {
-          # Allow getting the proper position of the output derivation.
-          # Since one of these are required, it should be fairly accurate.
-          pos =
-            if args_ ? pname then
-              builtins.unsafeGetAttrPos "pname" args_
+    extendDrvArgs =
+      finalAttrs:
+      args@{
+        name ?
+          assert lib.assertMsg (
+            finalAttrs ? pname && finalAttrs ? version
+          ) "symlinkJoin requires either a `name` OR `pname` and `version`";
+          "${finalAttrs.pname}-${finalAttrs.version}",
+        paths,
+        stripPrefix ? "",
+        preferLocalBuild ? true,
+        allowSubstitutes ? false,
+        postBuild ? "",
+        failOnMissing ? stripPrefix == "",
+        ...
+      }:
+      assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
+        stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
+
+        Ensure that the path starts with / and specifies path to the subdirectory.
+      '';
+      let
+        mapPaths =
+          f:
+          map (
+            path:
+            if path == null then
+              null
+            else if isList path then
+              mapPaths f path
             else
-              builtins.unsafeGetAttrPos "name" args_;
-          inherit preferLocalBuild allowSubstitutes;
-          paths = mapPaths (path: "${path}${stripPrefix}") paths;
-          passAsFile = [ "paths" ];
-        }; # pass the defaults
-    in
-    runCommand name args ''
-      mkdir -p $out
-      for i in $(cat $pathsPath); do
-        ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${
-          optionalString (!failOnMissing) "; fi"
-        }
-      done
-      ${postBuild}
-    '';
+              f path
+          );
+      in
+      {
+        enableParallelBuilding = true;
+        inherit name allowSubstitutes preferLocalBuild;
+        passAsFile = [
+          "buildCommand"
+          "paths"
+        ];
+        paths = mapPaths (path: "${path}${stripPrefix}") paths;
+        buildCommand = ''
+          mkdir -p $out
+          for i in $(cat $pathsPath); do
+            ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${
+              optionalString (!failOnMissing) "; fi"
+            }
+          done
+          ${postBuild}
+        '';
+      }
+      // lib.optionalAttrs (!args ? meta) {
+        pos =
+          if args ? pname then
+            builtins.unsafeGetAttrPos "pname" args
+          else
+            builtins.unsafeGetAttrPos "name" args;
+      };
+  };
 
   # TODO: move linkFarm docs to the Nixpkgs manual
   /*
@@ -687,7 +694,7 @@ rec {
         # This is the best we can do since the other attrs are either defined here, or curried values that
         # we cannot extract a position from
         pos =
-          if lib.isAttrs entries then
+          if (lib.isAttrs entries) && (entries != { }) then
             builtins.unsafeGetAttrPos (builtins.head (builtins.attrNames entries)) entries
           else
             null;
@@ -1021,76 +1028,69 @@ rec {
       ];
     }
   */
-  applyPatches =
-    {
-      src,
-      name ?
-        (
-          if builtins.typeOf src == "path" then
-            baseNameOf src
-          else if builtins.isAttrs src && builtins.hasAttr "name" src then
-            src.name
-          else
-            throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
-        )
-        + "-patched",
-      patches ? [ ],
-      prePatch ? "",
-      postPatch ? "",
-      ...
-    }@args:
-    assert lib.assertMsg (
-      !args ? meta
-    ) "applyPatches will not merge 'meta', change it in 'src' instead";
-    assert lib.assertMsg (
-      !args ? passthru
-    ) "applyPatches will not merge 'passthru', change it in 'src' instead";
-    if patches == [ ] && prePatch == "" && postPatch == "" then
-      src # nothing to do, so use original src to avoid additional drv
-    else
+  applyPatches = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        src,
+        ...
+      }@args:
+      assert lib.assertMsg (
+        !args ? meta
+      ) "applyPatches will not merge 'meta', change it in 'src' instead";
+      assert lib.assertMsg (
+        !args ? passthru
+      ) "applyPatches will not merge 'passthru', change it in 'src' instead";
       let
         keepAttrs = names: lib.filterAttrs (name: val: lib.elem name names);
         # enables tools like nix-update to determine what src attributes to replace
-        extraPassthru = lib.optionalAttrs (lib.isAttrs src) (
+        extraPassthru = lib.optionalAttrs (lib.isAttrs finalAttrs.src) (
           keepAttrs [
             "rev"
             "tag"
             "url"
             "outputHash"
             "outputHashAlgo"
-          ] src
+          ] finalAttrs.src
         );
       in
-      stdenvNoCC.mkDerivation (
-        {
-          inherit
-            name
-            src
-            patches
-            prePatch
-            postPatch
-            ;
-          preferLocalBuild = true;
-          allowSubstitutes = false;
-          phases = "unpackPhase patchPhase installPhase";
-          installPhase = "cp -R ./ $out";
-        }
+      {
+        name =
+          args.name or (
+            if builtins.isPath finalAttrs.src then
+              baseNameOf finalAttrs.src + "-patched"
+            else if builtins.isAttrs finalAttrs.src && (finalAttrs.src ? name) then
+              finalAttrs.src.name + "-patched"
+            else
+              throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
+          );
+
+        # Manually setting `name` can mess up positioning.
+        # This should fix it.
+        pos = builtins.unsafeGetAttrPos "src" args;
+
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+
+        # unconditionally disable phases that are we don't want
+        phases = [
+          "unpackPhase"
+          "patchPhase"
+          "installPhase"
+        ];
+
+        installPhase = "cp -R ./ $out";
+
+        # passthru the git and hash info for nix-update, as well
+        # as all the src's passthru attrs.
+        passthru = extraPassthru // finalAttrs.src.passthru or { };
+
         # Carry (and merge) information from the underlying `src` if present.
-        // (optionalAttrs (src ? meta) {
-          inherit (src) meta;
-        })
-        // (optionalAttrs (extraPassthru != { } || src ? passthru) {
-          passthru = extraPassthru // src.passthru or { };
-        })
-        # Forward any additional arguments to the derivation
-        // (removeAttrs args [
-          "src"
-          "name"
-          "patches"
-          "prePatch"
-          "postPatch"
-        ])
-      );
+        meta = lib.optionalAttrs (src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
+      };
+  };
 
   # TODO: move docs to Nixpkgs manual
   # An immutable file in the store with a length of 0 bytes.

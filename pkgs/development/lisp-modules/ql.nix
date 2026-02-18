@@ -12,6 +12,15 @@ let
 
   overrides = (
     self: super: {
+      named-readtables = super.named-readtables.overrideLispAttrs (o: {
+        patches = (o.patches or [ ]) ++ [
+          (pkgs.fetchpatch {
+            name = "named-readtables-sbcl-fix.patch";
+            url = "https://github.com/melisgl/named-readtables/commit/6eea56674442b884a4fee6ede4c8aad63541aa5b.patch";
+            hash = "sha256-ZkmBz50tkJutCNhrgVTHyE+sxRjmL8y7YC7yewrmves=";
+          })
+        ];
+      });
       cl_plus_ssl = super.cl_plus_ssl.overrideLispAttrs (o: {
         nativeLibs = [ pkgs.openssl ];
       });
@@ -182,10 +191,41 @@ let
           "iolib/pathnames"
         ];
       });
+      cl-ana_dot_makeres = super.cl-ana_dot_makeres.overrideLispAttrs (o: {
+        patches = (o.patches or [ ]) ++ [ ./patches/cl-ana-fix-type-error.patch ];
+      });
       cl-ana_dot_hdf-cffi = super.cl-ana_dot_hdf-cffi.overrideLispAttrs (o: {
         nativeBuildInputs = [ pkgs.hdf5 ];
         nativeLibs = [ pkgs.hdf5 ];
         NIX_LDFLAGS = [ "-lhdf5" ];
+      });
+      # The antik source archive contains a broken documentation.pdf symlink
+      # pointing to documentation/build/latex/Antik.pdf which doesn't exist.
+      # All packages built from this archive need the symlink removed.
+      antik = super.antik.overrideLispAttrs (o: {
+        postInstall = (o.postInstall or "") + ''
+          rm -f $out/documentation.pdf
+        '';
+      });
+      antik-base = super.antik-base.overrideLispAttrs (o: {
+        postInstall = (o.postInstall or "") + ''
+          rm -f $out/documentation.pdf
+        '';
+      });
+      foreign-array = super.foreign-array.overrideLispAttrs (o: {
+        postInstall = (o.postInstall or "") + ''
+          rm -f $out/documentation.pdf
+        '';
+      });
+      physical-dimension = super.physical-dimension.overrideLispAttrs (o: {
+        postInstall = (o.postInstall or "") + ''
+          rm -f $out/documentation.pdf
+        '';
+      });
+      science-data = super.science-data.overrideLispAttrs (o: {
+        postInstall = (o.postInstall or "") + ''
+          rm -f $out/documentation.pdf
+        '';
       });
       gsll = super.gsll.overrideLispAttrs (o: {
         nativeBuildInputs = [ pkgs.gsl ];

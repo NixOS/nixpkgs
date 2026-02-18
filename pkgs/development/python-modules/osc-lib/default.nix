@@ -15,7 +15,6 @@
   stdenv,
   stestr,
   stevedore,
-  writeText,
 }:
 
 buildPythonPackage rec {
@@ -30,11 +29,9 @@ buildPythonPackage rec {
     hash = "sha256-1mMON/aVJon7t/zfYVhFpuB78b+DmOEVhvIFaTBRqfo=";
   };
 
-  postPatch = ''
-    # TODO: somehow bring this to upstreams attention
-    substituteInPlace pyproject.toml \
-      --replace-fail '"osc_lib"' '"osc_lib", "osc_lib.api", "osc_lib.cli", "osc_lib.command", "osc_lib.test", "osc_lib.tests", "osc_lib.tests.api", "osc_lib.tests.cli", "osc_lib.tests.command", "osc_lib.tests.utils", "osc_lib.utils"'
-  '';
+  patches = [
+    ./fix-pyproject.diff
+  ];
 
   env.PBR_VERSION = version;
 
@@ -79,7 +76,19 @@ buildPythonPackage rec {
       runHook postCheck
     '';
 
-  pythonImportsCheck = [ "osc_lib" ];
+  pythonImportsCheck = [
+    "osc_lib"
+    "osc_lib.api"
+    "osc_lib.cli"
+    "osc_lib.command"
+    "osc_lib.test"
+    "osc_lib.tests"
+    "osc_lib.tests.api"
+    "osc_lib.tests.cli"
+    "osc_lib.tests.command"
+    "osc_lib.tests.utils"
+    "osc_lib.utils"
+  ];
 
   meta = {
     description = "OpenStackClient Library";

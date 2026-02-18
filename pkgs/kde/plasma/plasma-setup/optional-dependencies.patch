@@ -1,0 +1,13 @@
+diff --git a/modules/keyboard/CMakeLists.txt b/modules/keyboard/CMakeLists.txt
+index ddd52df8bc1cc1c6c3bc6b90d9b7f913092995a2..4a108baf60dcf0a87ad9e512f63884dba4442c10 100644
+--- a/modules/keyboard/CMakeLists.txt
++++ b/modules/keyboard/CMakeLists.txt
+@@ -9,7 +9,7 @@ ecm_qt_declare_logging_category(logging_SRCS
+     EXPORT PLASMASETUP
+ )
+ 
+-ecm_find_qmlmodule(org.kde.plasma.private.kcm_keyboard REQUIRED)
++ecm_find_qmlmodule(org.kde.plasma.private.kcm_keyboard)
+ 
+ ecm_add_qml_module(plasmasetup_keyboard
+     URI "org.kde.plasmasetup.keyboard"

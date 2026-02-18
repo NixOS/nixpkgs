@@ -2694,15 +2694,6 @@ let
         sha512 = "VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==";
       };
     };
-    "isexe-3.1.1" = {
-      name = "isexe";
-      packageName = "isexe";
-      version = "3.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/isexe/-/isexe-3.1.1.tgz";
-        sha512 = "LpB/54B+/2J5hqQ7imZHfdU31OlgQqx7ZicVlkm9kzg9/w8GKLEcFfJl/t7DCEDueOyBAD6zCCwTO6Fzs0NoEQ==";
-      };
-    };
     "isomorphic-ws-4.0.1" = {
       name = "isomorphic-ws";
       packageName = "isomorphic-ws";
@@ -4872,15 +4863,6 @@ let
         sha512 = "ghqN1b0puy3MhhviwO2kGF8SeMDNhEbnKxjK7h6+fvY9JAxqvXi8y5NAHSQv687OVboS2uZIByzGd45/YxrRHg==";
       };
     };
-    "tslib-2.8.1" = {
-      name = "tslib";
-      packageName = "tslib";
-      version = "2.8.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz";
-        sha512 = "oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==";
-      };
-    };
     "tsx-4.19.3" = {
       name = "tsx";
       packageName = "tsx";
@@ -4960,15 +4942,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/typescript/-/typescript-5.4.5.tgz";
         sha512 = "vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==";
-      };
-    };
-    "typescript-5.8.2" = {
-      name = "typescript";
-      packageName = "typescript";
-      version = "5.8.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/typescript/-/typescript-5.8.2.tgz";
-        sha512 = "aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==";
       };
     };
     "uid-number-0.0.5" = {
@@ -5187,15 +5160,6 @@ let
         sha512 = "X+8T3GoiwTVlJbicx/sIAF+yuJAqz8VvwJyoMVhwEMoEKE/fkDmrqUgDMyBECcM2A2frVZIUj5HI/ErRXCfOeA==";
       };
     };
-    "vscode-languageserver-textdocument-1.0.12" = {
-      name = "vscode-languageserver-textdocument";
-      packageName = "vscode-languageserver-textdocument";
-      version = "1.0.12";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vscode-languageserver-textdocument/-/vscode-languageserver-textdocument-1.0.12.tgz";
-        sha512 = "cxWNPesCnQCcMPeenjKKsOCKQZ/L6Tv19DTRIGuLWe32lyzWhihGVJ/rcckZXJxfdKCFvRLS3fpBIsV/ZGX4zA==";
-      };
-    };
     "vscode-languageserver-types-3.16.0" = {
       name = "vscode-languageserver-types";
       packageName = "vscode-languageserver-types";
@@ -5232,15 +5196,6 @@ let
         sha512 = "RAaHx7B14ZU04EU31pT+rKz2/zSl7xMsfIZuo8pd+KZO6PXtQmpevpq3vxvWNcrGbdmhM/rr5Uw5Mz+NBfhVng==";
       };
     };
-    "vscode-uri-3.1.0" = {
-      name = "vscode-uri";
-      packageName = "vscode-uri";
-      version = "3.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vscode-uri/-/vscode-uri-3.1.0.tgz";
-        sha512 = "/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==";
-      };
-    };
     "walk-2.3.15" = {
       name = "walk";
       packageName = "walk";
@@ -5248,15 +5203,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/walk/-/walk-2.3.15.tgz";
         sha512 = "4eRTBZljBfIISK1Vnt69Gvr2w/wc3U6Vtrw7qiN5iqYJPH7LElcYh/iU4XWhdCy2dZqv1ToMyYlybDylfG/5Vg==";
-      };
-    };
-    "which-5.0.0" = {
-      name = "which";
-      packageName = "which";
-      version = "5.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/which/-/which-5.0.0.tgz";
-        sha512 = "JEdGzHwwkrbWoGOlIHqQ5gtprKGOenpDHpxE9zVR1bWbOtYRyPPHMe9FaP6x61CmNaTThSkb0DAJte5jD+DmzQ==";
       };
     };
     "which-typed-array-1.1.19" = {
@@ -5689,52 +5635,6 @@ in
     meta = {
       description = "browser-side require() the node way";
       homepage = "https://github.com/browserify/browserify#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-go = nodeEnv.buildNodePackage {
-    name = "coc-go";
-    packageName = "coc-go";
-    version = "1.3.35";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-go/-/coc-go-1.3.35.tgz";
-      sha512 = "1XHfCsUe8Xcb8EJb0kCXIuCFc7EfNFM4qziZhk/1LcKS9oMWrUCxQqPpYSdpd1XAatTad1KeuRFigPv6aaijiQ==";
-    };
-    dependencies = [
-      sources."isexe-3.1.1"
-      sources."tslib-2.8.1"
-      sources."vscode-languageserver-textdocument-1.0.12"
-      sources."vscode-uri-3.1.0"
-      sources."which-5.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "gopls extension for coc";
-      homepage = "https://github.com/josa42/coc-go#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-tsserver = nodeEnv.buildNodePackage {
-    name = "coc-tsserver";
-    packageName = "coc-tsserver";
-    version = "2.2.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-tsserver/-/coc-tsserver-2.2.3.tgz";
-      sha512 = "XYMekSGU+2jJ4U53FXUPmcv8WayME0eXUYruVL6PDYyVUUij86UQetliWHt1ai42VLTh3riIIZlcMdQkLot1sQ==";
-    };
-    dependencies = [
-      sources."typescript-5.8.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "javascript and typescript language features extension of coc.nvim";
-      homepage = "https://github.com/neoclide/coc-tsserver#readme";
       license = "MIT";
     };
     production = true;

@@ -181,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps,share/icons/hicolor/256x256/apps}
+    mkdir -p $out/{bin,opt/${binaryName},share/icons/hicolor/256x256/apps}
     mv * $out/opt/${binaryName}
 
     chmod +x $out/opt/${binaryName}/${binaryName}
@@ -205,7 +205,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Without || true the install would fail on case-insensitive filesystems
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${lib.strings.toLower binaryName} || true
 
-    ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
     ln -s "$desktopItem/share/applications" $out/share/

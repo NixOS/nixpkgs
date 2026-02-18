@@ -619,6 +619,7 @@
   ./services/display-managers/greetd.nix
   ./services/display-managers/lemurs.nix
   ./services/display-managers/ly.nix
+  ./services/display-managers/plasma-login-manager.nix
   ./services/display-managers/sddm.nix
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
@@ -1514,6 +1515,7 @@
   ./services/security/reaction.nix
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
+  ./services/security/ssh-agent-switcher.nix
   ./services/security/sshguard.nix
   ./services/security/sslmate-agent.nix
   ./services/security/step-ca.nix
@@ -1598,6 +1600,7 @@
   ./services/web-apps/changedetection-io.nix
   ./services/web-apps/chhoto-url.nix
   ./services/web-apps/cloudlog.nix
+  ./services/web-apps/cocoon.nix
   ./services/web-apps/code-server.nix
   ./services/web-apps/coder.nix
   ./services/web-apps/collabora-online.nix

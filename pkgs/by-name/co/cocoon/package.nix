@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
+  stdenvNoCC,
   nix-update-script,
 }:
 buildGoModule (finalAttrs: {
@@ -23,7 +25,10 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-bux3OfHT8f1FVpBAZUP23vo8M6h8nPTJbi/GTUzhdc4=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = lib.optionalAttrs stdenvNoCC.hostPlatform.isLinux { inherit (nixosTests) cocoon; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "ATProtocol Personal Data Server written in Go with a SQLite block and blob store";
