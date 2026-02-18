@@ -921,7 +921,7 @@
   };
 
   gren = {
-    version = "0-unstable-2025-05-03";
+    version = "2.0.0-unstable-2025-05-03";
     url = "github:MaeBrooks/tree-sitter-gren/c36aac51a915fdfcaf178128ba1e9c2205b25930";
     hash = "sha256-XtLP2ncpwAiubHug6k4sJCYRZo5f+Nu02tho/4tVD/k=";
     meta = {
