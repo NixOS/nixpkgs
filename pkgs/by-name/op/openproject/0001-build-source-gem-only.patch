@@ -1,0 +1,269 @@
+diff --git a/Gemfile.lock b/Gemfile.lock
+index 155a56ab7bd..153ed9529c4 100644
+--- a/Gemfile.lock
++++ b/Gemfile.lock
+@@ -450,13 +450,8 @@ GEM
+       descendants_tracker (~> 0.0.1)
+     color_conversion (0.1.2)
+     colored2 (4.0.3)
+-    commonmarker (2.8.2-aarch64-linux)
+-    commonmarker (2.8.2-aarch64-linux-musl)
+-    commonmarker (2.8.2-arm-linux)
+-    commonmarker (2.8.2-arm64-darwin)
+-    commonmarker (2.8.2-x86_64-darwin)
+-    commonmarker (2.8.2-x86_64-linux)
+-    commonmarker (2.8.2-x86_64-linux-musl)
++    commonmarker (2.8.2)
++      rb_sys (~> 0.9)
+     compare-xml (0.66)
+       nokogiri (~> 1.8)
+     concurrent-ruby (1.3.6)
+@@ -595,14 +590,7 @@ GEM
+       concurrent-ruby (~> 1.1)
+       webrick (~> 1.7)
+       websocket-driver (~> 0.7)
+-    ffi (1.17.4-aarch64-linux-gnu)
+-    ffi (1.17.4-aarch64-linux-musl)
+-    ffi (1.17.4-arm-linux-gnu)
+-    ffi (1.17.4-arm-linux-musl)
+-    ffi (1.17.4-arm64-darwin)
+-    ffi (1.17.4-x86_64-darwin)
+-    ffi (1.17.4-x86_64-linux-gnu)
+-    ffi (1.17.4-x86_64-linux-musl)
++    ffi (1.17.4)
+     flamegraph (0.9.5)
+     fog-aws (3.33.2)
+       base64 (>= 0.2, < 0.4)
+@@ -658,24 +646,6 @@ GEM
+     google-protobuf (4.35.0)
+       bigdecimal
+       rake (~> 13.3)
+-    google-protobuf (4.35.0-aarch64-linux-gnu)
+-      bigdecimal
+-      rake (~> 13.3)
+-    google-protobuf (4.35.0-aarch64-linux-musl)
+-      bigdecimal
+-      rake (~> 13.3)
+-    google-protobuf (4.35.0-arm64-darwin)
+-      bigdecimal
+-      rake (~> 13.3)
+-    google-protobuf (4.35.0-x86_64-darwin)
+-      bigdecimal
+-      rake (~> 13.3)
+-    google-protobuf (4.35.0-x86_64-linux-gnu)
+-      bigdecimal
+-      rake (~> 13.3)
+-    google-protobuf (4.35.0-x86_64-linux-musl)
+-      bigdecimal
+-      rake (~> 13.3)
+     googleapis-common-protos-types (1.23.0)
+       google-protobuf (~> 4.26)
+     googleauth (1.16.2)
+@@ -843,6 +813,7 @@ GEM
+     mini_magick (5.3.1)
+       logger
+     mini_mime (1.1.5)
++    mini_portile2 (2.8.9)
+     minitest (6.0.6)
+       drb (~> 2.0)
+       prism (~> 1.5)
+@@ -866,21 +837,8 @@ GEM
+     net-smtp (0.5.1)
+       net-protocol
+     nio4r (2.7.5)
+-    nokogiri (1.19.3-aarch64-linux-gnu)
+-      racc (~> 1.4)
+-    nokogiri (1.19.3-aarch64-linux-musl)
+-      racc (~> 1.4)
+-    nokogiri (1.19.3-arm-linux-gnu)
+-      racc (~> 1.4)
+-    nokogiri (1.19.3-arm-linux-musl)
+-      racc (~> 1.4)
+-    nokogiri (1.19.3-arm64-darwin)
+-      racc (~> 1.4)
+-    nokogiri (1.19.3-x86_64-darwin)
+-      racc (~> 1.4)
+-    nokogiri (1.19.3-x86_64-linux-gnu)
+-      racc (~> 1.4)
+-    nokogiri (1.19.3-x86_64-linux-musl)
++    nokogiri (1.19.3)
++      mini_portile2 (~> 2.8.2)
+       racc (~> 1.4)
+     oj (3.17.3)
+       bigdecimal (>= 3.0)
+@@ -1122,12 +1080,6 @@ GEM
+       ruby-rc4
+       ttfunk
+     pg (1.6.3)
+-    pg (1.6.3-aarch64-linux)
+-    pg (1.6.3-aarch64-linux-musl)
+-    pg (1.6.3-arm64-darwin)
+-    pg (1.6.3-x86_64-darwin)
+-    pg (1.6.3-x86_64-linux)
+-    pg (1.6.3-x86_64-linux-musl)
+     plaintext (0.3.7)
+       activesupport (> 2.2.1)
+       nokogiri (~> 1.10, >= 1.10.4)
+@@ -1146,36 +1098,6 @@ GEM
+       bigdecimal
+       logger
+       rb_sys (~> 0.9.124)
+-    prometheus-client-mmap (1.5.0-aarch64-linux-gnu)
+-      base64
+-      bigdecimal
+-      logger
+-      rb_sys (~> 0.9.124)
+-    prometheus-client-mmap (1.5.0-aarch64-linux-musl)
+-      base64
+-      bigdecimal
+-      logger
+-      rb_sys (~> 0.9.124)
+-    prometheus-client-mmap (1.5.0-arm64-darwin)
+-      base64
+-      bigdecimal
+-      logger
+-      rb_sys (~> 0.9.124)
+-    prometheus-client-mmap (1.5.0-x86_64-darwin)
+-      base64
+-      bigdecimal
+-      logger
+-      rb_sys (~> 0.9.124)
+-    prometheus-client-mmap (1.5.0-x86_64-linux-gnu)
+-      base64
+-      bigdecimal
+-      logger
+-      rb_sys (~> 0.9.124)
+-    prometheus-client-mmap (1.5.0-x86_64-linux-musl)
+-      base64
+-      bigdecimal
+-      logger
+-      rb_sys (~> 0.9.124)
+     pry-byebug (3.12.0)
+       byebug (~> 13.0)
+       pry (>= 0.13, < 0.17)
+@@ -1558,16 +1480,7 @@ GEM
+     zeitwerk (2.8.2)
+ 
+ PLATFORMS
+-  aarch64-linux
+-  aarch64-linux-gnu
+-  aarch64-linux-musl
+-  arm-linux-gnu
+-  arm-linux-musl
+-  arm64-darwin
+-  x86_64-darwin
+-  x86_64-linux
+-  x86_64-linux-gnu
+-  x86_64-linux-musl
++  ruby
+ 
+ DEPENDENCIES
+   actionpack-xml_parser (~> 2.0.0)
+@@ -1849,7 +1762,6 @@ CHECKSUMS
+   browser (6.2.0) sha256=281d5295788825c9396427c292c2d2be0a5c91875c93c390fde6e5d61a5ace2d
+   budgets (1.0.0)
+   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
+-  bundler (4.0.14) sha256=d09a0a965cf772266a7e49e83610be7c2f4e49e61134c42a56804bb383cc24b8
+   byebug (13.0.0) sha256=d2263efe751941ca520fa29744b71972d39cbc41839496706f5d9b22e92ae05d
+   capybara (3.40.0) sha256=42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
+   capybara-screenshot (1.0.27) sha256=afa1896cc23df77be1774e8d3b3ce3953bf060aeaa04ff87607b5daf689174f2
+@@ -1865,13 +1777,7 @@ CHECKSUMS
+   coercible (1.0.0) sha256=5081ad24352cc8435ce5472bc2faa30260c7ea7f2102cc6a9f167c4d9bffaadc
+   color_conversion (0.1.2) sha256=99bea5fa412e1527a11389975aa6ad445ff8528ebae202c11d08c45ea2b94c96
+   colored2 (4.0.3) sha256=63e1038183976287efc43034f5cca17fb180b4deef207da8ba78d051cbce2b37
+-  commonmarker (2.8.2-aarch64-linux) sha256=715a5df28e5c1ec7b520e6441466062e9717b82193d2a5bd11a9c94f2f1e15f0
+-  commonmarker (2.8.2-aarch64-linux-musl) sha256=c7d587bd7978416978e84d0de7488906b8f29b3f67ce8424942f0ca9aa6899db
+-  commonmarker (2.8.2-arm-linux) sha256=da9da5c08d5133ad429ece13f2e93d3a30e1b23621ffac9040e185d7ea29bde6
+-  commonmarker (2.8.2-arm64-darwin) sha256=cd7364f1fb9735d60218e4af0a4afbbeedbc465eb81cccca56f29a4efe2b5013
+-  commonmarker (2.8.2-x86_64-darwin) sha256=fb946e0bb01f0e5742aef75cc972b51ffe099e5b983ce9cd792b4a78c5d2c297
+-  commonmarker (2.8.2-x86_64-linux) sha256=42cfb6532b15dd5821ce99e47397923255f32dcfc81024ef4c17e01e66ac7d75
+-  commonmarker (2.8.2-x86_64-linux-musl) sha256=66568dce1c6f265e85d57ea7f749a148446527c7dd599c6ded4cdc819997c43e
++  commonmarker (2.8.2) sha256=d33ea93f3daf58ad68953c750c7bdeedb0ff6b9c36c86799ae5683fedc7cb8e1
+   compare-xml (0.66) sha256=e21aa5c0f69ef1177eced997c688fd4df989084e74a1b612257af32e1dd05319
+   concurrent-ruby (1.3.6) sha256=6b56837e1e7e5292f9864f34b69c5a2cbc75c0cf5338f1ce9903d10fa762d5ab
+   connection_pool (3.0.2) sha256=33fff5ba71a12d2aa26cb72b1db8bba2a1a01823559fb01d29eb74c286e62e0a
+@@ -1928,14 +1834,7 @@ CHECKSUMS
+   faraday-follow_redirects (0.5.0) sha256=5cde93c894b30943a5d2b93c2fe9284216a6b756f7af406a1e55f211d97d10ad
+   faraday-net_http (3.4.3) sha256=9db13becec9312f345a769eeeecf9049c9287d54c0ae053d7235228993a4eec1
+   ferrum (0.17.2) sha256=2c2540a850b211a46f4d81de21bfd62048f507e4c327d1807225c3823c17e6ee
+-  ffi (1.17.4-aarch64-linux-gnu) sha256=b208f06f91ffd8f5e1193da3cae3d2ccfc27fc36fba577baf698d26d91c080df
+-  ffi (1.17.4-aarch64-linux-musl) sha256=9286b7a615f2676245283aef0a0a3b475ae3aae2bb5448baace630bb77b91f39
+-  ffi (1.17.4-arm-linux-gnu) sha256=d6dbddf7cb77bf955411af5f187a65b8cd378cb003c15c05697f5feee1cb1564
+-  ffi (1.17.4-arm-linux-musl) sha256=9d4838ded0465bef6e2426935f6bcc93134b6616785a84ffd2a3d82bc3cf6f95
+-  ffi (1.17.4-arm64-darwin) sha256=19071aaf1419251b0a46852abf960e77330a3b334d13a4ab51d58b31a937001b
+-  ffi (1.17.4-x86_64-darwin) sha256=aa70390523cf3235096cf64962b709b4cfbd5c082a2cb2ae714eb0fe2ccda496
+-  ffi (1.17.4-x86_64-linux-gnu) sha256=9d3db14c2eae074b382fa9c083fe95aec6e0a1451da249eab096c34002bc752d
+-  ffi (1.17.4-x86_64-linux-musl) sha256=3fdf9888483de005f8ef8d1cf2d3b20d86626af206cbf780f6a6a12439a9c49e
++  ffi (1.17.4) sha256=bcd1642e06f0d16fc9e09ac6d49c3a7298b9789bcb58127302f934e437d60acf
+   flamegraph (0.9.5) sha256=a683020637ffa0e14a72640fa41babf14d926bfeaed87e31907cfd06ab2de8dc
+   fog-aws (3.33.2) sha256=bd9c1b045f19daad8942d65d7e9c9c7c1cd144beeabde63e34df7c58a9bb0f5b
+   fog-core (2.6.0) sha256=3fe08aa83a23cddce42f4ba412040c08f890d7ff04c175c0ee59119371245be6
+@@ -1954,12 +1853,6 @@ CHECKSUMS
+   google-cloud-env (2.3.1) sha256=0faac01eb27be78c2591d64433663b1a114f8f7af55a4f819755426cac9178e7
+   google-logging-utils (0.2.0) sha256=675462b4ea5affa825a3442694ca2d75d0069455a1d0956127207498fca3df7b
+   google-protobuf (4.35.0) sha256=95346162c792ed78c9a28cbf2d937a53f706de6df36a27471582f63f03c30c0d
+-  google-protobuf (4.35.0-aarch64-linux-gnu) sha256=2cabd61b420918aec1564f9f7414e455bf922d20c5f8139d62783df5558a7aea
+-  google-protobuf (4.35.0-aarch64-linux-musl) sha256=f6b11f3420a4564f68e8233c95eac6924f6a727dfc2f81a56af2e09add551501
+-  google-protobuf (4.35.0-arm64-darwin) sha256=66ab26d3fc82b8950702e53ab16c198e3c0ea3f2a38aaaf1f32152da45593ac5
+-  google-protobuf (4.35.0-x86_64-darwin) sha256=05eb5c8bc9899135befff496fc0a3642e7ff3d0943f043841dcc456f5654fea0
+-  google-protobuf (4.35.0-x86_64-linux-gnu) sha256=999226f3b00cd9fddb1b26851d16060212fa1d90c406aaad47e574682b716059
+-  google-protobuf (4.35.0-x86_64-linux-musl) sha256=be0218520d77b2aee898b363514b03819f6f63f9c041ae0d0d79b4ce5247bffd
+   googleapis-common-protos-types (1.23.0) sha256=992e740a523794d9fc5f29a504465d8fc737aaa16c930fe7228e3346860faf0a
+   googleauth (1.16.2) sha256=15009502e2e38af71948cda918f230e27d327f6882a1e47967a5a4664930a638
+   grape (3.2.1) sha256=448072f55904e5a4dca2e3781f0a373942514be65402cafb6177f5bc73db1b94
+@@ -2023,6 +1916,7 @@ CHECKSUMS
+   mime-types-data (3.2026.0414) sha256=461c4c655373a44bd6c5fe54bcf5b7776026ea96e808144b1ec465c4b99148cc
+   mini_magick (5.3.1) sha256=29395dfd76badcabb6403ee5aff6f681e867074f8f28ce08d78661e9e4a351c4
+   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
++  mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
+   minitest (6.0.6) sha256=153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
+   msgpack (1.8.1) sha256=3fef787cd3965fd119c08a22724a56a93ca25008c3421fc15039f603a8b7c86c
+   multi_json (1.20.1) sha256=2f3934e805cc45ef91b551a1f89d0e9191abd06a5e04a2ef09a6a036c452ca6d
+@@ -2036,14 +1930,7 @@ CHECKSUMS
+   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
+   net-smtp (0.5.1) sha256=ed96a0af63c524fceb4b29b0d352195c30d82dd916a42f03c62a3a70e5b70736
+   nio4r (2.7.5) sha256=6c90168e48fb5f8e768419c93abb94ba2b892a1d0602cb06eef16d8b7df1dca1
+-  nokogiri (1.19.3-aarch64-linux-gnu) sha256=46b89e5d7b9e844c2ee360794240c6ea2a4e6fa0c5892a4ed487db621224b639
+-  nokogiri (1.19.3-aarch64-linux-musl) sha256=8392dfdcd21be7a94dbbe9ccc138dea01b97b24cb2dc02a114ca98bfb1d9a0b7
+-  nokogiri (1.19.3-arm-linux-gnu) sha256=3919d5ffc334ad778a4a9eb88fda7dcb8b1fb58c8a52ac640c6dcd2f038e774f
+-  nokogiri (1.19.3-arm-linux-musl) sha256=9ce1cb6346bb9c67b1550eb537aa183ead91e4b6eadb2f36ade02d8dd2a79fb6
+-  nokogiri (1.19.3-arm64-darwin) sha256=71b9bd424b1b7abc18b05052a1a3cfd3627abdca62be280854cc411791357e42
+-  nokogiri (1.19.3-x86_64-darwin) sha256=77f3fba57d46c53ab31e62fc6c28f705109d1bf6264356c76f132b2be5728d4d
+-  nokogiri (1.19.3-x86_64-linux-gnu) sha256=2f5078620fe12e83669b5b17311b32532a8153d02eee7ad06948b926d6080976
+-  nokogiri (1.19.3-x86_64-linux-musl) sha256=248c906d2166eca5efb56d52fdee5f9a1f51d69a72e2b64fdac647b4ce39ea3f
++  nokogiri (1.19.3) sha256=78312cbac32a40c812780d9678221b79d51288eec00054c1a8d15f7ce05960e8
+   oj (3.17.3) sha256=ebe3967b0bb7ac4f206561d0d9ac8875b9973f778600d7b61b5c355662a707ed
+   okcomputer (1.19.2) sha256=d069aedf1e31b8ebe7e1fdf9e327dee158ea49b9fbdebebc2f1bed4690cb7a6d
+   omniauth (1.9.2)
+@@ -2152,12 +2039,6 @@ CHECKSUMS
+   pdf-inspector (1.3.0) sha256=fc107579d6f29b636e2da3d6743479b2624d9e390bf2d84beef8fd4ebe1a05bd
+   pdf-reader (2.15.1) sha256=18c6a986a84a3117fa49f4279fc2de51f5d2399b71833df5d2bccd595c7068ce
+   pg (1.6.3) sha256=1388d0563e13d2758c1089e35e973a3249e955c659592d10e5b77c468f628a99
+-  pg (1.6.3-aarch64-linux) sha256=0698ad563e02383c27510b76bf7d4cd2de19cd1d16a5013f375dd473e4be72ea
+-  pg (1.6.3-aarch64-linux-musl) sha256=06a75f4ea04b05140146f2a10550b8e0d9f006a79cdaf8b5b130cde40e3ecc2c
+-  pg (1.6.3-arm64-darwin) sha256=7240330b572e6355d7c75a7de535edb5dfcbd6295d9c7777df4d9dddfb8c0e5f
+-  pg (1.6.3-x86_64-darwin) sha256=ee2e04a17c0627225054ffeb43e31a95be9d7e93abda2737ea3ce4a62f2729d6
+-  pg (1.6.3-x86_64-linux) sha256=5d9e188c8f7a0295d162b7b88a768d8452a899977d44f3274d1946d67920ae8d
+-  pg (1.6.3-x86_64-linux-musl) sha256=9c9c90d98c72f78eb04c0f55e9618fe55d1512128e411035fe229ff427864009
+   plaintext (0.3.7) sha256=3b923152ee84d98898d459e9442ec9cca84d2acdbb8d232e2bcf41c5723e70d5
+   pp (0.6.3) sha256=2951d514450b93ccfeb1df7d021cae0da16e0a7f95ee1e2273719669d0ab9df6
+   prawn (2.4.0) sha256=82062744f7126c2d77501da253a154271790254dfa8c309b8e52e79bc5de2abd
+@@ -2165,12 +2046,6 @@ CHECKSUMS
+   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
+   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
+   prometheus-client-mmap (1.5.0) sha256=361eb98d6c19ae0f44ae5e02f9e6750436fd92d1c501d1c69843609c1daf0117
+-  prometheus-client-mmap (1.5.0-aarch64-linux-gnu) sha256=e7fe1a630dda83a237efb0eb4a29ee3da37922722fc89ecac6057a1187372c5d
+-  prometheus-client-mmap (1.5.0-aarch64-linux-musl) sha256=897fa5d82150ddcb3bc30dfa7af0deb85930655500e71bd8879daa86b5e690ff
+-  prometheus-client-mmap (1.5.0-arm64-darwin) sha256=78703435f76d246e31a04344071630133608a4e624275a910cfb2c19346b5aa3
+-  prometheus-client-mmap (1.5.0-x86_64-darwin) sha256=96d360bbffc5603f8322a0b8c3353cf531c06410cf80dbdeda46efbd27a6a5a2
+-  prometheus-client-mmap (1.5.0-x86_64-linux-gnu) sha256=2f5e7be72ea0b8bddd0e6a123e8f2468d7e2bdfa664a4d355fec4ed4f659d457
+-  prometheus-client-mmap (1.5.0-x86_64-linux-musl) sha256=4673196ca44feb6db5eb63d5248feea32ffaae851f7861eee25218ccf7057ef4
+   pry (0.16.0)
+   pry-byebug (3.12.0) sha256=594e094ae8a8390a7ad4c7b36ae36e13304ed02664c67417d108dc5f7213d1b7
+   pry-rails (0.3.11) sha256=a69e28e24a34d75d1f60bcf241192a54253f8f7ef8a62cba1e75750a9653593d
+@@ -2331,4 +2206,4 @@ RUBY VERSION
+   ruby 4.0.2
+ 
+ BUNDLED WITH
+-  4.0.14
++  4.0.10
