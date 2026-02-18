@@ -70,11 +70,7 @@ let
 
   darwin = fetchzip {
     inherit (download) url stripRoot;
-    hash =
-      {
-        aarch64-darwin = "sha256-qWrMOreqTOFhmFBROlXIPXrM3wqNT7iJJwpelVFke6I=";
-      }
-      .${system} or throwSystem;
+    hash = "sha256-qWrMOreqTOFhmFBROlXIPXrM3wqNT7iJJwpelVFke6I=";
   };
 in
 {

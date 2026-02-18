@@ -128,11 +128,7 @@ let
   };
   chromium-darwin = fetchzip {
     inherit (download) url stripRoot;
-    hash =
-      {
-        aarch64-darwin = "sha256-aJbvZQ1hY0FfDC+ZktfW2yNW3nwc0kh/P30+n/cmLf0=";
-      }
-      .${system} or throwSystem;
+    hash = "sha256-aJbvZQ1hY0FfDC+ZktfW2yNW3nwc0kh/P30+n/cmLf0=";
   };
 in
 {
