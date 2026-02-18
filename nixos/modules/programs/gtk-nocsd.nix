@@ -14,9 +14,9 @@ options.programs.gtk-nocsd = {
 config = lib.mkIf config.programs.gtk-nocsd.enable {
 environment.sessionVariables = {
     GTK_CSD = "0";
-    LD_PRELOAD = "${gtk-nocsd}/lib/libgtk-nocsd.so.0";
+    LD_PRELOAD = "${pkgs.gtk-nocsd}/lib/libgtk-nocsd.so.0";
   };
-environment.systemPackages with pkgs = [ gtk-nocsd ];
+environment.systemPackages = [ pkgs.gtk-nocsd ];
 };
 meta.maintainers = with lib.maintainers; [ mr-banana-egg ];
 }
