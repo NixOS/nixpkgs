@@ -8,7 +8,7 @@
   gtk4-layer-shell,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cursor-clip";
   version = "unstable-2026-02-17";
 
