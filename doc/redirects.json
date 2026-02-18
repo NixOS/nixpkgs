@@ -404,6 +404,30 @@
   "sec-nixpkgs-release-25.05-notable-changes": [
     "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
+  "sec-nixpkgs-release-26.11": [
+    "release-notes.html#sec-nixpkgs-release-26.11"
+  ],
+  "sec-nixpkgs-release-26.11-highlights": [
+    "release-notes.html#sec-nixpkgs-release-26.11-highlights"
+  ],
+  "sec-nixpkgs-release-26.11-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-26.11-incompatibilities"
+  ],
+  "sec-nixpkgs-release-26.11-lib": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib"
+  ],
+  "sec-nixpkgs-release-26.11-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-26.11-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib-breaking"
+  ],
+  "sec-nixpkgs-release-26.11-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-26.11-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-26.11-notable-changes"
+  ],
   "sec-nrfutil": [
     "index.html#sec-nrfutil"
   ],
@@ -871,6 +895,9 @@
   ],
   "x86_64-darwin-26.05": [
     "release-notes.html#x86_64-darwin-26.05"
+  ],
+  "x86_64-darwin-26.11": [
+    "release-notes.html#x86_64-darwin-26.11"
   ],
   "zip-files": [
     "index.html#zip-files"
