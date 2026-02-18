@@ -335,7 +335,7 @@
   };
 
   csv = {
-    version = "0-unstable-2025-03-13";
+    version = "1.0.0-unstable-2025-03-13";
     url = "github:weartist/rainbow-csv-tree-sitter/fbf125bcedb15080980e8afaf69c4374412e5844";
     hash = "sha256-caWf6cIx0CcDP2u84ncfdTSlWvhVawnYAIW4m5bzRQY=";
     meta = {
