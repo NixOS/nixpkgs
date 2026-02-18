@@ -782,7 +782,7 @@
   };
 
   gitcommit = {
-    version = "0-unstable-2025-03-13";
+    version = "0.4.0-unstable-2025-03-13";
     url = "github:gbprod/tree-sitter-gitcommit/a716678c0f00645fed1e6f1d0eb221481dbd6f6d";
     hash = "sha256-KYfcs99p03b0RiPYnZeKJf677fmVf658FLZcFk2v2Ws=";
     meta = {
