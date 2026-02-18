@@ -1636,7 +1636,7 @@
   };
 
   odin = {
-    version = "0-unstable-2025-01-12";
+    version = "1.3.0-unstable-2025-01-12";
     url = "github:tree-sitter-grammars/tree-sitter-odin/d2ca8efb4487e156a60d5bd6db2598b872629403";
     hash = "sha256-aPeaGERAP1Fav2QAjZy1zXciCuUTQYrsqXaSQsYG0oU=";
     meta = {
