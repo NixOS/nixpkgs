@@ -140,7 +140,7 @@
   };
 
   blade = {
-    version = "0-unstable-2025-08-25";
+    version = "0.12.3-unstable-2025-08-25";
     url = "github:EmranMR/tree-sitter-blade/cc764dadcbbceb3f259396fef66f970c72e94f96";
     hash = "sha256-3/gY68F+xOF5Fv6rK9cEIJCVDzg/3ap1/gzkEacGuy4=";
     meta = {
