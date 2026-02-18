@@ -1128,9 +1128,9 @@
   };
 
   inko = {
-    version = "0-unstable-2025-12-06";
-    url = "github:inko-lang/tree-sitter-inko/20e2842680dd0d47dd2ee976bc320e4399f65fe1";
-    hash = "sha256-qgB2s/ghmOGjJ+MH7p3ZQKa+RMxx58642Z9lYC1wlq4=";
+    version = "0.5.1-unstable-2026-01-09";
+    url = "github:inko-lang/tree-sitter-inko/5c1226a901341f0a6f52924a5c2584b5e2df1119";
+    hash = "sha256-bt/T6O/7of8r9DrA6DU8pM4vWlBCgWWzw89GZbDyJnw=";
     meta = {
       license = lib.licenses.mpl20;
       maintainers = with lib.maintainers; [
