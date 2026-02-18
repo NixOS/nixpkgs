@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   env = {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -std=gnu11";
   }
   # https://github.com/ygrek/mldonkey/issues/117
   // lib.optionalAttrs stdenv.cc.isClang {
