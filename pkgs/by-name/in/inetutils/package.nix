@@ -10,7 +10,6 @@
   libxcrypt,
   util-linux,
 }:
-
 stdenv.mkDerivation rec {
   pname = "inetutils";
   version = "2.7";
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
 
-    ./tests-libls.sh.patch
+    (if stdenv.isDarwin then ./tests-libls-2.sh.patch else ./tests-libls.sh.patch)
 
     (fetchpatch {
       name = "CVE-2026-24061_1.patch";
@@ -75,6 +74,8 @@ stdenv.mkDerivation rec {
     "--disable-rexec"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-servers";
+
+  ${if stdenv.isDarwin then "hardeningDisable" else null} = [ "format" ];
 
   doCheck = true;
 

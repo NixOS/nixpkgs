@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.12.0";
+  version = "3.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${version}";
-    hash = "sha256-xuCxeQD8NAn7zlqCG+GyFjL6NlnIkGie+4GxzLGsyUg=";
+    hash = "sha256-Nd7v3Xa4ceYygpMetDbDm0/efzF9HZCtAmRpi2szZZs=";
   };
 
   # Use a raw string to prevent LaTeX codes from being interpreted as escape sequences.
