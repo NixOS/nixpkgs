@@ -358,19 +358,18 @@ in
 
       forceImportRoot = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = lib.versionOlder config.system.stateVersion "26.11";
+        defaultText = lib.literalExpression ''lib.versionOlder config.system.stateVersion "26.11"'';
         description = ''
           Forcibly import the ZFS root pool(s) during early boot.
 
-          This is enabled by default for backwards compatibility purposes, but it is highly
-          recommended to disable this option, as it bypasses some of the safeguards ZFS uses
-          to protect your ZFS pools.
+          It is highly recommended to keep this option disabled as it bypasses ZFS
+          safeguard that protect your pools.
 
-          If you set this option to `false` and NixOS subsequently fails to
-          boot because it cannot import the root pool, you should boot with the
-          `zfs_force=1` option as a kernel parameter (e.g. by manually
-          editing the kernel params in grub during boot). You should only need to do this
-          once.
+          If NixOS fails to boot because it cannot import the root pool, you should boot
+          with the `zfs_force=1` option as a kernel parameter (e.g. by manually
+          editing the kernel params via your bootloader).
+          You should only need to do this after unclean shutdowns.
         '';
       };
 
@@ -380,10 +379,10 @@ in
         description = ''
           Forcibly import all ZFS pool(s).
 
-          If you set this option to `false` and NixOS subsequently fails to
-          import your non-root ZFS pool(s), you should manually import each pool with
-          "zpool import -f \<pool-name\>", and then reboot. You should only need to do
-          this once.
+          It is highly recommended to keep this option disabled as it bypasses ZFS
+          safeguard that protect your pools.
+
+          See {option}`boot.zfs.forceImportRoot` for details.
         '';
       };
 
@@ -680,7 +679,7 @@ in
           message = "ZFS requires networking.hostId to be set";
         }
         {
-          assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
+          assertion = cfgZfs.forceImportAll -> cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
         {
@@ -697,6 +696,18 @@ in
           '';
         }
       ];
+
+      warnings =
+        lib.optional
+          (
+            options.boot.zfs.forceImportRoot.definitionsWithLocations == [
+              {
+                inherit (__curPos) file;
+                value = true;
+              }
+            ]
+          )
+          "`boot.zfs.forceImportRoot` is using the default value of `true`. It is highly recommended to set it to `false`, the new default from 26.11 on, to reduce the risk of data loss. Alternatively, you can silence this warning by explicitly setting it to `true`.";
 
       boot = {
         kernelModules = [ "zfs" ];
