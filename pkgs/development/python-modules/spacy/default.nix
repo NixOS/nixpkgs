@@ -68,6 +68,10 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "thinc" ];
 
+  # We provide typer, not typer-slim, so the dependency check fails.
+  # Remove if/when https://github.com/explosion/spaCy/pull/13922 merges.
+  pythonRemoveDeps = [ "typer-slim" ];
+
   dependencies = [
     catalogue
     cymem
