@@ -94,8 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/openMVG/openMVG/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
-    badPlatforms = [
-    ];
     maintainers = with lib.maintainers; [
       mdaiter
       bouk
