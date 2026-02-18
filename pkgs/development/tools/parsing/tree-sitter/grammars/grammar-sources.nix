@@ -2168,7 +2168,7 @@
   };
 
   slang = {
-    version = "0-unstable-2025-09-01";
+    version = "0.3.1-unstable-2025-09-01";
     url = "github:tree-sitter-grammars/tree-sitter-slang/1dbcc4abc7b3cdd663eb03d93031167d6ed19f56";
     hash = "sha256-UsZpXEJwbKn5M9dqbAv5eJgsCdNbsllbFWtNnDPvtoE=";
     meta = {
