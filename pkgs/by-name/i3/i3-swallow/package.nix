@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication {
     owner = "jamesofarrell";
     repo = "i3-swallow";
     rev = "6fbc04645c483fe733de56b56743e453693d4c78";
-    sha256 = "1l3x8mixwq4n0lnyp0wz5vijgnypamq6lqjazcd2ywl2jv8d6fif";
+    hash = "sha256-LjrT0JaCci8a+0pianBV19sn4y6fg+stBZZg3mNFfdA=";
   };
 
   nativeBuildInputs = [
