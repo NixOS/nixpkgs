@@ -194,7 +194,7 @@ let
   #   -> [a]  -- list of elements from which to remove
   #   -> [a]
   #
-  # > removeMany ["aarch64-linux" "x86_64-darwin"] ["aarch64-linux" "x86_64-darwin" "x86_64-linux"]
+  # > removeMany ["aarch64-linux" "aarch64-darwin"] ["aarch64-linux" "aarch64-darwin" "x86_64-linux"]
   # ["x86_64-linux"]
   removeMany = itemsToRemove: list: lib.foldr lib.remove list itemsToRemove;
 
@@ -374,7 +374,6 @@ let
             "aarch64-linux"
 
             # musl only supports linux, not darwin.
-            "x86_64-darwin"
             "aarch64-darwin"
           ]
           {
@@ -399,7 +398,6 @@ let
             "aarch64-linux" # times out on Hydra
 
             # Static doesn't work on darwin
-            "x86_64-darwin"
             "aarch64-darwin"
           ]
           {
@@ -498,7 +496,6 @@ let
               # Testing cross from x86_64-linux
               "aarch64-darwin"
               "aarch64-linux"
-              "x86_64-darwin"
             ]
             {
               haskellPackages = {
