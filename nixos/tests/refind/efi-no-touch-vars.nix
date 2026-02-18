@@ -1,6 +1,6 @@
 { lib, pkgs, ... }:
 {
-  name = "refind";
+  name = "refind-efi-no-touch-vars";
   meta = {
     inherit (pkgs.refind.meta) maintainers;
   };
@@ -12,7 +12,7 @@
       virtualisation.useEFIBoot = true;
 
       boot.loader.grub.enable = false;
-      boot.loader.efi.canTouchEfiVariables = true;
+      boot.loader.efi.canTouchEfiVariables = false;
       boot.loader.refind.enable = true;
       boot.loader.timeout = 1;
     };
