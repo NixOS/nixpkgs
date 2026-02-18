@@ -31,7 +31,7 @@ let
   contains_any = l1: l2: 0 < lib.length (lib.intersectLists l1 l2);
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i3blocks-gaps";
   version = "1.4";
 
@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
     owner = "Airblader";
     repo = "i3blocks-gaps";
     rev = "4cfdf93c75f729a2c96d471004d31734e923812f";
-    sha256 = "0v9307ij8xzwdaxay3r75sd2cp453s3qb6q7dy9fks2p6wwqpazi";
+    hash = "sha256-8auLOTdX6OmSbwebhYcehVwmmi4nD6+6avx3JOMBI20=";
   };
 
   makeFlags = [ "all" ];
   installFlags = [
     "PREFIX=\${out}"
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
   ];
 
   buildInputs = lib.optional (contains_any scripts perlscripts) perl;
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ carlsverre ];
     platforms = lib.platforms.linux;
   };
-}
+})
