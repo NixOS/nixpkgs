@@ -35,13 +35,8 @@ let
         '${Libc}/include/_bounds.h'
 
       mkdir -p "$out/include/System"
-      for dir in arm i386 machine; do
-        mkdir -p "$out/include/$dir"
-        for file in '${xnu}/osfmk/'$dir/*; do
-          name=$(basename "$file")
-          # Skip copying `endian.h` because it conflicts with the SDK, breaking the build on x86_64-darwin.
-          test "$name" != endian.h && cp -r "$file" "$out/include/$dir/$name"
-        done
+      for dir in arm machine; do
+        cp -r '${xnu}/osfmk/'$dir "$out/include/$dir"
         ln -s "$out/include/$dir" "$out/include/System/$dir"
       done
 
