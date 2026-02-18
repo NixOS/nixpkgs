@@ -443,7 +443,7 @@
   };
 
   diff = {
-    version = "0-unstable-2025-10-29";
+    version = "0.1.0-unstable-2025-10-29";
     url = "github:the-mikedavis/tree-sitter-diff/2520c3f934b3179bb540d23e0ef45f75304b5fed";
     hash = "sha256-8rYLNGgoZSvvfqO2++nAgFKmvbkKJ3m+9B8bTXp6Us4=";
     meta = {
