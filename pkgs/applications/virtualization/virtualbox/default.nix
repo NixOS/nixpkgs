@@ -171,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (!headless) [
     qtbase
     qttools
+    qtwayland
     qtscxml
     libxinerama
     SDL2
