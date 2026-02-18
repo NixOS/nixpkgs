@@ -87,4 +87,13 @@ in
     version = "60.2";
     hash = "sha256-8HPqjzW5JtcLsz5ld1CKpkKosxaoA/Eb4grzhIEdtBg=";
   };
+  icu56 =
+    (make-icu {
+      version = "56.1";
+      hash = "sha256-OmTpEFxzTc9jHAs+1gQEUxvObA9aZL/hpkAqTMIxSBY=";
+    }).overrideAttrs
+      {
+        __structuredAttrs = true;
+        strictDeps = true;
+      };
 }
