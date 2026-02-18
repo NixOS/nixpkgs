@@ -75,7 +75,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "0.24.2";
+  version = "0.26.0";
 
   outputs = [
     "out"
@@ -86,27 +86,23 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~sircmpwn";
     repo = "hare";
     rev = finalAttrs.version;
-    hash = "sha256-61lckI0F+Ez5LR/8g6ftS0W7Q/+EU/1flTDFleBg6pc=";
+    hash = "sha256-3NrhnbAR0VIyr7JkAsY8NIkW8AelPSphzIYu8QMgXsU=";
   };
 
   patches = [
-    # Replace FHS paths with nix store
-    (replaceVars ./001-tzdata.patch {
-      inherit tzdata;
-    })
-    # Don't build haredoc since it uses the build `hare` bin, which breaks
-    # cross-compilation.
-    ./002-dont-build-haredoc.patch
-    # Hardcode harec and qbe.
-    (replaceVars ./003-hardcode-qbe-and-harec.patch {
-      harec_bin = lib.getExe harec;
-      qbe_bin = lib.getExe qbe;
-    })
-    # Use mailcap `/etc/mime.types` for Hare's mime module
-    (replaceVars ./004-use-mailcap-for-mimetypes.patch {
-      inherit mailcap;
-    })
+    ./0001-disable-haredoc.patch
   ];
+
+  preConfigure = ''
+    zoneinfoFiles=$(grep -lr --exclude-dir=.builds '/usr/share/zoneinfo' | tr '\n' ' ');
+    echo "DBG: $zoneinfoFiles"
+    substituteInPlace $zoneinfoFiles --replace-fail  '/usr/share/zoneinfo' '${tzdata}/share/zoneinfo'
+
+    mimetypeFiles=$(grep -lr --exclude-dir=.builds '/etc/mime.types' | tr '\n' ' ');
+    substituteInPlace $mimetypeFiles --replace-fail '/etc/mime.types' '${mailcap}/etc/mime.types'
+
+    substituteInPlace ./cmd/hare/build.ha --replace-fail '"harec"' '"${harec}/bin/harec"' --replace-fail '"qbe"' '"${qbe}/bin/qbe"'
+  '';
 
   nativeBuildInputs = [
     harec

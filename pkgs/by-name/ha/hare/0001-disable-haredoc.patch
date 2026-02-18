@@ -1,0 +1,75 @@
+diff --git a/Makefile b/Makefile
+index d1f50f5e..4ed60069 100644
+--- a/Makefile
++++ b/Makefile
+@@ -5,7 +5,7 @@ all:
+ include config.mk
+ include makefiles/$(PLATFORM).$(ARCH).mk
+ 
+-all: $(BINOUT)/hare-configured $(BINOUT)/haredoc docs
++all: $(BINOUT)/hare-configured docs
+ 
+ HARE_DEFINES = \
+ 	-D PLATFORM:str='"$(PLATFORM)"' \
+@@ -57,39 +57,18 @@ $(BINOUT)/hare-configured: $(BINOUT)/hare
+ 	@env $(HARE_BUILD_ENV) \
+ 		$(BINOUT)/hare build $(HARE_DEFINES) $(HAREFLAGS) -o $@ ./cmd/hare
+ 
+-$(BINOUT)/haredoc: $(BINOUT)/hare
+-	@mkdir -p $(BINOUT)
+-	@printf 'HARE\t%s\n' "$@"
+-	@env $(HARE_BUILD_ENV) $(BINOUT)/hare build \
+-		$(HARE_DEFINES) $(HAREFLAGS) -o $@ ./cmd/haredoc
+-
+-docs/html: $(BINOUT)/haredoc
+-	mkdir -p docs/html
+-	$(BINOUT)/haredoc -Fhtml > docs/html/index.html
+-	for d in $$(scripts/moddirs); do \
+-		find $$d -type d | sed -E '/(\+|-)/d'; \
+-	done \
+-	| while read path; do \
+-		mod=$$(echo $$path | sed -E 's@/@::@g'); \
+-		echo $$mod; \
+-		mkdir -p docs/html/$$path; \
+-		$(BINOUT)/haredoc -Fhtml $$mod > docs/html/$$path/index.html; \
+-	done
+-
+ docs: \
+ 	docs/hare.1 \
+ 	docs/hare-build.1 \
+ 	docs/hare-cache.1 \
+ 	docs/hare-deps.1 \
+ 	docs/hare-tool.1 \
+-	docs/haredoc.1 \
+ 	docs/hare-run.1 \
+ 	docs/hare-test.1 \
+-	docs/haredoc.5 \
+ 	docs/hare-module.5
+ 
+-MAN1 = hare hare-build hare-cache hare-deps haredoc hare-run hare-test hare-tool
+-MAN5 = haredoc hare-module
++MAN1 = hare hare-build hare-cache hare-deps hare-run hare-test hare-tool
++MAN5 = hare-module
+ 
+ bootstrap:
+ 	@BINOUT=$(BINOUT) ./scripts/genbootstrap
+@@ -110,7 +89,6 @@ install-cmd: all $(BINOUT)/hare-configured
+ 		'$(DESTDIR)$(BINDIR)' '$(DESTDIR)$(MANDIR)/man1' \
+ 		'$(DESTDIR)$(BINDIR)' '$(DESTDIR)$(MANDIR)/man5'
+ 	install -m755 '$(BINOUT)/hare-configured' '$(DESTDIR)$(BINDIR)/hare'
+-	install -m755 '$(BINOUT)/haredoc' '$(DESTDIR)$(BINDIR)/haredoc'
+ 	for i in $(MAN1); do install -m644 docs/$$i.1 '$(DESTDIR)$(MANDIR)'/man1/$$i.1; done
+ 	for i in $(MAN5); do install -m644 docs/$$i.5 '$(DESTDIR)$(MANDIR)'/man5/$$i.5; done
+ 
+@@ -121,10 +99,9 @@ install-mods:
+ 
+ uninstall:
+ 	rm -- '$(DESTDIR)$(BINDIR)/hare'
+-	rm -- '$(DESTDIR)$(BINDIR)/haredoc'
+ 	for i in $(MAN1); do rm -- '$(DESTDIR)$(MANDIR)'/man1/$$i.1; done
+ 	for i in $(MAN5); do rm -- '$(DESTDIR)$(MANDIR)'/man5/$$i.5; done
+ 	rm -r -- '$(DESTDIR)$(STDLIB)'
+ 
+-.PHONY: all $(BINOUT)/hare-configured $(BINOUT)/haredoc bootstrap clean check \
++.PHONY: all $(BINOUT)/hare-configured bootstrap clean check \
+ 	docs docs/html install start uninstall
