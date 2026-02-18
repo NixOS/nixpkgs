@@ -1071,7 +1071,7 @@
   };
 
   hurl = {
-    version = "0-unstable-2025-09-13";
+    version = "1.7.0-unstable-2025-09-13";
     url = "github:pfeiferj/tree-sitter-hurl/597efbd7ce9a814bb058f48eabd055b1d1e12145";
     hash = "sha256-sQjjx3DGfi0l8/XNOIoyFYAcDpaQOkD4Ics3g6vkgjM=";
     meta = {
