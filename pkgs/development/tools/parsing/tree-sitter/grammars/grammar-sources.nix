@@ -2078,7 +2078,7 @@
   };
 
   robot = {
-    version = "0-unstable-2025-05-01";
+    version = "1.1.2-unstable-2025-05-01";
     url = "github:Hubro/tree-sitter-robot/e34def7cb0d8a66a59ec5057fe17bb4e6b17b56a";
     hash = "sha256-fTV45TQp2Z+ivh2YWphlJjyuBh0iMCpaNDyKoHrNAh0=";
     meta = {
