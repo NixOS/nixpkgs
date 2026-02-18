@@ -2346,7 +2346,7 @@
   };
 
   sway = {
-    version = "0-unstable-2025-09-02";
+    version = "1.0.0-unstable-2025-09-02";
     url = "github:FuelLabs/tree-sitter-sway/9b7845ce06ecb38b040c3940970b4fd0adc331d1";
     hash = "sha256-+BRw4OFQb7FljdKCj5mruK0L9wsZ+1UDTykVLS9wjoY=";
     meta = {
