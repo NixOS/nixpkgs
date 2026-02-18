@@ -1750,7 +1750,7 @@
   };
 
   pest = {
-    version = "0-unstable-2025-10-06";
+    version = "0.1.0-unstable-2025-10-06";
     url = "github:pest-parser/tree-sitter-pest/c19629a0c50e6ca2485c3b154b1dde841a08d169";
     hash = "sha256-S5qg/LLPlMmNtRTTi7vW8y/c+zcId7ADmMqIt0gqJBo=";
     meta = {
