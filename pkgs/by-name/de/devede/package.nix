@@ -26,7 +26,7 @@ let
 in
 buildPythonApplication (finalAttrs: {
   pname = "devede";
-  version = "4.21.0";
+  version = "4.21.1";
   format = "setuptools";
   namePrefix = "";
 
@@ -34,7 +34,7 @@ buildPythonApplication (finalAttrs: {
     owner = "rastersoft";
     repo = "devedeng";
     rev = finalAttrs.version;
-    hash = "sha256-sLJkIKw0ciX6spugbdO0eZ1dIkoHfuu5e/f2XwA70a0=";
+    hash = "sha256-ZOXoxK43yYzq3C4dIlW2xx/xjVIKr/v9k478TvrUbF8=";
   };
 
   nativeBuildInputs = [
