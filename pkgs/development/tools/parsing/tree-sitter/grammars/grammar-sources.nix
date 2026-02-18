@@ -2827,7 +2827,7 @@
   };
 
   xit = {
-    version = "0-unstable-2024-03-16";
+    version = "0.2-unstable-2024-03-16";
     url = "github:synaptiko/tree-sitter-xit/a4fad351bfa5efdcb379b40c36671413fbe9caac";
     hash = "sha256-wTr7YyGnz/dWfA5oecRqxeR8Unoob6isGnQg4/iu+MI=";
     meta = {
