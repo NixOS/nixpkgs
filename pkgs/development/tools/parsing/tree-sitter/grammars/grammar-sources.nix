@@ -398,7 +398,7 @@
   };
 
   dbml = {
-    version = "0-unstable-2023-11-02";
+    version = "0.1.0-unstable-2023-11-02";
     url = "github:dynamotn/tree-sitter-dbml/2e2fa5640268c33c3d3f27f7e676f631a9c68fd9";
     hash = "sha256-IxxUW6YYxP1hkwA9NEojEEE3c8pwvAI6juX8aF7NfMw=";
     meta = {
