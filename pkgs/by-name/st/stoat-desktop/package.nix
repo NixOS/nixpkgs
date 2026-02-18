@@ -12,11 +12,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "stoat-desktop";
-  version = "1.1.12";
+  version = "1.3.0";
 
   src = fetchzip {
     url = "https://github.com/stoatchat/for-desktop/releases/download/v${version}/Stoat-linux-x64-${version}.zip";
-    hash = "sha256-S3uJ4ADzDgrpKVxBdEpz73Q6bqOakzk9bObaoRZopbM=";
+    hash = "sha256-Ny685m0yNMBPPnM+cmBY0Flj5UyY2aw867qUqqLOJZk=";
     stripRoot = false;
   };
 
@@ -52,8 +52,8 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
     install -m644 ${
       fetchurl {
-        url = "https://raw.githubusercontent.com/stoatchat/assets/628eb2f8255c215148007f4227d2e0d5d1a67582/desktop/icon.svg";
-        hash = "sha256-EMDwnAtfTZqhw8hMGTbMjZUrnVkP+2HkyHlSy6pZmik=";
+        url = "https://raw.githubusercontent.com/stoatchat/assets/bd432f2298901a8566a092636eef0c35a3a80fbc/desktop/icon.svg";
+        hash = "sha256-p9q8izmvFHhbDDUki394l2ZZ0a2hVW+zcuvZzKB7FOA=";
       }
     } "$out/share/icons/hicolor/scalable/apps/stoat-desktop.svg"
 
