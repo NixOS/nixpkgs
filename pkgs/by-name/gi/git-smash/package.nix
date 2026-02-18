@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-smash";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "anthraxx";
     repo = "git-smash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NyNYEF5g0O9xNhq+CoDPhQXZ+ISiY4DsShpjk5nP0N8=";
+    hash = "sha256-M93lHa3BH0DqumnroNPGMs7V/FLiCjEjJE8V+G4puzQ=";
   };
 
-  cargoHash = "sha256-YuSaSYr5W4zN7WnWjq7UClQtqx8AnaswOqlOq2WsZ6o=";
+  cargoHash = "sha256-Ux5kcr12LwPVXFdS7oeYQcvhaTyHBahxwXyo1aqOB5g=";
 
   nativeBuildInputs = [
     installShellFiles

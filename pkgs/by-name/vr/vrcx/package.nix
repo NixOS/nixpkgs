@@ -18,19 +18,19 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2026.01.28";
+  version = "2026.02.11";
 
   src = fetchFromGitHub {
     repo = "VRCX";
     owner = "vrcx-team";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D6KYKKDaWk7OMKVNOsA8K2j+kilAtLcRmMz4Xmt5pms=";
+    hash = "sha256-/CMxFjIcLqk2oTnXUV519NkrImsnq3/kUGiew5E3Zyw=";
   };
 
   nodejs = node;
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
-  npmDepsHash = "sha256-qa9056EljXLxcrArECf41vygueAAwrbeuA20yoMcYPA=";
+  npmDepsHash = "sha256-bli8TKzxcASuCegEGwiHM5siMXGK4WuzhweNr5HaCvg=";
 
   nativeBuildInputs = [
     makeWrapper

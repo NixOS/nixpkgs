@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ];
 
-  CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "gcc";
+  env.CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "gcc";
 
   preBuild = ''
     # `SANDBOX` defined by upstream to disable build-time network access

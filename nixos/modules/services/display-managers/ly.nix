@@ -166,5 +166,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ vonfry ];
+  meta.maintainers = with lib.maintainers; [
+    vonfry
+    zacharyarnaise
+  ];
 }

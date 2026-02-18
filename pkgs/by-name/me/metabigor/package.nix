@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "metabigor";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "j3ssie";
     repo = "metabigor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3bIU1eVsVhXEazcvlhTbuBLBSdjTxEuO2SXjdcUUyNs=";
+    hash = "sha256-sFrcre4S2VTmKFzBLCkFXLr+HW/WZ0XhMEFl7N1WgOA=";
   };
 
-  vendorHash = "sha256-PGUOTEFcOL1pG+itTp9ce1qW+1V6hts8jKpA0E8orDk=";
+  vendorHash = "sha256-GN069be+ZUXBA0d8Mq4ffgTM8JHlDhlVZCw2AyAxVHw=";
 
   ldflags = [
     "-w"

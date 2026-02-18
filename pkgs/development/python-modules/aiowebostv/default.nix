@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   aiohttp,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "aiowebostv";
   version = "0.7.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

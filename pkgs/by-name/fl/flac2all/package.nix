@@ -4,7 +4,7 @@
   lib,
   flac,
   lame,
-  opusTools,
+  opus-tools,
   vorbis-tools,
   ffmpeg,
 }:
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
           flac
           lame
           # Optional deps depending on encoding types
-          opusTools
+          opus-tools
           vorbis-tools
           ffmpeg
         ]

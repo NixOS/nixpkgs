@@ -27,6 +27,17 @@ with lib;
       '';
     };
 
+    enableEarlyBootBlocking = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        This option activates an additional oneshot systemd service to ensure that the mullvad daemon
+        will start and block traffic before any network configuration will be applied.
+        This matches what upstream Mullvad distributes for their supported distros, but is disabled by
+        default in NixOS as it may conflict with non-Mullvad network configuration.
+      '';
+    };
+
     package = mkPackageOption pkgs "mullvad" {
       example = "mullvad-vpn";
       extraDescription = ''
@@ -48,6 +59,23 @@ with lib;
       source = "${cfg.package}/bin/mullvad-exclude";
     };
 
+    # see https://github.com/mullvad/mullvadvpn-app/blob/2025.14/dist-assets/linux/mullvad-early-boot-blocking.service
+    systemd.services.mullvad-early-boot-blocking = mkIf cfg.enableEarlyBootBlocking {
+      description = "Mullvad early boot network blocker";
+      wantedBy = [ "mullvad-daemon.service" ];
+      before = [
+        "basic.target"
+        "mullvad-daemon.service"
+      ];
+      unitConfig = {
+        DefaultDependencies = "no";
+      };
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${cfg.package}/bin/mullvad-daemon --initialize-early-boot-firewall";
+      };
+    };
+
     systemd.services.mullvad-daemon = {
       description = "Mullvad VPN daemon";
       wantedBy = [ "multi-user.target" ];
@@ -59,7 +87,8 @@ with lib;
         "network-online.target"
         "NetworkManager.service"
         "systemd-resolved.service"
-      ];
+      ]
+      ++ lib.optional cfg.enableEarlyBootBlocking "mullvad-early-boot-blocking.service";
       # See https://github.com/NixOS/nixpkgs/issues/262681
       path = lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
       startLimitBurst = 5;

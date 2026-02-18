@@ -7,6 +7,7 @@
   llama-cpp-vulkan,
   podman,
   withPodman ? true,
+  writableTmpDirAsHomeHook,
 
   # passthru
   ramalama,
@@ -14,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ramalama";
-  version = "0.15.0";
+  version = "0.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0R7y1PpAxXzSlhfOFHf3cWPzZ544fYVUL0w7jOFSuAU=";
+    hash = "sha256-BXUWNP3yxuDsL1gY28oWhlu+vTIezYpDbScUsOulyYA=";
   };
 
   build-system = with python3Packages; [
@@ -31,6 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     argcomplete
+    bcrypt
     pyyaml
     jsonschema
     jinja2
@@ -69,8 +71,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    python3Packages.pytestCheckHook
     podman
+    python3Packages.pytestCheckHook
+    python3Packages.requests
+    writableTmpDirAsHomeHook
   ];
 
   preCheck = ''

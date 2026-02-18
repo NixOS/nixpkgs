@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
+      "--use-github-releases"
       "--version-regex"
       "@astrojs/language-server@(.*)"
     ];
@@ -82,10 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Astro language server";
-    homepage = "https://github.com/withastro/language-tools";
-    changelog = "https://github.com/withastro/language-tools/blob/@astrojs/language-server@${finalAttrs.version}/packages/language-server/CHANGELOG.md";
+    homepage = "https://github.com/withastro/astro/tree/main/packages/language-tools";
+    changelog = "https://github.com/withastro/astro/blob/%40astrojs/language-server%40${finalAttrs.version}/packages/language-tools/language-server/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "astro-ls";
     platforms = lib.platforms.unix;
   };

@@ -10,7 +10,7 @@
   openssl,
   zlib,
   pkg-config,
-  python310,
+  python3,
   re2,
 }:
 
@@ -26,10 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # Fix gcc15 build failures due to missing <cstdint>
+  # Tracking: https://github.com/NixOS/nixpkgs/issues/475479
+  postPatch = ''
+    sed -i '1i #include <cstdint>' src/exif_entry.h
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/be20_api/feature_recorder_set.cpp --replace-fail '#warn ' '#warning '
+  '';
+
   enableParallelBuilding = true;
   nativeBuildInputs = [
     pkg-config
-    python310
+    python3
     autoreconfHook
   ];
   buildInputs = [
@@ -46,10 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3 etc/makefile_builder.py
     autoheader -f
     aclocal -I m4
-  '';
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/be20_api/feature_recorder_set.cpp --replace-fail '#warn ' '#warning '
   '';
 
   meta = {

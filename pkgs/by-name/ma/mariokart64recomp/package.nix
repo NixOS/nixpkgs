@@ -17,7 +17,6 @@
   makeDesktopItem,
   n64recomp,
   directx-shader-compiler,
-  forceX11 ? false,
 }:
 
 let
@@ -42,13 +41,13 @@ in
 
 llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   pname = "mariokart64recomp";
-  version = "0.9.1-unstable-2025-10-15";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "sonicdcer";
     repo = "MarioKart64Recomp";
-    rev = "f019c3906d47cddbc8bcbea744948b9f4825f54d";
-    hash = "sha256-lMN7FY9EvFbHEc3bLiTWP9LS15syo7dANxeFOpS4YaA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7h2dxa8yR5y03FGdoF9eLTv7ZQY7IkXPtkwu7Q+SbAo=";
     preFetch = ''
       export GIT_CONFIG_COUNT=1
       export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
@@ -82,7 +81,6 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
       icon = "MarioKart64Recompiled";
       exec = "MarioKart64Recompiled";
       comment = "Recompilation of MarioKart 64";
-      genericName = "Recompilation of MarioKart 64";
       desktopName = "MarioKart64Recompiled";
       categories = [ "Game" ];
     })
@@ -118,7 +116,7 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
 
     installBin MarioKart64Recompiled
     install -Dm644 -t $out/share ../recompcontrollerdb.txt
-    install -Dm644 ../icons/512.png $out/share/icons/hicolor/scalable/apps/MarioKart64Recompiled.png
+    install -Dm644 ../icons/512.png $out/share/icons/hicolor/512x512/apps/MarioKart64Recompiled.png
     install -Dm644 ../flatpak/io.github.mariokart64recomp.mariokart64recomp.desktop $out/share/applications/MarioKart64Recompiled.desktop
     cp -r ../assets $out/share/
     ln -s $out/share/recompcontrollerdb.txt $out/bin/recompcontrollerdb.txt
@@ -139,13 +137,9 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
      )
   '';
 
-  # This is needed as MarioKart64Recompiled will segfault when not run from the same
-  # directory as the binary. It also used to exit when run without X11. Recent rt64
-  # updates enabled wayland support, but leave the option to disable this on the
-  # application level if desired.
+  # The game will segfault when not run from the same directory as the binary.
   postFixup = ''
-    wrapProgram $out/bin/MarioKart64Recompiled --chdir "$out/bin/" \
-        ${lib.optionalString forceX11 "--set SDL_VIDEODRIVER x11"}
+    wrapProgram $out/bin/MarioKart64Recompiled --chdir "$out/bin/"
   '';
 
   meta = {

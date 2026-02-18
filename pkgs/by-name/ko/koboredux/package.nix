@@ -65,7 +65,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = optionalString useProprietaryAssets ''
+  postPatch = ''
+    # CMake 4 support
+    # https://github.com/olofson/koboredux/pull/562
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.8)' \
+      'cmake_minimum_required(VERSION 2.8...4.1)'
+  ''
+  + optionalString useProprietaryAssets ''
     cp -r ../koboredux-${version}-Linux/sfx/redux data/sfx/
     cp -r ../koboredux-${version}-Linux/gfx/redux data/gfx/
     cp -r ../koboredux-${version}-Linux/gfx/redux_fullscreen data/gfx/

@@ -14,16 +14,16 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "powerfox";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-powerfox";
-    tag = "v${version}";
-    hash = "sha256-ygzO4/KZ9XUBjLVq48gvyZVEVRB1VJV6DpuHGKNXP54=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JsvLa5zZ6E+d5l4sIngp0KvZlN8BgBxllk9Md19kZLY=";
   };
 
   build-system = [ poetry-core ];
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Python client for the Powerfox devices";
     homepage = "https://github.com/klaasnicolaas/python-powerfox";
-    changelog = "https://github.com/klaasnicolaas/python-powerfox/releases/tag/${src.tag}";
+    changelog = "https://github.com/klaasnicolaas/python-powerfox/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -22,8 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-v+OfQEfAwHxX+FfC0UK2F8/e2tJKaI3zQpg+3hk2hV4=";
 
-  CARGO_PROFILE_RELEASE_LTO = "fat";
-  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  env = {
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config

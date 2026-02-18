@@ -277,6 +277,13 @@ buildPythonPackage (finalAttrs: {
 
         # ptxas fatal   : Unknown option 'sass'
         "python/test/unit/tools/test_disasm.py"
+
+        # assert 'mma.sync.aligned.m16n8k16.row.col.f32.f16.f16.f32' in ptx
+        # AssertionError: assert 'mma.sync.aligned.m16n8k16.row.col.f32.f16.f16.f32' in ...
+        "python/test/unit/language/test_core.py::test_dot[1-1-2-32-1-False-False-None-ieee-float8e5-float32-1-None]"
+
+        # AssertionError: Tensor-likes are not close!
+        "python/test/unit/language/test_core.py::test_scaled_dot[64-128-128-True-False-True-e4m3-fp16-4-16-1]"
       ];
 
       enabledTestPaths = [

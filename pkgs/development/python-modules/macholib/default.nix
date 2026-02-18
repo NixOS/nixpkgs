@@ -3,11 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   unittestCheckHook,
   altgraph,
   setuptools,
-  typing-extensions,
   pyinstaller,
 }:
 
@@ -27,9 +25,6 @@ buildPythonPackage rec {
 
   dependencies = [
     altgraph
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   # Checks assume to find darwin specific libraries

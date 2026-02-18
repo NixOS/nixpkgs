@@ -65,11 +65,13 @@ rustPlatform.buildRustPackage rec {
     cp -a $releaseDir/devimint $devimint/bin/
   '';
 
-  PROTOC = "${buildPackages.protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
-  OPENSSL_DIR = openssl.dev;
+  env = {
+    PROTOC = "${buildPackages.protobuf}/bin/protoc";
+    PROTOC_INCLUDE = "${protobuf}/include";
+    OPENSSL_DIR = openssl.dev;
 
-  FEDIMINT_BUILD_FORCE_GIT_HASH = "0000000000000000000000000000000000000000";
+    FEDIMINT_BUILD_FORCE_GIT_HASH = "0000000000000000000000000000000000000000";
+  };
 
   # currently broken, will require some upstream fixes
   doCheck = false;

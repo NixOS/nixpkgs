@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "asdf-astropy";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "asdf-astropy";
     tag = version;
-    hash = "sha256-JYzC1dEnq1caNSPffWCgk7c3mgUERywP0ladS+RwEnk=";
+    hash = "sha256-8atPmtVWb+4Dj1Lf0UIusBtAIW7lF5D+1ay7G7Ay3PA=";
   };
 
   build-system = [

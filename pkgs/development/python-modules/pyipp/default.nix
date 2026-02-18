@@ -2,7 +2,6 @@
   lib,
   aiohttp,
   aresponses,
-  async-timeout,
   awesomeversion,
   backoff,
   buildPythonPackage,
@@ -12,7 +11,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
@@ -42,8 +40,7 @@ buildPythonPackage rec {
     backoff
     deepmerge
     yarl
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     aresponses

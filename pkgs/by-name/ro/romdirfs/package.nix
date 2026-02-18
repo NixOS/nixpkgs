@@ -7,15 +7,15 @@
   fuse,
 }:
 
-gccStdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "romdirfs";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "mlafeldt";
     repo = "romdirfs";
-    rev = "v${version}";
-    sha256 = "1jbsmpklrycz5q86qmzvbz4iz2g5fvd7p9nca160aw2izwpws0g7";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5wHNL/9RcAVMUMyme9p25YkfyV/7V2wQLp/5TOetesk=";
   };
 
   nativeBuildInputs = [
@@ -37,4 +37,4 @@ gccStdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "romdirfs";
   };
-}
+})

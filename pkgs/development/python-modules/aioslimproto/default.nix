@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pillow,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "aioslimproto";
   version = "3.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

@@ -64,8 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
     chmod +x $out/bin/trigger-rally
 
-    mkdir -p $out/share/pixmaps/
-    ln -s $out/share/games/trigger-rally/icon/trigger-rally-icons.svg $out/share/pixmaps/trigger.svg
+    install -Dm644 $out/share/games/trigger-rally/icon/trigger-rally-icons.svg $out/share/icons/hicolor/scalable/trigger.svg
   '';
 
   desktopItems = [

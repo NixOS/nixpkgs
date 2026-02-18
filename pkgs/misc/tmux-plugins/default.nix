@@ -425,12 +425,12 @@ in
 
   ukiyo = mkTmuxPlugin {
     pluginName = "ukiyo";
-    version = "0-unstable-2026-01-30";
+    version = "0-unstable-2026-02-02";
     src = fetchFromGitHub {
       owner = "Nybkox";
       repo = "tmux-ukiyo";
-      rev = "14fdf51ad16f7b81019c53b987877e78e697f51b";
-      hash = "sha256-ILQVOQ6cfG7I7hFN72mgSTc0AZZW4WWHSxwWKbK0piY=";
+      rev = "dd8730a2a41da79425c11c0cea69e0bd81545e19";
+      hash = "sha256-jOcGNKb8QrIgT7l3D3RiJOPIC9JU1rOy8tk0x5ULrdc=";
     };
     meta = {
       homepage = "https://github.com/Nybkox/tmux-ukiyo";
@@ -445,12 +445,12 @@ in
   lazy-restore = mkTmuxPlugin rec {
     pluginName = "lazy-restore";
     rtpFilePath = "tmux-lazy-restore.tmux";
-    version = "0.1.1";
+    version = "0.1.2";
     src = fetchFromGitHub {
       owner = "bcampolo";
       repo = "tmux-lazy-restore";
       tag = "v${version}";
-      hash = "sha256-rI9KhV6CiAHTErOKuTla+xVbpiP8RK9wu6goxCKhKiA=";
+      hash = "sha256-LLXGXJzIB2I0NMbWTh2DtLTAyC+JMzNM//SbKtFd9nM=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''

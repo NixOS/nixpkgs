@@ -5,7 +5,6 @@
   fetchFromGitHub,
   setuptools,
   attrs,
-  exceptiongroup,
   pexpect,
   doCheck ? true,
   pytestCheckHook,
@@ -14,7 +13,6 @@
   sortedcontainers,
   stdenv,
   pythonAtLeast,
-  pythonOlder,
   sphinxHook,
   sphinx-rtd-theme,
   sphinx-hoverxref,
@@ -54,8 +52,7 @@ buildPythonPackage rec {
   dependencies = [
     attrs
     sortedcontainers
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
   nativeCheckInputs = [
     pexpect

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -18,8 +17,6 @@
   rich,
   tomli-w,
   typer,
-  # python<3.11 only
-  tomli,
 
   # tests
   imagemagick,
@@ -61,9 +58,6 @@ buildPythonPackage (finalAttrs: {
     rich
     tomli-w
     typer
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ];
 
   pythonImportsCheck = [ "npe2" ];

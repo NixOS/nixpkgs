@@ -50,19 +50,32 @@ let
           ;
 
         dart =
-          (dart.overrideAttrs (_: {
-            # This overrideAttrs is used to replace the version in src.url
-            version = dartVersion;
-            __intentionallyOverridingVersion = true;
-          })).overrideAttrs
-            (oldAttrs: {
-              src = fetchzip {
-                inherit (oldAttrs.src) url;
-                hash =
-                  dartHash.${stdenv.hostPlatform.system}
-                    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-              };
-            });
+          let
+            hash =
+              dartHash.${stdenv.hostPlatform.system}
+                or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+          in
+          (
+            if lib.versionAtLeast version "3.41" then
+              (dart.overrideAttrs (oldAttrs: {
+                version = dartVersion;
+                src = oldAttrs.src.overrideAttrs (_: {
+                  inherit hash;
+                });
+              }))
+            else
+              (dart.overrideAttrs (_: {
+                # This overrideAttrs is used to replace the version in src.url
+                version = dartVersion;
+                __intentionallyOverridingVersion = true;
+              })).overrideAttrs
+                (oldAttrs: {
+                  src = fetchzip {
+                    inherit (oldAttrs.src) url;
+                    inherit hash;
+                  };
+                })
+          );
         src =
           let
             source = fetchFromGitHub {

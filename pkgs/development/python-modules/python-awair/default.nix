@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   voluptuous,
   vcrpy,
 }:

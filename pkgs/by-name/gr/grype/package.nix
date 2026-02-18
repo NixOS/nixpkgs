@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "grype";
-  version = "0.105.0";
+  version = "0.108.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "grype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+8fCQ/9S4qwPfq/XM5G7LdNl8VQvBxIl67RMqlB6rUI=";
+    hash = "sha256-5TYQKLVl3iM1Litp86n0aAaj3p2yKA1fbJ6bduIjfp8=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-dYtTYkSVIO5k9kkodhIUWrlNXfQNCUjTUwz4+n6IMtY=";
+  vendorHash = "sha256-8LVpcSjWdGwYv8CMuMZyaHC9+wMJNPDSNV6a8VsmA0M=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -88,6 +88,7 @@ buildGoModule (finalAttrs: {
       --replace-fail "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
     substituteInPlace test/cli/cmd_test.go \
       --replace-fail "Test_descriptorNameAndVersionSet" "Skip_descriptorNameAndVersionSet"
+
     # remove tests that depend on git
     substituteInPlace test/cli/db_validations_test.go \
       --replace-fail "TestDBValidations" "SkipDBValidations"
@@ -104,6 +105,9 @@ buildGoModule (finalAttrs: {
       --replace-fail "TestVersionCmdPrintsToStdout" "SkipVersionCmdPrintsToStdout"
     substituteInPlace grype/presenter/sarif/presenter_test.go \
       --replace-fail "Test_SarifIsValid" "SkipTest_SarifIsValid"
+    substituteInPlace test/cli/config_test.go \
+      --replace-fail "Test_dpkgUseCPEsForEOLEnvVar" "SkipTest_dpkgUseCPEsForEOLEnvVar" \
+      --replace-fail "Test_rpmUseCPEsForEOLEnvVar" "SkipTest_rpmUseCPEsForEOLEnvVar"
 
     # May fail on NixOS, probably due bug in how syft handles tmpfs.
     # See https://github.com/anchore/grype/issues/1822

@@ -27,6 +27,7 @@
   buildPackages,
 
   # this is just for tests (not in the closure of any regular package)
+  glib,
   dbus,
   tzdata,
   desktop-file-utils,
@@ -45,6 +46,13 @@
 assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
 
 let
+  glib-untested = glib.overrideAttrs { doCheck = false; };
+  # break dependency cycles
+  # these things are only used for tests, they don't get into the closure
+  dbus' = dbus.override { enableSystemd = false; };
+  shared-mime-info' = shared-mime-info.override { glib = glib-untested; };
+  desktop-file-utils' = desktop-file-utils.override { glib = glib-untested; };
+
   gobject-introspection' = buildPackages.gobject-introspection.override {
     propagateFullGlib = false;
     # Avoid introducing cairo, which enables gobjectSupport by default.
@@ -213,8 +221,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     tzdata
-    desktop-file-utils
-    shared-mime-info
+    desktop-file-utils'
+    shared-mime-info'
   ];
 
   mesonFlags = [
@@ -315,8 +323,8 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"
     export HOME="$TMP"
-    export XDG_DATA_DIRS="${desktop-file-utils}/share:${shared-mime-info}/share"
-    export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
+    export XDG_DATA_DIRS="${desktop-file-utils'}/share:${shared-mime-info'}/share"
+    export G_TEST_DBUS_DAEMON="${dbus'}/bin/dbus-daemon"
 
     # pkg_config_tests expects a PKG_CONFIG_PATH that points to meson-private, wrapped pkg-config
     # tries to be clever and picks up the wrong glib at the end.

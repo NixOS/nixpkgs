@@ -14,7 +14,7 @@
   requests,
   smart-open,
   srsly,
-  typer-slim,
+  typer,
   wasabi,
 
   # tests
@@ -33,6 +33,11 @@ buildPythonPackage rec {
     hash = "sha256-Xd7cJlUi/a8gwtnuO9wqZiHT1xVMbp6V6Ha+Kyr4tFE=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "typer-slim" "typer"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -43,7 +48,7 @@ buildPythonPackage rec {
     requests
     smart-open
     srsly
-    typer-slim
+    typer
     wasabi
   ];
 

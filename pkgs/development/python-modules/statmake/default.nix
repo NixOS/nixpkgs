@@ -3,13 +3,11 @@
   attrs,
   buildPythonPackage,
   cattrs,
-  exceptiongroup,
   fetchFromGitHub,
   fonttools,
   fs,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   ufo2ft,
   ufolib2,
   hatchling,
@@ -41,8 +39,7 @@ buildPythonPackage rec {
     fonttools
     # required by fonttools[ufo]
     fs
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

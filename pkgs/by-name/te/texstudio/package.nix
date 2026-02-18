@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   qt6,
   qt6Packages,
@@ -38,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
+  ];
+
+  patches = [
+    (fetchpatch2 {
+      name = "disable-auto-update.patch";
+      url = "https://sources.debian.org/data/main/t/texstudio/4.9.1%2Bds-1/debian/patches/0004-disable-auto-update.patch";
+      hash = "sha256-w4/u8ObJSQqHisZmxMSpJeveE+DJSgLqnfpEnizHsBg=";
+    })
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

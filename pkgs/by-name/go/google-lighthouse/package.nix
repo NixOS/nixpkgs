@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "google-lighthouse";
-  version = "13.0.2";
+  version = "13.0.3";
 
   src = fetchFromGitHub {
     owner = "GoogleChrome";
     repo = "lighthouse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jbyp8RJChX6CjXucQLcvRwkUJWptUer3xNNbwaB8vi4=";
+    hash = "sha256-449UZlEDBUhqZ16aYnZhGHBUt6ox1G/FYvJRav63/wk=";
   };
 
   yarnOfflineCache = fetchYarnDeps {

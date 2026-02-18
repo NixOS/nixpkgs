@@ -24,6 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Wrapper library for evdev devices";
     homepage = "https://www.freedesktop.org/software/libevdev/doc/latest/index.html";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

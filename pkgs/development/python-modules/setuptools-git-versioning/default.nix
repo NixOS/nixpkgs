@@ -8,10 +8,8 @@
   packaging,
   pytestCheckHook,
   pytest-rerunfailures,
-  pythonOlder,
   setuptools,
   toml,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -41,8 +39,7 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   pythonImportsCheck = [ "setuptools_git_versioning" ];
 

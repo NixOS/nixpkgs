@@ -494,7 +494,6 @@ in
         nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
         nvidia_dc = nvidiaPackages.dc;
         nvidia_dc_535 = nvidiaPackages.dc_535;
-        nvidia_dc_565 = nvidiaPackages.dc_565;
 
         # this is not a replacement for nvidia_x11*
         # only the opensource kernel driver exposed for hydra to build
@@ -724,6 +723,7 @@ in
         tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
         phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
         prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
+        nvidia_dc_565 = throw "nvidiaPackages.dc_565 has reached end of life, see https://endoflife.date/nvidia"; # added 2026-02-10
       }
     )).extend
       (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);

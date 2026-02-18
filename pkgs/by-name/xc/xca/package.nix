@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Needed for qcollectiongenerator (see https://github.com/NixOS/nixpkgs/pull/92710)
-  QT_PLUGIN_PATH = "${qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}";
+  env.QT_PLUGIN_PATH = "${qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 

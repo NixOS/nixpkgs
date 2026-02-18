@@ -6,15 +6,12 @@
   hatchling,
   jinja2,
   nltk,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hakuin";
   version = "0.1.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pruzko";

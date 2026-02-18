@@ -31,7 +31,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "cheusov";
         repo = "lua-alt-getopt";
-        rev = "0.8.0";
+        tag = "0.8.0";
         hash = "sha256-OxtMNB8++cVQ/gQjntLUt3WYopGhYb1VbIUAZEzJB88=";
       };
 
@@ -224,7 +224,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "busted";
-        rev = "v2.3.0";
+        tag = "v2.3.0";
         hash = "sha256-ZSfnbsDiaIo/abVpwb/LV5Ktp5wFSZQNO0OdbnjqVSs=";
       };
 
@@ -265,7 +265,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "hishamhm";
         repo = "busted-htest";
-        rev = "1.0.0";
+        tag = "1.0.0";
         hash = "sha256-tGAQUSeDt+OV/TBAJo/JFdyeBRRZaIQEJG+SKcCaQhs=";
       };
 
@@ -297,7 +297,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "sile-typesetter";
         repo = "cassowary.lua";
-        rev = "v2.3.2";
+        tag = "v2.3.2";
         hash = "sha256-wIVuf1L3g2BCM+zW4Nt1IyU6xaP4yYuzxHjVDxsgdNM=";
       };
 
@@ -332,7 +332,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "alerque";
         repo = "cldr-lua";
-        rev = "v0.3.0";
+        tag = "v0.3.0";
         hash = "sha256-5LY0YxHACtreP38biDZD97bkPuuT7an/Z1VBXEJYjkI=";
       };
 
@@ -429,7 +429,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "mascarenhas";
         repo = "cosmo";
-        rev = "v16.06.04";
+        tag = "v16.06.04";
         hash = "sha256-mJE5GkDnfZ3qAQyyyKj+aXOtlITeYs8lerGJSTzU/Tk=";
       };
 
@@ -460,7 +460,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "keplerproject";
         repo = "coxpcall";
-        rev = "v1_17_0";
+        tag = "v1_17_0";
         hash = "sha256-EW8pGI9jiGutNVNmyiCP5sIVYZe2rJQc03OrKXIOeMw=";
       };
 
@@ -523,7 +523,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "teal-language";
         repo = "cyan";
-        rev = "v0.4.1";
+        tag = "v0.4.1";
         hash = "sha256-jvBmOC1SMnuwgwtK6sPCDma+S5RyhItc6YjzMPULzSw=";
       };
 
@@ -560,7 +560,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "hishamhm";
         repo = "datafile";
-        rev = "v0.11";
+        tag = "v0.11";
         hash = "sha256-aHdxFJ2IB9v9UMK7vqk7tUA0rLmfvRd0nzhc9JO8AlQ=";
       };
 
@@ -594,7 +594,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "astoff";
         repo = "digestif";
-        rev = "v0.6";
+        tag = "v0.6";
         hash = "sha256-sGwKt9suRVNrbRJlhNMHzc5r4sK/fvUc7smxmxmrn8Y=";
       };
 
@@ -660,7 +660,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "bakpakin";
         repo = "Fennel";
-        rev = "1.6.1";
+        tag = "1.6.1";
         hash = "sha256-MLXLkRKlxqvEOogM5I4uHxnlRLjK8Pbeq9b1+kAgqFg=";
       };
 
@@ -754,7 +754,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "alerque";
         repo = "fluent-lua";
-        rev = "v0.2.0";
+        tag = "v0.2.0";
         hash = "sha256-uDJWhQ/fDD9ZbYOgPk1FDlU3A3DAZw3Ujx92BglFWoo=";
       };
 
@@ -814,15 +814,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2459-1";
+      version = "0.0.2475-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2459-1.rockspec";
-          sha256 = "0qz1r8vm7szd7z6gicxiblc40y8pw9w91g5qnvax4qmzhyyw4zcq";
+          url = "mirror://luarocks/fzf-lua-0.0.2475-1.rockspec";
+          sha256 = "0lpmyffc5g7sl1smb59pqmd8zrkcp367mgsiarscqbqc6yilrvky";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/36d60dd59cd9bc0442352119fc0e45e1c9011e03.zip";
-        sha256 = "0lr4rk0fqdw12vhnmrjy197ai2d5ld16rwpcwxw4ay1dnaaq2f3x";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/739330f48ca64b4283f5228e9dc9c0c8f9a37110.zip";
+        sha256 = "1pwzaak9q7cacw2qvcs80qxqfpxc60jvspw4ykmws6sh3rbi5c36";
       };
 
       disabled = luaOlder "5.1";
@@ -937,15 +937,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "haskell-tools.nvim";
-      version = "7.0.0-1";
+      version = "7.0.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/haskell-tools.nvim-7.0.0-1.rockspec";
-          sha256 = "03zrib07g6fxzf9gj52f8v5bvllqv7zsvn7z473grwsq6w26dpdy";
+          url = "mirror://luarocks/haskell-tools.nvim-7.0.1-1.rockspec";
+          sha256 = "0iy3c8zdj5m0mcj11vw91458dgh4g7y7yz3pc312gbbjq89pi07h";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/haskell-tools.nvim/archive/v7.0.0.zip";
-        sha256 = "1jxbdqh4sgh00lx7abrb7rww62x1dafzxncsr0pjlmly53vwrw5r";
+        url = "https://github.com/mrcjkb/haskell-tools.nvim/archive/v7.0.1.zip";
+        sha256 = "0ibd2cdmfagmdi0v0m0l4yssnx9pfvw0cgs0gz0zlb403jsgm394";
       };
 
       disabled = luaOlder "5.1";
@@ -1057,7 +1057,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "kmarius";
         repo = "jsregexp";
-        rev = "v0.0.7";
+        tag = "v0.0.7";
         hash = "sha256-aXRGmo6w7jgKlR2BwKhbFGHC0mOTwHfYsh+lvqNuFtQ=";
       };
 
@@ -1123,7 +1123,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "ldoc";
-        rev = "v1.5.0";
+        tag = "v1.5.0";
         hash = "sha256-Me2LT+UzO8G2vHqG7DjjoCRAtLmhiJHlSEYQGkprxTw=";
       };
 
@@ -1158,7 +1158,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "pavouk";
         repo = "lgi";
-        rev = "0.9.2";
+        tag = "0.9.2";
         hash = "sha256-UpamUbvqzF0JKV3J0wIiJlV6iedwe823vD0EIm3zKw8=";
       };
 
@@ -1250,7 +1250,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "jeffzi";
         repo = "llscheck";
-        rev = "v0.8.0";
+        tag = "v0.8.0";
         hash = "sha256-edUS6EQLiU4Slob2PagmPE5h7Co+XNRYb3fNeC4COsI=";
       };
 
@@ -1345,7 +1345,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "leafo";
         repo = "loadkit";
-        rev = "v1.1.0";
+        tag = "v1.1.0";
         hash = "sha256-fw+aoP9+yDpme4qXupE07cV1QGZjb2aU7IOHapG+ihU=";
       };
 
@@ -1466,7 +1466,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "rrthomas";
         repo = "lrexlib";
-        rev = "rel-2-9-2";
+        tag = "rel-2-9-2";
         hash = "sha256-DzNDve+xeKb+kAcW+o7GK/RsoDhaDAVAWAhgjISCyZc=";
       };
 
@@ -1498,7 +1498,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "rrthomas";
         repo = "lrexlib";
-        rev = "rel-2-9-2";
+        tag = "rel-2-9-2";
         hash = "sha256-DzNDve+xeKb+kAcW+o7GK/RsoDhaDAVAWAhgjISCyZc=";
       };
 
@@ -1531,7 +1531,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "rrthomas";
         repo = "lrexlib";
-        rev = "rel-2-9-2";
+        tag = "rel-2-9-2";
         hash = "sha256-DzNDve+xeKb+kAcW+o7GK/RsoDhaDAVAWAhgjISCyZc=";
       };
 
@@ -1563,7 +1563,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "rrthomas";
         repo = "lrexlib";
-        rev = "rel-2-9-2";
+        tag = "rel-2-9-2";
         hash = "sha256-DzNDve+xeKb+kAcW+o7GK/RsoDhaDAVAWAhgjISCyZc=";
       };
 
@@ -1626,7 +1626,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-cjson";
-        rev = "2.1.0.10";
+        tag = "2.1.0.10";
         hash = "sha256-/SeQro0FaJn91bAGjsVIin+mJF89VUm/G0KyJkV9Qps=";
       };
 
@@ -1658,7 +1658,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "antirez";
         repo = "lua-cmsgpack";
-        rev = "0.4.0";
+        tag = "0.4.0";
         hash = "sha256-oGKX5G3uNGCJOaZpjLmIJYuq5HtdLd9xM/TlmxODCkg=";
       };
 
@@ -1721,7 +1721,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "hamishforbes";
         repo = "lua-ffi-zlib";
-        rev = "v0.6";
+        tag = "v0.6";
         hash = "sha256-l3zN6amZ6uUbOl7vt5XF+Uyz0nbDrYgcaQCWRFSN22Q=";
       };
 
@@ -1785,7 +1785,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "Alloyed";
         repo = "lua-lsp";
-        rev = "v0.1.0";
+        tag = "v0.1.0";
         hash = "sha256-Fy9d6ZS0R48dUpKpgJ9jRujQna5wsE3+StJ8GQyWY54=";
       };
 
@@ -1851,7 +1851,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "starwing";
         repo = "lua-protobuf";
-        rev = "0.5.3";
+        tag = "0.5.3";
         hash = "sha256-9vAv/Rhf9xrQnbd0nkaxGrcTRKkUSlpYRAJe2zpdIiY=";
       };
 
@@ -1884,7 +1884,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "ledgetech";
         repo = "lua-resty-http";
-        rev = "v0.17.2";
+        tag = "v0.17.2";
         hash = "sha256-Ph3PpzQYKYMvPvjYwx4TeZ9RYoryMsO6mLpkAq/qlHY=";
       };
 
@@ -1917,7 +1917,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "cdbattags";
         repo = "lua-resty-jwt";
-        rev = "v0.2.3";
+        tag = "v0.2.3";
         hash = "sha256-m8UbvKk2DR8yCYX9Uv5HjXcZDVyVeRlUKp7UiaN/SkA=";
       };
 
@@ -1953,7 +1953,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "zmartzone";
         repo = "lua-resty-openidc";
-        rev = "v1.8.0";
+        tag = "v1.8.0";
         hash = "sha256-LSkNWebMF1L1a66QszugAxcHsW5o9uxQZHWituFFgJs=";
       };
 
@@ -1989,7 +1989,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "fffonion";
         repo = "lua-resty-openssl";
-        rev = "1.7.1";
+        tag = "1.7.1";
         hash = "sha256-Zj4neqIptfg8Qckj6BOoHpnVlxCNmJuIgg1kcuqt6pw=";
       };
 
@@ -2021,7 +2021,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "bungle";
         repo = "lua-resty-session";
-        rev = "v4.1.5";
+        tag = "v4.1.5";
         hash = "sha256-qwXNEWU0i3PUJK5cUChkcH43HnBCz4EEVPDQQ10Je+Q=";
       };
 
@@ -2139,7 +2139,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "jonstoler";
         repo = "lua-toml";
-        rev = "v2.0.1";
+        tag = "v2.0.1";
         hash = "sha256-6wCo06Ulmx6HVN2bTrklPqgGiEhDZ1fUfusdS/SDdFI=";
       };
 
@@ -2202,7 +2202,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "brimworks";
         repo = "lua-yajl";
-        rev = "v2.1";
+        tag = "v2.1";
         hash = "sha256-zHBNedJkGEm47HpbeJvcm6JNUUfA1OunLHPJulR8rF8=";
       };
 
@@ -2235,7 +2235,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "brimworks";
         repo = "lua-zlib";
-        rev = "v1.4";
+        tag = "v1.4";
         hash = "sha256-z25OtHroEVUFraeFwajbmIiyD3hlZ12FnWs5uUBLm2Y=";
       };
 
@@ -2268,7 +2268,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "lua_cliargs";
-        rev = "v3.0.2";
+        tag = "v3.0.2";
         hash = "sha256-wL3qBQ8Lu3q8DK2Kaeo1dgzIHd8evaxFYJg47CcQiSg=";
       };
 
@@ -2330,7 +2330,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "luacheck";
-        rev = "v1.2.0";
+        tag = "v1.2.0";
         hash = "sha256-6aDXZRLq2c36dbasyVzcecQKoMvY81RIGYasdF211UY=";
       };
 
@@ -2358,17 +2358,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luacov";
-      version = "0.16.0-1";
+      version = "0.17.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luacov-0.16.0-1.rockspec";
-          sha256 = "1yn056pd2x142lc1s2admnhjnv5hpqwlq6d5sr2ckj5g83x55dvx";
+          url = "mirror://luarocks/luacov-0.17.0-1.rockspec";
+          sha256 = "042jp0nfy3hcnbywlfp4jkrm9xpxrkggs57q616p4win9ibxcqjy";
         }).outPath;
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "luacov";
-        rev = "v0.16.0";
-        hash = "sha256-GoJqiFyXH4chQ/k/qBPttnh/V4vUSfR2Lg8rt3CPKoY=";
+        tag = "v0.17.0";
+        hash = "sha256-UI+6+0g3ldbKUsXCAgYll8v25gwEUn5A102Pn/H0c60=";
       };
 
       disabled = luaOlder "5.1";
@@ -2401,7 +2401,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "mwild1";
         repo = "luadbi";
-        rev = "v0.7.4";
+        tag = "v0.7.4";
         hash = "sha256-N4I8zVTodS01QUIncwAts/vxh2aFY2nYCnVmpN+2HwM=";
       };
 
@@ -2435,7 +2435,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "mwild1";
         repo = "luadbi";
-        rev = "v0.7.4";
+        tag = "v0.7.4";
         hash = "sha256-N4I8zVTodS01QUIncwAts/vxh2aFY2nYCnVmpN+2HwM=";
       };
 
@@ -2470,7 +2470,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "mwild1";
         repo = "luadbi";
-        rev = "v0.7.4";
+        tag = "v0.7.4";
         hash = "sha256-N4I8zVTodS01QUIncwAts/vxh2aFY2nYCnVmpN+2HwM=";
       };
 
@@ -2505,7 +2505,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "mwild1";
         repo = "luadbi";
-        rev = "v0.7.4";
+        tag = "v0.7.4";
         hash = "sha256-N4I8zVTodS01QUIncwAts/vxh2aFY2nYCnVmpN+2HwM=";
       };
 
@@ -2540,7 +2540,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "siffiejoe";
         repo = "lua-luaepnf";
-        rev = "v0.3";
+        tag = "v0.3";
         hash = "sha256-iZksr6Ljy94D0VO4xSRO9s/VgcURvCfDMX9DOt2IetM=";
       };
 
@@ -2602,7 +2602,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "luaexpat";
-        rev = "1.4.1";
+        tag = "1.4.1";
         hash = "sha256-SnI+a7555R/EFFdnrvJohP6uzwQiMNQPqgp0jxAI178=";
       };
 
@@ -2670,7 +2670,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "keplerproject";
         repo = "luafilesystem";
-        rev = "v1_8_0";
+        tag = "v1_8_0";
         hash = "sha256-pEA+Z1pkykWLTT6NHQ5lo8roOh2P0fiHtnK+byTkF5o=";
       };
 
@@ -2703,7 +2703,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lualdap";
         repo = "lualdap";
-        rev = "v1.4.0";
+        tag = "v1.4.0";
         hash = "sha256-u91T7RlRa87CbYXZLhrzcpVvZWsCnQObmbS86kfsAHc=";
       };
 
@@ -2768,7 +2768,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "lualogging";
-        rev = "v1.8.2";
+        tag = "v1.8.2";
         hash = "sha256-RIblf2C9H6Iajzc9aqnvrK4xq8FAHq9InTO6m3aM5dc=";
       };
 
@@ -2862,7 +2862,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "dpapavas";
         repo = "luaprompt";
-        rev = "v0.9";
+        tag = "v0.9";
         hash = "sha256-S6bzlIY1KlMK3wy01wGuRujGFgPxcNWmCaISQ87EBGs=";
       };
 
@@ -2924,7 +2924,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "luarocks";
         repo = "luarocks";
-        rev = "v3.13.0";
+        tag = "v3.13.0";
         hash = "sha256-ETVoDpeFSsW7ld2z31Vog3RKsMquoxd7c8m9y7Fb1wk=";
       };
 
@@ -2957,7 +2957,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "mlua-rs";
         repo = "luarocks-build-rust-mlua";
-        rev = "0.2.7";
+        tag = "0.2.7";
         hash = "sha256-Zf/Ey5utsgzXqR8zlDse7KsyWA0RGx3hyvnJ36qhKG8=";
       };
 
@@ -3055,7 +3055,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "brunoos";
         repo = "luasec";
-        rev = "v1.3.2";
+        tag = "v1.3.2";
         hash = "sha256-o3uiZQnn/ID1qAgpZAqA4R3fWWk+Ajcgx++iNu1yLWc=";
       };
 
@@ -3121,7 +3121,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "luasocket";
-        rev = "v3.1.0";
+        tag = "v3.1.0";
         hash = "sha256-sKSzCrQpS+9reN9IZ4wkh4dB50wiIfA87xN4u1lyHo4=";
       };
 
@@ -3144,17 +3144,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luasql-sqlite3";
-      version = "2.7.0-1";
+      version = "2.8.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luasql-sqlite3-2.7.0-1.rockspec";
-          sha256 = "0fsx3r1hfdkvy07ki7rmmn23w0578mss8rfzz5fi668f0f35lywg";
+          url = "mirror://luarocks/luasql-sqlite3-2.8.0-1.rockspec";
+          sha256 = "1zqcs211idnji4fzyh5g6yn4ca13z690fx0i84gmbibvi5w9rqnl";
         }).outPath;
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "luasql";
-        rev = "2.7.0";
-        hash = "sha256-vtL/ynlnZYNP3CQSxMR7o3xWx10rDHI9fIQazrtNfQE=";
+        tag = "2.8.0";
+        hash = "sha256-7FQa62eGe+bGkDF9+yte0JMcONPjoy5Zn5nohJG1KLA=";
       };
 
       disabled = luaOlder "5.1";
@@ -3186,7 +3186,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "luassert";
-        rev = "v1.9.0";
+        tag = "v1.9.0";
         hash = "sha256-jjdB95Vr5iVsh5T7E84WwZMW6/5H2k2R/ny2VBs2l3I=";
       };
 
@@ -3219,7 +3219,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "luasystem";
-        rev = "v0.6.3";
+        tag = "v0.6.3";
         hash = "sha256-8d2835/EcyDJX9yTn6MTfaZryjY1wkSP+IIIKGPDXMk=";
       };
 
@@ -3251,7 +3251,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "f4z3r";
         repo = "luatext";
-        rev = "v1.2.1";
+        tag = "v1.2.1";
         hash = "sha256-StxCmjSSy3ok0hNkKTQyq4yS1LfX980R5pULCUjLPek=";
       };
 
@@ -3376,7 +3376,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "mpeterv";
         repo = "luazip";
-        rev = "1.2.7";
+        tag = "1.2.7";
         hash = "sha256-pAuXdvF2hM3ApvOg5nn9EHTGlajujHMtHEoN3Sj+mMo=";
       };
 
@@ -3409,7 +3409,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "svermeulen";
         repo = "lusc_luv";
-        rev = "main";
+        tag = "main";
         hash = "sha256-xT3so0QHtzzLRNRb7yqfaRMwkl2bt1MP1xh8BkHKqqo=";
       };
 
@@ -3664,7 +3664,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "leafo";
         repo = "magick";
-        rev = "v1.6.0";
+        tag = "v1.6.0";
         hash = "sha256-gda+vLrWyMQ553jVCIRl1qYTS/rXsGhxrBsrJyI8EN4=";
       };
 
@@ -3698,7 +3698,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "mpeterv";
         repo = "markdown";
-        rev = "0.33";
+        tag = "0.33";
         hash = "sha256-PgRGiSwDODSyNSgeN7kNOCZwjLbGf1Qts/jrfLGYKwU=";
       };
 
@@ -3788,7 +3788,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "lua-mimetypes";
-        rev = "v1.1.0";
+        tag = "v1.1.0";
         hash = "sha256-9uuhMerMqE/AtFFGNIWxGBN0BQ+FE+NgZa3g041lesE=";
       };
 
@@ -4051,7 +4051,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "MunifTanjim";
         repo = "nui.nvim";
-        rev = "0.4.0";
+        tag = "0.4.0";
         hash = "sha256-SJc9nfV6cnBKYwRWsv0iHy+RbET8frNV85reICf+pt8=";
       };
 
@@ -4302,7 +4302,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "penlight";
-        rev = "1.15.0";
+        tag = "1.15.0";
         hash = "sha256-yEkzr4v8avygFxp+NUvffg2fRxQJWTpRdIvluh/QBpY=";
       };
 
@@ -4393,7 +4393,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "xpol";
         repo = "lua-rapidjson";
-        rev = "v0.7.2";
+        tag = "v0.7.2";
         hash = "sha256-WdfGIgbwlMMItsasN+ZITd/iqSeHC0EVeYoUcolb1MU=";
       };
 
@@ -4685,7 +4685,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "say";
-        rev = "v1.4.1";
+        tag = "v1.4.1";
         hash = "sha256-IjNkK1leVtYgbEjUqguVMjbdW+0BHAOCE0pazrVuF50=";
       };
 
@@ -4718,7 +4718,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "pkulchenko";
         repo = "serpent";
-        rev = "0.30";
+        tag = "0.30";
         hash = "sha256-aCP/Lk11wdnqXzntgNlyZz1LkLgZApcvDiA//LLzAGE=";
       };
 
@@ -4756,7 +4756,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "f4z3r";
         repo = "sofa";
-        rev = "v0.8.0";
+        tag = "v0.8.0";
         hash = "sha256-MWGp0kbLaXQV3ElSgPTFoVuWk4+ujktG0xh20kQPex4=";
       };
 
@@ -4795,7 +4795,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "tami5";
         repo = "sqlite.lua";
-        rev = "v1.2.2";
+        tag = "v1.2.2";
         hash = "sha256-NUjZkFawhUD0oI3pDh/XmVwtcYyPqa+TtVbl3k13cTI=";
       };
 
@@ -5035,7 +5035,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "gptlang";
         repo = "lua-tiktoken";
-        rev = "v0.2.5";
+        tag = "v0.2.5";
         hash = "sha256-V3dpFS590QkJQRIAeEgxakvoOGrilolWHutKn9zlOsg=";
       };
 
@@ -5071,7 +5071,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "teal-language";
         repo = "tl";
-        rev = "v0.24.8";
+        tag = "v0.24.8";
         hash = "sha256-bjk/e+FuW0pSaVkRXIiYWhaNGU08Mgyvb7U7lc+8k2w=";
       };
 
@@ -5099,22 +5099,22 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "toml-edit";
-      version = "0.6.1-1";
+      version = "0.7.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/toml-edit-0.6.1-1.rockspec";
-          sha256 = "0crvmigffka3n7583r1a7fgcjfq5b0819a7d155q50m52b7afc4z";
+          url = "mirror://luarocks/toml-edit-0.7.0-1.rockspec";
+          sha256 = "174kjw3j6p1q5wxd34929wlm4hsv5s7ma44nccy3l0b52g453afg";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-neorocks/toml-edit.lua/archive/v0.6.1.zip";
-        sha256 = "03gxfj2km4j08cx8yv70wvzwynnlwai6cdprrxnbf76mwy877hpg";
+        url = "https://github.com/lumen-oss/toml-edit.lua/archive/v0.7.0.zip";
+        sha256 = "03wg6mwmj802a5iv4fklz0zwd9slpw9hjzwj5068gf2lihkkwjzh";
       };
 
       disabled = luaOlder "5.1";
       nativeBuildInputs = [ luarocks-build-rust-mlua ];
 
       meta = {
-        homepage = "https://github.com/nvim-neorocks/toml-edit.lua";
+        homepage = "https://github.com/lumen-oss/toml-edit.lua";
         description = "TOML Parser + Formatting and Comment-Preserving Editor";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
@@ -5233,7 +5233,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "ToxicFrog";
         repo = "vstruct";
-        rev = "v2.1.1";
+        tag = "v2.1.1";
         hash = "sha256-p9yRJ3Kr6WQ4vBSTOVLoX6peNCJW6b6kgXCySg7aiWo=";
       };
 
@@ -5265,7 +5265,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "notomo";
         repo = "vusted";
-        rev = "v2.5.3";
+        tag = "v2.5.3";
         hash = "sha256-b07aSgDgSNpALs5en8ZXLEd/ThLEWX/dTME8Rg1K15I=";
       };
 
@@ -5300,7 +5300,7 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "manoelcampos";
         repo = "xml2lua";
-        rev = "v1.6-2";
+        tag = "v1.6-2";
         hash = "sha256-4il5mmRLtuyCJ2Nm1tKv2hXk7rmiq7Fppx9LMbjkne0=";
       };
 

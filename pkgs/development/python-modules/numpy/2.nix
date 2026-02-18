@@ -6,7 +6,6 @@
   python,
   numpy_2,
   pythonAtLeast,
-  pythonOlder,
   buildPythonPackage,
   writeTextFile,
 
@@ -63,8 +62,6 @@ buildPythonPackage rec {
   pname = "numpy";
   version = "2.3.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "numpy";

@@ -30,9 +30,9 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hass-nabucasa";
-  version = "1.12.0";
+  version = "1.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -40,13 +40,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
-    tag = version;
-    hash = "sha256-hBfO/dHsoMwUKcJf+6wGmS2+GWXauMu5FC527X3Ygow=";
+    tag = finalAttrs.version;
+    hash = "sha256-uTADu6IK8X+oQVvGdprmijR+MUJuWG9KMclq7zveC8o=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
+      --replace-fail "0.0.0" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
@@ -91,8 +91,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for the Home Assistant cloud integration";
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
-    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${src.tag}";
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = with lib.maintainers; [
+      fab
+      Scriptkiddi
+    ];
   };
-}
+})

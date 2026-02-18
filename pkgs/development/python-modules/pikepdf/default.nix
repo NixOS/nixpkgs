@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   hypothesis,
-  pythonOlder,
   jbig2dec,
   deprecated,
   lxml,

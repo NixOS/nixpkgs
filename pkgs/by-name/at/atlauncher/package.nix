@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ''
       install -D -m444 ${packagingDir}/atlauncher.desktop -t $out/share/applications
       install -D -m444 ${packagingDir}/atlauncher.metainfo.xml -t $out/share/metainfo
-      install -D -m444 ${packagingDir}/atlauncher.png -t $out/share/pixmaps
+      install -D -m444 ${packagingDir}/atlauncher.png -t $out/share/icons/hicolor/128x128/apps
       install -D -m444 ${packagingDir}/atlauncher.svg -t $out/share/icons/hicolor/scalable/apps
     '';
 

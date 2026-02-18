@@ -27,14 +27,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
-  version = "1.0.5";
+  version = "1.0.6";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-OIVG0snnYtRkL8D3nurlygkqx6ugzIV4RPm7wReaE4o=";
+    hash = "sha256-255HkAWq9q7Fxx/YCTYqcsRE7g6Hnuqc6rJWBW+7MYA=";
   };
 
   cargoHash = "sha256-T9fbhrYrQrc7TjyumhfT5vyElRKnDzxVBsJtcGA3f7I=";

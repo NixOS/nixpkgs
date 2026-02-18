@@ -14,10 +14,8 @@
   pytest-xdist,
   pytest7CheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools,
-  tomli,
   tomlkit,
   typing-extensions,
   writableTmpDirAsHomeHook,
@@ -44,8 +42,7 @@ buildPythonPackage (finalAttrs: {
     mccabe
     platformdirs
     tomlkit
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     gitpython

@@ -111,8 +111,7 @@ buildNpmPackage rec {
       ln -s $out/opt/threema/$dir $out/opt/threema/dist/src/$dir
     done
 
-    mkdir -p $out/share/pixmaps
-    cp $out/opt/threema/assets/icons/svg/consumer.svg $out/share/pixmaps/threema.svg
+    install -Dm644 $out/opt/threema/assets/icons/svg/consumer.svg $out/share/icons/hicolor/scalable/threema.svg
 
     makeWrapper ${electron}/bin/electron $out/bin/threema \
       --add-flags $out/opt/threema/dist/src/main.js

@@ -594,6 +594,10 @@ stdenv.mkDerivation (
         widely used in academic research. Code in the LLVM project is licensed
         under the "Apache 2.0 License with LLVM exceptions".
       '';
+      identifiers.cpeParts = llvm_meta.identifiers.cpeParts // {
+        inherit version;
+        update = "*";
+      };
     };
   }
   // lib.optionalAttrs enableManpages {

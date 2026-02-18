@@ -329,11 +329,10 @@ You can invoke the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot mer
 The bot will verify the following conditions, refusing to merge otherwise:
 
 - the PR author should be @r-ryantm or a Nixpkgs committer;
-- the invoker should be among the package maintainers;
+- the invoker should be among the package maintainers on the targeted branch;
 - the package should reside in `pkgs/by-name`.
 
-Further, nixpkgs-merge-bot will ensure all CI checks and the ofborg builds for Linux have successfully completed before merging the pull request.
-Should the checks still be underway, the bot will wait for them to finish before attempting the merge again.
+Required status checks prevent PRs that fail them ("PR / ..." jobs) from being merged. Ofborg is not required by the checks.
 
 For other pull requests, please see [I opened a PR, how do I get it merged?](#i-opened-a-pr-how-do-i-get-it-merged).
 

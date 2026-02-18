@@ -37,8 +37,7 @@ buildPythonPackage rec {
     setuptools
     versioneer
     wheel
-  ]
-  ++ versioneer.optional-dependencies.toml;
+  ];
 
   buildInputs = [ gdal ];
 

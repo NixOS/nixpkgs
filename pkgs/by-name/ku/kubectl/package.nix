@@ -1,17 +1,19 @@
 { lib, kubernetes }:
-
-kubernetes.overrideAttrs (_: {
+let
+  kubernetes' = kubernetes.override {
+    components = [
+      "cmd/kubectl"
+      "cmd/kubectl-convert"
+    ];
+  };
+in
+kubernetes'.overrideAttrs (_: {
   pname = "kubectl";
 
   outputs = [
     "out"
     "man"
     "convert"
-  ];
-
-  WHAT = lib.concatStringsSep " " [
-    "cmd/kubectl"
-    "cmd/kubectl-convert"
   ];
 
   installPhase = ''

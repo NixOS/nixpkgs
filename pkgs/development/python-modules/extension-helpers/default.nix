@@ -7,10 +7,8 @@
   findutils,
   pip,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   setuptools,
-  tomli,
   wheel,
 }:
 
@@ -31,7 +29,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [ setuptools ];
 
   nativeCheckInputs = [
     build

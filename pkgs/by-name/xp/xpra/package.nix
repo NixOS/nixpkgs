@@ -126,7 +126,12 @@ effectiveBuildPythonApplication rec {
     patchShebangs --build fs/bin/build_cuda_kernels.py
   '';
 
-  INCLUDE_DIRS = "${pam}/include";
+  env = {
+    # error: 'import_cairo' defined but not used
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
+
+    INCLUDE_DIRS = "${pam}/include";
+  };
 
   nativeBuildInputs = [
     clang
@@ -223,9 +228,6 @@ effectiveBuildPythonApplication rec {
         pynvml
       ]
     );
-
-  # error: 'import_cairo' defined but not used
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
   setupPyBuildFlags = [
     "--with-Xdummy"

@@ -53,7 +53,6 @@
   python-dateutil,
   python-json-logger,
   python-multipart,
-  pythonOlder,
   pyyaml,
   questionary,
   rich,
@@ -62,7 +61,6 @@
   simple-di,
   starlette,
   tomli-w,
-  tomli,
   tritonclient,
   uv,
   uvicorn,
@@ -205,8 +203,7 @@ buildPythonPackage {
     uv
     uvicorn
     watchfiles
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   inherit optional-dependencies;
 

@@ -25,8 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     openblas
   ];
 
-  NIX_ENFORCE_NO_NATIVE = !enableAVX;
-  __AVX2__ = if enableAVX then 1 else 0;
+  env = {
+    NIX_ENFORCE_NO_NATIVE = !enableAVX;
+    __AVX2__ = if enableAVX then 1 else 0;
+  };
 
   meta = {
     homepage = "https://github.com/yahoojapan/NGT";

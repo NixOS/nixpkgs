@@ -15,6 +15,7 @@ let
     elemAt
     extendDerivation
     filter
+    filterAttrs
     getDev
     head
     imap1
@@ -709,8 +710,12 @@ let
               ];
           }
           // (
+            let
+              attrsOutputChecks = makeOutputChecks attrs;
+              attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
+            in
             if !__structuredAttrs then
-              makeOutputChecks attrs
+              attrsOutputChecks
             else
               {
                 outputChecks = builtins.listToAttrs (
@@ -719,7 +724,7 @@ let
                     value =
                       let
                         raw = zipAttrsWith (_: builtins.concatLists) [
-                          (makeOutputChecks attrs)
+                          attrsOutputChecksFiltered
                           (makeOutputChecks attrs.outputChecks.${name} or { })
                         ];
                       in
@@ -888,6 +893,9 @@ let
             name = "inputDerivation" + lib.optionalString (derivationArg ? name) "-${derivationArg.name}";
             # This always only has one output
             outputs = [ "out" ];
+            # This doesn’t require any system features even if the original
+            # derivation did.
+            requiredSystemFeatures = [ ];
 
             # Propagate the original builder and arguments, since we override
             # them and they might contain references to build inputs

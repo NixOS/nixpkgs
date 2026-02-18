@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     dbus-python
   ];
 
-  PYTHONDIR = "${placeholder "out"}/${python3Packages.python.sitePackages}";
+  env.PYTHONDIR = "${placeholder "out"}/${python3Packages.python.sitePackages}";
 
   dontWrapGApps = true;
 

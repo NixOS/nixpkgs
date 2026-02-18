@@ -9,7 +9,6 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
-  pythonOlder,
   stdenv,
 }:
 

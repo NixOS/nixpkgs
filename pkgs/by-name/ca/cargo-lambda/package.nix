@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/cargo-lambda --prefix PATH : ${lib.makeBinPath [ zig_0_13 ]}
   '';
 
-  CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
+  env.CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
 
   cargoBuildFlags = [ "--features=skip-build-banner" ];
   cargoCheckFlags = [ "--features=skip-build-banner" ];

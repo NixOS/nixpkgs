@@ -10,10 +10,8 @@
   # dependencies
   filelock,
   packaging,
-  tomli,
 
   distutils,
-  pythonOlder,
   ncurses,
   patchelf,
   dmgbuild,
@@ -64,9 +62,6 @@ buildPythonPackage rec {
     filelock
     packaging
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     dmgbuild

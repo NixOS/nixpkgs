@@ -11,12 +11,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "8.1.2";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0ICZ+hsWm61KmR0xsquJ8EugixMZ7R9b0OrYVH1MWtM=";
+    hash = "sha256-ZFI+mUAd307n8J9VF4fcEnER7rmsjYsOgDeWbv3XoaU=";
   };
 
   patches = [

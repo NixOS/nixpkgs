@@ -1,6 +1,7 @@
 {
   stdenv,
   pkgs,
+  config,
   lib,
   fetchurl,
   gfortran,
@@ -207,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     octavePackages = import ../../../top-level/octave-packages.nix {
       pkgs = allPkgs;
       inherit
+        config
         lib
         stdenv
         fetchurl

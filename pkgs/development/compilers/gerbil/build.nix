@@ -74,6 +74,10 @@ stdenv.mkDerivation rec {
     "--enable-march=" # Avoid non-portable invalid instructions. Use =native if local build only.
   ];
 
+  env.NIX_CFLAGS_COMPILE =
+    # Required for legacy C code in source
+    "-Wno-error=implicit-function-declaration";
+
   configurePhase = ''
     export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \
            CXX=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++ \

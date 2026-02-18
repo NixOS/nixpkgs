@@ -11,7 +11,6 @@
   pytest-httpx,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   respx,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pydiscovergy";
   version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jpbede";

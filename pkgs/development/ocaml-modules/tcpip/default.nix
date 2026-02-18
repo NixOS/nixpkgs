@@ -26,8 +26,6 @@
   ipaddr-cstruct,
   lru,
   metrics,
-  withFreestanding ? false,
-  ocaml-freestanding,
 }:
 
 buildDunePackage rec {
@@ -64,9 +62,6 @@ buildDunePackage rec {
     metrics
     arp
     mirage-flow
-  ]
-  ++ lib.optionals withFreestanding [
-    ocaml-freestanding
   ];
 
   doCheck = true;

@@ -14,7 +14,6 @@
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   typer,
   yarl,
   zeroconf,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "wled";
   version = "0.21.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";

@@ -41,6 +41,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Basic spell checker that works well with camelCase code for (Neo)vim";
     homepage = "https://github.com/iamcco/coc-spell-checker";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

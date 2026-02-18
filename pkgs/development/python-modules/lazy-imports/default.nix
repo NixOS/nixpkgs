@@ -11,13 +11,13 @@
 }:
 let
   pname = "lazy-imports";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "bachorp";
     repo = "lazy-imports";
     tag = version;
-    hash = "sha256-KtKqR/e0ldpsrz3dyY1ehF4cM5k7jDziiB+8uV0HEwc=";
+    hash = "sha256-3TKhPMtViebdFTR3timf0ulXMdKrpQZ22gj891xQHVI=";
   };
 in
 buildPythonPackage {

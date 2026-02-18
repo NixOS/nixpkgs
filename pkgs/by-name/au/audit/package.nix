@@ -175,5 +175,10 @@ stdenv.mkDerivation (finalAttrs: {
       "auparse"
     ];
     platforms = lib.platforms.linux;
+    identifiers.cpeParts =
+      lib.meta.cpeFullVersionWithVendor "linux_audit_project" finalAttrs.version
+      // {
+        product = "linux_audit";
+      };
   };
 })

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "cry";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-cry";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ea6f2xTVmYekPmzAKasA9mNG4Voxw2MCkfZ9LB9gwbo=";
   };
 
@@ -27,4 +27,4 @@ buildDunePackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})
