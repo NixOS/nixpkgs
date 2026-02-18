@@ -10029,10 +10029,6 @@ with pkgs;
 
   i3ipc-glib = callPackage ../applications/window-managers/i3/i3ipc-glib.nix { };
 
-  i3lock = callPackage ../applications/window-managers/i3/lock.nix {
-    cairo = cairo.override { xcbSupport = true; };
-  };
-
   i3lock-blur = callPackage ../applications/window-managers/i3/lock-blur.nix { };
 
   i3lock-color = callPackage ../applications/window-managers/i3/lock-color.nix { };

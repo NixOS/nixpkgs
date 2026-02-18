@@ -12,12 +12,16 @@
   pam,
   libx11,
   libev,
-  cairo,
   libxkbcommon,
   libxkbfile,
   libxcb-util,
+  cairo,
 }:
-
+let
+  cairo' = cairo.override {
+    xcbSupport = true;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "i3lock";
   version = "2.15";
@@ -43,7 +47,7 @@ stdenv.mkDerivation rec {
     pam
     libx11
     libev
-    cairo
+    cairo'
     libxkbcommon
     libxkbfile
     libxcb-util
