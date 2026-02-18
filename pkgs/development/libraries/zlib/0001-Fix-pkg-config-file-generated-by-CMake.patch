@@ -1,0 +1,104 @@
+From 13092ab4cf9ddfa46352796904d7c187071c7ca1 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Wed, 18 Feb 2026 18:07:07 +0100
+Subject: [PATCH 1/3] Define exec_prefix to be the same as prefix in pc file
+
+This makes it easier to relocate the package since only one variable
+needs to be overriden.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ zlib.pc.cmakein | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/zlib.pc.cmakein b/zlib.pc.cmakein
+index a392727c5..699a33424 100644
+--- a/zlib.pc.cmakein
++++ b/zlib.pc.cmakein
+@@ -1,5 +1,5 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=${prefix}
+ libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+ sharedlibdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+ includedir=${exec_prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+
+From ca541a9863f3793acbe11de0466cfc568a313987 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Wed, 18 Feb 2026 18:08:39 +0100
+Subject: [PATCH 2/3] Use prefix for includedir in pc file
+
+The exec_prefix is meant for machine-specific files and headers are
+machine-independent.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ zlib.pc.cmakein | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/zlib.pc.cmakein b/zlib.pc.cmakein
+index 699a33424..6f1947316 100644
+--- a/zlib.pc.cmakein
++++ b/zlib.pc.cmakein
+@@ -2,7 +2,7 @@ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+ libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+ sharedlibdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${exec_prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+ 
+ Name: zlib
+ Description: zlib compression library
+
+From 7c20e37b41f1267bd2d07648acf71c4d5a464289 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Wed, 18 Feb 2026 18:20:57 +0100
+Subject: [PATCH 3/3] Emit correct pc file variables when install dirs are
+ absolute
+
+The CMAKE_INSTALL_*DIR variables can be absolute and in this case they
+should not be appended to the prefix.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ CMakeLists.txt  | 10 ++++++++++
+ zlib.pc.cmakein |  6 +++---
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e103c409a..6ef5e1440 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -112,6 +112,16 @@ check_c_source_compiles(
+ 
+ unset(CMAKE_COMPILE_FLAGS)
+ set(ZLIB_PC ${zlib_BINARY_DIR}/zlib.pc)
++if(IS_ABSOLUTE "${CMAKE_INSTALL_INCLUDEDIR}")
++    set(pc_includedir "${CMAKE_INSTALL_INCLUDEDIR}")
++else()
++    set(pc_includedir "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
++endif()
++if(IS_ABSOLUTE "${CMAKE_INSTALL_LIBDIR}")
++    set(pc_libdir "${CMAKE_INSTALL_LIBDIR}")
++else()
++    set(pc_libdir "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
++endif()
+ configure_file(${zlib_SOURCE_DIR}/zlib.pc.cmakein ${ZLIB_PC} @ONLY)
+ configure_file(${zlib_BINARY_DIR}/zconf.h.cmakein ${zlib_BINARY_DIR}/zconf.h)
+ 
+diff --git a/zlib.pc.cmakein b/zlib.pc.cmakein
+index 6f1947316..c8edaf65d 100644
+--- a/zlib.pc.cmakein
++++ b/zlib.pc.cmakein
+@@ -1,8 +1,8 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-sharedlibdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@pc_libdir@
++sharedlibdir=${libdir}
++includedir=@pc_includedir@
+ 
+ Name: zlib
+ Description: zlib compression library
