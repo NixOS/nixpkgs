@@ -2240,7 +2240,7 @@
   };
 
   sourcepawn = {
-    version = "0-unstable-2025-06-13";
+    version = "0.7.8-unstable-2025-06-13";
     url = "github:nilshelmig/tree-sitter-sourcepawn/5a8fdd446b516c81e218245c12129c6ad4bccfa2";
     hash = "sha256-TfLCG2Ro3QnGStyCNqHwO54HQMR2fEOV6FjBv+0LjJ0=";
     meta = {
