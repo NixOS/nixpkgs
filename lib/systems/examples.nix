@@ -332,12 +332,6 @@ rec {
     platform = { };
   };
 
-  x86_64-darwin = {
-    config = "x86_64-apple-darwin";
-    xcodePlatform = "MacOSX";
-    platform = { };
-  };
-
   #
   # UEFI
   #
