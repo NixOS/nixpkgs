@@ -2893,7 +2893,7 @@
   };
 
   yuck = {
-    version = "0-unstable-2024-05-05";
+    version = "0.0.2-unstable-2024-05-05";
     url = "github:Philipp-M/tree-sitter-yuck/e877f6ade4b77d5ef8787075141053631ba12318";
     hash = "sha256-l8c1/7q8S78jGyl+VAVVgs8wq58PrrjycyJfWXsCgAI=";
     meta = {
