@@ -123,7 +123,6 @@ let
             aarch64-darwin: ["package1", "package2"],
             aarch64-linux: ["package1", "package2"],
             x86_64-linux: ["package1", "package2", "package3"],
-            x86_64-darwin: ["package1"],
           },
         }
       - step-summary.md: A markdown render of the changes
