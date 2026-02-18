@@ -365,7 +365,7 @@
   };
 
   cylc = {
-    version = "0-unstable-2025-09-08";
+    version = "0.2.0-unstable-2025-09-08";
     url = "github:elliotfontaine/tree-sitter-cylc/6d1d81137112299324b526477ce1db989ab58fb8";
     hash = "sha256-jgQCTM36S8UwSyT4LAfcX4DUIl2OYVMeQdDg3zRrw00=";
     meta = {
