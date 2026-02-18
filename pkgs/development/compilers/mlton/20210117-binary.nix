@@ -20,11 +20,6 @@ stdenv.mkDerivation rec {
         url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-linux-glibc2.31.tgz";
         hash = "sha256-dJy1nWuszWRBQ3Cb6GYQUijSttzUDFB6kLicm14PRdI=";
       })
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      (fetchurl {
-        url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-darwin-19.6.gmp-static.tgz";
-        hash = "sha256-W+qfYBNupoR4kMX05F1xJqMu8U/UaiMDyrh1ypXIzXY=";
-      })
     else if stdenv.hostPlatform.system == "aarch64-darwin" then
       (fetchurl {
         url = "https://projects.laas.fr/tina/software/mlton-${version}-1.arm64-darwin-21.6-gmp-static.tgz";
