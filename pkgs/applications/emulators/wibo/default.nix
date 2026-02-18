@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchzip,
+  mimalloc,
   srcOnly,
   cmake,
   unzip,
@@ -10,18 +11,26 @@
 
 stdenv.mkDerivation rec {
   pname = "wibo";
-  version = "0.6.14";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "decompals";
     repo = "wibo";
     rev = version;
-    hash = "sha256-6YcraHBFWmm8TBfuFHbM9jGvUm9KvTOplJrFSTQkt70=";
+    hash = "sha256-PEqfvpS3p8Zooee7k59SN2UiSZWfITuB/VULIrfup4w=";
   };
 
   nativeBuildInputs = [
     cmake
     unzip
+  ];
+
+  buildInputs = [
+    mimalloc
+  ];
+
+  cmakeFlags = [
+    "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
   ];
 
   doCheck = false;
