@@ -1672,9 +1672,9 @@
   };
 
   openscad = {
-    version = "0-unstable-2025-11-25";
-    url = "github:openscad/tree-sitter-openscad/09ed1478aa98a11df06367e91f2d310e334e39fb";
-    hash = "sha256-tRBUGfcEdEnym1mrpPs7YdWvbBgeLQoZLgb47XtoGd8=";
+    version = "0.7.0-unstable-2026-01-26";
+    url = "github:openscad/tree-sitter-openscad/4f358209e9fcd13a5183daa99ecd3570c8a9a5e6";
+    hash = "sha256-3ecgfKxjqqQwPaPzBZQf0JSs+WrdYgLpLb1kPlYt1oc=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
