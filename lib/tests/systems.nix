@@ -126,7 +126,6 @@ lib.runTests (
     ];
     testx86_64 = mseteq x86_64 [
       "x86_64-linux"
-      "x86_64-darwin"
       "x86_64-freebsd"
       "x86_64-genode"
       "x86_64-redox"
@@ -143,7 +142,6 @@ lib.runTests (
       "x86_64-cygwin"
     ];
     testdarwin = mseteq darwin [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     testfreebsd = mseteq freebsd [

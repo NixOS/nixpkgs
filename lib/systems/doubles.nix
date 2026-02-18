@@ -11,7 +11,6 @@ let
     "x86_64-cygwin"
 
     # Darwin
-    "x86_64-darwin"
     "aarch64-darwin"
 
     # FreeBSD
