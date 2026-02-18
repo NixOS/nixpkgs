@@ -119,7 +119,7 @@
   };
 
   bicep = {
-    version = "0-unstable-2024-12-22";
+    version = "1.1.0-unstable-2024-12-22";
     url = "github:tree-sitter-grammars/tree-sitter-bicep/bff59884307c0ab009bd5e81afd9324b46a6c0f9";
     hash = "sha256-+qvhJgYqs8aj/Kmojr7lmjbXmskwVvbYBn4ia9wOv3k=";
     meta = {
