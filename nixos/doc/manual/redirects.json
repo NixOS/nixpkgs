@@ -2207,6 +2207,9 @@
   "test-opt-interactive": [
     "index.html#test-opt-interactive"
   ],
+  "test-opt-logLevel": [
+    "index.html#test-opt-logLevel"
+  ],
   "test-opt-meta": [
     "index.html#test-opt-meta"
   ],
