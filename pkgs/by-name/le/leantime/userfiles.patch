@@ -1,0 +1,43 @@
+diff --git a/app/Core/Configuration/laravelConfig.php b/app/Core/Configuration/laravelConfig.php
+index ac6b6d9e4..bb9a189c3 100644
+--- a/app/Core/Configuration/laravelConfig.php
++++ b/app/Core/Configuration/laravelConfig.php
+@@ -160,7 +160,7 @@ return [
+         'disks' => [
+             'local' => [
+                 'driver' => 'local',
+-                'root' => base_path('userfiles'),
++                'root' => $_ENV["APP_DATA_PATH"] . "/userfiles",
+                 'serve' => true,
+                 'throw' => false,
+                 'report' => false,
+@@ -168,8 +168,8 @@ return [
+             ],
+             'public' => [
+                 'driver' => 'local',
+-                'root' => public_path('userfiles'),
+-                'url' => env('LEAN_APP_URL').'/userfiles',
++                'root' => $_ENV["APP_DATA_PATH"] . "/publicfiles",
++                'url' => env('LEAN_APP_URL') . '/userfiles',
+                 'visibility' => 'public',
+                 'throw' => false,
+                 'report' => false,
+@@ -653,8 +653,7 @@ return [
+                 'driver' => 'leantime',
+                 'provider' => 'leantimeUsers',
+             ],
+-            'sanctum' => [
+-            ],
++            'sanctum' => [],
+             'jsonRpc' => [
+                 'driver' => 'jsonRpc',
+                 'provider' => 'leantimeUsers',
+@@ -678,7 +677,7 @@ return [
+ 
+         // The release version of your application
+         // Example with dynamic git hash: trim(exec('git --git-dir ' . base_path('.git') . ' log --pretty="%h" -n1 HEAD'))
+-        'release' => 'leantime-backend@'.get_release_version(),
++        'release' => 'leantime-backend@' . get_release_version(),
+ 
+         // When left empty or `null` the Laravel environment will be used (usually discovered from `APP_ENV` in your `.env`)
+         'environment' => env('LEAN_ENV', 'dev'),

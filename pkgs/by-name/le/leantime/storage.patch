@@ -1,0 +1,69 @@
+diff --git a/app/Core/Application.php b/app/Core/Application.php
+index 5fecfd9af..97a3a6ff2 100644
+--- a/app/Core/Application.php
++++ b/app/Core/Application.php
+@@ -42,14 +42,14 @@ class Application extends \Illuminate\Foundation\Application
+         }
+ 
+         // Our folder structure is different and we shall not bow to the bourgeoisie
+-        $this->useAppPath($this->basePath.'/app');
+-        $this->useConfigPath($this->basePath.'/config');
+-        $this->useEnvironmentPath($this->basePath.'/config');
+-        $this->useBootstrapPath($this->basePath.'/bootstrap');
+-        $this->usePublicPath($this->basePath.'/public');
+-        $this->useStoragePath($this->basePath.'/storage');
+-        $this->useLangPath($this->basePath.'/app/Language');
+-        $this->useDatabasePath($this->basePath.'/database');
++        $this->useAppPath($this->basePath . '/app');
++        $this->useConfigPath($this->basePath . '/config');
++        $this->useEnvironmentPath($this->basePath . '/config');
++        $this->useBootstrapPath($_ENV["APP_DATA_PATH"] . '/bootstrap');
++        $this->usePublicPath($this->basePath . '/public');
++        $this->useStoragePath($_ENV["APP_DATA_PATH"] . '/storage');
++        $this->useLangPath($this->basePath . '/app/Language');
++        $this->useDatabasePath($this->basePath . '/database');
+ 
+         $this->registerBaseBindings();
+         $this->registerBaseServiceProviders();
+@@ -59,7 +59,6 @@ class Application extends \Illuminate\Foundation\Application
+         $this->registerLeantimeAliases();
+ 
+         $this->registerLaravelCloudServices();
+-
+     }
+ 
+     /**
+@@ -85,11 +84,13 @@ class Application extends \Illuminate\Foundation\Application
+ 
+     public function registerLeantimeAliases()
+     {
+-        foreach ([
+-            'app' => [self::class, \Illuminate\Contracts\Container\Container::class, Application::class, \Illuminate\Contracts\Foundation\Application::class, \Psr\Container\ContainerInterface::class],
+-            'config' => [Environment::class, \Illuminate\Config\Repository::class, \Illuminate\Contracts\Config\Repository::class],
+-            'request' => [IncomingRequest::class, ApiRequest::class, \Leantime\Core\Console\CliRequest::class, \Illuminate\Http\Request::class,  \Symfony\Component\HttpFoundation\Request::class],
+-        ] as $key => $aliases) {
++        foreach (
++            [
++                'app' => [self::class, \Illuminate\Contracts\Container\Container::class, Application::class, \Illuminate\Contracts\Foundation\Application::class, \Psr\Container\ContainerInterface::class],
++                'config' => [Environment::class, \Illuminate\Config\Repository::class, \Illuminate\Contracts\Config\Repository::class],
++                'request' => [IncomingRequest::class, ApiRequest::class, \Leantime\Core\Console\CliRequest::class, \Illuminate\Http\Request::class,  \Symfony\Component\HttpFoundation\Request::class],
++            ] as $key => $aliases
++        ) {
+             foreach ($aliases as $alias) {
+                 $this->alias($key, $alias);
+             }
+@@ -97,7 +98,6 @@ class Application extends \Illuminate\Foundation\Application
+ 
+         $this->alias(HttpKernel::class, \Illuminate\Foundation\Http\Kernel::class);
+         $this->alias(ConsoleKernel::class, \Illuminate\Foundation\Console\Kernel::class);
+-
+     }
+ 
+     // Boot with Leantime event dispatcher
+@@ -120,6 +120,5 @@ class Application extends \Illuminate\Foundation\Application
+         parent::boot();
+ 
+         self::dispatchEvent('afterBootingServiceProviders');
+-
+     }
+ }
