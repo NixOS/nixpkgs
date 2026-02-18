@@ -1104,7 +1104,7 @@
   };
 
   ini = {
-    version = "0-unstable-2025-12-08";
+    version = "1.4.0-unstable-2025-12-08";
     url = "github:justinmk/tree-sitter-ini/e4018b5176132b4f3c5d6e61cea383f42288d0f5";
     hash = "sha256-8WCyIaApsLPOybe+cntF4ISyQKN41L2IRAATd9KmzL0=";
     meta = {
