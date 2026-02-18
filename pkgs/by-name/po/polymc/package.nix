@@ -29,7 +29,13 @@
   gamemode,
   mangohud,
 
-  xorg,
+  libx11,
+  libxext,
+  libxcursor,
+  libxrandr,
+  libxxf86vm,
+  xrandr,
+
   libpulseaudio,
   libGL,
   glfw,
@@ -70,34 +76,33 @@ symlinkJoin {
     qtwayland
   ];
 
-  postBuild = ''wrapQtAppsHook'';
+  postBuild = "wrapQtAppsHook";
 
   qtWrapperArgs =
     let
-      runtimeLibs =
-        (with xorg; [
-          libX11
-          libXext
-          libXcursor
-          libXrandr
-          libXxf86vm
-        ])
-        ++ [
-          libpulseaudio
-          libGL
-          glfw
-          openal
-          stdenv.cc.cc.lib
-          udev # OSHI
-          wayland
-          vulkan-loader # VulkanMod's lwjgl
-        ]
-        ++ lib.optional gamemodeSupport gamemode.lib
-        ++ additionalLibraries;
+      runtimeLibs = [
+        # xorg
+        libx11
+        libxext
+        libxcursor
+        libxrandr
+        libxxf86vm
+
+        libpulseaudio
+        libGL
+        glfw
+        openal
+        stdenv.cc.cc.lib
+        udev # OSHI
+        wayland
+        vulkan-loader # VulkanMod's lwjgl
+      ]
+      ++ lib.optional gamemodeSupport gamemode.lib
+      ++ additionalLibraries;
 
       runtimeBins = [
         # Required by old LWJGL versions
-        xorg.xrandr
+        xrandr
         mesa-demos # For glxinfo
       ]
       ++ additionalBinaries;
