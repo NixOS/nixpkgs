@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "glueviz";
-  version = "1.24.1";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "glue";
     tag = "v${version}";
-    hash = "sha256-21XFH1fIt8vLd0blZJn6ZRmLJaof/E30zHrBVLjXOaA=";
+    hash = "sha256-5kgygaZEduJzkSlmRMOO7SM1XPZJ0Pb+vZNIvwDEh5Y=";
   };
 
   buildInputs = [ pyqt-builder ];
