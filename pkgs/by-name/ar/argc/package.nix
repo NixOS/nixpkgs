@@ -55,14 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
     tests = {
       cross =
-        (
-          if stdenv.hostPlatform.isDarwin then
-            if stdenv.hostPlatform.isAarch64 then pkgsCross.x86_64-darwin else pkgsCross.aarch64-darwin
-          else if stdenv.hostPlatform.isAarch64 then
-            pkgsCross.gnu64
-          else
-            pkgsCross.aarch64-multiplatform
-        ).argc;
+        (if stdenv.hostPlatform.isAarch64 then pkgsCross.gnu64 else pkgsCross.aarch64-multiplatform).argc;
     };
   };
 
