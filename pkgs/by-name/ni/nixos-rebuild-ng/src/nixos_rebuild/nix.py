@@ -25,7 +25,7 @@ from .models import (
     Profile,
     Remote,
 )
-from .process import SSH_DEFAULT_OPTS, run_wrapper
+from .process import PRESERVE_ENV, SSH_DEFAULT_OPTS, run_wrapper
 from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
@@ -192,9 +192,7 @@ def copy_closure(
     Also supports copying a closure from a remote to another remote."""
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
-    extra_env = {
-        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))
-    }
+    env = {"NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))}
 
     def nix_copy_closure(host: Remote, to: bool) -> None:
         run_wrapper(
@@ -205,7 +203,7 @@ def copy_closure(
                 host.host,
                 closure,
             ],
-            extra_env=extra_env,
+            env=env,
         )
 
     def nix_copy(to_host: Remote, from_host: Remote) -> None:
@@ -221,7 +219,7 @@ def copy_closure(
                 f"ssh://{to_host.host}",
                 closure,
             ],
-            extra_env=extra_env,
+            env=env,
         )
 
     match (to_host, from_host):
@@ -703,7 +701,11 @@ def switch_to_configuration(
 
     run_wrapper(
         [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
-        extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
+        env={
+            "LOCALE_ARCHIVE": PRESERVE_ENV,
+            "NIXOS_NO_CHECK": PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0",
+        },
         remote=target_host,
         sudo=sudo,
     )

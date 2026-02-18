@@ -23,7 +23,6 @@ let
     maintainers = with lib.maintainers; [
       conradmearns
       zaninime
-      qbit
       kashw2
       w-lfchen
     ];

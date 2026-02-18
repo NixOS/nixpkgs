@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pyipv8";
-  version = "3.1";
+  version = "3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tribler";
     repo = "py-ipv8";
     tag = version;
-    hash = "sha256-HamjKVuBPSicoP/GldO5kg2Eay50ti03wzeNaPAl0qI=";
+    hash = "sha256-lvkMWMwpKEbHcHZQ3rbG9MOS1/tufa/KphQT9iz5PcQ=";
   };
 
   build-system = [ setuptools ];

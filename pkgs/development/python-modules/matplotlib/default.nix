@@ -204,7 +204,6 @@ buildPythonPackage rec {
       bsd0
     ];
     maintainers = with lib.maintainers; [
-      lovek323
       veprbl
     ];
   };

@@ -268,12 +268,16 @@ let
           ]
           ++ overlays;
           ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
-            config = lib.systems.parse.tripleFromSystem (
-              stdenv.hostPlatform.parsed
-              // {
-                cpu = lib.systems.parse.cpuTypes.i686;
-              }
-            );
+            config =
+              if isSupported then
+                lib.systems.parse.tripleFromSystem (
+                  stdenv.hostPlatform.parsed
+                  // {
+                    cpu = lib.systems.parse.cpuTypes.i686;
+                  }
+                )
+              else
+                "i686-unknown-linux-gnu";
           };
         }
       else

@@ -126,6 +126,10 @@ buildPythonPackage (finalAttrs: {
     "test_yaml_unicode_dump"
     # FileNotFoundError: Command not found: 'init'
     "test_git_cli"
+  ]
+  ++ lib.optionals withOptDeps [
+    # Require network access
+    "test_csl_style_download"
   ];
 
   meta = {

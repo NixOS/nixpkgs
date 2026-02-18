@@ -44,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     substitute ${./wrapper} $out/bin/ccls \
       --replace-fail '@clang@' '${llvmPackages.clang}' \
       --replace-fail '@shell@' '${runtimeShell}' \
-      --replace-fail '@wrapped@' "$wrapped"
+      --replace-fail '@wrapped@' "$wrapped" \
+      --replace-fail '@out@' "$out"
     chmod --reference=$out/bin/$wrapped $out/bin/ccls
   '';
 

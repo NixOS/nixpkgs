@@ -20,20 +20,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stoat-desktop";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "stoatchat";
     repo = "for-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Q1FKQBxtlrGmdfx7gLd0aQx/5Pqd4atFdMykxK997Rw=";
+    hash = "sha256-vMXnBniA0wyoK7Pe13h/yHtf8ky59ts4VQb9k7KuUCE=";
   };
 
   postPatch = ''
     # Disable auto-updates
-    substituteInPlace src/main.ts \
-      --replace-fail "updateElectronApp();" ""
+    sed -i '/updateElectronApp([^)]*)/d' src/main.ts
   '';
 
   strictDeps = true;

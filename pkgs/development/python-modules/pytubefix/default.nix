@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytubefix";
-  version = "10.3.6";
+  version = "10.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JuanBindez";
     repo = "pytubefix";
     tag = "v${version}";
-    hash = "sha256-GSXz89BztDOcAmAMPi3SIIDnUbvYJjnHf4DcWf1hqjY=";
+    hash = "sha256-XfcFpJRMcXGcGeo36QhBEi7iT6Lsf1yq2F1iz/jq7oQ=";
   };
 
   patches = [

@@ -177,7 +177,7 @@ let
       # the function you would have passed to python.withPackages
       extraPythonPackages ? (_: [ ]),
       # the function you would have passed to python.withPackages
-      withPython3 ? true,
+      withPython3 ? false,
       extraPython3Packages ? (_: [ ]),
       # the function you would have passed to lua.withPackages
       extraLuaPackages ? (_: [ ]),
@@ -243,9 +243,9 @@ let
   */
   generateProviderRc =
     {
-      withPython3 ? true,
+      withPython3 ? false,
       withNodeJs ? false,
-      withRuby ? true,
+      withRuby ? false,
       # Perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
       withPerl ? false,
 

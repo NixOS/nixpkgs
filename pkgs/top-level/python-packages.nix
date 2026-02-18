@@ -310,6 +310,8 @@ self: super: with self; {
 
   aiohomematic = callPackage ../development/python-modules/aiohomematic { };
 
+  aiohomematic-config = callPackage ../development/python-modules/aiohomematic-config { };
+
   aiohomematic-test-support = callPackage ../development/python-modules/aiohomematic-test-support { };
 
   aiohttp = callPackage ../development/python-modules/aiohttp { };
@@ -535,6 +537,8 @@ self: super: with self; {
   aiotarfile = callPackage ../development/python-modules/aiotarfile { };
 
   aiotedee = callPackage ../development/python-modules/aiotedee { };
+
+  aiotools = callPackage ../development/python-modules/aiotools { };
 
   aiotractive = callPackage ../development/python-modules/aiotractive { };
 
@@ -3505,8 +3509,6 @@ self: super: with self; {
 
   daiquiri = callPackage ../development/python-modules/daiquiri { };
 
-  dalle-mini = callPackage ../development/python-modules/dalle-mini { };
-
   daltonlens = callPackage ../development/python-modules/daltonlens { };
 
   daphne = callPackage ../development/python-modules/daphne { };
@@ -4870,6 +4872,8 @@ self: super: with self; {
 
   effect = callPackage ../development/python-modules/effect { };
 
+  egauge-async = callPackage ../development/python-modules/egauge-async { };
+
   eggdeps = callPackage ../development/python-modules/eggdeps { };
 
   eheimdigital = callPackage ../development/python-modules/eheimdigital { };
@@ -5481,6 +5485,8 @@ self: super: with self; {
 
   finetuning-scheduler = callPackage ../development/python-modules/finetuning-scheduler { };
 
+  fing-agent-api = callPackage ../development/python-modules/fing-agent-api { };
+
   fingerprints = callPackage ../development/python-modules/fingerprints { };
 
   finitude = callPackage ../development/python-modules/finitude { };
@@ -5514,6 +5520,8 @@ self: super: with self; {
   first = callPackage ../development/python-modules/first { };
 
   fiscalyear = callPackage ../development/python-modules/fiscalyear { };
+
+  fish-audio-sdk = callPackage ../development/python-modules/fish-audio-sdk { };
 
   fissix = callPackage ../development/python-modules/fissix { };
 
@@ -5763,6 +5771,8 @@ self: super: with self; {
 
   flufl-lock = callPackage ../development/python-modules/flufl/lock.nix { };
 
+  fluss-api = callPackage ../development/python-modules/fluss-api { };
+
   flux-led = callPackage ../development/python-modules/flux-led { };
 
   flyingsquid = callPackage ../development/python-modules/flyingsquid { };
@@ -5863,6 +5873,8 @@ self: super: with self; {
   freezegun = callPackage ../development/python-modules/freezegun { };
 
   frelatage = callPackage ../development/python-modules/frelatage { };
+
+  fressnapftracker = callPackage ../development/python-modules/fressnapftracker { };
 
   freud = callPackage ../development/python-modules/freud { };
 
@@ -6321,6 +6333,8 @@ self: super: with self; {
     callPackage ../development/python-modules/google-ai-generativelanguage
       { };
 
+  google-air-quality-api = callPackage ../development/python-modules/google-air-quality-api { };
+
   google-api-core = callPackage ../development/python-modules/google-api-core { };
 
   google-api-python-client = callPackage ../development/python-modules/google-api-python-client { };
@@ -6643,6 +6657,8 @@ self: super: with self; {
 
   # built-in for pypi
   greenlet = if isPyPy then null else callPackage ../development/python-modules/greenlet { };
+
+  greenplanet-energy-api = callPackage ../development/python-modules/greenplanet-energy-api { };
 
   greenwavereality = callPackage ../development/python-modules/greenwavereality { };
 
@@ -7039,6 +7055,8 @@ self: super: with self; {
   homeassistant-stubs = callPackage ../servers/home-assistant/stubs.nix { };
 
   homeconnect = callPackage ../development/python-modules/homeconnect { };
+
+  homelink-integration-api = callPackage ../development/python-modules/homelink-integration-api { };
 
   homematicip = callPackage ../development/python-modules/homematicip { };
 
@@ -11468,6 +11486,13 @@ self: super: with self; {
 
   openidc-client = callPackage ../development/python-modules/openidc-client { };
 
+  openimageio = toPythonModule (
+    pkgs.openimageio.override {
+      enablePython = true;
+      python3Packages = self;
+    }
+  );
+
   openmm = toPythonModule (
     pkgs.openmm.override {
       python3Packages = self;
@@ -11494,6 +11519,10 @@ self: super: with self; {
   opensensemap-api = callPackage ../development/python-modules/opensensemap-api { };
 
   opensfm = callPackage ../development/python-modules/opensfm { };
+
+  openshadinglanguage = toPythonModule (
+    pkgs.openshadinglanguage.override { python3Packages = self; }
+  );
 
   openshift = callPackage ../development/python-modules/openshift { };
 
@@ -13237,6 +13266,8 @@ self: super: with self; {
   pycddl = callPackage ../development/python-modules/pycddl { };
 
   pycdio = callPackage ../development/python-modules/pycdio { };
+
+  pycdlib = callPackage ../development/python-modules/pycdlib { };
 
   pycec = callPackage ../development/python-modules/pycec { };
 
@@ -16061,8 +16092,6 @@ self: super: with self; {
 
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
-  pywlroots = callPackage ../development/python-modules/pywlroots { wlroots = pkgs.wlroots_0_17; };
-
   pywmspro = callPackage ../development/python-modules/pywmspro { };
 
   pyworld = callPackage ../development/python-modules/pyworld { };
@@ -16537,6 +16566,8 @@ self: super: with self; {
   requests-futures = callPackage ../development/python-modules/requests-futures { };
 
   requests-gssapi = callPackage ../development/python-modules/requests-gssapi { };
+
+  requests-hardened = callPackage ../development/python-modules/requests-hardened { };
 
   requests-hawk = callPackage ../development/python-modules/requests-hawk { };
 

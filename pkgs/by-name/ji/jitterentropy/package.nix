@@ -45,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       johnazoidberg
-      c0bw3b
     ];
   };
 })

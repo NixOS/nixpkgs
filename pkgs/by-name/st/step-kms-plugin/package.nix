@@ -48,7 +48,7 @@ buildGoModule rec {
     description = "Step plugin to manage keys and certificates on cloud KMSs and HSMs";
     homepage = "https://smallstep.com/cli/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ qbit ];
+    maintainers = [ ];
     mainProgram = "step-kms-plugin";
   };
 }

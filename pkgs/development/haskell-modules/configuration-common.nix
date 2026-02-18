@@ -112,10 +112,12 @@ with haskellLib;
     (
       let
         # !!! Use cself/csuper inside for the actual overrides
-        cabalInstallOverlay = cself: csuper: {
-          Cabal = cself.Cabal_3_16_1_0;
-          Cabal-syntax = cself.Cabal-syntax_3_16_1_0;
-        };
+        cabalInstallOverlay =
+          cself: csuper:
+          lib.optionalAttrs (lib.versionOlder csuper.ghc.version "9.14") {
+            Cabal = cself.Cabal_3_16_1_0;
+            Cabal-syntax = cself.Cabal-syntax_3_16_1_0;
+          };
       in
       {
         cabal-install =

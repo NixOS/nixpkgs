@@ -771,10 +771,10 @@
   };
 
   ghostty = {
-    version = "1.2-unstable-2025-11-27";
+    version = "1.2-unstable-2026-01-02";
     url = "github:bezhermoso/tree-sitter-ghostty";
-    rev = "c2f7af6d7250f63f01401a6d84b3e353e71ff3c3";
-    hash = "sha256-d9cJWhEHiAMxyNhUt7VR5IU5z/5oXn3m9aMsknexaNM=";
+    rev = "c14d6cb4dd36ff9dd569978491aa52e4726cbe86";
+    hash = "sha256-sVPr8jR6z0G68z3ZTdlMOXWguNGbZ/5apffNefm9apU=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -1660,10 +1660,10 @@
   };
 
   nim = {
-    version = "0.6.2-unstable-2025-07-29";
+    version = "0.6.2-unstable-2026-01-11";
     url = "github:alaviss/tree-sitter-nim";
-    rev = "4ad352773688deb84a95eeaa9872acda5b466439";
-    hash = "sha256-dinMmbD36o1QkcLk2mgycgHZ9sW5Mg6lfnxssynaj58=";
+    rev = "9b4ede21a6ca866d29263f6b66c070961bc622b4";
+    hash = "sha256-3BHcQrLNcXe1RMkV7ECCMzzEukgTlARH3+DDo2M5b0w=";
     meta = {
       license = lib.licenses.mpl20;
       maintainers = with lib.maintainers; [
@@ -1914,10 +1914,10 @@
   };
 
   pkl = {
-    version = "0.20.0-unstable-2025-12-12";
+    version = "0.20.0-unstable-2026-02-24";
     url = "github:apple/tree-sitter-pkl";
-    rev = "ac58931956c000d3aeefbb55a81fc3c5bd6aecf0";
-    hash = "sha256-R0p9ceNjd9xnikxaCjDFwN4HkfRr+4ezVSlXqLP/YuQ=";
+    rev = "a02fc36f6001a22e7fdf35eaabbadb7b39c74ba5";
+    hash = "sha256-t+N4oxqZpzm3qHkbjUVyGzeVS56u1oFVx0MtgTBe0bk=";
     meta = {
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
@@ -2831,10 +2831,10 @@
   };
 
   vhdl = {
-    version = "1.3.1-unstable-2025-12-18";
+    version = "1.3.1-unstable-2026-02-21";
     url = "github:jpt13653903/tree-sitter-vhdl";
-    rev = "7ae08deb5d1641aa57111342218ca1e1b3a5d539";
-    hash = "sha256-IJ6Gqq+3YJlL4n4cjtCLUCZKpLVJQa81nQrLsJBCccs=";
+    rev = "7e0d014691c1b8c25e8fe8f30cc3ac4649df3f57";
+    hash = "sha256-r3fMnexbbIniZA75ZIJ+ay39/JCCb3b3J5F6bYMK4YY=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

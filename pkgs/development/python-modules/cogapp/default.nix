@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://nedbatchelder.com/code/cog";
     changelog = "https://github.com/nedbat/cog/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
   };
 }

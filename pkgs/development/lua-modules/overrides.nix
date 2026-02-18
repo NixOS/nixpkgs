@@ -17,6 +17,7 @@
   fetchurl,
   fzf,
   glib,
+  glibcLocalesUtf8,
   gmp,
   gnulib,
   gnum4,
@@ -50,6 +51,7 @@
   tree-sitter,
   unbound,
   unzip,
+  util-linux,
   versionCheckHook,
   vimPlugins,
   yajl,
@@ -450,7 +452,7 @@ in
 
     # ld: symbol(s) not found for architecture arm64
     # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
-    meta.broken = stdenv.hostPlatform.isDarwin;
+    meta.broken = stdenv.hostPlatform.isDarwin || luaAtLeast "5.5";
   });
 
   lua-subprocess = prev.lua-subprocess.overrideAttrs {
@@ -840,10 +842,6 @@ in
     '';
   });
 
-  nfd = prev.nfd.overrideAttrs {
-    strictDeps = false;
-  };
-
   nlua = prev.nlua.overrideAttrs {
 
     # patchShebang removes the nvim in nlua's shebang so we hardcode one
@@ -871,7 +869,14 @@ in
   };
 
   orgmode = prev.orgmode.overrideAttrs {
-    strictDeps = false;
+    doCheck = stdenv.hostPlatform.isLinux;
+    nativeCheckInputs = [
+      neovim-unwrapped
+      glibcLocalesUtf8 # the tests run "vim.cmd.language('en_US.utf-8')"
+      writableTmpDirAsHomeHook
+      util-linux # for uuidgen
+    ];
+
     # Patch in tree-sitter-orgmode dependency
     postPatch = ''
       substituteInPlace lua/orgmode/config/init.lua \
@@ -881,6 +886,32 @@ in
         --replace-fail \
         "require('orgmode.utils.treesitter.install').reinstall()" \
         "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
+    '';
+
+    preCheck = ''LUA_PATH="lua/?.lua;lua/?/init.lua;$LUA_PATH"'';
+
+    checkPhase = ''
+      runHook preCheck
+
+      # bypass the download of plenary
+      substituteInPlace  tests/minimal_init.lua --replace-fail \
+        "plenary = 'https://github.com/nvim-lua/plenary.nvim.git'," \
+        ""
+
+      # remove failing tests
+      rm tests/plenary/colors/colors_spec.lua # colors depend on neovim version usually
+      rm tests/plenary/capture/capture_spec.lua # because clipboard not available
+
+      # not sure why yet
+      rm tests/plenary/ui/mappings/date_spec.lua \
+        tests/plenary/capture/templates_spec.lua
+
+      # bypass upstream launcher that interacts with network
+      nvim --headless -i NONE \
+        -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
+        -c "PlenaryBustedDirectory tests { sequential = true, minimal_init = './tests/minimal_init.lua' }"
+
+      runHook postCheck
     '';
   };
 
@@ -1009,9 +1040,11 @@ in
 
     # we override 'luarocks test' because otherwise neovim doesn't find/loldd the plenary plugin
     checkPhase = ''
+      runHook preCheck
       nvim --headless -i NONE \
         -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
         -c "PlenaryBustedDirectory test/auto/ { sequential = true, minimal_init = './test/minimal_init.vim' }"
+      runHook postCheck
     '';
   };
 
@@ -1038,6 +1071,10 @@ in
       cargo
       rustPlatform.cargoSetupHook
     ];
+
+    meta = old.meta // {
+      broken = luaAtLeast "5.5";
+    };
   });
 
   tl = prev.tl.overrideAttrs (old: {
@@ -1067,51 +1104,17 @@ in
   });
 
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {
-    strictDeps = false;
-    propagatedBuildInputs =
-      let
-        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
-        # but that doesn't seem to work
-        lua = lib.head old.propagatedBuildInputs;
-      in
-      old.propagatedBuildInputs
-      ++ [
-        lua.pkgs.luarocks-build-treesitter-parser
-        tree-sitter
-      ];
-
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+      tree-sitter
       writableTmpDirAsHomeHook
     ];
   });
 
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (old: {
-    propagatedBuildInputs =
-      let
-        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
-        # but that doesn't seem to work
-        lua = lib.head old.propagatedBuildInputs;
-      in
-      old.propagatedBuildInputs
-      ++ [
-        lua.pkgs.luarocks-build-treesitter-parser-cpp
-      ];
-
     meta.broken = lua.luaversion != "5.1";
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
-    strictDeps = false;
-    propagatedBuildInputs =
-      let
-        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
-        # but that doesn't seem to work
-        lua = lib.head old.propagatedBuildInputs;
-      in
-      old.propagatedBuildInputs
-      ++ [
-        lua.pkgs.luarocks-build-treesitter-parser
-      ];
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       writableTmpDirAsHomeHook
       tree-sitter

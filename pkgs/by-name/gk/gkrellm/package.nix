@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gkrellm";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "http://gkrellm.srcbox.net/releases/gkrellm-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-aMdaA6Brk1r6k9MzHKHC2GLB1Qw+nfGdmo1Ilw12a1U=";
+    hash = "sha256-CJ48HtOYSC5oLJkAtQTqFmphRKbJ+gQecMW7ymsXfmM=";
   };
 
   nativeBuildInputs = [

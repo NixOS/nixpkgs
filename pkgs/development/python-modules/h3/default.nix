@@ -14,17 +14,17 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "h3";
-  version = "4.4.1";
+  version = "4.4.2";
   pyproject = true;
 
   # pypi version does not include tests
   src = fetchFromGitHub {
     owner = "uber";
     repo = "h3-py";
-    tag = "v${version}";
-    hash = "sha256-ugYx8FJUxfrJHfzRxyjaOlG/Z0KhKglRHTgKKBHzUGQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+2cf/m+8BEEjNgIyuYmLDD7wsmc3Bg8QXaIjC0Px+Qk=";
   };
 
   dontConfigure = true;
@@ -75,9 +75,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "h3" ];
 
   meta = {
+    changelog = "https://github.com/uber/h3-py/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     homepage = "https://github.com/uber/h3-py";
     description = "Hierarchical hexagonal geospatial indexing system";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.kalbasit ];
   };
-}
+})

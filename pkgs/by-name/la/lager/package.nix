@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   boost,
   cereal,
@@ -14,23 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lager";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "arximboldi";
     repo = "lager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ssGBQu8ba798MSTtJeCBE3WQ7AFfvSGLhZ7WBYHEgfw=";
+    hash = "sha256-xJxLLvOQxti0s1Lr1EWqYiuJLoHkSOUHiz5COnE5aog=";
   };
-
-  patches = lib.optionals finalAttrs.finalPackage.doCheck [
-    # https://github.com/arximboldi/lager/pull/233
-    (fetchpatch {
-      name = "Stop-using-Boost-system.patch";
-      url = "https://github.com/arximboldi/lager/commit/0eb1d3d3a6057723c5b57b3e0ee3e41924ff419a.patch";
-      hash = "sha256-peGpuyuCznCDqYo+9zk1FytLV+a6Um8fvjLmrm7Y2CI=";
-    })
-  ];
 
   strictDeps = true;
 

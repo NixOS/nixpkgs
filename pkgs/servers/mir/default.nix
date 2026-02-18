@@ -110,6 +110,23 @@ in
         ];
         hash = "sha256-gzLVQW9Z6y+s2D7pKtp0ondQrjkzZ5iUYhGDPqFXD5M=";
       })
+
+      # Drop deprecated & removed Boost.System
+      # Remove when version > 2.22.2
+      (fetchpatch {
+        name = "0301-mir-Disable-boost_system.patch";
+        url = "https://github.com/canonical/mir/commit/0261aa6ce700311ee2b8723294451cdade1bc219.patch";
+        excludes = [
+          # hunk errors
+          "tests/CMakeLists.txt"
+          "tests/mir_test_framework/CMakeLists.txt"
+          "tests/unit-tests/CMakeLists.txt"
+
+          # doesn't exist
+          "tests/window_management_tests/CMakeLists.txt"
+        ];
+        hash = "sha256-UqClQFHzA1th2P7NH67dMJtncw8n/ey9RlPD5Z3VPk0=";
+      })
     ];
   };
 }

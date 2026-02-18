@@ -55,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace external/discord-sdk/CMakeLists.txt --replace-fail \
       'cmake_minimum_required (VERSION 3.2.0)' \
       'cmake_minimum_required (VERSION 4.0)'
+    # Fix build with boost 1.89.
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'find_package(Boost REQUIRED COMPONENTS filesystem system date_time locale)' \
+      'find_package(Boost REQUIRED COMPONENTS filesystem date_time locale)'
   '';
 
   nativeBuildInputs = [

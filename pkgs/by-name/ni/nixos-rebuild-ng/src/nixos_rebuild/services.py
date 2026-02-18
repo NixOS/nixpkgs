@@ -103,8 +103,7 @@ def _get_system_attr(
         case Action.BUILD_IMAGE if flake:
             variants = nix.get_build_image_variants_flake(
                 flake,
-                eval_flags=grouped_nix_args.flake_build_flags
-                | grouped_nix_args.flake_eval_flags,
+                eval_flags=grouped_nix_args.flake_eval_flags,
             )
             _validate_image_variant(args.image_variant, variants)
             attr = f"config.system.build.images.{args.image_variant}"
@@ -264,8 +263,7 @@ def _activate_system(
                 image_name = nix.get_build_image_name_flake(
                     flake,
                     args.image_variant,
-                    eval_flags=grouped_nix_args.flake_build_flags
-                    | grouped_nix_args.flake_eval_flags,
+                    eval_flags=grouped_nix_args.flake_eval_flags,
                 )
             else:
                 image_name = nix.get_build_image_name(

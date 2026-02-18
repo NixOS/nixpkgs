@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reef";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ZStud";
     repo = "reef";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FP7cnqYIICb4JCYk9ytvSp4yxW+xW2SUVqhELdTGLZQ=";
+    hash = "sha256-ytQ/nLfqdVkdpyVVOzQuVd8Ina0DUQJjLAtMgkn1KLU=";
   };
 
-  cargoHash = "sha256-UmazwJqsWXQK3bniDLyNCLXHrgrF3iHRPugOAkRzhv8=";
+  cargoHash = "sha256-v/UCabpSt5weUH1+spbQFC4MCOozLXhmN/pEUZCVH84=";
 
   postInstall = ''
     install -Dm644 fish/functions/*.fish -t $out/share/fish/vendor_functions.d/

@@ -5422,6 +5422,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  flow-nvim = buildVimPlugin {
+    pname = "flow.nvim";
+    version = "2.0.2-unstable-2026-02-25";
+    src = fetchFromGitHub {
+      owner = "0xstepit";
+      repo = "flow.nvim";
+      rev = "1fe4ff584b53298e41a9f8cf108f23967cc9280c";
+      hash = "sha256-fc3H89D2xW2GZuJiHDgRJz5zYt8FQ4Azqh0o5HGcgLw=";
+    };
+    meta.homepage = "https://github.com/0xstepit/flow.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   fluent-vim = buildVimPlugin {
     pname = "fluent.vim";
     version = "0-unstable-2025-04-26";

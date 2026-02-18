@@ -163,11 +163,14 @@ buildPythonPackage {
 
     (lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
   ];
-  CUDA_HOME = lib.optionalString cudaSupport "${cuda-native-redist}";
-  NVCC_PREPEND_FLAGS = lib.optionals cudaSupport [
-    "-I${cuda-native-redist}/include"
-    "-L${cuda-native-redist}/lib"
-  ];
+
+  env = lib.optionalAttrs cudaSupport {
+    CUDA_HOME = cuda-native-redist;
+    NVCC_PREPEND_FLAGS = toString [
+      "-I${cuda-native-redist}/include"
+      "-L${cuda-native-redist}/lib"
+    ];
+  };
 
   preBuild = ''
     make -j $NIX_BUILD_CORES

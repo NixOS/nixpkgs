@@ -1497,6 +1497,7 @@ mapAliases {
   orogene = throw "'orogene' uses a wasm-specific fork of async-tar that is vulnerable to CVE-2025-62518, which is not supported by its upstream"; # Added 2025-10-24
   ortp = throw "'ortp' has been moved to 'linphonePackages.ortp'"; # Added 2025-09-20
   OSCAR = throw "'OSCAR' has been renamed to/replaced by 'oscar'"; # Converted to throw 2025-10-27
+  osl = openshadinglanguage; # Added 2026-01-04
   osm2xmap = throw "osm2xmap has been removed, as it is unmaintained upstream and depended on old dependencies with broken builds"; # Added 2025-09-16
   osmtogeojson = throw "'osmtogeojson' has been removed as it was unmaintained upstream"; # Added 2026-02-22
   ossec-agent = throw "'ossec-agent' has been removed due to lack of maintenance"; # Added 2025-11-08
@@ -1509,6 +1510,7 @@ mapAliases {
   pal = throw "pal has been removed, as it was broken"; # Added 2025-08-25
   pam_pgsql = pam-pgsql; # Added 2025-12-16
   pangolin = throw "pangolin has been removed due to lack of maintenance"; # Added 2025-11-17
+  paper-plane = throw "'paper-plane' has been removed as it is unmaintained upstream and depends on vulnerable tdlib version."; # Added 2026-02-26
   paperless-ng = throw "'paperless-ng' has been renamed to/replaced by 'paperless-ngx'"; # Converted to throw 2025-10-27
   parcellite = throw "'parcellite' was remove due to lack of maintenance and relying on gtk2"; # Added 2025-10-03
   patchelfStable = throw "'patchelfStable' has been renamed to/replaced by 'patchelf'"; # Converted to throw 2025-10-27

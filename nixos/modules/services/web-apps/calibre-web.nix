@@ -184,6 +184,45 @@ in
 
           CacheDirectory = "calibre-web";
           CacheDirectoryMode = "0750";
+
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateIPC = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectKernelTunables = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RestrictSUIDSGID = true;
+          ProtectHome = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          RestrictNamespaces = true;
+          RemoveIPC = true;
+          CapabilityBoundingSet = "";
+          AmbientCapabilities = "";
+          ProtectKernelModules = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+            "AF_NETLINK"
+          ];
+          SystemCallFilter = [
+            "~@obsolete"
+            "~@privileged"
+            "~@raw-io"
+            "~@resources"
+            "~@mount"
+            "~@debug"
+            "~@cpu-emulation"
+          ];
         }
         // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
           StateDirectory = cfg.dataDir;

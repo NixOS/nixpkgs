@@ -133,6 +133,7 @@ mapAliases {
   configshell = throw "'configshell' has been renamed to/replaced by 'configshell-fb'"; # Converted to throw 2025-10-29
   cx_Freeze = throw "'cx_Freeze' has been renamed to/replaced by 'cx-freeze'"; # Converted to throw 2025-10-29
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
+  dalle-mini = throw "'dalle-mini' has been removed due to lack of upstream maintenance"; # added 2026-02-26
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
   debian = throw "'debian' has been renamed to/replaced by 'python-debian'"; # Converted to throw 2025-10-29
@@ -453,6 +454,7 @@ mapAliases {
   PyVirtualDisplay = throw "'PyVirtualDisplay' has been renamed to/replaced by 'pyvirtualdisplay'"; # Converted to throw 2025-10-29
   pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11
   pywal = pywal16; # added 2026-02-01
+  pywlroots = throw "pywlroots has been removed because it was no longer used by anything"; # added 2026-02-25
   qds_sdk = throw "'qds_sdk' has been renamed to/replaced by 'qds-sdk'"; # Converted to throw 2025-10-29
   qiskit-ibmq-provider = throw "qiskit-imbq-provider has been removed, since it was deprecated upstream"; # added 2025-09-13
   qiskit-ignis = throw "qiskit-ignis has been removed, since it was deprecated upstream"; # added 2025-09-13

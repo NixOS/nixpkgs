@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/fwaeytens/dnsenum";
     description = "Tool to enumerate DNS information";
     mainProgram = "dnsenum";
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
