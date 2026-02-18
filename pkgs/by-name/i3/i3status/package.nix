@@ -17,13 +17,13 @@
   docbook_xsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i3status";
   version = "2.15";
 
   src = fetchurl {
-    url = "https://i3wm.org/i3status/i3status-${version}.tar.xz";
-    sha256 = "sha256-bGf1LK5PE533ZK0cxzZWK+D5d1B5G8IStT80wG6vIgU=";
+    url = "https://i3wm.org/i3status/i3status-${finalAttrs.version}.tar.xz";
+    hash = "sha256-bGf1LK5PE533ZK0cxzZWK+D5d1B5G8IStT80wG6vIgU=";
   };
 
   separateDebugInfo = true;
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     mainProgram = "i3status";
   };
 
-}
+})
