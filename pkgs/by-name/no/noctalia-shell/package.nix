@@ -9,6 +9,7 @@
   quickshell,
 
   # runtime deps
+  bluez,
   brightnessctl,
   cava,
   cliphist,
@@ -29,6 +30,7 @@
   json-glib,
   gobject-introspection,
 
+  bluetoothSupport ? true,
   brightnessctlSupport ? true,
   cavaSupport ? true,
   cliphistSupport ? true,
@@ -45,6 +47,7 @@ let
     wget
     (python3.withPackages (pp: lib.optional calendarSupport pp.pygobject3))
   ]
+  ++ lib.optional bluetoothSupport bluez
   ++ lib.optional brightnessctlSupport brightnessctl
   ++ lib.optional cavaSupport cava
   ++ lib.optional cliphistSupport cliphist
@@ -65,13 +68,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noctalia-shell";
-  version = "4.4.3";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia-shell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5HqCE5qfW6ItA+ZeFGfTT7/+12QYp/1j93EPdn+nlK0=";
+    hash = "sha256-Y5P0RYO9NKxa4UZBoGmmxtz3mEwJrBOfvdLJRGjV2Os=";
   };
 
   nativeBuildInputs = [
