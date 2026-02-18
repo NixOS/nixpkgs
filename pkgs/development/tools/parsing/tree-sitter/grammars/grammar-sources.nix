@@ -248,7 +248,7 @@
   };
 
   clarity = {
-    version = "0-unstable-2025-11-17";
+    version = "0.0.5-unstable-2025-11-17";
     url = "github:xlittlerag/tree-sitter-clarity/cbb3ffe8688aca558286fd45ed46857a1f3207bb";
     hash = "sha256-iylkAIBEpMPzRYHXyFQKMIEZJbqij/8tLdq9z/UPgN8=";
     meta = {
