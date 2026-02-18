@@ -1779,6 +1779,7 @@ mapAliases {
   pcp = throw "'pcp' has been removed because the upstream repo was archived and it hasn't been updated since 2021"; # Added 2025-09-23
   pcre16 = throw "'pcre16' has been removed because it is obsolete. Consider migrating to 'pcre2' instead."; # Added 2025-05-29
   pcsctools = throw "'pcsctools' has been renamed to/replaced by 'pcsc-tools'"; # Converted to throw 2025-10-27
+  pcsx2-bin = throw "pcsx2-bin has been removed as it only supported x86_64-darwin"; # Added 2026-06-26
   pdf2djvu = throw "pdf2djvu has been removed because it was broken and archived upstream"; # added 2025-12-06
   pdf4tcl = throw "'pdf4tcl' has been renamed to/replaced by 'tclPackages.pdf4tcl'"; # Converted to throw 2025-10-27
   pdf-quench = throw "'pdf-quench' has been removed as it was unmaintained upstream and depended on the outdated and vulnerable pypdf2"; # Added 2026-03-29
