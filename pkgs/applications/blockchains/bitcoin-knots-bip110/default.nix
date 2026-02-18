@@ -32,7 +32,6 @@
   # The list can be found at https://github.com/bitcoinknots/guix.sigs/tree/knots/builder-keys
   builderKeys ? [
     "1A3E761F19D2CC7785C5502EA291A2C45D0C504A" # luke-jr.gpg
-    "DAED928C727D3E613EC46635F5073C4F4882FFFC" # leo-haf.gpg
   ],
 }:
 
