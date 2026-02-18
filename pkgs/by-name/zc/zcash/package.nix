@@ -16,7 +16,7 @@
   rustc,
   rustPlatform,
   pkg-config,
-  stdenv,
+  llvmPackages,
   testers,
   tl-expected,
   utf8cpp,
@@ -24,15 +24,17 @@
   zcash,
   zeromq,
 }:
-
-stdenv.mkDerivation rec {
+let
+  stdenv = llvmPackages.stdenv;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "zcash";
   version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo = "zcash";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XGq/cYUo43FcpmRDO2YiNLCuEQLsTFLBFC4M1wM29l8=";
   };
 
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-VBqasLpxqI4kr73Mr7OVuwb2OIhUwnY9CTyZZOyEElU=";
   };
 
@@ -115,4 +117,4 @@ stdenv.mkDerivation rec {
     # https://github.com/zcash/zcash/issues/4405
     broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin;
   };
-}
+})
