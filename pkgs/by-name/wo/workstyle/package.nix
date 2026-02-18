@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage {
     owner = "pierrechevalier83";
     repo = "workstyle";
     rev = "8bde72d9a9dd67e0fc7c0545faca53df23ed3753";
-    sha256 = "sha256-yhnt7edhgVy/cZ6FpF6AZWPoeMeEKTXP+87no2KeIYU=";
+    hash = "sha256-yhnt7edhgVy/cZ6FpF6AZWPoeMeEKTXP+87no2KeIYU=";
   };
 
   cargoHash = "sha256-es8kS1w71TuQ1pKb4/wXtpukWEBqUJUA+GX3uXOYbtU=";
