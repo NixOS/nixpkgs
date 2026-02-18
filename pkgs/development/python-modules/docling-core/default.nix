@@ -46,6 +46,10 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "typer"
+  ];
+
   dependencies = [
     jsonref
     jsonschema
@@ -62,12 +66,9 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ];
 
-  pythonRelaxDeps = [
-    "pillow"
-  ];
-
+  # pins typer upper bound
   pythonImportsCheck = [
-    "docling_core"
+    "typer"
   ];
 
   nativeCheckInputs = [
