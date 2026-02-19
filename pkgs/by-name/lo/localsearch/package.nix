@@ -8,7 +8,7 @@
   gettext,
   itstool,
   libxslt,
-  gexiv2,
+  gexiv2_0_16,
   tinysparql,
   meson,
   mesonEmulatorHook,
@@ -27,11 +27,8 @@
   icu,
   json-glib,
   libcue,
-  libexif,
   libgsf,
-  libgudev,
   libgxps,
-  libiptcdata,
   libjpeg,
   libosinfo,
   libpng,
@@ -87,17 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
     exempi
     ffmpeg
     giflib
-    gexiv2
+    gexiv2_0_16
     totem-pl-parser
     tinysparql
     icu
     json-glib
     libcue
-    libexif
     libgsf
-    libgudev
     libgxps
-    libiptcdata
     libjpeg
     libosinfo
     libpng
