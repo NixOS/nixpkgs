@@ -19016,6 +19016,13 @@
     name = "Jakub Kądziołka";
     keys = [ { fingerprint = "E576 BFB2 CF6E B13D F571  33B9 E315 A758 4613 1564"; } ];
   };
+  niels = {
+    email = "niels@ganser.consulting";
+    github = "niels";
+    githubId = 16709;
+    matrix = "@niels:ganser.cloud";
+    name = "Niels Ganser";
+  };
   nielsegberts = {
     email = "nix@nielsegberts.nl";
     github = "nielsegberts";
