@@ -8,27 +8,20 @@
   pkg-config,
   gnome,
   gobject-introspection,
-  adwaita-icon-theme,
   glib,
-  gtk4,
   gsettings-desktop-schemas,
   gnome-desktop,
   gnome-settings-daemon,
   gnome-shell,
   dbus,
-  json-glib,
-  libice,
   xmlto,
   docbook_xsl,
   docbook_xml_dtd_45,
-  python3,
   libxslt,
   gettext,
   systemd,
-  xtrans,
-  libepoxy,
   gnome-session-ctl,
-  wrapGAppsHook4,
+  wrapGAppsNoGuiHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,29 +54,19 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     docbook_xsl
     docbook_xml_dtd_45
-    python3
     dbus # for DTD
-    wrapGAppsHook4
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
     glib
-    gtk4
-    libice
     gnome-desktop
-    json-glib
-    xtrans
-    adwaita-icon-theme
     gnome-settings-daemon
     gsettings-desktop-schemas
     systemd
-    libepoxy
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-
     # Use our provided `gnome-session-ctl`
     original="@libexecdir@/gnome-session-ctl"
     replacement="${gnome-session-ctl}/libexec/gnome-session-ctl"
@@ -99,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir $sessions
     moveToOutput share/wayland-sessions "$sessions"
-    moveToOutput share/xsessions "$sessions"
 
     # Our provided one is being used
     rm -rf $out/libexec/gnome-session-ctl
