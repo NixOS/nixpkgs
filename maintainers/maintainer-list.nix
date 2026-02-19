@@ -20289,6 +20289,13 @@
     github = "nielmin";
     githubId = 81798555;
   };
+  niels = {
+    email = "niels@ganser.consulting";
+    github = "niels";
+    githubId = 16709;
+    matrix = "@niels:ganser.cloud";
+    name = "Niels Ganser";
+  };
   nielsegberts = {
     email = "nix@nielsegberts.nl";
     github = "nielsegberts";
