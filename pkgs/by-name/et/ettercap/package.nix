@@ -19,6 +19,7 @@
   pango,
   pcre2,
   pkg-config,
+  versionCheckHook,
   zlib,
 }:
 
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     flex
     pkg-config
+    versionCheckHook
   ];
 
   buildInputs = [
@@ -59,6 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail /etc \$\{INSTALL_PREFIX\}/etc \
@@ -69,9 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUNDLED_LIBS=Off"
     "-DGTK3_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ];
-
-  # TODO: Remove after the next release (0.8.4 should work without this):
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${harfbuzz.dev}/include/harfbuzz" ];
 
   meta = {
     description = "Comprehensive suite for man in the middle attacks";
@@ -86,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Ettercap/ettercap/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    mainProgram = "ettercap";
     maintainers = with lib.maintainers; [
       pSub
       makefu
