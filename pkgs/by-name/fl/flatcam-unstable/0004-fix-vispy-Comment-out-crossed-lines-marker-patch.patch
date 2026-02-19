@@ -1,0 +1,57 @@
+From d99f37ec6518dcf45d7c448961b4374619a80b62 Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Wed, 18 Feb 2026 21:34:36 -0800
+Subject: [PATCH 4/4] fix(vispy): Comment out crossed lines marker patch
+
+---
+ appGUI/VisPyPatches.py | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/appGUI/VisPyPatches.py b/appGUI/VisPyPatches.py
+index 28ee9801..73276d2f 100644
+--- a/appGUI/VisPyPatches.py
++++ b/appGUI/VisPyPatches.py
+@@ -14,23 +14,23 @@ import numpy as np
+ 
+ def apply_patches():
+     # Patch MarkersVisual to have crossed lines marker
+-    cross_lines = """
+-    float cross(vec2 pointcoord, float size)
+-    {
+-        //vbar
+-        float r1 = abs(pointcoord.x - 0.5)*size;
+-        float r2 = abs(pointcoord.y - 0.5)*size - $v_size/2;
+-        float vbar = max(r1,r2);
+-        //hbar
+-        float r3 = abs(pointcoord.y - 0.5)*size;
+-        float r4 = abs(pointcoord.x - 0.5)*size - $v_size/2;
+-        float hbar = max(r3,r4);
+-        return min(vbar, hbar);
+-    }
+-    """
+-
+-    markers._marker_dict['++'] = cross_lines
+-    markers.marker_types = tuple(sorted(list(markers._marker_dict.copy().keys())))
++    # cross_lines = """
++    # float cross(vec2 pointcoord, float size)
++    # {
++    #     //vbar
++    #     float r1 = abs(pointcoord.x - 0.5)*size;
++    #     float r2 = abs(pointcoord.y - 0.5)*size - $v_size/2;
++    #     float vbar = max(r1,r2);
++    #     //hbar
++    #     float r3 = abs(pointcoord.y - 0.5)*size;
++    #     float r4 = abs(pointcoord.x - 0.5)*size - $v_size/2;
++    #     float hbar = max(r3,r4);
++    #     return min(vbar, hbar);
++    # }
++    # """
++
++    # markers._marker_dict['++'] = cross_lines
++    # markers.marker_types = tuple(sorted(list(markers._marker_dict.copy().keys())))
+ 
+     # # Add clear_data method to LineVisual to have possibility of clearing data
+     # def clear_data(self):
+-- 
+2.52.0
+

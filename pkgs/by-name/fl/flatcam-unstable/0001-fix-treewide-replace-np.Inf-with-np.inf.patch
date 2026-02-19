@@ -1,0 +1,484 @@
+From 3942ee12fa4d805db0646654c1255afa64d51d93 Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Wed, 18 Feb 2026 21:09:38 -0800
+Subject: [PATCH 1/4] fix(treewide): replace np.Inf with np.inf
+
+---
+ appCommon/Common.py            |  2 +-
+ appEditors/AppExcEditor.py     |  8 ++---
+ appEditors/AppGeoEditor.py     | 34 ++++++++++-----------
+ appEditors/AppGerberEditor.py  | 24 +++++++--------
+ appGUI/PlotCanvasLegacy.py     |  2 +-
+ appObjects/ObjectCollection.py | 10 +++---
+ appParsers/ParseExcellon.py    |  8 ++---
+ appParsers/ParseGerber.py      |  8 ++---
+ appTools/ToolCutOut.py         | 10 +++---
+ appTools/ToolDblSided.py       | 10 +++---
+ appTools/ToolPaint.py          | 10 +++---
+ appTools/ToolTransform.py      |  8 ++---
+ app_Main.py                    |  8 ++---
+ camlib.py                      | 56 +++++++++++++++++-----------------
+ 14 files changed, 99 insertions(+), 99 deletions(-)
+
+diff --git a/appCommon/Common.py b/appCommon/Common.py
+index bfd5d482..8a43e198 100644
+--- a/appCommon/Common.py
++++ b/appCommon/Common.py
+@@ -974,7 +974,7 @@ def nearest_point(origin, points_list):
+     :return:            Nearest Point
+     :rtype:             Point
+     """
+-    old_dist = np.Inf
++    old_dist = np.inf
+     nearest_pt = None
+ 
+     for pt in points_list:
+diff --git a/appEditors/AppExcEditor.py b/appEditors/AppExcEditor.py
+index 381bc6f5..b5e4f760 100644
+--- a/appEditors/AppExcEditor.py
++++ b/appEditors/AppExcEditor.py
+@@ -4506,10 +4506,10 @@ class AppExcEditorUI:
+ 
+ 
+ def get_shapely_list_bounds(geometry_list):
+-    xmin = np.Inf
+-    ymin = np.Inf
+-    xmax = -np.Inf
+-    ymax = -np.Inf
++    xmin = np.inf
++    ymin = np.inf
++    xmax = -np.inf
++    ymax = -np.inf
+ 
+     for gs in geometry_list:
+         try:
+diff --git a/appEditors/AppGeoEditor.py b/appEditors/AppGeoEditor.py
+index 4d0335a6..68815ccd 100644
+--- a/appEditors/AppGeoEditor.py
++++ b/appEditors/AppGeoEditor.py
+@@ -1535,10 +1535,10 @@ class TransformEditorTool(AppTool):
+         """
+ 
+         def bounds_rec(lst):
+-            minx = np.Inf
+-            miny = np.Inf
+-            maxx = -np.Inf
+-            maxy = -np.Inf
++            minx = np.inf
++            miny = np.inf
++            maxx = -np.inf
++            maxy = -np.inf
+ 
+             try:
+                 for shape in lst:
+@@ -1623,10 +1623,10 @@ class DrawToolShape(object):
+         # now it can get bounds for nested lists of objects
+         def bounds_rec(shape_el):
+             if type(shape_el) is list:
+-                minx = np.Inf
+-                miny = np.Inf
+-                maxx = -np.Inf
+-                maxy = -np.Inf
++                minx = np.inf
++                miny = np.inf
++                maxx = -np.inf
++                maxy = -np.inf
+ 
+                 for k in shape_el:
+                     minx_, miny_, maxx_, maxy_ = bounds_rec(k)
+@@ -1898,10 +1898,10 @@ class DrawTool(object):
+     def bounds(obj):
+         def bounds_rec(o):
+             if type(o) is list:
+-                minx = np.Inf
+-                miny = np.Inf
+-                maxx = -np.Inf
+-                maxy = -np.Inf
++                minx = np.inf
++                miny = np.inf
++                maxx = -np.inf
++                maxy = -np.inf
+ 
+                 for k in o:
+                     try:
+@@ -4605,7 +4605,7 @@ class AppGeoEditor(QtCore.QObject):
+         """
+ 
+         snap_x, snap_y = (x, y)
+-        snap_distance = np.Inf
++        snap_distance = np.inf
+ 
+         # # ## Object (corner?) snap
+         # # ## No need for the objects, just the coordinates
+@@ -5215,10 +5215,10 @@ def poly2rings(poly):
+ 
+ 
+ def get_shapely_list_bounds(geometry_list):
+-    xmin = np.Inf
+-    ymin = np.Inf
+-    xmax = -np.Inf
+-    ymax = -np.Inf
++    xmin = np.inf
++    ymin = np.inf
++    xmax = -np.inf
++    ymax = -np.inf
+ 
+     for gs in geometry_list:
+         try:
+diff --git a/appEditors/AppGerberEditor.py b/appEditors/AppGerberEditor.py
+index 331004ea..70c7279c 100644
+--- a/appEditors/AppGerberEditor.py
++++ b/appEditors/AppGerberEditor.py
+@@ -149,10 +149,10 @@ class DrawTool(object):
+     def bounds(obj):
+         def bounds_rec(o):
+             if type(o) is list:
+-                minx = np.Inf
+-                miny = np.Inf
+-                maxx = -np.Inf
+-                maxy = -np.Inf
++                minx = np.inf
++                miny = np.inf
++                maxx = -np.inf
++                maxy = -np.inf
+ 
+                 for k in o:
+                     try:
+@@ -6688,10 +6688,10 @@ class TransformEditorTool(AppTool):
+         """
+ 
+         def bounds_rec(lst):
+-            minx = np.Inf
+-            miny = np.Inf
+-            maxx = -np.Inf
+-            maxy = -np.Inf
++            minx = np.inf
++            miny = np.inf
++            maxx = -np.inf
++            maxy = -np.inf
+ 
+             try:
+                 for shape in lst:
+@@ -6711,10 +6711,10 @@ class TransformEditorTool(AppTool):
+ 
+ 
+ def get_shapely_list_bounds(geometry_list):
+-    xmin = np.Inf
+-    ymin = np.Inf
+-    xmax = -np.Inf
+-    ymax = -np.Inf
++    xmin = np.inf
++    ymin = np.inf
++    xmax = -np.inf
++    ymax = -np.inf
+ 
+     for gs in geometry_list:
+         try:
+diff --git a/appGUI/PlotCanvasLegacy.py b/appGUI/PlotCanvasLegacy.py
+index 994140e7..4657a263 100644
+--- a/appGUI/PlotCanvasLegacy.py
++++ b/appGUI/PlotCanvasLegacy.py
+@@ -1109,7 +1109,7 @@ class PlotCanvasLegacy(QtCore.QObject):
+         """
+ 
+         snap_x, snap_y = (x, y)
+-        snap_distance = np.Inf
++        snap_distance = np.inf
+ 
+         # ### Grid snap
+         if self.app.grid_status():
+diff --git a/appObjects/ObjectCollection.py b/appObjects/ObjectCollection.py
+index 8b325a96..08f01402 100644
+--- a/appObjects/ObjectCollection.py
++++ b/appObjects/ObjectCollection.py
+@@ -29,7 +29,7 @@ import inspect  # TODO: Remove
+ import re
+ import logging
+ from copy import deepcopy
+-from numpy import Inf
++from numpy import inf
+ 
+ import gettext
+ import appTranslation as fcTranslate
+@@ -625,10 +625,10 @@ class ObjectCollection(QtCore.QAbstractItemModel):
+ 
+         # TODO: Move the operation out of here.
+ 
+-        xmin = Inf
+-        ymin = Inf
+-        xmax = -Inf
+-        ymax = -Inf
++        xmin = inf
++        ymin = inf
++        xmax = -inf
++        ymax = -inf
+ 
+         # for obj in self.object_list:
+         for obj in self.get_list():
+diff --git a/appParsers/ParseExcellon.py b/appParsers/ParseExcellon.py
+index 3c09c5e7..1da212e6 100644
+--- a/appParsers/ParseExcellon.py
++++ b/appParsers/ParseExcellon.py
+@@ -1101,10 +1101,10 @@ class Excellon(Geometry):
+ 
+         def bounds_rec(obj):
+             if type(obj) is list:
+-                minx = np.Inf
+-                miny = np.Inf
+-                maxx = -np.Inf
+-                maxy = -np.Inf
++                minx = np.inf
++                miny = np.inf
++                maxx = -np.inf
++                maxy = -np.inf
+ 
+                 for k in obj:
+                     if type(k) is dict:
+diff --git a/appParsers/ParseGerber.py b/appParsers/ParseGerber.py
+index 6cfff2cf..e2142b31 100644
+--- a/appParsers/ParseGerber.py
++++ b/appParsers/ParseGerber.py
+@@ -1724,10 +1724,10 @@ class Gerber(Geometry):
+ 
+         def bounds_rec(obj):
+             if type(obj) is list and type(obj) is not MultiPolygon:
+-                minx = np.Inf
+-                miny = np.Inf
+-                maxx = -np.Inf
+-                maxy = -np.Inf
++                minx = np.inf
++                miny = np.inf
++                maxx = -np.inf
++                maxy = -np.inf
+ 
+                 for k in obj:
+                     if type(k) is dict:
+diff --git a/appTools/ToolCutOut.py b/appTools/ToolCutOut.py
+index dbbd828b..a4d4e1ba 100644
+--- a/appTools/ToolCutOut.py
++++ b/appTools/ToolCutOut.py
+@@ -16,7 +16,7 @@ import shapely.affinity as affinity
+ 
+ from matplotlib.backend_bases import KeyEvent as mpl_key_event
+ 
+-from numpy import Inf
++from numpy import inf
+ from copy import deepcopy
+ import math
+ import logging
+@@ -1898,10 +1898,10 @@ class CutOut(AppTool):
+ 
+         def bounds_rec(obj):
+             try:
+-                minx = Inf
+-                miny = Inf
+-                maxx = -Inf
+-                maxy = -Inf
++                minx = inf
++                miny = inf
++                maxx = -inf
++                maxy = -inf
+ 
+                 for k in obj:
+                     minx_, miny_, maxx_, maxy_ = bounds_rec(k)
+diff --git a/appTools/ToolDblSided.py b/appTools/ToolDblSided.py
+index 14a4f456..846d29e7 100644
+--- a/appTools/ToolDblSided.py
++++ b/appTools/ToolDblSided.py
+@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
+ from appTool import AppTool
+ from appGUI.GUIElements import RadioSet, FCDoubleSpinner, FCButton, FCComboBox, NumericalEvalTupleEntry, FCLabel
+ 
+-from numpy import Inf
++from numpy import inf
+ 
+ from shapely.geometry import Point
+ from shapely import affinity
+@@ -395,10 +395,10 @@ class DblSidedTool(AppTool):
+ 
+     def on_bbox_coordinates(self):
+ 
+-        xmin = Inf
+-        ymin = Inf
+-        xmax = -Inf
+-        ymax = -Inf
++        xmin = inf
++        ymin = inf
++        xmax = -inf
++        ymax = -inf
+ 
+         obj_list = self.app.collection.get_selected()
+ 
+diff --git a/appTools/ToolPaint.py b/appTools/ToolPaint.py
+index 0e6ac5b3..35f3ac13 100644
+--- a/appTools/ToolPaint.py
++++ b/appTools/ToolPaint.py
+@@ -22,7 +22,7 @@ from shapely.ops import unary_union, linemerge
+ from matplotlib.backend_bases import KeyEvent as mpl_key_event
+ 
+ import numpy as np
+-from numpy import Inf
++from numpy import inf
+ import traceback
+ import sys
+ import logging
+@@ -2597,10 +2597,10 @@ class ToolPaint(AppTool, Gerber):
+     def paint_bounds(geometry):
+         def bounds_rec(o):
+             if type(o) is list:
+-                minx = Inf
+-                miny = Inf
+-                maxx = -Inf
+-                maxy = -Inf
++                minx = inf
++                miny = inf
++                maxx = -inf
++                maxy = -inf
+ 
+                 for k in o:
+                     try:
+diff --git a/appTools/ToolTransform.py b/appTools/ToolTransform.py
+index b9deb4c1..71761e8c 100644
+--- a/appTools/ToolTransform.py
++++ b/appTools/ToolTransform.py
+@@ -481,10 +481,10 @@ class ToolTransform(AppTool):
+         """
+ 
+         def bounds_rec(lst):
+-            minx = np.Inf
+-            miny = np.Inf
+-            maxx = -np.Inf
+-            maxy = -np.Inf
++            minx = np.inf
++            miny = np.inf
++            maxx = -np.inf
++            maxy = -np.inf
+ 
+             try:
+                 for obj in lst:
+diff --git a/app_Main.py b/app_Main.py
+index 6e918910..ecf7cdd6 100644
+--- a/app_Main.py
++++ b/app_Main.py
+@@ -9454,10 +9454,10 @@ class MenuFileHandlers(QtCore.QObject):
+ 
+             exported_svg.append(ET.tostring(root))
+ 
+-        xmin = Inf
+-        ymin = Inf
+-        xmax = -Inf
+-        ymax = -Inf
++        xmin = inf
++        ymin = inf
++        xmax = -inf
++        ymax = -inf
+ 
+         for obj in obj_selection:
+             try:
+diff --git a/camlib.py b/camlib.py
+index b9276eed..ae058a54 100644
+--- a/camlib.py
++++ b/camlib.py
+@@ -756,10 +756,10 @@ class Geometry(object):
+ 
+         def bounds_rec(obj):
+             if type(obj) is list:
+-                gminx = np.Inf
+-                gminy = np.Inf
+-                gmaxx = -np.Inf
+-                gmaxy = -np.Inf
++                gminx = np.inf
++                gminy = np.inf
++                gmaxx = -np.inf
++                gmaxy = -np.inf
+ 
+                 for k in obj:
+                     if type(k) is dict:
+@@ -5608,10 +5608,10 @@ class CNCjob(Geometry):
+ 
+         def bounds_rec(obj):
+             if type(obj) is list:
+-                minx = np.Inf
+-                miny = np.Inf
+-                maxx = -np.Inf
+-                maxy = -np.Inf
++                minx = np.inf
++                miny = np.inf
++                maxx = -np.inf
++                maxy = -np.inf
+ 
+                 for k in obj:
+                     if type(k) is dict:
+@@ -7544,10 +7544,10 @@ class CNCjob(Geometry):
+ 
+         def bounds_rec(obj):
+             if type(obj) is list:
+-                cminx = np.Inf
+-                cminy = np.Inf
+-                cmaxx = -np.Inf
+-                cmaxy = -np.Inf
++                cminx = np.inf
++                cminy = np.inf
++                cmaxx = -np.inf
++                cmaxy = -np.inf
+ 
+                 for k in obj:
+                     if type(k) is dict:
+@@ -7576,16 +7576,16 @@ class CNCjob(Geometry):
+ 
+             bounds_coords = bounds_rec(self.solid_geometry)
+         else:
+-            minx = np.Inf
+-            miny = np.Inf
+-            maxx = -np.Inf
+-            maxy = -np.Inf
++            minx = np.inf
++            miny = np.inf
++            maxx = -np.inf
++            maxy = -np.inf
+             if self.cnc_tools:
+                 for k, v in self.cnc_tools.items():
+-                    minx = np.Inf
+-                    miny = np.Inf
+-                    maxx = -np.Inf
+-                    maxy = -np.Inf
++                    minx = np.inf
++                    miny = np.inf
++                    maxx = -np.inf
++                    maxy = -np.inf
+                     try:
+                         for k in v['solid_geometry']:
+                             minx_, miny_, maxx_, maxy_ = bounds_rec(k)
+@@ -7602,10 +7602,10 @@ class CNCjob(Geometry):
+ 
+             if self.exc_cnc_tools:
+                 for k, v in self.exc_cnc_tools.items():
+-                    minx = np.Inf
+-                    miny = np.Inf
+-                    maxx = -np.Inf
+-                    maxy = -np.Inf
++                    minx = np.inf
++                    miny = np.inf
++                    maxx = -np.inf
++                    maxy = -np.inf
+                     try:
+                         for k in v['solid_geometry']:
+                             minx_, miny_, maxx_, maxy_ = bounds_rec(k)
+@@ -8042,10 +8042,10 @@ def get_bounds(geometry_list):
+     :param geometry_list:   List of geometries for which to calculate the bounds limits
+     :return:
+     """
+-    xmin = np.Inf
+-    ymin = np.Inf
+-    xmax = -np.Inf
+-    ymax = -np.Inf
++    xmin = np.inf
++    ymin = np.inf
++    xmax = -np.inf
++    ymax = -np.inf
+ 
+     for gs in geometry_list:
+         try:
+-- 
+2.52.0
+
