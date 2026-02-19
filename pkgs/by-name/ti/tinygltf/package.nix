@@ -10,7 +10,7 @@
 
   # propagatedBuildInputs
   nlohmann_json,
-  stb_2023,
+  stb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     nlohmann_json
-    stb_2023
+    stb
   ];
 
   cmakeFlags = [

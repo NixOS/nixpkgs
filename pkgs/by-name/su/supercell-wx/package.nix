@@ -30,7 +30,7 @@
   range-v3,
   re2,
   spdlog,
-  stb_2023,
+  stb,
   zlib,
 }:
 let
@@ -111,7 +111,7 @@ buildStdenv.mkDerivation (finalAttrs: {
 
     # These tests aren't built by 'all', but ctest still tries to run them.
     (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "-E;'test_mln_core|test_mln_widgets'")
-    (lib.cmakeFeature "STB_INCLUDE_DIR" "${stb_2023}/include/stb")
+    (lib.cmakeFeature "STB_INCLUDE_DIR" "${stb}/include/stb")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TRACY" "${tracy.src}")
   ];
 
@@ -151,7 +151,7 @@ buildStdenv.mkDerivation (finalAttrs: {
     re2
     range-v3
     spdlog
-    stb_2023
+    stb
     zlib
   ];
 

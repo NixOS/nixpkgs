@@ -41,7 +41,7 @@
   renderdoc,
   robin-map,
   sndio,
-  stb_2023,
+  stb,
   toml11,
   util-linux,
   vulkan-headers,
@@ -120,7 +120,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     renderdoc
     robin-map
     sndio
-    stb_2023
+    stb
     toml11
     util-linux
     vulkan-headers

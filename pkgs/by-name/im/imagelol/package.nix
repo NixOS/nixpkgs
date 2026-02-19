@@ -5,7 +5,7 @@
   fetchpatch,
   cmake,
   libpng,
-  stb_2023,
+  stb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # use system stb headers
     substituteInPlace External/stb_image-cmake/CMakeLists.txt \
-      --replace-fail '"''${CMAKE_CURRENT_SOURCE_DIR}/../stb"' '"${stb_2023}/include/stb"'
+      --replace-fail '"''${CMAKE_CURRENT_SOURCE_DIR}/../stb"' '"${stb}/include/stb"'
 
     # remove bundled libraries
     rm -r External/zlib External/zlib-no-examples External/libpng External/stb
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libpng
-    stb_2023
+    stb
   ];
 
   installPhase = ''

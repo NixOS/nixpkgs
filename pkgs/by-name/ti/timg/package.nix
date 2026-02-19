@@ -13,7 +13,7 @@
   librsvg,
   cairo,
   pkg-config,
-  stb_2023,
+  stb,
   qoi,
   stdenv,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     cairo
     qoi.dev
-    stb_2023
+    stb
   ];
 
   nativeBuildInputs = [
