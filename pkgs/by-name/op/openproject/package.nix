@@ -16,6 +16,7 @@
   makeWrapper,
   which,
   nixosTests,
+  postgresql,
   openprojectStatePath ? "/tmp/openproject",
 }:
 
@@ -150,6 +151,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     cp -R . $out
+
+    mkdir -p $out/bin
+
+    substitute ${./web.sh.in} $out/bin/openproject-web \
+      --subst-var-by openprojectStatePath ${openprojectStatePath} \
+      --subst-var-by openproject $out \
+      --subst-var-by shell ${stdenv.shell} \
+      --subst-var-by bundle ${rubyEnv.wrappedRuby}/bin/bundle
+
+    substitute ${./seeder.sh.in} $out/bin/openproject-seeder \
+      --subst-var-by openprojectStatePath ${openprojectStatePath} \
+      --subst-var-by openproject $out \
+      --subst-var-by psql ${postgresql}/bin/psql \
+      --subst-var-by shell ${stdenv.shell} \
+      --subst-var-by bundle ${rubyEnv.wrappedRuby}/bin/bundle
+
+    substitute ${./worker.sh.in} $out/bin/openproject-worker \
+      --subst-var-by openprojectStatePath ${openprojectStatePath} \
+      --subst-var-by openproject $out \
+      --subst-var-by shell ${stdenv.shell} \
+      --subst-var-by bundle ${rubyEnv.wrappedRuby}/bin/bundle
+
+    substitute ${./cron-step-imap.sh.in} $out/bin/openproject-cron-step-imap \
+      --subst-var-by openprojectStatePath ${openprojectStatePath} \
+      --subst-var-by openproject $out \
+      --subst-var-by shell ${stdenv.shell} \
+      --subst-var-by bundle ${rubyEnv.wrappedRuby}/bin/bundle
+
+    chmod +x $out/bin/*
   '';
 
   passthru = {
@@ -162,9 +192,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.openproject.org";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+      b12f
       bendlas
       onny
+      teutat3s
     ];
     license = lib.licenses.gpl3;
+    mainProgram = "openproject-web";
   };
 })
