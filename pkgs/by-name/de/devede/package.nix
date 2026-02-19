@@ -8,7 +8,6 @@
   cdrkit,
   dvdauthor,
   gtk3,
-  gettext,
   wrapGAppsHook3,
   gdk-pixbuf,
   gobject-introspection,
@@ -22,23 +21,25 @@ let
     pygobject3
     urllib3
     setuptools
+    setuptools-gettext
+    importlib-metadata
     ;
 in
 buildPythonApplication (finalAttrs: {
   pname = "devede";
-  version = "4.21.0";
-  format = "setuptools";
+  version = "4.21.3.1";
+  format = "pyproject";
   namePrefix = "";
 
   src = fetchFromGitLab {
     owner = "rastersoft";
     repo = "devedeng";
     rev = finalAttrs.version;
-    hash = "sha256-sLJkIKw0ciX6spugbdO0eZ1dIkoHfuu5e/f2XwA70a0=";
+    hash = "sha256-81H063PpBF/+JDsRgBLwfAevb11yNkDtH4KdtOAL/Fg=";
   };
 
   nativeBuildInputs = [
-    gettext
+    setuptools-gettext
     wrapGAppsHook3
     gobject-introspection
   ];
@@ -59,6 +60,7 @@ buildPythonApplication (finalAttrs: {
     cdrkit
     urllib3
     setuptools
+    importlib-metadata
   ];
 
   postPatch = ''
@@ -68,7 +70,7 @@ buildPythonApplication (finalAttrs: {
       --replace "/usr/local/share" "$out/share"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "DVD Creator for Linux";
