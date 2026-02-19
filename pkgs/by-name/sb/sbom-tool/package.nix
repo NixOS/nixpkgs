@@ -26,6 +26,8 @@ buildDotnetModule rec {
 
   dotnetBuildFlags = [
     "-p:MinVerVersionOverride=${version}"
+    # this is fragile with sdk updates
+    "-p:EnforceCodeStyleInBuild=false"
   ];
 
   dotnetInstallFlags = [

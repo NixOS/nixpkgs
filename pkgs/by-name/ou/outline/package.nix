@@ -2,60 +2,41 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchYarnDeps,
   makeWrapper,
   nix-update-script,
-  prefetch-yarn-deps,
-  fixup-yarn-lock,
   nodejs,
-  yarn,
   nixosTests,
+  yarn-berry_4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "outline";
-  version = "1.1.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
-    rev = "v${version}";
-    hash = "sha256-IaokSRFl2fOlDzLV0jNgKzATBCTwouLFG12Beeh6vI4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AxTgD5zqJ9PFdhvfbiHLDjEHzhMLPOsjGtjrzTle4qw=";
   };
+
+  missingHashes = ./missing-hashes.json;
 
   nativeBuildInputs = [
     makeWrapper
-    prefetch-yarn-deps
-    fixup-yarn-lock
-  ];
-  buildInputs = [
-    yarn
-    nodejs
+    yarn-berry_4.yarnBerryConfigHook
+    yarn-berry_4
   ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-SLyEk78NEnMBFB0Wha9rot6j97l2/ZEGkc6Mtbn9/UM=";
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-GtuiC8/zlhWtXjSIEAIEzMbvUeXN6vUhi2CrRye2rus=";
   };
-
-  configurePhase = ''
-    export HOME=$(mktemp -d)/yarn_home
-  '';
 
   buildPhase = ''
     runHook preBuild
-    export NODE_OPTIONS=--openssl-legacy-provider
 
-    yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    fixup-yarn-lock yarn.lock
-
-    yarn install --offline \
-      --frozen-lockfile \
-      --ignore-engines --ignore-scripts
-    patchShebangs node_modules/
-    # apply upstream patches with `patch-package`
-    yarn run postinstall
-    yarn build
+    yarn run build
 
     runHook postBuild
   '';
@@ -85,7 +66,7 @@ stdenv.mkDerivation rec {
     };
     updateScript = nix-update-script { };
     # alias for nix-update to be able to find and update this attribute
-    offlineCache = yarnOfflineCache;
+    inherit (finalAttrs) offlineCache;
   };
 
   meta = {
@@ -100,4 +81,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.cyberus ];
     platforms = lib.platforms.linux;
   };
-}
+})
