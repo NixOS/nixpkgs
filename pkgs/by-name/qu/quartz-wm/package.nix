@@ -43,7 +43,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   meta = {
     license = lib.licenses.apple-psl20;
     platforms = lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     mainProgram = "quartz-wm";
   };
 })
