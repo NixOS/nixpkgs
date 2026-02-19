@@ -128,11 +128,10 @@ lib.extendMkDerivation {
       installPhase = ''
         runHook preInstall
 
-        mkdir -p $out/{bin,$pname,share/pixmaps,share/icons/hicolor/scalable/apps}
+        mkdir -p $out/{bin,$pname,share/icons/hicolor/scalable/apps,share/icons/hicolor/128x128/apps}
         cp -a . $out/$pname
-        [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/pixmaps/${pname}.png
-        [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/pixmaps/${pname}.svg \
-          && ln -s $out/$pname/bin/${loName}.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
+        [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/icons/hicolor/128x128/apps/${pname}.png
+        [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
         cp ${libdbm}/lib/libdbm.so $out/$pname/bin/libdbm.so
         cp ${fsnotifier}/bin/fsnotifier $out/$pname/bin/fsnotifier
 
