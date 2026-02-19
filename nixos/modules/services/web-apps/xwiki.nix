@@ -137,6 +137,12 @@ in
       '';
     };
 
+    bootstrapXip = {
+      enable = lib.mkEnableOption "offline XIP bootstrap package for the XWiki Distribution Wizard";
+
+      package = lib.mkPackageOption pkgs "xwiki-flavor-xip" { };
+    };
+
     database = {
       type = lib.mkOption {
         type = lib.types.enum [
@@ -309,6 +315,27 @@ in
         };
       };
     };
+
+    systemd.services.xwiki-install-bootstrap-xip =
+      lib.mkIf (cfg.enableWebserver && cfg.bootstrapXip.enable)
+        {
+          description = "Install XWiki bootstrap XIP package";
+          wantedBy = [ "multi-user.target" ];
+          before = [ "tomcat.service" ];
+          serviceConfig = {
+            Type = "oneshot";
+            User = config.services.tomcat.user;
+            Group = config.services.tomcat.group;
+          };
+          script = ''
+            set -euo pipefail
+            repository_dir="${cfg.stateDir}/extension/repository"
+            xip_file="$(find ${cfg.bootstrapXip.package} -maxdepth 1 -type f -name '*.xip' | head -n 1)"
+
+            mkdir -p "$repository_dir"
+            ${pkgs.unzip}/bin/unzip -oq "$xip_file" -d "$repository_dir"
+          '';
+        };
 
     services.mysql = lib.mkIf createMariaDB {
       enable = true;
@@ -491,6 +518,10 @@ in
             ${pkgs.gnused}/bin/sed -i "s|__XWIKI_DB_PASSWORD__|$dbpass|g" ${config.services.tomcat.baseDir}/webapps/${webappDir}/WEB-INF/hibernate.cfg.xml
           fi
         '';
+      })
+      (lib.mkIf (cfg.enableWebserver && cfg.bootstrapXip.enable) {
+        after = [ "xwiki-install-bootstrap-xip.service" ];
+        requires = [ "xwiki-install-bootstrap-xip.service" ];
       })
     ];
 
