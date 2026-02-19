@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "i3-volume";
-  version = "3.9.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "hastinbe";
     repo = "i3-volume";
     rev = "v${version}";
-    hash = "sha256-vmyfEXJ/5TRWIJQCblYcy8owI03F+ARNAEd0ni5ublM=";
+    hash = "sha256-IuJK03qW/WIK1K2gWJu3V1mVJM1wJx4IAcNKUBxtXf0=";
   };
 
   buildInputs = [
@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
 
     install -Dm755 volume $out/bin/i3-volume
     mkdir -p $out/share/doc/i3-volume/
-    cp -a i3volume-alsa.conf $out/share/doc/i3-volume/i3volume-alsa.conf
-    cp -a i3volume-pulseaudio.conf $out/share/doc/i3-volume/i3volume-pulseaudio.conf
+    cp -a example.conf $out/share/doc/i3-volume/example.conf
 
     runHook postInstall
   '';
