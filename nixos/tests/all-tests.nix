@@ -1263,6 +1263,7 @@ in
   openbao = runTest ./openbao.nix;
   opencloud = runTest ./opencloud.nix;
   openldap = runTest ./openldap.nix;
+  openproject = runTest ./openproject.nix;
   openresty-lua = runTest ./openresty-lua.nix;
   opensearch = discoverTests (import ./opensearch.nix);
   opensmtpd = handleTest ./opensmtpd.nix { };
