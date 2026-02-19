@@ -129,17 +129,25 @@ let
         wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
         generatedWrapperArgs =
-          lib.optionals
-            (
-              finalAttrs.packpathDirs.myNeovimPackages.start != [ ]
-              || finalAttrs.packpathDirs.myNeovimPackages.opt != [ ]
-            )
-            [
-              "--add-flags"
-              ''--cmd "set packpath^=${finalPackdir}"''
-              "--add-flags"
-              ''--cmd "set rtp^=${finalPackdir}"''
-            ]
+
+          # neovimUtils.legacyWrapper adds a `legacyWrapper` attribute to let us know we run in "legacy" mode
+          lib.optionals (attrs ? legacyWrapper) [
+            # vim accepts a limited number of commands so we join all the provider ones
+            "--add-flags"
+            ''--cmd "lua ${providerLuaRc}"''
+          ]
+          ++
+            lib.optionals
+              (
+                finalAttrs.packpathDirs.myNeovimPackages.start != [ ]
+                || finalAttrs.packpathDirs.myNeovimPackages.opt != [ ]
+              )
+              [
+                "--add-flags"
+                ''--cmd "set packpath^=${finalPackdir}"''
+                "--add-flags"
+                ''--cmd "set rtp^=${finalPackdir}"''
+              ]
           ++ lib.optionals finalAttrs.withRuby [
             "--set"
             "GEM_HOME"
