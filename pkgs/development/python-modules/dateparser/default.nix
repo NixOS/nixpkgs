@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   setuptools,
   python-dateutil,
   pytz,
@@ -11,6 +10,7 @@
   hijridate,
   convertdate,
   fasttext,
+  numpy,
   langdetect,
   parameterized,
   pytestCheckHook,
@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.2.2";
+  version = "1.3.0";
 
   pyproject = true;
 
@@ -30,25 +30,12 @@ buildPythonPackage rec {
     owner = "scrapinghub";
     repo = "dateparser";
     tag = "v${version}";
-    hash = "sha256-cUbY6c0JFzs1oZJOTnMXz3uCah2f50g8/3uWQXtwiGY=";
+    hash = "sha256-X15zNHlF34+8Lmo6Ia3HyKOdfgsu76KbcJUxzHax0EE=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/scrapinghub/dateparser/pull/1294
-      url = "https://github.com/scrapinghub/dateparser/commit/6b23348b9367d43bebc9a40b00dda3363eb2acd5.patch";
-      hash = "sha256-LriRbGdYxF51Nwrm7Dp4kivyMikzmhytNQo0txMGsVI=";
-    })
-    (fetchpatch {
-      url = "https://github.com/scrapinghub/dateparser/commit/cbe29797c463c7939234df2923af310ed10aeb4f.patch";
-      includes = [ "dateparser_scripts/write_complete_data.py" ];
-      hash = "sha256-mDHDZlWU2G/NU2W+dxSRb6rRb/bp2PoTbgz8wXhaNCo=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     pytz
     regex
@@ -60,7 +47,10 @@ buildPythonPackage rec {
       hijridate
       convertdate
     ];
-    fasttext = [ fasttext ];
+    fasttext = [
+      fasttext
+      numpy
+    ];
     langdetect = [ langdetect ];
   };
 
@@ -85,10 +75,6 @@ buildPythonPackage rec {
     # access network
     "test_custom_language_detect_fast_text_0"
     "test_custom_language_detect_fast_text_1"
-
-    # breaks with latest tzdata: https://github.com/scrapinghub/dateparser/issues/1237
-    # FIXME: look into this more
-    "test_relative_base"
   ];
 
   pythonImportsCheck = [ "dateparser" ];

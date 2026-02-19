@@ -15,7 +15,7 @@
   pyyaml,
   shellingham,
   tqdm,
-  typer-slim,
+  typer,
   typing-extensions,
 
   # optional-dependencies
@@ -35,15 +35,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.3.4";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q6BTpNawUPZ9LWSxJkq/GaLNLdmhAeJehyWVMvdtH24=";
+    hash = "sha256-At3FN+dplQ3L9B4vDZrEvREdwgepUvzWC7yeU6L5XY8=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "typer-slim" "typer"
+  '';
 
   build-system = [ setuptools ];
 
@@ -56,7 +61,7 @@ buildPythonPackage (finalAttrs: {
     pyyaml
     shellingham
     tqdm
-    typer-slim
+    typer
     typing-extensions
   ];
 

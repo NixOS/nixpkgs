@@ -39,6 +39,12 @@ let
           inherit hash;
         };
 
+        # Set CGO_ENABLED based on platform:
+        # - Linux: CGO_ENABLED=0 for static linking (avoids LTO plugin issues)
+        # - Darwin: CGO_ENABLED=1 to avoid DNS resolution issues
+        # See: https://github.com/hashicorp/terraform/blob/main/BUILDING.md
+        env.CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";
+
         ldflags = [
           "-s"
           "-w"

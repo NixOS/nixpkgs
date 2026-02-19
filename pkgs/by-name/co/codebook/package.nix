@@ -20,8 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = "crates/codebook-lsp";
   cargoHash = "sha256-hxPgYGBq+KZfEyFiHQG31cNEN6A6hUgKRgZXIHOGalw=";
 
-  CARGO_PROFILE_RELEASE_LTO = "fat";
-  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  env = {
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  };
 
   # Integration tests require internet access for dictionaries
   doCheck = false;

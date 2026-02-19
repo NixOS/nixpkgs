@@ -101,8 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString buildClient (
     lib.optionalString stdenv.hostPlatform.isLinux ''
       # Convert and install desktop icon
-      mkdir -p $out/share/pixmaps
-      icotool --extract --index 1 --output $out/share/pixmaps/teeworlds.png $src/other/icons/teeworlds.ico
+      mkdir -p $out/share/icons/hicolor/256x256/apps
+      icotool --extract --index 1 --output $out/share/icons/hicolor/256x256/apps/teeworlds.png $src/other/icons/teeworlds.ico
 
       # Install menu item
       install -D $src/other/teeworlds.desktop $out/share/applications/teeworlds.desktop

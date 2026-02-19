@@ -23,7 +23,6 @@ let
       [ ];
 in
 buildNodejs {
-
   version = "25.6.1";
   sha256 = "cf756781c8b4dc5ee030f87ddf9d51b8d5bf219ad56cbd9855c4a3bdc832c78e";
   patches =

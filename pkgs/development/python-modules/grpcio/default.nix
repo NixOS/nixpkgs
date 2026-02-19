@@ -26,6 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-c4K5UYlUbzdcF09TpfqHPO+RxLgAX6oFzFs77qnE8cU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail cython==3.1.1 cython
+  '';
+
   outputs = [
     "out"
     "dev"

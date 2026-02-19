@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
@@ -46,6 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "doc"
     "examples"
+  ];
+
+  patches = [
+    # Remove when version > 2.2.2
+    (fetchpatch {
+      name = "0001-lomiri-content-hub-Properly-include-lomiri-api-includedirs.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-content-hub/-/commit/dab1854e5ec0a91fd28c9d84f06dcdd0af39518b.patch";
+      hash = "sha256-aQB8kLL2ZkKUOvFoDQ9rottFsCSNJ66wUjUZxP+kr5k=";
+    })
   ];
 
   postPatch = ''

@@ -8,7 +8,7 @@
   json_c,
   zlib,
   docutils,
-  fastJson,
+  libfastjson,
   withKrb5 ? true,
   libkrb5,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    fastJson
+    libfastjson
     libestr
     json_c
     zlib

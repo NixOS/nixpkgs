@@ -64,6 +64,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "pillow"
+    "typer"
   ];
 
   pythonImportsCheck = [

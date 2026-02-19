@@ -1,72 +1,136 @@
 {
-  stdenvNoCC,
   lib,
-  asar,
-  fetchurl,
-  fetchzip,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchPnpmDeps,
   makeDesktopItem,
-  copyDesktopItems,
+  desktopToDarwinBundle,
+  pnpmConfigHook,
   makeWrapper,
-  electron,
+  removeReferencesTo,
+  copyDesktopItems,
+  pnpm_10,
+  nodejs,
+  electron_38,
+  zip,
 }:
-
-stdenvNoCC.mkDerivation rec {
+let
+  electron = electron_38;
+  stdenv = stdenvNoCC;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "stoat-desktop";
-  version = "1.1.12";
+  version = "1.2.0";
 
-  src = fetchzip {
-    url = "https://github.com/stoatchat/for-desktop/releases/download/v${version}/Stoat-linux-x64-${version}.zip";
-    hash = "sha256-S3uJ4ADzDgrpKVxBdEpz73Q6bqOakzk9bObaoRZopbM=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "stoatchat";
+    repo = "for-desktop";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-Q1FKQBxtlrGmdfx7gLd0aQx/5Pqd4atFdMykxK997Rw=";
   };
 
-  dontConfigure = true;
-  dontBuild = true;
+  postPatch = ''
+    # Disable auto-updates
+    substituteInPlace src/main.ts \
+      --replace-fail "updateElectronApp();" ""
+  '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
+  doCheck = true;
 
   nativeBuildInputs = [
-    copyDesktopItems
+    pnpmConfigHook
+    removeReferencesTo
     makeWrapper
-    asar
+    copyDesktopItems
+    nodejs
+    pnpm_10
+    zip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
 
-  installPhase = ''
-    runHook preInstall
-    set -euo pipefail
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 3;
+    pnpm = pnpm_10;
+    hash = "sha256-m0EuM8qTCFLxxO0RNze5WgMkuHZXeIi+U/Jiuv91eCg=";
+  };
 
-    mkdir -p "$out/bin" "$out/share/applications" "$out/share/stoat-desktop"
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-    asarPath="$(find "$src" -type f -path '*/resources/app.asar' -print -quit || true)"
-    if [ -z "$asarPath" ]; then
-      echo "ERROR: could not find resources/app.asar in $src" >&2
-      exit 1
-    fi
+  buildPhase = ''
+    runHook preBuild
 
-    resDir="$(dirname "$asarPath")"
-    appDir="$(dirname "$resDir")"
+    export npm_config_nodedir=${electron.headers}
 
-    cp -a "$resDir" "$out/share/stoat-desktop/resources"
-    if [ -d "$appDir/locales" ]; then
-      cp -a "$appDir/locales" "$out/share/stoat-desktop/locales"
-    fi
+    # override the detected electron version
+    substituteInPlace node_modules/@electron-forge/core-utils/dist/electron-version.js \
+      --replace-fail "return version" "return '${electron.version}'"
 
-    mkdir -p "$out/share/icons/hicolor/scalable/apps"
-    install -m644 ${
-      fetchurl {
-        url = "https://raw.githubusercontent.com/stoatchat/assets/628eb2f8255c215148007f4227d2e0d5d1a67582/desktop/icon.svg";
-        hash = "sha256-EMDwnAtfTZqhw8hMGTbMjZUrnVkP+2HkyHlSy6pZmik=";
-      }
-    } "$out/share/icons/hicolor/scalable/apps/stoat-desktop.svg"
+    # create the electron archive to be used by electron-packager
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
 
-    runHook postInstall
+    pushd electron-dist
+    zip -0Xqr ../electron.zip .
+    popd
+
+    rm -r electron-dist
+
+    # force @electron/packager to use our electron instead of downloading it
+    substituteInPlace node_modules/@electron/packager/dist/packager.js \
+      --replace-fail "await this.getElectronZipPath(downloadOpts)" "'$(pwd)/electron.zip'"
+
+
+    pnpm make \
+      --arch "${stdenv.hostPlatform.node.arch}" \
+      --platform "${stdenv.hostPlatform.node.platform}" \
+      --targets "@electron-forge/maker-zip"
+
+    runHook postBuild
   '';
+
+  installPhase = lib.concatStringsSep "\n" [
+    "runHook preInstall"
+    # Make freedesktop stuff, then the convert hook should make them for Darwin
+    ''
+      install -Dm444 "assets/desktop/icon.svg" "$out/share/icons/hicolor/scalable/apps/stoat-desktop.svg"
+    ''
+    (lib.optionalString stdenv.hostPlatform.isLinux ''
+      # remove references to nodejs
+      find out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
+
+      mkdir -p "$out/share/stoat-desktop"
+      cp -r out/*/resources{,.pak} "$out/share/stoat-desktop"
+
+      makeWrapper ${lib.getExe electron} "$out/bin/stoat-desktop" \
+        --add-flag $out/share/stoat-desktop/resources/app.asar \
+        --set ELECTRON_FORCE_IS_PACKAGED 1 \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --inherit-argv0
+    '')
+    (lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/Applications"
+      cp -r out/*/Stoat.app
+
+      makeWrapper "$out/Applications/Stoat.app/Contents/MacOS/stoat-desktop" "$out/bin/stoat-desktop" \
+        --set ELECTRON_FORCE_IS_PACKAGED 1 \
+        --inherit-argv0
+    '')
+    "runHook postInstall"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
       name = "Stoat";
-      exec = "stoat-desktop %u";
-      icon = "stoat-desktop";
+      exec = "${finalAttrs.meta.mainProgram} %u";
+      icon = "${finalAttrs.meta.mainProgram}";
       desktopName = "Stoat";
-      genericName = meta.description;
+      genericName = "Chat Client";
       categories = [
         "Network"
         "Chat"
@@ -76,24 +140,18 @@ stdenvNoCC.mkDerivation rec {
     })
   ];
 
-  postFixup = ''
-    makeWrapper ${electron}/bin/electron "$out/bin/stoat-desktop" \
-      --add-flags "$out/share/stoat-desktop/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-  '';
-
   meta = {
     description = "Open source user-first chat platform";
     homepage = "https://stoat.chat/";
-    changelog = "https://github.com/stoatchat/for-desktop/releases/tag/v${version}";
+    changelog = "https://github.com/stoatchat/for-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       heyimnova
       magistau
       v3rm1n0
+      RossSmyth
     ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "stoat-desktop";
   };
-}
+})

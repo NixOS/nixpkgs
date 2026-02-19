@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-08pvkBa2PD7/uko1OOBg6/dCcOM3z9Cp//8mylFCMcE=";
 
-  CARGO_CRATE_NAME = "mhost";
+  env.CARGO_CRATE_NAME = "mhost";
 
   doCheck = false;
 

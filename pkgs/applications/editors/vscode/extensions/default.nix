@@ -3093,8 +3093,8 @@ let
         mktplcRef = {
           name = "compare-folders";
           publisher = "moshfeu";
-          version = "0.25.3";
-          hash = "sha256-QrSh8/AycC5nKbZ1+E3V/lJu/7Skket8b05yPnZg68s=";
+          version = "0.27.0";
+          hash = "sha256-v4ZIcrYa+5RXSX0OM5atXMcmN/EgAH6qqWS1vksxXpI=";
         };
 
         meta = {
@@ -4340,8 +4340,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "4.42.0";
-          hash = "sha256-jWw5vbORdi/qW8L4D1qbue8tdeiyof01FzJtcZUKs3Y=";
+          version = "4.43.0";
+          hash = "sha256-cpd8+fbp57l+XYBuDnz95lmKzJ8IUHu937KWHsLXrPk=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };
@@ -4788,8 +4788,8 @@ let
         mktplcRef = {
           name = "emacs-mcx";
           publisher = "tuttieee";
-          version = "0.107.1";
-          hash = "sha256-x2WoDoYE4at2G8yuefc5evHRpCiJXh5WTTkNzW454N0=";
+          version = "0.107.2";
+          hash = "sha256-Id8pKACGLtRXas1Tb2dZrw+ZrZvAQLbWcI3Q1gYpXos=";
         };
         meta = {
           changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";

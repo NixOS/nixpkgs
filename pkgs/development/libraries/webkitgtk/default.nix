@@ -29,6 +29,7 @@
   libjxl,
   at-spi2-core,
   cairo,
+  expat,
   libxml2,
   libsoup_3,
   libsecret,
@@ -142,6 +143,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     at-spi2-core
     cairo # required even when using skia
     enchant
+    expat
     flite
     libavif
     libepoxy

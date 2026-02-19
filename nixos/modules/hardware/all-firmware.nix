@@ -73,7 +73,7 @@ in
         with pkgs;
         [
           linux-firmware
-          intel2200BGFirmware
+          ipw2200-firmware
           rtl8192su-firmware
           rt5677-firmware
           rtl8761b-firmware

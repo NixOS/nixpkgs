@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapgrep";
-  version = "25.10";
+  version = "26.02";
 
   src = fetchFromGitHub {
     owner = "luleyleo";
     repo = "clapgrep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y7XwS4jOj8WHi3ntLwPne86/ZVkdBaWrDtPmUcUG4XE=";
+    hash = "sha256-8OG3yVfmvAJN/e07r/2rij0tairE/hOdERDwqDt8fbk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

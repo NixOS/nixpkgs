@@ -24,21 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "procps";
-  version = "4.0.5";
+  version = "4.0.6";
 
   # The project's releases are on SF, but git repo on gitlab.
   src = fetchurl {
     url = "mirror://sourceforge/procps-ng/procps-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wubRk8x4+EzW3bcqr21capFi8EcOWZIJIFf1/1GFYvo=";
+    hash = "sha256-Z76m+8OkKlNaAjDJ6JHl3ftNnTlCLUZWWimQ0azhUhY=";
   };
-
-  patches = [
-    # Fix build on Darwin. This patch can be dropped once 4.0.6 is released.
-    (fetchpatch2 {
-      url = "https://gitlab.com/procps-ng/procps/-/commit/2dc340e47669e0b0df7f71ff082e05ac5fa36615.diff";
-      hash = "sha256-4eu0MdHsCeUPiQBTdvYHlUAtSVbgputTqPRmSvh9iVs=";
-    })
-  ];
 
   buildInputs = [ ncurses ] ++ lib.optionals withSystemd [ systemdLibs ];
   nativeBuildInputs = [

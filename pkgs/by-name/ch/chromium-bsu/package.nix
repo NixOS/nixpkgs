@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    install -D misc/chromium-bsu.png $out/share/pixmaps/chromium-bsu.png
+    install -D misc/chromium-bsu.png -t $out/share/icons/hicolor/64x64/apps
     install -D misc/chromium-bsu.desktop $out/share/applications/chromium-bsu.desktop
   '';
 

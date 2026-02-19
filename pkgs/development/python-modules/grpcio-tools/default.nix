@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   protobuf,
+  cython,
   grpcio,
   setuptools,
 }:
@@ -21,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-Sw3YZWAnQxbhVdklFYJ2+FZFCBkwiLxD4g0/Xf+Vays=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython==3.1.1" Cython
+  '';
+
   outputs = [
     "out"
     "dev"
@@ -28,7 +34,10 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  build-system = [ setuptools ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   pythonRelaxDeps = [
     "protobuf"

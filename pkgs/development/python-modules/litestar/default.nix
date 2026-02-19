@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
+  pythonOlder,
 
   # build-system
   hatchling,
@@ -10,19 +11,16 @@
   # dependencies
   annotated-types,
   anyio,
-  asyncpg,
   attrs,
   brotli,
   click,
   cryptography,
-  fsspec,
   httpx,
   jinja2,
   jsbeautifier,
   litestar-htmx,
   mako,
   minijinja,
-  fast-query-parsers,
   msgspec,
   multidict,
   multipart,
@@ -30,7 +28,6 @@
   polyfactory,
   piccolo,
   prometheus-client,
-  psutil,
   opentelemetry-instrumentation-asgi,
   pydantic-extra-types,
   pydantic,
@@ -40,11 +37,12 @@
   redis,
   rich-click,
   rich,
+  sniffio,
   structlog,
   time-machine,
   typing-extensions,
   uvicorn,
-  # valkey,
+  valkey,
 
   # tests
   addBinToPathHook,
@@ -76,20 +74,17 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     anyio
-    asyncpg
     click
-    fast-query-parsers
-    fsspec
     httpx
     litestar-htmx
     msgspec
     multidict
     multipart
     polyfactory
-    psutil
     pyyaml
     rich
     rich-click
+    sniffio
     typing-extensions
   ];
 
@@ -100,9 +95,9 @@ buildPythonPackage (finalAttrs: {
     cli = [
       jsbeautifier
       uvicorn
-    ];
+    ]
+    ++ uvicorn.optional-dependencies.standard;
     cryptography = [ cryptography ];
-    htmx = [ litestar-htmx ];
     jinja = [ jinja2 ];
     jwt = [
       cryptography
@@ -112,8 +107,7 @@ buildPythonPackage (finalAttrs: {
     minijinja = [ minijinja ];
     opentelemetry = [ opentelemetry-instrumentation-asgi ];
     piccolo = [ piccolo ];
-    picologging = [ picologging ];
-    polyfactory = [ polyfactory ];
+    picologging = lib.optionals (pythonOlder "3.13") [ picologging ];
     prometheus = [ prometheus-client ];
     pydantic = [
       pydantic
@@ -122,9 +116,14 @@ buildPythonPackage (finalAttrs: {
     ];
     redis = [ redis ] ++ redis.optional-dependencies.hiredis;
     # sqlalchemy = [ advanced-alchemy ];
+    standard = [
+      jinja2
+      jsbeautifier
+      uvicorn
+    ]
+    ++ uvicorn.optional-dependencies.standard;
     structlog = [ structlog ];
-    # valkey = [ valkey ] ++ valkey.optional-dependencies.libvalkey;
-    yaml = [ pyyaml ];
+    valkey = [ valkey ] ++ valkey.optional-dependencies.libvalkey;
   };
 
   nativeCheckInputs = [

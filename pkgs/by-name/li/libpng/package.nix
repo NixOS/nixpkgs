@@ -24,11 +24,15 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "libpng" + whenPatched "-apng";
-  version = "1.6.54";
+  version = if !stdenv.isDarwin then "1.6.55" else "1.6.54"; # FIXME: darwin lags temporarily
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AcnYowPJQewsURwUMSo7HTbO20Hi9RaMzaqF1TuIeAU=";
+    hash =
+      if !stdenv.isDarwin then
+        "sha256-2SVyKGSDetWuKoIHDUsuBgPccq9EvUV8OWIpgli46C0="
+      else
+        "sha256-AcnYowPJQewsURwUMSo7HTbO20Hi9RaMzaqF1TuIeAU=";
   };
   postPatch =
     whenPatched "gunzip < ${patch_src} | patch -Np1"

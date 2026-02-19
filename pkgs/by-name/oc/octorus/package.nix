@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "octorus";
-  version = "0.3.1";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "ushironoko";
     repo = "octorus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-20HVES8XgZEgKIijTzo9rV5IRfhyZlY1noX6yHSUf8g=";
+    hash = "sha256-xVbLh1fe+59KxcZOtCoSAh6O+VdhAyBSGCPP3UZLidA=";
   };
 
-  cargoHash = "sha256-4HHl3SIXqfWOeKFmGqXLTC9veglMAFo1MLJIR/BYr0M=";
+  cargoHash = "sha256-mOHjNQWeEcoBS4OhPj5RRja+b1PCPAeOM49t7OUtx1s=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -28,7 +28,6 @@
 
   # optional-dependencies
   aiohttp,
-  hf-transfer,
   immutabledict,
   langdetect,
   librosa,
@@ -54,14 +53,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lm-eval";
-  version = "0.4.10";
+  version = "0.4.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EleutherAI";
     repo = "lm-evaluation-harness";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+fVLpJ/wzFyQJkdlHTirTNrtWg7Vn26kU0OV4+oDJXA=";
+    hash = "sha256-+zhZ+I+gzoF7g0xYvlPbZFcFy2PuFOgNTFLvbmdE1R0=";
   };
 
   build-system = [
@@ -104,7 +103,6 @@ buildPythonPackage (finalAttrs: {
       torch
       transformers
     ];
-    hf_transfer = [ hf-transfer ];
     ifeval = [
       immutabledict
       langdetect
@@ -133,7 +131,6 @@ buildPythonPackage (finalAttrs: {
     # - math
     # - multilingual
     # - ruler
-    # - sae_lens
     # - sparsify
     # - tasks
     # - unitxt
