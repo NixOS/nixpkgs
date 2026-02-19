@@ -4,16 +4,18 @@
   fetchFromGitHub,
   versionCheckHook,
   mockgen,
+  nix-update-script,
 }:
+
 buildGo125Module (finalAttrs: {
   pname = "terragrunt";
-  version = "0.97.0";
+  version = "0.99.3";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "terragrunt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LJGc85oCDEW/z9I4Mcr9Pyv9MLqqN4Zu/nJK1LTD9mk=";
+    hash = "sha256-ueiGJHd9IcqG7tv7O8+x9TOd1+MnNObKnGLkUw3pdb4=";
   };
 
   nativeBuildInputs = [
@@ -26,9 +28,10 @@ buildGo125Module (finalAttrs: {
     make generate-mocks
   '';
 
-  vendorHash = "sha256-BXFtw7+f9Isnk6EB3U4eLlho5B3rTnofmWBDbbbroUs=";
+  vendorHash = "sha256-4j6qrYtIHkgQGHvWUt/+Mvwdzwnnkg2GAsQB1qgeJmw=";
 
   doCheck = false;
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
@@ -41,6 +44,8 @@ buildGo125Module (finalAttrs: {
   ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://terragrunt.gruntwork.io";
