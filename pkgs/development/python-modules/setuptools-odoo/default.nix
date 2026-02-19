@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "setuptools-odoo";
-  version = "3.3.1";
+  version = "3.3.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "acsone";
     repo = "setuptools-odoo";
     tag = version;
-    hash = "sha256-fTXc3ICJ1VKno1PYBVMhXr5u7awhahLdOuDJ/8czPtA=";
+    hash = "sha256-cGvE/AioSX2R74dsElx4eb2Rp5irA65w/gBE6DFaUiI=";
   };
 
   nativeBuildInputs = [ distutils ];

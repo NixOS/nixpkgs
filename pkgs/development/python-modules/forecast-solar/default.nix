@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   aiodns,
   aiohttp,
   aresponses,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "forecast-solar";
   version = "4.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
 
   patches = [ ./fixup-addonmanager-lib-path.patch ];
 
-  WHAT = lib.concatStringsSep " " components;
+  env.WHAT = toString components;
 
   buildPhase = ''
     runHook preBuild

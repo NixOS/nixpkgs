@@ -19,16 +19,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtconsole";
-  version = "5.7.0";
+  version = "5.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "qtconsole";
-    tag = version;
-    hash = "sha256-UbtPVVWehb30lidBNrmsQATEd0DBfn8xCPB9ALzDjiI=";
+    tag = finalAttrs.version;
+    hash = "sha256-3NXW/6W0Gr8/LnB6VfHgFWJdwty4gLe2D8YzXn0/Cds=";
   };
 
   build-system = [ setuptools ];
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

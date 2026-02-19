@@ -16,9 +16,7 @@
   pytest-testinfra,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   typeguard,
-  typing-extensions,
   uv-dynamic-versioning,
 }:
 
@@ -63,8 +61,7 @@ buildPythonPackage rec {
     pydantic
     python-dateutil
     typeguard
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     freezegun

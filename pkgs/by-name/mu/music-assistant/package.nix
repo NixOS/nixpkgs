@@ -47,14 +47,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.7.6";
+  version = "2.7.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-tAzCEU8jFWENOy0WaAchuhQGjmQl8BTW9TuGZPJByPw=";
+    hash = "sha256-o17H8cmMC8szh/hfgdq0JWCPh45TkrhuXOikr+DcBw8=";
   };
 
   patches = [
@@ -186,6 +186,7 @@ python.pkgs.buildPythonApplication rec {
     "tests/core/test_server_base.py::test_events"
     # provider is missing dependencies
     "tests/providers/nicovideo"
+    "tests/providers/apple_music"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];

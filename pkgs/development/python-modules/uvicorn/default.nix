@@ -8,12 +8,10 @@
   httptools,
   python-dotenv,
   pyyaml,
-  typing-extensions,
   uvloop,
   watchfiles,
   websockets,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -38,8 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     click
     h11
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   optional-dependencies.standard = [
     httptools

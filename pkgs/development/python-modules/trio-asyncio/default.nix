@@ -7,11 +7,9 @@
   trio,
   outcome,
   sniffio,
-  exceptiongroup,
   pytest-trio,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -41,8 +39,7 @@ buildPythonPackage rec {
     trio
     outcome
     sniffio
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
   pytestFlags = [
     # RuntimeWarning: Can't run the Python asyncio tests because they're not installed

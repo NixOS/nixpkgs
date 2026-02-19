@@ -40,14 +40,14 @@
 }:
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "1.0.7";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = version;
-    hash = "sha256-gwug+eVzFa0mL+dvASHQ/cLq4/nIzl6CvigPIep7v1E=";
+    hash = "sha256-VuvO2s6ttS3ZBs0Zz5CHOOkUSdJkfY3AnhIoCgnQOhs=";
   };
 
   postgresqlTestSetupPost = ''

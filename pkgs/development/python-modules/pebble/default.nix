@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pebble";
-  version = "5.1.3";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noxdafox";
     repo = "pebble";
     tag = version;
-    hash = "sha256-17kAIvHI2/6p8Chm7pTkLWP+QcnIcARpH+OBVerbefQ=";
+    hash = "sha256-U6siydeKf/Ekqq2qHZj/ro2VQix2dRaP80d5CPQnRKU=";
   };
 
   build-system = [

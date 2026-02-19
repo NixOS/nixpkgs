@@ -50,7 +50,6 @@ sets are
 
 * `pkgs.python27Packages`
 * `pkgs.python3Packages`
-* `pkgs.python310Packages`
 * `pkgs.python311Packages`
 * `pkgs.python312Packages`
 * `pkgs.python313Packages`
@@ -897,7 +896,7 @@ on NixOS.
   # ...
 
   environment.systemPackages = with pkgs; [
-    (python310.withPackages (
+    (python314.withPackages (
       ps: with ps; [
         numpy
         toolz
@@ -1683,7 +1682,7 @@ with import <nixpkgs> { };
           });
         };
       in
-      pkgs.python310.override { inherit packageOverrides; };
+      pkgs.python313.override { inherit packageOverrides; };
 
   in
   python.withPackages (ps: [ ps.pandas ])
@@ -1707,7 +1706,7 @@ with import <nixpkgs> { };
   let
     packageOverrides = self: super: { scipy = super.scipy_0_17; };
   in
-  (pkgs.python310.override { inherit packageOverrides; }).withPackages (ps: [ ps.blaze ])
+  (pkgs.python313.override { inherit packageOverrides; }).withPackages (ps: [ ps.blaze ])
 ).env
 ```
 
@@ -1723,13 +1722,13 @@ let
   newpkgs = import pkgs.path {
     overlays = [
       (self: super: {
-        python310 =
+        python313 =
           let
             packageOverrides = python-self: python-super: {
               numpy = python-super.numpy_1_18;
             };
           in
-          super.python310.override { inherit packageOverrides; };
+          super.python313.override { inherit packageOverrides; };
       })
     ];
   };
@@ -2136,7 +2135,7 @@ The following rules are desired to be respected:
 * `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
 * `meta.platforms` takes the default value in many cases.
   It does not need to be set explicitly unless the package requires a specific platform.
-* The file is formatted with `nixfmt-rfc-style`.
+* The file is formatted correctly (e.g., `nix-shell --run treefmt`).
 * Commit names of Python libraries must reflect that they are Python
   libraries (e.g. `python3Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
   See also [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#commit-conventions).

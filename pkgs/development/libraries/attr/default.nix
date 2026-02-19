@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     badPlatforms = lib.platforms.microblaze;
     license = lib.licenses.gpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "attr_project" version;
   };
 }

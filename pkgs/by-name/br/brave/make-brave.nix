@@ -303,7 +303,6 @@ stdenv.mkDerivation {
       jefflabonte
       nasirhm
       buckley310
-      matteopacini
     ];
     platforms = [
       "aarch64-linux"

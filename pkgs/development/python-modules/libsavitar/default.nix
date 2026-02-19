@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   python,
-  pythonOlder,
   fetchFromGitHub,
   cmake,
   sip4,

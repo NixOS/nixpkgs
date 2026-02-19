@@ -11,15 +11,15 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-ug";
-  version = "1.0.0";
+  version = "1.0.1";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "10.0.0";
+  scipVersion = "10.0.1";
 
   # Take the SCIPOptSuite source since no other source exists publicly.
   src = fetchzip {
     url = "https://github.com/scipopt/scip/releases/download/v${scipVersion}/scipoptsuite-${scipVersion}.tgz";
-    hash = "sha256-Nskb8quLsox7igz1UZCfd+VjR9Q8/oa8dZBYjAdc1EU=";
+    hash = "sha256-U5tbgGCzUkDL/22RwQLQmvCjSAhxehJe0P5rwNupW6Q=";
   };
 
   sourceRoot = "${src.name}/ug";

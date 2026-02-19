@@ -11,15 +11,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "m2crypto";
-  version = "0.46.2";
+  version = "0.47.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "m2crypto";
     repo = "m2crypto";
     tag = finalAttrs.version;
-    hash = "sha256-XV9aILSWfQ/xKDySflG3wiNRP4YVPVujuhIz2VdPuBc=";
+    hash = "sha256-yOpejD2lYbv8JrTXxXOwjAgftb9xojAYgC3iKu3bDSQ=";
   };
+
+  # https://lists.sr.ht/~mcepl/m2crypto/%3CCAPhw1+Hg6+OJZoqt1O6aezxnTUFmfFTMzDwkD2bJ74jnmygqrg@mail.gmail.com%3E
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/SWIG/_lib.h \
+      --replace-fail "|| defined(__clang__)" "&& !defined(__clang__)"
+    substituteInPlace src/SWIG/_m2crypto.i \
+      --replace-fail "PRAGMA_IGNORE_UNUSED_LABEL" "" \
+      --replace-fail "PRAGMA_WARN_STRICT_PROTOTYPES" ""
+  '';
 
   build-system = [ setuptools ];
 

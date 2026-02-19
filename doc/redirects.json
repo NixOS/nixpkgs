@@ -119,6 +119,12 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "friction-graphics": [
+    "index.html#friction-graphics"
+  ],
+  "friction-graphics-wayland": [
+    "index.html#friction-graphics-wayland"
+  ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
@@ -1811,6 +1817,9 @@
   ],
   "fetchtorrent-parameters": [
     "index.html#fetchtorrent-parameters"
+  ],
+  "fetchitchio": [
+    "index.html#fetchitchio"
   ],
   "chap-trivial-builders": [
     "index.html#chap-trivial-builders"
@@ -4295,6 +4304,18 @@
   "neovim-plugin-treesitter": [
     "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
+  ],
+  "neovim-plugin-nvim-treesitter": [
+    "index.html#neovim-plugin-nvim-treesitter",
+    "index.html#vim-plugin-nvim-treesitter"
+  ],
+  "neovim-plugin-treesitter-standalone": [
+    "index.html#neovim-plugin-treesitter-standalone",
+    "index.html#vim-plugin-treesitter-standalone"
+  ],
+  "neovim-plugin-treesitter-grammar-dependencies": [
+    "index.html#neovim-plugin-treesitter-grammar-dependencies",
+    "index.html#vim-plugin-treesitter-grammar-dependencies"
   ],
   "managing-plugins-with-vim-plug": [
     "index.html#managing-plugins-with-vim-plug"

@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cheat";
-  version = "4.4.2";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "cheat";
     repo = "cheat";
     tag = finalAttrs.version;
-    sha256 = "sha256-GUU6VWfTmNS6ny12HnMr3uQmS7HI86Oupcmqx0MVAvE=";
+    sha256 = "sha256-RDfOdyQL9QICXZmgYCmz532iTuPdCW8GixajvEXmaUQ=";
   };
 
   subPackages = [ "cmd/cheat" ];

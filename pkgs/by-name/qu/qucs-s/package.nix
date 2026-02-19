@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.makeBinPath kernels)
   ];
 
-  QTDIR = qt6Packages.qtbase.dev;
+  env.QTDIR = qt6Packages.qtbase.dev;
 
   doInstallCheck = true;
   installCheck = ''

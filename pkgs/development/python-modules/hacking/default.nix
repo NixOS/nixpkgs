@@ -5,7 +5,6 @@
   fetchPypi,
   flake8,
   pbr,
-  pythonOlder,
   setuptools,
   stestr,
   testscenarios,

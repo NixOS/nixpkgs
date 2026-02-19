@@ -29,19 +29,14 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies =
-    with python3.pkgs;
-    [
-      attrs
-      click
-      click-log
-      jinja2
-      markdown-it-py
-      requests
-    ]
-    ++ lib.optionals (python3.pythonOlder "3.11") [
-      tomli
-    ];
+  dependencies = with python3.pkgs; [
+    attrs
+    click
+    click-log
+    jinja2
+    markdown-it-py
+    requests
+  ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

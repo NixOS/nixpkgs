@@ -24,12 +24,14 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ zstd ];
 
-  nativeCheckInputs = lib.optionals finalAttrs.doCheck [
+  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
     python3
     perl
   ];
 
-  inherit (sharness) SHARNESS_TEST_SRCDIR;
+  env = {
+    inherit (sharness) SHARNESS_TEST_SRCDIR;
+  };
 
   vendorHash = null;
 

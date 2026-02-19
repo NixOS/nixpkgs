@@ -57,7 +57,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -D "${appimageContents}/production.desktop" "$out/share/applications/fastmail.desktop"
     substituteInPlace "$out/share/applications/fastmail.desktop" \
-      --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=fastmail" \
+      --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=fastmail %U" \
       --replace-fail "Icon=production" "Icon=fastmail" \
 
     for res in 16 24 32 48 64 128 256 512 1024; do

@@ -59,7 +59,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional pipewireSupport pipewire
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
-  TARGET = lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    TARGET = "MACOS";
+  };
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_PULSE" pulseaudioSupport)

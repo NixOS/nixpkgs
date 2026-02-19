@@ -8,8 +8,6 @@
 
   # dependencies
   anyio,
-  pythonOlder,
-  exceptiongroup,
 
   # tests
   objsize,
@@ -43,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.maturinBuildHook
   ];
 
-  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  dependencies = [ anyio ];
 
   pythonImportsCheck = [ "pycrdt" ];
 

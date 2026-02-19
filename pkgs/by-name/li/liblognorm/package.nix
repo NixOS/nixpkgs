@@ -6,7 +6,7 @@
   libestr,
   json_c,
   pcre,
-  fastJson,
+  libfastjson,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     libestr
     json_c
     pcre
-    fastJson
+    libfastjson
   ];
 
   configureFlags = [ "--enable-regexp" ];

@@ -68,6 +68,16 @@ let
           }).pname;
         expected = "hello-no-final-attrs-overridden";
       };
+      structuredAttrs-allowedRequisites-nullability = {
+        expr =
+          lib.hasPrefix builtins.storeDir
+            (pkgs.stdenv.mkDerivation {
+              __structuredAttrs = true;
+              inherit (pkgs.hello) pname version src;
+              allowedRequisites = null;
+            }).drvPath;
+        expected = true;
+      };
     };
 
   test-extendMkDerivation =

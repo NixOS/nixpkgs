@@ -59,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.tobim ];
     platforms = lib.platforms.all;
     mainProgram = "logrotate";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "logrotate_project" finalAttrs.version;
   };
 })

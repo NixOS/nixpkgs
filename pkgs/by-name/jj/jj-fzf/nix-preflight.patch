@@ -1,16 +1,16 @@
-diff --git a/preflight.sh b/preflight.sh
-index f1ed02fe60..43b9c365c5 100755
---- a/preflight.sh
-+++ b/preflight.sh
-@@ -78,19 +78,6 @@
+diff --git i/preflight.sh w/preflight.sh
+index a2fcd1e..43b9c36 100755
+--- i/preflight.sh
++++ w/preflight.sh
+@@ -78,19 +78,6 @@ command -v "awk" > /dev/null 2>&1 &&
    test $(awk 'BEGIN{print(123)}') == 123 ||
      __preflightish_die "Failed to find usable 'awk' executable in \$PATH"
-
+ 
 -# == Jujutsu ==
--__preflightish_require "0.34" jj --version --ignore-working-copy
+-__preflightish_require "0.37" jj --version --ignore-working-copy
 -
 -# == fzf ==
--__preflightish_require "0.65.2" fzf --version
+-__preflightish_require "0.67.0" fzf --version
 -
 -# == python3 ==
 -__preflightish_require "3.9" python3 --version

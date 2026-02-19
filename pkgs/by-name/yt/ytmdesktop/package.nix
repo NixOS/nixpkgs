@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.10";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "ytmdesktop";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       find -name .git -print0 | xargs -0 rm -rf
     '';
 
-    hash = "sha256-CA3Vb7Wp4WrsWSVtIwDxnEt1pWYb73WnhyoMVKoqvOE=";
+    hash = "sha256-3gUEdkTFaO6WT13HyVssVX0qSmluOPm4AAy1dovHw6g=";
   };
 
   patches = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-1jlnVY4KWm+w3emMkCkdwUtkqRB9ZymPPGuvgfQolrA=";
+    hash = "sha256-fY7JZNUz82ldgpG76+pfiz59eL3BKlfXgoH5x7dY5bM=";
   };
 
   nativeBuildInputs = [

@@ -46,9 +46,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       python-box
       tomli-w
     ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ]
     ++ lib.optional withInotify inotify;
 
   nativeCheckInputs = with python3.pkgs; [

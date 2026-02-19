@@ -19,7 +19,7 @@
   pkg-config,
   wrapGAppsHook3,
   wxGTK32,
-  wxSVG,
+  wxsvg,
   xine-ui,
   xmlto,
   zip,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libexif
     libjpeg
-    wxSVG
+    wxsvg
     wxGTK32
     xine-ui
   ]

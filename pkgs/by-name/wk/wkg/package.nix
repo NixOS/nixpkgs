@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wkg";
-  version = "0.14.0";
+  version = "0.15.0";
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-pkg-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nFPfDVs/C7GtmLKy4V+ECsZvsABNfaxR3iDbDrnlMek=";
+    hash = "sha256-G576caJ9oeYDFDIOP75mfkw6/JsxYyfDsVlFhb0RbIE=";
   };
 
-  cargoHash = "sha256-KfF9VePqkWVdDU5C8b7x9u+uXPnrO5wVxQQZz8eJ4vM=";
+  cargoHash = "sha256-3sf6fyLaiB/w6PF6CzO7p9ZHdBTLAzqIHEhT4COY/4A=";
 
   # A large number of tests require Internet access in order to function.
   doCheck = false;

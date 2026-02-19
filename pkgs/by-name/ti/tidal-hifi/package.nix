@@ -42,13 +42,16 @@
   libsecret,
   libpulseaudio,
   speechd-minimal,
+  writeShellScript,
+  yq,
+  curl,
+  nix-update,
+  common-updater-scripts,
 
   castlabs-electron ? callPackage ./electron.nix { },
 }:
 
 let
-  version = "6.0.1";
-
   electronLibPath = lib.makeLibraryPath [
     alsa-lib
     at-spi2-atk
@@ -89,13 +92,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "tidal-hifi";
-  inherit version;
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "Mastermindzh";
     repo = "tidal-hifi";
-    tag = version;
-    hash = "sha256-wc8KsZGNjaIG9sijVGEzoJ7ZTmu4xX8b/ETjlMkNyDs=";
+    tag = finalAttrs.version;
+    hash = "sha256-wNYcjFbePWhtkPqR4byGE+FlRNEUv2/EoTYQE2JRAyE=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +107,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-lec3XcdZc+lcp/b175m/4dgBPLJCvlUPN8Ttqdehgw4=";
+  npmDepsHash = "sha256-OTETAe9RW3tBkGS7AlboxX/hUiGax7lxbtdXwRnr9X8=";
   forceGitDeps = true;
   makeCacheWritable = true;
 
@@ -187,8 +190,30 @@ buildNpmPackage (finalAttrs: {
       "''${gappsWrapperArgs[@]}"
   '';
 
+  passthru = {
+    inherit castlabs-electron;
+    updateScript = writeShellScript "update" ''
+      set -xeuo pipefail
+      export PATH="${
+        lib.makeBinPath [
+          nix-update
+          yq
+          curl
+          common-updater-scripts
+        ]
+      }:$PATH"
+
+      nix-update 'tidal-hifi'
+
+      TIDAL_VERSION="$(nix-instantiate --eval --raw -A 'tidal-hifi.version')"
+      NEW_VERSION="$(curl --silent "https://raw.githubusercontent.com/Mastermindzh/tidal-hifi/refs/tags/$TIDAL_VERSION/build/electron-builder.base.yml" | yq -r '.electronVersion')"
+
+      NIXPKGS_ALLOW_UNFREE=1 update-source-version tidal-hifi.castlabs-electron "$NEW_VERSION"
+    '';
+  };
+
   meta = {
-    changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${version}";
+    changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${finalAttrs.version}";
     description = "Web version of Tidal running in Electron with Hi-Fi support thanks to Widevine";
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;

@@ -199,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     touch _build/default/lib/.built
   '';
 
-  REBAR_IGNORE_DEPS = 1;
+  env.REBAR_IGNORE_DEPS = 1;
 
   postInstall = ''
     sed -i \

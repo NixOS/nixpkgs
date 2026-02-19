@@ -14,19 +14,19 @@
 }:
 buildDotnetModule rec {
   pname = "wheelwizard";
-  version = "2.3.3";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "TeamWheelWizard";
     repo = "WheelWizard";
     tag = version;
-    hash = "sha256-DuEI6bmvNP6wRuZX9Do0FGDsu80ldy0SCefBk6gqT9s=";
+    hash = "sha256-VEoj0h+YTEPWmYz2jtFnLzcMbMNeSt8yTuOwbfNt9t0=";
   };
   postPatch = ''
     rm .config/dotnet-tools.json
   '';
 
-  projectFile = "WheelWizard.sln";
+  projectFile = "WheelWizard";
   buildType = "Release";
   dotnet-sdk = dotnetCorePackages.sdk_8_0-bin;
   dotnet-runtime = dotnetCorePackages.runtime_8_0-bin;
@@ -50,7 +50,7 @@ buildDotnetModule rec {
     runHook preInstall
 
     mkdir -p $out/lib/wheelwizard $out/bin
-    cp -r WheelWizard/bin/Release/net8.0/* $out/lib/wheelwizard/
+    cp -r WheelWizard/bin/Release/net8.0/*/* $out/lib/wheelwizard/
 
     makeWrapper $out/lib/wheelwizard/WheelWizard $out/bin/WheelWizard \
       --prefix PATH : ${lib.makeBinPath [ dotnet-runtime ]}

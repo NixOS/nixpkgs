@@ -19,16 +19,16 @@
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymodbus";
-  version = "3.11.4";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
-    tag = "v${version}";
-    hash = "sha256-Le/TJfDSvro9eMLOfY/il/0LSJ8orHSSjI7jaYdXaLs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wyelHxfzmoyqp+D6v4EqJK8fL4FOuYrV57xZROGuIsY=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     sqlalchemy
     twisted
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   preCheck = ''
     pushd test
@@ -86,9 +86,9 @@ buildPythonPackage rec {
       lightweight project is needed.
     '';
     homepage = "https://github.com/pymodbus-dev/pymodbus";
-    changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/${src.tag}";
+    changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pymodbus.simulator";
   };
-}
+})

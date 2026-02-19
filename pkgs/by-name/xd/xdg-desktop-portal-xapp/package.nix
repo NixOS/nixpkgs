@@ -10,7 +10,7 @@
   glib,
   gtk3,
   gsettings-desktop-schemas,
-  mate,
+  mate-desktop,
   xapp,
   xdg-desktop-portal,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     gsettings-desktop-schemas # org.gnome.system.location
-    mate.mate-desktop # org.mate.background
+    mate-desktop # org.mate.background
     xapp # org.x.apps.portal
     xdg-desktop-portal
   ];

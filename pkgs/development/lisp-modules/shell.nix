@@ -1,10 +1,12 @@
 let
-  pkgs = import ../../../. { };
-  inherit (pkgs) mkShellNoCC sbcl nixfmt-rfc-style;
+  # Use CI-pinned (Hydra-cached) packages and formatter,
+  # rather than the local nixpkgs checkout.
+  inherit (import ../../../ci { }) pkgs fmt;
+  inherit (pkgs) mkShellNoCC sbcl;
 in
 mkShellNoCC {
   packages = [
-    nixfmt-rfc-style
+    fmt.pkg
     (sbcl.withPackages (
       ps:
       builtins.attrValues {

@@ -3,13 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
-  async-timeout,
   bellows,
   click,
   coloredlogs,
@@ -55,7 +53,6 @@ buildPythonPackage rec {
     typing-extensions
     zigpy
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
 
   nativeCheckInputs = [

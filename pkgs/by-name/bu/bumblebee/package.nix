@@ -159,7 +159,7 @@ stdenv.mkDerivation rec {
     # Don't use a special group, just reuse wheel.
     "CONF_GID=wheel"
     # see #10282
-    #"CONF_PRIMUS_LD_PATH=${primusLibs}"
+    #"CONF_PRIMUS_LD_PATH=${primus-lib}"
   ]
   ++ lib.optionals useNvidia [
     "CONF_LDPATH_NVIDIA=${nvidiaLibs}"

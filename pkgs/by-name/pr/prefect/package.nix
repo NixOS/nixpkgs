@@ -94,8 +94,7 @@ python3Packages.buildPythonApplication rec {
       semver
     ]
     ++ sqlalchemy.optional-dependencies.asyncio
-    ++ httpx.optional-dependencies.http2
-    ++ python-socks.optional-dependencies.asyncio;
+    ++ httpx.optional-dependencies.http2;
 
   optional-dependencies = with python3Packages; {
     aws = [

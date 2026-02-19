@@ -25,16 +25,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayvr";
-  version = "26.2.0";
+  version = "26.2.1";
 
   src = fetchFromGitHub {
     owner = "wlx-team";
     repo = "wayvr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RjZ9CmTHacw50TVxl53z4E2Yp/XW/sgf4WjYL6pd1s8=";
+    hash = "sha256-v1Wkelru825KV+ciXD9esLq39oTyMm/Z4rRbN+jjviY=";
   };
 
-  cargoHash = "sha256-xv6l+zCp3tkJs0c10f+omcwY8/wd2HWlZeFHDiUfkso=";
+  cargoHash = "sha256-d6iRaOHq+4j90L76bx7+EwCLOY4MxPeqm3ELJ5H9O+8=";
 
   nativeBuildInputs = [
     pkg-config

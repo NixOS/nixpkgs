@@ -14,13 +14,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "presenterm";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "presenterm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tkIw7qo7lq3rSaBG0m6HzlXt8l3dQVFSBm8P3v7adVk=";
+    hash = "sha256-wQP3tLa6+GZAhNkAaIrbpIMBnQD7UoH6O5N/wDKtfrQ=";
   };
 
   nativeBuildInputs =
@@ -35,19 +35,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libsixel
   ];
 
-  buildFeatures = [
-    "sixel"
-  ];
-
-  cargoHash = "sha256-CLoN85A2fggTHs/AHmo43N+9Q4FGKwNmKObw+OMBFao=";
+  cargoHash = "sha256-mDbzZZDsGCpbOKJ9/lX23VgSH0LGzHvYo2nxnRay15A=";
 
   env = lib.optionalAttrs (isDarwin && isx86_64) {
     NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
-
-  checkFeatures = [
-    "sixel"
-  ];
 
   checkFlags = [
     # failed to load .tmpEeeeaQ: No such file or directory (os error 2)

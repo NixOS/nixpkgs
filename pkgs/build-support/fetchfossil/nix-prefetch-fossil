@@ -89,10 +89,15 @@ fossil open "$tmpPath/fossil-clone.fossil" "$rev" >&2
 
 # Get the actual commit hash and date
 checkoutLine=$(fossil info | grep ^checkout:)
-# Remove 'checkout:' prefix and squeeze multiple spaces, then extract fields
-actualRev=$(echo "$checkoutLine" | sed 's/^checkout:[[:space:]]*//' | tr -s ' ' | cut -d' ' -f1)
-# Extract date (format: checkout:     HASH YYYY-MM-DD HH:MM:SS UTC)
-actualDate=$(echo "$checkoutLine" | sed 's/^checkout:[[:space:]]*//' | tr -s ' ' | cut -d' ' -f2)
+# Remove 'checkout:' prefix & remove whitespace
+checkoutData=$(echo "$checkoutLine" | sed 's/^checkout:[[:space:]]*//' | tr -s ' ')
+# Extract fields: HASH YYYY-MM-DD HH:MM:SS UTC
+actualRev=$(echo "$checkoutData" | cut -d' ' -f1)
+# Get datetime parts
+rawDate=$(echo "$checkoutData" | cut -d' ' -f2)
+rawTime=$(echo "$checkoutData" | cut -d' ' -f3)
+# Combine into ISO 8601 RFC 3339 format
+actualDatetime="${rawDate}T${rawTime}Z"
 cd - >/dev/null
 
 # Remove the fossil checkout file
@@ -118,7 +123,8 @@ cat <<EOF
 {
   "url": "$url",
   "rev": "$actualRev",
-  "date": "$actualDate",
+  "date": "$actualDatetime",
+  "path": "$finalPath",
   "$hashType": "$hash",
   "hash": "$(nix-hash --to-sri --type $hashType $hash)"
 }

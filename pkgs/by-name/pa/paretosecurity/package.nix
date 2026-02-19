@@ -17,13 +17,13 @@ buildGoModule (finalAttrs: {
     webkitgtk_4_1
   ];
   pname = "paretosecurity";
-  version = "0.3.13";
+  version = "0.3.14";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
     rev = finalAttrs.version;
-    hash = "sha256-ETKKcEeTLK+srVmIDRC2hYGOKWxNzc18DPn03hc86Bs=";
+    hash = "sha256-Exl1PGTf1i5DKDcU5XOwYE6rEbrD+1wPnjB4rcz3lhA=";
   };
 
   vendorHash = "sha256-jAcUf4VjtKB/Q2wHOVnCgcmPp5XNMqV8Ei9kpWoGO4Q=";

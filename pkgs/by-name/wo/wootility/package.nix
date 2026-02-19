@@ -28,7 +28,7 @@ appimageTools.wrapType2 {
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
       install -Dm444 ${contents}/Wootility.desktop -t $out/share/applications
-      install -Dm444 ${contents}/Wootility.png -t $out/share/pixmaps
+      install -Dm444 ${contents}/Wootility.png -t $out/share/icons/hicolor/1024x1024/apps
       substituteInPlace $out/share/applications/Wootility.desktop \
         --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=wootility'
     '';

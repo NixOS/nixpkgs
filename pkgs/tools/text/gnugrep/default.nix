@@ -115,6 +115,9 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.all;
     mainProgram = "grep";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version // {
+      product = "grep";
+    };
   };
 
   passthru = {

@@ -9,21 +9,21 @@
 }:
 
 let
-  commitHash = "d5bc935e4801a02fdbd953f8f0ae7989eaef50cf"; # matches tag release
+  commitHash = "be318748da098346a52133c0f7d4a4104a56efc5"; # matches tag release
   shortCommitHash = builtins.substring 0 7 commitHash;
 in
 buildGoModule (finalAttrs: {
   pname = "copywrite";
-  version = "0.22.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "copywrite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gPVlHgFlLxoAj4pkg3OxD4CGQaLdAL312/Zn/pJ+7fg=";
+    hash = "sha256-gw5i50fHshyRrSU3/M4HWM/J82HawGXPHHg9nKIRBkQ=";
   };
 
-  vendorHash = "sha256-Qxp6BwN/Y6Xb1BwFGT/T8WYsXGPgN27mzoTE0i6cS1Q=";
+  vendorHash = "sha256-607qlAhrk+1SdrIeE9eYBW3qJKq9i7hEzObvKH66Dfk=";
 
   ldflags = [
     "-s"
@@ -33,6 +33,10 @@ buildGoModule (finalAttrs: {
   ];
 
   env.CGO_ENABLED = 0;
+
+  checkFlags = [
+    "-skip=Test_FormatCopyrightYears_AutoDetect" # depends on git metadata
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

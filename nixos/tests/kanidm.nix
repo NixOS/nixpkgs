@@ -68,10 +68,10 @@ in
             verify_ca = true;
             verify_hostnames = true;
           };
-          unix = {
-            enable = true;
-            kanidm.pam_allowed_login_groups = [ "shell" ];
-          };
+        };
+        unix = {
+          enable = true;
+          settings.kanidm.pam_allowed_login_groups = [ "shell" ];
         };
       };
 

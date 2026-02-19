@@ -24,25 +24,22 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hatchling
   ];
 
-  dependencies =
-    with python3Packages;
-    [
-      click
-      mysql-connector
-      pytimeparse2
-      pymysql
-      pymysqlsa
-      simplejson
-      sqlalchemy
-      sqlalchemy-utils
-      tqdm
-      tabulate
-      unidecode
-      packaging
-      mysql80
-      python-dateutil
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  dependencies = with python3Packages; [
+    click
+    mysql-connector
+    pytimeparse2
+    pymysql
+    pymysqlsa
+    simplejson
+    sqlalchemy
+    sqlalchemy-utils
+    tqdm
+    tabulate
+    unidecode
+    packaging
+    mysql80
+    python-dateutil
+  ];
 
   pythonRelaxDeps = [
     "mysql-connector-python"

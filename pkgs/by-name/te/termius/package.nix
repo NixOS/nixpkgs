@@ -73,9 +73,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/termius
     cp -r ./ $out/opt/termius
 
-    mkdir -p "$out/share/applications" "$out/share/pixmaps"
+    mkdir -p $out/share/applications
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
-    cp meta/gui/icon.png $out/share/pixmaps/termius-app.png
+    install -Dm644 meta/gui/icon.png $out/share/icons/hicolor/1024x1024/termius-app.png
 
     runHook postInstall
   '';

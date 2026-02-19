@@ -5,12 +5,10 @@
   cmake,
   eigen,
   avogadrolibs,
-  molequeue,
   hdf5,
   jkqtplotter,
   openbabel,
-  qttools,
-  wrapQtAppsHook,
+  qt6,
   mesa,
 }:
 
@@ -18,20 +16,20 @@ let
   avogadroI18N = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadro-i18n";
-    tag = "1.102.1";
-    hash = "sha256-doY+AWJ0GiE6VsTolgmFIRcRVl52lTgwNJLpXgVQ57c=";
+    tag = "1.103.0";
+    hash = "sha256-gdr0Ed0UWjQB0LQq+6RvlAb8ZNFQAjV9mrgFLePG+CM=";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "avogadro2";
-  version = "1.102.1";
+  version = "1.103.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
     rev = finalAttrs.version;
-    hash = "sha256-nBkOiw6JO/cG1Ob9gw7Tt/076OoRaRRmDc/a9YAfZCA=";
+    hash = "sha256-nmvK3R966Xv2Xs5wXDh/8itIZLIRqbXHFe8dffFiI+s=";
   };
 
   postUnpack = ''
@@ -40,16 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     avogadrolibs
-    molequeue
     eigen
     hdf5
     jkqtplotter
-    qttools
+    qt6.qttools
   ];
 
   propagatedBuildInputs = [ openbabel ];

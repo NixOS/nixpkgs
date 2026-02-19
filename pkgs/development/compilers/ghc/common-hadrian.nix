@@ -291,6 +291,14 @@
               hash = "sha256-Vr5wkiSE1S5e+cJ8pWUvG9KFpxtmvQ8wAy08ElGNp5E=";
             })
           ]
+      # Fix subword division regression in 9.12.3 https://gitlab.haskell.org/ghc/ghc/-/merge_requests/15264
+      ++ lib.optionals (version == "9.12.3") [
+        (fetchpatch {
+          name = "ghc-9.12.3-fix-subword-division.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/65370007e2d9f1976fbcfbb514917fb111117148.patch";
+          hash = "sha256-GMnD0StBTRynl2Lels1L0u1bo7HscLGPUAv+rTJ98QQ=";
+        })
+      ]
       # Fixes stack overrun in rts which crashes an process whenever
       # freeHaskellFunPtr is called with nixpkgs' hardening flags.
       # https://gitlab.haskell.org/ghc/ghc/-/issues/25485 krank:ignore-line

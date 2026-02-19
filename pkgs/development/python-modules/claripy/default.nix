@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pysmt,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
   z3-solver,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "claripy";
   version = "9.2.154";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";

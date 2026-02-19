@@ -2886,10 +2886,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0wkffbl793jvkjw3qdfqfb1j4adsvyakdv7sc0g3cdp2q6lrrmah";
+      sha256 = "1cjn1vqnvr3lhbdqfpy88aq7qmvd1j7i08gd8cly91914cd22pi9";
       type = "gem";
     };
-    version = "1.40.0";
+    version = "1.43.0";
   };
   gitlab-crystalball = {
     dependencies = [

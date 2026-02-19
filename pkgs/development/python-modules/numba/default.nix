@@ -2,7 +2,6 @@
   lib,
   stdenv,
   pythonAtLeast,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch2,
   python,

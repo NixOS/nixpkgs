@@ -1,6 +1,5 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   coloredlogs,
   fetchFromGitHub,
@@ -11,7 +10,6 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   voluptuous,
   zigpy,
@@ -43,9 +41,6 @@ buildPythonPackage rec {
     jsonschema
     voluptuous
     zigpy
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   nativeCheckInputs = [

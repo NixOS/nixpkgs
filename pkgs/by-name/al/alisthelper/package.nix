@@ -7,6 +7,7 @@
   makeDesktopItem,
   runCommand,
   yq-go,
+  imagemagick,
   _experimental-update-script-combinators,
   nix-update-script,
 }:
@@ -26,7 +27,10 @@ flutter332.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    imagemagick
+    copyDesktopItems
+  ];
 
   buildInputs = [ libayatana-appindicator ];
 
@@ -44,7 +48,8 @@ flutter332.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -D --mode=0644 assets/alisthelper.png -t $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/1024x1024/apps
+    magick assets/alisthelper.png -resize 1024x1024 $out/share/icons/hicolor/1024x1024/apps/alisthelper.png
   '';
 
   passthru = {

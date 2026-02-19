@@ -3,13 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # builds
   poetry-core,
 
   # propagates
-  isodate,
   pyparsing,
 
   # extras: networkx
@@ -41,8 +39,7 @@ buildPythonPackage rec {
 
   dependencies = [
     pyparsing
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ isodate ];
+  ];
 
   optional-dependencies = {
     html = [ html5lib ];

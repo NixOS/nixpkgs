@@ -44,7 +44,6 @@
   python,
   python-daemon,
   python-path,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,

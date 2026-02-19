@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
   hatch-vcs,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "django-modeltranslation";
   version = "0.19.19";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "deschler";

@@ -13,8 +13,6 @@
   protobuf,
   types-protobuf,
   typing-extensions,
-  pythonOlder,
-  python-dateutil,
 
   # nativeBuildInputs
   cargo,
@@ -61,8 +59,7 @@ buildPythonPackage rec {
     protobuf
     types-protobuf
     typing-extensions
-  ]
-  ++ lib.optional (pythonOlder "3.11") python-dateutil;
+  ];
 
   nativeBuildInputs = [
     cargo

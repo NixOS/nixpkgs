@@ -44,7 +44,7 @@ buildNpmPackage (finalAttrs: {
     description = "Verify examples in your docs";
     homepage = "https://github.com/stoeffel/elm-verify-examples";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "elm-verify-examples";
   };
 })

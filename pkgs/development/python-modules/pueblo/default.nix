@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   versioningit,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pueblo";
   version = "0.0.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   # This tarball doesn't include tests unfortunately, and the GitHub tarball
   # could have been an alternative, but versioningit fails to detect the

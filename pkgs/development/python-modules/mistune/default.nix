@@ -3,9 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -19,10 +17,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-mCqOcLrgLtUL1le82Y+QVqqXGq+n0ZY76hqtyJsCKhE=";
   };
-
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ];
 
   build-system = [ setuptools ];
 

@@ -8,11 +8,11 @@
 
 let
   pname = "ledger-live-desktop";
-  version = "2.139.1";
+  version = "2.141.0";
 
   src = fetchurl {
     url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "sha256-I4NYtvef+6wnd3IMffwAeuCg4dvGz6gLRcYHwXWwdtM=";
+    hash = "sha256-G6mmTAs4Y4XE1GnXusJhJEg68EqTLpW8SaCmpidYR8M=";
   };
 
   appimageContents = appimageTools.extractType2 {

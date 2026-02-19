@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.0.2";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eZqNxibJ0Ps65tHT6msaizRxvUPNNq0OZ++aAYvUi0E=";
+    hash = "sha256-q79/xP+kaovkch5wXzXumQb9l4wSspXg2cl7mD0Q2f8=";
   };
 
   build-system = with python3Packages; [
@@ -30,15 +30,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "agent-client-protocol"
+    "gitpython"
     "mistralai"
-    "pydantic"
     "pydantic-settings"
-    "watchfiles"
+    "zstandard"
   ];
   dependencies = with python3Packages; [
     agent-client-protocol
     anyio
+    cryptography
+    gitpython
+    giturlparse
+    google-auth
     httpx
+    keyring
     mcp
     mistralai
     packaging
@@ -48,13 +53,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyperclip
     python-dotenv
     pyyaml
+    requests
     rich
     textual
     textual-speedups
-    tree-sitter
-    tree-sitter-grammars.tree-sitter-bash
     tomli-w
+    tree-sitter
+    tree-sitter-bash
     watchfiles
+    zstandard
   ];
 
   pythonImportsCheck = [ "vibe" ];

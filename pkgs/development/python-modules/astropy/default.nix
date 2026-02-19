@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build time
   stdenv,
@@ -57,8 +56,6 @@ buildPythonPackage rec {
   pname = "astropy";
   version = "7.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "astropy";

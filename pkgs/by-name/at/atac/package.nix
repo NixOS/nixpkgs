@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   oniguruma,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atac";
@@ -18,13 +20,33 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-lJO9riP/3FRrQ/gkKQCghfkNn1ePS+p6FtMcJTIJxZY=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
+    pkg-config
+  ];
 
   buildInputs = [ oniguruma ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
+
+  postInstall = ''
+    $out/bin/atac completions bash
+    $out/bin/atac completions fish
+    $out/bin/atac completions zsh
+    installShellCompletion --cmd atac \
+      --bash atac.bash \
+      --fish atac.fish \
+      --zsh _atac
+
+    mkdir -p $out/share/powershell
+    $out/bin/atac completions powershell $out/share/powershell
+
+    $out/bin/atac man
+    installManPage atac.1
+  '';
 
   meta = {
     description = "Simple API client (postman like) in your terminal";

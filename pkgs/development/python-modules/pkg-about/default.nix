@@ -3,7 +3,6 @@
   buildPythonPackage,
   docutils,
   fetchPypi,
-  pythonOlder,
   importlib-metadata,
   importlib-resources,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pkg-about";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "pkg_about";

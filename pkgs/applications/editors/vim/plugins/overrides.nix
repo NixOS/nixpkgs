@@ -947,14 +947,6 @@ assertNoAdditions {
   };
 
   cpsm = super.cpsm.overrideAttrs (old: {
-    # CMake 4 dropped support of versions lower than 3.5, and versions
-    # lower than 3.10 are deprecated.
-    postPatch = (old.postPatch or "") + ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail \
-          "cmake_minimum_required(VERSION 2.8.12)" \
-          "cmake_minimum_required(VERSION 3.10)"
-    '';
     nativeBuildInputs = [ cmake ];
     buildInputs = [
       python3
@@ -1615,6 +1607,13 @@ assertNoAdditions {
 
   jellybeans-nvim = super.jellybeans-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
+  };
+
+  jj-nvim = super.jj-nvim.overrideAttrs {
+    # Don't install 30 MB of GIFs
+    postPatch = ''
+      rm -rf assets/
+    '';
   };
 
   jupytext-nvim = super.jupytext-nvim.overrideAttrs {
@@ -2800,6 +2799,8 @@ assertNoAdditions {
       # Meta can't be required
       "nvim-tree._meta.api"
       "nvim-tree._meta.api_decorator"
+      "nvim-tree._meta.api.decorator_example"
+      "nvim-tree._meta.classes"
       "nvim-tree._meta.config.filters"
       "nvim-tree._meta.config.actions"
       "nvim-tree._meta.config.git"

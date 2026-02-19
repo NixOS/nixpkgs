@@ -38,7 +38,6 @@ in
           };
         };
         virtualisation.rootDevice = "/dev/mapper/cryptroot";
-        virtualisation.fileSystems."/".autoFormat = true;
         boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
       };
     };
@@ -47,6 +46,8 @@ in
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
     machine.succeed("cryptsetup luksFormat -q --iter-time=1 -d ${keyfile} /dev/vdb")
+    machine.succeed("cryptsetup luksOpen --key-file ${keyfile} /dev/vdb cryptroot")
+    machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
 
     # Boot from the encrypted disk
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")

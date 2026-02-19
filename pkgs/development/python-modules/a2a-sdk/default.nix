@@ -18,6 +18,9 @@
   pydantic,
   pyjwt,
   pytest-asyncio,
+  pytest-cov-stub,
+  pytest-timeout,
+  pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
   respx,
@@ -30,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "a2a-sdk";
-  version = "0.3.22";
+  version = "0.3.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "a2aproject";
     repo = "a2a-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RGD55BGxWSPJXKqDPcTYW3pIzlOVPoOqd3hyTArifqc=";
+    hash = "sha256-F7tu+coSNNrLT36DFaHdoFe7hBG5lA69O5ktnxfJlZI=";
   };
 
   build-system = [
@@ -65,10 +68,22 @@ buildPythonPackage (finalAttrs: {
       sse-starlette
       starlette
     ];
-    mysql = [ sqlalchemy ];
-    postgresql = [ sqlalchemy ];
+    mysql = [
+      sqlalchemy
+    ]
+    ++ sqlalchemy.optional-dependencies.asyncio
+    ++ sqlalchemy.optional-dependencies.postgresql_asyncpg;
+    postgresql = [
+      sqlalchemy
+    ]
+    ++ sqlalchemy.optional-dependencies.asyncio
+    ++ sqlalchemy.optional-dependencies.postgresql_asyncpg;
     signing = [ pyjwt ];
-    sqlite = [ sqlalchemy ];
+    sqlite = [
+      sqlalchemy
+    ]
+    ++ sqlalchemy.optional-dependencies.asyncio
+    ++ sqlalchemy.optional-dependencies.aiosqlite;
     telemetry = [
       opentelemetry-api
       opentelemetry-sdk
@@ -78,6 +93,9 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     aiosqlite
     pytest-asyncio
+    pytest-cov-stub
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
     respx
     uvicorn

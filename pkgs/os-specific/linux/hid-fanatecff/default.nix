@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ rake5k ];
     platforms = lib.platforms.linux;
     mainProgram = "hid-fanatecff";
+    broken = lib.versionOlder kernel.version "6.1";
   };
 })

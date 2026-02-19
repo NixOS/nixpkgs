@@ -15,7 +15,7 @@
   dialog,
   dbiSupport ? false,
   libdbi ? null,
-  libdbiDrivers ? null,
+  libdbi-drivers ? null,
   postgresSupport ? false,
   libpq ? null,
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals dbiSupport [
     libdbi
-    libdbiDrivers
+    libdbi-drivers
   ]
   ++ lib.optionals postgresSupport [ libpq ];
 

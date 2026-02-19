@@ -55,6 +55,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     homepage = "https://github.com/vega/vl-convert";
     changelog = "https://github.com/vega/vl-convert/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ antonmosich ];
+    maintainers = [ ];
   };
 }

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
   boost,
@@ -42,6 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ]
   ++ lib.optionals withDocumentation [ "doc" ];
+
+  patches = [
+    # Remove when version > 0.3.0
+    (fetchpatch {
+      name = "0001-lomiri-download-manager-Properly-include-lomiri-api-includedirs.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/commit/b847aca92cea6f729b96f7a55f765ae4d9fbf741.patch";
+      hash = "sha256-hx/b80P5nbonlP3B8ekjZjxUGV3Ofm/lai0RU1ak9Gs=";
+    })
+  ];
 
   postPatch = ''
     # Substitute systemd's prefix in pkg-config call

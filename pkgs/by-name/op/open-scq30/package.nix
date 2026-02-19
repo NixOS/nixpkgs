@@ -12,25 +12,35 @@
   gtk4,
   libadwaita,
   pango,
-  cargo-make,
+  just,
+  sqlite,
+  wayland,
+  libxkbcommon,
+  libGL,
+  libx11,
+  libxcursor,
+  libxi,
+  autoPatchelfHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "open-scq30";
-  version = "1.12.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "Oppzippy";
     repo = "OpenSCQ30";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DL2hYm1j27K0nnBvE3iGnguqm0m1k56bkuG+6+u4u4c=";
+    hash = "sha256-BSh10x0cbxfds/3m7XrWmVI1/9Li/Uh9OZA6I9gH8qE=";
   };
 
   nativeBuildInputs = [
     pkg-config
     protobuf
     wrapGAppsHook4
-    cargo-make
+    just
+    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -41,23 +51,41 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk4
     libadwaita
     pango
+    sqlite
+    libxkbcommon
   ];
 
-  cargoHash = "sha256-3K+/CpTGWSjCRa2vOEcDvLIiZMdntugIqnzkXF4wkng=";
+  # Wayland and X11 libs are required at runtime since winit uses dlopen
+  runtimeDependencies = [
+    wayland
+    libxkbcommon
+    libGL
+    libx11
+    libxcursor
+    libxi
+  ];
 
-  INSTALL_PREFIX = placeholder "out";
+  cargoHash = "sha256-410iXY9Ae3CPRX82LmbkWh+huna6YwBV2gtdfc3ap90=";
+
+  env.INSTALL_PREFIX = placeholder "out";
 
   # Requires headphones
   doCheck = false;
 
+  postPatch = ''
+    patchShebangs ./gui/scripts ./cli/scripts ./scripts
+  '';
+
   buildPhase = ''
-    cargo make --profile release build
+    just build-cli
+    just build-gui
   '';
 
   installPhase = ''
-    cargo make --profile release install
+    just install ${placeholder "out"}
   '';
 
+  passthru.updateScript = nix-update-script { };
   meta = {
     description = "Cross platform application for controlling settings of Soundcore headphones";
     homepage = "https://github.com/Oppzippy/OpenSCQ30";

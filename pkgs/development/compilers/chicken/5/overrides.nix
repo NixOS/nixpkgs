@@ -24,7 +24,7 @@ let
   broken = addMetaAttrs { broken = true; };
   brokenOnDarwin = addMetaAttrs { broken = stdenv.hostPlatform.isDarwin; };
   addToCscOptions = opt: old: {
-    CSC_OPTIONS = lib.concatStringsSep " " ([ old.CSC_OPTIONS or "" ] ++ lib.toList opt);
+    env.CSC_OPTIONS = lib.concatStringsSep " " ([ old.env.CSC_OPTIONS or "" ] ++ lib.toList opt);
   };
 in
 {
@@ -265,6 +265,7 @@ in
         --replace-quiet 'only chicken.base' 'only chicken.base define-values'
     '';
   };
+  raylib = addToBuildInputsWithPkgConfig pkgs.raylib;
   socket = old: {
     # chicken-do checks for changes to a file that doesn't exist
     preBuild = ''
@@ -284,10 +285,10 @@ in
         chickenEggs.foreigners
       ];
     };
-  ephem = broken;
   canvas-draw = broken;
   coops-utils = broken;
   crypt = broken;
+  ephem = addToBuildInputs pkgs.libnova;
   gemini = broken;
   gemini-client = broken;
   hypergiant = broken;
@@ -295,8 +296,13 @@ in
   kiwi = broken;
   lmdb-ht = broken;
   mpi = broken;
+  oauthtoothy = broken;
   pyffi = broken;
   qt-light = broken;
+  schematra-csrf = broken;
+  schematra-session = broken;
+  srfi-174 = broken;
+  srfi-19 = broken;
   sundials = broken;
   svn-client = broken;
   tokyocabinet = broken;

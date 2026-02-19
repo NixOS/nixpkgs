@@ -40,6 +40,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "R LSP client for coc.nvim";
     homepage = "https://github.com/neoclide/coc-r-lsp";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

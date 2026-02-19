@@ -129,9 +129,6 @@ let
             inherit hash;
           };
 
-          # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
-          NROFF = if docSupport then "${groff}/bin/nroff" else null;
-
           outputs = [ "out" ] ++ lib.optional docSupport "devdoc";
 
           strictDeps = true;
@@ -174,12 +171,17 @@ let
           ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
 
-          env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && yjitSupport) {
-            # The ruby build system will use a bare `rust` command by default for its rust.
-            # We can use the Nixpkgs rust wrapper to work around the fact that our Rust builds
-            # for cross-compilation output for the build target by default.
-            NIX_RUSTFLAGS = "--target ${stdenv.hostPlatform.rust.rustcTargetSpec}";
-          };
+          env =
+            lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && yjitSupport) {
+              # The ruby build system will use a bare `rust` command by default for its rust.
+              # We can use the Nixpkgs rust wrapper to work around the fact that our Rust builds
+              # for cross-compilation output for the build target by default.
+              NIX_RUSTFLAGS = "--target ${stdenv.hostPlatform.rust.rustcTargetSpec}";
+            }
+            // lib.optionalAttrs docSupport {
+              # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
+              NROFF = "${groff}/bin/nroff";
+            };
 
           enableParallelBuilding = true;
           # /build/ruby-2.7.7/lib/fileutils.rb:882:in `chmod':

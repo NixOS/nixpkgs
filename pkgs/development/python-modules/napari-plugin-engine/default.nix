@@ -2,22 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "napari-plugin-engine";
-  version = "0.2.0";
-  format = "setuptools";
+  version = "0.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari-plugin-engine";
-    tag = "v${version}";
-    hash = "sha256-cKpCAEYYRq3UPje7REjzhEe1J9mmrtXs8TBnxWukcNE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GdOip1ekw4MUzGugiaYQQvBKkZaKVoWI/rASelrNmAU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   # Circular dependency: napari
   doCheck = false;
@@ -27,7 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "First generation napari plugin engine";
     homepage = "https://github.com/napari/napari-plugin-engine";
+    changelog = "https://github.com/napari/napari-plugin-engine/releases/tag/{finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
-}
+})

@@ -16,6 +16,7 @@
   gnused,
   gnugrep,
   gawk,
+  mixBuildDirHook,
 }@inputs:
 
 {
@@ -108,6 +109,7 @@ stdenv.mkDerivation (
           elixir
           hex
           git
+          mixBuildDirHook
         ]
       ++
         # Mix deps
@@ -123,28 +125,31 @@ stdenv.mkDerivation (
 
     buildInputs = buildInputs ++ lib.optionals (escriptBinName != null) [ erlang ];
 
-    MIX_ENV = mixEnv;
-    MIX_TARGET = mixTarget;
-    MIX_BUILD_PREFIX = (if mixTarget == "host" then "" else "${mixTarget}_") + "${mixEnv}";
-    MIX_DEBUG = if enableDebugInfo then 1 else 0;
-    HEX_OFFLINE = 1;
-
     __darwinAllowLocalNetworking = true;
 
-    DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
-    # The API with `mix local.rebar rebar path` makes a copy of the binary
-    # some older dependencies still use rebar.
-    MIX_REBAR = "${rebar}/bin/rebar";
-    MIX_REBAR3 = "${rebar3}/bin/rebar3";
+    env = {
+      MIX_ENV = mixEnv;
+      MIX_TARGET = mixTarget;
+      MIX_BUILD_PREFIX = (if mixTarget == "host" then "" else "${mixTarget}_") + "${mixEnv}";
+      MIX_DEBUG = if enableDebugInfo then 1 else 0;
+      HEX_OFFLINE = 1;
 
-    ERL_COMPILER_OPTIONS =
-      let
-        options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];
-      in
-      "[${lib.concatStringsSep "," options}]";
+      DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
+      # The API with `mix local.rebar rebar path` makes a copy of the binary
+      # some older dependencies still use rebar.
+      MIX_REBAR = "${rebar}/bin/rebar";
+      MIX_REBAR3 = "${rebar3}/bin/rebar3";
 
-    LANG = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "C";
-    LC_CTYPE = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "UTF-8";
+      ERL_COMPILER_OPTIONS =
+        let
+          options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];
+        in
+        "[${lib.concatStringsSep "," options}]";
+
+      LANG = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "C";
+      LC_CTYPE = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "UTF-8";
+    }
+    // (attrs.env or { });
 
     postUnpack = ''
       # Mix and Hex
@@ -168,8 +173,6 @@ stdenv.mkDerivation (
       attrs.configurePhase or ''
         runHook preConfigure
 
-        ${./mix-configure-hook.sh}
-
         # This is needed for projects that have a specific compile step
         # the dependency needs to be compiled in order for the task
         # to be available.
@@ -183,13 +186,12 @@ stdenv.mkDerivation (
         ${lib.optionalString (mixNixDeps != { }) ''
           mkdir -p deps
 
-          ${lib.concatMapStringsSep "\n" (dep: ''
-            dep_name=$(basename ${dep} | cut -d '-' -f2)
-            dep_path="deps/$dep_name"
+          ${lib.concatMapAttrsStringSep "\n" (name: dep: ''
+            dep_path="deps/${name}"
             if [ -d "${dep}/src" ]; then
-              ln -s ${dep}/src $dep_path
+              ln -sv ${dep}/src $dep_path
             fi
-          '') (builtins.attrValues mixNixDeps)}
+          '') mixNixDeps}
         ''}
 
         # Symlink deps to build root. Similar to above, but allows for mixFodDeps

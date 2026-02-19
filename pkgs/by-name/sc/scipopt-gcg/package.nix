@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-gcg";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "gcg";
     tag = "v${version}";
-    hash = "sha256-HMhb35Zkjt3yzYk6X1OfigZjJrLuelrkQyCBs/UpFjc=";
+    hash = "sha256-eu7JHtG10/4rzr4xSdoFJjGQ+X5OeWelkEWJOO7QQmE=";
   };
 
   nativeBuildInputs = [
