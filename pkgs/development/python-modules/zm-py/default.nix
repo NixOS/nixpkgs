@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "zm-py";
-  version = "0.5.4";
+  version = "0.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rohankapoorcom";
     repo = "zm-py";
     tag = "v${version}";
-    hash = "sha256-n9FRX2Pnn96H0HVT4SHLJgONc0XzQ005itMNpvl9IYg=";
+    hash = "sha256-lvgkEMQZh0yb4aGx/jxfS3mp0IN6oirwEeDU3m6jWfI=";
   };
 
   nativeBuildInputs = [ poetry-core ];
