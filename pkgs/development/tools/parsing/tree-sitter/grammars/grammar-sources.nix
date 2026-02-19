@@ -1811,10 +1811,10 @@
   };
 
   pascal = {
-    version = "0-unstable-2025-05-17";
+    version = "0.10.2-unstable-2025-12-23";
     url = "github:Isopod/tree-sitter-pascal";
-    rev = "5054931bcd022860dd5936864f981e359fb63aef";
-    hash = "sha256-+5HzlNL54/Wdr7b1vRwZzIU3Z8vqFP9FzmEO1qwxJrk=";
+    rev = "042119eca2e18a60e56317fb06ee3ba5c32cb447";
+    hash = "sha256-jqpY3g19YzX5T2rD4EFUAs594XrUdmk5DjkgGO6MC2g=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
