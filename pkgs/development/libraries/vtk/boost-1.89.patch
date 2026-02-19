@@ -1,0 +1,13 @@
+diff --git a/IO/LAS/CMakeLists.txt b/IO/LAS/CMakeLists.txt
+index aa5b7d6ed4..d67d4326c4 100644
+--- a/IO/LAS/CMakeLists.txt
++++ b/IO/LAS/CMakeLists.txt
+@@ -15,7 +15,7 @@ if (libLAS_VERSION VERSION_LESS "1.8.2" OR
+       iostreams program_options serialization thread)
+   else ()
+     set(boost_components
+-      program_options thread system iostreams filesystem)
++      program_options thread serialization iostreams filesystem)
+   endif ()
+   vtk_module_find_package(PRIVATE_IF_SHARED
+     PACKAGE Boost
