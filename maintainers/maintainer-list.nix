@@ -29098,6 +29098,12 @@
     github = "peterablehmann";
     githubId = 36541313;
   };
+  xiangpenghao = {
+    name = "Xiangpeng Hao";
+    email = "me@xiangpeng.systems";
+    github = "XiangpengHao";
+    githubId = 6504314;
+  };
   xiangpingjiang = {
     email = "xiangpingjiang1998@gmail.com";
     github = "xiangpingjiang";
