@@ -2961,7 +2961,6 @@
      name = "Mr.Banana Egg";
      github = "Mr-Banana-Egg";
      githubId = 183596302;
-     email = "183596302+Mr-Banana-Egg@users.noreply.github.com";
      matrix = "@mrbananaegg:matrix.org";
    };
   bandithedoge = {
