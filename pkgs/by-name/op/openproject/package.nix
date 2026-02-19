@@ -15,6 +15,7 @@
   buildRubyGem,
   makeWrapper,
   which,
+  nixosTests,
   openprojectStatePath ? "/tmp/openproject",
 }:
 
@@ -151,7 +152,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R . $out
   '';
 
-  passthru = { inherit rubyEnv openprojectStatePath; };
+  passthru = {
+    inherit rubyEnv openprojectStatePath;
+    inherit (nixosTests) openproject;
+  };
 
   meta = {
     description = "Open-source project management web application";
