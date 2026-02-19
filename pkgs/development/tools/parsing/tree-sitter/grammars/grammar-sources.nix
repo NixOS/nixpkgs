@@ -2059,7 +2059,7 @@
   };
 
   purescript = {
-    version = "0-unstable-2025-06-17";
+    version = "0.3.0-unstable-2025-06-17";
     url = "github:postsolar/tree-sitter-purescript";
     rev = "f541f95ffd6852fbbe88636317c613285bc105af";
     hash = "sha256-tONS2Eai/eVDecn6ow4nN9F7++UjY6OAKezeCco8hYU=";
