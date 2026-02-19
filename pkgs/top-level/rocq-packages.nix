@@ -47,8 +47,14 @@ let
       mathcomp-solvable = self.mathcomp.solvable;
       mathcomp-field = self.mathcomp.field;
       mathcomp-character = self.mathcomp.character;
+      mathcomp-analysis = callPackage ../development/rocq-modules/mathcomp-analysis { };
+      mathcomp-analysis-stdlib = self.mathcomp-analysis.analysis-stdlib;
       mathcomp-bigenough = callPackage ../development/rocq-modules/mathcomp-bigenough { };
+      mathcomp-classical = self.mathcomp-analysis.classical;
+      mathcomp-experimental-reals = self.mathcomp-analysis.experimental-reals;
       mathcomp-finmap = callPackage ../development/rocq-modules/mathcomp-finmap { };
+      mathcomp-reals = self.mathcomp-analysis.reals;
+      mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
       parseque = callPackage ../development/rocq-modules/parseque { };
       relation-algebra = callPackage ../development/rocq-modules/relation-algebra { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
