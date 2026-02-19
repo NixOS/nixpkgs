@@ -6,7 +6,7 @@
   wrapGAppsNoGuiHook,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "open-fprintd";
   version = "0.7";
   format = "setuptools";
@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uunicorn";
     repo = "open-fprintd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4TraOKvBc7ddqcY73aCuKgfwx4fNoaPHVG8so8Dc5Bw=";
   };
 
@@ -58,4 +58,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

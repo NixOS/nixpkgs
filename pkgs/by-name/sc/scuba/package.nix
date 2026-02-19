@@ -25,7 +25,7 @@ let
     cargoHash = "sha256-YUYo2B5hzzmDeNiWUC+198Qbz+JPgUJfpAqyPWAXTRA=";
   };
 in
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage {
   pname = "scuba";
   inherit src version;
   pyproject = true;

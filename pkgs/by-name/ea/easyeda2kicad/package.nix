@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "easyeda2kicad";
   version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-p4G+bRB29uBohqQpI3PrkwyZId5McJ1t2Ru26hBPSks=";
   };
 
@@ -30,4 +30,4 @@ python3Packages.buildPythonPackage rec {
     maintainers = with lib.maintainers; [ ChocolateLoverRaj ];
     mainProgram = "easyeda2kicad";
   };
-}
+})
