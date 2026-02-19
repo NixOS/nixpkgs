@@ -146,6 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.osl3;
     maintainers = with lib.maintainers; [
       nyabinary
+      miniharinn
     ];
     platforms = lib.platforms.linux;
     mainProgram = "goofcord";
