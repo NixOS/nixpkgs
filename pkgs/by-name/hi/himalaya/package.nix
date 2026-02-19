@@ -18,9 +18,9 @@
 }@args:
 
 let
-  version = "1.1.0";
-  hash = "sha256-gdrhzyhxRHZkALB3SG/aWOdA5iMYkel3Cjk5VBy3E4M=";
-  cargoHash = "sha256-ulqMjpW3UI509vs3jVHXAEQUhxU/f/hN8XiIo8UBRq8=";
+  version = "1.2.0";
+  hash = "sha256-BBzfDeNu7s010ARCYuydCyR7QWrbeI3/B4CxA6d4olw=";
+  cargoHash = "sha256-IkvRiU9NuD6n7aCF8J235u2LjjmLftnF1n874IWVcN0=";
 
   noDefaultFeatures =
     lib.warnIf (args ? buildNoDefaultFeatures)
