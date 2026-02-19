@@ -28,6 +28,7 @@
   libopus,
   libtpms,
   qt6,
+  wayland,
   pkg-config,
   which,
   docbook_xsl,
@@ -103,6 +104,13 @@ let
     qtscxml
     wrapQtAppsHook
     ;
+
+  patchelfWayland = binPath: ''
+    patchelf ${binPath} \
+      --add-needed libwayland-client.so.0 \
+      --add-rpath ${lib.makeLibraryPath [ wayland ]}
+  '';
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "virtualbox";
@@ -386,11 +394,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup =
     optionalString (!headless) ''
+      ${patchelfWayland "$out/bin/VirtualBox"}
       wrapQtApp $out/bin/VirtualBox
     ''
     # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
     # the source code (see postPatch).
     + optionalString (!headless && !enableHardening) ''
+      ${patchelfWayland "$out/libexec/virtualbox/VirtualBoxVM"}
       wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
     '';
 
