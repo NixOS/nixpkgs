@@ -14,7 +14,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xsdata";
   version = "26.2";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h5VGXGXQSG4o8H+Q+Z0SN9rw4mFI8EORNtB+4VAKg/k=";
   };
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTestPaths = [ "tests/integration/benchmarks" ];
 
@@ -77,8 +77,8 @@ buildPythonPackage rec {
     description = "Naive XML & JSON bindings for Python";
     mainProgram = "xsdata";
     homepage = "https://github.com/tefra/xsdata";
-    changelog = "https://github.com/tefra/xsdata/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/tefra/xsdata/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
