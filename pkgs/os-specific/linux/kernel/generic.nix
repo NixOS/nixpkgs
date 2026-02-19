@@ -296,7 +296,6 @@ let
         pos = builtins.unsafeGetAttrPos "version" args;
 
         config = {
-          CONFIG_MODULES = "y";
           CONFIG_FW_LOADER = "y";
           CONFIG_RUST = if withRust then "y" else "n";
         };
