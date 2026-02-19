@@ -7694,6 +7694,9 @@ with pkgs;
     hdf5 = hdf5.override { usev110Api = true; };
   };
 
+  voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix { vulkanSupport = true; };
+  voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix { onnxSupport = true; };
+
   vte-gtk4 = vte.override {
     gtkVersion = "4";
   };
