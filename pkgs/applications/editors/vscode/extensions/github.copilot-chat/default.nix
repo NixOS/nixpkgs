@@ -16,6 +16,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat";
     homepage = "https://github.com/features/copilot";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.laurent-f1z1 ];
+    maintainers = [ ];
   };
 }
