@@ -29,12 +29,9 @@ stdenv.mkDerivation {
     gobject-introspection
   ];
   buildPhase = ''
-      runHook preBuild
-    $CC -fPIC -shared ./Source/GTK-NoCSD.c -o libgtk-nocsd.so.0 \
-    	-Wl,-soname,libgtk-nocsd.so.0 \
-    	$(pkg-config --cflags libadwaita-1) \
-    	$(pkg-config --cflags --libs gobject-2.0 gio-2.0)
-      runHook postBuild
+    runHook preBuild
+    gcc -fPIC -shared ./Source/GTK-NoCSD.c -o libgtk-nocsd.so.0 -Wl,-soname,libgtk-nocsd.so.0 $(pkg-config --cflags libadwaita-1) $(pkg-config --cflags --libs gobject-2.0 gio-2.0)
+    runHook postBuild
   '';
   installPhase = ''
     runHook preInstall
