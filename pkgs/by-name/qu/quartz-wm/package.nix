@@ -23,6 +23,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1+KZNeR4Gq2uWBHTN53PTITHuly1Z4buR+grzdVNwhs=";
   };
 
+  patches = [ ./fix-picture-typedef-conflict.patch ];
+
   configureFlags = [ "--enable-xplugin-dock-support" ];
   nativeBuildInputs = [
     autoreconfHook
