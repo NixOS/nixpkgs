@@ -161,7 +161,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Milkshiift/GoofCord";
     downloadPage = "https://github.com/Milkshiift/GoofCord";
     license = lib.licenses.osl3;
-    maintainers = with lib.maintainers; [ nyabinary ];
+    maintainers = with lib.maintainers; [
+      nyabinary
+      miniharinn
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "goofcord";
   };
