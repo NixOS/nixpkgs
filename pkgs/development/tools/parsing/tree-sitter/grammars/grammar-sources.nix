@@ -2219,7 +2219,7 @@
   };
 
   ron = {
-    version = "0-unstable-2024-05-05";
+    version = "0.2.0-unstable-2024-05-05";
     url = "github:tree-sitter-grammars/tree-sitter-ron";
     rev = "78938553b93075e638035f624973083451b29055";
     hash = "sha256-Sp0g6AWKHNjyUmL5k3RIU+5KtfICfg3o/DH77XRRyI0=";
