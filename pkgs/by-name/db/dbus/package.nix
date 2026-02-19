@@ -106,7 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemdMinimal}/bin/systemctl" ];
 
-  NIX_CFLAGS_LINK = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-Wl,--as-needed";
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    NIX_CFLAGS_LINK = "-Wl,--as-needed";
+  };
 
   enableParallelBuilding = true;
 
