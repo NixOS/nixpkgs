@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   callPackages,
+  nixosTests,
   cacert,
   fetchFromGitHub,
   buildGoModule,
@@ -15,13 +16,13 @@
 let
   nodejs = nodejs_24;
 
-  version = "2025.10.1";
+  version = "2025.10.2";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     tag = "version/${version}";
-    hash = "sha256-HowB6DTGCqz770fKYbnE+rQ11XRV0WSNkLD+HSWZwz8=";
+    hash = "sha256-xBnAfoAOUslOrxNzY5kV0h67qWMXKZnPC/wgRGXZleQ=";
   };
 
   meta = {
@@ -48,8 +49,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-aXXlzTsZp5mOrsxy9oHNzcc+1cFSnbC9RmtawBohmLI=";
-        "x86_64-linux" = "sha256-Hi0HXzwTLuer0v4IKF3aim0tVe7AVLi67DiMimrIq5s=";
+        "aarch64-linux" = "sha256-G8w3E+sfVjjH5Y4YwcP+REJCc4xtvPORwfzvE17bMv4=";
+        "x86_64-linux" = "sha256-+wnrEdRVsamYoECA2I0XDCbyOqErz+3IJo1nahrgnoE=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
 
@@ -119,8 +120,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-t/jyzG3ibTW3fu8Gl1tWkSjMG6Lek/7JDccDrZX6sD0=";
-        "x86_64-linux" = "sha256-8I1YAKvgWjM3p9O1mCetZvhZelrfB31w0ZwkZBUEoh4=";
+        "aarch64-linux" = "sha256-uewIWgYuEJlhBhcZaWYRJKiADlY/JLu0EaZ0GcK7z4Y=";
+        "x86_64-linux" = "sha256-E8LINs4agyWkoSQRgMH7qJBDT9mssRzVQfJ/XFVaCqs=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";
@@ -501,6 +502,7 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     inherit proxy;
+    tests = nixosTests.authentik;
     outposts = callPackages ./outposts.nix {
       inherit (proxy) vendorHash;
     };
