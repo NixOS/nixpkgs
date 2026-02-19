@@ -1,0 +1,19 @@
+{
+  "authentik": {
+    "version": "2025.12.4",
+    "hash": "sha256-alTyrMBbjZbw4jhEna8saabf93sqSrZCu+Z5xH3pZ7M="
+  },
+  "clientgo": {
+    "version": "3.2025.12.4",
+    "hash": "sha256-+/CfOE2HkBU+ZddvdXGenB/z8xNFk8cujpZpMXyh3cY="
+  },
+  "proxyVendorHash": "sha256-pdQg02f1K4nOhsnadoplQYOhEybqZxn+yDQRN5RNygM=",
+  "websiteHashes": {
+    "aarch64-linux": "sha256-GL5FPIBnoEXYtw8DPJpRPe3tT3qioN4AdoeOmCoiYsM=",
+    "x86_64-linux": "sha256-AnceTipq6uUvTbOAZanVshAbAJ9LS1kwImbttTOcWxc="
+  },
+  "webuiHashes": {
+    "aarch64-linux": "sha256-eZZ5Ynj81KwFsU5emPtYZ2CxO8MFvWbJnCHs+L88KQQ=",
+    "x86_64-linux": "sha256-yUAyyO1NFav1EptrRYGSzC8dxCxYVj0FmzHk8IckFZM="
+  }
+}
