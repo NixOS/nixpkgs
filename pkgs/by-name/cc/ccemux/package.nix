@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${desktopItem}/share/applications $out/share/applications
 
     install -D ${finalAttrs.src} $out/share/ccemux/ccemux.jar
-    install -D ${desktopIcon} $out/share/pixmaps/ccemux.png
+    install -D ${desktopIcon} $out/share/icons/hicolor/256x256/apps/ccemux.png
 
     makeWrapper ${jre}/bin/java $out/bin/ccemux \
       --add-flags "-jar $out/share/ccemux/ccemux.jar"

@@ -6,7 +6,7 @@
   static ? true,
   # If true, a separate .static output is created and the .a is moved there.
   # If false, and if `{ static = true; }`, the .a stays in the main output.
-  splitStaticOutput ? shared && static,
+  splitStaticOutput ? shared && static && !stdenv.hostPlatform.isWindows,
   testers,
   minizip,
 }:

@@ -25,7 +25,6 @@
 buildPythonPackage (finalAttrs: {
   pname = "sphinx-design";
   version = "0.7.0";
-
   pyproject = true;
 
   src = fetchFromGitHub {

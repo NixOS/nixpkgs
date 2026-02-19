@@ -92,6 +92,15 @@ stdenv.mkDerivation (
 
     patches = map fetchpatch' patches;
 
+    # https://github.com/ocaml/ocaml/issues/14543
+    postPatch =
+      if stdenv.cc.isClang then
+        ''
+          rm testsuite/tests/basic/trigraph.ml
+        ''
+      else
+        null;
+
     strictDeps = true;
 
     prefixKey = "-prefix ";

@@ -13,7 +13,7 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pacu";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -52,6 +52,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     sqlalchemy
     sqlalchemy-utils
     toml
+    types-urllib3
     typing-extensions
     urllib3
   ]);
@@ -71,6 +72,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     # sAttributeError: module 'moto' has no attribute 'mock_s3'
     "test_update"
     "test_update_second_time"
+
+    # AttributeError: module 'moto' has no attribute 'mock_cognitoidp'
+    "test_cognito__attack_minimal"
+    "test_cognito__attack_sanity"
   ];
 
   meta = {

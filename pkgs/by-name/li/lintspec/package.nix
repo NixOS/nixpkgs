@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lintspec";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "lintspec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XT4tj1FcdQpaL6N9H6Li/D9jrlJtHEZ1EmyE+ObruEY=";
+    hash = "sha256-giCPigyLkWv2d8hdXT3ZmYjl7mYRlTxua0N0JpeC/kc=";
   };
 
-  cargoHash = "sha256-yrzqJyWUNO3AYzGxVj3KA/mftr9Su5ZfelWZEnDbWcE=";
+  cargoHash = "sha256-XsGkEy/uNmd2Em+ypDAAVKDeioaGafzFFHVL18Z0pdg=";
   cargoBuildFlags = [
     "--package"
     "lintspec"

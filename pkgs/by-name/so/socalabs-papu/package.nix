@@ -7,6 +7,7 @@
   alsa-lib,
   copyDesktopItems,
   makeDesktopItem,
+  imagemagick,
   libx11,
   libxcomposite,
   libxcursor,
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     copyDesktopItems
+    imagemagick
     ninja
   ];
 
@@ -113,7 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm555 PAPU_artefacts/Release/Standalone/PAPU $out/bin
 
-    install -Dm444 $src/plugin/Resources/icon.png $out/share/pixmaps/PAPU.png
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    magick $src/plugin/Resources/icon.png -resize 256x256 $out/share/icons/hicolor/256x256/apps/PAPU.png
 
     runHook postInstall
   '';

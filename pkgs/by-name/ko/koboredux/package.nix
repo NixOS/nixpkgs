@@ -31,6 +31,7 @@ let
     sha256 = "09h9r65z8bar2z89s09j6px0gdq355kjf38rmd85xb2aqwnm6xig";
   };
 
+  # TODO: Replace this with fetchItchIo
   assets_src = requireFile {
     name = "koboredux-${version}-Linux.tar.bz2";
     sha256 = "11bmicx9i11m4c3dp19jsql0zy4rjf5a28x4hd2wl8h3bf8cdgav";
@@ -65,7 +66,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = optionalString useProprietaryAssets ''
+  postPatch = ''
+    # CMake 4 support
+    # https://github.com/olofson/koboredux/pull/562
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.8)' \
+      'cmake_minimum_required(VERSION 2.8...4.1)'
+  ''
+  + optionalString useProprietaryAssets ''
     cp -r ../koboredux-${version}-Linux/sfx/redux data/sfx/
     cp -r ../koboredux-${version}-Linux/gfx/redux data/gfx/
     cp -r ../koboredux-${version}-Linux/gfx/redux_fullscreen data/gfx/

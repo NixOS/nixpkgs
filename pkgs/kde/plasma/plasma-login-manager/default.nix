@@ -32,4 +32,8 @@ mkKdeDerivation {
     "-DUID_MAX=29999"
     "-DINSTALL_PAM_CONFIGURATION=OFF"
   ];
+
+  postInstall = ''
+    install -Dm444 ${./defaults.conf} $out/lib/plasmalogin/defaults.conf
+  '';
 }

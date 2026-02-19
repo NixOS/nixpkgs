@@ -44,7 +44,7 @@ appimageTools.wrapAppImage {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -m 444 -D ${src}/Bazecor.desktop -t $out/share/applications
-    install -m 444 -D ${src}/bazecor.png -t $out/share/pixmaps
+    install -m 444 -D ${src}/bazecor.png -t $out/share/icons/hicolor/512x512/apps
 
     mkdir -p $out/lib/udev/rules.d
     install -m 444 -D ${./60-dygma.rules} $out/lib/udev/rules.d/60-dygma.rules

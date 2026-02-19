@@ -7,16 +7,16 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uv-build";
-  version = "0.9.26";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
-    tag = version;
-    hash = "sha256-qvfMB62/0Hvc7m5h+QitvUcS6YZWAV1uGPg8JpCKPNU=";
+    tag = finalAttrs.version;
+    hash = "sha256-nD26zqKMK5LNkeYdqVYteeYL4mYaQQ/QlyjbMDDhLAY=";
   };
 
   nativeBuildInputs = [
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-3ncKhauappl1MR3EG1bwYVrwhM7gCFRcRyRvYrsDaok=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-lEynVemQHCI7ZKD2+1n4K/AtEYRld2+aRLkDMSX8ejM=";
   };
 
   buildAndTestSubdir = "crates/uv-build";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   # Run the tests of a package built by `uv_build`.
   passthru = {
-    tests.built-by-uv = callPackage ./built-by-uv.nix { inherit (pkgs) uv; };
+    tests.built-by-uv = callPackage ./built-by-uv.nix { };
 
     # updateScript is not needed here, as updating is done on staging
   };
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     inherit (pkgs.uv.meta) changelog license;
     maintainers = with lib.maintainers; [ bengsparks ];
   };
-}
+})

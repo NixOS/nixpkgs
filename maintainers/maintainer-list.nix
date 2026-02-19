@@ -5799,12 +5799,6 @@
     name = "Daniil Berendeev";
     keys = [ { fingerprint = "60D7 0EE0 3BD4 A415 B255  1938 6556 0668 006B 4906"; } ];
   };
-  danbst = {
-    email = "abcz2.uprola@gmail.com";
-    github = "danbst";
-    githubId = 743057;
-    name = "Danylo Hlynskyi";
-  };
   danbulant = {
     name = "Daniel Bulant";
     email = "danbulant@gmail.com";
@@ -25293,6 +25287,11 @@
     github = "squat";
     githubId = 20484159;
     keys = [ { fingerprint = "F246 425A 7650 6F37 0552  BA8D DEA9 C405 09D9 65F5"; } ];
+  };
+  squishykid = {
+    github = "squishykid";
+    githubId = 2177912;
+    name = "squishykid";
   };
   srgom = {
     github = "SRGOM";

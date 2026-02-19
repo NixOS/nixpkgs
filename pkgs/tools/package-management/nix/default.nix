@@ -222,14 +222,14 @@ lib.makeExtensible (
 
       nixComponents_git =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.34pre20251217_${lib.substring 0 8 src.rev}";
+          version = "2.34pre20260217_${lib.substring 0 8 src.rev}";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_git";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "b6add8dcc6f4f6feb1ce83aaffe4d7e660e6f616";
-            hash = "sha256-2au7PdQ4HXSuktTPCtOJoD/LNjqMwbHIJmuzEYW1b7I=";
+            rev = "6e725093e6d4dda4f6bdbab20ea3e9e9687225ec";
+            hash = "sha256-dhPINhGyN3N+3zMSdM51DRTEKCPGCNO3+QsbhD0/nFc=";
           };
         }).appendPatches
           patches_common;

@@ -43,16 +43,11 @@ buildPythonPackage rec {
   # integrate the setup hook to set up the build environment for cross compilation
   # this hook is automatically propagated to consumers using setuptools-rust as build-system
   #
-  # No need for the setup hook when python.pythonOnTargetForTarget is empty,
-  # or when the host & target platforms are the same.
-  #
+  # Only include the setup hook if python.pythonOnTargetForTarget is not empty.
   # python.pythonOnTargetForTarget is not always available, for example in
   # pkgsLLVM.python3.pythonOnTargetForTarget. cross build with pkgsLLVM should not be affected.
   setupHook =
-    if
-      python.pythonOnTargetForTarget == { }
-      || (lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform)
-    then
+    if python.pythonOnTargetForTarget == { } then
       null
     else
       replaceVars ./setuptools-rust-hook.sh {

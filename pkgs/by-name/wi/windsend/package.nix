@@ -35,7 +35,7 @@ flutter338.buildFlutterApplication rec {
   ];
 
   postInstall = ''
-    install -Dm644 ../../app_icon/web/icon-512.png $out/share/pixmaps/windsend.png
+    install -Dm644 ../../app_icon/web/icon-512.png $out/share/icons/hicolor/512x512/apps/windsend.png
   '';
 
   passthru.updateScript = ./update.sh;

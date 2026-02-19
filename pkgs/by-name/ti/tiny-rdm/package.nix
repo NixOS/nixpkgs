@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   fetchNpmDeps,
+  imagemagick,
   npmHooks,
   nodejs,
   wails,
@@ -48,6 +49,7 @@ buildGoModule (finalAttrs: {
     nodejs
     npmHooks.npmConfigHook
     copyDesktopItems
+    imagemagick
   ];
 
   buildInputs = [ webkitgtk_4_1 ];
@@ -79,7 +81,8 @@ buildGoModule (finalAttrs: {
     runHook preInstall
 
     install -Dm 0755 build/bin/tiny-rdm $out/bin/tiny-rdm
-    install -Dm 0644 frontend/src/assets/images/icon.png $out/share/pixmaps/tiny-rdm.png
+    mkdir -p $out/share/icons/hicolor/96x96/apps
+    magick frontend/src/assets/images/icon.png -resize 96x96 $out/share/icons/hicolor/96x96/apps/tiny-rdm.png
 
     runHook postInstall
   '';

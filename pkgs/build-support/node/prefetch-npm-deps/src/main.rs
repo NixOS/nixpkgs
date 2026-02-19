@@ -67,6 +67,20 @@ const ALLOWED_VERSION_FIELDS: &[&str] = &[
     "scripts",
 ];
 
+/// Allowed fields in `dist` sub-objects.
+///
+/// Only fields that npm reads during `npm install` are included.
+/// Excluded volatile fields:
+///   - `signatures`: changes when npm rotates registry signing keys
+///   - `npm-signature`: legacy signature format, also mutable
+///   - `attestations`: provenance attestations, can be added/updated post-publish
+///   - `fileCount`, `unpackedSize`: informational only, not used during install
+const ALLOWED_DIST_FIELDS: &[&str] = &[
+    "tarball",   // URL to download the package tarball
+    "integrity", // SRI hash for verification (e.g., sha512-...)
+    "shasum",    // SHA-1 fallback hash for older lockfiles
+];
+
 fn normalize_packument(
     package_name: &str,
     data: &[u8],
@@ -91,6 +105,12 @@ fn normalize_packument(
         for version_val in versions.values_mut() {
             if let Some(version_obj) = version_val.as_object_mut() {
                 version_obj.retain(|key, _| ALLOWED_VERSION_FIELDS.contains(&key.as_str()));
+
+                // Normalize the dist sub-object to strip volatile fields
+                // (signatures, npm-signature, attestations, fileCount, unpackedSize)
+                if let Some(Value::Object(dist_obj)) = version_obj.get_mut("dist") {
+                    dist_obj.retain(|key, _| ALLOWED_DIST_FIELDS.contains(&key.as_str()));
+                }
             }
         }
     }

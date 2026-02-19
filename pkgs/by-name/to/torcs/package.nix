@@ -1,4 +1,5 @@
 {
+  imagemagick,
   stdenv,
   symlinkJoin,
   torcs-without-data,
@@ -20,7 +21,11 @@ let
 
     installTargets = "export datainstall";
     postInstall = ''
-      install -D -m644 Ticon.png $out/share/pixmaps/torcs.png
+      mkdir -p $out/share/icons/hicolor/64x64/apps
+      ${imagemagick}/bin/magick Ticon.png -resize 64x64 $out/share/icons/hicolor/64x64/apps/torcs.png
+
+      substituteInPlace torcs.desktop \
+        --replace-fail "Icon=torcs.png" "Icon=torcs"
       install -D -m644 torcs.desktop $out/share/applications/torcs.desktop
     '';
 

@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "autosuspend";
-  version = "10.0.0";
+  version = "10.1.0";
   pyproject = true;
 
   outputs = [
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "languitar";
     repo = "autosuspend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o9Jpb4i2/SJ3s3h5sclNjpaN/UFk1YbpPf7b3rGXLRg=";
+    hash = "sha256-4mByuJ75hd5TEoKxVglAHlYXZSlbAldMwnIianSw8O4=";
   };
 
   postPatch = ''

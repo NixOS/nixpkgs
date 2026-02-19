@@ -1,16 +1,3 @@
-diff --git a/meson.build b/meson.build
-index 9e69128d..8c53ac88 100644
---- a/meson.build
-+++ b/meson.build
-@@ -226,7 +226,7 @@ if is_64bit_system
-   xcb_64bit_dep = dependency('xcb')
- endif
- if with_bitbridge
--  xcb_32bit_dep = winegcc.find_library('xcb')
-+  xcb_32bit_dep = winegcc.find_library('xcb', dirs: ['@libxcb32@/lib'])
- endif
- 
- # These are all headers-only libraries, and thus won't require separate 32-bit
 diff --git a/src/common/notifications.cpp b/src/common/notifications.cpp
 index 654b6c83..78ba2fe7 100644
 --- a/src/common/notifications.cpp

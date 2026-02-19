@@ -37,7 +37,7 @@ appimageTools.wrapAppImage {
   # Add desktop convencience stuff
   extraInstallCommands = ''
     install -D --mode 0644 ${appimageContents}/todoist.desktop -t $out/share/applications
-    install -D --mode 0644 ${appimageContents}/todoist.png -t $out/share/pixmaps
+    install -D --mode 0644 ${appimageContents}/todoist.png -t $out/share/icons/hicolor/512x512/apps
     substituteInPlace $out/share/applications/todoist.desktop \
       --replace-fail "Exec=AppRun" "Exec=todoist-electron --" \
       --replace-fail "Exec=todoist" "Exec=todoist-electron --"

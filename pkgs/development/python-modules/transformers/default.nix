@@ -7,17 +7,15 @@
   setuptools,
 
   # dependencies
-  filelock,
   huggingface-hub,
   numpy,
-  protobuf,
   packaging,
   pyyaml,
   regex,
   safetensors,
   tokenizers,
   tqdm,
-  typer-slim,
+  typer,
 
   # optional-dependencies
   # sklearn
@@ -25,23 +23,28 @@
   # torch
   torch,
   accelerate,
-  # hf_xet
-  hf-xet,
+  # deepspeed
+  # deepspeed,
+  # codecarbon
+  # codecarbon,
   # retrieval
   faiss,
   datasets,
-  # tokenizers
-  # ftfy
-  ftfy,
-  # modelcreation
-  cookiecutter,
+  # ja
+  fugashi,
+  ipadic,
+  sudachipy,
+  # sudachidict_core,
+  # unidic_lite,
+  unidic,
+  # rhoknp,
   # sagemaker
   sagemaker,
   # optuna
   optuna,
   # ray
   ray,
-  # hub-kernels
+  # kernels
   kernels,
   # serving
   openai,
@@ -52,8 +55,9 @@
   rich,
   # audio
   librosa,
+  # pyctcdecode,
   phonemizer,
-  # speech
+  # kenlm,
   torchaudio,
   # vision
   pillow,
@@ -67,6 +71,7 @@
   num2words,
   # sentencepiece
   sentencepiece,
+  protobuf,
   # tiktoken
   tiktoken,
   blobfile,
@@ -80,27 +85,32 @@
   gitpython,
   urllib3,
   libcst,
-  pandas,
-  # torchhub
-  importlib-metadata,
+  # opentelemetry
+  opentelemetry-api,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "transformers";
-  version = "5.0.0";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ART1ARd+hfC0GQNDa225SWF0zTFUKE4eDxFYbWFaTl8=";
+    hash = "sha256-vus4Y+1QXUNqwBO1ZK0gWd+sJBPwrqWW7O2sn0EBvno=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "typer-slim" "typer"
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
-    filelock
     huggingface-hub
     numpy
     packaging
@@ -109,18 +119,18 @@ buildPythonPackage (finalAttrs: {
     safetensors
     tokenizers
     tqdm
-    typer-slim
+    typer
   ];
 
   optional-dependencies = lib.fix (self: {
     ja = [
-      # fugashi
-      # ipadic
+      fugashi
+      ipadic
       # unidic_lite
-      # unidic
-      # sudachipy
-      # sudachidict_core
+      unidic
       # rhoknp
+      sudachipy
+      # sudachidict_core
     ];
     sklearn = [ scikit-learn ];
     torch = [
@@ -128,14 +138,10 @@ buildPythonPackage (finalAttrs: {
       accelerate
     ];
     accelerate = [ accelerate ];
-    hf_xet = [ hf-xet ];
     retrieval = [
       faiss
       datasets
     ];
-    tokenizers = [ tokenizers ];
-    ftfy = [ ftfy ];
-    modelcreation = [ cookiecutter ];
     sagemaker = [ sagemaker ];
     deepspeed = [
       # deepspeed
@@ -143,8 +149,11 @@ buildPythonPackage (finalAttrs: {
     ++ self.accelerate;
     optuna = [ optuna ];
     ray = [ ray ] ++ ray.optional-dependencies.tune;
-    hub-kernels = [ kernels ];
-    integrations = self.hub-kernels ++ self.optuna ++ self.ray;
+    kernels = [ kernels ];
+    codecarbon = [
+      # codecarbon
+    ];
+    integrations = self.kernels ++ self.optuna ++ self.codecarbon ++ self.ray;
     serving = [
       openai
       pydantic
@@ -155,22 +164,16 @@ buildPythonPackage (finalAttrs: {
     ]
     ++ self.torch;
     audio = [
+      torchaudio
       librosa
       # pyctcdecode
       phonemizer
-      # kenlm
     ];
-    speech = [ torchaudio ] ++ self.audio;
-    torch-speech = [ torchaudio ] ++ self.audio;
-    vision = [ pillow ];
+    vision = [
+      torchvision
+      pillow
+    ];
     timm = [ timm ];
-    torch-vision = [ torchvision ] ++ self.vision;
-    natten = [
-      # natten
-    ];
-    codecarbon = [
-      # codecarbon
-    ];
     video = [ av ];
     num2words = [ num2words ];
     sentencepiece = [
@@ -182,7 +185,7 @@ buildPythonPackage (finalAttrs: {
       blobfile
     ];
     mistral-common = [ mistral-common ] ++ mistral-common.optional-dependencies.image;
-    chat_template = [
+    chat-template = [
       jinja2
       jmespath
     ];
@@ -193,23 +196,14 @@ buildPythonPackage (finalAttrs: {
       urllib3
       libcst
       rich
-      pandas
-    ];
-    torchhub = [
-      filelock
-      huggingface-hub
-      importlib-metadata
-      numpy
-      packaging
-      protobuf
-      regex
-      sentencepiece
-      torch
-      tokenizers
-      tqdm
     ];
     benchmark = [
       # optimum-benchmark
+    ];
+    open-telemetry = [
+      opentelemetry-api
+      opentelemetry-exporter-otlp
+      opentelemetry-sdk
     ];
   });
 
@@ -226,6 +220,7 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+      GaetanLepage
       pashashocky
       happysalada
     ];

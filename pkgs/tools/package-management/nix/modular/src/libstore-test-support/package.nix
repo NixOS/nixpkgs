@@ -8,6 +8,8 @@
 
   rapidcheck,
 
+  gtest,
+
   # Configuration Options
 
   version,
@@ -24,7 +26,8 @@ mkMesonLibrary (finalAttrs: {
     nix-store
     nix-store-c
     rapidcheck
-  ];
+  ]
+  ++ lib.optional (lib.versionAtLeast version "2.34pre") gtest;
 
   mesonFlags = [
   ];

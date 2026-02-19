@@ -6,6 +6,7 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  isPy313,
   typing-extensions,
 }:
 
@@ -20,6 +21,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-3WInufN+Pp6vB/Gik6e8V1a34Dr/oiH3wDMB+2lHRMM=";
   };
+
+  # CPython fixed https://github.com/python/cpython/issues/141732 in
+  # https://github.com/python/cpython/pull/141736, but exceptiongroup 1.3.1,
+  # including its test suite, still matches the old repr behavior.
+  # The CPython fix has only been backported to 3.13 so far, where it was
+  # first included in version 3.13.12, so we only need to patch for 3.13
+  # and 3.15+.
+  # Upstream issue: https://github.com/agronholm/exceptiongroup/issues/154
+  patches = lib.optional (isPy313 || pythonAtLeast "3.15") ./match-repr-fix.patch;
 
   build-system = [ flit-scm ];
 

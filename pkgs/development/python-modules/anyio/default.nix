@@ -11,14 +11,12 @@
   # dependencies
   exceptiongroup,
   idna,
-  sniffio,
   typing-extensions,
 
   # optionals
   trio,
 
   # tests
-  blockbuster,
   hypothesis,
   psutil,
   pytest-mock,
@@ -47,7 +45,6 @@ buildPythonPackage rec {
 
   dependencies = [
     idna
-    sniffio
   ]
   ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
@@ -58,7 +55,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    blockbuster
     exceptiongroup
     hypothesis
     psutil

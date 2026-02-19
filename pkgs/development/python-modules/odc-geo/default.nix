@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   affine,
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
+    flit-core
   ];
 
   dependencies = [
@@ -96,6 +96,8 @@ buildPythonPackage rec {
     "test_warp_nan"
     # requires imagecodecs package (currently not available on nixpkgs)
     "test_cog_with_dask_smoke_test"
+    # xarray compat issue
+    "test_xr_reproject"
   ];
 
   pythonImportsCheck = [
