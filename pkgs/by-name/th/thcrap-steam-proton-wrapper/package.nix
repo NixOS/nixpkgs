@@ -5,7 +5,6 @@
   makeWrapper,
   bash,
   subversion,
-  zenity,
 }:
 stdenv.mkDerivation {
   pname = "thcrap-proton";
@@ -37,7 +36,6 @@ stdenv.mkDerivation {
         lib.makeBinPath [
           bash
           subversion
-          zenity
         ]
       }
   '';
