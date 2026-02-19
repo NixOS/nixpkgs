@@ -86,6 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Ettercap/ettercap/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [
+      pSub
+      makefu
+    ];
   };
 })
