@@ -53,6 +53,7 @@
   ./hardware/all-firmware.nix
   ./hardware/all-hardware.nix
   ./hardware/apple-touchbar.nix
+  ./hardware/bequiet.nix
   ./hardware/bladeRF.nix
   ./hardware/brillo.nix
   ./hardware/ckb-next.nix
