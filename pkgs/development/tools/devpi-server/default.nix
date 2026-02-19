@@ -37,8 +37,6 @@ buildPythonApplication (finalAttrs: {
   version = "6.17.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
@@ -48,17 +46,12 @@ buildPythonApplication (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace "--flake8" ""
-  '';
-
-  nativeBuildInputs = [
+  buildSystem = [
     setuptools
     setuptools-changelog-shortener
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     appdirs
     defusedxml
@@ -107,7 +100,7 @@ buildPythonApplication (finalAttrs: {
     "test_devpi_server/test_streaming_replica_nginx.py"
   ];
   disabledTests = [
-    "test_fetch_later_deleted"
+    "test_fetch_later_deleted" # incompatible with newer pytest
   ];
 
   __darwinAllowLocalNetworking = true;
