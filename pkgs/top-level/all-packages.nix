@@ -4629,15 +4629,35 @@ with pkgs;
     enableGui = true;
   };
 
-  ocaml-ng = callPackage ./ocaml-packages.nix { };
-  ocaml = ocamlPackages.ocaml;
+  mkOcamlPackages = callPackage ./ocaml-packages.nix { };
 
-  ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
-  ocamlPackages_latest = recurseIntoAttrs ocaml-ng.ocamlPackages_latest;
+  ocamlPackages_4_09 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.09.nix { });
+  ocamlPackages_4_10 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.10.nix { });
+  ocamlPackages_4_11 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.11.nix { });
+  ocamlPackages_4_12 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.12.nix { });
+  ocamlPackages_4_13 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.13.nix { });
+  ocamlPackages_4_14 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.14.nix { });
+  ocamlPackages_5_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.0.nix { });
+  ocamlPackages_5_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.1.nix { });
+  ocamlPackages_5_2 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.2.nix { });
+  ocamlPackages_5_3 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.3.nix { });
+  ocamlPackages_5_4 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.4.nix { });
+  ocamlPackages_latest = recurseIntoAttrs ocamlPackages_5_4;
+  ocamlPackages = recurseIntoAttrs ocamlPackages_5_3;
+
+  # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
+  # Below are aliases for porting them to the latest versions of the OCaml 4 series.
+  ocamlPackages_4_14_unsafe_string = mkOcamlPackages (
+    callPackage ../development/compilers/ocaml/4.14.nix {
+      unsafeStringSupport = true;
+    }
+  );
+
+  ocaml = ocamlPackages.ocaml;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 
-  inherit (ocaml-ng.ocamlPackages_4_14)
+  inherit (ocamlPackages_4_14)
     ocamlformat_0_19_0
     ocamlformat_0_20_0
     ocamlformat_0_20_1
@@ -4650,7 +4670,7 @@ with pkgs;
     ocamlformat_0_26_1
     ;
 
-  inherit (ocaml-ng.ocamlPackages_5_2)
+  inherit (ocamlPackages_5_2)
     ocamlformat_0_26_2
     ;
 
