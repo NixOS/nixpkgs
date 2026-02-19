@@ -288,17 +288,42 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         )
 
 
-@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    side_effect=[
+        CompletedProcess([], returncode=0, stdout="4\n"),
+        CompletedProcess([], returncode=0),
+        CompletedProcess([], returncode=0),
+        CompletedProcess([], returncode=0),
+        CompletedProcess([], returncode=0),
+    ],
+)
 def test_edit(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
     with monkeypatch.context() as mp:
-        default_nix = tmpdir / "default.nix"
-        default_nix.write_text("{}", encoding="utf-8")
+        system_nix = tmpdir / "system.nix"
+        config_nix = tmpdir / "configuration.nix"
+        config_nix.write_text("", encoding="utf-8")
 
-        mp.setenv("NIXOS_CONFIG", str(tmpdir))
-        mp.setenv("EDITOR", "editor")
+        # with system.nix, attr
+        mp.setenv("EDITOR", "vim")
+        n.edit(m.BuildAttr(system_nix, "foo"))
+        mock_run.assert_called_with(["vim", "+4", system_nix], check=False)
 
-        n.edit()
-        mock_run.assert_called_with(["editor", default_nix], check=False)
+        # same but with unsupported editor
+        mp.setenv("EDITOR", "ed")
+        n.edit(m.BuildAttr(system_nix, "foo"))
+        mock_run.assert_called_with(["ed", system_nix], check=False)
+
+        # with system.nix, but no attr
+        mp.setenv("EDITOR", "emacs")
+        mp.setenv("NIXOS_CONFIG", str(config_nix))
+        n.edit(m.BuildAttr(system_nix, None))
+        mock_run.assert_called_with(["emacs", config_nix], check=False)
+
+        # without both system.nix and attr
+        n.edit(m.BuildAttr("<nixpkgs/nixos>", None))
+        mock_run.assert_called_with(["emacs", config_nix], check=False)
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
@@ -566,7 +591,6 @@ def test_list_generations(mock_get_generations: Mock, tmp_path: Path) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_diff_closures(mock_run: Mock) -> None:
-
     n.diff_closures(
         Path("/run/current-system"), Path("/nix/var/nix/profiles/system"), None
     )

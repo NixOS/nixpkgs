@@ -344,14 +344,13 @@ def build_and_activate_system(
     )
 
 
-def edit(flake: Flake | None, grouped_nix_args: GroupedNixArgs) -> None:
+def edit(
+    build_attr: BuildAttr, flake: Flake | None, grouped_nix_args: GroupedNixArgs
+) -> None:
     if flake:
-        nix.edit_flake(
-            flake,
-            grouped_nix_args.flake_build_flags | grouped_nix_args.flake_eval_flags,
-        )
+        nix.edit_flake(flake, grouped_nix_args.flake_build_flags)
     else:
-        nix.edit()
+        nix.edit(build_attr)
 
 
 def list_generations(

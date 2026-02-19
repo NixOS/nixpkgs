@@ -1,3 +1,4 @@
+import logging
 import platform
 import re
 import subprocess
@@ -5,12 +6,15 @@ from argparse import Namespace
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, ClassVar, Self, TypedDict, override
+from typing import Any, ClassVar, Final, Self, TypedDict, override
 
+from . import nix
 from .process import Remote, run_wrapper
 from .utils import Args
 
 type ImageVariants = dict[str, str]
+
+logger: Final = logging.getLogger(__name__)
 
 
 class NixOSRebuildError(Exception):
@@ -58,9 +62,39 @@ class BuildAttr:
 
     @classmethod
     def from_arg(cls, attr: str | None, file: str | None) -> Self:
-        if not (attr or file):
-            return cls("<nixpkgs/nixos>", None)
-        return cls(Path(file or "default.nix"), attr)
+        # We use, in this order:
+        #
+        #   1. the --file argument
+        #   2. system.nix in the working directory
+        #   3. <nixos-system>
+        #   4. /etc/nixos/system.nix
+        #
+        # If none are present, fall back to <nixpkgs/nixos>,
+        # which uses the channel and configuration.nix file.
+        if file:
+            return cls(Path(file), attr)
+        elif Path("system.nix").exists():
+            return cls(Path("system.nix"), attr)
+        elif nix.find_file("nixos-system"):
+            return cls("<nixos-system>", attr)
+        elif Path("/etc/nixos/system.nix").exists():
+            return cls(Path("/etc/nixos/system.nix"), attr)
+        elif Path("default.nix").exists():
+            # Backward compatibility
+            logger.warning(
+                "default.nix has been deprecated, please rename"
+                " your file to system.nix to fix this warning."
+            )
+            return cls(Path("default.nix"), attr)
+        elif Path("/etc/nixos/default.nix").exists():
+            # Backward compatibility
+            logger.warning(
+                "default.nix has been deprecated, please rename"
+                " your file to system.nix to fix this warning."
+            )
+            return cls(Path("/etc/nixos/default.nix"), attr)
+        else:
+            return cls("<nixpkgs/nixos>", attr)
 
 
 @dataclass(frozen=True)

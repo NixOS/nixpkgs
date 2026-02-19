@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import sys
 import textwrap
 import uuid
@@ -238,18 +239,36 @@ def copy_closure(
             nix_copy(to_host, from_host)
 
 
-def edit() -> None:
+def edit(build_attr: BuildAttr) -> None:
     "Try to find and open NixOS configuration file in editor."
-    nixos_config = Path(
-        os.getenv("NIXOS_CONFIG") or find_file("nixos-config") or "/etc/nixos"
-    )
-    if nixos_config.is_dir():
-        nixos_config /= "default.nix"
-
-    if nixos_config.exists():
-        run_wrapper([os.getenv("EDITOR", "nano"), nixos_config], check=False)
+    editor = os.getenv("EDITOR", "nano")
+    if build_attr.attr:
+        args = [editor]
+        if re.findall(r"emacs|nano|vim|kak", editor):
+            # Get the attribute position
+            r = run_wrapper(
+                [
+                    "nix-instantiate",
+                    "--eval",
+                    "--expr",
+                    f'(builtins.unsafeGetAttrPos "{build_attr.attr}" '
+                    f"(import {build_attr.path})).line",
+                ]
+            )
+            if r.returncode == 0:
+                args.append("+" + r.stdout.strip())
+        args.append(str(build_attr.path))
+        run_wrapper(args, check=False)
     else:
-        raise NixOSRebuildError("cannot find NixOS config file")
+        nixos_config = Path(
+            os.getenv("NIXOS_CONFIG")
+            or find_file("nixos-config")
+            or "/etc/nixos/configuration.nix"
+        )
+        if nixos_config.exists():
+            run_wrapper([editor, nixos_config], check=False)
+        else:
+            raise NixOSRebuildError("cannot find NixOS config file")
 
 
 def edit_flake(flake: Flake | None, flake_flags: Args | None = None) -> None:
