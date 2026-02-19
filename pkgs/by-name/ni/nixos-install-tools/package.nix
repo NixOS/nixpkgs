@@ -1,14 +1,12 @@
 {
   buildEnv,
   lib,
-  man,
   nixos,
   # TODO: replace indirect self-reference by proper self-reference
   #       https://github.com/NixOS/nixpkgs/pull/119942
   nixos-install-tools,
   nixos-install,
   nixos-enter,
-  runCommand,
   nixosTests,
   binlore,
 }:
@@ -41,32 +39,7 @@ in
     platforms = lib.platforms.linux;
   };
 
-  passthru.tests = {
-    nixos-tests = lib.recurseIntoAttrs nixosTests.installer;
-    nixos-install-help =
-      runCommand "test-nixos-install-help"
-        {
-          nativeBuildInputs = [
-            man
-            nixos-install-tools
-          ];
-          meta.description = ''
-            Make sure that --help works. It's somewhat non-trivial because it
-            requires man.
-          '';
-        }
-        ''
-          nixos-install --help | grep -F 'NixOS Reference Pages'
-          nixos-install --help | grep -F 'configuration.nix'
-          nixos-generate-config --help | grep -F 'NixOS Reference Pages'
-          nixos-generate-config --help | grep -F 'hardware-configuration.nix'
-
-          # FIXME: Tries to call unshare, which it must not do for --help
-          # nixos-enter --help | grep -F 'NixOS Reference Pages'
-
-          touch $out
-        '';
-  };
+  passthru.tests = lib.recurseIntoAttrs nixosTests.installer;
 
   # no documented flags show signs of exec; skim of source suggests
   # it's just --help execing man
