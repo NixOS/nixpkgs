@@ -1,57 +1,66 @@
 {
   lib,
-  python,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   numpy,
   lxml,
   trimesh,
+
+  # optional deps
+  colorlog,
+  manifold3d,
+  charset-normalizer,
+  jsonschema,
+  networkx,
+  svg-path,
+  pycollada,
+  shapely,
+  xxhash,
+  rtree,
+  httpx,
+  scipy,
+  pillow,
+  mapbox-earcut,
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.6.10";
+  version = "4.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-tlIsRZLmnRCqVHcLQOh6Jmne3rZGS95QudnvJHMu1qs=";
+    hash = "sha256-N9loKQ+xcUtug98K2nsCs5kXUnLLtxCqNH8L8wStb74=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
 
-  optional-dependencies = with python.pkgs; {
-    easy =
-      [
-        colorlog
-        manifold3d
-        charset-normalizer
-        lxml
-        jsonschema
-        networkx
-        svg-path
-        pycollada
-        shapely
-        xxhash
-        rtree
-        httpx
-        scipy
-        pillow
-        # vhacdx # not packaged
-        mapbox-earcut
-      ]
-      ++ lib.optionals embreex.meta.available [
-        embreex
-      ];
+  optional-dependencies = {
+    easy = [
+      colorlog
+      manifold3d
+      charset-normalizer
+      lxml
+      jsonschema
+      networkx
+      svg-path
+      pycollada
+      shapely
+      xxhash
+      rtree
+      httpx
+      scipy
+      pillow
+      # vhacdx # not packaged
+      mapbox-earcut
+      # embreex # not packaged
+    ];
   };
 
   nativeCheckInputs = [
@@ -64,7 +73,7 @@ buildPythonPackage rec {
     "test_load"
   ];
 
-  pytestFlagsArray = [ "tests/test_minimal.py" ];
+  enabledTestPaths = [ "tests/test_minimal.py" ];
 
   pythonImportsCheck = [
     "trimesh"

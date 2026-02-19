@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "aribb25";
-    # rev = version; FIXME: uncomment in next release
+    # tag = version; FIXME: uncomment in next release
     rev = "c14938692b313b5ba953543fd94fd1cad0eeef18"; # 0.2.7 with build fixes
     sha256 = "1kb9crfqib0npiyjk4zb63zqlzbhqm35nz8nafsvdjd71qbd2amp";
   };
@@ -48,12 +48,12 @@ stdenv.mkDerivation {
       })
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Sample implementation of the ARIB STD-B25 standard";
     homepage = "https://code.videolan.org/videolan/aribb25";
-    license = licenses.isc;
-    maintainers = with maintainers; [ midchildan ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ midchildan ];
     mainProgram = "b25";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

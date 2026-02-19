@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
+  setuptools-scm,
   dataclasses-json,
   requests,
   pytestCheckHook,
@@ -14,23 +14,24 @@
 
 buildPythonPackage rec {
   pname = "pyecotrend-ista";
-  version = "3.3.2";
+  version = "3.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Ludy87";
     repo = "pyecotrend-ista";
     tag = version;
-    hash = "sha256-TZDHEaDc7UACIAHNX1fStJH74qLKf+krWbTDtemXahA=";
+    hash = "sha256-O5HU0U19E+cS1/UVYouxbyTBNjenJw9kkH80GCZ04cw=";
   };
 
   postPatch = ''
     sed -i "/addopts =/d" pyproject.toml
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     dataclasses-json

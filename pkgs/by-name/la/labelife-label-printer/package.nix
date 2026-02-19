@@ -2,38 +2,60 @@
   lib,
   stdenv,
   fetchurl,
+  unzip,
   cups,
   autoPatchelfHook,
 }:
 
+let
+  archAttrset = {
+    aarch64-linux = "aarch64";
+    armv6l-linux = "arm";
+    armv7l-linux = "armhf";
+    i686-linux = "i386";
+    x86_64-linux = "x86_64";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "labelife-label-printer";
-  version = "1.2.1";
+  version = "2.2.0.002";
 
   arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      "x86_64"
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      "i386"
-    else
-      throw "Unsupported system: ${stdenv.hostPlatform.system}";
+    archAttrset.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://oss.saas.aimocloud.com/saas/Lablife/bag/LabelPrinter-${finalAttrs.version}.tar.gz";
-    hash = "sha256-twnIFMBMyEM3xGlsuk3763C3emz3mgpEnlfvnL0XRWw=";
+    url = "https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
+    hash = "sha256-yUrEV3pdTqiATZ1V9Ze0zTjsyA3b9i+Bbh1v0FzGeas=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    unzip
+    autoPatchelfHook
+  ];
   buildInputs = [ cups ];
+
+  unpackPhase = ''
+    runHook preUnpack
+
+    # Extract outer ZIP file
+    unzip -q ${finalAttrs.src}
+
+    # Extract inner tar.gz with --strip-components=1 to remove the `LabelPrinter-${finalAttrs.version}/` prefix
+    tar -xzf Label_Printer_Driver_Linux.tar.gz --strip-components=1
+
+    runHook postUnpack
+  '';
 
   installPhase = ''
     runHook preInstall
+
     # Install the CUPS filter with executable permissions
     install -Dm755 ./${finalAttrs.arch}/rastertolabeltspl $out/lib/cups/filter/rastertolabeltspl
 
     # Install all PPD files with read and write permissions for owner, and read for group and others
     for ppd in ./ppds/*.ppd; do
-      install -Dm644 $ppd $out/share/cups/model/label/$(basename $ppd)
+      install -Dm644 "$ppd" "$out/share/cups/model/label/$(basename "$ppd")"
     done
     runHook postInstall
   '';
@@ -46,9 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       Supported printer models include:
       - D520 & D520BT
-      - PM-201
       - PM-241 & PM-241-BT
-      - PM-246 & PM-246S
 
       Brands using Labelife drivers include:
       - Phomemo
@@ -57,10 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Aimo
     '';
     maintainers = with lib.maintainers; [ daniel-fahey ];
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-    ];
+    platforms = lib.attrNames archAttrset;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

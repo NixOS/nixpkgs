@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-6hGEcJz+zGfwz1q+XKQYfyJJK7lr+kCgk2/uiq1xP0M=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-u+aMwj+IxFY+fSAECkKr8dSPVw2q+FXZpgwwexu7BFU=";
 
   nativeBuildInputs = [ python3 ];
@@ -26,7 +25,7 @@ rustPlatform.buildRustPackage {
   # has not tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Automatically change sway workspace names based on their contents";
     mainProgram = "swaywsr";
     longDescription = ''
@@ -35,7 +34,7 @@ rustPlatform.buildRustPackage {
       window property for each window in a workspace.
     '';
     homepage = "https://github.com/pedroscaff/swaywsr";
-    license = licenses.mit;
-    maintainers = [ maintainers.sebbadk ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sebbadk ];
   };
 }

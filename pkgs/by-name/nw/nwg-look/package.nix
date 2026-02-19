@@ -8,19 +8,19 @@
   cairo,
   gtk3,
   xcur2png,
-  libX11,
+  libx11,
   zlib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nwg-look";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-look";
-    rev = "v${version}";
-    hash = "sha256-SyGyW4Hq0zT+jBrCmsuG+9Smcu4ruP6+aR3VUK205MM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cNVUgtbdzEuttDO7DZyipDugACr/fIU8RKmh5trykPw=";
   };
 
   vendorHash = "sha256-8ooWJTOC4fmuu+/Dy7JOaGSO5YlsMfKcf2lyv2ojJIw=";
@@ -39,7 +39,7 @@ buildGoModule rec {
     glib
     cairo
     xcur2png
-    libX11.dev
+    libx11.dev
     zlib
     gtk3
   ];
@@ -66,12 +66,12 @@ buildGoModule rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nwg-piotr/nwg-look";
     description = "GTK settings editor, designed to work properly in wlroots-based Wayland environment";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ max-amb ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ max-amb ];
     mainProgram = "nwg-look";
   };
-}
+})

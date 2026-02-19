@@ -5,24 +5,21 @@
   buildPythonPackage,
   fetchFromGitHub,
   jsonrpc-base,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
-  version = "3.1.5";
+  version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = "jsonrpc-websocket";
     tag = version;
-    hash = "sha256-CdYa4gcbG3EM1glxLU1hyqbNse87KJKjwSRQSFfDMM0=";
+    hash = "sha256-SgwEY/5MPEkSrcsQV4qkVgKmYYYsWA2YluReOz7sEjc=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -34,21 +31,24 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--asyncio-mode=auto"
+  ];
+
+  enabledTestPaths = [
     "tests.py"
   ];
 
   pythonImportsCheck = [ "jsonrpc_websocket" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON-RPC websocket client library for asyncio";
     homepage = "https://github.com/emlove/jsonrpc-websocket";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

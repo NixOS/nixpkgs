@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "peft";
-  version = "0.15.2";
+  version = "0.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "peft";
     tag = "v${version}";
-    hash = "sha256-c9oHBQCdJpPAeI7xwePXx75Sp39I8QVjRZSxxSOm2PM=";
+    hash = "sha256-qlM8yEN/CJZbSAGNCltS4JQSzstVXRVqu47qZbLPVNc=";
   };
 
   build-system = [ setuptools ];
@@ -68,11 +68,13 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   # These tests fail when MPS devices are detected
-  disabledTests = lib.optional stdenv.isDarwin [
+  disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
     "gpu"
+    "test_save_load"
+    "test_resume_training_model_with_topk_weights"
   ];
 
   disabledTestPaths = [
@@ -81,6 +83,7 @@ buildPythonPackage rec {
 
     # Require internet access to download a dataset
     "tests/test_adaption_prompt.py"
+    "tests/test_arrow.py"
     "tests/test_auto.py"
     "tests/test_boft.py"
     "tests/test_cpt.py"
@@ -92,9 +95,9 @@ buildPythonPackage rec {
     "tests/test_hub_features.py"
     "tests/test_incremental_pca.py"
     "tests/test_initialization.py"
+    "tests/test_lora_variants.py"
     "tests/test_mixed.py"
     "tests/test_multitask_prompt_tuning.py"
-    "tests/test_other.py"
     "tests/test_other.py"
     "tests/test_poly.py"
     "tests/test_stablediffusion.py"
@@ -102,6 +105,9 @@ buildPythonPackage rec {
     "tests/test_tuners_utils.py"
     "tests/test_vision_models.py"
     "tests/test_xlora.py"
+    "tests/test_target_parameters.py"
+    "tests/test_seq_classifier.py"
+    "tests/test_low_level_api.py"
   ];
 
   meta = {

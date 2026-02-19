@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     rev = "${pname}-v${version}";
     hash = "sha256-orQN83DE+ZNgdx2PVcYrte/rVDFFtuQuRDKzeumpsLo=";
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-lR36UAMedPdfvX613adxxRzJe+Ri09hiZYanyu7xbLU=";
   nativeBuildInputs = [
     pkg-config
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ openssl ];
 
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   doCheck = false;
   doInstallCheck = true;
@@ -35,7 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://synit.org/";
     license = lib.licenses.asl20;
     mainProgram = "syndicate-server";
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };
 }

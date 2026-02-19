@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
 
   # nativeBuildInputs
   scons,
@@ -19,11 +18,11 @@
   # optional deps for GUI packages
   guiSupport ? true,
   dbus-glib,
-  libX11,
-  libXt,
-  libXpm,
-  libXaw,
-  libXext,
+  libx11,
+  libxt,
+  libxpm,
+  libxaw,
+  libxext,
   gobject-introspection,
   pango,
   gdk-pixbuf,
@@ -34,50 +33,51 @@
   gpsdGroup ? "dialout",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpsd";
-  version = "3.25";
+  version = "3.27.5";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-s2i2owXj96Y4LSOgy/wdeJIwYLa39Uz3mHpzx7Spr8I=";
+    url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-QJhz9QSEYu8axBOlGrNcqotQsxvmKzNHvuHMKZTnxkk=";
   };
 
   # TODO: render & install HTML documentation using asciidoctor
-  nativeBuildInputs =
-    [
-      pkg-config
-      python3Packages.wrapPython
-      scons
-    ]
-    ++ lib.optionals guiSupport [
-      gobject-introspection
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    python3Packages.wrapPython
+    scons
+  ]
+  ++ lib.optionals guiSupport [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    [
-      dbus
-      libusb1
-      ncurses
-      python3Packages.python
-    ]
-    ++ lib.optionals kppsSupport [
-      pps-tools
-    ]
-    ++ lib.optionals guiSupport [
-      atk
-      dbus-glib
-      gdk-pixbuf
-      libX11
-      libXaw
-      libXext
-      libXpm
-      libXt
-      pango
-    ];
+  buildInputs = [
+    dbus
+    libusb1
+    ncurses
+    python3Packages.python
+  ]
+  ++ lib.optionals kppsSupport [
+    pps-tools
+  ]
+  ++ lib.optionals guiSupport [
+    atk
+    dbus-glib
+    gdk-pixbuf
+    libx11
+    libxaw
+    libxext
+    libxpm
+    libxt
+    pango
+  ];
 
-  pythonPath = lib.optionals guiSupport [
+  pythonPath = [
+    python3Packages.pyserial
+  ]
+  ++ lib.optionals guiSupport [
     python3Packages.pygobject3
     python3Packages.pycairo
   ];
@@ -85,12 +85,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./sconstruct-env-fixes.patch
     ./sconstrict-rundir-fixes.patch
-
-    # fix build with Python 3.12
-    (fetchpatch {
-      url = "https://gitlab.com/gpsd/gpsd/-/commit/9157b1282d392b2cc220bafa44b656d6dac311df.patch";
-      hash = "sha256-kFMn4HgidQvHwHfcSNH/0g6i1mgvEnZfvAUDPU4gljg=";
-    })
   ];
 
   preBuild = ''
@@ -121,6 +115,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/udev/rules.d"
   '';
 
+  doInstallCheck = true;
+
   installTargets = [
     "install"
     "udev-install"
@@ -128,10 +124,10 @@ stdenv.mkDerivation rec {
 
   # remove binaries for x-less install because xgps sconsflag is partially broken
   postFixup = ''
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    wrapPythonProgramsIn $out/bin "$out ''${pythonPath[*]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPS service daemon";
     longDescription = ''
       gpsd is a service daemon that monitors one or more GPSes or AIS
@@ -152,12 +148,11 @@ stdenv.mkDerivation rec {
       location-aware applications GPS/AIS logs for diagnostic purposes.
     '';
     homepage = "https://gpsd.gitlab.io/gpsd/index.html";
-    changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${finalAttrs.version}/NEWS";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bjornfor
-      rasendubi
     ];
   };
-}
+})

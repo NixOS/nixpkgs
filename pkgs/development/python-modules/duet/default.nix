@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "duet";
   version = "0.2.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "google";
@@ -35,9 +32,9 @@ buildPythonPackage rec {
     "test_repeated_sleep"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple future-based async library for python";
     homepage = "https://github.com/google/duet";
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

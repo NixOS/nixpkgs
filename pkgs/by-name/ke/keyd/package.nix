@@ -9,13 +9,13 @@
 }:
 
 let
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "keyd";
     rev = "v" + version;
-    hash = "sha256-pylfQjTnXiSzKPRJh9Jli1hhin/MIGIkZxLKxqlReVo=";
+    hash = "sha256-l7yjGpicX1ly4UwF7gcOTaaHPRnxVUMwZkH70NDLL5M=";
   };
 
   pypkgs = python3.pkgs;
@@ -23,7 +23,7 @@ let
   appMap = pypkgs.buildPythonApplication rec {
     pname = "keyd-application-mapper";
     inherit version src;
-    format = "other";
+    pyproject = false;
 
     postPatch = ''
       substituteInPlace scripts/${pname} \
@@ -70,10 +70,11 @@ stdenv.mkDerivation {
 
   passthru.tests.keyd = nixosTests.keyd;
 
-  meta = with lib; {
+  meta = {
     description = "Key remapping daemon for Linux";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alfarel ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/rvaiya/keyd";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alfarel ];
+    platforms = lib.platforms.linux;
   };
 }

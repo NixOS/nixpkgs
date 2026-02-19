@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
+  gitUpdater,
   cmake,
   lomiri-api,
   lomiri-indicator-network,
@@ -13,23 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-push-qml";
-  version = "0-unstable-2022-09-15";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-push-qml";
-    rev = "6f87ee5cf92e2af0e0ce672835e71704e236b8c0";
-    hash = "sha256-ezLcQRJ7Sq/TVbeGJL3Vq2lzBe7StRRCrWXZs2CCUX8=";
+    tag = finalAttrs.version;
+    hash = "sha256-QpkW/fbl0Px5HsKfz/gv+D1S+iSpMZM8TiZCuAq1myk=";
   };
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-push-qml/-/merge_requests/6 merged
-    (fetchpatch {
-      name = "0001-lomiri-push-qml-Stop-using-qt5_use_modules.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-push-qml/-/commit/a4268c98b9f50fdd52da69c173d377f78ea93104.patch";
-      hash = "sha256-OijTB5+I9/wabT7dX+DkvoEROKzAUIKhBZkkhqq5Oig=";
-    })
-  ];
 
   postPatch = ''
     # Queries QMake for QML install location, returns QtBase build path
@@ -55,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    # In case anything still depends on deprecated hints
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true)
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" (!lib.strings.versionAtLeast qtbase.version "6"))
   ];
 
   preBuild = ''
@@ -64,12 +55,16 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     description = "Lomiri Push Notifications QML plugin";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-push-qml";
-    # License file indicates gpl3Only, but de87869c2cdb9819c2ca7c9eca9c5fb8b500a01f says it should be lgpl3Only
-    license = licenses.lgpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-push-qml/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
   };
 })

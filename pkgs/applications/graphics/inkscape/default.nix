@@ -19,8 +19,9 @@
   gspell,
   gtk-mac-integration,
   gtkmm3,
+  gtksourceview4,
   gdk-pixbuf,
-  imagemagick,
+  graphicsmagick,
   lcms,
   lib2geom,
   libcdr,
@@ -31,9 +32,10 @@
   libsigcxx,
   libvisio,
   libwpg,
-  libXft,
+  libxft,
   libxml2,
   libxslt,
+  readline,
   ninja,
   perlPackages,
   pkg-config,
@@ -74,11 +76,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inkscape";
-  version = "1.4.2";
+  version = "1.4.3";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://inkscape.org/release/inkscape-${finalAttrs.version}/source/archive/xz/dl/inkscape-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-IABTDHkX5SYMnoV1pxVP9pJmQ9IAZIfXFOMEqWPwx4I=";
+    sha256 = "sha256-6DosPbVwtsWh/w/M/nCYg3s/a9dLEzVnk3yKkXEO0dE=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -116,63 +122,63 @@ stdenv.mkDerivation (finalAttrs: {
     shopt -u globstar
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      ninja
-      python3Env
-      glib # for setup hook
-      gdk-pixbuf # for setup hook
-      wrapGAppsHook3
-      gobject-introspection
-    ]
-    ++ (with perlPackages; [
-      perl
-      XMLParser
-    ])
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    python3Env
+    glib # for setup hook
+    gdk-pixbuf # for setup hook
+    wrapGAppsHook3
+    gobject-introspection
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLParser
+  ])
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
-  buildInputs =
-    [
-      boehmgc
-      boost
-      gettext
-      glib
-      glibmm
-      gsl
-      gtkmm3
-      imagemagick
-      lcms
-      lib2geom
-      libcdr
-      libexif
-      libpng
-      librevenge
-      librsvg # for loading icons
-      libsigcxx
-      libvisio
-      libwpg
-      libXft
-      libxml2
-      libxslt
-      perlPackages.perl
-      poppler
-      popt
-      potrace
-      python3Env
-      zlib
-      libepoxy
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      gspell
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cairo
-      gtk-mac-integration
-    ];
+  buildInputs = [
+    boehmgc
+    boost
+    gettext
+    glib
+    glibmm
+    gsl
+    gtkmm3
+    gtksourceview4
+    graphicsmagick
+    lcms
+    lib2geom
+    libcdr
+    libexif
+    libpng
+    librevenge
+    librsvg # for loading icons
+    libsigcxx
+    libvisio
+    libwpg
+    libxft
+    libxml2
+    libxslt
+    readline
+    perlPackages.perl
+    poppler
+    popt
+    potrace
+    python3Env
+    zlib
+    libepoxy
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gspell
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cairo
+    gtk-mac-integration
+  ];
 
   # Make sure PyXML modules can be found at run-time.
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

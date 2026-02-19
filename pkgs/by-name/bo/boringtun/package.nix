@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-QrgKO0SVU4Z9GlNtZZmOV+Xcm1PonzLbUTGAFFOV/BM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-j1I16QC46MMxcK7rbZJgI8KiKJvF29hkuGKiYLc6uW0=";
 
   # Testing this project requires sudo, Docker and network access, etc.

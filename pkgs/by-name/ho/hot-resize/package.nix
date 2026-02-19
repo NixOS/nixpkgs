@@ -19,17 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hot-resize";
-  version = "0.1.2";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "liberodark";
     repo = "hot-resize";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aGiu+YPflbyemk1IB0tPystu4hao0qLzLtuV0KAJtYg=";
+    hash = "sha256-sfiXy0PPIYSJub8dohzpUJMJ2ul/fglth7qd8paJKEo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-u+VW5aZkMhQ+dgRAHmK7avxp6PfzFyG49SfYr0stpuQ=";
+  cargoHash = "sha256-mVCL4tLY+JqJDn8+0PTtStd+rD2VzQoAEtlikIe1K9Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     systemd.dev
   ];
 
-  PKG_CONFIG_PATH = "${systemd.dev}/lib/pkgconfig";
+  env.PKG_CONFIG_PATH = "${systemd.dev}/lib/pkgconfig";
 
   postInstall = ''
     wrapProgram $out/bin/hot-resize \
@@ -61,7 +60,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

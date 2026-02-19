@@ -12,17 +12,18 @@
 
 buildPythonPackage rec {
   pname = "allure-python-commons-test";
-  version = "2.13.5";
-  format = "setuptools";
+  version = "2.15.3";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pWkLVfBrLEhdhuTE95K3aqrhEY2wEyo5uRzuJC3ngjE=";
+    pname = "allure_python_commons_test";
+    inherit version;
+    hash = "sha256-eRjjsxiXm/7nMyaJS5pXhpNmrjOhnd1o7+F9ZwGzI/I=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     pluggy
     six
@@ -38,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "allure_commons_test" ];
 
-  meta = with lib; {
+  meta = {
     description = "Just pack of hamcrest matchers for validation result in allure2 json format";
     homepage = "https://github.com/allure-framework/allure-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ evanjs ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ evanjs ];
   };
 }

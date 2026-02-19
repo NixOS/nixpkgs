@@ -1,9 +1,12 @@
 {
+  lib,
   buildNpmPackage,
 
+  stdenv,
   libsecret,
   python3,
   pkg-config,
+  clang_20,
 
   pname,
   src,
@@ -18,7 +21,8 @@ buildNpmPackage {
   nativeBuildInputs = [
     python3
     pkg-config
-  ];
+  ]
+  ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
   buildInputs = [ libsecret ];
 

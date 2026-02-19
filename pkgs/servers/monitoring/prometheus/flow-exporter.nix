@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-2raOUOPiMUMydIsfSsnwUAAiM7WyMio1NgL1EoADr2s=";
 
-  meta = with lib; {
+  meta = {
     description = "Export network flows from kafka to Prometheus";
     mainProgram = "flow-exporter";
     homepage = "https://github.com/neptune-networks/flow-exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kloenk ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kloenk ];
+    platforms = lib.platforms.linux;
   };
 }

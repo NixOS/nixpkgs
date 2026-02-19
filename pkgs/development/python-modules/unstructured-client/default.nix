@@ -19,16 +19,16 @@
   typing-inspection,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unstructured-client";
-  version = "0.36.0";
+  version = "0.42.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-python-client";
-    tag = "v${version}";
-    hash = "sha256-WEltF3puitytIFN/CxG6TCpWGxs8dubCqvU7byba1Yg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+neZK7I5qjidLlM298TrVl5mGFBdGZdxAdFaJIf0tNk=";
   };
 
   preBuild = ''
@@ -62,18 +62,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # see test-unit in Makefile
+  # see test-unit in Makefile
+  enabledTestPaths = [
     "_test_unstructured_client"
-    "-k"
+  ];
+
+  enabledTests = [
     "unit"
   ];
 
   meta = {
-    changelog = "https://github.com/Unstructured-IO/unstructured-python-client/blob/${src.tag}/RELEASES.md";
+    changelog = "https://github.com/Unstructured-IO/unstructured-python-client/blob/${finalAttrs.src.tag}/RELEASES.md";
     description = "Python Client SDK for Unstructured API";
     homepage = "https://github.com/Unstructured-IO/unstructured-python-client";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

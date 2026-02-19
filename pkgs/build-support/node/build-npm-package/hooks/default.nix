@@ -1,6 +1,7 @@
 {
   lib,
   srcOnly,
+  stdenv,
   makeSetupHook,
   makeWrapper,
   nodejs,
@@ -18,6 +19,8 @@
     substitutions = {
       nodeSrc = srcOnly nodejs;
       nodeGyp = "${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js";
+      npmArch = stdenv.targetPlatform.node.arch;
+      npmPlatform = stdenv.targetPlatform.node.platform;
 
       # Specify `diff`, `jq`, and `prefetch-npm-deps` by abspath to ensure that the user's build
       # inputs do not cause us to find the wrong binaries.

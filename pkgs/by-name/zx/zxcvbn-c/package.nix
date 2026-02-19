@@ -3,26 +3,26 @@
   stdenv,
   fetchFromGitHub,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zxcvbn-c";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "tsyrogit";
     repo = "zxcvbn-c";
-    rev = "v${version}";
-    sha256 = "sha256-RKqbv0iGkjS7Y7KikqglZ+AK1oiw4G1mB2Zg87tOlbI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-/ATlpcx0XTtmzs6REA2YsnINKWz5xPNaetfhfyMuFP0=";
   };
 
   installPhase = ''
     install -D -t $out/lib libzxcvbn.so*
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tsyrogit/zxcvbn-c";
     description = "C/C++ implementation of the zxcvbn password strength estimation";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ xurei ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ xurei ];
   };
-}
+})

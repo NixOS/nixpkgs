@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "drive";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "odeke-em";
     repo = "drive";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mNOeOB0Tn5eqULFJZuE18PvLoHtnspv4AElmgEQKXcU=";
   };
 
@@ -33,11 +33,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/odeke-em/drive";
     description = "Google Drive client for the commandline";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "drive";
   };
-}
+})

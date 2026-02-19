@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubemqctl";
   version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "kubemq-io";
     repo = "kubemqctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PaB5+Sy2ccEQz+wuz88w/M4NXayKA41/ugSPJdtjfiE=";
   };
 
@@ -25,16 +25,16 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   doCheck = false; # TODO tests are failing
 
   meta = {
     homepage = "https://github.com/kubemq-io/kubemqctl";
-    description = "Kubemqctl is a command line interface (CLI) for Kubemq Kubernetes Message Broker";
+    description = "CLI for Kubemq Kubernetes Message Broker";
     mainProgram = "kubemqctl";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ brianmcgee ];
   };
-}
+})

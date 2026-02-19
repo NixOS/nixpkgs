@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.1-alpha.7";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-aonCRtXi9MZWhZO3SjMxAxsTm8iZZdrm36psGArFz/I=";
+    hash = "sha256-CVtpHmo4gF6DHdZJJ5nVroJzwwlGYzYBN9TX5Wf6h8A=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-pYv99huRgqcFcnkMkfFoejmZmVkb9q/VVlYfylPXo4o=";
+  cargoHash = "sha256-IF60aGv56Kh+wDYyN7XzLBywepvAxv2HMqSOz+Su2b4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -50,15 +50,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export CARGO_BIN_EXE_ty="$PWD"/target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/ty
   '';
 
-  # All the packages referenced in `crates/ty/README.md`, plus `crates/ty` itself.
   cargoTestFlags = [
     "--package=ty" # CLI tests; file-watching tests only on Linux platforms
     "--package=ty_python_semantic" # core type checking tests
     "--package=ty_test" # test framework tests
   ];
 
+  checkFlags = [
+    # Flaky:
+    # called `Result::unwrap()` on an `Err` value: Os { code: 26, kind: ExecutableFileBusy, message: "Text file busy" }
+    "--skip=python_environment::ty_environment_and_active_environment"
+    "--skip=python_environment::ty_environment_and_discovered_venv"
+    "--skip=python_environment::ty_environment_is_only_environment"
+    "--skip=python_environment::ty_environment_is_system_not_virtual"
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
@@ -74,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   );
 
   passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -85,6 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ty";
     maintainers = with lib.maintainers; [
       bengsparks
+      figsoda
       GaetanLepage
     ];
   };

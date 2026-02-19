@@ -2,7 +2,6 @@
   lib,
   stdenv,
   kernel,
-  kernelModuleMakeFlags,
   ncurses,
 }:
 
@@ -18,7 +17,9 @@ stdenv.mkDerivation {
     cd tools/thermal/tmon
   '';
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     "INSTALL_ROOT=\"$(out)\""
     "BINDIR=bin"
   ];
@@ -26,11 +27,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Monitoring and Testing Tool for Linux kernel thermal subsystem";
     mainProgram = "tmon";
     homepage = "https://www.kernel.org/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

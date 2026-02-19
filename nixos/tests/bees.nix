@@ -5,29 +5,33 @@
   nodes.machine =
     { config, pkgs, ... }:
     {
-      boot.initrd.postDeviceCommands = ''
-        ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux1 /dev/vdb
-        ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux2 /dev/vdc
-      '';
       virtualisation.emptyDiskImages = [
-        4096
-        4096
+        {
+          size = 4096;
+          driveConfig.deviceExtraOpts.serial = "aux1";
+        }
+        {
+          size = 4096;
+          driveConfig.deviceExtraOpts.serial = "aux2";
+        }
       ];
       virtualisation.fileSystems = {
         "/aux1" = {
           # filesystem configured to be deduplicated
-          device = "/dev/disk/by-label/aux1";
+          device = "/dev/disk/by-id/virtio-aux1";
           fsType = "btrfs";
+          autoFormat = true;
         };
         "/aux2" = {
           # filesystem not configured to be deduplicated
-          device = "/dev/disk/by-label/aux2";
+          device = "/dev/disk/by-id/virtio-aux2";
           fsType = "btrfs";
+          autoFormat = true;
         };
       };
       services.beesd.filesystems = {
         aux1 = {
-          spec = "LABEL=aux1";
+          spec = "/dev/disk/by-id/virtio-aux1";
           hashTableSizeMB = 16;
           verbosity = "debug";
         };

@@ -17,7 +17,11 @@
   libjpeg,
   libopus,
   nasm,
-  xorg,
+  xorg-server,
+  libxrandr,
+  libxfixes,
+  libx11,
+  xauth,
   lame,
   pixman,
   libjpeg_turbo,
@@ -48,7 +52,7 @@ let
     ];
 
     buildInputs = [
-      xorg.xorgserver
+      xorg-server
       libdrm
     ];
 
@@ -74,7 +78,7 @@ let
 
   xrdp = stdenv.mkDerivation rec {
     pname = "xrdp";
-    version = "0.10.3";
+    version = "0.10.4.1";
 
     src = applyPatches {
       inherit version;
@@ -85,7 +89,7 @@ let
         repo = "xrdp";
         rev = "v${version}";
         fetchSubmodules = true;
-        hash = "sha256-6QSz0a0ed1UxfYYibehPgGUzU/xf1HmqEvVE4xU5hRg=";
+        hash = "sha256-ula1B9/eriJ+0r6d9r2LAzh7J3s6/uvAiTKeRzLuVL0=";
       };
     };
 
@@ -109,13 +113,13 @@ let
       pam
       pixman
       systemd
-      xorg.libX11
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxfixes
+      libxrandr
     ];
 
     postPatch = ''
-      substituteInPlace sesman/sesexec/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
+      substituteInPlace sesman/sesexec/xauth.c --replace "xauth -q" "${xauth}/bin/xauth -q"
 
       substituteInPlace configure.ac --replace /usr/include/ ""
     '';
@@ -151,8 +155,8 @@ let
 
       cp $src/keygen/openssl.conf $out/share/xrdp/openssl.conf
 
-      substituteInPlace $out/etc/xrdp/sesman.ini --replace /etc/xrdp/pulse $out/etc/xrdp/pulse
-      substituteInPlace $out/etc/xrdp/sesman.ini --replace '#SessionSockdirGroup=root' 'SessionSockdirGroup=xrdp'
+      substituteInPlace $out/etc/xrdp/sesman.ini --replace-fail /etc/xrdp/pulse $out/etc/xrdp/pulse
+      substituteInPlace $out/etc/xrdp/sesman.ini --replace-fail '#SessionSockdirGroup=xrdp' 'SessionSockdirGroup=xrdp'
 
       # remove all session types except Xorg (they are not supported by this setup)
       perl -i -ne 'print unless /\[(X11rdp|Xvnc|console|vnc-any|sesman-any|rdp-any|neutrinordp-any)\]/ .. /^$/' $out/etc/xrdp/xrdp.ini
@@ -163,9 +167,9 @@ let
       cat >> $out/etc/xrdp/sesman.ini <<EOF
 
       [Xorg]
-      param=${xorg.xorgserver}/bin/Xorg
+      param=${xorg-server}/bin/Xorg
       param=-modulepath
-      param=${xorgxrdp}/lib/xorg/modules,${xorg.xorgserver}/lib/xorg/modules
+      param=${xorgxrdp}/lib/xorg/modules,${xorg-server}/lib/xorg/modules
       param=-config
       param=${xorgxrdp}/etc/X11/xrdp/xorg.conf
       param=-noreset
@@ -204,15 +208,15 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Open source RDP server";
       homepage = "https://github.com/neutrinolabs/xrdp";
-      license = licenses.asl20;
-      maintainers = with maintainers; [
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
         chvp
         lucasew
       ];
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   };
 in

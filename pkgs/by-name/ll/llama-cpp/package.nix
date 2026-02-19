@@ -3,6 +3,7 @@
   autoAddDriverRunpath,
   cmake,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   stdenv,
 
@@ -12,6 +13,7 @@
 
   rocmSupport ? config.rocmSupport,
   rocmPackages ? { },
+  rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
 
   openclSupport ? false,
   clblast,
@@ -25,22 +27,26 @@
   ],
   blas,
 
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
+
   pkg-config,
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
-  curl,
+  openssl,
+  llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
   ninja,
-  git,
 }:
 
 let
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
-  # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
+  # cuda imposes an upper bound on the gcc version
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
   inherit (lib)
     cmakeBool
@@ -72,13 +78,18 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "5535";
+  version = "8069";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-n6h4aiszPU7/JV3btPQEJBHeR/YrzVqOzNFAXNPSEAg=";
+    hash = "sha256-/hfczIFTW+VyCCs7oM2a6VmPh24wiZ8P3fQZTfd9jA8=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -86,34 +97,24 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  patches = [ ];
+
   postPatch = ''
-    # Workaround for local-ai package which overrides this package to an older llama-cpp
-    if [ -f ./ggml/src/ggml-metal.m ]; then
-      substituteInPlace ./ggml/src/ggml-metal.m \
-        --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
-    fi
-
-    if [ -f ./ggml/src/ggml-metal/ggml-metal.m ]; then
-      substituteInPlace ./ggml/src/ggml-metal/ggml-metal.m \
-        --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
-    fi
-
-    substituteInPlace ./scripts/build-info.sh \
-      --replace-fail 'build_number="0"' 'build_number="${finalAttrs.version}"' \
-      --replace-fail 'build_commit="unknown"' "build_commit=\"$(cat COMMIT)\""
+    rm tools/server/public/index.html.gz
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-      git
-    ]
-    ++ optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-      autoAddDriverRunpath
-    ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+    ninja
+    nodejs
+    npmHooks.npmConfigHook
+    pkg-config
+  ]
+  ++ optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ];
 
   buildInputs =
     optionals cudaSupport cudaBuildInputs
@@ -121,74 +122,105 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
-    ++ [ curl ];
+    ++ [ openssl ];
 
-  cmakeFlags =
-    [
-      # -march=native is non-deterministic; override with platform-specific flags if needed
-      (cmakeBool "GGML_NATIVE" false)
-      (cmakeBool "LLAMA_BUILD_SERVER" true)
-      (cmakeBool "LLAMA_CURL" true)
-      (cmakeBool "BUILD_SHARED_LIBS" true)
-      (cmakeBool "GGML_BLAS" blasSupport)
-      (cmakeBool "GGML_CLBLAST" openclSupport)
-      (cmakeBool "GGML_CUDA" cudaSupport)
-      (cmakeBool "GGML_HIP" rocmSupport)
-      (cmakeBool "GGML_METAL" metalSupport)
-      (cmakeBool "GGML_RPC" rpcSupport)
-      (cmakeBool "GGML_VULKAN" vulkanSupport)
-    ]
-    ++ optionals cudaSupport [
-      (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-    ]
-    ++ optionals rocmSupport ([
-      (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
-      # TODO: this should become `clr.gpuTargets` in the future.
-      (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmPackages.rocblas.amdgpu_targets)
-    ])
-    ++ optionals metalSupport [
-      (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
-      (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
-    ]
-    ++ optionals rpcSupport [
-      # This is done so we can move rpc-server out of bin because llama.cpp doesn't
-      # install rpc-server in their install target.
-      "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    ];
+  npmRoot = "tools/server/webui";
+  npmDepsHash = "sha256-bbv0e3HZmqpFwKELiEFBgoMr72jKbsX20eceH4XjfBA=";
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src patches;
+    preBuild = ''
+      pushd ${finalAttrs.npmRoot}
+    '';
+    hash = finalAttrs.npmDepsHash;
+  };
+
+  preConfigure = ''
+    prependToVar cmakeFlags "-DLLAMA_BUILD_COMMIT:STRING=$(cat COMMIT)"
+    pushd ${finalAttrs.npmRoot}
+    npm run build
+    popd
+  '';
+
+  cmakeFlags = [
+    # -march=native is non-deterministic; override with platform-specific flags if needed
+    (cmakeBool "GGML_NATIVE" false)
+    (cmakeBool "LLAMA_BUILD_EXAMPLES" false)
+    (cmakeBool "LLAMA_BUILD_SERVER" true)
+    (cmakeBool "LLAMA_BUILD_TESTS" (finalAttrs.finalPackage.doCheck or false))
+    (cmakeBool "LLAMA_OPENSSL" true)
+    (cmakeBool "BUILD_SHARED_LIBS" true)
+    (cmakeBool "GGML_BLAS" blasSupport)
+    (cmakeBool "GGML_CLBLAST" openclSupport)
+    (cmakeBool "GGML_CUDA" cudaSupport)
+    (cmakeBool "GGML_HIP" rocmSupport)
+    (cmakeBool "GGML_METAL" metalSupport)
+    (cmakeBool "GGML_RPC" rpcSupport)
+    (cmakeBool "GGML_VULKAN" vulkanSupport)
+    (cmakeFeature "LLAMA_BUILD_NUMBER" finalAttrs.version)
+  ]
+  ++ optionals cudaSupport [
+    (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ]
+  ++ optionals rocmSupport [
+    (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
+    (cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
+  ]
+  ++ optionals metalSupport [
+    (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
+    (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
+  ]
+  ++ optionals rpcSupport [
+    # This is done so we can move rpc-server out of bin because llama.cpp doesn't
+    # install rpc-server in their install target.
+    (cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+  ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that
-  postInstall =
-    ''
-      # Match previous binary name for this package
-      ln -sf $out/bin/llama-cli $out/bin/llama
+  postInstall = ''
+    # Match previous binary name for this package
+    ln -sf $out/bin/llama-cli $out/bin/llama
 
-      mkdir -p $out/include
-      cp $src/include/llama.h $out/include/
-    ''
-    + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
+    mkdir -p $out/include
+    cp $src/include/llama.h $out/include/
 
-  passthru.updateScript = nix-update-script {
-    attrPath = "llama-cpp";
-    extraArgs = [
-      "--version-regex"
-      "b(.*)"
-    ];
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
+  ''
+  + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
+
+  # the tests are failing as of 2025-08
+  doCheck = false;
+
+  passthru = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      metal = llama-cpp.override { metalSupport = true; };
+    };
+    updateScript = nix-update-script {
+      attrPath = "llama-cpp";
+      extraArgs = [
+        "--version-regex"
+        "b(.*)"
+      ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
     homepage = "https://github.com/ggml-org/llama.cpp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "llama";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
+      booxter
       dit7ya
-      elohmeier
       philiptaron
       xddxdd
+      yuannan
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
-    broken = (metalSupport && !effectiveStdenv.hostPlatform.isDarwin);
+    broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
   };
 })

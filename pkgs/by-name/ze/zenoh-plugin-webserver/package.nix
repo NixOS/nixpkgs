@@ -4,19 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-plugin-webserver";
-  version = "1.2.1"; # nixpkgs-update: no auto update
+  version = "1.4.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-webserver";
-    tag = version;
-    hash = "sha256-GvJWyH0kW6POQaliPhahEFen1CcwDrrQNMdL2LtHkmc=";
+    tag = finalAttrs.version;
+    hash = "sha256-R+MLM42m3UTBFHqCAGezU4jz0Hi1+X2W1Yje7+ctl6k=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-S6Dn7ZOfonUo5FMh0rMzrZiKMaBjYDZs2LeUUAVCJOw=";
+  cargoHash = "sha256-/WVMdSGEawvAJ0viV/2eVhWGlvgaGUpe9ZHDCBUOc1I=";
 
   meta = {
     description = "Implements an HTTP server mapping URLs to zenoh paths";
@@ -28,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

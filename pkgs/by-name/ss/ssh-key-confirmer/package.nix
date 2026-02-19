@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ssh-key-confirmer";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "benjojo";
     repo = "ssh-key-confirmer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CXDjm8PMdCTwHnZWa0fYKel7Rmxq0XBWkfLmoVuSkKM=";
   };
 
@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Test ssh login key acceptance without having the private key";
     homepage = "https://github.com/benjojo/ssh-key-confirmer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oxzi ];
     mainProgram = "ssh-key-confirmer";
   };
-}
+})

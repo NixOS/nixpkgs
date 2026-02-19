@@ -58,8 +58,19 @@ for id in $(cat $ECLIPSES_JSON | jq -r '.eclipses | keys | .[]'); do
             url="https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-${id}-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
         fi
 
-        echo "prefetching ${id} ${arch}";
-        h=$(nix store prefetch-file --json "$url" | jq -r .hash);
+        # sometimes a mirror is down; retrying a few times should eventually get us redirected to a working mirror
+        for try in $(seq 1 5); do
+            echo "prefetching ${id} ${arch} (try ${try})";
+            h=$(nix store prefetch-file --json "$url" | jq -r .hash);
+
+            if [ "$h" != "" ]; then break; fi
+        done
+
+        if [ "$h" == "" ]; then
+            echo "unable to prefetch and hash ${id} for ${arch} from ${url}";
+            echo "see above output for errors";
+            exit 1;
+        fi
 
         t=$(mktemp);
         cat $ECLIPSES_JSON | jq -r ".eclipses.${id}.hashes.${arch} = \"${h}\"" > $t;

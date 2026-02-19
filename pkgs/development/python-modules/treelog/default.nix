@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ typing-extensions ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging framework that organizes messages in a tree structure";
     homepage = "https://github.com/evalf/treelog";
-    license = licenses.mit;
-    maintainers = [ maintainers.Scriptkiddi ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.Scriptkiddi ];
   };
 }

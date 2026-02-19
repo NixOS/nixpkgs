@@ -43,7 +43,7 @@ let
           license,
           ...
         }@args:
-        assert lib.any (x: x == type) [
+        assert lib.elem type [
           "plugin"
           "theme"
           "language"
@@ -68,7 +68,8 @@ let
 
             meta = {
               license = lib.licenses.${license};
-            } // (args.passthru or { });
+            }
+            // (args.passthru or { });
           }
           // lib.optionalAttrs (type == "language") {
             nativeBuildInputs = [

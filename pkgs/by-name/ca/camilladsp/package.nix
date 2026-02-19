@@ -37,13 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libpulseaudio
     openssl
-  ] ++ lib.optionals stdenv.isLinux [ alsa-lib ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Flexible cross-platform IIR and FIR engine for crossovers, room correction etc";

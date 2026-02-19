@@ -2,21 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  runtimeShell,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-insta";
-  version = "1.42.2";
+  version = "1.46.3";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
-    rev = "e81bae9b7b7f536bd9057158fe5a219facced116";
-    hash = "sha256-5IGp4WuC34wRB7xSiDWzScLvV26yjsdw/LT/7CN9hWc=";
+    tag = finalAttrs.version;
+    hash = "sha256-MRGtD6ZbZkiblq9tadiJPrOGWZ2uM+8qIw2KlP/KuJc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Vx26ArAcsW0NNVNZa4M5hqz/sm1gecrun/bbRWMu07Q=";
+  cargoHash = "sha256-lp7jaftj/BXorK+xxO4FS8aCpi1SSAC2/xt0CX25Dos=";
+
+  postPatch = ''
+    substituteInPlace cargo-insta/tests/functional/test_runner_fallback.rs \
+      --replace-fail '#!/bin/bash' '#!${runtimeShell}'
+  '';
 
   checkFlags = [
     # Depends on `rustfmt` and does not matter for packaging.
@@ -29,16 +34,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=env::test_get_cargo_workspace_manifest_dir"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for snapshot testing";
     mainProgram = "cargo-insta";
     homepage = "https://github.com/mitsuhiko/insta";
-    changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      figsoda
+    changelog = "https://github.com/mitsuhiko/insta/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       oxalica
       matthiasbeyer
+      figsoda
     ];
   };
-}
+})

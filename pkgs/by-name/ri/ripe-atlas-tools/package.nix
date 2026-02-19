@@ -3,16 +3,18 @@
   python3,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ripe-atlas-tools";
   version = "3.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-tools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aETSDXCVteTruRKV/8Aw3R/bprB6txOsXrFvoZOxIus=";
   };
 
@@ -23,13 +25,17 @@ python3.pkgs.buildPythonApplication rec {
     echo "include ripe/atlas/tools/user-agent" >> MANIFEST.in
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    sphinx-rtd-theme
-    sphinxHook
+  nativeBuildInputs = [
     installShellFiles
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+    sphinx-rtd-theme
+    sphinxHook
+  ];
+
+  dependencies = with python3.pkgs; [
     ipy
     pyopenssl
     python-dateutil
@@ -43,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   preBuild = ''
-    echo "RIPE Atlas Tools [NixOS ${version}" > ripe/atlas/tools/user-agent
+    echo "RIPE Atlas Tools [NixOS ${finalAttrs.version}" > ripe/atlas/tools/user-agent
   '';
 
   postInstall = ''
@@ -56,6 +62,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    writableTmpDirAsHomeHook # for cache generation.
   ];
 
   disabledTests = [
@@ -80,21 +87,19 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_docs.py"
   ];
 
-  HOME = "$TMPDIR"; # for cache generation.
-
   # Necessary because it confuse the tests when it does "from ripe.atlas.sagan import X"
   # version.py is used by Sphinx tests.
   preCheck = ''
     rm -rf ripe
     mkdir -p ripe/atlas/tools
-    echo "__version__ = \"${version}\"" > ripe/atlas/tools/version.py
+    echo "__version__ = \"${finalAttrs.version}\"" > ripe/atlas/tools/version.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "RIPE ATLAS project tools";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-tools";
-    changelog = "https://github.com/RIPE-NCC/ripe-atlas-tools/blob/v${version}/CHANGES.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    changelog = "https://github.com/RIPE-NCC/ripe-atlas-tools/blob/v${finalAttrs.version}/CHANGES.rst";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
-}
+})

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-cRqgIxF6H1WyJs5hhaAXVdWAlv6t22BZLp3p/qRlCSM=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   postPatch = ''
     # avoid -Werror

@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     description = "Lightweight C++ logging library";
     homepage = "https://github.com/emilk/loguru";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

@@ -8,7 +8,7 @@
   docbook-xsl-nons,
   dvdauthor,
   dvdplusrwtools,
-  ffmpeg,
+  ffmpeg_7,
   flex,
   fontconfig,
   gettext,
@@ -19,7 +19,7 @@
   pkg-config,
   wrapGAppsHook3,
   wxGTK32,
-  wxSVG,
+  wxsvg,
   xine-ui,
   xmlto,
   zip,
@@ -35,12 +35,12 @@
 let
   inherit (lib) optionals makeBinPath;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dvdstyler";
   version = "3.3b4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/dvdstyler/dvdstyler-devel/${version}/DVDStyler-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/dvdstyler/dvdstyler-devel/${finalAttrs.version}/DVDStyler-${finalAttrs.version}.tar.bz2";
     hash = "sha256-JCaKcE7jkTxT57KKePs8gmgQedoOcP5NEQ2FwIDS2Ho=";
   };
 
@@ -56,23 +56,22 @@ stdenv.mkDerivation rec {
     xmlto
     zip
   ];
-  buildInputs =
-    [
-      cdrtools
-      dvdauthor
-      dvdplusrwtools
-      ffmpeg
-      fontconfig
-      glib
-      libexif
-      libjpeg
-      wxSVG
-      wxGTK32
-      xine-ui
-    ]
-    ++ optionals dvdisasterSupport [ dvdisaster ]
-    ++ optionals udevSupport [ udev ]
-    ++ optionals dbusSupport [ dbus ];
+  buildInputs = [
+    cdrtools
+    dvdauthor
+    dvdplusrwtools
+    ffmpeg_7
+    fontconfig
+    glib
+    libexif
+    libjpeg
+    wxsvg
+    wxGTK32
+    xine-ui
+  ]
+  ++ optionals dvdisasterSupport [ dvdisaster ]
+  ++ optionals udevSupport [ udev ]
+  ++ optionals dbusSupport [ dbus ];
 
   enableParallelBuilding = true;
 
@@ -93,7 +92,7 @@ stdenv.mkDerivation rec {
       )
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.dvdstyler.org/";
     description = "DVD authoring software";
     longDescription = ''
@@ -127,9 +126,9 @@ stdenv.mkDerivation rec {
       - copy any menu object or whole menu
       - customize navigation using DVD scripting
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = with lib.platforms; linux;
     mainProgram = "dvdstyler";
   };
-}
+})

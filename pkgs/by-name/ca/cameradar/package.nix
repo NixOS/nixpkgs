@@ -6,42 +6,30 @@
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cameradar";
-  version = "5.0.2";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "Ullaakut";
     repo = "cameradar";
-    rev = "v${version}";
-    sha256 = "sha256-GOqmz/aiOLGMfs9rQBIEQSgBycPzhu8BohcAc2U+gBw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XmCpd7ptPU26EMn+WDH2Y9hKRsYV0GdbU4T26TUsp6U=";
   };
 
-  vendorHash = "sha256-AIi57DWMvAKl0PhuwHO/0cHoDKk5e0bJsqHYBka4NiU=";
+  vendorHash = "sha256-A8SJRky4dQHJoYpOaUBae89kHXwbdA+gnF/p7oRxcYo=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    curl
-  ];
+  buildInputs = [ curl ];
 
-  subPackages = [
-    "cmd/cameradar"
-  ];
-  # At least one test is outdated
-  #doCheck = false;
+  subPackages = [ "cmd/cameradar" ];
 
-  meta = with lib; {
+  meta = {
     description = "RTSP stream access tool";
     homepage = "https://github.com/Ullaakut/cameradar";
-    changelog = "https://github.com/Ullaakut/cameradar/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
-    # Upstream issue, doesn't build with latest curl, see
-    # https://github.com/Ullaakut/cameradar/issues/320
-    # https://github.com/andelf/go-curl/issues/84
-    broken = true;
+    changelog = "https://github.com/Ullaakut/cameradar/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

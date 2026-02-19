@@ -17,31 +17,31 @@ let
   webvault = callPackage ./webvault.nix { };
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vaultwarden";
-  version = "1.34.1";
+  version = "1.35.3";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
-    rev = version;
-    hash = "sha256-SVEQX+uAYb4/qFQZRm2khOi8ti76v3F5lRnUgoHk8wA=";
+    tag = finalAttrs.version;
+    hash = "sha256-Q/kMdrKMBB5Tbfi4Cy9ucI6iH8eOr+fzi876+ef2kV4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Or259iQP89Ptf/XHpkHD08VDyCk/nQcFlyoKRUUQKt0=";
+  cargoHash = "sha256-3wS8LoFMYhd8uwjDyNfWLMQEK3USotTzTHEJNimG3pM=";
 
   # used for "Server Installed" version in admin panel
-  env.VW_VERSION = version;
+  env.VW_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optional (dbBackend == "mysql") libmysqlclient
-    ++ lib.optional (dbBackend == "postgresql") libpq;
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optional (dbBackend == "mysql") libmysqlclient
+  ++ lib.optional (dbBackend == "postgresql") libpq;
 
   buildFeatures = dbBackend;
 
@@ -51,15 +51,15 @@ rustPlatform.buildRustPackage rec {
     updateScript = callPackage ./update.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
-    changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       dotlambda
       SuperSandro2000
     ];
     mainProgram = "vaultwarden";
   };
-}
+})

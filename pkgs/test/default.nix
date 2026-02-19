@@ -1,28 +1,43 @@
-{ pkgs, callPackage }:
-
-with pkgs;
-
+{ pkgs }:
+let
+  inherit (pkgs) callPackages callPackage stdenv;
+  inherit (pkgs.lib)
+    recurseIntoAttrs
+    attrNames
+    pipe
+    hasPrefix
+    hasSuffix
+    filter
+    genAttrs
+    optionals
+    filterAttrs
+    meta
+    concatMapAttrs
+    optionalAttrs
+    ;
+  inherit (pkgs.lib.strings) toJSON;
+in
 {
   cc-wrapper =
-    with builtins;
     let
       pkgNames = (attrNames pkgs);
       llvmTests =
         let
-          pkgSets = lib.pipe pkgNames [
-            (filter (lib.hasPrefix "llvmPackages"))
-            (filter (n: n != "rocmPackages.llvm"))
-            # Are throw aliases.
-            (filter (n: n != "llvmPackages_rocm"))
+          pkgSets = pipe pkgNames [
+            (filter (hasPrefix "llvmPackages"))
+            # Are aliases.
             (filter (n: n != "llvmPackages_latest"))
-            (filter (n: n != "llvmPackages_6"))
-            (filter (n: n != "llvmPackages_7"))
-            (filter (n: n != "llvmPackages_8"))
             (filter (n: n != "llvmPackages_9"))
             (filter (n: n != "llvmPackages_10"))
             (filter (n: n != "llvmPackages_11"))
+            (filter (n: n != "llvmPackages_12"))
+            (filter (n: n != "llvmPackages_13"))
+            (filter (n: n != "llvmPackages_14"))
+            (filter (n: n != "llvmPackages_15"))
+            (filter (n: n != "llvmPackages_16"))
+            (filter (n: n != "llvmPackages_17"))
           ];
-          tests = lib.genAttrs pkgSets (
+          tests = genAttrs pkgSets (
             name:
             recurseIntoAttrs {
               clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };
@@ -33,16 +48,22 @@ with pkgs;
         tests;
       gccTests =
         let
-          pkgSets = lib.pipe (attrNames pkgs) (
+          pkgSets = pipe (attrNames pkgs) (
             [
-              (filter (lib.hasPrefix "gcc"))
-              (filter (lib.hasSuffix "Stdenv"))
+              (filter (hasPrefix "gcc"))
+              (filter (hasSuffix "Stdenv"))
               (filter (n: n != "gccCrossLibcStdenv"))
               (filter (n: n != "gcc49Stdenv"))
               (filter (n: n != "gcc6Stdenv"))
+              (filter (n: n != "gcc7Stdenv"))
+              (filter (n: n != "gcc8Stdenv"))
+              (filter (n: n != "gcc9Stdenv"))
+              (filter (n: n != "gcc10Stdenv"))
+              (filter (n: n != "gcc11Stdenv"))
+              (filter (n: n != "gcc12Stdenv"))
             ]
             ++
-              lib.optionals
+              optionals
                 (
                   !(
                     (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64)
@@ -50,11 +71,11 @@ with pkgs;
                   )
                 )
                 [
-                  (filter (n: !lib.hasSuffix "MultiStdenv" n))
+                  (filter (n: !hasSuffix "MultiStdenv" n))
                 ]
           );
         in
-        lib.genAttrs pkgSets (name: callPackage ./cc-wrapper { stdenv = pkgs.${name}; });
+        genAttrs pkgSets (name: callPackage ./cc-wrapper { stdenv = pkgs.${name}; });
     in
     recurseIntoAttrs {
       default = callPackage ./cc-wrapper { };
@@ -63,9 +84,8 @@ with pkgs;
         name = "cc-wrapper-supported";
         builtGCC =
           let
-            inherit (lib) filterAttrs;
-            sets = lib.pipe gccTests [
-              (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.stdenv.cc))
+            sets = pipe gccTests [
+              (filterAttrs (_: v: meta.availableOn stdenv.hostPlatform v.stdenv.cc))
               # Broken
               (filterAttrs (n: _: n != "gccMultiStdenv"))
             ];
@@ -74,10 +94,9 @@ with pkgs;
 
         builtLLVM =
           let
-            inherit (lib) filterAttrs;
-            sets = lib.pipe llvmTests [
-              (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.clang.stdenv.cc))
-              (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.libcxx.stdenv.cc))
+            sets = pipe llvmTests [
+              (filterAttrs (_: v: meta.availableOn stdenv.hostPlatform v.clang.stdenv.cc))
+              (filterAttrs (_: v: meta.availableOn stdenv.hostPlatform v.libcxx.stdenv.cc))
             ];
           in
           toJSON sets;
@@ -98,12 +117,12 @@ with pkgs;
   hardeningFlags = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix { });
   hardeningFlags-gcc = recurseIntoAttrs (
     callPackage ./cc-wrapper/hardening.nix {
-      stdenv = gccStdenv;
+      stdenv = pkgs.gccStdenv;
     }
   );
   hardeningFlags-clang = recurseIntoAttrs (
     callPackage ./cc-wrapper/hardening.nix {
-      stdenv = llvmPackages.stdenv;
+      stdenv = pkgs.llvmPackages.stdenv;
     }
   );
 
@@ -115,8 +134,8 @@ with pkgs;
 
   hooks = recurseIntoAttrs (callPackage ./hooks { });
 
-  cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
-  cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
+  cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = pkgs.gccMultiStdenv; };
+  cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = pkgs.clangMultiStdenv; };
 
   compress-drv = callPackage ../build-support/compress-drv/test.nix { };
 
@@ -124,11 +143,16 @@ with pkgs;
   fetchtorrent = recurseIntoAttrs (callPackages ../build-support/fetchtorrent/tests.nix { });
   fetchpatch = recurseIntoAttrs (callPackages ../build-support/fetchpatch/tests.nix { });
   fetchpatch2 = recurseIntoAttrs (
-    callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = fetchpatch2; }
+    callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = pkgs.fetchpatch2; }
   );
   fetchDebianPatch = recurseIntoAttrs (callPackages ../build-support/fetchdebianpatch/tests.nix { });
   fetchzip = recurseIntoAttrs (callPackages ../build-support/fetchzip/tests.nix { });
   fetchgit = recurseIntoAttrs (callPackages ../build-support/fetchgit/tests.nix { });
+  fetchNextcloudApp = recurseIntoAttrs (
+    callPackages ../build-support/fetchnextcloudapp/tests.nix { }
+  );
+  fetchFromBitbucket = recurseIntoAttrs (callPackages ../build-support/fetchbitbucket/tests.nix { });
+  fetchFromGitHub = recurseIntoAttrs (callPackages ../build-support/fetchgithub/tests.nix { });
   fetchFirefoxAddon = recurseIntoAttrs (
     callPackages ../build-support/fetchfirefoxaddon/tests.nix { }
   );
@@ -146,9 +170,9 @@ with pkgs;
 
   php = recurseIntoAttrs (callPackages ./php { });
 
-  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { }) // {
-    __recurseIntoDerivationForReleaseJobs = true;
-  };
+  go = recurseIntoAttrs (callPackage ../build-support/go/tests.nix { });
+
+  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
 
   buildRustCrate = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { });
   importCargoLock = recurseIntoAttrs (callPackage ../build-support/rust/test/import-cargo-lock { });
@@ -166,6 +190,8 @@ with pkgs;
   cuda = callPackage ./cuda { };
 
   trivial-builders = callPackage ../build-support/trivial-builders/test/default.nix { };
+
+  vmTools = callPackage ../build-support/vm/test.nix { };
 
   writers = callPackage ../build-support/writers/test.nix { };
 
@@ -187,7 +213,7 @@ with pkgs;
       # Enable sanitizers in the tests only, to avoid the performance cost in regular usage.
       # The sanitizers cause errors on aarch64-darwin, see https://github.com/NixOS/nixpkgs/pull/150079#issuecomment-994132734
       sanitizers =
-        pkgs.lib.optionals (!(pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64))
+        optionals (!(pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64))
           [
             "undefined"
             "address"
@@ -195,11 +221,25 @@ with pkgs;
     };
   };
 
-  pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
+  lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+
+  pkgs-lib = recurseIntoAttrs (callPackage ../pkgs-lib/tests { });
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
+
+  auto-patchelf-hook-preserve-origin = callPackage ./auto-patchelf-hook-preserve-origin { };
+
+  # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
+  arrayUtilities = recurseIntoAttrs (
+    concatMapAttrs (
+      name: value:
+      optionalAttrs (value ? passthru.tests) {
+        ${name} = value.passthru.tests;
+      }
+    ) pkgs.arrayUtilities
+  );
 
   srcOnly = callPackage ../build-support/src-only/tests.nix { };
 
@@ -212,4 +252,10 @@ with pkgs;
   build-environment-info = callPackage ./build-environment-info { };
 
   rust-hooks = recurseIntoAttrs (callPackages ../build-support/rust/hooks/test { });
+
+  prefer-remote-fetch = recurseIntoAttrs (
+    callPackages ../build-support/prefer-remote-fetch/tests.nix { }
+  );
+
+  home-assistant-component-tests = recurseIntoAttrs pkgs.home-assistant.tests.components;
 }

@@ -11,17 +11,17 @@
   freetype,
   alsa-lib,
   makeShellWrapper,
-  libX11,
-  libXext,
-  libXdamage,
-  libXfixes,
+  libx11,
+  libxext,
+  libxdamage,
+  libxfixes,
   libxcb,
-  libXcomposite,
-  libXcursor,
-  libXi,
-  libXrender,
-  libXtst,
-  libXxf86vm,
+  libxcomposite,
+  libxcursor,
+  libxi,
+  libxrender,
+  libxtst,
+  libxxf86vm,
   util-linux,
   socat,
 }:
@@ -39,7 +39,7 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-Ma2WWknZ0rF9NZNqOaPyQ2eil34HWmgSIHMnfaSaFjs=";
+      x86_64-linux = "sha256-mkiVKp5zh4dZ9MHk8mIIZVvUzGH89AK7sWWuuxcAWWs=";
     }
     .${system} or throwSystem;
 
@@ -48,7 +48,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "xpipe";
-  version = "16.4.1";
+  version = "21.2.1";
 
   src = fetchzip {
     url = "https://github.com/xpipe-io/xpipe/releases/download/${version}/xpipe-portable-linux-${arch}.tar.gz";
@@ -70,18 +70,18 @@ stdenvNoCC.mkDerivation rec {
     freetype
     gtk3
     alsa-lib
-    libX11
-    libX11
-    libXext
-    libXdamage
-    libXfixes
+    libx11
+    libx11
+    libxext
+    libxdamage
+    libxfixes
     libxcb
-    libXcomposite
-    libXcursor
-    libXi
-    libXrender
-    libXtst
-    libXxf86vm
+    libxcomposite
+    libxcursor
+    libxi
+    libxrender
+    libxtst
+    libxxf86vm
     util-linux
     socat
   ];
@@ -141,18 +141,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform shell connection hub and remote file manager";
     homepage = "https://github.com/xpipe-io/${pname}";
     downloadPage = "https://github.com/xpipe-io/${pname}/releases/latest";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     changelog = "https://github.com/xpipe-io/${pname}/releases/tag/${version}";
     license = [
-      licenses.asl20
-      licenses.unfree
+      lib.licenses.asl20
+      lib.licenses.unfree
     ];
-    maintainers = with maintainers; [ crschnick ];
+    maintainers = with lib.maintainers; [ crschnick ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = pname;
+    mainProgram = "xpipe";
   };
 }

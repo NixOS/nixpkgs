@@ -19,22 +19,21 @@
 }:
 
 let
-  bins =
-    [
-      coreutils
-      debootstrap
-      gnupg
-      gnutar
-      squashfsTools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      # repack-windows deps
-      cdrkit
-      hivex
-      wimlib
-    ];
+  bins = [
+    coreutils
+    debootstrap
+    gnupg
+    gnutar
+    squashfsTools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # repack-windows deps
+    cdrkit
+    hivex
+    wimlib
+  ];
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "distrobuilder";
   version = "3.2";
 
@@ -43,7 +42,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "distrobuilder";
-    tag = "distrobuilder-${version}";
+    tag = "distrobuilder-${finalAttrs.version}";
     sha256 = "sha256-aDCx2WGAKdTNf0uMzwxG0AUmbuuWBFPYzNyycKklYOY=";
   };
 
@@ -55,7 +54,8 @@ buildGoModule rec {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
-  ] ++ bins;
+  ]
+  ++ bins;
 
   postInstall = ''
     wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}
@@ -66,7 +66,7 @@ buildGoModule rec {
       incus-lts = nixosTests.incus-lts.container;
     };
 
-    generator = callPackage ./generator.nix { inherit src version; };
+    generator = callPackage ./generator.nix { inherit (finalAttrs) src version; };
 
     updateScript = nix-update-script { };
   };
@@ -79,4 +79,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "distrobuilder";
   };
-}
+})

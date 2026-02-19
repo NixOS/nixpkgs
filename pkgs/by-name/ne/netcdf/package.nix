@@ -18,12 +18,12 @@
 let
   inherit (hdf5) mpiSupport mpi;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
   version = "4.9.3";
 
   src = fetchurl {
-    url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
+    url = "https://downloads.unidata.ucar.edu/netcdf-c/${finalAttrs.version}/netcdf-c-${finalAttrs.version}.tar.gz";
     hash = "sha256-pHQUmETmFEVmZz+s8Jf+olPchDw3vAp9PeBH3Irdpd0=";
   };
 
@@ -46,17 +46,16 @@ stdenv.mkDerivation rec {
     libxml2 # xml2-config
   ];
 
-  buildInputs =
-    [
-      curl
-      hdf5
-      libxml2
-      bzip2
-      libzip
-      zstd
-    ]
-    ++ lib.optional szipSupport szip
-    ++ lib.optional mpiSupport mpi;
+  buildInputs = [
+    curl
+    hdf5
+    libxml2
+    bzip2
+    libzip
+    zstd
+  ]
+  ++ lib.optional szipSupport szip
+  ++ lib.optional mpiSupport mpi;
 
   strictDeps = true;
 
@@ -69,18 +68,17 @@ stdenv.mkDerivation rec {
     # tracked upstream here: https://github.com/Unidata/netcdf-c/issues/2715
     lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 
-  configureFlags =
-    [
-      "--enable-netcdf-4"
-      "--enable-dap"
-      "--enable-shared"
-      "--disable-dap-remote-tests"
-      "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
-    ]
-    ++ (lib.optionals mpiSupport [
-      "--enable-parallel-tests"
-      "CC=${lib.getDev mpi}/bin/mpicc"
-    ]);
+  configureFlags = [
+    "--enable-netcdf-4"
+    "--enable-dap"
+    "--enable-shared"
+    "--disable-dap-remote-tests"
+    "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
+  ]
+  ++ (lib.optionals mpiSupport [
+    "--enable-parallel-tests"
+    "CC=${lib.getDev mpi}/bin/mpicc"
+  ]);
 
   enableParallelBuilding = true;
 
@@ -101,7 +99,7 @@ stdenv.mkDerivation rec {
     description = "Libraries for the Unidata network Common Data Format";
     platforms = lib.platforms.unix;
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";
-    changelog = "https://docs.unidata.ucar.edu/netcdf-c/${version}/RELEASE_NOTES.html";
+    changelog = "https://docs.unidata.ucar.edu/netcdf-c/${finalAttrs.version}/RELEASE_NOTES.html";
     license = lib.licenses.bsd3;
   };
-}
+})

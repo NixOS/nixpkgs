@@ -23,10 +23,10 @@ runTest (
           services.nextcloud = {
             caching = {
               apcu = true;
-              redis = false;
               memcached = true;
             };
             config.dbtype = "mysql";
+            configureRedis = false;
           };
 
           services.memcached.enable = true;

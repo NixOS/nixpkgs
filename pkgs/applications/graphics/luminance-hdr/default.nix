@@ -81,11 +81,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://qtpfsgui.sourceforge.net/";
     description = "Complete open source solution for HDR photography";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.hrdinka ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

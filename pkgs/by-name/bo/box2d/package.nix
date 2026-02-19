@@ -13,11 +13,11 @@
   glfw3,
   imgui,
   libGLU,
-  libX11,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxinerama,
+  libxrandr,
   libglut,
   xorgproto,
 
@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "box2d";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "erincatto";
     repo = "box2d";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QTSU1+9x8GoUK3hlTDMh43fc4vbNfFR7syt6xVHIuPs=";
+    hash = "sha256-IqQy9A8fWLG9H8ZPmOXeFZDaaks84miRuzXaFlNwm0g=";
   };
 
   patches = [
@@ -72,11 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
       IMGUI_BUILD_GLFW_BINDING = true;
     })
     libGLU
-    libX11
-    libXcursor
-    libXi
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
     libglut
     xorgproto
   ];

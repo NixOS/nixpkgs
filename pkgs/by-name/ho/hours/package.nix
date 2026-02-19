@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "hours";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "dhth";
     repo = "hours";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B9M02THTCrr7ylbbflpkpTFMuoIwV2O0PQKOKbyxYPg=";
+    hash = "sha256-z1VHvzUQJoZeSuc1LpTw+z3XCFRJqNU+GIWwlAEXl1o=";
   };
 
-  vendorHash = "sha256-5lhn0iTLmXUsaedvtyaL3qWLosmQaQVq5StMDl7pXXI=";
+  vendorHash = "sha256-Sim17RybSM92H6OP0Od9gH/wqa+5cd4Lmli6Na8RDJk=";
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

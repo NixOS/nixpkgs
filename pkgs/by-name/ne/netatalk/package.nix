@@ -5,6 +5,7 @@
   acl,
   autoreconfHook,
   avahi,
+  bstring,
   db,
   libevent,
   libgcrypt,
@@ -24,15 +25,16 @@
   dbus,
   iniparser,
   pandoc,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "4.2.3";
+  version = "4.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EKPDpMEazsZX35wzxppiaeMZ26dZxeHfpB7lo/G4DEM=";
+    hash = "sha256-j8qwvzs5zYqU/j7nqCZMYABRWjrzd9o0FmlmCasTMW0=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     acl
     avahi
+    bstring
     db
     libevent
     libgcrypt
@@ -60,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     iniparser
     pandoc
+    sqlite
   ];
 
   mesonFlags = [
@@ -69,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwith-bdb-include-path=${db.dev}/include"
     "-Dwith-install-hooks=false"
     "-Dwith-init-hooks=false"
-    "-Dwith-lockfile-path=/run/lock/"
+    "-Dwith-lockfile-path=/run/lock"
     "-Dwith-cracklib=true"
     "-Dwith-cracklib-path=${cracklib.out}"
     "-Dwith-statedir-creation=false"
@@ -82,6 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://netatalk.io/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jcumming ];
+    maintainers = with lib.maintainers; [
+      jcumming
+      nulleric
+    ];
   };
 })

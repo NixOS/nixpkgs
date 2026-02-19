@@ -6,15 +6,15 @@
   mlton,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlkit";
-  version = "4.7.14";
+  version = "4.7.21";
 
   src = fetchFromGitHub {
     owner = "melsman";
     repo = "mlkit";
-    rev = "v${version}";
-    sha256 = "sha256-0nAQHBcQgGdcWd4SFhDon7I0zi5U+YRTdGvG78tri6A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c1GdM3K6dgY0EgHu01adBXwAxuMehRfo73Lo71couJ4=";
   };
 
   nativeBuildInputs = [
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Standard ML Compiler and Toolkit";
     homepage = "https://elsman.com/mlkit/";
-    changelog = "https://github.com/melsman/mlkit/blob/v${version}/NEWS.md";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ athas ];
+    changelog = "https://github.com/melsman/mlkit/blob/v${finalAttrs.version}/NEWS.md";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ athas ];
   };
-}
+})

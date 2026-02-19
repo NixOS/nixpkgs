@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "Mozc UT EDICT2 Dictionary is a dictionary converted from EDICT2 for Mozc.";
+    description = "Dictionary converted from EDICT2 for Mozc";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-sudachidict";
     license = with lib.licenses; [
       asl20

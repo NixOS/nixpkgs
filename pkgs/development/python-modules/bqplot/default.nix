@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   jupyter-packaging,
   jupyterlab,
@@ -15,14 +14,12 @@
 
 buildPythonPackage rec {
   pname = "bqplot";
-  version = "0.12.43";
-
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  version = "0.12.45";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8rRp0fA99PUYc8sEBqJLVs30qDX8WqlWB3b8Y2uLNEk=";
+    hash = "sha256-7eAOn999kuQ8wtG5aRx9oXa2IW/dGHyOkvGde+rKXio=";
   };
 
   # upstream seems in flux for 0.13 release. they seem to want to migrate from
@@ -33,12 +30,12 @@ buildPythonPackage rec {
       --replace "jupyterlab~=" "jupyterlab>="
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     jupyter-packaging
     jupyterlab
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bqscales
     ipywidgets
     numpy

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   callPackage,
-  pythonOlder,
   fetchPypi,
   writeText,
 
@@ -12,11 +11,9 @@
 
   # dependencies
   attrs,
-  exceptiongroup,
   iniconfig,
   packaging,
   pluggy,
-  tomli,
 
   # optional-dependencies
   argcomplete,
@@ -29,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "8.3.5";
+  version = "8.4.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9O/nDMFOURVlrEdrV8J54SqFWxH0jyEq8QgO8iY9OEU=";
+    hash = "sha256-hsDQuTMGuWHVjWKk20h58n/iVRPUuWnfNRq93bPDDgE=";
   };
 
   outputs = [
@@ -42,21 +39,17 @@ buildPythonPackage rec {
     "testout"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs =
-    [
-      iniconfig
-      packaging
-      pluggy
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      exceptiongroup
-      tomli
-    ];
+  dependencies = [
+    iniconfig
+    packaging
+    pluggy
+    pygments
+  ];
 
   optional-dependencies = {
     testing = [
@@ -64,7 +57,6 @@ buildPythonPackage rec {
       attrs
       hypothesis
       mock
-      pygments
       requests
       setuptools
       xmlschema
@@ -102,11 +94,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    teams = [ teams.python ];
-    license = licenses.mit;
+    teams = [ lib.teams.python ];
+    license = lib.licenses.mit;
   };
 }

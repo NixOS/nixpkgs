@@ -34,12 +34,12 @@ in
       ];
     };
 
-    boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
+    boot.kernelPackages = mkDefault pkgs.linuxKernel.packages.linux_hardened;
 
     nix.settings.allowed-users = mkDefault [ "@users" ];
 
     environment.memoryAllocator.provider = mkDefault "scudo";
-    environment.variables.SCUDO_OPTIONS = mkDefault "ZeroContents=1";
+    environment.variables.SCUDO_OPTIONS = mkDefault "zero_contents=true";
 
     security.lockKernelModules = mkDefault true;
 

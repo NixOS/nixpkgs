@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -8,17 +9,19 @@
 
 buildPythonPackage rec {
   pname = "pytubefix";
-  version = "9.0.1";
+  version = "9.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JuanBindez";
     repo = "pytubefix";
     tag = "v${version}";
-    hash = "sha256-TIrt20FAQumtDisscY9jcJY+Cuh1zA92hU3HVmwr4Bk=";
+    hash = "sha256-r8bzgDQK3csx3Myh90lVnv4Zs3cJq6B+PmpVAUCMRLs=";
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

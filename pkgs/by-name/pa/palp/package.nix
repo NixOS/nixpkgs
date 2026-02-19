@@ -9,12 +9,12 @@
 let
   dim = toString dimensions;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "palp";
   version = "2.21";
 
   src = fetchurl {
-    url = "http://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/${pname}-${version}.tar.gz";
+    url = "http://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/palp-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-fkp78hmZioRMC8zgoXbknQdDy0tQWg4ZUym/LsGW3dc=";
   };
 
@@ -43,21 +43,20 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      for file in poly class cws nef mori; do
-        cp -p $file.x "$out/bin/$file-${dim}d.x"
-      done
-    ''
-    + lib.optionalString doSymlink ''
-      cd $out/bin
-      for file in poly class cws nef mori; do
-        ln -sf $file-6d.x $file.x
-      done
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    for file in poly class cws nef mori; do
+      cp -p $file.x "$out/bin/$file-${dim}d.x"
+    done
+  ''
+  + lib.optionalString doSymlink ''
+    cd $out/bin
+    for file in poly class cws nef mori; do
+      ln -sf $file-6d.x $file.x
+    done
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Package for Analyzing Lattice Polytopes";
     longDescription = ''
       A Package for Analyzing Lattice Polytopes (PALP) is a set of C
@@ -87,8 +86,8 @@ stdenv.mkDerivation rec {
     # Just a link on the website pointing to gpl -- now gplv3. When the last
     # version was released that pointed to gplv2 however, so thats probably
     # the right license.
-    license = licenses.gpl2;
-    teams = [ teams.sage ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.unix;
   };
-}
+})

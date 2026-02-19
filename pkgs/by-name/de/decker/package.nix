@@ -8,15 +8,15 @@
   multimarkdown,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "decker";
-  version = "1.54";
+  version = "1.60";
 
   src = fetchFromGitHub {
     owner = "JohnEarnest";
     repo = "Decker";
-    rev = "v${version}";
-    hash = "sha256-6rKfIMEWMig1LAaLk1eSUHnc2104FuN5wTVpf1SgCtg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-A8lsQs3fZm8XREHx2IPRNWZp4tTZ4Jya30+gBT6xME8=";
   };
 
   buildInputs = [
@@ -75,12 +75,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://beyondloom.com/decker";
     description = "Multimedia platform for creating and sharing interactive documents";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "decker";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
-}
+})

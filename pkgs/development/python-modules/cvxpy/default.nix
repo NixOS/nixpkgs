@@ -12,6 +12,7 @@
   # dependencies
   clarabel,
   cvxopt,
+  highspy,
   osqp,
   scipy,
   scs,
@@ -23,23 +24,26 @@
   useOpenmp ? (!stdenv.hostPlatform.isDarwin),
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.6.5";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
-    tag = "v${version}";
-    hash = "sha256-utTd/13RQ3WKWreCKFMqGwPUFbPw3TaKKbS4T1BGGP4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7bLvVvOthbEe+Ry/NQCxP5El9K8qITIGwJzypooT2mw=";
   };
 
-  # we need to patch out numpy version caps from upstream
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy >= 2.0.0" "numpy"
-  '';
+  postPatch =
+    # too tight tolerance in tests (AssertionError)
+    ''
+      substituteInPlace cvxpy/tests/test_constant_atoms.py \
+        --replace-fail \
+          "CLARABEL: 1e-7," \
+          "CLARABEL: 1e-6,"
+    '';
 
   build-system = [
     numpy
@@ -50,6 +54,7 @@ buildPythonPackage rec {
   dependencies = [
     clarabel
     cvxopt
+    highspy
     numpy
     osqp
     scipy
@@ -67,7 +72,7 @@ buildPythonPackage rec {
     export LDFLAGS="-lgomp"
   '';
 
-  pytestFlagsArray = [ "cvxpy" ];
+  enabledTestPaths = [ "cvxpy" ];
 
   disabledTests = [
     # Disable the slowest benchmarking tests, cuts test time in half
@@ -89,8 +94,8 @@ buildPythonPackage rec {
     description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
-    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
+    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = [ lib.maintainers.GaetanLepage ];
   };
-}
+})

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,18 +8,18 @@
   karmor,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "karmor";
-  version = "1.3.4";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "kubearmor";
     repo = "kubearmor-client";
-    rev = "v${version}";
-    hash = "sha256-3WPelRhvK/9LY+TFDExcltszE1wVRr1MMY9Xjijj0so=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xOI6meI88GB5w19T9eSn+8dTnhrUxUCKHUBk/1EaDVI=";
   };
 
-  vendorHash = "sha256-HH3U1reZXG9w7uwnXbY33hsKlPCxbVb2yvw4KmBfOa0=";
+  vendorHash = "sha256-FL5WL44dsM0uPYXMNfYKRd37umId21rMGvj84rYTU3A=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,7 +27,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X=github.com/kubearmor/kubearmor-client/selfupdate.BuildDate=1970-01-01"
-    "-X=github.com/kubearmor/kubearmor-client/selfupdate.GitSummary=${version}"
+    "-X=github.com/kubearmor/kubearmor-client/selfupdate.GitSummary=${finalAttrs.version}"
   ];
 
   # integration tests require network access
@@ -34,6 +35,8 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/{kubearmor-client,karmor}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd karmor \
       --bash <($out/bin/karmor completion bash) \
       --fish <($out/bin/karmor completion fish) \
@@ -47,15 +50,14 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Client tool to help manage KubeArmor";
     mainProgram = "karmor";
     homepage = "https://kubearmor.io";
-    changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      urandom
+    changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kashw2
     ];
   };
-}
+})

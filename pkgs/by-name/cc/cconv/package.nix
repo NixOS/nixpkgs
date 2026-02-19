@@ -6,14 +6,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cconv";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "xiaoyjy";
     repo = "cconv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "RAFl/+I+usUfeG/l17F3ltThK7G4+TekyQGwzQIgeH8=";
   };
 
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libiconv ];
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS=-liconv";
 
-  meta = with lib; {
+  meta = {
     description = "Iconv based simplified-traditional chinese conversion tool";
     mainProgram = "cconv";
     homepage = "https://github.com/xiaoyjy/cconv";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.redfish64 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.redfish64 ];
   };
-}
+})

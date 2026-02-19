@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxeddsa";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "libxeddsa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kdy+S51nQstRFGw5mIW3TW+WBNynHLpmFC1t6Mc02K4=";
+    hash = "sha256-4xBZ3Ul2Mm5fz/vfulFQmWC6+CQB/egiw7NsC/GrUyw=";
   };
 
   strictDeps = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Syndace/libxeddsa/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

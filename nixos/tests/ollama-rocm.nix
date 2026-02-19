@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   name = "ollama-rocm";
   meta.maintainers = with lib.maintainers; [ abysssol ];
@@ -7,7 +7,7 @@
     { ... }:
     {
       services.ollama.enable = true;
-      services.ollama.acceleration = "rocm";
+      services.ollama.package = pkgs.ollama-rocm;
     };
 
   testScript = ''

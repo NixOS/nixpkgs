@@ -4,32 +4,30 @@
   buildDunePackage,
   fetchFromGitHub,
   ctypes,
+  dune-configurator,
 }:
 
-buildDunePackage rec {
+(buildDunePackage.override { inherit stdenv; }) (finalAttrs: {
   pname = "eigen";
-  version = "0.2.0";
-
-  useDune2 = true;
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "owlbarn";
-    repo = pname;
-    rev = version;
-    sha256 = "1zaw03as14hyvfpyj6bjrfbcxp2ljdbqcqqgm53kms244mig425f";
+    repo = "eigen";
+    tag = finalAttrs.version;
+    hash = "sha256-bi+7T9qXByVPIy86lBMiJ2LTKCoNesrKZPa3VEDyINA=";
   };
-
-  minimalOCamlVersion = "4.02";
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   propagatedBuildInputs = [ ctypes ];
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  buildInputs = [ dune-configurator ];
+
+  meta = {
+    homepage = "https://github.com/owlbarn/eigen";
     description = "Minimal/incomplete Ocaml interface to Eigen3, mostly for Owl";
-    platforms = platforms.x86_64;
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.mit;
+    platforms = lib.platforms.x86_64;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

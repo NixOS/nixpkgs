@@ -6,11 +6,12 @@
   lapack,
   python3,
   fetchFromGitHub,
+  fetchpatch,
 }:
 assert (!blas.isILP64);
 assert blas.isILP64 == lapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wannier90";
   version = "3.1.0";
 
@@ -23,9 +24,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wannier-developers";
     repo = "wannier90";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+Mq7lM6WuwAnK/2FlDz9gNRIg2sRazQRezb3BfD0veY=";
   };
+
+  patches = [
+    # upstream patch, fixes test runner.
+    (fetchpatch {
+      name = "replace-obsolete-pipes-module";
+      url = "https://github.com/wannier-developers/wannier90/commit/8aef6edaa4f169d45b479dc5d5c5efb8b9385a49.patch";
+      hash = "sha256-6ZfHd8CVTzfaj99AA3dsJJ/EOeCZmzACAM5pe2wBo8g=";
+    })
+  ];
 
   # test cases are removed as error bounds of wannier90 are obviously to tight
   postPatch = ''
@@ -35,7 +45,11 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     cp config/make.inc.gfort make.inc
+
+    runHook postConfigure
   '';
 
   buildFlags = [
@@ -67,11 +81,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Calculation of maximally localised Wannier functions";
     homepage = "https://github.com/wannier-developers/wannier90";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

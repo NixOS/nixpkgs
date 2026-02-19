@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
@@ -7,18 +8,16 @@
   installShellFiles,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprland-workspaces-tui";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Levizor";
     repo = "hyprland-workspaces-tui";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DLu7njrD5i9FeNWVZGBTKki70FurIGxtwgS6HbA7YLE=";
   };
-
-  useFetchCargoVendor = true;
 
   cargoHash = "sha256-1NZrpqbFiYSJtFNnlDwXX4J4rLwa9XlwUT+boMtr4tk=";
 
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ hyprland-workspaces ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hyprland-workspaces-tui \
       --bash <($out/bin/hyprland-workspaces-tui --completions bash) \
       --zsh <($out/bin/hyprland-workspaces-tui --completions zsh) \
@@ -51,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ Levizor ];
     platforms = lib.platforms.linux;
   };
-}
+})

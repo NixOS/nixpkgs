@@ -10,7 +10,7 @@
   pkg-config,
   openssl,
   glib-networking,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   jq,
   moreutils,
 }:
@@ -18,19 +18,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.8.0";
+  version = "4.10.2";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cixpsn0jMufd6VrBCsCH9t3bpkKdgi1i0qnkBlLgLG0=";
+    hash = "sha256-M1p8rwdNEsKvZ1ssxsFyfiIBS8tKrXhuz85CKM4dSRw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-twfRuoA4z+Xgyyn7aIRy6MV1ozN2+qhSLh8i+qOTa2Q=";
+  cargoHash = "sha256-Ie6xq21JoJ37j/BjdVrsiJ3JULVEV5ZwN3hf9NhfXVA=";
 
   postPatch =
     let
@@ -68,20 +67,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   '';
 
-  nativeBuildInputs =
-    [
-      cargo-tauri_1.hook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      desktop-file-utils
-      pkg-config
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    cargo-tauri_1.hook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    desktop-file-utils
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     openssl
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   meta = {
@@ -94,5 +92,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cinny";
+    # Waiting for update to Tauri v2, webkitgtk_4_0 is deprecated
+    # See https://github.com/cinnyapp/cinny-desktop/issues/398 and https://github.com/NixOS/nixpkgs/pull/450065
+    broken = stdenv.hostPlatform.isLinux;
   };
 })

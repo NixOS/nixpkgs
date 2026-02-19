@@ -1,5 +1,5 @@
 # This module allows the test driver to connect to the virtual machine
-# via a root shell attached to port 514.
+# via a root shell attached to a virtio console.
 
 {
   options,
@@ -14,7 +14,7 @@ with lib;
 let
   cfg = config.testing;
 
-  qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
 
   backdoorService = {
     requires = [
@@ -67,9 +67,17 @@ let
       # we can also run non-NixOS guests during tests. This, however, is
       # mostly futureproofing as the test instrumentation is still very
       # tightly coupled to NixOS.
-      PS1="" exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
+      PS1="" exec ${pkgs.bashNonInteractive}/bin/bash --norc /dev/hvc0
     '';
     serviceConfig.KillSignal = "SIGHUP";
+  };
+
+  managerSettings = {
+    # Don't clobber the console with duplicate systemd messages.
+    ShowStatus = false;
+    # Allow very slow start
+    DefaultTimeoutStartSec = 300;
+    DefaultDeviceTimeoutSec = 300;
   };
 
 in
@@ -77,6 +85,9 @@ in
 {
 
   options.testing = {
+    backdoor = lib.mkEnableOption "backdoor service in stage 2" // {
+      default = true;
+    };
 
     initrdBackdoor = lib.mkEnableOption ''
       backdoor.service in initrd. Requires
@@ -99,12 +110,14 @@ in
       }
     ];
 
-    systemd.services.backdoor = lib.mkMerge [
-      backdoorService
-      {
-        wantedBy = [ "multi-user.target" ];
-      }
-    ];
+    systemd.services.backdoor = lib.mkIf cfg.backdoor (
+      lib.mkMerge [
+        backdoorService
+        {
+          wantedBy = [ "multi-user.target" ];
+        }
+      ]
+    );
 
     boot.initrd.systemd = lib.mkMerge [
       {
@@ -115,7 +128,7 @@ in
           MaxLevelConsole=debug
         '';
 
-        extraConfig = config.systemd.extraConfig;
+        settings.Manager = managerSettings;
       }
 
       (lib.mkIf cfg.initrdBackdoor {
@@ -201,7 +214,7 @@ in
     ];
 
     # `xwininfo' is used by the test driver to query open windows.
-    environment.systemPackages = [ pkgs.xorg.xwininfo ];
+    environment.systemPackages = [ pkgs.xwininfo ];
 
     # Log everything to the serial console.
     services.journald.extraConfig = ''
@@ -210,13 +223,7 @@ in
       MaxLevelConsole=debug
     '';
 
-    systemd.extraConfig = ''
-      # Don't clobber the console with duplicate systemd messages.
-      ShowStatus=no
-      # Allow very slow start
-      DefaultTimeoutStartSec=300
-      DefaultDeviceTimeoutSec=300
-    '';
+    systemd.settings.Manager = managerSettings;
     systemd.user.extraConfig = ''
       # Allow very slow start
       DefaultTimeoutStartSec=300

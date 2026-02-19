@@ -5,8 +5,8 @@
   ffmpeg,
   glib,
   libGLU,
-  libICE,
-  libX11,
+  libice,
+  libx11,
   libgbm,
   perl,
   pkg-config,
@@ -17,13 +17,13 @@
   wxGTK32,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "survex";
-  version = "1.4.17";
+  version = "1.4.19";
 
   src = fetchurl {
-    url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-r24vcOV1pjNxnLRfy2tSG7bDG/HLChwEvlc83YMeOEc=";
+    url = "https://survex.com/software/${finalAttrs.version}/survex-${finalAttrs.version}.tar.gz";
+    hash = "sha256-X8FZCZTJ7DkZeYnrzaLCukRhs/kTHwre9F1TTRlK2ro=";
   };
 
   nativeBuildInputs = [
@@ -33,22 +33,21 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      ffmpeg
-      glib
-      proj
-      gdal
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # TODO: libGLU doesn't build for macOS because of Mesa issues
-      # (#233265); is it required for anything?
-      libGLU
-      libgbm
-      libICE
-      libX11
-    ];
+  buildInputs = [
+    ffmpeg
+    glib
+    proj
+    gdal
+    wxGTK32
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # TODO: libGLU doesn't build for macOS because of Mesa issues
+    # (#233265); is it required for anything?
+    libGLU
+    libgbm
+    libice
+    libx11
+  ];
 
   strictDeps = true;
 
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
   doCheck = (!stdenv.hostPlatform.isDarwin); # times out
   enableParallelChecking = false;
 
-  meta = with lib; {
+  meta = {
     description = "Free Software/Open Source software package for mapping caves";
     longDescription = ''
       Survex is a Free Software/Open Source software package for mapping caves,
@@ -72,9 +71,9 @@ stdenv.mkDerivation rec {
       variety of platforms, including Linux/Unix, macOS, and Microsoft Windows.
     '';
     homepage = "https://survex.com/";
-    changelog = "https://github.com/ojwb/survex/raw/v${version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.matthewcroughan ];
-    platforms = platforms.all;
+    changelog = "https://github.com/ojwb/survex/raw/v${finalAttrs.version}/NEWS";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.matthewcroughan ];
+    platforms = lib.platforms.all;
   };
-}
+})

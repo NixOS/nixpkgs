@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
   inherit version src;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Nh4YesgWa1JR8tLfrIRps9TBdsAfilXu6G2/kB08co8=";
 
   # Environment variables, based on <https://github.com/vadimcn/codelldb/blob/master/cargo_config.unix.toml>

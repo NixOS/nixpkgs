@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Small daemon to speed up UPnP device discoveries";
     longDescription = ''
       MiniSSDPd receives NOTIFY packets and stores (caches) that information
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://miniupnp.free.fr/minissdpd.html";
     downloadPage = "http://miniupnp.free.fr/files/";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     mainProgram = "minissdpd";
   };
 }

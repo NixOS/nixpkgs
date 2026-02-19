@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jinja2_pluralize" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jinja2 pluralize filters";
     homepage = "https://github.com/audreyr/jinja2_pluralize";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dzabraev ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dzabraev ];
   };
 }

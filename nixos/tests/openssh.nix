@@ -224,6 +224,58 @@ in
         ];
       };
 
+    server-null-pam =
+      { pkgs, ... }:
+      {
+        services.openssh = {
+          enable = true;
+          package = pkgs.opensshPackages.openssh.override {
+            withPAM = false;
+          };
+          settings = {
+            UsePAM = null;
+          };
+        };
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilPublicKey
+        ];
+      };
+
+    server-sftp =
+      { pkgs, ... }:
+      {
+        services.openssh = {
+          enable = true;
+          extraConfig = ''
+            Match Group sftponly
+              ChrootDirectory /srv/sftp
+              ForceCommand internal-sftp
+          '';
+        };
+
+        users.groups = {
+          sftponly = { };
+        };
+        users.users = {
+          alice = {
+            isNormalUser = true;
+            createHome = false;
+            group = "sftponly";
+            shell = "/run/current-system/sw/bin/nologin";
+            openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+          };
+        };
+      };
+
+    server-no-sshd-with-key =
+      { pkgs, ... }:
+      {
+        services.openssh.generateHostKeys = true;
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilPublicKey
+        ];
+      };
+
     client =
       { ... }:
       {
@@ -238,16 +290,23 @@ in
   testScript = ''
     start_all()
 
-    server.wait_for_unit("sshd", timeout=30)
-    server_allowed_users.wait_for_unit("sshd", timeout=30)
-    server_localhost_only.wait_for_unit("sshd", timeout=30)
-    server_match_rule.wait_for_unit("sshd", timeout=30)
-    server_no_openssl.wait_for_unit("sshd", timeout=30)
-    server_no_pam.wait_for_unit("sshd", timeout=30)
+    server.wait_for_unit("sshd", timeout=60)
+    server_allowed_users.wait_for_unit("sshd", timeout=60)
+    server_localhost_only.wait_for_unit("sshd", timeout=60)
+    server_match_rule.wait_for_unit("sshd", timeout=60)
+    server_no_openssl.wait_for_unit("sshd", timeout=60)
+    server_no_pam.wait_for_unit("sshd", timeout=60)
+    server_null_pam.wait_for_unit("sshd", timeout=60)
+    server_null_pam.fail("journalctl -u sshd.service | grep 'Unsupported option UsePAM'")
+    server_sftp.wait_for_unit("sshd", timeout=60)
 
-    server_lazy.wait_for_unit("sshd.socket", timeout=30)
-    server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
-    server_lazy_socket.wait_for_unit("sshd.socket", timeout=30)
+    server_lazy.wait_for_unit("sshd.socket", timeout=60)
+    server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=60)
+    server_lazy_socket.wait_for_unit("sshd.socket", timeout=60)
+
+    # sshd-keygen is a oneshot unit, so just wait for multi-user.target, which
+    # pulls it in.
+    server_no_sshd_with_key.wait_for_unit("multi-user.target", timeout=60)
 
     with subtest("manual-authkey"):
         client.succeed(
@@ -350,6 +409,59 @@ in
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
             timeout=30
         )
+
+    with subtest("null-pam"):
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-null-pam true",
+            timeout=30
+        )
+
+    with subtest("sftp"):
+        server_sftp.succeed(
+          "mkdir -p /srv/sftp/uploads"
+        )
+        server_sftp.succeed(
+          "chown alice:sftponly /srv/sftp/uploads"
+        )
+        server_sftp.succeed(
+          "chmod 0755 /srv/sftp/uploads"
+        )
+
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+
+        client.succeed(
+            "echo 'hello-sftp-world' > test-file"
+        )
+        client.succeed(
+            "echo 'put test-file uploads/' > put-batch-file"
+        )
+
+        client.succeed(
+            "sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil -b put-batch-file alice@server-sftp",
+            timeout=30
+        )
+
+        server_sftp.wait_for_file("/srv/sftp/uploads/test-file")
+
+    with subtest("keygen without sshd"):
+        client.fail(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@server-no-sshd-with-key true",
+            timeout=30
+        )
+        server_no_sshd_with_key.succeed("test -e /etc/ssh/ssh_host_ed25519_key")
+        server_no_sshd_with_key.succeed("test -e /etc/ssh/ssh_host_ed25519_key.pub")
+        server_no_sshd_with_key.fail("pgrep sshd")
+
+        # Validate the above check for sshd using pgrep does pass on a server
+        # that should have sshd running, just to prove it's a useful test.
+        server.succeed("pgrep sshd")
 
     # None of the per-connection units should have failed.
     server_lazy.fail("systemctl is-failed 'sshd@*.service'")

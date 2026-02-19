@@ -14,9 +14,9 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "homematicip";
-  version = "2.0.1.1";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
-    tag = version;
-    hash = "sha256-klDyrbIJeAm3C7sCo4Z4OKDvm5+V8mfwYbyS22CKVQU=";
+    tag = finalAttrs.version;
+    hash = "sha256-0i3sXtwEBd9rXOEcoL7E3pCwviCcMcIQcTFFLSV3s+0=";
   };
 
   build-system = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   disabledTests = [
     # Assert issues with datetime
@@ -76,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "homematicip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the homematicIP REST API";
     homepage = "https://github.com/hahn-th/homematicip-rest-api";
-    changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

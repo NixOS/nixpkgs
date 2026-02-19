@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   pkg-config,
   python3,
@@ -13,20 +12,24 @@
   systemd,
   zlib,
   pcre,
+  rapidjson,
+  small,
   libb64,
   libutp,
   libdeflate,
   utf8cpp,
+  fast-float,
   fmt,
   libpsl,
   miniupnpc,
+  crc32c,
   dht,
   libnatpmp,
   libiconv,
   # Build options
   enableGTK3 ? false,
   gtkmm3,
-  xorg,
+  libpthread-stubs,
   wrapGAppsHook3,
   enableQt5 ? false,
   enableQt6 ? false,
@@ -45,6 +48,7 @@ let
 
   apparmorRules = apparmorRulesFromClosure { name = "transmission-daemon"; } (
     [
+      crc32c
       curl
       libdeflate
       libevent
@@ -62,140 +66,128 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  version = "4.0.6";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = finalAttrs.version;
-    hash = "sha256-KBXvBFgrJ3njIoXrxHbHHLsiocwfd7Eba/GNI8uZA38=";
+    tag = finalAttrs.version;
+    hash = "sha256-glmwa06+jCyL9G2Rc58Yrvzo+/6Qu3bqwqy02RWgG64=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/transmission/transmission/commit/febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8.patch?full_index=1";
-      hash = "sha256-Ge0+AXf/ilfMieGBAdvvImY7JOb0gGIdeKprC37AROs=";
-      excludes = [
-        # The submodule that we don't use (we use our miniupnp)
-        "third-party/miniupnp"
-        # Hunk fails for this one, but we don't care because we don't rely upon
-        # xcode definitions even for the Darwin build.
-        "Transmission.xcodeproj/project.pbxproj"
-      ];
-    })
-  ];
 
   outputs = [
     "out"
     "apparmor"
   ];
 
-  cmakeFlags =
-    [
-      (cmakeBool "ENABLE_CLI" enableCli)
-      (cmakeBool "ENABLE_DAEMON" enableDaemon)
-      (cmakeBool "ENABLE_GTK" enableGTK3)
-      (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
-      (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
-      (cmakeBool "INSTALL_LIB" installLib)
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
-    ];
+  cmakeFlags = [
+    (cmakeBool "ENABLE_CLI" enableCli)
+    (cmakeBool "ENABLE_DAEMON" enableDaemon)
+    (cmakeBool "ENABLE_GTK" enableGTK3)
+    (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
+    (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
+    (cmakeBool "INSTALL_LIB" installLib)
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+  ];
 
   postPatch = ''
     # Clean third-party libraries to ensure system ones are used.
     # Excluding gtest since it is hardcoded to vendored version. The rest of the listed libraries are not packaged.
     pushd third-party
     for f in *; do
-        if [[ ! $f =~ googletest|wildmat|fast_float|wide-integer|jsonsl ]]; then
+        if [[ ! $f =~ googletest|wildmat|wide-integer|jsonsl ]]; then
             rm -r "$f"
         fi
     done
     popd
     rm \
+      cmake/FindFastFloat.cmake \
       cmake/FindFmt.cmake \
+      cmake/FindRapidJSON.cmake \
+      cmake/FindSmall.cmake \
       cmake/FindUtfCpp.cmake
     # Upstream uses different config file name.
-    substituteInPlace CMakeLists.txt --replace 'find_package(UtfCpp)' 'find_package(utf8cpp)'
-
-    # Use gettext even on Darwin
-    substituteInPlace libtransmission/utils.h \
-      --replace-fail '#if defined(HAVE_GETTEXT) && !defined(__APPLE__)' '#if defined(HAVE_GETTEXT)'
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'find_package(UtfCpp)' 'find_package(utf8cpp)'
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      python3
-    ]
-    ++ optionals enableGTK3 [ wrapGAppsHook3 ]
-    ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
-    ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    python3
+  ]
+  ++ optionals enableGTK3 [ wrapGAppsHook3 ]
+  ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
+  ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ];
 
-  buildInputs =
+  buildInputs = [
+    curl
+    crc32c
+    dht
+    fast-float
+    fmt
+    libb64
+    libdeflate
+    libevent
+    libnatpmp
+    libpsl
+    libutp
+    miniupnpc
+    openssl
+    pcre
+    rapidjson
+    small
+    utf8cpp
+    zlib
+  ]
+  ++ optionals enableQt5 (
+    with qt5;
     [
-      curl
-      dht
-      fmt
-      libb64
-      libdeflate
-      libevent
-      libnatpmp
-      libpsl
-      libutp
-      miniupnpc
-      openssl
-      pcre
-      utf8cpp
-      zlib
+      qttools
+      qtbase
     ]
-    ++ optionals enableQt5 (
-      with qt5;
-      [
-        qttools
-        qtbase
-      ]
-    )
-    ++ optionals enableQt6 (
-      with qt6Packages;
-      [
-        qttools
-        qtbase
-        qtsvg
-      ]
-    )
-    ++ optionals enableGTK3 [
-      gtkmm3
-      xorg.libpthreadstubs
+  )
+  ++ optionals enableQt6 (
+    with qt6Packages;
+    [
+      qttools
+      qtbase
+      qtsvg
     ]
-    ++ optionals enableSystemd [ systemd ]
-    ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
+  )
+  ++ optionals enableGTK3 [
+    gtkmm3
+    libpthread-stubs
+  ]
+  ++ optionals enableSystemd [ systemd ]
+  ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   postInstall = ''
     mkdir $apparmor
     cat >$apparmor/bin.transmission-daemon <<EOF
+    abi <abi/4.0>,
     include <tunables/global>
-    $out/bin/transmission-daemon {
+    profile $out/bin/transmission-daemon {
       include <abstractions/base>
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
       include "${apparmorRules}"
-      r @{PROC}/sys/kernel/random/uuid,
-      r @{PROC}/sys/vm/overcommit_memory,
-      r @{PROC}/@{pid}/environ,
-      r @{PROC}/@{pid}/mounts,
-      rwk /tmp/tr_session_id_*,
+      @{PROC}/sys/kernel/random/uuid r,
+      @{PROC}/sys/vm/overcommit_memory r,
+      @{PROC}/@{pid}/environ r,
+      @{PROC}/@{pid}/mounts r,
+      /tmp/tr_session_id_* rwk,
 
-      r $out/share/transmission/public_html/**,
+      $out/share/transmission/public_html/** r,
 
-      include <local/bin.transmission-daemon>
+      include if exists <local/bin.transmission-daemon>
     }
     EOF
-    install -Dm0444 -t $out/share/icons ../qt/icons/transmission.svg
+    install -Dm0444 -t $out/share/icons ../icons/hicolor_apps_scalable_transmission.svg
   '';
 
   passthru.tests = {
@@ -203,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     smoke-test = nixosTests.bittorrent;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, easy and free BitTorrent client";
     mainProgram =
       if (enableQt5 || enableQt6) then
@@ -224,11 +216,10 @@ stdenv.mkDerivation (finalAttrs: {
         * Full encryption, DHT, and PEX support
     '';
     homepage = "https://www.transmissionbt.com/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       mit
     ];
-    maintainers = with maintainers; [ astsmtl ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

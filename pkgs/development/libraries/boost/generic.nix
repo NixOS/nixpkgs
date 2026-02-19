@@ -125,14 +125,16 @@ let
             else
               toString stdenv.hostPlatform.parsed.kernel.execFormat.name
           }"
-          "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
+          "target-os=${
+            if stdenv.hostPlatform.isCygwin then "cygwin" else toString stdenv.hostPlatform.parsed.kernel.name
+          }"
 
           # adapted from table in boost manual
           # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
           "abi=${
             if stdenv.hostPlatform.parsed.cpu.family == "arm" then
               "aapcs"
-            else if stdenv.hostPlatform.isWindows then
+            else if (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin) then
               "ms"
             else if stdenv.hostPlatform.isMips32 then
               "o32"
@@ -169,6 +171,7 @@ stdenv.mkDerivation {
       lib.versionOlder version "1.88" && stdenv.hostPlatform.isDarwin
     ) ./darwin-no-system-python.patch
     ++ lib.optional (lib.versionOlder version "1.88") ./cmake-paths-173.patch
+    ++ lib.optional (lib.versionAtLeast version "1.88") ./cmake-paths-188.patch
     ++ lib.optional (version == "1.77.0") (fetchpatch {
       url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
       relative = "include";
@@ -215,17 +218,20 @@ stdenv.mkDerivation {
     ++ lib.optional (
       lib.versionAtLeast version "1.81" && lib.versionOlder version "1.88" && stdenv.cc.isClang
     ) ./fix-clang-target.patch
-    ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
-      # Backport fix for NumPy 2 support.
-      (fetchpatch {
-        name = "boost-numpy-2-compatibility.patch";
-        url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
-        stripLen = 1;
-        extraPrefix = "libs/python/";
-        hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
-      })
-    ]
-    ++ lib.optional (version == "1.87.0") [
+    ++
+      lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87")
+        # Backport fix for NumPy 2 support.
+        (
+          fetchpatch {
+            name = "boost-numpy-2-compatibility.patch";
+            url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
+            stripLen = 1;
+            extraPrefix = "libs/python/";
+            hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
+          }
+        )
+
+    ++ lib.optionals (version == "1.87.0") [
       # Fix operator<< for shared_ptr and intrusive_ptr
       # https://github.com/boostorg/smart_ptr/issues/115
       (fetchpatch {
@@ -242,16 +248,15 @@ stdenv.mkDerivation {
       })
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://boost.org/";
     description = "Collection of C++ libraries";
-    license = licenses.boost;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.boost;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     # boost-context lacks support for the N32 ABI on mips64.  The build
     # will succeed, but packages depending on boost-context will fail with
     # a very cryptic error message.
     badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
-    maintainers = with maintainers; [ hjones2199 ];
     broken =
       enableNumpy && lib.versionOlder version "1.86" && lib.versionAtLeast python.pkgs.numpy.version "2";
   };
@@ -346,34 +351,33 @@ stdenv.mkDerivation {
     which
     boost-build
     copyPkgconfigItems
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs =
-    [
-      zlib
-      bzip2
-      libiconv
-    ]
-    ++ lib.optional (lib.versionAtLeast version "1.69") zstd
-    ++ [ xz ]
-    ++ lib.optional enableIcu icu
-    ++ lib.optionals enablePython [
-      libxcrypt
-      python
-    ]
-    ++ lib.optional enableNumpy python.pkgs.numpy;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = [
+    zlib
+    bzip2
+    libiconv
+  ]
+  ++ lib.optional (lib.versionAtLeast version "1.69") zstd
+  ++ [ xz ]
+  ++ lib.optional enableIcu icu
+  ++ lib.optionals enablePython [
+    libxcrypt
+    python
+  ]
+  ++ lib.optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [ ];
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
-  configureFlags =
-    [
-      "--includedir=$(dev)/include"
-      "--libdir=$(out)/lib"
-      "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
-    ]
-    ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
-    ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
+  configureFlags = [
+    "--includedir=$(dev)/include"
+    "--libdir=$(out)/lib"
+    "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
+  ]
+  ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
+  ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
     runHook preBuild
@@ -394,19 +398,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  postFixup =
-    ''
-      # Make boost header paths relative so that they are not runtime dependencies
-      cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
-        -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMinGW ''
-      $RANLIB "$out/lib/"*.a
-    '';
+  postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    $RANLIB "$out/lib/"*.a
+  '';
 
   outputs = [
     "out"
     "dev"
   ];
   setOutputFlags = false;
+
+  __structuredAttrs = true;
 }

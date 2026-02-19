@@ -8,21 +8,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-vision";
-  version = "3.10.1";
+  version = "3.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_vision";
-    inherit version;
-    hash = "sha256-Ux4QGyzK2SJDOtRsRqR1KeZKCXM0bzD5GgEt4WOlIxE=";
+    inherit (finalAttrs) version;
+    hash = "sha256-+ZuDr3WI0w5wi4fgn/c+Q+OASX/oLHmbnwXgPzEAJ8g=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +28,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -54,11 +52,11 @@ buildPythonPackage rec {
     "test_list_products"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud Vision API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-vision";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-vision-v${version}/packages/google-cloud-vision/CHANGELOG.md";
-    license = licenses.asl20;
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-vision-v${finalAttrs.version}/packages/google-cloud-vision/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

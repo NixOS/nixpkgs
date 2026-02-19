@@ -4,23 +4,31 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dnsrecon";
-  version = "1.3.1";
+  version = "1.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darkoperator";
     repo = "dnsrecon";
-    tag = version;
-    hash = "sha256-CW5HM8hATfhyQDbSAV+zSp8Gc/C5uy40yKMJAGawn0k=";
+    tag = finalAttrs.version;
+    hash = "sha256-MkeHQZXWCqZ9/Z8WEVZIkDeLB/bnSxi8NBpgrcxAo+s=";
   };
+
+  pythonRelaxDeps = true;
 
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     dnspython
     loguru
+    httpx
+    fastapi
+    uvicorn
+    slowapi
+    stamina
+    ujson
     lxml
     netaddr
     requests
@@ -32,15 +40,15 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "dnsrecon" ];
 
-  meta = with lib; {
+  meta = {
     description = "DNS Enumeration script";
     homepage = "https://github.com/darkoperator/dnsrecon";
-    changelog = "https://github.com/darkoperator/dnsrecon/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/darkoperator/dnsrecon/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       c0bw3b
       fab
     ];
     mainProgram = "dnsrecon";
   };
-}
+})

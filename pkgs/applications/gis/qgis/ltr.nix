@@ -19,10 +19,10 @@ let
     withWebKit = withWebKit;
   };
 in
-symlinkJoin rec {
 
+symlinkJoin {
   inherit (qgis-ltr-unwrapped) version src;
-  name = "qgis-${version}";
+  pname = "qgis";
 
   paths = [ qgis-ltr-unwrapped ];
 

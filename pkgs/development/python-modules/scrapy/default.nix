@@ -8,6 +8,7 @@
   defusedxml,
   fetchFromGitHub,
   glibcLocales,
+  hatchling,
   installShellFiles,
   itemadapter,
   itemloaders,
@@ -18,10 +19,13 @@
   pexpect,
   protego,
   pydispatcher,
+  pyftpdlib,
   pyopenssl,
+  pytest-asyncio,
+  pytest-twisted,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
+  pythonAtLeast,
   queuelib,
   service-identity,
   setuptools,
@@ -36,20 +40,22 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.12.0";
+  version = "2.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = "scrapy";
     tag = version;
-    hash = "sha256-o3+57+bZRohgrld2EuoQDU2LioJu0jmaC/RPREvI1t8=";
+    hash = "sha256-KDci1Z5TZ+3svotYXkEG1s+bPWtxzIfQQwOgvI0k8w0=";
   };
 
   pythonRelaxDeps = [
     "defusedxml"
+  ];
+
+  build-system = [
+    hatchling
   ];
 
   nativeBuildInputs = [
@@ -57,7 +63,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     cssselect
     defusedxml
@@ -82,7 +88,10 @@ buildPythonPackage rec {
     glibcLocales
     jmespath
     pexpect
+    pytest-asyncio
+    pytest-twisted
     pytest-xdist
+    pyftpdlib
     pytestCheckHook
     sybil
     testfixtures
@@ -91,42 +100,70 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
+  pytestFlags = [
+    # DeprecationWarning: There is no current event loop
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     "tests/test_proxy_connect.py"
     "tests/test_utils_display.py"
     "tests/test_command_check.py"
+
+    # ConnectionRefusedError: [Errno 111] Connection refused
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_append"
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_append_active_mode"
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_overwrite"
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_overwrite_active_mode"
+
+    # this test is testing that the *first* deprecation warning is a specific one
+    # but for some reason we get other deprecation warnings appearing first
+    # but this isn't a material issue and the deprecation warning is still raised
+    "tests/test_spider_start.py::MainTestCase::test_start_deprecated_super"
+
     # Don't test the documentation
     "docs"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "tests/test_feedexport.py"
   ];
 
-  disabledTests =
-    [
-      # Requires network access
-      "AnonymousFTPTestCase"
-      "FTPFeedStorageTest"
-      "FeedExportTest"
-      "test_custom_asyncio_loop_enabled_true"
-      "test_custom_loop_asyncio"
-      "test_custom_loop_asyncio_deferred_signal"
-      "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
-      "test_persist"
-      "test_timeout_download_from_spider_nodata_rcvd"
-      "test_timeout_download_from_spider_server_hangs"
-      "test_unbounded_response"
-      "CookiesMiddlewareTest"
-      # Test fails on Hydra
-      "test_start_requests_laziness"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_xmliter_encoding"
-      "test_download"
-      "test_reactor_default_twisted_reactor_select"
-      "URIParamsSettingTest"
-      "URIParamsFeedOptionTest"
-      # flaky on darwin-aarch64
-      "test_fixed_delay"
-      "test_start_requests_laziness"
-    ];
+  disabledTests = [
+    # Requires network access
+    "AnonymousFTPTestCase"
+    "FTPFeedStorageTest"
+    "FeedExportTest"
+    "test_custom_asyncio_loop_enabled_true"
+    "test_custom_loop_asyncio"
+    "test_custom_loop_asyncio_deferred_signal"
+    # "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
+    "test_persist"
+    "test_timeout_download_from_spider_nodata_rcvd"
+    "test_timeout_download_from_spider_server_hangs"
+    "test_unbounded_response"
+    "CookiesMiddlewareTest"
+    "test_asyncio_enabled_reactor_same_loop"
+    "test_response_ip_address"
+    # Test fails on Hydra
+    "test_start_requests_laziness"
+
+    # Fails due to different path structure on NixOS
+    "test_start_deprecated_super"
+    "test_file_path"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_xmliter_encoding"
+    "test_download"
+    "test_reactor_default_twisted_reactor_select"
+    "URIParamsSettingTest"
+    "URIParamsFeedOptionTest"
+    # flaky on darwin-aarch64
+    "test_fixed_delay"
+    "test_start_requests_laziness"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "test_non_pickable_object"
+  ];
 
   postInstall = ''
     installManPage extras/scrapy.1
@@ -139,7 +176,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-level web crawling and web scraping framework";
     mainProgram = "scrapy";
     longDescription = ''
@@ -149,7 +186,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://scrapy.org/";
     changelog = "https://github.com/scrapy/scrapy/raw/${src.tag}/docs/news.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vinnymeller ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vinnymeller ];
   };
 }

@@ -5,21 +5,21 @@
   pkg-config,
   openssl,
   zlib,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-edit";
-  version = "0.13.6";
+  version = "0.13.8";
 
   src = fetchFromGitHub {
     owner = "killercup";
     repo = "cargo-edit";
-    rev = "v${version}";
-    hash = "sha256-z+LTgCeTUr3D0LEbw0yHlk1di2W95XewbYlgusD2TLg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-+CWCWhdb7S4QSNAfzL2+YMTF7oKQvk18NSxSSTQtQBc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/+DDA64kemZKzKdaKnXK+R4e8FV59qT5HCGcwyOz7R8=";
+  cargoHash = "sha256-D2klo0arp1Gv6y1a1lCM3Ht4nAirkao/Afu7FE3CTbg=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,23 +28,24 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   doCheck = false; # integration tests depend on changing cargo config
 
-  meta = with lib; {
+  meta = {
     description = "Utility for managing cargo dependencies from the command line";
     homepage = "https://github.com/killercup/cargo-edit";
-    changelog = "https://github.com/killercup/cargo-edit/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/killercup/cargo-edit/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
-      Br1ght0ne
-      figsoda
+    mainProgram = "cargo-edit";
+    maintainers = with lib.maintainers; [
       gerschtli
       jb55
       killercup
       matthiasbeyer
     ];
   };
-}
+})

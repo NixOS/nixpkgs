@@ -9,14 +9,14 @@
   godot3-export-templates,
   godot3-headless,
   libGLU,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   libglvnd,
   libpulseaudio,
   zlib,
@@ -43,14 +43,14 @@ stdenv.mkDerivation {
     gcc-unwrapped.lib
     git
     libGLU
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxcursor
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
     libglvnd
     libpulseaudio
     zlib
@@ -79,11 +79,11 @@ stdenv.mkDerivation {
   dontFixup = true;
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gapophustu/4D-Minesweeper";
     description = "4D Minesweeper game written in Godot";
-    license = licenses.mpl20;
-    platforms = platforms.linux;
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "4d-minesweeper";
   };

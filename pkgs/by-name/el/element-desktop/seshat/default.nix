@@ -16,20 +16,18 @@ let
   pinData = lib.importJSON ./pin.json;
 
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "seshat-node";
   inherit (pinData) version cargoHash;
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "seshat";
-    rev = version;
+    rev = finalAttrs.version;
     hash = pinData.srcHash;
   };
 
-  sourceRoot = "${src.name}/seshat-node/native";
-
-  useFetchCargoVendor = true;
+  sourceRoot = "${finalAttrs.src.name}/seshat-node/native";
 
   nativeBuildInputs = [
     nodejs
@@ -42,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   npm_config_nodedir = nodejs;
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/seshat-node/yarn.lock";
+    yarnLock = finalAttrs.src + "/seshat-node/yarn.lock";
     sha256 = pinData.yarnHash;
   };
 
@@ -73,4 +71,4 @@ rustPlatform.buildRustPackage rec {
   '';
 
   disallowedReferences = [ stdenv.cc.cc ];
-}
+})

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Intel CPU undervolting and throttling configuration tool";

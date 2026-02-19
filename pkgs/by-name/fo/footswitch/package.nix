@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   hidapi,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +18,10 @@ stdenv.mkDerivation {
     hash = "sha256-vwjeWjIXQiFJ0o/wgEBrKP3hQi8Xa/azVS1IE/Q/MyY=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ hidapi ];
 
   postPatch = ''
@@ -31,11 +35,13 @@ stdenv.mkDerivation {
     mkdir -p $out/bin $out/lib/udev/rules.d
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "Command line utlities for programming PCsensor and Scythe foot switches";
     homepage = "https://github.com/rgerganov/footswitch";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ baloo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ baloo ];
   };
 }

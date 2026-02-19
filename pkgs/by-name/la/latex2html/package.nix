@@ -9,14 +9,14 @@
 }:
 # TODO: withTex
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "latex2html";
   version = "2025";
 
   src = fetchFromGitHub {
     owner = "latex2html";
     repo = "latex2html";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xylIU2GY/1t9mA8zJzEjHwAIlvVxZmUAUdQ/IXEy+Wg=";
   };
 
@@ -29,10 +29,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   configurePhase = ''
+    runHook preConfigure
+
     ./configure \
       --prefix="$out" \
       --without-mktexlsr \
       --with-texpath=$out/share/texmf/tex/latex/html
+
+    runHook postConfigure
   '';
 
   postInstall = ''
@@ -41,7 +45,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LaTeX-to-HTML translator";
     longDescription = ''
       A Perl program that translates LaTeX into HTML (HyperText Markup
@@ -55,8 +59,8 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.ctan.org/pkg/latex2html";
 
-    license = licenses.gpl2Only;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ yurrriq ];
+    license = lib.licenses.gpl2Only;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ yurrriq ];
   };
-}
+})

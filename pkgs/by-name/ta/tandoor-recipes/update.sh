@@ -29,12 +29,12 @@ tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
 
 pushd "$tmpdir"
-wget "${TOKEN_ARGS[@]}" "$package_src/vue/yarn.lock"
+wget "${TOKEN_ARGS[@]}" "$package_src/vue3/yarn.lock"
 yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 
 # Use friendlier hashes
-yarn_hash=$(nix hash to-sri --type sha256 "$yarn_hash")
+yarn_hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$yarn_hash")
 
 common="./pkgs/applications/misc/tandoor-recipes/common.nix"
 sed -i -E -e "s#version = \".*\"#version = \"$version\"#" $common

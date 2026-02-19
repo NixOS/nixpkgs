@@ -26,7 +26,7 @@ let
   # bit absurd - repo doesn't even have a license.
   idl-serial = stdenv.mkDerivation {
     pname = "idl-serial";
-    version = "unstable-2023-09-28";
+    version = "0-unstable-2023-09-28";
 
     src = fetchFromGitHub {
       owner = "nanomq";
@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.23.6";
+  version = "0.24.5";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
     tag = finalAttrs.version;
-    hash = "sha256-Fy/9ASpQ/PHGItYhad69DdHWqCr/Wa+Xdm53Q573Pfc=";
+    hash = "sha256-tyhAEYdYCO0Tur7HDXXbBSQ8tzTHCbW9B8aBu0sMEEI=";
     fetchSubmodules = true;
   };
 

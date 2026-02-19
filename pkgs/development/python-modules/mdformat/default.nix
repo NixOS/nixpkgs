@@ -1,37 +1,36 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
-  importlib-metadata,
+  setuptools,
   markdown-it-py,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  tomli,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdformat";
-  version = "0.7.22";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mdformat";
-    tag = version;
-    hash = "sha256-WvbGCqfzh7KlNXIGJq09goiyLzVgU7c1+qmsLrIW38k=";
+    tag = finalAttrs.version;
+    hash = "sha256-fo4xO4Y89qPAggEjwuf6dnTyu1JzhZVdJyUqGNpti7g=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [ markdown-it-py ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [ markdown-it-py ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    versionCheckHook
+  ];
 
   pythonImportsCheck = [ "mdformat" ];
 
@@ -39,15 +38,15 @@ buildPythonPackage rec {
     withPlugins = throw "Use pkgs.mdformat.withPlugins, i.e. the top-level attribute.";
   };
 
-  meta = with lib; {
+  meta = {
     description = "CommonMark compliant Markdown formatter";
     homepage = "https://mdformat.rtfd.io/";
-    changelog = "https://github.com/executablebooks/mdformat/blob/${version}/docs/users/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/executablebooks/mdformat/blob/${finalAttrs.src.tag}/docs/users/changelog.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       aldoborrero
     ];
     mainProgram = "mdformat";
   };
-}
+})

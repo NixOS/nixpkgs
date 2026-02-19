@@ -3,38 +3,34 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "pypinyin";
-  version = "0.54.0";
+  version = "0.55.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mozillazg";
     repo = "python-pinyin";
     tag = "v${version}";
-    hash = "sha256-kA6h2CPGhoZt8h3KEttegHhmMqVc72IkrkA3PonY3sY=";
+    hash = "sha256-Xd5dxEiaByjtZmlORyK4cBPfNyIcZwbF40SvEKZ24Ks=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini --replace \
-      "--cov-report term-missing" ""
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  enabledTestPaths = [ "tests" ];
 
-  pytestFlagsArray = [ "tests" ];
-
-  meta = with lib; {
+  meta = {
     description = "Chinese Characters to Pinyin - 汉字转拼音";
     mainProgram = "pypinyin";
     homepage = "https://github.com/mozillazg/python-pinyin";
     changelog = "https://github.com/mozillazg/python-pinyin/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    teams = [ teams.tts ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

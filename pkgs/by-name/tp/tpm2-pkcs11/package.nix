@@ -16,6 +16,7 @@
   opensc,
   openssh,
   openssl,
+  nix-update-script,
   nss,
   p11-kit,
   patchelf,
@@ -45,13 +46,13 @@ let
 in
 chosenStdenv.mkDerivation (finalAttrs: {
   pname = "tpm2-pkcs11";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = "tpm2-pkcs11";
     tag = finalAttrs.version;
-    hash = "sha256-W74ckrpK7ypny1L3Gn7nNbOVh8zbHavIk/TX3b8XbI8=";
+    hash = "sha256-o0a5MiFqLH7SuHG/BEtPVGOaDoV+kCu2l1MCHt5rWFc=";
   };
 
   # Disable Java‐based tests because of missing dependencies
@@ -82,18 +83,17 @@ chosenStdenv.mkDerivation (finalAttrs: {
     ./bootstrap
   '';
 
-  configureFlags =
-    [
-      (lib.enableFeature finalAttrs.doCheck "unit")
-      (lib.enableFeature finalAttrs.doCheck "integration")
+  configureFlags = [
+    (lib.enableFeature finalAttrs.doCheck "unit")
+    (lib.enableFeature finalAttrs.doCheck "integration")
 
-      # Strangely, it uses --with-fapi=yes|no instead of a normal configure flag.
-      "--with-fapi=${if fapiSupport then "yes" else "no"}"
-    ]
-    ++ lib.optionals enableFuzzing [
-      "--enable-fuzzing"
-      "--disable-hardening"
-    ];
+    # Strangely, it uses --with-fapi=yes|no instead of a normal configure flag.
+    "--with-fapi=${lib.boolToYesNo fapiSupport}"
+  ]
+  ++ lib.optionals enableFuzzing [
+    "--enable-fuzzing"
+    "--disable-hardening"
+  ];
 
   strictDeps = true;
 
@@ -243,11 +243,12 @@ chosenStdenv.mkDerivation (finalAttrs: {
         fapi-abrmd
         ;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description =
-      "PKCS#11 interface for TPM2 hardware."
+      "PKCS#11 interface for TPM2 hardware"
       + lib.optionalString (extraDescription != null) " ${extraDescription}";
     homepage = "https://github.com/tpm2-software/tpm2-pkcs11";
     license = lib.licenses.bsd2;

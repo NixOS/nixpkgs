@@ -1,23 +1,21 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
-  version = "0.7.6";
+  version = "0.7.12";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "iff";
     repo = "pay-respects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+50MKpZgJqjuUvJeFFv8fMILkJ3cOAN7R7kmlR+98II=";
+    hash = "sha256-bx5PSKWRLzU8OLOtrspI1GT+DMmzqAk+NDZgvcw/OEU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-TJP+GPkXwPvnBwiF0SCkn8NGz/xyrYjbUZKCbUUSqHQ=";
+  cargoHash = "sha256-dCZGPIipSotcA7DT3VvTCYq8+DxWHi5cp/fwh/44Jwc=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -29,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       sigmasquadron
-      bloxx12
+      faukah
       ALameLlama
     ];
     mainProgram = "pay-respects";

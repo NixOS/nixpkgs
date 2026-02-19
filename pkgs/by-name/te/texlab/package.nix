@@ -12,19 +12,18 @@
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "texlab";
-  version = "5.22.1";
+  version = "5.25.1";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = "texlab";
-    tag = "v${version}";
-    hash = "sha256-ldbWENQa7ZiBSx1b1JgChIgadqzHEPvUyOdHVgW6MSU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hd7fDnZqNEz4Ayop3uPqL4IU6xgGsTjMhGvgF+Trgcw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-omMisd2lY9BPIp/0yJ5Eg3pAIvwIWcEJE0ygTj2yqwo=";
+  cargoHash = "sha256-4HFl6bPCHSUhHD5QB8sOK6irUaCAioZgKBm67REEYR8=";
 
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
@@ -38,23 +37,23 @@ rustPlatform.buildRustPackage rec {
   # generate the man page
   postInstall = lib.optionalString (!isCross) ''
     # TexLab builds man page separately in CI:
-    # https://github.com/latex-lsp/texlab/blob/v5.21.0/.github/workflows/publish.yml#L110-L114
+    # https://github.com/latex-lsp/texlab/blob/v5.25.0/.github/workflows/publish.yml#L110-L114
     help2man --no-info "$out/bin/texlab" > texlab.1
     installManPage texlab.1
   '';
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Language Server Protocol for LaTeX";
     homepage = "https://github.com/latex-lsp/texlab";
-    changelog = "https://github.com/latex-lsp/texlab/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/latex-lsp/texlab/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       doronbehar
       kira-bruneau
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "texlab";
   };
-}
+})

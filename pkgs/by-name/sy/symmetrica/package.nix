@@ -6,7 +6,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "symmetrica";
   version = "3.1.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "sagemath";
     repo = "symmetrica";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-unaNQfmDcQFUKApka7eEkjceurMnX0FICQXGDbOAOXo=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "https://gitlab.com/sagemath/symmetrica";
   };
-}
+})

@@ -17,51 +17,49 @@
   gdb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "verilator";
-  version = "5.034";
-
-  # Verilator gets the version from this environment variable
-  # if it can't do git describe while building.
-  VERILATOR_SRC_VERSION = "v${version}";
+  version = "5.044";
 
   src = fetchFromGitHub {
     owner = "verilator";
     repo = "verilator";
-    rev = "v${version}";
-    hash = "sha256-1o9Qf6avdiRgIYUgBS/S0W2GLSi/HdO9Xgs78oW6VJE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z3jYNzhnZ+OocDAbmsRBWHNNPXLLvExKK1TLDi9JzPQ=";
   };
 
   enableParallelBuilding = true;
   buildInputs = [
     perl
-    python3
     systemc
+    (python3.withPackages (
+      pp: with pp; [
+        distro
+      ]
+    ))
     # ccache
   ];
-  nativeBuildInputs =
-    [
-      makeWrapper
-      flex
-      bison
-      autoconf
-      help2man
-      git
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gdb
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    flex
+    bison
+    autoconf
+    help2man
+    git
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gdb
+  ];
 
-  nativeCheckInputs =
-    [
-      which
-      coreutils
-      # cmake
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      numactl
-    ];
+  nativeCheckInputs = [
+    which
+    coreutils
+    # cmake
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    numactl
+  ];
 
   doCheck = true;
   checkTarget = "test";
@@ -86,21 +84,26 @@ stdenv.mkDerivation rec {
   '';
 
   env = {
+    # Verilator gets the version from this environment variable
+    # if it can't do git describe while building.
+    VERILATOR_SRC_VERSION = "v${finalAttrs.version}";
+
     SYSTEMC_INCLUDE = "${lib.getDev systemc}/include";
     SYSTEMC_LIBDIR = "${lib.getLib systemc}/lib";
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/verilator/verilator/blob/${finalAttrs.src.tag}/Changes";
     description = "Fast and robust (System)Verilog simulator/compiler and linter";
     homepage = "https://www.veripool.org/verilator";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       artistic2
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       amiloradovsky
     ];
   };
-}
+})

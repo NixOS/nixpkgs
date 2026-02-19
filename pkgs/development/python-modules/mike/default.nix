@@ -46,7 +46,6 @@ buildPythonPackage rec {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   __darwinAllowLocalNetworking = true;
@@ -58,15 +57,14 @@ buildPythonPackage rec {
     shtab
   ];
 
-  preCheck =
-    ''
-      export PATH=$out/bin:$PATH
-    ''
-    # "stat" on darwin results in "not permitted" instead of "does not exists"
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace test/unit/test_git_utils.py \
-        --replace-fail "/home/nonexist" "$(mktemp -d)"
-    '';
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  ''
+  # "stat" on darwin results in "not permitted" instead of "does not exists"
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace test/unit/test_git_utils.py \
+      --replace-fail "/home/nonexist" "$(mktemp -d)"
+  '';
 
   pythonImportsCheck = [ "mike" ];
 

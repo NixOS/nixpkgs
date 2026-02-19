@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   requests,
   websocket-client,
 }:
@@ -11,9 +10,7 @@
 buildPythonPackage rec {
   pname = "zwave-me-ws";
   version = "0.4.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Z-Wave-Me";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zwave_me_ws" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to connect to a ZWave-Me instance";
     homepage = "https://github.com/Z-Wave-Me/zwave-me-ws";
     changelog = "https://github.com/Z-Wave-Me/zwave-me-ws/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

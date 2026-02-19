@@ -5,23 +5,22 @@
   marshmallow,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   validators,
 }:
 
 buildPythonPackage rec {
   pname = "faraday-agent-parameters-types";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";
     inherit version;
-    hash = "sha256-ZyTaQN6T+F8QKPuTfGcEtdKM/2hvtekghG4UwtER02A=";
+    hash = "sha256-o4N1op+beeoM0GGtcQGWNfFt6SMDohiNnOyD8lWzuk0=";
   };
+
+  pythonRelaxDeps = [ "validators" ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -48,11 +47,11 @@ buildPythonPackage rec {
     "test_incorrect_version_requested"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Faraday agent parameters types";
     homepage = "https://github.com/infobyte/faraday_agent_parameters_types";
     changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

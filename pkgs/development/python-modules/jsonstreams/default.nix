@@ -22,13 +22,19 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests --doctest-modules jsonstreams" ];
 
-  meta = with lib; {
+  pytestFlags = [ "--doctest-modules" ];
+
+  enabledTestPaths = [
+    "tests"
+    "jsonstreams"
+  ];
+
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "JSON streaming writer";
     homepage = "https://github.com/dcbaker/jsonstreams";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chkno ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chkno ];
   };
 }

@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-PTujR3ciLRvbpiqStNMx3W5fkUdW2dsGmCj/iFRTKJM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-RO4wY7FMwczZeR4GOxA3mwfBJZKPToOJJKGZb48yHJA=";
 
   nativeBuildInputs = [
@@ -31,6 +30,10 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/main.rs \
       --replace-fail "./config.cfg" "$out/etc/sonic/config.cfg"
   '';
+
+  # Fix GCC 15 compatibility
+  # error: unknown type name 'uint32_t'
+  env.CXXFLAGS = "-include cstdint";
 
   postInstall = ''
     install -Dm444 -t $out/etc/sonic config.cfg
@@ -55,14 +58,14 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, lightweight and schema-less search backend";
     homepage = "https://github.com/valeriansaliou/sonic";
     changelog = "https://github.com/valeriansaliou/sonic/releases/tag/v${version}";
-    license = licenses.mpl20;
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
     mainProgram = "sonic";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pleshevskiy
       anthonyroussel
     ];

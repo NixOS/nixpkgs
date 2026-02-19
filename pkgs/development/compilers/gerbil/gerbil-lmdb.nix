@@ -25,12 +25,12 @@
     sha256 = "12kywxx4qjxchmhcd66700r2yfqjnh12ijgqnpqaccvigi07iq9b";
   };
 
-  meta = with lib; {
+  meta = {
     description = "LMDB bindings for Gerbil";
     homepage = "https://github.com/mighty-gerbils/gerbil-lmdb";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fare ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fare ];
   };
 
   # "-L${lmdb.out}/lib"

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -17,15 +16,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-subtests";
-  version = "0.14.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.14.2";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_subtests";
     inherit version;
-    hash = "sha256-NQwArcNsOv9namYTXIGu2eIYLhX2w+yHITZpGLu/dYA=";
+    hash = "sha256-cVSoZl/VKO5wp20AIWpE0TncPJyDUhoPd597CtT4AN4=";
   };
 
   nativeBuildInputs = [
@@ -39,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_subtests" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for unittest subTest() support and subtests fixture";
     homepage = "https://github.com/pytest-dev/pytest-subtests";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

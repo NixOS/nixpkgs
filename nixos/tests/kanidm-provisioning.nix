@@ -1,10 +1,10 @@
-{ pkgs, ... }:
+{ kanidmPackage, pkgs, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   serverDomain = certs.domain;
 
   # copy certs to store to work around mount namespacing
-  certsPath = pkgs.runCommandNoCC "snakeoil-certs" { } ''
+  certsPath = pkgs.runCommand "snakeoil-certs" { } ''
     mkdir $out
     cp ${certs."${serverDomain}".cert} $out/snakeoil.crt
     cp ${certs."${serverDomain}".key} $out/snakeoil.key
@@ -15,29 +15,35 @@ let
   provisionIdmAdminPassword2 = "very-strong-alternative-password-for-idm-admin";
 in
 {
-  name = "kanidm-provisioning";
+  name = "kanidm-provisioning-${kanidmPackage.version}";
   meta.maintainers = with pkgs.lib.maintainers; [ oddlama ];
+
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidmWithSecretProvisioning_1_8;
 
   nodes.provision =
     { pkgs, lib, ... }:
     {
       services.kanidm = {
-        package = pkgs.kanidmWithSecretProvisioning_1_6;
-        enableServer = true;
-        serverSettings = {
-          origin = "https://${serverDomain}";
-          domain = serverDomain;
-          bindaddress = "[::]:443";
-          ldapbindaddress = "[::1]:636";
-          tls_chain = "${certsPath}/snakeoil.crt";
-          tls_key = "${certsPath}/snakeoil.key";
+        package = kanidmPackage;
+        server = {
+          enable = true;
+          settings = {
+            origin = "https://${serverDomain}";
+            domain = serverDomain;
+            bindaddress = "[::]:443";
+            ldapbindaddress = "[::1]:636";
+            tls_chain = "${certsPath}/snakeoil.crt";
+            tls_key = "${certsPath}/snakeoil.key";
+          };
         };
         # So we can check whether provisioning did what we wanted
-        enableClient = true;
-        clientSettings = {
-          uri = "https://${serverDomain}";
-          verify_ca = true;
-          verify_hostnames = true;
+        client = {
+          enable = true;
+          settings = {
+            uri = "https://${serverDomain}";
+            verify_ca = true;
+            verify_hostnames = true;
+          };
         };
       };
 
@@ -73,6 +79,10 @@ in
             };
 
             groups.testgroup1 = { };
+            groups.imperative = {
+              overwriteMembers = false;
+              members = [ "testuser1" ];
+            };
 
             persons.testuser1 = {
               displayName = "Test User";
@@ -133,6 +143,11 @@ in
             };
 
             groups.testgroup1 = { };
+            groups.imperative = {
+              overwriteMembers = false;
+              # Will be retained:
+              # members = [ "testuser1" ];
+            };
 
             persons.testuser1 = {
               displayName = "Test User (changed)";
@@ -264,11 +279,11 @@ in
 
       users.users.kanidm.shell = pkgs.bashInteractive;
 
-      environment.systemPackages = with pkgs; [
-        kanidm
-        openldap
-        ripgrep
-        jq
+      environment.systemPackages = [
+        kanidmPackage
+        pkgs.openldap
+        pkgs.ripgrep
+        pkgs.jq
       ];
     };
 
@@ -278,7 +293,7 @@ in
       # We need access to the config file in the test script.
       filteredConfig = pkgs.lib.converge (pkgs.lib.filterAttrsRecursive (
         _: v: v != null
-      )) nodes.provision.services.kanidm.serverSettings;
+      )) nodes.provision.services.kanidm.server.settings;
       serverConfigFile = (pkgs.formats.toml { }).generate "server.toml" filteredConfig;
 
       specialisations = "${nodes.provision.system.build.toplevel}/specialisation";
@@ -351,6 +366,10 @@ in
           out = provision.succeed("kanidm group get testgroup1")
           assert_contains(out, "name: testgroup1")
 
+          out = provision.succeed("kanidm group get imperative")
+          assert_contains(out, "name: imperative")
+          assert_contains(out, "member: testuser1")
+
           out = provision.succeed("kanidm group get supergroup1")
           assert_contains(out, "name: supergroup1")
           assert_contains(out, "member: testgroup1")
@@ -361,6 +380,7 @@ in
           assert_contains(out, "legalname: Jane Doe")
           assert_contains(out, "mail: jane.doe@example.com")
           assert_contains(out, "memberof: testgroup1")
+          assert_contains(out, "memberof: imperative")
           assert_contains(out, "memberof: service1-access")
 
           out = provision.succeed("kanidm person get testuser2")
@@ -405,6 +425,10 @@ in
           out = provision.succeed("kanidm group get testgroup1")
           assert_contains(out, "name: testgroup1")
 
+          out = provision.succeed("kanidm group get imperative")
+          assert_contains(out, "name: imperative")
+          assert_contains(out, "member: testuser1")
+
           out = provision.succeed("kanidm group get supergroup1")
           assert_contains(out, "name: supergroup1")
           assert_lacks(out, "member: testgroup1")
@@ -416,6 +440,7 @@ in
           assert_contains(out, "mail: jane.doe@example.com")
           assert_contains(out, "mail: second.doe@example.com")
           assert_lacks(out, "memberof: testgroup1")
+          assert_contains(out, "memberof: imperative")
           assert_contains(out, "memberof: service1-access")
 
           out = provision.succeed("kanidm person get testuser2")

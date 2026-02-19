@@ -4,18 +4,18 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "memogram";
-  version = "0.2.4";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "telegram-integration";
-    tag = "v${version}";
-    hash = "sha256-nhNVo8Bp/g/IWyj548BQlyxPy1t3DDCyLmInDwQCH4c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b7y3+Qfa6NWX58gMmIPXSZxfl/d40xUQDQN9EBaewaY=";
   };
 
-  vendorHash = "sha256-g8mAG5l2juOVaem2xk+pPVzKYNJHbWbkS/D0LwF+XdM=";
+  vendorHash = "sha256-G3ZkjpmZjIGyCwZvxWDQGW33n/AbuN9hXlvdLo85M6Q=";
 
   subPackages = [ "bin/memogram" ];
 
@@ -24,10 +24,10 @@ buildGoModule rec {
   meta = {
     description = "Easy to use integration service for syncing messages and images from a Telegram bot into your Memos";
     homepage = "https://github.com/usememos/telegram-integration";
-    changelog = "https://github.com/usememos/telegram-integration/releases/v${version}";
+    changelog = "https://github.com/usememos/telegram-integration/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ merrkry ];
     mainProgram = "memogram";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,15 +6,15 @@
   nix-update-script,
   acr-cli,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "acr-cli";
-  version = "0.15";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "acr-cli";
-    tag = "v${version}";
-    hash = "sha256-5uEaptJSB5mb12vqeSGkRj4oRed+0VgcJx4vpTBQCAU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mS6IgeQqjdruSlsr2cssdbsTOWM4STBqp/RtrWXG9/c=";
   };
 
   vendorHash = null;
@@ -22,8 +22,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/Azure/acr-cli/version.Version=${version}"
-    "-X=github.com/Azure/acr-cli/version.Revision=${src.rev}"
+    "-X=github.com/Azure/acr-cli/version.Version=${finalAttrs.version}"
+    "-X=github.com/Azure/acr-cli/version.Revision=${finalAttrs.src.rev}"
   ];
 
   executable = [ "acr" ];
@@ -42,4 +42,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ hausken ];
     mainProgram = "acr-cli";
   };
-}
+})

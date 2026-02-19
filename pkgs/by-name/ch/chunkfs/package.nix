@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://chunkfs.florz.de";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ yayayayaka ];
   };
 })

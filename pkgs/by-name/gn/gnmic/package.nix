@@ -7,26 +7,26 @@
   buildPackages,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gnmic";
-  version = "0.41.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "openconfig";
     repo = "gnmic";
-    tag = "v${version}";
-    hash = "sha256-tuEkpuUs245jj0/wzZjqTWeMZNJhiylZD7e0XOc/c14=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gIKhJ8BaJq/IXXOJrY+n8BoAxKxDDXvEc3JDXGcOxW0=";
   };
 
-  vendorHash = "sha256-piHSVATQjHjKIWNIjm8p2A0ivQzDR2PQj0ovfYDk/FA=";
+  vendorHash = "sha256-osVsIqluU4la2oDWGbjDQq0sM9uCiWgsar5H/XNudV0=";
 
   ldflags = [
     "-s"
     "-w"
     "-X"
-    "github.com/openconfig/gnmic/pkg/app.version=${version}"
+    "github.com/openconfig/gnmic/pkg/app.version=${finalAttrs.version}"
     "-X"
-    "github.com/openconfig/gnmic/pkg/app.commit=${src.rev}"
+    "github.com/openconfig/gnmic/pkg/app.commit=${finalAttrs.src.rev}"
     "-X"
     "github.com/openconfig/gnmic/pkg/app.date=1970-01-01T00:00:00Z"
   ];
@@ -44,12 +44,12 @@ buildGoModule rec {
         --zsh  <(${emulator} $out/bin/gnmic completion zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "gNMI CLI client and collector";
     homepage = "https://gnmic.openconfig.net/";
-    changelog = "https://github.com/openconfig/gnmic/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vincentbernat ];
+    changelog = "https://github.com/openconfig/gnmic/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vincentbernat ];
     mainProgram = "gnmic";
   };
-}
+})

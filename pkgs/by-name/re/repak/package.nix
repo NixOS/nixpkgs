@@ -5,18 +5,17 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "repak";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "trumank";
     repo = "repak";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nl05EsR52YFSR9Id3zFynhrBIvaqVwUOdjPlSp19Gcc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-i0pBd0ZiMIEFGZgvBgVNCfqPHE6E3Rt5pAHHVj1epLs=";
 
   passthru.updateScript = nix-update-script { };
@@ -24,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Unreal Engine .pak file library and CLI in rust";
     homepage = "https://github.com/trumank/repak";
-    changelog = "https://github.com/trumank/repak/releases/tag/v${version}";
+    changelog = "https://github.com/trumank/repak/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       asl20
@@ -32,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ florensie ];
     mainProgram = "repak";
   };
-}
+})

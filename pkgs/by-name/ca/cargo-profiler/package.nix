@@ -25,14 +25,13 @@ buildRustPackage {
     repo = "cargo-profiler";
   };
 
-  useFetchCargoVendor = true;
   inherit cargoHash;
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for profiling Rust binaries";
     mainProgram = "cargo-profiler";
     homepage = "https://github.com/svenstaro/cargo-profiler";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

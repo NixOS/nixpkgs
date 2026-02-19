@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "dtlssocket";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TnbXFXJuDEbcCeNdqbZxewY8I4mwbBcj3sw7o4tzh/Q=";
+    hash = "sha256-8Gy+Mt+FYtu8y+J0qvJ9J3PoSSqGxBwzSzoKcKUAN88=";
   };
 
   build-system = [
@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "DTLSSocket" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cython wrapper for tinydtls with a Socket like interface";
     homepage = "https://git.fslab.de/jkonra2m/tinydtls-cython";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

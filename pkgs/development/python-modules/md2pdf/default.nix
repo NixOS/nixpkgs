@@ -1,37 +1,40 @@
 {
   buildPythonPackage,
-  docopt,
+  click,
   fetchFromGitHub,
+  hatchling,
+  jinja2,
   lib,
-  markdown2,
+  markdown,
+  pygments,
+  pymdown-extensions,
   pytest-cov-stub,
   pytestCheckHook,
-  setuptools,
+  python-frontmatter,
   weasyprint,
 }:
 
 buildPythonPackage rec {
   pname = "md2pdf";
-  version = "1.0.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmaupetit";
     repo = "md2pdf";
-    tag = version;
-    hash = "sha256-9B1vVfcBHk+xdE2Xouu95j3Hp4xm9d5DgPv2zKwCvHY=";
+    tag = "v${version}";
+    hash = "sha256-Do4GW3Z1LmcFSOSCQ0ESztJSrtaNp+2gfci2tDH3+E8=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail '"pytest-runner",' ""
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
-    docopt
-    markdown2
+    click
+    jinja2
+    markdown
+    pygments
+    pymdown-extensions
+    python-frontmatter
     weasyprint
   ];
 
@@ -47,7 +50,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/jmaupetit/md2pdf/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jmaupetit/md2pdf/blob/${src.tag}/CHANGELOG.md";
     description = "Markdown to PDF conversion tool";
     homepage = "https://github.com/jmaupetit/md2pdf";
     license = lib.licenses.mit;

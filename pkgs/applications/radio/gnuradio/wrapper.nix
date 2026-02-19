@@ -9,7 +9,7 @@
   # For the wrapper
   makeWrapper,
   # For lndir
-  xorg,
+  lndir,
   # To define a the gnuradio.pkgs scope
   newScope,
   # For Emulating wrapGAppsHook3
@@ -37,6 +37,7 @@
   soapyaudio,
   soapybladerf,
   soapyhackrf,
+  soapyplutosdr,
   soapyremote,
   soapyrtlsdr,
   soapyuhd,
@@ -46,8 +47,11 @@
     soapyaudio
     soapybladerf
     soapyhackrf
+    soapyplutosdr
     soapyremote
     soapyrtlsdr
+  ]
+  ++ lib.optionals (unwrapped.hasFeature "gr-uhd") [
     soapyuhd
   ],
   # Allow to add whatever you want to the wrapper
@@ -60,12 +64,16 @@ let
   pythonPkgs =
     extraPythonPackages
     ++ [ (unwrapped.python.pkgs.toPythonModule unwrapped) ]
-    ++ unwrapped.passthru.uhd.pythonPath
-    ++ lib.optionals (unwrapped.passthru.uhd.pythonPath != [ ]) [
-      (unwrapped.python.pkgs.toPythonModule unwrapped.passthru.uhd)
-    ]
+    ++ lib.optionals (unwrapped.hasFeature "gr-uhd") (
+      unwrapped.passthru.uhd.pythonPath
+      # Check if uhd was built with python support, which means it should
+      # be added as a python module too.
+      ++ lib.optionals (unwrapped.passthru.uhd.pythonPath != [ ]) [
+        (unwrapped.python.pkgs.toPythonModule unwrapped.passthru.uhd)
+      ]
+    )
     # Add the extraPackages as python modules as well
-    ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
+    ++ (map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (
       lib.mapAttrsToList (
         feat: info:
@@ -77,37 +85,33 @@ let
   pythonEnv = unwrapped.python.withPackages (ps: pythonPkgs);
 
   pname = unwrapped.pname + "-wrapped";
-  inherit (unwrapped) version;
+  inherit (unwrapped) outputs version;
   makeWrapperArgs = builtins.concatStringsSep " " (
-    [
-    ]
     # Emulating wrapGAppsHook3 & wrapQtAppsHook working together
-    ++
-      lib.optionals ((unwrapped.hasFeature "gnuradio-companion") || (unwrapped.hasFeature "gr-qtgui"))
-        [
-          "--prefix"
-          "XDG_DATA_DIRS"
-          ":"
-          "$out/share"
-          "--prefix"
-          "XDG_DATA_DIRS"
-          ":"
-          "$out/share/gsettings-schemas/${pname}"
-          "--prefix"
-          "XDG_DATA_DIRS"
-          ":"
-          "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
-          "--prefix"
-          "XDG_DATA_DIRS"
-          ":"
-          "${hicolor-icon-theme}/share"
-          # Needs to run `gsettings` on startup, see:
-          # https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1764890.html
-          "--prefix"
-          "PATH"
-          ":"
-          "${lib.getBin glib}/bin"
-        ]
+    lib.optionals ((unwrapped.hasFeature "gnuradio-companion") || (unwrapped.hasFeature "gr-qtgui")) [
+      "--prefix"
+      "XDG_DATA_DIRS"
+      ":"
+      "$out/share"
+      "--prefix"
+      "XDG_DATA_DIRS"
+      ":"
+      "$out/share/gsettings-schemas/${pname}"
+      "--prefix"
+      "XDG_DATA_DIRS"
+      ":"
+      "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+      "--prefix"
+      "XDG_DATA_DIRS"
+      ":"
+      "${hicolor-icon-theme}/share"
+      # Needs to run `gsettings` on startup, see:
+      # https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1764890.html
+      "--prefix"
+      "PATH"
+      ":"
+      "${lib.getBin glib}/bin"
+    ]
     ++ lib.optionals (unwrapped.hasFeature "gnuradio-companion") [
       "--set"
       "GDK_PIXBUF_MODULE_FILE"
@@ -155,45 +159,34 @@ let
       ":"
       "${lib.makeSearchPath soapysdr.passthru.searchPath extraSoapySdrPackages}"
     ]
-    ++
-      lib.optionals (unwrapped.hasFeature "gr-qtgui")
-        # 3.7 builds with qt4
-        (
-          if lib.versionAtLeast unwrapped.versionAttr.major "3.8" then
-            [
-              "--prefix"
-              "QT_PLUGIN_PATH"
-              ":"
-              "${lib.makeSearchPath unwrapped.qt.qtbase.qtPluginPrefix (
-                builtins.map lib.getBin (
-                  [
-                    unwrapped.qt.qtbase
-                  ]
-                  ++ lib.optionals stdenv.hostPlatform.isLinux [
-                    unwrapped.qt.qtwayland
-                  ]
-                )
-              )}"
-              "--prefix"
-              "QML2_IMPORT_PATH"
-              ":"
-              "${lib.makeSearchPath unwrapped.qt.qtbase.qtQmlPrefix (
-                builtins.map lib.getBin (
-                  [
-                    unwrapped.qt.qtbase
-                  ]
-                  ++ lib.optionals stdenv.hostPlatform.isLinux [
-                    unwrapped.qt.qtwayland
-                  ]
-                )
-              )}"
-            ]
-          else
-            # Add here qt4 related environment for 3.7?
-            [
-
-            ]
+    ++ lib.optionals (unwrapped.hasFeature "gr-qtgui") [
+      "--prefix"
+      "QT_PLUGIN_PATH"
+      ":"
+      "${lib.makeSearchPath unwrapped.qt.qtbase.qtPluginPrefix (
+        map lib.getBin (
+          [
+            unwrapped.qt.qtbase
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            unwrapped.qt.qtwayland
+          ]
         )
+      )}"
+      "--prefix"
+      "QML2_IMPORT_PATH"
+      ":"
+      "${lib.makeSearchPath unwrapped.qt.qtbase.qtQmlPrefix (
+        map lib.getBin (
+          [
+            unwrapped.qt.qtbase
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            unwrapped.qt.qtwayland
+          ]
+        )
+      )}"
+    ]
     ++ extraMakeWrapperArgs
   );
 
@@ -212,18 +205,27 @@ let
   self =
     if doWrap then
       stdenv.mkDerivation {
-        inherit pname version passthru;
-        nativeBuildInputs = [ makeWrapper ];
-        buildInputs = [
-          xorg.lndir
+        inherit
+          pname
+          outputs
+          version
+          passthru
+          ;
+        nativeBuildInputs = [
+          makeWrapper
+          lndir
         ];
         buildCommand = ''
-          mkdir $out
+          ${builtins.concatStringsSep "\n" (
+            map (output: ''
+              mkdir ''$${output}
+              lndir -silent ${unwrapped.${output}} ''$${output}
+            '') outputs
+          )}
           cd $out
-          lndir -silent ${unwrapped}
           ${lib.optionalString (extraPackages != [ ]) (
             builtins.concatStringsSep "\n" (
-              builtins.map (pkg: ''
+              map (pkg: ''
                 if [[ -d ${lib.getBin pkg}/bin/ ]]; then
                   lndir -silent ${pkg}/bin ./bin
                 fi
@@ -238,7 +240,7 @@ let
             mv -f "$i".tmp "$i"
             if head -1 "$i" | grep -q ${unwrapped.python}; then
               substituteInPlace "$i" \
-                --replace ${unwrapped.python} ${pythonEnv}
+                --replace-fail ${unwrapped.python} ${pythonEnv}
             fi
             wrapProgram "$i" ${makeWrapperArgs}
           done

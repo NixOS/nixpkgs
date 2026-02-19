@@ -3,7 +3,7 @@
   stdenv,
   llvm_meta,
   release_version,
-  buildLlvmTools,
+  buildLlvmPackages,
   monorepoSrc,
   runCommand,
   cmake,
@@ -12,6 +12,7 @@
   libllvm,
   version,
   devExtraCmakeFlags ? [ ],
+  getVersionFile,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,25 +26,25 @@ stdenv.mkDerivation (finalAttrs: {
     && (!stdenv.hostPlatform.isMusl);
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
-    ''
-      mkdir -p "$out"
-    ''
-    + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    ''
-    + ''
-      cp -r ${monorepoSrc}/mlir "$out"
-      cp -r ${monorepoSrc}/third-party "$out/third-party"
+  src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/mlir "$out"
+    cp -r ${monorepoSrc}/third-party "$out/third-party"
 
-      mkdir -p "$out/llvm"
-    ''
-  );
+    mkdir -p "$out/llvm"
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/mlir";
 
   patches = [
     ./gnu-install-dirs.patch
+  ]
+  ++ lib.optional (lib.versionOlder release_version "20") [
+    # Fix build with gcc15
+    # https://github.com/llvm/llvm-project/commit/41eb186fbb024898bacc2577fa3b88db0510ba1f
+    # https://github.com/llvm/llvm-project/commit/101109fc5460d5bb9bb597c6ec77f998093a6687
+    (getVersionFile "mlir/mlir-add-include-cstdint.patch")
   ];
 
   nativeBuildInputs = [
@@ -56,31 +57,30 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "LLVM_BUILD_TOOLS" true)
-      # Install headers as well
-      (lib.cmakeBool "LLVM_INSTALL_TOOLCHAIN_ONLY" false)
-      (lib.cmakeFeature "MLIR_TOOLS_INSTALL_DIR" "${placeholder "out"}/bin/")
-      (lib.cmakeBool "LLVM_ENABLE_IDE" false)
-      (lib.cmakeFeature "MLIR_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
-      (lib.cmakeFeature "MLIR_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
-      (lib.cmakeBool "LLVM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
-      (lib.cmakeBool "LLVM_ENABLE_FFI" true)
-      (lib.cmakeFeature "LLVM_HOST_TRIPLE" stdenv.hostPlatform.config)
-      (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" stdenv.hostPlatform.config)
-      (lib.cmakeBool "LLVM_ENABLE_DUMP" true)
-      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-      (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/mlir-tblgen")
-      (lib.cmakeBool "LLVM_BUILD_LLVM_DYLIB" (!stdenv.hostPlatform.isStatic))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      # Disables building of shared libs, -fPIC is still injected by cc-wrapper
-      (lib.cmakeBool "LLVM_ENABLE_PIC" false)
-      (lib.cmakeBool "LLVM_BUILD_STATIC" true)
-      (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" false)
-    ]
-    ++ devExtraCmakeFlags;
+  cmakeFlags = [
+    (lib.cmakeBool "LLVM_BUILD_TOOLS" true)
+    # Install headers as well
+    (lib.cmakeBool "LLVM_INSTALL_TOOLCHAIN_ONLY" false)
+    (lib.cmakeFeature "MLIR_TOOLS_INSTALL_DIR" "${placeholder "out"}/bin/")
+    (lib.cmakeBool "LLVM_ENABLE_IDE" false)
+    (lib.cmakeFeature "MLIR_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
+    (lib.cmakeFeature "MLIR_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
+    (lib.cmakeBool "LLVM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "LLVM_ENABLE_FFI" true)
+    (lib.cmakeFeature "LLVM_HOST_TRIPLE" stdenv.hostPlatform.config)
+    (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" stdenv.hostPlatform.config)
+    (lib.cmakeBool "LLVM_ENABLE_DUMP" true)
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
+    (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/mlir-tblgen")
+    (lib.cmakeBool "LLVM_BUILD_LLVM_DYLIB" (!stdenv.hostPlatform.isStatic))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    # Disables building of shared libs, -fPIC is still injected by cc-wrapper
+    (lib.cmakeBool "LLVM_ENABLE_PIC" false)
+    (lib.cmakeBool "LLVM_BUILD_STATIC" true)
+    (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" false)
+  ]
+  ++ devExtraCmakeFlags;
 
   outputs = [
     "out"

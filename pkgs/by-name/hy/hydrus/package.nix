@@ -14,16 +14,16 @@
   enableSwftools ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hydrus";
-  version = "617";
-  format = "other";
+  version = "659";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    tag = "v${version}";
-    hash = "sha256-yvnfG7XxGowa3wRZjNsl/WnptdllWWFT/eIFq0TEey8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mrZQnMIM6r2RA1+RRIP42J0OPS6uYzu+87J1eMjBeXM=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
       exec = "hydrus-client";
       desktopName = "Hydrus Client";
       icon = "hydrus-client";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       terminal = false;
       type = "Application";
       categories = [
@@ -99,40 +99,39 @@ python3Packages.buildPythonApplication rec {
     "doc"
   ];
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      # Move the hydrus module and related directories
-      mkdir -p $out/${python3Packages.python.sitePackages}
-      mv {hydrus,static,db} $out/${python3Packages.python.sitePackages}
-      # Fix random files being marked with execute permissions
-      chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
-      # Build docs
-      mkdocs build -d help
-      mkdir -p $doc/share/doc
-      mv help $doc/share/doc/hydrus
+    # Move the hydrus module and related directories
+    mkdir -p $out/${python3Packages.python.sitePackages}
+    mv {hydrus,static,db} $out/${python3Packages.python.sitePackages}
+    # Fix random files being marked with execute permissions
+    chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
+    # Build docs
+    mkdocs build -d help
+    mkdir -p $doc/share/doc
+    mv help $doc/share/doc/hydrus
 
-      # install the hydrus binaries
-      mkdir -p $out/bin
-      install -m0755 hydrus_server.py $out/bin/hydrus-server
-      install -m0755 hydrus_client.py $out/bin/hydrus-client
-      install -m0755 hydrus_test.py $out/bin/hydrus-test
+    # install the hydrus binaries
+    mkdir -p $out/bin
+    install -m0755 hydrus_server.py $out/bin/hydrus-server
+    install -m0755 hydrus_client.py $out/bin/hydrus-client
+    install -m0755 hydrus_test.py $out/bin/hydrus-test
 
-      # desktop item
-      mkdir -p "$out/share/icons/hicolor/scalable/apps"
-      ln -s "$doc/share/doc/hydrus/assets/hydrus-white.svg" "$out/share/icons/hicolor/scalable/apps/hydrus-client.svg"
-    ''
-    + lib.optionalString enableSwftools ''
-      mkdir -p $out/${python3Packages.python.sitePackages}/bin
-      # swfrender seems to have to be called sfwrender_linux
-      # not sure if it can be loaded through PATH, but this is simpler
-      # $out/python3Packages.python.sitePackages/bin is correct NOT .../hydrus/bin
-      ln -s ${swftools}/bin/swfrender $out/${python3Packages.python.sitePackages}/bin/swfrender_linux
-    ''
-    + ''
-      runHook postInstall
-    '';
+    # desktop item
+    mkdir -p "$out/share/icons/hicolor/scalable/apps"
+    ln -s "$doc/share/doc/hydrus/assets/hydrus-white.svg" "$out/share/icons/hicolor/scalable/apps/hydrus-client.svg"
+  ''
+  + lib.optionalString enableSwftools ''
+    mkdir -p $out/${python3Packages.python.sitePackages}/bin
+    # swfrender seems to have to be called sfwrender_linux
+    # not sure if it can be loaded through PATH, but this is simpler
+    # $out/python3Packages.python.sitePackages/bin is correct NOT .../hydrus/bin
+    ln -s ${swftools}/bin/swfrender $out/${python3Packages.python.sitePackages}/bin/swfrender_linux
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   checkPhase = ''
     runHook preCheck
@@ -162,10 +161,11 @@ python3Packages.buildPythonApplication rec {
     description = "Danbooru-like image tagging and searching system for the desktop";
     license = lib.licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";
-    changelog = "https://github.com/hydrusnetwork/hydrus/releases/tag/${src.tag}";
+    changelog = "https://github.com/hydrusnetwork/hydrus/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [
       dandellion
       evanjs
+      KunyaKud
     ];
   };
-}
+})

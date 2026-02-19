@@ -4,24 +4,23 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "otree";
-  version = "v0.3.0";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "fioncat";
     repo = "otree";
-    rev = version;
-    hash = "sha256-WvoiTu6erNI5Cb9PSoHgL6+coIGWLe46pJVXBZHOLTE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7Yv8krhtA+YAbJmF/bxgWb6NZBzg/fubxkzDEeOw4xU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tgw1R1UmXAHcrQFsY4i4efGCXQW3m0PVYdFSK2q+NUk=";
+  cargoHash = "sha256-Op0IIH1whnBWP5Z5LLygdiWpysC/JZJEKX6OLHQAsWo=";
 
   meta = {
-    description = "Command line tool to view objects (json/yaml/toml) in TUI tree widget";
+    description = "Command line tool to view objects (JSON/YAML/TOML/XML) in TUI tree widget";
     homepage = "https://github.com/fioncat/otree";
-    changelog = "https://github.com/fioncat/otree/releases/tag/v${version}";
+    changelog = "https://github.com/fioncat/otree/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "otree";
     maintainers = with lib.maintainers; [
@@ -29,4 +28,4 @@ rustPlatform.buildRustPackage rec {
       kiara
     ];
   };
-}
+})

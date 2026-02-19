@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "diffsync";
   version = "2.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "networktocode";
@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diffsync" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility library for comparing and synchronizing different datasets";
     homepage = "https://github.com/networktocode/diffsync";
     changelog = "https://github.com/networktocode/diffsync/blob/${src.tag}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ clerie ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ clerie ];
   };
 }

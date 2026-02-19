@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "s3rvac";
-    repo = pname;
+    repo = "weechat-notify-send";
     rev = "v${version}";
     sha256 = "sha256-7uw0IdRSxhPrLqdgECKB9eOrtFj+2HTILBhakKiRuNQ=";
   };
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
       --replace "'notify-send'" "'${libnotify}/bin/notify-send'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WeeChat script that sends highlight and message notifications through notify-send";
     homepage = "https://github.com/s3rvac/weechat-notify-send";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tobim ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tobim ];
   };
 }

@@ -15,9 +15,9 @@
   libxml2,
   libwebpSupport ? true,
   libwebp,
-  # libXmu is not used if libunique is.
+  # libxmu is not used if libunique is.
   libXmuSupport ? false,
-  xorg,
+  libxmu,
   libxsltSupport ? true,
   libxslt,
   fitsSupport ? true,
@@ -32,12 +32,12 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gwyddion";
-  version = "2.68";
+  version = "2.70";
   src = fetchurl {
-    url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "sha256-clw/cXODYrELHiz3bTkWhM8vFacaKzTvHK3avW1am/o=";
+    url = "mirror://sourceforge/gwyddion/gwyddion-${finalAttrs.version}.tar.xz";
+    hash = "sha256-lC9OBBlFqFC8MtBRk6EVrIpRGKb4Qa+m1N6lEPmRP1k=";
   };
 
   nativeBuildInputs = [
@@ -45,25 +45,24 @@ stdenv.mkDerivation rec {
     file
   ];
 
-  buildInputs =
-    [
-      gtk2
-      fftw
-    ]
-    ++ lib.optionals openglSupport [
-      gnome2.gtkglext
-      libGL
-    ]
-    ++ lib.optional openexrSupport openexr
-    ++ lib.optional libXmuSupport xorg.libXmu
-    ++ lib.optional fitsSupport cfitsio
-    ++ lib.optional libpngSupport libpng
-    ++ lib.optional libxsltSupport libxslt
-    ++ lib.optional libxml2Support libxml2
-    ++ lib.optional libwebpSupport libwebp
-    ++ lib.optional zlibSupport zlib
-    ++ lib.optional libuniqueSupport libunique
-    ++ lib.optional libzipSupport libzip;
+  buildInputs = [
+    gtk2
+    fftw
+  ]
+  ++ lib.optionals openglSupport [
+    gnome2.gtkglext
+    libGL
+  ]
+  ++ lib.optional openexrSupport openexr
+  ++ lib.optional libXmuSupport libxmu
+  ++ lib.optional fitsSupport cfitsio
+  ++ lib.optional libpngSupport libpng
+  ++ lib.optional libxsltSupport libxslt
+  ++ lib.optional libxml2Support libxml2
+  ++ lib.optional libwebpSupport libwebp
+  ++ lib.optional zlibSupport zlib
+  ++ lib.optional libuniqueSupport libunique
+  ++ lib.optional libzipSupport libzip;
 
   # This patch corrects problems with python support, but should apply cleanly
   # regardless of whether python support is enabled, and have no effects if
@@ -90,4 +89,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
-}
+})

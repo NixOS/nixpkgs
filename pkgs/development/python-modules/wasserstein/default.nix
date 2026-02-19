@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "wasserstein/tests" ];
+  enabledTestPaths = [ "wasserstein/tests" ];
   disabledTestPaths = [
     "wasserstein/tests/test_emd.py" # requires "ot"
     # cyclic dependency on energyflow
@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wasserstein" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python/C++ library for computing Wasserstein distances efficiently";
     homepage = "https://github.com/pkomiske/Wasserstein";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

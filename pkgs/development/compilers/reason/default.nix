@@ -10,19 +10,34 @@
   merlin-extend,
   ppxlib,
   cppo,
-  ppx_derivers,
+  cmdliner,
   dune-build-info,
 }:
 
+let
+  param =
+    if lib.versionAtLeast ppxlib.version "0.36" then
+      {
+        version = "3.17.3";
+        hash = "sha256-AcRZG4ITrYxxtunx0YDqvSANRBk27if+n5lka3X5hlw=";
+      }
+    else
+      {
+        version = "3.15.0";
+
+        hash = "sha256-7D0gJfQ5Hw0riNIFPmJ6haoa3dnFEyDp5yxpDgX7ZqY=";
+      };
+in
+
 buildDunePackage rec {
   pname = "reason";
-  version = "3.15.0";
+  inherit (param) version;
 
   minimalOCamlVersion = "4.11";
 
   src = fetchurl {
     url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
-    hash = "sha256-7D0gJfQ5Hw0riNIFPmJ6haoa3dnFEyDp5yxpDgX7ZqY=";
+    inherit (param) hash;
   };
 
   nativeBuildInputs = [
@@ -35,7 +50,8 @@ buildDunePackage rec {
     fix
     menhirSdk
     merlin-extend
-  ];
+  ]
+  ++ lib.optional (lib.versionAtLeast version "3.17") cmdliner;
 
   propagatedBuildInputs = [
     ppxlib
@@ -46,11 +62,11 @@ buildDunePackage rec {
     hello = callPackage ./tests/hello { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://reasonml.github.io/";
     downloadPage = "https://github.com/reasonml/reason";
     description = "User-friendly programming language built on OCaml";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

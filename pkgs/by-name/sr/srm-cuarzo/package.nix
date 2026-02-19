@@ -13,14 +13,14 @@
   seatd,
   udev,
 }:
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srm-cuarzo";
-  version = "0.12.0-1";
-  rev = "v${self.version}";
-  hash = "sha256-baLi0Upv8VMfeusy9EfeAXVxMo0KuKNC+EYg/c+tzRY=";
+  version = "0.13.0-1";
+  rev = "v${finalAttrs.version}";
+  hash = "sha256-5BwLqAZdfO5vyEMPZImaxymvLoNuu6bOiOkvR8JERxg=";
 
   src = fetchFromGitHub {
-    inherit (self) rev hash;
+    inherit (finalAttrs) rev hash;
     owner = "CuarzoSoftware";
     repo = "SRM";
   };

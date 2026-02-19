@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pqu7jIKksjn52benebICQEhgCW59MX+RRTcHm2ufjWE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-wdJTQjDCmbJVPEUV6DENb2UegAc1ET4iSw3SzmlGPnA=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -26,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A CLI tool to convert clippy diagnostics into SARIF";
+    description = "CLI tool to convert clippy diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];

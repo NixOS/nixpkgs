@@ -6,7 +6,6 @@
   pkg-config,
   cmake,
   alsa-lib,
-  glib,
   libjack2,
   libsndfile,
   libpulseaudio,
@@ -14,13 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluidsynth";
-  version = "2.4.4";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K7NJOLq0Yjf8IlJZKqQA7WS1uKPC+WN97mtPgwhA/+8=";
+    hash = "sha256-Ei6ts6gmC3jg1b7nORUCYxoAzoPoN3foyVnrmhpqHTs=";
+    fetchSubmodules = true;
   };
 
   outputs = [
@@ -35,26 +35,30 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs =
-    [
-      glib
-      libsndfile
-      libjack2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libpulseaudio
-    ];
+  buildInputs = [
+    stdenv.cc.cc.lib
+    libsndfile
+    libjack2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpulseaudio
+  ];
 
   cmakeFlags = [
     "-Denable-framework=off"
+    "-Dosal=cpp11"
+    "-Denable-libinstpatch=0"
   ];
 
   meta = {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";
     homepage = "https://www.fluidsynth.org";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = with lib.maintainers; [
+      lovek323
+      guylamar2006
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "fluidsynth";
   };

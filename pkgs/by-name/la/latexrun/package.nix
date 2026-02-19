@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "latexrun";
-  version = "unstable-2015-11-18";
+  version = "0-unstable-2015-11-18";
   src = fetchFromGitHub {
     owner = "aclements";
     repo = "latexrun";
@@ -24,12 +24,12 @@ stdenvNoCC.mkDerivation {
     chmod +x $out/bin/latexrun
   '';
 
-  meta = with lib; {
+  meta = {
     description = "21st century LaTeX wrapper";
     mainProgram = "latexrun";
     homepage = "https://github.com/aclements/latexrun";
-    license = licenses.mit;
-    maintainers = [ maintainers.lucus16 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.lucus16 ];
+    platforms = lib.platforms.all;
   };
 }

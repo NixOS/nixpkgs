@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "bids-validator";
   version = "1.14.7.post0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "bids_validator";

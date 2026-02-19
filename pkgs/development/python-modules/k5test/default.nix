@@ -4,7 +4,6 @@
   fetchPypi,
   findutils,
   krb5-c,
-  pythonOlder,
   setuptools,
   replaceVars,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "k5test";
   version = "0.10.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -37,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "k5test" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
     changelog = "https://github.com/pythongssapi/k5test/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

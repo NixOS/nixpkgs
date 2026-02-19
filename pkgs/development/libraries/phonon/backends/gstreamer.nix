@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
 
   cmakeBuildType = if debug then "Debug" else "Release";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://phonon.kde.org/";
     description = "GStreamer backend for Phonon";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel ];
-    license = licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    license = lib.licenses.lgpl21;
   };
 }

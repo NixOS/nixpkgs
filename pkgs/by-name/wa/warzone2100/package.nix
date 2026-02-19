@@ -9,7 +9,7 @@
   asciidoctor,
   gettext,
 
-  SDL2,
+  sdl3,
   libtheora,
   libvorbis,
   libopus,
@@ -27,6 +27,8 @@
   vulkan-headers,
   vulkan-loader,
   shaderc,
+  protobuf,
+  libzip,
 
   testers,
   warzone2100,
@@ -34,47 +36,49 @@
 
   gitUpdater,
 
-  withVideos ? false,
+  withVideos ? true,
 }:
 
 let
   pname = "warzone2100";
-  sequences_src = fetchurl {
-    url = "mirror://sourceforge/${pname}/warzone2100/Videos/high-quality-en/sequences.wz";
-    sha256 = "90ff552ca4a70e2537e027e22c5098ea4ed1bc11bb7fc94138c6c941a73d29fa";
+
+  sequences = fetchurl {
+    url = "mirror://sourceforge/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz";
+    hash = "sha256-kP9VLKSnDiU34CfiLFCY6k7RvBG7f8lBOMbJQac9Kfo=";
   };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "4.5.5";
+  version = "4.6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
-    hash = "sha256-B/YbrnIWh+3rYtpId+hQMKA6BTpZPWRRlPxld44EgP8=";
+    hash = "sha256-hWIW2r6vLgOuj351jDlbJ9IYif6LX+RfOvznAP3n1x8=";
   };
 
-  buildInputs =
-    [
-      SDL2
-      libtheora
-      libvorbis
-      libopus
-      openal
-      openalSoft
-      physfs
-      miniupnpc
-      libsodium
-      curl
-      libpng
-      freetype
-      harfbuzz
-      sqlite
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      vulkan-headers
-      vulkan-loader
-    ];
+  buildInputs = [
+    sdl3
+    libtheora
+    libvorbis
+    libopus
+    openal
+    openalSoft
+    physfs
+    miniupnpc
+    libsodium
+    curl
+    libpng
+    freetype
+    harfbuzz
+    sqlite
+    protobuf
+    libzip
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    vulkan-headers
+    vulkan-loader
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -91,6 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
                       --replace '"which "' '"${which}/bin/which "'
     substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
                       --replace "which %s" "${which}/bin/which %s"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CONFIGURE_WZ_COMPILER_WARNINGS()" ""
   '';
 
   cmakeFlags = [
@@ -105,10 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # Alternatively, we could have set CMAKE_INSTALL_BINDIR to "bin".
     "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
 
   postInstall = lib.optionalString withVideos ''
-    cp ${sequences_src} $out/share/warzone2100/sequences.wz
+    ln -sn ${sequences} $out/share/warzone2100/sequences.wz
   '';
 
   passthru.tests = {
@@ -124,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/Warzone2100/warzone2100";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free RTS game, originally developed by Pumpkin Studios";
     mainProgram = "warzone2100";
     longDescription = ''
@@ -139,12 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
       variety of possible units and tactics.
     '';
     homepage = "https://wz2100.net";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      astsmtl
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       fgaz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # configure_mac.cmake tries to download stuff
     # https://github.com/Warzone2100/warzone2100/blob/master/macosx/README.md
     broken = stdenv.hostPlatform.isDarwin;

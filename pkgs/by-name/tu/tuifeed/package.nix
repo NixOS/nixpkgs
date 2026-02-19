@@ -13,16 +13,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-CL6cd9OfvnA5N4W3rGl7XLcnlSrh3kcqA7idxexkjA4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-A7kD46gfXWK/OlFVMULlMa7Z9Q1it9/rhGo6pjFa38k=";
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal feed reader with a fancy UI";
     mainProgram = "tuifeed";
     homepage = "https://github.com/veeso/tuifeed";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ devhell ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ devhell ];
   };
 }

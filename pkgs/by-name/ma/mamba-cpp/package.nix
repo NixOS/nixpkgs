@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   bzip2,
   cmake,
   cli11,
@@ -15,16 +14,9 @@
   python3,
   versionCheckHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mamba-cpp";
-  version = "2.1.1";
-
-  src = fetchFromGitHub {
-    owner = "mamba-org";
-    repo = "mamba";
-    tag = version;
-    hash = "sha256-JBwdfYM7J5R7HZyw5kVXwu4FlZUd2QPrsTaGuXnyAJI=";
-  };
+  inherit (libmamba) version src;
 
   nativeBuildInputs = [ cmake ];
 
@@ -49,12 +41,12 @@ stdenv.mkDerivation rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of the conda package manager";
     homepage = "https://github.com/mamba-org/mamba";
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ klchen0112 ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ klchen0112 ];
     mainProgram = "mamba";
   };
 }

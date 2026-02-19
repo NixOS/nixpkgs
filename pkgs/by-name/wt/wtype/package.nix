@@ -12,14 +12,14 @@
   wayland-scanner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wtype";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "atx";
     repo = "wtype";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TfpzAi0mkXugQn70MISyNFOXIJpDwvgh3enGv0Xq8S4=";
   };
 
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  meta = with lib; {
+  meta = {
     description = "xdotool type for wayland";
     homepage = "https://github.com/atx/wtype";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ justinlovinger ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ justinlovinger ];
     mainProgram = "wtype";
   };
-}
+})

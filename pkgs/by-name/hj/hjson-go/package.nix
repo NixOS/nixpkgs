@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hjson-go";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "hjson";
     repo = "hjson-go";
-    rev = "v${version}";
-    hash = "sha256-0xFTxnXMJA98+Y6gwO8zCDPQvLecG1qmbGAISCFMaPw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Qg/sy0fHHadQMU1wToz/Nm6tiIe/tm1D1knmbh9zYr0=";
   };
 
   vendorHash = null;
@@ -22,12 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to convert JSON to and from HJSON";
     homepage = "https://hjson.github.io/";
-    changelog = "https://github.com/hjson/hjson-go/releases/tag/v${version}";
-    maintainers = with maintainers; [ ehmry ];
-    license = licenses.mit;
+    changelog = "https://github.com/hjson/hjson-go/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     mainProgram = "hjson-cli";
   };
-}
+})

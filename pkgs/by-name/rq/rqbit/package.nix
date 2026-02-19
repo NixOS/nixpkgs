@@ -6,27 +6,26 @@
   pkg-config,
   openssl,
   buildNpmPackage,
-  nodejs_20,
+  nodejs,
   nix-update-script,
+  nixosTests,
 }:
 let
   pname = "rqbit";
 
-  version = "8.0.0";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-Meztr/UxLgnbd3YwkSW0vy+D2N4mFg2v+T4nBnYiQBI=";
+    hash = "sha256-5ErcI3hwC2EgxsjgEVlbHP1MzBf/LndpgTfynQGc29s=";
   };
 
   rqbit-webui = buildNpmPackage {
     pname = "rqbit-webui";
 
-    nodejs = nodejs_20;
-
-    inherit version src;
+    inherit version src nodejs;
 
     sourceRoot = "${src.name}/crates/librqbit/webui";
 
@@ -45,8 +44,7 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-FGcws80cX0I74bVaSV6OLntPFPNanGAFm6CVHDAGbOU=";
+  cargoHash = "sha256-gYasOjrG0oeT/6Ben57MKAvBtgpoSmZ93RZQqSXAxIc=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
@@ -65,21 +63,23 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
-  passthru.webui = rqbit-webui;
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "webui"
-    ];
+  passthru = {
+    webui = rqbit-webui;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "webui"
+      ];
+    };
+    tests.testService = nixosTests.rqbit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Bittorrent client in Rust";
     homepage = "https://github.com/ikatson/rqbit";
     changelog = "https://github.com/ikatson/rqbit/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cafkafk
       toasteruwu
     ];

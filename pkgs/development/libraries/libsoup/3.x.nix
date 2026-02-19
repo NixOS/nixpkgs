@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -40,31 +41,29 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      glib
-      python3
-    ]
-    ++ lib.optionals withIntrospection [
-      gi-docgen
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+    python3
+  ]
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+    vala
+  ];
 
-  buildInputs =
-    [
-      sqlite
-      libpsl
-      glib.out
-      brotli
-      libnghttp2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libsysprof-capture
-    ];
+  buildInputs = [
+    sqlite
+    libpsl
+    glib.out
+    brotli
+    libnghttp2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libsysprof-capture
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -86,7 +85,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO: For some reason the pkg-config setup hook does not pick this up.
-  PKG_CONFIG_PATH = "${libnghttp2.dev}/lib/pkgconfig";
+  env.PKG_CONFIG_PATH = "${libnghttp2.dev}/lib/pkgconfig";
 
   # HSTS tests fail.
   doCheck = false;
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "libsoup_3";
-      packageName = pname;
+      packageName = "libsoup";
       versionPolicy = "odd-unstable";
     };
   };

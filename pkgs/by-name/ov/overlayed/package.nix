@@ -1,16 +1,22 @@
 {
-  rustPlatform,
   lib,
-  callPackage,
-  pkg-config,
-  openssl,
-  libsoup_3,
-  webkitgtk_4_1,
+  rustPlatform,
   fetchFromGitHub,
-  libayatana-appindicator,
-  nix-update-script,
-}:
 
+  cargo-tauri,
+  jq,
+  moreutils,
+  nodejs,
+  pkg-config,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+
+  libayatana-appindicator,
+  libsoup_3,
+  openssl,
+  webkitgtk_4_1,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "overlayed";
   version = "0.6.2";
@@ -22,23 +28,33 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3GFg8czBf1csojXUNC51xFXJnGuXltP6D46fCt6q24I=";
   };
 
-  sourceRoot = "${src.name}/apps/desktop/src-tauri";
+  cargoRoot = "apps/desktop/src-tauri";
+  buildAndTestSubdir = "apps/desktop/src-tauri";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6wN4nZQWrY0J5E+auj17B3iJ/84hzBXYA/bJsX/N5pk=";
 
-  webui = callPackage ./webui.nix {
-    inherit meta src version;
+  pnpmDeps = fetchPnpmDeps {
+    inherit pname version src;
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-+yyxoodcDfqJ2pkosd6sMk77/71RDsGthedo1Oigwto=";
   };
 
   nativeBuildInputs = [
+    cargo-tauri.hook
+    jq
+    moreutils
+    nodejs
     pkg-config
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildInputs = [
+    libayatana-appindicator
+    libsoup_3
     openssl
     webkitgtk_4_1
-    libsoup_3
   ];
 
   env = {
@@ -48,9 +64,10 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-    substituteInPlace ./tauri.conf.json \
-      --replace-fail '../dist' '${webui}' \
-      --replace-fail 'pnpm build' ' '
+
+    # disable updater
+    jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' \
+      apps/desktop/src-tauri/tauri.conf.json | sponge apps/desktop/src-tauri/tauri.conf.json
   '';
 
   meta = {

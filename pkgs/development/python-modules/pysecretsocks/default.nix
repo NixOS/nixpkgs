@@ -6,7 +6,7 @@
   pyasyncore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pysecretsocks";
   version = "0.9.1-unstable-2023-11-04";
   pyproject = true;

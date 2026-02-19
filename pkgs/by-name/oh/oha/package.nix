@@ -6,21 +6,26 @@
   pkg-config,
   openssl,
   rust-jemalloc-sys,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oha";
-  version = "1.8.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "hatoo";
     repo = "oha";
-    tag = "v${version}";
-    hash = "sha256-hE3G8hPFHLd+lORzIgdaZ0xxfska011GdVk20bg3S7s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fjWfv/RuEqU0krVfHNxByzHdREVL7dD/tSEw7X1gaGk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-seipBF9gfut+Z4CKMSbo6/TckSjH8PwF9HbnpbnpL0Q=";
+  cargoHash = "sha256-v+OfQEfAwHxX+FfC0UK2F8/e2tJKaI3zQpg+3hk2hV4=";
+
+  env = {
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
@@ -34,12 +39,17 @@ rustPlatform.buildRustPackage rec {
   # tests don't work inside the sandbox
   doCheck = false;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     description = "HTTP load generator inspired by rakyll/hey with tui animation";
     homepage = "https://github.com/hatoo/oha";
-    changelog = "https://github.com/hatoo/oha/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/hatoo/oha/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jpds ];
     mainProgram = "oha";
   };
-}
+})

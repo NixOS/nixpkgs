@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "tachyon";
   version = "0.99.5";
   src = fetchurl {
-    url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${pname}-${version}.tar.gz";
+    url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/tachyon-${version}.tar.gz";
     sha256 = "sha256-CSA8ECMRFJ9d9cw2dAn5bHJXQmZtGcJNtbqZTVqBpvU=";
   };
   buildInputs =
@@ -22,18 +22,17 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withPngSupport [
       libpng
     ];
-  preBuild =
-    ''
-      cd unix
-    ''
-    + lib.optionalString withJpegSupport ''
-      export USEJPEG=" -DUSEJPEG"
-      export JPEGLIB=" -ljpeg"
-    ''
-    + lib.optionalString withPngSupport ''
-      export USEPNG=" -DUSEPNG"
-      export PNGLIB=" -lpng -lz"
-    '';
+  preBuild = ''
+    cd unix
+  ''
+  + lib.optionalString withJpegSupport ''
+    export USEJPEG=" -DUSEJPEG"
+    export JPEGLIB=" -ljpeg"
+  ''
+  + lib.optionalString withPngSupport ''
+    export USEPNG=" -DUSEPNG"
+    export PNGLIB=" -lpng -lz"
+  '';
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       "linux-64-thr"

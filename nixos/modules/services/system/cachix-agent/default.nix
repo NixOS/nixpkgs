@@ -8,10 +8,13 @@ let
   cfg = config.services.cachix-agent;
 in
 {
-  meta.maintainers = [ lib.maintainers.domenkozar ];
+  meta.maintainers = with lib.maintainers; [
+    domenkozar
+    sandydoo
+  ];
 
   options.services.cachix-agent = {
-    enable = lib.mkEnableOption "Cachix Deploy Agent: https://docs.cachix.org/deploy/";
+    enable = lib.mkEnableOption "Cachix Deploy Agent: <https://docs.cachix.org/deploy/>";
 
     name = lib.mkOption {
       type = lib.types.str;

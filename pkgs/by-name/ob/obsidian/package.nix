@@ -12,21 +12,28 @@
 }:
 let
   pname = "obsidian";
-  version = "1.8.10";
+  version = "1.11.5";
   appname = "Obsidian";
-  meta = with lib; {
+  meta = {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     mainProgram = "obsidian";
-    license = licenses.obsidian;
-    maintainers = with maintainers; [
+    license = lib.licenses.obsidian;
+    maintainers = with lib.maintainers; [
       atila
       conradmearns
       zaninime
       qbit
       kashw2
       w-lfchen
+    ];
+
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 
@@ -36,9 +43,9 @@ let
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-3BiPbT1ME75WpR/mTDl8/TI+yq6+WMU+RaZXykUG8yE="
+        "sha256-5orx4Fbf7t87dPC4lHO205tnLZ5zhtpxKGOIAva9K/Q="
       else
-        "sha256-xZoi4Z9JMM/FEPfvjBXEag3pT/uJH9dvFp8qHnTFNKE=";
+        "sha256-j1hMEey5Z0gHkOZTGWdDQL/NKjT7S3qVu3Cpb88Zq68=";
   };
 
   icon = fetchurl {
@@ -63,13 +70,8 @@ let
       src
       desktopItem
       icon
+      meta
       ;
-    meta = meta // {
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
-    };
     nativeBuildInputs = [
       makeWrapper
       imagemagick
@@ -79,7 +81,7 @@ let
       mkdir -p $out/bin
       makeWrapper ${electron}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
@@ -107,13 +109,8 @@ let
       version
       src
       appname
+      meta
       ;
-    meta = meta // {
-      platforms = [
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-    };
     sourceRoot = "${appname}.app";
     nativeBuildInputs = [
       makeWrapper

@@ -16,7 +16,6 @@
   libdrm,
   libglvnd,
   libnotify,
-  libsForQt5,
   libxkbcommon,
   libgbm,
   nspr,
@@ -30,15 +29,22 @@
   vulkan-loader,
   wrapGAppsHook3,
   xdg-utils,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
 }:
 stdenv.mkDerivation rec {
   pname = "plasticity";
-  version = "25.1.9";
+  version = "25.3.9";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-iNgMsQ6JDPRNKssvgVyZ9z8aUFzemboYgm1wIjuERog=";
+    hash = "sha256-92DokpVmywh7EZZMKAoXf0RzkEuG/4Ngd5l0l/o6Klk=";
   };
 
   passthru.updateScript = ./update.sh;
@@ -64,7 +70,6 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
     libdrm
     libnotify
-    libsForQt5.kde-cli-tools
     libxkbcommon
     nspr
     nss
@@ -79,14 +84,14 @@ stdenv.mkDerivation rec {
     systemd
     libglvnd
     vulkan-loader # may help with nvidia users
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libXtst
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxtst
   ];
 
   dontUnpack = true;
@@ -122,13 +127,13 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--add-flags "--use-gl=egl")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CAD for artists";
     homepage = "https://www.plasticity.xyz";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "Plasticity";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ imadnyc ];
+    maintainers = with lib.maintainers; [ imadnyc ];
     platforms = [ "x86_64-linux" ];
   };
 }

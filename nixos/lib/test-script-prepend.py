@@ -1,6 +1,7 @@
 # This file contains type hints that can be prepended to Nix test scripts so they can be type
 # checked.
 
+from test_driver.debug import DebugAbstract
 from test_driver.driver import Driver
 from test_driver.vlan import VLan
 from test_driver.machine import Machine
@@ -12,7 +13,7 @@ from unittest import TestCase
 
 
 class RetryProtocol(Protocol):
-    def __call__(self, fn: Callable, timeout: int = 900) -> None:
+    def __call__(self, fn: Callable, timeout_seconds: int = 900) -> None:
         raise Exception("This is just type information for the Nix test driver")
 
 
@@ -52,4 +53,5 @@ join_all: Callable[[], None]
 serial_stdout_off: Callable[[], None]
 serial_stdout_on: Callable[[], None]
 polling_condition: PollingConditionProtocol
+debug: DebugAbstract
 t: TestCase

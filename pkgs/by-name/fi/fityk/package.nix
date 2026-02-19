@@ -14,14 +14,14 @@
   swig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fityk";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "wojdyr";
     repo = "fityk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-m2RaZMYT6JGwa3sOUVsBIzCdZetTbiygaInQWoJ4m1o=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     homepage = "https://fityk.nieto.pl/";
     platforms = lib.platforms.linux;
   };
-}
+})

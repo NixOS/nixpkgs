@@ -1,36 +1,48 @@
 {
   lib,
+  kubectl,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kubie";
-  version = "0.25.2";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "sbstp";
     repo = "kubie";
-    sha256 = "sha256-+sSooE0KJqvWFdR63qazOMmSS8dV7MirYZ+sk7BnGQ4=";
+    sha256 = "sha256-eSzNCH0MiGvLKHrSXFSXQq4lN5tfmr0NcuGaN96Invs=";
   };
 
   buildNoDefaultFeatures = true;
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Yf8fAW65K7SLaRpvegjWBLVDV33sMGV+I1rqlWvx5Ss=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  cargoHash = "sha256-nXzIXMpCtibTN4rsPQFtSSjCQzylWWQZixwbH680ue0=";
+
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   postInstall = ''
-    installShellCompletion completion/kubie.bash
+    installShellCompletion completion/kubie.{bash,fish}
+
+    wrapProgram "$out/bin/kubie" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          kubectl
+        ]
+      }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shell independent context and namespace switcher for kubectl";
     mainProgram = "kubie";
     homepage = "https://github.com/sbstp/kubie";
-    license = with licenses; [ zlib ];
-    maintainers = with maintainers; [ illiusdope ];
+    license = with lib.licenses; [ zlib ];
+    maintainers = with lib.maintainers; [ illiusdope ];
   };
-}
+})

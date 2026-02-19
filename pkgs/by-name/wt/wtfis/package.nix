@@ -6,18 +6,18 @@
 
 let
   pname = "wtfis";
-  version = "0.10.2";
+  version = "0.14.0";
   src = fetchFromGitHub {
     owner = "pirxthepilot";
     repo = "wtfis";
     tag = "v${version}";
-    hash = "sha256-2p5xFNr08WCgCQY8socmZ5UsyGCMId3zXQhXTX909PE=";
+    hash = "sha256-XFitQY30hK3byVevqndSAkG08ztwY1BIpJEYhY3PzTs=";
   };
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version src;
 
-  format = "pyproject";
+  pyproject = true;
 
   propagatedBuildInputs = [
     python3.pkgs.hatchling

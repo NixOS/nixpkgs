@@ -8,13 +8,13 @@
   gnugrep,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "likwid";
-  version = "5.4.1";
+  version = "5.5.1";
 
   src = fetchurl {
-    url = "https://ftp.fau.de/pub/likwid/likwid-${version}.tar.gz";
-    hash = "sha256-V3OFFFXbukieLjc1kx5RVHN3zReWyYKlrIjQ8imcCBE=";
+    url = "https://ftp.fau.de/pub/likwid/likwid-${finalAttrs.version}.tar.gz";
+    hash = "sha256-JceDDmOyA5b8/DsWrnnDm0IgqG03bOt81pSbX/mR23g=";
   };
 
   nativeBuildInputs = [ perl ];
@@ -33,14 +33,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hpc.fau.de/research/tools/likwid/";
-    changelog = "https://github.com/RRZE-HPC/likwid/releases/tag/v${version}";
+    changelog = "https://github.com/RRZE-HPC/likwid/releases/tag/v${finalAttrs.version}";
     description = "Performance monitoring and benchmarking suite";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     # Might work on ARM by appropriately setting COMPILER in config.mk
-    platforms = intersectLists platforms.linux platforms.x86;
-    maintainers = [ maintainers.vbgl ];
+    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
+    maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "likwid-perfctr";
   };
-}
+})

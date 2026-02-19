@@ -1,15 +1,13 @@
 {
-  "version": "3.3.12",
-  "x86_64-linux": {
-    "url": "https://github.com/laurent22/joplin/releases/download/v3.3.12/Joplin-3.3.12.AppImage",
-    "sha256": "1fjrblmlpm6sf4jdvifmyxic0rw2bs1f4sbw3nz4xy7wlsab5f62"
+  "version": "3.5.12",
+  "hash": "sha256-NUWb2y8sTIzKTURJymb0Bvidz1tl+u3Q7o1UvEnIUtI=",
+  "plugins": {
+    "io.github.jackgruber.backup": {
+      "name": "joplin-plugin-backup",
+      "url": "https://github.com/JackGruber/joplin-plugin-backup/archive/2c3da7056e7ac39c86c2051a4fdb99d9534dd0a1.tar.gz",
+      "hash": "sha256-rPmBg/+mJH7Fp26gVzuSGFxi1Y4MtfRT+hqppk3tHdY=",
+      "npmDepsHash": "sha256-xZJ0Oir1A6sLe0ztIyBu39Yy3D6sNrVaciOYG0k85l0="
+    }
   },
-  "x86_64-darwin": {
-    "url": "https://github.com/laurent22/joplin/releases/download/v3.3.12/Joplin-3.3.12.dmg",
-    "sha256": "0rk5jl7i7sj31336r8yn8wf9h4xwdwi66wvwrkblvxrfhgddn2gj"
-  },
-  "aarch64-darwin": {
-    "url": "https://github.com/laurent22/joplin/releases/download/v3.3.12/Joplin-3.3.12-arm64.dmg",
-    "sha256": "13m4nypg1v5d7i13has9f1sp08dijc44962dr75b9jfiq8q6ciz6"
-  }
+  "deps_hash": "sha256-9xJmudcpUw1xmTvJD3TFrfzYEi+LupZGSzsA5zUOemI="
 }

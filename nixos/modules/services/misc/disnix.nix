@@ -49,7 +49,8 @@ in
 
     environment.systemPackages = [
       pkgs.disnix
-    ] ++ lib.optional cfg.useWebServiceInterface pkgs.DisnixWebService;
+    ]
+    ++ lib.optional cfg.useWebServiceInterface pkgs.disnix-web-service;
     environment.variables.PATH = lib.optionals cfg.enableProfilePath (
       map (profileName: "/nix/var/nix/profiles/disnix/${profileName}/bin") cfg.profiles
     );
@@ -62,9 +63,9 @@ in
     services.tomcat.extraGroups = [ "disnix" ];
     services.tomcat.javaOpts = "${lib.optionalString cfg.useWebServiceInterface "-Djava.library.path=${pkgs.libmatthew_java}/lib/jni"} ";
     services.tomcat.sharedLibs =
-      lib.optional cfg.useWebServiceInterface "${pkgs.DisnixWebService}/share/java/DisnixConnection.jar"
+      lib.optional cfg.useWebServiceInterface "${pkgs.disnix-web-service}/share/java/DisnixConnection.jar"
       ++ lib.optional cfg.useWebServiceInterface "${pkgs.dbus_java}/share/java/dbus.jar";
-    services.tomcat.webapps = lib.optional cfg.useWebServiceInterface pkgs.DisnixWebService;
+    services.tomcat.webapps = lib.optional cfg.useWebServiceInterface pkgs.disnix-web-service;
 
     users.groups.disnix.gid = config.ids.gids.disnix;
 
@@ -73,15 +74,16 @@ in
         description = "Disnix server";
         wants = [ "dysnomia.target" ];
         wantedBy = [ "multi-user.target" ];
-        after =
-          [ "dbus.service" ]
-          ++ lib.optional config.services.httpd.enable "httpd.service"
-          ++ lib.optional config.services.mysql.enable "mysql.service"
-          ++ lib.optional config.services.postgresql.enable "postgresql.service"
-          ++ lib.optional config.services.tomcat.enable "tomcat.service"
-          ++ lib.optional config.services.svnserve.enable "svnserve.service"
-          ++ lib.optional config.services.mongodb.enable "mongodb.service"
-          ++ lib.optional config.services.influxdb.enable "influxdb.service";
+        after = [
+          "dbus.service"
+        ]
+        ++ lib.optional config.services.httpd.enable "httpd.service"
+        ++ lib.optional config.services.mysql.enable "mysql.service"
+        ++ lib.optional config.services.postgresql.enable "postgresql.target"
+        ++ lib.optional config.services.tomcat.enable "tomcat.service"
+        ++ lib.optional config.services.svnserve.enable "svnserve.service"
+        ++ lib.optional config.services.mongodb.enable "mongodb.service"
+        ++ lib.optional config.services.influxdb.enable "influxdb.service";
 
         restartIfChanged = false;
 
@@ -92,16 +94,15 @@ in
           "/run/current-system/sw"
         ];
 
-        environment =
-          {
-            HOME = "/root";
-          }
-          // (lib.optionalAttrs (config.environment.variables ? DYSNOMIA_CONTAINERS_PATH) {
-            inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH;
-          })
-          // (lib.optionalAttrs (config.environment.variables ? DYSNOMIA_MODULES_PATH) {
-            inherit (config.environment.variables) DYSNOMIA_MODULES_PATH;
-          });
+        environment = {
+          HOME = "/root";
+        }
+        // (lib.optionalAttrs (config.environment.variables ? DYSNOMIA_CONTAINERS_PATH) {
+          inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH;
+        })
+        // (lib.optionalAttrs (config.environment.variables ? DYSNOMIA_MODULES_PATH) {
+          inherit (config.environment.variables) DYSNOMIA_MODULES_PATH;
+        });
 
         serviceConfig.ExecStart = "${cfg.package}/bin/disnix-service";
       };

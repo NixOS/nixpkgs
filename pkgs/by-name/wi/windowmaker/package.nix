@@ -6,14 +6,14 @@
   callPackage,
   pkg-config,
   imagemagick,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXmu,
-  libXpm,
-  libXrandr,
-  libXres,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
+  libxmu,
+  libxpm,
+  libxrandr,
+  libxres,
   libexif,
   libjpeg,
   libpng,
@@ -41,14 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     giflib
     imagemagick
-    libX11
-    libXext
-    libXft
-    libXinerama
-    libXmu
-    libXpm
-    libXrandr
-    libXres
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxmu
+    libxpm
+    libxrandr
+    libxres
     libexif
     libjpeg
     libpng
@@ -83,6 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "wmaker";
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

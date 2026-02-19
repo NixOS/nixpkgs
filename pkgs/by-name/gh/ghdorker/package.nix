@@ -4,17 +4,21 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ghdorker";
   version = "0.3.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wF4QoXxH55SpdYgKLHf4sCwUk1rkCpSdnIX5FvFi/BU=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     ghapi
     glom
     python-dotenv
@@ -28,11 +32,11 @@ python3.pkgs.buildPythonApplication rec {
     "GHDorker"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensible GitHub dorking tool";
     mainProgram = "ghdorker";
     homepage = "https://github.com/dtaivpp/ghdorker";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

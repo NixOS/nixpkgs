@@ -7,19 +7,18 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "selene";
-  version = "0.28.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "kampfkarren";
     repo = "selene";
-    rev = version;
-    sha256 = "sha256-QE9kXGQWg0pHtSI1bTppn5IE+53KoxqFED1VvwkumEI=";
+    tag = finalAttrs.version;
+    hash = "sha256-zsqgLE9igxGGjymMJSt6JR453bw63TWeZwRVmkDm6ag=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7mAtTOnrNT8280TOAqtsykfdLq6XAQkDjR5JXZGwCFM=";
+  cargoHash = "sha256-RxIDFE+FGKUDvM1Fy/doSy/mf2JuklhoMGpSqoHhAV4=";
 
   nativeBuildInputs = lib.optionals robloxSupport [
     pkg-config
@@ -31,12 +30,12 @@ rustPlatform.buildRustPackage rec {
 
   buildNoDefaultFeatures = !robloxSupport;
 
-  meta = with lib; {
+  meta = {
     description = "Blazing-fast modern Lua linter written in Rust";
     mainProgram = "selene";
     homepage = "https://github.com/kampfkarren/selene";
-    changelog = "https://github.com/kampfkarren/selene/blob/${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/kampfkarren/selene/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ liberodark ];
   };
-}
+})

@@ -2,22 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitLab,
+  perl,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oniux";
-  version = "0.5.0";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
     owner = "tpo/core";
     repo = "oniux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rtQUHTDPQXL4gT8/Nl0hV/F06ybPIfemibCzH3mFHaY=";
+    hash = "sha256-Z+uryz2Zc6VbnwAG7FRm/ghS8rZO6n75c4/4IGWaMKI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-79KNytAXxuYi9VBmkkOJg2ugjjoKJ/BPBqWa7Z72HGI=";
+  cargoHash = "sha256-3ihfoxKS1QJONbCXivbLSAPkbSdsNqaOZEQXL5GHPiM=";
+
+  nativeBuildInputs = [
+    perl
+  ];
 
   passthru.updateScript = nix-update-script { };
 

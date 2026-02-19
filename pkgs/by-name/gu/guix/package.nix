@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
-  fetchDebianPatch,
+  fetchgit,
+  graphviz,
+  gettext,
   autoreconfHook,
   disarchive,
   git,
@@ -27,6 +27,7 @@
   pkg-config,
   po4a,
   scheme-bytestructures,
+  slirp4netns,
   texinfo,
   bzip2,
   libgcrypt,
@@ -37,45 +38,18 @@
   storeDir ? "/gnu/store",
   confDir ? "/etc",
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guix";
-  version = "1.4.0";
+  version = "1.5.0";
 
-  src = fetchurl {
-    url = "mirror://gnu/guix/guix-${version}.tar.gz";
-    hash = "sha256-Q8dpy/Yy7wVEmsH6SMG6FSwzSUxqvH5HE3u6eyFJ+KQ=";
+  src = fetchgit {
+    url = "https://codeberg.org/guix/guix.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/g8JMUGM5GaZjtPLnl4vlrBNYMxSTjsHUDdhKLtHaQA=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "CVE-2024-27297_1.patch";
-      url = "https://git.savannah.gnu.org/cgit/guix.git/patch/?id=8f4ffb3fae133bb21d7991e97c2f19a7108b1143";
-      hash = "sha256-xKo1h2uckC2pYHt+memekagfL6dWcF8gOnTOOW/wJUU=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-27297_2.patch";
-      url = "https://git.savannah.gnu.org/cgit/guix.git/patch/?id=ff1251de0bc327ec478fc66a562430fbf35aef42";
-      hash = "sha256-f4KWDVrvO/oI+4SCUHU5GandkGtHrlaM1BWygM/Qlao=";
-    })
-    # see https://guix.gnu.org/en/blog/2024/build-user-takeover-vulnerability
-    (fetchDebianPatch {
-      inherit pname version;
-      debianRevision = "8";
-      patch = "security/0101-daemon-Sanitize-failed-build-outputs-prior-to-exposi.patch";
-      hash = "sha256-cbra/+K8+xHUJrCKRgzJCuhMBpzCSjgjosKAkJx7QIo=";
-    })
-    (fetchDebianPatch {
-      inherit pname version;
-      debianRevision = "8";
-      patch = "security/0102-daemon-Sanitize-successful-build-outputs-prior-to-ex.patch";
-      hash = "sha256-mOnlYtpIuYL+kDvSNuXuoDLJP03AA9aI2ALhap+0NOM=";
-    })
-    (fetchpatch {
-      name = "fix-guile-ssh-detection.patch";
-      url = "https://git.savannah.gnu.org/cgit/guix.git/patch/?id=b8a45bd0473ab2ba9b96b7ef429a557ece9bf06c";
-      hash = "sha256-oYkgM694qPK8kqgxatkr4fj/GL73ozTNQADNyDeU6WY=";
-    })
+    ./missing-cstdint-include.patch
   ];
 
   postPatch = ''
@@ -90,6 +64,8 @@ stdenv.mkDerivation rec {
     autoreconfHook
     disarchive
     git
+    graphviz
+    gettext
     glibcLocales
     guile
     guile-avahi
@@ -110,6 +86,7 @@ stdenv.mkDerivation rec {
     pkg-config
     po4a
     scheme-bytestructures
+    slirp4netns
     texinfo
   ];
 
@@ -136,6 +113,7 @@ stdenv.mkDerivation rec {
     guile-zlib
     guile-zstd
     scheme-bytestructures
+    slirp4netns
   ];
 
   configureFlags = [
@@ -143,7 +121,15 @@ stdenv.mkDerivation rec {
     "--localstatedir=${stateDir}"
     "--sysconfdir=${confDir}"
     "--with-bash-completion-dir=$(out)/etc/bash_completion.d"
+    "--with-zsh-completion-dir=$(out)/share/zsh/site-functions"
+    "--with-fish-completion-dir=$(out)/share/fish/vendor_completions.d"
+    "--with-apparmor-profile-dir=$(out)/etc/apparmor.d"
   ];
+
+  preAutoreconf = ''
+    echo ${finalAttrs.version} > .tarball-version
+    ./bootstrap
+  '';
 
   enableParallelBuilding = true;
 
@@ -160,7 +146,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) guix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Functional package manager with a Scheme interface";
     longDescription = ''
       GNU Guix is a purely functional package manager for the GNU system, and a distribution thereof.
@@ -174,15 +160,14 @@ stdenv.mkDerivation rec {
       Guix.
       Guix is based on the Nix package manager.
     '';
-    homepage = "http://www.gnu.org/software/guix";
-    changelog = "https://git.savannah.gnu.org/cgit/guix.git/plain/NEWS?h=v${version}";
-    license = licenses.gpl3Plus;
+    homepage = "https://guix.gnu.org/";
+    changelog = "https://codeberg.org/guix/guix/raw/tag/v${finalAttrs.version}/NEWS";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "guix";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cafkafk
-      foo-dogsquared
       hpfr
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

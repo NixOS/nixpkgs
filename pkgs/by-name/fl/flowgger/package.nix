@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eybahv1A/AIpAXGj6/md8k+b9fu9gSchU16fnAWZP2s=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-50/rg1Bo8wEpD9UT1EWIKNLglZLS1FigoPtZudDaL4c=";
 
   nativeBuildInputs = [
@@ -32,10 +31,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=flowgger::encoder::ltsv_encoder::test_ltsv_full_encode_no_sd"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/awslabs/flowgger";
     description = "Fast, simple and lightweight data collector written in Rust";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "flowgger";
   };

@@ -8,6 +8,7 @@
   nix-update-script,
   replaceVars,
   makeWrapper,
+  installShellFiles,
 }:
 let
   jdk = temurin-bin-21;
@@ -16,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkl";
-  version = "0.28.2";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "pkl";
     tag = finalAttrs.version;
-    hash = "sha256-ay3V3EWqZHncLH6UR4JOCChkweNcilDeskXzaeAFTR8=";
+    hash = "sha256-vel4Il/muHd4wqV5tfMPwBHoxgei8vPcnk2kS2/XG3I=";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     jdk
     kotlinOverlay
     makeWrapper
+    installShellFiles
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -65,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     gradleFlagsArray+=(-DcommitId=$(cat .commit-hash))
   '';
 
-  JAVA_TOOL_OPTIONS = "-Dfile.encoding=utf-8";
+  env.JAVA_TOOL_OPTIONS = "-Dfile.encoding=utf-8";
   __darwinAllowLocalNetworking = true;
 
   preCheck = ''
@@ -80,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp ./pkl-cli/build/executable/jpkl "$out/opt/pkl/jpkl.jar"
 
     makeWrapper ${lib.getExe jdk} $out/bin/pkl --add-flags "-jar $out/opt/pkl/jpkl.jar"
+
+    ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd pkl \
+        --bash <($out/bin/pkl shell-completion bash) \
+        --zsh <($out/bin/pkl shell-completion zsh) \
+        --fish <($out/bin/pkl shell-completion fish)
+    ''}
 
     runHook postInstall
   '';

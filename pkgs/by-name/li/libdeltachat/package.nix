@@ -18,15 +18,15 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdeltachat";
-  version = "1.159.5";
+  version = "2.43.0";
 
   src = fetchFromGitHub {
     owner = "chatmail";
     repo = "core";
-    tag = "v${version}";
-    hash = "sha256-qooN7XRWFqR/bVPAQ8e7KOYNnBD9E70uAesaLUUeXXs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3hpsc/IMBTVHH6Lun9R8Dx3s53sJOb9J1fU1O56MpIc=";
   };
 
   patches = [
@@ -34,32 +34,30 @@ stdenv.mkDerivation rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    pname = "deltachat-core-rust";
-    inherit version src;
-    hash = "sha256-TmizhgXMYX0hn4GnsL1QiSyMdahebh0QFbk/cOA48jg=";
+    pname = "chatmail-core";
+    inherit (finalAttrs) version src;
+    hash = "sha256-kDYWu8QrVv1fAyNsPN5xY7QqExbdiM7C+Af0l9HVRDQ=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      perl
-      pkg-config
-      rustPlatform.cargoSetupHook
-      cargo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    pkg-config
+    rustPlatform.cargoSetupHook
+    cargo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
-  buildInputs =
-    [
-      openssl
-      sqlcipher
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+    sqlcipher
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   nativeCheckInputs = with rustPlatform; [
     cargoCheckHook
@@ -85,12 +83,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Delta Chat Rust Core library";
     homepage = "https://github.com/chatmail/core";
-    changelog = "https://github.com/chatmail/core/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/chatmail/core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.unix;
   };
-}
+})

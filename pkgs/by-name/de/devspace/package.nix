@@ -6,15 +6,15 @@
   devspace,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "devspace";
-  version = "6.3.15";
+  version = "6.3.18";
 
   src = fetchFromGitHub {
     owner = "devspace-sh";
     repo = "devspace";
-    rev = "v${version}";
-    hash = "sha256-aD7A9GGFnX1w5MehmhqYE+wEREASyKFxusE5GFFgwbs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-33uhg2OY0owgP1rzdxcZzpN0cuYPRfX8vcwCJF9MVoo=";
   };
 
   vendorHash = null;
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # Check are disable since they required a working K8S cluster
@@ -33,11 +33,11 @@ buildGoModule rec {
     package = devspace;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source developer tool for Kubernetes that lets you develop and deploy cloud-native software faster";
     homepage = "https://devspace.sh/";
-    changelog = "https://github.com/devspace-sh/devspace/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ darkonion0 ];
+    changelog = "https://github.com/devspace-sh/devspace/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ darkonion0 ];
   };
-}
+})

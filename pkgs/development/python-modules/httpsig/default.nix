@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpsig" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sign HTTP requests with secure signatures";
-    license = licenses.mit;
-    maintainers = with maintainers; [ srhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ srhb ];
     homepage = "https://github.com/ahknight/httpsig";
   };
 }

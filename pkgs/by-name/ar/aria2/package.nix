@@ -15,14 +15,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aria2";
   version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "aria2";
     repo = "aria2";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     sha256 = "sha256-xbiNSg/Z+CA0x0DQfMNsWdA+TATyX6dCeW2Nf3L3Kfs=";
   };
 
@@ -69,17 +69,16 @@ stdenv.mkDerivation rec {
     aria2 = nixosTests.aria2;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://aria2.github.io";
-    changelog = "https://github.com/aria2/aria2/releases/tag/release-${version}";
+    changelog = "https://github.com/aria2/aria2/releases/tag/release-${finalAttrs.version}";
     description = "Lightweight, multi-protocol, multi-source, command-line download utility";
     mainProgram = "aria2c";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      Br1ght0ne
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       koral
       timhae
     ];
   };
-}
+})

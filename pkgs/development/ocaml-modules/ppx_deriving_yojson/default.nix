@@ -2,6 +2,7 @@
   lib,
   buildDunePackage,
   fetchFromGitHub,
+  fetchpatch,
   ocaml,
   ppxlib,
   ounit,
@@ -13,7 +14,13 @@
 
 let
   param =
-    if lib.versionAtLeast ppxlib.version "0.30" then
+    if lib.versionAtLeast ppxlib.version "0.36" then
+      {
+        version = "3.10.0";
+        sha256 = "sha256-Dy9egNpZdxsTPLo2mbpiFTMh5cYUXXOlOZLlQJuAK+E=";
+        checkInputs = [ ounit2 ];
+      }
+    else if lib.versionAtLeast ppxlib.version "0.30" then
       {
         version = "3.9.0";
         sha256 = "sha256-0d6YcBkeFoHXffCYjLIIvruw8B9ZB6NbUijhTv9uyN8=";
@@ -32,7 +39,10 @@ buildDunePackage rec {
   pname = "ppx_deriving_yojson";
   inherit (param) version;
 
-  minimalOCamlVersion = "4.07";
+  patches = fetchpatch {
+    url = "https://github.com/ocaml-ppx/ppx_deriving_yojson/commit/1bbbe2c4c5822c4297b0b812c59a155cf96c5089.patch";
+    hash = "sha256-jYW2/Ix6T94vfI2mGnIkYSG1rjsWEsnOPA1mufP3sd4=";
+  };
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
@@ -45,9 +55,10 @@ buildDunePackage rec {
     ppxlib
     ppx_deriving
     yojson
-  ] ++ param.propagatedBuildInputs or [ ];
+  ]
+  ++ param.propagatedBuildInputs or [ ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
   inherit (param) checkInputs;
 
   meta = {

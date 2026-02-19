@@ -39,7 +39,6 @@
   pydantic,
   pygments,
   pyjwt,
-  pythonOlder,
   pyyaml,
   setuptools,
   tldextract,
@@ -50,19 +49,20 @@
 
 buildPythonPackage rec {
   pname = "msticpy";
-  version = "2.16.2.post";
+  version = "2.17.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "msticpy";
     tag = "v${version}";
-    hash = "sha256-EUZAN56EXNnAFXiBhtjsu652+K3T/qMZoWt2N1C92mU=";
+    hash = "sha256-tzAfynPyIqvWHxzLZ67r/Q5hNBKZAJhllhEVJ69L43k=";
   };
 
-  pythonRelaxDeps = [ "bokeh" ];
+  pythonRelaxDeps = [
+    "azure-kusto-data"
+    "bokeh"
+  ];
 
   build-system = [ setuptools ];
 

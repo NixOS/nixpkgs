@@ -24,17 +24,17 @@ buildPythonPackage rec {
     razdel
   ];
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
   disabledTestPaths = [
     # Tries to download model binary artifacts:
     "tests/test_api.py"
   ];
   pythonImportsCheck = [ "slovnet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deep-learning based NLP modeling for Russian language";
     homepage = "https://github.com/natasha/slovnet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ npatsakula ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ npatsakula ];
   };
 }

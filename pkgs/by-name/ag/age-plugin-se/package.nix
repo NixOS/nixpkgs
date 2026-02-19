@@ -1,13 +1,14 @@
 {
   lib,
   fetchFromGitHub,
+  llvmPackages,
   swiftPackages,
   swift,
   swiftpm,
   nix-update-script,
 }:
 let
-  inherit (swiftPackages) stdenv;
+  inherit (llvmPackages) stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "age-plugin-se";
@@ -25,8 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     swiftpm
   ];
 
-  # Can't find libdispatch without this on NixOS. (swift 5.8)
-  LD_LIBRARY_PATH = lib.optionalString stdenv.isLinux "${swiftPackages.Dispatch}/lib";
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    # Can't find libdispatch without this on NixOS. (swift 5.8)
+    LD_LIBRARY_PATH = "${swiftPackages.Dispatch}/lib";
+  };
 
   postPatch =
     let

@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "roundcube";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ globin ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes = {
@@ -30,7 +30,7 @@
 
   testScript = ''
     roundcube.start
-    roundcube.wait_for_unit("postgresql.service")
+    roundcube.wait_for_unit("postgresql.target")
     roundcube.wait_for_unit("phpfpm-roundcube.service")
     roundcube.wait_for_unit("nginx.service")
     roundcube.succeed("curl -sSfL http://roundcube/ | grep 'Keep me logged in'")

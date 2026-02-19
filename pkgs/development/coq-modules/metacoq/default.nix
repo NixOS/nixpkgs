@@ -10,50 +10,23 @@
 let
   repo = "metacoq";
   owner = "MetaCoq";
-  defaultVersion = lib.switch coq.coq-version [
-    {
-      case = "8.11";
-      out = "1.0-beta2-8.11";
-    }
-    {
-      case = "8.12";
-      out = "1.0-beta2-8.12";
-    }
-    # Do not provide 8.13 because it does not compile with equations 1.3 provided by default (only 1.2.3)
-    # { case = "8.13"; out = "1.0-beta2-8.13"; }
-    {
-      case = "8.14";
-      out = "1.1-8.14";
-    }
-    {
-      case = "8.15";
-      out = "1.1-8.15";
-    }
-    {
-      case = "8.16";
-      out = "1.1-8.16";
-    }
-    {
-      case = "8.17";
-      out = "1.3.1-8.17";
-    }
-    {
-      case = "8.18";
-      out = "1.3.1-8.18";
-    }
-    {
-      case = "8.19";
-      out = "1.3.3-8.19";
-    }
-    {
-      case = "8.20";
-      out = "1.3.4-8.20";
-    }
-    {
-      case = "9.0";
-      out = "1.3.4-9.0";
-    }
-  ] null;
+  defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
+    lib.switch coq.coq-version [
+      (case "8.11" "1.0-beta2-8.11")
+      (case "8.12" "1.0-beta2-8.12")
+      # Do not provide 8.13 because it does not compile with equations 1.3 provided by default (only 1.2.3)
+      # (case "8.13" "1.0-beta2-8.13")
+      (case "8.14" "1.1-8.14")
+      (case "8.15" "1.1-8.15")
+      (case "8.16" "1.1-8.16")
+      (case "8.17" "1.3.1-8.17")
+      (case "8.18" "1.3.1-8.18")
+      (case "8.19" "1.3.3-8.19")
+      (case "8.20" "1.3.4-8.20")
+    ] null;
   release = {
     "1.0-beta2-8.11".sha256 = "sha256-I9YNk5Di6Udvq5/xpLSNflfjRyRH8fMnRzbo3uhpXNs=";
     "1.0-beta2-8.12".sha256 = "sha256-I8gpmU9rUQJh0qfp5KOgDNscVvCybm5zX4TINxO1TVA=";
@@ -148,7 +121,8 @@ let
             propagatedBuildInputs = [
               equations
               coq.ocamlPackages.zarith
-            ] ++ metacoq-deps;
+            ]
+            ++ metacoq-deps;
 
             patchPhase =
               if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev" then
@@ -218,8 +192,7 @@ let
             in
             {
               propagatedBuildInputs =
-                o.propagatedBuildInputs
-                ++ lib.optional requiresOcamlStdlibShims coq.ocamlPackages.stdlib-shims;
+                o.propagatedBuildInputs ++ lib.optional requiresOcamlStdlibShims coq.ocamlPackages.stdlib-shims;
             }
           );
       # utils, common, template-pcuic, quotation, safechecker-plugin, and erasure-plugin

@@ -4,16 +4,17 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "glow";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "glow";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lDGCRtwCpW/bZlfcb100g7tMXN2dlCPnCY7qVFyayUo=";
   };
 
@@ -24,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -36,15 +37,14 @@ buildGoModule rec {
       --zsh <($out/bin/glow completion zsh)
   '';
 
-  meta = with lib; {
-    description = "Render markdown on the CLI, with pizzazz!";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Render markdown on the CLI, with pizzazz";
     homepage = "https://github.com/charmbracelet/glow";
-    changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      Br1ght0ne
-      penguwin
-    ];
+    changelog = "https://github.com/charmbracelet/glow/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ higherorderlogic ];
     mainProgram = "glow";
   };
-}
+})

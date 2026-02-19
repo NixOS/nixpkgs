@@ -17,8 +17,8 @@
   jansson,
   enable9361 ? true,
   libad9361,
-# enable9166 ? true,
-# libad9166,
+  # enable9166 ? true,
+  # libad9166,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,7 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     curl
     jansson
-  ] ++ lib.optional enable9361 libad9361;
+  ]
+  ++ lib.optional enable9361 libad9361;
 
   cmakeFlags = [
     "-DCMAKE_POLKIT_PREFIX=${placeholder "out"}"

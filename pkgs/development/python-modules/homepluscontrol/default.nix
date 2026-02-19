@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -14,7 +13,6 @@ buildPythonPackage rec {
   pname = "homepluscontrol";
   version = "0.1";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "chemaaa";
@@ -36,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "homepluscontrol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API to interact with the Legrand Eliot Home and Control";
     homepage = "https://github.com/chemaaa/homepluscontrol";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

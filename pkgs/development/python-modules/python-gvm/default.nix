@@ -9,22 +9,19 @@
   poetry-core,
   pontos,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-gvm";
-  version = "26.2.0";
+  version = "26.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "python-gvm";
-    tag = "v${version}";
-    hash = "sha256-xWNOUgTanOVYjvoZZkQBrKYr0z+dn0/ur5jdO549FXw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZClhWPo0Tnx62RE/YzADq2QmUnpWdPBX98IIXK0sfOA=";
   };
 
   build-system = [ poetry-core ];
@@ -47,15 +44,16 @@ buildPythonPackage rec {
     # No running SSH available
     "test_connect_error"
     "test_feed_xml_error"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_feed_xml_error" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_feed_xml_error" ];
 
   pythonImportsCheck = [ "gvm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";
     homepage = "https://github.com/greenbone/python-gvm";
-    changelog = "https://github.com/greenbone/python-gvm/releases/tag/${src.tag}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/greenbone/python-gvm/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

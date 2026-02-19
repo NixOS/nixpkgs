@@ -1,5 +1,3 @@
-# Xen Project Hypervisor (Dom0) support.
-
 {
   config,
   lib,
@@ -8,34 +6,40 @@
 }:
 
 let
-  inherit (builtins) readFile;
-  inherit (lib.modules) mkRemovedOptionModule mkRenamedOptionModule mkIf;
-  inherit (lib.options)
-    mkOption
-    mkEnableOption
+  inherit (lib)
+    boolToString
+    getExe
+    hasSuffix
+    hiPrio
     literalExpression
+    mkEnableOption
+    mkIf
+    mkOption
     mkPackageOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optional
+    optionalAttrs
+    optionalString
+    optionals
+    singleton
+    teams
+    types
     ;
-  inherit (lib.types)
-    listOf
-    str
+  inherit (types)
+    addCheck
+    bool
+    enum
+    float
+    int
     ints
     lines
-    enum
-    path
-    submodule
-    addCheck
-    float
-    bool
-    int
+    listOf
     nullOr
+    path
+    str
+    submodule
     ;
-  inherit (lib.lists) optional optionals;
-  inherit (lib.strings) hasSuffix optionalString;
-  inherit (lib.meta) getExe;
-  inherit (lib.attrsets) optionalAttrs;
-  inherit (lib.trivial) boolToString;
-  inherit (lib.teams.xen) members;
 
   cfg = config.virtualisation.xen;
 
@@ -51,21 +55,19 @@ let
         gnused
         jq
       ])
-      ++ optionals (cfg.efi.bootBuilderVerbosity == "info") (
+      ++ optionals (cfg.boot.builderVerbosity == "info") (
         with pkgs;
         [
           bat
           diffutils
         ]
       );
-    runtimeEnv = {
-      efiMountPoint = config.boot.loader.efi.efiSysMountPoint;
-    };
+    runtimeEnv.efiMountPoint = config.boot.loader.efi.efiSysMountPoint;
 
     # We disable SC2016 because we don't want to expand the regexes in the sed commands.
     excludeShellChecks = [ "SC2016" ];
 
-    text = readFile ./xen-boot-builder.sh;
+    text = builtins.readFile ./xen-boot-builder.sh;
   };
 in
 
@@ -146,6 +148,48 @@ in
         "path"
       ]
     )
+    (mkRenamedOptionModule
+      [
+        "virtualisation"
+        "xen"
+        "efi"
+        "bootBuilderVerbosity"
+      ]
+      [
+        "virtualisation"
+        "xen"
+        "boot"
+        "builderVerbosity"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "virtualisation"
+        "xen"
+        "bootParams"
+      ]
+      [
+        "virtualisation"
+        "xen"
+        "boot"
+        "params"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "virtualisation"
+        "xen"
+        "efi"
+        "path"
+      ]
+      [
+        "virtualisation"
+        "xen"
+        "boot"
+        "efi"
+        "path"
+      ]
+    )
   ];
 
   ## Interface ##
@@ -178,25 +222,27 @@ in
       };
     };
 
-    bootParams = mkOption {
-      default = [ ];
-      example = ''
-        [
-          "iommu=force:true,qinval:true,debug:true"
-          "noreboot=true"
-          "vga=ask"
-        ]
-      '';
-      type = listOf str;
-      description = ''
-        Xen Command Line parameters passed to Domain 0 at boot time.
-        Note: these are different from `boot.kernelParams`. See
-        the [Xen documentation](https://xenbits.xenproject.org/docs/unstable/misc/xen-command-line.html) for more information.
-      '';
-    };
+    boot = {
+      params = mkOption {
+        default = [ ];
+        example = literalExpression ''
+          [
+            "iommu=force:true,qinval:true,debug:true"
+            "noreboot=true"
+            "vga=ask"
+          ]
+        '';
+        type = listOf str;
+        description = ''
+          Xen Command Line parameters passed to Domain 0 at boot time.
 
-    efi = {
-      bootBuilderVerbosity = mkOption {
+          ::: {.note}
+          Note: these are different from {option}`boot.kernelParams`. See
+          the [Xen documentation](https://xenbits.xenproject.org/docs/unstable/misc/xen-command-line.html) for more information.
+          :::
+        '';
+      };
+      builderVerbosity = mkOption {
         type = enum [
           "default"
           "info"
@@ -206,7 +252,7 @@ in
         default = "default";
         example = "info";
         description = ''
-          The EFI boot entry builder script should be called with exactly one of the following arguments in order to specify its verbosity:
+          The boot entry builder script should be called with exactly one of the following arguments in order to specify its verbosity:
 
           - `quiet` supresses all messages.
 
@@ -220,19 +266,33 @@ in
           This option does not alter the actual functionality of the script, just the number of messages printed when rebuilding the system.
         '';
       };
-
-      path = mkOption {
-        type = path;
-        default = "${cfg.package.boot}/${cfg.package.efi}";
-        defaultText = literalExpression "\${config.virtualisation.xen.package.boot}/\${config.virtualisation.xen.package.efi}";
-        example = literalExpression "\${config.virtualisation.xen.package}/boot/efi/efi/nixos/xen-\${config.virtualisation.xen.package.version}.efi";
-        description = ''
-          Path to xen.efi. `pkgs.xen` is patched to install the xen.efi file
-          on `$boot/boot/xen.efi`, but an unpatched Xen build may install it
-          somewhere else, such as `$out/boot/efi/efi/nixos/xen.efi`. Unless
-          you're building your own Xen derivation, you should leave this
-          option as the default value.
-        '';
+      bios = {
+        path = mkOption {
+          type = path;
+          default = "${cfg.package.boot}/${cfg.package.multiboot}";
+          defaultText = literalExpression "\${config.virtualisation.xen.package.boot}/\${config.virtualisation.xen.package.multiboot}";
+          example = literalExpression "\${config.virtualisation.xen.package}/boot/xen-\${config.virtualisation.xen.package.upstreamVersion}";
+          description = ''
+            Path to the Xen `multiboot` binary used for BIOS booting.
+            Unless you're building your own Xen derivation, you should leave this
+            option as the default value.
+          '';
+        };
+      };
+      efi = {
+        path = mkOption {
+          type = path;
+          default = "${cfg.package.boot}/${cfg.package.efi}";
+          defaultText = literalExpression "\${config.virtualisation.xen.package.boot}/\${config.virtualisation.xen.package.efi}";
+          example = literalExpression "\${config.virtualisation.xen.package}/boot/efi/efi/nixos/xen-\${config.virtualisation.xen.package.upstreamVersion}.efi";
+          description = ''
+            Path to xen.efi. `pkgs.xen` is patched to install the xen.efi file
+            on `$boot/boot/xen.efi`, but an unpatched Xen build may install it
+            somewhere else, such as `$out/boot/efi/efi/nixos/xen.efi`. Unless
+            you're building your own Xen derivation, you should leave this
+            option as the default value.
+          '';
+        };
       };
     };
 
@@ -277,7 +337,7 @@ in
       extraConfig = mkOption {
         type = lines;
         default = "";
-        example = ''
+        example = literalExpression ''
           XENDOMAINS_SAVE=/persist/xen/save
           XENDOMAINS_RESTORE=false
           XENDOMAINS_CREATE_USLEEP=10000000
@@ -612,17 +672,21 @@ in
       {
         assertion =
           config.boot.loader.systemd-boot.enable
-          || (config.boot ? lanzaboote) && config.boot.lanzaboote.enable;
-        message = "Xen only supports booting on systemd-boot or Lanzaboote.";
+          || (config.boot ? lanzaboote) && config.boot.lanzaboote.enable
+          || config.boot.loader.limine.enable;
+        message = "Xen only supports booting on systemd-boot, Lanzaboote or Limine.";
       }
       {
         assertion = config.boot.initrd.systemd.enable;
-        message = "Xen does not support the legacy script-based Stage 1 initrd.";
+        message = ''
+          Xen does not support the legacy script-based stage 1 initial ramdisk.
+          Please set 'boot.initrd.systemd.enable' to 'true'.
+        '';
       }
       {
         assertion = cfg.dom0Resources.maxMemory >= cfg.dom0Resources.memory;
         message = ''
-          You have allocated more memory to dom0 than virtualisation.xen.dom0Resources.maxMemory
+          You have allocated more memory to dom0 than 'virtualisation.xen.dom0Resources.maxMemory'
           allows for. Please increase the maximum memory limit, or decrease the default memory allocation.
         '';
       }
@@ -633,13 +697,20 @@ in
       {
         assertion = cfg.store.settings.quota.maxWatchEvents >= cfg.store.settings.quota.maxOutstanding;
         message = ''
-          Upstream Xen recommends that maxWatchEvents be equal to or greater than maxOutstanding,
+          Upstream Xen recommends that 'virtualisation.xen.store.settings.quota.maxWatchEvents'
+          be equal to or greater than 'virtualisation.xen.store.settings.quota.maxOutstanding',
           in order to mitigate denial of service attacks from malicious frontends.
         '';
       }
     ];
 
-    virtualisation.xen.bootParams =
+    warnings = lib.optional ((config.boot ? lanzaboote) && config.boot.lanzaboote.enable) ''
+      Xen support has not yet been merged into Lanzaboote.
+      Ensure that your Lanzaboote configuration includes PR #387:
+      https://github.com/nix-community/lanzaboote/pull/387
+    '';
+
+    virtualisation.xen.boot.params =
       optionals cfg.trace [
         "loglvl=all"
         "guest_loglvl=all"
@@ -663,15 +734,6 @@ in
         "xen-blkback"
         "xen-netback"
         "xen-pciback"
-        "evtchn"
-        "gntdev"
-        "netbk"
-        "blkbk"
-        "xen-scsibk"
-        "usbbk"
-        "pciback"
-        "xen-acpi-processor"
-        "blktap2"
         "tun"
         "netxen_nic"
         "xen_wdt"
@@ -692,18 +754,19 @@ in
       '';
 
       # Xen Bootspec extension. This extension allows NixOS bootloaders to
-      # fetch the `xen.efi` path and access the `cfg.bootParams` option.
-      bootspec.extensions = {
-        "org.xenproject.bootspec.v1" = {
-          xen = cfg.efi.path;
-          xenParams = cfg.bootParams;
-        };
+      # fetch the dom0 kernel paths and access the `cfg.boot.params` option.
+      # Bootspec extension v2 includes more detail,
+      # including supporting multiboot, and is the current supported
+      # bootspec extension
+      bootspec.extensions."org.xenproject.bootspec.v2" = {
+        efiPath = cfg.boot.efi.path;
+        multibootPath = cfg.boot.bios.path;
+        version = cfg.package.version;
+        params = cfg.boot.params;
       };
 
       # See the `xenBootBuilder` script in the main `let...in` statement of this file.
-      loader.systemd-boot.extraInstallCommands = ''
-        ${getExe xenBootBuilder} ${cfg.efi.bootBuilderVerbosity}
-      '';
+      loader.systemd-boot.extraInstallCommands = "${getExe xenBootBuilder} ${cfg.boot.builderVerbosity}";
     };
 
     # Domain 0 requires a pvops-enabled kernel.
@@ -730,7 +793,7 @@ in
     environment = {
       systemPackages = [
         cfg.package
-        cfg.qemu.package
+        (hiPrio cfg.qemu.package)
       ];
       etc =
         # Set up Xen Domain 0 configuration files.
@@ -803,21 +866,18 @@ in
       # Xen provides systemd units.
       packages = [ cfg.package ];
 
-      mounts = [
-        {
-          description = "Mount /proc/xen files";
-          what = "xenfs";
-          where = "/proc/xen";
-          type = "xenfs";
-          unitConfig = {
-            ConditionPathExists = "/proc/xen";
-            RefuseManualStop = "true";
-          };
-        }
-      ];
+      mounts = singleton {
+        description = "Mount /proc/xen files";
+        what = "xenfs";
+        where = "/proc/xen";
+        type = "xenfs";
+        unitConfig = {
+          ConditionPathExists = "/proc/xen";
+          RefuseManualStop = "true";
+        };
+      };
 
       services = {
-
         # While this service is installed by the `xen` package, it shouldn't be used in dom0.
         xendriverdomain.enable = false;
 
@@ -839,13 +899,17 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             PIDFile = cfg.qemu.pidFile;
-            ExecStart = ''
-              ${cfg.qemu.package}/${cfg.qemu.package.qemu-system-i386} \
-              -xen-domid 0 -xen-attach -name dom0 -nographic -M xenpv \
-              -daemonize -monitor /dev/null -serial /dev/null -parallel \
-              /dev/null -nodefaults -no-user-config -pidfile \
-              ${cfg.qemu.pidFile}
-            '';
+            overrideStrategy = "asDropin";
+            ExecStart = [
+              ""
+              ''
+                ${cfg.qemu.package}/${cfg.qemu.package.qemu-system-i386} \
+                -xen-domid 0 -xen-attach -name dom0 -nographic -M xenpv \
+                -daemonize -monitor /dev/null -serial /dev/null -parallel \
+                /dev/null -nodefaults -no-user-config -pidfile \
+                ${cfg.qemu.pidFile}
+              ''
+            ];
           };
         };
 
@@ -871,5 +935,8 @@ in
       };
     };
   };
-  meta.maintainers = members;
+  meta = {
+    doc = ./xen.md;
+    maintainers = teams.xen.members;
+  };
 }

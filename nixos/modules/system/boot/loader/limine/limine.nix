@@ -14,7 +14,7 @@ let
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;
-      luksDevices = config.boot.initrd.luks.devices;
+      luksDevices = builtins.attrNames config.boot.initrd.luks.devices;
       canTouchEfiVariables = efi.canTouchEfiVariables;
       efiSupport = cfg.efiSupport;
       efiRemovable = cfg.efiInstallAsRemovable;
@@ -22,9 +22,10 @@ let
       biosSupport = cfg.biosSupport;
       biosDevice = cfg.biosDevice;
       partitionIndex = cfg.partitionIndex;
-      forceMbr = cfg.forceMbr;
+      force = cfg.force;
       enrollConfig = cfg.enrollConfig;
       style = cfg.style;
+      resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
       timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
@@ -43,8 +44,16 @@ in
     inherit (pkgs.limine.meta) maintainers;
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "boot" "loader" "limine" "forceMbr" ]
+      [ "boot" "loader" "limine" "force" ]
+    )
+  ];
+
   options.boot.loader.limine = {
     enable = lib.mkEnableOption "the Limine Bootloader";
+    package = lib.mkPackageOption pkgs "limine" { };
 
     enableEditor = lib.mkEnableOption null // {
       description = ''
@@ -90,6 +99,27 @@ in
       '';
     };
 
+    resolution = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.str;
+      example = "1920x1080x32";
+      description = ''
+        The framebuffer resolution to set when booting Linux entries.
+        This controls the GOP mode that Limine sets before handing off to the kernel,
+        which affects early boot graphics (e.g., simpledrm, efifb).
+
+        Format: `<width>x<height>` or `<width>x<height>x<bpp>`.
+        If bpp is omitted, defaults to 32.
+
+        Note: Refresh rate is not supported because the UEFI GOP protocol only
+        defines framebuffer dimensions and pixel format, not display timing.
+        Refresh rate is determined later by the GPU driver based on EDID.
+
+        This is distinct from {option}`boot.loader.limine.style.interface.resolution`
+        which only affects the Limine bootloader's own menu interface.
+      '';
+    };
+
     additionalFiles = lib.mkOption {
       default = { };
       type = lib.types.attrsOf lib.types.path;
@@ -116,8 +146,6 @@ in
         error at boot time.
       '';
     };
-
-    package = lib.mkPackageOption pkgs "limine" { };
 
     efiSupport = lib.mkEnableOption null // {
       default = pkgs.stdenv.hostPlatform.isEfi;
@@ -170,9 +198,9 @@ in
       '';
     };
 
-    forceMbr = lib.mkEnableOption null // {
+    force = lib.mkEnableOption null // {
       description = ''
-        Force MBR detection to work even if the safety checks fail, use absolutely only if necessary!
+        Force installation even if the safety checks fail, use absolutely only if necessary!
       '';
     };
 
@@ -223,10 +251,10 @@ in
       };
 
       wallpaperStyle = lib.mkOption {
-        default = "streched";
+        default = "stretched";
         type = lib.types.enum [
           "centered"
-          "streched"
+          "stretched"
           "tiled"
         ];
         description = ''
@@ -369,7 +397,7 @@ in
     }
     (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
       boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "streched";
+      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
     })
     (lib.mkIf cfg.enable {
       assertions = [
@@ -438,15 +466,17 @@ in
         wantedBy = [ "fwupd.service" ];
         partOf = [ "fwupd.service" ];
         before = [ "fwupd.service" ];
+
+        unitConfig.ConditionPathIsDirectory = "/var/lib/sbctl";
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
           RuntimeDirectory = "fwupd-efi";
         };
+
         script = ''
-          cp ${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi /run/fwupd-efi/
-          chmod +w /run/fwupd-efi/fwupd*.efi
-          ${lib.getExe pkgs.sbctl} sign /run/fwupd-efi/fwupd*.efi
+          fwupd_efi=(${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi)
+          ${lib.getExe cfg.secureBoot.sbctl} sign -o /run/fwupd-efi/$(basename "$fwupd_efi").signed "$fwupd_efi"
         '';
       };
 

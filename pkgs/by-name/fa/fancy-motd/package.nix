@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "fancy-motd";
-  version = "unstable-2022-06-06";
+  version = "0-unstable-2022-06-06";
 
   src = fetchFromGitHub {
     owner = "bcyran";
@@ -54,12 +54,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fancy, colorful MOTD written in bash. Server status at a glance";
     homepage = "https://github.com/bcyran/fancy-motd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rhoriguchi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
+    platforms = lib.platforms.linux;
     mainProgram = "motd";
   };
 }

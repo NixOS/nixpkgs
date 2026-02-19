@@ -54,7 +54,33 @@ let
 
   missingGithubIds = lib.concatLists (lib.mapAttrsToList checkMaintainer lib.maintainers);
 
-  success = pkgs.runCommand "checked-maintainers-success" { } ">$out";
+  uniqueFields = [
+    "github"
+    "githubId"
+    "email"
+    "matrix"
+  ];
+
+  nonUniqueFields = lib.filterAttrs (field: nonUnique: nonUnique != { }) (
+    lib.genAttrs uniqueFields (
+      field:
+      lib.pipe lib.maintainers [
+        (lib.mapAttrsToList (handle: m: m // { inherit handle; }))
+        (lib.groupBy (m: toString (m.${field} or null)))
+        (lib.filterAttrs (v: ms: v != "" && lib.length ms > 1))
+        (lib.mapAttrs (v: ms: map (m: m.handle) ms))
+      ]
+    )
+  );
+
+  uniquenessError =
+    value:
+    if nonUniqueFields == { } then
+      value
+    else
+      throw "lib.maintainers has non-unique fields: ${lib.generators.toPretty { } nonUniqueFields}";
+
+  success = pkgs.runCommand "checked-maintainers-success" { } "mkdir $out";
 
   failure =
     pkgs.runCommand "checked-maintainers-failure"
@@ -73,4 +99,4 @@ let
         exit 1
       '';
 in
-if missingGithubIds == [ ] then success else failure
+uniquenessError (if missingGithubIds == [ ] then success else failure)

@@ -3,7 +3,21 @@
   lib,
   stdenv,
   squashfsTools,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxshmfence,
+  libxcb,
   alsa-lib,
   makeShellWrapper,
   wrapGAppsHook3,
@@ -79,21 +93,21 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libxshmfence
-    xorg.libXtst
+    libice
+    libsm
+    libx11
+    libxcb
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxshmfence
+    libxtst
     zlib
   ];
 in
@@ -105,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.2.60.564.gcc6305cb";
+  version = "1.2.74.477.g3be53afe";
 
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
@@ -113,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "87";
+  rev = "89";
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last
@@ -126,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     name = "spotify-${finalAttrs.version}-${finalAttrs.rev}.snap";
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${finalAttrs.rev}.snap";
-    hash = "sha512-hdJOko/0EHkPiNgWO+WB3nP+0MO9D2fxgM/X/Ri6fM1ODJxz3XYY84Xf2Ru6iGqdA9XUNRcd/qi+Gfaj9Ez0Ug==";
+    hash = "sha512-mn1w/Ylt9weFgV67tB435CoF2/4V+F6gu1LUXY07J6m5nxi1PCewHNFm8/11qBRO/i7mpMwhcRXaiv0HkFAjYA==";
   };
 
   nativeBuildInputs = [
@@ -232,7 +246,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = meta // {
     maintainers = with lib.maintainers; [
       ftrvxmtrx
-      sheenobu
       timokau
       ma27
     ];

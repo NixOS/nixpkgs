@@ -5,6 +5,7 @@
   vim,
   vimPlugins,
   buildEnv,
+  symlinkJoin,
   writeText,
   runCommand,
   makeWrapper,
@@ -200,12 +201,26 @@ let
           # and can simply pass `null`.
           depsOfOptionalPlugins = lib.subtractLists opt (findDependenciesRecursively opt);
           startWithDeps = findDependenciesRecursively start;
-          allPlugins = lib.unique (startWithDeps ++ depsOfOptionalPlugins);
+          allPluginsAndGrammars = lib.unique (startWithDeps ++ depsOfOptionalPlugins);
+
           allPython3Dependencies =
-            ps: lib.flatten (builtins.map (plugin: (plugin.python3Dependencies or (_: [ ])) ps) allPlugins);
+            ps: lib.flatten (map (plugin: (plugin.python3Dependencies or (_: [ ])) ps) allPlugins);
           python3Env = python3.withPackages allPython3Dependencies;
 
-          packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" allPlugins;
+          partitionGrammars = lib.partition (
+            p: p.isTreesitterGrammar or false || p.isTreesitterQuery or false
+          );
+          allPluginsAndGrammarsPartitioned = partitionGrammars allPluginsAndGrammars;
+          allPlugins = allPluginsAndGrammarsPartitioned.wrong;
+          allGrammars = allPluginsAndGrammarsPartitioned.right;
+          allGrammarsSymlinked = symlinkJoin {
+            name = "nvim-treesitter-grammars";
+            paths = allGrammars;
+          };
+
+          packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" (
+            if allGrammars != [ ] then allPlugins ++ [ allGrammarsSymlinked ] else allPlugins
+          );
           packdirOpt = vimFarm "pack/${packageName}/opt" "packdir-opt" opt;
           # Assemble all python3 dependencies into a single `site-packages` to avoid doing recursive dependency collection
           # for each plugin.
@@ -216,6 +231,14 @@ let
             ln -s ${python3Env}/${python3Env.sitePackages} $out/pack/${packageName}/start/__python3_dependencies/python3
           '';
         in
+
+        assert
+          (
+            builtins.elem vimPlugins.nvim-treesitter (opt ++ allPlugins)
+            && builtins.elem vimPlugins.nvim-treesitter-legacy (opt ++ allPlugins)
+          )
+          -> throw "You cannot include two different versions of nvim-treesitter, perhaps you included a legacy plugin together with a new one?";
+
         [
           packdirStart
           packdirOpt
@@ -260,17 +283,16 @@ let
 
     let
       # vim-plug is an extremely popular vim plugin manager.
-      plugImpl =
-        ''
-          source ${vimPlugins.vim-plug}/plug.vim
-          silent! call plug#begin('/dev/null')
+      plugImpl = ''
+        source ${vimPlugins.vim-plug}/plug.vim
+        silent! call plug#begin('/dev/null')
 
-        ''
-        + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg}'") plug.plugins)
-        + ''
+      ''
+      + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg}'") plug.plugins)
+      + ''
 
-          call plug#end()
-        '';
+        call plug#end()
+      '';
 
       # vim-addon-manager = VAM (deprecated)
       vamImpl =
@@ -289,19 +311,18 @@ let
         in
         nativeImpl vamPackages;
 
-      entries =
-        [
-          beforePlugins
-        ]
-        ++ lib.optional (vam != null) (
-          lib.warn "'vam' attribute is deprecated. Use 'packages' instead in your vim configuration" vamImpl
-        )
-        ++ lib.optional (packages != null && packages != [ ]) (nativeImpl packages)
-        ++ lib.optional (pathogen != null) (
-          throw "pathogen is now unsupported, replace `pathogen = {}` with `packages.home = { start = []; }`"
-        )
-        ++ lib.optional (plug != null) plugImpl
-        ++ [ customRC ];
+      entries = [
+        beforePlugins
+      ]
+      ++ lib.optional (vam != null) (
+        lib.warn "'vam' attribute is deprecated. Use 'packages' instead in your vim configuration" vamImpl
+      )
+      ++ lib.optional (packages != null && packages != [ ]) (nativeImpl packages)
+      ++ lib.optional (pathogen != null) (
+        throw "pathogen is now unsupported, replace `pathogen = {}` with `packages.home = { start = []; }`"
+      )
+      ++ lib.optional (plug != null) plugImpl
+      ++ [ customRC ];
 
     in
     lib.concatStringsSep "\n" (lib.filter (x: x != null && x != "") entries);
@@ -474,7 +495,7 @@ rec {
     let
       nativePluginsConfigs = lib.attrsets.attrValues packages;
       nonNativePlugins = (lib.optionals (plug != null) plug.plugins);
-      nativePlugins = lib.concatMap (requiredPluginsForPackage) nativePluginsConfigs;
+      nativePlugins = lib.concatMap requiredPluginsForPackage nativePluginsConfigs;
     in
     nativePlugins ++ nonNativePlugins;
 
@@ -488,8 +509,11 @@ rec {
 
   toVimPlugin =
     drv:
+    let
+      drv-name = drv.name or "${drv.pname}-${drv.version}";
+    in
     drv.overrideAttrs (oldAttrs: {
-      name = "vimplugin-${oldAttrs.name}";
+      name = "vimplugin-${drv-name}";
       # dont move the "doc" folder since vim expects it
       forceShare = [
         "man"

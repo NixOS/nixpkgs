@@ -1,28 +1,39 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmake";
-  version = "2.9.9";
-  src = fetchurl {
-    url = "https://github.com/xmake-io/xmake/releases/download/v${version}/xmake-v${version}.tar.gz";
-    hash = "sha256-6SUFuDvJd2KG6ucZ1YvOp/8ld6/hLLXMsnnIHn28cC0=";
+  version = "3.0.7";
+
+  src = fetchFromGitHub {
+    owner = "xmake-io";
+    repo = "xmake";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SmvkdAo0XZF8RMP039kkmJxx3pwSPxKj3k8ScfTfYb8=";
+    fetchSubmodules = true;
   };
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/xmake-io/xmake/releases/tag/v${finalAttrs.version}";
     description = "Cross-platform build utility based on Lua";
     homepage = "https://xmake.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      rewine
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      wineee
       rennsax
     ];
+    mainProgram = "xmake";
   };
-}
+})

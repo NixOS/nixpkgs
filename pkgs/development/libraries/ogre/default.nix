@@ -16,15 +16,15 @@
   libglut,
   libGL,
   libGLU,
-  libICE,
-  libSM,
-  libX11,
-  libXaw,
-  libXmu,
-  libXrandr,
-  libXrender,
-  libXt,
-  libXxf86vm,
+  libice,
+  libsm,
+  libx11,
+  libxaw,
+  libxmu,
+  libxrandr,
+  libxrender,
+  libxt,
+  libxxf86vm,
   xorgproto,
   # optional
   withNvidiaCg ? false,
@@ -71,43 +71,41 @@ let
         unzip
       ];
 
-      buildInputs =
-        [
-          SDL2
-          boost
-          freetype
-          libpng
-          ois
-          pugixml
-          zziplib
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          libglut
-          libGL
-          libGLU
-          libICE
-          libSM
-          libX11
-          libXaw
-          libXmu
-          libXrandr
-          libXrender
-          libXt
-          libXxf86vm
-          xorgproto
-        ]
-        ++ lib.optionals withNvidiaCg [
-          nvidia_cg_toolkit
-        ];
+      buildInputs = [
+        SDL2
+        boost
+        freetype
+        libpng
+        ois
+        pugixml
+        zziplib
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        libglut
+        libGL
+        libGLU
+        libice
+        libsm
+        libx11
+        libxaw
+        libxmu
+        libxrandr
+        libxrender
+        libxt
+        libxxf86vm
+        xorgproto
+      ]
+      ++ lib.optionals withNvidiaCg [
+        nvidia_cg_toolkit
+      ];
 
-      cmakeFlags =
-        [
-          (lib.cmakeBool "OGRE_BUILD_DEPENDENCIES" false)
-          (lib.cmakeBool "OGRE_BUILD_SAMPLES" withSamples)
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
-        ];
+      cmakeFlags = [
+        (lib.cmakeBool "OGRE_BUILD_DEPENDENCIES" false)
+        (lib.cmakeBool "OGRE_BUILD_SAMPLES" withSamples)
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
+      ];
 
       meta = {
         description = "3D Object-Oriented Graphics Rendering Engine";
@@ -123,11 +121,11 @@ let
 in
 {
   ogre_14 = common {
-    version = "14.3.4";
-    hash = "sha256-4ZfScIBGy5J3pwGpnoFkiMhfaZKJz9oSOtFrK2pZnvc=";
-    # https://github.com/OGRECave/ogre/blob/v14.3.3/Components/Overlay/CMakeLists.txt
-    imguiVersion = "1.91.2";
-    imguiHash = "sha256-B7XXQNuEPcT1ID5nMYbAV+aNCG9gIrC9J7BLnYB8yjI=";
+    version = "14.5.2";
+    hash = "sha256-qI5z6a5WD1WCQZarogQb4c9KRac/szQLsvs/9/5BNCI=";
+    # https://github.com/OGRECave/ogre/blob/v14.5.2/Components/Overlay/CMakeLists.txt
+    imguiVersion = "1.91.9b";
+    imguiHash = "sha256-dkukDP0HD8CHC2ds0kmqy7KiGIh4148hMCyA1QF3IMo=";
   };
 
   ogre_13 = common {

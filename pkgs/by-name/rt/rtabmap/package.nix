@@ -6,7 +6,7 @@
 
   # nativeBuildInputs
   cmake,
-  libsForQt5,
+  qt6,
   pkg-config,
   wrapGAppsHook3,
 
@@ -14,7 +14,9 @@
   opencv,
   pcl,
   liblapack,
-  xorg,
+  libxt,
+  libsm,
+  libice,
   libusb1,
   yaml-cpp,
   libnabo,
@@ -28,36 +30,30 @@
   libGL,
   libGLU,
   librealsense,
-  vtkWithQt5,
+  vtkWithQt6,
   zed-open-capture,
   hidapi,
 
   # passthru
   gitUpdater,
 }:
-
+let
+  pcl' = pcl.override { vtk = vtkWithQt6; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
-  version = "0.21.13";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
-    tag = "${finalAttrs.version}-noetic";
-    hash = "sha256-W4yjHKb2BprPYkL8rLwLQcZDGgmMZ8279ntR+Eqj7R0=";
+    tag = finalAttrs.version;
+    hash = "sha256-u9wswlFkGpPgJaBwSddnpv49wBAmkKRwWFO5jQ9/twA=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix the ctor and dtor warning
-      url = "https://github.com/introlab/rtabmap/pull/1496/commits/84c59a452b40a26edf1ba7ec8798700a2f9c3959.patch";
-      hash = "sha256-kto02qcL2dW8Frt81GA+OCldPgCF5bAs/28w9amcf0o=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
     wrapGAppsHook3
   ];
@@ -65,11 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     ## Required
     opencv
     opencv.cxxdev
-    pcl
+    pcl'
     liblapack
-    xorg.libSM
-    xorg.libICE
-    xorg.libXt
+    libsm
+    libice
+    libxt
 
     ## Optional
     libusb1
@@ -83,21 +79,18 @@ stdenv.mkDerivation (finalAttrs: {
     freenect
     libdc1394
     librealsense
-    libsForQt5.qtbase
+    qt6.qtbase
     libGL
     libGLU
-    vtkWithQt5
     zed-open-capture
     hidapi
   ];
 
   # Configure environment variables
-  NIX_CFLAGS_COMPILE = "-Wno-c++20-extensions -I${vtkWithQt5}/include/vtk";
+  env.NIX_CFLAGS_COMPILE = "-Wno-c++20-extensions";
 
   cmakeFlags = [
-    (lib.cmakeFeature "VTK_QT_VERSION" "5")
-    (lib.cmakeFeature "VTK_DIR" "${vtkWithQt5}/lib/cmake/vtk-${lib.versions.majorMinor vtkWithQt5.version}")
-    (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "${vtkWithQt5}/include/vtk:${pcl}/include/pcl-${lib.versions.majorMinor pcl.version}")
+    (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "${pcl'}/include/pcl-${lib.versions.majorMinor pcl'.version}")
   ];
 
   passthru = {

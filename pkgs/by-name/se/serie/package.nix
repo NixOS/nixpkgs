@@ -7,29 +7,28 @@
   serie,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "serie";
-  version = "0.4.6";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "serie";
-    rev = "v${version}";
-    hash = "sha256-26B/bwXz60fcZrh6H1RPROiML44S1Pt1J3VrJh2gRrI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iHhm71z1DH2oDcgl5bwFVO0U5ks0LmoqMrlUZfIQkf4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Bdk553tECJiMxJlXj147Sv2LzH+nM+/Cm5BpBr78I4o=";
+  cargoHash = "sha256-9jWXr/43zPe+7VpbRHj5k8eptXnhMKU073KAKJtG5+E=";
 
   nativeCheckInputs = [ gitMinimal ];
 
   passthru.tests.version = testers.testVersion { package = serie; };
 
-  meta = with lib; {
-    description = "A rich git commit graph in your terminal, like magic";
+  meta = {
+    description = "Rich git commit graph in your terminal, like magic";
     homepage = "https://github.com/lusingander/serie";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "serie";
   };
-}
+})

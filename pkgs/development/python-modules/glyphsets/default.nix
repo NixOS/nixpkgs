@@ -7,7 +7,6 @@
   gflanguages,
   glyphslib,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools-scm,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "glyphsets";
   version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -66,12 +63,12 @@ buildPythonPackage rec {
     "test_definitions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Fonts glyph set metadata";
     homepage = "https://github.com/googlefonts/glyphsets";
     changelog = "https://github.com/googlefonts/glyphsets/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
     mainProgram = "glyphsets";
   };
 }

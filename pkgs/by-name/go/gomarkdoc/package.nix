@@ -6,14 +6,14 @@
   gomarkdoc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gomarkdoc";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "princjef";
     repo = "gomarkdoc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eMH+F1ZXAKHqnrvOJvCETm2NiDwY03IFHrDNYr3jaW8=";
   };
 
@@ -24,8 +24,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
 
   passthru.tests = {
@@ -34,11 +34,11 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generate markdown documentation for Go (golang) code";
     homepage = "https://github.com/princjef/gomarkdoc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ brpaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ brpaz ];
     mainProgram = "gomarkdoc";
   };
-}
+})

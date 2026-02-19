@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   nix-update-script,
   hatchling,
@@ -15,15 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pixel-font-builder";
-  version = "0.0.34";
+  version = "0.0.39";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "pixel_font_builder";
     inherit version;
-    hash = "sha256-+t1N2GlIyPr7OHppP3h0TDQNYhrQCrBHc8fGyYq2AiM=";
+    hash = "sha256-osEaZDmby0Xcg3oec4m6TEXJQDfMvWeJeLOCIOwEMZA=";
   };
 
   build-system = [ hatchling ];

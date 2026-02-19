@@ -6,14 +6,14 @@
   nats-top,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nats-top";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats-top";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NOU0U1hyP9FCSLK0ulf28cx1K0/KWKQd+t3KtaVqWWo=";
   };
 
@@ -22,22 +22,22 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
     version = testers.testVersion {
       package = nats-top;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "top-like tool for monitoring NATS servers";
     homepage = "https://github.com/nats-io/nats-top";
-    changelog = "https://github.com/nats-io/nats-top/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/nats-io/nats-top/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "nats-top";
   };
-}
+})

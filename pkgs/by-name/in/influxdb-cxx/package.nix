@@ -5,36 +5,31 @@
   cmake,
   boost,
   catch2_3,
-  libcpr_1_10_5,
+  libcpr,
   trompeloeil,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "influxdb-cxx";
-  version = "0.7.4";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "offa";
     repo = "influxdb-cxx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i7YnFjAuhtMGZ26rEObbm+kPmtwzBB0fyMlJLyR+LLI=";
+    hash = "sha256-5y9yRc69IH94Lmokp+XzXehQYkfj/vr3qnNmjTMylsg=";
   };
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-warn "-Werror" ""
-  '';
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [
-      boost
-      libcpr_1_10_5
-    ]
-    ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      catch2_3
-      trompeloeil
-    ];
+  buildInputs = [
+    boost
+    libcpr
+  ]
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
+    catch2_3
+    trompeloeil
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "INFLUXCXX_TESTING" finalAttrs.finalPackage.doCheck)

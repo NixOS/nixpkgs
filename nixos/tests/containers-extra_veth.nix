@@ -2,7 +2,6 @@
 {
   name = "containers-extra_veth";
   meta = {
-    maintainers = with lib.maintainers; [ kampfschlaefer ];
   };
 
   nodes.machine =

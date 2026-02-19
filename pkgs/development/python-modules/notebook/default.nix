@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "7.4.1";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook";
     tag = "v${version}";
-    hash = "sha256-Xz9EZgYNJjWsN7tcTmwXLwH9VW7GnI0P/oNT0IFpkoE=";
+    hash = "sha256-EKfe3uqIwb+kKmSuU7aIinNj1nkRaBvg3liV6RiR3xc=";
   };
 
   postPatch = ''
@@ -42,20 +42,19 @@ buildPythonPackage rec {
       --replace-fail "timeout = 300" ""
   '';
 
-  nativeBuildInputs =
-    [
-      nodejs
-      yarn-berry_3.yarnBerryConfigHook
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      distutils
-    ];
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    distutils
+  ];
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-IFLAwEFsI/GL26XAfiLDyW1mG72gcN2TH651x8Nbrtw=";
+    hash = "sha256-ILDTRK5NJ33T30YRTT3/g1mIE2sI8spGPwMsWyQ5UTc=";
   };
 
   build-system = [
@@ -77,9 +76,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   env = {
@@ -90,7 +88,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/jupyter/notebook/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter/notebook/blob/${src.tag}/CHANGELOG.md";
     description = "Web-based notebook environment for interactive computing";
     homepage = "https://github.com/jupyter/notebook";
     license = lib.licenses.bsd3;

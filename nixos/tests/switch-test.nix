@@ -64,13 +64,13 @@ in
         boot.loader.grub.enable = false;
 
         specialisation = rec {
-          brokenInitInterface.configuration.config.system.extraSystemBuilderCmds = ''
+          brokenInitInterface.configuration.config.system.systemBuilderCommands = ''
             echo "systemd 0" > $out/init-interface-version
           '';
 
-          modifiedSystemConf.configuration.systemd.extraConfig = ''
-            # Hello world!
-          '';
+          modifiedSystemConf.configuration.systemd.settings.Manager = {
+            DefaultEnvironment = "XXX_SYSTEM=foo";
+          };
 
           addedMount.configuration.virtualisation.fileSystems."/test" = {
             device = "tmpfs";
@@ -89,6 +89,14 @@ in
 
           storeMountModified.configuration = {
             virtualisation.fileSystems."/".device = lib.mkForce "auto";
+          };
+
+          automount.configuration = {
+            virtualisation.fileSystems."/testauto" = {
+              device = "tmpfs";
+              fsType = "tmpfs";
+              options = [ "x-systemd.automount" ];
+            };
           };
 
           swap.configuration.swapDevices = lib.mkVMOverride [
@@ -627,6 +635,34 @@ in
                 (pkgs.writeText "dbus-reload-dummy" "dbus reload dummy")
               ];
             };
+
+          generators.configuration =
+            { lib, pkgs, ... }:
+            {
+              systemd.generators.simple-generator = pkgs.writeShellScript "simple-generator" ''
+                ${lib.getExe' pkgs.coreutils "cat"} >$1/simple-generated.service <<EOF
+                [Service]
+                ExecStart=${lib.getExe' pkgs.coreutils "sleep"} infinity
+                EOF
+              '';
+            };
+
+          no_inhibitors.configuration.system.switch.inhibitors = lib.mkForce { };
+
+          inhibitors.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "bar";
+            quz = "bor";
+          };
+
+          inhibitors_changed.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "baz";
+            quz = "boz";
+          };
+
+          inhibitors_new.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "bar";
+            qux = "baz";
+          };
         };
       };
 
@@ -639,6 +675,7 @@ in
         echo "this should succeed (config: $config, action: $action)"
         [ "$action" == "check" ] || [ "$action" == "test" ]
       '';
+      boot.loader.grub.enable = false;
       specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
         echo this will fail
         false
@@ -663,7 +700,7 @@ in
       '';
 
       # Returns a comma separated representation of the given list in sorted
-      # order, that matches the output format of switch-to-configuration.pl
+      # order, that matches the output format of switch-to-configuration
       sortedUnits = xs: lib.concatStringsSep ", " (builtins.sort builtins.lessThan xs);
 
       dbusService =
@@ -725,6 +762,24 @@ in
           machine.succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration check")
           out = switch_to_specialisation("${otherSystem}", "failingCheck", action="check", fail=True)
           assert_contains(out, "this will fail")
+
+      with subtest("switch inhibitors"):
+          # Start without any inhibitors
+          switch_to_specialisation("${machine}", "no_inhibitors", action="switch")
+          # Check that we can switch into a generation with inhibitors from one that doesn't have any
+          switch_to_specialisation("${machine}", "inhibitors", action="switch")
+          # Check that we cannot switch into a generation that has a different value for an existing inhibitor
+          out = switch_to_specialisation("${machine}", "inhibitors_changed", action="switch", fail=True)
+          assert_contains(out, "There are changes to critical components of the system")
+          assert_contains(out, "foo")
+          assert_contains(out, "bar")
+          assert_contains(out, "baz")
+          # Confirm that we can set that same generation as the new boot default
+          switch_to_specialisation("${machine}", "inhibitors_changed", action="boot")
+          # Check that we can switch into a new generation with new inhibitors, but same values for existing ones
+          switch_to_specialisation("${machine}", "inhibitors_new", action="switch")
+          # Check that we can switch back into a generation without inhibitors
+          switch_to_specialisation("${machine}", "no_inhibitors", action="switch")
 
       with subtest("actions"):
           # boot action
@@ -826,9 +881,21 @@ in
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
           assert_lacks(out, "the following new units were started:")
+          # add an automount
+          out = switch_to_specialisation("${machine}", "automount")
+          assert_lacks(out, "stopping the following units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_contains(out, "the following new units were started: testauto.automount\n")
+          # remove the automount
+          out = switch_to_specialisation("${machine}", "")
+          assert_contains(out, "stopping the following units: testauto.automount\n")
+          assert_lacks(out, "reloading the following units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_lacks(out, "the following new units were started:")
 
       with subtest("swaps"):
-          switch_to_specialisation("${machine}", "")
           # add a swap
           out = switch_to_specialisation("${machine}", "swap")
           assert_lacks(out, "stopping the following units:")
@@ -1520,5 +1587,13 @@ in
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
           assert_lacks(out, "the following new units were started:")
+
+      with subtest("generators"):
+          out = switch_to_specialisation("${machine}", "generators")
+          # The service is not started by anything, so we start it manually
+          machine.succeed("systemctl start simple-generated.service && systemctl is-active simple-generated.service")
+          out = switch_to_specialisation("${machine}", "")
+          # Assert switching to a different generation doesn't touch units created by generators
+          machine.succeed("systemctl is-active simple-generated.service")
     '';
 }

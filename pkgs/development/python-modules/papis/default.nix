@@ -27,23 +27,36 @@
   requests,
   stevedore,
 
+  # optional dependencies
+  chardet,
+  citeproc-py,
+  jinja2,
+  markdownify,
+  whoosh,
+
+  # switch for optional dependencies
+  withOptDeps ? false,
+
   # tests
   docutils,
   git,
   pytestCheckHook,
+  pytest-cov-stub,
   sphinx,
   sphinx-click,
+  writableTmpDirAsHomeHook,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "papis";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "papis";
     repo = "papis";
-    tag = "v${version}";
-    hash = "sha256-V4YswLNYwfBYe/Td0PEeDG++ClZoF08yxXjUXuyppPI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G+ryUMBUEbGxUG+u2YwZbT04IAzOmajtIPXP12MaXsY=";
   };
 
   build-system = [ hatchling ];
@@ -68,12 +81,18 @@ buildPythonPackage rec {
     pyyaml
     requests
     stevedore
-  ];
+  ]
+  ++ lib.optionals withOptDeps finalAttrs.passthru.optional-dependencies.complete;
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=papis" ""
-  '';
+  optional-dependencies = {
+    complete = [
+      chardet
+      citeproc-py
+      jinja2
+      markdownify
+      whoosh
+    ];
+  };
 
   pythonImportsCheck = [ "papis" ];
 
@@ -81,15 +100,13 @@ buildPythonPackage rec {
     docutils
     git
     pytestCheckHook
+    pytest-cov-stub
     sphinx
     sphinx-click
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "papis"
     "tests"
   ];
@@ -102,18 +119,24 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Require network access
+    "test_add_folder_name_cli"
+    "test_add_link_cli"
+    "test_get_matching_importers_by_name"
+    "test_matching_importers_by_uri"
     "test_yaml_unicode_dump"
+    # FileNotFoundError: Command not found: 'init'
+    "test_git_cli"
   ];
 
   meta = {
     description = "Powerful command-line document and bibliography manager";
     mainProgram = "papis";
     homepage = "https://papis.readthedocs.io/";
-    changelog = "https://github.com/papis/papis/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/papis/papis/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       nico202
       teto
     ];
   };
-}
+})

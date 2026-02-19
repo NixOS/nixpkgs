@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   pytestCheckHook,
@@ -10,22 +9,19 @@
 
 buildPythonPackage rec {
   pname = "rubicon-objc";
-  version = "0.5.0";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "beeware";
     repo = "rubicon-objc";
     tag = "v${version}";
-    hash = "sha256-yEsW8xHW004O7aDU4/mlbfTuF2H5UcpbNR9NACxQv3M=";
+    hash = "sha256-ahlsY4eU9n+BRexE4wNVXMcgSiGW7pU25zJif9lGTUs=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.7.0" "setuptools" \
-      --replace-fail "setuptools_scm==8.1.0" "setuptools_scm"
+    sed -i 's/"setuptools==.*"/"setuptools"/' pyproject.toml
+    sed -i 's/"setuptools_scm==.*"/"setuptools_scm"/' pyproject.toml
   '';
 
   build-system = [

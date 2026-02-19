@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  udevCheckHook,
 }:
 
 ## Usage
@@ -17,6 +18,12 @@ stdenv.mkDerivation {
     sha256 = "sha256-vQMPX3Amttja0u03KWGnPDAVTGM9ekJ+IBTjW+xlJS0=";
   };
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   dontUnpack = true;
   dontBuild = true;
 
@@ -26,11 +33,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://probe.rs/docs/getting-started/probe-setup/#udev-rules";
     description = "Picoprobe udev rules list";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mglolenstine ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
   };
 }

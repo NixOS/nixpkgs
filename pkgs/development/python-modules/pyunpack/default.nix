@@ -41,7 +41,7 @@ buildPythonPackage rec {
     cabextract
   ];
 
-  pytestFlagsArray = [ "-x" ];
+  pytestFlags = [ "-x" ];
 
   pythonImportsCheck = [ "pyunpack" ];
 
@@ -62,10 +62,10 @@ buildPythonPackage rec {
     "tests/test_zippw.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unpack archive files in python";
     homepage = "https://github.com/ponty/pyunpack";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

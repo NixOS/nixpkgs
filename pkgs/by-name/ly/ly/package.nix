@@ -1,51 +1,71 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  linux-pam,
-  libxcb,
-  makeBinaryWrapper,
-  zig_0_13,
   callPackage,
+  fetchFromCodeberg,
+  lib,
+  libxcb,
+  linux-pam,
+  makeBinaryWrapper,
   nixosTests,
+  stdenv,
+  versionCheckHook,
+  x11Support ? true,
+  zig_0_15,
 }:
 
-stdenv.mkDerivation {
+let
+  zig = zig_0_15;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.0.3";
+  version = "1.3.1";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "fairyglade";
     repo = "ly";
-    rev = "v1.0.3";
-    hash = "sha256-TsEn0kH7j4myjjgwHnbOUmIZjHn8A1d/7IjamoWxpXQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BelsR/+sfm3qdEnyf4bbadyzuUVvVPrPEhdZaNPLxiE=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    zig_0_13.hook
-  ];
-  buildInputs = [
-    libxcb
-    linux-pam
+    zig
   ];
 
-  postPatch = ''
+  buildInputs = [
+    linux-pam
+  ]
+  ++ (lib.optionals x11Support [ libxcb ]);
+
+  postConfigure = ''
     ln -s ${
       callPackage ./deps.nix {
-        zig = zig_0_13;
+        inherit zig;
       }
     } $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
+  zigBuildFlags = [
+    "-Denable_x11_support=${lib.boolToString x11Support}"
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru.tests = { inherit (nixosTests) ly; };
 
-  meta = with lib; {
+  meta = {
     description = "TUI display manager";
-    license = licenses.wtfpl;
-    homepage = "https://github.com/fairyglade/ly";
-    maintainers = [ maintainers.vidister ];
-    platforms = platforms.linux;
+    longDescription = ''
+      Ly is a lightweight TUI (ncurses-like) display manager for Linux
+      and BSD, designed with portability in mind (e.g. it does not
+      require systemd to run).
+    '';
+    homepage = "https://codeberg.org/fairyglade/ly";
+    license = lib.licenses.wtfpl;
     mainProgram = "ly";
+    maintainers = with lib.maintainers; [
+      zacharyarnaise
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})

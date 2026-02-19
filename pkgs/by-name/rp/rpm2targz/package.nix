@@ -11,13 +11,13 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpm2targz";
   version = "2021.03.16";
 
   # git repo: https://gitweb.gentoo.org/proj/rpm2targz.git/
   src = fetchurl {
-    url = "https://dev.gentoo.org/~vapier/dist/${pname}-${version}.tar.xz";
+    url = "https://dev.gentoo.org/~vapier/dist/rpm2targz-${finalAttrs.version}.tar.xz";
     hash = "sha256-rcV+o9V2wWKznqSW2rA8xgnpQ02kpK4te6mYvLRC5vQ=";
   };
 
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert a .rpm file to a .tar.gz archive";
     homepage = "http://slackware.com/config/packages.php";
-    license = licenses.bsd1;
+    license = lib.licenses.bsd1;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

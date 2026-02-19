@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dasel";
   version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "TomWright";
     repo = "dasel";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vq4lRCsqD2hmQw0yH84Wji5LeJ/aiMGJJIyCDvATA+I=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/tomwright/dasel/v2/internal.Version=${version}"
+    "-X github.com/tomwright/dasel/v2/internal.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -37,7 +37,7 @@ buildGoModule rec {
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   installCheckPhase = ''
     runHook preInstallCheck
-    if [[ $($out/bin/dasel --version) == "dasel version ${version}" ]]; then
+    if [[ $($out/bin/dasel --version) == "dasel version ${finalAttrs.version}" ]]; then
       echo '{ "my": { "favourites": { "colour": "blue" } } }' \
         | $out/bin/dasel put -t json -r json -t string -v "red" "my.favourites.colour" \
         | grep "red"
@@ -47,16 +47,16 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Query and update data structures from the command line";
     longDescription = ''
       Dasel (short for data-selector) allows you to query and modify data structures using selector strings.
       Comparable to jq / yq, but supports JSON, YAML, TOML and XML with zero runtime dependencies.
     '';
     homepage = "https://github.com/TomWright/dasel";
-    changelog = "https://github.com/TomWright/dasel/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/TomWright/dasel/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     mainProgram = "dasel";
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with lib.maintainers; [ _0x4A6F ];
   };
-}
+})

@@ -13,13 +13,13 @@
 
 # at runtime, need jdk
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "groovy";
-  version = "4.0.26";
+  version = "5.0.2";
 
   src = fetchurl {
-    url = "mirror://apache/groovy/${version}/distribution/apache-groovy-binary-${version}.zip";
-    sha256 = "sha256-O+aIDG3nDq2i8/XGnh6UlT4LDE4zxGBMEEDQXd3q7ZI=";
+    url = "mirror://apache/groovy/${finalAttrs.version}/distribution/apache-groovy-binary-${finalAttrs.version}.zip";
+    sha256 = "sha256-cPgvEbG3ZOIH3PVWiILHjcdyk/MHgWJCOUo/enTyDoE=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       desktopName = "Groovy Console";
       exec = "groovyConsole";
       icon = "groovy";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       terminal = false;
       startupNotify = false;
       categories = [ "Development" ];
@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Agile dynamic language for the Java Platform";
     homepage = "http://groovy-lang.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; unix;
   };
-}
+})

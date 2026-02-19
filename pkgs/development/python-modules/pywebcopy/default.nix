@@ -6,7 +6,6 @@
   legacy-cgi,
   lxml-html-clean,
   pytestCheckHook,
-  pythonAtLeast,
   requests,
   setuptools,
   six,
@@ -28,10 +27,11 @@ buildPythonPackage rec {
 
   dependencies = [
     cachecontrol
+    legacy-cgi
     lxml-html-clean
     requests
     six
-  ] ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python package for cloning complete webpages and websites to local storage";
     homepage = "https://github.com/rajatomar788/pywebcopy/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
   };
 }

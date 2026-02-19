@@ -28,10 +28,10 @@ buildPythonPackage rec {
     six
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise-class Certificate Authority";
     homepage = "https://github.com/dogtagpki/pki";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ s1341 ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ s1341 ];
   };
 }

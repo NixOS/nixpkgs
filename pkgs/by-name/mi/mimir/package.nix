@@ -5,34 +5,35 @@
   nixosTests,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mimir";
-  version = "2.16.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
-    rev = "mimir-${version}";
+    rev = "mimir-${finalAttrs.version}";
     owner = "grafana";
     repo = "mimir";
-    hash = "sha256-75KHS+jIPEvcB7SHBBcBi5uycwY7XR4RNc1khNYVZFE=";
+    hash = "sha256-8dym3E6VinpExE4A+ekbhiQ+Zhwvue6/s1mAhBkwPMU=";
   };
 
   vendorHash = null;
 
-  subPackages =
-    [
-      "cmd/mimir"
-      "cmd/mimirtool"
-    ]
-    ++ (map (pathName: "tools/${pathName}") [
-      "compaction-planner"
-      "copyblocks"
-      "copyprefix"
-      "delete-objects"
-      "list-deduplicated-blocks"
-      "listblocks"
-      "mark-blocks"
-      "undelete-blocks"
-    ]);
+  subPackages = [
+    "cmd/mimir"
+    "cmd/mimirtool"
+  ]
+  ++ (map (pathName: "tools/${pathName}") [
+    "compaction-planner"
+    "copyblocks"
+    "copyprefix"
+    "delete-objects"
+    "list-deduplicated-blocks"
+    "listblocks"
+    "mark-blocks"
+    "splitblocks"
+    "tenant-injector"
+    "undelete-blocks"
+  ]);
 
   passthru = {
     updateScript = nix-update-script {
@@ -53,19 +54,20 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Grafana Mimir provides horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus. ";
     homepage = "https://github.com/grafana/mimir";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/grafana/mimir/releases/tag/mimir-${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       happysalada
       bryanhonof
       adamcstephens
     ];
   };
-}
+})

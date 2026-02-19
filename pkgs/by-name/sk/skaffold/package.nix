@@ -6,15 +6,15 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "skaffold";
-  version = "2.15.0";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
-    rev = "v${version}";
-    hash = "sha256-hZBIWiH7zxdfK8+QiaeJwz1aq9Xa0Ojy2R4LKk3ALIY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Cbpfz0IXFopCeKNDwx8mB/1quhcOO3IWStsFmKeNPYg=";
   };
 
   vendorHash = null;
@@ -28,8 +28,8 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}/version.version=v${version}"
-      "-X ${t}/version.gitCommit=${src.rev}"
+      "-X ${t}/version.version=v${finalAttrs.version}"
+      "-X ${t}/version.gitCommit=${finalAttrs.src.rev}"
       "-X ${t}/version.buildDate=unknown"
     ];
 
@@ -40,7 +40,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/skaffold version | grep ${version} > /dev/null
+    $out/bin/skaffold version | grep ${finalAttrs.version} > /dev/null
   '';
 
   postInstall = ''
@@ -51,9 +51,9 @@ buildGoModule rec {
       --zsh <($out/bin/skaffold completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://skaffold.dev/";
-    changelog = "https://github.com/GoogleContainerTools/skaffold/releases/tag/v${version}";
+    changelog = "https://github.com/GoogleContainerTools/skaffold/releases/tag/v${finalAttrs.version}";
     description = "Easy and Repeatable Kubernetes Development";
     mainProgram = "skaffold";
     longDescription = ''
@@ -62,10 +62,9 @@ buildGoModule rec {
       Skaffold handles the workflow for building, pushing and deploying your application.
       It also provides building blocks and describe customizations for a CI/CD pipeline.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       vdemeester
-      bryanasdev000
     ];
   };
-}
+})

@@ -5,7 +5,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "miranda";
   version = "2.066";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # from the start so this mismatch cannot occur.
   src = fetchzip {
     url = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/src/mira-${
-      builtins.replaceStrings [ "." ] [ "" ] version
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }-src.tgz";
     sha256 = "KE/FTL9YW9l7VBAgkFZlqgSM1Bt/BXT6GkkONtyKJjQ=";
   };
@@ -84,12 +84,12 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace strip '${stdenv.cc.targetPrefix}strip'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Compiler for Miranda -- a pure, non-strict, polymorphic, higher order functional programming language";
     homepage = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.all;
     mainProgram = "mira";
   };
-}
+})

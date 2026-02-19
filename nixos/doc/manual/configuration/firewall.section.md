@@ -5,9 +5,7 @@ and other unexpected packets. The firewall applies to both IPv4 and IPv6
 traffic. It is enabled by default. It can be disabled as follows:
 
 ```nix
-{
-  networking.firewall.enable = false;
-}
+{ networking.firewall.enable = false; }
 ```
 
 If the firewall is enabled, you can open specific TCP ports to the
@@ -15,7 +13,10 @@ outside world:
 
 ```nix
 {
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 }
 ```
 
@@ -28,8 +29,14 @@ To open ranges of TCP ports:
 ```nix
 {
   networking.firewall.allowedTCPPortRanges = [
-    { from = 4000; to = 4007; }
-    { from = 8000; to = 8010; }
+    {
+      from = 4000;
+      to = 4007;
+    }
+    {
+      from = 8000;
+      to = 8010;
+    }
   ];
 }
 ```

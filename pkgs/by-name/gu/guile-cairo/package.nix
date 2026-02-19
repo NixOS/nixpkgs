@@ -9,12 +9,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-cairo";
   version = "1.11.2";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/guile-cairo/guile-cairo-${finalAttrs.version}.tar.gz";
     hash = "sha256-YjLU3Cxb2dMxE5s7AfQ0PD4fucp4mDYaaZIGcwlBoHs=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # Cannot find unit-test module from guile-lib
   nativeCheckInputs = [ guile-lib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/guile-cairo/";
     description = "Cairo bindings for GNU Guile";
     longDescription = ''
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
       maintained graphics library with all of the benefits of Scheme: memory
       management, exceptions, macros, and a dynamic programming environment.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

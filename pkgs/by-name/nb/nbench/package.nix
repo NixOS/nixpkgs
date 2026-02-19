@@ -4,23 +4,22 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nbench-byte";
   version = "2.2.3";
 
   src = fetchurl {
-    url = "http://www.math.utah.edu/~mayer/linux/nbench-byte-${version}.tar.gz";
+    url = "http://www.math.utah.edu/~mayer/linux/nbench-byte-${finalAttrs.version}.tar.gz";
     sha256 = "1b01j7nmm3wd92ngvsmn2sbw43sl9fpx4xxmkrink68fz1rx0gbj";
   };
 
-  prePatch =
-    ''
-      substituteInPlace nbench1.h --replace '"NNET.DAT"' "\"$out/NNET.DAT\""
-      substituteInPlace sysspec.h --replace "malloc.h" "stdlib.h"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace Makefile --replace "-static" ""
-    '';
+  prePatch = ''
+    substituteInPlace nbench1.h --replace '"NNET.DAT"' "\"$out/NNET.DAT\""
+    substituteInPlace sysspec.h --replace "malloc.h" "stdlib.h"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile --replace "-static" ""
+  '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isGnu [
     stdenv.cc.libc.static
@@ -34,11 +33,11 @@ stdenv.mkDerivation rec {
     cp NNET.DAT $out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.math.utah.edu/~mayer/linux/bmark.html";
     description = "Synthetic computing benchmark program";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bennofs ];
     mainProgram = "nbench";
   };
-}
+})

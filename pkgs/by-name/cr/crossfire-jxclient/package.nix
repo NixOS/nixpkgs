@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "crossfire-jxclient";
+  pname = "crossfire-jxclient";
   version = "2025-01";
 
   src = fetchgit {
@@ -57,17 +57,17 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/crossfire-jxclient \
       --add-flags "-jar $out/share/java/jxclient.jar" \
-      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=on' \
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
       --set _JAVA_AWT_WM_NONREPARENTING 1
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Java-based fullscreen client for the Crossfire free MMORPG";
     homepage = "http://crossfire.real-time.com/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ToxicFrog ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ToxicFrog ];
   };
 }

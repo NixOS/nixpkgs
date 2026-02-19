@@ -6,21 +6,20 @@
   perl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kakoune-lsp";
-  version = "18.1.3";
+  version = "19.0.1";
 
   src = fetchFromGitHub {
     owner = "kakoune-lsp";
     repo = "kakoune-lsp";
-    rev = "v${version}";
-    hash = "sha256-2jD0meehUNGvmywOY4D9CwP1qswD7QCPlctLBjngzvE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-MDGDc2xhQNfbczq/JT/hDd3ZPLRd9DVXdTg0VLQLNHk=";
   };
 
   patches = [ (replaceVars ./Hardcode-perl.patch { inherit perl; }) ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-fb6RDcOLtkrUqw+BX2oa43d84BGF8IA2HxhdGgB94iU=";
+  cargoHash = "sha256-5ESICzwLcXheqNz/E3EBX7K2RFVFPAAuoqyZsJpVijI=";
 
   meta = {
     description = "Kakoune Language Server Protocol Client";
@@ -40,4 +39,4 @@ rustPlatform.buildRustPackage rec {
 
     mainProgram = "kak-lsp";
   };
-}
+})

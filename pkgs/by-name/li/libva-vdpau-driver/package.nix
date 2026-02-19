@@ -10,12 +10,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libva-vdpau-driver";
   version = "0.7.4";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/vaapi/releases/${pname}/${pname}-${version}.tar.bz2";
+    url = "https://www.freedesktop.org/software/vaapi/releases/libva-vdpau-driver/libva-vdpau-driver-${finalAttrs.version}.tar.bz2";
     sha256 = "1fcvgshzyc50yb8qqm6v6wn23ghimay23ci0p8sm8gxcy211jp0m";
   };
 
@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
     sed -i -e "s,LIBVA_DRIVERS_PATH=.*,LIBVA_DRIVERS_PATH=$out/lib/dri," configure
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cgit.freedesktop.org/vaapi/vdpau-driver";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "VDPAU driver for the VAAPI library";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -8,21 +8,21 @@
   pkg-config,
   rustPlatform,
   wayland,
+  libgbm,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "woomer";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "coffeeispower";
     repo = "woomer";
-    tag = version;
-    hash = "sha256-puALhN54ma2KToXUF8ipaYysyayjaSp+ISZ3AgQvniw=";
+    tag = finalAttrs.version;
+    hash = "sha256-LcL43Wq+5d7HPsm2bEK0vZsjP/dixtNhMKywXMi4ODw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VQee/2adBvJpJDihWuo22JNyDKLkZ9PrVqWPB/gJ9Sw=";
+  cargoHash = "sha256-xll/A0synEsXy9kPThA3bR8LRuAOQH0T6CAfIEoYJ0w=";
 
   strictDeps = true;
 
@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     glfw3
     wayland
+    libgbm
   ];
 
   # `raylib-sys` wants to compile examples that don't exist in its crate
@@ -58,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Zoomer application for Wayland inspired by tsoding's boomer";
     homepage = "https://github.com/coffeeispower/woomer";
-    changelog = "https://github.com/coffeeispower/woomer/releases/tag/${version}";
+    changelog = "https://github.com/coffeeispower/woomer/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "woomer";
@@ -73,4 +74,4 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/raylib-rs/raylib-rs/issues/74
     broken = stdenv.hostPlatform.isAarch64;
   };
-}
+})

@@ -8,14 +8,14 @@
   iptables,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "udp2raw";
   version = "20230206.0";
 
   src = fetchFromGitHub {
     owner = "wangyu-";
     repo = "udp2raw";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-mchSaqw6sOJ7+dydCM8juP7QMOVUrPL4MFA79Rvyjdo=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    echo 'const char *gitversion = "${version}";' > git_version.h
+    echo 'const char *gitversion = "${finalAttrs.version}";' > git_version.h
     # Adress sanitization crashes the application, reported upstream at https://github.com/wangyu-/udp2raw/issues/474
     substituteInPlace CMakeLists.txt --replace "sanitize=address," "sanitize="
   '';
@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/udp2raw" --prefix PATH : "${lib.makeBinPath [ iptables ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wangyu-/udp2raw";
     description = "Tunnel which turns UDP traffic into encrypted UDP/FakeTCP/ICMP traffic by using a raw socket";
     mainProgram = "udp2raw";
-    license = licenses.mit;
-    changelog = "https://github.com/wangyu-/udp2raw/releases/tag/${version}";
-    maintainers = with maintainers; [ chvp ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    changelog = "https://github.com/wangyu-/udp2raw/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ chvp ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "querystring-parser";
   version = "1.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "querystring_parser";
@@ -29,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "querystring_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to handle nested dictionaries";
     homepage = "https://github.com/bernii/querystring-parser";
     changelog = "https://github.com/bernii/querystring-parser/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

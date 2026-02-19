@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation {
   pname = "udebug";
-  version = "unstable-2023-12-06";
+  version = "unstable-2025-09-28";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/udebug.git";
-    rev = "6d3f51f9fda706f0cf4732c762e4dbe8c21e12cf";
-    hash = "sha256-5dowoFZn9I2IXMQ3Pz+2Eo3rKfihLzjca84MytQIXcU=";
+    rev = "5327524e715332daaebf6b04c155d2880d230979";
+    hash = "sha256-Zcbbo7Jo7JxNSjUlbB2m2Id8crdxzKc/QFeduPGvows=";
   };
 
   buildInputs = [
@@ -32,12 +32,12 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenWrt debugging helper library/service";
     mainProgram = "udebugd";
     homepage = "https://git.openwrt.org/?p=project/udebug.git;a=summary";
-    license = licenses.free;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.free;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mkg20001 ];
   };
 }

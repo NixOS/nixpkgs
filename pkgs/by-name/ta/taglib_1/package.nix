@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   zlib,
   testers,
@@ -17,6 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-QX0EpHGT36UsgIfRf5iALnwxe0jjLpZvCTbk8vSMFF4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "taglib-fix-cmake-4.patch";
+      url = "https://github.com/taglib/taglib/commit/967aaf7af2f4aa2e9fed0edb2cbaca98b737eebe.patch";
+      hash = "sha256-GeowBwspGAmrjALaIgEgSR9uUuClKAkS/cwZ2FHltl4=";
+    })
+  ];
 
   strictDeps = true;
 

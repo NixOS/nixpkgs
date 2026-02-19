@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
-  version = "2.14.6";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${version}";
-    hash = "sha256-/6w4AOfPQXjwrAUrioN4Macg8r/8Ap92nO8CGmz6VRk=";
+    hash = "sha256-w/eD07yzBm3x4G74OuGwkmpBzj63UoklmcKxVi5lx8E=";
   };
 
   patches = [
@@ -85,7 +85,8 @@ stdenv.mkDerivation rec {
     libedit
     openssl
     systemd
-  ] ++ lib.optional withPostgresql libpq;
+  ]
+  ++ lib.optional withPostgresql libpq;
 
   nativeBuildInputs = [
     cmake
@@ -127,6 +128,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.icinga.com";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
   };
 }

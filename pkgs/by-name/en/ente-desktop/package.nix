@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   nodejs,
-  electron_35,
+  electron_38,
   yarnConfigHook,
   copyDesktopItems,
   vips,
@@ -15,12 +15,12 @@
   imagemagick,
 }:
 let
-  electron = electron_35;
+  electron = electron_38;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-desktop";
-  version = "1.7.11";
+  version = "1.7.15";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
       "web"
     ];
     tag = "photosd-v${finalAttrs.version}";
-    hash = "sha256-yEfJEe+/PnRr9in7+9l54LQqCFkGqDRhqzcsNaEZmhI=";
+    hash = "sha256-QnJp+oHkRsb/uMobA33Hgo2VOzfDFDtJ6vchCAzyb+c=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/desktop";
@@ -39,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
   offlineCache = fetchYarnDeps {
     name = "ente-desktop-${finalAttrs.version}-offline-cache";
     inherit (finalAttrs) src sourceRoot;
-    hash = "sha256-Cq/4OOgGp6qg2ge5NK5jcYCvS/uF5l9nLLWIslpGRDc=";
+    hash = "sha256-dnjTH68lNqSD/RIiaYdip0U8a2RXCNanqF05WnhzjEA=";
   };
   webOfflineCache = fetchYarnDeps {
     name = "ente-desktop-${finalAttrs.version}-web-offline-cache";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/web";
-    hash = "sha256-yoCOU4cxxHiWu1+/vGwM9VWRroymr6JTbRHomKRJhU4=";
+    hash = "sha256-m+7woB5XnOPDMLpoIBui1GxeW1BOms18SKJ8vaJcv68=";
   };
 
   nativeBuildInputs = [
@@ -144,5 +144,6 @@ stdenv.mkDerivation (finalAttrs: {
       yuka
     ];
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   websockets,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "graphql-subscription-manager";
   version = "0.7.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "graphql_subscription_manager" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python3 library for graphql subscription manager";
     homepage = "https://github.com/Danielhiversen/PyGraphqlWebsocketManager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

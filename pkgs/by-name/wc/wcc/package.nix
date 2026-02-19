@@ -1,26 +1,36 @@
 {
   lib,
   stdenv,
+  rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
+  cargo,
   capstone,
   libbfd,
   libelf,
   libiberty,
   readline,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wcc";
-  version = "0.0.7-unstable-2025-04-30";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "endrazine";
     repo = "wcc";
-    rev = "8cbb49345d9596dfd37bd1b681753aacaab96475";
-    hash = "sha256-TYYtnMlrp/wbrTmwd3n90Uni7WE54gK6zKSBg4X9ZfA=";
-    deepClone = true;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cg8rf8R3xYNJTJhrDfIdVAUR/OOd6JjB0NYHRosUzvU=";
     fetchSubmodules = true;
   };
+
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+
+  nativeBuildInputs = [
+    cargo
+    rustPlatform.cargoSetupHook
+  ];
 
   buildInputs = [
     capstone
@@ -30,13 +40,22 @@ stdenv.mkDerivation {
     readline
   ];
 
+  patches = [
+    # The upstream forgot to bump WVERSION in header before tagging `v0.0.11`.
+    (fetchpatch2 {
+      url = "https://github.com/endrazine/wcc/commit/4bea2dac8b49d82e4f72e42027d74fc654380f7b.patch?full_index=1";
+      hash = "sha256-RK0ue8hdK/G+njwGmWpaewclRHprO8aBdZ9vBGQIQOc=";
+    })
+  ];
+
   postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
     sed -i src/wsh/include/libwitch/wsh.h src/wsh/scripts/INDEX \
       -e "s#/usr/share/wcc#$out/share/wcc#"
 
     sed -i -e '/stropts.h>/d' src/wsh/include/libwitch/wsh.h
 
-    sed -i '/wsh-`uname -m`.*-static/d' src/wsh/Makefile
+    sed -i '/wsh-static/d' src/wsh/Makefile
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
@@ -61,17 +80,23 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  meta = {
     homepage = "https://github.com/endrazine/wcc";
     description = "Witchcraft compiler collection: tools to convert and script ELF files";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
-      orivej
+    maintainers = with lib.maintainers; [
       DieracDelta
     ];
+    mainProgram = "wcc";
   };
-}
+})

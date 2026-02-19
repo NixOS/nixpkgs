@@ -11,9 +11,7 @@
 buildPythonPackage rec {
   pname = "rsa";
   version = "4.9";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sybrenstuvel";
@@ -38,9 +36,9 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/test_mypy.py" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://stuvel.eu/rsa";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Pure-Python RSA implementation";
   };
 }

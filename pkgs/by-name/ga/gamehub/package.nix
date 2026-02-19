@@ -14,9 +14,9 @@
   libsoup_2_4,
   json-glib,
   sqlite,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   libmanette,
-  libXtst,
+  libxtst,
   wrapGAppsHook3,
 }:
 
@@ -48,12 +48,14 @@ stdenv.mkDerivation rec {
     libgee
     libmanette
     libsoup_2_4
-    libXtst
+    libxtst
     sqlite
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
-  meta = with lib; {
+  meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     homepage = "https://tkashkin.github.io/projects/gamehub";
     description = "Unified library for all your games";
     longDescription = ''
@@ -61,8 +63,8 @@ stdenv.mkDerivation rec {
       your games from different platforms into one program to make it easier
       for you to manage your games.
     '';
-    maintainers = with maintainers; [ pasqui23 ];
-    license = with licenses; [ gpl3Only ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ pasqui23 ];
+    license = with lib.licenses; [ gpl3Only ];
+    platforms = lib.platforms.linux;
   };
 }

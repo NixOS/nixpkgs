@@ -6,21 +6,17 @@
   botocore,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
-  typing-extensions,
 }:
 
 let
   toUnderscore = str: builtins.replaceStrings [ "-" ] [ "_" ] str;
   buildTypesAiobotocorePackage =
     serviceName: version: hash:
-    buildPythonPackage rec {
+    buildPythonPackage (finalAttrs: {
       pname = "types-aiobotocore-${serviceName}";
       inherit version;
       pyproject = true;
-
-      disabled = pythonOlder "3.7";
 
       oldStylePackages = [
         "gamesparks"
@@ -30,7 +26,7 @@ let
 
       src = fetchPypi {
         pname =
-          if builtins.elem serviceName oldStylePackages then
+          if builtins.elem serviceName finalAttrs.oldStylePackages then
             "types-aiobotocore-${serviceName}"
           else
             "types_aiobotocore_${toUnderscore serviceName}";
@@ -43,637 +39,649 @@ let
         aiobotocore
         boto3
         botocore
-      ] ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
+      ];
 
       # Module has no tests
       doCheck = false;
 
       pythonImportsCheck = [ "types_aiobotocore_${toUnderscore serviceName}" ];
 
-      meta = with lib; {
+      meta = {
         description = "Type annotations for aiobotocore ${serviceName}";
         homepage = "https://github.com/youtype/mypy_boto3_builder";
-        license = licenses.mit;
-        maintainers = with maintainers; [ mbalatsko ];
+        license = lib.licenses.mit;
+        maintainers = [ ];
       };
-    };
+    });
 in
 {
   types-aiobotocore-accessanalyzer =
-    buildTypesAiobotocorePackage "accessanalyzer" "2.22.0"
-      "sha256-774I1TXtrPfjpNe121CUUyQe742Z7nZF8KmtHBQA7ig=";
+    buildTypesAiobotocorePackage "accessanalyzer" "3.1.1"
+      "sha256-RqvxyNeYfZtFSXrOHJmbdLYXSXRg2sLDTvEXX7m1HxE=";
 
   types-aiobotocore-account =
-    buildTypesAiobotocorePackage "account" "2.22.0"
-      "sha256-dkFlBYanCDzoyNfXtML6Kv9P8ETCLtOyVD948hoE0Yg=";
+    buildTypesAiobotocorePackage "account" "3.1.1"
+      "sha256-hpjrOZPmdDebFhke8Hb4lub4pIlAqKVJXjyUHMWxFoI=";
 
   types-aiobotocore-acm =
-    buildTypesAiobotocorePackage "acm" "2.22.0"
-      "sha256-4Zkodcc2faCDdNNPYhj5zGsur+Q+xHkyv3UVn8cMtEU=";
+    buildTypesAiobotocorePackage "acm" "3.1.1"
+      "sha256-fiwbQUMWfZW1zcENYBrlRvFeJomakhXjMrySP/XnTqA=";
 
   types-aiobotocore-acm-pca =
-    buildTypesAiobotocorePackage "acm-pca" "2.22.0"
-      "sha256-9Eb1jQYws+leyCC8LkmehQjrp18nTKf1tlutopVFaGE=";
+    buildTypesAiobotocorePackage "acm-pca" "3.1.1"
+      "sha256-RIOn/MY5SJJA2zchQlrtTnLthM396qimhQsHjrUOuWU=";
+
+  types-aiobotocore-aiops =
+    buildTypesAiobotocorePackage "aiops" "3.1.1"
+      "sha256-8ukp5V/vwKO42pC8c0mlsY8KknPMgL+3wr5bJdWYnZk=";
 
   types-aiobotocore-alexaforbusiness =
     buildTypesAiobotocorePackage "alexaforbusiness" "2.13.0"
       "sha256-+w/InoQR2aZ5prieGhgEEp7auBiSSghG5zIIHY5Kyao=";
 
   types-aiobotocore-amp =
-    buildTypesAiobotocorePackage "amp" "2.22.0"
-      "sha256-3blXs3DxqFum7+QOGgXWMLM1PSy7ilKzPPuWvjeiJUM=";
+    buildTypesAiobotocorePackage "amp" "3.1.1"
+      "sha256-7pkxm9Atyb9hJbvh77CYazI+VKnZEyj1Kk5WzRwQxs8=";
 
   types-aiobotocore-amplify =
-    buildTypesAiobotocorePackage "amplify" "2.22.0"
-      "sha256-acSuANDq6fPhk3w5J5p9QX+oiakC+ROgkjbbSoiYR58=";
+    buildTypesAiobotocorePackage "amplify" "3.1.1"
+      "sha256-CWsLx+R5FjnNSRAskfeEPYC2i3hO8vTrxedfKm+yVa4=";
 
   types-aiobotocore-amplifybackend =
-    buildTypesAiobotocorePackage "amplifybackend" "2.22.0"
-      "sha256-s6xy9G/iWolWbyXEyPR4bSm/dweZiE9U0pfVOpPlkTE=";
+    buildTypesAiobotocorePackage "amplifybackend" "3.1.1"
+      "sha256-z4fosLbvTGITCt6I+EfoUbddbAH0R72JCbT3d19mh3U=";
 
   types-aiobotocore-amplifyuibuilder =
-    buildTypesAiobotocorePackage "amplifyuibuilder" "2.22.0"
-      "sha256-fWVSy9gkHlLBehNJbo5FLfCDlWqAGH3Zd7hjk8X4FF4=";
+    buildTypesAiobotocorePackage "amplifyuibuilder" "3.1.1"
+      "sha256-JnciPdyRpuEPEFpHbo07HfH4kJjPxJOb47DDeRoYbis=";
 
   types-aiobotocore-apigateway =
-    buildTypesAiobotocorePackage "apigateway" "2.22.0"
-      "sha256-8G/o/FDMFQbpsxTTdrTN8dJWDUXLlGxuiAO0emwqMrQ=";
+    buildTypesAiobotocorePackage "apigateway" "3.1.1"
+      "sha256-L+FPKA/xS8JW8Gyh2xF8B+e3dIzBzblcz0azxaxeils=";
 
   types-aiobotocore-apigatewaymanagementapi =
-    buildTypesAiobotocorePackage "apigatewaymanagementapi" "2.22.0"
-      "sha256-ITDjfDmLPtOqgC8uDEVdIirhpAlZ9ghe5ZSLjSMkLzk=";
+    buildTypesAiobotocorePackage "apigatewaymanagementapi" "3.1.1"
+      "sha256-PkrFDQPUHf6Z5Z8FwikujXNJiopEpCSm3e39L8ZTgt8=";
 
   types-aiobotocore-apigatewayv2 =
-    buildTypesAiobotocorePackage "apigatewayv2" "2.22.0"
-      "sha256-UEUy4IpfQZggKpseBMaMyLdPBX6ud9KK/wjR+wNICEA=";
+    buildTypesAiobotocorePackage "apigatewayv2" "3.1.1"
+      "sha256-pYCAjpFWxUELP5xEmnKlFxIt2XCInAYS0MpRT0LHpNk=";
 
   types-aiobotocore-appconfig =
-    buildTypesAiobotocorePackage "appconfig" "2.22.0"
-      "sha256-Q8n/IsRqoHG4D3ooe8hPPmXtgfnql0vAKBKj0Y7BNq4=";
+    buildTypesAiobotocorePackage "appconfig" "3.1.1"
+      "sha256-YKTDSJbihDJJjbNZsJGmkJzUshLAHaKyCERaTUkl9KE=";
 
   types-aiobotocore-appconfigdata =
-    buildTypesAiobotocorePackage "appconfigdata" "2.22.0"
-      "sha256-oj5R5iAIaTL6pEY04fGMUbE0W9dDm4KYVN+5McFI09c=";
+    buildTypesAiobotocorePackage "appconfigdata" "3.1.1"
+      "sha256-ZRPeJKm8iBRsTG1C1ND8eDvVNKqYeTrBJVpl/4pSG/0=";
 
   types-aiobotocore-appfabric =
-    buildTypesAiobotocorePackage "appfabric" "2.22.0"
-      "sha256-cunRoOZn6vJoTIB55HzTnYfj0jdWIe9XkVSNkYwlQTM=";
+    buildTypesAiobotocorePackage "appfabric" "3.1.1"
+      "sha256-27e25/UBj3YebwLjIVyIRKiADgOAi1i6FXx+BDCASUY=";
 
   types-aiobotocore-appflow =
-    buildTypesAiobotocorePackage "appflow" "2.22.0"
-      "sha256-vbHA3mGtLteDcgQt0ztNp5uF8AWOEwWMq7RWVxA8+NA=";
+    buildTypesAiobotocorePackage "appflow" "3.1.1"
+      "sha256-BC80w924yKct8XN+y4sVnMzhzYunop0ycJ4FCBd3YcE=";
 
   types-aiobotocore-appintegrations =
-    buildTypesAiobotocorePackage "appintegrations" "2.22.0"
-      "sha256-O9dlTC7Q9VsVvz0stoggQE6vh6HX2hvq1oT3zKc1tOI=";
+    buildTypesAiobotocorePackage "appintegrations" "3.1.1"
+      "sha256-brxHJmWcQBq12YjXgHyheRl25pE2ru7UNUiAKNPxDoU=";
 
   types-aiobotocore-application-autoscaling =
-    buildTypesAiobotocorePackage "application-autoscaling" "2.22.0"
-      "sha256-VX8MzWpIt0MiqGfmeZ1UznrmMfJjkB6AtNSN5NnbR6o=";
+    buildTypesAiobotocorePackage "application-autoscaling" "3.1.1"
+      "sha256-/iXR+FLQK0ERKoZiDFJGpttPKURMEIHRB5nmY9Cbe9c=";
 
   types-aiobotocore-application-insights =
-    buildTypesAiobotocorePackage "application-insights" "2.22.0"
-      "sha256-jC5biE+Qp3qYmSxudyouCDayTHl47GPNKNJYfmDieVY=";
+    buildTypesAiobotocorePackage "application-insights" "3.1.1"
+      "sha256-EGi08z/HnY5lNXdsvYg2fmnrsypYGcSpuO3pPz43+q0=";
 
   types-aiobotocore-applicationcostprofiler =
-    buildTypesAiobotocorePackage "applicationcostprofiler" "2.22.0"
-      "sha256-sBlop4VKI3Fe8rtCAVFU+MsJXCXwZtyzMkyyM0xgTxI=";
+    buildTypesAiobotocorePackage "applicationcostprofiler" "3.1.1"
+      "sha256-+v6ehROfGlqsPCclZKwe4ODl574r+NVv6MzGvQrxF1Y=";
 
   types-aiobotocore-appmesh =
-    buildTypesAiobotocorePackage "appmesh" "2.22.0"
-      "sha256-iOUOCy+vlVd1tiSUCEknv4Q9f+49NJr5rRpFORzVFyg=";
+    buildTypesAiobotocorePackage "appmesh" "3.1.1"
+      "sha256-Wf+6wFF8rPb3Q6r/L+/kcJEZQdVIpuBx5gU6ix5ih5Y=";
 
   types-aiobotocore-apprunner =
-    buildTypesAiobotocorePackage "apprunner" "2.22.0"
-      "sha256-jAyThKObnErStzT1gmlmJcQ0OhDg43n3iJP4qNNj0OY=";
+    buildTypesAiobotocorePackage "apprunner" "3.1.1"
+      "sha256-eDg3+J3hD/oJyBvZEhAU5kefSm4Za7DIraOgt5lU1do=";
 
   types-aiobotocore-appstream =
-    buildTypesAiobotocorePackage "appstream" "2.22.0"
-      "sha256-2+A1U975n5Ab88AcBOl85j7FLkhVMy8GDIS+VUq2e+w=";
+    buildTypesAiobotocorePackage "appstream" "3.1.1"
+      "sha256-N6JcI3PtoDzleFZG0ObbWUbJNUvQ80U3w/JjNJOigsg=";
 
   types-aiobotocore-appsync =
-    buildTypesAiobotocorePackage "appsync" "2.22.0"
-      "sha256-SU+sOv+kSqie700NCsD87jvkX3NLimJNelaJ3f7CbGs=";
+    buildTypesAiobotocorePackage "appsync" "3.1.1"
+      "sha256-vGFHM/EQEg9Mz8ARS9LZzDd6Cc66BMal1vT9CsPWN+c=";
 
   types-aiobotocore-arc-zonal-shift =
-    buildTypesAiobotocorePackage "arc-zonal-shift" "2.22.0"
-      "sha256-65HLrO1AGTYVAcxeBXG85Fapha1mzt8UgL8ONiMiQK8=";
+    buildTypesAiobotocorePackage "arc-zonal-shift" "3.1.1"
+      "sha256-K9V6Q53AMdBBEARZqZfX4M488KM7Dv7GKhQHuNFhqlo=";
 
   types-aiobotocore-athena =
-    buildTypesAiobotocorePackage "athena" "2.22.0"
-      "sha256-pVs/lo6O01dqIGNLyFASJl+LIwv0tUAUDIKhnmEAdDc=";
+    buildTypesAiobotocorePackage "athena" "3.1.1"
+      "sha256-jIuMq/70OcqwRnTwpDVvzwzwWMG10dlKtOGP32Agj2M=";
 
   types-aiobotocore-auditmanager =
-    buildTypesAiobotocorePackage "auditmanager" "2.22.0"
-      "sha256-i/MdzrJrWlJqRPq73IQ9pWsTpAAaeslSPtHW7lZN1mY=";
+    buildTypesAiobotocorePackage "auditmanager" "3.1.1"
+      "sha256-5YiY8wd/detDqp8Z7tdj09rcpLbXF4NxwbIlLGJFZ1Y=";
 
   types-aiobotocore-autoscaling =
-    buildTypesAiobotocorePackage "autoscaling" "2.22.0"
-      "sha256-7t0CK66iKlbrY4kIC+Jwdhp35dRgNPthCWUV/e6GrXI=";
+    buildTypesAiobotocorePackage "autoscaling" "3.1.1"
+      "sha256-EzKNHZxD4EYREh9cnpvX+OYWBCtcRP0LgO34xpIutbA=";
 
   types-aiobotocore-autoscaling-plans =
-    buildTypesAiobotocorePackage "autoscaling-plans" "2.22.0"
-      "sha256-rbrurBPHq50xMkO5Vh1bo55J3K09bL2K1ppKlfOEJuk=";
+    buildTypesAiobotocorePackage "autoscaling-plans" "3.1.1"
+      "sha256-BieAUO3YZb+V/p3UmNJIhZfFHNSKebilymycp+yIW1c=";
 
   types-aiobotocore-backup =
-    buildTypesAiobotocorePackage "backup" "2.22.0"
-      "sha256-22TKyYor1b2qzq7Zc8uiqhl1QlC9DRqjM91InBi5qOU=";
+    buildTypesAiobotocorePackage "backup" "3.1.1"
+      "sha256-1tJJcCYre9c2sonM1e96yu0OdTn+l2FWZgFVf9kdbeU=";
 
   types-aiobotocore-backup-gateway =
-    buildTypesAiobotocorePackage "backup-gateway" "2.22.0"
-      "sha256-2fCgoLxZd7/cYNhxPOJagjy+ROGoC2wDuD+e3AaUe/A=";
+    buildTypesAiobotocorePackage "backup-gateway" "3.1.1"
+      "sha256-or/3kdieG8Zj79tTTZnw7MP6KWs143ILR9Rva/lIcw0=";
 
   types-aiobotocore-backupstorage =
     buildTypesAiobotocorePackage "backupstorage" "2.13.0"
       "sha256-YUKtBdBrdwL2yqDqOovvzDPbcv/sD8JLRnKz3Oh7iSU=";
 
   types-aiobotocore-batch =
-    buildTypesAiobotocorePackage "batch" "2.22.0"
-      "sha256-vQhZeuMIzphgQYXBNyrI2XZlY+sR09lbusweQ23JB8Q=";
+    buildTypesAiobotocorePackage "batch" "3.1.1"
+      "sha256-1M05bm3fbAkrGQ7MzI7m6VCAct9qA1kSRyFtpxDrS+U=";
 
   types-aiobotocore-billingconductor =
-    buildTypesAiobotocorePackage "billingconductor" "2.22.0"
-      "sha256-txF+ocXl3KjFCfqit/kb9mXIRW14SxCpy2PWczWBBTY=";
+    buildTypesAiobotocorePackage "billingconductor" "3.1.1"
+      "sha256-UAjXQHIJo5LiLrxoDQWgPpZJszmRFFd+o1uFn8Ds2jU=";
 
   types-aiobotocore-braket =
-    buildTypesAiobotocorePackage "braket" "2.22.0"
-      "sha256-wkciK6H0bw0ooPKdRCybZuBobPJHDme6jSn8osBAukk=";
+    buildTypesAiobotocorePackage "braket" "3.1.1"
+      "sha256-1Gj61aOgoK6y3MLQc+H+/yxSB5xWkuJqY1xkRpN/aps=";
 
   types-aiobotocore-budgets =
-    buildTypesAiobotocorePackage "budgets" "2.22.0"
-      "sha256-Uw4Euhct1i+rWMTuRKuu3EDhAVrEcOJK9THJgOed55M=";
+    buildTypesAiobotocorePackage "budgets" "3.1.1"
+      "sha256-TCzIIBCIDRCi0aA7Vz6CJgykxucEQpZKL85/pnAikpI=";
 
   types-aiobotocore-ce =
-    buildTypesAiobotocorePackage "ce" "2.22.0"
-      "sha256-jfy6yBxEQGV77vFZNmB2He1SeVU63P43rE+NOdhK5UE=";
+    buildTypesAiobotocorePackage "ce" "3.1.1"
+      "sha256-qgo838uG/WRJBSHhMebwYzaosknBzjRwwVHXxibcqFE=";
 
   types-aiobotocore-chime =
-    buildTypesAiobotocorePackage "chime" "2.22.0"
-      "sha256-5K0Phfr6FZwv3tIjtxwgWBmPb/8ewyjaWf/fVTmIXLE=";
+    buildTypesAiobotocorePackage "chime" "3.1.1"
+      "sha256-x1Yv7e1tUOpk0Ih+pN2qNQyRQSs5C9Tc8BMaWWHa9oM=";
 
   types-aiobotocore-chime-sdk-identity =
-    buildTypesAiobotocorePackage "chime-sdk-identity" "2.22.0"
-      "sha256-NFkPUW85qS23L6yxfLneGKvRUVUcnKFC8gKWl4eYKAE=";
+    buildTypesAiobotocorePackage "chime-sdk-identity" "3.1.1"
+      "sha256-zpRklRxEiaO7WjgrWzrUtSY0guDyAbPyhZC1iafkU34=";
 
   types-aiobotocore-chime-sdk-media-pipelines =
-    buildTypesAiobotocorePackage "chime-sdk-media-pipelines" "2.22.0"
-      "sha256-oF4Rj6tWmlR8mFSzG+RXSyxUewVX8lQuMSqFgy+lTYc=";
+    buildTypesAiobotocorePackage "chime-sdk-media-pipelines" "3.1.1"
+      "sha256-E+6Qy3Q+CuHKpVUHiyrt84rq6JgTYirc+Ir55x57iY4=";
 
   types-aiobotocore-chime-sdk-meetings =
-    buildTypesAiobotocorePackage "chime-sdk-meetings" "2.22.0"
-      "sha256-L2ichNZIhvfA5r3LwPaVPY7un0rDzH2oi7nsgMfyDSo=";
+    buildTypesAiobotocorePackage "chime-sdk-meetings" "3.1.1"
+      "sha256-qdSmqlctq4Vpn0TZlo1Cqqv8Q/SpgKjs8Ar+BN5PmAc=";
 
   types-aiobotocore-chime-sdk-messaging =
-    buildTypesAiobotocorePackage "chime-sdk-messaging" "2.22.0"
-      "sha256-sA16Teac3eeX0dZtagCMHJhY4nAz0k0WO/mBs9yh364=";
+    buildTypesAiobotocorePackage "chime-sdk-messaging" "3.1.1"
+      "sha256-oe4E8diDZpY0pFX78V6qJG8ukOeMBlgMaTZQzj4/sYc=";
 
   types-aiobotocore-chime-sdk-voice =
-    buildTypesAiobotocorePackage "chime-sdk-voice" "2.22.0"
-      "sha256-phT4Jvd+r6Imv9hXvHs9nhOPCdIiY5QNsOQCWRpdwBA=";
+    buildTypesAiobotocorePackage "chime-sdk-voice" "3.1.1"
+      "sha256-j7s9epPxNdZh/uBqEMgX/S9D0PeelSuUe/oOWkMYebg=";
 
   types-aiobotocore-cleanrooms =
-    buildTypesAiobotocorePackage "cleanrooms" "2.22.0"
-      "sha256-FS7vqDj0+uSitgON8T6JkqreRG9S+GhHaizDQR0ol5Y=";
+    buildTypesAiobotocorePackage "cleanrooms" "3.1.1"
+      "sha256-nElh9uAw6rtIDx1S/8gRNmEfynCbbJp+KZPc4ZCwfu0=";
 
   types-aiobotocore-cloud9 =
-    buildTypesAiobotocorePackage "cloud9" "2.22.0"
-      "sha256-OVw9zlZhPrELXvw5x5cEW9Ijrs+mSJat6xymFVDB8NE=";
+    buildTypesAiobotocorePackage "cloud9" "3.1.1"
+      "sha256-uIzJFa2XDwYp3SNrHkqa1Se7nw+7MkXoFataULJtOGc=";
 
   types-aiobotocore-cloudcontrol =
-    buildTypesAiobotocorePackage "cloudcontrol" "2.22.0"
-      "sha256-G0eNbnLZ0r0H/FcBJePXhvi1P6ICby5s3BlbSS9nHhk=";
+    buildTypesAiobotocorePackage "cloudcontrol" "3.1.1"
+      "sha256-Em+QrqSEeZWY9FHMv9OxRnM6ZsF6J9G+aVYjSKgN6/k=";
 
   types-aiobotocore-clouddirectory =
-    buildTypesAiobotocorePackage "clouddirectory" "2.22.0"
-      "sha256-Y4k1LdRHZVQT1WgYnif+hL5lRNLELvidJnCIP0WLhzU=";
+    buildTypesAiobotocorePackage "clouddirectory" "3.1.1"
+      "sha256-SnYs49214t9N3o2bwsEEcbE06iopc5ZCUwBeQupwYZU=";
 
   types-aiobotocore-cloudformation =
-    buildTypesAiobotocorePackage "cloudformation" "2.22.0"
-      "sha256-ecF5Ibbuvd4E0iH/GH10u6oWBUmyrBNLXqZgsJ4dGug=";
+    buildTypesAiobotocorePackage "cloudformation" "3.1.1"
+      "sha256-UuGjgAQPE5g6pGNm3yXF8Map22jex16SIp7hFvOLBCk=";
 
   types-aiobotocore-cloudfront =
-    buildTypesAiobotocorePackage "cloudfront" "2.22.0"
-      "sha256-JP09W8BAUhqEi5y3lWYqJybSVpoJmmL4a5ifG8rklcs=";
+    buildTypesAiobotocorePackage "cloudfront" "3.1.1"
+      "sha256-7xxKqjNusACG4DFjV+DzragZBo4HxNHPIU2eZ+Rcxqs=";
 
   types-aiobotocore-cloudhsm =
-    buildTypesAiobotocorePackage "cloudhsm" "2.22.0"
-      "sha256-PL9UDD6Q8WP+LBR0AzUhxdMu6gqUAFO93T1PbJkK0Xc=";
+    buildTypesAiobotocorePackage "cloudhsm" "3.1.1"
+      "sha256-ckSAgYQtr8IlsIJ8BdLguqYx01DHHYhlwN6n53PJi8A=";
 
   types-aiobotocore-cloudhsmv2 =
-    buildTypesAiobotocorePackage "cloudhsmv2" "2.22.0"
-      "sha256-27NVmbzXHQdBlC+hu33/NmY+kLPbH9JPNr8JSeYTQqA=";
+    buildTypesAiobotocorePackage "cloudhsmv2" "3.1.1"
+      "sha256-4UjFCxKlyw5XZryksWJvMZKG3w21wiZdizF5lu4zB4k=";
 
   types-aiobotocore-cloudsearch =
-    buildTypesAiobotocorePackage "cloudsearch" "2.22.0"
-      "sha256-6vSDSIX766QcWY60OfUsLw2zHosRFuHT/gbuG7uLLcA=";
+    buildTypesAiobotocorePackage "cloudsearch" "3.1.1"
+      "sha256-xSgWv6ozbFtn3ucc0vDauGMgOFyIEe3Yusr4Bxnv6iQ=";
 
   types-aiobotocore-cloudsearchdomain =
-    buildTypesAiobotocorePackage "cloudsearchdomain" "2.22.0"
-      "sha256-IRKzio9xZyQ9JEaBrpkGGBrvwMNU03Yj5ByQgJ1BKIo=";
+    buildTypesAiobotocorePackage "cloudsearchdomain" "3.1.1"
+      "sha256-Zvy0E+dtHbblSjKK+s1amd2gHlgtcD3tYzhYg1j0k5A=";
 
   types-aiobotocore-cloudtrail =
-    buildTypesAiobotocorePackage "cloudtrail" "2.22.0"
-      "sha256-kS0KvOY3hNV/2Aea7FKqpqVxds3CpzQzv13mYnSXOjQ=";
+    buildTypesAiobotocorePackage "cloudtrail" "3.1.1"
+      "sha256-Ba+HGg6KpmCaTr2Dg3t2qrxxat6wh/SLcsZA6eClawg=";
 
   types-aiobotocore-cloudtrail-data =
-    buildTypesAiobotocorePackage "cloudtrail-data" "2.22.0"
-      "sha256-QfUxRPimVJ61CuTIbZKx3yteKb/Dpo3X3odo57KR7/I=";
+    buildTypesAiobotocorePackage "cloudtrail-data" "3.1.1"
+      "sha256-nIoQZ2v471TukrJVyEgP84l09jIsm8A1EAstlmtBqWY=";
 
   types-aiobotocore-cloudwatch =
-    buildTypesAiobotocorePackage "cloudwatch" "2.22.0"
-      "sha256-13rXJ6FORJrB82+636j+73L5AroejnLt+mhctskHa7o=";
+    buildTypesAiobotocorePackage "cloudwatch" "3.1.1"
+      "sha256-jjG5vq1T2aCyQc09sPgEcC2rN91l1/GDYJG1f6iS044=";
 
   types-aiobotocore-codeartifact =
-    buildTypesAiobotocorePackage "codeartifact" "2.22.0"
-      "sha256-iY/Q1ovxLejtrA2nHcVqXW/7WIUM556nu7f5SFbW7hU=";
+    buildTypesAiobotocorePackage "codeartifact" "3.1.1"
+      "sha256-tnBrCNvS7r7gNH7RRB9/vZTAj4x9rK+qon0b8Oj9hWs=";
 
   types-aiobotocore-codebuild =
-    buildTypesAiobotocorePackage "codebuild" "2.22.0"
-      "sha256-9sesg4rfUJBE4SYgZk0SpihVrdh2R5sHpsGJt5x+TA0=";
+    buildTypesAiobotocorePackage "codebuild" "3.1.1"
+      "sha256-vqS8ob5xr3qP7OcLTS7sHfoqxAW1g30FWfMHETKnwxg=";
 
   types-aiobotocore-codecatalyst =
-    buildTypesAiobotocorePackage "codecatalyst" "2.22.0"
-      "sha256-gZtmYuuyqhX2y1KP5U4+JBUM8xinq/s6SM+u+pbmSCg=";
+    buildTypesAiobotocorePackage "codecatalyst" "3.1.1"
+      "sha256-mZ4oJj5VjBJuB9+FiJNrWhZCXfeA26LmYVTZyAq84DU=";
 
   types-aiobotocore-codecommit =
-    buildTypesAiobotocorePackage "codecommit" "2.22.0"
-      "sha256-/75t4UzPxF+MECx1juZR3mGGMIaWDO6Zqs5ZuEn65Mo=";
+    buildTypesAiobotocorePackage "codecommit" "3.1.1"
+      "sha256-TOEnza/qiyVLATTlUf+WUh7zRtD+V+Vh3fkrb5WHHPs=";
+
+  types-aiobotocore-codeconnections =
+    buildTypesAiobotocorePackage "codeconnections" "3.1.1"
+      "sha256-R/7XuO/KdWsUadXxH+fgobOAzmIQ+FTH330KQ8wUxww=";
 
   types-aiobotocore-codedeploy =
-    buildTypesAiobotocorePackage "codedeploy" "2.22.0"
-      "sha256-2qw+Hvb68WFhXFApBIUXG9NAKyqSY4qbjfxcxFu7v6A=";
+    buildTypesAiobotocorePackage "codedeploy" "3.1.1"
+      "sha256-nBu9Uk1L4AhG3NcS128To+9pyHy4CBA9ODTa6XPPqWo=";
 
   types-aiobotocore-codeguru-reviewer =
-    buildTypesAiobotocorePackage "codeguru-reviewer" "2.22.0"
-      "sha256-Nl250zSOaGAXtOUMSg8dNKHSH6Zl7lF0hC3+NJBPXF4=";
+    buildTypesAiobotocorePackage "codeguru-reviewer" "3.1.1"
+      "sha256-mjlUraPceyD4VtBuTquWPxzeNw3HMpZdoAj+YwdsgNg=";
 
   types-aiobotocore-codeguru-security =
-    buildTypesAiobotocorePackage "codeguru-security" "2.22.0"
-      "sha256-/KjsBiC0O3bbzCsv3Yj5FRRLyPHPR0UgMo2A/vvdWFM=";
+    buildTypesAiobotocorePackage "codeguru-security" "3.1.1"
+      "sha256-Lg4vqrtDhTJj7GooerJBcsvwHGG4+US0lqb80EcKD1g=";
 
   types-aiobotocore-codeguruprofiler =
-    buildTypesAiobotocorePackage "codeguruprofiler" "2.22.0"
-      "sha256-aJMjbjo54cjCrHJqFhPnMNBZ0D/fxhbLrccuFh2FJ+U=";
+    buildTypesAiobotocorePackage "codeguruprofiler" "3.1.1"
+      "sha256-0CsMOhN/oKoh3wIDAFb7pbAjAj+3V2pCqx21k8Bk878=";
 
   types-aiobotocore-codepipeline =
-    buildTypesAiobotocorePackage "codepipeline" "2.22.0"
-      "sha256-6miisnSb3iXDdvWif9WB7IIFVbwx1ixvqaK0t563PD0=";
+    buildTypesAiobotocorePackage "codepipeline" "3.1.1"
+      "sha256-65ffxJgss339JKWbjlMDxQHCv+ReFBWzgVSPgDzMjYk=";
 
   types-aiobotocore-codestar =
     buildTypesAiobotocorePackage "codestar" "2.13.3"
       "sha256-Z1ewx2RjmxbOQZ7wXaN54PVOuRs6LP3rMpsrVTacwjo=";
 
   types-aiobotocore-codestar-connections =
-    buildTypesAiobotocorePackage "codestar-connections" "2.22.0"
-      "sha256-FNUOrFeS7fGB9y9QH2Nt8KhTaXQiMyToQYdzEChWK7A=";
+    buildTypesAiobotocorePackage "codestar-connections" "3.1.1"
+      "sha256-kFHaPMsXjX2LaSwuygVmyBdP3g2oMABH+Y2r5T/1jhk=";
 
   types-aiobotocore-codestar-notifications =
-    buildTypesAiobotocorePackage "codestar-notifications" "2.22.0"
-      "sha256-7ax9Mi3xhfDoB7tJu+DtWif2opRSTp76WxqqONU/41Q=";
+    buildTypesAiobotocorePackage "codestar-notifications" "3.1.1"
+      "sha256-7J9aFKvZ7cGmLGCKVns+6DNY9Cp749R5kXcvbjUGruU=";
 
   types-aiobotocore-cognito-identity =
-    buildTypesAiobotocorePackage "cognito-identity" "2.22.0"
-      "sha256-zqvW1iM55ivSwaHdGFZMG8hDKYP1f64PANc4Ms/pE4k=";
+    buildTypesAiobotocorePackage "cognito-identity" "3.1.1"
+      "sha256-7blur/20lTznEA9U0bZ3WShWsfFuZ+9A0mv7Gxnm690=";
 
   types-aiobotocore-cognito-idp =
-    buildTypesAiobotocorePackage "cognito-idp" "2.22.0"
-      "sha256-i23oyVNSWVYOGBmf+Es4Nv7RobLcaX9G8xmMBBbUloQ=";
+    buildTypesAiobotocorePackage "cognito-idp" "3.1.1"
+      "sha256-fnBsIrBFaFWKQct585WDV4f3EKZ7V2UKHYfg4lHLrQo=";
 
   types-aiobotocore-cognito-sync =
-    buildTypesAiobotocorePackage "cognito-sync" "2.22.0"
-      "sha256-hvo5J5BWLSR3an1I/yVTCO3zTtu9tFF9HdUvm0ng0GQ=";
+    buildTypesAiobotocorePackage "cognito-sync" "3.1.1"
+      "sha256-0eUr55yuxy6khG/6I5Ty0GDEmNxncaVk0uocPVa3InU=";
 
   types-aiobotocore-comprehend =
-    buildTypesAiobotocorePackage "comprehend" "2.22.0"
-      "sha256-/uTn0PFh1QCsZjyvYG8U2k9KK9kDi25Y+wzRwz4WjpI=";
+    buildTypesAiobotocorePackage "comprehend" "3.1.1"
+      "sha256-LIX04JMceLyH70VUWe+cVL+yqeRzPzvljpZSxGQwZD8=";
 
   types-aiobotocore-comprehendmedical =
-    buildTypesAiobotocorePackage "comprehendmedical" "2.22.0"
-      "sha256-UBOOmoQVtd/3PuAIy7kzidEpgTKlXPL8CbMDUHRyvnQ=";
+    buildTypesAiobotocorePackage "comprehendmedical" "3.1.1"
+      "sha256-sjXPsANgGkRMJqvjkFHaUYVFds++7YGTQV1VGrBBhtE=";
 
   types-aiobotocore-compute-optimizer =
-    buildTypesAiobotocorePackage "compute-optimizer" "2.22.0"
-      "sha256-se1tjr0lwGpaqcICoDwc4gnyiqgCmZIpdlQ72xUBkUE=";
+    buildTypesAiobotocorePackage "compute-optimizer" "3.1.1"
+      "sha256-w/d0rVpVdc4ouMckyJYkBb1OTvB+bHuGkVwAuZ1XQDo=";
 
   types-aiobotocore-config =
-    buildTypesAiobotocorePackage "config" "2.22.0"
-      "sha256-kJ9HJ8vN1xdSyQSbvuQ+uwA/EDRYOHwW8yYe4h7N+l4=";
+    buildTypesAiobotocorePackage "config" "3.1.1"
+      "sha256-8ZyYp7V1v+PNV9pdi2aMYLL1KRXRx7vxaGuDHjf8ef0=";
 
   types-aiobotocore-connect =
-    buildTypesAiobotocorePackage "connect" "2.22.0"
-      "sha256-1e5Cu44oTHkAHP02PJzf8C6eVlU3KhCs5Ys/uhxtTBE=";
+    buildTypesAiobotocorePackage "connect" "3.1.1"
+      "sha256-ctvHPJebwtSXfHTFGgiRNKdLrbJ/7N1tnZgD4f04c98=";
 
   types-aiobotocore-connect-contact-lens =
-    buildTypesAiobotocorePackage "connect-contact-lens" "2.22.0"
-      "sha256-wJUd04oGKGxUl69LVZjsV1/et9aDoHt3m5pG7mYcLDk=";
+    buildTypesAiobotocorePackage "connect-contact-lens" "3.1.1"
+      "sha256-x0ibjg6H3Biqy+oiDQI5l0IXblJpFsKPCD5oa+PqUt0=";
 
   types-aiobotocore-connectcampaigns =
-    buildTypesAiobotocorePackage "connectcampaigns" "2.22.0"
-      "sha256-i1BVM3LPwuJTYa/0uvLlHhiyZiCMRk1Ny305EbIPziY=";
+    buildTypesAiobotocorePackage "connectcampaigns" "3.1.1"
+      "sha256-cljoeOpPs0EzMev6fvEjTi1dZqiAbwhIyIDJ102+eKU=";
 
   types-aiobotocore-connectcases =
-    buildTypesAiobotocorePackage "connectcases" "2.22.0"
-      "sha256-3PZzIU3NJQb1RWukhaZuXKsuL1DDrU8rsJYJSVkE27g=";
+    buildTypesAiobotocorePackage "connectcases" "3.1.1"
+      "sha256-p/IwTmfGpMcjwhdMvBi92gbSVa/ovt/gvXO0T88n7YE=";
 
   types-aiobotocore-connectparticipant =
-    buildTypesAiobotocorePackage "connectparticipant" "2.22.0"
-      "sha256-/pmBY/yG0bsyautHeFyffcXR8v5Mp3t5r/ElStpPQQY=";
+    buildTypesAiobotocorePackage "connectparticipant" "3.1.1"
+      "sha256-dYyX+8a/5FjT4gZlELaaRoPqvB8wQGCfvGaMjKhV2uI=";
 
   types-aiobotocore-controltower =
-    buildTypesAiobotocorePackage "controltower" "2.22.0"
-      "sha256-3icLS3wkyrsvbqmks1bFWZ3/pflnuNzjoovX1xGWpXc=";
+    buildTypesAiobotocorePackage "controltower" "3.1.1"
+      "sha256-xQ91lpjqm3HDU/2F+Ftzbgzr38qf79nOM8w4pF3SgWE=";
 
   types-aiobotocore-cur =
-    buildTypesAiobotocorePackage "cur" "2.22.0"
-      "sha256-2B/BhlopuhTuw9V3PYi4JFX+QTL+fJyswz9tTl9YKaY=";
+    buildTypesAiobotocorePackage "cur" "3.1.1"
+      "sha256-QS+iO2kPjft3mvIHWQ4jAFRz5aYwCmJTvCmydy6QL6U=";
 
   types-aiobotocore-customer-profiles =
-    buildTypesAiobotocorePackage "customer-profiles" "2.22.0"
-      "sha256-M8WaCHLLiDEVO0qWWHC4EIyzdaxUfZMPagSyXvbKke4=";
+    buildTypesAiobotocorePackage "customer-profiles" "3.1.1"
+      "sha256-Zkz7GDatr85L54gcg0E8gNJE7BqQDRbwc3QY6YIFUHY=";
 
   types-aiobotocore-databrew =
-    buildTypesAiobotocorePackage "databrew" "2.22.0"
-      "sha256-InlpLYKUsqSqeKpCMbbeD/r3Mbzi2cV8LsDSBXpkN/o=";
+    buildTypesAiobotocorePackage "databrew" "3.1.1"
+      "sha256-6Fy3hOTNNhUYFfYYSY6lGI331KYyIaYsDXeP7+0U9Rk=";
 
   types-aiobotocore-dataexchange =
-    buildTypesAiobotocorePackage "dataexchange" "2.22.0"
-      "sha256-9TPbxDd7e82qPUzqTmWT0+Fg52P+8HBI98Cb3qcrrvs=";
+    buildTypesAiobotocorePackage "dataexchange" "3.1.1"
+      "sha256-Gve/YrDZnwocilkFD8nxUc6jKAlxHiw4NvHXxLJ0LeY=";
 
   types-aiobotocore-datapipeline =
-    buildTypesAiobotocorePackage "datapipeline" "2.22.0"
-      "sha256-Crs2aaiOYjDLj5A7n2QULdjowkpZttr0JuMP7QaR8lE=";
+    buildTypesAiobotocorePackage "datapipeline" "3.1.1"
+      "sha256-szI6s6RZvl4gFN8tZN4XycbE9xbJiNj1t63o3h548D0=";
 
   types-aiobotocore-datasync =
-    buildTypesAiobotocorePackage "datasync" "2.22.0"
-      "sha256-g3l9buYkUqoUNgE53DWP5U3NlCPCu5gxK2LxutJZCLw=";
+    buildTypesAiobotocorePackage "datasync" "3.1.1"
+      "sha256-gIt9vawHcY2ey6wQIJ8xzYGL2I+UwK6T9iJhkBVoLyY=";
 
   types-aiobotocore-dax =
-    buildTypesAiobotocorePackage "dax" "2.22.0"
-      "sha256-dCO/V+k764wrGbvPXWnX1vRexmz1zfTDT8WzESAERdY=";
+    buildTypesAiobotocorePackage "dax" "3.1.1"
+      "sha256-KmZLCv196pr1vCQna4OVf1h0y9FdxhMtzd298hIOR1o=";
 
   types-aiobotocore-detective =
-    buildTypesAiobotocorePackage "detective" "2.22.0"
-      "sha256-pIWJZJnO70H8UjcqWBtuoggVPWh5rN7dhIVwQ6OhdgM=";
+    buildTypesAiobotocorePackage "detective" "3.1.1"
+      "sha256-BiQY4ettsk/xwjcDyQLyk69/HJyj+40ARYWrt9nDiMk=";
 
   types-aiobotocore-devicefarm =
-    buildTypesAiobotocorePackage "devicefarm" "2.22.0"
-      "sha256-iBDDgq5DpBk85AH+P3WvVJfYLkqegm9HbrupPv/z2uM=";
+    buildTypesAiobotocorePackage "devicefarm" "3.1.1"
+      "sha256-CGvm5RZ1LHTh4O6Wxm7Yp78T74w4KWTtPBiAcTS4kKQ=";
 
   types-aiobotocore-devops-guru =
-    buildTypesAiobotocorePackage "devops-guru" "2.22.0"
-      "sha256-1CWV3kBk74y4CDxZjpRSvgkPmTgcp4J7pkthFvDxIIY=";
+    buildTypesAiobotocorePackage "devops-guru" "3.1.1"
+      "sha256-h5qvQaRshp1/nXIRAl0RSM6SZeJThlmEZusJBCMZNNU=";
 
   types-aiobotocore-directconnect =
-    buildTypesAiobotocorePackage "directconnect" "2.22.0"
-      "sha256-G4Ea3JZvpTfFH+uifY+v5Vic68QdF5swhadFpdPoYpc=";
+    buildTypesAiobotocorePackage "directconnect" "3.1.1"
+      "sha256-DF8G/ZQkR11+24bdSpYw5NQWRaL5soGuN4J+jAi8YUw=";
 
   types-aiobotocore-discovery =
-    buildTypesAiobotocorePackage "discovery" "2.22.0"
-      "sha256-ew13XwU+SQOljFpDiVDkvfRIqySDkPAEHCsT/a+T7Rk=";
+    buildTypesAiobotocorePackage "discovery" "3.1.1"
+      "sha256-xgswng92YmwzOKPR/flZvM4f5qtS9TOuM2qy3tzPOMo=";
 
   types-aiobotocore-dlm =
-    buildTypesAiobotocorePackage "dlm" "2.22.0"
-      "sha256-AxkrCquNxBakMriLdz2WqwcpG4tZlM07Bp7duDsVfD8=";
+    buildTypesAiobotocorePackage "dlm" "3.1.1"
+      "sha256-l0HyjJekikvNskRNfvkCAdfLsZNhCUBkk6OsGbZBeIA=";
 
   types-aiobotocore-dms =
-    buildTypesAiobotocorePackage "dms" "2.22.0"
-      "sha256-cFhJLx8j9sxnnDL8T3MJMhVKB9iLnULg7SxMuU6zpuA=";
+    buildTypesAiobotocorePackage "dms" "3.1.1"
+      "sha256-E/vG1SkS7AP8ZvdcQtQMNVy+utCf8H1/uNWzeX6DrUg=";
 
   types-aiobotocore-docdb =
-    buildTypesAiobotocorePackage "docdb" "2.22.0"
-      "sha256-RrozvADo9QhLzmYrZbkv6CqqAsXqmNPxrNj+gwIrJSs=";
+    buildTypesAiobotocorePackage "docdb" "3.1.1"
+      "sha256-sS7uOOlioCpORdutS9di5tWjyWKVxsmAsl41YKvqoHc=";
 
   types-aiobotocore-docdb-elastic =
-    buildTypesAiobotocorePackage "docdb-elastic" "2.22.0"
-      "sha256-MDZVTe1TKHgJNSipw9XlMcrn2uds7um6lRzpHTEmEu4=";
+    buildTypesAiobotocorePackage "docdb-elastic" "3.1.1"
+      "sha256-cldJlQYNLpEwUX761g2c+zeuqLa4xArpHtNHUtScBeg=";
 
   types-aiobotocore-drs =
-    buildTypesAiobotocorePackage "drs" "2.22.0"
-      "sha256-tLF/Enf7ii3ZMrh31iTmg5d9Ind1S+xg/+9lIB0j38k=";
+    buildTypesAiobotocorePackage "drs" "3.1.1"
+      "sha256-kOCifJbAvdK2nX7nXwsILd0V5xTEmWe12Yni2/qlZOU=";
 
   types-aiobotocore-ds =
-    buildTypesAiobotocorePackage "ds" "2.22.0"
-      "sha256-7fbtZofJ4e4qlsgO6qNjiyxiDqhLlDfBacZPZCLXx6A=";
+    buildTypesAiobotocorePackage "ds" "3.1.1"
+      "sha256-ZOkuDRkJOnOArM1ZHI1cjrz6ZZuWCmEC9rVGUCdJwG4=";
 
   types-aiobotocore-dynamodb =
-    buildTypesAiobotocorePackage "dynamodb" "2.22.0"
-      "sha256-pQahBGreSEdYC0m7WUQ2TO0y+hlvt342/XwlC7VYZ6M=";
+    buildTypesAiobotocorePackage "dynamodb" "3.1.1"
+      "sha256-XUwVNWvPOMUe2tXxPhYzgoH3tlfpAtNpKraEZ7eWVls=";
 
   types-aiobotocore-dynamodbstreams =
-    buildTypesAiobotocorePackage "dynamodbstreams" "2.22.0"
-      "sha256-QZPlFdLirYBBQtGJ5xRIsG8rrFeoFQWqccw2/nPzmzs=";
+    buildTypesAiobotocorePackage "dynamodbstreams" "3.1.1"
+      "sha256-uSW9gS/EOsztp1p0slfe/42wCU+v2cjAqoIeoxBl31E=";
 
   types-aiobotocore-ebs =
-    buildTypesAiobotocorePackage "ebs" "2.22.0"
-      "sha256-E4HJ42BZYYs1r70JArgEBuc9DsGdQ6W2nVOdI/lJgOk=";
+    buildTypesAiobotocorePackage "ebs" "3.1.1"
+      "sha256-tuFQ6kJTKVKsrtqb2htjdozq9j9fuRkXCCQZ32OY0fg=";
 
   types-aiobotocore-ec2 =
-    buildTypesAiobotocorePackage "ec2" "2.22.0"
-      "sha256-IyOQ+2kBtX/e95LKqGEznuSIm68dqAlDmcN98Oma8Eo=";
+    buildTypesAiobotocorePackage "ec2" "3.1.1"
+      "sha256-wbNNprZkFgMbb6xlSXWYjAHVXvL9uaT58hr65OrkUPc=";
 
   types-aiobotocore-ec2-instance-connect =
-    buildTypesAiobotocorePackage "ec2-instance-connect" "2.22.0"
-      "sha256-pDzURXy8RXK2yJteb4ghSFM6igkvcA0W8gf32RDXQwE=";
+    buildTypesAiobotocorePackage "ec2-instance-connect" "3.1.1"
+      "sha256-RDslReCA8S5us9+Y8pFOAK4xKff9XftcCdAnDzJoYgs=";
 
   types-aiobotocore-ecr =
-    buildTypesAiobotocorePackage "ecr" "2.22.0"
-      "sha256-vCBUav3rf4s7ASe2Xtw9DXHV2Pha5owLewkLxW1dSK8=";
+    buildTypesAiobotocorePackage "ecr" "3.1.1"
+      "sha256-FV7cY8YS4aeGH6dGN2pRQ8xPPKBbYMJ9aM7SPoVno0Q=";
 
   types-aiobotocore-ecr-public =
-    buildTypesAiobotocorePackage "ecr-public" "2.22.0"
-      "sha256-ay4pPWBa3oL0hW4UhV06Te5og8mvPu9HIvQH0rGYvfo=";
+    buildTypesAiobotocorePackage "ecr-public" "3.1.1"
+      "sha256-Tb+0296xPRw0V2iY7YGVWU6H/llGtcQK/5m76ls0c2c=";
 
   types-aiobotocore-ecs =
-    buildTypesAiobotocorePackage "ecs" "2.22.0"
-      "sha256-BZlo/ksnLKOBQk0Ha2hmap9K3adGlO3VxqNz4AbT50o=";
+    buildTypesAiobotocorePackage "ecs" "3.1.1"
+      "sha256-XugyQ7DDFcTwY4C42vHWHrox/+jTJnPgmd6abkJMINY=";
 
   types-aiobotocore-efs =
-    buildTypesAiobotocorePackage "efs" "2.22.0"
-      "sha256-GVOzochs9I2VH6bzR1/gXvf1t79QS3PGDZ6IlietZG4=";
+    buildTypesAiobotocorePackage "efs" "3.1.1"
+      "sha256-50Un9Z6R4DeRPcoS4ACF0SpAYWsn179gYIfrfp1bDpM=";
 
   types-aiobotocore-eks =
-    buildTypesAiobotocorePackage "eks" "2.22.0"
-      "sha256-q/pTWkGmGFb3eqBb/Ycw5YBsYQcsNUXeXKc2NGTcXtM=";
+    buildTypesAiobotocorePackage "eks" "3.1.1"
+      "sha256-Ag9/hx7fXFEcgIEebZgncmDIXN9+f8j2PKd5tDrpHLY=";
 
   types-aiobotocore-elastic-inference =
     buildTypesAiobotocorePackage "elastic-inference" "2.20.0"
       "sha256-jFSY7JBVjDQi6dCqlX2LG7jxpSKfILv3XWbYidvtGos=";
 
   types-aiobotocore-elasticache =
-    buildTypesAiobotocorePackage "elasticache" "2.22.0"
-      "sha256-GYiVlvwnfE5p4eu9TgiD4XDBs81kC5iXh/gwTLD3NjU=";
+    buildTypesAiobotocorePackage "elasticache" "3.1.1"
+      "sha256-cMjWUp+m+Xnxr5m6pdzX7bwjSyIar5bvJtKExdIjBwI=";
 
   types-aiobotocore-elasticbeanstalk =
-    buildTypesAiobotocorePackage "elasticbeanstalk" "2.22.0"
-      "sha256-JAYQKMUrYsVZIcLxxq5HK/VwUsieM53Mg8HBzypI+mg=";
+    buildTypesAiobotocorePackage "elasticbeanstalk" "3.1.1"
+      "sha256-Qf8OL4VvshNmsi80a5cPl0BWGB76pEqw1I+oeL0/vNE=";
 
   types-aiobotocore-elastictranscoder =
-    buildTypesAiobotocorePackage "elastictranscoder" "2.22.0"
-      "sha256-7K5h65LrXLRjqp0sGDE4Z6DesYzxV6woQfT+gGizluc=";
+    buildTypesAiobotocorePackage "elastictranscoder" "2.25.2"
+      "sha256-5t214U60d2kSf8bmUiEkj4OMFf3+SbNRGqLif1Rj28E=";
 
   types-aiobotocore-elb =
-    buildTypesAiobotocorePackage "elb" "2.22.0"
-      "sha256-Q0pVOC3HgSNMJkZYO/pIrQfz9XSOdM53dOTVInfWf08=";
+    buildTypesAiobotocorePackage "elb" "3.1.1"
+      "sha256-yogZLWnsvn0PEtN7kcwNhcQLs+xFy80YO2qM2VTDajM=";
 
   types-aiobotocore-elbv2 =
-    buildTypesAiobotocorePackage "elbv2" "2.22.0"
-      "sha256-uu83undxPrbaEZQvlTeUtis16AbgGGikiw/RlqcRGfQ=";
+    buildTypesAiobotocorePackage "elbv2" "3.1.1"
+      "sha256-GAqIVcHM5PnKt3GpEN3YnBhVVJIUhdWPUXP81nWVNHY=";
 
   types-aiobotocore-emr =
-    buildTypesAiobotocorePackage "emr" "2.22.0"
-      "sha256-QYfueAtYDpc/Q4VXU+SqlqPnQZOGJfEznviiQ3BfTi0=";
+    buildTypesAiobotocorePackage "emr" "3.1.1"
+      "sha256-/WhzJCP3CQWmG0H7orv++8lnHY0N6e8sSOV1vcGvFCI=";
 
   types-aiobotocore-emr-containers =
-    buildTypesAiobotocorePackage "emr-containers" "2.22.0"
-      "sha256-j/LWzU7CFFSE4v2Xl1SPLJ+An++AjFt/KTVOj2sPx9k=";
+    buildTypesAiobotocorePackage "emr-containers" "3.1.1"
+      "sha256-V49u67frOX834yUEQ8EJMK/FWOMN3ZGe6SobwTu954Q=";
 
   types-aiobotocore-emr-serverless =
-    buildTypesAiobotocorePackage "emr-serverless" "2.22.0"
-      "sha256-ZiR+eR/QJmGxEZQz5GNX2kd8P3hH9WKeobvi4ChQKcI=";
+    buildTypesAiobotocorePackage "emr-serverless" "3.1.1"
+      "sha256-uaeD1ZymUgqb2O3vWONy62IKsraEoaHMJltR2VNWmiA=";
 
   types-aiobotocore-entityresolution =
-    buildTypesAiobotocorePackage "entityresolution" "2.22.0"
-      "sha256-xpkvQKSWVvktiX9gn/iAA7gyKFE/V3q/gr3Bb9rHaro=";
+    buildTypesAiobotocorePackage "entityresolution" "3.1.1"
+      "sha256-ApIo6XIUmWhLnl/RDEMDJGUzoUxMyG6GqutmBKQZzBA=";
 
   types-aiobotocore-es =
-    buildTypesAiobotocorePackage "es" "2.22.0"
-      "sha256-wKgvGgj6hfJrvEGjNxMuJ5DTFhh0d4cutSS/8du+iew=";
+    buildTypesAiobotocorePackage "es" "3.1.1"
+      "sha256-+HtQ93rFG7IOmciPeqTtnTtNisWVcjfqQFl/veLxbp4=";
 
   types-aiobotocore-events =
-    buildTypesAiobotocorePackage "events" "2.22.0"
-      "sha256-fsZvKKOSpEL8u0Ok3RmtH9VEm9wA6Gg/Eg5Svn9mjpU=";
+    buildTypesAiobotocorePackage "events" "3.1.1"
+      "sha256-ppz0XPiY4CuSKVz2kypznisTzIOlviurs2CmE7dRwbg=";
 
   types-aiobotocore-evidently =
-    buildTypesAiobotocorePackage "evidently" "2.22.0"
-      "sha256-Jq2cSoGCGisX9a6DJ5FyFCc/BIVx2mWxUIcHjyS446c=";
+    buildTypesAiobotocorePackage "evidently" "3.1.1"
+      "sha256-g+XQEgqqZul8kOg0kstdYMvw2tu6zhC9GZGgs7WH3Mo=";
 
   types-aiobotocore-finspace =
-    buildTypesAiobotocorePackage "finspace" "2.22.0"
-      "sha256-qscVqOSqtcxwHkqyy3a83rtiKKl6fq5h9XBWE3zz6Us=";
+    buildTypesAiobotocorePackage "finspace" "3.1.1"
+      "sha256-91tfoDjQoRqrcEcvEhBpIoB01KCZGMptnhT1jPhwSLI=";
 
   types-aiobotocore-finspace-data =
-    buildTypesAiobotocorePackage "finspace-data" "2.22.0"
-      "sha256-igN2Ra1ckXXT5n+HVjME/k3TX5gbNu15vYUtXmQfoPs=";
+    buildTypesAiobotocorePackage "finspace-data" "3.1.1"
+      "sha256-ZdDgGAMDiy4OGMAwHPhvZup4XFYOL8eRhitk/9K7SZU=";
 
   types-aiobotocore-firehose =
-    buildTypesAiobotocorePackage "firehose" "2.22.0"
-      "sha256-J1tkl71/lKJzYJuppe/GXeUm/W39kNjdyKpiKKoMlQs=";
+    buildTypesAiobotocorePackage "firehose" "3.1.1"
+      "sha256-Sj0btYoRtCwdsXVLVER+zjM7vkqS9x8bi7TXHJEwHsk=";
 
   types-aiobotocore-fis =
-    buildTypesAiobotocorePackage "fis" "2.22.0"
-      "sha256-K1rIFYdkjXDhbMyFZH3Yp0YDmLaYDxSeveK9qwgAEgc=";
+    buildTypesAiobotocorePackage "fis" "3.1.1"
+      "sha256-oZbVOEvNzC765J5XnLmCkD4QlZRd+6CZR+bJ2p6ibWA=";
 
   types-aiobotocore-fms =
-    buildTypesAiobotocorePackage "fms" "2.22.0"
-      "sha256-NpvQxqnwxZhy4R39IO4O/HVbeMj77j50U8Xf+vonpQY=";
+    buildTypesAiobotocorePackage "fms" "3.1.1"
+      "sha256-uD67/fJl+JhLZS8xtr4rhjfeKf4vMA27x4xGJzsQiKI=";
 
   types-aiobotocore-forecast =
-    buildTypesAiobotocorePackage "forecast" "2.22.0"
-      "sha256-9qSNQ3HPngBm1OQIJzCLIHxPZGaKKj09+2gniQCUk2E=";
+    buildTypesAiobotocorePackage "forecast" "3.1.1"
+      "sha256-eZAMtbHi/kGw2oAjzatHHXtV2XO9dK6o2JXxEosJM/g=";
 
   types-aiobotocore-forecastquery =
-    buildTypesAiobotocorePackage "forecastquery" "2.22.0"
-      "sha256-ewWTNvhI8hmLmZ0pV4aKMLy2Nk0RQeFLmb8BcoEXLHQ=";
+    buildTypesAiobotocorePackage "forecastquery" "3.1.1"
+      "sha256-BUN0WyLcMXL48o/z9vF3AgkXMkj4SAggfq33BemAsCE=";
 
   types-aiobotocore-frauddetector =
-    buildTypesAiobotocorePackage "frauddetector" "2.22.0"
-      "sha256-QrWDDip3PI4Al9ZZErFHleeBS8XQHAvMj1G4dFtS1PU=";
+    buildTypesAiobotocorePackage "frauddetector" "3.1.1"
+      "sha256-9+meGYgV6rC8Y8Qymtj0hWvpjlZReUBB4dym4B034bo=";
+
+  types-aiobotocore-freetier =
+    buildTypesAiobotocorePackage "freetier" "3.1.1"
+      "sha256-LzJVHqaJUEnjQMM5Zjv7g8K5jixmssJ7mpmoDgNupr0=";
 
   types-aiobotocore-fsx =
-    buildTypesAiobotocorePackage "fsx" "2.22.0"
-      "sha256-D0kG0EDaLu5EuoYn9ycrc5xPgcAchkV473NlGFT7NWA=";
+    buildTypesAiobotocorePackage "fsx" "3.1.1"
+      "sha256-0jXg5ywMfBEByF57McOf/9WD+VHLPNcNyNxLBMtoyBI=";
 
   types-aiobotocore-gamelift =
-    buildTypesAiobotocorePackage "gamelift" "2.22.0"
-      "sha256-pYUims8YaT89VZPIjuCakFsf6npK3f2cHbqbdfW7MQw=";
+    buildTypesAiobotocorePackage "gamelift" "3.1.1"
+      "sha256-xb92KmPUK9jcK4ALfZ2BT0W6wEYq+LhMMskmMIDCZWE=";
 
   types-aiobotocore-gamesparks =
     buildTypesAiobotocorePackage "gamesparks" "2.7.0"
       "sha256-oVbKtuLMPpCQcZYx/cH1Dqjv/t6/uXsveflfFVqfN+8=";
 
   types-aiobotocore-glacier =
-    buildTypesAiobotocorePackage "glacier" "2.22.0"
-      "sha256-5GbN3WwsUzNGXLLq/HENXsHw9HId36pu1m3JmQplu1M=";
+    buildTypesAiobotocorePackage "glacier" "3.1.1"
+      "sha256-R4vvIPDrO37M8Ob8mpPojNHTI9J7X1305GK68HKQJK0=";
 
   types-aiobotocore-globalaccelerator =
-    buildTypesAiobotocorePackage "globalaccelerator" "2.22.0"
-      "sha256-cM3wBa9uvSArXsLdwQnAXcFSHX3L14vZMDmk6gZMUWU=";
+    buildTypesAiobotocorePackage "globalaccelerator" "3.1.1"
+      "sha256-7NHbRGc0GNuEnQoNjt1AIbrilaBT0lski4/IzAUbVXs=";
 
   types-aiobotocore-glue =
-    buildTypesAiobotocorePackage "glue" "2.22.0"
-      "sha256-UlDESCTs36HTSEdWd26A0q2XbD+CkDoTVFgN98N3DA4=";
+    buildTypesAiobotocorePackage "glue" "3.1.1"
+      "sha256-NH8DRpn8ySvLLadhahnn2ufkFklsvfFS3was5h5o56I=";
 
   types-aiobotocore-grafana =
-    buildTypesAiobotocorePackage "grafana" "2.22.0"
-      "sha256-6J3YiF7Zm6tGqiWWmUOSKUoOQDF+c+ogaHl7o/0VPjo=";
+    buildTypesAiobotocorePackage "grafana" "3.1.1"
+      "sha256-BUsfLqM+ZXwgeu0tFrrCAtzwCr34mRQJXWHFiV3I3Fw=";
 
   types-aiobotocore-greengrass =
-    buildTypesAiobotocorePackage "greengrass" "2.22.0"
-      "sha256-3p8y5TlL3OzPV6BHahvP0hzKNeRDYX2pombm6VqvQAE=";
+    buildTypesAiobotocorePackage "greengrass" "3.1.1"
+      "sha256-VwBqqxzcOHJlOuopdVebGeHg8byujKgdBlZk4EvcYiE=";
 
   types-aiobotocore-greengrassv2 =
-    buildTypesAiobotocorePackage "greengrassv2" "2.22.0"
-      "sha256-HI/GOR2lwuIlX/HIyarr5IjKA1oOaYqMSx8+r94iyTU=";
+    buildTypesAiobotocorePackage "greengrassv2" "3.1.1"
+      "sha256-xoTv+sTdjTodlRoeC3Zx0ZZ1Gffx8iNJ00eXPRIrNNk=";
 
   types-aiobotocore-groundstation =
-    buildTypesAiobotocorePackage "groundstation" "2.22.0"
-      "sha256-MvzJnp9daBoHIj0EzAUOAu3zNvlxE6w8ZtUTEl20N8Y=";
+    buildTypesAiobotocorePackage "groundstation" "3.1.1"
+      "sha256-9FCCRyAt930MW00B6H3mEEIfgjc8sT6rFX3QdzW7HKI=";
 
   types-aiobotocore-guardduty =
-    buildTypesAiobotocorePackage "guardduty" "2.22.0"
-      "sha256-0E0TtmnDsUS8UsUp30tjTCHMj8L7fnpZR6Tr/upwfCk=";
+    buildTypesAiobotocorePackage "guardduty" "3.1.1"
+      "sha256-XX7YXw4y0xSbTcVnsJpol7UR3ZV5qpVlcvCtkP6Yu6s=";
 
   types-aiobotocore-health =
-    buildTypesAiobotocorePackage "health" "2.22.0"
-      "sha256-TZNPKx9V6fVzSOyAtIDfatVrnzndns7qQTfamihwwlI=";
+    buildTypesAiobotocorePackage "health" "3.1.1"
+      "sha256-DM4VxmF1Ocz9tyeClVuqNniylCVgZ1dyupz2Pr5aA5A=";
 
   types-aiobotocore-healthlake =
-    buildTypesAiobotocorePackage "healthlake" "2.22.0"
-      "sha256-PooJiPQemCvy0TDNeFUNQ6SOTHkOveqyc6AZRPXddJE=";
+    buildTypesAiobotocorePackage "healthlake" "3.1.1"
+      "sha256-jfOzrgBa1zSCFxyoXmit/ODHKbFGJoO9OMFA0KAQh00=";
 
   types-aiobotocore-honeycode =
     buildTypesAiobotocorePackage "honeycode" "2.13.0"
       "sha256-DeeheoQeFEcDH21DSNs2kSR1rjnPLtTgz0yNCFnE+Io=";
 
   types-aiobotocore-iam =
-    buildTypesAiobotocorePackage "iam" "2.22.0"
-      "sha256-js+G1ckKh6WrnOLPi9e6ZhXxz3Oob40sLOIYbgdE8Ig=";
+    buildTypesAiobotocorePackage "iam" "3.1.1"
+      "sha256-n9sndad94xwJ9E78XbCOOJ5bTxmUiKZ14SruaT3JQHg=";
 
   types-aiobotocore-identitystore =
-    buildTypesAiobotocorePackage "identitystore" "2.22.0"
-      "sha256-kIVbk5h5FXL4zDXJHYd1W7Q2QB54vNVTeYz9b1PNKb4=";
+    buildTypesAiobotocorePackage "identitystore" "3.1.1"
+      "sha256-dy7SnosNkHban5PxAqbjA1KCwpBNQvrHTizCd/3iT2E=";
 
   types-aiobotocore-imagebuilder =
-    buildTypesAiobotocorePackage "imagebuilder" "2.22.0"
-      "sha256-rSxgMT9oibt1MfidO/tDOFyVBc5gHSDUr47lkbdsD6Y=";
+    buildTypesAiobotocorePackage "imagebuilder" "3.1.1"
+      "sha256-Tw6ES0pPchxjFUHeGjhRFj64ym2cTInkb4EptIJpBeU=";
 
   types-aiobotocore-importexport =
-    buildTypesAiobotocorePackage "importexport" "2.22.0"
-      "sha256-Sg1OVOJjCttSdBnFANnJMPxiLKc6rNfdohchzTZ6Y7A=";
+    buildTypesAiobotocorePackage "importexport" "3.1.1"
+      "sha256-qiXUAB5rL3f4dMpUFZOUa5N9zFJhTYXjYhE7eWW9umk=";
 
   types-aiobotocore-inspector =
-    buildTypesAiobotocorePackage "inspector" "2.22.0"
-      "sha256-E9k2RzxSCPgyJ+bCeNKFTn6Mup8lhrJpG7JcIxqz0KU=";
+    buildTypesAiobotocorePackage "inspector" "3.1.1"
+      "sha256-7L/SppxIz+2JJ6LgzQEEBTMyqZs2LRrLvG23MGx5PGw=";
 
   types-aiobotocore-inspector2 =
-    buildTypesAiobotocorePackage "inspector2" "2.22.0"
-      "sha256-cXMdVq2u25k6CvQY6YoQ4IFnK8uPZAxOIEqR9XUsjoM=";
+    buildTypesAiobotocorePackage "inspector2" "3.1.1"
+      "sha256-XkcmWvIhAwjeZvLM5J9Ns3r+i2BOrN+SLg7vjdOjG4k=";
 
   types-aiobotocore-internetmonitor =
-    buildTypesAiobotocorePackage "internetmonitor" "2.22.0"
-      "sha256-IJwRCPKKNM67RCauePdTaYGXu3AP9TVjb5U32JO57f4=";
+    buildTypesAiobotocorePackage "internetmonitor" "3.1.1"
+      "sha256-C0KPUEQwPq7unUsHEVgtl5jb9avF2/jRaKR3LMKvBaU=";
 
   types-aiobotocore-iot =
-    buildTypesAiobotocorePackage "iot" "2.22.0"
-      "sha256-jSoP8yfJgRmrB04USAcsLMC2pTkIvyNXHBk8NajC2mc=";
+    buildTypesAiobotocorePackage "iot" "3.1.1"
+      "sha256-uECrDJcFYUODeMCfrC8f0dj57oVKribPA+ClgYiWWZk=";
 
   types-aiobotocore-iot-data =
-    buildTypesAiobotocorePackage "iot-data" "2.22.0"
-      "sha256-jS4TG1BpySpDByWXt5tIZq8L12A15YEs9fVa81MpKV0=";
+    buildTypesAiobotocorePackage "iot-data" "3.1.1"
+      "sha256-SEHtsRKq8JzYhHyZh2gw6pOd6PxgVa7bU4hspoM3lK0=";
 
   types-aiobotocore-iot-jobs-data =
-    buildTypesAiobotocorePackage "iot-jobs-data" "2.22.0"
-      "sha256-PZynB4jAQL4LylFlMlgSbErUQyQ9asCNQlX3W2bJhjs=";
+    buildTypesAiobotocorePackage "iot-jobs-data" "3.1.1"
+      "sha256-+BYbu4Fdvz6l4rB3IQpFrTDuuduXxv6nPb1IsR1Iv1M=";
 
   types-aiobotocore-iot-roborunner =
     buildTypesAiobotocorePackage "iot-roborunner" "2.12.2"
@@ -688,786 +696,802 @@ in
       "sha256-qK5dPunPAbC7xIramYINSda50Zum6yQ4n2BfuOgLC58=";
 
   types-aiobotocore-iotanalytics =
-    buildTypesAiobotocorePackage "iotanalytics" "2.22.0"
-      "sha256-5lS5QJHQ50Ppr1LtlJ18jucI2qG8PfsnVGT6gBRnjQM=";
+    buildTypesAiobotocorePackage "iotanalytics" "3.1.1"
+      "sha256-Yf1vvasgtUxFiEfSrlPq0Q2yhbAOGyRATzid+qYjlj8=";
 
   types-aiobotocore-iotdeviceadvisor =
-    buildTypesAiobotocorePackage "iotdeviceadvisor" "2.22.0"
-      "sha256-VGQJdbS/bEWQ4W00+Yg8CfKzEwdT9A9G+t6jyBDrKnU=";
+    buildTypesAiobotocorePackage "iotdeviceadvisor" "3.1.1"
+      "sha256-t4ADzmTe2GlZOzxKg+0wzb3Om1KXiF5KsiqcTQ2Dlr8=";
 
   types-aiobotocore-iotevents =
-    buildTypesAiobotocorePackage "iotevents" "2.22.0"
-      "sha256-YMigEXhdZkcaT+n9Fbl4Fcw7iMOLPqU24E2OM/30xjw=";
+    buildTypesAiobotocorePackage "iotevents" "3.1.1"
+      "sha256-ribAg15KxQMCKeXkFoRXC68P5YgzEkl9icRnzmOASBY=";
 
   types-aiobotocore-iotevents-data =
-    buildTypesAiobotocorePackage "iotevents-data" "2.22.0"
-      "sha256-h9eRdh5fUjfBBUiHkR8kljVzhFTIEvwLXsZXiVFIfCo=";
+    buildTypesAiobotocorePackage "iotevents-data" "3.1.1"
+      "sha256-TKM5f8PpMzWOG7WKlp79Z1m8UmU+jV6IKw6Ttg8BPyM=";
 
   types-aiobotocore-iotfleethub =
-    buildTypesAiobotocorePackage "iotfleethub" "2.22.0"
-      "sha256-fM5Ki9vKi+pJaHoxnAYoOolLK6NM/imGNe69s8K54bg=";
+    buildTypesAiobotocorePackage "iotfleethub" "2.24.2"
+      "sha256-WzdCGMVRCl8x+UswlyApMYMYT3Rvtng0ID2YyV08NzA=";
 
   types-aiobotocore-iotfleetwise =
-    buildTypesAiobotocorePackage "iotfleetwise" "2.22.0"
-      "sha256-9tNYETHROFzLuI9RomgLatklqdfr0MMx5PL8DeM/ZaY=";
+    buildTypesAiobotocorePackage "iotfleetwise" "3.1.1"
+      "sha256-T2UfFaBxEPTU7O2Rjq6uqcaF3w25+yeZtOIoVACZoNA=";
 
   types-aiobotocore-iotsecuretunneling =
-    buildTypesAiobotocorePackage "iotsecuretunneling" "2.22.0"
-      "sha256-dPtJJwjguH0/ulQyc0PvBUDczFozBdYIJ0cB3paEHfo=";
+    buildTypesAiobotocorePackage "iotsecuretunneling" "3.1.1"
+      "sha256-J+JDRyXPar1IK/7LzpHhZJjTVMlOvkLBIy7h2GghfL8=";
 
   types-aiobotocore-iotsitewise =
-    buildTypesAiobotocorePackage "iotsitewise" "2.22.0"
-      "sha256-76GVd5cKsVns06IFsiCbf8u1U0JwAL47YMkoimW0iQE=";
+    buildTypesAiobotocorePackage "iotsitewise" "3.1.1"
+      "sha256-nPSRxIdJwsOd2eZ92czbRrQRr0Sce301dYDuoANX7Sg=";
 
   types-aiobotocore-iotthingsgraph =
-    buildTypesAiobotocorePackage "iotthingsgraph" "2.22.0"
-      "sha256-g7adxw/KSBkvQxYtcVg2Uxwr+7jBC6+G+IdtRlM/szU=";
+    buildTypesAiobotocorePackage "iotthingsgraph" "3.1.1"
+      "sha256-mu5gEdtzoHZElnP5U7OArje99L/0AyEcoMac8Crl6fQ=";
 
   types-aiobotocore-iottwinmaker =
-    buildTypesAiobotocorePackage "iottwinmaker" "2.22.0"
-      "sha256-CoLbJ6ocP5VC5viO4dt/XtnUcf0SuJvptwa9RzoLJtg=";
+    buildTypesAiobotocorePackage "iottwinmaker" "3.1.1"
+      "sha256-BYi7WZ6cgdKF44wpaQf+yTySMnZ1Tb6DNmrdfKF8woc=";
 
   types-aiobotocore-iotwireless =
-    buildTypesAiobotocorePackage "iotwireless" "2.22.0"
-      "sha256-94mPO3XRIcFKsQclVhnEp9vehZNQpFSyoTi3dTsPA0w=";
+    buildTypesAiobotocorePackage "iotwireless" "3.1.1"
+      "sha256-zHz/XfXo78f2WUiPY/3K67s38JahcS0+d0F8w56ik18=";
 
   types-aiobotocore-ivs =
-    buildTypesAiobotocorePackage "ivs" "2.22.0"
-      "sha256-QxV1vq3+drtjRTA/ZwE1F7kdvS8lWXQgSUesMlP2L4M=";
+    buildTypesAiobotocorePackage "ivs" "3.1.1"
+      "sha256-JqJ4fPFtkefMuCJ1K/jSnSo701YsozYIGz3ysvB2E2k=";
 
   types-aiobotocore-ivs-realtime =
-    buildTypesAiobotocorePackage "ivs-realtime" "2.22.0"
-      "sha256-oyP+yuOi3RbQNG68lgiHReEcelbkmC6i2Y962+ai5XM=";
+    buildTypesAiobotocorePackage "ivs-realtime" "3.1.1"
+      "sha256-jx/DqAPz4fREEGJaySfRK/VYL1miyvV/MXywmyxr5LU=";
 
   types-aiobotocore-ivschat =
-    buildTypesAiobotocorePackage "ivschat" "2.22.0"
-      "sha256-vSBQbddu5xpmR4J3lYRlR6D96M5WCCurdrEvsVwIqS4=";
+    buildTypesAiobotocorePackage "ivschat" "3.1.1"
+      "sha256-FwDxpP0T62gn11QLSfK/uNRtKpmX63K0IQORr+uPmvU=";
 
   types-aiobotocore-kafka =
-    buildTypesAiobotocorePackage "kafka" "2.22.0"
-      "sha256-+Un6+KbSLJarlbk/t7L7ADQ6pmgsMsU1z5zsMm2xM5w=";
+    buildTypesAiobotocorePackage "kafka" "3.1.1"
+      "sha256-VFXJnmUFR5amQETMT0KXjwIdjoWiAjx0/KytmFqjxNA=";
 
   types-aiobotocore-kafkaconnect =
-    buildTypesAiobotocorePackage "kafkaconnect" "2.22.0"
-      "sha256-wiX+/9m/Ou119WlTYChF9LC4d7FGV8Z+O9U2PfkL9eU=";
+    buildTypesAiobotocorePackage "kafkaconnect" "3.1.1"
+      "sha256-uOizMqu/4gsyY+aQbaMdUWg7raxukPn/MtqFBW8Kbmg=";
 
   types-aiobotocore-kendra =
-    buildTypesAiobotocorePackage "kendra" "2.22.0"
-      "sha256-qM+3w6VTIDp1ZWtt3E3zjns/AY38f0lRk+icoEfHHgI=";
+    buildTypesAiobotocorePackage "kendra" "3.1.1"
+      "sha256-wmy+I+Q3tlp2h9fKrU1pQvcYqX/deQb198snvFE2XTw=";
 
   types-aiobotocore-kendra-ranking =
-    buildTypesAiobotocorePackage "kendra-ranking" "2.22.0"
-      "sha256-GVLV0/tw7qDPiNqj2ZzWfN2RHAAAvdwKDa7/uch+O7U=";
+    buildTypesAiobotocorePackage "kendra-ranking" "3.1.1"
+      "sha256-skYaLFofiYpTBLEIX2JYhE0wxvr3DbYHYNGH9YRBPO4=";
 
   types-aiobotocore-keyspaces =
-    buildTypesAiobotocorePackage "keyspaces" "2.22.0"
-      "sha256-MsGW+N7q8kEijzG7eakrPeAVTvMNLG/XpyS1yT1rbjE=";
+    buildTypesAiobotocorePackage "keyspaces" "3.1.1"
+      "sha256-o9AkLUE2ZyvvJa9fOwNkKIRwLQ8hEI/XF6W9yJ7g1WM=";
 
   types-aiobotocore-kinesis =
-    buildTypesAiobotocorePackage "kinesis" "2.22.0"
-      "sha256-25Cz0sZYTHynV2Q/u4lo0dfk5G6xbCXt+XPoJxJLZ1o=";
+    buildTypesAiobotocorePackage "kinesis" "3.1.1"
+      "sha256-NmUQMF6PrPg4FkYXbC6iyC12SiNJ7u33sA3fmyXbEr4=";
 
   types-aiobotocore-kinesis-video-archived-media =
-    buildTypesAiobotocorePackage "kinesis-video-archived-media" "2.22.0"
-      "sha256-UfnJWV0LohEfXxPUrNxtMkjcyoSoA7cAYa/91AaDvlY=";
+    buildTypesAiobotocorePackage "kinesis-video-archived-media" "3.1.1"
+      "sha256-Y0z2ukmCDuFa4qZWtoc7rj8/Hhh0ASMFY3wFI9xCeT0=";
 
   types-aiobotocore-kinesis-video-media =
-    buildTypesAiobotocorePackage "kinesis-video-media" "2.22.0"
-      "sha256-+3n/6/EbZmeaZ459VFr4WWdoEkE4D5Egu5/vhayBXEw=";
+    buildTypesAiobotocorePackage "kinesis-video-media" "3.1.1"
+      "sha256-EC8/s+NbcMQBJ/uuGiDINiJQQFMuTS4DY4xZ2yIPp30=";
 
   types-aiobotocore-kinesis-video-signaling =
-    buildTypesAiobotocorePackage "kinesis-video-signaling" "2.22.0"
-      "sha256-x9VqVZYOoC6cKnOttuDsfcp3J7euSXc36uhMax1SSUM=";
+    buildTypesAiobotocorePackage "kinesis-video-signaling" "3.1.1"
+      "sha256-/QqHPFOvSPMx+LPwvWC+G5aBH+bBG8hlz6x7ksC+VVM=";
 
   types-aiobotocore-kinesis-video-webrtc-storage =
-    buildTypesAiobotocorePackage "kinesis-video-webrtc-storage" "2.22.0"
-      "sha256-1qcLB0V8daH8rnEBiOxQ4gFDeeG/jgSPBVmOg/Q6W+Y=";
+    buildTypesAiobotocorePackage "kinesis-video-webrtc-storage" "3.1.1"
+      "sha256-IJL++00bJoNolXDl3iOE0EKjc9oSi7wJJK3w/S31vFA=";
 
   types-aiobotocore-kinesisanalytics =
-    buildTypesAiobotocorePackage "kinesisanalytics" "2.22.0"
-      "sha256-rc6O/FlwOSTFpBlf9IftYzssk2vlJjwDrDghcylqbGA=";
+    buildTypesAiobotocorePackage "kinesisanalytics" "3.1.1"
+      "sha256-HRWVpgdKqD2BJqBuRFflKQUi+II/tNnWDdCv9i0O21A=";
 
   types-aiobotocore-kinesisanalyticsv2 =
-    buildTypesAiobotocorePackage "kinesisanalyticsv2" "2.22.0"
-      "sha256-cRnpl0XSm62cfrQDvXmmfspQCDHL2ZE7jzP7paSGRsY=";
+    buildTypesAiobotocorePackage "kinesisanalyticsv2" "3.1.1"
+      "sha256-7+p62UiSq6UouX89LVPCGLXJLIdk340kw77BatgmiIc=";
 
   types-aiobotocore-kinesisvideo =
-    buildTypesAiobotocorePackage "kinesisvideo" "2.22.0"
-      "sha256-LBeBX3YhgU0ClxUfgr6Nx5NbSWkFzeNisHkhqy8TeNI=";
+    buildTypesAiobotocorePackage "kinesisvideo" "3.1.1"
+      "sha256-iJgLtaZuguBPqrpBbl8XCeB8L3YONFJs7Bcx0fT1BD4=";
 
   types-aiobotocore-kms =
-    buildTypesAiobotocorePackage "kms" "2.22.0"
-      "sha256-he2H86tQQLPj2sAYr0ymLN9r1gn8JD+Wea+pweSNpjw=";
+    buildTypesAiobotocorePackage "kms" "3.1.1"
+      "sha256-9KqXNCZC/Ll+axgQ6ISZsXeRbMSx1eiw51YVoEkTULA=";
 
   types-aiobotocore-lakeformation =
-    buildTypesAiobotocorePackage "lakeformation" "2.22.0"
-      "sha256-Sbfj/iPWlvyataiUpbiEIc/3zkBlVdMfV804uIZOi3E=";
+    buildTypesAiobotocorePackage "lakeformation" "3.1.1"
+      "sha256-Ie0AIzE7FbjQNNJrKWuEre/caIuhgD4XYVHUn8KEOhQ=";
 
   types-aiobotocore-lambda =
-    buildTypesAiobotocorePackage "lambda" "2.22.0"
-      "sha256-hfkG7IFqKirFS2oHUlLTW6dNnxB6aracVCdaZMrZ4m0=";
+    buildTypesAiobotocorePackage "lambda" "3.1.1"
+      "sha256-P4VgxLV5cD1bBHNTtSEWgT6URSfm8FaohsK86wJY68s=";
 
   types-aiobotocore-lex-models =
-    buildTypesAiobotocorePackage "lex-models" "2.22.0"
-      "sha256-M+cUEoSWd8B316+MuXTXAG2qJdhjlRjpAHLPENOLKQE=";
+    buildTypesAiobotocorePackage "lex-models" "3.1.1"
+      "sha256-NI5cDtptyAr5unDsiS3keghxZvA+07Oqc7EIUEEAYgc=";
 
   types-aiobotocore-lex-runtime =
-    buildTypesAiobotocorePackage "lex-runtime" "2.22.0"
-      "sha256-ciKvrhoJJQRkAJzHu3Jq+vdBuIvzh5fWePSC466EnRc=";
+    buildTypesAiobotocorePackage "lex-runtime" "3.1.1"
+      "sha256-qYg/L6Ojc6cCNQ7O1+XyAVrZnnOje5aQvHch0rnN93k=";
 
   types-aiobotocore-lexv2-models =
-    buildTypesAiobotocorePackage "lexv2-models" "2.22.0"
-      "sha256-8u9dPu0JEg0OfI4/Iqw4Jk/vcjRoYfR7WISY4H5E13s=";
+    buildTypesAiobotocorePackage "lexv2-models" "3.1.1"
+      "sha256-kHF1aE/z+Dvmf/km/qm9Zd9TrKXjU4i0UQ9a0BicG8I=";
 
   types-aiobotocore-lexv2-runtime =
-    buildTypesAiobotocorePackage "lexv2-runtime" "2.22.0"
-      "sha256-HyYDbt8aGGsD2afomoXSm2B5zTqdKHzo4FhBmE8Z8Ek=";
+    buildTypesAiobotocorePackage "lexv2-runtime" "3.1.1"
+      "sha256-2+rCKwWQdlV9EH0+b0iCMOgQKfzl2OMFscWu5oCZKrM=";
 
   types-aiobotocore-license-manager =
-    buildTypesAiobotocorePackage "license-manager" "2.22.0"
-      "sha256-HaexawdY3kr5O6sBdQmHCy2aJKqOylBRq3W/kzTe3qk=";
+    buildTypesAiobotocorePackage "license-manager" "3.1.1"
+      "sha256-WZVMql96LyLsawY70m6O8U4sJmJz7l3y4Ts2TbXNYkQ=";
 
   types-aiobotocore-license-manager-linux-subscriptions =
-    buildTypesAiobotocorePackage "license-manager-linux-subscriptions" "2.22.0"
-      "sha256-iGexg7/ItikVgyMkD/LdpZdL6Gergu9/tYQwyAgy3qU=";
+    buildTypesAiobotocorePackage "license-manager-linux-subscriptions" "3.1.1"
+      "sha256-ycMCdu3hCU9EHUkjzPj6gjNAWIVajOioMFo968ersPA=";
 
   types-aiobotocore-license-manager-user-subscriptions =
-    buildTypesAiobotocorePackage "license-manager-user-subscriptions" "2.22.0"
-      "sha256-y/eO57cyQkbfo4lqjB7/GN/jPU+RiPSiT4Sx7S4XaDY=";
+    buildTypesAiobotocorePackage "license-manager-user-subscriptions" "3.1.1"
+      "sha256-xxmcCG/Us8WfcIThW857iD+1m4Q4cLQkvnqpjBydEZw=";
 
   types-aiobotocore-lightsail =
-    buildTypesAiobotocorePackage "lightsail" "2.22.0"
-      "sha256-aROLfsc51jC3xhxlwqTXzNjBBX/uVSp7C8E6CbP7MsU=";
+    buildTypesAiobotocorePackage "lightsail" "3.1.1"
+      "sha256-yiBpTNnLHaXYh1GIPcAjTPmVoTcfdPX19iMcQAaMSqY=";
 
   types-aiobotocore-location =
-    buildTypesAiobotocorePackage "location" "2.22.0"
-      "sha256-Zyd0olPEQY0Rvw2m6l+u3CbgaZxBNSZZF1Ep8PTfdZw=";
+    buildTypesAiobotocorePackage "location" "3.1.1"
+      "sha256-wEPtBnzLrITVYHRyTiovD7giY+KmwsB5WRGFOz4iOic=";
 
   types-aiobotocore-logs =
-    buildTypesAiobotocorePackage "logs" "2.22.0"
-      "sha256-TM4gkzjsa9MLQquxj9X+ace0c0tzQ/I6WaxMD0VrBcM=";
+    buildTypesAiobotocorePackage "logs" "3.1.1"
+      "sha256-f0ZOlNmGdtYm2PLkiIlKaTcfksxXdejsjVmXbVdriH0=";
 
   types-aiobotocore-lookoutequipment =
-    buildTypesAiobotocorePackage "lookoutequipment" "2.22.0"
-      "sha256-NYcdtdIwKyP6rXkhAzcsGvHXr6rTtKp01T4yBsIog7M=";
+    buildTypesAiobotocorePackage "lookoutequipment" "3.1.1"
+      "sha256-KkI39r2VShirYFylvSZGRwHqtt83zteWHwAxabDxmnY=";
 
   types-aiobotocore-lookoutmetrics =
-    buildTypesAiobotocorePackage "lookoutmetrics" "2.22.0"
-      "sha256-GQjiDaC8zu4z6NRiDXE0o2A6N8mT20iNKUzZuV4NCsk=";
+    buildTypesAiobotocorePackage "lookoutmetrics" "2.24.2"
+      "sha256-u84KeWwmp42KajZ3HnztG1106RN4dGh3jcMfSkJYXNY=";
 
   types-aiobotocore-lookoutvision =
-    buildTypesAiobotocorePackage "lookoutvision" "2.22.0"
-      "sha256-3QevdI5IktoSUBzknsmguCM+1yhAV/HTtHE4QxPYZHY=";
+    buildTypesAiobotocorePackage "lookoutvision" "2.24.2"
+      "sha256-HvNqynXLpYFJceCmrlncodqWuoczilMB8QtbCS5pcDM=";
 
   types-aiobotocore-m2 =
-    buildTypesAiobotocorePackage "m2" "2.22.0"
-      "sha256-3alYDnfO/tjrlblrWFwmKDgVdq8glq4yt3J+AtgcBic=";
+    buildTypesAiobotocorePackage "m2" "3.1.1"
+      "sha256-jUXB9bhdcsBzMGR0r2Zbg8+1k+B75kwS7Ltd5ZJjgDA=";
 
   types-aiobotocore-machinelearning =
-    buildTypesAiobotocorePackage "machinelearning" "2.22.0"
-      "sha256-wvcrxbFZmLkOQ2tK5cGX1bOkUcyU27yvWa3hIfJ4UWk=";
+    buildTypesAiobotocorePackage "machinelearning" "3.1.1"
+      "sha256-+ON6bHoN69LT7fnHSH6ABEQ2n2ihOVdgkLhQC7GSplk=";
 
   types-aiobotocore-macie =
     buildTypesAiobotocorePackage "macie" "2.7.0"
       "sha256-hJJtGsK2b56nKX1ZhiarC+ffyjHYWRiC8II4oyDZWWw=";
 
   types-aiobotocore-macie2 =
-    buildTypesAiobotocorePackage "macie2" "2.22.0"
-      "sha256-+Ei1NLs9W+HIM98Zzs30lb0Wq5MsPxdki7+eSaEM2yU=";
+    buildTypesAiobotocorePackage "macie2" "3.1.1"
+      "sha256-wUxSvhQ61WMClqjy4pvcqyEqHAyLZPT58xAWHS7uCxU=";
 
   types-aiobotocore-managedblockchain =
-    buildTypesAiobotocorePackage "managedblockchain" "2.22.0"
-      "sha256-+5XfrJjWZwsmcISCngVFqeA9uv2LjKqeiAK9a6gmKpU=";
+    buildTypesAiobotocorePackage "managedblockchain" "3.1.1"
+      "sha256-PGEMouhVZS3LQHcsT49j/nvm8GG7yUezlkpAbh+0Ejo=";
 
   types-aiobotocore-managedblockchain-query =
-    buildTypesAiobotocorePackage "managedblockchain-query" "2.22.0"
-      "sha256-InGUZ9wXiL+WlalhS2cwD4thIQm6SMZ70I0OBl5TjF8=";
+    buildTypesAiobotocorePackage "managedblockchain-query" "3.1.1"
+      "sha256-S9LulFwqCi8hVmlP5Fdtp/8XaX+4F4KWXdqzCklzTmE=";
 
   types-aiobotocore-marketplace-catalog =
-    buildTypesAiobotocorePackage "marketplace-catalog" "2.22.0"
-      "sha256-MdBuMahamIbJBE+fQJY89HF8gpcWMrXmOnSCmg+OvFY=";
+    buildTypesAiobotocorePackage "marketplace-catalog" "3.1.1"
+      "sha256-BzzG6RxTge3OZMNz9OetB26/CyR+EIqFrlS6fXN+hsA=";
 
   types-aiobotocore-marketplace-entitlement =
-    buildTypesAiobotocorePackage "marketplace-entitlement" "2.22.0"
-      "sha256-A8r5x1MNLdlAnWYKbxDad5MNR61XqFex4L+yui7fvTc=";
+    buildTypesAiobotocorePackage "marketplace-entitlement" "3.1.1"
+      "sha256-gkmEK5hm375K80q3NpNGI3jp32NjXbvarpHVIPZ0YkM=";
 
   types-aiobotocore-marketplacecommerceanalytics =
-    buildTypesAiobotocorePackage "marketplacecommerceanalytics" "2.22.0"
-      "sha256-Ybsh+XfWThqllODz1J4nj3axPCGub7GZceV0IMfbM1Q=";
+    buildTypesAiobotocorePackage "marketplacecommerceanalytics" "3.1.1"
+      "sha256-yCAgw+kNkvokhcl1TnPmGoX1zUgn7s7zboxq9ZKK6oQ=";
 
   types-aiobotocore-mediaconnect =
-    buildTypesAiobotocorePackage "mediaconnect" "2.22.0"
-      "sha256-BryzD7sUww4SjmEtKjUe1hasuxXzzRyra7YQOcNWJPE=";
+    buildTypesAiobotocorePackage "mediaconnect" "3.1.1"
+      "sha256-cnE/gH17joqGxBQ4pgpIRJMC6Nukef8JFFMVqe0PiIU=";
 
   types-aiobotocore-mediaconvert =
-    buildTypesAiobotocorePackage "mediaconvert" "2.22.0"
-      "sha256-6FcznylrC+WyNxvFJ3PkCH4Z/9756njTbV9zUi0UcS8=";
+    buildTypesAiobotocorePackage "mediaconvert" "3.1.1"
+      "sha256-9FCwpmXZJRu987K3mnlBj/mgUOEx56RT3rwKgFcVzgM=";
 
   types-aiobotocore-medialive =
-    buildTypesAiobotocorePackage "medialive" "2.22.0"
-      "sha256-9OWdqUnDOBmDqQ0ueeuJum1eu3M5dustNzDmMsbFT14=";
+    buildTypesAiobotocorePackage "medialive" "3.1.1"
+      "sha256-IY2PZHwBLpEcsFmbZrwqpj6ODdYZXpdPoPeoTBCJ6Us=";
 
   types-aiobotocore-mediapackage =
-    buildTypesAiobotocorePackage "mediapackage" "2.22.0"
-      "sha256-kADWppbEloZYsozQsdV1ypSXclK6aa/8IvHfxHXojOo=";
+    buildTypesAiobotocorePackage "mediapackage" "3.1.1"
+      "sha256-8GVz1U7Nfhqftifs2i2vYMA76BxJvN25jefHruWU7nE=";
 
   types-aiobotocore-mediapackage-vod =
-    buildTypesAiobotocorePackage "mediapackage-vod" "2.22.0"
-      "sha256-6mpiNHKHKUQo/wtlaJzaUX0RGURx/xeqXlB2gm2kQTU=";
+    buildTypesAiobotocorePackage "mediapackage-vod" "3.1.1"
+      "sha256-raiCQ7xu4wpx90MrMOd2WzlHQfts3eydsB8Sap24jnM=";
 
   types-aiobotocore-mediapackagev2 =
-    buildTypesAiobotocorePackage "mediapackagev2" "2.22.0"
-      "sha256-bc2NmxlezCiGOQZZfCtPe15/mZZopy/PPGX+AU0AXQI=";
+    buildTypesAiobotocorePackage "mediapackagev2" "3.1.1"
+      "sha256-HSUY3KPPXX9nquBc08wwxJbDLdhOFU5d5BQ1rR6JL/M=";
 
   types-aiobotocore-mediastore =
-    buildTypesAiobotocorePackage "mediastore" "2.22.0"
-      "sha256-QxH7qrPDtaJvr9YrEEtfpK5ixHKumy7Lb5+6c4AeQAI=";
+    buildTypesAiobotocorePackage "mediastore" "3.1.1"
+      "sha256-3Icr1+QkDqGfCULoouiuVrdksBnOgJNwdDmKw9/mnm0=";
 
   types-aiobotocore-mediastore-data =
-    buildTypesAiobotocorePackage "mediastore-data" "2.22.0"
-      "sha256-Z2gnxVmetMofxmhIfVzyvxzJyfhXp0jF2W7Q+EvF88I=";
+    buildTypesAiobotocorePackage "mediastore-data" "3.1.1"
+      "sha256-5jvXU6axVfGUxaKpIWRl0PoMJy/+AgdqkfB3lqs6snw=";
 
   types-aiobotocore-mediatailor =
-    buildTypesAiobotocorePackage "mediatailor" "2.22.0"
-      "sha256-+HwnGaq+khRA4F5SvpdLfbJueT3FmnKkVeIMX0E8/yg=";
+    buildTypesAiobotocorePackage "mediatailor" "3.1.1"
+      "sha256-I64+448b1NnovLESYBprXqwbYl2LfUTTV3uq+HdIMCE=";
 
   types-aiobotocore-medical-imaging =
-    buildTypesAiobotocorePackage "medical-imaging" "2.22.0"
-      "sha256-6vOfuTdfNGpNtH30kX29VpL0VV/kxlan6arKLpRyFik=";
+    buildTypesAiobotocorePackage "medical-imaging" "3.1.1"
+      "sha256-HpHRaJh9PskEMzPTZZskV7A+0NPXt9lAWFELBrQ09eU=";
 
   types-aiobotocore-memorydb =
-    buildTypesAiobotocorePackage "memorydb" "2.22.0"
-      "sha256-HPIC8b/dfvgEfuCRiQlaaBmp5Xw6NcZBeFO3z073OVw=";
+    buildTypesAiobotocorePackage "memorydb" "3.1.1"
+      "sha256-7TqwAPZICoOS4812eD7+kFQbGtnAIpgEcG+hXKUAkAY=";
 
   types-aiobotocore-meteringmarketplace =
-    buildTypesAiobotocorePackage "meteringmarketplace" "2.22.0"
-      "sha256-yaO2WnXrDD4R/tqNEi05vT290diCNbWJxKCHTh4XJaA=";
+    buildTypesAiobotocorePackage "meteringmarketplace" "3.1.1"
+      "sha256-f9zacDyz8v12K8dtha35z0b7o95ruExiUAclf9RZ7HY=";
 
   types-aiobotocore-mgh =
-    buildTypesAiobotocorePackage "mgh" "2.22.0"
-      "sha256-NYNzSFY/X24jhfTmPg26uPC8izSShbWDO/vozC+qE3s=";
+    buildTypesAiobotocorePackage "mgh" "3.1.1"
+      "sha256-2FSNcXUOufGNSJxfaoUtdud/I6/kK96TutQ3nSdUjQQ=";
 
   types-aiobotocore-mgn =
-    buildTypesAiobotocorePackage "mgn" "2.22.0"
-      "sha256-q3VfX0oPqyhBfrrGLV4pIoE3Z8qdmBt21sX2WxDUR8Y=";
+    buildTypesAiobotocorePackage "mgn" "3.1.1"
+      "sha256-xty4Av76wv75peSMCmZBKD6+PVV4GVINKSssaEN3Oyc=";
 
   types-aiobotocore-migration-hub-refactor-spaces =
-    buildTypesAiobotocorePackage "migration-hub-refactor-spaces" "2.22.0"
-      "sha256-StOesizcNOzrvqZEfsLGzL9FpFEzPqglDNmDvdm7p2Y=";
+    buildTypesAiobotocorePackage "migration-hub-refactor-spaces" "3.1.1"
+      "sha256-/v1A8tgSfVMCaRKB61fVfIQxHiJQVH02ynmt5CcEER0=";
 
   types-aiobotocore-migrationhub-config =
-    buildTypesAiobotocorePackage "migrationhub-config" "2.22.0"
-      "sha256-BiO1lK5Z2qniLqI5bY8WNn9y9B/xAKFlPi8QhDa07vM=";
+    buildTypesAiobotocorePackage "migrationhub-config" "3.1.1"
+      "sha256-5sXvRJSN61x283/aNblJeHV3O4Q5NV5joN1LV3hKrcs=";
 
   types-aiobotocore-migrationhuborchestrator =
-    buildTypesAiobotocorePackage "migrationhuborchestrator" "2.22.0"
-      "sha256-6b/4naep6PYCLPugYNaTMXzfK8/r+JPoCTpqlRsQYW8=";
+    buildTypesAiobotocorePackage "migrationhuborchestrator" "3.1.1"
+      "sha256-dSXP0nKFVH8SqnHkEUqso/HzmL/yp20OhZ6ESuj91So=";
 
   types-aiobotocore-migrationhubstrategy =
-    buildTypesAiobotocorePackage "migrationhubstrategy" "2.22.0"
-      "sha256-wm9aMfrK7knPLkYWy5xOXIdGLSGfu7qWbLN2D3vojbw=";
+    buildTypesAiobotocorePackage "migrationhubstrategy" "3.1.1"
+      "sha256-Q6txW7m8uFu4i7hspZwW1YEK/enrVkQRqaTM9WHX8kE=";
 
   types-aiobotocore-mobile =
     buildTypesAiobotocorePackage "mobile" "2.13.2"
       "sha256-OxB91BCAmYnY72JBWZaBlEkpAxN2Q5aY4i1Pt3eD9hc=";
 
   types-aiobotocore-mq =
-    buildTypesAiobotocorePackage "mq" "2.22.0"
-      "sha256-5DBwWPLRoY5hBm0EsbHfKJQR+j3n6pPBg2dcWHqh05I=";
+    buildTypesAiobotocorePackage "mq" "3.1.1"
+      "sha256-cFe2c2qh7KMjolRVu3dCXaSnVJDl8+MmagpfeQbULcg=";
 
   types-aiobotocore-mturk =
-    buildTypesAiobotocorePackage "mturk" "2.22.0"
-      "sha256-iBJabmgaQ70xHJkq0mwuemOJJ0mYJNQYM+FbMCLVit0=";
+    buildTypesAiobotocorePackage "mturk" "3.1.1"
+      "sha256-ro8rgylUR3sD8oBQA3lJaAWONvLdENhU00fDAcdm5EU=";
 
   types-aiobotocore-mwaa =
-    buildTypesAiobotocorePackage "mwaa" "2.22.0"
-      "sha256-QjBsWwYIxA5GAuNYM0jJv5geRXBinyiud0gXwg4I2F0=";
+    buildTypesAiobotocorePackage "mwaa" "3.1.1"
+      "sha256-EwHU03wwyvHTWmSFlY5p5AqkjSbbkp+ya+dvN5F75uw=";
 
   types-aiobotocore-neptune =
-    buildTypesAiobotocorePackage "neptune" "2.22.0"
-      "sha256-nS4qypeSWWQ7mF68eHhAurGjUxjWg1BUG/FEnjlLXCA=";
+    buildTypesAiobotocorePackage "neptune" "3.1.1"
+      "sha256-ystvIXoNzceZgttIEn0UZHV/fstjhewIdpmrWTav3x8=";
 
   types-aiobotocore-network-firewall =
-    buildTypesAiobotocorePackage "network-firewall" "2.22.0"
-      "sha256-gfSkPSDY9Tyzckk7NhaQkvyHM0MlL4qKl/865AkvC/8=";
+    buildTypesAiobotocorePackage "network-firewall" "3.1.1"
+      "sha256-0LVYzJNtvKdF7yFUDHtXri/hmT+zOYHTPCzdGfarCHc=";
 
   types-aiobotocore-networkmanager =
-    buildTypesAiobotocorePackage "networkmanager" "2.22.0"
-      "sha256-CbOVLr2H/0QnCPFcR6j0ydbz63WswKz/Ugm3Aq+2+cQ=";
+    buildTypesAiobotocorePackage "networkmanager" "3.1.1"
+      "sha256-a48zAw0Sf3obnuG1IzsB3747Zj74PD1ttwJt9BrojsU=";
+
+  types-aiobotocore-networkmonitor =
+    buildTypesAiobotocorePackage "networkmonitor" "3.1.1"
+      "sha256-MgVX1qMWFw8UN2SyjNJzLX9Y30lhgfwjKNu39X5ojwo=";
 
   types-aiobotocore-nimble =
     buildTypesAiobotocorePackage "nimble" "2.15.2"
       "sha256-PChX5Jbgr0d1YaTZU9AbX3cM7NrhkyunK6/X3l+I8Q0=";
 
   types-aiobotocore-oam =
-    buildTypesAiobotocorePackage "oam" "2.22.0"
-      "sha256-RQlVwAenfiU0f96AfTQubeI90UqlXkoK17ebq+O7AXY=";
+    buildTypesAiobotocorePackage "oam" "3.1.1"
+      "sha256-khmCr1dPEhksIS4bMp9FsTVH+I2MU/CACDq1fF6uT6o=";
 
   types-aiobotocore-omics =
-    buildTypesAiobotocorePackage "omics" "2.22.0"
-      "sha256-aT0QPikVbbJP3kWmAnesvQE5rd1/uFStNYRk2gSW9cw=";
+    buildTypesAiobotocorePackage "omics" "3.1.1"
+      "sha256-t3wuO156c1bpM/RYqaJDBKABY+nfyEHwiEFxxiwzihU=";
 
   types-aiobotocore-opensearch =
-    buildTypesAiobotocorePackage "opensearch" "2.22.0"
-      "sha256-a9xlkheT+4d5l3OsjLjjgF7kElkJZbemFZNTB6qrlGw=";
+    buildTypesAiobotocorePackage "opensearch" "3.1.1"
+      "sha256-5dsBvDllvNFSNMwq06x62rusCIkmENpKryBZ0qLRJQM=";
 
   types-aiobotocore-opensearchserverless =
-    buildTypesAiobotocorePackage "opensearchserverless" "2.22.0"
-      "sha256-SqC2Jl3OXi0YZE2SHNSxEgvzE99FYu/qkZDoNzLomVI=";
+    buildTypesAiobotocorePackage "opensearchserverless" "3.1.1"
+      "sha256-wBN7GgJKAY0++uvg98D/zeXk/qhViDIp335ctrgkBTA=";
 
   types-aiobotocore-opsworks =
-    buildTypesAiobotocorePackage "opsworks" "2.22.0"
-      "sha256-35/PSIJBv2+69FdDQMdPLvde21JZaBuBjnLcdekpYV4=";
+    buildTypesAiobotocorePackage "opsworks" "2.24.2"
+      "sha256-ScEMFhogJRX6ykymK3rqYniGVcyJEsECKvnnbT3xv1A=";
 
   types-aiobotocore-opsworkscm =
-    buildTypesAiobotocorePackage "opsworkscm" "2.22.0"
-      "sha256-hgWxBh7mj4szt17VrY3lGGdlyocyISJCBwusdTmjtY8=";
+    buildTypesAiobotocorePackage "opsworkscm" "2.24.2"
+      "sha256-i+qoE5XXWpZ7dQeDagkD2MhnBjwbKTJYyZxATDh8h9M=";
 
   types-aiobotocore-organizations =
-    buildTypesAiobotocorePackage "organizations" "2.22.0"
-      "sha256-AJFbQnR8p2t3xkSjtpIjyqjIU5BPBms4tkRrDB3BBN0=";
+    buildTypesAiobotocorePackage "organizations" "3.1.1"
+      "sha256-9mSsZoNFZRxfqYu3a+JAAst6SFm4oQTKbjSpaaevBj4=";
 
   types-aiobotocore-osis =
-    buildTypesAiobotocorePackage "osis" "2.22.0"
-      "sha256-s2w2pmQycU9TiEleW2aGccOaT8WsacAjAmC0Uh+BAX0=";
+    buildTypesAiobotocorePackage "osis" "3.1.1"
+      "sha256-dg7yfjkQhSeJ6Ukq+vuPchTPPhHN9GSVQXcH5nxOD74=";
 
   types-aiobotocore-outposts =
-    buildTypesAiobotocorePackage "outposts" "2.22.0"
-      "sha256-kSMQwXQfaae6r9/ze2vDGYQZlvxFUkvUvgVf41oTUm8=";
+    buildTypesAiobotocorePackage "outposts" "3.1.1"
+      "sha256-m6RptDmaOsg3IuG6njvsLEPjlvBoG4WAS8/TiRla0Nc=";
 
   types-aiobotocore-panorama =
-    buildTypesAiobotocorePackage "panorama" "2.22.0"
-      "sha256-qrdkO5EZigoZmoybeFJSi2gDr/uGFkYnWtoX++U+XF4=";
+    buildTypesAiobotocorePackage "panorama" "3.1.1"
+      "sha256-n6xv1XtGzS47T0mfRjG2sOpjDr4odL76sRnFatnLJYs=";
 
   types-aiobotocore-payment-cryptography =
-    buildTypesAiobotocorePackage "payment-cryptography" "2.22.0"
-      "sha256-0zIOTuFVHJ1YkU+RvcH2LU5mAvxxM12OxbkGsk4j83Y=";
+    buildTypesAiobotocorePackage "payment-cryptography" "3.1.1"
+      "sha256-uocATok9fdU0PEwUhEG3xNb8Imzhv93akNO5T4+UPMM=";
 
   types-aiobotocore-payment-cryptography-data =
-    buildTypesAiobotocorePackage "payment-cryptography-data" "2.22.0"
-      "sha256-4z1ubsdD5g3quVUa7XSsrcqV3RyTs1ScDIq7tvQjG2Y=";
+    buildTypesAiobotocorePackage "payment-cryptography-data" "3.1.1"
+      "sha256-ywoIU/Qgl6GsA5+438hwgkTqWFgy8zat5yVDkBGYg5A=";
 
   types-aiobotocore-personalize =
-    buildTypesAiobotocorePackage "personalize" "2.22.0"
-      "sha256-sjuGPy2cVvxTo776mpLoCczUx8TLtTk/fBtOMdDuxoY=";
+    buildTypesAiobotocorePackage "personalize" "3.1.1"
+      "sha256-vIg2Hxh9aqepicRFxlNUukLsuu6MiEpc/p48bgKqK1c=";
 
   types-aiobotocore-personalize-events =
-    buildTypesAiobotocorePackage "personalize-events" "2.22.0"
-      "sha256-7SCHQOTOPc23edpBFnM+yKoeoLr32JcYffymetGqxVY=";
+    buildTypesAiobotocorePackage "personalize-events" "3.1.1"
+      "sha256-8FoAZtUWxNA3iFqyfeYO/yJb02XbmDKlVYYgUuC9Zuc=";
 
   types-aiobotocore-personalize-runtime =
-    buildTypesAiobotocorePackage "personalize-runtime" "2.22.0"
-      "sha256-4bvgk7rFP0gcJiCsfOjDfFluZHpQ/u1WYXnRBtK0Qnc=";
+    buildTypesAiobotocorePackage "personalize-runtime" "3.1.1"
+      "sha256-j47P2WctXxiyAXhp8ymPBFQfvSqee8sxsAYym7gghhE=";
 
   types-aiobotocore-pi =
-    buildTypesAiobotocorePackage "pi" "2.22.0"
-      "sha256-LOD+tB5B45Ss4TOrV40ufeIQdiJqPAsuopj4XFk0huU=";
+    buildTypesAiobotocorePackage "pi" "3.1.1"
+      "sha256-LIxeYK6y55H3IoF4Sv/UZZBVAU/8m/t+rBdy/ZQlabk=";
 
   types-aiobotocore-pinpoint =
-    buildTypesAiobotocorePackage "pinpoint" "2.22.0"
-      "sha256-HtVX9pE+vO5mdzfNXshwsmIG4E7czmd9wxvcmZgkjrs=";
+    buildTypesAiobotocorePackage "pinpoint" "3.1.1"
+      "sha256-plNFu+sghU1naHY9btk41GRk6MrHKuEJ9tHnPGydj6M=";
 
   types-aiobotocore-pinpoint-email =
-    buildTypesAiobotocorePackage "pinpoint-email" "2.22.0"
-      "sha256-gJISPsXhW3YOx9JH9zRlLKcWPxoY1ixSECF2BtEZrA4=";
+    buildTypesAiobotocorePackage "pinpoint-email" "3.1.1"
+      "sha256-0WRy+7saj7k+N8kDXafwFnBbagq1WlrGcyXXFyJ9hdE=";
 
   types-aiobotocore-pinpoint-sms-voice =
-    buildTypesAiobotocorePackage "pinpoint-sms-voice" "2.22.0"
-      "sha256-b7AFK9DeG/rOSlfmYz/Iha/8NwDaB7yFkgd6RAwE9VQ=";
+    buildTypesAiobotocorePackage "pinpoint-sms-voice" "3.1.1"
+      "sha256-OKMJ/cVT2QauXzP/QcnZlVaoFOY+nyirtEZrEJrvH4A=";
 
   types-aiobotocore-pinpoint-sms-voice-v2 =
-    buildTypesAiobotocorePackage "pinpoint-sms-voice-v2" "2.22.0"
-      "sha256-kNDWS8kVjFjRnJ7SItgNAkujADhYSz56wzjHzCWuW+M=";
+    buildTypesAiobotocorePackage "pinpoint-sms-voice-v2" "3.1.1"
+      "sha256-ZrUkbnXjRyw6WDW8QxhP8k5055wip1Ne03L1L3AsmeM=";
 
   types-aiobotocore-pipes =
-    buildTypesAiobotocorePackage "pipes" "2.22.0"
-      "sha256-sP9qcauhD4HoTBp8v0pe4MpdCVzoY5osFaxssXgUs6I=";
+    buildTypesAiobotocorePackage "pipes" "3.1.1"
+      "sha256-m3mjnwr3mkWYThcVIKCepvXUXBm7Qnui7kjTQV/uCvE=";
 
   types-aiobotocore-polly =
-    buildTypesAiobotocorePackage "polly" "2.22.0"
-      "sha256-Xi/OX+TDkwBp+ZKwZR3nm1mLblJprepWFyfnLRHeXKE=";
+    buildTypesAiobotocorePackage "polly" "3.1.1"
+      "sha256-p+BH4d/JXfvLZckTXdM/cJswgE7CiB4GBbZHqJSCqCU=";
 
   types-aiobotocore-pricing =
-    buildTypesAiobotocorePackage "pricing" "2.22.0"
-      "sha256-w8nxv6hvKraQWA7vB7G8Spg8QLAkVQi2jrWwFlPHiGQ=";
+    buildTypesAiobotocorePackage "pricing" "3.1.1"
+      "sha256-tCgFEmAhYH+EpzRt8qnsf+clVvdMlFESg6ZW9xAq6pk=";
 
   types-aiobotocore-privatenetworks =
     buildTypesAiobotocorePackage "privatenetworks" "2.22.0"
       "sha256-yaYvgVKcr3l2eq0dMzmQEZHxgblTLlVF9cZRnObiB7M=";
 
   types-aiobotocore-proton =
-    buildTypesAiobotocorePackage "proton" "2.22.0"
-      "sha256-6gMJVIhvXYu1WitFgQVMw7yPxed5+L0TLhhOQkOYp4Q=";
+    buildTypesAiobotocorePackage "proton" "3.1.1"
+      "sha256-BKC/3AH88cmY51yEXU4N7M2YpmSazg1mCqes+v+LtCU=";
+
+  types-aiobotocore-qapps =
+    buildTypesAiobotocorePackage "qapps" "3.1.1"
+      "sha256-Y6egSNGNRx1aaLfm+q1PkHW+dSIYpnU7I0Nq1B/1G8A=";
+
+  types-aiobotocore-qbusiness =
+    buildTypesAiobotocorePackage "qbusiness" "3.1.1"
+      "sha256-WV0XXL48qg7gZu6SCpiKPKBR2DdSmLPE1emTGtPtTH8=";
+
+  types-aiobotocore-qconnect =
+    buildTypesAiobotocorePackage "qconnect" "3.1.1"
+      "sha256-q/vHlhRNIvJt7nPNeJMX+5q3HhIdeh2k7u4z7Vzoaw8=";
 
   types-aiobotocore-qldb =
-    buildTypesAiobotocorePackage "qldb" "2.22.0"
-      "sha256-Zb/DI+zuP6LBpI4JjfNfyqDp4+Dy+xGM4tLmi78G4wg=";
+    buildTypesAiobotocorePackage "qldb" "2.24.2"
+      "sha256-qrSbXgc4DBb2kNg0ydb1vT9EmRqQWNIfuNOVsK8BPY0=";
 
   types-aiobotocore-qldb-session =
-    buildTypesAiobotocorePackage "qldb-session" "2.22.0"
-      "sha256-GSkvjf683M34NbA88IP3U1ySJV559qRqjB82EjOY9sQ=";
+    buildTypesAiobotocorePackage "qldb-session" "2.24.2"
+      "sha256-Lk9RLigcg4F/AsgKneBUoyPyeUh46ra+BLCw94b74eU=";
 
   types-aiobotocore-quicksight =
-    buildTypesAiobotocorePackage "quicksight" "2.22.0"
-      "sha256-W5TeMRYawjh53fRXsbnQQ+j5P7E7SfUTrhKtdwwb6rc=";
+    buildTypesAiobotocorePackage "quicksight" "3.1.1"
+      "sha256-T6FiUtwNTsMa/3RMEA3/4gXwpvAAJvl2qH3u+50ozIk=";
 
   types-aiobotocore-ram =
-    buildTypesAiobotocorePackage "ram" "2.22.0"
-      "sha256-vhJXQcpf/SM/WSIPlDsau4STczSbPKPIOHMwZMI8c2Q=";
+    buildTypesAiobotocorePackage "ram" "3.1.1"
+      "sha256-b0bm9rvM4kBRIHmxc2ARvHZ6Qhh636CRpXlxNVk92p0=";
 
   types-aiobotocore-rbin =
-    buildTypesAiobotocorePackage "rbin" "2.22.0"
-      "sha256-+ibKKx8EzVTA0ZTauVpZgrMATFZA84lCz7i+b01jW7w=";
+    buildTypesAiobotocorePackage "rbin" "3.1.1"
+      "sha256-EyjZ/2pDSa+AXS5lN1udGemFtXaQGwaJY7Pv6BvmwqE=";
 
   types-aiobotocore-rds =
-    buildTypesAiobotocorePackage "rds" "2.22.0"
-      "sha256-DAQpCQclLYIuKR0sJaX3wYV02rWAEC3opCxS6wjyf/E=";
+    buildTypesAiobotocorePackage "rds" "3.1.1"
+      "sha256-FFEHie64KT8vmBtQ24ddzQxDmtkriJR1GRA7C4fOxVk=";
 
   types-aiobotocore-rds-data =
-    buildTypesAiobotocorePackage "rds-data" "2.22.0"
-      "sha256-o0ODmezIE38pzs94IjwuPRvhoQTFIV2Bd+9gnAvjFxw=";
+    buildTypesAiobotocorePackage "rds-data" "3.1.1"
+      "sha256-hVC82OG2dZIJGllWfLgQyM1e44HEtK1PGuNXcCDdmgQ=";
 
   types-aiobotocore-redshift =
-    buildTypesAiobotocorePackage "redshift" "2.22.0"
-      "sha256-jJCLogzbKKEja6eJXM4WCKNI64Ho96hjkY93dCGaUu4=";
+    buildTypesAiobotocorePackage "redshift" "3.1.1"
+      "sha256-8p2F55suy6sJmpXvLZ2XrfW00hw+nIJeeVqOTx4Hk5k=";
 
   types-aiobotocore-redshift-data =
-    buildTypesAiobotocorePackage "redshift-data" "2.22.0"
-      "sha256-pZq8/7XxsMbi3dMRg8MWNooD59UyD0jtyXqzmkEA1ts=";
+    buildTypesAiobotocorePackage "redshift-data" "3.1.1"
+      "sha256-7LjGSidm6AP+lAJyxsQtyCF3c6jB5cUvXfqxzMp9y18=";
 
   types-aiobotocore-redshift-serverless =
-    buildTypesAiobotocorePackage "redshift-serverless" "2.22.0"
-      "sha256-/bO6rVXgRIX0wmsW8b+O1zc4xYzL9seBE/48RSLV6is=";
+    buildTypesAiobotocorePackage "redshift-serverless" "3.1.1"
+      "sha256-u+Va+MEMXAcPaSxvryCVTpKyPdTar0AdpZGNCInzkgU=";
 
   types-aiobotocore-rekognition =
-    buildTypesAiobotocorePackage "rekognition" "2.22.0"
-      "sha256-TzgWZt1HjKdEfZ9P+wGHCnosIim2jwRhU65ooFgD3vY=";
+    buildTypesAiobotocorePackage "rekognition" "3.1.1"
+      "sha256-U/KVbFTlIfKaBSAevzSMpihvSflCScpCT6fdTUwnbcQ=";
 
   types-aiobotocore-resiliencehub =
-    buildTypesAiobotocorePackage "resiliencehub" "2.22.0"
-      "sha256-4HVA/HzeOzvoDYmbsPOLFHF8niZvNO7AaGLK07M/sT8=";
+    buildTypesAiobotocorePackage "resiliencehub" "3.1.1"
+      "sha256-c1zMuR9faLmlHRSgx/LTVEr1GejxeCyToTRXqKwyUtA=";
 
   types-aiobotocore-resource-explorer-2 =
-    buildTypesAiobotocorePackage "resource-explorer-2" "2.22.0"
-      "sha256-IzHCHZIRwXiUfc5Ye5BWajakFh2biD4xy0cw1z1a5qE=";
+    buildTypesAiobotocorePackage "resource-explorer-2" "3.1.1"
+      "sha256-2qBAz5uIVOKU5506JiKHF9gI5X4h4Zz8BnKAxn5+Ork=";
 
   types-aiobotocore-resource-groups =
-    buildTypesAiobotocorePackage "resource-groups" "2.22.0"
-      "sha256-rRaOYZkaof6KfrC+GyGUkmSxnurnEXi1jTvkXG3gqM4=";
+    buildTypesAiobotocorePackage "resource-groups" "3.1.1"
+      "sha256-qakIWZDujyL1nrqVAujEY7gEw06Rh5ZrTKMwwjZjwZw=";
 
   types-aiobotocore-resourcegroupstaggingapi =
-    buildTypesAiobotocorePackage "resourcegroupstaggingapi" "2.22.0"
-      "sha256-QEYsHFSBlr2EX3hLQhwriEreVEcVjqU3vi3QKezEhho=";
+    buildTypesAiobotocorePackage "resourcegroupstaggingapi" "3.1.1"
+      "sha256-U6M0V4rnU9CdlwTaYtd8uXdtPm2WHiirTzqE19Yk/4A=";
 
   types-aiobotocore-robomaker =
-    buildTypesAiobotocorePackage "robomaker" "2.22.0"
-      "sha256-JSqXiS4hvYOTGoBEEhakWfcXA9ItUnG4nOWW/decu98=";
+    buildTypesAiobotocorePackage "robomaker" "2.24.2"
+      "sha256-EczunxMisSO9t2iYzXuzTeFiNalu2EyDRIOE7TW5fOg=";
 
   types-aiobotocore-rolesanywhere =
-    buildTypesAiobotocorePackage "rolesanywhere" "2.22.0"
-      "sha256-MrQMLawcycrYWoZsBmhJl5slvLZ23kkYifnpmVkfUsY=";
+    buildTypesAiobotocorePackage "rolesanywhere" "3.1.1"
+      "sha256-x1nXEe64uz1OXNTj+LEjl6Xo5QS4/53qywFa6HP7diw=";
 
   types-aiobotocore-route53 =
-    buildTypesAiobotocorePackage "route53" "2.22.0"
-      "sha256-ukFN2qks+T2ZMAbTEr/IehL0RTwoyVaJQvDbnPexbM4=";
+    buildTypesAiobotocorePackage "route53" "3.1.1"
+      "sha256-YiR4+/8JsuWDgTH5iLK9LpXc5BWusLAMAxmi50BR4Gc=";
 
   types-aiobotocore-route53-recovery-cluster =
-    buildTypesAiobotocorePackage "route53-recovery-cluster" "2.22.0"
-      "sha256-rfbQTUeKLod6Y5fwFjYlvurqYbS2qBHE+39kSVW+X1o=";
+    buildTypesAiobotocorePackage "route53-recovery-cluster" "3.1.1"
+      "sha256-A6eq6sE5xDZeycGMNxLh/UA/Uj+mbMVm0xOPw+HQ2mQ=";
 
   types-aiobotocore-route53-recovery-control-config =
-    buildTypesAiobotocorePackage "route53-recovery-control-config" "2.22.0"
-      "sha256-EXPl8FQoSiEwP5f6BysHEnJ1ntk+HPEpAsHn6Rp0fMk=";
+    buildTypesAiobotocorePackage "route53-recovery-control-config" "3.1.1"
+      "sha256-9R8D+jq4sRY4NWZ487LJT7rAzQ6/LyFVlPskJp+Dq0c=";
 
   types-aiobotocore-route53-recovery-readiness =
-    buildTypesAiobotocorePackage "route53-recovery-readiness" "2.22.0"
-      "sha256-OZXX+IPHI8ikUOKgqjTS1uqzsSnZDfmtzyNH1XMdWO0=";
+    buildTypesAiobotocorePackage "route53-recovery-readiness" "3.1.1"
+      "sha256-LmEs3Xz1ELh0UPAy0Yu6PwU4Ogz5GnPPqg5tn067jAA=";
 
   types-aiobotocore-route53domains =
-    buildTypesAiobotocorePackage "route53domains" "2.22.0"
-      "sha256-vqwyz+oQkUqe7aC1nRrqARcqQL6SxTh9RfYLFKMPUHM=";
+    buildTypesAiobotocorePackage "route53domains" "3.1.1"
+      "sha256-0wtwVlAHi9agn+2RhmvfbJlfq9zi3ZWnVUvm2qjaUTQ=";
 
   types-aiobotocore-route53resolver =
-    buildTypesAiobotocorePackage "route53resolver" "2.22.0"
-      "sha256-qJLQK3QDYNWRWvK0OEN22i+hOm3RwZsO65nb0IMnNZg=";
+    buildTypesAiobotocorePackage "route53resolver" "3.1.1"
+      "sha256-i4bfFGnSbIBD9necbure2NumPQBhkcDJk/T/6CAbkyA=";
 
   types-aiobotocore-rum =
-    buildTypesAiobotocorePackage "rum" "2.22.0"
-      "sha256-XnN4O6T/uGm3nPPHfXuTa2k0QTzT4a8uZXAkcJzWOkE=";
+    buildTypesAiobotocorePackage "rum" "3.1.1"
+      "sha256-nTxbVfCTj6omj2R1UOHIuarItcpN2M7Q6Vs+pa0RJJs=";
 
   types-aiobotocore-s3 =
-    buildTypesAiobotocorePackage "s3" "2.22.0"
-      "sha256-RxJldgOekMrk6RfVuhyits0W9SKL6IAkpwdTpV63dfE=";
+    buildTypesAiobotocorePackage "s3" "3.1.1"
+      "sha256-5/S6ZHKjJLh0Q1zeuYb1awtHgGkE4n/cclH1QM6dYs0=";
 
   types-aiobotocore-s3control =
-    buildTypesAiobotocorePackage "s3control" "2.22.0"
-      "sha256-cfbHY1Bz88j3N5s7jrys3PR5sX22EqDuJz3Vrh/dHHs=";
+    buildTypesAiobotocorePackage "s3control" "3.1.1"
+      "sha256-0ueIW+9239grzVj3dU0fPrTZRlEsEsnfUllvO0aWLLA=";
 
   types-aiobotocore-s3outposts =
-    buildTypesAiobotocorePackage "s3outposts" "2.22.0"
-      "sha256-Yr9z+JQA4Otcoxh92hc1ZdLdtrsNhvmYK2kitWme0zE=";
+    buildTypesAiobotocorePackage "s3outposts" "3.1.1"
+      "sha256-U0r+tuv0Q8VMKVaDaQBS8dW0dXZMz6Va3X6ESQY43+g=";
 
   types-aiobotocore-sagemaker =
-    buildTypesAiobotocorePackage "sagemaker" "2.22.0"
-      "sha256-aXQ1D3Wo4l3I5U7JIDKF1dSh5mlhw8RWhooRU3MZR1o=";
+    buildTypesAiobotocorePackage "sagemaker" "3.1.1"
+      "sha256-8ZbSi+4qJ4cE01E5CkLz37x/YyUc2t985HugrF1CNIA=";
 
   types-aiobotocore-sagemaker-a2i-runtime =
-    buildTypesAiobotocorePackage "sagemaker-a2i-runtime" "2.22.0"
-      "sha256-IhvGAZrGpB2FX9EQDNg48tX2L9uF5SveadwiG6aXQ5M=";
+    buildTypesAiobotocorePackage "sagemaker-a2i-runtime" "3.1.1"
+      "sha256-LFcrIvF++PPQKPF+SwUd9lWYHD99JPE9OmaObG0fWzM=";
 
   types-aiobotocore-sagemaker-edge =
-    buildTypesAiobotocorePackage "sagemaker-edge" "2.22.0"
-      "sha256-vdaLkWxj4nA0a+9h4wQkeM/VCP9yntAqSBkVnegMHag=";
+    buildTypesAiobotocorePackage "sagemaker-edge" "3.1.1"
+      "sha256-HNeG89qLcU+Jow39qt1hy4Bl718UjPAZe1jFSTnRU+U=";
 
   types-aiobotocore-sagemaker-featurestore-runtime =
-    buildTypesAiobotocorePackage "sagemaker-featurestore-runtime" "2.22.0"
-      "sha256-RT3fu7tb0i7hwpsyJrSLQuzXJqVzjBhRdKIUWImEYYs=";
+    buildTypesAiobotocorePackage "sagemaker-featurestore-runtime" "3.1.1"
+      "sha256-BXqKsUMuOllA3ZX9a3QXnylfzv8AlBNO6xHP8OzKNaA=";
 
   types-aiobotocore-sagemaker-geospatial =
-    buildTypesAiobotocorePackage "sagemaker-geospatial" "2.22.0"
-      "sha256-sxTEnm2d9XsoKzS6VAwqFAaGRt1sgelaJGrDdY09u/w=";
+    buildTypesAiobotocorePackage "sagemaker-geospatial" "3.1.1"
+      "sha256-b+bORsJUj8RNVuQ/t/vjQdfuojlDRfLyf4a0hh05i9I=";
 
   types-aiobotocore-sagemaker-metrics =
-    buildTypesAiobotocorePackage "sagemaker-metrics" "2.22.0"
-      "sha256-dr+ugp2qtcgxkLcqw8lzjLLy0Y7Lc+9CaMmU07WER3E=";
+    buildTypesAiobotocorePackage "sagemaker-metrics" "3.1.1"
+      "sha256-e1Td6SS4lkUGb4pGw8dLh0fwk8IuQDHoePdelArhTuw=";
 
   types-aiobotocore-sagemaker-runtime =
-    buildTypesAiobotocorePackage "sagemaker-runtime" "2.22.0"
-      "sha256-6y1vr5MfP1kou0oZfu4ltJykWRYwPaBo0f1Hwjcl8hw=";
+    buildTypesAiobotocorePackage "sagemaker-runtime" "3.1.1"
+      "sha256-mfmUnIWDHJrbtR46Cswmp4EFCS3Sx2f9BAS/CtS7FmY=";
 
   types-aiobotocore-savingsplans =
-    buildTypesAiobotocorePackage "savingsplans" "2.22.0"
-      "sha256-rE3aUEXfcASECVIX4ZfI4Cj/hzyjaH5s6GuT6Mm6M8A=";
+    buildTypesAiobotocorePackage "savingsplans" "3.1.1"
+      "sha256-DMLWYNvYZO9wKiYUOQ5CEb1OleeHeLvwQBuvM1la7fo=";
 
   types-aiobotocore-scheduler =
-    buildTypesAiobotocorePackage "scheduler" "2.22.0"
-      "sha256-Uz3sAX8St/qEZffa9Ge/atDeAG+v63jcubTAY+4Qr9E=";
+    buildTypesAiobotocorePackage "scheduler" "3.1.1"
+      "sha256-cHXK35sAqY7PmRLIzGJvhUue8q9PDsriKd6kf86RMt8=";
 
   types-aiobotocore-schemas =
-    buildTypesAiobotocorePackage "schemas" "2.22.0"
-      "sha256-yo9vYhkiUaVM/ZVT+nQfz8VCDPeO6eGpl93ERnHViDU=";
+    buildTypesAiobotocorePackage "schemas" "3.1.1"
+      "sha256-Ef/CKyJpHiz2/4TVnCv+CtFU52EQ/zljuC58qZ3Apa8=";
 
   types-aiobotocore-sdb =
-    buildTypesAiobotocorePackage "sdb" "2.22.0"
-      "sha256-D5R9+/UKjLO1AQK8BtuTyy+6fb8I3+8FKjVmSrx2WoU=";
+    buildTypesAiobotocorePackage "sdb" "3.1.1"
+      "sha256-yrKi1uHlaV2Ze2nR8/CSMI8bPVMg6FhaR+LwOGuJ0FQ=";
 
   types-aiobotocore-secretsmanager =
-    buildTypesAiobotocorePackage "secretsmanager" "2.22.0"
-      "sha256-awcRJRDyIlI1HolDnjUkyUi2BzxIOLKgvqbssKoxVrs=";
+    buildTypesAiobotocorePackage "secretsmanager" "3.1.1"
+      "sha256-AUmFSodtBXV9OlC/ynO5gky20ubcmmdSwdJ1oxfXqLY=";
 
   types-aiobotocore-securityhub =
-    buildTypesAiobotocorePackage "securityhub" "2.22.0"
-      "sha256-ys+/zB6ZDcpjUiF9kC25GYKFvcMrGkqfsGZMlRs01Sk=";
+    buildTypesAiobotocorePackage "securityhub" "3.1.1"
+      "sha256-GxMUqlS8qNUFML4yer1q8EbtvzSt/GeYec6U6PKna2U=";
 
   types-aiobotocore-securitylake =
-    buildTypesAiobotocorePackage "securitylake" "2.22.0"
-      "sha256-Z+W94UHpw3f2602UEWgiJo/UUbbe3X8KNFYAFV0vAUs=";
+    buildTypesAiobotocorePackage "securitylake" "3.1.1"
+      "sha256-EYLRzIkCSX1ZPkm2KP/swE+lD63dSLrb2PC01z8TIPI=";
 
   types-aiobotocore-serverlessrepo =
-    buildTypesAiobotocorePackage "serverlessrepo" "2.22.0"
-      "sha256-+o4xSY7GYnTiTbXPRbyktIhmjkeNukE/3ttk7yCyetA=";
+    buildTypesAiobotocorePackage "serverlessrepo" "3.1.1"
+      "sha256-BxN5PgJgUaJ+RVHKDjiFVcHOUvId8ztz6I/mqj3dV6Q=";
 
   types-aiobotocore-service-quotas =
-    buildTypesAiobotocorePackage "service-quotas" "2.22.0"
-      "sha256-gXeqka6BXpj1donipn7lIog6Gw8wcoqm6yeLFhhoUf4=";
+    buildTypesAiobotocorePackage "service-quotas" "3.1.1"
+      "sha256-/yRZzfHbLLmoS2JY3E9Gt4D9GnS+2S2GnVqFc17V620=";
 
   types-aiobotocore-servicecatalog =
-    buildTypesAiobotocorePackage "servicecatalog" "2.22.0"
-      "sha256-tFrr4345+9zF7TK5K32rtqWL3aX8Mlj6NOhfz//3v0s=";
+    buildTypesAiobotocorePackage "servicecatalog" "3.1.1"
+      "sha256-rS5SR6uJDYLHsPM5peDU4gum9shrVXLkaLVzENbFTqU=";
 
   types-aiobotocore-servicecatalog-appregistry =
-    buildTypesAiobotocorePackage "servicecatalog-appregistry" "2.22.0"
-      "sha256-FtCCo8R3SxlJCm2FgFtjXjZ9mW3M73i/pbOs8u+uEWw=";
+    buildTypesAiobotocorePackage "servicecatalog-appregistry" "3.1.1"
+      "sha256-/iRL4THgfVXdI3Dp74Q5BGDFpHt++KLboQbn8DAmMOg=";
 
   types-aiobotocore-servicediscovery =
-    buildTypesAiobotocorePackage "servicediscovery" "2.22.0"
-      "sha256-8AtgkUE6GDbBkjEiovFErpbfhbwYULklL20j7D3wOSo=";
+    buildTypesAiobotocorePackage "servicediscovery" "3.1.1"
+      "sha256-F+f7YeOO2Jsw+5DsS6new6vmWA9RopdyzfC41+IsLUc=";
 
   types-aiobotocore-ses =
-    buildTypesAiobotocorePackage "ses" "2.22.0"
-      "sha256-+4wO5mMfclRG4kiXPFXCYdfwlR+pF6HfnyhaMGURmp4=";
+    buildTypesAiobotocorePackage "ses" "3.1.1"
+      "sha256-9NpTtA5gSHkzIK36eJlpMcImplJKWC56NQm8x+pb/3E=";
 
   types-aiobotocore-sesv2 =
-    buildTypesAiobotocorePackage "sesv2" "2.22.0"
-      "sha256-LyUx7xj4ALJItP7Gkh+EdI2R49sbeWvi2MOrYkmA6WI=";
+    buildTypesAiobotocorePackage "sesv2" "3.1.1"
+      "sha256-EsZdps9wrSW7dl6B7cM5Ur04nlkvFJZPTma6UI6Y4g0=";
 
   types-aiobotocore-shield =
-    buildTypesAiobotocorePackage "shield" "2.22.0"
-      "sha256-UXG5LOKygqw1k+G4VujAmwUktFU9vIHVBTHQfmFDT3E=";
+    buildTypesAiobotocorePackage "shield" "3.1.1"
+      "sha256-l5VGTIkl8f5wmHzMYaJ1inuB5aiNMrWPPNAMuFUKoM8=";
 
   types-aiobotocore-signer =
-    buildTypesAiobotocorePackage "signer" "2.22.0"
-      "sha256-uoO1mvCMMDM7g9+YsbBzTFBLh3rWwG2RXuGN4YILTHU=";
+    buildTypesAiobotocorePackage "signer" "3.1.1"
+      "sha256-LkXSPGq2lGibp/5rIk06+rHYzVd0GmGeR3vD4pIbjaw=";
 
   types-aiobotocore-simspaceweaver =
-    buildTypesAiobotocorePackage "simspaceweaver" "2.22.0"
-      "sha256-KRX0KPKdtMwzqy5zwfeV0cZq1mhVYcBbULnFMJKiNhw=";
+    buildTypesAiobotocorePackage "simspaceweaver" "3.1.1"
+      "sha256-4EZYXzMC4tKcZPdVH1Tkc19Vv9md49Xbbl7hdHzh7uI=";
 
   types-aiobotocore-sms =
-    buildTypesAiobotocorePackage "sms" "2.22.0"
-      "sha256-bMPNUSUpxERCX2TKpY7CDzvBepZz69ZiOtw5JnsKvbg=";
+    buildTypesAiobotocorePackage "sms" "2.24.2"
+      "sha256-aZuGmKtxe3ERjMUZ5jNiZUaVUqDaCHKQQ6wMTsGkcVs=";
 
   types-aiobotocore-sms-voice =
     buildTypesAiobotocorePackage "sms-voice" "2.22.0"
       "sha256-nlg8QppdMa4MMLUQZXcxnypzv5II9PqEtuVc09UmjKU=";
 
   types-aiobotocore-snow-device-management =
-    buildTypesAiobotocorePackage "snow-device-management" "2.22.0"
-      "sha256-ezSEYExAgIuu+oIwznRBuWG5Tn/H3leQfNE0uvVRgUk=";
+    buildTypesAiobotocorePackage "snow-device-management" "3.1.1"
+      "sha256-/NwzS9U1t4//pCorM5/FIOAlNBZb+2+RnY9fgTTMb6g=";
 
   types-aiobotocore-snowball =
-    buildTypesAiobotocorePackage "snowball" "2.22.0"
-      "sha256-PdrujWMg5M40qaAzqSnHm659EvMCtdm0zOVCu0euGCw=";
+    buildTypesAiobotocorePackage "snowball" "3.1.1"
+      "sha256-9UfBPLwXXGljN7gDfy41ujtS38l7XdgQhrRNIfbUQMw=";
 
   types-aiobotocore-sns =
-    buildTypesAiobotocorePackage "sns" "2.22.0"
-      "sha256-FKWoRpJdRdB1Nm3lVZUgWPn0zmwkfjlnzwkeNJ9l2RU=";
+    buildTypesAiobotocorePackage "sns" "3.1.1"
+      "sha256-cT+F0l1Vbvqfam30qJRLrX/4BCv1/mJd4JfGfIPIilI=";
 
   types-aiobotocore-sqs =
-    buildTypesAiobotocorePackage "sqs" "2.22.0"
-      "sha256-slfeI7RL7OpxwXuXt4Ojl1q4hZ14OxbGR+zaupN0D9s=";
+    buildTypesAiobotocorePackage "sqs" "3.1.1"
+      "sha256-ueacBQwvInwLWNiqVJ0Vw7Nw/o2XZgsQjzpCeuqqtzU=";
 
   types-aiobotocore-ssm =
-    buildTypesAiobotocorePackage "ssm" "2.22.0"
-      "sha256-nvqWxnxNlGAm967LnSgXq2K4g1oGjt6GH/J+a8ag6Mg=";
+    buildTypesAiobotocorePackage "ssm" "3.1.1"
+      "sha256-LyHpJdWhdW8PYgiOHRlOmLNO4+6Ky7xrrim9/s5jH0k=";
 
   types-aiobotocore-ssm-contacts =
-    buildTypesAiobotocorePackage "ssm-contacts" "2.22.0"
-      "sha256-eBrx0iB/35Vtu0TrJm+DVL8YNh+5fNGORJKw6zFCokA=";
+    buildTypesAiobotocorePackage "ssm-contacts" "3.1.1"
+      "sha256-oTFfGAL2S6hTM8cwQLMcZXjSpyRf3QN1m50a2Px0FBw=";
 
   types-aiobotocore-ssm-incidents =
-    buildTypesAiobotocorePackage "ssm-incidents" "2.22.0"
-      "sha256-OioI5ue2KCtcs4B+Zys4mw8aU/IWnKTQVb7d53uldLw=";
+    buildTypesAiobotocorePackage "ssm-incidents" "3.1.1"
+      "sha256-9vyFo4pS4SobbbCCuwQOlW/VBF2yesnX59GsgdsO+KY=";
 
   types-aiobotocore-ssm-sap =
-    buildTypesAiobotocorePackage "ssm-sap" "2.22.0"
-      "sha256-h0WWRD9qVdt3gqqFofw5ntpjZNO9UCXANNxLoaPAm3E=";
+    buildTypesAiobotocorePackage "ssm-sap" "3.1.1"
+      "sha256-tP3465vsX842Ftut8n1ntio34SRX/UekFj8VYSCRO5w=";
 
   types-aiobotocore-sso =
-    buildTypesAiobotocorePackage "sso" "2.22.0"
-      "sha256-NsrOt20b+C3HOpcndfLZ9b0dr5NnhPSCzZUVW5kmzF0=";
+    buildTypesAiobotocorePackage "sso" "3.1.1"
+      "sha256-JhLvoJgs4y8e26VT6ZZkOiY1I/SNin1/JthaFPc4OJE=";
 
   types-aiobotocore-sso-admin =
-    buildTypesAiobotocorePackage "sso-admin" "2.22.0"
-      "sha256-g04kdTCjOPVYkv3kj1OQO1dWQdoPjk9qUdHWWgZmiMI=";
+    buildTypesAiobotocorePackage "sso-admin" "3.1.1"
+      "sha256-1KfctJkmFUdfAnFDYp2skGeNRvlZUG4cEKOtie1lP0A=";
 
   types-aiobotocore-sso-oidc =
-    buildTypesAiobotocorePackage "sso-oidc" "2.22.0"
-      "sha256-aFq2vFX121nuSyqVZU8zZikf+Vxu5s0efabb0nzAzBE=";
+    buildTypesAiobotocorePackage "sso-oidc" "3.1.1"
+      "sha256-+UALlB9RKGXMnlIMSoKsd1l4JuxFtKTJmZke9C1S0zc=";
 
   types-aiobotocore-stepfunctions =
-    buildTypesAiobotocorePackage "stepfunctions" "2.22.0"
-      "sha256-3TK3iGXMEdfCgx6PYyj0MeRq9siER+0eFqxO5CO8ixE=";
+    buildTypesAiobotocorePackage "stepfunctions" "3.1.1"
+      "sha256-JcBvWSojGhqmuqBxyp4Nh/knTWylxPK6GrBKRoa82uk=";
 
   types-aiobotocore-storagegateway =
-    buildTypesAiobotocorePackage "storagegateway" "2.22.0"
-      "sha256-cd3Qh/ImDqLAPh58/tkBOhirzw9TMFBEILb9LzEiTtw=";
+    buildTypesAiobotocorePackage "storagegateway" "3.1.1"
+      "sha256-X3J+W9OzZT8JBzJwaVKeKvgEDNaEJLGV7BYDC1Bsj/w=";
 
   types-aiobotocore-sts =
-    buildTypesAiobotocorePackage "sts" "2.22.0"
-      "sha256-SAUzM9YxQVF/qF6S/I7tMpApYnIDIY4hUPXgUPtsrsA=";
+    buildTypesAiobotocorePackage "sts" "3.1.1"
+      "sha256-SrM3vsUMyY2tlm4keqt15GSBl5C4OAVZ3kcwHZVV8PA=";
 
   types-aiobotocore-support =
-    buildTypesAiobotocorePackage "support" "2.22.0"
-      "sha256-VJjQATKjR6uxsIQwO17R6ptSZlJjmRUQ7i29vbOfWoM=";
+    buildTypesAiobotocorePackage "support" "3.1.1"
+      "sha256-uqLjAu3V5y25x1MZmPWiKtqo4fHtFNsUKQ7qzgMJJbk=";
 
   types-aiobotocore-support-app =
-    buildTypesAiobotocorePackage "support-app" "2.22.0"
-      "sha256-JmNeAIP4Qo4rXx/yiyhvfQKg9ltbxNwMLiC6JXYW8YE=";
+    buildTypesAiobotocorePackage "support-app" "3.1.1"
+      "sha256-dt58V9rl7OFuKbrC/IEn/oHmaSo3yb5OlZIuFB6EENA=";
 
   types-aiobotocore-swf =
-    buildTypesAiobotocorePackage "swf" "2.22.0"
-      "sha256-V3joMcWwiwa0nSMYlhDFPhyJb/7Gaqt76gh1nCH29bc=";
+    buildTypesAiobotocorePackage "swf" "3.1.1"
+      "sha256-IQSwkrDhSoQ3pdLaQaaJCEPSAYc84Al+C7Wy83tbI+4=";
 
   types-aiobotocore-synthetics =
-    buildTypesAiobotocorePackage "synthetics" "2.22.0"
-      "sha256-wVQdln8aZbLsV1F2MIwS/G/xdJzv1vGVXITlDgubRQ4=";
+    buildTypesAiobotocorePackage "synthetics" "3.1.1"
+      "sha256-IJo8z/lEc9acZLKPBYg/f/2+zMSee6Tviti5QVOTa8w=";
 
   types-aiobotocore-textract =
-    buildTypesAiobotocorePackage "textract" "2.22.0"
-      "sha256-FfvP6OB7vBqQ5MJzRBIFm5MkmdiNkfdRFiG1gPXw/K4=";
+    buildTypesAiobotocorePackage "textract" "3.1.1"
+      "sha256-8AE30iSji4gZH1ga2R9OOBW1ZhfYncsAYvJ30QHMKWw=";
 
   types-aiobotocore-timestream-query =
-    buildTypesAiobotocorePackage "timestream-query" "2.22.0"
-      "sha256-t96kYvIFtVFsrydp8PgqyN8Si7CsEZsaA+XhMwe7AUw=";
+    buildTypesAiobotocorePackage "timestream-query" "3.1.1"
+      "sha256-it4qUJvRK1UszVrcG8SV+tjmgt+951NwOymZLP7qiv0=";
 
   types-aiobotocore-timestream-write =
-    buildTypesAiobotocorePackage "timestream-write" "2.22.0"
-      "sha256-9ErxKQRAIOXtEy2TbOADhvnWVqenviCoxg8zqlticOk=";
+    buildTypesAiobotocorePackage "timestream-write" "3.1.1"
+      "sha256-T4/9DYqKRp8OEHA4r9Wkb8iW6+yTho3D0d/6MGrebQA=";
 
   types-aiobotocore-tnb =
-    buildTypesAiobotocorePackage "tnb" "2.22.0"
-      "sha256-M6WKLK7Azbao1K38tTZM+kCunmYq/3ZNDaO9PRjW5Oc=";
+    buildTypesAiobotocorePackage "tnb" "3.1.1"
+      "sha256-fdJJtgZBcz1R70iP/8rsw5f2denHcvQMtj2oABfN9b0=";
 
   types-aiobotocore-transcribe =
-    buildTypesAiobotocorePackage "transcribe" "2.22.0"
-      "sha256-swmBPOmZLlZzgdAy8Ng7lWNEjpBfJeDlOtgN3C7+L7s=";
+    buildTypesAiobotocorePackage "transcribe" "3.1.1"
+      "sha256-eDv/gZST1YBOzY9jZ2tcVrvRG4iQjcCpHN01hEv79pM=";
 
   types-aiobotocore-transfer =
-    buildTypesAiobotocorePackage "transfer" "2.22.0"
-      "sha256-Jv0WVrAcXZoVMMH9DzNk3xIpvs0Jmp/a1khcBfSjDcQ=";
+    buildTypesAiobotocorePackage "transfer" "3.1.1"
+      "sha256-xNYIGy73VrL2KAHqyDZDXI0yxmbCmPZiDcWG91LwpSk=";
 
   types-aiobotocore-translate =
-    buildTypesAiobotocorePackage "translate" "2.22.0"
-      "sha256-dg/6/ihL07Dneo0+wFiPOFFwnAExn5rDJ+H0UhObvYQ=";
+    buildTypesAiobotocorePackage "translate" "3.1.1"
+      "sha256-F4FGlAV9zhW02axSImRi2Z5dY88GUXIvtXAeCAqkXA4=";
 
   types-aiobotocore-verifiedpermissions =
-    buildTypesAiobotocorePackage "verifiedpermissions" "2.22.0"
-      "sha256-wnd3S6mZbVhZMvWgHQDLP9fAgelw7nU2+jkZHGgl8xw=";
+    buildTypesAiobotocorePackage "verifiedpermissions" "3.1.1"
+      "sha256-agM4QnbjwiQv7L9E/FVaK9UN4KhL8bbyjfescFcTkXM=";
 
   types-aiobotocore-voice-id =
-    buildTypesAiobotocorePackage "voice-id" "2.22.0"
-      "sha256-IJN+zme4utrC4ngX9qZYFh1B/nZ0PDj72IVNPwfvE+g=";
+    buildTypesAiobotocorePackage "voice-id" "3.1.1"
+      "sha256-jMKm4sZjAT1JiwOGfNjHwBLM7nbSnFUjzRwSiHKqpA4=";
 
   types-aiobotocore-vpc-lattice =
-    buildTypesAiobotocorePackage "vpc-lattice" "2.22.0"
-      "sha256-Lbm0thE1mpmfjhIxGUWCVu5Fpkd/360Qn5UnNNWr6Wg=";
+    buildTypesAiobotocorePackage "vpc-lattice" "3.1.1"
+      "sha256-PkGkxoiiSe04jeQ4voPQvkMMFcvy8r4c9umMk70sjAk=";
 
   types-aiobotocore-waf =
-    buildTypesAiobotocorePackage "waf" "2.22.0"
-      "sha256-/U0qlIaQ5iZu/aO+3aUNAw1OjSxKMpm+W/2cSYpFgZY=";
+    buildTypesAiobotocorePackage "waf" "3.1.1"
+      "sha256-72fSxAns3WHmrdmZOJkV0SNcbw/2ftUxrP8yjPIJ79g=";
 
   types-aiobotocore-waf-regional =
-    buildTypesAiobotocorePackage "waf-regional" "2.22.0"
-      "sha256-vYlgHXJ3mzWvPymsQThAQHw0+oeuw1xZRxKdrfT1j2E=";
+    buildTypesAiobotocorePackage "waf-regional" "3.1.1"
+      "sha256-/tcKP+RFvgy9IqCmDs8EOF3MBcuivLzxT2ahf5cuWG0=";
 
   types-aiobotocore-wafv2 =
-    buildTypesAiobotocorePackage "wafv2" "2.22.0"
-      "sha256-0u26AqP1V/MtjXqymdCjxhCABpH+Sdrqt2Ny8YnyGjo=";
+    buildTypesAiobotocorePackage "wafv2" "3.1.1"
+      "sha256-vM2qHczDDGFQykTxOMhXRgB1k+zDWbQHaejTtLhHnQ8=";
 
   types-aiobotocore-wellarchitected =
-    buildTypesAiobotocorePackage "wellarchitected" "2.22.0"
-      "sha256-AnXhsF3xvub7ippcdyJdFxibXH/PaqHRvBCj2lHv0jQ=";
+    buildTypesAiobotocorePackage "wellarchitected" "3.1.1"
+      "sha256-dc7Emr6OZLt2cXgE5DHKV3S64bwdRK40nqjfxuAuFjY=";
 
   types-aiobotocore-wisdom =
-    buildTypesAiobotocorePackage "wisdom" "2.22.0"
-      "sha256-0WB1RytK1JW+tI0AWPS/rWFfGpogWo7RtQxU7gCLPtc=";
+    buildTypesAiobotocorePackage "wisdom" "3.1.1"
+      "sha256-4BbO3YO4zVVxuF9yXln8CvyejIbV8Di5z6SCPqlNju8=";
 
   types-aiobotocore-workdocs =
-    buildTypesAiobotocorePackage "workdocs" "2.22.0"
-      "sha256-+Of4Lr7HZVzwe6b6SB/bqTmxDGWy8bi6LO4TX5cX58s=";
+    buildTypesAiobotocorePackage "workdocs" "3.1.1"
+      "sha256-/n9kptl3kjFWaCnfhj7ZTs2FsoFbyqx3Lw+cCKGg2PM=";
 
   types-aiobotocore-worklink =
     buildTypesAiobotocorePackage "worklink" "2.15.1"
       "sha256-VvuxiybvGaehPqyVUYGO1bbVSQ0OYgk6LbzgoKLHF2c=";
 
   types-aiobotocore-workmail =
-    buildTypesAiobotocorePackage "workmail" "2.22.0"
-      "sha256-NGB2ke/jSwydMq4deAZ2jnIorkLc7b2HAVtIffpT78E=";
+    buildTypesAiobotocorePackage "workmail" "3.1.1"
+      "sha256-VUDDXQea77SesZFPUNaW7N4ks1Vhn2qr+iPYDhA89y4=";
 
   types-aiobotocore-workmailmessageflow =
-    buildTypesAiobotocorePackage "workmailmessageflow" "2.22.0"
-      "sha256-2hMsEsZX9dEwPVqWn43flCS2VKafdilpWBf8YfdIdSc=";
+    buildTypesAiobotocorePackage "workmailmessageflow" "3.1.1"
+      "sha256-/w7qTqFuOPU6yOyr5JzY7RwBGyhbBfhwS6OGCFLBXog=";
 
   types-aiobotocore-workspaces =
-    buildTypesAiobotocorePackage "workspaces" "2.22.0"
-      "sha256-n03h0T9BRYNGJPcZipFilsSZFOvUIp7/MGqohsrYfXE=";
+    buildTypesAiobotocorePackage "workspaces" "3.1.1"
+      "sha256-60MKEc3GWpYacygjiaHdG/Bpst3MKyuGZAUnHpDppfw=";
 
   types-aiobotocore-workspaces-web =
-    buildTypesAiobotocorePackage "workspaces-web" "2.22.0"
-      "sha256-SnwKiY3Zl1ak0rB+cUZRKwmWQORC9d+CuUmBPKNtnHc=";
+    buildTypesAiobotocorePackage "workspaces-web" "3.1.1"
+      "sha256-wSAu3G8zsTFYlAxDKXW6eBm4L+khDspMw/zehf32a44=";
 
   types-aiobotocore-xray =
-    buildTypesAiobotocorePackage "xray" "2.22.0"
-      "sha256-VyhJz7j8zm6ZwQyYboF2SzHvoh3p6GnEJqeHeO01LnY=";
+    buildTypesAiobotocorePackage "xray" "3.1.1"
+      "sha256-FKDzj+WCtRIbawt6+zaKiGeXOg0vVQ3LQIgrsEz40Z0=";
 }

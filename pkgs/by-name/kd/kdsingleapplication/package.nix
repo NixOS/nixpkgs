@@ -6,14 +6,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "KDSingleApplication";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "KDSingleApplication";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rglt89Gw6OHXXVOEwf0TxezDzyHEvWepeGeup7fBlLs=";
   };
 
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DKDSingleApplication_QT6=true" ];
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "KDAB's helper class for single-instance policy applications";
     homepage = "https://www.kdab.com/";
-    maintainers = with maintainers; [ hellwolf ];
-    platforms = platforms.unix;
-    license = licenses.mit;
-    changelog = "https://github.com/KDAB/KDSingleApplication/releases/tag/v${version}";
+    maintainers = with lib.maintainers; [ hellwolf ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    changelog = "https://github.com/KDAB/KDSingleApplication/releases/tag/v${finalAttrs.version}";
   };
-}
+})

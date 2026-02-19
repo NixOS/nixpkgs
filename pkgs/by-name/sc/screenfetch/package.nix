@@ -46,20 +46,22 @@ let
   );
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "screenfetch";
   version = "3.9.9";
 
   src = fetchFromGitHub {
     owner = "KittyKatt";
     repo = "screenFetch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UNZMCLXhH4wDV0/fGWsB+KAi6aJVuPs6zpWXIQAqnjo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 0755 screenfetch-dev $out/bin/screenfetch
     install -Dm 0644 screenfetch.1 $out/share/man/man1/screenfetch.1
     install -Dm 0644 -t $out/share/doc/screenfetch CHANGELOG COPYING README.mkdn TODO
@@ -68,9 +70,17 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/screenfetch
     wrapProgram "$out/bin/screenfetch" \
       --prefix PATH : ${path}
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  meta = {
     description = "Fetches system/theme information in terminal for Linux desktop screenshots";
     longDescription = ''
       screenFetch is a "Bash Screenshot Information Tool". This handy Bash
@@ -82,10 +92,10 @@ stdenv.mkDerivation rec {
       screenshot upon displaying info, and even customizing the screenshot
       command! This script is very easy to add to and can easily be extended.
     '';
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://github.com/KittyKatt/screenFetch";
-    maintainers = with maintainers; [ relrod ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ relrod ];
+    platforms = lib.platforms.all;
     mainProgram = "screenfetch";
   };
-}
+})

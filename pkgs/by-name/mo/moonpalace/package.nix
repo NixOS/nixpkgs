@@ -29,7 +29,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "An API debugging tool provided by Moonshot AI";
+    description = "API debugging tool provided by Moonshot AI";
     homepage = "https://github.com/MoonshotAI/moonpalace";
     changelog = "https://github.com/MoonshotAI/moonpalace/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;

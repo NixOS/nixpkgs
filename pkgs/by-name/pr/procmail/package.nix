@@ -1,17 +1,22 @@
 {
   lib,
   stdenv,
+  gcc14Stdenv,
   fetchurl,
   fetchpatch,
   buildPackages,
-}:
+}@args:
 
-stdenv.mkDerivation rec {
+let
+  stdenv = if args.stdenv.cc.isGNU then gcc14Stdenv else args.stdenv;
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "procmail";
   version = "3.24";
 
   src = fetchurl {
-    url = "https://github.com/BuGlessRB/procmail/archive/refs/tags/v${version}.tar.gz";
+    url = "https://github.com/BuGlessRB/procmail/archive/refs/tags/v${finalAttrs.version}.tar.gz";
     sha256 = "UU6kMzOXg+ld+TIeeUdx5Ih7mCOsVf2yRpcCz2m9OYk=";
   };
 
@@ -30,25 +35,24 @@ stdenv.mkDerivation rec {
 
   # getline is defined differently in glibc now. So rename it.
   # Without the .PHONY target "make install" won't install anything on Darwin.
-  postPatch =
-    ''
-      sed -i Makefile \
-        -e "s%^RM.*$%#%" \
-        -e "s%^BASENAME.*%\BASENAME=$out%" \
-        -e "s%^LIBS=.*%LIBS=-lm%"
-      sed -e "s%getline%thisgetline%g" -i src/*.c src/*.h
-      sed -e "3i\
-      .PHONY: install
-      " -i Makefile
-    ''
-    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      substituteInPlace src/Makefile.0 \
-        --replace-fail '@./_autotst' '@${stdenv.hostPlatform.emulator buildPackages} ./_autotst'
-      sed -e '3i\
-      _autotst() { ${stdenv.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
-      _locktst() { ${stdenv.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
-      ' -i src/autoconf
-    '';
+  postPatch = ''
+    sed -i Makefile \
+      -e "s%^RM.*$%#%" \
+      -e "s%^BASENAME.*%\BASENAME=$out%" \
+      -e "s%^LIBS=.*%LIBS=-lm%"
+    sed -e "s%getline%thisgetline%g" -i src/*.c src/*.h
+    sed -e "3i\
+    .PHONY: install
+    " -i Makefile
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace src/Makefile.0 \
+      --replace-fail '@./_autotst' '@${stdenv.hostPlatform.emulator buildPackages} ./_autotst'
+    sed -e '3i\
+    _autotst() { ${stdenv.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
+    _locktst() { ${stdenv.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
+    ' -i src/autoconf
+  '';
 
   # default target is binaries + manpages; manpages don't cross compile without more work.
   makeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "bins" ];
@@ -56,11 +60,11 @@ stdenv.mkDerivation rec {
     "install.bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Mail processing and filtering utility";
     homepage = "https://github.com/BuGlessRB/procmail/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

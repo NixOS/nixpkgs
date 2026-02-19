@@ -3,26 +3,24 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-let
+
+buildGoModule (finalAttrs: {
   pname = "tparse";
-  version = "0.17.0";
-in
-buildGoModule {
-  inherit pname version;
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "mfridman";
     repo = "tparse";
-    rev = "v${version}";
-    hash = "sha256-yU4hP+EJ+Ci3Ms0dAoSuqZFT9RRwqmN1V0x5cV+87z0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oJApKmdo8uvnm6npXpzcKBRRkZ901AH1kZqGuoLdB3U=";
   };
 
-  vendorHash = "sha256-m0YTGzzjr7/4+vTNhfPb7y2xtsI/y4Q2pbg+3yqSFaw=";
+  vendorHash = "sha256-4W6RryyQByUcwM2P2jmG2wXjNMrnpcCTSOJiw1M/Kd0=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -32,4 +30,4 @@ buildGoModule {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ obreitwi ];
   };
-}
+})

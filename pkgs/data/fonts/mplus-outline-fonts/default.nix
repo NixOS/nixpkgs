@@ -26,12 +26,12 @@ in
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "M+ Outline Fonts (legacy OSDN release)";
       homepage = "https://mplus-fonts.osdn.jp";
-      maintainers = with maintainers; [ uakci ];
-      platforms = platforms.all;
-      license = licenses.mplus;
+      maintainers = with lib.maintainers; [ uakci ];
+      platforms = lib.platforms.all;
+      license = lib.licenses.mplus;
     };
   };
 
@@ -56,12 +56,12 @@ in
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "M+ Outline Fonts (GitHub release)";
       homepage = "https://mplusfonts.github.io";
-      maintainers = with maintainers; [ uakci ];
-      platforms = platforms.all;
-      license = licenses.ofl;
+      maintainers = with lib.maintainers; [ uakci ];
+      platforms = lib.platforms.all;
+      license = lib.licenses.ofl;
     };
   };
 }

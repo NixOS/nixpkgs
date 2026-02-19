@@ -47,7 +47,8 @@ let
       libgcrypt
       libthai
       xz
-    ] ++ (with libsForQt5; [ qt5.qtvirtualkeyboard ]);
+    ]
+    ++ (with libsForQt5; [ qt5.qtvirtualkeyboard ]);
 
     installPhase = ''
       runHook preInstall
@@ -73,6 +74,9 @@ buildFHSEnv {
     pkgs: with pkgs; [
       libudev0-shim
       insync-pkg
+      # Qt requires usr/share/icons/hicolor/index.theme file (provided by hicolor-icon-theme) to be
+      # present to successfully find the system tray icons.
+      hicolor-icon-theme
     ];
 
   extraInstallCommands = ''
@@ -116,10 +120,6 @@ buildFHSEnv {
       and built in sharing.
 
       There is a 15-day free trial, and it is a paid application after that.
-
-      Known bug(s):
-
-      1) Currently the system try icon does not render correctly.
     '';
     mainProgram = "insync";
   };

@@ -11,34 +11,30 @@
 }:
 buildPythonPackage rec {
   pname = "corallium";
-  version = "0.3.3";
-  format = "pyproject";
+  version = "2.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = pname;
-    rev = version;
-    hash = "sha256-fZzm3o8EwegNG+sYn8lbPz60NMyA/OzGFUf/J/lbGbI=";
+    tag = version;
+    hash = "sha256-0P8qmX+1zigL4jaA4TTuqAzFkyhQUfdGmPLxkFnT0qE=";
   };
 
   build-system = [
     poetry-core
   ];
 
-  dependencies =
-    [
-      beartype
-      pydantic
-      rich
-    ]
-    ++ lib.optionals (python.pythonOlder "3.11") [
-      tomli
-    ];
+  dependencies = [
+    beartype
+    pydantic
+    rich
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Shared functionality for calcipy-ecosystem";
     homepage = "https://corallium.kyleking.me";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yajo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

@@ -1,76 +1,46 @@
 {
-  stdenv,
   lib,
-  rustPlatform,
-  installShellFiles,
+  symlinkJoin,
   makeBinaryWrapper,
-  fetchFromGitHub,
-  nix-update-script,
-  nvd,
+  nh-unwrapped,
   nix-output-monitor,
-  buildPackages,
 }:
 let
+  unwrapped = nh-unwrapped;
   runtimeDeps = [
-    nvd
     nix-output-monitor
   ];
 in
-rustPlatform.buildRustPackage (finalAttrs: {
+symlinkJoin {
   pname = "nh";
-  version = "4.1.0";
+  inherit (unwrapped) version;
 
-  src = fetchFromGitHub {
-    owner = "nix-community";
-    repo = "nh";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-OiuhBrJe1AyVxC+AV4HMJ+vhDvUfCyLpBmj+Fy7MDtM=";
-  };
-
-  strictDeps = true;
+  paths = [
+    unwrapped
+  ];
 
   nativeBuildInputs = [
-    installShellFiles
     makeBinaryWrapper
   ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      mkdir completions
-
-      for shell in bash zsh fish; do
-        NH_NO_CHECKS=1 ${emulator} $out/bin/nh completions $shell > completions/nh.$shell
-      done
-
-      installShellCompletion completions/*
-    ''
-  );
-
-  postFixup = ''
+  postBuild = ''
     wrapProgram $out/bin/nh \
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/tbmzGUd1b4oa+29+eFdkE4l8vxMoIdHx40YgErY9pY=";
-
-  passthru.updateScript = nix-update-script { };
-
-  env.NH_REV = finalAttrs.src.tag;
-
   meta = {
-    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.version}/CHANGELOG.md";
-    description = "Yet another nix cli helper";
-    homepage = "https://github.com/nix-community/nh";
-    license = lib.licenses.eupl12;
-    mainProgram = "nh";
-    maintainers = with lib.maintainers; [
-      drupol
-      NotAShelf
-      viperML
-    ];
+    inherit (unwrapped.meta)
+      changelog
+      description
+      homepage
+      license
+      mainProgram
+      maintainers
+      ;
+
+    # To prevent builds on hydra
+    hydraPlatforms = [ ];
+    # prefer wrapper over the package
+    priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
-})
+}

@@ -3,10 +3,8 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  cacert,
-  caBundle ? "${cacert}/etc/ssl/certs/ca-bundle.crt",
-  nextcloud30Packages,
   nextcloud31Packages,
+  nextcloud32Packages,
 }:
 
 let
@@ -34,10 +32,6 @@ let
         inherit packages;
       };
 
-      postPatch = ''
-        cp ${caBundle} resources/config/ca-bundle.crt
-      '';
-
       installPhase = ''
         runHook preInstall
         mkdir -p $out/
@@ -58,16 +52,16 @@ let
     };
 in
 {
-  nextcloud30 = generic {
-    version = "30.0.11";
-    hash = "sha256-WEJ3LV1xLxBdyPFdZ4hFnmFEuDbMiKBiyQU3CiZUN3o=";
-    packages = nextcloud30Packages;
+  nextcloud31 = generic {
+    version = "31.0.14";
+    hash = "sha256-0JZessv2gQV0PLvm7vQEyJCSz5LEDa7iycuc9u32NhM=";
+    packages = nextcloud31Packages;
   };
 
-  nextcloud31 = generic {
-    version = "31.0.5";
-    hash = "sha256-Iii49STc2H8IoqkoHUGwT1y1ALdiS8jI4HuOMDkGFQM=";
-    packages = nextcloud31Packages;
+  nextcloud32 = generic {
+    version = "32.0.6";
+    hash = "sha256-RLwz/A4xplC7UguxI8CqplGbf3uThhM9Vhred+U/cTA=";
+    packages = nextcloud32Packages;
   };
 
   # tip: get the sha with:

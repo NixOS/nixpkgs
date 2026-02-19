@@ -8,18 +8,18 @@
   gtk-layer-shell,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nwg-dock-hyprland";
-  version = "0.4.6";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-dock-hyprland";
-    tag = "v${version}";
-    hash = "sha256-qxJSSdRySCCHiILNzP7Idvts6sAOdaXl6uU7Kw6lngE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a+LNABfe5rHStZrf+qlayNuCwTQf+7qY4xjx2K7Ky7E=";
   };
 
-  vendorHash = "sha256-TcDgsreaPLZSqaxwcVrRcLJ9frkG23uHVpEv7dizNz4=";
+  vendorHash = "sha256-uHxH3g0pcfA5emF4LpvjYsSocjoFtk2p57JRSsY/PKY=";
 
   ldflags = [
     "-s"
@@ -48,4 +48,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

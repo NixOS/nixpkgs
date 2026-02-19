@@ -1,12 +1,12 @@
 {
   lib,
-  aetcd,
   buildPythonPackage,
   coredis,
   deprecated,
-  etcd3,
   fetchFromGitHub,
   flaky,
+  hatchling,
+  hatch-vcs,
   hiro,
   importlib-resources,
   motor,
@@ -18,48 +18,35 @@
   pytest-cov-stub,
   pytest-lazy-fixtures,
   pytestCheckHook,
-  pythonOlder,
   redis,
-  setuptools,
   typing-extensions,
+  valkey,
 }:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "4.0.1";
+  version = "5.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "limits";
     tag = version;
-    # Upstream uses versioneer, which relies on git attributes substitution.
-    # This leads to non-reproducible archives on github. Remove the substituted
-    # file here, and recreate it later based on our version info.
+    hash = "sha256-svCvfQcidmfTPpe/GPrPxDhIPbmyoeIlXBR2vttTyHI=";
     postFetch = ''
-      rm "$out/limits/_version.py"
+      rm "$out/limits/_version.pyi"
     '';
-    hash = "sha256-JXXjRVn3RQMqNYRYXF4LuV2DHzVF8PTeGepFkt4jDFM=";
   };
-
-  patches = [
-    ./only-test-in-memory.patch
-  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace-fail "-K" ""
-
-    substituteInPlace setup.py \
-      --replace-fail "versioneer.get_version()" "'${version}'"
-
-    # Recreate _version.py, deleted at fetch time due to non-reproducibility.
-    echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     deprecated
@@ -69,17 +56,15 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    redis = [ redis ];
-    rediscluster = [ redis ];
+    async-memcached = [ pymemcache ];
+    async-mongodb = [ motor ];
+    async-redis = [ coredis ];
+    async-valkey = [ valkey ];
     memcached = [ pymemcache ];
     mongodb = [ pymongo ];
-    etcd = [ etcd3 ];
-    async-redis = [ coredis ];
-    # async-memcached = [
-    #   emcache  # Missing module
-    # ];
-    async-mongodb = [ motor ];
-    async-etcd = [ aetcd ];
+    redis = [ redis ];
+    rediscluster = [ redis ];
+    valkey = [ valkey ];
   };
 
   env = {
@@ -96,17 +81,32 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-lazy-fixtures
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  disabledTests = [ "test_moving_window_memcached" ];
+  pytestFlags = [ "--benchmark-disable" ];
+
+  disabledTests = [
+    # requires docker
+    "TestAsyncConcurrency"
+    "TestAsyncFixedWindow"
+    "TestAsyncMovingWindow"
+    "TestAsyncSlidingWindow"
+    "TestConcreteStorages"
+    "TestConcurrency"
+    "TestFixedWindow"
+    "TestMovingWindow"
+    "TestRedisStorage"
+    "TestSlidingWindow"
+  ];
 
   pythonImportsCheck = [ "limits" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
     changelog = "https://github.com/alisaifee/limits/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

@@ -49,10 +49,11 @@ stdenv.mkDerivation rec {
     runHook postUnpack
   '';
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [
     stdenv.cc.cc
@@ -79,12 +80,12 @@ stdenv.mkDerivation rec {
     tests.smoke-test = nixosTests.ombi;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted web application that automatically gives your shared Plex or Emby users the ability to request content by themselves";
     homepage = "https://ombi.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ woky ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ woky ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -1,37 +1,37 @@
-From 301de689a1f7fae8ee6d0d5bbbe155a351b1b927 Mon Sep 17 00:00:00 2001
-From: Jade Lovelace <jadel@mercury.com>
-Date: Wed, 9 Nov 2022 11:02:02 -0800
-Subject: [PATCH] add NO_REDIS_TEST env-var that disables Redis-requiring tests
+From ce22aed5afa89c9b591d865bdfcc84a739929a01 Mon Sep 17 00:00:00 2001
+From: jkachmar <j@mercury.com>
+Date: Fri, 24 Oct 2025 17:56:22 -0400
+Subject: [PATCH] disable tests that require redis
 
 ---
- internal/peer/peers_test.go | 7 +++++++
- 1 file changed, 7 insertions(+)
+ internal/peer/peers_test.go | 4 ++++
+ pubsub/pubsub_test.go       | 1 -
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/internal/peer/peers_test.go b/internal/peer/peers_test.go
-index 5ec7f81..c64b1b4 100644
+index dae54067d8..b33ebc4979 100644
 --- a/internal/peer/peers_test.go
 +++ b/internal/peer/peers_test.go
-@@ -2,6 +2,7 @@ package peer
+@@ -86,6 +86,10 @@
+ }
  
- import (
- 	"context"
-+	"os"
- 	"testing"
- 	"time"
- 
-@@ -26,6 +27,12 @@ func TestNewPeers(t *testing.T) {
- 		t.Errorf("received %T expected %T", i, &filePeers{})
- 	}
- 
-+	// Allow skipping test requiring redis, since Nix builds without redis
-+	// available
+ func TestPeerShutdown(t *testing.T) {
++	// Skip tests requiring Redis so that nixpkgs can build & test refinery.
 +	if os.Getenv("NO_REDIS_TEST") != "" {
-+		t.Skip("Skipping redis-requiring test");
++		t.Skip("Skipping Redis-requiring test");
 +	}
-+
- 	c = &config.MockConfig{
+ 	c := &config.MockConfig{
  		GetPeerListenAddrVal: "0.0.0.0:8081",
  		PeerManagementType:   "redis",
--- 
-2.37.1
-
+diff --git a/pubsub/pubsub_test.go b/pubsub/pubsub_test.go
+index 4ad630ff96..dff6981926 100644
+--- a/pubsub/pubsub_test.go
++++ b/pubsub/pubsub_test.go
+@@ -17,7 +17,6 @@
+ )
+ 
+ var types = []string{
+-	"goredis",
+ 	"local",
+ }
+ 

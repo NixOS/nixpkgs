@@ -7,7 +7,13 @@
   copyDesktopItems,
   pkg-config,
   desktopToDarwinBundle,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   wayland,
   wayland-protocols,
   libxkbcommon,
@@ -16,75 +22,70 @@
   waylandSupport ? false,
 }:
 
-assert waylandSupport -> stdenv.hostPlatform.isLinux;
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.15.2";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
-    rev = "v${version}";
-    hash = "sha256-grVZgsoehx32zpdKXuy78gcBb/ESZtzyizRuRKIjgwM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q9g59TVo8Y7cKdSnyrsTQEIpB+f/+pcaobBFynnAgwY=";
   };
 
-  vendorHash = "sha256-fc86z8bvdFI3LdlyHej2G42O554hpRszqre+e3WUOKI=";
+  vendorHash = "sha256-x8eq1ZGitBoq+N1QOIYLZRLIta3gbfpn2xZsqkj4cGo=";
 
-  nativeBuildInputs =
-    [
-      copyDesktopItems
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   # go-glfw doesn't support both X11 and Wayland in single build
-  tags = lib.optionals waylandSupport [ "wayland" ];
+  tags = [ "migrated_fynedo" ] ++ lib.optionals waylandSupport [ "wayland" ];
 
-  buildInputs =
-    [
-      libglvnd
-      mpv-unwrapped
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libXxf86vm
-      xorg.libX11
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
-      xorg.libXrandr
-      xorg.libXinerama
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXext
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
-      wayland
-      wayland-protocols
-      libxkbcommon
-    ];
+  buildInputs = [
+    libglvnd
+    mpv-unwrapped
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxxf86vm
+    libx11
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
+    wayland
+    wayland-protocols
+    libxkbcommon
+  ];
 
-  postInstall =
-    ''
-      for dimension in 128 256 512;do
-          dimensions=''${dimension}x''${dimension}
-          mkdir -p $out/share/icons/hicolor/$dimensions/apps
-          cp res/appicon-$dimension.png $out/share/icons/hicolor/$dimensions/apps/${meta.mainProgram}.png
-      done
-    ''
-    + lib.optionalString waylandSupport ''
-      mv $out/bin/supersonic $out/bin/${meta.mainProgram}
-    '';
+  postInstall = ''
+    for dimension in 128 256 512;do
+        dimensions=''${dimension}x''${dimension}
+        mkdir -p $out/share/icons/hicolor/$dimensions/apps
+        cp res/appicon-$dimension.png $out/share/icons/hicolor/$dimensions/apps/${finalAttrs.meta.mainProgram}.png
+    done
+  ''
+  + lib.optionalString waylandSupport ''
+    mv $out/bin/supersonic $out/bin/${finalAttrs.meta.mainProgram}
+  '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = meta.mainProgram;
-      exec = meta.mainProgram;
-      icon = meta.mainProgram;
+      name = finalAttrs.meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
+      icon = finalAttrs.meta.mainProgram;
       desktopName = "Supersonic" + lib.optionalString waylandSupport " (Wayland)";
       genericName = "Subsonic Client";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       type = "Application";
       categories = [
         "Audio"
@@ -93,15 +94,17 @@ buildGoModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "supersonic" + lib.optionalString waylandSupport "-wayland";
-    description = "A lightweight cross-platform desktop client for Subsonic music servers";
+    description = "Lightweight cross-platform desktop client for Subsonic music servers";
     homepage = "https://github.com/dweymouth/supersonic";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/dweymouth/supersonic/releases/tag/${finalAttrs.src.tag}";
+    platforms = lib.platforms.linux ++ lib.optionals (!waylandSupport) lib.platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       zane
       sochotnicky
+      toasteruwu
     ];
   };
-}
+})

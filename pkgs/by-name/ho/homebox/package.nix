@@ -1,44 +1,48 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
-  go_1_23,
+  go_1_24,
   git,
   cacert,
   nixosTests,
 }:
 let
   pname = "homebox";
-  version = "0.19.0";
+  version = "0.22.3";
   src = fetchFromGitHub {
     owner = "sysadminsmedia";
     repo = "homebox";
-    rev = "v${version}";
-    hash = "sha256-98V2JnxHnMkW8YD8QekNgKeh9aPp0mcosmGh07GAFaU=";
+    tag = "v${version}";
+    hash = "sha256-0/pf7jShuoME6it8GPXJ7ugoRLVfpEzu2uaUW0XFwJg=";
   };
 in
-buildGo123Module {
+buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-SkfYNOyRlcUSfga0g8o7yIvxgdL9SMxgVgRjIcPru0A=";
+  vendorHash = "sha256-pAMWPMZV5U7hIKNNFgRyyqZEH3wjUCplo7cQfKh1A6g=";
   modRoot = "backend";
   # the goModules derivation inherits our buildInputs and buildPhases
   # Since we do pnpm thing in those it fails if we don't explicitly remove them
   overrideModAttrs = _: {
     nativeBuildInputs = [
-      go_1_23
+      go_1_24
       git
       cacert
     ];
     preBuild = "";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit pname version;
     src = "${src}/frontend";
-    hash = "sha256-6Q+tIY5dl5jCQyv1F8btLdJg0oEUGs0Wyu/joVdVhf8=";
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-5AEwgI5rQzp/36USr+QEzjgllZkKhhIvlzl+9ZVfGM4=";
   };
   pnpmRoot = "../frontend";
 
@@ -56,20 +60,24 @@ buildGo123Module {
   '';
 
   nativeBuildInputs = [
+    pnpmConfigHook
     pnpm_9
-    pnpm_9.configHook
     nodejs
   ];
 
   env.CGO_ENABLED = 0;
   doCheck = false;
 
+  tags = [
+    "nodynamic"
+  ];
+
   ldflags = [
     "-s"
     "-w"
     "-extldflags=-static"
-    "-X main.version=${version}"
-    "-X main.commit=${version}"
+    "-X main.version=${src.tag}"
+    "-X main.commit=${src.tag}"
   ];
   installPhase = ''
     runHook preInstall
@@ -90,7 +98,10 @@ buildGo123Module {
     mainProgram = "api";
     homepage = "https://homebox.software/";
     description = "Inventory and organization system built for the Home User";
-    maintainers = with lib.maintainers; [ patrickdag ];
+    maintainers = with lib.maintainers; [
+      patrickdag
+      tebriel
+    ];
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux;
   };

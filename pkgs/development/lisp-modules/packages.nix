@@ -86,6 +86,25 @@ let
 
       jzon = super.com_dot_inuoe_dot_jzon;
 
+      _40ants-routes = super._40ants-routes.overrideLispAttrs (o: {
+        systems = o.systems ++ [ "40ants-routes/handler" ];
+      });
+
+      reblocks-ui2 = super.reblocks-ui2.overrideLispAttrs (o: {
+        systems = o.systems ++ [
+          "reblocks-ui2/themes/color"
+          "reblocks-ui2/themes/tailwind"
+          "reblocks-ui2/utils/padding"
+          "reblocks-ui2/utils/align"
+          "reblocks-ui2/card"
+          "reblocks-ui2/card/view"
+        ];
+      });
+
+      april = super.april.overrideLispAttrs (o: {
+        systems = o.systems ++ [ "cape" ];
+      });
+
       cl-notify = build-asdf-system {
         pname = "cl-notify";
         version = "20080904-138ca7038";
@@ -102,6 +121,13 @@ let
       };
 
       cl-liballegro-nuklear = build-with-compile-into-pwd super.cl-liballegro-nuklear;
+
+      cl-project = super.cl-project.overrideLispAttrs {
+        # install skeleton.asd
+        postInstall = ''
+          cp -v skeleton/skeleton.asd $out/skeleton
+        '';
+      };
 
       lessp = build-asdf-system {
         pname = "lessp";
@@ -266,12 +292,10 @@ let
             #+sb-core-compression t
             :toplevel #'clfswm:main)
         '';
-        installPhase =
-          o.installPhase
-          + ''
-            mkdir -p $out/bin
-            mv $out/clfswm $out/bin
-          '';
+        installPhase = o.installPhase + ''
+          mkdir -p $out/bin
+          mv $out/clfswm $out/bin
+        '';
       });
 
       magicl = build-with-compile-into-pwd {
@@ -444,8 +468,8 @@ let
         ];
       };
 
-      nsb-cga = super.nsb-cga.overrideLispAttrs (oa: {
-        lispLibs = oa.lispLibs ++ [ self.sb-cga ];
+      nsb-cga = super.nsb-cga.overrideLispAttrs (old: {
+        lispLibs = old.lispLibs ++ [ self.sb-cga ];
       });
 
       qlot-cli = build-asdf-system rec {
@@ -455,7 +479,7 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "fukamachi";
           repo = "qlot";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-j9iT25Yz9Z6llCKwwiHlVNKLqwuKvY194LrAzXuljsE=";
         };
 
@@ -508,13 +532,13 @@ let
         meta.mainProgram = "qlot";
       };
 
-      fset = super.fset.overrideLispAttrs (oa: {
+      fset = super.fset.overrideLispAttrs (old: {
         systems = [
           "fset"
           "fset/test"
         ];
         meta = {
-          description = "functional collections library";
+          description = "Functional collections library";
           homepage = "https://gitlab.common-lisp.net/fset/fset/-/wikis/home";
           license = pkgs.lib.licenses.llgpl21;
         };
@@ -522,7 +546,7 @@ let
 
       thih-coalton = self.coalton;
       quil-coalton = self.coalton;
-      coalton = super.coalton.overrideLispAttrs (oa: {
+      coalton = super.coalton.overrideLispAttrs (old: {
         systems = [
           "coalton"
           "thih-coalton"
@@ -531,10 +555,10 @@ let
           "quil-coalton/tests"
           "coalton/tests"
         ];
-        lispLibs = oa.lispLibs ++ [ self.fiasco ];
+        lispLibs = old.lispLibs ++ [ self.fiasco ];
         nativeLibs = [ pkgs.mpfr ];
         meta = {
-          description = "statically typed functional programming language that supercharges Common Lisp";
+          description = "Statically typed functional programming language that supercharges Common Lisp";
           homepage = "https://coalton-lang.github.io";
           license = pkgs.lib.licenses.mit;
         };

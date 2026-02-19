@@ -1,26 +1,29 @@
 {
   mkKdeDerivation,
   replaceVars,
-  mediainfo,
   mlt,
   glaxnimate,
   ffmpeg-full,
+  ffmpegthumbs,
   pkg-config,
   shared-mime-info,
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
+  kddockwidgets,
   qqc2-desktop-style,
   libv4l,
-  open-timeline-io,
+  kio-extras,
+  opentimelineio,
   frei0r,
+  shaderc,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
 
   patches = [
     (replaceVars ./dependency-paths.patch {
-      inherit mediainfo mlt glaxnimate;
+      inherit mlt glaxnimate;
       ffmpeg = ffmpeg-full;
     })
   ];
@@ -28,6 +31,9 @@ mkKdeDerivation {
   extraCmakeFlags = [
     "-DFETCH_OTIO=0"
   ];
+
+  # Workaround until https://github.com/NixOS/nixpkgs/pull/480475 hits master
+  NIX_LDFLAGS = [ "-L${shaderc.lib}/lib -lshaderc_shared" ];
 
   extraNativeBuildInputs = [
     pkg-config
@@ -39,12 +45,15 @@ mkKdeDerivation {
     qtmultimedia
     qtnetworkauth
 
+    kddockwidgets
     qqc2-desktop-style
+    kio-extras
 
     ffmpeg-full
+    ffmpegthumbs
     libv4l
     mlt
-    open-timeline-io
+    opentimelineio
   ];
 
   qtWrapperArgs = [

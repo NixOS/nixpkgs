@@ -16,11 +16,15 @@ buildHomeAssistantComponent rec {
     hash = "sha256-68clZgS7Qo62srcZWD3Un9BnNSwQUBr4Z5oBMTC9m8o=";
   };
 
-  meta = with lib; {
+  # https://github.com/lichtteil/local_luftdaten/pull/70
+  # Replace undeclared async-timeout dependency with native asyncio.timeout
+  patches = [ ./async-timeout.patch ];
+
+  meta = {
     changelog = "https://github.com/lichtteil/local_luftdaten/releases/tag/${version}";
     description = "Custom component for Home Assistant that integrates your (own) local Luftdaten sensor (air quality/particle sensor) without using the cloud";
     homepage = "https://github.com/lichtteil/local_luftdaten";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -11,10 +11,10 @@
   libinput,
   fontconfig,
   freetype,
+  isocodes,
   pipewire,
   pulseaudio,
   udev,
-  util-linux,
   cosmic-randr,
   xkeyboard_config,
   nix-update-script,
@@ -27,18 +27,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
-  version = "1.0.0-alpha.7";
+  version = "1.0.6";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-rrPgCXl4uD4Gvstgj9Sdv6rB/0d8wa56CdBjAkTLQG8=";
+    hash = "sha256-255HkAWq9q7Fxx/YCTYqcsRE7g6Hnuqc6rJWBW+7MYA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7Aoy/okgFSwDU6jMYzTGtwPbK82yMgL5bnKBfBUD3vA=";
+  cargoHash = "sha256-T9fbhrYrQrc7TjyumhfT5vyElRKnDzxVBsJtcGA3f7I=";
 
   nativeBuildInputs = [
     cmake
@@ -46,7 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libcosmicAppHook'
     pkg-config
     rustPlatform.bindgenHook
-    util-linux
   ];
 
   buildInputs = [
@@ -67,13 +65,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-settings"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   preFixup = ''
     libcosmicAppWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]}
+      --prefix XDG_DATA_DIRS : ${lib.makeSearchPathOutput "bin" "share" [ isocodes ]}
       --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
       --set-default X11_BASE_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/extra.xml
     )
@@ -88,10 +87,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

@@ -10,14 +10,14 @@ let
   platform =
     if stdenvNoCC.hostPlatform.isDarwin then "universal-macos" else stdenvNoCC.hostPlatform.system;
   hash = builtins.getAttr platform {
-    "universal-macos" = "sha256-RSP9nJ2dmLGci4v2iPRzE//QzAY1m7ZdzCkN43k3w8A=";
-    "x86_64-linux" = "sha256-Xy3kGShqaTbuf9BLx4fUahZrrby2r04+nmuHwDxENMo=";
-    "aarch64-linux" = "sha256-98BAH7yb6I1kG7j/zJyoFEwS1jBjF3oEM/YKk32bbZY=";
+    "universal-macos" = "sha256-NNXbkfA46kYq12SjD8G3r7fitMXwPxNdVQNslwj9p3A=";
+    "x86_64-linux" = "sha256-H+oU30NLVI9Pv7qEx9qQh7n/8+8/up5YYj9qo46UMi8=";
+    "aarch64-linux" = "sha256-ifFOvyBIT0gmfMzfIGYnV0w39M5WW/CFHzIBgdIbcho=";
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tigerbeetle";
-  version = "0.16.41";
+  version = "0.16.70";
 
   src = fetchzip {
     url = "https://github.com/tigerbeetle/tigerbeetle/releases/download/${finalAttrs.version}/tigerbeetle-${platform}.zip";
@@ -56,7 +56,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-    ] ++ lib.platforms.darwin;
+    ]
+    ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "tigerbeetle";
   };

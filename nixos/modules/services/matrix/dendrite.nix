@@ -225,7 +225,7 @@ in
             description = ''
               The language most likely to be used on the server - used when indexing, to
               ensure the returned results match expectations. A full list of possible languages
-              can be found at https://github.com/blevesearch/bleve/tree/master/analysis/lang
+              can be found at <https://github.com/blevesearch/bleve/tree/master/analysis/lang>
             '';
           };
         };
@@ -325,10 +325,10 @@ in
             "--config /run/dendrite/dendrite.yaml"
           ]
           ++ lib.optionals (cfg.httpPort != null) [
-            "--http-bind-address :${builtins.toString cfg.httpPort}"
+            "--http-bind-address :${toString cfg.httpPort}"
           ]
           ++ lib.optionals (cfg.httpsPort != null) [
-            "--https-bind-address :${builtins.toString cfg.httpsPort}"
+            "--https-bind-address :${toString cfg.httpsPort}"
             "--tls-cert ${cfg.tlsCert}"
             "--tls-key ${cfg.tlsKey}"
           ]

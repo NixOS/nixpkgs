@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pynacl,
-  pythonOlder,
   requests,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pynuki";
   version = "1.6.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynuki" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for nuki.io bridges";
     homepage = "https://github.com/pschmitt/pynuki";
     changelog = "https://github.com/pschmitt/pynuki/releases/tag/${version}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

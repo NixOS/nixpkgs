@@ -1,7 +1,7 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   chromaprint,
   makeWrapper,
   versionCheckHook,
@@ -11,8 +11,7 @@ buildGoModule rec {
   pname = "soundalike";
   version = "0.1.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "derat";
     repo = "soundalike";
     tag = "v${version}";
@@ -36,8 +35,7 @@ buildGoModule rec {
   doCheck = true;
   # need to grab another repo for music test data
   testDataVersion = "0.0.1";
-  testData = fetchFromGitea {
-    domain = "codeberg.org";
+  testData = fetchFromCodeberg {
     owner = "derat";
     repo = "soundalike-testdata";
     tag = "v${testDataVersion}";
@@ -62,12 +60,12 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ chromaprint ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Find duplicate audio files using acoustic fingerprints";
     homepage = "https://codeberg.org/derat/soundalike";
     changelog = "https://codeberg.org/derat/soundalike/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ atar13 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ atar13 ];
     mainProgram = "soundalike";
   };
 }

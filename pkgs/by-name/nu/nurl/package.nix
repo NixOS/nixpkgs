@@ -6,30 +6,32 @@
   makeBinaryWrapper,
   gitMinimal,
   mercurial,
-  nixForLinking,
+  nix,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nurl";
-  version = "0.3.13";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nurl";
-    rev = "v${version}";
-    hash = "sha256-rVqF+16esE27G7GS55RT91tD4x/GAzfVlIR0AgSknz0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-BxtvT2k4mErYPU9lNpZlat9ULI2wKXQToic7+PgkCSk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OUJGxNqytwz7530ByqkanpseVJJXAea/L2GIHnuSIqk=";
+  cargoHash = "sha256-4ACuHFzfuF4JWU0cPAJO+RPiA1HZ6o3b8K0C4NWJHmM=";
 
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
   ];
 
-  # tests require internet access
-  doCheck = false;
+  # disable tests that require internet access
+  checkFlags = [
+    "--skip=integration"
+    "--skip=verify_outputs"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/nurl \
@@ -37,7 +39,7 @@ rustPlatform.buildRustPackage rec {
         lib.makeBinPath [
           gitMinimal
           mercurial
-          nixForLinking
+          nix
         ]
       }
     installManPage artifacts/nurl.1
@@ -48,12 +50,15 @@ rustPlatform.buildRustPackage rec {
     GEN_ARTIFACTS = "artifacts";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to generate Nix fetcher calls from repository URLs";
     homepage = "https://github.com/nix-community/nurl";
-    changelog = "https://github.com/nix-community/nurl/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/nix-community/nurl/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      figsoda
+      matthiasbeyer
+    ];
     mainProgram = "nurl";
   };
-}
+})

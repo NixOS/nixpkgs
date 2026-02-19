@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   wxGTK32,
-  libX11,
+  libx11,
   readline,
   fetchpatch,
 }:
@@ -21,14 +21,14 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bossa";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "shumatech";
     repo = "BOSSA";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-8M3MU/+Y1L6SaQ1yoC9Z27A/gGruZdopLnL1z7h7YJw=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bin2c ];
   buildInputs = [
     wxGTK32
-    libX11
+    libx11
     readline
   ];
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     cp bin/bossa{c,sh,} $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
     longDescription = ''
       BOSSA is a flash programming utility for Atmel's SAM family of
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       Source SAM-BA Application to reflect that goal.
     '';
     homepage = "http://www.shumatech.com/web/products/bossa";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
-}
+})

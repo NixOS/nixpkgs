@@ -2,30 +2,31 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  gcc,
   click,
+  cython,
+  distutils,
+  fetchFromGitHub,
+  gcc,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "primer3";
-  version = "2.1.0";
+  version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "libnano";
     repo = "primer3-py";
-    tag = "v${version}";
-    hash = "sha256-Kp4JH57gEdj7SzY+7XGBzGloWuTSwUQRBK9QbgXQfUE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HL/kFpz5xvFDKgef2+AI/qjs2jakl00qfPSABYMGyrI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    distutils
+    setuptools
+  ];
 
   nativeBuildInputs = [ cython ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     click
     pytestCheckHook
   ];
+
   # We are not sure why exactly this is need. It seems `pytestCheckHook`
   # doesn't find extension modules installed in $out/${python.sitePackages},
   # and the tests rely upon them. This was initially reported upstream at
@@ -44,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "primer3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oligo analysis and primer design";
     homepage = "https://github.com/libnano/primer3-py";
-    changelog = "https://github.com/libnano/primer3-py/blob/${src.tag}/CHANGES";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/libnano/primer3-py/blob/${finalAttrs.src.tag}/CHANGES";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

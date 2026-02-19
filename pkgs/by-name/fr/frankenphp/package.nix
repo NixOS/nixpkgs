@@ -6,8 +6,6 @@
   php,
   brotli,
   watcher,
-  testers,
-  frankenphp,
   cctools,
   darwin,
   libiconv,
@@ -15,6 +13,7 @@
   makeBinaryWrapper,
   runCommand,
   writeText,
+  versionCheckHook,
 }:
 
 let
@@ -29,36 +28,39 @@ let
   phpConfig = "${phpUnwrapped.dev}/bin/php-config";
   pieBuild = stdenv.hostPlatform.isMusl;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "frankenphp";
-  version = "1.6.2";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
-    owner = "dunglas";
+    owner = "php";
     repo = "frankenphp";
-    tag = "v${version}";
-    hash = "sha256-YYEipvr0qqudKuLrINt5htl2oCp6wXWLpyvCPuwR9e8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JzZXg/tkSZqLZn56RyLb8Q8SaeG/tHA8Sqxu99s5ks0=";
   };
 
-  sourceRoot = "${src.name}/caddy";
+  sourceRoot = "${finalAttrs.src.name}/caddy";
 
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-M1z9Yv+WomKA+UACOUT8xcWdw+SD1MY2jfaDO4zYUQg=";
+  vendorHash = "sha256-9RHD2ZcolhgQO0UKxkqFjxXGAVijSYQxVt7s+/aXNIo=";
 
   buildInputs = [
     phpUnwrapped
     brotli
     watcher
-  ] ++ phpUnwrapped.buildInputs;
-  nativeBuildInputs =
-    [ makeBinaryWrapper ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      pkg-config
-      cctools
-      darwin.autoSignDarwinBinariesHook
-    ];
+  ]
+  ++ phpUnwrapped.buildInputs;
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pkg-config
+    cctools
+    darwin.autoSignDarwinBinariesHook
+    libiconv
+  ];
 
   subPackages = [ "frankenphp" ];
 
@@ -75,22 +77,17 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP ${version} PHP ${phpUnwrapped.version} Caddy'"
+    "-X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP ${finalAttrs.version} PHP ${phpUnwrapped.version} Caddy'"
     # pie mode is only available with pkgsMusl, it also automatically add -buildmode=pie to $GOFLAGS
-  ] ++ (lib.optional pieBuild [ "-static-pie" ]);
+  ]
+  ++ (lib.optional pieBuild [ "-static-pie" ]);
 
-  preBuild =
-    ''
-      export CGO_CFLAGS="$(${phpConfig} --includes)"
-      export CGO_LDFLAGS="-DFRANKENPHP_VERSION=${version} \
-        $(${phpConfig} --ldflags) \
-        $(${phpConfig} --libs)"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # replace hard-code homebrew path
-      substituteInPlace ../frankenphp.go \
-        --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${libiconv}/lib"
-    '';
+  preBuild = ''
+    export CGO_CFLAGS="$(${phpConfig} --includes)"
+    export CGO_LDFLAGS="-DFRANKENPHP_VERSION=${finalAttrs.version} \
+      $(${phpConfig} --ldflags) \
+      $(${phpConfig} --libs)"
+  '';
 
   preFixup = ''
     mkdir -p $out/lib
@@ -101,15 +98,14 @@ buildGoModule rec {
 
   doCheck = false;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
   passthru = {
     php = phpEmbedWithZts;
     tests = {
       # TODO: real NixOS test with Symfony application
-      version = testers.testVersion {
-        inherit version;
-        package = frankenphp;
-        command = "frankenphp version";
-      };
       phpinfo =
         runCommand "php-cli-phpinfo"
           {
@@ -118,21 +114,18 @@ buildGoModule rec {
             '';
           }
           ''
-            ${lib.getExe frankenphp} php-cli $phpScript > $out
+            ${lib.getExe finalAttrs.finalPackage} php-cli $phpScript > $out
           '';
     };
   };
 
   meta = {
-    changelog = "https://github.com/dunglas/frankenphp/releases/tag/v${version}";
+    changelog = "https://github.com/php/frankenphp/releases/tag/v${finalAttrs.version}";
     description = "Modern PHP app server";
-    homepage = "https://github.com/dunglas/frankenphp";
+    homepage = "https://github.com/php/frankenphp";
     license = lib.licenses.mit;
     mainProgram = "frankenphp";
-    maintainers = with lib.maintainers; [
-      gaelreyrol
-      shyim
-    ];
+    maintainers = [ lib.maintainers.piotrkwiecinski ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

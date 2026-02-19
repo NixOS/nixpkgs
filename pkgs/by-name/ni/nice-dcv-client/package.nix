@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   glib,
-  libX11,
+  libx11,
   gst_all_1,
   libepoxy,
   pango,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libxml2
     libva
     e2fsprogs
-    libX11
+    libx11
     openssl
     pcsclite
     gtk3
@@ -79,12 +79,12 @@ stdenv.mkDerivation rec {
     ln -s ${lib.getLib libffi}/lib/libffi.so $out/lib64/libffi.so.6
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-performance remote display protocol";
     homepage = "https://aws.amazon.com/hpc/dcv/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ rmcgibbo ];
+    maintainers = with lib.maintainers; [ rmcgibbo ];
   };
 }

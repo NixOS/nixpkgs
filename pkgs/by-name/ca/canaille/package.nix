@@ -15,12 +15,10 @@ python.pkgs.buildPythonApplication rec {
   version = "0.0.74";
   pyproject = true;
 
-  disabled = python.pythonOlder "3.10";
-
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FL02ADM7rUU43XR71UWr4FLr/NeUau7zRwTMOSFm1T4=";
   };
 
@@ -58,7 +56,7 @@ python.pkgs.buildPythonApplication rec {
       coverage
       flask-webtest
       pyquery
-      pytest-cov
+      pytest-cov-stub
       pytest-httpserver
       pytest-lazy-fixtures
       pytest-smtpd
@@ -123,7 +121,8 @@ python.pkgs.buildPythonApplication rec {
       sqlalchemy
       sqlalchemy-json
       sqlalchemy-utils
-    ] ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
+    ]
+    ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
     otp = [
       otpauth
       pillow
@@ -140,13 +139,13 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Identity and Authorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";
     changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "canaille";
   };
 

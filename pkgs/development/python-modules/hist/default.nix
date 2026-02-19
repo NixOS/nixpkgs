@@ -9,27 +9,24 @@
   numpy,
   pytestCheckHook,
   pytest-mpl,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hist";
-  version = "2.8.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.9.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-fafJAOLvbUJXk9oamtrEJOvAE6jqvymyQwH3CJghjZ0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Z7+A4Vuxq5n4nM9liO+jV9FoJtaRBDtyYWXHgzSpBns=";
   };
 
-  buildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boost-histogram
     histoprint
     numpy
@@ -40,12 +37,14 @@ buildPythonPackage rec {
     pytest-mpl
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "hist" ];
+
+  meta = {
     description = "Histogramming for analysis powered by boost-histogram";
-    mainProgram = "hist";
+    mainProgram = "";
     homepage = "https://hist.readthedocs.io/";
-    changelog = "https://github.com/scikit-hep/hist/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/hist/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

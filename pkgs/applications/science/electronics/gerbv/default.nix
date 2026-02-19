@@ -18,10 +18,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gerbv";
-    repo = pname;
+    repo = "gerbv";
     tag = "v${version}";
     hash = "sha256-sr48RGLYcMKuyH9p+5BhnR6QpKBvNOqqtRryw3+pbBk=";
   };
+
+  patches = [
+    ./0001-fix-invalid-function-signatures.patch
+  ];
 
   postPatch = ''
     sed -i '/AC_INIT/s/m4_esyscmd.*/${version}])/' configure.ac
@@ -45,13 +49,13 @@ stdenv.mkDerivation rec {
     "--disable-update-desktop-database"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gerber (RS-274X) viewer";
     mainProgram = "gerbv";
     homepage = "https://gerbv.github.io/";
     changelog = "https://github.com/gerbv/gerbv/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mog ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ mog ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -8,16 +8,16 @@
   mysql80,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlite3-to-mysql";
-  version = "2.4.0";
-  format = "pyproject";
+  version = "2.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "techouse";
     repo = "sqlite3-to-mysql";
-    tag = "v${version}";
-    hash = "sha256-1XYDCHR1GitMr6wgpj+roCzf5q4tMr6eGLMWzZgzpBY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2SoLiqOLuGcB4IV2CPud+mjc5s8mqobD72kkx0WCwVU=";
   };
 
   build-system = with python3Packages; [
@@ -39,7 +39,6 @@ python3Packages.buildPythonApplication rec {
     packaging
     mysql80
     python-dateutil
-    types-python-dateutil
   ];
 
   pythonRelaxDeps = [
@@ -65,4 +64,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ gador ];
     mainProgram = "sqlite3mysql";
   };
-}
+})

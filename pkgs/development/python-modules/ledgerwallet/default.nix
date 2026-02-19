@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "ledgerwallet";
-  version = "0.5.0";
-  format = "pyproject";
+  version = "0.5.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LedgerHQ";
     repo = "ledgerctl";
     rev = "v${version}";
-    hash = "sha256-PBULYvyO3+YaW+a1/enJtKB/DR4ndL/o/WdpETbWyZ0=";
+    hash = "sha256-roDfj+igDBS+sTJL4hwYNg5vZzaq+F8QvDA9NucnrMA=";
   };
 
   buildInputs = [
@@ -60,13 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ledgerwallet" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LedgerHQ/ledgerctl";
     description = "Library to control Ledger devices";
     mainProgram = "ledgerctl";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      d-xo
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       erdnaxe
     ];
   };

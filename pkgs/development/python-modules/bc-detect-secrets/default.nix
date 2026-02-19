@@ -7,26 +7,24 @@
   pkgs,
   pyahocorasick,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
   setuptools,
   unidiff,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "bc-detect-secrets";
-  version = "1.5.43";
+  version = "1.5.45";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "detect-secrets";
     tag = version;
-    hash = "sha256-A9qDkAi414wJ7cuAwr1r6FgIa1tOJb+EkAGsvFrw/Fo=";
+    hash = "sha256-/0VHhKcYcXYXosInjsgBf6eR7kcfLiLSyxFuaIqTbiQ=";
   };
 
   build-system = [ setuptools ];
@@ -47,11 +45,9 @@ buildPythonPackage rec {
     pkgs.gitMinimal
     pytestCheckHook
     responses
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Tests are failing for various reasons (missing git repo, missing test data, etc.)
@@ -68,10 +64,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "detect_secrets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detect secrets in the code";
     homepage = "https://github.com/bridgecrewio/detect-secrets";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

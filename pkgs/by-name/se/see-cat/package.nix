@@ -4,18 +4,17 @@
   rustPlatform,
   pkg-config,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "see-cat";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "guilhermeprokisch";
     repo = "see";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VCUrPCaG2fKp9vpFLzNLcfCBu2NiwdY2+bo1pd7anZY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Yw6zRvwT+y3CFb6WwKBiMSWz8igLQ7JmyGalHdRDGL0=";
 
   nativeBuildInputs = [
@@ -36,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "see";
     maintainers = with lib.maintainers; [ louis-thevenet ];
   };
-}
+})

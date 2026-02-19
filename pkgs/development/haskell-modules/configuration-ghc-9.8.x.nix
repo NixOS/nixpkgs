@@ -1,15 +1,22 @@
 { pkgs, haskellLib }:
 
+self: super:
+
 with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
   inherit (pkgs) lib;
+
+  warnAfterVersion =
+    ver: pkg:
+    lib.warnIf (lib.versionOlder ver
+      super.${pkg.pname}.version
+    ) "override for haskell.packages.ghc98.${pkg.pname} may no longer be needed" pkg;
+
 in
 
-self: super: {
-
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+{
 
   # Disable GHC core libraries.
   array = null;
@@ -54,11 +61,20 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
+  Win32 = null;
+
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_2_0_8;
+
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
 
   #
   # Version upgrades
   #
-  megaparsec = doDistribute self.megaparsec_9_7_0;
   ghc-tags = self.ghc-tags_1_8;
 
   #
@@ -71,7 +87,6 @@ self: super: {
     sha256 = "sha256-Mo65FfP1nh7QTY+oLia22hj4eV2v9hpXlYsrFKljA3E=";
   }) super.hevm;
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
-  saltine = doJailbreak super.saltine; # bytestring  && <0.12, deepseq <1.5, text > 1.2 && <1.3 || >=2.0 && <2.1
   inflections = doJailbreak super.inflections; # text >=0.2 && <2.1
 
   #
@@ -87,14 +102,50 @@ self: super: {
   #   A factor of 100 is insufficient, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 
-  # 2025-04-21: "flavor" for GHC 9.8.5 is missing a fix introduced for 9.8.4. See:
-  # https://github.com/digital-asset/ghc-lib/pull/571#discussion_r2052684630
-  ghc-lib-parser =
-    assert super.ghc-lib-parser.version == "9.8.5.20250214";
-    overrideCabal {
-      postPatch = ''
-        substituteInPlace compiler/cbits/genSym.c \
-          --replace-fail "HsWord64 u = atomic_inc64" "HsWord64 u = atomic_inc"
-      '';
-    } super.ghc-lib-parser;
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = doDistribute super.ghc-exactprint_1_8_0_0;
+
+  haddock-library = doJailbreak super.haddock-library;
+  ghc-lib = doDistribute self.ghc-lib_9_8_5_20250214;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_5_20250214;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
+  inherit
+    (
+      let
+        hls_overlay = lself: lsuper: {
+          Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
+          Cabal = lself.Cabal_3_10_3_0;
+          extensions = dontCheck (doJailbreak lself.extensions_0_1_0_1);
+        };
+      in
+      lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
+        apply-refact = addBuildDepend self.data-default-class super.apply-refact;
+        floskell = doJailbreak super.floskell;
+        fourmolu = dontCheck (doJailbreak self.fourmolu_0_15_0_0);
+        ghcide = super.ghcide;
+        haskell-language-server = addBuildDepends [
+          self.retrie
+          self.floskell
+          self.markdown-unlit
+        ] super.haskell-language-server;
+        hls-plugin-api = super.hls-plugin-api;
+        hlint = self.hlint_3_8;
+        lsp-types = super.lsp-types;
+        ormolu = self.ormolu_0_7_4_0;
+        retrie = doJailbreak (unmarkBroken super.retrie);
+        stylish-haskell = self.stylish-haskell_0_14_6_0;
+      }
+    )
+    apply-refact
+    floskell
+    fourmolu
+    ghcide
+    haskell-language-server
+    hls-plugin-api
+    hlint
+    lsp-types
+    ormolu
+    retrie
+    stylish-haskell
+    ;
 }

@@ -67,43 +67,46 @@ let
     in
     stdenv.mkDerivation rec {
       pname = "pinentry-${pinentryExtraPname}";
-      version = "1.3.1";
+      version = "1.3.2";
 
       src = fetchurl {
         url = "mirror://gnupg/pinentry/pinentry-${version}.tar.bz2";
-        hash = "sha256-vHLuJ8cjkAerGJbDwvrlOwduLJvSSD3CdpoWkCvOjAQ=";
+        hash = "sha256-jphu2IVhtNpunv4MVPpMqJIwNcmSZN8LBGRJfF+5Tp4=";
       };
 
       nativeBuildInputs = [
         pkg-config
         autoreconfHook
-      ] ++ lib.concatMap (f: flavorInfo.${f}.nativeBuildInputs or [ ]) buildFlavors;
+      ]
+      ++ lib.concatMap (f: flavorInfo.${f}.nativeBuildInputs or [ ]) buildFlavors;
 
-      buildInputs =
-        [
-          libgpg-error
-          libassuan
-        ]
-        ++ lib.optional withLibsecret libsecret
-        ++ lib.concatMap (f: flavorInfo.${f}.buildInputs or [ ]) buildFlavors;
+      buildInputs = [
+        libgpg-error
+        libassuan
+      ]
+      ++ lib.optional withLibsecret libsecret
+      ++ lib.concatMap (f: flavorInfo.${f}.buildInputs or [ ]) buildFlavors;
 
       dontWrapGApps = true;
       dontWrapQtApps = true;
 
-      patches =
-        [ ./autoconf-ar.patch ]
-        ++ lib.optionals (lib.elem "gtk2" buildFlavors) [
-          (fetchpatch {
-            url = "https://salsa.debian.org/debian/pinentry/raw/debian/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch";
-            sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
-          })
-        ];
+      patches = [
+        ./autoconf-ar.patch
+        ./gettext-0.25.patch
+      ]
+      ++ lib.optionals (lib.elem "gtk2" buildFlavors) [
+        (fetchpatch {
+          url = "https://salsa.debian.org/debian/pinentry/raw/debian/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch";
+          sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
+        })
+      ];
 
       configureFlags = [
         "--with-libgpg-error-prefix=${libgpg-error.dev}"
         "--with-libassuan-prefix=${libassuan.dev}"
         (lib.enableFeature withLibsecret "libsecret")
-      ] ++ (map enableFeaturePinentry (lib.attrNames flavorInfo));
+      ]
+      ++ (map enableFeaturePinentry (lib.attrNames flavorInfo));
 
       postInstall =
         lib.optionalString (lib.elem "gnome3" buildFlavors) ''

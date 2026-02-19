@@ -41,7 +41,7 @@ echo "testBuildFailure: Original builder produced exit code: $r"
 #
 # NOTE: This MUST be done after the original builder has finished!
 #       Otherwise we could pollute its environment.
-if [ -e "${NIX_ATTRS_SH_FILE:-}" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
+if [ -e "${NIX_ATTRS_SH_FILE:-}" ]; then . "$NIX_ATTRS_SH_FILE"; fi
 
 # Variables injected by replaceVars
 #

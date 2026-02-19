@@ -3,18 +3,25 @@
   buildGoModule,
   fetchFromGitHub,
   runtimeShell,
+  udevCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xe-guest-utilities";
   version = "8.4.0";
 
   src = fetchFromGitHub {
     owner = "xenserver";
     repo = "xe-guest-utilities";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LpZx+Km2qRywYK/eFLP3aCDku6K6HC4+MzEODH+8Gvs=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   deleteVendor = true;
   vendorHash = "sha256-X/BI+ZhoqCGCmJfccyEBVgZc70aRTp3rL5j+rBWG5fE=";
@@ -48,4 +55,4 @@ buildGoModule rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -19,7 +19,7 @@ let
 
   rnnoise-nu = stdenv.mkDerivation {
     pname = "rnnoise-nu";
-    version = "unstable-07-10-2019";
+    version = "0-unstable-2018-10-08";
     src = speech-denoiser-src;
     sourceRoot = "${speech-denoiser-src.name}/rnnoise";
     nativeBuildInputs = [ autoreconfHook ];
@@ -34,7 +34,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "speech-denoiser";
-  version = "unstable-07-10-2019";
+  version = "0-unstable-2018-10-08";
 
   src = speech-denoiser-src;
 
@@ -55,12 +55,12 @@ stdenv.mkDerivation {
       --replace "cc.find_library('rnnoise-nu',dirs: meson.current_source_dir() + '/rnnoise/.libs/',required : true)" "cc.find_library('rnnoise-nu', required : true)"
   '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Speech denoise lv2 plugin based on RNNoise library";
     homepage = "https://github.com/lucianodato/speech-denoiser";
-    license = licenses.lgpl3;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

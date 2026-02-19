@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   terminaltexteffects,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "textualeffects";
   version = "0.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

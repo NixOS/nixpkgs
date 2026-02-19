@@ -4,12 +4,12 @@
   fetchzip,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "braa";
   version = "0.82";
 
   src = fetchzip {
-    url = "http://s-tech.elsat.net.pl/braa/braa-${version}.tar.gz";
+    url = "http://s-tech.elsat.net.pl/braa/braa-${finalAttrs.version}.tar.gz";
     hash = "sha256-GS3kk432BdGx/sLzzjXvotD9Qn4S3U4XtMmM0fWMhGA=";
   };
 
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mass snmp scanner";
     homepage = "http://s-tech.elsat.net.pl";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bycEEE ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bycEEE ];
     mainProgram = "braa";
   };
-}
+})

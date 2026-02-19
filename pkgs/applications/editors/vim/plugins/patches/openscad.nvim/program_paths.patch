@@ -2,18 +2,9 @@ diff --git a/autoload/health/openscad_nvim.vim b/autoload/health/openscad_nvim.v
 index d6d4b4c..9853877 100644
 --- a/autoload/health/openscad_nvim.vim
 +++ b/autoload/health/openscad_nvim.vim
-@@ -7,7 +7,7 @@ function! s:check_nvim_version_minimum() abort
- endfunction
- 
- function! s:check_zathura_installed() abort
--	if !executable('zathura')
-+	if !executable('@zathura@')
- 		call v:lua.vim.health.error('has(zathura)','install zathura')
- 	else
- 		call v:lua.vim.health.ok("zathura is installed")
 @@ -15,7 +15,7 @@ function! s:check_zathura_installed() abort
  endfunction
- 
+
  function! s:check_htop_installed() abort
 -	if !executable('htop')
 +	if !executable('@htop@')
@@ -24,15 +15,6 @@ diff --git a/lua/openscad.lua b/lua/openscad.lua
 index 0a26d08..1264989 100644
 --- a/lua/openscad.lua
 +++ b/lua/openscad.lua
-@@ -101,7 +101,7 @@ end
- 
- function M.manual()
-     local path = U.openscad_nvim_root_dir .. U.path_sep .. "help_source" .. U.path_sep .. "openscad-manual.pdf"
--    api.nvim_command('silent !zathura --fork '  .. path)
-+    api.nvim_command('silent !@zathura@ --fork '  .. path)
- end
- 
- function M.help()
 @@ -126,7 +126,7 @@ function M.exec_openscad()
  		jobCommand = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD ' .. filename
  	else
@@ -40,5 +22,5 @@ index 0a26d08..1264989 100644
 -		jobCommand = 'openscad ' .. filename
 +		jobCommand = '@openscad@ ' .. filename
  	end
- 
+
  	vim.fn.jobstart(jobCommand)

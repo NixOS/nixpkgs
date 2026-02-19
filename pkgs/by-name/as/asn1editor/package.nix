@@ -4,19 +4,23 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "asn1editor";
   version = "0.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Futsch1";
     repo = "asn1editor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mgluhC2DMS4OyS/BoWqBdVf7GcxquOtOKTHZ/hbiHQM=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     asn1tools
     coverage
     wxpython
@@ -28,11 +32,11 @@ python3.pkgs.buildPythonApplication rec {
   # "SystemExit: Unable to access the X Display, is $DISPLAY set properly?"
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python based editor for ASN.1 encoded data";
     homepage = "https://github.com/Futsch1/asn1editor";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "asn1editor";
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})

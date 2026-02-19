@@ -1,0 +1,27 @@
+From 4d098e36df3a81799231618ce1d88ca8759a6616 Mon Sep 17 00:00:00 2001
+From: Christoph Heiss <christoph@c8h4.io>
+Date: Thu, 4 Sep 2025 10:46:17 +0200
+Subject: [PATCH proxmox] pbs-api-types: crypto: fix autoref error in ptr to
+ ref conversion
+
+Signed-off-by: Christoph Heiss <christoph@c8h4.io>
+---
+ pbs-api-types/src/crypto.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pbs-api-types/src/crypto.rs b/pbs-api-types/src/crypto.rs
+index cdc1ba64..7b274982 100644
+--- a/pbs-api-types/src/crypto.rs
++++ b/pbs-api-types/src/crypto.rs
+@@ -88,7 +88,7 @@ pub mod bytes_as_fingerprint {
+         let mut s = String::deserialize(deserializer)?;
+         s.retain(|c| c != ':');
+         let mut out = MaybeUninit::<[u8; 32]>::uninit();
+-        hex::decode_to_slice(s.as_bytes(), unsafe { &mut (*out.as_mut_ptr())[..] })
++        hex::decode_to_slice(s.as_bytes(), unsafe { &mut *out.as_mut_ptr() })
+             .map_err(serde::de::Error::custom)?;
+         Ok(unsafe { out.assume_init() })
+     }
+-- 
+2.50.1
+

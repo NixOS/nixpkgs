@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aetcd";
   version = "1.0.0a4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "martyanov";
@@ -58,11 +55,11 @@ buildPythonPackage rec {
     "tests/integration/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python asyncio-based client for etcd";
     homepage = "https://github.com/martyanov/aetcd";
     changelog = "https://github.com/martyanov/aetcd/blob/v${version}/docs/changelog.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

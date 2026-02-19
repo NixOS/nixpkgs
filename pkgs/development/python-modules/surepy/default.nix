@@ -12,7 +12,6 @@
   fetchFromGitHub,
   halo,
   poetry-core,
-  pythonOlder,
   requests,
   rich,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "surepy";
   version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "benleb";
@@ -58,12 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "surepy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with the Sure Petcare API";
     homepage = "https://github.com/benleb/surepy";
-    changelog = "https://github.com/benleb/surepy/releases/tag/v${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/benleb/surepy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "surepy";
   };
 }

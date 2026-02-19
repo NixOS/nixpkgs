@@ -6,7 +6,7 @@
   cmake-lint,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cmake-lint";
   version = "1.4.3";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cmake-lint";
     repo = "cmake-lint";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/OuWwerBlJynEibaYo+jkLpHt4x9GZrqMRJNxgrDBlM=";
   };
 
@@ -34,9 +34,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Static code checker for CMake files";
     homepage = "https://github.com/cmake-lint/cmake-lint";
-    changelog = "https://github.com/cmake-lint/cmake-lint/releases/tag/${version}";
+    changelog = "https://github.com/cmake-lint/cmake-lint/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
     mainProgram = "cmakelint";
   };
-}
+})

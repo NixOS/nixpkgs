@@ -6,7 +6,7 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mosml";
   version = "2.10.1";
 
@@ -20,12 +20,13 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+  # Version 2.10.1 (dated August 2014) breaks with newer compilers
+  env.NIX_CFLAGS_COMPILE = "-fpermissive -std=gnu17";
 
   src = fetchFromGitHub {
     owner = "kfl";
     repo = "mosml";
-    rev = "ver-${version}";
+    rev = "ver-${finalAttrs.version}";
     sha256 = "sha256-GK39WvM7NNhoC5f0Wjy4/5VWT+Rbh2qo+W71hWrbPso=";
   };
 
@@ -35,15 +36,15 @@ stdenv.mkDerivation rec {
   # by the build system), which patchelf will remove.
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     description = "Light-weight implementation of Standard ML";
     longDescription = ''
       Moscow ML is a light-weight implementation of Standard ML (SML), a strict
       functional language used in teaching and research.
     '';
     homepage = "https://mosml.org/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vaibhavsagar ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ vaibhavsagar ];
   };
-}
+})

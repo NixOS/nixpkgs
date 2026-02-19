@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   which,
   qtbase,
@@ -19,13 +19,13 @@
   libsamplerate,
   libbluray,
   lzo,
-  libX11,
-  libXv,
-  libXrandr,
-  libXvMC,
-  libXinerama,
-  libXxf86vm,
-  libXmu,
+  libx11,
+  libxv,
+  libxrandr,
+  libxvmc,
+  libxinerama,
+  libxxf86vm,
+  libxmu,
   yasm,
   libuuid,
   taglib,
@@ -33,6 +33,7 @@
   autoconf,
   automake,
   file,
+  wrapQtAppsHook,
   exiv2,
   linuxHeaders,
   soundtouch,
@@ -41,7 +42,7 @@
   withWebKit ? false,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mythtv";
   version = "35.0";
 
@@ -74,21 +75,22 @@ mkDerivation rec {
     alsa-lib
     libpulseaudio
     fftwSinglePrec
-    libX11
-    libXv
-    libXrandr
-    libXvMC
-    libXmu
-    libXinerama
-    libXxf86vm
-    libXmu
+    libx11
+    libxv
+    libxrandr
+    libxvmc
+    libxmu
+    libxinerama
+    libxxf86vm
+    libxmu
     libuuid
     taglib
     exiv2
     soundtouch
     libzip
     libhdhomerun
-  ] ++ lib.optional withWebKit qtwebkit;
+  ]
+  ++ lib.optional withWebKit qtwebkit;
   nativeBuildInputs = [
     pkg-config
     which
@@ -97,17 +99,18 @@ mkDerivation rec {
     autoconf
     automake
     file
+    wrapQtAppsHook
   ];
 
   configureFlags = [ "--dvb-path=${linuxHeaders}/include" ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mythtv.org/";
     description = "Open Source DVR";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

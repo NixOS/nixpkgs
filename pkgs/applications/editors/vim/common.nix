@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 rec {
-  version = "9.1.1336";
+  version = "9.1.2035";
 
   outputs = [
     "out"
@@ -11,7 +11,7 @@ rec {
     owner = "vim";
     repo = "vim";
     rev = "v${version}";
-    hash = "sha256-fF1qRPdVzQiYH/R0PSmKR/zFVVuCtT6lPN1x1Th5SgA=";
+    hash = "sha256-x7WosfqYApaY2Vv1X9+2at/A/KqfacuPy53MGtnxk9w=";
   };
 
   enableParallelBuilding = true;
@@ -35,16 +35,16 @@ rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Most popular clone of the VI editor";
     homepage = "https://www.vim.org";
-    license = licenses.vim;
-    maintainers = with maintainers; [
+    license = lib.licenses.vim;
+    maintainers = with lib.maintainers; [
       das_j
       equirosa
       philiptaron
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "vim";
     outputsToInstall = [
       "out"

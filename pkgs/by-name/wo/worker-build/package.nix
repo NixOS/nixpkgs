@@ -4,25 +4,21 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worker-build";
-  version = "0.5.0";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-rs";
-    tag = "v${version}";
-    hash = "sha256-eMuuEqHBiwgz7DKimYuK9MUPT4vnOU8rLOIIq8zsTao=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LeW0CHYBaib81AqftYpW38FFR3P7q7OJE2NmrK9oi9Q=";
+    fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-yzuyenWAdj5tEdUFGxSfBU4m3w1YCCrnbajPMYMGSkI=";
+  cargoHash = "sha256-W1m7W7LepgZ3WPjmZ7qXlu3WnvZkpGO35sHryOFqhfk=";
 
   buildAndTestSubdir = "worker-build";
-
-  # missing some module upstream to run the tests
-  doCheck = false;
 
   meta = {
     description = "Tool to be used as a custom build command for a Cloudflare Workers `workers-rs` project";
@@ -34,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

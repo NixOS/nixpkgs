@@ -6,22 +6,27 @@
   mkHyprlandPlugin,
   nix-update-script,
 }:
-mkHyprlandPlugin hyprland rec {
+mkHyprlandPlugin (finalAttrs: {
   pluginName = "hy3";
-  version = "hl0.49.0";
+  version = "0.53.0.1";
 
   src = fetchFromGitHub {
     owner = "outfoxxed";
     repo = "hy3";
-    tag = version;
-    hash = "sha256-dYxkdbg6yj8HhuBkCmklMQVR17N7P32R8ir7b7oNxm4=";
+    tag = "hl${finalAttrs.version}";
+    hash = "sha256-0gUgUk8XFtu8HWZySFgb4bzvn+MHK9ZEZ1trVU8YfPw=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   dontStrip = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "hl(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/outfoxxed/hy3";
@@ -33,4 +38,4 @@ mkHyprlandPlugin hyprland rec {
       johnrtitor
     ];
   };
-}
+})

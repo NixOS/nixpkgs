@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "System and process monitor written with EFL";
     mainProgram = "evisum";
     homepage = "https://www.enlightenment.org";
-    license = with licenses; [ isc ];
-    platforms = platforms.linux;
-    teams = [ teams.enlightenment ];
+    license = with lib.licenses; [ isc ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.enlightenment ];
   };
 }

@@ -25,10 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  env.NIX_LDFLAGS = toString ([
+  env.NIX_LDFLAGS = toString [
     "-lcrypto"
     "-lplist-2.0"
-  ]);
+  ];
 
   buildPhase = ''
     runHook preBuild

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
 
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,14 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
        #include <string.h>"
   '';
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc" # fix darwin and cross-compiled builds
+  ];
 
   meta = {
     homepage = "http://www.newbreedsoftware.com/3dpong/";
     description = "One or two player 3d sports game based on Pong from Atari";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

@@ -9,6 +9,7 @@ let
   inherit (lib)
     getExe
     mapAttrs
+    match
     mkEnableOption
     mkIf
     mkPackageOption
@@ -31,6 +32,8 @@ let
     else
       toString value
   ) cfg.settings;
+
+  proxySuffix = if match "unix:.*" cfg.bind != null then ":" else "";
 
   commonServiceConfig = {
     RuntimeDirectory = "lasuite-docs";
@@ -173,6 +176,13 @@ in
               defaultText = lib.literalExpression "https://\${cfg.domain}";
               description = "URL to the backend server base";
             };
+
+            COLLABORATION_SERVER_ORIGIN = mkOption {
+              type = types.str;
+              default = "https://${cfg.domain}";
+              defaultText = lib.literalExpression "https://\${cfg.domain}";
+              description = "Origins allowed to connect to the collaboration server";
+            };
           };
         };
         default = { };
@@ -184,7 +194,7 @@ in
         description = ''
           Configuration options of collaboration server.
 
-          See https://github.com/suitenumerique/docs/blob/v${cfg.collaborationServer.package.version}/docs/env.md
+          See <https://github.com/suitenumerique/docs/blob/v${cfg.collaborationServer.package.version}/docs/env.md>
         '';
       };
     };
@@ -264,7 +274,7 @@ in
             type = types.str;
             default = if cfg.enableNginx then "localhost,127.0.0.1,${cfg.domain}" else "";
             defaultText = lib.literalExpression ''
-              if cfg.enableNginx then "localhost,127.0.0.1,$${cfg.domain}" else ""
+              if cfg.enableNginx then "localhost,127.0.0.1,''${cfg.domain}" else ""
             '';
             description = "Comma-separated list of hosts that are able to connect to the server";
           };
@@ -317,7 +327,7 @@ in
       description = ''
         Configuration options of docs.
 
-        See https://github.com/suitenumerique/docs/blob/v${cfg.backendPackage.version}/docs/env.md
+        See <https://github.com/suitenumerique/docs/blob/v${cfg.backendPackage.version}/docs/env.md>
 
         `REDIS_URL` and `CELERY_BROKER_URL` are set if `services.lasuite-docs.redis.createLocally` is true.
         `DB_HOST` is set if `services.lasuite-docs.postgresql.createLocally` is true.
@@ -336,28 +346,73 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.services.lasuite-docs-postgresql-setup = mkIf cfg.postgresql.createLocally {
+      wantedBy = [ "lasuite-docs.target" ];
+      requiredBy = [ "lasuite-docs.service" ];
+      before = [ "lasuite-docs.service" ];
+      after = [ "postgresql-setup.service" ];
+
+      serviceConfig = {
+        Slice = "system-lasuite-docs.slice";
+        Type = "oneshot";
+        User = "postgres";
+
+        # lasuite-docs user cannot create a C function as it is unsafe.
+        ExecStart = ''
+          ${lib.getExe' config.services.postgresql.package "psql"} --port=${toString config.services.postgresql.settings.port} -d lasuite-docs -c "CREATE OR REPLACE FUNCTION public.immutable_unaccent(regdictionary, text) RETURNS text LANGUAGE c IMMUTABLE PARALLEL SAFE STRICT AS '$libdir/unaccent', 'unaccent_dict';"
+        '';
+
+        # hardening
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = [ "" ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = "0077";
+      };
+
+    };
+
     systemd.services.lasuite-docs = {
       description = "Docs from SuiteNumérique";
-      after =
-        [ "network.target" ]
-        ++ (optional cfg.postgresql.createLocally "postgresql.service")
-        ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
+      after = [
+        "network.target"
+      ]
+      ++ (optional cfg.postgresql.createLocally "postgresql.target")
+      ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wants =
-        (optional cfg.postgresql.createLocally "postgresql.service")
+        (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        ln -sfT ${cfg.backendPackage}/share/static /var/lib/lasuite-docs/static
-
         if [ ! -f .version ]; then
           touch .version
         fi
 
-        if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
-          ${getExe cfg.backendPackage} migrate
-          echo -n "${cfg.backendPackage.version}" > .version
-        fi
         ${optionalString (cfg.secretKeyPath == null) ''
           if [[ ! -f /var/lib/lasuite-docs/django_secret_key ]]; then
             (
@@ -366,11 +421,17 @@ in
             )
           fi
         ''}
+        if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
+          ${getExe cfg.backendPackage} migrate
+          echo -n "${cfg.backendPackage.version}" > .version
+        fi
       '';
 
       environment = pythonEnvironment;
 
       serviceConfig = {
+        BindReadOnlyPaths = "${cfg.backendPackage}/share/static:/var/lib/lasuite-docs/static";
+
         ExecStart = utils.escapeSystemdExecArgs (
           [
             (lib.getExe' cfg.backendPackage "gunicorn")
@@ -381,17 +442,19 @@ in
         );
         EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
         MemoryDenyWriteExecute = true;
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     systemd.services.lasuite-docs-celery = {
       description = "Docs Celery broker from SuiteNumérique";
-      after =
-        [ "network.target" ]
-        ++ (optional cfg.postgresql.createLocally "postgresql.service")
-        ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
+      after = [
+        "network.target"
+      ]
+      ++ (optional cfg.postgresql.createLocally "postgresql.target")
+      ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wants =
-        (optional cfg.postgresql.createLocally "postgresql.service")
+        (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wantedBy = [ "multi-user.target" ];
 
@@ -410,7 +473,8 @@ in
         );
         EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
         MemoryDenyWriteExecute = true;
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     systemd.services.lasuite-docs-collaboration-server = {
@@ -422,7 +486,8 @@ in
 
       serviceConfig = {
         ExecStart = getExe cfg.collaborationServer.package;
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     services.postgresql = mkIf cfg.postgresql.createLocally {
@@ -476,10 +541,9 @@ in
         };
 
         locations."/media-auth" = {
-          proxyPass = "http://${cfg.bind}";
+          proxyPass = "http://${cfg.bind}${proxySuffix}/api/v1.0/documents/media-auth/";
           recommendedProxySettings = true;
           extraConfig = ''
-            rewrite $/(.*)^ /api/v1.0/documents/$1 break;
             proxy_set_header X-Original-URL $request_uri;
             proxy_pass_request_body off;
             proxy_set_header Content-Length "";
@@ -489,7 +553,6 @@ in
 
         locations."/media/" = {
           proxyPass = cfg.s3Url;
-          recommendedProxySettings = true;
           extraConfig = ''
             auth_request /media-auth;
             auth_request_set $authHeader $upstream_http_authorization;

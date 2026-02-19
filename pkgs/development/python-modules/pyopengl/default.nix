@@ -72,16 +72,15 @@ buildPythonPackage rec {
   doCheck = false; # does not affect pythonImportsCheck
 
   # OpenGL looks for libraries during import, making this a somewhat decent test of the flaky patching above.
-  pythonImportsCheck =
-    [
-      "OpenGL"
-      "OpenGL.GL"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      "OpenGL.GLX"
-    ];
+  pythonImportsCheck = [
+    "OpenGL"
+    "OpenGL.GL"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "OpenGL.GLX"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mcfletch.github.io/pyopengl/";
     description = "PyOpenGL, the Python OpenGL bindings";
     longDescription = ''
@@ -90,7 +89,7 @@ buildPythonPackage rec {
       Python 2.5) ctypes library, and is provided under an extremely
       liberal BSD-style Open-Source license.
     '';
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     inherit (mesa.meta) platforms;
   };
 }

@@ -15,7 +15,6 @@ let
   inherit (lib)
     any
     concatMap
-    filterOverrides
     isList
     literalExpression
     mergeEqualOption
@@ -56,13 +55,10 @@ rec {
     name = "systemd option";
     merge =
       loc: defs:
-      let
-        defs' = filterOverrides defs;
-      in
-      if any (def: isList def.value) defs' then
-        concatMap (def: toList def.value) defs'
+      if any (def: isList def.value) defs then
+        concatMap (def: toList def.value) defs
       else
-        mergeEqualOption loc defs';
+        mergeEqualOption loc defs;
   };
 
   sharedOptions = {
@@ -380,6 +376,14 @@ rec {
             environment variable.  Both the {file}`bin`
             and {file}`sbin` subdirectories of each
             package are added.
+          '';
+        };
+
+        enableDefaultPath = mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Whether to append a minimal default {env}`PATH` environment variable to the service, containing common system utilities.
           '';
         };
 

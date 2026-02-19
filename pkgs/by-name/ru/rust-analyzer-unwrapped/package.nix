@@ -8,19 +8,20 @@
   useMimalloc ? false,
   doCheck ? true,
   nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-analyzer-unwrapped";
-  version = "2025-05-12";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Y6/1xr08KXj+KQVJgLO7LhwsNGE2ooFdTR9GoAgAwKk=";
+  version = "2026-02-16";
+
+  cargoHash = "sha256-1Brx4mvT8683zhrFkfL15/ynfgewyd7WcFFdKvDL3+Q=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
-    rev = version;
-    hash = "sha256-h3LQYZgyv2l3U7r+mcsrEOGRldaK0zJFwAAva4hV/6g=";
+    rev = finalAttrs.version;
+    hash = "sha256-1TZROjtryMzOJHgHhAUQUoAMnnWal231G7gM1pfNlK4=";
   };
 
   cargoBuildFlags = [
@@ -48,21 +49,17 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional useMimalloc "mimalloc";
 
-  env.CFG_RELEASE = version;
+  env.CFG_RELEASE = finalAttrs.version;
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''
     export RUST_SRC_PATH=${rustPlatform.rustLibSrc}
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    versionOutput="$($out/bin/rust-analyzer --version)"
-    echo "'rust-analyzer --version' returns: $versionOutput"
-    [[ "$versionOutput" == "rust-analyzer ${version}" ]]
-    runHook postInstallCheck
-  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -72,14 +69,14 @@ rustPlatform.buildRustPackage rec {
     # tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
   };
 
-  meta = with lib; {
-    description = "Modular compiler frontend for the Rust language";
+  meta = {
+    description = "Language server for the Rust language";
     homepage = "https://rust-analyzer.github.io";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with lib.maintainers; [ oxalica ];
     mainProgram = "rust-analyzer";
   };
-}
+})

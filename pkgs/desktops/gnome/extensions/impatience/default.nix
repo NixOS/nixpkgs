@@ -5,15 +5,15 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-impatience";
-  version = "0.5.2";
+  version = "0.5.3-unstable-2025-10-06";
 
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "gnome-shell-impatience";
-    tag = "version-${version}";
-    hash = "sha256-Z+tpmmGbC1rgV4U1w6qM3g85FwpRvzHbBCmFCfcmc60=";
+    rev = "593f9cd52ffd7875265e7cfa2d03e0309fec55b1"; # shows gnome 49 support
+    hash = "sha256-Slcd47DX1Gdl5H1kkrn19s95eDpftyS2Wn25UpYCjYQ=";
   };
 
   buildInputs = [
@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "impatience";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Speed up builtin gnome-shell animations";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       timbertson
       tiramiseb
     ];

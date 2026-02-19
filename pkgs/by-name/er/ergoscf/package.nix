@@ -6,12 +6,12 @@
   lapack,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ergoscf";
   version = "3.8.2";
 
   src = fetchurl {
-    url = "http://www.ergoscf.org/source/tarfiles/ergo-${version}.tar.gz";
+    url = "http://www.ergoscf.org/source/tarfiles/ergo-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-U0NVREEZ8HI0Q0ZcbwvZsYA76PWMh7bqgDG1uaUc01c=";
   };
 
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-linalgebra-templates"
     "--enable-performance"
-  ] ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-intrinsics";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-intrinsics";
 
   env = {
     # Required for compilation with gcc-14
@@ -49,12 +50,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Quantum chemistry program for large-scale self-consistent field calculations";
     mainProgram = "ergo";
     homepage = "http://www.ergoscf.org";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
   };
-}
+})

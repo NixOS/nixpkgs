@@ -19,12 +19,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unpaper";
   version = "7.0.0";
 
   src = fetchurl {
-    url = "https://www.flameeyes.eu/files/${pname}-${version}.tar.xz";
+    url = "https://www.flameeyes.eu/files/unpaper-${finalAttrs.version}.tar.xz";
     hash = "sha256-JXX7vybCJxnRy4grWWAsmQDH90cRisEwiD9jQZvkaoA=";
   };
 
@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) paperless;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.flameeyes.eu/projects/unpaper";
-    changelog = "https://github.com/unpaper/unpaper/blob/unpaper-${version}/NEWS";
+    changelog = "https://github.com/unpaper/unpaper/blob/unpaper-${finalAttrs.version}/NEWS";
     description = "Post-processing tool for scanned sheets of paper";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
     mainProgram = "unpaper";
-    maintainers = [ maintainers.rycee ];
+    maintainers = [ lib.maintainers.rycee ];
   };
-}
+})

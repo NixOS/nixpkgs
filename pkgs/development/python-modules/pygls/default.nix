@@ -3,41 +3,36 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  lsprotocol,
   poetry-core,
+  attrs,
+  cattrs,
+  lsprotocol,
+  websockets,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  typeguard,
-  websockets,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "1.3.1";
+  version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = "pygls";
     tag = "v${version}";
-    hash = "sha256-AvrGoQ0Be1xKZhFn9XXYJpt5w+ITbDbj6NFZpaDPKao=";
+    hash = "sha256-RznpnGBOZZeNP1pqL9jSNd0W2sJmW0CAo8DKP6t9APw=";
   };
-
-  pythonRelaxDeps = [
-    # https://github.com/openlawlibrary/pygls/pull/432
-    "lsprotocol"
-  ];
 
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
+    attrs
+    cattrs
     lsprotocol
-    typeguard
   ];
 
   optional-dependencies = {
@@ -59,11 +54,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygls" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # Skips pre-releases
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
+
+  meta = {
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
     changelog = "https://github.com/openlawlibrary/pygls/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }

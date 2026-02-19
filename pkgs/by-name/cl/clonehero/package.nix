@@ -8,14 +8,14 @@
   alsa-lib,
   dbus,
   libGL,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
   libxkbcommon,
-  libXrandr,
-  libXScrnSaver,
-  libXxf86vm,
+  libxrandr,
+  libxscrnsaver,
+  libxxf86vm,
   udev,
   vulkan-loader, # (not used by default, enable in settings menu)
   wayland, # (not used by default, enable with SDL_VIDEODRIVER=wayland - doesn't support HiDPI)
@@ -48,14 +48,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Run-time libraries (loaded with dlopen)
     dbus
     libGL
-    libXcursor
-    libXext
-    libXi
-    libXinerama
+    libxcursor
+    libxext
+    libxi
+    libxinerama
     libxkbcommon
-    libXrandr
-    libXScrnSaver
-    libXxf86vm
+    libxrandr
+    libxscrnsaver
+    libxxf86vm
     udev
     vulkan-loader
     wayland
@@ -117,11 +117,11 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/libexec/clonehero/UnityPlayer.so"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Clone of Guitar Hero and Rockband-style games";
     homepage = "https://clonehero.net";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       kira-bruneau
       syboxez
     ];

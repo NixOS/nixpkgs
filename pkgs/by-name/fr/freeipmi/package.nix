@@ -3,19 +3,27 @@
   fetchurl,
   lib,
   stdenv,
+  argp-standalone,
   libgcrypt,
   readline,
   libgpg-error,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.6.15";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.6.16";
   pname = "freeipmi";
 
   src = fetchurl {
-    url = "mirror://gnu/freeipmi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1pKcNUY59c51tbGJfos2brY2JcI+XEWQp66gNP4rjK8=";
+    url = "mirror://gnu/freeipmi/freeipmi-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-W872u562gOSbSjYjV5kwrOeJn1OSWyBF/p+RrWkEER0=";
   };
+
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace man/Makefile.in \
+      --replace-fail \
+        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man $@.pre $@' \
+        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man -o $@ $@.pre'
+  '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -23,9 +31,16 @@ stdenv.mkDerivation rec {
     libgcrypt
     readline
     libgpg-error
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    argp-standalone
   ];
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  configureFlags = [
+    # Device permissions are set by udev/kernel, so don't restrict them unnecessarily
+    "--with-dont-check-for-root"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_file__dev_urandom=true"
     "ac_cv_file__dev_random=true"
   ];
@@ -59,6 +74,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.unix;
   };
-}
+})

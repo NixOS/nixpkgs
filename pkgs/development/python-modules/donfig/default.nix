@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytroll/donfig";
     changelog = "https://github.com/pytroll/donfig/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   geojson,
   pysocks,
-  pythonOlder,
   requests,
   setuptools,
   pytestCheckHook,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "3.3.0";
+  version = "3.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "csparpa";
     repo = "pyowm";
     tag = version;
-    hash = "sha256-cSOhm3aDksLBChZzgw1gjUjLQkElR2/xGFMOb9K9RME=";
+    hash = "sha256-D1Cl3uWoEIUqA0R+bjRL2YgsVKj5inuBAVLJYluADg0=";
   };
 
   pythonRelaxDeps = [ "geojson" ];
@@ -38,15 +35,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Run only tests which don't require network access
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "pyowm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the OpenWeatherMap web API";
     homepage = "https://pyowm.readthedocs.io/";
     changelog = "https://github.com/csparpa/pyowm/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

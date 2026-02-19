@@ -3,8 +3,9 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  nodejs,
-  pnpm_8,
+  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wails,
   wrapGAppsHook3,
   glib-networking,
@@ -14,13 +15,13 @@
 
 buildGoModule rec {
   pname = "satisfactorymodmanager";
-  version = "3.0.3";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "satisfactorymodding";
     repo = "SatisfactoryModManager";
     tag = "v${version}";
-    hash = "sha256-ndvrgSRblm7pVwnGvxpwtGVMEGp+mqpC4kE87lmt36M=";
+    hash = "sha256-n1eGgvIxbWMugCaB/YX1chPgt97autDDJzomIgntz6M=";
   };
 
   patches = [
@@ -38,8 +39,8 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [
-    nodejs
-    pnpm_8.configHook
+    pnpmConfigHook
+    pnpm
     wails
     wrapGAppsHook3
     copyDesktopItems
@@ -52,10 +53,15 @@ buildGoModule rec {
   # we use env because buildGoModule doesn't forward all normal attrs
   # this is pretty hacky
   env = {
-    pnpmDeps = pnpm_8.fetchDeps {
-      inherit pname version src;
+    pnpmDeps = fetchPnpmDeps {
+      inherit
+        pname
+        version
+        src
+        ;
       sourceRoot = "${src.name}/frontend";
-      hash = "sha256-OP+3zsNlvqLFwvm2cnBd2bj2Kc3EghQZE3hpotoqqrQ=";
+      fetcherVersion = 3;
+      hash = "sha256-p0PFIqnIDZPffKaACWWDUvdBN+a0aMbZTUvz9wRTY+k=";
     };
 
     pnpmRoot = "frontend";
@@ -64,17 +70,17 @@ buildGoModule rec {
   # running this caches some additional dependencies for the FOD
   overrideModAttrs = {
     preBuild = ''
-      wails build
+      wails build -tags webkit2_41 # 4.0 EOL
     '';
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-3nsJPuwL2Zw/yuHvd8rMSpj9DBBpYUaR19z9TSV/7jg=";
+  vendorHash = "sha256-LvDftUsmvrIY2WkC2pFxRasUGwytEE6ObhzDlrdgpB4=";
 
   buildPhase = ''
     runHook preBuild
-    wails build
+    wails build -tags webkit2_41 # 4.0 EOL
     runHook postBuild
   '';
 

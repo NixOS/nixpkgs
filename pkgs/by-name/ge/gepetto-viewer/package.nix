@@ -43,21 +43,19 @@ let
 
     buildInputs = [
       python3Packages.boost
-      python3Packages.python-qt
       libsForQt5.qtbase
     ];
 
-    nativeBuildInputs =
-      [
-        cmake
-        doxygen
-        libsForQt5.wrapQtAppsHook
-        pkg-config
-        python3Packages.python
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-        darwin.autoSignDarwinBinariesHook
-      ];
+    nativeBuildInputs = [
+      cmake
+      doxygen
+      libsForQt5.wrapQtAppsHook
+      pkg-config
+      python3Packages.python
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      darwin.autoSignDarwinBinariesHook
+    ];
 
     propagatedBuildInputs = [
       jrl-cmakemodules
@@ -116,12 +114,13 @@ let
         '';
 
     meta = {
-      description = "Graphical Interface for Pinocchio and HPP.";
+      description = "Graphical Interface for Pinocchio and HPP";
       homepage = "https://github.com/gepetto/gepetto-viewer";
       license = lib.licenses.lgpl3Only;
       maintainers = [ lib.maintainers.nim65s ];
       mainProgram = "gepetto-gui";
       platforms = lib.platforms.unix;
+      broken = true; # TODO @nim65s
     };
   });
 in

@@ -9,16 +9,16 @@
 
 buildGoModule {
   pname = "echoip";
-  version = "0-unstable-2023-05-21";
+  version = "0-unstable-2026-02-14";
 
   src = fetchFromGitHub {
     owner = "mpolden";
     repo = "echoip";
-    rev = "d84665c26cf7df612061e9c35abe325ba9d86b8d";
-    hash = "sha256-7qc1NZu0hC1np/EKf5fU5Cnd7ikC1+tIrYOXhxK/++Y=";
+    rev = "0405a55f7d0007c72aaf88e449b8416a62f16772";
+    hash = "sha256-oMxbFyFQ1VYXgUU3wkDrfmIku8uigvF3bJInGNQAZkc=";
   };
 
-  vendorHash = "sha256-lXYpkeGpBK+WGHqyLxJz7kS3t7a55q55QQLTqtxzroc=";
+  vendorHash = "sha256-gNXu1yfvJnviPDeG0oNJ9MD5R93rjEV/n8hrADi8ZnM=";
 
   nativeBuildInputs = [ makeWrapper ];
 

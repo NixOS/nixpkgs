@@ -3,6 +3,7 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
+  gitUpdater,
   cdrtools,
   curl,
   gawk,
@@ -29,41 +30,40 @@
   installShellFiles,
 }:
 let
-  runtimePaths =
-    [
-      cdrtools
-      curl
-      gawk
-      gnugrep
-      gnused
-      jq
-      pciutils
-      procps
-      python3
-      (qemu.override { smbdSupport = true; })
-      socat
-      swtpm
-      util-linux
-      unzip
-      xrandr
-      zsync
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      mesa-demos
-      usbutils
-      xdg-user-dirs
-    ];
+  runtimePaths = [
+    cdrtools
+    curl
+    gawk
+    gnugrep
+    gnused
+    jq
+    pciutils
+    procps
+    python3
+    (qemu.override { smbdSupport = true; })
+    socat
+    swtpm
+    util-linux
+    unzip
+    xrandr
+    zsync
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    mesa-demos
+    usbutils
+    xdg-user-dirs
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.7";
+  version = "4.9.7-unstable-2025-12-28";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = finalAttrs.version;
-    hash = "sha256-sCoCcN6950pH33bRZsLoLc1oSs5Qfpj9Bbywn/uA6Bc=";
+    rev = "7ea4e95508a7898bc63c3b5e1588066184d4c79b";
+    hash = "sha256-pj6YQc7e4I6XvGq/uGGq2z/UhAs3ZeKrsJd8oLWjauA=";
   };
 
   postPatch = ''
@@ -74,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
       -e 's,\[ -x "\$(command -v smbd)" \],true,' \
       quickemu
+
+    substituteInPlace quickemu \
+      --replace-fail 'readonly VERSION="4.9.8"' 'readonly VERSION="${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [
@@ -98,7 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";

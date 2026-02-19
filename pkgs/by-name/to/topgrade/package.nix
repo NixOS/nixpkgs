@@ -6,19 +6,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "topgrade";
-  version = "16.0.3";
+  version = "16.9.0";
 
   src = fetchFromGitHub {
     owner = "topgrade-rs";
     repo = "topgrade";
-    rev = "v${version}";
-    hash = "sha256-TLeShvDdVqFBIStdRlgF1Zmi8FwS9pmeQ9qOu63nq/E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jWjyW/CYrPt8gEgCa1T56+5sBtaNpnV6RZz30S6nYIs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Tu4exuUhsk9hGDreQWkPrYvokZh0z6DQSQnREO40Qwc=";
+  cargoHash = "sha256-WScgutM8e/lwYQBjyZGG/9ieLoaPQA+X1IhRlz3Izew=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -41,15 +40,15 @@ rustPlatform.buildRustPackage rec {
     installManPage topgrade.8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Upgrade all the things";
     homepage = "https://github.com/topgrade-rs/topgrade";
-    changelog = "https://github.com/topgrade-rs/topgrade/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/topgrade-rs/topgrade/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       xyenon
     ];
     mainProgram = "topgrade";
   };
-}
+})

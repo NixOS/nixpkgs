@@ -7,14 +7,14 @@
   hdf5-threadsafe,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alembic";
   version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "alembic";
     repo = "alembic";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-R69UYyvLnMwv1JzEQ6S6elvR83Rmvc8acBJwSV/+hCk=";
   };
 
@@ -62,14 +62,14 @@ stdenv.mkDerivation rec {
   doCheck = true;
   enableParallelChecking = false;
 
-  meta = with lib; {
+  meta = {
     description = "Open framework for storing and sharing scene data";
     homepage = "http://alembic.io/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       guibou
       tmarkus
     ];
   };
-}
+})

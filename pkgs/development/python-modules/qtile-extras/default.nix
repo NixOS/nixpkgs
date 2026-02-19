@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+  anyio,
   gobject-introspection,
   gtk3,
   imagemagick,
@@ -10,42 +12,58 @@
   pulseaudio,
   pytest-asyncio,
   pytest-lazy-fixture,
+  pytest-rerunfailures,
+  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   qtile,
   requests,
   setuptools-scm,
-  xorgserver,
+  xorg-server,
+  nixosTests,
 }:
-
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.31.0";
+  version = "0.34.1";
+  # nixpkgs-update: no auto update
+  # should be updated alongside with `qtile`
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
     tag = "v${version}";
-    hash = "sha256-87xdSw4JKQyb/jpfTUkFDjHvKgPKzu+rKLGeaAzP8NI=";
+    hash = "sha256-CtmTZmUQlqkDPd++n3fPbRB4z1NA4ZxnmIR84IjsURw=";
   };
+
+  patches = [
+    # Remove unpack of widget.eval call in tests
+    # https://github.com/elParaguayo/qtile-extras/pull/460
+    (fetchpatch {
+      url = "https://github.com/elParaguayo/qtile-extras/commit/359964520a9dcd2c7e12680bfc53e359d74c489b.patch?full_index=1";
+      hash = "sha256-nKt39bTaBbvEC5jWU6XH0pigTs4hpSmMIwFe/A9YdJA=";
+    })
+  ];
 
   build-system = [ setuptools-scm ];
 
   dependencies = [ gtk3 ];
 
   nativeCheckInputs = [
+    anyio
     gobject-introspection
     imagemagick
     keyring
     pulseaudio
     pytest-asyncio
     pytest-lazy-fixture
+    pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
     python-dateutil
     qtile
     requests
-    xorgserver
+    xorg-server
     # stravalib  # marked as broken due to https://github.com/stravalib/stravalib/issues/379
   ];
 
@@ -84,11 +102,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qtile_extras" ];
 
-  meta = with lib; {
+  passthru.tests.qtile-extras = nixosTests.qtile-extras;
+
+  meta = {
     description = "Extra modules and widgets for the Qtile tiling window manager";
     homepage = "https://github.com/elParaguayo/qtile-extras";
-    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.rev}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arjan-s ];
+    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.tag}/CHANGELOG";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ arjan-s ];
   };
 }

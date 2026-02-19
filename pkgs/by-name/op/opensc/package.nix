@@ -10,21 +10,21 @@
   libiconv,
   pcsclite,
   libassuan,
-  libXt,
+  libxt,
   docbook_xsl,
   libxslt,
   docbook_xml_dtd_412,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensc";
   version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-H5df+x15fz28IlL/G9zPBxbNBzc+BlDmmgNZVEYQgac=";
   };
 
@@ -38,27 +38,28 @@ stdenv.mkDerivation rec {
     readline
     openssl
     libassuan
-    libXt
+    libxt
     libiconv
     docbook_xml_dtd_412
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) pcsclite;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) pcsclite;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  configureFlags =
-    [
-      "--enable-zlib"
-      "--enable-readline"
-      "--enable-openssl"
-      "--enable-pcsc"
-      "--enable-sm"
-      "--enable-man"
-      "--enable-doc"
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin)
+  configureFlags = [
+    "--enable-zlib"
+    "--enable-readline"
+    "--enable-openssl"
+    "--enable-pcsc"
+    "--enable-sm"
+    "--enable-man"
+    "--enable-doc"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
+  ]
+  ++
+    lib.optional (!stdenv.hostPlatform.isDarwin)
       "--with-pcsc-provider=${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   installFlags = [
@@ -68,11 +69,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Set of libraries and utilities to access smart cards";
     homepage = "https://github.com/OpenSC/OpenSC/wiki";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.michaeladler ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.michaeladler ];
   };
-}
+})

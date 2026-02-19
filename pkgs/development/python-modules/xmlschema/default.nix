@@ -6,22 +6,19 @@
   jinja2,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xmlschema";
-  version = "4.0.1";
+  version = "4.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
     tag = "v${version}";
-    hash = "sha256-J2A1dBLo5LtO1ldRuopfTjaew38B27D4wE+y387bQvs=";
+    hash = "sha256-O34MHsP4BC5fALHDzXJBWGtcRifdL3dJNwW721QN4vA=";
   };
 
   build-system = [ setuptools ];
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xmlschema" ];
 
-  meta = with lib; {
+  meta = {
     description = "XML Schema validator and data conversion library for Python";
     homepage = "https://github.com/sissaschool/xmlschema";
     changelog = "https://github.com/sissaschool/xmlschema/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

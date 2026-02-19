@@ -16,5 +16,5 @@ Use the following configuration to start a public instance of Glances locally:
     enable = true;
     openFirewall = true;
   };
-};
+}
 ```

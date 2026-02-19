@@ -1,17 +1,19 @@
 {
   stdenv,
   pkgs,
+  config,
   lib,
   fetchurl,
   gfortran,
   ncurses,
   perl,
   flex,
+  testers,
   texinfo,
   qhull,
   libsndfile,
   portaudio,
-  libX11,
+  libx11,
   graphicsmagick,
   pcre2,
   pkg-config,
@@ -97,96 +99,97 @@ let
   allPkgs = pkgs;
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "10.1.0";
+  version = "10.3.0";
   pname = "octave";
 
   src = fetchurl {
     url = "mirror://gnu/octave/octave-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-rtRJy6N5/B4Rhuw/w8luCGB4knj7yCOuLOvmA0Q0S3g=";
+    sha256 = "sha256-L8s43AYuRA8eBsBpu8qEDtRtzI+YPkc+FVj8w4OE7ms=";
   };
 
   postPatch = ''
     patchShebangs --build build-aux/*.pl
   '';
 
-  buildInputs =
-    [
-      readline
-      ncurses
-      flex
-      qhull
-      graphicsmagick
-      pcre2
-      fltk
-      zlib
-      curl
-      rapidjson
-      blas'
-      lapack'
-      libsndfile
-      fftw
-      fftwSinglePrec
-      portaudio
-      qrupdate'
-      arpack'
-      libwebp
-      gl2ps
-      ghostscript
-      hdf5
-      glpk
-      suitesparse'
-      sundials
-      gnuplot
-      python3
-    ]
-    ++ lib.optionals enableQt [
-      libsForQt5.qtbase
-      libsForQt5.qtsvg
-      libsForQt5.qscintilla
-    ]
-    ++ lib.optionals (enableJava) [
-      jdk
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
-      libGLU
-      libX11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
-  nativeBuildInputs =
-    [
-      perl
-      pkg-config
-      gfortran
-      texinfo
-    ]
-    ++ lib.optionals enableQt [
-      libsForQt5.wrapQtAppsHook
-      libsForQt5.qtscript
-      libsForQt5.qttools
-    ];
+  buildInputs = [
+    readline
+    ncurses
+    flex
+    qhull
+    graphicsmagick
+    pcre2
+    fltk
+    zlib
+    curl
+    rapidjson
+    blas'
+    lapack'
+    libsndfile
+    fftw
+    fftwSinglePrec
+    portaudio
+    qrupdate'
+    arpack'
+    libwebp
+    gl2ps
+    ghostscript
+    hdf5
+    glpk
+    suitesparse'
+    sundials
+    gnuplot
+    python3
+  ]
+  ++ lib.optionals enableQt [
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qscintilla
+  ]
+  ++ lib.optionals enableJava [
+    jdk
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
+    libx11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+    gfortran
+    texinfo
+  ]
+  ++ lib.optionals enableQt [
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qtscript
+    libsForQt5.qttools
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   enableParallelBuilding = true;
 
-  # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lobjc";
+  env =
+    lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
+      NIX_LDFLAGS = "-lobjc";
+    }
+    // lib.optionalAttrs use64BitIdx {
+      # See https://savannah.gnu.org/bugs/?50339
+      F77_INTEGER_8_FLAG = "-fdefault-integer-8";
+    };
 
-  # See https://savannah.gnu.org/bugs/?50339
-  F77_INTEGER_8_FLAG = lib.optionalString use64BitIdx "-fdefault-integer-8";
-
-  configureFlags =
-    [
-      "--with-blas=blas"
-      "--with-lapack=lapack"
-      (if use64BitIdx then "--enable-64" else "--disable-64")
-    ]
-    ++ lib.optionals enableReadline [ "--enable-readline" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
-    ++ lib.optionals enableQt [ "--with-qt=5" ];
+  configureFlags = [
+    "--with-blas=blas"
+    "--with-lapack=lapack"
+    (if use64BitIdx then "--enable-64" else "--disable-64")
+  ]
+  ++ lib.optionals enableReadline [ "--enable-readline" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
+  ++ lib.optionals enableQt [ "--with-qt=5" ];
 
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care
@@ -205,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     octavePackages = import ../../../top-level/octave-packages.nix {
       pkgs = allPkgs;
       inherit
+        config
         lib
         stdenv
         fetchurl
@@ -229,6 +233,12 @@ stdenv.mkDerivation (finalAttrs: {
     withPackages = import ./with-packages.nix { inherit buildEnv octavePackages; };
     pkgs = octavePackages;
     interpreter = "${finalAttrs.finalPackage}/bin/octave";
+    tests = {
+      wrapper = testers.testVersion {
+        package = finalAttrs.finalPackage.withPackages (ps: [ ps.doctest ]);
+        command = "octave --version";
+      };
+    };
   };
 
   meta = {

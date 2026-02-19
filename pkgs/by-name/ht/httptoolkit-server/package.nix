@@ -1,6 +1,6 @@
 {
   lib,
-  nodejs_20,
+  nodejs_22,
   buildNpmPackage,
   fetchFromGitHub,
   writeShellScriptBin,
@@ -9,19 +9,22 @@
   pkg-config,
   openssl,
   libdatachannel,
+  plog,
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
 
-  version = "1.19.3";
+  # update together with httptoolkit
+  # nixpkgs-update: no auto update
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cIxpV155A76TCOXurJhBA0dQpwn63hTpokBRXMLBEUA=";
+    tag = "v${version}";
+    hash = "sha256-tcUQe4YIUpQ9I5nq66K7LO84mLFo8YAdHY/c2HROSpk=";
   };
 
   overridesNodeModules = buildNpmPackage' {
@@ -29,7 +32,7 @@ let
     inherit version src;
     sourceRoot = "${src.name}/overrides/js";
 
-    npmDepsHash = "sha256-GRN6ua3FY1AE61bB7PM2wgbKPZI/zJeXa5HOOh/2N2Y=";
+    npmDepsHash = "sha256-8cNGJdT8ndXa72ETttU2PjA8nfn+MTWesVVlA8GA1qQ=";
 
     dontBuild = true;
 
@@ -41,20 +44,20 @@ let
 
   nodeDatachannel = buildNpmPackage' {
     pname = "node-datachannel";
-    version = "0.4.3";
+    version = "0.12.0";
 
     src = fetchFromGitHub {
       owner = "murat-dogan";
       repo = "node-datachannel";
-      rev = "refs/tags/v${nodeDatachannel.version}";
-      hash = "sha256-BlfeocqSG+pqbK0onnCf0VKbQw8Qq4qMxhAcfGlFYR8=";
+      tag = "v${nodeDatachannel.version}";
+      hash = "sha256-xjYja+e2Z7X5cU4sEuSsJzG0gtmTPl3VrUf+ypd3zdw=";
     };
 
     npmFlags = [ "--ignore-scripts" ];
 
     makeCacheWritable = true;
 
-    npmDepsHash = "sha256-pgcOOjiuWKlpD+WJyPj/c9ZhDjYuEnybpLS/BPmzeFM=";
+    npmDepsHash = "sha256-Qhib9ZGulTXjoYcZIWunf3/BSd2SLXZuWEmMcstaphs=";
 
     nativeBuildInputs = [
       cmake
@@ -64,6 +67,7 @@ let
     buildInputs = [
       openssl
       libdatachannel
+      plog
     ];
 
     dontUseCmakeConfigure = true;
@@ -73,16 +77,16 @@ let
 
     preBuild = ''
       # don't use static libs and don't use FetchContent
+      # don't try to link plog (it's headers-only)
       substituteInPlace CMakeLists.txt \
           --replace-fail 'OPENSSL_USE_STATIC_LIBS TRUE' 'OPENSSL_USE_STATIC_LIBS FALSE' \
           --replace-fail 'if(NOT libdatachannel)' 'if(false)' \
-          --replace-fail 'datachannel-static' 'datachannel'
+          --replace-fail 'datachannel-static' 'datachannel' \
+          --replace-fail 'plog::plog' ""
 
       # don't fetch node headers
       substituteInPlace node_modules/cmake-js/lib/dist.js \
           --replace-fail '!this.downloaded' 'false'
-
-      npm rebuild --verbose
     '';
 
     installPhase = ''
@@ -98,7 +102,7 @@ buildNpmPackage' {
 
   patches = [ ./only-build-for-one-platform.patch ];
 
-  npmDepsHash = "sha256-GZESwRDG1gEVhkclR+LBWwoUYaE1xS0z4EvPN7kYTrA=";
+  npmDepsHash = "sha256-vhTe7EccEX57h7LDtNaaLaNR8xHSOlbnLtGrs7qT7pY=";
 
   npmFlags = [ "--ignore-scripts" ];
 

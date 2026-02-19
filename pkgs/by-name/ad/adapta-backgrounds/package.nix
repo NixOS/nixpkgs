@@ -8,14 +8,14 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adapta-backgrounds";
   version = "0.5.3.1";
 
   src = fetchFromGitHub {
     owner = "adapta-project";
     repo = "adapta-backgrounds";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "04hmbmzf97rsii8gpwy3wkljy5xhxmlsl34d63s6hfy05knclydj";
   };
 
@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ glib ];
 
-  meta = with lib; {
+  meta = {
     description = "Wallpaper collection for adapta-project";
     homepage = "https://github.com/adapta-project/adapta-backgrounds";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       cc-by-sa-40
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ romildo ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

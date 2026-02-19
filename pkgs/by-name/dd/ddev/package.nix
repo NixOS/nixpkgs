@@ -4,19 +4,19 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  ddev,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ddev";
-  version = "1.24.6";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "ddev";
     repo = "ddev";
-    rev = "v${version}";
-    hash = "sha256-vOf500/HdOWn24MdXDfbetqAyKbEsaut707O+Rndks8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vRhFj2/lV34sDIDUxi2/zF9VJimhi6By6TQndl0O/Xg=";
   };
 
   nativeBuildInputs = [
@@ -27,8 +27,8 @@ buildGoModule rec {
 
   ldflags = [
     "-extldflags -static"
-    "-X github.com/ddev/ddev/pkg/versionconstants.DdevVersion=${version}"
-    "-X github.com/ddev/ddev/pkg/versionconstants.SegmentKey=${version}"
+    "-X github.com/ddev/ddev/pkg/versionconstants.DdevVersion=v${finalAttrs.version}"
+    "-X github.com/ddev/ddev/pkg/versionconstants.SegmentKey=v${finalAttrs.version}"
   ];
 
   # Tests need docker.
@@ -45,22 +45,19 @@ buildGoModule rec {
       --zsh .gotmp/bin/completions/ddev_zsh_completion.sh
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = ddev;
-    command = ''
-      # DDEV will try to create $HOME/.ddev, so we set $HOME to a temporary
-      # directory.
-      export HOME=$(mktemp -d)
-      ddev --version
-    '';
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
-  meta = with lib; {
+  meta = {
     description = "Docker-based local PHP+Node.js web development environments";
     homepage = "https://ddev.com/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "ddev";
-    maintainers = with maintainers; [ remyvv ];
+    maintainers = with lib.maintainers; [ remyvv ];
   };
-}
+})

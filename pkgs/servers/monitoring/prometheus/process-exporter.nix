@@ -26,11 +26,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) process; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter that mines /proc to report on selected processes";
     homepage = "https://github.com/ncabatoff/process-exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _1000101 ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _1000101 ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,8 +1,8 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   matplotlib,
   numpy,
   pandas,
@@ -16,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.7.0";
+  version = "2.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ESSS";
     repo = "pytest-regressions";
     tag = "v${version}";
-    hash = "sha256-w9uwJJtikbjUtjpJJ3dEZ1zU0KbdyLaDuJWJr45WpCg=";
+    hash = "sha256-8FbPWKYHy/0ITrCx9044iYOR7B9g8tgEdV+QfUg4esk=";
   };
 
   build-system = [ setuptools-scm ];
@@ -56,11 +54,18 @@ buildPythonPackage rec {
     matplotlib
     pandas
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isBigEndian) [
+    # https://github.com/ESSS/pytest-regressions/issues/156
+    # i686-linux not listed in the report, but seems to have this issue as well
+    "test_different_data_types"
+    "test_common_case" # not listed in the issue, but fails after the above is skipped
   ];
 
   pythonImportsCheck = [
@@ -68,7 +73,7 @@ buildPythonPackage rec {
     "pytest_regressions.plugin"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ESSS/pytest-regressions/blob/${src.tag}/CHANGELOG.rst";
     description = "Pytest fixtures to write regression tests";
     longDescription = ''
@@ -78,7 +83,7 @@ buildPythonPackage rec {
       that future runs produce the same data.
     '';
     homepage = "https://github.com/ESSS/pytest-regressions";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

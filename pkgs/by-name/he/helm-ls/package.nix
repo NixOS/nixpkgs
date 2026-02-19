@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,28 +8,28 @@
   helm-ls,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "helm-ls";
-  version = "0.2.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "mrjosh";
     repo = "helm-ls";
-    rev = "v${version}";
-    hash = "sha256-NI9qtbt0Ci300DhDR+yjFThTGLXKrbsc1wuLPpC1l9o=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4M2o/M8mnO+9QwsjsGahY3i/pwtsNdCMCn5oCFGm0aI=";
   };
 
-  vendorHash = "sha256-1BO/0Ous4mclainPV+nqk5K+tHKgRnaxMtsI4xAhZF4=";
+  vendorHash = "sha256-4zQy7PFC41iBVKvDRaW2zUnUzCSQmjAmyKsdnLDUHJ8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     mv $out/bin/helm-ls $out/bin/helm_ls
     installShellCompletion --cmd helm_ls \
       --bash <($out/bin/helm_ls completion bash) \
@@ -41,12 +42,12 @@ buildGoModule rec {
     command = "helm_ls version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Language server for Helm";
-    changelog = "https://github.com/mrjosh/helm-ls/releases/tag/v${version}";
+    changelog = "https://github.com/mrjosh/helm-ls/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/mrjosh/helm-ls";
-    license = licenses.mit;
-    maintainers = with maintainers; [ stehessel ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stehessel ];
     mainProgram = "helm_ls";
   };
-}
+})

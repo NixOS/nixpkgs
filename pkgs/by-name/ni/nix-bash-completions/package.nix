@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.6.8";
   pname = "nix-bash-completions";
 
   src = fetchFromGitHub {
     owner = "hedning";
     repo = "nix-bash-completions";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1n5zs6xcnv4bv1hdaypmz7fv4j7dsr4a0ifah99iyj4p5j85i1bc";
   };
 
@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/hedning/nix-bash-completions/pull/28/commits/ef2055aa28754fa9e009bbfebc1491972e4f4e67.patch";
       hash = "sha256-TRkHrk7bX7DX0COzzYR+1pgTqLy7J55BcejNjRwthII=";
     })
+    # Fix completion with Nix 2.4+ on non-NixOS: https://github.com/hedning/nix-bash-completions/pull/26
+    # Rebased locally due to conflict with the above patch (https://github.com/hedning/nix-bash-completions/pull/28).
+    ./0001-Fix-completion-with-Nix-2.4-on-non-NixOS.patch
   ];
 
   postPatch = ''
@@ -52,16 +55,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hedning/nix-bash-completions";
     description = "Bash completions for Nix, NixOS, and NixOps";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       hedning
       ncfavier
     ];
     # Set a lower priority such that Nix wins in case of conflicts.
     priority = 10;
   };
-}
+})

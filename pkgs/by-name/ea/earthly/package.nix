@@ -7,18 +7,18 @@
   earthly,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "earthly";
-  version = "0.8.15";
+  version = "0.8.16";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
-    rev = "v${version}";
-    hash = "sha256-7yw2SmwWsPBCH0LOaZSruYeZ5qL+njGuExy8+11Ni78=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2+Ya5i6V2QDzHsYR+Ro14u0VWR3wrQJHZRXBatGC8BA=";
   };
 
-  vendorHash = "sha256-bwNuQPGjAQ9Afa2GuPWrW8ytfIvhsOYFKPt0zyfdZhU=";
+  vendorHash = "sha256-kEgg7zrT69X4yrsGtLyvnrGQ7+sXaEzdqd4Fz7rpFyg=";
   subPackages = [
     "cmd/earthly"
     "cmd/debugger"
@@ -26,18 +26,17 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  ldflags =
-    [
-      "-s"
-      "-w"
-      "-X main.Version=v${version}"
-      "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${version}"
-      "-X main.GitSha=v${version}"
-      "-X main.DefaultInstallationName=earthly"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-extldflags '-static'"
-    ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=v${finalAttrs.version}"
+    "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${finalAttrs.version}"
+    "-X main.GitSha=v${finalAttrs.version}"
+    "-X main.DefaultInstallationName=earthly"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-extldflags '-static'"
+  ];
 
   tags = [
     "dfrunmount"
@@ -54,18 +53,18 @@ buildGoModule rec {
   passthru = {
     tests.version = testers.testVersion {
       package = earthly;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Build automation for the container era";
     homepage = "https://earthly.dev/";
-    changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/earthly/earthly/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       zoedsoupe
       konradmalik
     ];
   };
-}
+})

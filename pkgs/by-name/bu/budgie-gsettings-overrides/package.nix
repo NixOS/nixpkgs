@@ -57,7 +57,8 @@ let
     budgie-desktop-view
     gsettings-desktop-schemas
     mutter
-  ] ++ extraGSettingsOverridePackages;
+  ]
+  ++ extraGSettingsOverridePackages;
 
 in
 runCommand "budgie-gsettings-overrides" { preferLocalBuild = true; } ''

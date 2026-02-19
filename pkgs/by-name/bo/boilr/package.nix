@@ -5,7 +5,11 @@
   rustPlatform,
   clangStdenv,
   gtk3,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   perl,
   pkg-config,
   openssl,
@@ -26,11 +30,11 @@ let
     wayland
 
     # WINIT_UNIX_BACKEND=x11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libX11
-    xorg.libxcb
+    libxcursor
+    libxrandr
+    libxi
+    libx11
+    libxcb
   ];
 in
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
@@ -44,7 +48,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     hash = "sha256-qCY/I3ACrs5mWpgN+xmWi42rF9Mzqxxce2DIA+R1RNs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9B2NcFO/Bj553yaOMi7oBZJTFtCQmBnJkU9nK+vjThU=";
 
   nativeBuildInputs = [
@@ -57,7 +60,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   postInstall = ''
     patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/boilr
     install -Dpm 0644 flatpak/io.github.philipk.boilr.desktop $out/share/applications/boilr.desktop
-    install -Dpm 0644 resources/io.github.philipk.boilr.png $out/share/pixmaps/io.github.philipk.boilr.png
+    install -Dpm 0644 resources/io.github.philipk.boilr.png -t $out/share/icons/hicolor/32x32/apps
   '';
 
   dontPatchELF = true;

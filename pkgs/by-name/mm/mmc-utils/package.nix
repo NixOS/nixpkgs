@@ -1,45 +1,41 @@
 {
   lib,
   stdenv,
-  fetchzip,
-  unstableGitUpdater,
+  fetchgit,
+  gitUpdater,
+  sparse,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mmc-utils";
-  version = "unstable-2024-03-07";
+  version = "1.0";
 
-  src = fetchzip rec {
-    url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/snapshot/mmc-utils-${passthru.rev}.tar.gz";
-    passthru.rev = "e1281d4de9166b7254ba30bb58f9191fc2c9e7fb";
-    sha256 = "/lkcZ/ArdBAStV9usavrbfjULXenqb+h2rbDJzxZjJk=";
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iWLA1psNPUBCPOP393/xnYJ6BEuOcPCEYgymqE06F3Q=";
   };
+
+  nativeBuildInputs = [ sparse ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "prefix=$(out)"
+    "mandir=$(out)/share/man"
   ];
-
-  # causes redefinition of _FORTIFY_SOURCE
-  hardeningDisable = [ "fortify3" ];
-
-  postInstall = ''
-    mkdir -p $out/share/man/man1
-    cp man/mmc.1 $out/share/man/man1/
-  '';
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git";
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Configure MMC storage devices from userspace";
     mainProgram = "mmc";
     homepage = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.linux;
   };
-}
+})

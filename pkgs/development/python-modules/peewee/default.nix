@@ -11,22 +11,19 @@
   mysql-connector,
   withPostgres ? false,
   psycopg2,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.18.1";
+  version = "3.18.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "peewee";
     tag = version;
-    hash = "sha256-7MLDhMiW9LaedPMQ2QqSqos4SegzUmTX1joyV18MkEg=";
+    hash = "sha256-gMoU6YQMlEfL6onRAA/8v/08Je2jeLoZ3zw+2n1fmw4=";
   };
 
   build-system = [ setuptools ];
@@ -36,12 +33,11 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs =
-    [
-      apsw
-    ]
-    ++ lib.optionals withPostgres [ psycopg2 ]
-    ++ lib.optionals withMysql [ mysql-connector ];
+  propagatedBuildInputs = [
+    apsw
+  ]
+  ++ lib.optionals withPostgres [ psycopg2 ]
+  ++ lib.optionals withMysql [ mysql-connector ];
 
   nativeCheckInputs = [ flask ];
 
@@ -54,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "peewee" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python ORM with support for various database implementation";
     homepage = "http://peewee-orm.com";
     changelog = "https://github.com/coleifer/peewee/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pwiz.py";
   };

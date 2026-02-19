@@ -6,26 +6,28 @@
   testers,
 }:
 
-python3.pkgs.buildPythonApplication rec {
-  version = "0.19.1";
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "khard";
+  version = "0.20.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WfMKDaPD2j6wT02+GO5HY5E7aF2Z7IQY/VdKiMSRxJA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-s+W/rfa11+jxaNDDIMdLlU5NDvQZSyh5EUD+V3pI+Ug=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
     setuptools-scm
     sphinxHook
+    sphinx-argparse
     sphinx-autoapi
     sphinx-autodoc-typehints
   ];
 
   sphinxBuilders = [ "man" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    atomicwrites
+  dependencies = with python3.pkgs; [
     configobj
     ruamel-yaml
     unidecode
@@ -52,4 +54,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "khard";
   };
-}
+})

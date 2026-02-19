@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
@@ -7,20 +8,20 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubescape";
-  version = "3.0.25";
+  version = "3.0.47";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
-    tag = "v${version}";
-    hash = "sha256-1KwFa0FixlzgRd2hSUj/ODf0SJKxZ496/xg374uV4fI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tXGFCKkuK8PGdgVGNXO5qVWB1+XPz092ovmLdVMY+yQ=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-GL5V3f2hiTzNDhBKyvyT8BlbRCaPSJXLy/+xiYjhsvw=";
+  vendorHash = "sha256-1WmG+ffcwBCsAdBTXST0iZIcA8Mo0LRt317WDX2f/aM=";
 
   subPackages = [ "." ];
 
@@ -34,7 +35,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/kubescape/kubescape/v3/core/cautils.BuildNumber=v${version}"
+    "-X=github.com/kubescape/kubescape/v3/core/cautils.BuildNumber=v${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -57,7 +58,7 @@ buildGoModule rec {
       --replace-fail "TestSetContextMetadata" "SkipSetContextMetadata"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubescape \
       --bash <($out/bin/kubescape completion bash) \
       --fish <($out/bin/kubescape completion fish) \
@@ -68,10 +69,10 @@ buildGoModule rec {
 
   versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for testing if Kubernetes is deployed securely";
     homepage = "https://github.com/kubescape/kubescape";
-    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
+    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Kubescape is the first open-source tool for testing if Kubernetes is
       deployed securely according to multiple frameworks: regulatory, customized
@@ -83,11 +84,11 @@ buildGoModule rec {
       time. Kubescape integrates natively with other DevOps tools, including
       Jenkins, CircleCI and Github workflows.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fab
       jk
     ];
     mainProgram = "kubescape";
   };
-}
+})

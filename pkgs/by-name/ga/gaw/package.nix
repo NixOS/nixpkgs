@@ -9,17 +9,17 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gaw3";
   version = "20250128";
 
   # https://www.rvq.fr/php/ndl.php?id=gaw.*
   # https://www.rvq.fr/php/ndl.php?id=gaw3-20250128.tar.gz
   src =
-    runCommandLocal "gaw3-${version}.tar.gz"
+    runCommandLocal "gaw3-${finalAttrs.version}.tar.gz"
       {
         BASE = "https://www.rvq.fr/php/ndl.php";
-        FNAME = "gaw3-${version}.tar.gz";
+        FNAME = "gaw3-${finalAttrs.version}.tar.gz";
 
         nativeBuildInputs = [
           htmlq
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 ];
 
-  meta = with lib; {
+  meta = {
     description = "Gtk Analog Wave viewer";
     mainProgram = "gaw";
     longDescription = ''
@@ -88,8 +88,8 @@ stdenv.mkDerivation rec {
       direct tcp/ip connection or directly from the sound card.
     '';
     homepage = "https://www.rvq.fr/linux/gaw.php";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fbeffa ];
+    platforms = lib.platforms.linux;
   };
-}
+})

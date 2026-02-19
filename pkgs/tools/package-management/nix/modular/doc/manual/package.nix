@@ -10,6 +10,7 @@
   jq,
   python3,
   rsync,
+  json-schema-for-humans,
   nix-cli,
 
   # Configuration Options
@@ -29,8 +30,7 @@ mkMesonDerivation (finalAttrs: {
     "man"
   ];
 
-  # Hack for sake of the dev shell
-  passthru.externalNativeBuildInputs = [
+  nativeBuildInputs = [
     meson
     ninja
     (lib.getBin lowdown-unsandboxed)
@@ -39,9 +39,11 @@ mkMesonDerivation (finalAttrs: {
     jq
     python3
     rsync
-  ];
-
-  nativeBuildInputs = finalAttrs.passthru.externalNativeBuildInputs ++ [
+  ]
+  ++ lib.optionals (lib.versionAtLeast (lib.versions.majorMinor version) "2.33") [
+    json-schema-for-humans
+  ]
+  ++ [
     nix-cli
   ];
 

@@ -4,63 +4,55 @@
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
-  pythonOlder,
   rfc3987,
   ruamel-yaml,
   setuptools-scm,
   libfdt,
+  pytestCheckHook,
+  dtc,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dtschema";
-  version = "2024.02";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2025.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devicetree-org";
     repo = "dt-schema";
-    tag = "v${version}";
-    sha256 = "sha256-UJU8b9BzuuUSHRjnA6hOd1bMPNOlk4LNtrQV5aZmGhI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DCkZDI0/W/4IkMzaa769vKJxlSMWoEsLIdlyChYd+Mk=";
   };
 
-  patches = [
-    # Change name of pylibfdt to libfdt
-    ./fix_libfdt_name.patch
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     jsonschema
     rfc3987
     ruamel-yaml
     libfdt
   ];
 
-  # Module has no tests
-  doCheck = false;
-
   pythonImportsCheck = [ "dtschema" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    dtc
+  ];
+
+  enabledTestPaths = [ "test/test-dt-validate.py" ];
+
+  meta = {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
-    changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${version}";
-    license = with licenses; [
+    changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       bsd2 # or
       gpl2Only
     ];
-    maintainers = with maintainers; [ sorki ];
+    maintainers = with lib.maintainers; [ sorki ];
 
-    broken = (
-      # Library not loaded: @rpath/libfdt.1.dylib
-      stdenv.hostPlatform.isDarwin
-      ||
-
-        # see https://github.com/devicetree-org/dt-schema/issues/108
-        versionAtLeast jsonschema.version "4.18"
-    );
+    # Library not loaded: @rpath/libfdt.1.dylib
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -16,14 +16,14 @@
   withGtk ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pktgen";
   version = "24.10.3";
 
   src = fetchFromGitHub {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
-    rev = "pktgen-${version}";
+    rev = "pktgen-${finalAttrs.version}";
     sha256 = "sha256-6KC1k+LWNSU/mdwcUKjCaq8pGOcO+dFzeXX4PJm0QgE=";
   };
 
@@ -33,28 +33,28 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      dpdk
-      libbsd
-      libpcap
-      lua5_3
-      numactl
-      which
-    ]
-    ++ lib.optionals withGtk [
-      gtk2
-    ];
-
-  RTE_SDK = dpdk;
-  GUI = lib.optionalString withGtk "true";
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=sign-compare"
+  buildInputs = [
+    dpdk
+    libbsd
+    libpcap
+    lua5_3
+    numactl
+    which
+  ]
+  ++ lib.optionals withGtk [
+    gtk2
   ];
 
-  # requires symbols from this file
-  NIX_LDFLAGS = "-lrte_net_bond";
+  env = {
+    RTE_SDK = dpdk;
+    GUI = lib.optionalString withGtk "true";
+
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=sign-compare"
+    ];
+    # requires symbols from this file
+    NIX_LDFLAGS = "-lrte_net_bond";
+  };
 
   postPatch = ''
     substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${util-linux}/bin/lscpu
@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/include $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Traffic generator powered by DPDK";
     homepage = "http://dpdk.org/";
-    license = licenses.bsdOriginal;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.abuibrahim ];
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.abuibrahim ];
   };
-}
+})

@@ -2,28 +2,37 @@
   lib,
   acme,
   aiohttp,
+  async-timeout,
   atomicwrites-homeassistant,
   attrs,
   buildPythonPackage,
   ciso8601,
   cryptography,
   fetchFromGitHub,
+  freezegun,
+  grpcio,
+  icmplib,
+  josepy,
   pycognito,
   pyjwt,
   pytest-aiohttp,
+  pytest-socket,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
+  sentence-stream,
   setuptools,
   snitun,
   syrupy,
+  voluptuous,
   webrtc-models,
   xmltodict,
+  yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hass-nabucasa";
-  version = "0.96.0";
+  version = "1.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -31,29 +40,46 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
-    tag = version;
-    hash = "sha256-U6rxX1VgSpOkmd/kyf2thYF/0TtsguWbVxXaeuq/wvs=";
+    tag = finalAttrs.version;
+    hash = "sha256-uTADu6IK8X+oQVvGdprmijR+MUJuWG9KMclq7zveC8o=";
   };
 
-  pythonRelaxDeps = [ "acme" ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "0.0.0" "${finalAttrs.version}"
+  '';
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "acme"
+    "snitun"
+  ];
 
   dependencies = [
     acme
     aiohttp
+    async-timeout
     atomicwrites-homeassistant
     attrs
     ciso8601
     cryptography
+    grpcio
+    icmplib
+    josepy
     pycognito
     pyjwt
+    sentence-stream
     snitun
+    voluptuous
     webrtc-models
+    yarl
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-aiohttp
+    pytest-socket
     pytest-timeout
     pytestCheckHook
     syrupy
@@ -62,11 +88,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hass_nabucasa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the Home Assistant cloud integration";
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
-    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      fab
+      Scriptkiddi
+    ];
   };
-}
+})

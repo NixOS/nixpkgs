@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pygetwindow";
   version = "0.0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyGetWindow";
@@ -20,10 +21,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyrect ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, cross-platform module for obtaining GUI information on applications' windows";
     homepage = "https://github.com/asweigart/PyGetWindow";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lucasew ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lucasew ];
   };
 }

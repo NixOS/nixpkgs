@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   deprecated,
   mss,
   websockets,
@@ -11,15 +10,13 @@
 
 buildPythonPackage rec {
   pname = "nodriver";
-  version = "0.46.1";
+  version = "0.48.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zFyeSwMJJLoIrE+CJ79kJrFF4qQOWun/AFO64Je8440=";
+    hash = "sha256-SsjNiLavEzwm3BV/t49asXRipZtKDaMwTjrxK75LQ0M=";
   };
-
-  disabled = pythonOlder "3.9";
 
   dependencies = [
     deprecated

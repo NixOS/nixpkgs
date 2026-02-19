@@ -1,33 +1,49 @@
 {
-  lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  lib,
   python,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+let
+  version = "2025.11.3";
+in
+buildPythonPackage {
   pname = "regex";
-  version = "2024.11.6";
-  format = "setuptools";
+  inherit version;
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-erFZsGPFKgMzyITkZ5+NeoURLuMHj+PZAEst2HVYVRk=";
+  src = fetchFromGitHub {
+    owner = "mrabarnett";
+    repo = "mrab-regex";
+    tag = version;
+    hash = "sha256-KEn+8DoAAq2OBqnl7vluqn1UPBpIfmO1v4wxKUZrcyA=";
   };
 
+  build-system = [ setuptools ];
+
+  preCheck = ''
+    rm regex/__init__.py
+  '';
+
   checkPhase = ''
-    ${python.interpreter} -m unittest
+    runHook preCheck
+
+    ${python.interpreter} -m unittest ./regex/tests/test_regex.py
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "regex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternative regular expression module, to replace re";
-    homepage = "https://bitbucket.org/mrabarnett/mrab-regex";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ abbradar ];
+    homepage = "https://github.com/mrabarnett/mrab-regex";
+    license = [
+      lib.licenses.asl20
+      lib.licenses.cnri-python
+    ];
+    maintainers = [ lib.maintainers.dwoffinden ];
   };
 }

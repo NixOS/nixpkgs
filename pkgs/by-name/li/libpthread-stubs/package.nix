@@ -37,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.x11;
     maintainers = [ ];
     pkgConfigModules = [ "pthread-stubs" ];
-    # on these platforms according to the readme
-    platforms = with lib.platforms; linux ++ cygwin ++ darwin ++ [ "x86_64-solaris" ];
+    platforms = lib.platforms.unix;
   };
 })

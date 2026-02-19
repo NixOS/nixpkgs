@@ -9,6 +9,7 @@
   faad2,
   fetchFromGitHub,
   fftwFloat,
+  gdk-pixbuf,
   glib,
   libogg,
   libopus,
@@ -33,33 +34,33 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.3.2";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DcQs9saw4DeEiPUo/pGaP5MMNfIuzOZPQW1FgQKQ20w=";
+    hash = "sha256-134SOyYnMPt7pIS8fb+lSA6ouubJQMGlIXPLyoRg6xA=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail '$(shell uname -s)' '${uppercaseFirst stdenv.hostPlatform.parsed.kernel.name}' \
-      --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}'
+      --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}' \
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     fftwFloat.dev
     chafa
     curl.dev
+    gdk-pixbuf
     glib.dev
     libopus
     opusfile
@@ -89,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

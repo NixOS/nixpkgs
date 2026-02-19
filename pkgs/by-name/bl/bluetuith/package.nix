@@ -7,28 +7,29 @@
 
 buildGoModule (finalAttrs: {
   pname = "bluetuith";
-  version = "0.2.3";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = "bluetuith";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yXH/koNT4ec/SOZhSU01iPNAfD1MdMjM2+wNmjXWsrk=";
+    hash = "sha256-jxN4FLefv+edlpBnwDN/pBxZ7sHkv2w+R2tUeNCI6Tw=";
   };
 
-  vendorHash = "sha256-tEVzuhE0Di7edGa5eJHLLqOecCuoj02h91TsZiZU1PM=";
+  vendorHash = "sha256-baSiOHiB02hfqDt95ldeKwz+tJgunXheTvREznxPUSc=";
+
+  subPackages = [ "." ];
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/darkhz/bluetuith/cmd.Version=${finalAttrs.version}@nixpkgs"
   ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "TUI-based bluetooth connection manager";
     longDescription = ''
       Bluetuith can transfer files via OBEX, perform authenticated pairing,
@@ -38,11 +39,11 @@ buildGoModule (finalAttrs: {
       devices. The TUI has mouse support.
     '';
     homepage = "https://github.com/darkhz/bluetuith";
-    changelog = "https://github.com/darkhz/bluetuith/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    changelog = "https://github.com/darkhz/bluetuith/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "bluetuith";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pyrox0
       katexochen
     ];

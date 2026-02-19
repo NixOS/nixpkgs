@@ -2,37 +2,42 @@
   lib,
   stdenv,
   buildNpmPackage,
-  nodejs_20,
   fetchFromGitHub,
-  cctools,
-  nix-update-script,
-  nixosTests,
+  nodejs_22,
   perl,
   xcbuild,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
+  nixosTests,
+  nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2025.4.0";
+  version = "2026.1.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    tag = "cli-v${version}";
-    hash = "sha256-sWphSdxh07GS7GPlNVxK7zoXMTGLjT7qTLfH1nsIiQQ=";
+    tag = "cli-v${finalAttrs.version}";
+    hash = "sha256-Z6YMAzn1J5n27qqx3PsaMmD9uIK7FTEl1/tEzePD+6Y=";
   };
+
+  patches = [
+    # https://github.com/bitwarden/clients/pull/18308
+    ./fix-lockfile.patch
+  ];
 
   postPatch = ''
     # remove code under unfree license
     rm -r bitwarden_license
   '';
 
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-/BOzDt+wgnWedWfShPkAhaeujBBQTDlZdtiKl3wrOqE=";
+  npmDepsHash = "sha256-lXESe2FwwJIiFVFI5adAgJLhMsK2DTc8V8jELMr5E84=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
     perl
     xcbuild.xcrun
   ];
@@ -61,9 +66,6 @@ buildNpmPackage rec {
     rm -r node_modules/**/prebuilds
     shopt -u globstar
 
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
-    rm -r node_modules/esbuild node_modules/vite/node_modules/esbuild
-
     npm rebuild --verbose
   '';
 
@@ -74,16 +76,22 @@ buildNpmPackage rec {
     shopt -u globstar
   '';
 
-  postInstall =
-    ''
-      # The @bitwarden modules are actually npm workspaces inside the source tree, which
-      # leave dangling symlinks behind. They can be safely removed, because their source is
-      # bundled via webpack and thus not needed at run-time.
-      rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/{@bitwarden,.bin}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd bw --zsh <($out/bin/bw completion --shell zsh)
-    '';
+  postInstall = ''
+    # The @bitwarden modules are actually npm workspaces inside the source tree, which
+    # leave dangling symlinks behind. They can be safely removed, because their source is
+    # bundled via webpack and thus not needed at run-time.
+    rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/{@bitwarden,.bin}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd bw --zsh <($out/bin/bw completion --shell zsh)
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
     tests = {
@@ -98,11 +106,14 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.tag}";
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${finalAttrs.src.tag}";
     description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3Only;
     mainProgram = "bw";
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+      dotlambda
+    ];
   };
-}
+})

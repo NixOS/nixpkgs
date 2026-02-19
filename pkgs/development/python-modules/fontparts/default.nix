@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -20,14 +19,12 @@
 
 buildPythonPackage rec {
   pname = "fontparts";
-  version = "0.12.5";
+  version = "0.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cD7ppaYLnKOLyBMlSlF+ham74yid8MBunxgVkyE3I0I=";
+    hash = "sha256-+oifxmY7MUkQj3Sy75wjRmoVEPkgZaO3+8/sauMMxYA=";
     extension = "zip";
   };
 
@@ -36,17 +33,16 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      booleanoperations
-      defcon
-      fontmath
-      fonttools
-    ]
-    ++ defcon.optional-dependencies.pens
-    ++ fonttools.optional-dependencies.ufo
-    ++ fonttools.optional-dependencies.lxml
-    ++ fonttools.optional-dependencies.unicode;
+  dependencies = [
+    booleanoperations
+    defcon
+    fontmath
+    fonttools
+  ]
+  ++ defcon.optional-dependencies.pens
+  ++ fonttools.optional-dependencies.ufo
+  ++ fonttools.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.unicode;
 
   checkPhase = ''
     runHook preCheck
@@ -54,11 +50,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "API for interacting with the parts of fonts during the font development process";
     homepage = "https://github.com/robotools/fontParts";
     changelog = "https://github.com/robotools/fontParts/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

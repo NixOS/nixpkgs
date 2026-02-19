@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = finalAttrs.pname;
+    repo = "go-jsonnet";
     tag = "v${finalAttrs.version}";
     hash = "sha256-J92xNDpCidbiSsN6NveS6BX6Tx+qDQqkgm6pjk1wBTQ=";
   };
@@ -36,7 +36,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nshalman
-      aaronjheng
     ];
     mainProgram = "jsonnet";
   };

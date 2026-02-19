@@ -36,13 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      glib
-      dbus-glib
-      json-glib
-    ]
-    ++ lib.optional (gtkVersion != null)
+  buildInputs = [
+    glib
+    dbus-glib
+    json-glib
+  ]
+  ++
+    lib.optional (gtkVersion != null)
       {
         "2" = gtk2;
         "3" = gtk3;
@@ -73,7 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO use `lib.withFeatureAs`
     (if gtkVersion == null then "--disable-gtk" else "--with-gtk=${gtkVersion}")
     "--disable-scrollkeeper"
-  ] ++ lib.optional (gtkVersion != "2") "--disable-dumper";
+  ]
+  ++ lib.optional (gtkVersion != "2") "--disable-dumper";
 
   doCheck = false; # generates shebangs in check phase, too lazy to fix
 
@@ -85,10 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Library for passing menu structures across DBus";
     homepage = "https://launchpad.net/dbusmenu";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       lgpl21
       lgpl3
@@ -96,8 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [
       "dbusmenu-glib-0.4"
       "dbusmenu-jsonloader-0.4"
-    ] ++ lib.optional (gtkVersion == "3") "dbusmenu-gtk${gtkVersion}-0.4";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    ]
+    ++ lib.optional (gtkVersion == "3") "dbusmenu-gtk${gtkVersion}-0.4";
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.msteen ];
   };
 })

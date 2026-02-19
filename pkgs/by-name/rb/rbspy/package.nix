@@ -8,24 +8,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rbspy";
-  version = "0.34.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "rbspy";
     repo = "rbspy";
-    tag = "v${version}";
-    hash = "sha256-yVcVuMCyvk9RbkbKomqjkLY+p5tUzW2zcAKZ8XfsjM0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4VNiz+b8fxJ0uEVn8PZJPIvqB2dK/mx74RnRGRCxeR8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-WiIHFwB6BE9VYuC2dCHNnrEFjVsesp0c5i4bH01cXis=";
-
-  # error: linker `aarch64-linux-gnu-gcc` not found
-  postPatch = ''
-    rm .cargo/config
-  '';
+  cargoHash = "sha256-bmKG0/9XWIT2rMEejmp4DCMj5JZe2k4AdHSmsOeXmak=";
 
   doCheck = true;
 
@@ -33,11 +27,11 @@ rustPlatform.buildRustPackage rec {
   # from nixpkgs during tests.
   preCheck = ''
     substituteInPlace src/core/process.rs \
-      --replace /usr/bin/which '${which}/bin/which'
+      --replace-fail "/usr/bin/which" "${lib.getExe which}"
     substituteInPlace src/sampler/mod.rs \
-      --replace /usr/bin/which '${which}/bin/which'
+      --replace-fail "/usr/bin/which" "${lib.getExe which}"
     substituteInPlace src/core/ruby_spy.rs \
-      --replace /usr/bin/ruby '${ruby}/bin/ruby'
+      --replace-fail "/usr/bin/ruby" "${lib.getExe ruby}"
   '';
 
   checkFlags = [
@@ -57,13 +51,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rbspy.github.io/";
     description = "Sampling CPU Profiler for Ruby";
     mainProgram = "rbspy";
-    changelog = "https://github.com/rbspy/rbspy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ viraptor ];
-    platforms = platforms.linux ++ platforms.darwin;
+    changelog = "https://github.com/rbspy/rbspy/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ viraptor ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

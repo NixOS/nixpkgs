@@ -2,12 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
+  pandas,
   pyarrow,
   pytz,
   textual,
   tzdata,
-  pythonOlder,
   polars,
   pytest-asyncio,
   pytest-textual-snapshot,
@@ -16,26 +16,26 @@
 
 buildPythonPackage rec {
   pname = "textual-fastdatatable";
-  version = "0.12.0";
+  version = "0.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-fastdatatable";
     tag = "v${version}";
-    hash = "sha256-aQduVFHsdAMwjJzFPqOGB5Ec16YZ9YOYnEK6Ilf96xM=";
+    hash = "sha256-gm1h+r8rZO1/9sXoNwqVuBbv7CpZm2a3YAMHRHGg5uo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
+    pandas
     pyarrow
     pytz
     textual
     tzdata
-  ] ++ textual.optional-dependencies.syntax;
+  ]
+  ++ textual.optional-dependencies.syntax;
 
   optional-dependencies = {
     polars = [ polars ];
@@ -45,7 +45,13 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-textual-snapshot
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pythonRelaxDeps = [
+    "numpy"
+    "pyarrow"
+  ];
 
   pythonImportsCheck = [ "textual_fastdatatable" ];
 
@@ -55,7 +61,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A performance-focused reimplementation of Textual's DataTable widget, with a pluggable data storage backend";
+    description = "Performance-focused reimplementation of Textual's DataTable widget, with a pluggable data storage backend";
     homepage = "https://github.com/tconbeer/textual-fastdatatable";
     changelog = "https://github.com/tconbeer/textual-fastdatatable/releases/tag/${src.tag}";
     license = lib.licenses.mit;

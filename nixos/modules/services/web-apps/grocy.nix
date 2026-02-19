@@ -149,9 +149,9 @@ in
       user = "grocy";
       group = "nginx";
 
-      # PHP 8.1 and 8.2 are the only version which are supported/tested by upstream:
-      # https://github.com/grocy/grocy/blob/v4.0.2/README.md#platform-support
-      phpPackage = pkgs.php82;
+      # PHP 8.2 and 8.3 are the only version which are supported/tested by upstream:
+      # https://github.com/grocy/grocy/blob/v4.5.0/README.md#platform-support
+      phpPackage = pkgs.php83;
 
       inherit (cfg.phpfpm) settings;
 
@@ -191,7 +191,6 @@ in
           locations."~ \\.(js|css|ttf|woff2?|png|jpe?g|svg)$".extraConfig = ''
             add_header Cache-Control "public, max-age=15778463";
             add_header X-Content-Type-Options nosniff;
-            add_header X-XSS-Protection "1; mode=block";
             add_header X-Robots-Tag none;
             add_header X-Download-Options noopen;
             add_header X-Permitted-Cross-Domain-Policies none;
@@ -211,7 +210,7 @@ in
   };
 
   meta = {
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ diogotcorreia ];
     doc = ./grocy.md;
   };
 }

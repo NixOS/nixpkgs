@@ -3,21 +3,14 @@
 {
   name = "loki";
 
-  meta = with lib.maintainers; {
-    maintainers = [ willibutz ];
-  };
+  meta.maintainers = [ ];
 
   nodes.machine =
     { ... }:
     {
       services.loki = {
         enable = true;
-
-        # FIXME(globin) revert to original file when upstream fix released
-        # configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";
-        configFile = pkgs.runCommandNoCC "patched-loki-cfg.yml" { } ''
-          sed '/metric_aggregation/!b;n;/enable/d' "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml" > $out
-        '';
+        configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";
       };
       services.promtail = {
         enable = true;

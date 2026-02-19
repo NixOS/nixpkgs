@@ -13,10 +13,10 @@
   alsa-lib,
   libjack2,
   libvorbis,
-  libSM,
+  libsm,
   libsndfile,
   libogg,
-  libX11,
+  libx11,
   nettle,
 }:
 
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libsndfile
     libogg
-    libSM
-    libX11
+    libsm
+    libx11
     nettle
   ];
 

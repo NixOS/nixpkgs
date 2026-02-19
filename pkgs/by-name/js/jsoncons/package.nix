@@ -7,18 +7,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncons";
-  version = "1.3.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "danielaparker";
     repo = "jsoncons";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q7qtLLTvJcIFPSx6MkS7SI89MBcM88g3KmX/b3BAKwI=";
+    hash = "sha256-brcOFD6EO6lVL4A+LrZp6CxZFY2mu+i10IQmjwf4XMo=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  env.NIX_CFLAGS_COMPILE = "-std=c++20 -Wno-error";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=tautological-overlap-compare";
 
   meta = {
     description = "C++, header-only library for constructing JSON and JSON-like data formats";

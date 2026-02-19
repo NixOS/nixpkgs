@@ -8,15 +8,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "patroni";
-  version = "4.0.5";
+  version = "4.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = "patroni";
-    tag = "v${version}";
-    sha256 = "sha256-1Afwdv1kX8/zc9TB4kbA2NakXycJlf/wUcYAYKWwITM=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-iY5QLbJXfQtfkzpQxvqSOzYQwgfFsBh8HPYujqxU44k=";
   };
 
   dependencies = with python3Packages; [
@@ -44,12 +45,11 @@ python3Packages.buildPythonApplication rec {
     flake8
     mock
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     requests
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 
@@ -62,9 +62,12 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "https://patroni.readthedocs.io/en/latest/";
     description = "Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
-    changelog = "https://github.com/patroni/patroni/blob/v${version}/docs/releases.rst";
+    changelog = "https://github.com/patroni/patroni/blob/v${finalAttrs.version}/docs/releases.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    teams = [ lib.teams.deshaw ];
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
-}
+})

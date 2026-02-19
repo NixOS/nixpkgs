@@ -2,7 +2,7 @@
 
 {
   name = "scrutiny";
-  meta.maintainers = with lib.maintainers; [ jnsgruk ];
+  meta.maintainers = [ ];
 
   nodes = {
     machine =

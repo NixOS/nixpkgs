@@ -7,16 +7,16 @@
   gobject-introspection,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "plasma-hud";
-  version = "19.10.1";
-  format = "other";
+  version = "22.01.0";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Zren";
     repo = "plasma-hud";
-    rev = version;
-    hash = "sha256-1AQtgVlrmzBkim1kVZzTAwJHq0OH3YAPr6o5aUpgdKc=";
+    rev = finalAttrs.version;
+    hash = "sha256-HEAvwQSROQtJAZdiDObu9qbpgJlkJdks2v95Xjh5520=";
   };
 
   nativeBuildInputs = [
@@ -54,4 +54,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ pasqui23 ];
     mainProgram = "plasma-hud";
   };
-}
+})

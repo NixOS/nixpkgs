@@ -7,18 +7,18 @@
   which,
   perl,
   jq,
-  libXrandr,
+  libxrandr,
   coreutils,
   cairo,
   dbus,
   systemd,
   gdk-pixbuf,
   glib,
-  libX11,
-  libXScrnSaver,
+  libx11,
+  libxscrnsaver,
   wayland,
   wayland-protocols,
-  libXinerama,
+  libxinerama,
   libnotify,
   pango,
   xorgproto,
@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dunst";
-  version = "1.12.2";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i5/rRlxs+voEXL3udY+55l2mU54yep8RpmLOZpGtDeM=";
+    hash = "sha256-F7CONYJ95aKNZ+BpWNUerCBMflgJYgSaLAqp6XJ1G5k=";
   };
 
   nativeBuildInputs = [
@@ -48,43 +48,42 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      cairo
-      dbus
-      gdk-pixbuf
-      glib
-      libnotify
-      pango
-      librsvg
-    ]
-    ++ lib.optionals withX11 [
-      libX11
-      libXScrnSaver
-      libXinerama
-      xorgproto
-      libXrandr
-    ]
-    ++ lib.optionals withWayland [
-      wayland
-      wayland-protocols
-    ];
+  buildInputs = [
+    cairo
+    dbus
+    gdk-pixbuf
+    glib
+    libnotify
+    pango
+    librsvg
+  ]
+  ++ lib.optionals withX11 [
+    libx11
+    libxscrnsaver
+    libxinerama
+    xorgproto
+    libxrandr
+  ]
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-protocols
+  ];
 
   outputs = [
     "out"
     "man"
   ];
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "VERSION=$(version)"
-      "SYSCONFDIR=$(out)/etc"
-      "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
-      "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
-    ]
-    ++ lib.optional (!withX11) "X11=0"
-    ++ lib.optional (!withWayland) "WAYLAND=0";
+  makeFlags = [
+    "PREFIX=$(out)"
+    "VERSION=$(version)"
+    "SYSCONFDIR=/etc/xdg"
+    "SYSCONF_FORCE_NEW=0"
+    "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
+    "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
+  ]
+  ++ lib.optional (!withX11) "X11=0"
+  ++ lib.optional (!withWayland) "WAYLAND=0";
 
   postInstall = ''
     wrapProgram $out/bin/dunst \
@@ -108,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -122,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     mainProgram = "dunst";
     maintainers = with lib.maintainers; [
-      domenkozar
       gepbird
     ];
     # NOTE: 'unix' or even 'all' COULD work too, I'm not sure

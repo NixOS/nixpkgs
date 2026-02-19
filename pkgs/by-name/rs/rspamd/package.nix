@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   doctest,
-  fmt_11,
+  fmt,
   perl,
   glib,
   luajit,
@@ -15,6 +15,7 @@
   ragel,
   fasttext,
   icu,
+  hyperscan,
   vectorscan,
   jemalloc,
   blas,
@@ -27,22 +28,28 @@
   # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
   # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/321
   withBlas ? false,
+  withHyperscan ? false,
   withLuaJIT ? stdenv.hostPlatform.isx86_64,
+  withVectorscan ? true,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+assert withHyperscan -> stdenv.hostPlatform.isx86_64;
+assert (!withHyperscan) || (!withVectorscan);
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "rspamd";
-  version = "3.11.1";
+  version = "3.14.3";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
-    rev = version;
-    hash = "sha256-vG52R8jYJlCgQqhA8zbZLMES1UxfxknAVOt87nhcflM=";
+    tag = finalAttrs.version;
+    hash = "sha256-ntWBcwcPZwRRSTUO4a0JUNd6kc49fm+0/x+fqcZIA/o=";
   };
 
-  hardeningEnable = [ "pie" ];
+  patches = [
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -51,30 +58,30 @@ stdenv.mkDerivation rec {
     ragel
   ];
 
-  buildInputs =
-    [
-      doctest
-      fmt_11
-      glib
-      openssl
-      pcre
-      sqlite
-      ragel
-      fasttext
-      icu
-      jemalloc
-      libsodium
-      xxHash
-      zstd
-      libarchive
-      vectorscan
-    ]
-    ++ lib.optionals withBlas [
-      blas
-      lapack
-    ]
-    ++ lib.optional withLuaJIT luajit
-    ++ lib.optional (!withLuaJIT) lua;
+  buildInputs = [
+    doctest
+    fmt
+    glib
+    openssl
+    pcre
+    sqlite
+    ragel
+    fasttext
+    icu
+    jemalloc
+    libsodium
+    xxHash
+    zstd
+    libarchive
+  ]
+  ++ lib.optionals withBlas [
+    blas
+    lapack
+  ]
+  ++ lib.optional withHyperscan hyperscan
+  ++ lib.optional withLuaJIT luajit
+  ++ lib.optional (!withLuaJIT) lua
+  ++ lib.optional withVectorscan vectorscan;
 
   cmakeFlags = [
     # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
@@ -92,20 +99,20 @@ stdenv.mkDerivation rec {
     "-DSYSTEM_XXHASH=ON"
     "-DSYSTEM_ZSTD=ON"
     "-DENABLE_HYPERSCAN=ON"
-  ] ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
+  ]
+  ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
 
   passthru.tests.rspamd = nixosTests.rspamd;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rspamd.com";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Advanced spam filtering system";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       avnik
       fpletz
-      globin
       lewo
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
-}
+})

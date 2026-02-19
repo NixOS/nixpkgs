@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sqlpkg-cli";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "nalgeon";
     repo = "sqlpkg-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qytqTaoslBcoIn84tSiLABwRcnY/FsyWYD3sugGEYB0=";
   };
 
@@ -33,7 +33,7 @@ buildGoModule rec {
   meta = {
     description = "SQLite package manager";
     homepage = "https://github.com/nalgeon/sqlpkg-cli";
-    changelog = "https://github.com/nalgeon/sqlpkg-cli/releases/tag/${version}";
+    changelog = "https://github.com/nalgeon/sqlpkg-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pbsds ];
     mainProgram = "sqlpkg";
@@ -44,4 +44,4 @@ buildGoModule rec {
       "aarch64-darwin" # install_test.go:22: installation error: failed to dequarantine files: exec: "xattr": executable file not found in $PATH
     ];
   };
-}
+})

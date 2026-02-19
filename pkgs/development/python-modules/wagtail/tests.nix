@@ -11,6 +11,7 @@
   python-dateutil,
   python,
   pytz,
+  responses,
   wagtail,
   wagtail-factories,
 }:
@@ -18,7 +19,7 @@
 buildPythonPackage {
   pname = "wagtail-tests";
   inherit (wagtail) src version;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;
@@ -34,6 +35,7 @@ buildPythonPackage {
     msrest
     python-dateutil
     pytz
+    responses
     wagtail
     wagtail-factories
   ];

@@ -9,16 +9,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "castor";
-  version = "0.24.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jolicode";
     repo = "castor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m+ef1I7x05IdCeLqN24MB5ldcOWDoNNoYWyLKiMgxAY=";
+    hash = "sha256-yTfSRB+Kr244lX4uIttCJltunGe3C67Ti8EUkZQsOIA=";
   };
 
-  vendorHash = "sha256-gwXEQX0Go7OCm32WRJUt4QXhT4VTHGbVo3su1FcT8RE=";
+  vendorHash = "sha256-OkW7I8nowjqd3bmvQwnqog6V73T9C+F763/QNcCXZNM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,19 +32,17 @@ php.buildComposerProject2 (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = {
-    broken = lib.versionOlder php.version "8.2";
     changelog = "https://github.com/jolicode/castor/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "DX oriented task runner and command launcher built with PHP";
     homepage = "https://github.com/jolicode/castor";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "castor";
   };
 })

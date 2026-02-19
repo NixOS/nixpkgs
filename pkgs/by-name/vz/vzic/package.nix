@@ -7,7 +7,7 @@
   glib,
   libical,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vzic";
   version = "0-unstable-2024-06-04";
 
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/libical/vzic";
-    description = "A program to convert the IANA timezone database files into VTIMEZONE files compatible with the iCalendar specification";
-    changelog = "https://github.com/libical/vzic/blob/${src.rev}/ChangeLog";
+    description = "Program to convert the IANA timezone database files into VTIMEZONE files compatible with the iCalendar specification";
+    changelog = "https://github.com/libical/vzic/blob/${finalAttrs.src.rev}/ChangeLog";
     mainProgram = "vzic";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [ moraxyc ];
     broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
     platforms = lib.platforms.unix;
   };
-}
+})

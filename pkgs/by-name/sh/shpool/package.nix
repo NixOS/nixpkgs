@@ -7,15 +7,15 @@
   shpool,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shpool";
-  version = "0.8.0";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "shell-pool";
     repo = "shpool";
-    rev = "v${version}";
-    hash = "sha256-pSSMC4pUtB38c6UNOj+Ma/Y1jcSfm33QV1B4tA/MyKY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-r1bYcf5SPHbrPgxCvfbZNVhGj/gX8K5ucd8PH0WMgb8=";
   };
 
   postPatch = ''
@@ -23,8 +23,7 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/bin/shpool' "$out/bin/shpool"
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-JDMgYd9mKsLdqc8rpDg3ymgFj/ntpBBF5fSDb2cLOJs=";
+  cargoHash = "sha256-BeMIasnEFqeoHhNAlj/uBMtMoZvrLjyWDKi0n8BaSnU=";
 
   buildInputs = [
     linux-pam
@@ -54,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

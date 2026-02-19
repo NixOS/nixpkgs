@@ -31,15 +31,18 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ scheme48 ];
   configureFlags = [ "--with-scheme48=${scheme48}" ];
+  makeFlags = [
+    "SCHEME48VERSION=${scheme48.version}"
+  ];
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Scheme shell";
     homepage = "http://www.scsh.net/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ joachifm ];
-    platforms = with platforms; unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ joachifm ];
+    platforms = with lib.platforms; unix;
     mainProgram = "scsh";
   };
 }

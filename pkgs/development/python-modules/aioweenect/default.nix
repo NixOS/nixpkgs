@@ -8,15 +8,12 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aioweenect";
   version = "1.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "eifinger";
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioweenect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the weenect API";
     homepage = "https://github.com/eifinger/aioweenect";
     changelog = "https://github.com/eifinger/aioweenect/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

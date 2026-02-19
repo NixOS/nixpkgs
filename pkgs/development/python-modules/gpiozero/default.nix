@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -16,6 +15,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -23,19 +23,12 @@ buildPythonPackage rec {
   version = "2.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "gpiozero";
     repo = "gpiozero";
     tag = "v${version}";
     hash = "sha256-ifdCFcMH6SrhKQK/TJJ5lJafSfAUzd6ZT5ANUzJGwxI=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov" ""
-  '';
 
   outputs = [
     "out"
@@ -50,7 +43,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ colorzero ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [
     "gpiozero"
@@ -62,12 +58,12 @@ buildPythonPackage rec {
     "test_spi_hardware_write"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple interface to GPIO devices with Raspberry Pi";
     homepage = "https://github.com/gpiozero/gpiozero";
     changelog = "https://github.com/gpiozero/gpiozero/blob/v${version}/docs/changelog.rst";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

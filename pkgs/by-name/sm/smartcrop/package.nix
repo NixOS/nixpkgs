@@ -22,11 +22,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Find good image crops for arbitrary crop sizes";
     homepage = "https://github.com/muesli/smartcrop";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "smartcrop";
   };
 }

@@ -5,22 +5,22 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.11";
   pname = "chibi-scheme";
 
   src = fetchFromGitHub {
     owner = "ashinn";
     repo = "chibi-scheme";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-i+xiaYwM7a+0T824VSuh7UUNI6HV9KpqzQPE1WAZ+As=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    make install PREFIX="$out"
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   fixupPhase = ''
     wrapProgram "$out/bin/chibi-scheme" \
@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
     description = "Small Footprint Scheme for use as a C Extension Language";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.DerGuteMoritz ];
+    maintainers = with lib.maintainers; [
+      applePrincess
+      DerGuteMoritz
+    ];
   };
-}
+})

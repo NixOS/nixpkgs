@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "snowflake";
   version = "2.11.0";
 
@@ -13,20 +13,20 @@ buildGoModule rec {
     group = "tpo";
     owner = "anti-censorship/pluggable-transports";
     repo = "snowflake";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-VfKiY5XCUnhsWoSfMeYQ5rxxXmAtWzD94o4EvhDCwDM=";
   };
 
   vendorHash = "sha256-vopRE4B4WhncUdBfmBTzRbZzCU20vsHoNCYcPG4BGc0=";
 
-  meta = with lib; {
+  meta = {
     description = "System to defeat internet censorship";
     homepage = "https://snowflake.torproject.org/";
-    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake/-/raw/v${version}/ChangeLog";
-    maintainers = with maintainers; [
+    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake/-/raw/v${finalAttrs.version}/ChangeLog";
+    maintainers = with lib.maintainers; [
       bbjubjub
       yayayayaka
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
-}
+})

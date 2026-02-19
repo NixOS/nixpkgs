@@ -29,24 +29,22 @@ stdenv.mkDerivation rec {
 
   postPatch = "substituteInPlace Makefile --replace libsystemd-daemon libsystemd";
 
-  buildInputs =
-    [
-      fontconfig
-      libjpeg
-      libcap
-      freetype
-      perl
-    ]
-    ++ lib.optional enableSystemd systemd
-    ++ lib.optional enableBidi fribidi;
+  buildInputs = [
+    fontconfig
+    libjpeg
+    libcap
+    freetype
+    perl
+  ]
+  ++ lib.optional enableSystemd systemd
+  ++ lib.optional enableBidi fribidi;
 
-  buildFlags =
-    [
-      "vdr"
-      "i18n"
-    ]
-    ++ lib.optional enableSystemd "SDNOTIFY=1"
-    ++ lib.optional enableBidi "BIDI=1";
+  buildFlags = [
+    "vdr"
+    "i18n"
+  ]
+  ++ lib.optional enableSystemd "SDNOTIFY=1"
+  ++ lib.optional enableBidi "BIDI=1";
 
   nativeBuildInputs = [ perl ];
 
@@ -81,11 +79,11 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
-    homepage = "http://www.tvdr.de/";
+  meta = {
+    homepage = "https://www.tvdr.de/";
     description = "Video Disc Recorder";
-    maintainers = [ maintainers.ck3d ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.ck3d ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

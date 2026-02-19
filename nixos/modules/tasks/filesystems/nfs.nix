@@ -35,36 +35,30 @@ let
       lockd.udp-port = cfg.server.lockdPort;
     };
 
-  nfsConfDeprecated =
-    cfg.extraConfig
-    + ''
-      [nfsd]
-      threads=${toString cfg.server.nproc}
-      ${lib.optionalString (cfg.server.hostName != null) "host=${cfg.server.hostName}"}
-      ${cfg.server.extraNfsdConfig}
+  nfsConfDeprecated = cfg.extraConfig + ''
+    [nfsd]
+    threads=${toString cfg.server.nproc}
+    ${lib.optionalString (cfg.server.hostName != null) "host=${cfg.server.hostName}"}
+    ${cfg.server.extraNfsdConfig}
 
-      [mountd]
-      ${lib.optionalString (cfg.server.mountdPort != null) "port=${toString cfg.server.mountdPort}"}
+    [mountd]
+    ${lib.optionalString (cfg.server.mountdPort != null) "port=${toString cfg.server.mountdPort}"}
 
-      [statd]
-      ${lib.optionalString (cfg.server.statdPort != null) "port=${toString cfg.server.statdPort}"}
+    [statd]
+    ${lib.optionalString (cfg.server.statdPort != null) "port=${toString cfg.server.statdPort}"}
 
-      [lockd]
-      ${lib.optionalString (cfg.server.lockdPort != null) ''
-        port=${toString cfg.server.lockdPort}
-        udp-port=${toString cfg.server.lockdPort}
-      ''}
-    '';
+    [lockd]
+    ${lib.optionalString (cfg.server.lockdPort != null) ''
+      port=${toString cfg.server.lockdPort}
+      udp-port=${toString cfg.server.lockdPort}
+    ''}
+  '';
 
   nfsConfFile =
     if cfg.settings != { } then
       format.generate "nfs.conf" (lib.recursiveUpdate nfsConfSettings cfg.settings)
     else
       pkgs.writeText "nfs.conf" nfsConfDeprecated;
-
-  requestKeyConfFile = pkgs.writeText "request-key.conf" ''
-    create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
-  '';
 
   cfg = config.services.nfs;
 
@@ -164,7 +158,10 @@ in
         environment.etc = {
           "idmapd.conf".source = idmapdConfFile;
           "nfs.conf".source = nfsConfFile;
-          "request-key.conf".source = requestKeyConfFile;
+          "request-key.conf".text = ''
+            create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
+            create dns_resolver * * ${pkgs.keyutils}/bin/key.dns_resolver %k
+          '';
         };
 
         systemd.services.nfs-blkmap = {

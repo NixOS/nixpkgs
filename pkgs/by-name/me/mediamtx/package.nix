@@ -8,37 +8,39 @@
 
 let
   hlsJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.6.2/dist/hls.min.js";
-    hash = "sha256-5lAT3DQ1tVo0tSV6fmWDWSbB9NVyCduomoENNQX08UM=";
+    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.6.15/dist/hls.min.js";
+    hash = "sha256-QTqD4rsMd+0L8L4QXVOdF+9F39mEoLE+zTsUqQE4OTg=";
   };
 in
 buildGoModule (finalAttrs: {
   pname = "mediamtx";
   # check for hls.js version updates in internal/servers/hls/hlsjsdownloader/VERSION
-  version = "1.12.3";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
     repo = "mediamtx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2eTvRWFSR6sXnUJJPKvzQhSqbg1Unh8QuxmyixAw8Cc=";
+    hash = "sha256-bi93rZnX8hymcmW6H/Iglujdv6LiqueitlVJbVlGNis=";
   };
 
-  vendorHash = "sha256-CdJS+RebJA6CpOo6YLlTpCXzE0eWSAnWzVXECvgMBvc=";
+  vendorHash = "sha256-vxKltySKNXs1HDPeBk51OFyMrjM4bSbWTqRIWxMO1HQ=";
 
   postPatch = ''
     cp ${hlsJs} internal/servers/hls/hls.min.js
     echo "v${finalAttrs.version}" > internal/core/VERSION
 
     # disable binary-only rpi camera support
-    substituteInPlace internal/staticsources/rpicamera/camera_disabled.go \
+    substituteInPlace internal/staticsources/rpicamera/camera_other.go \
       --replace-fail '!linux || (!arm && !arm64)' 'linux || !linux'
-    substituteInPlace internal/staticsources/rpicamera/{camera,params_serialize,pipe}.go \
+    substituteInPlace internal/staticsources/rpicamera/{params_serialize,pipe}.go \
       --replace-fail '(linux && arm) || (linux && arm64)' 'linux && !linux'
-    substituteInPlace internal/staticsources/rpicamera/camera_32.go \
+    substituteInPlace internal/staticsources/rpicamera/camera_arm32_.go \
       --replace-fail 'linux && arm' 'linux && !linux'
-    substituteInPlace internal/staticsources/rpicamera/camera_64.go \
+    substituteInPlace internal/staticsources/rpicamera/camera_arm64_.go \
       --replace-fail 'linux && arm64' 'linux && !linux'
+    substituteInPlace internal/staticsources/rpicamera/camera_arm_.go \
+      --replace-fail '(linux && arm) || (linux && arm64)' 'linux && !linux'
   '';
 
   subPackages = [ "." ];

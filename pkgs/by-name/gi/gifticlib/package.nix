@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "gifticlib";
-  version = "unstable-2020-07-07";
+  version = "0-unstable-2020-07-07";
 
   src = fetchFromGitHub {
     owner = "NIFTI-Imaging";
@@ -40,11 +40,11 @@ stdenv.mkDerivation {
     "NEEDS_DATA"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nitrc.org/projects/gifti";
     description = "Medical imaging geometry format C API";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.publicDomain;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.publicDomain;
   };
 }

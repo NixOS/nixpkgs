@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "massren";
   version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "laurent22";
     repo = "massren";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-17y+vmspvZKKRRaEwzP3Zya4r/z+2aSGG6oNZiA8D64=";
   };
 
@@ -41,11 +41,11 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easily rename multiple files using your text editor";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/laurent22/massren";
     maintainers = [ ];
     mainProgram = "massren";
   };
-}
+})

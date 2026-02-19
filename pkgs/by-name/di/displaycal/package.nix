@@ -5,19 +5,23 @@
   wrapGAppsHook3,
   gtk3,
   librsvg,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libx11,
   argyllcms,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "displaycal";
-  version = "3.9.16";
+  version = "3.9.17";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "DisplayCAL";
-    inherit version;
-    hash = "sha256-Ozl0RrYJ/oarNddnz+JjQKyRY6ZNvM9sJapqn75X3Mw=";
+    inherit (finalAttrs) version;
+    hash = "sha256-cV8x1Hx+KQUhOOzqw/89QgoZ9+82vhwGrhG13KpE9Vw=";
   };
 
   nativeBuildInputs = [
@@ -38,18 +42,15 @@ python3.pkgs.buildPythonApplication rec {
     zeroconf
   ];
 
-  buildInputs =
-    [
-      gtk3
-      librsvg
-    ]
-    ++ (with xorg; [
-      libX11
-      libXxf86vm
-      libXext
-      libXinerama
-      libXrandr
-    ]);
+  buildInputs = [
+    gtk3
+    librsvg
+    libx11
+    libxxf86vm
+    libxext
+    libxinerama
+    libxrandr
+  ];
 
   # Workaround for eoyilmaz/displaycal-py3#261
   setupPyGlobalFlags = [ "appdata" ];
@@ -68,11 +69,11 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Display calibration and characterization powered by Argyll CMS (Migrated to Python 3)";
     homepage = "https://github.com/eoyilmaz/displaycal-py3";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ toastal ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ toastal ];
   };
-}
+})

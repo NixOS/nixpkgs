@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
   libbpf,
   elfutils,
@@ -14,15 +15,15 @@
   wireshark-cli,
   nukeReferences,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdp-tools";
-  version = "1.5.5";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
-    rev = "v${version}";
-    hash = "sha256-dK+ZpD1wv20iU51dsMUiW/Z9jojuwC8P3rrjU3LEB1Y=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KIUuAaWmU5BsmLsp8T3S2hSF4p7BJ506luS82RpmOKs=";
   };
 
   outputs = [
@@ -42,7 +43,6 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     bpftools
-    llvmPackages.clang
     llvmPackages.llvm
     pkg-config
     m4
@@ -53,13 +53,21 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "zerocallusedregs" ];
-  # When building BPF, the default CC wrapper is interfering a bit too much.
-  BPF_CFLAGS = "-fno-stack-protector -Wno-error=unused-command-line-argument";
 
-  PRODUCTION = 1;
-  DYNAMIC_LIBXDP = 1;
-  FORCE_SYSTEM_LIBBPF = 1;
-  FORCE_EMACS = 1;
+  env = {
+    # When building BPF, the default CC wrapper is interfering a bit too much.
+    BPF_CFLAGS = toString [
+      "-fno-stack-protector"
+      "-Wno-error=unused-command-line-argument"
+    ];
+    # When cross compiling, configure prefers the unwrapped clang unless told otherwise.
+    CLANG = lib.getExe buildPackages.llvmPackages.clang;
+
+    PRODUCTION = 1;
+    DYNAMIC_LIBXDP = 1;
+    FORCE_SYSTEM_LIBBPF = 1;
+    FORCE_EMACS = 1;
+  };
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -73,19 +81,19 @@ stdenv.mkDerivation rec {
     nuke-refs "$lib"/lib/bpf/*.o
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xdp-project/xdp-tools";
     description = "Library and utilities for use with XDP";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl21
       bsd2
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tirex
       vcunat
       vifino
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

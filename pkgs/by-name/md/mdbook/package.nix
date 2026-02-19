@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   nix,
   rustPlatform,
   installShellFiles,
 }:
 let
-  version = "0.4.50";
+  version = "0.5.2";
 in
 rustPlatform.buildRustPackage rec {
   inherit version;
@@ -17,11 +18,10 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = "mdBook";
     tag = "v${version}";
-    hash = "sha256-ooXfYXqE12wTxrrHKF0IO8JNY7P4sPplrnhVJ6kEUyI=";
+    hash = "sha256-gyjD47ZR9o2lIxipzesyJ6mxb9J9W+WS77TNWhKHP6U=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kyk7fwuR5A0GEGUw+W81IjwDNsa3I2DT3SFnT75IvLs=";
+  cargoHash = "sha256-230KljOUSrDy8QCQki7jvJvdAsjVlUEjKDNVyTF4tWs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
     license = [ lib.licenses.mpl20 ];
     maintainers = with lib.maintainers; [
-      havvy
       Frostman
       matthiasbeyer
     ];

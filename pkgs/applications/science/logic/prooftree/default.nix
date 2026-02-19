@@ -18,18 +18,19 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-      camlp5
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+    camlp5
+  ]);
   buildInputs = [ ncurses ] ++ (with ocamlPackages; [ lablgtk ]);
 
   prefixKey = "--prefix ";
 
-  meta = with lib; {
+  meta = {
     description = "Program for proof-tree visualization";
     mainProgram = "prooftree";
     longDescription = ''
@@ -50,8 +51,8 @@ stdenv.mkDerivation rec {
       shift-click).
     '';
     homepage = "http://askra.de/software/prooftree";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.jwiegley ];
-    license = licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.jwiegley ];
+    license = lib.licenses.gpl3;
   };
 }

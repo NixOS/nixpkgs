@@ -2,15 +2,16 @@
   lib,
   anyio,
   buildPythonPackage,
-  curio,
   fetchFromGitHub,
   httpx,
   hypothesis,
+  mypy,
   poetry-core,
   pytest-aio,
+  pytest-mypy,
+  pytest-mypy-plugins,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   trio,
   typing-extensions,
@@ -18,22 +19,19 @@
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.24.0";
+  version = "0.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
     tag = version;
-    hash = "sha256-qmBxW1XxUlFpAqf2t2ix01TN5NSxOtnYqLyE5ovZU58=";
+    hash = "sha256-VQzsa/uNTQVND0kc20d25to/6LELEiS3cqvG7a1kDw4=";
   };
 
   postPatch = ''
     sed -i setup.cfg \
-      -e '/--cov.*/d' \
-      -e '/--mypy.*/d'
+      -e '/--cov.*/d'
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -42,29 +40,35 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     anyio
-    curio
     httpx
-    hypothesis
+    # https://github.com/dry-python/returns/issues/2224
+    (hypothesis.overrideAttrs (old: {
+      src = fetchFromGitHub {
+        owner = "HypothesisWorks";
+        repo = "hypothesis";
+        tag = "hypothesis-python-6.136.9";
+        hash = "sha256-Q1wxIJwAYKZ0x6c85CJSGgcdKw9a3xFw8YpJROElSNU=";
+      };
+    }))
+    mypy
     pytestCheckHook
     pytest-aio
+    pytest-mypy
+    pytest-mypy-plugins
     pytest-subtests
     setuptools
     trio
   ];
 
-  preCheck = ''
-    rm -rf returns/contrib/mypy
-  '';
-
   pythonImportsCheck = [ "returns" ];
 
-  pytestFlagsArray = [ "--ignore=typesafety" ];
+  disabledTestPaths = [ "typesafety" ];
 
-  meta = with lib; {
-    description = "Make your functions return something meaningful, typed, and safe!";
+  meta = {
+    description = "Make your functions return something meaningful, typed, and safe";
     homepage = "https://github.com/dry-python/returns";
-    changelog = "https://github.com/dry-python/returns/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ jessemoore ];
+    changelog = "https://github.com/dry-python/returns/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ jessemoore ];
   };
 }

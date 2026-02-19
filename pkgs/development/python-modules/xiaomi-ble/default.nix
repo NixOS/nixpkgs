@@ -13,22 +13,19 @@
   pycryptodomex,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xiaomi-ble";
-  version = "0.39.0";
+  version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
-    tag = "v${version}";
-    hash = "sha256-XuEFzyJmWrHm4vzyei6+iUEPRDGht+DQGUn6K9Polng=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BSWZCugyBnyan4Hl5RxY9IhyGwELl47EQiMrHjjUTKk=";
   };
 
   build-system = [ poetry-core ];
@@ -54,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xiaomi_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Xiaomi BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/xiaomi-ble";
-    changelog = "https://github.com/Bluetooth-Devices/xiaomi-ble/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/xiaomi-ble/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

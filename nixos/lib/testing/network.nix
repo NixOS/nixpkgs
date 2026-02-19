@@ -30,16 +30,10 @@ let
       ...
     }:
     let
-      qemu-common = import ../qemu-common.nix { inherit lib pkgs; };
+      qemu-common = import ../qemu-common.nix { inherit (pkgs) lib stdenv; };
 
-      # Convert legacy VLANs to named interfaces and merge with explicit interfaces.
-      vlansNumbered = forEach (zipLists config.virtualisation.vlans (range 1 255)) (v: {
-        name = "eth${toString v.snd}";
-        vlan = v.fst;
-        assignIP = true;
-      });
-      explicitInterfaces = lib.mapAttrsToList (n: v: v // { name = n; }) config.virtualisation.interfaces;
-      interfaces = vlansNumbered ++ explicitInterfaces;
+      interfaces = lib.attrValues config.virtualisation.allInterfaces;
+
       interfacesNumbered = zipLists interfaces (range 1 255);
 
       # Automatically assign IP addresses to requested interfaces.
@@ -67,10 +61,10 @@ let
           { fst, snd }: qemu-common.qemuNICFlags snd fst.vlan config.virtualisation.test.nodeNumber
         )
       );
-      udevRules = forEach interfacesNumbered (
-        { fst, snd }:
+      udevRules = forEach interfaces (
+        interface:
         # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
-        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower (qemu-common.qemuNicMac fst.vlan config.virtualisation.test.nodeNumber)}",NAME="${fst.name}"''
+        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower (qemu-common.qemuNicMac interface.vlan config.virtualisation.test.nodeNumber)}",NAME="${interface.name}"''
       );
 
       networkConfig = {
@@ -104,9 +98,9 @@ let
           optionalString (
             config.networking.primaryIPAddress != ""
           ) "${config.networking.primaryIPAddress} ${hostnames}"
-          + optionalString (config.networking.primaryIPv6Address != "") (
-            "${config.networking.primaryIPv6Address} ${hostnames}"
-          )
+          + optionalString (
+            config.networking.primaryIPv6Address != ""
+          ) "${config.networking.primaryIPv6Address} ${hostnames}"
         );
 
         virtualisation.qemu.options = qemuOptions;
@@ -130,7 +124,7 @@ let
         virtualisation.test.nodeName = mkOption {
           internal = true;
           default = name;
-          # We need to force this in specilisations, otherwise it'd be
+          # We need to force this in specialisations, otherwise it'd be
           # readOnly = true;
           description = ''
             The `name` in `nodes.<name>`; stable across `specialisations`.

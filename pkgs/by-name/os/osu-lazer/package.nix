@@ -13,7 +13,7 @@
   lttng-ust,
   numactl,
   libglvnd,
-  xorg,
+  libxi,
   udev,
   vulkan-loader,
   nix-update-script,
@@ -22,13 +22,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2025.424.0";
+  version = "2026.119.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    tag = version;
-    hash = "sha256-+r7YeaNrUkoYoMzGqhqT+bqdO1UohvJRlAcAskF7vn4=";
+    tag = "${version}-lazer";
+    hash = "sha256-aAWWq4nX8AeWTT8/aRbHccq+Zx87qP4izxXL3fE7QMg=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -54,7 +54,7 @@ buildDotnetModule rec {
     libglvnd
 
     # needed for the window to actually appear
-    xorg.libXi
+    libxi
 
     # needed to avoid in runtime.log:
     # [verbose]: SDL error log [debug]: Failed loading udev_device_get_action: /nix/store/*-osu-lazer-*/lib/osu-lazer/runtimes/linux-x64/native/libSDL2.so: undefined symbol: _udev_device_get_action
@@ -95,7 +95,11 @@ buildDotnetModule rec {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=(.*)-lazer"
+    ];
+  };
 
   meta = {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";

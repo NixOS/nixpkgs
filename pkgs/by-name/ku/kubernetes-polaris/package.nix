@@ -1,33 +1,34 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubernetes-polaris";
-  version = "9.6.3";
+  version = "10.1.4";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
-    rev = version;
-    sha256 = "sha256-g7qttmh5iYCtDvt3YW5aECpbpNsG7fC9itODsD40q+w=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-OwKW8a7bka6YYI8xIRaxcNvrFOjuf+0jG3CSQGVCRPM=";
   };
 
-  vendorHash = "sha256-yDR2eY/idL4Realr84iLMA2P9SoALP3/4V+Dvd4j6Ow=";
+  vendorHash = "sha256-gqMeXzPqQ0RBtjx+fS0+b7KhfJh1Ss0mC3djzOR84dU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X main.Commit=${version}"
+    "-X main.Version=${finalAttrs.version}"
+    "-X main.Commit=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd polaris \
       --bash <($out/bin/polaris completion bash) \
       --fish <($out/bin/polaris completion fish) \
@@ -39,16 +40,16 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/polaris help
-    $out/bin/polaris version | grep 'Polaris version:${version}'
+    $out/bin/polaris version | grep 'Polaris version:${finalAttrs.version}'
 
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Validate and remediate Kubernetes resources to ensure configuration best practices are followed";
     mainProgram = "polaris";
     homepage = "https://www.fairwinds.com/polaris";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ longer ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ longer ];
   };
-}
+})

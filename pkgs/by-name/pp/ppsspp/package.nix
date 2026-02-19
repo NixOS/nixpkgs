@@ -9,7 +9,7 @@
   libffi,
   libsForQt5,
   libzip,
-  libX11,
+  libx11,
   makeDesktopItem,
   makeWrapper,
   pkg-config,
@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString enableQt "-qt"
     + lib.optionalString (!enableQt) "-sdl"
     + lib.optionalString forceWayland "-wayland";
-  version = "1.18.1";
+  version = "1.19.3";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-X5Sb6oxjjhlsm1VN9e0Emk4SqiHTe3G3ZiuIgw5DSds=";
+    hash = "sha256-71oIjUXYGFNyhcXQP65Bd2gYF6golrPR4USwS7bTxFQ=";
   };
 
   patches = lib.optionals useSystemFfmpeg [
@@ -65,31 +65,31 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     python3
-  ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  ]
+  ++ lib.optionals enableQt [ wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      SDL2
-      libX11
-      glew
-      libzip
-      zlib
-    ]
-    ++ lib.optionals useSystemFfmpeg [
-      ffmpeg_6
-    ]
-    ++ lib.optionals useSystemSnappy [
-      snappy
-    ]
-    ++ lib.optionals enableQt [
-      qtbase
-      qtmultimedia
-    ]
-    ++ lib.optionals enableVulkan [ vulkan-loader ]
-    ++ lib.optionals vulkanWayland [
-      wayland
-      libffi
-    ];
+  buildInputs = [
+    SDL2
+    libx11
+    glew
+    libzip
+    zlib
+  ]
+  ++ lib.optionals useSystemFfmpeg [
+    ffmpeg_6
+  ]
+  ++ lib.optionals useSystemSnappy [
+    snappy
+  ]
+  ++ lib.optionals enableQt [
+    qtbase
+    qtmultimedia
+  ]
+  ++ lib.optionals enableVulkan [ vulkan-loader ]
+  ++ lib.optionals vulkanWayland [
+    wayland
+    libffi
+  ];
 
   dontWrapQtApps = true;
 
@@ -119,29 +119,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = lib.concatStringsSep "\n" (
     [
-      ''runHook preInstall''
+      "runHook preInstall"
     ]
     ++ [
-      ''mkdir -p $out/share/{applications,ppsspp/bin,icons}''
+      "mkdir -p $out/share/{applications,ppsspp/bin,icons}"
     ]
     ++ (
       if enableQt then
         [
-          ''install -Dm555 PPSSPPQt $out/share/ppsspp/bin/''
+          "install -Dm555 PPSSPPQt $out/share/ppsspp/bin/"
         ]
       else
         [
-          ''install -Dm555 PPSSPPHeadless $out/share/ppsspp/bin/''
-          ''makeWrapper $out/share/ppsspp/bin/PPSSPPHeadless $out/bin/ppsspp-headless''
-          ''install -Dm555 PPSSPPSDL $out/share/ppsspp/bin/''
+          "install -Dm555 PPSSPPHeadless $out/share/ppsspp/bin/"
+          "makeWrapper $out/share/ppsspp/bin/PPSSPPHeadless $out/bin/ppsspp-headless"
+          "install -Dm555 PPSSPPSDL $out/share/ppsspp/bin/"
         ]
     )
     ++ [
-      ''mv assets $out/share/ppsspp''
-      ''mv ../icons/hicolor $out/share/icons''
+      "mv assets $out/share/ppsspp"
+      "mv ../icons/hicolor $out/share/icons"
     ]
     ++ [
-      ''runHook postInstall''
+      "runHook postInstall"
     ]
   );
 
@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       );
       binToBeWrapped = if enableQt then "PPSSPPQt" else "PPSSPPSDL";
     in
-    ''makeWrapper $out/share/ppsspp/bin/${binToBeWrapped} $out/bin/ppsspp ${wrapperArgs}'';
+    "makeWrapper $out/share/ppsspp/bin/${binToBeWrapped} $out/bin/ppsspp ${wrapperArgs}";
 
   meta = {
     homepage = "https://www.ppsspp.org/";

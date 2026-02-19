@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   flit-core,
   mock,
   pbr,
@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "jenkinsapi";
-  version = "0.3.14";
-  format = "pyproject";
+  version = "0.3.15";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-G+Wj1gu5e4/VqdnUR34iAeB+RyWn1CwOsWhGu4eeS5c=";
+  src = fetchFromGitHub {
+    owner = "pycontribs";
+    repo = "jenkinsapi";
+    tag = version;
+    hash = "sha256-r6GOi/0ALJDy6R6cd/bECk+HVe/AyKZYG96sr9y9o/4=";
   };
-
-  patches = [ ./pytest-warn-none.patch ];
 
   nativeBuildInputs = [
     flit-core
@@ -52,11 +52,14 @@ buildPythonPackage rec {
     "jenkinsapi.utils.jenkins_launcher"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for accessing resources on a Jenkins continuous-integration server";
     homepage = "https://github.com/salimfadhley/jenkinsapi";
-    maintainers = with maintainers; [ drets ];
-    teams = [ teams.deshaw ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+      drets
+    ];
+    license = lib.licenses.mit;
   };
 }

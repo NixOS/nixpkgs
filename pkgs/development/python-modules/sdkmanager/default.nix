@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  pythonOlder,
   pythonAtLeast,
   argcomplete,
   requests,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   version = "0.6.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "sdkmanager";
@@ -29,13 +26,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      argcomplete
-      requests
-    ]
-    ++ requests.optional-dependencies.socks
-    ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];
+  dependencies = [
+    argcomplete
+    requests
+  ]
+  ++ requests.optional-dependencies.socks
+  ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];
 
   postInstall = ''
     wrapProgram $out/bin/sdkmanager \

@@ -1,9 +1,15 @@
 {
+  lib,
   mkKdeDerivation,
   qtwayland,
   qtmultimedia,
   opencv,
+  tesseractLanguages ? [ ],
+  tesseract5,
 }:
+let
+  tesseract = tesseract5.override { enableLanguages = tesseractLanguages; };
+in
 mkKdeDerivation {
   pname = "spectacle";
 
@@ -19,5 +25,11 @@ mkKdeDerivation {
       runAccuracyTests = false; # tests will fail because of missing plugins but that's okay
     })
   ];
+
+  # no point adding the dependency when we have no language packs
+  preFixup = lib.optionalString (tesseractLanguages != [ ]) ''
+    patchelf --add-needed libtesseract.so.5 --add-rpath ${tesseract}/lib $out/bin/spectacle
+  '';
+
   meta.mainProgram = "spectacle";
 }

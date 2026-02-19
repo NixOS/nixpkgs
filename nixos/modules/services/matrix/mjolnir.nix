@@ -30,7 +30,7 @@ let
   moduleConfigFile = pkgs.writeText "module-config.yaml" (
     lib.generators.toYAML { } (
       lib.filterAttrs (_: v: v != null) (
-        lib.fold lib.recursiveUpdate { } [
+        lib.foldr lib.recursiveUpdate { } [
           yamlConfig
           cfg.settings
         ]
@@ -214,14 +214,16 @@ in
       description = "mjolnir - a moderation tool for Matrix";
       wants = [
         "network-online.target"
-      ] ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      ]
+      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
       after = [
         "network-online.target"
-      ] ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      ]
+      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = ''${pkgs.mjolnir}/bin/mjolnir --mjolnir-config ./config/default.yaml'';
+        ExecStart = "${pkgs.mjolnir}/bin/mjolnir --mjolnir-config ./config/default.yaml";
         ExecStartPre = [ generateConfig ];
         WorkingDirectory = cfg.dataPath;
         StateDirectory = "mjolnir";

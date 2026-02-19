@@ -1,67 +1,71 @@
 {
   lib,
-  buildPackages,
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
-  maturin,
-  pythonOlder,
-  poetry-core,
-  protobuf,
-  python-dateutil,
-  rustc,
   rustPlatform,
-  setuptools,
-  setuptools-rust,
+  buildPackages,
+
+  # build-system
+  maturin,
+
+  # dependencies
+  nexusrpc,
+  protobuf,
   types-protobuf,
   typing-extensions,
+
+  # nativeBuildInputs
+  cargo,
+  rustc,
+
+  # passthru
+  nixosTests,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.11.0";
+  version = "1.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "sdk-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-942EmFOAYUWq58MW2rIVhDK9dHkzi62fUdOudYP94hU=";
+    tag = version;
     fetchSubmodules = true;
+    hash = "sha256-6QqROLHEu4+htIddBJ8sMhPHZmD2eHcxvIa0L0PLZHA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-9hP+zN6jcRmRhPmcZ4Zgp61IeS7gDPfsOvweAxKHnHM=";
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-G64Gw3jpo2wyI75bl2yJoN6UlIt/wk3NI4J5i4R3lgg=";
   };
 
   cargoRoot = "temporalio/bridge";
 
   build-system = [
     maturin
-    poetry-core
   ];
 
-  preBuild = ''
-    export PROTOC=${buildPackages.protobuf}/bin/protoc
-  '';
+  env.PROTOC = "${lib.getExe buildPackages.protobuf}";
 
   dependencies = [
+    nexusrpc
     protobuf
     types-protobuf
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.11") python-dateutil;
+  ];
 
   nativeBuildInputs = [
     cargo
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     rustc
-    setuptools
-    setuptools-rust
   ];
 
   pythonImportsCheck = [
@@ -70,6 +74,11 @@ buildPythonPackage rec {
     "temporalio.client"
     "temporalio.worker"
   ];
+
+  passthru = {
+    tests = { inherit (nixosTests) temporal; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Temporal Python SDK";

@@ -11,26 +11,26 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.24.0";
+  version = "3.26.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-ca7iAr3vGuc4mMz36cMVE0+n22wkYGOvxQOu9wLsA70=";
+    hash = "sha256-jVTHFwKRBvFkSq2vgCq5aS5T2T3QFcvRnnQZDrpha9c=";
   };
 
   patches = [
-    # Fix build on ELFv2 powerpc64
-    # https://bugs.kde.org/show_bug.cgi?id=398883
-    (fetchurl {
-      url = "https://github.com/void-linux/void-packages/raw/3e16b4606235885463fc9ab45b4c120f1a51aa28/srcpkgs/valgrind/patches/elfv2-ppc64-be.patch";
-      sha256 = "NV/F+5aqFZz7+OF5oN5MUTpThv4H5PEY9sBgnnWohQY=";
-    })
     # Fix checks on Musl.
     # https://bugs.kde.org/show_bug.cgi?id=453929
     (fetchpatch {
       url = "https://bugsfiles.kde.org/attachment.cgi?id=148912";
       sha256 = "Za+7K93pgnuEUQ+jDItEzWlN0izhbynX2crSOXBBY/I=";
     })
+    # https://bugs.kde.org/show_bug.cgi?id=511548
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=186451";
+      hash = "sha256-IGmyHwwGoy00hcz3XxQSDcwcU8zHLBJ9dfqTvWDQ520=";
+    })
+
     # Fix build on armv7l.
     # see also https://bugs.kde.org/show_bug.cgi?id=454346
     (fetchpatch {
@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [
-    "pie"
     "stackprotector"
   ];
 
@@ -111,12 +110,11 @@ stdenv.mkDerivation rec {
       Valgrind to build new tools.
     '';
 
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = [ lib.maintainers.eelco ];
     platforms =
       with lib.platforms;
-      lib.intersectLists (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips) (
+      lib.intersectLists (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips ++ riscv64) (
         darwin ++ freebsd ++ illumos ++ linux
       );
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];

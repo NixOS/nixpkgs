@@ -40,96 +40,93 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.4.1";
+  version = "8.4.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = finalAttrs.version;
-    hash = "sha256-q1jOimQi+24I1ZBf6Z0cvAyXcBFBpT5aWSNeG6n6y0k=";
+    hash = "sha256-DEbJZlnq9o+5BYQBXL6wJIVJ9c7HOBLQDMrsiMcaPgk=";
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      wrapGAppsHook3
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook3
 
-      bison
-      flex
-      gdal # for `gdal-config`
-      geos # for `geos-config`
-      netcdf # for `nc-config`
-      pkg-config
-    ]
-    ++ (with python3Packages; [
-      python-dateutil
-      numpy
-      wxpython
-    ]);
+    bison
+    flex
+    gdal # for `gdal-config`
+    geos # for `geos-config`
+    netcdf # for `nc-config`
+    pkg-config
+  ]
+  ++ (with python3Packages; [
+    python-dateutil
+    numpy
+    wxpython
+  ]);
 
-  buildInputs =
-    [
-      blas
-      cairo
-      ffmpeg
-      fftw
-      freetype
-      gdal
-      geos
-      lapack
-      libpng
-      libsvm
-      libtiff
-      libxml2
-      netcdf
-      pdal
-      libpq
-      proj
-      readline
-      sqlite
-      wxGTK32
-      zlib
-      zstd
-    ]
-    ++ lib.optionals withOpenGL [ libGLU ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
-    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  buildInputs = [
+    blas
+    cairo
+    ffmpeg
+    fftw
+    freetype
+    gdal
+    geos
+    lapack
+    libpng
+    libsvm
+    libtiff
+    libxml2
+    netcdf
+    pdal
+    libpq
+    proj
+    readline
+    sqlite
+    wxGTK32
+    zlib
+    zstd
+  ]
+  ++ lib.optionals withOpenGL [ libGLU ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   strictDeps = true;
 
-  configureFlags =
-    [
-      "--with-blas"
-      "--with-cairo-ldflags=-lfontconfig"
-      "--with-cxx"
-      "--with-fftw"
-      "--with-freetype"
-      "--with-geos"
-      "--with-gdal"
-      "--with-lapack"
-      "--with-libsvm"
-      "--with-nls"
-      "--with-openmp"
-      "--with-pdal"
-      "--with-postgres"
-      "--with-postgres-libs=${libpq}/lib/"
-      "--with-proj-includes=${proj.dev}/include"
-      "--with-proj-libs=${proj}/lib"
-      "--with-proj-share=${proj}/share/proj"
-      "--with-sqlite"
-      "--with-zstd"
-      "--without-bzlib"
-      "--without-mysql"
-      "--without-odbc"
-    ]
-    ++ lib.optionals (!withOpenGL) [
-      "--without-opengl"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--without-cairo"
-      "--without-freetype"
-      "--without-x"
-    ];
+  configureFlags = [
+    "--with-blas"
+    "--with-cairo-ldflags=-lfontconfig"
+    "--with-cxx"
+    "--with-fftw"
+    "--with-freetype"
+    "--with-geos"
+    "--with-gdal"
+    "--with-lapack"
+    "--with-libsvm"
+    "--with-nls"
+    "--with-openmp"
+    "--with-pdal"
+    "--with-postgres"
+    "--with-postgres-libs=${libpq}/lib/"
+    "--with-proj-includes=${proj.dev}/include"
+    "--with-proj-libs=${proj}/lib"
+    "--with-proj-share=${proj}/share/proj"
+    "--with-sqlite"
+    "--with-zstd"
+    "--without-bzlib"
+    "--without-mysql"
+    "--without-odbc"
+  ]
+  ++ lib.optionals (!withOpenGL) [
+    "--without-opengl"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--without-cairo"
+    "--without-freetype"
+    "--without-x"
+  ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
   makeFlags = lib.optional stdenv.hostPlatform.isDarwin "GDAL_DYNAMIC=";
@@ -161,13 +158,13 @@ stdenv.mkDerivation (finalAttrs: {
     grass = callPackage ./tests.nix { grass = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     homepage = "https://grass.osgeo.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mpickering ];
-    teams = [ teams.geospatial ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ mpickering ];
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.all;
     mainProgram = "grass";
   };
 })

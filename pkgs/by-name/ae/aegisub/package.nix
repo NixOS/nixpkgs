@@ -39,6 +39,10 @@
   useBundledLuaJIT ? false,
 }:
 
+let
+  luajit' = luajit.override { enable52Compat = true; };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
   version = "3.4.2";
@@ -60,30 +64,29 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      boost
-      expat
-      ffmpeg
-      ffms
-      fftw
-      fontconfig
-      freetype
-      fribidi
-      harfbuzz
-      icu
-      libGL
-      libass
-      libuchardet
-      wxGTK32
-      zlib
-    ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
-    ++ lib.optionals portaudioSupport [ portaudio ]
-    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-    ++ lib.optionals spellcheckSupport [ hunspell ]
-    ++ lib.optionals (!useBundledLuaJIT) [ luajit ];
+  buildInputs = [
+    boost
+    expat
+    ffmpeg
+    ffms
+    fftw
+    fontconfig
+    freetype
+    fribidi
+    harfbuzz
+    icu
+    libGL
+    libass
+    libuchardet
+    wxGTK32
+    zlib
+  ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
+  ++ lib.optionals portaudioSupport [ portaudio ]
+  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+  ++ lib.optionals spellcheckSupport [ hunspell ]
+  ++ lib.optionals (!useBundledLuaJIT) [ luajit' ];
 
   mesonFlags = [
     (lib.mesonEnable "alsa" alsaSupport)

@@ -1,68 +1,87 @@
 {
   lib,
   stdenv,
-  accelerate,
   buildPythonPackage,
-  boto3,
-  docker,
-  duckduckgo-search,
   fetchFromGitHub,
-  gradio,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   huggingface-hub,
   jinja2,
-  ipython,
-  litellm,
-  markdownify,
-  mcp,
-  mcpadapt,
-  openai,
-  pandas,
   pillow,
-  pytest-datadir,
-  pytestCheckHook,
   python-dotenv,
   requests,
   rich,
-  setuptools,
+
+  # optional-dependencies
+  # audio
   soundfile,
+  # bedrock
+  boto3,
+  # docker
+  docker,
+  websocket-client,
+  # gradio
+  gradio,
+  # litellm
+  litellm,
+  # mcp
+  mcp,
+  mcpadapt,
+  # openai
+  openai,
+  # toolkit
+  ddgs,
+  markdownify,
+  # torch
+  numpy,
   torch,
   torchvision,
+  # transformers
+  accelerate,
   transformers,
-  websocket-client,
+
+  # tests
+  ipython,
+  pytest-datadir,
+  pytest-timeout,
+  pytestCheckHook,
   wikipedia-api,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "smolagents";
-  version = "1.17.0";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
-    tag = "v${version}";
-    hash = "sha256-BMyLN8eNGBhywpN/EEE8hFf4Wb5EDpZvqBbX0ojRYec=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
   };
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "pillow" ];
-
   dependencies = [
-    duckduckgo-search
     huggingface-hub
     jinja2
-    markdownify
-    pandas
     pillow
     python-dotenv
     requests
     rich
   ];
 
-  optional-dependencies = {
-    audio = [ soundfile ];
+  optional-dependencies = lib.fix (self: {
+    audio = [ soundfile ] ++ self.torch;
     bedrock = [ boto3 ];
+    # blaxel = [
+    #   blaxel
+    #   websocket-client
+    # ];
     docker = [
       docker
       websocket-client
@@ -77,6 +96,10 @@ buildPythonPackage rec {
       mcp
       mcpadapt
     ];
+    # modal = [
+    #   modal
+    #   websocket-client
+    # ];
     # mlx-lm = [ mlx-lm ];
     openai = [ openai ];
     # telemetry = [
@@ -85,14 +108,20 @@ buildPythonPackage rec {
     #   opentelemetry-exporter-otlp
     #   opentelemetry-sdk
     # ];
+    toolkit = [
+      ddgs
+      markdownify
+    ];
     torch = [
+      numpy
       torch
       torchvision
     ];
     transformers = [
       accelerate
       transformers
-    ];
+    ]
+    ++ self.torch;
     # vision = [
     #   helium
     #   selenium
@@ -101,57 +130,78 @@ buildPythonPackage rec {
     #   torch
     #   vllm
     # ];
-  };
+  });
 
   nativeCheckInputs = [
     ipython
     pytest-datadir
     pytestCheckHook
     wikipedia-api
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ pytest-timeout ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "smolagents" ];
 
-  disabledTests =
-    [
-      # Missing dependencies
-      "test_ddgs_with_kwargs"
-      "test_e2b_executor_instantiation"
-      "test_flatten_messages_as_text_for_all_models"
-      "mcp"
-      "test_import_smolagents_without_extras"
-      "test_vision_web_browser_main"
-      "test_multiple_servers"
-      # Tests require network access
-      "test_agent_type_output"
-      "test_call_different_providers_without_key"
-      "test_can_import_sklearn_if_explicitly_authorized"
-      "test_transformers_message_no_tool"
-      "test_transformers_message_vl_no_tool"
-      "test_transformers_toolcalling_agent"
-      "test_visit_webpage"
-      "test_wikipedia_search"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # Missing dependencies
-      "test_get_mlx"
+  disabledTestPaths = [
+    # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
+    "tests/test_types.py"
+  ];
 
-      # Fatal Python error: Aborted
-      # thread '<unnamed>' panicked, Attempted to create a NULL object.
-      # duckduckgo_search/duckduckgo_search.py", line 83 in __init__
-      "TestDuckDuckGoSearchTool"
-      "test_init_agent_with_different_toolsets"
-      "test_multiagents_save"
-      "test_new_instance"
-    ];
+  disabledTests = [
+    # Missing dependencies
+    "test_cleanup"
+    "test_ddgs_with_kwargs"
+    "test_e2b_executor_instantiation"
+    "test_flatten_messages_as_text_for_all_models"
+    "mcp"
+    "test_import_smolagents_without_extras"
+    "test_vision_web_browser_main"
+    "test_multiple_servers"
+    # Tests require network access
+    "test_agent_type_output"
+    "test_call_different_providers_without_key"
+    "test_can_import_sklearn_if_explicitly_authorized"
+    "test_transformers_message_no_tool"
+    "test_transformers_message_vl_no_tool"
+    "test_transformers_toolcalling_agent"
+    "test_visit_webpage"
+    "test_wikipedia_search"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: 'function' object is not subscriptable
+    "test_stream_to_gradio_memory_step"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Missing dependencies
+    "test_get_mlx"
+
+    # Fatal Python error: Aborted
+    # thread '<unnamed>' panicked, Attempted to create a NULL object.
+    # duckduckgo_search/duckduckgo_search.py", line 83 in __init__
+    "TestDuckDuckGoSearchTool"
+    "test_init_agent_with_different_toolsets"
+    "test_multiagents_save"
+    "test_new_instance"
+
+    # Requires optional "blaxel" dependencies
+    "test_blaxel_executor_instantiation_with_blaxel_sdk"
+    "test_blaxel_executor_custom_parameters"
+    "test_blaxel_executor_cleanup"
+    # Requires optional "modal" dependencies
+    "test_sandbox_lifecycle"
+    # TypeError: 'function' object is not subscriptable
+    "test_stream_to_gradio_memory_step"
+
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Barebones library for agents";
     homepage = "https://github.com/huggingface/smolagents";
-    changelog = "https://github.com/huggingface/smolagents/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/smolagents/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,22 +1,23 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "civo";
-  version = "1.2.3";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "civo";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-NREiQA/zAxClwKZDq5SR43/AAT6HqdfR6/ud9Xhe5rM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-eR/L0AkeMgtbtaV+jIhbyGN1tUYrpnIWDeKD0p9BP1Y=";
   };
 
-  vendorHash = "sha256-xSvq8ZrkdzRhfD2gPKSJkLnwVQuFuWnSYJ89iUDOpUU=";
+  vendorHash = "sha256-F56+450hDqAiIFt9/Jl79ltLOKMRC2NaNQM4/T4Di3k=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,8 +28,8 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X github.com/civo/cli/common.VersionCli=${version}"
-    "-X github.com/civo/cli/common.CommitCli=${src.rev}"
+    "-X github.com/civo/cli/common.VersionCli=${finalAttrs.version}"
+    "-X github.com/civo/cli/common.CommitCli=${finalAttrs.src.rev}"
     "-X github.com/civo/cli/common.DateCli=unknown"
   ];
 
@@ -36,6 +37,8 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cli $out/bin/civo
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd civo \
       --bash <($out/bin/civo completion bash) \
       --fish <($out/bin/civo completion fish) \
@@ -52,4 +55,4 @@ buildGoModule rec {
       rytswd
     ];
   };
-}
+})

@@ -3,7 +3,6 @@
   buildNpmPackage,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatch-vcs,
   hatchling,
   jinja2,
@@ -38,9 +37,7 @@ in
 
 buildPythonPackage {
   inherit pname version src;
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   nativeBuildInputs = [
     hatch-vcs
@@ -66,10 +63,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pytest_html" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for generating HTML reports";
     homepage = "https://github.com/pytest-dev/pytest-html";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ mpoquet ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ mpoquet ];
   };
 }

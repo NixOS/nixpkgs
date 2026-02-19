@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitLab,
   qt6,
-  xorg,
+  libxtst,
+  libx11,
   cmake,
   ninja,
   libcprime,
@@ -29,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt6.qtbase
-    xorg.libXtst
-    xorg.libX11
+    libxtst
+    libx11
     libcprime
     libcsys
   ];
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "corekeyboard";
     homepage = "https://gitlab.com/cubocore/coreapps/corekeyboard";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

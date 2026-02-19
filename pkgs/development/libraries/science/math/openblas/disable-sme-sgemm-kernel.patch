@@ -1,0 +1,13 @@
+diff --git a/interface/gemm.c b/interface/gemm.c
+index c5182c266..7056422e1 100644
+--- a/interface/gemm.c
++++ b/interface/gemm.c
+@@ -436,7 +436,7 @@ void CNAME(enum CBLAS_ORDER order, enum CBLAS_TRANSPOSE TransA, enum CBLAS_TRANS
+ #endif
+ #if defined(ARCH_ARM64) && (defined(USE_SGEMM_KERNEL_DIRECT)||defined(DYNAMIC_ARCH))
+ #if defined(DYNAMIC_ARCH)
+- if (support_sme1())
++ if (false)
+ #endif
+   if (beta == 0 && alpha == 1.0 && order == CblasRowMajor && TransA == CblasNoTrans && TransB == CblasNoTrans) {
+ 	SGEMM_DIRECT(m, n, k, a, lda, b, ldb, c, ldc);

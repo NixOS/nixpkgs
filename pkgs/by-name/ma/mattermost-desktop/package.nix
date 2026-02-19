@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  electron_34,
+  electron_38,
   makeWrapper,
   testers,
   mattermost-desktop,
@@ -10,21 +10,21 @@
 }:
 
 let
-  electron = electron_34;
+  electron = electron_38;
 in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "5.11.2";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-03874pV7/GqydMdaSlh3N17LsbHppfPdYJ8nGdbvvbk=";
+    hash = "sha256-9/HDkcQEyvcflHMk/M4181jT6xUzMUcD5GHRxqfgxSg=";
   };
 
-  npmDepsHash = "sha256-v6XEJJ9kozkY7HSLNJtM+86+36G7wt8xIFwCyO7x11Y=";
+  npmDepsHash = "sha256-ug7PSLj/AB5krMVJAhCpJHOOKkAootG6oPeMHoW6E0A=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
@@ -87,7 +87,7 @@ buildNpmPackage rec {
       command = "env HOME=/tmp ${meta.mainProgram} --version";
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
+      extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ];
     };
   };
 

@@ -1,6 +1,8 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
+  gitMinimal,
   makeBinaryWrapper,
   installShellFiles,
   rustPlatform,
@@ -8,25 +10,51 @@
   cachix,
   nixVersions,
   openssl,
+  dbus,
   pkg-config,
   glibcLocalesUtf8,
   devenv, # required to run version test
 }:
 
 let
-  devenv_nix = nixVersions.nix_2_24.overrideAttrs (old: {
-    version = "2.24-devenv";
-    src = fetchFromGitHub {
-      owner = "domenkozar";
-      repo = "nix";
-      rev = "b455edf3505f1bf0172b39a735caef94687d0d9c";
-      hash = "sha256-bYyjarS3qSNqxfgc89IoVz8cAFDkF9yPE63EJr+h50s=";
-    };
-    doCheck = false;
-    doInstallCheck = false;
-  });
+  version = "1.11.2";
+  devenvNixVersion = "2.30.4";
 
-  version = "1.6.1";
+  devenv_nix =
+    let
+      components = (
+        nixVersions.nixComponents_git.overrideSource (fetchFromGitHub {
+          owner = "cachix";
+          repo = "nix";
+          rev = "devenv-${devenvNixVersion}";
+          hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
+        })
+      );
+    in
+    # Support for mdbook >= 0.5, https://github.com/NixOS/nix/issues/14628
+    (
+      (components.appendPatches [
+        (fetchpatch2 {
+          name = "nix-2.30-14695-mdbook-0.5-support.patch";
+          url = "https://github.com/NixOS/nix/commit/5cbd7856de0a9c13351f98e32a1e26d0854d87fd.patch";
+          excludes = [ "doc/manual/package.nix" ];
+          hash = "sha256-GYaTOG9wZT9UI4G6za535PkLyjHKSxwBjJsXbjmI26g=";
+        })
+      ]).overrideScope
+      (
+        finalScope: prevScope: {
+          version = devenvNixVersion;
+        }
+      )
+    ).nix-everything.overrideAttrs
+      (old: {
+        pname = "devenv-nix";
+        version = devenvNixVersion;
+        doCheck = false;
+        doInstallCheck = false;
+        # do override src, but the Nix way so the warning is unaware of it
+        __intentionallyOverridingVersion = true;
+      });
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -35,12 +63,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    rev = "v${version}";
-    hash = "sha256-CEVWxRaln3sp0541QpMfcfmI2w+RN72UgNLV5Dy9sco=";
+    tag = "v${version}";
+    hash = "sha256-8Ivbm9ltg0hUGQYMuRDOI8hbHUzqB9xKZ9ubKAzzwE8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-t4Cj7JlBVrMP02Dqibq2IgdKy6ejv+CeffmcPAkh7BE=";
+  cargoHash = "sha256-mMmobDZeNqrByowwrDXojVnHeUyC/YbhERpF8iOCZ0s=";
 
   buildAndTestSubdir = "devenv";
 
@@ -50,7 +77,20 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    dbus
+  ];
+
+  nativeCheckInputs = [
+    gitMinimal
+  ];
+
+  preCheck = ''
+    git init
+    git config user.email "test@example.com"
+    git config user.name "Test User"
+  '';
 
   postInstall =
     let
@@ -93,6 +133,9 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/cachix/devenv";
     license = lib.licenses.asl20;
     mainProgram = "devenv";
-    maintainers = with lib.maintainers; [ domenkozar ];
+    maintainers = with lib.maintainers; [
+      domenkozar
+      sandydoo
+    ];
   };
 }

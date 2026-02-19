@@ -9,17 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "koto";
-  version = "0.15.3";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "koto-lang";
     repo = "koto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sFADZj0mBe8TQ2x6NeXLqvvXK13WhVGD2anGWoWrSZw=";
+    hash = "sha256-47eDSohLH/cMmMwjUENNeT5danpgMKLPEMzEUACrpiY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ok4rgqiQ7N5knXdb0Mfn3fYPPLXoRtOZVv8RvWR2h3k=";
+  cargoHash = "sha256-mQxPwU/f7/AastJmGBZOAxGKaZBWTQUkb2KIuC6MSfE=";
 
   postPatch = ''
     tomlq -ti 'del(.bench)' crates/koto/Cargo.toml
@@ -32,7 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [ "--package=koto_cli" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

@@ -11,13 +11,13 @@
   libGL,
   libGLU,
   libGLX,
-  libX11,
-  libXext,
-  libXmu,
-  libXpm,
+  libx11,
+  libxext,
+  libxmu,
+  libxpm,
   motif,
   python3,
-  qt5,
+  qt6,
   soxt,
   xercesc,
   zlib,
@@ -37,13 +37,13 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
-  version = "11.3.2";
+stdenv.mkDerivation (finalAttrs: {
+  version = "11.4.0";
   pname = "geant4";
 
   src = fetchurl {
-    url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-iSrt10JSYqUKw9PHEX2BwMDaS0CMaIDbr1R4uTAeSIw=";
+    url = "https://cern.ch/geant4-data/releases/geant4-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-rWTJa4s9cSXnRruX9fVXee1ZRoGmpdY8JwJefJzvWPo=";
   };
 
   # Fix broken paths in a .pc
@@ -52,47 +52,46 @@ stdenv.mkDerivation rec {
       --replace '${"$"}{prefix}/${"$"}{PTL_INSTALL_' '${"$"}{PTL_INSTALL_'
   '';
 
-  cmakeFlags =
-    [
-      "-DGEANT4_INSTALL_DATA=OFF"
-      "-DGEANT4_USE_GDML=ON"
-      "-DGEANT4_USE_G3TOG4=ON"
-      "-DGEANT4_USE_QT=${if enableQt then "ON" else "OFF"}"
-      "-DGEANT4_USE_XM=${if enableXM then "ON" else "OFF"}"
-      "-DGEANT4_USE_OPENGL_X11=${if enableOpenGLX11 then "ON" else "OFF"}"
-      "-DGEANT4_USE_INVENTOR=${if enableInventor then "ON" else "OFF"}"
-      "-DGEANT4_USE_PYTHON=${if enablePython then "ON" else "OFF"}"
-      "-DGEANT4_USE_RAYTRACER_X11=${if enableRaytracerX11 then "ON" else "OFF"}"
-      "-DGEANT4_USE_SYSTEM_CLHEP=ON"
-      "-DGEANT4_USE_SYSTEM_EXPAT=ON"
-      "-DGEANT4_USE_SYSTEM_ZLIB=ON"
-      "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
-    ]
-    ++ lib.optionals (enableOpenGLX11 && stdenv.hostPlatform.isDarwin) [
-      "-DXQuartzGL_INCLUDE_DIR=${libGLX.dev}/include"
-      "-DXQuartzGL_gl_LIBRARY=${libGLX}/lib/libGL.dylib"
-    ]
-    ++ lib.optionals (enableMultiThreading && enablePython) [
-      "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
-    ]
-    ++ lib.optionals enableInventor [
-      "-DINVENTOR_INCLUDE_DIR=${coin3d}/include"
-      "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
-    ];
+  cmakeFlags = [
+    "-DGEANT4_INSTALL_DATA=OFF"
+    "-DGEANT4_USE_GDML=ON"
+    "-DGEANT4_USE_G3TOG4=ON"
+    "-DGEANT4_USE_QT=${if enableQt then "ON" else "OFF"}"
+    "-DGEANT4_USE_XM=${if enableXM then "ON" else "OFF"}"
+    "-DGEANT4_USE_OPENGL_X11=${if enableOpenGLX11 then "ON" else "OFF"}"
+    "-DGEANT4_USE_INVENTOR=${if enableInventor then "ON" else "OFF"}"
+    "-DGEANT4_USE_PYTHON=${if enablePython then "ON" else "OFF"}"
+    "-DGEANT4_USE_RAYTRACER_X11=${if enableRaytracerX11 then "ON" else "OFF"}"
+    "-DGEANT4_USE_SYSTEM_CLHEP=ON"
+    "-DGEANT4_USE_SYSTEM_EXPAT=ON"
+    "-DGEANT4_USE_SYSTEM_ZLIB=ON"
+    "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
+  ]
+  ++ lib.optionals (enableOpenGLX11 && stdenv.hostPlatform.isDarwin) [
+    "-DXQuartzGL_INCLUDE_DIR=${libGLX.dev}/include"
+    "-DXQuartzGL_gl_LIBRARY=${libGLX}/lib/libGL.dylib"
+  ]
+  ++ lib.optionals (enableMultiThreading && enablePython) [
+    "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
+  ]
+  ++ lib.optionals enableInventor [
+    "-DINVENTOR_INCLUDE_DIR=${coin3d}/include"
+    "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
+  ];
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedNativeBuildInputs = lib.optionals enableQt [ qt5.wrapQtAppsHook ];
+  propagatedNativeBuildInputs = lib.optionals enableQt [ qt6.wrapQtAppsHook ];
   dontWrapQtApps = true; # no binaries
 
   buildInputs =
     lib.optionals enableOpenGLX11 [
       libGLU
-      libXext
-      libXmu
+      libxext
+      libxmu
     ]
     ++ lib.optionals enableInventor [
-      libXpm
+      libxpm
       coin3d
       soxt
       motif
@@ -102,28 +101,26 @@ stdenv.mkDerivation rec {
       python3
     ];
 
-  propagatedBuildInputs =
-    [
-      clhep
-      expat
-      xercesc
-      zlib
-    ]
-    ++ lib.optionals enableOpenGLX11 [
-      libGL
-      libX11
-    ]
-    ++ lib.optionals enableXM [ motif ]
-    ++ lib.optionals enableQt [ qt5.qtbase ];
+  propagatedBuildInputs = [
+    clhep
+    expat
+    xercesc
+    zlib
+  ]
+  ++ lib.optionals enableOpenGLX11 [
+    libGL
+    libx11
+  ]
+  ++ lib.optionals enableXM [ motif ]
+  ++ lib.optionals enableQt [ qt6.qtbase ];
 
-  postFixup =
-    ''
-      substituteInPlace "$out"/bin/geant4.sh \
-        --replace-fail "export GEANT4_DATA_DIR" "# export GEANT4_DATA_DIR"
-    ''
-    + lib.optionalString enableQt ''
-      wrapQtAppsHook
-    '';
+  postFixup = ''
+    substituteInPlace "$out"/bin/geant4.sh \
+      --replace-fail "export GEANT4_DATA_DIR" "# export GEANT4_DATA_DIR"
+  ''
+  + lib.optionalString enableQt ''
+    wrapQtAppsHook
+  '';
 
   setupHook = ./geant4-hook.sh;
 
@@ -140,19 +137,19 @@ stdenv.mkDerivation rec {
     source $out/nix-support/setup-hook
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for the simulation of the passage of particles through matter";
     longDescription = ''
       Geant4 is a toolkit for the simulation of the passage of particles through matter.
       Its areas of application include high energy, nuclear and accelerator physics, as well as studies in medical and space science.
       The two main reference papers for Geant4 are published in Nuclear Instruments and Methods in Physics Research A 506 (2003) 250-303, and IEEE Transactions on Nuclear Science 53 No. 1 (2006) 270-278.
     '';
-    homepage = "http://www.geant4.org";
-    license = licenses.g4sl;
-    maintainers = with maintainers; [
+    homepage = "https://www.geant4.org";
+    license = lib.licenses.g4sl;
+    maintainers = with lib.maintainers; [
       omnipotententity
       veprbl
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

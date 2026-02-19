@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  nix,
+  nixVersions,
   perlPackages,
   buildEnv,
   makeWrapper,
@@ -38,7 +38,7 @@
   mdbook,
   foreman,
   python3,
-  libressl,
+  netcat,
   cacert,
   glibcLocales,
   meson,
@@ -50,6 +50,8 @@
 }:
 
 let
+  nix = nixVersions.nix_2_33;
+
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
     paths =
@@ -102,6 +104,7 @@ let
         NetAmazonS3
         NetPrometheus
         NetStatsd
+        NumberBytesHuman
         PadWalker
         ParallelForkManager
         PerlCriticCommunity
@@ -116,13 +119,12 @@ let
         TermReadKey
         Test2Harness
         TestPostgreSQL
-        TestSimple13
         TextDiff
         TextTable
         UUID4Tiny
         XMLSimple
         YAML
-        (nix.libs.nix-perl-bindings or nix.perl-bindings)
+        (nix.libs.nix-perl-bindings or nix.perl-bindings or null)
         git
       ];
   };
@@ -130,13 +132,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2025-04-23";
+  version = "0-unstable-2026-01-23";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "455f1a0665c6ca55df2a17679f6103402a9e9431";
-    hash = "sha256-rn9ZE4ERml8ZkT9ziDrqGEJfzr0rJlzYfu2PHL71oiI=";
+    rev = "8bc95a96f787eb36f29ceec773f5bf48bd121097";
+    hash = "sha256-Ro+qOHWmWuKJiUwX8bmNuGpb0cLUaPr0vsuZGAi2QCI=";
   };
 
   outputs = [
@@ -206,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
     foreman
     glibcLocales
     python3
-    libressl.nc
+    netcat
     nix-eval-jobs
     openldap
     postgresql
@@ -239,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
         read -n 4 chars < $i
         if [[ $chars =~ ELF ]]; then continue; fi
         wrapProgram $i \
-            --prefix PERL5LIB ':' $out/libexec/hydra/lib:$PERL5LIB \
+            --prefix PERL5LIB ':' "$out/libexec/hydra/lib:${perlPackages.makePerlPath [ perlDeps ]}" \
             --prefix PATH ':' $out/bin:$hydraPath \
             --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \
@@ -256,12 +259,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Nix-based continuous build system";
     homepage = "https://nixos.org/hydra";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mindavi ];
-    teams = [ teams.helsinki-systems ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      conni2461
+      das_j
+      helsinki-Jo
+      mindavi
+    ];
   };
 })

@@ -3,9 +3,10 @@
   lib,
   opencloud,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencloud-idp-web";
 
@@ -13,15 +14,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmRoot = "services/idp";
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pnpmRoot}";
-    hash = "sha256-gFhWDYk3DcwUowZ9AQjCqHZL1oniK3YCNiG1cDGabYg=";
+    fetcherVersion = 1;
+    hash = "sha256-NW7HK2B9h5JprK3JcIGi/OHcyoa5VTs/P0s3BZr+4FU=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   buildPhase = ''

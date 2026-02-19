@@ -18,14 +18,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "regextester";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "artemanufrij";
     repo = "regextester";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-5+gU8DeB99w2h/4vMal2eHkR0305dmRYiY6fsLZzlnc=";
   };
 
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop application to test regular expressions interactively";
     mainProgram = "com.github.artemanufrij.regextester";
     homepage = "https://github.com/artemanufrij/regextester";
-    maintainers = with maintainers; [ samdroid-apps ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ samdroid-apps ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

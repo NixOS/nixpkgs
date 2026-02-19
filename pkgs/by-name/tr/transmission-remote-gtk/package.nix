@@ -21,15 +21,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "transmission-remote-gtk";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gtk";
     repo = "transmission-remote-gtk";
-    tag = version;
-    hash = "sha256-/syZI/5LhuYLvXrNknnpbGHEH0z5iHeye2YRNJFWZJ0=";
+    tag = finalAttrs.version;
+    hash = "sha256-I8Y5oB7sF5q1j8ITaYmQWa/ZdBORxbMSLI5O0vWUoKY=";
   };
 
   nativeBuildInputs = [
@@ -58,13 +58,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # Requires network access
 
-  meta = with lib; {
+  meta = {
     description = "GTK remote control for the Transmission BitTorrent client";
     mainProgram = "transmission-remote-gtk";
     homepage = "https://github.com/transmission-remote-gtk/transmission-remote-gtk";
-    changelog = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/releases/tag/${version}";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
-}
+})

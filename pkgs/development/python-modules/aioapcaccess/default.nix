@@ -4,26 +4,23 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "aioapcaccess";
-  version = "0.5.0";
+  version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "yuxincs";
     repo = "aioapcaccess";
     tag = "v${version}";
-    hash = "sha256-nI8hfHfSLMOKPcG5idYqqa/msJuR/Xt+JmgzdftlN28=";
+    hash = "sha256-gCi0vo4w3jr4w5neQS9v821rdfE+SqnUkrOrEQUET7E=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioapcaccess" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for working with apcaccess";
     homepage = "https://github.com/yuxincs/aioapcaccess";
-    changelog = "https://github.com/yuxincs/aioapcaccess/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/yuxincs/aioapcaccess/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

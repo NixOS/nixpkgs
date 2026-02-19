@@ -6,25 +6,25 @@
   kube-router,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kube-router";
-  version = "2.5.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "cloudnativelabs";
     repo = "kube-router";
-    rev = "v${version}";
-    hash = "sha256-bt7BnMIq/tkRL8d1pf/gG5qBq/1yiMqXDpBrIICo780=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xtqzUnQxNwk6Qp2RQ94LqDQ0eJXPtrYEe9MK6OUZYAE=";
   };
 
-  vendorHash = "sha256-BH0yLr7oVtpMPfljDIjzpQiABtwRKOPXNvejh8l8lE8=";
+  vendorHash = "sha256-s7In0uv8C+H1xkQxfjnH4+PXO3NPZU/NYdg00EVH4us=";
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.Version=${version}"
+    "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.Version=${finalAttrs.version}"
     "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.BuildDate=Nix"
   ];
 
@@ -32,12 +32,12 @@ buildGoModule rec {
     package = kube-router;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.kube-router.io/";
     description = "All-in-one router, firewall and service proxy for Kubernetes";
     mainProgram = "kube-router";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ johanot ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ johanot ];
+    platforms = lib.platforms.linux;
   };
-}
+})

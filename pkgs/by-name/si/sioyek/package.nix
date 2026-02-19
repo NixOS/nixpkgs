@@ -15,29 +15,28 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
-  version = "2.0.0-unstable-2025-05-23";
+  version = "2.0.0-unstable-2026-02-12";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
-    rev = "d73a2fcd74c0a119c397372a79aeea628205d4a7";
-    hash = "sha256-ZKAv/G/Bgb3lxEx+WRupTBxo4Gf5yFbZ+siNyz5lABY=";
+    rev = "7b2b26547da4b644d646686a53b087d26ac7413f";
+    hash = "sha256-5ObudXMbUD37LbbtGKW9SDxPHaZx6QBMh+66fyY3NGo=";
   };
 
-  buildInputs =
-    [
-      gumbo
-      harfbuzz
-      jbig2dec
-      mujs
-      mupdf
-      openjpeg
-      qt6.qt3d
-      qt6.qtbase
-      qt6.qtspeech
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
+  buildInputs = [
+    gumbo
+    harfbuzz
+    jbig2dec
+    mujs
+    mupdf
+    openjpeg
+    qt6.qt3d
+    qt6.qtbase
+    qt6.qtspeech
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -79,17 +78,17 @@ stdenv.mkDerivation (finalAttrs: {
     tagPrefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sioyek.info/";
     description = "PDF viewer designed for research papers and technical books";
     mainProgram = "sioyek";
     changelog = "https://github.com/ahrm/sioyek/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       podocarp
       stephen-huan
       xyven1
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

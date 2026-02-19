@@ -32,7 +32,7 @@ in
 
 stdenv.mkDerivation {
   pname = "spip";
-  version = "unstable-2023-04-19";
+  version = "0-unstable-2023-04-19";
 
   src = fetchFromGitHub {
     owner = "raphaelleman";
@@ -58,12 +58,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "A random forest model for splice prediction in genomics";
-    license = licenses.mit;
+  meta = {
+    description = "Random forest model for splice prediction in genomics";
+    license = lib.licenses.mit;
     homepage = "https://github.com/raphaelleman/SPiP";
-    maintainers = with maintainers; [ apraga ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ apraga ];
+    platforms = lib.platforms.unix;
     mainProgram = "spip";
   };
 }

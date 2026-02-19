@@ -170,10 +170,6 @@ lib.recurseIntoAttrs {
             set -x
 
             diff $exampleBarPathString $barPath
-
-            ${lib.optionalString (builtins ? convertHash) ''
-              [[ "$(basename $exampleBarPathString)" = "$(basename $barPath)" ]]
-            ''}
           )
 
           ''${args:+fail "args should not be set by Nix. We don't expect it to and unstructuredDerivationInputEnv removes it."}

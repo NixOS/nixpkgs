@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cmctl";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cmctl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Kr7vwVW6v08QRbJDs2u0vK241ljNfhLVYIQCBl31QSs=";
+    hash = "sha256-wOtpaohPjBWQkaZbA1Fbh97kVxMTEGuqCtIhviJGOrU=";
   };
 
-  vendorHash = "sha256-SYCWvt2K3MEow4cDKxLSK+Bp0hZG9rNI9PoXdPcPESg=";
+  vendorHash = "sha256-ocQDysrJUbCDnWZ2Ul3kDqPTpvmpgA3Wz+L5/fIkrh4=";
 
   ldflags = [
     "-s"

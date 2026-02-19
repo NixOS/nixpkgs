@@ -4,54 +4,62 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  buildPackages,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
-  testers,
-  az-pim-cli,
 }:
 buildGoModule (finalAttrs: {
   pname = "az-pim-cli";
-  version = "1.6.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "netr0m";
     repo = "az-pim-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zi/DNTroMews4PvPCeLWSq74xWdZ22NO2VtmW91zcfs=";
+    hash = "sha256-93nafWcPjfRX2pGe27UVxERH7H7rhkLAvUiY2x6CvY0=";
   };
 
-  vendorHash = "sha256-g4NcRNmHXS3mOtE0nbV96vFFoVzGFbAvcj/vkdXshoU=";
+  patches = [
+    # removes info we don't have from version command
+    ./version-build-info.patch
+  ];
+
+  vendorHash = "sha256-ucsTrouw0/MAVzrXb2mot9ccD5v6scu8SJMJR51R48E=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      installShellCompletion --cmd az-pim-cli \
-        --bash <(${emulator} $out/bin/az-pim-cli completion bash) \
-        --fish <(${emulator} $out/bin/az-pim-cli completion fish) \
-        --zsh <(${emulator} $out/bin/az-pim-cli completion zsh)
-    ''
-  );
+  env.CGO_ENABLED = 0;
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      command = "HOME=$TMPDIR az-pim-cli --version";
-      package = az-pim-cli;
-    };
-  };
+  ldflags = [
+    "-s"
+    "-X github.com/netr0m/az-pim-cli/cmd.version=v${finalAttrs.version}"
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd az-pim-cli \
+      --bash <($out/bin/az-pim-cli completion bash) \
+      --fish <($out/bin/az-pim-cli completion fish) \
+      --zsh <($out/bin/az-pim-cli completion zsh)
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "List and activate Azure Entra ID Privileged Identity Management roles from the CLI";
     homepage = "https://github.com/netr0m/az-pim-cli";
     changelog = "https://github.com/netr0m/az-pim-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
     mainProgram = "az-pim-cli";
   };
 })

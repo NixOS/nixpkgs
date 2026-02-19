@@ -23,13 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontBuild = true;
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      imagemagick
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems # postInstallHook
-    ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle; # fixupOutputHook
+  nativeBuildInputs = [
+    makeWrapper
+    imagemagick
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems # postInstallHook
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle; # fixupOutputHook
   buildInputs = [
     jre
     perl
@@ -71,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A quality control application for high throughput sequence data";
+    description = "Quality control application for high throughput sequence data";
     longDescription = ''
       FastQC aims to provide a simple way to do some quality control checks on raw sequence data coming from high throughput sequencing pipelines. It provides a modular set of analyses which you can use to give a quick impression of whether your data has any problems of which you should be aware before doing any further analysis.
 

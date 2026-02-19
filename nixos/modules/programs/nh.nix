@@ -10,6 +10,7 @@ in
 {
   meta.maintainers = with lib.maintainers; [
     NotAShelf
+    mdaniels5757
     viperML
   ];
 
@@ -99,6 +100,7 @@ in
         script = "exec ${lib.getExe cfg.package} clean all ${cfg.clean.extraArgs}";
         startAt = cfg.clean.dates;
         path = [ config.nix.package ];
+        after = [ "multi-user.target" ];
         serviceConfig.Type = "oneshot";
       };
 

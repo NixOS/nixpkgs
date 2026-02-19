@@ -100,14 +100,16 @@ in
         };
       };
 
-      services.odoo.settings.options =
-        {
-          data_dir = "/var/lib/private/odoo/data";
-          proxy_mode = cfg.domain != null;
-        }
-        // (lib.optionalAttrs (cfg.addons != [ ]) {
-          addons_path = lib.concatMapStringsSep "," lib.escapeShellArg cfg.addons;
-        });
+      services.odoo.settings.options = {
+        data_dir = "/var/lib/private/odoo/data";
+        proxy_mode = cfg.domain != null;
+        # Disable the database manager by default
+        # https://www.odoo.com/documentation/master/administration/on_premise/deploy.html#database-manager-security
+        list_db = lib.mkDefault false;
+      }
+      // (lib.optionalAttrs (cfg.addons != [ ]) {
+        addons_path = lib.concatMapStringsSep "," lib.escapeShellArg cfg.addons;
+      });
 
       users.users.odoo = {
         isSystemUser = true;
@@ -119,13 +121,13 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"
-          "postgresql.service"
+          "postgresql.target"
         ];
 
         # pg_dump
         path = [ config.services.postgresql.package ];
 
-        requires = [ "postgresql.service" ];
+        requires = [ "postgresql.target" ];
 
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/odoo";

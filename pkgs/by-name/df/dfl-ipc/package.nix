@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A very simple set of IPC classes for inter-process communication";
+    description = "Very simple set of IPC classes for inter-process communication";
     homepage = "https://gitlab.com/desktop-frameworks/ipc";
     changelog = "https://gitlab.com/desktop-frameworks/ipc/-/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

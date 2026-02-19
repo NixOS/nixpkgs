@@ -7,10 +7,10 @@
 let
   data = lib.importJSON ../data.json;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitlab-workhorse";
 
-  version = "18.0.1";
+  version = "18.8.4";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
@@ -20,18 +20,18 @@ buildGoModule rec {
     sha256 = data.repo_hash;
   };
 
-  sourceRoot = "${src.name}/workhorse";
+  sourceRoot = "${finalAttrs.src.name}/workhorse";
 
-  vendorHash = "sha256-tLlxsUCoSGvUpJnS0GsNobk2IuSEgs3R4UDUmNf+HrA=";
+  vendorHash = "sha256-MfEVR8kfNvP1wAmd6PjVIcfiNojHyMmDvWjdDlnd/P0=";
   buildInputs = [ git ];
-  ldflags = [ "-X main.Version=${version}" ];
+  ldflags = [ "-X main.Version=${finalAttrs.version}" ];
   doCheck = false;
   prodyVendor = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.gitlab.com/";
-    platforms = platforms.linux;
-    teams = [ teams.gitlab ];
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gitlab ];
+    license = lib.licenses.mit;
   };
-}
+})

@@ -1,12 +1,10 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
   gmt,
   numpy,
-  netcdf4,
   pandas,
   packaging,
   xarray,
@@ -16,18 +14,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygmt";
-  version = "0.15.0";
+  version = "0.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
-    tag = "v${version}";
-    hash = "sha256-sse1Cxzsrhg9X9zH/XSUtF/7YHrSUHYGtn4qoq5qdM4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yWB/IRu5B6hnu8e1TvpAaLehr1TMqvnDc5sRgyMw2mM=";
   };
 
   postPatch = ''
@@ -39,7 +35,6 @@ buildPythonPackage rec {
 
   dependencies = [
     numpy
-    netcdf4
     pandas
     packaging
     xarray
@@ -65,7 +60,7 @@ buildPythonPackage rec {
     description = "Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = lib.licenses.bsd3;
-    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/${src.tag}";
+    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/${finalAttrs.src.tag}";
     teams = [ lib.teams.geospatial ];
   };
-}
+})

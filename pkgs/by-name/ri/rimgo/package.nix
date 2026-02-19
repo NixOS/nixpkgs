@@ -1,18 +1,17 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildGoModule,
   tailwindcss_3,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rimgo";
   version = "1.2.6";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "rimgo";
     repo = "rimgo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PBzbCiRIDrtKH3j6jxmylPpwafR5qgRYDHgYP1m/+Ok=";
   };
 
@@ -27,14 +26,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X codeberg.org/rimgo/rimgo/pages.VersionInfo=${version}"
+    "-X codeberg.org/rimgo/rimgo/pages.VersionInfo=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternative frontend for Imgur";
     homepage = "https://codeberg.org/rimgo/rimgo";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "rimgo";
-    maintainers = with maintainers; [ quantenzitrone ];
+    maintainers = with lib.maintainers; [ quantenzitrone ];
   };
-}
+})

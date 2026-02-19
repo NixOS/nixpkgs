@@ -16,16 +16,16 @@ let
   variants = {
     # ./update-zen.py zen
     zen = {
-      version = "6.14.7"; # zen
+      version = "6.18.9"; # zen
       suffix = "zen1"; # zen
-      sha256 = "04vcy71wjs6n1ahnva55i0czayn96w8qq0b0v0qymcq9lrbms2mr"; # zen
+      sha256 = "1kwb5lbm3y7nhsyx18fhpc3852v76lyl74008rjai9shr3p4zp40"; # zen
       isLqx = false;
     };
     # ./update-zen.py lqx
     lqx = {
-      version = "6.14.7"; # lqx
+      version = "6.18.12"; # lqx
       suffix = "lqx1"; # lqx
-      sha256 = "0in1ymvnac9kic974r5sqkk730fm71d49q0cgzk7lj1ykd9jzxpp"; # lqx
+      sha256 = "1xyzjzd1v6s5xympivb0xkyh5fz5lbaif8lam6c8lhr2q2msybiv"; # lqx
       isLqx = true;
     };
   };
@@ -106,7 +106,7 @@ let
             HZ_1000 = yes;
 
           }
-          // lib.optionalAttrs (isLqx) {
+          // lib.optionalAttrs isLqx {
             # https://github.com/damentz/liquorix-package/commit/07b176edc002f2a7825ae181613e1f79a3650fd2
             CMDLINE_BOOL = yes;
             CMDLINE = freeform "audit=0 intel_pstate=disable amd_pstate=disable ";
@@ -145,7 +145,7 @@ let
             UCLAMP_TASK_GROUP = mkKernelOverride (option no);
           };
 
-        passthru.updateScript = [
+        extraPassthru.updateScript = [
           ./update-zen.py
           (if isLqx then "lqx" else "zen")
         ];

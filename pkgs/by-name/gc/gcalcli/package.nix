@@ -7,7 +7,7 @@
   libnotify,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gcalcli";
   version = "4.5.1";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "insanum";
     repo = "gcalcli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FU1EHLQ+/2sOGeeGwONsrV786kHTFfMel7ocBcCe+rI=";
   };
 
@@ -54,4 +54,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nocoolnametom ];
   };
-}
+})

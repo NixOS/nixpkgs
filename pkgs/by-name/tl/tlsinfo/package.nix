@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tlsinfo";
-  version = "0.1.47";
+  version = "0.1.53";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "tlsinfo";
-    tag = "v${version}";
-    hash = "sha256-9YOFsUDNxZi1C59ZSQ31QXE9comFa6DGEzvRah0bruY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZP9juaZ2jsXSnvz1RxJ/841QgYvSYupdG2OqOOm55U4=";
   };
 
-  vendorHash = "sha256-f7Rkpz6qGiJNhxlYPJo2G3ykItj+55PvGnNPNOU1ftI=";
+  vendorHash = "sha256-rxTiIGIdSSwS1UdBjWmNz5iUlkUb1htDCa5XRpFLUw8=";
 
   ldflags = [
     "-s"
@@ -26,11 +26,11 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/paepckehh/tlsinfo/releases/tag/v${version}";
+    changelog = "https://github.com/paepckehh/tlsinfo/releases/tag/v${finalAttrs.version}";
     homepage = "https://paepcke.de/tlsinfo";
     description = "Tool to analyze and troubleshoot TLS connections";
     license = lib.licenses.bsd3;
     mainProgram = "tlsinfo";
     maintainers = with lib.maintainers; [ paepcke ];
   };
-}
+})

@@ -1,32 +1,56 @@
 {
   lib,
-  buildNpmPackage,
-  fetchzip,
+  stdenv,
+  autoPatchelfHook,
+  fetchurl,
+  versionCheckHook,
 }:
 
-buildNpmPackage rec {
+let
+  sources = lib.importJSON ./sources.json;
+  srcConfig =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "0.1.36";
+  inherit (sources) version;
 
-  src = fetchzip {
-    url = "https://registry.npmjs.org/@githubnext/github-copilot-cli/-/github-copilot-cli-${version}.tgz";
-    hash = "sha256-7n+7sN61OrqMVGaKll85+HwX7iGG9M/UW5lf2Pd5sRU=";
+  src = fetchurl {
+    url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/${srcConfig.name}.tar.gz";
+    inherit (srcConfig) hash;
   };
 
-  npmDepsHash = "sha256-h0StxzGbl3ZeOQ4Jy1BgJ5sJ0pAbubMCRsiIOYpU04w=";
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+  sourceRoot = ".";
+  dontStrip = true;
 
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 copilot $out/bin/copilot
+    runHook postInstall
   '';
 
-  dontNpmBuild = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-  meta = with lib; {
-    description = "CLI experience for letting GitHub Copilot help you on the command line";
-    homepage = "https://githubnext.com/projects/copilot-cli/";
-    license = licenses.unfree; # upstream has no license
-    maintainers = [ maintainers.malo ];
-    platforms = platforms.all;
-    mainProgram = "github-copilot-cli";
+  passthru.updateScript = ./update.sh;
+
+  meta = {
+    description = "GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal";
+    homepage = "https://github.com/github/copilot-cli";
+    changelog = "https://github.com/github/copilot-cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      dbreyfogle
+    ];
+    mainProgram = "copilot";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
-}
+})

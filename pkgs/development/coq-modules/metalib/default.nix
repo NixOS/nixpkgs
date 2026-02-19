@@ -25,9 +25,9 @@
   release."8.15".sha256 = "0wbp058zwa4bkdjj38aysy2g1avf9nrh8q23a3dil0q00qczi616";
   release."8.10".sha256 = "0wbypc05d2lqfm9qaw98ynr5yc1p0ipsvyc3bh1rk9nz7zwirmjs";
 
-  meta = with lib; {
-    license = licenses.mit;
-    maintainers = [ maintainers.jwiegley ];
+  meta = {
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jwiegley ];
   };
 }).overrideAttrs
   (oldAttrs: {

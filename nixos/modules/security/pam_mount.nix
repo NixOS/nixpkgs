@@ -158,7 +158,8 @@ in
                 user = user.name;
                 path = user.cryptHomeLuks;
                 mountpoint = user.home;
-              } // user.pamMount;
+              }
+              // user.pamMount;
             in
             "<volume ${lib.concatStringsSep " " (lib.mapAttrsToList mkAttr attrs)} />\n";
         in
@@ -169,9 +170,7 @@ in
           <pam_mount>
           <debug enable="${toString cfg.debugLevel}" />
           <!-- if activated, requires ofl from hxtools to be present -->
-          <logout wait="${toString cfg.logoutWait}" hup="${if cfg.logoutHup then "yes" else "no"}" term="${
-            if cfg.logoutTerm then "yes" else "no"
-          }" kill="${if cfg.logoutKill then "yes" else "no"}" />
+          <logout wait="${toString cfg.logoutWait}" hup="${lib.boolToYesNo cfg.logoutHup}" term="${lib.boolToYesNo cfg.logoutTerm}" kill="${lib.boolToYesNo cfg.logoutKill}" />
           <!-- set PATH variable for pam_mount module -->
           <path>${lib.makeBinPath ([ pkgs.util-linux ] ++ cfg.additionalSearchPaths)}</path>
           <!-- create mount point if not present -->

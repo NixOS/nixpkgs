@@ -17,7 +17,7 @@
   vulkan-headers,
   vulkan-loader,
   glfw,
-  libXdmcp,
+  libxdmcp,
   pcre,
   util-linux,
   libselinux,
@@ -28,25 +28,27 @@
   libepoxy,
   dbus,
   at-spi2-core,
-  libXtst,
+  libxtst,
   gtkmm3,
 }:
 
-# Known issues:
-# - The daemon can't be started from the GUI, because pkexec requires a shell
-#   registered in /etc/shells. The nix's bash is not in there when running
-#   cpu-x from nixpkgs.
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpu-x";
-  version = "5.3.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
-    owner = "X0rg";
+    owner = "TheTumultuousUnicornOfDarkness";
     repo = "CPU-X";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UOOqPkOXsyZthreg0Fv/KMJcm0Syd7/Uni9G3H6UJ2E=";
+    hash = "sha256-db7NxoVZgnYb1MZKfiFINx00JqDnf/TvwumBp6qDooQ=";
   };
+
+  postPatch = ''
+    # https://github.com/TheTumultuousUnicornOfDarkness/CPU-X/pull/402
+    # FIXME: remove in the next version
+    substituteInPlace src/core/bandwidth/{OOC/utility,routines}-x86-64bit.asm \
+      --replace-fail "cpu	ia64" "cpu	default"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -67,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     glfw
     opencl-headers
     ocl-icd
-    libXdmcp
+    libxdmcp
     pcre
     util-linux
     libselinux
@@ -78,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     dbus
     at-spi2-core
-    libXtst
+    libxtst
   ];
 
   preFixup = ''

@@ -11,12 +11,12 @@
 }:
 
 let
-  version = "2.8.0";
+  version = "3.9.2";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-0LUT7OdYoOZTdR/UXJO2eL2Afo2Y7GjBPIrjWUt205E=";
+    hash = "sha256-jR9NGguxobUenjnvh6vhZztntxNM2rkwkWcq/DeB4JY=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -24,13 +24,12 @@ let
   pythonpkgs = python3Packages;
   python = pythonpkgs.python;
 in
-
 pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;
 
-  build-system = with pythonpkgs; [ poetry-core ];
+  build-system = with pythonpkgs; [ setuptools ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -38,46 +37,58 @@ pythonpkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  dependencies = with pythonpkgs; [
-    aiofiles
-    alembic
-    aniso8601
-    appdirs
-    apprise
-    authlib
-    bcrypt
-    extruct
-    fastapi
-    gunicorn
-    html2text
-    httpx
-    ingredient-parser-nlp
-    itsdangerous
-    jinja2
-    lxml
-    openai
-    orjson
-    paho-mqtt
-    pillow
-    pillow-heif
-    psycopg2
-    pydantic-settings
-    pyhumps
-    pyjwt
-    python-dotenv
-    python-ldap
-    python-multipart
-    python-slugify
-    pyyaml
-    rapidfuzz
-    recipe-scrapers
-    sqlalchemy
-    tzdata
-    uvicorn
-  ];
+  dependencies =
+    with pythonpkgs;
+    [
+      aiofiles
+      alembic
+      aniso8601
+      appdirs
+      apprise
+      authlib
+      bcrypt
+      beautifulsoup4
+      extruct
+      fastapi
+      html2text
+      httpx
+      ingredient-parser-nlp
+      isodate
+      itsdangerous
+      jinja2
+      lxml
+      openai
+      orjson
+      paho-mqtt
+      pillow
+      pillow-heif
+      psycopg2 # pgsql optional-dependencies
+      pydantic
+      pydantic-settings
+      pyhumps
+      pyjwt
+      python-dateutil
+      python-dotenv
+      python-ldap
+      python-multipart
+      python-slugify
+      pyyaml
+      rapidfuzz
+      recipe-scrapers
+      requests
+      sqlalchemy
+      text-unidecode
+      typing-extensions
+      tzdata
+      uvicorn
+    ]
+    ++ uvicorn.optional-dependencies.standard;
 
   postPatch = ''
     rm -rf dev # Do not need dev scripts & code
+
+    substituteInPlace pyproject.toml \
+     --replace-fail '"setuptools==80.9.0"' '"setuptools"'
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
@@ -105,21 +116,19 @@ pythonpkgs.buildPythonApplication rec {
         --set OUT "$out"
     '';
 
-  nativeCheckInputs = with pythonpkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with pythonpkgs; [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   # Needed for tests
   preCheck = ''
     export NLTK_DATA=${nltk-data.averaged-perceptron-tagger-eng}
   '';
 
-  disabledTestPaths = [
-    # KeyError: 'alembic_version'
-    "tests/unit_tests/services_tests/backup_v2_tests/test_backup_v2.py"
-    "tests/unit_tests/services_tests/backup_v2_tests/test_alchemy_exporter.py"
-    # sqlite3.OperationalError: no such table
-    "tests/unit_tests/services_tests/scheduler/tasks/test_create_timeline_events.py"
-    "tests/unit_tests/test_ingredient_parser.py"
-    "tests/unit_tests/test_security.py"
+  disabledTests = [
+    # pydantic_core._pydantic_core.ValidationError: 1 validation error
+    "test_pg_connection_url_encode_password"
   ];
 
   passthru = {
@@ -129,7 +138,7 @@ pythonpkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Self hosted recipe manager and meal planner";
     longDescription = ''
       Mealie is a self hosted recipe manager and meal planner with a REST API and a reactive frontend
@@ -139,8 +148,8 @@ pythonpkgs.buildPythonApplication rec {
     '';
     homepage = "https://mealie.io";
     changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.rev}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       litchipi
       anoa
     ];

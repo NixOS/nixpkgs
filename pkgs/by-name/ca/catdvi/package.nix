@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "catdvi";
   version = "0.14";
   src = fetchurl {
-    url = with finalAttrs; "http://downloads.sourceforge.net/${pname}/${pname}-${version}.tar.bz2";
+    url = with finalAttrs; "http://downloads.sourceforge.net/catdvi/catdvi-${version}.tar.bz2";
     hash = "sha256-orVQVdQuRXp//OGkA7xRidNi4+J+tkw398LPZ+HX+k8=";
   };
 
@@ -60,13 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     tex
   ];
 
-  makeFlags =
-    [
-      "catdvi" # to avoid running tests until checkPhase
-    ]
-    ++ lib.optionals (with stdenv; !buildPlatform.canExecute hostPlatform) (
-      map (tool: "--assume-old=${tool}") buildPlatformTools
-    );
+  makeFlags = [
+    "catdvi" # to avoid running tests until checkPhase
+  ]
+  ++ lib.optionals (with stdenv; !buildPlatform.canExecute hostPlatform) (
+    map (tool: "--assume-old=${tool}") buildPlatformTools
+  );
 
   nativeCheckInputs = [
     texlive
@@ -92,10 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s ${tex}/share/texmf-var $out/share/texmf
     '';
 
-  meta = with lib; {
-    homepage = "http://catdvi.sourceforge.net";
+  meta = {
+    homepage = "https://catdvi.sourceforge.net";
     description = "DVI to plain text translator";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 })

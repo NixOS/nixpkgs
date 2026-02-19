@@ -47,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     codec2
   ];
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
+
   doCheck = true;
   nativeCheckInputs = [
     # NOTE: From some reason, the tests pass without this on x86_64-linux, but

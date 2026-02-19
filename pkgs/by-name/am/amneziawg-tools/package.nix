@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amneziawg-tools";
-  version = "1.0.20241018";
+  version = "1.0.20250903";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y6xkOLT9KVD6ACCH60Myk2iA1S8/+tGXEQbOYnu+dPI=";
+    hash = "sha256-a5o49hx0HwB0PwlY1orp3ZI5zb5mpzHoRIhv9OdGSbU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -41,36 +41,35 @@ stdenv.mkDerivation (finalAttrs: {
     "WITH_WGQUICK=yes"
   ];
 
-  postFixup =
-    ''
-      substituteInPlace $out/lib/systemd/system/awg-quick@.service \
-        --replace-fail /usr/bin $out/bin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      for f in $out/bin/*; do
-        # Which firewall and resolvconf implementations to use should be determined by the
-        # environment, we provide the "default" ones as fallback.
-        wrapProgram $f \
-          --prefix PATH : ${
-            lib.makeBinPath [
-              procps
-              iproute2
-            ]
-          } \
-          --suffix PATH : ${
-            lib.makeBinPath [
-              iptables
-              openresolv
-            ]
-          }
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for f in $out/bin/*; do
-        wrapProgram $f \
-          --prefix PATH : ${lib.makeBinPath [ amneziawg-go ]}
-      done
-    '';
+  postFixup = ''
+    substituteInPlace $out/lib/systemd/system/awg-quick@.service \
+      --replace-fail /usr/bin $out/bin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    for f in $out/bin/*; do
+      # Which firewall and resolvconf implementations to use should be determined by the
+      # environment, we provide the "default" ones as fallback.
+      wrapProgram $f \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            procps
+            iproute2
+          ]
+        } \
+        --suffix PATH : ${
+          lib.makeBinPath [
+            iptables
+            openresolv
+          ]
+        }
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for f in $out/bin/*; do
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ amneziawg-go ]}
+    done
+  '';
 
   strictDeps = true;
 

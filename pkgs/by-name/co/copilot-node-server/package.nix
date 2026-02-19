@@ -32,11 +32,11 @@ buildNpmPackage rec {
   forceEmptyCache = true;
   dontNpmBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Copilot Node.js server";
     homepage = src.meta.homepage;
-    license = licenses.unfree; # I don't know: https://github.com/jfcherng/copilot-node-server/blob/main/LICENSE.md
-    maintainers = with maintainers; [ DamienCassou ];
+    license = lib.licenses.unfree; # I don't know: https://github.com/jfcherng/copilot-node-server/blob/main/LICENSE.md
+    maintainers = with lib.maintainers; [ DamienCassou ];
     mainProgram = "copilot-node-server";
   };
 }

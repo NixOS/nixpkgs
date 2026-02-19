@@ -7,32 +7,35 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gokapi";
-  version = "1.9.6";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Forceu";
     repo = "Gokapi";
-    tag = "v${version}";
-    hash = "sha256-RDEvKh3tUun7wt1nhtCim95wEN9V9RlztZ9zcw9nS1o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GEdg79Rl4MqaVIJz9fAVs02hN270SIStq54fvxzL7UU=";
   };
 
-  vendorHash = "sha256-9GRAlgng+yq7q0VQz374jIOCjeDIIDD631BglM/FsQQ=";
+  vendorHash = "sha256-gP9bCnRN40y7NWwh3V8dv1yOBqpmzlcp8Bf6IkdjoWU=";
 
-  patches = [
-    ./go-1.24.patch
-  ];
+  patches = [ ];
 
   # This is the go generate is ran in the upstream builder, but we have to run the components separately for things to work.
   preBuild = ''
+    # Some steps expect GOROOT to be set.
+    export GOROOT="$(go env GOROOT)"
+    # Go generate runs from this working dir upstream
     cd ./cmd/gokapi/
     go run ../../build/go-generate/updateVersionNumbers.go
-    # Tries to download "golang.org/x/exp/slices"
+    # Tries to download "golang.org/x/exp/slices", and fails
     # go run ../../build/go-generate/updateProtectedUrls.go
     go run ../../build/go-generate/buildWasm.go
-    # Must be specify go root to import wasm_exec.js
-    GOROOT="$(go env GOROOT)" go run "../../build/go-generate/copyStaticFiles.go"
+    go run ../../build/go-generate/copyStaticFiles.go
+    # Attempts to download program to minify content, and fails
+    # go run ../../build/go-generate/minifyStaticContent.go
+    go run ../../build/go-generate/updateApiRouting.go
     cd ../..
   '';
 
@@ -46,7 +49,6 @@ buildGoModule rec {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -59,7 +61,7 @@ buildGoModule rec {
   meta = {
     description = "Lightweight selfhosted Firefox Send alternative without public upload";
     homepage = "https://github.com/Forceu/Gokapi";
-    changelog = "https://github.com/Forceu/Gokapi/releases/tag/v${version}";
+    changelog = "https://github.com/Forceu/Gokapi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -67,4 +69,4 @@ buildGoModule rec {
     ];
     mainProgram = "gokapi";
   };
-}
+})

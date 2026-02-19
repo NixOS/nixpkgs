@@ -17,15 +17,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-I8mzOUvm72KLLBumpgn9gNyx9FKvUrB4ze1iM1+OA18=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-0ON1h8+ruLOvBR7Q/hOIW6j+BjfPAAuYA2wrUYj59Ow=";
 
-  meta = with lib; {
+  meta = {
     description = "Alternative to *fetch, uwuifies all stats";
     homepage = "https://github.com/netthier/owofetch-rs";
-    license = licenses.gpl3Only;
-    platforms = platforms.x86_64;
-    maintainers = with maintainers; [ nullishamy ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.x86_64;
+    maintainers = with lib.maintainers; [ nullishamy ];
     mainProgram = "owofetch";
   };
 }

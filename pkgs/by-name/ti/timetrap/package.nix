@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  ruby_3_4,
   bundlerEnv,
   bundlerApp,
   bundlerUpdateScript,
@@ -8,7 +9,7 @@
 }:
 
 let
-  ttBundlerApp = bundlerApp {
+  ttBundlerApp = (bundlerApp.override { ruby = ruby_3_4; }) {
     pname = "timetrap";
     gemdir = ./.;
     exes = [
@@ -19,7 +20,7 @@ let
     passthru.updateScript = bundlerUpdateScript "timetrap";
   };
 
-  ttGem = bundlerEnv {
+  ttGem = (bundlerEnv.override { ruby = ruby_3_4; }) {
     pname = "timetrap";
     gemdir = ./.;
   };
@@ -48,16 +49,15 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple command line time tracker written in ruby";
     homepage = "https://github.com/samg/timetrap";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jerith666
-      manveru
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 
   passthru = {

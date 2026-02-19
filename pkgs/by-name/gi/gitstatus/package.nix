@@ -8,14 +8,17 @@
   zlib,
   runtimeShell,
 }:
-stdenv.mkDerivation rec {
+let
+  romkatv_libgit2 = callPackage ./romkatv_libgit2.nix { };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitstatus";
   version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "gitstatus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-b+9bwJ87VV6rbOPobkwMkDXGH34STjYPlt8wCRR5tEc=";
   };
 
@@ -28,8 +31,8 @@ stdenv.mkDerivation rec {
   );
 
   buildInputs = [
+    romkatv_libgit2
     zlib
-    (callPackage ./romkatv_libgit2.nix { })
   ];
 
   postPatch = ''
@@ -115,7 +118,11 @@ stdenv.mkDerivation rec {
     wait $!
   '';
 
-  meta = with lib; {
+  passthru = {
+    inherit romkatv_libgit2;
+  };
+
+  meta = {
     description = "10x faster implementation of `git status` command";
     longDescription = ''
       To enable the included gitstatus prompt, add the appropriate line to your NixOS configuration:
@@ -125,12 +132,12 @@ stdenv.mkDerivation rec {
       See the project homepage for details on customization.
     '';
     homepage = "https://github.com/romkatv/gitstatus";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       mmlb
       SuperSandro2000
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "gitstatusd";
   };
-}
+})

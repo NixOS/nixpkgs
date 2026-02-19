@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "propka";
   version = "3.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jensengroup";
@@ -27,12 +24,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "propka" ];
 
-  meta = with lib; {
+  meta = {
     description = "Predictor of the pKa values of ionizable groups in proteins and protein-ligand complexes based in the 3D structure";
     mainProgram = "propka3";
     homepage = "https://github.com/jensengroup/propka";
     changelog = "https://github.com/jensengroup/propka/releases/tag/v${version}";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

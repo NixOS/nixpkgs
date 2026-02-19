@@ -27,20 +27,20 @@ let
     }
     .${system} or throwSystem;
 
-  version = "1.52.0";
+  version = "1.57.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright";
     rev = "v${version}";
-    hash = "sha256-+2ih1tZHqbNtyabtYi1Sd3f9Qs3Is8zUMNBt6Lo2IKs=";
+    hash = "sha256-1g8XCToVKWOjLpWS6g60FpoIphg9Rn/nv10oRa7oyDA=";
   };
 
   babel-bundle = buildNpmPackage {
     pname = "babel-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/babel";
-    npmDepsHash = "sha256-sdl+rMCmuOmY1f7oSfGuAAFCiPCFzqkQtFCncL4o5LQ=";
+    npmDepsHash = "sha256-ByCy4go8PM0ksDg+2DcJPyoKG7Z0uIqKM647ZQwYwAE=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -50,7 +50,7 @@ let
     pname = "expect-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/expect";
-    npmDepsHash = "sha256-KwxNqPefvPPHG4vbco2O4G8WlA7l33toJdfNWHMTDOQ=";
+    npmDepsHash = "sha256-wXy6pkHJusB/WLgNKIPnuY4mTjntOMbrFrQp0UjrqAw=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -60,7 +60,7 @@ let
     pname = "utils-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/utils";
-    npmDepsHash = "sha256-tyk9bv1ethQSm8PKDpLthwsmqJugLIpsUOf9G8TOKRc=";
+    npmDepsHash = "sha256-InwWYRk6eRF62qI6qpVaPceIetSr3kPIBK4LdfeoJdo=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -70,7 +70,7 @@ let
     pname = "utils-bundle-core";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright-core/bundles/utils";
-    npmDepsHash = "sha256-3hdOmvs/IGAgW7vhldms9Q9/ZQfbjbc+xP+JEtGJ7g8=";
+    npmDepsHash = "sha256-lOwcHRpv7OKfdnwqHxvh+Gy5AE/Up3Vro4czedNiOpc=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -80,7 +80,7 @@ let
     pname = "zip-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright-core/bundles/zip";
-    npmDepsHash = "sha256-62Apz8uX6d4HKDqQxR6w5Vs31tl63McWGPwT6s2YsBE=";
+    npmDepsHash = "sha256-c0UZ0Jg86icwJp3xarpXpxWjRYeIjz9wpWtJZDHkd8U=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -92,7 +92,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}"; # update.sh depends on sourceRoot presence
-    npmDepsHash = "sha256-Os/HvvL+CFFb2sM+EDdxF2hN28Sg7oy3vBBfkIipkqs=";
+    npmDepsHash = "sha256-69v+H3EQuJadma8b/l9rA/yMFCCb7wWiBGN/LoJLJM8=";
 
     nativeBuildInputs = [
       cacert
@@ -103,10 +103,8 @@ let
 
     postPatch = ''
       sed -i '/\/\/ Update test runner./,/^\s*$/{d}' utils/build/build.js
-      sed -i '/\/\/ Update bundles./,/^\s*$/{d}' utils/build/build.js
+      sed -i '/^\/\/ Update bundles\./,/^[[:space:]]*}$/d' utils/build/build.js
       sed -i '/execSync/d' ./utils/generate_third_party_notice.js
-      sed -i '/plugins: /d' ./packages/playwright/bundles/utils/build.js
-      sed -i '/plugins: /d' ./packages/playwright-core/bundles/zip/build.js
       chmod +w packages/playwright/bundles/babel
       ln -s ${babel-bundle}/node_modules packages/playwright/bundles/babel/node_modules
       chmod +w packages/playwright/bundles/expect
@@ -123,9 +121,6 @@ let
       runHook preInstall
 
       shopt -s extglob
-
-      mkdir -p "$out/lib"
-      cp -r packages/playwright/node_modules "$out/lib/node_modules"
 
       mkdir -p "$out/lib/node_modules/playwright"
       cp -r packages/playwright/!(bundles|src|node_modules|.*) "$out/lib/node_modules/playwright"
@@ -151,7 +146,6 @@ let
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
         kalekseev
-        marie
       ];
       inherit (nodejs.meta) platforms;
     };

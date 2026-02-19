@@ -39,7 +39,7 @@ appimageTools.wrapType2 {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Graphical configurator for Kaleidoscope-powered keyboards";
     homepage = "https://github.com/keyboardio/Chrysalis";
     license = lib.licenses.gpl3Only;
@@ -48,8 +48,8 @@ appimageTools.wrapType2 {
       nshalman
     ];
     platforms = [ "x86_64-linux" ];
-    # buildFHSEnv will create a symlink in $out/bin/${pname}
-    mainProgram = pname;
+    # buildFHSEnv will create a symlink in $out/bin/chrysalis
+    mainProgram = "chrysalis";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -5,18 +5,18 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nuclei";
-  version = "3.4.4";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "nuclei";
-    tag = "v${version}";
-    hash = "sha256-pZA7Alrn3E9w283nQ5G0sVaTd8/QqnMqa3WGaMsNllQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MAOyMpcJsw4O+oC3IhEBF1XR6KSLBHhYZDnmNnwX4mo=";
   };
 
-  vendorHash = "sha256-mrLXVfZR+OtinIsvRaEMss//oKl6IWDFcfS8ku05zx4=";
+  vendorHash = "sha256-XaRcVKFgsQnPngqmp7QIcx2jV7h51EafNlZjSd9lUIE=";
 
   proxyVendor = true; # hash mismatch between Linux and Darwin
 
@@ -36,7 +36,7 @@ buildGoModule rec {
 
   versionCheckProgramArg = "-version";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for configurable targeted scanning";
     longDescription = ''
       Nuclei is used to send requests across targets based on a template
@@ -46,12 +46,12 @@ buildGoModule rec {
       CVEs across targets that are known and easily detectable.
     '';
     homepage = "https://github.com/projectdiscovery/nuclei";
-    changelog = "https://github.com/projectdiscovery/nuclei/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/projectdiscovery/nuclei/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       Misaka13514
     ];
     mainProgram = "nuclei";
   };
-}
+})

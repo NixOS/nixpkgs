@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "h2o";
-  version = "2.3.0.20250519";
+  version = "2.3.0-rolling-2026-01-19";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "87e2aa634f2c0d9f3d9429f7a3cf273f98db0058";
-    sha256 = "sha256-/9YnaOqvYmFme4/mFq8Sx78FMDyGwnErEW45qPVELjU=";
+    rev = "a9ba592b904684b8d12e9a825e4a579c31999c2b";
+    hash = "sha256-ZLoZgMIhBtLJ0GS6leyTegNauAczGB0Ua1pU6PE31yE=";
   };
 
   outputs = [
@@ -39,18 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      makeWrapper
-      ninja
-    ]
-    ++ lib.optionals withMruby [
-      bison
-      ruby
-    ]
-    ++ lib.optional withUring liburing;
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    makeWrapper
+    ninja
+  ]
+  ++ lib.optionals withMruby [
+    bison
+    ruby
+  ]
+  ++ lib.optional withUring liburing;
 
   buildInputs = [
     brotli
@@ -79,15 +78,15 @@ stdenv.mkDerivation (finalAttrs: {
     tests = { inherit (nixosTests) h2o; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";
     homepage = "https://h2o.examp1e.net";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       toastal
       thoughtpolice
     ];
     mainProgram = "h2o";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

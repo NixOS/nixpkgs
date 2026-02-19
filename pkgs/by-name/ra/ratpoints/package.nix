@@ -2,33 +2,49 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
+  texliveSmall,
+  writableTmpDirAsHomeHook,
   gmp,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ratpoints";
-  version = "2.1.3.p4";
+  version = "2.2.2";
 
   src = fetchurl {
-    url = "http://www.mathe2.uni-bayreuth.de/stoll/programs/ratpoints-${version}.tar.gz";
-    sha256 = "0zhad84sfds7izyksbqjmwpfw4rvyqk63yzdjd3ysd32zss5bgf4";
+    url = "https://www.mathe2.uni-bayreuth.de/stoll/programs/ratpoints-${finalAttrs.version}.tar.gz";
+    hash = "sha256-2A4VIhkKHhIvey3i78Je+qyQf1XzdjXY2t3Q0Yqv/ZM=";
   };
 
   enableParallelBuilding = true;
 
-  patches = [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/sagemath/sage/1615f58890e8f9881c4228c78a6b39b9aab1303a/build/pkgs/ratpoints/patches/sturm_and_rp_private.patch";
-      sha256 = "0q3wajncyfr3gahd8gwk9x7g56zw54lpywrl63lqk7drkf60mrcl";
-    })
+  nativeBuildInputs = [
+    (texliveSmall.withPackages (
+      ps: with ps; [
+        charter
+        comment
+        cyrillic
+        preprint
+        titlesec
+        xypic
+      ]
+    ))
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [ gmp ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-  buildFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "CCFLAGS2=-lgmp -lc -lm"
-    "CCFLAGS=-UUSE_SSE"
+  buildFlags = [
+    "CCFLAGS1=${
+      if stdenv.hostPlatform.avx512Support then
+        "-DUSE_AVX512 -mavx512f"
+      else if stdenv.hostPlatform.avx2Support then
+        "-DUSE_AVX -mavx2"
+      else if stdenv.hostPlatform.avxSupport then
+        "-DUSE_AVX -mavx"
+      else
+        "-DUSE_SSE"
+    }"
   ];
   installFlags = [ "INSTALL_DIR=$(out)" ];
 
@@ -42,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "http://www.mathe2.uni-bayreuth.de/stoll/programs/";
   };
-}
+})

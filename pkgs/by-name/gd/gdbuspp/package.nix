@@ -6,15 +6,16 @@
   ninja,
   glib,
   pkg-config,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gdbuspp";
   version = "3";
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "gdbuspp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LwEUNBQ7BUyoTm8tBgE4hwL7AbimCY/grQus8lWSI/M=";
   };
 
@@ -30,6 +31,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib ];
 
+  # fix build for gcc 15
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=free-nonheap-object";
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "GDBus++ - a glib2 D-Bus wrapper for C++";
     longDescription = ''
@@ -37,10 +43,10 @@ stdenv.mkDerivation rec {
       into applications in a more C++ approach, based on the C++17 standard.
     '';
     homepage = "https://codeberg.org/OpenVPN/gdbuspp";
-    changelog = "https://codeberg.org/OpenVPN/gdbuspp/releases/tag/v${version}";
+    changelog = "https://codeberg.org/OpenVPN/gdbuspp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
     platforms = lib.platforms.linux;
   };
-}
+})

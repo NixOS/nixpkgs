@@ -8,18 +8,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "livepeer";
-  version = "0.8.5";
+  version = "0.8.8";
 
   proxyVendor = true;
-  vendorHash = "sha256-9BxLyl8lZTKx/2Qw0NR4+1GdmD9FQPfnVU+x/RWEIvA=";
+  vendorHash = "sha256-cEpRLnLR0ia5vvoJ8Fwk/0qgvsnYw7vSpyS9BJQ8UfY=";
 
   src = fetchFromGitHub {
     owner = "livepeer";
     repo = "go-livepeer";
-    tag = "v${version}";
-    hash = "sha256-GT/YMY3U17pfhAL5uiEBjSlM79dhwgkwan0xlzGbR5g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DVgB/pE3nq6oHzLi+g/WUMQqrmXvJhPub7bmeLgyEDQ=";
   };
 
   nativeBuildInputs = [
@@ -44,9 +44,8 @@ buildGoModule rec {
     homepage = "https://livepeer.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      elitak
       bot-wxt1221
     ];
     mainProgram = "livepeer";
   };
-}
+})

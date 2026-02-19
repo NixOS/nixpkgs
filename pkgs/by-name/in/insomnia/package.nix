@@ -7,38 +7,38 @@
 }:
 let
   pname = "insomnia";
-  version = "11.0.1";
+  version = "12.2.0";
 
   src =
     fetchurl
       {
         aarch64-darwin = {
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
-          hash = "sha256-3LjQYFCIIrjEQ+J0m7Xau3qcHMRR3xU078QOVgoBat4=";
+          hash = "sha256-ISQVIhR5TWY/Xk6sXeL89/srxppqBS7wdoRINwuoQqg=";
         };
         x86_64-darwin = {
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
-          hash = "sha256-3LjQYFCIIrjEQ+J0m7Xau3qcHMRR3xU078QOVgoBat4=";
+          hash = "sha256-ISQVIhR5TWY/Xk6sXeL89/srxppqBS7wdoRINwuoQqg=";
         };
         x86_64-linux = {
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.AppImage";
-          hash = "sha256-X0UiD+IhyMTrUmsgocw0bpRZEk5YNEF3CMo3IkwKtvA=";
+          hash = "sha256-/0fJmbXhjrcVVSFvxd847mSKrzrZRK3Sqi6rjyaBOUw=";
         };
       }
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  meta = with lib; {
+  meta = {
     homepage = "https://insomnia.rest";
-    description = " The open-source, cross-platform API client for GraphQL, REST, WebSockets, SSE and gRPC. With Cloud, Local and Git storage.";
+    description = "Open-source, cross-platform API client for GraphQL, REST, WebSockets, SSE and gRPC, with Cloud, Local and Git storage";
     mainProgram = "insomnia";
     changelog = "https://github.com/Kong/insomnia/releases/tag/core@${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = [
       "aarch64-darwin"
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       markus1189
       kashw2
       DataHearth

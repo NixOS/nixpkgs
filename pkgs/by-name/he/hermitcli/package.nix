@@ -4,32 +4,32 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hermit";
-  version = "0.44.8";
+  version = "0.49.2";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "cashapp";
     repo = "hermit";
-    hash = "sha256-euSuOYHroTJTifUcthHr4oQktTmE62qf2y6p6fBy9fI=";
+    hash = "sha256-RieD6y6ZTTyL5gxEqVxTaGoBwMIFKR7UEYWP2w8XrZU=";
   };
 
-  vendorHash = "sha256-GnZqM5ZKpg2yKAzUaXLOOKspbpjNnihscftkDT/7P9w=";
+  vendorHash = "sha256-KEwbADLm7oTChoLyx/0SykQX1Fy4bJxNbYcGmfEka7Q=";
 
   subPackages = [ "cmd/hermit" ];
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.channel=stable"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cashapp.github.io/hermit";
     description = "Manages isolated, self-bootstrapping sets of tools in software projects";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cbrewster ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cbrewster ];
+    platforms = lib.platforms.unix;
     mainProgram = "hermit";
   };
-}
+})

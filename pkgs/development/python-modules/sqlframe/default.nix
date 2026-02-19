@@ -7,16 +7,30 @@
   setuptools-scm,
 
   # dependencies
+  more-itertools,
   prettytable,
   sqlglot,
   typing-extensions,
 
-  # tests
-  databricks-sql-connector,
-  duckdb,
-  findspark,
+  # optional-dependencies
+  # bigquery
   google-cloud-bigquery,
+  google-cloud-bigquery-storage,
+  # duckdb
+  duckdb,
+  pandas,
+  # openai
+  openai,
+  # postgres
+  psycopg2,
+  # spark
   pyspark,
+  # databricks-sql-connector
+  databricks-sql-connector,
+
+  # tests
+  findspark,
+  pytest-forked,
   pytest-postgresql,
   pytest-xdist,
   pytestCheckHook,
@@ -24,43 +38,59 @@
 
 buildPythonPackage rec {
   pname = "sqlframe";
-  version = "3.31.3";
+  version = "3.43.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eakmanrq";
     repo = "sqlframe";
     tag = "v${version}";
-    hash = "sha256-x9ILbtl71Xp4p5OWQ/goays5W6uE17FCes7ZVfWZBwY=";
+    hash = "sha256-gsWA3aBolsR2zPwseHnQXSJRngXUHFGvi55UPevgUHw=";
   };
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   dependencies = [
+    more-itertools
     prettytable
     sqlglot
     typing-extensions
   ];
 
+  optional-dependencies = {
+    bigquery = [
+      google-cloud-bigquery
+      google-cloud-bigquery-storage
+    ]
+    ++ google-cloud-bigquery.optional-dependencies.pandas;
+    duckdb = [
+      duckdb
+      pandas
+    ];
+    openai = [ openai ];
+    pandas = [ pandas ];
+    postgres = [ psycopg2 ];
+    spark = [ pyspark ];
+    databricks = [ databricks-sql-connector ];
+  };
+
   pythonImportsCheck = [ "sqlframe" ];
 
   nativeCheckInputs = [
-    databricks-sql-connector
-    duckdb
     findspark
-    google-cloud-bigquery
-    pyspark
+    pytest-forked
     pytest-postgresql
     pytest-xdist
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Requires google-cloud credentials
     # google.auth.exceptions.DefaultCredentialsErro
     "test_activate_bigquery_default_dataset"
+    # AttributeError: module 'sqlglot.expressions' has no attribute 'Acos'
+    "test_unquoted_identifiers"
   ];
 
   disabledTestPaths = [
@@ -72,7 +102,7 @@ buildPythonPackage rec {
   meta = {
     description = "Turning PySpark Into a Universal DataFrame API";
     homepage = "https://github.com/eakmanrq/sqlframe";
-    changelog = "https://github.com/eakmanrq/sqlframe/releases/tag/v${version}";
+    changelog = "https://github.com/eakmanrq/sqlframe/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

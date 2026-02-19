@@ -9,22 +9,22 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nsis";
-  version = "3.06.1";
+  version = "3.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}-src.tar.bz2";
-    sha256 = "1w1z2m982l6j8lw8hy91c3979wbnqglcf4148f9v79vl32znhpcv";
+    url = "mirror://sourceforge/project/nsis/NSIS%203/${finalAttrs.version}/nsis-${finalAttrs.version}-src.tar.bz2";
+    sha256 = "19e72062676ebdc67c11dc032ba80b979cdbffd3886c60b04bb442cdd401ff4b";
   };
   srcWinDistributable = fetchzip {
-    url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}.zip";
-    sha256 = "04qm9jqbcybpwcrjlksggffdyafzwxxcaz9xhjw8w5rb95x7lw5q";
+    url = "mirror://sourceforge/project/nsis/NSIS%203/${finalAttrs.version}/nsis-${finalAttrs.version}.zip";
+    sha256 = "e574f335ab9d3ad73118f46615e5c9f2a52f3e4622ecbb7e5886badbc8601348";
   };
 
   postUnpack = ''
     mkdir -p $out/share/nsis
-    cp -avr ${srcWinDistributable}/{Contrib,Include,Plugins,Stubs} \
+    cp -avr ${finalAttrs.srcWinDistributable}/{Contrib,Include,Plugins,Stubs} \
       $out/share/nsis
     chmod -R u+w $out/share/nsis
   '';
@@ -48,7 +48,9 @@ stdenv.mkDerivation rec {
     "SKIPUTILS=all"
     "SKIPMISC=all"
     "NSIS_CONFIG_CONST_DATA=no"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "APPEND_LINKFLAGS=-liconv";
+    "VERSION=${finalAttrs.version}"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "APPEND_LINKFLAGS=-liconv";
 
   preBuild = ''
     sconsFlagsArray+=(
@@ -63,13 +65,13 @@ stdenv.mkDerivation rec {
   prefixKey = "PREFIX=";
   installTargets = [ "install-compiler" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
-    license = licenses.zlib;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pombeirp ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pombeirp ];
     mainProgram = "makensis";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

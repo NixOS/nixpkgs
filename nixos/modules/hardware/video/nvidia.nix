@@ -204,11 +204,22 @@ in
 
       prime.offload.enableOffloadCmd = lib.mkEnableOption ''
         adding a `nvidia-offload` convenience script to {option}`environment.systemPackages`
-        for offloading programs to an nvidia device. To work, should have also enabled
+        for offloading programs to an nvidia device. To work, you must also enable
         {option}`hardware.nvidia.prime.offload.enable` or {option}`hardware.nvidia.prime.reverseSync.enable`.
 
-        Example usage `nvidia-offload sauerbraten_client`
+        Example usage: `nvidia-offload sauerbraten_client`
+
+        This script can be renamed with {option}`hardware.nvidia.prime.offload.enableOffloadCmd`.
       '';
+      prime.offload.offloadCmdMainProgram = lib.mkOption {
+        type = lib.types.str;
+        description = ''
+          Specifies the CLI name of the {option}`hardware.nvidia.prime.offload.enableOffloadCmd`
+          convenience script for offloading programs to an nvidia device.
+        '';
+        default = "nvidia-offload";
+        example = "prime-run";
+      };
 
       prime.reverseSync.enable = lib.mkEnableOption ''
         NVIDIA Optimus support using the NVIDIA proprietary driver via reverse
@@ -218,7 +229,7 @@ in
 
         Warning: This feature is relatively new, depending on your system this might
         work poorly. AMD support, especially so.
-        See: https://forums.developer.nvidia.com/t/the-all-new-outputsink-feature-aka-reverse-prime/129828
+        See: <https://forums.developer.nvidia.com/t/the-all-new-outputsink-feature-aka-reverse-prime/129828>
 
         Note that this option only has any effect if the "nvidia" driver is specified
         in {option}`services.xserver.videoDrivers`, and it should preferably
@@ -322,7 +333,7 @@ in
     lib.mkIf cfg.enabled (
       lib.mkMerge [
         # Common
-        ({
+        {
           assertions = [
             {
               assertion = !(nvidiaEnabled && cfg.datacenter.enable);
@@ -339,6 +350,7 @@ in
           boot = {
             blacklistedKernelModules = [
               "nouveau"
+              "nova_core"
               "nvidiafb"
             ];
 
@@ -377,7 +389,7 @@ in
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
-        })
+        }
 
         # X11
         (lib.mkIf nvidiaEnabled {
@@ -476,41 +488,38 @@ in
             lib.optional primeEnabled {
               name = igpuDriver;
               display = offloadCfg.enable;
-              modules = lib.optional (igpuDriver == "amdgpu") pkgs.xorg.xf86videoamdgpu;
-              deviceSection =
-                ''
-                  BusID "${igpuBusId}"
-                ''
-                + lib.optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''
-                  Option "AccelMethod" "none"
-                '';
+              modules = lib.optional (igpuDriver == "amdgpu") pkgs.xf86-video-amdgpu;
+              deviceSection = ''
+                BusID "${igpuBusId}"
+              ''
+              + lib.optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''
+                Option "AccelMethod" "none"
+              '';
             }
             ++ lib.singleton {
               name = "nvidia";
               modules = [ nvidia_x11.bin ];
               display = !offloadCfg.enable;
-              deviceSection =
-                ''
-                  Option "SidebandSocketPath" "/run/nvidia-xdriver/"
-                ''
-                + lib.optionalString primeEnabled ''
-                  BusID "${pCfg.nvidiaBusId}"
-                ''
-                + lib.optionalString pCfg.allowExternalGpu ''
-                  Option "AllowExternalGpus"
-                '';
-              screenSection =
-                ''
-                  Option "RandRRotation" "on"
-                ''
-                + lib.optionalString syncCfg.enable ''
-                  Option "AllowEmptyInitialConfiguration"
-                ''
-                + lib.optionalString cfg.forceFullCompositionPipeline ''
-                  Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
-                  Option         "AllowIndirectGLXProtocol" "off"
-                  Option         "TripleBuffer" "on"
-                '';
+              deviceSection = ''
+                Option "SidebandSocketPath" "/run/nvidia-xdriver/"
+              ''
+              + lib.optionalString primeEnabled ''
+                BusID "${pCfg.nvidiaBusId}"
+              ''
+              + lib.optionalString pCfg.allowExternalGpu ''
+                Option "AllowExternalGpus"
+              '';
+              screenSection = ''
+                Option "RandRRotation" "on"
+              ''
+              + lib.optionalString syncCfg.enable ''
+                Option "AllowEmptyInitialConfiguration"
+              ''
+              + lib.optionalString cfg.forceFullCompositionPipeline ''
+                Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+                Option         "AllowIndirectGLXProtocol" "off"
+                Option         "TripleBuffer" "on"
+              '';
             };
 
           services.xserver.serverLayoutSection =
@@ -529,7 +538,7 @@ in
               gpuProviderName =
                 if igpuDriver == "amdgpu" then
                   # find the name of the provider if amdgpu
-                  "`${lib.getExe pkgs.xorg.xrandr} --listproviders | ${lib.getExe pkgs.gnugrep} -i AMD | ${lib.getExe pkgs.gnused} -n 's/^.*name://p'`"
+                  "`${lib.getExe pkgs.xrandr} --listproviders | ${lib.getExe pkgs.gnugrep} -i AMD | ${lib.getExe pkgs.gnused} -n 's/^.*name://p'`"
                 else
                   igpuDriver;
               providerCmdParams =
@@ -539,8 +548,8 @@ in
               (syncCfg.enable || (reverseSyncCfg.enable && reverseSyncCfg.setupCommands.enable))
               ''
                 # Added by nvidia configuration module for Optimus/PRIME.
-                ${lib.getExe pkgs.xorg.xrandr} --setprovideroutputsource ${providerCmdParams}
-                ${lib.getExe pkgs.xorg.xrandr} --auto
+                ${lib.getExe pkgs.xrandr} --setprovideroutputsource ${providerCmdParams}
+                ${lib.getExe pkgs.xrandr} --auto
               '';
 
           environment.etc = {
@@ -558,7 +567,7 @@ in
             lib.optional cfg.nvidiaSettings nvidia_x11.settings
             ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced
             ++ lib.optional offloadCfg.enableOffloadCmd (
-              pkgs.writeShellScriptBin "nvidia-offload" ''
+              pkgs.writeShellScriptBin cfg.prime.offload.offloadCmdMainProgram ''
                 export __NV_PRIME_RENDER_OFFLOAD=1
                 export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
                 export __GLX_VENDOR_LIBRARY_NAME=nvidia
@@ -633,16 +642,16 @@ in
 
           hardware.firmware = lib.optional cfg.gsp.enable nvidia_x11.firmware;
 
-          systemd.tmpfiles.rules =
-            [
-              # Remove the following log message:
-              #    (WW) NVIDIA: Failed to bind sideband socket to
-              #    (WW) NVIDIA:     '/var/run/nvidia-xdriver-b4f69129' Permission denied
-              #
-              # https://bbs.archlinux.org/viewtopic.php?pid=1909115#p1909115
-              "d /run/nvidia-xdriver 0770 root users"
-            ]
-            ++ lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+          systemd.tmpfiles.rules = [
+            # Remove the following log message:
+            #    (WW) NVIDIA: Failed to bind sideband socket to
+            #    (WW) NVIDIA:     '/var/run/nvidia-xdriver-b4f69129' Permission denied
+            #
+            # https://bbs.archlinux.org/viewtopic.php?pid=1909115#p1909115
+            "d /run/nvidia-xdriver 0770 root users"
+          ]
+          ++
+            lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
               "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
           boot = {
@@ -701,7 +710,7 @@ in
                 "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
             services = lib.mkMerge [
-              ({
+              {
                 nvidia-fabricmanager = {
                   enable = true;
                   description = "Start NVIDIA NVLink Management";
@@ -728,7 +737,7 @@ in
                     LimitCORE = "infinity";
                   };
                 };
-              })
+              }
               (lib.mkIf cfg.nvidiaPersistenced {
                 "nvidia-persistenced" = {
                   description = "NVIDIA Persistence Daemon";

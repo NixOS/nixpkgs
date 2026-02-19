@@ -4,14 +4,19 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
-  tbb_2021_11,
+  onetbb,
 
-  useTBB ? true,
+  useTBB ? lib.meta.availableOn stdenv.hostPlatform onetbb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblake3";
   version = "1.8.2";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "BLAKE3-team";
@@ -33,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-kidCMGd/i9D9HLLTt7l1DbiU71sFTEyr3Vew4XHUHls=";
       relative = "c";
     })
+    # fix cygwin build
+    (fetchpatch {
+      url = "https://github.com/BLAKE3-team/BLAKE3/commit/d62babb7ebb01c8ac4aaa580f4b49071a639195e.patch";
+      hash = "sha256-qO8HsmBIAkR03rqITooyBiQTorUM6JCJLZOrOc2yss8=";
+      relative = "c";
+    })
   ];
 
   sourceRoot = finalAttrs.src.name + "/c";
@@ -40,8 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   propagatedBuildInputs = lib.optionals useTBB [
-    # 2022.0 crashes on macOS at the moment
-    tbb_2021_11
+    onetbb
   ];
 
   cmakeFlags = [

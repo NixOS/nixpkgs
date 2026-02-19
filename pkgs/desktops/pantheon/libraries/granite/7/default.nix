@@ -9,6 +9,7 @@
   vala,
   pkg-config,
   libgee,
+  libshumate,
   gtk4,
   glib,
   gettext,
@@ -19,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "7.6.0";
+  version = "7.8.0";
 
   outputs = [
     "out"
@@ -28,9 +29,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-bv2rOq16xg9lCWfcLzAFN4LjBTJBxPhXvEJzutkdYzs=";
+    repo = "granite";
+    tag = version;
+    hash = "sha256-UEbe/vAXbd1W7EA1s5qvn8dM9/3CTIyLGMPXzEFu7qM=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,10 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
+  buildInputs = [
+    libshumate # demo
+  ];
+
   propagatedBuildInputs = [
     glib
     gsettings-desktop-schemas # is_clock_format_12h uses "org.gnome.desktop.interface clock-format"
@@ -55,16 +60,16 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extension to GTK used by elementary OS";
     longDescription = ''
       Granite is a companion library for GTK and GLib. Among other things, it provides complex widgets and convenience functions
       designed for use in apps built for elementary OS.
     '';
     homepage = "https://github.com/elementary/granite";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "granite-7-demo";
   };
 }

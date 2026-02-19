@@ -1,12 +1,12 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
   fetchFromGitHub,
   menhir,
   menhirLib,
   ppx_deriving_yojson,
   visitors,
-  yojson,
 }:
 
 buildDunePackage rec {
@@ -17,10 +17,8 @@ buildDunePackage rec {
     owner = "colis-anr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fOBaJHHP/Imi9UDLflI52OdKDcmMxpl+NH3pfofmv/o=";
+    hash = "sha256-fOBaJHHP/Imi9UDLflI52OdKDcmMxpl+NH3pfofmv/o=";
   };
-
-  duneVersion = "3";
 
   nativeBuildInputs = [
     menhir
@@ -30,13 +28,13 @@ buildDunePackage rec {
     menhirLib
     ppx_deriving_yojson
     visitors
-    yojson
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/colis-anr/${pname}";
     description = "Static parser for POSIX Shell";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ niols ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ niols ];
+    broken = lib.versionAtLeast ocaml.version "5.4";
   };
 }

@@ -4,40 +4,43 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-tools";
-  version = "1.232.0";
+  version = "1.245.1";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-tools";
-    rev = "v${version}";
-    hash = "sha256-iEHZXxE/cOs438KVXJ5o7+LobrODKtXGt92TPKxtOpU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0x3RcGd8OB/XNvKnHihvc0DOnCqB3gxTQAxLK7HIWMI=";
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-W01pqmqJWwEOLv/ng0ZRFcPpOPO9s0IqcaEM7IN7v9g=";
+
+  cargoHash = "sha256-5CIKmfa/hqR1Ge7reiTzyx0D4JMjBsxg2xqxzzZxl4s=";
   cargoBuildFlags = [
     "--package"
     "wasm-tools"
   ];
-  cargoTestFlags =
-    [ "--all" ]
-    ++
+  cargoTestFlags = [
+    "--workspace"
+    "--exclude"
+    "wit-dylib"
+  ]
+  ++
     # Due to https://github.com/bytecodealliance/wasm-tools/issues/1820
     [
       "--"
       "--test-threads=1"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Low level tooling for WebAssembly in Rust";
     homepage = "https://github.com/bytecodealliance/wasm-tools";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ereslibre ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ereslibre ];
     mainProgram = "wasm-tools";
   };
-}
+})

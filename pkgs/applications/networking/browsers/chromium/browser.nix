@@ -6,11 +6,15 @@
   ungoogled,
 }:
 
+let
+  # https://chromium-review.googlesource.com/c/chromium/src/+/7253206
+  ifElseM145 = new: old: if chromiumVersionAtLeast "145" then new else old;
+in
+
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
   buildTargets = [
-    "run_mksnapshot_default"
     "chrome_sandbox"
     "chrome"
   ];
@@ -63,19 +67,20 @@ mkChromiumDerivation (base: rec {
       $out/share/applications/chromium-browser.desktop
 
     substituteInPlace $out/share/applications/chromium-browser.desktop \
-      --replace "@@MENUNAME@@" "Chromium" \
-      --replace "@@PACKAGE@@" "chromium" \
-      --replace "Exec=/usr/bin/@@USR_BIN_SYMLINK_NAME@@" "Exec=chromium"
-
-    # Append more mime types to the end
-    sed -i '/^MimeType=/ s,$,x-scheme-handler/webcal;x-scheme-handler/mailto;x-scheme-handler/about;x-scheme-handler/unknown,' \
-      $out/share/applications/chromium-browser.desktop
+      --replace-fail "${ifElseM145 "@@MENUNAME" "@@MENUNAME@@"}" "Chromium" \
+      --replace-fail "${ifElseM145 "@@PACKAGE" "@@PACKAGE@@"}" "chromium" \
+      --replace-fail "${ifElseM145 "/usr/bin/@@usr_bin_symlink_name" "/usr/bin/@@USR_BIN_SYMLINK_NAME@@"}" "chromium" \
+      --replace-fail "${ifElseM145 "@@uri_scheme" "@@URI_SCHEME@@"}" "x-scheme-handler/chromium;" \
+      --replace-fail "${ifElseM145 "@@extra_desktop_entries" "@@EXTRA_DESKTOP_ENTRIES@@"}" ""
 
     # See https://github.com/NixOS/nixpkgs/issues/12433
-    sed -i \
-      -e '/\[Desktop Entry\]/a\' \
-      -e 'StartupWMClass=chromium-browser' \
-      $out/share/applications/chromium-browser.desktop
+    substituteInPlace $out/share/applications/chromium-browser.desktop \
+      --replace-fail "[Desktop Entry]" "[Desktop Entry]''\nStartupWMClass=chromium-browser"
+
+    if grep -F '@@' $out/share/applications/chromium-browser.desktop ; then
+      echo "error: chromium-browser.desktop contains unsubstituted placeholders" >&2
+      exit 1
+    fi
   '';
 
   passthru = { inherit sandboxExecutableName; };

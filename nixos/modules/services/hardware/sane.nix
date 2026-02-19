@@ -34,13 +34,12 @@ let
     LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
-  backends =
-    [
-      pkg
-      netConf
-    ]
-    ++ lib.optional config.services.saned.enable sanedConf
-    ++ config.hardware.sane.extraBackends;
+  backends = [
+    pkg
+    netConf
+  ]
+  ++ lib.optional config.services.saned.enable sanedConf
+  ++ config.hardware.sane.extraBackends;
   saneConfig = pkgs.mkSaneConfig {
     paths = backends;
     inherit (config.hardware.sane) disabledDefaultBackends;
@@ -68,12 +67,7 @@ in
       '';
     };
 
-    hardware.sane.backends-package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.sane-backends;
-      defaultText = lib.literalExpression "pkgs.sane-backends";
-      description = "Backends driver package to use.";
-    };
+    hardware.sane.backends-package = lib.mkPackageOption pkgs "sane-backends" { };
 
     hardware.sane.snapshot = lib.mkOption {
       type = lib.types.bool;

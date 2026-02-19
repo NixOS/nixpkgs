@@ -5,20 +5,17 @@
   fetchPypi,
   hatchling,
   llama-index-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-graph-stores-neptune";
-  version = "0.3.3";
+  version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_graph_stores_neptune";
     inherit version;
-    hash = "sha256-IqY4dEWcbM9371vuZ7C9NlDux9O/j6wF7Hcc4aiBiIE=";
+    hash = "sha256-plwDD8NBcYqedEoCeYqEZn1kDQZjDpg94jRZJBPjdU8=";
   };
 
   build-system = [ hatchling ];
@@ -30,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.graph_stores.neptune" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Graph Store Integration for Neptune";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/graph_stores/llama-index-graph-stores-neptune";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

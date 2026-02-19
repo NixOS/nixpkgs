@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "termcolor";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DNhVyHFjg/FSrQK7s5hB1uRpRTj/XUJAiOVsi4H95SU=";
+    hash = "sha256-am3X++5YGQnu7Gp1bP8df3w3YGOxTkopjcSYAwnlWXA=";
   };
 
   build-system = [
@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/termcolor/termcolor/releases/tag/${version}";
     description = "ANSI color formatting for output in terminal";
     homepage = "https://github.com/termcolor/termcolor";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

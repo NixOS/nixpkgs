@@ -26,10 +26,10 @@ Then make the needed changes and generate a patch with `git diff`:
 
 ```
 [user@localhost ~]$ <make changes>
-[user@localhost ~]$ git diff -u > /path/to/nixpkgs/pkgs/applications/science/math/sage/patches/name-of-patch.patch
+[user@localhost ~]$ git diff -u > /path/to/nixpkgs/pkgs/by-name/sa/sage/patches/name-of-patch.patch
 ```
 
-Now just add the patch to `sage-src.nix` and test your changes. If they fix the problem, submit a PR upstream (refer to sages [Developer's Guide](http://doc.sagemath.org/html/en/developer/index.html) for further details).
+Now just add the patch to `sage-src.nix` and test your changes. If they fix the problem, submit a PR upstream (refer to Sage's [Developer's Guide](http://doc.sagemath.org/html/en/developer/index.html) for further details).
 
 - pin the package version in `default.nix` and add a note that explains why that is necessary.
 

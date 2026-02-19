@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kty";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "grampelberg";
     repo = "kty";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-E9PqWDBKYJFYOUNyjiK+AM2WULMiwupFWTOQlBH+6d4=";
   };
 
@@ -29,15 +29,14 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nJ+nof2YhyLrNuLVy69kYj5tw+aG4IJm6nVxHkczbko=";
 
   meta = {
     homepage = "https://kty.dev/";
-    changelog = "https://github.com/grampelberg/kty/releases/tag/v${version}";
+    changelog = "https://github.com/grampelberg/kty/releases/tag/v${finalAttrs.version}";
     description = "Terminal for Kubernetes";
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     platforms = lib.platforms.unix;
     mainProgram = "kty";
   };
-}
+})

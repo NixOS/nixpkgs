@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "emacsclient-commands";
-  version = "unstable-2023-09-22";
+  version = "0-unstable-2023-09-22";
 
   src = fetchFromGitHub {
     owner = "szermatt";
@@ -26,10 +26,10 @@ buildGoModule {
     runHook postBuild
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of small shell utilities that connect to a local Emacs server";
     homepage = "https://github.com/szermatt/emacsclient-commands";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ binarycat ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ binarycat ];
   };
 }

@@ -1,0 +1,28 @@
+From 4ecaacf3fa93720a13cc06732d427415ae66d48f Mon Sep 17 00:00:00 2001
+From: Nick Bathum <nickbathum@gmail.com>
+Date: Fri, 14 Mar 2025 20:36:49 -0400
+Subject: [PATCH] Fix packaging: Ensure resources are included in both sdist
+ and wheel
+
+Poetry's `include` directive defaults to only including files in the sdist.
+See https://github.com/python-poetry/poetry-core/pull/773
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 0262552..c7deb2d 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -7,7 +7,7 @@ authors = ["mingrammer <mingrammer@gmail.com>"]
+ readme = "README.md"
+ homepage = "https://diagrams.mingrammer.com"
+ repository = "https://github.com/mingrammer/diagrams"
+-include = ["resources/**/*"]
++include = [{ path = "resources/**/*", format = ["sdist", "wheel"] }]
+ 
+ [tool.poetry.scripts]
+ diagrams="diagrams.cli:main"
+-- 
+2.47.2
+

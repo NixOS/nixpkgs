@@ -36,12 +36,16 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "9.2.0";
+  version = "9.7.0";
+  outputs = [
+    "out"
+    "man"
+  ];
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Yqk3PbwS8o+f6vRwDQUhlb+JgGJ5/IyhHz9UAX0EdRs=";
+    hash = "sha256-X23ojJBaVmxqnWxACo/tVKY44fdUPReq4lURMyFrHk4=";
   };
 
   build-system = [ setuptools ];
@@ -56,7 +60,8 @@ buildPythonPackage rec {
     pygments
     stack-data
     traitlets
-  ] ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   optional-dependencies = {
     matplotlib = [ matplotlib ];
@@ -79,20 +84,19 @@ buildPythonPackage rec {
     testpath
   ];
 
-  disabledTests =
-    [
-      # UnboundLocalError: local variable 'child' referenced before assignment
-      "test_system_interrupt"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AttributeError: 'Pdb' object has no attribute 'curframe'. Did you mean: 'botframe'?
-      "test_run_debug_twice"
-      "test_run_debug_twice_with_breakpoint"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
-      "test_clipboard_get"
-    ];
+  disabledTests = [
+    # UnboundLocalError: local variable 'child' referenced before assignment
+    "test_system_interrupt"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AttributeError: 'Pdb' object has no attribute 'curframe'. Did you mean: 'botframe'?
+    "test_run_debug_twice"
+    "test_run_debug_twice_with_breakpoint"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
+    "test_clipboard_get"
+  ];
 
   passthru.tests = {
     inherit sage;

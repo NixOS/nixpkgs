@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  clang_20,
 
   fetchFromGitHub,
   fetchYarnDeps,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
-  version = "0.10.12";
+  version = "0.10.15";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "logseq";
     tag = finalAttrs.version;
-    hash = "sha256-SUzt4hYHE6XJOEMxFp2a0om2oVUk1MHQUteGFiM9Lkc=";
+    hash = "sha256-knosNA2Gqy10Kr9HWnBdYNlV51zzgFuL8cdioVlAk0Q=";
   };
 
   patches = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./electron-forge-package-instead-of-make.patch
     ./electron-forge-disable-signing.patch
+    ./fix-yarn-lock.patch
   ];
 
   mavenRepo = stdenv.mkDerivation {
@@ -97,30 +99,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCacheRoot = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-root";
-    inherit (finalAttrs) src;
-    hash = "sha256-sbC6WQLjEHIKTuejSQXplQOWZwUmBJdGXuAkilQGjYs=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-xfAJ38shd92KdRfh/P7BH4eolZHQmzl4raoH1aZpGRk=";
   };
 
   # ./static and ./resources are combined into ./static by the build process
   # ./static contains the lockfile and ./resources contains everything else
   yarnOfflineCacheStaticResources = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-static-resources";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/static";
-    hash = "sha256-01t6lolMbBL5f6SFk4qTkTx6SQXWtHuVkBhDwW+HScc=";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ./static";
+    hash = "sha256-zAGEQlOqKfPDrIoZQUnjBifgdYDYRsiHH7PUNrd0u+8=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-amplify";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/packages/amplify";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ./packages/amplify";
     hash = "sha256-IOhSwIf5goXCBDGHCqnsvWLf3EUPqq75xfQg55snIp4=";
   };
 
   yarnOfflineCacheTldraw = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-tldraw";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/tldraw";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ./tldraw";
     hash = "sha256-CtMl3MPlyO5nWfFhCC1SLb/+1HUM3YfFATAPqJg3rUo=";
   };
 
@@ -153,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       cctools
       darwin.autoSignDarwinBinariesHook
       xcbuild
+      clang_20 # newer clang breaks node-addon-api on darwin
     ];
 
   # we'll run the hook manually multiple times
@@ -233,37 +236,36 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnBuildScript = "release-electron";
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      # remove references to nodejs
-      find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm644 static/icons/logseq.png "$out/share/icons/hicolor/512x512/apps/logseq.png"
+    # remove references to nodejs
+    find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 static/icons/logseq.png "$out/share/icons/hicolor/512x512/apps/logseq.png"
 
-      mkdir -p $out/share/logseq
-      cp -r static/out/*/{locales,resources{,.pak}} $out/share/logseq
+    mkdir -p $out/share/logseq
+    cp -r static/out/*/{locales,resources{,.pak}} $out/share/logseq
 
-      makeWrapper ${lib.getExe electron} $out/bin/logseq \
-          --add-flags $out/share/logseq/resources/app \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-          --set-default LOCAL_GIT_DIRECTORY ${git} \
-          --inherit-argv0
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r static/out/*/Logseq.app $out/Applications
+    makeWrapper ${lib.getExe electron} $out/bin/logseq \
+        --add-flags $out/share/logseq/resources/app \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --set-default LOCAL_GIT_DIRECTORY ${git} \
+        --inherit-argv0
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r static/out/*/Logseq.app $out/Applications
 
-      wrapProgram $out/Applications/Logseq.app/Contents/MacOS/Logseq \
-        --set-default LOCAL_GIT_DIRECTORY ${git}
+    wrapProgram $out/Applications/Logseq.app/Contents/MacOS/Logseq \
+      --set-default LOCAL_GIT_DIRECTORY ${git}
 
-      makeWrapper $out/Applications/Logseq.app/Contents/MacOS/Logseq $out/bin/logseq
-    ''
-    + ''
-      runHook postInstall
-    '';
+    makeWrapper $out/Applications/Logseq.app/Contents/MacOS/Logseq $out/bin/logseq
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {

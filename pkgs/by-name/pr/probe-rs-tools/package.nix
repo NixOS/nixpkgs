@@ -2,25 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchurl,
   cmake,
   pkg-config,
   libusb1,
   openssl,
 }:
 
+let
+  # udev rules are in another unversioned repo
+  udevRules = fetchurl {
+    url = "https://raw.githubusercontent.com/probe-rs/webpage/054a0b16831593091a8a5624d0e2305573e860ee/public/files/69-probe-rs.rules";
+    hash = "sha256-yjxld5ebm2jpfyzkw+vngBfHu5Nfh2ioLUKQQDY4KYo=";
+  };
+in
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs-tools";
-  version = "0.29.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
     tag = "v${version}";
-    hash = "sha256-5EppB6XVUHM7TrvpdqdvojuFbjw8RTDOudpypVdLPbQ=";
+    hash = "sha256-ZcH2FBKsbBtTYfRQgPfOOODDpyB7VydcO7F7pq8xzD0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-sdMRauSaDYMgpfAYhEBEqz0s9WHAZJLjijdvQqO6fMs=";
+  cargoHash = "sha256-fVmwZw34lK6eKkqNT/SW5wzeeyWg6Qp48eso6yibICE=";
 
   buildAndTestSubdir = pname;
 
@@ -35,6 +42,10 @@ rustPlatform.buildRustPackage rec {
     libusb1
     openssl
   ];
+
+  postInstall = ''
+    install -D -m 444 ${udevRules} $out/etc/udev/rules.d/69-probe-rs.rules
+  '';
 
   checkFlags = [
     # require a physical probe
@@ -62,15 +73,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=util::cargo::test::workspace_root"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for on-chip debugging and flashing of ARM chips";
     homepage = "https://probe.rs/";
     changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       xgroleau
       newam
     ];

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "icamerasrc-${ipu6-camera-hal.ipuVersion}";
-  version = "unstable-2024-09-29";
+  version = "unstable-2025-12-26";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "icamerasrc";
-    tag = "20240926_1446";
-    hash = "sha256-BpIZxkPmSVKqPntwBJjGmCaMSYFCEZHJa4soaMAJRWE=";
+    tag = "20251226_1140_191_PTL_PV_IoT";
+    hash = "sha256-BYURJfNz4D8bXbSeuWyUYnoifozFOq6rSfG9GBKVoHo=";
   };
 
   nativeBuildInputs = [
@@ -34,18 +34,17 @@ stdenv.mkDerivation {
     export STRIP_VIRTUAL_CHANNEL_CAMHAL=ON
   '';
 
-  buildInputs =
-    [
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-bad
-      ipu6-camera-hal
-      libdrm
-      libva
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    ipu6-camera-hal
+    libdrm
+    libva
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error"
@@ -59,10 +58,10 @@ stdenv.mkDerivation {
     inherit (ipu6-camera-hal) ipuVersion;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GStreamer Plugin for MIPI camera support through the IPU6/IPU6EP/IPU6SE on Intel Tigerlake/Alderlake/Jasperlake platforms";
     homepage = "https://github.com/intel/icamerasrc/tree/icamerasrc_slim_api";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };

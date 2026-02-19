@@ -9,14 +9,14 @@
 let
   pythonEnv = python3.withPackages (p: with p; [ tqdm ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phockup";
   version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "ivandokov";
     repo = "phockup";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-44UjxTbC2XK+NThvesROdd7aGP7zr7g7bQiQZv2TvvM=";
   };
 
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Media sorting tool to organize photos and videos from your camera in folders by year, month and day";
     homepage = "https://github.com/ivandokov/phockup";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aanderse ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aanderse ];
     mainProgram = "phockup";
   };
-}
+})

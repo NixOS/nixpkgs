@@ -6,14 +6,14 @@
 }:
 buildPythonPackage rec {
   pname = "glueviz";
-  version = "1.4.0";
+  version = "1.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "glueviz";
     tag = "v${version}";
-    hash = "sha256-R2yzeq/+VV7TAl/kAwJyTI6o5PfdM5jBFR9IV48cqlU=";
+    hash = "sha256-21XFH1fIt8vLd0blZJn6ZRmLJaof/E30zHrBVLjXOaA=";
   };
 
   build-system = with python.pkgs; [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   # it just a meta package
   pythonImportsCheck = [ "glue" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://glueviz.org";
     description = "The glueviz meta-package";
     license = licenses.bsd3; # https://github.com/glue-viz/glueviz/blob/main/LICENSE

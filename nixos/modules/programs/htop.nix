@@ -12,13 +12,13 @@ let
   fmt =
     value:
     if builtins.isList value then
-      builtins.concatStringsSep " " (builtins.map fmt value)
+      builtins.concatStringsSep " " (map fmt value)
     else if builtins.isString value then
       value
     else if builtins.isBool value then
       if value then "1" else "0"
     else if builtins.isInt value then
-      builtins.toString value
+      toString value
     else
       throw "Unrecognized type ${builtins.typeOf value} in htop settings";
 
@@ -63,14 +63,13 @@ in
       cfg.package
     ];
 
-    environment.etc."htoprc".text =
-      ''
-        # Global htop configuration
-        # To change set: programs.htop.settings.KEY = VALUE;
-      ''
-      + builtins.concatStringsSep "\n" (
-        lib.mapAttrsToList (key: value: "${key}=${fmt value}") cfg.settings
-      );
+    environment.etc."htoprc".text = ''
+      # Global htop configuration
+      # To change set: programs.htop.settings.KEY = VALUE;
+    ''
+    + builtins.concatStringsSep "\n" (
+      lib.mapAttrsToList (key: value: "${key}=${fmt value}") cfg.settings
+    );
   };
 
 }

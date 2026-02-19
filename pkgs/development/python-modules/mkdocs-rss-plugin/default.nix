@@ -9,23 +9,20 @@
   mkdocs,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   validator-collection,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.17.1";
+  version = "1.17.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
     tag = version;
-    hash = "sha256-Qa8EgjucJaxvKivE45kXSUgTx5RnLEpYCNZJRTO2E1Q=";
+    hash = "sha256-K+cqBJmTz4WzkeXp3pGQoizfLMuxR17Q33Fc0xc5eWo=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +31,8 @@ buildPythonPackage rec {
     cachecontrol
     gitpython
     mkdocs
-  ];
+  ]
+  ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = [
     feedparser
@@ -64,11 +62,11 @@ buildPythonPackage rec {
     "tests/test_build.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin to generate a RSS feeds for created and updated pages, using git log and YAML frontmatter";
     homepage = "https://github.com/Guts/mkdocs-rss-plugin";
     changelog = "https://github.com/Guts/mkdocs-rss-plugin/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

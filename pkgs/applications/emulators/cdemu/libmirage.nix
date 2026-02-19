@@ -4,6 +4,7 @@
   cmake,
   pkg-config,
   gobject-introspection,
+  vala,
   glib,
   libsndfile,
   zlib,
@@ -33,8 +34,11 @@ in
 stdenv.mkDerivation {
   inherit pname version src;
 
-  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "out"}/share/gir-1.0";
-  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
+  env = {
+    PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "out"}/share/gir-1.0";
+    PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
+  };
+
   buildInputs = [
     glib
     libsndfile
@@ -48,6 +52,7 @@ stdenv.mkDerivation {
     pkg-config
     intltool
     gobject-introspection
+    vala
   ];
   propagatedBuildInputs = [
     pcre

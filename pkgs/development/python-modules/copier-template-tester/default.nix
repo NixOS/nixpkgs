@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "copier-template-tester";
-  version = "2.1.1";
-  format = "pyproject";
+  version = "2.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = pname;
-    rev = version;
-    hash = "sha256-q1SNsy5CbBmGTGVejSN8P8BkdiasZjnW8BWMXOfSD1s=";
+    tag = version;
+    hash = "sha256-n/39Gl4q24QKfVFaeeqqu0AQt2jRSRrcnEOFRHQ+SQE=";
   };
 
   build-system = [
@@ -29,10 +29,10 @@ buildPythonPackage rec {
     corallium
   ];
 
-  meta = with lib; {
-    description = "ctt: CLI and pre-commit tool for testing copier";
+  meta = {
+    description = "CLI and pre-commit tool for testing copier";
     homepage = "https://copier-template-tester.kyleking.me";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yajo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

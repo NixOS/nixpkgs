@@ -19,29 +19,28 @@
   libadwaita,
   libxcvt,
   libGL,
-  libICE,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXtst,
-  libxkbfile,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   xkeyboard_config,
   libxkbcommon,
   libxcb,
-  libXrandr,
-  libXinerama,
-  libXau,
+  libxrandr,
+  libxinerama,
+  libxau,
   libinput,
   libdrm,
   libgbm,
   libei,
+  libepoxy,
   libdisplay-info,
   gsettings-desktop-schemas,
   glib,
+  libglycin,
   atk,
   gtk4,
   fribidi,
@@ -50,12 +49,12 @@
   pipewire,
   libgudev,
   libwacom,
-  libSM,
+  libsm,
   xwayland,
   mesa-gl-headers,
   meson,
   gnome-settings-daemon,
-  xorgserver,
+  xorg-server,
   python3,
   wayland-scanner,
   wrapGAppsHook4,
@@ -65,13 +64,14 @@
   desktop-file-utils,
   egl-wayland,
   graphene,
+  udevCheckHook,
   wayland,
   wayland-protocols,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "48.2";
+  version = "49.4";
 
   outputs = [
     "out"
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PBi6Tgk+qaN4ET3K+nvbXB+db1r5dlAmt+Zst42vYU4=";
+    hash = "sha256-wWZuxQVhUwviXLiNk5wrzCrzTwHGO4sWuCuJLuM9eFU=";
   };
 
   mesonFlags = [
@@ -121,14 +121,16 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
     wrapGAppsHook4
     gi-docgen
-    xorgserver
+    xorg-server
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
     cairo
     egl-wayland
     glib
+    libglycin
     gnome-desktop
     gnome-settings-daemon
     gsettings-desktop-schemas
@@ -137,15 +139,17 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libcanberra
     libdrm
+    libadwaita
     libgbm
     libei
+    libepoxy
     libdisplay-info
     libGL
     libgudev
     libinput
     libstartup_notification
     libwacom
-    libSM
+    libsm
     colord
     lcms2
     pango
@@ -157,25 +161,23 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     # X11 client
     gtk4
-    libICE
-    libX11
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXtst
-    libxkbfile
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
     xkeyboard_config
     libxkbcommon
     libxcb
-    libXrandr
-    libXinerama
-    libXau
+    libxrandr
+    libxinerama
+    libxau
 
-    # for gdctl shebang
+    # for gdctl and gnome-service-client shebangs
     (python3.withPackages (pp: [
+      pp.dbus-python
       pp.pygobject3
       pp.argcomplete
     ]))
@@ -196,13 +198,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Install udev files into our own tree.
-  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+  env.PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   separateDebugInfo = true;
   strictDeps = true;
 
+  doInstallCheck = true;
+
   passthru = {
-    libmutter_api_version = "16"; # bumped each dev cycle
+    libmutter_api_version = "17"; # bumped each dev cycle
     libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {
@@ -220,13 +224,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Window manager for GNOME";
     mainProgram = "mutter";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     changelog = "https://gitlab.gnome.org/GNOME/mutter/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

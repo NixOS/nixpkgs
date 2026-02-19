@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ qbe ];
 
   makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
+    "PREFIX=${placeholder "out"}"
     "ARCH=${arch}"
     "VERSION=${finalAttrs.version}-nixpkgs"
     "QBEFLAGS=-t${qbePlatform}"
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence (
-      builtins.map (item: item.command) [
+      map (item: item.command) [
         (gitUpdater {
           attrPath = "harec";
           ignoredVersions = [ "-rc[0-9]{1,}" ];
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://harelang.org/";
     description = "Bootstrapping Hare compiler written in C for POSIX systems";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    maintainers = [ ];
     mainProgram = "harec";
     # The upstream developers do not like proprietary operating systems; see
     # https://harelang.org/platforms/

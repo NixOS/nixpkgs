@@ -6,7 +6,6 @@
   pyglet,
   pysdl2,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage {
   version = "3.32";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bitcraft";
@@ -51,10 +48,10 @@ buildPythonPackage {
     "test_contains_reserved_property_name"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bitcraft/PyTMX";
     description = "Python library to read Tiled Map Editor's TMX maps";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

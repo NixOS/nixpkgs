@@ -4,20 +4,20 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "expr";
-  version = "1.17.4";
+  version = "1.17.8";
 
   src = fetchFromGitHub {
     owner = "expr-lang";
     repo = "expr";
-    rev = "v${version}";
-    hash = "sha256-Ss1rs4BiKFOSzfL6VXKZA2Z/LYJ9N+AYkgdVCeintOk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MJM7ezZtSdDaUewNGACOKvWc+ZOPVScTuW+d6n1K5jo=";
   };
 
-  sourceRoot = "${src.name}/repl";
+  sourceRoot = "${finalAttrs.src.name}/repl";
 
-  vendorHash = "sha256-mjqbO3qgX7ak8VRFHnz9UYNoOd+bbHBImDLvnaJhdqI=";
+  vendorHash = "sha256-GH7rn0q/YuGBx0rrfHa2EMCsynQ3Pgtz1yDsD/NIKsU=";
 
   ldflags = [
     "-s"
@@ -28,12 +28,12 @@ buildGoModule rec {
     mv $out/bin/{repl,expr}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Expression language and expression evaluation for Go";
     homepage = "https://github.com/expr-lang/expr";
-    changelog = "https://github.com/expr-lang/expr/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/expr-lang/expr/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hythera ];
     mainProgram = "expr";
   };
-}
+})

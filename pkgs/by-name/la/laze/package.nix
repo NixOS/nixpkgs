@@ -13,17 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "laze";
-  version = "0.1.36";
+  version = "0.1.39";
 
   src = fetchFromGitHub {
     owner = "kaspar030";
     repo = "laze";
     tag = finalAttrs.version;
-    hash = "sha256-516VJ6yzQOn8a1ufpxbJ8lCHcs09PVzPmXyWU7F+REk=";
+    hash = "sha256-6jpsrRsBqowPL0TXke5gbgl6twuQLUsQ9yMGh4bJVds=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vLlkgF8vfL4RbFH7S3pQaAgHs08glHJaIkFIBYLoAWE=";
+  cargoHash = "sha256-kxbMkz3vEhXXzJ8yVDPAkCrALOq9+dNw9NoknCmGPIE=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -33,22 +32,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  postInstall =
-    ''
-      wrapProgram "$out/bin/laze" \
-        --suffix PATH : ${lib.makeBinPath [ ninja ]}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd laze \
-        --bash <($out/bin/laze completion --generate bash) \
-        --fish <($out/bin/laze completion --generate fish) \
-        --zsh <($out/bin/laze completion --generate zsh)
-    '';
+  postInstall = ''
+    wrapProgram "$out/bin/laze" \
+      --suffix PATH : ${lib.makeBinPath [ ninja ]}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd laze \
+      --bash <($out/bin/laze completion --generate bash) \
+      --fish <($out/bin/laze completion --generate fish) \
+      --zsh <($out/bin/laze completion --generate zsh)
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

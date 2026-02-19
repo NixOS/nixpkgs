@@ -5,9 +5,10 @@
   accountsservice,
   budgie-desktop,
   gtk3,
+  gtk-layer-shell,
   intltool,
   libgee,
-  libpeas,
+  libpeas2,
   meson,
   ninja,
   nix-update-script,
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-user-indicator-redux";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "EbonJaeger";
     repo = "budgie-user-indicator-redux";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-X9b4H4PnrYGb/T7Sg9iXQeNDLoO1l0VCdbOCGUAgwC4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZvT114F0g+3zpskyb4Bn6grAXHWtMqRqb9MzfF0WLQ8=";
   };
 
   nativeBuildInputs = [
@@ -39,10 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
     accountsservice
     budgie-desktop
     gtk3
+    gtk-layer-shell
     libgee
-    libpeas
+    libpeas2
     sassc
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "dependency('budgie-2.0', version: '>= 3')" "dependency('budgie-3.0')"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

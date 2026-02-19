@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "lazygit.yazi";
-  version = "0-unstable-2025-03-31";
+  version = "0-unstable-2025-12-31";
 
   src = fetchFromGitHub {
     owner = "Lil-Dank";
     repo = "lazygit.yazi";
-    rev = "7a08a0988c2b7481d3f267f3bdc58080e6047e7d";
-    hash = "sha256-OJJPgpSaUHYz8a9opVLCds+VZsK1B6T+pSRJyVgYNy8=";
+    rev = "0e56060192d1ccd307664bf93b3d0beb1efe528e";
+    hash = "sha256-LcEpzSf0E43hnhOxJ/EHNJRk3Au5hcgRZ2Kj412Ykew=";
   };
 
   meta = {

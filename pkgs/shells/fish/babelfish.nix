@@ -16,12 +16,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-HY9ejLfT6gj3vUMSzbNZ4QlpB+liigTtNDBNWCy8X38=";
 
-  meta = with lib; {
+  meta = {
     description = "Translate bash scripts to fish";
     mainProgram = "babelfish";
     homepage = "https://github.com/bouk/babelfish";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bouk
       kevingriffin
     ];

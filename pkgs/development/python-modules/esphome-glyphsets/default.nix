@@ -25,7 +25,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A lightweight version of glyphsets for ESPHome";
+    description = "Lightweight version of glyphsets for ESPHome";
     homepage = "https://github.com/esphome/esphome-glyphsets";
     changelog = "https://github.com/esphome/esphome-glyphsets/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

@@ -8,27 +8,32 @@
   oslo-i18n,
   oslo-utils,
   pbr,
+  pythonAtLeast,
   requests,
   requests-mock,
   setuptools,
+  stdenv,
   stestr,
   stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "3.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
-    rev = version;
-    hash = "sha256-P1f0wwtOo0LKbc3ay0Vh8GGi/2nRXcTr9JOByc2nlZY=";
+    tag = version;
+    hash = "sha256-1mMON/aVJon7t/zfYVhFpuB78b+DmOEVhvIFaTBRqfo=";
   };
 
-  # fake version to make pbr.packaging happy and not reject it...
-  PBR_VERSION = version;
+  patches = [
+    ./fix-pyproject.diff
+  ];
+
+  env.PBR_VERSION = version;
 
   build-system = [
     pbr
@@ -50,16 +55,45 @@ buildPythonPackage rec {
     stestr
   ];
 
-  checkPhase = ''
-    stestr run
-  '';
+  checkPhase =
+    let
+      disabledTests =
+        lib.optionals stdenv.hostPlatform.isDarwin [
+          "osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public"
+          "osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence"
+          "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1"
+          "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2"
+        ]
+        ++ lib.optionals (pythonAtLeast "3.14") [
+          # Disable test incompatible with Python 3.14+
+          # See upstream issue: https://bugs.launchpad.net/python-openstackclient/+bug/2138684
+          "osc_lib.tests.utils.test_tags.TestTagHelps"
+        ];
+    in
+    ''
+      runHook preCheck
+      stestr run -e <(echo "${lib.concatStringsSep "\n" disabledTests}")
+      runHook postCheck
+    '';
 
-  pythonImportsCheck = [ "osc_lib" ];
+  pythonImportsCheck = [
+    "osc_lib"
+    "osc_lib.api"
+    "osc_lib.cli"
+    "osc_lib.command"
+    "osc_lib.test"
+    "osc_lib.tests"
+    "osc_lib.tests.api"
+    "osc_lib.tests.cli"
+    "osc_lib.tests.command"
+    "osc_lib.tests.utils"
+    "osc_lib.utils"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStackClient Library";
     homepage = "https://github.com/openstack/osc-lib";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

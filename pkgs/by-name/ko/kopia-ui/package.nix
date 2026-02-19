@@ -10,12 +10,12 @@
   kopia,
 }:
 let
-  version = "0.20.0";
+  version = "0.22.3";
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${version}";
-    hash = "sha256-AM9Mpy+9ZCvEtFtzYC87vqCNpLxO+yWVd4th9DDQ2QI=";
+    hash = "sha256-5oNam99Mij78snSO6jiGPYzeD68sXEBKM2dGQtTUrww=";
   };
 in
 buildNpmPackage {
@@ -24,7 +24,7 @@ buildNpmPackage {
 
   sourceRoot = "${src.name}/app";
 
-  npmDepsHash = "sha256-FXPfZnqpuI6NgHk81HEJ7Hj8xCpXD0BKJgFeQ/Oce04=";
+  npmDepsHash = "sha256-DRsPiIiikp0pCAo0np0E3TYT1L6HGKXAXwKuB1jX6lw=";
   makeCacheWritable = true;
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ buildNpmPackage {
       type = "Application";
       desktopName = "KopiaUI";
       comment = "Fast and secure open source backup.";
-      icon = "kopia-ui";
+      icon = "kopia";
       exec = "kopia-ui";
       categories = [ "Utility" ];
     })

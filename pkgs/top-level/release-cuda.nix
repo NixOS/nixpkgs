@@ -2,10 +2,7 @@
     Test CUDA packages.
 
     This release file is currently not tested on hydra.nixos.org
-    because it requires unfree software, but it is tested by
-    https://hydra.nix-community.org/jobset/nixpkgs/cuda-nixos-unstable.
-
-    Cf. https://github.com/nix-community/infra/pull/1335
+    because it requires unfree software.
 
     Test for example like this:
 
@@ -86,10 +83,19 @@ let
       colmap = linux;
       ctranslate2 = linux;
       ffmpeg-full = linux;
+      firefox = linux;
+      firefox-unwrapped = linux;
+      firefox-beta = linux;
+      firefox-beta-unwrapped = linux;
+      firefox-devedition = linux;
+      firefox-devedition-unwrapped = linux;
+      freecad = linux;
       gimp = linux;
-      gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
+      jellyfin-ffmpeg = linux;
+      kdePackages.kdenlive = linux;
+      krita = linux;
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
@@ -97,6 +103,7 @@ let
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;
+      octave = linux; # because depend on SuiteSparse which need rebuild when cuda enabled
       ollama = linux;
       onnxruntime = linux;
       openmvg = linux;
@@ -109,6 +116,8 @@ let
       saga = linux;
       suitesparse = linux;
       sunshine = linux;
+      thunderbird = linux;
+      thunderbird-unwrapped = linux;
       truecrack-cuda = linux;
       tts = linux;
       ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
@@ -120,6 +129,7 @@ let
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;
+        flashinfer = linux;
         flax = linux;
         gpt-2-simple = linux;
         grad-cam = linux;
@@ -134,6 +144,7 @@ let
         triton = linux;
         openai-whisper = linux;
         opencv4 = linux;
+        opencv4Full = linux;
         opensfm = linux;
         pycuda = linux;
         pymc = linux;

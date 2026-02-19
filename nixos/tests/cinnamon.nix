@@ -53,7 +53,8 @@
           machine.succeed("xauth merge ${user.home}/.Xauthority")
 
       with subtest("Check that logging in has given the user ownership of devices"):
-          machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
+          # Change back to /dev/snd/timer after systemd-258.1
+          machine.succeed("getfacl -p /dev/dri/card0 | grep -q ${user.name}")
 
       with subtest("Wait for the Cinnamon shell"):
           # Correct output should be (true, '2')
@@ -68,6 +69,13 @@
 
       with subtest("Check if sessionPath option actually works"):
           machine.succeed("${eval "imports.gi.GIRepository.Repository.get_search_path\\(\\)"} | grep gpaste")
+
+      with subtest("Check if various environment variables are set"):
+          cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/nemo-desktop)/environ"
+          machine.succeed(f"{cmd} | grep 'XDG_SESSION_TYPE' | grep 'x11'")
+          machine.succeed(f"{cmd} | grep '__NIXOS_SET_ENVIRONMENT_DONE' | grep '1'")
+          # From the nixos/cinnamon module
+          machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
 
       with subtest("Open Cinnamon Settings"):
           machine.succeed("${su "cinnamon-settings themes >&2 &"}")
@@ -92,7 +100,7 @@
 
       with subtest("Open virtual keyboard"):
           machine.succeed("${su "dbus-send --print-reply --dest=org.Cinnamon /org/Cinnamon org.Cinnamon.ToggleKeyboard"}")
-          machine.wait_for_text('(Ctrl|Alt)')
+          machine.wait_for_text('(Esc|123)')
           machine.sleep(2)
           machine.screenshot("cinnamon_virtual_keyboard")
 

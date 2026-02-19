@@ -12,13 +12,13 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.71.0";
+  version = "1.76.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_tools";
     inherit version;
-    hash = "sha256-ONuo4NXg+yOgNOCWRP3G7YYr4jcYh+7lSQGZno9nkqg=";
+    hash = "sha256-zoAWm15q3z6DAvPrtssMOp8ICJEzq8pLdq1n91H1rYg=";
   };
 
   outputs = [
@@ -46,9 +46,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpc_tools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf code generator for gRPC";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
     maintainers = [ ];
   };

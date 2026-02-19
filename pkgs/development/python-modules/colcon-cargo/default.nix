@@ -6,7 +6,6 @@
   fetchFromGitHub,
   scspell,
   setuptools,
-  pythonOlder,
   pytestCheckHook,
   rustfmt,
   toml,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "colcon-cargo";
   version = "0.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "colcon";
@@ -51,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "An extension for colcon-core to support Rust packages built with Cargo";
+    description = "Extension for colcon-core to support Rust packages built with Cargo";
     homepage = "https://github.com/colcon/colcon-cargo";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];

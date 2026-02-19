@@ -9,18 +9,20 @@
   nasm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "4.1.5";
   pname = "mozjpeg";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "mozjpeg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-k8qWtU4j3ipIHvY60ae7kdNnPvWnUa0qgacqlSIJijo=";
   };
 
   cmakeFlags = [
+    # Fix the build with CMake 4
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DENABLE_STATIC=NO"
     "-DPNG_SUPPORTED=TRUE"
   ]; # See https://github.com/mozilla/mozjpeg/issues/351
@@ -29,6 +31,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     libpng
     zlib
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/mozilla/mozjpeg";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.aristid ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

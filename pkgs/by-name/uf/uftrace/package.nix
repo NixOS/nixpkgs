@@ -14,30 +14,29 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uftrace";
-  version = "0.17";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "namhyung";
     repo = "uftrace";
-    rev = "v${version}";
-    sha256 = "sha256-xx/eABF1q5uZYDGWUQc1YO6qCqR7J2mCHHQTBsHxMVw=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-9fVBV23gVN1kSkdqBlWV0oEIj6ew6yVO4edUTTHV5H0=";
   };
 
   nativeBuildInputs = [
     pkg-config
     pandoc
   ];
-  buildInputs =
-    [
-      capstone
-      elfutils
-      libtraceevent
-      ncurses
-    ]
-    ++ lib.optional withLuaJIT luajit
-    ++ lib.optional withPython python3;
+  buildInputs = [
+    capstone
+    elfutils
+    libtraceevent
+    ncurses
+  ]
+  ++ lib.optional withLuaJIT luajit
+  ++ lib.optional withPython python3;
 
   # libmcount.so dlopens python and luajit, make sure they're in the RUNPATH
   preBuild =
@@ -60,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.nthorne ];
   };
-}
+})

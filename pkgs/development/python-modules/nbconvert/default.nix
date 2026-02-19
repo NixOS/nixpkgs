@@ -2,7 +2,6 @@
   lib,
   fetchurl,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   beautifulsoup4,
@@ -18,7 +17,6 @@
   pandocfilters,
   pygments,
   traitlets,
-  importlib-metadata,
   flaky,
   ipykernel,
   ipywidgets,
@@ -36,8 +34,6 @@ buildPythonPackage rec {
   pname = "nbconvert";
   version = "7.16.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -57,24 +53,22 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [
-      beautifulsoup4
-      bleach
-      defusedxml
-      jinja2
-      jupyter-core
-      jupyterlab-pygments
-      markupsafe
-      mistune
-      nbclient
-      packaging
-      pandocfilters
-      pygments
-      traitlets
-    ]
-    ++ bleach.optional-dependencies.css
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [
+    beautifulsoup4
+    bleach
+    defusedxml
+    jinja2
+    jupyter-core
+    jupyterlab-pygments
+    markupsafe
+    mistune
+    nbclient
+    packaging
+    pandocfilters
+    pygments
+    traitlets
+  ]
+  ++ bleach.optional-dependencies.css;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -87,9 +81,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

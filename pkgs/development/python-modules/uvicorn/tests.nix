@@ -15,7 +15,7 @@
 buildPythonPackage {
   pname = "uvicorn-tests";
   inherit (uvicorn) version;
-  format = "other";
+  pyproject = false;
 
   src = uvicorn.testsout;
 
@@ -34,7 +34,8 @@ buildPythonPackage {
     a2wsgi
     watchgod
     wsproto
-  ] ++ uvicorn.optional-dependencies.standard;
+  ]
+  ++ uvicorn.optional-dependencies.standard;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

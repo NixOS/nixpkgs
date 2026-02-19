@@ -21,12 +21,13 @@
   gmobile,
   umockdev,
   feedbackd-device-themes,
+  udevCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.8.2";
+  version = "0.8.5";
 
   outputs = [
     "out"
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "agx";
     repo = "feedbackd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Hd+kHLr+d1+mg9BbD1pCfVZuwmf7Hk02xmDTmR3foh4=";
+    hash = "sha256-m8jDn7gDrZOsdFl17IsIINgcpuHmmtNOCEEdQFwVj6g=";
   };
 
   depsBuildBuild = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     vala
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -98,26 +100,28 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
   };
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Theme based Haptic, Visual and Audio Feedback";
     homepage = "https://gitlab.freedesktop.org/agx/feedbackd/";
-    license = with licenses; [
+    license = with lib.licenses; [
       # feedbackd
       gpl3Plus
 
       # libfeedback library
       lgpl21Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pacman99
       Luflosi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

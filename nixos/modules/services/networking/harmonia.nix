@@ -10,7 +10,7 @@ let
 
   signKeyPaths = cfg.signKeyPaths ++ lib.optional (cfg.signKeyPath != null) cfg.signKeyPath;
   credentials = lib.imap0 (i: signKeyPath: {
-    id = "sign-key-${builtins.toString i}";
+    id = "sign-key-${toString i}";
     path = signKeyPath;
   }) signKeyPaths;
 in
@@ -82,7 +82,7 @@ in
         DeviceAllow = [ "" ];
         UMask = "0066";
         RuntimeDirectory = "harmonia";
-        LoadCredential = builtins.map (credential: "${credential.id}:${credential.path}") credentials;
+        LoadCredential = map (credential: "${credential.id}:${credential.path}") credentials;
         SystemCallFilter = [
           "@system-service"
           "~@privileged"

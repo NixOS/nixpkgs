@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   runtimeShell,
 }:
 
@@ -9,8 +9,7 @@ stdenv.mkDerivation {
   pname = "ngn-k";
   version = "0-unstable-2025-01-04";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ngn";
     repo = "k";
     rev = "feb51a61443dac03213c4e97edd8df679a4a3aaa";

@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   cmake,
   pkg-config,
   fetchFromGitHub,
@@ -10,15 +10,15 @@
   polkit,
   qt6,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpolkitagent";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpolkitagent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K1nSPFlh5VBWNagcaZ/157gfifAXTH8lzeyfYt/UEX8=";
+    hash = "sha256-39xQ6iitVz9KVJz6PPRR+pkS5hBogq25BDd24eUDOQg=";
   };
 
   nativeBuildInputs = [

@@ -4,18 +4,17 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "onetun";
   version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "aramperes";
     repo = "onetun";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-bggBBl2YQUncfOYIDsPgrHPwznCJQOlIOY3bbiZz7Rw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-VC7q2ZTdbBmvZ9l70uQz59paFIi8HXp5CPxfQC6cVmk=";
 
   meta = {
@@ -25,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "onetun";
   };
-}
+})

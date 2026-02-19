@@ -1,6 +1,7 @@
 {
   callPackage,
   fetchFromGitHub,
+  jsonSchemaCatalogs,
   lib,
   nix-update-script,
   rustPlatform,
@@ -9,25 +10,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "json-schema-catalog-rs";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "roberth";
     repo = "json-schema-catalog-rs";
     tag = finalAttrs.version;
-    hash = "sha256-BbEPpolv2aoKFlfZ6A+CmUlr5sySGIqRlv3rLgf1VkA=";
+    hash = "sha256-KmUpnpVBfVhdHLQVqcVoNCM6KODfIeTUNagOR69ntQY=";
   };
 
-  cargoHash = "sha256-YI2LN2DBzC1B5wCZOrGAZi/hkKHoAm6xLkdJ+8DDFo8=";
+  cargoHash = "sha256-ydygZWAcKNMRw2v6ci2x8b7ca3T5dEGYukEwHnJb7jo=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/json-schema-catalog";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = {
       run = callPackage ./test-run.nix { json-schema-catalog-rs = finalAttrs.finalPackage; };
+      jsonSchemaCatalogs = jsonSchemaCatalogs.tests.override {
+        json-schema-catalog-rs = finalAttrs.finalPackage;
+      };
     };
 
     updateScript = nix-update-script { };

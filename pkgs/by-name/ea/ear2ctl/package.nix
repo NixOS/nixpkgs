@@ -7,18 +7,17 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ear2ctl";
   version = "0.1.0";
 
   src = fetchFromGitLab {
     owner = "bharadwaj-raju";
     repo = "ear2ctl";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xaxl4opLMw9KEDpmNcgR1fBGUqO4BP5a/U52Kz+GAvc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-2yMq1Ag0cUXMBMjpkdqYxkKMXQiZ5536cmwoaCrpFgI=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -35,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "ear2ctl";
   };
-}
+})

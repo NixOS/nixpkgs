@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchPypi,
   installShellFiles,
-  pythonOlder,
   setuptools-scm,
   writeScript,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   version = "2.47.0";
   docs_version = "71d71d4be238628bf9cb9b27be79b8bb824ed1a9";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "git_filter_repo";
@@ -43,15 +40,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "git_filter_repo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Quickly rewrite git repository history";
     homepage = "https://github.com/newren/git-filter-repo";
     changelog = "https://github.com/newren/git-filter-repo/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       gpl2Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aiotter
       fab
     ];

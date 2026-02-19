@@ -71,7 +71,7 @@ with lib;
         type = types.ints.positive;
         default = 1024;
         description = ''
-          Guest memory in MB
+          Guest memory in MiB (1024×1024 bytes)
         '';
       };
       bios = mkOption {
@@ -213,7 +213,7 @@ with lib;
     let
       cfg = config.proxmox;
       cfgLine = name: value: ''
-        ${name}: ${builtins.toString value}
+        ${name}: ${toString value}
       '';
       virtio0Storage = builtins.head (builtins.split ":" cfg.qemuConf.virtio0);
       cfgFile =

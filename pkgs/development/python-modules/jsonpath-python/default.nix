@@ -16,12 +16,12 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "jsonpath" ];
-  pytestFlagsArray = [ "test/test*.py" ];
+  enabledTestPaths = [ "test/test*.py" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sean2077/jsonpath-python";
-    description = "A more powerful JSONPath implementations in modern python.";
-    maintainers = with maintainers; [ dadada ];
-    license = with licenses; [ mit ];
+    description = "More powerful JSONPath implementations in modern python";
+    maintainers = with lib.maintainers; [ dadada ];
+    license = with lib.licenses; [ mit ];
   };
 }

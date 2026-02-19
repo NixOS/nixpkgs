@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pubs";
   version = "0.9.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pubs";
     repo = "pubs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-U/9MLqfXrzYVGttFSafw4pYDy26WgdsJMCxciZzO1pw=";
   };
 
@@ -30,11 +30,11 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     argcomplete
     beautifulsoup4
     bibtexparser
@@ -44,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     requests
     six
+    standard-pipes # https://github.com/pubs/pubs/issues/282
   ];
 
   nativeCheckInputs = with python3.pkgs; [
@@ -71,14 +72,14 @@ python3.pkgs.buildPythonApplication rec {
     "pubs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line bibliography manager";
     mainProgram = "pubs";
     homepage = "https://github.com/pubs/pubs";
-    changelog = "https://github.com/pubs/pubs/blob/v${version}/changelog.md";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/pubs/pubs/blob/v${finalAttrs.version}/changelog.md";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       dotlambda
     ];
   };
-}
+})

@@ -8,9 +8,10 @@
   wayland-scanner,
   libdrm,
   minimal ? false,
-  libX11,
-  libXext,
-  libXfixes,
+  libx11,
+  libxcb,
+  libxext,
+  libxfixes,
   wayland,
   libffi,
   libGL,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.22.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libva";
     rev = finalAttrs.version;
-    sha256 = "sha256-0eOYxyMt2M2lkhoWOhoUQgP/1LYY3QQqSF5TdRUuCbs=";
+    sha256 = "sha256-ePtzZPzBnkhV0cV3Nw/pgOnKnzDkk7U2Svzo0e1YMbc=";
   };
 
   outputs = [
@@ -46,18 +47,21 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
-  ] ++ lib.optional (!minimal) wayland-scanner;
+  ]
+  ++ lib.optional (!minimal) wayland-scanner;
 
-  buildInputs =
-    [ libdrm ]
-    ++ lib.optionals (!minimal) [
-      libX11
-      libXext
-      libXfixes
-      wayland
-      libffi
-      libGL
-    ];
+  buildInputs = [
+    libdrm
+  ]
+  ++ lib.optionals (!minimal) [
+    libx11
+    libxcb
+    libxext
+    libxfixes
+    wayland
+    libffi
+    libGL
+  ];
 
   mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
     # Add FHS and Debian paths for non-NixOS applications
@@ -86,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Implementation for VA-API (Video Acceleration API)";
     longDescription = ''
       VA-API is an open-source library and API specification, which provides
@@ -96,19 +100,18 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://01.org/linuxmedia/vaapi";
     changelog = "https://raw.githubusercontent.com/intel/libva/${finalAttrs.version}/NEWS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    pkgConfigModules =
-      [
-        "libva"
-        "libva-drm"
-      ]
-      ++ lib.optionals (!minimal) [
-        "libva-glx"
-        "libva-wayland"
-        "libva-x11"
-      ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    pkgConfigModules = [
+      "libva"
+      "libva-drm"
+    ]
+    ++ lib.optionals (!minimal) [
+      "libva-glx"
+      "libva-wayland"
+      "libva-x11"
+    ];
+    platforms = lib.platforms.unix;
     badPlatforms = [
       # Mandatory libva shared library.
       lib.systems.inspect.platformPatterns.isStatic

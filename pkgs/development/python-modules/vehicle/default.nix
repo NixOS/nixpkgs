@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "vehicle";
   version = "2.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
@@ -54,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vehicle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client providing RDW vehicle information";
     homepage = "https://github.com/frenck/python-vehicle";
     changelog = "https://github.com/frenck/python-vehicle/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

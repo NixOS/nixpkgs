@@ -38,32 +38,30 @@ stdenv.mkDerivation {
     "--without-openssl-version-check"
   ];
 
-  buildInputs =
-    [
-      gmp
-      libxml2
-      stoken
-      zlib
-      (if useOpenSSL then openssl else gnutls)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      p11-kit
-      pcsclite
-    ]
-    ++ lib.optional useDefaultExternalBrowser xdg-utils;
+  buildInputs = [
+    gmp
+    libxml2
+    stoken
+    zlib
+    (if useOpenSSL then openssl else gnutls)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    p11-kit
+    pcsclite
+  ]
+  ++ lib.optional useDefaultExternalBrowser xdg-utils;
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
     homepage = "https://www.infradead.org/openconnect/";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [
-      pradeepchhetri
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
       tricktron
-      alyaeanyx
+      pentane
     ];
     platforms = lib.platforms.unix;
     mainProgram = "openconnect";

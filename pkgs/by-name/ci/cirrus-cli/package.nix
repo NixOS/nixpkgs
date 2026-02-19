@@ -1,30 +1,31 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cirrus-cli";
-  version = "0.144.0";
+  version = "0.164.2";
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
     repo = "cirrus-cli";
-    rev = "v${version}";
-    hash = "sha256-pbfLEoc9MF9Zo9P5D8R0WM/ZbzwhdIZhtcWR9tSKzX8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/xOiqa26Zfv1AugH3w9euQHmEwLm5S+sSu7DVZDHOzc=";
   };
 
-  vendorHash = "sha256-PH28ZIubrJWk4qTrL9OSx/ylW1iEP0j0iq4uNg9d9ko=";
+  vendorHash = "sha256-G/UlmNDzYuF9gkAaGO6O/SziNZ9obs01sD2Cmu+r8Dc=";
 
   ldflags = [
-    "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${version}"
-    "-X github.com/cirruslabs/cirrus-cli/internal/version.Commit=v${version}"
+    "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${finalAttrs.version}"
+    "-X github.com/cirruslabs/cirrus-cli/internal/version.Commit=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cirrus \
       --bash <($out/bin/cirrus completion bash) \
       --zsh <($out/bin/cirrus completion zsh) \
@@ -34,11 +35,11 @@ buildGoModule rec {
   # tests fail on read-only filesystem
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI for executing Cirrus tasks locally and in any CI";
     homepage = "https://github.com/cirruslabs/cirrus-cli";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ techknowlogick ];
     mainProgram = "cirrus";
   };
-}
+})

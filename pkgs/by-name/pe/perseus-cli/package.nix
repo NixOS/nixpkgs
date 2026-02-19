@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-IYjLx9/4oWSXa4jhOtGw1GOHmrR7LQ6bWyN5zbOuEFs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9McjhdS6KrFgtWIaP0qKsUYpPxGQjNX7SM9gJ/aJGwc=";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,11 +24,11 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "${lib.makeBinPath [ wasm-pack ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://framesurge.sh/perseus/en-US";
     description = "High-level web development framework for Rust with full support for server-side rendering and static generation";
-    maintainers = with maintainers; [ max-niederman ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ max-niederman ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "perseus";
   };
 }

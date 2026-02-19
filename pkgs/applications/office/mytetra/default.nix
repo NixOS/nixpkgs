@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
   qtsvg,
   makeWrapper,
+  wrapQtAppsHook,
   xdg-utils,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mytetra";
   version = "1.44.183";
 
@@ -22,6 +23,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     makeWrapper
+    wrapQtAppsHook
   ];
   buildInputs = [ qtsvg ];
 
@@ -46,12 +48,12 @@ mkDerivation rec {
       --suffix PATH : ${xdg-utils}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Smart manager for information collecting";
     mainProgram = "mytetra";
     homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

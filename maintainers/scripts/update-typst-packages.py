@@ -78,7 +78,14 @@ class TypstPackage:
             "nix-command",
         ]
         result = subprocess.run(cmd + [url], capture_output=True, text=True)
-        hash = re.search(r"hash\s+\'(sha256-.{44})\'", result.stderr).groups()[0]
+        # We currently rely on Typst Universe's github repository to
+        # track package dependencies. However, there might be an
+        # inconsistency between the registry and the repository. We
+        # skip packages that cannot be fetched from the registry.
+        if re.search(r"error: unable to download", result.stderr):
+            return url, None
+        else:
+            hash = re.search(r"hash\s+\'(sha256-.{44})\'", result.stderr).groups()[0]
         return url, hash
 
     def to_name_full(self):
@@ -86,10 +93,14 @@ class TypstPackage:
 
     def to_attrs(self):
         deps = set()
-        excludes = list(map(
-            lambda e: os.path.join(self.path, e),
-            self.meta["package"]["exclude"] if "exclude" in self.meta["package"] else [],
-        ))
+        excludes = list(
+            map(
+                lambda e: os.path.join(self.path, e),
+                self.meta["package"]["exclude"]
+                if "exclude" in self.meta["package"]
+                else [],
+            )
+        )
         for root, _, files in os.walk(self.path):
             for file in filter(lambda f: f.split(".")[-1] == "typ", files):
                 file_path = os.path.join(root, file)
@@ -109,6 +120,9 @@ class TypstPackage:
             filter(lambda p: p[0] != self.pname or p[1] != self.version, deps)
         )
         source_url, source_hash = self.source()
+
+        if not source_hash:
+            return None
 
         return dict(
             url=source_url,
@@ -152,11 +166,12 @@ def generate_typst_packages(preview_dir, output_file):
         def generate_package(pname, package_subtree):
             sorted_keys = sorted(package_subtree.keys(), key=Version, reverse=True)
             print(f"Generating metadata for {pname}")
-            return {
-                pname: OrderedDict(
-                    (k, package_subtree[k].to_attrs()) for k in sorted_keys
-                )
-            }
+            version_set = OrderedDict(
+                (k, a)
+                for k, a in [(k, package_subtree[k].to_attrs()) for k in sorted_keys]
+                if a is not None
+            )
+            return {pname: version_set} if len(version_set) > 0 else {}
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
             sorted_packages = sorted(package_tree.items(), key=lambda x: x[0])

@@ -38,25 +38,25 @@ stdenv.mkDerivation rec {
     ninja
     cmake
     pkg-config
-  ] ++ lib.optional withGui wrapGAppsHook4;
+  ]
+  ++ lib.optional withGui wrapGAppsHook4;
 
-  buildInputs =
-    [
-      liblxi
-      readline
-      lua
-      bash-completion
-    ]
-    ++ lib.optionals withGui [
-      glib
-      gtk4
-      gtksourceview5
-      libadwaita
-      json-glib
-      desktop-file-utils
-      appstream-glib
-      gsettings-desktop-schemas
-    ];
+  buildInputs = [
+    liblxi
+    readline
+    lua
+    bash-completion
+  ]
+  ++ lib.optionals withGui [
+    glib
+    gtk4
+    gtksourceview5
+    libadwaita
+    json-glib
+    desktop-file-utils
+    appstream-glib
+    gsettings-desktop-schemas
+  ];
 
   postUnpack = "sed -i '/meson.add_install.*$/d' source/meson.build";
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString withGui "glib-compile-schemas $out/share/glib-2.0/schemas";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for communicating with LXI compatible instruments";
     longDescription = ''
       lxi-tools is a collection of open source software tools
@@ -73,9 +73,9 @@ stdenv.mkDerivation rec {
       spectrum analyzers etc.
     '';
     homepage = "https://lxi-tools.github.io/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.vq ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vq ];
     mainProgram = "lxi";
   };
 }

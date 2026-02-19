@@ -11,6 +11,7 @@ mkCoqDerivation {
 
   releaseRev = v: "v${v}";
 
+  release."9.0.0".sha256 = "sha256-mln1182EOeXZCa1NzjAiovK93Xm+5JMZpGqJVrM67Jo=";
   release."8.20.0".sha256 = "sha256-VQzeINIZAfP3Qyh29uPqcNVlNJfIzzRLtN0Cm4EuGCk=";
   release."8.19.1".sha256 = "sha256-W/V57h+rjb3m0ktCG83PquMHfXiv6H1Nhvw9sVEPLqM=";
   release."8.19.0".sha256 = "sha256-IeCBd8gcu4bAXH5I/XIT7neQIILi+EWR6qqAA4GzQD0=";
@@ -32,8 +33,12 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
-    with lib.versions;
+
     lib.switch coq.coq-version [
+      {
+        case = "9.0";
+        out = "9.0.0";
+      }
       {
         case = "8.20";
         out = "8.20.0";
@@ -100,7 +105,7 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ stdlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Coq plugin providing tactics for rewriting universally quantified equations";
     longDescription = ''
       This Coq plugin provides tactics for rewriting universally quantified
@@ -110,8 +115,8 @@ mkCoqDerivation {
       operator instances, such as for Z binary arithmetic and booleans, are
       provided with the plugin.
     '';
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

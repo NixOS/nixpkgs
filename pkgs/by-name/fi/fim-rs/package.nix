@@ -7,15 +7,15 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fim-rs";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Achiefs";
     repo = "fim";
-    tag = "v${version}";
-    hash = "sha256-V9BzgVcDTnYSy7N5fCo38vQmXRDXLjY6wvnSkIpuDGg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xJzglrNB5rqaRQTgRFIl8/AXjeDwFPykIE5LJwJ3cX4=";
   };
 
   cargoLock = {
@@ -39,10 +39,10 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  # There is a failure while the binary is checked
+  # Relies on /var/lib/fim existing, but /var is not available under nix-build.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Host-based file integrity monitoring tool";
     longDescription = ''
       FIM is a File Integrity Monitoring tool that tracks any event over your
@@ -55,9 +55,9 @@ rustPlatform.buildRustPackage rec {
       tools like ElasticSearch/OpenSearch.
     '';
     homepage = "https://github.com/Achiefs/fim";
-    changelog = "https://github.com/Achiefs/fim/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Achiefs/fim/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "fim";
   };
-}
+})

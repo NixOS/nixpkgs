@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-e3RQn6wKvVm40UK8ZlgIi2gRS9eEFBnEXdmXtCgv0Go=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-v4laGVbWmK8WFJXX5ChtViyKyMtmwpehSgNG6F31Mn0=";
 
   # tests do not find grcov path correctly
@@ -31,9 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "test_integration_zip_dir"
         "test_integration_zip_zip"
       ];
-      skipFlag = test: "--skip " + test;
     in
-    builtins.concatStringsSep " " (builtins.map skipFlag skipList);
+    builtins.map (x: "--skip=" + x) skipList;
 
   meta = {
     description = "Rust tool to collect and aggregate code coverage data for multiple source files";

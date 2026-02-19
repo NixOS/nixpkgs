@@ -16,10 +16,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Find the nearest xterm 256 color index for an RGB";
     homepage = "https://github.com/magarcia/python-x256";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

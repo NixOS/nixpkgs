@@ -17,16 +17,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bleak-esphome";
-  version = "2.15.1";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "bleak-esphome";
-    tag = "v${version}";
-    hash = "sha256-Q+W7i0+Qsm1wfVNC+ub9J9DOcP7D4gZkjw3j37aHhYc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XZ/JjrHJ8Zd1t2Ahi0Jc7S/bkXMIBHfDTVanoGemtI0=";
   };
 
   postPatch = ''
@@ -56,13 +56,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # bleak_client.services.get_characteristic returns None
+    "test_client_get_services_and_read_write"
+    "test_bleak_client_get_services_and_read_write"
+    "test_bleak_client_cached_get_services_and_read_write"
+  ];
+
   pythonImportsCheck = [ "bleak_esphome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bleak backend of ESPHome";
     homepage = "https://github.com/bluetooth-devices/bleak-esphome";
-    changelog = "https://github.com/bluetooth-devices/bleak-esphome/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bluetooth-devices/bleak-esphome/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

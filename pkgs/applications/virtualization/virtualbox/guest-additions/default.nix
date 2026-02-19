@@ -4,20 +4,39 @@
   callPackage,
   lib,
   dbus,
-  xorg,
+  kmod,
+  libxt,
+  libxrandr,
+  libxmu,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
   patchelf,
   makeWrapper,
   wayland,
-  libX11,
+  libx11,
 }:
 let
-  virtualboxVersion = "7.1.8";
+  virtualboxVersion = "7.2.6";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "3f7132c55ac6c5f50585bfaa115d29e30b47ccf535cb0a12ff50214ddae2f63d";
+  virtualboxSha256 = "c58443a0e6fcc7fc7e84c1011a10823b3540c6a2b8f2e27c4d8971272baf09f7";
+
+  platform =
+    if stdenv.hostPlatform.isAarch64 then
+      "arm64"
+    else if stdenv.hostPlatform.is32bit then
+      "x86"
+    else
+      "amd64";
 
   virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix {
-    inherit virtualboxVersion virtualboxSubVersion virtualboxSha256;
+    inherit
+      virtualboxVersion
+      virtualboxSubVersion
+      virtualboxSha256
+      platform
+      ;
   };
 
   # Specifies how to patch binaries to make sure that libraries loaded using
@@ -30,11 +49,11 @@ let
     }
     {
       name = "libXfixes.so";
-      pkg = xorg.libXfixes;
+      pkg = libxfixes;
     }
     {
       name = "libXrandr.so";
-      pkg = xorg.libXrandr;
+      pkg = libxrandr;
     }
     {
       name = "libwayland-client.so";
@@ -42,11 +61,11 @@ let
     }
     {
       name = "libX11.so";
-      pkg = libX11;
+      pkg = libx11;
     }
     {
       name = "libXt.so";
-      pkg = xorg.libXt;
+      pkg = libxt;
     }
   ];
 in
@@ -54,9 +73,7 @@ stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
   version = "${virtualboxVersion}${virtualboxSubVersion}-${kernel.version}";
 
-  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${
-    if stdenv.hostPlatform.is32bit then "x86" else "amd64"
-  }.tar.bz2";
+  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${platform}.tar.bz2";
   sourceRoot = ".";
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -70,7 +87,9 @@ stdenv.mkDerivation {
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
-  ] ++ kernel.moduleBuildDependencies;
+    kmod
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   buildPhase = ''
     runHook preBuild
@@ -89,12 +108,12 @@ stdenv.mkDerivation {
             stdenv.cc.cc
             stdenv.cc.libc
             zlib
-            xorg.libX11
-            xorg.libXt
-            xorg.libXext
-            xorg.libXmu
-            xorg.libXfixes
-            xorg.libXcursor
+            libx11
+            libxt
+            libxext
+            libxmu
+            libxfixes
+            libxcursor
           ]
         } $i
     done
@@ -128,6 +147,11 @@ stdenv.mkDerivation {
     # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
     # either. (#18457)
 
+    mkdir -p $out/etc/depmod.d
+    for mod in $out/lib/modules/*/misc/*; do
+      echo "override $(modinfo -F name "$mod") * misc" >> $out/etc/depmod.d/vbox.conf
+    done
+
     runHook postInstall
   '';
 
@@ -152,12 +176,12 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Only;
     maintainers = [
-      lib.maintainers.sander
       lib.maintainers.friedrichaltheide
     ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
+      "aarch64-linux"
     ];
     broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };

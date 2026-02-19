@@ -7,7 +7,6 @@
   psutil,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sybil,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "flufl-lock";
   version = "8.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "flufl_lock";
@@ -40,17 +37,17 @@ buildPythonPackage rec {
   # disable code coverage checks for all OS. Upstream does not enforce these
   # checks on Darwin, and code coverage cannot be improved downstream nor is it
   # relevant to the user.
-  pytestFlagsArray = [ "--no-cov" ];
+  pytestFlags = [ "--no-cov" ];
 
   pythonImportsCheck = [ "flufl.lock" ];
 
   pythonNamespaces = [ "flufl" ];
 
-  meta = with lib; {
+  meta = {
     description = "NFS-safe file locking with timeouts for POSIX and Windows";
     homepage = "https://flufllock.readthedocs.io/";
     changelog = "https://gitlab.com/warsaw/flufl.lock/-/blob/${version}/docs/NEWS.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

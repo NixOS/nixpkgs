@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oonf-olsrd2";
   version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "OLSR";
     repo = "OONF";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7EH2K7gaBGD95WFlG6RRhKEWJm91Xv2GOHYQjZWuzl0=";
   };
 
@@ -31,11 +31,16 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Adhoc wireless mesh routing daemon";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "http://olsr.org/";
-    maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ mkg20001 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

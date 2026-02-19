@@ -9,26 +9,25 @@
   openapi-python-client,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openapi-python-client";
-  version = "0.24.3";
+  version = "0.28.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    inherit version;
+    inherit (finalAttrs) version;
     owner = "openapi-generators";
     repo = "openapi-python-client";
-    tag = "v${version}";
-    hash = "sha256-EAHwICY8bjqYt0yGSG+SMcyTqeftfGCGTE4pJE120Mo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-egeT/XTUTq+HbwX7PpfygDNNKgBkExM0neMEu/mfErw=";
   };
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.ps
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.ps
+  ];
 
   build-system = with python3Packages; [
     hatchling
@@ -53,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   # just a simple wrapper to locate the binary. We'll remove the upper bound
   pythonRelaxDeps = [ "ruff" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # see: https://github.com/fastapi/typer/blob/5889cf82f4ed925f92e6b0750bf1b1ed9ee672f3/typer/completion.py#L54
     # otherwise shellingham throws exception on darwin
     export _TYPER_COMPLETE_TEST_DISABLE_SHELL_DETECTION=1
@@ -72,9 +71,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Generate modern Python clients from OpenAPI";
     homepage = "https://github.com/openapi-generators/openapi-python-client";
-    changelog = "https://github.com/openapi-generators/openapi-python-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/openapi-generators/openapi-python-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "openapi-python-client";
     maintainers = with lib.maintainers; [ konradmalik ];
   };
-}
+})

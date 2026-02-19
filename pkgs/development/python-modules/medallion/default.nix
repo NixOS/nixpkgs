@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "medallion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal implementation of a TAXII 2.1 Server in Python";
     homepage = "https://medallion.readthedocs.io/en/latest/";
     changelog = "https://github.com/oasis-open/cti-taxii-server/blob/v${version}/CHANGES.txt";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ PapayaJackal ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ PapayaJackal ];
   };
 }

@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   replaceVars,
 
   cmake,
+  jre,
   ninja,
   pkg-config,
-  jre,
   swig,
   wrapGAppsHook3,
 
@@ -16,30 +17,36 @@
   glibc,
   sudo,
 
+  python3Packages,
+
   cairo,
-  mysql,
+  mysql80,
   libiodbc,
   proj,
 
   antlr4_13,
-  gtkmm3,
-  libxml2,
-  libmysqlconnectorcpp,
-  vsqlite,
-  gdal,
   boost,
+  gdal,
+  gtkmm3,
+  libmysqlconnectorcpp,
+  libsecret,
   libssh,
+  libuuid,
+  libxml2,
+  libzip,
   openssl,
   rapidjson,
-  libuuid,
-  libzip,
-  libsecret,
-  python3Packages,
+  vsqlite,
+  zstd,
 }:
 
 let
+  mysql = mysql80;
+  gdal' = gdal.override { libmysqlclient = mysql; };
+  antlr = antlr4_13;
+
   # for some reason the package doesn't build with swig 4.3.0
-  swig_4_2 = swig.overrideAttrs (prevAttrs: {
+  swig' = swig.overrideAttrs (prevAttrs: {
     version = "4.2.1";
     src = prevAttrs.src.override {
       hash = "sha256-VlUsiRZLScmbC7hZDzKqUr9481YXVwo0eXT/jy6Fda8=";
@@ -50,11 +57,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.42";
+  version = "8.0.46";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-d4SnNALK76AXWEu0WHX0dZv4co6Q+oCMTYAVV3pd9gU=";
+    hash = "sha256-sP7GYSagPpcBhmdCynvQsxJexe54Bgu6RI7apCSb9TE=";
   };
 
   patches = [
@@ -73,6 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't try to override the ANTLR_JAR_PATH specified in cmakeFlags
     ./dont-search-for-antlr-jar.patch
+
+    # fixes the build with python 3.13
+    (fetchpatch {
+      name = "python3.13.patch";
+      url = "https://git.pld-linux.org/?p=packages/mysql-workbench.git;a=blob_plain;f=python-3.13.patch;h=d1425a93c41fb421603cda6edbb0514389cdc6a8;hb=bb09cb858f3b9c28df699d3b98530a6c590b5b7a";
+      hash = "sha256-hLfPqZSNf3ls2WThF1SBRjV33zTUymfgDmdZVpgO22Q=";
+    })
   ];
 
   postPatch = ''
@@ -82,30 +96,35 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools/get_wb_version.sh
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
+    jre
     ninja
     pkg-config
-    jre
-    swig_4_2
+    swig'
     wrapGAppsHook3
   ];
 
   buildInputs = [
-    antlr4_13.runtime.cpp
-    gtkmm3
-    (libxml2.override { enableHttp = true; })
-    libmysqlconnectorcpp
-    vsqlite
-    gdal
+    antlr.runtime.cpp
     boost
+    gdal'
+    gtkmm3
+    libiodbc
+    libmysqlconnectorcpp
+    libsecret
     libssh
+    libuuid
+    (libxml2.override { enableHttp = true; })
+    libzip
     openssl
     rapidjson
-    libuuid
-    libzip
-    libsecret
-    libiodbc
+    vsqlite
+    zstd
+
+    bash # for shebangs
 
     # python dependencies:
     paramiko
@@ -132,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "MySQL_CONFIG_PATH" (lib.getExe' mysql "mysql_config"))
     (lib.cmakeFeature "IODBC_CONFIG_PATH" (lib.getExe' libiodbc "iodbc-config"))
-    (lib.cmakeFeature "ANTLR_JAR_PATH" "${antlr4_13.jarLocation}")
+    (lib.cmakeFeature "ANTLR_JAR_PATH" "${antlr.jarLocation}")
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.

@@ -6,18 +6,17 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprdim";
   version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "donovanglover";
     repo = "hyprdim";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-o06HnN/E8QWRFOqd9Sxolm4g/fI5+6hYITptnRNAFag=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8xbmVQHMXs9rq4iP5Svx2Zdg/B9WuZuq+hKsokk2m78=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -33,12 +32,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Automatically dim windows in Hyprland when switching between them";
     homepage = "https://github.com/donovanglover/hyprdim";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ donovanglover ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "hyprdim";
   };
-}
+})

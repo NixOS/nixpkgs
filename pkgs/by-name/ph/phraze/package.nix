@@ -8,21 +8,20 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phraze";
-  version = "0.3.23";
+  version = "0.3.25";
 
   src = fetchFromGitHub {
     owner = "sts10";
     repo = "phraze";
-    rev = "v${version}";
-    hash = "sha256-CQhzH6x8Fxx0ynHbLh8FTY7urbiXHrvTbMh+/TAwS2A=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Eeyf3+zJYMRbfeTj+LdxMGEeouvvky6cAmADFqIoRNo=";
   };
 
   doCheck = true;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-d4qj4rvH5CyHTH3RWDV6ADSGK/kz6yQLp3JjQdb6Wyo=";
+  cargoHash = "sha256-NJOVWIUObmjjamRDZsj7V6xKsfRfUeUqCiKBv/vNiEY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -45,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Generate random passphrases";
     homepage = "https://github.com/sts10/phraze";
-    changelog = "https://github.com/sts10/phraze/releases/tag/v${version}";
+    changelog = "https://github.com/sts10/phraze/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       x123
@@ -53,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "phraze";
   };
-}
+})

@@ -47,15 +47,18 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/{decoder,encoder,hl_decoder,hl_encoder}.py"
+  enabledTestPaths = [
+    "tests/decoder.py"
+    "tests/encoder.py"
+    "tests/hl_decoder.py"
+    "tests/hl_encoder.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings to the libopus, IETF low-delay audio codec";
     homepage = "https://github.com/orion-labs/opuslib";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ thelegy ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thelegy ];
   };
 }

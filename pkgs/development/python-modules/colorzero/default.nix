@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkginfo,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -18,21 +19,19 @@ buildPythonPackage rec {
     hash = "sha256-0NoQsy86OHQNLZsTEuF5s2MlRUoacF28jNeHgFKAH14=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov" ""
-  '';
-
   nativeBuildInputs = [ pkginfo ];
 
   pythonImportsCheck = [ "colorzero" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet another Python color library";
     homepage = "https://github.com/waveform80/colorzero";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

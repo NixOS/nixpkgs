@@ -6,9 +6,9 @@
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "fable";
-  version = "4.25.0";
+  version = "4.28.0";
 
-  nugetHash = "sha256-1T6cJKODI5Rm6Ze0f7X/Ecdrrn1NulKSnO3lMW73W0M=";
+  nugetHash = "sha256-t5Kex6sVe1B/xErMfDav+WGEjeZjndRNQA2r0FvL92g=";
 
   passthru.tests = testers.testVersion {
     package = finalAttrs.finalPackage;
@@ -17,14 +17,14 @@ buildDotnetGlobalTool (finalAttrs: {
     version = "[37m${finalAttrs.version}";
   };
 
-  meta = with lib; {
-    description = "Fable is an F# to JavaScript compiler";
+  meta = {
+    description = "F# to JavaScript compiler";
     mainProgram = "fable";
     homepage = "https://github.com/fable-compiler/fable";
-    changelog = "https://github.com/fable-compiler/fable/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/fable-compiler/fable/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       anpin
       mdarocha
     ];

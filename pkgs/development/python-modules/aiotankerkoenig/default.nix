@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "aiotankerkoenig";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jpbede";
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiotankerkoenig" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with tankerkoenig.de";
     homepage = "https://github.com/jpbede/aiotankerkoenig";
     changelog = "https://github.com/jpbede/aiotankerkoenig/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

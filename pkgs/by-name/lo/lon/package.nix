@@ -8,21 +8,20 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lon";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "lon";
-    tag = version;
-    hash = "sha256-/7RelKn3pzC8n+b2OV1pcUEaWeEoH4qC2TvAWwni5AA=";
+    tag = finalAttrs.version;
+    hash = "sha256-bxu83mbdfAeDZYOnjZQYyjTs5WgZS8o6Q2irlzgbYs0=";
   };
 
   sourceRoot = "source/rust/lon";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2/lHRv3bD0hX/JVSucsA3G5gM9NMgRrBf21JtEvzu64=";
+  cargoHash = "sha256-x+qxn0s64fPJpTG/d0PgzAdzMXegYdnsC1FFFuBpsaI=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -42,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Lock & update Nix dependencies";
     homepage = "https://github.com/nikstur/lon";
-    changelog = "https://github.com/nikstur/lon/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/nikstur/lon/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       ma27
       nikstur
@@ -50,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "lon";
   };
-}
+})

@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-flatland";
   version = "0-unstable-2024-04-13";
 
@@ -16,9 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-m7c6XpmpTM1URuqMG2KqtaWbL2Vt8vJFJtmvq123BmY=";
   };
 
-  env.STARDUST_RES_PREFIXES = "${src}/res";
+  env.STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-oM4nQUEc3iq1x4uRp8Kw5WtE/L5b6VlLOfElMT9Tk98=";
 
   passthru.updateScript = nix-update-script {
@@ -26,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A flat window for Stardust XR";
+    description = "Flat window for Stardust XR";
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
     mainProgram = "flatland";
@@ -36,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     hash = "sha256-0skAavJe01b+4Z7LEfS2qIhqkwj8XhOwmflhYPEynw4=";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   nativeBuildInputs = [
     cc65
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "disk transfer utility for imaging and converting commodore 64 disk images";
+    description = "Disk transfer utility for imaging and converting commodore 64 disk images";
     homepage = "https://github.com/OpenCBM/nibtools/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ matthewcroughan ];

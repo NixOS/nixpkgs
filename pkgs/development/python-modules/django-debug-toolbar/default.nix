@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pythonOlder,
   buildPythonPackage,
 
   # build-system
@@ -16,23 +15,24 @@
   html5lib,
   jinja2,
   pygments,
-  pytest-django,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "5.0.1";
+  version = "6.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-debug-toolbar";
     tag = version;
-    hash = "sha256-Q0joSIFXhoVmNQ+AfESdEWUGY1xmJzr4iR6Ak54YM7c=";
+    hash = "sha256-0NF71cuA55puEjJxd6I0xoeDQPWW+oxfWseDBmhis5k=";
   };
+
+  postPatch = ''
+    # not actually used and we don't have django-template-partials packaged
+    sed -i "/template_partials/d" tests/settings.py
+  '';
 
   build-system = [ hatchling ];
 
@@ -62,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "debug_toolbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Configurable set of panels that display debug information about the current request/response";
     homepage = "https://github.com/jazzband/django-debug-toolbar";
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ yuu ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

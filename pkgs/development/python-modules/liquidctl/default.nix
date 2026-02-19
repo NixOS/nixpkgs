@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   installShellFiles,
   setuptools,
   setuptools-scm,
@@ -16,14 +15,13 @@
   colorlog,
   crcmod,
   pillow,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "liquidctl";
   version = "1.15.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liquidctl";
@@ -37,6 +35,7 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     wheel
+    udevCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -74,14 +73,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "liquidctl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
     homepage = "https://github.com/liquidctl/liquidctl";
     changelog = "https://github.com/liquidctl/liquidctl/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       arturcygan
-      evils
     ];
     mainProgram = "liquidctl";
   };

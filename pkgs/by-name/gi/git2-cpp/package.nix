@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ken-matsui/git2-cpp";
     description = "libgit2 bindings for C++";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })
 # TODO [ ken-matsui ]: tests

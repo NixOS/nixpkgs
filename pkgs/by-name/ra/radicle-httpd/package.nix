@@ -1,6 +1,6 @@
 {
   asciidoctor,
-  fetchgit,
+  fetchFromRadicle,
   git,
   installShellFiles,
   lib,
@@ -9,23 +9,28 @@
   rustPlatform,
   stdenv,
   xdg-utils,
+  versionCheckHook,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-httpd";
-  version = "0.18.2";
-  env.RADICLE_VERSION = version;
+  version = "0.23.0";
+
+  env.RADICLE_VERSION = finalAttrs.version;
 
   # You must update the radicle-explorer source hash when changing this.
-  src = fetchgit {
-    url = "https://seed.radicle.xyz/z4V1sjrXqjvFdnCUbxPFqd5p4DtH5.git";
-    rev = "refs/namespaces/z6MkkfM3tPXNPrPevKr3uSiQtHPuwnNhu2yUVjgd2jXVsVz5/refs/tags/v${version}";
-    hash = "sha256-s4QZi3/EEKzlvfhlU9KMuSeH8Al4kFnhADk10WLUilA=";
+  src = fetchFromRadicle {
+    seed = "seed.radicle.xyz";
+    repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
+    tag = "releases/${finalAttrs.version}";
     sparseCheckout = [ "radicle-httpd" ];
+    hash = "sha256-OpDW6qJOHN4f4smhc1vNO0DRzJW6114gQV4K1ZNicag=";
   };
 
-  sourceRoot = "${src.name}/radicle-httpd";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ILsrDrpBMY8X3ZpfyUdf342agP6E8d32LEQTYtV869o=";
+  sourceRoot = "${finalAttrs.src.name}/radicle-httpd";
+
+  cargoHash = "sha256-m/2pP1mCU4SvPXU3qWOpbh3H/ykTOGgERYcP8Iu5DDs=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -57,6 +62,15 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    tests = { inherit (nixosTests) radicle; };
+    updateScript = ./update.sh;
+  };
+
   meta = {
     description = "Radicle JSON HTTP API Daemon";
     longDescription = ''
@@ -64,6 +78,7 @@ rustPlatform.buildRustPackage rec {
       repositories on a Radicle node via their web browser.
     '';
     homepage = "https://radicle.xyz";
+    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/radicle-httpd/CHANGELOG.md";
     # cargo.toml says MIT and asl20, LICENSE file says GPL3
     license = with lib.licenses; [
       gpl3Only
@@ -74,7 +89,8 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       gador
       lorenzleutgeb
+      defelo
     ];
     mainProgram = "radicle-httpd";
   };
-}
+})

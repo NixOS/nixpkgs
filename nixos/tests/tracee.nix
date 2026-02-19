@@ -20,13 +20,15 @@ import ./make-test-python.nix (
           # Test_EventFilters/trace_only_events_from_"dockerd"_binary_and_contain_it's_pid
           # require docker/dockerd
           virtualisation.docker.enable = true;
-
-          environment.systemPackages = with pkgs; [
-            # required by Test_EventFilters/trace_events_from_ls_and_which_binary_in_separate_scopes
-            which
-            # the go integration tests as a binary
-            tracee.passthru.tests.integration-test-cli
-          ];
+          environment = {
+            variables.PATH = "/tmp/testdir";
+            systemPackages = with pkgs; [
+              # 'ls', 'uname' and 'who' are required by many tests in event_filters_test.go
+              coreutils
+              # the go integration tests as a binary
+              tracee.passthru.tests.integration-test-cli
+            ];
+          };
         };
     };
 
@@ -38,11 +40,18 @@ import ./make-test-python.nix (
           # the policies and run tracee myself but doesn't work in the integration
           # test either with the automatic run or running the commands by hand
           # while it's searching.
-          "Test_EventFilters/comm:_event:_args:_trace_event_set_in_a_specific_policy_with_args_from_ls_command"
+          "Test_EventFilters/comm:_event:_data:_trace_event_magic_write_set_in_multiple_policies_using_multiple_filter_types"
+          "Test_EventFilters/comm:_event:_data:_trace_event_security_file_open_and_magic_write_using_multiple_filter_types"
+          "Test_EventFilters/comm:_event:_data:_trace_event_security_file_open_and_magic_write_using_multiple_filter_types_combined"
+          "Test_EventFilters/comm:_event:_data:_trace_event_security_file_open_set_in_multiple_policies_\\(with_and_without_in-kernel_filter\\)"
+          "Test_EventFilters/comm:_event:_data:_trace_event_security_file_open_set_in_multiple_policies_using_multiple_filter_types"
+          "Test_EventFilters/comm:_event:_data:_trace_event_set_in_a_specific_policy_with_data_from_ls_command"
           "Test_EventFilters/comm:_event:_trace_events_set_in_two_specific_policies_from_ls_and_uname_commands"
-
-          # worked at some point, seems to be flakey
-          "Test_EventFilters/pid:_event:_args:_trace_event_sched_switch_with_args_from_pid_0"
+          "Test_EventFilters/pid:_event:_data:_trace_event_sched_switch_with_data_from_pid_0"
+          "Test_EventsDependencies/non_existing_ksymbol_dependency_with_sanity"
+          "Test_EventsDependencies/non_existing_probe_function_with_sanity"
+          "Test_EventsDependencies/sanity_of_exec_test_event"
+          "Test_TraceeCapture/capture_packet_context"
         ];
       in
       ''
@@ -61,11 +70,11 @@ import ./make-test-python.nix (
           )
 
         with subtest("run integration tests"):
-          # Test_EventFilters/trace_event_set_in_a_specific_scope expects to be in a dir that includes "integration"
+          # Test_EventFilters/comm:_event:_data:_trace_event_set_in_a_specific_policy_with_data_from_ls_command expects to be in a dir that includes "integration"
           # tests must be ran with 1 process
           print(machine.succeed(
             'mkdir /tmp/integration',
-            'cd /tmp/integration && export PATH="/tmp/testdir:$PATH" && integration.test -test.v -test.parallel 1 -test.skip="^${builtins.concatStringsSep "$|^" skippedTests}$"'
+            'cd /tmp/integration && integration.test -test.v -test.parallel 1 -test.skip="^${builtins.concatStringsSep "$|^" skippedTests}$"'
           ))
       '';
   }

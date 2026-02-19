@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
   name = "rsyncd";
-  meta.maintainers = with pkgs.lib.maintainers; [ ehmry ];
 
   nodes =
     let

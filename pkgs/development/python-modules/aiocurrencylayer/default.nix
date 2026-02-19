@@ -7,15 +7,12 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiocurrencylayer";
   version = "1.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiocurrencylayer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for interacting with currencylayer";
     homepage = "https://github.com/home-assistant-ecosystem/aiocurrencylayer";
     changelog = "https://github.com/home-assistant-ecosystem/aiocurrencylayer/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

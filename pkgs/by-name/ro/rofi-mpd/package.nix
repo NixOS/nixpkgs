@@ -4,18 +4,21 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rofi-mpd";
   version = "2.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "Rofi_MPD";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0jabyn6gqh8ychn2a06xws3avz0lqdnx3qvqkavfd2xr6sp2q7lg";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     mutagen
     mpd2
     toml
@@ -25,12 +28,12 @@ python3Packages.buildPythonApplication rec {
   # upstream doesn't contain a test suite
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Rofi menu for interacting with MPD written in Python";
     mainProgram = "rofi-mpd";
     homepage = "https://github.com/JakeStanger/Rofi_MPD";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jakestanger ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jakestanger ];
+    platforms = lib.platforms.all;
   };
-}
+})

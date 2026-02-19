@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "arocc";
   inherit version src;
 
-  nativeBuildInputs = [ zig.hook ];
+  nativeBuildInputs = [ zig ];
 
   passthru = {
     inherit zig;
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "C compiler written in Zig.";
+    description = "C compiler written in Zig";
     homepage = "http://aro.vexu.eu/";
     license = with lib.licenses; [
       mit

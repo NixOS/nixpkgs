@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   fetchzip,
-  xorg,
+  xcursorgen,
   hicolor-icon-theme,
 }:
 
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   buildInputs = [
-    xorg.xcursorgen
+    xcursorgen
   ];
 
   propagatedBuildInputs = [
@@ -52,11 +52,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://jimmac.musichall.cz";
     description = "Style neutral scalable cursor theme";
-    platforms = platforms.all;
-    license = licenses.cc-by-sa-30;
+    platforms = lib.platforms.all;
+    license = lib.licenses.cc-by-sa-30;
     maintainers = [ ];
   };
 }

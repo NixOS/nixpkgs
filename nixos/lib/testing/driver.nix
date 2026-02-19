@@ -9,7 +9,7 @@ let
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
-  testDriver = hostPkgs.callPackage ../test-driver {
+  testDriver = hostPkgs.python3Packages.callPackage ../test-driver {
     inherit (config) enableOCR extraPythonPackages;
     qemu_pkg = config.qemu.package;
     imagemagick_light = hostPkgs.imagemagick_light.override { inherit (hostPkgs) libtiff; };
@@ -49,7 +49,8 @@ let
         # inherit testName; TODO (roberth): need this?
         nativeBuildInputs = [
           hostPkgs.makeWrapper
-        ] ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
+        ]
+        ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
         buildInputs = [ testDriver ];
         testScript = config.testScriptString;
         preferLocalBuild = true;
@@ -66,8 +67,8 @@ let
         ${lib.optionalString (!config.skipTypeCheck) ''
           # prepend type hints so the test script can be type checked with mypy
           cat "${../test-script-prepend.py}" >> testScriptWithTypes
-          echo "${builtins.toString machineNames}" >> testScriptWithTypes
-          echo "${builtins.toString vlanNames}" >> testScriptWithTypes
+          echo "${toString machineNames}" >> testScriptWithTypes
+          echo "${toString vlanNames}" >> testScriptWithTypes
           echo -n "$testScript" >> testScriptWithTypes
 
           echo "Running type check (enable/disable: config.skipTypeCheck)"
@@ -90,7 +91,7 @@ let
 
           PYFLAKES_BUILTINS="$(
             echo -n ${lib.escapeShellArg (lib.concatStringsSep "," pythonizedNames)},
-            < ${lib.escapeShellArg "driver-symbols"}
+            cat ${lib.escapeShellArg "driver-symbols"}
           )" ${hostPkgs.python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
 
@@ -201,7 +202,7 @@ in
     _module.args = {
       hostPkgs =
         # Comment is in nixos/modules/misc/nixpkgs.nix
-        lib.mkOverride lib.modules.defaultOverridePriority config.hostPkgs.__splicedPackages;
+        lib.mkOverride lib.modules.defaultOverridePriority config.hostPkgs;
     };
 
     driver = withChecks driver;

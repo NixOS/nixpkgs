@@ -8,17 +8,18 @@
   rustPlatform,
   cargo,
   rustc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libchewing";
-  version = "0.9.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "chewing";
     repo = "libchewing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5aeAsvTiUMTm+ibNfJI57rzSUpJB7luhA/aWmTcnBj4=";
+    hash = "sha256-rUkLwE5PvFcMxTwb2zVzWaa20D3ZW1MXl3Cra+Wim04=";
   };
 
   # ld: unknown option: -version-script
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-LTuUhQ0ZeyGloNvVs+6OGjFvPdBsQNZupwC8QTjUfyk=";
+    hash = "sha256-+BmJOouajL3ib08t96TAHtNXBX48wq614LSbcSgYpIM=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     corrosion
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Intelligent Chinese phonetic input method";

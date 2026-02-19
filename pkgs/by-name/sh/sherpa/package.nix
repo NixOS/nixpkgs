@@ -2,24 +2,22 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  autoconf,
-  gfortran,
   cmake,
+  gfortran,
   libzip,
-  pkg-config,
   lhapdf,
-  autoPatchelfHook,
+  patchelf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchFromGitLab {
     owner = "sherpa-team";
     repo = "sherpa";
-    tag = "v${version}";
-    hash = "sha256-zrtu4LJIzNdUGmnQlvZytYgzESo8eYQIdfxBABgUbzs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bh5C0BYbuAkbPrp27P0oD0yoxd53ViRtmpUKfN7kZ90=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
@@ -27,23 +25,28 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoconf
-    gfortran
     cmake
-    pkg-config
-    autoPatchelfHook
-  ];
+    gfortran
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ patchelf ];
 
   buildInputs = [
     libzip
     lhapdf
   ];
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    # Needed to initialize a valid SHERPA_LIBRARY_PATH
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
 
-  preFixup = ''
-    patchelf --add-rpath $out/lib/SHERPA-MC $out/bin/Sherpa
-  '';
+  preFixup =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -add_rpath "$out"/lib/SHERPA-MC "$out"/bin/Sherpa
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-rpath "$out"/lib/SHERPA-MC "$out"/bin/Sherpa
+    '';
 
   meta = {
     description = "Monte Carlo event generator for the Simulation of High-Energy Reactions of PArticles";
@@ -54,4 +57,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
-}
+})

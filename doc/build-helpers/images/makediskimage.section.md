@@ -8,7 +8,7 @@ This function can create images in two ways:
 - using a virtual machine to create a full NixOS installation.
 
 When testing early-boot or lifecycle parts of NixOS such as a bootloader or multiple generations, it is necessary to opt for a full NixOS system installation.
-Whereas for many web servers, applications, it is possible to work with a Nix store only disk image and is faster to build.
+Whereas for many web servers and applications, it is possible to work with a Nix store only disk image, which is faster to build.
 
 NixOS tests also use this function when preparing the VM. The `cptofs` method is used when `virtualisation.useBootLoader` is false (the default). Otherwise the second method is used.
 
@@ -23,7 +23,7 @@ Features are separated in various sections depending on if you opt for a Nix-sto
 - automatic or bound disk size: `diskSize` parameter, `additionalSpace` can be set when `diskSize` is `auto` to add a constant of disk space
 - multiple partition table layouts: EFI, legacy, legacy + GPT, hybrid, none through `partitionTableType` parameter
 - OVMF or EFI firmwares and variables templates can be customized
-- root filesystem `fsType` can be customized to whatever `mkfs.${fsType}` exist during operations
+- root filesystem `fsType` can be customized to whatever `mkfs.${fsType}` exists during operations
 - root filesystem label can be customized, defaults to `nix-store` if it's a Nix store image, otherwise `nixpkgs/nixos`
 - arbitrary code can be executed after disk image was produced with `postVM`
 - the current nixpkgs can be realized as a channel in the disk image, which will change the hash of the image when the sources are updated
@@ -39,10 +39,10 @@ Features are separated in various sections depending on if you opt for a Nix-sto
 
 ### On bit-to-bit reproducibility {#sec-make-disk-image-features-reproducibility}
 
-Images are **NOT** deterministic, please do not hesitate to try to fix this, source of determinisms are (not exhaustive) :
+Images are **NOT** deterministic. Please do not hesitate to try to fix this. Sources of non-determinism are (not exhaustive):
 
-- bootloader installation have timestamps
-- SQLite Nix store database contain registration times
+- bootloader installation has timestamps
+- SQLite Nix store database contains registration times
 - `/etc/shadow` is in a non-deterministic order
 
 A `deterministic` flag is available for best efforts determinism.
@@ -108,6 +108,6 @@ make-disk-image {
   diskSize = "auto";
   additionalSpace = "0M"; # Defaults to 512M.
   copyChannel = false;
-  memSize = 2048; # Qemu VM memory size in megabytes. Defaults to 1024M.
+  memSize = 2048; # Qemu VM memory size in MiB (1024*1024 bytes). Defaults to 1024M.
 }
 ```

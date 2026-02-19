@@ -1,19 +1,22 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
+  gitMinimal,
+  gitSetupHook,
   python3Packages,
+  writableTmpDirAsHomeHook,
 }:
-python3Packages.buildPythonApplication rec {
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tbump";
   version = "6.11.0";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit version;
-    pname = "tbump";
-    hash = "sha256-OF5xDu3wqKb/lZzx6fPP0XyHNhcTL8DsX2Ka8MNVyHA=";
+  src = fetchFromGitHub {
+    owner = "your-tools";
+    repo = "tbump";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+H4C4q+/QlYFgz9hvDZhKtREpa8yN1xLx99odSI3WlY=";
   };
 
   pythonRelaxDeps = [ "tomlkit" ];
@@ -29,11 +32,20 @@ python3Packages.buildPythonApplication rec {
     cli-ui
   ];
 
+  nativeCheckInputs = with python3Packages; [
+    gitMinimal
+    gitSetupHook
+    pytest-mock
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
   meta = {
     description = "Bump software releases";
     homepage = "https://github.com/your-tools/tbump";
+    changelog = "https://github.com/your-tools/tbump/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     mainProgram = "tbump";
     maintainers = with lib.maintainers; [ slashformotion ];
   };
-}
+})

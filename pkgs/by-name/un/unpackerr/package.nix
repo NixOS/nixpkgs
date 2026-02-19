@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "unpackerr";
   version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "davidnewhall";
     repo = "unpackerr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-uQwpdgV6ksouW9JTuiiuQjxBGOE/ypDW769kNJgWrHw=";
   };
 
@@ -20,14 +20,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X golift.io/version.Version=${version}"
+    "-X golift.io/version.Version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extracts downloads for Radarr, Sonarr, Lidarr - Deletes extracted files after import";
     homepage = "https://github.com/davidnewhall/unpackerr";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "unpackerr";
   };
-}
+})

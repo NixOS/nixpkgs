@@ -2,22 +2,10 @@
 
 let
   inherit (pkgs) fetchpatch lib;
-  checkAgainAfter =
-    pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then
-      act
-    else
-      builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
 in
 
 with haskellLib;
-self: super:
-let
-  jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
-in
-{
-  llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
-
+self: super: {
   # Disable GHC core libraries.
   array = null;
   base = null;
@@ -62,15 +50,27 @@ in
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
+  Win32 = null;
 
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_2_0_8;
+
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
 
   # only broken for >= 9.6
   calligraphy = doDistribute (unmarkBroken super.calligraphy);
 
   # Jailbreaks & Version Updates
 
+  # hashable >= 1.5 needs base >= 4.18
+  hashable = self.hashable_1_4_7_0;
   hashable-time = doJailbreak super.hashable-time;
   libmpd = doJailbreak super.libmpd;
 
@@ -92,11 +92,18 @@ in
     # 2021-10-10: 9.2.1 is not yet supported (also no issue)
     testFlags = [
       "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
-    ] ++ drv.testFlags or [ ];
+    ]
+    ++ drv.testFlags or [ ];
   }) (doJailbreak super.hpack);
+
+  # Later versions require unix >= 2.8 which is tricky to provide with GHC 9.4
+  crypton-x509-store = doDistribute self.crypton-x509-store_1_6_11;
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
+
+  # Tests require skeletest which doesn't support GHC 9.4
+  toml-reader = dontCheck super.toml-reader;
 
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
@@ -116,8 +123,12 @@ in
     }
   );
 
+  # Last version to not depend on file-io and directory-ospath-streaming,
+  # which both need unix >= 2.8.
+  tar = self.tar_0_6_3_0;
+
   # A given major version of ghc-exactprint only supports one version of GHC.
-  ghc-exactprint = super.ghc-exactprint_1_6_1_3;
+  ghc-exactprint = dontCheck super.ghc-exactprint_1_6_1_3;
 
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/issues/18
@@ -126,28 +137,21 @@ in
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck super.relude;
 
-  inherit
-    (
-      let
-        hls_overlay = lself: lsuper: {
-          Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
-          Cabal = lself.Cabal_3_10_3_0;
-        };
-      in
-      lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
-        haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        fourmolu = doJailbreak self.fourmolu_0_14_0_0; # ansi-terminal, Diff
-        ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
-        hlint = self.hlint_3_6_1;
-        stylish-haskell = self.stylish-haskell_0_14_5_0;
-      }
-    )
-    haskell-language-server
-    fourmolu
-    ormolu
-    hlint
-    stylish-haskell
-    ;
+  haddock-library = doJailbreak super.haddock-library;
+  path = self.path_0_9_5;
+
+  haskell-language-server =
+    lib.throwIf pkgs.config.allowAliases
+      "haskell-language-server has dropped support for ghc 9.4 in version 2.12.0.0, please use a newer ghc version or an older nixpkgs"
+      (markBroken super.haskell-language-server);
+
+  hlint = doDistribute self.hlint_3_6_1;
+
+  # directory-ospath-streaming requires the ospath API in core packages
+  # filepath, directory and unix.
+  stan = super.stan.override {
+    directory-ospath-streaming = null;
+  };
 
   # Packages which need compat library for GHC < 9.6
   inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)

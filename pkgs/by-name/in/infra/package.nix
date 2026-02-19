@@ -24,12 +24,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
-    description = "Infra manages access to infrastructure such as Kubernetes";
+  meta = {
+    description = "Manages access to infrastructure such as Kubernetes";
     homepage = "https://github.com/infrahq/infra";
     changelog = "https://github.com/infrahq/infra/raw/v${version}/CHANGELOG.md";
-    license = licenses.elastic20;
-    maintainers = with maintainers; [ peterromfeldhk ];
+    license = lib.licenses.elastic20;
     mainProgram = "infra";
   };
 }

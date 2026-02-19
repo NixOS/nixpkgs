@@ -1,5 +1,6 @@
 {
   coreutils,
+  curl,
   fetchFromGitHub,
   gawk,
   hyprland,
@@ -15,13 +16,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "hdrop";
-  version = "0.7.7";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "Schweber";
     repo = "hdrop";
     rev = "v${version}";
-    hash = "sha256-T+hyC3YfTMn5txFlFbm/+wKWj21vuwIN5lfe+iiAm8c=";
+    hash = "sha256-Z8jtuO1GTk7md9iXOiE2poAY1D9YOIqzSlEY7Eai/pg=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ stdenvNoCC.mkDerivation rec {
         lib.makeBinPath (
           [
             coreutils
+            curl
             util-linux
             jq
             libnotify
@@ -47,13 +49,13 @@ stdenvNoCC.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Emulate 'tdrop' in Hyprland (run, show and hide specific programs per keybind)";
     homepage = "https://github.com/Schweber/hdrop";
     changelog = "https://github.com/Schweber/hdrop/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Schweber ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Schweber ];
     mainProgram = "hdrop";
   };
 }

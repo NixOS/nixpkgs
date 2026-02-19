@@ -11,7 +11,7 @@ in
 }:
 let
   self = packages // (overrides self packages);
-  packages = with self; {
+  packages = {
     meck = builder {
       name = "meck";
       version = "0.8.13";

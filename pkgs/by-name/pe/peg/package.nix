@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "peg";
   version = "0.1.20";
 
   src = fetchurl {
-    url = "${meta.homepage}/${pname}-${version}.tar.gz";
+    url = "${finalAttrs.meta.homepage}/peg-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-uLcXvJOll2ijXWUlZ5pODOlOa/ZvkrrPKXnGR0VytFo=";
   };
 
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   preBuild = "makeFlagsArray+=( PREFIX=$out )";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://piumarta.com/software/peg/";
     description = "Tools for generating recursive-descent parsers: programs that perform pattern matching on text";
-    platforms = platforms.all;
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
   };
-}
+})

@@ -6,14 +6,14 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libglibutil";
   version = "1.0.80";
 
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = "libglibutil";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-wp87cStOuQILSKFPFlFDL2vGvTQ4Cg5kuSlwnM4kc64=";
   };
 
@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sailfishos.org/mer-core/libglibutil";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

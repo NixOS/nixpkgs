@@ -9,15 +9,15 @@
   libxml2,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qir-runner";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "qir-alliance";
     repo = "qir-runner";
-    tag = "v${version}";
-    hash = "sha256-ExCIjn5XqDIIYhvEesHRtNZuc4mRr+b9EYE5LNKqNTc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k93I/DE8Jx0DbloBVNhKKay/L26H5TPX5yvkHKe/yBg=";
   };
 
   nativeBuildInputs = [ llvmPackages_19.llvm ];
@@ -27,8 +27,7 @@ rustPlatform.buildRustPackage rec {
     libxml2
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-XzxkSzbjJdJaUmXK2nwd9naIDCsfXiLLlTyf8AFSvzA=";
+  cargoHash = "sha256-U/9oDOPhlSL1ViW1n5C4MWRvUvU4c/cuATLNIx7FkiM=";
 
   meta = {
     description = "QIR bytecode runner to assist with QIR development and validation";
@@ -40,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     # which is not available when cross compiling
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
-}
+})

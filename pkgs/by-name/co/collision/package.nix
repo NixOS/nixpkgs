@@ -21,13 +21,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "Collision";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Collision";
     rev = "v${version}";
-    hash = "sha256-ZXGhMicwlkXUw8I6HUNVxY4vCaVixdV76+wYn34Py6Q=";
+    hash = "sha256-OCFy7DFSRsqiw+b6zlJy9Us44zQXf150zVDu3GmclOk=";
   };
 
   postPatch = ''
@@ -47,15 +47,14 @@ crystal.buildCrystalPackage rec {
   # main_module:(.text+0x6f0): undefined reference to `SSL_library_init'
   # There is an explanation for this https://danilafe.com/blog/crystal_nix_revisited/
   # Shortly, adding pkg-config to buildInputs along with openssl fixes the issue.
-  nativeBuildInputs =
-    [
-      wrapGAppsHook4
-      pkg-config
-      gobject-introspection
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    wrapGAppsHook4
+    pkg-config
+    gobject-introspection
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   buildInputs = [
     libadwaita
@@ -106,12 +105,12 @@ crystal.buildCrystalPackage rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Check hashes for your files";
     homepage = "https://github.com/GeopJr/Collision";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "collision";
-    maintainers = with maintainers; [ sund3RRR ];
-    teams = [ teams.gnome-circle ];
+    maintainers = with lib.maintainers; [ sund3RRR ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

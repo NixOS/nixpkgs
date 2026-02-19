@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  flutter327,
+  flutter338,
   gst_all_1,
   libunwind,
   makeWrapper,
@@ -18,15 +18,15 @@
   fletTarget ? "linux",
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter338.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.27.6";
+  version = "0.80.0";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
     tag = "v${version}";
-    hash = "sha256-ZtIAfLdj9209ZzgmNzTHMyzCTohxYK0Va4M8NYyie64=";
+    hash = "sha256-PxSFDWo5qN9RB/E+vLu1xYttJ8CQdy86OStyLMRn6Lo=";
   };
 
   sourceRoot = "${src.name}/client";
@@ -47,19 +47,22 @@ flutter327.buildFlutterApplication rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      mpv-unwrapped
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-vaapi
-      gst_all_1.gstreamer
-      libunwind
-      orc
-      mimalloc
-    ]
-    ++ mpv-unwrapped.buildInputs
-    ++ libplacebo.buildInputs;
+  buildInputs = [
+    mpv-unwrapped
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-vaapi
+    gst_all_1.gstreamer
+    libunwind
+    orc
+    mimalloc
+  ]
+  ++ mpv-unwrapped.buildInputs
+  ++ libplacebo.buildInputs;
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=nontrivial-memcall"
+  ];
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [

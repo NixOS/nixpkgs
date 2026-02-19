@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   wayland,
-  libX11,
+  libx11,
   libGL,
 }:
 
@@ -29,16 +29,16 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     wayland
-    libX11 # required by libglvnd
+    libx11 # required by libglvnd
     libGL
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wallpaper program for wlroots based Wayland compositors such as sway that allows you to render glsl shaders as your wallpaper";
     mainProgram = "glpaper";
     homepage = "https://hg.sr.ht/~scoopta/glpaper";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ccellado ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ccellado ];
   };
 }

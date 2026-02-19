@@ -5,19 +5,23 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "git-privacy";
   version = "2.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EMPRI-DEVOPS";
     repo = "git-privacy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-b2RkRL8/mZwqc3xCs+oltzualhQtp/7F9POlLlT3UUU=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     click
     git-filter-repo
     gitpython
@@ -39,11 +43,11 @@ python3.pkgs.buildPythonApplication rec {
     "gitprivacy"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to redact Git author and committer dates";
     homepage = "https://github.com/EMPRI-DEVOPS/git-privacy";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "git-privacy";
   };
-}
+})

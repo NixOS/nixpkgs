@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
 
@@ -22,7 +21,6 @@ buildPythonPackage rec {
   pname = "django-graphiql-debug-toolbar";
   version = "0.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "flavors";
@@ -61,11 +59,13 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.settings
   '';
 
-  meta = with lib; {
+  doCheck = false; # tests broke with django-debug-toolbar 6.0
+
+  meta = {
     changelog = "https://github.com/flavors/django-graphiql-debug-toolbar/releases/tag/${src.rev}";
     description = "Django Debug Toolbar for GraphiQL IDE";
     homepage = "https://github.com/flavors/django-graphiql-debug-toolbar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

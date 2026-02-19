@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   valkey,
   redis,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "logutils";
   version = "0.3.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,21 +39,24 @@ buildPythonPackage rec {
     "test_hashandlers"
   ];
 
-  disabledTestPaths =
-    lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # Exception: unable to connect to Redis server
-      "tests/test_redis.py"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      "tests/test_dictconfig.py"
-    ];
+  disabledTestPaths = [
+    # Disable redis tests on all systems for now
+    "tests/test_redis.py"
+  ]
+  # lib.optionals (stdenv.hostPlatform.isDarwin) [
+  #   # Exception: unable to connect to Redis server
+  #   "tests/test_redis.py"
+  # ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    "tests/test_dictconfig.py"
+  ];
 
   pythonImportsCheck = [ "logutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging utilities";
     homepage = "https://bitbucket.org/vinay.sajip/logutils/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

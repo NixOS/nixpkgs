@@ -2,26 +2,33 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  makeWrapper,
   stdenv,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "delve";
-  version = "1.24.2";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
-    rev = "v${version}";
-    hash = "sha256-BFezzZpkF88xYsOcn3pI2zsH+OTRLvuwqa3CaU9Fk44=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tFd8g866nRSNUVNz+6SM6YLl4ys3AUP3c8eT1kWbjKY=";
   };
+
+  patches = [
+    ./disable-fortify.diff
+  ];
 
   vendorHash = null;
 
   subPackages = [ "cmd/dlv" ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -38,20 +45,22 @@ buildGoModule rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
-    # fortify source breaks build since delve compiles with -O0
-    wrapProgram $out/bin/dlv \
-      --prefix disableHardening " " fortify
-
     # add symlink for vscode golang extension
     # https://github.com/golang/vscode-go/blob/master/docs/debugging.md#manually-installing-dlv-dap
     ln $out/bin/dlv $out/bin/dlv-dap
   '';
 
-  meta = with lib; {
-    description = "debugger for the Go programming language";
+  # delve doesn't support --version
+  doInstallCheck = false;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Debugger for the Go programming language";
     homepage = "https://github.com/go-delve/delve";
-    maintainers = with maintainers; [ vdemeester ];
-    license = licenses.mit;
+    changelog = "https://github.com/go-delve/delve/blob/v${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ vdemeester ];
+    license = lib.licenses.mit;
     mainProgram = "dlv";
   };
-}
+})

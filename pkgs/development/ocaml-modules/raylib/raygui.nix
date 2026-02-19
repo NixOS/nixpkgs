@@ -13,6 +13,8 @@ buildDunePackage rec {
     hash = "sha256-PQcVTAQKeTPkOOHk5w3O3Tz0n7jLvkIo3Urvrk66eMs=";
   };
 
+  inherit (raylib) patches;
+
   propagatedBuildInputs = [
     raylib
   ];

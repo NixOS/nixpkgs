@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pysentation";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mimseyedi";
     repo = "pysentation";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TwHDXWgGWuQVgatBDc1iympnb6dy4xYThLR5MouEZHA=";
   };
 
@@ -33,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pysentation" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for displaying Python presentations";
     homepage = "https://github.com/mimseyedi/pysentation";
-    changelog = "https://github.com/mimseyedi/pysentation/releases/tag/${src.rev}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/mimseyedi/pysentation/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
     mainProgram = "pysentation";
   };
-}
+})

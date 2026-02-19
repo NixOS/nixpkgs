@@ -11,7 +11,7 @@
   ...
 }:
 let
-  version = builtins.fromTOML (builtins.readFile ./version.toml);
+  version = fromTOML (builtins.readFile ./version.toml);
 
   src = fetchFromGitHub {
     owner = "graphhopper";
@@ -68,10 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   version = version.patch;
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
     maven
   ];
+
+  strictDeps = true;
 
   configurePhase = ''
     runHook preConfigure

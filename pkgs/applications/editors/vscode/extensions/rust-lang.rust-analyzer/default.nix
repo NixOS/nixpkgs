@@ -1,4 +1,5 @@
 {
+  clang_20,
   pkgsBuildBuild,
   lib,
   fetchFromGitHub,
@@ -9,7 +10,7 @@
   moreutils,
   esbuild,
   pkg-config,
-  libsecret,
+  stdenv,
   setDefaultServerPath ? true,
 }:
 
@@ -20,20 +21,21 @@ let
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
-  releaseTag = "2025-02-17";
+  releaseTag = "2025-08-25";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
-    rev = releaseTag;
-    hash = "sha256-i76MMFSkCr4kDwurK8CACwZq7qEgVEgIzkOr2kiuAKk=";
+    tag = releaseTag;
+    hash = "sha256-apbJj2tsJkL2l+7Or9tJm1Mt5QPB6w/zIyDkCx8pfvk=";
   };
 
   vsix = buildNpmPackage {
     inherit pname releaseTag;
+    name = "${pname}-${version}.vsix";
     version = lib.trim (lib.readFile ./version.txt);
     src = "${src}/editors/code";
-    npmDepsHash = "sha256-0frOGphtzO6z8neSEYfjyRYrM6zEO3wId/TACblZkxM=";
+    npmDepsHash = "sha256-fV4Z3jj+v56A7wbIEYhVAPVuAMqMds5xSe3OetWAsbw=";
     buildInputs = [
       pkgsBuildBuild.libsecret
     ];
@@ -43,7 +45,9 @@ let
       esbuild
       # Required by `keytar`, which is a dependency of `vsce`.
       pkg-config
-    ];
+
+    ]
+    ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
     # Follows https://github.com/rust-lang/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
     installPhase = ''
@@ -54,15 +58,14 @@ let
         walk(del(.["$generated-start"]?) | del(.["$generated-end"]?))
       ' package.json | sponge package.json
 
-      mkdir -p $out
-      npx vsce package -o $out/${pname}.zip
+      npm exec --package=@vscode/vsce -- vsce package --out $out
     '';
   };
 
 in
 vscode-utils.buildVscodeExtension {
   inherit version vsix pname;
-  src = "${vsix}/${pname}.zip";
+  src = vsix;
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
   vscodeExtName = pname;
@@ -73,9 +76,15 @@ vscode-utils.buildVscodeExtension {
   ];
 
   preInstall = lib.optionalString setDefaultServerPath ''
-    jq '(.contributes.configuration[] | select(.title == "server") | .properties."rust-analyzer.server.path".default) = $s' \
+    jq '(.contributes.configuration[] | select(.title == "Server") | .properties."rust-analyzer.server.path".default) = $s' \
       --arg s "${rust-analyzer}/bin/rust-analyzer" \
       package.json | sponge package.json
+
+    # Ensure that the previous modification worked, by searching for the binary path
+    grep -Fq ${rust-analyzer}/bin/rust-analyzer package.json || {
+      echo "Modifying 'rust-analyzer.server.path' in 'package.json' failed."
+      exit 1
+    }
   '';
 
   meta = {

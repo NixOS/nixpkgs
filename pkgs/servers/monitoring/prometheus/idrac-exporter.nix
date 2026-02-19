@@ -29,11 +29,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) idrac; };
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Simple iDRAC exporter for Prometheus";
     mainProgram = "idrac_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ codec ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ codec ];
   };
 }

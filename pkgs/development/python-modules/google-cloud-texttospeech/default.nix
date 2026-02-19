@@ -8,21 +8,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-texttospeech";
-  version = "2.27.0";
+  version = "2.34.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "google_cloud_texttospeech";
-    inherit version;
-    hash = "sha256-lKOCyVt8xY79JQWiTClo4mFPxr3512+5qBnU7SmuGI4=";
+    inherit (finalAttrs) version;
+    hash = "sha256-ZYN8O8co83KQAJ2++JLfh+rkWtgJBVWQltEQeCIHT2I=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +28,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -51,11 +49,11 @@ buildPythonPackage rec {
     "google.cloud.texttospeech_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Text-to-Speech API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-texttospeech";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-texttospeech-v${version}/packages/google-cloud-texttospeech/CHANGELOG.md";
-    license = licenses.asl20;
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-texttospeech-v${finalAttrs.version}/packages/google-cloud-texttospeech/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -6,7 +6,6 @@
   numpy,
   pytestCheckHook,
   python-utils,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "lap";
   version = "0.5.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

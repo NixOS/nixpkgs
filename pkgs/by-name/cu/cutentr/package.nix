@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A 3DS streaming client for Linux";
+    description = "3DS streaming client for Linux";
     homepage = "https://gitlab.com/BoltsJ/cuteNTR";
     license = lib.licenses.gpl3Plus;
     mainProgram = "cutentr";

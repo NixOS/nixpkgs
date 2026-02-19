@@ -5,15 +5,15 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dool";
-  version = "1.3.4";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "scottchiefbaker";
     repo = "dool";
-    rev = "v${version}";
-    hash = "sha256-eyWt8gWPGiU8YavX8KT018upSB6xg8eAyRZ84snrvoY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-aIGYv8UAC3toQe21xdtPUnsnrJhzbvQLfN/pPU3L2J0=";
   };
 
   buildInputs = [
@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
         "'$out/share/dool/'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python3 compatible clone of dstat";
     homepage = "https://github.com/scottchiefbaker/dool";
-    changelog = "https://github.com/scottchiefbaker/dool/blob/${src.rev}/ChangeLog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/scottchiefbaker/dool/blob/${finalAttrs.src.rev}/ChangeLog";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.linux;
     mainProgram = "dool";
   };
-}
+})

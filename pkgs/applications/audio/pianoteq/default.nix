@@ -84,7 +84,7 @@ let
       installPhase = ''
         runHook preInstall
         mkdir -p $out/bin
-        mv -t $out/bin ${builtins.concatStringsSep " " (builtins.map (dir: "Pianoteq*/${dir}/*") archdirs)}
+        mv -t $out/bin ${builtins.concatStringsSep " " (map (dir: "Pianoteq*/${dir}/*") archdirs)}
         install -Dm644 ${./pianoteq.svg} $out/share/icons/hicolor/scalable/apps/pianoteq.svg
         for size in 16 22 32 48 64 128 256; do
           dir=$out/share/icons/hicolor/"$size"x"$size"/apps
@@ -99,16 +99,16 @@ let
         runHook postInstall
       '';
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.modartt.com/pianoteq";
         description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
-        license = licenses.unfree;
+        license = lib.licenses.unfree;
         inherit mainProgram;
         platforms = [
           "x86_64-linux"
           "aarch64-linux"
         ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           mausch
           ners
         ];

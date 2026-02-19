@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchNpmDeps,
   fetchurl,
@@ -8,6 +9,7 @@
   nodejs,
   turbo,
   linkFarm,
+  installShellFiles,
 }:
 
 let
@@ -25,13 +27,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "perses";
-  version = "0.51.0-rc.0";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "perses";
     repo = "perses";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ts/GqBASja+IbZAKWMtExeVyFs6Q76iI9o6AKWZlp9Y=";
+    hash = "sha256-VjjTi+RltB4gZloAcaEtRsmFmG9CruYtDphYyAx1Tkc=";
   };
 
   outputs = [
@@ -43,13 +45,14 @@ buildGoModule (finalAttrs: {
     npmHooks.npmConfigHook
     nodejs
     turbo
+    installShellFiles
   ];
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) version src;
     pname = "${finalAttrs.pname}-ui";
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-a3bkk8IDfxi5nbRqu4WgYZ9bDr5my11HV4a72THclNw=";
+    hash = "sha256-TteC9/1ORUl41BvhW9rTUW6ZBmDv4ScG6OzsI6WYjiE=";
   };
 
   npmRoot = "ui";
@@ -59,7 +62,7 @@ buildGoModule (finalAttrs: {
     preBuild = null;
   };
 
-  vendorHash = "sha256-DJAWmeuRPA2pII2RQZNF37n/QNmw2wDUtDpATMqkSJ8=";
+  vendorHash = "sha256-zb8LJIzCCX5bjKl6aDI/vjkaPbEQfiGKVJbpcR596WI=";
 
   ldflags = [
     "-s"
@@ -75,12 +78,6 @@ buildGoModule (finalAttrs: {
   subPackages = [
     "cmd/percli"
     "cmd/perses"
-  ];
-
-  patches = [
-    # This patch allows to override the default config paths using linker constants above
-    # See https://github.com/perses/perses/issues/2947
-    ./plugin-path-config.patch
   ];
 
   prePatch = ''
@@ -99,7 +96,13 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     cp -r cue "$cue"
-  '';
+  ''
+  + (lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd percli \
+      --bash <($out/bin/percli completion bash) \
+      --zsh <($out/bin/percli completion zsh) \
+      --fish <($out/bin/percli completion fish)
+  '');
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -119,7 +122,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "The CNCF sandbox for observability visualisation";
+    description = "CNCF sandbox for observability visualisation";
     homepage = "https://perses.dev/";
     changelog = "https://github.com/perses/perses/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;

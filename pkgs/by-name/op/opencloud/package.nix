@@ -26,15 +26,15 @@ let
     }
   );
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "opencloud";
-  version = "2.3.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "opencloud";
-    tag = "v${version}";
-    hash = "sha256-IIasFyKF28ynYi8bAmx8LddF0OWB1/Hji6Ovp5pm9QE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ncV7aPT56NNJawNLVuHfTlHMpXsW+3Rq/NEaTnoKz/c=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ buildGoModule rec {
     "-X"
     "github.com/opencloud-eu/opencloud/pkg/version.String=nixos"
     "-X"
-    "github.com/opencloud-eu/opencloud/pkg/version.Tag=${version}"
+    "github.com/opencloud-eu/opencloud/pkg/version.Tag=${finalAttrs.version}"
     "-X"
     "github.com/opencloud-eu/opencloud/pkg/version.Date=19700101"
   ];
@@ -86,10 +86,18 @@ buildGoModule rec {
     vips
   ];
 
+  # wants testcontainers and docker, and we don't have a good way to skip tests
+  # based on package name and not test name
+  preCheck = ''
+    rm services/search/pkg/opensearch/*_test.go
+  '';
+
   env = {
     # avoids 'make generate' calling `git`, otherwise no-op
-    STRING = version;
-    VERSION = version;
+    STRING = finalAttrs.version;
+    VERSION = finalAttrs.version;
+    # avoids weird test failure
+    AUTOMEMLIMIT = "off";
   };
 
   excludedPackages = [ "tests/*" ];
@@ -106,9 +114,9 @@ buildGoModule rec {
   versionCheckProgramArg = [ "version" ];
 
   meta = {
-    description = "OpenCloud gives you a secure and private way to store, access, and share your files.";
+    description = "OpenCloud gives you a secure and private way to store, access, and share your files";
     homepage = "https://github.com/opencloud-eu/opencloud";
-    changelog = "https://github.com/opencloud-eu/opencloud/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/opencloud-eu/opencloud/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       christoph-heiss
@@ -116,4 +124,4 @@ buildGoModule rec {
     ];
     mainProgram = "opencloud";
   };
-}
+})

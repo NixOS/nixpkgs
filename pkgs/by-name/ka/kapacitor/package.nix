@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "influxdata";
       repo = "flux";
-      rev = "refs/tags/v${libflux_version}";
+      tag = "v${libflux_version}";
       hash = "sha256-v9MUR+PcxAus91FiHYrMN9MbNOTWewh7MT6/t/QWQcM=";
     };
     patches = [
@@ -43,7 +43,7 @@ let
       })
     ];
     sourceRoot = "${src.name}/libflux";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-kbI1uUDE8JyFFtwV5k0EeeNGCZFQLXLobW/MilHX2Sg=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
@@ -55,16 +55,15 @@ let
       Libs: -L/out/lib -lflux -lpthread
     '';
     passAsFile = [ "pkgcfg" ];
-    postInstall =
-      ''
-        mkdir -p $out/include $out/pkgconfig
-        cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
-        substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-          --replace-fail /out $out
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
-      '';
+    postInstall = ''
+      mkdir -p $out/include $out/pkgconfig
+      cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
+      substitute $pkgcfgPath $out/pkgconfig/flux.pc \
+        --replace-fail /out $out
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
+    '';
   };
 in
 buildGoModule rec {
@@ -74,7 +73,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "kapacitor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vxaLfJq0NFAJst0/AEhNJUl9dAaZY3blZAFthseMSX0=";
   };
 
@@ -82,7 +81,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  PKG_CONFIG_PATH = "${flux}/pkgconfig";
+  env.PKG_CONFIG_PATH = "${flux}/pkgconfig";
 
   # Check that libflux is at the right version
   preBuild = ''
@@ -122,7 +121,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     changelog = "https://github.com/influxdata/kapacitor/blob/master/CHANGELOG.md";
     maintainers = with lib.maintainers; [
-      offline
       totoroot
     ];
   };

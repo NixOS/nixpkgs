@@ -3,14 +3,17 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  gcc14Stdenv,
   coreutils,
-  nettools,
-  java,
+  net-tools,
+  openjdk21,
   scala_3,
   polyml,
-  veriT,
+  verit,
   vampire,
   eprover-ho,
+  cvc5,
+  csdp,
   rlwrap,
   perl,
   procps,
@@ -18,17 +21,63 @@
   isabelle-components,
   symlinkJoin,
   fetchhg,
+  electron,
 }:
 
 let
-  vampire' = vampire.overrideAttrs (_: {
+  java = openjdk21;
+
+  # There have been issues with proofs failing on NixOS in the past,
+  # so we pin polyml to the exact commit that upstream isabelle uses
+  polyml' = polyml.overrideAttrs {
+    pname = "polyml-for-isabelle";
+    version = "2025-1";
+
     src = fetchFromGitHub {
-      owner = "vprover";
-      repo = "vampire";
-      tag = "v4.8HO4Sledgahammer";
-      hash = "sha256-CmppaGa4M9tkE1b25cY1LSPFygJy5yV4kpHKbPqvcVE=";
+      owner = "polyml";
+      repo = "polyml";
+      rev = "ccd3e3717f7238b9b5d295fea4b5426182dfc0b6";
+      hash = "sha256-wYW8aSvXzhW3hCDeorkD59j+1S6smzsFXHuPYeqo7z8=";
     };
-  });
+
+    configureFlags = [
+      "--enable-intinf-as-int"
+      "--with-gmp"
+      "--disable-shared"
+    ];
+    buildFlags = [ "compiler" ];
+  };
+
+  # Isabelle uses a branch of vampire that is not in the normal release line
+  # that adds support for higher order goals
+  vampireStdenv = if stdenv.hostPlatform.isLinux then gcc14Stdenv else stdenv;
+  vampire' =
+    (vampire.override {
+      stdenv = vampireStdenv;
+      z3' = null;
+    }).overrideAttrs
+      (_: {
+        pname = "vampire-for-isabelle";
+        version = "4.8";
+
+        src = fetchFromGitHub {
+          owner = "vprover";
+          repo = "vampire";
+          tag = "v4.8HO4Sledgahammer";
+          hash = "sha256-CmppaGa4M9tkE1b25cY1LSPFygJy5yV4kpHKbPqvcVE=";
+        };
+
+        patches = [ ./vampire-add-install-directive.patch ];
+
+        postInstall = ''
+          mv $out/bin/vampire_rel $out/bin/vampire
+        '';
+
+        cmakeFlags = [
+          (lib.cmakeFeature "CMAKE_BUILD_HOL" "On")
+          (lib.cmakeFeature "CMAKE_DISABLE_FIND_PACKAGE_Z3" "On")
+        ];
+      });
 
   sha1 = stdenv.mkDerivation {
     pname = "isabelle-sha1";
@@ -52,129 +101,166 @@ let
       cp libsha1.so $out/lib/
     '';
   };
-in
-stdenv.mkDerivation (finalAttrs: rec {
-  pname = "isabelle";
-  version = "2025";
 
-  dirname = "Isabelle${version}";
+  cvc5' = cvc5.overrideAttrs {
+    version = "1.2.0";
+    src = fetchFromGitHub {
+      owner = "cvc5";
+      repo = "cvc5";
+      tag = "cvc5-1.2.0";
+      hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
+    };
+  };
+
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "isabelle";
+  version = "2025-2";
+
+  dirname = "Isabelle${finalAttrs.version}";
 
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
-        hash = "sha256-6ldUwiiFf12dOuJU7JgUeX8kU+opDfILL23LLvDi5/g=";
+        url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_macos.tar.gz";
+        hash = "sha256-jxh0luKV8WmVLpRHRa+eSuAMnBzS7UytvPfYmOREkT4=";
       }
     else if stdenv.hostPlatform.isx86 then
       fetchurl {
-        url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
-        hash = "sha256-PR1m3jcYI/4xqormZjj3NXW6wkTwCzGu4dy2LzgUfFY=";
+        url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux.tar.gz";
+        hash = "sha256-ogpQe8fBJw2L6WqfP77AY0U4d4nS3CxNPfYmDUe/szw=";
       }
     else
       fetchurl {
-        url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux_arm.tar.gz";
-        hash = "sha256-p/Hp+7J5gJy5s6BVD5Ma1Mu2OS53I8BS7gKSOYYB0PE=";
+        url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux_arm.tar.gz";
+        hash = "sha256-ZQqWabSgh2da+zQpTYLe0vBwTUfVgN2e1FzdyfF2S90=";
       };
 
   nativeBuildInputs = [ java ];
 
   buildInputs = [
-    polyml
-    veriT
+    polyml'
+    verit
     vampire'
     eprover-ho
-    nettools
+    net-tools
+    cvc5'
+    csdp
+  ];
+
+  patches = [
+    # Make "isabelle build" work when generating documents
+    # See: https://github.com/NixOS/nixpkgs/issues/289529
+    ./fix-copied-permissions.patch
   ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ procps ];
 
-  sourceRoot = "${dirname}${lib.optionalString stdenv.hostPlatform.isDarwin ".app"}";
+  sourceRoot = "${finalAttrs.dirname}${lib.optionalString stdenv.hostPlatform.isDarwin ".app"}";
 
   doCheck = stdenv.hostPlatform.system != "aarch64-linux";
   checkPhase = "bin/isabelle build -v HOL-SMT_Examples";
 
   postUnpack = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mv $sourceRoot ${dirname}
-    sourceRoot=${dirname}
+    mv $sourceRoot ${finalAttrs.dirname}
+    sourceRoot=${finalAttrs.dirname}
   '';
 
-  postPatch =
-    ''
-      patchShebangs lib/Tools/ bin/
+  postPatch = ''
+    patchShebangs lib/Tools/ bin/
 
-      cat >contrib/verit-*/etc/settings <<EOF
-        ISABELLE_VERIT=${veriT}/bin/veriT
-      EOF
+    substituteInPlace src/Pure/ML/ml_settings.scala \
+      --replace-fail 'polyml_home + Path.basic(ml_platform)' 'Path.explode("${polyml'}/bin")'
 
-      cat >contrib/e-*/etc/settings <<EOF
-        E_HOME=${eprover-ho}/bin
-        E_VERSION=${eprover-ho.version}
-      EOF
+    cat >contrib/verit-*/etc/settings <<EOF
+      ISABELLE_VERIT=${verit}/bin/veriT
+    EOF
 
-      cat >contrib/vampire-*/etc/settings <<EOF
-        VAMPIRE_HOME=${vampire'}/bin
-        VAMPIRE_VERSION=${vampire'.version}
-        VAMPIRE_EXTRA_OPTIONS="--mode casc"
-      EOF
+    cat >contrib/e-*/etc/settings <<EOF
+      E_HOME=${eprover-ho}/bin
+      E_VERSION=${eprover-ho.version}
+    EOF
 
-      cat >contrib/polyml-*/etc/settings <<EOF
-        ML_SYSTEM_64=true
-        ML_SYSTEM=${polyml.name}
-        ML_PLATFORM=${stdenv.system}
-        ML_HOME=${polyml}/bin
-        ML_OPTIONS="--minheap 1000"
-        POLYML_HOME="\$COMPONENT"
-        ML_SOURCES="\$POLYML_HOME/src"
-      EOF
+    cat >contrib/vampire-*/etc/settings <<EOF
+      VAMPIRE_HOME=${vampire'}/bin
+      VAMPIRE_VERSION=${vampire'.version}
+      VAMPIRE_EXTRA_OPTIONS="--mode casc"
+    EOF
 
-      cat >contrib/jdk*/etc/settings <<EOF
-        ISABELLE_JAVA_PLATFORM=${stdenv.system}
-        ISABELLE_JDK_HOME=${java}
-      EOF
+    cat >contrib/cvc5-*/etc/settings <<EOF
+      CVC5_HOME=${cvc5'}
+      CVC5_VERSION=${cvc5'.version}
+      CVC5_SOLVER=${cvc5'}/bin/cvc5
+      CVC5_INSTALLED=yes
+    EOF
 
-      echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
+    cat >contrib/csdp-*/etc/settings <<EOF
+      ISABELLE_CSDP=${csdp}/bin/csdp
+    EOF
 
-      for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* contrib/e-*; do
-        rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
-      done
-      rm -rf contrib/*/src
+    cat >contrib/polyml-*/etc/settings <<EOF
+      ML_SYSTEM_64=true
+      ML_SYSTEM=${polyml'.name}
+      ML_PLATFORM=${stdenv.system}
+      ML_OPTIONS="--minheap 1000"
+      POLYML_HOME="\$COMPONENT"
+      ML_SOURCES="\$POLYML_HOME/src"
+    EOF
 
-      substituteInPlace lib/Tools/env \
-        --replace-fail /usr/bin/env ${coreutils}/bin/env
+    cat >contrib/jdk*/etc/settings <<EOF
+      ISABELLE_JAVA_PLATFORM=${stdenv.system}
+      ISABELLE_JDK_HOME=${java}
+    EOF
 
-      substituteInPlace src/Tools/Setup/src/Environment.java \
-        --replace-fail 'cmd.add("/usr/bin/env");' "" \
-        --replace-fail 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
+    echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-      substituteInPlace src/Pure/General/sha1.ML \
-        --replace-fail '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
+    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* \
+                contrib/e-* contrib/cvc5-* contrib/csdp-*; do
+      rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
+    done
+    rm -rf contrib/*/src
 
-      rm -r heaps
-    ''
-    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
-      substituteInPlace lib/scripts/isabelle-platform \
-        --replace-fail 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      arch=${
-        if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system
-      }
-      for f in contrib/*/$arch/{z3,nunchaku,spass,zipperposition}; do
-        patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
-      done
-      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
-      for d in contrib/kodkodi-*/jni/$arch; do
-        patchelf --set-rpath "${
-          lib.concatStringsSep ":" [
-            "${java}/lib/openjdk/lib/server"
-            "${lib.getLib stdenv.cc.cc}/lib"
-          ]
-        }" $d/*.so
-      done
-    ''
-    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-      patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib" contrib/z3-*/$arch/z3
-    '';
+    substituteInPlace lib/Tools/env \
+      --replace-fail /usr/bin/env ${coreutils}/bin/env
+
+    substituteInPlace src/Tools/Setup/src/Environment.java \
+      --replace-fail 'cmd.add("/usr/bin/env");' "" \
+      --replace-fail 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
+
+    substituteInPlace src/Pure/General/sha1.ML \
+      --replace-fail '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
+
+    rm -r heaps
+  ''
+  + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
+    substituteInPlace lib/scripts/isabelle-platform \
+      --replace-fail 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    arch=${
+      if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system
+    }
+    for f in contrib/*/$arch/{z3,nunchaku,SPASS,zipperposition}; do
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
+    done
+    patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
+
+    ln -sf ${electron}/bin/electron contrib/vscodium-*/*/electron
+    rm contrib/vscodium-*/*/*.so{,.*}
+    rm contrib/vscodium-*/*/chrome*
+
+    for d in contrib/kodkodi-*/jni/$arch; do
+      patchelf --set-rpath "${
+        lib.concatStringsSep ":" [
+          "${java}/lib/openjdk/lib/server"
+          "${lib.getLib stdenv.cc.cc}/lib"
+        ]
+      }" $d/*.so
+    done
+  ''
+  + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib" contrib/z3-*/$arch/z3
+  '';
 
   buildPhase = ''
     export HOME=$TMP # The build fails if home is not set
@@ -192,11 +278,12 @@ stdenv.mkDerivation (finalAttrs: rec {
       ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"
     done
     echo "Building isabelle setup"
-    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/lib/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/lib/scala3-compiler_3-${scala_3.version}.jar" "''${ARGS[@]}"
+    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/lib/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/lib/scala3-compiler_3-${scala_3.version}.jar:./contrib/flatlaf-3.6.2/lib/flatlaf-3.6.2-no-natives.jar" "''${ARGS[@]}"
     jar -c -f "$TARGET_DIR/isabelle_setup.jar" -e "isabelle.setup.Setup" -C "$TARGET_DIR" isabelle
     rm -rf "$TARGET_DIR/isabelle"
 
     echo "Building HOL heap"
+    ln -s ${polyml'}/bin ./contrib/polyml-*/
     bin/isabelle build -v -o system_heaps -b HOL
   '';
 
@@ -208,11 +295,11 @@ stdenv.mkDerivation (finalAttrs: rec {
 
     # icon
     mkdir -p "$out/share/icons/hicolor/isabelle/apps"
-    cp "$out/Isabelle${version}/lib/icons/isabelle.xpm" "$out/share/icons/hicolor/isabelle/apps/"
+    cp "$out/Isabelle${finalAttrs.version}/lib/icons/isabelle.xpm" "$out/share/icons/hicolor/isabelle/apps/"
 
     # desktop item
     mkdir -p "$out/share"
-    cp -r "${desktopItem}/share/applications" "$out/share/applications"
+    cp -r "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
   '';
 
   desktopItem = makeDesktopItem {
@@ -220,7 +307,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     exec = "isabelle jedit";
     icon = "isabelle";
     desktopName = "Isabelle";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     categories = [
       "Education"
       "Science"
@@ -228,8 +315,8 @@ stdenv.mkDerivation (finalAttrs: rec {
     ];
   };
 
-  meta = with lib; {
-    description = "A generic proof assistant";
+  meta = {
+    description = "Generic proof assistant";
 
     longDescription = ''
       Isabelle is a generic proof assistant.  It allows mathematical formulas
@@ -237,31 +324,40 @@ stdenv.mkDerivation (finalAttrs: rec {
       formulas in a logical calculus.
     '';
     homepage = "https://isabelle.in.tum.de/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode # source bundles binary dependencies
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [
-      maintainers.jwiegley
-      maintainers.jvanbruegge
+      lib.maintainers.jvanbruegge
+      lib.maintainers.sempiternal-aurora
     ];
-    platforms = platforms.unix;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 
-  passthru.withComponents =
-    f:
-    let
-      isabelle = finalAttrs.finalPackage;
-      base = "$out/${isabelle.dirname}";
-      components = f isabelle-components;
-    in
-    symlinkJoin {
-      name = "isabelle-with-components-${isabelle.version}";
-      paths = [ isabelle ] ++ (builtins.map (c: c.override { inherit isabelle; }) components);
+  passthru = {
+    vampire = vampire';
+    polyml = polyml';
+    cvc5 = cvc5';
+    sha1 = sha1;
+    withComponents =
+      f:
+      let
+        isabelle = finalAttrs.finalPackage;
+        base = "$out/${isabelle.dirname}";
+        components = f isabelle-components;
+      in
+      symlinkJoin {
+        name = "isabelle-with-components-${isabelle.version}";
+        paths = [ isabelle ] ++ (map (c: c.override { inherit isabelle; }) components);
 
-      postBuild =
-        ''
+        postBuild = ''
           rm $out/bin/*
 
           cd ${base}
@@ -277,5 +373,6 @@ stdenv.mkDerivation (finalAttrs: rec {
         + lib.concatMapStringsSep "\n" (c: ''
           echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
         '') components;
-    };
+      };
+  };
 })

@@ -15,9 +15,10 @@ in
 pythonPackages.buildPythonApplication rec {
   pname = "quast";
   version = "5.3.0";
+  format = "setuptools";
 
   src = fetchurl {
-    url = "https://github.com/ablab/quast/releases/download/${pname}_${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/ablab/quast/releases/download/quast_${version}/quast-${version}.tar.gz";
     hash = "sha256-rJ26A++dClHXqeLFaCYQTnjzQPYmOjrTk2SEQt68dOw=";
   };
 

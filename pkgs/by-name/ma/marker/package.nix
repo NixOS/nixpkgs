@@ -14,14 +14,14 @@
   pandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marker";
   version = "2023.05.02";
 
   src = fetchFromGitHub {
     owner = "fabiocolacio";
     repo = "Marker";
-    rev = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-HhDhigQ6Aqo8R57Yrf1i69sM0feABB9El5R5OpzOyB0=";
   };
@@ -48,19 +48,19 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    meson rewrite kwargs set project / version '${version}'
+    meson rewrite kwargs set project / version '${finalAttrs.version}'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fabiocolacio.github.io/Marker/";
     description = "Markdown editor for the Linux desktop made with GTK3";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       trepetti
       aleksana
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${version}";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${finalAttrs.version}";
     mainProgram = "marker";
   };
-}
+})

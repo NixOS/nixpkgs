@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/cktan/tomlcpp";
     description = "No fanfare TOML C++ Library";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 }

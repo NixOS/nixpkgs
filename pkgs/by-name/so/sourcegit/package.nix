@@ -8,24 +8,26 @@
   makeDesktopItem,
   libicns,
 
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
 
   git,
   xdg-utils,
+
+  nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "sourcegit";
-  version = "2025.17";
+  version = "2025.34";
 
   src = fetchFromGitHub {
     owner = "sourcegit-scm";
     repo = "sourcegit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rpgsaWpVREftEve7vhAi42mNvWWU8Bl+4fUbUwJf1M4=";
+    hash = "sha256-O7HzbrcQGgP3mRSfqLxoHPswVW99S9chb7ZWBeEelsY=";
   };
 
   patches = [ ./fix-darwin-git-path.patch ];
@@ -50,13 +52,13 @@ buildDotnetModule (finalAttrs: {
   ];
 
   # these are dlopen-ed at runtime
-  # libXi is needed for right-click support
+  # libxi is needed for right-click support
   # not sure about what the other ones are needed for, but I'll include them anyways
   runtimeDeps = [
-    libXcursor
-    libXext
-    libXi
-    libXrandr
+    libxcursor
+    libxext
+    libxi
+    libxrandr
   ];
 
   # Note: users can use `.overrideAttrs` to append to this list
@@ -78,6 +80,7 @@ buildDotnetModule (finalAttrs: {
       exec = "SourceGit";
       icon = "SourceGit";
       desktopName = "SourceGit";
+      categories = [ "Development" ];
       terminal = false;
       comment = finalAttrs.meta.description;
     })
@@ -105,6 +108,8 @@ buildDotnetModule (finalAttrs: {
       mkdir -p $out/Applications/SourceGit.app/Contents/MacOS
       ln -s $out/bin/SourceGit $out/Applications/SourceGit.app/Contents/MacOS/SourceGit
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/sourcegit-scm/sourcegit/releases/tag/${finalAttrs.src.tag}";

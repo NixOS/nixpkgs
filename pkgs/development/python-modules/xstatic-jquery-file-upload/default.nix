@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "xstatic-jquery-file-upload";
   version = "10.31.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "XStatic-jQuery-File-Upload";
@@ -20,10 +21,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ xstatic-jquery ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://plugins.jquery.com/project/jQuery-File-Upload";
     description = "jquery-file-upload packaged static files for python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

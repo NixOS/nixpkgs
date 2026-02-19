@@ -8,6 +8,7 @@
 
 buildPythonApplication rec {
   version = "0.4.1";
+  format = "setuptools";
   pname = "vimwiki-markdown";
 
   src = fetchPypi {
@@ -20,11 +21,11 @@ buildPythonApplication rec {
     pygments
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Vimwiki markdown plugin";
     homepage = "https://github.com/WnP/vimwiki_markdown";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seqizz ];
     mainProgram = "vimwiki_markdown";
   };
 }

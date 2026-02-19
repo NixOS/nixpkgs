@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoenixd";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src =
     let
@@ -28,10 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/ACINQ/phoenixd/releases/download/v${finalAttrs.version}/phoenixd-${finalAttrs.version}-${suffix}.zip";
       hash = selectSystem {
-        aarch64-darwin = "sha256-CJCGVL6az02Yxdj7RpXMScSdx+yKvMfBMKE0SaBYTow=";
-        x86_64-darwin = "sha256-ClSyQ8Ir13wVBBpYivv2W+s5ZlYrx+6drUbUp5EhlBo=";
-        x86_64-linux = "sha256-z+gfiFor8nDHl2vjGCA0RYKrUXmdiRX6ztucXOOxLoI=";
-        aarch64-linux = "sha256-YkGJJS3dSHtxB891urGdL3f5F5TYIKBHKRrREAk5NkM=";
+        aarch64-darwin = "sha256-OOoEgZLa+wZ8CXDH64TxvLBZ2r5WLyq6HERIyeEerf0=";
+        x86_64-darwin = "sha256-HPpgqmoiw3TCT4Q/+GJRv1AgHI0wtHThSPTSVAsPQcE=";
+        x86_64-linux = "sha256-T0Xhc4tzZRIDx16sbrOXeCZjRlTdeITghhfLHrU6nBY=";
+        aarch64-linux = "sha256-w7zaqDd4zYM0gva6l8d6tJ+/jpJuWERQ2aHaKOBKJAM=";
       };
     };
 

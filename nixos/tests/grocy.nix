@@ -2,7 +2,9 @@
 {
   name = "grocy";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 ];
+    maintainers = [
+      diogotcorreia
+    ];
   };
 
   nodes.machine =

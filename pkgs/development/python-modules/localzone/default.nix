@@ -5,15 +5,12 @@
   dnspython,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "localzone";
   version = "0.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ags-slc";
@@ -30,11 +27,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "localzone" ];
 
-  meta = with lib; {
+  postPatch = ''
+    # Fix tests with dnspython 2.8.0
+    # https://github.com/ags-slc/localzone/pull/6
+    substituteInPlace tests/test_models.py \
+      --replace-fail 'raises((AttributeError, DNSSyntaxError))' 'raises((AttributeError, DNSSyntaxError, ValueError))'
+  '';
+
+  meta = {
     description = "Simple DNS library for managing zone files";
     homepage = "https://localzone.iomaestro.com";
     changelog = "https://github.com/ags-slc/localzone/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ flyfloh ];
+    license = lib.licenses.bsd3;
   };
 }

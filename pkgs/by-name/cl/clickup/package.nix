@@ -7,17 +7,17 @@
 }:
 let
   pname = "clickup";
-  version = "3.5.87";
+  version = "3.5.120";
 
   src = fetchurl {
     # Using archive.org because the website doesn't store older versions of the software.
-    url = "https://web.archive.org/web/20250419020454/https://desktop.clickup.com/linux";
-    hash = "sha256-+Et+N8ZR5pJ8dvsU/tZa+LLpatooTnq3D24c6t1NS18=";
+    url = "https://web.archive.org/web/20250802083833/https://desktop.clickup.com/linux";
+    hash = "sha256-LVHgXqTxDTsnVJ3zx74TzaSrEs2OD0wl0eioPd4+484=";
   };
 
   appimage = appimageTools.wrapType2 {
     inherit pname version src;
-    extraPkgs = pkgs: [ pkgs.xorg.libxkbfile ];
+    extraPkgs = pkgs: [ pkgs.libxkbfile ];
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation {
       --replace-fail 'Icon=desktop' 'Icon=clickup'
 
     wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}} --no-update"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}} --no-update"
 
     runHook postInstall
   '';

@@ -6,7 +6,6 @@
   fetchFromGitHub,
   libopus,
   pynacl,
-  pythonOlder,
   withVoice ? true,
   ffmpeg,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "disnake";
   version = "2.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "DisnakeDev";
@@ -27,15 +24,14 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      aiohttp
-    ]
-    ++ lib.optionals withVoice [
-      libopus
-      pynacl
-      ffmpeg
-    ];
+  dependencies = [
+    aiohttp
+  ]
+  ++ lib.optionals withVoice [
+    libopus
+    pynacl
+    ffmpeg
+  ];
 
   postPatch = lib.optionalString withVoice ''
     substituteInPlace "disnake/opus.py" \

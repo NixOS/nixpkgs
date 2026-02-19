@@ -7,25 +7,6 @@
 let
   cfg = config.services.xserver.desktopManager.phosh;
 
-  # Based on https://source.puri.sm/Librem5/librem5-base/-/blob/4596c1056dd75ac7f043aede07887990fd46f572/default/sm.puri.OSK0.desktop
-  oskItem = pkgs.makeDesktopItem {
-    name = "sm.puri.OSK0";
-    desktopName = "On-screen keyboard";
-    exec = "${pkgs.squeekboard}/bin/squeekboard";
-    categories = [
-      "GNOME"
-      "Core"
-    ];
-    onlyShowIn = [ "GNOME" ];
-    noDisplay = true;
-    extraConfig = {
-      X-GNOME-Autostart-Phase = "Panel";
-      X-GNOME-Provides = "inputmethod";
-      X-GNOME-Autostart-Notify = "true";
-      X-GNOME-AutoRestart = "true";
-    };
-  };
-
   phocConfigType = lib.types.submodule {
     options = {
       xwayland = lib.mkOption {
@@ -114,7 +95,7 @@ let
     };
   };
 
-  optionalKV = k: v: lib.optionalString (v != null) "${k} = ${builtins.toString v}";
+  optionalKV = k: v: lib.optionalString (v != null) "${k} = ${toString v}";
 
   renderPhocOutput =
     name: output:
@@ -145,6 +126,11 @@ let
 in
 
 {
+
+  meta = {
+    maintainers = with lib.maintainers; [ armelclo ];
+  };
+
   options = {
     services.xserver.desktopManager.phosh = {
       enable = lib.mkOption {
@@ -183,8 +169,11 @@ in
 
   config = lib.mkIf cfg.enable {
     # Inspired by https://gitlab.gnome.org/World/Phosh/phosh/-/blob/main/data/phosh.service
+    # Parts taken from nixos/modules/services/wayland/cage.nix
     systemd.services.phosh = {
       wantedBy = [ "graphical.target" ];
+      after = [ "getty@tty1.service" ];
+      conflicts = [ "getty@tty1.service" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/phosh-session";
         User = cfg.user;
@@ -193,7 +182,7 @@ in
         WorkingDirectory = "~";
         Restart = "always";
 
-        TTYPath = "/dev/tty7";
+        TTYPath = "/dev/tty1";
         TTYReset = "yes";
         TTYVHangup = "yes";
         TTYVTDisallocate = "yes";
@@ -204,7 +193,7 @@ in
         StandardError = "journal";
 
         # Log this user with utmp, letting it show up with commands 'w' and 'who'.
-        UtmpIdentifier = "tty7";
+        UtmpIdentifier = "tty1";
         UtmpMode = "user";
       };
       environment = {
@@ -224,11 +213,20 @@ in
       };
     };
 
+    xdg.portal = {
+      enable = true;
+      extraPortals = [
+        pkgs.xdg-desktop-portal-phosh
+        pkgs.xdg-desktop-portal-gnome
+        pkgs.xdg-desktop-portal-gtk
+      ];
+      configPackages = lib.mkDefault [ pkgs.phosh ];
+    };
+
     environment.systemPackages = [
       pkgs.phoc
       cfg.package
-      pkgs.squeekboard
-      oskItem
+      pkgs.stevia
     ];
 
     systemd.packages = [ cfg.package ];

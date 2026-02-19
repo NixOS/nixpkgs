@@ -7,7 +7,6 @@
   # Tie withPlugins through the fixed point here, so it will receive an
   # overridden version properly
   buildbot,
-  pythonOlder,
   python,
   twisted,
   jinja2,
@@ -47,10 +46,10 @@
 let
   withPlugins =
     plugins:
-    buildPythonApplication {
+    buildPythonApplication rec {
       pname = "${buildbot.pname}-with-plugins";
       inherit (buildbot) version;
-      format = "other";
+      pyproject = false;
 
       dontUnpack = true;
       dontBuild = true;
@@ -69,22 +68,21 @@ let
       '';
 
       passthru = buildbot.passthru // {
+        inherit pyproject;
         withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
       };
     };
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "4.2.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "4.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "buildbot";
     repo = "buildbot";
     rev = "v${version}";
-    hash = "sha256-Kf8sxZE2cQDQSVSMpRTokJU4f3/M6OJq6bXzGonrRLU=";
+    hash = "sha256-yUtOJRI04/clCMImh5sokpj6MeBIXjEAdf9xnToqJZs=";
   };
 
   build-system = [
@@ -94,31 +92,30 @@ buildPythonApplication rec {
     "twisted"
   ];
 
-  propagatedBuildInputs =
-    [
-      # core
-      twisted
-      jinja2
-      msgpack
-      zope-interface
-      sqlalchemy
-      alembic
-      python-dateutil
-      txaio
-      autobahn
-      pyjwt
-      pyyaml
-      setuptools
-      croniter
-      importlib-resources
-      packaging
-      unidiff
-      treq
-      brotli
-      zstandard
-    ]
-    # tls
-    ++ twisted.optional-dependencies.tls;
+  propagatedBuildInputs = [
+    # core
+    twisted
+    jinja2
+    msgpack
+    zope-interface
+    sqlalchemy
+    alembic
+    python-dateutil
+    txaio
+    autobahn
+    pyjwt
+    pyyaml
+    setuptools
+    croniter
+    importlib-resources
+    packaging
+    unidiff
+    treq
+    brotli
+    zstandard
+  ]
+  # tls
+  ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [
     treq
@@ -156,22 +153,21 @@ buildPythonApplication rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  passthru =
-    {
-      inherit withPlugins python;
-      updateScript = ./update.sh;
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      tests = {
-        inherit (nixosTests) buildbot;
-      };
+  passthru = {
+    inherit withPlugins python;
+    updateScript = ./update.sh;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    tests = {
+      inherit (nixosTests) buildbot;
     };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source continuous integration framework for automating software build, test, and release processes";
     homepage = "https://buildbot.net/";
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
-    teams = [ teams.buildbot ];
-    license = licenses.gpl2Only;
+    teams = [ lib.teams.buildbot ];
+    license = lib.licenses.gpl2Only;
   };
 }

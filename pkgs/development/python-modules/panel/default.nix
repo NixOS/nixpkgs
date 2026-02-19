@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "1.6.3";
+  version = "1.7.5";
 
   format = "wheel";
 
@@ -24,8 +24,9 @@ buildPythonPackage rec {
   # artifacts using npm, the bundling invoked in setup.py
   # tries to fetch even more artifacts
   src = fetchPypi {
-    inherit pname version format;
-    hash = "sha256-zNKgWHqzgr1VuOoJlwbzG2Sq2saXuKQZI9Oxi57WGNY=";
+    inherit pname version;
+    format = "wheel";
+    hash = "sha256-HDtKM11W1aoM9dbhw2hKKX4kpiz5k0XF6euFUoN7l8M=";
     dist = "py3";
     python = "py3";
   };
@@ -50,12 +51,12 @@ buildPythonPackage rec {
   # infinite recursion in test dependencies (hvplot)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "High level dashboarding library for python visualization libraries";
     mainProgram = "panel";
     homepage = "https://github.com/holoviz/panel";
     changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -17,30 +17,30 @@
   syrupy,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.3.3";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-ollama==${version}";
-    hash = "sha256-YxcxVyiPEZPvO4NyeDp8nTVfbxlOCLClWCmAlL5PPi0=";
+    hash = "sha256-+AMaKC055ET/Turd4z89gxXC6wWnlrrA1ldvMl1Z8w8=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
 
   build-system = [
-    pdm-backend
+    hatchling
   ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
   ];
 
@@ -56,19 +56,20 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_ollama" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-ollama==([0-9.]+)"
-    ];
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-ollama==";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-ollama==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Integration package connecting Ollama and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/ollama";
     license = lib.licenses.mit;

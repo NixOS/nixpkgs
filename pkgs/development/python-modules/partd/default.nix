@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "partd";
   version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";

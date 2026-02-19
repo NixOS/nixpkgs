@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   qt6,
+  wrapGAppsHook3,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OMgxhb+9GdLK00nl/df9QiYYewr+YEjdX2KjQWvu1mk=";
   };
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     qt6.qtbase
@@ -41,11 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=(''${gappsWrapperArgs[@]})
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/Pedro-Beirao/dsda-launcher";
-    description = "This is a launcher GUI for the dsda-doom source port";
+    description = "Launcher GUI for the dsda-doom source port";
     mainProgram = "dsda-launcher";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

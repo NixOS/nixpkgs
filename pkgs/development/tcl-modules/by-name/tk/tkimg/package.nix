@@ -4,7 +4,7 @@
   tcl,
   tcllib,
   tk,
-  xorg,
+  libx11,
 }:
 
 tcl.mkTclDerivation rec {
@@ -24,7 +24,7 @@ tcl.mkTclDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
     tcllib
   ];
 
@@ -34,5 +34,6 @@ tcl.mkTclDerivation rec {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
   };
 }

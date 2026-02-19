@@ -7,18 +7,17 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turn-rs";
   version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "mycrl";
     repo = "turn-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BW5dNPkf/JGrf00BI41rEoZRmqftoz+RMGiP6ECVEec=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-wnbovuxh3wc1TU8BYZEOG/8SO9bCUd0eWRC81MtAdqo=";
 
   # By default, no features are enabled
@@ -29,7 +28,6 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/turn-server";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -40,10 +38,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Pure rust implemented turn server";
     homepage = "https://github.com/mycrl/turn-rs";
-    changelog = "https://github.com/mycrl/turn-rs/releases/tag/v${version}";
+    changelog = "https://github.com/mycrl/turn-rs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "turn-server";
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     platforms = lib.platforms.linux;
   };
-}
+})

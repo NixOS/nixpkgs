@@ -23,6 +23,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "pendulum" ];
+
   dependencies = [
     irctokens
     pendulum
@@ -35,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ircstates" ];
 
-  meta = with lib; {
+  meta = {
     description = "sans-I/O IRC session state parsing library";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/jesopo/ircstates";
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

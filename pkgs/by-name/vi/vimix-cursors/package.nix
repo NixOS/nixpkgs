@@ -2,8 +2,8 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  cairosvg,
   inkscape,
-  python3Packages,
   xcursorgen,
 }:
 stdenvNoCC.mkDerivation {
@@ -18,8 +18,8 @@ stdenvNoCC.mkDerivation {
   };
 
   nativeBuildInputs = [
+    cairosvg
     inkscape
-    python3Packages.cairosvg
     xcursorgen
   ];
 
@@ -46,11 +46,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "X cursor theme inspired by Materia design";
     homepage = "https://github.com/vinceliuice/Vimix-cursors";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ambroisie ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ambroisie ];
+    platforms = lib.platforms.linux;
   };
 }

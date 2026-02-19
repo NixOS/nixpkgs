@@ -57,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--enable-shared"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--with-audio=${audioBackend}" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "--with-audio=${audioBackend}" ];
 
   # main/Makefile creates and removes 'flite_voice_list.c' from multiple targets:
   # make[1]: *** No rule to make target 'flite_voice_list.c', needed by 'all'.  Stop

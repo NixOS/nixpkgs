@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Extract semantic information about static Python code";
     homepage = "https://github.com/serge-sans-paille/beniget";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

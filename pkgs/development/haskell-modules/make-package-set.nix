@@ -49,7 +49,7 @@ let
   inherit (haskellLib) overrideCabal;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
-    inherit stdenv;
+    inherit stdenv haskellLib;
     nodejs = buildPackages.nodejs-slim;
     inherit (self)
       buildHaskellPackages
@@ -57,6 +57,10 @@ let
       ghcWithHoogle
       ghcWithPackages
       ;
+    iserv-proxy = {
+      build = buildHaskellPackages.iserv-proxy;
+      host = self.iserv-proxy;
+    };
     inherit (self.buildHaskellPackages) jailbreak-cabal;
     hscolour = overrideCabal (drv: {
       isLibrary = false;
@@ -107,29 +111,35 @@ let
       # is that nix has no way to "passthrough" args while preserving the reflection
       # info that callPackage uses to determine the arguments).
       drv = if lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (lib.functionArgs drv) scope;
+      drvFunctionArgs = lib.functionArgs drv;
+      auto = builtins.intersectAttrs drvFunctionArgs scope;
 
       # Converts a returned function to a functor attribute set if necessary
       ensureAttrs = v: if builtins.isFunction v then { __functor = _: v; } else v;
 
       # this wraps the `drv` function to add `scope` and `overrideScope` to the result.
-      drvScope =
-        allArgs:
-        ensureAttrs (drv allArgs)
-        // {
-          inherit scope;
-          overrideScope =
-            f:
-            let
-              newScope = mkScope (fix' (extends f scope.__unfix__));
-            in
-            # note that we have to be careful here: `allArgs` includes the auto-arguments that
-            # weren't manually specified. If we would just pass `allArgs` to the recursive call here,
-            # then we wouldn't look up any packages in the scope in the next interation, because it
-            # appears as if all arguments were already manually passed, so the scope change would do
-            # nothing.
-            callPackageWithScope newScope drv manualArgs;
-        };
+      # it's a functor, so that we can pass through `functionArgs`
+      drvScope = {
+        __functor =
+          _: allArgs:
+          ensureAttrs (drv allArgs)
+          // {
+            inherit scope;
+            overrideScope =
+              f:
+              let
+                newScope = mkScope (fix' (extends f scope.__unfix__));
+              in
+              # note that we have to be careful here: `allArgs` includes the auto-arguments that
+              # weren't manually specified. If we would just pass `allArgs` to the recursive call here,
+              # then we wouldn't look up any packages in the scope in the next interation, because it
+              # appears as if all arguments were already manually passed, so the scope change would do
+              # nothing.
+              callPackageWithScope newScope drv manualArgs;
+          };
+        # `drvScope` accepts the same arguments as `drv`
+        __functionArgs = drvFunctionArgs;
+      };
     in
     lib.makeOverridable drvScope (auto // manualArgs);
 
@@ -151,7 +161,7 @@ let
           inherit (scope) ghc buildHaskellPackages;
         };
     in
-    ps // ps.xorg // ps.gnome2 // { inherit stdenv; } // scopeSpliced;
+    ps // ps.gnome2 // { inherit stdenv; } // scopeSpliced;
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
@@ -262,6 +272,7 @@ package-set { inherit pkgs lib callPackage; } self
       pkg,
       ver,
       sha256,
+      candidate ? false,
       rev ? {
         revision = null;
         sha256 = null;
@@ -271,7 +282,11 @@ package-set { inherit pkgs lib callPackage; } self
     let
       pkgver = "${pkg}-${ver}";
       firstRevision = self.callCabal2nix pkg (pkgs.fetchzip {
-        url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
+        url =
+          if candidate then
+            "mirror://hackage/${pkgver}/candidate/${pkgver}.tar.gz"
+          else
+            "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
         inherit sha256;
       }) args;
     in
@@ -340,7 +355,7 @@ package-set { inherit pkgs lib callPackage; } self
   developPackage =
     {
       root,
-      name ? lib.optionalString (builtins.typeOf root == "path") (builtins.baseNameOf root),
+      name ? lib.optionalString (builtins.typeOf root == "path") (baseNameOf root),
       source-overrides ? { },
       overrides ? self: super: { },
       modifier ? drv: drv,
@@ -592,17 +607,16 @@ package-set { inherit pkgs lib callPackage; } self
       #
       # The important thing to note here is that all the fields from
       # packageInputs are set correctly.
-      genericBuilderArgs =
-        {
-          pname = if pkgs.lib.length selected == 1 then (pkgs.lib.head selected).name else "packages";
-          version = "0";
-          license = null;
-        }
-        // packageInputs
-        // pkgs.lib.optionalAttrs doBenchmark {
-          # `doBenchmark` needs to explicitly be set here because haskellPackages.mkDerivation defaults it to `false`.  If the user wants benchmark dependencies included in their development shell, it has to be explicitly enabled here.
-          doBenchmark = true;
-        };
+      genericBuilderArgs = {
+        pname = if pkgs.lib.length selected == 1 then (pkgs.lib.head selected).name else "packages";
+        version = "0";
+        license = null;
+      }
+      // packageInputs
+      // pkgs.lib.optionalAttrs doBenchmark {
+        # `doBenchmark` needs to explicitly be set here because haskellPackages.mkDerivation defaults it to `false`.  If the user wants benchmark dependencies included in their development shell, it has to be explicitly enabled here.
+        doBenchmark = true;
+      };
 
       # This is a pseudo Haskell package derivation that contains all the
       # dependencies for the packages in `selected`.
@@ -624,7 +638,7 @@ package-set { inherit pkgs lib callPackage; } self
       # pkgWithCombinedDepsDevDrv :: Derivation
       pkgWithCombinedDepsDevDrv = pkgWithCombinedDeps.envFunc { inherit withHoogle; };
 
-      mkDerivationArgs = builtins.removeAttrs args [
+      mkDerivationArgs = removeAttrs args [
         "genericBuilderArgsModifier"
         "packages"
         "withHoogle"
@@ -664,10 +678,6 @@ package-set { inherit pkgs lib callPackage; } self
         inherit src;
         nativeBuildInputs = [
           buildHaskellPackages.cabal-install
-
-          # TODO after https://github.com/haskell/cabal/issues/8352
-          #      remove ghc
-          self.ghc
         ];
         dontUnpack = false;
       }
@@ -689,10 +699,18 @@ package-set { inherit pkgs lib callPackage; } self
   */
   buildFromCabalSdist =
     pkg:
-    haskellLib.overrideSrc {
-      src = self.cabalSdist { inherit (pkg) src; };
-      version = pkg.version;
-    } pkg;
+    haskellLib.overrideCabal
+      (_: {
+        # Patches are already applied by srcOnly above, so clear them
+        # to avoid double-application.
+        patches = [ ];
+      })
+      (
+        haskellLib.overrideSrc {
+          src = self.cabalSdist { src = pkgs.srcOnly pkg; };
+          version = pkg.version;
+        } pkg
+      );
 
   /*
     Modify a Haskell package to add shell completion scripts for the
@@ -735,6 +753,13 @@ package-set { inherit pkgs lib callPackage; } self
   */
   forceLlvmCodegenBackend = overrideCabal (drv: {
     configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
-    buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
+    buildTools =
+      drv.buildTools or [ ]
+      ++ [ self.ghc.llvmPackages.llvm ]
+      # GHC >= 9.10 needs LLVM specific assembler, i.e. clang
+      # On Darwin clang is always required
+      ++ lib.optionals (lib.versionAtLeast self.ghc.version "9.10" || stdenv.hostPlatform.isDarwin) [
+        self.ghc.llvmPackages.clang
+      ];
   });
 }

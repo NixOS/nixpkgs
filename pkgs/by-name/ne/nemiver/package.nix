@@ -22,12 +22,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nemiver";
   version = "0.9.6";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/nemiver/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/nemiver/${lib.versions.majorMinor finalAttrs.version}/nemiver-${finalAttrs.version}.tar.xz";
     sha256 = "85ab8cf6c4f83262f441cb0952a6147d075c3c53d0687389a3555e946b694ef2";
   };
 
@@ -80,12 +80,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/Archive/nemiver";
     description = "Easy to use standalone C/C++ debugger";
     mainProgram = "nemiver";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.juliendehos ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
-}
+})

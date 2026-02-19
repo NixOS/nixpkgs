@@ -5,21 +5,21 @@
   gitUpdater,
   stdenv,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloud-provider-kind";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cloud-provider-kind";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6HdP6/uUCtLyZ7vjFGB2NLqe73v/yolRTUE5s/KyIIk=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   vendorHash = null;
 
-  checkFlags = lib.optional stdenv.isDarwin "-skip=^Test_firstSuccessfulProbe$";
+  checkFlags = lib.optional stdenv.hostPlatform.isDarwin "-skip=^Test_firstSuccessfulProbe$";
 
   meta = {
     description = "Load Balancer implementation for Kubernetes-in-Docker";
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ nicoo ];
     mainProgram = "cloud-provider-kind";
   };
-}
+})

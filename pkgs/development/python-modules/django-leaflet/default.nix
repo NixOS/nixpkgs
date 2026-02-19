@@ -1,23 +1,20 @@
 {
-  pkgs,
+  lib,
   buildPythonPackage,
   django,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-leaflet";
-  version = "0.31.0";
+  version = "0.32.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "django_leaflet";
     inherit version;
-    hash = "sha256-+yt1+Er/YNQFhlkwDzGnEVVMZdEout5fqAiGN/sHUfc=";
+    hash = "sha256-ATzLBu4IBxyuyYpl3/1oqzaU2vznLK/zTz1481VoriU=";
   };
 
   build-system = [ setuptools ];
@@ -32,11 +29,11 @@ buildPythonPackage rec {
   # This dosn't work either because of the same exception as above
   # pythonImportsCheck = [ "leaflet" ];
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Allows you to use Leaflet in your Django projects";
     homepage = "https://github.com/makinacorpus/django-leaflet";
     changelog = "https://github.com/makinacorpus/django-leaflet/blob/${version}/CHANGES";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
 }

@@ -5,24 +5,23 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rtrtr";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "rtrtr";
-    rev = "v${version}";
-    hash = "sha256-1TmzC/d/odfYdo1CiCsFW3U7OCpTF4Gkw2w4c2yaxxw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-n6dpORKh9ul9VQXKXtnkuewUnQOmge99HljUgVpO2HM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-SeQ2zRBbETabAhOItu3C6PUjL7vUsVDzWGbYcUIslF4=";
+  cargoHash = "sha256-3Atv3lEQIiM5MNjdQdLUnUDb3rHICxDAhQq0yuLSgtA=";
   nativeBuildInputs = [ pkg-config ];
 
   buildNoDefaultFeatures = true;
 
-  meta = with lib; {
+  meta = {
     description = "RPKI data proxy";
     longDescription = ''
       TRTR is an RPKI data proxy, designed to collect Validated ROA Payloads
@@ -33,9 +32,9 @@ rustPlatform.buildRustPackage rec {
       RTR and JSON and, in turn, provide an RTR service for routers to connect to.
     '';
     homepage = "https://github.com/NLnetLabs/rtrtr";
-    changelog = "https://github.com/NLnetLabs/rtrtr/blob/v${version}/Changelog.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ steamwalker ];
+    changelog = "https://github.com/NLnetLabs/rtrtr/blob/v${finalAttrs.version}/Changelog.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ steamwalker ];
     mainProgram = "rtrtr";
   };
-}
+})

@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mdr";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "MichaelMure";
     repo = "mdr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ibM3303pXnseAFP9qFTOzj0G/SxRPX+UeRfbJ+MCABk=";
   };
 
@@ -20,16 +20,16 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.GitCommit=${src.rev}"
-    "-X main.GitLastTag=${version}"
-    "-X main.GitExactTag=${version}"
+    "-X main.GitCommit=${finalAttrs.src.rev}"
+    "-X main.GitLastTag=${finalAttrs.version}"
+    "-X main.GitExactTag=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MarkDown Renderer for the terminal";
     homepage = "https://github.com/MichaelMure/mdr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "mdr";
   };
-}
+})

@@ -1,34 +1,34 @@
 {
   stdenv,
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
-buildGo123Module rec {
+buildGoModule (finalAttrs: {
   pname = "certinfo";
-  version = "1.0.24";
+  version = "1.0.39";
 
   src = fetchFromGitHub {
     owner = "pete911";
     repo = "certinfo";
-    rev = "v${version}";
-    sha256 = "sha256-BI5gYWKGMU0wLvnArG41bLWj+9ipe/GARKRX0fwz4ag=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-U3uVQiALtI7aWkIPQyHxSzMTD6AjAMoOEjkbPO07SdA=";
   };
 
   # clipboard functionality not working on Darwin
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "Print x509 certificate info";
     mainProgram = "certinfo";
     homepage = "https://github.com/pete911/certinfo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jakuzure ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jakuzure ];
   };
-}
+})

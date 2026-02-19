@@ -14,22 +14,23 @@
   xdg-desktop-portal,
   xdg-desktop-portal-gtk,
   kdotool,
+  udevCheckHook,
 }:
 let
   # We have to hardcode revision because upstream often create multiple releases for the same version number.
-  # This is the commit hash that maps to 1.5.0-beta.8 released on 2025-03-12
-  rev = "de11d84afac7873044568606a8468c78d57aceda";
+  # This is the commit hash that maps to 1.5.0-beta.12 released on 2025-10-11
+  rev = "73b7632ff2977d05763acd56e53bdc7a37d30c0c";
 in
 stdenv.mkDerivation {
   pname = "streamcontroller";
 
-  version = "1.5.0-beta.8";
+  version = "1.5.0-beta.12";
 
   src = fetchFromGitHub {
     repo = "StreamController";
     owner = "StreamController";
     inherit rev;
-    hash = "sha256-pE92/oX9iZYCIhwDkPkjPq/cDUQLUGs+Ou5rjFEIBpo=";
+    hash = "sha256-6H0FPkvjKSfso1+E0JwseOnubDXwYys0RVBbyaGCXw0=";
   };
 
   # The installation method documented upstream
@@ -41,12 +42,11 @@ stdenv.mkDerivation {
   installPhase =
     # Some plugins needs to load things dynamically and in that case we won't find python3 without this
     let
-      binPath =
-        [
-          python3Packages.python.interpreter
-        ]
-        # Allows automatic detection of windows to switch pages on KDE
-        ++ lib.optional isKde kdotool;
+      binPath = [
+        python3Packages.python.interpreter
+      ]
+      # Allows automatic detection of windows to switch pages on KDE
+      ++ lib.optional isKde kdotool;
     in
     ''
       runHook preInstall
@@ -88,119 +88,122 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     copyDesktopItems
     wrapGAppsHook4
+    udevCheckHook
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      libportal
-      libportal-gtk4
-      xdg-desktop-portal
-      xdg-desktop-portal-gtk
-    ]
-    ++ (with python3Packages; [
-      annotated-types
-      async-lru
-      cairocffi
-      cairosvg
-      certifi
-      cffi
-      charset-normalizer
-      click
-      colorama
-      contourpy
-      cssselect2
-      cycler
-      dbus-python
-      decorator
-      defusedxml
-      distlib
-      dnspython
-      evdev
-      filelock
-      fonttools
-      fuzzywuzzy
-      gcodepy
-      get-video-properties
-      gitdb
-      idna
-      imageio
-      imageio-ffmpeg
-      indexed-bzip2
-      jinja2
-      joblib
-      kiwisolver
-      levenshtein
-      linkify-it-py
-      loguru
-      markdown-it-py
-      markupsafe
-      matplotlib
-      mdit-py-plugins
-      mdurl
-      meson
-      meson-python
-      natsort
-      nltk
-      numpy
-      opencv4
-      packaging
-      pillow
-      platformdirs
-      plumbum
-      proglog
-      psutil
-      pulsectl
-      pycairo
-      pyclip
-      pycparser
-      pydantic
-      pydantic-core
-      pyenchant
-      pygments
-      pygobject3
-      pymongo
-      pyparsing
-      pyperclip
-      pyproject-metadata
-      pyro5
-      pyspellchecker
-      python-dateutil
-      pyudev
-      pyusb
-      pyyaml
-      rapidfuzz
-      regex
-      requests
-      requirements-parser
-      rich
-      rpyc
-      serpent
-      setproctitle
-      six
-      smmap
-      speedtest-cli
-      streamcontroller-plugin-tools
-      streamdeck
-      textual
-      tinycss2
-      tqdm
-      types-setuptools
-      typing-extensions
-      uc-micro-py
-      urllib3
-      usb-monitor
-      webencodings
-      websocket-client
-    ]);
+  buildInputs = [
+    libadwaita
+    libportal
+    libportal-gtk4
+    xdg-desktop-portal
+    xdg-desktop-portal-gtk
+  ]
+  ++ (with python3Packages; [
+    annotated-types
+    async-lru
+    cairocffi
+    cairosvg
+    certifi
+    cffi
+    charset-normalizer
+    click
+    colorama
+    contourpy
+    cssselect2
+    cycler
+    dbus-python
+    decorator
+    defusedxml
+    distlib
+    dnspython
+    evdev
+    filelock
+    fonttools
+    fuzzywuzzy
+    gcodepy
+    get-video-properties
+    gitdb
+    idna
+    imageio
+    imageio-ffmpeg
+    indexed-bzip2
+    jinja2
+    joblib
+    kiwisolver
+    levenshtein
+    linkify-it-py
+    loguru
+    markdown-it-py
+    markupsafe
+    matplotlib
+    mdit-py-plugins
+    mdurl
+    meson
+    meson-python
+    natsort
+    nltk
+    numpy
+    opencv4
+    packaging
+    pillow
+    platformdirs
+    plumbum
+    proglog
+    psutil
+    pulsectl
+    pycairo
+    pyclip
+    pycparser
+    pydantic
+    pydantic-core
+    pyenchant
+    pygments
+    pygobject3
+    pymongo
+    pyparsing
+    pyperclip
+    pyproject-metadata
+    pyro5
+    pyspellchecker
+    python-dateutil
+    python-wayland-extra
+    pyudev
+    pyusb
+    pyyaml
+    rapidfuzz
+    regex
+    requests
+    requirements-parser
+    rich
+    rpyc
+    serpent
+    setproctitle
+    six
+    smmap
+    speedtest-cli
+    streamcontroller-plugin-tools
+    streamcontroller-streamdeck
+    textual
+    tinycss2
+    tqdm
+    types-setuptools
+    typing-extensions
+    uc-micro-py
+    urllib3
+    usb-monitor
+    webencodings
+    websocket-client
+  ]);
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "Elegant Linux app for the Elgato Stream Deck with support for plugins";
     homepage = "https://core447.com/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "streamcontroller";
-    maintainers = with maintainers; [ sifmelcara ];
+    maintainers = with lib.maintainers; [ sifmelcara ];
     platforms = lib.platforms.linux;
   };
 }

@@ -9,22 +9,23 @@
 
 buildNpmPackage rec {
   pname = "semantic-release";
-  version = "24.2.4";
+  version = "25.0.2";
 
   src = fetchFromGitHub {
     owner = "semantic-release";
     repo = "semantic-release";
     rev = "v${version}";
-    hash = "sha256-nQfHgVQ2Daa9CTiHCzd8XRuxAXL/jOG7KBfoZZWAaNo=";
+    hash = "sha256-iucXpzB9Rd7HuAxg7ZYLuY8j7zRCYxjly5zhyFOmDak=";
   };
 
-  npmDepsHash = "sha256-T+U9FKYa6VUIOLYOYwCBs0B53vgNlTYXZLJm+YwfWu4=";
+  npmDepsHash = "sha256-FrwwER5/QNBV7Ppby7bJMBV8bfgTCWjeORPv9/KjeNo=";
 
   dontNpmBuild = true;
 
   nativeBuildInputs = [
     python3
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools;
 
   # Fixes `semantic-release --version` output
   postPatch = ''
@@ -39,5 +40,7 @@ buildNpmPackage rec {
     homepage = "https://semantic-release.gitbook.io/semantic-release/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sestrella ];
+    # https://hydra.nixos.org/job/nixpkgs/trunk/semantic-release.aarch64-linux
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

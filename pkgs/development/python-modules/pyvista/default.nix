@@ -6,7 +6,6 @@
   numpy,
   pillow,
   pooch,
-  pythonAtLeast,
   scooby,
   setuptools,
   typing-extensions,
@@ -15,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.45.2";
+  version = "0.46.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "pyvista";
     tag = "v${version}";
-    hash = "sha256-szI9kzJQOVCKcGTWj9Twq9i2DzbrHt/LmYBBfq6MBy8=";
+    hash = "sha256-yTCHbAOcAxXrXwKbTXKGuSwoA69hy+XBT1kt6MhdoxQ=";
   };
 
   build-system = [ setuptools ];
@@ -42,12 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvista" ];
 
-  meta = with lib; {
-    broken = pythonAtLeast "3.13"; # segfault
+  meta = {
     description = "Easier Pythonic interface to VTK";
     homepage = "https://pyvista.org";
     changelog = "https://github.com/pyvista/pyvista/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

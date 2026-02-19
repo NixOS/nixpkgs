@@ -7,15 +7,15 @@
   asciidoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yash";
-  version = "2.59";
+  version = "2.60";
 
   src = fetchFromGitHub {
     owner = "magicant";
     repo = "yash";
-    rev = version;
-    hash = "sha256-HTKodWcP7K2DLggELSi4TkFezjb3bhMRXiLenBEZoaQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-iHM1f+zdYsfuqmyel+vlFi+TQukmN91SyZCHJLXPnTs=";
   };
 
   strictDeps = true;
@@ -25,14 +25,14 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ ncurses ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://yash.osdn.jp/index.html.en";
     description = "Yet another POSIX-compliant shell";
     mainProgram = "yash";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qbit ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qbit ];
+    platforms = lib.platforms.all;
   };
 
   passthru.shellPath = "/bin/yash";
-}
+})

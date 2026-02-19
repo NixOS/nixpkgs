@@ -66,13 +66,15 @@ stdenv.mkDerivation {
   pname = "corefonts";
   version = "1";
 
-  exes = map (
-    { name, hash }:
-    fetchurl {
-      url = "mirror://sourceforge/corefonts/the%20fonts/final/${name}32.exe";
-      inherit hash;
-    }
-  ) fonts;
+  env.exes = toString (
+    map (
+      { name, hash }:
+      fetchurl {
+        url = "mirror://sourceforge/corefonts/the%20fonts/final/${name}32.exe";
+        inherit hash;
+      }
+    ) fonts
+  );
 
   nativeBuildInputs = [ cabextract ];
 
@@ -137,11 +139,13 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://corefonts.sourceforge.net/";
     description = "Microsoft's TrueType core fonts for the Web";
-    platforms = platforms.all;
-    license = licenses.unfreeRedistributable;
+    platforms = lib.platforms.all;
+    license = lib.licenses.unfreeRedistributable;
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.
     priority = 5;

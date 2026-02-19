@@ -48,11 +48,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "48.1";
+  version = "49.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CEqYUEApTDZFS0ZKIUT5gcAnSQa0xJ1xYT5hztapbo8=";
+    hash = "sha256-9kbbLxK89Ag3K2tJrpEJn85S0OrHYs6iMRqMik3/nQA=";
   };
 
   patches = [
@@ -101,23 +101,25 @@ stdenv.mkDerivation (finalAttrs: {
     # For video screenshots
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-  ] ++ lib.optionals withFwupd [ fwupd ];
+  ]
+  ++ lib.optionals withFwupd [ fwupd ];
 
   mesonFlags = [
     # Requires /etc/machine-id, D-Bus system bus, etc.
     "-Dtests=false"
-  ] ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
+  ]
+  ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-software"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Software store that lets you install and update applications and system extensions";
     mainProgram = "gnome-software";
     homepage = "https://apps.gnome.org/Software/";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

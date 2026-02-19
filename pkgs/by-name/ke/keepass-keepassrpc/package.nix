@@ -16,13 +16,12 @@ let
       hash = "sha256-p5dYluCrXAKhBhlm6sQ3QQE3gLMJzEZsHXwGnVeXFos=";
     };
 
-    meta = with lib; {
+    meta = {
       description = "KeePassRPC plugin that needs to be installed inside KeePass in order for Kee to be able to connect your browser to your passwords";
       homepage = "https://github.com/kee-org/keepassrpc";
       platforms = [ "x86_64-linux" ];
-      license = licenses.gpl2;
-      maintainers = with maintainers; [
-        mjanczyk
+      license = lib.licenses.gpl2;
+      maintainers = with lib.maintainers; [
         svsdep
         mgregoire
       ];

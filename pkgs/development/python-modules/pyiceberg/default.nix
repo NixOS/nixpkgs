@@ -6,7 +6,6 @@
 
   # build-system
   cython,
-  poetry-core,
   setuptools,
 
   # dependencies
@@ -16,24 +15,30 @@
   mmh3,
   pydantic,
   pyparsing,
-  ray,
+  pyroaring,
   requests,
   rich,
-  sortedcontainers,
   strictyaml,
   tenacity,
   zstandard,
 
   # optional-dependencies
   adlfs,
-  # getdaft,
+  google-cloud-bigquery,
+  datafusion,
   duckdb,
   pyarrow,
   boto3,
+  azure-identity,
+  google-auth,
   gcsfs,
-  mypy-boto3-glue,
+  huggingface-hub,
   thrift,
+  kerberos,
   pandas,
+  polars,
+  pyiceberg-core,
+  ray,
   s3fs,
   python-snappy,
   psycopg2-binary,
@@ -42,7 +47,6 @@
   # tests
   azure-core,
   azure-storage-blob,
-  datafusion,
   fastavro,
   moto,
   pyspark,
@@ -54,38 +58,25 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iceberg-python";
-  version = "0.9.1";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
-    tag = "pyiceberg-${version}";
-    hash = "sha256-OUj8z/UOIcK0S4tf6Id52YHweNDfYnX6P4nChXrOxqY=";
+    tag = "pyiceberg-${finalAttrs.version}";
+    hash = "sha256-sej0RJuoTnpX0DXC54RTacZNJIxzorcG4xlxByNUxc4=";
   };
-
-  patches = [
-    # Build script fails to build the cython extension on python 3.11 (no issues with python 3.12):
-    # distutils.errors.DistutilsSetupError: each element of 'ext_modules' option must be an Extension instance or 2-tuple
-    # This error vanishes if Cython and setuptools imports are swapped
-    # https://stackoverflow.com/a/53356077/11196710
-    ./reorder-imports-in-build-script.patch
-  ];
 
   build-system = [
     cython
-    poetry-core
     setuptools
   ];
 
   # Prevents the cython build to fail silently
   env.CIBUILDWHEEL = "1";
-
-  pythonRelaxDeps = [
-    "rich"
-  ];
 
   dependencies = [
     cachetools
@@ -94,10 +85,9 @@ buildPythonPackage rec {
     mmh3
     pydantic
     pyparsing
-    ray
+    pyroaring
     requests
     rich
-    sortedcontainers
     strictyaml
     tenacity
     zstandard
@@ -107,8 +97,17 @@ buildPythonPackage rec {
     adlfs = [
       adlfs
     ];
+    bigquery = [
+      google-cloud-bigquery
+    ];
+    bodo = [
+      # bodo
+    ];
     daft = [
-      # getdaft
+      # daft
+    ];
+    datafusion = [
+      datafusion
     ];
     duckdb = [
       duckdb
@@ -117,27 +116,50 @@ buildPythonPackage rec {
     dynamodb = [
       boto3
     ];
+    entra-auth = [
+      azure-identity
+    ];
+    gcp-auth = [
+      google-auth
+    ];
     gcsfs = [
       gcsfs
     ];
     glue = [
       boto3
-      mypy-boto3-glue
+    ];
+    hf = [
+      huggingface-hub
     ];
     hive = [
       thrift
+    ];
+    hive-kerberos = [
+      kerberos
+      thrift
+      # thrift-sasl
     ];
     pandas = [
       pandas
       pyarrow
     ];
+    polars = [
+      polars
+    ];
     pyarrow = [
       pyarrow
+      pyiceberg-core
+    ];
+    pyiceberg-core = [
+      pyiceberg-core
     ];
     ray = [
       pandas
       pyarrow
       ray
+    ];
+    rest-sigv4 = [
+      boto3
     ];
     s3fs = [
       s3fs
@@ -151,9 +173,6 @@ buildPythonPackage rec {
     ];
     sql-sqlite = [
       sqlalchemy
-    ];
-    zstandard = [
-      zstandard
     ];
   };
 
@@ -170,25 +189,31 @@ buildPythonPackage rec {
     datafusion
     fastavro
     moto
-    mypy-boto3-glue
-    pandas
-    pyarrow
     pyspark
     pytest-lazy-fixture
     pytest-mock
     pytest-timeout
     pytestCheckHook
     requests-mock
-    s3fs
-    sqlalchemy
-    thrift
-  ] ++ moto.optional-dependencies.server;
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.adlfs
+  ++ finalAttrs.passthru.optional-dependencies.bigquery
+  ++ finalAttrs.passthru.optional-dependencies.entra-auth
+  ++ finalAttrs.passthru.optional-dependencies.hive
+  ++ finalAttrs.passthru.optional-dependencies.pandas
+  ++ finalAttrs.passthru.optional-dependencies.pyarrow
+  ++ finalAttrs.passthru.optional-dependencies.s3fs
+  ++ finalAttrs.passthru.optional-dependencies.sql-sqlite
+  ++ moto.optional-dependencies.server;
 
-  pytestFlagsArray = [
-    "-W"
+  pytestFlags = [
     # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
-    "ignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::ResourceWarning"
   ];
+
+  preCheck = ''
+    rm -rf pyiceberg
+  '';
 
   disabledTestPaths = [
     # Several errors:
@@ -198,69 +223,96 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  disabledTests =
-    [
-      # ModuleNotFoundError: No module named 'puresasl'
-      "test_create_hive_client_with_kerberos"
-      "test_create_hive_client_with_kerberos_using_context_manager"
+  disabledTests = [
+    # assert "Expected '<=' | '<>' | '<' | '>=' | '>' | '==' | '=' | '!=', found '.'" in str(exc_info.value)
+    "test_quoted_column_with_dots"
 
-      # Require unpackaged pyiceberg_core
-      "test_bucket_pyarrow_transforms"
-      "test_transform_consistency_with_pyarrow_transform"
-      "test_truncate_pyarrow_transforms"
+    # AssertionError: assert 'grant_type=c...scope=catalog' == 'grant_type=c...scope=catalog'
+    "test_auth_header"
 
-      # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
-      "test_checking_if_a_file_exists"
-      "test_closing_a_file"
-      "test_fsspec_file_tell"
-      "test_fsspec_getting_length_of_file"
-      "test_fsspec_pickle_round_trip_s3"
-      "test_fsspec_raise_on_opening_file_not_found"
-      "test_fsspec_read_specified_bytes_for_file"
-      "test_fsspec_write_and_read_file"
-      "test_writing_avro_file"
+    # KeyError: 'authorization'
+    "test_token_200"
+    "test_token_200_without_optional_fields"
+    "test_token_with_default_scope"
+    "test_token_with_optional_oauth_params"
+    "test_token_with_custom_scope"
 
-      # Require unpackaged gcsfs
-      "test_fsspec_converting_an_outputfile_to_an_inputfile_gcs"
-      "test_fsspec_new_input_file_gcs"
-      "test_fsspec_new_output_file_gcs"
-      "test_fsspec_pickle_roundtrip_gcs"
+    # AttributeError: 'SessionContext' object has no attribute 'register_table_provider'
+    "test_datafusion_register_pyiceberg_tabl"
 
-      # Timeout (network access)
-      "test_fsspec_converting_an_outputfile_to_an_inputfile_adls"
-      "test_fsspec_new_abfss_output_file_adls"
-      "test_fsspec_new_input_file_adls"
-      "test_fsspec_pickle_round_trip_aldfs"
-      "test_partitioned_write"
-      "test_token_200_w_oauth2_server_uri"
+    # ModuleNotFoundError: No module named 'puresasl'
+    "test_create_hive_client_with_kerberos"
+    "test_create_hive_client_with_kerberos_using_context_manager"
 
-      # Hangs forever (from tests/io/test_pyarrow.py)
-      "test_getting_length_of_file_gcs"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
-      "test_converting_an_outputfile_to_an_inputfile_gcs"
-      "test_new_input_file_gcs"
-      "test_new_output_file_gc"
+    # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
+    "test_checking_if_a_file_exists"
+    "test_closing_a_file"
+    "test_fsspec_file_tell"
+    "test_fsspec_getting_length_of_file"
+    "test_fsspec_pickle_round_trip_s3"
+    "test_fsspec_raise_on_opening_file_not_found"
+    "test_fsspec_read_specified_bytes_for_file"
+    "test_fsspec_write_and_read_file"
+    "test_writing_avro_file"
 
-      # PermissionError: [Errno 13] Failed to open local file
-      # '/tmp/iceberg/warehouse/default.db/test_projection_partitions/metadata/00000-6c1c61a1-495f-45d3-903d-a2643431be91.metadata.json'
-      "test_identity_transform_column_projection"
-      "test_identity_transform_columns_projection"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AssertionError:
-      # assert "Incompatible with StructProtocol: <class 'str'>" in "Unable to initialize struct: <class 'str'>"
-      "test_read_not_struct_type"
-    ];
+    # Require unpackaged gcsfs
+    "test_fsspec_converting_an_outputfile_to_an_inputfile_gcs"
+    "test_fsspec_new_input_file_gcs"
+    "test_fsspec_new_output_file_gcs"
+    "test_fsspec_pickle_roundtrip_gcs"
+
+    # Timeout (network access)
+    "test_config_200"
+    "test_fsspec_converting_an_outputfile_to_an_inputfile_adls"
+    "test_fsspec_new_abfss_output_file_adls"
+    "test_fsspec_new_input_file_adls"
+    "test_fsspec_pickle_round_trip_aldfs"
+    "test_partitioned_write"
+    "test_token_200_w_oauth2_server_uri"
+
+    # azure.core.exceptions.ServiceRequestError (network access)
+    "test_converting_an_outputfile_to_an_inputfile_adls"
+    "test_file_tell_adls"
+    "test_getting_length_of_file_adls"
+    "test_new_input_file_adls"
+    "test_new_output_file_adls"
+    "test_raise_on_opening_file_not_found_adls"
+    "test_read_specified_bytes_for_file_adls"
+    "test_write_and_read_file_adls"
+
+    # Hangs forever (from tests/io/test_pyarrow.py)
+    "test_getting_length_of_file_gcs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
+    "test_converting_an_outputfile_to_an_inputfile_gcs"
+    "test_create_table_with_database_location"
+    "test_drop_table_with_database_location"
+    "test_new_input_file_gcs"
+    "test_new_output_file_gc"
+
+    # PermissionError: [Errno 13] Failed to open local file
+    # '/tmp/iceberg/warehouse/default.db/test_projection_partitions/metadata/00000-6c1c61a1-495f-45d3-903d-a2643431be91.metadata.json'
+    "test_identity_transform_column_projection"
+    "test_identity_transform_columns_projection"
+    "test_in_memory_catalog_context_manager"
+    "test_inspect_partition_for_nested_field"
+    "test_inspect_partitions_respects_partition_evolution"
+    "test_partition_column_projection_with_schema_evolution"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AssertionError:
+    # assert "Incompatible with StructProtocol: <class 'str'>" in "Unable to initialize struct: <class 'str'>"
+    "test_read_not_struct_type"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python library for programmatic access to Apache Iceberg";
     homepage = "https://github.com/apache/iceberg-python";
-    changelog = "https://github.com/apache/iceberg-python/releases/tag/pyiceberg-${version}";
+    changelog = "https://github.com/apache/iceberg-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

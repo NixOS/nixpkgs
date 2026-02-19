@@ -8,7 +8,6 @@
   pkg-config,
   openssl,
   publicsuffix-list,
-  pythonOlder,
   libiconv,
   pytestCheckHook,
   toml,
@@ -17,9 +16,7 @@
 buildPythonPackage rec {
   pname = "adblock";
   version = "0.6.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   # Pypi only has binary releases
   src = fetchFromGitHub {
@@ -48,18 +45,20 @@ buildPythonPackage rec {
     hash = "sha256-fetJX6HQxRZ/Az7rJeU9S+s8ttgNPnJEvTLfzGt4xjk=";
   };
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ (with rustPlatform; [
-      cargoSetupHook
-      maturinBuildHook
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ]);
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
 
@@ -83,12 +82,12 @@ buildPythonPackage rec {
     "adblock.adblock"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for Brave's adblocking library";
     homepage = "https://github.com/ArniDagur/python-adblock/";
     changelog = "https://github.com/ArniDagur/python-adblock/blob/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ dotlambda ];
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ dotlambda ];
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];

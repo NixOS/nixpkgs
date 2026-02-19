@@ -3,23 +3,23 @@
   fetchFromGitHub,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "juicity";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "juicity";
     repo = "juicity";
-    rev = "v${version}";
-    hash = "sha256-4sej/nb7d58+hSCaD6KIfDsqiGmgECPIbRKR65TbMBM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-CFytPXfmGNfKDbyYuMCr+4HiH37f28cTmng+XgnO6T0=";
   };
 
-  vendorHash = "sha256-SM5ZrTtuqenPsGjphkCM9JHzucw0/qBmevD+3/kyF6k=";
+  vendorHash = "sha256-kToWZCk6xAAj+t/elO9U5itoOBQ2J9sLcmzz+nNdBHg=";
 
   proxyVendor = true;
 
   ldflags = [
-    "-X=github.com/juicity/juicity/config.Version=${version}"
+    "-X=github.com/juicity/juicity/config.Version=${finalAttrs.version}"
   ];
 
   subPackages = [
@@ -38,10 +38,10 @@ buildGoModule rec {
       --replace /usr/bin/juicity-client $out/bin/juicity-client
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/juicity/juicity";
     description = "Quic-based proxy protocol";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ oluceps ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ oluceps ];
   };
-}
+})

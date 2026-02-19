@@ -9,18 +9,17 @@
   fortuneAlias ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fortune-kind";
   version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "cafkafk";
     repo = "fortune-kind";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Tpg0Jq2EhkwQuz5ZOtv6Rb5YESSlmzLoJPTxYJNNgac=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Kp3pv9amEz9oFMDhz0IZDmhpsok5VgrvJZfwSPyz2X0=";
 
   nativeBuildInputs = [
@@ -49,16 +48,15 @@ rustPlatform.buildRustPackage rec {
     cp -r $src/fortunes $out/fortunes;
   '';
 
-  postInstall =
-    ''
-      wrapProgram $out/bin/fortune-kind \
-        --set-default FORTUNE_DIR "$out/fortunes"
-    ''
-    + lib.optionalString fortuneAlias ''
-      ln -s fortune-kind $out/bin/fortune
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/fortune-kind \
+      --set-default FORTUNE_DIR "$out/fortunes"
+  ''
+  + lib.optionalString fortuneAlias ''
+    ln -s fortune-kind $out/bin/fortune
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Kinder, curated fortune, written in rust";
     longDescription = ''
       Historically, contributions to fortune-mod have had a less-than ideal
@@ -69,10 +67,10 @@ rustPlatform.buildRustPackage rec {
       process to the fortune adoption workflow.
     '';
     homepage = "https://github.com/cafkafk/fortune-kind";
-    changelog = "https://github.com/cafkafk/fortune-kind/releases/tag/v${version}";
-    license = licenses.gpl3Only;
+    changelog = "https://github.com/cafkafk/fortune-kind/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
     mainProgram = "fortune-kind";
-    maintainers = with maintainers; [ cafkafk ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ cafkafk ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})

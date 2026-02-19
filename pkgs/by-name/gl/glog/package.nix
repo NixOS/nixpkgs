@@ -9,14 +9,14 @@
   pkgsBuildHost,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glog";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+nwWP6VBmhgU7GCPSEGUzvUSCc48wXME181WpJ5ABP4=";
   };
 
@@ -75,6 +75,11 @@ stdenv.mkDerivation (finalAttrs: rec {
         ]
         ++ [
           "logging" # works around segfaults for now
+        ]
+        ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+          # CHECK_STREQ failed: symbol == "non_inline_func" ((/build/source/build/symbolize_unittest+0x1000b840) vs. non_inline_func)
+          # TestWithPCInsideNonInlineFunction doesn't use TEST(), so can't exclude via GTEST_FILTER
+          "symbolize"
         ];
       excludedTestsRegex = lib.optionalString (
         excludedTests != [ ]
@@ -86,12 +91,12 @@ stdenv.mkDerivation (finalAttrs: rec {
       runHook postCheck
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/glog";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     description = "Library for application-level logging";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       nh2
       r-burns
     ];

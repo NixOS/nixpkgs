@@ -26,13 +26,13 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "i3-layout-manager";
   version = "unstable-2020-05-04";
 
   src = fetchFromGitHub {
     owner = "klaxalk";
-    repo = pname;
+    repo = "i3-layout-manager";
     rev = "df54826bba351d8bcd7ebeaf26c07c713af7912c";
     sha256 = "0ccvr43yp26fnh5d82cw7jcfq2sbxzzmdx2cp15bmxr8ixr8knc3";
   };
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/klaxalk/i3-layout-manager";
     description = "Saving, loading and managing layouts for i3wm";
     mainProgram = "layout_manager";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

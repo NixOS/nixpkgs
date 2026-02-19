@@ -2,7 +2,9 @@
   bash,
   bison,
   buildGoModule,
+  cargo,
   cmake,
+  corrosion,
   cups,
   curl,
   dlib,
@@ -35,6 +37,8 @@
   pkg-config,
   protobuf,
   replaceVars,
+  rustc,
+  rustPlatform,
   snappy,
   stdenv,
   systemd,
@@ -47,42 +51,52 @@
   withDBengine ? true,
   withDebug ? false,
   withEbpf ? false,
-  withIpmi ? (stdenv.hostPlatform.isLinux),
+  withIpmi ? stdenv.hostPlatform.isLinux,
   withLibbacktrace ? true,
-  withNdsudo ? false,
-  withNetfilter ? (stdenv.hostPlatform.isLinux),
-  withNetworkViewer ? (stdenv.hostPlatform.isLinux),
-  withSsl ? true,
-  withSystemdJournal ? (stdenv.hostPlatform.isLinux),
   withML ? true,
+  withNdsudo ? false,
+  withNetfilter ? stdenv.hostPlatform.isLinux,
+  withNetworkViewer ? stdenv.hostPlatform.isLinux,
+  withOtel ? true,
+  withSsl ? true,
+  withSystemdJournal ? stdenv.hostPlatform.isLinux,
+  withSystemdUnits ? stdenv.hostPlatform.isLinux,
 }:
-stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.2";
-  pname = "netdata";
+stdenv.mkDerivation (
+  finalAttrs:
+  {
+    pname = "netdata";
+    version = "2.8.5";
 
-  src = fetchFromGitHub {
-    owner = "netdata";
-    repo = "netdata";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-QsExU7/fdDHekNa+7WnWGiAKAsR1mqyJU34OXA1vB7c=";
-    fetchSubmodules = true;
-  };
+    src = fetchFromGitHub {
+      owner = "netdata";
+      repo = "netdata";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-NO6KE2Gf09Y9Ff6uJQj5XAZ+05WMdvRV2iSBdWTs2CE=";
+      fetchSubmodules = true;
+    };
 
-  strictDeps = true;
+    strictDeps = true;
 
-  nativeBuildInputs = [
-    bison
-    cmake
-    flex
-    go
-    makeWrapper
-    ninja
-    pkg-config
-  ] ++ lib.optionals withCups [ cups.dev ];
+    nativeBuildInputs = [
+      bison
+      cmake
+      flex
+      go
+      makeWrapper
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals withCups [ cups.dev ]
+    ++ lib.optionals (withOtel || withSystemdJournal) [
+      cargo
+      corrosion
+      rustc
+      rustPlatform.cargoSetupHook
+    ];
 
-  # bash is only used to rewrite shebangs
-  buildInputs =
-    [
+    # bash is only used to rewrite shebangs
+    buildInputs = [
       bash
       curl
       jemalloc
@@ -96,8 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libossp_uuid
     ]
-
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libcap
       libuuid
       lm_sensors
@@ -119,15 +132,15 @@ stdenv.mkDerivation (finalAttrs: {
       libnetfilter_acct
     ]
     ++ lib.optionals withSsl [ openssl ]
-    ++ lib.optionals withSystemdJournal [ systemd ];
+    ++ lib.optionals (withSystemdJournal || withSystemdUnits) [ systemd ];
 
-  patches =
-    [
+    patches = [
       # Allow ndsudo to use non-hardcoded `PATH`
       # See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
       #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
       ./ndsudo-fix-path.patch
 
+      ./use-local-corrosion.patch
       ./use-local-libbacktrace.patch
     ]
     ++ lib.optional withCloudUi (
@@ -141,44 +154,35 @@ stdenv.mkDerivation (finalAttrs: {
       }
     );
 
-  # Guard against unused build-time development inputs in closure. Without
-  # the ./skip-CONFIGURE_COMMAND.patch patch the closure retains inputs up
-  # to bootstrap tools:
-  #   https://github.com/NixOS/nixpkgs/pull/175719
-  # We pick zlib.dev as a simple canary package with pkg-config input.
-  disallowedReferences = lib.optional (!withDebug) zlib.dev;
+    # Guard against unused build-time development inputs in closure. Without
+    # the ./skip-CONFIGURE_COMMAND.patch patch the closure retains inputs up
+    # to bootstrap tools:
+    #   https://github.com/NixOS/nixpkgs/pull/175719
+    # We pick zlib.dev as a simple canary package with pkg-config input.
+    disallowedReferences = lib.optional (!withDebug) zlib.dev;
 
-  donStrip = withDebug || withLibbacktrace;
-  env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
+    donStrip = withDebug || withLibbacktrace;
+    env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
-  postInstall =
-    ''
+    postInstall = ''
       # Relocate one folder above.
       mv $out/usr/* $out/
     ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       # rename this plugin so netdata will look for setuid wrapper
       mv $out/libexec/netdata/plugins.d/apps.plugin \
-         $out/libexec/netdata/plugins.d/apps.plugin.org
+        $out/libexec/netdata/plugins.d/apps.plugin.org
       mv $out/libexec/netdata/plugins.d/cgroup-network \
-         $out/libexec/netdata/plugins.d/cgroup-network.org
+        $out/libexec/netdata/plugins.d/cgroup-network.org
       mv $out/libexec/netdata/plugins.d/perf.plugin \
-         $out/libexec/netdata/plugins.d/perf.plugin.org
+        $out/libexec/netdata/plugins.d/perf.plugin.org
       mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
-         $out/libexec/netdata/plugins.d/slabinfo.plugin.org
+        $out/libexec/netdata/plugins.d/slabinfo.plugin.org
       mv $out/libexec/netdata/plugins.d/debugfs.plugin \
-         $out/libexec/netdata/plugins.d/debugfs.plugin.org
-      ${lib.optionalString withSystemdJournal ''
-        mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
-           $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
-      ''}
+        $out/libexec/netdata/plugins.d/debugfs.plugin.org
       ${lib.optionalString withIpmi ''
         mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
-           $out/libexec/netdata/plugins.d/freeipmi.plugin.org
-      ''}
-      ${lib.optionalString withNetworkViewer ''
-        mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
-           $out/libexec/netdata/plugins.d/network-viewer.plugin.org
+          $out/libexec/netdata/plugins.d/freeipmi.plugin.org
       ''}
       ${lib.optionalString withNdsudo ''
         mv $out/libexec/netdata/plugins.d/ndsudo \
@@ -186,112 +190,169 @@ stdenv.mkDerivation (finalAttrs: {
 
         ln -s /var/lib/netdata/ndsudo/ndsudo $out/libexec/netdata/plugins.d/ndsudo
       ''}
+      ${lib.optionalString withNetworkViewer ''
+        mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
+          $out/libexec/netdata/plugins.d/network-viewer.plugin.org
+      ''}
+      ${lib.optionalString withOtel ''
+        mv $out/libexec/netdata/plugins.d/otel-plugin \
+          $out/libexec/netdata/plugins.d/otel-plugin.org
+      ''}
+      ${lib.optionalString withSystemdJournal ''
+        mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
+          $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
+      ''}
+      ${lib.optionalString withSystemdUnits ''
+        mv $out/libexec/netdata/plugins.d/systemd-units.plugin \
+          $out/libexec/netdata/plugins.d/systemd-units.plugin.org
+      ''}
     '';
 
-  preConfigure = ''
-    export GOCACHE=$TMPDIR/go-cache
-    export GOPATH=$TMPDIR/go
-    export GOSUMDB=off
+    preConfigure = ''
+      ${lib.optionalString (withOtel || withSystemdJournal) ''
+        export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
+      ''}
 
-    substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
-      --replace-fail \
-        'GOPROXY=https://proxy.golang.org' \
-        'GOPROXY=file://${finalAttrs.passthru.netdata-go-modules}'
+      export GOCACHE=$TMPDIR/go-cache
+      export GOPATH=$TMPDIR/go
+      export GOSUMDB=off
 
-    # Prevent the path to be caught into the Nix store path.
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'set(CACHE_DIR "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(CACHE_DIR "/var/cache/netdata")' \
-      --replace-fail 'set(CONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(CONFIG_DIR "/etc/netdata")' \
-      --replace-fail 'set(LIBCONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(LIBCONFIG_DIR "${placeholder "out"}/share/netdata/conf.d")' \
-      --replace-fail 'set(LOG_DIR "''${NETDATA_RUNTIME_PREFIX}/var/log/netdata")' 'set(LOG_DIR "/var/log/netdata")' \
-      --replace-fail 'set(PLUGINS_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata/plugins.d")' 'set(PLUGINS_DIR "${placeholder "out"}/libexec/netdata/plugins.d")' \
-      --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
-      --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
-      --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
-      --replace-fail 'set(sbindir_POST "''${NETDATA_RUNTIME_PREFIX}/''${BINDIR}")' 'set(sbindir_POST "${placeholder "out"}/bin")' \
-      --replace-fail 'set(configdir_POST "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(configdir_POST "/etc/netdata")' \
-      --replace-fail 'set(libconfigdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(libconfigdir_POST "${placeholder "out"}/share/netdata/conf.d")' \
-      --replace-fail 'set(cachedir_POST "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(libconfigdir_POST "/var/cache/netdata")' \
-      --replace-fail 'set(registrydir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata/registry")' 'set(registrydir_POST "/var/lib/netdata/registry")' \
-      --replace-fail 'set(varlibdir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(varlibdir_POST "/var/lib/netdata")' \
-      --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
-  '';
+      substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
+        --replace-fail \
+          'GOPROXY=https://proxy.golang.org' \
+          'GOPROXY=file://${finalAttrs.passthru.netdata-go-modules},file://${finalAttrs.passthru.nd-mcp}'
 
-  cmakeFlags = [
-    "-DWEB_DIR=share/netdata/web"
-    (lib.cmakeBool "ENABLE_DASHBOARD" withCloudUi)
-    (lib.cmakeBool "ENABLE_DBENGINE" withDBengine)
-    (lib.cmakeBool "ENABLE_EXPORTER_PROMETHEUS_REMOTE_WRITE" withConnPrometheus)
-    (lib.cmakeBool "ENABLE_JEMALLOC" true)
-    (lib.cmakeBool "ENABLE_LIBBACKTRACE" withLibbacktrace)
-    (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
-    (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
-    (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
-    (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
-    (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
-    (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
-    (lib.cmakeBool "ENABLE_ML" withML)
-    # Suggested by upstream.
-    "-G Ninja"
-  ] ++ lib.optional withML "-DNETDATA_DLIB_SOURCE_PATH=${dlib.src}";
+      # Prevent the path to be caught into the Nix store path.
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'set(CACHE_DIR "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(CACHE_DIR "/var/cache/netdata")' \
+        --replace-fail 'set(CONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(CONFIG_DIR "/etc/netdata")' \
+        --replace-fail 'set(LIBCONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(LIBCONFIG_DIR "${placeholder "out"}/share/netdata/conf.d")' \
+        --replace-fail 'set(LOG_DIR "''${NETDATA_RUNTIME_PREFIX}/var/log/netdata")' 'set(LOG_DIR "/var/log/netdata")' \
+        --replace-fail 'set(PLUGINS_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata/plugins.d")' 'set(PLUGINS_DIR "${placeholder "out"}/libexec/netdata/plugins.d")' \
+        --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
+        --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
+        --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
+        --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "bin")' \
+        --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
+    '';
 
-  postFixup = ''
-    wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
-    wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
-    wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
-    ${lib.optionalString (stdenv.hostPlatform.isLinux) ''
-      substituteInPlace $out/lib/netdata/conf.d/go.d/sensors.conf --replace-fail '/usr/bin/sensors' '${lm_sensors}/bin/sensors'
-    ''}
+    cmakeFlags = [
+      "-DWEB_DIR=share/netdata/web"
+      (lib.cmakeBool "ENABLE_DASHBOARD" withCloudUi)
+      (lib.cmakeBool "ENABLE_DBENGINE" withDBengine)
+      (lib.cmakeBool "ENABLE_EXPORTER_PROMETHEUS_REMOTE_WRITE" withConnPrometheus)
+      (lib.cmakeBool "ENABLE_JEMALLOC" true)
+      (lib.cmakeBool "ENABLE_LIBBACKTRACE" withLibbacktrace)
+      (lib.cmakeBool "ENABLE_ML" withML)
+      (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
+      (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
+      (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
+      (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
+      (lib.cmakeBool "ENABLE_PLUGIN_OTEL" withOtel)
+      (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
+      (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_UNITS" withSystemdUnits)
+      (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
+      # Suggested by upstream.
+      "-G Ninja"
+    ]
+    ++ lib.optional withML "-DNETDATA_DLIB_SOURCE_PATH=${dlib.src}";
 
-    # Time to cleanup the output directory.
-    unlink $out/sbin
-    cp $out/etc/netdata/edit-config $out/bin/netdata-edit-config
-    mv $out/lib/netdata/conf.d $out/share/netdata/conf.d
-    rm -rf $out/{var,usr,etc}
-  '';
+    postFixup = ''
+      wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
+      wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
+      wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        substituteInPlace $out/lib/netdata/conf.d/go.d/sensors.conf --replace-fail '/usr/bin/sensors' '${lm_sensors}/bin/sensors'
+      ''}
 
-  enableParallelBuilding = true;
+      # Time to cleanup the output directory.
+      cp $out/etc/netdata/edit-config $out/bin/netdata-edit-config
+      mv $out/lib/netdata/conf.d $out/share/netdata/conf.d
+      rm -rf $out/{var,usr,etc}
+    '';
 
-  passthru = rec {
-    netdata-go-modules =
-      (buildGoModule {
-        pname = "netdata-go-plugins";
-        inherit (finalAttrs) version src;
+    enableParallelBuilding = true;
 
-        sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
+    passthru = {
+      nd-mcp =
+        (buildGoModule {
+          pname = "${finalAttrs.pname}-nd-mcp";
+          inherit (finalAttrs) version src;
 
-        vendorHash = "sha256-N03IGTtF78PCo4kf0Sdtzv6f8z47ohg8g3YIXtINRjU=";
-        doCheck = false;
-        proxyVendor = true;
+          sourceRoot = "${finalAttrs.src.name}/src/web/mcp/bridges/stdio-golang";
 
-        ldflags = [
-          "-s"
-          "-w"
-          "-X main.version=${finalAttrs.version}"
-        ];
+          vendorHash = "sha256-jyCTp52Dc2IuRwzGT+sHFljO30oqAMfe3xVdEpV+R2c=";
+          proxyVendor = true;
+          doCheck = false;
 
-        passthru.tests = tests;
-        meta = finalAttrs.meta // {
-          description = "Netdata orchestrator for data collection modules written in Go";
-          mainProgram = "godplugin";
-          license = lib.licenses.gpl3Only;
-        };
-      }).goModules;
-    inherit withIpmi withNetworkViewer withNdsudo;
-    tests.netdata = nixosTests.netdata;
-  };
+          subPackages = [ "." ];
 
-  meta = with lib; {
-    broken = stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
-    description = "Real-time performance monitoring tool";
-    homepage = "https://www.netdata.cloud/";
-    changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
-    license = [ licenses.gpl3Plus ] ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
-    mainProgram = "netdata";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      mkg20001
-      rhoriguchi
-    ];
-  };
-})
+          ldflags = [
+            "-s"
+            "-w"
+          ];
+
+          meta = finalAttrs.meta // {
+            description = "Netdata Model Context Protocol (MCP) Integration";
+            license = lib.licenses.gpl3Only;
+          };
+        }).goModules;
+
+      netdata-go-modules =
+        (buildGoModule {
+          pname = "${finalAttrs.pname}-go-plugins";
+          inherit (finalAttrs) version src;
+
+          sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
+
+          vendorHash = "sha256-AVNUbKCvO+Z3eKE+bJ/VFDo1tS9DdlmMw6M3OSdHiIU=";
+          proxyVendor = true;
+          doCheck = false;
+
+          ldflags = [
+            "-s"
+            "-w"
+            "-X main.version=${finalAttrs.version}"
+          ];
+
+          meta = finalAttrs.meta // {
+            description = "Netdata orchestrator for data collection modules written in Go";
+            mainProgram = "godplugin";
+            license = lib.licenses.gpl3Only;
+          };
+        }).goModules;
+
+      inherit
+        withIpmi
+        withNdsudo
+        withNetworkViewer
+        withOtel
+        withSystemdJournal
+        ;
+
+      tests.netdata = nixosTests.netdata;
+    };
+
+    meta = {
+      broken = stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
+      description = "Real-time performance monitoring tool";
+      homepage = "https://www.netdata.cloud/";
+      changelog = "https://github.com/netdata/netdata/releases/tag/v${finalAttrs.version}";
+      license = [ lib.licenses.gpl3Plus ] ++ lib.optionals withCloudUi [ lib.licenses.ncul1 ];
+      mainProgram = "netdata";
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [
+        mkg20001
+        rhoriguchi
+      ];
+    };
+  }
+  // lib.optionalAttrs (withOtel || withSystemdJournal) {
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      pname = "${finalAttrs.pname}-nd-jf";
+      inherit (finalAttrs) version src cargoRoot;
+      hash = "sha256-HY6OtKHP75mO9X+F2a6H6e+3M0pgZBOIIaxAI9OhgkQ=";
+    };
+    cargoRoot = "src/crates/jf";
+  }
+)

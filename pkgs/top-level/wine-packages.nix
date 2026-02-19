@@ -33,6 +33,7 @@ rec {
     usbSupport = true;
     waylandSupport = stdenv.hostPlatform.isLinux;
     x11Support = stdenv.hostPlatform.isLinux;
+    ffmpegSupport = true;
   };
 
   full = base.override {

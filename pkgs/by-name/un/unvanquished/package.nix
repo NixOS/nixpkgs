@@ -20,7 +20,7 @@
   libpng,
   libvorbis,
   libwebp,
-  libX11,
+  libx11,
   lua5,
   makeDesktopItem,
   ncurses,
@@ -40,7 +40,7 @@ let
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-wOFSPPEu7AGsEcqHG7xFWzFlYZRWAIvvfTj5FLZ3HFc=";
   };
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
     libvorbis
     libjpeg
     libwebp
-    libX11
+    libx11
     libpng
   ];
 

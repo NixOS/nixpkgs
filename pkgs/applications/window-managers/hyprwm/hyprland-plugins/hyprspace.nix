@@ -1,20 +1,19 @@
 {
   lib,
   fetchFromGitHub,
-  hyprland,
   mkHyprlandPlugin,
   nix-update-script,
 }:
 
-mkHyprlandPlugin hyprland {
+mkHyprlandPlugin {
   pluginName = "hyprspace";
-  version = "0-unstable-2025-05-09";
+  version = "0-unstable-2025-09-28";
 
   src = fetchFromGitHub {
     owner = "KZDKM";
     repo = "hyprspace";
-    rev = "82bdb6720ef6163f0b10b49ba49702f0bde815d8";
-    hash = "sha256-qs8I5gBib+RLNGYa9om36VivHVrrisJDlZ4EnXNA6OQ=";
+    rev = "e54884da1d6a1af76af9d053887bf3750dd554fd";
+    hash = "sha256-QhcOFLJYC9CiSVPkci62ghMEAJChzl+L98To1pKvnRQ=";
   };
 
   dontUseCmakeConfigure = true;

@@ -1,8 +1,8 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
-  libX11,
+  libx11,
   libinput,
   libxcb,
   libxkbcommon,
@@ -10,12 +10,13 @@
   pkg-config,
   stdenv,
   testers,
+  nixosTests,
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots,
+  wlroots_0_18,
   writeText,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
   # Boolean flags
   enableXWayland ? true,
@@ -40,8 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
   version = "0.7";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dwl";
     repo = "dwl";
     rev = "v${finalAttrs.version}";
@@ -54,21 +54,20 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs =
-    [
-      libinput
-      libxcb
-      libxkbcommon
-      pixman
-      wayland
-      wayland-protocols
-      wlroots
-    ]
-    ++ lib.optionals enableXWayland [
-      libX11
-      xcbutilwm
-      xwayland
-    ];
+  buildInputs = [
+    libinput
+    libxcb
+    libxkbcommon
+    pixman
+    wayland
+    wayland-protocols
+    wlroots_0_18
+  ]
+  ++ lib.optionals enableXWayland [
+    libx11
+    libxcb-wm
+    xwayland
+  ];
 
   outputs = [
     "out"
@@ -85,17 +84,16 @@ stdenv.mkDerivation (finalAttrs: {
     in
     lib.optionalString withCustomConfigH "cp ${configFile} config.h";
 
-  makeFlags =
-    [
-      "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
-      "WAYLAND_SCANNER=wayland-scanner"
-      "PREFIX=$(out)"
-      "MANDIR=$(man)/share/man"
-    ]
-    ++ lib.optionals enableXWayland [
-      ''XWAYLAND="-DXWAYLAND"''
-      ''XLIBS="xcb xcb-icccm"''
-    ];
+  makeFlags = [
+    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
+    "WAYLAND_SCANNER=wayland-scanner"
+    "PREFIX=$(out)"
+    "MANDIR=$(man)/share/man"
+  ]
+  ++ lib.optionals enableXWayland [
+    ''XWAYLAND="-DXWAYLAND"''
+    ''XLIBS="xcb xcb-icccm"''
+  ];
 
   strictDeps = true;
 
@@ -103,10 +101,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      # `dwl -v` emits its version string to stderr and returns 1
-      command = "dwl -v 2>&1; return 0";
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        # `dwl -v` emits its version string to stderr and returns 1
+        command = "dwl -v 2>&1; return 0";
+      };
+      basic = nixosTests.dwl;
     };
   };
 

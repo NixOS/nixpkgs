@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) merecat;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small and made-easy HTTP/HTTPS server based on Jef Poskanzer's thttpd";
     homepage = "https://troglobit.com/projects/merecat/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     # Strange header and/or linker errors
     broken = stdenv.hostPlatform.isDarwin;
   };

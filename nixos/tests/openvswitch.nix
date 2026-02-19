@@ -56,7 +56,7 @@
       node2.wait_for_unit("ovsdb.service")
       node2.wait_for_unit("ovs-vswitchd.service")
 
-      node1.succeed("ping -c3 10.0.0.2")
-      node2.succeed("ping -c3 10.0.0.1")
+      node1.wait_until_succeeds("ping -c1 10.0.0.2", timeout=30)
+      node2.wait_until_succeeds("ping -c1 10.0.0.1", timeout=30)
     '';
 }

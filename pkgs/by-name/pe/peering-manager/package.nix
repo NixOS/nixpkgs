@@ -7,40 +7,42 @@
   plugins ? ps: [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = final: prev: {
+      django = prev.django_5;
+    };
+  };
+in
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "peering-manager";
-  version = "1.8.3";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "peering-manager";
     repo = "peering-manager";
-    tag = "v${version}";
-    sha256 = "sha256-UV1zSX9C9y5faOBUQ7bfj2DT6ffhMW28MIT7SaYjMgw=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-SRXQIbSCnIH1JUJTpF754Jx/B+xzgKhXfNGbhaMyCYQ=";
   };
 
-  format = "other";
-
-  patches = [
-    # Fix compatibility with pyixapi 0.2.3
-    # https://github.com/peering-manager/peering-manager/commit/ee558ff66e467412942559a8a92252e3fc009920
-    ./fix-pyixapi-0.2.3-compatibility.patch
-  ];
+  pyproject = false;
 
   propagatedBuildInputs =
-    with python3.pkgs;
+    with python.pkgs;
     [
       django
-      djangorestframework
-      django-redis
       django-debug-toolbar
       django-filter
       django-postgresql-netfields
       django-prometheus
+      django-redis
       django-rq
       django-tables2
       django-taggit
+      djangorestframework
       drf-spectacular
       drf-spectacular-sidecar
+      dulwich
       jinja2
       markdown
       napalm
@@ -50,9 +52,11 @@ python3.pkgs.buildPythonApplication rec {
       pynetbox
       pyyaml
       requests
+      social-auth-app-django
+      pytz
       tzdata
     ]
-    ++ plugins python3.pkgs;
+    ++ plugins python.pkgs;
 
   buildPhase = ''
     runHook preBuild
@@ -74,20 +78,20 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     # PYTHONPATH of all dependencies used by the package
-    python = python3;
-    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
+    inherit python;
+    pythonPath = python.pkgs.makePythonPath finalAttrs.propagatedBuildInputs;
 
     tests = {
       inherit (nixosTests) peering-manager;
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://peering-manager.net/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "BGP sessions management tool";
     mainProgram = "peering-manager";
-    teams = [ teams.wdz ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ yureka-wdz ];
+    platforms = lib.platforms.linux;
   };
-}
+})

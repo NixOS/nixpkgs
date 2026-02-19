@@ -18,15 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ hareHook ];
 
-  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~sircmpwn/hare-ssh/";
     description = "SSH client & server protocol implementation for Hare";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ patwid ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ patwid ];
 
     inherit (hareHook.meta) platforms badPlatforms;
   };

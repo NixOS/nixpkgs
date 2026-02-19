@@ -16,15 +16,15 @@
   pmix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "prrte";
-  version = "3.0.11";
+  version = "3.0.12";
 
   src = fetchFromGitHub {
     owner = "openpmix";
     repo = "prrte";
-    rev = "v${version}";
-    hash = "sha256-4JEh4N/38k0Xgp0CqnFipaEZlJBQr8nyxoncyz0/7yo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sOCJc70imSzAqYXz29tOKKETsSHvgMUQmeTHlfnQXj4=";
     fetchSubmodules = true;
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})

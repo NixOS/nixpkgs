@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   marisa-trie,
-  pythonOlder,
   fetchPypi,
   pytestCheckHook,
   language-data,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "langcodes";
   version = "3.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,9 +39,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langcodes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python toolkit for working with and comparing the standardized codes for languages";
     homepage = "https://github.com/georgkrause/langcodes";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

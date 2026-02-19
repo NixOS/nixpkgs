@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,18 +8,18 @@
   clusterctl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clusterctl";
-  version = "1.10.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cluster-api";
-    rev = "v${version}";
-    hash = "sha256-8clNhU9RxQ63zBaNnvftp4+wUG33bL8KCxbgzJwJdPo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AaGJhdBTyCxUK+qm++McS6rFlgAdv/7SjQHvaNRn6YU=";
   };
 
-  vendorHash = "sha256-iProsOETP9ahyemF2tHUVmoiqjG+ghjZkHb6PAhygb4=";
+  vendorHash = "sha256-3dh9Y8R4OeUayyqNyrvUcrnSi/4s9x6oMrAADXR5rnw=";
 
   subPackages = [ "cmd/clusterctl" ];
 
@@ -29,12 +30,12 @@ buildGoModule rec {
       t = "sigs.k8s.io/cluster-api/version";
     in
     [
-      "-X ${t}.gitMajor=${lib.versions.major version}"
-      "-X ${t}.gitMinor=${lib.versions.minor version}"
-      "-X ${t}.gitVersion=v${version}"
+      "-X ${t}.gitMajor=${lib.versions.major finalAttrs.version}"
+      "-X ${t}.gitMinor=${lib.versions.minor finalAttrs.version}"
+      "-X ${t}.gitVersion=v${finalAttrs.version}"
     ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # errors attempting to write config to read-only $HOME
     export HOME=$TMPDIR
 
@@ -47,15 +48,15 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = clusterctl;
     command = "HOME=$TMPDIR clusterctl version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
-    changelog = "https://github.com/kubernetes-sigs/cluster-api/releases/tag/${src.rev}";
+    changelog = "https://github.com/kubernetes-sigs/cluster-api/releases/tag/${finalAttrs.src.rev}";
     description = "Kubernetes cluster API tool";
     mainProgram = "clusterctl";
     homepage = "https://cluster-api.sigs.k8s.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qjoly ];
   };
-}
+})

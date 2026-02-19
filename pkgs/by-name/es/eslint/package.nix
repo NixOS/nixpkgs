@@ -2,17 +2,17 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  stdenv,
+  nix-update-script,
 }:
 buildNpmPackage rec {
   pname = "eslint";
-  version = "9.20.0";
+  version = "9.39.2";
 
   src = fetchFromGitHub {
     owner = "eslint";
     repo = "eslint";
     tag = "v${version}";
-    hash = "sha256-ahERh5Io2J/Uz9fgY875ldPtzjiasqxZ0ppINwYNoB4=";
+    hash = "sha256-VIJLEMIg9WUbrSAAHCZ6AJRrao0ssSbR+fyFQE+56vY=";
   };
 
   # NOTE: Generating lock-file
@@ -24,16 +24,23 @@ buildNpmPackage rec {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-F3EUANBvniczR7QxNfo1LlksYPxXt16uqJDFzN6u64Y=";
+  npmDepsHash = "sha256-5QC0XLxcwawRcrc3r3EfFdo3hTZDTHz9BF68WJLk7SE=";
   npmInstallFlags = [ "--omit=dev" ];
 
   dontNpmBuild = true;
   dontNpmPrune = true;
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--generate-lockfile" ];
+  };
+
   meta = {
     description = "Find and fix problems in your JavaScript code";
     homepage = "https://eslint.org";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.onny ];
+    maintainers = with lib.maintainers; [
+      mdaniels5757
+      onny
+    ];
   };
 }

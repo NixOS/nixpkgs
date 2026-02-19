@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "garble";
   version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "burrowers";
     repo = "garble";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zS/K2kOpWhJmr0NuWSjEjNXV8ILt81yLIQWSPDuMwt8=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   patches = [
     (replaceVars ./0001-Add-version-info.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
@@ -72,4 +72,4 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     mainProgram = "garble";
   };
-}
+})

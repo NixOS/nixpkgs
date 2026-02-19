@@ -9,12 +9,12 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swfmill";
   version = "0.3.6";
 
   src = fetchurl {
-    url = "http://swfmill.org/releases/swfmill-${version}.tar.gz";
+    url = "http://swfmill.org/releases/swfmill-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-2yT2OWOVf67AK7FLi2HNr3CWd0+M/eudNXPi4ZIxVI4=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "swfmill";
   };
-}
+})

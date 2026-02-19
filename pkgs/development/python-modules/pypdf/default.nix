@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -11,9 +10,6 @@
   sphinxHook,
   sphinx-rtd-theme,
   myst-parser,
-
-  # propagates
-  typing-extensions,
 
   # optionals
   cryptography,
@@ -27,10 +23,8 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "5.5.0";
+  version = "6.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "py-pdf";
@@ -38,7 +32,7 @@ buildPythonPackage rec {
     tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-L/dj8yJIkGLsDdsZ1xFK46yyAVJ14F3RSh7HLhEcVhI=";
+    hash = "sha256-Kd5jBsq6sE5qWdIieVWdAKFA3QiDRsTBwoFerNY9ZRU=";
   };
 
   outputs = [
@@ -59,8 +53,6 @@ buildPythonPackage rec {
     myst-parser
   ];
 
-  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
-
   optional-dependencies = rec {
     full = crypto ++ image;
     crypto = [ cryptography ];
@@ -73,19 +65,19 @@ buildPythonPackage rec {
     (fpdf2.overridePythonAttrs { doCheck = false; }) # avoid reference loop
     pytestCheckHook
     pytest-timeout
-  ] ++ optional-dependencies.full;
+  ]
+  ++ optional-dependencies.full;
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # don't access the network
-    "-m"
-    "'not enable_socket'"
+    "enable_socket"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
     changelog = "https://github.com/py-pdf/pypdf/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ javaes ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ javaes ];
   };
 }

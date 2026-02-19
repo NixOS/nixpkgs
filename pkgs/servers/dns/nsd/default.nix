@@ -4,6 +4,8 @@
   fetchurl,
   libevent,
   openssl,
+  pkg-config,
+  systemdMinimal,
   nixosTests,
   bind8Stats ? false,
   checking ? false,
@@ -16,26 +18,33 @@
   rootServer ? false,
   rrtypes ? false,
   zoneStats ? false,
-
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   configFile ? "/etc/nsd/nsd.conf",
 }:
 
 stdenv.mkDerivation rec {
   pname = "nsd";
-  version = "4.11.1";
+  version = "4.12.0";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-aW5QBSAI3k+nqx2BjVt362MkfuovBXURTJWS/5GIphQ=";
+    sha256 = "sha256-+ezCz3m6UFgPLfYpGO/EQAhMW/EQV9tEwZqpZDzUteg=";
   };
 
   prePatch = ''
     substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
   '';
 
+  nativeBuildInputs = lib.optionals withSystemd [
+    pkg-config
+  ];
+
   buildInputs = [
     libevent
     openssl
+  ]
+  ++ lib.optionals withSystemd [
+    systemdMinimal
   ];
 
   enableParallelBuilding = true;
@@ -55,6 +64,7 @@ stdenv.mkDerivation rec {
     ++ edf rootServer "root-server"
     ++ edf rrtypes "draft-rrtypes"
     ++ edf zoneStats "zone-stats"
+    ++ edf withSystemd "systemd"
     ++ [
       "--with-ssl=${openssl.dev}"
       "--with-libevent=${libevent.dev}"
@@ -70,11 +80,10 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) nsd;
   };
 
-  meta = with lib; {
-    homepage = "http://www.nlnetlabs.nl";
+  meta = {
+    homepage = "https://www.nlnetlabs.nl";
     description = "Authoritative only, high performance, simple and open source name server";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.hrdinka ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

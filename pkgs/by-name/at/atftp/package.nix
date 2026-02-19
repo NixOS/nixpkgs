@@ -12,12 +12,12 @@
   tcp_wrappers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "atftp";
   version = "0.8.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/atftp/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/atftp/atftp-${finalAttrs.version}.tar.gz";
     hash = "sha256-3yqgicdnD56rQOVZjl0stqWC3FGCkm6lC01pDk438xY=";
   };
 
@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Advanced tftp tools";
-    changelog = "https://sourceforge.net/p/atftp/code/ci/v${version}/tree/Changelog";
+    changelog = "https://sourceforge.net/p/atftp/code/ci/v${finalAttrs.version}/tree/Changelog";
     homepage = "https://sourceforge.net/projects/atftp/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
-}
+})

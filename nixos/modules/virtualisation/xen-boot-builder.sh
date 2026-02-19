@@ -1,14 +1,17 @@
 # This script is called by ./xen-dom0.nix to create the Xen boot entries.
 # shellcheck shell=bash
 
-# Handle input argument and exit if the flag is invalid. See virtualisation.xen.efi.bootBuilderVerbosity below.
-[[ $# -ne 1 ]] && echo -e "\e[1;31merror:\e[0m xenBootBuilder must be called with exactly one verbosity argument. See the \e[1;34mvirtualisation.xen.efi.bootBuilderVerbosity\e[0m option." && exit 1
+export LC_ALL=C
+
+# Handle input argument and exit if the flag is invalid. See virtualisation.xen.boot.builderVerbosity below.
+[[ $# -ne 1 ]] && echo -e "\e[1;31merror:\e[0m xenBootBuilder must be called with exactly one verbosity argument. See the \e[1;34mvirtualisation.xen.boot.builderVerbosity\e[0m option." && exit 1
+
 case "$1" in
     "quiet") true ;;
     "default" | "info") echo -n "Installing Xen Project Hypervisor boot entries..." ;;
     "debug") echo -e "\e[1;34mxenBootBuilder:\e[0m called with the '$1' flag" ;;
     *)
-        echo -e "\e[1;31merror:\e[0m xenBootBuilder was called with an invalid argument. See the \e[1;34mvirtualisation.xen.efi.bootBuilderVerbosity\e[0m option."
+        echo -e "\e[1;31merror:\e[0m xenBootBuilder was called with an invalid argument. See the \e[1;34mvirtualisation.xen.boot.builderVerbosity\e[0m option."
         exit 2
         ;;
 esac
@@ -42,10 +45,9 @@ for gen in "${gens[@]}"; do
     bootspecFile="$(sed -nr 's/^options init=(.*)\/init.*$/\1/p' "$gen")/boot.json"
     [ "$1" = "debug" ] && echo -e "\e[1;34mxenBootBuilder:\e[0m processing bootspec file $bootspecFile"
 
-    # We do nothing if the Bootspec for the current $gen does not contain the Xen
-    # extension, which is added as a configuration attribute below.
-    if grep -sq '"org.xenproject.bootspec.v1"' "$bootspecFile"; then
-        [ "$1" = "debug" ] && echo -e "                \e[1;32msuccess:\e[0m found Xen entries in $gen."
+    # Check for a valid Xen v2 spec being detected
+    if grep -sq '"org.xenproject.bootspec.v2"' "$bootspecFile"; then
+        [ "$1" = "debug" ] && echo -e "                \e[1;32msuccess:\e[0m found v2 Xen entries in $gen."
 
         # TODO: Support DeviceTree booting. Xen has some special handling for DeviceTree
         # attributes, which will need to be translated in a boot script similar to this
@@ -61,7 +63,7 @@ for gen in "${gens[@]}"; do
         # the corresponding nixos generation, substituting `nixos` with `xen`:
         # `xen-$profile-generation-$number-specialisation-$specialisation.{cfg,conf}`
         xenGen=$(echo "$gen" | sed 's_/loader/entries/nixos_/loader/entries/xen_g;s_^.*/xen_xen_g;s_.conf$__g')
-        bootParams=$(jq -re '."org.xenproject.bootspec.v1".xenParams | join(" ")' "$bootspecFile")
+        bootParams=$(jq -re ".\"org.xenproject.bootspec.v2\".params | join(\" \")" "$bootspecFile")
         kernel=$(jq -re '."org.nixos.bootspec.v1".kernel | sub("^/nix/store/"; "") | sub("/bzImage"; "-bzImage.efi")' "$bootspecFile")
         kernelParams=$(jq -re '."org.nixos.bootspec.v1".kernelParams | join(" ")' "$bootspecFile")
         initrd=$(jq -re '."org.nixos.bootspec.v1".initrd | sub("^/nix/store/"; "") | sub("/initrd"; "-initrd.efi")' "$bootspecFile")
@@ -88,8 +90,9 @@ EOF
         # Create Xen UKI for $generation. Most of this is lifted from
         # https://xenbits.xenproject.org/docs/unstable/misc/efi.html.
         [ "$1" = "debug" ] && echo -e "\e[1;34mxenBootBuilder:\e[0m making Xen UKI..."
-        xenEfi=$(jq -re '."org.xenproject.bootspec.v1".xen' "$bootspecFile")
-        padding=$(objdump --header --section=".pad" "$xenEfi" | awk '/\.pad/ { printf("0x%016x\n", strtonum("0x"$3) + strtonum("0x"$4))};')
+        xenEfi=$(jq -re ".\"org.xenproject.bootspec.v2\".efiPath" "$bootspecFile")
+        finalSection=$(objdump --header --wide "$xenEfi" | tail -n +6 | sort --key="4,4" | tail -n 1 | grep -Eo '\.[a-z]*')
+        padding=$(objdump --header --section="$finalSection" "$xenEfi" | awk -v section="$finalSection" '$0 ~ section { printf("0x%016x\n", and(strtonum("0x"$3) + strtonum("0x"$4) + 0xfff, compl(0xfff)))};')
         [ "$1" = "debug" ] && echo "               - padding: $padding"
         objcopy \
             --add-section .config="$tmpCfg" \
@@ -110,13 +113,16 @@ sort-key $sortKey
 EOF
         [ "$1" = "debug" ] && echo -e "done."
 
-    # Sometimes, garbage collection weirdness causes a generation to still exist in
-    # the loader entries, but its Bootspec file was deleted. We consider such a
-    # generation to be invalid, but we don't write extra code to handle this
-    # situation, as supressing grep's error messages above is quite enough, and the
-    # error message below is still technically correct, as no Xen can be found in
-    # something that does not exist.
+        # Since NixOS 26.05, org.xenproject.bootspec.v1 is unsupported.
+    elif grep -sq '"org.xenproject.bootspec.v1"' "$bootspecFile"; then
+        [ "$1" = "debug" ] && echo -e "\n\e[1;33mwarning:\e[0m $gen has a \e[1;34morg.xenproject.bootspec.v1\e[0m Bootspec entry. This boot builder only supports v2 entries, so this generation will be ignored, and will \e[1;31mfail to boot\e[0m."
     else
+        # Sometimes, garbage collection weirdness causes a generation to still exist in
+        # the loader entries, but its Bootspec file was deleted. We consider such a
+        # generation to be invalid, but we don't write extra code to handle this
+        # situation, as supressing grep's error messages above is quite enough, and the
+        # error message below is still technically correct, as no Xen can be found in
+        # something that does not exist.
         [ "$1" = "debug" ] && echo -e "                \e[1;33mwarning:\e[0m \e[1;31mno Xen found\e[0m in $gen."
     fi
 done
@@ -130,8 +136,8 @@ mapfile -t postGenerations < <(find "$efiMountPoint"/loader/entries -type f -nam
 # any hypervisor boot entries.
 if ((${#postGenerations[@]} == 0)); then
     case "$1" in
-        "default" | "info") echo "none found." && echo -e "If you believe this is an error, set the \e[1;34mvirtualisation.xen.efi.bootBuilderVerbosity\e[0m option to \e[1;34m\"debug\"\e[0m and rebuild to print debug logs." ;;
-        "debug") echo -e "\e[1;34mxenBootBuilder:\e[0m wrote \e[1;31mno generations\e[0m. Most likely, there were no generations with a valid \e[1;34morg.xenproject.bootspec.v1\e[0m entry." ;;
+        "default" | "info") echo "none found." && echo -e "If you believe this is an error, set the \e[1;34mvirtualisation.xen.boot.builderVerbosity\e[0m option to \e[1;34m\"debug\"\e[0m and rebuild to print debug logs." ;;
+        "debug") echo -e "\e[1;34mxenBootBuilder:\e[0m wrote \e[1;31mno generations\e[0m. Most likely, there were no generations with a valid \e[1;34morg.xenproject.bootspec.v2\e[0m entry." ;;
     esac
 
 # If the script is successful, change the default boot, say "done.", write a

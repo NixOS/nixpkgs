@@ -1,10 +1,12 @@
 {
   lib,
   buildPythonPackage,
+  dissect-apfs,
   dissect-archive,
   dissect-btrfs,
   dissect-cim,
   dissect-clfs,
+  dissect-cramfs,
   dissect-cstruct,
   dissect-esedb,
   dissect-etl,
@@ -19,6 +21,7 @@
   dissect-jffs,
   dissect-ntfs,
   dissect-ole,
+  dissect-qnxfs,
   dissect-regf,
   dissect-shellitem,
   dissect-sql,
@@ -29,23 +32,20 @@
   dissect-volume,
   dissect-xfs,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.18";
+  version = "3.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
     tag = version;
-    hash = "sha256-3yy7BA6FJgAdn2lMSJgyFeVDxJg0f0RWsekkqiqxd7M=";
+    hash = "sha256-INqZwN3x5MzrACyaUOa2A7mrKvld9reN1PJVxkq837o=";
   };
 
   pythonRelaxDeps = true;
@@ -56,10 +56,12 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    dissect-apfs
     dissect-archive
     dissect-btrfs
     dissect-cim
     dissect-clfs
+    dissect-cramfs
     dissect-cstruct
     dissect-esedb
     dissect-etl
@@ -74,6 +76,7 @@ buildPythonPackage rec {
     dissect-jffs
     dissect-ntfs
     dissect-ole
+    dissect-qnxfs
     dissect-regf
     dissect-shellitem
     dissect-sql
@@ -83,18 +86,19 @@ buildPythonPackage rec {
     dissect-vmfs
     dissect-volume
     dissect-xfs
-  ] ++ dissect-target.optional-dependencies.full;
+  ]
+  ++ dissect-target.optional-dependencies.full;
 
   # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "dissect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect meta module";
     homepage = "https://github.com/fox-it/dissect";
     changelog = "https://github.com/fox-it/dissect/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

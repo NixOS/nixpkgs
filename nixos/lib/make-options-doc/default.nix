@@ -45,7 +45,7 @@
 
   Documentation rendered as AsciiDoc. This is useful for e.g. man pages.
 
-  > Note: NixOS itself uses this ouput to to build the configuration.nix man page"
+  > Note: NixOS itself uses this output to to build the configuration.nix man page"
 
   ## optionsNix
 
@@ -59,9 +59,6 @@
   let
     # Evaluate a NixOS configuration
     eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
-      # Overriden explicitly here, this would include all modules from NixOS otherwise.
-      # See: docs of eval-config.nix for more details
-      baseModules = [];
       modules = [
         ./module.nix
       ];
@@ -217,9 +214,8 @@ rec {
           pkgs.brotli
           pkgs.python3
         ];
-        options = builtins.toFile "options.json" (
-          builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix)
-        );
+        passAsFile = [ "options" ];
+        options = builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix);
         # merge with an empty set if baseOptionsJSON is null to run markdown
         # processing on the input options
         baseJSON = if baseOptionsJSON == null then builtins.toFile "base.json" "{}" else baseOptionsJSON;
@@ -232,7 +228,7 @@ rec {
           TOUCH_IF_DB=$dst/.used-docbook \
           python ${./mergeJSON.py} \
             ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
-            $baseJSON $options \
+            $baseJSON $optionsPath \
             > $dst/options.json
 
         if grep /nixpkgs/nixos/modules $dst/options.json; then

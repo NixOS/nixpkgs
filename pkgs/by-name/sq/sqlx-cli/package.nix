@@ -12,18 +12,17 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqlx-cli";
   version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Trnyrc17KWhX8QizKyBvXhTM7HHEqtywWgNqvQNMOAY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-FxvzCe+dRfMUcPWA4lp4L6FJaSpMiXTqEyhzk+Dv1B8=";
 
   buildNoDefaultFeatures = true;
@@ -65,15 +64,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "SQLx's associated command-line utility for managing databases, migrations, and enabling offline mode with sqlx::query!() and friends.";
+  meta = {
+    description = "CLI for managing databases, migrations, and enabling offline mode with `sqlx::query!()` and friends";
     homepage = "https://github.com/launchbadge/sqlx";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       greizgh
       xrelkd
       fd
     ];
     mainProgram = "sqlx";
   };
-}
+})

@@ -1,12 +1,14 @@
 {
   "url": "https://github.com/alecthomas/chroma.git",
-  "rev": "009385f9487ee14c8a54e49aaf4331fea0830310",
-  "date": "2024-12-30T09:27:18+11:00",
-  "path": "/nix/store/rr2cj4bmlfw803diwyfpbrpai35gifaw-chroma",
-  "sha256": "088w3aixwfk8s04iyb2mjn3kx5dl3gb9q14jzawabcdy2ar7iijn",
-  "hash": "sha256-VsZ4shK+saW4+pIEnNYbtJU+h5VVLB8J0Gg63qMaHCE=",
+  "rev": "467c878aa553cdb4b0d486a534ea744f6ac7ef5e",
+  "date": "2026-01-10T09:37:30+11:00",
+  "path": "/nix/store/qkfgjvpw8j5rkfgh687kxzkv8ac9apba-chroma",
+  "sha256": "1wlvxxlbwaq963rkr9fwxc6qwa77m49icq2gdzf46w7wdc3cygpm",
+  "hash": "sha256-9T7PBmv8cEPcb09gFhOp5yiODevcpTzzMAkrvmjvm/I=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "leaveDotGit": false
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
 }

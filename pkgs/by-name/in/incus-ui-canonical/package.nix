@@ -18,21 +18,21 @@ let
     hash = "sha256-f0vd/Xp/kBbZkg6CBM4cZPlwg5WUL/zv3mCAEmugzCE=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "incus-ui-canonical";
-  version = "0.15.3";
+  version = "0.19.5";
 
   src = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus-ui-canonical";
     # only use tags prefixed by incus- they are the tested fork versions
-    tag = "incus-${version}";
-    hash = "sha256-FsDdALcIXJFo0ScOA8YEzulefp8IfOSi2ZClrtcPo24=";
+    tag = "incus-${finalAttrs.version}";
+    hash = "sha256-dwQshNQrP/3AWsFtDeMpUIm3l3Oqjj1jkKw98KT4u9M=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-nZyk/ZrTAOyL+A3oMUHY52PIffVZxMG2tvh4FM/A+w0=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-08G3jYj7N9h6aBnqwGQQtpYOP/wP/k2VRY7dgmpxXZw=";
   };
 
   patchPhase = ''
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
   };
-}
+})

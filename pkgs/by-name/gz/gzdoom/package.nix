@@ -23,14 +23,14 @@
   zmusic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gzdoom";
   version = "4.14.2";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "gzdoom";
-    rev = "g${version}";
+    rev = "g${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-kYw+r08v/Q/hphJuvjn38Dj5mZRijE6pWKoEZBlN5P4=";
   };
@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
     makeWrapper
     ninja
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   buildInputs = [
     SDL2
@@ -66,10 +67,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/updaterevision/UpdateRevision.cmake \
-      --replace-fail "ret_var(Tag)" "ret_var(\"${src.rev}\")" \
+      --replace-fail "ret_var(Tag)" "ret_var(\"${finalAttrs.src.rev}\")" \
       --replace-fail "ret_var(Timestamp)" "ret_var(\"1970-00-00 00:00:00 +0000\")" \
-      --replace-fail "ret_var(Hash)" "ret_var(\"${src.rev}\")" \
-      --replace-fail "<unknown version>" "${src.rev}"
+      --replace-fail "ret_var(Hash)" "ret_var(\"${finalAttrs.src.rev}\")" \
+      --replace-fail "<unknown version>" "${finalAttrs.src.rev}"
   '';
 
   # Apple dropped GL support
@@ -77,14 +78,15 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DDYN_GTK=OFF"
     "-DDYN_OPENAL=OFF"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DHAVE_GLES2=OFF" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DHAVE_GLES2=OFF" ];
 
   desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       name = "gzdoom";
       exec = "gzdoom";
       desktopName = "GZDoom";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       icon = "gzdoom";
       categories = [ "Game" ];
     })
@@ -124,4 +126,4 @@ stdenv.mkDerivation rec {
       r4v3n6101
     ];
   };
-}
+})

@@ -4,24 +4,17 @@
   fetchFromGitHub,
   zlib,
 }:
-let
-  libs-src = fetchFromGitHub {
-    owner = "megatokio";
-    repo = "Libraries";
-    # 2021-02-02
-    rev = "c5cb3ed512c677db6f33e2d3539dfbb6e547030b";
-    sha256 = "sha256-GiplhZf640uScVdKL6E/fegOgtC9SE1xgBqcX86XADk=";
-  };
-in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "zasm";
-  version = "4.4.7";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "megatokio";
     repo = "zasm";
-    rev = version;
-    sha256 = "sha256-Zbno8kmzss1H2FjwzHB4U7UXxa6oDfsPV80MVVFfM68=";
+    tag = finalAttrs.version;
+    fetchSubmodules = true;
+    hash = "sha256-bymcbuz3hcUYeqoYtY2mm7rDYPgPVHoaxKQ/LBWsskQ=";
     postFetch = ''
       # remove folder containing files with weird names (causes the hash to turn out differently under macOS vs. Linux)
       rm -rv $out/Test
@@ -29,10 +22,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib ];
-
-  configurePhase = ''
-    ln -sf ${libs-src} Libraries
-  '';
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -42,16 +31,20 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin zasm
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Z80 / 8080 / Z180 assembler (for unix-style OS)";
     mainProgram = "zasm";
     homepage = "https://k1.spdns.de/Develop/Projects/zasm/Distributions/";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.turbomack ];
-    platforms = platforms.unix;
-    badPlatforms = platforms.aarch64;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.turbomack ];
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.aarch64;
   };
-}
+})

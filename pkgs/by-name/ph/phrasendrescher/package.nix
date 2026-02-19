@@ -7,12 +7,12 @@
   gpgme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phrasendrescher";
   version = "1.2.2c";
 
   src = fetchurl {
-    url = "http://leidecker.info/projects/${pname}/${pname}-${version}.tar.gz";
+    url = "http://leidecker.info/projects/phrasendrescher/phrasendrescher-${finalAttrs.version}.tar.gz";
     sha256 = "18vg6h294219v14x5zqm8ddmq5amxlbz7pw81lcmpz8v678kwyph";
   };
 
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-plugins" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modular and multi processing pass phrase cracking tool";
     homepage = "https://leidecker.info/projects/phrasendrescher/index.shtml";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "pd";
   };
-}
+})

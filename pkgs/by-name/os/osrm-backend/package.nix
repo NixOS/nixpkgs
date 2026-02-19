@@ -10,22 +10,19 @@
   boost,
   lua,
   luabind,
-  tbb_2022_0,
+  onetbb,
   expat,
   nixosTests,
 }:
 
-let
-  tbb = tbb_2022_0;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osrm-backend";
   version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "Project-OSRM";
     repo = "osrm-backend";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-R2Sx+DbT6gROI8X1fkxqOGbMqgmsnNiw2rUX6gSZuTs=";
   };
 
@@ -41,12 +38,16 @@ stdenv.mkDerivation rec {
     boost
     lua
     luabind
-    tbb
+    onetbb
     expat
   ];
 
-  # Needed with GCC 12
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=uninitialized";
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=uninitialized"
+    # Needed with GCC 14
+    "-Wno-error=maybe-uninitialized"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/osrm-backend
@@ -60,9 +61,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://project-osrm.org/";
     description = "Open Source Routing Machine computes shortest paths in a graph. It was designed to run well with map data from the Openstreetmap Project";
-    changelog = "https://github.com/Project-OSRM/osrm-backend/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Project-OSRM/osrm-backend/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ erictapen ];
     platforms = lib.platforms.unix;
   };
-}
+})

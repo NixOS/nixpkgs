@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "hamtransfer";
-  version = "unstable-2024-04-05";
+  version = "0-unstable-2024-04-05";
 
   src = fetchFromGitHub {
     owner = "ThomasHabets";
@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-yZwbFjs+mnTbU+75dwRhVjvXXoHQuzgE9GlliUQZV1s=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/fsK8zgoq819vdHTK9GwzzgyP1ZNhQ78yKai5783XS8=";
 
   nativeBuildInputs = [
@@ -35,11 +34,11 @@ rustPlatform.buildRustPackage {
     mv $out/bin/uploader $out/bin/hamtransfer-uploader
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for transferring files over amateur radio using modern techniques";
     homepage = "https://github.com/ThomasHabets/hamtransfer";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       matthewcroughan
       sarcasticadmin
       pkharvey

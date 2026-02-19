@@ -6,18 +6,17 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typical";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "typical";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-y7PWTzD9+rkC4wZYhecmDTa3AoWl4Tgh7QXbSK4Qq5Q=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+SnwxmNQDj6acr2nEKJkNmR5PqnTIvyMApyZOmCld2U=";
 
   nativeBuildInputs = [
@@ -30,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   patches = [
     # Related to https://github.com/stepchowfun/typical/pull/501
-    # Commiting a slightly different patch because the upstream one doesn't apply cleanly
+    # Committing a slightly different patch because the upstream one doesn't apply cleanly
     ./lifetime.patch
   ];
 
@@ -41,12 +40,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/typical shell-completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Data interchange with algebraic data types";
     mainProgram = "typical";
     homepage = "https://github.com/stepchowfun/typical";
-    changelog = "https://github.com/stepchowfun/typical/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/stepchowfun/typical/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

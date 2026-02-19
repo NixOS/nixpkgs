@@ -21,13 +21,14 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "textext";
-  version = "1.11.1";
+  version = "1.13.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "textext";
     repo = "textext";
     tag = version;
-    sha256 = "sha256-eqyS3P+FrwwO567GBBOLk53fC6ROG6mZKHL1RGDPLpM=";
+    sha256 = "sha256-fEPSpI9uO+r3d5p+gV1XcorYvUPw0sLgG9nHUPeTtYs=";
   };
 
   patches = [
@@ -112,15 +113,15 @@ python3.pkgs.buildPythonApplication rec {
 
   postFixup = ''
     # Wrap the project so it can find runtime dependencies.
-    wrapPythonProgramsIn "$out/share/inkscape/extensions/textext" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/inkscape/extensions/textext" "$out ''${pythonPath[*]}"
     cp ${launchScript} $out/share/inkscape/extensions/textext/launch.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Re-editable LaTeX graphics for Inkscape";
     homepage = "https://textext.github.io/textext/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.raboof ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.raboof ];
+    platforms = lib.platforms.all;
   };
 }

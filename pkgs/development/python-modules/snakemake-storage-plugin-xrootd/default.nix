@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-storage-plugin-xrootd";
-  version = "0.4.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-storage-plugin-xrootd";
     tag = "v${version}";
-    hash = "sha256-vfMAgOTmT3uzUZHXeKsd8Ze3+b3nFsVHDhkPG+xvz+k=";
+    hash = "sha256-QYG/BE7y3h/Mz1PrVVxmfBBLBLoirrEx9unSEaflUds=";
   };
 
   # xrootd<6.0.0,>=5.6.4 not satisfied by version 5.7rc20240303
@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_storage_plugin_xrootd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Snakemake storage plugin for handling input and output via XRootD";
     homepage = "https://github.com/snakemake/snakemake-storage-plugin-xrootd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

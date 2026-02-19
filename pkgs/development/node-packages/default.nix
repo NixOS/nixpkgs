@@ -11,7 +11,6 @@ let
     composeManyExtensions
     extends
     makeExtensible
-    mapAttrs
     ;
 
   nodePackages =
@@ -21,23 +20,11 @@ let
       inherit (stdenv.hostPlatform) system;
     };
 
-  mainProgramOverrides =
-    final: prev:
-    mapAttrs (
-      pkgName: mainProgram:
-      prev.${pkgName}.override (oldAttrs: {
-        meta = oldAttrs.meta // {
-          inherit mainProgram;
-        };
-      })
-    ) (import ./main-programs.nix);
-
   aliases =
     final: prev: lib.optionalAttrs config.allowAliases (import ./aliases.nix pkgs lib final prev);
 
   extensions = composeManyExtensions [
     aliases
-    mainProgramOverrides
     (import ./overrides.nix { inherit pkgs nodejs; })
   ];
 in

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -14,25 +15,37 @@
   pyxdg,
   pyzmq,
   wurlitzer,
+
+  # tests
+  anyio,
+  django,
+  flaky,
+  h5py,
+  numpy,
+  pandas,
+  pillow,
+  polars,
+  pyarrow,
+  pydicom,
+  pytestCheckHook,
+  scipy,
+  writableTmpDirAsHomeHook,
+  xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spyder-kernels";
-  version = "3.1.0a1";
+  version = "3.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = "spyder-kernels";
-    tag = "v${version}";
-    hash = "sha256-/Dd+yCLctOC7ao26EU6LrhBD1SKGd84XLepMdDJnFow=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BhXJZB4lZuNqesJBcuAmOHTM38fMir4tTnr+mmwBaqA=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [
-    "ipython"
-  ];
 
   dependencies = [
     cloudpickle
@@ -44,17 +57,51 @@ buildPythonPackage rec {
     wurlitzer
   ];
 
-  # No tests
-  doCheck = false;
+  nativeCheckInputs = [
+    anyio
+    django
+    flaky
+    h5py
+    numpy
+    pandas
+    pillow
+    polars
+    pyarrow
+    pydicom
+    pytestCheckHook
+    scipy
+    writableTmpDirAsHomeHook
+    xarray
+  ];
+
+  disabledTests = [
+    "test_umr_reload_modules"
+    # OSError: Kernel failed to start
+    "test_debug_namespace"
+    "test_enter_debug_after_interruption"
+    "test_global_message"
+    "test_interrupt_long_sleep"
+    "test_interrupt_short_loop"
+    "test_matplotlib_inline"
+    "test_multiprocessing"
+    "test_np_threshold"
+    "test_runfile"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: 'Frame' object has no attribute 'f_locals'. Did you mean: 'f_globals'?
+    "test_functions_with_locals_in_pdb"
+  ];
 
   pythonImportsCheck = [ "spyder_kernels" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Jupyter kernels for Spyder's console";
     homepage = "https://docs.spyder-ide.org/current/ipythonconsole.html";
     downloadPage = "https://github.com/spyder-ide/spyder-kernels/releases";
-    changelog = "https://github.com/spyder-ide/spyder-kernels/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/spyder-ide/spyder-kernels/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

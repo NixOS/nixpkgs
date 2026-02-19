@@ -4,15 +4,12 @@
   fetchPypi,
   regex,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "parsimonious";
   version = "0.10.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,10 +39,10 @@ buildPythonPackage rec {
     "parsimonious.nodes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Arbitrary-lookahead parser";
     homepage = "https://github.com/erikrose/parsimonious";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

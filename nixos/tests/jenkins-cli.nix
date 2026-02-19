@@ -1,5 +1,5 @@
 { pkgs, ... }:
-rec {
+{
   name = "jenkins-cli";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ pamplemousse ];

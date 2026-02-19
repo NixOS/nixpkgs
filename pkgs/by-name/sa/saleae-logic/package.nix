@@ -12,25 +12,25 @@
   fetchurl,
   unzip,
   glib,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   gtk2,
-  libXext,
-  libXft,
+  libxext,
+  libxft,
   fontconfig,
-  libXrender,
-  libXfixes,
-  libX11,
-  libXi,
-  libXrandr,
-  libXcursor,
+  libxrender,
+  libxfixes,
+  libx11,
+  libxi,
+  libxrandr,
+  libxcursor,
   freetype,
-  libXinerama,
+  libxinerama,
   libxcb,
   zlib,
   pciutils,
   makeDesktopItem,
-  xkeyboardconfig,
+  xkeyboard-config,
   dbus,
   runtimeShell,
   libGL,
@@ -40,20 +40,20 @@ let
 
   libPath = lib.makeLibraryPath [
     glib
-    libSM
-    libICE
+    libsm
+    libice
     gtk2
-    libXext
-    libXft
+    libxext
+    libxft
     fontconfig
-    libXrender
-    libXfixes
-    libX11
-    libXi
-    libXrandr
-    libXcursor
+    libxrender
+    libxfixes
+    libx11
+    libxi
+    libxrandr
+    libxcursor
     freetype
-    libXinerama
+    libxinerama
     libxcb
     zlib
     stdenv.cc.cc
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     cat > "$out/bin/saleae-logic" << EOF
     #!${runtimeShell}
     export LD_PRELOAD="$out/lib/preload.so"
-    export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"
+    export QT_XKB_CONFIG_ROOT="${xkeyboard-config}/share/X11/xkb"
     export PATH="${pciutils}/bin:\$PATH"
     exec "$out/Logic" "\$@"
     EOF
@@ -126,12 +126,12 @@ stdenv.mkDerivation rec {
     cp Drivers/99-SaleaeLogic.rules "$out/etc/udev/rules.d/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Software for Saleae logic analyzers";
     homepage = "https://www.saleae.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = intersectLists platforms.x86_64 platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

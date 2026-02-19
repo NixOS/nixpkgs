@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "0.303.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/cantarell-fonts/${lib.versions.majorMinor version}/cantarell-fonts-${version}.tar.xz";
     sha256 = "+UY6BlnGPlfjgf3XU88ZKSJTlcW0kTWYlCR2GDBTBBE=";
   };
 

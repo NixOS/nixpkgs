@@ -10,15 +10,15 @@
   libpq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pspg";
-  version = "5.8.10";
+  version = "5.8.16";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = "pspg";
-    rev = version;
-    sha256 = "sha256-kkynCpnwdoAwWEs+gXO0ZPkPk+U4Phl0iL/s3CnL0zA=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-7x1hTEl2WoOXZTbPfb/t0w4tl09paDD/uIPuyhLlMbk=";
   };
 
   nativeBuildInputs = [
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash --cmd pspg bash-completion.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/okbob/pspg";
     description = "Postgres Pager";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.jlesquembre ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.jlesquembre ];
     mainProgram = "pspg";
   };
-}
+})

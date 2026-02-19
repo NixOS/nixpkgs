@@ -49,6 +49,7 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "pyca";
   version = "4.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opencast";
@@ -57,7 +58,9 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
   };
 
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python.pkgs; [
     pycurl
     python-dateutil
     configobj
@@ -72,16 +75,18 @@ python3.pkgs.buildPythonApplication rec {
     sed -i -e 's#static_folder=.*#static_folder="${frontend}/static")#' pyca/ui/__init__.py
   '';
 
+  pythonImportsCheck = [ "pyca" ];
+
   passthru = {
     inherit frontend;
   };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Fully functional Opencast capture agent written in Python";
     mainProgram = "pyca";
     homepage = "https://github.com/opencast/pyCA";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ pmiddend ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ pmiddend ];
   };
 }

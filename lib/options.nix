@@ -77,12 +77,12 @@ rec {
   isOption = lib.isType "option";
 
   /**
-    Creates an Option attribute set. mkOption accepts an attribute set with the following keys:
+    Creates an Option declaration for use with the module system.
 
     # Inputs
 
-    Structured attribute set
-    : Attribute set containing none or some of the following attributes.
+    Attribute set
+    : containing none or some of the following attributes.
 
       `default`
       : Optional default value used when no definition is given in the configuration.
@@ -113,21 +113,25 @@ rec {
       : Optional boolean indicating whether the option is for NixOS developers only.
 
       `visible`
-      : Optional boolean indicating whether the option shows up in the manual. Default: true. Use false to hide the option and any sub-options from submodules. Use "shallow" to hide only sub-options.
+      : Optional, whether the option and/or sub-options show up in the manual.
+        Use false to hide the option and any sub-options from submodules.
+        Use "shallow" to hide only sub-options.
+        Use "transparent" to hide this option, but not its sub-options.
+        Default: true.
 
       `readOnly`
       : Optional boolean indicating whether the option can be set only once.
-
-      `...` (any other attribute)
-      : Any other attribute is passed through to the resulting option attribute set.
 
     # Examples
     :::{.example}
     ## `lib.options.mkOption` usage example
 
     ```nix
-    mkOption { }  // => { _type = "option"; }
-    mkOption { default = "foo"; } // => { _type = "option"; default = "foo"; }
+    mkOption { }
+    # => Empty option; type = types.anything
+
+    mkOption { default = "foo"; }
+    # => Same as above, with a default value
     ```
 
     :::
@@ -148,7 +152,7 @@ rec {
     attrs // { _type = "option"; };
 
   /**
-    Creates an option declaration with a default value of ´false´, and can be defined to ´true´.
+    Creates an option declaration with a default value of `false`, and can be defined to `true`.
 
     # Inputs
 
@@ -170,8 +174,8 @@ rec {
 
             config.foo.enable = true;
           }
-        ]:
-      }
+        ];
+      };
     in
     eval.config
     => { foo.enable = true; }
@@ -267,9 +271,9 @@ rec {
 
     mkPackageOption pkgs "GHC" {
       default = [ "ghc" ];
-      example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
+      example = "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])";
     }
-    => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
+    => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
 
     mkPackageOption pkgs [ "python3Packages" "pytorch" ] {
       extraDescription = "This is an example and doesn't actually do anything.";
@@ -341,13 +345,6 @@ rec {
     );
 
   /**
-    Deprecated alias of mkPackageOption, to be removed in 25.05.
-
-    Previously used to create options with markdown documentation, which is no longer required.
-  */
-  mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
-
-  /**
     This option accepts arbitrary definitions, but it does not produce an option value.
 
     This is useful for sharing a module across different module sets
@@ -404,7 +401,7 @@ rec {
     ```nix
     myType = mkOptionType {
       name = "myType";
-      merge = mergeDefaultOption; # <- This line is redundant. It is the default aready.
+      merge = mergeDefaultOption; # <- This line is redundant. It is the default already.
     };
     ```
 
@@ -436,7 +433,7 @@ rec {
     else if all isAttrs list then
       foldl' lib.mergeAttrs { } list
     else if all isBool list then
-      foldl' lib.or false list
+      foldl' lib."or" false list
     else if all isString list then
       lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then
@@ -447,14 +444,18 @@ rec {
   /**
     Require a single definition.
 
-    WARNING: Does not perform nested checks, as this does not run the merge function!
+    ::: {.warning}
+    Does not perform nested checks, as this does not run the merge function!
+    :::
   */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
   /**
     Require a single definition.
 
-    NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+    ::: {.note}
+    When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+    :::
 
     # Inputs
 
@@ -470,7 +471,7 @@ rec {
     args@{
       message,
       # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
-      #   - type checked beyond what .check does (which should be very litte; only on the value head; not attribute values, etc)
+      #   - type checked beyond what .check does (which should be very little; only on the value head; not attribute values, etc)
       #   - if you want attribute values to be checked, or list items
       #   - if you want coercedTo-like behavior to work
       merge ? loc: defs: (head defs).value,
@@ -499,7 +500,7 @@ rec {
     loc: defs:
     if defs == [ ] then
       abort "This case should never happen."
-    # Return early if we only have one element
+    # Returns early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
     else if length defs == 1 then
@@ -519,7 +520,7 @@ rec {
       ) (head defs) (tail defs)).value;
 
   /**
-    Extracts values of all "value" keys of the given list.
+    Extracts values of all `value` keys of the given list.
 
     # Type
 
@@ -541,7 +542,7 @@ rec {
   getValues = map (x: x.value);
 
   /**
-    Extracts values of all "file" keys of the given list
+    Extracts values of all `file` keys of the given list
 
     # Type
 
@@ -572,37 +573,37 @@ rec {
       opt:
       let
         name = showOption opt.loc;
-        docOption =
-          {
-            loc = opt.loc;
-            inherit name;
-            description = opt.description or null;
-            declarations = filter (x: x != unknownModule) opt.declarations;
-            internal = opt.internal or false;
-            visible = if (opt ? visible && opt.visible == "shallow") then true else opt.visible or true;
-            readOnly = opt.readOnly or false;
-            type = opt.type.description or "unspecified";
-          }
-          // optionalAttrs (opt ? example) {
-            example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
-              renderOptionValue opt.example
-            );
-          }
-          // optionalAttrs (opt ? defaultText || opt ? default) {
-            default = builtins.addErrorContext "while evaluating the ${
-              if opt ? defaultText then "defaultText" else "default value"
-            } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
-          }
-          // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
-            inherit (opt) relatedPackages;
-          };
+        visible = opt.visible or true;
+        docOption = {
+          loc = opt.loc;
+          inherit name;
+          description = opt.description or null;
+          declarations = filter (x: x != unknownModule) opt.declarations;
+          internal = opt.internal or false;
+          visible = if isBool visible then visible else visible == "shallow";
+          readOnly = opt.readOnly or false;
+          type = opt.type.description or "unspecified";
+        }
+        // optionalAttrs (opt ? example) {
+          example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
+            renderOptionValue opt.example
+          );
+        }
+        // optionalAttrs (opt ? defaultText || opt ? default) {
+          default = builtins.addErrorContext "while evaluating the ${
+            if opt ? defaultText then "defaultText" else "default value"
+          } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
+        }
+        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
+          inherit (opt) relatedPackages;
+        };
 
         subOptions =
           let
             ss = opt.type.getSubOptions opt.loc;
           in
           if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
-        subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
+        subOptionsVisible = if isBool visible then visible else visible == "transparent";
       in
       # To find infinite recursion in NixOS option docs:
       # builtins.trace opt.loc
@@ -618,7 +619,7 @@ rec {
     (on the order of megabytes) and is not actually used by the
     manual generator.
 
-    This function was made obsolete by renderOptionValue and is kept for
+    This function was made obsolete by `renderOptionValue` and is kept for
     compatibility with out-of-tree code.
 
     # Inputs
@@ -671,11 +672,30 @@ rec {
     is necessary for complex values, e.g. functions, or values that depend on
     other values or packages.
 
+    # Examples
+    :::{.example}
+    ## `literalExpression` usage example
+
+    ```nix
+    llvmPackages = mkOption {
+      type = types.str;
+      description = ''
+        Version of llvm packages to use for
+        this module
+      '';
+      example = literalExpression ''
+        llvmPackages = pkgs.llvmPackages_20;
+      '';
+    };
+    ```
+
+    :::
+
     # Inputs
 
     `text`
 
-    : 1\. Function argument
+    : The text to render as a Nix expression
   */
   literalExpression =
     text:
@@ -687,7 +707,48 @@ rec {
         inherit text;
       };
 
-  literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
+  /**
+    For use in the `defaultText` and `example` option attributes. Causes the
+    given string to be rendered verbatim in the documentation as a code
+    block with the language bassed on the provided input tag.
+
+    If you wish to render Nix code, please see `literalExpression`.
+
+    # Examples
+    :::{.example}
+    ## `literalCode` usage example
+
+    ```nix
+    myPythonScript = mkOption {
+      type = types.str;
+      description = ''
+        Example python script used by a module
+      '';
+      example = literalCode "python" ''
+        print("Hello world!")
+      '';
+    };
+    ```
+
+    :::
+
+    # Inputs
+
+    `languageTag`
+
+    : The language tag to use when producing the code block (i.e. `js`, `rs`, etc).
+
+    `text`
+
+    : The text to render as a Nix expression
+  */
+  literalCode =
+    languageTag: text:
+    lib.literalMD ''
+      ```${languageTag}
+      ${text}
+      ```
+    '';
 
   /**
     For use in the `defaultText` and `example` option attributes. Causes the

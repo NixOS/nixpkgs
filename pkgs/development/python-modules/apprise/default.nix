@@ -12,25 +12,29 @@
   paho-mqtt,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   requests-oauthlib,
   setuptools,
+  stdenv,
+  terminal-notifier,
   testers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apprise";
-  version = "1.9.3";
+  version = "1.9.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9YNmfqNbiJnNRjGMbLJvD69qRgWxGRdMJSOgElkMZaY=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-L3PMHgJk+xGf25t83oLo/eQKD1MayIXYxvDPD24TrsI=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace apprise/plugins/macosx.py \
+    --replace-fail "/opt/homebrew/bin/terminal-notifier" "${lib.getExe' terminal-notifier "terminal-notifier"}"
+  '';
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -64,16 +68,16 @@ buildPythonPackage rec {
   passthru = {
     tests.version = testers.testVersion {
       package = apprise;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
     description = "Push Notifications that work with just about every platform";
-    homepage = "https://github.com/caronc/apprise";
-    changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
-    license = lib.licenses.bsd3;
+    homepage = "https://appriseit.com/";
+    changelog = "https://github.com/caronc/apprise/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "apprise";
   };
-}
+})

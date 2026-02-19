@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   google-api-core,
   grpc-google-iam-v1,
   mock,
@@ -13,17 +12,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-network-connectivity";
-  version = "2.8.0";
+  version = "2.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "google_cloud_network_connectivity";
-    hash = "sha256-NHZII5BYlysvlPBxXSu9nN7uqh/Ly3dLtgEuTS9eQOw=";
+    hash = "sha256-Fad8oso2ulaA6Nqna7AlBe9whycHzDLyFKK9wqylfzA=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +30,8 @@ buildPythonPackage rec {
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -46,11 +44,11 @@ buildPythonPackage rec {
     "google.cloud.networkconnectivity_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "API Client library for Google Cloud Network Connectivity Center";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-network-connectivity";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-network-connectivity-v${version}/packages/google-cloud-network-connectivity/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aksiksi ];
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-network-connectivity-v${finalAttrs.version}/packages/google-cloud-network-connectivity/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aksiksi ];
   };
-}
+})

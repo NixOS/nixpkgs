@@ -6,18 +6,17 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustmission";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "intuis";
     repo = "rustmission";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vQ6MBbzmOBgD1kcF62NmQys737QEN9isvFN7L7mP8mk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-GwSf/o90RO6LURIcm/kYA8oXmnCJ1OkM+eHkyZduOt0=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,12 +27,12 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A TUI for the Transmission daemon";
+    description = "TUI for the Transmission daemon";
     homepage = "https://github.com/intuis/rustmission";
-    changelog = "https://github.com/intuis/rustmission/releases/tag/v${version}";
+    changelog = "https://github.com/intuis/rustmission/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "rustmission";
     maintainers = with lib.maintainers; [ anas ];
     platforms = with lib.platforms; unix ++ windows;
   };
-}
+})

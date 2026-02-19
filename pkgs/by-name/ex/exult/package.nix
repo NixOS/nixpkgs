@@ -10,24 +10,24 @@
   libogg,
   libtool,
   libvorbis,
-  libX11,
+  libx11,
   pkg-config,
   zlib,
   enableTools ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exult";
-  version = "1.10.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "exult";
     repo = "exult";
-    rev = "v${version}";
-    hash = "sha256-NlvtYtmJNYhOC1BtIxIij3NEQHWAGOeD4XgRq7evjzE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rAUg8RoPsou1g27MZ84vFc0uDvUGzLXkGj33Vbsjlr8=";
   };
 
-  # We can't use just DESTDIR because with it we'll have /nix/store/...-exult-1.10.1/nix/store/...-exult-1.10.1/bin
+  # We can't use just DESTDIR because with it we'll have /nix/store/...-exult-1.12.0/nix/store/...-exult-1.12.0/bin
   postPatch = ''
     substituteInPlace macosx/macosx.am \
       --replace-fail DESTDIR NIX_DESTDIR
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     SDL2
     libogg
     libvorbis
-    libX11
+    libx11
     zlib
   ];
 
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "NIX_DESTDIR=$(out)" ]; # see postPatch
   configureFlags = lib.optional (!enableTools) "--disable-tools";
 
-  meta = with lib; {
-    description = "Exult is a project to recreate Ultima VII for modern operating systems";
+  meta = {
+    description = "Recreation of Ultima VII for modern operating systems";
     longDescription = ''
       Ultima VII, an RPG from the early 1990's, still has a huge following. But,
       being a DOS game with a very nonstandard memory manager, it is difficult
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
       possible.
     '';
     homepage = "http://exult.info";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "exult";
   };
-}
+})

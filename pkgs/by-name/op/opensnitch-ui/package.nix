@@ -1,11 +1,12 @@
 {
   python3Packages,
-  qt5,
+  qt6,
   lib,
   opensnitch,
 }:
 
 python3Packages.buildPythonApplication {
+  pyproject = true;
   pname = "opensnitch-ui";
 
   inherit (opensnitch) src version;
@@ -17,12 +18,15 @@ python3Packages.buildPythonApplication {
   '';
 
   nativeBuildInputs = [
-    python3Packages.pyqt5
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt5.qtwayland
+    qt6.qtwayland
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
   ];
 
   dependencies = with python3Packages; [
@@ -31,17 +35,16 @@ python3Packages.buildPythonApplication {
     packaging
     pyasn
     pyinotify
-    pyqt5
+    pyqt6
     qt-material
-    unicode-slugify
+    python-slugify
     unidecode
   ];
 
   preBuild = ''
     make -C ../proto ../ui/opensnitch/ui_pb2.py
     # sourced from ui/Makefile
-    pyrcc5 -o opensnitch/resources_rc.py opensnitch/res/resources.qrc
-    sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/ui_pb2*
+    sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/proto/ui_pb2*
   '';
 
   preCheck = ''
@@ -57,6 +60,8 @@ python3Packages.buildPythonApplication {
 
   # All tests are sandbox-incompatible and disabled for now
   doCheck = false;
+
+  pythonImportsCheck = [ "opensnitch" ];
 
   meta = {
     description = "Application firewall";

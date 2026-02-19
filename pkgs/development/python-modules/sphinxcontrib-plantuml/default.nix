@@ -5,15 +5,12 @@
   setuptools,
   sphinx,
   plantuml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
   version = "0.30";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
     homepage = "https://github.com/sphinx-contrib/plantuml/";
-    license = with licenses; [ bsd2 ];
+    license = with lib.licenses; [ bsd2 ];
     maintainers = [ ];
   };
 }

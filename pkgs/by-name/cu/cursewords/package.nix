@@ -3,34 +3,38 @@
   python3Packages,
   fetchFromGitHub,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cursewords";
   version = "1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thisisparker";
     repo = "cursewords";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Ssr15kSdWmyMFFG5uCregrpGQ3rI2cMXqY9+/a3gs84=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     python3Packages.setuptools
-    python3Packages.wheel
   ];
 
   doCheck = false; # no tests
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "blessed"
+  ];
+
+  dependencies = [
     python3Packages.blessed
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thisisparker/cursewords";
     description = "Graphical command line program for solving crossword puzzles in the terminal";
     mainProgram = "cursewords";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

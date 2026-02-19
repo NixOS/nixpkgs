@@ -10,18 +10,17 @@
   sqlite,
   gnupg,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-wot";
   version = "0.12.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-wot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Xbj1XLZQxyEYf/+R5e6EJMmL0C5ohfwZMZPVK5PwmUU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-hpI791Bz0MqZgjI2E/KMseqfPQU56Qr0xmHigyPv4HU=";
 
   nativeBuildInputs = [
@@ -30,14 +29,13 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals (!stdenv.targetPlatform.isWindows) [
-      nettle
-    ];
+  buildInputs = [
+    openssl
+    sqlite
+  ]
+  ++ lib.optionals (!stdenv.targetPlatform.isWindows) [
+    nettle
+  ];
 
   buildFeatures = [
     # Upstream uses the sequoia-openpgp crate, which doesn't force you to use a
@@ -90,4 +88,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "sq-wot";
   };
-}
+})

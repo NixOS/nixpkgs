@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "adreaper";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "AidenPearce369";
     repo = "ADReaper";
-    rev = "ADReaperv${version}";
+    rev = "ADReaperv${finalAttrs.version}";
     sha256 = "sha256-+FCb5TV9MUcRyex2M4rn2RhcIsXQFbtm1T4r7MpcRQs=";
   };
 
@@ -22,14 +22,14 @@ buildGoModule rec {
     mv $out/bin/ADReaper $out/bin/$pname
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enumeration tool for Windows Active Directories";
     homepage = "https://github.com/AidenPearce369/ADReaper";
-    changelog = "https://github.com/AidenPearce369/ADReaper/releases/tag/ADReaperv${version}";
+    changelog = "https://github.com/AidenPearce369/ADReaper/releases/tag/ADReaperv${finalAttrs.version}";
     # Upstream doesn't have a license yet
     # https://github.com/AidenPearce369/ADReaper/issues/2
-    license = with licenses; [ unfree ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ unfree ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ADReaper";
   };
-}
+})

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   libGL,
   wxGTK32,
@@ -11,8 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "wxc";
   version = "1.0.0.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "wxHaskell";
     repo = "wxHaskell";
     rev = "wxc-${finalAttrs.version}";
@@ -37,7 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C language binding for wxWidgets";
     homepage = "https://wiki.haskell.org/WxHaskell";
-    license = lib.licenses.wxWindows;
+    license = with lib.licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = wxGTK32.meta.platforms;
   };

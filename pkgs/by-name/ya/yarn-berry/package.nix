@@ -10,9 +10,9 @@
 }:
 
 let
-  version_4 = "4.9.1";
+  version_4 = "4.12.0";
   version_3 = "3.8.7";
-  hash_4 = "sha256-znxB827TFLAEfCeHrwBsmRlkZz1LVWsBFhjZANiIW/4=";
+  hash_4 = "sha256-HuUqk4g+MaDI7r1cKAwAtQeNrJ6G9T9IdPgybv2W2pU=";
   hash_3 = "sha256-vRrk+Fs/7dZha3h7yI5NpMfd1xezesnigpFgTRCACZo=";
 in
 
@@ -60,19 +60,20 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
       };
     };
-  } // (callPackage ./fetcher { yarn-berry = finalAttrs; });
+  }
+  // (callPackage ./fetcher { yarn-berry = finalAttrs; });
 
-  meta = with lib; {
+  meta = {
     homepage = "https://yarnpkg.com/";
     changelog = "https://github.com/yarnpkg/berry/releases/tag/${finalAttrs.src.tag}";
     description = "Fast, reliable, and secure dependency management";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       ryota-ka
       pyrox0
       DimitarNestorov
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "yarn";
   };
 })

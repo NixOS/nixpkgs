@@ -9,18 +9,16 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sss_code";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "SergioRibera";
     repo = "sss";
-    rev = "sss_code/v${version}";
+    rev = "sss_code/v${finalAttrs.version}";
     hash = "sha256-AmJFAwHfG4R2iRz9zNeZsVFLptVy499ozQ7jgwnevOo=";
   };
-
-  useFetchCargoVendor = true;
 
   cargoHash = "sha256-qeDZgrGPSz+wXolZeVb2FFHjLzl1+vjzMN/3NCgaf/s=";
 
@@ -38,14 +36,14 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Libraries and tools for building screenshots in a high-performance image format";
     mainProgram = "sss_code";
     homepage = "https://github.com/SergioRibera/sss";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ krovuxdev ];
+    maintainers = with lib.maintainers; [ krovuxdev ];
   };
-}
+})

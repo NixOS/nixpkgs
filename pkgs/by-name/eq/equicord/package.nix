@@ -3,9 +3,15 @@
   git,
   lib,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
   nix-update-script,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
   buildWebExtension ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -14,24 +20,27 @@ stdenv.mkDerivation (finalAttrs: {
   # the Equicord repository. Dates as tags (and automatic releases) were the compromise
   # we came to with upstream. Please do not change the version schema (e.g., to semver)
   # unless upstream changes the tag schema from dates.
-  version = "2025-04-17";
+  version = "2026-01-19";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equicord";
-    tag = "${finalAttrs.version}";
-    hash = "sha256-pAuNqPrQBeL2qPIoIvyBl1PrUBz81TrBd5RT15Iuuus=";
+    tag = finalAttrs.version;
+    hash = "sha256-pEFU1E+BqAAAz2ywPrS1MejhZ/g47iG/4BBey+2F7Hw=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-fjfzBy1Z7AUKA53yjjCQ6yasHc5QMaOBtXtXA5fNK5s=";
+    pnpm = pnpm_10;
+    fetcherVersion = 1;
+    hash = "sha256-iBCA4G1E1Yw/d94pQzcbBGJYeIIgZI+Gw87/x4ogoyg=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   env = {
@@ -56,18 +65,23 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^\d{4}-\d{2}-\d{2}$"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^(\\d{4}-\\d{2}-\\d{2})$"
+      ];
+    };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withEquicord
+    );
   };
 
   meta = {
-    description = "The other cutest Discord client mod";
+    description = "Other cutest Discord client mod";
     homepage = "https://github.com/Equicord/Equicord";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [
       lib.maintainers.NotAShelf
     ];

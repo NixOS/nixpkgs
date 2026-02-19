@@ -6,8 +6,8 @@
   alsa-utils,
   fltk,
   libjack2,
-  libXft,
-  libXpm,
+  libxft,
+  libxpm,
   libjpeg,
   libpng,
   libsamplerate,
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     alsa-utils
     fltk
     libjack2
-    libXft
-    libXpm
+    libxft
+    libxpm
     libjpeg
     libpng
     libsamplerate
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-effects processor emulating a guitar effects pedalboard";
     homepage = "https://rakarrack.sourceforge.net";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

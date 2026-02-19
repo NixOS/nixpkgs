@@ -3,6 +3,8 @@
   tl,
   bin,
 
+  version,
+
   lib,
   buildEnv,
   libfaketime,
@@ -45,13 +47,20 @@ lib.fix (
     ### buildEnv with custom attributes
     buildEnv' =
       args:
-      (
-        buildEnv ({ inherit (args) name paths; })
+      (buildEnv (
+        {
+          pname = name;
+          version = "${toString version.texliveYear}-unstable-${version.year}-${version.month}-${version.day}";
+
+          inherit (args) name paths;
+        }
         // lib.optionalAttrs (args ? extraOutputsToInstall) { inherit (args) extraOutputsToInstall; }
-      ).overrideAttrs
+        // lib.optionalAttrs (args ? pathsToLink) { inherit (args) pathsToLink; }
+      )).overrideAttrs
         (
           removeAttrs args [
             "extraOutputsToInstall"
+            "pathsToLink"
             "name"
             "paths"
             "pkgs"
@@ -220,11 +229,14 @@ lib.fix (
       paths = builtins.catAttrs "outPath" pkgList.nonbin;
 
       # mktexlsr
-      nativeBuildInputs = [ tl."texlive.infra" ];
+      nativeBuildInputs = [
+        tl.texlive-scripts # for mktexlsr.pl with --sort support
+        perl
+      ];
 
       postBuild = # generate ls-R database
         ''
-          mktexlsr "$out"
+          perl ${tl.texlive-scripts.tex}/scripts/texlive/mktexlsr.pl --sort "$out"
         '';
     };
 
@@ -418,7 +430,8 @@ lib.fix (
         # use attrNames, attrValues to ensure the two lists are sorted in the same way
         outputs = [
           "out"
-        ] ++ lib.optionals (!__combine && __formatsOf == null) (builtins.attrNames nonEnvOutputs);
+        ]
+        ++ lib.optionals (!__combine && __formatsOf == null) (builtins.attrNames nonEnvOutputs);
         otherOutputs = lib.optionals (!__combine && __formatsOf == null) (
           builtins.attrValues nonEnvOutputs
         );
@@ -451,7 +464,8 @@ lib.fix (
           gawk
           gnugrep
           gnused
-        ] ++ lib.optional needsGhostscript ghostscript;
+        ]
+        ++ lib.optional needsGhostscript ghostscript;
 
         inherit meta passthru __combine;
         __formatsOf = __formatsOf.pname or null;

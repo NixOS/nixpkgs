@@ -2,7 +2,6 @@
   lib,
   callPackage,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   cython,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.3.8";
+  version = "1.3.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spacy-transformers";
     tag = "release-v${version}";
-    hash = "sha256-VhFF+cbZL+sod1t4fqyVDEDdGHXqVJsOGUj81EErdMA=";
+    hash = "sha256-06M/e8/+hMVQdZfqyI3qGaZY7iznMwMtblEkFR6Sro0=";
   };
 
   build-system = [

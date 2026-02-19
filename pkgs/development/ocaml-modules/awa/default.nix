@@ -16,17 +16,16 @@
   cmdliner,
   base64,
   zarith,
+  mirage-mtime,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "awa";
-  version = "0.5.1";
-
-  minimalOCamlVersion = "4.10";
+  version = "0.5.2";
 
   src = fetchurl {
-    url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";
-    hash = "sha256-bd6vBgUwJh1MUlrgbdbBVTZMd3gcJGIX8EEJ5872n14=";
+    url = "https://github.com/mirage/awa-ssh/releases/download/v${finalAttrs.version}/awa-${finalAttrs.version}.tbz";
+    hash = "sha256-64gloekVN0YsBwUodrJc6QaNU3PGKMIZMPJWvBfzaj0=";
   };
 
   propagatedBuildInputs = [
@@ -48,13 +47,14 @@ buildDunePackage rec {
     cstruct-unix
     cmdliner
     fmt
+    mirage-mtime
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SSH implementation in OCaml";
     homepage = "https://github.com/mirage/awa-ssh";
-    changelog = "https://github.com/mirage/awa-ssh/raw/v${version}/CHANGES.md";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    changelog = "https://github.com/mirage/awa-ssh/raw/v${finalAttrs.version}/CHANGES.md";
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

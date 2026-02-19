@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gtk2,
-  libXft,
+  libxft,
   intltool,
   automake,
   autoconf,
@@ -11,14 +11,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcmanx-gtk2";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "pcman-bbs";
     repo = "pcmanx";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0fbwd149wny67rfhczz4cbh713a1qnswjiz7b6c2bxfcwh51f9rc";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk2
-    libXft
+    libxft
     libtool
   ];
 
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     cd libltdl; autoreconf; cd ..
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pcman.ptt.cc";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     description = "Telnet BBS browser with GTK interface";
-    maintainers = [ maintainers.sifmelcara ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.sifmelcara ];
+    platforms = lib.platforms.linux;
     mainProgram = "pcmanx";
   };
-}
+})

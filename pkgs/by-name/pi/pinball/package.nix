@@ -9,7 +9,7 @@
   SDL2,
   SDL2_image,
   SDL2_mixer,
-  xorg,
+  libsm,
 }:
 
 stdenv.mkDerivation {
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     SDL2
     SDL2_image
     SDL2_mixer
-    xorg.libSM
+    libsm
   ];
   strictDeps = true;
 
@@ -48,11 +48,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/adoptware/pinball";
     description = "Emilia Pinball simulator";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.linux;
   };
 }

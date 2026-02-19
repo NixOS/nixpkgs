@@ -6,6 +6,7 @@
   pkg-config,
   qt6,
   perl,
+  fetchpatch2,
 
   # Cantata doesn't build with cdparanoia enabled so we disable that
   # default for now until I (or someone else) figure it out.
@@ -16,7 +17,7 @@
   withLame ? false,
   lame,
   withMusicbrainz ? false,
-  libmusicbrainz5,
+  libmusicbrainz,
 
   withTaglib ? true,
   taglib_1,
@@ -24,14 +25,14 @@
   withHttpStream ? true,
   gst_all_1,
   withReplaygain ? true,
-  ffmpeg,
+  ffmpeg_6,
   speex,
   mpg123,
   withMtp ? true,
   libmtp,
   withOnlineServices ? true,
   withDevices ? true,
-  udisks2,
+  udisks,
   withDynamic ? true,
   withHttpServer ? true,
   withLibVlc ? true,
@@ -91,7 +92,7 @@ let
       ];
       enable = withReplaygain;
       pkgs = [
-        ffmpeg
+        ffmpeg_6
         speex
         mpg123
       ];
@@ -129,7 +130,7 @@ let
     {
       names = [ "MUSICBRAINZ" ];
       enable = withMusicbrainz;
-      pkgs = [ libmusicbrainz5 ];
+      pkgs = [ libmusicbrainz ];
     }
     {
       names = [ "ONLINE_SERVICES" ];
@@ -155,7 +156,7 @@ let
     {
       names = [ "UDISKS2" ];
       enable = withUdisks;
-      pkgs = [ udisks2 ];
+      pkgs = [ udisks ];
     }
   ];
 
@@ -176,6 +177,18 @@ stdenv.mkDerivation (finalAttrs: {
     # patchShebangs the playlists scripts, making that unnecessary (perl will
     # always be available because it's a dependency)
     ./dont-check-for-perl-in-PATH.diff
+
+    # remove following patches in next release
+    (fetchpatch2 {
+      name = "fix-build-with-qt-610-qfile-open.patch";
+      url = "https://github.com/nullobsi/cantata/pull/89.patch";
+      hash = "sha256-c7hdecX2oo9jTlLc6zd7LVjgZj4w89zN+eEw7ol/hmI=";
+    })
+    (fetchpatch2 {
+      name = "fix-build-with-qt-610-invalidateFilter-deprecated.patch";
+      url = "https://github.com/nullobsi/cantata/pull/90.patch";
+      hash = "sha256-dMxbC/p5mD/TQZEXORbvNON7Zzbvq0khaIR89lU5cO4=";
+    })
   ];
 
   postPatch = ''
@@ -187,7 +200,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
     qt6.qtwayland
     (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
-  ] ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
+  ]
+  ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
 
   nativeBuildInputs = [
     cmake

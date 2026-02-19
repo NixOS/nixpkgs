@@ -14,14 +14,13 @@ rustPlatform.buildRustPackage {
     hash = "sha256-UFk6SJVA58WXhH1CIuT48MEF19yPUe1HD+ekn4LDj8g=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cxPNqUVNMkNY9Ov7/ajTAwnBd2j/gKDHVLXPtd1aPVA=";
 
-  meta = with lib; {
+  meta = {
     description = "Recursive blake3 digest (hash) of a file-system path";
     homepage = "https://github.com/rustshop/rblake3sum";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ dpc ];
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [ dpc ];
     mainProgram = "rblake3sum";
   };
 }

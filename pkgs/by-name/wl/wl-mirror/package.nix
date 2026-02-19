@@ -29,15 +29,15 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wl-mirror";
-  version = "0.18.2";
+  version = "0.18.5";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
-    rev = "v${version}";
-    hash = "sha256-1R8jMDPprTeLt98iALC5l1mdW1U2yKGVtncXGatM8Vg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KUS0mN9JpLFBDeztzn+3NnJWQZSDZjeqKTFwhRJf+hI=";
   };
 
   strictDeps = true;
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    echo 'v${version}' > version.txt
+    echo 'v${finalAttrs.version}' > version.txt
     substituteInPlace CMakeLists.txt \
       --replace 'WL_PROTOCOL_DIR "/usr' 'WL_PROTOCOL_DIR "${wayland-protocols}' \
       --replace 'WLR_PROTOCOL_DIR "/usr' 'WLR_PROTOCOL_DIR "${wlr-protocols}'
@@ -72,25 +72,24 @@ stdenv.mkDerivation rec {
     "-DWITH_GBM=ON"
   ];
 
-  postInstall =
-    ''
-      installShellCompletion --cmd wl-mirror \
-        --bash ../scripts/completions/bash-completions/_wl-mirror \
-        --zsh ../scripts/completions/zsh-completions/_wl-mirror
+  postInstall = ''
+    installShellCompletion --cmd wl-mirror \
+      --bash ../scripts/completions/bash-completions/_wl-mirror \
+      --zsh ../scripts/completions/zsh-completions/_wl-mirror
 
-      installShellCompletion --cmd wl-present \
-        --bash ../scripts/completions/bash-completions/_wl-present \
-        --zsh ../scripts/completions/zsh-completions/_wl-present
-    ''
-    + lib.optionalString installExampleScripts ''
-      wrapProgram $out/bin/wl-present --prefix PATH ":" ${wl-present-binpath}
-    '';
+    installShellCompletion --cmd wl-present \
+      --bash ../scripts/completions/bash-completions/_wl-present \
+      --zsh ../scripts/completions/zsh-completions/_wl-present
+  ''
+  + lib.optionalString installExampleScripts ''
+    wrapProgram $out/bin/wl-present --prefix PATH ":" ${wl-present-binpath}
+  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Ferdi265/wl-mirror";
     description = "Simple Wayland output mirror client";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ synthetica ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ synthetica ];
+    platforms = lib.platforms.linux;
   };
-}
+})

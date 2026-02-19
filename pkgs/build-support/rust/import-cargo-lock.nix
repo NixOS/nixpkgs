@@ -16,7 +16,7 @@
   # Cargo lock file contents as string
   lockFileContents ? null,
 
-  # Allow `builtins.fetchGit` to be used to not require hashes for git dependencies
+  # Allow `fetchGit` to be used to not require hashes for git dependencies
   allowBuiltinFetchGit ? false,
 
   # Additional registries to pull sources from
@@ -57,7 +57,7 @@ let
   # shadows args.lockFileContents
   lockFileContents = if lockFile != null then builtins.readFile lockFile else args.lockFileContents;
 
-  parsedLockFile = builtins.fromTOML lockFileContents;
+  parsedLockFile = fromTOML lockFileContents;
 
   # lockfile v1 and v2 don't have the `version` key, so assume v2
   # we can implement more fine-grained detection later, if needed
@@ -75,11 +75,11 @@ let
   # Force evaluation of the git SHA -> hash mapping, so that an error is
   # thrown if there are stale hashes. We cannot rely on gitShaOutputHash
   # being evaluated otherwise, since there could be no git dependencies.
-  depCrates = builtins.deepSeq gitShaOutputHash (builtins.map mkCrate depPackages);
+  depCrates = builtins.deepSeq gitShaOutputHash (map mkCrate depPackages);
 
   # Map package name + version to git commit SHA for packages with a git source.
   namesGitShas = builtins.listToAttrs (
-    builtins.map nameGitSha (builtins.filter (pkg: lib.hasPrefix "git+" pkg.source) depPackages)
+    map nameGitSha (builtins.filter (pkg: lib.hasPrefix "git+" pkg.source) depPackages)
   );
 
   nameGitSha =
@@ -131,7 +131,8 @@ let
 
   registries = {
     "https://github.com/rust-lang/crates.io-index" = "https://crates.io/api/v1/crates";
-  } // extraRegistries;
+  }
+  // extraRegistries;
 
   # Replaces values inherited by workspace members.
   replaceWorkspaceValues = writers.writePython3 "replace-workspace-values" {
@@ -187,7 +188,7 @@ let
               sha256 = gitShaOutputHash.${gitParts.sha};
             }
           else if allowBuiltinFetchGit then
-            builtins.fetchGit {
+            fetchGit {
               inherit (gitParts) url;
               rev = gitParts.sha;
               allRefs = true;

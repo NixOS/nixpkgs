@@ -8,19 +8,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hexpatch";
-  version = "1.11.2";
+  version = "1.12.5";
 
   src = fetchFromGitHub {
     owner = "Etto48";
     repo = "HexPatch";
-    tag = "v${version}";
-    hash = "sha256-xeHOViakCRMXQqmuUCeekL0tyYyh61OnU0zDk767NPU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2FTFVKFql28S3/03M64FJyrwWuI0Zeg8z/nrWZJzGIo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3eaEgzGVSz6MjNqRGjzP8GoOZ/3eYOkI4Gd6+n+6vDg=";
+  cargoHash = "sha256-PQEq6g+VItcIG3GBl5sOFtPVZem27+n2JTPjK23xIt8=";
 
   nativeBuildInputs = [
     cmake
@@ -34,7 +33,6 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -50,9 +48,9 @@ rustPlatform.buildRustPackage rec {
       via SSH.
     '';
     homepage = "https://etto48.github.io/HexPatch/";
-    changelog = "https://github.com/Etto48/HexPatch/releases/tag/v${version}";
+    changelog = "https://github.com/Etto48/HexPatch/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ratcornu ];
     mainProgram = "hexpatch";
   };
-}
+})

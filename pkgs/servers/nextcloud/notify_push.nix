@@ -13,23 +13,22 @@ rustPlatform.buildRustPackage rec {
   # in nixpkgs!
   # For that, check the `<dependencies>` section of `appinfo/info.xml`
   # in the app (https://github.com/nextcloud/notify_push/blob/main/appinfo/info.xml)
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "notify_push";
     tag = "v${version}";
-    hash = "sha256-mHoVNKvE4Hszi1wg9fIHjRMJp5+CIBCgUPzreJ6Jnew=";
+    hash = "sha256-RdrwHlp3VlQkhyYr9XDWzqhNnNmUnd8hVAei8IkkNR8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-PkRWyz4Gd2gGg9n4yChtR96QNOjEK5HNVhBwkkVjVPE=";
+  cargoHash = "sha256-+z9XaAzToLZg6/PoRigkvPVpZ/bX/t0VBR5bg3dCUVw=";
 
   passthru = rec {
     app = fetchNextcloudApp {
       appName = "notify_push";
       appVersion = version;
-      hash = "sha256-nxbmzRaW4FYmwTF27P9K7SebKYiL5KOMdyU5unif+NQ=";
+      hash = "sha256-Z9vTAln//DYsx5VLWeJP1KBRF0to79F9aBLnpp+PdwA=";
       license = "agpl3Plus";
       homepage = "https://github.com/nextcloud/notify_push";
       url = "https://github.com/nextcloud-releases/notify_push/releases/download/v${version}/notify_push-v${version}.tar.gz";
@@ -42,8 +41,7 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      useFetchCargoVendor = true;
-      cargoHash = "sha256-PkRWyz4Gd2gGg9n4yChtR96QNOjEK5HNVhBwkkVjVPE=";
+      cargoHash = "sha256-+z9XaAzToLZg6/PoRigkvPVpZ/bX/t0VBR5bg3dCUVw=";
 
       meta = meta // {
         mainProgram = "test_client";
@@ -58,13 +56,16 @@ rustPlatform.buildRustPackage rec {
       };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/nextcloud/notify_push/releases/tag/v${version}";
     description = "Update notifications for nextcloud clients";
     mainProgram = "notify_push";
     homepage = "https://github.com/nextcloud/notify_push";
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.helsinki-systems ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
   };
 }

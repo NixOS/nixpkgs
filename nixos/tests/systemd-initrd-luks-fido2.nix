@@ -2,6 +2,11 @@
 {
   name = "systemd-initrd-luks-fido2";
 
+  meta = {
+    # `canokey-qemu` is marked broken.
+    broken = true;
+  };
+
   nodes.machine =
     { pkgs, config, ... }:
     {

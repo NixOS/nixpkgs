@@ -18,10 +18,10 @@ buildPythonPackage rec {
   # There are no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Should assertions in Python as clear and readable as possible";
     homepage = "https://github.com/nsi-iff/should-dsl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

@@ -6,7 +6,6 @@
   hypothesis,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "fastnumbers";
   version = "5.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SethMMorton";
@@ -39,15 +36,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--hypothesis-profile=standard" ];
+  pytestFlags = [ "--hypothesis-profile=standard" ];
 
   pythonImportsCheck = [ "fastnumbers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for number conversion";
     homepage = "https://github.com/SethMMorton/fastnumbers";
     changelog = "https://github.com/SethMMorton/fastnumbers/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

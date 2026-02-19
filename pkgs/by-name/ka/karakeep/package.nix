@@ -2,45 +2,58 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+  nixosTests,
   nodejs,
   node-gyp,
+  gnutar,
   inter,
   python3,
   srcOnly,
   removeReferencesTo,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  versionCheckHook,
 }:
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.24.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-eiDTNMB/CipAR3FkUqPUGYdTAC6lSxT9gRXPQJLx5YE=";
+    tag = "cli/v${finalAttrs.version}";
+    hash = "sha256-Ssr/KcQHRtEloz4YPAUfUmcbicMumkIQ+wOjxe9PTXM=";
   };
 
   patches = [
     ./patches/use-local-font.patch
-    ./patches/fix-migrations-path.patch
     ./patches/dont-lock-pnpm-version.patch
   ];
+
   postPatch = ''
     ln -s ${inter}/share/fonts/truetype ./apps/web/app/fonts
+
+    substituteInPlace apps/cli/src/commands/dump.ts \
+      --replace-fail 'spawn("tar"' 'spawn("${lib.getExe gnutar}"'
   '';
 
   nativeBuildInputs = [
     python3
     nodejs
     node-gyp
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
-  pnpmDeps = pnpm.fetchDeps {
+
+  buildInputs = [
+    gnutar
+  ];
+
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version;
+    pnpm = pnpm_9;
 
     # We need to pass the patched source code, so pnpm sees the patched version
     src = stdenv.mkDerivation {
@@ -51,7 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-    hash = "sha256-2n61uKdT9Q1fobpHunRhC3Eql3fqsV+DcyaEGjYDOyY=";
+    fetcherVersion = 3;
+    hash = "sha256-ZCsG+Zjiy3hmROgBKnqxGlJjvIYqAeQMlfXUnNQIsiI=";
   };
   buildPhase = ''
     runHook preBuild
@@ -71,6 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo "Building apps/cli"
     pushd apps/cli
+    pnpm run build
+    popd
+
+    echo "Building apps/workers"
+    pushd apps/workers
     pnpm run build
     popd
 
@@ -102,9 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
       HELPER_SCRIPT_NAME="$(basename "$HELPER_SCRIPT")"
       cp "$HELPER_SCRIPT" "$KARAKEEP_LIB_PATH/"
       substituteInPlace "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME" \
-        --replace-warn "KARAKEEP_LIB_PATH=" "KARAKEEP_LIB_PATH=$KARAKEEP_LIB_PATH" \
-        --replace-warn "RELEASE=" "RELEASE=${finalAttrs.version}" \
-        --replace-warn "NODEJS=" "NODEJS=${nodejs}"
+        --subst-var-by KARAKEEP_LIB_PATH "$KARAKEEP_LIB_PATH" \
+        --subst-var-by VERSION "${finalAttrs.version}" \
+        --subst-var-by NODEJS "${nodejs}"
       chmod +x "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
       patchShebangs "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
     done
@@ -124,8 +143,22 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -type l ! -exec test -e {} \; -delete
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) karakeep;
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     homepage = "https://karakeep.app/";
+    changelog = "https://github.com/karakeep-app/karakeep/releases/tag/v${finalAttrs.version}";
     description = "Self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.three ];

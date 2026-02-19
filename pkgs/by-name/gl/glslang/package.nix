@@ -2,22 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  bison,
   cmake,
-  jq,
   python3,
   spirv-headers,
   spirv-tools,
+  config,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glslang";
-  version = "15.3.0";
+  version = "16.1.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = version;
-    hash = "sha256-HwFP4KJuA+BMQVvBWV0BCRj9U5I3CLEU+5bBtde2f6w=";
+    tag = finalAttrs.version;
+    hash = "sha256-cEREniYgSd62mnvKaQkgs69ETL5pLl5Gyv3hKOtSv3w=";
   };
 
   outputs = [
@@ -26,48 +25,40 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  # These get set at all-packages, keep onto them for child drvs
-  passthru = {
-    spirv-tools = spirv-tools;
-    spirv-headers = spirv-headers;
-  };
-
   nativeBuildInputs = [
     cmake
     python3
-    bison
-    jq
   ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  propagatedBuildInputs = [
+    spirv-tools
+    spirv-headers
+  ];
 
-  postPatch = ''
-    cp --no-preserve=mode -r "${spirv-tools.src}" External/spirv-tools
-    ln -s "${spirv-headers.src}" External/spirv-tools/external/spirv-headers
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_EXTERNAL" false)
+    (lib.cmakeBool "ALLOW_EXTERNAL_SPIRV_TOOLS" true)
+  ];
 
-  # This is a dirty fix for lib/cmake/SPIRVTargets.cmake:51 which includes this directory
   postInstall = ''
-    mkdir -p $dev/include/External
-    moveToOutput lib/pkgconfig "''${!outputDev}"
-    moveToOutput lib/cmake "''${!outputDev}"
-  '';
-
-  # Fix the paths in .pc, even though it's unclear if these .pc are really useful.
-  postFixup = ''
-    substituteInPlace $dev/lib/pkgconfig/*.pc \
-      --replace-fail '=''${prefix}//' '=/' \
-      --replace-fail "includedir=$dev/$dev" "includedir=$dev"
-
     # add a symlink for backwards compatibility
     ln -s $bin/bin/glslang $bin/bin/glslangValidator
   '';
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
-    description = "Khronos reference front-end for GLSL and ESSL";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ralith ];
+  passthru = lib.optionalAttrs config.allowAliases {
+    # Added 2026-01-06, https://github.com/NixOS/nixpkgs/pull/477412
+    spirv-tools = throw "'glslang' no longer pins to specific 'spirv-tools'";
+
+    # Added 2026-01-06, https://github.com/NixOS/nixpkgs/pull/477412
+    spirv-headers = throw "'glslang' no longer pins to specific 'spirv-headers'";
   };
-}
+
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
+    description = "Khronos reference front-end for GLSL and ESSL";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.ralith ];
+  };
+})

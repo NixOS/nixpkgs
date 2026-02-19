@@ -15,12 +15,12 @@
   withALSA ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcem";
   version = "17";
 
   src = fetchzip {
-    url = "https://pcem-emulator.co.uk/files/PCemV${version}Linux.tar.gz";
+    url = "https://pcem-emulator.co.uk/files/PCemV${finalAttrs.version}Linux.tar.gz";
     stripRoot = false;
     sha256 = "067pbnc15h6a4pnnym82klr1w8qwfm6p0pkx93gx06wvwqsxvbdv";
   };
@@ -36,22 +36,24 @@ stdenv.mkDerivation rec {
     SDL2
     openal
     gtk3
-  ] ++ lib.optional withALSA alsa-lib;
+  ]
+  ++ lib.optional withALSA alsa-lib;
 
-  configureFlags =
-    [ "--enable-release-build" ]
-    ++ lib.optional withNetworking "--enable-networking"
-    ++ lib.optional withALSA "--enable-alsa";
+  configureFlags = [
+    "--enable-release-build"
+  ]
+  ++ lib.optional withNetworking "--enable-networking"
+  ++ lib.optional withALSA "--enable-alsa";
 
   # Fix GCC 14 build
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types";
 
-  meta = with lib; {
+  meta = {
     description = "Emulator for IBM PC computers and clones";
     mainProgram = "pcem";
     homepage = "https://pcem-emulator.co.uk/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.terin ];
-    platforms = platforms.linux ++ platforms.windows;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.terin ];
+    platforms = lib.platforms.linux ++ lib.platforms.windows;
   };
-}
+})

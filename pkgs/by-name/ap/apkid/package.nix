@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "apkid";
   version = "3.0.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rednaga";
     repo = "APKiD";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/8p2qR1je65k1irXFcCre2e16rhGjcu0+u6RChMYTWQ=";
   };
 
@@ -35,12 +35,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "apkid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Android Application Identifier";
     homepage = "https://github.com/rednaga/APKiD";
-    changelog = "https://github.com/rednaga/APKiD/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/rednaga/APKiD/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "apkid";
   };
-}
+})

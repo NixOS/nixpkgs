@@ -30,13 +30,12 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      flask
-      zstandard
-    ]
-    ++ lib.optionals (!isPyPy) [ brotli ]
-    ++ lib.optionals isPyPy [ brotlicffi ];
+  dependencies = [
+    flask
+    zstandard
+  ]
+  ++ lib.optionals (!isPyPy) [ brotli ]
+  ++ lib.optionals isPyPy [ brotlicffi ];
 
   nativeCheckInputs = [
     pytestCheckHook

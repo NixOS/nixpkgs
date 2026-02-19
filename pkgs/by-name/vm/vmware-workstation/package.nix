@@ -1,7 +1,7 @@
 {
   stdenv,
   buildFHSEnv,
-  requireFile,
+  fetchurl,
   lib,
   zlib,
   gdbm,
@@ -19,7 +19,21 @@
   libxcrypt-legacy,
   libGL,
   numactl,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxft,
+  libxfixes,
+  libxext,
+  libxdmcp,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libxau,
+  libx11,
   kmod,
   python3,
   autoPatchelfHook,
@@ -35,13 +49,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vmware-workstation";
-  version = "17.6.3";
-  build = "24583834";
+  version = "17.6.4";
+  build = "24832109";
 
-  src = requireFile {
-    name = "VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
-    url = "https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Workstation%20Pro&freeDownloads=true";
-    hash = "sha256-eVdZF3KN7UxtC4n0q2qBvpp3PADuto0dEqwNsSVHjuA=";
+  src = fetchurl {
+    url = "https://archive.org/download/vmware-workstation-full-${finalAttrs.version}-${finalAttrs.build}.x86_64/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
+    hash = "sha256-ZPv7rqzEiGVGgRQ2Kiu6rekRDMnoe8O9k4OWun8Zqb0=";
   };
 
   vmware-unpack-env = buildFHSEnv {
@@ -79,19 +92,18 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  nativeBuildInputs =
-    [
-      python3
-      finalAttrs.vmware-unpack-env
-      autoPatchelfHook
-      makeWrapper
-    ]
-    ++ lib.optionals enableInstaller [
-      bzip2
-      sqlite
-      finalAttrs.readline70_compat63
-    ]
-    ++ lib.optionals enableMacOSGuests [ unzip ];
+  nativeBuildInputs = [
+    python3
+    finalAttrs.vmware-unpack-env
+    autoPatchelfHook
+    makeWrapper
+  ]
+  ++ lib.optionals enableInstaller [
+    bzip2
+    sqlite
+    finalAttrs.readline70_compat63
+  ]
+  ++ lib.optionals enableMacOSGuests [ unzip ];
 
   buildInputs = [
     libxslt
@@ -108,21 +120,21 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt-legacy
     libGL
     numactl
-    xorg.libX11
-    xorg.libXau
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXdmcp
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXft
-    xorg.libXinerama
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libXtst
+    libx11
+    libxau
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxdmcp
+    libxext
+    libxfixes
+    libxft
+    libxinerama
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxtst
   ];
 
   installPhase = ''
@@ -231,8 +243,8 @@ stdenv.mkDerivation (finalAttrs: {
         --add-needed ${libpulseaudio}/lib/libpulse.so.0 \
         --add-needed ${libGL}/lib/libEGL.so.1 \
         --add-needed ${numactl}/lib/libnuma.so.1 \
-        --add-needed ${xorg.libX11}/lib/libX11.so.6 \
-        --add-needed ${xorg.libXi}/lib/libXi.so.6 \
+        --add-needed ${libx11}/lib/libX11.so.6 \
+        --add-needed ${libxi}/lib/libXi.so.6 \
         --add-needed ${libGL}/lib/libGL.so.1 \
         $out/lib/vmware/bin/$binary
     done

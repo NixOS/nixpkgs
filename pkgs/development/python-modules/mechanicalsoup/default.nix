@@ -4,20 +4,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
+  pytest-cov-stub,
   pytest-httpbin,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
-  requests,
   requests-mock,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "mechanicalsoup";
   version = "1.4.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MechanicalSoup";
@@ -31,10 +30,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "'pytest-runner'" ""
     substituteInPlace setup.cfg \
-      --replace " --cov --cov-config .coveragerc --flake8" ""
+      --replace " --flake8" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     lxml
     requests
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-httpbin
     pytest-mock
     pytestCheckHook
@@ -51,12 +53,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mechanicalsoup" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Missing module
+    "test_select_form_associated_elements"
+  ];
+
+  meta = {
     description = "Python library for automating interaction with websites";
     homepage = "https://github.com/hickford/MechanicalSoup";
     changelog = "https://github.com/MechanicalSoup/MechanicalSoup/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jgillich
       fab
     ];

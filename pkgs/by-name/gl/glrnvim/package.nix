@@ -4,18 +4,17 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "glrnvim";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "beeender";
     repo = "glrnvim";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fyJ3k1CBrxL6It8x9jNumzCuhXug6eB/fuvPUQYEc4A=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xDa2aMWx09dEbRDops2HwYSl/KMA7CeFqS2bnxX/8w8=";
 
   postInstall = ''
@@ -30,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aacebedo ];
   };
-}
+})

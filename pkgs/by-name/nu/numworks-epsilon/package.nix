@@ -5,7 +5,7 @@
   libpng,
   libjpeg,
   freetype,
-  xorg,
+  libxext,
   python3,
   imagemagick,
   gcc-arm-embedded,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     libpng
     libjpeg
     freetype
-    xorg.libXext
+    libxext
     python3
     imagemagick
     gcc-arm-embedded
@@ -49,9 +49,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mv ./output/release/simulator/linux/{epsilon.bin,epsilon}
     mkdir -p $out/bin
-    cp -r ./output/release/simulator/linux/* $out/bin/
+    cp ./output/release/simulator/linux/epsilon.bin $out/bin/epsilon
 
     # Build the logo
     assets="$src/ion/src/simulator/assets"
@@ -85,11 +84,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulator for Epsilon, a High-performance graphing calculator operating system";
     homepage = "https://numworks.com/";
-    license = licenses.cc-by-nc-sa-40;
-    maintainers = with maintainers; [ erikbackman ];
+    license = lib.licenses.cc-by-nc-sa-40;
+    maintainers = with lib.maintainers; [ erikbackman ];
     platforms = [ "x86_64-linux" ];
   };
 }

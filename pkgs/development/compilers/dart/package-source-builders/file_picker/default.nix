@@ -1,18 +1,19 @@
 {
+  lib,
   stdenv,
   zenity,
 }:
 
 { version, src, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "file_picker";
   inherit version src;
   inherit (src) passthru;
 
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versionOlder version "10.3.0") ''
     substituteInPlace lib/src/linux/file_picker_linux.dart \
-        --replace-fail "isExecutableOnPath('zenity')" "'${zenity}/bin/zenity'"
+        --replace-fail "isExecutableOnPath('zenity')" "'${lib.getExe zenity}'"
   '';
 
   installPhase = ''

@@ -8,6 +8,7 @@
   fetchNpmDeps,
   fetchFromGitHub,
   makeDesktopItem,
+  nodejs_22,
 
   autoPatchelfHook,
   copyDesktopItems,
@@ -19,19 +20,14 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bs-manager";
-  version = "1.5.3";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "Zagrios";
     repo = "bs-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-thqz6sFmov5py7mUBYUC6ANBgjnNFC1hfLEsaxJVYu8=";
+    hash = "sha256-hx6ciEz772NYd9+7WjLqTzNNenWMoOq57IneqsDC1Qg=";
   };
-
-  patches = [
-    # https://github.com/Zagrios/bs-manager/pull/870
-    ./use-steam-run-for-wine.patch
-  ];
 
   postPatch = ''
     # don't search for resources in electron's resource directory, but our own
@@ -43,13 +39,13 @@ buildNpmPackage (finalAttrs: {
     ln -s ${finalAttrs.passthru.depotdownloader}/bin/DepotDownloader assets/scripts/DepotDownloader
   '';
 
-  npmDepsHash = "sha256-VsCbz7ImDnJ0tonVhA4lOPA0w//tqF4hLhrReLUqYI8=";
+  npmDepsHash = "sha256-wmPZv1lqGr31wBGaeLw7LL6ZMzq/x8lkoy/iMxU+M80=";
 
   extraNpmDeps = fetchNpmDeps {
     name = "bs-manager-${finalAttrs.version}-extra-npm-deps";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/release/app";
-    hash = "sha256-JqDsv9kvYnbJdNwXN1EbppSrFVqr2cSnVhV2+8uw54g=";
+    hash = "sha256-jE/M22QQzuTS0zgcB+tLEL8Ey61HE8MP7H1MTX060gY=";
   };
 
   makeCacheWritable = true;
@@ -66,6 +62,10 @@ buildNpmPackage (finalAttrs: {
 
   buildInputs = [
     stdenv.cc.cc
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+    "libc.musl-x86_64.so.1" # musl-based node modules won't be used on glibc systems
   ];
 
   preBuild = ''

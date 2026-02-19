@@ -6,14 +6,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcstar";
   version = "1.8.0";
 
   src = fetchFromGitLab {
     owner = "Kerenoc";
     repo = "GCstar";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-37yjKI4l/nUzDnra1AGxDQxNafMsLi1bSifG6pz33zg=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/gcstar --prefix PERL5LIB : $PERL5LIB
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/Kerenoc/GCstar";
     description = "Manage your collections of movies, games, books, music and more";
     mainProgram = "gcstar";
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
       Detailed information on each item can be automatically retrieved from the internet and you can store additional data, such as the location or who you've lent it to.
       You may also search and filter your collections by many criteria.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dasj19 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dasj19 ];
+    platforms = lib.platforms.all;
   };
-}
+})

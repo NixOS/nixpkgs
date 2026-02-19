@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ffuf";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "ffuf";
     repo = "ffuf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+wcNqQHtB8yCLiJXMBxolCWsYZbBAsBGS1hs7j1lzUU=";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for web fuzzing";
     mainProgram = "ffuf";
     longDescription = ''
@@ -41,8 +41,8 @@ buildGoModule rec {
       or web servers.
     '';
     homepage = "https://github.com/ffuf/ffuf";
-    changelog = "https://github.com/ffuf/ffuf/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ffuf/ffuf/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

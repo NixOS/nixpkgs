@@ -4,6 +4,7 @@
   fetchFromGitLab,
   autoreconfHook,
   coreutils,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +20,10 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-udev" ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    udevCheckHook
+  ];
 
   patches = [
     ./0001-define-light-loglevel-as-extern.patch
@@ -32,6 +36,8 @@ stdenv.mkDerivation {
       --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
   '';
 
+  doInstallCheck = true;
+
   meta = {
     description = "GNU/Linux application to control backlights";
     homepage = "https://gitlab.com/dpeukert/light";
@@ -39,7 +45,6 @@ stdenv.mkDerivation {
     mainProgram = "light";
     maintainers = with lib.maintainers; [
       puffnfresh
-      dtzWill
     ];
     platforms = lib.platforms.linux;
   };

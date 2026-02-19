@@ -90,7 +90,8 @@ let
         __structuredAttrs = true;
         env = {
           LUAROCKS_CONFIG = self.configFile;
-        } // attrs.env or { };
+        }
+        // attrs.env or { };
 
         generatedRockspecFilename = "./${self.pname}-${self.rockspecVersion}.rockspec";
 
@@ -132,18 +133,16 @@ let
           text = self.luarocks_content;
         };
 
-        luarocks_content =
-          (lib.generators.toLua { asBindings = true; } self.luarocksConfig)
-          + ''
+        luarocks_content = (lib.generators.toLua { asBindings = true; } self.luarocksConfig) + ''
 
-            ${self.extraConfig}
-          '';
+          ${self.extraConfig}
+        '';
 
         # TODO make it the default variable
         luarocksConfig =
           let
             externalDepsGenerated = lib.filter (drv: !drv ? luaModule) (
-              self.nativeBuildInputs ++ self.propagatedBuildInputs ++ self.buildInputs
+              self.finalPackage.nativeBuildInputs ++ self.propagatedBuildInputs ++ self.buildInputs
             );
 
             generatedConfig = luaLib.generateLuarocksConfig {
@@ -158,7 +157,7 @@ let
               # closure, as it doesn't have a rock tree :)
               # luaLib.hasLuaModule
               requiredLuaRocks = lib.filter luaLib.hasLuaModule (
-                lua.pkgs.requiredLuaModules (self.nativeBuildInputs ++ self.propagatedBuildInputs)
+                lua.pkgs.requiredLuaModules (self.finalPackage.nativeBuildInputs ++ self.propagatedBuildInputs)
               );
             };
 
@@ -172,22 +171,21 @@ let
           in
           lib.recursiveUpdate generatedConfig luarocksConfig';
 
-        configurePhase =
-          ''
-            runHook preConfigure
-          ''
-          + lib.optionalString (self.rockspecFilename == null) ''
-            rockspecFilename="${self.generatedRockspecFilename}"
-          ''
-          + lib.optionalString (self.knownRockspec != null) ''
-            # prevents the following type of error:
-            # Inconsistency between rockspec filename (42fm1b3d7iv6fcbhgm9674as3jh6y2sh-luv-1.22.0-1.rockspec) and its contents (luv-1.22.0-1.rockspec)
-            rockspecFilename="$TMP/$(stripHash ${self.knownRockspec})"
-            cp ${self.knownRockspec} "$rockspecFilename"
-          ''
-          + ''
-            runHook postConfigure
-          '';
+        configurePhase = ''
+          runHook preConfigure
+        ''
+        + lib.optionalString (self.rockspecFilename == null) ''
+          rockspecFilename="${self.generatedRockspecFilename}"
+        ''
+        + lib.optionalString (self.knownRockspec != null) ''
+          # prevents the following type of error:
+          # Inconsistency between rockspec filename (42fm1b3d7iv6fcbhgm9674as3jh6y2sh-luv-1.22.0-1.rockspec) and its contents (luv-1.22.0-1.rockspec)
+          rockspecFilename="$TMP/$(stripHash ${self.knownRockspec})"
+          cp ${self.knownRockspec} "$rockspecFilename"
+        ''
+        + ''
+          runHook postConfigure
+        '';
 
         buildPhase = ''
           runHook preBuild
@@ -243,14 +241,16 @@ let
 
         passthru = {
           inherit lua;
-        } // attrs.passthru or { };
+        }
+        // attrs.passthru or { };
 
         meta = {
           platforms = lua.meta.platforms;
           # add extra maintainer(s) to every package
           maintainers = (attrs.meta.maintainers or [ ]) ++ [ ];
           broken = disabled;
-        } // attrs.meta or { };
+        }
+        // attrs.meta or { };
       }
     )
   );

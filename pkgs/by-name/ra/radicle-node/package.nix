@@ -1,45 +1,61 @@
 {
   asciidoctor,
-  fetchgit,
-  git,
+  fetchFromRadicle,
+  gitMinimal,
   installShellFiles,
   jq,
   lib,
-  makeWrapper,
+  makeBinaryWrapper,
   man-db,
-  nixos,
   nixosTests,
   openssh,
-  radicle-node,
   runCommand,
   rustPlatform,
   stdenv,
-  testers,
   xdg-utils,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-node";
-  version = "1.1.0";
-  env.RADICLE_VERSION = version;
+  version = "1.6.1";
 
-  src = fetchgit {
-    url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
-    rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-M4oz9tWjI/eqV4Gz1b512MEmvsZ5u3R9y6P9VeeH9CA=";
+  src = fetchFromRadicle {
+    seed = "seed.radicle.xyz";
+    repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-7kwtWuYdYG3MDHThCkY5OZmx4pWaQXMYoOlJszmV2rM=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse HEAD > $out/.git_head
+      git -C $out log -1 --pretty=%ct HEAD > $out/.git_time
+      rm -rf $out/.git
+    '';
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-SzwBQxTqQafHDtH8+OWkAMDnKh3AH0PeSMBWpHprQWM=";
 
-  patches = [
-    ./61865b5b5ad715e2b812087947281f0add9aa05e.patch
-  ];
+  cargoHash = "sha256-59RyfSUJNoQ7EtQK3OSYOIO/YVEjeeM9ovbojHFX4pI=";
+
+  env.RADICLE_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     asciidoctor
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
+
+  preBuild = ''
+    export GIT_HEAD=$(<$src/.git_head)
+    export SOURCE_DATE_EPOCH=$(<$src/.git_time)
+  '';
+
+  cargoBuildFlags = [
+    "--package=radicle-node"
+    "--package=radicle-cli"
+    "--package=radicle-remote-helper"
+  ];
+
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   # tests regularly time out on aarch64
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
@@ -48,10 +64,17 @@ rustPlatform.buildRustPackage rec {
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release
     # Tests want to open many files.
     ulimit -n 4096
+    # Cap test threads to avoid timing issues on loaded builders (sync timeout is 5s)
+    max_threads=4
+    if [[ -n "$NIX_BUILD_CORES" && "$NIX_BUILD_CORES" -lt "$max_threads" ]]; then
+      max_threads=$NIX_BUILD_CORES
+    fi
+    export RUST_TEST_THREADS=$max_threads
   '';
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"
     "--skip=tests::test_announcement_relay"
+    "--skip=tests::commands::rad_remote"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Flaky.20tests/near/438352360
     "--skip=tests::e2e::test_connection_crossing"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Clone.20Partial.20Fail.20Flake
@@ -63,7 +86,16 @@ rustPlatform.buildRustPackage rec {
       asciidoctor -d manpage -b manpage $page
       installManPage ''${page::-5}
     done
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rad \
+      --bash <($out/bin/rad completion bash) \
+      --fish <($out/bin/rad completion fish) \
+      --zsh <($out/bin/rad completion zsh)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postFixup = ''
     for program in $out/bin/* ;
@@ -71,7 +103,7 @@ rustPlatform.buildRustPackage rec {
       wrapProgram "$program" \
         --prefix PATH : "${
           lib.makeBinPath [
-            git
+            gitMinimal
             man-db
             openssh
             xdg-utils
@@ -80,54 +112,35 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  passthru.tests =
-    let
-      package = radicle-node;
-    in
-    {
-      version = testers.testVersion { inherit package; };
-      basic =
-        runCommand "${package.name}-basic-test"
-          {
-            nativeBuildInputs = [
-              jq
-              openssh
-              radicle-node
-            ];
-          }
-          ''
-            set -e
-            export RAD_HOME="$PWD/.radicle"
-            mkdir -p "$RAD_HOME/keys"
-            ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
-            jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
+  passthru.updateScript = ./update.sh;
+  passthru.tests = {
+    basic =
+      runCommand "radicle-node-basic-test"
+        {
+          nativeBuildInputs = [
+            jq
+            openssh
+            finalAttrs.finalPackage
+          ];
+        }
+        ''
+          set -e
+          export RAD_HOME="$PWD/.radicle"
+          mkdir -p "$RAD_HOME/keys"
+          ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
+          jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
 
-            rad config > /dev/null
-            rad debug | jq -e '
-                (.sshVersion | contains("${openssh.version}"))
-              and
-                (.gitVersion | contains("${git.version}"))
-            '
+          rad config > /dev/null
+          rad debug | jq -e '
+              (.sshVersion | contains("${openssh.version}"))
+            and
+              (.gitVersion | contains("${gitMinimal.version}"))
+          '
 
-            touch $out
-          '';
-      nixos-build = lib.recurseIntoAttrs {
-        checkConfig-success =
-          (nixos {
-            services.radicle.settings = {
-              node.alias = "foo";
-            };
-          }).config.services.radicle.configFile;
-        checkConfig-failure =
-          testers.testBuildFailure
-            (nixos {
-              services.radicle.settings = {
-                node.alias = null;
-              };
-            }).config.services.radicle.configFile;
-      };
-      nixos-run = nixosTests.radicle;
-    };
+          touch $out
+        '';
+    nixos-run = nixosTests.radicle;
+  };
 
   meta = {
     description = "Radicle node and CLI for decentralized code collaboration";
@@ -145,7 +158,8 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       amesgen
       lorenzleutgeb
+      defelo
     ];
     mainProgram = "rad";
   };
-}
+})

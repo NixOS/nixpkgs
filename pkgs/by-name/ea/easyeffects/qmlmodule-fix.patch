@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2736ac18b..85be09a90 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -65,7 +65,7 @@ find_package(KF${QT_MAJOR_VERSION} REQUIRED COMPONENTS
+     QQC2DesktopStyle
+ )
+ 
+-ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
++ecm_find_qmlmodule(org.kde.kirigami)
+ 
+ qt_policy(SET QTP0001 NEW)

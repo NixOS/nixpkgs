@@ -29,7 +29,6 @@
   gd,
   gmp,
   graphite2,
-  harfbuzzFull,
   hunspell,
   libjpeg,
   log4cxx,
@@ -94,19 +93,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "miktex";
-  version = "25.4";
+  version = "25.12";
 
   src = fetchFromGitHub {
     owner = "miktex";
     repo = "miktex";
     tag = finalAttrs.version;
-    hash = "sha256-3QGW8rsettA+Jtrsi9C5ONIG4vP+iuUEUi9dGHfWMSY=";
+    hash = "sha256-gg6qTyY1LkHcUxTQN92yYark0uVoQjXDTbTMD6BucXA=";
   };
 
   patches = [
     ./startup-config-support-nix-store.patch
     # Miktex will search exectables in "GetMyPrefix(true)/bin".
-    # The path evalutate to "/usr/bin" in FHS style linux distrubution,
+    # The path evaluate to "/usr/bin" in FHS style linux distribution,
     # compared to "/nix/store/.../bin" in NixOS.
     # As a result, miktex will fail to find e.g. 'pkexec','ksudo','gksu'
     # under /run/wrappers/bin in NixOS.
@@ -114,36 +113,33 @@ stdenv.mkDerivation (finalAttrs: {
     ./find-exectables-in-path.patch
   ];
 
-  postPatch =
-    ''
-      # dont symlink fontconfig to /etc/fonts/conf.d
-      substituteInPlace Programs/MiKTeX/miktex/topics/fontmaps/commands/FontMapManager.cpp \
-        --replace-fail 'this->ctx->session->IsAdminMode()' 'false'
+  postPatch = ''
+    # dont symlink fontconfig to /etc/fonts/conf.d
+    substituteInPlace Programs/MiKTeX/miktex/topics/fontmaps/commands/FontMapManager.cpp \
+      --replace-fail 'this->ctx->session->IsAdminMode()' 'false'
 
-      substituteInPlace \
-        Libraries/MiKTeX/App/app.cpp \
-        Programs/Editors/TeXworks/miktex/miktex-texworks.cpp \
-        Programs/MiKTeX/Console/Qt/main.cpp \
-        Programs/MiKTeX/PackageManager/mpm/mpm.cpp \
-        Programs/MiKTeX/Yap/MFC/StdAfx.h \
-        Programs/MiKTeX/initexmf/initexmf.cpp \
-        Programs/MiKTeX/miktex/miktex.cpp \
-        --replace-fail "log4cxx/rollingfileappender.h" "log4cxx/rolling/rollingfileappender.h"
+    substituteInPlace \
+      Libraries/MiKTeX/App/app.cpp \
+      Programs/Editors/TeXworks/miktex/miktex-texworks.cpp \
+      Programs/MiKTeX/Console/Qt/main.cpp \
+      Programs/MiKTeX/PackageManager/mpm/mpm.cpp \
+      Programs/MiKTeX/Yap/MFC/StdAfx.h \
+      Programs/MiKTeX/initexmf/initexmf.cpp \
+      Programs/MiKTeX/miktex/miktex.cpp \
+      --replace-fail "log4cxx/rollingfileappender.h" "log4cxx/rolling/rollingfileappender.h"
 
-      substitute cmake/modules/FindPOPPLER_QT5.cmake \
-        cmake/modules/FindPOPPLER_QT6.cmake \
-        --replace-fail "QT5" "QT6" \
-        --replace-fail "qt5" "qt6"
+    substitute cmake/modules/FindPOPPLER_QT5.cmake \
+      cmake/modules/FindPOPPLER_QT6.cmake \
+      --replace-fail "QT5" "QT6" \
+      --replace-fail "qt5" "qt6"
 
-      substituteInPlace Programs/TeXAndFriends/omega/otps/source/outocp.c \
-        --replace-fail 'fprintf(stderr, s);' 'fprintf(stderr, "%s", s);'
-    ''
-    # This patch fixes mismatch char types (signed int and unsigned int) on aarch64-linux platform.
-    # Should not be applied to other platforms otherwise the build will fail.
-    + lib.optionalString (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) ''
-      sed -i 's/--using-namespace=MiKTeX::TeXAndFriends/& --chars-are-unsigned/g' \
-        Programs/TeXAndFriends/Knuth/web/CMakeLists.txt
-    '';
+    substituteInPlace Programs/TeXAndFriends/omega/otps/source/outocp.c \
+      --replace-fail 'fprintf(stderr, s);' 'fprintf(stderr, "%s", s);'
+
+    # we use unsigned-char for all platform
+    substituteInPlace Programs/TeXAndFriends/Knuth/web/CMakeLists.txt \
+      --replace-fail '--using-namespace=MiKTeX::TeXAndFriends' '--using-namespace=MiKTeX::TeXAndFriends --chars-are-unsigned'
+  '';
 
   strictDeps = true;
 
@@ -174,7 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
     gd
     gmp
     graphite2
-    harfbuzzFull
     hunspell
     libjpeg
     log4cxx
@@ -195,6 +190,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_BOOTSTRAPPING" true)
     (lib.cmakeBool "USE_SYSTEM_POPPLER" true)
     (lib.cmakeBool "USE_SYSTEM_POPPLER_QT" true)
+    (lib.cmakeBool "USE_SYSTEM_HARFBUZZ" false)
+    (lib.cmakeBool "USE_SYSTEM_HARFBUZZ_ICU" false)
     (lib.cmakeBool "MIKTEX_SELF_CONTAINED" false)
     # Miktex infers install prefix by stripping CMAKE_INSTALL_BINDIR from the called program.
     # It should not be set to absolute path in default cmakeFlags, otherwise an infinite loop will happen.
@@ -207,6 +204,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     LANG = "C.UTF-8";
     MIKTEX_REPOSITORY = "file://${miktexLocalRepository}/";
+    # Force use of unsigned char for all platform
+    # See https://github.com/MiKTeX/miktex/issues/1440
+    NIX_CFLAGS_COMPILE = "-funsigned-char";
   };
 
   enableParallelBuilding = false;
@@ -218,16 +218,15 @@ stdenv.mkDerivation (finalAttrs: {
   # Todo: figure out the exact binary to be Qt wrapped.
   dontWrapQtApps = true;
 
-  postFixup =
-    ''
-      wrapQtApp $out/bin/miktex-console
-      wrapQtApp $out/bin/miktex-texworks
-      $out/bin/miktexsetup finish --verbose
-    ''
-    # Biber binary is missing on ctan.org for aarch64-linux platform.
-    + lib.optionalString (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) ''
-      ln -sf ${biber}/bin/biber $out/bin/biber
-    '';
+  postFixup = ''
+    wrapQtApp $out/bin/miktex-console
+    wrapQtApp $out/bin/miktex-texworks
+    $out/bin/miktexsetup finish --verbose
+  ''
+  # Biber binary is missing on ctan.org for aarch64-linux platform.
+  + lib.optionalString (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) ''
+    ln -sf ${biber}/bin/biber $out/bin/biber
+  '';
 
   meta = {
     description = "Modern TeX distribution";

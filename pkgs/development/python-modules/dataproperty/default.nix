@@ -6,7 +6,6 @@
   loguru,
   mbstrdecoder,
   pytestCheckHook,
-  pythonOlder,
   tcolorpy,
   termcolor,
   typepy,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "dataproperty";
   version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thombashi";
@@ -32,7 +29,8 @@ buildPythonPackage rec {
     mbstrdecoder
     typepy
     tcolorpy
-  ] ++ typepy.optional-dependencies.datetime;
+  ]
+  ++ typepy.optional-dependencies.datetime;
 
   optional-dependencies = {
     logging = [ loguru ];
@@ -50,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thombashi/DataProperty";
     changelog = "https://github.com/thombashi/DataProperty/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
   };
 }

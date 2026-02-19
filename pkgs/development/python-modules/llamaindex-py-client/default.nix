@@ -5,15 +5,12 @@
   httpx,
   poetry-core,
   pydantic,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llamaindex-py-client";
   version = "0.1.19";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llamaindex_py_client";
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for LlamaIndex";
     homepage = "https://pypi.org/project/llamaindex-py-client/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

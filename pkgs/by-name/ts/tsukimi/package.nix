@@ -20,19 +20,19 @@
   desktop-file-utils,
   versionCheckHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tsukimi";
   version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FmxNOMYHoQK//v4ZGvJ6vIHKYgMfQm7LTwQV9iEFo0A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-iH7vCZhCN2/gu2EC+YG/LUL9N/HMMnj7qHqXUdrlAh8=";
   };
 
@@ -47,26 +47,24 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      mpv-unwrapped
-      ffmpeg
-      libadwaita
-      openssl
-      libepoxy
-      dbus
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ]);
+  buildInputs = [
+    mpv-unwrapped
+    ffmpeg
+    libadwaita
+    openssl
+    libepoxy
+    dbus
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -82,4 +80,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tsukimi";
     platforms = lib.platforms.linux;
   };
-}
+})

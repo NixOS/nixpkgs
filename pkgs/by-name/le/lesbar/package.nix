@@ -4,7 +4,7 @@
   fetchFromSourcehut,
   pkg-config,
   scdoc,
-  libX11,
+  libx11,
   cairo,
   pango,
 }:
@@ -26,19 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     cairo
     pango
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Programming language agnostic view layer for creating desktop widgets and status bars";
     homepage = "https://git.sr.ht/~salmiak/lesbar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpentland ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpentland ];
+    platforms = lib.platforms.linux;
     mainProgram = "lesbar";
   };
 })

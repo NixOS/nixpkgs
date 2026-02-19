@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "minidump";
   version = "0.0.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,12 +22,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "minidump" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to parse and read Microsoft minidump file format";
     homepage = "https://github.com/skelsec/minidump";
     changelog = "https://github.com/skelsec/minidump/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "minidump";
   };
 }

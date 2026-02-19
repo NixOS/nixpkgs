@@ -4,12 +4,11 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "eduli";
   version = "3.0";
 
   src = fetchzip {
-    name = "${pname}-${version}";
     url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/MoeLI-3.0.zip";
     hash = "sha256-bDQtLugYPWwJJNusBLEJrgIVufocRK4NIR0CCGaTkyw=";
   };
@@ -22,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "The MOE Li Font, a clerical Chinese font by the Ministry of Education, ROC (Taiwan)";
+    description = "MOE Li Font, a clerical Chinese font by the Ministry of Education, ROC (Taiwan)";
     longDescription = ''
       The MOE Li Font is a li (clerical srcipt) font
       provided by

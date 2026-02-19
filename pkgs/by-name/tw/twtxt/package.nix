@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "twtxt";
   version = "1.3.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "buckket";
     repo = "twtxt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-CbFh1o2Ijinfb8X+h1GP3Tp+8D0D3/Czt/Uatd1B4cw=";
   };
 
@@ -35,12 +35,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_tweet_relative_datetime"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Decentralised, minimalist microblogging service for hackers";
     homepage = "https://github.com/buckket/twtxt";
-    changelog = "https://github.com/buckket/twtxt/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    changelog = "https://github.com/buckket/twtxt/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
     mainProgram = "twtxt";
   };
-}
+})

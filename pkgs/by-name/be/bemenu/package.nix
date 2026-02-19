@@ -17,7 +17,12 @@
   wayland-protocols,
   wayland-scanner,
   x11Support ? stdenv.hostPlatform.isLinux,
-  xorg,
+  libxinerama,
+  libxft,
+  libxdmcp,
+  libx11,
+  libpthread-stubs,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,43 +41,42 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      pkg-config
-      scdoc
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin makeWrapper
-    ++ lib.optional waylandSupport wayland-scanner;
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin makeWrapper
+  ++ lib.optional waylandSupport wayland-scanner;
 
-  buildInputs =
-    [
-      cairo
-      fribidi
-      harfbuzz
-      libxkbcommon
-      pango
-    ]
-    ++ lib.optional ncursesSupport ncurses
-    ++ lib.optionals waylandSupport [
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optionals x11Support [
-      xorg.libX11
-      xorg.libXinerama
-      xorg.libXft
-      xorg.libXdmcp
-      xorg.libpthreadstubs
-      xorg.libxcb
-    ];
+  buildInputs = [
+    cairo
+    fribidi
+    harfbuzz
+    libxkbcommon
+    pango
+  ]
+  ++ lib.optional ncursesSupport ncurses
+  ++ lib.optionals waylandSupport [
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optionals x11Support [
+    libx11
+    libxinerama
+    libxft
+    libxdmcp
+    libpthread-stubs
+    libxcb
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  buildFlags =
-    [ "clients" ]
-    ++ lib.optional ncursesSupport "curses"
-    ++ lib.optional waylandSupport "wayland"
-    ++ lib.optional x11Support "x11";
+  buildFlags = [
+    "clients"
+  ]
+  ++ lib.optional ncursesSupport "curses"
+  ++ lib.optional waylandSupport "wayland"
+  ++ lib.optional x11Support "x11";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     so="$(find "$out/lib" -name "libbemenu.so.[0-9]" -print -quit)"
@@ -82,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Cloudef/bemenu";
     description = "Dynamic menu library and client program inspired by dmenu";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ crertel ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ crertel ];
     mainProgram = "bemenu";
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "thingsiplay";
     repo = "emojipick";
-    rev = "20210127";
+    tag = "20210127";
     sha256 = "1kib3cyx6z9v9qw6yrfx5sklanpk5jbxjc317wi7i7ljrg0vdazp";
   };
 
@@ -50,7 +50,8 @@ stdenvNoCC.mkDerivation {
     python3
     xclip
     libnotify
-  ] ++ (if emojipick-use-rofi then [ rofi ] else [ dmenu ]);
+  ]
+  ++ (if emojipick-use-rofi then [ rofi ] else [ dmenu ]);
 
   installPhase = ''
     runHook preInstall
@@ -62,11 +63,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Get a selection of emojis with dmenu or rofi";
     homepage = "https://github.com/thingsiplay/emojipick";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alexnortung ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alexnortung ];
+    platforms = lib.platforms.linux;
   };
 }

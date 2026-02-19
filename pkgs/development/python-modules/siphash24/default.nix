@@ -10,16 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  version = "1.7";
+buildPythonPackage (finalAttrs: {
+  version = "1.8";
   pname = "siphash24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dnicolodi";
     repo = "python-siphash24";
-    tag = "v${version}";
-    hash = "sha256-/7XrRD4e7jLTUY/8mBbJ4dSo5P6pj8GRpSreIOZpKp0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-51LgmB30MDTBRoZttIESopWMdrozvLFwlxYELmqu5UQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -38,15 +38,15 @@ buildPythonPackage rec {
     "siphash24"
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/dnicolodi/python-siphash24";
     description = "Streaming-capable SipHash Implementation";
-    changelog = "https://github.com/dnicolodi/python-siphash24/releases/tag/${src.tag}";
+    changelog = "https://github.com/dnicolodi/python-siphash24/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

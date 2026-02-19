@@ -10,18 +10,17 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oscavmgr";
   version = "25.2";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "oscavmgr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-592qj0dHn0fbIFt4Y+1TESIOUpwXcJ2tnlKNcYuxriQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1/jjZ1jkLvE/L1lHFL3RCx3ox2w15WWDp6aQJOtFkcU=";
 
   nativeBuildInputs = [
@@ -50,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Face tracking & utilities for Resonite and VRChat";
     homepage = "https://github.com/galister/oscavmgr";
-    changelog = "https://github.com/galister/oscavmgr/releases/tag/v${version}";
+    changelog = "https://github.com/galister/oscavmgr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       pandapip1
@@ -58,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "oscavmgr";
   };
-}
+})

@@ -5,7 +5,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eschalot";
   version = "1.2.0.20191006";
 
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     install -D -t $out/bin eschalot worgen
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tor hidden service name generator";
-    homepage = src.meta.homepage;
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    homepage = finalAttrs.src.meta.homepage;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

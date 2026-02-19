@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
     tag = finalAttrs.version;
-    hash = "sha256-+ttmtvt18NMKYfGntEXgBOSJ3lW9Bf55327XYIzxMh8=";
+    hash = "sha256-n9TlmmRRB618cXCOmo5CYqeMog7I7VxURN9mlDhljWw=";
   };
 
   outputs = [
@@ -40,13 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs $(find test -name '*.py')
 
     substituteInPlace data/liblomiri-api.pc.in \
-      --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@'
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@'
 
     # Variable is queried via pkg-config by reverse dependencies
     # TODO This is likely not supposed to be the regular Qt QML import prefix
     # but otherwise i.e. lomiri-notifications cannot be found in lomiri
     substituteInPlace CMakeLists.txt \
-      --replace 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
+      --replace-fail 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
   '';
 
   strictDeps = true;
@@ -75,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+  ];
+
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   preBuild = ''
@@ -98,6 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Lomiri API Library for integrating with the Lomiri shell";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-api";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-api/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = with lib.licenses; [
       lgpl3Only
       gpl3Only

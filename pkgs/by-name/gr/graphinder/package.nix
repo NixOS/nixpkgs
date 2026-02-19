@@ -4,23 +4,21 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "graphinder";
-  version = "1.11.6";
-  format = "pyproject";
+  version = "2.0.0b4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Escape-Technologies";
     repo = "graphinder";
-    tag = "v${version}";
-    hash = "sha256-TDc6aIFkxShlfC6fLYMKULfrFUAYhQZrIHZNDuMh68g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-emBWhEJxYRAw3WTd8t+lurnHX8SeCcLBHGH9B+Owuag=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiohttp
     beautifulsoup4
     requests
@@ -47,12 +45,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_is_gql_endpoint"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to find GraphQL endpoints using subdomain enumeration";
-    mainProgram = "graphinder";
     homepage = "https://github.com/Escape-Technologies/graphinder";
-    changelog = "https://github.com/Escape-Technologies/graphinder/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Escape-Technologies/graphinder/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "graphinder";
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ebtables";
   version = "2.0.11";
 
   src = fetchurl {
-    url = "http://ftp.netfilter.org/pub/${pname}/${pname}-${version}.tar.gz";
+    url = "http://ftp.netfilter.org/pub/ebtables/ebtables-${finalAttrs.version}.tar.gz";
     sha256 = "0apxgmkhsk3vxn9q3libxn3dgrdljrxyy4mli2gk49m7hi3na7xp";
   };
 
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     ln -s $out/sbin/ebtables-legacy-save     $out/sbin/ebtables-save
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Filtering tool for Linux-based bridging firewalls";
     homepage = "http://ebtables.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

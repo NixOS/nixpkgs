@@ -3,22 +3,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  miniaudio,
   cffi,
   pytestCheckHook,
 }:
 
-let
-  # TODO: recheck after 1.59
-  miniaudio' = miniaudio.overrideAttrs (oldAttrs: rec {
-    version = "0.11.16"; # cffi breakage with 0.11.17
-    src = fetchFromGitHub {
-      inherit (oldAttrs.src) owner repo;
-      rev = "refs/tags/${version}";
-      hash = "sha256-POe/dYPJ25RKNGIhaLoqxm9JJ08MrTyHVN4NmaGOdwM=";
-    };
-  });
-in
 buildPythonPackage rec {
   pname = "miniaudio";
   version = "1.61";
@@ -27,18 +15,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "irmen";
     repo = "pyminiaudio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H3o2IWGuMqLrJTzQ7w636Ito6f57WBtMXpXXzrZ7UD8=";
   };
 
-  postPatch = ''
-    rm -r miniaudio
-    ln -s ${miniaudio'} miniaudio
-    substituteInPlace build_ffi_module.py \
-      --replace-fail "miniaudio/stb_vorbis.c" "miniaudio/extras/stb_vorbis.c";
-    substituteInPlace miniaudio.c \
-      --replace-fail "miniaudio/stb_vorbis.c" "miniaudio/extras/stb_vorbis.c";
-  '';
+  # TODO: Properly unvendor miniaudio c library
 
   build-system = [ setuptools ];
 
@@ -49,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "miniaudio" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/irmen/pyminiaudio/releases/tag/v${version}";
     description = "Python bindings for the miniaudio library and its decoders";
     homepage = "https://github.com/irmen/pyminiaudio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

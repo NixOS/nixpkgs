@@ -40,7 +40,7 @@ let
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = ''${pkgs.pantalaimon-headless}/bin/pantalaimon --config ${mkConfigFile name instanceConfig} --data-path ${instanceConfig.dataPath}'';
+        ExecStart = "${pkgs.pantalaimon-headless}/bin/pantalaimon --config ${mkConfigFile name instanceConfig} --data-path ${instanceConfig.dataPath}";
         Restart = "on-failure";
         DynamicUser = true;
         NoNewPrivileges = true;

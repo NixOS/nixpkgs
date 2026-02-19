@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "0.0.14.2";
+  version = "2.0.0";
 in
 buildHomeAssistantComponent {
   owner = "8none1";
@@ -18,8 +18,8 @@ buildHomeAssistantComponent {
   src = fetchFromGitHub {
     owner = "8none1";
     repo = "lednetwf_ble";
-    tag = "v.${version}";
-    hash = "sha256-FgLUBCIYsmvrU8auraFVJ+hnl/p6KHpEeIWMT4KGJBM=";
+    tag = "v${version}";
+    hash = "sha256-Keb2Eph2DvS0zsg7wa30LrfqkmmccLl9okfdd0OTpqc=";
   };
 
   dependencies = [
@@ -36,7 +36,7 @@ buildHomeAssistantComponent {
   meta = {
     description = "Home Assistant custom integration for LEDnetWF devices";
     homepage = "https://github.com/8none1/lednetwf_ble";
-    changelog = "https://github.com/8none1/lednetwf_ble/releases/tag/v.${version}";
+    changelog = "https://github.com/8none1/lednetwf_ble/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ blenderfreaky ];
   };

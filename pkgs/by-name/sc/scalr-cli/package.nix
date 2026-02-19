@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scalr-cli";
-  version = "0.17.1";
+  version = "0.17.7";
 
   src = fetchFromGitHub {
     owner = "Scalr";
     repo = "scalr-cli";
-    rev = "v${version}";
-    hash = "sha256-+ZwENhZF19VpJPGOVHnT4vMiWi8fzuJa3AhyOQ/S6w0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZGq76TPMNrlyuHs5yUgw3pJ+a2wVNwBTTSgzIofD4io=";
   };
 
   vendorHash = "sha256-TUf+0Z0yBDOpzMuETn+FCAPXWvQltjRhwQ3Xz0X6YOI=";
@@ -24,7 +24,7 @@ buildGoModule rec {
 
   preConfigure = ''
     # Set the version.
-    substituteInPlace main.go --replace '"0.0.0"' '"${version}"'
+    substituteInPlace main.go --replace '"0.0.0"' '"${finalAttrs.version}"'
   '';
 
   postInstall = ''
@@ -33,12 +33,12 @@ buildGoModule rec {
 
   doCheck = false; # Skip tests as they require creating actual Scalr resources.
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool that communicates directly with the Scalr API";
     homepage = "https://github.com/Scalr/scalr-cli";
-    changelog = "https://github.com/Scalr/scalr-cli/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dylanmtaylor ];
+    changelog = "https://github.com/Scalr/scalr-cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dylanmtaylor ];
     mainProgram = "scalr";
   };
-}
+})

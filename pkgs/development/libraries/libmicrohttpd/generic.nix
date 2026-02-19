@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
+  enableParallelBuilding = true;
+
   preCheck = ''
     # Since `localhost' can't be resolved in a chroot, work around it.
     sed -i -e 's/localhost/127.0.0.1/g' src/test*/*.[ch]
@@ -40,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   meta =
-    with lib;
+
     {
       description = "Embeddable HTTP server library";
 
@@ -49,12 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
         it easy to run an HTTP server as part of another application.
       '';
 
-      license = licenses.lgpl2Plus;
+      license = lib.licenses.lgpl2Plus;
 
       homepage = "https://www.gnu.org/software/libmicrohttpd/";
 
-      maintainers = with maintainers; [ fpletz ];
-      platforms = platforms.unix;
+      maintainers = with lib.maintainers; [ fpletz ];
+      platforms = lib.platforms.unix;
     }
     // meta;
 })

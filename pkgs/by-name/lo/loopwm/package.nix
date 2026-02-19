@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "loopwm";
-  version = "1.2.0";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://github.com/MrKai77/Loop/releases/download/${finalAttrs.version}/Loop.zip";
-    hash = "sha256-MofFucp/GUquU7Bx4gePIWSSrAqFUf0q59IM8MgJIPs=";
+    hash = "sha256-UU6X+qs4Q837ixhZuRMzcEY5oaLOWA5PaE117+AH04Y=";
   };
 
   sourceRoot = ".";

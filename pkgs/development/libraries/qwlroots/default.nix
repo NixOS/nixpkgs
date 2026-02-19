@@ -14,7 +14,8 @@
   libgbm,
   vulkan-loader,
   libinput,
-  xorg,
+  libxcb-errors,
+  libxdmcp,
   seatd,
   wlroots,
 }:
@@ -45,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     vulkan-loader
     libinput
-    xorg.libXdmcp
-    xorg.xcbutilerrors
+    libxdmcp
+    libxcb-errors
     seatd
   ];
 
@@ -69,6 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
     ];
     platforms = wlroots.meta.platforms;
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
   };
 })

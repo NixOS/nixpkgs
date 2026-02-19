@@ -74,7 +74,7 @@ let
 
         inherit src;
 
-        REBAR_IGNORE_DEPS = beamDeps != [ ];
+        env.REBAR_IGNORE_DEPS = beamDeps != [ ];
 
         configurePhase = ''
           runHook preConfigure
@@ -111,7 +111,8 @@ let
 
         meta = {
           inherit (erlang.meta) platforms;
-        } // meta;
+        }
+        // meta;
 
         passthru = (
           {

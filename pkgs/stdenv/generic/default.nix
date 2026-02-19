@@ -8,7 +8,7 @@ let
       initialPath,
 
       # If we don't have a C compiler, we might either have `cc = null` or `cc =
-      # throw ...`, but if we do have a C compiler we should definiely have `cc !=
+      # throw ...`, but if we do have a C compiler we should definitely have `cc !=
       # null`.
       #
       # TODO(@Ericson2314): Add assert without creating infinite recursion
@@ -214,6 +214,9 @@ let
       shellDryRun = "${stdenv.shell} -n -O extglob";
 
       tests = {
+        inputDerivationRequiredSystemFeatures = import ../tests/inputDerivationRequiredSystemFeatures.nix {
+          inherit lib stdenv;
+        };
         succeedOnFailure = import ../tests/succeedOnFailure.nix { inherit stdenv; };
       };
       passthru.tests = lib.warn "Use `stdenv.tests` instead. `passthru` is a `mkDerivation` detail." stdenv.tests;

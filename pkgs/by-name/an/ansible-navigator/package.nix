@@ -5,17 +5,16 @@
   fetchPypi,
   ansible-lint,
 }:
-python3Packages.buildPythonApplication rec {
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ansible-navigator";
-  version = "25.4.1";
+  version = "25.12.0";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.10";
-
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "ansible_navigator";
-    hash = "sha256-ygX7rPqd63PpLHm0XqOh5vvwN9h6KivMZQco9XdyUog=";
+    hash = "sha256-i6yw282NWUaCZBtAYi3rQsLk+GGyp8QHyqBi7nwwIlo=";
   };
 
   build-system = with python3Packages; [
@@ -43,8 +42,8 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Text-based user interface (TUI) for Ansible";
     homepage = "https://ansible.readthedocs.io/projects/navigator/";
-    changelog = "https://github.com/ansible/ansible-navigator/releases/tag/v${version}";
+    changelog = "https://github.com/ansible/ansible-navigator/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ melkor333 ];
   };
-}
+})

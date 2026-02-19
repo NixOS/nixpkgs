@@ -5,16 +5,16 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybrowsers";
-  version = "1.1.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roniemartinez";
     repo = "browsers";
-    tag = version;
-    hash = "sha256-9YO/FTgL/BzabPnpi2RM/C08F7/d6FNshWnGsT6NQlg=";
+    tag = finalAttrs.version;
+    hash = "sha256-MpTCeu2rxIx6JByosL2C3hayrMIfKD/2kZT3AJpjKZw=";
   };
 
   build-system = [ poetry-core ];
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for detecting and launching browsers";
     homepage = "https://github.com/roniemartinez/browsers";
-    changelog = "https://github.com/roniemartinez/browsers/releases/tag/${src.tag}";
+    changelog = "https://github.com/roniemartinez/browsers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,18 +5,17 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sagoin";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "figsoda";
     repo = "sagoin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zXYjR9ZFNX2guUSeMN/G77oBIlW3AowFWA4gwID2jQs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-JM7m/VdaXpUlPOi+N7gue6mlQuxvRFU6++SaSq45Ntg=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -26,14 +25,14 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion artifacts/sagoin.{bash,fish} --zsh artifacts/_sagoin
   '';
 
-  GEN_ARTIFACTS = "artifacts";
+  env.GEN_ARTIFACTS = "artifacts";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line submission tool for the UMD CS Submit Server";
     homepage = "https://github.com/figsoda/sagoin";
-    changelog = "https://github.com/figsoda/sagoin/blob/v${version}/CHANGELOG.md";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/figsoda/sagoin/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "sagoin";
   };
-}
+})

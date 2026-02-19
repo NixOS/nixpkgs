@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchFromGitHub,
   cmake,
   expat,
@@ -14,22 +14,22 @@
   giflib,
   glib,
   imlib2,
-  libICE,
-  libSM,
-  libX11,
-  libXcomposite,
-  libXdamage,
-  libXdmcp,
-  libXext,
-  libXfixes,
-  libXft,
-  libXinerama,
-  libXpm,
-  libXrandr,
+  libice,
+  libsm,
+  libx11,
+  libxcomposite,
+  libxdamage,
+  libxdmcp,
+  libxext,
+  libxfixes,
+  libxft,
+  libxinerama,
+  libxpm,
+  libxrandr,
   libjpeg,
   libogg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libsndfile,
   libtiff,
   libxcb,
@@ -39,15 +39,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.7.5";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     tag = finalAttrs.version;
-    hash = "sha256-YGEgAO/H21yfv75LnCKYqCRtQtV6bqA7HRFXxDIll/c=";
+    hash = "sha256-CbIQICov0h3lBDT54dEODkINNXou6CUEhRQAPZwfYK0=";
   };
 
   strictDeps = true;
@@ -71,22 +71,22 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     glib
     imlib2
-    libICE
-    libSM
-    libX11
-    libXcomposite
-    libXdamage
-    libXdmcp
-    libXext
-    libXfixes
-    libXft
-    libXinerama
-    libXpm
-    libXrandr
+    libice
+    libsm
+    libx11
+    libxcomposite
+    libxdamage
+    libxdmcp
+    libxext
+    libxfixes
+    libxft
+    libxinerama
+    libxpm
+    libxrandr
     libjpeg
     libogg
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libsndfile
     libtiff
     libxcb
@@ -99,13 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCFGDIR=/etc/icewm"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString gccStdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
+
   # install legacy themes
   postInstall = ''
     cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} \
       $out/share/icewm/themes/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ice-wm.org/";
     description = "Simple, lightweight X window manager";
     longDescription = ''
@@ -121,8 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
       optional external background wallpaper manager with transparency support,
       a simple session manager and a system tray.
     '';
-    license = licenses.lgpl2Only;
+    license = lib.licenses.lgpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

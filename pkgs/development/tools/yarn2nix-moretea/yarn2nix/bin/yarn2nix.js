@@ -56,9 +56,9 @@ if (json.type !== "success") {
 let pkgs = R.pipe(
   mapObjIndexedReturnArray((value, key) => ({
     ...value,
-    nameWithVersion: key
+    nameWithVersion: key,
   })),
-  R.uniqBy(R.prop("resolved"))
+  R.uniqBy(R.prop("resolved")),
 )(json.object);
 
 (async () => {
@@ -83,7 +83,7 @@ let pkgs = R.pipe(
     // print to stdout
     console.log(generateNix(pkgs, options["--builtin-fetchgit"]));
   }
-})().catch(error => {
+})().catch((error) => {
   console.error(error);
 
   process.exit(1);

@@ -33,7 +33,7 @@ stdenv.mkDerivation (
     plat =
       if (stdenv.hostPlatform.isLinux && lib.versionOlder self.luaversion "5.4") then
         "linux"
-      else if (stdenv.hostPlatform.isLinux && lib.versionAtLeast self.luaversion "5.4") then
+      else if (stdenv.hostPlatform.isLinux && self.luaversion == "5.4") then
         "linux-readline"
       else if stdenv.hostPlatform.isDarwin then
         "macosx"
@@ -84,20 +84,24 @@ stdenv.mkDerivation (
 
     inherit patches;
 
-    postPatch =
-      ''
-        sed -i "s@#define LUA_ROOT[[:space:]]*\"/usr/local/\"@#define LUA_ROOT  \"$out/\"@g" src/luaconf.h
+    postPatch = ''
+      sed -i "s@#define LUA_ROOT[[:space:]]*\"/usr/local/\"@#define LUA_ROOT  \"$out/\"@g" src/luaconf.h
 
-        # abort if patching didn't work
-        grep $out src/luaconf.h
-      ''
-      + lib.optionalString (!stdenv.hostPlatform.isDarwin && !staticOnly) ''
-        # Add a target for a shared library to the Makefile.
-        sed -e '1s/^/LUA_SO = liblua.so/' \
-            -e 's/ALL_T *= */&$(LUA_SO) /' \
-            -i src/Makefile
-        cat ${./lua-dso.make} >> src/Makefile
-      '';
+      # abort if patching didn't work
+      grep $out src/luaconf.h
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin && !staticOnly) ''
+      # Add a target for a shared library to the Makefile.
+      sed -e '1s/^/LUA_SO = liblua.so/' \
+          -e 's/ALL_T *= */&$(LUA_SO) /' \
+          -i src/Makefile
+      cat ${./lua-dso.make} >> src/Makefile
+    '';
+
+    env = {
+      inherit luaversion;
+      pkgversion = version;
+    };
 
     # see configurePhase for additional flags (with space)
     makeFlags = [

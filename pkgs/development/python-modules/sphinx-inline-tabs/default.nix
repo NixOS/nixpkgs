@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "sphinx-inline-tabs";
   version = "2023.04.21";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pradyunsg";
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_inline_tabs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Add inline tabbed content to your Sphinx documentation";
     homepage = "https://github.com/pradyunsg/sphinx-inline-tabs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

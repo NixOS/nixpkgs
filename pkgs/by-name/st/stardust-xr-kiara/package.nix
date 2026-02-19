@@ -9,7 +9,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-kiara";
   version = "0-unstable-2024-07-13";
 
@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-e89/x66S+MpJFtqat1hYEyRVUYFjef62LDN2hQPjNVw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-C1eD974cEGbo0vHJqdnCPUopDPDDa6hAFJdzSm8t618=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -42,12 +41,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   env = {
-    NIRI_CONFIG = "${src}/src/niri_config.kdl";
-    STARDUST_RES_PREFIXES = "${src}/res";
+    NIRI_CONFIG = "${finalAttrs.src}/src/niri_config.kdl";
+    STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
   };
 
   meta = {
-    description = "A 360-degree app shell / DE for Stardust XR using Niri";
+    description = "360-degree app shell / DE for Stardust XR using Niri";
     homepage = "https://stardustxr.org/";
     license = lib.licenses.mit;
     mainProgram = "kiara";
@@ -57,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

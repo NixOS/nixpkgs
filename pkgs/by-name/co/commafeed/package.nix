@@ -3,20 +3,21 @@
   biome,
   buildNpmPackage,
   fetchFromGitHub,
-  jre,
+  jdk25,
   maven,
   makeWrapper,
+  unzip,
   nixosTests,
   writeText,
 }:
 let
-  version = "4.6.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "Athou";
     repo = "commafeed";
-    rev = version;
-    hash = "sha256-Qc2l/CSVK+8k7b3RZA8hQsGTq29OvkDMbMzHcnPm/yE=";
+    tag = version;
+    hash = "sha256-M5p3nzlEIuIEMADZyQUqE6WAzlMmP/e4Zh9J8nbhZ9Q=";
   };
 
   frontend = buildNpmPackage {
@@ -26,7 +27,7 @@ let
 
     sourceRoot = "${src.name}/commafeed-client";
 
-    npmDepsHash = "sha256-bQShz6dmE9IZ9to5Z2DScncc/WVJnX1tRCm8XQJNmiU=";
+    npmDepsHash = "sha256-XkUlsRdqIXwVExvSofZJLKMUSzjxJRRpV549UTP9Cjo=";
 
     nativeBuildInputs = [ biome ];
 
@@ -52,7 +53,8 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-7nm8Cz05Qa44TMC0ioklvKAXQnE9J2wUDZFXLQt2A1w=";
+  mvnHash = "sha256-vZ7BPA2N3jgRnTwF3k9En2Pn+zTrXbtB9FGbmU4wJgY=";
+  mvnJdk = jdk25;
 
   mvnParameters = lib.escapeShellArgs [
     "-Dskip.installnodenpm"
@@ -61,7 +63,10 @@ maven.buildMavenPackage {
     "-Dmaven.gitcommitid.skip"
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -79,19 +84,12 @@ maven.buildMavenPackage {
     runHook preInstall
 
     mkdir -p $out/bin $out/share
-    install -Dm644 commafeed-server/target/commafeed.jar $out/share/commafeed.jar
-    install -Dm644 commafeed-server/config.yml.example $out/share/config.yml
+    unzip -d $out/share/ commafeed-server/target/commafeed-$version-h2-jvm.zip
 
-    makeWrapper ${jre}/bin/java $out/bin/commafeed \
-      --add-flags "-jar $out/share/commafeed.jar"
+    makeWrapper ${jdk25}/bin/java $out/bin/commafeed \
+      --add-flags "-jar $out/share/commafeed-$version-h2/quarkus-run.jar"
 
     runHook postInstall
-  '';
-
-  postInstall = ''
-    substituteInPlace $out/share/config.yml \
-      --replace-fail 'url: jdbc:h2:/commafeed/data/db;DEFRAG_ALWAYS=TRUE' \
-        'url: jdbc:h2:./database/db;DEFRAG_ALWAYS=TRUE'
   '';
 
   passthru.tests = nixosTests.commafeed;
@@ -101,6 +99,6 @@ maven.buildMavenPackage {
     homepage = "https://github.com/Athou/commafeed";
     license = lib.licenses.asl20;
     mainProgram = "commafeed";
-    maintainers = [ lib.maintainers.raroh73 ];
+    maintainers = [ ];
   };
 }

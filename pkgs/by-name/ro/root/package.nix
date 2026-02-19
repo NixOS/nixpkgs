@@ -3,7 +3,6 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   fetchurl,
   makeWrapper,
   writeText,
@@ -23,10 +22,13 @@
   libGL,
   libxcrypt,
   libxml2,
-  llvm_18,
+  llvm_20,
   lsof,
   lz4,
-  xorg,
+  libxpm,
+  libxft,
+  libxext,
+  libx11,
   xz,
   man,
   openssl,
@@ -46,21 +48,21 @@
   patchRcPathCsh,
   patchRcPathFish,
   patchRcPathPosix,
-  tbb,
+  onetbb,
   xrootd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "root";
-  version = "6.36.00";
+  version = "6.38.00";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
   };
 
   src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-lK/I3vkoQmeaEwonUhvmbiq9qjdiCIjmHYKKQ/xLAaI=";
+    url = "https://root.cern.ch/download/root_v${finalAttrs.version}.source.tar.gz";
+    hash = "sha256-pEKUIsRg+DLN5RSlgN0gKx08luiRnCQ2PD1C+M9azNw=";
   };
 
   clad_src = fetchFromGitHub {
@@ -68,8 +70,8 @@ stdenv.mkDerivation rec {
     repo = "clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    rev = "refs/tags/v1.9";
-    hash = "sha256-TKCRAfwdTp/uDH7rk9EE4z2hwqBybklHhhYH6hQFYpg=";
+    tag = "v2.0";
+    hash = "sha256-Oj7gGSvnGuYdggonPWjrwPn/06cD+ig3eefRh7xaiPs=";
   };
 
   # ROOT requires a patched version of clang
@@ -84,106 +86,85 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     nlohmann_json # link interface of target "ROOT::ROOTEve"
   ];
-  buildInputs =
-    [
-      clang
-      davix
-      fftw
-      ftgl
-      giflib
-      gl2ps
-      glew
-      gsl
-      libjpeg
-      libpng
-      libtiff
-      libxcrypt
-      libxml2
-      llvm_18
-      lz4
-      openssl
-      patchRcPathCsh
-      patchRcPathFish
-      patchRcPathPosix
-      pcre2
-      python3.pkgs.numpy
-      tbb
-      xrootd
-      xxHash
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk.privateFrameworksHook ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGLU
-      libGL
-      xorg.libX11
-      xorg.libXpm
-      xorg.libXft
-      xorg.libXext
-    ];
-
-  patches = [
-    # Backport that can be removed once ROOT is updated to 6.38.00
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/8f21acb893977bc651a4c4fe5c4fa020a48d31de.patch";
-      hash = "sha256-xo3BbaJRyW4Wy2eVuX1bY3FFH7Jm3vN2ZojMsVNIK2I=";
-    })
-    # Revert because it introduces usage of the xcrun executable from xcode:
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/6bd0dbad38bb524491c5109bc408942246db8b50.patch";
-      hash = "sha256-D7LZWJnGF9DtKcM8EF3KILU81cqTcZolW+HMe3fmXTw=";
-      revert = true;
-    })
+  buildInputs = [
+    finalAttrs.clang
+    davix
+    fftw
+    ftgl
+    giflib
+    gl2ps
+    glew
+    gsl
+    libjpeg
+    libpng
+    libtiff
+    libxcrypt
+    libxml2
+    llvm_20
+    lz4
+    openssl
+    patchRcPathCsh
+    patchRcPathFish
+    patchRcPathPosix
+    pcre2
+    python3
+    onetbb
+    xrootd
+    xxHash
+    xz
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk.privateFrameworksHook ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGLU
+    libGL
+    libx11
+    libxpm
+    libxft
+    libxext
   ];
 
-  preConfigure =
-    ''
-      for path in builtins/*; do
-        if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
-          rm -rf "$path"
-        fi
-      done
-      substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
-        --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
+  preConfigure = ''
+    for path in builtins/*; do
+      if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
+        rm -rf "$path"
+      fi
+    done
+    substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
+      --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
-      patchShebangs cmake/unix/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Eliminate impure reference to /System/Library/PrivateFrameworks
-      substituteInPlace core/macosx/CMakeLists.txt \
-        --replace-fail "-F/System/Library/PrivateFrameworks " ""
-    ''
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
-        ''
-          MACOSX_DEPLOYMENT_TARGET=10.16
-        '';
+    patchShebangs cmake/unix/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Eliminate impure reference to /System/Library/PrivateFrameworks
+    substituteInPlace core/macosx/CMakeLists.txt \
+      --replace-fail "-F/System/Library/PrivateFrameworks " ""
+  ''
+  +
+    lib.optionalString
+      (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
+      ''
+        MACOSX_DEPLOYMENT_TARGET=10.16
+      '';
 
-  cmakeFlags =
-    [
-      "-DCLAD_SOURCE_DIR=${clad_src}"
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DClang_DIR=${clang}/lib/cmake/clang"
-      "-Dbuiltin_clang=OFF"
-      "-Dbuiltin_llvm=OFF"
-      "-Dfail-on-missing=ON"
-      "-Dfftw3=ON"
-      "-Dfitsio=OFF"
-      "-Dgnuinstall=ON"
-      "-Dmathmore=ON"
-      "-Dsqlite=OFF"
-      "-Dvdt=OFF"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
-      # fatal error: could not build module '_Builtin_intrinsics'
-      "-Druntime_cxxmodules=OFF"
-    ];
+  cmakeFlags = [
+    "-DCLAD_SOURCE_DIR=${finalAttrs.clad_src}"
+    "-DClang_DIR=${finalAttrs.clang}/lib/cmake/clang"
+    "-Dbuiltin_clang=OFF"
+    "-Dbuiltin_llvm=OFF"
+    "-Dfail-on-missing=ON"
+    "-Dfftw3=ON"
+    "-Dfitsio=OFF"
+    "-Dmathmore=ON"
+    "-Dsqlite=OFF"
+    "-Dvdt=OFF"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
+    # fatal error: could not build module '_Builtin_intrinsics'
+    "-Druntime_cxxmodules=OFF"
+  ];
 
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
@@ -237,12 +218,6 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  # workaround for
-  # https://github.com/root-project/root/issues/14778
-  env.NIX_LDFLAGS = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin
-  ) "--version-script,${writeText "version.map" "ROOT { global: *; };"}";
-
   # To use the debug information on the fly (without installation)
   # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)
   # and make sure that gdb from Nixpkgs can be found in PATH.
@@ -254,14 +229,14 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://root.cern/";
     description = "Data analysis framework";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [
-      maintainers.guitargeek
-      maintainers.veprbl
+      lib.maintainers.guitargeek
+      lib.maintainers.veprbl
     ];
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
-}
+})

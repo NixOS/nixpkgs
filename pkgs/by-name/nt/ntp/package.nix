@@ -9,12 +9,12 @@
   libcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntp";
   version = "4.2.8p18";
 
   src = fetchurl {
-    url = "https://archive.ntp.org/ntp4/ntp-${lib.versions.majorMinor version}/ntp-${version}.tar.gz";
+    url = "https://archive.ntp.org/ntp4/ntp-${lib.versions.majorMinor finalAttrs.version}/ntp-${finalAttrs.version}.tar.gz";
     hash = "sha256-z4TF8/saKVKElCYk2CP/+mNBROCWz8T5lprJjvX0aOU=";
   };
 
@@ -31,34 +31,32 @@ stdenv.mkDerivation rec {
     "--with-openssl-incdir=${openssl.dev}/include"
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"
-  ] ++ lib.optional stdenv.hostPlatform.isLinux "--enable-linuxcaps";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux "--enable-linuxcaps";
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs =
-    [
-      openssl
-      perl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pps-tools
-      libcap
-    ];
-
-  hardeningEnable = [ "pie" ];
+  buildInputs = [
+    openssl
+    perl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pps-tools
+    libcap
+  ];
 
   postInstall = ''
     rm -rf $out/share/doc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ntp.org/";
     description = "Implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
-    maintainers = with maintainers; [ thoughtpolice ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.unix;
   };
-}
+})

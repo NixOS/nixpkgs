@@ -8,16 +8,16 @@
   withGraphics ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "setools";
-  version = "4.5.1";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
     repo = "setools";
-    tag = version;
-    hash = "sha256-/6dOzSz2Do4d6TSS50fuak0CysoQ532zJ0bJ532BUCE=";
+    tag = finalAttrs.version;
+    hash = "sha256-UZisEbHx3zO92gmRQSYsI8TmY9MjCP7AWNAESYklAkk=";
   };
 
   build-system = with python3Packages; [
@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "SELinux Policy Analysis Tools";
     homepage = "https://github.com/SELinuxProject/setools";
-    changelog = "https://github.com/SELinuxProject/setools/blob/${version}/ChangeLog";
+    changelog = "https://github.com/SELinuxProject/setools/blob/${finalAttrs.version}/ChangeLog";
     license = with lib.licenses; [
       gpl2Only
       lgpl21Plus
@@ -68,4 +68,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

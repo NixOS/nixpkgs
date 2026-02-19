@@ -92,12 +92,12 @@ let
     cfg.extraFlags
     ++ [
       "--config.file=${if cfg.enableReload then "/etc/prometheus/prometheus.yaml" else prometheusYml}"
-      "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
+      "--web.listen-address=${cfg.listenAddress}:${toString cfg.port}"
     ]
     ++ (
       if (cfg.enableAgentMode) then
         [
-          "--enable-feature=agent"
+          "--agent"
         ]
       else
         [
@@ -201,7 +201,8 @@ let
         tls_config = mkOpt promTypes.tls_config ''
           TLS configuration.
         '';
-      } // extraOptions;
+      }
+      // extraOptions;
     };
 
   #
@@ -1903,7 +1904,7 @@ in
       default = null;
       description = ''
         Specifies which file should be used as web.config.file and be passed on startup.
-        See https://prometheus.io/docs/prometheus/latest/configuration/https/ for valid options.
+        See <https://prometheus.io/docs/prometheus/latest/configuration/https/> for valid options.
       '';
     };
 
@@ -1968,7 +1969,7 @@ in
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart =
-          "${cfg.package}/bin/prometheus"
+          "${lib.getExe cfg.package}"
           + optionalString (length cmdlineArgs != 0) (" \\\n  " + concatStringsSep " \\\n  " cmdlineArgs);
         ExecReload = mkIf cfg.enableReload "+${reload}/bin/reload-prometheus";
         User = "prometheus";
@@ -1979,6 +1980,7 @@ in
         StateDirectory = cfg.stateDir;
         StateDirectoryMode = "0700";
         # Hardening
+        CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "/dev/null rw" ];
         DevicePolicy = "strict";
         LockPersonality = true;

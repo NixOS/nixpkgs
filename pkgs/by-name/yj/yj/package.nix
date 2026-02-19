@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yj";
   version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "sclevine";
     repo = "yj";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lsn5lxtix5W7po6nzvGcHmifbyhrtHgvaKYT7RPPCOg=";
   };
 
@@ -20,14 +20,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert YAML <=> TOML <=> JSON <=> HCL";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "yj";
-    maintainers = with maintainers; [ Profpatsch ];
+    maintainers = with lib.maintainers; [ Profpatsch ];
     homepage = "https://github.com/sclevine/yj";
   };
-}
+})

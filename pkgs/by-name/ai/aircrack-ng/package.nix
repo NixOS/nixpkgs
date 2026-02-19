@@ -47,14 +47,14 @@ let
     extension = "zip";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aircrack-ng";
   version = "1.7";
 
   src = fetchFromGitHub {
     owner = "aircrack-ng";
     repo = "aircrack-ng";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-niQDwiqi5GtBW5HIn0endnqPb/MqllcjsjXw4pTyFKY=";
   };
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
       ethtool
       pciutils
     ]
-    ++ lib.optional (stdenv.hostPlatform.isCygwin && stdenv.hostPlatform.isClang) libiconv
+    ++ lib.optional (stdenv.hostPlatform.isCygwin && stdenv.cc.isClang) libiconv
     ++ lib.optional enableAirolib sqlite
     ++ lib.optional enableRegex pcre2
     ++ lib.optional useAirpcap airpcap-sdk;
@@ -113,17 +113,16 @@ stdenv.mkDerivation rec {
   '';
 
   installCheckTarget = "integration";
-  nativeInstallCheckInputs =
-    [
-      cmocka
-      expect
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      tcpdump
-      hostapd
-      wpa_supplicant
-      screen
-    ];
+  nativeInstallCheckInputs = [
+    cmocka
+    expect
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    tcpdump
+    hostapd
+    wpa_supplicant
+    screen
+  ];
 
   meta = {
     description = "WiFi security auditing tools suite";
@@ -141,6 +140,6 @@ stdenv.mkDerivation rec {
         freebsd
         illumos
       ];
-    changelog = "https://github.com/aircrack-ng/aircrack-ng/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/aircrack-ng/aircrack-ng/blob/${finalAttrs.src.rev}/ChangeLog";
   };
-}
+})

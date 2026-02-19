@@ -5,12 +5,12 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libutempter";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "http://ftp.altlinux.org/pub/people/ldv/utempter/libutempter-${version}.tar.gz";
+    url = "http://ftp.altlinux.org/pub/people/ldv/utempter/libutempter-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-ln/vNy85HeUBhDrYdXDGz12r2WUfAPF4MJD7wSsqNMs=";
   };
 
@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
     "mandir=\${out}/share/man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/altlinux/libutempter";
     description = "Interface for terminal emulators such as screen and xterm to record user sessions to utmp and wtmp files";
     longDescription = ''
       The bundled utempter binary must be able to run as a user belonging to group utmp.
       On NixOS systems, this can be achieved by creating a setguid wrapper.
     '';
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.msteen ];
   };
-}
+})

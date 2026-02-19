@@ -1,72 +1,67 @@
 {
   fetchFromGitHub,
   glib,
-  gtk3,
-  iproute2,
+  gtk4,
   kdePackages,
   lib,
-  libappindicator,
-  libappindicator-gtk2,
-  libappindicator-gtk3,
-  libayatana-appindicator,
-  libsoup_3,
   openssl,
   pkg-config,
   rustPlatform,
-  webkitgtk_4_1,
+  wrapGAppsHook4,
+  graphene,
+  sqlite,
   nix-update-script,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snx-rs";
-  version = "3.1.2";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
-    tag = "v${version}";
-    hash = "sha256-bLuIXd2pqqiyEP+lDTJYVDZkRZ0HcDkKFZd/qlpuf98=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-whmZM6OYdHtcTJzzR4aqDMBVpFuRvJKLFVGCQNDjRw8=";
   };
 
   passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [
-    iproute2
     pkg-config
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
     kdePackages.kstatusnotifieritem
-    libappindicator
-    libappindicator-gtk2
-    libappindicator-gtk3
-    libayatana-appindicator
-    libsoup_3
     openssl
-    webkitgtk_4_1
+    graphene
+    sqlite
   ];
-
-  postPatch = ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-  '';
 
   checkFlags = [
     "--skip=platform::linux::net::tests::test_default_ip"
+    "--skip=platform::linux::tests::test_xfrm_check"
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-E5OJVf9CkLn5mFtk4Yacs2OIvAuIw0idSs7QuTNvfgU=";
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  cargoHash = "sha256-gAOxwmsPo0XpFxNe3EObNlgiTJ0krMAlVaTDorrYUqg=";
+
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/snx-rs";
 
   meta = {
     description = "Open source Linux client for Checkpoint VPN tunnels";
     homepage = "https://github.com/ancwrd1/snx-rs";
     license = lib.licenses.agpl3Plus;
-    changelog = "https://github.com/ancwrd1/snx-rs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ancwrd1/snx-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       shavyn
     ];
     mainProgram = "snx-rs";
   };
-}
+})

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/dict
     mkdir -p $out/share/man/man1
     mkdir -p $out/share/applications
-    mkdir -p $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/32x32/apps
 
     for f in ding ding.1; do
       sed -i "s@/usr/share@$out/share@g" "$f"
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     cp -v ding $out/bin/
     cp -v de-en.txt $out/share/dict/
     cp -v ding.1 $out/share/man/man1/
-    cp -v ding.png $out/share/pixmaps/
+    cp -v ding.png $out/share/icons/hicolor/32x32/apps
     cp -v ding.desktop $out/share/applications/
 
     wrapProgram $out/bin/ding --prefix PATH : ${
@@ -73,12 +73,12 @@ stdenv.mkDerivation rec {
     } --prefix ASPELL_CONF : "\"prefix ${aspellEnv};\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and fast dictionary lookup tool";
     mainProgram = "ding";
     homepage = "https://www-user.tu-chemnitz.de/~fri/ding/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux; # homepage says: unix-like except darwin
-    maintainers = [ maintainers.exi ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux; # homepage says: unix-like except darwin
+    maintainers = [ lib.maintainers.exi ];
   };
 }

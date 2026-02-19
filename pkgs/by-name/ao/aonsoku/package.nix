@@ -5,6 +5,8 @@
   cargo-tauri,
   nodejs,
   pnpm_8,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pkg-config,
   wrapGAppsHook3,
   openssl,
@@ -12,7 +14,6 @@
   glib-networking,
   nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aonsoku";
   version = "0.9.1";
@@ -25,21 +26,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   # lockfileVersion: '6.0' need old pnpm
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_8;
+    fetcherVersion = 1;
     hash = "sha256-h1rcM+H2c0lk7bpGeQT5ue9bQIggrCFHkj4o7KxnH08=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-8UtfL8iB1XKP31GT9Ok5hIQSobQTm681uiluG+IhK/s=";
 
   patches = [ ./remove_updater.patch ];
 
   nativeBuildInputs = [
     nodejs
-    pnpm_8.configHook
+    pnpmConfigHook
+    pnpm_8
     cargo-tauri.hook
     pkg-config
     wrapGAppsHook3

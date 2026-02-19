@@ -10,7 +10,6 @@
   pyaml,
   pyclipper,
   python-bidi,
-  pythonOlder,
   scikit-image,
   scipy,
   shapely,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "easyocr";
   version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JaidedAI";
@@ -76,12 +73,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "easyocr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ready-to-use OCR with 80+ supported languages and all popular writing scripts";
     mainProgram = "easyocr";
     homepage = "https://github.com/JaidedAI/EasyOCR";
     changelog = "https://github.com/JaidedAI/EasyOCR/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

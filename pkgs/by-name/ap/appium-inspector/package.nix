@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_34,
+  electron_39,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
@@ -10,8 +10,8 @@
 }:
 
 let
-  electron = electron_34;
-  version = "2025.3.1";
+  electron = electron_39;
+  version = "2026.1.3";
 in
 
 buildNpmPackage {
@@ -22,16 +22,18 @@ buildNpmPackage {
     owner = "appium";
     repo = "appium-inspector";
     tag = "v${version}";
-    hash = "sha256-Qpk3IXoegPKLKdSSzY05cT2//45TIhyVLxESd2OeWPE=";
+    hash = "sha256-9WhSQq3is2qucL1cGQIYPuLM9VkCFIWq2XVU2QioRMo=";
   };
 
-  npmDepsHash = "sha256-vUqX8yUZCflfkDYssQelFfJLNhDeU3K4UJPPgvvEeaI=";
+  npmDepsHash = "sha256-2DNUTvZ6yFL9U8JKw4ZFR81a6Mv9rPXtRu/v/Il/Rhw=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
+
+  makeCacheWritable = true;
 
   buildPhase = ''
     runHook preBuild
@@ -57,7 +59,7 @@ buildNpmPackage {
       --set NODE_ENV production
 
     install -m 444 -D 'app/common/renderer/assets/images/icon.png' \
-      $out/share/icons/hicolor/512x512/apps/appium-inspector.png
+      $out/share/icons/hicolor/256x256/apps/appium-inspector.png
 
     runHook postInstall
   '';

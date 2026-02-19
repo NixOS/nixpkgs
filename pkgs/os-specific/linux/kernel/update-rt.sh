@@ -55,8 +55,8 @@ update-if-needed() {
         echo "$nixattr: $cur (up-to-date)"
         return
     fi
-    khash=$(nix-prefetch-url "$mirror/v${major}.x/linux-${kversion}.tar.xz")
-    phash=$(nix-prefetch-url "$mirror/projects/rt/${branch}/older/patch-${new}.patch.xz")
+    khash=$(nix-prefetch-url "$mirror/v${major}.x/linux-${kversion}.tar.xz" | nix-hash --type sha256 --to-sri)
+    phash=$(nix-prefetch-url "$mirror/projects/rt/${branch}/older/patch-${new}.patch.xz" | nix-hash --type sha256 --to-sri)
     if [ "$cur" ]; then
         msg="$nixattr: $cur -> $new"
     else
@@ -69,8 +69,8 @@ update-if-needed() {
     sed -i "$file" \
         -e "s/$cur/$new/" \
         -e "s|kernel/v[0-9]*|kernel/v$major|" \
-        -e "1,/.patch.xz/ s/sha256 = .*/sha256 = \"$khash\";/" \
-        -e "1,/.patch.xz/! s/sha256 = .*/sha256 = \"$phash\";/"
+        -e "1,/.patch.xz/ s|hash = .*|hash = \"$khash\";|" \
+        -e "1,/.patch.xz/! s|hash = .*|hash = \"$phash\";|"
     if [ "${COMMIT:-}" ]; then
         git add "$file"
         git commit -m "$msg"

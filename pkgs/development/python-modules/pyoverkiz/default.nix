@@ -3,33 +3,29 @@
   aiohttp,
   attrs,
   backoff,
-  backports-strenum,
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pyhumps,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   warrant-lite,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyoverkiz";
-  version = "1.17.2";
+  version = "1.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
-    tag = "v${version}";
-    hash = "sha256-KkVII55CG2RiAp1XdQnuyQfckIkSSK+vG02+6M/U66M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H1G85vleaV+ZWbjH3tozI6fvWPKxwrIVRIXiFwsUWOA=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -38,7 +34,7 @@ buildPythonPackage rec {
     boto3
     pyhumps
     warrant-lite
-  ] ++ lib.optionals (pythonOlder "3.11") [ backports-strenum ];
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -47,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyoverkiz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the Somfy TaHoma API or other OverKiz APIs";
     homepage = "https://github.com/iMicknl/python-overkiz-api";
-    changelog = "https://github.com/iMicknl/python-overkiz-api/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/iMicknl/python-overkiz-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

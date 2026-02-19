@@ -18,18 +18,23 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dropbear";
-  version = "2025.88";
+  version = "2025.89";
 
   src = fetchurl {
-    url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${version}.tar.bz2";
-    sha256 = "sha256-eD9Q6iexfBbaiVePr9tt7PpEu49lkOVpik5NNnLcU9Q=";
+    url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-DR98pxHPwzbcioXmcsq5z9giOgL+LaCkp661jJ4RNjQ=";
   };
 
   CFLAGS = lib.pipe (lib.attrNames dflags) [
-    (builtins.map (name: "-D${name}=\\\"${dflags.${name}}\\\""))
+    (map (name: "-D${name}=\\\"${dflags.${name}}\\\""))
     (lib.concatStringsSep " ")
+  ];
+
+  configureFlags = lib.optionals stdenv.hostPlatform.isMusl [
+    "--enable-wtmp=no"
+    "--enable-wtmpx=no"
   ];
 
   # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
@@ -65,12 +70,12 @@ stdenv.mkDerivation rec {
     libxcrypt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small footprint implementation of the SSH 2 protocol";
     homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";
-    changelog = "https://github.com/mkj/dropbear/raw/DROPBEAR_${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/mkj/dropbear/raw/DROPBEAR_${finalAttrs.version}/CHANGES";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

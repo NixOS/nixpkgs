@@ -53,6 +53,12 @@ let
       rev = "2589c3fd46925f5d57e4ec79233cd1bd0f5d0c09";
       hash = "sha256-mbhxuJjrV3nC8Ja7N0WWF9ByHovJLmoLLuuzoU4khjU=";
     };
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+      substituteInPlace td/generate/tl-parser/CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+    '';
   });
   rlottie-paperplane = rlottie.overrideAttrs (prev: {
     pname = "rlottie-paperplane";

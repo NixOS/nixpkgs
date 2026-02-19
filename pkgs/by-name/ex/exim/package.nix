@@ -37,44 +37,43 @@
 let
   perl' = perl.withPackages (p: with p; [ FileFcntlLock ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exim";
-  version = "4.98.2";
+  version = "4.99.1";
 
   src = fetchurl {
-    url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    hash = "sha256-iLjopnwdtswLHRSBYao25mL0yi/vJdW282lNSQ5C3K4=";
+    url = "https://ftp.exim.org/pub/exim/exim4/exim-${finalAttrs.version}.tar.xz";
+    hash = "sha256-6ulnvUml+HmTO4xuyIwwR1ocZkYjITXzfwW1XbxONEc=";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      coreutils
-      db
-      openssl
-      perl'
-      pcre2
-      libxcrypt
-    ]
-    ++ lib.optional enableLDAP openldap
-    ++ lib.optionals enableMySQL [
-      libmysqlclient
-      zlib
-    ]
-    ++ lib.optional enablePgSQL libpq
-    ++ lib.optionals enableSqlite [
-      sqlite
-      sqlite.dev
-      zlib
-    ]
-    ++ lib.optional enableAuthDovecot dovecot
-    ++ lib.optional enablePAM pam
-    ++ lib.optional enableSPF libspf2
-    ++ lib.optional enableDMARC opendmarc
-    ++ lib.optional enableRedis hiredis
-    ++ lib.optional enableJSON jansson;
+  buildInputs = [
+    coreutils
+    db
+    openssl
+    perl'
+    pcre2
+    libxcrypt
+  ]
+  ++ lib.optional enableLDAP openldap
+  ++ lib.optionals enableMySQL [
+    libmysqlclient
+    zlib
+  ]
+  ++ lib.optional enablePgSQL libpq
+  ++ lib.optionals enableSqlite [
+    sqlite
+    sqlite.dev
+    zlib
+  ]
+  ++ lib.optional enableAuthDovecot dovecot
+  ++ lib.optional enablePAM pam
+  ++ lib.optional enableSPF libspf2
+  ++ lib.optional enableDMARC opendmarc
+  ++ lib.optional enableRedis hiredis
+  ++ lib.optional enableJSON jansson;
 
   configurePhase = ''
     runHook preConfigure
@@ -192,17 +191,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://exim.org/";
     description = "Mail transfer agent (MTA)";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       bsd3
     ];
     mainProgram = "exim";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tv ];
-    teams = [ teams.helsinki-systems ];
-    changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+      tv
+    ];
+    changelog = "https://github.com/Exim/exim/blob/exim-${finalAttrs.version}/doc/doc-txt/ChangeLog";
   };
-}
+})

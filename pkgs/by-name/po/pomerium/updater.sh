@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p gnugrep coreutils curl wget jq nix-update prefetch-yarn-deps
+#! nix-shell -i bash -p gnugrep coreutils curl jq nix-update prefetch-yarn-deps
 
 set -euo pipefail
 pushd "$(dirname "${BASH_SOURCE[0]}")"
@@ -14,10 +14,6 @@ if [[ "$UPDATE_NIX_OLD_VERSION" == "$version" ]]; then
     exit 0
 fi
 
-rm -f package.json yarn.lock
-wget "$url/ui/yarn.lock" "$url/ui/package.json"
-echo $(prefetch-yarn-deps) > yarn-hash
-rm -f yarn.lock
-
 popd
 nix-update pomerium --version $version
+nix-update pomerium --version=skip --subpackage ui

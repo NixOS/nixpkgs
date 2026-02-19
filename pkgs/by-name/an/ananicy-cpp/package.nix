@@ -23,7 +23,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ananicy-cpp";
     repo = "ananicy-cpp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-oPinSc00+Z6SxjfTh7DttcXSjsLv1X0NI+O37C8M8GY=";
   };
@@ -48,31 +48,35 @@ clangStdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/b2589a9b1faa2ecf54aeede40ea781c33bfb09a8.patch";
       hash = "sha256-nfyCdhvnWj446z5aPFCXGi79Xgja8W0Eopl6I30fOBM=";
     })
+
+    # fix build w/ glibc-2.42 (don't conflict with sched_* API from glibc 2.41)
+    (fetchpatch {
+      url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/99e64815bacaf3baa28ad89d022e33ebede94fa9.patch";
+      hash = "sha256-V9yf0nUa91DXRufDYhufybQUTP6R1CUzF51SEBMdjmA=";
+    })
   ];
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withBpf [
-      bpftools
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withBpf [
+    bpftools
+  ];
 
-  buildInputs =
-    [
-      pcre2
-      spdlog
-      nlohmann_json
-      systemd
-      zlib
-    ]
-    ++ lib.optionals withBpf [
-      libbpf
-      elfutils
-    ];
+  buildInputs = [
+    pcre2
+    spdlog
+    nlohmann_json
+    systemd
+    zlib
+  ]
+  ++ lib.optionals withBpf [
+    libbpf
+    elfutils
+  ];
 
   # BPF A call to built-in function '__stack_chk_fail' is not supported.
   hardeningDisable = [

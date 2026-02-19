@@ -2,23 +2,26 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
-  ffmpeg,
+  ffmpeg_7,
   pkg-config,
   alsa-lib,
   wayland,
   makeWrapper,
   libxkbcommon,
   vulkan-loader,
-  xorg,
+  libxrender,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 let
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "PolyMeilex";
     repo = "Neothesia";
     rev = "v${version}";
-    hash = "sha256-JD1jQ/a6GHtB/d/fRMCiE4ZOO676BIiZ980VIYUloU0=";
+    hash = "sha256-qYwBSye6RYClSlWmHwuy/rxq9w5932tR33Z+o2S1l8k=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -27,7 +30,7 @@ rustPlatform.buildRustPackage {
   inherit src version;
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     alsa-lib
   ];
 
@@ -37,8 +40,7 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OYdKuYOL3X6eqVYANvmfTRA8TGd4+QLg0zodDH0jxXk=";
+  cargoHash = "sha256-mXeNAVYqPsBWiUZFV/atx/xjLgFNarm2HwI7k/NaAbc=";
 
   cargoBuildFlags = [
     "-p neothesia -p neothesia-cli"
@@ -50,10 +52,10 @@ rustPlatform.buildRustPackage {
         wayland
         libxkbcommon
         vulkan-loader
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrender
+        libx11
+        libxcursor
+        libxi
+        libxrender
       ]
     }"
 

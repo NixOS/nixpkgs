@@ -2,7 +2,7 @@
   stdenv,
   lib,
   gitUpdater,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   meson,
   ninja,
@@ -21,17 +21,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fnott";
-  version = "1.7.1";
+  version = "1.8.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "fnott";
     rev = finalAttrs.version;
-    hash = "sha256-C0GvpjOrcelk/KNNDQ7/02Ai7xy8FVzmLcuC2je5wYA=";
+    hash = "sha256-II8fij64ufwXg71VoSayVpSFim9+2w3j4gdTRDBrYQE=";
   };
 
-  PKG_CONFIG_DBUS_1_SESSION_BUS_SERVICES_DIR = "${placeholder "out"}/share/dbus-1/services";
+  env.PKG_CONFIG_DBUS_1_SESSION_BUS_SERVICES_DIR = "${placeholder "out"}/share/dbus-1/services";
 
   strictDeps = true;
   depsBuildBuild = [

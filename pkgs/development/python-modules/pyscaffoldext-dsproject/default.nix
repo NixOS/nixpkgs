@@ -11,7 +11,7 @@
   configupdater,
   pre-commit,
   pytest,
-  pytest-cov-stub,
+  pytest-cov,
   pytest-xdist,
   tox,
   virtualenv,
@@ -44,7 +44,7 @@ buildPythonPackage rec {
       configupdater
       pre-commit
       pytest
-      pytest-cov-stub
+      pytest-cov
       pytest-xdist
       setuptools-scm
       tox
@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.dsproject" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyScaffold extension for Data Science projects";
     homepage = "https://pypi.org/project/pyscaffoldext-dsproject/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

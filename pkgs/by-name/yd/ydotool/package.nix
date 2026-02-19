@@ -2,10 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   scdoc,
   util-linux,
-  xorg,
+  xinput,
   nixosTests,
 }:
 
@@ -20,9 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MtanR+cxz6FsbNBngqLE+ITKPZFHmWGsD1mBDk0OVng=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/ReimuNotMoe/ydotool/commit/58fde33d9a8b393fd59348f71e80c56177b62706.patch?full_index=1";
+      hash = "sha256-Ga9DPCzpJwtYVHWwKKl3kzn2BPEZBZ7uzbEY/eFXGs4=";
+      includes = [ "CMakeLists.txt" ];
+    })
+  ];
+
   postPatch = ''
     substituteInPlace Daemon/ydotoold.c \
-      --replace "/usr/bin/xinput" "${xorg.xinput}/bin/xinput"
+      --replace "/usr/bin/xinput" "${xinput}/bin/xinput"
     substituteInPlace Daemon/ydotool.service.in \
       --replace "/usr/bin/kill" "${util-linux}/bin/kill"
   '';
@@ -41,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     mainProgram = "ydotool";
     maintainers = with lib.maintainers; [
-      willibutz
       kraem
     ];
     platforms = lib.platforms.linux;

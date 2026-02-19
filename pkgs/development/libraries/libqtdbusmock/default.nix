@@ -18,24 +18,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqtdbusmock";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libqtdbusmock";
     rev = finalAttrs.version;
-    hash = "sha256-hVw2HnIHlA7vvt0Sr6F2qVhvBZ33aCeqb9vgbu3rgBo=";
+    hash = "sha256-6xOTqynuYmSpFJ8FJwKcTxhoddlSJuHuvlXRWmSjdeI=";
   };
 
-  postPatch =
-    ''
-      # Workaround for "error: expected unqualified-id before 'public'" on "**signals"
-      sed -i -e '/add_definitions/a -DQT_NO_KEYWORDS' CMakeLists.txt
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      # Don't build tests when we're not running them
-      sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
-    '';
+  postPatch = ''
+    # Workaround for "error: expected unqualified-id before 'public'" on "**signals"
+    sed -i -e '/add_definitions/a -DQT_NO_KEYWORDS' CMakeLists.txt
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    # Don't build tests when we're not running them
+    sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
+  '';
 
   strictDeps = true;
 
@@ -68,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+  ];
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   enableParallelChecking = false;
@@ -82,12 +85,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Library for mocking DBus interactions using Qt";
-    homepage = "https://launchpad.net/libqtdbusmock";
-    license = licenses.lgpl3Only;
-    platforms = platforms.unix;
-    teams = [ teams.lomiri ];
+    homepage = "https://gitlab.com/ubports/development/core/libqtdbusmock";
+    changelog = "https://gitlab.com/ubports/development/core/libqtdbusmock/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.lomiri ];
     pkgConfigModules = [
       "libqtdbusmock-1"
     ];

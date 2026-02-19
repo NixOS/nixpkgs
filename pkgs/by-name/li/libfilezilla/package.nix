@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation {
   pname = "libfilezilla";
-  version = "0.49.0";
+  version = "0.52.0";
 
   src = fetchsvn {
     url = "https://svn.filezilla-project.org/svn/libfilezilla/trunk";
-    rev = "11192";
-    hash = "sha256-fm1cenGwYcPz0TtMzbPXrZA7nAzwo8toBNA9cW2Gnh0=";
+    rev = "11335";
+    hash = "sha256-BjHqPC43UtwlYeKbgIaGU8jmWbg5UUiTN8vl1m2mZpo=";
   };
 
   nativeBuildInputs = [
@@ -26,24 +26,27 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      gettext
-      gnutls
-      nettle
-      libxcrypt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    gettext
+    gnutls
+    nettle
+    libxcrypt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lib.filezilla-project.org/";
     description = "Modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      iedame
+      pSub
+    ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

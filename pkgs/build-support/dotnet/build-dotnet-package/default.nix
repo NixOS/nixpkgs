@@ -32,7 +32,8 @@ let
       makeWrapper
       dotnetbuildhelpers
       mono
-    ] ++ nativeBuildInputs;
+    ]
+    ++ nativeBuildInputs;
 
     configurePhase = ''
       runHook preConfigure
@@ -121,4 +122,4 @@ let
     '';
   };
 in
-stdenv.mkDerivation (attrs // (builtins.removeAttrs attrsOrig [ "nativeBuildInputs" ]))
+stdenv.mkDerivation (attrs // (removeAttrs attrsOrig [ "nativeBuildInputs" ]))

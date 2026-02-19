@@ -13,12 +13,12 @@
 
 let
   pname = "uhk-agent";
-  version = "7.0.1";
+  version = "9.0.1";
 
   src = fetchurl {
     url = "https://github.com/UltimateHackingKeyboard/agent/releases/download/v${version}/UHK.Agent-${version}-linux-x86_64.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-8zf6vhgZj8cY9XoI/6FZH1/xh7/I3vboVumLsTq3q8Q=";
+    sha256 = "sha256-/DgXushqByEbvbQhmzwXIdmaKWEJL40X6HpV6SUKieY=";
   };
 
   appimageContents = appimageTools.extract {
@@ -69,12 +69,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Agent is the configuration application of the Ultimate Hacking Keyboard";
+  meta = {
+    description = "Configuration application of the Ultimate Hacking Keyboard";
     homepage = "https://github.com/UltimateHackingKeyboard/agent";
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [
-      ngiger
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [
       nickcao
     ];
     platforms = [ "x86_64-linux" ];

@@ -12,6 +12,7 @@
   perl,
   pkg-config,
   wrapGAppsHook3,
+  saxon,
 
   # buildInputs
   SDL2,
@@ -52,8 +53,7 @@
   libtiff,
   libwebp,
   libxml2,
-  libxslt,
-  lua,
+  lua5_4,
   util-linux,
   openexr,
   openjpeg,
@@ -67,10 +67,10 @@
   colord-gtk,
   libselinux,
   libsepol,
-  libX11,
-  libXdmcp,
+  libx11,
+  libxdmcp,
   libxkbcommon,
-  libXtst,
+  libxtst,
   ocl-icd,
   # Darwin only
   gtk-mac-integration,
@@ -78,14 +78,16 @@
   versionCheckHook,
   gitUpdater,
 }:
-
+let
+  pugixml-shared = pugixml.override { shared = true; };
+in
 stdenv.mkDerivation rec {
-  version = "5.0.1";
+  version = "5.4.1";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-SpGNCU67qYPvZ6EMxxXD1+jKc4AJkgqf9l0zQXtt2YQ=";
+    hash = "sha256-r9x8iKM4qM0vrDHIRQ0Hbtv3PpVuQwcmDIPrwZX4ReQ=";
   };
 
   nativeBuildInputs = [
@@ -97,81 +99,79 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     wrapGAppsHook3
+    saxon # Use Saxon instead of libxslt to fix XSLT generate-id() consistency issues
   ];
 
-  buildInputs =
-    [
-      SDL2
-      adwaita-icon-theme
-      cairo
-      curl
-      exiv2
-      glib
-      glib-networking
-      gmic
-      graphicsmagick
-      gtk3
-      icu
-      ilmbase
-      isocodes
-      jasper
-      json-glib
-      lcms2
-      lensfun
-      lerc
-      libaom
-      libavif
-      libdatrie
-      libepoxy
-      libexif
-      libgcrypt
-      libgpg-error
-      libgphoto2
-      libheif
-      libjpeg
-      libjxl
-      libpng
-      librsvg
-      libsecret
-      libsysprof-capture
-      libthai
-      libtiff
-      libwebp
-      libxml2
-      libxslt
-      lua
-      openexr
-      openjpeg
-      osm-gps-map
-      pcre2
-      portmidi
-      pugixml
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      colord
-      colord-gtk
-      libselinux
-      libsepol
-      libX11
-      libXdmcp
-      libxkbcommon
-      libXtst
-      ocl-icd
-      util-linux
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  buildInputs = [
+    SDL2
+    adwaita-icon-theme
+    cairo
+    curl
+    exiv2
+    glib
+    glib-networking
+    gmic
+    graphicsmagick
+    gtk3
+    icu
+    ilmbase
+    isocodes
+    jasper
+    json-glib
+    lcms2
+    lensfun
+    lerc
+    libaom
+    #libavif # TODO re-enable once cmake files are fixed (#425306)
+    libdatrie
+    libepoxy
+    libexif
+    libgcrypt
+    libgpg-error
+    libgphoto2
+    libheif
+    libjpeg
+    libjxl
+    libpng
+    librsvg
+    libsecret
+    libsysprof-capture
+    libthai
+    libtiff
+    libwebp
+    libxml2
+    lua5_4
+    openexr
+    openjpeg
+    osm-gps-map
+    pcre2
+    portmidi
+    pugixml-shared
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    colord
+    colord-gtk
+    libselinux
+    libsepol
+    libx11
+    libxdmcp
+    libxkbcommon
+    libxtst
+    ocl-icd
+    util-linux
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  cmakeFlags =
-    [
-      "-DBUILD_USERMANUAL=False"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DUSE_COLORD=OFF"
-      "-DUSE_KWALLET=OFF"
-    ];
+  cmakeFlags = [
+    "-DBUILD_USERMANUAL=False"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DUSE_COLORD=OFF"
+    "-DUSE_KWALLET=OFF"
+  ];
 
   # darktable changed its rpath handling in commit
   # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the
@@ -193,10 +193,13 @@ stdenv.mkDerivation rec {
       )
     '';
 
+  postPatch = ''
+    patchShebangs ./tools/generate_styles_string.sh
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {

@@ -10,41 +10,39 @@
   libxkbcommon,
   wayland,
   enableX11 ? true,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "centerpiece";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "friedow";
     repo = "centerpiece";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tZNwMPL1ITWVvoywojsd5j0GIVQt6pOKFLwi7jwqLKg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-qwKn9NN7+F/S8ojObjWBU2y2wG0TNeYbYHiwou8AhnI=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      dbus
-      libGL
-      libxkbcommon
-      vulkan-loader
-      wayland
-    ]
-    ++ lib.optionals enableX11 (
-      with xorg;
-      [
-        libX11
-        libXcursor
-        libXi
-        libXrandr
-      ]
-    );
+  buildInputs = [
+    dbus
+    libGL
+    libxkbcommon
+    vulkan-loader
+    wayland
+  ]
+  ++ lib.optionals enableX11 [
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+  ];
 
   postFixup = lib.optional stdenv.hostPlatform.isLinux ''
     rpath=$(patchelf --print-rpath $out/bin/centerpiece)
@@ -58,15 +56,15 @@ rustPlatform.buildRustPackage rec {
     }" $out/bin/centerpiece
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/friedow/centerpiece";
     description = "Your trusty omnibox search";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       a-kenji
       friedow
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "centerpiece";
   };
-}
+})

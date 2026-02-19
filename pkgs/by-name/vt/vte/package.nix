@@ -23,28 +23,33 @@
   pango,
   pcre2,
   cairo,
+  fmt_11,
   fribidi,
   lz4,
   icu,
+  simdutf,
   systemd,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fast-float,
   nixosTests,
   blackbox-terminal,
+  darwinMinVersionHook,
+  withApp ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.80.1";
+  version = "0.82.3";
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional (gtkVersion != null) "devdoc";
+  ]
+  ++ lib.optional (gtkVersion != null) "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DNvQ6YOv2dIuBl4yOnQxYAcr9ktFPgCxXtvm8tzdpGw=";
+    hash = "sha256-bcYnj2/uMNB9GgPiujM1sepOjSlWzrWdhhlDEV2TCoU=";
   };
 
   patches = [
@@ -55,6 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
       name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       hash = "sha256-FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
+    })
+
+    # https://gitlab.gnome.org/GNOME/vte/-/merge_requests/11
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/f672ed15a88dd3e25c33aa0a5ef6f6d291a6d5c7.patch";
+      hash = "sha256-JdLDild5j7marvR5n2heW9YD00+bwzJIoxDlzO5r/6w=";
     })
   ];
 
@@ -72,20 +83,24 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
   ];
 
-  buildInputs =
-    [
-      cairo
-      fribidi
-      gnutls
-      pango # duplicated with propagatedBuildInputs to support gtkVersion == null
-      pcre2
-      lz4
-      icu
-      fast-float
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ];
+  buildInputs = [
+    cairo
+    fmt_11
+    fribidi
+    gnutls
+    pango # duplicated with propagatedBuildInputs to support gtkVersion == null
+    pcre2
+    lz4
+    icu
+    fast-float
+    simdutf
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
+  ];
 
   # Required by vte-2.91.pc.
   propagatedBuildInputs = lib.optionals (gtkVersion != null) [
@@ -97,19 +112,17 @@ stdenv.mkDerivation (finalAttrs: {
     pango
   ];
 
-  mesonFlags =
-    [
-      "-Ddocs=true"
-      (lib.mesonBool "gtk3" (gtkVersion == "3"))
-      (lib.mesonBool "gtk4" (gtkVersion == "4"))
-    ]
-    ++ lib.optionals (!systemdSupport) [
-      "-D_systemd=false"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # -Bsymbolic-functions is not supported on darwin
-      "-D_b_symbolic_functions=false"
-    ];
+  mesonFlags = [
+    "-Ddocs=true"
+    (lib.mesonBool "app" withApp)
+    (lib.mesonBool "gtk3" (gtkVersion == "3"))
+    (lib.mesonBool "gtk4" (gtkVersion == "4"))
+    (lib.mesonBool "_systemd" (!systemdSupport))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # -Bsymbolic-functions is not supported on darwin
+    "-D_b_symbolic_functions=false"
+  ];
 
   # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
   env.NIX_CFLAGS_COMPILE = toString (
@@ -118,11 +131,11 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   postPatch = ''
-    patchShebangs perf/*
-    patchShebangs src/app/meson_desktopfile.py
-    patchShebangs src/parser-seq.py
-    patchShebangs src/minifont-coverage.py
-    patchShebangs src/modes.py
+    patchShebangs perf/* \
+      src/app/meson_desktopfile.py \
+      src/parser-seq.py \
+      src/minifont-coverage.py \
+      src/modes.py
   '';
 
   postFixup = ''
@@ -147,11 +160,11 @@ stdenv.mkDerivation (finalAttrs: {
         termite
         xfce4-terminal
         ;
-      blackbox-terminal = blackbox-terminal.override { sixelSupport = true; };
+      inherit blackbox-terminal;
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnome.org/";
     description = "Library implementing a terminal emulator widget for GTK";
     longDescription = ''
@@ -162,12 +175,11 @@ stdenv.mkDerivation (finalAttrs: {
       character set conversion, as well as emulating any terminal known to
       the system's terminfo database.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
-      astsmtl
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       antono
     ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 })

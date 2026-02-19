@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "picosnitch";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,14 +33,14 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "picosnitch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Monitor network traffic per executable with hashing";
     mainProgram = "picosnitch";
     homepage = "https://github.com/elesiuta/picosnitch";
     changelog = "https://github.com/elesiuta/picosnitch/releases";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.elesiuta ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.elesiuta ];
+    platforms = lib.platforms.linux;
     knownVulnerabilities = [
       "Allows an unprivileged user to write to arbitrary files as root; see https://github.com/elesiuta/picosnitch/issues/40"
     ];

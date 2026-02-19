@@ -4,8 +4,7 @@
   fetchFromGitHub,
   networkx,
   numpy,
-  pytestCheckHook,
-  pythonOlder,
+  pytest8_3CheckHook,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   # https://github.com/gtaylor/python-colormath/issues/104
   version = "3.0.0-unstable-2021-04-17";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gtaylor";
@@ -33,15 +30,15 @@ buildPythonPackage rec {
     numpy
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest8_3CheckHook ];
 
   pythonImportsCheck = [ "colormath" ];
 
-  meta = with lib; {
+  meta = {
     description = "Color math and conversion library";
     homepage = "https://github.com/gtaylor/python-colormath";
     changelog = "https://github.com/gtaylor/python-colormath/releases/tag/${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ jonathanreeve ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ jonathanreeve ];
   };
 }

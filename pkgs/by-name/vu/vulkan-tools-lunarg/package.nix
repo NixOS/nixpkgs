@@ -7,33 +7,33 @@
   jq,
   expat,
   jsoncpp,
-  libX11,
-  libXdmcp,
-  libXrandr,
+  libx11,
+  libxdmcp,
+  libxrandr,
   libffi,
   libxcb,
   pkg-config,
   wayland,
   which,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-keysyms,
+  libxcb-wm,
   valijson,
   vulkan-headers,
   vulkan-loader,
   vulkan-utility-libraries,
   writeText,
-  libsForQt5,
+  qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-tools-lunarg";
-  version = "1.4.313.0";
+  version = "1.4.335.0";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "VulkanTools";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-VJxomhzHEIbQ8CUzlUN2fvBF+M9854FlIR0fE2RgppM=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-2DUxlGH9Yco64Y74QByVniWXiYYy+e4MfyN4S+E6KKA=";
   };
 
   nativeBuildInputs = [
@@ -42,15 +42,15 @@ stdenv.mkDerivation rec {
     jq
     which
     pkg-config
-    libsForQt5.qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     expat
     jsoncpp
-    libX11
-    libXdmcp
-    libXrandr
+    libx11
+    libxdmcp
+    libxrandr
     libffi
     libxcb
     valijson
@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
     vulkan-loader
     vulkan-utility-libraries
     wayland
-    xcbutilkeysyms
-    xcbutilwm
-    libsForQt5.qt5.qtbase
-    libsForQt5.qt5.qtwayland
+    libxcb-keysyms
+    libxcb-wm
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   cmakeFlags = [
@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs scripts/*
-    substituteInPlace via/CMakeLists.txt --replace "jsoncpp_static" "jsoncpp"
   '';
 
   # Include absolute paths to layer libraries in their associated
@@ -87,15 +86,15 @@ stdenv.mkDerivation rec {
     export XDG_CONFIG_DIRS=@out@/etc''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LunarG Vulkan Tools and Utilities";
     longDescription = ''
       Tools to aid in Vulkan development including useful layers, trace and
       replay, and tests.
     '';
     homepage = "https://github.com/LunarG/VulkanTools";
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

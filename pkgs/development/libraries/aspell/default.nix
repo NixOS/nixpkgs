@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/GNUAspell/aspell/commit/ee6cbb12ff36a1e6618d7388a78dd4e0a2b44041.patch";
       hash = "sha256-rW1FcfARdtT4wX+zGd2x/1K8zRp9JZhdR/zRd8RwPZA=";
     })
-  ] ++ lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
+  ]
+  ++ lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
 
   postPatch = ''
     patch interfaces/cc/aspell.h < ${./clang.patch}
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     uses-curses =
-      runCommand "${pname}-curses"
+      runCommand "aspell-curses"
         {
           buildInputs = [ glibc ];
         }

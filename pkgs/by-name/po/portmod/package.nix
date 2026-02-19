@@ -26,7 +26,6 @@ let
     inherit src version;
     pname = "portmod-rust";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-hLci2O+eliCgscvvC4ejn6ZDtFQnM5K6f0luu2cYIHM=";
 
     nativeBuildInputs = [
@@ -51,7 +50,7 @@ python3Packages.buildPythonApplication {
   inherit src version;
 
   pname = "portmod";
-  format = "pyproject";
+  pyproject = true;
 
   # build the rust library independently
   prePatch = ''
@@ -121,10 +120,10 @@ python3Packages.buildPythonApplication {
       "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs}")
   '';
 
-  meta = with lib; {
-    description = "mod manager for openMW based on portage";
+  meta = {
+    description = "Mod manager for openMW based on portage";
     homepage = "https://gitlab.com/portmod/portmod";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

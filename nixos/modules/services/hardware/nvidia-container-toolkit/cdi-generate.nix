@@ -3,6 +3,8 @@
   device-name-strategy,
   discovery-mode,
   mounts,
+  disable-hooks,
+  enable-hooks,
   glibc,
   jq,
   lib,
@@ -10,18 +12,9 @@
   nvidia-driver,
   runtimeShell,
   writeScriptBin,
+  extraArgs,
 }:
 let
-  mkMount =
-    {
-      hostPath,
-      containerPath,
-      mountOptions,
-    }:
-    {
-      inherit hostPath containerPath;
-      options = mountOptions;
-    };
   mountToCommand =
     mount:
     "additionalMount \"${mount.hostPath}\" \"${mount.containerPath}\" '${builtins.toJSON mount.mountOptions}'";
@@ -46,9 +39,12 @@ writeScriptBin "nvidia-cdi-generator" ''
       }
       --discovery-mode ${discovery-mode} \
       --device-name-strategy ${device-name-strategy} \
+      ${lib.concatMapStringsSep " \\\n" (hook: "--disable-hook ${hook}") disable-hooks} \
+      ${lib.concatMapStringsSep " \\\n" (hook: "--enable-hook ${hook}") enable-hooks} \
       --ldconfig-path ${lib.getExe' glibc "ldconfig"} \
       --library-search-path ${lib.getLib nvidia-driver}/lib \
-      --nvidia-cdi-hook-path ${lib.getExe' nvidia-container-toolkit.tools "nvidia-cdi-hook"}
+      --nvidia-cdi-hook-path ${lib.getOutput "tools" nvidia-container-toolkit}/bin/nvidia-cdi-hook \
+      ${lib.escapeShellArgs extraArgs}
   }
 
   function additionalMount {

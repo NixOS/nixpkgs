@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "distgen";
-  version = "2.1";
+  version = "2.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VG9EX9LHoZamBM3PEm5qGpViK39qD+PA8vcHTzvsW+o=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-w+/aiLv5NCQFD0ItlC+Wy9BuvA/ndDQcLf6Iyb9trF4=";
   };
 
   build-system = with python3.pkgs; [
@@ -46,4 +46,4 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://distgen.readthedocs.io";
     maintainers = with lib.maintainers; [ bachp ];
   };
-}
+})

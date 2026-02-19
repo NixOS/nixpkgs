@@ -71,7 +71,8 @@ let
       "--enabled"
       "--disable-infobars"
       "--autoplay-policy=no-user-gesture-required"
-    ] ++ lists.optional cfg.ignoreCert "--ignore-certificate-errors";
+    ]
+    ++ lists.optional cfg.ignoreCert "--ignore-certificate-errors";
 
     stats.enable-stats-d = true;
     webhook.subscribers = [ ];
@@ -354,7 +355,7 @@ in
 
         StateDirectory = "jibri";
 
-        ExecStart = "${pkgs.xorg.xorgserver}/bin/Xorg -nocursor -noreset +extension RANDR +extension RENDER -config ${pkgs.jibri}/etc/jitsi/jibri/xorg-video-dummy.conf -logfile /dev/null :0";
+        ExecStart = "${pkgs.xorg-server}/bin/Xorg -nocursor -noreset +extension RANDR +extension RENDER -config ${pkgs.jibri}/etc/jitsi/jibri/xorg-video-dummy.conf -logfile /dev/null :0";
       };
     };
 

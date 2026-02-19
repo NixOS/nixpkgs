@@ -12,7 +12,12 @@
   libselinux,
   wayland,
   libdecor,
-  xorg,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
   libxkbcommon,
   libdrm,
   withSELinux ? false,
@@ -44,13 +49,14 @@ buildDotnetModule rec {
     wayland
     libdrm
     libxkbcommon
-    xorg.libX11
-    xorg.libXfixes
-    xorg.libXext
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-  ] ++ lib.optionals withSELinux [ libselinux ];
+    libx11
+    libxfixes
+    libxext
+    libxcursor
+    libxi
+    libxrandr
+  ]
+  ++ lib.optionals withSELinux [ libselinux ];
 
   postInstall = ''
     export ICON_DIR=$out/share/icons/hicolor/256x256/apps
@@ -82,7 +88,7 @@ buildDotnetModule rec {
       "aarch64-linux"
       "armv7l-linux"
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "Celeste64";
     homepage = "https://github.com/ExOK/Celeste64";
     description = "Celeste 64: Fragments of the Mountain";

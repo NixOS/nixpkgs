@@ -4,20 +4,23 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs_20,
+  nix-update-script,
   nixosTests,
 }:
 buildNpmPackage rec {
   pname = "send";
-  version = "3.4.25";
+  version = "3.4.27";
 
   src = fetchFromGitHub {
     owner = "timvisee";
     repo = "send";
     tag = "v${version}";
-    hash = "sha256-2XeChKJi57auIf9aSe2JlP55tiE8dmrCBtUfCkziYi8=";
+    hash = "sha256-tfntox8Sw3xzlCOJgY/LThThm+mptYY5BquYDjzHonQ=";
   };
 
-  npmDepsHash = "sha256-DY+4qOzoURx8xmemhutxcNxg0Tv2u6tyJHK5RhBjo8w=";
+  nodejs = nodejs_20;
+
+  npmDepsHash = "sha256-ZVegUECrwkn/DlAwqx5VDmcwEIJV/jAAV99Dq29Tm2w=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -37,13 +40,16 @@ buildNpmPackage rec {
     cp -r dist $out/lib/node_modules/send/
     ln -s $out/lib/node_modules/send/dist/version.json $out/lib/node_modules/send/version.json
 
-    makeWrapper ${lib.getExe nodejs_20} $out/bin/send \
+    makeWrapper ${lib.getExe nodejs} $out/bin/send \
       --add-flags $out/lib/node_modules/send/server/bin/prod.js \
       --set "NODE_ENV" "production"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) send;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) send;
+    };
   };
 
   meta = {

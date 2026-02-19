@@ -2,7 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
+
+  # build system
+  setuptools,
 
   # propagates:
   requests,
@@ -24,18 +26,19 @@
 
 buildPythonPackage rec {
   pname = "samsungtvws";
-  version = "2.7.2";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "3.0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
     tag = "v${version}";
-    hash = "sha256-CU59Kg8kSEE71x6wifCKCaVFdaMftodtkrAOpD+qvWY=";
+    hash = "sha256-yxCdcE5N/ZMRAkb0R8TT1jocMre0xv3EzpBXJ6Erkvg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     websocket-client
   ];
@@ -51,22 +54,21 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs =
-    [
-      aioresponses
-      pytest-asyncio
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.async
-    ++ optional-dependencies.encrypted;
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.async
+  ++ optional-dependencies.encrypted;
 
   pythonImportsCheck = [ "samsungtvws" ];
 
-  meta = with lib; {
+  meta = {
     description = "Samsung Smart TV WS API wrapper";
     homepage = "https://github.com/xchwarze/samsung-tv-ws-api";
     changelog = "https://github.com/xchwarze/samsung-tv-ws-api/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

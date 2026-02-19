@@ -2,25 +2,25 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libX11,
-  libXcursor,
-  libXmu,
-  libXpm,
+  libx11,
+  libxcursor,
+  libxmu,
+  libxpm,
   libheif,
   pkg-config,
   wayland,
   xbitmaps,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wallutils";
-  version = "5.12.9";
+  version = "5.14.3";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
-    rev = version;
-    hash = "sha256-kayzaNOV2xTjbMeGUJ1jMLGxcVZzYkMLr6qWlAupPKM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-35JkZa7ihz0vgHwEagIkP7xTd6wLLRqSaeySJY1/Dw8=";
   };
 
   vendorHash = null;
@@ -38,10 +38,10 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    libX11
-    libXcursor
-    libXmu
-    libXpm
+    libx11
+    libxcursor
+    libxmu
+    libxpm
     libheif
     wayland
     xbitmaps
@@ -68,10 +68,10 @@ buildGoModule rec {
 
   meta = {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.bsd3;
     maintainers = [ ];
     inherit (wayland.meta) platforms;
     badPlatforms = lib.platforms.darwin;
   };
-}
+})

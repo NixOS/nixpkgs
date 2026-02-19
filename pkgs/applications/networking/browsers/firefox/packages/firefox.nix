@@ -9,10 +9,10 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "139.0.1";
+  version = "147.0.4";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "78ae10fc14900eb1273b7ff798a159504f68166c39b1f12ef9ea04243debc78472c24499da01641590feb5d2b28475131d2ec94d6f28fd4f2f644a721f7f40ba";
+    sha512 = "981368916582e1566594ab8e2c03cab471aaf04613d2c77a0d4e067ab159bb81b5929a801bbac20ef0506ef048cde91b2e2f89598fa8d4e8d66a8c8016bb9b33";
   };
 
   meta = {
@@ -20,7 +20,7 @@ buildMozillaMach rec {
     description = "Web browser built from Firefox source tree";
     homepage = "http://www.mozilla.com/en-US/firefox/";
     maintainers = with lib.maintainers; [
-      lovesegfault
+      booxter # darwin
       hexa
     ];
     platforms = lib.platforms.unix;

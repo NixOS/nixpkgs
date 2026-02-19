@@ -11,16 +11,17 @@
   gnugrep,
   gnused,
   nvme-cli,
+  udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "google-guest-configs";
   version = "20211116.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-configs";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0SRu6p/DsHNNI20mkXJitt/Ee5S2ooiy5hNmD+ndecM=";
   };
 
@@ -34,7 +35,10 @@ stdenv.mkDerivation rec {
     iproute2
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    udevCheckHook
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -49,6 +53,8 @@ stdenv.mkDerivation rec {
     patch -p1 < ./fix-paths.patch
   '';
 
+  doInstallCheck = true;
+
   installPhase = ''
     mkdir -p $out/{bin,etc,lib}
     cp -r src/etc/{modprobe.d,sysctl.d} $out/etc
@@ -62,11 +68,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GoogleCloudPlatform/guest-configs";
     description = "Linux Guest Environment for Google Compute Engine";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

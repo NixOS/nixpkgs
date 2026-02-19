@@ -1,20 +1,19 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "poezio";
   version = "0.14";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "poezio";
     repo = "poezio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sk+8r+a0CcoB0RidqnE7hJUgt/xvN/MCJMkxiquvdJc=";
   };
 
@@ -48,11 +47,10 @@ python3.pkgs.buildPythonApplication rec {
     rm -r poezio
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free console XMPP client";
     homepage = "https://poez.io";
-    changelog = "https://codeberg.org/poezio/poezio/src/tag/v${version}/CHANGELOG";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ lsix ];
+    changelog = "https://codeberg.org/poezio/poezio/src/tag/v${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.zlib;
   };
-}
+})

@@ -8,7 +8,6 @@
   munch,
   openidc-client,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   six,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "python-fedora";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -51,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fedora" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the infrastructure of the Fedora Project";
     homepage = "https://github.com/fedora-infra/python-fedora";
     changelog = "https://github.com/fedora-infra/python-fedora/releases/tag/${version}";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

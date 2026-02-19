@@ -4,8 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   autoreconfHook,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,16 +24,16 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
   buildInputs = [
-    libX11
-    libXt
+    libx11
+    libxt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line program for getting and setting the contents of the X selection";
     homepage = "http://www.kfish.org/software/xsel";
     changelog = "https://github.com/kfish/xsel/releases/tag/${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cafkafk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cafkafk ];
     platforms = lib.platforms.unix;
     mainProgram = "xsel";
   };

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "astroterm";
-  version = "1.0.7";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "da-luce";
     repo = "astroterm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SQR5Q369LUtQum5a4f0/sy7GdPB8sBfn6mkAjxyTbg8=";
+    hash = "sha256-z9KblIAoXk///NnRFHCSAFNDuNiPxDuuiliajcsyJM0=";
   };
 
   bsc5File = fetchurl {

@@ -8,12 +8,13 @@
 
 buildPythonPackage rec {
   pname = "protobuf";
-  version = "5.29.4";
+  version = "5.29.6";
   pyproject = true;
+  # nixpkgs-update: no auto update
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Tx3815l7Me+PU+yCeB/0NKKL9x2RAt3eFNB2rc/HjJk=";
+    hash = "sha256-2p7mpUJLazD9XkXF6mY671QMqV+a2Z0eiH6BnN+bhyM=";
   };
 
   build-system = [ setuptools ];

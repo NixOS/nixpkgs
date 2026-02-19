@@ -2,11 +2,18 @@
   lib,
   stdenv,
   uhk-agent,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
   pname = "uhk-udev-rules";
   inherit (uhk-agent) version;
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   dontUnpack = true;
   dontBuild = true;
@@ -19,6 +26,5 @@ stdenv.mkDerivation {
   meta = {
     description = "udev rules for UHK keyboards from https://ultimatehackingkeyboard.com";
     inherit (uhk-agent.meta) license;
-    maintainers = [ lib.maintainers.ngiger ];
   };
 }

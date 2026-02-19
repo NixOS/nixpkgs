@@ -2,112 +2,172 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
 
   # dependencies
+  annotated-types,
   anyio,
   asyncpg,
+  attrs,
+  brotli,
   click,
   cryptography,
   fsspec,
   httpx,
   jinja2,
+  jsbeautifier,
   litestar-htmx,
   mako,
+  minijinja,
+  fast-query-parsers,
   msgspec,
   multidict,
+  multipart,
   picologging,
   polyfactory,
+  piccolo,
+  prometheus-client,
   psutil,
-  psycopg,
+  opentelemetry-instrumentation-asgi,
+  pydantic-extra-types,
+  pydantic,
+  email-validator,
+  pyjwt,
   pyyaml,
   redis,
-  rich,
   rich-click,
+  rich,
+  structlog,
   time-machine,
-  trio,
   typing-extensions,
+  uvicorn,
+  # valkey,
 
   # tests
-  pytestCheckHook,
-  pytest-lazy-fixtures,
-  pytest-xdist,
-  pytest-mock,
+  addBinToPathHook,
+  httpx-sse,
   pytest-asyncio,
-  pytest-timeout,
+  pytest-lazy-fixtures,
+  pytest-mock,
   pytest-rerunfailures,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  trio,
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "litestar";
-  version = "2.13.0";
+  version = "2.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "litestar";
-    tag = "v${version}";
-    hash = "sha256-PR2DVNRtILHs7XwVi9/ZCVRJQFqfGLn1x2gpYtYjHDo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6FRGZ8CjNZxfSRUgVWE+qA0LA/4fjDdZ40MlN0AveEo=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     anyio
     asyncpg
     click
-    cryptography
+    fast-query-parsers
     fsspec
     httpx
-    jinja2
     litestar-htmx
-    mako
     msgspec
     multidict
-    picologging
+    multipart
     polyfactory
     psutil
-    psycopg
     pyyaml
-    redis
     rich
     rich-click
-    time-machine
-    trio
     typing-extensions
   ];
 
+  optional-dependencies = {
+    annotated-types = [ annotated-types ];
+    attrs = [ attrs ];
+    brotli = [ brotli ];
+    cli = [
+      jsbeautifier
+      uvicorn
+    ];
+    cryptography = [ cryptography ];
+    htmx = [ litestar-htmx ];
+    jinja = [ jinja2 ];
+    jwt = [
+      cryptography
+      pyjwt
+    ];
+    mako = [ mako ];
+    minijinja = [ minijinja ];
+    opentelemetry = [ opentelemetry-instrumentation-asgi ];
+    piccolo = [ piccolo ];
+    picologging = [ picologging ];
+    polyfactory = [ polyfactory ];
+    prometheus = [ prometheus-client ];
+    pydantic = [
+      pydantic
+      email-validator
+      pydantic-extra-types
+    ];
+    redis = [ redis ] ++ redis.optional-dependencies.hiredis;
+    # sqlalchemy = [ advanced-alchemy ];
+    structlog = [ structlog ];
+    # valkey = [ valkey ] ++ valkey.optional-dependencies.libvalkey;
+    yaml = [ pyyaml ];
+  };
+
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-lazy-fixtures
-    pytest-xdist
-    pytest-mock
+    addBinToPathHook
+    httpx-sse
     pytest-asyncio
-    pytest-timeout
+    pytest-lazy-fixtures
+    pytest-mock
     pytest-rerunfailures
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
+    time-machine
+    trio
     versionCheckHook
   ];
+
   versionCheckProgramArg = "version";
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
-    # Follow github CI
+  enabledTestPaths = [
+    # Follow GitHub CI
     "docs/examples/"
   ];
 
+  pytestFlags = lib.optionals (pythonAtLeast "3.14") [
+    # UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    "-Wignore::UserWarning"
+  ];
+
+  disabledTests = [
+    # StartupError
+    "test_subprocess_async_client"
+  ];
+
   meta = {
-    homepage = "https://litestar.dev/";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    changelog = "https://github.com/litestar-org/litestar/releases/tag/v${version}";
     description = "Production-ready, Light, Flexible and Extensible ASGI API framework";
+    homepage = "https://litestar.dev/";
+    changelog = "https://github.com/litestar-org/litestar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "litestar";
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "libseccomp";
   version = libseccomp.version;
+  format = "setuptools";
   src = libseccomp.pythonsrc;
 
   VERSION_RELEASE = version; # used by build system
@@ -26,9 +27,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "seccomp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for libseccomp";
-    license = with licenses; [ lgpl21 ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = with lib.licenses; [ lgpl21 ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

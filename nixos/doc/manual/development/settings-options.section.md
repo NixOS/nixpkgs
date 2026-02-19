@@ -358,6 +358,47 @@ have a predefined type and string generator already declared under
 
     :   Outputs the xml with header.
 
+`pkgs.formats.plist` { escape ? true }
+
+:   A function taking an attribute set with values
+
+    `escape`
+
+    :   Whether to escape XML special characters in string values and keys.
+
+    It returns a set with Property list (plist) specific attributes `type` and `generate` as specified [below](#pkgs-formats-result).
+
+`pkgs.formats.pythonVars` { }
+
+:   A function taking an empty attribute set (for future extensibility)
+    and returning a set with python variable specific attributes `type`, `lib`, and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    The `lib` attribute contains functions to be used in settings, for
+    generating special Python values:
+
+    `mkRaw pythonCode`
+
+    :   Outputs the given string as raw Python code
+
+    `_imports`
+
+    `_imports` is a special value you can set to specify additional modules to be
+    imported on top of the file.
+
+    `Example usage:`
+
+    ```nix
+      let
+        format = pkgs.formats.pythonVars { };
+      in {
+        _imports = [ "re" ];
+
+        conditional = format.lib.mkRaw "1 if True else 2";
+        function_result = format.lib.mkRaw "re.findall(r'\\bf[a-z]*', 'which foot or hand fell fastest')";
+      }
+    ```
+
 `pkgs.formats.cdn` { }
 
 :   A function taking an empty attribute set (for future extensibility)
@@ -481,12 +522,19 @@ with some other related best practices. See the comments for
 explanations.
 
 ```nix
-{ options, config, lib, pkgs, ... }:
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.foo;
   # Define the settings format used for this program
-  settingsFormat = pkgs.formats.json {};
-in {
+  settingsFormat = pkgs.formats.json { };
+in
+{
 
   options.services.foo = {
     enable = lib.mkEnableOption "foo service";
@@ -494,7 +542,7 @@ in {
     settings = lib.mkOption {
       # Setting this type allows for correct merging behavior
       type = settingsFormat.type;
-      default = {};
+      default = { };
       description = ''
         Configuration for foo, see
         <link xlink:href="https://example.com/docs/foo"/>
@@ -528,7 +576,9 @@ in {
 
     # We know that the `user` attribute exists because we set a default value
     # for it above, allowing us to use it without worries here
-    users.users.${cfg.settings.user} = { isSystemUser = true; };
+    users.users.${cfg.settings.user} = {
+      isSystemUser = true;
+    };
 
     # ...
   };
@@ -567,7 +617,7 @@ up in the manual.
       };
 
     };
-    default = {};
+    default = { };
     description = ''
       Configuration for Foo, see
       <link xlink:href="https://example.com/docs/foo"/>

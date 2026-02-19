@@ -4,11 +4,12 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  unstableGitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "yapsy";
-  version = "1.12.2-unstable-2023-03-29";
+  version = "1.12.2-unstable-2023-03-28";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -26,9 +27,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yapsy" ];
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "release_Yapsy-";
+  };
+
+  meta = {
     homepage = "https://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

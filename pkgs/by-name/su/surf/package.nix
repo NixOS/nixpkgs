@@ -10,8 +10,9 @@
   gsettings-desktop-schemas,
   gtk2,
   libsoup_2_4,
-  webkitgtk_4_0,
-  xorg,
+  # webkitgtk_4_0,
+  webkitgtk_4_1,
+  xprop,
   dmenu,
   findutils,
   gnused,
@@ -35,23 +36,22 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook3
   ];
-  buildInputs =
-    [
-      glib
-      gcr
-      glib-networking
-      gsettings-desktop-schemas
-      gtk2
-      libsoup_2_4
-      webkitgtk_4_0
-    ]
-    ++ (with gst_all_1; [
-      # Audio & video support for webkitgtk WebView
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    glib
+    gcr
+    glib-networking
+    gsettings-desktop-schemas
+    gtk2
+    libsoup_2_4
+    # webkitgtk_4_0
+  ]
+  ++ (with gst_all_1; [
+    # Audio & video support for webkitgtk WebView
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   inherit patches;
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   preFixup =
     let
       depsPath = lib.makeBinPath [
-        xorg.xprop
+        xprop
         dmenu
         findutils
         gnused
@@ -75,7 +75,10 @@ stdenv.mkDerivation rec {
       )
     '';
 
-  meta = with lib; {
+  meta = {
+    # webkitgtk_4_0 was removed. master is supposed to support 4.1
+    # but it crashes with BadWindow X Error
+    broken = true;
     description = "Simple web browser based on WebKitGTK";
     mainProgram = "surf";
     longDescription = ''
@@ -85,8 +88,8 @@ stdenv.mkDerivation rec {
       surf to another URI by setting its XProperties.
     '';
     homepage = "https://surf.suckless.org";
-    license = licenses.mit;
-    platforms = webkitgtk_4_0.meta.platforms;
-    maintainers = with maintainers; [ joachifm ];
+    license = lib.licenses.mit;
+    platforms = webkitgtk_4_1.meta.platforms;
+    maintainers = with lib.maintainers; [ joachifm ];
   };
 }

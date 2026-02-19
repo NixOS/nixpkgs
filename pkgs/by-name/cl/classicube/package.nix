@@ -6,8 +6,8 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  libX11,
-  libXi,
+  libx11,
+  libxi,
   libGL,
   curl,
   openal,
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libX11
-    libXi
+    libx11
+    libxi
     libGL
     curl
     openal
@@ -103,12 +103,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.classicube.net/";
     description = "Lightweight, custom Minecraft Classic/ClassiCube client with optional additions written from scratch in C";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _360ied ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ _360ied ];
     mainProgram = "ClassiCube";
   };
 }

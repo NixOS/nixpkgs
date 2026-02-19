@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fping";
-  version = "5.3";
+  version = "5.5";
 
   src = fetchurl {
-    url = "https://www.fping.org/dist/fping-${version}.tar.gz";
-    hash = "sha256-1XvQFBrqCC4638GYv8PbXf0SpwFMfCZV6X9hzVSQHQ4=";
+    url = "https://www.fping.org/dist/fping-${finalAttrs.version}.tar.gz";
+    hash = "sha256-FcTjK2xV/xBbr+A+jJHHyhsu2jG/mnEnMmu4eIfuGP4=";
   };
 
   configureFlags = [
@@ -18,13 +18,18 @@ stdenv.mkDerivation rec {
     "--enable-ipv4"
   ];
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = {
     description = "Send ICMP echo probes to network hosts";
     homepage = "http://fping.org/";
-    changelog = "https://github.com/schweikert/fping/releases/tag/v${version}";
-    license = licenses.bsd0;
+    changelog = "https://github.com/schweikert/fping/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd0;
     mainProgram = "fping";
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.all;
   };
-}
+})

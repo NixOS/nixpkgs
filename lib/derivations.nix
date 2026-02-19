@@ -21,6 +21,11 @@ let
     if pkg ? meta.position && isString pkg.meta.position then "${prefix}${pkg.meta.position}" else "";
 in
 {
+  inherit (builtins)
+    addDrvOutputDependencies
+    unsafeDiscardOutputDependency
+    ;
+
   /**
     Restrict a derivation to a predictable set of attribute names, so
     that the returned attrset is not strict in the actual derivation,
@@ -86,7 +91,7 @@ in
       This can be used for adding package attributes, such as `tests`.
 
     `outputs`
-    : Optional list of assumed outputs. Default: ["out"]
+    : Optional list of assumed outputs. Default: `[ "out" ]`
 
       This must match the set of outputs that the returned derivation has.
       You must use this when the derivation has multiple outputs.
@@ -216,8 +221,9 @@ in
   /**
     Wrap a derivation such that instantiating it produces a warning.
 
-    All attributes apart from `meta`, `name`, and `type` (which are used by
-    `nix search`) will be wrapped in `lib.warn`.
+    All attributes will be wrapped with `lib.warn` except from `.meta`, `.name`,
+    and `.type` which are used by `nix search`, and `.outputName` which avoids
+    double warnings with `nix-instantiate` and `nix-build`.
 
     # Inputs
 
@@ -246,6 +252,7 @@ in
         "meta"
         "name"
         "type"
+        "outputName"
       ];
     in
     drv // mapAttrs (_: lib.warn msg) drvToWrap;

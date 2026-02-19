@@ -33,6 +33,7 @@
   librsvg,
   libwmf,
   zlib,
+  xz,
   libzip,
   ghostscript,
   aalib,
@@ -46,9 +47,10 @@
   vala,
   gi-docgen,
   perl,
-  appstream-glib,
+  appstream,
   desktop-file-utils,
-  xorg,
+  libxpm,
+  libxmu,
   glib-networking,
   json-glib,
   libmypaint,
@@ -66,6 +68,8 @@
   adwaita-icon-theme,
   alsa-lib,
   desktopToDarwinBundle,
+  fetchpatch,
+  qoi,
 }:
 
 let
@@ -77,20 +81,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.2";
+  version = "3.0.6";
 
   outputs = [
     "out"
     "dev"
     "devdoc"
+    "man"
   ];
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VG3cMMstDnkSPH/LTXghHh7npqrOkaagrYy8v26lcaI=";
+    hash = "sha256-JGwiU4PHLvnw3HcDt9cHCEu/F3vSkA6UzkZqYoYuKWs=";
   };
 
   patches = [
+    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15257
+    (fetchpatch {
+      name = "fix-gegl-bevel-test.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/2fd12847496a9a242ca8edc448d400d3660b8009.patch";
+      hash = "sha256-pjOjyzZxxl+zRqThXBwCBfYHdGhgaMI/IMKaL3XGAMs=";
+    })
+
     # to remove compiler from the runtime closure, reference was retained via
     # gimp --version --verbose output
     (replaceVars ./remove-cc-reference.patch {
@@ -112,98 +124,98 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      wrapGAppsHook3
-      libxslt # for xsltproc
-      gobject-introspection
-      perl
-      vala
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    wrapGAppsHook3
+    libxslt # for xsltproc
+    gobject-introspection
+    perl
+    vala
 
-      # for docs
-      gi-docgen
+    # for docs
+    gi-docgen
 
-      # for tests
-      desktop-file-utils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-      xvfb-run
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+    # for tests
+    desktop-file-utils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
+    xvfb-run
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
-  buildInputs =
-    [
-      appstream-glib # for library
-      babl
-      cfitsio
-      gegl
-      gtk3
-      glib
-      gdk-pixbuf
-      pango
-      cairo
-      libarchive
-      gexiv2
-      harfbuzz
-      isocodes
-      freetype
-      fontconfig
-      lcms
-      libpng
-      libiff
-      libilbm
-      libjpeg
-      libjxl
-      poppler
-      poppler_data
-      libtiff
-      openexr
-      libmng
-      librsvg
-      libwmf
-      zlib
-      libzip
-      ghostscript
-      aalib
-      shared-mime-info
-      json-glib
-      libwebp
-      libheif
-      python
-      libexif
-      xorg.libXpm
-      xorg.libXmu
-      glib-networking
-      libmypaint
-      mypaint-brushes1
+  buildInputs = [
+    appstream # for library
+    babl
+    cfitsio
+    gegl
+    gtk3
+    glib
+    gdk-pixbuf
+    pango
+    cairo
+    libarchive
+    gexiv2
+    harfbuzz
+    isocodes
+    freetype
+    fontconfig
+    lcms
+    libpng
+    libiff
+    libilbm
+    libjpeg
+    libjxl
+    poppler
+    poppler_data
+    libtiff
+    openexr
+    libmng
+    librsvg
+    libwmf
+    zlib
+    xz
+    libzip
+    ghostscript
+    aalib
+    shared-mime-info
+    json-glib
+    libwebp
+    libheif
+    python
+    libexif
+    libxpm
+    libxmu
+    glib-networking
+    libmypaint
+    mypaint-brushes1
+    qoi
 
-      # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
-      adwaita-icon-theme
+    # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
+    adwaita-icon-theme
 
-      # for Lua plug-ins
-      (luajit.withPackages (pp: [
-        pp.lgi
-      ]))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
+    # for Lua plug-ins
+    (luajit.withPackages (pp: [
+      pp.lgi
+    ]))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
 
-      # for JavaScript plug-ins
-      gjs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libgudev
-    ];
+    # for JavaScript plug-ins
+    gjs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libgudev
+  ];
 
   propagatedBuildInputs = [
     # needed by gimp-3.0.pc
@@ -213,21 +225,20 @@ stdenv.mkDerivation (finalAttrs: {
     gexiv2
   ];
 
-  mesonFlags =
-    [
-      "-Dbug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-      "-Dicc-directory=/run/current-system/sw/share/color/icc"
-      "-Dcheck-update=no"
-      (lib.mesonEnable "gudev" stdenv.hostPlatform.isLinux)
-      (lib.mesonEnable "headless-tests" stdenv.hostPlatform.isLinux)
-      (lib.mesonEnable "linux-input" stdenv.hostPlatform.isLinux)
-      # Not very important to do downstream, save a dependency.
-      "-Dappdata-test=disabled"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-Dalsa=disabled"
-      "-Djavascript=disabled"
-    ];
+  mesonFlags = [
+    "-Dbug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
+    "-Dicc-directory=/run/current-system/sw/share/color/icc"
+    "-Dcheck-update=no"
+    (lib.mesonEnable "gudev" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "headless-tests" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "linux-input" stdenv.hostPlatform.isLinux)
+    # Not very important to do downstream, save a dependency.
+    "-Dappdata-test=disabled"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Dalsa=disabled"
+    "-Djavascript=disabled"
+  ];
 
   doCheck = true;
 
@@ -242,9 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    patchShebangs \
-      app/tests/create_test_env.sh \
-      tools/gimp-mkenums
+    patchShebangs tools/gimp-mkenums
 
     # GIMP is executed at build time so we need to fix this.
     # TODO: Look into if we can fix the interp thing.
@@ -317,12 +326,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk = gtk3;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
-    maintainers = with maintainers; [ jtojnar ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "gimp";
   };
 })

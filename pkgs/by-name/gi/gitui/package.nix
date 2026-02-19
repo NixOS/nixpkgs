@@ -9,35 +9,34 @@
   cmake,
   xclip,
   nix-update-script,
+  fetchpatch,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitui";
-  version = "0.27.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "extrawurst";
     repo = "gitui";
-    rev = "v${version}";
-    hash = "sha256-jKJ1XnF6S7clyFGN2o3bHnYpC4ckl/lNXscmf6GRLbI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-B3Cdhhu8ECfpc57TKe6u08Q/Kl4JzUlzw4vtJJ1YAUQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Le/dD8bTd5boz1IeEq4ItJZYC3MRW8uiT/3Zy1yv5L0=";
+  cargoHash = "sha256-dq5F7NJ0XcJ9x6hVWOboQQn8Liw8n8vkFgQSmTYIkSw=";
 
   nativeBuildInputs = [
     pkg-config
     cmake
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isLinux xclip
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux xclip
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   postPatch = ''
     # The cargo config overrides linkers for some targets, breaking the build
@@ -50,9 +49,11 @@ rustPlatform.buildRustPackage {
     substituteInPlace Cargo.toml --replace-fail 'build = "build.rs"' ""
   '';
 
-  GITUI_BUILD_NAME = version;
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  env = {
+    GITUI_BUILD_NAME = finalAttrs.version;
+    # Needed to get openssl-sys to use pkg-config.
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   # Getting app_config_path fails with a permission denied
   checkFlags = [
@@ -62,15 +63,14 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/extrawurst/gitui/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/extrawurst/gitui/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Blazing fast terminal-ui for Git written in Rust";
     homepage = "https://github.com/extrawurst/gitui";
     license = lib.licenses.mit;
     mainProgram = "gitui";
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       yanganto
       mfrw
     ];
   };
-}
+})

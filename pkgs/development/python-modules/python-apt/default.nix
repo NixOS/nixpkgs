@@ -16,7 +16,7 @@ buildPythonPackage rec {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "python-apt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3mRMqbhKy5CYwpSttq8MgXY147Ov3lPuZaTjUMtmHik=";
   };
 
@@ -35,7 +35,11 @@ buildPythonPackage rec {
     description = "Python bindings for APT";
     homepage = "https://launchpad.net/python-apt";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
     platforms = lib.platforms.linux;
   };
 }

@@ -4,18 +4,23 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "savepagenow";
-  version = "1.1.1";
+  version = "1.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pastpages";
     repo = "savepagenow";
-    rev = "v${version}";
-    sha256 = "1lz6rc47cds9rb35jdf8n13gr61wdkh5jqzx4skikm1yrqkwjyhm";
+    tag = finalAttrs.version;
+    sha256 = "sha256-ztM1g71g8SN1LTyFF7sxaLhC3+nVsC9fJwfYPjkUsdE=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
+
+  build-system = with python3Packages; [ setuptools-scm ];
+
+  dependencies = with python3Packages; [
     click
     requests
   ];
@@ -23,11 +28,13 @@ python3Packages.buildPythonApplication rec {
   # requires network access
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "savepagenow" ];
+
+  meta = {
     description = "Simple Python wrapper for archive.org's \"Save Page Now\" capturing service";
     homepage = "https://github.com/pastpages/savepagenow";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "savepagenow";
   };
-}
+})

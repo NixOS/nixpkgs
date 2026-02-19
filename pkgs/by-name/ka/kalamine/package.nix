@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kalamine";
   version = "0.38";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "OneDeadKey";
     repo = "kalamine";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eDOwoI7S0l48oOWWDaBbDlC0A8RtPEA+FDCHpPur0OQ=";
   };
 
@@ -31,11 +31,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "kalamine" ];
 
-  meta = with lib; {
+  meta = {
     description = "Keyboard Layout Maker";
     homepage = "https://github.com/OneDeadKey/kalamine/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ iogamaster ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "kalamine";
   };
-}
+})

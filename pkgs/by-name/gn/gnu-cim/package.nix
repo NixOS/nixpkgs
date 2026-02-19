@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnu-cim";
   version = "5.1";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnu/cim/cim-${version}.tar.gz";
+    url = "mirror://gnu/cim/cim-${finalAttrs.version}.tar.gz";
     hash = "sha256-uQcXtm7EAFA73WnlN+i38+ip0QbDupoIoErlc2mgaak=";
   };
 
@@ -29,17 +29,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  # lib.escapeShellArgs does not work
-  env.CFLAGS = lib.concatStringsSep " " [
-    "-Wno-error=implicit-function-declaration"
-    "-Wno-error=implicit-int"
-    "-Wno-error=return-mismatch"
-    "-Wno-error=incompatible-pointer-types"
-  ];
+  env.CFLAGS = "-std=gnu89";
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "GNU compiler for the programming language Simula";
     longDescription = ''
       GNU Cim is a compiler for the programming language Simula.
@@ -49,9 +43,9 @@ stdenv.mkDerivation rec {
       discrete event modelling.
     '';
     homepage = "https://www.gnu.org/software/cim/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [ pbsds ];
+    maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

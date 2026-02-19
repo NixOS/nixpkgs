@@ -14,6 +14,7 @@ in
 buildPythonPackage {
   pname = "docstr-coverage";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "HunterMcGushion";
@@ -38,12 +39,12 @@ buildPythonPackage {
     "test_set_config_defaults_with_ignore_patterns"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Docstring coverage analysis and rating for Python";
     mainProgram = "docstr-coverage";
     homepage = "https://github.com/HunterMcGushion/docstr_coverage";
     changelog = "https://github.com/HunterMcGushion/docstr_coverage/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ augustebaum ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ augustebaum ];
   };
 }

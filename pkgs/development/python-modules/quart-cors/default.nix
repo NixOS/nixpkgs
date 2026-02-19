@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   pdm-backend,
 
   # propagates
   quart,
-  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -31,7 +29,7 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  dependencies = [ quart ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = [ quart ];
 
   pythonImportsCheck = [ "quart_cors" ];
 
@@ -41,11 +39,11 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Quart-CORS is an extension for Quart to enable and control Cross Origin Resource Sharing, CORS";
     homepage = "https://github.com/pgjones/quart-cors/";
     changelog = "https://github.com/pgjones/quart-cors/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

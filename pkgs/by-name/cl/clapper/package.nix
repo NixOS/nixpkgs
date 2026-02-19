@@ -3,7 +3,7 @@
   clapper-unwrapped,
   wrapGAppsHook4,
   gobject-introspection,
-  xorg,
+  lndir,
   clapper-enhancers,
 }:
 
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     wrapGAppsHook4
     gobject-introspection
-    xorg.lndir
+    lndir
   ];
 
   buildInputs = [ clapper-unwrapped ] ++ clapper-unwrapped.buildInputs;
@@ -29,6 +29,11 @@ stdenvNoCC.mkDerivation {
 
     mkdir -p $out
     lndir $src $out
+    dbusfile=share/dbus-1/services/com.github.rafostar.Clapper.service
+    rm $out/$dbusfile
+    cp $src/$dbusfile $out/$dbusfile
+    substituteInPlace $out/$dbusfile \
+      --replace-fail $src/bin/clapper $out/bin/clapper
 
     runHook postInstall
   '';

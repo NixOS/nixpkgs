@@ -14,13 +14,13 @@
   wireshark,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libssh";
-  version = "0.11.1";
+  version = "0.11.3";
 
   src = fetchurl {
-    url = "https://www.libssh.org/files/${lib.versions.majorMinor version}/libssh-${version}.tar.xz";
-    hash = "sha256-FLfcxy6R4IFRxYuYGntXCrJmP2MOfSg3ZF1anGEsG3k=";
+    url = "https://www.libssh.org/files/${lib.versions.majorMinor finalAttrs.version}/libssh-${finalAttrs.version}.tar.xz";
+    hash = "sha256-fYoTYbsJTsP1EZZOeKWk26aJtZhuESr6vk9NDWxhJcM=";
   };
 
   outputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Don’t build examples, which are not installed and require additional dependencies not
-  # included in `buildInputs` such as libX11.
+  # included in `buildInputs` such as libx11.
   cmakeFlags = [ "-DWITH_EXAMPLES=OFF" ];
 
   buildInputs = [
@@ -57,11 +57,10 @@ stdenv.mkDerivation rec {
     inherit ffmpeg sshping wireshark;
   };
 
-  meta = with lib; {
+  meta = {
     description = "SSH client library";
     homepage = "https://libssh.org";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ sander ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

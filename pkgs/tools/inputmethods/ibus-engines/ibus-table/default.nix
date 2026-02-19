@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-table";
-  version = "1.17.12";
+  version = "1.17.17";
 
   src = fetchFromGitHub {
     owner = "kaio";
     repo = "ibus-table";
     rev = version;
-    sha256 = "sha256-ecs99Y7NctnKTdRT9UHiDqliinvPNMHIyb5mwT7dDL8=";
+    sha256 = "sha256-Y8tZBcRlND4DsBE0YQXrulgT0kn8WrGUAOEg0j1Nvc8=";
   };
 
   postPatch = ''
@@ -68,13 +68,13 @@ stdenv.mkDerivation rec {
       --replace "docbook2man" "docbook2man --sgml"
   '';
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "IBus framework for table-based input methods";
     mainProgram = "ibus-table-createdb";
     homepage = "https://github.com/kaio/ibus-table/wiki";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mudri ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mudri ];
   };
 }

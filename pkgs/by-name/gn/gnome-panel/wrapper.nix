@@ -4,7 +4,7 @@
   buildEnv,
   gnome-panel,
   gnome-flashback,
-  xorg,
+  lndir,
   glib,
   wrapGAppsHook3,
   panelModulePackages ? [ ],
@@ -15,7 +15,8 @@ let
   selectedPanelModulePackages = [
     gnome-panel
     gnome-flashback
-  ] ++ panelModulePackages;
+  ]
+  ++ panelModulePackages;
 
   panelModulesEnv = buildEnv {
     name = "gnome-panel-modules-env";
@@ -33,12 +34,13 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    selectedPanelModulePackages
-    ++ lib.forEach selectedPanelModulePackages (x: x.buildInputs or [ ]);
+    selectedPanelModulePackages ++ lib.forEach selectedPanelModulePackages (x: x.buildInputs or [ ]);
 
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
+  # $output/lib/systemd/user is already a symlink
+  dontMoveSystemdUserUnits = true;
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -47,15 +49,15 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-    ${xorg.lndir}/bin/lndir -silent ${gnome-panel} $out
+    ${lndir}/bin/lndir -silent ${gnome-panel} $out
 
     rm -r $out/lib/gnome-panel/modules
-    ${xorg.lndir}/bin/lndir -silent ${panelModulesEnv} $out
+    ${lndir}/bin/lndir -silent ${panelModulesEnv} $out
 
-    rm $out/share/applications/gnome-panel.desktop
-
-    ln -s ${gnome-panel}/share/applications/gnome-panel.desktop \
-      $out/share/applications/gnome-panel.desktop
+    rm $out/share/systemd/user/gnome-panel.service
+    substitute ${gnome-panel}/share/systemd/user/gnome-panel.service \
+      $out/share/systemd/user/gnome-panel.service \
+      --replace-fail "ExecStart=${gnome-panel}/bin/gnome-panel" "ExecStart=$out/bin/gnome-panel"
 
     runHook postInstall
   '';

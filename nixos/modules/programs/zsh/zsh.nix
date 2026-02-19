@@ -254,8 +254,8 @@ in
 
       # Setup command line history.
       # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
-      SAVEHIST=${builtins.toString cfg.histSize}
-      HISTSIZE=${builtins.toString cfg.histSize}
+      SAVEHIST=${toString cfg.histSize}
+      HISTSIZE=${toString cfg.histSize}
       HISTFILE=${cfg.histFile}
 
       # Configure sane keyboard defaults.
@@ -308,7 +308,8 @@ in
 
     environment.systemPackages = [
       pkgs.zsh
-    ] ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
+    ]
+    ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
     environment.pathsToLink = lib.optional cfg.enableCompletion "/share/zsh";
 

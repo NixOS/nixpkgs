@@ -43,11 +43,12 @@ flutter.buildFlutterApplication rec {
       --replace "Icon=com.expidusos.file_manager" "Icon=$out/share/icons/com.expidusos.file_manager.png"
   '';
 
-  meta = with lib; {
+  meta = {
+    broken = true;
     description = "ExpidusOS File Manager";
     homepage = "https://expidusos.com";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ RossComputerGuy ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

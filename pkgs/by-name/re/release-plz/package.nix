@@ -9,19 +9,18 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "release-plz";
-  version = "0.3.135";
+  version = "0.3.156";
 
   src = fetchFromGitHub {
     owner = "MarcoIeni";
     repo = "release-plz";
-    rev = "release-plz-v${version}";
-    hash = "sha256-P84yow5NcZlYTRGo7Nir1JERtii86vZUsMkSnlaoVYg=";
+    rev = "release-plz-v${finalAttrs.version}";
+    hash = "sha256-XJACR1/wpN4NhV/zEgYwA1f+3AHTwJeoQ2dgGlJqpBo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-t1dqbF70HOxnPTFyMv9j4s2r8D6l/gaxw7FoGPMVVbk=";
+  cargoHash = "sha256-OlBhTlfM5LV1mRRYjnQFioap/lMCrav9ggj5wiI1Qqo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,22 +36,25 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd ${meta.mainProgram} \
-      --bash <($out/bin/${meta.mainProgram} generate-completions bash) \
-      --fish <($out/bin/${meta.mainProgram} generate-completions fish) \
-      --zsh <($out/bin/${meta.mainProgram} generate-completions zsh)
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      --bash <($out/bin/${finalAttrs.meta.mainProgram} generate-completions bash) \
+      --fish <($out/bin/${finalAttrs.meta.mainProgram} generate-completions fish) \
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} generate-completions zsh)
   '';
 
   meta = {
     description = "Publish Rust crates from CI with a Release PR";
     homepage = "https://release-plz.ieni.dev";
-    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${version}/CHANGELOG.md";
+    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ dannixon ];
+    maintainers = with lib.maintainers; [
+      dannixon
+      chrjabs
+    ];
     mainProgram = "release-plz";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -8,26 +8,20 @@
   libarchive,
   openssl,
   pacman,
-  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "paru";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Morganamilo";
     repo = "paru";
-    rev = "v${version}";
-    hash = "sha256-VFIeDsIuPbWGf+vio5i8qGUBB+spP/7SwYwmQkMjtL8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i99f2ngYhfVCKpImJ8L7u2T2FgOt7Chp8DHDbrNh1kw=";
   };
 
-  cargoPatches = [
-    ./cargo-lock.patch
-  ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3tKoL2I6DHrRodhWFOi3mSxk2P5SxCush/Hz9Dpyo3U=";
+  cargoHash = "sha256-USIceRh24WGV0TIrpuyHs4thjaghpxqZmk2uVKBxlm4=";
 
   nativeBuildInputs = [
     gettext
@@ -40,11 +34,6 @@ rustPlatform.buildRustPackage rec {
     libarchive
     openssl
     pacman
-  ];
-
-  # https://github.com/Morganamilo/paru/issues/1154#issuecomment-2002357898
-  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
-    "generate"
   ];
 
   postBuild = ''
@@ -62,10 +51,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Feature packed AUR helper";
     homepage = "https://github.com/Morganamilo/paru";
-    changelog = "https://github.com/Morganamilo/paru/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Morganamilo/paru/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ wegank ];
     mainProgram = "paru";
     platforms = lib.platforms.linux;
   };
-}
+})

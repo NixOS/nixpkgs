@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Extension for python-markdown that makes writing trac-like macros easy";
     homepage = "https://github.com/wnielson/markdown-macros";
-    license = licenses.mit;
-    maintainers = [ maintainers.abigailbuccaneer ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.abigailbuccaneer ];
   };
 }

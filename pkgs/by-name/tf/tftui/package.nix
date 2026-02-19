@@ -6,7 +6,7 @@
   enableUsageTracking ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tftui";
   version = "0.13.5";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "idoavrah";
     repo = "terraform-tui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xOlPuPVwfVT7jfBJPqZ5FbOs80HE0k2ZqcA+Jcxh9p4=";
   };
 
@@ -46,12 +46,15 @@ python3Packages.buildPythonApplication rec {
       --add-flags "--disable-usage-tracking"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Textual UI to view and interact with Terraform state";
     homepage = "https://github.com/idoavrah/terraform-tui";
-    changelog = "https://github.com/idoavrah/terraform-tui/releases/tag/v${version}";
-    license = licenses.asl20;
-    teams = [ teams.bitnomial ];
+    changelog = "https://github.com/idoavrah/terraform-tui/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      cdepillabout
+      wraithm
+    ];
     mainProgram = "tftui";
   };
-}
+})

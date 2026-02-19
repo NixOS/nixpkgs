@@ -18,16 +18,23 @@ let
   py = python3 // {
     pkgs = python3.pkgs.overrideScope (
       final: prev: {
-        sphinx = prev.sphinx.overridePythonAttrs (prev: {
-          disabledTests = prev.disabledTests ++ [
-            "test_check_link_response_only" # fails on hydra https://hydra.nixos.org/build/242624087/nixlog/1
-          ];
+        # https://github.com/NixOS/nixpkgs/issues/449266
+        prompt-toolkit = prev.prompt-toolkit.overridePythonAttrs (prev: rec {
+          version = "3.0.51";
+          src = prev.src.override {
+            tag = version;
+            hash = "sha256-pNYmjAgnP9nK40VS/qvPR3g+809Yra2ISASWJDdQKrU=";
+          };
         });
-        python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: {
+
+        # backends/build_system/utils.py cannot parse PEP 440 version
+        # for python-dateutil 2.9.0.post0 (eg. post0)
+        python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
           version = "2.8.2";
+          format = "setuptools";
           pyproject = null;
           src = prev.src.override {
-            version = "2.8.2";
+            inherit version;
             hash = "sha256-ASPKzBYnrhnd88J6XeW9Z+5FhvvdZEDZdI+Ku0g9PoY=";
           };
           patches = [
@@ -40,23 +47,6 @@ let
           ];
           postPatch = null;
         });
-        ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
-          src = prev.src.override {
-            version = "0.17.21";
-            hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
-          };
-        });
-        urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
-          pyproject = true;
-          version = "1.26.18";
-          nativeBuildInputs = with final; [
-            setuptools
-          ];
-          src = prev.src.override {
-            inherit version;
-            hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
-          };
-        });
       }
     );
   };
@@ -64,25 +54,25 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.27.2"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.33.2"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-rdgjA6t5L4mNKnyRyNdIyzX6fjMUgbD0YCjresK94Dg=";
+    hash = "sha256-dAtcYDdrZASrwBjQfnZ4DUR4F5WhY59/UX92QcILavs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'flit_core>=3.7.1,<3.9.1' 'flit_core>=3.7.1' \
-      --replace-fail 'awscrt==0.25.4' 'awscrt>=0.25.4' \
-      --replace-fail 'cryptography>=40.0.0,<43.0.2' 'cryptography>=43.0.0' \
+      --replace-fail 'awscrt==' 'awscrt>=' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
-      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24' \
-      --replace-fail 'ruamel.yaml.clib>=0.2.0,<=0.2.12' 'ruamel.yaml.clib>=0.2.0' \
+      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.52' 'prompt-toolkit>=3.0.24' \
+      --replace-fail 'ruamel.yaml>=0.15.0,<=0.17.21' 'ruamel.yaml>=0.15.0' \
+      --replace-fail 'ruamel.yaml.clib>=0.2.0,<=0.2.12' 'ruamel.yaml.clib>=0.2.0'
 
     substituteInPlace requirements-base.txt \
       --replace-fail "wheel==0.43.0" "wheel>=0.43.0"
@@ -103,24 +93,27 @@ py.pkgs.buildPythonApplication rec {
 
   dependencies = with py.pkgs; [
     awscrt
-    bcdoc
-    botocore
     colorama
-    cryptography
     distro
     docutils
     jmespath
     prompt-toolkit
     python-dateutil
-    pyyaml
     ruamel-yaml
     urllib3
-    zipp
   ];
 
   propagatedBuildInputs = [
     groff
     less
+  ];
+
+  # Prevent breakage when running in a Python environment: https://github.com/NixOS/nixpkgs/issues/47900
+  makeWrapperArgs = [
+    "--unset"
+    "NIX_PYTHONPATH"
+    "--unset"
+    "PYTHONPATH"
   ];
 
   nativeCheckInputs = with py.pkgs; [
@@ -131,15 +124,14 @@ py.pkgs.buildPythonApplication rec {
     writableTmpDirAsHomeHook
   ];
 
-  postInstall =
-    ''
-      installShellCompletion --cmd aws \
-        --bash <(echo "complete -C $out/bin/aws_completer aws") \
-        --zsh $out/bin/aws_zsh_completer.sh
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-      rm $out/bin/aws.cmd
-    '';
+  postInstall = ''
+    installShellCompletion --cmd aws \
+      --bash <(echo "complete -C $out/bin/aws_completer aws") \
+      --zsh $out/bin/aws_zsh_completer.sh
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+    rm $out/bin/aws.cmd
+  '';
 
   # Propagating dependencies leaks them through $PYTHONPATH which causes issues
   # when used in nix-shell.
@@ -150,7 +142,7 @@ py.pkgs.buildPythonApplication rec {
   # tests/unit/customizations/sso/test_utils.py uses sockets
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-Wignore::DeprecationWarning"
   ];
 
@@ -164,6 +156,15 @@ py.pkgs.buildPythonApplication rec {
     # Disable slow tests (only run unit tests)
     "tests/backends"
     "tests/functional"
+  ];
+
+  disabledTests = [
+    # Requires networking (socket binding not possible in sandbox)
+    "test_is_socket"
+    "test_is_special_file_warning"
+
+    # Disable slow tests
+    "test_details_disabled_for_choice_wo_details"
   ];
 
   pythonImportsCheck = [
@@ -186,15 +187,13 @@ py.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Unified tool to manage your AWS services";
     homepage = "https://aws.amazon.com/cli/";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      bhipple
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       davegallant
-      bryanasdev000
       devusb
       anthonyroussel
     ];

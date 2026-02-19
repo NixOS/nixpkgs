@@ -4,11 +4,12 @@
   fetchFromGitHub,
   cmake,
   boost,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quantlib";
-  version = "1.38";
+  version = "1.41";
 
   outputs = [
     "out"
@@ -19,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lballabio";
     repo = "QuantLib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4a86sGUOz/B5IQHE41r5+OTvR9es4FgXeufy3bKRWAc=";
+    hash = "sha256-dHXITHP0SBrBXf5hrVhjSD4n2EtVvEkBDfE2NbT0/sc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,12 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     cp ./quantlib-config $out/bin/
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Free/open-source library for quantitative finance";
     homepage = "https://quantlib.org";
     changelog = "https://github.com/lballabio/QuantLib/releases/tag/v${finalAttrs.version}";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.kupac ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.kupac ];
   };
 })

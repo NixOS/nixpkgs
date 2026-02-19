@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "zope-lifecycleevent";
-  version = "5.1";
+  version = "6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.lifecycleevent";
     tag = version;
-    hash = "sha256-vTonbZSeQxnLA6y1wAnBpobEKAs+gaAYN25dx5Fla9k=";
+    hash = "sha256-HgxOUseRYc+mkwESUDqauoH2D2E4PL8XxM1C0FC35w8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools <= 75.6.0" setuptools
+      --replace-fail "setuptools ==" "setuptools >="
   '';
 
   build-system = [ setuptools ];

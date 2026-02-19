@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   qmake,
   pkg-config,
@@ -19,23 +19,24 @@
   mpv-unwrapped,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "2.2.27";
+  version = "2.2.34";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     rev = version;
-    hash = "sha256-wu4kJCs1Bo6yVGLJuzXSCtv2nXhzlwX6jDTa0gTwPsw=";
+    hash = "sha256-58NFlB6viWXG13J+RBzMj6LlYFClpWpGQ/aCNxJ5wKQ=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  qmakeFlags =
-    [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
-    ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
+  qmakeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
+  ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
 
   patches = [
     ./0001-fix-installation-paths.patch
@@ -69,25 +70,24 @@ mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtquickcontrols2
-      qtwebsockets
-      qtmultimedia
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad
-      gst-plugins-good
-      gst-plugins-base
-      gst-libav
-      gstreamer
-    ])
-    ++ lib.optionals withVLC [ libvlc ]
-    ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
+  buildInputs = [
+    qtbase
+    qtquickcontrols2
+    qtwebsockets
+    qtmultimedia
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-base
+    gst-libav
+    gstreamer
+  ])
+  ++ lib.optionals withVLC [ libvlc ]
+  ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
 
   desktopItems = [
-    (makeDesktopItem (rec {
+    (makeDesktopItem rec {
       name = "AniLibria";
       desktopName = name;
       icon = "anilibria";
@@ -101,14 +101,14 @@ mkDerivation rec {
       keywords = [ "anime" ];
       exec = name;
       terminal = false;
-    }))
+    })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anilibria/anilibria-winmaclinux";
     description = "AniLibria cross platform desktop client";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     inherit (qtbase.meta) platforms;
     mainProgram = "AniLibria";
   };

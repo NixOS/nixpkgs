@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
   setuptools,
   django-classy-tags,
   django-formtools,
@@ -21,32 +20,15 @@
 
 buildPythonPackage rec {
   pname = "django-cms";
-  version = "4.1.6";
+  version = "5.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "django-cms";
     tag = version;
-    hash = "sha256-KowhiJz84hR5VqW+WNIBEhC+X9zPE1opDWygFfsFfPE=";
+    hash = "sha256-s7sgENs1A5weAiZ2zQYIbAKFOWR3Jmhbsli3vLyqi/4=";
   };
-
-  patches = [
-    # Removed django-app-manage dependency by updating ./manage.py
-    # https://github.com/django-cms/django-cms/pull/8061
-    (fetchpatch {
-      url = "https://github.com/django-cms/django-cms/commit/3270edb72f6a736b5cb448864ce2eaf68f061740.patch";
-      hash = "sha256-DkgAfE/QGAXwKMNvgcYxtO0yAc7oAaAAui2My8ml1Vk=";
-      name = "remove_django_app_manage_dependency.patch";
-    })
-    (fetchpatch {
-      url = "https://github.com/django-cms/django-cms/pull/8061/commits/04005ff693e775db645c62fefbb62367822e66f9.patch";
-      hash = "sha256-4M/VKEv7pnqCk6fDyA6FurSCCu/k9tNnz16wT4Tr0Rw=";
-      name = "manage_py_update_dj_database_url.patch";
-    })
-  ];
 
   build-system = [ setuptools ];
 

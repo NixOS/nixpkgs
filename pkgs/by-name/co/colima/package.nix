@@ -7,20 +7,21 @@
   installShellFiles,
   lima,
   makeWrapper,
+  procps,
   qemu,
   testers,
   colima,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "colima";
-  version = "0.8.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = "colima";
-    rev = "v${version}";
-    hash = "sha256-RQnHqEabxyoAKr8BfmVhk8z+l5oy8pa5JPTWk/0FV5g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oRhpABYyP4T6kfmvJ4llPXcXWrSbxU7uUfvXQhm2huc=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
@@ -32,9 +33,10 @@ buildGoModule rec {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  vendorHash = "sha256-rqCPpO/Va31U++sfELcN1X6oDtDiCXoGj0RHKZUM6rY=";
+  vendorHash = "sha256-ZwgzKCOEhgKK2LNRLjnWP6qHI4f6OGORvt3CREJf55I=";
 
   # disable flaky Test_extractZones
   # https://hydra.nixos.org/build/212378003/log
@@ -42,8 +44,16 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 1;
 
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace cmd/daemon/daemon.go \
+      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
+
+    substituteInPlace daemon/process/vmnet/vmnet.go \
+      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
+  '';
+
   preConfigure = ''
-    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \
+    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${finalAttrs.version} \
     -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
   '';
 
@@ -51,7 +61,10 @@ buildGoModule rec {
     wrapProgram $out/bin/colima \
       --prefix PATH : ${
         lib.makeBinPath [
-          lima
+          # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
+          (lima.override {
+            withAdditionalGuestAgents = true;
+          })
           qemu
         ]
       }
@@ -67,14 +80,14 @@ buildGoModule rec {
     command = "HOME=$(mktemp -d) colima version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Container runtimes with minimal setup";
     homepage = "https://github.com/abiosoft/colima";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aaschmid
       tricktron
     ];
     mainProgram = "colima";
   };
-}
+})

@@ -5,9 +5,7 @@
   gitUpdater,
   nixosTests,
   testers,
-  # dbus-cpp not compatible with Boost 1.87
-  # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
-  boost186,
+  boost,
   cmake,
   cmake-extras,
   dbus,
@@ -59,29 +57,28 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      boost186
-      cmake-extras
-      dbus
-      dbus-cpp
-      gdk-pixbuf
-      glib
-      libapparmor
-      libexif
-      properties-cpp
-      qtbase
-      qtdeclarative
-      shared-mime-info
-      sqlite
-      taglib
-      udisks
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ]);
+  buildInputs = [
+    boost
+    cmake-extras
+    dbus
+    dbus-cpp
+    gdk-pixbuf
+    glib
+    libapparmor
+    libexif
+    properties-cpp
+    qtbase
+    qtdeclarative
+    shared-mime-info
+    sqlite
+    taglib
+    udisks
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ]);
 
   checkInputs = [ gtest ];
 
@@ -115,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Media scanner service & access library";
     homepage = "https://gitlab.com/ubports/development/core/mediascanner2";
     changelog = "https://gitlab.com/ubports/development/core/mediascanner2/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];

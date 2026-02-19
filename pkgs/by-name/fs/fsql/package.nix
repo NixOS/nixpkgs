@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fsql";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "kshvmdn";
     repo = "fsql";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-U6TPszqsZvoz+9GIB0wNYMRJqIDLOp/BZO3/k8FC0Gs=";
   };
 
@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Search through your filesystem with SQL-esque queries";
     homepage = "https://github.com/kshvmdn/fsql";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "fsql";
   };
-}
+})

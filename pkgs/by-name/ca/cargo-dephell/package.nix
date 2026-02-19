@@ -9,58 +9,53 @@
   libgit2,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-dephell";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mimoo";
     repo = "cargo-dephell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NOjkKttA+mwPCpl4uiRIYD58DlMomVFpwnM9KGfWd+w=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoPatches = [
+    # update Cargo.lock to work with openssl 3
+    ./openssl3-support.patch
+  ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  cargoHash = "sha256-+5ElAfYuUfosXzR3O2QIFGy4QJuPrWDMg5LacZKi3c8=";
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-      libgit2
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
-  # update Cargo.lock to work with openssl 3
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+    libgit2
+  ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
     mainProgram = "cargo-dephell";
     homepage = "https://github.com/mimoo/cargo-dephell";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };
-}
+})

@@ -9,14 +9,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odyssey";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "yandex";
     repo = "odyssey";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-1ALTKRjpKmmFcAuhmgpcbJBkNuUlTyau8xWDRHh7gf0=";
   };
 
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin sources/odyssey
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scalable PostgreSQL connection pooler";
     homepage = "https://github.com/yandex/odyssey";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "odyssey";
   };
-}
+})

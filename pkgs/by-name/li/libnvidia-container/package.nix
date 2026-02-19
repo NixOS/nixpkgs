@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvidia-container";
-  version = "1.17.6";
+  version = "1.17.8";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kveP0Px9Fds7pS39aW+cqg2jtiQCMN2zG4GTGRqRrc0=";
+    hash = "sha256-OzjcYxnWjzgmrjERyPN3Ch3EQj4t1J5/TbATluoDESg=";
   };
 
   patches = [
@@ -121,11 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
     CGO_ENABLED = "1"; # Needed for cross-compilation
     GOFLAGS = "-trimpath"; # Don't include paths to Go stdlib to resulting binary
     inherit (go) GOARCH GOOS;
+    NIX_LDFLAGS = toString [
+      "-L${lib.getLib libtirpc}/lib"
+      "-ltirpc"
+    ];
   };
-  NIX_LDFLAGS = [
-    "-L${lib.getLib libtirpc}/lib"
-    "-ltirpc"
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -175,6 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       cpcloud
       msanft
+      katexochen
     ];
   };
 })

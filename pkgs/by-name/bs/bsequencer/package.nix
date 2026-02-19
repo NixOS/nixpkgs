@@ -2,37 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libx11,
   cairo,
   lv2,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bsequencer";
   version = "1.8.10";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = "BSEQuencer";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-1PSICm5mw37nO3gkHA9MNUH+CFULeOZURjimYEA/dXA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11
+    libx11
     cairo
     lv2
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sjaehn/BSEQuencer";
     description = "Multi channel MIDI step sequencer LV2 plugin";
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
   };
-}
+})

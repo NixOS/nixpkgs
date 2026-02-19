@@ -11,12 +11,12 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "licensee";
 
-  meta = with lib; {
+  meta = {
     description = "Ruby Gem to detect under what license a project is distributed";
     homepage = "https://licensee.github.io/licensee/";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    platforms = lib.platforms.unix;
     mainProgram = "licensee";
   };
 }

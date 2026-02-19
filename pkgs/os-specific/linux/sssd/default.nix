@@ -29,6 +29,7 @@
   openldap,
   pcre2,
   libkrb5,
+  libcap,
   cifs-utils,
   glib,
   keyutils,
@@ -51,6 +52,7 @@
   docbook_xsl,
   docbook_xml_dtd_45,
   testers,
+  versionCheckHook,
   nix-update-script,
   nixosTests,
   withSudo ? false,
@@ -61,14 +63,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.9.5";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
     tag = finalAttrs.version;
-    hash = "sha256-wr6qFgM5XN3aizYVquj0xF+mVRgrkLWWhA3/gQOK8hQ=";
+    hash = "sha256-9F+D7qZKwnP1U0zJbvzy0f7dQSKkfgJrewDJ4p+Svgk=";
   };
+
+  patches = [
+    # Keep in mind to check /src/external/pac_responder.m4 for Kerberos compatibility before update Kerberos !!!
+    # Fix Kerberos Support version for PAC responder
+    #./fix-kerberos-version.patch
+  ];
 
   postPatch = ''
     patchShebangs ./sbus_generate.sh.in
@@ -80,41 +88,45 @@ stdenv.mkDerivation (finalAttrs: {
     "-I${libxml2.dev}/include/libxml2"
   ];
 
-  preConfigure =
-    ''
-      export SGML_CATALOG_FILES="${docbookFiles}"
-      export PATH=$PATH:${openldap}/libexec
+  preConfigure = ''
+    export SGML_CATALOG_FILES="${docbookFiles}"
+    export PATH=$PATH:${openldap}/libexec
 
-      configureFlagsArray=(
-        --prefix=$out
-        --sysconfdir=/etc
-        --localstatedir=/var
-        --enable-pammoddir=$out/lib/security
-        --with-os=fedora
-        --with-pid-path=/run
-        --with-python3-bindings
-        --with-syslog=journald
-        --without-selinux
-        --without-semanage
-        --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
-        --with-ldb-lib-dir=$out/modules/ldb
-        --with-nscd=${glibc.bin}/sbin/nscd
-      )
-    ''
-    + lib.optionalString withSudo ''
-      configureFlagsArray+=("--with-sudo")
-    '';
+    configureFlagsArray=(
+      --prefix=$out
+      --sysconfdir=/etc
+      --localstatedir=/var
+      --enable-pammoddir=$out/lib/security
+      --with-os=fedora
+      --with-pid-path=/run
+      --with-python3-bindings
+      --with-syslog=journald
+      --with-initscript=systemd
+      --without-selinux
+      --without-semanage
+      --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
+      --with-ldb-lib-dir=$out/modules/ldb
+      --with-nscd=${glibc.bin}/sbin/nscd
+      --with-sssd-user=root
+      --with-ldb-modules-path="${placeholder "out"}/modules/ldb:${ldb}/modules/ldb"
+    )
+  ''
+  + lib.optionalString withSudo ''
+    configureFlagsArray+=("--with-sudo")
+  '';
 
   enableParallelBuilding = true;
   # Disable parallel install due to missing depends:
   #   libtool:   error: error: relink '_py3sss.la' with the above command before installing i
   enableParallelInstalling = false;
+
   nativeBuildInputs = [
     autoreconfHook
     makeWrapper
     pkg-config
     doxygen
   ];
+
   buildInputs = [
     augeas
     dnsutils
@@ -122,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     cyrus_sasl
     ding-libs
+    libcap
     libnl
     libunistring
     nss
@@ -130,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     p11-kit
     (python3.withPackages (
       p: with p; [
+        setuptools
         distutils
         python-ldap
       ]
@@ -188,31 +202,36 @@ stdenv.mkDerivation (finalAttrs: {
     rm -f "$out"/modules/ldb/memberof.la
     find "$out" -depth -type d -exec rmdir --ignore-fail-on-non-empty {} \;
   '';
+
   postFixup = ''
     for f in $out/bin/sss{ctl,_cache,_debuglevel,_override,_seed}; do
       wrapProgram $f --prefix LDB_MODULES_PATH : $out/modules/ldb
     done
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru = {
     tests = {
-      inherit (nixosTests) sssd sssd-ldap;
+      inherit (nixosTests) sssd-ldap sssd-legacy-config;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "sssd --version";
-      };
     };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System Security Services Daemon";
     homepage = "https://sssd.io/";
     changelog = "https://sssd.io/release-notes/sssd-${finalAttrs.version}.html";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ illustris ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      illustris
+      liberodark
+    ];
     pkgConfigModules = [
       "ipa_hbac"
       "sss_certmap"

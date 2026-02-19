@@ -2,38 +2,62 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
-  mdformat,
+
+  # build-system
+  uv-build,
+
+  mdformat-beautysh,
+  mdformat-footnote,
+  mdformat-front-matters,
   mdformat-gfm,
+  mdformat-simple-breaks,
+  mdformat,
   mdit-py-plugins,
   more-itertools,
-  pythonOlder,
   pytest-snapshot,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdformat-mkdocs";
-  version = "4.1.2";
+  version = "5.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
-    tag = "v${version}";
-    hash = "sha256-+2w7UrOPSCUDc6jnLAW0/njq+aJ4y+H8n7gshxLj8/Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Li+nXYs+JZHgV/RBMpxJGP1P7sXp9E7xqSvjHZRlev4=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.10" "uv_build"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    uv-build
+  ];
+
+  dependencies = [
     mdformat
     mdformat-gfm
     mdit-py-plugins
     more-itertools
   ];
+
+  optional-dependencies = {
+    recommended = [
+      mdformat-beautysh
+      # mdformat-config
+      mdformat-footnote
+      mdformat-front-matters
+      # mdformat-ruff
+      mdformat-simple-breaks
+      # mdformat-web
+      # mdformat-wikilink
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-snapshot
@@ -47,11 +71,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_mkdocs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin for MkDocs";
     homepage = "https://github.com/KyleKing/mdformat-mkdocs";
-    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aldoborrero ];
+    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aldoborrero ];
   };
-}
+})

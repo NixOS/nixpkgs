@@ -24,12 +24,12 @@
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "2.0.6";
+  version = "2.99.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pqyyNzx2YPP3qmWQbzGd3q2HzCkrWlIVSJZeFrGm9dk=";
+    hash = "sha256-Ep3Qh9Q1xWt2JveCf/A/KInQ3cnGE7D1YNdavDS0ZE8=";
   };
 
   postPatch = ''
@@ -72,12 +72,12 @@ buildPythonPackage rec {
   #   "gradient"
   # ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for Gradient";
     mainProgram = "gradient";
     homepage = "https://github.com/Paperspace/gradient-cli";
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

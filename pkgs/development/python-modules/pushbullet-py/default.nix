@@ -17,7 +17,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "pushbullet.py";
     sha256 = "917883e1af4a0c979ce46076b391e0243eb8fe0a81c086544bcfa10f53e5ae64";
   };
 
@@ -36,21 +37,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests =
-    [
-      "test_auth_fail"
-      "test_auth_success"
-      "test_decryption"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # AttributeError: 'called_once_with' is not a valid assertion. Use a spec for the mock if 'called_once_with' is meant to be an attribute.. Did you mean: 'assert_called_once_with'?
-      "test_new_device_ok"
-      "test_new_chat_ok"
-    ];
+  disabledTests = [
+    "test_auth_fail"
+    "test_auth_success"
+    "test_decryption"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'called_once_with' is not a valid assertion. Use a spec for the mock if 'called_once_with' is meant to be an attribute.. Did you mean: 'assert_called_once_with'?
+    "test_new_device_ok"
+    "test_new_chat_ok"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple python client for pushbullet.com";
     homepage = "https://github.com/randomchars/pushbullet.py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

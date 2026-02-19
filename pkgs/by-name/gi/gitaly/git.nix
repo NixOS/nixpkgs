@@ -6,47 +6,72 @@
   curl,
   pcre2,
   zlib,
+  git,
+  pkg-config,
+  openssl,
 }:
-
-stdenv.mkDerivation rec {
+let
+  data = lib.importJSON ./git-data.json;
+in
+stdenv.mkDerivation (finalAttrs: {
+  inherit (data) version;
   pname = "gitaly-git";
-  version = "2.49.0.gl2";
 
-  # `src` attribute for nix-update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "git";
-    rev = "v${version}";
-    hash = "sha256-1y94T5UBG7s76ENsUmaXRXngSKmqIAT0nq1u+QjSWaY=";
+    inherit (data) rev hash;
+    fetchSubmodules = true;
   };
 
-  # we actually use the gitaly build system
+  # Use gitaly and their build system as source root
   unpackPhase = ''
     cp -r ${gitaly.src} source
     chmod -R +w source
-
-    mkdir -p source/_build/deps
-
-    cp -r ${src} source/_build/deps/git-distribution
-    chmod -R +w source/_build/deps/git-distribution
-
-    # FIXME? maybe just patch the makefile?
-    echo -n 'v${version} DEVELOPER=1 DEVOPTS=no-error USE_LIBPCRE=YesPlease NO_PERL=YesPlease NO_EXPAT=YesPlease NO_TCLTK=YesPlease NO_GETTEXT=YesPlease NO_PYTHON=YesPlease' > source/_build/deps/git-distribution.version
-    echo -n 'v${version}' > source/_build/deps/git-distribution/version
+    git config --global --add safe.directory '*'
   '';
+
+  # This is a patch for gitaly, not git
+  patches = [
+    ./dont-clone-git-repo.patch
+  ];
+
   sourceRoot = "source";
 
-  buildFlags = [ "git" ];
+  buildFlags = [ "install-git" ];
+  GIT_REPO_PATH = finalAttrs.src;
+  HOME = "/build";
 
-  buildInputs = [
-    curl
-    pcre2
-    zlib
+  nativeBuildInputs = [
+    git # clones our repo from the store
+    pkg-config
   ];
+  # git inputs
+  buildInputs = [
+    openssl
+    zlib
+    pcre2
+    curl
+  ];
+
+  # required to support pthread_cancel()
+  NIX_LDFLAGS =
+    lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
+    + lib.optionalString stdenv.isFreeBSD "-lthr";
 
   # The build phase already installs it all
   GIT_PREFIX = placeholder "out";
   dontInstall = true;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    HOME=/build PAGER=cat $out/bin/git config -l
+    file $out/bin/git | grep -qv 'too large section header'
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     homepage = "https://git-scm.com/";
@@ -55,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     teams = [ lib.teams.gitlab ];
   };
-}
+})

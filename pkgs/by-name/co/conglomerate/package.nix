@@ -32,21 +32,25 @@ stdenv.mkDerivation {
     zlib
     bicpl
   ];
-  propagatedBuildInputs =
-    [
-      coreutils
-      minc_tools
-    ]
-    ++ (with perlPackages; [
-      perl
-      GetoptTabular
-      MNI-Perllib
-    ]);
+  propagatedBuildInputs = [
+    coreutils
+    minc_tools
+  ]
+  ++ (with perlPackages; [
+    perl
+    GetoptTabular
+    MNI-Perllib
+  ]);
 
   cmakeFlags = [
     "-DLIBMINC_DIR=${libminc}/lib/cmake"
     "-DBICPL_DIR=${bicpl}/lib"
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   postFixup = ''
     for p in $out/bin/*; do

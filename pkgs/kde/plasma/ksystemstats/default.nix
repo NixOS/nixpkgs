@@ -9,6 +9,10 @@
 mkKdeDerivation {
   pname = "ksystemstats";
 
+  patches = [
+    ./helper-path.patch
+  ];
+
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     networkmanager-qt

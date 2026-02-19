@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ] ++ lib.optional tls "--enable-tls";
+  ]
+  ++ lib.optional tls "--enable-tls";
 
   installFlags = [ "DESTDIR=$(out)" ];
 
@@ -52,6 +53,6 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ sargon ];
+    maintainers = [ ];
   };
 }

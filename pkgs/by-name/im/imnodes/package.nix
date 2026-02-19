@@ -6,7 +6,7 @@
   cmake,
   imgui,
   SDL2,
-  xorg,
+  libxext,
   imnodes,
   withExamples ? false,
 }:
@@ -34,12 +34,13 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [ imgui ]
-    ++ lib.optionals withExamples [
-      SDL2
-      xorg.libXext
-    ];
+  buildInputs = [
+    imgui
+  ]
+  ++ lib.optionals withExamples [
+    SDL2
+    libxext
+  ];
 
   cmakeFlags = [ (lib.cmakeBool "IMNODES_EXAMPLES" withExamples) ];
 

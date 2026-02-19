@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -13,10 +13,12 @@
 
   # tests
   freezegun,
+  langchain,
   langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pytest-mock,
   pytest-socket,
@@ -26,35 +28,24 @@
   toml,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.17";
+  version = "1.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-JsPdG62vvM8b/u5bo6FyXQhhGua/Sd74L/8CtMI7Fjc=";
+    hash = "sha256-Y+GV48rlqMfT4TrmoJFGqbHKfc8gxq61NhcUpwSsOwk=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
 
-  preConfigure = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=langchain_openai" ""
-  '';
-
-  build-system = [ pdm-backend ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
-    "langchain-core"
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
@@ -64,10 +55,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    langchain
     langchain-tests
     lark
     pandas
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     pytest-mock
     pytest-socket
@@ -77,37 +70,37 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   disabledTests = [
     # These tests require network access
-    "test__convert_dict_to_message_tool_call"
     "test__get_encoding_model"
-    "test_azure_openai_api_key_is_secret_string"
-    "test_azure_openai_api_key_masked_when_passed_from_env"
-    "test_azure_openai_api_key_masked_when_passed_via_constructor"
-    "test_azure_openai_secrets"
-    "test_azure_openai_uses_actual_secret_value_from_secretstr"
-    "test_azure_serialized_secrets"
     "test_chat_openai_get_num_tokens"
     "test_embed_documents_with_custom_chunk_size"
     "test_get_num_tokens_from_messages"
     "test_get_token_ids"
-    "test_init_o1"
-    "test_openai_get_num_tokens"
+    "test_embeddings_respects_token_limit"
+
+    # Fail when langchain-core gets ahead of this package
+    "test_serdes"
+    "test_loads_openai_llm"
+    "test_load_openai_llm"
+    "test_loads_openai_chat"
+    "test_load_openai_chat"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-openai==([0-9.]+)"
-    ];
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-openai==";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;

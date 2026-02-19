@@ -39,15 +39,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Ignore tests which require setup, check again if disabledTestFiles can be used
-  pytestFlagsArray = [ "--ignore tests/io_" ];
+  disabledTestPaths = [ "tests/io_" ];
 
   pythonImportsCheck = [ "slicedimage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to access sliced imaging data";
     mainProgram = "slicedimage";
     homepage = "https://github.com/spacetx/slicedimage";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

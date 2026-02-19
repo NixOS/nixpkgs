@@ -3,15 +3,16 @@
 
 set -euo pipefail
 
-packages="$(curl -s -L "https://lmstudio.ai/" | grep -oE 'https://installers.lmstudio.ai[^"\]*' | sort -u | grep -v \\.exe)"
 for system in "aarch64-darwin darwin/arm64" "x86_64-linux linux/x64"; do
   # shellcheck disable=SC2086
   set -- ${system} # split string into variables $1 and $2
 
   arch="${1}"
-  url=$(echo "${packages}" | grep "${2}")
+  platform="${2}"
+
+  url=$(curl -ILs -o /dev/null -w %{url_effective} "https://lmstudio.ai/download/latest/${platform}")
   version="$(echo "${url}" | cut -d/ -f6)"
-  hash=$(nix hash convert --hash-algo sha256 "$(nix-prefetch-url "${url}")")
+  hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 "$(nix-prefetch-url "${url}")")
 
   update-source-version lmstudio "${version}" "${hash}" --system="${arch}" --version-key="version_${arch}" \
     2> >(tee /dev/stderr) | grep -q "nothing to do" && exit

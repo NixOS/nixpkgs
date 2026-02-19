@@ -5,7 +5,7 @@
   buildPythonPackage,
 }:
 let
-  version = "16.7.11";
+  version = "17.5.1";
   format = "wheel";
   inherit (stdenvNoCC.hostPlatform) system;
 
@@ -13,19 +13,19 @@ let
   pypiMeta =
     {
       x86_64-linux = {
-        hash = "sha256-aAPVZPz1mn73JuQPGJ/PAOUAtaufeHehSKHzaBmVFF8=";
+        hash = "sha256-gUYHLjKLoUI/aXzB+aU5yvfmObcA9hctkBqLgZxHvi0=";
         platform = "manylinux1_x86_64";
       };
       aarch64-linux = {
-        hash = "sha256-mQgfMJ6esH41MXnGZQUwF4j8gDgzfyBDUQo5Kw8TGa4=";
+        hash = "sha256-zU9mmxU8WWs2dG3lHnSiY0oTDN2tUFTMolV22SHtBbc=";
         platform = "manylinux2014_aarch64";
       };
       x86_64-darwin = {
-        hash = "sha256-TuWvQ4oDkK5Fn/bp0G3eAhvDLlv0tzIQ8dKtysX36w0=";
+        hash = "sha256-hgsUQHS/DCVXSMm8ViC4zd/UVvEqYH7uwedv4ag48Mc=";
         platform = "macosx_10_13_x86_64";
       };
       aarch64-darwin = {
-        hash = "sha256-QWfWbGnKeuKiGoD0srnnMsbWPYFcYsbO/Oy68uJIRjI=";
+        hash = "sha256-HgjAVeACzWis0WFgf/D40GAqMbqSmZ8XBilgID3Yk5A=";
         platform = "macosx_11_0_arm64";
       };
     }
@@ -52,7 +52,10 @@ buildPythonPackage {
   meta = {
     description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (Python bindings)";
     homepage = "https://www.frida.re";
-    license = lib.licenses.wxWindows;
+    license = with lib.licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
     maintainers = with lib.maintainers; [ s1341 ];
     platforms = [
       "x86_64-linux"

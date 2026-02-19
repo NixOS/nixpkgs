@@ -12,14 +12,14 @@ let
     ps.pyusb
   ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fusee-interfacee-tk";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "nh-server";
     repo = "fusee-interfacee-tk";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     sha256 = "0ngwbwsj999flprv14xvhk7lp51nprrvcnlbnbk6y4qx5casm5md";
   };
 
@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
     cp intermezzo.bin $out/bin/intermezzo.bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nh-server/fusee-interfacee-tk";
     description = "Tool to send .bin files to a Nintendo Switch in RCM mode";
     mainProgram = "fusee-interfacee-tk";
     longDescription = "A mod of falquinhos Fusée Launcher for use with Nintendo Homebrew Switch Guide. It also adds the ability to mount SD while in RCM.
     Must be run as sudo.";
-    maintainers = with maintainers; [ kristian-brucaj ];
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ kristian-brucaj ];
+    license = lib.licenses.gpl2;
   };
-}
+})

@@ -27,35 +27,46 @@
   imageio,
   numpy,
   psutil,
+  pypng,
   pytest,
+  rendercanvas,
   ruff,
   trio,
 
   # passthru
-  wgpu-py,
   testers,
+  wgpu-py,
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";
-  version = "0.21.1";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "wgpu-py";
     tag = "v${version}";
-    hash = "sha256-XlV0ovIF3w/u6f65+3c4zAfisCoQDbzMiINJJTR/I6o=";
+    hash = "sha256-drXO3NHIuK34tbOZjxOCz1lnlcrfx6mADZ2WlEc9vDU=";
   };
 
-  # `requests` is only used to fetch a copy of `wgpu-native` via `tools/hatch_build.py`.
-  # As we retrieve `wgpu-native` from nixpkgs instead, none of this is needed, and
-  # remove an extra dependency.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'requires = ["requests", "hatchling"]' 'requires = ["hatchling"]' \
-      --replace-fail '[tool.hatch.build.targets.wheel.hooks.custom]' "" \
-      --replace-fail 'path = "tools/hatch_build.py"' ""
-  '';
+  postPatch =
+    # `requests` is only used to fetch a copy of `wgpu-native` via `tools/hatch_build.py`.
+    # As we retrieve `wgpu-native` from nixpkgs instead, none of this is needed, and
+    # remove an extra dependency.
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail 'requires = ["requests", "hatchling"]' 'requires = ["hatchling"]' \
+        --replace-fail '[tool.hatch.build.targets.wheel.hooks.custom]' "" \
+        --replace-fail 'path = "tools/hatch_build.py"' ""
+    ''
+    # Skip the compute_textures example during testing, as it uses `imageio` to
+    # retrieve an image of an astronaut, which touches the network.
+    # Additionally skip the imgui_backend_sea and imgui_basic_example examples during testing,
+    # as they depend on imgui_bundle which has not been packaged for nixpkgs.
+    + ''
+      substituteInPlace examples/{compute_textures.py,imgui_backend_sea.py,imgui_basic_example.py} \
+        --replace-fail 'import wgpu' 'import wgpu # run_example = false'
+    '';
 
   # wgpu-py expects to have an appropriately named wgpu-native library in wgpu/resources
   preBuild = ''
@@ -70,6 +81,8 @@ buildPythonPackage rec {
     [
       cffi
       sniffio
+      # https://github.com/pygfx/wgpu-py/blob/ff8db1772f7f94bf2a3e82989f5d296d2ddbb923/pyproject.toml#L16
+      (rendercanvas.overrideAttrs { doInstallCheck = false; })
     ]
     # Required only on darwin
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -96,66 +109,40 @@ buildPythonPackage rec {
     imageio
     numpy
     psutil
+    pypng
     pytest
+    # break circular dependency cycle
+    (rendercanvas.overrideAttrs { doInstallCheck = false; })
     ruff
     trio
   ];
 
-  # Tests break due to sandboxing on everything except darwin
-  # Prefer to run them in passthru
-  doCheck = false;
+  # Tests break in Linux CI due to wgpu being unable to find any adapters.
+  # Ordinarily, this would be fixed in an approach similar to `pkgs/by-name/wg/wgpu-native/examples.nix`'s
+  # usage of `runtimeInputs` and `makeWrapperArgs`.
+  # Unfortunately, as this is a Python module without a `mainProgram`, `makeWrapperArgs` will not apply here,
+  # as there is no "script" to wrap.
+  doCheck = stdenv.hostPlatform.isDarwin;
 
-  passthru = {
-    tests =
-      {
-        version = testers.testVersion {
-          package = wgpu-py;
-          command = "python3 -c 'import wgpu; print(wgpu.__version__)'";
-        };
-      }
-      // lib.optionalAttrs stdenv.buildPlatform.isDarwin {
-        tests = testers.runCommand {
-          name = "tests";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/tests
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
+  installCheckPhase = ''
+    runHook preInstallCheck
 
-        examples = testers.runCommand {
-          name = "examples";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/examples
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
+    pytest tests -k "not test_render_timestamps_inside_encoder"
+    pytest examples
+    pytest tests_mem
 
-        codegen = testers.runCommand {
-          name = "codegen";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/codegen
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
+    runHook postInstallCheck
+  '';
 
-        tests_mem = testers.runCommand {
-          name = "tests_mem";
-          script = ''
-            WGPU_LIB_PATH=${wgpu-native}/lib/libwgpu_native${stdenv.hostPlatform.extensions.library} \
-              pytest -v ${wgpu-py.src}/tests_mem
-          '';
-          nativeBuildInputs = [ wgpu-py ] ++ nativeCheckInputs;
-        };
-      };
+  passthru.tests.version = testers.testVersion {
+    package = wgpu-py;
+    command = "python3 -c 'import wgpu; print(wgpu.__version__)'";
   };
 
   meta = {
     description = "WebGPU for Python";
     homepage = "https://github.com/pygfx/wgpu-py";
-    changelog = "https://github.com/pygfx/wgpu-py/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pygfx/wgpu-py/blob/${src.tag}/CHANGELOG.md";
 
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;

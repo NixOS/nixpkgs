@@ -7,18 +7,17 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-clone";
   version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "janlikar";
     repo = "cargo-clone";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-tAY4MUytFVa7kXLeOg4xak8XKGgApnEGWiK51W/7uDg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-AFCCXZKm6XmiaayOqvGhMzjyMwAqVK1GZccWHWV5/9c=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -31,19 +30,18 @@ rustPlatform.buildRustPackage rec {
   # requires internet access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to fetch the source code of a Rust crate";
     mainProgram = "cargo-clone";
     homepage = "https://github.com/janlikar/cargo-clone";
-    changelog = "https://github.com/janlikar/cargo-clone/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/janlikar/cargo-clone/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       janlikar
     ];
   };
-}
+})

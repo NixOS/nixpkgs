@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gupnp-dlna/${lib.versions.majorMinor version}/gupnp-dlna-${version}.tar.xz";
     sha256 = "PVO5b4W8VijTPjZ+yb8q2zjvKzTXrQQ0proM9K2QSOY=";
   };
 
@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gupnp-dlna";
     description = "Library to ease DLNA-related bits for applications using GUPnP";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

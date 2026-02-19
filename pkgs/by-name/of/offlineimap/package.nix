@@ -13,7 +13,7 @@
   fetchpatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "offlineimap";
   version = "8.0.0";
   pyproject = true;
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap3";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XLxKqO5OCXsFu8S3lMp2Ke5hp6uer9npZ3ujmL6Kb3g=";
   };
 
@@ -87,11 +87,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = offlineimap; };
 
-  meta = with lib; {
+  meta = {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
-    license = licenses.gpl2Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ stephen-huan ];
     mainProgram = "offlineimap";
   };
-}
+})

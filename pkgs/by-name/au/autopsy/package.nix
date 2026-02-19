@@ -8,7 +8,6 @@
   jdk,
   findutils,
   sleuthkit,
-  ...
 }:
 let
   jdkWithJfx = jdk.override (
@@ -17,13 +16,13 @@ let
     }
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autopsy";
-  version = "4.21.0";
+  version = "4.22.1";
 
   src = fetchzip {
-    url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${version}/autopsy-${version}.zip";
-    hash = "sha256-32iOQA3+ykltCYW/MpqCVxyhh3mm6eYzY+t0smAsWRw=";
+    url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${finalAttrs.version}/autopsy-${finalAttrs.version}_v2.zip";
+    hash = "sha256-IHpUzwSXoghjixsPwpj3lMwHIby3+zx7BjzGRlAVcVs=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +33,7 @@ stdenv.mkDerivation rec {
     testdisk
     imagemagick
     jdkWithJfx
+    sleuthkit
   ];
 
   installPhase = ''
@@ -44,9 +44,11 @@ stdenv.mkDerivation rec {
     # Run the provided setup script to make files executable and copy sleuthkit
     TSK_JAVA_LIB_PATH="${sleuthkit}/share/java" bash $out/unix_setup.sh -j '${jdkWithJfx}' -n autopsy
 
+    # --add-flags "--nosplash" -> https://github.com/sleuthkit/autopsy/issues/6980
     substituteInPlace $out/bin/autopsy \
       --replace-warn 'APPNAME=`basename "$PRG"`' 'APPNAME=autopsy'
     wrapProgram $out/bin/autopsy \
+      --add-flags "--nosplash" \
       --run 'export SOLR_LOGS_DIR="$HOME/.autopsy/dev/var/log"' \
       --run 'export SOLR_PID_DIR="$HOME/.autopsy/dev"' \
       --prefix PATH : "${
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Graphical interface to The Sleuth Kit and other open source digital forensics tools";
     homepage = "https://www.sleuthkit.org/autopsy";
-    changelog = "https://github.com/sleuthkit/autopsy/releases/tag/autopsy-${version}";
+    changelog = "https://github.com/sleuthkit/autopsy/releases/tag/autopsy-${finalAttrs.version}";
     # Autopsy brings a lot of vendored dependencies
     license = with lib.licenses; [
       asl20
@@ -83,4 +85,4 @@ stdenv.mkDerivation rec {
     # Autopsy theoretically also supports darwin
     platforms = lib.platforms.x86_64;
   };
-}
+})

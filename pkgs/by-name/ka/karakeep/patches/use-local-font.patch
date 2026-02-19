@@ -12,17 +12,19 @@ See similar patches:
 @@ -1,5 +1,5 @@
  import type { Metadata } from "next";
 -import { Inter } from "next/font/google";
-+import localFont from 'next/font/local';
-
++import localFont from "next/font/local";
+ import { NuqsAdapter } from "nuqs/adapters/next/app";
+ 
  import "@karakeep/tailwind-config/globals.css";
-
-@@ -13,9 +13,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
+@@ -14,9 +14,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+ 
  import { clientConfig } from "@karakeep/shared/config";
-
+ 
 -const inter = Inter({
 +const inter = localFont({
    subsets: ["latin"],
    fallback: ["sans-serif"],
 +  src: "./fonts/InterVariable.ttf",
  });
+ 
+ export const metadata: Metadata = {

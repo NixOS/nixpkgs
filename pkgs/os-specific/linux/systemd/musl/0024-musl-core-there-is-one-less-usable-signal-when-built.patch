@@ -1,0 +1,57 @@
+From c00d31373a8f5b922dd947a6d6d6098df0429762 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Sun, 7 Sep 2025 08:53:07 +0900
+Subject: [PATCH 24/30] musl: core: there is one less usable signal when built
+ with musl
+
+musl internally reserves one more signal, hence we can only use 29
+signals.
+---
+ src/core/manager.c          | 4 ++--
+ src/test/test-signal-util.c | 7 ++++++-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/src/core/manager.c b/src/core/manager.c
+index d85896577f..86cb11905f 100644
+--- a/src/core/manager.c
++++ b/src/core/manager.c
+@@ -526,7 +526,7 @@ static int manager_setup_signals(Manager *m) {
+         assert_se(sigaction(SIGCHLD, &sa, NULL) == 0);
+ 
+         /* We make liberal use of realtime signals here. On Linux/glibc we have 30 of them, between
+-         * SIGRTMIN+0 ... SIGRTMIN+30 (aka SIGRTMAX). */
++         * SIGRTMIN+0 ... SIGRTMIN+30 (aka SIGRTMAX). When musl is used SIGRTMAX is SIGRTMIN+29. */
+ 
+         assert_se(sigemptyset(&mask) == 0);
+         sigset_add_many(&mask,
+@@ -571,7 +571,7 @@ static int manager_setup_signals(Manager *m) {
+                         SIGRTMIN+28, /* systemd: set log target to kmsg */
+                         SIGRTMIN+29, /* systemd: set log target to syslog-or-kmsg (obsolete) */
+ 
+-                        /* ... one free signal here SIGRTMIN+30 ... */
++                        /* ... one free signal here SIGRTMIN+30 (glibc only) ... */
+                         -1);
+         assert_se(sigprocmask(SIG_SETMASK, &mask, NULL) == 0);
+ 
+diff --git a/src/test/test-signal-util.c b/src/test/test-signal-util.c
+index 7d069a7fb2..f26b48f3f2 100644
+--- a/src/test/test-signal-util.c
++++ b/src/test/test-signal-util.c
+@@ -13,8 +13,13 @@ TEST(rt_signals) {
+         info(SIGRTMIN);
+         info(SIGRTMAX);
+ 
+-        /* We use signals SIGRTMIN+0 to SIGRTMIN+30 unconditionally */
++        /* We use signals SIGRTMIN+0 to SIGRTMIN+29 unconditionally. SIGRTMIN+30 can be used only when
++         * built with glibc. */
++#ifdef __GLIBC__
+         assert_se(SIGRTMAX - SIGRTMIN >= 30);
++#else
++        assert_se(SIGRTMAX - SIGRTMIN >= 29);
++#endif
+ }
+ 
+ static void test_signal_to_string_one(int val) {
+-- 
+2.51.0
+

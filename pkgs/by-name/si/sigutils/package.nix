@@ -31,12 +31,12 @@ stdenv.mkDerivation {
     volk
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small signal processing utility library";
     homepage = "https://github.com/BatchDrake/sigutils";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       polygon
       oxapentane
     ];

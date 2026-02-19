@@ -23,6 +23,7 @@
   libavif,
   libsixel,
   libraw,
+  libdrm,
   openexr,
   bash-completion,
   testers,
@@ -31,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "4.0";
+  version = "4.7";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2UmaU60+5NNj2CVJt4oJXyBPjVeA0zBfEqZOOSI2vvk=";
+    hash = "sha256-1dJf339lM8ETcYyjtWCJEyNmwmoxt72+rXdTH/48s6Q=";
   };
 
   strictDeps = true;
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
     libsixel
     libraw
+    libdrm
     openexr
   ];
 

@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   buildGo124Module,
+  buildGo125Module,
   fetchFromGitHub,
   nixosTests,
   installShellFiles,
@@ -12,16 +13,16 @@ let
     {
       buildGoModule,
       version,
-      sha256,
+      hash,
       vendorHash,
       license,
       ...
     }@attrs:
     let
-      attrs' = builtins.removeAttrs attrs [
+      attrs' = removeAttrs attrs [
         "buildGoModule"
         "version"
-        "sha256"
+        "hash"
         "vendorHash"
         "license"
       ];
@@ -35,9 +36,9 @@ let
 
         src = fetchFromGitHub {
           owner = "hashicorp";
-          repo = pname;
+          repo = "nomad";
           rev = "v${version}";
-          inherit sha256;
+          inherit hash;
         };
 
         nativeBuildInputs = [ installShellFiles ];
@@ -58,14 +59,13 @@ let
           installShellCompletion nomad.bash
         '';
 
-        meta = with lib; {
-          homepage = "https://www.nomadproject.io/";
+        meta = {
+          homepage = "https://developer.hashicorp.com/nomad";
           description = "Distributed, Highly Available, Datacenter-Aware Scheduler";
           mainProgram = "nomad";
           inherit license;
-          maintainers = with maintainers; [
+          maintainers = with lib.maintainers; [
             rushmorem
-            pradeepchhetri
             techknowlogick
             cottand
           ];
@@ -81,12 +81,36 @@ rec {
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
-  nomad = nomad_1_9;
+  nomad = nomad_1_10;
+
+  nomad_1_11 = generic {
+    buildGoModule = buildGo125Module;
+    version = "1.11.1";
+    hash = "sha256-xP3wSxDo59hme9G4+ATfGD0LTdf11+c/cSfPoKfeBLc=";
+    vendorHash = "sha256-CXWaEwJCKzggyCrHsa+PrLnQNQKI8G14uWno2NAvOwU=";
+    license = lib.licenses.bsl11;
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
+    '';
+  };
+
+  nomad_1_10 = generic {
+    buildGoModule = buildGo124Module;
+    version = "1.10.5";
+    hash = "sha256-NFH++oYWb6vQN6cOPByscI/ZBWDNy4YbcLiBMO3/jVU=";
+    vendorHash = "sha256-QcTw9kKwoHIvXZoxfDohFG+sBs8OLvYPeygygDClsn8=";
+    license = lib.licenses.bsl11;
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
+    '';
+  };
 
   nomad_1_9 = generic {
     buildGoModule = buildGo124Module;
     version = "1.9.7";
-    sha256 = "sha256-U02H6DPr1friQ9EwqD/wQnE2Fm20OE5xNccPDJfnsqI=";
+    hash = "sha256-U02H6DPr1friQ9EwqD/wQnE2Fm20OE5xNccPDJfnsqI=";
     vendorHash = "sha256-9GnwqkexJAxrhW9yJFaDTdSaZ+p+/dcMuhlusp4cmyw=";
     license = lib.licenses.bsl11;
     passthru.tests.nomad = nixosTests.nomad;

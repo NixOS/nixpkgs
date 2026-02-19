@@ -7,6 +7,7 @@
   ninja,
   boost,
   nlohmann_json,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,6 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YshU7G5Rov67CVwFbf5ENp2j5ptAvkVrlMu85KmnEpk=";
   };
 
+  patches = [
+    # fix build with glibc 2.42 & -Werror
+    (fetchpatch {
+      url = "https://github.com/raspberrypi/libpisp/commit/f2bbf7e000d3f11cac235b8ea1291722080a016c.patch";
+      hash = "sha256-vrdmVadyjlAnZtmBahOs/hlKPrkh/BF3LvrTPM9D15Q=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     meson
@@ -30,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/raspberrypi/libpisp";
-    description = "A helper library to generate run-time configuration for the Raspberry Pi ISP (PiSP), consisting of the Frontend and Backend hardware components.";
-    license = licenses.bsd2;
-    platforms = platforms.all;
+    description = "Helper library to generate run-time configuration for the Raspberry Pi ISP (PiSP), consisting of the Frontend and Backend hardware components";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
   };
 })

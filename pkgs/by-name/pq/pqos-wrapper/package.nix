@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "pqos-wrapper";
   version = "unstable-2022-01-31";
+  pyproject = true;
 
   src = fetchFromGitLab {
     group = "sosy-lab";
@@ -16,13 +17,17 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-SaYr6lVucpJjVtGgxRbDGYbOoBwdfEDVKtvD+M1L0o4=";
   };
 
+  build-system = with python3.pkgs; [ setuptools ];
+
   makeWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ intel-cmt-cat ]}" ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pqos_wrapper" ];
+
+  meta = {
     description = "Wrapper for Intel PQoS for the purpose of using it in BenchExec";
     homepage = "https://gitlab.com/sosy-lab/software/pqos-wrapper";
-    maintainers = with maintainers; [ lorenzleutgeb ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ lorenzleutgeb ];
+    license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
     mainProgram = "pqos_wrapper";
   };

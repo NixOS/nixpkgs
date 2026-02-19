@@ -27,18 +27,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     tag = "v${version}";
-    hash = "sha256-uEYamKIZIjR7c2LB+GydLmxy+EhcKrcxV+9vsveqGVk=";
+    hash = "sha256-EMxA5QqmIae/d3nUpwKjgURo0nOyaNbma8poB5mcQW0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-bzB4yjBcMsOqbq1UCgPFErzVOXs55qy+CYBUinGEbg4=";
+    hash = "sha256-fr1bDTzTKx7TLBqw94CyaB0/Jo2x1BzZcM6dcen1PHc=";
   };
 
   nativeBuildInputs = [
@@ -64,19 +64,18 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "cli" true)
   ];
 
-  buildInputs =
-    [
-      appstream
-      glib
-      gst_all_1.gstreamer
-      gtk4
-      libadwaita
-      libxml2
-      poppler
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    appstream
+    glib
+    gst_all_1.gstreamer
+    gtk4
+    libadwaita
+    libxml2
+    poppler
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   postPatch = ''
     chmod +x build-aux/*.py

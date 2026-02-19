@@ -34,11 +34,11 @@ buildPythonPackage rec {
   # a few tests are failing on aarch64
   doCheck = !stdenv.hostPlatform.isAarch64;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to simplify SVGs";
     mainProgram = "picosvg";
     homepage = "https://github.com/googlefonts/picosvg";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ _999eagle ];
   };
 }

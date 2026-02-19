@@ -60,7 +60,8 @@ stdenv.mkDerivation {
   # Workaround build failure on -fno-common toolchains:
   #   ld: initc.o:(.bss+0x28): multiple definition of `HacksDisable'; cfg.o:(.bss+0x59e3): first defined here
   # Use pre-c++17 standard (c++17 forbids throw annotations)
-  env.NIX_CFLAGS_COMPILE = "-fcommon -std=c++14";
+  # Use pre-c23: chips/dsp3emu.c:31:23: error: 'bool' cannot be defined via 'typedef'
+  env.NIX_CFLAGS_COMPILE = "-fcommon -std=c++14 -std=gnu17";
 
   preConfigure = ''
     cd src
@@ -69,6 +70,8 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = [ "--enable-release" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     function installIcon () {
@@ -87,7 +90,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Super Nintendo Entertainment System Emulator";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.sander ];
     homepage = "https://www.zsnes.com";
     platforms = [
       "i686-linux"

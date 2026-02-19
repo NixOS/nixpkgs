@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.3.113";
   pname = "libaio";
 
   src = fetchurl {
-    url = "https://pagure.io/libaio/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.gz";
+    url = "https://pagure.io/libaio/archive/libaio-${finalAttrs.version}/libaio-libaio-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-cWxwWXAyRzROsGa1TsvDyiE08BAzBxkubCt9q1+VKKs=";
   };
 
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=${placeholder "out"}"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic "ENABLE_SHARED=0";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic "ENABLE_SHARED=0";
 
   hardeningDisable = lib.optional (stdenv.hostPlatform.isi686) "stackprotector";
 
@@ -36,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ ];
   };
-}
+})

@@ -7,13 +7,13 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "kimai";
-  version = "2.33.0";
+  version = "2.47.0";
 
   src = fetchFromGitHub {
     owner = "kimai";
     repo = "kimai";
     tag = finalAttrs.version;
-    hash = "sha256-YkACx0xl+6yN8pgH56WPdEoNAZxAxHIPLay28V1S5WQ=";
+    hash = "sha256-aMvgioXuKZWstkslfX8bFuxBpTo9F3VHl9aqyNPDMFQ=";
   };
 
   php = php.buildEnv {
@@ -38,16 +38,18 @@ php.buildComposerProject2 (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-smDAz4RnVEgPcGjsQmN0NC8kWgLw78YFuef9gbajAeQ=";
+  vendorHash = "sha256-HOpl+cfQgh/I/Od8o6/hRlJvuMsaEouwn3w4M9FmR7Q=";
 
   composerNoPlugins = false;
-  composerNoScripts = false;
-
   postInstall = ''
     # Make available the console utility, as Kimai doesn't list this in
     # composer.json.
     mkdir -p "$out"/share/php/kimai "$out"/bin
     ln -s "$out"/share/php/kimai/bin/console "$out"/bin/console
+
+    # Install bundled assets. This is normally done in the `composer install`
+    # post-install script, but it's being skipped.
+    (cd "$out"/share/php/kimai && php ./bin/console assets:install)
   '';
 
   passthru.tests = {

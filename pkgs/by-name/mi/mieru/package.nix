@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mieru";
-  version = "3.14.1";
+  version = "3.27.0";
 
   src = fetchFromGitHub {
     owner = "enfein";
     repo = "mieru";
-    rev = "v${version}";
-    hash = "sha256-+I3Vqu6laJPzv8tZ+3f6J88K+IM5SiGr7GVem4dKyao=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rUX3zCnwCw34dujpctTaEH6tmUN2iMraO6awavldiUI=";
   };
 
   vendorHash = "sha256-pKcdvP38fZ2KFYNDx6I4TfmnnvWKzFDvz80xMkUojqM=";
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "mieru";
   };
-}
+})

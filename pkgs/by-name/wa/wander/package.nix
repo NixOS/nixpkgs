@@ -1,18 +1,19 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wander";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "robinovitch61";
     repo = "wander";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1+bKdIAWdg/+5FBDbtvjDV0xpZ5jot3y6F+KuLO9WVk=";
   };
 
@@ -25,18 +26,17 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd wander \
       --fish <($out/bin/wander completion fish) \
       --bash <($out/bin/wander completion bash) \
       --zsh <($out/bin/wander completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal app/TUI for HashiCorp Nomad";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/robinovitch61/wander";
-    teams = [ teams.c3d2 ];
     mainProgram = "wander";
   };
-}
+})

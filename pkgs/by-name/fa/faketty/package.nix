@@ -6,29 +6,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "faketty";
-  version = "1.0.19";
+  version = "1.0.20";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-ntfbwaVZM4wtoDaaFo+Y7RHSft3KZ29DMsNiTvhiaXs=";
+    hash = "sha256-1AX2DBFOSUcORSQCo/5Vd8puE4hJU9VDfVqxcZDKrrY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0pDm/e1xisPLqdTe10kleoejQfuOZoZW6l/83Splz/Y=";
+  cargoHash = "sha256-2MVWtCezrCd+uDAkYLzwDNobrc7TQEu1H2eUHlOcpVE=";
 
   postPatch = ''
     patchShebangs tests/test.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper to execute a command in a pty, even if redirecting the output";
     homepage = "https://github.com/dtolnay/faketty";
     changelog = "https://github.com/dtolnay/faketty/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "faketty";
   };
 }

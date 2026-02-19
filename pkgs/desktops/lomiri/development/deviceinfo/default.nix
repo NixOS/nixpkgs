@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deviceinfo";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/deviceinfo";
     rev = finalAttrs.version;
-    hash = "sha256-Tc/jbiEoekudfy9Si6Jy51wYue6cqlMigpDHJtFl64I=";
+    hash = "sha256-eZQyTRhMRobufPk5AcTY8G718T+/e3teFtqV5kGspxw=";
   };
 
   outputs = [
@@ -61,13 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to detect and configure devices";
     homepage = "https://gitlab.com/ubports/development/core/deviceinfo";
     changelog = "https://gitlab.com/ubports/development/core/deviceinfo/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     mainProgram = "device-info";
     pkgConfigModules = [
       "deviceinfo"

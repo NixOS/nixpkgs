@@ -8,19 +8,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-flamegraph";
-  version = "0.6.8";
+  version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "flamegraph-rs";
     repo = "flamegraph";
-    rev = "v${version}";
-    sha256 = "sha256-JGUABNCZhDyTTrjFCRsT+wkuAeZn9mCHCI6XgGYEl7Y=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-WPWS3NX6t8RNNALqYF2JMLI5HWVhsVmhg9ULZKt972I=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-FjLjEoorbZC2WZ424w2aFLmd4dIfy5s13sR8BSRVNIo=";
+  cargoHash = "sha256-U/Cs4HRNuxq7RaWHmmLoWbiZgqumSRFRLpe1N/63q+E=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ];
 
@@ -33,16 +32,16 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Easy flamegraphs for Rust projects and everything else, without Perl or pipes <3";
     homepage = "https://github.com/flamegraph-rs/flamegraph";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       killercup
       matthiasbeyer
     ];
   };
-}
+})

@@ -2,20 +2,21 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "routedns";
-  version = "0.1.51";
+  version = "0.1.136";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "routedns";
-    rev = "v${version}";
-    hash = "sha256-9H/l6EAbrNwD2DnweBqjmcoaJEnTH9BdGn2x/ZC3us4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JAlfPTOCmDjKoT+bzpM1UXl3HkbrSCztpbi0CFtuMYA=";
   };
 
-  vendorHash = "sha256-yOYeMYAXa1jok8QwGtYsvuUGgIXEjZGo6+FiDQkZwUU=";
+  vendorHash = "sha256-9JjsY4zyq0lJkrbYopOtngrtrRUsyMw9Ghlhghn5xBo=";
 
   subPackages = [ "./cmd/routedns" ];
 
@@ -24,11 +25,13 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/folbricht/routedns";
     description = "DNS stub resolver, proxy and router";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jsimonetti ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jsimonetti ];
     mainProgram = "routedns";
   };
-}
+})

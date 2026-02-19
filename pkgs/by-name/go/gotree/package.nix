@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotree";
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "elbachir-one";
     repo = "gt";
-    rev = "v${version}";
-    hash = "sha256-sWKqfDWwMfj4shg/MxHu7Zr4WE5pxAzHHmsjU3jQY10=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0wYuIaGkJHSD8La1yfBYNPDB8ETtID8e5lgahqQgjLM=";
   };
 
   vendorHash = null;
@@ -20,9 +20,9 @@ buildGoModule rec {
   meta = {
     description = "Display a tree of files and directories";
     homepage = "https://github.com/elbachir-one/gt";
-    changelog = "https://github.com/elbachir-one/gt/releases/tag/v${version}";
+    changelog = "https://github.com/elbachir-one/gt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     mainProgram = "gt";
     maintainers = with lib.maintainers; [ schnow265 ];
   };
-}
+})

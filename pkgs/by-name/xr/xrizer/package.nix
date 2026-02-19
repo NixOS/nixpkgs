@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch2,
   lib,
   libGL,
   libxkbcommon,
@@ -9,20 +10,36 @@
   rustPlatform,
   shaderc,
   vulkan-loader,
+  stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+let
+  platformPaths = {
+    "aarch64-linux" = "bin/linuxarm64";
+    "i686-linux" = "bin";
+    "x86_64-linux" = "bin/linux64";
+  };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xrizer";
-  version = "0.2";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
-    tag = "v${version}";
-    hash = "sha256-0RICNxF8RBHthve69Z9msTg2+jegg5K4aHYRF0YZ8a4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IRhLWlGHywp0kZe5aGmMHAF1zZwva3sGg68eG1E2K9A=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-87JcULH1tAA487VwKVBmXhYTXCdMoYM3gOQTkM53ehE=";
+  patches = [
+    # https://github.com/Supreeeme/xrizer/pull/262
+    (fetchpatch2 {
+      name = "xrizer-fix-aarch64.patch";
+      url = "https://github.com/Supreeeme/xrizer/commit/70ea6f616cd7608462cdf2f5bf76a85acf23fe33.patch?full_index=1";
+      hash = "sha256-Bwu/GjsaoS1VqpXmijBuZcJFUf6kRYWYWpGxm40AWyc=";
+    })
+  ];
+
+  cargoHash = "sha256-orfK5pwWv91hA7Ra3Kk+isFTR+qMHSZ0EYZTVbf0fO0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,9 +61,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/lib/xrizer/bin/linux64
-    ln -s "$out/lib/libxrizer.so" "$out/lib/xrizer/bin/linux64/vrclient.so"
+    mkdir -p $out/lib/xrizer/$platformPath
+    mv "$out/lib/libxrizer.so" "$out/lib/xrizer/$platformPath/vrclient.so"
   '';
+
+  platformPath = platformPaths."${stdenv.hostPlatform.system}";
 
   passthru.updateScript = nix-update-script { };
 
@@ -55,9 +74,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Supreeeme/xrizer";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
-    # TODO: support more systems
-    # To do so, we need to map systems to the format openvr expects.
-    # i.e. x86_64-linux -> linux64, aarch64-linux -> linuxarm64
-    platforms = [ "x86_64-linux" ];
+    platforms = builtins.attrNames platformPaths;
   };
-}
+})

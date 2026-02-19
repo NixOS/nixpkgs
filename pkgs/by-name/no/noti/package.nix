@@ -5,7 +5,7 @@
   installShellFiles,
 }:
 
-buildGoModule (finalAttrs: rec {
+buildGoModule (finalAttrs: {
   pname = "noti";
   version = "3.8.0";
 

@@ -11,6 +11,7 @@
   installShellFiles,
 
   # buildInputs
+  corrosion,
   libuuid,
 
   # passthru.tests
@@ -24,18 +25,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
-  version = "3.4.1";
+  version = "3.4.2";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-00HiGju4pIswx8Z+M+ATdBSupiMS2xIm2ZnE52k/RwA=";
+    hash = "sha256-Y0jnAW4OtPI9GCOSFRPf8/wo4qBB6O1FASj40S601+E=";
     fetchSubmodules = true;
   };
   cargoDeps = rustPlatform.fetchCargoVendor {
     name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-trc5DIWf68XRBSMjeG/ZchuwFA56wJnLbqm17gE+jYQ=";
+    hash = "sha256-03HG8AGe6PJ516zL23iNjGUYmGOZa8NuFljb1ll2pjs=";
   };
 
   # The CMakeLists files used by upstream issue a `cargo install` command to
@@ -46,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     export CARGO_HOME=$PWD/.cargo
   '';
+  cmakeFlags = [
+    (lib.cmakeBool "SYSTEM_CORROSION" true)
+  ];
   failingTests = [
     # It would be very hard to make this test succeed, as the bash completion
     # needs to be installed and the builder's `bash` should be aware of it.
@@ -54,14 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     "bash_completion.test.py"
   ];
   # Contains Bash and Python scripts used while testing.
-  preConfigure =
-    ''
-      patchShebangs test
-    ''
-    + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
-      substituteInPlace test/CMakeLists.txt \
-        ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
-    '';
+  preConfigure = ''
+    patchShebangs test
+  ''
+  + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
+    substituteInPlace test/CMakeLists.txt \
+      ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
+  '';
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -75,12 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    corrosion
     libuuid
   ];
 
   doCheck = true;
   # See:
-  # https://github.com/GothenburgBitFactory/taskwarrior/blob/v3.2.0/doc/devel/contrib/development.md#run-the-test-suite
+  # https://github.com/GothenburgBitFactory/taskwarrior/blob/v3.4.1/doc/devel/contrib/development.md#run-the-test-suite
   preCheck = ''
     make test_runner
   '';
@@ -123,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       oxalica
       mlaradji
       doronbehar
+      Necior
     ];
     mainProgram = "task";
     platforms = lib.platforms.unix;

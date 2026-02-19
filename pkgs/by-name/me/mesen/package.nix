@@ -6,19 +6,19 @@
   fetchFromGitHub,
   wrapGAppsHook3,
   gtk3,
-  libX11,
+  libx11,
   SDL2,
 }:
 
 buildDotnetModule rec {
   pname = "mesen";
-  version = "2.0.0-unstable-2025-04-01";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "SourMesen";
     repo = "Mesen2";
-    rev = "0dfdbbdd9b5bc4c5d501ea691116019266651aff";
-    hash = "sha256-+Jzw1tfdiX2EmQIoPuMtLmJrv9nx/XqfyLEBW+AXj1I=";
+    tag = version;
+    hash = "sha256-vBwAPAnp6HIgI49vAZIqnzw8xHQ7ZMuALjf7G+acCXg=";
   };
 
   patches = [
@@ -26,6 +26,8 @@ buildDotnetModule rec {
     ./dont-use-nightly-avalonia.patch
     # upstream has a weird library loading mechanism, which we override with a more sane alternative
     ./dont-zip-libraries.patch
+    # without this the generated .desktop file uses an absolute (and incorrect) path for the binary
+    ./desktop-make-non-absolute-exec.patch
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -60,7 +62,7 @@ buildDotnetModule rec {
 
     nativeBuildInputs = [ SDL2 ];
 
-    buildInputs = [ SDL2 ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ libX11 ];
+    buildInputs = [ SDL2 ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ libx11 ];
 
     makeFlags = [ "core" ];
 
@@ -72,8 +74,7 @@ buildDotnetModule rec {
   };
 
   meta = {
-    badPlatforms = [ "aarch64-linux" ]; # not sure what the issue is
-    description = "Multi-system emulator that supports NES, SNES, Game Boy (Color) and PC Engine games";
+    description = "Multi-system emulator that supports NES, SNES, Game Boy, Game Boy Advance, PC Engine, SMS/Game Gear and WonderSwan games";
     homepage = "https://www.mesen.ca";
     license = lib.licenses.gpl3Plus;
     mainProgram = "Mesen";

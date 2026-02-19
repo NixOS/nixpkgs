@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  xorg,
+  libxcb-keysyms,
   python3,
   pkg-config,
   cairo,
@@ -16,12 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "svenstaro";
-    repo = pname;
+    repo = "wmfocus";
     rev = "v${version}";
     sha256 = "sha256-94MgE2j8HaS8IyzHEDtoqTls2A8xD96v2iAFx9XfMcw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-tYzJS/ApjGuvNnGuBEVr54AGcEmDhG9HtirZvtmNslY=";
 
   nativeBuildInputs = [
@@ -32,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     cairo
     expat
     libxkbcommon
-    xorg.xcbutilkeysyms
+    libxcb-keysyms
   ];
 
   # For now, this is the only available featureset. This is also why the file is
@@ -40,12 +39,12 @@ rustPlatform.buildRustPackage rec {
   # users.
   buildFeatures = [ "i3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Visually focus windows by label";
     mainProgram = "wmfocus";
     homepage = "https://github.com/svenstaro/wmfocus";
-    license = licenses.mit;
-    maintainers = with maintainers; [ synthetica ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ synthetica ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,7 +4,6 @@
   cffi,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyspx";
   version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sphincs";
@@ -32,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyspx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for SPHINCS";
     homepage = "https://github.com/sphincs/pyspx";
     changelog = "https://github.com/sphincs/pyspx/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

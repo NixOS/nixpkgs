@@ -6,12 +6,12 @@
   texliveMedium,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastcap";
   version = "2.0-18Sep92";
 
   src = fetchzip {
-    url = "https://www.rle.mit.edu/cpg/codes/fastcap-${version}.tgz";
+    url = "https://www.rle.mit.edu/cpg/codes/fastcap-${finalAttrs.version}.tgz";
     hash = "sha256-fnmC6WNd7xk8fphxkMZUq2+Qz+2mWIP2lvBUBAmUvHI";
     stripRoot = false;
   };
@@ -76,8 +76,8 @@ stdenv.mkDerivation rec {
     mv bin $out/bin
     rm $out/bin/README
 
-    mkdir -p $doc/share/doc/fastcap-${version}
-    cp doc/*.pdf $doc/share/doc/fastcap-${version}
+    mkdir -p $doc/share/doc/fastcap-${finalAttrs.version}
+    cp doc/*.pdf $doc/share/doc/fastcap-${finalAttrs.version}
 
     mkdir -p $out/share/fastcap
     mv examples $out/share/fastcap
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multipole-accelerated capacitance extraction program";
     longDescription = ''
       Fastcap is  a three dimensional capacitance extraction program that
@@ -93,9 +93,9 @@ stdenv.mkDerivation rec {
       shapes, sizes and orientations.
     '';
     homepage = "https://www.rle.mit.edu/cpg/research_codes.htm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fbeffa ];
+    platforms = lib.platforms.linux;
     mainProgram = "fastcap";
   };
-}
+})

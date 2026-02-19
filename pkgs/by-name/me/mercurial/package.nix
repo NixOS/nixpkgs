@@ -30,22 +30,24 @@ let
   inherit (python3Packages)
     docutils
     python
-    fb-re2
+    google-re2
     pygit2
     pygments
     setuptools
+    setuptools-scm
+    pip
     ;
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.9.4";
+    version = "7.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      hash = "sha256-fqDoOeyDRSd90Z0HJQtEJhNNxdZoL/iAqGorCbTjjs0=";
+      hash = "sha256-6NkgyDw4xHXY6XO+YHYKSdw1w3ldZL1oduVq26Yi5cs=";
     };
 
-    format = "other";
+    pyproject = false;
 
     passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
@@ -54,29 +56,34 @@ let
         rustPlatform.fetchCargoVendor {
           inherit src;
           name = "mercurial-${version}";
-          hash = "sha256-k/K1BupCqnlB++2T7hJxu82yID0jG8HwLNmb2eyx29o=";
+          hash = "sha256-REMgZ1TiVTDbvT8TCd4EeHfYT/xMJfC4E6weLJFT6Rw=";
           sourceRoot = "mercurial-${version}/rust";
         }
       else
         null;
     cargoRoot = if rustSupport then "rust" else null;
 
+    # enable building with Python 3.14
+    # FIXME remove once PyO3 is updated in Cargo.lock
+    env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = 1;
+
     propagatedBuildInputs =
-      lib.optional re2Support fb-re2
+      lib.optional re2Support google-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
-    nativeBuildInputs =
-      [
-        makeWrapper
-        gettext
-        installShellFiles
-        setuptools
-      ]
-      ++ lib.optionals rustSupport [
-        rustPlatform.cargoSetupHook
-        cargo
-        rustc
-      ];
+    nativeBuildInputs = [
+      makeWrapper
+      gettext
+      installShellFiles
+      setuptools
+      setuptools-scm
+      pip
+    ]
+    ++ lib.optionals rustSupport [
+      rustPlatform.cargoSetupHook
+      cargo
+      rustc
+    ];
     buildInputs = [ docutils ];
 
     makeFlags = [ "PREFIX=$(out)" ] ++ lib.optional rustSupport "PURE=--rust";
@@ -114,18 +121,18 @@ let
       mercurial-tests = makeTests { flags = "--with-hg=$MERCURIAL_BASE/bin/hg"; };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
-      changelog = "https://wiki.mercurial-scm.org/Release${versions.majorMinor version}";
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [
+      changelog = "https://wiki.mercurial-scm.org/Release${lib.versions.majorMinor version}";
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [
         lukegb
         euxane
         techknowlogick
       ];
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
       mainProgram = "hg";
     };
   };

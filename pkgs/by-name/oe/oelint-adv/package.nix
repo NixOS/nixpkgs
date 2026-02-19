@@ -5,16 +5,16 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "oelint-adv";
-  version = "7.2.6";
+  version = "8.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-adv";
-    tag = version;
-    hash = "sha256-QNTC8jO6RjHNaHVNSqAoM1xAhYc35G5A7D0yfwmd6+U=";
+    tag = finalAttrs.version;
+    hash = "sha256-W8W+hNgRVxBVkEDyKtFVx2mCyvbMA4CPjR1NrehClJs=";
   };
 
   postPatch = ''
@@ -63,8 +63,8 @@ python3Packages.buildPythonApplication rec {
     description = "Advanced bitbake-recipe linter";
     mainProgram = "oelint-adv";
     homepage = "https://github.com/priv-kweihmann/oelint-adv";
-    changelog = "https://github.com/priv-kweihmann/oelint-adv/releases/tag/${version}";
+    changelog = "https://github.com/priv-kweihmann/oelint-adv/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ otavio ];
   };
-}
+})

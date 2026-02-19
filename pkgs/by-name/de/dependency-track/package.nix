@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nodejs_20,
   jre_headless,
-  protobuf,
+  protobuf_30,
   cyclonedx-cli,
   makeWrapper,
   maven,
@@ -12,7 +12,7 @@
   nixosTests,
 }:
 let
-  version = "4.13.2";
+  version = "4.13.6";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -25,7 +25,7 @@ let
       owner = "DependencyTrack";
       repo = "frontend";
       rev = version;
-      hash = "sha256-HshphdOvJMRdMWYNc+nOkoFGA9Rr+N7+Gs8THBZjKTM=";
+      hash = "sha256-SSnbmAFXQwxAZQzMZeDzf/ebbWUVRICAs1msFXMMi98=";
     };
 
     installPhase = ''
@@ -33,7 +33,7 @@ let
       cp -R ./dist $out/
     '';
 
-    npmDepsHash = "sha256-u5yVJlW9LhptyHQddd1RCBgU/xNdSNX5FAmSEj6n7Ng=";
+    npmDepsHash = "sha256-2VK3LOqUxOJaR8cUuINhrhMkvHGyUr206RJR18NCvUo=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -50,7 +50,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-4A34lt6M0M1+HPGFFqH/Ik07FBNz6pI0XYiW9rIVsOk=";
+    hash = "sha256-EL0Yd8pfTG8/DlY9A3F0lRuPl/wU2/LyACclzttrsjw=";
   };
 
   patches = [
@@ -61,11 +61,11 @@ maven.buildMavenPackage rec {
   postPatch = ''
     substituteInPlace pom.xml \
       --replace-fail '<protocArtifact>''${tool.protoc.version}</protocArtifact>' \
-      "<protocCommand>${protobuf}/bin/protoc</protocCommand>"
+      "<protocCommand>${protobuf_30}/bin/protoc</protocCommand>"
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-V0EhfPN8htR4v/KQpQ9tec6dAe/FOxBCp8cUZqL7mFo=";
+  mvnHash = "sha256-UrLni4shNCv9aHvaGdkzFNBVe8BT4/z4cQ6Ekjr0l9s=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 
@@ -120,7 +120,10 @@ maven.buildMavenPackage rec {
     description = "Intelligent Component Analysis platform that allows organizations to identify and reduce risk in the software supply chain";
     homepage = "https://github.com/DependencyTrack/dependency-track";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.cyberus ];
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+    ];
     mainProgram = "dependency-track";
     inherit (jre_headless.meta) platforms;
   };

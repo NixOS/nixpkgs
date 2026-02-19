@@ -6,7 +6,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "coursera-dl";
   version = "0.11.5";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "coursera-dl";
     repo = "coursera-dl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-c+ElGIrd4ZhMfWtsNHrHRO3HaRRtEQuGlCSBrvPnbyo=";
   };
 
@@ -63,13 +63,13 @@ python3.pkgs.buildPythonApplication rec {
     "test_quiz_exam_to_markup_converter"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for downloading Coursera.org videos and naming them";
     mainProgram = "coursera-dl";
     homepage = "https://github.com/coursera-dl/coursera-dl";
-    changelog = "https://github.com/coursera-dl/coursera-dl/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ alexfmpe ];
-    platforms = platforms.darwin ++ platforms.linux;
+    changelog = "https://github.com/coursera-dl/coursera-dl/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ alexfmpe ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})

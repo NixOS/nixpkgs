@@ -28,12 +28,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free and open-source monospaced font from Evil Martians";
     homepage = "https://github.com/evilmartians/mono";
     changelog = "https://github.com/evilmartians/mono/raw/v${version}/Changelog.md";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

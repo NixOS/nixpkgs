@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   cmake,
@@ -28,28 +27,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libusermetrics";
-  version = "1.3.3";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libusermetrics";
     rev = finalAttrs.version;
-    hash = "sha256-V4vxNyHMs2YYBILkpco79FN9xnooULgB+z2Kf3V0790=";
+    hash = "sha256-Zh6a+laSsdZMyoaGoZAKTo5ShJ1NyPZrqR/zBjlOdbk=";
   };
 
   outputs = [
     "out"
     "dev"
     "doc"
-  ];
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/core/libusermetrics/-/merge_requests/17 merged & in release
-    (fetchpatch {
-      name = "0001-libusermetrics-BUILD_TESTING.patch";
-      url = "https://gitlab.com/ubports/development/core/libusermetrics/-/commit/c1e4847601cc4522034a766755ce491d48132d77.patch";
-      hash = "sha256-UWc9/ngpuiSm0Rd6eBK/R3N/NwDRtMxie78seN3+y/8=";
-    })
   ];
 
   postPatch = ''
@@ -59,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace doc/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_FULL_DATAROOTDIR}/doc/libusermetrics-doc" "\''${CMAKE_INSTALL_DOCDIR}"
+
+    # https://gitlab.com/ubports/development/core/libusermetrics/-/merge_requests/22
+    substituteInPlace src/libusermetricsoutput/GSettingsColorThemeProvider.h \
+      --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
   '';
 
   strictDeps = true;

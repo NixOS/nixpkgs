@@ -12,7 +12,7 @@
   rtree,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (pkgs.libsupermesh)
     pname
     version

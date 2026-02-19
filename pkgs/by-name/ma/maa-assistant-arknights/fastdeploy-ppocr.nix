@@ -34,46 +34,45 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     eigen
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
-  buildInputs =
+  buildInputs = [
+    onnxruntime
+    opencv
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
     [
-      onnxruntime
-      opencv
+      cuda_cccl # cub/cub.cuh
+      libcublas # cublas_v2.h
+      libcurand # curand.h
+      libcusparse # cusparse.h
+      libcufft # cufft.h
+      cudnn # cudnn.h
+      cuda_cudart
     ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cccl # cub/cub.cuh
-        libcublas # cublas_v2.h
-        libcurand # curand.h
-        libcusparse # cusparse.h
-        libcufft # cufft.h
-        cudnn # cudnn.h
-        cuda_cudart
-      ]
-    );
+  );
 
   cmakeBuildType = "None";
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ];
 
   postInstall = ''
     mkdir $cmake
     install -Dm644 ${finalAttrs.src}/cmake/Findonnxruntime.cmake $cmake/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MaaAssistantArknights stripped-down version of FastDeploy";
     homepage = "https://github.com/MaaAssistantArknights/FastDeploy";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.asl20;
     broken = cudaSupport && stdenv.hostPlatform.system != "x86_64-linux";
   };
 })

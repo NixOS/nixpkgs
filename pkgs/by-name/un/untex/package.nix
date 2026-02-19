@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "untex";
   version = "1.3";
 
   src = fetchurl {
-    url = "ftp://ftp.thp.uni-duisburg.de/pub/source/${pname}-${version}.tar.gz";
+    url = "ftp://ftp.thp.uni-duisburg.de/pub/source/untex-${finalAttrs.version}.tar.gz";
     sha256 = "1jww43pl9qvg6kwh4h8imp966fzd62dk99pb4s93786lmp3kgdjv";
   };
 
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility which removes LaTeX commands from input";
     mainProgram = "untex";
     homepage = "https://www.ctan.org/pkg/untex";
-    license = licenses.gpl1Only;
-    maintainers = with maintainers; [ joachifm ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl1Only;
+    maintainers = with lib.maintainers; [ joachifm ];
+    platforms = lib.platforms.all;
   };
-}
+})

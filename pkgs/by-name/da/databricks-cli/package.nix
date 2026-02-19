@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.250.0";
+  version = "0.288.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AqXwlt7Aqi0cRoDiUfE1LFOJqtRmySuA6D4RMYOonU4=";
+    hash = "sha256-GBkeIY/uYiLA6CmKiMnMuGX2sPSyOmr9gZXZTe/AoQs=";
   };
 
   # Otherwise these tests fail asserting that the version is 0.0.0-dev
@@ -25,12 +25,14 @@ buildGoModule (finalAttrs: {
       --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
   '';
 
-  vendorHash = "sha256-tpm7eCjJuRpVnZfMZais1bHVhnQ8DxchaN1/7ljKNOo=";
+  vendorHash = "sha256-YtXdGQzuzTHBrqRUk2ORacVNixdLt+jHxJ8zMxwlcmI=";
 
   excludedPackages = [
     "bundle/internal"
     "acceptance"
     "integration"
+    "tools/testrunner"
+    "tools/testmask"
   ];
 
   ldflags = [
@@ -50,10 +52,17 @@ buildGoModule (finalAttrs: {
       "TestExpandPipelineGlobPaths"
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
+      "TestWorkspaceVerifyProfileForHost"
+      "TestWorkspaceVerifyProfileForHost/default_config_file_with_match"
+      "TestWorkspaceResolveProfileFromHost"
+      "TestWorkspaceResolveProfileFromHost/no_config_file"
+      "TestBundleConfigureDefault"
       # Use uv venv which doesn't work with nix
       # https://github.com/astral-sh/uv/issues/4450
       "TestVenvSuccess"
       "TestPatchWheel"
+      # Requires HOME to be set
+      "TestCacheDirEnvVar"
     ]);
 
   nativeCheckInputs = [
@@ -78,7 +87,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/databricks";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

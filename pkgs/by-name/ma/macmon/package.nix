@@ -2,27 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "macmon";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "vladkens";
     repo = "macmon";
-    rev = "v${version}";
-    hash = "sha256-Uc+UjlCeG7W++l7d/3tSkIVbUi8IbNn3A5fqyshG+xE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GiSF5PBRUcKZzd9vWf9MmKKZbtqchnu0DjFgbXmp7bg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-erKN6wR/W48QF1FbUkzjo6xaN1GVbAelruzxf4NS07o=";
+  cargoHash = "sha256-b9CpHSC3/kj7lHs+QhDqnRZfda9rtJJEs3j24NDZSPQ=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
-    homepage = "https://github.com/vladkens/macmon";
     description = "Sudoless performance monitoring for Apple Silicon processors";
+    homepage = "https://github.com/vladkens/macmon";
+    changelog = "https://github.com/vladkens/macmon/releases/tag/${finalAttrs.src.tag}";
     platforms = [ "aarch64-darwin" ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ schrobingus ];
+    mainProgram = "macmon";
   };
-}
+})

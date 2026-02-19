@@ -4,18 +4,17 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "colo";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Aloso";
     repo = "colo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ocGzZR4gM2sInXccbHxh7Vf0kcZTZOnVW0KM6zp/pR8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-bAq1sDP/EG9TuUHHWLrp3JtW6S5nWgyyXQbiD63WPGk=";
 
   meta = {
@@ -24,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ llakala ];
   };
-}
+})

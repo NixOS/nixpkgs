@@ -11,19 +11,18 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ntpd-rs";
-  version = "1.5.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
-    tag = "v${version}";
-    hash = "sha256-APQHxlsyUMA1N6FatQvotOokxNikOO22GGyXUMh3ABo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gOt2X/tqtFrmxkTO/8UFwmyX0vPKHsTu+qe5AfqDtMk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-BiLYKOgmmqOesfl/8y4590Xo2Z4+u/Rn7CglNjQk2bU=";
+  cargoHash = "sha256-DXAy/K70sNhVOjDOd6G/juE7JgmewPzGHZDeXAOZ1+s=";
 
   nativeBuildInputs = [
     pandoc
@@ -38,14 +37,6 @@ rustPlatform.buildRustPackage rec {
   postBuild = ''
     source utils/generate-man.sh
   '';
-
-  # lots of flaky tests
-  doCheck = false;
-
-  checkFlags = [
-    # doesn't find the testca
-    "--skip=daemon::keyexchange::tests"
-  ];
 
   postInstall = ''
     install -Dm444 -t $out/lib/systemd/system docs/examples/conf/{ntpd-rs,ntpd-rs-metrics}.service
@@ -62,7 +53,7 @@ rustPlatform.buildRustPackage rec {
       nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.ntpd-rs;
       version = testers.testVersion {
         package = ntpd-rs;
-        inherit version;
+        inherit (finalAttrs) version;
       };
     };
 
@@ -72,7 +63,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Full-featured implementation of the Network Time Protocol";
     homepage = "https://tweedegolf.nl/en/pendulum";
-    changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
@@ -85,4 +76,4 @@ rustPlatform.buildRustPackage rec {
     # note: Undefined symbols for architecture x86_64: "_ntp_adjtime"
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
-}
+})

@@ -21,17 +21,17 @@
   gtk3,
   gtk4,
   qt6,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libdrm,
   libkrb5,
   libuuid,
@@ -47,7 +47,7 @@
   wayland,
   xdg-utils,
   coreutils,
-  xorg,
+  libxcb,
   zlib,
 
   # Darwin dependencies
@@ -94,53 +94,52 @@ let
     escapeShellArg
     ;
 
-  deps =
-    [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      cairo
-      cups
-      dbus
-      expat
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      gtk3
-      gtk4
-      libdrm
-      libX11
-      libGL
-      libxkbcommon
-      libXScrnSaver
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXrandr
-      libXrender
-      libxshmfence
-      libXtst
-      libuuid
-      libgbm
-      nspr
-      nss
-      pango
-      pipewire
-      udev
-      wayland
-      xorg.libxcb
-      zlib
-      snappy
-      libkrb5
-      qt6.qtbase
-    ]
-    ++ optional pulseSupport libpulseaudio
-    ++ optional libvaSupport libva;
+  deps = [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gtk3
+    gtk4
+    libdrm
+    libx11
+    libGL
+    libxkbcommon
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxshmfence
+    libxtst
+    libuuid
+    libgbm
+    nspr
+    nss
+    pango
+    pipewire
+    udev
+    wayland
+    libxcb
+    zlib
+    snappy
+    libkrb5
+    qt6.qtbase
+  ]
+  ++ optional pulseSupport libpulseaudio
+  ++ optional libvaSupport libva;
 
   rpath = makeLibraryPath deps + ":" + makeSearchPathOutput "lib" "lib64" deps;
   binpath = makeBinPath deps;
@@ -152,10 +151,11 @@ let
     ]
     ++ optional enableVulkan "Vulkan";
 
-  disableFeatures =
-    [ "OutdatedBuildDetector" ] # disable automatic updates
-    # The feature disable is needed for VAAPI to work correctly: https://github.com/brave/brave-browser/issues/20935
-    ++ optionals enableVideoAcceleration [ "UseChromeOSDirectVideoDecoder" ];
+  disableFeatures = [
+    "OutdatedBuildDetector"
+  ] # disable automatic updates
+  # The feature disable is needed for VAAPI to work correctly: https://github.com/brave/brave-browser/issues/20935
+  ++ optionals enableVideoAcceleration [ "UseChromeOSDirectVideoDecoder" ];
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -205,7 +205,8 @@ stdenv.mkDerivation {
 
       # Fix path to bash in $BINARYWRAPPER
       substituteInPlace $BINARYWRAPPER \
-          --replace /bin/bash ${stdenv.shell}
+          --replace-fail /bin/bash ${stdenv.shell} \
+          --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
 
       ln -sf $BINARYWRAPPER $out/bin/brave
 
@@ -216,14 +217,12 @@ stdenv.mkDerivation {
       done
 
       # Fix paths
-      substituteInPlace $out/share/applications/brave-browser.desktop \
-          --replace /usr/bin/brave-browser-stable $out/bin/brave
+      substituteInPlace $out/share/applications/{brave-browser,com.brave.Browser}.desktop \
+          --replace-fail /usr/bin/brave-browser-stable $out/bin/brave
       substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
-          --replace /opt/brave.com $out/opt/brave.com
-      substituteInPlace $out/share/menu/brave-browser.menu \
-          --replace /opt/brave.com $out/opt/brave.com
+          --replace-fail /opt/brave.com $out/opt/brave.com
       substituteInPlace $out/opt/brave.com/brave/default-app-block \
-          --replace /opt/brave.com $out/opt/brave.com
+          --replace-fail /opt/brave.com $out/opt/brave.com
 
       # Correct icons location
       icon_sizes=("16" "24" "32" "48" "64" "128" "256")
@@ -263,6 +262,7 @@ stdenv.mkDerivation {
           coreutils
         ]
       }
+      --set CHROME_WRAPPER ${pname}
       ${optionalString (enableFeatures != [ ]) ''
         --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations --enable-wayland-ime=true}}"
       ''}
@@ -303,7 +303,6 @@ stdenv.mkDerivation {
       jefflabonte
       nasirhm
       buckley310
-      matteopacini
     ];
     platforms = [
       "aarch64-linux"

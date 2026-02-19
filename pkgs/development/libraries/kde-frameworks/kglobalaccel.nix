@@ -10,7 +10,7 @@
   qtbase,
   qttools,
   qtx11extras,
-  libXdmcp,
+  libxdmcp,
 }:
 
 mkDerivation {
@@ -25,7 +25,7 @@ mkDerivation {
     kwindowsystem
     qttools
     qtx11extras
-    libXdmcp
+    libxdmcp
   ];
   outputs = [
     "out"

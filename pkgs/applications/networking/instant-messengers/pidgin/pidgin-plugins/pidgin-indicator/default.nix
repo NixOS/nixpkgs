@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "philipl";
-    repo = pname;
+    repo = "pidgin-indicator";
     rev = version;
     sha256 = "sha256-CdA/aUu+CmCRbVBKpJGydicqFQa/rEsLWS3MBKlH2/M=";
   };
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     pidgin
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AppIndicator and KStatusNotifierItem Plugin for Pidgin";
     homepage = "https://github.com/philipl/pidgin-indicator";
-    maintainers = with maintainers; [ imalison ];
-    license = licenses.gpl2;
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ imalison ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux;
   };
 }

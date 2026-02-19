@@ -4,30 +4,30 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cariddi";
-  version = "1.4.1";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "cariddi";
-    tag = "v${version}";
-    hash = "sha256-hhzzSEuraer3oQwpNZn4ROASYKQHsnwZs+XHuJ8MkK4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ULeG+TmpRbHT+GsEuEsSSCzlOwRzDzUZmPZNN7KZdrA=";
   };
 
-  vendorHash = "sha256-GvgH6i2t3O39gG2hsKsv5xbLb1V1qi3MqVSfw2D+cZg=";
+  vendorHash = "sha256-DgyDRMDYBC4GVuffJCrNpoDsqtpZ/LH++q5zXdkC1YE=";
 
   ldflags = [
     "-w"
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Crawler for URLs and endpoints";
     homepage = "https://github.com/edoardottt/cariddi";
-    changelog = "https://github.com/edoardottt/cariddi/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/edoardottt/cariddi/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cariddi";
   };
-}
+})

@@ -2,10 +2,12 @@ src: version:
 {
   lib,
   fetchYarnDeps,
-  nodejs_20,
+  dart-sass,
+  nodejs,
   fixup-yarn-lock,
   stdenv,
   yarn,
+  writableTmpDirAsHomeHook,
 }:
 stdenv.mkDerivation {
   name = "mealie-frontend";
@@ -14,26 +16,29 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-a2kIOQHaMzaMWId6+SSYN+SPQM2Ipa+F1ztFZgo3R6A=";
+    hash = "sha256-sZk7OEkJdBZRU9ysRDCetzv09XrK5GhPaxxEBD8k5rw=";
   };
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs_20
-    (yarn.override { nodejs = nodejs_20; })
+    nodejs
+    (yarn.override { inherit nodejs; })
+    writableTmpDirAsHomeHook
+    dart-sass
   ];
 
   configurePhase = ''
     runHook preConfigure
 
-    export HOME=$(mktemp -d)
+    sed -i 's+"@nuxt/fonts",+// NUXT FONTS DISABLED+g' nuxt.config.ts
+
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
     fixup-yarn-lock yarn.lock
-    # TODO: Remove --ignore-engines once upstream supports nodejs_20+
-    # https://github.com/mealie-recipes/mealie/issues/5400
-    # https://github.com/mealie-recipes/mealie/pull/5184
-    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-engines
-    patchShebangs node_modules/
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-scripts
+    patchShebangs node_modules
+
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
 
     runHook postConfigure
   '';
@@ -42,21 +47,19 @@ stdenv.mkDerivation {
     runHook preBuild
 
     export NUXT_TELEMETRY_DISABLED=1
-    yarn --offline build
-    yarn --offline generate
-
+    yarn --offline generate --env production
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    mv dist $out
+    mv .output/public $out
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Frontend for Mealie";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ litchipi ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ litchipi ];
   };
 }

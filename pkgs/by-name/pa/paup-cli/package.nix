@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "A software package for inferring evolutionary trees";
+    description = "Software package for inferring evolutionary trees";
     homepage = "http://phylosolutions.com/paup-test/";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

@@ -7,12 +7,12 @@
   pkg-config,
   python3,
   addDriverRunpath,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libglvnd";
   version = "1.7.0";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "glvnd";
     repo = "libglvnd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-2U9JtpGyP4lbxtVJeP5GUgh5XthloPvFIw28+nldYx8=";
   };
 
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
     addDriverRunpath
   ];
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
     xorgproto
   ];
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit (addDriverRunpath) driverLink; };
 
-  meta = with lib; {
+  meta = {
     description = "GL Vendor-Neutral Dispatch library";
     longDescription = ''
       libglvnd is a vendor-neutral dispatch layer for arbitrating OpenGL API
@@ -99,19 +99,19 @@ stdenv.mkDerivation rec {
       dispatch each API call to at runtime.
       Both GLX and EGL are supported, in any combination with OpenGL and OpenGL ES.
     '';
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     # https://gitlab.freedesktop.org/glvnd/libglvnd#libglvnd:
-    changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${version}";
-    license = with licenses; [
+    changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${finalAttrs.version}";
+    license = with lib.licenses; [
       mit
       bsd1
       bsd3
       gpl3Only
       asl20
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/212
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    maintainers = with maintainers; [ primeos ];
+    maintainers = [ ];
   };
-}
+})

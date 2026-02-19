@@ -11,7 +11,7 @@ let
   enabled = (lib.length cfg.ensureProfiles.secrets.entries) > 0;
 
   nmFileSecretAgentConfig = {
-    entry = builtins.map (
+    entry = map (
       i:
       {
         key = i.key;
@@ -24,6 +24,7 @@ let
       // lib.optionalAttrs (i.matchSetting != null) {
         match_setting = i.matchSetting;
       }
+      // lib.optionalAttrs (i.trim != null) { trim = i.trim; }
     ) cfg.ensureProfiles.secrets.entries;
   };
   nmFileSecretAgentConfigFile = toml.generate "config.toml" nmFileSecretAgentConfig;
@@ -84,7 +85,7 @@ in
                   The NetworkManager configuration settings reference roughly corresponds to connection types.
                   More might be available on your system depending on the installed plugins.
 
-                  https://networkmanager.dev/docs/api/latest/ch01.html
+                  <https://networkmanager.dev/docs/api/latest/ch01.html>
                 '';
                 type = lib.types.nullOr lib.types.str;
                 default = null;
@@ -107,6 +108,11 @@ in
               file = lib.mkOption {
                 description = "file from which the secret value is read";
                 type = lib.types.str;
+              };
+              trim = lib.mkOption {
+                description = "whether leading and trailing whitespace should be stripped from the files content before being passed to NetworkManager";
+                type = lib.types.nullOr lib.types.bool;
+                default = null;
               };
             };
           }

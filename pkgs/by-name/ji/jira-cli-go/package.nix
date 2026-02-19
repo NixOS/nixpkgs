@@ -11,15 +11,15 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jira-cli-go";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ankitpokhrel";
     repo = "jira-cli";
-    tag = "v${version}";
-    hash = "sha256-+7R0yf7YVUnJErvhDm6dVskAJdyd7DHM0JJ6V9gzj/Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NJXLB2N8Kc8Ow6kb2EtPSG+iZ7O4yrhAMi3NFrUuocA=";
   };
 
   vendorHash = "sha256-cl+Sfi9WSPy8qOtB13rRiKtQdDC+HC0+FMKpsWbtU2w=";
@@ -29,9 +29,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ankitpokhrel/jira-cli/internal/version.GitCommit=${src.rev}"
+    "-X github.com/ankitpokhrel/jira-cli/internal/version.GitCommit=${finalAttrs.src.rev}"
     "-X github.com/ankitpokhrel/jira-cli/internal/version.SourceDateEpoch=0"
-    "-X github.com/ankitpokhrel/jira-cli/internal/version.Version=${version}"
+    "-X github.com/ankitpokhrel/jira-cli/internal/version.Version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -53,22 +53,21 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = jira-cli-go;
       command = "jira version";
-      inherit version;
+      inherit (finalAttrs) version;
     };
     updateScript = nix-update-script { };
   };
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich interactive Jira command line";
     homepage = "https://github.com/ankitpokhrel/jira-cli";
-    changelog = "https://github.com/ankitpokhrel/jira-cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      bryanasdev000
+    changelog = "https://github.com/ankitpokhrel/jira-cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       anthonyroussel
     ];
     mainProgram = "jira";
   };
-}
+})

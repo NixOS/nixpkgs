@@ -9,9 +9,9 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnss_nis";
-  version = "3.2";
+  version = "3.4";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = "libnss_nis";
-    rev = "v${version}";
-    hash = "sha256-dt5wL+v98Heg6395BOwNssXLXmoOKFnRXGqlOknYYPs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-FWAyf4soSUpNrYzSefNWthEMfQEopfYX9pMDf1rNK6c=";
   };
 
   outputs = [ "out" ];
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ BarrOff ];
     platforms = lib.platforms.linux;
   };
-}
+})

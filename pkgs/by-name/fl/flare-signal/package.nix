@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   gst_all_1,
+  openssl,
   protobuf,
   libspelling,
   libsecret,
@@ -14,7 +15,7 @@
   gtksourceview5,
   rustPlatform,
   rustc,
-  appstream-glib,
+  appstream,
   blueprint-compiler,
   desktop-file-utils,
   wrapGAppsHook4,
@@ -22,23 +23,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.16.1";
+  version = "0.18.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     tag = finalAttrs.version;
-    hash = "sha256-5phXBsXi0kbTb4RVzbB4LS9b+S2M3U2l/6QYoSHo114=";
+    hash = "sha256-+25nDG/xw82Iv6gGYWmGHUBf4CbTLBTzrOqKdrCFIMQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-sI+zV1YW9RhtYRgUWiFKN8Iw9a5qkktOo0hFwyimPI8=";
+    hash = "sha256-nY+rxWzZJoQRB+Pn4yjof+fCcI2GU2+QFCN73kgRLZ0=";
   };
 
   nativeBuildInputs = [
-    appstream-glib # for appstream-util
+    appstream # for appstream-util
     blueprint-compiler
     desktop-file-utils # for update-desktop-database
     meson
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libsecret
     libspelling
+    openssl
     protobuf
 
     # To reproduce audio messages

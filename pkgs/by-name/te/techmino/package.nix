@@ -15,7 +15,7 @@
 
 let
   pname = "techmino";
-  description = "A modern Tetris clone with many features";
+  description = "Modern Tetris clone with many features";
 
   desktopItem = makeDesktopItem {
     name = pname;
@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     inherit description;
     downloadPage = "https://github.com/26F-Studio/Techmino/releases";
     homepage = "https://github.com/26F-Studio/Techmino/";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     mainProgram = "techmino";
-    maintainers = with maintainers; [ chayleaf ];
+    maintainers = with lib.maintainers; [ chayleaf ];
   };
 }

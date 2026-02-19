@@ -10,28 +10,26 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cyme";
-  version = "2.2.2";
+  version = "2.2.11";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
-    rev = "v${version}";
-    hash = "sha256-oOr7LYQfA/ZtC1Up4/dAHFdtWAM+8J+OPiHIOtVLQxY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DRlK7QsZvydC05kHIWLR1a01/Cc+9TZN0Z4hUCfShjQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-PaX2Eod/5eCZFzMzkLovhE/TpQqNyhqCHaF1LiRxndg=";
+  cargoHash = "sha256-vh7VUTI+FKWtwYmcpEeADq/OF69M38yekPySXkFJ5ZA=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.DarwinTools
+  ];
 
   checkFlags = [
     # doctest that requires access outside sandbox
@@ -53,18 +51,17 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tuna-f1sh/cyme";
-    changelog = "https://github.com/tuna-f1sh/cyme/releases/tag/${src.rev}";
+    changelog = "https://github.com/tuna-f1sh/cyme/releases/tag/${finalAttrs.src.rev}";
     description = "Modern cross-platform lsusb";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ h7x4 ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ h7x4 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
     mainProgram = "cyme";
   };
-}
+})

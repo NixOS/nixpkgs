@@ -1,0 +1,21 @@
+Fix type error in fixed-mem-cache for SBCL 2.6.0
+
+cache starts as nil and may be emptied by the loop, so (last cache)
+can return nil. (setf (cdr nil) ...) is undefined behavior that
+SBCL 2.6.0 now catches as a type conflict during compilation,
+causing COMPILE-FILE-ERROR.
+
+Use nconc instead, which handles the nil case correctly.
+
+Upstream issue: https://github.com/ghollisjr/cl-ana/issues/48
+
+--- a/makeres/makeres.lisp
++++ b/makeres/makeres.lisp
+@@ -936,5 +936,5 @@
+                    do (unload-target (pop cache))))
+               (load-target id)
+-              (setf (cdr (last cache))
+-                    (list id)))))))))
++              (setf cache
++                    (nconc cache (list id))))))))))
+

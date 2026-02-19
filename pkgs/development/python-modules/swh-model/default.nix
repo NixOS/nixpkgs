@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "swh-model";
-  version = "7.1.0";
+  version = "8.4.1";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "devel";
     repo = "swh-model";
     tag = "v${version}";
-    hash = "sha256-I0DaSipE5TVFqAdGkNo4e66l1x4A26EYk0F4tKMy33k=";
+    hash = "sha256-v/vbY0mxvsbuLUAmDACW9brfVF5djMYyvv9Mf1VL6do=";
   };
 
   build-system = [
@@ -68,17 +68,17 @@ buildPythonPackage rec {
     types-deprecated
   ];
 
-  pytestFlagsArray = lib.optionals (stdenv.hostPlatform.isDarwin) [
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin) [
     # OSError: [Errno 92] Illegal byte sequence
-    "--deselect swh/model/tests/test_cli.py::TestIdentify::test_exclude"
-    "--deselect swh/model/tests/test_from_disk.py::DirectoryToObjects::test_exclude"
-    "--deselect swh/model/tests/test_from_disk.py::DirectoryToObjects::test_exclude_trailing"
+    "swh/model/tests/test_cli.py::TestIdentify::test_exclude"
+    "swh/model/tests/test_from_disk.py::DirectoryToObjects::test_exclude"
+    "swh/model/tests/test_from_disk.py::DirectoryToObjects::test_exclude_trailing"
   ];
 
   meta = {
     description = "Implementation of the Data model of the Software Heritage project, used to archive source code artifacts";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-model";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

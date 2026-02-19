@@ -7,14 +7,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.4";
   pname = "nqptp";
 
   src = fetchFromGitHub {
     owner = "mikebrady";
     repo = "nqptp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-roTNcr3v2kzE6vQ5plAVtlw1+2yJplltOYsGGibtoZo=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})

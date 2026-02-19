@@ -12,18 +12,18 @@
   glew,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   boost,
   glm,
   freetype,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "logstalgia";
   version = "1.1.4";
 
   src = fetchurl {
-    url = "https://github.com/acaudwell/Logstalgia/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/acaudwell/Logstalgia/releases/download/logstalgia-${finalAttrs.version}/logstalgia-${finalAttrs.version}.tar.gz";
     hash = "sha256-wEnv9AXpJANSIu2ya8xse18AoIkmq9t7Rn4kSSQnkKk=";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ftgl
     libpng
     libjpeg
-    libX11
+    libx11
     pcre2
     SDL2_image
     libGLU
@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
     "--with-boost-filesystem=boost_filesystem"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://logstalgia.io/";
     description = "Website traffic visualization tool";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     longDescription = ''
       Logstalgia is a website traffic visualization that replays or
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
       a Miscellaneous section.
     '';
 
-    platforms = platforms.gnu ++ platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "logstalgia";
   };
-}
+})

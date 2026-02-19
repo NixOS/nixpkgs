@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.8.3";
+  version = "2.8.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     tag = "v${version}";
-    hash = "sha256-l7XCgD5UvQTva3lsKZmFSIT0nxReGuslWWuar31+pQQ=";
+    hash = "sha256-76DeL/KIna8Hd9eukCzuRXKO+awkbpc4trCeKTSfGmA=";
   };
 
   build-system = [
@@ -60,14 +60,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # pyarrow.lib.ArrowInvalid
-    "test_recordarray"
-  ];
-
   disabledTestPaths = [
     # Need to be run on a GPU platform.
-    "tests-cuda"
+    "tests-cuda/*"
   ];
 
   meta = {

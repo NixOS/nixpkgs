@@ -17,7 +17,7 @@
   pango,
   bash,
   bison,
-  xorg,
+  libxrender,
   python3,
   withXorg ? true,
 
@@ -59,14 +59,17 @@ stdenv.mkDerivation rec {
     gts
     pango
     bash
-  ] ++ optionals withXorg (with xorg; [ libXrender ]);
+  ]
+  ++ optionals withXorg [ libxrender ];
 
   hardeningDisable = [ "fortify" ];
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ optional (xorg == null) "--without-x";
+  ]
+  # TODO: this should probably be !withXorg instead of false, however it causes 17k rebuilds
+  ++ optional false "--without-x";
 
   enableParallelBuilding = true;
 
@@ -101,12 +104,12 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://graphviz.org";
     description = "Graph visualization tools";
-    license = licenses.epl10;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bjornfor
       raskin
     ];

@@ -38,12 +38,7 @@ let
           description = "Whether to enable this buildkite agent";
         };
 
-        package = lib.mkOption {
-          default = pkgs.buildkite-agent;
-          defaultText = lib.literalExpression "pkgs.buildkite-agent";
-          description = "Which buildkite-agent derivation to use";
-          type = lib.types.package;
-        };
+        package = lib.mkPackageOption pkgs "buildkite-agent" { };
 
         dataDir = lib.mkOption {
           default = "/var/lib/buildkite-agent-${name}";
@@ -218,7 +213,7 @@ in
             tagStr =
               name: value:
               if lib.isList value then
-                lib.concatStringsSep "," (builtins.map (v: "${name}=${v}") value)
+                lib.concatStringsSep "," (map (v: "${name}=${v}") value)
               else
                 "${name}=${value}";
             tagsStr = lib.concatStringsSep "," (lib.mapAttrsToList tagStr cfg.tags);

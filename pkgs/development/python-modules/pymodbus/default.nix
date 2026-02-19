@@ -19,17 +19,19 @@
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymodbus";
-  version = "3.9.2";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
-    tag = "v${version}";
-    hash = "sha256-nzaIE8ZBIwo6ZChYBzQzMndCM/hOwCVKepkUACn8e80=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wyelHxfzmoyqp+D6v4EqJK8fL4FOuYrV57xZROGuIsY=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
@@ -47,7 +49,8 @@ buildPythonPackage rec {
     redis
     sqlalchemy
     twisted
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   preCheck = ''
     pushd test
@@ -59,18 +62,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymodbus" ];
 
-  disabledTests =
-    [
-      # Tests often hang
-      "test_connected"
-    ]
-    ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
-      "test_split_serial_packet"
-      "test_serial_poll"
-      "test_simulator"
-    ];
+  disabledTests = [
+    # Tests often hang
+    "test_connected"
+  ]
+  ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
+    "test_split_serial_packet"
+    "test_serial_poll"
+    "test_simulator"
+  ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Don't test the examples
+    "examples/"
+  ];
+
+  meta = {
     description = "Python implementation of the Modbus protocol";
     longDescription = ''
       Pymodbus is a full Modbus protocol implementation using twisted,
@@ -79,9 +86,9 @@ buildPythonPackage rec {
       lightweight project is needed.
     '';
     homepage = "https://github.com/pymodbus-dev/pymodbus";
-    changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pymodbus.simulator";
   };
-}
+})

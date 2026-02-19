@@ -8,15 +8,15 @@
   libimobiledevice-glue,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libusbmuxd";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libusbmuxd";
-    rev = version;
-    hash = "sha256-coQqNGPsqrOYbBjO0eQZQNK8ZTB+ZzfMWvQ6Z1by9PY=";
+    rev = finalAttrs.version;
+    hash = "sha256-o1EFY/cv+pQrGexvPOwMs5mz9KRcffnloXCQXMzbmDY=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   meta = {
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

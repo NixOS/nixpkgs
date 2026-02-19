@@ -15,14 +15,14 @@ let
     hash = "sha256-IoU9ZPCqvSPX4DmfC+r5MiglhFc41XMRrbJRL9ZNrvs=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wofi-emoji";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Zeioth";
     repo = "wofi-emoji";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NHiAAPRbIz0sC5yh9DTDmIU3zDBFIlUsbpW4HAPr5C8=";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "wofi-emoji";
   };
-}
+})

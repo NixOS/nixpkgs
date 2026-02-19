@@ -17,7 +17,6 @@ stdenv.mkDerivation {
     version
     src
     meta
-    CASROOT
     env
     ;
 

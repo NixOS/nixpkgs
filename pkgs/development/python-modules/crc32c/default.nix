@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "crc32c";
   version = "2.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ICRAR";

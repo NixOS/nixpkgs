@@ -144,7 +144,7 @@ in
 
           Enabling system-wide PipeWire is however not recommended and disabled
           by default according to
-          https://github.com/PipeWire/pipewire/blob/master/NEWS
+          https://github.com/PipeWire/pipewire/blob/0.3.11/NEWS#L14-L16
         '';
       };
 
@@ -359,8 +359,7 @@ in
     systemd.services.pipewire.bindsTo = [ "dbus.service" ];
     systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
 
-    # Enable either system or user units.  Note that for pipewire-pulse there
-    # are only user units, which work in both cases.
+    # Enable either system or user units.
     systemd.sockets.pipewire.enable = cfg.systemWide;
     systemd.services.pipewire.enable = cfg.systemWide;
     systemd.user.sockets.pipewire.enable = !cfg.systemWide;
@@ -368,6 +367,9 @@ in
 
     systemd.services.pipewire.environment.LV2_PATH = mkIf cfg.systemWide "${lv2Plugins}/lib/lv2";
     systemd.user.services.pipewire.environment.LV2_PATH = mkIf (
+      !cfg.systemWide
+    ) "${lv2Plugins}/lib/lv2";
+    systemd.user.services.filter-chain.environment.LV2_PATH = mkIf (
       !cfg.systemWide
     ) "${lv2Plugins}/lib/lv2";
 
@@ -445,7 +447,8 @@ in
         extraGroups = [
           "audio"
           "video"
-        ] ++ optional config.security.rtkit.enable "rtkit";
+        ]
+        ++ optional config.security.rtkit.enable "rtkit";
         description = "PipeWire system service user";
         isSystemUser = true;
         home = "/var/lib/pipewire";

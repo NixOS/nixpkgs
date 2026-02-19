@@ -45,9 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library by which preformatted data get onto optical media: CD, DVD, BD (Blu-Ray)";
     changelog = "https://dev.lovelyhq.com/libburnia/libburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      abbradar
-    ];
+    maintainers = [ ];
     mainProgram = "cdrskin";
     platforms = lib.platforms.unix;
   };

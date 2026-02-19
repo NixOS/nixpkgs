@@ -20,14 +20,16 @@
 
 buildPythonPackage rec {
   pname = "music-assistant-models";
-  version = "1.1.43"; # Must be compatible with music-assistant-client package
+  # Must be compatible with music-assistant-client package
+  # nixpkgs-update: no auto update
+  version = "1.1.89";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "models";
     tag = version;
-    hash = "sha256-0SBNxpiBAKlAQe7eJTp+BwGNY52OTt37TksKrp9nfz4=";
+    hash = "sha256-/eNCgAB5G8g1r2fcW27lySEqg+q/1bJvwwyntigGWjo=";
   };
 
   postPatch = ''
@@ -58,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Models used by Music Assistant (shared by client and server";
     homepage = "https://github.com/music-assistant/models";
-    changelog = "https://github.com/music-assistant/models/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/music-assistant/models/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

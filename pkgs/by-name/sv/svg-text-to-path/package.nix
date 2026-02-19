@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "svg-text-to-path";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "paulzi";
     repo = "svg-text-to-path";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1LW4jYRawP+BM1UtFJiTdcWVnFsEtRdVMlpZgbpZZ8Q=";
+    hash = "sha256-B6/8BbJ75jeFpTFIzL6BtMNCRL9181KxrUkaP9u9odA=";
   };
 
-  npmDepsHash = "sha256-HBV002dwyWwb9dBBpQY4FFZ/U0lfrXNEmNz4Aa0gRKw=";
+  npmDepsHash = "sha256-x593WtqC9Y8AweL6LOr228p1eAc1rI4C+6Ev1K3pUJo=";
   npmPackFlags = [ "--ignore-scripts" ];
   dontNpmBuild = true;
 

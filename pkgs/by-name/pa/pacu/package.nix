@@ -11,15 +11,15 @@ let
     packageOverrides = self: super: { sqlalchemy = super.sqlalchemy_1_4; };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pacu";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "pacu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Td5H4O6/7Gh/rvP191xjCJmIbyc4ezZC5Fh4FZ39ZUM=";
   };
 
@@ -34,26 +34,28 @@ python.pkgs.buildPythonApplication rec {
 
   build-system = with python.pkgs; [ poetry-core ];
 
-  dependencies =
-    [ awscli ]
-    ++ (with python.pkgs; [
-      awscli
-      boto3
-      botocore
-      chalice
-      dsnap
-      jq
-      policyuniverse
-      pycognito
-      pyyaml
-      qrcode
-      requests
-      sqlalchemy
-      sqlalchemy-utils
-      toml
-      typing-extensions
-      urllib3
-    ]);
+  dependencies = [
+    awscli
+  ]
+  ++ (with python.pkgs; [
+    awscli
+    boto3
+    botocore
+    chalice
+    dsnap
+    jq
+    policyuniverse
+    pycognito
+    pyyaml
+    qrcode
+    requests
+    sqlalchemy
+    sqlalchemy-utils
+    toml
+    types-urllib3
+    typing-extensions
+    urllib3
+  ]);
 
   nativeCheckInputs = with python.pkgs; [
     moto
@@ -70,14 +72,18 @@ python.pkgs.buildPythonApplication rec {
     # sAttributeError: module 'moto' has no attribute 'mock_s3'
     "test_update"
     "test_update_second_time"
+
+    # AttributeError: module 'moto' has no attribute 'mock_cognitoidp'
+    "test_cognito__attack_minimal"
+    "test_cognito__attack_sanity"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AWS exploitation framework";
     homepage = "https://github.com/RhinoSecurityLabs/pacu";
-    changelog = "https://github.com/RhinoSecurityLabs/pacu/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/RhinoSecurityLabs/pacu/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pacu";
   };
-}
+})

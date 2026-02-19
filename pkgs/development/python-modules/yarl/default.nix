@@ -9,6 +9,7 @@
   multidict,
   propcache,
   hypothesis,
+  pydantic,
   pytest-codspeed,
   pytest-cov-stub,
   pytest-xdist,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.18.3";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "yarl";
     tag = "v${version}";
-    hash = "sha256-j2z6YAFbQe26YUQGLBwLr9ztUoxMDJJGS9qYeVqSob0=";
+    hash = "sha256-274uVOCTLUihDIJTG62hL2mOBaYDNvRLdTjMcasDFsw=";
   };
 
   build-system = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    pydantic
     pytest-codspeed
     pytest-cov-stub
     pytest-xdist
@@ -58,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yarl" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/aio-libs/yarl/blob/v${version}/CHANGES.rst";
+  meta = {
+    changelog = "https://github.com/aio-libs/yarl/blob/${src.tag}/CHANGES.rst";
     description = "Yet another URL library";
     homepage = "https://github.com/aio-libs/yarl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

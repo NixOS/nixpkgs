@@ -19,11 +19,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyparsing ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for translating ASN.1 into other forms";
     mainProgram = "asn1ate";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

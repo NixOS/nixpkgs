@@ -3,16 +3,20 @@
   stdenv,
   fetchurl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caps";
   version = "0.9.26";
   src = fetchurl {
-    url = "http://www.quitte.de/dsp/caps_${version}.tar.bz2";
+    url = "http://www.quitte.de/dsp/caps_${finalAttrs.version}.tar.bz2";
     sha256 = "1jcq9y51vdnk93q27r566y9qmddvadhr4ddnvkiypaq5rrdnqjg7";
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     echo "PREFIX = $out" > defines.make
+
+    runHook postConfigure
   '';
 
   meta = {
@@ -28,7 +32,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.quitte.de/dsp/caps.html";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.astsmtl ];
     platforms = lib.platforms.linux;
   };
-}
+})

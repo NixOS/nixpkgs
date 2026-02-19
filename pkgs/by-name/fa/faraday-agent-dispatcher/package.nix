@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "faraday-agent-dispatcher";
   version = "3.4.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Qr3ZGU4y7f6yHD78ecdv7a6IBFDpT+/4Yez0n/MenN0=";
   };
 
@@ -70,12 +70,12 @@ python3.pkgs.buildPythonApplication rec {
     "faraday_agent_dispatcher"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to send result from tools to the Faraday Platform";
     homepage = "https://github.com/infobyte/faraday_agent_dispatcher";
-    changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "faraday-dispatcher";
   };
-}
+})

@@ -10,6 +10,7 @@
 
 let
   inherit (lib)
+    boolToYesNo
     concatStringsSep
     literalExpression
     mapAttrsToList
@@ -21,16 +22,15 @@ let
     ;
   libDir = "/var/lib/bacula";
 
-  yes_no = bool: if bool then "yes" else "no";
   tls_conf =
     tls_cfg:
     optionalString tls_cfg.enable (
       concatStringsSep "\n" (
         [ "TLS Enable = yes;" ]
-        ++ optional (tls_cfg.require != null) "TLS Require = ${yes_no tls_cfg.require};"
+        ++ optional (tls_cfg.require != null) "TLS Require = ${boolToYesNo tls_cfg.require};"
         ++ optional (tls_cfg.certificate != null) ''TLS Certificate = "${tls_cfg.certificate}";''
         ++ [ ''TLS Key = "${tls_cfg.key}";'' ]
-        ++ optional (tls_cfg.verifyPeer != null) "TLS Verify Peer = ${yes_no tls_cfg.verifyPeer};"
+        ++ optional (tls_cfg.verifyPeer != null) "TLS Verify Peer = ${boolToYesNo tls_cfg.verifyPeer};"
         ++ optional (
           tls_cfg.allowedCN != [ ]
         ) "TLS Allowed CN = ${concatStringsSep " " (tls_cfg.allowedCN)};"
@@ -720,7 +720,7 @@ in
     systemd.services.bacula-dir = mkIf dir_cfg.enable {
       after = [
         "network.target"
-        "postgresql.service"
+        "postgresql.target"
       ];
       description = "Bacula Director Daemon";
       wantedBy = [ "multi-user.target" ];

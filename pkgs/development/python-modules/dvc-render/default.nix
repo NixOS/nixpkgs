@@ -10,7 +10,6 @@
   pytestCheckHook,
   pytest-mock,
   pytest-test-utils,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "dvc-render";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
@@ -41,25 +38,24 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs =
-    [
-      funcy
-      pytestCheckHook
-      pytest-mock
-      pytest-test-utils
-    ]
-    ++ optional-dependencies.table
-    ++ optional-dependencies.markdown;
+  nativeCheckInputs = [
+    funcy
+    pytestCheckHook
+    pytest-mock
+    pytest-test-utils
+  ]
+  ++ optional-dependencies.table
+  ++ optional-dependencies.markdown;
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_vega.py" ];
 
   pythonImportsCheck = [ "dvc_render" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for rendering DVC plots";
     homepage = "https://github.com/iterative/dvc-render";
     changelog = "https://github.com/iterative/dvc-render/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

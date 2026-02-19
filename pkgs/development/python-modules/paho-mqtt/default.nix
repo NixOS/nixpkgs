@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   version = "2.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.python";
@@ -38,7 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "paho.mqtt" ];
 
@@ -49,12 +46,12 @@ buildPythonPackage rec {
     export PYTHONPATH=".:$PYTHONPATH"
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${src.rev}/ChangeLog.txt";
     description = "MQTT version 5.0/3.1.1 client class";
     homepage = "https://eclipse.org/paho";
-    license = licenses.epl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.epl20;
+    maintainers = with lib.maintainers; [
       mog
       dotlambda
     ];

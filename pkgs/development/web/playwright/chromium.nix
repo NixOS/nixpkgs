@@ -31,18 +31,34 @@
   stdenv,
   systemd,
   vulkan-loader,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   ...
 }:
 let
+  # Playwright expects different directory names for different architectures:
+  # - linux-x64 expects: chrome-linux64
+  # - linux-arm64 expects: chrome-linux
+  chromeDir =
+    {
+      x86_64-linux = "chrome-linux64";
+      aarch64-linux = "chrome-linux";
+    }
+    .${system} or throwSystem;
+
   chromium-linux = stdenv.mkDerivation {
     name = "playwright-chromium";
     src = fetchzip {
       url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-${suffix}.zip";
       hash =
         {
-          x86_64-linux = "sha256-7oQQCAIt1VJiMNFEJO40K8oENK/L0BICXm2D/3fZ8bA=";
-          aarch64-linux = "sha256-1OmByLX2jNHXAzWdXF8Od7S7pj/jl4wwvOQcsZc5R7o=";
+          x86_64-linux = "sha256-r715GrQMPRIsM2/Z6SRyvo/6j4fbWXKfCCh//Cc2DGw=";
+          aarch64-linux = "sha256-bS8CstCia8dm2DG9vBKHjsfeoXkyBZStBefu0kD8c2o=";
         }
         .${system} or throwSystem;
     };
@@ -70,22 +86,22 @@ let
       pango
       stdenv.cc.cc.lib
       systemd
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libxcb
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
+      libxcb
     ];
 
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/chrome-linux
-      cp -R . $out/chrome-linux
+      mkdir -p $out/${chromeDir}
+      cp -R . $out/${chromeDir}
 
-      wrapProgram $out/chrome-linux/chrome \
+      wrapProgram $out/${chromeDir}/chrome \
         --set-default SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
         --set-default FONTCONFIG_FILE ${fontconfig_file}
 
@@ -100,8 +116,8 @@ let
 
     postFixup = ''
       # replace bundled vulkan-loader since we are also already adding our own to RPATH
-      rm "$out/chrome-linux/libvulkan.so.1"
-      ln -s -t "$out/chrome-linux" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+      rm "$out/${chromeDir}/libvulkan.so.1"
+      ln -s -t "$out/${chromeDir}" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
   };
   chromium-darwin = fetchzip {
@@ -109,8 +125,8 @@ let
     stripRoot = false;
     hash =
       {
-        x86_64-darwin = "sha256-IJxCYtHTOtBxQdGbiLz+PODQL4rmBn4WXNJ3QNr0D/I=";
-        aarch64-darwin = "sha256-6QP1OY1krhcfMf5rNzbd55W/Wg02LnbqaU7aKWhJ7qM=";
+        x86_64-darwin = "sha256-kGHlIxS9Ti362XmBt+aepYV45cCZoBRqJ+YBsLasDp0=";
+        aarch64-darwin = "sha256-LwY25Ckh1ZY+L196shf8ydF4IHXUIeI83Yqp8KG+nc4=";
       }
       .${system} or throwSystem;
   };

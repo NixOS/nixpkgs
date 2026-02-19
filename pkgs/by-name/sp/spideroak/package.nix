@@ -7,11 +7,11 @@
   fontconfig,
   freetype,
   glib,
-  libICE,
-  libSM,
-  libX11,
-  libXext,
-  libXrender,
+  libice,
+  libsm,
+  libx11,
+  libxext,
+  libxrender,
   zlib,
 }:
 
@@ -22,11 +22,11 @@ let
     fontconfig
     freetype
     glib
-    libICE
-    libSM
-    libX11
-    libXext
-    libXrender
+    libice
+    libsm
+    libx11
+    libxext
+    libxrender
     zlib
   ];
 
@@ -78,7 +78,6 @@ stdenv.mkDerivation {
     description = "Secure online backup and sychronization";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ amorsillo ];
     platforms = lib.platforms.linux;
     mainProgram = "spideroak";
   };

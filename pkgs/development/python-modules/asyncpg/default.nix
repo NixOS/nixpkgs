@@ -2,12 +2,10 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  async-timeout,
   cython,
   libpq,
   uvloop,
   postgresql,
-  pythonOlder,
   pytest-xdist,
   pytestCheckHook,
   setuptools,
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   version = "0.30.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-xVHpkoq2cHYC9EgRgX+CujxEbgGL/h06vsyLpfPqyFE=";
@@ -30,10 +26,6 @@ buildPythonPackage rec {
     cython
     setuptools
   ];
-
-  # required for compatibility with Python versions older than 3.11
-  # see https://github.com/MagicStack/asyncpg/blob/v0.29.0/asyncpg/_asyncio_compat.py#L13
-  dependencies = lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     libpq.pg_config
@@ -59,7 +51,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncpg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio PosgtreSQL driver";
     homepage = "https://github.com/MagicStack/asyncpg";
     changelog = "https://github.com/MagicStack/asyncpg/releases/tag/v${version}";
@@ -69,7 +61,7 @@ buildPythonPackage rec {
       implementation of PostgreSQL server binary protocol for use with Python's
       asyncio framework.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

@@ -1,13 +1,14 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   qmake,
+  wrapQtAppsHook,
   qtscript,
   qtwebkit,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "21.10.0";
   pname = "smtube";
 
@@ -22,17 +23,20 @@ mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
   buildInputs = [
     qtscript
     qtwebkit
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Play and download Youtube videos";
     homepage = "http://smplayer.sourceforge.net/smtube.php";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ vbgl ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ vbgl ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,15 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   psycopg2,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiopg";
   version = "1.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
@@ -36,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiopg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for accessing a PostgreSQL database";
     homepage = "https://aiopg.readthedocs.io/";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

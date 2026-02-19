@@ -6,15 +6,15 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openresolv";
-  version = "3.13.2";
+  version = "3.17.0";
 
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "openresolv";
-    rev = "v${version}";
-    sha256 = "sha256-rpfzAIzuiO+QTFhN+tHND+OQOyX/GUPvLLX3CSSwqA4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-blWfUXTBPkAYj5o2/lqAfMV4mOHUW1wpPGiUx93Bfyo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openresolv_project" finalAttrs.version;
   };
-}
+})

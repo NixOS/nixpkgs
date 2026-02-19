@@ -11,19 +11,18 @@
   gitMinimal,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-crev";
-  version = "0.26.4";
+  version = "0.26.5";
 
   src = fetchFromGitHub {
     owner = "crev-dev";
     repo = "cargo-crev";
-    rev = "v${version}";
-    sha256 = "sha256-tuOFanGmIRQs0whXINplfHNyKBhJ1QGF+bBVxqGX/yU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-P6i2RvosI36rrg52kUcdrb5y4Fg0ms/mH5hcOWNgSik=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-CmDTNE0nn2BxB//3vE1ao+xnzA1JBhIQdqcQNWuIKHU=";
+  cargoHash = "sha256-ZlcKnSVpMxQqstbr/VkR/iT1B0wR5qnh5VLpNpYsTRw=";
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -36,27 +35,28 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      curl
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    curl
+  ];
 
   nativeCheckInputs = [ gitMinimal ];
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographically verifiable code review system for the cargo (Rust) package manager";
     mainProgram = "cargo-crev";
     homepage = "https://github.com/crev-dev/cargo-crev";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
       mpl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       b4dm4n
       matthiasbeyer
     ];
   };
-}
+})

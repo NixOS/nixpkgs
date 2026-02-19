@@ -6,20 +6,19 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fnm";
   version = "1.38.1";
 
   src = fetchFromGitHub {
     owner = "Schniz";
     repo = "fnm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WW+jWaClDn78Fw/xj6WvnEUlBI99HA5hQFUpwsYKmbI=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-mxYTV3kNetIHB8XcvFdqp7t78E9EzMdMgD4ENIAYyec=";
 
   doCheck = false;
@@ -38,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kidonng ];
   };
-}
+})

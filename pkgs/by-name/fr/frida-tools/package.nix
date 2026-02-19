@@ -4,16 +4,27 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frida-tools";
-  version = "13.7.1";
+  version = "14.5.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-c0Gq1ep75WAvTGIj4c7xSy0NjCGK5wrRPYzeYyFHDgU=";
+    inherit (finalAttrs) version;
+    pname = "frida_tools";
+    hash = "sha256-yan13hoxurv8cUzvBW8iEmhedSOms+lTLpOmlJFbz9U=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "frida"
+    "websockets"
+  ];
+
+  dependencies = with python3Packages; [
     pygments
     prompt-toolkit
     colorama
@@ -25,6 +36,9 @@ python3Packages.buildPythonApplication rec {
     description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (client tools)";
     homepage = "https://www.frida.re/";
     maintainers = with lib.maintainers; [ s1341 ];
-    license = lib.licenses.wxWindows;
+    license = with lib.licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
   };
-}
+})

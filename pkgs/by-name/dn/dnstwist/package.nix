@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dnstwist";
   version = "20250130";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "elceef";
     repo = "dnstwist";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cgSQ6KDCvTYX0vp0jqNzKHzo84IXrztoYqoTJNF+FiI=";
   };
 
@@ -36,12 +36,12 @@ python3.pkgs.buildPythonApplication rec {
     "dnstwist"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Domain name permutation engine for detecting homograph phishing attacks";
     homepage = "https://github.com/elceef/dnstwist";
-    changelog = "https://github.com/elceef/dnstwist/releases/tag/${version}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/elceef/dnstwist/releases/tag/${finalAttrs.version}";
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dnstwist";
   };
-}
+})

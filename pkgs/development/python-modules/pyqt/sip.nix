@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pyqt5-sip";
   version = "12.17.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "pyqt5_sip";
@@ -20,11 +21,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "PyQt5.sip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Qt5";
     homepage = "https://github.com/Python-SIP/sip";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     inherit (mesa.meta) platforms;
-    maintainers = with maintainers; [ sander ];
   };
 }

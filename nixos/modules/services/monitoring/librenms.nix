@@ -11,22 +11,26 @@ let
   configJson = settingsFormat.generate "librenms-config.json" cfg.settings;
 
   package = cfg.package.override {
-    logDir = cfg.logDir;
-    dataDir = cfg.dataDir;
+    inherit (cfg) logDir dataDir;
   };
 
-  phpOptions = ''
-    log_errors = on
-    post_max_size = 100M
-    upload_max_filesize = 100M
-    memory_limit = ${toString cfg.settings.php_memory_limit}M
-    date.timezone = "${config.time.timeZone}"
-  '';
+  toKeyValue = lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
+  };
+
+  defaultPHPSettings = {
+    log_errors = "on";
+    post_max_size = "100M";
+    upload_max_filesize = "100M";
+    memory_limit = "${toString cfg.settings.php_memory_limit}M";
+    "date.timezone" = config.time.timeZone;
+  };
+
   phpIni =
     pkgs.runCommand "php.ini"
       {
         inherit (package) phpPackage;
-        inherit phpOptions;
+        phpOptions = toKeyValue cfg.phpOptions;
         preferLocalBuild = true;
         passAsFile = [ "phpOptions" ];
       }
@@ -212,6 +216,51 @@ in
       };
     };
 
+    phpOptions = mkOption {
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          int
+        ]);
+      defaultText = literalExpression (
+        generators.toPretty { } (
+          defaultPHPSettings
+          // {
+            "zend_extension" = lib.literalExpression "opcache";
+            "opcache.enable" = lib.literalExpression "1";
+            "opcache.memory_consumption" = lib.literalExpression "256";
+            "date.timezone" = lib.literalExpression "config.time.timeZone";
+            memory_limit = lib.literalExpression "\${toString cfg.settings.php_memory_limit}M";
+          }
+        )
+      );
+      description = ''
+        Options for PHP's php.ini file for librenms.
+
+        Please note that this option is _additive_ on purpose while the
+        attribute values inside the default are option defaults: that means that
+
+        ```nix
+        {
+          services.librenms.phpOptions."opcache.enable" = 1;
+        }
+        ```
+
+        will override the `php.ini` option `opcache.enable` without discarding the rest of the defaults.
+
+        Overriding all of `phpOptions` can be done like this:
+
+        ```nix
+        {
+          services.librenms.phpOptions = lib.mkForce {
+            /* ... */
+          };
+        }
+        ```
+      '';
+    };
+
     poolConfig = mkOption {
       type =
         with types;
@@ -354,7 +403,7 @@ in
       description = ''
         Attrset of the LibreNMS configuration.
         See <https://docs.librenms.org/Support/Configuration/> for reference.
-        All possible options are listed [here](https://github.com/librenms/librenms/blob/master/misc/config_definitions.json).
+        All possible options are listed [here](https://github.com/librenms/librenms/blob/master/resources/definitions/config_definitions.json).
         See <https://docs.librenms.org/Extensions/Authentication/> for setting other authentication methods.
       '';
       default = { };
@@ -399,48 +448,49 @@ in
 
     users.groups.${cfg.group} = { };
 
-    services.librenms.settings =
-      {
-        # basic configs
-        "user" = cfg.user;
-        "own_hostname" = cfg.hostname;
-        "base_url" = lib.mkDefault "/";
-        "auth_mechanism" = lib.mkDefault "mysql";
+    services.librenms.phpOptions = lib.mapAttrs (lib.const lib.mkOptionDefault) defaultPHPSettings;
 
-        # disable auto update function (won't work with NixOS)
-        "update" = false;
+    services.librenms.settings = {
+      # basic configs
+      "user" = cfg.user;
+      "own_hostname" = cfg.hostname;
+      "base_url" = lib.mkDefault "/";
+      "auth_mechanism" = lib.mkDefault "mysql";
 
-        # enable fast ping by default
-        "ping_rrd_step" = 60;
+      # disable auto update function (won't work with NixOS)
+      "update" = false;
 
-        # set default memory limit to 1G
-        "php_memory_limit" = lib.mkDefault 1024;
+      # enable fast ping by default
+      "ping_rrd_step" = 60;
 
-        # one minute polling
-        "rrd.step" = if cfg.enableOneMinutePolling then 60 else 300;
-        "rrd.heartbeat" = if cfg.enableOneMinutePolling then 120 else 600;
-      }
-      // (lib.optionalAttrs cfg.distributedPoller.enable {
-        "distributed_poller" = true;
-        "distributed_poller_name" = lib.mkIf (
-          cfg.distributedPoller.name != null
-        ) cfg.distributedPoller.name;
-        "distributed_poller_group" = cfg.distributedPoller.group;
-        "distributed_billing" = cfg.distributedPoller.distributedBilling;
-        "distributed_poller_memcached_host" = cfg.distributedPoller.memcachedHost;
-        "distributed_poller_memcached_port" = cfg.distributedPoller.memcachedPort;
-        "rrdcached" =
-          "${cfg.distributedPoller.rrdcachedHost}:${toString cfg.distributedPoller.rrdcachedPort}";
-      })
-      // (lib.optionalAttrs cfg.useDistributedPollers {
-        "distributed_poller" = true;
-        # still enable a local poller with distributed polling
-        "distributed_poller_group" = lib.mkDefault "0";
-        "distributed_billing" = lib.mkDefault true;
-        "distributed_poller_memcached_host" = "localhost";
-        "distributed_poller_memcached_port" = 11211;
-        "rrdcached" = "localhost:42217";
-      });
+      # set default memory limit to 1G
+      "php_memory_limit" = lib.mkDefault 1024;
+
+      # one minute polling
+      "rrd.step" = if cfg.enableOneMinutePolling then 60 else 300;
+      "rrd.heartbeat" = if cfg.enableOneMinutePolling then 120 else 600;
+    }
+    // (lib.optionalAttrs cfg.distributedPoller.enable {
+      "distributed_poller" = true;
+      "distributed_poller_name" = lib.mkIf (
+        cfg.distributedPoller.name != null
+      ) cfg.distributedPoller.name;
+      "distributed_poller_group" = cfg.distributedPoller.group;
+      "distributed_billing" = cfg.distributedPoller.distributedBilling;
+      "distributed_poller_memcached_host" = cfg.distributedPoller.memcachedHost;
+      "distributed_poller_memcached_port" = cfg.distributedPoller.memcachedPort;
+      "rrdcached" =
+        "${cfg.distributedPoller.rrdcachedHost}:${toString cfg.distributedPoller.rrdcachedPort}";
+    })
+    // (lib.optionalAttrs cfg.useDistributedPollers {
+      "distributed_poller" = true;
+      # still enable a local poller with distributed polling
+      "distributed_poller_group" = lib.mkDefault "0";
+      "distributed_billing" = lib.mkDefault true;
+      "distributed_poller_memcached_host" = "localhost";
+      "distributed_poller_memcached_port" = 11211;
+      "rrdcached" = "localhost:42217";
+    });
 
     services.memcached = lib.mkIf cfg.useDistributedPollers {
       enable = true;
@@ -466,14 +516,13 @@ in
     services.mysql = lib.mkIf cfg.database.createLocally {
       enable = true;
       package = lib.mkDefault pkgs.mariadb;
-      settings.mysqld =
-        {
-          innodb_file_per_table = 1;
-          lower_case_table_names = 0;
-        }
-        // (lib.optionalAttrs cfg.useDistributedPollers {
-          bind-address = "0.0.0.0";
-        });
+      settings.mysqld = {
+        innodb_file_per_table = 1;
+        lower_case_table_names = 0;
+      }
+      // (lib.optionalAttrs cfg.useDistributedPollers {
+        bind-address = "0.0.0.0";
+      });
       ensureDatabases = [ cfg.database.database ];
       ensureUsers = [
         {
@@ -513,12 +562,13 @@ in
       user = cfg.user;
       group = cfg.group;
       inherit (package) phpPackage;
-      inherit phpOptions;
+      phpOptions = toKeyValue cfg.phpOptions;
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = config.services.nginx.user;
         "listen.group" = config.services.nginx.group;
-      } // cfg.poolConfig;
+      }
+      // cfg.poolConfig;
     };
 
     systemd.services.librenms-scheduler = {
@@ -548,7 +598,8 @@ in
       after = [
         "systemd-tmpfiles-setup.service"
         "network.target"
-      ] ++ (lib.optional (cfg.database.host == "localhost") "mysql.service");
+      ]
+      ++ (lib.optional (cfg.database.host == "localhost") "mysql.service");
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [
         package
@@ -588,8 +639,15 @@ in
         ];
       };
       script =
+        let
+          nginxHasSSL =
+            with config.services.nginx.virtualHosts."${cfg.hostname}";
+            onlySSL || addSSL || forceSSL;
+        in
         ''
           set -euo pipefail
+
+          PATH=$PATH:${lib.makeBinPath (with pkgs; [ gnused ])}
 
           # config setup
           ln -sf ${configFile} ${cfg.dataDir}/config.php
@@ -609,12 +667,14 @@ in
             echo "" >> ${cfg.dataDir}/.env
           else
             # .env file already exists --> only update database and cache config
-            ${pkgs.gnused}/bin/sed -i /^DB_/d ${cfg.dataDir}/.env
-            ${pkgs.gnused}/bin/sed -i /^CACHE_DRIVER/d ${cfg.dataDir}/.env
+            sed -i /^APP_URL=/d ${cfg.dataDir}/.env
+            sed -i /^DB_/d ${cfg.dataDir}/.env
+            sed -i /^CACHE_DRIVER=/d ${cfg.dataDir}/.env
           fi
           ${lib.optionalString (cfg.useDistributedPollers || cfg.distributedPoller.enable) ''
             echo "CACHE_DRIVER=memcached" >> ${cfg.dataDir}/.env
           ''}
+          echo "APP_URL=http${lib.optionalString nginxHasSSL "s"}://${cfg.hostname}/" >> ${cfg.dataDir}/.env
           echo "DB_DATABASE=${cfg.database.database}" >> ${cfg.dataDir}/.env
         ''
         + (
@@ -669,6 +729,9 @@ in
             ${artisanWrapper}/bin/librenms-artisan optimize
             echo "${package}" > ${cfg.dataDir}/package
           fi
+
+          # to make sure to not read an outdated .env file
+          ${artisanWrapper}/bin/librenms-artisan config:cache
         '';
     };
 
@@ -735,32 +798,34 @@ in
       lnmsWrapper
     ];
 
-    systemd.tmpfiles.rules =
-      [
-        "d ${cfg.logDir}                               0750 ${cfg.user} ${cfg.group} - -"
-        "f ${cfg.logDir}/librenms.log                  0640 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}                              0750 ${cfg.user} ${cfg.group} - -"
-        "f ${cfg.dataDir}/.env                         0600 ${cfg.user} ${cfg.group} - -"
-        "f ${cfg.dataDir}/version                      0600 ${cfg.user} ${cfg.group} - -"
-        "f ${cfg.dataDir}/package                      0600 ${cfg.user} ${cfg.group} - -"
-        "f ${cfg.dataDir}/one_minute_enabled           0600 ${cfg.user} ${cfg.group} - -"
-        "f ${cfg.dataDir}/config.json                  0600 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/storage                      0700 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/storage/app                  0700 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/storage/debugbar             0700 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/storage/framework            0700 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/storage/framework/cache      0700 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/storage/framework/sessions   0700 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/storage/framework/views      0700 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/storage/logs                 0700 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/rrd                          0700 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.dataDir}/cache                        0700 ${cfg.user} ${cfg.group} - -"
-      ]
-      ++ lib.optionals cfg.useDistributedPollers [
-        "d ${cfg.dataDir}/rrdcached-journal            0700 ${cfg.user} ${cfg.group} - -"
-      ];
+    systemd.tmpfiles.rules = [
+      "d ${cfg.logDir}                               0750 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.logDir}/librenms.log                  0640 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}                              0750 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.dataDir}/.env                         0600 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.dataDir}/version                      0600 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.dataDir}/package                      0600 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.dataDir}/one_minute_enabled           0600 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.dataDir}/config.json                  0600 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage                      0700 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage/app                  0700 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage/debugbar             0700 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage/framework            0700 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage/framework/cache      0700 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage/framework/sessions   0700 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage/framework/views      0700 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage/logs                 0700 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/rrd                          0700 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/cache                        0700 ${cfg.user} ${cfg.group} - -"
+    ]
+    ++ lib.optionals cfg.useDistributedPollers [
+      "d ${cfg.dataDir}/rrdcached-journal            0700 ${cfg.user} ${cfg.group} - -"
+    ];
 
   };
 
-  meta.maintainers = with lib.maintainers; [ netali ] ++ lib.teams.wdz.members;
+  meta.maintainers = with lib.maintainers; [
+    netali
+    johannwagner
+  ];
 }

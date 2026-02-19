@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pulsectl,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pulsectl-asyncio";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mhthies";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pulsectl_asyncio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings library for PulseAudio";
     homepage = "https://github.com/mhthies/pulsectl-asyncio";
     changelog = "https://github.com/mhthies/pulsectl-asyncio/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

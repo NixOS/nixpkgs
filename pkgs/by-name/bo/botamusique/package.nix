@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = with python3Packages; [
+    audioop-lts
     flask
     magic
     mutagen
@@ -112,7 +113,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share $out/bin
     cp -r . $out/share/botamusique
     chmod +x $out/share/botamusique/mumbleBot.py
-    wrapPythonProgramsIn $out/share/botamusique "$out $pythonPath"
+    wrapPythonProgramsIn $out/share/botamusique "$out ''${pythonPath[*]}"
 
     # Convenience binary and wrap with ffmpeg dependency
     makeWrapper $out/share/botamusique/mumbleBot.py $out/bin/botamusique \
@@ -155,11 +156,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) botamusique;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Bot to play youtube / soundcloud / radio / local music on Mumble";
     homepage = "https://github.com/azlux/botamusique";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "botamusique";
   };

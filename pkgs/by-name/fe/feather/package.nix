@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "feather-wallet";
     repo = "feather";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-DZBRZBcoba32Z/bFThn/9siC8VESg5gdfoFO4Nw8JqM=";
     fetchSubmodules = true;
   };
@@ -40,27 +40,26 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      bc-ur
-      boost186
-      hidapi
-      libsodium
-      libusb1
-      openssl
-      protobuf
-      qrencode
-      unbound
-      zxing-cpp
-    ]
-    ++ (with qt6; [
-      qtbase
-      qtmultimedia
-      qtsvg
-      qttools
-      qtwayland
-      qtwebsockets
-    ]);
+  buildInputs = [
+    bc-ur
+    boost186
+    hidapi
+    libsodium
+    libusb1
+    openssl
+    protobuf
+    qrencode
+    unbound
+    zxing-cpp
+  ]
+  ++ (with qt6; [
+    qtbase
+    qtmultimedia
+    qtsvg
+    qttools
+    qtwayland
+    qtwebsockets
+  ]);
 
   cmakeFlags = [
     "-DProtobuf_INCLUDE_DIR=${lib.getDev protobuf}/include"
@@ -79,13 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free Monero desktop wallet";
     homepage = "https://featherwallet.org/";
     changelog = "https://featherwallet.org/changelog/#${finalAttrs.version}%20changelog";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "feather";
-    maintainers = with maintainers; [ surfaceflinger ];
+    maintainers = with lib.maintainers; [ surfaceflinger ];
   };
 })

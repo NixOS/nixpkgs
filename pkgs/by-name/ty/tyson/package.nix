@@ -1,11 +1,12 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tyson";
   version = "0.1.1-unstable-2024-04-10";
 
@@ -27,19 +28,19 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tyson \
       --bash <($out/bin/tyson completion bash) \
       --fish <($out/bin/tyson completion fish) \
       --zsh <($out/bin/tyson completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TypeScript as a configuration language";
     mainProgram = "tyson";
     homepage = "https://github.com/jetify-com/tyson";
-    changelog = "https://github.com/jetify-com/tyson/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/jetify-com/tyson/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

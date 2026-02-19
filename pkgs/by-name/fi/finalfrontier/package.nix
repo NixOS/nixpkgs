@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-bnRzXIYairlBjv2JxU16UXYc5BB3VeKZNiJ4+XDzub4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-AQiXRKOXV7kXiu9GbtPE0Rddy93t1Y5tuJmww4xFSaU=";
 
   nativeBuildInputs = [
@@ -28,11 +27,12 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   postInstall = ''
     installManPage man/*.1
@@ -44,11 +44,13 @@ rustPlatform.buildRustPackage {
     installShellCompletion finalfrontier.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility for training word and subword embeddings";
     mainProgram = "finalfrontier";
     homepage = "https://github.com/finalfusion/finalfrontier/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -44,13 +44,13 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.30.1";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MjP1rLyWJWrUAHrOKAwGN3A0wIq4iPaXlaUbtPs3F6U=";
+    hash = "sha256-1sNStxgvP8iaiINIa4UOFz8RGeQlFvJK5+RGlK/3Xa8=";
   };
 
   php = php.buildEnv (
@@ -88,7 +88,7 @@ php.buildComposerProject2 (finalAttrs: {
     ++ lib.optional minify.style.enable lightningcss
     ++ lib.optional minify.svg.enable scour;
 
-  vendorHash = "sha256-7jb4/UgnMcXtLCihwk4rr0HLw99FgiYeYJVATGxM/D4=";
+  vendorHash = "sha256-8tEs+kQGB0pmhEQndOOOUDTFkIq+OvyKTmi9YAvK6qc=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
@@ -100,8 +100,8 @@ php.buildComposerProject2 (finalAttrs: {
 
     # Point to PHP + PHP INI in the Nix store
     substituteInPlace src/Movim/Console/DaemonCommand.php \
-      --replace-fail "<info>php vendor/bin/phinx migrate</info>" \
-        "<info>${lib.getBin finalAttrs.php} vendor/bin/phinx migrate</info>" \
+      --replace-fail "<info>composer movim:migrate</info>" \
+        "<info>${lib.getBin finalAttrs.php.packages.composer} movim:migrate</info>" \
       --replace-fail "<info>php daemon.php setAdmin {jid}</info>" \
         "<info>${finalAttrs.meta.mainProgram} setAdmin {jid}</info>"
 
@@ -154,7 +154,7 @@ php.buildComposerProject2 (finalAttrs: {
     mkdir -p $out/bin
     cat << EOF > $out/bin/movim
     #!${lib.getExe dash}
-    ${lib.getExe finalAttrs.php} $out/share/php/${finalAttrs.pname}/daemon.php "\$@"
+    ${lib.getExe finalAttrs.php} $out/share/php/movim/daemon.php "\$@"
     EOF
     chmod +x $out/bin/movim
 

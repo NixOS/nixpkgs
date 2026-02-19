@@ -7,7 +7,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   version = "1.1.0";
   pname = "fatresize";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ya-mouse";
     repo = "fatresize";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1vhz84kxfyl0q7mkqn68nvzzly0a4xgzv76m6db0bk7xyczv1qr2";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     util-linux
   ];
 
-  meta = with lib; {
+  meta = {
     description = "FAT16/FAT32 non-destructive resizer";
     homepage = "https://github.com/ya-mouse/fatresize";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
     mainProgram = "fatresize";
   };
-}
+})

@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   pytestCheckHook,
   fetchPypi,
   lxml,
@@ -18,7 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-cZwqoKQ+B7d07R20dXTiDsiBIYYTyaWa2SnGs8o8Hl8=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     lxml

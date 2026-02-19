@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Legible monospace font that looks like Comic Sans";
     longDescription = ''
       A legible monospace font... the very typeface you’ve been trained to
@@ -36,11 +36,11 @@ stdenvNoCC.mkDerivation {
     '';
     homepage = "https://dtinth.github.io/comic-mono-font/";
 
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       an-empty-string
       totoroot
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

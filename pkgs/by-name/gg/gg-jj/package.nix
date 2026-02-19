@@ -13,46 +13,57 @@
   webkitgtk_4_1,
   versionCheckHook,
   nix-update-script,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gg";
-  version = "0.27.0";
+  version = "0.37.2";
 
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vmzALX1x7VfdnwN05bCwbnTL+HfFVyNiKFoT74tFuu8=";
+    hash = "sha256-xs8UmHKtu+fzNrw77JAifkxDOAx1w/UUKK/4rhWjf2I=";
   };
 
-  cargoRoot = "src-tauri";
-
-  buildAndTestSubdir = "src-tauri";
-
-  cargoHash = "sha256-esStQ55+T4uLbHbg7P7hqS6kIpXIMxouRSFkTo6dvAU=";
+  cargoHash = "sha256-iEWdN6xVXrZiAcsung9LrsTsJdx3cnlr6x3NMrKSi+k=";
 
   npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-yFDGH33maCndH4vgyMfNg0+c5jCOeoIAWUJgAPHXwsM=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    hash = "sha256-jAzIaLRACIDjsn8bHTr3erBoC/02jz8xhyHpFxwH+Y4=";
   };
 
-  nativeBuildInputs =
-    [
-      cargo-tauri.hook
-      nodejs
-      npmHooks.npmConfigHook
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    cargo-tauri.hook
+    nodejs
+    npmHooks.npmConfigHook
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1
+  ];
+
+  nativeCheckInputs = [
+    # Failing tests: Could not execute the git process, found in the OS path 'git'
+    gitMinimal
+  ];
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Attempted to create a NULL object.
+    "--skip=web::tests::integration_test"
+  ];
 
   env.OPENSSL_NO_VENDOR = true;
 

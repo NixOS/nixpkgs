@@ -1,22 +1,23 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dyff";
-  version = "1.10.1";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
-    rev = "v${version}";
-    sha256 = "sha256-dioahL3dWK+rNAcThv2vYyoGaIIFhcd5li9gtwjtGzM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-3BW6uvxnwmvbzqoYnXKO85hMEFXPp+QsrAoGj/ksn/g=";
   };
 
-  vendorHash = "sha256-5uAe6bnYhncr2A+Y/HEjv9agvKp+1D2JH66zIDIeDro=";
+  vendorHash = "sha256-vZI56PKtwmCqqWwPGuWApAZ2lBv17vin1aD36Ym3HOg=";
 
   subPackages = [
     "cmd/dyff"
@@ -29,23 +30,23 @@ buildGoModule rec {
   # test fails with the injected version
   postPatch = ''
     substituteInPlace internal/cmd/cmds_test.go \
-      --replace "version (development)" ${version}
+      --replace "version (development)" ${finalAttrs.version}
   '';
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/homeport/dyff/internal/cmd.version=${version}"
+    "-X=github.com/homeport/dyff/internal/cmd.version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dyff \
       --bash <($out/bin/dyff completion bash) \
       --fish <($out/bin/dyff completion fish) \
       --zsh <($out/bin/dyff completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Diff tool for YAML files, and sometimes JSON";
     mainProgram = "dyff";
     longDescription = ''
@@ -57,10 +58,10 @@ buildGoModule rec {
       using either the Spruce or go-patch path syntax.
     '';
     homepage = "https://github.com/homeport/dyff";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       edlimerkaj
       jceb
     ];
   };
-}
+})

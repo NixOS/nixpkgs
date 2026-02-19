@@ -1,6 +1,6 @@
 {
   lib,
-  fetchurl,
+  fetchFromGitLab,
   gettext,
   wrapGAppsHook3,
 
@@ -11,6 +11,7 @@
   adwaita-icon-theme,
   gtksourceview5,
   glib-networking,
+  libadwaita,
 
   # Test dependencies
   xvfb-run,
@@ -35,44 +36,50 @@
   gupnp-igd,
   enableAppIndicator ? true,
   libappindicator-gtk3,
+  enableSoundNotifications ? true,
+  gsound,
   extraPythonPackages ? ps: [ ],
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.2.0";
+  version = "2.4.3";
 
-  src = fetchurl {
-    url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-TOZuMiE5RjaJYvNWxl2FyCp6uIO+LLWiRb7N9jc1yRk=";
+  src = fetchFromGitLab {
+    domain = "dev.gajim.org";
+    owner = "gajim";
+    repo = "gajim";
+    tag = version;
+    hash = "sha256-3Z6ADcq+E83xD3GMd19zm0n7+w1SuCYP4KcNL9M/DM4=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
-  buildInputs =
-    [
-      gtk4
-      adwaita-icon-theme
-      gtksourceview5
-      glib-networking
-    ]
-    ++ lib.optionals enableJingle [
-      farstream
-      gstreamer
-      gst-plugins-base
-      gst-libav
-      gst-plugins-good
-      libnice
-    ]
-    ++ lib.optional enableSecrets libsecret
-    ++ lib.optional enableSpelling gspell
-    ++ lib.optional enableUPnP gupnp-igd
-    ++ lib.optional enableAppIndicator libappindicator-gtk3;
+  buildInputs = [
+    gtk4
+    adwaita-icon-theme
+    gtksourceview5
+    glib-networking
+  ]
+  ++ lib.optionals enableJingle [
+    farstream
+    gstreamer
+    gst-plugins-base
+    gst-libav
+    gst-plugins-good
+    libnice
+  ]
+  ++ lib.optional enableSecrets libsecret
+  ++ lib.optional enableSpelling gspell
+  ++ lib.optional enableUPnP gupnp-igd
+  ++ lib.optional enableAppIndicator libappindicator-gtk3
+  ++ lib.optional enableSoundNotifications gsound;
 
   nativeBuildInputs = [
     gettext
     wrapGAppsHook3
     gobject-introspection
+    libadwaita
   ];
 
   dontWrapGApps = true;
@@ -93,7 +100,6 @@ python3.pkgs.buildPythonApplication rec {
     with python3.pkgs;
     [
       nbxmpp
-      pygobject3
       dbus-python
       pillow
       css-parser
@@ -106,6 +112,9 @@ python3.pkgs.buildPythonApplication rec {
       qrcode
       sqlalchemy
       emoji
+      httpx
+      h2
+      truststore
     ]
     ++ lib.optionals enableE2E [
       pycrypto
@@ -138,7 +147,6 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       raskin
-      abbradar
       hlad
     ];
     downloadPage = "http://gajim.org/download/";

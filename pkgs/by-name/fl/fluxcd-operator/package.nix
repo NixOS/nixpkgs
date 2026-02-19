@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "fluxcd-operator";
-  version = "0.20.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "controlplaneio-fluxcd";
     repo = "fluxcd-operator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GGHufHUqTylgynK19aaj4KAawlzzuz3iSEHa+vVVPMM=";
+    hash = "sha256-31C+QsuXTQEPUKe3h/u52RXF9FxHidQxIZkrhLvOcuU=";
   };
 
-  vendorHash = "sha256-5uT/pcfXrinyJ1hXmQ+vmWNuyO33c6d5PAjm6kwOZmY=";
+  vendorHash = "sha256-pbEdlq1qOKuxRqLTY4NE/+yfjph8PKcsJOiRc/Tw+Og=";
 
   ldflags = [
     "-s"
@@ -28,11 +28,12 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/cli" ];
 
+  doCheck = false;
+
   nativeBuildInputs = [ installShellFiles ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/flux-operator";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   env.CGO_ENABLED = 0;

@@ -16,8 +16,12 @@ stdenv.mkDerivation {
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     ./autogen.sh
     ./configure --prefix=$out
+
+    runHook postConfigure
   '';
 
   patches = [
@@ -32,11 +36,11 @@ stdenv.mkDerivation {
   ];
   buildInputs = with pkgs; [ libuecc ];
 
-  meta = with lib; {
+  meta = {
     description = "Create and manipulate ECC NISTP256 keypairs";
     mainProgram = "ecdsatool";
     homepage = "https://github.com/kaniini/ecdsatool/";
-    license = with licenses; [ free ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ free ];
+    platforms = lib.platforms.unix;
   };
 }

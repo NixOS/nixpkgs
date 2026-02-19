@@ -4,21 +4,22 @@
   fetchFromGitHub,
   qt5,
   openssl,
-  protobuf,
+  # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
+  protobuf_21,
   pkg-config,
   cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ricochet-refresh";
-  version = "3.0.33";
+  version = "3.0.39";
 
   src = fetchFromGitHub {
     owner = "blueprint-freespeech";
     repo = "ricochet-refresh";
-    rev = "v${finalAttrs.version}-release";
+    tag = "v${finalAttrs.version}-release";
     fetchSubmodules = true;
-    hash = "sha256-KI2C0+S2CKTqaHKL94aS/znGTrnrHjkKCij14BwZMIo=";
+    hash = "sha256-bKleUuR3dnvZETnMx7FSpVflPB8rcijMhJbuH/MuTWE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -35,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     ])
     ++ [
       openssl
-      protobuf
+      protobuf_21
     ];
 
   nativeBuildInputs = [
     pkg-config
-    protobuf
+    protobuf_21
     cmake
     qt5.wrapQtAppsHook
   ];

@@ -16,51 +16,49 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcdio";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "libcdio";
     repo = "libcdio";
     tag = finalAttrs.version;
-    hash = "sha256-izjZk2kz9PkLm9+INUdl1e7jMz3nUsQKdplKI9Io+CM=";
+    hash = "sha256-NZj6sMIhBORh2ZBs/WGI4BYri1REog4ovUug1t5p8Y8=";
   };
 
-  env = lib.optionalAttrs stdenv.is32bit {
+  env = lib.optionalAttrs stdenv.hostPlatform.is32bit {
     NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
   };
 
-  postPatch =
-    ''
-      patchShebangs .
-      echo "
-      @set UPDATED 1 January 1970
-      @set UPDATED-MONTH January 1970
-      @set EDITION ${finalAttrs.version}
-      @set VERSION ${finalAttrs.version}
-      " > doc/version.texi
-    ''
-    + lib.optionalString (!withMan) ''
-      substituteInPlace src/Makefile.am \
-        --replace-fail 'man_cd_drive     = cd-drive.1' "" \
-        --replace-fail 'man_cd_info     = cd-info.1' "" \
-        --replace-fail 'man_cd_read     = cd-read.1' "" \
-        --replace-fail 'man_iso_info     = iso-info.1' "" \
-        --replace-fail 'man_iso_read     = iso-read.1' ""
-    '';
+  postPatch = ''
+    patchShebangs .
+    echo "
+    @set UPDATED 1 January 1970
+    @set UPDATED-MONTH January 1970
+    @set EDITION ${finalAttrs.version}
+    @set VERSION ${finalAttrs.version}
+    " > doc/version.texi
+  ''
+  + lib.optionalString (!withMan) ''
+    substituteInPlace src/Makefile.am \
+      --replace-fail 'man_cd_drive     = cd-drive.1' "" \
+      --replace-fail 'man_cd_info     = cd-info.1' "" \
+      --replace-fail 'man_cd_read     = cd-read.1' "" \
+      --replace-fail 'man_iso_info     = iso-info.1' "" \
+      --replace-fail 'man_iso_read     = iso-read.1' ""
+  '';
 
   configureFlags = [
     (lib.enableFeature withMan "maintainer-mode")
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      autoreconfHook
-      texinfo
-    ]
-    ++ lib.optionals withMan [
-      help2man
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    texinfo
+  ]
+  ++ lib.optionals withMan [
+    help2man
+  ];
 
   buildInputs = [
     libcddb
@@ -72,16 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  outputs =
-    [
-      "out"
-      "lib"
-      "dev"
-      "info"
-    ]
-    ++ lib.optionals withMan [
-      "man"
-    ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "info"
+  ]
+  ++ lib.optionals withMan [
+    "man"
+  ];
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

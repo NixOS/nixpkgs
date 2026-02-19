@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   robotframework,
@@ -14,8 +13,6 @@
 buildPythonPackage rec {
   pname = "robotframework-pythonlibcore";
   version = "4.4.1";
-
-  disabled = pythonOlder "3.8";
 
   pyproject = true;
 

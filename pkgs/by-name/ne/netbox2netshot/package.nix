@@ -6,18 +6,17 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "netbox2netshot";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "netbox2netshot";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4Leg7MaLSos2RjmxB6yVzxGju6OzNrChXdw5htppuZU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-XjHOlpYSOwSXxbGp/xZVVcBGhprg4hh61L5dhVE5ODM=";
 
   nativeBuildInputs = [
@@ -28,11 +27,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Inventory synchronization tool between Netbox and Netshot";
     homepage = "https://github.com/scaleway/netbox2netshot";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "netbox2netshot";
   };
-}
+})

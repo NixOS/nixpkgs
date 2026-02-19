@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   fetchFromGitHub,
+  patchelfUnstable,
 }:
 
 buildNpmPackage rec {
@@ -28,7 +29,24 @@ buildNpmPackage rec {
     })
   ];
 
+  nativeBuildInputs = [
+    patchelfUnstable # --clear-execstack is only available on 0.18
+  ];
+
   doInstallCheck = true;
+
+  postInstall = ''
+    # glibc 2.41+ refuses to make the stack executable if it isn't executable,
+    # but a library loaded via `dlopen()` mandates it.
+    # According to https://github.com/holepunchto/sodium-native/issues/214
+    # this isn't necessary in this case.
+    while IFS= read -r -d ''' file; do
+      # Skip PEs with the same name
+      if patchelf --print-rpath "$file" &>/dev/null; then
+        patchelf "$file" --clear-execstack
+      fi
+    done < <(find $out/lib/node_modules -name 'sodium-native.node' -print0)
+  '';
 
   installCheckPhase = ''
     $out/bin/hypershell --help

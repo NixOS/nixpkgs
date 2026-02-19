@@ -12,7 +12,7 @@
 }:
 buildPythonPackage {
   pname = "plastexdepgraph";
-  version = "0.0.4";
+  version = "0.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -30,7 +30,7 @@ buildPythonPackage {
   ];
 
   meta = {
-    description = "plasTeX plugin allowing to build dependency graphs";
+    description = "PlasTeX plugin allowing to build dependency graphs";
     homepage = "https://github.com/PatrickMassot/plastexdepgraph";
     maintainers = with lib.maintainers; [ niklashh ];
     license = lib.licenses.asl20;

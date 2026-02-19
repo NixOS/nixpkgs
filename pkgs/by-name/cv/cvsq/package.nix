@@ -5,19 +5,19 @@
   makeWrapper,
   cvs,
   perl,
-  nettools,
+  net-tools,
   findutils,
   rsync,
   coreutils,
   diffutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cvsq";
   version = "1.11";
 
   src = fetchurl {
-    url = "http://www.linta.de/~aehlig/cvsq/cvsq-${version}.tgz";
+    url = "http://www.linta.de/~aehlig/cvsq/cvsq-${finalAttrs.version}.tgz";
     sha256 = "0491k4skk3jyyd6plp2kcihmxxav9rsch7vd1yi697m2fqckp5ws";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cvs
     perl
-    nettools
+    net-tools
     findutils
     rsync
     coreutils
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/cvsq --prefix PATH : ${
       lib.makeBinPath [
         cvs
-        nettools
+        net-tools
         findutils
         rsync
         coreutils
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/cvsq-branch --prefix PATH : ${
       lib.makeBinPath [
         cvs
-        nettools
+        net-tools
         findutils
         rsync
         coreutils
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/cvsq-merge --prefix PATH : ${
       lib.makeBinPath [
         cvs
-        nettools
+        net-tools
         findutils
         rsync
         coreutils
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/cvsq-switch --prefix PATH : ${
       lib.makeBinPath [
         cvs
-        nettools
+        net-tools
         findutils
         rsync
         coreutils
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/lcvs --prefix PATH : ${
       lib.makeBinPath [
         cvs
-        nettools
+        net-tools
         findutils
         rsync
         coreutils
@@ -113,4 +113,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ clkamp ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,7 +4,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "passh";
   version = "2020-03-18";
 
@@ -16,16 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp ${finalAttrs.pname} $out/bin
+    runHook preInstall
+    install -Dm755 passh $out/bin/passh
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/clarkwang/passh";
     description = "Sshpass alternative for non-interactive ssh auth";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.lovesegfault ];
-    mainProgram = finalAttrs.pname;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.lovesegfault ];
+    mainProgram = "passh";
+    platforms = lib.platforms.unix;
   };
-})
+}

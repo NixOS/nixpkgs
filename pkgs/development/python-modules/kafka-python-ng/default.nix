@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools-scm,
   crc32c,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   version = "2.2.3";
   pname = "kafka-python-ng";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wbarnha";
@@ -44,7 +41,8 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     xxhash
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   meta = {
     changelog = "https://github.com/wbarnha/kafka-python-ng/releases/tag/v${version}";

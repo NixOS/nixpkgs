@@ -8,10 +8,11 @@
 buildPythonApplication rec {
   pname = "cxxtest";
   version = "4.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "CxxTest";
-    repo = pname;
+    repo = "cxxtest";
     rev = version;
     sha256 = "19w92kipfhp5wvs47l0qpibn3x49sbmvkk91yxw6nwk6fafcdl17";
   };
@@ -42,12 +43,12 @@ buildPythonApplication rec {
 
   dontWrapPythonPrograms = true;
 
-  meta = with lib; {
-    homepage = "http://github.com/CxxTest/cxxtest";
+  meta = {
+    homepage = "https://github.com/CxxTest/cxxtest";
     description = "Unit testing framework for C++";
     mainProgram = "cxxtestgen";
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ juliendehos ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ juliendehos ];
   };
 }

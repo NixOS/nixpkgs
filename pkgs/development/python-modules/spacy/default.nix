@@ -6,7 +6,7 @@
 
   # build-system
   cymem,
-  cython_0,
+  cython,
   murmurhash,
   numpy,
   preshed,
@@ -45,21 +45,26 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spacy";
-  version = "3.8.6";
+  version = "3.8.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
-    tag = "release-v${version}";
-    hash = "sha256-Zy2RLib/B9fLtcqO24ltvn1PUD68l9Rf7nHH4XuT6to=";
+    tag = "release-v${finalAttrs.version}";
+    hash = "sha256-pLn3fq6SDstkRIv+1fj1yEGTlAd1IAiVgRu25CnEV8E=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt setup.cfg \
+      --replace-fail typer-slim typer
+  '';
 
   build-system = [
     cymem
-    cython_0
+    cython
     murmurhash
     numpy
     preshed
@@ -106,13 +111,18 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  pytestFlagsArray = [ "-m 'slow'" ];
+  disabledTestMarks = [ "slow" ];
 
   disabledTests = [
     # touches network
     "test_download_compatibility"
     "test_validate_compatibility_table"
     "test_project_assets"
+    "test_find_available_port"
+
+    # Tests for presence of outdated (and thus missing) spacy models
+    # https://github.com/explosion/spaCy/issues/13856
+    "test_registry_entries"
   ];
 
   pythonImportsCheck = [ "spacy" ];
@@ -129,7 +139,7 @@ buildPythonPackage rec {
         ]
       }
 
-      nix-update python3Packages.spacy
+      nix-update python3Packages.spacy --version-regex 'release-v([0-9.]+)'
 
       # update spacy models as well
       echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy-models.en_core_web_sm
@@ -137,12 +147,14 @@ buildPythonPackage rec {
     tests.annotation = callPackage ./annotation-test { };
   };
 
+  __darwinAllowLocalNetworking = true; # needed for test_find_available_port
+
   meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
-    changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
+    changelog = "https://github.com/explosion/spaCy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
     mainProgram = "spacy";
   };
-}
+})

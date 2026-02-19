@@ -104,7 +104,7 @@ let
   runTest =
     script:
     let
-      name = script.name or (builtins.baseNameOf script);
+      name = script.name or (baseNameOf script);
     in
     writeShellScript "run-${name}" ''
       if [ "$(${script})" != "success" ]; then

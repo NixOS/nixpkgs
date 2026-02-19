@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kdigger";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "quarkslab";
     repo = "kdigger";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hpLhtTENtOBQjm+CZRAcx1BG9831JUFIsLL57wZIrso=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -34,7 +34,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/quarkslab/kdigger/commands.VERSION=v${version}"
+    "-X github.com/quarkslab/kdigger/commands.VERSION=v${finalAttrs.version}"
     "-X github.com/quarkslab/kdigger/commands.BUILDERARCH=${stdenv.hostPlatform.linuxArch}"
   ];
 
@@ -42,7 +42,7 @@ buildGoModule rec {
     ldflags+=" -X github.com/quarkslab/kdigger/commands.GITCOMMIT=$(cat COMMIT)"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kdigger \
       --bash <($out/bin/kdigger completion bash) \
       --fish <($out/bin/kdigger completion fish) \
@@ -58,9 +58,9 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/quarkslab/kdigger";
-    changelog = "https://github.com/quarkslab/kdigger/releases/tag/v${version}";
+    changelog = "https://github.com/quarkslab/kdigger/releases/tag/v${finalAttrs.version}";
     description = "In-pod context discovery tool for Kubernetes penetration testing";
     mainProgram = "kdigger";
     longDescription = ''
@@ -69,12 +69,12 @@ buildGoModule rec {
       plugins called buckets to facilitate pentesting Kubernetes from inside a
       pod.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
     ];
   };
-}
+})

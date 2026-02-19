@@ -10,7 +10,6 @@
   pytestCheckHook,
   numpy,
   pandas,
-  pythonOlder,
   scipy,
   statsmodels,
 }:
@@ -18,9 +17,7 @@
 buildPythonPackage rec {
   pname = "seaborn";
   version = "0.13.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwaskom";
@@ -64,15 +61,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # requires internet connection
-      "test_load_dataset_string_error"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isx86) [
-      # overly strict float tolerances
-      "TestDendrogram"
-    ];
+  disabledTests = [
+    # requires internet connection
+    "test_load_dataset_string_error"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+    # overly strict float tolerances
+    "TestDendrogram"
+  ];
 
   # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
   # backends (leads to crashes on macOS).
@@ -80,10 +76,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "seaborn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
     changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
   };
 }

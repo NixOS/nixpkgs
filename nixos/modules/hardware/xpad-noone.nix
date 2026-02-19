@@ -9,7 +9,7 @@ let
 in
 {
   options.hardware.xpad-noone = {
-    enable = lib.mkEnableOption "The Xpad driver from the Linux kernel with support for Xbox One controllers removed";
+    enable = lib.mkEnableOption "the Xpad driver from the Linux kernel with support for Xbox One controllers removed";
   };
 
   config = lib.mkIf cfg.enable {

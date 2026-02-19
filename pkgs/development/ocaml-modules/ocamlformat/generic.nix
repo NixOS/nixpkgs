@@ -1,7 +1,7 @@
 {
   lib,
   fetchurl,
-  version ? "0.27.0",
+  version ? "0.28.1",
   astring,
   base,
   camlp-streams,
@@ -21,7 +21,6 @@
   stdio,
   uuseg,
   uutf,
-  janeStreet_0_15,
   ...
 }:
 
@@ -49,6 +48,7 @@ rec {
         "0.26.1" = "sha256-2gBuQn8VuexhL7gI1EZZm9m3w+4lq+s9VVdHpw10xtc=";
         "0.26.2" = "sha256-Lk9Za/eqNnqET+g7oPawvxSyplF53cCCNj/peT0DdcU=";
         "0.27.0" = "sha256-3b9ITAdtCPmUAO6Et5DsIx9cj8vV0zJKZADVOI6EbRU=";
+        "0.28.1" = "sha256-cL2gN9C+2WHtkb21GYsu7vVCREdQqLAV2AzLlLP/Qfs=";
       }
       ."${version}";
   };
@@ -67,37 +67,32 @@ rec {
 
   cmdliner_v = if lib.versionAtLeast version "0.21.0" then cmdliner_1_1 else cmdliner_1_0;
 
-  base_v = if lib.versionAtLeast version "0.25.1" then base else janeStreet_0_15.base;
-
-  stdio_v = if lib.versionAtLeast version "0.25.1" then stdio else janeStreet_0_15.stdio;
-
-  library_deps =
-    [
-      base_v
-      cmdliner_v
-      dune-build-info
-      fix
-      fpath
-      menhirLib
-      menhirSdk
-      ocp-indent
-      stdio_v
-      uuseg
-      uutf
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "0.20.0") [
-      either
-      ocaml-version
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "0.22.4") [ csexp ]
-    ++ (
-      if lib.versionOlder version "0.25.1" then
-        [ odoc-parser_v ]
-      else
-        [
-          camlp-streams
-          result
-          astring
-        ]
-    );
+  library_deps = [
+    base
+    cmdliner_v
+    dune-build-info
+    fix
+    fpath
+    menhirLib
+    menhirSdk
+    ocp-indent
+    stdio
+    uuseg
+    uutf
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "0.20.0") [
+    either
+    ocaml-version
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "0.22.4") [ csexp ]
+  ++ (
+    if lib.versionOlder version "0.25.1" then
+      [ odoc-parser_v ]
+    else
+      [
+        camlp-streams
+        result
+        astring
+      ]
+  );
 }

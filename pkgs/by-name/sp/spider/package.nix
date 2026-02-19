@@ -14,17 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spider";
-  version = "2.37.79";
+  version = "2.44.3";
 
   src = fetchFromGitHub {
     owner = "spider-rs";
     repo = "spider";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uYgdYIZ+T5G9TvgFCdErvex9KXN0pJn3MngMKpT/PVo=";
+    hash = "sha256-zOHk9vZGf9f3VD6EN+EIfFdyFGWNtTOKWGrteH86DA4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-uJ69BxeYhU/xVTKqOsxoqfS4At9+BtqurJfYUFEnKtA=";
+  cargoHash = "sha256-LC5rrL+1HrxadsoSJ+3uvi3Wraud/mzCraIFZGFyk0o=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,32 +42,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  checkFlags =
-    [
-      # Sandbox limitation: no network or io_uring
-      "--skip=website::crawl"
-      "--skip=website::scrape"
-      "--skip=website::test_crawl_subdomains"
-      "--skip=website::test_crawl_tld"
-      "--skip=website::test_respect_robots_txt"
-      "--skip=page::parse_links"
-      "--skip=page::test_status_code"
-      "--skip=pdl_is_fresh"
-      "--skip=verify_revision_available"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # Sandbox limitation: attempted to create a NULL object
-      "--skip=website::test_link_duplicates"
-      "--skip=website::not_crawl_blacklist"
-      "--skip=website::test_crawl_budget"
-      "--skip=website::test_crawl_subscription"
-      "--skip=website::Website::subscribe_guard"
-      "--skip=website::Website::subscribe"
-    ];
+  checkFlags = [
+    # Sandbox limitation: no network or io_uring
+    "--skip=website::crawl"
+    "--skip=website::scrape"
+    "--skip=website::test_crawl_subdomains"
+    "--skip=website::test_crawl_tld"
+    "--skip=website::test_respect_robots_txt"
+    "--skip=page::parse_links"
+    "--skip=page::test_status_code"
+    "--skip=pdl_is_fresh"
+    "--skip=verify_revision_available"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Sandbox limitation: attempted to create a NULL object
+    "--skip=website::test_link_duplicates"
+    "--skip=website::not_crawl_blacklist"
+    "--skip=website::test_crawl_budget"
+    "--skip=website::test_crawl_subscription"
+    "--skip=website::Website::subscribe_guard"
+    "--skip=website::Website::subscribe"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -80,7 +77,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "spider";
     maintainers = with lib.maintainers; [
       j-mendez
-      KSJ2000
     ];
     platforms = lib.platforms.unix;
   };

@@ -1,15 +1,7 @@
-{ pkgs, ... }:
 {
   name = "simple";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ];
-  };
 
-  nodes.machine =
-    { ... }:
-    {
-      imports = [ ../modules/profiles/minimal.nix ];
-    };
+  nodes.machine = { };
 
   testScript = ''
     start_all()

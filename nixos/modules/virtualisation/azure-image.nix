@@ -105,7 +105,7 @@ in
       splashImage = null;
       # For Gen 1 VM, configurate grub output to serial_com0.
       # Not needed for Gen 2 VM wbere serial_com0 does not exist,
-      # and outputing to console is enough to make Azure Serial Console working
+      # and outputting to console is enough to make Azure Serial Console working
       extraConfig = lib.mkIf (!efiSupport) ''
         serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
         terminal_input --append serial

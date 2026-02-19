@@ -1,7 +1,8 @@
-diff -u b/src/kdenlivesettings.kcfg b/src/kdenlivesettings.kcfg
---- b/src/kdenlivesettings.kcfg
+diff --git a/src/kdenlivesettings.kcfg b/src/kdenlivesettings.kcfg
+index d92555f0b5..a7b32b5183 100644
+--- a/src/kdenlivesettings.kcfg
 +++ b/src/kdenlivesettings.kcfg
-@@ -517,7 +517,7 @@
+@@ -628,7 +628,7 @@
    <group name="env">
      <entry name="mltpath" type="Path">
        <label>Mlt framework install path.</label>
@@ -10,7 +11,7 @@ diff -u b/src/kdenlivesettings.kcfg b/src/kdenlivesettings.kcfg
      </entry>
  
      <entry name="kdenliverendererpath" type="Path">
-@@ -527,27 +527,27 @@
+@@ -638,22 +638,22 @@
  
      <entry name="meltpath" type="Path">
        <label>Mlt melt renderer install path.</label>
@@ -36,17 +37,13 @@ diff -u b/src/kdenlivesettings.kcfg b/src/kdenlivesettings.kcfg
 +      <default>@ffmpeg@/bin/ffprobe</default>
      </entry>
  
-     <entry name="mediainfopath" type="Path">
-       <label>mediaInfo binary path.</label>
--      <default></default>
-+      <default>@mediainfo@/bin/mediainfo</default>
-     </entry>
- 
      <entry name="processingthreads" type="Int">
-@@ -657,5 +657,5 @@
+@@ -758,7 +758,7 @@
+ 
      <entry name="glaxnimatePath" type="String">
        <label>Path to the Glaxnimate application.</label>
 -      <default></default>
 +      <default>@glaxnimate@/bin/glaxnimate</default>
      </entry>
+ 
      <entry name="nice_tasks" type="Bool">

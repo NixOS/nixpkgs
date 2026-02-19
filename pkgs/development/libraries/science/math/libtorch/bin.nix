@@ -3,15 +3,17 @@
   stdenv,
   fetchzip,
   lib,
-  libcxx,
   llvmPackages,
   config,
 
-  addDriverRunpath,
+  autoAddDriverRunpath,
+  autoPatchelfHook,
   patchelf,
   fixDarwinDylibNames,
 
   cudaSupport ? config.cudaSupport,
+  cudaPackages_13,
+  libz,
 }:
 
 let
@@ -20,11 +22,10 @@ let
   # this derivation. However, we should ensure on version bumps
   # that the CUDA toolkit for `passthru.tests` is still
   # up-to-date.
-  version = "2.5.0";
+  version = "2.9.0";
   device = if cudaSupport then "cuda" else "cpu";
   srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
-  libcxx-for-libtorch = if stdenv.hostPlatform.isDarwin then libcxx else (lib.getLib stdenv.cc.cc);
 in
 stdenv.mkDerivation {
   inherit version;
@@ -36,7 +37,11 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       [ fixDarwinDylibNames ]
     else
-      [ patchelf ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
+      [
+        patchelf
+        autoPatchelfHook
+      ]
+      ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
 
   dontBuild = true;
   dontConfigure = true;
@@ -64,7 +69,17 @@ stdenv.mkDerivation {
 
   postFixup =
     let
-      rpath = lib.makeLibraryPath [ stdenv.cc.cc ];
+      rpath = lib.makeLibraryPath (
+        [ stdenv.cc.cc ]
+        ++ lib.optionals cudaSupport [
+          cudaPackages_13.cuda_cudart # libcuda.so
+          cudaPackages_13.libcufft
+          cudaPackages_13.libcurand
+          cudaPackages_13.libcusolver
+          cudaPackages_13.libcusparse
+          libz
+        ]
+      );
     in
     lib.optionalString stdenv.hostPlatform.isLinux ''
       find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
@@ -87,9 +102,6 @@ stdenv.mkDerivation {
         for rpath in $(otool -L $f | grep rpath | awk '{print $1}');do
           install_name_tool -change $rpath $out/lib/$(basename $rpath) $f
         done
-        if otool -L $f | grep /usr/lib/libc++ >& /dev/null; then
-          install_name_tool -change /usr/lib/libc++.1.dylib ${libcxx-for-libtorch.outPath}/lib/libc++.1.0.dylib $f
-        fi
       done
       for f in $out/lib/*.dylib; do
           otool -L $f
@@ -105,15 +117,15 @@ stdenv.mkDerivation {
     inherit cudaSupport;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ API of the PyTorch machine learning framework";
     homepage = "https://pytorch.org/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ junjihashimoto ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ junjihashimoto ];
     platforms = [
       "aarch64-darwin"
       "x86_64-linux"

@@ -12,16 +12,16 @@
   protobuf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorflow-metadata";
-  version = "1.17.1";
+  version = "1.17.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "metadata";
-    tag = "v${version}";
-    hash = "sha256-/jVAGt3nKPwVk+poXzQ9tVCi9HEZENrbjeN4dcOfWeo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4xj2JfQryGy7a9ho9/JJtyg+0H5VLQzq9JevOmOWJZk=";
   };
 
   patches = [ ./build.patch ];
@@ -35,10 +35,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [
-    "protobuf"
-  ];
 
   dependencies = [
     absl-py
@@ -58,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standard representations for metadata that are useful when training machine learning models with TensorFlow";
     homepage = "https://github.com/tensorflow/metadata";
-    changelog = "https://github.com/tensorflow/metadata/releases/tag/v${version}";
+    changelog = "https://github.com/tensorflow/metadata/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

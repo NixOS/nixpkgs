@@ -9,16 +9,14 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   sigstore,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "aiogithubapi";
   version = "25.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
@@ -29,14 +27,14 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonRelaxDeps = [ "async-timeout" ];
-
   postPatch = ''
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0"' 'version = "${version}"'
   '';
+
+  pythonRelaxDeps = [ "async-timeout" ];
 
   build-system = [ poetry-core ];
 
@@ -53,13 +51,12 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Need sigstore is an optional dependencies and need <2
     rm -rf tests/test_helper.py
   '';

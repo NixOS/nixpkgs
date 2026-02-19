@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
   poetry-core,
@@ -14,8 +13,7 @@
 buildPythonPackage rec {
   pname = "pytest-mockservers";
   version = "0.6.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Gr1N";
@@ -46,12 +44,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # relies on the removed event_loop fixture
+  disabledTests = [ "test_udp_server_factory" ];
+
   pythonImportsCheck = [ "pytest_mockservers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of fixtures to test your requests to HTTP/UDP servers";
     homepage = "https://github.com/Gr1N/pytest-mockservers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

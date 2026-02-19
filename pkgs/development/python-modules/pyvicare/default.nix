@@ -10,21 +10,21 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvicare";
-  version = "2.44.0";
+  version = "2.56.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openviess";
     repo = "PyViCare";
-    tag = version;
-    hash = "sha256-R7GhMiE4gXCTQkew7meSkMBGSdZlTKd9X2A1zEgC8ng=";
+    tag = finalAttrs.version;
+    hash = "sha256-DRCetTR7sFaShau3in0548FoR+rOaG28SGqfAjAVsn4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.1.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.1.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyViCare" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/openviess/PyViCare/releases/tag/${src.tag}";
+  meta = {
     description = "Python Library to access Viessmann ViCare API";
     homepage = "https://github.com/somm15/PyViCare";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/openviess/PyViCare/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

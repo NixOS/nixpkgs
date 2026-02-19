@@ -1,7 +1,8 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchbzr,
+  wrapQtAppsHook,
   python3,
   rtmpdump,
 }:
@@ -14,7 +15,7 @@ let
     ]
   );
 in
-mkDerivation {
+stdenv.mkDerivation {
   pname = "qarte";
   version = "5.5.0";
 
@@ -23,6 +24,8 @@ mkDerivation {
     rev = "88";
     sha256 = "sha256-+Ixe4bWKubH/XBESwmP2NWS8bH0jq611c3MZn7W87Jw=";
   };
+
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   buildInputs = [ pythonEnv ];
 
@@ -48,12 +51,12 @@ mkDerivation {
       --prefix PATH : ${rtmpdump}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://launchpad.net/qarte";
     description = "Recorder for Arte TV Guide and Arte Concert";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ vbgl ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ vbgl ];
+    platforms = lib.platforms.linux;
     mainProgram = "qarte";
   };
 }

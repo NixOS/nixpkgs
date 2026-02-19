@@ -13,12 +13,12 @@ let
       file = pkgs.writeText "rule" (builtins.toJSON cfg);
     }
   );
-
 in
 {
   options = {
     services.opensnitch = {
       enable = lib.mkEnableOption "Opensnitch application firewall";
+      package = lib.mkPackageOption pkgs "opensnitch" { };
 
       rules = lib.mkOption {
         default = { };
@@ -108,13 +108,7 @@ in
             };
 
             LogLevel = lib.mkOption {
-              type = lib.types.enum [
-                0
-                1
-                2
-                3
-                4
-              ];
+              type = lib.types.ints.between 0 4;
               description = ''
                 Default log level from 0 to 4 (debug, info, important, warning,
                 error).
@@ -167,6 +161,15 @@ in
               '';
             };
 
+            Audit.AudispSocketPath = lib.mkOption {
+              type = lib.types.path;
+              default = "/run/audit/audispd_events";
+              description = ''
+                Configure audit socket path. Used when
+                `settings.ProcMonitorMethod` is set to `audit`.
+              '';
+            };
+
             Rules.Path = lib.mkOption {
               type = lib.types.path;
               default = "/var/lib/opensnitch/rules";
@@ -192,15 +195,21 @@ in
     services.opensnitch.settings = lib.mapAttrs (_: v: lib.mkDefault v) (
       builtins.fromJSON (
         builtins.unsafeDiscardStringContext (
-          builtins.readFile "${pkgs.opensnitch}/etc/opensnitchd/default-config.json"
+          builtins.readFile "${cfg.package}/etc/opensnitchd/default-config.json"
         )
       )
     );
 
+    security.auditd = lib.mkIf (cfg.settings.ProcMonitorMethod == "audit") {
+      enable = true;
+      plugins.af_unix.active = true;
+    };
+
     systemd = {
-      packages = [ pkgs.opensnitch ];
+      packages = [ cfg.package ];
       services.opensnitchd = {
         wantedBy = [ "multi-user.target" ];
+        path = lib.optionals (cfg.settings.ProcMonitorMethod == "audit") [ pkgs.audit ];
         serviceConfig = {
           ExecStart =
             let
@@ -210,7 +219,7 @@ in
             in
             [
               ""
-              "${pkgs.opensnitch}/bin/opensnitchd --config-file ${format.generate "default-config.json" preparedSettings}"
+              "${lib.getExe' cfg.package "opensnitchd"} --config-file ${format.generate "default-config.json" preparedSettings}"
             ];
         };
         preStart = lib.mkIf (cfg.rules != { }) (
@@ -245,11 +254,14 @@ in
       };
       tmpfiles.rules = [
         "d ${cfg.settings.Rules.Path} 0750 root root - -"
-        "L+ /etc/opensnitchd/system-fw.json - - - - ${pkgs.opensnitch}/etc/opensnitchd/system-fw.json"
+        "L+ /etc/opensnitchd/system-fw.json - - - - ${cfg.package}/etc/opensnitchd/system-fw.json"
       ];
     };
 
   };
 
-  meta.maintainers = with lib.maintainers; [ onny ];
+  meta.maintainers = with lib.maintainers; [
+    onny
+    grimmauld
+  ];
 }

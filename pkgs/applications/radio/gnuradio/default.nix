@@ -58,17 +58,16 @@ let
         pkg-config
         orc
       ];
-      runtime =
-        [
-          volk
-          boost
-          spdlog
-          mpir
-        ]
-        # when gr-qtgui is disabled, icu needs to be included, otherwise
-        # building with boost 1.7x fails
-        ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
-      pythonNative = with python.pkgs; [
+      runtime = [
+        volk
+        boost
+        spdlog
+        mpir
+      ]
+      # when gr-qtgui is disabled, icu needs to be included, otherwise
+      # building with boost 1.7x fails
+      ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
+      pythonNative = with python.pythonOnBuildForHost.pkgs; [
         mako
         six
       ];
@@ -311,33 +310,28 @@ stdenv.mkDerivation (
         # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
         ./modtool-newmod-permissions.patch
       ];
-      passthru =
-        shared.passthru
-        // {
-          # Deps that are potentially overridden and are used inside GR plugins - the same version must
-          inherit
-            boost
-            volk
-            ;
-          # Used by many gnuradio modules, the same attribute is present in
-          # previous gnuradio versions where there it's log4cpp.
-          logLib = spdlog;
-        }
-        // lib.optionalAttrs (hasFeature "gr-uhd") {
-          inherit uhd;
-        }
-        // lib.optionalAttrs (hasFeature "gr-pdu") {
-          inherit libiio libad9361;
-        }
-        // lib.optionalAttrs (hasFeature "gr-qtgui") {
-          inherit (libsForQt5) qwt;
-        };
+      passthru = shared.passthru // {
+        # Deps that are potentially overridden and are used inside GR plugins - the same version must
+        inherit
+          uhd
+          boost
+          volk
+          libiio
+          libad9361
+          ;
+        # Used by many gnuradio modules, the same attribute is present in
+        # previous gnuradio versions where there it's log4cpp.
+        logLib = spdlog;
+        inherit (libsForQt5) qwt;
+      };
 
       postInstall =
         shared.postInstall
         # This is the only python reference worth removing, if needed.
         + lib.optionalString (!hasFeature "python-support") ''
           remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
+        ''
+        + lib.optionalString (!hasFeature "python-support" && hasFeature "gnuradio-runtime") ''
           remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
           remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
         '';

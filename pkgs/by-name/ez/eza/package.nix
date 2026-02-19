@@ -15,17 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eza";
-  version = "0.21.4";
+  version = "0.23.4";
 
   src = fetchFromGitHub {
     owner = "eza-community";
     repo = "eza";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lwCZj4EHzgZSAQTnJZizonh4FmKoX3dkYKbIcn1WBHs=";
+    hash = "sha256-zLb2VPfmv9J9UdPAXS+QPHI+hvDRl5UBcvW84J6nUK8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-8XkkClXyTT2+py57rSTMNpnuesTujNgHTz6K2gmDHYM=";
+  cargoHash = "sha256-3KLjlEZhGEyOcaiBnfIafR509oRbsWllqf1e6Z0M8Sg=";
 
   nativeBuildInputs = [
     cmake
@@ -43,21 +42,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "man"
   ];
 
-  postInstall =
-    ''
-      for page in eza.1 eza_colors.5 eza_colors-explanation.5; do
-        sed "s/\$version/v${finalAttrs.version}/g" "man/$page.md" |
-          pandoc --standalone -f markdown -t man >"man/$page"
-      done
-      installManPage man/eza.1 man/eza_colors.5 man/eza_colors-explanation.5
-      installShellCompletion \
-        --bash completions/bash/eza \
-        --fish completions/fish/eza.fish \
-        --zsh completions/zsh/_eza
-    ''
-    + lib.optionalString exaAlias ''
-      ln -s eza $out/bin/exa
-    '';
+  postInstall = ''
+    for page in eza.1 eza_colors.5 eza_colors-explanation.5; do
+      sed "s/\$version/v${finalAttrs.version}/g" "man/$page.md" |
+        pandoc --standalone -f markdown -t man >"man/$page"
+    done
+    installManPage man/eza.1 man/eza_colors.5 man/eza_colors-explanation.5
+    installShellCompletion \
+      --bash completions/bash/eza \
+      --fish completions/fish/eza.fish \
+      --zsh completions/zsh/_eza
+  ''
+  + lib.optionalString exaAlias ''
+    ln -s eza $out/bin/exa
+  '';
 
   meta = {
     description = "Modern, maintained replacement for ls";

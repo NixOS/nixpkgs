@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "1.2.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager-openconnect/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/NetworkManager-openconnect/${lib.versions.majorMinor version}/NetworkManager-openconnect-${version}.tar.xz";
     sha256 = "hEtr9k7K25e0pox3bbiapebuflm9JLAYAihAaGMTZGQ=";
   };
 
@@ -37,21 +37,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs =
-    [
-      libxml2
-      openconnect
-      networkmanager
-      webkitgtk_4_1 # required, for SSO
-    ]
-    ++ lib.optionals withGnome [
-      gtk3
-      libnma
-      libnma-gtk4
-      gtk4
-      gcr
-      libsecret
-    ];
+  buildInputs = [
+    libxml2
+    openconnect
+    networkmanager
+    webkitgtk_4_1 # required, for SSO
+  ]
+  ++ lib.optionals withGnome [
+    gtk3
+    libnma
+    libnma-gtk4
+    gtk4
+    gcr
+    libsecret
+  ];
 
   nativeBuildInputs = [
     glib
@@ -61,8 +60,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
-    "--with-gtk4=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${lib.boolToYesNo withGnome}"
+    "--with-gtk4=${lib.boolToYesNo withGnome}"
     "--enable-absolute-paths"
   ];
 
@@ -73,11 +72,12 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
     };
     networkManagerPlugin = "VPN/nm-openconnect-service.name";
+    networkManagerRuntimeDeps = [ openconnect ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager’s OpenConnect plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

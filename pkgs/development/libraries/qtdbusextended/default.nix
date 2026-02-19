@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nemomobile";
-    repo = pname;
+    repo = "qtdbusextended";
     rev = version;
     sha256 = "sha256-tUp7OhNBXwomR2tO4UOaR0vJQ3GTirMk/hRl1cMk61o=";
   };
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt provides several classes for DBus communication";
     homepage = "https://github.com/nemomobile/qtdbusextended";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
   };
 }

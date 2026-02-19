@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmamba";
-  version = "2.1.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     tag = finalAttrs.version;
-    hash = "sha256-JBwdfYM7J5R7HZyw5kVXwu4FlZUd2QPrsTaGuXnyAJI=";
+    hash = "sha256-ojcAS5NYAhklACrBkmSHRPNiVLjUR/umll0vhoFnFBs=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/mamba-org/mamba/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Library for the fast Cross-Platform Package Manager";
     homepage = "https://github.com/mamba-org/mamba";
     license = lib.licenses.bsd3;

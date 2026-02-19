@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   packaging,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyzabbix";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lukecyca";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyzabbix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the Zabbix API";
     homepage = "https://github.com/lukecyca/pyzabbix";
     changelog = "https://github.com/lukecyca/pyzabbix/blob/${version}/CHANGELOG.md";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

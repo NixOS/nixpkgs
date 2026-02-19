@@ -8,12 +8,12 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "annextimelog";
   version = "0.15.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "nobodyinperson";
     repo = "annextimelog";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RfqBtbfArFva3TVJGF4STx0QTio62qxXaM23lsLYLUg=";
   };
 
@@ -33,10 +33,10 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  meta = with lib; {
+  meta = {
     description = "git-annex based cli time tracker";
     homepage = "https://gitlab.com/nobodyinperson/annextimelog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

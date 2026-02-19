@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-doctor";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "emirozer";
     repo = "kubectl-doctor";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-yp5OfSDxIASiCgISUVNxfe3dsLukgIoHARVPALIaQfY=";
   };
 
@@ -31,12 +31,12 @@ buildGoModule rec {
     mv $out/bin/{cmd,kubectl-doctor}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "kubectl cluster triage plugin for k8s";
     mainProgram = "kubectl-doctor";
     homepage = "https://github.com/emirozer/kubectl-doctor";
-    changelog = "https://github.com/emirozer/kubectl-doctor/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.zimbatm ];
+    changelog = "https://github.com/emirozer/kubectl-doctor/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.zimbatm ];
   };
-}
+})

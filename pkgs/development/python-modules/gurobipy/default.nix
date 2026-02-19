@@ -11,21 +11,25 @@ let
   pyShortVersion = "cp" + builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   platforms = rec {
     aarch64-darwin =
-      if pyShortVersion == "cp313" then "macosx_10_13_universal2" else "macosx_10_9_universal2";
-    aarch64-linux = "manylinux2014_aarch64.manylinux_2_17_aarch64";
+      if pyShortVersion == "cp314" then "macosx_10_15_universal2" else "macosx_10_13_universal2";
+    aarch64-linux = "manylinux_2_26_aarch64";
     x86_64-darwin = aarch64-darwin;
     x86_64-linux = "manylinux2014_x86_64.manylinux_2_17_x86_64";
   };
   platform = platforms.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   hashes = rec {
-    cp312-aarch64-darwin = "sha256-i/0ygF6PxOotAlO1vq7yx2NXAxbyah9PLIbLqg6zqNc=";
-    cp312-aarch64-linux = "sha256-WvK9RiY4T/xwDCmvDh3WnK/m9tvW78045eMoc6RvPRI=";
+    cp312-aarch64-darwin = "sha256-hQ9VN5Wl8RQ53ShE5q/LqzgNsZHX27W7b05rGeH95jc=";
+    cp312-aarch64-linux = "sha256-wKQjIAmhM+Smk3XzzlR8ZtwxJpr8hvbV15QTfSMxuE8=";
     cp312-x86_64-darwin = cp312-aarch64-darwin;
-    cp312-x86_64-linux = "sha256-ER0yOTo5o+Ld1erRdScx04izxoW3NVDGsMqaRdlUw2Q=";
-    cp313-aarch64-darwin = "sha256-V5HcmwKfBrMY1U4N+gf1yWiMJ+XHH3pUvNqv20wJBek=";
-    cp313-aarch64-linux = "sha256-s8rr72p8a6I1WYcqtz3NgEDHFW74DN4LWRGLvf0k53k=";
+    cp312-x86_64-linux = "sha256-yISDKQFJYKZAxXE2vyrcanXcc3FvUHKcpshtaLnwtrI=";
+    cp313-aarch64-darwin = "sha256-j8E8zsPr1m4q7p1i4ihUuzPSczbRKuZGWp0C/oNx0Lc=";
+    cp313-aarch64-linux = "sha256-QvHfssbnKwoBmcqqBbOP2wLclJ7xol6054n8XqUtk44=";
     cp313-x86_64-darwin = cp313-aarch64-darwin;
-    cp313-x86_64-linux = "sha256-JAqrYPz7/lhvRW1uy8yOyjtapf/nF+agjEHIKWQCYTc=";
+    cp313-x86_64-linux = "sha256-wVm6yMfrL0rMgVebo/WGAyb7LKOp139g8U0GhgCbRoc=";
+    cp314-aarch64-darwin = "sha256-QCytKZtPSzdGDKg0LjFbJS/y5whqa8mcotNfecYXPVw=";
+    cp314-aarch64-linux = "sha256-qHAOVJwmZ6ojUDSmFJrxaiE4unwfns0VtVdUcEq2zq8=";
+    cp314-x86_64-darwin = cp314-aarch64-darwin;
+    cp314-x86_64-linux = "sha256-WUSCCjJ4uWTwxIsasIOizEmZ9HuZBoWVV0F3wPiXOCY=";
   };
   hash =
     hashes."${pyShortVersion}-${stdenv.system}"
@@ -33,7 +37,7 @@ let
 in
 buildPythonPackage rec {
   pname = "gurobipy";
-  version = "12.0.2";
+  version = "13.0.1";
   inherit format;
 
   src = fetchPypi {

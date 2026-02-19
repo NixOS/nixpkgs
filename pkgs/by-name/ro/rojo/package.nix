@@ -10,18 +10,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rojo";
-  version = "7.5.1";
+  version = "7.6.1";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-awMio62guyP5qZH4i5hwXV5re6o45HDwqIJb3Dd71Is=";
+    hash = "sha256-h8gd91Nc35jTQ4u9YyQGOB+rkgRAos8lsjX+bWzvpDs=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-iWRjXC+JaBA/z2eOHiiqFFtS2gug5/hkIpYrPdHyux0=";
+  cargoHash = "sha256-zl1L8q1AJwVn0o2BazJ30FyBCMq5F5nAQ0FGuEAPGms=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -35,7 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/rojo";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -49,9 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Tool designed to enable Roblox developers to use professional-grade software engineering tools.
     '';
     mainProgram = "rojo";
-    maintainers = with lib.maintainers; [
-      wackbyte
-      HeitorAugustoLN
-    ];
+    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
   };
 })

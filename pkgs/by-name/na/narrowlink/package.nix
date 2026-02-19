@@ -4,18 +4,17 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "narrowlink";
   version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "narrowlink";
     repo = "narrowlink";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-O66eihqSxwvrUfJj+VMrs7Vfndz2LPKQEnH7BDljvUg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-NjL5A+HEz7WDsTcwAGj1g+Brs4JYsU1kl0OZfTfoBN0=";
 
   nativeBuildInputs = [
@@ -32,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "narrowlink";
   };
-}
+})

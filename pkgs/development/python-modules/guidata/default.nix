@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "guidata";
-  version = "3.9.0";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "guidata";
     tag = "v${version}";
-    hash = "sha256-W3d7LGfQJ9DVngZxhnuQpoTHvXyHenaXzm7qeqi/zGQ=";
+    hash = "sha256-dh1WyUgJ+rkBFtcyXEFgU8UNPQEkJfiJBwmkT1eqKoI=";
   };
 
   build-system = [

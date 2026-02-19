@@ -14,16 +14,16 @@
   btrfs-progs,
   util-linux,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "handheld-daemon";
-  version = "3.15.3";
+  version = "4.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
-    tag = "v${version}";
-    hash = "sha256-O3Pgrb3k891IAmYtYWulosAOxtnIvLd+voEsyYtm/0U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KPjna0yJXXSQBwpRO5b3Fc9C6H14uboJzvQ1LefeXFc=";
   };
 
   # Handheld-daemon runs some selinux-related utils which are not in nixpkgs.
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace src/hhd/plugins/power/power.py \
       --replace-fail '"efibootmgr"' '"${lib.getExe' efibootmgr "id"}"' \
-      --replace-fail '"systemctl"' '"${lib.getExe' systemd "systemctl"}"' \
+      --replace-fail '"systemctl' '"${lib.getExe' systemd "systemctl"}' \
       --replace-fail '"stat"' '"${lib.getExe' coreutils "stat"}"' \
       --replace-fail '"swapon"' '"${lib.getExe' util-linux "swapon"}"' \
       --replace-fail '"swapoff"' '"${lib.getExe' util-linux "swapoff"}"' \
@@ -70,6 +70,12 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace src/hhd/plugins/plugin.py \
       --replace-fail '"id"' '"${lib.getExe' coreutils "id"}"'
+
+    substituteInPlace usr/lib/udev/rules.d/83-hhd.rules \
+      --replace-fail '/bin/chmod' '${lib.getExe' coreutils "chmod"}'
+
+    substituteInPlace src/adjustor/core/acpi.py \
+      --replace-fail '"modprobe"' '"${lib.getExe' kmod "modprobe"}"'
   '';
 
   build-system = with python3Packages; [
@@ -83,26 +89,33 @@ python3Packages.buildPythonApplication rec {
     rich
     setuptools
     xlib
+    pyroute2
+    pygobject3
+    dbus-python
   ];
 
   # This package doesn't have upstream tests.
   doCheck = false;
 
+  pythonImportsCheck = [
+    "hhd"
+    "adjustor"
+  ];
+
   postInstall = ''
-    install -Dm644 $src/usr/lib/udev/rules.d/83-hhd.rules -t $out/lib/udev/rules.d/
-    install -Dm644 $src/usr/lib/udev/hwdb.d/83-hhd.hwdb -t $out/lib/udev/hwdb.d/
+    install -Dm644 usr/lib/udev/rules.d/83-hhd.rules -t $out/lib/udev/rules.d/
+    install -Dm644 usr/lib/udev/hwdb.d/83-hhd.hwdb -t $out/lib/udev/hwdb.d/
   '';
 
   meta = {
     homepage = "https://github.com/hhd-dev/hhd/";
     description = "Linux support for handheld gaming devices like the Legion Go, ROG Ally, and GPD Win";
     platforms = lib.platforms.linux;
-    changelog = "https://github.com/hhd-dev/hhd/releases/tag/${src.tag}";
-    license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/hhd-dev/hhd/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
-      appsforartists
       toast
     ];
     mainProgram = "hhd";
   };
-}
+})

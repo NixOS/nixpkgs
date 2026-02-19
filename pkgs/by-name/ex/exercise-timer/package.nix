@@ -20,18 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exercise-timer";
-  version = "1.8.1";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "mfep";
     repo = "exercise-timer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6MBSUYFZ8nMZX7acam8T0uJWb9E2/L9vnKzJq14p4BY=";
+    hash = "sha256-yparZ9XmHkjwvgpnERpi8hvRXdb8R+kAyFOFl+exXb4=";
+    fetchLFS = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-fmY89VGv9tSMaILFnAVTAyp9PWGsvSCZ/9DfF5LI3xM=";
+    hash = "sha256-JObzeiQHEGIDjOung3o8dpaXVcOoJS2v1hyrcS1fqcI=";
   };
 
   nativeBuildInputs = [

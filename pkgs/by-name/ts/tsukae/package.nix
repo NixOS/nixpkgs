@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "tsukae";
-  version = "unstable-2021-04-19";
+  version = "0-unstable-2021-04-19";
 
   src = fetchFromGitHub {
     owner = "irevenko";
@@ -17,11 +17,11 @@ buildGoModule {
 
   vendorHash = "sha256-Q0WOzyJGnTXTmj7ZPKyVSnWuWb4bbDjDpgftQ1Opf/I=";
 
-  meta = with lib; {
+  meta = {
     description = "Show off your most used shell commands";
     homepage = "https://github.com/irevenko/tsukae";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "tsukae";
-    maintainers = with maintainers; [ l3af ];
+    maintainers = with lib.maintainers; [ l3af ];
   };
 }

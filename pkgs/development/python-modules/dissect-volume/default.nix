@@ -7,21 +7,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-volume";
-  version = "3.15";
+  version = "3.17";
   pyproject = true;
-
-  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.volume";
     tag = version;
-    hash = "sha256-QxIZg0svKBHp7uVsK4S40oDBOxFudSHBzi6I2iloiok=";
+    hash = "sha256-z7DH96c0uxOOE71m+P+QGds7ZHm1/yyE2FTilZt1OdA=";
   };
 
   build-system = [
@@ -61,11 +58,11 @@ buildPythonPackage rec {
     "test_vinum"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing various utility functions for the other Dissect modules";
     homepage = "https://github.com/fox-it/dissect.volume";
     changelog = "https://github.com/fox-it/dissect.volume/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

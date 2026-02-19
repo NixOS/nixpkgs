@@ -13,16 +13,12 @@
   taglib,
   shared-mime-info,
   libappimage,
-  xorg,
+  libxcursor,
   kio,
 }:
 mkKdeDerivation {
   pname = "kio-extras";
 
-  patches = [
-    # An upstream merge request is pending for this https://invent.kde.org/network/kio-extras/-/merge_requests/422
-    ./add-nixos-man-db-config-path.patch
-  ];
   extraNativeBuildInputs = [
     pkg-config
     gperf
@@ -41,7 +37,7 @@ mkKdeDerivation {
     openexr
     taglib
     libappimage
-    xorg.libXcursor
+    libxcursor
   ];
 
   postInstall = ''

@@ -2,11 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  writeScript,
 
   # build-system
   hatchling,
 
   # dependencies
+  dbt-protos,
   agate,
   colorama,
   deepdiff,
@@ -28,28 +30,27 @@
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.23.0-unstable-2025-04-21";
+  version = "1.37.2-unstable-2026-02-16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-common";
-    rev = "03e09c01f20573975e8e17776a4b7c9088b3f212"; # They don't tag releases
-    hash = "sha256-KqnwlFZZRYuWRflMzjrqCPBnzY9q/pPhceM2DGqz5bw=";
+    rev = "db568b8aa2d7c081f36a144c379668dd65007803"; # They don't tag releases
+    hash = "sha256-FIc98xjdmEQ8QJQwvEktj7oT/hJwwqCg4agpR4gaZIc=";
   };
 
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "agate"
-    "deepdiff"
     # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
     # https://pypi.org/project/isodate/0.7.2/
     "isodate"
-    "protobuf"
   ];
 
   dependencies = [
+    dbt-protos
     agate
     colorama
     deepdiff
@@ -62,7 +63,8 @@ buildPythonPackage rec {
     python-dateutil
     requests
     typing-extensions
-  ] ++ mashumaro.optional-dependencies.msgpack;
+  ]
+  ++ mashumaro.optional-dependencies.msgpack;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -77,10 +79,31 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dbt_common" ];
 
+  passthru.updateScript = writeScript "update-dbt-common" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p git common-updater-scripts perl
+
+    tmpdir="$(mktemp -d)"
+    git clone --depth=1 "${src.gitRepoUrl}" "$tmpdir"
+
+    pushd "$tmpdir"
+
+    newVersionNumber=$(perl -pe 's/version = "([\d.]+)"/$1/' dbt_common/__about__.py | tr -d '\n')
+    newRevision=$(git show -s --pretty='format:%H')
+    newDate=$(git show -s --pretty='format:%cs')
+    newVersion="$newVersionNumber-unstable-$newDate"
+    popd
+
+    rm -rf "$tmpdir"
+    update-source-version --rev="$newRevision" "python3Packages.dbt-common" "$newVersion"
+    perl -pe 's/^(.*version = ")([\d\.]+)(.*)$/''${1}'"''${newVersion}"'";/' \
+      -i 'pkgs/development/python-modules/dbt-common/default.nix'
+  '';
+
   meta = {
     description = "Shared common utilities for dbt-core and adapter implementations use";
     homepage = "https://github.com/dbt-labs/dbt-common";
-    changelog = "https://github.com/dbt-labs/dbt-common/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-common/blob/main/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

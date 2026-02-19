@@ -7,21 +7,21 @@
   perl,
   pkg-config,
   SDL2,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   utf8proc,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "schismtracker";
-  version = "20250415";
+  version = "20251014";
 
   src = fetchFromGitHub {
     owner = "schismtracker";
     repo = "schismtracker";
-    tag = version;
-    hash = "sha256-VK2XdixejaoG6P1X3XG8Ow4H6CF3sNwAveJ4cCxdLuQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-N1wCOR7Su3PllzrffkwB6LfhZlol1/4dVegySzJlH28=";
   };
 
   # If we let it try to get the version from git, it will fail and fall back
@@ -29,22 +29,21 @@ stdenv.mkDerivation rec {
   # in this assert: https://github.com/schismtracker/schismtracker/blob/a106b57e0f809b95d9e8bcf5a3975d27e0681b5a/schism/version.c#L112
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace-fail 'git log' 'echo ${version} #'
+      --replace-fail 'git log' 'echo ${finalAttrs.version} #'
   '';
 
-  configureFlags =
-    [
-      (lib.enableFeature true "dependency-tracking")
-      (lib.withFeature true "sdl2")
-      (lib.enableFeature true "sdl2-linking")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.enableFeature true "alsa")
-      (lib.enableFeature true "alsa-linking")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.enableFeature false "sdltest")
-    ];
+  configureFlags = [
+    (lib.enableFeature true "dependency-tracking")
+    (lib.withFeature true "sdl2")
+    (lib.enableFeature true "sdl2-linking")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.enableFeature true "alsa")
+    (lib.enableFeature true "alsa-linking")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.enableFeature false "sdltest")
+  ];
 
   strictDeps = true;
 
@@ -54,16 +53,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      SDL2
-      libX11
-      utf8proc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libXext
-    ];
+  buildInputs = [
+    SDL2
+    libx11
+    utf8proc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libxext
+  ];
 
   enableParallelBuilding = true;
 
@@ -83,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ftrvxmtrx ];
     mainProgram = "schismtracker";
   };
-}
+})

@@ -9,7 +9,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seren";
   version = "0.0.21";
 
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://holdenc.altervista.org/seren/downloads/${pname}-${version}.tar.gz";
+    url = "http://holdenc.altervista.org/seren/downloads/seren-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-adI365McrJkvTexvnWjMzpHcJkLY3S/uWfE8u4yuqho=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple ncurses VoIP program based on the Opus codec";
     mainProgram = "seren";
     longDescription = ''
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://holdenc.altervista.org/seren/";
     changelog = "http://holdenc.altervista.org/seren/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       matthewcroughan
       nixinator
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

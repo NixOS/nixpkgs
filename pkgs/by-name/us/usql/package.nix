@@ -9,15 +9,15 @@
   usql,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "usql";
-  version = "0.19.21";
+  version = "0.20.8";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
-    tag = "v${version}";
-    hash = "sha256-Ix1+uq5TpYp6JyT2KML8Ts/ElPeQCKz9qAW9DqQahbE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oaimplnmNpr3nMGNmiXmE9L03SfifjfncI9ZPiJg6JI=";
   };
 
   buildInputs = [
@@ -25,7 +25,7 @@ buildGoModule rec {
     icu
   ];
 
-  vendorHash = "sha256-YXpmzIPs6gvEspC9JrGHw4Yzs8wdtBTsGU9kTOT6c+0=";
+  vendorHash = "sha256-bu9vU7rpq8sg5zHcmbOhdOkO18ci4dUErsLwip0j3Jo=";
   proxyVendor = true;
 
   # Exclude drivers from the bad group
@@ -44,7 +44,6 @@ buildGoModule rec {
     "sqlite_json1"
     "sqlite_math_functions"
     "sqlite_stat4"
-    "sqlite_userauth"
     "sqlite_vtable"
     "no_adodb"
   ];
@@ -52,7 +51,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/xo/usql/text.CommandVersion=${version}"
+    "-X github.com/xo/usql/text.CommandVersion=${finalAttrs.version}"
   ];
 
   # All the checks currently require docker instances to run the databases.
@@ -61,7 +60,7 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = usql;
       command = "usql --version";
     };
@@ -70,7 +69,7 @@ buildGoModule rec {
   meta = {
     description = "Universal command-line interface for SQL databases";
     homepage = "https://github.com/xo/usql";
-    changelog = "https://github.com/xo/usql/releases/tag/v${version}";
+    changelog = "https://github.com/xo/usql/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "usql";
     maintainers = with lib.maintainers; [
@@ -79,4 +78,4 @@ buildGoModule rec {
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

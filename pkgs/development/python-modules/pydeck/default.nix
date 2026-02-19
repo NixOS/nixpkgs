@@ -9,7 +9,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   traitlets,
   wheel,
@@ -18,9 +17,7 @@
 buildPythonPackage rec {
   pname = "pydeck";
   version = "0.9.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -61,15 +58,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pandas
-  ] ++ optional-dependencies.jupyter;
+  ]
+  ++ optional-dependencies.jupyter;
 
   # tries to start a jupyter server
   disabledTests = [ "test_nbconvert" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/visgl/deck.gl/tree/master/bindings/pydeck";
     description = "Large-scale interactive data visualization in Python";
-    maintainers = with maintainers; [ creator54 ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ creator54 ];
+    license = lib.licenses.asl20;
   };
 }

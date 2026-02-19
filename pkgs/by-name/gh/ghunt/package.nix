@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ghunt";
   version = "2.3.3";
   pyproject = true;
@@ -54,12 +54,12 @@ python3.pkgs.buildPythonApplication rec {
     "ghunt"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Offensive Google framework";
     mainProgram = "ghunt";
     homepage = "https://github.com/mxrch/ghunt";
-    changelog = "https://github.com/mxrch/GHunt/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/mxrch/GHunt/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

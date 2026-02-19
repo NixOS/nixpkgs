@@ -3,19 +3,25 @@
   stdenv,
   fetchurl,
   directoryListingUpdater,
+  gawk,
   man,
+  pcre2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "man-pages";
-  version = "6.14";
+  version = "6.16";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/man-pages-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ceEwZ7eABEsvNy7sJfQgm8BBPMMq9xQUHvPSLSHq6OM=";
+    hash = "sha256-jiR6vXXNgICc/ghpbIG4xwaQWDsEV0lISyQvtDYx16M=";
   };
 
-  nativeInstallCheckInputs = [ man ];
+  nativeInstallCheckInputs = [
+    gawk
+    man
+    pcre2
+  ];
 
   dontBuild = true;
   enableParallelInstalling = true;
@@ -56,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linux development manual pages";
     homepage = "https://www.kernel.org/doc/man-pages/";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.unix;
     priority = 30; # if a package comes with its own man page, prefer it
   };

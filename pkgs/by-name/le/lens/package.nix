@@ -29,11 +29,11 @@ let
     inherit (sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) url hash;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes IDE";
     homepage = "https://k8slens.dev/";
-    license = licenses.lens;
-    maintainers = with maintainers; [
+    license = lib.licenses.lens;
+    maintainers = with lib.maintainers; [
       dbirks
       RossComputerGuy
       starkca90

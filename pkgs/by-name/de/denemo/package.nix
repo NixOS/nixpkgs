@@ -26,7 +26,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "denemo";
   version = "2.6.43";
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   # error by default in GCC 14
-  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   preFixup = ''
     gappsWrapperArgs+=(

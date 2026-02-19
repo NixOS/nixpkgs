@@ -31,18 +31,19 @@ buildPythonPackage rec {
     googleapis-common-protos
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
+    # float_precision option is deprecated for json_format error with latest protobuf
+    "-Wignore:float_precision:UserWarning"
   ];
 
   pythonImportsCheck = [ "proto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Beautiful, idiomatic protocol buffers in Python";
     homepage = "https://github.com/googleapis/proto-plus-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ruuda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ruuda ];
   };
 }

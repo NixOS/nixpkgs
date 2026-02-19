@@ -17,7 +17,8 @@
   tmux,
   # X11 Front
   xterm,
-  xorg,
+  xset,
+  xdpyinfo,
   # what the author calls "Internals"
   usbutils,
   wget,
@@ -58,70 +59,69 @@
   supportX11 ? false, # Allow using xterm instead of tmux, hard to test
 }:
 let
-  deps =
-    [
-      aircrack-ng
-      bash
-      coreutils-full
-      curl
-      gawk
-      glibc
-      gnugrep
-      gnused
-      iproute2
-      iw
-      networkmanager
-      ncurses
-      pciutils
-      procps
-      tmux
-      usbutils
-      wget
-      ethtool
-      util-linux
-      ccze
-      systemd
-    ]
-    ++ lib.optionals supportWpaWps [
-      bully
-      pixiewps
-      reaverwps-t6x
-    ]
-    ++ lib.optionals supportHashCracking [
-      asleap
-      crunch
-      hashcat
-      hcxdumptool
-      hcxtools
-      john
-      wireshark-cli
-    ]
-    ++ lib.optionals supportEvilTwin [
-      bettercap
-      dnsmasq
-      ettercap
-      hostapd
-      lighttpd
-      openssl
-      mdk4
-      nftables
-      apparmor-bin-utils
-    ]
-    ++ lib.optionals supportX11 [
-      xterm
-      xorg.xset
-      xorg.xdpyinfo
-    ];
+  deps = [
+    aircrack-ng
+    bash
+    coreutils-full
+    curl
+    gawk
+    glibc
+    gnugrep
+    gnused
+    iproute2
+    iw
+    networkmanager
+    ncurses
+    pciutils
+    procps
+    tmux
+    usbutils
+    wget
+    ethtool
+    util-linux
+    ccze
+    systemd
+  ]
+  ++ lib.optionals supportWpaWps [
+    bully
+    pixiewps
+    reaverwps-t6x
+  ]
+  ++ lib.optionals supportHashCracking [
+    asleap
+    crunch
+    hashcat
+    hcxdumptool
+    hcxtools
+    john
+    wireshark-cli
+  ]
+  ++ lib.optionals supportEvilTwin [
+    bettercap
+    dnsmasq
+    ettercap
+    hostapd
+    lighttpd
+    openssl
+    mdk4
+    nftables
+    apparmor-bin-utils
+  ]
+  ++ lib.optionals supportX11 [
+    xterm
+    xset
+    xdpyinfo
+  ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "airgeddon";
-  version = "11.41";
+  version = "11.52";
 
   src = fetchFromGitHub {
     owner = "v1s1t0r1sh3r3";
     repo = "airgeddon";
-    tag = "v${version}";
-    hash = "sha256-+hJqaEjEy8woJKE+HKg3utNrZmGeAdd0YWi62HPLN/I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FQB348wOXi89CnjS32cwZwTewjkguTbhK5Izvh/74Q0=";
   };
 
   strictDeps = true;
@@ -162,13 +162,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi-use TUI to audit wireless networks";
     mainProgram = "airgeddon";
     homepage = "https://github.com/v1s1t0r1sh3r3/airgeddon";
-    changelog = "https://github.com/v1s1t0r1sh3r3/airgeddon/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
+    changelog = "https://github.com/v1s1t0r1sh3r3/airgeddon/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

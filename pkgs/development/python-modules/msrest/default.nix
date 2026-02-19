@@ -11,7 +11,6 @@
   pytest-aiohttp,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   requests-oauthlib,
   setuptools,
@@ -22,8 +21,6 @@ buildPythonPackage {
   pname = "msrest";
   version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Azure";
@@ -52,32 +49,31 @@ buildPythonPackage {
     trio
   ];
 
-  disabledTests =
-    [
-      # Test require network access
-      "test_basic_aiohttp"
-      "test_basic_aiohttp"
-      "test_basic_async_requests"
-      "test_basic_async_requests"
-      "test_conf_async_requests"
-      "test_conf_async_requests"
-      "test_conf_async_trio_requests"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # AttributeError: 'TestAuthentication' object has no attribute...
-      "test_apikey_auth"
-      "test_cs_auth"
-      "test_eventgrid_auth"
-      "test_eventgrid_domain_auth"
-    ];
+  disabledTests = [
+    # Test require network access
+    "test_basic_aiohttp"
+    "test_basic_aiohttp"
+    "test_basic_async_requests"
+    "test_basic_async_requests"
+    "test_conf_async_requests"
+    "test_conf_async_requests"
+    "test_conf_async_trio_requests"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'TestAuthentication' object has no attribute...
+    "test_apikey_auth"
+    "test_cs_auth"
+    "test_eventgrid_auth"
+    "test_eventgrid_domain_auth"
+  ];
 
   pythonImportsCheck = [ "msrest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Runtime library for AutoRest generated Python clients";
     homepage = "https://github.com/Azure/msrest-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bendlas
       maxwilson
     ];

@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pefile";
   version = "2024.8.26";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   # DON'T fetch from github, the repo is >60 MB due to test artifacts, which we cannot use
   src = fetchPypi {
@@ -26,11 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pefile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform Python module to parse and work with Portable Executable (aka PE) files";
     homepage = "https://github.com/erocarrera/pefile";
     changelog = "https://github.com/erocarrera/pefile/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pamplemousse ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pamplemousse ];
   };
 }

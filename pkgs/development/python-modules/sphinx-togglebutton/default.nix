@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "sphinx-togglebutton";
   version = "0.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_togglebutton" ];
 
-  meta = with lib; {
+  meta = {
     description = "Toggle page content and collapse admonitions in Sphinx";
     homepage = "https://github.com/executablebooks/sphinx-togglebutton";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

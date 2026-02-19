@@ -3,13 +3,13 @@
   buildGoModule,
   lib,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "etherguard";
   version = "0.3.5-f5";
   src = fetchFromGitHub {
     owner = "KusakabeShi";
     repo = "EtherGuard-VPN";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-67ocXHf+AN3nyPt4636ZJHGRqWSjkpTiDvU5243urBw=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

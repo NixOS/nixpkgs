@@ -14,13 +14,13 @@
   withLua ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nmap";
-  version = "7.97";
+  version = "7.98";
 
   src = fetchurl {
-    url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    hash = "sha256-r5jyeSXGcMJX3Zap3fJyTgbLebL9Hg0IySBjFr4WRcA=";
+    url = "https://nmap.org/dist/nmap-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-zoRzE+qunlyfIXCOQtKre1bH4OuIA3KaMJL1iIbYl+Y=";
   };
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Free and open source utility for network discovery and security auditing";
     homepage = "http://www.nmap.org";
-    changelog = "https://nmap.org/changelog.html#${version}";
+    changelog = "https://nmap.org/changelog.html#${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
       fpletz
     ];
   };
-}
+})

@@ -7,15 +7,12 @@
   tldextract,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "certauth";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ikreymer";
@@ -51,11 +48,11 @@ buildPythonPackage {
     "test_in_mem_parent_wildcard_cert_2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple CertificateAuthority and host certificate creation, useful for man-in-the-middle HTTPS proxy";
     mainProgram = "certauth";
     homepage = "https://github.com/ikreymer/certauth";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

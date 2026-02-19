@@ -8,9 +8,6 @@
         services.haproxy = {
           enable = true;
           config = ''
-            global
-              limited-quic
-
             defaults
               mode http
               timeout connect 10s
@@ -68,7 +65,7 @@
     client =
       { pkgs, ... }:
       {
-        environment.systemPackages = [ pkgs.curlHTTP3 ];
+        environment.systemPackages = [ pkgs.curl ];
       };
   };
   testScript = ''

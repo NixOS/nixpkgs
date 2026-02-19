@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "devpi-client";
   version = "7.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "devpi-client";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-wUM2hFjDh4unvuah2bQY4uZZVxo4VmFPWNdriigmnXs=";
   };
 
@@ -36,27 +36,26 @@ python3.pkgs.buildPythonApplication rec {
     platformdirs
   ];
 
-  nativeCheckInputs =
-    [
-      devpi-server
-      git
-    ]
-    ++ (with python3.pkgs; [
-      mercurial
-      mock
-      pypitoken
-      pytestCheckHook
-      sphinx
-      virtualenv
-      webtest
-      wheel
-    ]);
+  nativeCheckInputs = [
+    devpi-server
+    git
+  ]
+  ++ (with python3.pkgs; [
+    mercurial
+    mock
+    pypitoken
+    pytestCheckHook
+    sphinx
+    virtualenv
+    webtest
+    wheel
+  ]);
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # --fast skips tests which try to start a devpi-server improperly
     "--fast"
   ];
@@ -69,15 +68,15 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Client for devpi, a pypi index server and packaging meta tool";
     homepage = "http://doc.devpi.net";
-    changelog = "https://github.com/devpi/devpi/blob/client-${version}/client/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/devpi/devpi/blob/client-${finalAttrs.version}/client/CHANGELOG";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lewo
       makefu
     ];
     mainProgram = "devpi";
   };
-}
+})

@@ -71,7 +71,7 @@ rec {
       derivationArgs ? { },
       # name of the resulting derivation
       name,
-    # TODO(@Artturin): enable strictDeps always
+      # TODO(@Artturin): enable strictDeps always
     }:
     buildCommand:
     stdenv.mkDerivation (
@@ -94,7 +94,7 @@ rec {
         preferLocalBuild = true;
         allowSubstitutes = false;
       })
-      // builtins.removeAttrs derivationArgs [ "passAsFile" ]
+      // removeAttrs derivationArgs [ "passAsFile" ]
     );
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
@@ -111,7 +111,7 @@ rec {
       allowSubstitutes ? false,
       preferLocalBuild ? true,
       derivationArgs ? { },
-    }:
+    }@args:
     assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
       destination must be an absolute path, relative to the derivation's out path,
       got '${destination}' instead.
@@ -125,6 +125,7 @@ rec {
     runCommand name
       (
         {
+          pos = builtins.unsafeGetAttrPos "name" args;
           inherit
             text
             executable
@@ -170,9 +171,9 @@ rec {
     name: text:
     # TODO: To fully deprecate, replace the assertion with `lib.isString` and remove the warning
     assert lib.assertMsg (lib.strings.isConvertibleWithToString text)
-      ''pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.'';
+      "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.";
     lib.warnIf (!lib.isString text)
-      ''pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead, which is deprecated. Use `toString` to convert the value to a string first.''
+      "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead, which is deprecated. Use `toString` to convert the value to a string first."
       writeTextFile
       { inherit name text; };
 
@@ -182,7 +183,7 @@ rec {
     path: text:
     writeTextFile {
       inherit text;
-      name = builtins.baseNameOf path;
+      name = baseNameOf path;
       destination = "/${path}";
     };
 
@@ -203,6 +204,7 @@ rec {
       inherit name text;
       executable = true;
       destination = "/bin/${name}";
+      meta.mainProgram = name;
     };
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
@@ -332,7 +334,7 @@ rec {
          Type: Bool
       */
       inheritPath ? true,
-    }:
+    }@args:
     writeTextFile {
       inherit
         name
@@ -344,27 +346,24 @@ rec {
       destination = "/bin/${name}";
       allowSubstitutes = true;
       preferLocalBuild = false;
-      text =
-        ''
-          #!${runtimeShell}
-          ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
-        ''
-        + lib.optionalString (runtimeEnv != null) (
-          lib.concatStrings (
-            lib.mapAttrsToList (name: value: ''
-              ${lib.toShellVar name value}
-              export ${name}
-            '') runtimeEnv
-          )
-        )
-        + lib.optionalString (runtimeInputs != [ ]) ''
+      text = ''
+        #!${runtimeShell}
+        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+      ''
+      + lib.optionalString (runtimeEnv != null) (
+        lib.concatMapAttrsStringSep "" (name: value: ''
+          ${lib.toShellVar name value}
+          export ${name}
+        '') runtimeEnv
+      )
+      + lib.optionalString (runtimeInputs != [ ]) ''
 
-          export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
-        ''
-        + ''
+        export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
+      ''
+      + ''
 
-          ${text}
-        '';
+        ${text}
+      '';
 
       checkPhase =
         let
@@ -573,62 +572,76 @@ rec {
     other derivations.  A derivation created with linkFarm is often used in CI
     as a easy way to build multiple derivations at once.
   */
-  symlinkJoin =
-    args_@{
-      name ?
-        assert lib.assertMsg (
-          args_ ? pname && args_ ? version
-        ) "symlinkJoin requires either a `name` OR `pname` and `version`";
-        "${args_.pname}-${args_.version}",
-      paths,
-      stripPrefix ? "",
-      preferLocalBuild ? true,
-      allowSubstitutes ? false,
-      postBuild ? "",
-      failOnMissing ? stripPrefix == "",
-      ...
-    }:
-    assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
-      stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
+  symlinkJoin = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-      Ensure that the path starts with / and specifies path to the subdirectory.
-    '';
+    excludeDrvArgNames = [
+      "postBuild"
+      "stripPrefix"
+      "paths"
+      "failOnMissing"
+    ];
 
-    let
-      mapPaths =
-        f: paths:
-        map (
-          path:
-          if path == null then
-            null
-          else if isList path then
-            mapPaths f path
-          else
-            f path
-        ) paths;
-      args =
-        removeAttrs args_ [
-          "name"
-          "postBuild"
-          "stripPrefix"
+    extendDrvArgs =
+      finalAttrs:
+      args@{
+        name ?
+          assert lib.assertMsg (
+            finalAttrs ? pname && finalAttrs ? version
+          ) "symlinkJoin requires either a `name` OR `pname` and `version`";
+          "${finalAttrs.pname}-${finalAttrs.version}",
+        paths,
+        stripPrefix ? "",
+        preferLocalBuild ? true,
+        allowSubstitutes ? false,
+        postBuild ? "",
+        failOnMissing ? stripPrefix == "",
+        ...
+      }:
+      assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
+        stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
+
+        Ensure that the path starts with / and specifies path to the subdirectory.
+      '';
+      let
+        mapPaths =
+          f:
+          map (
+            path:
+            if path == null then
+              null
+            else if isList path then
+              mapPaths f path
+            else
+              f path
+          );
+      in
+      {
+        enableParallelBuilding = true;
+        inherit name allowSubstitutes preferLocalBuild;
+        passAsFile = [
+          "buildCommand"
           "paths"
-          "failOnMissing"
-        ]
-        // {
-          inherit preferLocalBuild allowSubstitutes;
-          paths = mapPaths (path: "${path}${stripPrefix}") paths;
-          passAsFile = [ "paths" ];
-        }; # pass the defaults
-    in
-    runCommand name args ''
-      mkdir -p $out
-      for i in $(cat $pathsPath); do
-        ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${
-          optionalString (!failOnMissing) "; fi"
-        }
-      done
-      ${postBuild}
-    '';
+        ];
+        paths = mapPaths (path: "${path}${stripPrefix}") paths;
+        buildCommand = ''
+          mkdir -p $out
+          for i in $(cat $pathsPath); do
+            ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${
+              optionalString (!failOnMissing) "; fi"
+            }
+          done
+          ${postBuild}
+        '';
+      }
+      // lib.optionalAttrs (!args ? meta) {
+        pos =
+          if args ? pname then
+            builtins.unsafeGetAttrPos "pname" args
+          else
+            builtins.unsafeGetAttrPos "name" args;
+      };
+  };
 
   # TODO: move linkFarm docs to the Nixpkgs manual
   /*
@@ -671,12 +684,20 @@ rec {
           throw "linkFarm entries must be either attrs or a list!";
 
       linkCommands = lib.mapAttrsToList (name: path: ''
-        mkdir -p "$(dirname ${lib.escapeShellArg "${name}"})"
-        ln -s ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+        mkdir -p -- "$(dirname -- ${lib.escapeShellArg "${name}"})"
+        ln -s -- ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
       '') entries';
     in
     runCommand name
       {
+        # Get the position from the `entries` attrset if it exists.
+        # This is the best we can do since the other attrs are either defined here, or curried values that
+        # we cannot extract a position from
+        pos =
+          if (lib.isAttrs entries) && (entries != { }) then
+            builtins.unsafeGetAttrPos (builtins.head (builtins.attrNames entries)) entries
+          else
+            null;
         preferLocalBuild = true;
         allowSubstitutes = false;
         passthru.entries = entries';
@@ -740,17 +761,21 @@ rec {
       name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook",
       # hooks go in nativeBuildInputs so these will be nativeBuildInputs
       propagatedBuildInputs ? [ ],
+      propagatedNativeBuildInputs ? [ ],
       # these will be buildInputs
       depsTargetTargetPropagated ? [ ],
       meta ? { },
       passthru ? { },
       substitutions ? { },
-    }:
+    }@args:
     script:
     runCommand name
       (
         substitutions
         // {
+          # Make the position of the derivation accurate.
+          # Since not having `name` is deprecated, this should be fairly accurate.
+          pos = lib.unsafeGetAttrPos "name" args;
           # TODO(@Artturin:) substitutions should be inside the env attrset
           # but users are likely passing non-substitution arguments through substitutions
           # turn off __structuredAttrs to unbreak substituteAll
@@ -758,6 +783,7 @@ rec {
           inherit meta;
           inherit depsTargetTargetPropagated;
           inherit propagatedBuildInputs;
+          inherit propagatedNativeBuildInputs;
           strictDeps = true;
           # TODO 2023-01, no backport: simplify to inherit passthru;
           passthru =
@@ -956,7 +982,6 @@ rec {
       outputHashAlgo = hashAlgo_;
       outputHash = hash_;
       preferLocalBuild = true;
-      allowSubstitutes = false;
       builder = writeScript "restrict-message" ''
         source ${stdenvNoCC}/setup
         cat <<_EOF_
@@ -981,7 +1006,7 @@ rec {
 
   # TODO: move copyPathsToStore docs to the Nixpkgs manual
   # Copy a list of paths to the Nix store.
-  copyPathsToStore = builtins.map copyPathToStore;
+  copyPathsToStore = map copyPathToStore;
 
   # TODO: move applyPatches docs to the Nixpkgs manual
   /*
@@ -1001,75 +1026,69 @@ rec {
       ];
     }
   */
-  applyPatches =
-    {
-      src,
-      name ?
-        (
-          if builtins.typeOf src == "path" then
-            builtins.baseNameOf src
-          else if builtins.isAttrs src && builtins.hasAttr "name" src then
-            src.name
-          else
-            throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
-        )
-        + "-patched",
-      patches ? [ ],
-      prePatch ? "",
-      postPatch ? "",
-      ...
-    }@args:
-    assert lib.assertMsg (
-      !args ? meta
-    ) "applyPatches will not merge 'meta', change it in 'src' instead";
-    assert lib.assertMsg (
-      !args ? passthru
-    ) "applyPatches will not merge 'passthru', change it in 'src' instead";
-    if patches == [ ] && prePatch == "" && postPatch == "" then
-      src # nothing to do, so use original src to avoid additional drv
-    else
+  applyPatches = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        src,
+        ...
+      }@args:
+      assert lib.assertMsg (
+        !args ? meta
+      ) "applyPatches will not merge 'meta', change it in 'src' instead";
+      assert lib.assertMsg (
+        !args ? passthru
+      ) "applyPatches will not merge 'passthru', change it in 'src' instead";
       let
         keepAttrs = names: lib.filterAttrs (name: val: lib.elem name names);
         # enables tools like nix-update to determine what src attributes to replace
-        extraPassthru = lib.optionalAttrs (lib.isAttrs src) (
+        extraPassthru = lib.optionalAttrs (lib.isAttrs finalAttrs.src) (
           keepAttrs [
             "rev"
             "tag"
             "url"
             "outputHash"
-          ] src
+            "outputHashAlgo"
+          ] finalAttrs.src
         );
       in
-      stdenvNoCC.mkDerivation (
-        {
-          inherit
-            name
-            src
-            patches
-            prePatch
-            postPatch
-            ;
-          preferLocalBuild = true;
-          allowSubstitutes = false;
-          phases = "unpackPhase patchPhase installPhase";
-          installPhase = "cp -R ./ $out";
-        }
+      {
+        name =
+          args.name or (
+            if builtins.isPath finalAttrs.src then
+              baseNameOf finalAttrs.src + "-patched"
+            else if builtins.isAttrs finalAttrs.src && (finalAttrs.src ? name) then
+              finalAttrs.src.name + "-patched"
+            else
+              throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
+          );
+
+        # Manually setting `name` can mess up positioning.
+        # This should fix it.
+        pos = builtins.unsafeGetAttrPos "src" args;
+
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+
+        # unconditionally disable phases that are we don't want
+        phases = [
+          "unpackPhase"
+          "patchPhase"
+          "installPhase"
+        ];
+
+        installPhase = "cp -R ./ $out";
+
+        # passthru the git and hash info for nix-update, as well
+        # as all the src's passthru attrs.
+        passthru = extraPassthru // finalAttrs.src.passthru or { };
+
         # Carry (and merge) information from the underlying `src` if present.
-        // (optionalAttrs (src ? meta) {
-          inherit (src) meta;
-        })
-        // (optionalAttrs (extraPassthru != { } || src ? passthru) {
-          passthru = extraPassthru // src.passthru or { };
-        })
-        # Forward any additional arguments to the derviation
-        // (removeAttrs args [
-          "src"
-          "name"
-          "patches"
-          "prePatch"
-          "postPatch"
-        ])
-      );
+        meta = lib.optionalAttrs (src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
+      };
+  };
 
   # TODO: move docs to Nixpkgs manual
   # An immutable file in the store with a length of 0 bytes.

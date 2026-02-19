@@ -8,7 +8,6 @@
   nh3,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "readme-renderer";
   version = "44.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "readme_renderer";
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "readme_renderer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for rendering readme descriptions";
     homepage = "https://github.com/pypa/readme_renderer";
     changelog = "https://github.com/pypa/readme_renderer/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

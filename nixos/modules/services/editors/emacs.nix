@@ -66,32 +66,31 @@ in
   };
 
   config = lib.mkIf (cfg.enable || cfg.install) {
-    systemd.user.services.emacs =
-      {
-        description = "Emacs: the extensible, self-documenting text editor";
+    systemd.user.services.emacs = {
+      description = "Emacs: the extensible, self-documenting text editor";
 
-        serviceConfig = {
-          Type = "notify";
-          ExecStart = "${pkgs.runtimeShell} -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --fg-daemon'";
-          # Emacs exits with exit code 15 (SIGTERM), when stopped by systemd.
-          SuccessExitStatus = 15;
-          Restart = "always";
-        };
-
-        unitConfig = lib.optionalAttrs cfg.startWithGraphical {
-          After = "graphical-session.target";
-        };
-      }
-      // lib.optionalAttrs cfg.enable {
-        wantedBy = if cfg.startWithGraphical then [ "graphical-session.target" ] else [ "default.target" ];
+      serviceConfig = {
+        Type = "notify";
+        ExecStart = "${pkgs.runtimeShell} -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --fg-daemon'";
+        # Emacs exits with exit code 15 (SIGTERM), when stopped by systemd.
+        SuccessExitStatus = 15;
+        Restart = "always";
       };
+
+      unitConfig = lib.optionalAttrs cfg.startWithGraphical {
+        After = "graphical-session.target";
+      };
+    }
+    // lib.optionalAttrs cfg.enable {
+      wantedBy = if cfg.startWithGraphical then [ "graphical-session.target" ] else [ "default.target" ];
+    };
 
     environment.systemPackages = [
       cfg.package
       editorScript
     ];
 
-    environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "emacseditor");
+    environment.sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "emacseditor");
   };
 
   meta.doc = ./emacs.md;

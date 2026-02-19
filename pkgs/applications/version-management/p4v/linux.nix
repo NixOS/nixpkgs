@@ -5,15 +5,15 @@
   dbus,
   fontconfig,
   gccForLibs,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libinput,
   libxcb,
   libxkbcommon,
@@ -24,10 +24,10 @@
   qttools,
   qtwebengine,
   qtwebview,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
 }:
 
 {
@@ -47,15 +47,15 @@ let
       dbus
       fontconfig
       gccForLibs
-      libX11
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXi
-      libXrandr
-      libXrender
-      libXtst
+      libx11
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxi
+      libxrandr
+      libxrender
+      libxtst
       libinput
       libxcb
       libxkbcommon
@@ -66,10 +66,10 @@ let
       qttools
       qtwebengine
       qtwebview
-      xcbutilimage
-      xcbutilkeysyms
-      xcbutilrenderutil
-      xcbutilwm
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
     ];
 
     dontBuild = true;

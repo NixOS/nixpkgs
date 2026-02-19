@@ -5,11 +5,11 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "collapseos-cvm";
   version = "20220316";
   src = fetchurl {
-    url = "http://collapseos.org/files/collapseos-${version}.tar.gz";
+    url = "http://collapseos.org/files/collapseos-${finalAttrs.version}.tar.gz";
     hash = "sha256-8bt6wj93T82K9fqtuC/mctkMCzfvW0taxv6QAKeJb5g=";
   };
   buildInputs = [ ncurses ];
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     downloadPage = "http://collapseos.org/files/";
     homepage = "http://collapseos.org/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "cos-serial";
   };
-}
+})

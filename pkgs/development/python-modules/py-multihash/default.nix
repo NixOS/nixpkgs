@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multihash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Self describing hashes - for future proofing";
     homepage = "https://github.com/multiformats/py-multihash";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rakesh4g ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

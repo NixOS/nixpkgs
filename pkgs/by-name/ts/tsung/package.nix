@@ -10,12 +10,12 @@
   gnuplot,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tsung";
   version = "1.8.0";
 
   src = fetchurl {
-    url = "http://tsung.erlang-projects.org/dist/tsung-${version}.tar.gz";
+    url = "http://tsung.erlang-projects.org/dist/tsung-${finalAttrs.version}.tar.gz";
     hash = "sha256-kehkMCYBfj0AiKZxD7EcT2F0d+gm6+TF/lhqpjFH/JI=";
   };
 
@@ -44,17 +44,17 @@ stdenv.mkDerivation rec {
         --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.TemplateToolkit ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://tsung.erlang-projects.org/";
-    changelog = "https://github.com/processone/tsung/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/processone/tsung/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "High-performance benchmark framework for various protocols including HTTP, XMPP, LDAP, etc";
     longDescription = ''
       Tsung is a distributed load testing tool. It is protocol-independent and
       can currently be used to stress HTTP, WebDAV, SOAP, PostgreSQL, MySQL,
       AMQP, MQTT, LDAP and Jabber/XMPP servers.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ uskudnik ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ uskudnik ];
+    platforms = lib.platforms.unix;
   };
-}
+})

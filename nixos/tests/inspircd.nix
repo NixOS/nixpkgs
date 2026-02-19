@@ -12,44 +12,43 @@ in
 { pkgs, lib, ... }:
 {
   name = "inspircd";
-  nodes =
-    {
-      "${server}" = {
-        networking.firewall.allowedTCPPorts = [ ircPort ];
-        services.inspircd = {
-          enable = true;
-          package = pkgs.inspircdMinimal;
-          config = ''
-            <bind address="" port="${toString ircPort}" type="clients">
-            <connect name="main" allow="*" pingfreq="15">
-          '';
-        };
+  nodes = {
+    "${server}" = {
+      networking.firewall.allowedTCPPorts = [ ircPort ];
+      services.inspircd = {
+        enable = true;
+        package = pkgs.inspircdMinimal;
+        config = ''
+          <bind address="" port="${toString ircPort}" type="clients">
+          <connect name="main" allow="*" pingfreq="15">
+        '';
       };
-    }
-    // lib.listToAttrs (
-      builtins.map (
-        client:
-        lib.nameValuePair client {
-          imports = [
-            ./common/user-account.nix
-          ];
+    };
+  }
+  // lib.listToAttrs (
+    map (
+      client:
+      lib.nameValuePair client {
+        imports = [
+          ./common/user-account.nix
+        ];
 
-          systemd.services.ii = {
-            requires = [ "network.target" ];
-            wantedBy = [ "default.target" ];
+        systemd.services.ii = {
+          requires = [ "network.target" ];
+          wantedBy = [ "default.target" ];
 
-            serviceConfig = {
-              Type = "simple";
-              ExecPreStartPre = "mkdir -p ${iiDir}";
-              ExecStart = ''
-                ${lib.getBin pkgs.ii}/bin/ii -n ${client} -s ${server} -i ${iiDir}
-              '';
-              User = "alice";
-            };
+          serviceConfig = {
+            Type = "simple";
+            ExecPreStartPre = "mkdir -p ${iiDir}";
+            ExecStart = ''
+              ${lib.getBin pkgs.ii}/bin/ii -n ${client} -s ${server} -i ${iiDir}
+            '';
+            User = "alice";
           };
-        }
-      ) clients
-    );
+        };
+      }
+    ) clients
+  );
 
   testScript =
     let
@@ -81,7 +80,7 @@ in
           ''
           # check that all greetings arrived on all clients
         ]
-        ++ builtins.map (other: ''
+        ++ map (other: ''
           ${client}.succeed(
               "grep '${msg other}$' ${iiDir}/${server}/#${channel}/out"
           )
@@ -98,5 +97,5 @@ in
       # entry is executed by every client before advancing
       # to the next one.
     ''
-    + lib.concatStrings (reduce (lib.zipListsWith (cs: c: cs + c)) (builtins.map clientScript clients));
+    + lib.concatStrings (reduce (lib.zipListsWith (cs: c: cs + c)) (map clientScript clients));
 }

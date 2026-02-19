@@ -6,14 +6,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elfio";
   version = "3.10";
 
   src = fetchFromGitHub {
     owner = "serge1";
     repo = "elfio";
-    rev = "Release_${version}";
+    rev = "Release_${finalAttrs.version}";
     sha256 = "sha256-DuZhkiHXdCplRiOy1Gsu7voVPdCbFt+4qFqlOeOeWQw=";
   };
 
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Header-only C++ library for reading and generating files in the ELF binary format";
     homepage = "https://github.com/serge1/ELFIO";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

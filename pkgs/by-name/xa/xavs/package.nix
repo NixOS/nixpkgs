@@ -4,38 +4,37 @@
   fetchsvn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xavs";
   version = "55";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/xavs/code/trunk";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0drw16wm95dqszpl7j33y4gckz0w0107lnz6wkzb66f0dlbv48cf";
   };
 
   enableParallelBuilding = true;
 
-  patchPhase =
-    ''
-      patchShebangs configure
-      patchShebangs config.sub
-      patchShebangs version.sh
-      patchShebangs tools/countquant_xavs.pl
-      patchShebangs tools/patcheck
-      patchShebangs tools/regression-test.pl
-      patchShebangs tools/xavs-format
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace config.guess --replace 'uname -p' 'uname -m'
-      substituteInPlace configure \
-        --replace '-O4' '-O3' \
-        --replace ' -s ' ' ' \
-        --replace 'LDFLAGS -s' 'LDFLAGS' \
-        --replace '-dynamiclib' ' ' \
-        --replace '-falign-loops=16' ' '
-      substituteInPlace Makefile --replace '-Wl,-soname,' ' '
-    '';
+  patchPhase = ''
+    patchShebangs configure
+    patchShebangs config.sub
+    patchShebangs version.sh
+    patchShebangs tools/countquant_xavs.pl
+    patchShebangs tools/patcheck
+    patchShebangs tools/regression-test.pl
+    patchShebangs tools/xavs-format
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace config.guess --replace 'uname -p' 'uname -m'
+    substituteInPlace configure \
+      --replace '-O4' '-O3' \
+      --replace ' -s ' ' ' \
+      --replace 'LDFLAGS -s' 'LDFLAGS' \
+      --replace '-dynamiclib' ' ' \
+      --replace '-falign-loops=16' ' '
+    substituteInPlace Makefile --replace '-Wl,-soname,' ' '
+  '';
 
   configureFlags = [
     "--enable-pic"
@@ -44,12 +43,12 @@ stdenv.mkDerivation rec {
     "--disable-asm"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AVS encoder and decoder";
     mainProgram = "xavs";
     homepage = "https://xavs.sourceforge.net/";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ codyopel ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ codyopel ];
   };
-}
+})

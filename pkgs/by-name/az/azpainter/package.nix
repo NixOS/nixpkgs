@@ -8,10 +8,10 @@
   ninja,
   pkg-config,
   libiconv,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
   freetype,
   fontconfig,
   libjpeg,
@@ -21,15 +21,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "azpainter";
-  version = "3.0.11";
+  version = "3.0.12";
 
   src = fetchFromGitLab {
     owner = "azelpg";
     repo = "azpainter";
-    rev = "v${version}";
-    hash = "sha256-5rNLGF/mkW+rBH9vuIPCJHciyf4NhG17Es+X6l4xIoQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cUq1UmS0k5eib0aJI1zOJbJRzErezfAAXOOIFrgUS6E=";
   };
 
   nativeBuildInputs = [
@@ -37,13 +37,14 @@ stdenv.mkDerivation rec {
     shared-mime-info # for update-mime-info
     ninja
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
-    libX11
-    libXcursor
-    libXext
-    libXi
+    libx11
+    libxcursor
+    libxext
+    libxi
     freetype
     fontconfig
     libjpeg
@@ -51,7 +52,8 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preBuild = ''
     cd build
@@ -59,12 +61,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Full color painting software for illustration drawing";
     homepage = "http://azsky2.html.xdomain.jp/soft/azpainter.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dtzWill ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "azpainter";
   };
-}
+})

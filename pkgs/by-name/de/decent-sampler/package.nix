@@ -7,14 +7,17 @@
   copyDesktopItems,
   buildFHSEnv,
   alsa-lib,
+  alsa-plugins,
   freetype,
   nghttp2,
-  libX11,
+  libx11,
+  expat,
 }:
 
 let
   pname = "decent-sampler";
-  version = "1.12.14";
+  version = "1.15.5";
+  rlkey = "orvjprslmwn0dkfs0ncx6nxnm";
 
   icon = fetchurl {
     url = "https://www.decentsamples.com/wp-content/uploads/2018/09/cropped-Favicon_512x512.png";
@@ -26,8 +29,8 @@ let
 
     src = fetchzip {
       # dropbox links: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
-      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/AFAQQGWSQ-kxJv5JggeMTrE/Decent_Sampler-1.12.14-Linux-Static-x86_64.tar.gz?rlkey=orvjprslmwn0dkfs0ncx6nxnm&dl=0";
-      hash = "sha256-n9WTR11chK9oCz84uYhymov1axTVRr4OLo6W0cRpdWc=";
+      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/ADKHnE9GsrZx5RepuBKy7dg/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz?rlkey=${rlkey}&dl=0";
+      hash = "sha256-uUEncrT0M4AmIokizrUdSATm8Dnvg3cBNGlH8wOPt+Y=";
     };
 
     nativeBuildInputs = [ copyDesktopItems ];
@@ -66,10 +69,12 @@ buildFHSEnv {
 
   targetPkgs = pkgs: [
     alsa-lib
+    alsa-plugins
     decent-sampler
     freetype
     nghttp2
-    libX11
+    libx11
+    expat
   ];
 
   runScript = "decent-sampler";
@@ -79,7 +84,7 @@ buildFHSEnv {
     cp -r ${decent-sampler}/share $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Audio sample player";
     longDescription = ''
       Decent Sampler is an audio sample player.
@@ -90,12 +95,13 @@ buildFHSEnv {
     homepage = "https://www.decentsamples.com/product/decent-sampler-plugin/";
     # It claims to be free but we currently cannot find any license
     # that it is released under.
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       adam248
       chewblacka
+      kaptcha0
     ];
   };
 }

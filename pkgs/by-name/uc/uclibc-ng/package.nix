@@ -26,54 +26,58 @@ let
             echo "parseconfig: removing $NAME"
             sed -i /^$NAME=/d .config
 
-            #if test "$OPTION" != n; then
-                echo "parseconfig: setting $NAME=$OPTION"
-                echo "$NAME=$OPTION" >> .config
-            #fi
+            echo "parseconfig: setting $NAME=$OPTION"
+            echo "$NAME=$OPTION" >> .config
         done
         set +x
     }
   '';
 
   # UCLIBC_SUSV4_LEGACY defines 'tmpnam', needed for gcc libstdc++ builds.
-  nixConfig =
-    ''
-      RUNTIME_PREFIX "/"
-      DEVEL_PREFIX "/"
-      UCLIBC_HAS_WCHAR y
-      UCLIBC_HAS_FTW y
-      UCLIBC_HAS_RPC y
-      DO_C99_MATH y
-      UCLIBC_HAS_PROGRAM_INVOCATION_NAME y
-      UCLIBC_HAS_RESOLVER_SUPPORT y
-      UCLIBC_SUSV4_LEGACY y
-      UCLIBC_HAS_THREADS_NATIVE y
-      KERNEL_HEADERS "${linuxHeaders}/include"
-    ''
-    + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
-      UCLIBC_HAS_FPU n
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isAarch32 && isCross) ''
-      CONFIG_ARM_EABI y
-      ARCH_WANTS_BIG_ENDIAN n
-      ARCH_BIG_ENDIAN n
-      ARCH_WANTS_LITTLE_ENDIAN y
-      ARCH_LITTLE_ENDIAN y
-      UCLIBC_HAS_FPU n
-    '';
+  # 'ftw' needed to build acl, a coreutils dependency
+  nixConfig = ''
+    RUNTIME_PREFIX "/"
+    DEVEL_PREFIX "/"
+    UCLIBC_HAS_WCHAR y
+    UCLIBC_HAS_FTW y
+    UCLIBC_HAS_RPC y
+    DO_C99_MATH y
+    UCLIBC_HAS_PROGRAM_INVOCATION_NAME y
+    UCLIBC_HAS_RESOLVER_SUPPORT y
+    UCLIBC_SUSV4_LEGACY y
+    UCLIBC_HAS_THREADS_NATIVE y
+    KERNEL_HEADERS "${linuxHeaders}/include"
+  ''
+  + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
+    UCLIBC_HAS_FPU n
+  ''
+  + lib.optionalString stdenv.hostPlatform.isEabi ''
+    CONFIG_ARM_EABI y
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLittleEndian ''
+    ARCH_WANTS_BIG_ENDIAN n
+    ARCH_BIG_ENDIAN n
+    ARCH_WANTS_LITTLE_ENDIAN y
+    ARCH_LITTLE_ENDIAN y
+  ''
+  + lib.optionalString stdenv.hostPlatform.isBigEndian ''
+    ARCH_WANTS_BIG_ENDIAN y
+    ARCH_BIG_ENDIAN y
+    ARCH_WANTS_LITTLE_ENDIAN n
+    ARCH_LITTLE_ENDIAN n
+  '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.52";
+  version = "1.0.56";
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-iB2kc3hPlcyCkLsHgMCvyBDKKNV14z1a/V5xU7KaoTY=";
+    hash = "sha256-I8nKtUwRPgIPsgudwGvkpJVg33kbePy8LKiZpujyE90=";
   };
 
-  # 'ftw' needed to build acl, a coreutils dependency
   configurePhase = ''
-    make defconfig
+    make defconfig ARCH=${stdenv.hostPlatform.linuxArch}
     ${configParser}
     cat << EOF | parseconfig
     ${nixConfig}
@@ -90,15 +94,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  makeFlags =
-    [
-      "ARCH=${stdenv.hostPlatform.linuxArch}"
-      "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
-      "VERBOSE=1"
-    ]
-    ++ lib.optionals (isCross) [
-      "CROSS=${stdenv.cc.targetPrefix}"
-    ];
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+    "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
+    "V=1"
+  ]
+  ++ lib.optionals isCross [
+    "CROSS=${stdenv.cc.targetPrefix}"
+  ];
 
   # `make libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrwlock.h`:
   # error: bits/sysnum.h: No such file or directory
@@ -146,9 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       experimental and need more testing.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [
-      rasendubi
-    ];
+    maintainers = with lib.maintainers; [ aleclearmind ];
     platforms = lib.platforms.linux;
     badPlatforms = lib.platforms.aarch64;
   };

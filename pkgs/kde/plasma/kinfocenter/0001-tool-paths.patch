@@ -1,8 +1,8 @@
 diff --git a/kcms/audio_information/kcm_audio_information.json b/kcms/audio_information/kcm_audio_information.json
-index d94ef1d0..13f1c377 100644
+index 5648bb73..28db7ffb 100644
 --- a/kcms/audio_information/kcm_audio_information.json
 +++ b/kcms/audio_information/kcm_audio_information.json
-@@ -80,7 +80,7 @@
+@@ -82,7 +82,7 @@
          "Name[zh_CN]": "音频",
          "Name[zh_TW]": "音訊"
      },
@@ -25,10 +25,10 @@ index adb196fd..9d6c8675 100644
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/block_devices/kcm_block_devices.json b/kcms/block_devices/kcm_block_devices.json
-index a73e33ad..3a1ab4da 100644
+index 5d864d49..8ea55707 100644
 --- a/kcms/block_devices/kcm_block_devices.json
 +++ b/kcms/block_devices/kcm_block_devices.json
-@@ -80,7 +80,7 @@
+@@ -82,7 +82,7 @@
          "Name[zh_CN]": "块设备",
          "Name[zh_TW]": "區塊裝置"
      },
@@ -51,7 +51,7 @@ index 2de923f3..6b14f7fb 100644
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/cpu/kcm_cpu.json b/kcms/cpu/kcm_cpu.json
-index a783b5bc..5866c4d2 100644
+index 7541b258..3ba7f289 100644
 --- a/kcms/cpu/kcm_cpu.json
 +++ b/kcms/cpu/kcm_cpu.json
 @@ -102,7 +102,7 @@
@@ -64,15 +64,15 @@ index a783b5bc..5866c4d2 100644
      "X-KDE-Keywords": "cpu,amd,intel,arm,instructions,cores,architecture,byte order",
      "X-KDE-Keywords[ar]": "cpu,amd,intel,arm,instructions,cores,architecture,byte order,تعليمات,أنوية,معمارية",
 diff --git a/kcms/cpu/main.cpp b/kcms/cpu/main.cpp
-index 608381eb..8fd7914f 100644
+index 96481ffb..198fef96 100644
 --- a/kcms/cpu/main.cpp
 +++ b/kcms/cpu/main.cpp
 @@ -16,7 +16,7 @@ public:
      explicit KCMCPU(QObject *parent, const KPluginMetaData &data)
          : KQuickConfigModule(parent, data)
      {
--        m_outputContext = new CommandOutputContext(QStringLiteral("lscpu"), {}, parent);
-+        m_outputContext = new CommandOutputContext(QStringLiteral("@lscpu@"), {}, parent);
+-        m_outputContext = new CommandOutputContext(QStringLiteral("lscpu"), {QStringLiteral("--hierarchic=always")}, parent);
++        m_outputContext = new CommandOutputContext(QStringLiteral("@lscpu@"), {QStringLiteral("--hierarchic=always")}, parent);
      }
      CommandOutputContext *outputContext() const
      {
@@ -90,18 +90,18 @@ index da803598..4e24eaaf 100755
      printf "%s\n\n" "$data"
  done
 diff --git a/kcms/edid/kcm_edid.json b/kcms/edid/kcm_edid.json
-index 68e4e670..19dfdc59 100644
+index 4639da41..1afb5522 100644
 --- a/kcms/edid/kcm_edid.json
 +++ b/kcms/edid/kcm_edid.json
-@@ -64,7 +64,7 @@
-         "Name[x-test]": "xxEDIDxx",
-         "Name[zh_CN]": "EDID"
+@@ -74,7 +74,7 @@
+         "Name[zh_CN]": "EDID",
+         "Name[zh_TW]": "EDID"
      },
 -    "TryExec": "di-edid-decode",
 +    "TryExec": "@di_edid_decode@",
      "X-KDE-KInfoCenter-Category": "graphical_information",
-     "X-KDE-Keywords": "EDID,Graphics",
-     "X-KDE-Keywords[ar]": "EDID,Graphics,الرسوميات,بيانات تعريف العرض الممتدة",
+     "X-KDE-Keywords": "EDID,Graphics,dxdiag",
+     "X-KDE-Keywords[ar]": "EDID,Graphics,الرسوميات,بيانات تعريف العرض الممتدة,dxdiag",
 diff --git a/kcms/edid/main.cpp b/kcms/edid/main.cpp
 index 9f04e7fd..8ef37d2c 100644
 --- a/kcms/edid/main.cpp
@@ -116,7 +116,7 @@ index 9f04e7fd..8ef37d2c 100644
      [[nodiscard]] CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/egl/kcm_egl.json b/kcms/egl/kcm_egl.json
-index 1cc89eb2..f1aed6c3 100644
+index a5a21cd6..cddef596 100644
 --- a/kcms/egl/kcm_egl.json
 +++ b/kcms/egl/kcm_egl.json
 @@ -102,7 +102,7 @@
@@ -126,8 +126,8 @@ index 1cc89eb2..f1aed6c3 100644
 -    "TryExec": "eglinfo",
 +    "TryExec": "@eglinfo@",
      "X-KDE-KInfoCenter-Category": "graphical_information",
-     "X-KDE-Keywords": "OpenGL,DRI,3D,VideoCard,Hardware Acceleration,Graphics,EGL",
-     "X-KDE-Keywords[ar]": "OpenGL,DRI,3D,VideoCard,Hardware Acceleration,Graphics,EGL,بطاقة الرسوميات,تسريع العتاد,رسوميات",
+     "X-KDE-Keywords": "OpenGL,DRI,3D,VideoCard,Hardware Acceleration,Graphics,EGL,dxdiag",
+     "X-KDE-Keywords[ar]": "OpenGL,DRI,3D,VideoCard,Hardware Acceleration,Graphics,EGL,بطاقة الرسوميات,تسريع العتاد,رسوميات,dxdiag",
 diff --git a/kcms/egl/main.cpp b/kcms/egl/main.cpp
 index 1a509dac..886a62d8 100644
 --- a/kcms/egl/main.cpp
@@ -155,7 +155,7 @@ index eab20e0f..5a0d2499 100644
                                                     {executable},
                                                     Qt::TextFormat::RichText,
 diff --git a/kcms/glx/kcm_glx.json b/kcms/glx/kcm_glx.json
-index 640ef4a5..791e8ce9 100644
+index 900d8d6a..c1bef34f 100644
 --- a/kcms/glx/kcm_glx.json
 +++ b/kcms/glx/kcm_glx.json
 @@ -101,7 +101,7 @@
@@ -165,8 +165,8 @@ index 640ef4a5..791e8ce9 100644
 -    "TryExec": "glxinfo",
 +    "TryExec": "@glxinfo@",
      "X-KDE-KInfoCenter-Category": "graphical_information",
-     "X-KDE-Keywords": "OpenGL,DRI,GLX,3D,VideoCard,Hardware Acceleration,Graphics,X,X11,Xserver,X-Server,XFree86,Display",
-     "X-KDE-Keywords[ar]": "OpenGL,DRI,GLX,3D,VideoCard,Hardware Acceleration,Graphics,X,X11,Xserver,X-Server,XFree86,Display,بطاقة الرسوميات,تسريع العتاد,الرسوميات",
+     "X-KDE-Keywords": "OpenGL,DRI,GLX,3D,VideoCard,Hardware Acceleration,Graphics,X,X11,Xserver,X-Server,XFree86,Display,dxdiag",
+     "X-KDE-Keywords[ar]": "OpenGL,DRI,GLX,3D,VideoCard,Hardware Acceleration,Graphics,X,X11,Xserver,X-Server,XFree86,Display,بطاقة,dxdiag الرسوميات,تسريع العتاد,الرسوميات",
 diff --git a/kcms/glx/main.cpp b/kcms/glx/main.cpp
 index a7317411..a6c5621d 100644
 --- a/kcms/glx/main.cpp
@@ -181,7 +181,7 @@ index a7317411..a6c5621d 100644
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/helpers/dmidecode-helper/helper.cpp b/kcms/helpers/dmidecode-helper/helper.cpp
-index 11921934..1160c5f0 100644
+index 2c009acd..f6c1c8e5 100644
 --- a/kcms/helpers/dmidecode-helper/helper.cpp
 +++ b/kcms/helpers/dmidecode-helper/helper.cpp
 @@ -20,10 +20,7 @@ auto make_array(Input &&...args) -> std::array<Output, sizeof...(args)> // NB: w
@@ -197,17 +197,18 @@ index 11921934..1160c5f0 100644
  
  KAuth::ActionReply DMIDecodeHelper::memoryinformation(const QVariantMap &args)
 diff --git a/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in b/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
-index 24dc11a7..bc72f2af 100644
+index d173229d..71815467 100644
 --- a/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
 +++ b/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
-@@ -93,6 +93,6 @@
+@@ -95,7 +95,7 @@
          "Name[zh_CN]": "窗口管理器",
          "Name[zh_TW]": "視窗管理員"
      },
 -    "TryExec": "@QtBinariesDir@/qdbus",
 +    "TryExec": "@qdbus@",
-     "X-KDE-KInfoCenter-Category": "graphical_information"
- }
+     "X-KDE-KInfoCenter-Category": "graphical_information",
+     "X-KDE-Keywords": "dxdiag",
+     "X-KDE-Keywords[ar]": "dxdiag",
 diff --git a/kcms/kwinsupportinfo/main.cpp b/kcms/kwinsupportinfo/main.cpp
 index ddb55b5c..8dc6b668 100644
 --- a/kcms/kwinsupportinfo/main.cpp
@@ -222,10 +223,10 @@ index ddb55b5c..8dc6b668 100644
                                                     parent);
      }
 diff --git a/kcms/memory/kcm_memory.json b/kcms/memory/kcm_memory.json
-index 54f729ec..8e7aeb57 100644
+index 87ad4a4c..e3f07e81 100644
 --- a/kcms/memory/kcm_memory.json
 +++ b/kcms/memory/kcm_memory.json
-@@ -132,7 +132,7 @@
+@@ -134,7 +134,7 @@
          "Name[zh_CN]": "内存",
          "Name[zh_TW]": "記憶體"
      },
@@ -235,10 +236,10 @@ index 54f729ec..8e7aeb57 100644
      "X-KDE-Keywords": "Memory,RAM,dmidecode",
      "X-KDE-Keywords[ar]": "Memory,RAM,dmidecode,رام,ذاكرة,ذاكرة حية",
 diff --git a/kcms/network/kcm_network.json b/kcms/network/kcm_network.json
-index 65e929e2..20bc2289 100644
+index 4ab2e0f1..559baf6f 100644
 --- a/kcms/network/kcm_network.json
 +++ b/kcms/network/kcm_network.json
-@@ -147,7 +147,7 @@
+@@ -146,7 +146,7 @@
          "Name[zh_CN]": "网络接口",
          "Name[zh_TW]": "網路介面"
      },
@@ -248,31 +249,31 @@ index 65e929e2..20bc2289 100644
      "X-KDE-Keywords": "network,nic,ip,ip address,mac,inet,eth,wlan,wifi",
      "X-KDE-Keywords[ar]": "network,nic,ip,ip address,mac,inet,eth,wlan,wifi,الشبكة,شبكة الاتصال,عنوان IP,عنوان IP,جهاز Mac,شبكة الإنترنت,شبكة ETH,شبكة WLAN,شبكة Wi-Fi",
 diff --git a/kcms/network/main.cpp b/kcms/network/main.cpp
-index f02577a3..479e18df 100644
+index a49284d3..77818fe2 100644
 --- a/kcms/network/main.cpp
 +++ b/kcms/network/main.cpp
-@@ -18,7 +18,7 @@ public:
-     explicit KCMNetwork(QObject *parent, const KPluginMetaData &data)
-         : KQuickConfigModule(parent, data)
+@@ -24,7 +24,7 @@ public:
      {
--        m_outputContext = new CommandOutputContext(u"ip"_s, {u"address"_s}, parent);
-+        m_outputContext = new CommandOutputContext(u"@ip@"_s, {u"address"_s}, parent);
+         const QString executable = QStandardPaths::locate(QStandardPaths::GenericDataLocation, u"kinfocenter/network/ip.sh"_s, QStandardPaths::LocateFile);
+         const QString darkness = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark ? u"1"_s : u"0"_s;
+-        m_outputContext = new CommandOutputContext({u"ip"_s, u"aha"_s}, u"/bin/sh"_s, {executable, darkness}, Qt::TextFormat::RichText, parent);
++        m_outputContext = new CommandOutputContext({u"@ip@"_s, u"aha"_s}, u"/bin/sh"_s, {executable, darkness}, Qt::TextFormat::RichText, parent);
      }
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/opencl/kcm_opencl.json b/kcms/opencl/kcm_opencl.json
-index 774dd42e..40e2076a 100644
+index e63b60a9..93f1f484 100644
 --- a/kcms/opencl/kcm_opencl.json
 +++ b/kcms/opencl/kcm_opencl.json
-@@ -90,7 +90,7 @@
+@@ -92,7 +92,7 @@
          "Name[zh_CN]": "OpenCL",
          "Name[zh_TW]": "OpenCL"
      },
 -    "TryExec": "clinfo",
 +    "TryExec": "@clinfo@",
      "X-KDE-KInfoCenter-Category": "graphical_information",
-     "X-KDE-Keywords": "OpenCL,VideoCard,Hardware Acceleration,Graphics",
-     "X-KDE-Keywords[ar]": "OpenCL,VideoCard,Hardware Acceleration,Graphics,بطاقة الفيديو,تسريع العتاد,الرسوميات",
+     "X-KDE-Keywords": "OpenCL,VideoCard,Hardware Acceleration,Graphics,dxdiag",
+     "X-KDE-Keywords[ar]": "OpenCL,VideoCard,Hardware Acceleration,Graphics,بطاقة الفيديو,تسريع العتاد,الرسوميات,dxdiag",
 diff --git a/kcms/opencl/main.cpp b/kcms/opencl/main.cpp
 index d58728ab..88733d46 100644
 --- a/kcms/opencl/main.cpp
@@ -299,8 +300,34 @@ index 36d82ef8..16ce2703 100644
      set(PCI_BACKEND_ARGUMENTS "-v")
  endif()
  
+diff --git a/kcms/sensors/kcm_sensors.json b/kcms/sensors/kcm_sensors.json
+index 4f9959dc..1cba9e5f 100644
+--- a/kcms/sensors/kcm_sensors.json
++++ b/kcms/sensors/kcm_sensors.json
+@@ -66,7 +66,7 @@
+         "Name[zh_CN]": "传感器",
+         "Name[zh_TW]": "感測器"
+     },
+-    "TryExec": "sensors",
++    "TryExec": "@sensors@",
+     "X-KDE-KInfoCenter-Category": "device_information",
+     "X-KDE-Keywords": "lm_sensors,sensors,temp,temperature,volt,voltage,sensors,fan,fan speed,monitoring,amp,amps,current,power",
+     "X-KDE-Keywords[ar]": "مستشعرات lm,مستشعرات,درجة الحرارة,درجة الحرارة,فولت,جهد,مستشعرات,مروحة,سرعة المروحة,مراقبة,أمبير,أمبير,تيار,طاقة",
+diff --git a/kcms/sensors/main.cpp b/kcms/sensors/main.cpp
+index 8dae9f8f..ee70f381 100644
+--- a/kcms/sensors/main.cpp
++++ b/kcms/sensors/main.cpp
+@@ -18,7 +18,7 @@ public:
+     explicit KCMSensors(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(u"sensors"_s, {}, parent);
++        m_outputContext = new CommandOutputContext(u"@sensors@"_s, {}, parent);
+         m_outputContext->setAutoRefreshMs(1000);
+     }
+     CommandOutputContext *outputContext() const
 diff --git a/kcms/vulkan/kcm_vulkan.json b/kcms/vulkan/kcm_vulkan.json
-index 78b42cfd..1ec93c91 100644
+index ca4cf9e0..4f6af805 100644
 --- a/kcms/vulkan/kcm_vulkan.json
 +++ b/kcms/vulkan/kcm_vulkan.json
 @@ -100,7 +100,7 @@
@@ -310,8 +337,8 @@ index 78b42cfd..1ec93c91 100644
 -    "TryExec": "vulkaninfo",
 +    "TryExec": "@vulkaninfo@",
      "X-KDE-KInfoCenter-Category": "graphical_information",
-     "X-KDE-Keywords": "Vulkan,VideoCard,Hardware Acceleration,Graphics",
-     "X-KDE-Keywords[ar]": "Vulkan,VideoCard,Hardware Acceleration,Graphics,فولكان,بطاقة الفيديو,تسريع الأجهزة,الرسومات",
+     "X-KDE-Keywords": "Vulkan,VideoCard,Hardware Acceleration,Graphics,dxdiag",
+     "X-KDE-Keywords[ar]": "Vulkan,VideoCard,Hardware Acceleration,Graphics,فولكان,بطاقة الفيديو,تسريع الأجهزة,الرسومات,dxdiag",
 diff --git a/kcms/vulkan/main.cpp b/kcms/vulkan/main.cpp
 index 5665d9d2..008f1bf0 100644
 --- a/kcms/vulkan/main.cpp
@@ -326,18 +353,18 @@ index 5665d9d2..008f1bf0 100644
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/wayland/kcm_wayland.json b/kcms/wayland/kcm_wayland.json
-index 9ae953bb..27d98104 100644
+index 7ca1dcb7..e814570b 100644
 --- a/kcms/wayland/kcm_wayland.json
 +++ b/kcms/wayland/kcm_wayland.json
-@@ -107,7 +107,7 @@
+@@ -106,7 +106,7 @@
          "Name[zh_CN]": "Wayland",
          "Name[zh_TW]": "Wayland"
      },
 -    "TryExec": "wayland-info",
 +    "TryExec": "@waylandinfo@",
      "X-KDE-KInfoCenter-Category": "graphical_information",
-     "X-KDE-Keywords": "Wayland,Compositor,Display,System Information",
-     "X-KDE-Keywords[ar]": "ويلاند,مراكب,عرض,معلومات النّظام",
+     "X-KDE-Keywords": "Wayland,Compositor,Display,System Information,dxdiag",
+     "X-KDE-Keywords[ar]": "ويلاند,مراكب,عرض,معلومات النّظام,dxdiag",
 diff --git a/kcms/wayland/main.cpp b/kcms/wayland/main.cpp
 index 3a4825c7..4633927b 100644
 --- a/kcms/wayland/main.cpp
@@ -352,10 +379,10 @@ index 3a4825c7..4633927b 100644
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/xserver/kcm_xserver.json b/kcms/xserver/kcm_xserver.json
-index f5642e25..11f108a7 100644
+index 5b12997a..9debc887 100644
 --- a/kcms/xserver/kcm_xserver.json
 +++ b/kcms/xserver/kcm_xserver.json
-@@ -147,7 +147,7 @@
+@@ -146,7 +146,7 @@
          "Name[zh_CN]": "X 服务器",
          "Name[zh_TW]": "X 伺服器"
      },
@@ -363,7 +390,7 @@ index f5642e25..11f108a7 100644
 +    "TryExec": "@xdpyinfo@",
      "X-DocPath": "kinfocenter/graphical.html#xserver",
      "X-KDE-KInfoCenter-Category": "graphical_information",
-     "X-KDE-Keywords": "X,X-Server,XServer,XFree86,Display,VideoCard,System Information",
+     "X-KDE-Keywords": "X,X-Server,XServer,XFree86,Display,VideoCard,System Information,dxdiag",
 diff --git a/kcms/xserver/main.cpp b/kcms/xserver/main.cpp
 index df9af24a..e5983e22 100644
 --- a/kcms/xserver/main.cpp

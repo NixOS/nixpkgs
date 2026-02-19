@@ -15,14 +15,13 @@ rustPlatform.buildRustPackage {
     hash = "sha256-/dH+mNtNHaYFndVhoqmz4Sc3HeemoQt1HGD98mb9Qhw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-t4tfQaFq4EV4ZWeU+IestSFiSAIeVQslTZhLbpKVoO4=";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility that takes grep-formatted lines and performs a find-and-replace on them";
     homepage = "https://github.com/robenkleene/rep-grep";
-    license = licenses.mit;
-    maintainers = with maintainers; [ philiptaron ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ philiptaron ];
     mainProgram = "rep";
   };
 }

@@ -57,6 +57,6 @@ python3Packages.buildPythonApplication {
     changelog = "https://github.com/Nokse22/teleprompter/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "teleprompter";
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
   };
 }

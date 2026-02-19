@@ -14,58 +14,29 @@
   boost,
   freexl,
   libarchive,
+  librdata,
   qt6,
   R,
   readstat,
   rPackages,
 }:
 
-let
-  version = "0.19.3";
-
+stdenv.mkDerivation (finalAttrs: {
+  pname = "jasp-desktop";
+  version = "0.95.4";
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-p489Q3jMQ7UWOCdAGskRF9KSLoRSatUwGVfj0/g4aPo=";
+    hash = "sha256-n7lXedICK+sAuSW6hODy+TngAZpDIObWDhTtOjiTXgc=";
   };
-
-  moduleSet = import ./modules.nix {
-    inherit fetchFromGitHub rPackages;
-    jasp-src = src;
-    jasp-version = version;
-  };
-
-  inherit (moduleSet) engine modules;
-
-  # Merges ${R}/lib/R with all used R packages (even propagated ones)
-  customREnv = buildEnv {
-    name = "jasp-${version}-env";
-    paths = [
-      "${R}/lib/R"
-      rPackages.RInside
-      engine.jaspBase # Should already be propagated from modules, but include it again, just in case
-    ] ++ lib.attrValues modules;
-  };
-
-  modulesDir = linkFarm "jasp-${version}-modules" (
-    lib.mapAttrsToList (name: drv: {
-      name = name;
-      path = "${drv}/library";
-    }) modules
-  );
-in
-stdenv.mkDerivation {
-  pname = "jasp-desktop";
-  inherit version src;
 
   patches = [
-    # - ensure boost is linked dynamically
-    # - fix readstat's find logic
-    # - disable some of the renv logic
-    # - dont't check for dependencies required for building modules
-    ./cmake.patch
+    ./link-boost-dynamically.patch
+    ./disable-module-install-logic.patch # don't try to install modules via cmake
+    ./disable-renv-logic.patch
+    ./dont-check-for-module-deps.patch # dont't check for dependencies required for building modules
   ];
 
   cmakeFlags = [
@@ -73,7 +44,7 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "GITHUB_PAT_DEF" "dummy")
     (lib.cmakeBool "LINUX_LOCAL_BUILD" false)
     (lib.cmakeBool "INSTALL_R_MODULES" false)
-    (lib.cmakeFeature "CUSTOM_R_PATH" "${customREnv}")
+    (lib.cmakeFeature "CUSTOM_R_PATH" "${finalAttrs.passthru.customREnv}")
   ];
 
   nativeBuildInputs = [
@@ -84,10 +55,11 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    finalAttrs.passthru.customREnv
     boost
-    customREnv
     freexl
     libarchive
+    librdata
     readstat
 
     qt6.qtbase
@@ -97,25 +69,47 @@ stdenv.mkDerivation {
     qt6.qt5compat
   ];
 
-  # needed so that JASPEngine can find libRInside.so
+  # needed so that the linker can find libRInside.so
   env.NIX_LDFLAGS = "-L${rPackages.RInside}/library/RInside/lib";
 
   postInstall = ''
-    # Remove unused cache locations
-    rm -r $out/lib64 $out/Modules
-
     # Remove flatpak proxy script
     rm $out/bin/org.jaspstats.JASP
     substituteInPlace $out/share/applications/org.jaspstats.JASP.desktop \
       --replace-fail "Exec=org.jaspstats.JASP" "Exec=JASP"
 
     # symlink modules from the store
-    ln -s ${modulesDir} $out/Modules
+    ln -s ${finalAttrs.passthru.moduleLibs} $out/Modules/module_libs
   '';
 
   passthru = {
-    inherit modules engine;
-    env = customREnv;
+    inherit
+      (import ./modules.nix {
+        inherit fetchFromGitHub rPackages;
+        jasp-src = finalAttrs.src;
+        jasp-version = finalAttrs.version;
+      })
+      jaspBase
+      modules
+      ;
+
+    # Merges ${R}/lib/R with all used R packages (even propagated ones)
+    customREnv = buildEnv {
+      name = "jasp-desktop-${finalAttrs.version}-env";
+      paths = [
+        "${R}/lib/R"
+        rPackages.RInside
+        finalAttrs.passthru.jaspBase # Should already be propagated from modules, but include it again, just in case
+      ]
+      ++ lib.attrValues finalAttrs.passthru.modules;
+    };
+
+    moduleLibs = linkFarm "jasp-desktop-${finalAttrs.version}-module-libs" (
+      lib.mapAttrsToList (name: drv: {
+        name = name;
+        path = "${drv}/library";
+      }) finalAttrs.passthru.modules
+    );
   };
 
   meta = {
@@ -129,4 +123,4 @@ stdenv.mkDerivation {
     # Perhaps the Darwin-specific things could be changed to be the same as Linux
     platforms = lib.platforms.linux;
   };
-}
+})

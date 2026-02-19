@@ -4,7 +4,7 @@
   perl,
   fetchurl,
   python3,
-  fmt,
+  fmt_9,
   libidn,
   pkg-config,
   spidermonkey_115,
@@ -24,8 +24,8 @@
   libGLU,
   libGL,
   xorgproto,
-  libX11,
-  libXcursor,
+  libx11,
+  libxcursor,
   nspr,
   SDL2,
   gloox,
@@ -34,19 +34,19 @@
   cxxtest,
   freetype,
   withEditor ? true,
-  wxGTK,
+  wxGTK32,
 }:
 
 # You can find more instructions on how to build 0ad here:
 #    https://trac.wildfiregames.com/wiki/BuildInstructions
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "0ad";
-  version = "0.27.0";
+  version = "0.27.1";
 
   src = fetchurl {
-    url = "http://releases.wildfiregames.com/0ad-${version}-unix-build.tar.xz";
-    hash = "sha256-qpSFcAl1DV9h2/AWvBUOO9y9s6zfyK0gtzq4tD6aG6Y=";
+    url = "https://releases.wildfiregames.com/0ad-${finalAttrs.version}-unix-build.tar.xz";
+    hash = "sha256-oKU1XutZaNJPKDdwc2FQ2XTa/sugd1TUZicH3BcBa/s=";
   };
 
   nativeBuildInputs = [
@@ -73,25 +73,26 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     xorgproto
-    libX11
-    libXcursor
+    libx11
+    libxcursor
     nspr
     SDL2
     gloox
     nvidia-texture-tools
     libsodium
-    fmt
+    fmt_9
     freetype
     premake5
     cxxtest
-  ] ++ lib.optional withEditor wxGTK;
+  ]
+  ++ lib.optional withEditor wxGTK32;
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${xorgproto}/include"
-    "-I${libX11.dev}/include"
-    "-I${libXcursor.dev}/include"
+    "-I${libx11.dev}/include"
+    "-I${libxcursor.dev}/include"
     "-I${SDL2}/include/SDL2"
-    "-I${fmt.dev}/include"
+    "-I${fmt_9.dev}/include"
     "-I${nvidia-texture-tools.dev}/include"
   ];
 
@@ -101,13 +102,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rootdir_env.patch
-    # Fix build script when using system premake
-    # https://gitea.wildfiregames.com/0ad/0ad/pulls/7571
-    # FIXME: Remove with next package update
-    ./fix-build-script.patch
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     # Delete shipped libraries which we don't need.
     rm -rf libraries/source/{cxxtest-4.4,nvtt,premake-core,spidermonkey,spirv-reflect}
 
@@ -137,6 +136,8 @@ stdenv.mkDerivation rec {
 
     # Move to the build directory.
     pushd build/workspaces/gcc
+
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;
@@ -161,18 +162,18 @@ stdenv.mkDerivation rec {
     install -D build/resources/0ad.desktop $out/share/applications/0ad.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free, open-source game of ancient warfare";
     homepage = "https://play0ad.com/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21
       mit
       cc-by-sa-30
-      licenses.zlib # otherwise masked by pkgs.zlib
+      lib.licenses.zlib # otherwise masked by pkgs.zlib
     ];
-    maintainers = with maintainers; [ chvp ];
-    platforms = subtractLists platforms.i686 platforms.linux;
+    maintainers = with lib.maintainers; [ chvp ];
+    platforms = lib.subtractLists lib.platforms.i686 lib.platforms.linux;
     mainProgram = "0ad";
   };
-}
+})

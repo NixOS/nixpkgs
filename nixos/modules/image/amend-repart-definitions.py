@@ -36,11 +36,11 @@ def add_contents_to_definition(
 
 
 def add_closure_to_definition(
-    definition: Path, closure: Path | None, strip_nix_store_prefix: bool | None
+    definition: Path, closure: Path | None, nix_store_prefix: str | None
 ) -> None:
     """Add CopyFiles= instructions to a definition for all paths in the closure.
 
-    If strip_nix_store_prefix is True, `/nix/store` is stripped from the target path.
+    Replace `/nix/store` with the value of nix_store_prefix.
     """
     if not closure:
         return
@@ -52,10 +52,12 @@ def add_closure_to_definition(
                 continue
 
             source = Path(line.strip())
-            target = str(source.relative_to("/nix/store/"))
-            target = f":/{target}" if strip_nix_store_prefix else ""
+            option = f"CopyFiles={source}"
+            if nix_store_prefix:
+                target = nix_store_prefix / source.relative_to("/nix/store/")
+                option = f"{option}:{target}"
 
-            copy_files_lines.append(f"CopyFiles={source}{target}\n")
+            copy_files_lines.append(f"{option}\n")
 
     with open(definition, "a") as f:
         f.writelines(copy_files_lines)
@@ -102,8 +104,8 @@ def main() -> None:
         add_contents_to_definition(definition, contents)
 
         closure = config.get("closure")
-        strip_nix_store_prefix = config.get("stripNixStorePrefix")
-        add_closure_to_definition(definition, closure, strip_nix_store_prefix)
+        nix_store_prefix = config.get("nixStorePrefix")
+        add_closure_to_definition(definition, closure, nix_store_prefix)
 
     print(target_dir.absolute())
 

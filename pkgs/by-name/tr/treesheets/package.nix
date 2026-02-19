@@ -10,15 +10,15 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "treesheets";
-  version = "0-unstable-2025-05-11";
+  version = "0-unstable-2025-07-01";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "treesheets";
-    rev = "eaa194be2ab7305de4542bbaa9efb9847c111922";
-    hash = "sha256-62xGpy93zGLqlwLGNGGWNSIjDzYNPVgb0Eer+e1LtxM=";
+    rev = "e6b973c0131380e8b1171bcb4078657cf27f7e70";
+    hash = "sha256-sGRLFvUfVlev5o6zlArPiY18io9qMs2wcW6pL1OJln4=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${
-    builtins.replaceStrings [ "unstable-" ] [ "" ] version
+    builtins.replaceStrings [ "unstable-" ] [ "" ] finalAttrs.version
   }\"";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free Form Data Organizer";
     mainProgram = "TreeSheets";
 
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://strlen.com/treesheets/";
-    maintainers = with maintainers; [ obadz ];
-    platforms = platforms.unix;
-    license = licenses.zlib;
+    maintainers = with lib.maintainers; [ obadz ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.zlib;
   };
-}
+})

@@ -8,7 +8,7 @@
 
 buildDunePackage rec {
   pname = "xenstore_transport";
-  version = "1.4.0";
+  version = "1.5.0";
 
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
@@ -17,7 +17,7 @@ buildDunePackage rec {
     owner = "xapi-project";
     repo = "ocaml-xenstore-clients";
     rev = "v${version}";
-    sha256 = "sha256-8dN8dgwhVrBgjmPHxFfPvmDlhz7eUaG0R0M8ACNhhFk=";
+    sha256 = "sha256-tnz+dZ3EdzDVTGAe4y7OveXuVEUSh1aJxJabHM4zHTI=";
   };
 
   propagatedBuildInputs = [
@@ -28,10 +28,10 @@ buildDunePackage rec {
   # requires a mounted xenfs and xen server
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Low-level libraries for connecting to a xenstore service on a xen host";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     homepage = "https://github.com/xapi-project/ocaml-xenstore-clients";
-    teams = [ teams.xen ];
+    teams = [ lib.teams.xen ];
   };
 }

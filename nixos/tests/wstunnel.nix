@@ -1,5 +1,3 @@
-{ lib, ... }:
-
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
@@ -32,8 +30,10 @@ in
             host = "10.0.0.1";
             port = 443;
           };
-          tlsCertificate = certs.${domain}.cert;
-          tlsKey = certs.${domain}.key;
+          settings = {
+            tls-certificate = "${certs.${domain}.cert}";
+            tls-private-key = "${certs.${domain}.key}";
+          };
         };
       };
     };
@@ -47,9 +47,9 @@ in
         useNetworkd = true;
         useDHCP = false;
         firewall.enable = false;
-        extraHosts = ''
-          10.0.0.1 ${domain}
-        '';
+        hosts = {
+          "10.0.0.1" = [ domain ];
+        };
       };
 
       systemd.network.networks."01-eth1" = {
@@ -62,8 +62,10 @@ in
         clients.my-client = {
           autoStart = false;
           connectTo = "wss://${domain}:443";
-          localToRemote = [ "tcp://8080:localhost:2080" ];
-          remoteToLocal = [ "tcp://2081:localhost:8081" ];
+          settings = {
+            local-to-remote = [ "tcp://8080:localhost:2080" ];
+            remote-to-local = [ "tcp://2081:localhost:8081" ];
+          };
         };
       };
     };

@@ -7,14 +7,14 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libharu";
   version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "libharu";
     repo = "libharu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-v2vudB95OdYPiLxS9Al5lsAInsvmharhPWdnUmCl+Bs=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.unix;
   };
-}
+})

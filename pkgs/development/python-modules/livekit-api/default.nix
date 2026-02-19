@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "livekit-api";
-  version = "1.0.2";
+  version = "1.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "python-sdks";
     tag = "api-v${version}";
-    hash = "sha256-QFUCMqRshEid08IbNjyvJvJSVhYfVJRjvXjSTlNlzlU=";
+    hash = "sha256-yS7Nzzrgyo3Q/O4z9acIfPXzS/SRv27BEiO4cMP11Z0=";
   };
 
   pypaBuildFlags = [ "livekit-api" ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "livekit-api/tests" ];
+  enabledTestPaths = [ "livekit-api/tests" ];
 
   pythonImportsCheck = [ "livekit" ];
 

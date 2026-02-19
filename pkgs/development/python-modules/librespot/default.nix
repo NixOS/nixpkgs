@@ -6,7 +6,6 @@
   protobuf,
   pycryptodomex,
   pyogg,
-  pythonOlder,
   requests,
   setuptools,
   websocket-client,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "librespot";
-  version = "0.0.9";
+  version = "0.0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "kokarare1212";
     repo = "librespot-python";
     tag = "v${version}";
-    hash = "sha256-k9qVsxjRlUZ7vCBx00quiAR7S+YkfyoZiAKVnOOG4xM=";
+    hash = "sha256-VjVPrWttOYfWsxzZpRgpZVenmP0y9Fea6Bhv9U8BO9U=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
@@ -48,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "librespot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Source Spotify Client";
     homepage = "https://github.com/kokarare1212/librespot-python";
     changelog = "https://github.com/kokarare1212/librespot-python/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

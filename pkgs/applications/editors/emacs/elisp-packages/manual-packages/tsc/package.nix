@@ -17,11 +17,10 @@ let
     src = fetchFromGitHub {
       owner = "emacs-tree-sitter";
       repo = "emacs-tree-sitter";
-      rev = version;
+      tag = version;
       hash = "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=";
     };
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-Tua3ZFfSyWVYXU9mPLWXE6ejGlXowTNe3nvZBaicmSQ=";
 
     sourceRoot = "${src.name}/core";
@@ -48,6 +47,6 @@ melpaBuild {
   meta = {
     description = "Core APIs of the Emacs binding for tree-sitter";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pimeys ];
+    maintainers = [ ];
   };
 }

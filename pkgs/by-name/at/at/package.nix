@@ -11,13 +11,13 @@
   atWrapperPath ? "/run/wrappers/bin/at",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "at";
   version = "3.2.5";
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
-    url = "mirror://debian/pool/main/a/at/at_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/a/at/at_${finalAttrs.version}.orig.tar.gz";
     hash = "sha256-uwZrOJ18m7nYSjVzgDK4XDDLp9lJ91gZKtxyyUd/07g=";
   };
 
@@ -77,12 +77,12 @@ stdenv.mkDerivation rec {
     sed -i "6i test -x ${atWrapperPath} && exec ${atWrapperPath} -qb now  # exec doesn't return" "$out/bin/batch"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classical Unix `at' job scheduling command";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://tracker.debian.org/pkg/at";
     changelog = "https://salsa.debian.org/debian/at/-/raw/master/ChangeLog";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "at";
   };
-}
+})

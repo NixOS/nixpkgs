@@ -6,6 +6,8 @@
   lz4,
   libxkbcommon,
   installShellFiles,
+  makeWrapper,
+  procps,
   scdoc,
   wayland-protocols,
   wayland-scanner,
@@ -13,19 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swww";
-  version = "0.10.0-unstable-2025-05-27";
+  version = "0.11.2";
 
-  # Fixes build for locating wayland.xml, go back to regular tagged releases at next version bump
-  # https://codeberg.org/LGFae/waybackend/issues/2
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
-    rev = "800619eb70c0f4293a5b449103f55a0a3cfe2963";
-    hash = "sha256-zkw1r2mmICkplgXTyN6GckTy0XEBAEoz4H1VQuP8eMU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X2ptpXRo6ps5RxDe5RS7qfTaHWqBbBNw/aSdC2tzUG8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-L2mbQJ0dAiB8+NOATnrPhVrjHvE5zjA1frhPbLUJ3sI=";
+  cargoHash = "sha256-5KZWsdo37NbFFkK8XFc0XI9iwBkpV8KsOaOc0y287Io=";
 
   buildInputs = [
     lz4
@@ -39,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    makeWrapper
     scdoc
   ];
 
@@ -53,6 +53,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash completions/swww.bash \
       --fish completions/swww.fish \
       --zsh completions/_swww
+  '';
+
+  postFixup = ''
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        --prefix PATH : "${lib.makeBinPath [ procps ]}"
+    done
   '';
 
   meta = {

@@ -24,11 +24,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gangverk/flask-swagger";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Extract swagger specs from your flask project";
     mainProgram = "flaskswagger";
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with lib.maintainers; [ vanschelven ];
   };
 }

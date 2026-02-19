@@ -1,99 +1,143 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
+
   nixosTests,
   alsa-lib,
   boost,
   cmake,
   cryptopp,
+  game-music-emu,
   glslang,
   ffmpeg,
+  flac,
+  fluidsynth,
   fmt,
   half,
   jack2,
   libdecor,
+  libGL,
   libpulseaudio,
   libunwind,
   libusb1,
-  magic-enum,
+  libvorbis,
+  libxmp,
   libgbm,
+  libx11,
+  libxcb,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
+  libxscrnsaver,
+  libxtst,
+  magic-enum,
+  mpg123,
   pipewire,
   pkg-config,
   pugixml,
-  qt6,
   rapidjson,
   renderdoc,
   robin-map,
-  sdl3,
   sndio,
   stb,
+  toml11,
+  util-linux,
   vulkan-headers,
   vulkan-loader,
   vulkan-memory-allocator,
-  xorg,
+  xbyak,
   xxHash,
   zlib-ng,
+  zydis,
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+# relies on std::sinf & co, which was broken in GCC until GCC 14: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79700
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.9.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-ljnoClmijCds/ydqXaRuUL6/Qv/fGIkLyGsmfPDqvVo=";
+    hash = "sha256-zc3zhFTphty/vwioFEOfhgXttpD9MG2F7+YJYcW0H2w=";
     fetchSubmodules = true;
+
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse --short=8 HEAD > $out/COMMIT
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
+
+  postPatch = ''
+    substituteInPlace src/common/scm_rev.cpp.in \
+      --replace-fail @APP_VERSION@ ${finalAttrs.version} \
+      --replace-fail @GIT_REV@ $(cat COMMIT) \
+      --replace-fail @GIT_BRANCH@ ${finalAttrs.version} \
+      --replace-fail @GIT_DESC@ nixpkgs \
+      --replace-fail @BUILD_DATE@ $(cat SOURCE_DATE_EPOCH)
+  '';
 
   buildInputs = [
     alsa-lib
     boost
     cryptopp
+    game-music-emu
     glslang
     ffmpeg
+    flac
+    fluidsynth
     fmt
     half
     jack2
     libdecor
+    libGL
     libpulseaudio
     libunwind
     libusb1
-    xorg.libX11
-    xorg.libXext
-    magic-enum
+    libvorbis
+    libxmp
+    libx11
+    libxcb
+    libxcursor
+    libxext
+    libxi
+    libxrandr
+    libxscrnsaver
+    libxtst
     libgbm
+    magic-enum
+    mpg123
     pipewire
     pugixml
-    qt6.qtbase
-    qt6.qtdeclarative
-    qt6.qtmultimedia
-    qt6.qttools
-    qt6.qtwayland
     rapidjson
     renderdoc
     robin-map
-    sdl3
     sndio
     stb
+    toml11
+    util-linux
     vulkan-headers
     vulkan-loader
     vulkan-memory-allocator
+    xbyak
     xxHash
     zlib-ng
+    zydis
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt6.wrapQtAppsHook
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT_GUI" true)
     (lib.cmakeBool "ENABLE_UPDATER" false)
   ];
 
@@ -114,12 +158,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDependencies = [
     vulkan-loader
-    xorg.libXi
+    libxi
   ];
 
   passthru = {
     tests.openorbis-example = nixosTests.shadps4;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v\\.(.*)"
+      ];
+    };
   };
 
   meta = {

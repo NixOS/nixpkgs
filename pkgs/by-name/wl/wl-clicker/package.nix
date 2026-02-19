@@ -5,11 +5,12 @@
   wayland-scanner,
   wlr-protocols,
   wayland,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wl-clicker";
-  version = "0.3.1";
+  version = "0.4";
 
   nativeBuildInputs = [ wayland-scanner ];
   buildInputs = [
@@ -18,29 +19,31 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "phonetic112";
+    owner = "phoneticalb";
     repo = "wl-clicker";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-HuUK1kkqIdB5SdcewJ1J8elzqrFaFWC3BRV3GgcasTU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+k3iZOv12WbqpeYbYjIXBIB4mO2DrY1pl+MJn2B+cZA=";
   };
 
-  postPatch = ''
-    sed -i 's|/usr|${wlr-protocols}|g' Makefile
-  '';
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    install build/wl-clicker $out/bin/wl-clicker
+    install -D build/wl-clicker --target-directory="$out"/bin
 
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Wayland autoclicker";
-    longDescription = "Script for auto clicking at incredibly high speeds - user must be a part of `input` group to run.";
-    homepage = "https://github.com/phonetic112/wl-clicker";
+    longDescription = ''
+      Script for auto clicking at incredibly high speeds - user must
+      be a part of `input` group to run.
+    '';
+    homepage = "https://github.com/phoneticalb/wl-clicker";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.Flameopathic ];
     mainProgram = "wl-clicker";

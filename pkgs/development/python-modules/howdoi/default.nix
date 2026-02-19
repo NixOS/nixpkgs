@@ -14,7 +14,6 @@
   requests,
   rich,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "howdoi";
   version = "2.0.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gleitz";
@@ -78,11 +75,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "howdoi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Instant coding answers via the command line";
     homepage = "https://github.com/gleitz/howdoi";
     changelog = "https://github.com/gleitz/howdoi/blob/v${version}/CHANGES.txt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

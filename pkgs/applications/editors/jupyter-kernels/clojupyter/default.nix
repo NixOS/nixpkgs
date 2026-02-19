@@ -26,12 +26,12 @@ let
   pname = "clojupyter";
   version = "0.3.3";
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter kernel for Clojure";
     homepage = "https://github.com/clojupyter/clojupyter";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ]; # deps from maven
-    license = licenses.mit;
-    maintainers = with maintainers; [ thomasjm ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ]; # deps from maven
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thomasjm ];
     platforms = jre.meta.platforms;
   };
 
@@ -43,7 +43,7 @@ let
       src = fetchFromGitHub {
         owner = "clojupyter";
         repo = "clojupyter";
-        rev = version;
+        tag = version;
         sha256 = "sha256-BCzcPnLSonm+ELFU4JIIzLPlVnP0VzlrRSGxOd/LFow=";
       };
 

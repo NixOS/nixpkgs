@@ -14,14 +14,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shmig";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "mbucc";
     repo = "shmig";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "15ry1d51d6dlzzzhck2x57wrq48vs4n9pp20bv2sz6nk92fva5l5";
   };
 
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic database migration tool with MySQL, PostgreSQL and SQLite support";
     mainProgram = "shmig";
     homepage = "https://github.com/mbucc/shmig";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

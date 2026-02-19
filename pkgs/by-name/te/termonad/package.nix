@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "termonad-with-packages";
-  inherit (termonadEnv) version;
+  inherit (haskellPackages.termonad) version;
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "asciinema";
   version = "2.4.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UegLwpJ+uc9cW3ozLQJsQBjIGD7+vzzwzQFRV5gmDmI=";
   };
 
@@ -29,8 +29,8 @@ python3Packages.buildPythonApplication rec {
     description = "Terminal session recorder and the best companion of asciinema.org";
     homepage = "https://asciinema.org/";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "asciinema";
   };
-}
+})

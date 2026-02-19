@@ -1,53 +1,53 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlfluff";
-  version = "3.4.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
-    tag = version;
-    hash = "sha256-9JitD46hMgCrUx+mtSoKm/8vKd6CfPngmVsaUb9vi+Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-hXiy3PGoBe6O9FaACN31Tss3xMBfiw4YuVLxbGi+/tA=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  pythonRelaxDeps = [ "click" ];
 
-  dependencies =
-    with python3.pkgs;
-    [
-      appdirs
-      cached-property
-      chardet
-      click
-      colorama
-      configparser
-      diff-cover
-      jinja2
-      oyaml
-      pathspec
-      platformdirs
-      pytest
-      regex
-      tblib
-      toml
-      tqdm
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      backports.cached-property
-      importlib_metadata
-    ];
+  build-system = with python3Packages; [ setuptools ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
+    appdirs
+    cached-property
+    chardet
+    click
+    colorama
+    configparser
+    diff-cover
+    jinja2
+    oyaml
+    pathspec
+    platformdirs
+    pytest
+    regex
+    tblib
+    toml
+    tqdm
+    typing-extensions
+  ];
+
+  nativeCheckInputs = with python3Packages; [
     hypothesis
     pytestCheckHook
+    versionCheckHook
   ];
+
+  versionCheckProgramArg = "--version";
 
   disabledTestPaths = [
     # Don't run the plugin related tests
@@ -68,12 +68,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "sqlfluff" ];
 
-  meta = with lib; {
+  meta = {
     description = "SQL linter and auto-formatter";
     homepage = "https://www.sqlfluff.com/";
-    changelog = "https://github.com/sqlfluff/sqlfluff/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/sqlfluff/sqlfluff/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sqlfluff";
   };
-}
+})

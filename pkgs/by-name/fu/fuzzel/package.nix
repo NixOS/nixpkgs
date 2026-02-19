@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   meson,
   ninja,
@@ -16,9 +16,10 @@
   enableCairo ? true,
   pngSupport ? true,
   svgSupport ? true,
-  svgBackend ? "nanosvg", # alternative: "librsvg"
+  svgBackend ? "resvg", # alternative: "librsvg", "nanosvg"
   # Optional dependencies
   cairo,
+  resvg,
   libpng,
   librsvg,
 }:
@@ -27,14 +28,13 @@ assert (svgSupport && svgBackend == "nanosvg") -> enableCairo;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuzzel";
-  version = "1.12.0";
+  version = "1.14.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "fuzzel";
     rev = finalAttrs.version;
-    hash = "sha256-42a8VF4EUTbyEKcfVSIbTXmPC55+cLq7FX+lRDZKXEM=";
+    hash = "sha256-9O6CABh149ZtNu3sEhuycsM7pinVrBzU+rLxCAbxobs=";
   };
 
   depsBuildBuild = [
@@ -49,18 +49,18 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  buildInputs =
-    [
-      wayland
-      pixman
-      wayland-protocols
-      libxkbcommon
-      tllist
-      fcft
-    ]
-    ++ lib.optional enableCairo cairo
-    ++ lib.optional pngSupport libpng
-    ++ lib.optional (svgSupport && svgBackend == "librsvg") librsvg;
+  buildInputs = [
+    wayland
+    pixman
+    wayland-protocols
+    libxkbcommon
+    tllist
+    fcft
+  ]
+  ++ lib.optional enableCairo cairo
+  ++ lib.optional pngSupport libpng
+  ++ lib.optional (svgSupport && svgBackend == "librsvg") librsvg
+  ++ lib.optional (svgSupport && svgBackend == "resvg") resvg;
 
   mesonBuildType = "release";
 
@@ -70,19 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "svg-backend" (if svgSupport then svgBackend else "none"))
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${finalAttrs.version}";
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
     homepage = "https://codeberg.org/dnkl/fuzzel";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       zlib
     ];
     mainProgram = "fuzzel";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fionera
       rodrgz
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 })

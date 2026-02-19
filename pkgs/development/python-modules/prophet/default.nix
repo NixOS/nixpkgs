@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
 
@@ -19,21 +18,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prophet";
-  version = "1.1.6";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "prophet";
-    rev = "v${version}";
-    hash = "sha256-vvSn2sVs6KZsTAKPuq9irlHgM1BmpkG8LJbvcu8ohd0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Bu+ztg6sj1jh2iair6v1CdbF0Fi4b+h8yLzB3xTMD3Y=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   env.PROPHET_REPACKAGE_CMDSTAN = "false";
 
@@ -52,7 +49,8 @@ buildPythonPackage rec {
   optional-dependencies.parallel = [
     dask
     distributed
-  ] ++ dask.optional-dependencies.dataframe;
+  ]
+  ++ dask.optional-dependencies.dataframe;
 
   preCheck = ''
     # use the generated files from $out for testing
@@ -65,10 +63,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "prophet" ];
 
   meta = {
-    changelog = "https://github.com/facebook/prophet/releases/tag/${src.rev}";
+    changelog = "https://github.com/facebook/prophet/releases/tag/${finalAttrs.src.tag}";
     description = "Tool for producing high quality forecasts for time series data that has multiple seasonality with linear or non-linear growth";
     homepage = "https://facebook.github.io/prophet/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

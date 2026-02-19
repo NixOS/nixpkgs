@@ -10,7 +10,7 @@ let
   blake3-src = fetchFromGitHub {
     owner = "BLAKE3-team";
     repo = "BLAKE3";
-    rev = "refs/tags/1.5.1";
+    tag = "1.5.1";
     hash = "sha256-STWAnJjKrtb2Xyj6i1ACwxX/gTkQo5jUHilcqcgJYxc=";
   };
 in
@@ -21,11 +21,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "xzfc";
     repo = "cached-nix-shell";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LI/hecqeRg3eCzU2bASJA8VoG4nvrSeHSeaGYn7M/UI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Rl+PgNr29OAl6P/iUfkuFlQycyeYNmxUIIdigk7PgV4=";
 
   nativeBuildInputs = [

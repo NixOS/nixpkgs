@@ -19,12 +19,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tali";
   version = "40.9";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tali/${lib.versions.major version}/tali-${version}.tar.xz";
+    url = "mirror://gnome/sources/tali/${lib.versions.major finalAttrs.version}/tali-${finalAttrs.version}.tar.xz";
     hash = "sha256-+p7eNm8KcuTKpSGJw6sLEMG1aoDHiFsBZgJVjETc59M=";
   };
 
@@ -57,13 +57,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "tali"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/tali";
-    changelog = "https://gitlab.gnome.org/GNOME/tali/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/tali/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Sort of poker with dice and less money";
     mainProgram = "tali";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

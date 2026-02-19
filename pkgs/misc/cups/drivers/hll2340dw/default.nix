@@ -93,13 +93,13 @@ stdenv.mkDerivation {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.brother.com/";
     description = "Brother hl-l2340dw printer driver";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=es&prod=hll2340dw_us_eu_as&os=128&flang=English";
-    maintainers = [ maintainers.qknight ];
+    maintainers = [ lib.maintainers.qknight ];
   };
 }

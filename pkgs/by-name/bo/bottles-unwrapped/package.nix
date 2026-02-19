@@ -30,31 +30,31 @@
   removeWarningPopup ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "51.21";
+  version = "61.1";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
-    tag = version;
-    hash = "sha256-rUS2LRr7NqTvNd706AC/U/QUDcF8tzwkHDuS3R0O1KY=";
+    tag = finalAttrs.version;
+    hash = "sha256-LW+os+5DtdUBZWONu2YX4FYMtAYg4BDlKbnVF64T2xI=";
   };
 
-  patches =
-    [
-      ./vulkan_icd.patch
-      ./redirect-bugtracker.patch
-      ./remove-flatpak-check.patch
-    ]
-    ++ (
-      if removeWarningPopup then
-        [ ./remove-unsupported-warning.patch ]
-      else
-        [
-          ./warn-unsupported.patch
-        ]
-    );
+  patches = [
+    ./vulkan_icd.patch
+    ./redirect-bugtracker.patch
+    ./remove-flatpak-check.patch
+    ./terminal.patch # Needed for `Launch with Terminal`
+  ]
+  ++ (
+    if removeWarningPopup then
+      [ ./remove-unsupported-warning.patch ]
+    else
+      [
+        ./warn-unsupported.patch
+      ]
+  );
 
   # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
@@ -96,6 +96,7 @@ python3Packages.buildPythonApplication rec {
       urllib3
       certifi
       pefile
+      yara-python
     ]
     ++ [
       cabextract
@@ -115,7 +116,7 @@ python3Packages.buildPythonApplication rec {
       procps
     ];
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''
@@ -131,11 +132,10 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       psydvl
-      shamilton
       Gliczy
       XBagon
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bottles";
   };
-}
+})

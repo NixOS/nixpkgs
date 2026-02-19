@@ -32,7 +32,7 @@ let
     nixpkgs = nixpkgsSrc;
   };
 
-  nixpkgs' = builtins.removeAttrs (import ../pkgs/top-level/release.nix {
+  nixpkgs' = removeAttrs (import ../pkgs/top-level/release.nix {
     inherit supportedSystems;
     nixpkgs = nixpkgsSrc;
   }) [ "unstable" ];
@@ -103,15 +103,19 @@ rec {
       opensshTest
       php
       postgresql
-      python
+      python3
       release-checks
       rsyslog
       stdenv
       subversion
       tarball
       vim
-      tests-stdenv-gcc-stageCompare
       ;
+    tests.stdenv = {
+      inherit (nixpkgs'.tests.stdenv)
+        tests-stdenv-gcc-stageCompare
+        ;
+    };
   };
 
   tested =
@@ -163,7 +167,7 @@ rec {
           "nixos.tests.proxy"
           "nixos.tests.simple"
           "nixpkgs.jdk"
-          "nixpkgs.tests-stdenv-gcc-stageCompare"
+          "nixpkgs.tests.stdenv.tests-stdenv-gcc-stageCompare"
           "nixpkgs.opensshTest"
         ])
       ];

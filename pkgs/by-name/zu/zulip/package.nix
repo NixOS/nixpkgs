@@ -1,44 +1,52 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
-  buildNpmPackage,
+  fetchPnpmDeps,
+  nodejs,
+  pnpm_10,
+  pnpmConfigHook,
   python3,
-  electron_35,
+  electron_39,
   makeDesktopItem,
-  makeShellWrapper,
+  makeBinaryWrapper,
   copyDesktopItems,
 }:
 
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
-  version = "5.12.0";
+  version = "5.12.3";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
-    tag = "v${version}";
-    hash = "sha256-YDb69tJCR58DARssnZgdVxtRpR8vHsawCTv7kQ56y+8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jRco2eyQrWf5jGvdWYn4mt8FD/xu1+FftQoB3wuF2Lw=";
   };
 
-  npmDepsHash = "sha256-MKKN6prUdWaHm27GybdbswDMNJH0xVffXsT2ZwroOHI=";
-
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-s/KllzT46L2o4SWS3z3Z7FDQD6FEEEAnPdM6tsfGRUo=";
   };
 
   nativeBuildInputs = [
-    makeShellWrapper
+    nodejs
+    pnpm_10
+    pnpmConfigHook
+    makeBinaryWrapper
     copyDesktopItems
-    (python3.withPackages (ps: with ps; [ distutils ]))
+    python3
   ];
 
-  dontNpmBuild = true;
   buildPhase = ''
     runHook preBuild
 
-    npm run pack -- \
-      -c.electronDist=${electron_35}/libexec/electron \
-      -c.electronVersion=${electron_35.version}
+    npm_config_nodedir=${electron_39.headers} \
+      node --run pack -- \
+      -c.electronDist=${electron_39}/libexec/electron \
+      -c.electronVersion=${electron_39.version}
 
     runHook postBuild
   '';
@@ -51,9 +59,8 @@ buildNpmPackage rec {
 
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
 
-    makeShellWrapper '${lib.getExe electron_35}' "$out/bin/zulip" \
+    makeBinaryWrapper '${lib.getExe electron_39}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}" \
       --inherit-argv0
 
     runHook postInstall
@@ -76,12 +83,12 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for Zulip Chat";
     homepage = "https://zulip.com";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.linux;
     mainProgram = "zulip";
   };
-}
+})
