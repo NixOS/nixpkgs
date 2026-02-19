@@ -1978,7 +1978,7 @@
   };
 
   powershell = {
-    version = "0-unstable-2025-12-08";
+    version = "0.25.10-unstable-2025-12-08";
     url = "github:airbus-cert/tree-sitter-powershell";
     rev = "7212f47716ced384ac012b2cc428fd9f52f7c5d4";
     hash = "sha256-xzDM1CdBY95XgLsEjqKWrwuIf/s6/2Q0XbxJRvOuL2o=";
