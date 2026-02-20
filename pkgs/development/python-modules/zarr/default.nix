@@ -138,16 +138,18 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    hypothesis
-    pytest-asyncio
-    pytest-xdist
     pytestCheckHook
-    tomlkit
-  ];
+  ]
+  # Not adding `passthru.optional-dependencies.remote{,_tests}` since the
+  # existence of these Python modules triggers tests that fail in the sandbox
+  # due to failed network requests.
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.test;
 
   disabledTestPaths = [
     # requires uv and then fails at setting up python envs
     "tests/test_examples.py::test_scripts_can_run[script_path0]"
+    # Requires zarr==2.x to generate zarr stores for the tests
+    "tests/test_regression"
   ];
 
   pythonImportsCheck = [ "zarr" ];
