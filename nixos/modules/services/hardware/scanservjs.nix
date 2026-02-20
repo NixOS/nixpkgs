@@ -23,8 +23,6 @@ let
       lib.mapAttrsToList (k: v: if builtins.isAttrs v then leafs v else [ v ]) attrs
     );
 
-  package = pkgs.scanservjs;
-
   configFile = pkgs.writeText "config.local.js" ''
     /* eslint-disable no-unused-vars */
     module.exports = {
@@ -52,11 +50,11 @@ let
       ],
     };
   '';
-
 in
 {
   options.services.scanservjs = {
     enable = lib.mkEnableOption "scanservjs";
+    package = lib.mkPackageOption pkgs "scanservjs" { };
     stateDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/scanservjs";
@@ -71,15 +69,17 @@ in
       '';
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
-        options.host = lib.mkOption {
-          type = lib.types.str;
-          description = "The IP to listen on.";
-          default = "127.0.0.1";
-        };
-        options.port = lib.mkOption {
-          type = lib.types.port;
-          description = "The port to listen on.";
-          default = 8080;
+        options = {
+          host = lib.mkOption {
+            type = lib.types.str;
+            description = "The IP to listen on.";
+            default = "127.0.0.1";
+          };
+          port = lib.mkOption {
+            type = lib.types.port;
+            description = "The port to listen on.";
+            default = 8080;
+          };
         };
       };
     };
@@ -113,41 +113,52 @@ in
 
   config = lib.mkIf cfg.enable {
     hardware.sane.enable = true;
-    users.users.scanservjs = {
-      group = "scanservjs";
-      extraGroups = [
-        "scanner"
-        "lp"
-      ];
-      home = cfg.stateDir;
-      isSystemUser = true;
-      createHome = true;
-    };
-    users.groups.scanservjs = { };
 
-    systemd.services.scanservjs = {
-      description = "scanservjs";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      # yes, those paths are configurable, but the config option isn't always used...
-      # a lot of the time scanservjs just takes those from PATH
-      path = with pkgs; [
-        coreutils
-        config.hardware.sane.backends-package
-        imagemagick
-        tesseract
-      ];
-      environment = {
-        NIX_SCANSERVJS_CONFIG_PATH = configFile;
-        SANE_CONFIG_DIR = "/etc/sane-config";
-        LD_LIBRARY_PATH = "/etc/sane-libs";
+    users = {
+      users.scanservjs = {
+        group = "scanservjs";
+        extraGroups = [
+          "scanner"
+          "lp"
+        ];
+        home = cfg.stateDir;
+        isSystemUser = true;
+        createHome = true;
       };
-      serviceConfig = {
-        ExecStart = lib.getExe package;
-        Restart = "always";
-        User = "scanservjs";
-        Group = "scanservjs";
-        WorkingDirectory = cfg.stateDir;
+
+      groups.scanservjs = { };
+    };
+
+    systemd = {
+      tmpfiles.rules = [
+        "d ${cfg.stateDir}/data/preview 0755 scanservjs scanservjs - -"
+        "L+ ${cfg.stateDir}/data/preview/default.jpg - - - - ${cfg.package}/lib/data/preview/default.jpg"
+      ];
+
+      services.scanservjs = {
+        description = "scanservjs";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        # yes, those paths are configurable, but the config option isn't always used...
+        # a lot of the time scanservjs just takes those from PATH
+        path = with pkgs; [
+          coreutils
+          config.hardware.sane.backends-package
+          imagemagick
+          tesseract
+        ];
+        environment = {
+          NIX_SCANSERVJS_CONFIG_PATH = configFile;
+          SANE_CONFIG_DIR = "/etc/sane-config";
+          LD_LIBRARY_PATH = "/etc/sane-libs";
+        };
+        serviceConfig = {
+          ExecStart = lib.getExe cfg.package;
+          Restart = "always";
+          User = "scanservjs";
+          Group = "scanservjs";
+          WorkingDirectory = cfg.stateDir;
+        };
       };
     };
   };
