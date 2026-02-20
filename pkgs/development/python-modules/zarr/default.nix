@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   hatchling,
@@ -27,9 +27,11 @@ buildPythonPackage (finalAttrs: {
   version = "3.1.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-F9ty838kiUUtITesiRxBM7j5dvkYnY79PnXzs63YTow=";
+  src = fetchFromGitHub {
+    owner = "zarr-developers";
+    repo = "zarr-python";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/rDKfu0KTYBU2lxZAwQ7eOUw9ivgklil5Yhb5rv1uiw=";
   };
 
   build-system = [
