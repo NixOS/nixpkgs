@@ -96,6 +96,12 @@ python.pkgs.buildPythonApplication rec {
       music_assistant/providers/airplay/bin/{cliap2-*,cliraop-*} \
       music_assistant/providers/airplay_receiver/bin/{build_binaries.sh,shairport-sync-*} \
       music_assistant/providers/spotify/bin
+
+    found_bins=$(find music_assistant/ -wholename '*/bin/*' -type f -executable -print0 | tr '\0' ' ')
+    if [[ -n $found_bins ]]; then
+      echo "Found binaries that should be replaced with packages built from source: $found_bins"
+      exit 2
+    fi
   '';
 
   build-system = with python.pkgs; [
