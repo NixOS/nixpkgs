@@ -30,6 +30,9 @@ buildNpmPackage rec {
     homepage = "https://github.com/alexbosworth/balanceofsatoshis";
     license = lib.licenses.mit;
     mainProgram = "bos";
-    maintainers = with lib.maintainers; [ mariaa144 ];
+    maintainers = with lib.maintainers; [
+      mariaa144
+      starius
+    ];
   };
 }
