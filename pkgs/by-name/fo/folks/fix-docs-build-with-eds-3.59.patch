@@ -1,0 +1,15 @@
+diff --git a/docs/meson.build b/docs/meson.build
+index 67c664513033dd8f892870836efaebcab3960af3..83a011f3852b240539fe0d41356ef74fe07a7887 100644
+--- a/docs/meson.build
++++ b/docs/meson.build
+@@ -39,6 +39,10 @@ if eds_backend_enabled
+     docs_common_valadoc_flags += ['-D', 'HAS_EDS_3_41']
+   endif
+ 
++  if eds_dep.version().version_compare('>=3.59.1')
++    docs_common_valadoc_flags += ['-D', 'HAS_EDS_3_60']
++  endif
++
+   valadoc_targets += {
+     'name': 'folks-eds',
+     'source_files': eds_backendlib_sources,
