@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libx11
+    xorg.libX11
     alsa-lib
     bzip2
     zlib
