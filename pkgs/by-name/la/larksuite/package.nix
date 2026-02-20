@@ -20,21 +20,11 @@
   gtk3,
   lib,
   libGL,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
   libappindicator-gtk3,
   libcxx,
   libdbusmenu,
   libdrm,
+  libgcc,
   libgcrypt,
   libglvnd,
   libnotify,
@@ -44,8 +34,19 @@
   libxkbcommon,
   libxkbfile,
   libxshmfence,
-  makeShellWrapper,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libgbm,
+  makeShellWrapper,
   nspr,
   nss,
   pango,
@@ -90,17 +91,17 @@ let
     glibc
     gnutls
     libGL
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     libappindicator-gtk3
     libcxx
     libdbusmenu
@@ -150,10 +151,11 @@ stdenv.mkDerivation {
     # for autopatchelf
     alsa-lib
     cups
-    libXdamage
-    libXtst
+    libxdamage
+    libxtst
     libdrm
     libgcrypt
+    libgcc
     libpulseaudio
     libxshmfence
     libgbm
@@ -254,7 +256,7 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames sources;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ adamcolwell ];
     mainProgram = "lark";
   };
 }
