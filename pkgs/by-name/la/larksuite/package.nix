@@ -187,6 +187,7 @@ stdenv.mkDerivation {
         --set ELECTRON_DISABLE_SANDBOX 1 \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --prefix LD_LIBRARY_PATH : ${rpath}:$out/opt/bytedance/lark:${addDriverRunpath.driverLink}/share \
+        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         ${lib.optionalString (
           commandLineArgs != ""
         ) "--add-flags ${lib.escapeShellArg commandLineArgs}"}
