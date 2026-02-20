@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     bzip2
     zlib
-    libxpm
+    libXpm
     libgcc
     libXfixes
     jack2
