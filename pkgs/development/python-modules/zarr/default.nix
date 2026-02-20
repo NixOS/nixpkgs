@@ -14,12 +14,42 @@
   packaging,
   typing-extensions,
 
-  # tests
-  hypothesis,
-  pytest-asyncio,
-  pytest-xdist,
+  # optional-dependencies
+  # remote
+  fsspec,
+  obstore ? null, # TODO: Package
+  # gpu
+  cupy,
+  # test
   pytestCheckHook,
+  pytest-asyncio,
+  pytest-cov,
+  pytest-accept ? null, # TODO: Package
+  rich,
+  mypy,
+  hypothesis,
+  pytest-xdist,
   tomlkit,
+  uv,
+  # remote_tests
+  botocore,
+  s3fs,
+  moto,
+  requests,
+  # optional
+  universal-pathlib,
+  # docs
+  sphinx,
+  sphinx-autobuild,
+  sphinx-autoapi,
+  sphinx-design,
+  sphinx-issues,
+  sphinx-copybutton,
+  sphinx-reredirects,
+  pydata-sphinx-theme,
+  numpydoc,
+  towncrier,
+  astroid,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -47,6 +77,65 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ]
   ++ numcodecs.optional-dependencies.crc32c;
+
+  passthru = {
+    optional-dependencies = {
+      remote = [
+        fsspec
+        obstore
+      ];
+      gpu = [
+        cupy
+      ];
+      # Development extras
+      test = [
+        #pytest
+        pytest-asyncio
+        pytest-cov
+        pytest-accept
+        rich
+        mypy
+        hypothesis
+        # From some reason the existence of pytest-xdist makes the tests fail
+        # depending on $NIX_BUILD_CORES
+        #pytest-xdist
+        packaging
+        tomlkit
+        uv
+      ];
+      remote_tests = [
+        botocore
+        s3fs
+        moto
+        requests
+      ]
+      ++ moto.optional-dependencies.server
+      ++ moto.optional-dependencies.s3;
+      optional = [
+        rich
+        universal-pathlib
+      ];
+      docs = [
+        # Doc building
+        sphinx
+        sphinx-autobuild
+        sphinx-autoapi
+        sphinx-design
+        sphinx-issues
+        sphinx-copybutton
+        sphinx-reredirects
+        pydata-sphinx-theme
+        numpydoc
+        towncrier # Changelog generation
+        # Optional dependencies to run examples
+        rich
+        s3fs
+        astroid
+        #pytest
+      ]
+      ++ numcodecs.optional-dependencies.msgpack;
+    };
+  };
 
   nativeCheckInputs = [
     hypothesis
