@@ -12377,6 +12377,13 @@
     githubId = 2881268;
     name = "John Hollowell";
   };
+  jhult = {
+    email = "Jonathan@JonathanHult.com";
+    github = "jhult";
+    githubId = 9849069;
+    name = "Jonathan Hult";
+    keys = [ { fingerprint = "DEE7 054C 5D43 ABEA C0F9  8BE4 3512 C8F8 2E2F 2A16"; } ];
+  };
   jiegec = {
     name = "Jiajie Chen";
     email = "c@jia.je";
