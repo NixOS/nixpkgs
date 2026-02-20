@@ -474,60 +474,64 @@ in
       dynamicConfigOptions = {
         http = {
           middlewares.redirect-to-https.redirectScheme.scheme = "https";
-          routers = {
-            # HTTP to HTTPS redirect router
-            main-app-router-redirect = {
-              rule = "Host(`${cfg.dashboardDomain}`)";
-              service = "next-service";
-              entryPoints = [ "web" ];
-              middlewares = [ "redirect-to-https" ];
-            };
-            # Next.js router (handles everything except API and WebSocket paths)
-            next-router = {
-              rule = "Host(`${cfg.dashboardDomain}`) && !PathPrefix(`/api/v1`)";
-              service = "next-service";
-              entryPoints = [ "websecure" ];
-              tls =
-                lib.optionalAttrs (finalSettings.domains.domain1.prefer_wildcard_cert) {
-                  domains = [
-                    { main = cfg.baseDomain; }
-                    { sans = "*.${cfg.baseDomain}"; }
-                  ];
-                }
-                //
-                # common
-                {
-                  certResolver = "letsencrypt";
-                };
-            };
-            # API router (handles /api/v1 paths)
-            api-router = {
-              rule = "Host(`${cfg.dashboardDomain}`) && PathPrefix(`/api/v1`)";
-              service = "api-service";
-              entryPoints = [ "websecure" ];
-              tls.certResolver = "letsencrypt";
-            };
-            # WebSocket router
-            ws-router = {
-              rule = "Host(`${cfg.dashboardDomain}`)";
-              service = "api-service";
-              entryPoints = [ "websecure" ];
-              tls.certResolver = "letsencrypt";
-            };
-            # Integration API router
-            int-api-router-redirect = {
-              rule = "Host(`api.${cfg.baseDomain}`)";
-              service = "int-api-service";
-              entryPoints = [ "web" ];
-              middlewares = [ "redirect-to-https" ];
-            };
-            int-api-router = {
-              rule = "Host(`api.${cfg.baseDomain}`)";
-              service = "int-api-service";
-              entryPoints = [ "websecure" ];
-              tls.certResolver = "letsencrypt";
-            };
-          };
+          routers = lib.mkMerge [
+            {
+              # HTTP to HTTPS redirect router
+              main-app-router-redirect = {
+                rule = "Host(`${cfg.dashboardDomain}`)";
+                service = "next-service";
+                entryPoints = [ "web" ];
+                middlewares = [ "redirect-to-https" ];
+              };
+              # Next.js router (handles everything except API and WebSocket paths)
+              next-router = {
+                rule = "Host(`${cfg.dashboardDomain}`) && !PathPrefix(`/api/v1`)";
+                service = "next-service";
+                entryPoints = [ "websecure" ];
+                tls =
+                  lib.optionalAttrs (finalSettings.domains.domain1.prefer_wildcard_cert) {
+                    domains = [
+                      { main = cfg.baseDomain; }
+                      { sans = "*.${cfg.baseDomain}"; }
+                    ];
+                  }
+                  //
+                  # common
+                  {
+                    certResolver = "letsencrypt";
+                  };
+              };
+              # API router (handles /api/v1 paths)
+              api-router = {
+                rule = "Host(`${cfg.dashboardDomain}`) && PathPrefix(`/api/v1`)";
+                service = "api-service";
+                entryPoints = [ "websecure" ];
+                tls.certResolver = "letsencrypt";
+              };
+              # WebSocket router
+              ws-router = {
+                rule = "Host(`${cfg.dashboardDomain}`)";
+                service = "api-service";
+                entryPoints = [ "websecure" ];
+                tls.certResolver = "letsencrypt";
+              };
+            }
+            (lib.mkIf (finalSettings.flags.enable_integration_api) {
+              # Integration API router
+              int-api-router-redirect = {
+                rule = "Host(`api.${cfg.dashboardDomain}`)";
+                service = "int-api-service";
+                entryPoints = [ "web" ];
+                middlewares = [ "redirect-to-https" ];
+              };
+              int-api-router = {
+                rule = "Host(`api.${cfg.dashboardDomain}`)";
+                service = "int-api-service";
+                entryPoints = [ "websecure" ];
+                tls.certResolver = "letsencrypt";
+              };
+            })
+          ];
           # needs to be a mkMerge otherwise will give error about standalone element
           services = lib.mkMerge [
             {
