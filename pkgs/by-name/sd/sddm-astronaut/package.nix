@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kdePackages,
   formats,
+  nix-update-script,
   themeConfig ? null,
   embeddedTheme ? "astronaut",
 }:
@@ -45,6 +46,8 @@ stdenvNoCC.mkDerivation {
     chmod u+w ${basePath}/Themes/
     ln -sf ${configFile} ${basePath}/Themes/${embeddedTheme}.conf.user
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Modern looking qt6 sddm theme";
