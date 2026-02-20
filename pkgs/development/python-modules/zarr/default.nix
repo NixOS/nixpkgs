@@ -22,13 +22,13 @@
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zarr";
   version = "3.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-F9ty838kiUUtITesiRxBM7j5dvkYnY79PnXzs63YTow=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of chunked, compressed, N-dimensional arrays for Python";
     homepage = "https://github.com/zarr-developers/zarr";
-    changelog = "https://github.com/zarr-developers/zarr-python/releases/tag/v${version}";
+    changelog = "https://github.com/zarr-developers/zarr-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})
