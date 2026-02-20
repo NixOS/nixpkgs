@@ -1,10 +1,13 @@
 # Test Traefik as a reverse proxy of a local web service
 # and a Docker container.
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   name = "traefik";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ joko ];
+  meta = with lib.maintainers; {
+    maintainers = [
+      joko
+      jackr
+    ];
   };
 
   nodes = {
@@ -37,7 +40,7 @@
         services.traefik = {
           enable = true;
 
-          dynamicConfigOptions = {
+          routing.files.NixOSTest.settings = {
             http.routers.simplehttp = {
               rule = "Host(`simplehttp.traefik.test`)";
               entryPoints = [ "web" ];
@@ -53,21 +56,16 @@
             };
           };
 
-          staticConfigOptions = {
+          install.settings = {
             global = {
               checkNewVersion = false;
               sendAnonymousUsage = false;
             };
 
-            entryPoints.web.address = ":\${HTTP_PORT}";
+            entryPoints.web.address = ":80";
 
             providers.docker.exposedByDefault = false;
           };
-          environmentFiles = [
-            (pkgs.writeText "traefik.env" ''
-              HTTP_PORT=80
-            '')
-          ];
         };
 
         systemd.services.simplehttp = {
@@ -99,7 +97,7 @@
             "curl -sSf -H Host:nginx.traefik.test http://traefik/"
         )
 
-    with subtest("Check that dynamic configuration works"):
+    with subtest("Check that routing configuration works"):
         assert "Directory listing for " in client.succeed(
             "curl -sSf -H Host:simplehttp.traefik.test http://traefik/"
         )

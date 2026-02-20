@@ -382,7 +382,7 @@ in
         '';
       }
       {
-        assertion = !(isDefault "routing.files") -> !(isDefault "routing.dir");
+        assertion = !(isDefault "routing.files") -> cfg.routing.dir != null;
         message = ''
           'services.traefik.routing.files' requires the routing file provider to be set
           to a directory. Please set a path for 'services.traefik.routing.dir'.
@@ -434,7 +434,7 @@ in
 
     # If a routing file or directory has been set, add it as a provider in the install configuration
     services.traefik = mkIf (isDefault "install.file") {
-      routing.files = mkIf (!(isDefault "install.file")) {
+      routing.files = mkIf (!(isDefault "routing.settings")) {
         "custom-migrated".settings = cfg.routing.settings;
       };
       install.settings = mkMerge [
@@ -465,18 +465,6 @@ in
       unitConfig.Documentation = "https://doc.traefik.io/traefik/";
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        # ExecStartPre = mkIf (cfg.localPlugins != [ ]) (
-        #   pkgs.writeShellScript "traefik-pre-start-ln-plugins" ''
-        #     ${lib.getExe' pkgs.coreutils "ln"} -Tsf ${
-        #       toString (
-        #         pkgs.symlinkJoin {
-        #           name = "traefik-plugins";
-        #           paths = cfg.localPlugins;
-        #         }
-        #       )
-        #     } plugins-local
-        #   ''
-        # );
         ExecStart = "${getExe cfg.package} --configfile=${installFile}";
         Type = "notify";
         User = cfg.user;
@@ -528,9 +516,7 @@ in
           }
         ) cfg.routing.files)
       ))
-      mkIf
-      (cfg.localPlugins != [ ])
-      {
+      (mkIf (cfg.localPlugins != [ ]) {
         "${cfg.dataDir}/plugins-local"."L+" = {
           inherit (cfg) user group;
           mode = "0700";
@@ -541,7 +527,7 @@ in
             }
           );
         };
-      }
+      })
     ];
 
     users = {
