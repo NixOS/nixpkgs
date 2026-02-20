@@ -5367,7 +5367,6 @@ broken-packages:
   - reqcatcher # failure in job https://hydra.nixos.org/build/295096611 at 2025-04-22
   - request # failure in job https://hydra.nixos.org/build/233256702 at 2023-09-02
   - request-monad # failure in job https://hydra.nixos.org/build/233204896 at 2023-09-02
-  - require # failure in job https://hydra.nixos.org/build/233203170 at 2023-09-02
   - rescue # failure in job https://hydra.nixos.org/build/233230073 at 2023-09-02
   - reservoir # failure in job https://hydra.nixos.org/build/233194430 at 2023-09-02
   - resolve # failure in job https://hydra.nixos.org/build/233224070 at 2023-09-02
