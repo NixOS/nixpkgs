@@ -11,6 +11,7 @@
   donfig,
   numpy,
   numcodecs,
+  google-crc32c,
   packaging,
   typing-extensions,
 
@@ -20,6 +21,8 @@
   obstore ? null, # TODO: Package
   # gpu
   cupy,
+  # cli
+  typer,
   # test
   pytestCheckHook,
   pytest-asyncio,
@@ -27,6 +30,7 @@
   pytest-accept ? null, # TODO: Package
   rich,
   mypy,
+  numpydoc,
   hypothesis,
   pytest-xdist,
   tomlkit,
@@ -39,29 +43,29 @@
   # optional
   universal-pathlib,
   # docs
-  sphinx,
-  sphinx-autobuild,
-  sphinx-autoapi,
-  sphinx-design,
-  sphinx-issues,
-  sphinx-copybutton,
-  sphinx-reredirects,
-  pydata-sphinx-theme,
-  numpydoc,
+  mkdocs-material,
+  mkdocs,
+  mkdocstrings,
+  mkdocstrings-python,
+  mike,
+  mkdocs-redirects,
+  markdown-exec ? null, # TODO: Package
+  griffe-inherited-docstrings ? null, # TODO: Package,
+  ruff,
   towncrier,
   astroid,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "zarr";
-  version = "3.1.1";
+  version = "3.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zarr-developers";
     repo = "zarr-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/rDKfu0KTYBU2lxZAwQ7eOUw9ivgklil5Yhb5rv1uiw=";
+    hash = "sha256-1Kx8gN1JiaY4eHmwpdilvJ8+NdnzxhDvn7YZjphgtZw=";
   };
 
   build-system = [
@@ -72,11 +76,11 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     donfig
     numcodecs
+    google-crc32c
     numpy
     packaging
     typing-extensions
-  ]
-  ++ numcodecs.optional-dependencies.crc32c;
+  ];
 
   passthru = {
     optional-dependencies = {
@@ -87,6 +91,9 @@ buildPythonPackage (finalAttrs: {
       gpu = [
         cupy
       ];
+      cli = [
+        typer
+      ];
       # Development extras
       test = [
         #pytest
@@ -95,6 +102,7 @@ buildPythonPackage (finalAttrs: {
         pytest-accept
         rich
         mypy
+        numpydoc
         hypothesis
         # From some reason the existence of pytest-xdist makes the tests fail
         # depending on $NIX_BUILD_CORES
@@ -117,15 +125,15 @@ buildPythonPackage (finalAttrs: {
       ];
       docs = [
         # Doc building
-        sphinx
-        sphinx-autobuild
-        sphinx-autoapi
-        sphinx-design
-        sphinx-issues
-        sphinx-copybutton
-        sphinx-reredirects
-        pydata-sphinx-theme
-        numpydoc
+        mkdocs-material
+        mkdocs
+        mkdocstrings
+        mkdocstrings-python
+        mike
+        mkdocs-redirects
+        markdown-exec
+        griffe-inherited-docstrings
+        ruff
         towncrier # Changelog generation
         # Optional dependencies to run examples
         rich
@@ -133,6 +141,8 @@ buildPythonPackage (finalAttrs: {
         astroid
         #pytest
       ]
+      ++ mkdocs-material.optional-dependencies.imaging
+      ++ markdown-exec.optional-dependencies.ansi
       ++ numcodecs.optional-dependencies.msgpack;
     };
   };
@@ -140,6 +150,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.cli
   # Not adding `passthru.optional-dependencies.remote{,_tests}` since the
   # existence of these Python modules triggers tests that fail in the sandbox
   # due to failed network requests.
