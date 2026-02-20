@@ -73,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       fontException
     ];
-    maintainers = [ lib.maintainers.rycee ];
+    maintainers = with lib.maintainers; [
+      rycee
+      qweered
+    ];
     platforms = lib.platforms.all;
   };
 })
