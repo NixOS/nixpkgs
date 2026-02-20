@@ -70,7 +70,7 @@ let
     };
     aarch64-linux = fetchurl {
       url = "https://lf16-larkversion.larksuitecdn.com/obj/lark-version-sg/2d8485bc/Lark-linux_arm64-7.59.12.deb";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-q27De0fseQEj3C9X77Z5s8FUSxXJ7gmPbFy10UaH3Sc=";
     };
   };
 
@@ -254,7 +254,7 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames sources;
-    maintainers = with lib.maintainers; [ adamcolwell ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "lark";
   };
 }
