@@ -27,6 +27,7 @@
   soxr,
   alac,
   sndio,
+  enableAvahi ? true,
   enableAirplay2 ? false,
   enableStdout ? true,
   enableAlsa ? true,
@@ -45,6 +46,7 @@
   enableAlac ? true,
   enableConvolution ? true,
   enableLibdaemon ? false,
+  enableTinySVCmDNS ? true,
 }:
 
 let
@@ -78,10 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
-    avahi
     popt
     libconfig
   ]
+  ++ optional enableAvahi avahi
   ++ optional enableLibdaemon libdaemon
   ++ optional enableAlsa alsa-lib
   ++ optional enableSndio sndio
@@ -115,8 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "--with-ssl=openssl"
     "--with-stdout"
-    "--with-avahi"
   ]
+  ++ optional enableAvahi "--with-avahi"
   ++ optional enablePulse "--with-pa"
   ++ optional enablePipewire "--with-pw"
   ++ optional enableAlsa "--with-alsa"
@@ -133,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableMetadata "--with-metadata"
   ++ optional enableMpris "--with-mpris-interface"
   ++ optional enableMqttClient "--with-mqtt-client"
+  ++ optional enableTinySVCmDNS "--with-tinysvcmdns"
   ++ optional enableLibdaemon "--with-libdaemon"
   ++ optional enableAirplay2 "--with-airplay-2";
 
