@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "xarray-einstats";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "xarray-einstats";
     tag = "v${version}";
-    hash = "sha256-CgyMc2Yvut+1LfH9F2FAd62HuLu+58Xr50txbWj4mYU=";
+    hash = "sha256-R/CbCaToW9U0+WqayE33gSyx5wKrhlZd7w4kjyxoxrk=";
   };
 
   build-system = [ flit-core ];
