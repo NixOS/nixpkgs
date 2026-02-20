@@ -3486,7 +3486,6 @@ dont-distribute-packages:
  - timeprint
  - timezone-unix
  - tinkoff-invest-sdk
- - tintin
  - tinytools-vty
  - tip-haskell-frontend
  - tip-lib
