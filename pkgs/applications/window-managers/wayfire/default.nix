@@ -33,7 +33,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
-  version = "0.10.1";
+  version = "0.11.0-unstable-2026-02-20";
 
   outputs = [
     "out"
@@ -43,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire";
-    rev = "v${finalAttrs.version}";
+    rev = "ad2c781a4c76b7539fa86e39fd3ef07ea3465070";
     fetchSubmodules = true;
-    hash = "sha256-yiqtnsXxvC7vk22ZQ5OFt5uX40FCRGWpfZrax9GItAg=";
+    hash = "sha256-NADPszDx4D/1SlCvkS4IQaTP7O0+6FVzKWitxyBzyLA=";
   };
 
   postPatch = ''
@@ -67,12 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     libevdev
     libinput
     libjpeg
-    libxkbcommon
     libxml2
     vulkan-headers
-    wayland-protocols
     libxcb-wm
-    yyjson
   ];
 
   propagatedBuildInputs = [
@@ -81,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     cairo
     pango
+    yyjson
+    libxkbcommon
+    wayland-protocols
   ];
 
   nativeCheckInputs = [
