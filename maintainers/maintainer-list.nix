@@ -599,6 +599,13 @@
     githubId = 85082674;
     name = "Adam J. Butler";
   };
+  adamcolwell = {
+    email = "adam@adamcolwell.com";
+    matrix = "@adam:colwell.au";
+    github = "adamcolwell";
+    githubId = 970593;
+    name = "Adam Colwell";
+  };
   adamcstephens = {
     email = "happy.plan4249@valkor.net";
     matrix = "@adam:robins.wtf";
