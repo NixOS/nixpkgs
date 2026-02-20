@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   libglycin,
+  libglycin-gtk4,
   glycin-loaders,
   cargo,
   desktop-file-utils,
@@ -37,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cargo
     desktop-file-utils
-    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -48,7 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
+    libglycin
     libglycin.setupHook
+    libglycin-gtk4
     glycin-loaders
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
