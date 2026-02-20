@@ -208,10 +208,10 @@
   "module-services-traefik-usage": [
     "index.html#module-services-traefik-usage"
   ],
-  "module-services-traefik-usage-dynamic": [
+  "module-services-traefik-usage-routing": [
     "index.html#module-services-traefik-usage-routing"
   ],
-  "module-services-traefik-usage-static": [
+  "module-services-traefik-usage-install": [
     "index.html#module-services-traefik-usage-install"
   ],
   "module-services-traefik-migrating-to-26.11": [
