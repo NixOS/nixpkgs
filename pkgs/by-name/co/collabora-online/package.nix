@@ -32,6 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kLJ8w2vMyladeOBbz1dhFQODniT82Ao4kani+snCNM8=";
   };
 
+  patches = [
+    ./fix-file-server-regex.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     nodejs
@@ -61,8 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-setcap"
     "--disable-werror"
     "--enable-silent-rules"
-    "--with-lo-path=${libreoffice-collabora}/lib/collaboraoffice"
-    "--with-lokit-path=${libreoffice-collabora.src}/include"
+    "--with-lo-path=${finalAttrs.passthru.libreoffice}/lib/collaboraoffice"
+    "--with-lokit-path=${finalAttrs.passthru.libreoffice.src}/include"
+
+    #"--sysconfdir=/etc"
+    #"--localstatedir=/var"
+    "--datarootdir=${placeholder "out"}/share"
+    "--datadir=${placeholder "out"}/share"
   ];
 
   postPatch = ''
