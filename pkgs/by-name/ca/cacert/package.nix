@@ -20,7 +20,7 @@ let
     lib.concatStringsSep "\n\n" extraCertificateStrings
   );
 
-  version = "3.119.1";
+  version = "3.121";
   meta = {
     homepage = "https://firefox-source-docs.mozilla.org/security/nss/runbooks/rootstore.html#root-store-consumers";
     description = "Bundle of X.509 certificates of public Certificate Authorities (CA)";
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
         "https://hg-edge.mozilla.org/projects/nss/raw-file/${tag}/${file}"
         "https://raw.githubusercontent.com/nss-dev/nss/refs/tags/${tag}/${file}"
       ];
-    hash = "sha256-qQOzzQUjHjkzJRXvfr435pcmLzlRWlIBXCPGKAW3PNA=";
+    hash = "sha256-O5jU4/9XoybZWHwzYzA5yMOpzwtV98pYHXWY/zKesfM=";
   };
 
   unpackPhase = ''
