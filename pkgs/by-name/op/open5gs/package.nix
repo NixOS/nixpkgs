@@ -61,6 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2k+S+OXfdskJPtDUFSxb/+2UZcUiOZzRSSGgsEJWolc=";
   };
 
+  patches = [
+    # Backport of https://github.com/open5gs/open5gs/commit/98f76e98df35cd6a35e868aa62715db7f8141ac1
+    # for CVE-2025-15528. Upstream patch doesn't apply cleanly to 2.7.6.
+    ./CVE-2025-15528.patch
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
