@@ -382,7 +382,7 @@ in
         '';
       }
       {
-        assertion = !(isDefault "dynamic.files") -> !(isDefault "dynamic.dir");
+        assertion = !(isDefault "dynamic.files") -> cfg.dynamic.dir != null;
         message = ''
           'services.traefik.dynamic.files' requires the dynamic file provider to be set
           to a directory. Please set a path for 'services.traefik.dynamic.dir'.
@@ -434,7 +434,7 @@ in
 
     # If a dynamic file or directory has been set, add it as a provider in the static configuration
     services.traefik = mkIf (isDefault "static.file") {
-      dynamic.files = mkIf (!(isDefault "static.file")) {
+      dynamic.files = mkIf (!(isDefault "dynamic.settings")) {
         "custom-migrated".settings = cfg.dynamic.settings;
       };
       static.settings = mkMerge [
@@ -465,18 +465,6 @@ in
       unitConfig.Documentation = "https://doc.traefik.io/traefik/";
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        # ExecStartPre = mkIf (cfg.localPlugins != [ ]) (
-        #   pkgs.writeShellScript "traefik-pre-start-ln-plugins" ''
-        #     ${lib.getExe' pkgs.coreutils "ln"} -Tsf ${
-        #       toString (
-        #         pkgs.symlinkJoin {
-        #           name = "traefik-plugins";
-        #           paths = cfg.localPlugins;
-        #         }
-        #       )
-        #     } plugins-local
-        #   ''
-        # );
         ExecStart = "${getExe cfg.package} --configfile=${staticFile}";
         Type = "notify";
         User = cfg.user;
@@ -528,9 +516,7 @@ in
           }
         ) cfg.dynamic.files)
       ))
-      mkIf
-      (cfg.localPlugins != [ ])
-      {
+      (mkIf (cfg.localPlugins != [ ]) {
         "${cfg.dataDir}/plugins-local"."L+" = {
           inherit (cfg) user group;
           mode = "0700";
@@ -541,7 +527,7 @@ in
             }
           );
         };
-      }
+      })
     ];
 
     users = {
