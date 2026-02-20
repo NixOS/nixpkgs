@@ -117,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-configfiles"
     "--sysconfdir=/etc"
     "--with-ssl=openssl"
-    "--with-stdout"
   ]
   ++ optional enableAvahi "--with-avahi"
   ++ optional enablePulse "--with-pa"
