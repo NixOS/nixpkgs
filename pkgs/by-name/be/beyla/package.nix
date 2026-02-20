@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
       application observability events for HTTP/S and gRPC services.
     '';
     homepage = "https://github.com/grafana/beyla";
-    changelog = "https://github.com/grafana/beyla/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/grafana/beyla/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ evanlhatch ];
     mainProgram = "beyla";
