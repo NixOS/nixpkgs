@@ -9526,8 +9526,6 @@ with pkgs;
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
-  clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
-
   cni = callPackage ../applications/networking/cluster/cni { };
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix { };
 
@@ -10486,8 +10484,6 @@ with pkgs;
   mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
 
   ncdu_1 = callPackage ../by-name/nc/ncdu/1.nix { };
-
-  notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     pythonPackages = python3Packages;
@@ -12218,11 +12214,6 @@ with pkgs;
     };
   };
 
-  yacas-gui = yacas.override {
-    enableGui = true;
-    enableJupyter = false;
-  };
-
   ### SCIENCE / MISC
 
   boinc-headless = boinc.override { headless = true; };
@@ -12607,7 +12598,15 @@ with pkgs;
 
   vimb = wrapFirefox vimb-unwrapped { };
 
-  vivisect = with python3Packages; toPythonApplication (vivisect.override { withGui = true; });
+  vivisect =
+    with python3Packages;
+    toPythonApplication (
+      vivisect.override {
+        # https://github.com/vivisect/vivisect/issues/683
+        # gui currently requires qt5 webengine, which has been removed
+        # withGui = true;
+      }
+    );
 
   py-wacz = with python3Packages; toPythonApplication wacz;
 
