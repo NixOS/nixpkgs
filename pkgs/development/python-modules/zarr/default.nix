@@ -58,7 +58,7 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [
     # requires uv and then fails at setting up python envs
-    "tests/test_examples.py"
+    "tests/test_examples.py::test_scripts_can_run[script_path0]"
   ];
 
   pythonImportsCheck = [ "zarr" ];
