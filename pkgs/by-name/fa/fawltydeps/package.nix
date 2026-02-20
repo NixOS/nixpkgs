@@ -5,7 +5,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fawltydeps";
   version = "0.20.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "FawltyDeps";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RGwCi4SD0khuOZXcR9Leh9WtRautnlJIfuLBnosyUgk=";
   };
 
@@ -53,4 +53,4 @@ python3Packages.buildPythonApplication rec {
       jherland
     ];
   };
-}
+})

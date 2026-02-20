@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "codebraid";
   version = "0.11.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gpoore";
     repo = "codebraid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-E9vzGK9ZEVwF+UBpSkdM+hm6vINen/A+LgnnPpc77QQ=";
   };
 
@@ -43,4 +43,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ synthetica ];
     mainProgram = "codebraid";
   };
-}
+})

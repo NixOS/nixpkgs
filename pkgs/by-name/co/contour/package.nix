@@ -12,7 +12,6 @@
   libutempter,
   termbench-pro,
   qt6,
-  pcre,
   boost,
   catch2_3,
   fmt,
@@ -67,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     termbench-pro
     qt6.qtmultimedia
     qt6.qt5compat
-    pcre
     boost
     catch2_3
     fmt

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pass-git-helper";
   version = "4.1.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "languitar";
     repo = "pass-git-helper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-gMhTYIFNCrUm6YoOOesJcQScugQ/SawiyeXjRG3cpQY=";
   };
 
@@ -39,4 +39,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "pass-git-helper";
   };
-}
+})

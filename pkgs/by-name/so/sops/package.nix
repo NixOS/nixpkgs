@@ -10,14 +10,14 @@
   age,
 }:
 
-buildGoModule (final: {
+buildGoModule (finalAttrs: {
   pname = "sops";
   version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "getsops";
-    repo = final.pname;
-    tag = "v${final.version}";
+    repo = finalAttrs.pname;
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AAnrZvNkBgliHdk1lAoFrJdISNWteFdBUorRycKsptU=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule (final: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/getsops/sops/v3/version.Version=${final.version}"
+    "-X github.com/getsops/sops/v3/version.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -49,19 +49,19 @@ buildGoModule (final: {
   # wrap sops with age plugins
   passthru.withAgePlugins =
     filter:
-    runCommand "sops-${final.version}-with-age-plugins"
+    runCommand "sops-${finalAttrs.version}-with-age-plugins"
       {
         nativeBuildInputs = [ makeWrapper ];
       }
       ''
-        makeWrapper ${lib.getBin final.finalPackage}/bin/sops $out/bin/sops \
+        makeWrapper ${lib.getBin finalAttrs.finalPackage}/bin/sops $out/bin/sops \
           --prefix PATH : "${lib.makeBinPath (filter age.passthru.plugins)}"
       '';
 
   meta = {
     homepage = "https://getsops.io/";
     description = "Simple and flexible tool for managing secrets";
-    changelog = "https://github.com/getsops/sops/blob/v${final.version}/CHANGELOG.rst";
+    changelog = "https://github.com/getsops/sops/blob/v${finalAttrs.version}/CHANGELOG.rst";
     mainProgram = "sops";
     maintainers = with lib.maintainers; [
       Scrumplex

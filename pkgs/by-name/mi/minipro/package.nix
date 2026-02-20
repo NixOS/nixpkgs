@@ -4,21 +4,29 @@
   fetchFromGitLab,
   pkg-config,
   libusb1,
+  util-linux,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minipro";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchFromGitLab {
     owner = "DavidGriffith";
     repo = "minipro";
     rev = finalAttrs.version;
-    hash = "sha256-NIaBN+T/EzYBhBtBEIvIAmqmksYDDiMJsWm9zCzZOxE=";
+    hash = "sha256-2Vi4NAKh+6N/at09egjS04ankEXnSHzsAIFSIau7jNc=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1 ];
+  nativeBuildInputs = [
+    pkg-config
+    util-linux
+  ];
+  buildInputs = [
+    libusb1
+    zlib
+  ];
   makeFlags = [
     "VERSION=${finalAttrs.version}"
     "PREFIX=$(out)"

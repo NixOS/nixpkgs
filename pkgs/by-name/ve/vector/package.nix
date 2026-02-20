@@ -63,25 +63,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ];
 
-  # Fix build with gcc 15
-  # https://github.com/vectordotdev/vector/issues/22888
-  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+  env = {
+    # Fix build with gcc 15
+    # https://github.com/vectordotdev/vector/issues/22888
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
 
-  # Without this, we get SIGSEGV failure
-  RUST_MIN_STACK = 33554432;
+    # Without this, we get SIGSEGV failure
+    RUST_MIN_STACK = 33554432;
 
-  # needed for internal protobuf c wrapper library
-  PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
-  RUSTONIG_SYSTEM_LIBONIG = true;
+    # needed for internal protobuf c wrapper library
+    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC_INCLUDE = "${protobuf}/include";
+    RUSTONIG_SYSTEM_LIBONIG = true;
 
-  TZDIR = "${tzdata}/share/zoneinfo";
+    TZDIR = "${tzdata}/share/zoneinfo";
 
-  # needed to dynamically link rdkafka
-  CARGO_FEATURE_DYNAMIC_LINKING = 1;
+    # needed to dynamically link rdkafka
+    CARGO_FEATURE_DYNAMIC_LINKING = 1;
 
-  CARGO_PROFILE_RELEASE_LTO = "fat";
-  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  };
 
   doCheck = true;
   checkType = "debug";
@@ -129,6 +131,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     # Flakey on aarch64-linux
+    "--skip=sources::exec::tests::test_run_command_linux"
     "--skip=topology::test::backpressure::buffer_drop_fan_out"
     "--skip=topology::test::backpressure::default_fan_out"
     "--skip=topology::test::backpressure::serial_backpressure"

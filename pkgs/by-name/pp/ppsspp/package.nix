@@ -9,7 +9,7 @@
   libffi,
   libsForQt5,
   libzip,
-  libX11,
+  libx11,
   makeDesktopItem,
   makeWrapper,
   pkg-config,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    libX11
+    libx11
     glew
     libzip
     zlib

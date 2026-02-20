@@ -6,7 +6,7 @@
   installShellFiles,
   versionCheckHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "typeinc";
   version = "1.0.3";
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "AnirudhG07";
     repo = "Typeinc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/R3mNxZE4Pt4UlCljsQphHBCoA2JIZrTorqU4Adcdp0=";
   };
 
@@ -39,4 +39,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ lonerOrz ];
   };
-}
+})

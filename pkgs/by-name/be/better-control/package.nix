@@ -17,7 +17,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "better-control";
   version = "6.12.1";
   pyproject = false;
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "better-ecosystem";
     repo = "better-control";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Dt+se8eOmF8Nzm+/bnYBSIyX0XHSXV9iCPF82qXhzug=";
   };
 
@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath runtimeDeps}"
+    "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}"
   ];
 
   postInstall = ''
@@ -101,4 +101,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "control"; # Users use both "control" and "better-control" to launch
   };
-}
+})

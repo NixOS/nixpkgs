@@ -47,7 +47,7 @@ buildPythonPackage rec {
   sphinxRoot = "docs";
 
   # ignore tests which are impure
-  DISABLED_TESTS = "network requires_nix_build";
+  env.DISABLED_TESTS = "network requires_nix_build";
 
   meta = {
     description = "Prefetch sources from github";

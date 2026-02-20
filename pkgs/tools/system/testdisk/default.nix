@@ -62,6 +62,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-unused";
 
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
+
   meta = {
     homepage = "https://www.cgsecurity.org/wiki/Main_Page";
     downloadPage = "https://www.cgsecurity.org/wiki/TestDisk_Download";

@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "livekit";
   version = "1.9.11";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mmDTY4nWUowSHPTSlvfVaNlv0Rp176H5FvJsYrNnt/8=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mgdelacroix ];
     mainProgram = "livekit-server";
   };
-}
+})

@@ -9,18 +9,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crate2nix";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "crate2nix";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-SUuruvw1/moNzCZosHaa60QMTL+L9huWdsCBN6XZIic=";
   };
 
-  sourceRoot = "${src.name}/crate2nix";
+  sourceRoot = "${finalAttrs.src.name}/crate2nix";
 
   cargoHash = "sha256-q/nPKNXZ1eJijeTBXA6Uuz235p+Q1uilXY5a/s8btMM=";
 
@@ -63,4 +63,4 @@ rustPlatform.buildRustPackage rec {
       cole-h
     ];
   };
-}
+})

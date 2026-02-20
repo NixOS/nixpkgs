@@ -5,14 +5,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gerbil";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "gerbil";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A3ehUYR5dM2No0AXxOCXZi83Lh/NXo6vMSFtYpvSAJo=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
     description = "Simple WireGuard interface management server";
     mainProgram = "gerbil";
     homepage = "https://github.com/fosrl/gerbil";
-    changelog = "https://github.com/fosrl/gerbil/releases/tag/${version}";
+    changelog = "https://github.com/fosrl/gerbil/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       jackr
@@ -36,4 +36,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

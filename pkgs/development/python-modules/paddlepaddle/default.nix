@@ -4,7 +4,6 @@
   stdenv,
   buildPythonPackage,
   fetchurl,
-  fetchPypi,
   python,
   pythonOlder,
   pythonAtLeast,
@@ -33,7 +32,7 @@ let
   sources = import ./sources.nix;
   version = sources.version;
   format = "wheel";
-  pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
+  pyShortVersion = "cp${lib.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
   cudaVersion = "cu${lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version}";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
@@ -49,25 +48,14 @@ let
 
   platform = sources.${stdenv.hostPlatform.system}.platform;
 
-  src =
-    if cudaSupport then
-      (fetchurl {
-        url = "https://paddle-whl.bj.bcebos.com/stable/${cudaVersion}/paddlepaddle-gpu/paddlepaddle_gpu-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
-        inherit hash;
-      })
-    else
-      (fetchPypi {
-        inherit
-          version
-          format
-          hash
-          platform
-          ;
-        pname = "paddlepaddle";
-        dist = pyShortVersion;
-        python = pyShortVersion;
-        abi = pyShortVersion;
-      });
+  src = fetchurl {
+    url = "https://paddle-whl.bj.bcebos.com/stable/${
+      if cudaSupport then cudaVersion else "cpu"
+    }/${pname}/${
+      lib.replaceStrings [ "-" ] [ "_" ] pname
+    }-${version}-${pyShortVersion}-${pyShortVersion}-${platform}.whl";
+    inherit hash;
+  };
 in
 buildPythonPackage {
   inherit

@@ -6,7 +6,7 @@
   testers,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exabgp";
   version = "5.0.1";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Exa-Networks";
     repo = "exabgp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UFo92jS/QmwTUEAhxQnbtY9K905jiBrJujfqGIUCUOg=";
   };
 
@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "BGP swiss army knife of networking";
     homepage = "https://github.com/Exa-Networks/exabgp";
-    changelog = "https://github.com/Exa-Networks/exabgp/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/Exa-Networks/exabgp/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     mainProgram = "exabgp";
     maintainers = with lib.maintainers; [
@@ -72,4 +72,4 @@ python3Packages.buildPythonApplication rec {
       raitobezarius
     ];
   };
-}
+})

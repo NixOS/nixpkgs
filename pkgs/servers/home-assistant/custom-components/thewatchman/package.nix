@@ -11,21 +11,18 @@
 buildHomeAssistantComponent rec {
   owner = "dummylabs";
   domain = "watchman";
-  version = "0.7.0-beta.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "dummylabs";
     repo = "thewatchman";
     tag = "v${version}";
-    hash = "sha256-U2AYxQ37XQocHcnY2Uv9Lhu0LmEZhhcGdO29i565tBM=";
+    hash = "sha256-5BXIKh8uPKuxsLbxu0fUbuCR2LYOXk1HpOvrqehg0u0=";
   };
 
   postPatch = ''
     substituteInPlace custom_components/watchman/manifest.json \
       --replace-fail "prettytable==3.12.0" "prettytable"
-
-    substituteInPlace tests/{__init__,test_{action,regex,report}}.py \
-      --replace-fail "/workspaces/thewatchman/" ""
   '';
 
   dontBuild = true;
@@ -38,6 +35,11 @@ buildHomeAssistantComponent rec {
     pytest-cov-stub
     pytest-homeassistant-custom-component
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # the test relies on NOT changing the hass config_dir and tries to write into the nix store
+    "test_status_sensor_safe_mode"
   ];
 
   meta = {

@@ -3,9 +3,9 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
-  libXfixes,
-  libXrandr,
+  libx11,
+  libxfixes,
+  libxrandr,
   gitUpdater,
 }:
 
@@ -21,9 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXfixes
-    libXrandr
+    libx11
+    libxfixes
+    libxrandr
   ];
 
   makeFlags = [ "prefix=$(out)" ];

@@ -12,25 +12,25 @@
   fetchurl,
   unzip,
   glib,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   gtk2,
-  libXext,
-  libXft,
+  libxext,
+  libxft,
   fontconfig,
-  libXrender,
-  libXfixes,
-  libX11,
-  libXi,
-  libXrandr,
-  libXcursor,
+  libxrender,
+  libxfixes,
+  libx11,
+  libxi,
+  libxrandr,
+  libxcursor,
   freetype,
-  libXinerama,
+  libxinerama,
   libxcb,
   zlib,
   pciutils,
   makeDesktopItem,
-  xkeyboardconfig,
+  xkeyboard-config,
   dbus,
   runtimeShell,
   libGL,
@@ -40,20 +40,20 @@ let
 
   libPath = lib.makeLibraryPath [
     glib
-    libSM
-    libICE
+    libsm
+    libice
     gtk2
-    libXext
-    libXft
+    libxext
+    libxft
     fontconfig
-    libXrender
-    libXfixes
-    libX11
-    libXi
-    libXrandr
-    libXcursor
+    libxrender
+    libxfixes
+    libx11
+    libxi
+    libxrandr
+    libxcursor
     freetype
-    libXinerama
+    libxinerama
     libxcb
     zlib
     stdenv.cc.cc
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     cat > "$out/bin/saleae-logic" << EOF
     #!${runtimeShell}
     export LD_PRELOAD="$out/lib/preload.so"
-    export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"
+    export QT_XKB_CONFIG_ROOT="${xkeyboard-config}/share/X11/xkb"
     export PATH="${pciutils}/bin:\$PATH"
     exec "$out/Logic" "\$@"
     EOF

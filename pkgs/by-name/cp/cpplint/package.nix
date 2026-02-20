@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cpplint";
   version = "2.0.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cpplint";
     repo = "cpplint";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4crTuqynQt8Nyjqea6DpREtLy7ydRF0hNVnc7tUnO1k=";
   };
 
@@ -39,8 +39,8 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/cpplint/cpplint";
     description = "Static code checker for C++";
-    changelog = "https://github.com/cpplint/cpplint/releases/tag/${version}";
+    changelog = "https://github.com/cpplint/cpplint/releases/tag/${finalAttrs.version}";
     mainProgram = "cpplint";
     license = [ lib.licenses.bsd3 ];
   };
-}
+})

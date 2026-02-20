@@ -8,12 +8,12 @@
   asciidoc-full,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "disorderfs";
   version = "0.5.11";
 
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/d/disorderfs/disorderfs_${version}.orig.tar.bz2";
+    url = "http://http.debian.net/debian/pool/main/d/disorderfs/disorderfs_${finalAttrs.version}.orig.tar.bz2";
     sha256 = "sha256-KqAMKVUykCgVdNyjacZjpVXqVdeob76v0iOuSd4TNIY=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

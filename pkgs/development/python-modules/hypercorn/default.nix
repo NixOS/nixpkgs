@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   aioquic,
   cacert,
   h11,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "hypercorn";
   version = "0.17.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11"; # missing taskgroup dependency
 
   src = fetchFromGitHub {
     owner = "pgjones";

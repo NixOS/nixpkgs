@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  libX11,
-  libXtst,
-  libXext,
+  libx11,
+  libxtst,
+  libxext,
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  libXi,
+  libxi,
 }:
 
 stdenv.mkDerivation {
@@ -26,10 +26,10 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    libX11
-    libXtst
-    libXext
-    libXi
+    libx11
+    libxtst
+    libxext
+    libxi
   ];
 
   meta = {

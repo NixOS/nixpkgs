@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "s5cmd";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "peak";
     repo = "s5cmd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+wSVJkXmu+1BzvO1o31jhKZLXeG7y+YkABIZZ1TlK/g=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tomberek ];
     mainProgram = "s5cmd";
   };
-}
+})

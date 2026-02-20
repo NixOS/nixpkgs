@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  lockfileProgs,
+  lockfile-progs,
   perlPackages,
 }:
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/logtail --replace "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
     substituteInPlace src/logtail2 --replace "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
 
-    sed -i -e 's|! -f /usr/bin/lockfile|! -f ${lockfileProgs}/bin/lockfile|' \
-           -e 's|^\([ \t]*\)lockfile-|\1${lockfileProgs}/bin/lockfile-|' \
+    sed -i -e 's|! -f /usr/bin/lockfile|! -f ${lockfile-progs}/bin/lockfile|' \
+           -e 's|^\([ \t]*\)lockfile-|\1${lockfile-progs}/bin/lockfile-|' \
            -e "s|/usr/sbin/logtail2|$out/sbin/logtail2|" \
            -e 's|mime-construct|${perlPackages.mimeConstruct}/bin/mime-construct|' \
            -e 's|\$(run-parts --list "\$dir")|"$dir"/*|' src/logcheck

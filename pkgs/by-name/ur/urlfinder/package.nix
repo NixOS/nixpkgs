@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "urlfinder";
   version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "urlfinder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dtCXCRnI05822+a5Os+I+ZAmL/hC884PRCIPlEY3jok=";
   };
 
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "Tool for passively gathering URLs without active scanning";
     homepage = "https://github.com/projectdiscovery/urlfinder";
-    changelog = "https://github.com/projectdiscovery/urlfinder/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/urlfinder/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "urlfinder";
   };
-}
+})

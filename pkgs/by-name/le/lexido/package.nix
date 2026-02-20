@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lexido";
   version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "micr0-dev";
     repo = "lexido";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zJP14dbC/Oz15CA3PRD0RfEYOrfulL2fWYHwFxhLKO4=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ daru-san ];
     mainProgram = "lexido";
   };
-}
+})

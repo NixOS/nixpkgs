@@ -46,6 +46,7 @@ PKG_PREFERENCES = {
     "numpy": "numpy",
     "ollama-hass": "ollama",
     "paho-mqtt": "paho-mqtt",
+    "pyrate-limiter": "pyrate-limiter",
     "sentry-sdk": "sentry-sdk",
     "slackclient": "slack-sdk",
     "SQLAlchemy": "sqlalchemy",
@@ -71,6 +72,7 @@ OUR_VERSION_IS_NEWER_THAN = {
     "blinkstick": "1.2.0",
     "gps3": "0.33.3",
     "proxmoxer": "2.2.0",
+    "py-cpuinfo": "9.0.0",
     "pybluez": "0.22",
     "pyps4-2ndscreen": "1.3.1",
 }

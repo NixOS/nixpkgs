@@ -9,7 +9,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wapiti";
   version = "3.2.10";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/w5t/BcMPewl0Wp6vx9kZamqHArb7+fnfktfEIUDL8Y=";
   };
 
@@ -171,9 +171,9 @@ python3Packages.buildPythonApplication rec {
       if a script is vulnerable.
     '';
     homepage = "https://wapiti-scanner.github.io/";
-    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${src.tag}/doc/ChangeLog_Wapiti";
+    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${finalAttrs.src.tag}/doc/ChangeLog_Wapiti";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wapiti";
   };
-}
+})

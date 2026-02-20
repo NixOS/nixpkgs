@@ -2,7 +2,6 @@
   lib,
   aiohttp,
   aresponses,
-  async-timeout,
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
@@ -16,18 +15,19 @@
   pytest-xdist,
   pytestCheckHook,
   yarl,
+  zeroconf,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-bsblan";
-  version = "3.1.6";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FMbba7z/Di5oD6xrjpF2cyJzdzdFjSw7wfTwS8Sjo8c=";
+    hash = "sha256-t60WMq1kbCIkcQSfr03K9Z6ro3zFGaDxCnl/84by+Qw=";
   };
 
   postPatch = ''
@@ -55,6 +55,7 @@ buildPythonPackage (finalAttrs: {
     pytest-mock
     pytest-xdist
     pytestCheckHook
+    zeroconf
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -9,14 +9,14 @@
   usql,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "usql";
   version = "0.20.8";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oaimplnmNpr3nMGNmiXmE9L03SfifjfncI9ZPiJg6JI=";
   };
 
@@ -51,7 +51,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/xo/usql/text.CommandVersion=${version}"
+    "-X github.com/xo/usql/text.CommandVersion=${finalAttrs.version}"
   ];
 
   # All the checks currently require docker instances to run the databases.
@@ -60,7 +60,7 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = usql;
       command = "usql --version";
     };
@@ -69,7 +69,7 @@ buildGoModule rec {
   meta = {
     description = "Universal command-line interface for SQL databases";
     homepage = "https://github.com/xo/usql";
-    changelog = "https://github.com/xo/usql/releases/tag/v${version}";
+    changelog = "https://github.com/xo/usql/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "usql";
     maintainers = with lib.maintainers; [
@@ -78,4 +78,4 @@ buildGoModule rec {
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

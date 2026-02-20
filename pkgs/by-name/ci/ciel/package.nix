@@ -14,14 +14,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ciel";
   version = "3.9.11";
 
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "ciel-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x26qy9dtycu8aRwMi3BNo15jthde2OVnwumSCwVt32c=";
   };
 
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ciel";
   };
-}
+})

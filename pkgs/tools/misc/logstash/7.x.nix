@@ -76,7 +76,6 @@ let
       license = if enableUnfree then lib.licenses.elastic20 else lib.licenses.asl20;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [
-        offline
         basvandijk
       ];
     };

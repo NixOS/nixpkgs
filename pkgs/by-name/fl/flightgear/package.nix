@@ -7,18 +7,18 @@
   freealut,
   libGLU,
   libGL,
-  libICE,
+  libice,
   libjpeg,
   openal,
   plib,
-  libSM,
+  libsm,
   libunwind,
-  libX11,
+  libx11,
   xorgproto,
-  libXext,
-  libXi,
-  libXmu,
-  libXt,
+  libxext,
+  libxi,
+  libxmu,
+  libxt,
   simgear,
   zlib,
   boost,
@@ -75,19 +75,19 @@ stdenv.mkDerivation rec {
     freealut
     libGLU
     libGL
-    libICE
+    libice
     libjpeg
     openal
     openscenegraph
     plib
-    libSM
+    libsm
     libunwind
-    libX11
+    libx11
     xorgproto
-    libXext
-    libXi
-    libXmu
-    libXt
+    libxext
+    libxi
+    libxmu
+    libxt
     (simgear.override { openscenegraph = openscenegraph; })
     zlib
     boost

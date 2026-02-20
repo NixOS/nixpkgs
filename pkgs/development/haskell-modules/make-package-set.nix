@@ -161,7 +161,7 @@ let
           inherit (scope) ghc buildHaskellPackages;
         };
     in
-    ps // ps.xorg // ps.gnome2 // { inherit stdenv; } // scopeSpliced;
+    ps // ps.gnome2 // { inherit stdenv; } // scopeSpliced;
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 

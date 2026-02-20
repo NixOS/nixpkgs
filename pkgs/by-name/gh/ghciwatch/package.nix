@@ -5,21 +5,21 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghciwatch";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = "ghciwatch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-K7BNGRilzi01loE0yS4CZFDNz8TQ9Z+fELO5HUvGObE=";
   };
 
   cargoHash = "sha256-kH5YTadpaUXDma+7SfBJxrOIsd9Gm0EU3MfhFmQ3U80=";
 
   # integration tests are not run but the macros need this variable to be set
-  GHC_VERSIONS = "";
+  env.GHC_VERSIONS = "";
   checkFlags = "--test \"unit\"";
 
   meta = {
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
   };
 
   passthru.updateScript = nix-update-script { };
-}
+})

@@ -46,7 +46,7 @@ let
       approval-prompt = approvalPrompt;
       basic-auth-password = basicAuthPassword;
       client-id = clientID;
-      client-secret = clientSecret;
+      client-secret-file = if clientSecretFile != null then "%d/client-secret" else null;
       custom-templates-dir = customTemplatesDir;
       email-domain = email.domains;
       http-address = httpAddress;
@@ -71,9 +71,9 @@ let
           secure
           expire
           name
-          secret
           refresh
           ;
+        secret-file = if cookie.secretFile != null then "%d/cookie-secret" else null;
         httponly = cookie.httpOnly;
       };
       set-xauthrequest = setXauthrequest;
@@ -159,6 +159,7 @@ in
 
     clientID = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
+      default = null;
       description = ''
         The OAuth Client ID.
       '';
@@ -174,11 +175,13 @@ in
       example = "https://login.microsoftonline.com/{TENANT_ID}/v2.0";
     };
 
-    clientSecret = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
+    clientSecretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
       description = ''
-        The OAuth Client Secret.
+        The path to a file containing the OAuth Client Secret.
       '';
+      example = "/run/keys/oauth2-client-secret";
     };
 
     skipAuthRegexes = lib.mkOption {
@@ -423,11 +426,13 @@ in
         example = "168h0m0s";
       };
 
-      secret = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+      secretFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
         description = ''
-          The seed string for secure cookies.
+          The path to a file containing the seed string for secure cookies.
         '';
+        example = "/run/keys/oauth2-cookie-secret";
       };
 
       secure = lib.mkOption {
@@ -595,14 +600,23 @@ in
 
   imports = [
     (lib.mkRenamedOptionModule [ "services" "oauth2_proxy" ] [ "services" "oauth2-proxy" ])
+    (lib.mkRemovedOptionModule [ "services" "oauth2-proxy" "clientSecret" ] ''
+      This option has been removed as it made the client secret world-readable.
+      Use services.oauth2-proxy.clientSecretFile instead.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "oauth2-proxy" "cookie" "secret" ] ''
+      This option has been removed as it made the cookie secret world-readable.
+      Use services.oauth2-proxy.cookie.secretFile instead.
+    '')
   ];
 
   config = lib.mkIf cfg.enable {
-    services.oauth2-proxy = lib.mkIf (cfg.keyFile != null) {
-      clientID = lib.mkDefault null;
-      clientSecret = lib.mkDefault null;
-      cookie.secret = lib.mkDefault null;
-    };
+    assertions = [
+      {
+        assertion = cfg.clientID != null || cfg.keyFile != null;
+        message = "Either services.oauth2-proxy.clientID or services.oauth2-proxy.keyFile must be specified.";
+      }
+    ];
 
     users.users.oauth2-proxy = {
       description = "OAuth2 Proxy";
@@ -633,6 +647,9 @@ in
           Restart = "always";
           ExecStart = "${lib.getExe cfg.package} ${configString}";
           EnvironmentFile = lib.mkIf (cfg.keyFile != null) cfg.keyFile;
+          LoadCredential =
+            lib.optional (cfg.clientSecretFile != null) "client-secret:${cfg.clientSecretFile}"
+            ++ lib.optional (cfg.cookie.secretFile != null) "cookie-secret:${cfg.cookie.secretFile}";
         };
       };
   };

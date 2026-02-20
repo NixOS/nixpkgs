@@ -8,12 +8,12 @@
   makeWrapper,
   jre,
   libGL,
-  libX11,
-  libXtst,
+  libx11,
+  libxtst,
   libxkbcommon,
   libxcb,
-  libXt,
-  libXinerama,
+  libxt,
+  libxinerama,
 }:
 
 let
@@ -23,12 +23,12 @@ let
     # used by the Java2D OpenGL backend
     libGL
     # jnativehook dependencies
-    libX11
-    libXtst
+    libx11
+    libxtst
     libxkbcommon
     libxcb
-    libXt
-    libXinerama
+    libxt
+    libxinerama
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

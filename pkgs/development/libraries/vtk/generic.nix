@@ -43,7 +43,7 @@
   # io modules
   cgns,
   adios2,
-  libLAS,
+  liblas,
   gdal,
   pdal,
   alembic,
@@ -74,10 +74,10 @@
   viskores,
   freetype,
   fontconfig,
-  libX11,
-  libXfixes,
-  libXrender,
-  libXcursor,
+  libx11,
+  libxfixes,
+  libxrender,
+  libxcursor,
   gl2ps,
   libGL,
   qt6,
@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
   ) python3Packages.pythonImportsCheckHook;
 
   buildInputs = [
-    libLAS
+    liblas
     alembic
     imath
     c-blosc
@@ -156,9 +156,9 @@ stdenv.mkDerivation (finalAttrs: {
     vtkPackages.pdal
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libXfixes
-    libXrender
-    libXcursor
+    libxfixes
+    libxrender
+    libxcursor
   ]
   ++ lib.optional withQt6 qt6.qttools
   ++ lib.optional mpiSupport mpi
@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.openmp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     gl2ps
   ]
   # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do

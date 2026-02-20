@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "redka";
-  version = "0.6.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "nalgeon";
     repo = "redka";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8p1riY5tCLhNWbXGmMEolqVVyjeKmc0WSaTI7lLZhJk=";
+    hash = "sha256-ALmRlikIFClzd/bghD3IUolnl3haFhKN+maqaP06dFY=";
   };
 
-  vendorHash = "sha256-vtCUDRBVbG7xocE7yUDktUSzEEc5af75R7rmcabu/sQ=";
+  vendorHash = "sha256-76mkNwmqOQCMLoWQr1ExZ2hS5YqiCj7gHQLvMl/wXbY=";
 
   subPackages = [
     "cmd/redka"

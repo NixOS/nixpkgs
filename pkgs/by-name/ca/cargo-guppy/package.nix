@@ -1,23 +1,24 @@
 {
-  lib,
-  rustPlatform,
   fetchFromGitHub,
-  pkg-config,
+  lib,
+  nix-update-script,
   openssl,
+  pkg-config,
+  rustPlatform,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-guppy";
-  version = "unstable-2023-10-04";
+  version = "0.17.25";
 
   src = fetchFromGitHub {
     owner = "guppy-rs";
     repo = "guppy";
-    rev = "837d0ae762b9ae79cc8ca5d629842e5ca34293b4";
-    sha256 = "sha256-LWU1yAD/f9w5m522vcKP9D2JusGkwzvfGSGstvFGUpk=";
+    tag = "guppy-${finalAttrs.version}";
+    hash = "sha256-wH14RCNjqbuJsyJdV3Vthulyd5GbLdfpoojK3F2muwM=";
   };
 
-  cargoHash = "sha256-nNbCQ/++gm2S+xFbE5t9U9gQR8E2fVWE4kh73wgbAwQ=";
+  cargoHash = "sha256-fNbuVXFCqrQPT0q00VkOVXm1H7/7HjuK9JYZ0TRxMJk=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -27,19 +28,25 @@ rustPlatform.buildRustPackage {
     "-p"
     "cargo-guppy"
   ];
+
   cargoTestFlags = [
     "-p"
     "cargo-guppy"
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=guppy-(.*)" ];
+  };
+
   meta = {
+    changelog = "https://github.com/guppy-rs/guppy/releases/tag/${finalAttrs.src.tag}";
     description = "Command-line frontend for guppy";
-    mainProgram = "cargo-guppy";
     homepage = "https://github.com/guppy-rs/guppy/tree/main/cargo-guppy";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = [ ];
+    mainProgram = "cargo-guppy";
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

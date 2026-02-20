@@ -9,14 +9,14 @@
   gnumake,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fzf-make";
   version = "0.67.0";
 
   src = fetchFromGitHub {
     owner = "kyu08";
     repo = "fzf-make";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ciUixT+ELBL90rPe1wUyp41ZL2a6YhEDY+n66cOB1xk=";
   };
 
@@ -38,12 +38,12 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Fuzzy finder for Makefile";
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/kyu08/fzf-make/releases/tag/v${version}";
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://github.com/kyu08/fzf-make/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sigmanificient
     ];
     mainProgram = "fzf-make";
   };
-}
+})

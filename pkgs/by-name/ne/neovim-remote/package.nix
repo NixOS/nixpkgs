@@ -7,7 +7,7 @@
   fetchpatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "neovim-remote";
   version = "2.5.1";
   pyproject = true;
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uO5KezbUQGj3rNpuw2SJOzcP86DZqX7DJFz3BxEnf1E=";
   };
 
@@ -55,4 +55,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "nvr";
   };
-}
+})

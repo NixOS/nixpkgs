@@ -600,5 +600,6 @@ stdenv.mkDerivation (finalAttrs: {
       zivarah
     ];
     mainProgram = "git";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "git-scm" finalAttrs.version;
   };
 })

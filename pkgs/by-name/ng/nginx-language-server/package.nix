@@ -14,7 +14,7 @@ let
     }
   );
 in
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "nginx-language-server";
   version = "0.9.0";
   pyproject = true;
@@ -22,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = "nginx-language-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-v9+Y8NBvN8HvTdNrK9D9YQuqDB3olIu5LfYapjlVlAM=";
   };
 
@@ -55,9 +55,9 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "Language server for nginx.conf";
     homepage = "https://github.com/pappasam/nginx-language-server";
-    changelog = "https://github.com/pappasam/nginx-language-server/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pappasam/nginx-language-server/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "nginx-language-server";
   };
-}
+})

@@ -5,7 +5,7 @@
   plugins ? [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "instawow";
   version = "7.0.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "layday";
     repo = "instawow";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dT1oiPX+id0g28I9I/WJS9G6hyeHHGx5mWvNKXX1Wus=";
   };
 
@@ -52,4 +52,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ seirl ];
   };
-}
+})

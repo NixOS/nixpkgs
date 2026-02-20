@@ -12,14 +12,14 @@
   notificationSupport ? stdenv.hostPlatform.isLinux,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tiny";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "osa1";
     repo = "tiny";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-phjEae2SS3zkSpuhhE4iscUM8ij8DT47YLIMATMG/+Q=";
   };
 
@@ -33,9 +33,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Console IRC client";
     homepage = "https://github.com/osa1/tiny";
-    changelog = "https://github.com/osa1/tiny/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/osa1/tiny/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "tiny";
   };
-}
+})

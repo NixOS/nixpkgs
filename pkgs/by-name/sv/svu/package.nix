@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "svu";
   version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "svu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3Rj+2ROo9TuWc2aZ8kkGeXH+PHjKva6nD7wlXHY/LQg=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
     "-X=main.builtBy=nixpkgs"
   ];
 
@@ -50,4 +50,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "svu";
   };
-}
+})

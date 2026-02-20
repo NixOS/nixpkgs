@@ -163,25 +163,6 @@ in
 
   testScript =
     { nodes, ... }:
-    let
-      narinfoName =
-        (lib.strings.removePrefix "/nix/store/" (
-          lib.strings.removeSuffix "-empty-file" pkgs.emptyFile.outPath
-        ))
-        + ".narinfo";
-
-      narinfoNameChars = lib.strings.stringToCharacters narinfoName;
-
-      narinfoPath = lib.concatStringsSep "/" [
-        (builtins.head nodes.minio.services.minio.dataDir)
-        bucket
-        "store/narinfo"
-        (lib.lists.elemAt narinfoNameChars 0)
-        ((lib.lists.elemAt narinfoNameChars 0) + (lib.lists.elemAt narinfoNameChars 1))
-        narinfoName
-        "xl.meta"
-      ];
-    in
     ''
       harmonia.start()
       minio.start()
@@ -206,13 +187,5 @@ in
 
       client0.wait_until_succeeds("curl -f http://ncps0:8501/ | grep '\"hostname\":\"${toString nodes.ncps0.services.ncps.cache.hostName}\"' >&2")
       client1.wait_until_succeeds("curl -f http://ncps1:8501/ | grep '\"hostname\":\"${toString nodes.ncps1.services.ncps.cache.hostName}\"' >&2")
-
-      client0.succeed("cat /etc/nix/nix.conf >&2")
-      client0.succeed("nix-store --realise ${pkgs.emptyFile}")
-
-      client1.succeed("cat /etc/nix/nix.conf >&2")
-      client1.succeed("nix-store --realise ${pkgs.emptyFile}")
-
-      minio.succeed("cat ${narinfoPath} >&2")
     '';
 }

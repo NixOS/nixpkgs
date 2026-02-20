@@ -168,6 +168,7 @@ in
           ffmpegthumbs
           krdp
           kconfig # required for xdg-terminal from xdg-utils
+          qtbase # for qtpaths which is required for xdg-mime from xdg-utils
         ]
         ++ lib.optionals config.hardware.sensor.iio.enable [
           # This is required for autorotation in Plasma 6

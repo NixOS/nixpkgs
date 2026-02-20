@@ -5,7 +5,7 @@
   glibcLocales,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "i3minator";
   version = "0.0.4";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "carlesso";
     repo = "i3minator";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "07dic5d2m0zw0psginpl43xn0mpxw7wilj49d02knz69f7c416lm";
   };
 
@@ -48,4 +48,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
   };
 
-}
+})

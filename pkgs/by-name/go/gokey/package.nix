@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gokey";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "gokey";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tJ9nCHhKPrw7SRGsqAlo/tf3tBLF63+CevEXggZADlE=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.confus ];
     mainProgram = "gokey";
   };
-}
+})

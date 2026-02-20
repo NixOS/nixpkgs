@@ -548,7 +548,7 @@ with self;
 
     installPhase = "./Build install --prefix $out";
 
-    SDL_INST_DIR = lib.getDev pkgs.SDL;
+    env.SDL_INST_DIR = lib.getDev pkgs.SDL;
     buildInputs = [
       pkgs.SDL
       ArchiveExtract
@@ -579,7 +579,7 @@ with self;
     };
 
     buildInputs = [ ArchiveExtract ];
-    TIDYP_DIR = pkgs.tidyp;
+    env.TIDYP_DIR = pkgs.tidyp;
     propagatedBuildInputs = [ FileShareDir ];
     meta = {
       description = "Building, finding and using tidyp library";
@@ -740,7 +740,7 @@ with self;
     pname = "AnyEvent-BDB";
     version = "1.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-BDB-${version}.tar.gz";
       hash = "sha256-k+NgEJQEZGJuXzG5+u3WXhLtjRq/Fs4FL+vyP0la78g=";
     };
     buildInputs = [ CanaryStability ];
@@ -841,7 +841,7 @@ with self;
     pname = "AnyEvent-IRC";
     version = "0.97";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EL/ELMEX/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/E/EL/ELMEX/AnyEvent-IRC-${version}.tar.gz";
       hash = "sha256-v9fPZFw8jGEUcQVxKGEUR+IPGt8BUWxpYky9i8d/W/A=";
     };
     propagatedBuildInputs = [
@@ -1893,7 +1893,7 @@ with self;
       TestWarn
     ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
       description = "Fast C metadata and tag reader for all common audio file formats, slimserver fork";
       homepage = "https://github.com/Logitech/slimserver-vendor";
@@ -2432,11 +2432,11 @@ with self;
     pname = "BDB";
     version = "1.92";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/BDB-${version}.tar.gz";
       hash = "sha256-o/LKnSuu/BqqQJCLL5y5KS/aPn15fji7146rudna62s=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.db4.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.db4.out}/lib -ldb";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.db4.out}/lib -ldb";
     buildInputs = [ pkgs.db4 ];
     propagatedBuildInputs = [ commonsense ];
     meta = {
@@ -4706,7 +4706,7 @@ with self;
     postPatch = ''
       substituteInPlace Makefile.PL --replace pkg-config $PKG_CONFIG
     '';
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.pcsclite}/lib -lpcsclite";
+    env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.pcsclite}/lib -lpcsclite";
     # tests fail; look unfinished
     doCheck = false;
     meta = {
@@ -5758,7 +5758,7 @@ with self;
     pname = "Compress-LZF";
     version = "3.8";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Compress-LZF-${version}.tar.gz";
       hash = "sha256-XR9d9IzhO03uHMnyeOzb+Bd4d7C5iBWk6zyRw0ZnFvI=";
     };
     meta = {
@@ -5779,9 +5779,9 @@ with self;
     };
 
     # Don't build a private copy of bzip2.
-    BUILD_BZIP2 = false;
-    BZIP2_LIB = "${pkgs.bzip2.out}/lib";
-    BZIP2_INCLUDE = "${pkgs.bzip2.dev}/include";
+    env.BUILD_BZIP2 = false;
+    env.BZIP2_LIB = "${pkgs.bzip2.out}/lib";
+    env.BZIP2_INCLUDE = "${pkgs.bzip2.dev}/include";
 
     meta = {
       description = "Low-Level Interface to bzip2 compression library";
@@ -6995,7 +6995,7 @@ with self;
       TestRequires
     ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "Crypt::DH Using GMP Directly";
       license = with lib.licenses; [
@@ -7483,7 +7483,7 @@ with self;
       hash = "sha256-kHxzoQVs6gV9qYGa6kipKreG5qqq858c3ZZHsj8RbHg=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.libsodium.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.libsodium.out}/lib -lsodium";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.libsodium.out}/lib -lsodium";
     meta = {
       description = "Perl bindings for libsodium (NaCL)";
       homepage = "https://metacpan.org/release/Crypt-Sodium";
@@ -7580,7 +7580,7 @@ with self;
       pkgs.openssl
     ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = {
       description = "Perl wrapper around OpenSSL's AES library";
       license = with lib.licenses; [
@@ -7598,7 +7598,7 @@ with self;
       hash = "sha256-I05y+4OW1FUn5v1F5DdZxcPzogjPjynmoiFhqZb9Qtw=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = {
       description = "OpenSSL's multiprecision integer arithmetic";
       license = with lib.licenses; [
@@ -7633,8 +7633,8 @@ with self;
       hash = "sha256-8IdvqhujER45uGqnMMYDIR7/KQXkYMcqV7YejPR1zvQ=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
-    OPENSSL_PREFIX = pkgs.openssl;
+    env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    env.OPENSSL_PREFIX = pkgs.openssl;
     buildInputs = [ CryptOpenSSLGuess ];
     meta = {
       description = "OpenSSL/LibreSSL pseudo-random number generator access";
@@ -7654,8 +7654,8 @@ with self;
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
-    OPENSSL_PREFIX = pkgs.openssl;
+    env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    env.OPENSSL_PREFIX = pkgs.openssl;
     buildInputs = [ CryptOpenSSLGuess ];
     meta = {
       description = "RSA encoding and decoding, using the openSSL libraries";
@@ -7674,8 +7674,8 @@ with self;
       hash = "sha256-xNvBbE/CloV4I3v8MkWH/9eSSacQFQJlLbnjjUSJUX8=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
-    OPENSSL_PREFIX = pkgs.openssl;
+    env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    env.OPENSSL_PREFIX = pkgs.openssl;
     buildInputs = [ CryptOpenSSLGuess ];
     propagatedBuildInputs = [ ConvertASN1 ];
     meta = {
@@ -7883,7 +7883,7 @@ with self;
         --replace '#! /usr/bin/perl' '#!${perl}/bin/perl'
     '';
     propagatedBuildInputs = [ pkgs.ncurses ];
-    NIX_CFLAGS_LINK = "-L${pkgs.ncurses.out}/lib -lncurses";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.ncurses.out}/lib -lncurses";
     meta = {
       description = "Perl bindings to ncurses";
       license = with lib.licenses; [ artistic1 ];
@@ -9405,7 +9405,7 @@ with self;
     pname = "Deliantra";
     version = "2.01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Deliantra-${version}.tar.gz";
       hash = "sha256-JxbZsfBWJ9YJQs4GNLnBolEJsWSBgoXUW2Ca6FluKxc=";
     };
     propagatedBuildInputs = [
@@ -9853,7 +9853,7 @@ with self;
       hash = "sha256-Uf6cFYlV/aDKkXqAaGPwvFEGi1M/u8dCOzzErVle0VM=";
     };
 
-    ORACLE_HOME = "${pkgs.oracle-instantclient.lib}/lib";
+    env.ORACLE_HOME = "${pkgs.oracle-instantclient.lib}/lib";
 
     buildInputs = [
       pkgs.oracle-instantclient
@@ -9920,7 +9920,7 @@ with self;
       hash = "sha256-B1e6aqyaKaLcOFmV1myPQSqIlo/SNsDYu0ZZAo5OmWU=";
     };
 
-    SYBASE = pkgs.freetds;
+    env.SYBASE = pkgs.freetds;
 
     buildInputs = [ pkgs.freetds ];
     propagatedBuildInputs = [ DBI ];
@@ -15261,8 +15261,8 @@ with self;
     ];
 
     # needed for fontconfig tests
-    HOME = "/build";
-    FONTCONFIG_PATH = "${lib.getOutput "out" pkgs.fontconfig}/etc/fonts";
+    env.HOME = "/build";
+    env.FONTCONFIG_PATH = "${lib.getOutput "out" pkgs.fontconfig}/etc/fonts";
 
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
@@ -16616,6 +16616,52 @@ with self;
     meta = {
       description = "Simple http server class";
       homepage = "https://github.com/libwww-perl/HTTP-Daemon";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  HTTPDaemonSSL = buildPerlPackage {
+    pname = "HTTP-Daemon-SSL";
+    version = "1.05-01-5";
+    src = fetchurl {
+      url = "https://salsa.debian.org/perl-team/modules/packages/libhttp-daemon-ssl-perl/-/archive/debian/1.05-01-5/libhttp-daemon-ssl-perl-debian-1.05-01-5.tar.gz";
+      hash = "sha256-2J4W3SAPgktQ8N+CTSm9fddaUlfzq074sj14fe5zHVc=";
+    };
+    patches = [
+      # Several Debian patches to fix test suite
+      # https://sources.debian.org/patches/libhttp-daemon-ssl-perl/1.05-01-5/
+      (fetchpatch2 {
+        name = "testmodule.diff";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/testmodule.diff";
+        hash = "sha256-pVPtQLlMYr7Bm8QprJbCyfY+6SyZ/v7uuqvX3k/GnGs=";
+      })
+      (fetchpatch2 {
+        name = "testpost.diff";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/testpost.diff";
+        hash = "sha256-clI4u2uYGPow8k3YjnjQFam5IK/xlW8SsJvJ/pwMm4o=";
+      })
+      (fetchpatch2 {
+        name = "IO-Socket-SSL_2.078.patch";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/IO-Socket-SSL_2.078.patch";
+        hash = "sha256-EoZPj7mlDm+KKAuXTdIhlyWAFjG9H8tqeZj42ZwV4no=";
+      })
+      (fetchpatch2 {
+        name = "IO-Socket-SSL_2.079.patch";
+        url = "https://sources.debian.org/data/main/libh/libhttp-daemon-ssl-perl/1.05-01-5/debian/patches/IO-Socket-SSL_2.079.patch";
+        hash = "sha256-xT533707i+ZCn1/qDZJU/oW8j+Sk8WWbIPulddJPb1w=";
+      })
+    ];
+    propagatedBuildInputs = [
+      HTTPDaemon
+      IOSocketSSL
+    ];
+    __darwinAllowLocalNetworking = true;
+    meta = {
+      description = "Simple http server class with SSL support";
+      homepage = "https://github.com/aufflick/p5-http-daemon-ssl";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -18426,7 +18472,7 @@ with self;
     pname = "LaTeXML";
     version = "0.8.8";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/B/BR/BRMILLER/LaTeXML-${version}.tar.gz";
       hash = "sha256-fSu+LOJSuvhro/OIzQ3sOqSDj0nWErnsfMT/iBBbrcw=";
     };
     outputs = [
@@ -18541,7 +18587,7 @@ with self;
     pname = "libapreq2";
     version = "2.17";
     src = fetchurl {
-      url = "mirror://apache/httpd/libapreq/${pname}-${version}.tar.gz";
+      url = "mirror://apache/httpd/libapreq/libapreq2-${version}.tar.gz";
       hash = "sha256-BGSH8ITBL6HIIq/8X33lbv7ZtIkFpCbmMaa5ScEU2Gw=";
     };
     outputs = [ "out" ];
@@ -18978,7 +19024,7 @@ with self;
       hash = "sha256-MSlAwfYPR8T8k/oKnSpiZCX6qDcEDIwvGtWO4J9i83E=";
     };
     buildInputs = [ pkgs.acl ];
-    NIX_CFLAGS_LINK = "-L${pkgs.acl.out}/lib -lacl";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.acl.out}/lib -lacl";
     meta = {
       description = "Perl extension for reading and setting Access Control Lists for files by libacl linux library";
       license = with lib.licenses; [
@@ -19230,7 +19276,7 @@ with self;
       url = "mirror://cpan/authors/id/P/PV/PVANDRY/gettext-1.07.tar.gz";
       hash = "sha256-kJ1HlUaX58BCGPlykVt4e9EkTXXjvQFiC8Fn1bvEnBU=";
     };
-    LANG = "C";
+    env.LANG = "C";
     meta = {
       description = "Perl extension for emulating gettext-related API";
       license = with lib.licenses; [
@@ -20661,7 +20707,7 @@ with self;
     buildInputs = [ pkgs.gmp ];
     doCheck = false;
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
       description = "Backend library for Math::BigInt etc. based on GMP";
@@ -20754,7 +20800,7 @@ with self;
       AlienGMP
     ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "High speed arbitrary size integer math";
       license = with lib.licenses; [ lgpl21Plus ];
@@ -20772,7 +20818,7 @@ with self;
       TestWarn
       pkgs.gmp
     ];
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "Perl interface to the GMP integer functions";
       homepage = "https://github.com/sisyphus/math-gmpz";
@@ -20921,7 +20967,7 @@ with self;
     };
     buildInputs = [ pkgs.gmp ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "Utilities related to prime numbers, using GMP";
       homepage = "https://github.com/danaj/Math-Prime-Util-GMP";
@@ -25297,7 +25343,7 @@ with self;
       pkgs.cups
       pkgs.libcupsfilters
     ];
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.cups}/lib -lcups";
+    env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.cups}/lib -lcups";
     meta = {
       description = "Common Unix Printing System Interface";
       homepage = "https://github.com/niner/perl-Net-CUPS";
@@ -26500,7 +26546,7 @@ with self;
     pname = "Object-Event";
     version = "1.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EL/ELMEX/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/E/EL/ELMEX/Object-Event-${version}.tar.gz";
       hash = "sha256-q2u4BQj0/dry1RsgyodqqwOFgqhrUijmQ1QRNIr1PII=";
     };
     propagatedBuildInputs = [
@@ -26771,7 +26817,7 @@ with self;
     hardeningDisable = [ "format" ];
     # Make the async API accessible
     env.NIX_CFLAGS_COMPILE = "-DTHREADED";
-    NIX_CFLAGS_LINK = "-L${pkgs.zookeeper_mt.out}/lib -lzookeeper_mt";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.zookeeper_mt.out}/lib -lzookeeper_mt";
     # Most tests are skipped as no server is available in the sandbox.
     # `t/35_log.t` seems to suffer from a race condition; remove it.  See
     # https://github.com/NixOS/nixpkgs/pull/104889#issuecomment-737144513
@@ -27907,7 +27953,7 @@ with self;
       hash = "sha256-SEhnmj8gHj87DF9vlSbmAq9Skj/6RxoqNlfbeGvTvcU=";
     };
     buildInputs = [ pkgs.zlib ];
-    NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
       description = "Perl extension to provide a PerlIO layer to gzip/gunzip";
       license = with lib.licenses; [
@@ -33036,7 +33082,7 @@ with self;
       pkgs.readline
       pkgs.ncurses
     ];
-    NIX_CFLAGS_LINK = "-lreadline -lncursesw";
+    env.NIX_CFLAGS_LINK = "-lreadline -lncursesw";
 
     # For some crazy reason Makefile.PL doesn't generate a Makefile if
     # AUTOMATED_TESTING is set.
@@ -33086,7 +33132,7 @@ with self;
     pname = "Term-ReadPassword";
     version = "0.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PH/PHOENIX/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/P/PH/PHOENIX/Term-ReadPassword-${version}.tar.gz";
       hash = "sha256-4ahmNFs1+f/vfQA34T1tTLKAMQCJ+YwgcTiAvHD7QyM=";
     };
 
@@ -35414,7 +35460,7 @@ with self;
     pname = "Test-UNIXSock";
     version = "0.4";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FU/FUJIWARA/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/F/FU/FUJIWARA/Test-UNIXSock-${version}.tar.gz";
       hash = "sha256-NzC0zBA0Es+/b+JHvbwwC+l94wnMmxxcvVc3E7hojz8=";
     };
     buildInputs = [ ModuleBuildTiny ];
@@ -35724,9 +35770,9 @@ with self;
       hash = "sha256-K+oyCfGOJzsZPjF1pC0mk5GRnkmrEGtuJSOV0nIYL2U=";
     };
     propagatedBuildInputs = [ pkgs.aspell ];
-    ASPELL_CONF = "dict-dir ${pkgs.aspellDicts.en}/lib/aspell";
+    env.ASPELL_CONF = "dict-dir ${pkgs.aspellDicts.en}/lib/aspell";
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.aspell}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.aspell}/lib -laspell";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.aspell}/lib -laspell";
     meta = {
       description = "Perl interface to the GNU Aspell library";
       license = with lib.licenses; [
@@ -38338,7 +38384,7 @@ with self;
       pkgs.libxt
       pkgs.libxtst
     ];
-    NIX_CFLAGS_LINK = "-lX11";
+    env.NIX_CFLAGS_LINK = "-lX11";
     doCheck = false; # requires an X server
     meta = {
       description = "Provides GUI testing/interaction routines";
@@ -38381,7 +38427,7 @@ with self;
       XMLSimple
       XSObjectMagic
     ];
-    NIX_CFLAGS_LINK = "-lxcb -lxcb-util -lxcb-xinerama -lxcb-icccm -lxcb-randr -lxcb-xkb";
+    env.NIX_CFLAGS_LINK = "-lxcb -lxcb-util -lxcb-xinerama -lxcb-icccm -lxcb-randr -lxcb-xkb";
     doCheck = false; # requires an X server
     meta = {
       description = "Perl bindings for libxcb";
@@ -38624,7 +38670,7 @@ with self;
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0210.tar.gz";
       hash = "sha256-opvz8Aq5ye4EIYFU4K/I95m/I2dOuZwantTeH0BZpI0=";
     };
-    SKIP_SAX_INSTALL = 1;
+    env.SKIP_SAX_INSTALL = 1;
     buildInputs = [
       AlienBuild
       AlienLibxml2
@@ -39477,7 +39523,7 @@ with self;
       hash = "sha256-BpsWQRcpX6gtJSlAocqLMIrYsfPocjvk6CaqqX9wbWw=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
+    env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
 
     makeMakerFlags = [ "--prefix-openssl=${pkgs.openssl.dev}" ];
 

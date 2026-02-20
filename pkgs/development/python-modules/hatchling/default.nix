@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # runtime
   editables,
   packaging,
   pathspec,
   pluggy,
-  tomli,
   trove-classifiers,
 
   # tests
@@ -36,8 +34,7 @@ buildPythonPackage rec {
     pathspec
     pluggy
     trove-classifiers
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   pythonImportsCheck = [
     "hatchling"

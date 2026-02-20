@@ -19,23 +19,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "navidrome";
-  version = "0.59.0";
+  version = "0.60.0";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YXyNnjaLgu4FXvgsbbzCOZRIuN96h+KDrXmJe1607JI=";
+    hash = "sha256-K7Cen0gADYQc0jxd2keBpTJlyQyuYL02j7/yiNtjZvQ=";
   };
 
-  vendorHash = "sha256-FFtTQuXb5GYxZmUiNjZNO6K8QYF0TLH4JU2JmAzZhqQ=";
+  vendorHash = "sha256-DCz/WKZXnZy109WgStCK7NJg8VpR3IJEaQZLMDXdegk=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/ui";
-    hash = "sha256-RTye1ZbxLqfkZUvV0NLN7wcRnri3sC5Lfi8RXVG1bLM=";
+    hash = "sha256-Z1kSRNSG1zeLA6rtbcTdLJnNWclsVTS5Xfc4D9M0dl4=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,10 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     taglib
     zlib
+  ];
+
+  excludedPackages = [
+    "plugins"
   ];
 
   ldflags = [
@@ -95,7 +99,6 @@ buildGoModule (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [
       aciceri
-      squalus
       tebriel
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)

@@ -4,14 +4,14 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "skypilot";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "skypilot-org";
     repo = "skypilot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jLjYsBkb5Tba3q/mdqCWK04FLg0pEdHyZH3vuMIP6tg=";
   };
 
@@ -57,4 +57,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ seanrmurphy ];
     mainProgram = "sky";
   };
-}
+})

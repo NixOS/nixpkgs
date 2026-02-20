@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oscar";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitLab {
     owner = "CrimsonNape";
     repo = "OSCAR-code";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-idooSDmozMtf0akhbaQP1aBIv6Ae9UMhMmN1P48u7FE=";
+    hash = "sha256-4ekhhzX//u/UFrqIriPmhxdjEGJ1LXczZU2ZCmC+Uvo=";
   };
 
   buildInputs = [
@@ -63,7 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Software for reviewing and exploring data produced by CPAP and related machines used in the treatment of sleep apnea";
     mainProgram = "OSCAR";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.roconnor ];
+    maintainers = with lib.maintainers; [
+      roconnor
+      ilkecan
+    ];
     # Someone needs to create a suitable installPhase for Darwin and Windows.
     # See https://gitlab.com/pholy/OSCAR-code/-/tree/master/Building.
     platforms = lib.platforms.linux;

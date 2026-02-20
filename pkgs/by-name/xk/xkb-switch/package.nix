@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libX11,
+  libx11,
   libxkbfile,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    libX11
+    libx11
     libxkbfile
   ];
 

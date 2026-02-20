@@ -72,6 +72,7 @@
   gitMinimal,
   # opencode-nvim,
   opencode,
+  lsof,
   # Preview-nvim dependencies
   md-tui,
   # sidekick-nvim dependencies
@@ -299,6 +300,10 @@ assertNoAdditions {
       "nvchad.configs.nvimtree"
       "nvchad.configs.telescope"
     ];
+  };
+
+  blink-cmp-conventional-commits = super.blink-cmp-conventional-commits.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
   };
 
   blink-cmp-copilot = super.blink-cmp-copilot.overrideAttrs {
@@ -942,14 +947,6 @@ assertNoAdditions {
   };
 
   cpsm = super.cpsm.overrideAttrs (old: {
-    # CMake 4 dropped support of versions lower than 3.5, and versions
-    # lower than 3.10 are deprecated.
-    postPatch = (old.postPatch or "") + ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail \
-          "cmake_minimum_required(VERSION 2.8.12)" \
-          "cmake_minimum_required(VERSION 3.10)"
-    '';
     nativeBuildInputs = [ cmake ];
     buildInputs = [
       python3
@@ -1612,6 +1609,13 @@ assertNoAdditions {
     dependencies = [ self.lush-nvim ];
   };
 
+  jj-nvim = super.jj-nvim.overrideAttrs {
+    # Don't install 30 MB of GIFs
+    postPatch = ''
+      rm -rf assets/
+    '';
+  };
+
   jupytext-nvim = super.jupytext-nvim.overrideAttrs {
     passthru.python3Dependencies = ps: [ ps.jupytext ];
   };
@@ -2015,6 +2019,19 @@ assertNoAdditions {
   material-vim = super.material-vim.overrideAttrs {
     # Optional integration
     checkInputs = [ self.lualine-nvim ];
+  };
+
+  mcphub-nvim = super.mcphub-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    checkInputs = [
+      # Required by mcphub.extensions.luali
+      self.lualine-nvim
+    ];
+
+    nvimSkipModules = [
+      # ENOENT: no such file or directory (cmd): 'npm'
+      "bundled_build"
+    ];
   };
 
   mind-nvim = super.mind-nvim.overrideAttrs {
@@ -2714,6 +2731,7 @@ assertNoAdditions {
     dependencies = with self; [
       none-ls-nvim
       nvim-treesitter-parsers.nu
+      plenary-nvim
     ];
   };
 
@@ -2750,15 +2768,15 @@ assertNoAdditions {
     checkInputs = [ self.toggleterm-nvim ];
     dependencies = with self; [
       nvim-treesitter-legacy
-      nvim-treesitter-legacy-parsers.c_sharp
-      nvim-treesitter-legacy-parsers.go
-      nvim-treesitter-legacy-parsers.haskell
-      nvim-treesitter-legacy-parsers.javascript
-      nvim-treesitter-legacy-parsers.python
-      nvim-treesitter-legacy-parsers.ruby
-      nvim-treesitter-legacy-parsers.rust
-      nvim-treesitter-legacy-parsers.typescript
-      nvim-treesitter-legacy-parsers.zig
+      nvim-treesitter-parsers.c_sharp
+      nvim-treesitter-parsers.go
+      nvim-treesitter-parsers.haskell
+      nvim-treesitter-parsers.javascript
+      nvim-treesitter-parsers.python
+      nvim-treesitter-parsers.ruby
+      nvim-treesitter-parsers.rust
+      nvim-treesitter-parsers.typescript
+      nvim-treesitter-parsers.zig
     ];
     nvimSkipModules = [
       # Broken runners
@@ -2781,6 +2799,8 @@ assertNoAdditions {
       # Meta can't be required
       "nvim-tree._meta.api"
       "nvim-tree._meta.api_decorator"
+      "nvim-tree._meta.api.decorator_example"
+      "nvim-tree._meta.classes"
       "nvim-tree._meta.config.filters"
       "nvim-tree._meta.config.actions"
       "nvim-tree._meta.config.git"
@@ -2838,6 +2858,10 @@ assertNoAdditions {
 
   nvim-treesitter-textobjects = super.nvim-treesitter-textobjects.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
+  };
+
+  nvim-treesitter-textobjects-legacy = super.nvim-treesitter-textobjects-legacy.overrideAttrs {
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-treesitter-textsubjects = super.nvim-treesitter-textsubjects.overrideAttrs {
@@ -2973,6 +2997,7 @@ assertNoAdditions {
     runtimeDeps = [
       curl
       opencode
+      lsof
     ];
   };
 
@@ -3751,6 +3776,7 @@ assertNoAdditions {
     ];
     dependencies = with self; [
       nvim-lspconfig
+      plenary-nvim
     ];
   };
 

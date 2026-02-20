@@ -13,7 +13,7 @@
   libjpeg,
   libpng,
   libwebp,
-  libX11,
+  libx11,
   libgbm,
   ninja,
   python3,
@@ -80,7 +80,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     libglvnd
-    libX11
+    libx11
     libgbm
   ];
 

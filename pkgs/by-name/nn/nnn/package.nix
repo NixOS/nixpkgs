@@ -59,8 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isMusl musl-fts
   ++ lib.optional withPcre pcre;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-I${musl-fts}/include";
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_CFLAGS_COMPILE = "-I${musl-fts}/include";
+    NIX_LDFLAGS = "-lfts";
+  };
 
   makeFlags = [
     "PREFIX=$(out)"

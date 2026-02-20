@@ -14,8 +14,8 @@
 # A wrapper that makes sure sage finds its docs (if they were build) and the
 # jupyter kernel spec.
 
-stdenv.mkDerivation rec {
-  version = src.version;
+stdenv.mkDerivation (finalAttrs: {
+  version = finalAttrs.src.version;
   pname = "sage";
   src = sage-with-env.env.lib.src;
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin"
     makeWrapper "${sage-with-env}/bin/sage" "$out/bin/sage" \
-      --set SAGE_DOC_SRC_OVERRIDE "${src}/src/doc" ${lib.optionalString withDoc "--set SAGE_DOC_OVERRIDE ${sagedoc}/share/doc/sage"} \
+      --set SAGE_DOC_SRC_OVERRIDE "${finalAttrs.src}/src/doc" ${lib.optionalString withDoc "--set SAGE_DOC_OVERRIDE ${sagedoc}/share/doc/sage"} \
       --prefix JUPYTER_PATH : "${jupyter-kernel-specs}"
   '';
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
   };
-}
+})

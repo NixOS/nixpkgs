@@ -8,12 +8,12 @@
   bash,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "patchance";
   version = "1.1.0";
 
   src = fetchurl {
-    url = "https://github.com/Houston4444/Patchance/releases/download/v${version}/Patchance-${version}-source.tar.gz";
+    url = "https://github.com/Houston4444/Patchance/releases/download/v${finalAttrs.version}/Patchance-${finalAttrs.version}-source.tar.gz";
     hash = "sha256-wlkEKkPH2C/y7TQicIVycWbtLUdX2hICcUWi7nFN51w=";
   };
 
@@ -61,4 +61,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -86,7 +86,7 @@ let
     installPhase = ''
       install -D geogebra/* -t "$out/libexec/geogebra/"
 
-      # The bundled jogl (required for 3D graphics) links to libXxf86vm, and loads libGL at runtime
+      # The bundled jogl (required for 3D graphics) links to libxxf86vm, and loads libGL at runtime
       # OpenGL versions newer than 3.0 cause "javax.media.opengl.GLException: Not a GL2 implementation"
       makeWrapper "$out/libexec/geogebra/geogebra" "$out/bin/geogebra" \
         --prefix LD_LIBRARY_PATH : "${

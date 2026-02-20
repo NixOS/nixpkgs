@@ -32,14 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ scons ];
   buildInputs = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  CPPPATH = symlinkJoin {
-    name = "nsis-includes";
-    paths = [ zlib.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
-  };
+  env = {
+    CPPPATH = symlinkJoin {
+      name = "nsis-includes";
+      paths = [ zlib.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+    };
 
-  LIBPATH = symlinkJoin {
-    name = "nsis-libs";
-    paths = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+    LIBPATH = symlinkJoin {
+      name = "nsis-libs";
+      paths = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+    };
   };
 
   sconsFlags = [

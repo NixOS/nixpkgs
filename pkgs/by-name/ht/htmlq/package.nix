@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "htmlq";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "mgdm";
     repo = "htmlq";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kZtK2QuefzfxxuE1NjXphR7otr+RYfMif/RSpR6TxY0=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "htmlq";
   };
-}
+})

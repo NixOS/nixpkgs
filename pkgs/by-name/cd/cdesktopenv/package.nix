@@ -2,26 +2,26 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   bison,
   mksh,
   perl,
-  libXinerama,
-  libXt,
-  libXext,
+  libxinerama,
+  libxt,
+  libxext,
   libtirpc,
   motif,
-  libXft,
+  libxft,
   xbitmaps,
   libjpeg,
-  libXmu,
-  libXdmcp,
-  libXScrnSaver,
+  libxmu,
+  libxdmcp,
+  libxscrnsaver,
   bdftopcf,
   ncompress,
   mkfontdir,
   tcl,
-  libXaw,
+  libxaw,
   libxcrypt,
   glibcLocales,
   autoPatchelfHook,
@@ -31,7 +31,7 @@
   autoreconfHook,
   opensp,
   flex,
-  libXpm,
+  libxpm,
   rpcsvc-proto,
   sessreg,
   pkg-config,
@@ -71,23 +71,23 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    libX11
-    libXinerama
-    libXt
-    libXext
+    libx11
+    libxinerama
+    libxt
+    libxext
     libtirpc
     motif
-    libXft
+    libxft
     xbitmaps
     libjpeg
-    libXmu
-    libXdmcp
-    libXScrnSaver
+    libxmu
+    libxdmcp
+    libxscrnsaver
     tcl
-    libXaw
+    libxaw
     mksh
     libxcrypt
-    libXpm
+    libxpm
     sessreg
     lmdb
   ];

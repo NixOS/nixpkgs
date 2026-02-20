@@ -12,31 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencc";
-  version = "1.1.9";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "BYVoid";
     repo = "OpenCC";
-    rev = "ver.${finalAttrs.version}";
-    sha256 = "sha256-JBTegQs9ALp4LdKKYMNp9GYEgqR9O8IkX6LqatvaTic=";
+    tag = "ver.${finalAttrs.version}";
+    hash = "sha256-T2bl4JVE04/64bLdBj5BB+2G09kDFyLnI+hx23h5q68=";
   };
-
-  patches = [
-    # fix build with gcc15 by adding cstdint include
-    (fetchpatch {
-      url = "https://github.com/BYVoid/OpenCC/commit/3d3adca2dbee0da7d33eb3c3563299fcbd2255e3.patch";
-      hash = "sha256-4ZQxVnEHnNBKtEu0IPnSC/ZX7gm2cJ1Ss00PvCZr5P8=";
-    })
-    (fetchpatch {
-      url = "https://github.com/BYVoid/OpenCC/commit/72cae18cfe4272f2b11c9ec1c44d6af7907abcab.patch";
-      hash = "sha256-Cd95AsW/tLk2l8skxqfEfQUm0t23G4ocoirauwMbuwk=";
-    })
-    (fetchpatch {
-      name = "CVE-2025-15536.patch";
-      url = "https://github.com/BYVoid/OpenCC/commit/345c9a50ab07018f1b4439776bad78a0d40778ec.patch";
-      hash = "sha256-lwzVRcCkMjHniaOQeoicO9fpEhyku2yhiPREk0WoXVM=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

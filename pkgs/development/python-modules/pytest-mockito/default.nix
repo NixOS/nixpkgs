@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-mockito";
-  version = "0.0.5";
+  version = "0.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kaste";
     repo = "pytest-mockito";
     rev = version;
-    hash = "sha256-GX3esFlMtKRCTjvTPS4jrnK/mV9eIENvDXRo5sOqBGc=";
+    hash = "sha256-iXL9INddGWkBTPoR1fvyeRts8JPKoyeqAmaHRBlXq2k=";
   };
 
   build-system = [

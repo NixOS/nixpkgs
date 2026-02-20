@@ -7,7 +7,7 @@
   jansson,
   lib,
   libGL,
-  libX11,
+  libx11,
   libjpeg,
   libpng,
   libsndfile,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     jansson
     libGL
-    libX11
+    libx11
     libjpeg
     libpng
     libsndfile

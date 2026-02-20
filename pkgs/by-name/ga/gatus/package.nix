@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gatus";
   version = "5.34.0";
 
   src = fetchFromGitHub {
     owner = "TwiN";
     repo = "gatus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+Ulttz13SzPnB+EFsyK2H/bv2vXn+uA/zv6UY9HKrgY=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ undefined-moe ];
     mainProgram = "gatus";
   };
-}
+})

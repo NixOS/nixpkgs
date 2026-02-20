@@ -8,14 +8,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "procs";
   version = "0.14.10";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "procs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+qY0BG3XNCm5vm5W6VX4a0JWCb4JSat/oK9GLXRis/M=";
   };
 
@@ -40,11 +40,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
-    changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/dalance/procs/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sciencentistguy
     ];
     mainProgram = "procs";
   };
-}
+})

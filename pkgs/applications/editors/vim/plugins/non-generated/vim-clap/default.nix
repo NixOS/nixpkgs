@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   pkg-config,
   libgit2,
   zlib,
@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "0.54";
+  version = "0.55";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
     tag = "v${version}";
-    hash = "sha256-rhCum59GCIAwdi5QgSaPfrALelAIMncNetu81i53Q8c=";
+    hash = "sha256-vtIA2URex7DOBIZ9KW++/ziqhVd/GDJOKYTUULdMqGc=";
   };
 
   meta = {
@@ -33,19 +33,19 @@ let
     pname = "maple";
     inherit version src meta;
 
-    cargoHash = "sha256-FEeSwa8KmIyfhWAU9Dpric6uB2e0yK+Tig/k2zwq2Rg=";
+    cargoHash = "sha256-RMDlLpPWDLHCRWLz7NAAQhp6FhKA7aNYqx9MCqR8vYM=";
+
+    cargoPatches = [
+      # TODO: remove after next release
+      # https://github.com/liuchengxu/vim-clap/issues/1121
+      (fetchpatch2 {
+        url = "https://github.com/liuchengxu/vim-clap/commit/b95d4a3f9371271096553df1240b3f59a2dc99ec.patch?full_index=1";
+        hash = "sha256-FvGuSFHMOprPSUlR82SR/IMNDd3RaGECQm2wfPCOW4Y=";
+      })
+    ];
 
     nativeBuildInputs = [
       pkg-config
-    ];
-
-    # Remove after next release
-    cargoPatches = [
-      (fetchpatch {
-        name = "rust-1.80";
-        url = "https://github.com/liuchengxu/vim-clap/commit/3e8d001f5c9be10e4bb680a1d409326902c96c10.patch";
-        hash = "sha256-qMflfQEssH4OGXmLFUcQwzbYWgPD0S/pClb35ZRUaPM=";
-      })
     ];
 
     buildInputs = [

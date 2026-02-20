@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "luigi";
   version = "3.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-QbFIUCI8YZ2QBrMKzacz51a4g/x+YIFCBVdmRxkMluM=";
   };
 
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
       handling failures, command line integration, and much more.
     '';
     homepage = "https://github.com/spotify/luigi";
-    changelog = "https://github.com/spotify/luigi/releases/tag/${version}";
+    changelog = "https://github.com/spotify/luigi/releases/tag/${finalAttrs.version}";
     license = [ lib.licenses.asl20 ];
   };
-}
+})

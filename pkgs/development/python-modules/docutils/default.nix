@@ -5,7 +5,6 @@
   flit-core,
   pillow,
   python,
-  pythonOlder,
 }:
 
 # Note: this package is used to build LLVM’s documentation, which is part of the Darwin stdenv.

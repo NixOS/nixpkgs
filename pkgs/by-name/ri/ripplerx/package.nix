@@ -9,11 +9,11 @@
   expat,
   fontconfig,
   freetype,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   nix-update-script,
   makeDesktopItem,
   copyDesktopItems,
@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig
     freetype
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
   ];
 
   env = {

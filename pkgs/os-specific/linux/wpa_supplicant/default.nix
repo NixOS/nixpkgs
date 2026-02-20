@@ -179,5 +179,6 @@ stdenv.mkDerivation rec {
       marcweber
     ];
     platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "w1.fi" version;
   };
 }

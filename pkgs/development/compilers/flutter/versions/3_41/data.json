@@ -1,73 +1,73 @@
 {
-  "version": "3.41.0-0.2.pre",
-  "engineVersion": "15d137647e372c59e8dcb78f670ab7686a0d1031",
+  "version": "3.41.1",
+  "engineVersion": "3452d735bd38224ef2db85ca763d862d6326b17f",
   "engineSwiftShaderHash": "sha256-qbtCl2nTpmtp9dnaoXc7rF3RqLnAZEmzw1BzPoCRWrc=",
   "engineSwiftShaderRev": "794b0cfce1d828d187637e6d932bae484fbe0976",
-  "channel": "beta",
+  "channel": "stable",
   "engineHashes": {
     "aarch64-linux": {
-      "aarch64-linux": "sha256-bRebKpS4FiIdhnTIsv0KfV3GqtRPrYZJrKq4R67iFpA=",
-      "x86_64-linux": "sha256-bRebKpS4FiIdhnTIsv0KfV3GqtRPrYZJrKq4R67iFpA="
+      "aarch64-linux": "sha256-XZvyhT3X4MBehSxWdceVFCNH9teXuGYjTaquuoiVp0w=",
+      "x86_64-linux": "sha256-XZvyhT3X4MBehSxWdceVFCNH9teXuGYjTaquuoiVp0w="
     },
     "x86_64-linux": {
-      "aarch64-linux": "sha256-zvyMMc5vmtyl0W3H14JcxhyxAOYtRfqohb6F0hYFRcM=",
-      "x86_64-linux": "sha256-zvyMMc5vmtyl0W3H14JcxhyxAOYtRfqohb6F0hYFRcM="
+      "aarch64-linux": "sha256-u2JDoBxDdOIj7no+9Ym+JLwAQZxTKXmOjrRtaDlktuc=",
+      "x86_64-linux": "sha256-u2JDoBxDdOIj7no+9Ym+JLwAQZxTKXmOjrRtaDlktuc="
     }
   },
-  "dartVersion": "3.11.0-296.4.beta",
+  "dartVersion": "3.11.0",
   "dartHash": {
-    "x86_64-linux": "sha256-7K4IreZXaF9l8XL544miwKs5GjhxWQE51otR6cD0Qkk=",
-    "aarch64-linux": "sha256-5aQGrc1GD8hfut0qnGH+u4TcrHzCm0fM9rvu0dFGSQk=",
-    "x86_64-darwin": "sha256-/hifcVYo3B18i/77KCtYfHb1kj4ZdcIIaKBpo04BW/Q=",
-    "aarch64-darwin": "sha256-HRucig/9pSM9Z2EbRRjyL3/3BNz+63J76dMwBnjVuPY="
+    "x86_64-linux": "sha256-8xcptWe+MYx8wjva/muamX+n3b+CnfUBbwZiJ7aqDJk=",
+    "aarch64-linux": "sha256-dr/vXICcCCF332xRu/SADY1NdV8ulvt1Fiv40rAy74M=",
+    "x86_64-darwin": "sha256-Wlwpx6g4EmkzKAEyaxHMrc8M/nMB7QGj8G6BdmvLjXQ=",
+    "aarch64-darwin": "sha256-IjJFpC6rG4EeUC4VYluGcHX/4BLenrU3Skzd4u4IdTQ="
   },
-  "flutterHash": "sha256-thAwWiddq13E/s8MOMzqIC7xtVcZI8RwFB1qwiUTIjw=",
+  "flutterHash": "sha256-qn0r6/JHPN+bFrsxkZ6NvVo3yLFgYnt70LwzsKXNRSk=",
   "artifactHashes": {
     "android": {
-      "aarch64-darwin": "sha256-RfHYnEbc2Plwe9/qJ1qgWLPheYodrA8TiKohpjh0q8c=",
-      "aarch64-linux": "sha256-uUXiXB5Ar4VN25vaBoHTI+HuC8QLQ5YCcjPUMF+753A=",
-      "x86_64-darwin": "sha256-RfHYnEbc2Plwe9/qJ1qgWLPheYodrA8TiKohpjh0q8c=",
-      "x86_64-linux": "sha256-uUXiXB5Ar4VN25vaBoHTI+HuC8QLQ5YCcjPUMF+753A="
+      "aarch64-darwin": "sha256-9bjCiMYvcwMMWU8lJdJB+f2P0WxZzzjfs/pUD4qr74g=",
+      "aarch64-linux": "sha256-u8O8uDaGrmAPexC+TIq0/dlnt3+B5+RQNiyk2GnVWLM=",
+      "x86_64-darwin": "sha256-9bjCiMYvcwMMWU8lJdJB+f2P0WxZzzjfs/pUD4qr74g=",
+      "x86_64-linux": "sha256-u8O8uDaGrmAPexC+TIq0/dlnt3+B5+RQNiyk2GnVWLM="
     },
     "fuchsia": {
-      "aarch64-darwin": "sha256-wwORZIhIAGvH0ksdyLRUIsmoQFz3sWp/zZ7Md6hbkFQ=",
-      "aarch64-linux": "sha256-wwORZIhIAGvH0ksdyLRUIsmoQFz3sWp/zZ7Md6hbkFQ=",
-      "x86_64-darwin": "sha256-wwORZIhIAGvH0ksdyLRUIsmoQFz3sWp/zZ7Md6hbkFQ=",
-      "x86_64-linux": "sha256-wwORZIhIAGvH0ksdyLRUIsmoQFz3sWp/zZ7Md6hbkFQ="
+      "aarch64-darwin": "sha256-hFiXjW34BhtPsw5jC22SqDsfMQzuZVidci6a6b63L4o=",
+      "aarch64-linux": "sha256-hFiXjW34BhtPsw5jC22SqDsfMQzuZVidci6a6b63L4o=",
+      "x86_64-darwin": "sha256-hFiXjW34BhtPsw5jC22SqDsfMQzuZVidci6a6b63L4o=",
+      "x86_64-linux": "sha256-hFiXjW34BhtPsw5jC22SqDsfMQzuZVidci6a6b63L4o="
     },
     "ios": {
-      "aarch64-darwin": "sha256-fRHm09zjIC9oyHOpc2o/KQg8xCII+iaB4/CErKlItF4=",
-      "aarch64-linux": "sha256-fRHm09zjIC9oyHOpc2o/KQg8xCII+iaB4/CErKlItF4=",
-      "x86_64-darwin": "sha256-fRHm09zjIC9oyHOpc2o/KQg8xCII+iaB4/CErKlItF4=",
-      "x86_64-linux": "sha256-fRHm09zjIC9oyHOpc2o/KQg8xCII+iaB4/CErKlItF4="
+      "aarch64-darwin": "sha256-lPCidjKmqgotphFvjWUL2t3o6NBIFos1lfh958pCATQ=",
+      "aarch64-linux": "sha256-lPCidjKmqgotphFvjWUL2t3o6NBIFos1lfh958pCATQ=",
+      "x86_64-darwin": "sha256-lPCidjKmqgotphFvjWUL2t3o6NBIFos1lfh958pCATQ=",
+      "x86_64-linux": "sha256-lPCidjKmqgotphFvjWUL2t3o6NBIFos1lfh958pCATQ="
     },
     "linux": {
-      "aarch64-darwin": "sha256-Zx9zWR0eOsiQGjnN8CIxKRNE0w7ck2ZzVEK71mqXMmc=",
-      "aarch64-linux": "sha256-Zx9zWR0eOsiQGjnN8CIxKRNE0w7ck2ZzVEK71mqXMmc=",
-      "x86_64-darwin": "sha256-jw+ZD2QIQsg6LbUchkDkMgyYKU+b/G9ZNVNCewBS0E4=",
-      "x86_64-linux": "sha256-jw+ZD2QIQsg6LbUchkDkMgyYKU+b/G9ZNVNCewBS0E4="
+      "aarch64-darwin": "sha256-RwXbextfT+342Zg19z0k1EykHo6flPYPHuHE5czDs+4=",
+      "aarch64-linux": "sha256-RwXbextfT+342Zg19z0k1EykHo6flPYPHuHE5czDs+4=",
+      "x86_64-darwin": "sha256-J9cGfpF5LIjY17lVJlmlcyucLCpT49jt5P8jAWyeoiU=",
+      "x86_64-linux": "sha256-J9cGfpF5LIjY17lVJlmlcyucLCpT49jt5P8jAWyeoiU="
     },
     "macos": {
-      "aarch64-darwin": "sha256-OTUv/k3Nts5BBzz+dWQq6EeBPeMzfUvIo3A39K5xRgA=",
-      "aarch64-linux": "sha256-OTUv/k3Nts5BBzz+dWQq6EeBPeMzfUvIo3A39K5xRgA=",
-      "x86_64-darwin": "sha256-OTUv/k3Nts5BBzz+dWQq6EeBPeMzfUvIo3A39K5xRgA=",
-      "x86_64-linux": "sha256-OTUv/k3Nts5BBzz+dWQq6EeBPeMzfUvIo3A39K5xRgA="
+      "aarch64-darwin": "sha256-xHoNZrOn5yu734jDEE0RN+cNO/DCuiNqwlEG1br82fY=",
+      "aarch64-linux": "sha256-xHoNZrOn5yu734jDEE0RN+cNO/DCuiNqwlEG1br82fY=",
+      "x86_64-darwin": "sha256-xHoNZrOn5yu734jDEE0RN+cNO/DCuiNqwlEG1br82fY=",
+      "x86_64-linux": "sha256-xHoNZrOn5yu734jDEE0RN+cNO/DCuiNqwlEG1br82fY="
     },
     "universal": {
-      "aarch64-darwin": "sha256-nWjUPgVwG0TJyTP1VpsJMI51/flfQyBhcsgv1DJpnZE=",
-      "aarch64-linux": "sha256-qmfIGpAqJl8giZrv918oJP04AD03XXXb18KPB2aP30U=",
-      "x86_64-darwin": "sha256-+L49rfv8uhBvqi5ezzOF16QFKgkxX/cleZDlt8NR5Oc=",
-      "x86_64-linux": "sha256-ifFFlLsgN7et/hpBQewYYeN7EzCUQAGUj5nlJgNt2UI="
+      "aarch64-darwin": "sha256-OKUry7x+5lrGzElLnmltaIaLyq5tHtNR40z33FgL+Z0=",
+      "aarch64-linux": "sha256-ZqmkJ5KGnKU4FGAOBGTF7vU7XZ7UmgCML0Pdg0bXNn4=",
+      "x86_64-darwin": "sha256-orb4XUtX9Uq3Uq1xwoZAzrd+GgkOKGiOek3NEEDVQR4=",
+      "x86_64-linux": "sha256-uN/wDyFnMLxqEfFR2PWesRGnigbsnqzs+mPDxEMZ+1g="
     },
     "web": {
-      "aarch64-darwin": "sha256-ReQNXUPZHGfL0grqK0cjc7xppYvxwFxJQl/FFGAqeDQ=",
-      "aarch64-linux": "sha256-ReQNXUPZHGfL0grqK0cjc7xppYvxwFxJQl/FFGAqeDQ=",
-      "x86_64-darwin": "sha256-ReQNXUPZHGfL0grqK0cjc7xppYvxwFxJQl/FFGAqeDQ=",
-      "x86_64-linux": "sha256-ReQNXUPZHGfL0grqK0cjc7xppYvxwFxJQl/FFGAqeDQ="
+      "aarch64-darwin": "sha256-sQNM2Hx+NEMKtbCv2tX9kh45TB/NH9yaRm4eZqDfJQE=",
+      "aarch64-linux": "sha256-sQNM2Hx+NEMKtbCv2tX9kh45TB/NH9yaRm4eZqDfJQE=",
+      "x86_64-darwin": "sha256-sQNM2Hx+NEMKtbCv2tX9kh45TB/NH9yaRm4eZqDfJQE=",
+      "x86_64-linux": "sha256-sQNM2Hx+NEMKtbCv2tX9kh45TB/NH9yaRm4eZqDfJQE="
     },
     "windows": {
-      "x86_64-darwin": "sha256-u77tk4Spp8AyujimnFAop2o5Orm5OlaBZ6bmbO2OG9w=",
-      "x86_64-linux": "sha256-u77tk4Spp8AyujimnFAop2o5Orm5OlaBZ6bmbO2OG9w="
+      "x86_64-darwin": "sha256-YZ7HehFv90UHmv0hfcyv0YsQxsNRRzOitPdf5BqaJJM=",
+      "x86_64-linux": "sha256-YZ7HehFv90UHmv0hfcyv0YsQxsNRRzOitPdf5BqaJJM="
     }
   },
   "pubspecLock": {
@@ -896,31 +896,31 @@
         "dependency": "direct dev",
         "description": {
           "name": "test",
-          "sha256": "77cc98ea27006c84e71a7356cf3daf9ddbde2d91d84f77dbfe64cf0e4d9611ae",
+          "sha256": "54c516bbb7cee2754d327ad4fca637f78abfc3cbcc5ace83b3eda117e42cd71a",
           "url": "https://pub.dev"
         },
         "source": "hosted",
-        "version": "1.28.0"
+        "version": "1.29.0"
       },
       "test_api": {
         "dependency": "direct main",
         "description": {
           "name": "test_api",
-          "sha256": "19a78f63e83d3a61f00826d09bc2f60e191bf3504183c001262be6ac75589fb8",
+          "sha256": "93167629bfc610f71560ab9312acdda4959de4df6fac7492c89ff0d3886f6636",
           "url": "https://pub.dev"
         },
         "source": "hosted",
-        "version": "0.7.8"
+        "version": "0.7.9"
       },
       "test_core": {
         "dependency": "direct main",
         "description": {
           "name": "test_core",
-          "sha256": "f1072617a6657e5fc09662e721307f7fb009b4ed89b19f47175d11d5254a62d4",
+          "sha256": "394f07d21f0f2255ec9e3989f21e54d3c7dc0e6e9dbce160e5a9c1a6be0e2943",
           "url": "https://pub.dev"
         },
         "source": "hosted",
-        "version": "0.6.14"
+        "version": "0.6.15"
       },
       "typed_data": {
         "dependency": "direct main",

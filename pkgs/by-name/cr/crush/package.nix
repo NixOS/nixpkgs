@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "crush";
-  version = "0.36.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xitCvejiVts9kkvtcVwh/zaeWIzDj0jx9xQMh2h+9Ns=";
+    hash = "sha256-Ev3Kk+jFnjc8pdozeeqktxDtYjyODvdN8lkiynMKe/o=";
   };
 
-  vendorHash = "sha256-8Tw+O57E5aKFO2bKimiXRK9tGnAAQr3qsuP6P9LgBjw=";
+  vendorHash = "sha256-u2K0CmCFFrlNVUJhof/8/OtX2ruKvVAIhyyE5Uyoj6Y=";
 
   ldflags = [
     "-s"
@@ -54,6 +54,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       x123
       malik
+      davinci42
     ];
     mainProgram = "crush";
   };

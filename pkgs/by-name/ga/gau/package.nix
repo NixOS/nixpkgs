@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gau";
   version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "lc";
     repo = "gau";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-B2l5joHeFDjYmdb3F1FFDKjIKENZu92O2sMlkf3Sf6Y=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gau";
   };
-}
+})

@@ -26,6 +26,8 @@
   yarn-berry_4,
   runCommand,
 
+  wrapGAppsHook3,
+
   swift,
 
   mesa,
@@ -144,7 +146,9 @@ python3Packages.buildPythonApplication rec {
     yarn-berry_4.yarnBerryConfigHook
     imagemagick
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin swift;
+  ++ lib.optional stdenv.hostPlatform.isDarwin swift
+  # Needed for when Qt uses a system's GTK file picker.
+  ++ lib.optional stdenv.hostPlatform.isLinux wrapGAppsHook3;
 
   buildInputs = [
     qt6.qtbase
@@ -170,6 +174,7 @@ python3Packages.buildPythonApplication rec {
 
   dontUseNinjaInstall = false;
   dontWrapQtApps = true;
+  dontWrapGApps = stdenv.hostPlatform.isLinux;
 
   env = {
     # Activate optimizations
@@ -282,6 +287,7 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=(
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''"''${gappsWrapperArgs[@]}"''}
       "''${qtWrapperArgs[@]}"
       --prefix PATH ':' "${lame}/bin:${mpv-unwrapped}/bin"
       --prefix PYTHONPATH ':' "$lib/${python3.sitePackages}"

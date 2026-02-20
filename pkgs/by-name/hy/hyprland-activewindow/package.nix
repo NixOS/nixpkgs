@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprland-activewindow";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "FieldOfClay";
     repo = "hyprland-activewindow";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oH3BsS0KqnNdYe7HWHlfRSiUJx+vC3IveN+mcEgwZLs=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "hyprland-activewindow";
   };
-}
+})

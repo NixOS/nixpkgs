@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-sweep";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "holmgr";
     repo = "cargo-sweep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/a7quBIX3gr9vVwQfDHdfkt4Xt7UYpjMNiyqivhOvBQ=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

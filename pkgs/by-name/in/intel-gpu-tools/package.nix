@@ -12,7 +12,7 @@
   meson,
   ninja,
   pkg-config,
-  utilmacros,
+  util-macros,
 
   # runtime
   alsa-lib,
@@ -27,10 +27,10 @@
   liboping,
   libpciaccess,
   libunwind,
-  libX11,
-  libXext,
-  libXrandr,
-  libXv,
+  libx11,
+  libxext,
+  libxrandr,
+  libxv,
   openssl,
   peg,
   procps,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    utilmacros
+    util-macros
   ];
 
   buildInputs = [
@@ -78,10 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     liboping
     libpciaccess
     libunwind
-    libX11
-    libXext
-    libXrandr
-    libXv
+    libx11
+    libxext
+    libxrandr
+    libxv
     openssl
     peg
     procps

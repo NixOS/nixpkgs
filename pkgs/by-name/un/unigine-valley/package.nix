@@ -13,11 +13,11 @@
   # Runtime dependencies
   fontconfig,
   freetype,
-  libX11,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxrender,
   libglvnd,
   openal,
 }:
@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc # libstdc++.so.6
     fontconfig
     freetype
-    libX11
-    libXext
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxinerama
+    libxrandr
+    libxrender
     libglvnd
     openal
   ];

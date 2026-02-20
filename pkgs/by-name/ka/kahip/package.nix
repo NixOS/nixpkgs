@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kahip";
-  version = "3.21";
+  version = "3.22";
 
   src = fetchFromGitHub {
     owner = "KaHIP";
     repo = "KaHIP";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FVbJJpz3ecfME0KZN/5AHuqCkPl/UpR+kHHMyxFzErY=";
+    hash = "sha256-uZRNATfrQgAn5Wsmpk9tU0ojXHbLJ8DOOuXRJJhkhFM=";
   };
 
   nativeBuildInputs = [

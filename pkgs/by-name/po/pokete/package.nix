@@ -7,7 +7,7 @@
   faketty,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pokete";
   version = "0.9.1";
 
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lxgr-linux";
     repo = "pokete";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-T18908Einsgful8hYMVHl0cL4sIYFvhpy0MbLIcVhxs=";
   };
 
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     pokete-version = testers.testVersion {
       package = pokete;
       command = "${faketty}/bin/faketty pokete --help";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
@@ -55,4 +55,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

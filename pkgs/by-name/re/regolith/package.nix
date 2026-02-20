@@ -5,14 +5,14 @@
   nix-update-script,
   versionCheckHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "regolith";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Bedrock-OSS";
     repo = "regolith";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9mRfK93eHuCA19RSdLKhlhbnQ0UTmBS46Gp1cXstTIk=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   ldflags = [
     "-X main.buildSource=nix"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -34,9 +34,9 @@ buildGoModule rec {
   meta = {
     description = "Add-on Compiler for the Bedrock Edition of Minecraft";
     homepage = "https://github.com/Bedrock-OSS/regolith";
-    changelog = "https://github.com/Bedrock-OSS/regolith/releases/tag/${version}";
+    changelog = "https://github.com/Bedrock-OSS/regolith/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arexon ];
     mainProgram = "regolith";
   };
-}
+})

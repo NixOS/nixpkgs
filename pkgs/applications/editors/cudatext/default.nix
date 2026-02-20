@@ -5,7 +5,7 @@
   coreutils,
   lazarus,
   fpc,
-  libX11,
+  libx11,
 
   # GTK2/3
   pango,
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (widgetset == "qt5") libsForQt5.wrapQtAppsHook;
 
   buildInputs = [
-    libX11
+    libx11
   ]
   ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [
     pango
@@ -81,7 +81,11 @@ stdenv.mkDerivation rec {
   ++ lib.optional (widgetset == "gtk3") gtk3
   ++ lib.optional (widgetset == "qt5") libsForQt5.libqtpas;
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = toString [
+    "--as-needed"
+    "-rpath"
+    (lib.makeLibraryPath buildInputs)
+  ];
 
   buildPhase =
     lib.concatStringsSep "\n" (

@@ -15,14 +15,14 @@
   libGL ? null,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rx";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "cloudhead";
     repo = "rx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-LTpaV/fgYUgA2M6Wz5qLHnTNywh13900g+umhgLvciM=";
   };
 
@@ -63,4 +63,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "toolbox";
   version = "0.0.99.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "toolbox";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-9HiWgEtaMypLOwXJ6Xg3grLSZOQ4NInZtcvLPV51YO8=";
   };
 
@@ -36,7 +36,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/containers/toolbox/pkg/version.currentVersion=${version}"
+    "-X github.com/containers/toolbox/pkg/version.currentVersion=${finalAttrs.version}"
   ];
 
   preCheck = "export PATH=$GOPATH/bin:$PATH";
@@ -53,10 +53,10 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://containertoolbx.org";
-    changelog = "https://github.com/containers/toolbox/releases/tag/${version}";
+    changelog = "https://github.com/containers/toolbox/releases/tag/${finalAttrs.version}";
     description = "Tool for containerized command line environments on Linux";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "toolbox";
   };
-}
+})

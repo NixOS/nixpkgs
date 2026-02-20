@@ -30,7 +30,7 @@
 
 let
   withQt = withUtils && withGUI;
-
+  isCrossBuild = !(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 in
 # we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
 stdenv.mkDerivation (finalAttrs: {
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Meson unable to find moc/uic/rcc in case of cross-compilation
   # https://github.com/mesonbuild/meson/issues/13018
-  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preConfigure = lib.optionalString (isCrossBuild && withQt) ''
     export PATH=${buildPackages.qt6Packages.qtbase}/libexec:$PATH
   '';
 

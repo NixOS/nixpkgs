@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dum";
   version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "egoist";
     repo = "dum";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rkdQb4TI7lfWE4REJYsIJwMcmM/78jjgQrd0ZvKJxk8=";
   };
 
@@ -21,8 +21,8 @@ rustPlatform.buildRustPackage rec {
     description = "Npm scripts runner written in Rust";
     mainProgram = "dum";
     homepage = "https://github.com/egoist/dum";
-    changelog = "https://github.com/egoist/dum/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/egoist/dum/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -4,25 +4,25 @@
   bash,
   libepoxy,
   fetchurl,
-  fontutil,
+  font-util,
   lib,
   libdecor,
   libgbm,
   libei,
   libGL,
   libGLU,
-  libX11,
-  libXau,
-  libXaw,
-  libXdmcp,
-  libXext,
-  libXfixes,
-  libXfont2,
-  libXmu,
-  libXpm,
-  libXrender,
-  libXres,
-  libXt,
+  libx11,
+  libxau,
+  libxaw,
+  libxdmcp,
+  libxext,
+  libxfixes,
+  libxfont_2,
+  libxmu,
+  libxpm,
+  libxrender,
+  libxres,
+  libxt,
   libdrm,
   libtirpc,
   # Disable withLibunwind as LLVM's libunwind will conflict and does not support the right symbols.
@@ -52,12 +52,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xwayland";
   version = "24.1.9";
 
   src = fetchurl {
-    url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
+    url = "mirror://xorg/individual/xserver/xwayland-${finalAttrs.version}.tar.xz";
     hash = "sha256-8pevJ6hFCNubgNHLvMacOAHaOOtkxy87W1D1gkWa/dA=";
   };
 
@@ -82,21 +82,21 @@ stdenv.mkDerivation rec {
     libgbm
     libepoxy
     libei
-    fontutil
+    font-util
     libGL
     libGLU
-    libX11
-    libXau
-    libXaw
-    libXdmcp
-    libXext
-    libXfixes
-    libXfont2
-    libXmu
-    libXpm
-    libXrender
-    libXres
-    libXt
+    libx11
+    libxau
+    libxaw
+    libxdmcp
+    libxext
+    libxfixes
+    libxfont_2
+    libxmu
+    libxpm
+    libxrender
+    libxres
+    libxt
     libdrm
     libtirpc
     libxcb
@@ -143,4 +143,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

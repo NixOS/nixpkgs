@@ -21,7 +21,10 @@ in
       name = "castlabs-electron-${version}";
       inherit version;
       pname = "castlabs-electron";
-      passthru.dist = final.finalPackage.outPath;
+      passthru = {
+        dist = final.finalPackage.outPath;
+        src = final.finalPackage;
+      };
 
       meta = {
         license = lib.licenses.unfreeRedistributable;

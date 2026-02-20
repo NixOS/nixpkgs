@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   geopy,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "aemet-opendata";
   version = "0.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Noltari";

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "interactsh";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "interactsh";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hbhVa+tXXJxSOeQqSFWcKKFv3tjcXhnCjqxLzg7/d+Q=";
   };
 
@@ -34,8 +34,8 @@ buildGoModule rec {
       For example - Blind SQLi, Blind CMDi, SSRF, etc.
     '';
     homepage = "https://github.com/projectdiscovery/interactsh";
-    changelog = "https://github.com/projectdiscovery/interactsh/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/interactsh/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hanemile ];
   };
-}
+})

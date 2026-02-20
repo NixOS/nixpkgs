@@ -78,14 +78,14 @@ buildFHSEnv rec {
       # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
       freetype = pkgs.freetype.override { libpng = libpng12; };
       fontconfig = pkgs.fontconfig.override { inherit freetype; };
-      libXft = pkgs.libxft.override { inherit freetype fontconfig; };
+      libxft = pkgs.libxft.override { inherit freetype fontconfig; };
     in
     [
       # questa requirements
       libxml2
       ncurses5
       unixODBC
-      libXft
+      libxft
       # common requirements
       freetype
       fontconfig

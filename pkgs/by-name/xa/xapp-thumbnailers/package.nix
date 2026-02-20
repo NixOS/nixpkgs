@@ -30,7 +30,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "xapp-thumbnailers";
   version = "1.2.9";
   pyproject = false;
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xapp-thumbnailers";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XlmWenp3BmGnmLGt9jauys9P92icsezjieHuyGVMisw=";
   };
 
@@ -114,9 +114,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Thumbnailers for GTK desktop environments";
     homepage = "https://github.com/linuxmint/xapp-thumbnailers";
-    changelog = "https://github.com/linuxmint/xapp-thumbnailers/blob/${src.tag}/debian/changelog";
+    changelog = "https://github.com/linuxmint/xapp-thumbnailers/blob/${finalAttrs.src.tag}/debian/changelog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ thunze ];
     inherit (xapp.meta) platforms;
   };
-}
+})

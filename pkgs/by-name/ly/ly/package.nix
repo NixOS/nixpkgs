@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (lib.optionals x11Support [ libxcb ]);
 
-  postPatch = ''
+  postConfigure = ''
     ln -s ${
       callPackage ./deps.nix {
         inherit zig;
@@ -63,7 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/fairyglade/ly";
     license = lib.licenses.wtfpl;
     mainProgram = "ly";
-    maintainers = with lib.maintainers; [ yiyu ];
+    maintainers = with lib.maintainers; [
+      zacharyarnaise
+    ];
     platforms = lib.platforms.unix;
   };
 })

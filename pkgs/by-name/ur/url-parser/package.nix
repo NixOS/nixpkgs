@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "url-parser";
   version = "2.1.13";
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "url-parser";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/eu3smf3CeAO+cwhKTL0DB7UVJJ4AJjFjZbNyBbwIZg=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X"
-    "main.BuildVersion=${version}"
+    "main.BuildVersion=${finalAttrs.version}"
     "-X"
     "main.BuildDate=1970-01-01"
   ];
@@ -29,9 +29,9 @@ buildGoModule rec {
   meta = {
     description = "Simple command-line URL parser";
     homepage = "https://github.com/thegeeklab/url-parser";
-    changelog = "https://github.com/thegeeklab/url-parser/releases/tag/v${version}";
+    changelog = "https://github.com/thegeeklab/url-parser/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "url-parser";
   };
-}
+})

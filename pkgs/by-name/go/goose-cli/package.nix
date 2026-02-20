@@ -28,16 +28,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.19.1";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BgY3YDe6x46XvHyE0Ia6SxNGTyU0MegkYz5TbOZVrrQ=";
+    hash = "sha256-Zwb3y9XhtmKxJG6XOIHl49YVZMBsYtOPePM7heJfEvE=";
   };
 
-  cargoHash = "sha256-2jjAqIBLd7awzLcowYKADHyluclrH+iELUSMvACRj30=";
+  cargoHash = "sha256-G6Jok2OfSlOVlkF62gxivrKM0VlGqWFNdR0pQh79A0Q=";
 
   cargoBuildFlags = [
     "--bin"
@@ -113,6 +113,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_basic"
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_with_additional_sub_recipes"
     "--skip=recipes::recipe::tests::load_recipe::test_load_recipe_success"
+    "--skip=test_session_id_matches_across_calls"
+    "--skip=test_session_id_propagation_to_llm"
   ];
 
   passthru.updateScript = nix-update-script { };

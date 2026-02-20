@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-careful";
   version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "RalfJung";
     repo = "cargo-careful";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-huo5KFb+qoPVHNrnR+vb97iNinGaU5d3NbFhAgGCzCk=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

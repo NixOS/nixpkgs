@@ -9,14 +9,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "convco";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "convco";
     repo = "convco";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-giVaDOYYH3YE9Gy0byt92vGEfyM4rTjpHDsKm5lqlP4=";
   };
 
@@ -51,4 +51,4 @@ rustPlatform.buildRustPackage rec {
       cafkafk
     ];
   };
-}
+})

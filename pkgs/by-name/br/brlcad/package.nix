@@ -5,8 +5,8 @@
   fetchpatch,
   cmake,
   fontconfig,
-  libX11,
-  libXi,
+  libx11,
+  libxi,
   freetype,
   libgbm,
 }:
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fontconfig
-    libX11
-    libXi
+    libx11
+    libxi
     freetype
     libgbm
   ];

@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  # adds support for printproto needed for libXp
+  # adds support for printproto needed for libxp
   mesonFlags = [ "-Dlegacy=true" ];
 
   passthru = {

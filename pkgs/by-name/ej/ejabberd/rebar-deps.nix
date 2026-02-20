@@ -264,12 +264,11 @@ let
     };
     erlydtl = builder {
       name = "erlydtl";
-      version = "git";
-      src = fetchFromGitHub {
-        owner = "erlydtl";
-        repo = "erlydtl";
-        rev = "aae414692b6052e96d890e03bbeeeca0f4dc01c2";
-        sha256 = "00p194jgmvzqza7xr7fdm2n091ymkyy66aj4gc82n0kzdlh03vbm";
+      version = "0.14.0";
+      src = fetchHex {
+        pkg = "erlydtl";
+        version = "0.14.0";
+        sha256 = "sha256-2A7ARM2PWICcGdKaxWBb4J6VUECRG2RFBeMendgUNDE=";
       };
       beamDeps = [ ];
     };

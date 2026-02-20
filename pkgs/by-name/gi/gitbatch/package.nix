@@ -5,14 +5,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitbatch";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "isacikgoz";
     repo = "gitbatch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ovmdbyPRSebwmW6AW55jBgBKaNdY6w5/wrpUF2cMKw8=";
   };
 
@@ -44,4 +44,4 @@ buildGoModule rec {
     platforms = with lib.platforms; linux;
     mainProgram = "gitbatch";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-libp2p-daemon";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "libp2p";
     repo = "go-libp2p-daemon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-N/5V03HQTr7dIvMpIVRlIhEaV2f+aDF36esWMjT96HA=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fare ];
   };
-}
+})

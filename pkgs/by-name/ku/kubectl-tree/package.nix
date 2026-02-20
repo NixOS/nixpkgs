@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-tree";
   version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = "kubectl-tree";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-o5LfWVirp6ENYxqiUSvBDenAzeIIeio2WDD9Ll7Khgk=";
   };
 
@@ -21,8 +21,8 @@ buildGoModule rec {
     description = "kubectl plugin to browse Kubernetes object hierarchies as a tree";
     mainProgram = "kubectl-tree";
     homepage = "https://github.com/ahmetb/kubectl-tree";
-    changelog = "https://github.com/ahmetb/kubectl-tree/releases/tag/v${version}";
+    changelog = "https://github.com/ahmetb/kubectl-tree/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ivankovnatsky ];
   };
-}
+})

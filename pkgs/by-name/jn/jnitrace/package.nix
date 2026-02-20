@@ -4,13 +4,13 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "jnitrace";
   version = "3.3.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-b8azmlYbNEFSUN3MjqpUqNlBTKT0JTLpCVBkk9Rx7+0=";
   };
 
@@ -34,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     mainProgram = "jnitrace";
   };
-}
+})

@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dummyhttp";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "dummyhttp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-J8TOOLTNvm6udkPdYTrjrCX/3D35lXeFDc0H5kki+Uk=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "dummyhttp";
   };
-}
+})

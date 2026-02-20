@@ -17,7 +17,7 @@
   gsl,
   harminv,
   libctl,
-  libGDSII,
+  libgdsii,
   guile,
   mpb,
   python,
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     hdf5-mpi
     harminv
     libctl
-    libGDSII
+    libgdsii
     guile
     gsl
     mpb

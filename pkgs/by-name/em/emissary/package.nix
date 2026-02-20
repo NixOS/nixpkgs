@@ -8,15 +8,15 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emissary";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "altonen";
     repo = "emissary";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A3Kkod2oQdprswoEY9Z6A5r2PsHMUEwqyDB8ycSEUqQ=";
+    hash = "sha256-fLhvMzdxXAuEB99NgIfTLxYezIIZVaC8Z6snK9UUEl0=";
   };
-  cargoHash = "sha256-alruzRWeLGwfiX/kj7grC7+fgu6i0/T/EJwrF/0VDtw=";
+  cargoHash = "sha256-ZboA5wO3vitts6L/tQc23z7bIFmFdj1freXHBoDl06k=";
 
   nativeBuildInputs = [
     pkg-config

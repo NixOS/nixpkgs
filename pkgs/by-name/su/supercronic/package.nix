@@ -7,14 +7,14 @@
   coreutils,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "supercronic";
   version = "0.2.41";
 
   src = fetchFromGitHub {
     owner = "aptible";
     repo = "supercronic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-i7Y4g9f5vEGTETNaLXdQb/JG/NpBIgWWg+kGtX/LQOc=";
   };
 
@@ -34,7 +34,7 @@ buildGoModule rec {
     substituteInPlace cron/cron_test.go --replace /bin/false ${coreutils}/bin/false
   '';
 
-  ldflags = [ "-X main.Version=${version}" ];
+  ldflags = [ "-X main.Version=${finalAttrs.version}" ];
 
   meta = {
     description = "Cron tool designed for use in containers";
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ nasageek ];
     mainProgram = "supercronic";
   };
-}
+})

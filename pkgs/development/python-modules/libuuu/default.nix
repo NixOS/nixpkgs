@@ -59,10 +59,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/nxp-imx/mfgtools/tree/master/wrapper";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    badPlatforms = [
-      # The pypi archive does not contain the pre-built library for these platforms
-      "aarch64-linux"
-      "x86_64-darwin"
-    ];
   };
 }

@@ -249,7 +249,7 @@ stdenv.mkDerivation (finalAttrs: {
       curl
     ];
 
-  NIX_LDFLAGS = [
+  env.NIX_LDFLAGS = toString [
     "-lpthread" # fixes linker errors
   ];
 

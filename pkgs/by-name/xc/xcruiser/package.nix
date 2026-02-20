@@ -4,10 +4,10 @@
   fetchurl,
   gccmakedep,
   imake,
-  libXt,
-  libXaw,
-  libXpm,
-  libXext,
+  libxt,
+  libxaw,
+  libxpm,
+  libxext,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -27,10 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
   buildInputs = [
-    libXt
-    libXaw
-    libXpm
-    libXext
+    libxt
+    libxaw
+    libxpm
+    libxext
   ];
 
   makeFlags = [

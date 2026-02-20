@@ -100,5 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     homepage = "https://www.flintlib.org/";
     downloadPage = "https://www.flintlib.org/downloads.html";
+    # > checking for library containing cblas_dgemm... no
+    broken =
+      withBlas
+      && stdenv.hostPlatform.isStatic
+      && stdenv.hostPlatform.isLinux
+      && stdenv.hostPlatform.isAarch64;
   };
 })

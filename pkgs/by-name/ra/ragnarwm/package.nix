@@ -4,10 +4,10 @@
   fetchFromGitHub,
   writeText,
   fontconfig,
-  libX11,
-  libXft,
-  libXcursor,
-  libXcomposite,
+  libx11,
+  libxft,
+  libxcursor,
+  libxcomposite,
   conf ? null,
   nixosTests,
 }:
@@ -38,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libX11
-    libXft
-    libXcursor
-    libXcomposite
+    libx11
+    libxft
+    libxcursor
+    libxcomposite
   ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

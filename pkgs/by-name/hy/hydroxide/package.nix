@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hydroxide";
   version = "0.2.31";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "hydroxide";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-92eyt+s+kEXRuIXPRmbIQG5Mth7wJFCruqTN3wL5DhI=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "hydroxide";
   };
-}
+})

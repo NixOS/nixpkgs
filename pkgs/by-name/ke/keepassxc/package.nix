@@ -10,8 +10,8 @@
   botan3,
   curl,
   darwinMinVersionHook,
-  libXi,
-  libXtst,
+  libxi,
+  libxtst,
   libargon2,
   libusb1,
   minizip,
@@ -46,13 +46,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Hec3RBC/f0GV6ZBniy+BjMAkABlg111mShrQv0aYm6g=";
   };
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
-    "-Wno-old-style-cast"
-    "-Wno-error"
-    "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
-  ]);
-
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-rpath ${libargon2}/lib";
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = toString [
+        "-Wno-old-style-cast"
+        "-Wno-error"
+        "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
+      ];
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_LDFLAGS = toString [
+        "-rpath"
+        "${libargon2}/lib"
+      ];
+    };
 
   patches = [
     ./darwin.patch
@@ -140,8 +147,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     botan3
     curl
-    libXi
-    libXtst
+    libxi
+    libxtst
     libargon2
     libsForQt5.qtbase
     libsForQt5.qtsvg

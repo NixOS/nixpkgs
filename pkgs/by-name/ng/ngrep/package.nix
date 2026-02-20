@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ngrep";
-  version = "1.48.3";
+  version = "1.49.0";
 
   src = fetchFromGitHub {
     owner = "jpr5";
     repo = "ngrep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2fYv9iLS+YLFLMjTpi/K4BLRSLTbkLGATlToA2ivrTo=";
+    hash = "sha256-qlzxtIsim7ABRwZ4lVQosH+EXkiIK3pb2Ug0OdMZrHs=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

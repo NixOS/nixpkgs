@@ -40,6 +40,7 @@ mixRelease rec {
       // {
         fast_html = prev.fast_html.override {
           nativeBuildInputs = [ cmake ];
+          dontUseCmakeConfigure = true;
         };
         ex_cldr = prev.ex_cldr.overrideAttrs (old: {
           # We have to use the GitHub sources, as it otherwise tries to download
@@ -146,6 +147,7 @@ mixRelease rec {
       ${lib.getExe nixfmt} pkgs/servers/mobilizon/mix.nix
     '';
     elixirPackage = beamPackages.elixir;
+    inherit mixNixDeps;
   };
 
   meta = {

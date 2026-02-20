@@ -5,7 +5,7 @@
   nixosTests,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
   libxcb,
   libxkbcommon,
   xinput,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
+    libx11
     libxcb
     libxkbcommon
     xinput

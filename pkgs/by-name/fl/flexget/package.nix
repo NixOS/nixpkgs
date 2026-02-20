@@ -5,7 +5,7 @@
   stdenv,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flexget";
   version = "3.17.11";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Qfq6TXSNAnIq8m3I7noFe6pIq6PmUTQKUjN+ZC4NxyU=";
   };
 
@@ -160,9 +160,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://flexget.com/";
-    changelog = "https://github.com/Flexget/Flexget/releases/tag/${src.tag}";
+    changelog = "https://github.com/Flexget/Flexget/releases/tag/${finalAttrs.src.tag}";
     description = "Multipurpose automation tool for all of your media";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

@@ -21,5 +21,6 @@ in
   pltcl = throw "PostgreSQL extension `pltcl` is not available, because `postgresql` was built without Tcl support. Override with `tclSupport = true` to enable the extension.";
 }
 // lib.optionalAttrs config.allowAliases {
+  cstore_fdw = throw "PostgreSQL extension `cstore_fdw` has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   pg_embedding = throw "PostgreSQL extension `pg_embedding` has been removed since the project has been abandoned. Upstream's recommendation is to use pgvector instead (https://neon.tech/docs/extensions/pg_embedding#migrate-from-pg_embedding-to-pgvector)";
 }

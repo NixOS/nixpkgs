@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "katana";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "katana";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hVT1RGS4h3vKcSxIT1nSRN+MC7k1KlGHhotByq+UUY4=";
   };
 
@@ -27,9 +27,9 @@ buildGoModule rec {
   meta = {
     description = "Next-generation crawling and spidering framework";
     homepage = "https://github.com/projectdiscovery/katana";
-    changelog = "https://github.com/projectdiscovery/katana/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/katana/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "katana";
   };
-}
+})

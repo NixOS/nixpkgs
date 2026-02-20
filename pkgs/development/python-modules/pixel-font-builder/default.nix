@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   nix-update-script,
   hatchling,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pixel-font-builder";
   version = "0.0.39";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "pixel_font_builder";

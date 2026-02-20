@@ -22,7 +22,7 @@
   rapidjson,
   libzip,
   curl,
-  libX11,
+  libx11,
   wayland,
   shaderc,
   spirv-cross,
@@ -248,7 +248,7 @@ let
       cpuinfo
       libzip
       curl
-      libX11
+      libx11
       wayland
       spirv-cross
       qt6.qtbase

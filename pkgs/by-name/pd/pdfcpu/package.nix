@@ -6,14 +6,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pdfcpu";
   version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
     repo = "pdfcpu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0xsa7/WlqjRMP961FTonfty40+C1knI3szCmCDfZJ/0=";
     # Apparently upstream requires that the compiled executable will know the
     # commit hash and the date of the commit. This information is also presented
@@ -42,7 +42,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   # ldflags based on metadata from git and source
@@ -65,7 +65,7 @@ buildGoModule rec {
       if stdenv.hostPlatform.isDarwin then "Library/Application Support" else ".config"
     }"/pdfcpu
     versionOutput="$($out/bin/pdfcpu version)"
-    for part in ${version} $(cat COMMIT | cut -c1-8) $(cat SOURCE_DATE); do
+    for part in ${finalAttrs.version} $(cat COMMIT | cut -c1-8) $(cat SOURCE_DATE); do
       if [[ ! "$versionOutput" =~ "$part" ]]; then
           echo version output did not contain expected part $part . Output was:
           echo "$versionOutput"
@@ -83,4 +83,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "pdfcpu";
   };
-}
+})

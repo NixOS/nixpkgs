@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pgcenter";
   version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "lesovsky";
     repo = "pgcenter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xaY01T12/5Peww9scRgfc5yHj7QA8BEwOK5l6OedziY=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.gitTag=${src.rev}"
-    "-X main.gitCommit=${src.rev}"
+    "-X main.gitTag=${finalAttrs.src.rev}"
+    "-X main.gitCommit=${finalAttrs.src.rev}"
     "-X main.gitBranch=master"
   ];
 
@@ -35,10 +35,10 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://pgcenter.org/";
-    changelog = "https://github.com/lesovsky/pgcenter/raw/v${version}/doc/Changelog";
+    changelog = "https://github.com/lesovsky/pgcenter/raw/v${finalAttrs.version}/doc/Changelog";
     description = "Command-line admin tool for observing and troubleshooting PostgreSQL";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "pgcenter";
   };
-}
+})

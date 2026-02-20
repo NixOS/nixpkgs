@@ -8,14 +8,14 @@
   openssl,
   nodejs,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cook-cli";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kGjeyw3E6hYcEOcGugW+mgvXGJ38pFp+z9vAMJqPTVE=";
   };
 
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   env.OPENSSL_NO_VENDOR = 1;
 
   npmDeps = fetchNpmDeps {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-HxC9Tf+PZvvETuNqm1W3jaZx7SpYXlxZlI8FwGouK+s=";
   };
 
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/cooklang/cookcli/releases/tag/v${version}";
+    changelog = "https://github.com/cooklang/cookcli/releases/tag/v${finalAttrs.version}";
     description = "Suite of tools to create shopping lists and maintain recipes";
     homepage = "https://cooklang.org/";
     license = lib.licenses.mit;
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

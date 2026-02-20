@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vvvvvv";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "TerryCavanagh";
     repo = "VVVVVV";
     rev = version;
-    hash = "sha256-SYXuA7RJ0x4d1Lyvmk/R2nofEt5k7OJ91X6w3sGQOhg=";
+    hash = "sha256-IEspPNsKGWgukqmnb6nDORRetQp9jvUzJ/mSOTLGdmQ=";
     fetchSubmodules = true;
   };
 

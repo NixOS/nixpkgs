@@ -4,7 +4,7 @@
   fetchFromCodeberg,
   giflib,
   imlib2Full,
-  libXft,
+  libxft,
   libexif,
   libwebp,
   libinotify-kqueue,
@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsxiv";
-  version = "33";
+  version = "34";
 
   src = fetchFromCodeberg {
     owner = "nsxiv";
     repo = "nsxiv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-H1s+pLpHTmoDssdudtAq6Ru0jwZZ55/qamEVgtHTGfk=";
+    hash = "sha256-Yv5Px72iZWLtix0K7Tbzhkar7ZBSb121cBzMhkAZhak=";
   };
 
   outputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     giflib
     imlib2Full
-    libXft
+    libxft
     libexif
     libwebp
   ]

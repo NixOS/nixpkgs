@@ -4,8 +4,8 @@
   fetchurl,
   cairo,
   fftwSinglePrec,
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   libclthreads,
   libclxclient,
   libjack2,
@@ -13,20 +13,20 @@
   zita-resampler,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zita-at1";
   version = "0.8.2";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/zita-at1-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-NSYTJmgOmL/CgGI/rBGQuqmccZEzvwYgchb7e4XqmmM=";
   };
 
   buildInputs = [
     cairo
     fftwSinglePrec
-    libX11
-    libXft
+    libx11
+    libxft
     libclthreads
     libclxclient
     libjack2
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "zita-at1";
   };
-}
+})

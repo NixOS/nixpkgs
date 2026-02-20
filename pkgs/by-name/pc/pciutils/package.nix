@@ -11,14 +11,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pciutils";
   version = "3.14.0"; # with release-date database
 
   src = fetchFromGitHub {
     owner = "pciutils";
     repo = "pciutils";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8wSvu8BGzETD1RfwL6/DfSCZcmuj1I+zNH033f48qNQ=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.vcunat ]; # not really, but someone should watch it
     mainProgram = "lspci";
   };
-}
+})

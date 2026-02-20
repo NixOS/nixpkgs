@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alioth";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "alioth";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VkyR9NOxv5PVuW172Sw2ign6sApDnKTnH2BBlVl6GFk=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})

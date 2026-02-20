@@ -6,33 +6,22 @@
   rustc,
   makeWrapper,
   nix-update-script,
-  nodePackages,
   rustPlatform,
   tailwindcss_3,
-  wasm-bindgen-cli_0_2_100,
+  wasm-bindgen-cli_0_2_106,
 }:
-let
-  tailwindcss = tailwindcss_3.overrideAttrs (_prev: {
-    plugins = [
-      nodePackages."@tailwindcss/aspect-ratio"
-      nodePackages."@tailwindcss/forms"
-      nodePackages."@tailwindcss/line-clamp"
-      nodePackages."@tailwindcss/typography"
-    ];
-  });
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "idmail";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "idmail";
-    tag = "v${version}";
-    hash = "sha256-9rl2UG8DeWd8hVh3N+dqyV5gO0LErok+kZ1vQZnVAe8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b18Ic+wffCPfp1cDTxDe7IBigbS4X6t7KaAy7P4Uh28=";
   };
 
-  cargoHash = "sha256-UcS2gAoa2fzPu6hh8I5sXSHHbAmzsecT44Ju2CVsK0Q=";
+  cargoHash = "sha256-FU9CfOJ9tNY+97OZDw2qYZHTPoFp9Ch2VigXaxBnFCw=";
 
   env = {
     RUSTC_BOOTSTRAP = 1;
@@ -40,11 +29,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    wasm-bindgen-cli_0_2_100
+    wasm-bindgen-cli_0_2_106
     binaryen
     cargo-leptos
     rustc.llvmPackages.lld
-    tailwindcss
+    tailwindcss_3
     makeWrapper
   ];
   buildPhase = ''
@@ -71,7 +60,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Email alias and account management interface for self-hosted mailservers";
     homepage = "https://github.com/oddlama/idmail";
-    changelog = "https://github.com/oddlama/idmail/releases/tag/v${version}";
+    changelog = "https://github.com/oddlama/idmail/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       oddlama
@@ -79,4 +68,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "idmail";
   };
-}
+})

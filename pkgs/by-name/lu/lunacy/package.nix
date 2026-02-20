@@ -7,12 +7,12 @@
   zlib,
   libgcc,
   fontconfig,
-  libX11,
+  libx11,
   lttng-ust,
   icu,
-  libICE,
-  libSM,
-  libXcursor,
+  libice,
+  libsm,
+  libxcursor,
   openssl,
   imagemagick,
   makeWrapper,
@@ -35,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig.lib
 
     # Runtime deps
-    libICE
-    libSM
-    libX11
-    libXcursor
+    libice
+    libsm
+    libx11
+    libxcursor
   ];
 
   nativeBuildInputs = [
@@ -63,10 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # will add to the RPATH of executable only
   runtimeDependencies = [
-    libICE
-    libSM
-    libX11
-    libXcursor
+    libice
+    libsm
+    libx11
+    libxcursor
   ];
 
   dontBuild = true;

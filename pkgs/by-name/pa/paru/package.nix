@@ -10,14 +10,14 @@
   pacman,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "paru";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Morganamilo";
     repo = "paru";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-i99f2ngYhfVCKpImJ8L7u2T2FgOt7Chp8DHDbrNh1kw=";
   };
 
@@ -51,10 +51,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Feature packed AUR helper";
     homepage = "https://github.com/Morganamilo/paru";
-    changelog = "https://github.com/Morganamilo/paru/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Morganamilo/paru/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ wegank ];
     mainProgram = "paru";
     platforms = lib.platforms.linux;
   };
-}
+})

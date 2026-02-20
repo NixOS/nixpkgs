@@ -9,14 +9,14 @@
   fontconfig,
   freetype,
   libxcb,
-  xcbutil,
+  libxcb-util,
   libxcb-cursor,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   libxkbcommon,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   pango,
   gtkmm3,
   sqlite,
@@ -44,14 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     libxcb
-    xcbutil
+    libxcb-util
     libxcb-cursor
-    xcbutilkeysyms
+    libxcb-keysyms
     libxkbcommon
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
     pango
     gtkmm3
     sqlite

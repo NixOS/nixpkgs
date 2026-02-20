@@ -10,14 +10,14 @@
   avahi,
   jack2,
   libxcb,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
+  libxxf86vm,
   libglvnd,
   zenity,
 }:
@@ -28,14 +28,14 @@ let
     avahi
     jack2
     libxcb
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
-    libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxxf86vm
     libglvnd
   ];
 

@@ -3,6 +3,7 @@
   aiohttp,
   aioresponses,
   buildPythonPackage,
+  deprecated,
   fetchFromGitHub,
   expects,
   pytest-asyncio,
@@ -15,20 +16,21 @@
 
 buildPythonPackage rec {
   pname = "aiosyncthing";
-  version = "0.6.3";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhulik";
     repo = "aiosyncthing";
     tag = "v${version}";
-    hash = "sha256-vn8S2/kRW5C2Hbes9oLM4LGm1jWWK0zeLdujR14y6EI=";
+    hash = "sha256-0jx61zs6yQqAIwSOO1zCUOkoZES+K/POtIGoWzr29bI=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    deprecated
     yarl
   ];
 

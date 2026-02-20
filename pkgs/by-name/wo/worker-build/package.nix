@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worker-build";
   version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LeW0CHYBaib81AqftYpW38FFR3P7q7OJE2NmrK9oi9Q=";
     fetchSubmodules = true;
   };
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

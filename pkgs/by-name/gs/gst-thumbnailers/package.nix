@@ -49,13 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-ugly
     fontconfig
     libglycin
+    glycin-loaders
   ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
 
   meta = {
     description = "Generate thumbnailer for video and audio files";

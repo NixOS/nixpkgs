@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-readme";
   version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "webern";
     repo = "cargo-readme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-FFWHADATEfvZvxGwdkj+eTVoq7pnPuoUAhMGTokUkMs=";
   };
 
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

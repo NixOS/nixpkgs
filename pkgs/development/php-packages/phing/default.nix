@@ -8,16 +8,16 @@
 (php.withExtensions ({ enabled, all }: enabled ++ (with all; [ xsl ]))).buildComposerProject2
   (finalAttrs: {
     pname = "phing";
-    version = "3.1.1";
+    version = "3.1.2";
 
     # Upstream no longer provides the composer.lock in their release artifact
     src = fetchgit {
       url = "https://github.com/phingofficial/phing";
       tag = finalAttrs.version;
-      hash = "sha256-2v16ojUDIECLfwWy8/Rbp1A6LlAXnjr4/dJLh6oog8w=";
+      hash = "sha256-cMKHJT0Ylo+8QXBVCcoj1ImSAOOMkV/KqgomXA7vHK0=";
     };
 
-    vendorHash = "sha256-dBk4/Mz2jh7Bq9VfdfvnWqSufbeAeVdC85zAnXVFQNA=";
+    vendorHash = "sha256-TTnltmE48yAXxWR9+aaa4tmv87shwBEkHlUoyCF2ZnI=";
 
     nativeInstallCheckInputs = [
       versionCheckHook

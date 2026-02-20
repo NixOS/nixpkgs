@@ -12,14 +12,14 @@
   mesa,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-cbindgen";
   version = "0.29.2";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cbindgen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P2A+XSLrcuYsI48gnZSNNs5qX+EatiuEJSEJbMvMSxg=";
   };
 
@@ -54,11 +54,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/mozilla/cbindgen/blob/v${version}/CHANGES";
+    changelog = "https://github.com/mozilla/cbindgen/blob/v${finalAttrs.version}/CHANGES";
     description = "Project for generating C bindings from Rust code";
     mainProgram = "cbindgen";
     homepage = "https://github.com/mozilla/cbindgen";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

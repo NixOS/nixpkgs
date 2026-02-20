@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
   ];
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   postInstall = ''
     ln -s ${wt}/share/Wt/resources $out/share/fileshelter/docroot/resources

@@ -7,10 +7,10 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
+  libsm,
+  libxinerama,
+  libxtst,
+  libxxf86vm,
   pkg-config,
   xorgproto,
   compat28 ? false,
@@ -53,10 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gtk3
-    libSM
-    libXinerama
-    libXtst
-    libXxf86vm
+    libsm
+    libxinerama
+    libxtst
+    libxxf86vm
     xorgproto
   ]
   ++ lib.optional withCurl curl
@@ -89,9 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-webviewwebkit"
   ];
 
-  SEARCH_LIB = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin
-  ) "${libGLU.out}/lib ${libGL.out}/lib ";
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    SEARCH_LIB = toString [
+      "${libGLU.out}/lib"
+      "${libGL.out}/lib"
+    ];
+  };
 
   preConfigure = ''
     substituteInPlace configure --replace \

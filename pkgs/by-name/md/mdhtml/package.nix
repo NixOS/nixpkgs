@@ -4,14 +4,14 @@
   fetchFromCodeberg,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mdhtml";
   version = "1.0";
 
   src = fetchFromCodeberg {
     owner = "Tomkoid";
     repo = "mdhtml";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Fv5XpWA2ebqXdA+46gZQouuZ3XxH4WDj/W6xJ0ETg8E=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tomkoid ];
     mainProgram = "mdhtml";
   };
-}
+})

@@ -5,14 +5,14 @@
   pigeon,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "verifpal";
   version = "0.27.4";
 
   src = fetchFromGitHub {
     owner = "symbolicsoft";
     repo = "verifpal";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kBeQ7U97Ezj85A/FbNnE1dXR7VJzx0EUrDbzwOgKl8E=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ zimbatm ];
     license = with lib.licenses; [ gpl3 ];
   };
-}
+})

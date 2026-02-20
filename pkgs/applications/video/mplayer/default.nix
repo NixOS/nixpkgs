@@ -16,18 +16,18 @@
   fribidiSupport ? true,
   fribidi,
   x11Support ? true,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libGLU,
   libGL,
   xineramaSupport ? true,
-  libXinerama,
+  libxinerama,
   xvSupport ? true,
-  libXv,
+  libxv,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   screenSaverSupport ? true,
-  libXScrnSaver,
+  libxscrnsaver,
   vdpauSupport ? false,
   libvdpau,
   cddaSupport ? !stdenv.hostPlatform.isDarwin,
@@ -146,16 +146,16 @@ stdenv.mkDerivation {
   ++ lib.optional fontconfigSupport fontconfig
   ++ lib.optional fribidiSupport fribidi
   ++ lib.optionals x11Support [
-    libX11
-    libXext
+    libx11
+    libxext
     libGLU
     libGL
   ]
   ++ lib.optional alsaSupport alsa-lib
-  ++ lib.optional xvSupport libXv
+  ++ lib.optional xvSupport libxv
   ++ lib.optional theoraSupport libtheora
   ++ lib.optional cacaSupport libcaca
-  ++ lib.optional xineramaSupport libXinerama
+  ++ lib.optional xineramaSupport libxinerama
   ++ lib.optional dvdnavSupport libdvdnav
   ++ lib.optional dvdreadSupport libdvdread
   ++ lib.optional bluraySupport libbluray
@@ -167,7 +167,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional x264Support x264
   ++ lib.optional pulseSupport libpulseaudio
-  ++ lib.optional screenSaverSupport libXScrnSaver
+  ++ lib.optional screenSaverSupport libxscrnsaver
   ++ lib.optional lameSupport lame
   ++ lib.optional vdpauSupport libvdpau
   ++ lib.optional speexSupport speex

@@ -14,7 +14,7 @@
   xvfb-run,
   libayatana-appindicator,
   libpeas,
-  libXtst,
+  libxtst,
   zeitgeist,
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libayatana-appindicator
     libpeas
-    libXtst
+    libxtst
     zeitgeist
   ];
 

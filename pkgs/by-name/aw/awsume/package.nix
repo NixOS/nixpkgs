@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "awsume";
   version = "4.5.5";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "trek10inc";
     repo = "awsume";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lm9YANYckyHDoNbB1wytBm55iyBmUuxFPmZupfpReqc=";
   };
 
@@ -54,4 +54,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "awsume";
     maintainers = with lib.maintainers; [ nilp0inter ];
   };
-}
+})

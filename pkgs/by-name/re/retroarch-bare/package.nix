@@ -15,12 +15,12 @@
   libGLU,
   libpulseaudio,
   libv4l,
-  libX11,
-  libXdmcp,
-  libXext,
+  libx11,
+  libxdmcp,
+  libxext,
   libxkbcommon,
   libxml2,
-  libXxf86vm,
+  libxxf86vm,
   makeBinaryWrapper,
   mbedtls,
   libgbm,
@@ -99,10 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     dbus
-    libX11
-    libXdmcp
-    libXext
-    libXxf86vm
+    libx11
+    libxdmcp
+    libxext
+    libxxf86vm
     libdrm
     libpulseaudio
     libv4l

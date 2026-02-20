@@ -30,12 +30,12 @@
   harfbuzz,
   imagemagick,
   jansson,
-  libXaw,
-  libXcursor,
-  libXft,
-  libXi,
-  libXpm,
-  libXrandr,
+  libxaw,
+  libxcursor,
+  libxft,
+  libxi,
+  libxpm,
+  libxrandr,
   libgccjit,
   libjpeg,
   libotf,
@@ -314,7 +314,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withPgtk [
     giflib
     gtk3
-    libXpm
+    libxpm
     libjpeg
     libpng
     librsvg
@@ -335,9 +335,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withX [
     Xaw3d
     giflib
-    libXaw
-    libXpm
-    libXrandr
+    libxaw
+    libxpm
+    libxrandr
     libjpeg
     libpng
     librsvg
@@ -347,10 +347,10 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
   ]
   ++ lib.optionals (withX && !withCairo) [
-    libXft
+    libxft
   ]
   ++ lib.optionals withXinput2 [
-    libXi
+    libxi
   ]
   ++ lib.optionals withWebkitgtk [
     webkitgtk_4_1
@@ -485,7 +485,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = lib.optionalString (stdenv.hostPlatform.isLinux && withX && toolkit == "lucid") ''
-    patchelf --add-rpath ${lib.makeLibraryPath [ libXcursor ]} $out/bin/emacs
+    patchelf --add-rpath ${lib.makeLibraryPath [ libxcursor ]} $out/bin/emacs
     patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
   '';
 

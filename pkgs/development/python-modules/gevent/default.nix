@@ -51,7 +51,10 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (!isPyPy) [ greenlet ];
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
+  env = {
+    GEVENTSETUP_EMBED = "0";
+  }
+  // lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
@@ -71,8 +74,6 @@ buildPythonPackage rec {
       ;
   }
   // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
-
-  GEVENTSETUP_EMBED = "0";
 
   meta = {
     description = "Coroutine-based networking library";

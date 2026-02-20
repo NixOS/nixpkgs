@@ -9,7 +9,7 @@
   writableTmpDirAsHomeHook,
   bluez,
   i2c-tools,
-  libX11,
+  libx11,
   libgpiod_1,
   libinput,
   libusb1,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bluez
     i2c-tools
-    libX11
+    libx11
     libgpiod_1
     libinput
     libusb1
@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p platformio-deps-native
     cp -ar ${platformio-deps-native}/. platformio-deps-native
     chmod +w -R platformio-deps-native
+    rm -f platformio-deps-native/core/appstate.json
 
     export PLATFORMIO_CORE_DIR=platformio-deps-native/core
     export PLATFORMIO_LIBDEPS_DIR=platformio-deps-native/libdeps

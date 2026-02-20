@@ -38,7 +38,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   libxxf86vm,
   libxrandr,
   libxfixes,
@@ -291,7 +291,7 @@ stdenv.mkDerivation {
     vulkan-loader
     wayland
     wayland-protocols
-    xcbutilkeysyms
+    libxcb-keysyms
     xorgproto
     zstd
   ]
@@ -386,7 +386,7 @@ stdenv.mkDerivation {
     jdupes --hard-links --link-soft --recurse "$out"
 
     # add RPATH here so Zink can find libvulkan.so
-    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so
+    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so $opencl/lib/libRusticlOpenCL.so
   '';
 
   passthru = {

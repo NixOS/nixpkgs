@@ -5,7 +5,6 @@
   h5py,
   pytestCheckHook,
   netcdf4,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

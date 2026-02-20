@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "faketty";
   };
 }

@@ -4,7 +4,7 @@
   fetchFromSourcehut,
   writeText,
   libinput,
-  libX11,
+  libx11,
   wayland,
   conf ? null,
   patches ? [ ],
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libinput
-    libX11
+    libx11
     wayland
   ];
 

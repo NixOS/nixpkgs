@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scooter";
   version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "thomasschafer";
     repo = "scooter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hKF0b3vgZ8kIK9QT129Ms+Rua6+Rrv8Jk2pt81eCc5Y=";
   };
 
@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Interactive find and replace in the terminal";
     homepage = "https://github.com/thomasschafer/scooter";
-    changelog = "https://github.com/thomasschafer/scooter/commits/v${version}";
+    changelog = "https://github.com/thomasschafer/scooter/commits/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felixzieger ];
     mainProgram = "scooter";
   };
-}
+})

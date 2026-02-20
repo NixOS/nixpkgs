@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pbgopy";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "nakabonne";
     repo = "pbgopy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-P/MFDFMsqSTVErTM9izJJSMIbiOcbQ9Ya10/w6NRcYw=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

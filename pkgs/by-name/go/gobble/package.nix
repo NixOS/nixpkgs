@@ -7,14 +7,14 @@
   pandoc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gobble";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "EmperorPenguin18";
     repo = "gobble";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-g4154Axvjp9jbE0lvMeNGM+v2UxkAsZqt9kPv5bhVK8=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "gobble";
   };
-}
+})

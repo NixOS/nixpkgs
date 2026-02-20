@@ -4,14 +4,14 @@
   fetchFromGitHub,
   gitMinimal,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-bug-migration";
   version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "MichaelMure";
     repo = "git-bug-migration";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IOBgrU3C0ZHD2wx9LRVgKEJzDlUj6z2UXlHGU3tdTdQ=";
   };
 
@@ -20,8 +20,8 @@ buildGoModule rec {
   nativeCheckInputs = [ gitMinimal ];
 
   ldflags = [
-    "-X main.GitExactTag=${version}"
-    "-X main.GitLastTag=${version}"
+    "-X main.GitExactTag=${finalAttrs.version}"
+    "-X main.GitLastTag=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -40,4 +40,4 @@ buildGoModule rec {
     ];
     mainProgram = "git-bug-migration";
   };
-}
+})

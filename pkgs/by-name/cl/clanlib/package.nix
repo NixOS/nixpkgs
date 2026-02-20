@@ -10,8 +10,8 @@
   freetype,
   fontconfig,
   alsa-lib,
-  libXrender,
-  libXinerama,
+  libxrender,
+  libxinerama,
   nix-update-script,
 }:
 
@@ -38,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fontconfig
     alsa-lib
-    libXrender
-    libXinerama
+    libxrender
+    libxinerama
   ];
 
   passthru.updateScript = nix-update-script { };

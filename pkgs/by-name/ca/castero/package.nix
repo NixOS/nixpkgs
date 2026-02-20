@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "castero";
   version = "0.9.5";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "xgi";
     repo = "castero";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6/7oCKBMEcQeJ8PaFP15Xef9sQRYCpigtzINv2M6GUY=";
   };
 
@@ -79,4 +79,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ keto ];
   };
-}
+})

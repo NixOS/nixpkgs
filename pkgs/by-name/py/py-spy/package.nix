@@ -7,14 +7,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "py-spy";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "benfred";
     repo = "py-spy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-T96F8xgB9HRwuvDLXi6+lfi8za/iNn1NAbG4AIpE0V0=";
   };
 
@@ -41,11 +41,11 @@ rustPlatform.buildRustPackage rec {
     description = "Sampling profiler for Python programs";
     mainProgram = "py-spy";
     homepage = "https://github.com/benfred/py-spy";
-    changelog = "https://github.com/benfred/py-spy/releases/tag/v${version}";
+    changelog = "https://github.com/benfred/py-spy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lnl7 ];
     platforms = lib.platforms.linux;
     # https://github.com/benfred/py-spy/pull/330
     broken = stdenv.hostPlatform.isAarch64;
   };
-}
+})

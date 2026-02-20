@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "moq";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "matryer";
     repo = "moq";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-veAfQ9dFt6s6xQace0nkcbAirl98UekJx+0qPHnQVGg=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -36,4 +36,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ anpryl ];
   };
-}
+})

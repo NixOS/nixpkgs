@@ -16,7 +16,6 @@
   pngquant,
   qpdf,
   tesseract5,
-  unpaper,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
@@ -30,13 +29,13 @@
   lndir,
 }:
 let
-  version = "2.20.5";
+  version = "2.20.7";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-EZaAn55gilvTitAo0p7U3BeqNI9iYIWg147BbO2fp9M=";
+    hash = "sha256-NVlV+iHtUx05EIuHx/WePRf558DH977oZ7C8iNW0QR4=";
   };
 
   python = python3.override {
@@ -69,7 +68,6 @@ let
     pngquant
     qpdf
     tesseract5
-    unpaper
     poppler-utils
   ];
 

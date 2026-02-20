@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   # this disables testing fuse mounts
-  MISSING_DEPENDENCIES = "fuse";
+  env.MISSING_DEPENDENCIES = "fuse";
 
   postPatch = ''
     patchShebangs .

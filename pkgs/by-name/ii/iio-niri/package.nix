@@ -5,14 +5,14 @@
   dbus,
   pkg-config,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iio-niri";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Zhaith-Izaliel";
     repo = "iio-niri";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tbCiG/u350U7UbYDV5gWczDQd//RosNHuzB/cP9Dyyo=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "iio-niri";
     platforms = lib.platforms.linux;
   };
-}
+})

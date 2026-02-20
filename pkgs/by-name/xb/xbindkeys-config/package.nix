@@ -8,7 +8,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xbindkeys-config";
   version = "0.1.3";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 ];
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/x/xbindkeys-config/xbindkeys-config_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/x/xbindkeys-config/xbindkeys-config_${finalAttrs.version}.orig.tar.gz";
     sha256 = "1rs3li2hyig6cdzvgqlbz0vw6x7rmgr59qd6m0cvrai8xhqqykda";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     cp xbindkeys_config $out/bin/xbindkeys-config
     wrapProgram $out/bin/xbindkeys-config --prefix PATH ":" "${procps}/bin"
   '';
-}
+})

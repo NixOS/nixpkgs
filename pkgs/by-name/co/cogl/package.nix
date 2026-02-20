@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   version = "1.22.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/cogl-${version}.tar.xz";
+    url = "mirror://gnome/sources/cogl/${lib.versions.majorMinor version}/cogl-${version}.tar.xz";
     sha256 = "0nfph4ai60ncdx7hy6hl1i1cmp761jgnyjfhagzi0iqq36qb41d8";
   };
 

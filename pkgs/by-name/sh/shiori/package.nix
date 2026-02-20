@@ -7,7 +7,7 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shiori";
   version = "1.8.0";
 
@@ -18,13 +18,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "go-shiori";
     repo = "shiori";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-oycD/Tyl3+CGW9EO0O4RHKONLt3mw2lzPEYELYNG0gw=";
   };
 
   ldflags = [
-    "-X main.version=${version}"
-    "-X main.commit=nixpkgs-${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=nixpkgs-${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -47,4 +47,4 @@ buildGoModule rec {
       CaptainJawZ
     ];
   };
-}
+})

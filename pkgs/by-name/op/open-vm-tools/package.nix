@@ -16,13 +16,13 @@
   procps,
   libtirpc,
   rpcsvc-proto,
-  libX11,
-  libXext,
-  libXinerama,
-  libXi,
-  libXrender,
-  libXrandr,
-  libXtst,
+  libx11,
+  libxext,
+  libxinerama,
+  libxi,
+  libxrender,
+  libxrandr,
+  libxtst,
   libxcrypt,
   libxml2,
   pkg-config,
@@ -98,13 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf-xlib
     gtk3
     gtkmm3
-    libX11
-    libXext
-    libXinerama
-    libXi
-    libXrender
-    libXrandr
-    libXtst
+    libx11
+    libxext
+    libxinerama
+    libxi
+    libxrender
+    libxrandr
+    libxtst
   ];
 
   postPatch = ''

@@ -5,6 +5,7 @@
   replaceVars,
   gobject-introspection,
   wrapGAppsHook3,
+  gawk,
   gtk3,
   getent,
   nixosTests,
@@ -72,7 +73,10 @@ python3Packages.buildPythonPackage rec {
 
   buildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [ getent ];
+  propagatedBuildInputs = [
+    getent
+    gawk
+  ];
 
   postInstall =
     # copy script manually

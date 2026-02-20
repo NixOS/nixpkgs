@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager_dmenu";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-NTkGKUZ3xA9ZWBLZgjIR5wrUXVhccGkGqnnm0a79p+Q=";
+    sha256 = "sha256-L5aO7mha37q2vjy9+j+TPiFBkqc4+deiZU9Om31HHBs=";
   };
 
   nativeBuildInputs = [ gobject-introspection ];

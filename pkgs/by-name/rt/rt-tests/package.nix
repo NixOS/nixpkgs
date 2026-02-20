@@ -7,12 +7,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rt-tests";
   version = "2.9";
 
   src = fetchurl {
-    url = "https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/snapshot/${pname}-${version}.tar.gz";
+    url = "https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/snapshot/rt-tests-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Zmb0RqGvS4bHy+6Krs3of1WUWOqJMOH0FHAXIqlteys=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ poelzi ];
     license = lib.licenses.gpl2Only;
   };
-}
+})

@@ -4,19 +4,19 @@
   autoreconfHook,
   fetchFromGitHub,
   xorgproto,
-  libX11,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   ncurses,
   pixman,
   pkg-config,
   udev,
   udevCheckHook,
-  utilmacros,
-  xorgserver,
+  util-macros,
+  xorg-server,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,18 +37,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
     ncurses
     udev
-    utilmacros
+    util-macros
     pixman
     xorgproto
-    xorgserver
+    xorg-server
   ];
 
   doInstallCheck = true;

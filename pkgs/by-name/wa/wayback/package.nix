@@ -5,14 +5,14 @@
   chromium,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wayback";
   version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "wabarc";
     repo = "wayback";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GnirEgJHgZVzxkFFVDU9795kgvMTitnH+xWd7ooNf7Y=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     # binary build for darwin is possible, but it requires chromium for runtime dependency, whose build (for nix) is not supported on darwin.
     platforms = lib.platforms.linux;
   };
-}
+})

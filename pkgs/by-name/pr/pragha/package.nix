@@ -20,7 +20,7 @@
   withGstPlugins ? true,
   glyr,
   withGlyr ? true,
-  liblastfmSF,
+  liblastfm-vambrose,
   withLastfm ? true,
   libcdio-paranoia,
   withCD ? true,
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withGudev libgudev
     ++ lib.optional withKeybinder keybinder3
     ++ lib.optional withLibnotify libnotify
-    ++ lib.optional withLastfm liblastfmSF
+    ++ lib.optional withLastfm liblastfm-vambrose
     ++ lib.optional withGlyr glyr
     ++ lib.optional withLibsoup libsoup_2_4
     ++ lib.optional withMtp libmtp

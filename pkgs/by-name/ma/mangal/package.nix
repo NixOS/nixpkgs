@@ -5,14 +5,14 @@
   fetchFromGitHub,
   installShellFiles,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mangal";
   version = "4.0.6";
 
   src = fetchFromGitHub {
     owner = "metafates";
     repo = "mangal";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nbJdePlzZFM2ihbvFIMKyYZ9C0uKjU3TE5VLduLvtKE=";
   };
 
@@ -44,4 +44,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.bertof ];
     mainProgram = "mangal";
   };
-}
+})

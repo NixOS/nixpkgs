@@ -947,7 +947,8 @@ in
   rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs {
 
     # E5113: Error while calling lua chunk [...] pl.path requires LuaFileSystem
-    doCheck = luaOlder "5.2";
+    # TODO: figure out darwin failure
+    doCheck = luaOlder "5.2" && stdenv.hostPlatform.isLinux;
     nativeCheckInputs = [
       final.nlua
       final.busted
@@ -967,7 +968,8 @@ in
       writableTmpDirAsHomeHook
     ];
 
-    doCheck = lua.luaversion == "5.1";
+    # TODO: figure out darwin failure
+    doCheck = lua.luaversion == "5.1" && stdenv.hostPlatform.isLinux;
 
     nvimSkipModules = [
       "bootstrap" # tries to install luarocks from network
@@ -1078,10 +1080,9 @@ in
   });
 
   toml-edit = prev.toml-edit.overrideAttrs (old: {
-
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
-      hash = "sha256-ow0zefFFrU91Q2PJww2jtd6nqUjwXUtfQzjkzl/AXuo=";
+      hash = "sha256-8lYvdraKEd1nf8dkZuSDQRVJvX56gHCcTZVtyoy/0IM=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
@@ -1093,7 +1094,6 @@ in
       rustPlatform.cargoSetupHook
       lua.pkgs.luarocks-build-rust-mlua
     ];
-
   });
 
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {

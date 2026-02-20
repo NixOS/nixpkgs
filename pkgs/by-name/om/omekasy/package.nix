@@ -4,14 +4,14 @@
   fetchFromGitHub,
   lib,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "omekasy";
   version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "ikanago";
     repo = "omekasy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wPAobYZAytzTIWGBeBVoRLjm/0Io/P7GXL1naB6ssNM=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ikanago/omekasy";
     mainProgram = "omekasy";
   };
-}
+})

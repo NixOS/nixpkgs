@@ -6,14 +6,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bibiman";
   version = "0.15.0";
 
   src = fetchFromCodeberg {
     owner = "lukeflo";
     repo = "bibiman";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GAPlfHeo/g2QaRW3v9LatqYajJ2gE1ssK77yJPhOKuo=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bibiman";
     platforms = lib.platforms.linux;
   };
-}
+})

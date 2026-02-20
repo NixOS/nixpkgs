@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pinniped";
   version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "pinniped";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-eReGKJRfn2MPJQjSSYf32WeElNw52egJxJF4aCkdHlg=";
   };
 
@@ -42,4 +42,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bpaulin ];
   };
-}
+})

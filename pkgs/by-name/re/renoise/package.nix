@@ -5,12 +5,12 @@
   alsa-lib,
   fetchurl,
   libjack2,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   mpg123,
   pipewire,
   releasePath ? null,
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     libjack2
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
     pipewire
   ];
 

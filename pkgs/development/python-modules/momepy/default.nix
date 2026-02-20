@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   geopandas,
   inequality,
@@ -21,7 +20,6 @@ buildPythonPackage rec {
   pname = "momepy";
   version = "0.10.0";
   pyproject = true;
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pysal";

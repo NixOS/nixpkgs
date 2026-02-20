@@ -10,14 +10,14 @@
   viceroy,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fastly";
   version = "13.3.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DQPZUp5UYx8GSOC8SeERwmOJ6N1ZH23YHI+Na5BWLFU=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
@@ -47,7 +47,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/fastly/cli/pkg/revision.AppVersion=v${version}"
+    "-X github.com/fastly/cli/pkg/revision.AppVersion=v${finalAttrs.version}"
     "-X github.com/fastly/cli/pkg/revision.Environment=release"
     "-X github.com/fastly/cli/pkg/revision.GoHostOS=${go.GOHOSTOS}"
     "-X github.com/fastly/cli/pkg/revision.GoHostArch=${go.GOHOSTARCH}"
@@ -79,11 +79,11 @@ buildGoModule rec {
   meta = {
     description = "Command line tool for interacting with the Fastly API";
     homepage = "https://github.com/fastly/cli";
-    changelog = "https://github.com/fastly/cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/fastly/cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ereslibre
     ];
     mainProgram = "fastly";
   };
-}
+})

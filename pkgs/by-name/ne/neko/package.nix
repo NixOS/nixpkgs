@@ -16,7 +16,7 @@
   mbedtls,
   openssl,
   gtk3,
-  libpthreadstubs,
+  libpthread-stubs,
   nix-update-script,
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmysqlclient
     mbedtls
     openssl
-    libpthreadstubs
+    libpthread-stubs
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux gtk3;
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];

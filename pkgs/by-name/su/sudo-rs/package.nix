@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudo-rs";
-  version = "0.2.11";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F1JwVP2GDzKCfiJXh8PXTBghNwWeD8a+TMiEaPx6wGg=";
+    hash = "sha256-VTqjsbd5CsvsNEItl8tTWnfyKHZVlYQpOQXpah68VH8=";
   };
 
-  cargoHash = "sha256-6NhyPdOAk2va8Vibsfpfq3xGLIzDBRmqxj4bZhQT9bY=";
+  cargoHash = "sha256-2h7ObKcrhtbJyoIinA1sawfpbY3Kt/8tEyZzjEdSQBI=";
 
   nativeBuildInputs = [ installShellFiles ];
 

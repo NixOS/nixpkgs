@@ -5,9 +5,9 @@
   cmake,
   libGL,
   libGLU,
-  libXv,
-  libXtst,
-  libXi,
+  libxv,
+  libxtst,
+  libxi,
   libjpeg_turbo,
   fltk_1_3,
   libxcb-keysyms,
@@ -16,12 +16,12 @@
   ocl-icd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "virtualgl-lib";
   version = "3.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/virtualgl/VirtualGL-${version}.tar.gz";
+    url = "mirror://sourceforge/virtualgl/VirtualGL-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-OIEbwAQ71yOuHIzM+iaK7QkUJrKg6sXpGuFQOUPjM2w=";
   };
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     fltk_1_3
-    libXv
-    libXtst
-    libXi
+    libxv
+    libxtst
+    libxi
     libxcb-keysyms
     opencl-headers
     opencl-clhpp
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

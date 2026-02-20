@@ -125,11 +125,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   dontUseNinjaCheck = true;
 
-  NIX_LDFLAGS = lib.optionalString finalAttrs.doCheck "-rpath ${
-    lib.makeLibraryPath [
-      onetbb
-    ]
-  }";
+  env = lib.optionalAttrs finalAttrs.doCheck {
+    NIX_LDFLAGS = "-rpath ${
+      lib.makeLibraryPath [
+        onetbb
+      ]
+    }";
+  };
 
   disabledTests = [
     # These tests try to access sysfs, which is unavailable in the sandbox

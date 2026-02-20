@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangareader";
-  version = "2.2.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "g-fb";
     repo = "mangareader";
     rev = finalAttrs.version;
-    hash = "sha256-e5mG286Pj4Ey1/VzRxzXsY3bqI3XA0IBtnFTXwas/0s=";
+    hash = "sha256-G/X8iJxEMNCSI0whxIpmzFh/Y/Hbr9vvzcGsbb8arig=";
   };
 
   nativeBuildInputs = [

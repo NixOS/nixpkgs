@@ -5,14 +5,14 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-outdated";
   version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "kbknapp";
     repo = "cargo-outdated";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-r7FtuXx9+OmVAdL6+9s2bYHjsURmX60+2c7+2FjkSRs=";
   };
 
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo subcommand for displaying when Rust dependencies are out of date";
     mainProgram = "cargo-outdated";
     homepage = "https://github.com/kbknapp/cargo-outdated";
-    changelog = "https://github.com/kbknapp/cargo-outdated/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kbknapp/cargo-outdated/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

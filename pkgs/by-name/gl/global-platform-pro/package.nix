@@ -26,7 +26,7 @@ in
 maven.buildMavenPackage rec {
   pname = "global-platform-pro";
   version = "25.10.20";
-  GPPRO_VERSION = "v25.10.20-0-g72f85b9"; # git describe --tags --always --long --dirty
+  env.GPPRO_VERSION = "v25.10.20-0-g72f85b9"; # git describe --tags --always --long --dirty
 
   src = fetchFromGitHub {
     owner = "martinpaljak";

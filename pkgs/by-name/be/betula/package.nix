@@ -3,14 +3,14 @@
   fetchFromSourcehut,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "betula";
   version = "1.5.0";
 
   src = fetchFromSourcehut {
     owner = "~bouncepaw";
     repo = "betula";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zrJkQNQmkp0JiXZL3YSPEkeavEJhu5KnONfOze9pttY=";
   };
   vendorHash = "sha256-8YDilb03J7fd6dj9CohvDDe9ylwXrrREvCP83yGpTyg=";
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ GoldsteinE ];
   };
-}
+})

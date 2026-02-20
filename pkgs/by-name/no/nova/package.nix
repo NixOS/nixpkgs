@@ -4,21 +4,21 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nova";
   version = "3.11.10";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "nova";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-64IDZMdEkSxbFr0HvDHTNz5j3IFEvmEICCUZ7ldX3TE=";
   };
 
   vendorHash = "sha256-HzVYJeDYSfUZmnq8iJeMeydkFGlRv+aylpEmbu3okfI=";
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -36,4 +36,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qjoly ];
   };
-}
+})

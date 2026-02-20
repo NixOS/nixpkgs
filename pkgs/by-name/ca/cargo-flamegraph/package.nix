@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-flamegraph";
   version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "flamegraph-rs";
     repo = "flamegraph";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WPWS3NX6t8RNNALqYF2JMLI5HWVhsVmhg9ULZKt972I=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

@@ -8,7 +8,6 @@
   numpy-typing-compat,
   beartype,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {
@@ -22,8 +21,6 @@ buildPythonPackage {
     rev = "5f16def3546222caf81a3411a27b007a00819172";
     hash = "sha256-52cY+u0wjhJFQDLsjND/h6cfln4rCTtcy+HqaoH/re0=";
   };
-
-  disabled = pythonOlder "3.11";
 
   build-system = [
     uv-build

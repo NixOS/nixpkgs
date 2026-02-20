@@ -8,14 +8,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hullcaster";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "gilcu3";
     repo = "hullcaster";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BR3klwy6vm6nJ38sgS/PGPQ19n0GJq6eQE97lHmg+kQ=";
   };
 
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ kiara ];
   };
-}
+})

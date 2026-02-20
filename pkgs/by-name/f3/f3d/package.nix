@@ -6,7 +6,7 @@
   cmake,
   help2man,
   gzip,
-  libXt,
+  libxt,
   openusd,
   onetbb,
   vtk,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     python3Packages.pybind11
   ]
   ++ lib.optionals withUsd [
-    libXt
+    libxt
     openusd
     onetbb
   ];

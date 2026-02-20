@@ -6,7 +6,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "style50";
   version = "2.10.4";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "style50";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-59V3QZMYH5edBXv1GNdoaQxerDfKmLKUZ7VL3cvDvuE=";
   };
 
@@ -58,10 +58,10 @@ python3Packages.buildPythonApplication rec {
     description = "Tool for checking code against the CS50 style guide";
     homepage = "https://cs50.readthedocs.io/style50/";
     downloadPage = "https://github.com/cs50/style50";
-    changelog = "https://github.com/cs50/style50/releases/tag/v${version}";
+    changelog = "https://github.com/cs50/style50/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     mainProgram = "style50";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "weaviate";
   version = "1.35.2";
 
   src = fetchFromGitHub {
     owner = "weaviate";
     repo = "weaviate";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FDDwC9CnnMhwI9iqEEGwklE7lr9vOOCYCJ8X389gw7U=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

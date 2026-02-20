@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   imake,
   gccmakedep,
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ gccmakedep ];
   buildInputs = [
-    libX11
+    libx11
     imake
   ];
 

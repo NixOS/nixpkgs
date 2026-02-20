@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "scipp";
-  version = "25.12.0";
+  version = "26.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "Scipp";
     tag = version;
-    hash = "sha256-Gv5Lgufsj5kCtOC+zTgeWTwwYm8j2Ct8cTK1RJ5+XDg=";
+    hash = "sha256-4Ha2Gz6yYBCYBGXMWPJjuooyKeJJBBVmmByFXbTLans=";
   };
   env = {
     SKIP_REMOTE_SOURCES = "true";
@@ -103,11 +103,5 @@ buildPythonPackage rec {
     homepage = "https://scipp.github.io";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
-    # Got:
-    #
-    #   error: a template argument list is expected after a name prefixed by the template keyword [-Wmissing-template-arg-list-after-template-kw]
-    #
-    # Needs debugging along with upstream.
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

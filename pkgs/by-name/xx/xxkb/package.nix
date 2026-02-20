@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libXt,
-  libXext,
-  libXpm,
+  libx11,
+  libxt,
+  libxext,
+  libxpm,
   imake,
   gccmakedep,
   svgSupport ? false,
@@ -31,10 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXt
-    libXext
-    libXpm
+    libx11
+    libxt
+    libxext
+    libxpm
   ]
   ++ lib.optionals svgSupport [
     librsvg

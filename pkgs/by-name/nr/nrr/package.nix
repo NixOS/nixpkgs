@@ -5,14 +5,14 @@
   enableLTO ? true,
   nrxAlias ? true,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nrr";
   version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "ryanccn";
     repo = "nrr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/PB5m0gVjhQxYB7IeR59gs4n1vuleFc0ZLBY0a+JYWI=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     mainProgram = "nrr";
   };
-}
+})

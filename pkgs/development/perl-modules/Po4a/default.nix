@@ -85,8 +85,10 @@ buildPerlPackage rec {
 
   buildInputs = [ bash ];
 
-  LC_ALL = "en_US.UTF-8";
-  SGML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
+  env = {
+    LC_ALL = "en_US.UTF-8";
+    SGML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
+  };
 
   preConfigure = ''
     touch Makefile.PL

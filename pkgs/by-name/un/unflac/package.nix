@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "unflac";
   version = "1.4";
 
   src = fetchFromSourcehut {
     owner = "~ft";
     repo = "unflac";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-1Mpo1eBjfAudl7Lc6DUstEnWlY6G4ZFT9jm9JoWxPlk=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ felipeqq2 ];
     mainProgram = "unflac";
   };
-}
+})

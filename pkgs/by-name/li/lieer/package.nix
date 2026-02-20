@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lieer";
   version = "1.6";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gauteh";
     repo = "lieer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-U3+Y634oGmvIrvcbSKrrJ8PzLRsMoN0Fd/+d9WE1Q7U=";
   };
 
@@ -54,4 +54,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "gmi";
   };
-}
+})

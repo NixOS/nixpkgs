@@ -6,7 +6,7 @@
   ocaml,
   pkg-config,
   mupdf,
-  libX11,
+  libx11,
   jbig2dec,
   openjpeg,
   libjpeg,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     mupdf
-    libX11
+    libx11
     freetype
     zlib
     gumbo

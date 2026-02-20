@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "intermodal";
   version = "0.1.15";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = "intermodal";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dNDJHLxKsuAwQifNHTjr4qhPx+GGY0KUAeWz1qthqOo=";
   };
 
@@ -36,11 +36,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "User-friendly and featureful command-line BitTorrent metainfo utility";
     homepage = "https://github.com/casey/intermodal";
-    changelog = "https://github.com/casey/intermodal/releases/tag/v${version}";
+    changelog = "https://github.com/casey/intermodal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
       xrelkd
     ];
     mainProgram = "imdl";
   };
-}
+})

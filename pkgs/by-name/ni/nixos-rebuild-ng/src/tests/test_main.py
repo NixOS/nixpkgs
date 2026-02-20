@@ -386,6 +386,8 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
                     "eval",
                     "--json",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.images',
@@ -412,6 +414,8 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
                     "eval",
                     "--json",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure.passthru.filePath',
@@ -483,6 +487,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "sudo",
+                    "--preserve-env",
                     "nix-env",
                     "-p",
                     Path("/nix/var/nix/profiles/system"),
@@ -500,6 +505,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "sudo",
+                    "--preserve-env",
                     *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     config_path / "bin/switch-to-configuration",
                     "switch",

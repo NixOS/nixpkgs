@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "opera";
-  version = "0-unstable-2026-01-27";
+  version = "0-unstable-2026-02-11";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "opera-libretro";
-    rev = "f20af9ad3271af2de8229f522c6534984a6e2520";
-    hash = "sha256-cilOteQK6clVaGdemujrNwfcbI6Gw+UMvtF6hICm3Wo=";
+    rev = "1eee72f640e4da6f1b8ca68f70b51db22cc474c8";
+    hash = "sha256-dXCMV0YZy33GcNTYlVTv/x7jwrKJRPTEclfU2qfqlXw=";
   };
 
   makefile = "Makefile";

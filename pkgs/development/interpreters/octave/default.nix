@@ -1,6 +1,7 @@
 {
   stdenv,
   pkgs,
+  config,
   lib,
   fetchurl,
   gfortran,
@@ -12,7 +13,7 @@
   qhull,
   libsndfile,
   portaudio,
-  libX11,
+  libx11,
   graphicsmagick,
   pcre2,
   pkg-config,
@@ -150,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libGLU
-    libX11
+    libx11
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -207,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     octavePackages = import ../../../top-level/octave-packages.nix {
       pkgs = allPkgs;
       inherit
+        config
         lib
         stdenv
         fetchurl

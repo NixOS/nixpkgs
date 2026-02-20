@@ -9,9 +9,9 @@
   wayland-scanner,
   obs-studio,
   libffi,
-  libX11,
-  libXau,
-  libXdmcp,
+  libx11,
+  libxau,
+  libxdmcp,
   libxcb,
   vulkan-headers,
   vulkan-loader,
@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libffi
-    libX11
-    libXau
-    libXdmcp
+    libx11
+    libxau
+    libxdmcp
     libxcb
     vulkan-headers
     vulkan-loader
@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/glinject.c \
       --replace "libGLX.so.0" "${lib.getLib libGL}/lib/libGLX.so.0" \
-      --replace "libX11.so.6" "${lib.getLib libX11}/lib/libX11.so.6" \
-      --replace "libX11-xcb.so.1" "${lib.getLib libX11}/lib/libX11-xcb.so.1" \
+      --replace "libX11.so.6" "${lib.getLib libx11}/lib/libX11.so.6" \
+      --replace "libX11-xcb.so.1" "${lib.getLib libx11}/lib/libX11-xcb.so.1" \
       --replace "libxcb-dri3.so.0" "${lib.getLib libxcb}/lib/libxcb-dri3.so.0" \
       --replace "libEGL.so.1" "${lib.getLib libGL}/lib/libEGL.so.1" \
       --replace "libvulkan.so.1" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"

@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "languagetool-rust";
   version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "jeertmans";
     repo = "languagetool-rust";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zH93Pi/zVnCLo8O/1HnSTfUOu9vtzF3JSzn+1/1/Oz0=";
   };
 
@@ -94,4 +94,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ name-snrl ];
     mainProgram = "ltrs";
   };
-}
+})

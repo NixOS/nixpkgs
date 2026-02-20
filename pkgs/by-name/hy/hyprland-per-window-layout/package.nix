@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprland-per-window-layout";
   version = "2.17";
 
   src = fetchFromGitHub {
     owner = "coffebar";
     repo = "hyprland-per-window-layout";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-wn1xFLi7CYb9A8fR0MaGYrOeIYuF8PCxbGcyQx33H6Y=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "hyprland-per-window-layout";
   };
-}
+})

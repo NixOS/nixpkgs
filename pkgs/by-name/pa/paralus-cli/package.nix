@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "paralus-cli";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     repo = "cli";
     owner = "paralus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cVrT8wU9MJgc/hzMVe1b0lzm7f+0Prv9w1IjMOAh69E=";
   };
 
@@ -20,8 +20,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.buildNum=${version}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.buildNum=${finalAttrs.version}"
   ];
 
   meta = {
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kashw2 ];
     mainProgram = "paralus";
   };
-}
+})

@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyvest";
-  version = "5.1.4";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PakitoSec";
     repo = "cyvest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OvAnhasc4iZtfi8olQ4rLaokcaC/b5rYdPPMn2pVYTA=";
+    hash = "sha256-FoQxhQHV1VuLfCsi3eRtxhFhuiHOtRDQc8+bhln+MOQ=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Cybersecurity Investigation Model";
     homepage = "https://github.com/PakitoSec/cyvest";
-    changelog = "https://github.com/PakitoSec/cyvest/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/PakitoSec/cyvest/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

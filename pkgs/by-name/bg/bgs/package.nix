@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXinerama,
+  libx11,
+  libxinerama,
   imlib2,
 }:
 
@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXinerama
+    libx11
+    libxinerama
     imlib2
   ];
 

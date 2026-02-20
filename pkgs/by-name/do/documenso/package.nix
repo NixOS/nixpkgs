@@ -15,31 +15,25 @@
   bash,
   openssl,
 }:
-let
+
+buildNpmPackage (finalAttrs: {
   pname = "documenso";
   version = "1.12.6";
-in
-buildNpmPackage {
-
-  inherit version pname;
 
   src = fetchFromGitHub {
     owner = "documenso";
     repo = "documenso";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1TKjsOKJkv3COFgsE4tPAymI0MdeT+T8HiNgnoWHlAY=";
   };
 
+  patches = [
+    ./package-lock.json.patch
+    ./package.json.patch
+    ./turbo.json.patch
+  ];
+
   npmDepsHash = "sha256-ZddRSBDasa3mMAS2dqXgXRMOc1nvspdXsuTZ7c+einw=";
-
-  env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
-
-  env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines_6}/lib/libquery_engine.node";
-  env.PRISMA_QUERY_ENGINE_BINARY = "${prisma-engines_6}/bin/query-engine";
-  env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines_6}/bin/schema-engine";
-  env.TURBO_NO_UPDATE_NOTIFIER = "true";
-  env.TURBO_FORCE = "true";
-  env.TURBO_REMOTE_CACHE_ENABLED = "false";
 
   nativeBuildInputs = [
     pkg-config
@@ -56,11 +50,15 @@ buildNpmPackage {
     vips
   ];
 
-  patches = [
-    ./package-lock.json.patch
-    ./package.json.patch
-    ./turbo.json.patch
-  ];
+  env = {
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+    PRISMA_QUERY_ENGINE_LIBRARY = "${lib.getLib prisma-engines_6}/lib/libquery_engine.node";
+    PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines_6 "query-engine";
+    PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines_6 "schema-engine";
+    TURBO_NO_UPDATE_NOTIFIER = "true";
+    TURBO_FORCE = "true";
+    TURBO_REMOTE_CACHE_ENABLED = "false";
+  };
 
   buildPhase = ''
     runHook preBuild
@@ -78,17 +76,17 @@ buildNpmPackage {
           mkdir -p $out/bin
           cp -r . $out/
 
-          cat > $out/bin/${pname} <<EOF
+          cat > $out/bin/documenso <<EOF
     #!${bash}/bin/bash
-    export PKG_CONFIG_PATH=${openssl.dev}/lib/pkgconfig;
-    export PRISMA_QUERY_ENGINE_LIBRARY=${prisma-engines_6}/lib/libquery_engine.node
-    export PRISMA_QUERY_ENGINE_BINARY=${prisma-engines_6}/bin/query-engine
+    export PKG_CONFIG_PATH=${lib.getLib openssl.dev}/lib/pkgconfig;
+    export PRISMA_QUERY_ENGINE_LIBRARY=${lib.getLib prisma-engines_6}/lib/libquery_engine.node
+    export PRISMA_QUERY_ENGINE_BINARY=${lib.getExe' prisma-engines_6 "query-engine"}
     export PRISMA_SCHEMA_ENGINE_BINARY=${prisma-engines_6}
     cd $out/apps/remix
-    ${prisma_6}/bin/prisma migrate deploy --schema ../../packages/prisma/schema.prisma
-    ${nodejs}/bin/node build/server/main.js
+    ${lib.getExe prisma_6} migrate deploy --schema ../../packages/prisma/schema.prisma
+    ${lib.getExe nodejs} build/server/main.js
     EOF
-          chmod +x $out/bin/${pname}
+          chmod +x $out/bin/documenso
 
           runHook postInstall
   '';
@@ -121,6 +119,6 @@ buildNpmPackage {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.unix;
-    mainProgram = pname;
+    mainProgram = "documenso";
   };
-}
+})

@@ -17,17 +17,17 @@
   gdk-pixbuf,
   glib,
   gtk3,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
+  libxtst,
   libdrm,
   libgbm,
   libGL,
@@ -125,18 +125,18 @@ stdenv.mkDerivation {
           libGL
           libsecret
           libuuid
-          libX11
-          libXcomposite
-          libXcursor
-          libXdamage
-          libXext
-          libXfixes
-          libXi
-          libXrandr
-          libXrender
-          libXScrnSaver
+          libx11
+          libxcomposite
+          libxcursor
+          libxdamage
+          libxext
+          libxfixes
+          libxi
+          libxrandr
+          libxrender
+          libxscrnsaver
           libxkbcommon
-          libXtst
+          libxtst
           nspr
           nss
           pango

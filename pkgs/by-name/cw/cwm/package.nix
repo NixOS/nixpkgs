@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXinerama,
-  libXrandr,
-  libXft,
+  libx11,
+  libxinerama,
+  libxrandr,
+  libxft,
   bison,
   pkg-config,
 }:
@@ -29,10 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     bison
   ];
   buildInputs = [
-    libX11
-    libXinerama
-    libXrandr
-    libXft
+    libx11
+    libxinerama
+    libxrandr
+    libxft
   ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';

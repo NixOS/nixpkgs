@@ -11,14 +11,14 @@
   pcsclite,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sbctl";
   version = "0.18";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "sbctl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Q8uQ74XvteMRcnUPu1PjLAPWt3jeI7aF4m3QMjiZJis=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X github.com/foxboron/sbctl.DatabasePath=${databasePath}"
-    "-X github.com/foxboron/sbctl.Version=${version}"
+    "-X github.com/foxboron/sbctl.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -75,4 +75,4 @@ buildGoModule rec {
     # see upstream on https://github.com/Foxboron/go-uefi/issues/13
     platforms = lib.platforms.linux;
   };
-}
+})

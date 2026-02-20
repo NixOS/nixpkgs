@@ -11,17 +11,18 @@
   desktop-file-utils,
   appstream,
   appstream-glib,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-pdf-poppler";
-  version = "0.3.4";
+  version = "2026.02.03";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-pdf-poppler";
     tag = finalAttrs.version;
-    hash = "sha256-xRTJlPj8sKRjwyuf1hWDyL1n4emLnAEVxVjn6XYn5IU=";
+    hash = "sha256-ddW2SepBoR9BpqcAIAONmd2P5AjkhmWyIjIDeTnHO4Y=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://pwmt.org/projects/zathura-pdf-poppler/";

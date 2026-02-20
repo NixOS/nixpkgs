@@ -6,14 +6,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "naabu";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jubam5UoWYWK8AoRVxbaibzU9Qv/X7VFfGtQxoY008Y=";
   };
 
@@ -43,9 +43,9 @@ buildGoModule rec {
       all ports that return a reply.
     '';
     homepage = "https://github.com/projectdiscovery/naabu";
-    changelog = "https://github.com/projectdiscovery/naabu/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/naabu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "naabu";
   };
-}
+})

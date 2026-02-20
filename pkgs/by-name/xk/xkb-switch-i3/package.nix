@@ -6,7 +6,7 @@
   i3,
   jsoncpp,
   libsigcxx,
-  libX11,
+  libx11,
   libxkbfile,
   pkg-config,
   fetchpatch,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     i3
     jsoncpp
     libsigcxx
-    libX11
+    libx11
     libxkbfile
   ];
 

@@ -11,7 +11,7 @@
   pkg-config,
   wrapGAppsHook3,
   gtk2-x11,
-  libX11,
+  libx11,
   polkit,
   vala,
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk2-x11
-    libX11
+    libx11
     polkit
     vala
   ];

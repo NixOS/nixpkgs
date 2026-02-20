@@ -14,18 +14,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.25.2";
+  version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2Fl6bkoAgu+KvwVIkQEIAPYKQRYyEQPWMRv3vsfnNA4=";
+    hash = "sha256-IOc4Y8U2J4Dpl0A5gfffAayiHKISlFiHU2qg61fR1Tw=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-4peAAxCws5IjWaiNwkRBiaL+n1fE+zsK0qbk1owueeY=";
+  npmDepsHash = "sha256-XfD+PmmeLsbb9rC7DCmqu08/+cXZpGewMN5olrHhH4M=";
 
   dontPatchElf = stdenv.isDarwin;
 
@@ -56,16 +56,15 @@ buildNpmPackage (finalAttrs: {
     substituteInPlace packages/core/src/tools/ripGrep.ts \
       --replace-fail "await ensureRgPath();" "'${lib.getExe ripgrep}';"
 
-    # Ideal method to disable auto-update
-    sed -i '/disableAutoUpdate: {/,/}/ s/default: false/default: true/' packages/cli/src/config/settingsSchema.ts
+    # Disable auto-update by changing default values in settings schema
+    sed -i '/enableAutoUpdate:/,/default: true/ s/default: true/default: false/' packages/cli/src/config/settingsSchema.ts
+    sed -i '/enableAutoUpdateNotification:/,/default: true/ s/default: true/default: false/' packages/cli/src/config/settingsSchema.ts
 
-    # Disable auto-update for real because the default value in settingsSchema isn't cleanly applied
-    # https://github.com/google-gemini/gemini-cli/issues/13569
+    # Also make sure the values are disabled in runtime code by changing condition checks to false
     substituteInPlace packages/cli/src/utils/handleAutoUpdate.ts \
-      --replace-fail "settings.merged.general?.disableAutoUpdate ?? false" "settings.merged.general?.disableAutoUpdate ?? true" \
-      --replace-fail "settings.merged.general?.disableAutoUpdate" "(settings.merged.general?.disableAutoUpdate ?? true)"
-    substituteInPlace packages/cli/src/ui/utils/updateCheck.ts \
-      --replace-fail "settings.merged.general?.disableUpdateNag" "(settings.merged.general?.disableUpdateNag ?? true)"
+      --replace-fail "if (!settings.merged.general.enableAutoUpdateNotification) {" "if (false) {" \
+      --replace-fail "settings.merged.general.enableAutoUpdate," "false," \
+      --replace-fail "!settings.merged.general.enableAutoUpdate" "!false"
   '';
 
   # Prevent npmDeps and python from getting into the closure

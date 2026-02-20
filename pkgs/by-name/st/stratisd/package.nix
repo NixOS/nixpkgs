@@ -28,19 +28,19 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stratisd";
   version = "3.8.6";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "stratisd";
-    tag = "stratisd-v${version}";
+    tag = "stratisd-v${finalAttrs.version}";
     hash = "sha256-Kky/6sgvA8NDDGLQLS3sjPJWTCxkoTP/ow+netnK6tY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-zA+GEKmg5iV1PaGh0yjNb4h52PH7PwpN53xLV8P9Gac=";
   };
 
@@ -137,4 +137,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

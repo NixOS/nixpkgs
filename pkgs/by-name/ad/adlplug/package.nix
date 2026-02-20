@@ -9,11 +9,11 @@
   liblo,
   alsa-lib,
   freetype,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
 
   # Enabling JACK requires a JACK server at runtime, no fallback mechanism
   withJack ? false,
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     ./cmake-v4.patch
   ];
 
-  NIX_LDFLAGS = toString (
+  env.NIX_LDFLAGS = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [
       # Framework that JUCE needs which don't get linked properly
       "-framework CoreAudioKit"
@@ -95,11 +95,11 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     freetype
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
   ]
   ++ lib.optionals withJack [ libjack2 ];
 

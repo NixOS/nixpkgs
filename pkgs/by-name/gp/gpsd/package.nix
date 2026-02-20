@@ -18,11 +18,11 @@
   # optional deps for GUI packages
   guiSupport ? true,
   dbus-glib,
-  libX11,
-  libXt,
-  libXpm,
-  libXaw,
-  libXext,
+  libx11,
+  libxt,
+  libxpm,
+  libxaw,
+  libxext,
   gobject-introspection,
   pango,
   gdk-pixbuf,
@@ -66,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     atk
     dbus-glib
     gdk-pixbuf
-    libX11
-    libXaw
-    libXext
-    libXpm
-    libXt
+    libx11
+    libxaw
+    libxext
+    libxpm
+    libxt
     pango
   ];
 

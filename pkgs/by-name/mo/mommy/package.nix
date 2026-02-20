@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mommy";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "FWDekker";
     repo = "mommy";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-G/8gUoJ6zKtSVlxrMYAkPX28SNG9XnLE72FZkqGhe+o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zuFiRzM3mDt5GIaRl9nCLH3YteJfKtV2R29JwIKygjY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

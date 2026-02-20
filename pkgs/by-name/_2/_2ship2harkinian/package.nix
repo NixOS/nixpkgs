@@ -27,7 +27,7 @@
   libogg,
   libopus,
   libvorbis,
-  libX11,
+  libx11,
   opusfile,
   sdl_gamecontrollerdb,
   makeDesktopItem,
@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libpulseaudio
     libvorbis
-    libX11
+    libx11
     libzip
     nlohmann_json
     (lib.getDev opusfile)
@@ -212,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/bin
     ln -s $out/2s2h/2s2h.elf $out/bin/2s2h
-    install -Dm644 ../mm/linux/2s2hIcon.png $out/share/pixmaps/2s2h.png
+    install -Dm644 ../mm/linux/2s2hIcon.png $out/share/icons/hicolor/512x512/apps/2s2h.png
 
     install -Dm644 -t $out/share/licenses/2ship2harkinian ../LICENSE
     install -Dm644 -t $out/share/licenses/2ship2harkinian/OTRExporter ../OTRExporter/LICENSE

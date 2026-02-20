@@ -19,7 +19,7 @@
   qtile,
   requests,
   setuptools-scm,
-  xorgserver,
+  xorg-server,
   nixosTests,
 }:
 buildPythonPackage rec {
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     python-dateutil
     qtile
     requests
-    xorgserver
+    xorg-server
     # stravalib  # marked as broken due to https://github.com/stravalib/stravalib/issues/379
   ];
 

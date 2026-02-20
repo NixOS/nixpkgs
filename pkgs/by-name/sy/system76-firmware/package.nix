@@ -9,7 +9,7 @@
   efibootmgr,
   makeWrapper,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "system76-firmware";
   # Check Makefile when updating, make sure postInstall matches make install
   version = "1.0.74";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-firmware";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-lgBEzOxTmVAksZ7yo7dIUzP6Z8KKmUpEIDEpU7CL69Y=";
   };
 
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})

@@ -8,14 +8,14 @@
   cmake,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rmpc";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "mierak";
     repo = "rmpc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IcWn15tKlThuLR8s/4KtaHm4np8B8UaKYQsyEWlQoB4=";
   };
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  env.VERGEN_GIT_DESCRIBE = version;
+  env.VERGEN_GIT_DESCRIBE = finalAttrs.version;
 
   postInstall = ''
     installManPage target/man/rmpc.1
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/mierak/rmpc/releases/tag/${src.rev}";
+    changelog = "https://github.com/mierak/rmpc/releases/tag/${finalAttrs.src.rev}";
     description = "TUI music player client for MPD with album art support via kitty image protocol";
     homepage = "https://rmpc.mierak.dev/";
     license = lib.licenses.bsd3;
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rmpc";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

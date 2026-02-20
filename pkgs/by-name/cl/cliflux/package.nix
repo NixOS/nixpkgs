@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/spencerwi/cliflux";
     changelog = "https://github.com/spencerwi/cliflux/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     mainProgram = "cliflux";
   };
 })

@@ -56,6 +56,7 @@ let
       attrs
       // {
 
+        pname = name;
         name = "${name}-${version}";
         inherit version;
 

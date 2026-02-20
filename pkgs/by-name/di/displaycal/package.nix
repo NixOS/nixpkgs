@@ -13,14 +13,14 @@
   argyllcms,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "displaycal";
   version = "3.9.17";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "DisplayCAL";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-cV8x1Hx+KQUhOOzqw/89QgoZ9+82vhwGrhG13KpE9Vw=";
   };
 
@@ -76,4 +76,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ toastal ];
   };
-}
+})

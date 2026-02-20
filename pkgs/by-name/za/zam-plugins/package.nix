@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   boost,
-  libX11,
+  libx11,
   libGL,
   liblo,
   libjack2,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost
-    libX11
+    libx11
     libGL
     liblo
     libjack2

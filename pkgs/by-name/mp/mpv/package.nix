@@ -104,7 +104,8 @@ let
   );
 in
 symlinkJoin {
-  name = "mpv-with-scripts-${mpv-unwrapped.version}";
+  pname = "mpv-with-scripts";
+  inherit (mpv-unwrapped) version;
 
   # TODO: don't link all mpv outputs
   paths = [ mpv-unwrapped.all ];

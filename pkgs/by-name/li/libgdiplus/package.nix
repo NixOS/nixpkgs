@@ -10,7 +10,7 @@
   giflib,
   libjpeg,
   libpng,
-  libXrender,
+  libxrender,
   libexif,
   autoreconfHook,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./configure-pkg-config.patch
   ];
 
-  NIX_LDFLAGS = "-lgif";
+  env.NIX_LDFLAGS = "-lgif";
 
   outputs = [
     "out"
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     libjpeg
     libpng
-    libXrender
+    libxrender
     libexif
   ];
 

@@ -8,9 +8,7 @@
   hypothesis,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -26,12 +24,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  optional-dependencies = {
-    toml = lib.optionals (pythonOlder "3.11") [
-      tomli
-    ];
-  };
 
   nativeCheckInputs = [
     flaky

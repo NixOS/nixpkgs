@@ -15,14 +15,14 @@ let
     git
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npins";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "andir";
     repo = "npins";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-ksOXi7u4bpHyWNHwkUR62fdwKowPW5GqBS7MA7Apwh4=";
   };
 
@@ -50,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ piegames ];
   };
-}
+})

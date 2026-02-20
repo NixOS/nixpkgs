@@ -188,13 +188,13 @@ in
 buildPythonPackage rec {
   pname = "manim";
   pyproject = true;
-  version = "0.19.1";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${version}";
-    hash = "sha256-VkMmIQNLUg6Epttze23vaAA8QOdlnAPQZ7UKpkFRzIk=";
+    hash = "sha256-sM2IQdrqWVopo5Yzjmv6/KTHkgb/7Fma+plAc+gGwaM=";
   };
 
   build-system = [
@@ -236,6 +236,10 @@ buildPythonPackage rec {
     audioop-lts
   ];
 
+  pythonRelaxDeps = [
+    "skia-pathops"
+  ];
+
   optional-dependencies = {
     jupyterlab = [
       jupyterlab
@@ -270,8 +274,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "manim" ];
 
   meta = {
-    # https://github.com/ManimCommunity/manim/pull/4037
-    broken = lib.versionAtLeast av.version "14";
     description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to
@@ -283,6 +285,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/ManimCommunity/manim/releases/tag/${src.tag}";
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ osbm ];
+    maintainers = with lib.maintainers; [
+      osbm
+      ivyfanchiang
+    ];
   };
 }

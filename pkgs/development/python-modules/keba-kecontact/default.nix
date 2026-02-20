@@ -6,15 +6,12 @@
   hatchling,
   ifaddr,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "keba-kecontact";
   version = "4.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "dannerph";

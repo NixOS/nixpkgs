@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication {
   pname = "lichess-bot";
-  version = "2026.1.11.1";
+  version = "2026.2.13.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "lichess-bot-devs";
     repo = "lichess-bot";
-    rev = "96afce91316ba1243290408f2eeb6cd89778e8ff";
-    hash = "sha256-eE6b4VWhBqWjrF028om0NE/UN9+4sI7PoZp4eV6hRcE=";
+    rev = "960bcad4ec5069547cc5fcfd496c47a70280ff56";
+    hash = "sha256-Dc6R9OufJCcTN32Hx2BVauTwaO9/gWRq24hJ4pWRObY=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -31,11 +31,6 @@ python3Packages.buildPythonApplication {
 
   installPhase = ''
     runHook preInstall
-
-    substituteInPlace "lib/lichess_bot.py" \
-      --replace 'open("lib/versioning.yml")' \
-                'open("'$out'/share/lichess-bot/lib/versioning.yml")'
-
 
     mkdir -p "$out"/{bin,share/lichess-bot}
     cp -R . $out/share/lichess-bot

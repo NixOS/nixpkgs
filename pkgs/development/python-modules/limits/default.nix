@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "5.6.0";
+  version = "5.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "limits";
     tag = version;
-    hash = "sha256-JmxoFc+AWV4qLgexpAysMGRKx2Q6K6AqNoaGkWU28Ro=";
+    hash = "sha256-svCvfQcidmfTPpe/GPrPxDhIPbmyoeIlXBR2vttTyHI=";
     postFetch = ''
       rm "$out/limits/_version.pyi"
     '';

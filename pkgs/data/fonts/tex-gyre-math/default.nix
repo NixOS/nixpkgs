@@ -44,7 +44,7 @@ let
       dotless_version = builtins.replaceStrings [ "." ] [ "" ] version;
     in
     stdenv.mkDerivation rec {
-      name = "tex-gyre-${variant}-math-${version}";
+      pname = "tex-gyre-${variant}-math";
       inherit version;
 
       src = fetchzip {
@@ -54,7 +54,7 @@ let
 
       installPhase = ''
         install -m444 -Dt $out/share/fonts/opentype opentype/*.otf
-        install -m444 -Dt $out/share/doc/${name}    doc/*.txt
+        install -m444 -Dt $out/share/doc/${pname}-${version}    doc/*.txt
       '';
 
       outputHashAlgo = "sha256";

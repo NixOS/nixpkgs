@@ -513,7 +513,7 @@ Unless set to `false`, some build systems with good support for parallel buildin
 
 ### Fixed-point arguments of `mkDerivation` {#mkderivation-recursive-attributes}
 
-If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
+If you pass a function to `mkDerivation`, it will call the function with an argument that represents the final state of the package: the return value of the function itself, with any overrides applied, as the function is reinvoked by any `overrideAttrs` calls. For example:
 
 ```nix
 mkDerivation (finalAttrs: {

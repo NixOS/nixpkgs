@@ -9,7 +9,6 @@
   pytest-cov-stub,
   pytest-freezer,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "easyenergy";
   version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";

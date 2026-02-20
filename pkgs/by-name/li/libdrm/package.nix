@@ -6,7 +6,7 @@
   meson,
   ninja,
   docutils,
-  libpthreadstubs,
+  libpthread-stubs,
   withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess,
   libpciaccess,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !stdenv.cc.isClang,
@@ -14,12 +14,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdrm";
   version = "2.4.131";
 
   src = fetchurl {
-    url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
+    url = "https://dri.freedesktop.org/libdrm/libdrm-${finalAttrs.version}.tar.xz";
     hash = "sha256-RbqZg7UciWQGo9ZU3oHTE7lTt25jkeJ5cHPVQ8X2F9U=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     docutils
   ];
   buildInputs = [
-    libpthreadstubs
+    libpthread-stubs
   ]
   ++ lib.optional withIntel libpciaccess
   ++ lib.optional withValgrind valgrind-light;
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

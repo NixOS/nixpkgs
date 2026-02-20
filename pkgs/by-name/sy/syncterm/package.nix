@@ -8,7 +8,7 @@
   autoPatchelfHook,
   ncurses,
   SDL2,
-  libX11,
+  libx11,
   alsa-lib,
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     pkg-config
     SDL2
-    libX11
+    libx11
     perl
     unzip
   ]; # SDL2 for `sdl2-config`.

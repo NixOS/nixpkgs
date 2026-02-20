@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   libpulseaudio,
-  libX11,
+  libx11,
   makeWrapper,
   sox,
   fetchpatch,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
-    libX11
+    libx11
   ];
 
   nativeBuildInputs = [

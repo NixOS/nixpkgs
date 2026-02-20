@@ -210,6 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
       cc-by-40
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libuv" finalAttrs.version;
   };
 
 })

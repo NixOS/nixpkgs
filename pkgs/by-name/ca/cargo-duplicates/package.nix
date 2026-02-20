@@ -9,14 +9,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-duplicates";
   version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "cargo-duplicates";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JzS1+BHSCEcZM5MokbQsck/AGJ7EeSwbzjNz0uLQsgE=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

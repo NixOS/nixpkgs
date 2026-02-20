@@ -11,7 +11,7 @@
   libnotify,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "densify";
   version = "0.3.2";
   pyproject = false;
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hkdb";
     repo = "Densify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-giFFy8HiSmnOqFKLyrPD1kTry8hMQxotEgD/u2FEMRY=";
   };
 
@@ -71,9 +71,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Compress PDF files with Ghostscript";
     homepage = "https://github.com/hkdb/Densify";
-    changelog = "https://github.com/hkdb/Densify/blob/${src.rev}/README.md";
+    changelog = "https://github.com/hkdb/Densify/blob/${finalAttrs.src.rev}/README.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
     platforms = lib.platforms.all;
   };
-}
+})

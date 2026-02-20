@@ -16,7 +16,7 @@
   libgit2,
   libpulseaudio,
   libsodium,
-  libXtst,
+  libxtst,
   libvpx,
   libyuv,
   libopus,
@@ -93,7 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
     libpulseaudio
     libsodium
-    libXtst
+    libxtst
     libvpx
     libyuv
     libopus

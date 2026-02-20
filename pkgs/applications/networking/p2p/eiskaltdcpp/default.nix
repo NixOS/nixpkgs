@@ -7,7 +7,7 @@
   pkg-config,
   wrapQtAppsHook,
   bzip2,
-  libX11,
+  libx11,
   qtbase,
   qttools,
   qtmultimedia,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     qtmultimedia
     qtscript
     bzip2
-    libX11
+    libx11
     pcre-cpp
     libidn
     lua5

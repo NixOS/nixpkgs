@@ -17,12 +17,12 @@
 # gflags is required to run tests
 assert runTests -> gflags != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ceres-solver";
   version = "2.1.0";
 
   src = fetchurl {
-    url = "http://ceres-solver.org/ceres-solver-${version}.tar.gz";
+    url = "http://ceres-solver.org/ceres-solver-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-99dO7N4K7XW/xR7EjJHQH+Fqa/FrzhmHpwcyhnAeL8Y=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ giogadi ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,
@@ -12,23 +11,15 @@
 
 buildPythonPackage rec {
   pname = "pycontrol4";
-  version = "1.5.0";
-
-  disabled = pythonOlder "3.11";
-
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lawtancool";
     repo = "pyControl4";
     tag = "v${version}";
-    hash = "sha256-r90v9vy8avvEbNKrzZgYtDS5Z5hV66Fd9fF9XJ4r7B4=";
+    hash = "sha256-8Sd39i/PPphGj3SI20ny5PkUU2D6QKMXn+zsRs9taLw=";
   };
-
-  patches = [
-    # https://github.com/lawtancool/pyControl4/pull/47
-    ./asyncio-timeout.patch
-  ];
 
   build-system = [ setuptools ];
 

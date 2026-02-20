@@ -6,8 +6,8 @@
   alsa-utils,
   fltk,
   libjack2,
-  libXft,
-  libXpm,
+  libxft,
+  libxpm,
   libjpeg,
   libpng,
   libsamplerate,
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     alsa-utils
     fltk
     libjack2
-    libXft
-    libXpm
+    libxft
+    libxpm
     libjpeg
     libpng
     libsamplerate

@@ -86,6 +86,8 @@ stdenv.mkDerivation rec {
 
     install -Dm444 $out/share/pixmaps/cider.png \
       $out/share/icons/hicolor/256x256/apps/cider.png
+
+    rm -r $out/share/pixmaps
   '';
 
   passthru.updateScript = ./updater.sh;

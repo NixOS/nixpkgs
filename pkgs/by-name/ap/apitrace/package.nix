@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
   procps,
   python3,
   libdwarf,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   # LD_PRELOAD wrappers need to be statically linked to work against all kinds
   # of games -- so it's fine to use e.g. bundled snappy.
   buildInputs = [
-    libX11
+    libx11
     procps
     libdwarf
     gtest

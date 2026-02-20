@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "senv";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "SpectralOps";
     repo = "senv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-TjlIX8FPNiPDQo41pIt04cki/orc+v30pV3o2bQQhAQ=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     broken = stdenv.hostPlatform.isDarwin; # needs golang.org/x/sys bump
     mainProgram = "senv";
   };
-}
+})

@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "brotab";
   version = "1.5.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "balta2ar";
     repo = "brotab";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Pv5tEDL11brc/n3TuFcad9kTr7Jb/Bt7JFb29HuX/28=";
   };
 
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

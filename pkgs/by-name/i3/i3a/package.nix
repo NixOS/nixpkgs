@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "i3a";
   version = "2.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BcGAFFq3UEj4o7nNQ9aStueKmeDNIqSIqkYWhs2Tnqg=";
   };
 
@@ -37,4 +37,4 @@ python3Packages.buildPythonApplication rec {
     ];
     broken = python3Packages.python.version < "3.11";
   };
-}
+})

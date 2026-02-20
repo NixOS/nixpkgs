@@ -45,7 +45,7 @@ mkJetBrainsProduct {
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     musl
   ];
 

@@ -6,8 +6,8 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  libX11,
-  libXi,
+  libx11,
+  libxi,
   libGL,
   curl,
   openal,
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libX11
-    libXi
+    libx11
+    libxi
     libGL
     curl
     openal

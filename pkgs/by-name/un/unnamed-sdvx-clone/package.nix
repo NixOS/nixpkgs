@@ -16,7 +16,7 @@
   curl,
   libcpr,
   rapidjson,
-  libX11,
+  libx11,
   libGL,
   writeShellScriptBin,
   makeDesktopItem,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libcpr
     rapidjson
-    libX11
+    libx11
     libGL
   ];
 

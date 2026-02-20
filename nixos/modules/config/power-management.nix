@@ -62,6 +62,19 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    warnings = lib.optional (cfg.powerUpCommands != "") ''
+      powerManagement.powerUpCommands is deprecated due to it having unclear ordering semantics.
+      It will be removed in NixOS 26.11.
+      It is recommended to create an explicit systemd oneshot service instead,
+      that is pulled in at the right time during the boot process.
+      See https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+      for more information on possible targets that can be used for this.
+
+      If you also want to run this service upon waking up from resume, the recommended
+      method to do so is described here:
+      https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html#sleep.target
+    '';
+
     systemd.targets.post-resume = {
       description = "Post-Resume Actions";
       requires = [ "post-resume.service" ];
@@ -81,14 +94,25 @@ in
       serviceConfig.Type = "oneshot";
     };
 
+    systemd.services.post-boot = {
+      description = "Post-boot Actions";
+      # It's not well defined at what point in the bootup sequence this should run
+      # we should eventually just remove this.
+      wantedBy = [ "multi-user.target" ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        ${cfg.powerUpCommands}
+      '';
+    };
+
     systemd.services.post-resume = {
       description = "Post-Resume Actions";
-      after = [
-        "suspend.target"
-        "hibernate.target"
-        "hybrid-sleep.target"
-        "suspend-then-hibernate.target"
-      ];
+      # Pulled in by post-resume.service above
+      after = [ "sleep.target" ];
       script = ''
         /run/current-system/systemd/bin/systemctl try-restart --no-block post-resume.target
         ${cfg.resumeCommands}

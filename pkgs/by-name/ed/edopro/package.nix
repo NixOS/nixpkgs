@@ -25,9 +25,9 @@
   libjpeg,
   libpng,
   libvorbis,
-  libX11,
+  libx11,
   libxkbcommon,
-  libXxf86vm,
+  libxxf86vm,
   mono,
   nlohmann_json,
   openal,
@@ -86,9 +86,9 @@ let
 
     buildInputs = [
       libGLU
-      libX11
+      libx11
       libxkbcommon
-      libXxf86vm
+      libxxf86vm
       wayland
     ];
 
@@ -277,9 +277,9 @@ let
         --prefix LD_LIBRARY_PATH : ${
           lib.makeLibraryPath [
             libGL
-            libX11
+            libx11
             libxkbcommon
-            libXxf86vm
+            libxxf86vm
             sqlite
             wayland
             egl-wayland

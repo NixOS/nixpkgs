@@ -4,11 +4,11 @@
   stdenv,
   fetchzip,
   ncurses,
-  libX11,
-  libXaw,
-  libXt,
-  libXext,
-  libXmu,
+  libx11,
+  libxaw,
+  libxt,
+  libxext,
+  libxmu,
   makeWrapper,
   writeScript,
 }:
@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     ncurses
-    libX11
-    libXaw
-    libXt
-    libXext
-    libXmu
+    libx11
+    libxaw
+    libxt
+    libxext
+    libxmu
   ];
 
   sourceRoot = "${finalAttrs.src.name}/Sil/src";

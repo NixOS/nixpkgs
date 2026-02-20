@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustic";
   version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MYl6tcCpWsyU38YSXpK3uFaDpS351ct89JIXhvpVu+Q=";
   };
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/rustic-rs/rustic";
-    changelog = "https://github.com/rustic-rs/rustic/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/rustic-rs/rustic/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Fast, encrypted, deduplicated backups powered by pure Rust";
     mainProgram = "rustic";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
       lib.maintainers.pmw
     ];
   };
-}
+})

@@ -165,9 +165,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_GUI" true)
   ];
 
-  NIX_LDFLAGS = lib.optionals (
-    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
-  ) "-levent_core";
+  env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) {
+    NIX_LDFLAGS = "-levent_core";
+  };
 
   nativeCheckInputs = [ python3 ];
 

@@ -18,14 +18,14 @@
   libjxl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swaybg";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaybg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IJcPSBJErf8Dy9YhYAc9eg/llgaaLZCQSB0Brof+kpg=";
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Wallpaper tool for Wayland compositors";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     longDescription = ''
       A wallpaper utility for Wayland compositors, that is compatible with any
       Wayland compositor which implements the following Wayland protocols:
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yggdrasil";
   version = "0.5.12";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NlNQnYmK//p35pj2MInD6RVsajM/bGDhOuzOZZYoWRw=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}"
+    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${finalAttrs.version}"
     "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=yggdrasil"
     "-X github.com/yggdrasil-network/yggdrasil-go/src/config.defaultAdminListen=unix:///var/run/yggdrasil/yggdrasil.sock"
     "-s"
@@ -45,4 +45,4 @@ buildGoModule rec {
       peigongdsd
     ];
   };
-}
+})

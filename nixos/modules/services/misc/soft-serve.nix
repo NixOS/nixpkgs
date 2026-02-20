@@ -45,11 +45,6 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      # The config file has to be inside the state dir
-      "L+ ${stateDir}/config.yaml - - - - ${configFile}"
-    ];
-
     systemd.services.soft-serve = {
       description = "Soft Serve git server";
       documentation = [ docUrl ];
@@ -58,8 +53,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       environment.SOFT_SERVE_DATA_PATH = stateDir;
-
-      restartTriggers = [ configFile ];
+      environment.SOFT_SERVE_CONFIG_LOCATION = configFile;
 
       serviceConfig = {
         Type = "simple";

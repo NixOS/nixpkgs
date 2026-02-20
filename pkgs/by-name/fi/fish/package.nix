@@ -298,6 +298,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
+    sphinx
     # Avoid warnings when building the manpages about HOME not being writable
     writableTmpDirAsHomeHook
   ];
@@ -350,7 +351,6 @@ stdenv.mkDerivation (finalAttrs: {
     glibcLocales
     (python3.withPackages (ps: [ ps.pexpect ]))
     procps
-    sphinx
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # For the getconf command, used in default-setup-path.fish

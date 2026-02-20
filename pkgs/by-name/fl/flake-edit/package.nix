@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flake-edit";
   version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "a-kenji";
     repo = "flake-edit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CDz7iDOPearlxsqLuAuG+cmKneFavxJmdCbnWwEIvcU=";
   };
 
@@ -43,9 +43,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Edit your flake inputs with ease";
     homepage = "https://github.com/a-kenji/flake-edit";
-    changelog = "https://github.com/a-kenji/flake-edit/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/a-kenji/flake-edit/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ a-kenji ];
     mainProgram = "flake-edit";
   };
-}
+})

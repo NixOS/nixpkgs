@@ -2,13 +2,11 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  autoconf,
-  gfortran,
   cmake,
+  gfortran,
   libzip,
-  pkg-config,
   lhapdf,
-  autoPatchelfHook,
+  patchelf,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,19 +25,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    autoconf
-    gfortran
     cmake
-    pkg-config
+    gfortran
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ patchelf ];
 
   buildInputs = [
     libzip
     lhapdf
   ];
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    # Needed to initialize a valid SHERPA_LIBRARY_PATH
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
 
   preFixup =
     lib.optionalString stdenv.hostPlatform.isDarwin ''

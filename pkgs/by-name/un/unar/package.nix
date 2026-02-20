@@ -14,7 +14,7 @@
 let
   stdenv = clangStdenv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unar";
   version = "1.10.8";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       owner = "MacPaw";
       repo = "XADMaster";
       name = repo;
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-dmIyxpa3pq4ls4Grp0gy/6ZjcaA7rmobMn4h1inVgns=";
     })
     (fetchFromGitHub {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace unar.m lsar.m \
-      --replace-fail "v1.10.7" "v${version}"
+      --replace-fail "v1.10.7" "v${finalAttrs.version}"
   ''
   + (
     if stdenv.hostPlatform.isDarwin then
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     mainProgram = "unar";
     platforms = lib.platforms.unix;
   };
-}
+})

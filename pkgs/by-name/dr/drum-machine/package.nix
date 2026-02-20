@@ -16,7 +16,7 @@
   ffmpeg-headless,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "drum-machine";
   version = "1.5.0";
   pyproject = false;
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Revisto";
     repo = "drum-machine";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-F3h3BxLNkJq0jpfNOGcTbckpc8CksyA3Bc8GNKviB+I=";
   };
 
@@ -72,9 +72,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Modern and intuitive application for creating, playing, and managing drum patterns";
     homepage = "https://apps.gnome.org/DrumMachine";
-    changelog = "https://github.com/Revisto/drum-machine/releases/tag/${src.tag}";
+    changelog = "https://github.com/Revisto/drum-machine/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
-}
+})

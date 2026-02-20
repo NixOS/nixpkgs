@@ -5,7 +5,7 @@
   lame,
   lib,
   makeWrapper,
-  monkeysAudio,
+  monkeys-audio,
   nixosTests,
   perlPackages,
   sox,
@@ -24,7 +24,7 @@ let
       sox
       wavpack
     ]
-    ++ (lib.optional stdenv.hostPlatform.isLinux monkeysAudio)
+    ++ (lib.optional stdenv.hostPlatform.isLinux monkeys-audio)
   );
 
   libPath = lib.makeLibraryPath [

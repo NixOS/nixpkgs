@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ali";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "nakabonne";
     repo = "ali";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iwuvWqDaaf/U8f4KDeq1gs+FlDoC11uDs+l2Z7Npd6M=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   meta = {
     description = "Generate HTTP load and plot the results in real-time";
     homepage = "https://github.com/nakabonne/ali";
-    changelog = "https://github.com/nakabonne/ali/releases/tag/v${version}";
+    changelog = "https://github.com/nakabonne/ali/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ farcaller ];
@@ -30,4 +30,4 @@ buildGoModule rec {
     # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

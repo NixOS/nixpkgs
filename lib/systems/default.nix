@@ -384,7 +384,7 @@ let
             if pkgs.stdenv.hostPlatform.canExecute final then
               lib.getExe (pkgs.writeShellScriptBin "exec" ''exec "$@"'')
             else if final.isWindows then
-              "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
+              "${wine}/bin/wine"
             else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null then
               "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
             else if final.isWasi then

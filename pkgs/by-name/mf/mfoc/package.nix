@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mfoc";
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/nfc-tools/mfoc";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

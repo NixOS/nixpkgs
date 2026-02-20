@@ -32,6 +32,7 @@
   libxkbfile,
   libxcb,
   minizip,
+  net-tools,
   lsb-release,
   freetype,
   fontconfig,
@@ -40,21 +41,29 @@
   pciutils,
   copyDesktopItems,
   pulseaudio,
+  udev,
 }:
 
 let
   description = "Desktop sharing application, providing remote support and online meetings";
+  pin = lib.importJSON ./pin.json;
+  inherit (pin) version;
+  inherit (stdenv.hostPlatform) system;
+  url =
+    if system == "x86_64-linux" then
+      "https://download.anydesk.com/linux/anydesk-${version}-amd64.tar.gz"
+    else if system == "aarch64-linux" then
+      "https://download.anydesk.com/rpi/anydesk-${version}-arm64.tar.gz"
+    else
+      throw "cannot install AnyDesk on ${system}";
+  hash = pin.${system};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "anydesk";
-  version = "7.1.1";
+  inherit version;
 
   src = fetchurl {
-    urls = [
-      "https://download.anydesk.com/linux/anydesk-${finalAttrs.version}-amd64.tar.gz"
-      "https://download.anydesk.com/linux/generic-linux/anydesk-${finalAttrs.version}-amd64.tar.gz"
-    ];
-    hash = "sha256-pGzU4dBeWlACAOvshBzTPN6PcNdQkQXAjGFnK+yrKA4=";
+    inherit url hash;
   };
 
   buildInputs = [
@@ -90,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libsm
     libxrender
+    udev
   ];
 
   nativeBuildInputs = [
@@ -139,17 +149,32 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       } \
       --prefix GDK_BACKEND : x11 \
+      --suffix PATH : ${
+        lib.makeBinPath [
+          net-tools
+        ]
+      } \
       --set GTK_THEME Adwaita
   '';
 
   passthru = {
     updateScript = genericUpdater {
-      versionLister = writeShellScript "anydesk-versionLister" ''
-        curl -s https://anydesk.com/en/downloads/linux \
-          | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
-          | uniq \
-          | sed 's,.*/anydesk-\(.*\)-amd64.tar.gz,\1,g'
-      '';
+      versionLister =
+        let
+          arch =
+            if system == "x86_64-linux" then
+              "amd64"
+            else if system == "aarch64-linux" then
+              "arm64"
+            else
+              throw "cannot update AnyDesk on ${system}";
+        in
+        writeShellScript "anydesk-versionLister" ''
+          curl -s https://anydesk.com/en/downloads/linux \
+            | grep "https://[a-z0-9._/-]*-${arch}.tar.gz" -o \
+            | uniq \
+            | sed 's,.*/anydesk-\(.*\)-${arch}.tar.gz,\1,g'
+        '';
     };
   };
 
@@ -158,7 +183,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.anydesk.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    mainProgram = "anydesk";
     maintainers = [ ];
   };
 })

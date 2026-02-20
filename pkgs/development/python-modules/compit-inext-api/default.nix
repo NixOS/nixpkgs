@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "compit-inext-api";
-  version = "0.5.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Przemko92";
     repo = "compit-inext-api";
     tag = finalAttrs.version;
-    hash = "sha256-DlNkDfV3fp/7DetiIDx3yi8SfJHV4sFIMHEam5rcYrg=";
+    hash = "sha256-7FGB2Vh0BhRzZSv/K5jISSFAN4VmFm9Je4uB9hdXS7k=";
   };
 
   build-system = [ setuptools ];

@@ -13,11 +13,11 @@
   jbig2dec,
   leptonica,
   libGL,
-  libX11,
-  libXau,
-  libXcomposite,
-  libXdmcp,
-  libXfixes,
+  libx11,
+  libxau,
+  libxcomposite,
+  libxdmcp,
+  libxfixes,
   libdrm,
   libffi,
   libjpeg,
@@ -43,8 +43,8 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-wm,
   xz,
   # Boolean flags
   buildManPages ? true,
@@ -81,11 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     jbig2dec
     leptonica
     libGL
-    libX11
-    libXau
-    libXcomposite
-    libXdmcp
-    libXfixes
+    libx11
+    libxau
+    libxcomposite
+    libxdmcp
+    libxfixes
     libdrm
     libffi
     libjpeg
@@ -105,8 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
     wayland
     wayland-protocols
-    xcbutil
-    xcbutilwm
+    libxcb-util
+    libxcb-wm
     xz
   ]
   ++ lib.optionals (!useBuiltinLua) [ luajit ]

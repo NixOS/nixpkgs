@@ -5,7 +5,7 @@
   ffmpeg,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yutto";
   version = "2.1.1";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yutto-dev";
     repo = "yutto";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zolH3mf9YQLZLK98hhbHqUdDLRDodS/fChyfZ/xzVew=";
   };
 
@@ -51,4 +51,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "yutto";
   };
-}
+})

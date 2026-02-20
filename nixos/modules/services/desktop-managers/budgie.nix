@@ -186,12 +186,12 @@ in
       ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ (utils.removePackagesByName [
         nemo
-        mate.eom
-        mate.pluma
-        mate.atril
-        mate.engrampa
-        mate.mate-calc
-        mate.mate-system-monitor
+        eom
+        pluma
+        atril
+        engrampa
+        mate-calc
+        mate-system-monitor
         vlc
 
         # Supplemental tooling.

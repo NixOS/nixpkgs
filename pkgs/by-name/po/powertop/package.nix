@@ -16,14 +16,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "powertop";
   version = "2.15";
 
   src = fetchFromGitHub {
     owner = "fenrus75";
     repo = "powertop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-53jfqt0dtMqMj3W3m6ravUTzApLQcljDHfdXejeZa4M=";
   };
 
@@ -57,13 +57,13 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = powertop;
       command = "powertop --version";
-      inherit version;
+      inherit (finalAttrs) version;
     };
   };
 
   meta = {
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/fenrus75/powertop/releases/tag/v${version}";
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://github.com/fenrus75/powertop/releases/tag/v${finalAttrs.version}";
     description = "Analyze power consumption on Intel-based laptops";
     mainProgram = "powertop";
     license = lib.licenses.gpl2Only;
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

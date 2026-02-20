@@ -55,7 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "cloud-hypervisor";
     maintainers = with lib.maintainers; [
-      offline
       qyliss
       phip1611
     ];

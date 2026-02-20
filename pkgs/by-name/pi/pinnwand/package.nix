@@ -6,7 +6,7 @@
 }:
 
 with python3.pkgs;
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "pinnwand";
   version = "1.6.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = "pinnwand";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oB7Dd1iVzGqr+5nG7BfZuwOQUgUnmg6ptQDZPGH7P5E=";
   };
 
@@ -55,7 +55,7 @@ buildPythonApplication rec {
   passthru.tests = nixosTests.pinnwand;
 
   meta = {
-    changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${version}";
+    changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${finalAttrs.version}";
     description = "Python pastebin that tries to keep it simple";
     homepage = "https://github.com/supakeen/pinnwand";
     license = lib.licenses.mit;
@@ -63,4 +63,4 @@ buildPythonApplication rec {
     mainProgram = "pinnwand";
     platforms = lib.platforms.linux;
   };
-}
+})

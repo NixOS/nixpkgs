@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional useUnrar unrar;
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   postPatch = "patchShebangs version.sh";
 

@@ -13,14 +13,14 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vectorscan";
   version = "5.4.12";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
-    rev = "vectorscan/${version}";
+    rev = "vectorscan/${finalAttrs.version}";
     hash = "sha256-P/3qmgVZ9OLfJGfxsKJ6CIuaKuuhs1nJt4Vjf1joQDc=";
   };
 
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
       code will be abstracted away.
     '';
     homepage = "https://www.vectorcamp.gr/vectorscan/";
-    changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG-vectorscan.md";
+    changelog = "https://github.com/VectorCamp/vectorscan/blob/${finalAttrs.src.rev}/CHANGELOG-vectorscan.md";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [
       bsd3 # and
@@ -128,4 +128,4 @@ stdenv.mkDerivation rec {
       vlaci
     ];
   };
-}
+})

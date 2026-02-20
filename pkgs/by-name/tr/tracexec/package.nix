@@ -13,7 +13,7 @@
   clang,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tracexec";
   version = "0.13.1";
 
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/kxxt/tracexec/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kxxt/tracexec/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Small utility for tracing execve{,at} and pre-exec behavior";
     homepage = "https://github.com/kxxt/tracexec";
     license = lib.licenses.gpl2Plus;
@@ -81,4 +81,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -10,7 +10,7 @@ let
   python3 = python312;
 in
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dmarc-metrics-exporter";
   version = "1.2.0";
 
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cIsI4TNYuLK0fpUg9lnbl5KSBtzQoT/pTByI9hiy/7o=";
   };
 
@@ -67,8 +67,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Export Prometheus metrics from DMARC reports";
     mainProgram = "dmarc-metrics-exporter";
     homepage = "https://github.com/jgosmann/dmarc-metrics-exporter";
-    changelog = "https://github.com/jgosmann/dmarc-metrics-exporter/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/jgosmann/dmarc-metrics-exporter/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ma27 ];
   };
-}
+})

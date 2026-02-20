@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goimports-reviser";
   version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "incu6us";
     repo = "goimports-reviser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5v10DmJovyDyfAlgLuO4uCKRDZGIUxGLHFJRHsGmSm4=";
   };
   vendorHash = "sha256-aTPzvqIwjZzEq9LHFdebIgbKMwsBOqLbpEWB7rN7cYY=";
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Tag=${src.rev}"
+    "-X=main.Tag=${finalAttrs.src.rev}"
   ];
 
   checkFlags = [
@@ -44,4 +44,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jk ];
   };
-}
+})

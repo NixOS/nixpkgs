@@ -6,14 +6,14 @@
   libsecret,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sigtop";
   version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "tbvdm";
     repo = "sigtop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-EvdO7fGnNdu1/f61c4k2dpeMUqKaq9xKGgevAQ+f3q0=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fricklerhandwerk ];
   };
-}
+})

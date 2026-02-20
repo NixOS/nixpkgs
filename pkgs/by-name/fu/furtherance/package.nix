@@ -16,16 +16,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "furtherance";
-  version = "26.1.1";
+  version = "26.7.0";
 
   src = fetchFromGitHub {
     owner = "unobserved-io";
     repo = "Furtherance";
     rev = finalAttrs.version;
-    hash = "sha256-VG1Ghhi74tkPU9bgauV98Gp5kVoZJ1cJUqWLWnrUAOU=";
+    hash = "sha256-UMkFEbLdwZsSJviO29FNmLYLL5/HofhriMptpjSAYuY=";
   };
 
-  cargoHash = "sha256-6S0L8FHI5eCTzhxlew35pK7TewMplKKJDaqJdtoYRnM=";
+  cargoHash = "sha256-fdslQutVEGq1EG+Q8QAYKf9XfoostvHKWZrr4YwEowQ=";
 
   nativeBuildInputs = [
     pkg-config

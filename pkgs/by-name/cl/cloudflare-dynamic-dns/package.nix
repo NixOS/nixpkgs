@@ -5,14 +5,14 @@
   fetchFromGitHub,
   testers,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudflare-dynamic-dns";
   version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "zebradil";
     repo = "cloudflare-dynamic-dns";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-G3msehvCZPm5WZTVCN0NnVEApZBQtqxJKCt0SFWb6xk=";
   };
 
@@ -23,8 +23,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=nixpkg-${version}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=nixpkg-${finalAttrs.version}"
     "-X=main.date=1970-01-01"
   ];
 
@@ -33,11 +33,11 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion { package = cloudflare-dynamic-dns; };
 
   meta = {
-    changelog = "https://github.com/Zebradil/cloudflare-dynamic-dns/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Zebradil/cloudflare-dynamic-dns/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Dynamic DNS client for Cloudflare";
     homepage = "https://github.com/Zebradil/cloudflare-dynamic-dns";
     license = lib.licenses.mit;
     mainProgram = "cloudflare-dynamic-dns";
     maintainers = [ lib.maintainers.zebradil ];
   };
-}
+})

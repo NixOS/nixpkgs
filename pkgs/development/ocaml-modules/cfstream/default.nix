@@ -8,7 +8,7 @@
   ounit,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "cfstream";
   version = "1.3.2";
 
@@ -16,8 +16,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "biocaml";
-    repo = pname;
-    rev = version;
+    repo = "cfstream";
+    rev = finalAttrs.version;
     hash = "sha256-iSg0QsTcU0MT/Cletl+hW6bKyH0jkp7Jixqu8H59UmQ=";
   };
 
@@ -36,9 +36,9 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Simple Core-inspired wrapper for standard library Stream module";
     maintainers = [ lib.maintainers.bcdarwin ];
     license = lib.licenses.lgpl21;
   };
-}
+})

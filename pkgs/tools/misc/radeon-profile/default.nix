@@ -6,7 +6,7 @@
   wrapQtAppsHook,
   qtbase,
   qtcharts,
-  libXrandr,
+  libxrandr,
   libdrm,
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtcharts
-    libXrandr
+    libxrandr
     libdrm
   ];
 

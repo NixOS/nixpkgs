@@ -10,9 +10,9 @@
   libxcrypt,
   lttng-ust_2_12,
   musl,
-  libICE,
-  libSM,
-  libX11,
+  libice,
+  libsm,
+  libx11,
   dotnetCorePackages,
   libxcb-keysyms,
   expat,
@@ -57,25 +57,26 @@ in
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
-  buildInputs = [
-    openssl
-    libxcrypt
-    lttng-ust_2_12
-    musl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libxcb-keysyms
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
-    expat
-    libxml2
-    xz
-  ];
+  # TODO: Some of these dependencies should probably also be added on Darwin - however it seems that JetBrains bundles them all? Unclear.
+  #       Somebody with a Darwin machine should investigate this.
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      openssl
+      libxcrypt
+      lttng-ust_2_12
+      musl
+      libxcb-keysyms
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
+      expat
+      libxml2
+      xz
+    ];
   extraLdPath = lib.optionals (stdenv.hostPlatform.isLinux) [
     # Avalonia dependencies needed for dotMemory
-    libICE
-    libSM
-    libX11
+    libice
+    libsm
+    libx11
   ];
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed

@@ -13,7 +13,7 @@
   makeWrapper,
   libtiff,
   enableX11 ? false,
-  libX11,
+  libx11,
   buildPackages,
 }:
 
@@ -50,14 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     jbigkit
   ]
-  ++ lib.optional enableX11 libX11;
+  ++ lib.optional enableX11 libx11;
 
   strictDeps = true;
 
   enableParallelBuilding = true;
-
-  # Environment variables
-  STRIPPROG = "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip";
 
   postPatch = ''
     # Install libnetpbm.so symlink to correct destination
@@ -102,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
+  env = {
+    STRIPPROG = "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip";
+  }
+  // lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   };
 

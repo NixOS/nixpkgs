@@ -61,7 +61,7 @@ in
 
     settings = mkOption {
       description = ''
-        Free-form settings written directly to the `lldap_config.toml` file.
+        Free-form settings written directly to the {file}`lldap_config.toml` file.
         Refer to <https://github.com/lldap/lldap/blob/main/lldap_config.docker_template.toml> for supported values.
       '';
 

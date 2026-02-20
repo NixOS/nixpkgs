@@ -90,6 +90,16 @@
         "path": "ai/grazie/model/model-common-jvm/0.8.74/model-common-jvm-0.8.74.jar"
     },
     {
+        "url": "ai/grazie/model/model-common-jvm/0.8.74/model-common-jvm-0.8.74.jar",
+        "hash": "d9c0813e00ff06888f30008098a3938a348863ee65c0b7f9a6aa524bb10982bf",
+        "path": "ai/grazie/model/model-common-jvm/0.8.74/model-common-jvm-0.8.74.jar"
+    },
+    {
+        "url": "ai/grazie/model/model-def-jvm/0.8.74/model-def-jvm-0.8.74.jar",
+        "hash": "d79871ceab86ee827ee1f1f069ffccb5da3fba05b7cd9829b4deca5936126fef",
+        "path": "ai/grazie/model/model-def-jvm/0.8.74/model-def-jvm-0.8.74.jar"
+    },
+    {
         "url": "ai/grazie/model/model-def-jvm/0.8.74/model-def-jvm-0.8.74.jar",
         "hash": "d79871ceab86ee827ee1f1f069ffccb5da3fba05b7cd9829b4deca5936126fef",
         "path": "ai/grazie/model/model-def-jvm/0.8.74/model-def-jvm-0.8.74.jar"
@@ -120,6 +130,11 @@
         "path": "ai/grazie/model/model-gec-jvm/0.8.74/model-gec-jvm-0.8.74.jar"
     },
     {
+        "url": "ai/grazie/model/model-gec-jvm/0.8.74/model-gec-jvm-0.8.74.jar",
+        "hash": "99cac5b6a3d8cd6e32333bb88c1aead22c7360a1471ea4a546425b822546f57f",
+        "path": "ai/grazie/model/model-gec-jvm/0.8.74/model-gec-jvm-0.8.74.jar"
+    },
+    {
         "url": "ai/grazie/model/model-indexing-jvm/0.8.74/model-indexing-jvm-0.8.74.jar",
         "hash": "664721a747bad766340aed882e265f01be3575a4d4800b003df35cbd9c698f6c",
         "path": "ai/grazie/model/model-indexing-jvm/0.8.74/model-indexing-jvm-0.8.74.jar"
@@ -138,6 +153,11 @@
         "url": "ai/grazie/model/model-llm-jvm/0.8.74/model-llm-jvm-0.8.74.jar",
         "hash": "0d6a157b67003c8ec2bc94977b938bb78344bb8fdb3d14e54e80e8e48011845b",
         "path": "ai/grazie/model/model-llm-jvm/0.8.74/model-llm-jvm-0.8.74.jar"
+    },
+    {
+        "url": "ai/grazie/model/model-ner-jvm/0.8.74/model-ner-jvm-0.8.74.jar",
+        "hash": "f2c12ec41507a192df5740a91ef004b6587e7a3d542741d010ff099ff523246f",
+        "path": "ai/grazie/model/model-ner-jvm/0.8.74/model-ner-jvm-0.8.74.jar"
     },
     {
         "url": "ai/grazie/model/model-ner-jvm/0.8.74/model-ner-jvm-0.8.74.jar",
@@ -195,9 +215,19 @@
         "path": "ai/grazie/model/model-text-jvm/0.8.74/model-text-jvm-0.8.74.jar"
     },
     {
+        "url": "ai/grazie/model/model-text-jvm/0.8.74/model-text-jvm-0.8.74.jar",
+        "hash": "fa7db0b8e4cad3a8951c91d6d09c2c6baf8ae9008b0b59d76158cf2282797caa",
+        "path": "ai/grazie/model/model-text-jvm/0.8.74/model-text-jvm-0.8.74.jar"
+    },
+    {
         "url": "ai/grazie/model/model-tone-formality-jvm/0.8.74/model-tone-formality-jvm-0.8.74.jar",
         "hash": "5596f5406cc20b0f0eb1a95733a39924eff44d443bc9b9d49687268d636f59d0",
         "path": "ai/grazie/model/model-tone-formality-jvm/0.8.74/model-tone-formality-jvm-0.8.74.jar"
+    },
+    {
+        "url": "ai/grazie/model/model-tree-jvm/0.8.74/model-tree-jvm-0.8.74.jar",
+        "hash": "ed6ca179c61ad44fd3a0b0401f6f25bfef680e3a3e704e83249ce5c26dc1a505",
+        "path": "ai/grazie/model/model-tree-jvm/0.8.74/model-tree-jvm-0.8.74.jar"
     },
     {
         "url": "ai/grazie/model/model-tree-jvm/0.8.74/model-tree-jvm-0.8.74.jar",
@@ -220,6 +250,16 @@
         "path": "ai/grazie/model/swagger-annotations-jvm/0.8.74/swagger-annotations-jvm-0.8.74.jar"
     },
     {
+        "url": "ai/grazie/model/swagger-annotations-jvm/0.8.74/swagger-annotations-jvm-0.8.74.jar",
+        "hash": "e3c8ebc2e1d06fd9efece9fed214d80e16416b6630567d891e200dcad2f07144",
+        "path": "ai/grazie/model/swagger-annotations-jvm/0.8.74/swagger-annotations-jvm-0.8.74.jar"
+    },
+    {
+        "url": "ai/grazie/nlp/nlp-common-jvm/0.8.74/nlp-common-jvm-0.8.74.jar",
+        "hash": "fae2d16393c9b42f5808021204f0989a27c825a72128eef943e9ebe1702d5ea1",
+        "path": "ai/grazie/nlp/nlp-common-jvm/0.8.74/nlp-common-jvm-0.8.74.jar"
+    },
+    {
         "url": "ai/grazie/nlp/nlp-common-jvm/0.8.74/nlp-common-jvm-0.8.74.jar",
         "hash": "fae2d16393c9b42f5808021204f0989a27c825a72128eef943e9ebe1702d5ea1",
         "path": "ai/grazie/nlp/nlp-common-jvm/0.8.74/nlp-common-jvm-0.8.74.jar"
@@ -235,9 +275,24 @@
         "path": "ai/grazie/nlp/nlp-detect-jvm/0.8.74/nlp-detect-jvm-0.8.74.jar"
     },
     {
+        "url": "ai/grazie/nlp/nlp-detect-jvm/0.8.74/nlp-detect-jvm-0.8.74.jar",
+        "hash": "887f672cc8b16ad9ca2a660bcd46d32cfa5fa6a726eca23c61ff5eceaab4af35",
+        "path": "ai/grazie/nlp/nlp-detect-jvm/0.8.74/nlp-detect-jvm-0.8.74.jar"
+    },
+    {
         "url": "ai/grazie/nlp/nlp-langs-jvm/0.8.74/nlp-langs-jvm-0.8.74.jar",
         "hash": "8619419456eb300942b819ce1046d7f6aa170efe892321a2d9e25ef7df612331",
         "path": "ai/grazie/nlp/nlp-langs-jvm/0.8.74/nlp-langs-jvm-0.8.74.jar"
+    },
+    {
+        "url": "ai/grazie/nlp/nlp-langs-jvm/0.8.74/nlp-langs-jvm-0.8.74.jar",
+        "hash": "8619419456eb300942b819ce1046d7f6aa170efe892321a2d9e25ef7df612331",
+        "path": "ai/grazie/nlp/nlp-langs-jvm/0.8.74/nlp-langs-jvm-0.8.74.jar"
+    },
+    {
+        "url": "ai/grazie/nlp/nlp-patterns-jvm/0.8.74/nlp-patterns-jvm-0.8.74.jar",
+        "hash": "97b03ed0b5c87cb486c64b1ed6574e05be2f3331d4ac394c85f35c24cb7a0f44",
+        "path": "ai/grazie/nlp/nlp-patterns-jvm/0.8.74/nlp-patterns-jvm-0.8.74.jar"
     },
     {
         "url": "ai/grazie/nlp/nlp-patterns-jvm/0.8.74/nlp-patterns-jvm-0.8.74.jar",
@@ -250,9 +305,29 @@
         "path": "ai/grazie/nlp/nlp-phonetics-jvm/0.8.74/nlp-phonetics-jvm-0.8.74.jar"
     },
     {
+        "url": "ai/grazie/nlp/nlp-phonetics-jvm/0.8.74/nlp-phonetics-jvm-0.8.74.jar",
+        "hash": "ea4cd2ec177029c88ab81e3b120d2c9aacc01997dc2ecc9ada5e22de9f10d723",
+        "path": "ai/grazie/nlp/nlp-phonetics-jvm/0.8.74/nlp-phonetics-jvm-0.8.74.jar"
+    },
+    {
         "url": "ai/grazie/nlp/nlp-similarity-jvm/0.8.74/nlp-similarity-jvm-0.8.74.jar",
         "hash": "0fbf476e73762b15509264e31e282bfb1a63342a8e0c6921d88c24c4eaf3c2a3",
         "path": "ai/grazie/nlp/nlp-similarity-jvm/0.8.74/nlp-similarity-jvm-0.8.74.jar"
+    },
+    {
+        "url": "ai/grazie/nlp/nlp-similarity-jvm/0.8.74/nlp-similarity-jvm-0.8.74.jar",
+        "hash": "0fbf476e73762b15509264e31e282bfb1a63342a8e0c6921d88c24c4eaf3c2a3",
+        "path": "ai/grazie/nlp/nlp-similarity-jvm/0.8.74/nlp-similarity-jvm-0.8.74.jar"
+    },
+    {
+        "url": "ai/grazie/nlp/nlp-similarity-jvm/0.8.74/nlp-similarity-jvm-0.8.74.jar",
+        "hash": "0fbf476e73762b15509264e31e282bfb1a63342a8e0c6921d88c24c4eaf3c2a3",
+        "path": "ai/grazie/nlp/nlp-similarity-jvm/0.8.74/nlp-similarity-jvm-0.8.74.jar"
+    },
+    {
+        "url": "ai/grazie/nlp/nlp-tokenizer-jvm/0.8.74/nlp-tokenizer-jvm-0.8.74.jar",
+        "hash": "b45bd05287973a6e30611933a5aa285d2115ea2f16545108f9285922dd71ca90",
+        "path": "ai/grazie/nlp/nlp-tokenizer-jvm/0.8.74/nlp-tokenizer-jvm-0.8.74.jar"
     },
     {
         "url": "ai/grazie/nlp/nlp-tokenizer-jvm/0.8.74/nlp-tokenizer-jvm-0.8.74.jar",
@@ -270,24 +345,29 @@
         "path": "ai/grazie/spell/gec-spell-engine-local/0.8.74/gec-spell-engine-local-0.8.74.jar"
     },
     {
-        "url": "ai/grazie/spell/hunspell-de/0.2.318/hunspell-de-0.2.318.jar",
-        "hash": "4532f6939496a445fcb414851775da773c0ec267578843eac780f4471de091a4",
-        "path": "ai/grazie/spell/hunspell-de/0.2.318/hunspell-de-0.2.318.jar"
+        "url": "ai/grazie/spell/gec-spell-engine-local/0.8.74/gec-spell-engine-local-0.8.74.jar",
+        "hash": "9bc5a572406da07a704d5e71e662dd183dfe9385e7c06cab1a49debc5a355638",
+        "path": "ai/grazie/spell/gec-spell-engine-local/0.8.74/gec-spell-engine-local-0.8.74.jar"
     },
     {
-        "url": "ai/grazie/spell/hunspell-en/0.2.318/hunspell-en-0.2.318.jar",
-        "hash": "2156335fe8fdc263beae3912178385c7ef7ea6472fafd429177479d260b20f80",
-        "path": "ai/grazie/spell/hunspell-en/0.2.318/hunspell-en-0.2.318.jar"
+        "url": "ai/grazie/spell/hunspell-de/0.2.327/hunspell-de-0.2.327.jar",
+        "hash": "41ace2052e81a529fdaca24d9ac47a1323d7ac91a4e764481ef4b84477483b42",
+        "path": "ai/grazie/spell/hunspell-de/0.2.327/hunspell-de-0.2.327.jar"
     },
     {
-        "url": "ai/grazie/spell/hunspell-ru/0.2.318/hunspell-ru-0.2.318.jar",
-        "hash": "8774adc464d22899bb61621f9d8ed4900ba131163e3ff64b8b835f56736d8c14",
-        "path": "ai/grazie/spell/hunspell-ru/0.2.318/hunspell-ru-0.2.318.jar"
+        "url": "ai/grazie/spell/hunspell-en/0.2.327/hunspell-en-0.2.327.jar",
+        "hash": "474f2837876c3d31ceccd1fad2e28336553ab21472910cd2654aaa3373a3d031",
+        "path": "ai/grazie/spell/hunspell-en/0.2.327/hunspell-en-0.2.327.jar"
     },
     {
-        "url": "ai/grazie/spell/hunspell-uk/0.2.318/hunspell-uk-0.2.318.jar",
-        "hash": "a1366fa763f5da5c436c6a94623acdd53370ee59ecc16652dda0a544f468a2bc",
-        "path": "ai/grazie/spell/hunspell-uk/0.2.318/hunspell-uk-0.2.318.jar"
+        "url": "ai/grazie/spell/hunspell-ru/0.2.327/hunspell-ru-0.2.327.jar",
+        "hash": "8c2b71691fbbc75cd6868aa6e7948f637470ba8b559cf6c98cacfe6b024f3513",
+        "path": "ai/grazie/spell/hunspell-ru/0.2.327/hunspell-ru-0.2.327.jar"
+    },
+    {
+        "url": "ai/grazie/spell/hunspell-uk/0.2.327/hunspell-uk-0.2.327.jar",
+        "hash": "155565ea33fdac34ffc3117bf645493a245a655eb2030b40f5f532348e72a81a",
+        "path": "ai/grazie/spell/hunspell-uk/0.2.327/hunspell-uk-0.2.327.jar"
     },
     {
         "url": "ai/grazie/tasks-library/tasks-library-api-jvm/0.4.14/tasks-library-api-jvm-0.4.14.jar",
@@ -345,6 +425,11 @@
         "path": "ai/grazie/utils/utils-common-jvm/0.8.74/utils-common-jvm-0.8.74.jar"
     },
     {
+        "url": "ai/grazie/utils/utils-common-jvm/0.8.74/utils-common-jvm-0.8.74.jar",
+        "hash": "e1cc87b2a052ce4e4124abc6cd6d9c14dbc9e3319f854eb5829d44af860cb7f6",
+        "path": "ai/grazie/utils/utils-common-jvm/0.8.74/utils-common-jvm-0.8.74.jar"
+    },
+    {
         "url": "ai/grazie/utils/utils-jwt-jvm/0.8.74/utils-jwt-jvm-0.8.74.jar",
         "hash": "23c6617feff191e38ebc1be8b17c23e703373c5d68dc894875a228816d5fa6cf",
         "path": "ai/grazie/utils/utils-jwt-jvm/0.8.74/utils-jwt-jvm-0.8.74.jar"
@@ -353,6 +438,11 @@
         "url": "ai/grazie/utils/utils-ktor-jvm/0.8.74/utils-ktor-jvm-0.8.74.jar",
         "hash": "719d32f0110a60613b8c55deda0aa6145223aa3fb740457b810a774525ec1a53",
         "path": "ai/grazie/utils/utils-ktor-jvm/0.8.74/utils-ktor-jvm-0.8.74.jar"
+    },
+    {
+        "url": "ai/grazie/utils/utils-multiplatform-jvm/0.8.74/utils-multiplatform-jvm-0.8.74.jar",
+        "hash": "ce5f571e5eae530cc4835d99977181a545bc07c85755b5b73a1bfb1a669f40d1",
+        "path": "ai/grazie/utils/utils-multiplatform-jvm/0.8.74/utils-multiplatform-jvm-0.8.74.jar"
     },
     {
         "url": "ai/grazie/utils/utils-multiplatform-jvm/0.8.74/utils-multiplatform-jvm-0.8.74.jar",
@@ -390,24 +480,24 @@
         "path": "androidx/collection/collection-jvm/1.5.0/collection-jvm-1.5.0.jar"
     },
     {
-        "url": "androidx/compose/runtime/runtime-annotation-jvm/1.10.0-beta01/runtime-annotation-jvm-1.10.0-beta01.jar",
+        "url": "androidx/compose/runtime/runtime-annotation-jvm/1.10.0-rc01/runtime-annotation-jvm-1.10.0-rc01.jar",
         "hash": "f89dda8bcd73876d0fc16568844b2bd79443ee7ca62810874d25c7dcaa394bd6",
-        "path": "androidx/compose/runtime/runtime-annotation-jvm/1.10.0-beta01/runtime-annotation-jvm-1.10.0-beta01.jar"
+        "path": "androidx/compose/runtime/runtime-annotation-jvm/1.10.0-rc01/runtime-annotation-jvm-1.10.0-rc01.jar"
     },
     {
-        "url": "androidx/compose/runtime/runtime-desktop/1.10.0-beta01/runtime-desktop-1.10.0-beta01.jar",
-        "hash": "d35610a718146c6623f1dc99bb03d33080da1d139325c7d18c81649061085353",
-        "path": "androidx/compose/runtime/runtime-desktop/1.10.0-beta01/runtime-desktop-1.10.0-beta01.jar"
+        "url": "androidx/compose/runtime/runtime-desktop/1.10.0-rc01/runtime-desktop-1.10.0-rc01.jar",
+        "hash": "b195860542f612de0512b54a75353e0f6d58815f0c9530a03bc5b0e734474829",
+        "path": "androidx/compose/runtime/runtime-desktop/1.10.0-rc01/runtime-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "androidx/compose/runtime/runtime-retain-desktop/1.10.0-beta01/runtime-retain-desktop-1.10.0-beta01.jar",
-        "hash": "e673e7bd810699399fe967675e8f24f3502ef8c9a967ee695b79d4649ef31908",
-        "path": "androidx/compose/runtime/runtime-retain-desktop/1.10.0-beta01/runtime-retain-desktop-1.10.0-beta01.jar"
+        "url": "androidx/compose/runtime/runtime-retain-desktop/1.10.0-rc01/runtime-retain-desktop-1.10.0-rc01.jar",
+        "hash": "463ee9c1e93d1b913458bfecc96d128a3574a802f41c8c9781d7320c3b55ed8b",
+        "path": "androidx/compose/runtime/runtime-retain-desktop/1.10.0-rc01/runtime-retain-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "androidx/compose/runtime/runtime-saveable-desktop/1.10.0-beta01/runtime-saveable-desktop-1.10.0-beta01.jar",
-        "hash": "12f491f7f5b36304d852e373231f06a3057ea52e369f380044ebc23097dfc2c5",
-        "path": "androidx/compose/runtime/runtime-saveable-desktop/1.10.0-beta01/runtime-saveable-desktop-1.10.0-beta01.jar"
+        "url": "androidx/compose/runtime/runtime-saveable-desktop/1.10.0-rc01/runtime-saveable-desktop-1.10.0-rc01.jar",
+        "hash": "ef24e24cc8c9c3b9871007fbdf589ed9aaaecf95979a66b7484806f9f0e24d91",
+        "path": "androidx/compose/runtime/runtime-saveable-desktop/1.10.0-rc01/runtime-saveable-desktop-1.10.0-rc01.jar"
     },
     {
         "url": "androidx/lifecycle/lifecycle-common-jvm/2.9.4/lifecycle-common-jvm-2.9.4.jar",
@@ -435,9 +525,9 @@
         "path": "androidx/lifecycle/lifecycle-viewmodel-savedstate-desktop/2.9.4/lifecycle-viewmodel-savedstate-desktop-2.9.4.jar"
     },
     {
-        "url": "androidx/navigationevent/navigationevent-desktop/1.0.0-beta01/navigationevent-desktop-1.0.0-beta01.jar",
+        "url": "androidx/navigationevent/navigationevent-desktop/1.0.0/navigationevent-desktop-1.0.0.jar",
         "hash": "8283896d87f6d3e21dd5b12785e6c7ca3b7f15cbc4d0391b20ad23e54b520515",
-        "path": "androidx/navigationevent/navigationevent-desktop/1.0.0-beta01/navigationevent-desktop-1.0.0-beta01.jar"
+        "path": "androidx/navigationevent/navigationevent-desktop/1.0.0/navigationevent-desktop-1.0.0.jar"
     },
     {
         "url": "androidx/savedstate/savedstate-compose-desktop/1.3.2/savedstate-compose-desktop-1.3.2.jar",
@@ -555,6 +645,11 @@
         "path": "com/beust/jcommander/1.82/jcommander-1.82.jar"
     },
     {
+        "url": "com/carrotsearch/hppc/0.8.2/hppc-0.8.2.jar",
+        "hash": "97e45d4e0106d98dd3e76d9610e0bd3895409bd1ab1ed189855b05af0571025e",
+        "path": "com/carrotsearch/hppc/0.8.2/hppc-0.8.2.jar"
+    },
+    {
         "url": "com/carrotsearch/hppc/0.9.1/hppc-0.9.1.jar",
         "hash": "d58706a2be60c972452550cdba79870bf481447c50eb718308e33a6ba45c65ec",
         "path": "com/carrotsearch/hppc/0.9.1/hppc-0.9.1.jar"
@@ -580,14 +675,29 @@
         "path": "com/fasterxml/aalto-xml/1.3.3/aalto-xml-1.3.3.jar"
     },
     {
+        "url": "com/fasterxml/jackson/core/jackson-annotations/2.18.0/jackson-annotations-2.18.0.jar",
+        "hash": "a09367d2eeb526873abf737ff754c5085f82073a382ee72c3bbe15412217671f",
+        "path": "com/fasterxml/jackson/core/jackson-annotations/2.18.0/jackson-annotations-2.18.0.jar"
+    },
+    {
         "url": "com/fasterxml/jackson/core/jackson-annotations/2.19.0/jackson-annotations-2.19.0.jar",
         "hash": "ead60e9cac0e42b57092b9e2d087ff43536e9477d4486ba393037a8cc156cda7",
         "path": "com/fasterxml/jackson/core/jackson-annotations/2.19.0/jackson-annotations-2.19.0.jar"
     },
     {
+        "url": "com/fasterxml/jackson/core/jackson-core/2.18.0/jackson-core-2.18.0.jar",
+        "hash": "215bbd7c8fd65be504cb92ff3aa1c4b790fc7b14cca72f4546aac4143c101bb5",
+        "path": "com/fasterxml/jackson/core/jackson-core/2.18.0/jackson-core-2.18.0.jar"
+    },
+    {
         "url": "com/fasterxml/jackson/core/jackson-core/2.19.0/jackson-core-2.19.0.jar",
         "hash": "da8e859bac94874528116a25f20c68560e4287acbf27628711b8a4f96b028430",
         "path": "com/fasterxml/jackson/core/jackson-core/2.19.0/jackson-core-2.19.0.jar"
+    },
+    {
+        "url": "com/fasterxml/jackson/core/jackson-databind/2.18.0/jackson-databind-2.18.0.jar",
+        "hash": "2bf1927b7f3224683ed0157a1ec3b0ede75179da3e597d78c572d56ed00f9f3c",
+        "path": "com/fasterxml/jackson/core/jackson-databind/2.18.0/jackson-databind-2.18.0.jar"
     },
     {
         "url": "com/fasterxml/jackson/core/jackson-databind/2.19.0/jackson-databind-2.19.0.jar",
@@ -710,6 +820,16 @@
         "path": "com/github/weisj/jsvg/1.3.0-jb.8/jsvg-1.3.0-jb.8.jar"
     },
     {
+        "url": "com/gitlab/dumonts/hunspell/2.1.2/hunspell-2.1.2.jar",
+        "hash": "973329ae3a43d35dacd618b93a5773a0a9210c8bf2b58a6b2d2a1e1c9f0389e9",
+        "path": "com/gitlab/dumonts/hunspell/2.1.2/hunspell-2.1.2.jar"
+    },
+    {
+        "url": "com/google/android/annotations/4.1.1.4/annotations-4.1.1.4.jar",
+        "hash": "ba734e1e84c09d615af6a09d33034b4f0442f8772dec120efb376d86a565ae15",
+        "path": "com/google/android/annotations/4.1.1.4/annotations-4.1.1.4.jar"
+    },
+    {
         "url": "com/google/android/annotations/4.1.1.4/annotations-4.1.1.4.jar",
         "hash": "ba734e1e84c09d615af6a09d33034b4f0442f8772dec120efb376d86a565ae15",
         "path": "com/google/android/annotations/4.1.1.4/annotations-4.1.1.4.jar"
@@ -720,9 +840,9 @@
         "path": "com/google/api/grpc/proto-google-common-protos/2.51.0/proto-google-common-protos-2.51.0.jar"
     },
     {
-        "url": "com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
-        "hash": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
-        "path": "com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"
+        "url": "com/google/api/grpc/proto-google-common-protos/2.59.2/proto-google-common-protos-2.59.2.jar",
+        "hash": "9407f50aef5d1cb12675c170fa64ee216023eefca49f8f5eac45124f23a6cb29",
+        "path": "com/google/api/grpc/proto-google-common-protos/2.59.2/proto-google-common-protos-2.59.2.jar"
     },
     {
         "url": "com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
@@ -748,6 +868,21 @@
         "url": "com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
         "hash": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
         "path": "com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"
+    },
+    {
+        "url": "com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
+        "hash": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
+        "path": "com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"
+    },
+    {
+        "url": "com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
+        "hash": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
+        "path": "com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"
+    },
+    {
+        "url": "com/google/code/gson/gson/2.11.0/gson-2.11.0.jar",
+        "hash": "57928d6e5a6edeb2abd3770a8f95ba44dce45f3b23b7a9dc2b309c581552a78b",
+        "path": "com/google/code/gson/gson/2.11.0/gson-2.11.0.jar"
     },
     {
         "url": "com/google/code/gson/gson/2.13.1/gson-2.13.1.jar",
@@ -783,6 +918,16 @@
         "url": "com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar",
         "hash": "03d0329547c13da9e17c634d1049ea2ead093925e290567e1a364fd6b1fc7ff8",
         "path": "com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar"
+    },
+    {
+        "url": "com/google/errorprone/error_prone_annotations/2.28.0/error_prone_annotations-2.28.0.jar",
+        "hash": "f3fc8a3a0a4020706a373b00e7f57c2512dd26d1f83d28c7d38768f8682b231e",
+        "path": "com/google/errorprone/error_prone_annotations/2.28.0/error_prone_annotations-2.28.0.jar"
+    },
+    {
+        "url": "com/google/guava/failureaccess/1.0.2/failureaccess-1.0.2.jar",
+        "hash": "8a8f81cf9b359e3f6dfa691a1e776985c061ef2f223c9b2c80753e1b458e8064",
+        "path": "com/google/guava/failureaccess/1.0.2/failureaccess-1.0.2.jar"
     },
     {
         "url": "com/google/guava/failureaccess/1.0.3/failureaccess-1.0.3.jar",
@@ -840,9 +985,19 @@
         "path": "com/google/guava/guava/25.1-android/guava-25.1-android.jar"
     },
     {
+        "url": "com/google/guava/guava/33.3.1-jre/guava-33.3.1-jre.jar",
+        "hash": "4bf0e2c5af8e4525c96e8fde17a4f7307f97f8478f11c4c8e35a0e3298ae4e90",
+        "path": "com/google/guava/guava/33.3.1-jre/guava-33.3.1-jre.jar"
+    },
+    {
         "url": "com/google/guava/guava/33.4.8-jre/guava-33.4.8-jre.jar",
         "hash": "f3d7f57f67fd622f4d468dfdd692b3a5e3909246c28017ac3263405f0fe617ed",
         "path": "com/google/guava/guava/33.4.8-jre/guava-33.4.8-jre.jar"
+    },
+    {
+        "url": "com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+        "hash": "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99",
+        "path": "com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"
     },
     {
         "url": "com/google/inject/guice/4.0/guice-4.0-no_aop.jar",
@@ -915,6 +1070,11 @@
         "path": "com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar"
     },
     {
+        "url": "com/google/j2objc/j2objc-annotations/3.0.0/j2objc-annotations-3.0.0.jar",
+        "hash": "88241573467ddca44ffd4d74aa04c2bbfd11bf7c17e0c342c94c9de7a70a7c64",
+        "path": "com/google/j2objc/j2objc-annotations/3.0.0/j2objc-annotations-3.0.0.jar"
+    },
+    {
         "url": "com/google/jimfs/jimfs/1.1/jimfs-1.1.jar",
         "hash": "c4828e28d7c0a930af9387510b3bada7daa5c04d7c25a75c7b8b081f1c257ddd",
         "path": "com/google/jimfs/jimfs/1.1/jimfs-1.1.jar"
@@ -928,6 +1088,11 @@
         "url": "com/google/protobuf/protobuf-java/3.24.4-jb.2/protobuf-java-3.24.4-jb.2.jar",
         "hash": "6ba90d0d081c03c5c03d2d41497f75a183da7fb23cc2691f7b782dea77f73d21",
         "path": "com/google/protobuf/protobuf-java/3.24.4-jb.2/protobuf-java-3.24.4-jb.2.jar"
+    },
+    {
+        "url": "com/google/protobuf/protobuf-java/3.25.8/protobuf-java-3.25.8.jar",
+        "hash": "72bdb32eb38cafb7dcd288262c29a34d57cba2e19101af9685155ba8c0a56008",
+        "path": "com/google/protobuf/protobuf-java/3.25.8/protobuf-java-3.25.8.jar"
     },
     {
         "url": "com/google/truth/truth/0.42/truth-0.42.jar",
@@ -970,6 +1135,11 @@
         "path": "com/h2database/h2-mvstore/2.3.232/h2-mvstore-2.3.232.jar"
     },
     {
+        "url": "com/hankcs/aho-corasick-double-array-trie/1.2.2/aho-corasick-double-array-trie-1.2.2.jar",
+        "hash": "cbc79badb1e3d18dd18fdb77850da17d4566371c955e5ae85654b770c6e17858",
+        "path": "com/hankcs/aho-corasick-double-array-trie/1.2.2/aho-corasick-double-array-trie-1.2.2.jar"
+    },
+    {
         "url": "com/hankcs/aho-corasick-double-array-trie/1.2.3/aho-corasick-double-array-trie-1.2.3.jar",
         "hash": "564f0fc690d50702a313510b9a72e9505ace6e81108e84f65de4feb0da244eb8",
         "path": "com/hankcs/aho-corasick-double-array-trie/1.2.3/aho-corasick-double-array-trie-1.2.3.jar"
@@ -993,6 +1163,11 @@
         "url": "com/ibm/icu/icu4j/77.1/icu4j-77.1.jar",
         "hash": "b3640b9f416a4411fd33c59abbeea8fd57d024c23e1819bf9673220a97499fe3",
         "path": "com/ibm/icu/icu4j/77.1/icu4j-77.1.jar"
+    },
+    {
+        "url": "com/intellij/annotations/12.0/annotations-12.0.jar",
+        "hash": "f8ab13b14be080fe2f617f90e55599760e4a1b4deeea5c595df63d0d6375ed6d",
+        "path": "com/intellij/annotations/12.0/annotations-12.0.jar"
     },
     {
         "url": "com/intellij/platform/kotlinx-coroutines-core-jvm/1.10.1-intellij-5/kotlinx-coroutines-core-jvm-1.10.1-intellij-5.jar",
@@ -1060,29 +1235,14 @@
         "path": "com/jetbrains/format-ripper/format-ripper/1.2.0/format-ripper-1.2.0.jar"
     },
     {
-        "url": "com/jetbrains/fus/reporting/ap-validation/171/ap-validation-171.jar",
-        "hash": "3c8c66663148ac5d2a953cb048a1939b96be543d4612c23e030a7c6fd20390cd",
-        "path": "com/jetbrains/fus/reporting/ap-validation/171/ap-validation-171.jar"
+        "url": "com/jetbrains/fus/reporting/ap-validation-all/1.0.205/ap-validation-all-1.0.205.jar",
+        "hash": "9921601d14966cf0f9231fd2b92ba9a5b65b02c92a3a9ebc2049c8b2710a2eea",
+        "path": "com/jetbrains/fus/reporting/ap-validation-all/1.0.205/ap-validation-all-1.0.205.jar"
     },
     {
-        "url": "com/jetbrains/fus/reporting/configuration/171/configuration-171.jar",
-        "hash": "f138ed43c55cb90192518293a5b46a135221c898b2b05d6c0648645b3d0fac64",
-        "path": "com/jetbrains/fus/reporting/configuration/171/configuration-171.jar"
-    },
-    {
-        "url": "com/jetbrains/fus/reporting/connection-client/171/connection-client-171.jar",
-        "hash": "ca8ebd17e33f333647b905d43fc8cce2ad16abd22bfa99b75cb8a499894648b8",
-        "path": "com/jetbrains/fus/reporting/connection-client/171/connection-client-171.jar"
-    },
-    {
-        "url": "com/jetbrains/fus/reporting/model/171/model-171.jar",
-        "hash": "8aa0be7e7c1a46ef0827d98c026d328a6f9be27aed79b36692a7f38bacd41a6a",
-        "path": "com/jetbrains/fus/reporting/model/171/model-171.jar"
-    },
-    {
-        "url": "com/jetbrains/fus/reporting/serialization-kotlin/171/serialization-kotlin-171.jar",
-        "hash": "83380929b70dc8e25db327be8680438f3d80087962a88f4dcf061c919ba2fc32",
-        "path": "com/jetbrains/fus/reporting/serialization-kotlin/171/serialization-kotlin-171.jar"
+        "url": "com/jetbrains/fus/reporting/api/1.0.205/api-1.0.205.jar",
+        "hash": "bd122fb2110ec009cf3143aef5e2d473611b5e015c0d2701686eb94200e538ca",
+        "path": "com/jetbrains/fus/reporting/api/1.0.205/api-1.0.205.jar"
     },
     {
         "url": "com/jetbrains/infra/download-pgp-verifier/1.1.4/download-pgp-verifier-1.1.4.jar",
@@ -1190,6 +1350,11 @@
         "path": "com/networknt/json-schema-validator/1.3.1/json-schema-validator-1.3.1.jar"
     },
     {
+        "url": "com/optimaize/languagedetector/language-detector/0.6/language-detector-0.6.jar",
+        "hash": "f53ecc3d71da9ebc82edd10fb35638d32e8b9d849273dd717a021eca02f2278d",
+        "path": "com/optimaize/languagedetector/language-detector/0.6/language-detector-0.6.jar"
+    },
+    {
         "url": "com/pngencoder/pngencoder/0.14.0/pngencoder-0.14.0.jar",
         "hash": "79bf02e8f49833dc3433ae1554999dd375075e5ab13447fc1e558857b51baecc",
         "path": "com/pngencoder/pngencoder/0.14.0/pngencoder-0.14.0.jar"
@@ -1280,6 +1445,11 @@
         "path": "com/sun/activation/jakarta.activation/1.2.2/jakarta.activation-1.2.2.jar"
     },
     {
+        "url": "com/sun/activation/jakarta.activation/1.2.2/jakarta.activation-1.2.2.jar",
+        "hash": "02156773e4ae9d048d14a56ad35d644bee9f1052a791d072df3ded3c656e6e1a",
+        "path": "com/sun/activation/jakarta.activation/1.2.2/jakarta.activation-1.2.2.jar"
+    },
+    {
         "url": "com/sun/activation/javax.activation/1.2.0/javax.activation-1.2.0.jar",
         "hash": "993302b16cd7056f21e779cc577d175a810bb4900ef73cd8fbf2b50f928ba9ce",
         "path": "com/sun/activation/javax.activation/1.2.0/javax.activation-1.2.0.jar"
@@ -1288,6 +1458,21 @@
         "url": "com/sun/istack/istack-commons-runtime/3.0.12/istack-commons-runtime-3.0.12.jar",
         "hash": "27d85fc134c9271d5c79d3300fc4669668f017e72409727c428f54f2417f04cd",
         "path": "com/sun/istack/istack-commons-runtime/3.0.12/istack-commons-runtime-3.0.12.jar"
+    },
+    {
+        "url": "com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar",
+        "hash": "7fd6792361f4dd00f8c56af4a20cecc0066deea4a8f3dec38348af23fc2296ee",
+        "path": "com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar"
+    },
+    {
+        "url": "com/sun/xml/bind/jaxb-core/2.3.0.1/jaxb-core-2.3.0.1.jar",
+        "hash": "d2ecba63615f317a11fb55c6468f6a9480f6411c10951d9881bafd9a9a8d0467",
+        "path": "com/sun/xml/bind/jaxb-core/2.3.0.1/jaxb-core-2.3.0.1.jar"
+    },
+    {
+        "url": "com/sun/xml/bind/jaxb-impl/2.3.3/jaxb-impl-2.3.3.jar",
+        "hash": "e5178d0c7948247f75a13c689bf36f4d5d4910a121f712aa3b20ae94377069d8",
+        "path": "com/sun/xml/bind/jaxb-impl/2.3.3/jaxb-impl-2.3.3.jar"
     },
     {
         "url": "com/thoughtworks/qdox/qdox/2.2.0/qdox-2.2.0.jar",
@@ -1360,6 +1545,11 @@
         "path": "commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar"
     },
     {
+        "url": "commons-digester/commons-digester/2.1/commons-digester-2.1.jar",
+        "hash": "e0b2b980a84fc6533c5ce291f1917b32c507f62bcad64198fff44368c2196a3d",
+        "path": "commons-digester/commons-digester/2.1/commons-digester-2.1.jar"
+    },
+    {
         "url": "commons-discovery/commons-discovery/0.4/commons-discovery-0.4.jar",
         "hash": "97d264e2f98821c4cd39eacfd597b4dc7c19d4232cf1f335fc2eab389b2d92fd",
         "path": "commons-discovery/commons-discovery/0.4/commons-discovery-0.4.jar"
@@ -1400,6 +1590,16 @@
         "path": "commons-logging/commons-logging/1.2/commons-logging-1.2.jar"
     },
     {
+        "url": "commons-logging/commons-logging/1.3.4/commons-logging-1.3.4.jar",
+        "hash": "bc2dfe32f1ef06509e6a065144c1adf7b420eabf11a87f30bd127f8faa332016",
+        "path": "commons-logging/commons-logging/1.3.4/commons-logging-1.3.4.jar"
+    },
+    {
+        "url": "commons-validator/commons-validator/1.9.0/commons-validator-1.9.0.jar",
+        "hash": "c3c14748e2d78db58df88808740711bd643b32c45ffa7b8a739f00fb467cd7d7",
+        "path": "commons-validator/commons-validator/1.9.0/commons-validator-1.9.0.jar"
+    },
+    {
         "url": "completion/ml/python/features/ml-completion-prev-exprs-models/1.11/ml-completion-prev-exprs-models-1.11.jar",
         "hash": "8924b199c8cc52530de2b250670806d8b046fa5ae9d32a9f27a9b224e934a1ad",
         "path": "completion/ml/python/features/ml-completion-prev-exprs-models/1.11/ml-completion-prev-exprs-models-1.11.jar"
@@ -1413,6 +1613,16 @@
         "url": "de/danielnaber/german-pos-dict/1.2.4/german-pos-dict-1.2.4.jar",
         "hash": "56f0b00adb704cbc1e86776b45f6890efe90685ab370a34b5b299593cdcaae22",
         "path": "de/danielnaber/german-pos-dict/1.2.4/german-pos-dict-1.2.4.jar"
+    },
+    {
+        "url": "de/danielnaber/german-pos-dict/1.2.4/german-pos-dict-1.2.4.jar",
+        "hash": "56f0b00adb704cbc1e86776b45f6890efe90685ab370a34b5b299593cdcaae22",
+        "path": "de/danielnaber/german-pos-dict/1.2.4/german-pos-dict-1.2.4.jar"
+    },
+    {
+        "url": "de/danielnaber/jwordsplitter/4.7/jwordsplitter-4.7.jar",
+        "hash": "0435e604abe8b4a0b27f568db9349fbe0546df286bbe62f667c9fd9663df71b2",
+        "path": "de/danielnaber/jwordsplitter/4.7/jwordsplitter-4.7.jar"
     },
     {
         "url": "de/danielnaber/jwordsplitter/4.7/jwordsplitter-4.7.jar",
@@ -1443,6 +1653,21 @@
         "url": "dk/brics/automaton/1.12-4/automaton-1.12-4.jar",
         "hash": "3941b48f2e9281aab7234395c549cbb399b3dc80fed2e13999a80db47f94b041",
         "path": "dk/brics/automaton/1.12-4/automaton-1.12-4.jar"
+    },
+    {
+        "url": "edu/washington/cs/knowitall/openregex/1.1.1/openregex-1.1.1.jar",
+        "hash": "33021c9cca70c6292d53ff7dac5d1832d422e986aba52ec998532a5f47f921f8",
+        "path": "edu/washington/cs/knowitall/openregex/1.1.1/openregex-1.1.1.jar"
+    },
+    {
+        "url": "edu/washington/cs/knowitall/openregex/1.1.1/openregex-1.1.1.jar",
+        "hash": "33021c9cca70c6292d53ff7dac5d1832d422e986aba52ec998532a5f47f921f8",
+        "path": "edu/washington/cs/knowitall/openregex/1.1.1/openregex-1.1.1.jar"
+    },
+    {
+        "url": "edu/washington/cs/knowitall/openregex/1.1.1/openregex-1.1.1.jar",
+        "hash": "33021c9cca70c6292d53ff7dac5d1832d422e986aba52ec998532a5f47f921f8",
+        "path": "edu/washington/cs/knowitall/openregex/1.1.1/openregex-1.1.1.jar"
     },
     {
         "url": "edu/washington/cs/knowitall/openregex/1.1.1/openregex-1.1.1.jar",
@@ -1715,9 +1940,29 @@
         "path": "io/github/detekt/sarif4k/sarif4k-jvm/0.6.0/sarif4k-jvm-0.6.0.jar"
     },
     {
+        "url": "io/github/java-diff-utils/java-diff-utils/4.12/java-diff-utils-4.12.jar",
+        "hash": "9990a2039778f6b4cc94790141c2868864eacee0620c6c459451121a901cd5b5",
+        "path": "io/github/java-diff-utils/java-diff-utils/4.12/java-diff-utils-4.12.jar"
+    },
+    {
         "url": "io/github/oshai/kotlin-logging-jvm/7.0.3/kotlin-logging-jvm-7.0.3.jar",
         "hash": "241daa21665dd0ca55576a4bc4d8e9ace8891ae3c698cc77f13bb4bdac372e94",
         "path": "io/github/oshai/kotlin-logging-jvm/7.0.3/kotlin-logging-jvm-7.0.3.jar"
+    },
+    {
+        "url": "io/github/resilience4j/resilience4j-circuitbreaker/1.7.1/resilience4j-circuitbreaker-1.7.1.jar",
+        "hash": "05ae08b684e6245b8d88bcb823dfd0a2994052098226bd1e614fb9828e5d13df",
+        "path": "io/github/resilience4j/resilience4j-circuitbreaker/1.7.1/resilience4j-circuitbreaker-1.7.1.jar"
+    },
+    {
+        "url": "io/github/resilience4j/resilience4j-core/1.7.1/resilience4j-core-1.7.1.jar",
+        "hash": "3153a2c96c3e3b31122a7fa8ca8ea1ab0f305bf82d096c291b7416443fff6491",
+        "path": "io/github/resilience4j/resilience4j-core/1.7.1/resilience4j-core-1.7.1.jar"
+    },
+    {
+        "url": "io/github/resilience4j/resilience4j-micrometer/1.7.1/resilience4j-micrometer-1.7.1.jar",
+        "hash": "71d9be0d10026f2223f2afba5b10d5d1a7b569c6433bbc1fd189ca8817d66d60",
+        "path": "io/github/resilience4j/resilience4j-micrometer/1.7.1/resilience4j-micrometer-1.7.1.jar"
     },
     {
         "url": "io/github/smiley4/schema-kenerator-core/2.2.0/schema-kenerator-core-2.2.0.jar",
@@ -1890,14 +2135,29 @@
         "path": "io/grpc/grpc-api/1.73.0/grpc-api-1.73.0.jar"
     },
     {
+        "url": "io/grpc/grpc-api/1.75.0/grpc-api-1.75.0.jar",
+        "hash": "7f309616691fa655d02512762049ed18bf4ab2b52ced424cab2f527d0bb8e3fc",
+        "path": "io/grpc/grpc-api/1.75.0/grpc-api-1.75.0.jar"
+    },
+    {
         "url": "io/grpc/grpc-context/1.73.0/grpc-context-1.73.0.jar",
         "hash": "d8d6911e225b55501692651272ce961ba5be1f76662ceb7f0aa79ecce8f63f25",
         "path": "io/grpc/grpc-context/1.73.0/grpc-context-1.73.0.jar"
     },
     {
+        "url": "io/grpc/grpc-context/1.75.0/grpc-context-1.75.0.jar",
+        "hash": "7e1de7847ea621a9ec7cb988a8baa947748d0eaef94bfe457d04d9b57105079f",
+        "path": "io/grpc/grpc-context/1.75.0/grpc-context-1.75.0.jar"
+    },
+    {
         "url": "io/grpc/grpc-core/1.73.0/grpc-core-1.73.0.jar",
         "hash": "cffb55f1e7268e160647e88da142c09c6175ff72970c64f7cb411d78eb661663",
         "path": "io/grpc/grpc-core/1.73.0/grpc-core-1.73.0.jar"
+    },
+    {
+        "url": "io/grpc/grpc-core/1.75.0/grpc-core-1.75.0.jar",
+        "hash": "f10cdbe558378494e4ffc6b1bb328b8a137f3201d46c8b24f0154eb9e51191a1",
+        "path": "io/grpc/grpc-core/1.75.0/grpc-core-1.75.0.jar"
     },
     {
         "url": "io/grpc/grpc-inprocess/1.65.1/grpc-inprocess-1.65.1.jar",
@@ -1915,9 +2175,19 @@
         "path": "io/grpc/grpc-netty-shaded/1.73.0/grpc-netty-shaded-1.73.0.jar"
     },
     {
+        "url": "io/grpc/grpc-netty-shaded/1.75.0/grpc-netty-shaded-1.75.0.jar",
+        "hash": "d33d47a9720a392512c4e4ceaa17a458a0e3ed6188d17e98d6c4faf0679374d7",
+        "path": "io/grpc/grpc-netty-shaded/1.75.0/grpc-netty-shaded-1.75.0.jar"
+    },
+    {
         "url": "io/grpc/grpc-protobuf-lite/1.73.0/grpc-protobuf-lite-1.73.0.jar",
         "hash": "de8ce5309713e72bb57d5ff2dabdb4c173ae4872bd1439b9c3d3f93430b407d9",
         "path": "io/grpc/grpc-protobuf-lite/1.73.0/grpc-protobuf-lite-1.73.0.jar"
+    },
+    {
+        "url": "io/grpc/grpc-protobuf-lite/1.75.0/grpc-protobuf-lite-1.75.0.jar",
+        "hash": "60fafc627aa04bcab328dcc9206f0e7aa71d95f1b612774a18272dfe7dc24cf1",
+        "path": "io/grpc/grpc-protobuf-lite/1.75.0/grpc-protobuf-lite-1.75.0.jar"
     },
     {
         "url": "io/grpc/grpc-protobuf/1.73.0/grpc-protobuf-1.73.0.jar",
@@ -1925,14 +2195,29 @@
         "path": "io/grpc/grpc-protobuf/1.73.0/grpc-protobuf-1.73.0.jar"
     },
     {
+        "url": "io/grpc/grpc-protobuf/1.75.0/grpc-protobuf-1.75.0.jar",
+        "hash": "f52b53c349b0776815e437636dff3d3844e9b10cbb25be419a786bf3d6f20269",
+        "path": "io/grpc/grpc-protobuf/1.75.0/grpc-protobuf-1.75.0.jar"
+    },
+    {
         "url": "io/grpc/grpc-stub/1.73.0/grpc-stub-1.73.0.jar",
         "hash": "050fe139de47d8937e6b0080e8dff3d0f42df6782f147c10bb298c0e9cd94b2f",
         "path": "io/grpc/grpc-stub/1.73.0/grpc-stub-1.73.0.jar"
     },
     {
+        "url": "io/grpc/grpc-stub/1.75.0/grpc-stub-1.75.0.jar",
+        "hash": "dc98fe18654206948666e6657e13fe301ad0754751f28c6c10961e1e6c457997",
+        "path": "io/grpc/grpc-stub/1.75.0/grpc-stub-1.75.0.jar"
+    },
+    {
         "url": "io/grpc/grpc-util/1.73.0/grpc-util-1.73.0.jar",
         "hash": "b7df6cbcc30b7a3219f06483a9a9d320a431beda8a1ace5b16d879f84112373f",
         "path": "io/grpc/grpc-util/1.73.0/grpc-util-1.73.0.jar"
+    },
+    {
+        "url": "io/grpc/grpc-util/1.75.0/grpc-util-1.75.0.jar",
+        "hash": "92b5a1195dad4cbd7c405b01cbd9fd2dbbd548d13d4cfabf9d2d6a37bad4cb81",
+        "path": "io/grpc/grpc-util/1.75.0/grpc-util-1.75.0.jar"
     },
     {
         "url": "io/kotest/kotest-assertions-api-jvm/5.5.4/kotest-assertions-api-jvm-5.5.4.jar",
@@ -2330,6 +2615,16 @@
         "path": "io/ktor/ktor-websockets-jvm/3.1.3/ktor-websockets-jvm-3.1.3.jar"
     },
     {
+        "url": "io/micrometer/micrometer-core/1.7.12/micrometer-core-1.7.12.jar",
+        "hash": "e7137f16fdbb183bf6608403f604036fa53971ca8635947745e8080039ab0533",
+        "path": "io/micrometer/micrometer-core/1.7.12/micrometer-core-1.7.12.jar"
+    },
+    {
+        "url": "io/micrometer/micrometer-registry-prometheus/1.7.12/micrometer-registry-prometheus-1.7.12.jar",
+        "hash": "1fd64ca17b7ec6235dae4bb080283dcd7866e929189d82f5ba8a201e41ca9848",
+        "path": "io/micrometer/micrometer-registry-prometheus/1.7.12/micrometer-registry-prometheus-1.7.12.jar"
+    },
+    {
         "url": "io/mockk/mockk-agent-api-jvm/1.14.5/mockk-agent-api-jvm-1.14.5.jar",
         "hash": "a919a8fec03dfb0c084cb43dafcebe2dd9351431c7a08c2fc8147037de1d06b7",
         "path": "io/mockk/mockk-agent-api-jvm/1.14.5/mockk-agent-api-jvm-1.14.5.jar"
@@ -2645,9 +2940,19 @@
         "path": "io/nlopez/compose/rules/detekt/0.4.27/detekt-0.4.27.jar"
     },
     {
+        "url": "io/opentelemetry/opentelemetry-api/1.42.1/opentelemetry-api-1.42.1.jar",
+        "hash": "6b0f9d067260ea3ed6c3960352b80800b993cb3962fa6fb1b6383cd04c3c0874",
+        "path": "io/opentelemetry/opentelemetry-api/1.42.1/opentelemetry-api-1.42.1.jar"
+    },
+    {
         "url": "io/opentelemetry/opentelemetry-api/1.48.0/opentelemetry-api-1.48.0.jar",
         "hash": "8d3781bda58892f7d14216908fc0d1faf6f4e6b806e6e73e23489e41c0ecf012",
         "path": "io/opentelemetry/opentelemetry-api/1.48.0/opentelemetry-api-1.48.0.jar"
+    },
+    {
+        "url": "io/opentelemetry/opentelemetry-context/1.42.1/opentelemetry-context-1.42.1.jar",
+        "hash": "fc8f47bc94bec89a3dbdbcf631470fb7fd7d3e628b10d43bc376f17ebde4b405",
+        "path": "io/opentelemetry/opentelemetry-context/1.42.1/opentelemetry-context-1.42.1.jar"
     },
     {
         "url": "io/opentelemetry/opentelemetry-context/1.48.0/opentelemetry-context-1.48.0.jar",
@@ -2700,6 +3005,11 @@
         "path": "io/opentelemetry/opentelemetry-sdk/1.48.0/opentelemetry-sdk-1.48.0.jar"
     },
     {
+        "url": "io/opentelemetry/opentelemetry-semconv/1.30.1-alpha/opentelemetry-semconv-1.30.1-alpha.jar",
+        "hash": "aaa73f6c6a3a67cdc07870387383808826d8dae7a84e47cae182b7a88a08e513",
+        "path": "io/opentelemetry/opentelemetry-semconv/1.30.1-alpha/opentelemetry-semconv-1.30.1-alpha.jar"
+    },
+    {
         "url": "io/opentelemetry/semconv/opentelemetry-semconv/1.30.0/opentelemetry-semconv-1.30.0.jar",
         "hash": "99c2478a9b803b7d385d1624d5c1ab6f9a64cac5a2dc00f44a350744a1d858ac",
         "path": "io/opentelemetry/semconv/opentelemetry-semconv/1.30.0/opentelemetry-semconv-1.30.0.jar"
@@ -2710,14 +3020,59 @@
         "path": "io/perfmark/perfmark-api/0.27.0/perfmark-api-0.27.0.jar"
     },
     {
+        "url": "io/perfmark/perfmark-api/0.27.0/perfmark-api-0.27.0.jar",
+        "hash": "c7b478503ec524e55df19b424d46d27c8a68aeb801664fadd4f069b71f52d0f6",
+        "path": "io/perfmark/perfmark-api/0.27.0/perfmark-api-0.27.0.jar"
+    },
+    {
+        "url": "io/prometheus/simpleclient/0.16.0/simpleclient-0.16.0.jar",
+        "hash": "22c374f237f7bc4fdb1f0ec2da379c0ba00e69ad2ffe8b6ade543d73062d377f",
+        "path": "io/prometheus/simpleclient/0.16.0/simpleclient-0.16.0.jar"
+    },
+    {
+        "url": "io/prometheus/simpleclient_common/0.10.0/simpleclient_common-0.10.0.jar",
+        "hash": "8f91f079b6d2e45af3a6ff2ad5cb6c039dce602c51d0923790a32482691e50ff",
+        "path": "io/prometheus/simpleclient_common/0.10.0/simpleclient_common-0.10.0.jar"
+    },
+    {
+        "url": "io/prometheus/simpleclient_guava/0.16.0/simpleclient_guava-0.16.0.jar",
+        "hash": "49959fe20423803b8958fe35ce6cdcc47e58e2251b191ad53eb7ef6fc46c4ae1",
+        "path": "io/prometheus/simpleclient_guava/0.16.0/simpleclient_guava-0.16.0.jar"
+    },
+    {
+        "url": "io/prometheus/simpleclient_tracer_common/0.16.0/simpleclient_tracer_common-0.16.0.jar",
+        "hash": "e84a784ac8e24f182ee62da80b6b5c8140774b75bfa4bf9cc3d3b8390db625f6",
+        "path": "io/prometheus/simpleclient_tracer_common/0.16.0/simpleclient_tracer_common-0.16.0.jar"
+    },
+    {
+        "url": "io/prometheus/simpleclient_tracer_otel/0.16.0/simpleclient_tracer_otel-0.16.0.jar",
+        "hash": "a2a84c59bef3796bb7f9c6f2ae8b7de8b905313ef28180ac3de7ff61dd68df3f",
+        "path": "io/prometheus/simpleclient_tracer_otel/0.16.0/simpleclient_tracer_otel-0.16.0.jar"
+    },
+    {
+        "url": "io/prometheus/simpleclient_tracer_otel_agent/0.16.0/simpleclient_tracer_otel_agent-0.16.0.jar",
+        "hash": "7ad2bb40df74a772d9f5445a3d03579b49d6b37a47d5e90f6cf3f59ecf41ad06",
+        "path": "io/prometheus/simpleclient_tracer_otel_agent/0.16.0/simpleclient_tracer_otel_agent-0.16.0.jar"
+    },
+    {
         "url": "io/takari/maven-wrapper/0.5.5/maven-wrapper-0.5.5.jar",
         "hash": "164e026e01338638e3433e4f6efbda52ed9a64a94ced649c3d0bbe02a7c61282",
         "path": "io/takari/maven-wrapper/0.5.5/maven-wrapper-0.5.5.jar"
     },
     {
+        "url": "io/vavr/vavr-match/0.10.2/vavr-match-0.10.2.jar",
+        "hash": "5d7a9515b05e3291194e04e641acf74a9a544c1caa1e2c24f59a1424c6ec8288",
+        "path": "io/vavr/vavr-match/0.10.2/vavr-match-0.10.2.jar"
+    },
+    {
         "url": "io/vavr/vavr-match/0.10.4/vavr-match-0.10.4.jar",
         "hash": "d46f96bf59ccd5800261eec5869a6877ee0a37ea781312e6735be55539f50354",
         "path": "io/vavr/vavr-match/0.10.4/vavr-match-0.10.4.jar"
+    },
+    {
+        "url": "io/vavr/vavr/0.10.2/vavr-0.10.2.jar",
+        "hash": "1b2ae46cf352627e05b39ac1f1d3bda7b285a8f643cdc7472aea4aa279492e54",
+        "path": "io/vavr/vavr/0.10.2/vavr-0.10.2.jar"
     },
     {
         "url": "io/vavr/vavr/0.10.4/vavr-0.10.4.jar",
@@ -2735,9 +3090,34 @@
         "path": "it/krzeminski/snakeyaml-engine-kmp-jvm/3.1.1/snakeyaml-engine-kmp-jvm-3.1.1.jar"
     },
     {
+        "url": "it/unimi/dsi/fastutil-core/8.5.14/fastutil-core-8.5.14.jar",
+        "hash": "8fb6fe5989a32a74df3158fd8d6b91a4dfc44348772a8654c47dcadd1090a4d8",
+        "path": "it/unimi/dsi/fastutil-core/8.5.14/fastutil-core-8.5.14.jar"
+    },
+    {
+        "url": "jakarta/activation/jakarta.activation-api/2.1.3/jakarta.activation-api-2.1.3.jar",
+        "hash": "01b176d718a169263e78290691fc479977186bcc6b333487325084d6586f4627",
+        "path": "jakarta/activation/jakarta.activation-api/2.1.3/jakarta.activation-api-2.1.3.jar"
+    },
+    {
+        "url": "jakarta/xml/bind/jakarta.xml.bind-api/2.3.3/jakarta.xml.bind-api-2.3.3.jar",
+        "hash": "c04539f472e9a6dd0c7685ea82d677282269ab8e7baca2e14500e381e0c6cec5",
+        "path": "jakarta/xml/bind/jakarta.xml.bind-api/2.3.3/jakarta.xml.bind-api-2.3.3.jar"
+    },
+    {
+        "url": "javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar",
+        "hash": "43fdef0b5b6ceb31b0424b208b930c74ab58fac2ceeb7b3f6fd3aeb8b5ca4393",
+        "path": "javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar"
+    },
+    {
         "url": "javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar",
         "hash": "5909b396ca3a2be10d0eea32c74ef78d816e1b4ead21de1d78de1f890d033e04",
         "path": "javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar"
+    },
+    {
+        "url": "javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar",
+        "hash": "e04ba5195bcd555dc95650f7cc614d151e4bcd52d29a10b8aa2197f3ab89ab9b",
+        "path": "javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar"
     },
     {
         "url": "javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar",
@@ -2895,6 +3275,16 @@
         "path": "javax/measure/unit-api/1.0/unit-api-1.0.jar"
     },
     {
+        "url": "javax/measure/unit-api/1.0/unit-api-1.0.jar",
+        "hash": "35da65fdbd3f9c1fe79cfc8399db975fd97660d8a219febfda9fd1a5fc058f10",
+        "path": "javax/measure/unit-api/1.0/unit-api-1.0.jar"
+    },
+    {
+        "url": "javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar",
+        "hash": "88b955a0df57880a26a74708bc34f74dcaf8ebf4e78843a28b50eae945732b06",
+        "path": "javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar"
+    },
+    {
         "url": "javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar",
         "hash": "88b955a0df57880a26a74708bc34f74dcaf8ebf4e78843a28b50eae945732b06",
         "path": "javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar"
@@ -2933,6 +3323,11 @@
         "url": "junit/junit/4.13.2/junit-4.13.2.jar",
         "hash": "8e495b634469d64fb8acfa3495a065cbacc8a0fff55ce1e31007be4c16dc57d3",
         "path": "junit/junit/4.13.2/junit-4.13.2.jar"
+    },
+    {
+        "url": "net/arnx/jsonic/1.2.11/jsonic-1.2.11.jar",
+        "hash": "76a787944faab6c9bea64dc78400949027ed6fb686fe9b328d18f949852bc89f",
+        "path": "net/arnx/jsonic/1.2.11/jsonic-1.2.11.jar"
     },
     {
         "url": "net/bytebuddy/byte-buddy-agent/1.14.12/byte-buddy-agent-1.14.12.jar",
@@ -2985,9 +3380,19 @@
         "path": "net/i2p/crypto/eddsa/0.3.0/eddsa-0.3.0.jar"
     },
     {
+        "url": "net/java/dev/jna/jna-platform/5.12.1/jna-platform-5.12.1.jar",
+        "hash": "8ce969116cac95bd61b07a8d5e07174b352e63301473caac72c395e3c08488d2",
+        "path": "net/java/dev/jna/jna-platform/5.12.1/jna-platform-5.12.1.jar"
+    },
+    {
         "url": "net/java/dev/jna/jna-platform/5.17.0/jna-platform-5.17.0.jar",
         "hash": "b7e3d46c87bad2eb409b0e704916bcd81206168e357312dfddd0e253679cd9e0",
         "path": "net/java/dev/jna/jna-platform/5.17.0/jna-platform-5.17.0.jar"
+    },
+    {
+        "url": "net/java/dev/jna/jna/5.12.1/jna-5.12.1.jar",
+        "hash": "91a814ac4f40d60dee91d842e1a8ad874c62197984403d0e3c30d39e55cf53b3",
+        "path": "net/java/dev/jna/jna/5.12.1/jna-5.12.1.jar"
     },
     {
         "url": "net/java/dev/jna/jna/5.15.0/jna-5.15.0.jar",
@@ -3028,6 +3433,11 @@
         "url": "net/jqwik/jqwik/1.9.2/jqwik-1.9.2.jar",
         "hash": "92c164d7c9d77b3883f3dd43cec9301603847c30c2e247782dc67fb86a4d8e36",
         "path": "net/jqwik/jqwik/1.9.2/jqwik-1.9.2.jar"
+    },
+    {
+        "url": "net/loomchild/segment/2.0.3/segment-2.0.3.jar",
+        "hash": "a134be9884ddfa18304c8e437e64aa598d83ccfa439310029e61ea3fdae8b2ce",
+        "path": "net/loomchild/segment/2.0.3/segment-2.0.3.jar"
     },
     {
         "url": "net/loomchild/segment/2.0.3/segment-2.0.3.jar",
@@ -3100,6 +3510,16 @@
         "path": "org/apache/commons/commons-lang3/3.18.0/commons-lang3-3.18.0.jar"
     },
     {
+        "url": "org/apache/commons/commons-lang3/3.18.0/commons-lang3-3.18.0.jar",
+        "hash": "4eeeae8d20c078abb64b015ec158add383ac581571cddc45c68f0c9ae0230720",
+        "path": "org/apache/commons/commons-lang3/3.18.0/commons-lang3-3.18.0.jar"
+    },
+    {
+        "url": "org/apache/commons/commons-lang3/3.18.0/commons-lang3-3.18.0.jar",
+        "hash": "4eeeae8d20c078abb64b015ec158add383ac581571cddc45c68f0c9ae0230720",
+        "path": "org/apache/commons/commons-lang3/3.18.0/commons-lang3-3.18.0.jar"
+    },
+    {
         "url": "org/apache/commons/commons-lang3/3.4/commons-lang3-3.4.jar",
         "hash": "734c8356420cc8e30c795d64fd1fcd5d44ea9d90342a2cc3262c5158fbc6d98b",
         "path": "org/apache/commons/commons-lang3/3.4/commons-lang3-3.4.jar"
@@ -3148,6 +3568,16 @@
         "url": "org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar",
         "hash": "1e56d7b058d28b65abd256b8458e3885b674c1d588fa43cd7d1cbb9c7ef2b308",
         "path": "org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar"
+    },
+    {
+        "url": "org/apache/commons/commons-pool2/2.12.0/commons-pool2-2.12.0.jar",
+        "hash": "6d3bd18df8410f3e31b031aca582cc109342358a62a2759ebd0c4cdf30d06f8b",
+        "path": "org/apache/commons/commons-pool2/2.12.0/commons-pool2-2.12.0.jar"
+    },
+    {
+        "url": "org/apache/commons/commons-text/1.12.0/commons-text-1.12.0.jar",
+        "hash": "de023257ff166044a56bd1aa9124e843cd05dac5806cc705a9311f3556d5a15f",
+        "path": "org/apache/commons/commons-text/1.12.0/commons-text-1.12.0.jar"
     },
     {
         "url": "org/apache/commons/commons-text/1.14.0/commons-text-1.14.0.jar",
@@ -3200,6 +3630,11 @@
         "path": "org/apache/lucene/lucene-analyzers-common/8.11.1/lucene-analyzers-common-8.11.1.jar"
     },
     {
+        "url": "org/apache/lucene/lucene-backward-codecs/5.5.5/lucene-backward-codecs-5.5.5.jar",
+        "hash": "b62e089f505bc72dd8abb0ad55040604cdd92306e14871d7febcbf947dd9c6e5",
+        "path": "org/apache/lucene/lucene-backward-codecs/5.5.5/lucene-backward-codecs-5.5.5.jar"
+    },
+    {
         "url": "org/apache/lucene/lucene-backward-codecs/8.11.1/lucene-backward-codecs-8.11.1.jar",
         "hash": "38e72688eef81efffb9c5ea68918f4d1adb2eb0de64ce6a8222abee036eb63cf",
         "path": "org/apache/lucene/lucene-backward-codecs/8.11.1/lucene-backward-codecs-8.11.1.jar"
@@ -3218,6 +3653,11 @@
         "url": "org/apache/lucene/lucene-core/2.4.1/lucene-core-2.4.1.jar",
         "hash": "b85d6c2a6b4c29e90fa7c5d94b21fe796f9c6857870268b56904765126bae718",
         "path": "org/apache/lucene/lucene-core/2.4.1/lucene-core-2.4.1.jar"
+    },
+    {
+        "url": "org/apache/lucene/lucene-core/5.5.5/lucene-core-5.5.5.jar",
+        "hash": "8d27a8ab4ee8883282d7713f067e72d1cfde1e88d0f5701a119100ec9e86d7e1",
+        "path": "org/apache/lucene/lucene-core/5.5.5/lucene-core-5.5.5.jar"
     },
     {
         "url": "org/apache/lucene/lucene-core/8.11.1/lucene-core-8.11.1.jar",
@@ -4440,6 +4880,16 @@
         "path": "org/carrot2/morfologik-fsa-builders/2.1.9/morfologik-fsa-builders-2.1.9.jar"
     },
     {
+        "url": "org/carrot2/morfologik-fsa-builders/2.1.9/morfologik-fsa-builders-2.1.9.jar",
+        "hash": "f418c519b49470c2ec7024086bf210ba370ff158732368005d3b8cef964d3fff",
+        "path": "org/carrot2/morfologik-fsa-builders/2.1.9/morfologik-fsa-builders-2.1.9.jar"
+    },
+    {
+        "url": "org/carrot2/morfologik-fsa/2.1.9/morfologik-fsa-2.1.9.jar",
+        "hash": "1bfefce937df14cc94d32a98ce59c33f4d5b6c0eddbb436b6bfe27ff2120a23d",
+        "path": "org/carrot2/morfologik-fsa/2.1.9/morfologik-fsa-2.1.9.jar"
+    },
+    {
         "url": "org/carrot2/morfologik-fsa/2.1.9/morfologik-fsa-2.1.9.jar",
         "hash": "1bfefce937df14cc94d32a98ce59c33f4d5b6c0eddbb436b6bfe27ff2120a23d",
         "path": "org/carrot2/morfologik-fsa/2.1.9/morfologik-fsa-2.1.9.jar"
@@ -4448,6 +4898,16 @@
         "url": "org/carrot2/morfologik-speller/2.1.9/morfologik-speller-2.1.9.jar",
         "hash": "8d2566a216f401380878f25196f84bd351b807b11f18bc71acd1417e04a1ec29",
         "path": "org/carrot2/morfologik-speller/2.1.9/morfologik-speller-2.1.9.jar"
+    },
+    {
+        "url": "org/carrot2/morfologik-speller/2.1.9/morfologik-speller-2.1.9.jar",
+        "hash": "8d2566a216f401380878f25196f84bd351b807b11f18bc71acd1417e04a1ec29",
+        "path": "org/carrot2/morfologik-speller/2.1.9/morfologik-speller-2.1.9.jar"
+    },
+    {
+        "url": "org/carrot2/morfologik-stemming/2.1.9/morfologik-stemming-2.1.9.jar",
+        "hash": "6170895b2315b697f4da5630caf57c6c441f1cb419d89d1cb5326b0673293e8a",
+        "path": "org/carrot2/morfologik-stemming/2.1.9/morfologik-stemming-2.1.9.jar"
     },
     {
         "url": "org/carrot2/morfologik-stemming/2.1.9/morfologik-stemming-2.1.9.jar",
@@ -4478,6 +4938,11 @@
         "url": "org/checkerframework/checker-compat-qual/2.0.0/checker-compat-qual-2.0.0.jar",
         "hash": "a40b2ce6d8551e5b90b1bf637064303f32944d61b52ab2014e38699df573941b",
         "path": "org/checkerframework/checker-compat-qual/2.0.0/checker-compat-qual-2.0.0.jar"
+    },
+    {
+        "url": "org/checkerframework/checker-qual/3.43.0/checker-qual-3.43.0.jar",
+        "hash": "3fbc2e98f05854c3df16df9abaa955b91b15b3ecac33623208ed6424640ef0f6",
+        "path": "org/checkerframework/checker-qual/3.43.0/checker-qual-3.43.0.jar"
     },
     {
         "url": "org/codehaus/groovy/groovy-ant/3.0.25/groovy-ant-3.0.25.jar",
@@ -4538,6 +5003,11 @@
         "url": "org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar",
         "hash": "2068320bd6bad744c3673ab048f67e30bef8f518996fa380033556600669905d",
         "path": "org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar"
+    },
+    {
+        "url": "org/codehaus/mojo/animal-sniffer-annotations/1.24/animal-sniffer-annotations-1.24.jar",
+        "hash": "c720e6e5bcbe6b2f48ded75a47bccdb763eede79d14330102e0d352e3d89ed92",
+        "path": "org/codehaus/mojo/animal-sniffer-annotations/1.24/animal-sniffer-annotations-1.24.jar"
     },
     {
         "url": "org/codehaus/mojo/animal-sniffer-annotations/1.24/animal-sniffer-annotations-1.24.jar",
@@ -4945,6 +5415,11 @@
         "path": "org/eclipse/aether/aether-util/1.0.2.v20150114/aether-util-1.0.2.v20150114.jar"
     },
     {
+        "url": "org/eclipse/angus/angus-activation/2.0.2/angus-activation-2.0.2.jar",
+        "hash": "6dd3bcffc22bce83b07376a0e2e094e4964a3195d4118fb43e380ef35436cc1e",
+        "path": "org/eclipse/angus/angus-activation/2.0.2/angus-activation-2.0.2.jar"
+    },
+    {
         "url": "org/eclipse/elk/org.eclipse.elk.alg.common.compaction/0.3.0/org.eclipse.elk.alg.common.compaction-0.3.0.jar",
         "hash": "7b5a2c04f1c942af3d8b891a9a535e74cfa45b4151b7835c3e9f63e96ec0332f",
         "path": "org/eclipse/elk/org.eclipse.elk.alg.common.compaction/0.3.0/org.eclipse.elk.alg.common.compaction-0.3.0.jar"
@@ -5125,14 +5600,29 @@
         "path": "org/fusesource/jansi/jansi/2.4.1/jansi-2.4.1.jar"
     },
     {
+        "url": "org/glassfish/jaxb/jaxb-core/4.0.5/jaxb-core-4.0.5.jar",
+        "hash": "ad3fd9bf00de3eda9859f70b6cfb011e2fe9904804e16a2665092888ece0fdca",
+        "path": "org/glassfish/jaxb/jaxb-core/4.0.5/jaxb-core-4.0.5.jar"
+    },
+    {
         "url": "org/glassfish/jaxb/jaxb-runtime/2.3.9/jaxb-runtime-2.3.9.jar",
         "hash": "ba88e5bde7c0d878c3e1f2ec2fcabaf51d201eaf93b3bb9cfecfc1f11b2304d4",
         "path": "org/glassfish/jaxb/jaxb-runtime/2.3.9/jaxb-runtime-2.3.9.jar"
     },
     {
+        "url": "org/glassfish/jaxb/jaxb-runtime/4.0.5/jaxb-runtime-4.0.5.jar",
+        "hash": "485d8940e76373a7f300815ea5504bf5b726c234425ad30971019d133124cca4",
+        "path": "org/glassfish/jaxb/jaxb-runtime/4.0.5/jaxb-runtime-4.0.5.jar"
+    },
+    {
         "url": "org/glassfish/jaxb/txw2/2.3.9/txw2-2.3.9.jar",
         "hash": "973018b87af911ecf6e6d861dd0d6a477e4d8ae6a883ec5d073d3df1330b87f0",
         "path": "org/glassfish/jaxb/txw2/2.3.9/txw2-2.3.9.jar"
+    },
+    {
+        "url": "org/glassfish/jaxb/txw2/4.0.5/txw2-4.0.5.jar",
+        "hash": "917355bc451481f30d043b24d123110517966af34383901773882810dca480e5",
+        "path": "org/glassfish/jaxb/txw2/4.0.5/txw2-4.0.5.jar"
     },
     {
         "url": "org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar",
@@ -5160,6 +5650,11 @@
         "path": "org/hamcrest/hamcrest/2.2/hamcrest-2.2.jar"
     },
     {
+        "url": "org/hdrhistogram/HdrHistogram/2.1.12/HdrHistogram-2.1.12.jar",
+        "hash": "9b47fbae444feaac4b7e04f0ea294569e4bc282bc69d8c2ce2ac3f23577281e2",
+        "path": "org/hdrhistogram/HdrHistogram/2.1.12/HdrHistogram-2.1.12.jar"
+    },
+    {
         "url": "org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar",
         "hash": "22d1d4316c4ec13a68b559e98c8256d69071593731da96136640f864fa14fad8",
         "path": "org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar"
@@ -5168,6 +5663,11 @@
         "url": "org/imgscalr/imgscalr-lib/4.2/imgscalr-lib-4.2.jar",
         "hash": "6f128a71c5e87a16f810513a73ad3c77d0ee0bb622ee0ce1ead115bccbc76d0a",
         "path": "org/imgscalr/imgscalr-lib/4.2/imgscalr-lib-4.2.jar"
+    },
+    {
+        "url": "org/ioperm/morphology-el/1.0.0/morphology-el-1.0.0.jar",
+        "hash": "caa36b7e96fd4c1804b3f4763de803ce87468d86908087087814f7d47caee668",
+        "path": "org/ioperm/morphology-el/1.0.0/morphology-el-1.0.0.jar"
     },
     {
         "url": "org/jacoco/org.jacoco.agent/0.8.14/org.jacoco.agent-0.8.14.jar",
@@ -5235,14 +5735,14 @@
         "path": "org/jetbrains/apple-notary-api-kotlin-client/2.0.1/apple-notary-api-kotlin-client-2.0.1.jar"
     },
     {
-        "url": "org/jetbrains/compose/animation/animation-core-desktop/1.10.0-beta01/animation-core-desktop-1.10.0-beta01.jar",
-        "hash": "530c042dcb2861382ed4d4a039f026c718b1d7c1b3cbbda58b12d26ba86683e3",
-        "path": "org/jetbrains/compose/animation/animation-core-desktop/1.10.0-beta01/animation-core-desktop-1.10.0-beta01.jar"
+        "url": "org/jetbrains/compose/animation/animation-core-desktop/1.10.0-rc01/animation-core-desktop-1.10.0-rc01.jar",
+        "hash": "41c0220ddbc55cb897feb0d5816b748f9c11162171f12743c04b50d0d84db628",
+        "path": "org/jetbrains/compose/animation/animation-core-desktop/1.10.0-rc01/animation-core-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/animation/animation-desktop/1.10.0-beta01/animation-desktop-1.10.0-beta01.jar",
-        "hash": "4aab9a942a0bf3cef4b1c01451dbc13c2e30a9289c87c4fe416663d808e920fb",
-        "path": "org/jetbrains/compose/animation/animation-desktop/1.10.0-beta01/animation-desktop-1.10.0-beta01.jar"
+        "url": "org/jetbrains/compose/animation/animation-desktop/1.10.0-rc01/animation-desktop-1.10.0-rc01.jar",
+        "hash": "3ec5254288b1e872263009221f677063ea728f90969598f399a5b02500ebc014",
+        "path": "org/jetbrains/compose/animation/animation-desktop/1.10.0-rc01/animation-desktop-1.10.0-rc01.jar"
     },
     {
         "url": "org/jetbrains/compose/compiler/compiler-hosted/1.5.14/compiler-hosted-1.5.14.jar",
@@ -5250,14 +5750,14 @@
         "path": "org/jetbrains/compose/compiler/compiler-hosted/1.5.14/compiler-hosted-1.5.14.jar"
     },
     {
-        "url": "org/jetbrains/compose/components/components-resources-desktop/1.10.0-alpha01/components-resources-desktop-1.10.0-alpha01.jar",
-        "hash": "efdd4db41e57baa5cd50d679be5a141ddf8ab9ed75f99fdaf9db7277343e3d96",
-        "path": "org/jetbrains/compose/components/components-resources-desktop/1.10.0-alpha01/components-resources-desktop-1.10.0-alpha01.jar"
+        "url": "org/jetbrains/compose/components/components-resources-desktop/1.10.0-rc01/components-resources-desktop-1.10.0-rc01.jar",
+        "hash": "7dbbe06683befa8110b4ac926a7432b7e2ee446ed156adf55ad17e9c868ae0e2",
+        "path": "org/jetbrains/compose/components/components-resources-desktop/1.10.0-rc01/components-resources-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/components/components-resources/1.10.0-alpha01/components-resources-1.10.0-alpha01.jar",
-        "hash": "75ed361cabb9ed491c00dadd0784d329ea6433c39d8240df062778c31b509bdb",
-        "path": "org/jetbrains/compose/components/components-resources/1.10.0-alpha01/components-resources-1.10.0-alpha01.jar"
+        "url": "org/jetbrains/compose/components/components-resources/1.10.0-rc01/components-resources-1.10.0-rc01.jar",
+        "hash": "7d2f02d5ecc865b8c9b81cc3026db4c0ba2ccf180c1be6844896e56581045b9a",
+        "path": "org/jetbrains/compose/components/components-resources/1.10.0-rc01/components-resources-1.10.0-rc01.jar"
     },
     {
         "url": "org/jetbrains/compose/components/components-ui-tooling-preview-desktop/1.9.0/components-ui-tooling-preview-desktop-1.9.0.jar",
@@ -5265,59 +5765,59 @@
         "path": "org/jetbrains/compose/components/components-ui-tooling-preview-desktop/1.9.0/components-ui-tooling-preview-desktop-1.9.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/foundation/foundation-desktop/1.10.0-beta01/foundation-desktop-1.10.0-beta01.jar",
-        "hash": "ef70b786c9444735bd634c1e2d224d1511a39bd134afb123e8f408679244b563",
-        "path": "org/jetbrains/compose/foundation/foundation-desktop/1.10.0-beta01/foundation-desktop-1.10.0-beta01.jar"
+        "url": "org/jetbrains/compose/foundation/foundation-desktop/1.10.0-rc01/foundation-desktop-1.10.0-rc01.jar",
+        "hash": "f988ef9d9517dc26b360943349bf1412d5735beb8ecf4f5304f10ecfe6ca05db",
+        "path": "org/jetbrains/compose/foundation/foundation-desktop/1.10.0-rc01/foundation-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.10.0-beta01/foundation-layout-desktop-1.10.0-beta01.jar",
-        "hash": "6d38e4de37bcc3adeadf595d559e9cb73a215c763f8127fe780c820faf6a789b",
-        "path": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.10.0-beta01/foundation-layout-desktop-1.10.0-beta01.jar"
+        "url": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.10.0-rc01/foundation-layout-desktop-1.10.0-rc01.jar",
+        "hash": "bd086a9f5ce453967ea1124bb709612bca14a4fbb6522a6023092a8866ee4ef0",
+        "path": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.10.0-rc01/foundation-layout-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-backhandler-desktop/1.10.0-beta01/ui-backhandler-desktop-1.10.0-beta01.jar",
-        "hash": "08a4ac21eca159e16e959ae27f9431b33ecf8f0fc88bcc7499edd21d340de7a5",
-        "path": "org/jetbrains/compose/ui/ui-backhandler-desktop/1.10.0-beta01/ui-backhandler-desktop-1.10.0-beta01.jar"
+        "url": "org/jetbrains/compose/ui/ui-backhandler-desktop/1.10.0-rc01/ui-backhandler-desktop-1.10.0-rc01.jar",
+        "hash": "1babf68f5a05cbe1ba8cf934f0e575bb0d0b184444514e6aa7ec1f8004c9ce33",
+        "path": "org/jetbrains/compose/ui/ui-backhandler-desktop/1.10.0-rc01/ui-backhandler-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-desktop/1.10.0-beta01/ui-desktop-1.10.0-beta01.jar",
-        "hash": "e4c01eefc1ec2d5a6f0e643f50865b56022b564cdcb0bbc122a64b692cb65d89",
-        "path": "org/jetbrains/compose/ui/ui-desktop/1.10.0-beta01/ui-desktop-1.10.0-beta01.jar"
+        "url": "org/jetbrains/compose/ui/ui-desktop/1.10.0-rc01/ui-desktop-1.10.0-rc01.jar",
+        "hash": "c699d8571082a7f507fbede0b9d567c661f47013a4f3f9b68109b8a0bd828ea8",
+        "path": "org/jetbrains/compose/ui/ui-desktop/1.10.0-rc01/ui-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-geometry-desktop/1.10.0-beta01/ui-geometry-desktop-1.10.0-beta01.jar",
+        "url": "org/jetbrains/compose/ui/ui-geometry-desktop/1.10.0-rc01/ui-geometry-desktop-1.10.0-rc01.jar",
         "hash": "cdbfdabccac8abef2d9bc0420ec0c4be7a880f6d26b2d1cc4e2317c0d252ee27",
-        "path": "org/jetbrains/compose/ui/ui-geometry-desktop/1.10.0-beta01/ui-geometry-desktop-1.10.0-beta01.jar"
+        "path": "org/jetbrains/compose/ui/ui-geometry-desktop/1.10.0-rc01/ui-geometry-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-graphics-desktop/1.10.0-beta01/ui-graphics-desktop-1.10.0-beta01.jar",
-        "hash": "80f61d974f2ddac95084738f0f18e8c0f6c1923b4bf8cc6a9245b1376c8c992f",
-        "path": "org/jetbrains/compose/ui/ui-graphics-desktop/1.10.0-beta01/ui-graphics-desktop-1.10.0-beta01.jar"
+        "url": "org/jetbrains/compose/ui/ui-graphics-desktop/1.10.0-rc01/ui-graphics-desktop-1.10.0-rc01.jar",
+        "hash": "d1710a4a15b115fc4c37878b32b10a476a0ec3b8399fa1fb588181dba83dbdd2",
+        "path": "org/jetbrains/compose/ui/ui-graphics-desktop/1.10.0-rc01/ui-graphics-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-test-desktop/1.10.0-beta01/ui-test-desktop-1.10.0-beta01.jar",
-        "hash": "65e46ce4ce2291ed0cead9d184ef96d8e10e31770e23901f71deadde6be72b2e",
-        "path": "org/jetbrains/compose/ui/ui-test-desktop/1.10.0-beta01/ui-test-desktop-1.10.0-beta01.jar"
+        "url": "org/jetbrains/compose/ui/ui-test-desktop/1.10.0-rc01/ui-test-desktop-1.10.0-rc01.jar",
+        "hash": "b7d61af17254d98ffb858ceb80bd38597c2486eead80c2cfe0a37ba3ee9724b2",
+        "path": "org/jetbrains/compose/ui/ui-test-desktop/1.10.0-rc01/ui-test-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.10.0-beta01/ui-test-junit4-desktop-1.10.0-beta01.jar",
+        "url": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.10.0-rc01/ui-test-junit4-desktop-1.10.0-rc01.jar",
         "hash": "de2f63543b8f646b85c789e3bf53121e4e6d89d3c7c0afc0358954cc27316a71",
-        "path": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.10.0-beta01/ui-test-junit4-desktop-1.10.0-beta01.jar"
+        "path": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.10.0-rc01/ui-test-junit4-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-text-desktop/1.10.0-beta01/ui-text-desktop-1.10.0-beta01.jar",
-        "hash": "2d230e78f7160cc2dbcf5c2bd2824ee43832b26e40d01ddfe862c0236c37c8f0",
-        "path": "org/jetbrains/compose/ui/ui-text-desktop/1.10.0-beta01/ui-text-desktop-1.10.0-beta01.jar"
+        "url": "org/jetbrains/compose/ui/ui-text-desktop/1.10.0-rc01/ui-text-desktop-1.10.0-rc01.jar",
+        "hash": "6ee18433659f389621386e759217b3ed5ef0f1e22ea177cad705457dc75aa27b",
+        "path": "org/jetbrains/compose/ui/ui-text-desktop/1.10.0-rc01/ui-text-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-unit-desktop/1.10.0-beta01/ui-unit-desktop-1.10.0-beta01.jar",
+        "url": "org/jetbrains/compose/ui/ui-unit-desktop/1.10.0-rc01/ui-unit-desktop-1.10.0-rc01.jar",
         "hash": "f0f3439928b3d9132f07cb2d7a86091696372ebc8354d16b48830b6ce15e8161",
-        "path": "org/jetbrains/compose/ui/ui-unit-desktop/1.10.0-beta01/ui-unit-desktop-1.10.0-beta01.jar"
+        "path": "org/jetbrains/compose/ui/ui-unit-desktop/1.10.0-rc01/ui-unit-desktop-1.10.0-rc01.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-util-desktop/1.10.0-beta01/ui-util-desktop-1.10.0-beta01.jar",
+        "url": "org/jetbrains/compose/ui/ui-util-desktop/1.10.0-rc01/ui-util-desktop-1.10.0-rc01.jar",
         "hash": "7bfc93a8cad2974cdfd5a2c817e3083e0e3c48ef99e4dbba51eb98a14c92ed2d",
-        "path": "org/jetbrains/compose/ui/ui-util-desktop/1.10.0-beta01/ui-util-desktop-1.10.0-beta01.jar"
+        "path": "org/jetbrains/compose/ui/ui-util-desktop/1.10.0-rc01/ui-util-desktop-1.10.0-rc01.jar"
     },
     {
         "url": "org/jetbrains/dokka/analysis-kotlin-descriptors/2.0.0/analysis-kotlin-descriptors-2.0.0.jar",
@@ -5740,54 +6240,79 @@
         "path": "org/jetbrains/intellij/deps/jcef/jcef/137.0.17-gf354b0e-chromium-137.0.7151.104-api-1.20-253-b13/jcef-137.0.17-gf354b0e-chromium-137.0.7151.104-api-1.20-253-b13.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/languagetool/language-be/6.7.19/language-be-6.7.19.jar",
-        "hash": "e1112c8cbb7bc83523e2fc057e58b0b48dcdba5cb58e9771639ed2cd735ae4e4",
-        "path": "org/jetbrains/intellij/deps/languagetool/language-be/6.7.19/language-be-6.7.19.jar"
+        "url": "org/jetbrains/intellij/deps/languagetool/language-be/6.7.20/language-be-6.7.20.jar",
+        "hash": "f24b9d99f0b9dddbe1d63118dce0af30fd32cb6228f949cfbbad9902e2bfa169",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-be/6.7.20/language-be-6.7.20.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/languagetool/language-de/6.7.19/language-de-6.7.19.jar",
-        "hash": "3b8fdde02fa7c870daaa0d33d040d00a6dd9a8971e5bf01b3946ff2a9a7b5887",
-        "path": "org/jetbrains/intellij/deps/languagetool/language-de/6.7.19/language-de-6.7.19.jar"
+        "url": "org/jetbrains/intellij/deps/languagetool/language-de/6.7.20/language-de-6.7.20.jar",
+        "hash": "91d7d42c173b92d918cdf4266f7f6b468726445dca98740976002745ebdd9678",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-de/6.7.20/language-de-6.7.20.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/languagetool/language-en/6.7.19/language-en-6.7.19.jar",
-        "hash": "4faf190812aff01543fe930c7476db7d21b4a5ac892421c849aa85e090d5dd2b",
-        "path": "org/jetbrains/intellij/deps/languagetool/language-en/6.7.19/language-en-6.7.19.jar"
+        "url": "org/jetbrains/intellij/deps/languagetool/language-de/6.7.20/language-de-6.7.20.jar",
+        "hash": "91d7d42c173b92d918cdf4266f7f6b468726445dca98740976002745ebdd9678",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-de/6.7.20/language-de-6.7.20.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/languagetool/language-it/6.7.19/language-it-6.7.19.jar",
-        "hash": "66610c22526cae842fbcfc2d64b15b27e1e88f6bd715b8b72d951d60d205e53c",
-        "path": "org/jetbrains/intellij/deps/languagetool/language-it/6.7.19/language-it-6.7.19.jar"
+        "url": "org/jetbrains/intellij/deps/languagetool/language-el/6.7.20/language-el-6.7.20.jar",
+        "hash": "da622c6b8d7581a1ce9d58e3cab8c7e9b6770cbe994bb2982d1d82d743dfc436",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-el/6.7.20/language-el-6.7.20.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/languagetool/language-pt/6.7.19/language-pt-6.7.19.jar",
-        "hash": "15082b699292f1b28756337e3fe46295c556d1e1147bf98d155cca4a08382599",
-        "path": "org/jetbrains/intellij/deps/languagetool/language-pt/6.7.19/language-pt-6.7.19.jar"
+        "url": "org/jetbrains/intellij/deps/languagetool/language-en/6.7.20/language-en-6.7.20.jar",
+        "hash": "572cb63055eaa335522e9f3983d457c9acc24672edfc629cc82277d46b455702",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-en/6.7.20/language-en-6.7.20.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/languagetool/language-ru/6.7.19/language-ru-6.7.19.jar",
-        "hash": "24e353865ce2862de1cb2468b73f28bb4d7fb996ab480c9a9513999ba2a3252e",
-        "path": "org/jetbrains/intellij/deps/languagetool/language-ru/6.7.19/language-ru-6.7.19.jar"
+        "url": "org/jetbrains/intellij/deps/languagetool/language-it/6.7.20/language-it-6.7.20.jar",
+        "hash": "6b25433cf377e3fafce95f772aec21fec29c0267bf1b651834d74309700b34a5",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-it/6.7.20/language-it-6.7.20.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/languagetool/language-uk/6.7.19/language-uk-6.7.19.jar",
-        "hash": "a02e7a2aced8f3f43244c9b06bdd2ac620ffc76a173dd33c19f79e12a9056660",
-        "path": "org/jetbrains/intellij/deps/languagetool/language-uk/6.7.19/language-uk-6.7.19.jar"
+        "url": "org/jetbrains/intellij/deps/languagetool/language-pt/6.7.20/language-pt-6.7.20.jar",
+        "hash": "2878fbeeeff14a74a970a2a1c477a9cd5fd74a432c015ca810a85eaeaa078186",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-pt/6.7.20/language-pt-6.7.20.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/languagetool/language-zh/6.7.19/language-zh-6.7.19.jar",
-        "hash": "9aceb89c3f8b7f1b98eaef06b1b79e64ee5308f0edb2315785aad4f3c4045169",
-        "path": "org/jetbrains/intellij/deps/languagetool/language-zh/6.7.19/language-zh-6.7.19.jar"
+        "url": "org/jetbrains/intellij/deps/languagetool/language-ru/6.7.20/language-ru-6.7.20.jar",
+        "hash": "37ee7871b86ded531c364ab448ebf446a1666aef088ecbd35c9bebd25f7239f4",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-ru/6.7.20/language-ru-6.7.20.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/languagetool/languagetool-core/6.7.19/languagetool-core-6.7.19.jar",
-        "hash": "adafb32cef456d63fbc71cd0e193211a58fb712517ad7fea7f3098e34a184842",
-        "path": "org/jetbrains/intellij/deps/languagetool/languagetool-core/6.7.19/languagetool-core-6.7.19.jar"
+        "url": "org/jetbrains/intellij/deps/languagetool/language-ru/6.7.20/language-ru-6.7.20.jar",
+        "hash": "37ee7871b86ded531c364ab448ebf446a1666aef088ecbd35c9bebd25f7239f4",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-ru/6.7.20/language-ru-6.7.20.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/languagetool/languagetool-core/6.7.19/languagetool-core-6.7.19.jar",
-        "hash": "adafb32cef456d63fbc71cd0e193211a58fb712517ad7fea7f3098e34a184842",
-        "path": "org/jetbrains/intellij/deps/languagetool/languagetool-core/6.7.19/languagetool-core-6.7.19.jar"
+        "url": "org/jetbrains/intellij/deps/languagetool/language-uk/6.7.20/language-uk-6.7.20.jar",
+        "hash": "bc94dd9aaee1f3e076d55bc91872d383cd92c9293cc7efd2e316915690963280",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-uk/6.7.20/language-uk-6.7.20.jar"
+    },
+    {
+        "url": "org/jetbrains/intellij/deps/languagetool/language-uk/6.7.20/language-uk-6.7.20.jar",
+        "hash": "bc94dd9aaee1f3e076d55bc91872d383cd92c9293cc7efd2e316915690963280",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-uk/6.7.20/language-uk-6.7.20.jar"
+    },
+    {
+        "url": "org/jetbrains/intellij/deps/languagetool/language-zh/6.7.20/language-zh-6.7.20.jar",
+        "hash": "c04ded4e5f33399dc14a52e4d4b13d6a4bfaa817f91efb26aaf208a4bbfdb42b",
+        "path": "org/jetbrains/intellij/deps/languagetool/language-zh/6.7.20/language-zh-6.7.20.jar"
+    },
+    {
+        "url": "org/jetbrains/intellij/deps/languagetool/languagetool-core/6.7.20/languagetool-core-6.7.20.jar",
+        "hash": "2ceb4fddcf6e6943e8e418a417caf05affd239c9f7855ba22aa8494aa0668256",
+        "path": "org/jetbrains/intellij/deps/languagetool/languagetool-core/6.7.20/languagetool-core-6.7.20.jar"
+    },
+    {
+        "url": "org/jetbrains/intellij/deps/languagetool/languagetool-core/6.7.20/languagetool-core-6.7.20.jar",
+        "hash": "2ceb4fddcf6e6943e8e418a417caf05affd239c9f7855ba22aa8494aa0668256",
+        "path": "org/jetbrains/intellij/deps/languagetool/languagetool-core/6.7.20/languagetool-core-6.7.20.jar"
+    },
+    {
+        "url": "org/jetbrains/intellij/deps/languagetool/languagetool-core/6.7.20/languagetool-core-6.7.20.jar",
+        "hash": "2ceb4fddcf6e6943e8e418a417caf05affd239c9f7855ba22aa8494aa0668256",
+        "path": "org/jetbrains/intellij/deps/languagetool/languagetool-core/6.7.20/languagetool-core-6.7.20.jar"
     },
     {
         "url": "org/jetbrains/intellij/deps/org.eclipse.jgit/6.6.1.202309021850-r-jb-202407181518/org.eclipse.jgit-6.6.1.202309021850-r-jb-202407181518.jar",
@@ -5900,14 +6425,14 @@
         "path": "org/jetbrains/intellij/plugins/structure-intellij/3.316/structure-intellij-3.316.jar"
     },
     {
-        "url": "org/jetbrains/jediterm/jediterm-core/3.57/jediterm-core-3.57.jar",
-        "hash": "e3d7c60adfdebe47732889d1ff21bc936ddf9990609ac54501c7cf749b0fe640",
-        "path": "org/jetbrains/jediterm/jediterm-core/3.57/jediterm-core-3.57.jar"
+        "url": "org/jetbrains/jediterm/jediterm-core/3.59/jediterm-core-3.59.jar",
+        "hash": "83247c676405d5c5c1764454d35f2bec4f70b72f1b75046d4c43bdbc49eb9587",
+        "path": "org/jetbrains/jediterm/jediterm-core/3.59/jediterm-core-3.59.jar"
     },
     {
-        "url": "org/jetbrains/jediterm/jediterm-ui/3.57/jediterm-ui-3.57.jar",
-        "hash": "05a51058880face1793bcdee9b31578d0ca160fcf603e773d3a12c41d35fd43f",
-        "path": "org/jetbrains/jediterm/jediterm-ui/3.57/jediterm-ui-3.57.jar"
+        "url": "org/jetbrains/jediterm/jediterm-ui/3.59/jediterm-ui-3.59.jar",
+        "hash": "e94b38d2e49e405a93eff2b264692d148fc996d3e72051e145d31215326186a9",
+        "path": "org/jetbrains/jediterm/jediterm-ui/3.59/jediterm-ui-3.59.jar"
     },
     {
         "url": "org/jetbrains/jetCheck/0.2.2/jetCheck-0.2.2.jar",
@@ -5920,84 +6445,79 @@
         "path": "org/jetbrains/jps/jps-javac-extension/10/jps-javac-extension-10.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.3.20-ij253-45/allopen-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.3.20-ij253-87/allopen-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
         "hash": "f7374912dbbcfc18686114a78804a7f4ba91aa54b6f3bf4be10a54bb643f8a61",
-        "path": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.3.20-ij253-45/allopen-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.3.20-ij253-87/allopen-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.3.20-ij253-45/analysis-api-fe10-for-ide-2.3.20-ij253-45.jar",
-        "hash": "cbf24708e46c2e064a37887d5b53d1234ba2b3c1d285ecc9ba82cb6152076297",
-        "path": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.3.20-ij253-45/analysis-api-fe10-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.3.20-ij253-87/analysis-api-fe10-for-ide-2.3.20-ij253-87.jar",
+        "hash": "a43d956c010eedbf6df9e7050705c13abade18f3803264ac26cfa3fc00c72dd7",
+        "path": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.3.20-ij253-87/analysis-api-fe10-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-for-ide/2.3.20-ij253-45/analysis-api-for-ide-2.3.20-ij253-45.jar",
-        "hash": "47db94b0240122449cb95aa00dd8b9d0722948b81f8390b9d27d38797c0fc784",
-        "path": "org/jetbrains/kotlin/analysis-api-for-ide/2.3.20-ij253-45/analysis-api-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/analysis-api-for-ide/2.3.20-ij253-87/analysis-api-for-ide-2.3.20-ij253-87.jar",
+        "hash": "956c4e4e9c423e4a3a4f90a6436aabc6f377765621bfdc9eb862207160216b02",
+        "path": "org/jetbrains/kotlin/analysis-api-for-ide/2.3.20-ij253-87/analysis-api-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.3.20-ij253-45/analysis-api-impl-base-for-ide-2.3.20-ij253-45.jar",
-        "hash": "1ae230b0e5847a47838b871060b7271c9b2329febb85e1470d1490ffe2e28fd4",
-        "path": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.3.20-ij253-45/analysis-api-impl-base-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.3.20-ij253-87/analysis-api-impl-base-for-ide-2.3.20-ij253-87.jar",
+        "hash": "4954ca1501a0963e7e0ac3c9ef633e1976f795e8c6bf1c52d0a28b08e5751ffb",
+        "path": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.3.20-ij253-87/analysis-api-impl-base-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.3.20-ij253-45/analysis-api-impl-base-tests-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.3.20-ij253-87/analysis-api-impl-base-tests-for-ide-2.3.20-ij253-87.jar",
         "hash": "c6deada2fac53b8ea6523dbda77597b128006674616f140f04df23264c6d1aa3",
-        "path": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.3.20-ij253-45/analysis-api-impl-base-tests-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.3.20-ij253-87/analysis-api-impl-base-tests-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.3.20-ij253-45/analysis-api-k2-for-ide-2.3.20-ij253-45.jar",
-        "hash": "7fdbe230eae422cec677a358823315996f53853d4b4469e45e1531fb4f4e5245",
-        "path": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.3.20-ij253-45/analysis-api-k2-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.3.20-ij253-87/analysis-api-k2-for-ide-2.3.20-ij253-87.jar",
+        "hash": "fa5e5854a339d3c76c89987f638df5b64b27b888272ec7162763981fae7d06ae",
+        "path": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.3.20-ij253-87/analysis-api-k2-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.3.20-ij253-45/analysis-api-k2-tests-for-ide-2.3.20-ij253-45.jar",
-        "hash": "7359f01e280d5d55781135956975278b3e4c1472e9628cce72bb0071705ce63b",
-        "path": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.3.20-ij253-45/analysis-api-k2-tests-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.3.20-ij253-87/analysis-api-k2-tests-for-ide-2.3.20-ij253-87.jar",
+        "hash": "725800ece6c76c3de403c1a936e415770a8bd5512d138b8491eb5433c5cd666d",
+        "path": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.3.20-ij253-87/analysis-api-k2-tests-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.3.20-ij253-45/analysis-api-platform-interface-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.3.20-ij253-87/analysis-api-platform-interface-for-ide-2.3.20-ij253-87.jar",
         "hash": "33db5c2be1f298109a32c67efc9ff9f2351812cd18b1d3e3b6142b8c1f6562a0",
-        "path": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.3.20-ij253-45/analysis-api-platform-interface-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.3.20-ij253-87/analysis-api-platform-interface-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.3.20-ij253-45/assignment-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.3.20-ij253-87/assignment-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
         "hash": "a1c99ebaca3f02a43d27c295ff6481a860c8e1e9f3b5a67dca2d6a01d5d977e5",
-        "path": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.3.20-ij253-45/assignment-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.3.20-ij253-87/assignment-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.3.20-ij253-45/compose-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
-        "hash": "84612c6b067f7018325c00975bb49a35e1947d8de1c03009e999b746219105f4",
-        "path": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.3.20-ij253-45/compose-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.3.20-ij253-87/compose-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "hash": "32ce7920a16422638113923f434afffa11f1e65306548ed4044bab4be9ee17be",
+        "path": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.3.20-ij253-87/compose-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.3.20-ij253-45/incremental-compilation-impl-tests-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.3.20-ij253-87/incremental-compilation-impl-tests-for-ide-2.3.20-ij253-87.jar",
         "hash": "9d2369a7e71ff367dbed384ee50976c25743b09e4be68a58f9412ad165d8e0d7",
-        "path": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.3.20-ij253-45/incremental-compilation-impl-tests-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.3.20-ij253-87/incremental-compilation-impl-tests-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.3.20-ij253-45/js-plain-objects-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
-        "hash": "fde628289a120756ea6155cbe76b905e7e800c968404aa20d76382ec0b26cf07",
-        "path": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.3.20-ij253-45/js-plain-objects-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.3.20-ij253-87/js-plain-objects-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "hash": "c3c265fa976e6e50758aece13351510a9b9a7f0de3ac476f5de7d617e926d3f4",
+        "path": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.3.20-ij253-87/js-plain-objects-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.3.20-ij253-45/kotlin-build-common-tests-for-ide-2.3.20-ij253-45.jar",
-        "hash": "c5d0331fb960fbb5e392118d1322e905f37be1b0b0abd6121d06caade7cc9b16",
-        "path": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.3.20-ij253-45/kotlin-build-common-tests-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.3.20-ij253-87/kotlin-build-common-tests-for-ide-2.3.20-ij253-87.jar",
+        "hash": "d0d925a63436683c9ba594cdef82902d0186c38b28d40489f358ca94989012f1",
+        "path": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.3.20-ij253-87/kotlin-build-common-tests-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.3.20-ij253-45/kotlin-compiler-cli-for-ide-2.3.20-ij253-45.jar",
-        "hash": "fd9db5d6b301967133bc977935d22295e247ed2ccefc2583942ef7376fd598c1",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.3.20-ij253-45/kotlin-compiler-cli-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.3.20-ij253-87/kotlin-compiler-cli-for-ide-2.3.20-ij253-87.jar",
+        "hash": "fb52f096c512486941155004f0f90522eda247f61014235860a7d95011600f56",
+        "path": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.3.20-ij253-87/kotlin-compiler-cli-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.3.20-ij253-45/kotlin-compiler-common-for-ide-2.3.20-ij253-45.jar",
-        "hash": "4af9a30fde5d143da69428bfef59e292c794927613bf0a5b111aaaa0ead01ba2",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.3.20-ij253-45/kotlin-compiler-common-for-ide-2.3.20-ij253-45.jar"
-    },
-    {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-embeddable/2.0.21/kotlin-compiler-embeddable-2.0.21.jar",
-        "hash": "9fa8cdd1de0dccffe154c997d423ec6b5f53cd6d9177e3a77a9b0de03fb1bc81",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-embeddable/2.0.21/kotlin-compiler-embeddable-2.0.21.jar"
+        "url": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.3.20-ij253-87/kotlin-compiler-common-for-ide-2.3.20-ij253-87.jar",
+        "hash": "777ab6852e6054d338ab20b59aa75f92244a116a465d247e8366571e231f7968",
+        "path": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.3.20-ij253-87/kotlin-compiler-common-for-ide-2.3.20-ij253-87.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-compiler-embeddable/2.0.21/kotlin-compiler-embeddable-2.0.21.jar",
@@ -6010,24 +6530,29 @@
         "path": "org/jetbrains/kotlin/kotlin-compiler-embeddable/2.0.21/kotlin-compiler-embeddable-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.3.20-ij253-45/kotlin-compiler-fe10-for-ide-2.3.20-ij253-45.jar",
-        "hash": "d1f296fae451d3e16f70a6812fe88024132422189a6cb8a74e4f62b1fa5f18fd",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.3.20-ij253-45/kotlin-compiler-fe10-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-compiler-embeddable/2.0.21/kotlin-compiler-embeddable-2.0.21.jar",
+        "hash": "9fa8cdd1de0dccffe154c997d423ec6b5f53cd6d9177e3a77a9b0de03fb1bc81",
+        "path": "org/jetbrains/kotlin/kotlin-compiler-embeddable/2.0.21/kotlin-compiler-embeddable-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.3.20-ij253-45/kotlin-compiler-fir-for-ide-2.3.20-ij253-45.jar",
-        "hash": "51241b1d60e87ef52b69ad58dc530230dd832def0cec16ca3a57e705f7ecd9bc",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.3.20-ij253-45/kotlin-compiler-fir-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.3.20-ij253-87/kotlin-compiler-fe10-for-ide-2.3.20-ij253-87.jar",
+        "hash": "862a7043999f5212182d41840e25c81f7bb837302d7d7ad1907c82154900ef92",
+        "path": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.3.20-ij253-87/kotlin-compiler-fe10-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.3.20-ij253-45/kotlin-compiler-ir-for-ide-2.3.20-ij253-45.jar",
-        "hash": "230f801ec0de74e6363bf7553c71dbf085d1aaaadcf553afd1248ab51fbcfef1",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.3.20-ij253-45/kotlin-compiler-ir-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.3.20-ij253-87/kotlin-compiler-fir-for-ide-2.3.20-ij253-87.jar",
+        "hash": "c1246e36061a25d2d33ac251b57c017b180b2c00dff873a58bd28d82ac5391f2",
+        "path": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.3.20-ij253-87/kotlin-compiler-fir-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.3.20-ij253-45/kotlin-compiler-tests-for-ide-2.3.20-ij253-45.jar",
-        "hash": "4b182e6689c0b5ff330195dc89d249df941a11a7027ce08e6e84163fa89d37d2",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.3.20-ij253-45/kotlin-compiler-tests-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.3.20-ij253-87/kotlin-compiler-ir-for-ide-2.3.20-ij253-87.jar",
+        "hash": "3e864a41449ef1e2f106473953950d34e6278aa1350b5671357b30e7afbb1be1",
+        "path": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.3.20-ij253-87/kotlin-compiler-ir-for-ide-2.3.20-ij253-87.jar"
+    },
+    {
+        "url": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.3.20-ij253-87/kotlin-compiler-tests-for-ide-2.3.20-ij253-87.jar",
+        "hash": "f3e930788cd79cb3e5123b7b95d34ed8dc2deedfd42e9565ba097c953e32674d",
+        "path": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.3.20-ij253-87/kotlin-compiler-tests-for-ide-2.3.20-ij253-87.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-compose-compiler-plugin/2.2.20/kotlin-compose-compiler-plugin-2.2.20.jar",
@@ -6050,9 +6575,9 @@
         "path": "org/jetbrains/kotlin/kotlin-daemon-embeddable/2.0.21/kotlin-daemon-embeddable-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-dataframe-compiler-plugin-for-ide/2.3.20-ij253-45/kotlin-dataframe-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
-        "hash": "076c66a0899ca0dfaeb18efdf73ca70c0dfbe935a70e7f790e009885b61e56ee",
-        "path": "org/jetbrains/kotlin/kotlin-dataframe-compiler-plugin-for-ide/2.3.20-ij253-45/kotlin-dataframe-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-dataframe-compiler-plugin-for-ide/2.3.20-ij253-87/kotlin-dataframe-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "hash": "5be504a59ebb1faaad1b947e70da101b79554cee42c6f7c4738bffed5babedcf",
+        "path": "org/jetbrains/kotlin/kotlin-dataframe-compiler-plugin-for-ide/2.3.20-ij253-87/kotlin-dataframe-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-dist-for-ide/2.2.20/kotlin-dist-for-ide-2.2.20.jar",
@@ -6070,14 +6595,14 @@
         "path": "org/jetbrains/kotlin/kotlin-gradle-plugin-idea/1.9.20-dev-8162/kotlin-gradle-plugin-idea-1.9.20-dev-8162.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.3.20-ij253-45/kotlin-gradle-statistics-for-ide-2.3.20-ij253-45.jar",
-        "hash": "94ffb26541561992a8eb23937f28437782830f896b90a6eed6f97e479fffdfa0",
-        "path": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.3.20-ij253-45/kotlin-gradle-statistics-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.3.20-ij253-87/kotlin-gradle-statistics-for-ide-2.3.20-ij253-87.jar",
+        "hash": "5ed51fde2e2c308a5e51c93f0c306e2df361d995358fe320e0fee3eafd88d0a7",
+        "path": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.3.20-ij253-87/kotlin-gradle-statistics-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.3.20-ij253-45/kotlin-jps-common-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.3.20-ij253-87/kotlin-jps-common-for-ide-2.3.20-ij253-87.jar",
         "hash": "4c42b6d0419bbdcb988df9ee3bd1d4f10fd90a3b1985966f66a9400d9c7a4ab0",
-        "path": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.3.20-ij253-45/kotlin-jps-common-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.3.20-ij253-87/kotlin-jps-common-for-ide-2.3.20-ij253-87.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.2.0/kotlin-jps-plugin-classpath-2.2.0.jar",
@@ -6090,9 +6615,9 @@
         "path": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.2.20/kotlin-jps-plugin-classpath-2.2.20.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.3.20-ij253-45/kotlin-jps-plugin-classpath-2.3.20-ij253-45.jar",
-        "hash": "290744db458f813618c460312a1f35bb2ed082485385d558de368c893509d11c",
-        "path": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.3.20-ij253-45/kotlin-jps-plugin-classpath-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.3.20-ij253-87/kotlin-jps-plugin-classpath-2.3.20-ij253-87.jar",
+        "hash": "c398467118f90fa52609c09fd853bbab73fa826fb6ba3193581d93007d3793d0",
+        "path": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.3.20-ij253-87/kotlin-jps-plugin-classpath-2.3.20-ij253-87.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-jps-plugin-tests-for-ide/2.2.20/kotlin-jps-plugin-tests-for-ide-2.2.20.jar",
@@ -6165,9 +6690,9 @@
         "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.2.20/kotlin-script-runtime-2.2.20.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-script-runtime/2.3.20-ij253-45/kotlin-script-runtime-2.3.20-ij253-45.jar",
-        "hash": "c35fd880ce45b252c0daee0bc644ea91a326a69c9dceda54151f4b2e13f3bdc3",
-        "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.3.20-ij253-45/kotlin-script-runtime-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-script-runtime/2.3.20-ij253-87/kotlin-script-runtime-2.3.20-ij253-87.jar",
+        "hash": "4708769225877c79239dfae72bf61947ef9834615d73d9e770e867ff2f4a5f10",
+        "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.3.20-ij253-87/kotlin-script-runtime-2.3.20-ij253-87.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-scripting-common/2.0.21/kotlin-scripting-common-2.0.21.jar",
@@ -6175,9 +6700,9 @@
         "path": "org/jetbrains/kotlin/kotlin-scripting-common/2.0.21/kotlin-scripting-common-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-common/2.3.20-ij253-45/kotlin-scripting-common-2.3.20-ij253-45.jar",
-        "hash": "a06d90da5af5a992f93223d26976b81141edf5764dc798431352dbcd6606bce6",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-common/2.3.20-ij253-45/kotlin-scripting-common-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-common/2.3.20-ij253-87/kotlin-scripting-common-2.3.20-ij253-87.jar",
+        "hash": "4232986f099ea03551b0090173ac8712eb0b154782cb3cb340073487f9b4b52e",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-common/2.3.20-ij253-87/kotlin-scripting-common-2.3.20-ij253-87.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-scripting-compiler-embeddable/2.0.21/kotlin-scripting-compiler-embeddable-2.0.21.jar",
@@ -6190,14 +6715,14 @@
         "path": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl-embeddable/2.0.21/kotlin-scripting-compiler-impl-embeddable-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.3.20-ij253-45/kotlin-scripting-compiler-impl-2.3.20-ij253-45.jar",
-        "hash": "c2b19162264b2aa78371cd834f8703e1c49c032ec9862cdb9b744a4a2a8e7ded",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.3.20-ij253-45/kotlin-scripting-compiler-impl-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.3.20-ij253-87/kotlin-scripting-compiler-impl-2.3.20-ij253-87.jar",
+        "hash": "284946efda62391471de3d4d7d64b4a807ce1f0f9fc7c31b049aed4d00e78a24",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.3.20-ij253-87/kotlin-scripting-compiler-impl-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-dependencies/2.3.20-ij253-45/kotlin-scripting-dependencies-2.3.20-ij253-45.jar",
-        "hash": "beeae35aaf0e3043b8202e081bbdeb55672a89dc8bbcc482dfa5cc21d26dc1de",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-dependencies/2.3.20-ij253-45/kotlin-scripting-dependencies-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-dependencies/2.3.20-ij253-87/kotlin-scripting-dependencies-2.3.20-ij253-87.jar",
+        "hash": "8614dddf67f21aa730e3030dbe3d58e92986660043e470c4c5b4c136a5254710",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-dependencies/2.3.20-ij253-87/kotlin-scripting-dependencies-2.3.20-ij253-87.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.0.21/kotlin-scripting-jvm-2.0.21.jar",
@@ -6205,9 +6730,9 @@
         "path": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.0.21/kotlin-scripting-jvm-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.3.20-ij253-45/kotlin-scripting-jvm-2.3.20-ij253-45.jar",
-        "hash": "42d81993e1dd93ba47dc648cf6f8af88aa20ab276077086adcffcc51cd65e08d",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.3.20-ij253-45/kotlin-scripting-jvm-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.3.20-ij253-87/kotlin-scripting-jvm-2.3.20-ij253-87.jar",
+        "hash": "92c88ac1306aeffa70e74eb65d5b1c2cce32c963cae728284c5a22d96bb30019",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.3.20-ij253-87/kotlin-scripting-jvm-2.3.20-ij253-87.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-stdlib-common/1.7.20/kotlin-stdlib-common-1.7.20.jar",
@@ -6250,44 +6775,44 @@
         "path": "org/jetbrains/kotlin/kotlin-tooling-core/1.9.20-dev-8162/kotlin-tooling-core-1.9.20-dev-8162.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.3.20-ij253-45/kotlinx-serialization-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
-        "hash": "7566ed7641a9eb3852d51a58f15f0815827c903b493ed0b7386a9ee4f83769ba",
-        "path": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.3.20-ij253-45/kotlinx-serialization-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.3.20-ij253-87/kotlinx-serialization-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "hash": "7810d0e3a97b3722d380c5a95e13936b3320acabd1123b80214bde25ea21345b",
+        "path": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.3.20-ij253-87/kotlinx-serialization-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.3.20-ij253-45/lombok-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.3.20-ij253-87/lombok-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
         "hash": "8bc0ca5c9bb47b4ae74ab75306e8c0481d2748b3165dc850165d72d199540653",
-        "path": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.3.20-ij253-45/lombok-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.3.20-ij253-87/lombok-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.3.20-ij253-45/low-level-api-fir-for-ide-2.3.20-ij253-45.jar",
-        "hash": "635cd736b002e250cbb2165f5cb05b2a9750f403ec8eaf6e1be9fad67f3ec1aa",
-        "path": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.3.20-ij253-45/low-level-api-fir-for-ide-2.3.20-ij253-45.jar"
+        "url": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.3.20-ij253-87/low-level-api-fir-for-ide-2.3.20-ij253-87.jar",
+        "hash": "2014b8257d0ecc50c3204a716028d629c6b31052922e6a8662ec02812fb7ada6",
+        "path": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.3.20-ij253-87/low-level-api-fir-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.3.20-ij253-45/noarg-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.3.20-ij253-87/noarg-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
         "hash": "261a90d908355e185f0a291aa71b3ce1f4e3c67aa31411244ef8c124958b0c77",
-        "path": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.3.20-ij253-45/noarg-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.3.20-ij253-87/noarg-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.3.20-ij253-45/parcelize-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.3.20-ij253-87/parcelize-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
         "hash": "c4e51a757d46f19bdc2264c7be0cba0cc52eb52c9047c0be9b1df91eb8195f4e",
-        "path": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.3.20-ij253-45/parcelize-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.3.20-ij253-87/parcelize-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.3.20-ij253-45/sam-with-receiver-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.3.20-ij253-87/sam-with-receiver-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
         "hash": "98457d26126f1095049a8769d78168ff7d0907f0b472ee28967073709b4b4607",
-        "path": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.3.20-ij253-45/sam-with-receiver-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.3.20-ij253-87/sam-with-receiver-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.3.20-ij253-45/scripting-compiler-plugin-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.3.20-ij253-87/scripting-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
         "hash": "75048ae78a873e992533ba3c376a65701cff28fbcafd79d587efc999a638e0bd",
-        "path": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.3.20-ij253-45/scripting-compiler-plugin-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.3.20-ij253-87/scripting-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.3.20-ij253-45/symbol-light-classes-for-ide-2.3.20-ij253-45.jar",
+        "url": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.3.20-ij253-87/symbol-light-classes-for-ide-2.3.20-ij253-87.jar",
         "hash": "298e61756dab332adc36712f14803e47f65f114f736c41cace04eaef2cce380e",
-        "path": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.3.20-ij253-45/symbol-light-classes-for-ide-2.3.20-ij253-45.jar"
+        "path": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.3.20-ij253-87/symbol-light-classes-for-ide-2.3.20-ij253-87.jar"
     },
     {
         "url": "org/jetbrains/kotlinx/atomicfu-jvm/0.20.2/atomicfu-jvm-0.20.2.jar",
@@ -6440,14 +6965,14 @@
         "path": "org/jetbrains/runtime/jbr-api/1.9.0/jbr-api-1.9.0.jar"
     },
     {
-        "url": "org/jetbrains/skiko/skiko-awt-runtime-all/0.9.30/skiko-awt-runtime-all-0.9.30.jar",
-        "hash": "1f8643e58e3bfd16625b1db6a3fd237410a32a37d54b74c51914069eea0a60a6",
-        "path": "org/jetbrains/skiko/skiko-awt-runtime-all/0.9.30/skiko-awt-runtime-all-0.9.30.jar"
+        "url": "org/jetbrains/skiko/skiko-awt-runtime-all/0.9.37.3/skiko-awt-runtime-all-0.9.37.3.jar",
+        "hash": "920a8209561ed5dcf362b227bdb337c358402dc8914a08e507bdbbdbbd3bbe06",
+        "path": "org/jetbrains/skiko/skiko-awt-runtime-all/0.9.37.3/skiko-awt-runtime-all-0.9.37.3.jar"
     },
     {
-        "url": "org/jetbrains/skiko/skiko-awt/0.9.30/skiko-awt-0.9.30.jar",
-        "hash": "928b8566c9bd03e51d69d72ed1106ef7eae2c9ad23d64e49966c5dc212dca411",
-        "path": "org/jetbrains/skiko/skiko-awt/0.9.30/skiko-awt-0.9.30.jar"
+        "url": "org/jetbrains/skiko/skiko-awt/0.9.37.3/skiko-awt-0.9.37.3.jar",
+        "hash": "cdfe998711c8f0fa84f21745ebcfe6d840d307c4ceea7f0dda3158be2bb2193d",
+        "path": "org/jetbrains/skiko/skiko-awt/0.9.37.3/skiko-awt-0.9.37.3.jar"
     },
     {
         "url": "org/jetbrains/skiko/skiko-awt/0.9.4/skiko-awt-0.9.4.jar",
@@ -6595,6 +7120,11 @@
         "path": "org/json/json/20240205/json-20240205.jar"
     },
     {
+        "url": "org/json/json/20240303/json-20240303.jar",
+        "hash": "3cf6cd6892e32e2b4c1c39e0f52f5248a2f5b37646fdfbb79a66b46b618414ed",
+        "path": "org/json/json/20240303/json-20240303.jar"
+    },
+    {
         "url": "org/jsoup/jsoup/1.21.2/jsoup-1.21.2.jar",
         "hash": "f05496e255734759f0d4b5632da7b24f81313147c78c69e90ad045d096191344",
         "path": "org/jsoup/jsoup/1.21.2/jsoup-1.21.2.jar"
@@ -6718,6 +7248,11 @@
         "url": "org/languagetool/portuguese-pos-dict/1.2.0/portuguese-pos-dict-1.2.0.jar",
         "hash": "fe8da88bb31b6372855741fbd81ee1c7477b4f8a0624d3dafd20ee23e184650e",
         "path": "org/languagetool/portuguese-pos-dict/1.2.0/portuguese-pos-dict-1.2.0.jar"
+    },
+    {
+        "url": "org/latencyutils/LatencyUtils/2.0.3/LatencyUtils-2.0.3.jar",
+        "hash": "a32a9ffa06b2f4e01c5360f8f9df7bc5d9454a5d373cd8f361347fa5a57165ec",
+        "path": "org/latencyutils/LatencyUtils/2.0.3/LatencyUtils-2.0.3.jar"
     },
     {
         "url": "org/lwjgl/lwjgl-tinyfd/3.3.1/lwjgl-tinyfd-3.3.1.jar",
@@ -6938,6 +7473,11 @@
         "url": "org/slf4j/slf4j-api/2.0.13/slf4j-api-2.0.13.jar",
         "hash": "e7c2a48e8515ba1f49fa637d57b4e2f590b3f5bd97407ac699c3aa5efb1204a9",
         "path": "org/slf4j/slf4j-api/2.0.13/slf4j-api-2.0.13.jar"
+    },
+    {
+        "url": "org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar",
+        "hash": "a12578dde1ba00bd9b816d388a0b879928d00bab3c83c240f7013bf4196c579a",
+        "path": "org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar"
     },
     {
         "url": "org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar",
@@ -7185,6 +7725,16 @@
         "path": "tech/units/indriya/1.3/indriya-1.3.jar"
     },
     {
+        "url": "tech/units/indriya/1.3/indriya-1.3.jar",
+        "hash": "7cbaa6f42e2c8412ef13cd0fb7f81936d64a1c3ea7c4f69cf75bb4e9410cb76b",
+        "path": "tech/units/indriya/1.3/indriya-1.3.jar"
+    },
+    {
+        "url": "tech/uom/lib/uom-lib-common/1.1/uom-lib-common-1.1.jar",
+        "hash": "4add5fbcb7f548b79230ed7e01cb9fd4f9e2524bd1598dbcbfd8150563fe27f7",
+        "path": "tech/uom/lib/uom-lib-common/1.1/uom-lib-common-1.1.jar"
+    },
+    {
         "url": "tech/uom/lib/uom-lib-common/1.1/uom-lib-common-1.1.jar",
         "hash": "4add5fbcb7f548b79230ed7e01cb9fd4f9e2524bd1598dbcbfd8150563fe27f7",
         "path": "tech/uom/lib/uom-lib-common/1.1/uom-lib-common-1.1.jar"
@@ -7193,6 +7743,11 @@
         "url": "thaiopensource/jing/20030619/jing-20030619.jar",
         "hash": "600acd9ebd37dd46e3a006bc6e748d68dfeb31cbf4881a84d06e6dc5cc5eed26",
         "path": "thaiopensource/jing/20030619/jing-20030619.jar"
+    },
+    {
+        "url": "ua/net/nlp/morfologik-ukrainian-lt/6.7.1/morfologik-ukrainian-lt-6.7.1.jar",
+        "hash": "453886930ba7ba0d80d1158577e3e10d814e2c739ee17e297f062542d92dfd04",
+        "path": "ua/net/nlp/morfologik-ukrainian-lt/6.7.1/morfologik-ukrainian-lt-6.7.1.jar"
     },
     {
         "url": "ua/net/nlp/morfologik-ukrainian-lt/6.7.1/morfologik-ukrainian-lt-6.7.1.jar",

@@ -8,21 +8,21 @@
   ninja,
   installShellFiles,
   libxcb,
-  xcbutilkeysyms,
-  xcbutil,
-  xcbutilwm,
+  libxcb-keysyms,
+  libxcb-util,
+  libxcb-wm,
   xcbutilxrm,
   libstartup_notification,
-  libX11,
+  libx11,
   pcre2,
   libev,
   yajl,
-  xcb-util-cursor,
+  libxcb-cursor,
   perl,
   pango,
   perlPackages,
   libxkbcommon,
-  xorgserver,
+  xorg-server,
   xvfb-run,
   xdotool,
   xrandr,
@@ -69,17 +69,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    xcbutilkeysyms
-    xcbutil
-    xcbutilwm
+    libxcb-keysyms
+    libxcb-util
+    libxcb-wm
     xcbutilxrm
     libxkbcommon
     libstartup_notification
-    libX11
+    libx11
     pcre2
     libev
     yajl
-    xcb-util-cursor
+    libxcb-cursor
     perl
     pango
     perlPackages.AnyEventI3
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.hostPlatform.isLinux;
 
   nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
-    xorgserver
+    xorg-server
     xvfb-run
     xdotool
     setxkbmap

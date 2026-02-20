@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "coldsnap";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "coldsnap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8+YPKjHi3VURzSOflIa0x4uBkoDMYGFJiFcNJ+8NJ7Q=";
   };
 
@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://github.com/awslabs/coldsnap";
     description = "Command line interface for Amazon EBS snapshots";
-    changelog = "https://github.com/awslabs/coldsnap/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/awslabs/coldsnap/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "coldsnap";
   };
-}
+})

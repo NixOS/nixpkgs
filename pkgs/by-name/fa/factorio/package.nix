@@ -4,14 +4,14 @@
   factorio-utils,
   fetchurl,
   libGL,
-  libICE,
-  libSM,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
+  libice,
+  libsm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
   libpulseaudio,
   libxkbcommon,
   makeDesktopItem,
@@ -242,14 +242,14 @@ let
       libPath = lib.makeLibraryPath [
         alsa-lib
         libGL
-        libICE
-        libSM
-        libX11
-        libXcursor
-        libXext
-        libXi
-        libXinerama
-        libXrandr
+        libice
+        libsm
+        libx11
+        libxcursor
+        libxext
+        libxi
+        libxinerama
+        libxrandr
         libpulseaudio
         libxkbcommon
         wayland

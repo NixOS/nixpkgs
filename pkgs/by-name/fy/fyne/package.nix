@@ -4,16 +4,16 @@
   fetchFromGitHub,
 
   libGL,
-  libX11,
-  libXcursor,
-  libXinerama,
-  libXi,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxinerama,
+  libxi,
+  libxrandr,
+  libxxf86vm,
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fyne";
   # This is the current latest version
   # version "1.26.1" was a typo of "1.7.0" - maybe, don't "upgrade" to it
@@ -22,7 +22,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fyne-io";
     repo = "tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-x2OfiFn5VHE3OrlfSMUQY1mckdnCcDpq1vqLmRi6yAg=";
   };
 
@@ -32,12 +32,12 @@ buildGoModule rec {
 
   buildInputs = [
     libGL
-    libX11
-    libXcursor
-    libXinerama
-    libXi
-    libXrandr
-    libXxf86vm
+    libx11
+    libxcursor
+    libxinerama
+    libxi
+    libxrandr
+    libxxf86vm
   ];
 
   doCheck = false;
@@ -49,4 +49,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ greg ];
     mainProgram = "fyne";
   };
-}
+})

@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   freetype,
-  libX11,
-  libXi,
-  libXt,
-  libXft,
+  libx11,
+  libxi,
+  libxt,
+  libxft,
 }:
 
 stdenv.mkDerivation {
@@ -30,10 +30,10 @@ stdenv.mkDerivation {
   CFLAGS = "-D_DARWIN_C_SOURCE";
   makeFlags = [ "DESTDIR=$(out)" ];
   buildInputs = [
-    libX11
-    libXi
-    libXt
-    libXft
+    libx11
+    libxi
+    libxt
+    libxft
   ];
   # build fails when run in parallel
   enableParallelBuilding = false;

@@ -862,7 +862,7 @@ in
     # but removing a subdirectory using file set functions
     difference
       (fromSource (lib.sources.sourceByRegex ./. [
-        "^README\.md$"
+        "^README\\.md$"
         # This regex includes everything in ./doc
         "^doc(/.*)?$"
       ])

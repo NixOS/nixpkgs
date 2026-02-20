@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "compile-daemon";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "githubnemo";
     repo = "CompileDaemon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-gpyXy7FO7ZVXJrkzcKHFez4S/dGiijXfZ9eSJtNlm58=";
   };
 
@@ -37,4 +37,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "CompileDaemon";
   };
-}
+})

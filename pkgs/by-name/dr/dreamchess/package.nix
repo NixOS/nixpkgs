@@ -13,8 +13,8 @@
   expat,
   glew,
   freetype,
-  libSM,
-  libXext,
+  libsm,
+  libxext,
   libGL,
   libGLU,
   libx11,
@@ -43,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     glew
     freetype
-    libSM
-    libXext
+    libsm
+    libxext
     libGL
     libGLU
     libxcb

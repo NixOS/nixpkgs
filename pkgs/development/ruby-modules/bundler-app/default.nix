@@ -57,7 +57,7 @@ let
     ]
     // {
       inherit preferLocalBuild allowSubstitutes; # pass the defaults
-      inherit (basicEnv) version;
+      inherit (basicEnv) version pname;
 
       nativeBuildInputs = nativeBuildInputs ++ lib.optionals (scripts != [ ]) [ makeWrapper ];
 

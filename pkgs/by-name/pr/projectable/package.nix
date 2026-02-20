@@ -8,14 +8,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "projectable";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "dzfrias";
     repo = "projectable";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GM/dPmLnv1/Qj6QhBxPu5kO/SDnbY7Ntupf1FGkmrUY=";
   };
 
@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "TUI file manager built for projects";
     homepage = "https://github.com/dzfrias/projectable";
-    changelog = "https://github.com/dzfrias/projectable/releases/tag/${src.rev}";
+    changelog = "https://github.com/dzfrias/projectable/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "prj";
   };
-}
+})

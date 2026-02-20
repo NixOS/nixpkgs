@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   python3Packages,
   fixDarwinDylibNames,
   nix-update-script,
@@ -28,13 +29,13 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z3";
-  version = "4.15.4";
+  version = "4.15.7";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = "z3";
     rev = "z3-${finalAttrs.version}";
-    hash = "sha256-eyF3ELv81xEgh9Km0Ehwos87e4VJ82cfsp53RCAtuTo=";
+    hash = "sha256-bK02PkJ+gmexfqY8hLMhbFlX1AIhs8Cd08NaTGP7D3A=";
   };
 
   patches = lib.optionals useCmakeBuild [

@@ -6,14 +6,14 @@
   ffmpeg-headless,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ytarchive";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Kethsar";
     repo = "ytarchive";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y1frd7iJJuNFvLL/C1Y+RrqYC/1LF7P3J9rkPAThp9c=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Commit=-${src.rev}"
+    "-X main.Commit=-${finalAttrs.src.rev}"
   ];
 
   postInstall = ''
@@ -38,4 +38,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "ytarchive";
   };
-}
+})

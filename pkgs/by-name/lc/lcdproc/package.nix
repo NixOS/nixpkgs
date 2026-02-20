@@ -8,7 +8,7 @@
   pkg-config,
   doxygen,
   freetype,
-  libX11,
+  libx11,
   libftdi,
   libusb-compat-0_1,
   libusb1,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     freetype
-    libX11
+    libx11
     libftdi
     libusb-compat-0_1
     libusb1

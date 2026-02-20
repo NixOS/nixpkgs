@@ -8,14 +8,14 @@
   openssh,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k3sup";
   version = "0.13.11";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-MLGgH9Tg3lcl/nDGlGgfvgjoxjXRux79Cz6Tig0kDM4=";
   };
 
@@ -36,8 +36,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/alexellis/k3sup/cmd.GitCommit=ref/tags/${version}"
-    "-X github.com/alexellis/k3sup/cmd.Version=${version}"
+    "-X github.com/alexellis/k3sup/cmd.GitCommit=ref/tags/${finalAttrs.version}"
+    "-X github.com/alexellis/k3sup/cmd.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -60,4 +60,4 @@ buildGoModule rec {
       qjoly
     ];
   };
-}
+})

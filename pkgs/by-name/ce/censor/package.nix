@@ -11,7 +11,7 @@
   desktop-file-utils,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "censor";
   version = "0.3.0";
   pyproject = false;
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromCodeberg {
     owner = "censor";
     repo = "Censor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-16Cy9yNOLvdVZ234kTB8fa585eI4f7yVnbMoPcHtGHk=";
   };
 
@@ -54,4 +54,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "censor";
   };
-}
+})

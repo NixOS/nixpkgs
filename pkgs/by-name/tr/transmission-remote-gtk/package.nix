@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission-remote-gtk";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gtk";
     repo = "transmission-remote-gtk";
     tag = finalAttrs.version;
-    hash = "sha256-/syZI/5LhuYLvXrNknnpbGHEH0z5iHeye2YRNJFWZJ0=";
+    hash = "sha256-I8Y5oB7sF5q1j8ITaYmQWa/ZdBORxbMSLI5O0vWUoKY=";
   };
 
   nativeBuildInputs = [

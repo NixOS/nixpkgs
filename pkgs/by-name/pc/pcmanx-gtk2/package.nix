@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gtk2,
-  libXft,
+  libxft,
   intltool,
   automake,
   autoconf,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     gtk2
-    libXft
+    libxft
     libtool
   ];
 

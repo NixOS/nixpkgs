@@ -7,15 +7,14 @@
   libheif,
   nix-update-script,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "timewall";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = "timewall";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-+jQ8cQENxTgCyekF65tr4d2a7OwbJvagUX01DiJ8ytg=";
   };
 
@@ -28,17 +27,17 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ libheif ];
 
-  SHELL_COMPLETIONS_DIR = "completions";
+  env.SHELL_COMPLETIONS_DIR = "completions";
 
   preBuild = ''
-    mkdir ${SHELL_COMPLETIONS_DIR}
+    mkdir $SHELL_COMPLETIONS_DIR
   '';
 
   postInstall = ''
     installShellCompletion \
-      --bash ${SHELL_COMPLETIONS_DIR}/timewall.bash \
-      --zsh ${SHELL_COMPLETIONS_DIR}/_timewall \
-      --fish ${SHELL_COMPLETIONS_DIR}/timewall.fish
+      --bash $SHELL_COMPLETIONS_DIR/timewall.bash \
+      --zsh $SHELL_COMPLETIONS_DIR/_timewall \
+      --fish $SHELL_COMPLETIONS_DIR/timewall.fish
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -46,9 +45,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Apple dynamic HEIF wallpapers on GNU/Linux";
     homepage = "https://github.com/bcyran/timewall";
-    changelog = "https://github.com/bcyran/timewall/releases/tag/${version}";
+    changelog = "https://github.com/bcyran/timewall/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "timewall";
     maintainers = with lib.maintainers; [ bcyran ];
   };
-}
+})

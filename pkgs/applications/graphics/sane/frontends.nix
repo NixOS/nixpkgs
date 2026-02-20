@@ -5,7 +5,7 @@
   fetchpatch,
   autoconf,
   sane-backends,
-  libX11,
+  libx11,
   gtk2,
   pkg-config,
   libusb-compat-0_1 ? null,
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     sane-backends
-    libX11
+    libx11
     gtk2
   ]
   ++ lib.optional (libusb-compat-0_1 != null) libusb-compat-0_1;

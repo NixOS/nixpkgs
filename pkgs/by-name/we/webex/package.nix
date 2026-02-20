@@ -33,26 +33,26 @@
   nss,
   pango,
   zlib,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libxshmfence,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   p7zip,
   onetbb,
   wayland,
-  libXScrnSaver,
+  libxscrnsaver,
 }:
 
 stdenv.mkDerivation rec {
@@ -99,23 +99,23 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbcommon
     libxcrypt-legacy
-    libX11
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     libxshmfence
-    xcbutil
-    xcbutilimage
-    libXScrnSaver
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-util
+    libxcb-image
+    libxscrnsaver
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     onetbb
     wayland
   ];

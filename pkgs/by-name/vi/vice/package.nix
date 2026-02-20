@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-gif"
   ];
 
-  LIBS = "-lGL";
+  env.LIBS = "-lGL";
 
   preBuild = ''
     sed -i -e 's|#!/usr/bin/env bash|${runtimeShell}/bin/bash|' src/arch/gtk3/novte/box_drawing_generate.sh

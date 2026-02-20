@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation (finalAttr: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iat";
   version = "0.1.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/iat.berlios/iat-${finalAttr.version}.tar.gz";
+    url = "mirror://sourceforge/iat.berlios/iat-${finalAttrs.version}.tar.gz";
     hash = "sha256-sl1X/eKKArLYfNSf0UeLA5rb2DY1GHmmVP6hTCd2SyE=";
   };
 

@@ -17,10 +17,10 @@
   lua,
   withCaca ? false,
   libcaca,
-  libX11,
-  libXt,
-  libXpm,
-  libXaw,
+  libx11,
+  libxt,
+  libxpm,
+  libxaw,
   aquaterm ? false,
   withWxGTK ? false,
   wxGTK32,
@@ -68,10 +68,10 @@ stdenv.mkDerivation rec {
   ++ lib.optional withLua lua
   ++ lib.optional withCaca libcaca
   ++ lib.optionals withX [
-    libX11
-    libXpm
-    libXt
-    libXaw
+    libx11
+    libxpm
+    libxt
+    libxaw
   ]
   ++ lib.optionals withQt [
     qtbase
@@ -92,7 +92,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional withCaca "--with-caca"
   ++ lib.optional withTeXLive "--with-texdir=${placeholder "out"}/share/texmf/tex/latex/gnuplot";
 
-  CXXFLAGS = lib.optionalString (stdenv.hostPlatform.isDarwin && withQt) "-std=c++11";
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && withQt) {
+    CXXFLAGS = "-std=c++11";
+  };
 
   # we'll wrap things ourselves
   dontWrapGApps = true;

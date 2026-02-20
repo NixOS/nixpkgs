@@ -10,7 +10,7 @@ let
   pypkgs = python3Packages;
 
 in
-pypkgs.buildPythonApplication rec {
+pypkgs.buildPythonApplication (finalAttrs: {
   pname = "rubber";
   version = "1.6.6";
   pyproject = true;
@@ -18,7 +18,7 @@ pypkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "latex-rubber";
     repo = "rubber";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-C26PN3jyV6qwSjgPem54bykZrpKj+n8iHYYUyR+8dgI=";
   };
 
@@ -64,4 +64,4 @@ pypkgs.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "rubber";
   };
-}
+})

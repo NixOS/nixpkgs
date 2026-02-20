@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osmium-tool";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "osmium-tool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6CT5vhzZtGZDr3mCgtpI8AGXn+Iiasf9SxUV6qN9+I8=";
+    hash = "sha256-x5qEW4DqOw/vA+IuZA7VC5WRn+uDOZ6dJhyJoi7UKOA=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  preCheck = ''
+    export OSMIUM_PAGER=cat
+  '';
 
   postInstall = ''
     installShellCompletion --zsh ../zsh_completion/_osmium

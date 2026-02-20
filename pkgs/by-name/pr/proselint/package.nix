@@ -5,7 +5,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "proselint";
   version = "0.14.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "amperser";
     repo = "proselint";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bI5gkckXUa640GOb5U5NW4i2op4fn0LKoPHFSIwbheM=";
   };
 
@@ -32,8 +32,8 @@ python3Packages.buildPythonApplication rec {
     description = "Linter for prose";
     mainProgram = "proselint";
     homepage = "https://github.com/amperser/proselint";
-    changelog = "https://github.com/amperser/proselint/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/amperser/proselint/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.pbsds ];
   };
-}
+})

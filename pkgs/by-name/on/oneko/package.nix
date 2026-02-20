@@ -4,8 +4,8 @@
   fetchFromGitHub,
   imake,
   gccmakedep,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     gccmakedep
   ];
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   makeFlags = [

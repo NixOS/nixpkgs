@@ -4,14 +4,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chirpstack-rest-api";
   version = "4.16.1";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-rest-api";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-utXayqQGlBYzmf7xW+s1Fh4oRhpBdfnV5g73X2ILKko=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.stv0g ];
     mainProgram = "chirpstack-rest-api";
   };
-}
+})

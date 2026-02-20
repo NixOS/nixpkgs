@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "efm-langserver";
   version = "0.0.55";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "efm-langserver";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1hqu8SeNLG66Sk8RH99gsu8dhxPb89R2s8hym6CRwbE=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     homepage = "https://github.com/mattn/efm-langserver";
     license = lib.licenses.mit;
   };
-}
+})

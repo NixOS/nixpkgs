@@ -4,14 +4,14 @@
   fetchFromGitLab,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-variables";
   version = "0.4.1";
 
   src = fetchFromGitLab {
     owner = "tglman";
     repo = "mdbook-variables";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-DMfVviMVizxtkunu3DygL1t0vTW6a+frfFfVl8h7Urw=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ kraftnix ];
   };
-}
+})

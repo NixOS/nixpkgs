@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwacom";
-  version = "2.17.0";
+  version = "2.18.0";
 
   outputs = [
     "bin"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${finalAttrs.version}";
-    hash = "sha256-2JbO3B/PqsLKnaCeQcn1x9Z2pQL4kScuS39F1JlpDpc=";
+    hash = "sha256-habbSnrOr9H6e/eRSQHugJaLRa252GXjZ8wHThpIydU=";
   };
 
   postPatch = ''

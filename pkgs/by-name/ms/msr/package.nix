@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     inherit pname version;
-    url = "http://www.etallen.com/msr/${pname}-${version}.src.tar.gz";
+    url = "http://www.etallen.com/msr/msr-${version}.src.tar.gz";
     hash = "sha256-e01qYWbOALkXp5NpexuVodMxA3EBySejJ6ZBpZjyT+E=";
   };
 

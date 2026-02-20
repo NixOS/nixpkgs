@@ -19,9 +19,9 @@
   libjpeg,
   libpng,
   libtiff,
-  libX11,
-  libXi,
-  libXmu,
+  libx11,
+  libxi,
+  libxmu,
   libGLU,
   libGL,
   openexr,
@@ -57,9 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libtiff
-    libX11
-    libXi
-    libXmu
+    libx11
+    libxi
+    libxmu
     libGLU
     libGL
     openexr

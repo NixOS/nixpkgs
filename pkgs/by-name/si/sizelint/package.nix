@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sizelint";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "a-kenji";
     repo = "sizelint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-06RJrE0w1Xhj364dUUuYadxleX12mkB8yO+h1QLZhH0=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ a-kenji ];
     mainProgram = "sizelint";
   };
-}
+})

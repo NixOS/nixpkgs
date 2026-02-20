@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-q2DEMTxIp/nwTBTGEZMHEAqQs99iJwQgimHS0YQj+eg=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   strictDeps = true;
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    $CC -Wall -pedantic -I${libX11}/include tinywm.c -L${libX11}/lib -lX11 -o tinywm
+    $CC -Wall -pedantic -I${libx11}/include tinywm.c -L${libx11}/lib -lX11 -o tinywm
 
     runHook postBuild
   '';
@@ -61,6 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.publicDomain;
     mainProgram = "tinywm";
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

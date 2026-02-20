@@ -35,6 +35,8 @@
 
   nix-cli,
 
+  nix-nswrapper ? null,
+
   nix-functional-tests,
 
   nix-manual,
@@ -177,6 +179,9 @@ stdenv.mkDerivation (finalAttrs: {
       # Forwarded outputs
       ln -sT ${nix-manual} $doc
       ln -sT ${nix-manual.man} $man
+    ''
+    + lib.optionalString (stdenv.isLinux && lib.versionAtLeast version "2.34pre") ''
+      lndir ${nix-nswrapper} $out
     '';
 
   passthru = {
@@ -252,6 +257,7 @@ stdenv.mkDerivation (finalAttrs: {
       "nix-util"
       "nix-util-c"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "nixos" version;
   };
 
 })

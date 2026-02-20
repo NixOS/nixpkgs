@@ -8,14 +8,14 @@
   espeak-ng,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mob";
   version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "remotemobprogramming";
     repo = "mob";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zb2/uTFlzaR0AFElsYSjwYP2H4p05fDLK02A3awzIFY=";
   };
 
@@ -44,4 +44,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ericdallo ];
   };
-}
+})

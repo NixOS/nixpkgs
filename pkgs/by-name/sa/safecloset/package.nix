@@ -6,14 +6,14 @@
   libxcb,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "safecloset";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "safecloset";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZLAgSD03Qfoz+uGjVJF7vCkV1pUWqw6yG/9+redbQQ8=";
   };
 
@@ -31,9 +31,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cross-platform secure TUI secret locker";
     homepage = "https://github.com/Canop/safecloset";
-    changelog = "https://github.com/Canop/safecloset/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Canop/safecloset/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
     mainProgram = "safecloset";
   };
-}
+})

@@ -5,12 +5,12 @@
   exampleSupport ? false, # Example encoding program
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fdk-aac";
   version = "2.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/opencore-amr/fdk-aac/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/opencore-amr/fdk-aac/fdk-aac-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-gptrie7zgkCc2mhX/YKvhPq7Y0F7CO3p6npVP4Ect54=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ codyopel ];
     platforms = lib.platforms.all;
   };
-}
+})

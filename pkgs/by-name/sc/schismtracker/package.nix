@@ -7,8 +7,8 @@
   perl,
   pkg-config,
   SDL2,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   utf8proc,
   nix-update-script,
 }:
@@ -55,12 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    libX11
+    libx11
     utf8proc
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libXext
+    libxext
   ];
 
   enableParallelBuilding = true;

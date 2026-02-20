@@ -13,7 +13,7 @@
   libGLU,
   libnotify,
   libogg,
-  libX11,
+  libx11,
   opusfile,
   pcre,
   python3,
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       spirv-tools
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
+      libx11
     ]
   );
 

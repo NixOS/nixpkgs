@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "calcure";
   version = "3.2.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "calcure";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YFX70gtNcIXG5XIuMlz47nmtjt/2oHzi6cajcj+DAyQ=";
   };
 
@@ -35,8 +35,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Modern TUI calendar and task manager with minimal and customizable UI";
     mainProgram = "calcure";
     homepage = "https://github.com/anufrievroman/calcure";
-    changelog = "https://github.com/anufrievroman/calcure/releases/tag/${src.tag}";
+    changelog = "https://github.com/anufrievroman/calcure/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

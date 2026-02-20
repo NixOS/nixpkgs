@@ -2,7 +2,7 @@
   lib,
   fetchFromCodeberg,
   installShellFiles,
-  libX11,
+  libx11,
   libinput,
   libxcb,
   libxkbcommon,
@@ -16,7 +16,7 @@
   wayland-scanner,
   wlroots_0_18,
   writeText,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
   # Boolean flags
   enableXWayland ? true,
@@ -64,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     wlroots_0_18
   ]
   ++ lib.optionals enableXWayland [
-    libX11
-    xcbutilwm
+    libx11
+    libxcb-wm
     xwayland
   ];
 

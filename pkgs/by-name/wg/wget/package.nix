@@ -67,6 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-included-regex"
   ];
 
+  outputs = [
+    "out"
+    "man"
+    "info"
+  ];
+
   preBuild = ''
     # avoid runtime references to build-only depends
     make -C src version.c

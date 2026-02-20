@@ -13,14 +13,14 @@
   withPostQuantum ? true,
 }:
 
-rustPlatform.buildRustPackage (finalPackage: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kryoptic";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "kryoptic";
-    tag = "v${finalPackage.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tP2BZkGCZqfLNLZ/mYAVkICWKTM1EbL7lbw+Mnx4VTk=";
   };
 

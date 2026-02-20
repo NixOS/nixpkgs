@@ -154,5 +154,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ np ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "sqlite" version;
   };
 }

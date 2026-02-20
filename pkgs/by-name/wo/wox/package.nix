@@ -25,13 +25,13 @@
 }:
 
 let
-  version = "2.0.0-beta.8";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-eucyQKNuzJCLwAnyQVE/64gth+uVrCgyHLAJNfrUxvk=";
+    hash = "sha256-6QJCv1geDff4noSaurVsO0Gz0g5+cdobG9DpKBcrMkA=";
   };
 
   metaCommon = {
@@ -160,7 +160,7 @@ buildGoModule {
     sed -i '/^	"path"$/d' plugin/host/host_python.go
   '';
 
-  vendorHash = "sha256-UMbhTV6fm9a2SVDsvwV1w9e4pPUhCdTi5FNVf8Rl3XM=";
+  vendorHash = "sha256-JA6D0i6lgWYGz8jS4m5yO4JCawbEaVpGGFoQ1QnNqpg=";
 
   proxyVendor = true;
 

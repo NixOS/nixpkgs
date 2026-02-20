@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yggdrasil-jumper";
   version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "one-d-wide";
     repo = "yggdrasil-jumper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dElC+q76dE3SlVY4+aauNmeqcNdfj0mMjg51WRuywJI=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ one-d-wide ];
   };
-}
+})

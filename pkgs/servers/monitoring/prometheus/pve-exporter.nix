@@ -7,12 +7,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prometheus_pve_exporter";
-  version = "3.5.5";
+  version = "3.8.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QFo/gnRF6+mk/xs6vJCxbR64LI3JwrLVwXib6tcEN8g=";
+    hash = "sha256-aETUp6ygYvaa9BEFuT1fiQGgdJrslBkQHOMOrcr2Bgc=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
     werkzeug
     gunicorn
+    wrapt
   ];
 
   doCheck = false;

@@ -3,6 +3,7 @@
   fetchgit,
   llvmPackages,
   python,
+  numpy,
   cmake,
   autoPatchelfHook,
   stdenv,
@@ -38,12 +39,16 @@ stdenv'.mkDerivation (finalAttrs: {
     python.pkgs.ninja
     python.pkgs.packaging
     python.pkgs.setuptools
+    numpy
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     python.pkgs.qt6.darwinVersionInputs
   ];
 
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
+  cmakeFlags = [
+    "-DBUILD_TESTS=OFF"
+    "-DNUMPY_INCLUDE_DIR=${numpy.coreIncludeDir}"
+  ];
 
   # We intentionally use single quotes around `${BASH}` since it expands from a CMake
   # variable available in this file.

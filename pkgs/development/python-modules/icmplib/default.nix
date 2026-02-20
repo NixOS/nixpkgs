@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pbr,
-  requests,
 }:
 
 buildPythonPackage rec {
@@ -17,11 +15,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-PnBcGiUvftz/KYg9Qd2GaIcF3OW4lYH301uI5/M5CBI=";
   };
-
-  propagatedBuildInputs = [
-    pbr
-    requests
-  ];
 
   # Project has no tests
   doCheck = false;

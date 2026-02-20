@@ -9,8 +9,6 @@
   # dependencies
   aiofiles,
   aiohttp,
-  aioshutil,
-  async-timeout,
   av,
   convertertools,
   dateparser,
@@ -52,11 +50,14 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ poetry-core ];
 
+  pythonRemoveDeps = [
+    "aioshutil"
+    "async-timeout"
+  ];
+
   dependencies = [
     aiofiles
     aiohttp
-    aioshutil
-    async-timeout
     av
     convertertools
     dateparser

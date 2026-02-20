@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ineffassign";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "gordonklaus";
     repo = "ineffassign";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JVrAIspRL6XvDd/AnPFt9IJPQ0hY1KPwXvldAfwYkzU=";
   };
 
@@ -36,4 +36,4 @@ buildGoModule rec {
       bot-wxt1221
     ];
   };
-}
+})

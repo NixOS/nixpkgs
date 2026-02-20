@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     "DATADIR=${placeholder "out"}/share/globulation2/glob2"
   ];
 
-  NIX_LDFLAGS = "-lboost_system";
+  env.NIX_LDFLAGS = "-lboost_system";
 
   meta = {
     description = "RTS without micromanagement";

@@ -6,8 +6,6 @@
   ounit2,
   dune-configurator,
   eqaf,
-  withFreestanding ? false,
-  ocaml-freestanding,
 }:
 
 buildDunePackage (finalAttrs: {
@@ -30,9 +28,6 @@ buildDunePackage (finalAttrs: {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
     eqaf
-  ]
-  ++ lib.optionals withFreestanding [
-    ocaml-freestanding
   ];
 
   meta = {

@@ -6,7 +6,7 @@
   cmake,
   libGL,
   libGLU,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libX11;
+  ++ lib.optional stdenv.hostPlatform.isLinux libx11;
 
   meta = {
     homepage = "https://github.com/coin3d/coin";

@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog%20${finalAttrs.version}/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      michelk
       mpickering
     ];
     teams = [ lib.teams.geospatial ];

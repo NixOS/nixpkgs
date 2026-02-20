@@ -87,7 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   # Undefined symbols for architecture arm64: "_gpg_strerror"
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lgpg-error";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lgpg-error";
+  };
 
   # Dino looks for plugins with a .so filename extension, even on macOS where
   # .dylib is appropriate, and despite the fact that it builds said plugins with

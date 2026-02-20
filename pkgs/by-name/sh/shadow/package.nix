@@ -135,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "shadow_project" finalAttrs.version;
   };
 
   passthru = {

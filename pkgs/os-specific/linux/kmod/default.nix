@@ -127,5 +127,6 @@ stdenv.mkDerivation rec {
     ]; # GPLv2+ for tools
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ artturin ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "kernel" version;
   };
 }

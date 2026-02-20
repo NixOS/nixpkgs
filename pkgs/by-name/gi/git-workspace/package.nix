@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-workspace";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "git-workspace";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SeE8O48lzqJSg8rfmIgsUcGPbquo2OvK3OUUBG21ksc=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ misuzu ];
     mainProgram = "git-workspace";
   };
-}
+})

@@ -174,6 +174,7 @@ let
     in
     runCommand name
       {
+        pname = name;
         # If this is erroring, try why-depends --precise on the symlinkJoin of inputs to look for the problem
         # nix why-depends --precise .#rocmPackages.llvm.rocm-toolchain.linked /store/path/its/not/allowed
         disallowedRequisites = disallowedRefsForToolchain;

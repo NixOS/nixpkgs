@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4ESzH2pMTGoDI/AAX8Iz/MVhxQD8q5cg9I91ryUi5Ys=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   configureFlags = [ "--disable-debug" ];
   makeFlags = [

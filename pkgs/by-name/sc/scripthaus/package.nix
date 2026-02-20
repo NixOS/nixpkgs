@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scripthaus";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "scripthaus-dev";
     repo = "scripthaus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZWOSLkqjauONa+fKkagpUgWB4k+l1mzEEiC0RAMUmo0=";
   };
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ raspher ];
     mainProgram = "scripthaus";
   };
-}
+})

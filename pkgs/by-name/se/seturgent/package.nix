@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchgit,
-  libX11,
+  libx11,
   xorgproto,
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
+    libx11
     xorgproto
   ];
 

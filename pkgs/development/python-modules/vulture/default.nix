@@ -5,10 +5,8 @@
   pint,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   toml,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -22,8 +20,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pint

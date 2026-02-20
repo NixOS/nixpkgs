@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
       martinetd
     ];
     platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libbpf_project" version;
   };
 }

@@ -138,7 +138,13 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then GOARCH= make -o assets plugins; fi
+    # CC and LD required to fix cross-compilation
+    # go generate -tags plugins ./plugins
+    # /nix/store/...-go-1.25.5/share/go/pkg/tool/linux_amd64/link: running riscv64-unknown-linux-gnu-gcc failed: exit status 1
+    # /nix/store/...-riscv64-unknown-linux-gnu-gcc-wrapper-15.2.0/bin/riscv64-unknown-linux-gnu-gcc -m64 -s -o $WORK/b001/exe/generate -rdynamic /build/go-link-1349994969/go.o
+    # riscv64-unknown-linux-gnu-gcc: error: unrecognized command-line option '-m64'
+    # Above log is due to https://github.com/golang/go/blob/b194f5d24a71e34f147c90e4351d80ac75be55de/src/cmd/cgo/gcc.go#L1763
+    if [[ -d vendor ]]; then GOARCH= CC="$CC_FOR_BUILD" LD="$CC_FOR_BUILD" make -o assets plugins; fi
 
     # Recreate the `make assets-compress` target here - workaround permissions
     # errors

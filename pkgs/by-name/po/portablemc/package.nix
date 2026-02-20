@@ -6,11 +6,11 @@
   installShellFiles,
   jre,
 
-  libX11,
-  libXext,
-  libXcursor,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxext,
+  libxcursor,
+  libxrandr,
+  libxxf86vm,
   libpulseaudio,
   libGL,
   glfw,
@@ -31,11 +31,11 @@ let
     (lib.getLib stdenv.cc.cc)
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXext
-    libXcursor
-    libXrandr
-    libXxf86vm
+    libx11
+    libxext
+    libxcursor
+    libxrandr
+    libxxf86vm
 
     # lwjgl
     libpulseaudio

@@ -9,12 +9,12 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "httplz";
   version = "1.13.2";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "https";
     hash = "sha256-uxEMgSrcxMZD/3GQuH9S/oYtMUPzgMR61ZzLcb65zXU=";
   };
@@ -47,8 +47,8 @@ rustPlatform.buildRustPackage rec {
     description = "Basic http server for hosting a folder fast and simply";
     mainProgram = "httplz";
     homepage = "https://github.com/thecoshman/http";
-    changelog = "https://github.com/thecoshman/http/releases/tag/v${version}";
+    changelog = "https://github.com/thecoshman/http/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
   };
-}
+})

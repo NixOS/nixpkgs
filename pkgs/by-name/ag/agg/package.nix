@@ -8,7 +8,7 @@
   pkg-config,
   freetype,
   SDL,
-  libX11,
+  libx11,
 }:
 let
   stdenv = gccStdenv;
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ];
 
   postPatch = ''
@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-examples=no"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "--x-includes=${lib.getDev libX11}/include"
-    "--x-libraries=${lib.getLib libX11}/lib"
+    "--x-includes=${lib.getDev libx11}/include"
+    "--x-libraries=${lib.getLib libx11}/lib"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];

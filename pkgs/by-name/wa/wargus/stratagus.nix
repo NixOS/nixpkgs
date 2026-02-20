@@ -7,7 +7,7 @@
   zlib,
   bzip2,
   libpng,
-  libX11,
+  libx11,
   lua5_1,
   toluapp,
   SDL2,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     SDL2_image
     SDL2_mixer
     libGL
-    libX11
+    libx11
   ];
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-Wno-error=format-overflow"

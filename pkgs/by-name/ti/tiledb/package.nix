@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   zlib,
   lz4,
@@ -24,7 +23,10 @@
   runCommand,
   curl,
   capnproto,
+  nlohmann_json,
+  c-blosc2,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
+  libpqxx,
 }:
 
 let
@@ -33,45 +35,23 @@ let
     chmod -R +w $out
     cp -r ${rapidcheck.dev}/* $out
   '';
-  catch2 = catch2_3;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tiledb";
-  version = "2.28.1";
+  version = "2.30.0";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     tag = finalAttrs.version;
-    hash = "sha256-Cs3Lr8I/Mu02x78d7IySG0XX4u/VAjBs4p4b00XDT5k=";
+    hash = "sha256-wzeWLwwsZXtrKsmlglZG7YvIki/ba7IwsDBq+40ltcg=";
   };
 
-  patches = [
-    # capnproto was updated to 1.2 in Nixpkgs, bring TileDB codebase up to speed
-    # patch only affects serialization related code, extracted from https://github.com/TileDB-Inc/TileDB/pull/5616
-    (fetchpatch {
-      url = "https://github.com/TileDB-Inc/TileDB/pull/5616.patch";
-      relative = "tiledb/sm/serialization";
-      extraPrefix = "tiledb/sm/serialization/";
-      hash = "sha256-5z/eJEHl+cnWRf1sMULodJyhmNh5KinDLlL1paMNiy4=";
-    })
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
 
-    # Fix build with gcc15
-    # https://github.com/TileDB-Inc/TileDB/pull/5612
-    (fetchpatch {
-      name = "tiledb-set-c-version-to-c99.patch";
-      url = "https://github.com/TileDB-Inc/TileDB/commit/4f946ad57fe823c3f53c06bf29dc18799ec6395a.patch";
-      hash = "sha256-chdaa6Ysqeb3p+FcWp7GTnAzgShoPGSCErmIGn+Q4tA=";
-    })
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
-
-  # libcxx (as of llvm-19) does not yet support `stop_token` and `jthread`
-  # without the -fexperimental-library flag. Tiledb adds its own
-  # implementations in the std namespace which conflict with libcxx. This
-  # test can be re-enabled once libcxx supports stop_token and jthread.
-  postPatch = lib.optionalString (stdenv.cc.libcxx != null) ''
-    truncate -s0 tiledb/stdx/test/CMakeLists.txt
+  postPatch = ''
+    substituteInPlace tiledb/sm/misc/test/unit_parse_argument.cc \
+      --replace-fail '"catch.hpp"' '<catch2/catch_all.hpp>'
   '';
 
   env.TILEDB_DISABLE_AUTO_VCPKG = "1";
@@ -89,36 +69,38 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
-    catch2
     clang-tools
     cmake
     python3
     doxygen
-    # Required for serialization
-    curl
-    capnproto
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
-    zlib
-    lz4
+    boost
     bzip2
-    zstd
-    spdlog
+    c-blosc2
+    capnproto
+    catch2_3
+    curl
+    file
+    libpng
+    libpqxx
+    lz4
+    nlohmann_json
     onetbb
     openssl
-    boost
-    libpng
-    file
     rapidcheck'
-    catch2
+    spdlog
+    zlib
+    zstd
   ];
 
   nativeCheckInputs = [
     gtest
-    catch2
   ];
+
+  strictDeps = true;
 
   # test commands taken from
   # https://github.com/TileDB-Inc/TileDB/blob/dev/.github/workflows/unit-test-runs.yml

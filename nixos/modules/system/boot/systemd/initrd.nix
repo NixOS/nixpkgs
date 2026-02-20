@@ -573,7 +573,7 @@ in
         "${cfg.package.util-linux}/bin/sulogin"
 
         # Resolving sysroot symlinks without code exec
-        "${config.system.nixos-init.package}/bin/chroot-realpath"
+        "${config.system.nixos-init.package}/bin/resolve-in-root"
         # Find the etc paths
         "${config.system.nixos-init.package}/bin/find-etc"
       ]
@@ -664,7 +664,7 @@ in
 
             # Resolve symlinks in the init parameter. We need this for some boot loaders
             # (e.g. boot.loader.generationsDir).
-            closure="$(chroot-realpath /sysroot "$closure")"
+            closure="$(resolve-in-root /sysroot "$closure")"
 
             # Assume the directory containing the init script is the closure.
             closure="$(dirname "$closure")"

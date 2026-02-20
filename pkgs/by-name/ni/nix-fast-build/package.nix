@@ -9,7 +9,7 @@
   bashInteractive,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nix-fast-build";
   version = "1.3.0";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-fast-build";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6X4BW+3C2nfkorMfe+tuoeYrdddxPtLqOJ1rZxuxPrc=";
   };
 
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Combine the power of nix-eval-jobs with nix-output-monitor to speed-up your evaluation and building process";
     homepage = "https://github.com/Mic92/nix-fast-build";
-    changelog = "https://github.com/Mic92/nix-fast-build/releases/tag/${version}";
+    changelog = "https://github.com/Mic92/nix-fast-build/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       getchoo
@@ -57,4 +57,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "nix-fast-build";
   };
-}
+})

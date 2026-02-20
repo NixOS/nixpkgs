@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "commit-formatter";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Eliot00";
     repo = "commit-formatter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hXpHEtPj6lrYBAzz8ZrhK+L3RBB2K1VIAi81kFlFgxY=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ elliot ];
     mainProgram = "git-cf";
   };
-}
+})

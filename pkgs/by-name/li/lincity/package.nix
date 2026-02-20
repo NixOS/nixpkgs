@@ -4,11 +4,11 @@
   fetchurl,
   fetchpatch,
   gettext,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   xorgproto,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libpng12,
   zlib,
 }:
@@ -25,11 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
   buildInputs = [
-    libICE
+    libice
     libpng12
-    libSM
-    libX11
-    libXext
+    libsm
+    libx11
+    libxext
     xorgproto
     zlib
   ];

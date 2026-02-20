@@ -60,6 +60,7 @@ buildPythonPackage (finalAttrs: {
     "datasets"
     "draccus"
     "gymnasium"
+    "opencv"
     "rerun-sdk"
     "torch"
     "torchvision"

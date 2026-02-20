@@ -6,7 +6,7 @@
   gtk2,
   gtk3,
   qt5,
-  libXtst,
+  libxtst,
   lib,
   libchewing,
   unixtools,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     unixtools.whereis
   ];
   buildInputs = [
-    libXtst
+    libxtst
     gtk2
     gtk3
     qt5.qtbase

@@ -25,8 +25,8 @@
   hidapi,
   lib3mf,
   libGLU,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libsForQt5,
   libspnav,
   libzip,
@@ -107,8 +107,8 @@ clangStdenv.mkDerivation rec {
     ]
     ++ lib.optionals clangStdenv.hostPlatform.isLinux [
       libxdmcp
-      libICE
-      libSM
+      libice
+      libsm
       wayland
       wayland-protocols
       qtwayland

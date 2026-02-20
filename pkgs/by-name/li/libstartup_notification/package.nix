@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   libxcb,
   pkg-config,
-  xcbutil,
+  libxcb-util,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,9 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     libxcb
-    xcbutil
+    libxcb-util
   ];
 
   meta = {

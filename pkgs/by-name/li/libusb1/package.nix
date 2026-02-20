@@ -14,14 +14,14 @@
   withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libusb";
   version = "1.0.29";
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-m1w+uF8+2WCn72LvoaGUYa+R0PyXHtFFONQjdRfImYY=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
       logger
     ];
   };
-}
+})

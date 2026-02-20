@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wpgtk";
   version = "6.7.0";
   pyproject = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-X7KKXPNKqs0pVRrR04ZrJgCTDZUj3lcFKnwSaX4/RAM=";
   };
 
@@ -67,4 +67,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "wpg";
   };
-}
+})

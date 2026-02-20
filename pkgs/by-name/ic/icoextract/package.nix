@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "icoextract";
   version = "0.2.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jlu5";
     repo = "icoextract";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GJCe7oFUidJt21F4NmOXspxZGRQXIjQvFjFhMYsHLjk=";
   };
 
@@ -35,11 +35,11 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Extract icons from Windows PE files";
     homepage = "https://github.com/jlu5/icoextract";
-    changelog = "https://github.com/jlu5/icoextract/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jlu5/icoextract/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       donovanglover
     ];
     mainProgram = "icoextract";
   };
-}
+})

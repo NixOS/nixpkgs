@@ -7,14 +7,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sqlcmd";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     repo = "go-sqlcmd";
     owner = "microsoft";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9De00wIuSgg7Z1LCsj3tODImyQJxYFINtqt6PSvrK/Y=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/modern" ];
@@ -47,15 +47,15 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = sqlcmd;
     command = "sqlcmd --version";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
   meta = {
     description = "Command line tool for working with Microsoft SQL Server, Azure SQL Database, and Azure Synapse";
     mainProgram = "sqlcmd";
     homepage = "https://github.com/microsoft/go-sqlcmd";
-    changelog = "https://github.com/microsoft/go-sqlcmd/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/go-sqlcmd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ratsclub ];
   };
-}
+})

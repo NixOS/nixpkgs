@@ -7,7 +7,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "firefox_decrypt";
   version = "1.1.1";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "unode";
     repo = "firefox_decrypt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HPjOUWusPXoSwwDvW32Uad4gFERvn79ee/WxeX6h3jY=";
   };
 
@@ -44,4 +44,4 @@ python3Packages.buildPythonApplication rec {
       unode
     ];
   };
-}
+})

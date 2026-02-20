@@ -119,7 +119,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) {
+  env = {
+    CXX = "${stdenv.cc.targetPrefix}c++";
+    CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) {
     # Not having this causes curl’s `configure` script to fail with static builds on Darwin because
     # some of curl’s propagated inputs need libiconv.
     NIX_LDFLAGS = "-liconv";
@@ -209,9 +213,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-ca-path=/etc/ssl/certs"
   ];
 
-  CXX = "${stdenv.cc.targetPrefix}c++";
-  CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
-
   # takes 14 minutes on a 24 core and because many other packages depend on curl
   # they cannot be run concurrently and are a bottleneck
   # tests are available in passthru.tests.withCheck
@@ -290,5 +291,6 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "haxx" finalAttrs.version;
   };
 })

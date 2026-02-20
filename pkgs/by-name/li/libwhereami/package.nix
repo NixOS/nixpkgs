@@ -8,13 +8,13 @@
   leatherman,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwhereami";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     sha256 = "05fc28dri2h858kxbvldk5b6wd5is3fjcdsiqj3nxf95i66bb3xp";
-    rev = version;
+    rev = finalAttrs.version;
     repo = "libwhereami";
     owner = "puppetlabs";
   };
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Library to report hypervisor information from inside a VM";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.womfoo ];
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     ]; # fails on aarch64
   };
 
-}
+})

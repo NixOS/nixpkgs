@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tut";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "RasmusLindroth";
     repo = "tut";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-AtwwLRZx9O8IWPFgFI/ZK0tbeshEmaKpTQxA1PepnWM=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ equirosa ];
     mainProgram = "tut";
   };
-}
+})

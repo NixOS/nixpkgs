@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-01-31";
+  version = "0-unstable-2026-02-14";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "ea855d2baff7087e86996d1c687427204b453cb5";
-    hash = "sha256-egLY8z+puxYADFLi5wOPpNCRKhQ35kid0JK7sX5+PTo=";
+    rev = "ae9106a29da6b93695da2954e2a43b8ab2c2c112";
+    hash = "sha256-cmF5YVnS2kwS3YghPFcuCAP9PWnDs6xbS8XkdH268Qc=";
   };
 
   postPatch = ''

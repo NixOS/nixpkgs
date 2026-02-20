@@ -825,28 +825,14 @@ fn parse_fstab(fstab: impl BufRead) -> (HashMap<String, Filesystem>, HashMap<Str
     (filesystems, swaps)
 }
 
-// Converts a path to the name of a systemd mount unit that would be responsible for mounting this
-// path.
-fn path_to_unit_name(bin_path: &Path, path: &str, is_automount: bool) -> String {
-    let Ok(output) = std::process::Command::new(bin_path.join("systemd-escape"))
-        .arg(format!(
-            "--suffix={}",
-            if is_automount { "automount" } else { "mount" }
-        ))
-        .arg("-p")
-        .arg(path)
-        .output()
-    else {
-        eprintln!("Unable to escape {path}!");
-        die();
-    };
-
-    let Ok(unit) = String::from_utf8(output.stdout) else {
-        eprintln!("Unable to convert systemd-escape output to valid UTF-8");
-        die();
-    };
-
-    unit.trim().to_string()
+// Converts a path to the name of a systemd mount/automount unit that would be responsible for
+// mounting this path.
+fn path_to_unit_name(path: &str, is_automount: bool) -> String {
+    format!(
+        "{}.{}",
+        libsystemd::unit::escape_path(path),
+        if is_automount { "automount" } else { "mount" },
+    )
 }
 
 // Returns a HashMap containing the same contents as the passed in `units`, minus the units in
@@ -1121,11 +1107,6 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         std::process::exit(0);
     }
 
-    // Needs to be after the "boot" action exits, as this directory will not exist when doing a NIXOS_LUSTRATE install
-    let current_system_bin = std::path::PathBuf::from("/run/current-system/sw/bin")
-        .canonicalize()
-        .context("/run/current-system/sw/bin is missing")?;
-
     let current_init_interface_version =
         std::fs::read_to_string("/run/current-system/init-interface-version").unwrap_or_default();
 
@@ -1352,7 +1333,7 @@ won't take effect until you reboot the system.
         let is_automount = current_filesystem.options.contains("x-systemd.automount");
 
         // Use current version of systemctl binary before daemon is reexeced.
-        let unit = path_to_unit_name(&current_system_bin, &mountpoint, is_automount);
+        let unit = path_to_unit_name(&mountpoint, is_automount);
         if let Some(new_filesystem) = new_filesystems.get(&mountpoint) {
             if current_filesystem.fs_type != new_filesystem.fs_type
                 || current_filesystem.device != new_filesystem.device

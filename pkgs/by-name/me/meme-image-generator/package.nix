@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "meme-image-generator";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "nomad-software";
     repo = "meme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-L+JpNg9X3RSNXTozv2H1n2JiQx75i9gFGaQmDFaMIf0=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.fgaz ];
     mainProgram = "meme";
   };
-}
+})

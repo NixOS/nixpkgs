@@ -2,11 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   packaging,
   pluggy,
   virtualenv,
-  tomli,
   filelock,
   hatchling,
   hatch-vcs,
@@ -17,7 +15,6 @@
   cachetools,
   testers,
   tox,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -47,10 +44,6 @@ buildPythonPackage rec {
     pluggy
     pyproject-api
     virtualenv
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-    typing-extensions
   ];
 
   doCheck = false; # infinite recursion via devpi-client

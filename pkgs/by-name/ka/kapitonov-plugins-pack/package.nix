@@ -12,7 +12,7 @@
   ladspa-sdk,
   libxcb,
   lv2,
-  xcbutilwm,
+  libxcb-wm,
   libxcb-util,
   zita-convolver,
   zita-resampler,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     ladspa-sdk
     libxcb
     lv2
-    xcbutilwm
+    libxcb-wm
     libxcb-util
     zita-convolver
     zita-resampler

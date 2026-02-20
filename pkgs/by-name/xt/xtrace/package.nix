@@ -3,7 +3,7 @@
   stdenv,
   autoreconfHook,
   fetchFromGitLab,
-  libX11,
+  libx11,
   xauth,
   makeWrapper,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     makeWrapper
   ];
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   postInstall = ''
     wrapProgram "$out/bin/xtrace" \

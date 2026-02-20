@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
   uv-dynamic-versioning,
   pytestCheckHook,

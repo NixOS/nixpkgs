@@ -7,14 +7,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.2";
   pname = "libnabo";
 
   src = fetchFromGitHub {
     owner = "ethz-asl";
     repo = "libnabo";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/XXRwiLLaEvp+Q+c6lBiuWBb9by6o0pDf8wFtBNp7o8=";
   };
 
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Fast K Nearest Neighbor library for low-dimensional spaces";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ cryptix ];
   };
-}
+})

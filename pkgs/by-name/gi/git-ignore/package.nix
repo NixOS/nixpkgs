@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-ignore";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "sondr3";
     repo = "git-ignore";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KIdhsbD9v2kCM2C/kSJCleyniEz4Bw7UxBsF762fnJs=";
   };
 
@@ -31,9 +31,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Quickly and easily fetch .gitignore templates from gitignore.io";
     homepage = "https://github.com/sondr3/git-ignore";
-    changelog = "https://github.com/sondr3/git-ignore/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/sondr3/git-ignore/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "git-ignore";
   };
-}
+})

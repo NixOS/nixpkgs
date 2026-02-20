@@ -10,10 +10,10 @@
   libxcb,
   libxkbcommon,
   autoPatchelfHook,
-  libX11,
-  libXi,
-  libXcursor,
-  libXrandr,
+  libx11,
+  libxi,
+  libxcursor,
+  libxrandr,
   wayland,
   stdenv,
 }:
@@ -95,10 +95,10 @@ rustPlatform.buildRustPackage {
   appendRunpaths = [
     (lib.makeLibraryPath (
       [
-        libX11
-        libXi
-        libXcursor
-        libXrandr
+        libx11
+        libxi
+        libxcursor
+        libxrandr
         vulkan-loader
       ]
       ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [
@@ -110,7 +110,7 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     # Icons
     install -Dm644 assets/voxygen/net.veloren.veloren.desktop -t "$out/share/applications"
-    install -Dm644 assets/voxygen/net.veloren.veloren.png -t "$out/share/pixmaps"
+    install -Dm644 assets/voxygen/net.veloren.veloren.png -t "$out/share/icons/hicolor/256x256/apps"
     install -Dm644 assets/voxygen/net.veloren.veloren.metainfo.xml -t "$out/share/metainfo"
     # Assets directory
     mkdir -p "$out/share/veloren"; cp -ar assets "$out/share/veloren/"

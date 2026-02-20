@@ -197,6 +197,12 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="Selects an image variant to build from the "
         "config.system.build.images attribute of the given configuration",
     )
+    main_parser.add_argument(
+        "--diff",
+        action="store_true",
+        help="prints out the diff between the current system "
+        "and the newly built one using nix store diff-closures",
+    )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
     return main_parser, sub_parsers
@@ -258,6 +264,20 @@ def parse_args(
 
     if args.no_build_nix:
         parser_warn("--no-build-nix is deprecated, we do not build nix anymore")
+
+    if args.diff and args.action not in (
+        # case for calling build_and_activate_system
+        # except excluding DRY_BUILD and DRY_ACTIVATE,
+        # in which --diff is uniquely a no-op
+        Action.SWITCH.value,
+        Action.BOOT.value,
+        Action.TEST.value,
+        Action.BUILD.value,
+        Action.BUILD_IMAGE.value,
+        Action.BUILD_VM.value,
+        Action.BUILD_VM_WITH_BOOTLOADER.value,
+    ):
+        parser_warn(f"--diff is a no-op with '{args.action}'")
 
     if args.action == Action.EDIT.value and (args.file or args.attr):
         parser.error("--file and --attr are not supported with 'edit'")
@@ -376,20 +396,20 @@ def main() -> None:
 
     try:
         execute(sys.argv)
+    except KeyboardInterrupt:
+        sys.exit(130)
     except CalledProcessError as ex:
-        _handle_called_process_error(ex)
-    except (Exception, KeyboardInterrupt) as ex:
+        sys.exit(_handle_called_process_error(ex))
+    except Exception as ex:
         if logger.isEnabledFor(logging.DEBUG):
             raise
         else:
             sys.exit(str(ex))
 
 
-def _handle_called_process_error(ex: CalledProcessError) -> None:
+def _handle_called_process_error(ex: CalledProcessError) -> int:
     if logger.isEnabledFor(logging.DEBUG):
-        import traceback
-
-        traceback.print_exception(ex)
+        sys.excepthook(*sys.exc_info())
     else:
         import shlex
 
@@ -410,4 +430,4 @@ def _handle_called_process_error(ex: CalledProcessError) -> None:
         print(str(ex), file=sys.stderr)
 
     # Exit with the error code of the process that failed
-    sys.exit(ex.returncode)
+    return ex.returncode

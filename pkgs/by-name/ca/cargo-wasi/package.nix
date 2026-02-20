@@ -7,12 +7,12 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-wasi";
   version = "0.1.28";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "cargo-wasi-src";
     hash = "sha256-fmQ23BtcBUPNcgZgvNq85iqdY6WRUhqwAp4aIobqMIw=";
   };
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lucperkins ];
   };
-}
+})

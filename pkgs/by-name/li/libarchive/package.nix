@@ -143,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     inherit (acl.meta) badPlatforms;
     pkgConfigModules = [ "libarchive" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libarchive" finalAttrs.version;
   };
 
   passthru.tests = {

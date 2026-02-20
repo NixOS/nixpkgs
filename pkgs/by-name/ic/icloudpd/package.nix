@@ -7,7 +7,7 @@
   icloudpd,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "icloudpd";
   version = "1.32.2";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "icloud-photos-downloader";
     repo = "icloud_photos_downloader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XwMY3OBGYDA/DKTXYgxuMV9pbamy8NbitMrEbsEmlMk=";
   };
 
@@ -90,7 +90,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "wheel==0.45.1" "wheel"
 
     substituteInPlace src/foundation/__init__.py \
-      --replace-fail "0.0.1" "${version}"
+      --replace-fail "0.0.1" "${finalAttrs.version}"
   '';
 
   meta = {
@@ -102,4 +102,4 @@ python3Packages.buildPythonApplication rec {
       anpin
     ];
   };
-}
+})

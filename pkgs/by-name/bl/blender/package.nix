@@ -28,11 +28,11 @@
   lib,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXrender,
-  libXxf86vm,
+  libx11,
+  libxext,
+  libxi,
+  libxrender,
+  libxxf86vm,
   libdecor,
   libepoxy,
   libffi,
@@ -280,11 +280,11 @@ stdenv'.mkDerivation (finalAttrs: {
       [
         libGL
         libGLU
-        libX11
-        libXext
-        libXi
-        libXrender
-        libXxf86vm
+        libx11
+        libxext
+        libxi
+        libxrender
+        libxxf86vm
         openal
         openxr-loader
       ]

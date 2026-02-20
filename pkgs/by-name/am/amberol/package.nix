@@ -21,7 +21,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amberol";
   version = "2025.1";
 
@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "amberol";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vF6O7+cQFoYpO4MHHHuacwjP7AUqFQCVUivCSZO7v3o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "amberol-${version}";
+    inherit (finalAttrs) src;
+    name = "amberol-${finalAttrs.version}";
     hash = "sha256-j/xkdLcmu02e+b8skx5U3uG2R2rIxwSJsYzyJ5tn5uU=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "amberol";
   };
-}
+})

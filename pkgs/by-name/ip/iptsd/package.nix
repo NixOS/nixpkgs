@@ -6,11 +6,13 @@
   meson,
   ninja,
   pkg-config,
+  cairomm,
   cli11,
   eigen,
   hidrd,
   inih,
   microsoft-gsl,
+  sdl2-compat,
   spdlog,
   systemd,
   udevCheckHook,
@@ -38,11 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
+    cairomm
     cli11
     eigen
     hidrd
     inih
     microsoft-gsl
+    sdl2-compat
     spdlog
     systemd
   ];
@@ -63,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dservice_manager=systemd"
     "-Dsample_config=false"
-    "-Ddebug_tools="
     "-Db_lto=false" # plugin needed to handle lto object -> undefined reference to ...
   ];
 

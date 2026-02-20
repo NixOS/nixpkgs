@@ -21,7 +21,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gnome-secrets";
   version = "12.0";
   pyproject = false;
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "secrets";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-U+ez/rhaXROcLdXhFY992YzIRBCkR05hxkAYbWIpa/A=";
   };
 
@@ -102,11 +102,11 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/secrets";
-    changelog = "https://gitlab.gnome.org/World/secrets/-/releases/${version}";
+    changelog = "https://gitlab.gnome.org/World/secrets/-/releases/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mvnetbiz ];
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "secrets";
   };
-}
+})

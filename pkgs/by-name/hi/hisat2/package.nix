@@ -8,14 +8,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hisat2";
   version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "DaehwanKimLab";
     repo = "hisat2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Ub7Oe363bU+R1xGiWVDkbXGV0PWJ5x2D9de+jTJSwOA=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     ];
   };
 
-}
+})

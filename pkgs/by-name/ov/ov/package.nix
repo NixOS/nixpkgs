@@ -10,14 +10,14 @@
   ov,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ov";
   version = "0.50.2";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tmGOyafVocbeEfHQcvysBuX/LJO62xRuclQ6Xy+Q1Gs=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=v${version}"
-    "-X=main.Revision=${src.rev}"
+    "-X=main.Version=v${finalAttrs.version}"
+    "-X=main.Revision=${finalAttrs.src.rev}"
   ];
 
   subPackages = [ "." ];
@@ -64,18 +64,18 @@ buildGoModule rec {
   passthru.tests = {
     version = testers.testVersion {
       package = ov;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
     description = "Feature-rich terminal-based text viewer";
     homepage = "https://noborus.github.io/ov";
-    changelog = "https://github.com/noborus/ov/releases/tag/v${version}";
+    changelog = "https://github.com/noborus/ov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       farcaller
     ];
     mainProgram = "ov";
   };
-}
+})

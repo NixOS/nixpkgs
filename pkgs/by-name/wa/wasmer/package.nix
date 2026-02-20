@@ -9,14 +9,14 @@
   withSinglepass ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmer";
   version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = "wasmer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rP0qvSb9PxsTMAq0hpB+zdSTHvridyCVdukLUYxdao8=";
   };
 
@@ -71,4 +71,4 @@ rustPlatform.buildRustPackage rec {
       nickcao
     ];
   };
-}
+})

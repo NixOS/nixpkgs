@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.5.0";
   pname = "podman-compose";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     repo = "podman-compose";
     owner = "containers";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AEnq0wsDHaCxefaEX4lB+pCAIKzN0oyaBNm7t7tK/yI=";
   };
 
@@ -47,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.podman ];
     mainProgram = "podman-compose";
   };
-}
+})

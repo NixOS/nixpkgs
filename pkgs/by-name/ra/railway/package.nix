@@ -5,14 +5,14 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "railway";
   version = "4.27.5";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-S6Fp6dXCLdHTmaiRrtsTh+N44GzM4vt27MGCb9lkk5k=";
   };
 
@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "railway";
     description = "Railway.app CLI";
     homepage = "https://github.com/railwayapp/cli";
-    changelog = "https://github.com/railwayapp/cli/releases/tag/v${version}";
+    changelog = "https://github.com/railwayapp/cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Crafter
       techknowlogick
     ];
   };
-}
+})

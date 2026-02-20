@@ -27,7 +27,7 @@ def test_run(mock_run: Any) -> None:
             extra_env={"FOO": "bar"},
         )
     mock_run.assert_called_with(
-        ["sudo", "test", "--with", "flags"],
+        ["sudo", "--preserve-env", "test", "--with", "flags"],
         check=False,
         text=True,
         errors="surrogateescape",
@@ -160,3 +160,21 @@ def test_ssh_host() -> None:
         remote = m.Remote.from_arg(host_input, None, False)
         assert remote is not None
         assert remote.ssh_host() == expected
+
+
+@patch("subprocess.run", autospec=True)
+def test_custom_sudo_args(mock_run: Any) -> None:
+    with patch.dict(p.os.environ, {"NIX_SUDOOPTS": "--custom foo --args"}):
+        p.run_wrapper(
+            ["test"],
+            check=False,
+            sudo=True,
+        )
+    mock_run.assert_called_with(
+        ["sudo", "--preserve-env", "--custom", "foo", "--args", "test"],
+        check=False,
+        env=None,
+        input=None,
+        text=True,
+        errors="surrogateescape",
+    )

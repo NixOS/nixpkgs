@@ -9,10 +9,10 @@
   jansson,
   lib,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrandr,
   libarchive,
   libjack2,
   liblo,
@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cardinal";
-  version = "25.06";
+  version = "26.01";
 
   src = fetchurl {
     url = "https://github.com/DISTRHO/Cardinal/releases/download/${finalAttrs.version}/cardinal+deps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-siZbbYrMGjhiof2M2ZBl2gekePuwsKvR8uZCdjyywiE=";
+    hash = "sha256-KWQc+pcSMebP85yOtQ812qHAwaB6ZOvPpwsxG+myzDo=";
   };
 
   prePatch = ''
@@ -57,10 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     jansson
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxrandr
     libarchive
     liblo
     libsamplerate
@@ -97,8 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
       PowerUser64
     ];
     mainProgram = "Cardinal";
-    platforms = lib.platforms.all;
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
 })

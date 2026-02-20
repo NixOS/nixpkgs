@@ -8,12 +8,12 @@
   pkg-config,
   makeWrapper,
   zlib,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libXi,
-  libXext,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
+  libxi,
+  libxext,
   libGLU,
   alsa-lib,
   fontconfig,
@@ -65,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libXext
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
     alsa-lib
     fontconfig
     libGLU

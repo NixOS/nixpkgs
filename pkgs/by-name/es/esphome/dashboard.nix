@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "esphome-dashboard";
-  version = "20260110.0";
+  version = "20260210.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "dashboard";
     tag = version;
-    hash = "sha256-h8g/MRfOBkiCKNTOM4I6OimsE5ljgsIMQLl1eZLfP3U=";
+    hash = "sha256-Edd2ZOSBAZSrGVjbncyPhhjFjE0CxBHz16ZHXyzx9LI=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-DkK2WG7oWHvwYflNdwOMfE0OVP2ICEGAhhTH2rix9zc=";
+    hash = "sha256-L6tKhijTFAvQwhBBl5Wk6xzI2dtDI6IYfCkiKX75Pvc=";
   };
 
   build-system = [ setuptools ];

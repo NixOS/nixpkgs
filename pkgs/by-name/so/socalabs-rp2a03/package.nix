@@ -7,14 +7,14 @@
   alsa-lib,
   copyDesktopItems,
   makeDesktopItem,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXinerama,
-  libXrandr,
-  libXtst,
-  libXdmcp,
-  libXext,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxinerama,
+  libxrandr,
+  libxtst,
+  libxdmcp,
+  libxext,
   xvfb,
   freetype,
   fontconfig,
@@ -64,14 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    libX11
-    libXcomposite
-    libXcursor
-    libXinerama
-    libXrandr
-    libXtst
-    libXdmcp
-    libXext
+    libx11
+    libxcomposite
+    libxcursor
+    libxinerama
+    libxrandr
+    libxtst
+    libxdmcp
+    libxext
     xvfb
     libGL
     libjack2

@@ -15,7 +15,7 @@
   libxslt,
   sqlcipher,
   rapidjson,
-  libXScrnSaver,
+  libxscrnsaver,
   qtbase,
   qtx11extras,
   qtmultimedia,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     qtbase
     libgnome-keyring
     bzip2
-    libXScrnSaver
+    libxscrnsaver
     libxml2
     libxslt
     sqlcipher

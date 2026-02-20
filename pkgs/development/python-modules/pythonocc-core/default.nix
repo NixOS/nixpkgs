@@ -17,16 +17,16 @@
   rapidjson,
   swig,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pythonocc-core";
-  version = "7.8.1.1";
+  # To avoid overriding opencascade-occt from 7.9.3 to 7.9.0. Go back to regular release next version.
+  version = "7.9.0-unstable-2025-12-31";
 
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
-    tag = version;
-    hash = "sha256-0o2PQEN0/Z7FUPZEo2HxFFa+mN2bZnYI++HVu4ONpNA=";
+    rev = "2f8f1a7d99312e8b3e81d0bb2adab9b1e717d37b";
+    hash = "sha256-fni6crPs58e8MUr2SfVHVD5nPFIEQcOfuAMLXJlWg88=";
   };
 
   nativeBuildInputs = [
@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
-    changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
+    changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

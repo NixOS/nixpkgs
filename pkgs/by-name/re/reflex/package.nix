@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "reflex";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "cespare";
     repo = "reflex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/2qVm2xpSFVspA16rkiIw/qckxzXQp/1EGOl0f9KljY=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nicknovitski ];
   };
-}
+})

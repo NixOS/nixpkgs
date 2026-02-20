@@ -22,8 +22,8 @@
   lame,
   fdk_aac,
   libass,
-  libXext,
-  libXfixes,
+  libxext,
+  libxfixes,
 }:
 
 let
@@ -89,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     fdk_aac
     libass
     quazip
-    libXext
-    libXfixes
+    libxext
+    libxfixes
   ];
 
   meta = {

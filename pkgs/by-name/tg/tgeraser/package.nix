@@ -4,16 +4,16 @@
   python3Packages,
   versionCheckHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tgeraser";
-  version = "1.4.2";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "en9inerd";
     repo = "tgeraser";
-    tag = "v${version}";
-    hash = "sha256-xB6bdB6ndyS3EOb3D2h9mRbelUXSQXkBkDvzCm7m5TY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xqims4Xfo7FH5nkq6mffkLhBbfq4lCJW3gBhL8assL8=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -40,9 +40,9 @@ python3Packages.buildPythonApplication rec {
       privileges.
     '';
     homepage = "https://github.com/en9inerd/tgeraser";
-    changelog = "https://github.com/en9inerd/tgeraser/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/en9inerd/tgeraser/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.azahi ];
     mainProgram = "tgeraser";
   };
-}
+})

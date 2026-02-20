@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nmap-formatter";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "vdjagilev";
     repo = "nmap-formatter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qai8HbVJJLFH5cNiG24fBjq5++6mvlhpT+4hlvx+gGI=";
   };
 
@@ -21,8 +21,8 @@ buildGoModule rec {
     description = "Tool that allows you to convert nmap output";
     mainProgram = "nmap-formatter";
     homepage = "https://github.com/vdjagilev/nmap-formatter";
-    changelog = "https://github.com/vdjagilev/nmap-formatter/releases/tag/v${version}";
+    changelog = "https://github.com/vdjagilev/nmap-formatter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

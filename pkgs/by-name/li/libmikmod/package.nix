@@ -29,7 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  NIX_LDFLAGS = optionalString stdenv.hostPlatform.isLinux "-lasound";
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    NIX_LDFLAGS = "-lasound";
+  };
 
   enableParallelBuilding = true;
 

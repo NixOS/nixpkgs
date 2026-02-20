@@ -51,29 +51,31 @@ let
 
         dart =
           let
-            dartChannel = if lib.strings.hasSuffix ".beta" dartVersion then "beta" else "stable";
+            hash =
+              dartHash.${stdenv.hostPlatform.system}
+                or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
           in
-          dart.override {
-            version = dartVersion;
-            sources = {
-              "${dartVersion}-x86_64-linux" = fetchzip {
-                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
-                hash = dartHash.x86_64-linux;
-              };
-              "${dartVersion}-aarch64-linux" = fetchzip {
-                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
-                hash = dartHash.aarch64-linux;
-              };
-              "${dartVersion}-x86_64-darwin" = fetchzip {
-                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
-                hash = dartHash.x86_64-darwin;
-              };
-              "${dartVersion}-aarch64-darwin" = fetchzip {
-                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-macos-arm64-release.zip";
-                hash = dartHash.aarch64-darwin;
-              };
-            };
-          };
+          (
+            if lib.versionAtLeast version "3.41" then
+              (dart.overrideAttrs (oldAttrs: {
+                version = dartVersion;
+                src = oldAttrs.src.overrideAttrs (_: {
+                  inherit hash;
+                });
+              }))
+            else
+              (dart.overrideAttrs (_: {
+                # This overrideAttrs is used to replace the version in src.url
+                version = dartVersion;
+                __intentionallyOverridingVersion = true;
+              })).overrideAttrs
+                (oldAttrs: {
+                  src = fetchzip {
+                    inherit (oldAttrs.src) url;
+                    inherit hash;
+                  };
+                })
+          );
         src =
           let
             source = fetchFromGitHub {

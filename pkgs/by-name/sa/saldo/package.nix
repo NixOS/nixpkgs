@@ -18,7 +18,7 @@
   gitUpdater,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "saldo";
   version = "0.8.4";
   pyproject = false;
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "tabos";
     repo = "saldo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QOhHDbXq+QHq6XV/ejt5+Si1bXRZZxLjsRlWVw7Zsuk=";
   };
 
@@ -65,11 +65,11 @@ python3.pkgs.buildPythonApplication rec {
   passthru.updateScript = gitUpdater { };
 
   meta = {
-    changelog = "https://gitlab.com/tabos/saldo/-/blob/${src.tag}/NEWS";
+    changelog = "https://gitlab.com/tabos/saldo/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "Banking application for small screens";
     homepage = "https://www.tabos.org/projects/saldo/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "org.tabos.saldo";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

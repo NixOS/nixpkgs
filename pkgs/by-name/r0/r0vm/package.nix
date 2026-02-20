@@ -7,13 +7,13 @@
   openssl,
   lib,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "r0vm";
   version = "1.0.5";
   src = fetchFromGitHub {
     owner = "risc0";
     repo = "risc0";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jtROtI5/4W2pNvn1ZYR/wQAZmECTr7YxuZGu2Ns9paw=";
   };
 
@@ -49,9 +49,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "RISC Zero zero-knowledge VM";
     homepage = "https://github.com/risc0/risc0";
-    changelog = "https://github.com/risc0/risc0/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/risc0/risc0/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ marijanp ];
     mainProgram = "r0vm";
   };
-}
+})

@@ -3,6 +3,7 @@
   fetchFromGitHub,
   fetchFromGitLab,
   fetchFromSourcehut,
+  fetchFromCodeberg,
   nix-update-script,
 }:
 
@@ -39,6 +40,9 @@ in
 
 lib.mapAttrs' (
   language: attrs:
+  let
+    source = lib.optionalAttrs (attrs ? url) (parseUrl attrs.url);
+  in
   lib.nameValuePair "tree-sitter-${language}" (
     {
       # Default to the source attr name as the language
@@ -54,7 +58,7 @@ lib.mapAttrs' (
           if (isUnstable attrs.version) then
             [
               "--version"
-              "branch"
+              "branch${lib.optionalString (source ? ref) "=${source.ref}"}"
             ]
           else
             [
@@ -69,26 +73,33 @@ lib.mapAttrs' (
     // lib.optionalAttrs (attrs ? url && attrs ? hash) {
       src =
         let
-          source = parseUrl attrs.url;
           fetch = lib.getAttr source.type {
             github = fetchFromGitHub;
             gitlab = fetchFromGitLab;
             sourcehut = fetchFromSourcehut;
+            codeberg = fetchFromCodeberg;
             # NOTE: include other types here as required
           };
+          rev =
+            if isUnstable attrs.version then
+              attrs.rev
+                or (throw "tree-sitter grammar '${language}': unstable version requires a pinned 'rev' attribute")
+            else
+              source.ref or "v${attrs.version}";
         in
         fetch {
           inherit (source)
             owner
             repo
             ;
-          rev = source.ref or "v${attrs.version}";
+          inherit rev;
           inherit (attrs) hash;
         };
     }
     // removeAttrs attrs [
       "url"
       "hash"
+      "rev"
     ]
   )
 ) grammar-sources

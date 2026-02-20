@@ -2,29 +2,20 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
 }:
 
 buildNpmPackage rec {
   pname = "clasp";
-  version = "3.1.3";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "clasp";
     tag = "v${version}";
-    hash = "sha256-Pxt3MaDDsk/qq3NSuwG3jOoPthwrL0QelaruoC37hfA=";
+    hash = "sha256-JLfkGxUHvde5RXlIWH+raBvTwqvpHOR/ul4yArLFj28=";
   };
 
-  patches = [
-    # https://github.com/google/clasp/pull/1112
-    (fetchpatch {
-      url = "https://github.com/google/clasp/commit/b183d4b5fbdb51f7bc2e3edadf5fd3bbff28bad1.patch";
-      hash = "sha256-lnC7DfKsV4E5guxbjZ+WfkLj5wDLYwObPtH21dmFUcc=";
-    })
-  ];
-
-  npmDepsHash = "sha256-IyFcGcT3ceoaaf2sCPriEIoWPavg+YGsvkxr1MkLj5c=";
+  npmDepsHash = "sha256-dT0HA21wvU+wP5/9juMYinY60Fq5ngWl5dgj0JJi9hM=";
 
   # `npm run build` tries installing clasp globally
   npmBuildScript = [ "compile" ];

@@ -16,7 +16,7 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lenspect";
   version = "1.0.4";
   pyproject = false;
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "vmkspv";
     repo = "lenspect";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zYIDTFjT9izc4WFjs9fYDPDrQ8z16i2Bko5JW0tgCBk=";
   };
 
@@ -60,10 +60,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Lightweight security threat scanner intended to make malware detection more accessible and efficient";
     homepage = "https://github.com/vmkspv/lenspect";
-    changelog = "https://github.com/vmkspv/lenspect/releases/tag/v${version}";
+    changelog = "https://github.com/vmkspv/lenspect/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ RoGreat ];
     mainProgram = "lenspect";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -11,7 +11,7 @@
   cmake,
   gmp,
   onetbb,
-  LAStools,
+  lastools,
   eigen,
   mpfr,
   numpy,
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     eigen
   ]
   ++ lib.optionals withLAS [
-    LAStools
+    lastools
   ];
 
   dependencies = [

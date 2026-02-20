@@ -7,14 +7,14 @@
   libxcb,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jless";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "PaulJuliusMartinez";
     repo = "jless";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-76oFPUWROX389U8DeMjle/GkdItu+0eYxZkt1c6l0V4=";
   };
 
@@ -28,10 +28,10 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line pager for JSON data";
     mainProgram = "jless";
     homepage = "https://jless.io";
-    changelog = "https://github.com/PaulJuliusMartinez/jless/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/PaulJuliusMartinez/jless/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jfchevrette
     ];
   };
-}
+})

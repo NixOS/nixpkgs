@@ -8,22 +8,22 @@
   versionCheckHook,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xlsxsql";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "xlsxsql";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OmNYrohWs4l7cReTBB6Ha9VuKPit1+P7a4QKhYwK5g8=";
   };
 
   vendorHash = "sha256-Zrt4NMoQePvipFyYpN+Ipgl2D6j/thCPhrQy4AbXOfQ=";
 
   ldflags = [
-    "-X main.version=v${version}"
-    "-X main.revision=${src.rev}"
+    "-X main.version=v${finalAttrs.version}"
+    "-X main.revision=${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = [
@@ -52,9 +52,9 @@ buildGoModule rec {
   meta = {
     description = "CLI tool that executes SQL queries on various files including xlsx files and outputs the results to various files";
     homepage = "https://github.com/noborus/xlsxsql";
-    changelog = "https://github.com/noborus/xlsxsql/releases/tag/v${version}";
+    changelog = "https://github.com/noborus/xlsxsql/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     mainProgram = "xlsxsql";
   };
-}
+})

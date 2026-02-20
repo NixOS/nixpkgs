@@ -5,7 +5,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bagels";
   version = "0.3.9";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "EnhancedJax";
     repo = "bagels";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LlEQ0by6Si37e8FvC4agjLy8eanizSA1iq44BaQ8D5o=";
   };
 
@@ -95,11 +95,11 @@ python3Packages.buildPythonApplication rec {
     longDescription = ''
       Bagels expense tracker is a TUI application where you can track and analyse your money flow, with convenience oriented features and a complete interface.
     '';
-    changelog = "https://github.com/EnhancedJax/Bagels/releases/tag/${version}";
+    changelog = "https://github.com/EnhancedJax/Bagels/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       loc
     ];
     mainProgram = "bagels";
   };
-}
+})

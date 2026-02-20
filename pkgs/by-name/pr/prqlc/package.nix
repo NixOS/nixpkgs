@@ -9,14 +9,14 @@
   python3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prqlc";
   version = "0.13.10";
 
   src = fetchFromGitHub {
     owner = "prql";
     repo = "prql";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-SYIrME3iE1SpqjLvP/TxXXeiURfdrRSedN3FlcTwrt8=";
   };
 
@@ -45,8 +45,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI for the PRQL compiler - a simple, powerful, pipelined SQL replacement";
     homepage = "https://github.com/prql/prql";
-    changelog = "https://github.com/prql/prql/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/prql/prql/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

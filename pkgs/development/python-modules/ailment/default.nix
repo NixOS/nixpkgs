@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pyvex,
   setuptools,
   typing-extensions,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "ailment";
   version = "9.2.154";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";

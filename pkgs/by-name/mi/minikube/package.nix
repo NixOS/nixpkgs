@@ -13,7 +13,7 @@
   OVMF,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "minikube";
   version = "1.38.0";
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "minikube";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6kBygQ9agBcFJZxoiGb4KsPMz/jnZU54sGMWjF3mTuA=";
   };
   postPatch = ''
@@ -54,7 +54,7 @@ buildGoModule rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libvirt ];
 
   buildPhase = ''
-    make COMMIT=${src.rev}
+    make COMMIT=${finalAttrs.src.rev}
   '';
 
   installPhase = ''
@@ -80,4 +80,4 @@ buildGoModule rec {
       Chili-Man
     ];
   };
-}
+})

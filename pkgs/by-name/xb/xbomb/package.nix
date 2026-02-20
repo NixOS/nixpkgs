@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libXaw,
+  libx11,
+  libxaw,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
-    libXaw
+    libx11
+    libxaw
   ];
 
   makeFlags = [

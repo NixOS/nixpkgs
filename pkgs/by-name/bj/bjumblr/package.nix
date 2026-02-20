@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   cairo,
   lv2,
   pkg-config,
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     cairo
     lv2
     libsndfile

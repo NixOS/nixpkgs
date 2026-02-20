@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "dukpy";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "dukpy";
     tag = version;
-    hash = "sha256-5+SdGHYBron6EwpCf5ByaK8KuqQXhvN73wQUptvgPzc=";
+    hash = "sha256-ZoBkCpilqPwDy0njwXqUIVgKt16jDCdnbDk7EfxzWOM=";
   };
 
   postPatch = ''

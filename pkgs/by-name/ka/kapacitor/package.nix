@@ -81,7 +81,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  PKG_CONFIG_PATH = "${flux}/pkgconfig";
+  env.PKG_CONFIG_PATH = "${flux}/pkgconfig";
 
   # Check that libflux is at the right version
   preBuild = ''
@@ -121,7 +121,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     changelog = "https://github.com/influxdata/kapacitor/blob/master/CHANGELOG.md";
     maintainers = with lib.maintainers; [
-      offline
       totoroot
     ];
   };
