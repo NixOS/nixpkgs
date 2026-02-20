@@ -68,6 +68,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.avahi = lib.mkIf (lib.elem "airplay_receiver" cfg.providers) {
+      enable = true;
+      publish = {
+        enable = true;
+        userServices = true;
+      };
+    };
+
     systemd.services.music-assistant = {
       description = "Music Assistant";
       documentation = [ "https://music-assistant.io" ];
@@ -86,6 +94,9 @@ in
         with pkgs;
         [
           lsof
+        ]
+        ++ lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
+          shairport-sync
         ]
         ++ lib.optionals (lib.elem "spotify" cfg.providers) [
           librespot-ma
