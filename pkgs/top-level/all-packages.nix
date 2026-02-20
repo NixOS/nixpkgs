@@ -424,18 +424,21 @@ with pkgs;
   dotnet-sdk_8 = dotnetCorePackages.sdk_8_0;
   dotnet-sdk_9 = dotnetCorePackages.sdk_9_0;
   dotnet-sdk_10 = dotnetCorePackages.sdk_10_0;
+  dotnet-sdk_11 = dotnetCorePackages.sdk_11_0;
 
   dotnet-runtime_6 = dotnetCorePackages.runtime_6_0-bin;
   dotnet-runtime_7 = dotnetCorePackages.runtime_7_0-bin;
   dotnet-runtime_8 = dotnetCorePackages.runtime_8_0;
   dotnet-runtime_9 = dotnetCorePackages.runtime_9_0;
   dotnet-runtime_10 = dotnetCorePackages.runtime_10_0;
+  dotnet-runtime_11 = dotnetCorePackages.runtime_11_0;
 
   dotnet-aspnetcore_6 = dotnetCorePackages.aspnetcore_6_0-bin;
   dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0-bin;
   dotnet-aspnetcore_8 = dotnetCorePackages.aspnetcore_8_0;
   dotnet-aspnetcore_9 = dotnetCorePackages.aspnetcore_9_0;
   dotnet-aspnetcore_10 = dotnetCorePackages.aspnetcore_10_0;
+  dotnet-aspnetcore_11 = dotnetCorePackages.aspnetcore_11_0;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
@@ -9289,11 +9292,15 @@ with pkgs;
       kanidm_1_8 = callPackage ../servers/kanidm/1_8.nix {
         kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_8;
       };
+      kanidm_1_9 = callPackage ../servers/kanidm/1_9.nix {
+        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_9;
+      };
 
       kanidmWithSecretProvisioning_1_5 = kanidm_1_5.override { enableSecretProvisioning = true; };
       kanidmWithSecretProvisioning_1_6 = kanidm_1_6.override { enableSecretProvisioning = true; };
       kanidmWithSecretProvisioning_1_7 = kanidm_1_7.override { enableSecretProvisioning = true; };
       kanidmWithSecretProvisioning_1_8 = kanidm_1_8.override { enableSecretProvisioning = true; };
+      kanidmWithSecretProvisioning_1_9 = kanidm_1_9.override { enableSecretProvisioning = true; };
     })
     kanidm_1_5
     kanidm_1_6
@@ -9301,8 +9308,10 @@ with pkgs;
     kanidm_1_8
     kanidmWithSecretProvisioning_1_5
     kanidmWithSecretProvisioning_1_6
+    kanidm_1_9
     kanidmWithSecretProvisioning_1_7
     kanidmWithSecretProvisioning_1_8
+    kanidmWithSecretProvisioning_1_9
     ;
 
   leafnode = callPackage ../servers/news/leafnode { };
