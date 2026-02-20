@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     ./bootstrap --gnulib-srcdir=.gnulib
   '';
 
+  configureFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "--disable-gnulib-tests" ];
   nativeBuildInputs = [
     autoreconfHook
     bison
