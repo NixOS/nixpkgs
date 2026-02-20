@@ -57,6 +57,7 @@ rec {
     maintainers = with lib.maintainers; [
       jk
       ambroisie
+      caverav
     ];
   };
 }
