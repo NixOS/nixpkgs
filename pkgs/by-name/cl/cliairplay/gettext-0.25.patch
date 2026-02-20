@@ -1,0 +1,12 @@
+diff --git a/configure.ac b/configure.ac
+index 1c9e67b..384f462 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -121,6 +121,8 @@ AC_SUBST([OWNTONE_CPPFLAGS])
+ AC_SUBST([OWNTONE_OPTS_LIBS])
+ AC_SUBST([OWNTONE_OPTS_CPPFLAGS])
+ 
++AM_GNU_GETTEXT_VERSION([0.21])
+ AM_ICONV
+ # All OWNTONE_ macros defined in m4/owntone_checks.m4
+ OWNTONE_FUNC_REQUIRE([COMMON], [GNU libunistring], [LIBUNISTRING], [unistring],
