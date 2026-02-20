@@ -178,16 +178,21 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/bytedance-lark.desktop \
       --replace-fail /usr/bin/bytedance-lark-stable $out/opt/bytedance/lark/bytedance-lark
 
-    # Wrap lark, vulcan, and video_conference_sdk
-    # - lark: main executable
+    # Remove bundled xdg utilities that don't work on NixOS
+    # This forces the system to use NixOS's xdg-utils which work correctly
+#    rm -f $out/opt/bytedance/lark/vulcan/xdg-mime
+#    rm -f $out/opt/bytedance/lark/vulcan/xdg-settings
+
+    # Wrap the actual Electron binaries (not upstream's shell scripts)
+    # - lark: main executable (Electron binary)
     # - vulcan/vulcan: Electron browser used for rendering
     # - video_conference_sdk: video meeting child process
+    # Note: bytedance-lark is kept as-is (upstream's shell script handles xdg-utils)
     for executable in $out/opt/bytedance/lark/{lark,vulcan/vulcan,video_conference_sdk}; do
       wrapProgram $executable \
-        --set ELECTRON_DISABLE_SANDBOX 1 \
+        --set ELECTRON_DISABLE_SANDBOX 0 \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix LD_LIBRARY_PATH : ${rpath}:$out/opt/bytedance/lark:${addDriverRunpath.driverLink}/share \
-        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+#        --prefix LD_LIBRARY_PATH : ${rpath}:$out/opt/bytedance/lark:${addDriverRunpath.driverLink}/share \
         ${lib.optionalString (
           commandLineArgs != ""
         ) "--add-flags ${lib.escapeShellArg commandLineArgs}"}
