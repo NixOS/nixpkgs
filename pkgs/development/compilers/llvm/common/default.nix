@@ -479,14 +479,96 @@ makeScopeWithSplicing' {
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
       flang-unwrapped = callPackage ./flang { };
       flang-rt = callPackage ./flang-rt { };
+      flang-wrapper = stdenv.mkDerivation {
+        name = "flang-adapter-${self.flang-unwrapped.version}";
+        inherit (self.flang-unwrapped) passthru meta;
 
+        buildCommand = ''
+            mkdir -p $out/bin
+            cat > $out/bin/flang-new <<'EOF'
+            #!${stdenv.shell}
+
+            declare -a final_args=()
+            TEMP_RSP=""
+            cleanup() { [ -n "$TEMP_RSP" ] && rm -f "$TEMP_RSP"; }
+            trap cleanup EXIT
+            emit() {
+              local mode="$1"
+              local val="$2"
+              if [[ "$mode" == "CLI" ]]; then
+                final_args+=("$val")
+              else
+                echo "$val" >> "$TEMP_RSP"
+              fi
+            }
+
+            process_stream() {
+              local mode="$1"; shift
+              while (($# > 0)); do
+                local arg="$1"
+
+                if [[ "$arg" == "-nostdlibinc" ]] || \
+                  [[ "$arg" == -frandom-seed=* ]] || \
+                  [[ "$arg" == -fmacro-prefix-map=* ]] || \
+                  [[ "$arg" == "-mno-omit-leaf-frame-pointer" ]] || \
+                  [[ "$arg" == "-Werror=unguarded-availability" ]]; then
+                  shift
+                  continue
+                fi
+                if [[ "$arg" == "-isystem" ]] || [[ "$arg" == "-idirafter" ]]; then
+                  emit "$mode" "-I"
+                  shift
+                  if (($# > 0)); then
+                    emit "$mode" "$1"
+                    shift
+                  fi
+                  continue
+                fi
+
+                emit "$mode" "$arg"
+                shift
+              done
+            }
+
+            for arg in "$@"; do
+              if [[ "$arg" == @* ]]; then
+                [ -z "$TEMP_RSP" ] && TEMP_RSP=$(mktemp /tmp/flang_args.XXXXXX.rsp)
+
+                declare -a file_content=()
+                while IFS= read -r line || [ -n "$line" ]; do
+                  for word in $line; do
+                    file_content+=("$word")
+                  done
+                done < "''${arg:1}"
+
+                process_stream "FILE" "''${file_content[@]}"
+                final_args+=("@$TEMP_RSP")
+              else
+                process_stream "CLI" "$arg"
+              fi
+            done
+            exec -a "$0" "${self.flang-unwrapped}/bin/flang-new" "''${final_args[@]}"
+          EOF
+
+            chmod +x $out/bin/flang-new
+            ln -s flang-new $out/bin/flang
+        '';
+      };
       flang = wrapCCWith rec {
-        cc = self.flang-unwrapped;
+        cc = self.flang-wrapper;
         bintools = bintools';
         extraPackages = [ targetLlvmPackages.flang-rt ];
         extraBuildCommands = mkExtraBuildCommands0 cc + ''
-          ln -s "${targetLlvmPackages.flang-rt}/lib/clang/${clangVersion}/lib/${stdenv.targetPlatform.config}" "$rsrc"/lib
-          echo -L"$rsrc"/lib >> $out/nix-support/cc-ldflags
+          # triplet however is not used in darwin
+          PLATFORM_DIR="${if stdenv.targetPlatform.isDarwin then "darwin" else stdenv.targetPlatform.config}"
+          RT_LIB_PATH="${targetLlvmPackages.flang-rt}/lib/clang/${clangVersion}/lib/$PLATFORM_DIR"
+          if [ -d "$RT_LIB_PATH" ]; then
+            ln -s "$RT_LIB_PATH" "$rsrc"/lib
+            echo "-L$rsrc/lib" >> $out/nix-support/cc-ldflags
+          else
+            ln -s "${targetLlvmPackages.flang-rt}/lib" "$rsrc"/lib
+            echo "-L$rsrc/lib" >> $out/nix-support/cc-ldflags
+          fi
         '';
       };
 

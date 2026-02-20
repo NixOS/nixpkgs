@@ -97,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     hardeningUnsupportedFlags = [
       "zerocallusedregs"
       "stackprotector"
+      "stackclashprotection"
     ];
   };
 
