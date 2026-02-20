@@ -19,12 +19,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wcm";
-  version = "0.10.0";
+  version = "0.11.0-unstable-2025-11-23";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wcm";
-    rev = "v${finalAttrs.version}";
+    rev = "d7e3d6783f3e7d10c3c4edf556be7a5342626065";
     fetchSubmodules = true;
     hash = "sha256-O4BYwb+GOMZIn3I2B/WMJ5tUZlaegvwBuyNK9l/gxvQ=";
   };
