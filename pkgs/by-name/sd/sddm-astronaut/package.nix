@@ -27,9 +27,10 @@ stdenvNoCC.mkDerivation {
   dontWrapQtApps = true;
 
   propagatedBuildInputs = with kdePackages; [
-    qtsvg
-    qtmultimedia
-    qtvirtualkeyboard
+    # avoid .dev outputs propagation
+    qtsvg.out
+    qtmultimedia.out
+    qtvirtualkeyboard.out
   ];
 
   installPhase = ''
