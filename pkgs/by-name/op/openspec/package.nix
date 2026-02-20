@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Fission-AI";
     repo = "OpenSpec";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XdE8WGXdBm9FQKZJIJtnPCqpD20ontpINlfmqFmts3U=";
   };
 
