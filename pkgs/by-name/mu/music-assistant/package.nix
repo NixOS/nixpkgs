@@ -66,6 +66,9 @@ python.pkgs.buildPythonApplication rec {
     # Look up librespot from PATH at runtime
     ./librespot.patch
 
+    # Look up shairport-sync from PATH at runtime
+    ./shairport-sync.patch
+
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
 
@@ -91,7 +94,9 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace-fail "get-mac" "getmac"
 
-    rm -rv music_assistant/providers/spotify/bin
+    rm -rv \
+      music_assistant/providers/airplay_receiver/bin/{build_binaries.sh,shairport-sync-*} \
+      music_assistant/providers/spotify/bin
   '';
 
   build-system = with python.pkgs; [
