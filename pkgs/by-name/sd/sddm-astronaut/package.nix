@@ -57,6 +57,7 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [
       danid3v
       uxodb
+      qweered
     ];
   };
 }
