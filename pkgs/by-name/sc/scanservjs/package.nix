@@ -1,7 +1,7 @@
 {
-  lib,
-  fetchFromGitHub,
   buildNpmPackage,
+  fetchFromGitHub,
+  lib,
   nodejs_20,
 }:
 
@@ -22,11 +22,36 @@ buildNpmPackage (finalAttrs: {
   # https://github.com/NixOS/nixpkgs/issues/371649
   nodejs = nodejs_20;
 
-  postInstall = ''
-    mkdir $out/bin
+  patches = [
+    ./nix-compatibility.patch
+  ];
+
+  postBuild = ''
+    # Install runtime dependencies
+    npm install \
+      --prefix ./dist \
+      --offline \
+      --production \
+      --ignore-scripts
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    rm -rf $out/lib
+
+    mkdir -p $out/lib
+    cp -r dist/* $out/lib
+
+    substituteInPlace $out/lib/server/express-configurer.js \
+      --replace-fail "@client@" "$out/lib/client"
+
+    mkdir -p $out/bin
     makeWrapper ${lib.getExe finalAttrs.nodejs} $out/bin/scanservjs \
       --set NODE_ENV production \
-      --add-flags "'$out/lib/node_modules/scanservjs/app-server/src/server.js'"
+      --add-flags "$out/lib/server/server.js"
+
+    runHook postInstall
   '';
 
   meta = {
