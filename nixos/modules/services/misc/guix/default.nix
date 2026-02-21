@@ -164,12 +164,14 @@ in
         '';
         example = lib.literalExpression ''
           [
-            (builtins.fetchurl {
+            (pkgs.fetchurl {
               url = "https://guix.example.com/signing-key.pub";
+              hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
             })
 
-            (builtins.fetchurl {
+            (pkgs.fetchurl {
               url = "https://guix.example.org/static/signing-key.pub";
+              hash = "sha256-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=";
             })
           ]
         '';
