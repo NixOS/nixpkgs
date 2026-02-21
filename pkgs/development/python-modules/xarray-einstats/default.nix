@@ -11,7 +11,7 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xarray-einstats";
   version = "0.10.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "xarray-einstats";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-R/CbCaToW9U0+WqayE33gSyx5wKrhlZd7w4kjyxoxrk=";
   };
 
@@ -36,7 +36,10 @@ buildPythonPackage rec {
     numba = [ numba ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "xarray_einstats" ];
 
@@ -51,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
