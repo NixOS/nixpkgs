@@ -98,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       lgpl21Plus
     ];
+    mainProgram = "xz";
     platforms = lib.platforms.all;
     pkgConfigModules = [ "liblzma" ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "tukaani" finalAttrs.version;
