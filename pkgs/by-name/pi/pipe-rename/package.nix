@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pipe-rename";
-  version = "1.6.6";
+  version = "1.6.7";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-eZldAhqmoIkNZaI6r31hI43KCPDDeWk3fKpY3/BaUQE=";
+    hash = "sha256-9Pub+OCN+PiKHfCxflwkHp6JNSB8AqAtKsNTlAsANbA=";
   };
 
-  cargoHash = "sha256-9xOL8qtUha4dL7V+GC8TnPGjBprKADqzIwOqqMyPB5A=";
+  cargoHash = "sha256-oYJNiUIi/uYxzd9DfgBgEaEy3g32r44seI56ur9UMcc=";
 
   nativeCheckInputs = [ python3 ];
 
