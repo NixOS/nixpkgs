@@ -1,0 +1,36 @@
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 61da30d..73c972d 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -176,6 +176,7 @@ add_test(
+         -B${CMAKE_CURRENT_BINARY_DIR}/findpackage_test_build
+         -DCMAKE_BUILD_TYPE=$<CONFIG> -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+         -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
++        -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
+         -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/test_install --fresh
+         -G "${CMAKE_GENERATOR}" -S${CMAKE_CURRENT_BINARY_DIR}/findpackage_test)
+ 
+@@ -211,6 +212,7 @@ add_test(
+         -B${CMAKE_CURRENT_BINARY_DIR}/findpackage_no_components_test_build
+         -DCMAKE_BUILD_TYPE=$<CONFIG> -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+         -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
++        -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
+         -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/test_install --fresh
+         -G "${CMAKE_GENERATOR}"
+         -S${CMAKE_CURRENT_BINARY_DIR}/findpackage_no_components_test)
+@@ -254,6 +256,7 @@ add_test(
+         -B${CMAKE_CURRENT_BINARY_DIR}/add_subdirectory_test_build
+         -DCMAKE_BUILD_TYPE=$<CONFIG> -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+         -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
++        -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
+         -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/test_install --fresh
+         -G "${CMAKE_GENERATOR}" -S${CMAKE_CURRENT_BINARY_DIR}/findpackage_test)
+ 
+@@ -289,6 +292,7 @@ add_test(
+         -B${CMAKE_CURRENT_BINARY_DIR}/add_subdirectory_exclude_test_build
+         -DCMAKE_BUILD_TYPE=$<CONFIG> -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+         -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
++        -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
+         -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/test_install --fresh
+         -G "${CMAKE_GENERATOR}" -S${CMAKE_CURRENT_BINARY_DIR}/findpackage_test)
+ 
