@@ -19,6 +19,7 @@
   rsync,
   stdenv,
   zstd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -101,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     libreoffice = libreoffice-collabora; # Used by NixOS module.
     updateScript = ./update.sh;
+    tests = nixosTests.collabora;
   };
 
   meta = {
