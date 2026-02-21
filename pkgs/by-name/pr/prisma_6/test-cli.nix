@@ -1,20 +1,22 @@
 {
   lib,
   runCommand,
-  prisma,
-  prisma-engines,
+  prisma_6,
+  prisma-engines_6,
   sqlite-interactive,
+  openssl,
 }:
 
 let
-  prismaMajorVersion = lib.versions.majorMinor prisma.version;
-  enginesMajorVersion = lib.versions.majorMinor prisma-engines.version;
+  prismaMajorVersion = lib.versions.majorMinor prisma_6.version;
+  enginesMajorVersion = lib.versions.majorMinor prisma-engines_6.version;
 in
 runCommand "prisma-cli-tests"
   {
     nativeBuildInputs = [
-      prisma
+      prisma_6
       sqlite-interactive
+      openssl
     ];
     meta.timeout = 60;
   }
@@ -30,8 +32,9 @@ runCommand "prisma-cli-tests"
     # Ensure CLI runs
     prisma --help > /dev/null
 
-    # Init a new project
-    prisma init > /dev/null
+    # Init a new project without prisma init, which needs
+    # network access
+    mkdir prisma
 
     # Create a simple data model
     cat << EOF > prisma/schema.prisma

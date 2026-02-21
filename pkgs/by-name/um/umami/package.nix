@@ -9,8 +9,8 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
-  prisma,
-  prisma-engines,
+  prisma_6,
+  prisma-engines_6,
   openssl,
   rustPlatform,
   # build variables
@@ -41,12 +41,12 @@ let
 
   # Pin the specific version of prisma to the one used by upstream
   # to guarantee compatibility.
-  prisma-engines' = prisma-engines.overrideAttrs (old: rec {
+  prisma-engines' = prisma-engines_6.overrideAttrs (old: rec {
     version = "6.19.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma-engines";
-      rev = version;
+      tag = version;
       hash = "sha256-icFgoKIrr3fGSVmSczlMJiT5KSb746kVldtrk+Q0wW8=";
     };
     cargoHash = "sha256-PgCfBcmK9RCA5BMacJ5oYEpo2DnBKx2xPbdLb79yCCY=";
@@ -57,12 +57,12 @@ let
       hash = cargoHash;
     };
   });
-  prisma' = (prisma.override { prisma-engines = prisma-engines'; }).overrideAttrs (old: rec {
+  prisma' = (prisma_6.override { prisma-engines_6 = prisma-engines'; }).overrideAttrs (old: rec {
     version = "6.19.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma";
-      rev = version;
+      tag = version;
       hash = "sha256-lFPAu296cQMDnEcLTReSHuLuOz13kd7n0GV+ifcX+lQ=";
     };
     pnpmDeps = old.pnpmDeps.override {

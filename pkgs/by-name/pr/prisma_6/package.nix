@@ -6,20 +6,20 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  prisma-engines,
+  prisma-engines_6,
   jq,
   makeWrapper,
   moreutils,
   callPackage,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "prisma";
+  pname = "prisma_6";
   version = "6.18.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-+WRWa59HlHN2CsYZfr/ptdW3iOuOPfDil8sLR5dWRA4=";
   };
 
@@ -72,13 +72,22 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm install --offline --ignore-scripts --frozen-lockfile --prod
     cp -r node_modules $out/lib/prisma
 
+    # Resolve workspace references so pnpm pack works
+    for package in packages/*; do
+      jq --arg version $version '
+        def resolve_deps: with_entries(.value |= if . == "workspace:*" then $version else . end);
+        if has("dependencies") then .dependencies |= resolve_deps else . end
+        | if has("devDependencies") then .devDependencies |= resolve_deps else . end
+      ' $package/package.json | sponge $package/package.json
+    done
+
     # Only install cli and its workspace dependencies
     for package in cli $deps; do
-      filename=$(npm pack --json ./packages/$package | jq -r '.[].filename')
+      filename=$(cd packages/$package && pnpm pack | tail -1)
       mkdir -p $out/lib/prisma/packages/$package
       [ -d "packages/$package/node_modules" ] && \
         cp -r packages/$package/node_modules $out/lib/prisma/packages/$package
-      tar xf $filename --strip-components=1 -C $out/lib/prisma/packages/$package
+      tar xf "packages/$package/$filename" --strip-components=1 -C $out/lib/prisma/packages/$package
     done
 
     # Remove dangling symlinks to packages we didn't copy to $out
@@ -86,9 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "${lib.getExe nodejs}" "$out/bin/prisma" \
       --add-flags "$out/lib/prisma/packages/cli/build/index.js" \
-      --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
-      --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
-      --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node
+      --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines_6}/bin/schema-engine \
+      --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines_6}/bin/query-engine \
+      --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines_6}/lib/libquery_engine.node
 
     runHook postInstall
   '';

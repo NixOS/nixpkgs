@@ -3,7 +3,7 @@
   buildNpmPackage,
   vips,
   pkg-config,
-  prisma,
+  prisma_6,
   src,
   version,
   nixosTests,
@@ -28,7 +28,7 @@ buildNpmPackage {
   buildInputs = [ vips ];
   nativeBuildInputs = [
     pkg-config
-    prisma
+    prisma_6
   ];
 
   npmDepsHash = "sha256-bc2suSGa7YTonIhUxEtNzdIUeUBubwJ6upW2tydVCnU=";
