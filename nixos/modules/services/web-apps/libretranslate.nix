@@ -131,13 +131,13 @@ in
           ];
           description = ''
             Sentence boundary detection.
-            - default: Argos's default behavior
+            - default: upstream Argos's default behavior
             - argostranslate: Argos's Translate's SBD
             - stanza: use Stanza for sentence splitting
             - spacy: use SPACY for sentence splitting
-            - minisbd: use minisbd for sentence splitting
+            - minisbd: use minisbd for sentence splitting (recommended by languagetool)
           '';
-          default = "default";
+          default = "minisbd";
           example = "spacy";
         };
       };
