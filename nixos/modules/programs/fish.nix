@@ -169,7 +169,8 @@ in
     programs.fish.shellAliases = lib.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
 
     # Required for man completions
-    documentation.man.generateCaches = lib.mkDefault true;
+    documentation.man.cache.enable = lib.mkDefault true;
+    documentation.man.cache.generateAtRuntime = lib.mkDefault true;
 
     environment = lib.mkMerge [
       (lib.mkIf cfg.useBabelfish {

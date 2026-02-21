@@ -193,23 +193,26 @@ stdenv.mkDerivation (finalAttrs: {
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
     && !stdenv.hostPlatform.isAarch32;
 
-  # Prevents attempts of running 'help2man' on cross-built binaries.
-  PERL = if isCross then "missing" else null;
-
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
-  FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
-  env.NIX_CFLAGS_COMPILE = toString (
-    [ ]
-    # Work around a bogus warning in conjunction with musl.
-    ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
-    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
-    # gnulib does not consider Clang-specific warnings to be bugs:
-    # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
-    # TODO: find out why these are happening on cygwin, which is gcc
-    ++ optional (stdenv.cc.isClang || stdenv.hostPlatform.isCygwin) "-Wno-error=format-security"
-  );
+  env = {
+    NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
+    FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
+    NIX_CFLAGS_COMPILE = toString (
+      [ ]
+      # Work around a bogus warning in conjunction with musl.
+      ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
+      ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
+      # gnulib does not consider Clang-specific warnings to be bugs:
+      # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
+      # TODO: find out why these are happening on cygwin, which is gcc
+      ++ optional (stdenv.cc.isClang || stdenv.hostPlatform.isCygwin) "-Wno-error=format-security"
+    );
+  }
+  // optionalAttrs isCross {
+    # Prevents attempts of running 'help2man' on cross-built binaries.
+    PERL = "missing";
+  };
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.

@@ -49,7 +49,6 @@ stdenv.mkDerivation {
     ];
     maintainers = with lib.maintainers; [
       tvorog
-      atila
     ];
     platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "4.20";

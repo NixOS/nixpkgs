@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     hash = "sha256-JHjjaK5WFRzDYuVkenfYowFsPnrF+Wjo85gQAbaVxO8=";
   };
 
-  NO_REDIS_TEST = true;
+  env.NO_REDIS_TEST = true;
 
   patches = [
     # Allows turning off the one test requiring a Redis service during build.

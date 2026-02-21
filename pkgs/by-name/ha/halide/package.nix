@@ -152,7 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       ck3d
-      atila
       twesterhout
     ];
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;

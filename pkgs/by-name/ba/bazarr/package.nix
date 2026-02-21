@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bazarr.media/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ diogotcorreia ];
     mainProgram = "bazarr";
     platforms = lib.platforms.all;
   };

@@ -827,6 +827,8 @@ let
       # and enforce signatures which we don't do by default.
       SECURITY_LOCKDOWN_LSM = no;
 
+      IMA = yes;
+
       # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
       PERSISTENT_KEYRINGS = yes;
       # enable temporary caching of the last request_key() result
@@ -1248,6 +1250,7 @@ let
         KEXEC_FILE = option yes;
         KEXEC_JUMP = option yes;
         KEXEC_HANDOVER = whenAtLeast "6.16" (option yes);
+        LIVEUPDATE = whenAtLeast "6.19" (option yes);
 
         PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION
         # Windows Logical Disk Manager (Dynamic Disk) support

@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   strictDeps = true;
 
-  CFLAGS = [
+  env.CFLAGS = toString [
     "-O2"
     "-DNDEBUG"
   ];

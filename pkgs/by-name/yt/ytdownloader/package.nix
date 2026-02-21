@@ -45,7 +45,7 @@ buildNpmPackage rec {
     })
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   dontNpmBuild = true;
 

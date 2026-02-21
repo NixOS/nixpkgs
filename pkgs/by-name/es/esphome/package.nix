@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2026.1.5";
+  version = "2026.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-leQkNa2FK7Wagpr+TKbfg/qkRMII03+dnWXoFZwwn9w=";
+    hash = "sha256-VcfQsDx3u7GTndF5GE0XCplPXVo9ClLJwqWLJFKzWEk=";
   };
 
   patches = [
@@ -68,8 +68,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.46" "wheel"
+      --replace-fail "setuptools==82.0.0" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.47" "wheel"
   '';
 
   # Remove esptool and platformio from requirements

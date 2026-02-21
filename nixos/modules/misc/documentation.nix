@@ -228,6 +228,10 @@ in
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man" "enable" ] [ "documentation" "man" "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+    (mkRenamedOptionModule
+      [ "documentation" "man" "generateCaches" ]
+      [ "documentation" "man" "cache" "enable" ]
+    )
     (mkRemovedOptionModule [
       "documentation"
       "nixos"
@@ -261,7 +265,7 @@ in
         '';
       };
 
-      man.generateCaches = mkOption {
+      man.cache.enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -270,6 +274,16 @@ in
           keyword using utilities like {manpage}`apropos(1)`
           and the `-k` option of
           {manpage}`man(1)`.
+        '';
+      };
+
+      man.cache.generateAtRuntime = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to generate the manual page index caches at runtime using
+          a systemd service. Note that this is currently only supported by the
+          man-db module.
         '';
       };
 

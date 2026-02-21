@@ -56,9 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     qpdf
   ];
 
-  CXXFLAGS =
+  env = lib.optionalAttrs (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "13") {
     # Pending upstream compatibility with GCC 13
-    lib.optional (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "13") "-Wno-changes-meaning";
+    CXXFLAGS = "-Wno-changes-meaning";
+  };
 
   meta = {
     description = "Simple application to extract, merge, rotate and reorder pages of PDF documents";

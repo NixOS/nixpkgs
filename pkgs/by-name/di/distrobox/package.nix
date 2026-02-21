@@ -67,7 +67,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://distrobox.it/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     mainProgram = "distrobox";
   };
 })

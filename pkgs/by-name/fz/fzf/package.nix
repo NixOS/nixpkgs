@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "fzf";
-  version = "0.67.0";
+  version = "0.68.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-P6jyKskc2jT6zMLAMxklN8e/630oWYT4bWim20IMKvo=";
+    hash = "sha256-3hEAhpWUkAwXE9kU+mRl6nSvnsVyvlFiKW0P9BG/cxE=";
   };
 
   vendorHash = "sha256-uFXHoseFOxGIGPiWxWfDl339vUv855VHYgSs9rnDyuI=";

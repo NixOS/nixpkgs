@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  LC_ALL = "en_US.utf8";
+  env.LC_ALL = "en_US.utf8";
 
   meta = {
     homepage = "https://profanity-im.github.io";

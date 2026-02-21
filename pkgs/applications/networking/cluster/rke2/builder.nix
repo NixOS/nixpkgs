@@ -75,7 +75,7 @@ buildGoModule (finalAttrs: {
   ];
 
   # Passing boringcrypto to GOEXPERIMENT variable to build with goboring library
-  GOEXPERIMENT = "boringcrypto";
+  env.GOEXPERIMENT = "boringcrypto";
 
   # https://github.com/rancher/rke2/blob/104ddbf3de65ab5490aedff36df2332d503d90fe/scripts/build-binary#L27-L39
   ldflags =

@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
   ];
 
-  DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";
+  env.DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";
 
   configureFlags = [
     "--sysconfdir=/etc"

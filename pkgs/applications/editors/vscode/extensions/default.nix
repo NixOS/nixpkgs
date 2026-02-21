@@ -1967,8 +1967,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.69.3";
-          hash = "sha256-u9f743vZar9FYWXam94wdF6wBZxp6/fikZM0rGXfces=";
+          version = "6.71.0";
+          hash = "sha256-jOD5VFF9g4BNdpm3ZoCi0LPkkBmLZ7vlXVVHgiCGac8=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -2879,18 +2879,7 @@ let
         };
       };
 
-      mads-hartmann.bash-ide-vscode = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "mads-hartmann";
-          name = "bash-ide-vscode";
-          version = "1.43.0";
-          hash = "sha256-IpJCzoYZ+L39HqBts487E00RfVnZhLa9wUYs2FIV9pQ=";
-        };
-        meta = {
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.kamadorueda ];
-        };
-      };
+      mads-hartmann.bash-ide-vscode = callPackage ./mads-hartmann.bash-ide-vscode { };
 
       marp-team.marp-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3044,6 +3033,8 @@ let
         };
       };
 
+      miguelsolorio.fluent-icons = callPackage ./miguelsolorio.fluent-icons { };
+
       miguelsolorio.min-theme = callPackage ./miguelsolorio.min-theme { };
 
       mikestead.dotenv = buildVscodeMarketplaceExtension {
@@ -3070,24 +3061,13 @@ let
         };
       };
 
-      mkhl.direnv = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "mkhl";
-          name = "direnv";
-          version = "0.17.0";
-          hash = "sha256-9sFcfTMeLBGw2ET1snqQ6Uk//D/vcD9AVsZfnUNrWNg=";
-        };
-        meta = {
-          description = "direnv support for Visual Studio Code";
-          license = lib.licenses.bsd0;
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mkhl.direnv";
-          maintainers = [ ];
-        };
-      };
+      mkhl.direnv = callPackage ./mkhl.direnv { };
 
       mkhl.shfmt = callPackage ./mkhl.shfmt { };
 
       mongodb.mongodb-vscode = callPackage ./mongodb.mongodb-vscode { };
+
+      motivesoft.vscode-man-page-syntax = callPackage ./motivesoft.vscode-man-page-syntax { };
 
       moshfeu.compare-folders = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3605,6 +3585,8 @@ let
           maintainers = [ lib.maintainers.kamadorueda ];
         };
       };
+
+      nomicfoundation.hardhat-solidity = callPackage ./nomicfoundation.hardhat-solidity { };
 
       nonylene.dark-molokai-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {

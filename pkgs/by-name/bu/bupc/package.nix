@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Used during the configure phase
-  ENVCMD = "${coreutils}/bin/env";
+  env.ENVCMD = "${coreutils}/bin/env";
 
   buildInputs = [ perl ];
 

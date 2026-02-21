@@ -203,12 +203,6 @@ python3Packages.buildPythonApplication {
     ++ lib.optional withStaticPPDInstall "--enable-cups-ppd-install"
     ++ lib.optional withQt5 "--enable-qt5";
 
-  # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
-  # generation of '*.ppd' files.
-  # This seems to be a 'ppdc' issue when the tool is run in a hermetic sandbox.
-  # Could not find how to fix the problem in 'ppdc' so this is a workaround.
-  CUPS_DATADIR = "${cups}/share/cups";
-
   makeFlags =
     let
       out = placeholder "out";
@@ -234,6 +228,12 @@ python3Packages.buildPythonApplication {
   enableParallelInstalling = false;
 
   env = {
+    # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
+    # generation of '*.ppd' files.
+    # This seems to be a 'ppdc' issue when the tool is run in a hermetic sandbox.
+    # Could not find how to fix the problem in 'ppdc' so this is a workaround.
+    CUPS_DATADIR = "${cups}/share/cups";
+
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=implicit-int"
       "-Wno-error=implicit-function-declaration"

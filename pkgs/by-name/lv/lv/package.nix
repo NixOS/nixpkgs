@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   # Upstream needs quite a bit of porting to c23:
   #   https://github.com/ttdoda/lv/issues/3
-  NIX_CFLAGS_COMPILE = "-std=gnu17";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   preAutoreconf = "cd src";
   postAutoreconf = "cd ..";

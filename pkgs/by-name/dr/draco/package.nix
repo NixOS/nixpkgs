@@ -61,9 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDRACO_TINYGLTF_PATH=${tinygltf}"
   ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # error: expected ')' before 'value' in 'explicit GltfValue(uint8_t value)'
-    "-include cstdint"
+    "-include"
+    "cstdint"
   ];
 
   passthru.updateScript = nix-update-script { };

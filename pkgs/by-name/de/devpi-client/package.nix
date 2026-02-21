@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "--fast"
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   __darwinAllowLocalNetworking = true;
 

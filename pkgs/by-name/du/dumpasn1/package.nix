@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r40czSLdjCYbt73zK7exCoP/kMq6+pyJfz9LKJLLaXM=";
   };
 
-  CFLAGS = ''-DDUMPASN1_CONFIG_PATH='"$(out)/etc/"' '';
+  env.CFLAGS = ''-DDUMPASN1_CONFIG_PATH='"$(out)/etc/"' '';
 
   makeFlags = [ "prefix=$(out)" ];
 

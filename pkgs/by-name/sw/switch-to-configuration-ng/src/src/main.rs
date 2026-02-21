@@ -825,16 +825,6 @@ fn parse_fstab(fstab: impl BufRead) -> (HashMap<String, Filesystem>, HashMap<Str
     (filesystems, swaps)
 }
 
-// Converts a path to the name of a systemd mount/automount unit that would be responsible for
-// mounting this path.
-fn path_to_unit_name(path: &str, is_automount: bool) -> String {
-    format!(
-        "{}.{}",
-        libsystemd::unit::escape_path(path),
-        if is_automount { "automount" } else { "mount" },
-    )
-}
-
 // Returns a HashMap containing the same contents as the passed in `units`, minus the units in
 // `units_to_filter`.
 fn filter_units(
@@ -1320,8 +1310,9 @@ won't take effect until you reboot the system.
 
     // Compare the previous and new fstab to figure out which filesystems need a remount or need to
     // be unmounted. New filesystems are mounted automatically by starting local-fs.target.
-    // FIXME: might be nicer if we generated units for all mounts; then we could unify this with
-    // the unit checking code above.
+    //
+    // TODO: We should probably not reimplement some of the logic of systemd-fstab-generator, and
+    // instead only consume and act upon the mount/automount units created from that generator.
     let (current_filesystems, current_swaps) = std::fs::read_to_string("/etc/fstab")
         .map(|fstab| parse_fstab(std::io::Cursor::new(fstab)))
         .unwrap_or_default();
@@ -1330,10 +1321,10 @@ won't take effect until you reboot the system.
         .unwrap_or_default();
 
     for (mountpoint, current_filesystem) in current_filesystems {
-        let is_automount = current_filesystem.options.contains("x-systemd.automount");
+        let current_is_automount = current_filesystem.options.contains("x-systemd.automount");
+        let mount_unit = format!("{}.mount", libsystemd::unit::escape_path(&mountpoint));
+        let automount_unit = format!("{}.automount", libsystemd::unit::escape_path(&mountpoint));
 
-        // Use current version of systemctl binary before daemon is reexeced.
-        let unit = path_to_unit_name(&mountpoint, is_automount);
         if let Some(new_filesystem) = new_filesystems.get(&mountpoint) {
             if current_filesystem.fs_type != new_filesystem.fs_type
                 || current_filesystem.device != new_filesystem.device
@@ -1341,25 +1332,30 @@ won't take effect until you reboot the system.
                 if matches!(mountpoint.as_str(), "/" | "/nix") {
                     if current_filesystem.options != new_filesystem.options {
                         // Mount options changes, so remount it.
-                        units_to_reload.insert(unit.to_string(), ());
-                        record_unit(RELOAD_LIST_FILE, &unit)
+                        units_to_reload.insert(mount_unit.to_string(), ());
+                        record_unit(RELOAD_LIST_FILE, &mount_unit)
                     } else {
                         // Don't unmount / or /nix if the device changed
-                        units_to_skip.insert(unit, ());
+                        units_to_skip.insert(mount_unit, ());
                     }
                 } else {
                     // Filesystem type or device changed, so unmount and mount it.
-                    units_to_restart.insert(unit.to_string(), ());
-                    record_unit(RESTART_LIST_FILE, &unit);
+                    units_to_restart.insert(mount_unit.to_string(), ());
+                    record_unit(RESTART_LIST_FILE, &mount_unit);
                 }
             } else if current_filesystem.options != new_filesystem.options {
                 // Mount options changes, so remount it.
-                units_to_reload.insert(unit.to_string(), ());
-                record_unit(RELOAD_LIST_FILE, &unit)
+                units_to_reload.insert(mount_unit.clone(), ());
+                record_unit(RELOAD_LIST_FILE, &mount_unit)
             }
         } else {
-            // Filesystem entry disappeared, so unmount it.
-            units_to_stop.insert(unit, ());
+            // Filesystem entry disappeared, so unmount it. Stopping the automount unit also stops
+            // the mount unit.
+            if current_is_automount {
+                units_to_stop.insert(automount_unit, ());
+            } else {
+                units_to_stop.insert(mount_unit, ());
+            }
         }
     }
 
@@ -1806,17 +1802,23 @@ won't take effect until you reboot the system.
     if !units_to_reload.is_empty() {
         for (unit, _) in units_to_reload.clone() {
             if !unit_is_active(&dbus_conn, &unit)? {
-                // Figure out if we need to start the unit
-                let unit_info = parse_unit(
+                // Figure out if we need to start the unit. We skip units that are not found in the
+                // NixOS-managed /etc/systemd/system directory (e.g. mount units that are generated
+                // from /etc/fstab).
+                if parse_unit(
                     toplevel.join("etc/systemd/system").join(&unit).as_path(),
                     toplevel.join("etc/systemd/system").join(&unit).as_path(),
-                )?;
-                if !parse_systemd_bool(Some(&unit_info), "Unit", "RefuseManualStart", false)
-                    || parse_systemd_bool(Some(&unit_info), "Unit", "X-OnlyManualStart", false)
+                )
+                .map(|unit_info| {
+                    !parse_systemd_bool(Some(&unit_info), "Unit", "RefuseManualStart", false)
+                        || parse_systemd_bool(Some(&unit_info), "Unit", "X-OnlyManualStart", false)
+                })
+                .unwrap_or_default()
                 {
                     units_to_start.insert(unit.clone(), ());
                     record_unit(START_LIST_FILE, &unit);
                 }
+
                 // Don't reload the unit, reloading would fail
                 units_to_reload.remove(&unit);
                 unrecord_unit(RELOAD_LIST_FILE, &unit);

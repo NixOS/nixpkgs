@@ -60,7 +60,7 @@ in
         apply = makeLeadingSlashes;
         description = ''
           Change the paths where mandoc {manpage}`makewhatis(8)`generates the
-          manual page index caches. {option}`documentation.man.generateCaches`
+          manual page index caches. {option}`documentation.man.cache.enable`
           should be enabled to allow cache generation. This list should only
           include the paths to manpages installed in the system configuration,
           i. e. /run/current-system/sw/share/man. {manpage}`makewhatis(8)`
@@ -215,7 +215,7 @@ in
       # create mandoc.db for whatis(1), apropos(1) and man(1) -k
       # TODO(@sternenseemman): fix symlinked directories not getting indexed,
       # see: https://inbox.vuxu.org/mandoc-tech/20210906171231.GF83680@athene.usta.de/T/#e85f773c1781e3fef85562b2794f9cad7b2909a3c
-      extraSetup = lib.mkIf config.documentation.man.generateCaches ''
+      extraSetup = lib.mkIf config.documentation.man.cache.enable ''
         for man_path in ${
           lib.concatMapStringsSep " " (path: "$out" + lib.escapeShellArg path) cfg.cachePath
         }

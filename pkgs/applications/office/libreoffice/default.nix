@@ -157,7 +157,7 @@
   liberation-sans-narrow,
   liberation_ttf_v2,
   libertine,
-  libertine-g,
+  linux-libertine-g,
   noto-fonts,
   noto-fonts-lgc-plus,
   noto-fonts-cjk-sans,
@@ -206,7 +206,7 @@ let
       liberation-sans-narrow
       liberation_ttf_v2
       libertine
-      libertine-g
+      linux-libertine-g
       # Font priority issues in some tests in Still
       noto-fonts-lgc-plus
       (if variant == "fresh" then noto-fonts else (notoSubset [ "Arabic" ]))

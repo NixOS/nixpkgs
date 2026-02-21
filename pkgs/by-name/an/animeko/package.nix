@@ -144,7 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
     useBwrap = false;
   };
 
-  env.JAVA_HOME = jetbrains.jdk;
+  env = {
+    JAVA_HOME = jetbrains.jdk;
+    ANDROID_SDK_HOME = "$(pwd)";
+  };
 
   gradleFlags = [
     "-Dorg.gradle.java.home=${jetbrains.jdk}"
@@ -256,8 +259,6 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r $out/lib/app/resources/lib
     ln -sf ${libvlc}/lib $out/lib/app/resources/
   '';
-
-  ANDROID_SDK_HOME = "$(pwd)";
 
   passthru.updateScript = writeShellScript "update-animeko" ''
     ${lib.getExe nix-update} animeko

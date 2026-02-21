@@ -23,6 +23,7 @@
   waylandSupport ? false,
   wayland ? null,
   libxkbcommon ? null,
+  imagemagick,
 }:
 
 assert x11Support || waylandSupport;
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    imagemagick
   ];
 
   runtimeLibs = [
@@ -89,9 +91,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/vintagestory $out/bin $out/share/pixmaps $out/share/fonts/truetype
+    mkdir -p $out/share/vintagestory $out/bin $out/share/icons/hicolor/512x512/apps $out/share/fonts/truetype
     cp -r * $out/share/vintagestory
-    cp $out/share/vintagestory/assets/gameicon.xpm $out/share/pixmaps/vintagestory.xpm
+    magick $out/share/vintagestory/assets/gameicon.xpm $out/share/icons/hicolor/512x512/apps/vintagestory.png
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
 
     runHook postInstall

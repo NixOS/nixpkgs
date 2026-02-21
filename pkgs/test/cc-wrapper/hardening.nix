@@ -272,6 +272,7 @@ let
       ''
         touch $out
         if $OBJDUMP -d \
+          -j .text \
           --no-addresses \
           --no-show-raw-insn \
           "$(PATH=$HOST_PATH type -P test-bin)" \

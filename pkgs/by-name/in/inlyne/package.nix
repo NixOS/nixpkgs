@@ -16,6 +16,7 @@
   libGL,
   openssl,
   oniguruma,
+  vulkan-loader,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -72,6 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/inlyne \
+      --add-needed ${lib.getLib vulkan-loader}/lib/libvulkan.so \
       --add-rpath ${
         lib.makeLibraryPath [
           libGL

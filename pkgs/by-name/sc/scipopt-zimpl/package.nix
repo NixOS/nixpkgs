@@ -44,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
   meta = {
-    maintainers = with lib.maintainers; [ fettgoenner ];
+    maintainers = with lib.maintainers; [ pmeinhold ];
     platforms = lib.platforms.linux;
     broken = stdenv.isDarwin;
     changelog = "https://zimpl.zib.de/download/CHANGELOG.txt";
-    description = "Zuse Institut Mathematical Programming Language";
+    description = "Zuse Institute Mathematical Programming Language";
     longDescription = ''
       ZIMPL is a little language to translate the mathematical model of a
       problem into a linear or (mixed-)integer mathematical program

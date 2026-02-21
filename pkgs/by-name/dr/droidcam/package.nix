@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "droidcam";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "aramg";
     repo = "droidcam";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-z/SteW3jYR/VR+HffvTetdGs5oz4qWBNkaqLYiP1V8c=";
+    sha256 = "sha256-22lRmtXumjR/83Fg1edBisM1GjNZvNUvPs1Yg7Na1xw=";
   };
 
   nativeBuildInputs = [

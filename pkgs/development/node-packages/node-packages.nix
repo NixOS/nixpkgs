@@ -1614,15 +1614,6 @@ let
         sha512 = "6Fv1DV/TYw//QF5IzQdqsNDjx/wc8TrMBZsqjL9eW01tWb7R7k/mq+/VXfJCl7SoD5emsJop9cOByJZfs8hYIw==";
       };
     };
-    "cssesc-3.0.0" = {
-      name = "cssesc";
-      packageName = "cssesc";
-      version = "3.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/cssesc/-/cssesc-3.0.0.tgz";
-        sha512 = "/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==";
-      };
-    };
     "csso-5.0.5" = {
       name = "csso";
       packageName = "csso";
@@ -2964,15 +2955,6 @@ let
         sha512 = "SXL66C731p0xPDC5LZg4wI5H+dJo/EO4KTqOMwLYCH3+FmmfAKJEZCm6ohGpI+T1xwsDsJCfL4OnhorllvlTPQ==";
       };
     };
-    "lodash.castarray-4.4.0" = {
-      name = "lodash.castarray";
-      packageName = "lodash.castarray";
-      version = "4.4.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.castarray/-/lodash.castarray-4.4.0.tgz";
-        sha512 = "aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==";
-      };
-    };
     "lodash.isempty-4.4.0" = {
       name = "lodash.isempty";
       packageName = "lodash.isempty";
@@ -2982,15 +2964,6 @@ let
         sha512 = "oKMuF3xEeqDltrGMfDxAPGIVMSSRv8tbRSODbrs4KGsRRLEhrW8N8Rd4DRgB2+621hY8A8XwwrTVhXWpxFvMzg==";
       };
     };
-    "lodash.isplainobject-4.0.6" = {
-      name = "lodash.isplainobject";
-      packageName = "lodash.isplainobject";
-      version = "4.0.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz";
-        sha512 = "oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==";
-      };
-    };
     "lodash.memoize-3.0.4" = {
       name = "lodash.memoize";
       packageName = "lodash.memoize";
@@ -2998,15 +2971,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/lodash.memoize/-/lodash.memoize-3.0.4.tgz";
         sha512 = "eDn9kqrAmVUC1wmZvlQ6Uhde44n+tXpqPrN8olQJbttgh0oKclk+SF54P47VEGE9CEiMeRwAP8BaM7UHvBkz2A==";
-      };
-    };
-    "lodash.merge-4.6.2" = {
-      name = "lodash.merge";
-      packageName = "lodash.merge";
-      version = "4.6.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz";
-        sha512 = "0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==";
       };
     };
     "lodash.omitby-4.6.0" = {
@@ -3187,15 +3151,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz";
         sha512 = "ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==";
-      };
-    };
-    "mini-svg-data-uri-1.4.4" = {
-      name = "mini-svg-data-uri";
-      packageName = "mini-svg-data-uri";
-      version = "1.4.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/mini-svg-data-uri/-/mini-svg-data-uri-1.4.4.tgz";
-        sha512 = "r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==";
       };
     };
     "minimalistic-assert-1.0.1" = {
@@ -3898,15 +3853,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/postcss-reporter/-/postcss-reporter-7.1.0.tgz";
         sha512 = "/eoEylGWyy6/DOiMP5lmFRdmDKThqgn7D6hP2dXKJI/0rJSO1ADFNngZfDzxL0YAxFvws+Rtpuji1YIHj4mySA==";
-      };
-    };
-    "postcss-selector-parser-6.0.10" = {
-      name = "postcss-selector-parser";
-      packageName = "postcss-selector-parser";
-      version = "6.0.10";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-6.0.10.tgz";
-        sha512 = "IQ7TZdoaqbT+LCpShg46jnZVlhWD2w6iQYAcYXfHARZ7X1t/UGhhceQDs5X0cGqKvYlHNOuv7Oa1xmb0oQuA3w==";
       };
     };
     "prettier-2.8.8" = {
@@ -4782,15 +4728,6 @@ let
         sha512 = "YPPlu67mdnHGTup2A8ff7BC2Pjq0e0Yp/IyTFN03zWO0RcK07uLcbi7C2KpGR2FvWbaB0+bfE27a+sBKebSo7w==";
       };
     };
-    "tailwindcss-4.0.14" = {
-      name = "tailwindcss";
-      packageName = "tailwindcss";
-      version = "4.0.14";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.0.14.tgz";
-        sha512 = "92YT2dpt671tFiHH/e1ok9D987N9fHD5VWoly1CdPD/Cd1HMglvZwP3nx2yTj2lbXDAHt8QssZkxTLCCTNL+xw==";
-      };
-    };
     "tar-6.1.15" = {
       name = "tar";
       packageName = "tar";
@@ -5298,97 +5235,6 @@ let
   };
 in
 {
-  "@tailwindcss/aspect-ratio" = nodeEnv.buildNodePackage {
-    name = "_at_tailwindcss_slash_aspect-ratio";
-    packageName = "@tailwindcss/aspect-ratio";
-    version = "0.4.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@tailwindcss/aspect-ratio/-/aspect-ratio-0.4.2.tgz";
-      sha512 = "8QPrypskfBa7QIMuKHg2TA7BqES6vhBrDLOv8Unb6FcFyd3TjKbc6lcmb9UPQHxfl24sXoJ41ux/H7qQQvfaSQ==";
-    };
-    dependencies = [
-      sources."tailwindcss-4.0.14"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Composable API for giving elements a fixed aspect ratio";
-      homepage = "https://github.com/tailwindlabs/tailwindcss-aspect-ratio#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  "@tailwindcss/forms" = nodeEnv.buildNodePackage {
-    name = "_at_tailwindcss_slash_forms";
-    packageName = "@tailwindcss/forms";
-    version = "0.5.10";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@tailwindcss/forms/-/forms-0.5.10.tgz";
-      sha512 = "utI1ONF6uf/pPNO68kmN1b8rEwNXv3czukalo8VtJH8ksIkZXr3Q3VYudZLkCsDd4Wku120uF02hYK25XGPorw==";
-    };
-    dependencies = [
-      sources."mini-svg-data-uri-1.4.4"
-      sources."tailwindcss-4.0.14"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Basic reset for form styles that makes form elements easy to override with utilities";
-      homepage = "https://github.com/tailwindlabs/tailwindcss-forms#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  "@tailwindcss/line-clamp" = nodeEnv.buildNodePackage {
-    name = "_at_tailwindcss_slash_line-clamp";
-    packageName = "@tailwindcss/line-clamp";
-    version = "0.4.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@tailwindcss/line-clamp/-/line-clamp-0.4.4.tgz";
-      sha512 = "5U6SY5z8N42VtrCrKlsTAA35gy2VSyYtHWCsg1H87NU1SXnEfekTVlrga9fzUDrrHcGi2Lb5KenUWb4lRQT5/g==";
-    };
-    dependencies = [
-      sources."tailwindcss-4.0.14"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Utilities for visually truncating text after a fixed number of lines";
-      homepage = "https://github.com/tailwindlabs/tailwindcss-line-clamp#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  "@tailwindcss/typography" = nodeEnv.buildNodePackage {
-    name = "_at_tailwindcss_slash_typography";
-    packageName = "@tailwindcss/typography";
-    version = "0.5.16";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@tailwindcss/typography/-/typography-0.5.16.tgz";
-      sha512 = "0wDLwCVF5V3x3b1SGXPCDcdsbDHMBe+lkFzBRaHeLvNi+nrrnZ1lA18u+OTWO8iSWU2GxUOCvlXtDuqftc1oiA==";
-    };
-    dependencies = [
-      sources."cssesc-3.0.0"
-      sources."lodash.castarray-4.4.0"
-      sources."lodash.isplainobject-4.0.6"
-      sources."lodash.merge-4.6.2"
-      sources."postcss-selector-parser-6.0.10"
-      sources."tailwindcss-4.0.14"
-      sources."util-deprecate-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Tailwind CSS plugin for automatically styling plain HTML content with beautiful typographic defaults";
-      homepage = "https://github.com/tailwindlabs/tailwindcss-typography#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   browserify = nodeEnv.buildNodePackage {
     name = "browserify";
     packageName = "browserify";

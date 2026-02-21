@@ -6,7 +6,7 @@
   nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "maestral-qt";
   version = "1.9.5";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FCn9ELbodk+zCJNmlOVoxE/KSSqbxy5HTB1vpiu7AJA=";
   };
 
@@ -39,13 +39,21 @@ python3.pkgs.buildPythonApplication rec {
   dontWrapQtApps = true;
 
   makeWrapperArgs = with python3.pkgs; [
-    # Firstly, add all necessary QT variables
-    "\${qtWrapperArgs[@]}"
-
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix PYTHONPATH : ${makePythonPath (requiredPythonModules maestral.propagatedBuildInputs)}"
-    "--prefix PYTHONPATH : ${makePythonPath [ maestral ]}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    (makePythonPath (requiredPythonModules maestral.propagatedBuildInputs))
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    (makePythonPath [ maestral ])
   ];
+
+  preFixup = ''
+    # Add all necessary QT variables
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   postInstall = ''
     install -Dm444 -t $out/share/icons/hicolor/512x512/apps src/maestral_qt/resources/maestral.png
@@ -58,10 +66,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.maestral = nixosTests.maestral;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
     homepage = "https://maestral.app";
-    changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
+    changelog = "https://github.com/samschott/maestral/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       peterhoeg
@@ -70,4 +80,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "maestral_qt";
   };
-}
+})

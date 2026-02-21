@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fetch CLI workspace dependencies
     deps_json=$(pnpm list --filter ./packages/cli --prod --depth Infinity --json)
-    deps=$(jq -r '[del(.. | .unsavedDependencies?) | .. | strings | select(startswith("link:../")) | sub("^link:../"; "")] | unique[]' <<< "$deps_json")
+    deps=$(jq -r '[.. | strings | select(startswith("link:../")) | sub("^link:../"; "")] | unique[]' <<< "$deps_json")
 
     # Remove unnecessary external dependencies
     find . -name node_modules -type d -prune -exec rm -rf {} +

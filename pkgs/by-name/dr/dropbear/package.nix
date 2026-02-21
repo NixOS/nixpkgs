@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-DR98pxHPwzbcioXmcsq5z9giOgL+LaCkp661jJ4RNjQ=";
   };
 
-  CFLAGS = lib.pipe (lib.attrNames dflags) [
+  env.CFLAGS = lib.pipe (lib.attrNames dflags) [
     (map (name: "-D${name}=\\\"${dflags.${name}}\\\""))
     (lib.concatStringsSep " ")
   ];

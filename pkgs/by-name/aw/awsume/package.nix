@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-lm9YANYckyHDoNbB1wytBm55iyBmUuxFPmZupfpReqc=";
   };
 
-  AWSUME_SKIP_ALIAS_SETUP = 1;
+  env.AWSUME_SKIP_ALIAS_SETUP = 1;
 
   nativeBuildInputs = [ installShellFiles ];
 

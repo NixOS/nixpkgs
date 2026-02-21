@@ -20,6 +20,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-IACFPPlkgyJh78p6Jy740CQqcySkMTV/8VVPSRJKTPI=";
   };
 
+  pythonRelaxDeps = [ "pypsrp" ];
+
   # Removes the additional binary ewp
   postPatch = ''
     substituteInPlace setup.py \

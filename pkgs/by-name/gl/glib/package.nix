@@ -252,6 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
       # we're using plain
       "-DG_DISABLE_CAST_CHECKS"
     ];
+    DETERMINISTIC_BUILD = 1;
   };
 
   postPatch = ''
@@ -279,8 +280,6 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     patchShebangs gio/gdbus-2.0/codegen/gdbus-codegen gobject/glib-{genmarshal,mkenums}
   '';
-
-  DETERMINISTIC_BUILD = 1;
 
   postInstall = ''
     moveToOutput "share/glib-2.0" "$dev"

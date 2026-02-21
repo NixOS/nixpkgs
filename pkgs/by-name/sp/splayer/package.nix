@@ -11,6 +11,8 @@
   cargo,
   rustc,
   python3,
+  pkg-config,
+  openssl,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -19,14 +21,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
-  version = "3.0.0-beta.9";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-+9F4ckATxRE+/PhMi5c1GVDq5V9QMOogCD9uT6QkREM=";
+    hash = "sha256-E29TJlp7nMokJbbi/YLuYf9qWmwvo/r4qQckKrVyumI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -37,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-tAOtrxQasIQ1IS2jKdcX4KEM5p3zhshqw8phzsj667Q=";
+    hash = "sha256-PTfZopse+9RS7qh0miLu3duYlWDfifZS254tZKqgxKk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -46,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    hash = "sha256-QKk1coOuZNaqKgvbBgorvOotHmTJ+YXTHBfyhF0L37E=";
+    hash = "sha256-gd/5f3yraTQI5bu1VE6HHsGDeKJLR1oTm2H+pg1PAOA=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     makeWrapper
     copyDesktopItems
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -84,12 +91,12 @@ stdenv.mkDerivation (finalAttrs: {
     for f in $(find . -path '*/node_modules/better-sqlite3' -type d); do
       (cd "$f" && (
       npm run build-release --offline --nodedir="${electron.headers}"
+      rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
       find build -type f -exec \
         ${lib.getExe removeReferencesTo} \
         -t "${electron.headers}" {} \;
       ))
     done
-    rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
 
     pnpm build
 

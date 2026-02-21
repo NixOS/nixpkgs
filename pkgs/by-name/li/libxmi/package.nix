@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "03d4ikh29l38rl1wavb0icw7m5pp7yilnv7bb2k8qij1dinsymlx";
   };
 
-  CFLAGS = "-std=gnu89";
+  env.CFLAGS = "-std=gnu89";
 
   # For the x86_64 GNU/Linux arch to be recognized by 'configure'
   preConfigure = "cp ${libtool}/share/libtool/build-aux/config.sub .";

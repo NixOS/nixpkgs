@@ -92,8 +92,6 @@ let
       MenhirLib
     ];
 
-    enableParallelBuilding = true;
-
     postPatch = ''
       substituteInPlace ./configure \
         --replace \$\{toolprefix\}ar 'ar' \

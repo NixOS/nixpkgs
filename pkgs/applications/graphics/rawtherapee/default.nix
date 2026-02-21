@@ -116,12 +116,18 @@ stdenv.mkDerivation rec {
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
-  CMAKE_CXX_FLAGS = toString [
-    "-std=c++11"
-    "-Wno-deprecated-declarations"
-    "-Wno-unused-result"
-  ];
-  env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
+  env = {
+    CMAKE_CXX_FLAGS = toString [
+      "-std=c++11"
+      "-Wno-deprecated-declarations"
+      "-Wno-unused-result"
+    ];
+    # needed at least with gcc13 on aarch64-linux
+    CXXFLAGS = toString [
+      "-include"
+      "cstdint"
+    ];
+  };
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications/RawTherapee.app $out/bin

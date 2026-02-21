@@ -16,8 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-Rnp2VNAi8BNbKqkGFoYUb4C5db5BS1P1cqpWlroTmdQ=";
   };
 
-  LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
-  LIBPCAP_VER = libpcap.version;
+  env = {
+    LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
+    LIBPCAP_VER = libpcap.version;
+  };
 
   cargoHash = "sha256-WGwtRMARwRvcUflN3JYL32aib+IG1Q0j0D9BEfaiME4=";
 

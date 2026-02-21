@@ -49,8 +49,10 @@ stdenv.mkDerivation {
     yoda
   ];
 
-  CPPFLAGS = [ "-I${eigen}/include/eigen3" ];
-  PREFIX = placeholder "out";
+  env = {
+    CPPFLAGS = toString [ "-I${eigen}/include/eigen3" ];
+    PREFIX = placeholder "out";
+  };
 
   postInstall = ''
     for prog in "$out"/bin/*; do

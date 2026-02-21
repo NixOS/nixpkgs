@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     "build" + lib.optionalString enableDoxygen " doxygen" + lib.optionalString withManual "sphinx";
 
   # to prevent fatal error: 'backward_warning.h' file not found
-  CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
+  env.CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
 
   # Make generated python bindings discoverable in customized python environment
   passthru = {

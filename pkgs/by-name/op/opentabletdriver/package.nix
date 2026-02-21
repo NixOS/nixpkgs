@@ -67,7 +67,7 @@ buildDotnetModule (finalAttrs: {
 
   buildInputs = finalAttrs.runtimeDeps;
 
-  OTD_CONFIGURATIONS = "${finalAttrs.src}/OpenTabletDriver.Configurations/Configurations";
+  env.OTD_CONFIGURATIONS = "${finalAttrs.src}/OpenTabletDriver.Configurations/Configurations";
 
   doCheck = true;
   testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";

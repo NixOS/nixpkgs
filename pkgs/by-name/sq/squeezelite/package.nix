@@ -72,23 +72,31 @@ stdenv.mkDerivation {
       --replace "<opusfile.h>" "<opus/opusfile.h>"
   '';
 
-  EXECUTABLE = binName;
+  env = {
+    EXECUTABLE = binName;
 
-  OPTS = [
-    "-DLINKALL"
-    "-DGPIO"
-  ]
-  ++ optional dsdSupport "-DDSD"
-  ++ optional (!faad2Support) "-DNO_FAAD"
-  ++ optional ffmpegSupport "-DFFMPEG"
-  ++ optional opusSupport "-DOPUS"
-  ++ optional portaudioSupport "-DPORTAUDIO"
-  ++ optional pulseSupport "-DPULSEAUDIO"
-  ++ optional resampleSupport "-DRESAMPLE"
-  ++ optional sslSupport "-DUSE_SSL"
-  ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI";
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LDADD = "-lportaudio -lpthread"; };
+    OPTS = toString (
+      [
+        "-DLINKALL"
+        "-DGPIO"
+      ]
+      ++ optional dsdSupport "-DDSD"
+      ++ optional (!faad2Support) "-DNO_FAAD"
+      ++ optional ffmpegSupport "-DFFMPEG"
+      ++ optional opusSupport "-DOPUS"
+      ++ optional portaudioSupport "-DPORTAUDIO"
+      ++ optional pulseSupport "-DPULSEAUDIO"
+      ++ optional resampleSupport "-DRESAMPLE"
+      ++ optional sslSupport "-DUSE_SSL"
+      ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI"
+    );
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LDADD = toString [
+      "-lportaudio"
+      "-lpthread"
+    ];
+  };
 
   installPhase = ''
     runHook preInstall

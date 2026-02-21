@@ -18,8 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-tZlh7+END6oOy3uWOrjle+nwqFhMU6bbXmr4hdt6gqY=";
 
-  LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
-  LIBPCAP_VER = libpcap.version;
+  env = {
+    LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
+    LIBPCAP_VER = libpcap.version;
+  };
 
   meta = {
     description = "Spy on the DNS queries your computer is making";

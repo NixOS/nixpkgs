@@ -138,7 +138,7 @@ stdenv.mkDerivation {
 
   # recommended build flags for performance optimized foot builds
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#release-build
-  CFLAGS = if !doPgo then "-O3" else pgoCflags;
+  env.CFLAGS = if !doPgo then "-O3" else pgoCflags;
 
   # ar with gcc plugins for lto objects
   preConfigure = ''

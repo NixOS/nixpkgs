@@ -109,7 +109,7 @@ buildGoModule (finalAttrs: {
   tags = [ "libsqlite3" ];
 
   # required for go-cowsql.
-  CGO_LDFLAGS_ALLOW = "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
+  env.CGO_LDFLAGS_ALLOW = "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
 
   # add our lxc location to incus's acceptable rootFsPaths
   # this is necessary for tmpfs/tmpfs-overlay to work

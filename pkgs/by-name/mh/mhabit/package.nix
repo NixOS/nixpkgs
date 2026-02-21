@@ -35,7 +35,7 @@ flutter338.buildFlutterApplication {
   ];
 
   # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
-  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
 
   postInstall = ''
     install -Dm644 flatpak/io.github.friesi23.mhabit.desktop --target-directory=$out/share/applications

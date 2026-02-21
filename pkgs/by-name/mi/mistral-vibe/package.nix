@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q79/xP+kaovkch5wXzXumQb9l4wSspXg2cl7mD0Q2f8=";
+    hash = "sha256-vJnykMcnwQDmzq0L4OhPzortliggtK8Hz+iG2cGu8BM=";
   };
 
   build-system = with python3Packages; [
@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_updates_index_on_file_deletion"
     "test_updates_index_on_file_rename"
     "test_updates_index_on_folder_rename"
+    "test_watcher_toggle_flow_off_on_off"
   ];
 
   disabledTestPaths = [

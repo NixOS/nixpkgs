@@ -185,8 +185,7 @@ let
       mkdir -p $out/share/${pname}/
       cp -R $src/* $out/share/${pname}
 
-      mkdir -p $out/share/pixmaps
-      cp gitkraken.png $out/share/pixmaps/
+      install -Dm444 gitkraken.png $out/share/icons/hicolor/512x512/apps/gitkraken.png
 
       runHook postInstall
     '';

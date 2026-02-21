@@ -20,7 +20,7 @@ python3Packages.buildPythonPackage rec {
 
   # NIX_SYSTEM suggested at
   # https://github.com/NixOS/nixpkgs/issues/386184#issuecomment-2692433531
-  NIX_SYSTEM = nixVersions.nixComponents_2_30.nix-store.stdenv.hostPlatform.system;
+  env.NIX_SYSTEM = nixVersions.nixComponents_2_30.nix-store.stdenv.hostPlatform.system;
 
   buildInputs = [
     boost

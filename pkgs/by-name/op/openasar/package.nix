@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   unstableGitUpdater,
   nodejs,
@@ -12,7 +12,7 @@
   discord-development,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openasar";
   version = "0-unstable-2025-11-21";
 

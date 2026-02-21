@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-openstackclient";
-  version = "8.3.0";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-openstackclient";
     tag = finalAttrs.version;
-    hash = "sha256-CEz1v4e4NadSZ+qhotFtLB4y/KdhDZbDOohN8D9FB30=";
+    hash = "sha256-iqHm3vOENStdGI53Ggln/gWVnF3Lyomel9OFmwz2CJc=";
   };
 
   patches = [

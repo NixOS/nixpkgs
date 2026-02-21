@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # This is where `build.rs` puts manpages
-  MAN_OUT = "./man";
+  env.MAN_OUT = "./man";
 
   postInstall = ''
     cd crates/nix-weather

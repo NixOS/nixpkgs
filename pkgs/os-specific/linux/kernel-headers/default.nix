@@ -49,7 +49,7 @@ let
       pname = "linux-headers";
       inherit version;
 
-      ARCH = stdenvNoCC.hostPlatform.linuxArch;
+      env.ARCH = stdenvNoCC.hostPlatform.linuxArch;
 
       strictDeps = true;
       enableParallelBuilding = true;

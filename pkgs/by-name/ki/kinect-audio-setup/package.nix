@@ -17,7 +17,7 @@ let
   # redirects to the following url:
   licenseUrl = "https://www.microsoft.com/en-us/legal/terms-of-use";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kinect-audio-setup";
 
   # On update: Make sure that the `firmwareURL` is still in sync with upstream.
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "0.5";
 
   # This is an MSI or CAB file
-  FIRMWARE = requireFile {
+  env.FIRMWARE = requireFile {
     name = "UACFirmware";
     sha256 = "08a2vpgd061cmc6h3h8i6qj3sjvjr1fwcnwccwywqypz3icn8xw1";
     message = ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.ao2.it/kinect-audio-setup.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bFwmWh822KvFwP/0Gu097nF5K2uCwCLMB1RtP7k+Zt0=";
   };
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     install -Dm755 kinect_upload_fw/kinect_upload_fw $out/libexec/
 
     # 7z extract "assume yes on all queries" "only extract/keep files/directories matching UACFIRMWARE.* recursively"
-    7z e -y -r "${FIRMWARE}" "UACFirmware.*" >/dev/null
+    7z e -y -r "${finalAttrs.env.FIRMWARE}" "UACFirmware.*" >/dev/null
     # The filename is bound to change with the Firmware SDK
     mv UACFirmware.* $out/lib/firmware/UACFirmware
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
   };
-}
+})

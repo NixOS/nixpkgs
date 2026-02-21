@@ -21,9 +21,9 @@
 let
   # Note: use this to get the release metadata
   # https://gitlab.com/api/v4/projects/10174980/repository/tags/v{version}
-  version = "0.17.0";
-  date = "2024-12-28-12:49";
-  rev = "a1be5a7bece7af43ebd76910eb0020c1cf3c0798";
+  version = "0.18.0";
+  timestamp = "1769191511";
+  rev = "1d12f35edd6cdbfc1fb921c167cdd7beeeffe248";
 in
 
 rustPlatform.buildRustPackage {
@@ -34,15 +34,14 @@ rustPlatform.buildRustPackage {
     owner = "veloren";
     repo = "veloren";
     inherit rev;
-    hash = "sha256-AnmXn4GWzxu27FUyQIIVnANtu3sr0NIi7seN7buAtL8=";
+    hash = "sha256-tngIwFq18kvOU2XwCQoeLWjiVDjrJgOf3XIYz2J2cWs=";
   };
 
   cargoPatches = [
-    ./fix-on-rust-stable.patch
     ./fix-assets-path.patch
   ];
 
-  cargoHash = "sha256-hxDVFJxZQ2Seg4vapSE8PsT527GOs9DFWFnacKwWkiM=";
+  cargoHash = "sha256-1qLE1UeP2i0xaOGLniZzdjIkBbme6rctGfcO9Kfoh5E=";
 
   postPatch = ''
     # Force vek to build in unstable mode
@@ -54,6 +53,8 @@ rustPlatform.buildRustPackage {
     EOF
     # Fix assets path
     substituteAllInPlace common/assets/src/lib.rs
+    # Do not use mold, it produces broken binaries
+    substituteInPlace .cargo/config.toml --replace-fail mold gold
   '';
 
   nativeBuildInputs = [
@@ -78,8 +79,7 @@ rustPlatform.buildRustPackage {
     RUSTC_BOOTSTRAP = true;
 
     # Set version info, required by veloren-common
-    NIX_GIT_TAG = "v${version}";
-    NIX_GIT_HASH = "${lib.substring 0 8 rev}/${date}";
+    VELOREN_GIT_VERSION = "/${lib.substring 0 8 rev}/${timestamp}";
 
     # Save game data under user's home directory,
     # otherwise it defaults to $out/bin/../userdata
@@ -99,6 +99,7 @@ rustPlatform.buildRustPackage {
         libxi
         libxcursor
         libxrandr
+        libxkbcommon
         vulkan-loader
       ]
       ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [
@@ -110,7 +111,7 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     # Icons
     install -Dm644 assets/voxygen/net.veloren.veloren.desktop -t "$out/share/applications"
-    install -Dm644 assets/voxygen/net.veloren.veloren.png -t "$out/share/pixmaps"
+    install -Dm644 assets/voxygen/net.veloren.veloren.png -t "$out/share/icons/hicolor/256x256/apps"
     install -Dm644 assets/voxygen/net.veloren.veloren.metainfo.xml -t "$out/share/metainfo"
     # Assets directory
     mkdir -p "$out/share/veloren"; cp -ar assets "$out/share/veloren/"
