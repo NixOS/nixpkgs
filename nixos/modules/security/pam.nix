@@ -216,6 +216,26 @@ let
               changed using {option}`security.pam.u2f.authFile` option.
             '';
           };
+
+          control = lib.mkOption {
+            default = config.security.pam.u2f.control;
+            defaultText = lib.literalExpression "config.security.pam.u2f.control";
+            type = lib.types.enum [
+              "required"
+              "requisite"
+              "sufficient"
+              "optional"
+            ];
+            description = ''
+              This option sets pam "control".
+              If you want to have multi factor authentication, use "required".
+              If you want to use U2F device instead of regular password, use "sufficient".
+
+              Read
+              {manpage}`pam.conf(5)`
+              for better understanding of this option.
+            '';
+          };
         };
 
         usshAuth = lib.mkOption {
@@ -903,7 +923,7 @@ let
                   {
                     name = "u2f";
                     enable = cfg.u2f.enable;
-                    control = u2f.control;
+                    control = cfg.u2f.control;
                     modulePath = "${pkgs.pam_u2f}/lib/security/pam_u2f.so";
                     inherit (u2f) settings;
                   }
