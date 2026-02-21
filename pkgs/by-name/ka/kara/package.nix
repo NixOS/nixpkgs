@@ -39,12 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DKDE_INSTALL_USE_QT_SYS_PATHS=OFF"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    cmake --install .
-    runHook postInstall
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
