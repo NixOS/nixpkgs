@@ -141,17 +141,16 @@ in
     substituters = {
       urls = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [
+        default = [ ];
+        defaultText = [
           "https://ci.guix.gnu.org"
           "https://bordeaux.guix.gnu.org"
           "https://berlin.guix.gnu.org"
         ];
-        example = lib.literalExpression ''
-          options.services.guix.substituters.urls.default ++ [
-            "https://guix.example.com"
-            "https://guix.example.org"
-          ]
-        '';
+        example = [
+          "https://guix.example.com"
+          "https://guix.example.org"
+        ];
         description = ''
           A list of substitute servers' URLs for the Guix daemon to download
           substitutes from.
@@ -160,16 +159,12 @@ in
 
       authorizedKeys = lib.mkOption {
         type = with lib.types; listOf path;
-        default = [
-          "${cfg.package}/share/guix/ci.guix.gnu.org.pub"
-          "${cfg.package}/share/guix/bordeaux.guix.gnu.org.pub"
-          "${cfg.package}/share/guix/berlin.guix.gnu.org.pub"
-        ];
+        default = [ ];
         defaultText = ''
           The packaged signing keys from {option}`services.guix.package`.
         '';
         example = lib.literalExpression ''
-          options.services.guix.substituters.authorizedKeys.default ++ [
+          [
             (builtins.fetchurl {
               url = "https://guix.example.com/signing-key.pub";
             })
@@ -273,6 +268,19 @@ in
 
         users.users = guixBuildUsers cfg.nrBuildUsers;
         users.groups.${cfg.group} = { };
+
+        services.guix.substituters = {
+          urls = [
+            "https://ci.guix.gnu.org"
+            "https://bordeaux.guix.gnu.org"
+            "https://berlin.guix.gnu.org"
+          ];
+          authorizedKeys = [
+            "${cfg.package}/share/guix/ci.guix.gnu.org.pub"
+            "${cfg.package}/share/guix/bordeaux.guix.gnu.org.pub"
+            "${cfg.package}/share/guix/berlin.guix.gnu.org.pub"
+          ];
+        };
 
         # Guix uses Avahi (through guile-avahi) both for the auto-discovering and
         # advertising substitute servers in the local network.
