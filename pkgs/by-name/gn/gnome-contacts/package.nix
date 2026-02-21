@@ -23,6 +23,8 @@
   meson,
   ninja,
   libadwaita,
+  libglycin,
+  libglycin-gtk4,
   gsettings-desktop-schemas,
   gst_all_1,
   pipewire,
@@ -63,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     folks
     libadwaita
+    libglycin
+    libglycin-gtk4
     libxml2
     gnome-online-accounts
     qrencode
