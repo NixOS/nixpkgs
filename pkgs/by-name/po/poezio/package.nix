@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pyinotify
     setuptools
     slixmpp
+    standard-pipes
     typing-extensions
   ];
 
