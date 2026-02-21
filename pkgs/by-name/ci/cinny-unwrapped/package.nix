@@ -51,7 +51,10 @@ buildNpmPackage rec {
   meta = {
     description = "Yet another Matrix client for the web";
     homepage = "https://cinny.in/";
-    maintainers = with lib.maintainers; [ abbe ];
+    maintainers = with lib.maintainers; [
+      abbe
+      rebmit
+    ];
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
   };

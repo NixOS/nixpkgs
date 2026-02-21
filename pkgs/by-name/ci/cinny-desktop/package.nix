@@ -87,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/cinnyapp/cinny-desktop";
     maintainers = with lib.maintainers; [
       qyriad
+      rebmit
       ryand56
     ];
     license = lib.licenses.agpl3Only;
