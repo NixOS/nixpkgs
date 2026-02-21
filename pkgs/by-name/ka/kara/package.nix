@@ -4,6 +4,8 @@
   fetchFromGitHub,
   nix-update-script,
   kdePackages,
+  cmake,
+  qt6,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kara";
@@ -16,21 +18,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SqFEtz4X9ZbzA4hEgHLDIqhQE0kuB6ht5i1gyFeEHyM=";
   };
 
-  nativeBuildInputs = with pkgs; [
+  nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs = with pkgs.kdePackages; [
-    libplasma
-    plasma-activities
-    plasma-workspace
-    kwin
-    kcoreaddons
-    kconfig
-    kpackage
-    kdeclarative
+  buildInputs = [
+    kdePackages.libplasma
+    kdePackages.plasma-activities
+    kdePackages.plasma-workspace
+    kdePackages.kwin
+    kdePackages.kcoreaddons
+    kdePackages.kconfig
+    kdePackages.kpackage
+    kdePackages.kdeclarative
   ];
 
   cmakeFlags = [
