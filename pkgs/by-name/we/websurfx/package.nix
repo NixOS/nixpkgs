@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "websurfx";
-  version = "1.24.47";
+  version = "1.24.48";
 
   src = fetchFromGitHub {
     owner = "neon-mmd";
     repo = "websurfx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CIGq1uQl5RcxzoX7mnruFDNlgP5RlVLT6/e2ClGaQGE=";
+    hash = "sha256-Fpw8zXku9Gw62jKek/3ou7ykuoTvmiVIzWk5BqYRF5E=";
   };
 
   cargoHash = "sha256-8zp8qsD2D9wSaeXY2JQuP4evXFDASOwMeOYe3HbHYp4=";
