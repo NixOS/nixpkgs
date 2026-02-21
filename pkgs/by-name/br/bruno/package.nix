@@ -84,7 +84,7 @@ buildNpmPackage rec {
     patchShebangs packages/*/node_modules
   '';
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   # remove giflib dependency
   npmRebuildFlags = [ "--ignore-scripts" ];

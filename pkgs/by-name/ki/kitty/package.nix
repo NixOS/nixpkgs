@@ -150,8 +150,10 @@ buildPythonApplication rec {
     "fortify3"
   ];
 
-  env.CGO_ENABLED = 0;
-  GOFLAGS = "-trimpath";
+  env = {
+    CGO_ENABLED = 0;
+    GOFLAGS = "-trimpath";
+  };
 
   configurePhase = ''
     export GOCACHE=$TMPDIR/go-cache

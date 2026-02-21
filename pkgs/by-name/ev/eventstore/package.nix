@@ -27,7 +27,7 @@ buildDotnetModule rec {
   };
 
   # Fixes application reporting 0.0.0.0 as its version.
-  MINVERVERSIONOVERRIDE = version;
+  env.MINVERVERSIONOVERRIDE = version;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;

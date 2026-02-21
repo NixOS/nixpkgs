@@ -216,7 +216,7 @@ stdenv.mkDerivation (
         }"
     '';
 
-    LINKFLAGS = "-lpthread";
+    env.LINKFLAGS = "-lpthread";
 
     meta = {
       description = "Multi-track hard disk recording software";

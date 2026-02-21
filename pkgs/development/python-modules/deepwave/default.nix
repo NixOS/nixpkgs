@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ar4/deepwave";
     license = lib.licenses.mit;
     platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
   };
 }

@@ -1,62 +1,86 @@
 {
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  systemd,
   boost,
-  libsodium,
-  libedit,
-  re2,
-  net-snmp,
-  lua,
-  protobuf,
-  openssl,
-  zlib,
+  cargo,
+  fetchpatch,
+  fetchurl,
+  fstrm,
   h2o,
+  lib,
+  libbpf,
+  libcap,
+  libedit,
+  libsodium,
+  lua,
+  net-snmp,
   nghttp2,
   nixosTests,
+  openssl,
+  pkg-config,
+  protobuf,
+  python3,
+  re2,
+  rustPlatform,
+  stdenv,
+  systemd,
+  xdp-tools,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsdist";
-  version = "1.9.10";
+  version = "2.0.2";
 
   src = fetchurl {
-    url = "https://downloads.powerdns.com/releases/dnsdist-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-An3b3uaVxaWXKAV7/EHFsaaR+hx6XokniwnzVTJfvtY=";
+    url = "https://downloads.powerdns.com/releases/dnsdist-${finalAttrs.version}.tar.xz";
+    hash = "sha256-M3Trplpco8+5/Fl5HEflA1FJ/lIcy7ztX4NKF/RWQb8=";
   };
 
   patches = [
-    # Disable tests requiring networking:
-    # "Error connecting to new server with address 192.0.2.1:53: connecting socket to 192.0.2.1:53: Network is unreachable"
-    ./disable-network-tests.patch
+    # Fix build error when only protobuf is enabled
+    (fetchpatch {
+      url = "https://github.com/PowerDNS/pdns/commit/daece82818d7f83b26dcf724ec1864644bc3f854.patch";
+      hash = "sha256-Ag65Gjmm2m4yvRfqMjSo1EEJg/2EHWDBg15vSL5DKCU=";
+      stripLen = 2;
+    })
   ];
 
   nativeBuildInputs = [
+    cargo
     pkg-config
     protobuf
+    python3
+    python3.pkgs.pyyaml
+    rustPlatform.cargoSetupHook
   ];
   buildInputs = [
-    systemd
     boost
-    libsodium
-    libedit
-    re2
-    net-snmp
-    lua
-    openssl
-    zlib
+    fstrm # Required for DNSTAP
     h2o
+    libbpf
+    libcap
+    libedit
+    libsodium
+    lua
+    net-snmp
     nghttp2
+    openssl
+    re2
+    systemd
+    xdp-tools # AF_XDP support
+    zlib
   ];
 
   configureFlags = [
     "--with-libsodium"
     "--with-re2"
     "--enable-dnscrypt"
+    "--enable-dnstap"
     "--enable-dns-over-tls"
     "--enable-dns-over-https"
+    "--enable-yaml"
+    "--with-ebpf"
+    "--with-xsk"
+    "--with-libcap"
     "--with-protobuf=yes"
     "--with-net-snmp"
     "--disable-dependency-tracking"
@@ -64,6 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-systemd"
     "--with-boost=${boost.dev}"
   ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) cargoRoot src;
+    hash = "sha256-nDAvgM3xb+95dcGIHiSKlFo4/0Rs5Evf1vvR5vF4MXs=";
+  };
+
+  cargoRoot = "dnsdist-rust-lib/rust";
 
   doCheck = true;
 

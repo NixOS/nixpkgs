@@ -841,6 +841,14 @@ in
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
           assert_contains(out, "the following new units were started: test.mount\n")
+          # we can start inactive mounts
+          machine.succeed("systemctl stop test.mount")
+          out = switch_to_specialisation("${machine}", "addedMount")
+          assert_lacks(out, "stopping the following units:")
+          assert_lacks(out, "NOT restarting the following changed units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_contains(out, "the following new units were started: local-fs.target, test.mount\n")
           # modify the mountpoint's options
           out = switch_to_specialisation("${machine}", "addedMountOptsModified")
           assert_lacks(out, "stopping the following units:")
@@ -1444,6 +1452,15 @@ in
           switch_to_specialisation("${machine}", "mount")
           out = machine.succeed("mount | grep 'on /testmount'")
           assert_contains(out, "size=1024k")
+          # We can start inactive mounts
+          machine.succeed("systemctl stop testmount.mount")
+          out = switch_to_specialisation("${machine}", "mount")
+          assert_lacks(out, "stopping the following units:")
+          assert_lacks(out, "NOT restarting the following changed units:")
+          assert_lacks(out, "reloading the following units")
+          assert_lacks(out, "restarting the following units:")
+          assert_lacks(out, "starting the following units:")
+          assert_contains(out, "the following new units were started: testmount.mount\n")
           # Changing options reloads the unit
           out = switch_to_specialisation("${machine}", "mountOptionsModified")
           assert_lacks(out, "stopping the following units:")

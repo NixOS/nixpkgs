@@ -104,16 +104,13 @@ let
         packpathDirs.myNeovimPackages = vimPackageInfo.vimPackage;
         finalPackdir = neovimUtils.packDir packpathDirs;
 
-        rcContent = lib.concatStringsSep "\n" (
-          [
-            providerLuaRc
-          ]
-          ++ lib.optional (luaRcContent != "") luaRcContent
-          ++ lib.optional (neovimRcContent' != "") ''
-            vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
-          ''
-          ++ lib.optionals autoconfigure vimPackageInfo.pluginAdvisedLua
-        );
+        rcContent = ''
+          ${luaRcContent}
+        ''
+        + lib.optionalString (neovimRcContent' != "") ''
+          vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
+        ''
+        + lib.optionalString autoconfigure (lib.concatStringsSep "\n" vimPackageInfo.pluginAdvisedLua);
 
         python3Env =
           lib.warnIf (attrs ? python3Env)
@@ -128,7 +125,12 @@ let
 
         wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
-        generatedWrapperArgs =
+        generatedWrapperArgs = [
+          # vim accepts a limited number of commands so we join all the provider ones
+          "--add-flags"
+          ''--cmd "lua ${providerLuaRc}"''
+        ]
+        ++
           lib.optionals
             (
               finalAttrs.packpathDirs.myNeovimPackages.start != [ ]
@@ -140,17 +142,17 @@ let
               "--add-flags"
               ''--cmd "set rtp^=${finalPackdir}"''
             ]
-          ++ lib.optionals finalAttrs.withRuby [
-            "--set"
-            "GEM_HOME"
-            "${rubyEnv}/${rubyEnv.ruby.gemPath}"
-          ]
-          ++ lib.optionals (finalAttrs.runtimeDeps != [ ]) [
-            "--suffix"
-            "PATH"
-            ":"
-            (lib.makeBinPath finalAttrs.runtimeDeps)
-          ];
+        ++ lib.optionals finalAttrs.withRuby [
+          "--set"
+          "GEM_HOME"
+          "${rubyEnv}/${rubyEnv.ruby.gemPath}"
+        ]
+        ++ lib.optionals (finalAttrs.runtimeDeps != [ ]) [
+          "--suffix"
+          "PATH"
+          ":"
+          (lib.makeBinPath finalAttrs.runtimeDeps)
+        ];
 
         providerLuaRc = neovimUtils.generateProviderRc {
           inherit (finalAttrs)
@@ -179,7 +181,7 @@ let
         ++ lib.optionals finalAttrs.wrapRc [
           "--set-default"
           "VIMINIT"
-          "lua dofile('${writeText "init.lua" finalAttrs.luaRcContent}')"
+          "lua dofile('${writeText "init.lua" rcContent}')"
         ]
         ++ finalAttrs.generatedWrapperArgs;
 

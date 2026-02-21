@@ -8,7 +8,7 @@
 }:
 buildLuarocksPackage rec {
   pname = "image.nvim";
-  version = "1.4.0";
+  version = "1.5.0";
 
   disabled = luaOlder "5.1";
   knownRockspec = "image.nvim-scm-1.rockspec";
@@ -18,7 +18,7 @@ buildLuarocksPackage rec {
     owner = "3rd";
     repo = "image.nvim";
     tag = "v${version}";
-    hash = "sha256-EaDeY8aP41xHTw5epqYjaBqPYs6Z2DABzSaVOnG6D6I=";
+    hash = "sha256-ihd7MEAP+v4FV3vb3c7l+VUd9PNcmNevnL9MjLrE+Sg=";
   };
 
   propagatedBuildInputs = [

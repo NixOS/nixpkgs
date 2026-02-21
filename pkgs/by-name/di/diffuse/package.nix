@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   # to avoid running gtk-update-icon-cache, update-desktop-database and glib-compile-schemas
-  DESTDIR = "/";
+  env.DESTDIR = "/";
 
   makeWrapperArgs = [
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"

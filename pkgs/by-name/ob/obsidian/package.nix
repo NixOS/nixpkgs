@@ -21,7 +21,6 @@ let
     mainProgram = "obsidian";
     license = lib.licenses.obsidian;
     maintainers = with lib.maintainers; [
-      atila
       conradmearns
       zaninime
       qbit

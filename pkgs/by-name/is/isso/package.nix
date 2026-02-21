@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     npmHooks.npmConfigHook
   ];
 
-  NODE_PATH = "$npmDeps";
+  env.NODE_PATH = "$npmDeps";
 
   preBuild = ''
     ln -s ${finalAttrs.npmDeps}/node_modules ./node_modules

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "modelscan";
-  version = "0.8.5";
+  version = "0.8.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "protectai";
     repo = "modelscan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8VupkPiHebVtOqMdtkBflAI1zPRdDSvHCEq3ghjASaE=";
+    hash = "sha256-mN2X6Zbai7xm8bdr2hi9fwzIsfQtukeGcOIS32G4hA0=";
   };
 
   pythonRelaxDeps = [ "rich" ];

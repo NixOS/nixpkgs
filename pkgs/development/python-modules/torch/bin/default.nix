@@ -3,7 +3,7 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonAtLeast,
+  isPyPy,
   fetchurl,
 
   # nativeBuildInputs
@@ -44,7 +44,8 @@ buildPythonPackage {
 
   format = "wheel";
 
-  disabled = pythonAtLeast "3.15";
+  # determine supported interpreters by the ones we have x86_64-linux wheels for
+  disabled = isPyPy || !(srcs ? "x86_64-linux-${pyVerNoDot}");
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 

@@ -8,13 +8,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "playwright-stealth";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "playwright_stealth";
     inherit (finalAttrs) version;
-    hash = "sha256-o29zXWFGnBK9oXm1jV/EIou+5hyc9bE0OxSXpf1R7Bo=";
+    hash = "sha256-rFflGHMZDaXmU+A3IOlIyPCj0GsJjx1WdjED0j7kgUM=";
   };
 
   build-system = [ poetry-core ];

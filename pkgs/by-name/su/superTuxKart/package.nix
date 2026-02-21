@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DOpenGL_GL_PREFERENCE=GLVND"
   ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'snprintf' was not declared in this scope
     "-include cstdio"
     # GCC 13: error: 'runtime_error' is not a member of 'std'

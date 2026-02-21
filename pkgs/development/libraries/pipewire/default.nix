@@ -240,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   doCheck = true;
   doInstallCheck = true;

@@ -37,7 +37,7 @@ buildNpmPackage rec {
   ];
 
   # workaround for https://github.com/webpack/webpack/issues/14532
-  NODE_OPTIONS = "--openssl-legacy-provider";
+  env.NODE_OPTIONS = "--openssl-legacy-provider";
 
   postInstall =
     let

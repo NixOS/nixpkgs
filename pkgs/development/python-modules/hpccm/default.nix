@@ -48,7 +48,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/NVIDIA/hpc-container-maker";
     changelog = "https://github.com/NVIDIA/hpc-container-maker/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     mainProgram = "hpccm";
     platforms = lib.platforms.x86;
   };

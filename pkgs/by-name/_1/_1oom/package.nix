@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "1oom";
-  version = "1.11.7";
+  version = "1.11.8";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "1oom-fork";
     repo = "1oom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pOEs3HQSxER0wUhasxQUyrktka8cRZCtNER0F01BRvk=";
+    hash = "sha256-Y29Xc8ylXhpQO7dDl7z7XC7+RB4UOIRksZ8RtfaCiEc=";
   };
 
   nativeBuildInputs = [

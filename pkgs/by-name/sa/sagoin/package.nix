@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion artifacts/sagoin.{bash,fish} --zsh artifacts/_sagoin
   '';
 
-  GEN_ARTIFACTS = "artifacts";
+  env.GEN_ARTIFACTS = "artifacts";
 
   meta = {
     description = "Command-line submission tool for the UMD CS Submit Server";

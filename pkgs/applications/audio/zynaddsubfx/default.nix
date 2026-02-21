@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
   # Find FLTK without requiring an OpenGL library in buildInputs
   ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'uint8_t' does not name a type
     "-include cstdint"
   ];

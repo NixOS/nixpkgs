@@ -23,6 +23,7 @@
 
   makeDesktopItem,
   copyDesktopItems,
+  desktopToDarwinBundle,
 
   nix-update-script,
 }:
@@ -70,6 +71,9 @@ buildDotnetModule (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
 
   buildInputs = [
@@ -85,15 +89,20 @@ buildDotnetModule (finalAttrs: {
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  dotnetFlags =
-    lib.optionals stdenv.hostPlatform.isx86_64 [ "-p:Runtimeidentifier=linux-x64" ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "-p:Runtimeidentifier=linux-arm64" ];
+  dotnetFlags = [
+    "-p:RuntimeIdentifier=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+  ];
 
   buildType = "ReleaseNoUpdate";
   projectFile = [
     "src/PixiEditor.Desktop/PixiEditor.Desktop.csproj"
     "src/PixiEditor/PixiEditor.csproj"
-    "src/PixiEditor.Linux/PixiEditor.Linux.csproj"
+    (
+      if stdenv.hostPlatform.isLinux then
+        "src/PixiEditor.Linux/PixiEditor.Linux.csproj"
+      else
+        "src/PixiEditor.MacOs/PixiEditor.MacOs.csproj"
+    )
     "src/PixiEditor.Platform.Standalone/PixiEditor.Platform.Standalone.csproj"
   ];
   executables = [ "PixiEditor.Desktop" ];
@@ -183,6 +192,8 @@ buildDotnetModule (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 })

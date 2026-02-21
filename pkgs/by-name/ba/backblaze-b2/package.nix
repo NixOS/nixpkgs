@@ -11,15 +11,17 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "backblaze-b2";
-  version = "4.4.2";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ut1e/A36Tp4pgwZx+S8nYmjg3k/2CmRpdUfz3iOXTz0=";
+    hash = "sha256-0BF4+L47Cx7GNGeNm8nJkEfTLYb6jLxSH3WE+h9B6zA=";
   };
+
+  patches = [ ./0001-fix-error-with-pytest-4.0.patch ];
 
   nativeBuildInputs = with python3Packages; [
     installShellFiles

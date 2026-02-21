@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     "prefix=${placeholder "out"}"
   ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'intptr_t' does not name a type
     "-include cstdint"
     "-include system_error"

@@ -90,9 +90,6 @@ effectiveStdenv.mkDerivation rec {
     ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
     ++ lib.optionals rLibrary [ "-DR_LIB=ON" ];
 
-  # on Darwin, cmake uses find_library to locate R instead of using the PATH
-  env.NIX_LDFLAGS = "-L${R}/lib/R/lib";
-
   preConfigure = lib.optionals rLibrary ''
     substituteInPlace cmake/RPackageInstall.cmake.in --replace "CMD INSTALL" "CMD INSTALL -l $out/library"
     export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
@@ -106,70 +103,75 @@ effectiveStdenv.mkDerivation rec {
     ctest --force-new-ctest-process ${lib.optionalString cudaSupport "-E TestXGBoostLib"}
   '';
 
-  # Disable finicky tests from dmlc core that fail in Hydra. XGboost team
-  # confirmed xgboost itself does not use this part of the dmlc code.
-  GTEST_FILTER =
-    let
-      # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
-      xsimdTests = lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-        "ThreadGroup.TimerThread"
-        "ThreadGroup.TimerThreadSimple"
-      ];
-      networkingTest = [
-        "AllgatherTest.Basic"
-        "AllgatherTest.VAlgo"
-        "AllgatherTest.VBasic"
-        "AllgatherTest.VRing"
-        "AllreduceGlobal.Basic"
-        "AllreduceGlobal.Small"
-        "AllreduceTest.Basic"
-        "AllreduceTest.BitOr"
-        "AllreduceTest.Restricted"
-        "AllreduceTest.Sum"
-        "Approx.PartitionerColumnSplit"
-        "BroadcastTest.Basic"
-        "CPUHistogram.BuildHistColSplit"
-        "CPUHistogram.BuildHistColumnSplit"
-        "CPUPredictor.CategoricalPredictLeafColumnSplit"
-        "CPUPredictor.CategoricalPredictionColumnSplit"
-        "ColumnSplit/ColumnSplitTrainingTest*"
-        "ColumnSplit/TestApproxColumnSplit*"
-        "ColumnSplit/TestHistColumnSplit*"
-        "ColumnSplitObjective/TestColumnSplit*"
-        "Cpu/ColumnSplitTrainingTest*"
-        "CommGroupTest.Basic"
-        "CommTest.Channel"
-        "CpuPredictor.BasicColumnSplit"
-        "CpuPredictor.IterationRangeColmnSplit"
-        "CpuPredictor.LesserFeaturesColumnSplit"
-        "CpuPredictor.SparseColumnSplit"
-        "DistributedMetric/TestDistributedMetric.BinaryAUCRowSplit/Dist_*"
-        "InitEstimation.FitStumpColumnSplit"
-        "MetaInfo.GetSetFeatureColumnSplit"
-        "Quantile.ColumnSplit"
-        "Quantile.ColumnSplitBasic"
-        "Quantile.ColumnSplitSorted"
-        "Quantile.ColumnSplitSortedBasic"
-        "Quantile.Distributed"
-        "Quantile.DistributedBasic"
-        "Quantile.SameOnAllWorkers"
-        "Quantile.SortedDistributed"
-        "Quantile.SortedDistributedBasic"
-        "QuantileHist.MultiPartitionerColumnSplit"
-        "QuantileHist.PartitionerColumnSplit"
-        "Stats.SampleMean"
-        "Stats.WeightedSampleMean"
-        "SimpleDMatrix.ColumnSplit"
-        "TrackerAPITest.CAPI"
-        "TrackerTest.AfterShutdown"
-        "TrackerTest.Bootstrap"
-        "TrackerTest.GetHostAddress"
-        "TrackerTest.Print"
-        "VectorAllgatherV.Basic"
-      ];
-      excludedTests = xsimdTests ++ networkingTest;
-    in
-    "-${builtins.concatStringsSep ":" excludedTests}";
+  env = {
+    # on Darwin, cmake uses find_library to locate R instead of using the PATH
+    NIX_LDFLAGS = "-L${R}/lib/R/lib";
+
+    # Disable finicky tests from dmlc core that fail in Hydra. XGboost team
+    # confirmed xgboost itself does not use this part of the dmlc code.
+    GTEST_FILTER =
+      let
+        # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
+        xsimdTests = lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+          "ThreadGroup.TimerThread"
+          "ThreadGroup.TimerThreadSimple"
+        ];
+        networkingTest = [
+          "AllgatherTest.Basic"
+          "AllgatherTest.VAlgo"
+          "AllgatherTest.VBasic"
+          "AllgatherTest.VRing"
+          "AllreduceGlobal.Basic"
+          "AllreduceGlobal.Small"
+          "AllreduceTest.Basic"
+          "AllreduceTest.BitOr"
+          "AllreduceTest.Restricted"
+          "AllreduceTest.Sum"
+          "Approx.PartitionerColumnSplit"
+          "BroadcastTest.Basic"
+          "CPUHistogram.BuildHistColSplit"
+          "CPUHistogram.BuildHistColumnSplit"
+          "CPUPredictor.CategoricalPredictLeafColumnSplit"
+          "CPUPredictor.CategoricalPredictionColumnSplit"
+          "ColumnSplit/ColumnSplitTrainingTest*"
+          "ColumnSplit/TestApproxColumnSplit*"
+          "ColumnSplit/TestHistColumnSplit*"
+          "ColumnSplitObjective/TestColumnSplit*"
+          "Cpu/ColumnSplitTrainingTest*"
+          "CommGroupTest.Basic"
+          "CommTest.Channel"
+          "CpuPredictor.BasicColumnSplit"
+          "CpuPredictor.IterationRangeColmnSplit"
+          "CpuPredictor.LesserFeaturesColumnSplit"
+          "CpuPredictor.SparseColumnSplit"
+          "DistributedMetric/TestDistributedMetric.BinaryAUCRowSplit/Dist_*"
+          "InitEstimation.FitStumpColumnSplit"
+          "MetaInfo.GetSetFeatureColumnSplit"
+          "Quantile.ColumnSplit"
+          "Quantile.ColumnSplitBasic"
+          "Quantile.ColumnSplitSorted"
+          "Quantile.ColumnSplitSortedBasic"
+          "Quantile.Distributed"
+          "Quantile.DistributedBasic"
+          "Quantile.SameOnAllWorkers"
+          "Quantile.SortedDistributed"
+          "Quantile.SortedDistributedBasic"
+          "QuantileHist.MultiPartitionerColumnSplit"
+          "QuantileHist.PartitionerColumnSplit"
+          "Stats.SampleMean"
+          "Stats.WeightedSampleMean"
+          "SimpleDMatrix.ColumnSplit"
+          "TrackerAPITest.CAPI"
+          "TrackerTest.AfterShutdown"
+          "TrackerTest.Bootstrap"
+          "TrackerTest.GetHostAddress"
+          "TrackerTest.Print"
+          "VectorAllgatherV.Basic"
+        ];
+        excludedTests = xsimdTests ++ networkingTest;
+      in
+      "-${builtins.concatStringsSep ":" excludedTests}";
+  };
 
   installPhase = ''
     runHook preInstall

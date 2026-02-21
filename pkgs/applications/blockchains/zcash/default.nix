@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     zeromq
   ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-I${lib.getDev utf8cpp}/include/utf8cpp"
     "-I${lib.getDev cxx-rs}/include"
   ];

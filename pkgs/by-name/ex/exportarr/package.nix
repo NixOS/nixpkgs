@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/exportarr" ];
 
-  CGO_ENABLE = 0;
+  env.CGO_ENABLE = 0;
 
   ldflags = [
     "-s"

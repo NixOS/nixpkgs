@@ -13,14 +13,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pacu";
-  version = "1.6.1";
+  version = "1.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "pacu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Td5H4O6/7Gh/rvP191xjCJmIbyc4ezZC5Fh4FZ39ZUM=";
+    hash = "sha256-Hrks6mvvmmdCMxprB/SPlkfcSu6uyoEVtb0eUD3CALo=";
   };
 
   pythonRelaxDeps = [

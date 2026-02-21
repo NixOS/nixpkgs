@@ -35,6 +35,15 @@ let
       django = prev.django_5;
     };
   };
+
+  GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
+    pango
+    harfbuzz
+    librsvg
+    gdk-pixbuf
+    glib
+    gobject-introspection
+  ];
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
@@ -197,14 +206,10 @@ python.pkgs.buildPythonApplication rec {
   };
 
   # We don't just use wrapGAppsNoGuiHook because we need to expose GI_TYPELIB_PATH
-  GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
-    pango
-    harfbuzz
-    librsvg
-    gdk-pixbuf
-    glib
-    gobject-introspection
-  ];
+  env = {
+    inherit GI_TYPELIB_PATH;
+  };
+
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" ];
 
   nativeCheckInputs =

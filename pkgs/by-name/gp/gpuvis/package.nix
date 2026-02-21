@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
   ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'uint32_t' has not been declared
     "-include cstdint"
   ];

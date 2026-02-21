@@ -147,7 +147,11 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
   };
 
-  FONTCONFIG_FILE = lib.optional stdenv.hostPlatform.isDarwin (makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  });
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    FONTCONFIG_FILE = (
+      makeFontsConf {
+        fontDirectories = [ freefont_ttf ];
+      }
+    );
+  };
 })

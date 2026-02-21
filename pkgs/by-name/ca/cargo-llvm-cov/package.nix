@@ -57,10 +57,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
-  # `cargo-llvm-cov` reads these environment variables to find these binaries,
-  # which are needed to run the tests
-  LLVM_COV = "${llvm}/bin/llvm-cov";
-  LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
+  env = {
+    # `cargo-llvm-cov` reads these environment variables to find these binaries,
+    # which are needed to run the tests
+    LLVM_COV = "${llvm}/bin/llvm-cov";
+    LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
+  };
 
   nativeCheckInputs = [
     gitMinimal

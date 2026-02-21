@@ -85,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nowrep/obs-vkcapture";
     changelog = "https://github.com/nowrep/obs-vkcapture/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
-      atila
       pedrohlc
     ];
     license = lib.licenses.gpl2Only;

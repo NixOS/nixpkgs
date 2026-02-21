@@ -192,14 +192,17 @@ stdenv.mkDerivation (
     ]
     ++ lib.optional optimize "--optimize";
 
-    env.NIX_CFLAGS_COMPILE = toString [
-      # 'ioprio_set' syscall support:
-      "-D_GNU_SOURCE"
-      # compiler doesn't find headers without these:
-      "-I${lib.getDev serd}/include/serd-0"
-      "-I${lib.getDev sratom}/include/sratom-0"
-      "-I${lib.getDev sord}/include/sord-0"
-    ];
+    env = {
+      NIX_CFLAGS_COMPILE = toString [
+        # 'ioprio_set' syscall support:
+        "-D_GNU_SOURCE"
+        # compiler doesn't find headers without these:
+        "-I${lib.getDev serd}/include/serd-0"
+        "-I${lib.getDev sratom}/include/sratom-0"
+        "-I${lib.getDev sord}/include/sord-0"
+      ];
+      LINKFLAGS = "-lpthread";
+    };
 
     postInstall = ''
       # wscript does not install these for some reason
@@ -226,8 +229,6 @@ stdenv.mkDerivation (
           ]
         }"
     '';
-
-    LINKFLAGS = "-lpthread";
 
     meta = {
       description = "Multi-track hard disk recording software";

@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildNoDefaultFeatures = true;
 
-  MAN_OUT = "./man";
+  env.MAN_OUT = "./man";
 
   preBuild = ''
     mkdir -p "./$MAN_OUT";

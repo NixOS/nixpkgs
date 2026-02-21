@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    maintainers = with lib.maintainers; [ fettgoenner ];
+    maintainers = with lib.maintainers; [ pmeinhold ];
     changelog = "https://scipopt.org/doc-${finalAttrs.version}/html/RN${lib.versions.major finalAttrs.version}.php";
     description = "Solving Constraint Integer Programs";
     license = lib.licenses.asl20;

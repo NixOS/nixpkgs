@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    maintainers = with lib.maintainers; [ fettgoenner ];
+    maintainers = with lib.maintainers; [ pmeinhold ];
     changelog = "https://scipopt.org/doc-${scipVersion}/html/RN${lib.versions.major scipVersion}.php";
     description = "Ubiquity Generator framework to parallelize branch-and-bound based solvers";
     license = lib.licenses.lgpl3Plus;

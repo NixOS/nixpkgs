@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zip
   ];
 
-  NODE_PATH = "$npmDeps";
+  env.NODE_PATH = "$npmDeps";
 
   buildPhase = ''
     trunk build --offline --frozen --release
