@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-bsblan";
-  version = "4.1.0";
+  version = "4.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t60WMq1kbCIkcQSfr03K9Z6ro3zFGaDxCnl/84by+Qw=";
+    hash = "sha256-Pm30KAx95lNnlqlDamINvIy/JwORINfG3tMJse+cpU0=";
   };
 
   postPatch = ''
