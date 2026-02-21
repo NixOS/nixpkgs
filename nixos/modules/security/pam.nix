@@ -135,6 +135,7 @@ let
 
       imports = [
         (lib.mkRenamedOptionModule [ "enableKwallet" ] [ "kwallet" "enable" ])
+        (lib.mkRenamedOptionModule [ "u2fAuth" ] [ "u2f" "enable" ])
       ];
 
       options = {
@@ -202,17 +203,19 @@ let
           '';
         };
 
-        u2fAuth = lib.mkOption {
-          default = config.security.pam.u2f.enable;
-          defaultText = lib.literalExpression "config.security.pam.u2f.enable";
-          type = lib.types.bool;
-          description = ''
-            If set, users listed in
-            {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
-            {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
-            not set) are able to log in with the associated U2F key. Path can be
-            changed using {option}`security.pam.u2f.authFile` option.
-          '';
+        u2f = {
+          enable = lib.mkOption {
+            default = config.security.pam.u2f.enable;
+            defaultText = lib.literalExpression "config.security.pam.u2f.enable";
+            type = lib.types.bool;
+            description = ''
+              If set, users listed in
+              {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
+              {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
+              not set) are able to log in with the associated U2F key. Path can be
+              changed using {option}`security.pam.u2f.authFile` option.
+            '';
+          };
         };
 
         usshAuth = lib.mkOption {
@@ -899,7 +902,7 @@ let
                   in
                   {
                     name = "u2f";
-                    enable = cfg.u2fAuth;
+                    enable = cfg.u2f.enable;
                     control = u2f.control;
                     modulePath = "${pkgs.pam_u2f}/lib/security/pam_u2f.so";
                     inherit (u2f) settings;
