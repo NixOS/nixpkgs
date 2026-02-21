@@ -3640,6 +3640,10 @@ assertNoAdditions {
     ];
   };
 
+  telescope-nvim = super.telescope-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   telescope-project-nvim = super.telescope-project-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
