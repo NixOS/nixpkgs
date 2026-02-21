@@ -35,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=$out/share/plasma/plasmoids/org.dhruv8sh.kara"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DKDE_INSTALL_USE_QT_SYS_PATHS=OFF"
   ];
 
