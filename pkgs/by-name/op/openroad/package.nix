@@ -97,11 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs etc/
-
-    # C++20 Fixes
-    sed -e '39i #include <cstdint>' -i src/gpl/src/placerBase.h
-    sed -e '37i #include <cstdint>' -i src/gpl/src/routeBase.h
   ''
+
   # Disable failing PSM tests on aarch64
   + lib.optionalString stdenv.hostPlatform.isAarch64 ''
     if [ -f src/psm/test/CMakeLists.txt ]; then
