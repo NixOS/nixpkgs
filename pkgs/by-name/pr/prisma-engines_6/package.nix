@@ -3,7 +3,6 @@
   lib,
   openssl,
   pkg-config,
-  protobuf,
   rustPlatform,
   stdenv,
 }:
@@ -12,13 +11,13 @@
 # version of prisma-engines and prisma must be the same for them to
 # function correctly.
 rustPlatform.buildRustPackage rec {
-  pname = "prisma-engines";
+  pname = "prisma-engines_6";
   version = "6.18.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
-    rev = version;
+    tag = version;
     hash = "sha256-p198o8ON5mGPCxK+gE0mW+JVyQlNsCsqwa8D4MNBkpA=";
   };
 
@@ -34,9 +33,6 @@ rustPlatform.buildRustPackage rec {
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
     export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
-
-    export PROTOC=${protobuf}/bin/protoc
-    export PROTOC_INCLUDE="${protobuf}/include";
 
     export SQLITE_MAX_VARIABLE_NUMBER=250000
     export SQLITE_MAX_EXPR_DEPTH=10000
@@ -71,7 +67,6 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "prisma";
     maintainers = with lib.maintainers; [
-      tomhoule
       aqrln
     ];
   };

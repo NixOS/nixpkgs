@@ -66,10 +66,10 @@
     "version": "20.6.0"
   },
   "hcaptcha-for-forms-and-more": {
-    "path": "hcaptcha-for-forms-and-more/tags/4.12.0",
-    "rev": "3265103",
-    "sha256": "0b8blf03g8vaw1i22rl3swknyqwq28bv8fmk2fd6a64phrsbdpvj",
-    "version": "4.12.0"
+    "path": "hcaptcha-for-forms-and-more/tags/4.23.0",
+    "rev": "3456290",
+    "sha256": "222ae768d76ba2e447185619357e5adc0282f14451534b11dcd6a2358f0d212e",
+    "version": "4.23.0"
   },
   "hello-dolly": {
     "path": "hello-dolly/tags/1.7.2",
