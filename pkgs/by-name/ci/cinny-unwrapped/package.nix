@@ -14,6 +14,7 @@
 
 buildNpmPackage rec {
   pname = "cinny-unwrapped";
+  # Remember to update cinny-desktop when bumping this version.
   version = "4.10.5";
 
   src = fetchFromGitHub {
