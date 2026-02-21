@@ -145,7 +145,6 @@ in
         defaultText = [
           "https://ci.guix.gnu.org"
           "https://bordeaux.guix.gnu.org"
-          "https://berlin.guix.gnu.org"
         ];
         example = [
           "https://guix.example.com"
@@ -273,12 +272,10 @@ in
           urls = [
             "https://ci.guix.gnu.org"
             "https://bordeaux.guix.gnu.org"
-            "https://berlin.guix.gnu.org"
           ];
           authorizedKeys = [
             "${cfg.package}/share/guix/ci.guix.gnu.org.pub"
             "${cfg.package}/share/guix/bordeaux.guix.gnu.org.pub"
-            "${cfg.package}/share/guix/berlin.guix.gnu.org.pub"
           ];
         };
 
