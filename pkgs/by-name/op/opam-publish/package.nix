@@ -19,13 +19,13 @@ in
 
 buildDunePackage (finalAttrs: {
   pname = "opam-publish";
-  version = "2.7.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "ocaml-opam";
     repo = "opam-publish";
     tag = finalAttrs.version;
-    hash = "sha256-yaFkR+MxkN6/skXx9euKVjTGXk9DraxDj+/2XQuHK4I=";
+    hash = "sha256-mYxvtgWmaMB6QerK8ojygmB1FrINeBvTEFCNPtY43JA=";
   };
 
   buildInputs = [
