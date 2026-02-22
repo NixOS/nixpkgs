@@ -5,7 +5,9 @@
 
   # build-system
   poetry-core,
+  setuptools,
   pytestCheckHook,
+  pytest-asyncio,
 
   # propagates
   fastapi,
@@ -19,6 +21,10 @@
   watchdog,
   websocket-client,
   websockets,
+  msgpack,
+  numpy,
+  pillow,
+  scikit-image,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +34,15 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/sdk/python/packages/flet";
 
-  build-system = [ poetry-core ];
+  build-system = [
+    poetry-core
+    setuptools
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   makeWrapperArgs = [
     "--prefix"
@@ -40,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   _flet_version = ''
-    version = "${version}"
+    flet_version = "${version}"
     def update_version():
       pass
   '';
@@ -69,6 +81,14 @@ buildPythonPackage rec {
     cookiecutter
     fastapi
     uvicorn
+    msgpack
+    numpy
+    pillow
+    scikit-image
+  ];
+
+  pytestFlags = [
+    "tests/"
   ];
 
   pythonImportsCheck = [ "flet" ];
