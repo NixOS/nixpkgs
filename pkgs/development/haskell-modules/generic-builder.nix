@@ -23,6 +23,8 @@ let
   crossSupport = rec {
     emulator = stdenv.hostPlatform.emulator buildPackages;
 
+    needsExternalInterpreterSetup = !stdenv.hostPlatform.isGhcjs; # JS backend already handles this
+
     canProxyTH =
       # iserv-proxy currently does not build on GHC 9.6
       lib.versionAtLeast ghc.version "9.8" && stdenv.hostPlatform.emulatorAvailable buildPackages;
@@ -258,8 +260,8 @@ in
   # of `meta.pkgConfigModules`. This option defaults to false for now, since
   # this metadata is far from complete in nixpkgs.
   __onlyPropagateKnownPkgConfigModules ? false,
-
-  enableExternalInterpreter ? isCross && crossSupport.canProxyTH,
+  enableExternalInterpreter ?
+    isCross && crossSupport.canProxyTH && crossSupport.needsExternalInterpreterSetup,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
