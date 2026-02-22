@@ -71,7 +71,7 @@ in
             '';
           };
 
-          locations."~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$".extraConfig = ''
+          locations."~* \\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$".extraConfig = ''
             expires 1y;
             add_header Cache-Control "public, immutable";
           '';
