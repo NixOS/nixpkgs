@@ -24940,6 +24940,13 @@
     githubId = 20484159;
     keys = [ { fingerprint = "F246 425A 7650 6F37 0552  BA8D DEA9 C405 09D9 65F5"; } ];
   };
+  squawkykaka = {
+    email = "squawkykaka@gmail.com";
+    matrix = "@squawk:smeagol.me";
+    name = "Squawkykaka";
+    github = "Squawkykaka";
+    githubId = 100256401;
+  };
   srgom = {
     github = "SRGOM";
     githubId = 8103619;
