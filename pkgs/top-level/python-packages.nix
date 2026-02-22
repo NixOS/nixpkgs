@@ -5365,6 +5365,8 @@ self: super: with self; {
 
   fasttext-predict = callPackage ../development/python-modules/fasttext-predict { };
 
+  fasttransform = callPackage ../development/python-modules/fasttransform { };
+
   fastuuid = callPackage ../development/python-modules/fastuuid { };
 
   fatrop = toPythonModule (
@@ -12445,6 +12447,8 @@ self: super: with self; {
   plugp100 = callPackage ../development/python-modules/plugp100 { };
 
   plugwise = callPackage ../development/python-modules/plugwise { };
+
+  plum-dispatch = callPackage ../development/python-modules/plum-dispatch { };
 
   plum-py = callPackage ../development/python-modules/plum-py { };
 
