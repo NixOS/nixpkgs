@@ -5,16 +5,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "csso-cli";
-  version = "4.0.2";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     owner = "css";
     repo = "csso";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uPjRSBOFEl55gyObKEZMXGQ6eaQ3tBB48k5JgLGrbTw=";
+    hash = "sha256-EXdPgmqq35+8HWX0WcZsZF/XCDjFEAEStr36kwoWnWY=";
   };
 
-  npmDepsHash = "sha256-rGqj1vCswUfAQwM1Lk1qCWgUfzeefBONHeEn0NusOoc=";
+  npmDepsHash = "sha256-TMwQjk/LN1jlP9Mh5UsO0X19f4wEBhz6Wnha6NdqyNA=";
 
   dontNpmBuild = true;
 
