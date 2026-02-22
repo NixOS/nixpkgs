@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "kanidm";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kanidm";
     repo = "kanidm";
-    rev = "1774f9428ccdc357d514652acbcae49f6b16687a";
-    hash = "sha256-SE3b9Ug0EZFygGf9lsmVsQzmop9qOMiCUsbO//1QWF8=";
+    rev = "d9a952b8816054b6f10be564dcd43a7202a2ef02";
+    hash = "sha256-JTo883Lq4CbzQ9G5y3XDgBC696r+Fyk5I3m9G9uYwVk=";
   };
 
   sourceRoot = "${src.name}/pykanidm";
@@ -56,6 +56,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/kanidm/kanidm/tree/master/pykanidm";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
+      adamcstephens
       arianvp
       hexa
     ];
