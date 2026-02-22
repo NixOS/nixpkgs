@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://github.com/n-t-roff/sc";
     license = lib.licenses.unlicense;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.claes ];
   };
 })
