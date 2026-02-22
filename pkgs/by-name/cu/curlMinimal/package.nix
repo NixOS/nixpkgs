@@ -246,6 +246,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4.4.0
   '';
+  # A temporary fix until https://github.com/NixOS/nixpkgs/pull/481311 is
+  # agreed upon
+  postFixup = ''
+    patchShebangs --update --host ''${!outputBin}/bin/
+  '';
 
   passthru =
     let
