@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     description = "Userspace daemon to combine joy-cons from the hid-nintendo kernel driver";
     mainProgram = "joycond";
     license = lib.licenses.gpl3Only;
-    maintainers = [];
+    maintainers = with lib.maintainers; [ TwoUnderscorez ];
     platforms = lib.platforms.linux;
   };
 }
