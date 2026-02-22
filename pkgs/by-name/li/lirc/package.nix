@@ -109,6 +109,30 @@ stdenv.mkDerivation (finalAttrs: {
     "localstatedir=$TMPDIR"
   ];
 
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "dev"
+    # This is the output referenced by dependent packages most of the time.
+    # $out on the other hand contains files used by direct users of lirc -
+    # systemd units, binaries, shell scripts & lirc python package. Since
+    # Nixpkgs' stdenv puts by default python libraries in $lib, this causes a
+    # cyclic reference between $out and $lib. We solve this by moving the
+    # Python library to $out in postFixup below. Since the Python library is
+    # also strongly related to the direct usage of lirc (and not only linking
+    # to the libraries of it), this makes sense anyway.
+    "lib"
+  ];
+
+  postFixup = ''
+    moveToOutput "${python3.sitePackages}" "$out"
+    # $out/bin/lirc-setup is symlinked to $lib/''${python3.sitePackages}, so it
+    # has to be fixed due to the above.
+    rm $out/bin/lirc-setup
+    ln -s $out/${python3.sitePackages}/lirc-setup/lirc-setup $out/bin/lirc-setup
+  '';
+
   # Upstream ships broken symlinks in docs
   dontCheckForBrokenSymlinks = true;
 
