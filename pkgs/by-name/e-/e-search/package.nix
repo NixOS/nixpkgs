@@ -26,7 +26,11 @@
   libsForQt5,
   pango,
   pangomm,
-  xorg,
+  libxt,
+  libxtst,
+  libxrandr,
+  libx11,
+  libxcb,
   zlib,
   nix-update-script,
   commandLineArgs ? "",
@@ -108,11 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qt5.qtxmlpatterns
     pango
     pangomm
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXt
-    xorg.libXtst
-    xorg.libxcb
+    libx11
+    libxrandr
+    libxt
+    libxtst
+    libxcb
     zlib
   ];
 

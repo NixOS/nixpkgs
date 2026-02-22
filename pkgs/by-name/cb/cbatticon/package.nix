@@ -10,14 +10,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cbatticon";
   version = "1.6.13";
 
   src = fetchFromGitHub {
     owner = "valr";
     repo = "cbatticon";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-VQjJujF9lnVvQxV+0YqodLgnI9F90JKDAGBu5nM/Q/c=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

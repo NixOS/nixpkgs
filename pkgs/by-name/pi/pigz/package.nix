@@ -6,14 +6,14 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pigz";
   version = "2.8";
 
   src = fetchFromGitHub {
     owner = "madler";
     repo = "pigz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
   };
-}
+})

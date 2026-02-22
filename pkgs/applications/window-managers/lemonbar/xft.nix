@@ -4,7 +4,7 @@
   fetchFromGitHub,
   perl,
   libxcb,
-  libXft,
+  libxft,
 }:
 
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libxcb
-    libXft
+    libxft
     perl
   ];
 

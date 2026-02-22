@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "haven";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "bitvora";
     repo = "haven";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2947XUAppZ3DLA5A4U6D/4O9pZQfCsPxjRn/4iHkrCg=";
   };
 
@@ -26,9 +26,9 @@ buildGoModule rec {
   meta = {
     description = "High Availability Vault for Events on Nostr";
     homepage = "https://github.com/bitvora/haven";
-    changelog = "https://github.com/bitvora/haven/releases/tag/v${version}";
+    changelog = "https://github.com/bitvora/haven/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felixzieger ];
     mainProgram = "haven";
   };
-}
+})

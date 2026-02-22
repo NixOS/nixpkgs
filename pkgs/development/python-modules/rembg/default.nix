@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -36,6 +37,9 @@
   withCli ? false,
 }:
 
+let
+  isNotAarch64Linux = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+in
 buildPythonPackage (finalAttrs: {
   pname = "rembg";
   version = "2.0.72";
@@ -106,7 +110,12 @@ buildPythonPackage (finalAttrs: {
     "NUMBA_CACHE_DIR"
   ];
 
-  pythonImportsCheck = [ "rembg" ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # -> Skip all tests that require importing rembg
+  pythonImportsCheck = lib.optionals isNotAarch64Linux [ "rembg" ];
+  doCheck = isNotAarch64Linux;
 
   meta = {
     description = "Tool to remove background from images";

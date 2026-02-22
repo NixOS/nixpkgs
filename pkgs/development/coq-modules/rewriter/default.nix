@@ -16,12 +16,12 @@ mkCoqDerivation {
     in
     lib.switch coq.coq-version [
       {
-        case = range "8.17" "8.19";
-        out = "0.0.11";
+        case = range "8.17" "9.0";
+        out = "0.0.15";
       }
     ] null;
   release = {
-    "0.0.11".sha256 = "sha256-aYoO08nwItlOoE5BnKRGib2Zk4Fz4Ni/L4QaqkObPow=";
+    "0.0.15".sha256 = "sha256-zxNIMppFXUKShOXLbdZphy0Je5ii6cjcWUUcQMTcaHk=";
   };
   releaseRev = v: "v${v}";
 

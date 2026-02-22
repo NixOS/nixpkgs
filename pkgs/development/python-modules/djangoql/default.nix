@@ -4,20 +4,23 @@
   fetchPypi,
   python,
   django,
+  setuptools,
   ply,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "djangoql";
-  version = "0.18.0";
-  format = "setuptools";
+  version = "0.19.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-x8KJ08BLKLRD42uqIW/FSFf3V6TFNXLTyWaoCr5Zb78=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-vOCdUoV4V7InRPkyQfFtXGKhsRing04civoUvruWTu4=";
   };
 
-  propagatedBuildInputs = [ ply ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ply ];
 
   nativeCheckInputs = [ django ];
 
@@ -26,10 +29,13 @@ buildPythonPackage rec {
     ${python.executable} test_project/manage.py test core.tests
   '';
 
+  pythonImportsCheck = [ "djangoql" ];
+
   meta = {
     description = "Advanced search language for Django";
     homepage = "https://github.com/ivelum/djangoql";
+    changelog = "https://github.com/ivelum/djangoql/blob/master/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erikarvstedt ];
   };
-}
+})

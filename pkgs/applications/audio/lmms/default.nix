@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   alsa-lib ? null,
   carla ? null,
   fftwFloat,
@@ -22,17 +24,16 @@
   qtx11extras,
   qttools,
   SDL ? null,
-  mkDerivation,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lmms";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "LMMS";
     repo = "lmms";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "006hwv1pbh3y5whsxkjk20hsbgwkzr4dawz43afq1gil69y7xpda";
     fetchSubmodules = true;
   };
@@ -41,6 +42,7 @@ mkDerivation rec {
     cmake
     qttools
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -81,7 +83,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DWANT_QT5=ON"
   ]
-  ++ lib.optionals (lib.versionOlder version "11.4") [
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "11.4") [
     # Fix the build with CMake 4.
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
@@ -94,4 +96,4 @@ mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

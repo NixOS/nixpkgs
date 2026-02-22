@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xnlinkfinder";
   version = "6.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "xnl-h4ck3r";
     repo = "xnLinkFinder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UMHMWHLJOhEeR+vO4YE3aNzdsvMAXPpQHQgdFf1QeMY=";
   };
 
@@ -47,9 +47,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to discover endpoints, potential parameters, and a target specific wordlist for a given target";
     homepage = "https://github.com/xnl-h4ck3r/xnLinkFinder";
-    changelog = "https://github.com/xnl-h4ck3r/xnLinkFinder/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/xnl-h4ck3r/xnLinkFinder/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "xnLinkFinder";
   };
-}
+})

@@ -116,7 +116,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/bin" "$pythonPath"
+    wrapPythonProgramsIn "$out/bin" "''${pythonPath[*]}"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
       --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
   '';

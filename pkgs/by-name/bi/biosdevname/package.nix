@@ -7,14 +7,14 @@
   pciutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "biosdevname";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "dell";
     repo = "biosdevname";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "19wbb79x9h79k55sgd4dylvdbhhrvfaiaknbw9s1wvfmirkxa1dz";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "biosdevname";
   };
-}
+})

@@ -7,15 +7,15 @@
   kapp,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kapp";
-  version = "0.64.2";
+  version = "0.65.0";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "kapp";
-    rev = "v${version}";
-    hash = "sha256-XIbKhJBGw+0TuRakZCBZ1d6MjNPpy252MgCDpPNEo3c=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-D46QgNzkCNg0GDsaN1GG0yuWbNeioIErYhbgjwMsTWA=";
   };
 
   vendorHash = null;
@@ -25,7 +25,7 @@ buildGoModule rec {
   env.CGO_ENABLED = 0;
 
   ldflags = [
-    "-X carvel.dev/kapp/pkg/kapp/version.Version=${version}"
+    "-X carvel.dev/kapp/pkg/kapp/version.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -48,4 +48,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ brodes ];
     mainProgram = "kapp";
   };
-}
+})

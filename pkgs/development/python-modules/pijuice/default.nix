@@ -27,8 +27,10 @@ buildPythonPackage rec {
     ./patch-shebang.diff
   ];
 
-  PIJUICE_BUILD_BASE = 1;
-  PIJUICE_VERSION = version;
+  env = {
+    PIJUICE_BUILD_BASE = 1;
+    PIJUICE_VERSION = version;
+  };
 
   preBuild = ''
     cd Software/Source

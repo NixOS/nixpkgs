@@ -11,14 +11,14 @@
   zoxide,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "felix";
   version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
     repo = "felix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QslV0MVbIuiFDmd8A69+7nTPAUhDrn/dndZsIiNkeZ8=";
   };
 
@@ -52,9 +52,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Tui file manager with vim-like key mapping";
     homepage = "https://github.com/kyoheiu/felix";
-    changelog = "https://github.com/kyoheiu/felix/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kyoheiu/felix/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _7karni ];
     mainProgram = "fx";
   };
-}
+})

@@ -8,14 +8,14 @@
   wayland,
   libGL,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "enkei";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "fia0";
     repo = "enkei";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-COU2JtiJcPRA3Jno0qLEIVgimYBWfn5Pgc1OMImsJtI=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ppenguin ];
   };
-}
+})

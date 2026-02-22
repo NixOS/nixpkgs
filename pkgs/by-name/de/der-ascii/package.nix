@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "der-ascii";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "der-ascii";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-i4rNeNDE7bIsO04haMKsbJmyvQRhhEt3I7UxmfTtL78=";
   };
   vendorHash = null;
@@ -35,4 +35,4 @@ buildGoModule rec {
     ];
     mainProgram = "ascii2der"; # has stable output, unlike its inverse
   };
-}
+})

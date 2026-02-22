@@ -6,12 +6,12 @@
   libGL,
   libpng,
   pkg-config,
-  xorg,
+  xorgproto,
   freetype,
   fontconfig,
   alsa-lib,
-  libXrender,
-  libXinerama,
+  libxrender,
+  libxinerama,
   nix-update-script,
 }:
 
@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libpng
-    xorg.xorgproto
+    xorgproto
     freetype
     fontconfig
     alsa-lib
-    libXrender
-    libXinerama
+    libxrender
+    libxinerama
   ];
 
   passthru.updateScript = nix-update-script { };

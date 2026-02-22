@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsh-navigation-tools";
   version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "psprint";
     repo = "zsh-navigation-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0c4kb19aprb868xnlyq8h1nd2d32r0zkrqblsrzvg7m9gx8vqps8";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;
   };
-}
+})

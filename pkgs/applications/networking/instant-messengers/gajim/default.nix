@@ -43,14 +43,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.3.6";
+  version = "2.4.3";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
     tag = version;
-    hash = "sha256-Mvi69FI2zRefcCnLsurdVNMxYaqKsUCKgeFxOh6vg/o=";
+    hash = "sha256-3Z6ADcq+E83xD3GMd19zm0n7+w1SuCYP4KcNL9M/DM4=";
   };
 
   pyproject = true;
@@ -112,6 +112,9 @@ python3.pkgs.buildPythonApplication rec {
       qrcode
       sqlalchemy
       emoji
+      httpx
+      h2
+      truststore
     ]
     ++ lib.optionals enableE2E [
       pycrypto

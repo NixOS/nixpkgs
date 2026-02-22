@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rang";
   version = "3.2";
 
   src = fetchFromGitHub {
     owner = "agauniyal";
     repo = "rang";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NK7jB5ijcu9OObmfLgiWxlJi4cVAhr7p6m9HKf+5TnQ=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.HaoZeke ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ipfs-upload-client";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "infura";
     repo = "ipfs-upload-client";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BT/LC+PKzAjxM7P2Iis28OlJmrZRbCwfd6kPEL3oaaI=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "ipfs-upload-client";
   };
-}
+})

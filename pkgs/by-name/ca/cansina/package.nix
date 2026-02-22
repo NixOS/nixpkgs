@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cansina";
   version = "0.9";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "deibit";
     repo = "cansina";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vDlYJSRBVFtEdE/1bN8PniFYkpggIKMcEakphHmaTos=";
   };
 
@@ -32,9 +32,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Web Content Discovery Tool";
     homepage = "https://github.com/deibit/cansina";
-    changelog = "https://github.com/deibit/cansina/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/deibit/cansina/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cansina";
   };
-}
+})

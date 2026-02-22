@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libclthreads";
   version = "2.4.2";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/clthreads-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/clthreads-${finalAttrs.version}.tar.bz2";
     sha256 = "0cbs1w89q8wfjrrhvxf6xk0y02nkjl5hd0yb692c8ma01i6b2nf6";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})

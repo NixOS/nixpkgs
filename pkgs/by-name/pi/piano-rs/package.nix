@@ -7,14 +7,14 @@
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "piano-rs";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "ritiek";
     repo = "piano-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qZeH9xXQPIOJ87mvLahnJB3DuEgLX0EAXPvECgxNlq0=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ ritiek ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "add-determinism";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "keszybz";
     repo = "add-determinism";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wy0jle1Fhq4wpxMY1IeS3FGHOOaH0Bu8qhvmaIRAJyI=";
   };
 
@@ -52,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "add-det";
   };
-}
+})

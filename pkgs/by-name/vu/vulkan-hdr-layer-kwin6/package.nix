@@ -3,7 +3,7 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  libX11,
+  libx11,
   meson,
   ninja,
   pkg-config,
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   buildInputs = [
     vulkan-headers
     vulkan-loader
-    libX11
+    libx11
     wayland
   ];
 

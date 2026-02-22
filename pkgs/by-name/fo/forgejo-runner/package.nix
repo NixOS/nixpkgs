@@ -47,19 +47,19 @@ let
     "TestMergeJobOptions"
   ];
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "forgejo-runner";
-  version = "12.5.3";
+  version = "12.7.0";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
-    rev = "v${version}";
-    hash = "sha256-qCk2GvPWKIQfEjYtx2Uc7GcVDehUu0/u4LP88FxoA9A=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pQYlacbctW+Cbm3abDps2ZpqX/iPhgAgJnBsaXcny6w=";
   };
 
-  vendorHash = "sha256-pGLZmSW7MKEy/K+njgcPv5a+7Qtf8mqUI4OwKhfEZXY=";
+  vendorHash = "sha256-nceLZzbSk56l3NLgusw6JKi1owniQVudNDgC7fsHxYQ=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -73,7 +73,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X code.forgejo.org/forgejo/runner/v12/internal/pkg/ver.version=${src.rev}"
+    "-X code.forgejo.org/forgejo/runner/v12/internal/pkg/ver.version=${finalAttrs.src.rev}"
   ];
 
   checkFlags = [
@@ -96,7 +96,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -109,10 +109,10 @@ buildGoModule rec {
   meta = {
     description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
-    changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";
+    changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nrabulinski ];
     teams = [ lib.teams.forgejo ];
     mainProgram = "forgejo-runner";
   };
-}
+})

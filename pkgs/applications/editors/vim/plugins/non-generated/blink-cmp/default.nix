@@ -8,18 +8,24 @@
   gitMinimal,
 }:
 let
-  version = "1.8.0";
+  version = "1.9.1";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-JjlcPj7v9J+v1SDBYIub6jFEslLhZGHmsipV1atUAFo=";
+    hash = "sha256-GgodXdWpQoF2z1g1/WvnSpfuhskw0aMcOoyZM5l66q8=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
     cargoHash = "sha256-Qdt8O7IGj2HySb1jxsv3m33ZxJg96Ckw26oTEEyQjfs=";
+
+    # NOTE: The only change in frizbee 0.7.0 was nixpkgs incompatible rust semantic changes
+    # Patch just reverts https://github.com/saghen/blink.cmp/commit/cc824ec85b789a54d05241389993c6ab8c040810
+    cargoPatches = [
+      ./0001-pin-frizbee-0.6.0.patch
+    ];
 
     nativeBuildInputs = [ gitMinimal ];
 

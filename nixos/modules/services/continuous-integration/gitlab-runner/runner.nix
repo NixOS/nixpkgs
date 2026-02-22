@@ -728,7 +728,7 @@ in
         mapAttrsToList
           (
             name: serviceConfig:
-            ''`services.gitlab-runner.services.${name}.protected` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
+            "`services.gitlab-runner.services.${name}.protected` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration."
           )
           (
             filterAttrs (
@@ -740,7 +740,7 @@ in
         mapAttrsToList
           (
             name: serviceConfig:
-            ''`services.gitlab-runner.services.${name}.runUntagged` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
+            "`services.gitlab-runner.services.${name}.runUntagged` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration."
           )
           (
             filterAttrs (
@@ -752,7 +752,7 @@ in
         mapAttrsToList
           (
             name: v:
-            ''`services.gitlab-runner.services.${name}.maximumTimeout` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
+            "`services.gitlab-runner.services.${name}.maximumTimeout` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration."
           )
           (
             filterAttrs (
@@ -764,7 +764,7 @@ in
         mapAttrsToList
           (
             name: v:
-            ''`services.gitlab-runner.services.${name}.tagList` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
+            "`services.gitlab-runner.services.${name}.tagList` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration."
           )
           (
             filterAttrs (

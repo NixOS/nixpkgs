@@ -17,7 +17,7 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcab";
   version = "1.6";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gcab/${lib.versions.majorMinor version}/gcab-${version}.tar.xz";
+    url = "mirror://gnome/sources/gcab/${lib.versions.majorMinor finalAttrs.version}/gcab-${finalAttrs.version}.tar.xz";
     hash = "sha256-LwyWFVd8QSaQniUfneBibD7noVI3bBW1VE3xD8h+Vgs=";
   };
 
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

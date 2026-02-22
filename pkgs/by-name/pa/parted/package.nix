@@ -16,12 +16,12 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "parted";
   version = "3.6";
 
   src = fetchurl {
-    url = "mirror://gnu/parted/parted-${version}.tar.xz";
+    url = "mirror://gnu/parted/parted-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-O0Pb4zzKD5oYYB66tWt4UrEo7Bo986mzDM3l5zNZ5hI=";
   };
 
@@ -94,4 +94,4 @@ stdenv.mkDerivation rec {
     # GNU Parted requires libuuid, which is part of util-linux-ng.
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -13,13 +13,13 @@
 }:
 
 let
-  version = "1.0.1291";
+  version = "1.0.1316";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-5SEw0hNeZg2a4SaqFnkKASeEVXpLWVjQVNT2NlaJz9c=";
+    hash = "sha256-yFBWFqTJJon6GeY6dQ0QL814/j1Y5ur4pz2uS7iIZCI=";
   };
 in
 flutter338.buildFlutterApplication {
@@ -36,7 +36,7 @@ flutter338.buildFlutterApplication {
   ];
 
   # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
-  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
 
   desktopItems = [
     (makeDesktopItem {

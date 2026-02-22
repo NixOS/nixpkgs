@@ -5,9 +5,9 @@
   cmake,
   kwindowsystem,
   layer-shell-qt,
-  libXdmcp,
+  libxdmcp,
   liblxqt,
-  libpthreadstubs,
+  libpthread-stubs,
   libqtxdg,
   lxqt-build-tools,
   pkg-config,
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     kwindowsystem
     layer-shell-qt
-    libXdmcp
+    libxdmcp
     liblxqt
-    libpthreadstubs
+    libpthread-stubs
     libqtxdg
     procps
     qtbase

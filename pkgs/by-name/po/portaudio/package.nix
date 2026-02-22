@@ -8,12 +8,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "portaudio";
   version = "190700_20210406";
 
   src = fetchurl {
-    url = "https://files.portaudio.com/archives/pa_stable_v${version}.tgz";
+    url = "https://files.portaudio.com/archives/pa_stable_v${finalAttrs.version}.tgz";
     sha256 = "1vrdrd42jsnffh6rq8ap2c6fr4g9fcld89z649fs06bwqx1bzvs7";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
   passthru = {
     api_version = 19;
   };
-}
+})

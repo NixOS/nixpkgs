@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   attrs,
   pluggy,
   six,

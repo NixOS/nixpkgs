@@ -1,13 +1,13 @@
 {
-  mkDerivation,
   lib,
   stdenv,
   fetchFromGitHub,
   qmake,
+  wrapQtAppsHook,
   boost,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "glogg";
   version = "1.1.4";
 
@@ -23,7 +23,10 @@ mkDerivation rec {
       --replace "boost_program_options-mt" "boost_program_options"
   '';
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
   buildInputs = [ boost ];
 
   qmakeFlags = [ "VERSION=${version}" ];

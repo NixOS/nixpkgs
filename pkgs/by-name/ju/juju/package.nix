@@ -7,14 +7,14 @@
   juju,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "juju";
   version = "3.6.12";
 
   src = fetchFromGitHub {
     owner = "juju";
     repo = "juju";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-c47+BmknMWoZr5xFGkR0Y8m7aNBm26441qOAsrHhUk8=";
   };
 
@@ -47,4 +47,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ citadelcore ];
     mainProgram = "juju";
   };
-}
+})

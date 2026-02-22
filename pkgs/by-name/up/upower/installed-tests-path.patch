@@ -1,10 +1,10 @@
 diff --git a/meson_options.txt b/meson_options.txt
-index eec3659..f064a1b 100644
+index 7220d2f..92fa778 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -6,6 +6,10 @@ option('gtk-doc',
         type : 'boolean',
-        value : 'true',
+        value : true,
         description : 'Build developer documentation')
 +option('installed_test_prefix',
 +       type: 'string',
@@ -14,10 +14,10 @@ index eec3659..f064a1b 100644
         type : 'feature',
         value : 'auto',
 diff --git a/src/meson.build b/src/meson.build
-index a2352ac..c1f25ac 100644
+index bf36c2d..2419ac2 100644
 --- a/src/meson.build
 +++ b/src/meson.build
-@@ -85,6 +85,7 @@ install_subdir('does-not-exist', install_dir: historydir, strip_directory : true
+@@ -90,6 +90,7 @@ install_emptydir(historydir)
  
  cdata = configuration_data()
  cdata.set('libexecdir', get_option('prefix') / get_option('libexecdir'))
@@ -25,26 +25,26 @@ index a2352ac..c1f25ac 100644
  cdata.set('historydir', historydir)
  
  configure_file(
-@@ -147,16 +148,16 @@ if os_backend == 'linux' and gobject_introspection.found()
-         'linux/integration-test.py',
-         'linux/output_checker.py',
-       ],
--      install_dir: get_option('prefix') / get_option('libexecdir') / 'upower'
-+      install_dir: get_option('installed_test_prefix') / 'libexec' / 'upower'
-     )
-     install_subdir('linux/tests/',
--      install_dir: get_option('prefix') / get_option('libexecdir') / 'upower'
-+      install_dir: get_option('installed_test_prefix') / 'libexec' / 'upower'
-     )
+@@ -154,16 +155,16 @@ if os_backend == 'linux' and gobject_introspection.found()
+             'linux/integration-test.py',
+             'linux/output_checker.py',
+           ],
+-          install_dir: get_option('prefix') / get_option('libexecdir') / 'upower'
++          install_dir: get_option('installed_test_prefix') / 'libexec' / 'upower'
+         )
+         install_subdir('linux/tests/',
+-          install_dir: get_option('prefix') / get_option('libexecdir') / 'upower'
++          install_dir: get_option('installed_test_prefix') / 'libexec' / 'upower'
+         )
  
-     configure_file(
-       input: 'upower-integration.test.in',
-       output: 'upower-integration.test',
--      install_dir: get_option('datadir') / 'installed-tests' / 'upower',
-+      install_dir: get_option('installed_test_prefix') / 'share' / 'installed-tests' / 'upower',
-       configuration: cdata
-     )
- endif
+         configure_file(
+           input: 'upower-integration.test.in',
+           output: 'upower-integration.test',
+-          install_dir: get_option('datadir') / 'installed-tests' / 'upower',
++          install_dir: get_option('installed_test_prefix') / 'libexec' / 'upower',
+           configuration: cdata
+         )
+     endif
 diff --git a/src/upower-integration.test.in b/src/upower-integration.test.in
 index 151ded0..b0a9bec 100644
 --- a/src/upower-integration.test.in

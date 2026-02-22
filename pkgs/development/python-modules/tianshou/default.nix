@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -49,8 +48,6 @@ buildPythonPackage rec {
   pname = "tianshou";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "thu-ml";

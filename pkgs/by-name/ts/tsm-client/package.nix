@@ -90,7 +90,7 @@ let
     }/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
 
   unwrapped = stdenv.mkDerivation (finalAttrs: {
-    name = "tsm-client-${finalAttrs.version}-unwrapped";
+    pname = "tsm-client-unwrapped";
     version = "8.1.27.1";
     src = fetchurl {
       url = mkSrcUrl finalAttrs.version;
@@ -152,7 +152,8 @@ let
 in
 
 buildEnv {
-  name = "tsm-client-${unwrapped.version}";
+  pname = "tsm-client";
+  inherit (unwrapped) version;
   meta =
     meta
     // lib.attrsets.optionalAttrs enableGui {

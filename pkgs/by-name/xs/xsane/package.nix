@@ -4,7 +4,7 @@
   fetchFromGitLab,
   sane-backends,
   sane-frontends,
-  libX11,
+  libx11,
   gtk2,
   pkg-config,
   libpng,
@@ -15,7 +15,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsane";
   version = "0.999";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "frontend";
     group = "sane-project";
     repo = "xsane";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-oOg94nUsT9LLKnHocY0S5g02Y9a1UazzZAjpEI/s+yM=";
   };
 
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
     libusb-compat-0_1
     sane-backends
     sane-frontends
-    libX11
+    libx11
     gtk2
   ]
   ++ lib.optional gimpSupport gimp;
@@ -143,4 +143,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

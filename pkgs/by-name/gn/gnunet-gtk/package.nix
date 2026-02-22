@@ -51,5 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = gnunet.meta // {
     description = "GNUnet GTK User Interface";
     homepage = "https://git.gnunet.org/gnunet-gtk.git";
+    # https://www.gnunet.org/en/news/2025-09-0.25.0.html
+    broken = true;
   };
 })

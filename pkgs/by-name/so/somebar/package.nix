@@ -17,14 +17,14 @@ let
   configFile = if lib.isDerivation conf || builtins.isPath conf then conf else "src/config.def.hpp";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "somebar";
   version = "1.0.3";
 
   src = fetchFromSourcehut {
     owner = "~raphi";
     repo = "somebar";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-PBxCy1dZrOL1nmhVDQozvF0XL79uKMhhERGNpPPzaRU=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "somebar";
   };
-}
+})

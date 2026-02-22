@@ -7,7 +7,14 @@
   libz,
   icu,
   openssl,
-  xorg,
+  libgbm,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   gtk3,
   glib,
   nss,
@@ -22,7 +29,6 @@
   cairo,
   udev,
   alsa-lib,
-  mesa,
   libGL,
   libsecret,
   nix-update-script,
@@ -35,13 +41,13 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "13";
+  version = "16";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-cnOhyaeoDXPaeRJnJpx1HcegWitcfMJe/vezxZ/zpFQ=";
+    hash = "sha256-2PCa9nP98htK9p5N6QPPZT6aYqaoAEBmag9JGnoujso=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -52,7 +58,7 @@ let
     sourceRoot = "source/Grayjay.Desktop.Web";
 
     npmBuildScript = "build";
-    npmDepsHash = "sha256-3nPzQcDWhPCdLrPvwGY+K0t1OSxWrVwQ3hH7i0eynRU=";
+    npmDepsHash = "sha256-3yJIPkuEvkFL9Wb4y/r0yEULQbXx/wHqicFBLzOPj68=";
 
     installPhase = ''
       runHook preInstall
@@ -68,12 +74,12 @@ buildDotnetModule (finalAttrs: {
 
   buildInputs = [
     openssl
+    libgbm
     libgcc
-    xorg.libX11
+    libx11
     gtk3
     glib
     alsa-lib
-    mesa
     nspr
     nss
     icu
@@ -108,7 +114,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   testProjectFile = [
-    "Grayjay.Desktop.Tests/Grayjay.Desktop.Tests.csproj"
     "Grayjay.Engine/Grayjay.Engine.Tests/Grayjay.Engine.Tests.csproj"
   ];
 
@@ -155,12 +160,12 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [
     libz
 
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxcb
 
     dbus
     atk

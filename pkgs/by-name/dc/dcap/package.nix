@@ -9,14 +9,14 @@
   cunit,
   libxcrypt,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dcap";
   version = "2.47.14";
 
   src = fetchFromGitHub {
     owner = "dCache";
     repo = "dcap";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-hn4nkFTIbSUUhvf9UfsEqVhphAdNWmATaCrv8jOuC0Y=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     mainProgram = "dccp";
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

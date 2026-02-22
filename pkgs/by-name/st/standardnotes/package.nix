@@ -89,7 +89,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       mgregoire
       chuangzhu
-      squalus
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     platforms = builtins.attrNames srcjson.deb;

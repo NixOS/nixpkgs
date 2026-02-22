@@ -11,7 +11,7 @@
   pkg-config,
   yaml-cpp,
   fmt_11,
-  xorg,
+  libx11,
 }:
 let
   sfl-src = fetchFromGitHub {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     sed -i 's#URL \+${openloco-objects.url}#URL ${openloco-objects}#' CMakeLists.txt
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=null-dereference";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=null-dereference";
 
   cmakeFlags = [
     "-DOPENLOCO_BUILD_TESTS=NO"
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     openal
     yaml-cpp
     fmt_11
-    xorg.libX11
+    libx11
   ];
 
   meta = {

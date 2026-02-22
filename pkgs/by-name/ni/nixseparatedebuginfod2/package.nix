@@ -11,14 +11,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixseparatedebuginfod2";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nixseparatedebuginfod2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-INY9mLJ+7i3BoShqFZMELm9aXiDbZkuLyokgm42kEbo=";
   };
 
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = { inherit (nixosTests) nixseparatedebuginfod2; };
 
   # flaky tests
-  checkFlags = [ "--skip substituter::http" ];
+  checkFlags = [ "--skip=substituter::http" ];
 
   meta = {
     description = "Downloads and provides debug symbols and source code for nix derivations to gdb and other debuginfod-capable debuggers as needed";
@@ -52,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "nixseparatedebuginfod2";
   };
-}
+})

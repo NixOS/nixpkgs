@@ -14,7 +14,7 @@
   coreaudioSupport ? stdenv.hostPlatform.isDarwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtaudio";
   version = "5.2.0";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtaudio";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0xvahlfj3ysgsjsp53q81hayzw7f99n1g214gh7dwdr52kv2l987";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.unix;
   };
-}
+})

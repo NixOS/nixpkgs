@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchgit,
-  fetchpatch,
   autoreconfHook,
   pkg-config,
   ell,
@@ -14,32 +13,14 @@
   gitUpdater,
 }:
 
-let
-  # fix segfault in iwctl with readline-8.3
-  # https://lists.gnu.org/archive/html/bug-readline/2025-07/msg00007.htmlP
-  readline-patch = fetchpatch {
-    url = "https://lists.gnu.org/archive/html/bug-readline/2025-07/txtmA7rksnmmi.txt";
-    hash = "sha256-QSS1GUJ2i/bF2ksvUtw27oqFHuTHALi+7QwxMFt9ZaM=";
-    stripLen = 2;
-  };
-
-  myreadline = (
-    readline.overrideAttrs (
-      _final: prev: {
-        patches = (prev.patches or [ ]) ++ [ readline-patch ];
-      }
-    )
-  );
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "iwd";
-  version = "3.10";
+  version = "3.11";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     tag = finalAttrs.version;
-    hash = "sha256-qzqBNGy67/VvRZh7n0W2ZPYwoyX/lP6k1sF57lL6v7c=";
+    hash = "sha256-H8kyj5RTY20wwRUJIYJF8lIQ367biItJpHYZeMcNHSE=";
   };
 
   patches = [
@@ -66,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ell
     python3Packages.python
-    myreadline
+    readline
   ];
 
   nativeCheckInputs = [ openssl ];

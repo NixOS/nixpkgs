@@ -10,14 +10,14 @@
   esh,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "esh";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "esh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1ddaji5nplf1dyvgkrhqjy8m5djaycqcfhjv30yprj1avjymlj6w";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mnacamura ];
     platforms = lib.platforms.unix;
   };
-}
+})

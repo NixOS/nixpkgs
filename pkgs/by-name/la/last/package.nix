@@ -8,15 +8,15 @@
   parallel,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "last";
-  version = "1648";
+  version = "1651";
 
   src = fetchFromGitLab {
     owner = "mcfrith";
     repo = "last";
-    tag = version;
-    hash = "sha256-U1FGP6jzB36HLwTFKm/VMZWPPjo6mVuV/ePhGIkQgpg=";
+    tag = finalAttrs.version;
+    hash = "sha256-TAc9prYydX5XO31f6p5DD7XMxVbNOW9ROtB7Agd7t8c=";
   };
 
   nativeBuildInputs = [
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.x86_64;
   };
-}
+})

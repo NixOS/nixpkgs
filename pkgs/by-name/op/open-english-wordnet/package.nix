@@ -7,14 +7,14 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "open-english-wordnet";
   version = "2022";
 
   src = fetchFromGitHub {
     owner = "globalwordnet";
     repo = "english-wordnet";
-    rev = "${self.version}-edition";
+    rev = "${finalAttrs.version}-edition";
     hash = "sha256-a1fWIp39uuJZL1aFX/r+ttLB1+kwh/XPHwphgENTQ5M=";
   };
 
@@ -49,14 +49,14 @@ stdenvNoCC.mkDerivation (self: {
     python scripts/merge.py
 
     echo Compressing
-    gzip --best --no-name --stdout ./wn.xml > 'oewn:${self.version}.xml.gz'
+    gzip --best --no-name --stdout ./wn.xml > 'oewn:${finalAttrs.version}.xml.gz'
 
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dt $out/share/wordnet 'oewn:${self.version}.xml.gz'
+    install -Dt $out/share/wordnet 'oewn:${finalAttrs.version}.xml.gz'
     runHook postInstall
   '';
 

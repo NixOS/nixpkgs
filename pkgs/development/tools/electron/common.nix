@@ -2,31 +2,34 @@
   lib,
   stdenv,
   chromium,
-  nodejs,
-  fetchYarnDeps,
   fetchNpmDeps,
   fetchpatch,
-  fixup-yarn-lock,
-  npmHooks,
-  yarn,
-  libnotify,
-  unzip,
+
   pkgsBuildHost,
-  pipewire,
-  libsecret,
-  libpulseaudio,
-  speechd-minimal,
-  info,
   gclient2nix,
+  nodejs,
+  npmHooks,
+  yarn-berry_4,
+  unzip,
+
+  libnotify,
+  libpulseaudio,
+  libsecret,
+  pipewire,
+  speechd-minimal,
+
+  info,
 }:
 
 let
   gclientDeps = gclient2nix.importGclientDeps info.deps;
+  yarn-berry = yarn-berry_4;
 in
 
 ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
+
   buildTargets = [
     "electron:copy_node_headers"
     "electron:electron_dist_zip"
@@ -41,19 +44,16 @@ in
   moveToDev = false;
 
   nativeBuildInputs = base.nativeBuildInputs ++ [
-    nodejs
-    yarn
-    fixup-yarn-lock
-    unzip
-    npmHooks.npmConfigHook
     gclient2nix.gclientUnpackHook
+    nodejs
+    npmHooks.npmConfigHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
+    unzip
   ];
+
   buildInputs = base.buildInputs ++ [ libnotify ];
 
-  electronOfflineCache = fetchYarnDeps {
-    yarnLock = gclientDeps."src/electron".path + "/yarn.lock";
-    sha256 = info.electron_yarn_hash;
-  };
   npmDeps = fetchNpmDeps rec {
     src = gclientDeps."src".path;
     # Assume that the fetcher always unpack the source,
@@ -61,6 +61,16 @@ in
     sourceRoot = "${src.name}/third_party/node";
     hash = info.chromium_npm_hash;
   };
+
+  npmRoot = "third_party/node";
+
+  yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
+    src = gclientDeps."src/electron".path;
+    hash = info.electron_yarn_hash;
+  };
+
+  dontYarnBerryInstallDeps = true; # we'll run the hook manually
+
   inherit gclientDeps;
   unpackPhase = null; # prevent chromium's unpackPhase from being used
   sourceRoot = "src";
@@ -82,22 +92,6 @@ in
 
   patches =
     base.patches
-    ++ lib.optionals (lib.versionOlder info.version "38") [
-      # Fix build with Rust 1.89.0
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6624733
-      (fetchpatch {
-        name = "Define-rust-no-alloc-shim-is-unstable-v2.patch";
-        url = "https://github.com/chromium/chromium/commit/6aae0e2353c857d98980ff677bf304288d7c58de.patch";
-        hash = "sha256-Dd38c/0hiH+PbGPJhhEFuW6kUR45A36XZqOVExoxlhM=";
-      })
-      # Fix build with LLVM 21+
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
-      (fetchpatch {
-        name = "Dont-return-an-enum-from-EnumSizeTraits-Count.patch";
-        url = "https://github.com/chromium/chromium/commit/b0ff8c3b258a8816c05bdebf472dbba719d3c491.patch";
-        hash = "sha256-YIWcsCj5w0jUd7D67hsuk0ljTA/IbHwA6db3eK4ggUY=";
-      })
-    ]
     ++ lib.optionals (lib.versionOlder info.version "39") [
       # Fix build with Rust 1.90.0
       # https://chromium-review.googlesource.com/c/chromium/src/+/6875644
@@ -135,8 +129,6 @@ in
         hash = "sha256-+M4gI77SoQ4dYIe/iGFgIwF1fS/6KQ8s16vj8ht/rik=";
       })
     ];
-
-  npmRoot = "third_party/node";
 
   postPatch = ''
     mkdir -p third_party/jdk/current/bin
@@ -186,15 +178,10 @@ in
     EOF
   ''
   + ''
-
     (
       cd electron
-      export HOME=$TMPDIR/fake_home
-      yarn config --offline set yarn-offline-mirror $electronOfflineCache
-      fixup-yarn-lock yarn.lock
-      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+      YARN_ENABLE_SCRIPTS=0 yarnBerryConfigHook
     )
-
     (
       cd ..
       PATH=$PATH:${
@@ -277,9 +264,6 @@ in
     # other
     enable_widevine = false;
     override_electron_version = info.version;
-  }
-  // lib.optionalAttrs (lib.versionOlder info.version "38") {
-    content_enable_legacy_ipc = true;
   };
 
   installPhase = ''

@@ -15,14 +15,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sticky";
   version = "1.30";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "sticky";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-8Y6PoQQHS8h1AT+4DMbExd9y7ScDMig0M9BJQjq09Uc=";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
 
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gitUpdater {
-      ignoredVersions = ''master.*'';
+      ignoredVersions = "master.*";
     };
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
       bobby285271
     ];
   };
-}
+})

@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   name = "flaresolverr";
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [ diogotcorreia ];
 
   nodes.machine =
     { pkgs, ... }:

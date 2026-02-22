@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "starkiller";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "bc-security";
     repo = "starkiller";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sUrbM0uq6wmGEF++K869AQtwgTlCxKe6r9XPlYMicU8=";
+    hash = "sha256-tnU6Q5hVRwouII0wSHWrCDhrDySiH6qV5oxCSE+hDqk=";
   };
 
   yarnOfflineCache = fetchYarnDeps {

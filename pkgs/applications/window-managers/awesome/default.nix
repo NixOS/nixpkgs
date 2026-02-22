@@ -10,11 +10,19 @@
   imagemagick,
   pkg-config,
   gdk-pixbuf,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxdmcp,
+  libxau,
+  libxshmfence,
+  libxcb,
   libstartup_notification,
   libxdg_basedir,
-  libpthreadstubs,
-  xcb-util-cursor,
+  libpthread-stubs,
+  libxcb-cursor,
   makeWrapper,
   pango,
   gobject-introspection,
@@ -106,8 +114,6 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  FONTCONFIG_FILE = toString fontsConf;
-
   propagatedUserEnvPkgs = [ hicolor-icon-theme ];
   buildInputs = [
     cairo
@@ -115,22 +121,22 @@ stdenv.mkDerivation rec {
     dbus
     gdk-pixbuf
     luaEnv
-    libpthreadstubs
+    libpthread-stubs
     libstartup_notification
     libxdg_basedir
     lua
     net-tools
     pango
-    xcb-util-cursor
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.libxcb
-    xorg.libxshmfence
-    xorg.xcbutil
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+    libxcb-cursor
+    libxau
+    libxdmcp
+    libxcb
+    libxshmfence
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     libxkbcommon
     xcbutilxrm
   ]
@@ -142,11 +148,14 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional lua.pkgs.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so";
 
-  GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
-  # LUA_CPATH and LUA_PATH are used only for *building*, see the --search flags
-  # below for how awesome finds the libraries it needs at runtime.
-  LUA_CPATH = "${luaEnv}/lib/lua/${lua.luaversion}/?.so";
-  LUA_PATH = "${luaEnv}/share/lua/${lua.luaversion}/?.lua;;";
+  env = {
+    FONTCONFIG_FILE = toString fontsConf;
+    GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
+    # LUA_CPATH and LUA_PATH are used only for *building*, see the --search flags
+    # below for how awesome finds the libraries it needs at runtime.
+    LUA_CPATH = "${luaEnv}/lib/lua/${lua.luaversion}/?.so";
+    LUA_PATH = "${luaEnv}/share/lua/${lua.luaversion}/?.lua;;";
+  };
 
   postInstall = ''
     # Don't use wrapProgram or the wrapper will duplicate the --search

@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sig";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ynqa";
     repo = "sig";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KxLSZ4/idlDrhRKFUsC3Ko0DcpSzwLWjees1jObC5KQ=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ qaidvoid ];
     mainProgram = "sig";
   };
-}
+})

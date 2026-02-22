@@ -9,7 +9,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webrtc-audio-processing";
   version = "1.3";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "pulseaudio";
     repo = "webrtc-audio-processing";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8CDt4kMt2Owzyv22dqWIcFuHeg4Y3FxB405cLw3FZ+g=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/31
     badPlatforms = lib.platforms.bigEndian;
   };
-}
+})

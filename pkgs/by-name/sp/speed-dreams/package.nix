@@ -4,19 +4,19 @@
   libGLU,
   libGL,
   libglut,
-  libX11,
+  libx11,
   plib,
   openal,
   freealut,
-  libXrandr,
+  libxrandr,
   xorgproto,
-  libXext,
-  libSM,
-  libICE,
-  libXi,
-  libXt,
-  libXrender,
-  libXxf86vm,
+  libxext,
+  libsm,
+  libice,
+  libxi,
+  libxt,
+  libxrender,
+  libxxf86vm,
   openscenegraph,
   expat,
   libpng12,
@@ -29,79 +29,94 @@
   cmake,
   pkg-config,
   libvorbis,
-  runtimeShell,
   curl,
   fetchgit,
   cjson,
   minizip,
   rhash,
   copyDesktopItems,
+  makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+let
+  glLibs = lib.optionals stdenv.isLinux [
+    libGL
+    libGLU
+    libglut
+  ];
+  runtimeLibs = glLibs ++ [
+    libx11
+    plib
+    openal
+    freealut
+    libxrandr
+    libxext
+    libsm
+    libice
+    libxi
+    libxt
+    libxrender
+    libxxf86vm
+    openscenegraph
+    expat
+    libpng12
+    zlib
+    SDL2
+    SDL2_mixer
+    enet
+    libjpeg
+    libvorbis
+    curl
+    cjson
+    minizip
+    rhash
+    stdenv.cc.cc.lib
+  ];
+  runtimeLibPath = lib.makeLibraryPath runtimeLibs;
+  libPathVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+in
+stdenv.mkDerivation (finalAttrs: {
   version = "2.4.2";
   pname = "speed-dreams";
 
   src = fetchgit {
     url = "https://forge.a-lec.org/speed-dreams/speed-dreams-code.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ZY/0tf0wFbepEUNqpaBA4qgkWDij/joqPtbiF/48oN4=";
     fetchSubmodules = true;
   };
-  NIX_CFLAGS_COMPILE = "-I${src}/src/libs/tgf -I${src}/src/libs/tgfdata -I${src}/src/interfaces -I${src}/src/libs/math -I${src}/src/libs/portability";
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-I${finalAttrs.src}/src/libs/tgf"
+    "-I${finalAttrs.src}/src/libs/tgfdata"
+    "-I${finalAttrs.src}/src/interfaces"
+    "-I${finalAttrs.src}/src/libs/math"
+    "-I${finalAttrs.src}/src/libs/portability"
+  ];
+
+  patches = [
+    ./darwin-gl-compat.patch
+  ];
 
   postInstall = ''
-    mkdir -p "$out/bin"
-    # Wrapper for main executable
-    cat > "$out/bin/speed-dreams" <<EOF
-    #!${runtimeShell}
-    export LD_LIBRARY_PATH="$out/lib/games/speed-dreams-2/lib:$out/lib:${
-      lib.makeLibraryPath [
-        libGL
-        libGLU
-        libglut
-        libX11
-        plib
-        openal
-        freealut
-        libXrandr
-        libXext
-        libSM
-        libICE
-        libXi
-        libXt
-        libXrender
-        libXxf86vm
-        openscenegraph
-        expat
-        libpng12
-        zlib
-        SDL2
-        SDL2_mixer
-        enet
-        libjpeg
-        libvorbis
-        curl
-        cjson
-        minizip
-        rhash
-        stdenv.cc.cc.lib
-      ]
-    }"
-    if [ -e "${libGL}/lib/libGL.so.1" ]; then
-      export LD_PRELOAD="${libGL}/lib/libGL.so.1''${LD_PRELOAD:+:$LD_PRELOAD}"
-    fi
-    export SDL_VIDEODRIVER="x11"
-    exec "$out/games/speed-dreams-2" "$@"
-    EOF
-    chmod a+x "$out/bin/speed-dreams"
-
-    # Symlink for desktop icon
-    mkdir -p $out/share/pixmaps/
-    ln -s "$out/share/games/speed-dreams-2/data/icons/icon.png" "$out/share/pixmaps/speed-dreams-2.png"
     substituteInPlace "$out/share/applications/speed-dreams.desktop" \
-      --replace-fail "Exec=$out/games/speed-dreams-2" "Exec=$out/bin/speed-dreams" \
-      --replace-fail "Icon=/build/speed-dreams-code/speed-dreams-data/data/data/icons/icon.png" "Icon=$out/share/pixmaps/speed-dreams-2.png"
+      --replace-fail "Exec=$out/games/speed-dreams-2" "Exec=$out/bin/speed-dreams"
+    ${lib.optionalString stdenv.isLinux ''
+      # Symlink for desktop icon
+      mkdir -p $out/share/pixmaps/
+      ln -s "$out/share/games/speed-dreams-2/data/icons/icon.png" "$out/share/pixmaps/speed-dreams-2.png"
+      substituteInPlace "$out/share/applications/speed-dreams.desktop" \
+        --replace-fail "Icon=/build/speed-dreams-code/speed-dreams-data/data/data/icons/icon.png" "Icon=$out/share/pixmaps/speed-dreams-2.png"
+    ''}
+  '';
+
+  postFixup = ''
+    mkdir -p "$out/bin"
+    makeWrapperArgs=(
+      --prefix ${libPathVar} : "$out/lib/games/speed-dreams-2/lib:$out/lib:${runtimeLibPath}"
+    )
+    ${lib.optionalString stdenv.isLinux "makeWrapperArgs+=(--set SDL_VIDEODRIVER x11)"}
+    makeWrapper "$out/games/speed-dreams-2" "$out/bin/speed-dreams" "''${makeWrapperArgs[@]}"
   '';
 
   # RPATH of binary /nix/store/.../lib64/games/speed-dreams-2/drivers/shadow_sc/shadow_sc.so contains a forbidden reference to /build/
@@ -113,26 +128,24 @@ stdenv.mkDerivation rec {
     pkg-config
     cmake
     copyDesktopItems
+    makeWrapper
   ];
 
   buildInputs = [
     libpng12
-    libGLU
-    libGL
-    libglut
-    libX11
+    libx11
     plib
     openal
     freealut
-    libXrandr
+    libxrandr
     xorgproto
-    libXext
-    libSM
-    libICE
-    libXi
-    libXt
-    libXrender
-    libXxf86vm
+    libxext
+    libsm
+    libice
+    libxi
+    libxt
+    libxrender
+    libxxf86vm
     zlib
     bash
     expat
@@ -146,6 +159,11 @@ stdenv.mkDerivation rec {
     cjson
     minizip
     rhash
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    libGL
+    libGLU
+    libglut
   ];
 
   meta = {
@@ -156,7 +174,7 @@ stdenv.mkDerivation rec {
       raskin
       mio
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "speed-dreams";
   };
-}
+})

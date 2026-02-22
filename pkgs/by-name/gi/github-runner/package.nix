@@ -103,10 +103,12 @@ buildDotnetModule (finalAttrs: {
                      'true'
   '';
 
-  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
-  LOCALE_ARCHIVE = lib.optionalString (
-    !finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
-  ) "${glibcLocales}/lib/locale/locale-archive";
+  env = {
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
+  }
+  // lib.optionalAttrs (!isNull glibcLocales) {
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
 
   postConfigure = ''
     # Generate src/Runner.Sdk/BuildConstants.cs
@@ -220,7 +222,7 @@ buildDotnetModule (finalAttrs: {
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode24RuntimeVersionInAlpineContainerAsync"
   ]
-  ++ lib.optionals finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
+  ++ lib.optionals finalAttrs.env.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
     "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
     "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
     "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"

@@ -6,13 +6,13 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "omniorb";
   version = "4.3.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/omniorb/omniORB/omniORB-${version}/omniORB-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/omniorb/omniORB/omniORB-${finalAttrs.version}/omniORB-${finalAttrs.version}.tar.bz2";
     hash = "sha256-rM0l4stwxOM+0iew2T6WaeOMRgGWN4h8dxOYhw7UXno=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ smironov ];
     platforms = lib.platforms.unix;
   };
-}
+})

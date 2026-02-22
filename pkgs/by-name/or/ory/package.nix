@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ory";
   version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-q7+Fpttgx62GbKxCCiEDlX//e/pNO24e7KhhBeGRDH0=";
   };
 
@@ -51,4 +51,4 @@ buildGoModule rec {
       nicolas-goudry
     ];
   };
-}
+})

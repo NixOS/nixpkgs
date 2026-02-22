@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "avml";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "avml";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QN9GLrs0wjlEdkNnN7Q4Uqu1yJlxD7Dx0SnHJnfV/so=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "avml";
   };
-}
+})

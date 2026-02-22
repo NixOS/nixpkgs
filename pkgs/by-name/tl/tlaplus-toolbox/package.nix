@@ -5,7 +5,7 @@
   makeDesktopItem,
   stdenv,
   gtk3,
-  libXtst,
+  libxtst,
   glib,
   zlib,
   wrapGAppsHook3,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           gtk3
-          libXtst
+          libxtst
           glib
           zlib
         ]

@@ -21,6 +21,7 @@
   withSerialPort ? false,
   cups,
   withSpeech ? true,
+  withPdf ? true,
 }:
 
 buildPythonPackage rec {
@@ -104,7 +105,8 @@ buildPythonPackage rec {
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
-    ++ lib.optional withSpeech qtspeech;
+    ++ lib.optional withSpeech qtspeech
+    ++ lib.optional withPdf qtwebengine;
 
   buildInputs =
     with qt6Packages;
@@ -121,7 +123,8 @@ buildPythonPackage rec {
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
-    ++ lib.optional withSpeech qtspeech;
+    ++ lib.optional withSpeech qtspeech
+    ++ lib.optional withPdf qtwebengine;
 
   propagatedBuildInputs =
     # ld: library not found for -lcups
@@ -151,7 +154,8 @@ buildPythonPackage rec {
   # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
   ++ lib.optional withLocation "PyQt6.QtPositioning"
   ++ lib.optional withSerialPort "PyQt6.QtSerialPort"
-  ++ lib.optional withSpeech "PyQt6.QtTextToSpeech";
+  ++ lib.optional withSpeech "PyQt6.QtTextToSpeech"
+  ++ lib.optional withPdf "PyQt6.QtPdf";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 

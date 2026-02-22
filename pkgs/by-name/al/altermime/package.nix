@@ -9,7 +9,7 @@ gccStdenv.mkDerivation rec {
   version = "0.3.11";
 
   src = fetchurl {
-    url = "https://pldaniels.com/${pname}/${pname}-${version}.tar.gz";
+    url = "https://pldaniels.com/altermime/altermime-${version}.tar.gz";
     sha256 = "15zxg6spcmd35r6xbidq2fgcg2nzyv1sbbqds08lzll70mqx4pj7";
   };
 

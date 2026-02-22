@@ -9,14 +9,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opendmarc";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "trusteddomainproject";
     repo = "opendmarc";
-    rev = "rel-opendmarc-${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    rev = "rel-opendmarc-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     hash = "sha256-vnWtTvHhzCed7P6rN3wAz6zfRvtV0cLn5GhDxLF8H3c=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
       helsinki-Jo
     ];
   };
-}
+})

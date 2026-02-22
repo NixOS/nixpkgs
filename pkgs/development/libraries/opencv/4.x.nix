@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   unzip,
@@ -104,7 +103,7 @@ let
     ;
   inherit (lib.trivial) flip;
 
-  version = "4.12.0";
+  version = "4.13.0";
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
@@ -115,21 +114,21 @@ let
     owner = "opencv";
     repo = "opencv";
     tag = version;
-    hash = "sha256-TZdEeZyBY3vCI53g4VDMzl3AASMuXAZKrSH/+XlxR7c=";
+    hash = "sha256-h9gpSf+xf/OafQSCYq3JYBt/ShnxafSG7WbxesTjM/A=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
     tag = version;
-    hash = "sha256-3tbscRFryjCynIqh0OWec8CUjXTeIDxOGJkHTK2aIao=";
+    hash = "sha256-8YRCq1H9afb1a0pVevH0x61SMW4dTpLAno/P9A6bOIg=";
   };
 
   testDataSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_extra";
     tag = version;
-    hash = "sha256-f8PZyFLdfixt1ApjMc9Cvj9nfEaDRUszSeEfCsWziis=";
+    hash = "sha256-r73Hphh5ZuKt3IoQMzbtL1AxeVZd2OSpvZ8x8v6Bd0k=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -141,8 +140,8 @@ let
       fetchFromGitHub {
         owner = "opencv";
         repo = "opencv_3rdparty";
-        rev = "7f55c0c26be418d494615afca15218566775c725";
-        hash = "sha256-XbmS+FXUL8MAG7kawbDkb2XHG9R0DpPhiYhq/18eTnY=";
+        rev = "c934a2a15a6df020446ac3dfa07e3acf72b63a8f";
+        hash = "sha256-L1n1pq7SiPLOMTCEpju4kXPHxhH9La8AvmwZrYU9iEQ=";
       }
       + "/ippicv";
     files =
@@ -300,33 +299,24 @@ effectiveStdenv.mkDerivation {
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
     ./0001-cmake-OpenCVUtils.cmake-invalidate-Nix-store-paths-b.patch
-    (fetchpatch {
-      name = "ffmpeg-8-support.patch";
-      url = "https://github.com/opencv/opencv/commit/90c444abd387ffa70b2e72a34922903a2f0f4f5a.patch";
-      hash = "sha256-iRRparDJoNhrvELH6cAagWcVzpiE2lfivHVxvZyi3ik=";
-    })
-    (fetchpatch {
-      name = "fix-ffmpeg-8-support.patch";
-      url = "https://github.com/opencv/opencv/commit/dbb622b7f59c3f0e5bd3487252ef37cf72dcdcdb.patch";
-      hash = "sha256-MS9WizZQu0Gxw/daDDFmETxcDJYRTyhSq/xK0X5lAZM=";
-    })
-    # Backport upstream fix for reproducible builds
-    # https://github.com/opencv/opencv/pull/27962
-    (fetchpatch {
-      name = "support-reproducible-builds.patch";
-      url = "https://github.com/opencv/opencv/commit/7224bced8bff9d16d5e869d44f90f95ad8fdfe25.patch";
-      hash = "sha256-DIlTQaIVWpPgJgPktY+0vd3BWJoS38YZn5aFS7DqsNM=";
-    })
   ]
   ++ optionals enableCuda [
     ./cuda_opt_flow.patch
   ];
 
-  # This prevents cmake from using libraries in impure paths (which
-  # causes build failure on non NixOS)
-  postPatch = ''
-    sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
-  '';
+  postPatch =
+    # This prevents cmake from using libraries in impure paths (which
+    # causes build failure on non NixOS)
+    ''
+      sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
+    ''
+    # TODO
+    + ''
+      substituteInPlace modules/ts/include/opencv2/ts/ts_gtest.h \
+        --replace-fail \
+          "#if defined(__GNUC__) && (__GNUC__ == 14)" \
+          "#if defined(__GNUC__)"
+    '';
 
   preConfigure =
     installExtraFile ade

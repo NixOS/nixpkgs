@@ -7,7 +7,7 @@
 }:
 
 symlinkJoin {
-  inherit (nix-index-unwrapped) name meta;
+  inherit (nix-index-unwrapped) pname version meta;
 
   paths = [ nix-index-unwrapped ];
 

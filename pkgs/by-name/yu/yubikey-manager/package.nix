@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.8.0";
+  version = "5.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
     tag = version;
-    hash = "sha256-Z3krdKP6hhhIxN7nl/k5r30jFVC0kZK9Z6Aqllp/KrA=";
+    hash = "sha256-8SWuhuFeMRIskJRxeb67gA3gdhSDf/vnrYHra6t71Bc=";
   };
 
   postPatch = ''
@@ -33,11 +33,12 @@ python3Packages.buildPythonPackage rec {
   ];
 
   dependencies = with python3Packages; [
-    cryptography
-    pyscard
-    fido2
     click
+    cryptography
+    fido2
     keyring
+    pyscard
+    python-pskc
   ];
 
   postInstall = ''
@@ -50,8 +51,9 @@ python3Packages.buildPythonPackage rec {
   '';
 
   nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
+    astroid
     makefun
+    pytestCheckHook
   ];
 
   meta = {

@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unicorn";
   version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "unicorn-engine";
     repo = "unicorn";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jEQXjYlLUdKrKPL4XfSbixn2KWJlNG7IYQveF4jDgl4=";
   };
 
@@ -26,8 +26,10 @@ stdenv.mkDerivation rec {
     cctools
   ];
 
-  # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+  env = lib.optionalAttrs stdenv.hostPlatform.isRiscV {
+    # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
+    NIX_LDFLAGS = "-latomic";
+  };
 
   cmakeFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Some x86 tests are interrupted by signal 10
@@ -45,4 +47,4 @@ stdenv.mkDerivation rec {
       thoughtpolice
     ];
   };
-}
+})

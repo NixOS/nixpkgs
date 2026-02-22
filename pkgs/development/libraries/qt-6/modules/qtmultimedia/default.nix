@@ -20,7 +20,7 @@
   libpulseaudio,
   pipewire,
   wayland,
-  libXrandr,
+  libxrandr,
   elfutils,
   libunwind,
   orc,
@@ -42,7 +42,7 @@ qtModule {
     pipewire
     alsa-lib
     wayland
-    libXrandr
+    libxrandr
     libva
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [ elfutils ];

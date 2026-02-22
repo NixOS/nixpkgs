@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ictree";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "NikitaIvanovV";
     repo = "ictree";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-77Wo6jN8VUGTXBuGL0a9kvSIixdyEQoxqqNsHq9jcWw=";
     fetchSubmodules = true;
   };
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "ictree";
   };
-}
+})

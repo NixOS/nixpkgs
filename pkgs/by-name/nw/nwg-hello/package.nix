@@ -8,7 +8,7 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nwg-hello";
   version = "0.4.2";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-hello";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SLz9qnk8JESTj1EeTJiQboDylEHC6r5KbvDhZ4zgiAo=";
   };
 
@@ -68,11 +68,11 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/nwg-piotr/nwg-hello";
-    changelog = "https://github.com/nwg-piotr/nwg-hello/releases/tag/${src.tag}";
+    changelog = "https://github.com/nwg-piotr/nwg-hello/releases/tag/${finalAttrs.src.tag}";
     description = "GTK3-based greeter for the greetd daemon, written in python";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "nwg-hello";
   };
-}
+})

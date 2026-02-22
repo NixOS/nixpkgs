@@ -5,10 +5,10 @@
   pkg-config,
   fontconfig,
   libGL,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
   cmake,
   libxkbcommon,
   wayland,
@@ -37,10 +37,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     fontconfig
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
     libxkbcommon
     wayland
   ];

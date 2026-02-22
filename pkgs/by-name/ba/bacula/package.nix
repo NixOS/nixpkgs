@@ -12,14 +12,20 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bacula";
   version = "15.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/bacula/bacula-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-KUr9PS651bccPQ6I/fGetRO/24Q7KNNcBVLkrgYoJ6E=";
   };
+
+  patches = [
+    # ncurses 6.6 moved the termios.h include inside #ifdef NCURSES_INTERNALS in term.h,
+    # so applications can no longer rely on term.h to provide termios symbols.
+    ./0001-console-include-termios.h-explicitly.patch
+  ];
 
   # libtool.m4 only matches macOS 10.*
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
@@ -81,4 +87,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

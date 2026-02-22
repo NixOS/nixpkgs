@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "jiratui";
   version = "1.3.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "whyisdifficult";
     repo = "jiratui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-b5bSMPnqHqpeFDl501gSun7G38OlhV/IMNMYXQT+j/4=";
   };
 
@@ -53,9 +53,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "A Textual User Interface for interacting with Atlassian Jira from your shell";
     homepage = "https://github.com/whyisdifficult/jiratui";
-    changelog = "https://github.com/whyisdifficult/jiratui/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/whyisdifficult/jiratui/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];
     mainProgram = "jiratui";
   };
-}
+})

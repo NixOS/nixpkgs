@@ -5,7 +5,7 @@
   mp3Support ? true,
   lame,
   opusSupport ? true,
-  opusTools,
+  opus-tools,
   faacSupport ? false,
   faac,
   flacSupport ? true,
@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication {
       zeroconf
     ]
     ++ lib.optional mp3Support lame
-    ++ lib.optional opusSupport opusTools
+    ++ lib.optional opusSupport opus-tools
     ++ lib.optional faacSupport faac
     ++ lib.optional flacSupport flac
     ++ lib.optional soxSupport sox

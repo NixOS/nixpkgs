@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "NGT";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "yahoojapan";
     repo = "NGT";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2cCuVeg7y3butTIAQaYIgx+DPqIFEA2qqVe3exAoAY8=";
+    sha256 = "sha256-T+ZFmvak1ZfY7I/9QKpC7qqXLq/tBdy+KUjx/0twceg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,8 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     openblas
   ];
 
-  NIX_ENFORCE_NO_NATIVE = !enableAVX;
-  __AVX2__ = if enableAVX then 1 else 0;
+  env = {
+    NIX_ENFORCE_NO_NATIVE = !enableAVX;
+    __AVX2__ = if enableAVX then 1 else 0;
+  };
 
   meta = {
     homepage = "https://github.com/yahoojapan/NGT";

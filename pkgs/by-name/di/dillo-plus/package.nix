@@ -6,7 +6,7 @@
   giflib,
   libjpeg,
   libpng,
-  libXdmcp,
+  libxdmcp,
   openssl,
   pkg-config,
   wget,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     libjpeg
     libpng
-    libXdmcp
+    libxdmcp
     openssl
   ];
 

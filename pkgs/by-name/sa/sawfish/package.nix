@@ -6,12 +6,12 @@
   gdk-pixbuf-xlib,
   gettext,
   gtk2-x11,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libxcrypt,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libxinerama,
+  libxrandr,
+  libxtst,
   librep,
   makeWrapper,
   pango,
@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gdk-pixbuf-xlib
     gtk2-x11
-    libICE
-    libSM
+    libice
+    libsm
     libxcrypt
-    libXinerama
-    libXrandr
-    libXtst
+    libxinerama
+    libxrandr
+    libxtst
     librep
     pango
     rep-gtk

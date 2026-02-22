@@ -16,14 +16,14 @@
   pigz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sanoid";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "jimsalterjrs";
     repo = "sanoid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-s6MP3x4qSuuiJKq2V2oLAXp6zaMSqKRCs5O9UMSgcvE=";
   };
 
@@ -101,4 +101,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

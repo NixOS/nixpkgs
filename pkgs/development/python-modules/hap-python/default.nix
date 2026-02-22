@@ -12,7 +12,6 @@
   pytest-timeout,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   zeroconf,
 }:

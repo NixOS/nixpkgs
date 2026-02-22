@@ -16,8 +16,8 @@ let
       case = case: out: { inherit case out; };
     in
     lib.switch rocq-core.rocq-version [
-      (case (lib.versions.range "8.18" "9.1") "2.3.3")
-      (case (lib.versions.range "8.18" "9.1") "2.3.0")
+      # When updating the default version here, also update the VsRocq VS Code extension
+      (case (lib.versions.range "8.18" "9.1") "2.3.4")
     ] null;
   location = {
     domain = "github.com";
@@ -29,6 +29,8 @@ let
     release."2.3.0".sha256 = "sha256-BZLxcCmSGFf04eUmlJXnyxmg4hTwpFaPaIik4VD444M=";
     release."2.3.3".rev = "v2.3.3";
     release."2.3.3".sha256 = "sha256-wgn28wqWhZS4UOLUblkgXQISgLV+XdSIIEMx9uMT/ig=";
+    release."2.3.4".rev = "v2.3.4";
+    release."2.3.4".sha256 = "sha256-v1hQjE8U1o2VYOlUjH0seIsNG+NrMNZ8ixt4bQNyGvI=";
     inherit location;
   };
   fetched = fetch (if version != null then version else defaultVersion);
@@ -72,7 +74,6 @@ ocamlPackages.buildDunePackage {
     license = lib.licenses.mit;
   }
   // lib.optionalAttrs (fetched.broken or false) {
-    rocqFilter = true;
     broken = true;
   };
 }

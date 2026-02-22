@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build system
   setuptools,
@@ -27,24 +26,15 @@
 
 buildPythonPackage rec {
   pname = "samsungtvws";
-  version = "2.7.2";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
     tag = "v${version}";
-    hash = "sha256-CU59Kg8kSEE71x6wifCKCaVFdaMftodtkrAOpD+qvWY=";
+    hash = "sha256-yxCdcE5N/ZMRAkb0R8TT1jocMre0xv3EzpBXJ6Erkvg=";
   };
-
-  patches = [
-    # https://github.com/xchwarze/samsung-tv-ws-api/pull/159
-    (fetchpatch {
-      name = "replace-async-timeout-with-asyncio.timeout.patch";
-      url = "https://github.com/xchwarze/samsung-tv-ws-api/commit/c5b363aababe0e859cf3aa521a658c83c567f876.patch";
-      hash = "sha256-gEtcqmxy2Til0KYLGwCxRThx9fndqdMbYam5WbzDKOo=";
-    })
-  ];
 
   build-system = [ setuptools ];
 

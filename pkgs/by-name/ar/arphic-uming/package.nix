@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.2.20080216.2";
 
   src = fetchurl {
-    url = "mirror://ubuntu/pool/main/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.bz2";
+    url = "mirror://ubuntu/pool/main/f/fonts-arphic-uming/fonts-arphic-uming_${version}.orig.tar.bz2";
     hash = "sha256-48GeBOp6VltKz/bx5CSAhNLhB1LjBb991sdugIYNwds=";
   };
 

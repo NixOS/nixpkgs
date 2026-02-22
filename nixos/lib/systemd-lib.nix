@@ -57,7 +57,7 @@ let
   inherit (lib.strings) toJSON;
 
   cfg = config.systemd;
-  lndir = "${pkgs.buildPackages.xorg.lndir}/bin/lndir";
+  lndir = "${pkgs.buildPackages.lndir}/bin/lndir";
   systemd = cfg.package;
 in
 rec {
@@ -688,17 +688,19 @@ rec {
       };
     };
 
-  stage2ServiceConfig = {
-    imports = [ serviceConfig ];
-    # Default path for systemd services. Should be quite minimal.
-    config.path = mkAfter [
-      pkgs.coreutils
-      pkgs.findutils
-      pkgs.gnugrep
-      pkgs.gnused
-      systemd
-    ];
-  };
+  stage2ServiceConfig =
+    { config, ... }:
+    {
+      imports = [ serviceConfig ];
+      # Default path for systemd services. Should be quite minimal.
+      config.path = mkIf config.enableDefaultPath (mkAfter [
+        pkgs.coreutils
+        pkgs.findutils
+        pkgs.gnugrep
+        pkgs.gnused
+        systemd
+      ]);
+    };
 
   stage1ServiceConfig = serviceConfig;
 

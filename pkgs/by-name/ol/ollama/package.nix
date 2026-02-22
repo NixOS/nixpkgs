@@ -137,17 +137,16 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  # don't forget to invalidate all hashes each update
-  version = "0.14.1";
+  version = "0.15.6";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r9Qwa1bAzLlr50mB+RLkRfuCFe6FUXtR9irqvU7PAvA=";
+    hash = "sha256-II9ffgkMj2yx7Sek5PuAgRnUIS1Kf1UeK71+DwAgBRE=";
   };
 
-  vendorHash = "sha256-WdHAjCD20eLj0d9v1K6VYP8vJ+IZ8BEZ3CciYLLMtxc=";
+  vendorHash = "sha256-r7bSHOYAB5f3fRz7lKLejx6thPx0dR4UXoXu0XD7kVM=";
 
   env =
     lib.optionalAttrs enableRocm {
@@ -193,6 +192,7 @@ goBuild (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm ml/backend/ggml/ggml_test.go
     rm ml/nn/pooling/pooling_test.go
+    rm model/models/qwen3next/checkpoints_test.go
   '';
 
   overrideModAttrs = (

@@ -10,7 +10,7 @@
   gst_all_1,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gnome-keysign";
   version = "1.3.0";
   format = "setuptools";
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-keysign";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-k77z8Yligzs4rHpPckRGcC5qnCHynHQRjdDkzxwt1Ss=";
   };
 
@@ -71,4 +71,4 @@ python3.pkgs.buildPythonApplication rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

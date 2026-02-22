@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  callPackage,
+  buildVscode,
   fetchurl,
   nixosTests,
   commandLineArgs ? "",
@@ -27,23 +27,23 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-NvICNng069Z6qvL3TnjLu82wyfGyjH8wK9aNw2YR2Jk=";
-      x86_64-darwin = "sha256-Ukms3L0tIw7tDfMqFctLjIzkUdr9rvXomKwhrGswMXk=";
-      aarch64-linux = "sha256-+6G7coqgPSOA3xFMKSOpZCDzb9Ssc7wqJnnlaW54e/I=";
-      aarch64-darwin = "sha256-49Zf51yiozdY9V5sPGnECXTUpNIO3OC2c//G2FQcCy0=";
-      armv7l-linux = "sha256-6l75xTqeUkDJW6/WTtkGrAsnmlcQPiVTmiEDRXDI/QA=";
-      loongarch64-linux = "sha256-PNPVAf6jh20jpFVhDGDgT5wo5xPZDQ2xdm4LO0/Vlzk=";
+      x86_64-linux = "sha256-vijpAKlBP0dS40YlKMRCPZsgu7T+FiPgLJAgpE39BHA=";
+      x86_64-darwin = "sha256-EQDLzLJwVQFWe+aez3PLS2uJXgYyocjH28R7v/n86sY=";
+      aarch64-linux = "sha256-Or1SLzmaqCwde71e9AfQkQDUV4tAA8cYFBk5iqi562M=";
+      aarch64-darwin = "sha256-j8gbLW+czhFkaPOmcJBTaeWm7cxAYtvebGihQ9tWVC8=";
+      armv7l-linux = "sha256-7L9Pu+roEietJlwNoh7uEIkr2q5Mi8Y1uorv3TkvE3M=";
+      loongarch64-linux = "sha256-/KEKLDaRPX2ZM3qn3T2nqV16aG5wtuzpDWs2EdLtzZU=";
     }
     .${system} or throwSystem;
 
   sourceRoot = lib.optionalString (!stdenv.hostPlatform.isDarwin) ".";
 in
-callPackage ./generic.nix rec {
+buildVscode rec {
   inherit sourceRoot commandLineArgs useVSCodeRipgrep;
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.108.10359";
+  version = "1.109.31074";
   pname = "vscodium";
 
   executableName = "codium";

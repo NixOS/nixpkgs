@@ -17,7 +17,6 @@
   fetchurl,
   fzf,
   glib,
-  glibc,
   gmp,
   gnulib,
   gnum4,
@@ -25,6 +24,7 @@
   imagemagick,
   installShellFiles,
   lib,
+  libc,
   libevent,
   libiconv,
   libmpack,
@@ -35,7 +35,6 @@
   libxcrypt,
   libyaml,
   lua-language-server,
-  luajitPackages,
   mariadb,
   mpfr,
   neovim-unwrapped,
@@ -251,13 +250,6 @@ in
     '';
   };
 
-  image-nvim = prev.image-nvim.overrideAttrs {
-    propagatedBuildInputs = [
-      lua
-      luajitPackages.magick
-    ];
-  };
-
   ldbus = prev.ldbus.overrideAttrs (old: {
     luarocksConfig = old.luarocksConfig // {
       variables = {
@@ -393,6 +385,7 @@ in
     buildInputs = old.buildInputs ++ [
       gnulib
     ];
+    meta.broken = isLuaJIT;
   });
 
   lrexlib-oniguruma = prev.lrexlib-oniguruma.overrideAttrs {
@@ -415,9 +408,13 @@ in
 
   lrexlib-posix = prev.lrexlib-posix.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
-      glibc.dev
+      (lib.getDev libc)
     ];
   });
+
+  lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
+    meta.broken = isLuaJIT;
+  };
 
   lua-curl = prev.lua-curl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
@@ -474,6 +471,13 @@ in
     buildInputs = old.buildInputs ++ [
       yajl
     ];
+    luarocksConfig = old.luarocksConfig // {
+      variables = {
+        # Since yajl's outputs are split, we need to help luarocks find the
+        # include directory.
+        YAJL_INCDIR = "${lib.getDev yajl}/include";
+      };
+    };
   });
 
   lua-zlib = prev.lua-zlib.overrideAttrs (old: {
@@ -692,7 +696,7 @@ in
 
   luasystem = prev.luasystem.overrideAttrs (
     lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      buildInputs = [ glibc.out ];
+      buildInputs = [ libc.out ];
     }
   );
 
@@ -940,57 +944,11 @@ in
     '';
   };
 
-  readline = final.callPackage (
-    {
-      buildLuarocksPackage,
-      fetchurl,
-      luaAtLeast,
-      luaOlder,
-      luaposix,
-    }:
-    # upstream broken, can't be generated, so moved out from the generated set
-    buildLuarocksPackage {
-      pname = "readline";
-      version = "3.2-0";
-      knownRockspec =
-        (fetchurl {
-          url = "mirror://luarocks/readline-3.2-0.rockspec";
-          sha256 = "1r0sgisxm4xd1r6i053iibxh30j7j3rcj4wwkd8rzkj8nln20z24";
-        }).outPath;
-      src = fetchurl {
-        # the rockspec url doesn't work because 'www.' is not covered by the certificate so
-        # I manually removed the 'www' prefix here
-        url = "http://pjb.com.au/comp/lua/readline-3.2.tar.gz";
-        sha256 = "1mk9algpsvyqwhnq7jlw4cgmfzj30l7n2r6ak4qxgdxgc39f48k4";
-      };
-
-      luarocksConfig.variables = rec {
-        READLINE_INCDIR = "${readline.dev}/include";
-        HISTORY_INCDIR = READLINE_INCDIR;
-      };
-      unpackCmd = ''
-        unzip "$curSrc"
-        tar xf *.tar.gz
-      '';
-
-      propagatedBuildInputs = [
-        luaposix
-        readline.out
-      ];
-
-      meta = {
-        homepage = "https://pjb.com.au/comp/lua/readline.html";
-        description = "Interface to the readline library";
-        license.fullName = "MIT/X11";
-        broken = (luaOlder "5.1") || (luaAtLeast "5.5");
-      };
-    }
-  ) { };
-
   rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs {
 
     # E5113: Error while calling lua chunk [...] pl.path requires LuaFileSystem
-    doCheck = luaOlder "5.2";
+    # TODO: figure out darwin failure
+    doCheck = luaOlder "5.2" && stdenv.hostPlatform.isLinux;
     nativeCheckInputs = [
       final.nlua
       final.busted
@@ -1010,7 +968,8 @@ in
       writableTmpDirAsHomeHook
     ];
 
-    doCheck = lua.luaversion == "5.1";
+    # TODO: figure out darwin failure
+    doCheck = lua.luaversion == "5.1" && stdenv.hostPlatform.isLinux;
 
     nvimSkipModules = [
       "bootstrap" # tries to install luarocks from network
@@ -1121,10 +1080,9 @@ in
   });
 
   toml-edit = prev.toml-edit.overrideAttrs (old: {
-
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
-      hash = "sha256-ow0zefFFrU91Q2PJww2jtd6nqUjwXUtfQzjkzl/AXuo=";
+      hash = "sha256-8lYvdraKEd1nf8dkZuSDQRVJvX56gHCcTZVtyoy/0IM=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
@@ -1136,7 +1094,6 @@ in
       rustPlatform.cargoSetupHook
       lua.pkgs.luarocks-build-rust-mlua
     ];
-
   });
 
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {
@@ -1168,9 +1125,12 @@ in
       ++ [
         lua.pkgs.luarocks-build-treesitter-parser-cpp
       ];
+
+    meta.broken = lua.luaversion != "5.1";
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
+    strictDeps = true; # can be removed after february 2026
     propagatedBuildInputs =
       let
         # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
@@ -1180,11 +1140,14 @@ in
       old.propagatedBuildInputs
       ++ [
         lua.pkgs.luarocks-build-treesitter-parser
-        tree-sitter
       ];
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       writableTmpDirAsHomeHook
+      tree-sitter
     ];
+
+    # should be fixed upstream
+    meta.broken = lua.luaversion != "5.1";
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {

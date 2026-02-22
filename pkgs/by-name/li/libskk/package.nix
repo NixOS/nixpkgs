@@ -15,14 +15,14 @@
   libxkbcommon,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libskk";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "ueno";
     repo = "libskk";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xXed7mQqseefIldGjNsQf8n0YTcI9L9T1FkO/dhNR3g=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ yuriaisaka ];
     platforms = lib.platforms.linux;
   };
-}
+})

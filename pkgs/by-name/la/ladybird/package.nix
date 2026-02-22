@@ -31,17 +31,18 @@
   libtommath,
   sdl3,
   icu78,
+  simdjson,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-01-11";
+  version = "0-unstable-2026-02-14";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "7814b497850ce131dfbfff8bd48836c121c2b237";
-    hash = "sha256-MMIk1FF9GB4pPNDdeSAGMjqqbVybn67EVtzcEOVbRIg=";
+    rev = "ae9106a29da6b93695da2954e2a43b8ab2c2c112";
+    hash = "sha256-cmF5YVnS2kwS3YghPFcuCAP9PWnDs6xbS8XkdH268Qc=";
   };
 
   postPatch = ''
@@ -113,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     }))
     woff2
     icu78
+    simdjson
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux [
     libpulseaudio.dev

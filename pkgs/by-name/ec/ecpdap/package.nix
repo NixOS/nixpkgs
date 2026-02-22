@@ -6,18 +6,18 @@
   libusb1,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ecpdap";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "adamgreig";
     repo = "ecpdap";
-    rev = "v${version}";
-    sha256 = "sha256-pgQqDRdewBSCm1/9/r8E9DBzwSKAaons3e6OLNv5gHM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-8YmdwhRYNOSAAa0hTC9f5nm+TDg2GiMbML+qNxJP3lw=";
   };
 
-  cargoHash = "sha256-o+qm4MFZt+BzqhQsaI5EU9lZz4LI9D75eL+VKIKbIyI=";
+  cargoHash = "sha256-Qz5yc3skpItCdoK4ffLbcT99YcOkvGfm3A/+QZ6FbBw=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

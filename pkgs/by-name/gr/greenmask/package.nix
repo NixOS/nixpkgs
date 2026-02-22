@@ -5,15 +5,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "greenmask";
-  version = "0.2.15";
+  version = "0.2.16";
 
   src = fetchFromGitHub {
     owner = "GreenmaskIO";
     repo = "greenmask";
-    tag = "v${version}";
-    hash = "sha256-/At0boolTyge4VNy1EDpK09Yo7hLAdq6SvCbyBTKGbw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0XWVYkC5ltpJZ1VLG3G1gvTwGdgqY4nzmOvDDnbz0Ss=";
   };
 
   vendorHash = "sha256-t2U65GAGBGdMRXPTkCQCuXfLuqohA6erTlvAN/xx/ek=";
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/greenmaskio/greenmask/cmd/greenmask/cmd.Version=${version}"
+    "-X=github.com/greenmaskio/greenmask/cmd/greenmask/cmd.Version=${finalAttrs.version}"
   ];
 
   nativeCheckInputs = [ coreutils ];
@@ -42,9 +42,9 @@ buildGoModule rec {
   meta = {
     description = "PostgreSQL database anonymization tool";
     homepage = "https://github.com/GreenmaskIO/greenmask";
-    changelog = "https://github.com/GreenmaskIO/greenmask/releases/tag/v${version}";
+    changelog = "https://github.com/GreenmaskIO/greenmask/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "greenmask";
   };
-}
+})

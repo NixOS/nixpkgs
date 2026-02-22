@@ -6,7 +6,7 @@
   gobject-introspection,
   gtk3,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nwg-icon-picker";
   version = "0.1.1";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-icon-picker";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Gm3JhS6eq2mSex4VFe71tRf13qWDCSqXoiMvNIhu9Sw=";
   };
 
@@ -51,4 +51,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "nwg-icon-picker";
     maintainers = with lib.maintainers; [ quantenzitrone ];
   };
-}
+})

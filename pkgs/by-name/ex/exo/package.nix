@@ -18,13 +18,13 @@
   nix-update-script,
 }:
 let
-  version = "1.0.63";
+  version = "1.0.67";
   src = fetchFromGitHub {
     name = "exo";
     owner = "exo-explore";
     repo = "exo";
     tag = "v${version}";
-    hash = "sha256-aQ3rGLtT/zvIVdKQcwqODulzEHBKg7KMkBg3KJEscho=";
+    hash = "sha256-hipCiAqCkkyrVcQXEZKbGoVbgjM3hykUcazNPEbT+q8=";
   };
 
   pyo3-bindings = python3Packages.buildPythonPackage (finalAttrs: {
@@ -55,6 +55,10 @@ let
     enabledTestPaths = [
       "rust/exo_pyo3_bindings/tests/"
     ];
+
+    # RuntimeError
+    # Attempted to create a NULL object
+    doCheck = !stdenv.hostPlatform.isDarwin;
   });
 
   dashboard = buildNpmPackage (finalAttrs: {
@@ -71,7 +75,20 @@ let
         sourceRoot
         ;
       fetcherVersion = 2;
-      hash = "sha256-w3FZL/yy8R+SWCQF7+v21sKyizvZMmipG6IfhJeSjyQ=";
+      hash = "sha256-3ZgE1ysb1OeB4BNszvlrnYcc7gOo7coPfOEQmMHC6E0=";
+    };
+  });
+
+  # exo requires building mlx-lm from its main branch to use the kimi-k2.5 model
+  mlx-lm-unstable = python3Packages.mlx-lm.overridePythonAttrs (old: {
+    version = "0.30.4-unstable-2026-01-27";
+    src = old.src.override {
+      rev = "96699e6dadb13b82b28285bb131a0741997d19ae";
+      tag = null;
+      hash = "sha256-L1ws8XA8VhR18pRuRGbVal/yEfJaFNW8QzS16C1dFpE=";
+    };
+    meta = old.meta // {
+      changelog = "https://github.com/ml-explore/mlx-lm/releases/tag/v0.30.5";
     };
   });
 in
@@ -100,15 +117,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
         "_MemoryObjectStreamState as AnyioState,"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/exo/worker/utils/macmon.py \
+    substituteInPlace src/exo/utils/info_gatherer/info_gatherer.py \
       --replace-fail \
-        'path = shutil.which("macmon")' \
-        'path = "${lib.getExe macmon}"'
-
-    substituteInPlace src/exo/worker/utils/tests/test_macmon.py \
-      --replace-fail \
-        'cmd=["macmon"' \
-        'cmd=["${lib.getExe macmon}"'
+        'shutil.which("macmon")' \
+        '"${lib.getExe macmon}"'
   '';
 
   build-system = with python3Packages; [
@@ -137,8 +149,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       hypercorn
       jinja2
       loguru
+      mflux
       mlx
-      mlx-lm
+      mlx-lm-unstable
       nvidia-ml-py
       openai
       openai-harmony
@@ -148,10 +161,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
       psutil
       pydantic
       pyo3-bindings
+      python-multipart
       rustworkx
       scapy
       tiktoken
       tinygrad
+      tomlkit
       transformers
       uvloop
     ]
@@ -179,6 +194,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # ValueError: zip() argument 2 is longer than argument 1
     "test_events_processed_in_correct_order"
+
+    # system_profiler is not available in the sandbox
+    "test_tb_parsing"
+
+    # Flaky in the sandbox (even when __darwinAllowLocalNetworking is enabled)
+    # RuntimeError - Attempted to create a NULL object.
+    "test_sleep_on_multiple_items"
+
+    # Flaky in the sandbox (even when __darwinAllowLocalNetworking is enabled)
+    # AssertionError: Expected 2 results, got 0. Errors: {0: "[ring] Couldn't bind socket (error: 1)"}
+    "test_composed_call_works"
   ];
 
   disabledTestPaths = [

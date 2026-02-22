@@ -6,8 +6,8 @@
   alsa-utils,
   fltk,
   libjack2,
-  libXft,
-  libXpm,
+  libxft,
+  libxpm,
   libjpeg,
   libpng,
   libsamplerate,
@@ -15,12 +15,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rakarrack";
   version = "0.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rakarrack/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/rakarrack/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     sha256 = "1rpf63pdn54c4yg13k7cb1w1c7zsvl97c4qxcpz41c8l91xd55kn";
   };
 
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     alsa-utils
     fltk
     libjack2
-    libXft
-    libXpm
+    libxft
+    libxpm
     libjpeg
     libpng
     libsamplerate
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

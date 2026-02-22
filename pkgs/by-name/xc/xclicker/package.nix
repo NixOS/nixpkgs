@@ -7,7 +7,7 @@
   pkg-config,
   wrapGAppsHook3,
   gtk3,
-  libXtst,
+  libxtst,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libXtst
+    libxtst
   ];
 
   mesonBuildType = "release";

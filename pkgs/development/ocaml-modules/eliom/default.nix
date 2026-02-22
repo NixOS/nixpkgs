@@ -17,14 +17,14 @@
   ocsipersist,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "eliom";
   version = "11.1.1";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "eliom";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ALuoyO6axNQEeBteBVIFwdoSrbLxxcaSTObAcLPGIvo=";
   };
 
@@ -72,4 +72,4 @@ buildDunePackage rec {
     broken = true;
     maintainers = [ lib.maintainers.gal_bolle ];
   };
-}
+})

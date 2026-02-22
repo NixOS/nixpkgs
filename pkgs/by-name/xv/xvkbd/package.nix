@@ -2,37 +2,37 @@
   lib,
   stdenv,
   fetchurl,
-  libXt,
-  libXaw,
-  libXtst,
-  libXi,
-  libXpm,
+  libxt,
+  libxaw,
+  libxtst,
+  libxi,
+  libxpm,
   pkg-config,
   xorgproto,
   Xaw3d,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xvkbd";
   version = "4.1";
   src = fetchurl {
-    url = "http://t-sato.in.coocan.jp/xvkbd/xvkbd-${version}.tar.gz";
+    url = "http://t-sato.in.coocan.jp/xvkbd/xvkbd-${finalAttrs.version}.tar.gz";
     sha256 = "1x5yldv9y99cw5hzzs73ygdn1z80zns9hz0baa355r711zghfbcm";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libXt
-    libXaw
-    libXtst
+    libxt
+    libxaw
+    libxtst
     xorgproto
-    libXi
+    libxi
     Xaw3d
-    libXpm
+    libxpm
   ];
 
   makeFlags = [
-    # avoid default libXt location
+    # avoid default libxt location
     "appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
     "datarootdir=${placeholder "out"}/share"
   ];
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xvkbd";
   };
-}
+})

@@ -21,14 +21,14 @@
   glibmm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lightspark";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lightspark";
     repo = "lightspark";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-2+Kmwj2keCMR7UbKbY6UvrkX4CnW61elres8ltiZuUg=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "lightspark";
   };
-}
+})

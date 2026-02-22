@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   numactl,
 }:

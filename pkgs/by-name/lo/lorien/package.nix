@@ -14,14 +14,14 @@
   libGL,
   libGLU,
   libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   zlib,
   udev, # for libudev
 }:
@@ -56,14 +56,14 @@ stdenv.mkDerivation rec {
     alsa-lib
     libGL
     libGLU
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxcursor
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
     zlib
     udev
   ];

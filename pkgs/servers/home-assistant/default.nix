@@ -12,7 +12,7 @@
   inetutils,
   nixosTests,
   home-assistant,
-  testers,
+  versionCheckHook,
 
   # Look up dependencies of specified components in component-packages.nix
   extraComponents ? [ ],
@@ -86,24 +86,6 @@ let
           self.pytz
         ];
       });
-
-      imageio = super.imageio.overridePythonAttrs (oldAttrs: {
-        disabledTests = oldAttrs.disabledTests or [ ] ++ [
-          # broken by pyav pin
-          "test_keyframe_intervals"
-          "test_lagging_video_stream"
-        ];
-      });
-
-      google-genai = super.google-genai.overridePythonAttrs rec {
-        version = "1.38.0";
-        src = fetchFromGitHub {
-          owner = "googleapis";
-          repo = "python-genai";
-          tag = "v${version}";
-          hash = "sha256-gJaLEpNKHl6n1MvQDIUW7ynsHYH2eEPGsYso5jSysNg=";
-        };
-      };
 
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
@@ -206,16 +188,6 @@ let
         };
       });
 
-      pydexcom = super.pydexcom.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.3";
-        src = fetchFromGitHub {
-          owner = "gagebenne";
-          repo = "pydexcom";
-          tag = version;
-          hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
-        };
-      });
-
       pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
         version = "0.6.5";
         src = fetchFromGitHub {
@@ -293,7 +265,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.1.2";
+  hassVersion = "2026.2.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -314,13 +286,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-+H+ujcJ7uYLNFfm05V7FBdogGGUSkC1b6PaWJ5Zu24k=";
+    hash = "sha256-BEE27D1P3cbxjQMRh3VHL6KDXa7bZDfqK316VQg0/SM=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-uWcSCmarOtfYIVYPz8wAgO8tx15MJcEP1Wv3h8YT0xI=";
+    hash = "sha256-UkIxZx3IU0IZh8gbjZ9xRkEZS97UW85FT5isNyPyiHQ=";
   };
 
   build-system = with python.pkgs; [
@@ -446,11 +418,14 @@ python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs =
     requirementsTest
+    ++ [ versionCheckHook ]
     ++ (with python.pkgs; [
       # Used in tests/non_packaged_scripts/test_alexa_locales.py
       beautifulsoup4
       # Used in tests/scripts/test_check_config.py
       colorlog
+      # Used in tests/helpers/test_httpx_client.py
+      h2
     ])
     ++ lib.concatMap (component: getPackages component python.pkgs) [
       # some components are needed even if tests in tests/components are disabled
@@ -517,10 +492,6 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       nixos = nixosTests.home-assistant;
       components = callPackage ./tests.nix { };
-      version = testers.testVersion {
-        package = home-assistant;
-        command = "hass --version";
-      };
       withoutCheckDeps = home-assistant.overridePythonAttrs {
         pname = "home-assistant-without-check-deps";
         doCheck = false;

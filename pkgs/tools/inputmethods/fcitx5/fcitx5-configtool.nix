@@ -21,7 +21,7 @@
   kirigami ? null,
   kirigami2 ? null,
   isocodes,
-  xkeyboardconfig,
+  xkeyboard-config,
   libxkbfile,
   libplasma ? null,
   plasma-framework ? null,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     kitemviews
     kwidgetsaddons
     isocodes
-    xkeyboardconfig
+    xkeyboard-config
     libxkbfile
   ]
   ++ lib.optionals (lib.versions.major qtbase.version == "5") [

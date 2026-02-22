@@ -64,7 +64,9 @@
   libossp_uuid,
   lxc,
   libpcap,
-  xorg,
+  libxtst,
+  libxdmcp,
+  libpthread-stubs,
   gtk3,
   lerc,
   buildRubyGem,
@@ -180,8 +182,8 @@ in
       glib
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ];
   };
 
@@ -192,8 +194,8 @@ in
       expat
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ];
   };
 
@@ -563,9 +565,9 @@ in
       libsysprof-capture
       libthai
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
-      xorg.libXtst
+      libpthread-stubs
+      libxdmcp
+      libxtst
       libxkbcommon
       libepoxy
     ];
@@ -889,8 +891,8 @@ in
       harfbuzz
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libselinux

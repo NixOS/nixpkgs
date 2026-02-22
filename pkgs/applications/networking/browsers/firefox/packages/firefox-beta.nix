@@ -10,11 +10,11 @@
 buildMozillaMach rec {
   pname = "firefox-beta";
   binaryName = "firefox-beta";
-  version = "148.0b3";
+  version = "148.0b15";
   applicationName = "Firefox Beta";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "4a005fa884dd7728016c92ad2f7019bbbb5abcedfcedd916c9e0b8e9bae5566f855e79a5c9bf533b0f7c324b6a298113a20afdb65b19ccbf323c9bcce01266c7";
+    sha512 = "5853818905193b7ab0da2198e3175f039a7b8e56399a6bb0edd50f0168766ff062755b0e383553641d9f6d4ab8b4fdb802e02065da76432d1d4c395c8cc1a543";
   };
 
   meta = {

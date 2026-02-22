@@ -1,13 +1,14 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   qmake,
+  wrapQtAppsHook,
   qtscript,
   qtwebkit,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "21.10.0";
   pname = "smtube";
 
@@ -22,7 +23,10 @@ mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
   buildInputs = [
     qtscript
     qtwebkit

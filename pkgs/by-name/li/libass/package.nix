@@ -15,12 +15,12 @@
 
 assert fontconfigSupport -> fontconfig != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libass";
   version = "0.17.4";
 
   src = fetchurl {
-    url = "https://github.com/libass/libass/releases/download/${version}/${pname}-${version}.tar.xz";
+    url = "https://github.com/libass/libass/releases/download/${finalAttrs.version}/libass-${finalAttrs.version}.tar.xz";
     hash = "sha256-ePEXm4ONAl6cJuj+8z+AkvZWEURP+hv8DPrGozURoFo=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ codyopel ];
   };
-}
+})

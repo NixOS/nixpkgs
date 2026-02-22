@@ -4,10 +4,7 @@
   fetchFromGitHub,
   cmake,
   z3,
-}:
-
-let
-  z3_4_14_0 = z3.overrideAttrs rec {
+  z3' ? z3.overrideAttrs rec {
     version = "4.14.0";
     src = fetchFromGitHub {
       owner = "Z3Prover";
@@ -15,26 +12,27 @@ let
       rev = "z3-${version}";
       hash = "sha256-Bv7+0J7ilJNFM5feYJqDpYsOjj7h7t1Bx/4OIar43EI=";
     };
-  };
-in
+  },
+  nix-update-script,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vampire";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "vprover";
     repo = "vampire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jRzVh1KirWi9GpOkzSGoIBUExDN1rV0b3AGwa6gWb3I=";
+    hash = "sha256-Ka9HmicIf7b5VN9nbiCW604ZZrGpJuP57RPTzOnwJbU=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    z3_4_14_0
+    z3'
   ];
 
-  cmakeFlags = [ (lib.cmakeFeature "Z3_DIR" "${z3_4_14_0.dev}/lib/cmake") ];
+  cmakeFlags = [ (lib.cmakeFeature "Z3_DIR" "${z3'.dev}/lib/cmake") ];
 
   enableParallelBuilding = true;
 
@@ -42,19 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf z3
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    # some versions place the binary at ./ while others at bin/
-    if test -n "$(find . -maxdepth 1 -name 'vampire*' -print -quit)"
-    then
-      install -m0755 -D vampire* $out/bin/vampire
-    else
-      install -m0755 -D bin/vampire* $out/bin/vampire
-    fi
-
-    runHook postInstall
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://vprover.github.io/";

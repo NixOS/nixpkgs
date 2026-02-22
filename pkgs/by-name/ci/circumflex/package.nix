@@ -7,14 +7,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "circumflex";
   version = "3.9";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "circumflex";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Wv0CSLXM6zMkK0FFAoe0oPpfD3Fq743jz+69qWh0njs=";
   };
 
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mktip ];
     mainProgram = "clx";
   };
-}
+})

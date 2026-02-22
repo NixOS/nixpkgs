@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lon";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "lon";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bxu83mbdfAeDZYOnjZQYyjTs5WgZS8o6Q2irlzgbYs0=";
   };
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Lock & update Nix dependencies";
     homepage = "https://github.com/nikstur/lon";
-    changelog = "https://github.com/nikstur/lon/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/nikstur/lon/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       ma27
       nikstur
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "lon";
   };
-}
+})

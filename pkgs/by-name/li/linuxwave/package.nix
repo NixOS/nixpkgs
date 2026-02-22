@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OuD5U/T3GuCQrzdhx01NXPSXD7pUAvLnNsznttJogz8=";
   };
 
-  postPatch = ''
+  postConfigure = ''
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 

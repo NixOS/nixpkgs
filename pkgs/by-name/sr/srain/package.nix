@@ -20,14 +20,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srain";
   version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "SrainApp";
     repo = "srain";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-F7TFCPTAU856403QNUUyf+10s/Yr4xDN/CarJNcUv4A=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wineee ];
   };
-}
+})

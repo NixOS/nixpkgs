@@ -108,6 +108,7 @@ let
         badPlatforms = with lib.systems.inspect.patterns; [
           (lib.recursiveUpdate isPower64 isLittleEndian)
         ];
+        identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openbsd" version;
       };
     };
   # https://github.com/libressl/portable/pull/1206

@@ -6,13 +6,13 @@
   mercurial,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bumpver";
   version = "2021.1110";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "b6a0ddb78db7e00ae7ffe895bf8ef97f91e6310dfc1c4721896bdfd044b1cb03";
   };
 
@@ -54,4 +54,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ kfollesdal ];
     mainProgram = "bumpver";
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rankwidth";
   version = "0.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rankwidth/rw-${version}.tar.gz";
+    url = "mirror://sourceforge/rankwidth/rw-${finalAttrs.version}.tar.gz";
     hash = "sha256-iajtNkiTrBtwq3ChUuPn2zzzSLtpCYqm27lpY535J9s=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.8.7";
   pname = "tinygltf";
 
   src = fetchFromGitHub {
     owner = "syoyo";
     repo = "tinygltf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uQlv+mUWnqUJIXnPf2pVuRg1akcXAfqyBIzPPmm4Np4=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jansol ];
     platforms = lib.platforms.all;
   };
-}
+})

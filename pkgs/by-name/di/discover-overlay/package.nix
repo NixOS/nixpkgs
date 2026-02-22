@@ -7,7 +7,7 @@
   gtk-layer-shell,
   wrapGAppsHook3,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "discover-overlay";
   version = "0.7.9";
   pyproject = true;
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "trigg";
     repo = "Discover";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Z554/zRikZztdD4NZiDDjMWgIlnQDGkemlA3ONRhqR8=";
   };
 
@@ -61,4 +61,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "discover-overlay";
     platforms = lib.platforms.linux;
   };
-}
+})

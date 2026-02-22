@@ -3,7 +3,7 @@
   python3,
   fetchFromGitHub,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "joystickwake";
   version = "0.4.2";
   pyproject = true;
@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "foresto";
     repo = "joystickwake";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-vSvIpbcDIbRyitVjx3wNSxt5vTIZ9/NPWokOJt0p6oQ=";
   };
 
@@ -42,4 +42,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

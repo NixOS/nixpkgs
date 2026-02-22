@@ -8,12 +8,12 @@
   pax,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bogofilter";
   version = "1.2.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bogofilter/bogofilter-${version}.tar.xz";
+    url = "mirror://sourceforge/bogofilter/bogofilter-${finalAttrs.version}.tar.xz";
     hash = "sha256-MkihNzv/VSxQCDStvqS2yu4EIkUWrlgfslpMam3uieo=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

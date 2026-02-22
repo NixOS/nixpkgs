@@ -5,12 +5,12 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libutempter";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "http://ftp.altlinux.org/pub/people/ldv/utempter/libutempter-${version}.tar.gz";
+    url = "http://ftp.altlinux.org/pub/people/ldv/utempter/libutempter-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-ln/vNy85HeUBhDrYdXDGz12r2WUfAPF4MJD7wSsqNMs=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.msteen ];
   };
-}
+})

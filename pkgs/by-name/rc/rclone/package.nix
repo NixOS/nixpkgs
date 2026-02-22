@@ -15,9 +15,9 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rclone";
-  version = "1.72.1";
+  version = "1.73.1";
 
   outputs = [
     "out"
@@ -27,11 +27,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rclone";
     repo = "rclone";
-    tag = "v${version}";
-    hash = "sha256-CyMGcyFkYbKYvv2pc2M1K6ikAI0tPO/Tc1DEf0O/Fsw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DzyfG14c2ca/Nw8rVL1SJ0fp9CWvus/9jDtwSqYN6F8=";
   };
 
-  vendorHash = "sha256-tNeL43WGWeX88vXJwQzxubUPIyejl3PPHXLc8oNeno4=";
+  vendorHash = "sha256-mMkntyRAYFrzp0HqlD0FBmzztCMc9gL/Cs/drq8U4K0=";
 
   subPackages = [ "." ];
 
@@ -49,7 +49,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/rclone/rclone/fs.Version=${src.tag}"
+    "-X github.com/rclone/rclone/fs.Version=${finalAttrs.src.tag}"
   ];
 
   postConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -89,7 +89,7 @@ buildGoModule rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "version";
 
   passthru = {
@@ -102,11 +102,11 @@ buildGoModule rec {
   meta = {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
-    changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
+    changelog = "https://github.com/rclone/rclone/blob/v${finalAttrs.version}/docs/content/changelog.md";
     license = lib.licenses.mit;
     mainProgram = "rclone";
     maintainers = with lib.maintainers; [
       SuperSandro2000
     ];
   };
-}
+})

@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "elf2nucleus";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "elf2nucleus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FAIOtGfGow+0DrPPEBEfvaiinNZLQlGWKJ4DkMj63OA=";
   };
 
@@ -38,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.marble ];
   };
-}
+})

@@ -8,7 +8,7 @@
   libGLU,
   libGL,
   wxGTK32,
-  libX11,
+  libx11,
   xorgproto,
   runtimeShell,
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     wxGTK32
-    libX11
+    libx11
     xorgproto
   ];
 

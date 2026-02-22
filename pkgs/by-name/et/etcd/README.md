@@ -19,7 +19,7 @@ After every NixOS release, the unsupported etcd versions should be removed by et
 
 ## User guidelines on etcd upgrades
 
-Before upgrading a NixOS release, certify to upgrade etcd to the latest version in the current used release.
+Before upgrading a NixOS release, make sure to upgrade etcd to the latest version in the current used release.
 
 Manual steps might be required for the upgrade.
 

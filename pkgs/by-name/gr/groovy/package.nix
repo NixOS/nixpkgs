@@ -13,12 +13,12 @@
 
 # at runtime, need jdk
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "groovy";
   version = "5.0.2";
 
   src = fetchurl {
-    url = "mirror://apache/groovy/${version}/distribution/apache-groovy-binary-${version}.zip";
+    url = "mirror://apache/groovy/${finalAttrs.version}/distribution/apache-groovy-binary-${finalAttrs.version}.zip";
     sha256 = "sha256-cPgvEbG3ZOIH3PVWiILHjcdyk/MHgWJCOUo/enTyDoE=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       desktopName = "Groovy Console";
       exec = "groovyConsole";
       icon = "groovy";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       terminal = false;
       startupNotify = false;
       categories = [ "Development" ];
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;
   };
-}
+})

@@ -7,14 +7,14 @@
   libgit2,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cocogitto";
   version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "oknozor";
     repo = "cocogitto";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aAVoPPeuJN6QPcuc3oBF93dP6U+74bAoSDw93XR01Vo=";
   };
 
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

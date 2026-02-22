@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "wagtail-localize";
-  version = "1.12.2";
+  version = "1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "wagtail-localize";
     owner = "wagtail";
     tag = "v${version}";
-    hash = "sha256-DY3owyxJrEPMP4Lfrcyo48gg6be25xSbv87BxW5sPE4=";
+    hash = "sha256-JhLfrK4CBdTR85JuAjf9vGByQVgCIYT3IrM6AYxxNTE=";
   };
 
   build-system = [ flit-core ];

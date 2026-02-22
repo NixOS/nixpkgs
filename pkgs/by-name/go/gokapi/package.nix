@@ -7,14 +7,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gokapi";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Forceu";
     repo = "Gokapi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GEdg79Rl4MqaVIJz9fAVs02hN270SIStq54fvxzL7UU=";
   };
 
@@ -61,7 +61,7 @@ buildGoModule rec {
   meta = {
     description = "Lightweight selfhosted Firefox Send alternative without public upload";
     homepage = "https://github.com/Forceu/Gokapi";
-    changelog = "https://github.com/Forceu/Gokapi/releases/tag/v${version}";
+    changelog = "https://github.com/Forceu/Gokapi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -69,4 +69,4 @@ buildGoModule rec {
     ];
     mainProgram = "gokapi";
   };
-}
+})

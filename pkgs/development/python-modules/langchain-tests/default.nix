@@ -9,20 +9,18 @@
   # dependencies
   httpx,
   langchain-core,
-  syrupy,
-  pytest-benchmark,
-  pytest-codspeed,
+  numpy,
+  pytest-asyncio,
   pytest-recording,
+  pytest-socket,
+  syrupy,
   vcrpy,
 
   # buildInputs
-  pytest,
+  pytestCheckHook,
 
   # tests
-  numpy,
-  pytest-asyncio_0,
-  pytest-socket,
-  pytestCheckHook,
+  pytest-benchmark,
 
   # passthru
   gitUpdater,
@@ -44,33 +42,35 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
+  pythonRemoveDeps = [
+    "pytest-benchmark"
+    "pytest-codspeed"
+  ];
+
   pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-    "numpy"
     "syrupy"
   ];
 
   dependencies = [
     httpx
     langchain-core
-    pytest-asyncio_0
+    numpy
+    pytest-asyncio
     pytest-benchmark
-    pytest-codspeed
     pytest-recording
     pytest-socket
     syrupy
     vcrpy
   ];
 
-  buildInputs = [ pytest ];
-
   pythonImportsCheck = [ "langchain_tests" ];
 
   nativeBuildInputs = [
-    numpy
     pytestCheckHook
+  ];
+
+  disabledTestMarks = [
+    "benchmark"
   ];
 
   passthru = {

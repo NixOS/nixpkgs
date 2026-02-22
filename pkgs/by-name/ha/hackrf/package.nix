@@ -9,14 +9,14 @@
   fftwSinglePrec,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hackrf";
   version = "2024.02.1";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "hackrf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-b3nGrk2P6ZLYBSCSD7c0aIApCh3ZoVDcFftybqm4vx0=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ sjmackenzie ];
   };
-}
+})

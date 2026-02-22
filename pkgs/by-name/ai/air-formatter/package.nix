@@ -7,23 +7,22 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "air-formatter";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "air";
     tag = finalAttrs.version;
-    hash = "sha256-LNU//dQico54GhZdehynEuukfGuU8rQvfFO4zvRsZL0=";
+    hash = "sha256-+AsKwigWikAv8NOaIYVvrH3Pub7Q9qV5YOp2jYU2GkE=";
   };
 
-  cargoHash = "sha256-9HRDUTYzKLYuh9KCcnvPXB6gDKcht79TOZZ3ze9+gbg=";
+  cargoHash = "sha256-ndd4ps2X/+a62p3dlv8jxhr2bbBG88rytI1XBVntk+g=";
 
   useNextest = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/air";
   doInstallCheck = true;
 
   cargoBuildFlags = [ "-p air" ];

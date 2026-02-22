@@ -13,16 +13,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "cheating-daddy";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "sohzm";
     repo = "cheating-daddy";
-    tag = finalAttrs.version;
-    hash = "sha256-w1Kd9V9MQvsWiVHr9pRPVLkds+Aj/dsZg6Xvj0vWWVg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/xH3tBnZAnDr/EbewtJc0WpBirW1Obn6tka7NP0ovAc=";
   };
 
-  npmDepsHash = "sha256-fMvzHrljOm43Dj0uJcqCj6QWd6qosARainhW9WSE348=";
+  npmDepsHash = "sha256-xoZ/qz7fGw858GsITkx/ag0FeeL4zcXh32qwb+OTLbg=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -31,7 +31,11 @@ buildNpmPackage (finalAttrs: {
     zip
   ];
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env = {
+    ONNXRUNTIME_NODE_INSTALL = "skip";
+    ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  };
 
   makeCacheWritable = true;
 

@@ -16,6 +16,7 @@
   kio-extras,
   opentimelineio,
   frei0r,
+  shaderc,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
@@ -30,6 +31,9 @@ mkKdeDerivation {
   extraCmakeFlags = [
     "-DFETCH_OTIO=0"
   ];
+
+  # Workaround until https://github.com/NixOS/nixpkgs/pull/480475 hits master
+  NIX_LDFLAGS = [ "-L${shaderc.lib}/lib -lshaderc_shared" ];
 
   extraNativeBuildInputs = [
     pkg-config

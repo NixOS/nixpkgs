@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "todoist";
   version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = "todoist";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+W6pc6J5eK/Sg7rc/6XJQtQ2IwVjyF/GbCX8+88k4Gc=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "todoist";
   };
-}
+})

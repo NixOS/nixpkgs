@@ -5,24 +5,28 @@
   paho-mqtt,
   pytestCheckHook,
   requests,
+  setuptools,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "adafruit-io";
-  version = "2.8.0";
-  format = "setuptools";
+  version = "2.8.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "Adafruit_IO_Python";
-    tag = version;
-    hash = "sha256-OwTHMyc2ePSdYVuY1h3PY+uDBl6/7fTMXiZC3sZm8fU=";
+    tag = finalAttrs.version;
+    hash = "sha256-JYQKrGg4FRzqq3wy/TqafC16rldvPEi+/xEI7XGvWM8=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     paho-mqtt
     requests
   ];
@@ -41,7 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with Adafruit IO";
     homepage = "https://github.com/adafruit/Adafruit_IO_Python";
+    changelog = "https://github.com/adafruit/Adafruit_IO_Python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

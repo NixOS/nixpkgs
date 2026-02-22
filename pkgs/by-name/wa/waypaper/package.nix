@@ -8,7 +8,7 @@
   socat,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "waypaper";
   version = "2.7";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "waypaper";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wtYF9H56IARkrFbChtuhWtOietA88khQJSOpfDtGQro=";
   };
 
@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${version}";
+    changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${finalAttrs.version}";
     description = "GUI wallpaper setter for Wayland-based window managers";
     mainProgram = "waypaper";
     longDescription = ''
@@ -67,4 +67,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

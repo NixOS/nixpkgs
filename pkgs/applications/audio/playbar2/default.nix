@@ -8,14 +8,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "playbar2";
   version = "2.5";
 
   src = fetchFromGitHub {
     owner = "jsmitar";
     repo = "PlayBar2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0iv2m4flgaz2r0k7f6l0ca8p6cw8j8j2gin1gci2pg3l5g5khbch";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pjones ];
   };
-}
+})

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   cmake,
   extra-cmake-modules,
   fftw,
@@ -11,15 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "krita-plugin-gmic";
-  version = "3.2.4.1";
+  version = "3.6.4.1";
 
-  src = fetchFromGitHub {
-    owner = "amyspark";
-    repo = "gmic";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-SYE8kGvN7iD5OqiEEZpB/eRle67PrB5DojMC79qAQtg=";
+  src = fetchurl {
+    url = "https://files.kde.org/krita/build/dependencies/gmic-${finalAttrs.version}.tar.gz";
+    hash = "sha256-prbGkwFWC+LqK1WDqOwZvX5Q5LQal3dFUXzpILwF+v4=";
   };
-  sourceRoot = "${finalAttrs.src.name}/gmic-qt";
+  sourceRoot = "gmic-v${finalAttrs.version}/gmic-qt";
   dontWrapQtApps = true;
 
   postPatch = ''
@@ -49,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/amyspark/gmic";
+    homepage = "https://krita.org";
     description = "GMic plugin for Krita";
     license = lib.licenses.cecill21;
     maintainers = with lib.maintainers; [ lelgenio ];

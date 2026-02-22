@@ -18,14 +18,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rye";
   version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-K9xad5Odza0Oxz49yMJjqpfh3cCgmWnbAlv069fHV6Q=";
   };
 
@@ -102,9 +102,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Tool to easily manage python dependencies and environments";
     homepage = "https://github.com/mitsuhiko/rye";
-    changelog = "https://github.com/mitsuhiko/rye/releases/tag/${version}";
+    changelog = "https://github.com/mitsuhiko/rye/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "rye";
   };
-}
+})

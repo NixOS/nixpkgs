@@ -257,6 +257,10 @@ with haskellLib;
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  # network < 3.2.8
+  # bound only required when running under WINE: https://github.com/haskell/network/issues/604
+  iserv-proxy = doJailbreak super.iserv-proxy;
+
   # Test ldap server test/ldap.js is missing from sdist
   # https://github.com/supki/ldap-client/issues/18
   ldap-client-og = dontCheck super.ldap-client-og;
@@ -611,7 +615,7 @@ with haskellLib;
         name = "git-annex-${super.git-annex.version}-src";
         url = "git://git-annex.branchable.com/";
         tag = super.git-annex.version;
-        sha256 = "sha256-+OLFMrqpf1Ooy7CQ9S+N/H5R5+aHQtbO1pYwDF4ln8A=";
+        sha256 = "sha256-Cnkohi1sl7kS4JECCsNDbxXKIWBus1gDcWoO3xZtXoM=";
         # delete android and Android directories which cause issues on
         # darwin (case insensitive directory). Since we don't need them
         # during the build process, we can delete it to prevent a hash
@@ -652,6 +656,16 @@ with haskellLib;
   # Too strict upper bounds on turtle and text
   # https://github.com/awakesecurity/nix-deploy/issues/35
   nix-deploy = doJailbreak super.nix-deploy;
+
+  call-stack = appendPatches [
+    # Fixes test suites with GHC >= 9.10
+    (pkgs.fetchpatch {
+      name = "call-stack-tests-normalize-pkg-name.patch";
+      url = "https://github.com/sol/call-stack/commit/cbbee23ce309d18201951e16a8b6d30b57e2bdf9.patch";
+      sha256 = "sha256-xkdjf8zXW+UMxot2Z8WYYmvAJsT+VGKXWGt19mZZwCg=";
+      includes = [ "test/Data/CallStackSpec.hs" ];
+    })
+  ] super.call-stack;
 
   # Too strict upper bound on algebraic-graphs
   # https://github.com/awakesecurity/nix-graph/issues/5
@@ -699,10 +713,14 @@ with haskellLib;
     hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
   }) super.algebraic-graphs;
 
-  # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
-  # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
   inspection-testing = overrideCabal (drv: {
-    broken = with pkgs.stdenv.hostPlatform; !(isx86 || (isPower64 && isAbiElfv2) || isAarch64);
+    broken =
+      with pkgs.stdenv.hostPlatform;
+      # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
+      # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
+      !(isx86 || (isPower64 && isAbiElfv2) || isAarch64)
+      # We compile static with -fexternal-interpreter which is incompatible with plugins
+      || (isStatic && lib.versionAtLeast self.ghc.version "9.10");
   }) super.inspection-testing;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
@@ -1840,7 +1858,6 @@ with haskellLib;
       # PATH.
       deps = [
         pkgs.git
-        pkgs.nix
         pkgs.nix-prefetch-git
       ];
     in
@@ -1854,7 +1871,9 @@ with haskellLib;
           wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${lib.makeBinPath deps}"
         '';
       }))
-      (addTestToolDepends deps)
+      # pkgs.nix is not added to the wrapper since we can resonably expect it to be installed
+      # and we don't know which implementation the eventual user prefers
+      (addTestToolDepends (deps ++ [ pkgs.nix ]))
       # Patch for hnix compat.
       (appendPatches [
         (fetchpatch {
@@ -2024,6 +2043,7 @@ with haskellLib;
   cli-git = addBuildTool pkgs.git super.cli-git;
 
   cli-nix = addBuildTools [
+    # Required due to https://github.com/obsidiansystems/cli-nix/issues/11
     pkgs.nix
     pkgs.nix-prefetch-git
   ] super.cli-nix;
@@ -2584,22 +2604,6 @@ with haskellLib;
 
   clash-prelude = dontCheck super.clash-prelude;
 
-  krank = appendPatches [
-    # Deal with removed exports in base
-    (pkgs.fetchpatch {
-      name = "krank-issue-97.patch";
-      url = "https://github.com/guibou/krank/commit/f6b676774537f8e2357115fd8cd3c93fb68e8a85.patch";
-      sha256 = "0d85q2x37yhjwp17wmqvblkna7p7vnl7rwdqr3kday46wvdgblgl";
-      excludes = [ ".envrc" ];
-    })
-    # Fix build of tests with http-client >=0.7.16
-    (pkgs.fetchpatch {
-      name = "krank-http-client-0.7.16.patch";
-      url = "https://github.com/guibou/krank/commit/50fd3d08526f3ed6add3352460d3d1ce9dc15f6d.patch";
-      sha256 = "0h15iir2v4pli2b72gv69amxs277xmmzw3wavrix74h9prbs4pms";
-    })
-  ] super.krank;
-
   # 2025-08-06: Upper bounds on containers <0.7 and hedgehog < 1.5 too strict.
   hermes-json = doJailbreak super.hermes-json;
 
@@ -2866,12 +2870,12 @@ with haskellLib;
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.2";
+          version = "14.5";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-wvE3foz2miOzA3hZ1Ar5XR0FUvP5EqAk010dXp8hiz0=";
+            hash = "sha256-qeFBq+d8AjwXp4YleOa0hLnBppI5+Tm1OEgB1QHWqY8=";
           };
         })
       ];
@@ -3182,6 +3186,12 @@ with haskellLib;
     doJailbreak super.egison-pattern-src-th-mode
   );
 
+  # 2025-12-27: doctests broken with -Wx-partial warning
+  # https://github.com/junjihashimoto/th-cas/issues/1
+  th-cas = overrideCabal {
+    testTargets = [ "spec" ];
+  } super.th-cas;
+
   # 2025-04-09: jailbreak to allow base >= 4.17, hasql >= 1.6, hasql-transaction-io >= 0.2
   hasql-streams-core = warnAfterVersion "0.1.0.0" (doJailbreak super.hasql-streams-core);
 
@@ -3335,12 +3345,6 @@ with haskellLib;
 
   # 2025-5-15: Too strict bounds on base <4.19, see: https://github.com/zachjs/sv2v/issues/317
   sv2v = doJailbreak super.sv2v;
-
-  # 2025-09-20: New revision already on hackage.
-  nvfetcher = lib.pipe super.nvfetcher [
-    (warnAfterVersion "0.7.0.0")
-    doJailbreak
-  ];
 
   # 2025-06-25: Upper bounds of transformers and bytestring too strict,
   # as haskore 0.2.0.8 was released in 2016 and is quite outdated.

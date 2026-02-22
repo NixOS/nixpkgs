@@ -5,7 +5,7 @@
   coreutils,
   lazarus,
   fpc,
-  libX11,
+  libx11,
 
   # GTK2/3
   pango,
@@ -40,14 +40,14 @@ let
     }
   ) (lib.importJSON ./deps.json);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cudatext";
   version = "1.202.1";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZFMO986D4RtrTnLFdcL0a2BNjcsB+9pIolylblku7j4=";
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (widgetset == "qt5") libsForQt5.wrapQtAppsHook;
 
   buildInputs = [
-    libX11
+    libx11
   ]
   ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [
     pango
@@ -81,7 +81,11 @@ stdenv.mkDerivation rec {
   ++ lib.optional (widgetset == "gtk3") gtk3
   ++ lib.optional (widgetset == "qt5") libsForQt5.libqtpas;
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = toString [
+    "--as-needed"
+    "-rpath"
+    (lib.makeLibraryPath finalAttrs.buildInputs)
+  ];
 
   buildPhase =
     lib.concatStringsSep "\n" (
@@ -142,4 +146,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "cudatext";
   };
-}
+})

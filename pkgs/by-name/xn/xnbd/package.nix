@@ -8,16 +8,16 @@
   jansson,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xnbd";
   version = "0.4.0";
 
   src = fetchurl {
-    url = "https://bitbucket.org/hirofuchi/xnbd/downloads/xnbd-${version}.tgz";
+    url = "https://bitbucket.org/hirofuchi/xnbd/downloads/xnbd-${finalAttrs.version}.tgz";
     sha256 = "00wkvsa0yaq4mabczcbfpj6rjvp02yahw8vdrq8hgb3wpm80x913";
   };
 
-  sourceRoot = "xnbd-${version}/trunk";
+  sourceRoot = "xnbd-${finalAttrs.version}/trunk";
 
   patches = [ ./0001-Fix-build-for-glibc-2.28.patch ];
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

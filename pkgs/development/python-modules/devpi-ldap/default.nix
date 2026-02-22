@@ -9,6 +9,7 @@
   pytest-flake8,
   pytestCheckHook,
   pythonOlder,
+  pythonAtLeast,
   pyyaml,
   setuptools,
   webtest,
@@ -19,7 +20,8 @@ buildPythonPackage {
   version = "2.1.1-unstable-2023-11-28";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  # build-system broken for 3.14, package incompatible <3.13
+  disabled = pythonOlder "3.13" || pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "devpi";

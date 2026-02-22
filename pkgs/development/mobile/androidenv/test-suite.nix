@@ -17,7 +17,7 @@ let
     // (examples-shell-with-emulator.passthru.tests // examples-shell-without-emulator.passthru.tests);
 in
 stdenv.mkDerivation {
-  name = "androidenv-test-suite";
+  pname = "androidenv-test-suite";
   version = (lib.importJSON ./repo.json).latest.fingerprint or "0000000000000000";
   buildInputs = lib.attrValues all-tests;
 

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "freshfetch";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "k4rakara";
     repo = "freshfetch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1l9zngr5l12g71j85iyph4jjri3crxc2pi9q0gczrrzvs03439mn";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "freshfetch";
   };
-}
+})

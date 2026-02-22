@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pingme";
   version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "kha7iq";
     repo = "pingme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-i+EZ3HfuxHSuZDe0+nfZVvoNZN5XcdQFwfgOg4OLBOs=";
   };
 
@@ -28,15 +28,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   meta = {
-    changelog = "https://github.com/kha7iq/pingme/releases/tag/${src.rev}";
+    changelog = "https://github.com/kha7iq/pingme/releases/tag/${finalAttrs.src.rev}";
     description = "Send messages or alerts to multiple messaging platforms & email";
     homepage = "https://pingme.lmno.pk";
     license = lib.licenses.mit;
     mainProgram = "pingme";
     maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

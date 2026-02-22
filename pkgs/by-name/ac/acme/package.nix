@@ -4,7 +4,7 @@
   fetchsvn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "acme";
   version = "unstable-2021-11-05";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dzvip90yf1wg0fhfghn96dwrhg289d06b624px9a2wwy3vp5ryg";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ OPNA2608 ];
   };
-}
+})

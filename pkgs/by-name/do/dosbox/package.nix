@@ -16,12 +16,12 @@
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox";
   version = "0.74-3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dosbox/dosbox-${version}.tar.gz";
+    url = "mirror://sourceforge/dosbox/dosbox-${finalAttrs.version}.tar.gz";
     hash = "sha256-wNE91+0u02O2jeYVR1eB6JHNWC6BYrXDZpE3UCIiJgo=";
   };
 
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "dosbox";
   };
-}
+})

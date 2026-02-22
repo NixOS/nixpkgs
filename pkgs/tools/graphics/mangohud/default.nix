@@ -11,7 +11,7 @@
   xdg-utils,
   dbus,
   libGL,
-  libX11,
+  libx11,
   hwdata,
   mangohud32,
   addDriverRunpath,
@@ -27,7 +27,7 @@
   spdlog,
   libxkbcommon,
   glfw,
-  libXrandr,
+  libxrandr,
   x11Support ? true,
   waylandSupport ? true,
   nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform libXNVCtrl,
@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       libdbus = dbus.lib;
       libGL = libGL;
-      libX11 = libX11;
+      libX11 = libx11;
       inherit hwdata;
     })
   ];
@@ -191,12 +191,12 @@ stdenv.mkDerivation (finalAttrs: {
     spdlog
   ]
   ++ lib.optional waylandSupport wayland
-  ++ lib.optional x11Support libX11
+  ++ lib.optional x11Support libx11
   ++ lib.optional nvidiaSupport libXNVCtrl
   ++ lib.optional (x11Support || waylandSupport) libxkbcommon
   ++ lib.optionals mangoappSupport [
     glfw
-    libXrandr
+    libxrandr
   ];
 
   doCheck = true;

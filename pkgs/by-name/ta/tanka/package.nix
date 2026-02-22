@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tanka";
   version = "0.36.3";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tanka";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ukWPmOEFOMnjwqTy9GkA8+WF3ItXUUvuh8EdKngLlT8=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-extldflags '-static'"
-    "-X github.com/grafana/tanka/pkg/tanka.CurrentVersion=v${version}"
+    "-X github.com/grafana/tanka/pkg/tanka.CurrentVersion=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -68,4 +68,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mikefaille ];
     mainProgram = "tk";
   };
-}
+})

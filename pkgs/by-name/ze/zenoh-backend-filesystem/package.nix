@@ -8,14 +8,14 @@
   rocksdb,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-backend-filesystem";
   version = "1.4.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-backend-filesystem";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aMIVBs3K9h2aVPuaU5DzOjm3xzpHJn8MnjxdCDCANCw=";
   };
 
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

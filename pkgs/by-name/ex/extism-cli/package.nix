@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "extism-cli";
   version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "extism";
     repo = "cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ioH2s9546/i12jCmE/4km9YqLhiHkj6WLBwmNAAZFUA=";
   };
 
@@ -39,4 +39,4 @@ buildGoModule rec {
     mainProgram = "extism";
     platforms = lib.platforms.all;
   };
-}
+})

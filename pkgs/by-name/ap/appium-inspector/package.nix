@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_38,
+  electron_39,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
@@ -10,8 +10,8 @@
 }:
 
 let
-  electron = electron_38;
-  version = "2025.8.2";
+  electron = electron_39;
+  version = "2026.1.3";
 in
 
 buildNpmPackage {
@@ -22,10 +22,10 @@ buildNpmPackage {
     owner = "appium";
     repo = "appium-inspector";
     tag = "v${version}";
-    hash = "sha256-v3UN58dJ+rSdFx+99xRMI88gnJ/hgL48Lr7AMjNgXMY=";
+    hash = "sha256-9WhSQq3is2qucL1cGQIYPuLM9VkCFIWq2XVU2QioRMo=";
   };
 
-  npmDepsHash = "sha256-rlmAZyznoLSudAf7k1mgf13CO+9mlDB3HhubPga+30Q=";
+  npmDepsHash = "sha256-2DNUTvZ6yFL9U8JKw4ZFR81a6Mv9rPXtRu/v/Il/Rhw=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [

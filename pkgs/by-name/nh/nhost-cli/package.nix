@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nhost-cli";
   version = "1.31.3";
 
   src = fetchFromGitHub {
     owner = "nhost";
     repo = "cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hUltJCehmlIDRLdJNGC/Oyjl6rnQHzjxSjrQEaDCdAo=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=v${version}"
+    "-X=main.Version=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -33,9 +33,9 @@ buildGoModule rec {
   meta = {
     description = "Tool for setting up a local development environment for Nhost";
     homepage = "https://github.com/nhost/cli";
-    changelog = "https://github.com/nhost/cli/releases/tag/v${version}";
+    changelog = "https://github.com/nhost/cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nhost";
   };
-}
+})

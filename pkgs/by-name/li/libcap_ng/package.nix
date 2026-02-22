@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ grimmauld ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap-ng_project" finalAttrs.version;
   };
 })

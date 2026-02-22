@@ -16,19 +16,19 @@ let
   vsix = stdenv.mkDerivation (finalAttrs: {
     name = "prettier-vscode-${finalAttrs.version}.vsix";
     pname = "prettier-vscode-vsix";
-    version = "12.0.7";
+    version = "12.3.0";
 
     src = fetchFromGitHub {
       owner = "prettier";
       repo = "prettier-vscode";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-pbUvgchOEWgBm0D5wdAPMfHouFdHZPEvCChD9JJf4Xk=";
+      hash = "sha256-a6BBWd+K8boLw+0j6etT/KHmdScLr6mBG7T5pslilTo=";
     };
 
     npmDeps = fetchNpmDeps {
       name = "${finalAttrs.pname}-npm-deps";
       inherit (finalAttrs) src;
-      hash = "sha256-VcJ3mzuspML2z3EzAUi21tavPtI62/Jo3X8swnMXwOs=";
+      hash = "sha256-itl/OXjL6co3smccRwRbuGM427YzBsYh2BvkEc+oX5Y=";
     };
 
     buildInputs = lib.optionals stdenv.isLinux [

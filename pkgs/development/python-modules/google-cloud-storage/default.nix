@@ -12,7 +12,6 @@
   protobuf,
   pytestCheckHook,
   pytest-asyncio,
-  pythonOlder,
   requests,
   setuptools,
 }:

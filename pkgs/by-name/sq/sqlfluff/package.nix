@@ -5,23 +5,22 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlfluff";
-  version = "3.5.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
-    tag = version;
-    hash = "sha256-fO4a1DCDM5RCeaPUHtPPGgTtZPRHOl9nuxbipDJZy7A=";
+    tag = finalAttrs.version;
+    hash = "sha256-hXiy3PGoBe6O9FaACN31Tss3xMBfiw4YuVLxbGi+/tA=";
   };
+
+  pythonRelaxDeps = [ "click" ];
 
   build-system = with python3Packages; [ setuptools ];
 
-  pythonRelaxDeps = [
-    "click"
-  ];
   dependencies = with python3Packages; [
     appdirs
     cached-property
@@ -47,6 +46,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     versionCheckHook
   ];
+
   versionCheckProgramArg = "--version";
 
   disabledTestPaths = [
@@ -71,9 +71,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "SQL linter and auto-formatter";
     homepage = "https://www.sqlfluff.com/";
-    changelog = "https://github.com/sqlfluff/sqlfluff/blob/${src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/sqlfluff/sqlfluff/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sqlfluff";
   };
-}
+})

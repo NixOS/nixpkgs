@@ -5,6 +5,7 @@
   pkg-config,
   ncurses,
   perl,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,6 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-kLULaKEefMpNLANnVdWAZeH+2KY5gEWGce6vJ/R7HAI=";
   };
+
+  patches = [
+    # fix build w/ glibc 2.42 (https://github.com/johnsonjh/OpenVi/pull/46)
+    (fetchpatch {
+      url = "https://github.com/johnsonjh/OpenVi/commit/67c76961f512bfe95616fe25b32928db0aab9326.patch";
+      hash = "sha256-GOair/unxROEPvtTekGuKacKwOctPyoRdvilqdVLjrY=";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

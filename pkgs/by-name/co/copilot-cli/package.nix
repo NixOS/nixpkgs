@@ -8,14 +8,14 @@
   copilot-cli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "copilot-cli";
   version = "1.34.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "copilot-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Oxt1+0z+woNPsFuCkj4t71/e21mHtoCd281BwbHCGc8=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/aws/copilot-cli/internal/pkg/version.Version=v${version}"
+    "-X github.com/aws/copilot-cli/internal/pkg/version.Version=v${finalAttrs.version}"
     "-X github.com/aws/copilot-cli/internal/pkg/cli.binaryS3BucketPath=https://ecs-cli-v2-release.s3.amazonaws.com"
   ];
 
@@ -43,15 +43,15 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = copilot-cli;
     command = "copilot version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     description = "Build, Release and Operate Containerized Applications on AWS";
     homepage = "https://github.com/aws/copilot-cli";
-    changelog = "https://github.com/aws/copilot-cli/releases/tag/v${version}";
+    changelog = "https://github.com/aws/copilot-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jiegec ];
     mainProgram = "copilot";
   };
-}
+})

@@ -9,14 +9,14 @@
   cmake,
   pkg-config,
   alsa-lib,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrender,
-  libXrandr,
-  libXdmcp,
-  libXtst,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrender,
+  libxrandr,
+  libxdmcp,
+  libxtst,
   xvfb,
   freetype,
   fontconfig,
@@ -63,14 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libxkbcommon
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrender
-    libXrandr
-    libXdmcp
-    libXtst
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrender
+    libxrandr
+    libxdmcp
+    libxtst
     xvfb
     libjack2
     expat
@@ -92,18 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcomposite"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-      "-lXtst"
-      "-lXdmcp"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcomposite"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+    "-lXtst"
+    "-lXdmcp"
+  ];
 
   patches = [
     # fiddle~.c prevents building with gcc15. Upstream puredata has fixed this issue,

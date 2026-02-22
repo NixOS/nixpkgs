@@ -30,6 +30,7 @@
   license-expression,
   lxml,
   markupsafe,
+  multiregex,
   packageurl-python,
   packaging,
   parameter-expansion-patched,
@@ -60,12 +61,13 @@
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "32.4.1";
+  version = "32.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qZUILeB1lGv0V9Uq81/aOI9pJTtayfZH/O5kwNnpf28=";
+    pname = "scancode_toolkit";
+    inherit version;
+    hash = "sha256-WXAZCk0aRmKb1UU1ud95mZFHAMC9U+gDRd9w7TZTVSA=";
   };
 
   dontConfigure = true;
@@ -101,6 +103,7 @@ buildPythonPackage rec {
     license-expression
     lxml
     markupsafe
+    multiregex
     packageurl-python
     packaging
     parameter-expansion-patched
@@ -126,9 +129,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  nativeBuildInputs = [
-    writableTmpDirAsHomeHook
-  ];
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

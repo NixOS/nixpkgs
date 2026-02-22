@@ -11,27 +11,19 @@
   libseccomp,
   nix-update-script,
   nixosTests,
-  fetchpatch,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scx_rustscheds";
-  version = "1.0.19";
+  version = "1.0.20";
 
   src = fetchFromGitHub {
     owner = "sched-ext";
     repo = "scx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bOldw2Sob5aANmVzw6VwCgJ4+VzEsohKUxOxntow7VY=";
+    hash = "sha256-MUWbNsxmbCRCOWB2dHpi5dEY2rNRrINxJSyl5SNSO9Y=";
   };
 
-  cargoHash = "sha256-ik05X+5jIdxtXYhN6fb1URW8TKKzgFuevi5+Wm2j15Y=";
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/sched-ext/scx/pull/3127.patch";
-      hash = "sha256-HpGJR3eBZKE+VsqGivjJp1n7JIORhZUxG87AsP1WWi0=";
-    })
-  ];
+  cargoHash = "sha256-H58wschck+l41fQh9W5SNVb5g9lAnw90SOSd/RtGXyw=";
 
   nativeBuildInputs = [
     pkg-config

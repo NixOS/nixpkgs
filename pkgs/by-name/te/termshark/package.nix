@@ -6,14 +6,14 @@
   wireshark-cli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "termshark";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "gcla";
     repo = "termshark";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-qq7BDGprRkWKRMJiVnqPeTwtHd3tea9dPE8RIPL2YVI=";
   };
 
@@ -29,7 +29,7 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-X github.com/gcla/termshark.Version=${version}"
+    "-X github.com/gcla/termshark.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -39,4 +39,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ winpat ];
   };
-}
+})

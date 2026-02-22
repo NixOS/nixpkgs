@@ -413,6 +413,8 @@ let
 
         dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { };
 
+        dns-client-miou-unix = callPackage ../development/ocaml-modules/dns/client-miou-unix.nix { };
+
         dns-client-mirage = callPackage ../development/ocaml-modules/dns/client-mirage.nix { };
 
         dns-mirage = callPackage ../development/ocaml-modules/dns/mirage.nix { };
@@ -453,6 +455,8 @@ let
         domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
         domain_shims = callPackage ../development/ocaml-modules/domain_shims { };
+
+        domainpc = callPackage ../development/ocaml-modules/domainpc { };
 
         domainslib = callPackage ../development/ocaml-modules/domainslib { };
 
@@ -624,25 +628,25 @@ let
 
         ffmpeg = callPackage ../development/ocaml-modules/ffmpeg { };
         ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avcodec = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avcodec.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avfilter = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avfilter.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-avutil = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avutil.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-swresample = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swresample.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
         ffmpeg-swscale = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swscale.nix {
-          ffmpeg = pkgs.ffmpeg_6;
+          ffmpeg = pkgs.ffmpeg_8;
         };
 
         fiber = callPackage ../development/ocaml-modules/fiber { };
@@ -822,6 +826,8 @@ let
         httpaf = callPackage ../development/ocaml-modules/httpaf { };
 
         httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
+
+        httpcats = callPackage ../development/ocaml-modules/httpcats { };
 
         httpun = callPackage ../development/ocaml-modules/httpun { };
 
@@ -1435,8 +1441,6 @@ let
 
         ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
-        ocaml-freestanding = callPackage ../development/ocaml-modules/ocaml-freestanding { };
-
         ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
 
         ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
@@ -1558,6 +1562,8 @@ let
         ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
 
         ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
+
+        ocplib-simplex_0_4 = callPackage ../development/ocaml-modules/ocplib-simplex/0_4.nix { };
 
         ocsigen-ppx-rpc = callPackage ../development/ocaml-modules/ocsigen-ppx-rpc { };
 
@@ -2037,6 +2043,8 @@ let
 
         swhid_core = callPackage ../development/ocaml-modules/swhid_core { };
 
+        symex = callPackage ../development/ocaml-modules/symex { };
+
         synchronizer = callPackage ../development/ocaml-modules/synchronizer { };
 
         syslog = callPackage ../development/ocaml-modules/syslog { };
@@ -2108,10 +2116,6 @@ let
         toml = callPackage ../development/ocaml-modules/toml { };
 
         topkg = callPackage ../development/ocaml-modules/topkg { };
-
-        torch = callPackage ../development/ocaml-modules/torch {
-          torch = pkgs.libtorch-bin;
-        };
 
         trace = callPackage ../development/ocaml-modules/trace { };
 
@@ -2316,8 +2320,10 @@ let
         dune_2 = pkgs.dune_2; # Added 2025-12-08
         dune_3 = pkgs.dune_3; # Added 2025-12-08
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+        ocaml-freestanding = throw "ocamlPackages.ocaml-freestanding has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
         ocaml_lwt = throw "ocamlPackages.ocaml_lwt has been renamed to ocamlPackages.lwt"; # Added 2025-12-05
+        torch = throw "ocamlPackages.torch has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
       }
     )).overrideScope
       liftJaneStreet;

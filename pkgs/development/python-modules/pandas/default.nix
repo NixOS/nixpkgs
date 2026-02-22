@@ -97,8 +97,7 @@ let
       pkg-config
       versioneer
       wheel
-    ]
-    ++ versioneer.optional-dependencies.toml;
+    ];
 
     enableParallelBuilding = true;
 

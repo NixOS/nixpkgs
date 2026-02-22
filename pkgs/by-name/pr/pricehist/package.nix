@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pricehist";
   version = "1.4.14";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "chrisberkhout";
     repo = "pricehist";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BnyoSYVjs2odnOzSpvgMF860PDkz7tPNnM0s3Fep5G0=";
   };
 
@@ -41,4 +41,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     mainProgram = "pricehist";
   };
-}
+})

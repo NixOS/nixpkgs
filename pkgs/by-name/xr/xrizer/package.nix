@@ -19,14 +19,14 @@ let
     "x86_64-linux" = "bin/linux64";
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xrizer";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IRhLWlGHywp0kZe5aGmMHAF1zZwva3sGg68eG1E2K9A=";
   };
 
@@ -76,4 +76,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = builtins.attrNames platformPaths;
   };
-}
+})

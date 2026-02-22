@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rain";
-  version = "2.2.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "cenkalti";
     repo = "rain";
-    tag = "v${version}";
-    hash = "sha256-phBZ1hIH6o4q8CU6+dheZG78OcO+e7YvJoC6hyHHNb4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g7KzqQymnB37nngi4CUuFMoLTUpc5iA3YKEoD+nJ814=";
   };
 
   vendorHash = "sha256-U4NZR3vJRLTrhE1CoCAB+7pkVnvxlJpbLmIGMFuZzWc=";
@@ -27,4 +27,4 @@ buildGoModule rec {
       matthewdargan
     ];
   };
-}
+})

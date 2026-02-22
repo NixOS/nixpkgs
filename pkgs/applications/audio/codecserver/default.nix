@@ -8,14 +8,14 @@
   protobuf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "codecserver";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "codecserver";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-JzaVBFl3JsFNDm4gy1qOKA9uAjUjNeMiI39l5gfH0aE=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "codecserver";
   };
-}
+})

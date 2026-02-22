@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
 
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
        #include <string.h>"
   '';
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   makeFlags = [
     "PREFIX=$(out)"

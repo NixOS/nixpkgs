@@ -6,9 +6,9 @@
   autoPatchelfHook,
   makeWrapper,
   libcxx,
-  libX11,
-  libXt,
-  libXdamage,
+  libx11,
+  libxt,
+  libxdamage,
   glib,
   gtk3,
   dbus-glib,
@@ -62,9 +62,9 @@ rec {
       dbus-glib
       glib
       gtk3
-      libX11
-      libXdamage
-      libXt
+      libx11
+      libxdamage
+      libxt
     ];
     installPhase = ''
       runHook preInstall

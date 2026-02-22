@@ -7,7 +7,7 @@
   libassuan,
   libgcrypt,
   perlPackages,
-  lockfileProgs,
+  lockfile-progs,
   gnupg,
   coreutils,
   # For the tests:
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       cpio
       hexdump
       procps
-      lockfileProgs
+      lockfile-progs
     ]
     ++ (with perlPackages; [
       CryptOpenSSLRSA
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
       wrapPrograms = runtimeDeps: programs: lib.concatMapStrings (wrapMonkeysphere runtimeDeps) programs;
     in
     wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
-    + wrapPrograms [ gnupg lockfileProgs ] [ "monkeysphere" ]
+    + wrapPrograms [ gnupg lockfile-progs ] [ "monkeysphere" ]
     + ''
       # These 4 programs depend on the program name ($0):
       for program in openpgp2pem openpgp2spki openpgp2ssh pem2openpgp; do

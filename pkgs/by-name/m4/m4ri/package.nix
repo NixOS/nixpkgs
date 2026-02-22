@@ -5,15 +5,15 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
-  version = "20251207";
+stdenv.mkDerivation (finalAttrs: {
+  version = "20260122";
   pname = "m4ri";
 
   src = fetchFromGitHub {
     owner = "malb";
     repo = "m4ri";
-    rev = version;
-    hash = "sha256-8cO4mPPZj/QUnSJmsqTFQ+THdrnZnCa6wFACKOk78UQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-/M/DVl2tRXIz5l3LFwY8Bvxnzjeoluy+zVgBVpPSdZM=";
   };
 
   doCheck = true;
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

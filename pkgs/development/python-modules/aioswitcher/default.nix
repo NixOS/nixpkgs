@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioswitcher";
-  version = "6.0.3";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TomerFi";
     repo = "aioswitcher";
     tag = finalAttrs.version;
-    hash = "sha256-6wBeAbBiuAZW9kHq/bKC0FMJxkLxM6RZN7RLwbF1ig4=";
+    hash = "sha256-SCJV2r6VB1Y1ceywHkoYDsO+PRnjualGdetnQrlBKDI=";
   };
 
   __darwinAllowLocalNetworking = true;

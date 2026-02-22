@@ -2,23 +2,23 @@
   lib,
   fetchFromGitHub,
   buildDotnetModule,
-  dotnet-sdk_6,
-  dotnet-runtime_6,
+  dotnet-sdk_9,
+  dotnet-runtime_9,
 }:
 buildDotnetModule rec {
   pname = "tshock";
-  version = "5.2.4";
+  version = "6.0.0-pre1";
 
   src = fetchFromGitHub {
     owner = "Pryaxis";
     repo = "TShock";
     rev = "v${version}";
-    sha256 = "sha256-dQ4yux5k4K1t6ah9r4X6d1KPAMqzzCsGvBKhm0TYIjA=";
+    hash = "sha256-nMCtOSfhneE4q/bqZcLVkfxObOpCEgNpSODMErKuTYw=";
     fetchSubmodules = true;
   };
 
-  dotnet-sdk = dotnet-sdk_6;
-  dotnet-runtime = dotnet-runtime_6;
+  dotnet-sdk = dotnet-sdk_9;
+  dotnet-runtime = dotnet-runtime_9;
   executables = [ "TShock.Server" ];
 
   projectFile = [

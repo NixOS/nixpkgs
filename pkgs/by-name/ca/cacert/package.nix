@@ -23,7 +23,7 @@ let
     lib.concatStringsSep "\n\n" extraCertificateStrings
   );
 
-  srcVersion = "3.117";
+  srcVersion = "3.119.1";
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = {
     homepage = "https://curl.haxx.se/docs/caextract.html";
@@ -34,6 +34,9 @@ let
       lukegb
     ];
     license = lib.licenses.mpl20;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mozilla" version // {
+      product = "nss";
+    };
   };
   certdata = stdenv.mkDerivation {
     pname = "nss-cacert-certdata";
@@ -47,7 +50,7 @@ let
           owner = "nss-dev";
           repo = "nss";
           rev = "NSS_${lib.replaceStrings [ "." ] [ "_" ] version}_RTM";
-          hash = "sha256-sAs0TiV3TK/WtgHvEjl2KFAgebyWZYmcRcmxjpn2AME=";
+          hash = "sha256-GxLTqHcVWGiFezcwdctXJ8k9wqizVJPHyLBPZzphLro=";
         };
 
     dontBuild = true;

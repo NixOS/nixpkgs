@@ -4,30 +4,11 @@
   buildMozillaMach,
   callPackage,
   fetchurl,
-  icu77,
-  icu78,
   fetchpatch2,
   config,
 }:
 
 let
-  patchICU =
-    icu:
-    icu.overrideAttrs (attrs: {
-      # standardize vtzone output
-      # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
-      patches = attrs.patches ++ [
-        (fetchpatch2 {
-          url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
-          stripLen = 3;
-          hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
-        })
-      ];
-    });
-  icu77' = patchICU icu77;
-  icu78' = patchICU icu78;
-
   common =
     {
       version,
@@ -48,10 +29,11 @@ let
         # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
         (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
       ];
-      extraPassthru = {
-        icu77 = icu77';
-        icu78 = icu78';
-      };
+      # FIXME: let's hope that upstream will fix this soon and we can drop this hack again.
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2006630
+      extraPostPatch = lib.optionalString (lib.versionAtLeast version "147") ''
+        find . -name .cargo-checksum.json | xargs sed 's/"[^"]*\.gitmodules":"[a-z0-9]*",//g' -i
+      '';
 
       meta = {
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
@@ -76,9 +58,6 @@ let
         webrtcSupport = false;
 
         pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
-
-        icu77 = icu77';
-        icu78 = icu78';
       };
 
 in
@@ -86,8 +65,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "146.0.1";
-    sha512 = "8a3b2de246c7c597574fce596836c7ef7b24bd21573feb15c308003f34b82335ad865aa0f81b24d1669c8023c0448c0e273a63019aab13356b023c2e8adc2c47";
+    version = "147.0.2";
+    sha512 = "4fe6d0389e8bc6078b3d4db79d1f8547666950de4a5a72e49ba24d5b60cb531908b88efa9f3dd32e154ee917a8b80786389ce9b1186b6c45fb0717d4e180e537";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -100,8 +79,8 @@ rec {
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.7.0esr";
-    sha512 = "92746d87ca2d5a59082c25aa3c3a816e5bf24ae3e095f8ec478a60c5cd890faea392ff98b5b510cc9a89b155240dce9d06c7ddd0f17f564722acc65105fb6cd2";
+    version = "140.7.1esr";
+    sha512 = "2d0f61758b0428eb4eb8294c58d914e03842c9ad7685cd2eec26c723cc1491634f90fc9fcf5ad6d3f13738e141e96c692cd8ff1599869346e3247a0cae2349f4";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";

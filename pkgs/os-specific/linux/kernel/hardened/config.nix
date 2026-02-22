@@ -1,5 +1,5 @@
 # Based on recommendations from:
-# http://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project#Recommended_settings
+# https://kspp.github.io/Recommended_Settings
 # https://wiki.gentoo.org/wiki/Hardened/Hardened_Kernel_Project
 #
 # Dangerous features that can be permanently (for the boot session) disabled at
@@ -29,7 +29,7 @@ assert (lib.versionAtLeast version "4.9");
   # We set SECURITY_WRITABLE_HOOKS n primarily for documentation purposes; the
   # config builder fails to detect that it has indeed been unset.
   SECURITY_SELINUX_DISABLE = whenOlder "6.4" no; # On 6.4: error: unused option: SECURITY_SELINUX_DISABLE
-  SECURITY_WRITABLE_HOOKS = option no;
+  SECURITY_WRITABLE_HOOKS = whenOlder "6.4" no;
 
   # Perform additional validation of commonly targeted structures.
   DEBUG_CREDENTIALS = whenOlder "6.6" yes;
@@ -56,6 +56,9 @@ assert (lib.versionAtLeast version "4.9");
   # Enable init_on_free by default
   INIT_ON_FREE_DEFAULT_ON = whenAtLeast "5.3" yes;
 
+  # Initialize all stack variables on function entry
+  INIT_STACK_ALL_ZERO = yes;
+
   # Wipe all caller-used registers on exit from a function
   ZERO_CALL_USED_REGS = whenAtLeast "5.15" yes;
 
@@ -67,8 +70,6 @@ assert (lib.versionAtLeast version "4.9");
 
   GCC_PLUGINS = yes; # Enable gcc plugin options
 
-  GCC_PLUGIN_STRUCTLEAK = option yes; # A port of the PaX structleak plugin
-  GCC_PLUGIN_STRUCTLEAK_BYREF_ALL = option yes; # Also cover structs passed by address
   GCC_PLUGIN_STACKLEAK = whenAtLeast "4.20" yes; # A port of the PaX stackleak plugin
   GCC_PLUGIN_RANDSTRUCT = whenOlder "5.19" yes; # A port of the PaX randstruct plugin
   GCC_PLUGIN_RANDSTRUCT_PERFORMANCE = whenOlder "5.19" yes;

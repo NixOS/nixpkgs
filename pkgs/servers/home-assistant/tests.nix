@@ -13,7 +13,7 @@ let
     air_quality = getComponentDeps "camera" ++ getComponentDeps "conversation";
     alexa = getComponentDeps "cloud" ++ getComponentDeps "frontend" ++ getComponentDeps "stream";
     android_ip_webcam = getComponentDeps "camera";
-    anthropic = getComponentDeps "ai_task";
+    anthropic = getComponentDeps "ai_task" ++ getComponentDeps "openai_conversation";
     assist_pipeline = getComponentDeps "frontend";
     automation = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
     axis = getComponentDeps "camera" ++ getComponentDeps "deconz";
@@ -46,6 +46,9 @@ let
     fully_kiosk = getComponentDeps "camera";
     gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
     geofency = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    go2rtc = [
+      tqdm
+    ];
     google_assistant = getComponentDeps "conversation";
     google_assistant_sdk = getComponentDeps "conversation" ++ getComponentDeps "frontend";
     google_cloud = getComponentDeps "tts";
@@ -58,6 +61,7 @@ let
     gpslogger = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     group = getComponentDeps "camera" ++ getComponentDeps "conversation";
     hassio = getComponentDeps "frontend" ++ getComponentDeps "homeassistant_yellow";
+    hikvision = getComponentDeps "camera";
     homeassistant = getComponentDeps "camera" ++ getComponentDeps "conversation";
     homeassistant_connect_zbt2 = getComponentDeps "zha";
     homeassistant_hardware = getComponentDeps "otbr" ++ getComponentDeps "zha";
@@ -75,7 +79,7 @@ let
     local_file = getComponentDeps "camera";
     locative = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     logbook = getComponentDeps "alexa";
-    lovelace = [
+    lovelace = getComponentDeps "frontend" ++ [
       pychromecast
     ];
     lutron_caseta = getComponentDeps "frontend";

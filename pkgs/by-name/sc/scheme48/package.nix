@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scheme48";
   version = "1.9.3";
 
   src = fetchurl {
-    url = "https://s48.org/${version}/scheme48-${version}.tgz";
+    url = "https://s48.org/${finalAttrs.version}/scheme48-${finalAttrs.version}.tgz";
     sha256 = "bvWp8/yhQRCw+DG0WAHRH5vftnmdl2qhLk+ICdrzkEw=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.siraben ];
   };
-}
+})

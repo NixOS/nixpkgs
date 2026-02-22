@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotest";
   version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "rakyll";
     repo = "gotest";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-i9kM421O8sbL4SSQrEeRbtDaqOCA1y22b7QCxvt4Oow=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

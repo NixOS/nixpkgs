@@ -20,14 +20,14 @@
   libinput,
   gdk-pixbuf,
   librsvg,
-  wlroots,
+  wlroots_0_19,
   wayland-protocols,
   libdrm,
   nixosTests,
   # Used by the NixOS module:
   isNixOS ? false,
   enableXWayland ? true,
-  xorg,
+  libxcb-wm,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   trayEnabled ? systemdSupport,
@@ -95,10 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     wayland-protocols
     libdrm
-    (wlroots.override { inherit (finalAttrs) enableXWayland; })
+    (wlroots_0_19.override { inherit (finalAttrs) enableXWayland; })
   ]
   ++ lib.optionals finalAttrs.enableXWayland [
-    xorg.xcbutilwm
+    libxcb-wm
   ];
 
   mesonFlags =

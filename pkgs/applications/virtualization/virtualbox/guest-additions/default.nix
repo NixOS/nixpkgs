@@ -5,17 +5,22 @@
   lib,
   dbus,
   kmod,
-  xorg,
+  libxt,
+  libxrandr,
+  libxmu,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
   patchelf,
   makeWrapper,
   wayland,
-  libX11,
+  libx11,
 }:
 let
-  virtualboxVersion = "7.2.4";
+  virtualboxVersion = "7.2.6";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "d281ec981b5f580211a0cedd1b75a1adcb0fbfcbb768d8c2bf4429f4763e8bbd";
+  virtualboxSha256 = "c58443a0e6fcc7fc7e84c1011a10823b3540c6a2b8f2e27c4d8971272baf09f7";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -44,11 +49,11 @@ let
     }
     {
       name = "libXfixes.so";
-      pkg = xorg.libXfixes;
+      pkg = libxfixes;
     }
     {
       name = "libXrandr.so";
-      pkg = xorg.libXrandr;
+      pkg = libxrandr;
     }
     {
       name = "libwayland-client.so";
@@ -56,11 +61,11 @@ let
     }
     {
       name = "libX11.so";
-      pkg = libX11;
+      pkg = libx11;
     }
     {
       name = "libXt.so";
-      pkg = xorg.libXt;
+      pkg = libxt;
     }
   ];
 in
@@ -103,12 +108,12 @@ stdenv.mkDerivation {
             stdenv.cc.cc
             stdenv.cc.libc
             zlib
-            xorg.libX11
-            xorg.libXt
-            xorg.libXext
-            xorg.libXmu
-            xorg.libXfixes
-            xorg.libXcursor
+            libx11
+            libxt
+            libxext
+            libxmu
+            libxfixes
+            libxcursor
           ]
         } $i
     done

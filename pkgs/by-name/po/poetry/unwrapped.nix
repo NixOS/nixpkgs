@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   findpython,
   installShellFiles,
@@ -26,7 +25,6 @@
   trove-classifiers,
   virtualenv,
   xattr,
-  tomli,
   deepdiff,
   pytestCheckHook,
   httpretty,
@@ -84,9 +82,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     xattr
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ]
   ++ cachecontrol.optional-dependencies.filecache
   ++ pbs-installer.optional-dependencies.download

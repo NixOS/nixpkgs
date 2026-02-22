@@ -14,14 +14,14 @@
   soapysdr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapyaudio";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyAudio";
-    rev = "soapy-audio-${version}";
+    rev = "soapy-audio-${finalAttrs.version}";
     sha256 = "0minlsc1lvmqm20vn5hb4im7pz8qwklfy7sbr2xr73xkrbqdahc0";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ numinit ];
     platforms = lib.platforms.unix;
   };
-}
+})

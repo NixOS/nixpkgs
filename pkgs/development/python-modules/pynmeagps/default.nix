@@ -7,16 +7,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynmeagps";
-  version = "1.0.57";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "semuconsulting";
     repo = "pynmeagps";
-    tag = "v${version}";
-    hash = "sha256-aFB0L2d/2LzDCS5ZbY1/NetDdiuGiwrgqlDyCAv6lV0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M35rD12PQIShNvty0AqclNIySMHee9ik9sX4ytWm3EQ=";
   };
 
   build-system = [ setuptools ];
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "NMEA protocol parser and generator";
     homepage = "https://github.com/semuconsulting/pynmeagps";
-    changelog = "https://github.com/semuconsulting/pynmeagps/releases/tag/${src.tag}";
+    changelog = "https://github.com/semuconsulting/pynmeagps/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dylan-gonzalez ];
   };
-}
+})

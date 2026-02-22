@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "argo-rollouts";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-rollouts";
-    rev = "v${version}";
-    sha256 = "sha256-OCFbnBSFSXcbXHT48sS8REAt6CtNFPCNTIfKRBj19DM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-LT5RV5dBqcEloKUm9RCDxPncxScYVlYVWWYUld1iO0M=";
   };
 
-  vendorHash = "sha256-2zarm9ZvPJ5uwEYvYI60uaN5MONKE8gd+i6TPHdD3PU=";
+  vendorHash = "sha256-+qdj72kjpctQabalcmjqk5DhptvBOzGErn9cpRkGqlk=";
 
   # Disable tests since some test fail because of missing test data
   doCheck = false;
@@ -31,4 +31,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ psibi ];
   };
-}
+})

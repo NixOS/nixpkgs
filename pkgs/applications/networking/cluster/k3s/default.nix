@@ -12,51 +12,15 @@ let
   extraArgs = removeAttrs args [ "callPackage" ];
 in
 {
-  k3s_1_32 = common (
-    (import ./1_32/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "32"
-      ];
-    }
-  ) extraArgs;
+  k3s_1_32 = common (import ./1_32/versions.nix) extraArgs;
 
-  k3s_1_33 = common (
-    (import ./1_33/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "33"
-      ];
-    }
-  ) extraArgs;
+  k3s_1_33 = common (import ./1_33/versions.nix) extraArgs;
 
-  k3s_1_34 =
-    (common (
-      (import ./1_34/versions.nix)
-      // {
-        updateScript = [
-          ./update-script.sh
-          "34"
-        ];
-      }
-    ) extraArgs).overrideAttrs
-      {
-        patches = [ ./go_runc_require.patch ];
-      };
+  k3s_1_34 = (common (import ./1_34/versions.nix) extraArgs).overrideAttrs {
+    patches = [ ./go_runc_require.patch ];
+  };
 
-  k3s_1_35 =
-    (common (
-      (import ./1_35/versions.nix)
-      // {
-        updateScript = [
-          ./update-script.sh
-          "35"
-        ];
-      }
-    ) extraArgs).overrideAttrs
-      {
-        patches = [ ./go_runc_require.patch ];
-      };
+  k3s_1_35 = (common (import ./1_35/versions.nix) extraArgs).overrideAttrs {
+    patches = [ ./go_runc_require.patch ];
+  };
 }

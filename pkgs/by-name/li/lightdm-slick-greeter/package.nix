@@ -13,22 +13,22 @@
   pixman,
   libcanberra,
   libgnomekbd,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   linkFarm,
   lightdm-slick-greeter,
   numlockx,
   xapp-symbolic-icons,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lightdm-slick-greeter";
   version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-zYjtd/Lb9ialq+pzOml4FMfPq9maX848Or6lzyZj4qs=";
   };
 
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
     pixman
     libcanberra
     libgnomekbd # needed by XApp.KbdLayoutController
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   pythonPath = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
       --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
@@ -107,4 +107,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

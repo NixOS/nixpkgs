@@ -9,14 +9,14 @@
   oniguruma,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bfs";
   version = "4.1";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+hGxdsk9MU5MVvvx3C2cqomboNxD0UZ5y7t84fAwfqs=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "bfs";
   };
-}
+})

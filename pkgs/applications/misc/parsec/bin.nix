@@ -10,11 +10,11 @@
   openssl,
   udev,
   libglvnd,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXfixes,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxfixes,
   libpulseaudio,
   libva,
   ffmpeg_7,
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation {
   buildInputs = [
     stdenv.cc.cc # libstdc++
     libglvnd
-    libX11
+    libx11
   ];
 
   runtimeDependenciesPath = lib.makeLibraryPath [
@@ -58,11 +58,11 @@ stdenvNoCC.mkDerivation {
     libpng
     libjpeg8
     curl
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXfixes
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxfixes
     vulkan-loader
   ];
 

@@ -9,18 +9,18 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "photonvision";
   version = "2025.2.1";
 
   src =
     {
       "x86_64-linux" = fetchurl {
-        url = "https://github.com/PhotonVision/photonvision/releases/download/v${version}/photonvision-v${version}-linuxx64.jar";
+        url = "https://github.com/PhotonVision/photonvision/releases/download/v${finalAttrs.version}/photonvision-v${finalAttrs.version}-linuxx64.jar";
         hash = "sha256-yEb6GCt29DjZNDsIqDvF/AiCw3QVMxUFKQM22OlMl7Q=";
       };
       "aarch64-linux" = fetchurl {
-        url = "https://github.com/PhotonVision/photonvision/releases/download/v${version}/photonvision-v${version}-linuxarm64.jar";
+        url = "https://github.com/PhotonVision/photonvision/releases/download/v${finalAttrs.version}/photonvision-v${finalAttrs.version}-linuxarm64.jar";
         hash = "sha256-YG9wyh+MCsv/RBdiFvgrF6Fw/6AnN7OEi4ofkMptfT0=";
       };
     }
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

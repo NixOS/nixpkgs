@@ -9,10 +9,10 @@
   docbook_xml_dtd_43,
   gtk-doc,
   gdk-pixbuf,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf-xlib";
   version = "2.40.2";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "Archive";
     repo = "gdk-pixbuf-xlib";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-b4EUaYzg2NlBMU90dGQivOvkv9KKSzES/ymPqzrelu8=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     gdk-pixbuf
-    libX11
+    libx11
   ];
 
   mesonFlags = [
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

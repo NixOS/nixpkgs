@@ -11,7 +11,7 @@
   libsigcxx30,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cairomm";
   version = "1.18.0";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.cairographics.org/releases/cairomm-${version}.tar.xz";
+    url = "https://www.cairographics.org/releases/cairomm-${finalAttrs.version}.tar.xz";
     sha256 = "uBJVOU4+qOiqiHJ20ir6iYX8ja72BpLrJAfSMEnwPPs=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

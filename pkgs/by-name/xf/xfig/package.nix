@@ -5,13 +5,13 @@
   fetchpatch,
   makeWrapper,
   imagemagick,
-  libXpm,
-  libXmu,
-  libXi,
-  libXp,
+  libxpm,
+  libxmu,
+  libxi,
+  libxp,
   Xaw3d,
-  libXaw,
-  libXft,
+  libxaw,
+  libxft,
   fig2dev,
 }:
 
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXpm
-    libXmu
-    libXi
-    libXp
+    libxpm
+    libxmu
+    libxi
+    libxp
     Xaw3d
-    libXaw
-    libXft
+    libxaw
+    libxft
   ];
 
   # Upstream-accepted patches for C23 compatibility from Gentoo and Debian

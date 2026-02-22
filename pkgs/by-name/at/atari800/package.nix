@@ -6,7 +6,7 @@
   fetchFromGitHub,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   readline,
   zlib,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
     libGL
     libGLU
-    libX11
+    libx11
     readline
     zlib
   ];

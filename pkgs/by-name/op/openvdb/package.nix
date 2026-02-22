@@ -10,7 +10,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvdb";
   version = "12.1.0";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openvdb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-28vrIlruPl1tvw2JhjIAARtord45hqCqnA9UNnu4Z70=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
   };
-}
+})

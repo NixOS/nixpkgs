@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -8,9 +8,10 @@
   capstone,
   bison,
   flex,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "boomerang";
   version = "0.5.2";
   # NOTE: When bumping version beyond 0.5.2, you likely need to remove
@@ -27,12 +28,13 @@ mkDerivation rec {
   # Boomerang usually compiles with -Werror but has not been updated for newer
   # compilers. Disable -Werror for now. Consider trying to remove this when
   # updating this derivation.
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error" ];
 
   nativeBuildInputs = [
     cmake
     bison
     flex
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase

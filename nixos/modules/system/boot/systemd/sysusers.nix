@@ -31,9 +31,9 @@ let
     ${lib.concatLines (
       lib.mapAttrsToList (
         groupname: opts:
-        ''g ${groupname} ${
+        "g ${groupname} ${
           if opts.gid == null then "/var/lib/nixos/gid/${groupname}" else toString opts.gid
-        }''
+        }"
       ) userCfg.groups
     )}
 

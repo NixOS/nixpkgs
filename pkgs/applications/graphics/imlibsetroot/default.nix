@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libXinerama,
+  libx11,
+  libxinerama,
   imlib2,
 }:
 
@@ -16,9 +16,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
+    libx11
     imlib2
-    libXinerama
+    libxinerama
   ];
 
   buildPhase = ''
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
     gcc -g imlibsetroot.c -o imlibsetroot              \
       -I${imlib2.dev}/include -L${imlib2}/lib -lImlib2 \
-      -I${libX11.dev}/include -lXinerama -lX11
+      -I${libx11.dev}/include -lXinerama -lX11
 
     runHook postBuild
   '';

@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kestrel";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "finfet";
     repo = "kestrel";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bKQBOk9yUqgnufRyyqXatsRHpesbM49rAkz0dD5XE80=";
   };
 
@@ -38,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

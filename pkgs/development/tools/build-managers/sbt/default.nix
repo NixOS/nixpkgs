@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
-  version = "1.12.0";
+  version = "1.12.2";
 
   src = fetchurl {
     url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
-    hash = "sha256-5K3j9L2+HnRFvprPAssbNXS+tGA2LhcofiRrfq+buVI=";
+    hash = "sha256-l7t331CsM+P4yH0UFcHWa7WFhvb+Ayt4CP14P5SVMfA=";
   };
 
   postPatch = ''
@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
       kashw2
     ];
     platforms = lib.platforms.unix;
+    mainProgram = "sbt";
   };
 })

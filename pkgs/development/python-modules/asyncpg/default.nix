@@ -2,12 +2,10 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  async-timeout,
   cython,
   libpq,
   uvloop,
   postgresql,
-  pythonOlder,
   pytest-xdist,
   pytestCheckHook,
   setuptools,
@@ -28,10 +26,6 @@ buildPythonPackage rec {
     cython
     setuptools
   ];
-
-  # required for compatibility with Python versions older than 3.11
-  # see https://github.com/MagicStack/asyncpg/blob/v0.29.0/asyncpg/_asyncio_compat.py#L13
-  dependencies = lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     libpq.pg_config

@@ -6,14 +6,14 @@
   arp-scan,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "watchyourlan";
   version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "aceberg";
     repo = "WatchYourLAN";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TFqBuJHoHKJ/ftorgNG9JpiOrjSmqw+tHhaOYzoTeUM=";
   };
 
@@ -34,9 +34,9 @@ buildGoModule rec {
   meta = {
     description = "Lightweight network IP scanner with web GUI";
     homepage = "https://github.com/aceberg/WatchYourLAN";
-    changelog = "https://github.com/aceberg/WatchYourLAN/releases/tag/${src.tag}";
+    changelog = "https://github.com/aceberg/WatchYourLAN/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "WatchYourLAN";
     maintainers = [ lib.maintainers.iv-nn ];
   };
-}
+})

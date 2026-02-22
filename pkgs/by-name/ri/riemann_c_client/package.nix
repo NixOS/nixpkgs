@@ -15,7 +15,7 @@
   json_c,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "riemann-c-client";
   version = "2.2.2";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "git.madhouse-project.org";
     owner = "algernon";
     repo = "riemann-c-client";
-    rev = "riemann-c-client-${version}";
+    rev = "riemann-c-client-${finalAttrs.version}";
     hash = "sha256-l9iUDhagODi58FDT9vEb90tsiIcrcMmGYCmH3ML3RCM=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.eupl12;
     platforms = lib.platforms.linux;
   };
-}
+})

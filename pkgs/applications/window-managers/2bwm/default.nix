@@ -4,10 +4,10 @@
   fetchFromGitHub,
   patches,
   libxcb,
-  xcbutilkeysyms,
-  xcbutilwm,
-  libX11,
-  xcbutil,
+  libxcb-keysyms,
+  libxcb-wm,
+  libx11,
+  libxcb-util,
   xcbutilxrm,
 }:
 
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxcb
-    xcbutilkeysyms
-    xcbutilwm
-    libX11
-    xcbutil
+    libxcb-keysyms
+    libxcb-wm
+    libx11
+    libxcb-util
     xcbutilxrm
   ];
 

@@ -16,18 +16,18 @@
   glibc,
   udevCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
-  version = "6.3.1";
+  version = "6.3.2";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
-    tag = version;
-    hash = "sha256-x3WKxjYrWYaLWDi52b3uQSYnr/Qunf6JYu4ikt4ajls=";
+    tag = finalAttrs.version;
+    hash = "sha256-6dZkQ8cPL8dbtvfuc/a5G1BxEaZyNbvy3eRBctFFwVU=";
   };
 
-  cargoHash = "sha256-FyVbeHzwMr8UJ2OoVYVekXJFhus/ab7KwfGK4eaua6A=";
+  cargoHash = "sha256-FlEuv/iaNlfXLhHRSmZedPwroCozaEqIvYRqbgJhgEw=";
 
   postPatch = ''
     files="
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace Makefile \
       --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
 
-    substituteInPlace /build/asusctl-${version}-vendor/sg-0.4.0/build.rs \
+    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/sg-0.4.0/build.rs \
       --replace-fail /usr/include ${lib.getDev glibc}/include
   '';
 
@@ -112,4 +112,4 @@ rustPlatform.buildRustPackage rec {
       yuannan
     ];
   };
-}
+})

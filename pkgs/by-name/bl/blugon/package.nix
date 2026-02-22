@@ -3,25 +3,25 @@
   stdenv,
   fetchFromGitHub,
   python3,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blugon";
   version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "jumper149";
     repo = "blugon";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1i67v8jxvavgax3dwvns200iwwdcvgki04liq0x64q52lg0vrh7m";
   };
 
   buildInputs = [
     python3
-    libX11
-    libXrandr
+    libx11
+    libxrandr
   ];
 
   # Remove at next release
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jumper149 ];
     mainProgram = "blugon";
   };
-}
+})

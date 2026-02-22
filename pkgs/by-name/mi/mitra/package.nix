@@ -2,23 +2,22 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mitra";
-  version = "4.16.1";
+  version = "4.17.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "silverpill";
     repo = "mitra";
-    rev = "v${version}";
-    hash = "sha256-nQhzU3LMEyqa2CciNTX5/+ViMqjmwDt3QrMZnbt/tBU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ysV0r0K+2ivnDg/GuqwK5HWa4/jQtopXqS9g/9wWrOw=";
   };
 
-  cargoHash = "sha256-aWBJ3PDHcqm73P4oOpuSlalT5LxRgSqhuC0f0/sL+lg=";
+  cargoHash = "sha256-RDMLfg+KsvfXDjsCzCn53kebBRN8/6er/LsS/BzoeU0=";
 
   # require running database
   doCheck = false;
@@ -50,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ haruki7049 ];
     mainProgram = "mitra";
   };
-}
+})

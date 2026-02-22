@@ -10,14 +10,14 @@
   gfortran,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-papilo";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oxuXv/xWQiApxrrVdH3aEUOp40Em6kCz/DJXXpCxdzs=";
   };
 
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
   ];
   doCheck = true;
   meta = {
-    maintainers = with lib.maintainers; [ fettgoenner ];
+    maintainers = with lib.maintainers; [ pmeinhold ];
     description = "Parallel Presolve for Integer and Linear Optimization";
     license = lib.licenses.lgpl3Plus;
     homepage = "https://github.com/scipopt/papilo";
     mainProgram = "papilo";
   };
-}
+})

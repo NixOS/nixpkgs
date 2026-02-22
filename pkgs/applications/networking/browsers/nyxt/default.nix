@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # for cffi
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
     glib
     gobject-introspection
     gdk-pixbuf

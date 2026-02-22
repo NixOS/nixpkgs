@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sss-cli";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "dsprenkels";
     repo = "sss-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9Wht+t48SsWpj1z2yY6P7G+h9StmuqfMdODtyPffhak=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ laalsaas ];
   };
-}
+})

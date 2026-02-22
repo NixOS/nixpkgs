@@ -13,14 +13,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
-  version = "1.3.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-YjGceElLsbq6aCs3iC69xVj85WTHVqs9AC5lHpi2SJY=";
+    hash = "sha256-j5kkmaB91y6KDROZjkUbosdmSG+udo6D/gcyfsU4Bbs=";
   };
 
   sourceRoot = "source/src/backend";
@@ -40,6 +40,7 @@ python.pkgs.buildPythonApplication rec {
       brevo-python
       brotli
       celery
+      dj-database-url
       django
       django-configurations
       django-cors-headers

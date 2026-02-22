@@ -6,14 +6,14 @@
   gotools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mtail";
   version = "3.2.26";
 
   src = fetchFromGitHub {
     owner = "jaqx0r";
     repo = "mtail";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-L+kRRAP74n8OJVQhbDjDGNc8IYp/11a6sKbGa1/UdNY=";
   };
 
@@ -25,8 +25,8 @@ buildGoModule rec {
 
   ldflags = [
     "-X=main.Branch=main"
-    "-X=main.Version=${version}"
-    "-X=main.Revision=${src.rev}"
+    "-X=main.Version=${finalAttrs.version}"
+    "-X=main.Revision=${finalAttrs.src.rev}"
   ];
 
   # fails on darwin with: write unixgram -> <tmpdir>/rsyncd.log: write: message too long
@@ -48,4 +48,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "mtail";
   };
-}
+})

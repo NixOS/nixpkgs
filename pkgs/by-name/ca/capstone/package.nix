@@ -6,15 +6,15 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "capstone";
-  version = "5.0.6";
+  version = "5.0.7";
 
   src = fetchFromGitHub {
     owner = "capstone-engine";
     repo = "capstone";
-    rev = version;
-    hash = "sha256-ovIvsxVq+/q5UUMzP4WpxzaE0898uayNc1g2Coignnc=";
+    rev = finalAttrs.version;
+    hash = "sha256-+6QReHZK+iIXspizy6Kvk7cj016HOKgiaKSaP4h7mao=";
   };
 
   cmakeFlags = [
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     mainProgram = "cstool";
     platforms = lib.platforms.unix;
   };
-}
+})

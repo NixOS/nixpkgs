@@ -5,7 +5,7 @@
   cmake,
   ninja,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-headers";
   version = "1.4.335.0";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Headers";
-    rev = "vulkan-sdk-${version}";
+    rev = "vulkan-sdk-${finalAttrs.version}";
     hash = "sha256-DIePLzDoImnaso0WYUv819wSDeA7Zy1I/tYAbsALXKg=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ralith ];
   };
-}
+})

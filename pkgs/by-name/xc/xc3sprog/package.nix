@@ -11,14 +11,14 @@
 # The xc3sprog project doesn't seem to make proper releases, they only put out
 # prebuilt binary subversion snapshots on sourceforge.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "795";
   pname = "xc3sprog";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/xc3sprog/code/trunk";
     sha256 = "sha256-E0MGwC3gIfl60gjGaSeSPTR5jJm9r8m7Et3402lek/w=";
-    rev = version;
+    rev = finalAttrs.version;
   };
 
   nativeBuildInputs = [
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

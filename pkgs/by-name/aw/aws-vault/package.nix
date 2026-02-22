@@ -8,19 +8,19 @@
   writableTmpDirAsHomeHook,
   xdg-utils,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aws-vault";
-  version = "7.8.7";
+  version = "7.9.5";
 
   src = fetchFromGitHub {
     owner = "ByteNess";
     repo = "aws-vault";
-    rev = "v${version}";
-    hash = "sha256-q4I/sCFo8svf+XL+Eln5TWLvj1ggaRjUplSgV6M0f9s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-MVeYKeFpGKk0asO7u5RE3arpX3x4EpF4xRCav5oj9J4=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-tsIyY+L3Bvv/3uvRVkCGK4cAZXQyZSa0mUPDg8Aqml8=";
+  vendorHash = "sha256-6JgcU+NRQSQjoGxF0ByaY2h9/HZUdg8BdbHazz5m8VM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -46,13 +46,13 @@ buildGoModule rec {
 
   # set the version. see: aws-vault's Makefile
   ldflags = [
-    "-X main.Version=v${version}"
+    "-X main.Version=v${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
 
   installCheckPhase = ''
-    $out/bin/aws-vault --version 2>&1 | grep ${version} > /dev/null
+    $out/bin/aws-vault --version 2>&1 | grep ${finalAttrs.version} > /dev/null
   '';
 
   meta = {
@@ -65,4 +65,4 @@ buildGoModule rec {
       er0k
     ];
   };
-}
+})

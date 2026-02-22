@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "updfparser";
+  pname = "updfparser";
   version = "0-unstable-2024-03-24";
   rev = "6060d123441a06df699eb275ae5ffdd50409b8f3";
 

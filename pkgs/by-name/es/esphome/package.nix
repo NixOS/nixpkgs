@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.12.7";
+  version = "2026.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-KC3LbY5mU4xig3kftIuemSz/RAnJ7wZ8eSccr9BKz9Q=";
+    hash = "sha256-VcfQsDx3u7GTndF5GE0XCplPXVo9ClLJwqWLJFKzWEk=";
   };
 
   patches = [
@@ -68,8 +68,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.46" "wheel"
+      --replace-fail "setuptools==82.0.0" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.47" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -95,6 +95,8 @@ python.pkgs.buildPythonApplication rec {
     pyparsing
     pyserial
     pyyaml
+    requests
+    resvg-py
     ruamel-yaml
     tornado
     tzdata
@@ -193,6 +195,7 @@ python.pkgs.buildPythonApplication rec {
     ];
     maintainers = with lib.maintainers; [
       hexa
+      picnoir
       thanegill
     ];
     mainProgram = "esphome";

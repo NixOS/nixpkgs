@@ -74,6 +74,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/espeak-ng/espeak-ng/commit/83e646e711af608fafa8c01dd812cd29e073f644.patch";
       hash = "sha256-UHuURyqRy/JVYYJH5EI5J2cpBfCNeTE24sMmheb+D2Q=";
     })
+    # Remove after next release.
+    (fetchpatch {
+      name = "cmake-default-ESPEAK_COMPAT-to-ON.patch";
+      url = "https://github.com/espeak-ng/espeak-ng/commit/3dcbe7ea3ea85a9212968d0f05172dde4259e770.patch";
+      hash = "sha256-U694hGe+cwy7qLe/6XmNHYIhccJGsbM0CzPZT5pIpUI=";
+    })
   ]
   ++ lib.optionals mbrolaSupport [
     # Hardcode correct mbrola paths.

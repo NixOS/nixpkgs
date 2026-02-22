@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   ...
@@ -305,6 +306,23 @@ in
       '';
     };
 
+    httpPort = mkOption {
+      default = 80;
+      type = with types; nullOr port;
+      description = ''
+        The default port to listen on for HTTP traffic.
+      '';
+    };
+
+    httpsPort = mkOption {
+      default = 443;
+      type = with types; nullOr port;
+      description = ''
+        The default port to listen on for HTTPS traffic.
+        Will also be used for HTTP/3.
+      '';
+    };
+
     enableReload = mkOption {
       default = true;
       type = types.bool;
@@ -376,6 +394,19 @@ in
         [here](https://caddyserver.com/docs/caddyfile/concepts#environment-variables)
       '';
     };
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable opening the specified http(s) ports in the firewall.
+        Any port set to `null` will not be opened.
+
+        ::: {.note}
+        If you use other ports for your virtual hosts, you need to open them manually.
+        :::
+      '';
+    };
   };
 
   # implementation
@@ -399,6 +430,18 @@ in
     services.caddy.globalConfig = ''
       ${optionalString (cfg.email != null) "email ${cfg.email}"}
       ${optionalString (cfg.acmeCA != null) "acme_ca ${cfg.acmeCA}"}
+      ${optionalString (
+        !elem cfg.httpPort [
+          null
+          options.services.caddy.httpPort.default
+        ]
+      ) "http_port ${cfg.httpPort}"}
+      ${optionalString (
+        !elem cfg.httpsPort [
+          null
+          options.services.caddy.httpsPort.default
+        ]
+      ) "https_port ${cfg.httpsPort}"}
       log {
         ${cfg.logFormat}
       }
@@ -421,9 +464,9 @@ in
 
       serviceConfig =
         let
-          runOptions = ''--config ${configPath} ${
+          runOptions = "--config ${configPath} ${
             optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"
-          }'';
+          }";
         in
         {
           # Override the `ExecStart` line from upstream's systemd unit file by our own:
@@ -431,7 +474,7 @@ in
           # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
           ExecStart = [
             ""
-            ''${lib.getExe cfg.package} run ${runOptions} ${optionalString cfg.resume "--resume"}''
+            "${lib.getExe cfg.package} run ${runOptions} ${optionalString cfg.resume "--resume"}"
           ];
           # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
           ExecReload = [
@@ -480,5 +523,13 @@ in
       listToAttrs certCfg;
 
     environment.etc.${etcConfigFile}.source = cfg.configFile;
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = filter (port: port != null) [
+        cfg.httpPort
+        cfg.httpsPort
+      ];
+      allowedUDPPorts = optional (cfg.httpsPort != null) cfg.httpsPort;
+    };
   };
 }

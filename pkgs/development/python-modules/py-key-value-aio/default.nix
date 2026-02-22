@@ -58,7 +58,6 @@
   inline-snapshot,
   py-key-value-shared-test,
   pytest-asyncio,
-  pytest-xdist,
   pytestCheckHook,
 }:
 
@@ -81,6 +80,18 @@ buildPythonPackage (finalAttrs: {
       --replace-fail \
         "uv_build>=0.8.2,<0.9.0" \
         "uv_build"
+  ''
+  # Tests fail when using pytest-xdist ('Worker crashes')
+  # https://github.com/strawgate/py-key-value/issues/266
+  + ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"-n=auto",' \
+        ""
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"--dist=loadfile",' \
+        ""
   '';
 
   build-system = [
@@ -160,7 +171,6 @@ buildPythonPackage (finalAttrs: {
     inline-snapshot
     py-key-value-shared-test
     pytest-asyncio
-    pytest-xdist
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.disk
@@ -183,6 +193,10 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # keyring.errors.PasswordSetError: Can't store password on keychain: (-61, 'Unknown Error')
     "tests/stores/keyring/test_keyring.py"
+
+    # Worker crashes
+    # https://github.com/strawgate/py-key-value/issues/266
+    "tests/stores/rocksdb/test_rocksdb.py"
   ];
 
   meta = {

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   kdePackages,
-  xorg,
+  libxcomposite,
   cmake,
   ninja,
   libcprime,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     kdePackages.qtbase
     kdePackages.kglobalaccel
-    xorg.libXcomposite
+    libxcomposite
     libcprime
     libcsys
   ];

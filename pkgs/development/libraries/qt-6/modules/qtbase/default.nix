@@ -13,7 +13,9 @@
   cmake,
   ninja,
   libproxy,
-  xorg,
+  libxcb-cursor,
+  libxtst,
+  libxdmcp,
   zstd,
   double-conversion,
   util-linux,
@@ -39,11 +41,11 @@
   glib,
   harfbuzz,
   icu,
-  libX11,
-  libXcomposite,
-  libXext,
-  libXi,
-  libXrender,
+  libx11,
+  libxcomposite,
+  libxext,
+  libxi,
+  libxrender,
   libjpeg,
   libpng,
   libxcb,
@@ -54,11 +56,11 @@
   pcre2,
   sqlite,
   udev,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   zlib,
   at-spi2-core,
   unixODBC,
@@ -144,21 +146,21 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     # X11 libs
-    libX11
-    libXcomposite
-    libXext
-    libXi
-    libXrender
+    libx11
+    libxcomposite
+    libxext
+    libxi
+    libxrender
     libxcb
     libxkbcommon
-    xcbutil
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
-    xorg.libXdmcp
-    xorg.libXtst
-    xorg.xcbutilcursor
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
+    libxdmcp
+    libxtst
+    libxcb-cursor
     libepoxy
   ]
   ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups

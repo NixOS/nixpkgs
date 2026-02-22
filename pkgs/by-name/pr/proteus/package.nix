@@ -8,12 +8,12 @@
   alsa-lib,
   freetype,
   libjack2,
-  libX11,
-  libXext,
-  libXcursor,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxcursor,
+  libxinerama,
+  libxrandr,
+  libxrender,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     alsa-lib
     freetype
     libjack2
-    libX11
-    libXext
-    libXcursor
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxcursor
+    libxinerama
+    libxrandr
+    libxrender
   ];
 
   postPatch = ''

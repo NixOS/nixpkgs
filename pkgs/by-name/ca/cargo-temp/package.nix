@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-temp";
-  version = "0.3.5";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "yozhgoor";
     repo = "cargo-temp";
-    rev = "v${version}";
-    hash = "sha256-kCiw3a9C78mcJ2/bX+E5gXZKYcfLXF0crMIZu4cJsdY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-F7KIYEWZN4KAVoBRquL7/VH0p+MSFGO0n2PkbXljyPM=";
   };
 
-  cargoHash = "sha256-7S7L/OKHTOAP9tbM7+xWhvcYBZScvX6SBW3U1AyFGrs=";
+  cargoHash = "sha256-ho5HriiViW2FxxPz4RA1nCkmlG7cdt5VuhVrSdGzzuY=";
 
   meta = {
     description = "CLI tool that allow you to create a temporary new Rust project using cargo with already installed dependencies";
     mainProgram = "cargo-temp";
     homepage = "https://github.com/yozhgoor/cargo-temp";
-    changelog = "https://github.com/yozhgoor/cargo-temp/releases/tag/${src.rev}";
+    changelog = "https://github.com/yozhgoor/cargo-temp/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [
       mit # or
       asl20
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

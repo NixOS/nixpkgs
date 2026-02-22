@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wtfutil";
   version = "0.46.1";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = "wtf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-GLLTI/hxlkt3OvtTWRNdzQ9jzO4xzJV9RruiJUyWD5g=";
   };
 
@@ -35,7 +35,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
-    substituteInPlace flags/flags.go --replace-fail 'version := "dev"' 'version := "v${version}"'
+    substituteInPlace flags/flags.go --replace-fail 'version := "dev"' 'version := "v${finalAttrs.version}"'
   '';
 
   postInstall = ''
@@ -52,7 +52,7 @@ buildGoModule rec {
   meta = {
     description = "Personal information dashboard for your terminal";
     homepage = "https://wtfutil.com/";
-    changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/wtfutil/wtf/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
@@ -61,4 +61,4 @@ buildGoModule rec {
     mainProgram = "wtfutil";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

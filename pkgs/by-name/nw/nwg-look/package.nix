@@ -8,18 +8,18 @@
   cairo,
   gtk3,
   xcur2png,
-  libX11,
+  libx11,
   zlib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nwg-look";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-look";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cNVUgtbdzEuttDO7DZyipDugACr/fIU8RKmh5trykPw=";
   };
 
@@ -39,7 +39,7 @@ buildGoModule rec {
     glib
     cairo
     xcur2png
-    libX11.dev
+    libx11.dev
     zlib
     gtk3
   ];
@@ -74,4 +74,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ max-amb ];
     mainProgram = "nwg-look";
   };
-}
+})

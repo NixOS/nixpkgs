@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pkarr";
   version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "pubky";
     repo = "pkarr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Sh7ly4jmW7XTizsxGV/iDsWjbhxEEall+dUNkEtYahc=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dpc ];
     mainProgram = "pkarr-server";
   };
-}
+})

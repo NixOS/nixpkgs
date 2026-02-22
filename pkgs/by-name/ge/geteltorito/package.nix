@@ -6,12 +6,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geteltorito";
   version = "0.6";
 
   src = fetchurl {
-    url = "https://userpages.uni-koblenz.de/~krienke/ftp/noarch/geteltorito/geteltorito-${version}.tar.gz";
+    url = "https://userpages.uni-koblenz.de/~krienke/ftp/noarch/geteltorito/geteltorito-${finalAttrs.version}.tar.gz";
     sha256 = "1gkbm9ahj2mgqrkrfpibzclsriqgsbsvjh19fr815vpd9f6snkxv";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     # reformat README to ronn markdown
     cat > README.new <<EOF
-    geteltorito -- ${meta.description}
+    geteltorito -- ${finalAttrs.meta.description}
     ===========
 
     ## SYNOPSIS
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     mainProgram = "geteltorito";
   };
 
-}
+})

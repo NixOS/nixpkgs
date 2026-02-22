@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pynetbox";
-  version = "7.6.0";
+  version = "7.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "pynetbox";
     tag = "v${version}";
-    hash = "sha256-XflMJ6mrXOeUt+Tlmaa2Tw59M3zssnjgnZ7RoQRdOTQ=";
+    hash = "sha256-PAWcLJvDrS70Y9pLGtdTbwiEjhOb6yiOPCT34RfnyjU=";
   };
 
   build-system = [

@@ -39,6 +39,7 @@ rec {
     toJSON
     typeOf
     unsafeDiscardStringContext
+    appendContext
     ;
 
   /**

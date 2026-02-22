@@ -1,17 +1,18 @@
 {
+  stdenv,
   cmake,
   fetchFromGitHub,
   fetchpatch,
   lib,
   libusb1,
-  mkDerivation,
   python3,
   qtbase,
   qttools,
+  wrapQtAppsHook,
   udev,
   zlib,
 }:
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openambit";
   version = "0.5";
 
@@ -49,6 +50,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qttools
+    wrapQtAppsHook
   ];
   buildInputs = [
     libusb1

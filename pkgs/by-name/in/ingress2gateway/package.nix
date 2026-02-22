@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ingress2gateway";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "ingress2gateway";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pX/4WFqYkBPnaEki3q3CahBCePUvKQzVulT+oMtUXQc=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ arikgrahl ];
     mainProgram = "ingress2gateway";
   };
-}
+})

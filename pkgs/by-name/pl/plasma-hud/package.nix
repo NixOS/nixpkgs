@@ -7,7 +7,7 @@
   gobject-introspection,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "plasma-hud";
   version = "22.01.0";
   pyproject = false;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Zren";
     repo = "plasma-hud";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-HEAvwQSROQtJAZdiDObu9qbpgJlkJdks2v95Xjh5520=";
   };
 
@@ -54,4 +54,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ pasqui23 ];
     mainProgram = "plasma-hud";
   };
-}
+})

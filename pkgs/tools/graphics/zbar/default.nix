@@ -6,7 +6,7 @@
   imagemagickBig,
   pkg-config,
   withXorg ? true,
-  libX11,
+  libx11,
   libv4l,
   qtbase,
   qtwayland,
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     dbus
   ]
   ++ lib.optionals withXorg [
-    libX11
+    libx11
   ]
   ++ lib.optionals enableVideo [
     libv4l

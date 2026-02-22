@@ -602,7 +602,7 @@ in
       ++ lib.optionals (cfg.settings.console.tokenFile != null) [
         ''
           if [ ! -e "${cfg.settings.console.tokenFile}" ]; then
-            ${lib.getExe cscli} console enroll "$(cat ${cfg.settings.console.tokenFile})" --name ${cfg.name}
+            ${lib.getExe cscli} console enroll "$(${lib.getExe' pkgs.coreutils "cat"} ${cfg.settings.console.tokenFile})" --name ${cfg.name}
           fi
         ''
       ];
@@ -625,7 +625,6 @@ in
 
       services.crowdsec.settings.general = {
         common = {
-          daemonize = false;
           log_media = "stdout";
         };
         config_paths = {
@@ -984,7 +983,7 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [
-      m0ustach3
+      M0ustach3
       tornax
       jk
     ];

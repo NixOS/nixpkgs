@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     systemd.dev
   ];
 
-  PKG_CONFIG_PATH = "${systemd.dev}/lib/pkgconfig";
+  env.PKG_CONFIG_PATH = "${systemd.dev}/lib/pkgconfig";
 
   postInstall = ''
     wrapProgram $out/bin/hot-resize \

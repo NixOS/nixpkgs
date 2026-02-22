@@ -5,14 +5,14 @@
   testers,
   i3-back,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3-back";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Cretezy";
     repo = "i3-back";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xGfX7ttWrcIVhy+MkR5RZr2DCAwIKwGu7zkafHcrjaE=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "i3-back";
   };
-}
+})

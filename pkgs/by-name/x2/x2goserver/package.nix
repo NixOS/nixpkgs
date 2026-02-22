@@ -14,7 +14,14 @@
   gnused,
   gnugrep,
   findutils,
-  xorg,
+  font-util,
+  xwininfo,
+  xrandr,
+  xmodmap,
+  xkbcomp,
+  xinit,
+  xauth,
+  setxkbmap,
   net-tools,
   iproute2,
   bc,
@@ -29,11 +36,11 @@
 
 let
   pname = "x2goserver";
-  version = "4.1.0.3";
+  version = "4.1.0.5";
 
   src = fetchurl {
     url = "https://code.x2go.org/releases/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "Z3aqo1T1pE40nws8F21JiMiKYYwu30bJijeuicBp3NA=";
+    hash = "sha256-Q1vbB84iQZ2eRWDf+Kyn+utrNgkdVayrwXZCm5Ia65Y=";
   };
 
   x2go-perl = perlPackages.buildPerlPackage {
@@ -86,14 +93,14 @@ let
     pwgen
     openssh
     sshfs
-    xorg.xauth
-    xorg.xinit
-    xorg.xrandr
-    xorg.xmodmap
-    xorg.xwininfo
-    xorg.fontutil
-    xorg.xkbcomp
-    xorg.setxkbmap
+    xauth
+    xinit
+    xrandr
+    xmodmap
+    xwininfo
+    font-util
+    xkbcomp
+    setxkbmap
   ];
 in
 stdenv.mkDerivation {

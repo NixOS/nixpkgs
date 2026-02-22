@@ -8,14 +8,14 @@
   pam,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "google-guest-oslogin";
   version = "20250821.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-oslogin";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-dvLr3rOzHs5gRbllxqmnkLlHUFYv9Hm2vz6AkwZoZy4=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [ "-I${json_c.dev}/include/json-c" ];
 
   makeFlags = [
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
     "PREFIX=$(out)"
     "MANDIR=$(out)/share/man"
     "SYSTEMDDIR=$(out)/etc/systemd/system"
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

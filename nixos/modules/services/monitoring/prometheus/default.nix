@@ -97,7 +97,7 @@ let
     ++ (
       if (cfg.enableAgentMode) then
         [
-          "--enable-feature=agent"
+          "--agent"
         ]
       else
         [

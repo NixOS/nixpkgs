@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smemstat";
   version = "0.02.13";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "smemstat";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-wxgw5tPdZAhhISbay8BwoL5zxZJV4WstDpOtv9umf54=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ womfoo ];
   };
-}
+})

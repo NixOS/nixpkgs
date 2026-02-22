@@ -30,15 +30,22 @@
   vulkan-loader,
   wrapGAppsHook3,
   xdg-utils,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
 }:
 stdenv.mkDerivation rec {
   pname = "plasticity";
-  version = "25.3.8";
+  version = "25.3.9";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-b3SsVd5y0GvM2cnil+ar4OGoaNlQn13gIEfzqOs4HfI=";
+    hash = "sha256-92DokpVmywh7EZZMKAoXf0RzkEuG/4Ngd5l0l/o6Klk=";
   };
 
   passthru.updateScript = ./update.sh;
@@ -78,14 +85,14 @@ stdenv.mkDerivation rec {
     systemd
     libglvnd
     vulkan-loader # may help with nvidia users
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libXtst
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxtst
   ];
 
   dontUnpack = true;

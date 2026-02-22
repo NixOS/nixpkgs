@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cshatag";
   version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "cshatag";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-RqQPbqfliKg7XPA/C9D7Aq1SsN+tAW44tAFHt9p8Py0=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

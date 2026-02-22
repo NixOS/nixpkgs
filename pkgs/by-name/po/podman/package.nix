@@ -7,7 +7,6 @@
   buildGoModule,
   buildPackages,
   gpgme,
-  lvm2,
   btrfs-progs,
   libapparmor,
   libseccomp,
@@ -43,13 +42,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "podman";
-  version = "5.7.0";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SHIWfY8eKdimwpLfB1NtpF1DBh6qaR5KCDTU4vWAMFw=";
+    hash = "sha256-0rpEmdx/IUgIvsqCxVyydXZXUm/r7cJG7xlHlEIz1G8=";
   };
 
   patches = [
@@ -83,7 +82,6 @@ buildGoModule (finalAttrs: {
     libapparmor
     libseccomp
     libselinux
-    lvm2
     systemd
   ];
 
@@ -157,6 +155,8 @@ buildGoModule (finalAttrs: {
         podman-tls-ghostunnel
         ;
       oci-containers-podman = nixosTests.oci-containers.podman;
+      oci-containers-podman-rootless-conmon = nixosTests.oci-containers.podman-rootless-conmon;
+      oci-containers-podman-rootless-healthy = nixosTests.oci-containers.podman-rootless-healthy;
     };
     # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
     binPath = lib.makeBinPath (
@@ -176,18 +176,19 @@ buildGoModule (finalAttrs: {
       name = "podman-helper-binary-wrapper";
 
       # this only works for some binaries, others may need to be added to `binPath` or in the modules
-      paths = [
-        gvproxy
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-        netavark
-        passt
-        conmon
-        crun
-      ]
-      ++ extraRuntimes;
+      paths =
+        lib.optionals stdenv.hostPlatform.isDarwin [
+          gvproxy
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          aardvark-dns
+          catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+          netavark
+          passt
+          conmon
+          crun
+        ]
+        ++ extraRuntimes;
     };
   };
 

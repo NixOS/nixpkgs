@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
+  util-linux,
 
   # build-system
   setuptools,
@@ -29,6 +31,7 @@
 
   # tests
   hypothesis,
+  psutil,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
@@ -39,22 +42,23 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask";
-  version = "2025.12.0";
+  version = "2026.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
-    tag = version;
-    hash = "sha256-oGBOt2ULLn0Kx1rOVNWaC3l1ECotMC2yNeCHya9Tx+s=";
+    tag = finalAttrs.version;
+    hash = "sha256-cyeAU5r8uYb7aAII9HztKY+3On44/nOC9eU9stYYWzE=";
   };
 
-  # https://github.com/dask/dask/issues/12043
-  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
-    substituteInPlace dask/dataframe/dask_expr/tests/_util.py \
-      --replace-fail "except AttributeError:" "except (AttributeError, pickle.PicklingError):"
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace dask/tests/test_system.py \
+      --replace-fail \
+        '"taskset",' \
+        '"${lib.getExe' util-linux "taskset"}",'
   '';
 
   build-system = [
@@ -97,6 +101,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    psutil
     pyarrow
     pytest-asyncio
     pytest-cov-stub
@@ -107,8 +112,8 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ]
-  ++ optional-dependencies.array
-  ++ optional-dependencies.dataframe;
+  ++ finalAttrs.passthru.optional-dependencies.array
+  ++ finalAttrs.passthru.optional-dependencies.dataframe;
 
   pytestFlags = [
     # Rerun failed tests up to three times
@@ -149,4 +154,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

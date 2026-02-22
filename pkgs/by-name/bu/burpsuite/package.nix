@@ -9,20 +9,20 @@
 }:
 
 let
-  version = "2026.1";
+  version = "2026.1.2";
 
   product =
     if proEdition then
       {
         productName = "pro";
         productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-4GvB1K4UZnZMor0jBWXvzgy0qfh234TZmtu6eSR4/jk=";
+        hash = "sha256-KF6VOXO3IKsysA3SBJJzL+G2yQEVpCQKL6IMYQhYFMc=";
       }
     else
       {
         productName = "community";
         productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-q0vKBEIzO18mNX7bn1vhnstnGr1pwjMnHXq6HdtpJy0=";
+        hash = "sha256-5LNzF68VhGdWttzZCkw/Ign4x6V4EhU/EHMddeSVirk=";
       };
 
   src = fetchurl {
@@ -73,21 +73,22 @@ buildFHSEnv {
       udev
       libxkbcommon
       libgbm
+      libglvnd
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxcb
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
     ];
 
   extraInstallCommands = ''
-    mkdir -p "$out/share/pixmaps"
-    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/pixmaps/burpsuite.png"
+    mkdir -p "$out/share/icons/hicolor/64x64/apps"
+    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
     cp -r ${desktopItem}/share/applications $out/share
   '';
 

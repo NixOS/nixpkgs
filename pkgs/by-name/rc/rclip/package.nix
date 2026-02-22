@@ -4,7 +4,7 @@
   fetchFromGitHub,
   versionCheckHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
   version = "2.0.11";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TXJpaMCSKCeOiWPVb9//czux+JV8VlJsiWH8fUb1tkw=";
   };
 
@@ -62,9 +62,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "AI-Powered Command-Line Photo Search Tool";
     homepage = "https://github.com/yurijmikhalevich/rclip";
-    changelog = "https://github.com/yurijmikhalevich/rclip/releases/tag/${src.tag}";
+    changelog = "https://github.com/yurijmikhalevich/rclip/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "rclip";
   };
-}
+})

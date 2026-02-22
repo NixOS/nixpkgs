@@ -4,7 +4,6 @@
 # depend on a dependency marked as broken.
 dont-distribute-packages:
 
- - 4Blocks
  - a50
  - abcBridge
  - AbortT-monadstf
@@ -421,9 +420,6 @@ dont-distribute-packages:
  - cfopu
  - chainweb-mining-client
  - chalkboard-viewer
- - changeset-containers
- - changeset-lens
- - changeset-reflex
  - chapelure
  - charade
  - chart-cli
@@ -459,8 +455,6 @@ dont-distribute-packages:
  - claferIG
  - claferwiki
  - clash
- - clash-ghc
- - clash-shake
  - classify-frog
  - classy-effects
  - classy-effects-th
@@ -774,7 +768,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_2_1_1
+ - dl-fedora_2_2
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -842,9 +836,6 @@ dont-distribute-packages:
  - effect-monad
  - effective-aspects-mzv
  - effects-parser
- - egison
- - egison-quote
- - egison-tutorial
  - ekg-carbon
  - elasticsearch-interchange
  - electrs-client
@@ -903,6 +894,13 @@ dont-distribute-packages:
  - eventful-sql-common
  - eventful-sqlite
  - eventful-test-helpers
+ - eventium-core
+ - eventium-memory
+ - eventium-postgresql
+ - eventium-sql-common
+ - eventium-sqlite
+ - eventium-test-helpers
+ - eventlog-live-otelcol
  - EventSocket
  - eventsource-geteventstore-store
  - eventsource-store-specs
@@ -1121,7 +1119,6 @@ dont-distribute-packages:
  - geolite-csv
  - geomancy-layout
  - getemx
- - ghc-debugger
  - ghc-dump-util
  - ghc-imported-from
  - ghc-instances
@@ -1214,6 +1211,7 @@ dont-distribute-packages:
  - grapefruit-records
  - grapefruit-ui
  - grapefruit-ui-gtk
+ - grapesy
  - grapesy-etcd
  - graph-rewriting-cl
  - graph-rewriting-gl
@@ -1229,7 +1227,6 @@ dont-distribute-packages:
  - graphicsFormats
  - graphicstools
  - graphtype
- - graphula
  - greencard-lib
  - grid-proto
  - gridbounds
@@ -1362,6 +1359,8 @@ dont-distribute-packages:
  - haskell-ftp
  - haskell-lsp
  - haskell-lsp-client
+ - haskell-opentimestamps
+ - haskell-opentimestamps-client
  - haskell-pdf-presenter
  - haskell-platform-test
  - haskell-reflect
@@ -1526,7 +1525,6 @@ dont-distribute-packages:
  - hgeometry-ipe
  - hgeometry-svg
  - hgithub
- - hgraph
  - hiccup
  - hie-core
  - hierarchical-clustering-diagrams
@@ -1711,7 +1709,6 @@ dont-distribute-packages:
  - hsyslog-tcp
  - HTab
  - html-kure
- - html2hamlet
  - htoml-parse
  - htsn-import
  - http-client-auth
@@ -1838,7 +1835,6 @@ dont-distribute-packages:
  - instrument-cloudwatch
  - integreat
  - intel-aes
- - intelli-monad
  - interpolatedstring-qq
  - interpolatedstring-qq-mwotton
  - intro-prelude
@@ -2015,7 +2011,6 @@ dont-distribute-packages:
  - LambdaShell
  - lambdaya-bus
  - lambdiff
- - lame-tester
  - landlock
  - lang
  - language-ats
@@ -2075,7 +2070,6 @@ dont-distribute-packages:
  - libmolude
  - libraft
  - librarian
- - librato
  - libxml-enumerator
  - lifted-base-tf
  - lightning-haskell
@@ -2147,7 +2141,6 @@ dont-distribute-packages:
  - lostcities
  - loup
  - LPPaver
- - lrucaching-haxl
  - ls-usb
  - LslPlus
  - lsm-tree
@@ -2313,7 +2306,6 @@ dont-distribute-packages:
  - morley-client
  - morley-prelude
  - morley-upgradeable
- - morpheus-graphql
  - morphisms-functors-inventory
  - motor
  - motor-diagrams
@@ -2572,7 +2564,6 @@ dont-distribute-packages:
  - partage
  - partial-semigroup-test
  - passman-cli
- - pathfindingcore
  - patterns
  - paypal-rest-client
  - pcap-enumerator
@@ -2605,7 +2596,7 @@ dont-distribute-packages:
  - persistent-hssqlppp
  - persistent-iproute
  - persistent-map
- - persistent-postgresql_2_14_0_0
+ - persistent-postgresql_2_14_2_0
  - persistent-protobuf
  - persona-idp
  - peyotls
@@ -2810,6 +2801,7 @@ dont-distribute-packages:
  - queryparser-presto
  - queryparser-vertica
  - queuelike
+ - quic-simple
  - quick-process
  - quickcheck-poly
  - quickcheck-regex
@@ -2891,12 +2883,10 @@ dont-distribute-packages:
  - refh
  - reflex-animation
  - reflex-backend-wai
- - reflex-ghci
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
  - reflex-monad-auth
- - reflex-process
  - refractor
  - refurb
  - reg-alloc-graph-color
@@ -3000,7 +2990,6 @@ dont-distribute-packages:
  - roshask
  - rosmsg-bin
  - rounded
- - rounded-hw
  - roundtrip-xml
  - route-generator
  - route-planning
@@ -3378,6 +3367,7 @@ dont-distribute-packages:
  - stunts
  - stutter
  - subhask
+ - substrate-synapse
  - substring-parser
  - sugar-data
  - sugar-json
@@ -3404,6 +3394,7 @@ dont-distribute-packages:
  - sydtest-amqp
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
+ - sydtest-webdriver-yesod_0_0_1_0
  - sylvia
  - symantic-atom
  - symantic-http-demo
@@ -3727,6 +3718,7 @@ dont-distribute-packages:
  - warp-grpc
  - warp-quic
  - warped
+ - warpZ-tls
  - WashNGo
  - WaveFront
  - wavesurfer
@@ -3853,6 +3845,7 @@ dont-distribute-packages:
  - yam-transaction-odbc
  - yam-transaction-postgresql
  - yam-web
+ - yaml-light
  - yaml-rpc-scotty
  - yaml-rpc-snap
  - yarr-image-io
@@ -3916,3 +3909,4 @@ dont-distribute-packages:
  - zoovisitor
  - zuramaru
  - zwirn
+ - _4Blocks

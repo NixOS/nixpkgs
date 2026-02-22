@@ -34,30 +34,20 @@
   # tests
   pytestCheckHook,
   writableTmpDirAsHomeHook,
+  pytest-timeout,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lerobot";
-  version = "0.4.0";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "lerobot";
-    tag = "v${version}";
-    hash = "sha256-RVe1X0qBPm+okO3Gi/UdkuvuX0m4RlbhIs+NJLlC9wU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3z8gyK9bx5GpFXM/kLbxume/e8F2U84yUTUhmn57mLs=";
   };
-
-  # ValueError: mutable default <class 'lerobot.configs.types.PolicyFeature'> for field value is not allowed: use default_factory
-  postPatch = ''
-    substituteInPlace tests/processor/test_pipeline.py \
-      --replace-fail \
-        "from dataclasses import dataclass" \
-        "from dataclasses import dataclass, field" \
-      --replace-fail \
-        "value: PolicyFeature = PolicyFeature(type=FeatureType.STATE, shape=(1,))" \
-        "value: PolicyFeature = field(default_factory=lambda: PolicyFeature(type=FeatureType.STATE, shape=(1,)))"
-  '';
 
   build-system = [
     cmake
@@ -70,9 +60,11 @@ buildPythonPackage rec {
     "datasets"
     "draccus"
     "gymnasium"
+    "opencv"
     "rerun-sdk"
     "torch"
     "torchvision"
+    "wandb"
   ];
 
   dependencies = [
@@ -109,6 +101,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     writableTmpDirAsHomeHook
+    pytest-timeout
   ];
 
   disabledTests = [
@@ -121,9 +114,14 @@ buildPythonPackage rec {
     # Require internet access
     "test_act_backbone_lr"
     "test_backward_compatibility"
+    "test_convert_image_to_video_dataset"
+    "test_convert_image_to_video_dataset_subset_episodes"
     "test_dataset_initialization"
     "test_factory"
     "test_from_pretrained_nonexistent_path"
+    "test_load_config_nonexistent_path_tries_hub"
+    "test_make_env_from_hub_async"
+    "test_make_env_from_hub_with_trust"
     "test_policy_defaults"
     "test_save_and_load_pretrained"
 
@@ -149,18 +147,24 @@ buildPythonPackage rec {
     #  Regex: "Can't instantiate abstract class NonCallableStep with abstract method __call_"
     #  Input: "Can't instantiate abstract class NonCallableStep without an implementation for abstract method '__call__'"
     "test_construction_rejects_step_without_call"
+
+    # TypeError: 'NoneType' object is not subscriptable
+    "test_pi0_rtc_inference_with_prev_chunk"
   ];
 
   disabledTestPaths = [
     # Sometimes hang forever on some CPU models
     "tests/policies/test_sac_policy.py"
+
+    # Sometimes hang forever
+    "tests/policies/rtc/test_modeling_rtc.py"
   ];
 
   meta = {
     description = "Making AI for Robotics more accessible with end-to-end learning";
     homepage = "https://github.com/huggingface/lerobot";
-    changelog = "https://github.com/huggingface/lerobot/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/lerobot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

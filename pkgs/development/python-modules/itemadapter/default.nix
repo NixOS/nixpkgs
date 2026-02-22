@@ -5,7 +5,6 @@
   fetchPypi,
   hatchling,
   pydantic,
-  pythonOlder,
   scrapy,
 }:
 

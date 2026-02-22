@@ -3,13 +3,13 @@
   lib,
   python3,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "seventeenlands";
   version = "0.1.43";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-oTF4dtMKhx2YR80goKTcyq2P0mxAKLE2Ze5HbMNvyGg=";
   };
 
@@ -33,4 +33,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ sephi ];
     mainProgram = "seventeenlands";
   };
-}
+})

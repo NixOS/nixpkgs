@@ -9,13 +9,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "empire-compiler";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "bc-security";
     repo = "empire-compiler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BuNg5RetGEV/YAZnZP7rkMHif9NczOx2e4OAVDjafuI=";
+    hash = "sha256-HNT1sELoyibXDoRcKkBZiJHIsNY7Hz2fZfHEM93UCBE=";
   };
 
   postPatch = ''

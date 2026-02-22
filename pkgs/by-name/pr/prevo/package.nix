@@ -7,8 +7,8 @@
   makeWrapper,
 }:
 
-symlinkJoin rec {
-  name = "prevo-${version}";
+symlinkJoin {
+  pname = "prevo";
   inherit (prevo-tools) version;
 
   paths = [ prevo-tools ];

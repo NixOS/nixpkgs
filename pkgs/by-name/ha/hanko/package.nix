@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hanko";
   version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "SRv6d";
     repo = "hanko";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9HRoXqZ3wdD6xf33tooEHiBWSZlggjUFomblwF4cFtA=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ srv6d ];
     mainProgram = "hanko";
   };
-}
+})

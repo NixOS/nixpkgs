@@ -19,6 +19,6 @@
         cp ${file} "${path}"
         diff -u /dev/null "${path}" >result.patch || true  # diff exit code is non-zero if there's a diff
       '';
-      installPhase = ''cp result.patch $out'';
+      installPhase = "cp result.patch $out";
     };
 }

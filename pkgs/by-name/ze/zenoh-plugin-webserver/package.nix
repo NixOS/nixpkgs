@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-plugin-webserver";
   version = "1.4.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-webserver";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-R+MLM42m3UTBFHqCAGezU4jz0Hi1+X2W1Yje7+ctl6k=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

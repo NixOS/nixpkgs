@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "nn";
+  pname = "nn";
   version = "2.0.8-unstable-2024-04-08";
 
   src = fetchFromGitHub {

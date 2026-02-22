@@ -4,17 +4,15 @@
   lib,
   stdenv,
 }:
-let
+
+buildGoModule (finalAttrs: {
   pname = "kratos";
   version = "25.4.0";
-in
-buildGoModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "kratos";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-f/K86B5h7xM7Zsbr5w2rZgsyNlCSemrBkqtMRQq/Xws=";
   };
 
@@ -26,7 +24,7 @@ buildGoModule {
 
   # Pass versioning information via ldflags
   ldflags = [
-    "-X github.com/ory/kratos/driver/config.Version=${version}"
+    "-X github.com/ory/kratos/driver/config.Version=${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -52,4 +50,4 @@ buildGoModule {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mrmebelman ];
   };
-}
+})

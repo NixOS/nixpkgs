@@ -6,6 +6,7 @@
   lib,
   llvmPackages,
   python3Packages,
+  cudaPackages,
   stdenv,
   config,
   testers,
@@ -15,9 +16,14 @@
   enableOpenMP ? true,
   enablePython ? true,
   enableUtilities ? true,
-}:
+}@inputs:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv = throw "Use effectiveStdenv instead";
+  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+in
+
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "zfp";
   version = "1.0.1";
 
@@ -48,7 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
 
-  propagatedBuildInputs = lib.optional (enableOpenMP && stdenv.cc.isClang) llvmPackages.openmp;
+  propagatedBuildInputs = lib.optionals (enableOpenMP && effectiveStdenv.cc.isClang) [
+    llvmPackages.openmp
+  ];
 
   # compile CUDA code for all extant GPUs so the binary will work with any GPU
   # and driver combination. to be ultimately solved upstream:

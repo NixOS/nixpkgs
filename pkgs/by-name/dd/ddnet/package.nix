@@ -13,7 +13,7 @@
   libGLU,
   libnotify,
   libogg,
-  libX11,
+  libx11,
   opusfile,
   pcre,
   python3,
@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "19.6";
+  version = "19.7";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = "ddnet";
     tag = version;
-    hash = "sha256-U0Yd3Xus0hsBpbXUsEC7EyoMtmsOXZJT4c3cFai918g=";
+    hash = "sha256-HjTkl4KOvQpAlLcUpfn5Ujr4IDfosUY2ueh0ZxE8KAs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       spirv-tools
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
+      libx11
     ]
   );
 

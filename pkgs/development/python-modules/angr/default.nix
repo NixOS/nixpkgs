@@ -24,7 +24,6 @@
   pycparser,
   pyformlang,
   pydemumble,
-  pythonOlder,
   pyvex,
   rich,
   rpyc,
@@ -40,8 +39,6 @@ buildPythonPackage rec {
   pname = "angr";
   version = "9.2.154";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";

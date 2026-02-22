@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchgit,
-  libX11,
-  libXScrnSaver,
+  libx11,
+  libxscrnsaver,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xssstate";
@@ -16,8 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
-    libXScrnSaver
+    libx11
+    libxscrnsaver
   ];
 
   makeFlags = [

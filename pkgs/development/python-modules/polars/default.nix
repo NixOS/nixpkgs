@@ -97,7 +97,7 @@ buildPythonPackage rec {
 
     RUSTFLAGS = lib.concatStringsSep " " (
       lib.optionals (polarsMemoryAllocator.pname == "mimalloc") [
-        "--cfg use_mimalloc"
+        "--cfg allocator=\"mimalloc\""
       ]
     );
     RUST_BACKTRACE = true;

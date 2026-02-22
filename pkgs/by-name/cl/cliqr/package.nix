@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cliqr";
-  version = "0.1.30";
+  version = "0.1.31";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "cliqr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+HP7RDh/8gIsHAO1adtClKZbBg70LSxvf88aS0hFBJs=";
+    hash = "sha256-AEUtPmLzNDsO39zRah1ln077w1S6ldsV8SsKStfQOlI=";
   };
 
   vendorHash = null;

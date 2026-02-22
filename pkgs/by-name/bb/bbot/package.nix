@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bbot";
   version = "2.7.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-vpKezG1nJVxQE4Qijf8feeRFD4hjy98HznVDXL+MBkE=";
   };
 
@@ -72,4 +72,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "bbot";
   };
-}
+})

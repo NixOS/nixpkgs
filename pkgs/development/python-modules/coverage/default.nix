@@ -8,30 +8,22 @@
   hypothesis,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.13.1";
+  version = "7.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coveragepy";
     repo = "coveragepy";
     tag = version;
-    hash = "sha256-xdbgHUE+vbSiqLRDhd5G5u90VU5+TxLehAuwdhdGzBQ=";
+    hash = "sha256-dYgZLAiuPwYs4NomT+c2KS9VXXYEMW8oyHk2y4TCwe0=";
   };
 
   build-system = [ setuptools ];
-
-  optional-dependencies = {
-    toml = lib.optionals (pythonOlder "3.11") [
-      tomli
-    ];
-  };
 
   nativeCheckInputs = [
     flaky

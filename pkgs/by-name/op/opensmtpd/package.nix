@@ -16,7 +16,7 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensmtpd";
   version = "7.8.0p0";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
+    url = "https://www.opensmtpd.org/archives/opensmtpd-${finalAttrs.version}.tar.gz";
     hash = "sha256-QDTeLpLGH6g+7a2x2Ni9/mXlfrUM6WeeAUCVDjTKSrc=";
   };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
     rspamd-integration = nixosTests.opensmtpd-rspamd;
   };
-}
+})

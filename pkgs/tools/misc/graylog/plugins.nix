@@ -39,7 +39,7 @@ let
 in
 {
   aggregates = glPlugin rec {
-    name = "graylog-aggregates-${version}";
+    pname = "graylog-aggregates";
     pluginName = "graylog-plugin-aggregates";
     version = "2.4.0";
     src = fetchurl {
@@ -52,7 +52,7 @@ in
     };
   };
   auth_sso = glPlugin rec {
-    name = "graylog-auth-sso-${version}";
+    pname = "graylog-auth-sso";
     pluginName = "graylog-plugin-auth-sso";
     version = "3.3.0";
     src = fetchurl {
@@ -65,7 +65,7 @@ in
     };
   };
   dnsresolver = glPlugin rec {
-    name = "graylog-dnsresolver-${version}";
+    pname = "graylog-dnsresolver";
     pluginName = "graylog-plugin-dnsresolver";
     version = "1.2.0";
     src = fetchurl {
@@ -78,7 +78,7 @@ in
     };
   };
   enterprise-integrations = glPlugin rec {
-    name = "graylog-enterprise-integrations-${version}";
+    pname = "graylog-enterprise-integrations";
     pluginName = "graylog-plugin-enterprise-integrations";
     version = "3.3.9";
     src = fetchurl {
@@ -97,7 +97,7 @@ in
     };
   };
   filter-messagesize = glPlugin rec {
-    name = "graylog-filter-messagesize-${version}";
+    pname = "graylog-filter-messagesize";
     pluginName = "graylog-plugin-filter-messagesize";
     version = "0.0.2";
     src = fetchurl {
@@ -110,7 +110,7 @@ in
     };
   };
   integrations = glPlugin rec {
-    name = "graylog-integrations-${version}";
+    pname = "graylog-integrations";
     pluginName = "graylog-plugin-integrations";
     version = "3.3.9";
     src = fetchurl {
@@ -128,7 +128,7 @@ in
     };
   };
   internal-logs = glPlugin rec {
-    name = "graylog-internal-logs-${version}";
+    pname = "graylog-internal-logs";
     pluginName = "graylog-plugin-internal-logs";
     version = "2.4.0";
     src = fetchurl {
@@ -141,7 +141,7 @@ in
     };
   };
   ipanonymizer = glPlugin rec {
-    name = "graylog-ipanonymizer-${version}";
+    pname = "graylog-ipanonymizer";
     pluginName = "graylog-plugin-ipanonymizer";
     version = "1.1.2";
     src = fetchurl {
@@ -154,7 +154,7 @@ in
     };
   };
   jabber = glPlugin rec {
-    name = "graylog-jabber-${version}";
+    pname = "graylog-jabber";
     pluginName = "graylog-plugin-jabber";
     version = "2.4.0";
     src = fetchurl {
@@ -167,7 +167,7 @@ in
     };
   };
   metrics = glPlugin rec {
-    name = "graylog-metrics-${version}";
+    pname = "graylog-metrics";
     pluginName = "graylog-plugin-metrics";
     version = "1.3.0";
     src = fetchurl {
@@ -180,7 +180,7 @@ in
     };
   };
   mongodb-profiler = glPlugin rec {
-    name = "graylog-mongodb-profiler-${version}";
+    pname = "graylog-mongodb-profiler";
     pluginName = "graylog-plugin-mongodb-profiler";
     version = "2.0.1";
     src = fetchurl {
@@ -193,7 +193,7 @@ in
     };
   };
   pagerduty = glPlugin rec {
-    name = "graylog-pagerduty-${version}";
+    pname = "graylog-pagerduty";
     pluginName = "graylog-plugin-pagerduty";
     version = "2.0.0";
     src = fetchurl {
@@ -206,7 +206,7 @@ in
     };
   };
   redis = glPlugin rec {
-    name = "graylog-redis-${version}";
+    pname = "graylog-redis";
     pluginName = "graylog-plugin-redis";
     version = "0.1.1";
     src = fetchurl {
@@ -219,7 +219,7 @@ in
     };
   };
   slack = glPlugin rec {
-    name = "graylog-slack-${version}";
+    pname = "graylog-slack";
     pluginName = "graylog-plugin-slack";
     version = "3.1.0";
     src = fetchurl {
@@ -232,11 +232,11 @@ in
     };
   };
   smseagle = glPlugin rec {
-    name = "graylog-smseagle-${version}";
+    pname = "graylog-smseagle";
     pluginName = "graylog-plugin-smseagle";
     version = "1.0.1";
     src = fetchurl {
-      url = "https://bitbucket.org/proximus/smseagle-graylog/raw/b99cfc349aafc7c94d4c2503f7c3c0bde67684d1/jar/graylog-plugin-smseagle-1.0.1.jar";
+      url = "https://bitbucket.org/proximus/smseagle-graylog/raw/b99cfc349aafc7c94d4c2503f7c3c0bde67684d1/jar/${pluginName}-${version}.jar";
       sha256 = "sha256-rvvftzPskXRGs1Z9dvd/wFbQoIoNtEQIFxMIpSuuvf0=";
     };
     meta = {
@@ -246,7 +246,7 @@ in
     };
   };
   snmp = glPlugin rec {
-    name = "graylog-snmp-${version}";
+    pname = "graylog-snmp";
     pluginName = "graylog-plugin-snmp";
     version = "0.3.0";
     src = fetchurl {
@@ -259,7 +259,7 @@ in
     };
   };
   spaceweather = glPlugin rec {
-    name = "graylog-spaceweather-${version}";
+    pname = "graylog-spaceweather";
     pluginName = "graylog-plugin-spaceweather";
     version = "1.0";
     src = fetchurl {
@@ -272,11 +272,11 @@ in
     };
   };
   splunk = glPlugin rec {
-    name = "graylog-splunk-${version}";
+    pname = "graylog-splunk";
     pluginName = "graylog-plugin-splunk";
     version = "0.5.0-rc.1";
     src = fetchurl {
-      url = "https://github.com/graylog-labs/graylog-plugin-splunk/releases/download/0.5.0-rc.1/graylog-plugin-splunk-0.5.0-rc.1.jar";
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
       sha256 = "sha256-EwF/Dc8GmMJBTxH9xGZizUIMTGSPedT4bprorN6X9Os=";
     };
     meta = {
@@ -286,7 +286,7 @@ in
     };
   };
   twiliosms = glPlugin rec {
-    name = "graylog-twiliosms-${version}";
+    pname = "graylog-twiliosms";
     pluginName = "graylog-plugin-twiliosms";
     version = "1.0.0";
     src = fetchurl {
@@ -299,7 +299,7 @@ in
     };
   };
   twitter = glPlugin rec {
-    name = "graylog-twitter-${version}";
+    pname = "graylog-twitter";
     pluginName = "graylog-plugin-twitter";
     version = "2.0.0";
     src = fetchurl {

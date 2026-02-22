@@ -7,17 +7,16 @@
   music-assistant,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "aiovban";
-  version = "0.6.2";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wmbest2";
     repo = "aiovban";
-    # https://github.com/wmbest2/aiovban/issues/2
-    rev = "cdcf1ef3328493e600b4e8725a6071c0d180b36a";
-    hash = "sha256-w+pA3225mdPms/PpnJYKZYe6YHn0WMf83LupExgjJZ8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0mhpmpsV0zSOWbhrPF9bfR9xAtJe6X57guWDZWMH6f0=";
   };
 
   build-system = [ setuptools ];
@@ -29,9 +28,10 @@ buildPythonPackage {
   ];
 
   meta = {
+    changelog = "https://github.com/wmbest2/aiovban/releases/tag/${finalAttrs.src.tag}";
     description = "Asyncio VBAN Protocol Wrapper";
     homepage = "https://github.com/wmbest2/aiovban";
     license = lib.licenses.mit;
     inherit (music-assistant.meta) maintainers;
   };
-}
+})

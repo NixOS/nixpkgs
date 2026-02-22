@@ -8,7 +8,7 @@
   glib,
   adwaita-icon-theme,
   wrapGAppsHook3,
-  libXtst,
+  libxtst,
   which,
 }:
 let
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           gtk3
           glib
-          libXtst
+          libxtst
         ]
       } \
       --prefix SMARTGIT_JAVA_HOME : ${jre} \

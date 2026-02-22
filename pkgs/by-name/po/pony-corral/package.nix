@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corral";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "corral";
     rev = finalAttrs.version;
-    hash = "sha256-zbOlk92oyy17VyUalYnUZPxAO+8wjRMCqcwLx0lLL1g=";
+    hash = "sha256-pJ6/+PYxMpJcj1e9v2Al8vIWFizJnLMIw7LlVU9ogS0=";
   };
 
   strictDeps = true;

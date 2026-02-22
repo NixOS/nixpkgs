@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-licenses";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "go-licenses";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GAlwTVoVA+n9+EfhybmpKm16FoY9kFzrxy1ZQxS6A8E=";
   };
 
@@ -53,11 +53,11 @@ buildGoModule rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/google/go-licenses/releases/tag/v${version}";
+    changelog = "https://github.com/google/go-licenses/releases/tag/v${finalAttrs.version}";
     description = "Reports on the licenses used by a Go package and its dependencies";
     mainProgram = "go-licenses";
     homepage = "https://github.com/google/go-licenses";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "curaengine";
   version = "15.04.6";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "CuraEngine";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-8V21TRSqCN+hkTlz51d5A5oK5JOwEtx+ROt8cfJBL/0=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

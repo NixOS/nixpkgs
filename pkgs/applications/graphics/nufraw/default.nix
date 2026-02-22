@@ -22,12 +22,12 @@
   addThumbnailer ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nufraw";
   version = "0.43-3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nufraw/nufraw-${version}.tar.gz";
+    url = "mirror://sourceforge/nufraw/nufraw-${finalAttrs.version}.tar.gz";
     sha256 = "0b63qvw9r8kaqw36bk3a9zwxc41h8fr6498indkw4glrj0awqz9c";
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString addThumbnailer ''
     mkdir -p $out/share/thumbnailers
-    substituteAll ${./nufraw.thumbnailer} $out/share/thumbnailers/${pname}.thumbnailer
+    substituteAll ${./nufraw.thumbnailer} $out/share/thumbnailers/nufraw.thumbnailer
   '';
 
   patches = [
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ asbachb ];
     platforms = lib.platforms.linux;
   };
-}
+})

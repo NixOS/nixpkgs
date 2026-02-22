@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   buildNpmPackage,
+  fetchpatch2,
   fetchFromGitHub,
   stdenv,
   babel,
@@ -24,17 +25,17 @@
 let
   src = buildNpmPackage (finalAttrs: {
     pname = "fava-frontend";
-    version = "1.30.7";
+    version = "1.30.9";
 
     src = fetchFromGitHub {
       owner = "beancount";
       repo = "fava";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-gO6eJIFp/yWAXFWhUcqkkfk2pA8/vyTxgPRPBmv4a6Q=";
+      hash = "sha256-/Tnu1SgYhd22HVEzOtJ8YEHyxXuQ9xW0c/1oRyVePXw=";
     };
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-cXIhEzYFpLOxUEY7lhTWW7R3/ptkx7hB9K92Fd2m1Ng=";
+    npmDepsHash = "sha256-5ee044Ev2FoxcdChZwfHnLQiiP+Ag4bNSAlzEnenAa0=";
     makeCacheWritable = true;
 
     preBuild = ''
@@ -55,7 +56,15 @@ buildPythonPackage {
 
   inherit src;
 
-  patches = [ ./dont-compile-frontend.patch ];
+  patches = [
+    ./dont-compile-frontend.patch
+    # https://github.com/beancount/fava/pull/2176
+    (fetchpatch2 {
+      name = "fix-have-excel-replacement.patch";
+      url = "https://github.com/beancount/fava/commit/36eba34495d189cd391fae0276aa1b6c94940203.patch?full_index=1";
+      hash = "sha256-XSkzygnq8eHkIcp1TT7J3NdcLCIwUxDoyipO4M9M3nE=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace tests/test_cli.py \

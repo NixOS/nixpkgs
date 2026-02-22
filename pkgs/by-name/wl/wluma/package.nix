@@ -14,14 +14,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wluma";
   version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "wluma";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gO7l0VnOs6BoBxZKkkXyxiBP7JB+G8ScrfuADNveys4=";
   };
 
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Automatic brightness adjustment based on screen contents and ALS";
     homepage = "https://github.com/maximbaz/wluma";
-    changelog = "https://github.com/maximbaz/wluma/releases/tag/${version}";
+    changelog = "https://github.com/maximbaz/wluma/releases/tag/${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       yshym
@@ -71,4 +71,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "wluma";
   };
-}
+})

@@ -40,14 +40,14 @@
   libconfig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "udisks";
   version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
-    tag = "udisks-${version}";
+    tag = "udisks-${finalAttrs.version}";
     hash = "sha256-G3qE4evcn5gtsd8Lrj6vjxCsAl/2LCdqdtaqLFFadMw=";
   };
 
@@ -165,4 +165,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,7 +6,7 @@
   copyDesktopItems,
   makeDesktopItem,
 
-  xorg,
+  libxxf86vm,
   glfw,
   gtk3,
   pkg-config,
@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
     ++ glfw.propagatedBuildInputs or [ ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       gtk3
-      xorg.libXxf86vm
+      libxxf86vm
     ];
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Picocrypt-NG/Picocrypt-NG";
     changelog = "https://github.com/Picocrypt-NG/Picocrypt-NG/blob/${finalAttrs.version}/Changelog.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     mainProgram = "picocrypt-ng-gui";
   };
 })

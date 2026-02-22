@@ -6,9 +6,9 @@
   pkg-config,
   glfw,
   libvgm,
-  libX11,
-  libXau,
-  libXdmcp,
+  libx11,
+  libxau,
+  libxdmcp,
   cppunit,
 }:
 
@@ -55,9 +55,9 @@ stdenv.mkDerivation {
     libvgm
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXau
-    libXdmcp
+    libx11
+    libxau
+    libxdmcp
   ];
 
   checkInputs = [

@@ -22,8 +22,6 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \

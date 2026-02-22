@@ -7,9 +7,9 @@
   pkg-config,
   httplib,
   libarchive,
-  libXdmcp,
-  libpthreadstubs,
-  xcbutilkeysyms,
+  libxdmcp,
+  libpthread-stubs,
+  libxcb-keysyms,
   qt6,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -34,13 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     httplib
-    libXdmcp
+    libxdmcp
     libarchive
-    libpthreadstubs
+    libpthread-stubs
     qt6.qtbase
     qt6.qtimageformats
     qt6.qtwebengine
-    xcbutilkeysyms
+    libxcb-keysyms
   ];
 
   cmakeFlags = [

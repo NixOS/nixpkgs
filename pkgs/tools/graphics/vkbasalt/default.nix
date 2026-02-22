@@ -6,7 +6,7 @@
   meson,
   ninja,
   pkg-config,
-  libX11,
+  libx11,
   spirv-headers,
   vulkan-headers,
   vkbasalt32,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    libX11
+    libx11
     spirv-headers
     vulkan-headers
   ];

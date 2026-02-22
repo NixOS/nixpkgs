@@ -2,22 +2,27 @@
   lib,
   fetchFromGitHub,
   buildHomeAssistantComponent,
-  websockets,
+  python-socketio,
 }:
 buildHomeAssistantComponent rec {
   owner = "iprak";
   domain = "sensi";
-  version = "1.4.8";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     tag = "v${version}";
-    hash = "sha256-qNvob0fqgrUMem8pL2Jabo6xFH5ZIuv7/Tk0LT18qbk=";
+    hash = "sha256-dyA4L/2FjyI4BM3IZHKE4UD+jUbrNs5dGKZGD1a1duY=";
   };
 
+  postPatch = ''
+    substituteInPlace custom_components/sensi/manifest.json \
+      --replace-fail "==" ">="
+  '';
+
   dependencies = [
-    websockets
+    python-socketio
   ];
 
   meta = {

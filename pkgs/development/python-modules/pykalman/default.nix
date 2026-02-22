@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pykalman";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pykalman";
     repo = "pykalman";
     tag = "v${version}";
-    hash = "sha256-8VPSz2pdK5jrVAYgZv64nCKC0E7JtQ1iKFEN0ko4fQE=";
+    hash = "sha256-F5p0li1ZKDd9gDwkL318hlL3QzD2MA3SyEtIB68UOFg=";
   };
 
   build-system = [ setuptools ];

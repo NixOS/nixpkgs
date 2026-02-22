@@ -37,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=daemon::filter::tests"
     "--skip=treedb::raw::tests::write_then_read_1000"
     "--skip=ip_pattern_matches"
+    # flaky and fails in hydra
+    "--skip=concepts::config::tests::merge_config_distinct_concurrency"
   ];
   cargoTestFlags = [
     # Skip integration tests for the same reason

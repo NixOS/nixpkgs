@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pat";
   version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "la5nta";
     repo = "pat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hpbSjxePAXuqQAlNTAfknh+noZgdILtNG57OWVJO02M=";
   };
 
@@ -48,4 +48,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "pat";
   };
-}
+})

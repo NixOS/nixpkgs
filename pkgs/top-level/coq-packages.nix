@@ -9,8 +9,10 @@
   ocamlPackages_4_10,
   ocamlPackages_4_12,
   ocamlPackages_4_14,
+  ocamlPackages_5_4,
   rocqPackages_9_0,
   rocqPackages_9_1,
+  rocqPackages_9_2,
   rocqPackages,
   fetchpatch,
   makeWrapper,
@@ -233,6 +235,7 @@ let
       Vpl = callPackage ../development/coq-modules/Vpl { };
       VplTactic = callPackage ../development/coq-modules/VplTactic { };
       vscoq-language-server = callPackage ../development/coq-modules/vscoq-language-server { };
+      vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };
       VST = callPackage ../development/coq-modules/VST (
         (lib.optionalAttrs (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override {
@@ -291,6 +294,7 @@ let
         ocamlPackages_4_10
         ocamlPackages_4_12
         ocamlPackages_4_14
+        ocamlPackages_5_4
         ;
       rocqPackages = rp;
     };
@@ -329,6 +333,7 @@ rec {
   coqPackages_8_20 = mkCoqPackages (mkCoq "8.20" { });
   coqPackages_9_0 = mkCoqPackages (mkCoq "9.0" rocqPackages_9_0);
   coqPackages_9_1 = mkCoqPackages (mkCoq "9.1" rocqPackages_9_1);
+  coqPackages_9_2 = mkCoqPackages (mkCoq "9.2" rocqPackages_9_2);
 
   coq_8_7 = coqPackages_8_7.coq;
   coq_8_8 = coqPackages_8_8.coq;
@@ -346,6 +351,7 @@ rec {
   coq_8_20 = coqPackages_8_20.coq;
   coq_9_0 = coqPackages_9_0.coq;
   coq_9_1 = coqPackages_9_1.coq;
+  coq_9_2 = coqPackages_9_2.coq;
 
   coqPackages = lib.recurseIntoAttrs coqPackages_9_0;
   coq = coqPackages.coq;

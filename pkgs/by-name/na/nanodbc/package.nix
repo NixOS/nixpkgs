@@ -7,14 +7,14 @@
   unixODBC,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nanodbc";
   version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "nanodbc";
     repo = "nanodbc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dVUOwA7LfLqcQq2nc6OAha0krmgTy5RUHupBVrNdo4g=";
   };
 
@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/nanodbc/nanodbc";
-    changelog = "https://github.com/nanodbc/nanodbc/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/nanodbc/nanodbc/raw/v${finalAttrs.version}/CHANGELOG.md";
     description = "Small C++ wrapper for the native C ODBC API";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bzizou ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

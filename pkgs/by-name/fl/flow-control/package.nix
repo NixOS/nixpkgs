@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-868FK3wr/fjXzrQJ4YVDBvzNuX818lufEx/K0fvJdWo=";
   };
-  postPatch = ''
+  postConfigure = ''
     ln -s ${
       callPackage ./build.zig.zon.nix {
         zig = zig_0_15;

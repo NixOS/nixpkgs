@@ -1,9 +1,10 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  wrapQtAppsHook,
   qtbase,
   qtquickcontrols2,
   SDL,
@@ -13,14 +14,14 @@
   nixosTests,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sfxr-qt";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "agateau";
     repo = "sfxr-qt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-JAWDk7mGkPtQ5yaA6UT9hlAy770MHrTBhBP9G8UqFKg=";
     fetchSubmodules = true;
   };
@@ -35,6 +36,7 @@ mkDerivation rec {
         setuptools
       ]
     ))
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -66,4 +68,4 @@ mkDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.linux;
   };
-}
+})

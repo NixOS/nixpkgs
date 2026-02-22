@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "highscore-mgba";
-  version = "0-unstable-2026-01-16";
+  version = "0-unstable-2026-02-03";
 
   src = fetchFromGitHub {
     owner = "highscore-emu";
     repo = "mgba";
-    rev = "d8e2d2d329417e6387563a495491e90dfa44426c";
-    hash = "sha256-aH167+XOboz6Q7rabYCfOf+qFm5ylzVTy4g38yx4Zj4=";
+    rev = "178d7dbe3c2927f2fc52a6032bc7b6c805192e9b";
+    hash = "sha256-AXOe2YoYQDeRpicYD9B9BR2l0rCJ+syYTwTnJUIcG1U=";
   };
 
   outputs = [

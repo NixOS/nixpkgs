@@ -191,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "USE_SVMLIGHT" withSvmLight)
     ];
 
-  CXXFLAGS = "-faligned-new";
+  env.CXXFLAGS = "-faligned-new";
 
   doCheck = true;
 

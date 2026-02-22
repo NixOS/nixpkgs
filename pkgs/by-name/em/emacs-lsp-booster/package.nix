@@ -4,14 +4,14 @@
   fetchFromGitHub,
   emacs,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emacs-lsp-booster";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "blahgeek";
     repo = "emacs-lsp-booster";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uP/xJfXQtk8oaG5Zk+dw+C2fVFdjpUZTDASFuj1+eYs=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ icy-thought ];
     mainProgram = "emacs-lsp-booster";
   };
-}
+})

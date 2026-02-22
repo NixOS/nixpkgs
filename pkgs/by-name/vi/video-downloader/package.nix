@@ -16,7 +16,7 @@
   libadwaita,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "video-downloader";
   version = "0.12.30";
   pyproject = false; # Built with meson
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Unrud";
     repo = "video-downloader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OQJq+3HR0BwuhQbh2HSH6DS3Mu84/FXqdXjQ8tdDEEM=";
   };
 
@@ -69,4 +69,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fliegendewurst ];
     mainProgram = "video-downloader";
   };
-}
+})

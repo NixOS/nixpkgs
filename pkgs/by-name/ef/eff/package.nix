@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  ocamlPackages,
+  ocaml-ng,
 }:
 
 let
-  inherit (ocamlPackages) buildDunePackage js_of_ocaml menhir;
+  inherit (ocaml-ng.ocamlPackages_5_2) buildDunePackage js_of_ocaml menhir;
 in
 
 buildDunePackage rec {

@@ -5,6 +5,7 @@
   stdenv,
   pkgs,
   lib,
+  config,
   testers,
 }:
 
@@ -20,7 +21,7 @@ let
   # use a early stdenv so when hacking on stdenv this test can be run quickly
   bootStdenv = earlyPkgs.stdenv.__bootPackages.stdenv.__bootPackages.stdenv or earlyPkgs.stdenv;
   pkgsStructured = import pkgs.path {
-    config = {
+    config = config // {
       structuredAttrsByDefault = true;
     };
     inherit (stdenv.hostPlatform) system;

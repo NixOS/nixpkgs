@@ -6,14 +6,14 @@
   libxcb,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cotp";
   version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "replydev";
     repo = "cotp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-N3UPeEc3xPIRHt1lOwd8c7e61jZk3PPo3sC/7BQBosY=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ davsanchez ];
     mainProgram = "cotp";
   };
-}
+})

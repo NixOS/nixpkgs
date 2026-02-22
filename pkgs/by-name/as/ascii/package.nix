@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ascii";
-  version = "3.30";
+  version = "3.31";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "ascii";
     tag = finalAttrs.version;
-    hash = "sha256-TE9YR5Va9tXaf2ZyNxz7d8lZRTgnD4Lz7FyqRDl1HNY=";
+    hash = "sha256-fXVREwjiSpLdwNAm6hbuPiCNFqFlpeBiwKsXGaMiY6s=";
   };
 
   nativeBuildInputs = [

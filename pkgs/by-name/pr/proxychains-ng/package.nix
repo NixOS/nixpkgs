@@ -7,14 +7,14 @@
   darwinHookMethod ? "dyld",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proxychains-ng";
   version = "4.17";
 
   src = fetchFromGitHub {
     owner = "rofl0r";
     repo = "proxychains-ng";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cHRWPQm6aXsror0z+S2Ddm7w14c1OvEruDublWsvnXs=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "proxychains4";
   };
-}
+})

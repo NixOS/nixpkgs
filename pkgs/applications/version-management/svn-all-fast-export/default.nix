@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     "SVN_INCLUDE=${subversion.dev}/include/subversion-1"
   ];
 
-  NIX_LDFLAGS = "-lsvn_fs-1";
+  env.NIX_LDFLAGS = "-lsvn_fs-1";
 
   dontWrapQtApps = true;
 

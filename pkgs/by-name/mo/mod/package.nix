@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mod";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "marwan-at-work";
     repo = "mod";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-s/i2S1BbIUEXclQlv0uXlzjEvrT+udo0uzec2Una0uY=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kalbasit ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

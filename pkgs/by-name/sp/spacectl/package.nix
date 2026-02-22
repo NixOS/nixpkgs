@@ -7,15 +7,15 @@
   buildPackages,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "spacectl";
-  version = "1.17.3";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "spacelift-io";
     repo = "spacectl";
-    rev = "v${version}";
-    hash = "sha256-kH5CVmticNZDDW97iMY+kU7m2bP44PgKvGSZzEgPoFw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1ucdKSIbShaH4o7kixY2x4t+raW24HBuJij2hdVmfAM=";
   };
 
   vendorHash = "sha256-f/09XZiaYNUZzKM0jITFdUmKt8UQy90K4PGhC6ZupCk=";
@@ -36,9 +36,9 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/spacelift-io/spacectl";
     description = "Spacelift client and CLI";
-    changelog = "https://github.com/spacelift-io/spacectl/releases/tag/v${version}";
+    changelog = "https://github.com/spacelift-io/spacectl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kashw2 ];
     mainProgram = "spacectl";
   };
-}
+})

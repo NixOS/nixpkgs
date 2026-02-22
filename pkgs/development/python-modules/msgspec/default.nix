@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   attrs,
   coverage,
   furo,
@@ -17,7 +16,6 @@
   sphinx,
   sphinx-copybutton,
   sphinx-design,
-  tomli,
   tomli-w,
 }:
 
@@ -62,10 +60,7 @@ buildPythonPackage rec {
     ]
     ++ optional-dependencies.yaml
     ++ optional-dependencies.toml;
-    toml = [
-      tomli-w
-    ]
-    ++ lib.optional (pythonOlder "3.11") tomli;
+    toml = [ tomli-w ];
     yaml = [ pyyaml ];
   };
 

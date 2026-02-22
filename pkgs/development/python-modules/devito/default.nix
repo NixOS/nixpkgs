@@ -154,6 +154,6 @@ buildPythonPackage rec {
     homepage = "https://www.devitoproject.org/";
     changelog = "https://github.com/devitocodes/devito/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
   };
 }

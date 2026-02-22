@@ -8,15 +8,15 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ddev";
-  version = "1.24.10";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "ddev";
     repo = "ddev";
-    rev = "v${version}";
-    hash = "sha256-ijYkTVVuNLsG8+L4g1sWAJCSh/3MaoeirItLjcIg150=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vRhFj2/lV34sDIDUxi2/zF9VJimhi6By6TQndl0O/Xg=";
   };
 
   nativeBuildInputs = [
@@ -27,8 +27,8 @@ buildGoModule rec {
 
   ldflags = [
     "-extldflags -static"
-    "-X github.com/ddev/ddev/pkg/versionconstants.DdevVersion=v${version}"
-    "-X github.com/ddev/ddev/pkg/versionconstants.SegmentKey=v${version}"
+    "-X github.com/ddev/ddev/pkg/versionconstants.DdevVersion=v${finalAttrs.version}"
+    "-X github.com/ddev/ddev/pkg/versionconstants.SegmentKey=v${finalAttrs.version}"
   ];
 
   # Tests need docker.
@@ -60,4 +60,4 @@ buildGoModule rec {
     mainProgram = "ddev";
     maintainers = with lib.maintainers; [ remyvv ];
   };
-}
+})

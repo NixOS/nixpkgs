@@ -4,14 +4,14 @@
   openssl,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "heygpt";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "fuyufjh";
     repo = "heygpt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oP0yIdYytXSsbZ2pNaZ8Rrak1qJsudTe/oP6dGncGUM=";
   };
 
@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Simple command-line interface for ChatGPT API";
     homepage = "https://github.com/fuyufjh/heygpt";
-    changelog = "https://github.com/fuyufjh/heygpt/releases/tag/v${version}";
+    changelog = "https://github.com/fuyufjh/heygpt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "heygpt";
     maintainers = with lib.maintainers; [ aldoborrero ];
   };
-}
+})

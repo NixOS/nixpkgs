@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "easyjson";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "mailru";
     repo = "easyjson";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aKufvebodIy0UtecpjZ9+5MOUTWKFIqFI3SYgVPWdhQ=";
   };
   vendorHash = "sha256-BsksTYmfPQezbWfIWX0NhuMbH4VvktrEx06C2Nb/FYE=";
@@ -24,4 +24,4 @@ buildGoModule rec {
     mainProgram = "easyjson";
     license = lib.licenses.mit;
   };
-}
+})

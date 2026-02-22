@@ -24,7 +24,7 @@ let
   dummyMount = writeScriptBin "mount" "#!${stdenv.shell}";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   version = "3.5.2";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   src = fetchurl {
-    url = "mirror://savannah/storebackup/storeBackup-${version}.tar.bz2";
+    url = "mirror://savannah/storebackup/storeBackup-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Ki1DT2zypFFiiMVd9Y8eSX7T+yr8moWMoALmAexjqWU=";
   };
 
@@ -130,4 +130,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
-}
+})

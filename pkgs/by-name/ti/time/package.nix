@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./time-1.9-fix-sighandler-prototype-for-c23.patch
   ];
 
+  outputs = [
+    "out"
+    "info"
+  ];
+
   meta = {
     description = "Tool that runs programs and summarizes the system resources they use";
     longDescription = ''

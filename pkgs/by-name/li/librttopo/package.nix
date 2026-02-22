@@ -7,7 +7,7 @@
   geos,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librttopo";
   version = "1.1.0";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     domain = "git.osgeo.org";
     owner = "rttopo";
     repo = "librttopo";
-    rev = "librttopo-${version}";
+    rev = "librttopo-${finalAttrs.version}";
     hash = "sha256-VxyQr4nBy4PS2IjabBZHvzejFPDNBgSNn528ZCf99EA=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
-}
+})

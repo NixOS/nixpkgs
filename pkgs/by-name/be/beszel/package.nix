@@ -8,13 +8,13 @@
 }:
 buildGoModule rec {
   pname = "beszel";
-  version = "0.18.2";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${version}";
-    hash = "sha256-7jXhlstGuQc3EP4fm5k9FD22nge0ecXVZAk8mXdyKc0=";
+    hash = "sha256-/rFVH3kWf9OB3/iJNOARG85y1WH03hW8LvsIRzq1vnU=";
   };
 
   webui = buildNpmPackage {
@@ -48,10 +48,10 @@ buildGoModule rec {
 
     sourceRoot = "${src.name}/internal/site";
 
-    npmDepsHash = "sha256-Ks78fCJeHoLCImkyEHo1fSRJqIOEEvL6Zyydpy5LlTw=";
+    npmDepsHash = "sha256-509/n5OH4z6LZH+jlmDLl2DlqKrD7M5ajtalmF/4n1o=";
   };
 
-  vendorHash = "sha256-OnCX/0DGtkcACuWxGfIreS6SSx9dKq+feWKSymtkABs=";
+  vendorHash = "sha256-O5gFpQ90AQFSAidPTWPrODZ4LWuwrOMpzEH/8HrjBig=";
 
   preBuild = ''
     mkdir -p internal/site/dist

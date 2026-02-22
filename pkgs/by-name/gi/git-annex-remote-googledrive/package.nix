@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-annex-remote-googledrive";
   version = "1.3.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "0rwjcdvfgzdlfgrn1rrqwwwiqqzyh114qddrbfwd46ld5spry6r1";
   };
 
@@ -40,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ gravndal ];
     mainProgram = "git-annex-remote-googledrive";
   };
-}
+})

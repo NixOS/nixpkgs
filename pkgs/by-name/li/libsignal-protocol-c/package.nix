@@ -6,14 +6,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsignal-protocol-c";
   version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal-protocol-c";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0z5p03vk15i6h870azfjgyfgxhv31q2vq6rfhnybrnkxq2wqzwhk";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

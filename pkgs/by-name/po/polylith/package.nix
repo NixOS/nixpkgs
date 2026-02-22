@@ -6,13 +6,13 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polylith";
-  version = "0.3.30";
+  version = "0.3.32";
 
   src = fetchurl {
-    url = "https://github.com/polyfy/polylith/releases/download/v${version}/poly-${version}.jar";
-    sha256 = "sha256-G64sbV671fY+k/tYy8Kq/cAGXLzbZY1g+HyzOw29D24=";
+    url = "https://github.com/polyfy/polylith/releases/download/v${finalAttrs.version}/poly-${finalAttrs.version}.jar";
+    sha256 = "sha256-bfF7YXGA6StGF1jZor/TZQ6tNU28Z8kcaiPdkmjljx4=";
   };
 
   dontUnpack = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       ARGS="$ARGS $1"
       shift
     done
-    exec "${jdk}/bin/java" "-jar" "${src}" $ARGS
+    exec "${jdk}/bin/java" "-jar" "${finalAttrs.src}" $ARGS
   '';
 
   installPhase = ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/poly help | fgrep -q '${version}'
+    $out/bin/poly help | fgrep -q '${finalAttrs.version}'
 
     runHook postInstallCheck
   '';
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = jdk.meta.platforms;
   };
-}
+})

@@ -84,7 +84,7 @@ python3Packages.buildPythonApplication rec {
 
   postFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    wrapPythonProgramsIn $out/lib "$out $pythonPath"
+    wrapPythonProgramsIn $out/lib "$out ''${pythonPath[*]}"
   '';
 
   meta = {

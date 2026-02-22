@@ -1,5 +1,5 @@
 {
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
   lib,
   openssl,
@@ -7,19 +7,18 @@
   rustPlatform,
   stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codeberg-cli";
-  version = "0.5.4";
+  version = "0.5.5";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Aviac";
     repo = "codeberg-cli";
-    rev = "v${version}";
-    hash = "sha256-o+Jf9JKDGsnSVV8sJcJddZG+9DBn6DB4HfaxLxxwa+U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yjWAL4Tu9nuQsy8fDhga5lsxYwooE0fW70zfp7Dqq3Y=";
   };
 
-  cargoHash = "sha256-HBVswxako/Djv8ayhEfgGVaFWblNn6ngtbQh9jNaxcQ=";
+  cargoHash = "sha256-AD4VLGsxkfl1UwJmZhR183Gk7ltjEyH9tlt+iKNs5J0=";
   nativeBuildInputs = [
     pkg-config
     installShellFiles
@@ -41,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ robwalt ];
     mainProgram = "berg";
   };
-}
+})

@@ -1,7 +1,9 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
+  # python module stuff
+  buildPythonPackage,
+  pythonAtLeast,
   setuptools,
   # dependencies
   cached-property,
@@ -20,13 +22,16 @@
   hypothesis,
   pytestCheckHook,
   pytest-xdist,
-  eth-hash,
+  pycryptodome,
 }:
 
 buildPythonPackage rec {
   pname = "py-evm";
   version = "0.12.1-beta.1";
   pyproject = true;
+
+  # py-evm project has been archived by upstream; its support should be deprecated from "3.14".
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "ethereum";
@@ -56,8 +61,8 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     pytest-xdist
-  ]
-  ++ eth-hash.optional-dependencies.pycryptodome;
+    pycryptodome
+  ];
 
   disabledTests = [
     # side-effect: runs pip online check and is blocked by sandbox

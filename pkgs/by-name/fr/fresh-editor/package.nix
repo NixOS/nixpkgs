@@ -2,40 +2,51 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  gzip,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
-  gzip,
   gitMinimal,
-  deno,
   nix-update-script,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.1.77";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+ESguKlMUB2gm9zNee35wKdZmKLhLcPFa3Z7n4KNpVQ=";
+    hash = "sha256-JbjTHMvncM5wCiPa3Tmv/HJbg7sKgmOXhmu9He6Tzhk=";
   };
 
-  cargoHash = "sha256-MrFVolkqGRESPNPsQPDZGvHNVYyB9+ok4GANgIfBbZU=";
-
-  passthru.updateScript = nix-update-script { };
+  cargoHash = "sha256-1b9v7K+EUOtHF3J3vOv1YyFxqnGZ5SbzyUBPCQ5i90U=";
 
   nativeBuildInputs = [
-    pkg-config
     gzip
+    makeBinaryWrapper
+    pkg-config
   ];
 
   nativeCheckInputs = [
     gitMinimal
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
   ];
+
+  preBuild = ''
+    mkdir -p $out/share/fresh-editor/plugins/
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
+      --add-flags "--no-upgrade-check"
+    rm -rf $out/bin/fresh.dSYM
+  '';
 
   # Tests create a local http server to check update functionality
   __darwinAllowLocalNetworking = true;
@@ -43,22 +54,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Due to issues with incorrect import paths with the actual app, I have disabled the checks below. Need to report upstream.
   checkFlags = [
     "--skip=e2e::"
+    "--skip=services::plugins::embedded::tests::test_extract_plugins"
   ];
   cargoTestFlags = [
     "--lib"
     "--bins"
   ];
 
-  # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
-  # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
-  env.RUSTY_V8_ARCHIVE = deno.librusty_v8;
-  preBuild = ''
-    mkdir -p $out/share/fresh-editor/plugins/
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  postInstall = ''
-    rm -rf $out/bin/fresh.dSYM
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal-based text editor with LSP support and TypeScript plugins";
@@ -74,7 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      binaryNativeCode # librusty_v8.a
     ];
   };
 })

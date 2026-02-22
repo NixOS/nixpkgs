@@ -15,7 +15,7 @@
   docbook_xsl,
   nix-update-script,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "alacarte";
   version = "3.58.0";
 
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "alacarte";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-U3shnQ1GlDvOQFfjYVfAhCVRVQpTyLwEzHqKIbBChas=";
   };
 
@@ -61,11 +61,11 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/alacarte";
-    changelog = "https://gitlab.gnome.org/GNOME/alacarte/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/alacarte/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Menu editor for GNOME using the freedesktop.org menu specification";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     mainProgram = "alacarte";
     maintainers = with lib.maintainers; [ pluiedev ];
   };
-}
+})

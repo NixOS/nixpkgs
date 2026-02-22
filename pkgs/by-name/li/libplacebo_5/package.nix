@@ -12,12 +12,12 @@
   shaderc,
   lcms2,
   libGL,
-  libX11,
+  libx11,
   libunwind,
   libdovi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libplacebo";
   version = "5.264.1";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "libplacebo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YEefuEfJURi5/wswQKskA/J1UGzessQQkBpltJ0Spq8=";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     shaderc
     lcms2
     libGL
-    libX11
+    libx11
     libunwind
     libdovi
   ];
@@ -80,9 +80,9 @@ stdenv.mkDerivation rec {
       MoltenVK).
     '';
     homepage = "https://code.videolan.org/videolan/libplacebo";
-    changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
+    changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${finalAttrs.version}";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

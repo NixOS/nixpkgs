@@ -70,6 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional sensorsSupport "--enable-sensors";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   postFixup =
     let
       optionalPatch = pred: so: lib.optionalString pred "patchelf --add-needed ${so} $out/bin/htop";

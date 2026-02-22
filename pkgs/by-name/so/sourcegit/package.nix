@@ -8,10 +8,10 @@
   makeDesktopItem,
   libicns,
 
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
 
   git,
   xdg-utils,
@@ -52,13 +52,13 @@ buildDotnetModule (finalAttrs: {
   ];
 
   # these are dlopen-ed at runtime
-  # libXi is needed for right-click support
+  # libxi is needed for right-click support
   # not sure about what the other ones are needed for, but I'll include them anyways
   runtimeDeps = [
-    libXcursor
-    libXext
-    libXi
-    libXrandr
+    libxcursor
+    libxext
+    libxi
+    libxrandr
   ];
 
   # Note: users can use `.overrideAttrs` to append to this list

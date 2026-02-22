@@ -16,7 +16,7 @@
   upscayl-ncnn,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "upscaler";
   version = "1.6.2";
 
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Upscaler";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Mt0bFPidg0/bxd3NP+1jVgWzRemaGKlU/l5orKbziB0=";
   };
 
@@ -89,4 +89,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "upscaler";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -7,8 +7,8 @@
   freetype,
   fontconfig,
   libGL,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   libxcb,
   libxkbcommon,
   utf8proc,
@@ -54,12 +54,12 @@ stdenv.mkDerivation {
 
   buildInputs = [
     fontconfig
-    libX11
+    libx11
     freetype
     libGL
     libxcb
     libxkbcommon
-    libXrandr
+    libxrandr
     utf8proc
     wayland
   ];

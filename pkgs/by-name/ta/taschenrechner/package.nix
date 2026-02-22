@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "taschenrechner";
   version = "2.0.0";
 
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     domain = "gitlab.fem-net.de";
     owner = "mabl";
     repo = "taschenrechner";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZkyZpCOSo30XEjfh6bLiTLQs/efSFtwdlpIu9bO5Sdc=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ netali ];
     mainProgram = "taschenrechner";
   };
-}
+})

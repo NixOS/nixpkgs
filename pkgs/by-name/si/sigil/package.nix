@@ -10,14 +10,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sigil";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     repo = "Sigil";
     owner = "Sigil-Ebook";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cKnWAVLScPZYNAFOiXaoHSXMl3YNOh6zmEryILaOR4w=";
   };
 
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "sigil";
   };
-}
+})

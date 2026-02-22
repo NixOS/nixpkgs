@@ -82,7 +82,6 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       lassulus
       danielfullmer
-      d3vil0p3r
     ];
   };
 }

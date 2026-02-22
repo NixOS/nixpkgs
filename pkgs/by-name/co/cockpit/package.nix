@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  asciidoc,
   autoreconfHook,
   bashInteractive,
   cacert,
@@ -14,6 +15,7 @@
   git,
   glib,
   glib-networking,
+  gobject-introspection,
   gnused,
   gnutls,
   hostname,
@@ -32,7 +34,7 @@
   pam,
   pkg-config,
   polkit,
-  python3Packages,
+  python312Packages,
   sscg,
   systemd,
   udev,
@@ -43,19 +45,26 @@
   nixos-icons,
 }:
 
+let
+  # Pinned to 3.12 due to cockpit-zfs dependency py-libzfs not being compatible
+  # with 3.13+
+  python3Packages = python312Packages;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "353.1";
+  version = "355";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-uJBrBsNCYkdq+13UGJ6nPr55HPD4R0BTugWCKrycaIY=";
+    hash = "sha256-LD3bjb87AvElwMFB5YKwz04PEmWw+DWDP7RGBCzwSb4=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    asciidoc
     autoreconfHook
     makeWrapper
     docbook_xml_dtd_43
@@ -96,11 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/tls/cockpit-certificate-helper.in \
       --replace-fail 'COCKPIT_CONFIG="@sysconfdir@/cockpit"' 'COCKPIT_CONFIG=/etc/cockpit'
 
-    substituteInPlace src/tls/cockpit-certificate-ensure.c \
-      --replace-fail '#define COCKPIT_SELFSIGNED_PATH      PACKAGE_SYSCONF_DIR COCKPIT_SELFSIGNED_FILENAME' '#define COCKPIT_SELFSIGNED_PATH      "/etc" COCKPIT_SELFSIGNED_FILENAME'
-
-    substituteInPlace src/common/cockpitconf.c \
-      --replace-fail 'const char *cockpit_config_dirs[] = { PACKAGE_SYSCONF_DIR' 'const char *cockpit_config_dirs[] = { "/etc"'
+    substituteInPlace src/Makefile.am \
+      --replace-fail '-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\"' '-DPACKAGE_SYSCONF_DIR=\""/etc"\"'
 
     substituteInPlace src/**/*.c \
       --replace-quiet "/bin/sh" "${lib.getExe bashInteractive}"
@@ -160,15 +166,28 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn '"/usr/share' '"/run/current-system/sw/share' \
       --replace-warn '"/lib/systemd' '"/run/current-system/sw/lib/systemd'
 
-    # replace reference to system python interpreter, used for e.g. sosreport
-    substituteInPlace pkg/lib/python.ts \
-      --replace-fail /usr/libexec/platform-python ${python3Packages.python.interpreter}
+    # fix polkit agent helper path
+    substituteInPlace src/cockpit/polkit.py \
+      --replace-fail "/usr/lib/polkit-1/polkit-agent-helper-1" "/run/wrappers/bin/polkit-agent-helper-1"
+  '';
+
+  preConfigure = ''
+    # Make sure our Python comes before any other Python (e.g. from asciidoc)
+    export PATH="${lib.makeBinPath [ python3Packages.python ]}:$PATH"
   '';
 
   configureFlags = [
     "--enable-prefix-only=yes"
     "--disable-pcp" # TODO: figure out how to package its dependency
-    "--with-default-session-path=${placeholder "out"}/bin:/etc/cockpit/bin:${util-linux}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+    "--with-default-session-path=${
+      lib.makeBinPath [
+        (placeholder "out")
+        "/etc/cockpit"
+        util-linux
+        "/run/wrappers"
+        "/run/current-system/sw"
+      ]
+    }"
     "--with-admin-group=root" # TODO: really? Maybe "wheel"?
   ];
 
@@ -192,8 +211,15 @@ stdenv.mkDerivation (finalAttrs: {
     for binary in $out/bin/cockpit-bridge $out/libexec/cockpit-askpass; do
       chmod +x $binary
       wrapProgram $binary \
-        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages} \
-        --prefix XDG_DATA_DIRS : /etc/cockpit/share # Cockpit apps will be stored at /etc/cockpit/share/cockpit/ (managed by Cockpit nixos service)
+        --prefix PATH : "/etc/cockpit/bin" \
+        --prefix PYTHONPATH : ${
+          lib.makeSearchPath python3Packages.python.sitePackages [
+            "$out"
+            "/etc/cockpit"
+          ]
+        } \
+        --prefix GI_TYPELIB_PATH : "/etc/cockpit/lib/girepository-1.0" \
+        --prefix XDG_DATA_DIRS : "/etc/cockpit/share"
     done
 
     patchShebangs $out/share/cockpit/issue/update-issue
@@ -254,8 +280,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    inherit python3Packages;
     tests = { inherit (nixosTests) cockpit; };
     updateScript = nix-update-script { };
+    cockpitPath = [
+      glib
+      gobject-introspection
+      python3Packages.python
+      python3Packages.pygobject3
+    ];
   };
 
   meta = {
@@ -264,9 +297,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cockpit-project.org/";
     changelog = "https://cockpit-project.org/blog/cockpit-${finalAttrs.version}.html";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [
-      lucasew
-      andre4ik3
-    ];
+    teams = [ lib.teams.cockpit ];
   };
 })

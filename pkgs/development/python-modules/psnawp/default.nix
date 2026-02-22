@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
   poetry-core,
   pycountry,
@@ -14,8 +14,7 @@ buildPythonPackage rec {
   version = "3.0.1";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "YoshikageKira";
     repo = "psnawp";
     tag = "v${version}";

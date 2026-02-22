@@ -11,28 +11,28 @@
   libGLU,
   libjack2,
   libsndfile,
-  libXdmcp,
+  libxdmcp,
   lv2,
   minixml,
   pcre,
   pkg-config,
   readline,
-  xorg,
+  libpthread-stubs,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yoshimi";
-  version = "2.3.5.2";
+  version = "2.3.5.3";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
     repo = "yoshimi";
-    rev = version;
-    hash = "sha256-X4g4AhPHg2ezHnAm8fWunatZgr3/PZxibzACplWogo8=";
+    tag = finalAttrs.version;
+    hash = "sha256-3/iFZfqUX2q4+6rD6AX3E8vXt0HP82PDDTqpiZTvtLw=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     substituteInPlace Misc/Config.cpp --replace /usr $out
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     libGLU
     libjack2
     libsndfile
-    libXdmcp
+    libxdmcp
     lv2
     minixml
     pcre
     readline
-    xorg.libpthreadstubs
+    libpthread-stubs
     zlib
   ];
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "yoshimi";
   };
-}
+})

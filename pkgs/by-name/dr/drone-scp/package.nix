@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "drone-scp";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "appleboy";
     repo = "drone-scp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qIIPvh+y1xPTXRGqUyCG2BnHQsgFlkbfi46vfM/Zgjg=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "drone-scp";
   };
-}
+})

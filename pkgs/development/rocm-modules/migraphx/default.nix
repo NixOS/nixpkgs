@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rocmUpdateScript,
   pkg-config,
   cmake,
@@ -22,9 +21,9 @@
   boost,
   msgpack-cxx,
   sqlite,
-  # TODO(@LunNova): Swap to `oneDNN` once v3 is supported
+  # TODO(@LunNova): Swap to `onednn` once v3 is supported
   # Upstream issue: https://github.com/ROCm/AMDMIGraphX/issues/4351
-  oneDNN_2,
+  onednn_2,
   blaze,
   texliveSmall,
   doxygen,
@@ -59,7 +58,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -75,12 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "AMDMIGraphX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-P3jiq6i7jpfpL9/S7mc1CiNRwAt8fzy3waHKhyuYIXI=";
+    hash = "sha256-s6w4bF7koK4wnf6leVKBzwIB4X2ROHa3EgX6XuJIAew=";
   };
-
-  patches = [
-    ./msgpack-6-compat.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -114,19 +109,19 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     msgpack-cxx
     sqlite
-    oneDNN_2
+    onednn_2
     blaze
     python3Packages.pybind11
     python3Packages.onnx
   ];
 
-  LDFLAGS = "-Wl,--allow-shlib-undefined";
+  env.LDFLAGS = "-Wl,--allow-shlib-undefined";
 
   cmakeFlags = [
     "-DMIGRAPHX_ENABLE_GPU=ON"
     "-DMIGRAPHX_ENABLE_CPU=ON"
     "-DMIGRAPHX_ENABLE_FPGA=ON"
-    "-DMIGRAPHX_ENABLE_MLIR=OFF" # LLVM or rocMLIR mismatch?
+    "-DMIGRAPHX_ENABLE_MLIR=ON"
     "-DCMAKE_C_COMPILER=amdclang"
     "-DCMAKE_CXX_COMPILER=amdclang++"
     "-DCMAKE_VERBOSE_MAKEFILE=ON"
@@ -147,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${abseil-cpp}/include -I${hipblas-common}/include"
+    export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${lib.getInclude abseil-cpp}/include -I${hipblas-common}/include -I${lib.getInclude protobuf}/include"
     patchShebangs tools
 
     # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`

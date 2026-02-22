@@ -14,7 +14,7 @@ let
       outputHash,
     }:
     stdenv.mkDerivation {
-      name = "tex-gyre-${variant}-${version}";
+      pname = "tex-gyre-${variant}";
       inherit version;
 
       src = fetchzip {

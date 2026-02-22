@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-sort";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "devinr528";
     repo = "cargo-sort";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-mdvaRTcs2zVXKX8LrqHFrWTdnFZpAfQuWjYmeWgdGVI=";
   };
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Tool to check that your Cargo.toml dependencies are sorted alphabetically";
     mainProgram = "cargo-sort";
     homepage = "https://github.com/devinr528/cargo-sort";
-    changelog = "https://github.com/devinr528/cargo-sort/blob/v${version}/changelog.md";
+    changelog = "https://github.com/devinr528/cargo-sort/blob/v${finalAttrs.version}/changelog.md";
     license = with lib.licenses; [
       mit # or
       asl20
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

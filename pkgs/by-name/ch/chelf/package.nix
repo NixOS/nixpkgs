@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chelf";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "Gottox";
     repo = "chelf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0xwd84aynyqsi2kcndbff176vmhrak3jmn3lfcwya59653pppjr6";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "chelf";
   };
-}
+})

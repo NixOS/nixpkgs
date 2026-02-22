@@ -9,14 +9,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marwaita-yellow";
   version = "23";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-yellow";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-1nGQvN6xacMoRyT7WkNC2lKX/QnXA7pCBz1kIo0aOwA=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

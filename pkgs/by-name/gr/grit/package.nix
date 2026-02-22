@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grit";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "climech";
     repo = "grit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-c8wBwmXFjpst6UxL5zmTxMR4bhzpHYljQHiJFKiNDms=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "grit";
   };
-}
+})

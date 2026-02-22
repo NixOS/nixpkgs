@@ -7,14 +7,14 @@
   protobuf,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pbpctrl";
   version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "qzed";
     repo = "pbpctrl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XSRJytPrRKKWhFTBQd3Kd1R3amdecGNTmJS4PmFL6kg=";
   };
 
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "pbpctrl";
   };
-}
+})

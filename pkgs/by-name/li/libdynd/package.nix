@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdynd";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "libdynd";
     repo = "libdynd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0fkd5rawqni1cq51fmr76iw7ll4fmbahfwv4rglnsabbkylf73pr";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
   };
-}
+})

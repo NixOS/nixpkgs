@@ -3,22 +3,25 @@
   stdenvNoCC,
   cacert,
   yarn-berry,
-  nodejs,
+  nodejs-slim, # no need for NPM
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
   fetchpatch2,
 }:
 
+let
+  nodejs = nodejs-slim;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "corepack";
-  version = "0.34.4";
+  version = "0.34.6";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "corepack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AE2tDeDs1wzDdTrkG/ic2ydQC8G2wcaKD6s7ec7p+Ew=";
+    hash = "sha256-Wht1w6irfjj4cG4O1mWaP+uWvi794CsxoQPhk3uoKcw=";
   };
 
   patches = [
@@ -45,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       patches
       src
       ;
-    hash = "sha256-Yzm3PtdbR9Tx2bisdzTw0XGD6rAc/KUCzmhjGuXdft4=";
+    hash = "sha256-kngfdPGent5u231BFOzDLZFLp+EueDrm88iLbSoo5+g=";
   };
 
   postPatch = ''

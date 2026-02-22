@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iay";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "aaqaishtyaq";
     repo = "iay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-oNUK2ROcocKoIlAuNZcJczDYtSchzpB1qaYbSYsjN50=";
   };
 
@@ -26,10 +26,12 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  NIX_LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-framework"
-    "AppKit"
-  ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = toString [
+      "-framework"
+      "AppKit"
+    ];
+  };
 
   meta = {
     description = "Minimalistic, blazing-fast, and extendable prompt for bash and zsh";
@@ -40,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "iay";
   };
-}
+})

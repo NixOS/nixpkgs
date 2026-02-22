@@ -9,14 +9,14 @@
   check,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vnstat";
   version = "2.13";
 
   src = fetchFromGitHub {
     owner = "vergoh";
     repo = "vnstat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Xd3s4Wrtfwis0dxRijeWhfloHcXPUNAj0P91uWi1C3M=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

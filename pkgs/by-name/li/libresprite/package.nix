@@ -14,10 +14,10 @@
   libpng,
   libwebp,
   libarchive,
-  libX11,
+  libx11,
   pixman,
   tinyxml-2,
-  xorg,
+  libxi,
   zlib,
   SDL2,
   SDL2_image,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libwebp
     libarchive
-    libX11
+    libx11
     pixman
     tinyxml-2
     zlib
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     # no v8 due to missing libplatform and libbase
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    xorg.libXi
+    libxi
   ];
 
   cmakeFlags = [

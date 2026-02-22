@@ -11,7 +11,7 @@ let
   zig = zig_0_14;
 in
 stdenvNoCC.mkDerivation {
-  name = "bork";
+  pname = "bork";
   version = "0.4.0-unstable-2025-04-18";
 
   src = fetchFromGitHub {
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
 
   zigBuildFlags = [ "--release=fast" ];
 
-  postPatch = ''
+  postConfigure = ''
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 

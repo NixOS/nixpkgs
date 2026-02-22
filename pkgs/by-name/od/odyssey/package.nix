@@ -9,14 +9,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odyssey";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "yandex";
     repo = "odyssey";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-1ALTKRjpKmmFcAuhmgpcbJBkNuUlTyau8xWDRHh7gf0=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "odyssey";
   };
-}
+})

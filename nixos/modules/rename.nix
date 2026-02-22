@@ -109,6 +109,11 @@ in
       consider using `programs.pay-respects` instead.
     '')
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "unity3d"
+      "enable"
+    ] "The corresponding package was removed from nixpkgs in 2022.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] (
       "way-cooler is abandoned by its author: "
       + "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"
@@ -441,10 +446,6 @@ in
       LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
       Consider migrating or switching to Incus, or remove from your configuration.
       https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
-    '')
-    (mkRemovedOptionModule [ "services" "invoiceplane" ] ''
-      services.invoiceplane has been removed since the service only supported PHP 8.1 which is EOL
-      and removed from nixpkgs.
     '')
     (mkRemovedOptionModule [ "services" "filesender" ] ''
       services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.

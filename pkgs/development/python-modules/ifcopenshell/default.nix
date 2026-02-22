@@ -3,7 +3,6 @@
   stdenv,
   testers,
   buildPythonPackage,
-  pythonOlder,
   python,
   pytestCheckHook,
   # fetchers

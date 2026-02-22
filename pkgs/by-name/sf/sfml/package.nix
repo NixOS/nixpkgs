@@ -15,12 +15,12 @@
   libvorbis,
   miniaudio,
   udev,
-  libXi,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXrender,
-  xcbutilimage,
+  libxi,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxrender,
+  libxcb-image,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
-    libXi
-    libXcursor
-    libXrandr
-    libXrender
-    xcbutilimage
+    libx11
+    libxi
+    libxcursor
+    libxrandr
+    libxrender
+    libxcb-image
   ];
 
   cmakeFlags = [

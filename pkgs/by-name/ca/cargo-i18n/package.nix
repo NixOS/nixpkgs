@@ -5,14 +5,14 @@
   gettext,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-i18n";
   version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "kellpossible";
     repo = "cargo-i18n";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-azwQlXsoCgNB/TjSBBE+taUR1POBJXaPnS5Sr+HVR90=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "cargo-i18n";
   };
-}
+})

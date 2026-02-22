@@ -15,15 +15,17 @@
   autoreconfHook,
   autoconf-archive,
   x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  xorg,
+  libx11,
+  libsm,
+  libice,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dbus";
   version = "1.14.10";
 
   src = fetchurl {
-    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
+    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-uh8h0r2dM52i1KqHgMCd8y/qh5mLc9ok9Jq53x42pQ8=";
   };
 
@@ -69,14 +71,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optionals x11Support (
-      with xorg;
-      [
-        libX11
-        libICE
-        libSM
-      ]
-    )
+    lib.optionals x11Support [
+      libx11
+      libice
+      libsm
+    ]
     ++ lib.optional enableSystemd systemdMinimal
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       audit
@@ -136,9 +135,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple interprocess messaging system";
     homepage = "https://www.freedesktop.org/wiki/Software/dbus/";
-    changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus; # most is also under AFL-2.1
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.unix;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "freedesktop" finalAttrs.version;
   };
-}
+})

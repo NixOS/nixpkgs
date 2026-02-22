@@ -90,7 +90,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [
-      atila
+      rafaelrc
     ];
     mainProgram = "irpf";
   };

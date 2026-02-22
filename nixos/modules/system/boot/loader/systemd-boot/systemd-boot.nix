@@ -244,7 +244,7 @@ in
 
     installDeviceTree = mkOption {
       default = with config.hardware.deviceTree; enable && name != null;
-      defaultText = ''with config.hardware.deviceTree; enable && name != null'';
+      defaultText = "with config.hardware.deviceTree; enable && name != null";
       description = ''
         Install the devicetree blob specified by `config.hardware.deviceTree.name`
         to the ESP and instruct systemd-boot to pass this DTB to linux.

@@ -5,14 +5,14 @@
   gitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geticons";
   version = "1.2.2";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "geticons";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-HEnUfOLeRTi2dRRqjDPVwVVHo/GN9wE28x5qv3qOpCY=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~zethra/geticons";
     license = with lib.licenses; [ gpl3Plus ];
   };
-}
+})

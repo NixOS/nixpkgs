@@ -65,7 +65,18 @@
   tzdata,
   which,
   woff2,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxmu,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxaw,
+  libx11,
+  xprop,
+  xdpyinfo,
+  libxcb,
   zlib,
 
   homepage,
@@ -199,10 +210,10 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     (lib.getLib systemd)
     woff2
-    xorg.libXScrnSaver
-    xorg.libXaw
-    xorg.libXmu
-    xorg.libXtst
+    libxscrnsaver
+    libxaw
+    libxmu
+    libxtst
     zlib
   ];
 
@@ -213,17 +224,17 @@ stdenv.mkDerivation rec {
     libGL
     pcsclite
 
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXinerama
-    xorg.libXmu
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
-    xorg.xdpyinfo
-    xorg.xprop
+    libx11
+    libxscrnsaver
+    libxext
+    libxfixes
+    libxinerama
+    libxmu
+    libxrender
+    libxtst
+    libxcb
+    xdpyinfo
+    xprop
   ];
 
   installPhase =

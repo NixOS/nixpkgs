@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
-  abseil-cpp_202505,
+  abseil-cpp_202508,
   protobuf,
   pybind11,
   zlib,
@@ -36,7 +36,7 @@ buildPythonPackage {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    abseil-cpp_202505
+    abseil-cpp_202508
     protobuf
     pybind11
     zlib

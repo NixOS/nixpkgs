@@ -8,8 +8,8 @@
   dri-pkgconfig-stub,
   libdrm,
   libGL,
-  libX11,
-  libXau,
+  libx11,
+  libxau,
   libxcb,
   libxcvt,
   libxdmcp,
@@ -20,13 +20,13 @@
   mesa-gl-headers,
   openssl,
   pixman,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   xkbcomp,
-  xkeyboardconfig,
+  xkeyboard-config,
   xorgproto,
   xtrans,
 }:
@@ -43,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     dri-pkgconfig-stub
     libdrm
     libGL
-    libX11
-    libXau
+    libx11
+    libxau
     libxcb
     libxcvt
     libxdmcp
@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     mesa-gl-headers
     openssl
     pixman
-    xcbutil
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     xorgproto
     xtrans
   ];
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-xquartz"
     "--disable-xwayland"
     "--with-xkb-bin-directory=${xkbcomp}/bin"
-    "--with-xkb-path=${xkeyboardconfig}/share/X11/xkb"
+    "--with-xkb-path=${xkeyboard-config}/share/X11/xkb"
     "--with-xkb-output=$out/share/X11/xkb/compiled"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "--without-dtrace";

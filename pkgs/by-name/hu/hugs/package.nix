@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ bison ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=implicit-int"
     "-Wno-error=implicit-function-declaration"
   ];

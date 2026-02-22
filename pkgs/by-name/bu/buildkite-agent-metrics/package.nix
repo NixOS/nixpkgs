@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "buildkite-agent-metrics";
   version = "5.10.0";
 
@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "buildkite-agent-metrics";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QE4IY1yU8X1zG+jf7eBWiSjN3HvDqr2Avhs3Bub+xB0=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     homepage = "https://github.com/buildkite/buildkite-agent-metrics";
     license = lib.licenses.mit;
   };
-}
+})

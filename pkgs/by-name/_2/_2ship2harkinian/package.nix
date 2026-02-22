@@ -27,7 +27,7 @@
   libogg,
   libopus,
   libvorbis,
-  libX11,
+  libx11,
   opusfile,
   sdl_gamecontrollerdb,
   makeDesktopItem,
@@ -106,13 +106,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "2ship2harkinian";
-  version = "3.0.2";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "2ship2harkinian";
     tag = finalAttrs.version;
-    hash = "sha256-3TmgOhlcYpu5FYvn9xblmNxwYUVSLjyE4VKbddR6D9s=";
+    hash = "sha256-fG9HIJChPGngb8vouLsQTo9xQXBq6qIZn7oyYssvNhI=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libpulseaudio
     libvorbis
-    libX11
+    libx11
     libzip
     nlohmann_json
     (lib.getDev opusfile)
@@ -172,6 +172,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   dontAddPrefix = true;
 
@@ -210,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/bin
     ln -s $out/2s2h/2s2h.elf $out/bin/2s2h
-    install -Dm644 ../mm/linux/2s2hIcon.png $out/share/pixmaps/2s2h.png
+    install -Dm644 ../mm/linux/2s2hIcon.png $out/share/icons/hicolor/512x512/apps/2s2h.png
 
     install -Dm644 -t $out/share/licenses/2ship2harkinian ../LICENSE
     install -Dm644 -t $out/share/licenses/2ship2harkinian/OTRExporter ../OTRExporter/LICENSE

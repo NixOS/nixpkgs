@@ -25,14 +25,14 @@
   pulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsndfile";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "libsndfile";
     repo = "libsndfile";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-MOOX/O0UaoeMaQPW9PvvE0izVp+6IoE5VbtTx0RvMkI=";
   };
 
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C library for reading and writing files containing sampled sound";
     homepage = "https://libsndfile.github.io/libsndfile/";
-    changelog = "https://github.com/libsndfile/libsndfile/releases/tag/${version}";
+    changelog = "https://github.com/libsndfile/libsndfile/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.all;
@@ -133,4 +133,4 @@ stdenv.mkDerivation rec {
       formats.
     '';
   };
-}
+})

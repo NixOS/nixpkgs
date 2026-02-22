@@ -14,14 +14,14 @@
 let
   inherit (stdenv.hostPlatform) isx86;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lrzip";
   version = "0.651";
 
   src = fetchFromGitHub {
     owner = "ckolivas";
     repo = "lrzip";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Mb324ojtLV0S10KhL7Vjf3DhSOtCy1pFMTzvLkTnpXM=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

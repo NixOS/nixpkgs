@@ -6,7 +6,7 @@
   autoPatchelfHook,
 
   # buildInputs
-  oneDNN,
+  onednn,
   re2,
 
   # dependencies
@@ -38,6 +38,10 @@ buildPythonPackage {
     chmod +w dist
   '';
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    NIX_LDFLAGS = "-z,noexecstack";
+  };
+
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   # This project requires fairly large dependencies such as sympy which we really don't always need.
@@ -49,7 +53,7 @@ buildPythonPackage {
 
   # Libraries are not linked correctly.
   buildInputs = [
-    oneDNN
+    onednn
     re2
     onnxruntime.protobuf
 

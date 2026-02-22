@@ -5,25 +5,26 @@
   fetchFromGitHub,
   freezegun,
   orjson,
+  pydantic,
   pydevccu,
   pytest-asyncio,
   pytest-socket,
+  pytest-xdist,
   pytestCheckHook,
   python-slugify,
   setuptools,
-  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "aiohomematic";
-  version = "2026.1.38";
+  version = "2026.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "aiohomematic";
     tag = version;
-    hash = "sha256-2Rf6WRMs/m55/kdq7yEmLkf4ptlOhfyRnvNT4XqelPs=";
+    hash = "sha256-HMKrXFhs3s0wV+39/xMIQT77gkLPg9m21iTKlypfZLA=";
   };
 
   build-system = [ setuptools ];
@@ -31,14 +32,15 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     orjson
+    pydantic
     python-slugify
-    voluptuous
   ];
 
   nativeCheckInputs = [
     freezegun
     pydevccu
     pytest-asyncio
+    pytest-xdist
     pytest-socket
     pytestCheckHook
   ];

@@ -9,7 +9,7 @@
   gtk3,
   alsa-lib,
   nss,
-  libXdamage,
+  libxdamage,
   libdrm,
   libgbm,
   libxshmfence,
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     gtk3
     alsa-lib
     nss
-    libXdamage
+    libxdamage
     libdrm
     libgbm
     libxshmfence

@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "msgpuck";
   version = "2.0";
 
   src = fetchFromGitHub {
     owner = "rtsisyk";
     repo = "msgpuck";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0cjq86kncn3lv65vig9cqkqqv2p296ymcjjbviw0j1s85cfflps0";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
   };
-}
+})

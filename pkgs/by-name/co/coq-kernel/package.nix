@@ -52,6 +52,7 @@ let
     runCommand "coq-kernel-launcher"
       {
         nativeBuildInputs = [ makeWrapper ];
+        inherit (coq-jupyter) pname version;
       }
       ''
         mkdir -p $out/bin

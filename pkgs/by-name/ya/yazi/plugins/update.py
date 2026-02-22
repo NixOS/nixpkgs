@@ -376,7 +376,7 @@ def commit_changes(updated_plugins: list[dict[str, str]]) -> None:
 
         if len(updated_plugins) == 1:
             plugin = updated_plugins[0]
-            commit_message = f"yaziPlugins.{plugin['name']}: update from {plugin['old_version']} to {plugin['new_version']}"
+            commit_message = f"yaziPlugins.{plugin['name']}: {plugin['old_version']} -> {plugin['new_version']}"
             compare_url = get_compare_url(plugin)
             if compare_url:
                 commit_message += f"\n\nCompare: {compare_url}"

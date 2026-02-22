@@ -131,7 +131,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/getpelican/pelican/blob/${src.tag}/docs/changelog.rst";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      offline
       prikhi
     ];
   };

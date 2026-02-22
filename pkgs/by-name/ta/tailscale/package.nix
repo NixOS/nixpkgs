@@ -24,7 +24,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tailscale";
-  version = "1.94.0";
+  version = "1.94.2";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kwIWUKKXBz0rmiicLEaR4d3T94aA4VqiVrFFV9vk7g0=";
+    hash = "sha256-qjWVB8xWVgIVUgrf27F6hwiFIE+4ERXWeHv26ugg/x4=";
   };
 
   vendorHash = "sha256-WeMTOkERj4hvdg4yPaZ1gRgKnhRIBXX55kUVbX/k/xM=";
@@ -55,7 +55,6 @@ buildGoModule (finalAttrs: {
     "cmd/derper"
     "cmd/derpprobe"
     "cmd/tailscaled"
-    "cmd/tsidp"
     "cmd/get-authkey"
   ];
 

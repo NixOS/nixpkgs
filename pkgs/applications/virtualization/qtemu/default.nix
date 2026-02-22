@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitLab,
   pkg-config,
   qmake,
+  wrapQtAppsHook,
   qtbase,
   qemu,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qtemu";
   version = "2.1";
 
@@ -22,6 +23,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -34,7 +36,7 @@ mkDerivation rec {
 
     # upstream lacks an install method
     install -D -t $out/share/applications qtemu.desktop
-    install -D -t $out/share/pixmaps qtemu.png
+    install -D -t $out/share/icons/hicolor/32x32/apps qtemu.png
     install -D -t $out/bin qtemu
 
     # make sure that the qemu-* executables are found

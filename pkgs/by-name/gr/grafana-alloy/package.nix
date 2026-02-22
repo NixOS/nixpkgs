@@ -55,7 +55,15 @@ buildGoModule (finalAttrs: rec {
   ]
   ++ lib.optionals useLLD [ lld ];
 
-  env = lib.optionalAttrs useLLD { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
+  env =
+    lib.optionalAttrs useLLD {
+      NIX_CFLAGS_LINK = "-fuse-ld=lld";
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
+      # uses go-systemd, which uses libsystemd headers
+      # https://github.com/coreos/go-systemd/issues/351
+      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemd}/include";
+    };
 
   ldflags =
     let
@@ -87,15 +95,11 @@ buildGoModule (finalAttrs: rec {
     "."
   ];
 
-  # uses go-systemd, which uses libsystemd headers
-  # https://github.com/coreos/go-systemd/issues/351
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isLinux [
-    "-I${lib.getDev systemd}/include"
-  ];
-
   checkFlags = [
-    "-tags nonetwork" # disable network tests
-    "-tags nodocker" # disable docker tests
+    "-tags"
+    "nonetwork" # disable network tests
+    "-tags"
+    "nodocker" # disable docker tests
   ];
 
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at

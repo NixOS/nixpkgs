@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lego";
   version = "4.31.0";
 
   src = fetchFromGitHub {
     owner = "go-acme";
     repo = "lego";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YzslAEZVJDAa8Q7/YTWb2pH0MiWwgHipL11A/UD+nYg=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -40,4 +40,4 @@ buildGoModule rec {
     lego-http = nixosTests.acme.http01-builtin;
     lego-dns = nixosTests.acme.dns01;
   };
-}
+})

@@ -5,14 +5,14 @@
   faust2jaqt,
   faust2lv2,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "RhythmDelay";
   version = "2.1";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "RhythmDelay";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     sha256 = "1j0bjl9agz43dcrcrbiqd7fv7xsxgd65s4ahhv5pvcr729y0fxg4";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

@@ -8,74 +8,83 @@
   symlinkJoin,
   autoAddDriverRunpath,
 
+  # nativeBuildInputs
+  which,
+
   # build-system
   cmake,
+  grpcio-tools,
   jinja2,
   ninja,
   packaging,
   setuptools,
   setuptools-scm,
 
+  # buildInputs
+  onednn,
+  numactl,
+  llvmPackages,
+
   # dependencies
-  which,
-  torch,
-  outlines,
-  psutil,
-  ray,
-  pandas,
-  pyarrow,
-  sentencepiece,
-  numpy,
-  transformers,
-  xformers,
-  xgrammar,
-  numba,
-  fastapi,
-  uvicorn,
-  pydantic,
   aioprometheus,
   anthropic,
-  nvidia-ml-py,
-  openai,
-  pyzmq,
-  tiktoken,
-  torchaudio,
-  torchvision,
-  py-cpuinfo,
-  lm-format-enforcer,
-  prometheus-fastapi-instrumentator,
-  cupy,
-  cbor2,
-  pybase64,
-  gguf,
-  einops,
-  importlib-metadata,
-  partial-json-parser,
-  compressed-tensors,
-  mcp,
-  ijson,
-  mistral-common,
-  msgspec,
-  model-hosting-container-standards,
-  numactl,
-  tokenizers,
-  oneDNN,
+  bitsandbytes,
   blake3,
-  depyf,
-  opencv-python-headless,
   cachetools,
+  cbor2,
+  compressed-tensors,
+  depyf,
+  einops,
+  fastapi,
+  gguf,
+  grpcio,
+  grpcio-reflection,
+  ijson,
+  importlib-metadata,
   llguidance,
-  python-json-logger,
-  python-multipart,
-  llvmPackages,
-  opentelemetry-sdk,
+  lm-format-enforcer,
+  mcp,
+  mistral-common,
+  model-hosting-container-standards,
+  msgspec,
+  numba,
+  numpy,
+  openai,
+  openai-harmony,
+  opencv-python-headless,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
-  bitsandbytes,
-  flashinfer,
-  py-libnuma,
+  opentelemetry-sdk,
+  outlines,
+  pandas,
+  partial-json-parser,
+  prometheus-fastapi-instrumentator,
+  py-cpuinfo,
+  pyarrow,
+  pybase64,
+  pydantic,
+  python-json-logger,
+  python-multipart,
+  pyzmq,
+  ray,
+  sentencepiece,
   setproctitle,
-  openai-harmony,
+  tiktoken,
+  tokenizers,
+  torch,
+  torchaudio,
+  torchvision,
+  transformers,
+  uvicorn,
+  xformers,
+  xgrammar,
+  # linux-only
+  psutil,
+  py-libnuma,
+  # cuda-only
+  cupy,
+  flashinfer,
+  nvidia-ml-py,
 
   # optional-dependencies
   # audio
@@ -124,8 +133,8 @@ let
   cutlass-flashmla = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.9.0";
-    hash = "sha256-Q6y/Z6vahASeSsfxvZDwbMFHGx8CnsF90IlveeVLO9g=";
+    rev = "147f5673d0c1c3dcf66f78d677fd647e4a020219";
+    hash = "sha256-dHQto08IwTDOIuFUp9jwm1MWkFi8v2YJ/UESrLuG71g=";
   };
 
   flashmla = stdenv.mkDerivation {
@@ -139,8 +148,8 @@ let
       name = "FlashMLA-source";
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "46d64a8ebef03fa50b4ae74937276a5c940e3f95";
-      hash = "sha256-jtMzWB5hKz8mJGsdK6q4YpQbGp9IrQxbwmB3a64DIl0=";
+      rev = "c2afa9cb93e674d5a9120a170a6da57b89267208";
+      hash = "sha256-pKlwxV6G9iHag/jbu3bAyvYvnu5TbrQwUMFV0AlGC3s=";
     };
 
     dontConfigure = true;
@@ -186,8 +195,8 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "86f8f157cf82aa2342743752b97788922dd7de43";
-      hash = "sha256-+h43jMte/29kraNtPiloSQFfCay4W3NNIlzvs47ygyM=";
+      rev = "188be16520ceefdc625fdf71365585d2ee348fe2";
+      hash = "sha256-Osec+/IF3+UDtbIhDMBXzUeWJ7hDJNb5FpaVaziPSgM=";
     };
 
     patches = [
@@ -223,7 +232,7 @@ let
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
-  # https://github.com/pytorch/pytorch/blob/v2.8.0/torch/utils/cpp_extension.py#L2411-L2414
+  # https://github.com/pytorch/pytorch/blob/v2.9.1/torch/utils/cpp_extension.py#L2407-L2410
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -246,10 +255,10 @@ let
         "9.0a"
         "10.0"
         "10.0a"
-        "10.1"
-        "10.1a"
         "10.3"
         "10.3a"
+        "11.0"
+        "11.0a"
         "12.0"
         "12.0a"
         "12.1"
@@ -313,16 +322,16 @@ let
 
 in
 
-buildPythonPackage.override { stdenv = torch.stdenv; } rec {
+buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.13.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = "vllm";
-    tag = "v${version}";
-    hash = "sha256-pI9vQBhjRPlKOjZp6kH+n8Y0Q4t9wLYM7SnLftSfYgs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qsAvcOB8ugGlBqBrLfNHqaIUcxLwaXBTg8xWRnGyd94=";
   };
 
   patches = [
@@ -372,6 +381,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
 
   build-system = [
     cmake
+    grpcio-tools
     jinja2
     ninja
     packaging
@@ -382,7 +392,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
 
   buildInputs =
     lib.optionals cpuSupport [
-      oneDNN
+      onednn
     ]
     ++ lib.optionals (cpuSupport && stdenv.hostPlatform.isLinux) [
       numactl
@@ -412,20 +422,36 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
   dependencies = [
     aioprometheus
     anthropic
+    bitsandbytes
     blake3
     cachetools
     cbor2
+    compressed-tensors
     depyf
+    einops
     fastapi
+    gguf
+    grpcio
+    grpcio-reflection
     ijson
+    importlib-metadata
     llguidance
     lm-format-enforcer
     mcp
+    mistral-common
+    model-hosting-container-standards
+    msgspec
+    numba
     numpy
     openai
+    openai-harmony
     opencv-python-headless
+    opentelemetry-api
+    opentelemetry-exporter-otlp
+    opentelemetry-sdk
     outlines
     pandas
+    partial-json-parser
     prometheus-fastapi-instrumentator
     py-cpuinfo
     pyarrow
@@ -436,43 +462,29 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
     pyzmq
     ray
     sentencepiece
+    setproctitle
     tiktoken
     tokenizers
-    msgspec
-    gguf
-    einops
-    importlib-metadata
-    partial-json-parser
-    compressed-tensors
-    mistral-common
-    model-hosting-container-standards
     torch
+    # vLLM needs Torch's compiler to be present in order to use torch.compile
+    torch.stdenv.cc
     torchaudio
     torchvision
     transformers
     uvicorn
     xformers
     xgrammar
-    numba
-    opentelemetry-sdk
-    opentelemetry-api
-    opentelemetry-exporter-otlp
-    bitsandbytes
-    setproctitle
-    openai-harmony
-    # vLLM needs Torch's compiler to be present in order to use torch.compile
-    torch.stdenv.cc
   ]
   ++ uvicorn.optional-dependencies.standard
   ++ aioprometheus.optional-dependencies.starlette
   ++ lib.optionals stdenv.targetPlatform.isLinux [
-    py-libnuma
     psutil
+    py-libnuma
   ]
   ++ lib.optionals cudaSupport [
     cupy
-    nvidia-ml-py
     flashinfer
+    nvidia-ml-py
   ];
 
   optional-dependencies = {
@@ -517,7 +529,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
     }
     // lib.optionalAttrs cpuSupport {
       VLLM_TARGET_DEVICE = "cpu";
-      FETCHCONTENT_SOURCE_DIR_ONEDNN = "${oneDNN.src}";
+      FETCHCONTENT_SOURCE_DIR_ONEDNN = "${onednn.src}";
     };
 
   preConfigure = ''
@@ -539,7 +551,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
 
   meta = {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";
-    changelog = "https://github.com/vllm-project/vllm/releases/tag/v${version}";
+    changelog = "https://github.com/vllm-project/vllm/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/vllm-project/vllm";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
@@ -559,4 +571,4 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
       "x86_64-darwin"
     ];
   };
-}
+})

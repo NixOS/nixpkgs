@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "dev"
+    "lib"
     "man"
   ];
 

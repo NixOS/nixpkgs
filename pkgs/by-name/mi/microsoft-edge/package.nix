@@ -25,20 +25,20 @@
   libdrm,
   libglvnd,
   libkrb5,
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   libxkbcommon,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
   libxshmfence,
-  libXtst,
+  libxtst,
   libgbm,
   nspr,
   nss,
@@ -122,20 +122,20 @@ let
     libglvnd
     libkrb5
     libpng
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
     libxkbcommon
-    libXrandr
-    libXrender
-    libXScrnSaver
+    libxrandr
+    libxrender
+    libxscrnsaver
     libxshmfence
-    libXtst
+    libxtst
     libgbm
     nspr
     nss
@@ -162,11 +162,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "143.0.3650.139";
+  version = "145.0.3800.70";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-sLn8llw8wdLLAl0wGbBUT4nyjYiZcgXS7LNCwpTb/qQ=";
+    hash = "sha256-gUyh9AD1ntnZb2iLRwKLxy0PxY0Dist73oT9AC2pFQI=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly

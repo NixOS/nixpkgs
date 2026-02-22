@@ -7,14 +7,14 @@
   rofi-unwrapped,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-vpn";
   version = "0.2.0";
 
   src = fetchFromGitLab {
     owner = "DamienCassou";
     repo = "rofi-vpn";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "04jcfb2jy8yyrk4mg68krwh3zb5qcyj1aq1bwk96fhybrq9k2hhp";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "rofi-vpn";
   };
-}
+})

@@ -8,6 +8,7 @@
   libbfd,
   libbfd_2_38,
   elfutils,
+  openssl,
   readline,
   zlib,
   python3,
@@ -15,7 +16,7 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpftools";
 
   inherit (linuxHeaders) version src;
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs =
     (
-      if (lib.versionAtLeast version "5.20") then
+      if (lib.versionAtLeast finalAttrs.version "5.20") then
         [
           libopcodes
           libbfd
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     ++ [
       elfutils
       zlib
+      openssl
       readline
     ];
 
@@ -88,4 +90,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

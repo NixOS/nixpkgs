@@ -5,12 +5,12 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "entr";
   version = "5.7";
 
   src = fetchurl {
-    url = "https://eradman.com/entrproject/code/entr-${version}.tar.gz";
+    url = "https://eradman.com/entrproject/code/entr-${finalAttrs.version}.tar.gz";
     hash = "sha256-kMXZQ4IMcM7zfrQaOCpupPXdf9le/vE7K1Ug0yD10Gc=";
   };
 
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   installFlags = [ "PREFIX=$(out)" ];
 
-  TARGET_OS = stdenv.hostPlatform.uname.system;
+  env.TARGET_OS = stdenv.hostPlatform.uname.system;
 
   meta = {
     homepage = "https://eradman.com/entrproject/";
     description = "Run arbitrary commands when files change";
-    changelog = "https://github.com/eradman/entr/raw/${version}/NEWS";
+    changelog = "https://github.com/eradman/entr/raw/${finalAttrs.version}/NEWS";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "entr";
   };
-}
+})

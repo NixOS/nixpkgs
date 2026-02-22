@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
   requests-mock,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pyatmo";
   version = "9.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jabesq";

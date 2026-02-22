@@ -9,7 +9,28 @@
   addDriverRunpath,
   dbus,
   libGLU,
-  xorg,
+  xkeyboard-config,
+  libxcb-util,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxxf86vm,
+  libxt,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   buildFHSEnv,
   bash,
   writeText,
@@ -46,7 +67,7 @@ let
       # Pretty sure, there are missing dependencies ...
       buildInputs = [
         libGLU
-        xorg.libXxf86vm
+        libxxf86vm
       ];
 
       src =
@@ -221,28 +242,28 @@ buildFHSEnv {
       python3.pkgs.numpy
       udev
       xdg-utils # xdg-open needed to open URLs
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXt
-      xorg.libXtst
-      xorg.libXxf86vm
-      xorg.libxcb
-      xorg.xcbutil
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
-      xorg.xkeyboardconfig
+      libice
+      libsm
+      libx11
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxinerama
+      libxrandr
+      libxrender
+      libxt
+      libxtst
+      libxxf86vm
+      libxcb
+      libxcb-util
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
+      xkeyboard-config
       zlib
     ];
 

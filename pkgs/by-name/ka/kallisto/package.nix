@@ -10,14 +10,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kallisto";
   version = "0.51.1";
 
   src = fetchFromGitHub {
     repo = "kallisto";
     owner = "pachterlab";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.arcadio ];
   };
-}
+})

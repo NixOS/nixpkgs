@@ -6,10 +6,10 @@
   fftwFloat,
   freetype,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrender,
   meson,
   ninja,
   pkg-config,
@@ -50,10 +50,10 @@ stdenv.mkDerivation {
     alsa-lib
     freetype
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXrender
+    libx11
+    libxcursor
+    libxext
+    libxrender
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];

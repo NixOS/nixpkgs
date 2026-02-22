@@ -54,6 +54,7 @@ let
     url = ltwaUrl;
     hash = "sha256-jnS8Y9x8eg2L3L3RPnS6INTs19mEtwzfNIjJUw6HtIY=";
   };
+  kotlinDslVersion = "6.4.2";
 in
 stdenv.mkDerivation rec {
   version = "6.0-alpha.4";
@@ -92,6 +93,9 @@ stdenv.mkDerivation rec {
     sed -i -e 's/javafx = .*/javafx = "25"/' versions/build.gradle.kts
 
     sed -i -e '1a //REPOS file://${mitmCache}/https/repo.maven.apache.org/maven2,file://${mitmCache}/https/plugins.gradle.org/m2' build-support/src/main/java/*.java
+
+    substituteInPlace build-logic/build.gradle.kts \
+      --replace-fail '`kotlin-dsl`' 'id("org.gradle.kotlin.kotlin-dsl") version "${kotlinDslVersion}"'
 
     pushd jablib
 

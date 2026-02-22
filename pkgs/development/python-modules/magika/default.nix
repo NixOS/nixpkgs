@@ -1,20 +1,30 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  click,
   fetchPypi,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  click,
   numpy,
   onnxruntime,
-  hatchling,
   python-dotenv,
   tabulate,
   tqdm,
+
+  # tests
   pytestCheckHook,
   dacite,
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+let
+  isNotAarch64Linux = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+in
+buildPythonPackage (finalAttrs: {
   pname = "magika";
   version = "1.0.1";
   pyproject = true;
@@ -23,7 +33,7 @@ buildPythonPackage rec {
   # Pypi tarball contains a pure python implementation of magika
   # while GitHub source requires compiling magika-cli
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-MT+Mv83Jp+VcJChicyMKJzK4mCXlipPeK1dlMTk7g5g=";
   };
 
@@ -63,14 +73,19 @@ buildPythonPackage rec {
     "test_magika_module_with_previously_missdetected_samples"
   ];
 
-  pythonImportsCheck = [ "magika" ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # -> Skip all tests that require importing magika
+  pythonImportsCheck = lib.optionals isNotAarch64Linux [ "magika" ];
+  doCheck = isNotAarch64Linux;
 
   meta = {
     description = "Detect file content types with deep learning";
     homepage = "https://github.com/google/magika";
-    changelog = "https://github.com/google/magika/blob/python-v${version}/python/CHANGELOG.md";
+    changelog = "https://github.com/google/magika/blob/python-v${finalAttrs.version}/python/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mihaimaruseac ];
     mainProgram = "magika-python-client";
   };
-}
+})

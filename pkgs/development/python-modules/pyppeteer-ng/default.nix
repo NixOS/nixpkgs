@@ -26,7 +26,6 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   readme-renderer,
   sphinx,
   sphinxcontrib-asyncio,
@@ -41,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer-ng";
-  version = "2.0.0rc11";
+  version = "2.0.0rc13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "pyppeteer-ng";
     tag = version;
-    hash = "sha256-vhsqz/2wNLqjtwVdLyLyO+JX7g2sz5MEMoHOnsDl/KQ=";
+    hash = "sha256-zx3uzD0y5FIw2ZWU3fPzY3nmnuhLRo7Ml+rTY1HUA9Q=";
   };
 
   postPatch = ''

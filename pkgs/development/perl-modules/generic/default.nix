@@ -12,7 +12,6 @@
     "out"
     "devdoc"
   ],
-  src ? null,
 
   # enabling or disabling does nothing for perl packages so set it explicitly
   # to false to not change hashes when enableParallelBuildingByDefault is enabled
@@ -64,7 +63,6 @@ lib.throwIf (attrs ? name)
 
           inherit
             outputs
-            src
             doCheck
             checkTarget
             enableParallelBuilding

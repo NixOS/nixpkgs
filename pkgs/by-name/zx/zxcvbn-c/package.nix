@@ -3,14 +3,14 @@
   stdenv,
   fetchFromGitHub,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zxcvbn-c";
   version = "2.6";
 
   src = fetchFromGitHub {
     owner = "tsyrogit";
     repo = "zxcvbn-c";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/ATlpcx0XTtmzs6REA2YsnINKWz5xPNaetfhfyMuFP0=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ xurei ];
   };
-}
+})

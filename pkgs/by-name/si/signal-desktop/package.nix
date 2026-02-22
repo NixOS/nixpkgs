@@ -1,11 +1,11 @@
 {
   stdenv,
   lib,
-  nodejs_22,
+  nodejs_24,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_39,
+  electron_40,
   python3,
   makeWrapper,
   callPackage,
@@ -23,9 +23,9 @@
   withAppleEmojis ? false,
 }:
 let
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
   pnpm = pnpm_10;
-  electron = electron_39;
+  electron = electron_40;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -54,13 +54,13 @@ let
     '';
   });
 
-  version = "7.85.0";
+  version = "7.90.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-fBaxgd9KjqomG2VrDnbIyVjf9Fv1vFrV4ge0h3yswGk=";
+    hash = "sha256-MkvIv9ohFtu4e3IK4hciWC32xiw18/kdm7pHEc436Bc=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -111,7 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
-  patches = lib.optional (!withAppleEmojis) (
+  patches = [
+    ./force-90-days-expiration.patch
+  ]
+  ++ lib.optional (!withAppleEmojis) (
     replaceVars ./replace-apple-emoji-with-noto-emoji.patch {
       noto-emoji-pngs = "${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png";
     }
@@ -144,15 +147,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-EqDHhfpdnj4ZhTVnmVmyiRjTUIGX5fpdAsxqRY/tzQI="
+        "sha256-sXDAAbrRFgOT+wRZqHAjEudmcUdBEbpkPWJpiB+MqDw="
       else
-        "sha256-Vfs1/J3R6O0Ct4gAPO/mVCwr6EaMBpltOImPrRHLkFM=";
+        "sha256-uEXm4lFTJ7U9I/I1UiETy1fIHzAPP7tr9SsPQ5lWsFw=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1768433780;
+    SOURCE_DATE_EPOCH = 1771441806;
   };
 
   preBuild = ''

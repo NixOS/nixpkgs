@@ -5,14 +5,14 @@
   libcap,
   udevCheckHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpu-energy-meter";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "cpu-energy-meter";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-QW65Z8mRYLHcyLeOtNAHjwPNWAUP214wqIYclK+whFw=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "cpu-energy-meter";
   };
-}
+})

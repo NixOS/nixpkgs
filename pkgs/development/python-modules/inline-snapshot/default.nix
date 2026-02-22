@@ -16,7 +16,6 @@
   pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rich,
   time-machine,
   toml,
@@ -40,9 +39,6 @@ buildPythonPackage rec {
     asttokens
     executing
     rich
-    toml
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
     toml
   ];
 

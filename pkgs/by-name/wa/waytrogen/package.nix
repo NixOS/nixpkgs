@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  preBuild = ''export OUT_PATH=$out'';
+  preBuild = "export OUT_PATH=$out";
 
   env = {
     OPENSSL_NO_VENDOR = 1;

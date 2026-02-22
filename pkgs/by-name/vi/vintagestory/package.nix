@@ -17,14 +17,16 @@
   libpulseaudio,
   dotnet-runtime_8,
   x11Support ? true,
-  xorg ? null,
+  libxi,
+  libxcursor,
+  libx11,
   waylandSupport ? false,
   wayland ? null,
   libxkbcommon ? null,
+  imagemagick,
 }:
 
 assert x11Support || waylandSupport;
-assert x11Support -> xorg != null;
 assert waylandSupport -> wayland != null;
 assert waylandSupport -> libxkbcommon != null;
 
@@ -40,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    imagemagick
   ];
 
   runtimeLibs = [
@@ -55,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
   ]
   ++ lib.optionals x11Support [
-    xorg.libX11
-    xorg.libXi
-    xorg.libXcursor
+    libx11
+    libxi
+    libxcursor
   ]
   ++ lib.optionals waylandSupport [
     wayland
@@ -88,9 +91,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/vintagestory $out/bin $out/share/pixmaps $out/share/fonts/truetype
+    mkdir -p $out/share/vintagestory $out/bin $out/share/icons/hicolor/512x512/apps $out/share/fonts/truetype
     cp -r * $out/share/vintagestory
-    cp $out/share/vintagestory/assets/gameicon.xpm $out/share/pixmaps/vintagestory.xpm
+    magick $out/share/vintagestory/assets/gameicon.xpm $out/share/icons/hicolor/512x512/apps/vintagestory.png
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
 
     runHook postInstall
@@ -129,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       artturin
       gigglesquid
-      niraethm
       dtomvan
     ];
     mainProgram = "vintagestory";

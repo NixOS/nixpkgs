@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  xorg,
+  libxcb,
   stdenv,
   python3,
   makeBinaryWrapper,
@@ -12,14 +12,14 @@
   mpv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "youtube-tui";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "Siriusmart";
     repo = "youtube-tui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a2Y0CATnKmZsYr3eUch3EUgHw41X1a2iOP0CjEJLXnc=";
   };
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-    xorg.libxcb
+    libxcb
     libsixel
     mpv
   ];
@@ -51,4 +51,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ Ruixi-rebirth ];
     mainProgram = "youtube-tui";
   };
-}
+})

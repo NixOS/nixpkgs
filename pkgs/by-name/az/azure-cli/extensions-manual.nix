@@ -213,9 +213,9 @@
 
   containerapp = mkAzExtension rec {
     pname = "containerapp";
-    version = "1.3.0b1";
+    version = "1.3.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
-    hash = "sha256-gEFo2qBqQ19SSIMx1BWPoc19xv7lCUkuZMSUz9qPqrE=";
+    hash = "sha256-Br/cfKFTkqcjGRCXAbHqfwTe4g49F3zbj/tzp/O+giI=";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
     propagatedBuildInputs = with python3Packages; [
       docker
@@ -320,9 +320,9 @@
 
   vm-repair = mkAzExtension rec {
     pname = "vm-repair";
-    version = "2.1.2";
+    version = "2.1.3";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/vm_repair-${version}-py2.py3-none-any.whl";
-    hash = "sha256-DOuH7BG4WrhP7SQH3GInFh7DHT0qN3JhSG76EXmNn24=";
+    hash = "sha256-atqfMIN0FjLZjSIRh+T9MBxt34y6VWpxexCEBFsPTaM=";
     description = "Support for repairing Azure Virtual Machines";
     propagatedBuildInputs = with python3Packages; [ opencensus ];
     meta.maintainers = [ ];

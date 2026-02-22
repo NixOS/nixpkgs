@@ -137,7 +137,7 @@ in
     meta = {
       description = "ZNC FiSH module";
       homepage = "https://github.com/oilslump/znc-fish";
-      maintainers = [ lib.maintainers.offline ];
+      maintainers = [ ];
     };
   };
 
@@ -234,9 +234,7 @@ in
       description = "Push notification service module for ZNC";
       homepage = "https://github.com/jreese/znc-push";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [
-        offline
-      ];
+      maintainers = [ ];
     };
   };
 }

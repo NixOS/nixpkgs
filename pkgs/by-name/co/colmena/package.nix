@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ nix-eval-jobs ];
 
-  NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
+  env.NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
 
   patches = [
     # Fixes nix 2.24 compat: https://github.com/zhaofengli/colmena/pull/236

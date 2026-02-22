@@ -5,6 +5,7 @@
   accountsservice,
   budgie-desktop,
   gtk3,
+  gtk-layer-shell,
   intltool,
   libgee,
   libpeas2,
@@ -39,10 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
     accountsservice
     budgie-desktop
     gtk3
+    gtk-layer-shell
     libgee
     libpeas2
     sassc
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "dependency('budgie-2.0', version: '>= 3')" "dependency('budgie-3.0')"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

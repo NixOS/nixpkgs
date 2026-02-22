@@ -3,6 +3,7 @@
   stdenv,
   fetchgit,
   pkg-config,
+  unstableGitUpdater,
   patches ? [ ],
   pkgsBuildHost,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -10,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "9base";
-  version = "unstable-2019-09-11";
+  version = "6-unstable-2019-09-13";
 
   src = fetchgit {
     url = "https://git.suckless.org/9base";
@@ -69,6 +70,8 @@ stdenv.mkDerivation {
     "man"
     "troff"
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://tools.suckless.org/9base/";

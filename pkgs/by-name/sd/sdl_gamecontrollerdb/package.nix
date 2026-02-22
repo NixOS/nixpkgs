@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sdl_gamecontrollerdb";
-  version = "0-unstable-2026-01-11";
+  version = "0-unstable-2026-02-18";
 
   src = fetchFromGitHub {
     owner = "mdqinc";
     repo = "SDL_GameControllerDB";
-    rev = "65490d3c39825a84f9c2cb4fa9bc359284f37ca2";
-    hash = "sha256-v6V5TTmI7PKHU5F82yhyyPdofPegvbbGeqqque+C1hU=";
+    rev = "a050623bb0e35e3e0ba635c48faddecf42ff225c";
+    hash = "sha256-yZiM3ykAII6PK4PCvu+knyHLg7orbCT9eYGvZWuU1F4=";
   };
 
   dontBuild = true;

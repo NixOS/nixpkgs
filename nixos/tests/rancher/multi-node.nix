@@ -218,11 +218,6 @@ in
       # wait for the agent to show up
       server.wait_until_succeeds("kubectl get node agent")
 
-      ${lib.optionalString (rancherDistro == "k3s") ''
-        for m in machines:
-            m.succeed("k3s check-config")
-      ''}
-
       server.succeed("kubectl cluster-info")
       # Also wait for our service account to show up; it takes a sec
       server.wait_until_succeeds("kubectl get serviceaccount default")

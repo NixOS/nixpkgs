@@ -29,14 +29,14 @@
   gst_all_1,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "orca";
   version = "49.5";
 
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/orca/${lib.versions.major version}/orca-${version}.tar.xz";
+    url = "mirror://gnome/sources/orca/${lib.versions.major finalAttrs.version}/orca-${finalAttrs.version}.tar.xz";
     hash = "sha256-U99BVYMZ6XwehK1gSYmVegK10P9TFBkZDwWH6mslYDQ=";
   };
 
@@ -133,4 +133,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
   };
-}
+})

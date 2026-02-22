@@ -32,7 +32,7 @@
   gsettings-desktop-schemas,
   gtk3,
   libdbusmenu-gtk2,
-  libXdamage,
+  libxdamage,
   nss,
   udev,
 }:
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     fuse
     gtk3
     libdbusmenu-gtk2
-    libXdamage
+    libxdamage
     nss
     udev
   ];

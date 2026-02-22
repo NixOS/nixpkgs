@@ -7,8 +7,8 @@
   gccmakedep,
   imake,
   installShellFiles,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   makeDesktopItem,
 }:
 
@@ -18,12 +18,12 @@ let
     hash = "sha256-g0Z6C1YSZL6N2eYUuZgXkPDoOLc4e9jAFL3ivk3OAS8=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "koules";
   version = "1.4";
 
   src = fetchurl {
-    url = "https://www.ucw.cz/~hubicka/koules/packages/${pname}${version}-src.tar.gz";
+    url = "https://www.ucw.cz/~hubicka/koules/packages/koules${finalAttrs.version}-src.tar.gz";
     hash = "sha256-w2+T/q/uvVmYO/RBACQOZ6hKi6yr1+5SjJMEbe/kohs=";
   };
 
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   # Debian maintains lots of patches for koules. Let's include all of them.
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.iblech ];
     platforms = lib.platforms.linux;
   };
-}
+})

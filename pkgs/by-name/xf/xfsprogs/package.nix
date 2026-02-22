@@ -15,12 +15,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfsprogs";
   version = "6.17.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/xfsprogs-${finalAttrs.version}.tar.xz";
     hash = "sha256-Ww9WqB9kEyYmb3Yq6KVjsp2Vzbzag7x5OPaM4SLx7dk=";
   };
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     "dev"
     "out"
     "doc"
+    "man"
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -106,8 +107,5 @@ stdenv.mkDerivation rec {
       dezgeg
       ajs124
     ];
-    # error: ‘struct statx’ has no member named ‘stx_atomic_write_unit_min’ ‘stx_atomic_write_unit_max’ ‘stx_atomic_write_segments_max’
-    # remove if https://www.openwall.com/lists/musl/2024/10/23/6 gets merged
-    broken = stdenv.hostPlatform.isMusl;
   };
-}
+})

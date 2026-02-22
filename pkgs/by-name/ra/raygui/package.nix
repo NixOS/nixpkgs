@@ -5,7 +5,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "raygui";
+  pname = "raygui";
   version = "4.0";
 
   src = fetchFromGitHub {

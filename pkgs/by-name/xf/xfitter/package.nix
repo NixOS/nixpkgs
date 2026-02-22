@@ -66,10 +66,10 @@ stdenv.mkDerivation {
                      'cmake_minimum_required(VERSION 3.10)'
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.libc == "glibc"
-  ) "-I${libtirpc.dev}/include/tirpc";
-  NIX_LDFLAGS = lib.optional (stdenv.hostPlatform.libc == "glibc") "-ltirpc";
+  env = lib.optionalAttrs (stdenv.hostPlatform.libc == "glibc") {
+    NIX_CFLAGS_COMPILE = "-I${libtirpc.dev}/include/tirpc";
+    NIX_LDFLAGS = "-ltirpc";
+  };
 
   hardeningDisable = [ "format" ];
 

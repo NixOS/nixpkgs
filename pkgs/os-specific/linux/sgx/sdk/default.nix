@@ -24,7 +24,7 @@
   writeText,
   debug ? false,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sgx-sdk";
   # Version as given in se_version.h
   version = "2.24.100.3";
@@ -34,15 +34,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
-    rev = "sgx_${versionTag}";
+    rev = "sgx_${finalAttrs.versionTag}";
     hash = "sha256-1urEdfMKNUqqyJ3wQ10+tvtlRuAKELpaCWIOzjCbYKw=";
     fetchSubmodules = true;
   };
 
   postUnpack = ''
     # Make sure this is the right version of linux-sgx
-    grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
-      || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
+    grep -q '"${finalAttrs.version}"' "$src/common/inc/internal/se_version.h" \
+      || (echo "Could not find expected version ${finalAttrs.version} in linux-sgx source" >&2 && exit 1)
   '';
 
   patches = [
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  BINUTILS_DIR = "${binutils}/bin";
+  env.BINUTILS_DIR = "${binutils}/bin";
 
   # Build external/ippcp_internal first. The Makefile is rewritten to make the
   # build faster by splitting different versions of ipp-crypto builds and to
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     let
       ipp-crypto-no_mitigation = callPackage ./ipp-crypto.nix { };
 
-      sgx-asm-pp = "python ${src}/build-scripts/sgx-asm-pp.py --assembler=nasm";
+      sgx-asm-pp = "python ${finalAttrs.src}/build-scripts/sgx-asm-pp.py --assembler=nasm";
 
       nasm-load = writeShellScript "nasm-load" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=LOAD $@";
       ipp-crypto-cve_2020_0551_load = callPackage ./ipp-crypto.nix {
@@ -150,14 +150,14 @@ stdenv.mkDerivation rec {
   ];
 
   postBuild = ''
-    patchShebangs linux/installer/bin/sgx_linux_x64_sdk_${version}.bin
+    patchShebangs linux/installer/bin/sgx_linux_x64_sdk_${finalAttrs.version}.bin
   '';
 
   installPhase = ''
     runHook preInstall
 
     installDir=$TMPDIR
-    ./linux/installer/bin/sgx_linux_x64_sdk_${version}.bin -prefix $installDir
+    ./linux/installer/bin/sgx_linux_x64_sdk_${finalAttrs.version}.bin -prefix $installDir
     installDir=$installDir/sgxsdk
 
     echo "Move files created by installer"
@@ -240,7 +240,7 @@ stdenv.mkDerivation rec {
     echo "Fixing BINUTILS_DIR in buildenv.mk"
     substituteInPlace $out/share/bin/buildenv.mk \
       --replace 'BINUTILS_DIR ?= /usr/local/bin' \
-                'BINUTILS_DIR ?= ${BINUTILS_DIR}'
+                'BINUTILS_DIR ?= ${finalAttrs.env.BINUTILS_DIR}'
 
     echo "Fixing GDB path in bin/sgx-gdb"
     substituteInPlace $out/bin/sgx-gdb --replace '/usr/local/bin/gdb' '${gdb}/bin/gdb'
@@ -302,4 +302,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = [ lib.licenses.bsd3 ];
   };
-}
+})

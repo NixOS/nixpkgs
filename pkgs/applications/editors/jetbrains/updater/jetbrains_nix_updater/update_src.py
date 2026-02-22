@@ -70,7 +70,7 @@ def requested_kotlinc_version(root_path: Path) -> str:
         return version
 
 
-def prefetch_intellij_community(variant: str, build_number: str) -> tuple[str, Path]:
+def prefetch_intellij_community(variant: str, version: str) -> tuple[str, Path]:
     print("[*] Prefetching IntelliJ community source code...")
     prefetch = run_command(
         [
@@ -81,7 +81,7 @@ def prefetch_intellij_community(variant: str, build_number: str) -> tuple[str, P
             "source",
             "--type",
             "sha256",
-            f"https://github.com/jetbrains/intellij-community/archive/{variant}/{build_number}.tar.gz",
+            f"https://github.com/jetbrains/intellij-community/archive/{variant}/{version}.tar.gz",
         ]
     )
     parts = prefetch.split()
@@ -92,7 +92,7 @@ def prefetch_intellij_community(variant: str, build_number: str) -> tuple[str, P
     return (hash, Path(out_path))
 
 
-def prefetch_android(variant: str, build_number: str) -> str:
+def prefetch_android(variant: str, version: str) -> str:
     print("[*] Prefetching Android plugin source code...")
     prefetch = run_command(
         [
@@ -102,7 +102,7 @@ def prefetch_android(variant: str, build_number: str) -> str:
             "source",
             "--type",
             "sha256",
-            f"https://github.com/jetbrains/android/archive/{variant}/{build_number}.tar.gz",
+            f"https://github.com/jetbrains/android/archive/{variant}/{version}.tar.gz",
         ]
     )
     return convert_hash_to_sri(prefetch)
@@ -151,10 +151,8 @@ def maven_out_path(jb_root: Path, name: str) -> Path:
 
 def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig):
     variant = ide.name.removesuffix("-oss")
-    intellij_hash, intellij_outpath = prefetch_intellij_community(
-        variant, info.build_number
-    )
-    android_hash = prefetch_android(variant, info.build_number)
+    intellij_hash, intellij_outpath = prefetch_intellij_community(variant, info.version)
+    android_hash = prefetch_android(variant, info.version)
     jps_hash = generate_jps_hash(config, intellij_outpath)
     restarter_hash = generate_restarter_hash(config, intellij_outpath)
     repositories = jar_repositories(intellij_outpath)

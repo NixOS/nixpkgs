@@ -8,22 +8,22 @@
   autoPatchelfHook,
   libxkbcommon,
   libGL,
-  libX11,
-  libXcursor,
-  libXi,
+  libx11,
+  libxcursor,
+  libxi,
   stdenv,
   makeWrapper,
   zenity,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surfer";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     owner = "surfer-project";
     repo = "surfer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2ikeG4K1CpyHgAZZfPzEFRXRoEh2PnOIf+8OREO6xug=";
+    hash = "sha256-83UKSD9Z4pT0OXLqIgquuJ8W6+U29ZzWG1SOrAOK9ic=";
     fetchSubmodules = true;
   };
 
@@ -43,12 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
     libxkbcommon
     libGL
-    libX11
-    libXcursor
-    libXi
+    libx11
+    libxcursor
+    libxi
   ];
 
-  cargoHash = "sha256-E+9u7t6bLzORL2HiG4iT5pT4nGftyOgO2/eXHuQK4pQ=";
+  cargoHash = "sha256-UuZpgW8di79mTNpDJ7K12IC5Xa3YX9ex2BYd62pUh1o=";
 
   # Avoid the network attempt from skia. See: https://github.com/cargo2nix/cargo2nix/issues/318
   doCheck = false;

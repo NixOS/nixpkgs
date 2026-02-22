@@ -10,14 +10,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bisect-rustc";
   version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "cargo-bisect-rustc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7HiM1oRuLSfRaum66duag/w8ncFdxRLF0yeSGlIey0Y=";
   };
 
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-SigRm2ZC7jH1iCEGRpka1G/e9kBEieFVU0YDBl2LfTM=";
 
   checkFlags = [
-    "--skip test_github" # requires internet
+    "--skip=test_github" # requires internet
   ];
 
   meta = {
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

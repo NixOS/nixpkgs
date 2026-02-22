@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "direvent";
   version = "5.4";
 
   src = fetchurl {
-    url = "mirror://gnu/direvent/direvent-${version}.tar.gz";
+    url = "mirror://gnu/direvent/direvent-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-HbvGGSqrZ+NFclFIYD1XDGooKDgMlkIVdir5FSTXlbo=";
   };
 
@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ puffnfresh ];
   };
-}
+})

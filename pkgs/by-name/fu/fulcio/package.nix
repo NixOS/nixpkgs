@@ -13,14 +13,14 @@
   fulcio,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fulcio";
   version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "fulcio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YMM517FpQvx3+8g2EuMmUo7cHTxaXUmCcszqnn3xs+c=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -42,7 +42,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${finalAttrs.version}"
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
@@ -79,12 +79,12 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = fulcio;
     command = "fulcio version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     homepage = "https://github.com/sigstore/fulcio";
-    changelog = "https://github.com/sigstore/fulcio/releases/tag/v${version}";
+    changelog = "https://github.com/sigstore/fulcio/releases/tag/v${finalAttrs.version}";
     description = "Root-CA for code signing certs - issuing certificates based on an OIDC email address";
     mainProgram = "fulcio";
     longDescription = ''
@@ -103,4 +103,4 @@ buildGoModule rec {
       jk
     ];
   };
-}
+})

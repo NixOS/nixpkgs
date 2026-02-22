@@ -55,14 +55,14 @@
 
 assert cryptoBackend == "openssl" || cryptoBackend == "botan";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "esdm";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "esdm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-41vc5mB2MiQJu0HXFzSjiudlu1sRj2IP8FcFPQfu5uo=";
   };
 
@@ -139,4 +139,4 @@ stdenv.mkDerivation rec {
       thillux
     ];
   };
-}
+})

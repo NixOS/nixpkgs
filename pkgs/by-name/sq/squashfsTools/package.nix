@@ -12,14 +12,14 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "squashfs";
   version = "4.7.4";
 
   src = fetchFromGitHub {
     owner = "plougher";
     repo = "squashfs-tools";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xvTSGVwtzJjoAIF6GClASUIB5eIk+uquQNNzHIuwkuY=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ruuda ];
     mainProgram = "mksquashfs";
   };
-}
+})

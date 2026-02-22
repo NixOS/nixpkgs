@@ -2,31 +2,22 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lurk";
-  version = "0.3.11";
+  version = "0.3.12";
 
   src = fetchFromGitHub {
     owner = "jakwai01";
     repo = "lurk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sng+mMMKDuI1aSgusJDRFMT5iKNUlp9arp9ruRn0bb0=";
+    hash = "sha256-gVxul9LeNbsP2eP0j5T6AL7pQh8Ls2lht3ki5JQ9kZM=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-aarch64-build.patch";
-      url = "https://github.com/JakWai01/lurk/commit/132e6557ddeafbdb1bb1d4d1411099f0d7df7a51.patch?full_index=1";
-      hash = "sha256-B5rNLipnFFWxIhTm+eCacJkw38D7stQ27WIHzgj7Vy0=";
-    })
-  ];
-
-  cargoHash = "sha256-Cmlhhda35FmNg/OvfMRPHBLPRXF5bs0ebBYT7KfierA=";
+  cargoHash = "sha256-NNwcc4rUol9M59XzoQBNw/MfHw3LP6pUtNjw6OY6bMc=";
 
   postPatch = ''
     substituteInPlace src/lib.rs \

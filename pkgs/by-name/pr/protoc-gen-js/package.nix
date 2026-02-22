@@ -40,7 +40,9 @@ buildBazelPackage' rec {
   removeRulesCC = false;
   removeLocalConfigCC = false;
 
-  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LIBTOOL = "${cctools}/bin/libtool";
+  };
 
   fetchAttrs = {
     preInstall = ''

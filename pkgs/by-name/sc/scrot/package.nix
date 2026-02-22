@@ -5,23 +5,23 @@
   imlib2,
   autoreconfHook,
   autoconf-archive,
-  libX11,
-  libXext,
-  libXfixes,
-  libXcomposite,
-  libXinerama,
+  libx11,
+  libxext,
+  libxfixes,
+  libxcomposite,
+  libxinerama,
   pkg-config,
   libbsd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scrot";
   version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = "scrot";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ExZH+bjpEvdbSYM8OhV+cyn4j+0YrHp5/b+HsHKAHCA=";
   };
 
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     imlib2
-    libX11
-    libXext
-    libXfixes
-    libXcomposite
-    libXinerama
+    libx11
+    libxext
+    libxfixes
+    libxcomposite
+    libxinerama
     libbsd
   ];
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.mitAdvertising;
   };
-}
+})

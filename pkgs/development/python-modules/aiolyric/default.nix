@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   incremental,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aiolyric";
   version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "timmo001";

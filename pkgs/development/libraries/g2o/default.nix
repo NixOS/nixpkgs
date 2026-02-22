@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   cmake,
+  wrapQtAppsHook,
   eigen,
   suitesparse,
   blas,
@@ -14,7 +14,7 @@
   spdlog,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "g2o";
   version = "20241228";
 
@@ -34,7 +34,10 @@ mkDerivation rec {
   ];
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
   buildInputs = [
     eigen
     suitesparse

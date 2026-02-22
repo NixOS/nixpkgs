@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clock-rs";
   version = "0.1.216";
 
   src = fetchFromGitHub {
     owner = "Oughie";
     repo = "clock-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-sSofMZThR025O2J4PnOMWVEuBt/+oZ01yDAQAijca0A=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.oughie ];
     platforms = lib.platforms.all;
   };
-}
+})

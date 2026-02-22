@@ -175,8 +175,7 @@ stdenv.mkDerivation rec {
     homepage = "http://caffe.berkeleyvision.org/";
     maintainers = [ ];
     broken =
-      (pythonSupport && (python.isPy310))
-      || !(leveldbSupport -> (leveldb != null && snappy != null))
+      !(leveldbSupport -> (leveldb != null && snappy != null))
       || !(pythonSupport -> (python != null && numpy != null));
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

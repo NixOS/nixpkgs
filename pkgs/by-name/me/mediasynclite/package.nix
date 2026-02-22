@@ -12,14 +12,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mediasynclite";
   version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "iBroadcastMediaServices";
     repo = "MediaSyncLiteLinux";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ToSkR6tPJMBCcj1NUBAywKjCAPlpmh+ngIopFrT2PIA=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tobz619 ];
   };
-}
+})

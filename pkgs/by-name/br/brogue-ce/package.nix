@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brogue-ce";
-  version = "1.14.1";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "tmewett";
     repo = "BrogueCE";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-habmfq1jZa70eggLOgsPT6j1OGmmQ6qmWcCwRN2G4Fo=";
+    hash = "sha256-a+gzaBhQq9xgEVM20X+pbu7xzUcKzylxYk9qu9GQOAw=";
   };
 
   postPatch = ''

@@ -8,12 +8,12 @@
 }:
 buildPythonPackage rec {
   pname = "onigurumacffi";
-  version = "1.4.1";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W/vB725dEXniJFP4JDeoJPnVdx4M5l86csprnGEiZTY=";
+    hash = "sha256-1Pqb7kSm04qYsiN8Z9ms3yftDDLWwhgSX+RmgaXt6k0=";
   };
 
   buildInputs = [

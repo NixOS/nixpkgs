@@ -22,16 +22,16 @@ let
   ];
 in
 with python3.pkgs;
-buildPythonApplication rec {
-  version = "5.1";
+buildPythonApplication (finalAttrs: {
+  version = "5.1.1";
   pname = "buku";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
-    tag = "v${version}";
-    sha256 = "sha256-7ezAhKqykTpnfyK4+BLr/7+GBH720GxnEnkoJ/AIL08=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-7dxe1GUdBDP/mNfYKkJzKNTgzXLfVQxp4REEkFIh4Bs=";
   };
 
   nativeBuildInputs = [
@@ -84,4 +84,4 @@ buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

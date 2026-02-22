@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kaf";
   version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "birdayz";
     repo = "kaf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tjHRIbTJJ8HPp2Jk7R2rl+ZN+ie6xRlssx4clcGc4U4=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ zarelit ];
   };
-}
+})

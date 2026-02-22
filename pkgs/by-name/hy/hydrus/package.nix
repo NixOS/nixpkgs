@@ -14,16 +14,16 @@
   enableSwftools ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hydrus";
-  version = "653";
+  version = "659";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    tag = "v${version}";
-    hash = "sha256-OH07OvN5EaEsjlUHUJMqproiVcN75yL9u7lnCjXSITo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mrZQnMIM6r2RA1+RRIP42J0OPS6uYzu+87J1eMjBeXM=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
       exec = "hydrus-client";
       desktopName = "Hydrus Client";
       icon = "hydrus-client";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       terminal = false;
       type = "Application";
       categories = [
@@ -161,11 +161,11 @@ python3Packages.buildPythonApplication rec {
     description = "Danbooru-like image tagging and searching system for the desktop";
     license = lib.licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";
-    changelog = "https://github.com/hydrusnetwork/hydrus/releases/tag/${src.tag}";
+    changelog = "https://github.com/hydrusnetwork/hydrus/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [
       dandellion
       evanjs
       KunyaKud
     ];
   };
-}
+})

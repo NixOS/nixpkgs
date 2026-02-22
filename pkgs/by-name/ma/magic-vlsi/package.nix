@@ -2,11 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  git,
+  fetchpatch,
+  gitMinimal,
   python3,
   m4,
   cairo,
-  libX11,
+  libx11,
   mesa,
   mesa_glu,
   ncurses,
@@ -14,23 +15,38 @@
   tcsh,
   tk,
   fixDarwinDylibNames,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "magic-vlsi";
-  version = "8.3.573";
+  version = "8.3.602";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
-    tag = version;
-    sha256 = "sha256-P5qfMsn3DGHjeF7zsZWeG9j38C6j5UEwUqGyjaEVO1E=";
+    tag = finalAttrs.version;
+    hash = "sha256-jNcuTdBHyVUEvdavIaB2LfMBKhHZkCxFOYyA2kBezqc=";
     leaveDotGit = true;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-buffer-overflow-runstats.patch";
+      url = "https://github.com/RTimothyEdwards/magic/commit/6a07bc172b4bdae8bc22f51905194cdd427912cc.patch";
+      hash = "sha256-QPVl+SfUWj51u/G+EjTCVQZdG7tTdOlEFN/hS7E1Ojg=";
+    })
+
+    (fetchpatch {
+      name = "fix_txinput_termbits.patch";
+      url = "https://github.com/RTimothyEdwards/magic/commit/790f0196d4fef21dc8a3f5646ccf87a531c4d6aa.patch";
+      hash = "sha256-zpmFT813USxX3PDpi6TGlWpWX4xfdirVrVtAlBtkSF0=";
+    })
+  ];
+
   nativeBuildInputs = [
     python3
-    git
+    gitMinimal
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
@@ -38,9 +54,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
-    libX11
+    libx11
     m4
-    mesa
     mesa_glu
     ncurses
     tcl
@@ -91,10 +106,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-implicit-function-declaration";
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "VLSI layout tool written in Tcl";
     homepage = "http://opencircuitdesign.com/magic/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

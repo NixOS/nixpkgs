@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
     sqlite
     libzip
     curl
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     install -Dm755 pgloader-bundle-${finalAttrs.version}/bin/pgloader "$out/bin/pgloader"
-    wrapProgram $out/bin/pgloader --prefix LD_LIBRARY_PATH : "${finalAttrs.LD_LIBRARY_PATH}"
+    wrapProgram $out/bin/pgloader --prefix LD_LIBRARY_PATH : "${finalAttrs.env.LD_LIBRARY_PATH}"
     mkdir -p $out/bin $out/man/man1
     installManPage source/docs/_build/man/*.1
   '';

@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-together";
   version = "0.1.0-alpha.26";
 
   src = fetchFromGitHub {
     owner = "kejadlen";
     repo = "git-together";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2HgOaqlX0mmmvRlALHm90NAdIhby/jWUJO63bQFqc+4=";
   };
 
@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-5LKKjHzIlXw0bUmF7GDCVW0cptCxohq6CNPIrMZKorM=";
 
   meta = {
-    changelog = "https://github.com/kejadlen/git-together/releases/tag/v${version}";
+    changelog = "https://github.com/kejadlen/git-together/releases/tag/v${finalAttrs.version}";
     description = "Better commit attribution while pairing without messing with your git workflow";
     homepage = "https://github.com/kejadlen/git-together";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sentientmonkey ];
     mainProgram = "git-together";
   };
-}
+})

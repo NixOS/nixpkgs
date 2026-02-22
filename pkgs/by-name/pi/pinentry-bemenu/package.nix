@@ -11,14 +11,14 @@
   bemenu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pinentry-bemenu";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "t-8ch";
     repo = "pinentry-bemenu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kiGUCcQIS58XjE4r0yiK4hJ85Sg5wrtBqeSYcgUKAmo=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "pinentry-bemenu";
   };
-}
+})

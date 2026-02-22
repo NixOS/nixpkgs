@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "uefi-firmware-parser";
   version = "1.12";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "theopolis";
     repo = "uefi-firmware-parser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Yiw9idmvSpx4CcVrXHznR8vK/xl7DTL+L7k4Nvql2B8=";
   };
 
@@ -35,4 +35,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "uefi-firmware-parser";
   };
-}
+})

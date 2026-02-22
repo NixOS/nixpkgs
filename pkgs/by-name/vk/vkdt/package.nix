@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   version = "0.9.1";
 
   src = fetchurl {
-    url = "https://github.com/hanatos/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
+    url = "https://github.com/hanatos/vkdt/releases/download/${version}/vkdt-${version}.tar.xz";
     hash = "sha256-+oVPZRI01IxMSPXOjvUXJutYXftQM7GxwVLG8wqoaY4=";
   };
 

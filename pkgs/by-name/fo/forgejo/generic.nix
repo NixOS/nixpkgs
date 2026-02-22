@@ -21,17 +21,16 @@
   nixosTests,
   openssh,
   sqliteSupport ? true,
-  xorg,
+  lndir,
   runCommand,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildNpmPackage,
   writableTmpDirAsHomeHook,
 }:
 
 let
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "forgejo";
     repo = "forgejo";
     inherit rev hash;
@@ -167,7 +166,7 @@ buildGoModule rec {
         {
           nativeBuildInputs = [
             brotli
-            xorg.lndir
+            lndir
           ];
         }
         ''

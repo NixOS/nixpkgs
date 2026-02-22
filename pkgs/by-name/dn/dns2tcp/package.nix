@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/alex-sector/dns2tcp";
     license = lib.licenses.gpl2Plus;
     mainProgram = "dns2tcpc";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

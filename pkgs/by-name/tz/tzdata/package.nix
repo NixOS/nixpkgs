@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2025b";
+  version = "2025c";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-EYEEEzRfx4BQF+J+qfpIhf10zWGykRcRrQOPXSjXFHQ=";
+      hash = "sha256-SqeeTv/uU/xAKf/l9uvpeTcoLrzfOG1dLakc6EFC+Vc=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-Bfj+2zUl7nDUnIfT+ueKig265P6HqlZcZc2plIrhNew=";
+      hash = "sha256-aX6+ZiVESu9QgPWOSdA0JLu1Lgi/SD0921rPEMvRV0A=";
     })
   ];
 
@@ -53,7 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [
     "CFLAGS+=-DHAVE_DIRECT_H"
+    "CFLAGS+=-DHAVE_FCHMOD=0"
+    "CFLAGS+=-DHAVE_GETEUID=0"
+    "CFLAGS+=-DHAVE_GETRESUID=0"
+    "CFLAGS+=-DHAVE_MEMPCPY=1"
     "CFLAGS+=-DHAVE_SETENV=0"
+    "CFLAGS+=-DHAVE_STRUCT_STAT_ST_CTIM=0"
     "CFLAGS+=-DHAVE_SYMLINK=0"
     "CFLAGS+=-DRESERVE_STD_EXT_IDS"
   ]

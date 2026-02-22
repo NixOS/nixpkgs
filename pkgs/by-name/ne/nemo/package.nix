@@ -35,14 +35,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nemo";
   version = "6.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jsAKNKpNsheyugI6dVQAYYrOTmHLDjJCbjlWmAChFgU=";
   };
 
@@ -87,13 +87,6 @@ stdenv.mkDerivation rec {
     "--localedir=${cinnamon-translations}/share/locale"
   ];
 
-  postInstall = ''
-    # This fixes open as root and handles nemo-with-extensions well.
-    # https://github.com/NixOS/nixpkgs/issues/297570
-    substituteInPlace $out/share/polkit-1/actions/org.nemo.root.policy \
-      --replace-fail "$out/bin/nemo" "/run/current-system/sw/bin/nemo"
-  '';
-
   preFixup = ''
     gappsWrapperArgs+=(
        --prefix XDG_DATA_DIRS : "${
@@ -126,4 +119,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.cinnamon ];
     mainProgram = "nemo";
   };
-}
+})

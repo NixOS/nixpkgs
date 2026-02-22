@@ -1,11 +1,12 @@
 {
   lib,
   stdenv,
+  newScope,
   fetchFromGitHub,
   fetchFromGitLab,
   fetchFromSourcehut,
+  fetchFromCodeberg,
   nix-update-script,
-  runCommand,
   which,
   rustPlatform,
   emscripten,
@@ -56,6 +57,7 @@ let
       fetchFromGitHub
       fetchFromGitLab
       fetchFromSourcehut
+      fetchFromCodeberg
       ;
   };
 
@@ -68,6 +70,14 @@ let
     Use pkgs.tree-sitter-grammars.<name> to access.
   */
   builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
+
+  /**
+    # Extensible package set for tree-sitter grammars.
+    # Provides .override and .extend for customization.
+    # Note: Use builtGrammars (not this) when iterating over grammars,
+    # as this includes package set functions alongside derivations
+  */
+  grammarsScope = lib.makeScope newScope (self: builtGrammars);
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -101,14 +111,14 @@ let
   allGrammars = lib.filter (p: !(p.meta.broken or false)) (lib.attrValues builtGrammars);
 
 in
-rustPlatform.buildRustPackage (final: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
   version = "0.25.10";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aHszbvLCLqCwAS4F4UmM3wbSb81QuG9FM7BDHTu1ZvM=";
     fetchSubmodules = true;
   };
@@ -184,6 +194,7 @@ rustPlatform.buildRustPackage (final: {
       grammars
       buildGrammar
       builtGrammars
+      grammarsScope
       withPlugins
       allGrammars
       ;
@@ -202,7 +213,7 @@ rustPlatform.buildRustPackage (final: {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
-    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${final.version}";
+    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.

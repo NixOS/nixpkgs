@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   patches ? [ ],
   writeText,
   conf ? null,
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     hash = "sha256-QtYQB2mvw1k2LA8D+/cVnA8+GRDWjhIM6rxfi/IGjEw=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   inherit patches;
 

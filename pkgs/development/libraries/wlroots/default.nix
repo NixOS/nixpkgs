@@ -15,7 +15,11 @@
   pixman,
   libcap,
   libgbm,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-image,
+  libxcb-errors,
+  libx11,
   hwdata,
   seatd,
   vulkan-loader,
@@ -75,12 +79,16 @@ let
       ]
       ++ extraNativeBuildInputs;
 
+      propagatedBuildInputs = [
+        # The headers of wlroots #include <libinput.h>, and consumers of `wlroots` need not add it explicitly, hence we propagate it.
+        libinput
+      ];
+
       buildInputs = [
         libliftoff
         libdisplay-info
         libGL
         libcap
-        libinput
         libxkbcommon
         libgbm
         pixman
@@ -88,11 +96,11 @@ let
         vulkan-loader
         wayland
         wayland-protocols
-        xorg.libX11
-        xorg.xcbutilerrors
-        xorg.xcbutilimage
-        xorg.xcbutilrenderutil
-        xorg.xcbutilwm
+        libx11
+        libxcb-errors
+        libxcb-image
+        libxcb-render-util
+        libxcb-wm
       ]
       ++ lib.optional finalAttrs.enableXWayland xwayland
       ++ extraBuildInputs;

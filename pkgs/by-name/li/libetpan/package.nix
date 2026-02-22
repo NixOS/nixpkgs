@@ -10,14 +10,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libetpan";
   version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "dinhviethoa";
     repo = "libetpan";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lukeWURNsRPTuFk2q2XVnwkKz5Y+PRiPba5GPQCw6jw=";
   };
 
@@ -113,4 +113,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ oxzi ];
     platforms = lib.platforms.unix;
   };
-}
+})

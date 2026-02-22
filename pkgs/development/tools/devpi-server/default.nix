@@ -22,6 +22,7 @@
   pytestCheckHook,
   repoze-lru,
   setuptools,
+  setuptools-changelog-shortener,
   strictyaml,
   waitress,
   webtest,
@@ -30,30 +31,26 @@
   nixosTests,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "devpi-server";
-  version = "6.15.0";
+  version = "6.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
-    rev = "server-${version}";
-    hash = "sha256-tKR1xZju5bDbFu8t3SunTM8FlaXodSm/OjJ3Jfl7Dzk=";
+    tag = "server-${finalAttrs.version}";
+    hash = "sha256-YFY2iLnORzFxnfGYU2kCpJL8CZi+lALIkL1bRpfd4NE=";
   };
 
-  sourceRoot = "${src.name}/server";
+  sourceRoot = "${finalAttrs.src.name}/server";
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace "--flake8" ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
+    setuptools-changelog-shortener
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     appdirs
     defusedxml
@@ -102,12 +99,7 @@ buildPythonApplication rec {
     "test_devpi_server/test_streaming_replica_nginx.py"
   ];
   disabledTests = [
-    "root_passwd_hash_option"
-    "TestMirrorIndexThings"
-    "test_auth_mirror_url_no_hash"
-    "test_auth_mirror_url_with_hash"
-    "test_auth_mirror_url_hidden_in_logs"
-    "test_simplelinks_timeout"
+    "test_fetch_later_deleted" # incompatible with newer pytest
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -123,7 +115,7 @@ buildPythonApplication rec {
     };
   };
 
-  # devpi uses a monorepo for server,common,client and web
+  # devpi uses a monorepo for server, common, client and web
   passthru.updateScript = gitUpdater {
     rev-prefix = "server-";
   };
@@ -131,8 +123,11 @@ buildPythonApplication rec {
   meta = {
     homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
-    changelog = "https://github.com/devpi/devpi/blob/${src.rev}/server/CHANGELOG";
+    changelog = "https://github.com/devpi/devpi/blob/${finalAttrs.src.tag}/server/CHANGELOG";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ makefu ];
+    maintainers = with lib.maintainers; [
+      confus
+      makefu
+    ];
   };
-}
+})

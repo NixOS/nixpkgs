@@ -17,7 +17,7 @@
   gnome-shell,
   dbus,
   json-glib,
-  libICE,
+  libice,
   xmlto,
   docbook_xsl,
   docbook_xml_dtd_45,
@@ -25,7 +25,7 @@
   libxslt,
   gettext,
   systemd,
-  xorg,
+  xtrans,
   libepoxy,
   gnome-session-ctl,
   wrapGAppsHook4,
@@ -69,10 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk4
-    libICE
+    libice
     gnome-desktop
     json-glib
-    xorg.xtrans
+    xtrans
     adwaita-icon-theme
     gnome-settings-daemon
     gsettings-desktop-schemas

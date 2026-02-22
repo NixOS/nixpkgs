@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   meson,
   ninja,
@@ -16,9 +16,10 @@
   enableCairo ? true,
   pngSupport ? true,
   svgSupport ? true,
-  svgBackend ? "nanosvg", # alternative: "librsvg"
+  svgBackend ? "resvg", # alternative: "librsvg", "nanosvg"
   # Optional dependencies
   cairo,
+  resvg,
   libpng,
   librsvg,
 }:
@@ -27,14 +28,13 @@ assert (svgSupport && svgBackend == "nanosvg") -> enableCairo;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuzzel";
-  version = "1.13.1";
+  version = "1.14.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "fuzzel";
     rev = finalAttrs.version;
-    hash = "sha256-JW6MvLXax7taJfBjJjRkEKCczzO4AYsQ47akJK2pkh0=";
+    hash = "sha256-9O6CABh149ZtNu3sEhuycsM7pinVrBzU+rLxCAbxobs=";
   };
 
   depsBuildBuild = [
@@ -59,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional enableCairo cairo
   ++ lib.optional pngSupport libpng
-  ++ lib.optional (svgSupport && svgBackend == "librsvg") librsvg;
+  ++ lib.optional (svgSupport && svgBackend == "librsvg") librsvg
+  ++ lib.optional (svgSupport && svgBackend == "resvg") resvg;
 
   mesonBuildType = "release";
 

@@ -4,18 +4,18 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "namespace-cli";
-  version = "0.0.474";
+  version = "0.0.486";
 
   src = fetchFromGitHub {
     owner = "namespacelabs";
     repo = "foundation";
-    rev = "v${version}";
-    hash = "sha256-OzHS3L0mJp6+zRHeK+kidJQDSbmy2VjyFdHU1iJZpsM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-FBk4PVIKpy6MvquqtQyfgw1/Twgef/CHE7/+mpsJjTw=";
   };
 
-  vendorHash = "sha256-jeH5/x4hIh2Q5bi6o7c0tcQLmyrMp0NJ641fZDPCHkw=";
+  vendorHash = "sha256-GPO3vdk26K54VmjHmg1PL/nQd6GTz/ZQk8ZpNQHoqSQ=";
 
   subPackages = [
     "cmd/nsc"
@@ -26,15 +26,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X namespacelabs.dev/foundation/internal/cli/version.Tag=v${version}"
+    "-X namespacelabs.dev/foundation/internal/cli/version.Tag=v${finalAttrs.version}"
   ];
 
   meta = {
     mainProgram = "nsc";
     maintainers = with lib.maintainers; [ techknowlogick ];
     license = lib.licenses.asl20;
-    changelog = "https://github.com/namespacelabs/foundation/releases/tag/v${version}";
+    changelog = "https://github.com/namespacelabs/foundation/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/namespacelabs/foundation";
     description = "Command line interface for the Namespaces platform";
   };
-}
+})

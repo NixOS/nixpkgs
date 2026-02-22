@@ -8,13 +8,11 @@
   platformdirs,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   sphinx,
   sphinx-autodoc-typehints,
   sphinx-rtd-theme,
   sphinxHook,
   tabulate,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -47,7 +45,7 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.doc;
 
-  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  propagatedBuildInputs = [ packaging ];
 
   optional-dependencies = {
     validation = [ pydantic ];

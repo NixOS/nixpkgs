@@ -4,20 +4,20 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "okta-aws-cli";
-  version = "2.5.0";
+  version = "2.6.0";
 
   subPackages = [ "cmd/okta-aws-cli" ];
 
   src = fetchFromGitHub {
     owner = "okta";
     repo = "okta-aws-cli";
-    rev = "v${version}";
-    sha256 = "sha256-IGecHT/JVKsaHG9OtPTOlu+ZCDbnqf1h3s4SI7+8oT8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-NiW0wclSL9QLPiP4zZ9/CohrRBp2rn5CblqrsKVNJK8=";
   };
 
-  vendorHash = "sha256-MnK0zCwPOTzsPrkULEYwnmIBmVrPiwK2yDr3tqVHHRY=";
+  vendorHash = "sha256-MEtwJZWadQcKAdJS5LhGdIJV2OZKoRJRu87o4J6sruU=";
 
   ldflags = [
     "-s"
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ daniyalsuri6 ];
     mainProgram = "okta-aws-cli";
   };
-}
+})

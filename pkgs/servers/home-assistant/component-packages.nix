@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.1.2";
+  version = "2026.2.3";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -126,7 +126,8 @@
       ];
     "airpatrol" =
       ps: with ps; [
-      ]; # missing inputs: airpatrol
+        airpatrol
+      ];
     "airq" =
       ps: with ps; [
         aioairq
@@ -469,6 +470,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
@@ -885,6 +887,7 @@
         home-assistant-intents
         ifaddr
         mutagen
+        openai
         plexapi
         plexauth
         plexwebsocket
@@ -952,6 +955,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
@@ -961,6 +965,10 @@
     "cloudflare" =
       ps: with ps; [
         pycfdns
+      ];
+    "cloudflare_r2" =
+      ps: with ps; [
+        aiobotocore
       ];
     "cmus" =
       ps: with ps; [
@@ -1151,6 +1159,7 @@
         ifaddr
         mutagen
         numpy
+        openai
         pillow
         psutil-home-assistant
         pymicro-vad
@@ -2242,6 +2251,9 @@
         greeclimate
         ifaddr
       ];
+    "green_planet_energy" =
+      ps: with ps; [
+      ]; # missing inputs: greenplanet-energy-api
     "greeneye_monitor" =
       ps: with ps; [
         greeneye-monitor
@@ -2304,6 +2316,10 @@
       ];
     "hddtemp" =
       ps: with ps; [
+      ];
+    "hdfury" =
+      ps: with ps; [
+        hdfury
       ];
     "hdmi_cec" =
       ps: with ps; [
@@ -3481,6 +3497,7 @@
         home-assistant-intents
         loqedapi
         mutagen
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
@@ -3809,6 +3826,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pillow
         pymicro-vad
         pynacl
@@ -4010,7 +4028,6 @@
       ];
     "namecheapdns" =
       ps: with ps; [
-        defusedxml
       ];
     "nanoleaf" =
       ps: with ps; [
@@ -4055,6 +4072,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pyatmo
         pymicro-vad
         pyspeex-noise
@@ -4183,6 +4201,10 @@
       ps: with ps; [
         aionotion
       ];
+    "nrgkick" =
+      ps: with ps; [
+        nrgkick-api
+      ];
     "nsw_fuel_station" =
       ps: with ps; [
         nsw-fuel-api-client
@@ -4301,6 +4323,7 @@
         home-assistant-intents
         mutagen
         onedrive-personal-sdk
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
@@ -4356,8 +4379,9 @@
       ];
     "openevse" =
       ps: with ps; [
-        openevsewifi
-      ];
+        ifaddr
+        zeroconf
+      ]; # missing inputs: python-openevse-http
     "openexchangerates" =
       ps: with ps; [
         aioopenexchangerates
@@ -4494,6 +4518,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
@@ -4514,6 +4539,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         paho-mqtt
         pymicro-vad
         pynacl
@@ -4639,6 +4665,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pymicro-vad
         pyplaato
         pyspeex-noise
@@ -4701,6 +4728,9 @@
       ps: with ps; [
         tesla-powerwall
       ];
+    "prana" =
+      ps: with ps; [
+      ]; # missing inputs: prana-api-client
     "private_ble_device" =
       ps: with ps; [
         aioesphomeapi
@@ -4938,6 +4968,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
@@ -5047,6 +5078,7 @@
         home-assistant-frontend
         home-assistant-intents
         mutagen
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
@@ -6302,6 +6334,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
@@ -6452,6 +6485,9 @@
       ps: with ps; [
         openwrt-ubus-rpc
       ];
+    "uhoo" =
+      ps: with ps; [
+      ]; # missing inputs: uhooapi
     "uk_transport" =
       ps: with ps; [
       ];
@@ -6604,6 +6640,7 @@
       ];
     "viaggiatreno" =
       ps: with ps; [
+        viaggiatreno-ha
       ];
     "vicare" =
       ps: with ps; [
@@ -6731,12 +6768,14 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
         securetar
-      ]; # missing inputs: visionpluspython
+        visionpluspython
+      ];
     "watttime" =
       ps: with ps; [
         aiowatttime
@@ -6822,6 +6861,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
@@ -6950,6 +6990,7 @@
         hassil
         home-assistant-intents
         mutagen
+        openai
         pymicro-vad
         pyspeex-noise
         python-matter-server
@@ -7138,6 +7179,7 @@
     "airnow"
     "airobot"
     "airos"
+    "airpatrol"
     "airq"
     "airthings"
     "airthings_ble"
@@ -7245,6 +7287,7 @@
     "climate"
     "cloud"
     "cloudflare"
+    "cloudflare_r2"
     "co2signal"
     "coinbase"
     "color_extractor"
@@ -7451,6 +7494,7 @@
     "harmony"
     "hassio"
     "hddtemp"
+    "hdfury"
     "hdmi_cec"
     "heos"
     "here_travel_time"
@@ -7711,6 +7755,7 @@
     "notify"
     "notify_events"
     "notion"
+    "nrgkick"
     "nsw_fuel_station"
     "nsw_rural_fire_service_feed"
     "ntfy"
@@ -7798,6 +7843,7 @@
     "prosegur"
     "prowl"
     "proximity"
+    "proxmoxve"
     "prusalink"
     "ps4"
     "pterodactyl"
@@ -8087,7 +8133,9 @@
     "wallbox"
     "waqi"
     "water_heater"
+    "waterfurnace"
     "watergate"
+    "watts"
     "watttime"
     "waze_travel_time"
     "weather"

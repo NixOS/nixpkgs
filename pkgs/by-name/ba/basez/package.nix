@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "basez";
   version = "1.6.2";
 
   src = fetchurl {
-    url = "http://www.quarkline.net/basez/download/basez-${version}.tar.gz";
+    url = "http://www.quarkline.net/basez/download/basez-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Kp+CFIh5HCdj7wEgx1xD3IPdFlZ7fEFvMDMYif1ZiTc=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.oaksoaj ];
     platforms = lib.platforms.all;
   };
-}
+})

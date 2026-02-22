@@ -16,7 +16,6 @@
   pngquant,
   qpdf,
   tesseract5,
-  unpaper,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
@@ -27,16 +26,16 @@
   pkg-config,
   symlinkJoin,
   nltk-data,
-  xorg,
+  lndir,
 }:
 let
-  version = "2.20.4";
+  version = "2.20.7";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-xWyYisSJ5FKU+ZFrCtjo94TjqXCzHDVdPAISMTX0Tt8=";
+    hash = "sha256-NVlV+iHtUx05EIuHx/WePRf558DH977oZ7C8iNW0QR4=";
   };
 
   python = python3.override {
@@ -69,7 +68,6 @@ let
     pngquant
     qpdf
     tesseract5
-    unpaper
     poppler-utils
   ];
 
@@ -167,7 +165,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
-    xorg.lndir
+    lndir
   ];
 
   pythonRelaxDeps = [

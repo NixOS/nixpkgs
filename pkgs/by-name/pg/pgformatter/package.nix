@@ -3,6 +3,7 @@
   perlPackages,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -42,6 +43,8 @@ perlPackages.buildPerlPackage rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";

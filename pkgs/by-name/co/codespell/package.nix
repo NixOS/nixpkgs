@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "codespell";
   version = "2.4.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-9hr/QZcBESLukujzNKNjWGG3nXx+wkvQvoUYmYgtXv0=";
   };
 
@@ -53,4 +53,4 @@ python3.pkgs.buildPythonApplication rec {
       SuperSandro2000
     ];
   };
-}
+})

@@ -117,9 +117,24 @@ let
 
       path = [ pkgs.wpa_supplicant ];
       serviceConfig = {
+        RuntimeDirectory = "wpa_supplicant";
+        ExecStartPre =
+          lib.optionals (cfg.allowAuxiliaryImperativeNetworks || !hasDeclarative) [
+            # set up imperative config file
+            "+${pkgs.coreutils}/bin/touch /etc/wpa_supplicant/imperative.conf"
+            "+${pkgs.coreutils}/bin/chmod 664 /etc/wpa_supplicant/imperative.conf"
+            "+${pkgs.coreutils}/bin/chown -R wpa_supplicant:wpa_supplicant /etc/wpa_supplicant"
+          ]
+          ++ lib.optionals cfg.userControlled [
+            # set up client sockets directory
+            "+${pkgs.coreutils}/bin/mkdir /run/wpa_supplicant/client"
+            "+${pkgs.coreutils}/bin/chown wpa_supplicant:wpa_supplicant /run/wpa_supplicant/client"
+            "+${pkgs.coreutils}/bin/chmod g=u /run/wpa_supplicant/client"
+          ];
+      }
+      // lib.optionalAttrs cfg.enableHardening {
         User = "wpa_supplicant";
         Group = "wpa_supplicant";
-        RuntimeDirectory = "wpa_supplicant";
         AmbientCapabilities = [
           "CAP_NET_ADMIN"
           "CAP_NET_RAW"
@@ -180,20 +195,6 @@ let
         ];
         SystemCallArchitectures = "native";
         UMask = "0077";
-
-        ExecStartPre =
-          lib.optionals (cfg.allowAuxiliaryImperativeNetworks || !hasDeclarative) [
-            # set up imperative config file
-            "+${pkgs.coreutils}/bin/touch /etc/wpa_supplicant/imperative.conf"
-            "+${pkgs.coreutils}/bin/chmod 664 /etc/wpa_supplicant/imperative.conf"
-            "+${pkgs.coreutils}/bin/chown -R wpa_supplicant:wpa_supplicant /etc/wpa_supplicant"
-          ]
-          ++ lib.optionals cfg.userControlled [
-            # set up client sockets directory
-            "+${pkgs.coreutils}/bin/mkdir /run/wpa_supplicant/client"
-            "+${pkgs.coreutils}/bin/chown wpa_supplicant:wpa_supplicant /run/wpa_supplicant/client"
-            "+${pkgs.coreutils}/bin/chmod g=u /run/wpa_supplicant/client"
-          ];
       };
 
       script = ''
@@ -595,6 +596,22 @@ in
         description = ''
           Whether to enable the DBus control interface.
           This is only needed when using NetworkManager or connman.
+        '';
+      };
+
+      enableHardening = mkOption {
+        default = true;
+        description = ''
+          Whether to apply security hardening measures to wpa_supplicant.
+          These include limiting access to the filesystem, devices and network
+          capabilities.
+
+          ::: {.note}
+          Disabling this will increase the potential attack surface if the
+          wpa_supplicant daemon becomes compromised, but it may be necessary
+          for more complex enterprise networks (for example requiring
+          access to mutable files, smart cards or TPM devices).
+          :::
         '';
       };
 

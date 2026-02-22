@@ -6,13 +6,13 @@
   testers,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "latexminted";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-WpYo9Ci3rshuVdsbAv4Hjx8vT2FLRinhNsVrcGoPXyU=";
   };
 
@@ -37,4 +37,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "latexminted";
     maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

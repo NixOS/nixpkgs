@@ -16,12 +16,12 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mrtg";
   version = "2.17.10";
 
   src = fetchurl {
-    url = "https://oss.oetiker.ch/mrtg/pub/mrtg-${version}.tar.gz";
+    url = "https://oss.oetiker.ch/mrtg/pub/mrtg-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-x/EcteIXpQDYfuO10mxYqGUu28DTKRaIu3krAQ+uQ6w=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

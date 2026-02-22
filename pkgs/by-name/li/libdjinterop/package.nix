@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "libdjinterop";
+  pname = "libdjinterop";
 
   version = "0.26.1";
 

@@ -6,14 +6,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boost-sml";
   version = "1.1.13";
 
   src = fetchFromGitHub {
     owner = "boost-ext";
     repo = "sml";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VgJl09kCRCXBF/IraVbAVowrrMJH0NFcblQAKVQwl6w=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ prtzl ];
     platforms = lib.platforms.all;
   };
-}
+})

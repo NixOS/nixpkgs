@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qtbase,
   qtmultimedia,
@@ -9,9 +9,10 @@
   pkg-config,
   cmake,
   gettext,
+  wrapQtAppsHook,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "kvirc";
   version = "2022-06-29";
 
@@ -33,6 +34,7 @@ mkDerivation {
     pkg-config
     cmake
     gettext
+    wrapQtAppsHook
   ];
 
   meta = {

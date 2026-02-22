@@ -60,7 +60,6 @@ buildPerlPackage rec {
       artistic2
     ];
     maintainers = with lib.maintainers; [
-      kiloreux
       anthonyroussel
     ];
     mainProgram = "exiftool";

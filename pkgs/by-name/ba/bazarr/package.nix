@@ -17,11 +17,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "1.5.3";
+  version = "1.5.5";
 
   src = fetchzip {
     url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
-    hash = "sha256-2JzsGnGgrkD5G0ZmrphkPZTnak3gdkHloXRKA+p9Y/0=";
+    hash = "sha256-YiR/hi+/vptjHxwBYsq/W3QdjT12+pv74AuU1ggM084=";
     stripRoot = false;
   };
 
@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bazarr.media/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ diogotcorreia ];
     mainProgram = "bazarr";
     platforms = lib.platforms.all;
   };

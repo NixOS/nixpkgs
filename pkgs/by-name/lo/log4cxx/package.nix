@@ -13,13 +13,13 @@
   expat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "log4cxx";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
-    url = "mirror://apache/logging/log4cxx/${version}/apache-${pname}-${version}.tar.gz";
-    hash = "sha256-R9doxXZcVyHPJ9Ug+H7ycikboPTg0yHHJzXVrshwGKc=";
+    url = "mirror://apache/logging/log4cxx/${finalAttrs.version}/apache-log4cxx-${finalAttrs.version}.tar.gz";
+    hash = "sha256-GHyFg29bLyf7Ho13x/Hyk5cl8fZJi3QrDdVpujCWX9I=";
   };
 
   postPatch = ''
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };
-}
+})

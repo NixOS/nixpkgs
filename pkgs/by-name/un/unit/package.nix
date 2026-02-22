@@ -32,14 +32,14 @@ let
 
   inherit (lib) optional optionals optionalString;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.35.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0cMtU7wmy8GFKqxS8fXPIrMljYXBHzoxrUJCOJSzLMA=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ izorkin ];
   };
-}
+})

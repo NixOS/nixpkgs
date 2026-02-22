@@ -36,7 +36,9 @@ let
 
 in
 symlinkJoin {
-  inherit name;
+  inherit version;
+  pname = "patchwork";
+
   paths = [ binary ];
 
   postBuild = ''

@@ -2,32 +2,33 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  stdenvNoCC,
+  installShellFiles,
   gitMinimal,
+  stdenv,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rumdl";
-  version = "0.0.221";
+  version = "0.1.22";
 
   src = fetchFromGitHub {
     owner = "rvben";
     repo = "rumdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r9aVSllmz7fXlePRC/vS6vxmi7zhUyVPEEo6dEkokKg=";
+    hash = "sha256-pOSsd/U/KdvhK/NTprFRzv0jROEeAjbboXr5ik1KFJA=";
   };
 
-  cargoHash = "sha256-LedT/ZwDz9FBsHZdObPZc2CoBNR8gNYF/4kvefgmNq8=";
+  cargoHash = "sha256-t/71aCc1lXIdYjP0g0nvjkMfHtoygAlpBEqfebLes7c=";
 
   cargoBuildFlags = [
     "--bin=rumdl"
   ];
 
-  # Non-specific tests often fail on Darwin (especially aarch64-darwin),
-  # on both Hydra and GitHub-hosted runners, even with __darwinAllowLocalNetworking enabled.
-  doCheck = !stdenvNoCC.hostPlatform.isDarwin;
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   nativeCheckInputs = [
     gitMinimal
@@ -36,14 +37,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useNextest = true;
 
   cargoTestFlags = [
-    "--profile ci"
+    "--bins"
+
+    # Building all tests takes too long, and filtering by profile does not solve it.
+    # It also causes flaky results on Darwin in Hydra.
+    "--test"
+    "cli_*"
+
+    # Prefer the "smoke" profile over "ci" to exclude flaky tests: https://github.com/rvben/rumdl/pull/341
+    "--profile"
+    "smoke"
   ];
 
-  checkFlags = [
-    # Skip Windows tests
-    "--skip comprehensive_windows_tests"
-    "--skip windows_vscode_tests"
-  ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rumdl \
+      --bash <("$out/bin/rumdl" completions bash) \
+      --fish <("$out/bin/rumdl" completions fish) \
+      --zsh <("$out/bin/rumdl" completions zsh)
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [

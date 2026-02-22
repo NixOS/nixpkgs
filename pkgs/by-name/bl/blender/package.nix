@@ -28,11 +28,11 @@
   lib,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXrender,
-  libXxf86vm,
+  libx11,
+  libxext,
+  libxi,
+  libxrender,
+  libxxf86vm,
   libdecor,
   libepoxy,
   libffi,
@@ -280,11 +280,11 @@ stdenv'.mkDerivation (finalAttrs: {
       [
         libGL
         libGLU
-        libX11
-        libXext
-        libXi
-        libXrender
-        libXxf86vm
+        libx11
+        libxext
+        libxi
+        libxrender
+        libxxf86vm
         openal
         openxr-loader
       ]
@@ -345,7 +345,7 @@ stdenv'.mkDerivation (finalAttrs: {
       mv $out/Blender.app $out/Applications
     ''
     + ''
-      buildPythonPath "$pythonPath"
+      buildPythonPath "''${pythonPath[*]}"
       wrapProgram $blenderExecutable \
         --prefix PATH : $program_PATH \
         --prefix PYTHONPATH : "$program_PYTHONPATH" \

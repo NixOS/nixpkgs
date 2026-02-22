@@ -123,11 +123,13 @@ stdenv.mkDerivation rec {
     "-Ddocumentation=disabled"
   ];
 
-  # Fixes error on a deprecated declaration
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env = {
+    # Fixes error on a deprecated declaration
+    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-  # Silence fontconfig warnings about missing config
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+    # Silence fontconfig warnings about missing config
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  };
 
   meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";

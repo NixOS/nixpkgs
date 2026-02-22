@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "seashells";
   version = "0.1.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RBs28FC7f82DrxRcmvTP9nljVpm7tjrGuvr05l32hDM=";
   };
 
@@ -30,4 +30,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ deejayem ];
   };
-}
+})

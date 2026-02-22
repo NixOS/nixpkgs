@@ -20,14 +20,14 @@
   enablePushNotifications ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opendht";
   version = "3.5.4";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mnnd6yATIk/TEuFG/M98d+pfeh42IKWBBYjkTP52xeM=";
   };
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

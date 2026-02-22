@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bazel-watcher";
   version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zbZhV1IjFW4USdj3MGdyfPabfCPUmAAaGBaguXqmcnY=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   env.CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";
   ldflags = [
     "-s"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/ibazel" ];
@@ -44,4 +44,4 @@ buildGoModule rec {
     mainProgram = "ibazel";
     platforms = lib.platforms.all;
   };
-}
+})

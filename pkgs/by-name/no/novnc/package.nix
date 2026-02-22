@@ -6,14 +6,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "novnc";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "novnc";
     repo = "noVNC";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-VYG0p70ZvRzK9IeA+5J95FqF+zWgj/8EcxnVOk+YL9o=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ neverbehave ];
     mainProgram = "novnc";
   };
-}
+})

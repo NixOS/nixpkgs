@@ -13,14 +13,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snphost";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "virtee";
     repo = "snphost";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9ztYKXZXhc+Fci8WvAyMWwdjurXL/S10ekCjaFOKWZE=";
   };
 
@@ -55,10 +55,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Administrative utility for SEV-SNP";
     homepage = "https://github.com/virtee/snphost/";
-    changelog = "https://github.com/virtee/snphost/releases/tag/v${version}";
+    changelog = "https://github.com/virtee/snphost/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "snphost";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -21,14 +21,14 @@
   taglib, # tag editor
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncmpcpp";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "ncmpcpp";
     repo = "ncmpcpp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-w3deSy71SWWD2kZKREowZh3KMNCBfBJbrjM0vW4/GrI=";
   };
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Featureful ncurses based MPD client inspired by ncmpc";
     homepage = "https://rybczak.net/ncmpcpp/";
-    changelog = "https://github.com/ncmpcpp/ncmpcpp/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ncmpcpp/ncmpcpp/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       koral
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "ncmpcpp";
   };
-}
+})

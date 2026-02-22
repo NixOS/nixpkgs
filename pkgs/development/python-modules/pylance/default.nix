@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "1.0.2";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yhEM+1Rr0nEVj5XGQOjaZXlRQKnvPagvlNBhDfNUItw=";
+    hash = "sha256-KuUXo7GyC78U5RG6orW0X7a/B/0e9TbLpbTc7KXpxF8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-aMgy20urjm5gRX2fOh/vAoGUpXvnG3oY8u/D8rfSbHw=";
+    hash = "sha256-dq5HK0yS/nnI7cqpsS51KnQus8KJ2mHsxmlgi8601gk=";
   };
 
   nativeBuildInputs = [
@@ -107,6 +107,13 @@ buildPythonPackage (finalAttrs: {
     "-Wignore::DeprecationWarning"
   ];
 
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: torch.compile is not supported on Python 3.14+
+    "torch_tests/test_bench_utils.py"
+    "torch_tests/test_distance.py"
+    "torch_tests/test_torch_kmeans.py"
+  ];
+
   disabledTests = [
     # Hangs indefinitely
     "test_all_permutations"
@@ -148,6 +155,26 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Build hangs after all the tests are run due to a torch subprocess not exiting
     "test_multiprocess_loading"
+
+    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
+    # OpenMP support not found
+    # TODO: figure out why this only happens on python 3.13 and not 3.14
+    "test_cosine_distance"
+    "test_ground_truth"
+    "test_index_cast_centroids"
+    "test_index_with_no_centroid_movement"
+    "test_l2_distance"
+    "test_l2_distance_f16_bf16_cpu"
+    "test_pairwise_cosine"
+    "test_torch_index_with_nans"
+    "test_torch_kmeans_nans"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: torch.compile is not supported on Python 3.14+
+    "test_create_index_unsupported_accelerator"
+    "test_index_cast_centroids"
+    "test_index_with_no_centroid_movement"
+    "test_torch_index_with_nans"
   ];
 
   __darwinAllowLocalNetworking = true;

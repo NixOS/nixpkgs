@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gitfetch";
   version = "1.3.2";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Matars";
     repo = "gitfetch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HAZUdGCITr4in0K/LOSZaMHZpPjrHxcg7kAF1J0vl1I=";
   };
 
@@ -43,4 +43,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ lonerOrz ];
   };
-}
+})

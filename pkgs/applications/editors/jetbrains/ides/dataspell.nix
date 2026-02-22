@@ -47,7 +47,9 @@ mkJetBrainsProduct {
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
-  buildInputs = [
+  # NOTE: This `lib.optionals` is only here because the old Darwin builder ignored `buildInputs`.
+  #       DataSpell may need these, even on Darwin!
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libgcc
     (runCommand "libR" { } ''
       mkdir -p $out/lib

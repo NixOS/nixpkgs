@@ -8,6 +8,7 @@
   nix-util,
   boost,
   curl,
+  cmake,
   aws-c-common,
   aws-sdk-cpp,
   aws-crt-cpp,
@@ -25,9 +26,8 @@
 
   withAWS ?
     # Default is this way because there have been issues building this dependency
-    stdenv.hostPlatform == stdenv.buildPlatform
-    && (stdenv.isLinux || stdenv.isDarwin)
-    && lib.meta.availableOn stdenv.hostPlatform aws-c-common,
+    # TODO: aws-crt-cpp is broken on cygwin, find a good way to check that here
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common && !stdenv.hostPlatform.isCygwin,
 }:
 
 mkMesonLibrary (finalAttrs: {
@@ -36,7 +36,9 @@ mkMesonLibrary (finalAttrs: {
 
   workDir = ./.;
 
-  nativeBuildInputs = lib.optional embeddedSandboxShell unixtools.hexdump;
+  nativeBuildInputs =
+    lib.optional embeddedSandboxShell unixtools.hexdump
+    ++ lib.optional (withAWS && lib.versionAtLeast version "2.34pre") cmake;
 
   buildInputs = [
     boost

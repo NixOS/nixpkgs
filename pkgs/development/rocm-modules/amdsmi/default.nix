@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rocmUpdateScript,
   cmake,
   pkg-config,
   libdrm,
+  python,
   wrapPython,
   autoPatchelfHook,
 }:
@@ -21,12 +21,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdsmi";
-  version = "7.0.2";
+  version = "7.1.1";
   src = fetchFromGitHub {
     owner = "rocm";
     repo = "amdsmi";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-1xQD68mrG1g9Bpw5/vxn+XxDM5HuAyEHyALyBixqR1s=";
+    hash = "sha256-BGe3+8YFwu41ZVAF+VtN5Cn9pfzGxmCg/Rpq8qWOEoM=";
   };
 
   postPatch = ''
@@ -43,11 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    (fetchpatch {
-      name = "fix-build-with-gcc15.patch";
-      url = "https://github.com/ROCm/amdsmi/commit/902667db3cafe72e2009287cb96b160854ab9d81.patch";
-      hash = "sha256-MoOY5q6tQ7Q+bgm/600Etz+cxRk4L2ujkarnBjnfANw=";
-    })
+    # Fix error: redefinition of 'struct drm_color_ctm_3x4'
+    # https://github.com/ROCm/amdsmi/pull/165
+    ./drm-struct-redefinition-fix.patch
   ];
 
   nativeBuildInputs = [
@@ -70,6 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
+    mkdir -p $out/${python.sitePackages}
+    ln -s $out/share/amd_smi/amdsmi $out/${python.sitePackages}/amdsmi
+
     makeWrapperArgs=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdrm ]})
     wrapPythonProgramsIn $out
     rm $out/bin/amd-smi

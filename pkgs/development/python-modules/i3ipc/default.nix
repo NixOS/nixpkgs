@@ -12,7 +12,8 @@
   pytest-timeout,
   pytest-xvfb,
   i3,
-  xorg,
+  xvfb,
+  xdpyinfo,
 }:
 
 buildPythonPackage rec {
@@ -52,8 +53,8 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xvfb
     i3
-    xorg.xdpyinfo
-    xorg.xvfb
+    xdpyinfo
+    xvfb
   ];
 
   disabledTestPaths = [

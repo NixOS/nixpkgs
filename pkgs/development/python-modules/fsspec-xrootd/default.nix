@@ -17,16 +17,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fsspec-xrootd";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "fsspec-xrootd";
-    tag = "v${version}";
-    hash = "sha256-Vpe/Gcm6rmehG05h2H7BDZcBQDyie0Ww9X8LgoTgAkE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UKZO5lgOOfzyOsrDZ2En67Xhm+BKvHELGuvkwSHbolY=";
   };
 
   build-system = [
@@ -45,8 +45,10 @@ buildPythonPackage rec {
     pkgs.xrootd
     pytestCheckHook
   ];
-
   disabledTests = [
+    # Hangs indefinitely
+    "test_broken_server"
+
     # Fails (on aarch64-linux) as it runs sleep, touch, stat and makes assumptions about the
     # scheduler and the filesystem.
     "test_touch_modified"
@@ -58,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "XRootD implementation for fsspec";
     homepage = "https://github.com/CoffeaTeam/fsspec-xrootd";
-    changelog = "https://github.com/CoffeaTeam/fsspec-xrootd/releases/tag/v${version}";
+    changelog = "https://github.com/CoffeaTeam/fsspec-xrootd/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

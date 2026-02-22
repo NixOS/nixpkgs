@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_mixer
   ];
 
-  NIX_LDFLAGS = "-lm";
+  env.NIX_LDFLAGS = "-lm";
 
   desktopItems = [
     (makeDesktopItem {

@@ -5,14 +5,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bump";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "rustadopt";
     repo = "cargo-bump";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PhA7uC2gJcBnUQPWgZC51p/KTSxSGld3m+dd6BhW6q8=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ cafkafk ];
   };
-}
+})

@@ -5,13 +5,13 @@
   patatt,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "b4";
   version = "0.14.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-MaSSe437tcl+38lWnNo7Zze7/YQwiB6MxIoLCIztYUc=";
   };
 
@@ -41,4 +41,4 @@ python3Packages.buildPythonApplication rec {
       mfrw
     ];
   };
-}
+})

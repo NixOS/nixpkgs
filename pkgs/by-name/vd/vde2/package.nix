@@ -8,14 +8,14 @@
   wolfssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vde2";
   version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "virtualsquare";
     repo = "vde-2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Yf6QB7j5lYld2XtqhYspK4037lTtimoFc7nCavCP+mU=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

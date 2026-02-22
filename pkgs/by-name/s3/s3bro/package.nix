@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "s3bro";
   version = "2.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+OqcLbXilbY4h/zRAkvRd8taVIOPyiScOAcDyPZ4RUw=";
   };
 
@@ -42,4 +42,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
   };
-}
+})

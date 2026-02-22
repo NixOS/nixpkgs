@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "cpyparsing";
-  version = "2.4.7.2.4.1";
+  version = "2.4.7.2.4.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2RfwGnSz/GFPk565n8MooIybHeWAlWYMDylZd0S/HTA=";
+    hash = "sha256-bmoHri14gWvTekgoScA1v0qVhre+08aRwx0V6AvfPdQ=";
   };
 
   nativeBuildInputs = [

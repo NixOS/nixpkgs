@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "leaps";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "Jeffail";
     repo = "leaps";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9AYE8+K6B6/odwNR+UhTTqmJ1RD6HhKvtC3WibWUZic=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -39,4 +39,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ qknight ];
   };
-}
+})

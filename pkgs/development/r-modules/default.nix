@@ -431,6 +431,22 @@ let
       cargo
       rustc
     ];
+    b32 = with pkgs; [
+      cargo
+      rustc
+    ];
+    RPesto = with pkgs; [
+      cargo
+      rustc
+    ];
+    fru = with pkgs; [
+      cargo
+      rustc
+    ];
+    fastgeojson = with pkgs; [
+      cargo
+      rustc
+    ];
     audio = [ pkgs.portaudio ];
     BayesChange = [ pkgs.gsl ];
     BayesSAE = [ pkgs.gsl ];
@@ -451,6 +467,7 @@ let
       which
     ];
     bio3d = [ pkgs.zlib ];
+    BigDataStatMeth = [ pkgs.pkg-config ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
     blosc = [ pkgs.pkg-config ];
@@ -470,7 +487,7 @@ let
       libtiff
       libjpeg
       cairo.dev
-      xorg.libXt.dev
+      libxt.dev
       fontconfig.lib
     ];
     Cardinal = [ pkgs.which ];
@@ -495,7 +512,7 @@ let
       cargo
       rustc
     ];
-    devEMF = with pkgs; [ xorg.libXft.dev ];
+    devEMF = with pkgs; [ libxft.dev ];
     DEploid = [ pkgs.zlib.dev ];
     DEploid_utils = [ pkgs.zlib.dev ];
     diversitree = with pkgs; [
@@ -542,7 +559,7 @@ let
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         expat
-        xorg.libXdmcp
+        libxdmcp
       ];
     GeneralizedWendland = [ pkgs.gsl ];
     ggiraph = [ pkgs.libpng.dev ];
@@ -568,6 +585,7 @@ let
       cargo
       rustc
     ];
+    harbinger = [ pkgs.glibcLocales ];
     haven = with pkgs; [ zlib.dev ];
     hellorust = [ pkgs.cargo ];
     hgwrr = [ pkgs.gsl ];
@@ -604,7 +622,7 @@ let
       mpfr.dev
       pkg-config
     ];
-    imager = [ pkgs.xorg.libX11.dev ];
+    imager = [ pkgs.libx11.dev ];
     imbibe = [ pkgs.zlib.dev ];
     image_CannyEdges = with pkgs; [
       fftw.dev
@@ -646,6 +664,10 @@ let
       cmake
       which
       curl.dev
+    ];
+    roxigraph = with pkgs; [
+      cargo
+      rustc
     ];
     rsbml = [ pkgs.pkg-config ];
     rvg = [ pkgs.libpng.dev ];
@@ -838,6 +860,10 @@ let
       cargo
       rustc
     ];
+    caugi = with pkgs; [
+      cargo
+      rustc
+    ];
     sdcTable = with pkgs; [
       gmp
       glpk
@@ -943,7 +969,7 @@ let
     ];
     tiff = [ pkgs.libtiff.dev ];
     tkrplot = with pkgs; [
-      xorg.libX11
+      libx11
       tk.dev
     ];
     topicmodels = [ pkgs.gsl ];
@@ -1120,6 +1146,7 @@ let
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.binutils ];
+    pqsfinder = [ pkgs.boost ];
     bigmemory = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libuuid.dev ];
     bayesWatch = [ pkgs.boost.dev ];
     clustermq = [ pkgs.pkg-config ];
@@ -1175,7 +1202,7 @@ let
     rgl = with pkgs; [
       libGLU
       libGL
-      xorg.libX11.dev
+      libx11.dev
       freetype.dev
       libpng.dev
     ];
@@ -1317,7 +1344,7 @@ let
     gridGraphics = [ pkgs.which ];
     adimpro = with pkgs; [
       which
-      xorg.xdpyinfo
+      xdpyinfo
     ];
     tfevents = [ pkgs.protobuf ];
     rsvg = [ pkgs.librsvg.dev ];
@@ -1517,12 +1544,18 @@ let
     psbcGroup = [ pkgs.gsl.dev ];
     rrd = [ pkgs.rrdtool ];
     flowWorkspace = [ pkgs.zlib.dev ];
+    MethScope = with pkgs; [
+      ncurses
+      zlib.dev
+    ];
     RITCH = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.mecab ];
     PING = [ pkgs.gsl ];
+    Rwbo = [ pkgs.zlib.dev ];
     PROJ = [ pkgs.proj.dev ];
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
+    BigDataStatMeth = [ pkgs.zlib ];
     spaMM = [ pkgs.gsl ];
     shrinkTVP = [ pkgs.gsl ];
     sbrl = with pkgs; [
@@ -1541,8 +1574,9 @@ let
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         expat
-        xorg.libXdmcp
+        libxdmcp
       ];
+    XYomics = [ pkgs.boost ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [
       harfbuzz.dev
@@ -1692,6 +1726,7 @@ let
     "csodata"
     "DiceView"
     "facmodTS"
+    "fwtraits"
     "gasanalyzer"
     "margaret"
     "MSnID"
@@ -1703,6 +1738,7 @@ let
     "PCRA"
     "PSCBS"
     "iemisc"
+    "ready4"
     "red"
     "repmis"
     "R_cache"
@@ -1718,6 +1754,7 @@ let
     "teal_code"
     "TreeTools"
     "TreeSearch"
+    "PKbioanalysis"
     "ACNE"
     "APAlyzer"
     "BAT"
@@ -1894,6 +1931,10 @@ let
       ];
     });
 
+    trajeR = old.trajeR.overrideAttrs (attrs: {
+      patches = [ ./patches/trajeR.patch ];
+    });
+
     arcpbf = old.arcpbf.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
@@ -1910,11 +1951,30 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    caugi = old.caugi.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    enderecobr = old.enderecobr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
     h3o = old.h3o.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
     ironseed = old.ironseed.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    roxigraph = old.roxigraph.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        LIBCLANG_PATH = "${lib.getLib pkgs.libclang}/lib";
+      };
       postPatch = "patchShebangs configure";
     });
 
@@ -1928,6 +1988,14 @@ let
 
     ymd = old.ymd.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
+    });
+
+    yaml12 = old.yaml12.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
     });
 
     SynExtend = old.SynExtend.overrideAttrs (attrs: {
@@ -2259,6 +2327,12 @@ let
       hardeningDisable = [ "format" ];
     });
 
+    harbinger = old.harbinger.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        LC_ALL = "en_US.UTF-8";
+      };
+    });
+
     HilbertVis = old.HilbertVis.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
     });
@@ -2434,7 +2508,6 @@ let
     });
 
     RAppArmor = old.RAppArmor.overrideAttrs (attrs: {
-      patches = [ ./patches/RAppArmor.patch ];
       LIBAPPARMOR_HOME = pkgs.libapparmor;
     });
 
@@ -2459,7 +2532,7 @@ let
     });
 
     devEMF = old.devEMF.overrideAttrs (attrs: {
-      NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
+      NIX_CFLAGS_LINK = "-L${pkgs.libxft.out}/lib -lXft";
       NIX_LDFLAGS = "-lX11";
     });
 
@@ -2907,6 +2980,12 @@ let
       ];
     });
 
+    SAIGEgds = old.SAIGEgds.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fpermissive";
+      };
+    });
+
     xslt = old.xslt.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fpermissive";
@@ -3085,6 +3164,22 @@ let
         patchShebangs src/library/pkgdepends/configure
         patchShebangs src/library/ps/configure
       '';
+    });
+
+    b32 = old.b32.overrideAttrs (_: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    BigDataStatMeth = old.BigDataStatMeth.overrideAttrs (_: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    bigPLSR = old.bigPLSR.overrideAttrs (_: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    RPesto = old.RPesto.overrideAttrs (_: {
+      preConfigure = "patchShebangs configure";
     });
 
     pkgdepends = old.pkgdepends.overrideAttrs (attrs: {

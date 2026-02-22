@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "2.4.3";
 
   src = fetchurl {
-    url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
+    url = "mirror://samba/talloc/talloc-${version}.tar.gz";
     sha256 = "sha256-3EbEC59GuzTdl/5B9Uiw6LJHt3qRhXZzPFKOg6vYVN0=";
   };
 
@@ -60,15 +60,18 @@ stdenv.mkDerivation rec {
     "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
-  # python-config from build Python gives incorrect values when cross-compiling.
-  # If python-config is not found, the build falls back to using the sysconfig
-  # module, which works correctly in all cases.
-  PYTHON_CONFIG = "/invalid";
-
-  # https://reviews.llvm.org/D135402
-  NIX_LDFLAGS = lib.optional (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  env = {
+    # python-config from build Python gives incorrect values when cross-compiling.
+    # If python-config is not found, the build falls back to using the sysconfig
+    # module, which works correctly in all cases.
+    PYTHON_CONFIG = "/invalid";
+  }
+  //
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        # https://reviews.llvm.org/D135402
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
   # this must not be exported before the ConfigurePhase otherwise waf whines
   preBuild = lib.optionalString stdenv.hostPlatform.isMusl ''

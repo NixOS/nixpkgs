@@ -7,17 +7,17 @@
   enableGUI ? true,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "syncplay";
-  version = "1.7.4";
+  version = "1.7.5";
 
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Syncplay";
     repo = "syncplay";
-    tag = "v${version}";
-    sha256 = "sha256-23OTj+KUmYtrhzIS4A9Gq/tClOLwaeo50+Fcm1tn47M=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-qNkucK7+OuNmTGLuTn4hXxKjMq3WpT4CvGRXoQ2+1Oc=";
   };
 
   patches = [
@@ -55,4 +55,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ assistant ];
   };
-}
+})

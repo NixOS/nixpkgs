@@ -9,14 +9,14 @@
   automake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lbzip2";
   version = "2.5";
 
   src = fetchFromGitHub {
     owner = "kjn";
     repo = "lbzip2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1h321wva6fp6khz6x0i6rqb76xh327nw6v5jhgjpcckwdarj5jv8";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

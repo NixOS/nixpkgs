@@ -10,8 +10,6 @@
   pytest-mypy-plugins,
   oracledb,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
   types-pytz,
   types-pyyaml,
   types-redis,
@@ -38,8 +36,7 @@ buildPythonPackage rec {
     types-pytz
     types-pyyaml
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   optional-dependencies = {
     compatible-mypy = [ mypy ];

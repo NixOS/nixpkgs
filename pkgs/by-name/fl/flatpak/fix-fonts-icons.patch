@@ -15,7 +15,7 @@ index 94ad013..5c9f55e 100644
 +      realpath(source_path, path);
 +      if (g_str_has_prefix(path, "/nix/store/"))
 +        {
-+          *strchr(path + strlen("/nix/store/"), '/') = 0;
++          char * const p = strchr(path + strlen("/nix/store/"), '/'); if (p != 0) *p = 0;
 +          g_hash_table_add(closure, g_steal_pointer (&path));
 +        }
 +    }

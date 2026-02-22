@@ -11,12 +11,12 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dump";
   version = "0.4b51";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dump/dump-${version}.tar.gz";
+    url = "mirror://sourceforge/dump/dump-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-huaDpzNVNMkVzwpQUlPay/RrYiSnD79or3RgsWPkU+s=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

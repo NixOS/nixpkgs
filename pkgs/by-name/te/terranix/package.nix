@@ -7,14 +7,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "terranix";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "mrVanDalo";
     repo = "terranix";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-1Pu2j5xsBTuoyga08ZVf+rKp3FOMmJh/0fXen/idOrA=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
       sshine
     ];
   };
-}
+})

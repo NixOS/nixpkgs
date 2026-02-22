@@ -12,14 +12,14 @@
   snappy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mongoc";
   version = "1.30.3";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3mzqsrbXfrtAAC5igIna5dAgU8FH23lkMS2IacVlCmI=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_VERSION=${version}"
+    "-DBUILD_VERSION=${finalAttrs.version}"
     "-DENABLE_UNINSTALL=OFF"
     "-DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF"
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ archer-65 ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -14,12 +14,12 @@
   buildExtendedTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
-  version = "7.0.2";
+  version = "7.1.1";
 
   outputs = [
     "out"
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocWMMA";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-xCLoYvbKiAgAxDCbEopNxYBs3V3EJBmO3NpONiveXvE=";
+    hash = "sha256-6hvdq3J8UhldcyNqXxi9UEF+P0RgG8o5YdIZLzvpgXw=";
   };
 
   patches = lib.optionals (buildTests || buildBenchmarks) [

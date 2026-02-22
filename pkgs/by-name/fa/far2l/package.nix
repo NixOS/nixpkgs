@@ -19,7 +19,7 @@
   p7zip,
   xz,
   withTTYX ? true,
-  libX11,
+  libx11,
   withGUI ? true,
   wxGTK32,
   withUCD ? true,
@@ -44,22 +44,14 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.6.5";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
-    rev = "v_${version}";
-    sha256 = "sha256-a/k36O19z/lHnETOGIbTJ7BNAI5zOQxVUSp+nIM08i4=";
+    tag = "v_${version}";
+    hash = "sha256-pqyAZtVeE3awejx1/glJgAQN6fjAe4YHJX/fLHlF1+Y=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "cmake4-fix";
-      url = "https://github.com/elfmz/far2l/commit/97ac0a3a0f29110a330d8f8634775e024561e817.patch?full_index=1";
-      hash = "sha256-LlCKgFPxoRrb2nD+PARsJCpUXqMO0rLyNbuvLh949fU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -71,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optional withTTYX libX11
+    lib.optional withTTYX libx11
     ++ lib.optional withGUI wxGTK32
     ++ lib.optional withUCD libuchardet
     ++ lib.optionals withColorer [

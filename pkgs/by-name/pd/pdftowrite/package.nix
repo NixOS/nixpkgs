@@ -20,7 +20,7 @@
   pdftk,
   librsvg,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdftowrite";
   version = "2021.05.03";
   pyproject = true;
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "apebl";
     repo = "pdftowrite";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IFX9K74tfGKyMtqlc/RsV00baZEzE3HcPAGfrmTHnDQ=";
   };
 
@@ -87,4 +87,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ henrispriet ];
   };
-}
+})

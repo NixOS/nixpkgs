@@ -8,7 +8,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "patroni";
   version = "4.1.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "zalando";
     repo = "patroni";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-iY5QLbJXfQtfkzpQxvqSOzYQwgfFsBh8HPYujqxU44k=";
   };
 
@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "https://patroni.readthedocs.io/en/latest/";
     description = "Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
-    changelog = "https://github.com/patroni/patroni/blob/v${version}/docs/releases.rst";
+    changelog = "https://github.com/patroni/patroni/blob/v${finalAttrs.version}/docs/releases.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -70,4 +70,4 @@ python3Packages.buildPythonApplication rec {
       despsyched
     ];
   };
-}
+})

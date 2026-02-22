@@ -4,13 +4,11 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
 
   # build-system, dependencies
   meson,
   ninja,
   pyproject-metadata,
-  tomli,
 
   # tests
   cython,
@@ -42,15 +40,13 @@ buildPythonPackage rec {
     meson
     ninja
     pyproject-metadata
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   dependencies = [
     meson
     ninja
     pyproject-metadata
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     cython

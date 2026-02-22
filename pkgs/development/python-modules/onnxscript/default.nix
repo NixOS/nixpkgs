@@ -257,59 +257,71 @@ buildPythonPackage (finalAttrs: {
     requiredSystemFeatures = [ "cuda" ];
 
     # Skip all tests that are failing independantly of the GPU availability
-    disabledTests = disabledTests ++ [
-      # AssertionError: Tensor-likes are not close!
-      "test_output_match_opinfo__cumsum_cuda_float16"
-      "test_output_match_opinfo__nn_functional_conv1d_cuda_float32"
-      "test_output_match_opinfo__nn_functional_embedding_cuda_float16"
-      "test_output_match_opinfo__nn_functional_embedding_cuda_float32"
-      "test_output_match_opinfo__ops_aten_conv3d_cuda_float32"
-      "test_output_match_opinfo__ops_aten_convolution_cuda_float32"
-      "test_output_match_opinfo__ops_aten_embedding_bag_cuda_float32"
-      "test_output_match_opinfo__ops_aten_embedding_renorm_cuda_float16"
-      "test_output_match_opinfo__ops_aten_embedding_renorm_cuda_float32"
+    disabledTests =
+      disabledTests
+      ++ [
+        # AssertionError: Tensor-likes are not close!
+        "test_output_match_opinfo__cumsum_cuda_float16"
+        "test_output_match_opinfo__nn_functional_conv1d_cuda_float32"
+        "test_output_match_opinfo__nn_functional_embedding_cuda_float16"
+        "test_output_match_opinfo__nn_functional_embedding_cuda_float32"
+        "test_output_match_opinfo__ops_aten_conv3d_cuda_float32"
+        "test_output_match_opinfo__ops_aten_convolution_cuda_float32"
+        "test_output_match_opinfo__ops_aten_embedding_bag_cuda_float32"
+        "test_output_match_opinfo__ops_aten_embedding_renorm_cuda_float16"
+        "test_output_match_opinfo__ops_aten_embedding_renorm_cuda_float32"
 
-      # AssertionError: Scalars are not equal!
-      "test_output_match_opinfo__equal_cuda_bool"
-      "test_output_match_opinfo__ops_aten_embedding_bag_padding_idx_cuda_float16"
-      "test_output_match_opinfo__ops_aten_embedding_bag_padding_idx_cuda_float32"
+        # AssertionError: Scalars are not equal!
+        "test_output_match_opinfo__equal_cuda_bool"
+        "test_output_match_opinfo__ops_aten_embedding_bag_padding_idx_cuda_float16"
+        "test_output_match_opinfo__ops_aten_embedding_bag_padding_idx_cuda_float32"
 
-      # TypeError: can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.
-      "test_output_match_opinfo__index_put_cuda_float16"
-      "test_output_match_opinfo__index_put_cuda_float32"
-      "test_output_match_opinfo__index_put_cuda_int32"
-      "test_output_match_opinfo__index_put_cuda_int64"
+        # AssertionError: Not equal to tolerance rtol=0, atol=0
+        "test_fuse_pad_into_conv_4"
+        "test_fuse_pad_into_conv_5"
+        "test_fuse_pad_into_conv_6"
+        "test_fuse_pad_into_conv_7"
 
-      # RuntimeError: ONNX Runtime failed to evaluate
-      # onnxruntime.capi.onnxruntime_pybind11_state.InvalidArgument: [ONNXRuntimeError] : 2 :
-      # INVALID_ARGUMENT : Non-zero status code returned while running LayerNormalization node.
-      # Name:'node_LayerNormalization_0' Status Message: Size of X.shape[axis:] must be larger than 1, got 1
-      "test_output_match_opinfo__native_layer_norm_cuda_float16"
-      # onnxruntime.capi.onnxruntime_pybind11_state.NotImplemented: [ONNXRuntimeError] : 9 :
-      # NOT_IMPLEMENTED : Could not find an implementation for SplitToSequence(11) node with name '_inlfunc_aten_split_n0'
-      "test_output_match_opinfo__split_cuda_bool"
-      "test_output_match_opinfo__split_list_args_cuda_bool"
-      # onnxruntime.capi.onnxruntime_pybind11_state.NotImplemented: [ONNXRuntimeError] : 9 :
-      # NOT_IMPLEMENTED : Could not find an implementation for SplitToSequence(11) node with name '_inlfunc_aten_split_with_sizes_n0'
-      "test_output_match_opinfo__split_with_sizes_cuda_bool"
+        # TypeError: can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.
+        "test_output_match_opinfo__index_put_cuda_float16"
+        "test_output_match_opinfo__index_put_cuda_float32"
+        "test_output_match_opinfo__index_put_cuda_int32"
+        "test_output_match_opinfo__index_put_cuda_int64"
 
-      # AssertionError: ONNX model is invalid
-      # onnx.onnx_cpp2py_export.shape_inference.InferenceError: [ShapeInferenceError] Inference error(s):
-      # (op_type:ConstantOfShape, node name: node_ConstantOfShape_67):
-      # [TypeInferenceError] Inferred elem type differs from existing elem type: (FLOAT) vs (INT64)
-      "test_output_match_opinfo__ops_aten__scaled_dot_product_efficient_attention_cuda_float32"
+        # RuntimeError: ONNX Runtime failed to evaluate
+        # onnxruntime.capi.onnxruntime_pybind11_state.InvalidArgument: [ONNXRuntimeError] : 2 :
+        # INVALID_ARGUMENT : Non-zero status code returned while running LayerNormalization node.
+        # Name:'node_LayerNormalization_0' Status Message: Size of X.shape[axis:] must be larger than 1, got 1
+        "test_output_match_opinfo__native_layer_norm_cuda_float16"
+        # onnxruntime.capi.onnxruntime_pybind11_state.NotImplemented: [ONNXRuntimeError] : 9 :
+        # NOT_IMPLEMENTED : Could not find an implementation for SplitToSequence(11) node with name '_inlfunc_aten_split_n0'
+        "test_output_match_opinfo__split_cuda_bool"
+        "test_output_match_opinfo__split_list_args_cuda_bool"
+        # onnxruntime.capi.onnxruntime_pybind11_state.NotImplemented: [ONNXRuntimeError] : 9 :
+        # NOT_IMPLEMENTED : Could not find an implementation for SplitToSequence(11) node with name '_inlfunc_aten_split_with_sizes_n0'
+        "test_output_match_opinfo__split_with_sizes_cuda_bool"
 
-      # RuntimeError: FlashAttention only support fp16 and bf16 data type
-      "test_output_match_opinfo__ops_aten__scaled_dot_product_flash_attention_cuda_float32"
+        # AssertionError: ONNX model is invalid
+        # onnx.onnx_cpp2py_export.shape_inference.InferenceError: [ShapeInferenceError] Inference error(s):
+        # (op_type:ConstantOfShape, node name: node_ConstantOfShape_67):
+        # [TypeInferenceError] Inferred elem type differs from existing elem type: (FLOAT) vs (INT64)
+        "test_output_match_opinfo__ops_aten__scaled_dot_product_efficient_attention_cuda_float32"
 
-      # Unexpected success
-      "test_output_match_opinfo__ops_aten_col2im_cuda_float16"
-      "test_output_match_opinfo__sort_cuda_float16"
+        # RuntimeError: FlashAttention only support fp16 and bf16 data type
+        "test_output_match_opinfo__ops_aten__scaled_dot_product_flash_attention_cuda_float32"
 
-      # RuntimeError: expected scalar type Int but found Float
-      "test_output_match_opinfo__ops_aten_fake_quantize_per_tensor_affine_cuda_float16"
-      "test_output_match_opinfo__ops_aten_fake_quantize_per_tensor_affine_cuda_float32"
-    ];
+        # Unexpected success
+        "test_output_match_opinfo__ops_aten_col2im_cuda_float16"
+        "test_output_match_opinfo__sort_cuda_float16"
+
+        # RuntimeError: expected scalar type Int but found Float
+        "test_output_match_opinfo__ops_aten_fake_quantize_per_tensor_affine_cuda_float16"
+        "test_output_match_opinfo__ops_aten_fake_quantize_per_tensor_affine_cuda_float32"
+      ]
+      ++ lib.optionals (pythonAtLeast "3.14") [
+        # TypeError: Expecting a type not f<class 'typing.Union'> for typeinfo
+        "TestOutputConsistencyFullGraphCUDA"
+      ];
   };
 
   meta = {

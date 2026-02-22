@@ -19,14 +19,14 @@
 }:
 buildPythonPackage rec {
   pname = "omemo";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-omemo";
     tag = "v${version}";
-    hash = "sha256-uA8Nv8xT6ROlE9eM/Oz2j5HsYtvWzKEu7DSd/ws+WZY=";
+    hash = "sha256-h1L/DdzssCwQzQDY32ACNcn/zmDsCz16x74+Qdyv6x4=";
   };
 
   build-system = [

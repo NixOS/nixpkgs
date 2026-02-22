@@ -11,14 +11,14 @@
   withExternalPoll ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwebsockets";
   version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Xvcnfvm9UCNXm3G3tVe7jExE3fwpzYuz8wllvINymeI=";
   };
 
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mindavi ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -43,6 +43,8 @@ let
           // {
             pname = namePrefix + pluginName;
 
+            strictDeps = true;
+
             inherit
               pluginName
               unpackPhase
@@ -421,19 +423,19 @@ in
     };
   };
 
-  kanagawa = mkTmuxPlugin {
-    pluginName = "kanagawa";
-    version = "0-unstable-2025-12-17";
+  ukiyo = mkTmuxPlugin {
+    pluginName = "ukiyo";
+    version = "0-unstable-2026-02-02";
     src = fetchFromGitHub {
       owner = "Nybkox";
-      repo = "tmux-kanagawa";
-      rev = "10a59af0a50aacf7e68e6757fb42e94d1804246e";
-      hash = "sha256-ldc++p2PcYdzoOLrd4PGSrueAGNWncdbc5k6wmFM9kQ=";
+      repo = "tmux-ukiyo";
+      rev = "dd8730a2a41da79425c11c0cea69e0bd81545e19";
+      hash = "sha256-jOcGNKb8QrIgT7l3D3RiJOPIC9JU1rOy8tk0x5ULrdc=";
     };
     meta = {
-      homepage = "https://github.com/Nybkox/tmux-kanagawa";
-      downloadPage = "https://github.com/Nybkox/tmux-kanagawa";
-      description = "Feature packed kanagawa theme for tmux";
+      homepage = "https://github.com/Nybkox/tmux-ukiyo";
+      downloadPage = "https://github.com/Nybkox/tmux-ukiyo";
+      description = "Feature packed ukiyo theme for tmux";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ FKouhai ];
@@ -443,12 +445,12 @@ in
   lazy-restore = mkTmuxPlugin rec {
     pluginName = "lazy-restore";
     rtpFilePath = "tmux-lazy-restore.tmux";
-    version = "0.1.1";
+    version = "0.1.2";
     src = fetchFromGitHub {
       owner = "bcampolo";
       repo = "tmux-lazy-restore";
       tag = "v${version}";
-      hash = "sha256-rI9KhV6CiAHTErOKuTla+xVbpiP8RK9wu6goxCKhKiA=";
+      hash = "sha256-LLXGXJzIB2I0NMbWTh2DtLTAyC+JMzNM//SbKtFd9nM=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
@@ -1204,4 +1206,6 @@ in
 }
 // lib.optionalAttrs config.allowAliases {
   mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
+
+  kanagawa = throw "'tmuxPlugins.kanagawa' has been renamed to/replaced by 'tmuxPlugins.ukiyo'"; # Converted to throw 2026-01-30
 }

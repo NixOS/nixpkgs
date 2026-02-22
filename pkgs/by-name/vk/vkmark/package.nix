@@ -13,7 +13,7 @@
   glm,
   assimp,
   libxcb,
-  xcbutilwm,
+  libxcb-wm,
   nix-update-script,
 }:
 
@@ -27,6 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     sha256 = "sha256-Rjpjqe7htwlhDdwELm74MvSzHzXLhRD/P8IES7nz/VY=";
   };
+
+  patches = [
+    # Fix build with vulkan-headers >= 1.4.333
+    # Remove once https://github.com/vkmark/vkmark/pull/80 is included in a release
+    ./fix-build-with-newer-vulkan-headers.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/meson.build \
@@ -45,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     glm
     assimp
     libxcb
-    xcbutilwm
+    libxcb-wm
     wayland
     wayland-protocols
   ];

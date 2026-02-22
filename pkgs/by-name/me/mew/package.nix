@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
 
   # nativeBuildInputs
   pkg-config,
@@ -18,8 +18,7 @@ stdenv.mkDerivation {
   pname = "mew";
   version = "1.0-unstable-2025-06-20";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "sewn";
     repo = "mew";
     rev = "af6440da8fe6683cf0b873e0a98c293bf02c3447";

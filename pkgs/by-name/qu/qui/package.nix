@@ -14,12 +14,12 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "qui";
-  version = "1.12.0";
+  version = "1.13.1";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j0d8aJ9qcK3+/g+qNBsH84U5zQho6bl5TdzHQRQsabs=";
+    hash = "sha256-zpOz5X3Okig5PNdzwa1nS6HaldSXEFIQ/Aj0dQczabs=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -56,7 +56,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-hdgTC/oA2ZUc7mqA3v1vunXcu+aeKGw2fEUBBeerCeg=";
+  vendorHash = "sha256-F4P+hpbAFWCrk+lSleOQFTsR3kfZoWkMbybeKPzMv20=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -72,6 +72,9 @@ buildGoModule (finalAttrs: {
   ];
   versionCheckProgramArg = "version";
   doInstallCheck = true;
+
+  # Required for tests on Darwin
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     updateScript = nix-update-script {

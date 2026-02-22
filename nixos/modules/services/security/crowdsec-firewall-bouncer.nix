@@ -45,7 +45,7 @@ in
             instead.
           '';
           default = config.services.crowdsec.enable;
-          defaultText = lib.literalExpression ''config.services.crowdsec.enable'';
+          defaultText = lib.literalExpression "config.services.crowdsec.enable";
         };
         bouncerName = mkOption {
           type = types.nonEmptyStr;

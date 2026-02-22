@@ -13,14 +13,14 @@
   vapoursynth,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "av1an-unwrapped";
   version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "master-of-zen";
     repo = "av1an";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YF+j349777pE+evvXWTo42DQn1CE0jlfKBEXUFTfcb8=";
   };
 
@@ -68,11 +68,11 @@ rustPlatform.buildRustPackage rec {
       It can increase your encoding speed and improve cpu utilization by running multiple encoder processes in parallel.
     '';
     homepage = "https://github.com/master-of-zen/Av1an";
-    changelog = "https://github.com/master-of-zen/Av1an/releases/tag/${version}";
+    changelog = "https://github.com/master-of-zen/Av1an/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "av1an";
     # symbol index out of range file '/private/tmp/nix-build-av1an-unwrapped-0.4.4.drv-0/rustcz0anL2/librav1e-ca440893f9248a14.rlib' for architecture x86_64
     broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
-}
+})

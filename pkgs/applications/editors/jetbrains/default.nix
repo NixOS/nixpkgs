@@ -92,63 +92,27 @@ in
   plugins = callPackage ./plugins { };
 }
 
-// lib.optionalAttrs config.allowAliases rec {
+// lib.optionalAttrs config.allowAliases {
 
   # Deprecated products and aliases.
 
-  aqua =
-    lib.warnOnInstantiate
-      "jetbrains.aqua: Aqua has been discontinued by Jetbrains and is not receiving updates. It will be removed in NixOS 26.05."
-      (mkBinIde ./ides/aqua.nix { });
+  aqua = throw "jetbrains.aqua: Aqua has been removed as it has been discontinued by JetBrains";
 
-  idea-community =
-    lib.warnOnInstantiate
-      "jetbrains.idea-community: IntelliJ IDEA Community has been discontinued by Jetbrains. This deprecated alias uses the, no longer updated, binary build on Darwin & Linux aarch64. On other platforms it uses IDEA Open Source, built from source. Either switch to 'jetbrains.idea-oss' or 'jetbrains.idea'. See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/"
-      (
-        if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64 then
-          idea-community-bin
-        else
-          _idea-oss
-      );
+  idea-community = throw "jetbrains.idea-community: IntelliJ IDEA Community has been removed as it has been discontinued by JetBrains. Either switch to 'jetbrains.idea-oss' or 'jetbrains.idea'. See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/";
 
-  idea-community-bin =
-    lib.warnOnInstantiate
-      "jetbrains.idea-community-bin: IntelliJ IDEA Community has been discontinued by Jetbrains. This binary build is no longer updated. Switch to 'jetbrains.idea-oss' for open source builds (from source) or 'jetbrains.idea' for commercial builds (binary, unfree). See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/"
-      (mkBinIde ./ides/idea-community.nix { });
+  idea-community-bin = throw "jetbrains.idea-community-bin: IntelliJ IDEA Community has been removed as it has been discontinued by JetBrains. Either switch to 'jetbrains.idea-oss' or 'jetbrains.idea'. See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/";
 
-  idea-ultimate =
-    lib.warnOnInstantiate "'jetbrains.idea-ultimate' has been renamed to/replaced by 'jetbrains.idea'"
-      (mkBinIde ./ides/idea.nix { });
+  idea-community-src = throw "jetbrains.idea-community-src: IntelliJ IDEA Community has been removed as it has been discontinued by JetBrains. Either switch to 'jetbrains.idea-oss' or 'jetbrains.idea'. See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/";
 
-  idea-community-src = lib.warnOnInstantiate "jetbrains.idea-community-src: IntelliJ IDEA Community has been discontinued by Jetbrains. This is now an alias for 'jetbrains.idea-oss', the Open Source build of IntelliJ. See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/" _idea-oss;
+  idea-ultimate = throw "'jetbrains.idea-ultimate' has been renamed to/replaced by 'jetbrains.idea'";
 
-  pycharm-community =
-    lib.warnOnInstantiate
-      "pycharm-community: PyCharm Community has been discontinued by Jetbrains. This deprecated alias uses the, no longer updated, binary build on Darwin. On Linux it uses PyCharm Open Source, built from source. Either switch to 'jetbrains.pycharm-oss' or 'jetbrains.pycharm'. See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025"
-      (
-        if stdenv.hostPlatform.isDarwin then
-          pycharm-community-bin
-        else
-          (mkSrcIde ./ides/pycharm-oss.nix { inherit pyCharmCommonOverrides; })
-      );
+  pycharm-community = throw "jetbrains.pycharm-community: PyCharm Community has been removed as it has been discontinued by JetBrains. Either switch to 'jetbrains.pycharm-oss' or 'jetbrains.pycharm'. See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025";
 
-  pycharm-community-bin =
-    lib.warnOnInstantiate
-      "pycharm-community-bin: PyCharm Community has been discontinued by Jetbrains. This binary build is no longer updated. Switch to 'jetbrains.pycharm-oss' for open source builds (from source) or 'jetbrains.pycharm' for commercial builds (binary, unfree). See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025"
-      (mkBinIde ./ides/pycharm-community.nix { inherit pyCharmCommonOverrides; });
+  pycharm-community-bin = throw "jetbrains.pycharm-community-bin: PyCharm Community has been removed as it has been discontinued by JetBrains. Either switch to 'jetbrains.pycharm-oss' or 'jetbrains.pycharm'. See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025";
 
-  pycharm-community-src =
-    lib.warnOnInstantiate
-      "jetbrains.idea-community-src: PyCharm Community has been discontinued by Jetbrains. This is now an alias for 'jetbrains.pycharm-oss', the Open Source build of PyCharm. See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025"
-      (mkSrcIde ./ides/pycharm-oss.nix { inherit pyCharmCommonOverrides; });
+  pycharm-community-src = throw "jetbrains.pycharm-community-src: PyCharm Community has been removed as it has been discontinued by JetBrains. Either switch to 'jetbrains.pycharm-oss' or 'jetbrains.pycharm'. See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025";
 
-  pycharm-professional =
-    lib.warnOnInstantiate
-      "'jetbrains.pycharm-professional' has been renamed to/replaced by 'jetbrains.pycharm'"
-      (mkBinIde ./ides/pycharm.nix { inherit pyCharmCommonOverrides; });
+  pycharm-professional = throw "'jetbrains.pycharm-professional' has been renamed to/replaced by 'jetbrains.pycharm'";
 
-  writerside =
-    lib.warnOnInstantiate
-      "jetbrains.writerside: Writerside has been discontinued by Jetbrains and is not receiving updates. It will be removed in NixOS 26.05."
-      (mkBinIde ./ides/writerside.nix { });
+  writerside = throw "jetbrains.writerside: Writerside has been removed as it has been discontinued by JetBrains";
 }

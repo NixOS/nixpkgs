@@ -18,8 +18,8 @@ let
   param =
     if lib.versionAtLeast ppxlib.version "0.36" then
       {
-        version = "3.17.2";
-        hash = "sha256-f0CHAW6MOToT1Xt3N2d7wdvxaXj9Q8GTVNTXmnlMjEc=";
+        version = "3.17.3";
+        hash = "sha256-AcRZG4ITrYxxtunx0YDqvSANRBk27if+n5lka3X5hlw=";
       }
     else
       {

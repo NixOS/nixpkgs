@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  callPackage,
-  vscode-generic,
+  buildVscode,
   fetchurl,
   extraCommandLineArgs ? "",
   useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
@@ -11,16 +10,16 @@
 let
   sources = (lib.importJSON ./sources.json).${stdenv.hostPlatform.system};
 in
-(callPackage vscode-generic {
+(buildVscode {
   inherit useVSCodeRipgrep;
   commandLineArgs = extraCommandLineArgs;
 
-  version = "0.8.86";
+  version = "0.10.0";
   pname = "kiro";
 
   # You can find the current VSCode version in the About dialog:
   # workbench.action.showAboutDialog (Help: About)
-  vscodeVersion = "1.103.2";
+  vscodeVersion = "1.107.1";
 
   executableName = "kiro";
   longName = "Kiro";

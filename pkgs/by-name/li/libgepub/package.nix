@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "0.7.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgepub/${lib.versions.majorMinor version}/libgepub-${version}.tar.xz";
     sha256 = "WlZpWqipEy1nwHkqQPJSzgpI2dAytOGops6YrxT9Xhs=";
   };
 

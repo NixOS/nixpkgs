@@ -1,43 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-  setuptools,
-
-  # dependencies
   docutils,
+  fetchFromGitHub,
   nicegui,
+  hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nicegui-highcharts";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui-highcharts";
-    tag = "v${version}";
-    hash = "sha256-xfZtEAwHIbSI55V9GR9E1c2bbC+RQFiBW9zZ1f3e+vk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ihPWk/FnOAJzO3kWM4dV0ZbbDgBfGb4o+6zkVEb6wrA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=30.3.0,<50" "setuptools"
-  '';
+  pythonRelaxDeps = [ "docutils" ];
 
-  pythonRelaxDeps = [
-    "docutils"
-    "nicegui"
-  ];
-
-  build-system = [
-    poetry-core
-    setuptools
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     docutils
@@ -52,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "NiceGUI with support for Highcharts";
     homepage = "https://github.com/zauberzeug/nicegui-highcharts";
-    changelog = "https://github.com/zauberzeug/nicegui-highcharts/releases/tag/v${version}";
+    changelog = "https://github.com/zauberzeug/nicegui-highcharts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

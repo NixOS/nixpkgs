@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "errbot";
   version = "6.2.0";
 
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "errbotio";
     repo = "errbot";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-UdqzBrlcb9NkuVo8ChADJmaKevadoGLyZUrckStb5ko=";
   };
 
@@ -61,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "errbot" ];
 
   meta = {
-    changelog = "https://github.com/errbotio/errbot/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/errbotio/errbot/blob/${finalAttrs.version}/CHANGES.rst";
     description = "Chatbot designed to be simple to extend with plugins written in Python";
     homepage = "http://errbot.io/";
     maintainers = with lib.maintainers; [ hlad ];
@@ -70,4 +70,4 @@ python3.pkgs.buildPythonApplication rec {
     # flaky on darwin, "RuntimeError: can't start new thread"
     mainProgram = "errbot";
   };
-}
+})

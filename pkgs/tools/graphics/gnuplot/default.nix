@@ -17,33 +17,32 @@
   lua,
   withCaca ? false,
   libcaca,
-  libX11 ? null,
-  libXt ? null,
-  libXpm ? null,
-  libXaw ? null,
+  libx11,
+  libxt,
+  libxpm,
+  libxaw,
   aquaterm ? false,
   withWxGTK ? false,
   wxGTK32,
-  fontconfig ? null,
-  gnused ? null,
-  coreutils ? null,
+  fontconfig,
+  gnused,
+  coreutils,
   withQt ? false,
-  mkDerivation,
   qttools,
+  wrapQtAppsHook,
   qtbase,
   qtsvg,
 }:
 
-assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
-  withX = libX11 != null && !aquaterm && !stdenv.hostPlatform.isDarwin;
+  withX = !aquaterm && !stdenv.hostPlatform.isDarwin;
 in
-(if withQt then mkDerivation else stdenv.mkDerivation) rec {
+stdenv.mkDerivation rec {
   pname = "gnuplot";
   version = "6.0.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/gnuplot/gnuplot-${version}.tar.gz";
     sha256 = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
   };
 
@@ -52,7 +51,10 @@ in
     pkg-config
     texinfo
   ]
-  ++ lib.optional withQt qttools;
+  ++ lib.optionals withQt [
+    qttools
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     cairo
@@ -66,10 +68,10 @@ in
   ++ lib.optional withLua lua
   ++ lib.optional withCaca libcaca
   ++ lib.optionals withX [
-    libX11
-    libXpm
-    libXt
-    libXaw
+    libx11
+    libxpm
+    libxt
+    libxaw
   ]
   ++ lib.optionals withQt [
     qtbase
@@ -90,7 +92,9 @@ in
   ++ lib.optional withCaca "--with-caca"
   ++ lib.optional withTeXLive "--with-texdir=${placeholder "out"}/share/texmf/tex/latex/gnuplot";
 
-  CXXFLAGS = lib.optionalString (stdenv.hostPlatform.isDarwin && withQt) "-std=c++11";
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && withQt) {
+    CXXFLAGS = "-std=c++11";
+  };
 
   # we'll wrap things ourselves
   dontWrapGApps = true;

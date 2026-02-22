@@ -31,7 +31,9 @@
   stdenv,
   vulkan-headers,
   xbyak,
-  xorg,
+  libxext,
+  libx11,
+  libxcb,
   enableQtTranslations ? true,
   qt6,
   gtk3,
@@ -55,11 +57,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2124";
+  version = "2124.3";
 
   src = fetchzip {
     url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-k/Rz7hiYtX0tVW2lrrEwiB8LanvAuhXHxPC79Dy4aUI=";
+    hash = "sha256-JpqEJIKdmSJ5D9Q+a6YbHMJNTCK3+vDaSCSI23i60pk=";
   };
 
   strictDeps = true;
@@ -112,9 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isLinux [
     pipewire
     qt6.qtwayland
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXext
+    libx11
+    libxcb
+    libxext
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
@@ -156,10 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open-source 3DS emulator project based on Citra";
     homepage = "https://github.com/azahar-emu/azahar";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
-      arthsmn
-      marcin-serwin
-    ];
+    maintainers = with lib.maintainers; [ marcin-serwin ];
     mainProgram = "azahar";
     platforms = with lib.platforms; linux ++ darwin;
   };

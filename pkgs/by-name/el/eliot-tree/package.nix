@@ -5,13 +5,13 @@
   addBinToPathHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eliot-tree";
   version = "21.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-hTl+r+QJPPQ7ss73lty3Wm7DLy2SKGmmgIuJx38ilO8=";
   };
 
@@ -42,9 +42,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/jonathanj/eliottree";
-    changelog = "https://github.com/jonathanj/eliottree/blob/${version}/NEWS.rst";
+    changelog = "https://github.com/jonathanj/eliottree/blob/${finalAttrs.version}/NEWS.rst";
     description = "Render Eliot logs as an ASCII tree";
     mainProgram = "eliot-tree";
     license = lib.licenses.mit;
   };
-}
+})

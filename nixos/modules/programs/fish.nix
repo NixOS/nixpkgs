@@ -77,6 +77,15 @@ in
         example = false;
       };
 
+      extraCompletionPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = lib.literalExpression "config.users.users.alice.packages";
+        description = ''
+          Additional packages to generate completions from, if {option}`programs.fish.generateCompletions` is enabled.
+        '';
+      };
+
       vendor.config.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -160,7 +169,8 @@ in
     programs.fish.shellAliases = lib.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
 
     # Required for man completions
-    documentation.man.generateCaches = lib.mkDefault true;
+    documentation.man.cache.enable = lib.mkDefault true;
+    documentation.man.cache.generateAtRuntime = lib.mkDefault true;
 
     environment = lib.mkMerge [
       (lib.mkIf cfg.useBabelfish {
@@ -295,7 +305,7 @@ in
           pkgs.buildEnv {
             name = "system_fish-completions";
             ignoreCollisions = true;
-            paths = map generateCompletions config.environment.systemPackages;
+            paths = map generateCompletions (config.environment.systemPackages ++ cfg.extraCompletionPackages);
           };
       })
 

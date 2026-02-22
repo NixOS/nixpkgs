@@ -29,14 +29,14 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "piper-tts";
-  version = "1.3.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "piper1-gpl";
     tag = "v${version}";
-    hash = "sha256-WDMIXsbUzJ5XnA/KUVUPQKZzkqrXagzAOrhFtLR4fGk=";
+    hash = "sha256-V/ESZMUT1PXxHNN7H2ckTBVOQRRf4c/L2GNtnkXvNpA=";
   };
 
   patches = [

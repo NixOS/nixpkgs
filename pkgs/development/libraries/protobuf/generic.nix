@@ -60,12 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
       })
     ];
 
+  preHook = ''
+    export build_protobuf=${
+      if (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) then
+        buildPackages."protobuf_${lib.versions.major version}"
+      else
+        (placeholder "out")
+    };
+  '';
+
   # hook to provide the path to protoc executable, used at build time
-  build_protobuf =
-    if (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) then
-      buildPackages."protobuf_${lib.versions.major version}"
-    else
-      (placeholder "out");
   setupHook = ./setup-hook.sh;
 
   nativeBuildInputs = [
@@ -82,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  separateDebugInfo = true;
 
   cmakeDir = if lib.versionOlder version "22" then "../cmake" else null;
   cmakeFlags = [

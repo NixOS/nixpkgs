@@ -18,14 +18,14 @@
   eigen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luminance-hdr";
   version = "2.6.1.1";
 
   src = fetchFromGitHub {
     owner = "LuminanceHDR";
     repo = "LuminanceHDR";
-    rev = "v.${version}";
+    rev = "v.${finalAttrs.version}";
     sha256 = "sha256-PWqtYGx8drfMVp7D7MzN1sIUTQ+Xz5yyeHN87p2r6PY=";
   };
 
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

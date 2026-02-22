@@ -6,12 +6,12 @@
   net-snmp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ifstat-legacy";
   version = "1.1";
 
   src = fetchurl {
-    url = "http://gael.roualland.free.fr/ifstat/ifstat-${version}.tar.gz";
+    url = "http://gael.roualland.free.fr/ifstat/ifstat-${finalAttrs.version}.tar.gz";
     sha256 = "01zmv6vk5kh5xmd563xws8a1qnxjb6b6kv59yzz9r3rrghxhd6c5";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "ifstat-legacy";
   };
-}
+})

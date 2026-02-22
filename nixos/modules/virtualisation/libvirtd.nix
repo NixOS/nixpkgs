@@ -573,7 +573,6 @@ in
 
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "libvirtd.service" ];
       after = [ "libvirtd.service" ];
       path = with pkgs; [
         coreutils

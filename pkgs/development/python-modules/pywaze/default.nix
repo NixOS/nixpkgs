@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   respx,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pywaze";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "eifinger";

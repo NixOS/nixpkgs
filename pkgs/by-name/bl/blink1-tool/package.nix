@@ -6,14 +6,14 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blink1";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "todbot";
     repo = "blink1-tool";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-9kbWZ0vq+A3y8IeqvK1HnWWgxXaieu1eU8l+om5F2/w=";
   };
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb1 ];
 
   makeFlags = [
-    "GIT_TAG=v${version}"
+    "GIT_TAG=v${finalAttrs.version}"
     "USBLIB_TYPE=HIDAPI"
     "HIDAPI_TYPE=LIBUSB"
   ];
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "blink1-tool";
   };
-}
+})

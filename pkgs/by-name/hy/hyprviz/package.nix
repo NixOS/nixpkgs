@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprviz";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "timasoft";
     repo = "hyprviz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ar1O/Em9AcPPfbuT4xnyOwBX1IClJlFYfdPQbU/5vTk=";
+    hash = "sha256-5w7+fkf2oB0x5N6xlKjSPbgsB7Ifr1NWW8qWDmGyFwU=";
   };
 
-  cargoHash = "sha256-BICF6nZcn/7t5X4Dj18fPD2RpEz7U1Zytt9sfHe7Xnw=";
+  cargoHash = "sha256-+8MKYruPjCTooiY7pxwz5oqIpk4ZidugPrVlMZ1yMI0=";
 
   nativeBuildInputs = [
     pkg-config

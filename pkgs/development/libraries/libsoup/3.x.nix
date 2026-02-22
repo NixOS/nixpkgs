@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO: For some reason the pkg-config setup hook does not pick this up.
-  PKG_CONFIG_PATH = "${libnghttp2.dev}/lib/pkgconfig";
+  env.PKG_CONFIG_PATH = "${libnghttp2.dev}/lib/pkgconfig";
 
   # HSTS tests fail.
   doCheck = false;

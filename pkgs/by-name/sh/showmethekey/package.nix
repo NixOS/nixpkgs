@@ -14,14 +14,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "showmethekey";
   version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "AlynxZhou";
     repo = "showmethekey";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jQRckUqLe9sshi3SJqpFwSsy5H0Gp17kkcCdslwg6cM=";
   };
 
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Show keys you typed on screen";
     homepage = "https://showmethekey.alynx.one/";
-    changelog = "https://github.com/AlynxZhou/showmethekey/releases/tag/v${version}";
+    changelog = "https://github.com/AlynxZhou/showmethekey/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ocfox ];
   };
-}
+})

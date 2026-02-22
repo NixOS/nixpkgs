@@ -15,7 +15,7 @@
   libzim,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "slobdict";
   version = "1.0.0";
 
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "MuntashirAkon";
     repo = "SlobDict";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-V6EmEpxUMZUN9lHSNs4nZBZI2QNxUUWWODukm01lYxY=";
   };
 
@@ -85,4 +85,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

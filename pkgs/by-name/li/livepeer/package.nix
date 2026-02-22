@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "livepeer";
   version = "0.8.8";
 
@@ -18,7 +18,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "livepeer";
     repo = "go-livepeer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DVgB/pE3nq6oHzLi+g/WUMQqrmXvJhPub7bmeLgyEDQ=";
   };
 
@@ -48,4 +48,4 @@ buildGoModule rec {
     ];
     mainProgram = "livepeer";
   };
-}
+})

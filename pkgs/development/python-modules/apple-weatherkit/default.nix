@@ -5,7 +5,6 @@
   poetry-core,
   aiohttp,
   aiohttp-retry,
-  pythonOlder,
   pyjwt,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "apple-weatherkit";
   version = "1.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "tjhorner";

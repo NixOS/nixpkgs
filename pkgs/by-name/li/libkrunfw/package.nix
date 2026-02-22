@@ -21,18 +21,18 @@ assert lib.elem variant [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw" + lib.optionalString (variant != null) "-${variant}";
-  version = "4.10.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrunfw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mq2gw0+xL6qUZE/fk0vLT3PEpzPV8p+iwRFJHXVOMnk=";
+    hash = "sha256-x9HQP+EqCteoCq2Sl/TQcfdzQC5iuE4gaSKe7tN5dAA=";
   };
 
   kernelSrc = fetchurl {
-    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.34.tar.xz";
-    hash = "sha256-p/P+OB9n7KQXLptj77YaFL1/nhJ44DYD0P9ak/Jwwk0=";
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.62.tar.xz";
+    hash = "sha256-E+LGhayPq13Zkt0QVzJVTa5RSu81DCqMdBjnt062LBM=";
   };
 
   postPatch = ''
@@ -65,7 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fixes https://github.com/containers/libkrunfw/issues/55
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.targetPlatform.isAarch64 "-march=armv8-a+crypto";
+  env = lib.optionalAttrs stdenv.targetPlatform.isAarch64 {
+    NIX_CFLAGS_COMPILE = "-march=armv8-a+crypto";
+  };
 
   enableParallelBuilding = true;
 
@@ -81,6 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
       RossComputerGuy
       nrabulinski
     ];
-    platforms = [ "x86_64-linux" ] ++ lib.optionals (variant == null) [ "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+    ]
+    ++ lib.optionals (variant == null) [
+      "aarch64-linux"
+      "riscv64-linux"
+    ];
   };
 })

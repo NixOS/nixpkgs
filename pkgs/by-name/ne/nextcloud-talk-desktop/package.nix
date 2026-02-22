@@ -8,7 +8,12 @@
   makeDesktopItem,
   nss,
   cairo,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
   libxkbcommon,
   alsa-lib,
   at-spi2-core,
@@ -26,11 +31,11 @@
 }:
 let
   pname = "nextcloud-talk-desktop";
-  version = "2.0.5"; # Ensure both hashes (Linux and Darwin) are updated!
+  version = "2.0.6"; # Ensure both hashes (Linux and Darwin) are updated!
 
   hashes = {
-    linux = "sha256-aKNrIbv6kaLoLmTZVgwncqzF4o/5C/hFXef3QqM7oBk=";
-    darwin = "sha256-Nli2z8eyAq5W3ALwHiH6+Ightk3Jf0gaWtwabOJS4gw=";
+    linux = "sha256-eEYNfVnM+qCYnirHdBG6oqBQzDio39J7tmh4BSTAF9g=";
+    darwin = "sha256-2A4Jjz0XoXxTdKq6xP0xhlBneysAkBHMbqfgaftJGFQ=";
   };
 
   # Only x86_64-linux is supported with Darwin support being universal
@@ -91,15 +96,13 @@ let
       libgbm
       libGL
       libglvnd
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcomposite
-      libXdamage
-      libXrandr
-      libXfixes
-      libXcursor
-    ]);
+      libx11
+      libxcomposite
+      libxdamage
+      libxrandr
+      libxfixes
+      libxcursor
+    ];
 
     # Required to launch the application and proceed past the zygote_linux fork() process
     # Fixes `Zygote could not fork`

@@ -1,9 +1,18 @@
-{ lib, buildHex }:
+{
+  lib,
+  buildRebar3,
+  fetchHex,
+}:
 
-buildHex {
+buildRebar3 rec {
   name = "rebar3_proper";
   version = "0.12.1";
-  sha256 = "1f174fb6h2071wr7qbw9aqqvnglzsjlylmyi8215fhrmi38w94b6";
+
+  src = fetchHex {
+    pkg = name;
+    inherit version;
+    sha256 = "1f174fb6h2071wr7qbw9aqqvnglzsjlylmyi8215fhrmi38w94b6";
+  };
 
   meta = {
     description = "rebar3 proper plugin";

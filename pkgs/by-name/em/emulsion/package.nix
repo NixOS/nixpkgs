@@ -8,11 +8,11 @@
   pkg-config,
   python3,
   libGL,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxxf86vm,
   libxcb,
   libxkbcommon,
   wayland,
@@ -20,11 +20,11 @@
 let
   rpathLibs = [
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXxf86vm
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxxf86vm
     libxcb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -32,14 +32,14 @@ let
     wayland
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emulsion";
   version = "11.0";
 
   src = fetchFromGitHub {
     owner = "ArturKovacs";
     repo = "emulsion";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-0t+MUZu1cvkJSL9Ly9kblH8fMr05KuRpOo+JDn/VUc8=";
   };
 
@@ -66,4 +66,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "emulsion";
   };
-}
+})

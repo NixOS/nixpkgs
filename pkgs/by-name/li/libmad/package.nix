@@ -14,12 +14,12 @@
   vlc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmad";
   version = "0.15.1b";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mad/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/mad/libmad-${finalAttrs.version}.tar.gz";
     sha256 = "14460zhacxhswnzb36qfpd1f2wbk10qvksvm6wyq5hpvdgnw7ymv";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
   };
-}
+})

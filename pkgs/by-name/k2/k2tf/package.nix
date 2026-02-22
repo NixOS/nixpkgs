@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k2tf";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "sl1pm4t";
     repo = "k2tf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zkkRzCTZCvbwBj4oIhTo5d3PvqLMJPzT3zV9jU3PEJs=";
   };
 
@@ -30,8 +30,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=v${version}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -41,4 +41,4 @@ buildGoModule rec {
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.flokli ];
   };
-}
+})

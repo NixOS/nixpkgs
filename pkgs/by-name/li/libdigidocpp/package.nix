@@ -15,14 +15,14 @@
   xxd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "4.3.0";
   pname = "libdigidocpp";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "libdigidocpp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f5wU3C6NC4op+9Wy+khwNJ6slFyPhq7hZl1Tj5hnYc8=";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
       lib.maintainers.flokli
     ];
   };
-}
+})
