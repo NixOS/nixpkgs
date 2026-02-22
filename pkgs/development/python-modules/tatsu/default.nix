@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.13.1";
+  version = "5.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
     tag = "v${version}";
-    hash = "sha256-iZtYqPvQxXl6SFG2An7dN3KxaxCTvAiAkeeuXUhLuF0=";
+    hash = "sha256-TMcEEXE2ia+hrshJatpOnAgmQIVAcST94Peoy3cG7yE=";
   };
 
   nativeBuildInputs = [ setuptools ];
