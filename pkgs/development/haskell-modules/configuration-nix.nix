@@ -29,6 +29,7 @@
 
 let
   inherit (pkgs) lib;
+  canExecute = pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform;
 in
 
 with haskellLib;
@@ -1941,9 +1942,10 @@ builtins.intersectAttrs super {
     ]
     ++ old.buildTools or [ ];
     postInstall = old.postInstall + ''
-      mkdir -p "$out/share/man/man1"
-      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
-
+      ${lib.optionalString canExecute ''
+        mkdir -p "$out/share/man/man1"
+        "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
+      ''}
       wrapProgram "$out/bin/cabal" \
         --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.groff ]}"
     '';
