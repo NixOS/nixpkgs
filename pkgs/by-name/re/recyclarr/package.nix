@@ -9,13 +9,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
-  version = "7.4.1";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = "recyclarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eutlnIHOcRnucgFDwJIheTPXA7avqvp4H0xUX2Cv2z8=";
+    hash = "sha256-dI/OVnUyDckbGi/CVTy1fWDXUxyZ90Q5thDUttTgBbE=";
   };
 
   projectFile = "Recyclarr.sln";
@@ -35,13 +35,11 @@ buildDotnetModule (finalAttrs: {
   '';
   patches = [ ./001-Git-Version.patch ];
 
-  enableParallelBuilding = false;
-
   doCheck = false;
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
-  dotnet-test-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
+  dotnet-test-sdk = dotnetCorePackages.sdk_10_0;
 
   executables = [ "recyclarr" ];
   makeWrapperArgs = [
