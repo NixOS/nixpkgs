@@ -5,10 +5,18 @@
   fetchFromGitHub,
   ocamlPackages,
   dune,
-  why3,
   python3,
+  why3,
 }:
-
+let
+  why3' = why3.override {
+    ideSupport = false;
+    coqPackages = {
+      coq = null;
+      flocq = null;
+    };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "easycrypt";
   version = "2026.02";
@@ -37,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     dune-site
     markdown
     pcre2
-    why3
+    why3'
     yojson
     zarith
   ];
 
-  propagatedBuildInputs = [ why3.out ];
+  propagatedBuildInputs = [ why3'.out ];
 
   strictDeps = true;
 
