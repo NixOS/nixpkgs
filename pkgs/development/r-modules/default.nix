@@ -2399,6 +2399,13 @@ let
       };
     });
 
+    packagefinder = old.packagefinder.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace "R/packagefinder.r" --replace-fail \
+          "if(!is.null(pf)) {" "if(is.data.frame(pf)) {"
+      '';
+    });
+
     rawrr = old.rawrr.overrideAttrs (attrs: {
       postPatch = ''
         substituteInPlace "R/zzz.R" "R/dotNetAssembly.R" --replace-warn \
