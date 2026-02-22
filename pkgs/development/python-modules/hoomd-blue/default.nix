@@ -18,7 +18,7 @@ let
   optionalCmakeBool = name: value: lib.optionals (value != null) [ (lib.cmakeBool name value) ];
 in
 buildPythonPackage rec {
-  version = "6.0.0";
+  version = "6.1.1";
   pname = "hoomd-blue";
   pyproject = false; # Built with cmake
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "glotzerlab";
     repo = "hoomd-blue";
     tag = "v${version}";
-    hash = "sha256-dmDBAJU6FxMQXuMO+nE1yzOY1m6/x43eH3USBQNVu8A=";
+    hash = "sha256-3xNw5PZm6fNzX8OMfA5j/u2u9J+RL6CCDKZ7YT1otdI=";
     fetchSubmodules = true;
   };
 
