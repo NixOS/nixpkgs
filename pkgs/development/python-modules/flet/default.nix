@@ -4,8 +4,9 @@
   flet-client-flutter,
 
   # build-system
-  poetry-core,
+  setuptools,
   pytestCheckHook,
+  pytest-asyncio,
 
   # propagates
   fastapi,
@@ -14,6 +15,7 @@
   packaging,
   qrcode,
   repath,
+  msgpack,
   cookiecutter,
   uvicorn,
   watchdog,
@@ -28,9 +30,13 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/sdk/python/packages/flet";
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
+  pytestFlagsArray = [ "tests" ];
 
   makeWrapperArgs = [
     "--prefix"
@@ -39,19 +45,17 @@ buildPythonPackage rec {
     "$PYTHONPATH"
   ];
 
-  _flet_version = ''
-    version = "${version}"
-    def update_version():
-      pass
-  '';
   _flet_utils_pip = ''
     def install_flet_package(name: str):
       pass
   '';
 
   postPatch = ''
-     # nerf out nagging about pip
-    echo "$_flet_version" > src/flet/version.py
+    # pin release version in packaged builds
+    substituteInPlace src/flet/version.py \
+      --replace-fail 'flet_version = ""' 'flet_version = "${version}"'
+
+    # nerf out nagging about pip
     echo "$_flet_utils_pip" >> src/flet/utils/pip.py
   '';
 
@@ -65,6 +69,7 @@ buildPythonPackage rec {
     httpx
     packaging
     repath
+    msgpack
     qrcode
     cookiecutter
     fastapi
