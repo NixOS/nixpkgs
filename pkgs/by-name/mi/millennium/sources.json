@@ -2,8 +2,8 @@
     "millennium-src" : {
         "owner": "SteamClientHomebrew",
         "repo": "Millennium",
-        "rev": "1bc62c94a06f25f7e8d7e269f11cd968cf576bff",
-        "hash" : "sha256-MceGTpXobCAh5Ll/1iTWcEf6/nHY3Ll1t06JxbYc+Co="
+        "rev": "50fcda7794bf32c8edbd30222370e70ac511805c",
+        "hash" : "sha256-BhFWModRCeZXaTPcMbuDKH1M4I7iXjdWn0M54SAttUM="
     },
     "zlib-src" : {
         "owner": "zlib-ng",
