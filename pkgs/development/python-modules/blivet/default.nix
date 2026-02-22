@@ -86,7 +86,10 @@ buildPythonPackage rec {
     stratisd
   ];
 
-  pythonImportsCheck = [ "blivet" ];
+  pythonImportsCheck = [
+    "blivet"
+    "blivet.devicelibs.lvm"
+  ];
 
   # Even unit tests require a system D-Bus.
   # TODO: Write a NixOS VM test?
