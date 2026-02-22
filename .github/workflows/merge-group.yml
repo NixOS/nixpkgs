@@ -29,7 +29,7 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: |
-            ci/supportedSystems.json
+            ci/github-script/supportedSystems.js
 
       - id: prepare
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
@@ -39,6 +39,8 @@ jobs:
         with:
           script: |
             const { classify } = require('./ci/supportedBranches.js')
+            const supportedSystems = require('./ci/github-script/supportedSystems.js')
+
             const baseBranch = (
               context.payload.merge_group?.base_ref ??
               context.payload.pull_request.base.ref
@@ -47,11 +49,16 @@ jobs:
             core.setOutput('base', baseClassification)
             core.info('base classification:', baseClassification)
 
-            core.setOutput('mergedSha', context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA)
-            core.info(`mergedSha: ${context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA}`)
-            core.setOutput('targetSha', context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA)
-            core.info(`targetSha: ${context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA}`)
-            core.setOutput('systems', require('./ci/supportedSystems.json'))
+            const mergedSha = context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA
+            core.setOutput('mergedSha', mergedSha)
+            core.info(`mergedSha: ${mergedSha}`)
+
+            const targetSha = context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA
+            core.setOutput('targetSha', targetSha)
+            core.info(`targetSha: ${targetSha}`)
+
+            const systems = await supportedSystems({ github, context, targetSha })
+            core.setOutput('systems', systems)
 
   check:
     name: Check
