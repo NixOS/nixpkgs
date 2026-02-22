@@ -7584,6 +7584,11 @@ with pkgs;
     postgresql_19
     ;
 
+  postgresql_14_neon = import ../servers/sql/postgresql/14_neon.nix { self = pkgs; };
+  postgresql_15_neon = import ../servers/sql/postgresql/15_neon.nix { self = pkgs; };
+  postgresql_16_neon = import ../servers/sql/postgresql/16_neon.nix { self = pkgs; };
+  postgresql_17_neon = import ../servers/sql/postgresql/17_neon.nix { self = pkgs; };
+
   inherit (postgresqlJitVersions)
     postgresql_14_jit
     postgresql_15_jit
