@@ -1740,10 +1740,6 @@ with pkgs;
 
   ### TOOLS/TYPESETTING/TEX
 
-  advi = callPackage ../tools/typesetting/tex/advi {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   dblatexFull = dblatex.override { enableAllFeatures = true; };
 
   latex2mathml = with python3Packages; toPythonApplication latex2mathml;
@@ -3495,10 +3491,6 @@ with pkgs;
   # https://github.com/NixOS/nixpkgs/issues/227327
   wafHook = waf.hook;
 
-  wyrd = callPackage ../tools/misc/wyrd {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   # A minimal xar is needed to break an infinite recursion between macfuse-stubs and xar.
   # It is also needed to reduce the amount of unnecessary stuff in the Darwin bootstrap.
   xarMinimal = callPackage ../by-name/xa/xar/package.nix { e2fsprogs = null; };
@@ -3642,10 +3634,6 @@ with pkgs;
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
   libcxxStdenv = if stdenv.hostPlatform.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
-
-  comby = callPackage ../development/tools/comby {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
 
   inherit (coqPackages_9_0) compcert;
 
@@ -4494,10 +4482,6 @@ with pkgs;
   open-watcom-v2-full = wrapWatcom open-watcom-v2-full-unwrapped { };
   open-watcom-bin = wrapWatcom open-watcom-bin-unwrapped { };
 
-  rml = callPackage ../development/compilers/rml {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
@@ -4601,11 +4585,6 @@ with pkgs;
     ;
 
   swi-prolog-gui = swi-prolog.override { withGui = true; };
-
-  teyjus = callPackage ../development/compilers/teyjus {
-    inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
-    stdenv = gcc14Stdenv;
-  };
 
   vcard = python3Packages.toPythonApplication python3Packages.vcard;
 
@@ -5533,10 +5512,6 @@ with pkgs;
     ];
   };
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   credstash = with python3Packages; toPythonApplication credstash;
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
@@ -6328,10 +6303,6 @@ with pkgs;
     # of the current set. We need host to be same as build to correctly get i686
     # variant of glibc.
     glibc32 = pkgsi686Linux.buildPackages.glibc;
-  };
-
-  glsurf = callPackage ../applications/science/math/glsurf {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
   };
 
   gmime2 = callPackage ../development/libraries/gmime/2.nix { };
@@ -9480,10 +9451,6 @@ with pkgs;
 
   hyperglot = with python3Packages; toPythonApplication hyperglot;
 
-  jackline = callPackage ../applications/networking/instant-messengers/jackline {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv { };
 
   pinboard = with python3Packages; toPythonApplication pinboard;
@@ -9793,10 +9760,6 @@ with pkgs;
 
   minitube = kdePackages.callPackage ../applications/video/minitube { };
 
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
   };
@@ -9995,10 +9958,6 @@ with pkgs;
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
   openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
-
-  orpie = callPackage ../applications/misc/orpie {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
 
   pantalaimon = callPackage ../applications/networking/instant-messengers/pantalaimon { };
 
@@ -10496,10 +10455,6 @@ with pkgs;
   gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim { };
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
-
-  virt-top = callPackage ../applications/virtualization/virt-top {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
 
   virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
@@ -11388,10 +11343,6 @@ with pkgs;
 
   ### SCIENCE/LOGIC
 
-  abella = callPackage ../applications/science/logic/abella {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
-  };
-
   inherit
     (callPackage ./rocq-packages.nix {
       inherit (ocaml-ng)
@@ -11465,14 +11416,6 @@ with pkgs;
     coq
     ;
 
-  cubicle = callPackage ../applications/science/logic/cubicle {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
-  ekrhyper = callPackage ../applications/science/logic/ekrhyper {
-    ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
-  };
-
   eprover-ho = eprover.override { enableHO = true; };
 
   giac-with-xcas = giac.override { enableGUI = true; };
@@ -11486,22 +11429,6 @@ with pkgs;
   isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
 
   lean3 = lean;
-
-  leo2 = callPackage ../applications/science/logic/leo2 {
-    inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;
-  };
-
-  prooftree = callPackage ../applications/science/logic/prooftree {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
-  };
-
-  satallax = callPackage ../applications/science/logic/satallax {
-    inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
-  };
-
-  statverif = callPackage ../applications/science/logic/statverif {
-    ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
-  };
 
   why3 = callPackage ../applications/science/logic/why3 { coqPackages = coqPackages_8_20; };
 
@@ -11599,10 +11526,6 @@ with pkgs;
   };
 
   gplates = libsForQt5.callPackage ../applications/science/misc/gplates { };
-
-  megam = callPackage ../applications/science/misc/megam {
-    inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
-  };
 
   spyder = with python3.pkgs; toPythonApplication spyder;
 
@@ -11910,10 +11833,6 @@ with pkgs;
   qmasterpassword-wayland = qmasterpassword.override {
     x11Support = false;
     waylandSupport = true;
-  };
-
-  sail-riscv = callPackage ../applications/virtualization/sail-riscv {
-    inherit (ocamlPackages) sail;
   };
 
   mfcj470dwlpr = pkgsi686Linux.callPackage ../misc/cups/drivers/mfcj470dwlpr { };
