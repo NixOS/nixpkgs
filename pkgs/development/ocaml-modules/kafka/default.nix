@@ -7,12 +7,12 @@
   zlib,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "kafka";
   version = "0.5";
 
   src = fetchurl {
-    url = "https://github.com/didier-wenzek/ocaml-kafka/releases/download/${version}/kafka-${version}.tbz";
+    url = "https://github.com/didier-wenzek/ocaml-kafka/releases/download/${finalAttrs.version}/kafka-${finalAttrs.version}.tbz";
     sha256 = "0m9212yap0a00hd0f61i4y4fna3141p77qj3mm7jl1h4q60jdhvy";
   };
 
@@ -28,4 +28,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     broken = lib.versionAtLeast ocaml.version "5.0";
   };
-}
+})
