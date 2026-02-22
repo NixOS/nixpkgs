@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "museeks";
-  version = "0.23.1";
+  version = "0.23.4";
 
   src = fetchurl {
     url = "https://github.com/martpie/museeks/releases/download/${finalAttrs.version}/Museeks_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-bji49ncJriDGrYoC0VYfblcGPDU66Ep+c/z9FNEXnkI=";
+    hash = "sha256-2WkWBd4opWpCcjE+uWRbDC8RPQoVvflpxbWuuNF2Z54=";
   };
 
   nativeBuildInputs = [
