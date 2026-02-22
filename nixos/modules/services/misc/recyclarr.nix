@@ -10,7 +10,7 @@ let
   cfg = config.services.recyclarr;
   format = pkgs.formats.yaml { };
   stateDir = "/var/lib/recyclarr";
-  configPath = "${stateDir}/config.json";
+  configPath = "${stateDir}/config.yml";
   secretsReplacement = utils.genJqSecretsReplacement {
     loadCredential = true;
   } cfg.configuration configPath;
@@ -98,7 +98,6 @@ in
     systemd.services.recyclarr = {
       description = "Recyclarr Service";
 
-      # YAML is a JSON super-set
       preStart = secretsReplacement.script;
 
       serviceConfig = {
@@ -106,7 +105,11 @@ in
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = "recyclarr";
-        ExecStart = "${lib.getExe cfg.package} ${cfg.command} --app-data ${stateDir} --config ${configPath}";
+        Environment = [
+          "RECYCLARR_CONFIG_DIR=${stateDir}"
+          "RECYCLARR_DATA_DIR=${stateDir}"
+        ];
+        ExecStart = "${lib.getExe cfg.package} ${cfg.command} --config ${configPath}";
         LoadCredential = secretsReplacement.credentials;
 
         ProtectSystem = "strict";

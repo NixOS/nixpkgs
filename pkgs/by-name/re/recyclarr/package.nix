@@ -9,33 +9,38 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
-  version = "8.2.0";
+  version = "8.2.1";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = "recyclarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dI/OVnUyDckbGi/CVTy1fWDXUxyZ90Q5thDUttTgBbE=";
+    hash = "sha256-pC9HvJQXB1pBAZ7kXRPQaMgZnXoRh96QLsOzwO8CzNE=";
   };
 
-  projectFile = "Recyclarr.sln";
+  projectFile = "Recyclarr.slnx";
   nugetDeps = ./deps.json;
 
   prePatch = ''
-    substituteInPlace src/Recyclarr.Cli/Console/CliSetup.cs \
-      --replace-fail '$"v{GitVersionInformation.SemVer} ({GitVersionInformation.FullBuildMetaData})"' '"${finalAttrs.version}-nixpkgs"'
+    cat > src/Recyclarr.Core/GitVersionInformation.g.cs <<'EOF'
+    public static class GitVersionInformation
+    {
+        public static string SemVer => "${finalAttrs.version}";
+        public static string FullBuildMetaData => "nixpkgs";
+        public static string InformationalVersion => "${finalAttrs.version}+nixpkgs";
+        public static int Major => ${lib.versions.major finalAttrs.version};
+    }
+    EOF
 
-    substituteInPlace src/Recyclarr.Cli/Console/Setup/ProgramInformationDisplayTask.cs \
-      --replace-fail 'GitVersionInformation.InformationalVersion' '"${finalAttrs.version}-nixpkgs"'
-
-    substituteInPlace Recyclarr.sln \
-      --replace-fail ".config\dotnet-tools.json = .config\dotnet-tools.json" ""
+    substituteInPlace Recyclarr.slnx \
+      --replace-fail "<File Path=\".config/dotnet-tools.json\" />" ""
 
     rm .config/dotnet-tools.json
   '';
-  patches = [ ./001-Git-Version.patch ];
 
   doCheck = false;
+
+  dotnetBuildFlags = [ "-p:DisableGitVersionTask=true" ];
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
