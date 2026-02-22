@@ -9,6 +9,5 @@
 makeSetupHook {
   name = "wrap-lua-hook";
   propagatedBuildInputs = [ makeWrapper ];
-  substitutions.executable = lua.interpreter;
   substitutions.lua = lua;
 } ./wrap.sh

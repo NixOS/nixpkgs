@@ -28,12 +28,6 @@ wrapLuaProgramsIn() {
 
   # Find all regular files in the output directory that are executable.
   find "$dir" -type f -perm -0100 -print0 | while read -d "" f; do
-    # Rewrite "#! .../env lua" to "#! /nix/store/.../lua".
-    # Lua to use besides one with this hook anyway.
-    if head -n1 "$f" | grep -q '#!.*/env.*\(lua\)'; then
-      sed -i "$f" -e "1 s^.*/env[ ]*\(lua\)[^ ]*^#! @executable@^"
-    fi
-
     # wrapProgram creates the executable shell script described
     # above. The script will set LUA_(C)PATH and PATH variables!
     # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
