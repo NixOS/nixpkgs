@@ -1197,6 +1197,10 @@ with haskellLib;
     broken = pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isi686;
   }) super.vimus;
 
+  # 2026-02-19: too strict bounds on bytestring (<0.11) and text (<2)
+  # https://github.com/theam/require/pull/31
+  require = doJailbreak super.require;
+
   # https://github.com/kazu-yamamoto/logger/issues/42
   logger = dontCheck super.logger;
 
