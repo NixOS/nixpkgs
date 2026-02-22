@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    installManPage docs/${finalAttrs.pname}.1
+    installManPage docs/authoscope.1
   '';
 
   # Tests requires access to httpin.org

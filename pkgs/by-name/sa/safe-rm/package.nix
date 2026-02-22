@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchgit {
     url = "https://git.launchpad.net/safe-rm";
-    tag = "${finalAttrs.pname}-${finalAttrs.version}";
+    tag = "safe-rm-${finalAttrs.version}";
     sha256 = "sha256-7+4XwsjzLBCQmHDYNwhlN4Yg3eL43GUEbq8ROtuP2Kw=";
   };
 

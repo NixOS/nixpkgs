@@ -22,8 +22,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.RUSTC_BOOTSTRAP = 1;
 
   postInstall = ''
-    install -D -m 0444 ../../README* -t "$out/share/doc/${finalAttrs.pname}"
-    install -D -m 0444 ../../LICEN* -t "$out/share/doc/${finalAttrs.pname}"
+    install -D -m 0444 ../../README* -t "$out/share/doc/unpfs"
+    install -D -m 0444 ../../LICEN* -t "$out/share/doc/unpfs"
   '';
 
   meta = {

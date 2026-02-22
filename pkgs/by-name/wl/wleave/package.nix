@@ -49,10 +49,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/config.rs \
-      --replace-fail "/etc/wleave" "$out/etc/${finalAttrs.pname}"
+      --replace-fail "/etc/wleave" "$out/etc/wleave"
 
     substituteInPlace layout.json \
-      --replace-fail "/usr/share/wleave" "$out/share/${finalAttrs.pname}"
+      --replace-fail "/usr/share/wleave" "$out/share/wleave"
   '';
 
   postInstall = ''

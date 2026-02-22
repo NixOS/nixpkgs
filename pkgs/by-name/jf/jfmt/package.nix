@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "scruffystuffs";
-    repo = "${finalAttrs.pname}.rs";
+    repo = "jfmt.rs";
     rev = "v${finalAttrs.version}";
     hash = "sha256-X3wk669G07BTPAT5xGbAfIu2Qk90aaJIi1CLmOnSG80=";
   };

@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    if [[ "$(${expect}/bin/unbuffer "$out/bin/${finalAttrs.pname}" --help 2> /dev/null | strings | grep ${finalAttrs.version} | tr -d '\n')" == " ${finalAttrs.version}" ]]; then
+    if [[ "$(${expect}/bin/unbuffer "$out/bin/${finalAttrs.meta.mainProgram}" --help 2> /dev/null | strings | grep ${finalAttrs.version} | tr -d '\n')" == " ${finalAttrs.version}" ]]; then
       echo '${finalAttrs.pname} smoke check passed'
     else
       echo '${finalAttrs.pname} smoke check failed'

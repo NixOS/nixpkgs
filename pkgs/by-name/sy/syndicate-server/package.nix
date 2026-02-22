@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     domain = "git.syndicate-lang.org";
     owner = "syndicate-lang";
     repo = "syndicate-rs";
-    rev = "${finalAttrs.pname}-v${finalAttrs.version}";
+    rev = "syndicate-server-v${finalAttrs.version}";
     hash = "sha256-orQN83DE+ZNgdx2PVcYrte/rVDFFtuQuRDKzeumpsLo=";
   };
 
