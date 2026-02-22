@@ -92,6 +92,31 @@ let
       '';
     };
 
+    matchSNItoHost = lib.mkOption {
+      type = with lib.types; nullOr bool;
+      default = null;
+      example = "true";
+      description = ''
+        When true, cloudflared will automatically set the Server Name Indication (SNI) during the TLS handshake to the hostname of the incoming request.
+
+        This setting is useful when directing traffic to entry points that host multiple services and rely on SNI to route requests or present the correct certificate.
+        It eliminates the need to explicitly configure originServerName for individual services when using wildcard routing.
+      '';
+    };
+
+    http2Origin = lib.mkOption {
+      type = with lib.types; nullOr bool;
+      default = null;
+      example = "true";
+      description = ''
+        When false (default), cloudflared will connect to your origin with HTTP/1.1.
+
+        When true, cloudflared will attempt to connect to your origin server using HTTP/2.0 instead of HTTP/1.1.
+        HTTP/2.0 is a faster protocol for high traffic origins but requires you to deploy an SSL certificate on the origin.
+        We recommend using this setting in conjunction with noTLSVerify so that you can use a self-signed certificate.
+      '';
+    };
+
     caPool = lib.mkOption {
       type = with lib.types; nullOr (either str path);
       default = null;
