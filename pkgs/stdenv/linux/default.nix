@@ -33,7 +33,7 @@
 # To explore build-time dependencies in graphical form one can use
 # the following:
 #     $ nix-store --query --graph $(nix-instantiate -A stdenv) |
-#         grep -P -v '[.]sh|[.]patch|bash|[.]tar' | # avoid clutter
+#         grep -P -v '[.]sh|[.]patch|dash|[.]tar' | # avoid clutter
 #         dot -Tsvg > stdenv-final.svg
 #
 # To find all the packages built by a particular stdenv instance:
@@ -46,7 +46,7 @@
 #
 # To verify which stdenv was used to build a given final package:
 #     $ nix-store --query --graph $(nix-instantiate -A stdenv) |
-#       grep -P -v '[.]sh|[.]patch|bash|[.]tar' |
+#       grep -P -v '[.]sh|[.]patch|dash|[.]tar' |
 #       grep -P '.*stdenv.*->.*glibc-2'
 #     "...-bootstrap-stage2-stdenv-linux.drv" -> "...-glibc-2.35-224.drv";
 #
@@ -402,7 +402,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         ${localSystem.libc} = prevStage.${localSystem.libc};
         gmp = super.gmp.override { cxx = false; };
         # This stage also rebuilds binutils which will of course be used only in the next stage.
-        # We inherit this until stage3, in stage4 it will be rebuilt using the adjacent bash/runtimeShell pkg.
+        # We inherit this until stage3, in stage4 it will be rebuilt using the adjacent dash/runtimeShell pkg.
         # TODO(@sternenseemann): Can we already build the wrapper with the actual runtimeShell here?
         # Historically, the wrapper didn't use runtimeShell, so the used shell had to be changed explicitly
         # (or stdenvNoCC.shell would be used) which happened in stage4.
@@ -471,7 +471,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               ];
 
               # This is a separate phase because gcc assembles its phase scripts
-              # in bash instead of nix (we should fix that).
+              # in dash instead of nix (we should fix that).
               preFixupPhases = (a.preFixupPhases or [ ]) ++ [ "preFixupXgccPhase" ];
 
               # This is needed to prevent "error: cycle detected in build of '...-xgcc-....drv'
@@ -782,7 +782,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
         extraAttrs = {
           inherit bootstrapTools;
-          shellPackage = prevStage.bash;
+          shellPackage = prevStage.dash;
         };
 
         disallowedRequisites = [ bootstrapTools.out ];
@@ -795,7 +795,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               bzip2
               xz
               zlib
-              bashNonInteractive
+              dashNonInteractive
               binutils
               coreutils
               diffutils
@@ -831,7 +831,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               gzip
               bzip2
               xz
-              bashNonInteractive
+              dashNonInteractive
               binutils.bintools
               coreutils
               diffutils
@@ -891,7 +891,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               gzip
               bzip2
               xz
-              bashNonInteractive
+              dashNonInteractive
               coreutils
               diffutils
               findutils

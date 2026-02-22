@@ -3715,7 +3715,11 @@ with pkgs;
   ### SHELLS
 
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
-  runtimeShellPackage = bashNonInteractive;
+  runtimeShellPackage = dashNonInteractive;
+
+  dashNonInteractive = callPackage ../by-name/da/dash/package.nix {
+    isInteractive = false;
+  };
 
   bash = callPackage ../shells/bash/5.nix { };
   bashNonInteractive = lowPrio (
