@@ -10,7 +10,7 @@
   libjpeg_turbo,
   libuv,
   libvorbis,
-  mbedtls_2,
+  mbedtls,
   openal,
   pcre,
   SDL2,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libpng
     libuv
     libvorbis
-    mbedtls_2
+    mbedtls
     openal
     pcre
     SDL2
