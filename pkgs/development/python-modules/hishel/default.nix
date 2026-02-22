@@ -8,6 +8,7 @@
   hatchling,
   httpx,
   moto,
+  msgpack,
   pytest-asyncio,
   pytestCheckHook,
   pyyaml,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.1.3";
+  version = "1.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "hishel";
     tag = version;
-    hash = "sha256-3dcXj9MPPtHBzafdccrOeh+Wrn9hulDA8L3itOe8ZXw=";
+    hash = "sha256-OT9kGfh9wDftmkHr88kas1tCPF2L2S1PNQnABsNmsnk=";
   };
 
   build-system = [
@@ -32,7 +33,10 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [ httpx ];
+  dependencies = [
+    httpx
+    msgpack
+  ];
 
   optional-dependencies = {
     redis = [ redis ];
