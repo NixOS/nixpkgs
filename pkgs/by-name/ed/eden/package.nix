@@ -90,7 +90,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eden";
-  version = "0.1.1";
+  version = "0.2.0-rc1";
 
   src = fetchFromGitea {
     domain = "git.eden-emu.dev";
