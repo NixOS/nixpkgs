@@ -10,6 +10,7 @@
   qt6,
   undmg,
   xkeyboard-config,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -103,6 +104,21 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://download.sweetscape.com/010EditorMacARM64Installer${finalAttrs.version}.dmg";
       hash = "sha256-gtfTq/e/BHSxkCv/Qg/o8Naoao+I8fzKOmGB1PXPSwI=";
     };
+  };
+
+  passthru = {
+    updateScript = writeScript "update-010editor" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of "Version: major.minor.patchlevel
+      newVersion="$(curl -s https://sweetscape.com/download/010editor/ | pcre2grep -o1 'Version: ([0-9]+\.[0-9]+\.[0-9]+)' | sort -u)"
+      for platform in ${toString finalAttrs.meta.platforms}; do
+        update-source-version _010editor "$newVersion" --source-key=passthru.srcs.$platform --ignore-same-version
+      done
+    '';
   };
 
   meta = {
