@@ -7,13 +7,13 @@
 
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "ajt-card-management";
-  version = "25.10.14.0";
+  version = "26.2.21.0";
   src =
     (fetchFromGitHub {
       owner = "Ajatt-Tools";
       repo = "learn-now-button";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-ebGMrEfDV9ZWtrV2AjiaNd7WMeNBHlaOBE2xL1x0nWs=";
+      hash = "sha256-9PLEEE9M+4LQX5xI7R/xORvykq9qf0k+Eo2UG71e1iM=";
       fetchSubmodules = true;
     })
     # HACK: remove when https://github.com/Ajatt-Tools/learn-now-button/pull/9 is released
