@@ -33,14 +33,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edk2";
-  version = "202511";
+  version = "202602";
 
   srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     tag = "edk2-stable${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-R/rgz8dWcDYVoiM67K2UGuq0xXbjjJYBPtJ1FmfGIaU=";
+    hash = "sha256-TeMGpqVpXYRaeLjjg/aWHjtvfJpEfauA7Xg7dfe3XNg=";
   };
 
   src = applyPatches {
@@ -55,14 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
       })
 
       ./fix-cross-compilation-antlr-dlg.patch
-
-      # fix compatibility with nasm 3.01 (https://github.com/tianocore/edk2/pull/11691)
-      # TODO: remove when updating beyond 202511
-      (fetchpatch {
-        name = "UefiCpuPkg-CpuExceptionHandlerLib-fix-push-instructions.patch";
-        url = "https://github.com/tianocore/edk2/commit/9ccf8751a74f26142e584c7b7c7572a182b67997.patch";
-        hash = "sha256-0aqpuQDxLdbSJMBXzY/57GzL2wLn0m8dkT7X6uXtKMg=";
-      })
     ];
 
     # FIXME: unvendor OpenSSL again once upstream updates
