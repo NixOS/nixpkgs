@@ -10,12 +10,12 @@
   libxcrypt,
   util-linux,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inetutils";
   version = "2.7";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/inetutils/inetutils-${finalAttrs.version}.tar.gz";
     hash = "sha256-oVa+HN48XA/+/CYhgNk2mmBIQIeQeqVUxieH0vQOwIY=";
   };
 
@@ -123,4 +123,4 @@ stdenv.mkDerivation rec {
     */
     priority = (util-linux.meta.priority or lib.meta.defaultPriority) + 1;
   };
-}
+})

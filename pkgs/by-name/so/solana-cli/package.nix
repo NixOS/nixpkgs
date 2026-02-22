@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   strictDeps = true;
   cargoBuildFlags = map (n: "--bin=${n}") solanaPkgs;
-  RUSTFLAGS = "-Amismatched_lifetime_syntaxes -Adead_code";
+  RUSTFLAGS = "-Amismatched_lifetime_syntaxes -Adead_code -Aunused_parens";
   LIBCLANG_PATH = "${libclang.lib}/lib";
 
   # Even tho the tests work, a shit ton of them try to connect to a local RPC
