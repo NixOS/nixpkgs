@@ -689,9 +689,9 @@
   };
 
   fish = rec {
-    version = "3.6.0";
+    version = "3.7.0";
     url = "github:ram02z/tree-sitter-fish?ref=${version}";
-    hash = "sha256-ZQj6XR7pHGoCOBS6GOHiRW9LWNoNPlwVcZe5F2mtGNE=";
+    hash = "sha256-n6eGMdbW1Rsn5XbszLSSSG3F8jh+loYnPEiabNY+jfk=";
     meta = {
       license = lib.licenses.unlicense;
     };
