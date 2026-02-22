@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "millennium-frontend";
-  version = "2.34.0";
+  version = "2.35.0";
 
   src = millennium-src;
 
