@@ -13,14 +13,7 @@ lib.extendMkDerivation {
   extendDrvArgs =
     finalAttrs:
     {
-      name ? "${args.pname}-${args.version}",
-      src ? null,
-      srcs ? null,
-      sourceRoot ? null,
-      prePatch ? "",
-      patches ? [ ],
-      postPatch ? "",
-      patchFlags ? [ ],
+      name ? "${finalAttrs.pname}-${finalAttrs.version}",
       nativeBuildInputs ? [ ],
       buildInputs ? [ ],
       # The output hash of the dependencies for this project.
@@ -53,19 +46,18 @@ lib.extendMkDerivation {
       npmWorkspace ? null,
       nodejs ? topLevelArgs.nodejs,
       npmDeps ? fetchNpmDeps {
-        inherit
-          forceGitDeps
-          forceEmptyCache
-          src
-          srcs
-          sourceRoot
-          prePatch
-          patches
-          postPatch
-          patchFlags
-          ;
         name = "${name}-npm-deps";
-        hash = npmDepsHash;
+        hash = finalAttrs.npmDepsHash;
+
+        forceEmptyCache = finalAttrs.forceEmptyCache or false;
+        forceGitDeps = finalAttrs.forceGitDeps or false;
+        patchFlags = finalAttrs.patchFlags or [ ];
+        patches = finalAttrs.patches or [ ];
+        postPatch = finalAttrs.postPatch or "";
+        prePatch = finalAttrs.prePatch or "";
+        sourceRoot = finalAttrs.sourceRoot or null;
+        src = finalAttrs.src or null;
+        srcs = finalAttrs.srcs or null;
       },
       # Custom npmConfigHook
       npmConfigHook ? null,
