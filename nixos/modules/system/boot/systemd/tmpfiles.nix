@@ -192,7 +192,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf config.systemd.enable {
     warnings =
       let
         paths = lib.filter (path: path != null && lib.hasPrefix "/etc/tmpfiles.d/" path) (
