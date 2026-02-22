@@ -28,14 +28,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nVr+fDdna8EEHvIiXsccWFRTYzXfb4GG1zrfL+O6zLA=";
   };
 
-  # incompatible pointer type error: const char ** -> const void **
-  postPatch = ''
-    substituteInPlace libs/sqlite/sqlite.c \
-     --replace-warn \
-       "sqlite3_prepare16_v2(db->db, sql, -1, &r->r, &tl)" \
-       "sqlite3_prepare16_v2(db->db, sql, -1, &r->r, (const void**)&tl)"
-  '';
-
   buildInputs = [
     libGL
     libGLU
