@@ -1,51 +1,38 @@
 {
   lib,
-  fetchzip,
-  fetchYarnDeps,
-  yarn2nix-moretea,
-  nodejs-slim_20,
-  dos2unix,
+  buildNpmPackage,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
-yarn2nix-moretea.mkYarnPackage {
+buildNpmPackage (finalAttrs: {
+  pname = "meshcentral";
   version = "1.1.56";
 
-  src = fetchzip {
-    url = "https://registry.npmjs.org/meshcentral/-/meshcentral-1.1.56.tgz";
-    sha256 = "1n6kzbgmsn083sdwgwnn6cwch1ay20n1218bgzyv604hyvzrm0i2";
+  src = fetchFromGitHub {
+    owner = "Ylianst";
+    repo = "MeshCentral";
+    tag = finalAttrs.version;
+    hash = "sha256-tISK6EmWCIDEkUB6CpIW3+eH2JyTam5URlhYpSkGsrw=";
   };
+
+  npmDepsHash = "sha256-Etpf964Rb4fOty7RdyClQelyLMLVJhSQQB4fLgnf6AE=";
 
   patches = [
     ./fix-js-include-paths.patch
+    # from some reason the way the package is installed causes the `require`
+    # line in `$out/lib/node_modules/meshcentral/bin/meshcentral` to import the
+    # main file as a module, and thus nothing happens when it runs. We remove
+    # this conditional since we never use this as a module.
+    ./run.patch
+    # Bring back package.json. See: https://github.com/Ylianst/MeshCentral/issues/7643
+    (fetchpatch {
+      url = "https://github.com/Ylianst/MeshCentral/commit/a5d27530eac148c8671bc502bbcdb21efb512079.patch";
+      hash = "sha256-jmH2eVIRhZZ0sElU0o5yhSzVeItNdw4B5mnzGBiFFXM=";
+    })
   ];
 
-  packageJSON = ./package.json;
-  yarnLock = ./yarn.lock;
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = ./yarn.lock;
-    hash = "sha256-M5TZhY995VFFbY3cjM3jiEceiVm54N6CKxQRVACOL9w=";
-  };
-
-  # Tarball has CRLF line endings. This makes patching difficult, so let's convert them.
-  nativeBuildInputs = [ dos2unix ];
-  prePatch = ''
-    find . -name '*.js' -exec dos2unix {} +
-    ln -snf meshcentral.js bin/meshcentral
-  '';
-
-  preFixup = ''
-    mkdir -p $out/bin
-    chmod a+x $out/libexec/meshcentral/deps/meshcentral/meshcentral.js
-    sed -i '1i#!${lib.getExe nodejs-slim_20}' $out/libexec/meshcentral/deps/meshcentral/meshcentral.js
-    ln -s $out/libexec/meshcentral/deps/meshcentral/meshcentral.js $out/bin/meshcentral
-  '';
-
-  doDist = false;
-
-  publishBinsFor = [ ];
-
-  passthru.updateScript = ./update.sh;
+  dontNpmBuild = true;
 
   meta = {
     description = "Computer management web app";
@@ -54,4 +41,4 @@ yarn2nix-moretea.mkYarnPackage {
     license = lib.licenses.asl20;
     mainProgram = "meshcentral";
   };
-}
+})
