@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openal-soft";
-  version = "1.24.3";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
     tag = finalAttrs.version;
-    hash = "sha256-VQa3FD9NyvDv/+VbU+5lmV0LteiioJHpRkr1lnCn1g4=";
+    hash = "sha256-Fh9ZNXjDdAswONiy93pc6DXw5KR5hkCYmWH1kuY2oSw=";
   };
 
   strictDeps = true;
