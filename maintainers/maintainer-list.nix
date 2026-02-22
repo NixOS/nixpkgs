@@ -9703,6 +9703,12 @@
     github = "gkleen";
     githubId = 20089782;
   };
+  gl1tchxd = {
+    name = "Felix Buchsteiner";
+    github = "gl1tchxd-git";
+    githubId = 92686452;
+    email = "contact@gl1tchxd.at";
+  };
   gleber = {
     email = "gleber.p@gmail.com";
     github = "gleber";
