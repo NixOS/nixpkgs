@@ -28,7 +28,7 @@
 buildPythonPackage rec {
   __structuredAttrs = true;
   pname = "conda";
-  version = "26.1.0";
+  version = "26.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "conda";
     repo = "conda";
     tag = version;
-    hash = "sha256-u3xxaSNfPocAjzvzEhKNijsa2lR4xiMSpWHP4MTnBzQ=";
+    hash = "sha256-j72nFI6EgZLfO15mRc9KYbS5a/5SigCFh+dCPx6tL98=";
   };
 
   build-system = [
