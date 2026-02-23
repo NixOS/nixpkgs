@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
+  msrest,
   setuptools,
 }:
 
@@ -22,9 +23,10 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    isodate
     azure-common
     azure-mgmt-core
+    isodate
+    msrest
   ];
 
   # Module has no tests

@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Fix compilation with GCC 15: https://github.com/flightaware/dump1090/pull/261
     (fetchpatch2 {
-      url = "https://github.com/flightaware/dump1090/commit/93be1da123215e8ac15a0deaffedd480e8899f77.patch";
-      hash = "sha256-ehpMfLLEh1pMgvFAPg1JHo8XRlta+GvCIZsSXVPISLc=";
+      url = "https://github.com/flightaware/dump1090/commit/93be1da123215e8ac15a0deaffedd480e8899f77.patch?full_index=1";
+      hash = "sha256-x+U86b1j+mSpqfG4oFnHEz3cd7/O57ezPUf8yBrLzbc=";
     })
   ];
 

@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "uefi-firmware-parser";
-  version = "1.12";
+  version = "1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theopolis";
     repo = "uefi-firmware-parser";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Yiw9idmvSpx4CcVrXHznR8vK/xl7DTL+L7k4Nvql2B8=";
+    hash = "sha256-JPNur7Ipi+Ite9B7lqDm7h7iYUga8D+l18J2knCWZpk=";
   };
 
   build-system = [

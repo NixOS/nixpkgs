@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "golangci-lint-langserver";
-  version = "0.0.11";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "nametake";
     repo = "golangci-lint-langserver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mwYhOUH5PAbPRfP86dw9w6lIZYz/iL+f863XWOhBFy0=";
+    hash = "sha256-Sm+y9ccM5zhatzDZ/qDYH4HT2foteCniItdojqnFSxI=";
   };
 
   vendorHash = "sha256-kbGTORTTxfftdU8ffsfh53nT7wZldOnBZ/1WWzN89Uc=";

@@ -56,6 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
     # We will also just remove installation of empty `${runstatedir}/dbus`
     # and `${localstatedir}/lib/dbus` since these are useless in the package.
     ./meson-install-dirs.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fixes Darwin issues like:
+    # dyld[29056]: Library not loaded: @rpath/libdbus-1.3.dylib
+    #   Referenced from: <...> /nix/store/.../bin/dbus-run-session
+    #   Reason: no LC_RPATH's found
+    ./set-install_rpath.patch
   ];
 
   strictDeps = true;

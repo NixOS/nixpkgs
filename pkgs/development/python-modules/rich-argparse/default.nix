@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  python,
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
@@ -28,6 +29,10 @@ buildPythonPackage rec {
   disabledTests = [
     # coloring mismatch in fixture
     "test_subparsers_usage"
+  ]
+  ++ lib.optionals (!python.isPy313) [
+    # solid vs dash line mismatch
+    "test_rich_renderables"
   ];
 
   pythonImportsCheck = [ "rich_argparse" ];

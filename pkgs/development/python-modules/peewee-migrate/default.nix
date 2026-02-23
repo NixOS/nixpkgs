@@ -45,11 +45,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    #  sqlite3.OperationalError: error in table order after drop column...
-    "test_migrator"
-  ];
-
   meta = {
     description = "Simple migration engine for Peewee";
     homepage = "https://github.com/klen/peewee_migrate";

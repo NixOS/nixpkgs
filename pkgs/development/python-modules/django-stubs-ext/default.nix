@@ -27,6 +27,9 @@ buildPythonPackage rec {
   postPatch = ''
     cd ext
     ln -s ../scripts
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.9,<0.10.0" uv_build
   '';
 
   build-system = [ uv-build ];

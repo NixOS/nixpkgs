@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./build-reproducibility.patch
     # Fix include directory in generated cmake files with split outputs
     ./cmake-include-dir.patch
+    # Finding `boost_system` fails because the stub compiled library of
+    # Boost.System, which has been a header-only library since 1.69, was
+    # removed in 1.89.
+    # Upstream PR: https://github.com/google/libphonenumber/pull/3903
+    ./boost-1.89.patch
   ];
 
   outputs = [

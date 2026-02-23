@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.81.0";
+  version = "2.82.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-Z8luIR1G9rLlt9GSOsCIAU87JZ9uolv2kHaDz6xlKYU=";
+    hash = "sha256-C9qsgJI/+4NKiUSrOANWnGtZPlAt5SaQTtRwcqjwIkk=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -238,8 +238,11 @@ py.pkgs.toPythonApplication (
         azure-mgmt-trafficmanager
         azure-mgmt-web
         azure-monitor-query
-        azure-multiapi-storage
         azure-storage-common
+        azure-storage-blob
+        azure-storage-file-datalake
+        azure-storage-file-share
+        azure-storage-queue
         azure-synapse-accesscontrol
         azure-synapse-artifacts
         azure-synapse-managedprivateendpoints

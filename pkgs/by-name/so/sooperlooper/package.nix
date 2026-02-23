@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # see https://bugs.gentoo.org/925275
-  CPPFLAGS = "-fpermissive";
+  env.CPPFLAGS = "-fpermissive";
 
   enableParallelBuilding = true;
 

@@ -7,13 +7,10 @@
   libsecret,
   jsoncpp,
   mpv-unwrapped,
-  fetchzip,
-  stdenv,
-  libgbm,
-  libdrm,
   libass,
   keybinder3,
   ffmpeg,
+  sdl3,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
@@ -23,28 +20,15 @@
   dart,
 }:
 
-let
-  libwebrtc = fetchzip {
-    url = "https://github.com/flutter-webrtc/flutter-webrtc/releases/download/v1.2.1/libwebrtc.zip";
-    hash = "sha256-i4LRG44f//SDIOl072yZavkYoTZdiydPZndeOm6/fBM=";
-    meta = {
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    };
-  };
-  libwebrtcRpath = lib.makeLibraryPath [
-    libgbm
-    libdrm
-  ];
-in
 flutter338.buildFlutterApplication rec {
   pname = "plezy";
-  version = "1.15.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-tFVaLfGANkcNYqwOJEQXQya52rMNMC4rJlqmrP7VhJ0=";
+    hash = "sha256-bJ/Qho6hkjbGOFUJj3J4XKk4Eq+3PU1VFGxik5ht16c=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -64,9 +48,15 @@ flutter338.buildFlutterApplication rec {
     libass
     keybinder3
     ffmpeg
+    sdl3
   ];
 
-  env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
+  postPatch = ''
+    # Avoid FetchContent download of SDL3 during build.
+    substituteInPlace linux/CMakeLists.txt \
+      --replace-fail "set(BUNDLE_SDL3 ON CACHE BOOL \"\" FORCE)" \
+                     "set(BUNDLE_SDL3 OFF CACHE BOOL \"\" FORCE)"
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -83,34 +73,7 @@ flutter338.buildFlutterApplication rec {
     })
   ];
 
-  customSourceBuilders = {
-    flutter_webrtc =
-      { version, src, ... }:
-      stdenv.mkDerivation {
-        pname = "flutter_webrtc";
-        inherit version src;
-        inherit (src) passthru;
-
-        postPatch = ''
-          substituteInPlace third_party/CMakeLists.txt \
-            --replace-fail "\''${CMAKE_CURRENT_LIST_DIR}/downloads/libwebrtc.zip" ${libwebrtc}
-          ln -s ${libwebrtc} third_party/libwebrtc
-        '';
-
-        installPhase = ''
-          runHook preInstall
-
-          mkdir $out
-          cp -r ./* $out/
-
-          runHook postInstall
-        '';
-      };
-  };
-
   postInstall = ''
-    patchelf --add-rpath ${libwebrtcRpath} $out/app/plezy/lib/libwebrtc.so
-
     install -Dm644 assets/plezy.png $out/share/icons/hicolor/128x128/apps/plezy.png
     for size in 16 24 32 48 64 256 512; do
       mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps

@@ -73,13 +73,13 @@
     "vendorHash": "sha256-OBXAl3MRAtnYYATHD0UWEuB1dJozG7al9csGYLClaYw="
   },
   "auth0_auth0": {
-    "hash": "sha256-d93MvkFn2+slFh2yvllcwthVTY15ezLn+q8Jm3MPQ+0=",
+    "hash": "sha256-7xAQGsDkw0JYP1Q+cEMHezNmQzccRyiwtUXKgJfnI6k=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.39.1",
+    "rev": "v1.40.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-XtPow6ysRcy9MWYFnH7GewtWu2c1LaZih8njbbEzAu8="
+    "vendorHash": "sha256-57To9XMBDp6VQKXEU7TzkRHebCUUzlHWHV8+QU9PoI8="
   },
   "aviatrixsystems_aviatrix": {
     "hash": "sha256-46djOfAj/5kfeoKLQHbeKefzdGbmlBATR+uN/IaAn8I=",
@@ -959,13 +959,13 @@
     "vendorHash": "sha256-OAd8SeTqTrH0kMoM2LsK3vM2PI23b3gl57FaJYM9hM0="
   },
   "newrelic_newrelic": {
-    "hash": "sha256-OqV20sYIi9M+U1f00neShv0Cm3NyVD6HucqYoxLKC64=",
+    "hash": "sha256-N/ytL2WQougrVl45Jq34HBP11VcnACl+wKFWeFPmsX8=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.80.0",
+    "rev": "v3.80.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-fh0QEWSwdoWKED/39OBT5kMADbsUDvhJUYMfWR9P5os="
+    "vendorHash": "sha256-y+VDIQQ91SyCIhObripBUdi75zhO7vSQvV9WjuJYDK4="
   },
   "ns1-terraform_ns1": {
     "hash": "sha256-MX/Wd9Lztjn7uwDzJjs4bsSSp0PFzUgsu4jXke9jHL8=",
@@ -1031,13 +1031,13 @@
     "vendorHash": "sha256-ofzbDmivXgH1i1Gjhpyp0bk3FDs5SnxwoRuNAWyMqyI="
   },
   "opentelekomcloud_opentelekomcloud": {
-    "hash": "sha256-14JxQBGvqU6K8PxkZFK7rEetCjN5lKLGXwAOnHSaZ2E=",
+    "hash": "sha256-ak1shQaEyxYHAwZKg5ELh9y7nvpfwuPk3TGDpcm3GY4=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.36.58",
+    "rev": "v1.36.59",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-gUilhKLjGR1P4JkQ6zkBJQUvrUcVSJlO1yzJdu3hBFA="
+    "vendorHash": "sha256-WPVk+wlAK6O2xXjyXekYu9svpEg0AFz9EnDGGTS9I3c="
   },
   "opsgenie_opsgenie": {
     "hash": "sha256-Y67kcg/ovvZc22l1CBz0Mqu7DAIit5F0jQNfQrl2EGI=",

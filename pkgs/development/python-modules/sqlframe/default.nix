@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "sqlframe";
-  version = "3.45.0";
+  version = "3.46.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eakmanrq";
     repo = "sqlframe";
     tag = "v${version}";
-    hash = "sha256-S0tcdmdA9SptmaFT/G3efO3yPLWrBOJVDLCK3Zu2r9w=";
+    hash = "sha256-WTeJXiIkyj9FgO1w3P6JsCTtpGzezWnsiz/boB9PdIU=";
   };
 
   build-system = [ setuptools-scm ];

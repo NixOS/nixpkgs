@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
+  msrest,
   setuptools,
   typing-extensions,
 }:
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
+    msrest
     typing-extensions
   ];
 

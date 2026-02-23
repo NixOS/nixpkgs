@@ -12,15 +12,6 @@ let
 
   overrides = (
     self: super: {
-      named-readtables = super.named-readtables.overrideLispAttrs (o: {
-        patches = (o.patches or [ ]) ++ [
-          (pkgs.fetchpatch {
-            name = "named-readtables-sbcl-fix.patch";
-            url = "https://github.com/melisgl/named-readtables/commit/6eea56674442b884a4fee6ede4c8aad63541aa5b.patch";
-            hash = "sha256-ZkmBz50tkJutCNhrgVTHyE+sxRjmL8y7YC7yewrmves=";
-          })
-        ];
-      });
       cl_plus_ssl = super.cl_plus_ssl.overrideLispAttrs (o: {
         nativeLibs = [ pkgs.openssl ];
       });

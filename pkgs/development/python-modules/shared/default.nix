@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   kvf,
   paradict,
   probed,
@@ -10,14 +10,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "shared";
-  version = "0.0.27";
+  version = "0.0.32";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "pyrustic";
-    repo = "shared";
-    tag = finalAttrs.version;
-    hash = "sha256-5O/eaVL83gWoh0msparEjcTU+5K532f495OVwkoyJO8=";
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-cwityVwNqxTQyZY1zYBJ0fAEzH/vc5bT/kcyPDTsWMY=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +34,6 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Data exchange and persistence based on human-readable files";
     homepage = "https://github.com/pyrustic/shared";
-    changelog = "https://github.com/pyrustic/shared/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

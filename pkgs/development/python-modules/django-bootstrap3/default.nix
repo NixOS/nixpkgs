@@ -26,6 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-DpdgwG+4We/r3NZ50no/SurEtL1BkB3P0nMv8KRj+GY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.6,<0.10.0" uv_build
+  '';
+
   build-system = [ uv-build ];
 
   dependencies = [ django ];

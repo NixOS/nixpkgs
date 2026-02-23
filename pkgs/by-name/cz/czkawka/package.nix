@@ -4,15 +4,19 @@
   cairo,
   callPackage,
   fetchFromGitHub,
+  fontconfig,
   gdk-pixbuf,
   glib,
   gobject-introspection,
   gtk4,
+  libglvnd,
+  libxkbcommon,
   pango,
   pkg-config,
   rustPlatform,
   stdenv,
   testers,
+  wayland,
   wrapGAppsHook4,
   xvfb-run,
   versionCheckHook,
@@ -41,10 +45,14 @@ let
     buildInputs = [
       atk
       cairo
+      fontconfig
       gdk-pixbuf
       glib
       gtk4
+      libglvnd
+      libxkbcommon
       pango
+      wayland
     ];
 
     nativeCheckInputs = [ xvfb-run ];
@@ -65,6 +73,20 @@ let
       install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka.svg
       install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka-symbolic.svg
       install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
+    '';
+    dontWrapGApps = true;
+
+    postFixup = ''
+      wrapGApp $out/bin/czkawka_gui
+
+      patchelf --add-rpath "${
+        lib.makeLibraryPath [
+          fontconfig
+          libglvnd
+          libxkbcommon
+          wayland
+        ]
+      }" $out/bin/krokiet
     '';
 
     nativeInstallCheckInputs = [
