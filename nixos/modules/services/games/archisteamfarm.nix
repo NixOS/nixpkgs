@@ -248,48 +248,38 @@ in
           }
         ];
 
-        preStart =
-          let
-            createBotsScript =
-              pkgs.runCommand "ASF-bots"
-                {
-                  preferLocalBuild = true;
-                }
-                ''
-                  mkdir -p $out
-                  # clean potential removed bots
-                  rm -rf $out/*.json
-                  for i in ${
-                    lib.concatStringsSep " " (map (x: "${lib.getName x},${x}") (lib.mapAttrsToList mkBot cfg.bots))
-                  }; do IFS=",";
-                    set -- $i
-                    ln -fs $2 $out/$1
-                  done
-                '';
-            replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
-          in
-          ''
-            mkdir -p config
+        preStart = ''
+          mkdir -p config
 
-            cp --no-preserve=mode ${configFile} config/ASF.json
+          cp --no-preserve=mode '${configFile}' config/ASF.json
 
-            ${lib.optionalString (cfg.ipcPasswordFile != null) ''
-              ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
-            ''}
+          ${lib.optionalString (cfg.ipcPasswordFile != null) ''
+            ${lib.getExe pkgs.replace-secret} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
+          ''}
 
-            ${lib.optionalString (cfg.ipcSettings != { }) ''
-              ln -fs ${ipc-config} config/IPC.config
-            ''}
+          ${lib.optionalString (cfg.ipcSettings != { }) ''
+            ln -fs ${ipc-config} config/IPC.config
+          ''}
 
-            ${lib.optionalString (cfg.bots != { }) ''
-              ln -fs ${createBotsScript}/* config/
-            ''}
+          for f in config/*.nixbot; do
+            [[ -f "$f" ]] || continue
+            rm "$f"
+            [[ -f "''${f%.nixbot}" ]] || continue
+            rm "''${f%.nixbot}"
+          done
 
-            rm -f www
-            ${lib.optionalString cfg.web-ui.enable ''
-              ln -s ${cfg.web-ui.package}/ www
-            ''}
-          '';
+          ${lib.concatStrings (
+            map (x: ''
+              cp --no-preserve=mode '${x}' 'config/${lib.getName x}'
+              touch 'config/${lib.getName x}.nixbot'
+            '') (lib.mapAttrsToList mkBot cfg.bots)
+          )}
+
+          rm -f www
+          ${lib.optionalString cfg.web-ui.enable ''
+            ln -s '${cfg.web-ui.package}/' www
+          ''}
+        '';
       };
     };
   };
