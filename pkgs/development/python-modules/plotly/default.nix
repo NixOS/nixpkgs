@@ -36,7 +36,7 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plotly";
   version = "6.5.2";
   pyproject = true;
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7rMatpaZvHuNPpiXR5eUHultqNnLER1iW+GR3dwgkyo=";
   };
 
@@ -52,6 +52,25 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail '"hatch", ' "" \
       --replace-fail "jupyter_packaging~=0.10.0" jupyter_packaging
+  ''
+  # AttributeError: module 'numpy' has no attribute 'in1d'
+  + ''
+    substituteInPlace \
+      tests/test_optional/test_px/test_px.py \
+      tests/test_optional/test_px/test_px_functions.py \
+      --replace-fail "np.in1d(" "np.isin("
+  ''
+  + ''
+    substituteInPlace plotly/figure_factory/_violin.py \
+      --replace-fail \
+        'np.percentile(x, 50, interpolation="linear")' \
+        'np.percentile(x, 50, method="linear")' \
+      --replace-fail \
+        'np.percentile(x, 25, interpolation="lower")' \
+        'np.percentile(x, 25, method="lower")' \
+      --replace-fail \
+        'np.percentile(x, 75, interpolation="higher")' \
+        'np.percentile(x, 75, method="higher")'
   '';
 
   env.SKIP_NPM = true;
@@ -90,7 +109,12 @@ buildPythonPackage rec {
     which
     xarray
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  pytestFlags = [
+    # pytest.PytestRemovedIn9Warning: The (path: py.path.local) argument is deprecated
+    "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
 
   disabledTests = [
     # failed pinning test, sensitive to dep versions
@@ -151,4 +175,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})
