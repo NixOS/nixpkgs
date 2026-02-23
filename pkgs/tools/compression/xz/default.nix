@@ -61,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeScript "update-xz" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '>xz-5.2.6.tar.xz</a>'
       # We pick first match where a stable release goes first.
       new_version="$(curl -s https://tukaani.org/xz/ |
-          pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]xz</a>' |
+          pcre2grep -o1 '>xz-([0-9.]+)[.]tar[.]xz</a>' |
           head -n1)"
       update-source-version ${finalAttrs.pname} "$new_version"
     '';

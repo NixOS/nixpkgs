@@ -86,14 +86,14 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-valgrind" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of:
       #  'Current release: <a href="/downloads/current.html#current">valgrind-3.19.0</a>'
       new_version="$(curl -s https://valgrind.org/ |
-          pcregrep -o1 'Current release: .*>valgrind-([0-9.]+)</a>')"
+          pcre2grep -o1 'Current release: .*>valgrind-([0-9.]+)</a>')"
       update-source-version ${pname} "$new_version"
     '';
   };

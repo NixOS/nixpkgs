@@ -60,13 +60,13 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-mpfr" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '<title>GNU MPFR version 4.1.1</title>'
       new_version="$(curl -s https://www.mpfr.org/mpfr-current/ |
-          pcregrep -o1 '<title>GNU MPFR version ([0-9.]+)</title>')"
+          pcre2grep -o1 '<title>GNU MPFR version ([0-9.]+)</title>')"
       update-source-version ${pname} "$new_version"
     '';
   };

@@ -199,13 +199,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeScript "update-gdb" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '<h3>GDB version 12.1</h3>'
       new_version="$(curl -s https://www.sourceware.org/gdb/ |
-          pcregrep -o1 '<h3>GDB version ([0-9.]+)</h3>')"
+          pcre2grep -o1 '<h3>GDB version ([0-9.]+)</h3>')"
       update-source-version ${pname} "$new_version"
     '';
   };

@@ -168,13 +168,13 @@ builder rec {
 
     updateScript = writeScript "update-guile-3" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '"https://ftp.gnu.org/gnu/guile/guile-3.0.8.tar.gz"'
       new_version="$(curl -s https://www.gnu.org/software/guile/download/ |
-          pcregrep -o1 '"https://ftp.gnu.org/gnu/guile/guile-(3[.0-9]+).tar.gz"')"
+          pcre2grep -o1 '"https://ftp.gnu.org/gnu/guile/guile-(3[.0-9]+).tar.gz"')"
       update-source-version guile_3_0 "$new_version"
     '';
   };
