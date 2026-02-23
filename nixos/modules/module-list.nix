@@ -230,6 +230,7 @@
   ./programs/gnome-disks.nix
   ./programs/gnome-terminal.nix
   ./programs/gnupg.nix
+  ./programs/google-chrome.nix
   ./programs/gpaste.nix
   ./programs/gphoto2.nix
   ./programs/gpu-screen-recorder.nix
