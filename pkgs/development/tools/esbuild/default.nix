@@ -32,7 +32,6 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       lucus16
       undefined-moe
-      ivan
     ];
     mainProgram = "esbuild";
   };

@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
       xrelkd
-      ivan
       matthiasbeyer
     ];
   };

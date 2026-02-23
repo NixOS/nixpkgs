@@ -11502,12 +11502,6 @@
     github = "ivalery111";
     githubId = 37245535;
   };
-  ivan = {
-    email = "ivan@ludios.org";
-    github = "ivan";
-    githubId = 4458;
-    name = "Ivan Kozik";
-  };
   ivan-babrou = {
     email = "nixpkgs@ivan.computer";
     name = "Ivan Babrou";
