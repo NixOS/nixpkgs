@@ -19,13 +19,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "httpcats";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "robur-coop";
     repo = "httpcats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t3gSfv73XYntle1dd4k9bv893pGStk1NHz62mAvcHAs=";
+    hash = "sha256-19WV5pabmeuYmcW3AbnVpT30Sx6TVAPH+ayEeJgRS0Q=";
   };
 
   propagatedBuildInputs = [

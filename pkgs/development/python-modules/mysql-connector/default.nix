@@ -29,6 +29,8 @@ buildPythonPackage rec {
     hash = "sha256-EwdJpiyplck26Tc9SiczxGieJ3GcTGMQva/fDzhzWn4=";
   };
 
+  sourceRoot = "${src.name}/mysql-connector-python";
+
   patches = [
     # mysql-connector overrides MACOSX_DEPLOYMENT_TARGET to 11.
     # This makes the installation with nixpkgs fail. I suspect, that's

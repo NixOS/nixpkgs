@@ -29,11 +29,6 @@ buildPythonPackage rec {
     hash = "sha256-iSWSBjtJe4iEvm+VUEWDvRCBdRz1R6m9mlfPLwh01Sk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools ==" "setuptools >="
-  '';
-
   build-system = [
     setuptools
     zope-proxy

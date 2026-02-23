@@ -3,20 +3,20 @@
   asgiref,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   flask,
+  hatchling,
+  hatch-vcs,
   hiro,
   limits,
   ordered-set,
   pymemcache,
   pymongo,
+  pytest-check,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   redis,
   rich,
-  setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -31,30 +31,25 @@ buildPythonPackage rec {
     hash = "sha256-lrq4WCc2gxm039nXW6tiDt7laJFEICO0x9jw71UUwaI=";
   };
 
-  patches = [
-    # permit use of rich < 15 -- remove when updating past 3.12
-    (fetchpatch {
-      url = "https://github.com/alisaifee/flask-limiter/commit/008a5c89f249e18e5375f16d79efc3ac518e9bcc.patch";
-      hash = "sha256-dvTPVnuPs7xCRfUBBA1bgeWGuevFUZ+Kgl9MBHdgfKU=";
-    })
-  ];
-
   postPatch = ''
     # flask-restful is unmaintained and breaks regularly, don't depend on it
     substituteInPlace tests/test_views.py \
       --replace-fail "import flask_restful" ""
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     flask
     limits
     ordered-set
-    rich
   ];
 
   optional-dependencies = {
+    cli = [ rich ];
     redis = limits.optional-dependencies.redis;
     memcached = limits.optional-dependencies.memcached;
     mongodb = limits.optional-dependencies.mongodb;
@@ -62,6 +57,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     asgiref
+    pytest-check
     pytest-cov-stub
     pytest-mock
     pytestCheckHook
@@ -69,7 +65,8 @@ buildPythonPackage rec {
     redis
     pymemcache
     pymongo
-  ];
+  ]
+  ++ optional-dependencies.cli;
 
   disabledTests = [
     # flask-restful is unmaintained and breaks regularly

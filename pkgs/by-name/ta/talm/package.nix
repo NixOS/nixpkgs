@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "talm";
-  version = "0.22.1";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "cozystack";
     repo = "talm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I3rSpFCNMoA5tAp3WVLM6Ae7Vo8m+9px9fg7Fgw0/oA=";
+    hash = "sha256-/veCnApXSX5ubfOb2g8MkLtN5Ejt7hdINwuHX/0JUYA=";
   };
 
   vendorHash = "sha256-jDp1WVETDbCtSq+v0BrIiTqoR2cnmI7JXdy5ydnt5wA=";

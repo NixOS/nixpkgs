@@ -12,16 +12,21 @@
   rich-argparse,
   setuptools-scm,
   wcwidth,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "3.1.0";
+  version = if python.isPy313 then "3.1.0" else "3.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zOOuzgGLCxBVmIraoraHrJwd84v9Kr/Cnb61GpcH3jM=";
+    hash =
+      if python.isPy313 then
+        "sha256-zOOuzgGLCxBVmIraoraHrJwd84v9Kr/Cnb61GpcH3jM="
+      else
+        "sha256-bGNyobJs0Uu2IJZTyJ1zAP58FDno3KMPW2tv/bXyFPo=";
   };
 
   build-system = [ setuptools-scm ];

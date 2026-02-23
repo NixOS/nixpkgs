@@ -17,6 +17,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pJ6/+PYxMpJcj1e9v2Al8vIWFizJnLMIw7LlVU9ogS0=";
   };
 
+  env.arch =
+    if stdenv.hostPlatform.isx86_64 then
+      "x86-64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "armv8-a"
+    else
+      lib.warn ''
+        architecture '${stdenv.hostPlatform.system}' compiles with native optimizations,
+        this may result in crashes on incompatible CPUs!
+      '' "native";
+
   strictDeps = true;
 
   nativeBuildInputs = [ ponyc ];

@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2025.12.0";
+  version = "2026.02.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "xarray";
     tag = "v${version}";
-    hash = "sha256-7MTZ/0BbJb3mg2FHvtsV+v4TsgoxD0Tpco7J4DgT/hY=";
+    hash = "sha256-g1cKI0Et3RToWOxn+bELtT5jAaB8e1N+k9doCU+OgfY=";
   };
 
   postPatch = ''
@@ -96,13 +96,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    scipy
   ];
 
   disabledTestPaths = [
-    # The following 3 are reported upstream here:
-    # https://github.com/pydata/xarray/issues/11051
+    # https://github.com/pydata/xarray/issues/11183
     "xarray/tests/test_dataarray.py::TestDataArray::test_curvefit_helpers" # Failed: DID NOT RAISE <class 'ValueError'>
-    "xarray/tests/test_duck_array_ops.py::test_extension_array_attr" # NotImplementedError: (CategoricalDtype(categories=['cat1', 'cat2', 'cat3'],...
     "xarray/tests/test_variable.py::TestIndexVariable::test_concat_periods" # ValueError: Could not convert <xarray.IndexVariable 't' (t: 5)> Size: 40B
   ];
 

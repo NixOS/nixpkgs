@@ -20,13 +20,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "lx-music-desktop";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "lyswhut";
     repo = "lx-music-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g4QVpymzoRKIq70aRLXGFmUmIpSiXIZThrp8fumBKTQ=";
+    hash = "sha256-bhgXNk1WUVYb5/42uLIi+V8Ivc9/ykul+Um6QmGlvyk=";
   };
 
   desktopItems = [
@@ -68,7 +68,7 @@ buildNpmPackage (finalAttrs: {
   # Npm 11 (nodejs 24) can't resolve all dependencies from the prefetched cache.
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-BmrY7IXx6Z+sBAemYnOZUBMyLInENMOB6fh/4LoV80w=";
+  npmDepsHash = "sha256-62ytK6WNwdkKfci2gsC+WVDcNi247IXqFGBWa5a5J5c=";
 
   makeCacheWritable = true;
 

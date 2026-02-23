@@ -6,6 +6,7 @@
   pytestCheckHook,
   pyyaml,
   setuptools,
+  setuptools-scm,
   sphinx,
 }:
 
@@ -21,7 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-5cjPV2pt2x8RmaGWTRWeX3Nb1QeDd7245FZ0tEmYCSk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     configobj

@@ -38,28 +38,16 @@ let
     releaseRev = v: "v${v}";
 
     defaultVersion =
+      let
+        case = case: out: { inherit case out; };
+      in
       with lib.versions;
       lib.switch coq.version [
-        {
-          case = range "8.15" "9.1";
-          out = "3.17";
-        }
-        {
-          case = range "8.14" "8.20";
-          out = "3.15";
-        }
-        {
-          case = isEq "8.13";
-          out = "3.10";
-        }
-        {
-          case = isEq "8.12";
-          out = "3.9";
-        }
-        {
-          case = range "8.8" "8.11";
-          out = "3.8";
-        }
+        (case (range "8.15" "9.1") "3.17")
+        (case (range "8.14" "8.20") "3.15")
+        (case (isEq "8.13") "3.10")
+        (case (isEq "8.12") "3.9")
+        (case (range "8.8" "8.11") "3.8")
       ] null;
 
     release = {

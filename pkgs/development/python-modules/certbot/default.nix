@@ -5,6 +5,7 @@
   python,
   runCommand,
   fetchFromGitHub,
+  fetchpatch,
   configargparse,
   acme,
   configobj,
@@ -33,6 +34,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-+LQX845Qw/T+kR846bNu9xTJ0zcL76rtp48e/Cgu6Vk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-test_rollback_too_many.patch";
+      url = "https://github.com/certbot/certbot/commit/4c61a450d4a843c66baab6d5d9a42ce0554e99d7.patch";
+      hash = "sha256-PSh2JXoEWNUrqxNh8X5QchyIP8KRHT60T/cLax6VRWo=";
+    })
+  ];
 
   postPatch = "cd certbot"; # using sourceRoot would interfere with patches
 

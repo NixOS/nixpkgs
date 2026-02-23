@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.12.0";
+  version = "18.12.1";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nubhaIxVpVDiiNxX2InbhmYBkk/fMO0i9XrJgtJxD1o=";
+    hash = "sha256-ojIL8Iy74UgFE4Mp75oHWbZDsFRKRhOBdkPP/TtZpz4=";
   };
 
-  cargoHash = "sha256-ZBqZhWQ5tPhfWDtJ8/7oVR1EoP+MrF55ofUQZ5qUpAw=";
+  cargoHash = "sha256-KamAFi6OHE38ss8rIncNecNMVjd8gAeSWMh8G7Yb/rQ=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.

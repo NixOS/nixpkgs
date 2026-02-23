@@ -29,15 +29,6 @@ buildPythonPackage rec {
     hash = "sha256-fMnXuMwxylO9Q7EFPpkgwwNeBuviUa8HduRrqrqdMaI=";
   };
 
-  postPatch = ''
-    sed -i -e '/namespace_packages/d' setup.py
-    printf 'from pkgutil import extend_path\n__path__ = extend_path(__path__, __name__)\n' >beetsplug/__init__.py
-
-    # beets v2.1.0 compat
-    # <https://github.com/beetbox/beets/commit/0e87389994a9969fa0930ffaa607609d02e286a8>
-    sed -i -e 's/util\.py3_path/os.fsdecode/g' tests/_common.py
-  '';
-
   build-system = [
     setuptools
   ];
@@ -67,7 +58,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/adammillerio/beets-copyartifacts/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     inherit (beets-minimal.meta) platforms;
-    # Isn't compatible with beets >= 2.3
     broken = true;
   };
 }

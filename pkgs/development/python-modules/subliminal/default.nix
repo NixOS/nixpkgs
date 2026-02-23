@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "subliminal";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Diaoul";
     repo = "subliminal";
     tag = version;
-    hash = "sha256-dA+UoSzMjncF619yfvRnXJFBrVi9FCkuqeN0X7FGiv8=";
+    hash = "sha256-fNrWdj8jnTH8O7mrltyApgBOd7zMA5wcaMizG6/Z0BU=";
   };
 
   build-system = [

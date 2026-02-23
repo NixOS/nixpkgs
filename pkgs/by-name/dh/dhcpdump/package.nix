@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dhcpdump";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "bbonev";
     repo = "dhcpdump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ck6DLsLQ00unNqPLBKkxaJLDCaPFjTFJcQjTbKSq0U8=";
+    hash = "sha256-EtCwtRvAvZdfW/6MjHEXJTHoD/OknJeZJ7q0qb+CzeE=";
   };
 
   strictDeps = true;

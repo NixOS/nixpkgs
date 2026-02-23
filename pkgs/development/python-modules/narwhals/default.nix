@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "2.15.0";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-7tLxMtFWpk0ZpR9UYtKdk6L2UXb/ah1ZA6XZ4RbnvsI=";
+    hash = "sha256-k7CeM8Q4JgKbkLisAaVrljro4diOf0K0immek6AI0vM=";
   };
 
   build-system = [ hatchling ];
@@ -81,6 +81,10 @@ buildPythonPackage rec {
     # ibis improvements cause strict XPASS failures (tests expected to fail now pass)
     "test_empty_scalar_reduction_with_columns"
     "test_collect_empty"
+    "test_first_last_expr_over_order_by"
+    "test_first_expr_broadcasting"
+    # sqlframe improvements cause strict XPASS failures (tests expected to fail now pass)
+    "test_unique_expr"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [

@@ -5,6 +5,7 @@
   azure-common,
   azure-mgmt-core,
   isodate,
+  msrest,
   setuptools,
 }:
 
@@ -25,6 +26,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
+    msrest
   ];
 
   # no tests included

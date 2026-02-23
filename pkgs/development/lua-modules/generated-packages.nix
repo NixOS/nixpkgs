@@ -5287,6 +5287,7 @@ final: prev: {
       buildLuarocksPackage,
       fetchFromGitHub,
       fetchurl,
+      luaAtLeast,
       luaOlder,
     }:
     buildLuarocksPackage {
@@ -5304,7 +5305,7 @@ final: prev: {
         hash = "sha256-4il5mmRLtuyCJ2Nm1tKv2hXk7rmiq7Fppx9LMbjkne0=";
       };
 
-      disabled = luaOlder "5.1";
+      disabled = luaOlder "5.1" || luaAtLeast "5.5";
 
       meta = {
         homepage = "http://manoelcampos.github.io/xml2lua/";

@@ -91,6 +91,7 @@
   et-xmlfile,
   networkx,
   numpy,
+  numba,
   openpyxl,
   pandas,
   xlrd,
@@ -160,6 +161,7 @@ buildPythonPackage rec {
     mypy-extensions
     nest-asyncio
     nltk
+    numba
     numpy
     olefile
     orderly-set

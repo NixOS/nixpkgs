@@ -8854,6 +8854,12 @@
     githubId = 100240294;
     name = "Florian Sanders";
   };
+  FlorisMenninga = {
+    email = "fl-ris@protonmail.com";
+    github = "Fl-ris";
+    githubId = 117688953;
+    name = "Floris Menninga";
+  };
   flosse = {
     email = "mail@markus-kohlhase.de";
     github = "flosse";
@@ -24451,12 +24457,6 @@
     github = "shgew";
     githubId = 5584672;
   };
-  shhht = {
-    name = "shhht";
-    email = "stp.tjeerd@gmail.com";
-    github = "shhht";
-    githubId = 118352823;
-  };
   shift = {
     name = "Vincent Palmer";
     email = "shift@someone.section.me";
@@ -29320,7 +29320,7 @@
     keys = [ { fingerprint = "FD0A C425 9EF5 4084 F99F 9B47 2ACC 9749 7C68 FAD4"; } ];
   };
   yechielw = {
-    name = "yechielw";
+    name = "Yechiel Worenklein";
     email = "yechielworen@gmail.com";
     github = "yechielw";
     githubId = 41305372;

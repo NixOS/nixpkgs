@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "acr-cli";
-  version = "0.17";
+  version = "0.18";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "acr-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mS6IgeQqjdruSlsr2cssdbsTOWM4STBqp/RtrWXG9/c=";
+    hash = "sha256-yMA+cbkmmwDwjPHTHVbxc+npyEklaGmDgCWXBUxlnyo=";
   };
 
   vendorHash = null;
