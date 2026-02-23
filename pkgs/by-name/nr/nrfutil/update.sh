@@ -14,11 +14,11 @@ declare -A versions
 declare -A hashes
 declare -a packages
 
-architectures["x86_64-linux"]="x86_64-unknown-linux-gnu"
+# same ordering as 'source.nix'
+architectures["aarch64-darwin"]="aarch64-apple-darwin"
 architectures["aarch64-linux"]="aarch64-unknown-linux-gnu"
-# NOTE: segger-jlink is not yet packaged for darwin
-# architectures["x86_64-darwin"]="x86_64-apple-darwin"
-# architectures["aarch64-darwin"]="aarch64-apple-darwin"
+architectures["x86_64-darwin"]="x86_64-apple-darwin"
+architectures["x86_64-linux"]="x86_64-unknown-linux-gnu"
 
 packages=(
     "nrfutil"
@@ -53,7 +53,7 @@ done
 
 {
     printf "{\n"
-    for a in "${!architectures[@]}"; do
+    for a in $(printf "%s\n" "${!architectures[@]}" | sort); do
         printf "  %s = {\n" "$a"
         printf "    triplet = \"%s\";\n" "${architectures["${a}"]}"
         printf "    packages = {\n"
