@@ -6,13 +6,18 @@
   asar,
   lib,
   version,
-  fetchurl,
   pname,
+  passthru,
   meta,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit pname version meta;
+  inherit
+    pname
+    version
+    passthru
+    meta
+    ;
 
   nativeBuildInputs = [
     dpkg
@@ -20,10 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     asar
   ];
 
-  src = fetchurl {
-    url = "https://proton.me/download/pass/linux/x64/proton-pass_${version}_amd64.deb";
-    hash = "sha256-i5QQ1uzQ2tSDX4I/APL60QcHh9Ovc7ciueRnz7cZUuE=";
-  };
+  src = passthru.sources.${stdenvNoCC.hostPlatform.system};
 
   dontConfigure = true;
   dontBuild = true;
