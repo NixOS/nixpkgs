@@ -2,50 +2,11 @@
   config,
   options,
   lib,
-  pkgs,
   ...
 }:
 let
   cfg = config.nixpkgs;
   opt = options.nixpkgs;
-
-  isConfig = x: builtins.isAttrs x || lib.isFunction x;
-
-  optCall = f: x: if lib.isFunction f then f x else f;
-
-  mergeConfig =
-    lhs_: rhs_:
-    let
-      lhs = optCall lhs_ { inherit lib pkgs; };
-      rhs = optCall rhs_ { inherit lib pkgs; };
-    in
-    lib.recursiveUpdate lhs rhs
-    // lib.optionalAttrs (lhs ? allowUnfreePackages) {
-      allowUnfreePackages = lhs.allowUnfreePackages ++ (lib.attrByPath [ "allowUnfreePackages" ] [ ] rhs);
-    }
-    // lib.optionalAttrs (lhs ? packageOverrides) {
-      packageOverrides =
-        pkgs:
-        optCall lhs.packageOverrides pkgs // optCall (lib.attrByPath [ "packageOverrides" ] { } rhs) pkgs;
-    }
-    // lib.optionalAttrs (lhs ? perlPackageOverrides) {
-      perlPackageOverrides =
-        pkgs:
-        optCall lhs.perlPackageOverrides pkgs
-        // optCall (lib.attrByPath [ "perlPackageOverrides" ] { } rhs) pkgs;
-    };
-
-  configType = lib.mkOptionType {
-    name = "nixpkgs-config";
-    description = "nixpkgs config";
-    check =
-      x:
-      let
-        traceXIfNot = c: if c x then true else lib.traceSeqN 1 x false;
-      in
-      traceXIfNot isConfig;
-    merge = args: lib.foldr (def: mergeConfig def.value) { };
-  };
 
   overlayType = lib.mkOptionType {
     name = "nixpkgs-overlay";
@@ -165,7 +126,13 @@ in
       example = lib.literalExpression ''
         { allowBroken = true; allowUnfree = true; }
       '';
-      type = configType;
+      type = lib.types.submoduleWith {
+        modules = [ ../../../pkgs/top-level/config.nix ];
+        specialArgs = {
+          docPrefix = "https://nixos.org/manual/nixpkgs/unstable/";
+        };
+        shorthandOnlyDefinesConfig = true;
+      };
       description = ''
         Global configuration for Nixpkgs.
         The complete list of [Nixpkgs configuration options](https://nixos.org/manual/nixpkgs/unstable/#sec-config-options-reference) is in the [Nixpkgs manual section on global configuration](https://nixos.org/manual/nixpkgs/unstable/#chap-packageconfig).
@@ -406,7 +373,7 @@ in
           '';
         }
         {
-          assertion = opt.pkgs.isDefined -> cfg.config == { };
+          assertion = opt.pkgs.isDefined -> opt.config.highestPrio == 1500;
           message = ''
             Your system configures nixpkgs with an externally created instance.
             `nixpkgs.config` options should be passed when creating the instance instead.
