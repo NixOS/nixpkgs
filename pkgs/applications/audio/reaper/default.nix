@@ -36,12 +36,12 @@ let
         builtins.replaceStrings [ "." ] [ "" ] version
       }_linux_${arch}.tar.xz";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "reaper";
   version = "7.59";
 
   src = fetchurl {
-    url = url_for_platform version stdenv.hostPlatform.qemuArch;
+    url = url_for_platform finalAttrs.version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
         "sha256-S4RAXWss1tPzmO0zzKfkXPrcgBqwNN5EE1jpjEZ5mYk="
@@ -152,4 +152,4 @@ stdenv.mkDerivation rec {
       viraptor
     ];
   };
-}
+})

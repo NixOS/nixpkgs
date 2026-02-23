@@ -61,7 +61,7 @@ let
     libv4l
   ];
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   pname = "bisq2";
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       export GNUPGHOME=./gnupg
       mkdir -m 700 -p $GNUPGHOME
       ln -s $downloadedFile ./Bisq-${version}.deb
-      ln -s ${signature} ./signature.asc
+      ln -s ${finalAttrs.signature} ./signature.asc
       gpg --import ${publicKey."E222AA02"}
       gpg --import ${publicKey."387C8307"}
       gpg --batch --verify signature.asc Bisq-${version}.deb

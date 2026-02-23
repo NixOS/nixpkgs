@@ -54,6 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libass/libass";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
   };
 })

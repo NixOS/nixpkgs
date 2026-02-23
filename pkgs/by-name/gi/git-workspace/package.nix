@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-workspace";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "git-workspace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SeE8O48lzqJSg8rfmIgsUcGPbquo2OvK3OUUBG21ksc=";
+    hash = "sha256-1/3P7SenUhPrN19cVVrKxFsQt75FR0BG1P3ef3galPg=";
   };
 
-  cargoHash = "sha256-CaHZivayZNuCi8vID8Qr5j/Ed+GGdNu+7NznvsCb3j0=";
+  cargoHash = "sha256-JoPs8Py8yaJ7A+OHKxDx3OwXbiJxKR2ZtkQAzXlXgJM=";
 
   nativeBuildInputs = [ pkg-config ];
 

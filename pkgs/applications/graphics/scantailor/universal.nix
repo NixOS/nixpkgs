@@ -14,14 +14,14 @@
   libcanberra,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scantailor-universal";
   version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "trufanov-nok";
     repo = "scantailor-universal";
-    rev = version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-n8NbokK+U0FAuYXtjRJcxlI1XAmI4hk5zV3sF86hB/s=";
   };
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "scantailor-universal-cli";
   };
-}
+})

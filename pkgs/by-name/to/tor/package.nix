@@ -148,7 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tor";
     maintainers = with lib.maintainers; [
       thoughtpolice
-      joachifm
       prusnak
     ];
     platforms = lib.platforms.unix;

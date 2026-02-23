@@ -724,8 +724,7 @@ in
       serviceConfig = {
         ExecStartPre = [
           (pkgs.writeShellScript "frigate-clear-cache" ''
-            shopt -s extglob
-            rm --recursive --force /var/cache/frigate/!(model_cache)
+            ${lib.getExe pkgs.findutils} /var/cache/frigate -not -path '/var/cache/frigate/model_cache/*' -type f -delete
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
             cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml

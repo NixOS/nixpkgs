@@ -109,6 +109,11 @@ in
       consider using `programs.pay-respects` instead.
     '')
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "unity3d"
+      "enable"
+    ] "The corresponding package was removed from nixpkgs in 2022.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] (
       "way-cooler is abandoned by its author: "
       + "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"

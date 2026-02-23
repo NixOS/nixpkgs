@@ -28,11 +28,11 @@
 let
   rootSrc = stdenv.mkDerivation {
     pname = "iEDA-src";
-    version = "0.1.0-unstable-2025-12-16";
+    version = "0.1.0-unstable-2025-12-23";
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
-      rev = "b73be0f1909294b56b2dbb27dba04b6cd9e0070d";
-      sha256 = "sha256-bvSHfQXDk7caTELtjgpSZhJdYfRzfk9VmFm2iBW2lRw=";
+      rev = "59662dcd768165f3957003522cb929d42b252023";
+      sha256 = "sha256-LaFGp9U7K+HmvHW1XK6HyUB/WM5O3y/tngul+cdbCP4=";
     };
 
     patches = [

@@ -27,14 +27,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcmi";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-3XZQyq6urCTI/A6tCSHgzPgOvzH8ckXvDRamWvVgeVY=";
+    hash = "sha256-jAwYw5btLG9W3oQ3OVMIFDAWEC8sosq0VTZq1RSFHXY=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_GOLDMASTER" true)
     (lib.cmakeBool "ENABLE_TEST" false) # Requires nonfree data files.
     (lib.cmakeBool "ENABLE_PCH" false)
+    (lib.cmakeBool "ENABLE_DISCORD" false)
     (lib.cmakeFeature "CMAKE_INSTALL_RPATH" "$out/lib/vcmi")
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")

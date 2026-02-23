@@ -67,8 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       options. No more no less.
     '';
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
-      codyopel
+    maintainers = [
     ];
     platforms = lib.platforms.linux;
     mainProgram = "sakura";

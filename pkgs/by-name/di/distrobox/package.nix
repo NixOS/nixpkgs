@@ -43,8 +43,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/distrobox-generate-entry" \
       --prefix PATH ":" ${lib.makeBinPath [ wget ]}
 
-    wrapProgram "$out/bin/${finalAttrs.meta.mainProgram}" \
-      --prefix PATH ":" ${lib.makeBinPath [ gnugrep ]}
+    mv "$out/bin/${finalAttrs.meta.mainProgram}" "$out/bin/.${finalAttrs.meta.mainProgram}-wrapped"
+    makeWrapper "${stdenvNoCC.shell}" "$out/bin/${finalAttrs.meta.mainProgram}" \
+      --prefix PATH ":" "${lib.makeBinPath [ gnugrep ]}" \
+      --add-flags "-c 'source \"$out/bin/.${finalAttrs.meta.mainProgram}-wrapped\"' \"\$0\""
 
     mkdir -p $out/share/distrobox
     echo 'container_additional_volumes="/nix:/nix"' > $out/share/distrobox/distrobox.conf

@@ -185,16 +185,16 @@ let
     ]
   );
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manim";
   pyproject = true;
-  version = "0.19.2";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
-    tag = "v${version}";
-    hash = "sha256-sM2IQdrqWVopo5Yzjmv6/KTHkgb/7Fma+plAc+gGwaM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sn33kI0AswuvE653hWmke+7+qdJo5COzPaL8Y2aGbsU=";
   };
 
   build-system = [
@@ -205,6 +205,9 @@ buildPythonPackage rec {
 
   buildInputs = [ cairo ];
 
+  pythonRelaxDeps = [
+    "skia-pathops"
+  ];
   dependencies = [
     av
     beautifulsoup4
@@ -234,10 +237,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     audioop-lts
-  ];
-
-  pythonRelaxDeps = [
-    "skia-pathops"
   ];
 
   optional-dependencies = {
@@ -282,7 +281,7 @@ buildPythonPackage rec {
       manim.
     '';
     mainProgram = "manim";
-    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${src.tag}";
+    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -290,4 +289,4 @@ buildPythonPackage rec {
       ivyfanchiang
     ];
   };
-}
+})

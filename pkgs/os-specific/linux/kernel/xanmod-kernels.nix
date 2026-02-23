@@ -26,6 +26,8 @@ let
     };
   };
 
+  # nixpkgs-update: no auto update
+
   xanmodKernelFor =
     {
       version,
