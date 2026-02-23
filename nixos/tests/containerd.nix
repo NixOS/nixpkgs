@@ -1,15 +1,18 @@
 { lib, pkgs, ... }:
 
 let
-  # Create passwd file
+  # Create passwd + group files - for symlink to absolute /nix/store/... paths
   etcFiles = pkgs.runCommand "containerd-symlink-passwd" { } ''
-        mkdir -p $out/etc
-        cat > $out/etc/passwd <<'EOF'
-    root:x:0:0:root:/root:/bin/sh
-    testuser:x:1000:0:test user:/home/testuser:/bin/sh
+            mkdir -p $out/etc
+            cat > $out/etc/passwd <<'EOF'
+        root:x:0:0:root:/root:/bin/sh
+        testuser:x:1000:0:test user:/home/testuser:/bin/sh
+        EOF
+
+            cat > $out/etc/group <<'EOF'
+    root:x:0:
     EOF
   '';
-
   passwdSymlinkImage = pkgs.dockerTools.buildLayeredImage {
     name = "nixos-symlink-passwd-test";
     tag = "latest";
@@ -24,10 +27,13 @@ let
       rm -f etc/passwd
       ln -sf ${etcFiles}/etc/passwd etc/passwd
       test -L etc/passwd
+
+      ln -sf ${etcFiles}/etc/group  etc/group
+      test -L etc/group
     '';
 
     config = {
-      # Forces containerd to read /etc/passwd in the rootfs
+      # Forces containerd to read /etc/passwd and group in the rootfs
       User = "testuser";
       Cmd = [
         "/bin/sh"
