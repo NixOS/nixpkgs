@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "mirror://kernel/linux/utils/kernel/kexec/${pname}-${version}.tar.xz"
-      "http://horms.net/projects/kexec/kexec-tools/${pname}-${version}.tar.xz"
+      "mirror://kernel/linux/utils/kernel/kexec/kexec-tools-${version}.tar.xz"
+      "http://horms.net/projects/kexec/kexec-tools/kexec-tools-${version}.tar.xz"
     ];
     sha256 = "sha256-j4FCKl/SNiz2ywAbUR5TVWXtDzLC9EUfteto/tZxCl0=";
   };

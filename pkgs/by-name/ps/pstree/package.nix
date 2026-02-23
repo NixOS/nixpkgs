@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://distfiles.macports.org/${pname}/${pname}-${version}.tar.gz"
-      "https://fossies.org/linux/misc/${pname}-${version}.tar.gz"
-      "ftp://ftp.thp.uni-duisburg.de/pub/source/${pname}-${version}.tar.gz"
+      "https://distfiles.macports.org/pstree/pstree-${version}.tar.gz"
+      "https://fossies.org/linux/misc/pstree-${version}.tar.gz"
+      "ftp://ftp.thp.uni-duisburg.de/pub/source/pstree-${version}.tar.gz"
     ];
     sha256 = "17s7v15c4gryjpi11y1xq75022nkg4ggzvjlq2dkmyg67ssc76vw";
   };

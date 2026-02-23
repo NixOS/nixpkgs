@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://www.mpfr.org/${pname}-${version}/${pname}-${version}.tar.xz"
-      "mirror://gnu/mpfr/${pname}-${version}.tar.xz"
+      "https://www.mpfr.org/mpfr-${version}/mpfr-${version}.tar.xz"
+      "mirror://gnu/mpfr/mpfr-${version}.tar.xz"
     ];
     hash = "sha256-tnugOD736KhWNzTi6InvXsPDuJigHQD6CmhprYHGzgE=";
   };

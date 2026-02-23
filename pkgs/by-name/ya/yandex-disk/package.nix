@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm"
-      "https://web.archive.org/web/${p.webarchive}/https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm"
+      "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/yandex-disk-${version}-1.fedora.${p.arch}.rpm"
+      "https://web.archive.org/web/${p.webarchive}/https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/yandex-disk-${version}-1.fedora.${p.arch}.rpm"
     ];
     sha256 = p.sha256;
   };

@@ -16,9 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.5.2";
 
   src = fetchurl {
-    url =
-      with finalAttrs;
-      "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/libffi/libffi/releases/download/v${finalAttrs.version}/libffi-${finalAttrs.version}.tar.gz";
     hash = "sha256-86MIKiOzfCk6T80QUxR7Nx8v+R+n6hsqUuM1Z2usgtw=";
   };
 

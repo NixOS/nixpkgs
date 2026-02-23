@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   helpMsg = ''
     We cannot download the full version automatically, as you require a license.
     Once you have bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://\$PWD/${pname}.Linux.${version}.sh"
+    You can do this by using "nix-prefetch-url file://\$PWD/WorldOfGoo.Linux.${version}.sh"
     in the directory where you saved it.
   '';
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip ];
-  sourceRoot = pname;
+  sourceRoot = "WorldOfGoo";
 
   libPath = lib.makeLibraryPath [
     stdenv.cc.cc
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     # zip archive attached to the end. Therefore a simple unzip does the job.
     # However, to avoid unzip errors, we need to strip those out first.
     tail -c +421887 ${src} > ${src}.zip
-    unzip -q ${src}.zip -d ${pname}
+    unzip -q ${src}.zip -d WorldOfGoo
   '';
 
   installPhase = ''

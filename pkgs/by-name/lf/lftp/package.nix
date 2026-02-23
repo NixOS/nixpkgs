@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://lftp.yar.ru/ftp/${pname}-${version}.tar.xz"
-      "https://ftp.st.ryukoku.ac.jp/pub/network/ftp/lftp/${pname}-${version}.tar.xz"
+      "https://lftp.yar.ru/ftp/lftp-${version}.tar.xz"
+      "https://ftp.st.ryukoku.ac.jp/pub/network/ftp/lftp/lftp-${version}.tar.xz"
     ];
     sha256 = "sha256-lucZnXk1vjPPaxFh6VWyqrQKt37N8qGc6k/BGT9Fftw=";
   };
