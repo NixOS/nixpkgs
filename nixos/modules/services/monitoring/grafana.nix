@@ -877,7 +877,7 @@ in
             secret_key = mkOption {
               description = ''
                 Secret key used for signing data source settings like secrets and passwords.
-                Set this to a unique, random string in production, generated for example by running `openssl rand -hex 32`.
+                Set this to a unique, random string in production, generated for example by running `openssl rand -hex 16`.
 
                 If you change this later you will need to update data source settings to re-encode them.
 
