@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # We have to be using the same version as cinny-web or this isn't going to work.
   version = "4.10.5";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";

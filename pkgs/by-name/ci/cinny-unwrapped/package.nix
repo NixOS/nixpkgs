@@ -17,6 +17,7 @@ buildNpmPackage rec {
   # Remember to update cinny-desktop when bumping this version.
   version = "4.10.5";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
