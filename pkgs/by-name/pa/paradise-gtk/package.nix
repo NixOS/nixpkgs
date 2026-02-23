@@ -4,7 +4,7 @@
   buildNpmPackage,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "paradise-gtk";
   version = "0-unstable-2022-06-13"; # No release, use commit's date
 

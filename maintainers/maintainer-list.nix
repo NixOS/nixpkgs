@@ -343,12 +343,6 @@
     githubId = 65275785;
     name = "Alexander Kenji Berthold";
   };
-  asteriau = {
-    email = "dorahaladita@gmail.com";
-    github = "asteriau";
-    githubId = 131019152;
-    name = "Laura";
-  };
   A1ca7raz = {
     email = "aya@wtm.moe";
     github = "A1ca7raz";
@@ -2469,6 +2463,12 @@
     github = "Astavie";
     githubId = 7745457;
     name = "Astavie";
+  };
+  asteriau = {
+    email = "dorahaladita@gmail.com";
+    github = "asteriau";
+    githubId = 131019152;
+    name = "Laura";
   };
   asterismono = {
     email = "cmiki@amono.me";
