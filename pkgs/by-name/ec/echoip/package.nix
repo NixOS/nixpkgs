@@ -9,13 +9,13 @@
 
 buildGoModule {
   pname = "echoip";
-  version = "0-unstable-2026-02-14";
+  version = "0-unstable-2026-02-17";
 
   src = fetchFromGitHub {
     owner = "mpolden";
     repo = "echoip";
-    rev = "0405a55f7d0007c72aaf88e449b8416a62f16772";
-    hash = "sha256-oMxbFyFQ1VYXgUU3wkDrfmIku8uigvF3bJInGNQAZkc=";
+    rev = "c3394af786b05879fc1219eb0d33b82b8dd806b0";
+    hash = "sha256-L1cLLEhPGtLYaJcbc26YPuUCZh8pmbceIWQ5iIEh4i4=";
   };
 
   vendorHash = "sha256-gNXu1yfvJnviPDeG0oNJ9MD5R93rjEV/n8hrADi8ZnM=";
