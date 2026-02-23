@@ -47,6 +47,6 @@ form to `/var/log/journal/{machine-id}`; if (locally) persisting the entire log
 is desired, it is recommended to make all of `/var/log/journal` persistent.
 
 If not, one can set `Storage=volatile` in {manpage}`journald.conf(5)`
-([`services.journald.storage = "volatile";`](#opt-services.journald.storage)),
+(`services.journald.settings.Journal.Storage = "volatile";`),
 which disables journal persistence and causes it to be written to
 `/run/log/journal`.
