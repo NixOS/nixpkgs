@@ -33,6 +33,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     (lib.makeLibraryPath [ nss ])
   ];
 
+  checkPhase = ''
+    runHook preCheck
+
+    patchShebangs tests
+    (cd tests && ${
+      if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"
+    }=${lib.makeLibraryPath [ nss ]} ./run_all)
+
+    runHook postCheck
+  '';
+
   passthru = {
     tests = {
       inherit (nixosTests) firefox_decrypt;
