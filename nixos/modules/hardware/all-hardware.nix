@@ -87,6 +87,8 @@ in
 
       # NVMe drives
       "nvme"
+      # Volume Management Device driver needed for some notebook's nvme
+      "vmd"
 
       # Firewire support.  Not tested.
       "ohci1394"
