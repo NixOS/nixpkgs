@@ -27,7 +27,7 @@
   python3,
   pywal,
   stdenv,
-  swww,
+  awww,
   upower,
   wireplumber,
   wl-clipboard,
@@ -80,7 +80,7 @@ ags.bundle {
     matugen
     networkmanager
     pywal
-    swww
+    awww
     upower
     wireplumber
     wl-clipboard
