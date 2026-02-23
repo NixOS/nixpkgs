@@ -330,6 +330,9 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
+  # workaround to correctly reference the actual package in the final setup hook
+  finalPackageOut = placeholder "out";
+
   setupHook =
     let
       hook = makeSetupHook {
