@@ -77,6 +77,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "pympress";
     license = lib.licenses.gpl2Plus;
     homepage = "https://cimbali.github.io/pympress/";
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 })

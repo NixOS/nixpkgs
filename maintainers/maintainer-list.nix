@@ -26188,12 +26188,6 @@
     name = "Trent Baldwin";
     keys = [ { fingerprint = "930C 3A61 F911 1296 7DA5  56D1 665A 9E2A FCDD 68AA"; } ];
   };
-  tbenst = {
-    email = "nix@tylerbenster.com";
-    github = "tbenst";
-    githubId = 863327;
-    name = "Tyler Benster";
-  };
   tbidne = {
     email = "tbidne@protonmail.com";
     github = "tbidne";
