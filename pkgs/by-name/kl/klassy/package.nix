@@ -54,7 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_QT5" false)
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Highly customizable binary Window Decoration, Application Style and Global Theme plugin for recent versions of the KDE Plasma desktop";
