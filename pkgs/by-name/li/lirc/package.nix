@@ -63,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     #   https://sourceforge.net/p/lirc/git/merge-requests/39/
     substituteInPlace python-pkg/lirc/database.py \
       --replace-fail 'yaml.load(' 'yaml.safe_load('
+
+    substituteInPlace systemd/*.service \
+      --replace-fail "ExecStart=/usr/" "ExecStart=''${!outputBin}/"
   '';
 
   preConfigure = ''
