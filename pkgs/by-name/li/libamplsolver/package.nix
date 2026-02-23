@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation {
   pname = "libamplsolver";
-  version = "20211109";
+  version = "20251121";
 
   src = fetchurl {
     url = "https://ampl.com/netlib/ampl/solvers.tgz";
-    sha256 = "sha256-LVmScuIvxmZzywPSBl9T9YcUBJP7UFAa3eWs9r4q3JM=";
+    sha256 = "sha256-kr+SqNsHEsDkLBL5EhURKN0ZLoQJuh/qb0tEzVFBod4=";
   };
 
   patches = [
