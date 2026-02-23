@@ -11,7 +11,7 @@
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
-  pname = "protonvpn-gui";
+  pname = "proton-vpn";
   version = "4.15.0";
   pyproject = true;
 
