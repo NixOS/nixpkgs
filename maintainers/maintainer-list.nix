@@ -24457,12 +24457,6 @@
     github = "shgew";
     githubId = 5584672;
   };
-  shhht = {
-    name = "shhht";
-    email = "stp.tjeerd@gmail.com";
-    github = "shhht";
-    githubId = 118352823;
-  };
   shift = {
     name = "Vincent Palmer";
     email = "shift@someone.section.me";
