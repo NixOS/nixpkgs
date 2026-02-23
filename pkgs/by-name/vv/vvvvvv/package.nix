@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch,
   cmake,
   makeWrapper,
   copyDesktopItems,
@@ -16,15 +17,24 @@
 
 stdenv.mkDerivation rec {
   pname = "vvvvvv";
-  version = "2.4.3";
+  version = "2.4.3-unstable-2026-02-16";
 
   src = fetchFromGitHub {
     owner = "TerryCavanagh";
     repo = "VVVVVV";
-    rev = version;
-    hash = "sha256-IEspPNsKGWgukqmnb6nDORRetQp9jvUzJ/mSOTLGdmQ=";
+    rev = "deeed00c95b82120a92bb3a7e3fb72c5acd1da3a";
+    hash = "sha256-NMwVeKuGS7TVK5u0cVCOCML97z056TckhtqhoJgoNs4=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      name = "use-vendored-lodepng.patch"; # Not packaged in nixpkgs atm
+      url = "https://github.com/TerryCavanagh/VVVVVV/commit/d9a3158f6a85737bd99a94af765a85798d85671c.patch";
+      hash = "sha256-nyLBfhURAr8UGkSKHkdD7WmIVxD7AAldkI7efk0PDBk=";
+      revert = true;
+    })
+  ];
 
   dataZip = fetchurl {
     url = "https://thelettervsixtim.es/makeandplay/data.zip";
