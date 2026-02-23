@@ -1,99 +1,22 @@
 {
   lib,
-  python3Packages,
-  fetchFromGitHub,
-  gobject-introspection,
-  libappindicator-gtk3,
-  libayatana-appindicator,
-  libnotify,
-  wrapGAppsHook4,
-  withIndicator ? true,
+  stdenv,
+  callPackage,
 }:
-
-python3Packages.buildPythonApplication (finalAttrs: {
-  pname = "proton-vpn";
-  version = "4.15.0";
-  pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "ProtonVPN";
-    repo = "proton-vpn-gtk-app";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-bKUhrbfOLVjknljwW9UPo3Ros1Ayzb+be5KTUjPnIW0=";
-  };
-
-  nativeBuildInputs = [
-    # Needed for the NM namespace
-    gobject-introspection
-    wrapGAppsHook4
-  ];
-
-  buildInputs = [
-    libnotify # gir typelib is used
-  ]
-  ++ lib.optionals withIndicator [
-    # Adds AppIndicator3 namespace
-    libappindicator-gtk3
-    # Adds AyatanaAppIndicator3 namespace
-    libayatana-appindicator
-  ];
-
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
-    dbus-python
-    packaging
-    proton-core
-    proton-keyring-linux
-    proton-vpn-api-core
-    proton-vpn-local-agent
-    pycairo
-    pygobject3
-  ];
-
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
-  postInstall = ''
-    mkdir -p $out/share/{applications,pixmaps}
-
-    # Fix the desktop file to correctly identify the wrapped app and show the icon during runtime
-    substitute ${finalAttrs.src}/rpmbuild/SOURCES/proton.vpn.app.gtk.desktop $out/share/applications/proton.vpn.app.gtk.desktop \
-      --replace-fail "StartupWMClass=protonvpn-app" "StartupWMClass=.protonvpn-app-wrapped"
-    install -Dm 644 ${finalAttrs.src}/rpmbuild/SOURCES/proton-vpn-logo.svg $out/share/pixmaps
-  '';
-
-  preCheck = ''
-    # Needed for Permission denied: '/homeless-shelter'
-    export HOME=$(mktemp -d)
-    export XDG_RUNTIME_DIR=$(mktemp -d)
-  '';
-
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
-
-  disabledTestPaths = [
-    # Segmentation fault during widgets tests
-    "tests/unit/widgets"
-  ];
-
+let
   meta = {
-    description = "Proton VPN GTK app for Linux";
-    homepage = "https://github.com/ProtonVPN/proton-vpn-gtk-app";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    mainProgram = "protonvpn-app";
+    description = "Official Proton VPN client";
+    homepage = "https://protonvpn.com/";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       anthonyroussel
-      sebtm
+      delafthi
       rapiteanu
+      sebtm
     ];
   };
-})
+in
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix { inherit meta; }
+else
+  callPackage ./linux.nix { inherit meta; }
