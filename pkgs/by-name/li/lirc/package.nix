@@ -59,8 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     # fix overriding PYTHONPATH
     sed -i 's,^PYTHONPATH *= *,PYTHONPATH := $(PYTHONPATH):,' \
       Makefile.in
-    sed -i 's,PYTHONPATH=,PYTHONPATH=$(PYTHONPATH):,' \
-      doc/Makefile.in
 
     # Pull fix for new pyyaml pending upstream inclusion
     #   https://sourceforge.net/p/lirc/git/merge-requests/39/
