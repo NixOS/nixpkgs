@@ -51,14 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
     # --with-systemdsystemunitdir
     # https://sourceforge.net/p/lirc/tickets/385/
     ./ubuntu.diff
+
+    # fix overriding PYTHONPATH
+    ./pythonpath.patch
   ];
 
   postPatch = ''
     patchShebangs .
-
-    # fix overriding PYTHONPATH
-    sed -i 's,^PYTHONPATH *= *,PYTHONPATH := $(PYTHONPATH):,' \
-      Makefile.in
 
     # Pull fix for new pyyaml pending upstream inclusion
     #   https://sourceforge.net/p/lirc/git/merge-requests/39/
