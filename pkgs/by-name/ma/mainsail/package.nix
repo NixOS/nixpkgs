@@ -44,7 +44,6 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      shhht
       lovesegfault
       wulfsta
     ];
