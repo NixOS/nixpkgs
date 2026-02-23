@@ -11,6 +11,7 @@
   installShellFiles,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  zed-editor,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
@@ -86,6 +87,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace packages/script/src/index.ts \
       --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
                      'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+
+    # HACK https://github.com/anomalyco/opencode/issues/14444
+    substituteInPlace packages/app/src/components/session/session-header.tsx \
+      --replace-fail  '{ id: "zed", label: "Zed", icon: "zed", openWith: "zed" },' \
+                      '{ id: "zed", label: "Zed", icon: "zed", openWith: ${builtins.toJSON zed-editor.meta.mainProgram} },'
   '';
 
   configurePhase = ''

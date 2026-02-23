@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     src
     node_modules
     patches
+    postPatch
     ;
 
   cargoRoot = "packages/desktop/src-tauri";
