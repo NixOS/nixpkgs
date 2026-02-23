@@ -13,7 +13,7 @@
   pymongo,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-checkpoint-mongodb";
   version = "0.3.1";
   pyproject = true;
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
-    tag = "libs/langgraph-checkpoint-mongodb/v${version}";
+    tag = "libs/langgraph-checkpoint-mongodb/v${finalAttrs.version}";
     hash = "sha256-vCiZ6Mp6aHmSEkLbeM6qTLJaxH0uoAdq80olTT5saX0=";
   };
 
-  sourceRoot = "${src.name}/libs/langgraph-checkpoint-mongodb";
+  sourceRoot = "${finalAttrs.src.name}/libs/langgraph-checkpoint-mongodb";
 
   build-system = [
     hatchling
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Integrations between MongoDB, Atlas, LangChain, and LangGraph";
     homepage = "https://github.com/langchain-ai/langchain-mongodb/tree/main/libs/langgraph-checkpoint-mongodb";
-    changelog = "https://github.com/langchain-ai/langchain-mongodb/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-mongodb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})
