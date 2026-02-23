@@ -254,6 +254,14 @@ self: super:
     # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
     zip = dontCheck super.zip;
 
+    dap = super.dap.overrideAttrs (drv: {
+      __darwinAllowLocalNetworking = true;
+    });
+
+    essence-of-live-coding-warp = super.essence-of-live-coding-warp.overrideAttrs (drv: {
+      __darwinAllowLocalNetworking = true;
+    });
+
     http-streams = super.http-streams.overrideAttrs (drv: {
       __darwinAllowLocalNetworking = true;
     });
@@ -266,7 +274,19 @@ self: super:
       __darwinAllowLocalNetworking = true;
     });
 
+    jsaddle-warp = super.jsaddle-warp.overrideAttrs (drv: {
+      __darwinAllowLocalNetworking = true;
+    });
+
     openssl-streams = super.openssl-streams.overrideAttrs (drv: {
+      __darwinAllowLocalNetworking = true;
+    });
+
+    servant-auth-client = super.servant-auth-client.overrideAttrs (drv: {
+      __darwinAllowLocalNetworking = true;
+    });
+
+    servant-client = super.servant-client.overrideAttrs (drv: {
       __darwinAllowLocalNetworking = true;
     });
 
