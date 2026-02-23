@@ -60,7 +60,12 @@ buildGoModule (finalAttrs: {
     "-X github.com/navidrome/navidrome/consts.gitTag=v${finalAttrs.version}"
   ];
 
-  CGO_CFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-return-local-addr" ];
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    CGO_CFLAGS = toString [ "-Wno-return-local-addr" ];
+    # Workaround for https://github.com/golang/go/issues/77387
+    # Remove when go1.25.8 has been merged into release-25.11
+    CGO_CFLAGS_ALLOW = "--define-prefix";
+  };
 
   postPatch = ''
     patchShebangs ui/bin/update-workbox.sh
