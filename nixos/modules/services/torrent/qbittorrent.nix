@@ -53,7 +53,7 @@ let
       else
         mkKeyValueDefault { } sep k v;
   };
-  configFile = pkgs.writeText "qBittorrent.conf" (gendeepINI cfg.serverConfig);
+  configContent = gendeepINI cfg.serverConfig;
 in
 {
   options.services.qbittorrent = {
@@ -154,10 +154,10 @@ in
             mode = "755";
             inherit (cfg) user group;
           };
-          "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"."L+" = mkIf (cfg.serverConfig != { }) {
-            mode = "1400";
+          "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"."f+" = mkIf (cfg.serverConfig != { }) {
+            mode = "600";
             inherit (cfg) user group;
-            argument = "${configFile}";
+            argument = configContent;
           };
         };
       };
@@ -170,7 +170,7 @@ in
           "nss-lookup.target"
         ];
         wantedBy = [ "multi-user.target" ];
-        restartTriggers = optionals (cfg.serverConfig != { }) [ configFile ];
+        restartTriggers = optionals (cfg.serverConfig != { }) [ configContent ];
 
         serviceConfig = {
           Type = "simple";
