@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       kashw2
     ];
     platforms = lib.platforms.unix;
+    mainProgram = "sbt";
   };
 })
