@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchao";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N5s2AzkK9HmUT+qVq2owrB/53izDlzd25fqThjA3hPQ=";
+    hash = "sha256-FyBsIVb3zdKtA8Vqjt301bRrGIoyeqiOUADVFGxiRPY=";
   };
 
   # AttributeError: 'typing.Union' object has no attribute '__module__' and no __dict__ for setting
@@ -104,6 +104,9 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Requires internet access
     "test_on_dummy_distilbert"
+
+    # execnet.gateway_base.DumpError: can't serialize <class 'torch.dtype'>
+    "test_numerical_consistency_per_tensor"
 
     # FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/meta-llama/Llama-2-7b-chat-hf/model.pth'
     "test_gptq_mt"
