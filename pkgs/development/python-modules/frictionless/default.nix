@@ -225,5 +225,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/frictionlessdata/frictionless-py/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
+    mainProgram = "frictionless";
   };
 }

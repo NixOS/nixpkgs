@@ -169,7 +169,6 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      joachifm
       np
       prusnak
     ];

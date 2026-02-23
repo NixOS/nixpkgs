@@ -267,7 +267,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.webmproject.org/";
     changelog = "https://github.com/webmproject/libvpx/raw/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

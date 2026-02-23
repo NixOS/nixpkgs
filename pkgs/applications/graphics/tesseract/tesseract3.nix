@@ -12,14 +12,14 @@
   opencl-headers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tesseract";
   version = "3.05.02";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-28osuZnVwkJpNTYkU+5D5PI8xtViFzGCMScHzkS2H20=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "tesseract";
   };
-}
+})

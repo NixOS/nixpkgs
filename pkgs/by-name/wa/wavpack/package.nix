@@ -41,6 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/dbry/WavPack/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
   };
 })

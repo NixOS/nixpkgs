@@ -19,13 +19,13 @@ assert lib.assertOneOf "${pname}: color variant" variant validVariants;
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "0-unstable-2024-10-19";
+  version = "0-unstable-2026-02-18";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "plymouth";
-    rev = "e0f58d6fcf3dbc2d35dfc4fec394217fbfa92666";
-    hash = "sha256-He6ER1QNrJCUthFoBBGHBINouW/tozxQy3R79F5tsuo=";
+    rev = "da38011d25f6f36152f2409372dfadb11c8f047c";
+    hash = "sha256-3JK4lX2ZmxysITDEEkhBLkyINUeCzvu5nUgrpvWZ+ZE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/themes/catppuccin-${variant}";

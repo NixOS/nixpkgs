@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gsettings-qt";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/gsettings-qt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NUrJ3xQnef7TwPa7AIZaiI7TAkMe+nhuEQ/qC1H1Ves=";
+    hash = "sha256-JgfDa4MStNyG84PmJNOC+1x/wwQiJpJwWV9XVwzkWYw=";
   };
 
   outputs = [

@@ -79,9 +79,9 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.BannedApiAnalyzers",
-    "version": "5.4.0-2.26060.102",
-    "hash": "sha256-OxqQo5NUVs1UuWTc/DiAHUY693VJDQCPv5CXuh9x1ow=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.bannedapianalyzers/5.4.0-2.26060.102/microsoft.codeanalysis.bannedapianalyzers.5.4.0-2.26060.102.nupkg"
+    "version": "5.4.0-2.26062.101",
+    "hash": "sha256-MUuAW6G8i4X2cbDlTeI0w2hCVffVzpQdGJLfHrdkPVQ=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.bannedapianalyzers/5.4.0-2.26062.101/microsoft.codeanalysis.bannedapianalyzers.5.4.0-2.26062.101.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.Common",
@@ -103,9 +103,9 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.PublicApiAnalyzers",
-    "version": "5.4.0-2.26060.102",
-    "hash": "sha256-E5JTn3ZWGipvAkCA6khC0gKtEv+LJm5k64KwlcnwbNg=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.publicapianalyzers/5.4.0-2.26060.102/microsoft.codeanalysis.publicapianalyzers.5.4.0-2.26060.102.nupkg"
+    "version": "5.4.0-2.26062.101",
+    "hash": "sha256-x94Y4zAEyokSTxy6VQ0jaMdIf4f3Pegyiq6iylEgyO8=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.publicapianalyzers/5.4.0-2.26062.101/microsoft.codeanalysis.publicapianalyzers.5.4.0-2.26062.101.nupkg"
   },
   {
     "pname": "Microsoft.CSharp",
@@ -127,9 +127,9 @@
   },
   {
     "pname": "Microsoft.DotNet.FileBasedPrograms",
-    "version": "11.0.100-alpha.1.26060.102",
-    "hash": "sha256-2wcbDTV7kJqbRlHaGRtWQw5tBhYP0JBXGPjZcyluU0E=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a57d0dd1-b586-4233-8880-21626fab1f1a/nuget/v3/flat2/microsoft.dotnet.filebasedprograms/11.0.100-alpha.1.26060.102/microsoft.dotnet.filebasedprograms.11.0.100-alpha.1.26060.102.nupkg"
+    "version": "11.0.100-alpha.1.26062.101",
+    "hash": "sha256-/Fg+hpfShTAmP15/O4eVRB9PCUHcITd6mu/dpmfY3Xs=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a57d0dd1-b586-4233-8880-21626fab1f1a/nuget/v3/flat2/microsoft.dotnet.filebasedprograms/11.0.100-alpha.1.26062.101/microsoft.dotnet.filebasedprograms.11.0.100-alpha.1.26062.101.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",
@@ -439,9 +439,9 @@
   },
   {
     "pname": "Roslyn.Diagnostics.Analyzers",
-    "version": "5.4.0-2.26060.102",
-    "hash": "sha256-XUTC2E3EdZ4Y+fwL1NoPK1GELYHDLgqlQbwLDWghZ/w=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/roslyn.diagnostics.analyzers/5.4.0-2.26060.102/roslyn.diagnostics.analyzers.5.4.0-2.26060.102.nupkg"
+    "version": "5.4.0-2.26062.101",
+    "hash": "sha256-sxrrxH4JBtnrcJJ4DO3pQR3nIawTGP1mJan96vd4dDQ=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/roslyn.diagnostics.analyzers/5.4.0-2.26062.101/roslyn.diagnostics.analyzers.5.4.0-2.26062.101.nupkg"
   },
   {
     "pname": "SQLitePCLRaw.bundle_green",
@@ -505,9 +505,9 @@
   },
   {
     "pname": "System.CommandLine",
-    "version": "3.0.0-alpha.1.26060.102",
-    "hash": "sha256-jvTFAZTJWGooqjR1qS86UAOTw1RCaVzNBlBUov404ss=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/516521bf-6417-457e-9a9c-0a4bdfde03e7/nuget/v3/flat2/system.commandline/3.0.0-alpha.1.26060.102/system.commandline.3.0.0-alpha.1.26060.102.nupkg"
+    "version": "3.0.0-alpha.1.26062.101",
+    "hash": "sha256-lzb+ooqLUSW6eU2jy5H4Vl62Fp+yizNBYPK1L5fjZ/M=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/516521bf-6417-457e-9a9c-0a4bdfde03e7/nuget/v3/flat2/system.commandline/3.0.0-alpha.1.26062.101/system.commandline.3.0.0-alpha.1.26062.101.nupkg"
   },
   {
     "pname": "System.ComponentModel.Composition",

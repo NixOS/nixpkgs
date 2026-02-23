@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "hardened";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ joachifm ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes.machine =

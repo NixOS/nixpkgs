@@ -41,6 +41,9 @@ buildPythonPackage (finalAttrs: {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "sparse"
+  ];
   dependencies = [
     arviz-plots
     formulae

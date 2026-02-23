@@ -74,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.xvid.com/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
-      codyopel
       lovek323
     ];
     platforms = lib.platforms.all;

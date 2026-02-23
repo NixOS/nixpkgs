@@ -41,7 +41,7 @@ let
       version,
       ...
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       inherit src version;
 
       pname = "pianoteq-${name}";
@@ -66,11 +66,11 @@ let
 
       desktopItems = [
         (makeDesktopItem {
-          name = pname;
+          name = finalAttrs.pname;
           exec = ''"${mainProgram}"'';
           desktopName = mainProgram;
           icon = "pianoteq";
-          comment = meta.description;
+          comment = finalAttrs.meta.description;
           categories = [
             "AudioVideo"
             "Audio"
@@ -114,7 +114,7 @@ let
         ];
         sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       };
-    };
+    });
 
   fetchWithCurlScript =
     {

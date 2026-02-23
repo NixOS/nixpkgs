@@ -16,7 +16,6 @@
   libtool,
   libwebp,
   libxml2,
-  libheifSupport ? true,
   libheif,
   nukeReferences,
   pkg-config,
@@ -49,14 +48,14 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libjpeg
     libjxl
+    libheif
     libpng
     libtiff
     libtool
     libwebp
     libxml2
     zlib
-  ]
-  ++ lib.optionals libheifSupport [ libheif ];
+  ];
 
   nativeBuildInputs = [
     nukeReferences

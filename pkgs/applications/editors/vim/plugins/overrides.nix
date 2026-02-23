@@ -10,7 +10,7 @@
   replaceVars,
   # Language dependencies
   fetchYarnDeps,
-  mkYarnModules,
+  yarnConfigHook,
   python3,
   # Misc dependencies
   charm-freeze,
@@ -1951,14 +1951,18 @@ assertNoAdditions {
   markdown-preview-nvim =
     let
       # We only need its dependencies `node-modules`.
-      nodeDep = mkYarnModules rec {
-        inherit (super.markdown-preview-nvim) pname version;
-        packageJSON = ./patches/markdown-preview-nvim/package.json;
-        yarnLock = "${super.markdown-preview-nvim.src}/yarn.lock";
-        offlineCache = fetchYarnDeps {
-          inherit yarnLock;
+      nodeDep = stdenv.mkDerivation {
+        inherit (super.markdown-preview-nvim) pname version src;
+        nativeBuildInputs = [
+          yarnConfigHook
+        ];
+        yarnOfflineCache = fetchYarnDeps {
+          yarnLock = "${super.markdown-preview-nvim.src}/yarn.lock";
           hash = "sha256-kzc9jm6d9PJ07yiWfIOwqxOTAAydTpaLXVK6sEWM8gg=";
         };
+        installPhase = ''
+          cp -r node_modules $out
+        '';
       };
     in
     super.markdown-preview-nvim.overrideAttrs {
@@ -1968,7 +1972,7 @@ assertNoAdditions {
         })
       ];
       postInstall = ''
-        ln -s ${nodeDep}/node_modules $out/app
+        cp -r ${nodeDep} $out/app/node_modules
       '';
 
       nativeBuildInputs = [ nodejs ];

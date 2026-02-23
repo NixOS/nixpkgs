@@ -64,11 +64,11 @@ let
     sqlite
   ];
 
-  binaryPackage = stdenv.mkDerivation rec {
+  binaryPackage = stdenv.mkDerivation (finalAttrs: {
     pname = "${pnameBase}-bin";
     version = buildVersion;
 
-    src = passthru.sources.${stdenv.hostPlatform.system};
+    src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
     dontStrip = true;
     dontPatchELF = true;
@@ -135,9 +135,9 @@ let
         };
       };
     };
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = pnameBase;
   version = buildVersion;
 
@@ -191,7 +191,7 @@ stdenv.mkDerivation rec {
               exit 0
           fi
 
-          for platform in ${lib.escapeShellArgs meta.platforms}; do
+          for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
               update-source-version "${packageAttribute}".unwrapped "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
           done
         '';
@@ -218,4 +218,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

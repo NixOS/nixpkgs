@@ -12,14 +12,14 @@
   cacert,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hydra-check";
   version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "hydra-check";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rOqLAI0r11Tfi6crKAxnj/HHBgUKcCGb4MCdxqLv4uE=";
   };
 

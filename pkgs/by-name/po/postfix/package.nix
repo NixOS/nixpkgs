@@ -74,11 +74,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "postfix";
-  version = "3.10.7";
+  version = "3.10.8";
 
   src = fetchurl {
-    url = "https://de.postfix.org/ftpmirror/official/postfix-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/NP/cIBq5/CoLntcMB4vT8+mpomi27Oz8bXlIIEVeIo=";
+    url = "http://ftp.porcupine.org/mirrors/postfix-release/official/postfix-${finalAttrs.version}.tar.gz";
+    hash = "sha256-MdSz64CT2CO1oVH1cXGf98BGJXG8leZEDYfKUlv7CWw=";
   };
 
   nativeBuildInputs = [

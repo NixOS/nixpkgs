@@ -365,9 +365,11 @@ let
             rm -r "$out"/OFF
           '';
 
-        env = lib.optionalAttrs stdenv.hostPlatform.isi686 {
-          CXXFLAGS = "-fpermissive";
-        };
+        env =
+          lib.optionalAttrs stdenv.hostPlatform.isi686 {
+            CXXFLAGS = "-fpermissive";
+          }
+          // (common.env or { });
 
         passthru = {
           inherit client;

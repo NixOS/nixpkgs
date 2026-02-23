@@ -353,7 +353,6 @@ stdenv.mkDerivation rec {
       c4patino
       felschr
       hax404
-      joachifm
       panicgh
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether

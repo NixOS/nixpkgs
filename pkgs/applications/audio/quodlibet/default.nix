@@ -44,7 +44,7 @@
   python3,
   xvfb-run,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "quodlibet${tag}";
   version = "4.7.1";
   pyproject = true;
@@ -57,7 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "quodlibet";
     repo = "quodlibet";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-xr3c1e4tjw2YHuKbvNeUPBIFdHEcpztqXjHVDSSxYlo=";
   };
 
@@ -197,4 +197,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
-}
+})

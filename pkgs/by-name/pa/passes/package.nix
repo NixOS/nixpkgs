@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/model/meson.build \
       --replace-fail /app/lib ${lib.getLib libzint}/lib
+
+    substituteInPlace ./src/meson.build \
+      --replace-fail "conf.set('PYTHON', python.find_installation('python3').full_path())" "conf.set('PYTHON', '${
+        lib.getExe (python3.withPackages (pp: [ pp.pygobject3 ]))
+      }')"
   '';
 
   strictDeps = true;
@@ -42,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    (python3.withPackages (pp: [ pp.pygobject3 ]))
     wrapGAppsHook4
   ];
 

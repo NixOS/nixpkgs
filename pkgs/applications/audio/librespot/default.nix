@@ -21,14 +21,14 @@
   tlsBackend ? "native-tls", # "native-tls" "rustls-tls-native-roots" "rustls-tls-webpki-roots"
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "librespot";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-twWndV6z5Cdivz7pfAJzdlIjddEiZPEFnTzipMczmJo=";
   };
 
@@ -71,8 +71,8 @@ rustPlatform.buildRustPackage rec {
     description = "Open Source Spotify client library and playback daemon";
     mainProgram = "librespot";
     homepage = "https://github.com/librespot-org/librespot";
-    changelog = "https://github.com/librespot-org/librespot/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/librespot-org/librespot/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ bennofs ];
   };
-}
+})

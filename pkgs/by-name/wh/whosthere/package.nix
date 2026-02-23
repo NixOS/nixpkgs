@@ -31,16 +31,6 @@ buildGoModule (finalAttrs: {
     "main.versionStr=${finalAttrs.version}"
   ];
 
-  checkFlags =
-    let
-      # Skip tests that require filesystem access
-      skippedTests = [
-        "TestResolveLogPath"
-        "TestStateDir"
-      ];
-    in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd whosthere \
       --bash <("$out/bin/whosthere" completion bash) \
@@ -65,7 +55,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/ramonvermeulen/whosthere";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "whosthere";
   };
 })

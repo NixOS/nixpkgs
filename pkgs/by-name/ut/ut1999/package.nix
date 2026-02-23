@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s "$out/${systemDir}/ut-bin" "$out/bin/ut1999"
       ln -s "$out/${systemDir}/ucc-bin" "$out/bin/ut1999-ucc"
 
-      install -D "${./ut1999.svg}" "$out/share/pixmaps/ut1999.svg"
+      install -D "${./ut1999.svg}" "$out/share/icons/hicolor/scalable/apps/ut1999.svg"
       for size in 16 24 32 48 64 128 192 256; do
         square=$(printf "%sx%s" $size $size)
         ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize $square ut1999_$square.png

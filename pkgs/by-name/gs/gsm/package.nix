@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.quut.com/gsm/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      codyopel
       raskin
     ];
     platforms = lib.platforms.unix;

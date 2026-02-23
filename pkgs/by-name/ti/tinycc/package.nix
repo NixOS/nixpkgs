@@ -140,7 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ lgpl21Only ];
     mainProgram = "tcc";
     maintainers = with lib.maintainers; [
-      joachifm
       onemoresuza
     ];
     platforms = lib.platforms.unix;

@@ -10,7 +10,7 @@
   readline,
   which,
   musl-fts,
-  pcre,
+  pcre2,
   gnused,
   # options
   conf ? null,
@@ -28,13 +28,13 @@ assert withEmojis -> (!withIcons && !withNerdIcons);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nnn";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "nnn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+2lFFBtaqRPBkEspCFtKl9fllbSR5MBB+4ks3Xh7vp4=";
+    hash = "sha256-u+88aDHfOZ6bSkg6ahS6eNZWj2QCwJXKW+8nHR99kic=";
   };
 
   patches = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ]
   ++ lib.optional stdenv.hostPlatform.isMusl musl-fts
-  ++ lib.optional withPcre pcre;
+  ++ lib.optional withPcre pcre2;
 
   env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
     NIX_CFLAGS_COMPILE = "-I${musl-fts}/include";
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withIcons [ "O_ICONS=1" ]
   ++ lib.optionals withNerdIcons [ "O_NERD=1" ]
   ++ lib.optionals withEmojis [ "O_EMOJI=1" ]
-  ++ lib.optionals withPcre [ "O_PCRE=1" ]
+  ++ lib.optionals withPcre [ "O_PCRE2=1" ]
   ++ extraMakeFlags;
 
   binPath = lib.makeBinPath [
@@ -101,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/jarun/nnn/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "nnn";
   };
 })

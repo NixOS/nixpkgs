@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  nix-update-script,
 
   # nativeBuildInputs
   makeWrapper,
@@ -65,8 +66,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   postInstall = ''
-    cp -r librelane/scripts $out/${python3Packages.python.sitePackages}/librelane/
-    cp -r librelane/examples $out/${python3Packages.python.sitePackages}/librelane/
+    # Create the site-packages subdirectory for librelane
+    dest="$out/${python3Packages.python.sitePackages}/librelane"
+    mkdir -p "$dest"
+
+    # Copy scripts and examples from the source into the installation
+    cp -r librelane/scripts "$dest/"
+    cp -r librelane/examples "$dest/"
   '';
 
   postFixup = ''
@@ -85,6 +91,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
         ]
       }
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "ASIC implementation flow infrastructure";

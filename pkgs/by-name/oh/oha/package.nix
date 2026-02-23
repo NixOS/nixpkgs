@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
+  cacert,
+  libredirect,
   pkg-config,
   openssl,
   rust-jemalloc-sys,
@@ -36,8 +38,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rust-jemalloc-sys
   ];
 
-  # tests don't work inside the sandbox
-  doCheck = false;
+  checkInputs = [ cacert ];
+  nativeCheckInputs = [
+    libredirect.hook
+  ];
+
+  preCheck = ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS="/etc/resolv.conf=$(realpath resolv.conf)"
+  '';
+
+  doCheck = true;
+  checkFlags = [
+    "--skip=test_google"
+    "--skip=test_proxy"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

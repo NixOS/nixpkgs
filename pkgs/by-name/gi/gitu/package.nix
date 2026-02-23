@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-JNa9foW5z0NrXk5r/Oep20+u7YRhkzMIZQPHlZVifGI=";
   };
 
+  patches = [
+    ./unit-tests-compile.patch
+  ];
+
   cargoHash = "sha256-mQ5xXYVmadmNx57nnJGICZ2dhll+V3PkYK+hwTTfdVE=";
 
   nativeBuildInputs = [

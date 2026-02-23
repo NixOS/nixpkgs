@@ -76,10 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 clonehero "$out/bin/clonehero"
     install -Dm644 UnityPlayer.so "$out/libexec/clonehero/UnityPlayer.so"
 
-    mkdir -p "$out/share/pixmaps"
+    mkdir -p "$out/share/icons/hicolor/128x128/apps"
     cp -r clonehero_Data "$out/share/clonehero"
     ln -s "$out/share/clonehero" "$out/bin/clonehero_Data"
-    ln -s "$out/share/clonehero/Resources/UnityPlayer.png" "$out/share/pixmaps/clonehero.png"
+    ln -s "$out/share/clonehero/Resources/UnityPlayer.png" "$out/share/icons/hicolor/128x128/apps/clonehero.png"
     install -Dm644 "$desktopItem/share/applications/clonehero.desktop" "$out/share/applications/clonehero.desktop"
 
     mkdir -p "$doc/share/doc/clonehero"

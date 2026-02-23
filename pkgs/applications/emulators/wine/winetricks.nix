@@ -21,9 +21,9 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "winetricks";
-  version = src.version;
+  version = finalAttrs.src.version;
 
   src = (callPackage ./sources.nix { }).winetricks;
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     '';
 
   passthru = {
-    inherit (src) updateScript;
+    inherit (finalAttrs.src) updateScript;
   };
 
   meta = {
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Winetricks/winetricks";
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

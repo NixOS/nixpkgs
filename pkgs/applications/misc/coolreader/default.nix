@@ -11,14 +11,14 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coolreader";
   version = "3.2.59";
 
   src = fetchFromGitHub {
     owner = "buggins";
     repo = "coolreader";
-    rev = "cr${version}";
+    rev = "cr${finalAttrs.version}";
     sha256 = "sha256-RgVEOaNBaEuPBC75B8PdCkbqMvEzNmnEYmiI1ny/WFQ=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

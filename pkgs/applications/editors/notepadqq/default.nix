@@ -13,7 +13,7 @@
   qtwebsockets,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notepadqq";
   # shipping a beta build as there's no proper release which supports qtwebengine
   version = "2.0.0-beta";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "notepadqq";
     repo = "notepadqq";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-XA9Ay9kJApY+bDeOf0iPv+BWYFuTmIuqsLEPgRTCZCE=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.rszibele ];
     mainProgram = "notepadqq";
   };
-}
+})

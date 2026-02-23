@@ -32,13 +32,13 @@
   libxcb,
   zlib,
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ida-free";
   version = "9.2";
 
   src = requireFile {
-    name = "ida-free-pc_${lib.replaceStrings [ "." ] [ "" ] version}_x64linux.run";
-    url = "https://my.hex-rays.com/dashboard/download-center/installers/release/${version}/ida-free";
+    name = "ida-free-pc_${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}_x64linux.run";
+    url = "https://my.hex-rays.com/dashboard/download-center/installers/release/${finalAttrs.version}/ida-free";
     hash = "sha256-CQm9phkqLXhht4UQxooKmhmiGuW3lV8RIJuDrm52aNw=";
   };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     libxcb-cursor
     zlib
   ];
-  buildInputs = runtimeDependencies;
+  buildInputs = finalAttrs.runtimeDependencies;
 
   # IDA comes with its own Qt6, some dependencies are missing in the installer.
   autoPatchelfIgnoreMissingDeps = [

@@ -6,16 +6,15 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gogdl";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "heroic-gogdl";
-    # two commits after the v1.2.0 tag, because the release messed up submodule fetching
-    rev = "9759dfb1f50e0c68854f938e9568d84cab59652c";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-yjiPHEiZjs9TnBRaKzm1TpLcPK0tfIrzM30DX66m+1Y=";
+    hash = "sha256-qYarDcwrVrTpLHQYdWQvXL5+V1wMyL06+n5t6LXKBHI=";
   };
 
   build-system = with python3Packages; [

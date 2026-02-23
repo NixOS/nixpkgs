@@ -68,11 +68,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
-  version = "15.1";
+  version = "15.2";
 
   src = fetchzip {
     url = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/openttd-${finalAttrs.version}-source.tar.xz";
-    hash = "sha256-eBtCsbDolcTLpumWi235y4dFnZFkgLfPuTuyMaA+xac=";
+    hash = "sha256-aoeG0mAmARzYPCzMAw2BeDbvuLYXJf8nIF+eEKkE7bc=";
   };
 
   nativeBuildInputs = [

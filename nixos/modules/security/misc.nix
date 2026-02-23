@@ -1,7 +1,7 @@
 { config, lib, ... }:
 {
   meta = {
-    maintainers = [ lib.maintainers.joachifm ];
+    maintainers = [ ];
   };
 
   imports = [

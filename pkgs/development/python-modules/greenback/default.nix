@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "greenback";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oremanj";
     repo = "greenback";
     tag = "v${version}";
-    hash = "sha256-u7kihdE5EH3Xbq4dQGY4ojiootjw3muYnoI7d2MrMkE=";
+    hash = "sha256-YAQEG3Lnyy9O+d58zZatDOeF+rxk34VqJ09XikqTyQk=";
   };
 
   build-system = [

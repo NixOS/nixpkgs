@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "op-geth";
   version = "1.101305.3";
 
   src = fetchFromGitHub {
     owner = "ethereum-optimism";
     repo = "op-geth";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AKVwwvt77FZlm7089EeayYVRYLo7c3v6LFVpsQN68Zk=";
     fetchSubmodules = true;
   };
@@ -46,4 +46,4 @@ buildGoModule rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

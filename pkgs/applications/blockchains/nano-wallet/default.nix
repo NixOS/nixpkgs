@@ -12,7 +12,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "nano-wallet";
   version = "28.2";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "nano-node";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-Wo1Gd6dOnCoPiGmuJQhZmKKSg7LrKpfdvLNNKBYTUWI=";
   };
@@ -82,5 +82,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-
-}
+})

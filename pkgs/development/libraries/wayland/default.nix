@@ -109,7 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit; # Expat version
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      codyopel
       qyliss
     ];
     pkgConfigModules = [

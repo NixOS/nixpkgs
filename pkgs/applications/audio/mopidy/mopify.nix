@@ -5,13 +5,13 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-mopify";
   version = "1.7.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Mopidy-Mopify";
     hash = "sha256-RlCC+39zC+LeA/QDWPHYx5TrEwOgVrnvcH1Xg12qSLE=";
   };
@@ -36,4 +36,4 @@ pythonPackages.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.Gonzih ];
   };
-}
+})

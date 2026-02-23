@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "attempto-clex";
   version = "6.5-090528";
 
   src = fetchFromGitHub {
     owner = "Attempto";
     repo = "Clex";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Oa1AMBaYpjd+U2k9lBnou4+4IgBwU8fojJ8bY9tf9ZE=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ yrashk ];
   };
-}
+})

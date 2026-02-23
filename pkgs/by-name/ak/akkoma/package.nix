@@ -47,7 +47,7 @@ beamPackages.mixRelease rec {
   ];
 
   mixFodDeps = beamPackages.fetchMixDeps {
-    pname = "mix-deps-${pname}";
+    pname = "mix-deps-akkoma";
     inherit src version;
     hash = "sha256-DqSeMjom9UjgGjjfJomWCr7jQhXEkqVrDCvW3+pDtcQ=";
 
