@@ -62,7 +62,7 @@
     credentials = list(
         csv.DictReader(
             io.StringIO(
-                machine.succeed("firefox_decrypt -f csv ~/.config/mozilla/firefox"),
+                machine.succeed("firefox-decrypt -f csv ~/.config/mozilla/firefox"),
                 newline="",
             ),
             delimiter=";",
