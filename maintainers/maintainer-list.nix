@@ -19207,13 +19207,6 @@
     name = "nixbitcoindev";
     keys = [ { fingerprint = "577A 3452 7F3E 2A85 E80F  E164 DD11 F9AD 5308 B3BA"; } ];
   };
-  nixinator = {
-    email = "33lockdown33@protonmail.com";
-    matrix = "@nixinator:nixos.dev";
-    github = "nixinator";
-    githubId = 66913205;
-    name = "Rick Sanchez";
-  };
   nixy = {
     email = "nixy@nixy.moe";
     github = "nixy";
