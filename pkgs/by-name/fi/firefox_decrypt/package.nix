@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   nss,
+  nixosTests,
   nix-update-script,
   stdenv,
   python3Packages,
@@ -32,7 +33,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     (lib.makeLibraryPath [ nss ])
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) firefox_decrypt;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/unode/firefox_decrypt";
