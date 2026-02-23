@@ -1,12 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
+  fetchFromGitHub,
+  # build-system
+  setuptools,
+  # dependencies
   ctranslate2,
   ctranslate2-cpp,
+  minisbd,
+  sacremoses,
   sentencepiece,
+  spacy,
   stanza,
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 let
   ctranslate2OneDNN = ctranslate2.override {
@@ -17,37 +25,37 @@ let
     };
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argostranslate";
-  version = "1.9.6";
+  version = "1.11.0";
+  pyproject = true;
 
-  format = "setuptools";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3YzBMnqmcTIpn5UOFg3SDTFLjPSE9UDw0i8fB8LYh2s=";
+  src = fetchFromGitHub {
+    owner = "argosopentech";
+    repo = "argos-translate";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8uzWS0YZEteeLTYAp9qpnnJhxyhxbWkKt1krqe/RF4M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ctranslate2OneDNN
+    minisbd
+    sacremoses
     sentencepiece
+    spacy
     stanza
   ];
 
-  postPatch = ''
-    ln -s */requires.txt requirements.txt
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
-    substituteInPlace requirements.txt  \
-      --replace "==" ">="
-  '';
-
-  doCheck = false; # needs network access
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  # required for import check to work
-  # PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
-  env.HOME = "/tmp";
+  pythonRelaxDeps = [
+    "stanza"
+  ];
 
   pythonImportsCheck = [
     "argostranslate"
@@ -57,7 +65,11 @@ buildPythonPackage rec {
   meta = {
     description = "Open-source offline translation library written in Python";
     homepage = "https://www.argosopentech.com";
+    changelog = "https://github.com/argosopentech/argos-translate/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ misuzu ];
+    maintainers = with lib.maintainers; [
+      misuzu
+      Stebalien
+    ];
   };
-}
+})

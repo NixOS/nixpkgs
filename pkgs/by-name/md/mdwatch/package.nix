@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdwatch";
-  version = "0.1.17";
+  version = "0.1.18";
 
   src = fetchFromGitHub {
     owner = "santoshxshrestha";
     repo = "mdwatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y0biB09WQPgnNhxUmLpGNbCuuNjgjnB4vwsJrSWn+Lo=";
+    hash = "sha256-XXDBDyX4XrGVC0cgkPNXyR1qULqJPA/azZbTyKU+m8k=";
   };
 
-  cargoHash = "sha256-bc1hbTzGSun5nXonMJHA6LFPcl1fFR1nUx9+GCjQ5UY=";
+  cargoHash = "sha256-rjo7TcKJ0TwLANQ822SIAubJnT6fZFDPV2GOc5MRHn4=";
 
   updateScript = nix-update-script { };
 

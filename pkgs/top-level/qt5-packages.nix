@@ -66,8 +66,6 @@ makeScopeWithSplicing' {
 
         accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
-        appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
-
         dxflib = callPackage ../development/libraries/dxflib { };
 
         drumstick = callPackage ../development/libraries/drumstick { };

@@ -174,6 +174,11 @@ stdenv.mkDerivation (finalAttrs: {
     # routinely hangs on powerpc64le
     !stdenv.hostPlatform.isPower64;
 
+  # Tests like to time out when run in parallel to large builds
+  preCheck = ''
+    export UV_TEST_TIMEOUT_MULTIPLIER=10
+  '';
+
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 

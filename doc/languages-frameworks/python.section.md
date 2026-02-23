@@ -50,7 +50,6 @@ sets are
 
 * `pkgs.python27Packages`
 * `pkgs.python3Packages`
-* `pkgs.python310Packages`
 * `pkgs.python311Packages`
 * `pkgs.python312Packages`
 * `pkgs.python313Packages`
@@ -551,6 +550,7 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `sphinxHook` to build documentation and manpages using Sphinx.
+- `stestrCheckHook` to run tests with `stestr`.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.
@@ -897,7 +897,7 @@ on NixOS.
   # ...
 
   environment.systemPackages = with pkgs; [
-    (python310.withPackages (
+    (python314.withPackages (
       ps: with ps; [
         numpy
         toolz
@@ -1683,7 +1683,7 @@ with import <nixpkgs> { };
           });
         };
       in
-      pkgs.python310.override { inherit packageOverrides; };
+      pkgs.python313.override { inherit packageOverrides; };
 
   in
   python.withPackages (ps: [ ps.pandas ])
@@ -1707,7 +1707,7 @@ with import <nixpkgs> { };
   let
     packageOverrides = self: super: { scipy = super.scipy_0_17; };
   in
-  (pkgs.python310.override { inherit packageOverrides; }).withPackages (ps: [ ps.blaze ])
+  (pkgs.python313.override { inherit packageOverrides; }).withPackages (ps: [ ps.blaze ])
 ).env
 ```
 
@@ -1723,13 +1723,13 @@ let
   newpkgs = import pkgs.path {
     overlays = [
       (self: super: {
-        python310 =
+        python313 =
           let
             packageOverrides = python-self: python-super: {
               numpy = python-super.numpy_1_18;
             };
           in
-          super.python310.override { inherit packageOverrides; };
+          super.python313.override { inherit packageOverrides; };
       })
     ];
   };

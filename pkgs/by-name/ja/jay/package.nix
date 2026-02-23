@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-T7053eAH3IqkAxNZpYHdC6Z7JZtArrOqGMjoIccjemI=";
 
-  SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
+  env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
   nativeBuildInputs = [
     autoPatchelfHook

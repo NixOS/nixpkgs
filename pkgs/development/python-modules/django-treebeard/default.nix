@@ -2,22 +2,27 @@
   lib,
   buildPythonPackage,
   django,
-  fetchPypi,
+  fetchFromGitHub,
   pytest-django,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-treebeard";
-  version = "4.7.1";
-  format = "setuptools";
+  version = "4.8.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hG5GKQS0NxVfduBJB7pOSEgHFoVfiLiY30Eivc+9bpg=";
+  src = fetchFromGitHub {
+    owner = "django-treebeard";
+    repo = "django-treebeard";
+    tag = finalAttrs.version;
+    hash = "sha256-DrjI0HlrJhNqrYul3SO0xkkFwjWRn94OgvTA/Z3wv84=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
 
   nativeCheckInputs = [
     pytest-django
@@ -29,7 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "Efficient tree implementations for Django";
     homepage = "https://tabo.pe/projects/django-treebeard/";
-    changelog = "https://github.com/django-treebeard/django-treebeard/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/django-treebeard/django-treebeard/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.asl20;
   };
-}
+})

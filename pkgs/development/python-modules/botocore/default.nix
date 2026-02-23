@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.40.18"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.42.31"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = "botocore";
     tag = version;
-    hash = "sha256-m0pmfOzI1mgfthiAShO2oDYlnFqUfDv+FR5X1XlHHkM=";
+    hash = "sha256-avuv1uXKMeSr3SL+BI9XW8tDCQM/dlXFn590di3S03k=";
   };
 
   build-system = [
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Low-level interface to a growing number of Amazon Web Services";
     homepage = "https://github.com/boto/botocore";
-    changelog = "https://github.com/boto/botocore/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/boto/botocore/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };

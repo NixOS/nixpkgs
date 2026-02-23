@@ -6,7 +6,6 @@
   deepl,
   django,
   fetchFromGitHub,
-  fetchpatch,
   gql,
   pytestCheckHook,
   pyyaml,
@@ -23,25 +22,17 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reptor";
-  version = "0.32";
+  version = "0.33";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syslifters";
     repo = "reptor";
-    tag = version;
-    hash = "sha256-nNG4rQHloOqcPZPnvw3hbw0+wCbB2XAdQ5/XnJtCHnE=";
+    tag = finalAttrs.version;
+    hash = "sha256-Jr8Gr5oGrASK/QAgO7r78/kjtxVsxn1skfkVe3Hx2HM=";
   };
-
-  patches = [
-    # https://github.com/Syslifters/reptor/pull/221
-    (fetchpatch {
-      url = "https://github.com/Syslifters/reptor/commit/0fc43c246e2f99aaac9e78af818f360a3a951980.patch";
-      hash = "sha256-eakbI7hMJdshD0OA6n7dEO4+qPB21sYl09uZgepiWu0=";
-    })
-  ];
 
   pythonRelaxDeps = true;
 
@@ -70,7 +61,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -86,9 +77,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module to do automated pentest reporting with SysReptor";
     homepage = "https://github.com/Syslifters/reptor";
-    changelog = "https://github.com/Syslifters/reptor/releases/tag/${src.tag}";
+    changelog = "https://github.com/Syslifters/reptor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "reptor";
   };
-}
+})

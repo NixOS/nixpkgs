@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    hash = "sha256-igjjwirg3O5mC3DzGCAO9OgrH2drnE/gV6NH7ZLNnFE=";
+    hash = "sha256-poLBZDogSL2ip90Es0xJ7X/xJ8+g9FJHnXSX0+N15es=";
   };
 
   patches = [

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "laspy";
-  version = "2.6.1";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zpy5oYUosqK5hVg99ApN6mjN2nmV5H5LALbUjfDojao=";
+    hash = "sha256-9W/rVEXnXW/xLugUqrajUzkpDnUmT/J3xr9VPzAlo/U=";
   };
 
   nativeBuildInputs = [ setuptools ];

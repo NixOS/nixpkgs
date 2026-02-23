@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   libao,
   libmodplug,
   libsamplerate,
@@ -11,28 +10,42 @@
   ncurses,
   which,
   pkg-config,
+  SDL2,
+  SDL2_mixer,
+  zlib,
+  libjpeg,
+  libpng,
+  freetype,
+  frontend ? "ncurses",
 }:
 
+assert lib.assertOneOf "frontend" frontend [
+  "ncurses"
+  "sdl"
+  # NOTE: more options are present in the Makefile, e.g., x11, dumb, nosound, ...
+];
+let
+  progName = if frontend == "ncurses" then "frotz" else "sfrotz";
+in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "frotz";
-  version = "2.54";
+  pname = progName;
+  version = "2.55";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";
-    rev = finalAttrs.version;
-    hash = "sha256-GvGxojD8d5GVy/d8h3q6K7KJroz2lsKbfE0F0acjBl8=";
+    tag = finalAttrs.version;
+    hash = "sha256-XZjimskjupTtYdgfVaOS2QnQrDIBSwkJqxrffdjgZk0=";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/macports/macports-ports/raw/496e5b91e3b6c9dc6820d77ab60dbe400d1924ee/games/frotz/files/Makefile.patch";
-      extraPrefix = "";
-      hash = "sha256-P83ZzSi3bhncQ52Y38Q3F/7v1SJKr5614tytt862HRg=";
-    })
+    # https://gitlab.com/DavidGriffith/frotz/-/merge_requests/226
+    ./0001-Fix-SDL_SOUND_CFLAGS-usage.patch
   ];
 
+  strictDeps = true;
+  enableParallelBuilding = true;
   nativeBuildInputs = [
     which
     pkg-config
@@ -43,16 +56,37 @@ stdenv.mkDerivation (finalAttrs: {
     libsamplerate
     libsndfile
     libvorbis
-    ncurses
-  ];
+  ]
+  ++ (
+    if frontend == "ncurses" then
+      [ ncurses ]
+    else
+      [
+        freetype
+        libjpeg
+        libpng
+        SDL2
+        SDL2_mixer
+        zlib
+      ]
+  );
 
-  installFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "HOMEBREW_PREFIX=/var/empty"
+  ];
+  preConfigure = ''
+    makeFlagsArray+=(CURSES_CONFIG="$PKG_CONFIG ncurses")
+  '';
+
+  buildFlags = [ frontend ];
+  installTargets = if frontend == "ncurses" then "install-frotz" else "install-${frontend}";
 
   meta = {
     homepage = "https://davidgriffith.gitlab.io/frotz/";
     changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${finalAttrs.version}/NEWS";
-    description = "Z-machine interpreter for Infocom games and other interactive fiction";
-    mainProgram = "frotz";
+    description = "Z-machine interpreter for Infocom games and other interactive fiction (${frontend})";
+    mainProgram = progName;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       nicknovitski

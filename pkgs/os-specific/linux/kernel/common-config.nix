@@ -565,10 +565,6 @@ let
         # Enable CEC over DisplayPort
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
-
-        # Do not enable Nova drivers, which are still WIP. This is the Kconfig default.
-        NOVA_CORE = whenAtLeast "6.15" no;
-        DRM_NOVA = whenAtLeast "6.16" no;
       }
       //
         lib.optionalAttrs
@@ -606,6 +602,10 @@ let
       DRM_PANIC_SCREEN = whenAtLeast "6.12" (freeform "kmsg");
 
       DRM_PANIC_SCREEN_QR_CODE = whenAtLeast "6.12" yes;
+
+      # Do not enable Nova drivers, which are still WIP. This is the Kconfig default.
+      NOVA_CORE = whenAtLeast "6.15" no;
+      DRM_NOVA = whenAtLeast "6.16" no;
     };
 
     sound = {
@@ -826,6 +826,8 @@ let
       # Depends on MODULE_SIG and only really helps when you sign your modules
       # and enforce signatures which we don't do by default.
       SECURITY_LOCKDOWN_LSM = no;
+
+      IMA = yes;
 
       # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
       PERSISTENT_KEYRINGS = yes;
@@ -1248,6 +1250,7 @@ let
         KEXEC_FILE = option yes;
         KEXEC_JUMP = option yes;
         KEXEC_HANDOVER = whenAtLeast "6.16" (option yes);
+        LIVEUPDATE = whenAtLeast "6.19" (option yes);
 
         PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION
         # Windows Logical Disk Manager (Dynamic Disk) support

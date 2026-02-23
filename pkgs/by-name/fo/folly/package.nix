@@ -139,6 +139,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # <https://github.com/facebook/folly/issues/2171>
     ./folly-fix-glog-0.7.patch
+
+    # https://github.com/facebook/folly/pull/2561
+    ./memset-memcpy-aarch64.patch
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170

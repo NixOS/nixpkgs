@@ -34,7 +34,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonNamespaces = [
-    "azure.mgmt.resource.deployments"
+    "azure.mgmt"
+    "azure.mgmt.resource"
   ];
 
   pythonImportsCheck = [

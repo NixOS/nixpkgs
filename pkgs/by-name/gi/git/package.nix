@@ -51,7 +51,7 @@
   deterministic-host-uname, # trick Makefile into targeting the host platform when cross-compiling
   doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
   tests,
-  rustSupport ? false,
+  rustSupport ? lib.meta.availableOn stdenv.hostPlatform rustc,
   cargo,
   rustc,
 }:
@@ -61,7 +61,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.52.0";
+  version = "2.53.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-PNj+6G9pqUnLYQ/ujNkmTmhz0H+lhBH2Bgs9YnKe18U=";
+    hash = "sha256-WBi9fYCwYbu9/sikM9YJ3IgYoFmR9zH/xKVh4soYxlM=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -130,12 +130,19 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://lore.kernel.org/git/20251201031040.1120091-1-brianmlyles@gmail.com/raw";
       hash = "sha256-vvhbvg74OIMzfksHiErSnjOZ+W0M/T9J8GOQ4E4wKbU=";
     })
-    # Fixes t8020 test on big-endian
+  ]
+  ++ lib.optionals osxkeychainSupport [
+    # Fix build failure on Darwin when building Keychain integration
+    # See https://github.com/git/git/pull/2188 and https://github.com/Homebrew/homebrew-core/pull/266961
     (fetchurl {
-      name = "last-modified-fix-bug-caused-by-inproper-initialized-memory.patch";
-      url = "https://lore.kernel.org/git/20251128-toon-big-endian-ci-v1-1-80da0f629c1e@iotcl.com/raw";
-      hash = "sha256-WdewOwD7hMhnahhUUEYAlM58tT3MkxUlBa3n8IwrESU=";
+      name = "osxkeychain-define-build-targets-in-toplevel-Makefile.patch";
+      url = "https://lore.kernel.org/git/pull.2046.v2.git.1770775169908.gitgitgadget@gmail.com/raw";
+      hash = "sha256-7jTiMM5XFRDj/srtVf8olW62T/mesqLcyRp3NZJcid8=";
     })
+  ]
+  ++ lib.optionals (rustSupport && osxkeychainSupport) [
+    # The above patch doesn’t work with Rust support enabled.
+    ./osxkeychain-link-rust_lib.patch
   ]
   ++ lib.optionals withSsh [
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
@@ -277,7 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
     make -C contrib/diff-highlight "''${flagsArray[@]}"
   ''
   + lib.optionalString osxkeychainSupport ''
-    make -C contrib/credential/osxkeychain "''${flagsArray[@]}"
+    make -C contrib/credential/osxkeychain COMPUTE_HEADER_DEPENDENCIES=no "''${flagsArray[@]}"
   ''
   + lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret "''${flagsArray[@]}"

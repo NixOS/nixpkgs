@@ -8,7 +8,11 @@
   pkg-config,
   abiVersion ? "6",
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt,
+  # Disabled for static FreeBSD: libc++ headers come after C library headers,
+  # breaking C++ compilation. No current consumers need the C++ bindings.
+  withCxx ?
+    !stdenv.hostPlatform.useAndroidPrebuilt
+    && !(stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform.isStatic),
   mouseSupport ? false,
   gpm,
   withTermlib ? false,

@@ -58,7 +58,15 @@ mapAliases {
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   "@prisma/language-server" = throw "@prisma/language-server has been removed because it was broken"; # added 2025-03-23
   "@shopify/cli" = throw "@shopify/cli has been removed because it was broken"; # added 2025-03-12
+  "@tailwindcss/aspect-ratio" =
+    throw "@tailwindcss/aspect-ratio has been removed because it is a library and your JS project should lock it instead."; # Added 2026-02-19
+  "@tailwindcss/forms" =
+    throw "@tailwindcss/forms has been removed because it is a library and your JS project should lock it instead."; # Added 2026-02-19
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
+  "@tailwindcss/line-clamp" =
+    throw "@tailwindcss/line-clamp has been removed because it is a library and your JS project should lock it instead."; # Added 2026-02-19
+  "@tailwindcss/typography" =
+    throw "@tailwindcss/typography has been removed because it is a library and your JS project should lock it instead."; # Added 2026-02-19
   "@uppy/companion" = pkgs.uppy-companion; # Added 2025-11-01
   "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@vue/language-server" = pkgs.vue-language-server; # added 2024-06-15
@@ -104,6 +112,7 @@ mapAliases {
   inherit (pkgs) coc-explorer; # added 2025-10-01
   inherit (pkgs) coc-flutter; # Added 2025-11-05
   inherit (pkgs) coc-git; # added 2025-10-01
+  coc-go = throw "coc-go has been removed because it was unmaintained in nixpkgs"; # Added 2026-02-14
   inherit (pkgs) coc-haxe; # Added 2025-11-05
   inherit (pkgs) coc-highlight; # Added 2025-11-05
   inherit (pkgs) coc-html; # Added 2025-11-05
@@ -135,6 +144,7 @@ mapAliases {
   inherit (pkgs) coc-toml;
   coc-tslint = throw "coc-tslint was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
   coc-tslint-plugin = throw "coc-tslint-plugin was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
+  coc-tsserver = throw "coc-tsserver has been removed because it was unmaintained in nixpkgs"; # Added 2026-02-14
   coc-ultisnips = throw "'coc-ultisnips' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   coc-vetur = throw "coc-vetur was removed because vetur was deprecated by Vue in favor of volar. Use coc-volar instead, which supports Vue 3"; # added 2025-10-01
   inherit (pkgs) coc-vimlsp; # Added 2025-11-05

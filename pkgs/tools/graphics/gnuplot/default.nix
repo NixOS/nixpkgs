@@ -92,7 +92,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional withCaca "--with-caca"
   ++ lib.optional withTeXLive "--with-texdir=${placeholder "out"}/share/texmf/tex/latex/gnuplot";
 
-  CXXFLAGS = lib.optionalString (stdenv.hostPlatform.isDarwin && withQt) "-std=c++11";
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && withQt) {
+    CXXFLAGS = "-std=c++11";
+  };
 
   # we'll wrap things ourselves
   dontWrapGApps = true;

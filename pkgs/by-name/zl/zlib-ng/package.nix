@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zlib-ng";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
     rev = finalAttrs.version;
-    hash = "sha256-lO6fO18Z74+wKF0O/JjfrhS8lyaNQ37eamWGThb39F8=";
+    hash = "sha256-6GlHCnx9dQtmViPnvHnMS+l9Z+g6M8ynrSxLhLtmAKU=";
   };
 
   outputs = [
@@ -44,10 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
     "-DINSTALL_UTILS=OFF"
   ]
-  ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ]
-  ++ lib.optional (
-    stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin
-  ) "-DCMAKE_RC_COMPILER=${stdenv.cc.targetPrefix}windres";
+  ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ];
 
   meta = {
     description = "Zlib data compression library for the next generation systems";

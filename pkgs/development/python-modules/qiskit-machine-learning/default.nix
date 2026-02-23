@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "qiskit-machine-learning";
-  version = "0.8.3";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
     tag = version;
-    hash = "sha256-XnLCejK6m8p/OC5gKCoP1UXVblISChu3lKF8BnrnRbk=";
+    hash = "sha256-l7lzdGSarj1DiC0igeyr6kP+GYYE+eGKdW9+IN+2uh8=";
   };
 
   nativeBuildInputs = [ setuptools ];

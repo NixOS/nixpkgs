@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
+  cacert,
+  libredirect,
   pkg-config,
   openssl,
   rust-jemalloc-sys,
@@ -22,8 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-v+OfQEfAwHxX+FfC0UK2F8/e2tJKaI3zQpg+3hk2hV4=";
 
-  CARGO_PROFILE_RELEASE_LTO = "fat";
-  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  env = {
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
@@ -34,8 +38,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rust-jemalloc-sys
   ];
 
-  # tests don't work inside the sandbox
-  doCheck = false;
+  checkInputs = [ cacert ];
+  nativeCheckInputs = [
+    libredirect.hook
+  ];
+
+  preCheck = ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS="/etc/resolv.conf=$(realpath resolv.conf)"
+  '';
+
+  doCheck = true;
+  checkFlags = [
+    "--skip=test_google"
+    "--skip=test_proxy"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

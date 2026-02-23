@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdfmixtool";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     owner = "scarpetta";
     repo = "pdfmixtool";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UuRTMLlUIyo2RF+XjI229kkE67ybmllIy98p97PjWCE=";
+    hash = "sha256-+omL0WNU34BcWbsfK3FXfhp0DVWjm9Vb5OVjRCoT/IA=";
   };
 
   nativeBuildInputs = [

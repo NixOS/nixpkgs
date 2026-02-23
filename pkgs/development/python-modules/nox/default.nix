@@ -51,9 +51,6 @@ buildPythonPackage rec {
     humanize
     packaging
     virtualenv
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ];
 
   optional-dependencies = {

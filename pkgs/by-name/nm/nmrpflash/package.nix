@@ -24,8 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
   ];
 
-  PREFIX = "${placeholder "out"}";
-  STANDALONE_VERSION = finalAttrs.version;
+  env = {
+    PREFIX = "${placeholder "out"}";
+    STANDALONE_VERSION = finalAttrs.version;
+  };
 
   preInstall = ''
     mkdir -p $out/bin

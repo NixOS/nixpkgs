@@ -5,6 +5,7 @@
   replaceVars,
   setuptools,
   python,
+  pythonAtLeast,
   pythonOlder,
   tcl,
   tclPackages,
@@ -74,6 +75,18 @@ buildPythonPackage {
   preCheck = ''
     cd $NIX_BUILD_TOP/Python-*/Lib
     export HOME=$TMPDIR
+  ''
+  + lib.optionalString (pythonAtLeast "3.13" && pythonOlder "3.15") ''
+    # https://github.com/python/cpython/pull/143570
+    # wantobject resources are only supported via libregrtest
+    substituteInPlace \
+      test/test_tcl.py \
+      test/test_ttk/__init__.py \
+      test/test_tkinter/__init__.py \
+      test/test_tkinter/support.py \
+        --replace-fail \
+          "support.get_resource_value('wantobjects')" \
+          "0"
   '';
 
   checkPhase =

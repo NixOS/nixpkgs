@@ -19,7 +19,6 @@
   python-mistralclient,
   python-neutronclient,
   python-octaviaclient,
-  python-openstackclient,
   python-watcherclient,
   python-zaqarclient,
   python-zunclient,
@@ -28,20 +27,20 @@
   setuptools,
   sphinxHook,
   sphinxcontrib-apidoc,
-  stestr,
-  testers,
+  stestrCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-openstackclient";
-  version = "8.3.0";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-openstackclient";
     tag = finalAttrs.version;
-    hash = "sha256-CEz1v4e4NadSZ+qhotFtLB4y/KdhDZbDOohN8D9FB30=";
+    hash = "sha256-iqHm3vOENStdGI53Ggln/gWVnF3Lyomel9OFmwz2CJc=";
   };
 
   patches = [
@@ -72,16 +71,12 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     ddt
     requests-mock
-    stestr
+    stestrCheckHook
   ];
 
-  # test_module failures under python 3.14: https://bugs.launchpad.net/python-openstackclient/+bug/2137223
-  checkPhase = ''
-    runHook preCheck
-    stestr run -E \
-      "openstackclient.tests.unit.common.test_module.TestModuleList.(test_module_list_no_options|test_module_list_all)"
-    runHook postCheck
-  '';
+  disabledTestsRegex = [
+    "openstackclient.tests.unit.common.test_module.TestModuleList*"
+  ];
 
   pythonImportsCheck = [
     "openstackclient"
@@ -116,12 +111,10 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = python-openstackclient;
-      command = "openstack --version";
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "OpenStack Command-line Client";

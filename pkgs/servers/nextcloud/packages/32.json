@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "hash": "sha256-szrfk83p+oNxhg49MwwSUlKJwHSMF/O8PuWE3wBgYrk=",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v16.0.1/bookmarks-16.0.1.tar.gz",
-    "version": "16.0.1",
+    "hash": "sha256-2v+lm1VBHcSdptKehpe8F+u9CiV3wC7zrx0UGdbKAek=",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v16.1.3/bookmarks-16.1.3.tar.gz",
+    "version": "16.1.3",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- ☠ Find broken links and duplicates\n- 📲 Synchronize with all your browsers and devices\n- 📔 Store archived versions of your links in case they are depublished\n- 🔍 Full-text search on site contents\n- 👪 Share bookmarks with other users, groups and teams or via public links\n- ⚛ Generate RSS feeds of your collections\n- 📈 Stats on how often you access which links\n- 🔒 Automatic backups of your bookmarks collection\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -30,9 +30,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-08JNQ2K6EC4AWoodOD5moAKWTQrKTWS9cHEQoLh1mvU=",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v8.3.2/contacts-v8.3.2.tar.gz",
-    "version": "8.3.2",
+    "hash": "sha256-ZbyDJDx/SCPMsdY2JT/kyrqbzxFxTm+5ZoSnrfANwzE=",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v8.3.3/contacts-v8.3.3.tar.gz",
+    "version": "8.3.3",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -40,9 +40,9 @@
     ]
   },
   "cookbook": {
-    "hash": "sha256-Bw5Oga5zawiicIR9tOLSflK0258Uy7q/9zJsXS5Ggd4=",
-    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.5/cookbook-0.11.5.tar.gz",
-    "version": "0.11.5",
+    "hash": "sha256-oiG3oAxc5tWqQepVN5ubMqOeglDT+mpkDs6UttgzuhE=",
+    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.6/cookbook-0.11.6.tar.gz",
+    "version": "0.11.6",
     "description": "A library for all your recipes. It uses JSON files following the schema.org recipe format. To add a recipe to the collection, you can paste in the URL of the recipe, and the provided web page will be parsed and downloaded to whichever folder you specify in the app settings.",
     "homepage": "https://github.com/nextcloud/cookbook/",
     "licenses": [
@@ -60,9 +60,9 @@
     ]
   },
   "dav_push": {
-    "hash": "sha256-73Wf6vP0m/jK0bwAdnuoMMAX5oh16DPViTFqjCX/rhI=",
-    "url": "https://github.com/bitfireAT/nc_ext_dav_push/releases/download/v1.0.0/dav_push.tar.gz",
-    "version": "1.0.0",
+    "hash": "sha256-tSLsSgPHdpfcKPzJubwchBqQykLf9WV/mXfKKM2CSxs=",
+    "url": "https://github.com/bitfireAT/nc_ext_dav_push/releases/download/v1.0.1/dav_push.tar.gz",
+    "version": "1.0.1",
     "description": "In proprietary environments, changes in events and contacts are nowadays usually pushed to other clients so that they can update their views almost in real-time.\n\nWebDAV however (and in this context, especially CalDAV and CardDAV) doesn't currently support push notifications of clients when a collection has changed. So clients have to periodically ask the server for changes. This causes unnecessary delays and battery usage.\n\nThe WebDAV-Push standard, which is currently in development, wants to solve this problem with an open protocol, too.\n\nThis is the server part of these efforts to draft a standard and provide a working implementation (server + client) in order to demonstrate it.\n\n\nThe current WebDAV-Push draft is provided by [@bitfireAT](https://github.com/bitfireAT).\n          \nThis Nextcloud extension has been developed by [@verdigado](https://github.com/verdigado).",
     "homepage": "",
     "licenses": [
@@ -120,9 +120,9 @@
     ]
   },
   "gpoddersync": {
-    "hash": "sha256-DNLcSnYz/R163EePnmtkyk4CAZQ8GXeq2J0cld9S13Y=",
-    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.13.3/gpoddersync.tar.gz",
-    "version": "3.13.3",
+    "hash": "sha256-9BcXVauZWFlmlXtnwdSo5xISbhhssa7ao5ulKpziOnU=",
+    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.16.0/gpoddersync.tar.gz",
+    "version": "3.16.0",
     "description": "Expose GPodder API to sync podcast consumer apps like AntennaPod",
     "homepage": "https://github.com/thrillfall/nextcloud-gpodder",
     "licenses": [
@@ -130,9 +130,9 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-Hbi3Qr9SHvqcZSooZn/Pu3BhGsyZjSS4Wh6MCGho534=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v20.1.10/groupfolders-v20.1.10.tar.gz",
-    "version": "20.1.10",
+    "hash": "sha256-+/16SkinCG7ATPc0JsAM13psfl914eSxAo3TU0l/+h8=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v20.1.12/groupfolders-v20.1.12.tar.gz",
+    "version": "20.1.12",
     "description": "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -180,9 +180,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-7d95EVvFsfv66clvBjBhS0/O0b/nWyRopx/CL9XkqDg=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.6.12/mail-v5.6.12.tar.gz",
-    "version": "5.6.12",
+    "hash": "sha256-K1BPRiSHe3QMb8qiEqybXiVHA5WrExdK+OTDyyrdZ+E=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.7.0/mail-v5.7.0.tar.gz",
+    "version": "5.7.0",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://www.horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -250,10 +250,10 @@
     ]
   },
   "phonetrack": {
-    "hash": "sha256-Le3yvewei8vty8frz66X7ij2H9ju2h4JWdGNf46L9MY=",
-    "url": "https://github.com/julien-nc/phonetrack/releases/download/v0.9.1/phonetrack-0.9.1.tar.gz",
-    "version": "0.9.1",
-    "description": "# PhoneTrack Nextcloud application\n\n📱 PhoneTrack is a Nextcloud application to track and store mobile device's locations.\n\n🗺 It receives information from mobile phone's logging apps and displays it dynamically on a map.\n\n🌍 Help us to translate this app on [PhoneTrack Crowdin project](https://crowdin.com/project/phonetrack).\n\n⚒ Check out other ways to help in the [contribution guidelines](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CONTRIBUTING.md).\n\nHow to use PhoneTrack :\n\n* Create a tracking session.\n* Give the logging link\\* to the mobile devices. Choose the [logging method](https://gitlab.com/eneiluj/phonetrack-oc/wikis/userdoc#logging-methods) you prefer.\n* Watch the session's devices location in real time (or not) in PhoneTrack or share it with public pages.\n\n(\\*) Don't forget to set the device name in the link (rather than in the logging app settings). Replace \"yourname\" with the desired device name. Setting the device name in logging app settings only works with Owntracks, Traccar and OpenGTS.\n\nOn PhoneTrack main page, while watching a session, you can :\n\n* 📍 Display location history\n* ⛛ Filter points\n* ✎ Manually edit/add/delete points\n* ✎ Edit devices (rename, change colour/shape, move to another session)\n* ⛶ Define geofencing zones for devices\n* ⚇ Define proximity alerts for device pairs\n* 🖧 Share a session to other Nextcloud users or with a public link (read-only)\n* 🔗 Generate public share links with optional restrictions (filters, device name, last positions only, geofencing simplification)\n* 🖫 Import/export a session in GPX format (one file with one track per device or one file per device)\n* 🗠 Display sessions statistics\n* 🔒 [Reserve a device name](https://gitlab.com/eneiluj/phonetrack-oc/wikis/userdoc#device-name-reservation) to make sure only authorised user can log with this name\n* 🗓 Toggle session auto export and auto purge (daily/weekly/monthly)\n* ◔ Choose what to do when point number quota is reached (block logging or delete oldest point)\n\nPublic page and public filtered page work like main page except there is only one session displayed, everything is read-only and there is no need to be logged in.\n\nThis app is tested on Nextcloud 17 with Firefox 57+ and Chromium.\n\nThis app is compatible with theming colours and accessibility themes !\n\nThis app is under development.\n\n## Install\n\nSee the [AdminDoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc) for installation details.\n\nCheck [CHANGELOG](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CHANGELOG.md#change-log) file to see what's new and what's coming in next release.\n\nCheck [AUTHORS](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/AUTHORS.md#authors) file to see complete list of authors.\n\n## Known issues\n\n* PhoneTrack **now works** with Nextcloud group restriction activated. See [admindoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc#issue-with-phonetrack-restricted-to-some-groups-in-nextcloud).\n\nAny feedback will be appreciated.\n\n## Donation\n\nI develop this app during my free time.\n\n* [Donate with Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66PALMY8SF5JE) (you don't need a paypal account)\n* [Donate with Liberapay : ![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/eneiluj/donate)",
+    "hash": "sha256-2DO4bK1FlTaVS1xve/oU4xNnrA8j9mq7IuOcZPszJOY=",
+    "url": "https://github.com/julien-nc/phonetrack/releases/download/v1.0.0/phonetrack-1.0.0.tar.gz",
+    "version": "1.0.0",
+    "description": "# PhoneTrack Nextcloud application\n\n📱 PhoneTrack is a Nextcloud application to track and store mobile device's locations.\n\n🗺 It receives information from mobile phone's logging apps and displays it dynamically on a map.\n\n🌍 Help us to translate this app on [PhoneTrack Crowdin project](https://crowdin.com/project/phonetrack).\n\n⚒ Check out other ways to help in the [contribution guidelines](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CONTRIBUTING.md).\n\nHow to use PhoneTrack :\n\n- Create a tracking session.\n- Give the logging link\\* to the mobile devices. Choose the [logging method](https://gitlab.com/eneiluj/phonetrack-oc/wikis/userdoc#logging-methods) you prefer.\n- Watch the session's devices location in real time (or not) in PhoneTrack or share it with public pages.\n\n(\\*) Don't forget to set the device name in the link (rather than in the logging app settings). Replace \"yourname\" with the desired device name.\nSetting the device name in logging app settings only works with Owntracks, Traccar and OpenGTS.\n\nOn PhoneTrack main page, while watching a session, you can :\n\n- 📍 Display location history\n- ⛛ Filter points\n- ✎ Manually edit/add/delete points\n- ✎ Edit devices (rename, change colour/shape, move to another session)\n- ⛶ Define geofencing zones for devices\n- ⚇ Define proximity alerts for device pairs\n- 🖧 Share a session to other Nextcloud users or with a public link (read-only)\n- 🔗 Generate public share links with optional restrictions (filters, device name, last positions only, geofencing simplification)\n- 🖫 Import/export a session in GPX format (one file with one track per device or one file per device)\n- 🗠 Display sessions statistics\n- 🔒 [Reserve a device name](https://gitlab.com/eneiluj/phonetrack-oc/wikis/userdoc#device-name-reservation) to make sure only authorised user can log with this name\n- 🗓 Toggle session auto export and auto purge (daily/weekly/monthly)\n- ◔ Choose what to do when point number quota is reached (block logging or delete oldest point)\n\nPublic page and public filtered page work like main page except there is only one session displayed, everything is read-only and there is no need to be logged in.\n\nThis app is tested on Nextcloud 17 with Firefox 57+ and Chromium.\n\nThis app is compatible with theming colours and accessibility themes !\n\nThis app is under development.\n\n## Install\n\nSee the [AdminDoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc) for installation details.\n\nCheck [CHANGELOG](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CHANGELOG.md#change-log) file to see what's new and what's coming in next release.\n\nCheck [AUTHORS](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/AUTHORS.md#authors) file to see complete list of authors.\n\n## Known issues\n\n- PhoneTrack **now works** with Nextcloud group restriction activated. See [admindoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc#issue-with-phonetrack-restricted-to-some-groups-in-nextcloud).\n\nAny feedback will be appreciated.\n\n\n\n## Donation\n\nI develop this app during my free time.\n\n* [Donate with Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66PALMY8SF5JE) (you don't need a paypal account)\n* [Donate with Liberapay : ![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/eneiluj/donate)",
     "homepage": "https://github.com/julien-nc/phonetrack",
     "licenses": [
       "agpl"
@@ -300,9 +300,9 @@
     ]
   },
   "registration": {
-    "hash": "sha256-O0x0kv5Ng+ewBI9jJ8KUPvjsPZLOeEsj9eIuvkNfoqA=",
-    "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.8.0/registration-v2.8.0.tar.gz",
-    "version": "2.8.0",
+    "hash": "sha256-EzKIk9o4+i9+6oa3B4ZP1tAnXnL6zO6LjSXmPEzvbGE=",
+    "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.9.0/registration-v2.9.0.tar.gz",
+    "version": "2.9.0",
     "description": "User registration\n\nThis app allows users to register a new account.\n\n# Features\n\n- Add users to a given group\n- Allow-list with email domains (including wildcard) to register with\n- Administrator will be notified via email for new user creation or require approval\n- Supports Nextcloud's Client Login Flow v1 and v2 - allowing registration in the mobile Apps and Desktop clients\n\n# Web form registration flow\n\n1. User enters their email address\n2. Verification link is sent to the email address\n3. User clicks on the verification link\n4. User is lead to a form where they can choose their username and password\n5. New account is created and is logged in automatically",
     "homepage": "https://github.com/nextcloud/registration",
     "licenses": [
@@ -320,9 +320,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-zu7Rwgfzc1aXKbnN+ipMTsreTdg9j93BPwGEAxa8A2Y=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v9.0.2/richdocuments-v9.0.2.tar.gz",
-    "version": "9.0.2",
+    "hash": "sha256-WTcaX95WhIPL6rJI4VSkh313Vnh5CUd8nawnBuMkf48=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v9.0.3/richdocuments-v9.0.3.tar.gz",
+    "version": "9.0.3",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -390,9 +390,9 @@
     ]
   },
   "twofactor_webauthn": {
-    "hash": "sha256-B1Oje5oX68i9Q/IGFvxjN9Q+78Snq3yusgkgd8Mh3LQ=",
-    "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v2.4.1/twofactor_webauthn-v2.4.1.tar.gz",
-    "version": "2.4.1",
+    "hash": "sha256-21lUwF1uC7vJKqpC144jbtKaX25UhVDzgU/E7XoMSos=",
+    "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v2.6.0/twofactor_webauthn-v2.6.0.tar.gz",
+    "version": "2.6.0",
     "description": "A two-factor provider for WebAuthn devices",
     "homepage": "https://github.com/nextcloud/twofactor_webauthn#readme",
     "licenses": [
@@ -410,9 +410,9 @@
     ]
   },
   "uppush": {
-    "hash": "sha256-3rQt2do+25uu1aOhVae4PsYkFg1bTqF4v6Xy12yCH5c=",
-    "url": "https://codeberg.org/NextPush/uppush/archive/2.3.1.tar.gz",
-    "version": "2.3.1",
+    "hash": "sha256-QMLrv44uCNPm+ko3u0XP6p5BZuJthtDFBsT07w0XW/c=",
+    "url": "https://codeberg.org/NextPush/uppush/archive/2.4.0.tar.gz",
+    "version": "2.4.0",
     "description": "Once the mobile phone is connected with NextPush, push notifications can be forwarded to applications implementing UnifiedPush.\n\nMore information about UnifiedPush at https://unifiedpush.org",
     "homepage": "",
     "licenses": [
@@ -420,9 +420,9 @@
     ]
   },
   "user_oidc": {
-    "hash": "sha256-b88rQ4jtTSyrkT+lnorxtmU0qdZvDjNXL5DqHGhUbac=",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v8.3.0/user_oidc-v8.3.0.tar.gz",
-    "version": "8.3.0",
+    "hash": "sha256-uvGCdA8wNHdeZJk+AIZZrxbylxicNusJzi5nqHWaVtY=",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v8.4.0/user_oidc-v8.4.0.tar.gz",
+    "version": "8.4.0",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [

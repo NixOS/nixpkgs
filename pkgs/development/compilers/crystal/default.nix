@@ -202,9 +202,8 @@ let
       env = {
         LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
-        FLAGS = [
-          "--single-module" # needed for deterministic builds
-        ];
+        # needed for deterministic builds
+        FLAGS = "--single-module";
 
         # This makes sure we don't keep depending on the previous version of
         # crystal used to build this one.

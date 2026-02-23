@@ -24,6 +24,19 @@ let
         passthru.providedSessions = [ "${opts.name}-uwsm" ];
       };
     });
+
+  desktopEntries = lib.mapAttrsToList (
+    name: value:
+    mk_uwsm_desktop_entry {
+      inherit name;
+      inherit (value)
+        prettyName
+        comment
+        binPath
+        extraArgs
+        ;
+    }
+  ) cfg.waylandCompositors;
 in
 {
   options.programs.uwsm = {
@@ -126,18 +139,8 @@ in
       }
 
       (lib.mkIf (cfg.waylandCompositors != { }) {
-        environment.systemPackages = lib.mapAttrsToList (
-          name: value:
-          mk_uwsm_desktop_entry {
-            inherit name;
-            inherit (value)
-              prettyName
-              comment
-              binPath
-              extraArgs
-              ;
-          }
-        ) cfg.waylandCompositors;
+        environment.systemPackages = desktopEntries;
+        services.displayManager.sessionPackages = desktopEntries;
       })
     ]
   );

@@ -9,6 +9,7 @@
   sound-theme-freedesktop,
   stdenv,
   wrapGAppsHook4,
+  writeText,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "timekpr";
@@ -42,49 +43,51 @@ python3Packages.buildPythonApplication rec {
     psutil
   ];
 
-  # Generate setup.py because the upstream repository does not include it
-  SETUP_PY = ''
-    from setuptools import setup, find_namespace_packages
+  postPatch =
+    let
+      # Generate setup.py because the upstream repository does not include it
+      setup-py = writeText "setup.py" ''
+        from setuptools import setup, find_namespace_packages
 
-    package_dir={"timekpr": "."}
-    setup(
-      name="timekpr-next",
-      version="${version}",
-      package_dir=package_dir,
-      packages=[
-        f"{package_prefix}.{package_suffix}"
-        for package_prefix, where in package_dir.items()
-        for package_suffix in find_namespace_packages(where=where)
-      ],
-      install_requires=[
-        ${lib.concatMapStringsSep ", " (dependency: "'${dependency.pname}'") dependencies}
-      ],
-    )
-  '';
+        package_dir={"timekpr": "."}
+        setup(
+          name="timekpr-next",
+          version="${version}",
+          package_dir=package_dir,
+          packages=[
+            f"{package_prefix}.{package_suffix}"
+            for package_prefix, where in package_dir.items()
+            for package_suffix in find_namespace_packages(where=where)
+          ],
+          install_requires=[
+            ${lib.concatMapStringsSep ", " (dependency: "'${dependency.pname}'") dependencies}
+          ],
+        )
+      '';
+    in
+    ''
+      shopt -s globstar extglob nullglob
 
-  postPatch = ''
-    shopt -s globstar extglob nullglob
+      substituteInPlace bin/* **/*.py resource/server/systemd/timekpr.service \
+        --replace-quiet /usr/lib/python3/dist-packages "$out"/${lib.escapeShellArg python3Packages.python.sitePackages}
 
-    substituteInPlace bin/* **/*.py resource/server/systemd/timekpr.service \
-      --replace-quiet /usr/lib/python3/dist-packages "$out"/${lib.escapeShellArg python3Packages.python.sitePackages}
+      substituteInPlace **/*.desktop **/*.policy **/*.service \
+        --replace-fail /usr/bin/timekpr "$out"/bin/timekpr
 
-    substituteInPlace **/*.desktop **/*.policy **/*.service \
-      --replace-fail /usr/bin/timekpr "$out"/bin/timekpr
+      substituteInPlace common/constants/constants.py \
+        --replace-fail /usr/share/sounds/freedesktop ${lib.escapeShellArg sound-theme-freedesktop}/share/sounds/freedesktop \
+        --replace-fail /usr/share/timekpr "$out"/share/timekpr \
+        --replace-fail /usr/share/locale "$out"/share/locale
 
-    substituteInPlace common/constants/constants.py \
-      --replace-fail /usr/share/sounds/freedesktop ${lib.escapeShellArg sound-theme-freedesktop}/share/sounds/freedesktop \
-      --replace-fail /usr/share/timekpr "$out"/share/timekpr \
-      --replace-fail /usr/share/locale "$out"/share/locale
+      substituteInPlace resource/server/timekpr.conf \
+        --replace-fail /usr/share/timekpr "$out"/share/timekpr \
 
-    substituteInPlace resource/server/timekpr.conf \
-      --replace-fail /usr/share/timekpr "$out"/share/timekpr \
+      # The original file name `timekpra` is renamed to `..timekpra-wrapped-wrapped` because `makeCWrapper` was used multiple times.
+      substituteInPlace client/admin/adminprocessor.py \
+        --replace-fail '"/timekpra" in ' '"/..timekpra-wrapped-wrapped" in '
 
-    # The original file name `timekpra` is renamed to `..timekpra-wrapped-wrapped` because `makeCWrapper` was used multiple times.
-    substituteInPlace client/admin/adminprocessor.py \
-      --replace-fail '"/timekpra" in ' '"/..timekpra-wrapped-wrapped" in '
-
-    printf %s "$SETUP_PY" > setup.py
-  '';
+      ln -s ${setup-py} setup.py
+    '';
 
   # We need to manually inject $PYTHONPATH here, because `buildPythonApplication` does not recognize timekpr's executables as Python scripts, and therefore it does not automatically inject $PYTHONPATH into them.
   postFixup = ''

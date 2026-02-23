@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watcher";
-  version = "0.14.4";
+  version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "e-dant";
     repo = "watcher";
     tag = finalAttrs.version;
-    hash = "sha256-V3s7IpnDJMV0ojNcJhg+15VXQviZptu2hB5oE/2B5Hw=";
+    hash = "sha256-KoBJdjzYsZiZ/75z1fORpMHTnkSkUnAbxmOWke0a5xE=";
   };
 
   nativeBuildInputs = [

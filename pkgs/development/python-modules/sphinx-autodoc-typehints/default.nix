@@ -10,7 +10,7 @@
 
 let
   pname = "sphinx-autodoc-typehints";
-  version = "3.5.2";
+  version = "3.6.2";
 in
 
 buildPythonPackage {
@@ -20,8 +20,14 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "sphinx_autodoc_typehints";
     inherit version;
-    hash = "sha256-X81KPreqiUJMHi4yvtymbtw4NnVpyRaagPSz6TQXH9s=";
+    hash = "sha256-PTdwmiG3t2WtbiCgTs78sim56wAHyyT266qKRXbqfwY=";
   };
+
+  postPatch = ''
+    # https://github.com/tox-dev/sphinx-autodoc-typehints/issues/586
+    substituteInPlace src/sphinx_autodoc_typehints/__init__.py \
+      --replace-fail "sphinx.ext.autodoc.mock" "sphinx.ext.autodoc._dynamic._mock"
+  '';
 
   pythonRelaxDeps = [ "sphinx" ];
 

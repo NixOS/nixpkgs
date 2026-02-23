@@ -37,9 +37,6 @@
   distro,
   # win
   colorama,
-  # python-version-dependent
-  pythonOlder,
-  typing-extensions,
   # tests
   pytest-retry,
   pytest-xdist,
@@ -95,8 +92,7 @@ buildPythonPackage (finalAttrs: {
       annexremote
       looseversion
     ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
     downloaders = [
       boto3
       keyrings-alt

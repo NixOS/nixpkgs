@@ -60,6 +60,7 @@ buildPythonPackage (finalAttrs: {
     "datasets"
     "draccus"
     "gymnasium"
+    "huggingface-hub"
     "opencv"
     "rerun-sdk"
     "torch"
@@ -92,9 +93,7 @@ buildPythonPackage (finalAttrs: {
     torchvision
     wandb
   ]
-  ++ imageio.optional-dependencies.ffmpeg
-  ++ huggingface-hub.optional-dependencies.hf_transfer
-  ++ huggingface-hub.optional-dependencies.cli;
+  ++ imageio.optional-dependencies.ffmpeg;
 
   pythonImportsCheck = [ "lerobot" ];
 

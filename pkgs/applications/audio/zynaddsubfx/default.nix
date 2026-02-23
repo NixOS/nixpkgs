@@ -64,14 +64,14 @@ let
 
   mruby-zest = callPackage ./mruby-zest { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zynaddsubfx";
   version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "zynaddsubfx";
     repo = "zynaddsubfx";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
   };
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
   # Find FLTK without requiring an OpenGL library in buildInputs
   ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'uint8_t' does not name a type
     "-include cstdint"
   ];
@@ -204,4 +204,4 @@ stdenv.mkDerivation rec {
     # - Zest UI fails to start on pulg_setup: Could not open display, aborting.
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

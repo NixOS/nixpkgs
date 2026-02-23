@@ -30,17 +30,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.6.8";
+  version = "2.6.10";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-RBrBtkDd8lgrnRmFkRwF86xuUr2zTDHUrcNVh5P6gCc=";
+    hash = "sha256-youaF9YERkGUwN0sg6IzV8OAyahSDbFt0psn/p4iOVY=";
   };
 
-  cargoHash = "sha256-6UTRvrQzuEvrHxleTEEpoTwgDWDG79+9Txjo0SLL3Ns=";
+  cargoHash = "sha256-goaqxj8Y5Gqo4et4AkyZ3Uv74Q3M3V0VExUA/AMYNMI=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -130,7 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [
     "--lib" # unit tests
-    "--test=integration_tests"
+    "--test=integration_test"
     # Test targets not included here:
     # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
     # - specs: this target uses a custom test harness that doesn't implement the --skip flag.

@@ -25,7 +25,6 @@
   python3Packages,
 
   # Mandatory dependencies
-  libcap,
   util-linux,
   kbd,
   kmod,
@@ -203,17 +202,17 @@ let
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1734643670";
+  releaseTimestamp = "1766012573";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "258.3";
+  version = "259";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wpg/0z7xrB8ysPaa/zNp1mz+yYRCGyXz0ODZcKapovM=";
+    hash = "sha256-lJUX1sWRouhEEPZoA9UjjOy5IUZYGGV8pltAU0E4Dsg=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -252,39 +251,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isMusl [
-    # Patchset to build with musl by an upstream systemd contributor:
-    # https://github.com/systemd/systemd/pull/37788
-    # This is vendored here because of the lack of permanent patch urls for the unmerged PR
-    ./musl/0001-musl-meson-allow-to-choose-libc-implementation.patch
-    ./musl/0002-musl-meson-do-not-use-libcrypt-libxcrypt.patch
-    ./musl/0003-musl-meson-explicitly-link-with-libintl-when-necessa.patch
-    ./musl/0004-musl-meson-explicitly-set-_LARGEFILE64_SOURCE.patch
-    ./musl/0005-musl-meson-make-musl-not-define-wchar_t-in-their-hea.patch
-    ./musl/0006-musl-meson-check-existence-of-renameat2.patch
-    ./musl/0007-musl-meson-gracefully-disable-gshadow-idn-nss-and-ut.patch
-    ./musl/0008-musl-introduce-dummy-gshadow-header-file-for-userdb.patch
-    ./musl/0009-musl-add-fallback-parse_printf_format-implementation.patch
-    ./musl/0010-musl-introduce-GNU-specific-version-of-strerror_r.patch
-    ./musl/0011-musl-make-strptime-accept-z.patch
-    ./musl/0012-musl-make-strtoll-accept-strings-start-with-dot.patch
-    ./musl/0013-musl-introduce-strerrorname_np.patch
-    ./musl/0014-musl-introduce-dummy-functions-for-mallinfo-malloc_i.patch
-    ./musl/0015-musl-introduce-dummy-function-for-gnu_get_libc_versi.patch
-    ./musl/0016-musl-define-__THROW-when-not-defined.patch
-    ./musl/0017-musl-replace-sys-prctl.h-with-our-own-implementation.patch
-    ./musl/0018-musl-replace-netinet-if_ether.h-with-our-own-impleme.patch
-    ./musl/0019-musl-add-missing-FTW_CONTINUE-macro.patch
-    ./musl/0020-musl-add-several-missing-statx-macros.patch
-    ./musl/0021-musl-avoid-conflict-between-fcntl.h-and-our-forward..patch
-    ./musl/0022-musl-redefine-HOST_NAME_MAX-as-64.patch
-    ./musl/0023-musl-avoid-multiple-evaluations-in-CPU_ISSET_S-macro.patch
-    ./musl/0024-musl-core-there-is-one-less-usable-signal-when-built.patch
-    ./musl/0025-musl-build-path-fix-reading-DT_RUNPATH-or-DT_RPATH.patch
-    ./musl/0026-musl-format-util-use-llu-for-formatting-rlim_t.patch
-    ./musl/0027-musl-time-util-skip-tm.tm_wday-check.patch
-    ./musl/0028-musl-glob-util-filter-out-.-and-.-even-if-GLOB_ALTDI.patch
   ];
 
   postPatch = ''
@@ -366,7 +332,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcrypt
-    (if withPam then libcap else libcap.override { usePam = false; })
     libuuid
     linuxHeaders
   ]
@@ -480,6 +445,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Mount
     (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
     (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
+
+    # Swap
+    (lib.mesonOption "swapon-path" "${lib.getOutput "swap" util-linux}/sbin/swapon")
+    (lib.mesonOption "swapoff-path" "${lib.getOutput "swap" util-linux}/sbin/swapoff")
 
     # SSH
     (lib.mesonOption "sshconfdir" "")
@@ -621,19 +590,6 @@ stdenv.mkDerivation (finalAttrs: {
           ];
         }
         {
-          search = "/sbin/swapon";
-          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon";
-          where = [
-            "src/core/swap.c"
-            "src/basic/unit-def.h"
-          ];
-        }
-        {
-          search = "/sbin/swapoff";
-          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff";
-          where = [ "src/core/swap.c" ];
-        }
-        {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
           where = [
@@ -766,29 +722,23 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-      # lead to a cyclic dependency.
-      "-UPOLKIT_AGENT_BINARY_PATH"
-      "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Can't say ${polkit.bin}/bin/pkttyagent here because that would
+    # lead to a cyclic dependency.
+    "-UPOLKIT_AGENT_BINARY_PATH"
+    "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
-      # Set the release_agent on /sys/fs/cgroup/systemd to the
-      # currently running systemd (/run/current-system/systemd) so
-      # that we don't use an obsolete/garbage-collected release agent.
-      "-USYSTEMD_CGROUP_AGENTS_PATH"
-      "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    # Set the release_agent on /sys/fs/cgroup/systemd to the
+    # currently running systemd (/run/current-system/systemd) so
+    # that we don't use an obsolete/garbage-collected release agent.
+    "-USYSTEMD_CGROUP_AGENTS_PATH"
+    "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-      "-USYSTEMD_BINARY_PATH"
-      "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+    "-USYSTEMD_BINARY_PATH"
+    "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+  ];
 
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      "-D__UAPI_DEF_ETHHDR=0"
-    ]
-  );
-
-  doCheck = true;
+  doCheck = false;
 
   # trigger the test -n "$DESTDIR" || mutate in upstreams build system
   preInstall = ''

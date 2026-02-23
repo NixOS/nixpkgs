@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsailing
   ];
 
-  INSTALL_PATH = "$(out)";
+  env.INSTALL_PATH = "$(out)";
 
   postUnpack = ''
     rmdir $sourceRoot/libsailing

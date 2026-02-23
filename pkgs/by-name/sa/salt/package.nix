@@ -12,12 +12,12 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "salt";
-  version = "3007.11";
+  version = "3007.13";
   format = "setuptools";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-EAkO0/1kKSXRkEXNH6mJHznUkQR0AsQ2ijtzCrwUCAU=";
+    hash = "sha256-xmOnOGy9R6/pSm2LCxrx/M3DUFnM7CuTMQ55IHBTRPs=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ++ extraInputs;
 
   # Don't use fixed dependencies on Darwin
-  USE_STATIC_REQUIREMENTS = "0";
+  env.USE_STATIC_REQUIREMENTS = "0";
 
   # The tests fail due to socket path length limits at the very least;
   # possibly there are more issues but I didn't leave the test suite running

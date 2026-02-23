@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  DATADIR = "/share/${pname}";
+  env.DATADIR = "/share/${pname}";
 
   postInstall = lib.optionalString withGUI ''
     wrapProgram $out/bin/xhydra \

@@ -30,7 +30,7 @@
   pytest-mock,
   pytest-socket,
   pytest-xdist,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   requests-mock,
   responses,
   syrupy,
@@ -88,7 +88,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-socket
     pytest-xdist
-    pytestCheckHook
+    pytest8_3CheckHook
     requests-mock
     responses
     syrupy

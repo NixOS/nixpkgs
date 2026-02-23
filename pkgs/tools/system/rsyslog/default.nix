@@ -8,7 +8,7 @@
   json_c,
   zlib,
   docutils,
-  fastJson,
+  libfastjson,
   withKrb5 ? true,
   libkrb5,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    fastJson
+    libfastjson
     libestr
     json_c
     zlib
@@ -179,6 +179,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature withCurl "omhttp")
     (lib.enableFeature true "generate-man-pages")
   ];
+
+  NIX_CFLAGS_LINK = "-lz";
 
   passthru.tests = {
     nixos-rsyslogd = nixosTests.rsyslogd;

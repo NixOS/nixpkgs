@@ -742,6 +742,8 @@ in
       };
 
       systemd = {
+        generatorPath = [ cfg.package ];
+
         sockets.sshd = lib.mkIf cfg.startWhenNeeded {
           description = "SSH Socket";
           wantedBy = [ "sockets.target" ];

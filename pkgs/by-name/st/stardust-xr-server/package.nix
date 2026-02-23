@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxfixes
   ];
 
-  CPM_SOURCE_CACHE = "./build";
+  env.CPM_SOURCE_CACHE = "./build";
 
   postPatch = ''
     install -D ${cpm-cmake}/share/cpm/CPM.cmake $(echo $cargoDepsCopy/stereokit-sys-*/StereoKit)/build/cpm/CPM_0.32.2.cmake

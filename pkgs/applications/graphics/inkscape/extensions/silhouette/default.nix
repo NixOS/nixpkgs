@@ -22,7 +22,7 @@ let
     ./silhouette_multi.py "$@"
   '';
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "inkscape-silhouette";
   version = "1.29";
   format = "setuptools";
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fablabnbg";
     repo = "inkscape-silhouette";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-MfR88BuaAx6n5XRIjslpIk4PnDf6TLU9AsmHxKkcFS0=";
   };
 
@@ -91,4 +91,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ jfly ];
     platforms = lib.platforms.all;
   };
-}
+})

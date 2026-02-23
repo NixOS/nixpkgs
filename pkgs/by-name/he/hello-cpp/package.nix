@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "hello-cpp";
-  version = lib.trivial.version;
+  version = lib.trivial.release;
   src = ./src;
   nativeBuildInputs = [
     cmake

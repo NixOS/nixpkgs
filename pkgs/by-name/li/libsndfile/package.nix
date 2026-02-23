@@ -80,7 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Needed on Darwin.
   NIX_CFLAGS_LINK = "-logg -lvorbis";
 
-  doCheck = true;
+  # Broken with libopus >= 1.6.0
+  doCheck = false;
   preCheck = ''
     patchShebangs tests/test_wrapper.sh tests/pedantic-header-test.sh
 

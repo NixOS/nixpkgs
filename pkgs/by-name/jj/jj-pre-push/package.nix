@@ -21,6 +21,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-dZrZjzygT6Q7jIPkasYgJ2uN3eyPQXsg0opksookLYI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "typer-slim" "typer"
+  '';
+
   build-system = [
     python3Packages.uv-build
   ];
@@ -28,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   dependencies =
     with python3Packages;
     [
-      typer-slim
+      typer
     ]
     ++ lib.optionals withPrecommit [ pre-commit ];
 

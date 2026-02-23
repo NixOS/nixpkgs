@@ -25,7 +25,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ./log-path.diff
   ];
 
-  KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  env = lib.optionalAttrs withDriver {
+    KSRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  };
 
   nativeBuildInputs = [
     nasm

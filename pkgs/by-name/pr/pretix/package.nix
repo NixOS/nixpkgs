@@ -35,6 +35,8 @@ let
           inherit version;
           hash = "sha256-hOXkMINaSwzU/SpXzjhTJp0ds0OREc2mtu11LjSc9KE=";
         };
+
+        build-system = with self; [ setuptools ];
       };
 
       pretix = self.toPythonModule pretix;
@@ -43,13 +45,13 @@ let
   };
 
   pname = "pretix";
-  version = "2026.1.0";
+  version = "2026.1.1";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${version}";
-    hash = "sha256-XS4Kqgvg3Bu5S3gFJ4fvvezCtQEA26jUa+8pSx2saNw=";
+    hash = "sha256-iH8S7+2SMw4LJjHjJvHAQgNSWU/zuk0nOUY/YI96T3E=";
   };
 
   npmDeps = buildNpmPackage {

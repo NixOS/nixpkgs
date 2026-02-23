@@ -48,6 +48,10 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
+  preCheck = ''
+    redisTestPort=6379
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   # redisTestHook does not work on darwin-x86_64

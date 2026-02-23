@@ -8,16 +8,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "zrepl";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "zrepl";
     repo = "zrepl";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sFSWcJ0aBMay+ngUqnr0PKBMOfCcKHgBjff6KRpPZrg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D2ADK1mX6Aq0I2fBeNLZeJ0GdxWxi2ApiZqT4b72yf4=";
   };
 
-  vendorHash = "sha256-75fGejR7eiECsm1j3yIU1lAWaW9GrorrVnv8JEzkAtU=";
+  vendorHash = "sha256-yu/bKkcWhHJSQPU2F4C58RC7geVTVEcXHlV0DRn/sUs=";
 
   subPackages = [ "." ];
 
@@ -46,6 +46,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://zrepl.github.io/";
+    changelog = "https://github.com/zrepl/zrepl/releases/tag/${finalAttrs.src.tag}";
     description = "One-stop, integrated solution for ZFS replication";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;

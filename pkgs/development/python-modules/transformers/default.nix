@@ -7,183 +7,205 @@
   setuptools,
 
   # dependencies
-  filelock,
   huggingface-hub,
   numpy,
-  protobuf,
   packaging,
   pyyaml,
   regex,
-  requests,
-  tokenizers,
   safetensors,
+  tokenizers,
   tqdm,
+  typer,
 
   # optional-dependencies
-  diffusers,
+  # sklearn
   scikit-learn,
-  tensorflow,
-  onnxconverter-common,
-  opencv4,
-  tf2onnx,
+  # torch
   torch,
   accelerate,
+  # deepspeed
+  # deepspeed,
+  # codecarbon
+  # codecarbon,
+  # retrieval
   faiss,
   datasets,
-  jax,
-  jaxlib,
-  flax,
-  optax,
-  ftfy,
-  onnxruntime,
-  onnxruntime-tools,
-  cookiecutter,
+  # ja
+  fugashi,
+  ipadic,
+  sudachipy,
+  # sudachidict_core,
+  # unidic_lite,
+  unidic,
+  # rhoknp,
+  # sagemaker
   sagemaker,
-  fairscale,
+  # optuna
   optuna,
+  # ray
   ray,
+  # kernels
+  kernels,
+  # serving
+  openai,
   pydantic,
   uvicorn,
   fastapi,
   starlette,
+  rich,
+  # audio
   librosa,
+  # pyctcdecode,
   phonemizer,
+  # kenlm,
   torchaudio,
+  # vision
   pillow,
+  # timm
   timm,
+  # torch-vision
   torchvision,
+  # video
   av,
+  # num2words
+  num2words,
+  # sentencepiece
   sentencepiece,
-  hf-xet,
+  protobuf,
+  # tiktoken
+  tiktoken,
+  blobfile,
+  # mistral-common
+  mistral-common,
+  # chat_template
+  jinja2,
+  jmespath,
+  # quality
+  ruff,
+  gitpython,
+  urllib3,
+  libcst,
+  # opentelemetry
+  opentelemetry-api,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "transformers";
-  version = "4.57.6";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a78ornUAYlOpr30iFdq1oUiWQTm6GeT0iq8ras5i3DQ=";
+    hash = "sha256-vus4Y+1QXUNqwBO1ZK0gWd+sJBPwrqWW7O2sn0EBvno=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "typer-slim" "typer"
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
-    filelock
     huggingface-hub
     numpy
     packaging
     pyyaml
     regex
-    requests
-    tokenizers
     safetensors
+    tokenizers
     tqdm
+    typer
   ];
 
-  optional-dependencies =
-    let
-      audio = [
-        librosa
-        # pyctcdecode
-        phonemizer
-        # kenlm
-      ];
-      vision = [ pillow ];
-    in
-    {
-      agents = [
-        diffusers
-        accelerate
-        datasets
-        torch
-        sentencepiece
-        opencv4
-        pillow
-      ];
-      ja = [
-        # fugashi
-        # ipadic
-        # rhoknp
-        # sudachidict_core
-        # sudachipy
-        # unidic
-        # unidic_lite
-      ];
-      sklearn = [ scikit-learn ];
-      tf = [
-        tensorflow
-        onnxconverter-common
-        tf2onnx
-        # tensorflow-text
-        # keras-nlp
-      ];
-      torch = [
-        torch
-        accelerate
-      ];
-      retrieval = [
-        faiss
-        datasets
-      ];
-      flax = [
-        jax
-        jaxlib
-        flax
-        optax
-      ];
-      hf_xet = [
-        hf-xet
-      ];
-      tokenizers = [ tokenizers ];
-      ftfy = [ ftfy ];
-      onnxruntime = [
-        onnxruntime
-        onnxruntime-tools
-      ];
-      onnx = [
-        onnxconverter-common
-        tf2onnx
-        onnxruntime
-        onnxruntime-tools
-      ];
-      modelcreation = [ cookiecutter ];
-      sagemaker = [ sagemaker ];
-      deepspeed = [
-        # deepspeed
-        accelerate
-      ];
-      fairscale = [ fairscale ];
-      optuna = [ optuna ];
-      ray = [ ray ] ++ ray.optional-dependencies.tune;
-      # sigopt = [ sigopt ];
-      # integrations = ray ++ optuna ++ sigopt;
-      serving = [
-        pydantic
-        uvicorn
-        fastapi
-        starlette
-      ];
-      audio = audio;
-      speech = [ torchaudio ] ++ audio;
-      torch-speech = [ torchaudio ] ++ audio;
-      tf-speech = audio;
-      flax-speech = audio;
-      timm = [ timm ];
-      torch-vision = [ torchvision ] ++ vision;
-      # natten = [ natten ];
-      # codecarbon = [ codecarbon ];
-      video = [
-        av
-      ];
-      sentencepiece = [
-        sentencepiece
-        protobuf
-      ];
-    };
+  optional-dependencies = lib.fix (self: {
+    ja = [
+      fugashi
+      ipadic
+      # unidic_lite
+      unidic
+      # rhoknp
+      sudachipy
+      # sudachidict_core
+    ];
+    sklearn = [ scikit-learn ];
+    torch = [
+      torch
+      accelerate
+    ];
+    accelerate = [ accelerate ];
+    retrieval = [
+      faiss
+      datasets
+    ];
+    sagemaker = [ sagemaker ];
+    deepspeed = [
+      # deepspeed
+    ]
+    ++ self.accelerate;
+    optuna = [ optuna ];
+    ray = [ ray ] ++ ray.optional-dependencies.tune;
+    kernels = [ kernels ];
+    codecarbon = [
+      # codecarbon
+    ];
+    integrations = self.kernels ++ self.optuna ++ self.codecarbon ++ self.ray;
+    serving = [
+      openai
+      pydantic
+      uvicorn
+      fastapi
+      starlette
+      rich
+    ]
+    ++ self.torch;
+    audio = [
+      torchaudio
+      librosa
+      # pyctcdecode
+      phonemizer
+    ];
+    vision = [
+      torchvision
+      pillow
+    ];
+    timm = [ timm ];
+    video = [ av ];
+    num2words = [ num2words ];
+    sentencepiece = [
+      sentencepiece
+      protobuf
+    ];
+    tiktoken = [
+      tiktoken
+      blobfile
+    ];
+    mistral-common = [ mistral-common ] ++ mistral-common.optional-dependencies.image;
+    chat-template = [
+      jinja2
+      jmespath
+    ];
+    quality = [
+      datasets
+      ruff
+      gitpython
+      urllib3
+      libcst
+      rich
+    ];
+    benchmark = [
+      # optimum-benchmark
+    ];
+    open-telemetry = [
+      opentelemetry-api
+      opentelemetry-exporter-otlp
+      opentelemetry-sdk
+    ];
+  });
 
   # Many tests require internet access.
   doCheck = false;
@@ -198,6 +220,7 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+      GaetanLepage
       pashashocky
       happysalada
     ];

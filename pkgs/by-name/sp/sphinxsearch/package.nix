@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       expat
     ];
 
-  CXXFLAGS = "-std=c++98";
+  env.CXXFLAGS = "-std=c++98";
 
   meta = {
     description = "Open source full text search server";

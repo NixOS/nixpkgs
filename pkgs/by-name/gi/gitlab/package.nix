@@ -228,14 +228,16 @@ let
       chmod 777 ee/frontend_islands/yarn.lock
     '';
 
-    # One of the patches uses this variable - if it's unset, execution
-    # of rake tasks fails.
-    GITLAB_LOG_PATH = "log";
-    FOSS_ONLY = !gitlabEnterprise;
-    SKIP_FRONTEND_ISLANDS_BUILD = lib.optionalString (!gitlabEnterprise) "true";
+    env = {
+      # One of the patches uses this variable - if it's unset, execution
+      # of rake tasks fails.
+      GITLAB_LOG_PATH = "log";
+      FOSS_ONLY = !gitlabEnterprise;
+      SKIP_FRONTEND_ISLANDS_BUILD = lib.optionalString (!gitlabEnterprise) "true";
 
-    SKIP_YARN_INSTALL = 1;
-    NODE_OPTIONS = "--max-old-space-size=8192";
+      SKIP_YARN_INSTALL = 1;
+      NODE_OPTIONS = "--max-old-space-size=8192";
+    };
 
     postConfigure = ''
       # Some rake tasks try to run yarn automatically, which won't work

@@ -6,6 +6,7 @@
   cmake,
   pkg-config,
   libdrm,
+  python,
   wrapPython,
   autoPatchelfHook,
 }:
@@ -67,6 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
+    mkdir -p $out/${python.sitePackages}
+    ln -s $out/share/amd_smi/amdsmi $out/${python.sitePackages}/amdsmi
+
     makeWrapperArgs=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdrm ]})
     wrapPythonProgramsIn $out
     rm $out/bin/amd-smi

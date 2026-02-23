@@ -29,7 +29,6 @@ in
   config = mkIf config.profiles.hardened {
     meta = {
       maintainers = [
-        maintainers.joachifm
         maintainers.emily
       ];
     };

@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # cannot use lib.optionalString as it creates an empty string, disabling all tests
-  LIT_FILTER_OUT =
+  env.LIT_FILTER_OUT =
     let
       lit-filters =
         # There are some tests depending on `clang-tools` to work. They are activated only when detected

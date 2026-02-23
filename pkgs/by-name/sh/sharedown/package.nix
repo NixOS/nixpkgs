@@ -1,44 +1,66 @@
 {
   lib,
-  stdenvNoCC,
+  buildNpmPackage,
   fetchFromGitHub,
-  ffmpeg,
-  yt-dlp,
-  libsecret,
-  python3,
+  nix-update-script,
+
+  # nativeBuildInputs
+  node-gyp,
   pkg-config,
-  nodejs,
-  electron,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  yarn2nix-moretea,
-  fetchYarnDeps,
+
+  # buildInputs
+  libsecret,
+  ffmpeg,
+  yt-dlp,
+  electron,
   chromium,
 }:
 
-let
-  yarnLock = ./yarn.lock;
-  offlineCache = fetchYarnDeps {
-    inherit yarnLock;
-    hash = "sha256-MRCrBvqDpPpwMg4A50RVKGp4GqRHNjNJzSpJz+14OG4=";
-  };
-in
-stdenvNoCC.mkDerivation rec {
+buildNpmPackage (finalAttrs: {
   pname = "Sharedown";
-  version = "5.3.6-unstable-2025-12-06";
+  version = "5.3.6-unstable-2025-12-16";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = "Sharedown";
-    rev = "c39f0c5bbf694c2cdfce4ef0b4381342fb535ecc";
-    hash = "sha256-PsfE7v9yEeGC8rUzhj/klhqtKKzxCV+thwLnQlgfDxI=";
+    rev = "5d0cbe2d25de6e288e35bd549f436b090d6e287a";
+    hash = "sha256-yHnTS3B3lWSkAVlUNQYFuKIHM96d1ZeVWImJqXjlfMw=";
   };
+
+  npmDepsHash = "sha256-YmrSIOi9WpqDPC9Tj1oTprdCFDdYj6C91kg567+/3ik=";
 
   nativeBuildInputs = [
     copyDesktopItems
+    node-gyp
+    pkg-config
     makeWrapper
   ];
+  dontNpmBuild = true;
+
+  buildInputs = [
+    libsecret
+  ];
+
+  strictDeps = true;
+
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    PUPPETEER_SKIP_DOWNLOAD = "1";
+  };
+
+  postInstall = ''
+    install -Dm0644 build/icon.png $out/share/icons/hicolor/512x512/apps/Sharedown.png
+
+    # Create a launcher wrapper
+    makeWrapper ${electron}/bin/electron $out/bin/sharedown \
+      --add-flags $out/lib/node_modules/sharedown/app.js \
+      --set PUPPETEER_EXECUTABLE_PATH ${chromium}/bin/chromium \
+      --prefix PATH : ${lib.makeBinPath finalAttrs.finalPackage.passthru.wrapperPaths} \
+      --add-flags "--no-sandbox" \
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -48,88 +70,25 @@ stdenvNoCC.mkDerivation rec {
       comment = "An Application to save your Sharepoint videos for offline usage.";
       desktopName = "Sharedown";
       categories = [
-        "Network"
-        "Archiving"
+        # Based upon categories in upstream's package.json
+        "AudioVideo"
       ];
     })
   ];
 
-  dontBuild = true;
-
-  installPhase =
-    let
-      binPath = lib.makeBinPath [
-        ffmpeg
-        yt-dlp
-      ];
-
-      modules = yarn2nix-moretea.mkYarnModules rec {
-        name = "Sharedown-modules-${version}";
-        inherit
-          pname
-          version
-          offlineCache
-          yarnLock
-          ;
-
-        yarnFlags = [ "--production" ];
-
-        pkgConfig = {
-          keytar = {
-            nativeBuildInputs = [
-              python3
-              pkg-config
-            ];
-            buildInputs = [
-              libsecret
-            ];
-            postInstall = ''
-              yarn --offline run build
-              # Remove unnecessary store path references.
-              rm build/config.gypi
-            '';
-          };
-        };
-
-        # needed for node-gyp, copied from https://nixos.org/manual/nixpkgs/unstable/#javascript-yarn2nix-pitfalls
-        # permalink: https://github.com/NixOS/nixpkgs/blob/d176767c02cb2a048e766215078c3d231e666091/doc/languages-frameworks/javascript.section.md#pitfalls-javascript-yarn2nix-pitfalls
-        preBuild = ''
-          mkdir -p $HOME/.node-gyp/${nodejs.version}
-          echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-          ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-          export npm_config_nodedir=${nodejs}
-        '';
-
-        postBuild = ''
-          rm $out/node_modules/sharedown
-        '';
-
-        packageJSON = "${src}/package.json";
-      };
-    in
-    ''
-      runHook preInstall
-
-      mkdir -p "$out/bin" "$out/share/Sharedown" "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
-
-      # Electron app
-      cp -r *.js *.json sharedownlogo.png sharedown "${modules}/node_modules" "$out/share/Sharedown"
-
-      # Desktop Launcher
-      cp build/icon.png "$out/share/icons/hicolor/512x512/apps/Sharedown.png"
-
-      # Install electron wrapper script
-      makeWrapper "${electron}/bin/electron" "$out/bin/Sharedown" \
-        --add-flags "$out/share/Sharedown" \
-        --prefix PATH : "${binPath}" \
-        --set PUPPETEER_EXECUTABLE_PATH "${chromium}/bin/chromium"
-
-      runHook postInstall
-    '';
-
   passthru = {
-    inherit offlineCache;
-    updateScript = ./update.sh;
+    wrapperPaths = [
+      ffmpeg
+      yt-dlp
+      chromium
+    ];
+    updateScript = nix-update-script {
+      # Updates are not very frequent, so we wish to track the latest git
+      # commit.
+      extraArgs = [
+        "--version=branch"
+      ];
+    };
   };
 
   meta = {
@@ -140,4 +99,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "Sharedown";
   };
-}
+})

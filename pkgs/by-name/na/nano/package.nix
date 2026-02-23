@@ -106,7 +106,6 @@ stdenv.mkDerivation rec {
     description = "Small, user-friendly console text editor";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      joachifm
       sigmasquadron
     ];
     platforms = lib.platforms.all;

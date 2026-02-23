@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ghw";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "jaypipes";
     repo = "ghw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W3a6hKX8vsWe02uLUx9zIOmJiivIOa4Ja++iXVd8J3E=";
+    hash = "sha256-olMKS+Bb+YK43I23zvxCp9XFkknwvqXorrYVlVomL+o=";
   };
   vendorHash = "sha256-REgtByhTlYQ3XyYleWAcrCymIWtWmltjx21tr2mtF7k=";
 

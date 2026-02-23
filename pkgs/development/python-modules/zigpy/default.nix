@@ -4,7 +4,6 @@
   aiohttp,
   aioresponses,
   aiosqlite,
-  async-timeout,
   attrs,
   buildPythonPackage,
   crccheck,
@@ -18,7 +17,6 @@
   pytest-asyncio_0,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
   voluptuous,
@@ -55,8 +53,7 @@ buildPythonPackage rec {
     pyserial-asyncio-fast
     typing-extensions
     voluptuous
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     aioresponses

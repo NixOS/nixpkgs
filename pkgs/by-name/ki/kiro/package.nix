@@ -14,7 +14,7 @@ in
   inherit useVSCodeRipgrep;
   commandLineArgs = extraCommandLineArgs;
 
-  version = "0.9.2";
+  version = "0.10.0";
   pname = "kiro";
 
   # You can find the current VSCode version in the About dialog:

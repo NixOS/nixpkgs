@@ -2,13 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkg-config,
-  libbsd,
-  openssl,
-  libmilter,
+  nix-update-script,
   autoreconfHook,
-  perl,
+  pkg-config,
   makeWrapper,
+  libbsd,
+  libmilter,
+  openssl,
+  perl,
   unbound,
 }:
 
@@ -19,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "trusteddomainproject";
     repo = "OpenDKIM";
-    rev = "rel-opendkim-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    sha256 = "0nx3in8sa6xna4vfacj8g60hfzk61jpj2ldag80xzxip9c3rd2pw";
+    tag = "rel-opendkim-${lib.replaceString "." "-" finalAttrs.version}";
+    hash = "sha256-/IqWB0s39t8BeqpRIa8MZn4HgXlIMuU2UbYbpZGNo1s=";
   };
 
   configureFlags = [
@@ -49,11 +50,24 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${openssl.bin}/bin
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=unstable"
+      "--version-regex=rel-opendkim-(\\d+)-(\\d+)-(.*)"
+    ];
+  };
+
   meta = {
     description = "C library for producing DKIM-aware applications and an open source milter for providing DKIM service";
     homepage = "http://www.opendkim.org/";
-    maintainers = [ ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    mainProgram = "opendkim";
+    knownVulnerabilities = [
+      "CVE-2020-35766: Privilege escalation in test suite"
+      "CVE-2022-48521: Specially crafted e-mails can bypass DKIM signature validation"
+      "Upstream OpenDKIM hasn't been updated in years, and is assumed to be unmaintained. Consider using an alternative such as rspamd."
+    ];
+    maintainers = with lib.maintainers; [ maevii ];
   };
 })

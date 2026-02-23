@@ -98,6 +98,13 @@ stdenv'.mkDerivation (finalAttrs: {
       --replace-fail 'find_package(Systemd)' "" \
       --replace-fail 'find_package(Udev)' ""
   ''
+  # use system boost instead of FetchContent.
+  # FETCH_CONTENT_BOOST_USED prevents Simple-Web-Server from re-finding boost
+  + ''
+    substituteInPlace cmake/dependencies/Boost_Sunshine.cmake \
+      --replace-fail 'set(BOOST_VERSION "1.87.0")' 'set(BOOST_VERSION "${boost.version}")'
+    echo 'set(FETCH_CONTENT_BOOST_USED TRUE)' >> cmake/dependencies/Boost_Sunshine.cmake
+  ''
   # don't look for npm since we build webui separately
   + ''
     substituteInPlace cmake/targets/common.cmake \

@@ -18,7 +18,7 @@ let
 in
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "17.1.5";
+  version = "17.1.8";
 
   inherit nodejs;
 
@@ -26,7 +26,7 @@ buildNpmPackage rec {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-ECUn+0RFNYc5QgJYXMYQ0fWZ39WVErCNCIIkrual1P4=";
+    hash = "sha256-76rgW97ElM/6Sy3JwmrqA+nV5ONWqYBoK1uK+UEYf24=";
 
     postFetch = ''
       find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
@@ -69,7 +69,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-tDQd3HVktivwyPaLF88fLLDwU6H7yX03DWrpFVkdDXk=";
+      hash = "sha256-epDGYONJgLJsNG0f6GiIbXwoPdjAsLGGQa0giPiBMYs=";
     }
   );
 

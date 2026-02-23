@@ -22,14 +22,14 @@
 }:
 buildPythonPackage rec {
   pname = "datasets";
-  version = "4.4.1";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "datasets";
     tag = version;
-    hash = "sha256-4uKGbT/EtPD1nk66SZu0r4lqGSQXMHkZh8q8x6g3YqU=";
+    hash = "sha256-K8JqIbYz3ZfT1t1h5dRGCo9kBQp0E+kElqzaw2InaOI=";
   };
 
   build-system = [
@@ -50,12 +50,17 @@ buildPythonPackage rec {
     requests
     tqdm
     xxhash
-  ];
+  ]
+  ++ fsspec.optional-dependencies.http;
 
   pythonRelaxDeps = [
     # https://github.com/huggingface/datasets/blob/a256b85cbc67aa3f0e75d32d6586afc507cf535b/setup.py#L117
     # "pin until dill has official support for determinism"
     "dill"
+    # https://github.com/huggingface/datasets/blob/4.5.0/setup.py#L127
+    "multiprocess"
+    # https://github.com/huggingface/datasets/blob/4.5.0/setup.py#L130
+    "fsspec"
   ];
 
   # Tests require pervasive internet access

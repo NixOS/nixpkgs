@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "zsh-abbr";
-  version = "6.5.0";
+  version = "6.5.2";
 
   src = fetchFromGitHub {
     owner = "olets";
     repo = "zsh-abbr";
     tag = "v${version}";
-    hash = "sha256-GjqVEPofJhUwyVegj0sm7tGfYdpAUyz2dM59nImRc+E=";
+    hash = "sha256-T5dnlPXsGdFjdASAAYrV9Kc38Y+q0iM2StgNj4efVj4=";
     fetchSubmodules = true;
   };
 

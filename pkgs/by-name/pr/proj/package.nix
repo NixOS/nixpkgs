@@ -59,9 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DNLOHMANN_JSON_ORIGIN=external"
     "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
   ];
-  CXXFLAGS = [
+
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
-    "-include cstdint"
+    "-include"
+    "cstdint"
   ];
 
   preCheck =

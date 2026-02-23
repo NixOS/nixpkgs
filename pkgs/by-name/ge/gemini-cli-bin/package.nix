@@ -10,11 +10,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.25.0";
+  version = "0.29.5";
 
   src = fetchurl {
     url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini.js";
-    hash = "sha256-7Co3DPZs/ZtdLfhZnOcpdFFQPnyeLkvxTZG+tv+FbBQ=";
+    hash = "sha256-Yzqi2l41XLNMGNqeVGru0SALc1ZVa2LS4Qk2QiiSasY=";
   };
 
   dontUnpack = true;
@@ -31,15 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -D "$src" "$out/bin/gemini"
 
-    # ideal method to disable auto-update
-    sed -i '/disableautoupdate: {/,/}/ s/default: false/default: true/' "$out/bin/gemini"
-
-    # disable auto-update for real because the default value in settingsschema isn't cleanly applied
-    # https://github.com/google-gemini/gemini-cli/issues/13569
-    substituteInPlace $out/bin/gemini \
-      --replace-fail "settings.merged.general?.disableUpdateNag" "(settings.merged.general?.disableUpdateNag ?? true)" \
-      --replace-fail "settings.merged.general?.disableAutoUpdate ?? false" "settings.merged.general?.disableAutoUpdate ?? true" \
-      --replace-fail "settings.merged.general?.disableAutoUpdate" "(settings.merged.general?.disableAutoUpdate ?? true)"
+    # disable auto-update
+    sed -i '/enableAutoUpdate: {/,/}/ s/default: true/default: false/' "$out/bin/gemini"
 
     # use `ripgrep` from `nixpkgs`, more dependencies but prevent downloading incompatible binary on NixOS
     # this workaround can be removed once the following upstream issue is resolved:

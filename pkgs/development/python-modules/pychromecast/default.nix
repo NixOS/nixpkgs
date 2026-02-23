@@ -3,7 +3,6 @@
   buildPythonPackage,
   casttube,
   fetchFromGitHub,
-  pythonOlder,
   protobuf,
   setuptools,
   zeroconf,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pychromecast";
   version = "14.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

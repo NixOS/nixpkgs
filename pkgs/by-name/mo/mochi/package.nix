@@ -1,6 +1,7 @@
 {
   appimageTools,
   fetchurl,
+  imagemagick,
   lib,
   makeWrapper,
   stdenv,
@@ -27,7 +28,8 @@ let
 
     extraInstallCommands = ''
       install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
-      install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
+      ${lib.getExe imagemagick} ${appimageContents}/${pname}.png -resize 512x512 ${pname}_512.png
+      install -Dm444 ${pname}_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=${pname}'
     '';

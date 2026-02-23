@@ -233,6 +233,8 @@ let
 
   proxy_env = config.networking.proxy.envVars;
 
+  json = pkgs.formats.json { };
+
 in
 
 {
@@ -353,6 +355,28 @@ in
 
         For each `NAME = VALUE` pair of the attrSet, a link is generated from
         `/etc/systemd/system-generators/NAME` to `VALUE`.
+      '';
+    };
+
+    generatorEnvironment = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      example = {
+        MY_VAR = "my-value";
+      };
+      description = ''
+        Environment variables for systemd generators.
+
+        The `PATH` environment variable is populated via `systemd.generatorPath`.
+      '';
+    };
+
+    generatorPath = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.hello ]";
+      description = ''
+        Packages added to the `PATH` environment variable of all systemd generators.
       '';
     };
 
@@ -636,6 +660,12 @@ in
         "systemd/user-preset/00-nixos.preset".text = ''
           ignore *
         '';
+
+        "systemd/generator-environment.json".source =
+          json.generate "systemd-generator-environment.json" cfg.generatorEnvironment;
+
+        "systemd/system-environment-generators/env-generator".source =
+          "${config.system.nixos-init.package}/bin/env-generator";
       };
 
     services.dbus.enable = true;
@@ -702,6 +732,16 @@ in
       );
       DefaultIOAccounting = lib.mkDefault true;
       DefaultIPAccounting = lib.mkDefault true;
+    };
+
+    # These are needed for systemd-fstab-generator to schedule systemd-fsck@
+    # units.
+    systemd.generatorPath = config.system.fsPackages ++ [
+      cfg.package.util-linux
+    ];
+
+    systemd.generatorEnvironment = {
+      PATH = lib.makeBinPath cfg.generatorPath;
     };
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [

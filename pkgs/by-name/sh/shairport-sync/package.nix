@@ -53,13 +53,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "4.3.7";
+  version = "5.0";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     tag = finalAttrs.version;
-    hash = "sha256-bfOgUeUCxQeCmKKBlvIXptM5lJxgZiH4lOhLJSNih8g=";
+    hash = "sha256-JmzJqod3XMNZPMuZV8ZD8GIz17k7IkJs04dgvINYm/k=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     "${glib.dev}"
   ]
   ++ optional enableAirplay2 [
+    libplist.bin
     unixtools.xxd
   ];
 

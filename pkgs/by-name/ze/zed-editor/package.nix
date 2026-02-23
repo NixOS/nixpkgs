@@ -107,7 +107,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.223.3";
+  version = "0.224.11";
 
   outputs = [
     "out"
@@ -120,7 +120,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BxSvMbZ5RrVxCmqIvpzgUCcFMmDQsYufDCz0igkwLkk=";
+    hash = "sha256-VOPAypHlcr7nY3/wk4ec/Ltv+DUf/v4rHDa5oCsg0aE=";
   };
 
   postPatch = ''
@@ -140,7 +140,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-cGobyrF3upHZy2m1eDHibZzTkgdN5rUYXLV0zu6F6tk=";
+  cargoHash = "sha256-V61uZEl6LG/xckOajcWugf/K+mJR8Bn9WjqxvvwBbfw=";
 
   nativeBuildInputs = [
     cmake
@@ -196,7 +196,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Some crates define extra types or enum values in test configuration which then lead
   # to type checking errors in other crates unless this feature is enabled.
-  checkFeatures = [ "visual-tests" ];
+  # gpui/runtime_shaders is required on darwin for the same reason as buildFeatures above:
+  # without it, build.rs invokes the proprietary Metal shader compiler.
+  checkFeatures = [
+    "visual-tests"
+  ]
+  ++ finalAttrs.buildFeatures;
 
   env = {
     ALLOW_MISSING_LICENSES = true;

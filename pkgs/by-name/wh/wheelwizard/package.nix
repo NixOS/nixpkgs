@@ -26,7 +26,7 @@ buildDotnetModule rec {
     rm .config/dotnet-tools.json
   '';
 
-  projectFile = "WheelWizard.sln";
+  projectFile = "WheelWizard";
   buildType = "Release";
   dotnet-sdk = dotnetCorePackages.sdk_8_0-bin;
   dotnet-runtime = dotnetCorePackages.runtime_8_0-bin;
@@ -50,7 +50,7 @@ buildDotnetModule rec {
     runHook preInstall
 
     mkdir -p $out/lib/wheelwizard $out/bin
-    cp -r WheelWizard/bin/Release/net8.0/* $out/lib/wheelwizard/
+    cp -r WheelWizard/bin/Release/net8.0/*/* $out/lib/wheelwizard/
 
     makeWrapper $out/lib/wheelwizard/WheelWizard $out/bin/WheelWizard \
       --prefix PATH : ${lib.makeBinPath [ dotnet-runtime ]}

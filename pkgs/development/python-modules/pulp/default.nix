@@ -6,27 +6,30 @@
   fetchFromGitHub,
   pyparsing,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pulp";
-  version = "2.8.0";
-  format = "setuptools";
+  version = "3.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "pulp";
     tag = version;
-    hash = "sha256-lpbk1GeC8F/iLGV8G5RPHghnaM9eL82YekUYEt9+mvc=";
+    hash = "sha256-b9qTJqSC8G3jxcqS4mkQ1gOLLab+YzYaNClRwD6I/hk=";
   };
 
+  patches = [ ./cbc_path_fixes.patch ];
+
   postPatch = ''
-    sed -i pulp/pulp.cfg.linux \
-      -e 's|CbcPath = .*|CbcPath = ${cbc}/bin/cbc|' \
-      -e 's|PulpCbcPath = .*|PulpCbcPath = ${cbc}/bin/cbc|'
+    substituteInPlace pulp/apis/coin_api.py --subst-var-by "cbc" "${lib.getExe' cbc "cbc"}"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     amply
     pyparsing
   ];

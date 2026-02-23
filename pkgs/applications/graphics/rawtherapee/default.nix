@@ -35,14 +35,14 @@
   libjxl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rawtherapee";
   version = "5.12";
 
   src = fetchFromGitHub {
     owner = "RawTherapee";
     repo = "RawTherapee";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-h8eWnw9I1R0l9WAI/DylsdA241qU9NhYGEPYz+JlE18=";
     # The developers ask not to use the tarball from Github releases, see
     # https://www.rawtherapee.com/downloads/5.10/#news-relevant-to-package-maintainers
@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cat <<EOF > ReleaseInfo.cmake
-    set(GIT_DESCRIBE ${version})
-    set(GIT_BRANCH ${version})
-    set(GIT_VERSION ${version})
+    set(GIT_DESCRIBE ${finalAttrs.version})
+    set(GIT_BRANCH ${finalAttrs.version})
+    set(GIT_VERSION ${finalAttrs.version})
     # Missing GIT_COMMIT and GIT_COMMIT_DATE, which are not easy to obtain.
     set(GIT_COMMITS_SINCE_TAG 0)
     set(GIT_COMMITS_SINCE_BRANCH 0)
-    set(GIT_VERSION_NUMERIC_BS ${version})
+    set(GIT_VERSION_NUMERIC_BS ${finalAttrs.version})
     EOF
     substituteInPlace tools/osx/Info.plist.in rtgui/config.h.in \
       --replace "/Applications" "${placeholder "out"}/Applications"
@@ -116,12 +116,18 @@ stdenv.mkDerivation rec {
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
-  CMAKE_CXX_FLAGS = toString [
-    "-std=c++11"
-    "-Wno-deprecated-declarations"
-    "-Wno-unused-result"
-  ];
-  env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
+  env = {
+    CMAKE_CXX_FLAGS = toString [
+      "-std=c++11"
+      "-Wno-deprecated-declarations"
+      "-Wno-unused-result"
+    ];
+    # needed at least with gcc13 on aarch64-linux
+    CXXFLAGS = toString [
+      "-include"
+      "cstdint"
+    ];
+  };
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications/RawTherapee.app $out/bin
@@ -141,4 +147,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; unix;
   };
-}
+})

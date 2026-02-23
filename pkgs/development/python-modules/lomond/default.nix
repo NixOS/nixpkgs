@@ -3,7 +3,6 @@
   fetchFromGitHub,
   lib,
   pythonAtLeast,
-  pythonOlder,
 
   # runtime
   six,

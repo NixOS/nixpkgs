@@ -9,12 +9,12 @@
   sox,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "espeakedit";
   version = "1.48.03";
 
   src = fetchurl {
-    url = "mirror://sourceforge/espeak/espeakedit-${version}.zip";
+    url = "mirror://sourceforge/espeak/espeakedit-${finalAttrs.version}.zip";
     sha256 = "0x8s7vpb7rw5x37yjzy1f98m4f2csdg89libb74fm36gn8ly0hli";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -88,6 +88,7 @@ let
         inherit rockspecVersion;
 
         __structuredAttrs = true;
+        strictDeps = true;
         env = {
           LUAROCKS_CONFIG = self.configFile;
         }
@@ -99,7 +100,8 @@ let
           lua # for lua.h
           wrapLua
           luarocks_bootstrap
-        ];
+        ]
+        ++ lib.optionals self.doCheck self.nativeCheckInputs;
 
         inherit
           doCheck
@@ -115,10 +117,7 @@ let
             # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
             externalDeps' = lib.filter (dep: !lib.isDerivation dep) self.externalDeps;
           in
-          [ luarocks_bootstrap ]
-          ++ buildInputs
-          ++ lib.optionals self.doCheck ([ luarocksCheckHook ] ++ self.nativeCheckInputs)
-          ++ (map (d: d.dep) externalDeps');
+          [ luarocks_bootstrap ] ++ buildInputs ++ (map (d: d.dep) externalDeps');
 
         # propagate lua to active setup-hook in nix-shell
         propagatedBuildInputs = propagatedBuildInputs ++ [ lua ];
@@ -225,12 +224,6 @@ let
           luarocks $LUAROCKS_EXTRA_ARGS make --deps-mode=all --tree=$out ''${rockspecFilename}
 
           runHook postInstall
-        '';
-
-        checkPhase = ''
-          runHook preCheck
-          luarocks test
-          runHook postCheck
         '';
 
         shellHook = ''

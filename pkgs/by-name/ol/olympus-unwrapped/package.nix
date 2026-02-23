@@ -39,6 +39,8 @@ buildDotnetModule {
   pname = "olympus-unwrapped";
   inherit version;
 
+  strictDeps = false;
+
   src = fetchFromGitHub {
     inherit rev;
     owner = "EverestAPI";

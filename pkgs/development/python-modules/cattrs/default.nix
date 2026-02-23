@@ -4,7 +4,6 @@
   buildPythonPackage,
   cbor2,
   fetchFromGitHub,
-  exceptiongroup,
   hatchling,
   hatch-vcs,
   hypothesis,
@@ -16,7 +15,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pyyaml,
   tomlkit,
   typing-extensions,
@@ -43,9 +41,6 @@ buildPythonPackage rec {
   dependencies = [
     attrs
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
   ];
 
   nativeCheckInputs = [

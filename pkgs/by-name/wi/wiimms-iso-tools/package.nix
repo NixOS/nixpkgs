@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile --replace gcc "$CC"
   '';
 
-  INSTALL_PATH = "$out";
+  env.INSTALL_PATH = "$out";
 
   installPhase = ''
     mkdir "$out"

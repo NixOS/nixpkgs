@@ -10,6 +10,7 @@
   qt5,
   makeDesktopItem,
   copyDesktopItems,
+  imagemagick,
   withCurses ? false,
   withGTK ? false,
   withQT ? false,
@@ -46,6 +47,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     python3.pkgs.poetry-core
+    imagemagick
   ]
   ++ lib.optionals withGTK [
     wrapGAppsHook3
@@ -94,7 +96,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     );
 
   postInstall = ''
-    install -Dvm444 $src/trackma/data/icon.png $out/share/pixmaps/trackma.png
+    mkdir -p $out/share/icons/hicolor/64x64/apps
+    magick $src/trackma/data/icon.png -resize 64x64! $out/share/icons/hicolor/64x64/apps/trackma.png
   '';
 
   doCheck = false;

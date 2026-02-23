@@ -1,5 +1,6 @@
 {
   lib,
+  backports-zstd,
   buildPythonPackage,
   fetchFromGitHub,
   awscli2,
@@ -13,25 +14,26 @@
   numpy,
   paramiko,
   pytest-cov-stub,
+  pytest-timeout,
+  pytest-xdist,
   pytestCheckHook,
   pyopenssl,
   responses,
   setuptools,
   setuptools-scm,
   wrapt,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "7.3.1";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     tag = "v${version}";
-    hash = "sha256-yrJmcwCVjPnkP8931xdb5fsOteBd+d/xEkg1/xahio8=";
+    hash = "sha256-MKQvvz75PBUZwQ9e/vR+XGdaT+pD2agZtdHOV0Gw9Kk=";
   };
 
   build-system = [
@@ -52,7 +54,7 @@ buildPythonPackage rec {
     http = [ requests ];
     webhdfs = [ requests ];
     ssh = [ paramiko ];
-    zst = [ zstandard ];
+    zst = [ backports-zstd ];
   };
 
   pythonImportsCheck = [ "smart_open" ];
@@ -62,6 +64,8 @@ buildPythonPackage rec {
     moto
     numpy
     pytest-cov-stub
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
     pyopenssl
     responses

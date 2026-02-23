@@ -106,6 +106,8 @@ in
 
     services.pcscd.plugins = [ pkgs.ccid ];
 
+    services.udev.packages = [ pkgs.ccid ];
+
     systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
 
     systemd.services.pcscd = {
@@ -134,5 +136,12 @@ in
         "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}"
       ];
     };
+
+    users.users.pcscd = {
+      isSystemUser = true;
+      group = "pcscd";
+    };
+
+    users.groups.pcscd = { };
   };
 }

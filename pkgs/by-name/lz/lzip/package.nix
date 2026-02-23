@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   enableParallelBuilding = true;
+  strictDeps = true;
 
   meta = {
     homepage = "https://www.nongnu.org/lzip/lzip.html";

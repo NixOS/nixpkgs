@@ -445,12 +445,12 @@ in
   lazy-restore = mkTmuxPlugin rec {
     pluginName = "lazy-restore";
     rtpFilePath = "tmux-lazy-restore.tmux";
-    version = "0.1.1";
+    version = "0.1.2";
     src = fetchFromGitHub {
       owner = "bcampolo";
       repo = "tmux-lazy-restore";
       tag = "v${version}";
-      hash = "sha256-rI9KhV6CiAHTErOKuTla+xVbpiP8RK9wu6goxCKhKiA=";
+      hash = "sha256-LLXGXJzIB2I0NMbWTh2DtLTAyC+JMzNM//SbKtFd9nM=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''

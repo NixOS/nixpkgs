@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "py-aosmith";
-  version = "1.0.16";
+  version = "1.0.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdr99";
     repo = "py-aosmith";
     tag = version;
-    hash = "sha256-ESdTEzT9JYtGTus2VUIOF72BwuuUr4rMv/ID7Nr8FR0=";
+    hash = "sha256-qBnHe4w59QW18osEf+9Y46eEx/W/GzARkwJlJ+9wPr0=";
   };
 
   build-system = [ poetry-core ];

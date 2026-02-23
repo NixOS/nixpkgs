@@ -5,7 +5,7 @@
   hatchling,
   lib,
   pytestCheckHook,
-  typer-slim,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -20,13 +20,18 @@ buildPythonPackage rec {
     hash = "sha256-nwEYFw+4jeF/SoaZWR51VWRezqBFjGoLiVgJWdPNoIk=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "typer-slim" "typer"
+  '';
+
   build-system = [
     hatch-vcs
     hatchling
   ];
 
   dependencies = [
-    typer-slim
+    typer
   ];
 
   pythonImportsCheck = [ "typer_injector" ];

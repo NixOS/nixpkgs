@@ -20,8 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  PREFIX = "\${out}";
-  USE_SSL = 1;
+  env = {
+    PREFIX = "\${out}";
+    USE_SSL = 1;
+  };
 
   meta = {
     homepage = "https://github.com/redis/hiredis";

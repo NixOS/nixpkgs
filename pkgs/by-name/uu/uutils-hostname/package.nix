@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-hostname";
-  version = "0-unstable-2026-02-10";
+  version = "0-unstable-2026-02-17";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "hostname";
-    rev = "217d1bce696197b13beab7a60dbb99609933a179";
-    hash = "sha256-E50v5IQQNdBiejxrJPwnoBR/V3Qrm8eg+hki2qadlxQ=";
+    rev = "c047799a57c09ee3878d78dc9134248747e6f677";
+    hash = "sha256-41+QCRWJ1kUDkGxuTs8M+l96VhPtq25VPEqI58Arn7A=";
   };
 
-  cargoHash = "sha256-aE/XXf+tIRSiiixdLmAxPgRVwBsbk4L2grwOFlydMx4=";
+  cargoHash = "sha256-gt1cC06Viu0trXL1+0/EToybSAJwFL3KVSltqUtpGj0=";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

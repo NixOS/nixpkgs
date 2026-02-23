@@ -7,6 +7,7 @@
   copyDesktopItems,
   buildFHSEnv,
   alsa-lib,
+  alsa-plugins,
   freetype,
   nghttp2,
   libx11,
@@ -15,7 +16,7 @@
 
 let
   pname = "decent-sampler";
-  version = "1.15.0";
+  version = "1.15.5";
   rlkey = "orvjprslmwn0dkfs0ncx6nxnm";
 
   icon = fetchurl {
@@ -28,8 +29,8 @@ let
 
     src = fetchzip {
       # dropbox links: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
-      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/ABn4zZmR24tyJx0xaRS_lXg/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz?rlkey=${rlkey}&dl=0";
-      hash = "sha256-A+CBsGUtqXo7KAlx6BjbHGRZww73TlJCI68thicGKiE=";
+      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/ADKHnE9GsrZx5RepuBKy7dg/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz?rlkey=${rlkey}&dl=0";
+      hash = "sha256-uUEncrT0M4AmIokizrUdSATm8Dnvg3cBNGlH8wOPt+Y=";
     };
 
     nativeBuildInputs = [ copyDesktopItems ];
@@ -55,7 +56,7 @@ let
       install -Dm755 DecentSampler $out/bin/decent-sampler
       install -Dm755 DecentSampler.so -t $out/lib/vst
       install -d "$out/lib/vst3" && cp -r "DecentSampler.vst3" $out/lib/vst3
-      install -Dm444 ${icon} $out/share/pixmaps/decent-sampler.png
+      install -Dm444 ${icon} $out/share/icons/hicolor/512x512/apps/decent-sampler.png
 
       runHook postInstall
     '';
@@ -68,6 +69,7 @@ buildFHSEnv {
 
   targetPkgs = pkgs: [
     alsa-lib
+    alsa-plugins
     decent-sampler
     freetype
     nghttp2

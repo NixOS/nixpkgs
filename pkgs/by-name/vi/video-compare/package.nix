@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "video-compare";
-  version = "20250928";
+  version = "20260214";
 
   src = fetchFromGitHub {
     owner = "pixop";
     repo = "video-compare";
     tag = finalAttrs.version;
-    hash = "sha256-md+h39tMbd07pHZzQ1eae5QCkqYErMoD6oEYov9lLBU=";
+    hash = "sha256-yHdotE//7b463AhGlzgRqv0FefW6pZnFSDXYEVgdBHY=";
   };
 
   postPatch = ''

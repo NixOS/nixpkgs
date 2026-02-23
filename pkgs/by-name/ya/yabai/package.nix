@@ -14,7 +14,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
-  version = "7.1.16";
+  version = "7.1.17";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -65,19 +65,19 @@ stdenv.mkDerivation (finalAttrs: {
       # Unfortunately compiling yabai from source on aarch64-darwin is a bit complicated. We use the precompiled binary instead for now.
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
       "aarch64-darwin" = fetchzip {
-        url = "https://github.com/koekeishiya/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
-        hash = "sha256-rEO+qcat6heF3qrypJ02Ivd2n0cEmiC/cNUN53oia4w=";
+        url = "https://github.com/asmvik/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
+        hash = "sha256-LMR5YMNNmDDLOMhRKiFIE3+JaEZiRTyGAO1o0LSDVTQ=";
       };
       "x86_64-darwin" = fetchFromGitHub {
-        owner = "koekeishiya";
+        owner = "asmvik";
         repo = "yabai";
         rev = "v${finalAttrs.version}";
-        hash = "sha256-WXvM0ub4kJ3rKXynTxmr2Mx+LzJOgmm02CcEx2nsy/A=";
+        hash = "sha256-XBJUh2l1DurftKZtved0D4LXe+kQ5od9SfIL6J/ymKI=";
       };
     };
 
     updateScript = writeShellScript "update-yabai" ''
-      NEW_VERSION=$(${lib.getExe curl} --silent https://api.github.com/repos/koekeishiya/yabai/releases/latest | ${lib.getExe jq} '.tag_name | ltrimstr("v")' --raw-output)
+      NEW_VERSION=$(${lib.getExe curl} --silent https://api.github.com/repos/asmvik/yabai/releases/latest | ${lib.getExe jq} '.tag_name | ltrimstr("v")' --raw-output)
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
         ${lib.getExe' common-updater-scripts "update-source-version"} "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
@@ -92,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
       using an intuitive command line interface and optionally set user-defined keyboard shortcuts
       using skhd and other third-party software.
     '';
-    homepage = "https://github.com/koekeishiya/yabai";
-    changelog = "https://github.com/koekeishiya/yabai/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/asmvik/yabai";
+    changelog = "https://github.com/asmvik/yabai/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = builtins.attrNames finalAttrs.passthru.sources;
     mainProgram = "yabai";

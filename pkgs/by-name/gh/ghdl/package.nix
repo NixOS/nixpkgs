@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vPeODNTptxIjN6qLoIHaKOFf3P3iAK2GloVreHPaAz8=";
   };
 
-  LIBRARY_PATH = "${stdenv.cc.libc}/lib";
+  env.LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
   nativeBuildInputs = [
     gnat

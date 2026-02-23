@@ -10,7 +10,6 @@
   natsort,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   wcmatch,
 
 }:

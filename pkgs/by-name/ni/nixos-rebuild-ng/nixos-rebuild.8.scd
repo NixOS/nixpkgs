@@ -308,6 +308,14 @@ It must be one of the following:
 	option, it is possible to build non-flake NixOS configurations even if
 	the current NixOS systems uses flakes.
 
+*--diff*
+	show the diff between the system closure in /run/current-system
+	and the newly built system closure.
+	(avaliable for actions: build, boot, test, switch)
+
+	This is similar to running:
+	"nix store diff-closures /run/current-system result" after build
+
 In addition, *nixos-rebuild* accepts following options from nix commands that
 the tool calls:
 

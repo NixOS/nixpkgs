@@ -2,18 +2,23 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "homeassistant-ai";
   domain = "ha_mcp_tools";
-  version = "6.6.1";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "homeassistant-ai";
     repo = "ha-mcp";
     tag = "v${version}";
-    hash = "sha256-yAJbvfIH5ewRTip8whbOKxE479qAihESaiLFTnhpRkY=";
+    hash = "sha256-zHa6wfRVmLfKrbAts5Fwe9rCCk57v1GoEIBxQaDAhm0=";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$" ];
   };
 
   meta = {

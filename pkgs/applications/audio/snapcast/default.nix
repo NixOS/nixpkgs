@@ -24,14 +24,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snapcast";
   version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapcast";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BPsAGFLWUfONuyQ1pzsJzGV/Jlxv+4TkVT1KG7j8H0s=";
   };
 
@@ -59,7 +59,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional pipewireSupport pipewire
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
-  TARGET = lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    TARGET = "MACOS";
+  };
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_PULSE" pulseaudioSupport)
@@ -82,4 +84,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gpl3Plus;
   };
-}
+})

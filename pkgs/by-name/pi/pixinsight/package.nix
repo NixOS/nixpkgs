@@ -1,182 +1,173 @@
 {
-  stdenv,
   lib,
-  requireFile,
-  autoPatchelfHook,
-  unixtools,
-  fakeroot,
-  mailcap,
-  libGL,
-  libpulseaudio,
-  alsa-lib,
-  nss,
-  gd,
-  gst_all_1,
-  nspr,
-  expat,
-  fontconfig,
-  dbus,
-  glib,
-  zlib,
-  openssl,
-  libdrm,
-  cups,
-  avahi-compat,
-  libidn2,
-  libdeflate,
-  brotli,
-  libxkbcommon,
-  libxcb,
-  libxtst,
-  libxrandr,
-  libxfixes,
-  libxext,
-  libxdamage,
-  libxcomposite,
-  libx11,
-  xrandr,
-  libxkbfile,
-  wayland,
-  libudev0-shim,
-  bubblewrap,
-  libjpeg8,
-  gdk-pixbuf,
-  gtk3,
-  pango,
+  callPackage,
   buildFHSEnv,
+  cudaPackages,
+  config,
+  cudaSupport ? config.cudaSupport,
+
+  # Provide support for built-in self-updates and plugin management
+  #
+  # PixInsight installs updates and plugins in its main installation location,
+  # which is incompatible with running it from immutable Nix store.
+  #
+  # `true`:
+  # - configure mutable copy of PixInsight installation under
+  #   `~/.local/share/pixinsight`, and run PixInsight using it
+  # - whenever immutable installation changes, on launch clear and reinstall
+  #   mutable files to keep synced with Nix store
+  # - `PixInsightUpdater` is fully functional
+  #
+  # `false`:
+  # - run PixInsight using immutable installation from Nix store
+  # - `PixInsightUpdater` returns `Read-only file system` error on update
+  #   installation attempt
+  #
+  # Enabled by default, as this is part of core functionality, expected from upstream
+  enableUpdates ? true,
 }:
 
 let
-  meta = {
-    description = "Scientific image processing program for astrophotography";
-    homepage = "https://pixinsight.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [ lib.maintainers.sheepforce ];
-    hydraPlatforms = [ ];
-    mainProgram = "PixInsight";
-  };
+  pixinsight = callPackage ./. { inherit cudaSupport; };
 
-  pname = "pixinsight";
-  version = "1.9.3-20250402";
+  # For CUDA support (PixInsight ships with `libtensorflow-cpu`)
+  #
+  # PixInsight uses C API `libtensorflow`, which differs from library shipped
+  # with `tensorflow-bin`: in particular it contains `VERS_1.0` embedded.
+  # Variants from `tensorflow-bin` don't embed it and are rejected as
+  # incompatible, when PixInsight installs plugins to its internal runtime
+  # environment and loads their dependencies.
+  libtensorflow-gpu = callPackage ./libtensorflow-gpu.nix { };
 
-  installPkg = stdenv.mkDerivation (finalAttrs: {
-    inherit meta pname version;
+  deployPath = "$HOME/.local/share/pixinsight";
+  storePathFile = "${deployPath}/opt/PixInsight/.store-path";
+in
+buildFHSEnv {
+  inherit (pixinsight) pname version;
 
-    src = requireFile rec {
-      name = "PI-linux-x64-${finalAttrs.version}-c.tar.xz";
-      url = "https://pixinsight.com/";
-      hash = "sha256-MOAWH64A13vVLeNiBC9nO78P0ELmXXHR5ilh5uUhWhs=";
-      message = ''
-        PixInsight is available from ${url} and requires a commercial (or trial) license.
-        After a license has been obtained, PixInsight can be downloaded from the software distribution
-        (choose Linux 64bit).
-        The PixInsight tarball must be added to the nix-store, i.e. via
-          nix-prefetch-url --type sha256 file:///path/to/${name}
-      '';
-    };
-    sourceRoot = ".";
+  targetPkgs =
+    pkgs:
+    (with pkgs; [
+      expat
+      glib
+      zlib
+      udev
+      dbus
+      nspr
+      nss
+      openssl
 
-    nativeBuildInputs = [
-      unixtools.script
-      fakeroot
-      mailcap
-      libudev0-shim
-      bubblewrap
+      alsa-lib
+      libxkbcommon
+
+      libGL
+      libdrm
+      qt6Packages.qtbase
+      gtk3
+      fontconfig
+      libjpeg8
+      gd
+
+      libssh2
+      libpsl
+      libidn2
+
+      brotli
+      libdeflate
+
+      avahi-compat
+      cups
+
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxinerama
+      libxrandr
+      libxrender
+      libxtst
+
+      libsm
+      libice
+
+      libxcb
+      libxkbfile
+      libxcb-util
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
+      # libxcb-cursor # Bundled by PixInsight
+    ])
+    ++ lib.optionals cudaSupport (
+      [
+        libtensorflow-gpu
+      ]
+      ++ (with pkgs.cudaPackages; [
+        cudatoolkit
+        cudnn
+      ])
+    );
+
+  extraInstallCommands = ''
+    # Provide second binary matching upstream CLI command (`PixInsight`)
+    ln -s $out/bin/{pixinsight,PixInsight}
+
+    # Provide desktop integration files
+    ln -s {${pixinsight},$out}/share
+  '';
+
+  # Prepare mutable opt/ for self-update and plugin support
+  # Clear and redeploy whenever `pixinsight` store path changes
+  extraPreBwrapCmds = lib.optionalString enableUpdates ''
+    set -e
+
+    read -r DEPLOYED_PATH < "${storePathFile}" 2>/dev/null || DEPLOYED_PATH=""
+
+    if [ "$DEPLOYED_PATH" != "${pixinsight}" ]; then
+      echo "pixinsight: new PixInsight installation detected"
+      echo "pixinsight: deploying ${pixinsight}/opt/PixInsight to ${deployPath}/opt/PixInsight..."
+
+      mkdir -p "${deployPath}"/opt
+      rm -rf "${deployPath}"/opt/PixInsight
+      cp -R ${pixinsight}/opt/PixInsight "${deployPath}"/opt
+      chmod -R u+w "${deployPath}"/opt/PixInsight
+
+      echo "${pixinsight}" > "${storePathFile}"
+
+      echo "pixinsight: deployed successfully"
+    fi
+  '';
+
+  extraBwrapArgs =
+    lib.optionals enableUpdates [
+      # Bind-mount mutable opt/ to /opt
+      ''--bind "${deployPath}"/opt /opt''
+    ]
+    ++ lib.optionals (!enableUpdates) [
+      # Bind-mount immutable opt/ to /opt
+      ''--ro-bind "${pixinsight}"/opt /opt''
     ];
 
-    postPatch = ''
-      patchelf ./installer \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath ${lib.getLib stdenv.cc.cc}/lib
-    '';
+  profile = lib.optionalString cudaSupport ''
+    export XLA_FLAGS=--xla_gpu_cuda_data_dir=${cudaPackages.cudatoolkit}
+  '';
 
-    dontConfigure = true;
-    dontBuild = true;
+  runScript = "/opt/PixInsight/bin/PixInsight.sh";
 
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/bin $out/opt/PixInsight $out/share/{applications,mime/packages,icons/hicolor}
-
-      bwrap --bind /build /build --bind $out/opt /opt --bind /nix /nix --dev /dev fakeroot script -ec "./installer \
-        --yes \
-        --install-desktop-dir=$out/share/applications \
-        --install-mime-dir=$out/share/mime \
-        --install-icons-dir=$out/share/icons/hicolor \
-        --no-bin-launcher \
-        --no-remove"
-
-      rm -rf $out/opt/PixInsight-old-0
-      ln -s $out/opt/PixInsight/bin/PixInsight $out/bin/.
-      ln -s $out/opt/PixInsight/bin/lib $out/lib
-
-      runHook postInstall
-    '';
-
-  });
-
-  runPkg = buildFHSEnv {
-    inherit meta pname version;
-
-    targetPkgs =
-      pkgs:
-
-      [
-        # PI itself
-        installPkg
-        # runtime deps
-        mailcap
-        libudev0-shim
-        (lib.getLib stdenv.cc.cc)
-        stdenv.cc
-        libGL
-        libpulseaudio
-        alsa-lib
-        nss
-        gd
-        gst_all_1.gstreamer
-        gst_all_1.gst-plugins-base
-        nspr
-        expat
-        fontconfig
-        dbus
-        glib
-        zlib
-        openssl
-        libdrm
-        wayland
-        cups
-        avahi-compat
-        libjpeg8
-        gdk-pixbuf
-        gtk3
-        pango
-        libidn2
-        libdeflate
-        brotli
-        libxkbcommon
-        libxcb
-        libx11
-        libxdamage
-        xrandr
-        libxtst
-        libxcomposite
-        libxext
-        libxfixes
-        libxrandr
-        libxkbfile
-      ];
-
-    profile = ''
-      export QT_QPA_PLATFORM_PLUGIN_PATH=/opt/PixInsight/bin/lib/qt-plugins/platforms
-      export QT_PLUGIN_PATH=/opt/PixInsight/bin/lib/qt-plugins
-      export LD_LIBRARY_PATH=${libudev0-shim}/lib
-    '';
-
-    runScript = "${installPkg}/bin/PixInsight";
+  passthru = {
+    inherit libtensorflow-gpu;
+    unwrapped = pixinsight;
   };
 
-in
-runPkg
+  inherit (pixinsight.meta)
+    description
+    homepage
+    license
+    maintainers
+    platforms
+    sourceProvenance
+    hydraPlatforms
+    ;
+}

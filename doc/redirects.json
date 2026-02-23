@@ -119,6 +119,12 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "friction-graphics": [
+    "index.html#friction-graphics"
+  ],
+  "friction-graphics-wayland": [
+    "index.html#friction-graphics-wayland"
+  ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
@@ -1811,6 +1817,9 @@
   ],
   "fetchtorrent-parameters": [
     "index.html#fetchtorrent-parameters"
+  ],
+  "fetchitchio": [
+    "index.html#fetchitchio"
   ],
   "chap-trivial-builders": [
     "index.html#chap-trivial-builders"

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "test";
   installFlags = [ "PREFIX=$(out)" ];
 
-  TARGET_OS = stdenv.hostPlatform.uname.system;
+  env.TARGET_OS = stdenv.hostPlatform.uname.system;
 
   meta = {
     homepage = "https://eradman.com/entrproject/";

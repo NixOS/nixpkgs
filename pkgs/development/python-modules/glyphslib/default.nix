@@ -15,17 +15,17 @@
   skia-pathops,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "glyphslib";
-  version = "6.12.6";
+  version = "6.12.7";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "glyphsLib";
-    tag = "v${version}";
-    hash = "sha256-okN/+/+5k+KOlcInouiadKP8aJVV8yqHZnmucXkQsGM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Vqgk5DNy3rKMOi+A6zvYTvcI0K5TdepUJhc5oF9SXbE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Bridge from Glyphs source files (.glyphs) to UFOs and Designspace files via defcon and designspaceLib";
     homepage = "https://github.com/googlefonts/glyphsLib";
-    changelog = "https://github.com/googlefonts/glyphsLib/releases/tag/${src.tag}";
+    changelog = "https://github.com/googlefonts/glyphsLib/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

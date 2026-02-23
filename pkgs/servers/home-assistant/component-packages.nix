@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.2.2";
+  version = "2026.2.3";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -126,7 +126,8 @@
       ];
     "airpatrol" =
       ps: with ps; [
-      ]; # missing inputs: airpatrol
+        airpatrol
+      ];
     "airq" =
       ps: with ps; [
         aioairq
@@ -6639,7 +6640,8 @@
       ];
     "viaggiatreno" =
       ps: with ps; [
-      ]; # missing inputs: viaggiatreno_ha
+        viaggiatreno-ha
+      ];
     "vicare" =
       ps: with ps; [
         pyvicare
@@ -6772,7 +6774,8 @@
         python-matter-server
         pyturbojpeg
         securetar
-      ]; # missing inputs: visionpluspython
+        visionpluspython
+      ];
     "watttime" =
       ps: with ps; [
         aiowatttime
@@ -7176,6 +7179,7 @@
     "airnow"
     "airobot"
     "airos"
+    "airpatrol"
     "airq"
     "airthings"
     "airthings_ble"
@@ -8131,6 +8135,7 @@
     "water_heater"
     "waterfurnace"
     "watergate"
+    "watts"
     "watttime"
     "waze_travel_time"
     "weather"

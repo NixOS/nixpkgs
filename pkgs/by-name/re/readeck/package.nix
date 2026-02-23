@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
 
   npmRoot = "web";
 
-  NODE_PATH = "$npmDeps";
+  env.NODE_PATH = "$npmDeps";
 
   preBuild = ''
     make generate

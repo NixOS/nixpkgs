@@ -13,8 +13,7 @@
   libarchive,
   libmsym,
   jkqtplotter,
-  qttools,
-  wrapQtAppsHook,
+  qt6,
 }:
 
 let
@@ -29,32 +28,32 @@ let
   moleculesRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "molecules";
-    tag = "1.102.1";
+    tag = "1.103.0";
     hash = "sha256-hMLf0gYYnQpjSGKcPy4tihNbmpRR7UxnXF/hyhforgI=";
   };
   crystalsRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "crystals";
-    tag = "1.102.1";
+    tag = "1.103.0";
     hash = "sha256-WhzFldaOt/wJy1kk+ypOkw1OYFT3hqD7j5qGdq9g+IY=";
   };
   fragmentsRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "fragments";
-    tag = "1.102.1";
-    hash = "sha256-x10jGl3lAEfm8OxUZJnjXRJCQg8RLQZTstjwnt5B2bw=";
+    tag = "1.103.0";
+    hash = "sha256-jH8k+qPlyU3Tset63uxrDlMFLdcWh8JhJoe5sl1pJ2E=";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "avogadrolibs";
-  version = "1.102.1";
+  version = "1.103.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadrolibs";
     tag = finalAttrs.version;
-    hash = "sha256-RmGRdCy1ubwAkEJlfldscR84NLOMBx33OdHdcq1R1gg=";
+    hash = "sha256-2SuSNaZnY3LXcUuGboc8ZRCCeoClENoYtWmNNahdor4=";
   };
 
   postUnpack = ''
@@ -65,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pythonWP
   ];
 
@@ -79,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libmsym
     jkqtplotter
-    qttools
+    qt6.qttools
   ];
 
   # Fix the broken CMake files to use the correct paths

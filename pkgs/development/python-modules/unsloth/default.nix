@@ -53,14 +53,14 @@ in
 
 buildPythonPackage rec {
   pname = "unsloth";
-  version = "2025.9.4";
+  version = "2026.1.3";
   pyproject = true;
 
   # Tags on the GitHub repo don't match
   src = fetchPypi {
     pname = "unsloth";
     inherit version;
-    hash = "sha256-aT/RS48hBMZT1ab1Rx1lpSMi6yyEzJCASzDAP0d6ixA=";
+    hash = "sha256-Vq47dKdOyRm+sQmGkfEQ8vM1A1Xq7NwqyE2NGhgyK/s=";
   };
 
   build-system = [

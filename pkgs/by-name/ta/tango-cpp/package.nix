@@ -16,14 +16,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tango-cpp";
-  version = "10.1.1";
+  version = "10.1.2";
 
   src = fetchFromGitLab {
     owner = "tango-controls";
     repo = "cppTango";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-Edv7ZGnESjpuwt0Hentl0qgV2PfBgXWED7v9pUvTW0o=";
+    hash = "sha256-8AFQMw3mUKbHFJBm3Xmme2ehqgZowLQsU0cn1gMLbTc=";
   };
 
   patches = [

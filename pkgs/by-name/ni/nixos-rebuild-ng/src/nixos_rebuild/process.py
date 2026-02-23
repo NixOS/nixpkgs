@@ -8,7 +8,7 @@ import subprocess
 from collections.abc import Sequence
 from dataclasses import dataclass
 from ipaddress import AddressValueError, IPv6Address
-from typing import Final, Self, TypedDict, Unpack
+from typing import Final, Self, TextIO, TypedDict, Unpack
 
 from . import tmpdir
 
@@ -85,8 +85,8 @@ class Remote:
 # Not exhaustive, but we can always extend it later.
 class RunKwargs(TypedDict, total=False):
     capture_output: bool
-    stderr: int | None
-    stdout: int | None
+    stderr: int | TextIO | None
+    stdout: int | TextIO | None
 
 
 def cleanup_ssh() -> None:
@@ -143,7 +143,17 @@ def run_wrapper(
             env = os.environ | extra_env
         if sudo:
             sudo_args = shlex.split(os.getenv("NIX_SUDOOPTS", ""))
-            run_args = ["sudo", *sudo_args, *run_args]
+            # Using --preserve-env is less than ideal since it will cause
+            # the following warn during usage:
+            # > warning: $HOME ('/home/<user>') is not owned by you,
+            # > falling back to the one defined in the 'passwd' file ('/root')
+            # However, right now it is the only way to guarantee the semantics
+            # expected for the commands, e.g. activation with systemd-run
+            # expects access to environment variables like LOCALE_ARCHIVE,
+            # NIXOS_NO_CHECK.
+            # For now, for anyone that the above warn bothers you, please
+            # use `sudo nixos-rebuild` instead of `--sudo` flag.
+            run_args = ["sudo", "--preserve-env", *sudo_args, *run_args]
 
     logger.debug(
         "calling run with args=%r, kwargs=%r, extra_env=%r",

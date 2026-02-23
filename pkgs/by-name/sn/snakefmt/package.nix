@@ -11,8 +11,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "0.11.4";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.11";
-
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-LfJVYdViI88L/DtfUD1znBHUiLQb7MKhyJ2jhFCW4+Y=";

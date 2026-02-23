@@ -1,9 +1,8 @@
 {
   lib,
-  multiStdenv,
+  stdenv,
   fetchFromGitHub,
   replaceVars,
-  pkgsi686Linux,
   dbus,
   meson,
   ninja,
@@ -73,7 +72,7 @@ let
     hash = "sha256-LsPHPoAL21XOKmF1Wl/tvLJGzjaCLjaDAcUtDvXdXSU=";
   };
 in
-multiStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yabridge";
   version = "5.1.1";
 
@@ -105,7 +104,6 @@ multiStdenv.mkDerivation (finalAttrs: {
     # Hard code bitbridge & runtime dependencies
     (replaceVars ./hardcode-dependencies.patch {
       libdbus = dbus.lib;
-      libxcb32 = pkgsi686Linux.libxcb;
       inherit wine;
     })
 
@@ -140,7 +138,7 @@ multiStdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "--cross-file"
     "cross-wine.conf"
-    "-Dbitbridge=true"
+    "-Dbitbridge=false"
 
     # Requires CMake and is unnecessary
     "-Dtomlplusplus:generate_cmake_config=false"
@@ -149,7 +147,7 @@ multiStdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/bin" "$out/lib"
-    cp yabridge-host{,-32}.exe{,.so} "$out/bin"
+    cp yabridge-host.exe{,.so} "$out/bin"
     cp libyabridge{,-chainloader}-{vst2,vst3,clap}.so "$out/lib"
     runHook postInstall
   '';

@@ -3,6 +3,7 @@
   buildPythonPackage,
   deprecation,
   fetchFromGitHub,
+  fpdf2,
   ghostscript_headless,
   hatch-vcs,
   hatchling,
@@ -16,19 +17,22 @@
   pillow,
   pluggy,
   pngquant,
+  pydantic,
+  pypdfium2,
   pytest-xdist,
   pytestCheckHook,
   rich,
   reportlab,
   replaceVars,
   tesseract,
+  uharfbuzz,
   unpaper,
   installShellFiles,
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.13.0";
+  version = "17.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -41,7 +45,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-xxVtncIQ72echi0VogfgqwfB8IA7JEKVUV2lmL1coeU=";
+    hash = "sha256-MlsrssmuEzFXy+N6kWjkF3wtcDCncjYmAi43PUeYuJg=";
   };
 
   patches = [
@@ -64,6 +68,7 @@ buildPythonPackage rec {
 
   dependencies = [
     deprecation
+    fpdf2
     img2pdf
     packaging
     pdfminer-six
@@ -71,7 +76,10 @@ buildPythonPackage rec {
     pikepdf
     pillow
     pluggy
+    pydantic
+    pypdfium2
     rich
+    uharfbuzz
   ];
 
   nativeCheckInputs = [

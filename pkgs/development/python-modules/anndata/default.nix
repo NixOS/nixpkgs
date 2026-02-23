@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "anndata";
-  version = "0.12.6";
+  version = "0.12.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "anndata";
     tag = version;
-    hash = "sha256-VFZrPcb6uaBSOPxJKTJtcYewD8K2Qrsuk3/7+QW6F78=";
+    hash = "sha256-LVpkLWlt7GtsHoh5rcHPM0JWlTDQqTl/c/38Mz7oBJA=";
   };
 
   build-system = [
@@ -135,7 +135,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "anndata" ];
 
   meta = {
-    changelog = "https://github.com/scverse/anndata/blob/main/docs/release-notes/${version}.md";
+    changelog = "https://github.com/scverse/anndata/blob/main/docs/release-notes/${src.tag}.md";
     description = "Python package for handling annotated data matrices in memory and on disk";
     homepage = "https://anndata.readthedocs.io/";
     license = lib.licenses.bsd3;

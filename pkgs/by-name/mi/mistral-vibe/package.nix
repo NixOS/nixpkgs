@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xeb16Ravk60DXAjRs1OcCl8axCRwTf9yqXWnva9VQro=";
+    hash = "sha256-vJnykMcnwQDmzq0L4OhPzortliggtK8Hz+iG2cGu8BM=";
   };
 
   build-system = with python3Packages; [
@@ -32,9 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "agent-client-protocol"
     "gitpython"
     "mistralai"
-    "pydantic"
     "pydantic-settings"
-    "watchfiles"
     "zstandard"
   ];
   dependencies = with python3Packages; [
@@ -43,6 +41,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     cryptography
     gitpython
     giturlparse
+    google-auth
     httpx
     keyring
     mcp
@@ -54,12 +53,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyperclip
     python-dotenv
     pyyaml
+    requests
     rich
     textual
     textual-speedups
     tomli-w
     tree-sitter
-    tree-sitter-grammars.tree-sitter-bash
+    tree-sitter-bash
     watchfiles
     zstandard
   ];
@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_updates_index_on_file_deletion"
     "test_updates_index_on_file_rename"
     "test_updates_index_on_folder_rename"
+    "test_watcher_toggle_flow_off_on_off"
   ];
 
   disabledTestPaths = [

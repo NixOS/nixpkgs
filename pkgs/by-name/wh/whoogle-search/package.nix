@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "whoogle-search";
-  version = "0.9.4";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "whoogle_search";
     inherit (finalAttrs) version;
-    hash = "sha256-EvmNDU1hRUIy+CTwECLzIdcEjzcJgiiFYd2iMy0wDG0=";
+    hash = "sha256-QU0VBMAh8MV32C/VDRWC+BHhaejcpiaMfMX3LCze2HM=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -22,15 +22,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
     attrs
     beautifulsoup4
     brotli
-    cachelib
+    cachetools
     certifi
     cffi
-    chardet
     click
     cryptography
     cssutils
     defusedxml
     flask
+    h11
+    httpcore
+    httpx
+    httpx.optional-dependencies.http2
+    httpx.optional-dependencies.socks
     idna
     itsdangerous
     jinja2
@@ -42,17 +46,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pycparser
     pyopenssl
     pyparsing
-    pysocks
+    pytest
     python-dateutil
-    requests
+    python-dotenv
     soupsieve
     stem
-    urllib3
     validators
     waitress
     wcwidth
     werkzeug
-    python-dotenv
   ];
 
   postInstall = ''
@@ -71,7 +73,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/benbusby/whoogle-search";
     description = "Self-hosted, ad-free, privacy-respecting metasearch engine";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ malte-v ];
+    maintainers = [ lib.maintainers.SchweGELBin ];
     mainProgram = "whoogle-search";
   };
 })

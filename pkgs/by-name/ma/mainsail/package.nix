@@ -21,7 +21,7 @@ buildNpmPackage rec {
   nodejs = nodejs_20;
 
   # Prevent Cypress binary download.
-  CYPRESS_INSTALL_BINARY = 0;
+  env.CYPRESS_INSTALL_BINARY = 0;
 
   preConfigure = ''
     # Make the build.zip target do nothing, since we will just copy these files later.
@@ -44,7 +44,6 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      shhht
       lovesegfault
       wulfsta
     ];

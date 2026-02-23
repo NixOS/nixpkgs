@@ -21,16 +21,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.15.4";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MIy1/8r5CMrTbVTjLFuUneoL3J38kZIgUMweoeaf3L0=";
+    hash = "sha256-T7ft+GQLLPWgVFoo3m3pLDwgXRwa5idRFlhKjDLkQaw=";
   };
 
-  cargoHash = "sha256-jVD11wz9Ab1E9KdNG4kp8Jqm2rJ2aUWuFTAOBga6Fgg=";
+  cargoHash = "sha256-WneUROKV+uLX1d5TIOanO0jhHLsHHpFcXKUB6zdbSzA=";
 
   depsBuildBuild = [
     pkg-config

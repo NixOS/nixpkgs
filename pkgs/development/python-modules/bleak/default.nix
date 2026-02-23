@@ -16,7 +16,6 @@
   pyobjc-framework-CoreBluetooth,
   pyobjc-framework-libdispatch,
   typing-extensions,
-  async-timeout,
 
   pytest-asyncio,
   pytest-cov-stub,
@@ -61,9 +60,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   nativeCheckInputs = [
