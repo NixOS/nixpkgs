@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "20240407";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/mobile-broadband-provider-info/${version}/mobile-broadband-provider-info-${version}.tar.xz";
     hash = "sha256-ib/v8hX0v/jpw/8uwlJQ/bCA0R6b+lnG/HGYKsAcgUo=";
   };
 

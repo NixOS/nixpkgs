@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "sha256-9MLepqRy4KXMncotxMH8NrpVOOrPjXk4JSkyUXJVRr0=";
-    url = "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
+    url = "http://miniupnp.free.fr/files/download.php?file=minissdpd-${version}.tar.gz";
     name = "${pname}-${version}.tar.gz";
   };
 

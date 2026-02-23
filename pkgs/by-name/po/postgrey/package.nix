@@ -32,7 +32,7 @@ runCommand "${pname}-${version}"
   {
     inherit pname version;
     src = fetchurl {
-      url = "https://postgrey.schweikert.ch/pub/${pname}-${version}.tar.gz";
+      url = "https://postgrey.schweikert.ch/pub/postgrey-${version}.tar.gz";
       sha256 = "1xx51xih4711vrvc6d57il9ccallbljj5zhgqdb07jzmz11rakgz";
     };
     meta = {

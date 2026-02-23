@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   version = "2.77";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/libcap-${version}.tar.xz";
     hash = "sha256-iXvBi0Svwmxw54zq09uzHhVKzCS+4IWloJB5qI2/b1I=";
   };
 

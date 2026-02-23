@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchurl {
-    url = "mirror://maven/io/trino/${pname}/${version}/${jarfilename}";
+    url = "mirror://maven/io/trino/trino-cli/${version}/${jarfilename}";
     sha256 = "sha256-/k6cf7VpzWdnOvoWIpRfYwjh5ZvbglQZNSuAiHZhdXs=";
   };
 

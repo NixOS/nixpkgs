@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "5.9.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/roccat/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/roccat/roccat-tools-${version}.tar.bz2";
     sha256 = "sha256-6bgyr5l7FF1HzPjT5aJSL7xickHJ9jZ73Ulrx3+tQ1o=";
   };
 

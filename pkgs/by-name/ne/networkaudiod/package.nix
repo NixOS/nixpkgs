@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   src =
     {
       x86_64-linux = fetchurl {
-        url = "https://www.signalyst.eu/bins/naa/linux/buster/${pname}_${version}_amd64.deb";
+        url = "https://www.signalyst.eu/bins/naa/linux/buster/networkaudiod_${version}_amd64.deb";
         sha256 = "sha256-un5VcCnvCCS/KWtW991Rt9vz3flYilERmRNooEsKCkA=";
       };
       aarch64-linux = fetchurl {
-        url = "https://www.signalyst.eu/bins/naa/linux/buster/${pname}_${version}_arm64.deb";
+        url = "https://www.signalyst.eu/bins/naa/linux/buster/networkaudiod_${version}_arm64.deb";
         sha256 = "sha256-fjSCWX9VYhVJ43N2kSqd5gfTtDJ1UiH4j5PJ9I5Skag=";
       };
     }

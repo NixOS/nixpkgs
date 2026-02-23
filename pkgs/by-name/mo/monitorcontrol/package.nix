@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "4.3.3";
 
   src = fetchurl {
-    url = "https://github.com/MonitorControl/${pname}/releases/download/v${version}/MonitorControl.${version}.dmg";
+    url = "https://github.com/MonitorControl/MonitorControl/releases/download/v${version}/MonitorControl.${version}.dmg";
     hash = "sha256-myx3adoU3FYYrs6LFRSiXtwSsoaujjQ/PYgAF/Xuk2g=";
   };
 

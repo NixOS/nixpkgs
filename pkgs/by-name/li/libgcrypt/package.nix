@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "1.11.2";
 
   src = fetchurl {
-    url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
+    url = "mirror://gnupg/libgcrypt/libgcrypt-${version}.tar.bz2";
     hash = "sha256-a6Wd0ZInDowdIt20GgfZXc28Hw+wLQPEtUsjWBQzCqw=";
   };
 

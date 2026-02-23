@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   pname = "neon";
 
   src = fetchurl {
-    url = "https://notroj.github.io/${pname}/${pname}-${version}.tar.gz";
+    url = "https://notroj.github.io/neon/neon-${version}.tar.gz";
     sha256 = "sha256-cMx/Ku694mOQbhhbJm4E4N6Ss45fTszL9h6LeRd8Lwc=";
   };
 

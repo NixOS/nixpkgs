@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   pname = "jbang";
 
   src = fetchzip {
-    url = "https://github.com/jbangdev/jbang/releases/download/v${version}/${pname}-${version}.tar";
+    url = "https://github.com/jbangdev/jbang/releases/download/v${version}/jbang-${version}.tar";
     sha256 = "sha256-MsP4iLquOwJWlV7EPxSuAPWuyTv1PPSyQCrVdq4lPlM=";
   };
 

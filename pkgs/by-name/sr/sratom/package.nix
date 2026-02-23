@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
+    url = "https://download.drobilla.net/sratom-${version}.tar.xz";
     hash = "sha256-OCbpGGyrxDyl41n8w9gjgGAjL1+KIJC+XcmrOQ5bZHc=";
   };
 

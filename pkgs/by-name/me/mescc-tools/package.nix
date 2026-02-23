@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.7.0";
 
   src = fetchurl {
-    url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://savannah/mescc-tools/mescc-tools-${finalAttrs.version}.tar.gz";
     hash = "sha256-toL3v1dvieVdCxxjjZ3i2b6yhVciaPWPq/TtFNm2V1w=";
   };
 
