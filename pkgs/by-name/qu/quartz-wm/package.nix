@@ -23,6 +23,12 @@ clangStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1+KZNeR4Gq2uWBHTN53PTITHuly1Z4buR+grzdVNwhs=";
   };
 
+  postPatch = ''
+    substituteInPlace lib/dock-support.h \
+      --replace-fail '#include <ApplicationServices/ApplicationServices.h>' \
+                     '#define Picture _Picture${"\n"}#include <ApplicationServices/ApplicationServices.h>${"\n"}#undef Picture'
+  '';
+
   configureFlags = [ "--enable-xplugin-dock-support" ];
   nativeBuildInputs = [
     autoreconfHook
