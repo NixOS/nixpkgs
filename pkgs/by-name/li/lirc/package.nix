@@ -64,7 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Pull fix for new pyyaml pending upstream inclusion
     #   https://sourceforge.net/p/lirc/git/merge-requests/39/
-    substituteInPlace python-pkg/lirc/database.py --replace 'yaml.load(' 'yaml.safe_load('
+    substituteInPlace python-pkg/lirc/database.py \
+      --replace-fail 'yaml.load(' 'yaml.safe_load('
   '';
 
   preConfigure = ''
