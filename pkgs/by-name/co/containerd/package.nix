@@ -46,6 +46,11 @@ buildGoModule rec {
       url = "https://github.com/containerd/containerd/commit/9bbb1309f051e54b51484fa0efbfe93e26223a2d.patch";
       hash = "sha256-QK+WGJRjJxro26MF04yGYcfAtNvoAZqAUYg8UzEOVqM=";
     })
+    (fetchpatch2 {
+      # fix(oci): apply absolute symlink resolution to /etc/group #12925
+      url = "https://github.com/containerd/containerd/commit/fc406dbc5ce50d05e37557e58eb00106d416b014.patch";
+      hash = "sha256-Z/3GJHyrhv6UbGsFMzwLJljz4O68GLSvojRBjo/GEpI=";
+    })
   ];
 
   postPatch = ''
