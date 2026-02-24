@@ -13361,6 +13361,12 @@
     name = "June Stepp";
     keys = [ { fingerprint = "2561 0243 2233 CFE6 E13E  3C33 348C 6EB3 39AE C582"; } ];
   };
+  junglerobba = {
+    email = "junglerobba@jngl.one";
+    name = "junglerobba";
+    github = "junglerobba";
+    githubId = 18437660;
+  };
   junjihashimoto = {
     email = "junji.hashimoto@gmail.com";
     github = "junjihashimoto";
