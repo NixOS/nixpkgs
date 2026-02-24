@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "peco";
-  version = "0.5.11";
+  version = "0.6.0";
 
   subPackages = [ "cmd/peco" ];
 
@@ -14,10 +14,10 @@ buildGoModule (finalAttrs: {
     owner = "peco";
     repo = "peco";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-OVUfeNpnmuJsgD//JTn6n9n4oOBxep69LhIpHX+ru2w=";
+    sha256 = "sha256-jvjqk1t2mTxkcGFWpynf3/J5VR3G1lhOBpIFqh6OoS0=";
   };
 
-  vendorHash = "sha256-+HQz7UUgATdgSWlI1dg2DdQRUSke9MyAtXgLikFhF90=";
+  vendorHash = "sha256-EvLi1v3c1Myx9GVvenXiZb2V5foloQzPc35VVjVLuiU=";
 
   meta = {
     description = "Simplistic interactive filtering tool";
