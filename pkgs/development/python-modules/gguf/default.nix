@@ -10,6 +10,7 @@
   numpy,
   pyside6,
   pyyaml,
+  requests,
   sentencepiece,
   tqdm,
 
@@ -17,19 +18,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gguf";
-  version = "7789";
+  version = "8145";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    tag = "b${version}";
-    hash = "sha256-EQYyRSptjEmhe6AaOs3KV0N4aoGvK8Z+WBKacEYW8Wo=";
+    tag = "b${finalAttrs.version}";
+    hash = "sha256-scl7ncBf5fOKo7pY4f3dgexADKxj7OBiEO9XKqYz6y4=";
   };
 
-  sourceRoot = "${src.name}/gguf-py";
+  sourceRoot = "${finalAttrs.src.name}/gguf-py";
 
   build-system = [ poetry-core ];
 
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     numpy
     pyside6
     pyyaml
+    requests
     sentencepiece
     tqdm
   ];
@@ -48,10 +50,11 @@ buildPythonPackage rec {
   meta = {
     description = "Module for writing binary files in the GGUF format";
     homepage = "https://ggml.ai/";
+    changelog = "https://github.com/ggml-org/llama.cpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mitchmindtree
       sarahec
     ];
   };
-}
+})
