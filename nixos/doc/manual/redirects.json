@@ -1202,6 +1202,27 @@
   "module-services-netbird-customization": [
     "index.html#module-services-netbird-customization"
   ],
+  "module-services-netbird-client-configuration": [
+    "index.html#module-services-netbird-client-configuration"
+  ],
+  "module-services-netbird-dns": [
+    "index.html#module-services-netbird-dns"
+  ],
+  "module-services-netbird-routing": [
+    "index.html#module-services-netbird-routing"
+  ],
+  "module-services-netbird-rosenpass": [
+    "index.html#module-services-netbird-rosenpass"
+  ],
+  "module-services-netbird-ssh": [
+    "index.html#module-services-netbird-ssh"
+  ],
+  "module-services-netbird-connection": [
+    "index.html#module-services-netbird-connection"
+  ],
+  "module-services-netbird-selfhosted": [
+    "index.html#module-services-netbird-selfhosted"
+  ],
   "module-services-mosquitto": [
     "index.html#module-services-mosquitto"
   ],
