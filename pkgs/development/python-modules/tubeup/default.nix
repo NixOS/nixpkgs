@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "tubeup";
-  version = "2025.5.11";
+  version = "2026.2.19";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LZ/kNtw5Tw3PtqQp4Dq2qOeXgofID5upFvpLMXUIuiM=";
+    hash = "sha256-aC8kWOE4oXyeCBfbgDuzC+l/IfpZfuTcFdUt1KXJ0lA=";
   };
 
   build-system = [ setuptools ];
