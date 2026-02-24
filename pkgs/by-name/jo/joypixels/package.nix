@@ -23,20 +23,31 @@ let
       fontFile = "joypixels-android.ttf";
     };
 
-  joypixels-free-license = lib.licenses.mkLicense {
-    shortName = "JoyPixels-Free";
-    fullName = "JoyPixels Free License Agreement";
-    url = "https://cdn.joypixels.com/free-license.pdf";
-    free = false;
-  };
+  joypixels-free-license =
+    let
+      inherit (systemSpecific) systemTag;
+    in
+    lib.licenses.mkLicense {
+      shortName = "JoyPixels-Free";
+      fullName = "JoyPixels Free License Agreement";
+      url = "https://cdn.joypixels.com/distributions/${systemTag}/license/free-license.txt";
+      free = false;
+    };
 
-  joypixels-license-appendix = lib.licenses.mkLicense {
-    shortName = "JoyPixels-NixOS-Appendix";
-    fullName = "JoyPixels ${systemSpecific.capitalized} License Appendix";
-    url = "https://cdn.joypixels.com/distributions/${systemSpecific.systemTag}/appendix/joypixels-license-appendix.pdf";
-    free = false;
-    redistributable = true;
-  };
+  joypixels-license-appendix =
+    let
+      inherit (systemSpecific)
+        capitalized
+        systemTag
+        ;
+    in
+    lib.licenses.mkLicense {
+      shortName = "JoyPixels-NixOS-Appendix";
+      fullName = "JoyPixels ${capitalized} License Appendix";
+      url = "https://cdn.joypixels.com/distributions/${systemTag}/appendix/joypixels-license-appendix.txt";
+      free = false;
+      redistributable = true;
+    };
 
   throwLicense = throw ''
     Use of the JoyPixels font requires acceptance of the license.
