@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
   cmake,
   opencv-python,
   ceres-solver,
@@ -128,6 +129,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "opensfm" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
