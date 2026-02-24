@@ -48,6 +48,10 @@ in
       };
     };
 
+    xdg = {
+      serverAutostart = lib.mkEnableOption "starting the foot server via xdg-autostart";
+    };
+
     theme = lib.mkOption {
       type = with lib.types; nullOr str;
       default = null;
@@ -74,7 +78,11 @@ in
     environment = {
       systemPackages = [ cfg.package ];
       etc."xdg/foot/foot.ini".source = settingsFormat.generate "foot.ini" cfg.settings;
+
+      etc."xdg/autostart/foot-server.desktop".source =
+        lib.mkIf cfg.xdg.serverAutostart "${cfg.package}/share/applications/foot-server.desktop";
     };
+
     programs = {
       foot.settings.main.include = lib.optionals (cfg.theme != null) [
         "${pkgs.foot.themes}/share/foot/themes/${cfg.theme}"
