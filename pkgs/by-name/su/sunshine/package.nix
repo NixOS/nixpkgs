@@ -121,6 +121,8 @@ stdenv'.mkDerivation (finalAttrs: {
     pkg-config
     python3
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
     # Avoid fighting upstream's usage of vendored ffmpeg libraries
     autoPatchelfHook
@@ -133,6 +135,20 @@ stdenv'.mkDerivation (finalAttrs: {
 
   buildInputs = [
     avahi
+    openssl
+    libopus
+    boost
+    curl
+    pcre
+    pcre2
+    libuuid
+    libthai
+    libdatrie
+    libnotify
+    miniupnpc
+    nlohmann_json
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libevdev
     libpulseaudio
     libx11
@@ -141,23 +157,14 @@ stdenv'.mkDerivation (finalAttrs: {
     libxrandr
     libxtst
     libxi
-    openssl
-    libopus
-    boost
     libdrm
     wayland
     libffi
     libevdev
     libcap
     libdrm
-    curl
-    pcre
-    pcre2
-    libuuid
     libselinux
     libsepol
-    libthai
-    libdatrie
     libxdmcp
     libxkbcommon
     libepoxy
@@ -168,16 +175,13 @@ stdenv'.mkDerivation (finalAttrs: {
     amf-headers
     svt-av1
     libappindicator
-    libnotify
-    miniupnpc
-    nlohmann_json
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
     cudaPackages.cuda_cudart
   ];
 
-  runtimeDependencies = [
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
     avahi
     libgbm
     libxrandr
@@ -253,6 +257,6 @@ stdenv'.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "sunshine";
     maintainers = with lib.maintainers; [ devusb ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
