@@ -138,6 +138,22 @@ in
       default = [ ];
       example = [ "--no-logs-no-support" ];
     };
+
+    relayServerPort = mkOption {
+      type = types.nullOr (types.either types.port (types.enum [ "" ]));
+      default = null;
+      description = ''
+        The port to use for Tailscale peer relay.
+
+        Set to a port number to enable, `""` to explicitly disable, or `null` (default) to leave the setting unmanaged.
+
+        Note: Tailscale settings are persistent. If you previously set a port and now want to disable it, set this to `""`,
+        or run {command}`tailscale set --relay-server-port=""` manually.
+        Setting it back to `null` will leave the last configured port active in Tailscale's state.
+
+        See <https://tailscale.com/docs/features/peer-relay>
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -234,27 +250,37 @@ in
         '';
     };
 
-    systemd.services.tailscaled-set = mkIf (cfg.extraSetFlags != [ ]) {
-      after = [
-        "tailscaled.service"
-        "tailscaled-autoconnect.service"
-      ];
-      wants = [ "tailscaled.service" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "oneshot";
+    systemd.services.tailscaled-set =
+      let
+        setFlags =
+          cfg.extraSetFlags
+          ++ lib.cli.toCommandLineGNU { } {
+            relay-server-port = cfg.relayServerPort;
+          };
+      in
+      mkIf (setFlags != [ ]) {
+        after = [
+          "tailscaled.service"
+          "tailscaled-autoconnect.service"
+        ];
+        wants = [ "tailscaled.service" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+        };
+        script = ''
+          ${lib.getExe cfg.package} set ${escapeShellArgs setFlags}
+        '';
       };
-      script = ''
-        ${lib.getExe cfg.package} set ${escapeShellArgs cfg.extraSetFlags}
-      '';
-    };
 
     boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
       "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
       "net.ipv6.conf.all.forwarding" = mkOverride 97 true;
     };
 
-    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall (
+      [ cfg.port ] ++ lib.optional (builtins.isInt cfg.relayServerPort) cfg.relayServerPort
+    );
 
     networking.firewall.checkReversePath = mkIf (
       cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both"
