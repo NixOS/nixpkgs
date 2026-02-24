@@ -382,7 +382,7 @@ let
                       jq
                     ]
                   }
-                  new_version=$(curl --silent "https://www.php.net/releases/active" | jq --raw-output '."${lib.versions.major version}"."${lib.versions.majorMinor version}".version')
+                  new_version=$(curl --silent "https://www.php.net/releases/active.php" | jq --raw-output '."${lib.versions.major version}"."${lib.versions.majorMinor version}".version')
                   update-source-version "$UPDATE_NIX_ATTR_PATH.unwrapped" "$new_version" "--file=$1"
                 '';
               in
