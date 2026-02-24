@@ -2,21 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "w3lib";
-  version = "2.3.1";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XIrAKjAnV2F0wrYeuaIXC6Gxl8rnZwgHcbbx/r2iSaQ=";
+    hash = "sha256-4jOtIWSbadDgR6EPMBga6Wd1JKKfb3H288dY3AyNJkg=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
