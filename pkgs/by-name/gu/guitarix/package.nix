@@ -8,6 +8,7 @@
   curl,
   eigen,
   faust,
+  fetchpatch2,
   fftwSinglePrec,
   gettext,
   glib,
@@ -108,6 +109,21 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withLiblo liblo
   ++ lib.optional withZitaConvolver zita-convolver
   ++ lib.optional withZitaResampler zita-resampler;
+
+  patchFlags = [ "-p2" ];
+  patches = [
+    # Remove the mandatory check for `boost_system` which was removed in boost 1.89
+    (fetchpatch2 {
+      name = "make-boost-system-stub-optional.patch";
+      url = "https://github.com/brummer10/guitarix/compare/v0.47.0..187670358ffc47a0fa09e140586b2e88dfdcf043.patch?full_index=1";
+      hash = "sha256-9Z0sAM/oTm3ejv9chDbXEpkjNvlX/SN+k48XaJTqdy0=";
+      includes = [
+        "trunk/waf"
+        "*/wscript"
+        "trunk/waftools/*.py"
+      ];
+    })
+  ];
 
   # There are many bad shebangs which can fail builds.
   # See `https://github.com/brummer10/guitarix/issues/246`.
