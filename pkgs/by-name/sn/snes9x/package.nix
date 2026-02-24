@@ -42,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-INMVyB3alwmsApO7ToAaUWgh7jlg2MeLxqHCEnUO88U=";
   };
 
+  patches = [
+    ./glslang-include-cstdint.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     python3
