@@ -44,7 +44,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools
   ];
 
-  pythonRelaxDeps = [ "phx-class-registry" ];
+  pythonRelaxDeps = [
+    "docutils"
+    "phx-class-registry"
+  ];
 
   nativeCheckInputs = with python3Packages; [
     backoff
