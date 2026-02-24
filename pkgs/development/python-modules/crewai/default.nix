@@ -35,6 +35,8 @@
   uv,
 
   # tests
+  a2a-sdk,
+  aiocache,
   pytestCheckHook,
   pytest-asyncio,
   pytest-xdist,
@@ -136,6 +138,12 @@ buildPythonPackage rec {
     "tests/llms/litellm"
     "tests/llms/hooks/test_anthropic_interceptor.py"
     "tests/llms/hooks/test_unsupported_providers.py"
+
+    # a2a integration test requires network (A2A_TEST_ENDPOINT)
+    "tests/a2a/test_a2a_integration.py"
+
+    # Tests requiring missing optional providers + network
+    "tests/llms/test_tool_call_streaming.py"
 
     # Tests requiring network/API access
     "tests/llms/openai"
@@ -381,6 +389,7 @@ buildPythonPackage rec {
     "test_multiple_handlers_for_same_event"
     "test_llm_emits_event_with_lite_agent"
     "test_tools_emits_finished_events"
+    "test_agent_emits_execution_error_event"
     "test_agent_emits_execution_started_and_completed_events"
     "test_crew_emits_end_kickoff_event"
     "test_llm_emits_stream_chunk_events"
@@ -433,6 +442,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    a2a-sdk
+    aiocache
     pytestCheckHook
     pytest-asyncio
     pytest-xdist
