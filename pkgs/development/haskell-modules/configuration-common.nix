@@ -2529,6 +2529,14 @@ with haskellLib;
     ];
   }) super.hexstring;
 
+  # 2026-02-19: GHC 9.10 increased simplifier ticks, need higher threshold
+  # https://github.com/lehins/hip/issues/56
+  hip = overrideCabal (drv: {
+    configureFlags = (drv.configureFlags or [ ]) ++ [
+      "--ghc-options=-fsimpl-tick-factor=200"
+    ];
+  }) super.hip;
+
   # Disabling doctests.
   regex-tdfa = overrideCabal {
     testTargets = [ "regex-tdfa-unittest" ];

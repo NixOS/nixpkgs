@@ -2573,7 +2573,6 @@ dont-distribute-packages:
  - penny-bin
  - penny-lib
  - peparser
- - perceptual-hash
  - perdure
  - perf-analysis
  - perfecthash

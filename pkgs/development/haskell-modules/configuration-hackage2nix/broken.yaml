@@ -2804,7 +2804,6 @@ broken-packages:
   - hint-server # failure in job https://hydra.nixos.org/build/233240346 at 2023-09-02
   - hinter # failure in job https://hydra.nixos.org/build/233245954 at 2023-09-02
   - hinterface # failure in job https://hydra.nixos.org/build/233250383 at 2023-09-02
-  - hip # failure in job https://hydra.nixos.org/build/307610903 at 2025-09-19
   - hipchat-hs # failure in job https://hydra.nixos.org/build/233198550 at 2023-09-02
   - Hipmunk # failure in job https://hydra.nixos.org/build/233259272 at 2023-09-02
   - hips # failure in job https://hydra.nixos.org/build/252728413 at 2024-03-16
