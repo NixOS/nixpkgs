@@ -1,18 +1,29 @@
+# Figure out which maintainers (users/teams) are relevant for a PR:
+# - All maintainers that can be linked directly to changedFiles
+# - Maintainers of affectedAttrPaths if a file directly related to the attribute is in changedFiles
+#
+# Files and attributes are linked in various ways:
+# - pkgs/by-name/<attr>/* is linked to pkgs.<attr>
+# - The file position of various attributes of pkgs.<attr>
+# - Explicitly specified file positions in derivations
 {
-  lib,
-  changedattrs,
-  changedpathsjson,
-  removedattrs,
-}:
-let
-  pkgs = import ../../.. {
+  # Files that were changed
+  # Type: ListOf (Nixpkgs-root-relative path)
+  changedFiles,
+  # Attributes whose value was affected by the change
+  # Type: ListOf (ListOf String)
+  affectedAttrPaths,
+
+  pkgs ? import ../../.. {
     system = "x86_64-linux";
     # We should never try to ping maintainers through package aliases, this can only lead to errors.
     # One example case is, where an attribute is a throw alias, but then re-introduced in a PR.
     # This would trigger the throw. By disabling aliases, we can fallback gracefully below.
     config.allowAliases = false;
-  };
-
+  },
+  lib,
+}:
+let
   nixpkgsRoot = toString ../../.. + "/";
   stripNixpkgsRootFromKeys = lib.mapAttrs' (
     file: value: lib.nameValuePair (lib.removePrefix nixpkgsRoot file) value
@@ -24,37 +35,35 @@ let
   fileMaintainers = stripNixpkgsRootFromKeys moduleMeta.maintainers;
   fileTeams = stripNixpkgsRootFromKeys moduleMeta.teams;
 
-  changedpaths = lib.importJSON changedpathsjson;
-
   # Extract attributes that changed from by-name paths.
   # This allows pinging reviewers for pure refactors.
-  touchedattrs = lib.pipe changedpaths [
+  touchedattrs = lib.pipe changedFiles [
     (lib.filter (changed: lib.hasPrefix "pkgs/by-name/" changed && changed != "pkgs/by-name/README.md"))
     (map (lib.splitString "/"))
     (map (path: lib.elemAt path 3))
+    (map lib.singleton)
     lib.unique
   ];
 
-  anyMatchingFile = filename: lib.any (lib.hasPrefix filename) changedpaths;
+  anyMatchingFile = filename: lib.any (lib.hasPrefix filename) changedFiles;
 
   anyMatchingFiles = files: lib.any anyMatchingFile files;
 
   sharded = name: "${lib.substring 0 2 name}/${name}";
 
-  attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs ++ touchedattrs) [
+  attrsWithMaintainers = lib.pipe (affectedAttrPaths ++ touchedattrs) [
     # An attribute can appear in changed/removed *and* touched
     lib.unique
     (map (
-      name:
+      path:
       let
-        path = lib.splitString "." name;
         # Some packages might be reported as changed on a different platform, but
         # not even have an attribute on the platform the maintainers are requested on.
         # Fallback to `null` for these to filter them out below.
         package = lib.attrByPath path null pkgs;
       in
       {
-        inherit name package;
+        inherit path package;
         # Adds all files in by-name to each package, no matter whether they are discoverable
         # via meta attributes below. For example, this allows pinging maintainers for
         # updates to .json files.
@@ -114,7 +123,7 @@ let
 
   teamPings =
     context: team:
-    if team ? github then
+    if team ? githubId then
       [
         {
           type = "team";
@@ -128,13 +137,14 @@ let
   maintainersToPing =
     lib.concatMap (
       pkg:
-      userPings { attr = pkg.name; } pkg.users ++ lib.concatMap (teamPings { pkg = pkg.name; }) pkg.teams
+      userPings { attrPath = pkg.path; } pkg.users
+      ++ lib.concatMap (teamPings { attrPath = pkg.path; }) pkg.teams
     ) attrsWithModifiedFiles
     ++ lib.concatMap (
       path:
       userPings { file = path; } (fileMaintainers.${path} or [ ])
       ++ lib.concatMap (teamPings { file = path; }) (fileTeams.${path} or [ ])
-    ) changedpaths;
+    ) changedFiles;
 
   byType = lib.groupBy (ping: ping.type) maintainersToPing;
 
@@ -150,5 +160,5 @@ in
 {
   users = byUser;
   teams = byTeam;
-  packages = lib.catAttrs "name" attrsWithModifiedFiles;
+  packages = lib.catAttrs "path" attrsWithModifiedFiles;
 }
