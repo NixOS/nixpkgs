@@ -107,9 +107,9 @@ in
         );
 
         Restart = "always";
-        RuntimeDirectory = "netbird-mgmt";
-        StateDirectory = "netbird-mgmt";
-        WorkingDirectory = "/var/lib/netbird-mgmt";
+        RuntimeDirectory = "netbird-signal";
+        StateDirectory = "netbird-signal";
+        WorkingDirectory = "/var/lib/netbird-signal";
 
         # hardening
         LockPersonality = true;
