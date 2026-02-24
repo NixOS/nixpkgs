@@ -389,7 +389,7 @@ let
               [
                 script
                 # Passed as an argument so that update.nix can ensure it does not become a store path.
-                (./. + "/${lib.versions.majorMinor version}.nix")
+                ./default.nix
               ];
             buildEnv = mkBuildEnv { } [ ];
             withExtensions = mkWithExtensions { } [ ];
