@@ -108,7 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/lib/packages/lib/node_modules/canvas
 
     # Remove extra files
-    rm -rf $out/lib/packages/app-cli/{app/*.test.ts,*.md,.*ignore,tests/,tools/,*.js,*.json,*.sh}
+    rm -rf $out/lib/packages/app-cli/{app/*.test.ts,*.md,.*ignore,tests/,tools/,*.js,tsconfig.json,*.sh}
+    mv $out/lib/packages/app-cli/package.json $out/lib/packages/app-cli/app
 
     # Link final binary
     chmod +x $out/lib/packages/app-cli/app/main.js
