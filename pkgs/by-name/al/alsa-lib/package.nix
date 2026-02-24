@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   alsa-topology-conf,
   alsa-ucm-conf,
   testers,
@@ -23,6 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     # "libs" field to declare locations for both native and 32bit plugins, in
     # order to support apps with 32bit sound running on x86_64 architecture.
     ./alsa-plugin-conf-multilib.patch
+    (fetchpatch {
+      name = "CVE-2026-25068.patch";
+      url = "https://github.com/alsa-project/alsa-lib/commit/5f7fe33002d2d98d84f72e381ec2cccc0d5d3d40.patch";
+      hash = "sha256-4memtcg+FDOctX6wgiCdmnlG+IUS+5rL1f3LcsWS5lw=";
+    })
   ];
 
   enableParallelBuilding = true;
