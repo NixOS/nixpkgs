@@ -48,12 +48,24 @@ let
     ];
   };
 
-  chromeDir =
-    {
-      x86_64-linux = "chrome-linux64";
-      aarch64-linux = "chrome-linux";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  # Playwright's upstream chromium-headless-shell zips use different directory
+  # names per architecture (chrome-headless-shell-linux64 vs chrome-linux).
+  chrome =
+    let
+      browsers = playwright-driver.selectBrowsers {
+        withChromiumHeadlessShell = true;
+        withChromium = false;
+        withFirefox = false;
+        withWebkit = false;
+        withFfmpeg = false;
+      };
+      chromeDir =
+        {
+          x86_64-linux = "chrome-headless-shell-linux64";
+        }
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    in
+    "${browsers}/chromium_headless_shell-*/${chromeDir}/chrome-headless-shell";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
@@ -181,7 +193,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --set-default PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines_6}/lib/libquery_engine.node" \
       --set-default PRISMA_QUERY_ENGINE_BINARY "${prisma-engines_6}/bin/query-engine" \
       --set-default PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines_6}/bin/schema-engine" \
-      --set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${playwright-driver.browsers-chromium}/chromium-*/${chromeDir}/chrome \
+      --set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${chrome} \
       --set-default LINKWARDEN_CACHE_DIR /var/cache/linkwarden \
       --set-default LINKWARDEN_HOST localhost \
       --set-default LINKWARDEN_PORT 3000 \
