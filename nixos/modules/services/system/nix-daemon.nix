@@ -136,10 +136,11 @@ in
         };
 
         systemd.tmpfiles.rules = [
-          "d /nix/store                 0755 ${config.nix.daemonUser} ${config.nix.daemonGroup} - -"
-          "Z /nix/var                   0755 ${config.nix.daemonUser} ${config.nix.daemonGroup} - -"
-          "d /nix/var/nix/builds        0755 ${config.nix.daemonUser} ${config.nix.daemonGroup} - 7d"
-          "d /nix/var/nix/daemon-socket 0755 ${config.nix.daemonUser} ${config.nix.daemonGroup} - -"
+          "d /nix/store                   0755 ${config.nix.daemonUser} ${config.nix.daemonGroup} - -"
+          "Z /nix/var                     0755 ${config.nix.daemonUser} ${config.nix.daemonGroup} - -"
+          "d /nix/var/nix/builds          0755 ${config.nix.daemonUser} ${config.nix.daemonGroup} 7d -"
+          "d /nix/var/nix/daemon-socket   0755 ${config.nix.daemonUser} ${config.nix.daemonGroup} - -"
+          "d /nix/var/nix/gc-roots-socket 0755 ${config.nix.daemonUser} ${config.nix.daemonGroup} - -"
         ];
 
         systemd.services.nix-roots-daemon = {

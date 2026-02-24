@@ -759,6 +759,9 @@ in
 
         # Sockets/IPC
         RuntimeDirectory = "frigate";
+
+        # Reduce visible process scope to cgroup
+        ProtectProc = "invisible";
       };
     };
   };

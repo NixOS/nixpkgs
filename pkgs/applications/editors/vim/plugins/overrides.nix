@@ -3499,6 +3499,13 @@ assertNoAdditions {
       };
     });
 
+  switcher-nvim = super.switcher-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-web-devicons
+    ];
+  };
+
   tardis-nvim = super.tardis-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
     meta = old.meta // {
