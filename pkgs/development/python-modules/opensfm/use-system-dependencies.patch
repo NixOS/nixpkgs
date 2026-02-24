@@ -1,0 +1,88 @@
+diff --git i/opensfm/src/CMakeLists.txt w/opensfm/src/CMakeLists.txt
+index 88a7dd8..3abd9d0 100644
+--- i/opensfm/src/CMakeLists.txt
++++ w/opensfm/src/CMakeLists.txt
+@@ -62,20 +62,9 @@ find_package(LAPACK)
+ find_package(SuiteSparse)
+ find_package(Eigen3 REQUIRED)
+ find_package(Ceres)
+-find_package(Gflags REQUIRED)
+-
+-# Try to find glog using its native CMake config first (modern systems)
+-# Fall back to custom FindGlog.cmake for older systems (e.g., Ubuntu 20.04)
+-find_package(glog QUIET CONFIG)
+-if(glog_FOUND)
+-  message(STATUS "Using glog native CMake config (modern glog)")
+-else()
+-  message(STATUS
+-    "glog CMake config not found, using FindGlog.cmake "
+-    "(Ubuntu 20.04 compatibility)"
+-  )
+-  find_package(Glog REQUIRED)
+-endif()
++find_package(gflags REQUIRED)
++find_package(glog REQUIRED)
++find_package(GTest REQUIRED)
+ 
+ # Ceres2 exposes Ceres::ceres target.
+ # Ceres1 exposes just ceres.
+@@ -97,7 +86,7 @@ if(TARGET opencv_imgcodecs)
+ endif()
+ 
+ ####### Third party libraries #######
+-add_subdirectory(third_party/pybind11)
++find_package(pybind11 REQUIRED)
+ add_subdirectory(third_party/akaze)
+ add_subdirectory(third_party/vlfeat)
+ 
+@@ -117,27 +106,13 @@ option(OPENSFM_BUILD_TESTS "Build OpenSfM unit tests." on)
+ 
+ if (OPENSFM_BUILD_TESTS)
+   enable_testing()
+-  include_directories(third_party/gtest)
+-  add_definitions(-DCERES_GFLAGS_NAMESPACE=${GFLAGS_NAMESPACE})
+-
+-  # Gtest if old now and trigger these
+-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers")
+-  set(CMAKE_CXX_FLAGS
+-      "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy-with-user-provided-copy"
+-  )
+-
+-  add_library(gtest
+-              third_party/gtest/gmock_gtest_all.cc
+-              third_party/gtest/gmock_main.cc)
+-  target_include_directories(gtest PRIVATE ${GFLAGS_INCLUDE_DIR})
+-  target_link_libraries(gtest PRIVATE glog::glog)
+ 
+   set(TEST_MAIN test_main)
+   add_library(${TEST_MAIN} testing_main.cc)
+   target_link_libraries(${TEST_MAIN}
+-                        ${GFLAGS_LIBRARY}
++                        gflags
+                         glog::glog
+-                        gtest)
++                        GTest::gtest)
+ endif()
+ 
+ ####### OpenSfM libraries #######
+diff --git i/opensfm/src/foundation/CMakeLists.txt w/opensfm/src/foundation/CMakeLists.txt
+index 9508d18..f90264e 100644
+--- i/opensfm/src/foundation/CMakeLists.txt
++++ w/opensfm/src/foundation/CMakeLists.txt
+@@ -16,13 +16,13 @@ target_link_libraries(foundation
+     ${OpenMP_libomp_LIBRARY}
+     Eigen3::Eigen
+   PRIVATE
+-    ${GFLAGS_LIBRARY}
++    gflags
+     glog::glog
++  PUBLIC
++    pybind11::pybind11
+ )
+ target_include_directories(foundation
+   PUBLIC
+-    ${PYBIND11_INCLUDE_DIR}
+-    ${PYTHON_INCLUDE_DIRS}
+     ${CMAKE_SOURCE_DIR}
+     ${OpenMP_CXX_INCLUDE_DIR}
+ )
