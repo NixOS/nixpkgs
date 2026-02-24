@@ -6,19 +6,13 @@
   cmake,
   opencv-python,
   ceres-solver,
-  suitesparse,
-  metis,
-  eigen,
   scikit-build-core,
   ninja,
   pkg-config,
   pybind11,
   numpy,
   pyyaml,
-  lapack,
   gtest,
-  gflags,
-  glog,
   pytestCheckHook,
   networkx,
   pillow,
@@ -27,12 +21,9 @@
   pyproj,
   python-dateutil,
   joblib,
-  repoze-lru,
   xmltodict,
-  distutils,
   cloudpickle,
   scipy,
-  sphinx,
   matplotlib,
   flask,
   fpdf2,
@@ -78,18 +69,11 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    sphinx
   ];
 
   buildInputs = [
     ceres-solver
-    suitesparse
-    metis
-    eigen
-    lapack
-    gflags
     gtest
-    glog
     pybind11
   ];
 
@@ -108,14 +92,12 @@ buildPythonPackage (finalAttrs: {
     pyproj
     python-dateutil
     joblib
-    repoze-lru
     xmltodict
     cloudpickle
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    distutils
   ];
 
   dontUseCmakeConfigure = true;
