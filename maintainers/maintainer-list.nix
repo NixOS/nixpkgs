@@ -30063,4 +30063,11 @@
     name = "Mathias Zhang";
   };
   # keep-sorted end
+
+  aaronsox = {
+    email = "aaronsox23@yahoo.com";
+    github = "aaronsox";
+    githubId = 225702220;
+    name = "Aaron";
+  };
 }
