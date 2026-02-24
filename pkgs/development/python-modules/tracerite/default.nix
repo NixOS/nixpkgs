@@ -43,7 +43,12 @@ buildPythonPackage rec {
     description = "Tracebacks for Humans in Jupyter notebooks";
     homepage = "https://github.com/sanic-org/tracerite";
     changelog = "https://github.com/sanic-org/tracerite/releases/tag/${src.tag}";
-    license = lib.licenses.unlicense;
+    # See https://github.com/sanic-org/tracerite/issues/13
+    license = with lib.licenses; [
+      mit
+      publicDomain
+      unlicense
+    ];
     maintainers = with lib.maintainers; [ p0lyw0lf ];
   };
 }
