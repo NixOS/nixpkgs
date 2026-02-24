@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jasonish";
     repo = "evebox";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-vakCBDyL/Su55tkn/SJ5ShZcYC8l+p2acpve/fTN0uI=";
   };
 

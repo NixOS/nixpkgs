@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dopplerhq";
     repo = "cli";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-S6g2wtF676Cc3nEKP1GpyhQRYyjKUQa9ACe41269vHY=";
   };
 

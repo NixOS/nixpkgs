@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sempr";
     repo = "cf-tool";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-D+mJJw1+ImCrFpsv8HmaAwWqjYvUWouh8mgQ7hJxMrc=";
   };
 

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "shizunge";
     repo = "endlessh-go";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-ABrmvP8xfH1DWzepnzrIsNJDE9sDoXPQteA/ToyRtoo=";
   };
 

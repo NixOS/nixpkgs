@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitLab {
     owner = "bharadwaj-raju";
     repo = "ear2ctl";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-xaxl4opLMw9KEDpmNcgR1fBGUqO4BP5a/U52Kz+GAvc=";
   };
 

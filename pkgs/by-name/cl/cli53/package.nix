@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "barnybug";
     repo = "cli53";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-wfb3lK/WB/B8gd4BOqh+Ol10cNZdsoCoQ+hM33+goM8=";
   };
 

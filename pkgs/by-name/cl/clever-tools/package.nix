@@ -18,7 +18,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "CleverCloud";
     repo = "clever-tools";
-    rev = version;
+    tag = version;
     hash = "sha256-0c2SBArtMUffQ7hd2fH9l5DMGm+UIWNeY/aSU0cUHzg=";
   };
 
