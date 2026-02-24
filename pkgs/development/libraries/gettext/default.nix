@@ -5,7 +5,6 @@
   libiconv,
   bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
-  gnulib,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -69,20 +68,6 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isMinGW ''
     sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
-  ''
-  + lib.optionalString stdenv.hostPlatform.isCygwin ''
-    for gnulib in \
-      ./libtextstyle/lib \
-      ./gettext-tools/libgettextpo \
-      ./gettext-tools/gnulib-lib \
-      ./gettext-runtime/libasprintf/gnulib-lib \
-      ./gettext-runtime/intl/gnulib-lib \
-      ./gettext-runtime/gnulib-lib
-    do
-      cd "$gnulib"
-      patch -p2 < ${gnulib.patches.memcpy-fix}
-      cd -
-    done
   '';
 
   strictDeps = true;
