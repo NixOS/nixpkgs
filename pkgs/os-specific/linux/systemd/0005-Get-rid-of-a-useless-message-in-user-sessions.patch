@@ -13,7 +13,7 @@ in containers.
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/src/core/manager.c b/src/core/manager.c
-index 7938c989af..c1ae20dfc0 100644
+index a5a51023c5..22cc7bd789 100644
 --- a/src/core/manager.c
 +++ b/src/core/manager.c
 @@ -1578,7 +1578,8 @@ static unsigned manager_dispatch_stop_when_bound_queue(Manager *m) {

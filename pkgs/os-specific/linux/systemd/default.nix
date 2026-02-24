@@ -206,13 +206,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "259";
+  version = "259.2";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lJUX1sWRouhEEPZoA9UjjOy5IUZYGGV8pltAU0E4Dsg=";
+    hash = "sha256-nyqmKZ7j6zA/heODen0j0xH8FiTSGT+E4rfaUoqPbjU=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -246,11 +246,9 @@ stdenv.mkDerivation (finalAttrs: {
     # if the install prefix is not /usr, but that does not work for us
     # because we include the config snippet manually
     ./0018-meson-Don-t-link-ssh-dropins.patch
-
-    ./0019-install-unit_file_exists_full-follow-symlinks.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+    ./0019-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ];
 
   postPatch = ''
@@ -507,7 +505,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "libcurl" wantCurl)
     (lib.mesonEnable "libidn" false)
     (lib.mesonEnable "libidn2" withLibidn2)
-    (lib.mesonEnable "libiptc" false)
     (lib.mesonEnable "repart" withRepart)
     (lib.mesonEnable "sysupdate" withSysupdate)
     (lib.mesonEnable "sysupdated" withSysupdate)
