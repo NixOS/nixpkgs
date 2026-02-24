@@ -12,6 +12,24 @@
       {
         services.netbird.enable = true;
         services.netbird.clients.custom.port = 51819;
+
+        # Test extraEnvironment escape hatch
+        services.netbird.clients.envtest = {
+          port = 51830;
+          extraEnvironment = {
+            NB_DISABLE_DNS = "true";
+            NB_HOSTNAME = "test-peer";
+          };
+        };
+
+        # Test config escape hatch
+        services.netbird.clients.configtest = {
+          port = 51831;
+          config = {
+            ManagementURL = "https://management.example.com:443";
+            Mtu = 1280;
+          };
+        };
       };
   };
 
@@ -78,7 +96,7 @@
           retry(check_success, retries)
           return output
 
-    instances = ["netbird", "netbird-custom"]
+    instances = ["netbird", "netbird-custom", "netbird-envtest", "netbird-configtest"]
 
     for name in instances:
       node.wait_for_unit(f"{name}.service")
@@ -86,6 +104,15 @@
 
     for name in instances:
       wait_until_rcode(node, f"{name} status |& grep -C20 Disconnected", 0, retries=5)
+
+    # Verify extraEnvironment variables are set correctly
+    node.succeed("systemctl show netbird-envtest.service --property=Environment | grep -q NB_DISABLE_DNS=true")
+    node.succeed("systemctl show netbird-envtest.service --property=Environment | grep -q NB_HOSTNAME=test-peer")
+
+    # Verify config.json contains ManagementURL and Mtu
+    node.succeed("cat /etc/netbird-configtest/config.d/50-nixos.json | grep -q 'ManagementURL'")
+    node.succeed("cat /etc/netbird-configtest/config.d/50-nixos.json | grep -q 'management.example.com'")
+    node.succeed("cat /etc/netbird-configtest/config.d/50-nixos.json | grep -q '\"Mtu\": 1280'")
   ''
   # The status used to turn into `NeedsLogin`, but recently started crashing instead.
   # leaving the snippets in here, in case some update goes back to the old behavior and can be tested again
