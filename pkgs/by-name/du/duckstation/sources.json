@@ -1,0 +1,19 @@
+{
+  "duckstation": {
+    "version": "0.1-10339",
+    "hash_darwin": "sha256-azs9Bqba2ymAQkGDtHOHFcCVUZAEo/0VcnHn6Gx/KXo="
+  },
+  "discord_rpc": {
+    "rev": "cc59d26d1d628fbd6527aac0ac1d6301f4978b92",
+    "hash": "sha256-8xXcx5w36eiJqtWm6qQfhEHgchVJbhP/jR94eMNNjHU="
+  },
+  "shaderc": {
+    "rev": "85cd26cc38e3e8b5e3c649f4551900ee330d6552",
+    "hash": "sha256-7PVrpS69pI5mi4aM1eNTAzZCMq6vuVl3mhTrc4U942w="
+  },
+  "chtdb": {
+    "date": "2025-12-05",
+    "rev": "df56dfb2f74e0d2a8274a072d8566cf347a723b4",
+    "hash": "sha256-sIC76+19NAA7ycDEaj6przGEyqTny7c9JIh3523rBMY="
+  }
+}

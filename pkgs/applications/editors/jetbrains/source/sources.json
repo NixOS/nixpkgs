@@ -1,0 +1,56 @@
+{
+  "idea-oss": {
+    "version": "2025.3.1",
+    "buildNumber": "253.29346.138",
+    "buildType": "idea",
+    "ideaHash": "sha256-eAq/lgv6ZcN9SR2E1KYnnhDHe/rBQ3GqqbbF6GstDoU=",
+    "androidHash": "sha256-quMCzrjCKIo1pkzw4PWewAs5tz7A2aq7TI5zd+QaaUY=",
+    "jpsHash": "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=",
+    "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
+    "mvnDeps": "idea_maven_artefacts.json",
+    "repositories": [
+      "repo1.maven.org/maven2",
+      "packages.jetbrains.team/maven/p/ij/intellij-dependencies",
+      "dl.google.com/dl/android/maven2",
+      "download.jetbrains.com/teamcity-repository",
+      "maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies",
+      "packages.jetbrains.team/maven/p/grazi/grazie-platform-public",
+      "packages.jetbrains.team/maven/p/kpm/public",
+      "packages.jetbrains.team/maven/p/ki/maven",
+      "maven.pkg.jetbrains.space/public/p/compose/dev",
+      "packages.jetbrains.team/maven/p/amper/amper",
+      "packages.jetbrains.team/maven/p/kt/bootstrap"
+    ],
+    "kotlin-jps-plugin": {
+      "version": "2.2.20",
+      "hash": "sha256-+jGghK2+yq+YFm5zT7ob+WTgTiJnHXAjDtlZjOzSISQ="
+    }
+  },
+  "pycharm-oss": {
+    "version": "2025.3.1",
+    "buildNumber": "253.29346.142",
+    "buildType": "pycharm",
+    "ideaHash": "sha256-eAq/lgv6ZcN9SR2E1KYnnhDHe/rBQ3GqqbbF6GstDoU=",
+    "androidHash": "sha256-quMCzrjCKIo1pkzw4PWewAs5tz7A2aq7TI5zd+QaaUY=",
+    "jpsHash": "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=",
+    "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
+    "mvnDeps": "pycharm_maven_artefacts.json",
+    "repositories": [
+      "repo1.maven.org/maven2",
+      "packages.jetbrains.team/maven/p/ij/intellij-dependencies",
+      "dl.google.com/dl/android/maven2",
+      "download.jetbrains.com/teamcity-repository",
+      "maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies",
+      "packages.jetbrains.team/maven/p/grazi/grazie-platform-public",
+      "packages.jetbrains.team/maven/p/kpm/public",
+      "packages.jetbrains.team/maven/p/ki/maven",
+      "maven.pkg.jetbrains.space/public/p/compose/dev",
+      "packages.jetbrains.team/maven/p/amper/amper",
+      "packages.jetbrains.team/maven/p/kt/bootstrap"
+    ],
+    "kotlin-jps-plugin": {
+      "version": "2.2.20",
+      "hash": "sha256-+jGghK2+yq+YFm5zT7ob+WTgTiJnHXAjDtlZjOzSISQ="
+    }
+  }
+}

@@ -1,0 +1,24 @@
+commit a34d894278d2c7938427d3c4d0fc07d96c26e55f
+Author: Arnout Engelen <arnout@bzzt.net>
+Date:   Sun Dec 14 11:33:08 2025 +0100
+
+    reproducible builds: make build deterministic by adding explicit deps
+    
+    Similar to https://qt-project.atlassian.net/browse/QTBUG-137440
+    
+    To fix https://bugs.kde.org/show_bug.cgi?id=512867
+    
+    I'll admit I don't quite know what I'm doing here, I'm mostly guessing and mimicking, but it does seem to remove the nondeterminism :)
+    
+    Inspired in part by https://invent.kde.org/plasma/plasma-workspace/-/merge_requests/6075/diffs
+
+diff --git a/applets/brightness/CMakeLists.txt b/applets/brightness/CMakeLists.txt
+index 3d1fce43..99331f85 100644
+--- a/applets/brightness/CMakeLists.txt
++++ b/applets/brightness/CMakeLists.txt
+@@ -16,3 +16,5 @@ plasma_add_applet(org.kde.plasma.brightness
+         PopupDialog.qml
+     GENERATE_APPLET_CLASS
+ )
++
++add_dependencies(org.kde.plasma.brightness brightnesscontrolplugin)
