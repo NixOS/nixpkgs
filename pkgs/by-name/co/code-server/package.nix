@@ -32,19 +32,18 @@ let
 
   nodejs = nodejs_22;
 
-  esbuild_0255 = esbuild;
-  esbuild_0250 = esbuild.override {
+  esbuild_0272 = esbuild.override {
     buildGoModule =
       args:
       buildGoModule (
         args
         // rec {
-          version = "0.25.0";
+          version = "0.27.2";
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
             rev = "v${version}";
-            hash = "sha256-L9jm94Epb22hYsU3hoq1lZXb5aFVD4FC4x2qNt0DljA=";
+            hash = "sha256-JbJB3F1NQlmA5d0rdsLm4RVD24OPdV4QXpxW8VWbESA=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
         }
@@ -75,18 +74,18 @@ let
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
   # Example: `$ git rev-parse v4.16.1`
-  commit = "3c0b449c6e6e37b44a8a7938c0d8a3049926a64c";
+  commit = "9184b645cc7aa41b750e2f2ef956f2896512dd84";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.108.2";
+  version = "4.109.2";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-EFhKozaiSEcJds918AhbPCo9IjkB/BDV3h9zXerxgQ0=";
+    hash = "sha256-AY99no2fU6by8KSvWsVxMPaLqbKIOWp72Pa+eGfGU7k=";
   };
 
   nodeModules =
@@ -95,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src nativeBuildInputs;
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-br4VLEQck9cWUO4tkjwb+u5pqFskwijZtx+0Lwid1h4=";
+        outputHash = "sha256-3buaQDcOBVZCBfdxEXqmQZKv0R+A1lLIc65HJul780Y=";
         env = {
           FORCE_EMPTY_CACHE = true;
           FORCE_GIT_DEPS = true;
@@ -241,8 +240,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
 
     # Use esbuild from nixpkgs.
-    ${patchEsbuild "./lib/vscode/build" "0.25.5" esbuild_0255}
-    ${patchEsbuild "./lib/vscode/extensions" "0.25.0" esbuild_0250}
+    ${patchEsbuild "./lib/vscode/build" "0.27.2" esbuild_0272}
+    ${patchEsbuild "./lib/vscode/extensions" "0.27.2" esbuild_0272}
 
     # Put ripgrep binary into bin, so post-install does not try to download it.
     find -name ripgrep -type d \
