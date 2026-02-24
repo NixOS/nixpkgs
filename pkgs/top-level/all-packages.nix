@@ -9853,6 +9853,7 @@ with pkgs;
     wlroots_0_17
     wlroots_0_18
     wlroots_0_19
+    wlroots_0_20
     ;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
