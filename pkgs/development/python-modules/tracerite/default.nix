@@ -6,6 +6,9 @@
   hatch-vcs,
   html5tagger,
   python,
+  pytestCheckHook,
+  beautifulsoup4,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -33,8 +36,11 @@ buildPythonPackage rec {
     cp tracerite/style.css $out/${python.sitePackages}/tracerite
   '';
 
-  # no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    beautifulsoup4
+    torch
+  ];
 
   pythonImportsCheck = [ "tracerite" ];
 
