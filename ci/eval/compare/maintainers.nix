@@ -25,6 +25,7 @@
     # One example case is, where an attribute is a throw alias, but then re-introduced in a PR.
     # This would trigger the throw. By disabling aliases, we can fallback gracefully below.
     config.allowAliases = false;
+    overlays = [ ];
   },
   lib,
 }:
@@ -37,59 +38,17 @@ let
   moduleMeta = (pkgs.nixos { }).config.meta;
 
   # Currently just nixos module maintainers, but in the future we can use this for code owners too
-  fileMaintainers = stripNixpkgsRootFromKeys moduleMeta.maintainers;
+  fileUsers = stripNixpkgsRootFromKeys moduleMeta.maintainers;
   fileTeams = stripNixpkgsRootFromKeys moduleMeta.teams;
-
-  # Extract attributes that changed from by-name paths.
-  # This allows pinging reviewers for pure refactors.
-  touchedattrs = lib.pipe changedFiles [
-    (lib.filter (changed: lib.hasPrefix "pkgs/by-name/" changed && changed != "pkgs/by-name/README.md"))
-    (map (lib.splitString "/"))
-    (map (path: lib.elemAt path 3))
-    (map lib.singleton)
-    lib.unique
-  ];
 
   anyMatchingFile = filename: lib.any (lib.hasPrefix filename) changedFiles;
 
   anyMatchingFiles = files: lib.any anyMatchingFile files;
 
-  sharded = name: "${lib.substring 0 2 name}/${name}";
-
-  attrsWithMaintainers = lib.pipe (affectedAttrPaths ++ touchedattrs) [
-    # An attribute can appear in changed/removed *and* touched
-    lib.unique
-    (map (
-      path:
-      let
-        # Some packages might be reported as changed on a different platform, but
-        # not even have an attribute on the platform the maintainers are requested on.
-        # Fallback to `null` for these to filter them out below.
-        package = lib.attrByPath path null pkgs;
-      in
-      {
-        inherit path package;
-        # Adds all files in by-name to each package, no matter whether they are discoverable
-        # via meta attributes below. For example, this allows pinging maintainers for
-        # updates to .json files.
-        # TODO: Support by-name package sets.
-        filenames = lib.optional (lib.length path == 1) "pkgs/by-name/${sharded (lib.head path)}/";
-        # meta.maintainers also contains all individual team members.
-        # We only want to ping individuals if they're added individually as maintainers, not via teams.
-        users = package.meta.nonTeamMaintainers or [ ];
-        teams = package.meta.teams or [ ];
-      }
-    ))
-    # No need to match up packages without maintainers with their files.
-    # This also filters out attributes where `package = null`, which is the
-    # case for libintl, for example.
-    (lib.filter (pkg: pkg.users != [ ] || pkg.teams != [ ]))
-  ];
-
   relevantFilenames =
     drv:
     (lib.unique (
-      map (pos: lib.removePrefix "${toString ../../..}/" pos.file) (
+      map (pos: lib.removePrefix nixpkgsRoot pos.file) (
         lib.filter (x: x != null) [
           (drv.meta.maintainersPosition or null)
           (drv.meta.teamsPosition or null)
@@ -112,11 +71,47 @@ let
       )
     ));
 
-  attrsWithFilenames = map (
-    pkg: pkg // { filenames = pkg.filenames ++ relevantFilenames pkg.package; }
-  ) attrsWithMaintainers;
+  relevantAffectedAttrPaths = lib.filter (
+    attrPath:
+    # Some packages might be reported as changed on a different platform, but
+    # not even have an attribute on the platform the maintainers are requested on.
+    # Fallback to `null` for these to filter them out
+    let
+      package = lib.attrByPath attrPath null pkgs;
+    in
+    package != null && anyMatchingFiles (relevantFilenames package)
+  ) affectedAttrPaths;
 
-  attrsWithModifiedFiles = lib.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
+  # Extract attributes that changed from by-name paths.
+  # This allows pinging reviewers for pure refactors.
+  changedByNameAttrPaths = lib.pipe changedFiles [
+    (lib.filter (changed: lib.hasPrefix "pkgs/by-name/" changed))
+    (map (lib.splitString "/"))
+    # Filters out e.g. pkgs/by-name/README.md
+    (lib.filter (path: lib.length path > 3))
+    (map (path: lib.elemAt path 3))
+    (map lib.singleton)
+  ];
+
+  # An attribute can appear in affected *and* touched
+  attrPathsToGetMaintainersFor = lib.unique (relevantAffectedAttrPaths ++ changedByNameAttrPaths);
+
+  attrPathEntities = lib.concatMap (
+    attrPath:
+    let
+      package = lib.getAttrFromPath attrPath pkgs;
+    in
+    # meta.maintainers also contains all individual team members.
+    # We only want to ping individuals if they're added individually as maintainers, not via teams.
+    userPings { inherit attrPath; } (package.meta.nonTeamMaintainers or [ ])
+    ++ lib.concatMap (teamPings { inherit attrPath; }) (package.meta.teams or [ ])
+  ) attrPathsToGetMaintainersFor;
+
+  changedFileEntities = lib.concatMap (
+    file:
+    userPings { inherit file; } (fileUsers.${file} or [ ])
+    ++ lib.concatMap (teamPings { inherit file; }) (fileTeams.${file} or [ ])
+  ) changedFiles;
 
   userPings =
     context:
@@ -139,19 +134,7 @@ let
     else
       userPings context team.members;
 
-  maintainersToPing =
-    lib.concatMap (
-      pkg:
-      userPings { attrPath = pkg.path; } pkg.users
-      ++ lib.concatMap (teamPings { attrPath = pkg.path; }) pkg.teams
-    ) attrsWithModifiedFiles
-    ++ lib.concatMap (
-      path:
-      userPings { file = path; } (fileMaintainers.${path} or [ ])
-      ++ lib.concatMap (teamPings { file = path; }) (fileTeams.${path} or [ ])
-    ) changedFiles;
-
-  byType = lib.groupBy (ping: ping.type) maintainersToPing;
+  byType = lib.groupBy (ping: ping.type) (attrPathEntities ++ changedFileEntities);
 
   byUser = lib.pipe (byType.user or [ ]) [
     (lib.groupBy (ping: toString ping.userId))
@@ -165,5 +148,5 @@ in
 {
   users = byUser;
   teams = byTeam;
-  packages = lib.catAttrs "path" attrsWithModifiedFiles;
+  packages = attrPathsToGetMaintainersFor;
 }
