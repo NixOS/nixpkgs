@@ -15,6 +15,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-6Nc6JHNZM6OUgoOfpD4wCDUlLAb2kLBplm1IjuVG/q8=";
   };
 
+  pythonRelaxDeps = [
+    "libtmux"
+  ];
+
   build-system = with python3Packages; [
     hatchling
     shtab
