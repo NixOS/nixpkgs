@@ -851,13 +851,13 @@
     "vendorHash": "sha256-TxfiOKANocV96TiN60QpA1wVLucXNpmJm1FmVavOlQg="
   },
   "loafoe_htpasswd": {
-    "hash": "sha256-ALTyTTVyS2HHenmk8HVwtQenCmJX05kyXifJTzzmnHE=",
+    "hash": "sha256-1o2kgeTFxegzOgGXWP4OYZ3uC3WbAkCXPqScMvVpHr0=",
     "homepage": "https://registry.terraform.io/providers/loafoe/htpasswd",
     "owner": "loafoe",
     "repo": "terraform-provider-htpasswd",
-    "rev": "v1.5.0",
+    "rev": "v2.0.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-6+ZQVWc4/2RoNjQLzetLTl9L8AdbFu2uFmqJ9Kxcc7Q="
+    "vendorHash": "sha256-1gzJdcSvFPE8Spkwxe24U7DUyrz4qpDoFVHm6vCWF6A="
   },
   "loafoe_ssh": {
     "hash": "sha256-1UN5QJyjCuxs2vQYlSuz2jsu/HgGTxOoWWRcv4qcwow=",
@@ -1283,13 +1283,13 @@
     "vendorHash": "sha256-rWiafaFE1RolO9JUN1WoW4EWJjR7kpfeVEOTLf21j50="
   },
   "tailscale_tailscale": {
-    "hash": "sha256-iWiZ0FizqJbY80pL6vVwzw3h/WpXJFjHF7vwJOpxD7k=",
+    "hash": "sha256-yR65w/o/VpwKINcvz4SBybAwsphGC7A/B+baKRcIT3I=",
     "homepage": "https://registry.terraform.io/providers/tailscale/tailscale",
     "owner": "tailscale",
     "repo": "terraform-provider-tailscale",
-    "rev": "v0.27.0",
+    "rev": "v0.28.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-oAMg/9YnUmkR5Pcb9EIuTgrghM7vS5h8N2NO24szabs="
+    "vendorHash": "sha256-+q2KR3ctotT30fBE0lcpQlUXQS7nfi5VACWYxwluuMc="
   },
   "telmate_proxmox": {
     "hash": "sha256-1aKKlOIk1mH4yx66eD635d1IaUWXIiBGHEt4A2F2mGM=",

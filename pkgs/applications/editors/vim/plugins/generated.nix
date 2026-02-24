@@ -14987,6 +14987,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  switcher-nvim = buildVimPlugin {
+    pname = "switcher-nvim";
+    version = "1.1.3-unstable-2026-02-04";
+    src = fetchFromGitHub {
+      owner = "neovim-idea";
+      repo = "switcher-nvim";
+      rev = "552a7fc0b1031c7565fe80bf7e2d0f1e3e7becf9";
+      hash = "sha256-7TicPnzHXB74xkpsppXMP0AvtfCgrWh/be/pXEmf1MY=";
+    };
+    meta.homepage = "https://github.com/neovim-idea/switcher-nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   symbol-usage-nvim = buildVimPlugin {
     pname = "symbol-usage.nvim";
     version = "0-unstable-2025-05-03";
