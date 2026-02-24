@@ -1,33 +1,27 @@
 {
-  lib,
   fetchFromGitHub,
-  rustPlatform,
+  lib,
+  nix-update-script,
   openssl,
   pkg-config,
+  rustPlatform,
 }:
-let
-  version = "1.24.47";
-in
-rustPlatform.buildRustPackage {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "websurfx";
-  inherit version;
+  version = "1.24.48";
 
   src = fetchFromGitHub {
     owner = "neon-mmd";
     repo = "websurfx";
-    tag = "v${version}";
-    hash = "sha256-CIGq1uQl5RcxzoX7mnruFDNlgP5RlVLT6/e2ClGaQGE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Fpw8zXku9Gw62jKek/3ou7ykuoTvmiVIzWk5BqYRF5E=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    openssl
-  ];
-
   cargoHash = "sha256-8zp8qsD2D9wSaeXY2JQuP4evXFDASOwMeOYe3HbHYp4=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
 
   postPatch = ''
     substituteInPlace src/handler.rs \
@@ -38,10 +32,11 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     mkdir -p $out/etc/xdg
     mkdir -p $out/opt/websurfx
-
-    cp -r websurfx $out/etc/xdg/
-    cp -r public $out/opt/websurfx/
+    cp -r websurfx $out/etc/xdg
+    cp -r public $out/opt/websurfx
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open source alternative to searx";
@@ -55,4 +50,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "websurfx";
   };
-}
+})
