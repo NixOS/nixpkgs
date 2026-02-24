@@ -126,6 +126,7 @@ stdenv.mkDerivation rec {
     description = "HTTP client/server library for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libsoup";
     license = lib.licenses.lgpl2Plus;
+    changelog = "https://gitlab.gnome.org/GNOME/libsoup/-/blob/${version}/NEWS";
     inherit (glib.meta) maintainers platforms teams;
   };
 }
