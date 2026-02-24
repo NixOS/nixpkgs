@@ -5,7 +5,6 @@
   hatchling,
   hatch-vcs,
   html5tagger,
-  python,
   pytestCheckHook,
   beautifulsoup4,
   torch,
@@ -31,10 +30,6 @@ buildPythonPackage rec {
   dependencies = [
     html5tagger
   ];
-
-  postInstall = ''
-    cp tracerite/style.css $out/${python.sitePackages}/tracerite
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook
