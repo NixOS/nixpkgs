@@ -23,6 +23,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       url = "https://github.com/kpetremann/mqtt-exporter/commit/53f5f31b28cb5aeec1c8d0bb7d1aea56f036082e.diff";
       hash = "sha256-LS+kO6bHofNQxk9o+ExsJnaecwfY/40S0MIJwpJxCAI=";
     })
+    (fetchpatch {
+      name = "updated prometheus-client from 0.22.1 to 0.24.1";
+      url = "https://patch-diff.githubusercontent.com/raw/kpetremann/mqtt-exporter/pull/130.diff";
+      hash = "sha256-9xdZ4HCVfi64HawcyfI/nlg0l5Npl+qbAaW8l/VhFO0=";
+    })
   ];
 
   build-system = with python3.pkgs; [ setuptools ];
