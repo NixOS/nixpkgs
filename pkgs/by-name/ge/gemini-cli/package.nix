@@ -109,6 +109,12 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
+  postInstall = ''
+    # Create the 'agy' symlink for compatibility with tools expecting that name
+    # We point it to the main 'gemini' binary created in the installPhase
+    ln -s $out/bin/gemini $out/bin/agy
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
