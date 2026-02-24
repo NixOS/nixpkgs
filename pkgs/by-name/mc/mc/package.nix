@@ -96,8 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     set -eu -o pipefail
 
-    # Expect the text in format of "Current version is: 4.8.27; ...".
-    new_version="$(curl -s https://midnight-commander.org/ | pcre2grep -o1 'Current version is: (([0-9]+\.?)+);')"
+    # Expect the text in format of mc-4.8.27; ...".
+    new_version="$(curl -s https://ftp.osuosl.org/pub/midnightcommander/ | pcre2grep -o 'mc-[0-9]+\.[0-9]+\.[0-9]+' | sed 's/^mc-//' | sort -Vu | tail -n1)"
     update-source-version mc "$new_version"
   '';
 
