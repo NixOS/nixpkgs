@@ -4560,6 +4560,12 @@
     githubId = 32384814;
     name = "Nikita Mitasov";
   };
+  chadnorvell = {
+    email = "chadnorvell@pm.me";
+    github = "chadnorvell";
+    githubId = 29340381;
+    name = "Chad Norvell";
+  };
   chaduffy = {
     email = "charles@dyfis.net";
     github = "charles-dyfis-net";
