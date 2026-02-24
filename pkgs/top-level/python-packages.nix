@@ -21362,4 +21362,6 @@ self: super: with self; {
   zxing-cpp = callPackage ../development/python-modules/zxing-cpp { libzxing-cpp = pkgs.zxing-cpp; };
 
   # keep-sorted end
+
+  xai-sdk = callPackage ../development/python-modules/xai-sdk { };
 }
