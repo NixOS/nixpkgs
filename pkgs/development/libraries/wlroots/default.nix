@@ -172,4 +172,12 @@ in
     version = "0.19.3";
     hash = "sha256-J+wSVUtuizaCyCn523chFbE8VtbPjyu5XYv5eLT+GM0=";
   };
+
+  wlroots_0_20 = generic {
+    version = "0.20.0-rc3";
+    hash = "sha256-qUhb/hDw4v28wwB/TTKIN0TJvuBCayXBKFbXMzGd7Cs=";
+    extraBuildInputs = [
+      lcms2
+    ];
+  };
 }
