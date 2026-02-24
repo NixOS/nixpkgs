@@ -6,6 +6,11 @@
 # - pkgs/by-name/<attr>/* is linked to pkgs.<attr>
 # - The file position of various attributes of pkgs.<attr>
 # - Explicitly specified file positions in derivations
+#
+# Test with
+#   nix-instantiate --eval --strict --json test.nix -A result | jq
+#
+# Empty list as an output means success
 {
   # Files that were changed
   # Type: ListOf (Nixpkgs-root-relative path)
