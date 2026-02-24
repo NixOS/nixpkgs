@@ -9,7 +9,11 @@ let
     optionalAttrs
     ;
 
-  inherit (lib.types) str;
+  inherit (lib.types)
+    nullOr
+    path
+    str
+    ;
 
   cfg = config.services.netbird.server;
 in
@@ -25,6 +29,7 @@ in
     ./coturn.nix
     ./dashboard.nix
     ./management.nix
+    ./relay.nix
     ./signal.nix
   ];
 
@@ -37,22 +42,51 @@ in
       type = str;
       description = "The domain under which the netbird server runs.";
     };
+
+    useRelay = mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Use the modern relay server instead of (or in addition to) Coturn.
+        When enabled, the relay server will be configured automatically.
+      '';
+    };
+
+    relayAuthSecretFile = mkOption {
+      type = nullOr path;
+      default = null;
+      description = ''
+        Path to the shared authentication secret for the relay server.
+        This secret must be provided when useRelay is enabled.
+        It will be used by both the relay server and management server.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.useRelay -> cfg.relayAuthSecretFile != null;
+        message = "relayAuthSecretFile must be set when useRelay is enabled";
+      }
+    ];
+
     services.netbird.server = {
       dashboard = {
         domain = mkDefault cfg.domain;
         enable = mkDefault cfg.enable;
         enableNginx = mkDefault cfg.enableNginx;
 
-        managementServer = "https://${cfg.domain}";
+        managementServer = mkDefault "https://${cfg.domain}";
       };
 
       management = {
         domain = mkDefault cfg.domain;
         enable = mkDefault cfg.enable;
         enableNginx = mkDefault cfg.enableNginx;
+        # When using relay without coturn, turnDomain still needs a value.
+        # Default to the server domain so the management config evaluates.
+        turnDomain = mkDefault cfg.domain;
       }
       // (optionalAttrs cfg.coturn.enable rec {
         turnDomain = cfg.domain;
@@ -72,12 +106,24 @@ in
             }
           ];
         };
+      })
+      // (optionalAttrs cfg.useRelay {
+        relayAddresses = mkDefault [ "rels://${cfg.domain}:443" ];
+        relaySecretFile = mkDefault cfg.relayAuthSecretFile;
       });
 
       signal = {
         domain = mkDefault cfg.domain;
         enable = mkDefault cfg.enable;
         enableNginx = mkDefault cfg.enableNginx;
+      };
+
+      relay = mkIf cfg.useRelay {
+        enable = mkDefault true;
+        domain = mkDefault cfg.domain;
+        enableNginx = mkDefault cfg.enableNginx;
+        exposedAddress = mkDefault "rels://${cfg.domain}:443";
+        authSecretFile = mkDefault cfg.relayAuthSecretFile;
       };
 
       coturn = {
