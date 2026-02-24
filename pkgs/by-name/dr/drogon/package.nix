@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/drogonframework/drogon";
     description = "C++14/17 based HTTP web application framework";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urlordjames ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

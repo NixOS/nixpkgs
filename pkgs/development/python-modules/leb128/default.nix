@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Utility to encode and decode Little Endian Base 128";
     homepage = "https://github.com/mohanson/leb128";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urlordjames ];
+    maintainers = [ ];
   };
 }

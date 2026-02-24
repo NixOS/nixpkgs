@@ -27789,12 +27789,6 @@
     githubId = 771193;
     name = "Matej Urbas";
   };
-  urlordjames = {
-    email = "urlordjames@gmail.com";
-    github = "urlordjames";
-    githubId = 32751441;
-    name = "urlordjames";
-  };
   ursi = {
     email = "masondeanm@aol.com";
     github = "ursi";
