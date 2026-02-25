@@ -1,18 +1,18 @@
 {
-  lib,
-  stdenv,
-  rustPlatform,
   fetchurl,
-  pkg-config,
-  wayland,
-  libxkbcommon,
-  libX11,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
+  lib,
+  libx11,
   libxcb,
+  libxcursor,
+  libxi,
+  libxinerama,
+  libxkbcommon,
+  libxrandr,
+  pkg-config,
+  rustPlatform,
+  stdenv,
   udev,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,22 +26,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    wayland
-    libxkbcommon
-    libX11
-    libXcursor
-    libXi
-    libXinerama
-    libXrandr
-    libxcb
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    udev
-  ];
+  buildInputs =
+    [
+      libx11
+      libxcb
+      libxcursor
+      libxi
+      libxinerama
+      libxkbcommon
+      libxrandr
+      wayland
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   meta = {
     description = "Desktop REST workbench with .http/.env collections and persisted state.";
