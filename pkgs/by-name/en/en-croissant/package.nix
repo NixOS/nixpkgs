@@ -27,13 +27,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "en-croissant";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "franciscoBSalgueiro";
     repo = "en-croissant";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+s774MtqbfOhL2qco+i9uBMQPn30EGvOYtqw1nZ9KkY=";
+    hash = "sha256-S1ObsGpLxNzr0+bFEuPAe3PCHQc1k0QavgKD6YDffIc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-/gue4iQG8xySxsH3l5ri+GjmNr/9sow20CLVxxQo7Gs=";
+    hash = "sha256-hkI1TQeOHKQdsnq1pYIeeU+GYFMIxbyNoZY5Wuxj4UU=";
   };
 
   postPatch = ''
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "src-tauri";
 
-  cargoHash = "sha256-4gtGHexyR6TkI8tmtLMT2xUAn9+Bd9l3hRq43aL94yI=";
+  cargoHash = "sha256-trQzf5x/sIxkEYQOQKAq1y2GrT3VoQ/ZWCFncb2dNvs=";
 
   buildAndTestSubdir = finalAttrs.cargoRoot;
 

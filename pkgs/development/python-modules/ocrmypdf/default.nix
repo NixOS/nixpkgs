@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "17.1.0";
+  version = "17.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-MlsrssmuEzFXy+N6kWjkF3wtcDCncjYmAi43PUeYuJg=";
+    hash = "sha256-/R/W8TMBaFBTjPiOIroZ1CNQAKMTLJH+cQvY2177e0U=";
   };
 
   patches = [

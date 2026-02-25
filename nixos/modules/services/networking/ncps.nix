@@ -66,6 +66,14 @@ let
         max-open-conns = cfg.cache.database.pool.maxOpenConns;
         max-idle-conns = cfg.cache.database.pool.maxIdleConns;
       };
+      cdc = {
+        inherit (cfg.cache.cdc)
+          enabled
+          min
+          avg
+          max
+          ;
+      };
       max-size = cfg.cache.maxSize;
       lru = {
         schedule = cfg.cache.lru.schedule;
@@ -214,6 +222,36 @@ in
           Whether to allow the PUT verb to push narinfo and nar files directly
           to the cache.
         '';
+
+        cdc = {
+          enabled = lib.mkEnableOption ''
+            Whether to enable Content-Defined Chunking (CDC) for deduplication (experimental).
+          '';
+
+          min = lib.mkOption {
+            type = lib.types.ints.u32;
+            default = 16384;
+            description = ''
+              The minimum chunk size for CDC in bytes.
+            '';
+          };
+
+          avg = lib.mkOption {
+            type = lib.types.ints.u32;
+            default = 65536;
+            description = ''
+              The average chunk size for CDC in bytes.
+            '';
+          };
+
+          max = lib.mkOption {
+            type = lib.types.ints.u32;
+            default = 262144;
+            description = ''
+              The maximum chunk size for CDC in bytes.
+            '';
+          };
+        };
 
         hostName = lib.mkOption {
           type = lib.types.str;

@@ -3,7 +3,6 @@
   symlinkJoin,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -76,7 +75,7 @@ let
   );
   stdenv = torch.stdenv;
 in
-buildPythonPackage.override { inherit stdenv; } rec {
+buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torchaudio";
   version = "2.10.0";
   pyproject = true;
@@ -84,7 +83,7 @@ buildPythonPackage.override { inherit stdenv; } rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-b1sjHVFXdNFDbdtXWSM2KisSRE/8IbzJI4rvzYQ4UMg=";
   };
 
@@ -156,7 +155,7 @@ buildPythonPackage.override { inherit stdenv; } rec {
   meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
-    changelog = "https://github.com/pytorch/audio/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytorch/audio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     platforms =
       lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
@@ -165,4 +164,4 @@ buildPythonPackage.override { inherit stdenv; } rec {
       junjihashimoto
     ];
   };
-}
+})

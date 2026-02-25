@@ -13,13 +13,13 @@
 let
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
-  version = "26.2.0";
+  version = "26.2.1";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-fnfDPN/9TfV1v/myNvCQ70Q0T2oW9XIyomsMdQKyoJo=";
+    hash = "sha256-8cRt1WKa4Yp6rE2Jzko0rKJoCp7+KSzVdtKcv/aKK8o=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -27,8 +27,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "a7a0edce994520f3d473c92902992b4eccb81204";
-    hash = "sha256-Kha3kPt9rKaw2i/S0nOOVba9QwWtb9SJV/1qs6YJHRE=";
+    rev = "3917dc0ea36608c3a1857518f0205d8ab4011d69";
+    hash = "sha256-g4GI+zIKZ63lL+NC+EMEk01GVlbUDVGey0UgqO6Fk+8=";
   };
 
 in

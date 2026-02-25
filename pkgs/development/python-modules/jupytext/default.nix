@@ -108,7 +108,11 @@ buildPythonPackage rec {
     "tests/external"
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # Fails due to whitespace differences in the outputs
+    "test_async_and_sync_files_are_in_sync"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # requires access to trash
     "test_load_save_rename"
   ];

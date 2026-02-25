@@ -5506,7 +5506,6 @@ broken-packages:
   - satyros # failure in job https://hydra.nixos.org/build/233199726 at 2023-09-02
   - savage # failure in job https://hydra.nixos.org/build/233213243 at 2023-09-02
   - sax # failure in job https://hydra.nixos.org/build/233218617 at 2023-09-02
-  - sbv # failure in job https://hydra.nixos.org/build/233210414 at 2023-09-02
   - sc2-proto # failure in job https://hydra.nixos.org/build/252730301 at 2024-03-16
   - scale # failure in job https://hydra.nixos.org/build/233222189 at 2023-09-02
   - scaleimage # failure in job https://hydra.nixos.org/build/233240688 at 2023-09-02

@@ -1,6 +1,6 @@
 { lib, pkgs, ... }:
 {
-  name = "tpm2";
+  name = "tpm2-tpmrm";
 
   nodes.machine =
     { config, pkgs, ... }:
@@ -23,9 +23,7 @@
       security.tpm2 = {
         enable = true;
         pkcs11.enable = true;
-        abrmd.enable = true;
         tctiEnvironment.enable = true;
-        tctiEnvironment.interface = "tabrmd";
         fapi.ekCertLess = true;
       };
 
@@ -39,9 +37,9 @@
     machine.start()
     machine.wait_for_unit("multi-user.target")
 
-    with subtest("tabrmd service started properly"):
-        machine.succeed('[ `systemctl show tpm2-abrmd.service --property=Result` = "Result=success" ]')
-        machine.succeed('[ `journalctl -b -u tpm2-abrmd.service | grep -c "Starting"` = "1" ]')
+    with subtest("/dev/tpmrm0 has correct ownership"):
+        machine.succeed('[ `stat -c "%U" /dev/tpmrm0` = "root" ]')
+        machine.succeed('[ `stat -c "%G" /dev/tpmrm0` = "tss" ]')
 
     with subtest("tpm2 cli works"):
         machine.succeed('tpm2 createprimary --hierarchy=o --key-algorithm=aes256 --attributes="fixedtpm|fixedparent|sensitivedataorigin|userwithauth|restricted|decrypt" --key-context=owner_root_key.ctx')

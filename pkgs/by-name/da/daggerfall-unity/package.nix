@@ -6,18 +6,19 @@
   fetchzip,
   lib,
   libGL,
-  libxscrnsaver,
+  libpulseaudio,
+  libudev0-shim,
   libxcursor,
   libxi,
   libxinerama,
   libxrandr,
+  libxscrnsaver,
   libxxf86vm,
-  libpulseaudio,
-  libudev0-shim,
   makeDesktopItem,
   nix-update-script,
   stdenv,
   vulkan-loader,
+  zlib,
   pname ? "daggerfall-unity",
   includeUnfree ? false,
 }:
@@ -56,15 +57,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     libGL
-    libxscrnsaver
+    libpulseaudio
+    libudev0-shim
     libxcursor
     libxi
     libxinerama
     libxrandr
+    libxscrnsaver
     libxxf86vm
-    libpulseaudio
-    libudev0-shim
     vulkan-loader
+    zlib
   ];
 
   strictDeps = true;

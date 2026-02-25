@@ -64,4 +64,7 @@ mkKdeDerivation {
     # we need to provide this so it knows our xwayland supports new features
     xwayland
   ];
+
+  # plugin QML relies on non-global imports
+  dontQmlLint = true;
 }
