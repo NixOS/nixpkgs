@@ -436,6 +436,24 @@ let
         '';
       };
 
+    fail2ban =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          exitOnError = true;
+        };
+        metricProvider = {
+          services.fail2ban.enable = true;
+        };
+        exporterTest = ''
+          wait_for_unit("fail2ban.service")
+          wait_for_unit("prometheus-fail2ban-exporter.service")
+          wait_for_open_port(9191)
+          succeed("curl -sSf http://localhost:9191/metrics | grep 'f2b_errors'")
+        '';
+      };
+
     fastly =
       { pkgs, ... }:
       {
