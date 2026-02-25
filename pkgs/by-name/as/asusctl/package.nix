@@ -18,16 +18,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
-  version = "6.3.2";
+  version = "6.3.3";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     tag = finalAttrs.version;
-    hash = "sha256-6dZkQ8cPL8dbtvfuc/a5G1BxEaZyNbvy3eRBctFFwVU=";
+    hash = "sha256-nc6pGxLutxKyd4LiI23e7UfWK45aQiLQRKL6zX7rVO0=";
   };
 
-  cargoHash = "sha256-FlEuv/iaNlfXLhHRSmZedPwroCozaEqIvYRqbgJhgEw=";
+  cargoHash = "sha256-LZsSnIGTemu+SvJxszPWkA5EIdu8XzruZXaYIibV31Q=";
 
   postPatch = ''
     files="
