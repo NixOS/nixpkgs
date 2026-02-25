@@ -28,18 +28,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libx11
-      libxcb
-      libxcursor
-      libxi
-      libxinerama
-      libxkbcommon
-      libxrandr
-      wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
+  buildInputs = [
+    libx11
+    libxcb
+    libxcursor
+    libxi
+    libxinerama
+    libxkbcommon
+    libxrandr
+    wayland
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   meta = {
     description = "Desktop REST workbench with .http/.env collections and persisted state.";
