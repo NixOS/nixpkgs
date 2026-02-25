@@ -32,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "weasyprint";
-  version = "68.0";
+  version = "68.1";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Kozea";
     repo = "WeasyPrint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kAJgSQz1RKrPwzO7I5xHXyXcXYJtvca9izjrAgTy3ek=";
+    hash = "sha256-xopuaEiiLXK8XQp+Ey3k9KUgznUmeIGlph1mT88Oib8=";
   };
 
   patches = [
