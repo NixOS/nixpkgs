@@ -10,5 +10,8 @@ mkKdeDerivation {
     libarchive
     (libzip.override { withOpenssl = true; })
   ];
-  meta.mainProgram = "ark";
+  meta = {
+    mainProgram = "ark";
+    homepage = "https://apps.kde.org/de/ark/";
+    };
 }
