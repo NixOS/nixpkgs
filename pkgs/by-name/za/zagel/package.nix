@@ -37,7 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
     libxrandr
     wayland
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   meta = {
     description = "Desktop REST workbench with .http/.env collections and persisted state.";
