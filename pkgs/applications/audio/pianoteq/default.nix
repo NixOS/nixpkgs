@@ -314,9 +314,22 @@ let
         inherit hash;
       };
     };
+  mkStage9 =
+    hash:
+    mkPianoteq {
+      name = "stage";
+      version = version9;
+      mainProgram = "Pianoteq 9 STAGE";
+      startupWMClass = "Pianoteq STAGE";
+      src = fetchPianoteqWithLogin {
+        name = "pianoteq_setup_v${versionForFile version9}.tar.xz";
+        inherit hash;
+      };
+    };
 in
 {
   trial_9 = mkTrial9 "sha256-1ofPL6F12Gv+k2rZBadOa5Iyukuji6vdww87ufdKjM8=";
+  stage_9 = mkStage9 "sha256-Jvm/AhBwgj5INW8U48rJjgDB7j/Z1VnYKczvtrpl/AY=";
 
   standard_8 = mkStandard version8 "sha256-ZDGB/SOOz+sWz7P+sNzyaipEH452n8zq5LleO3ztSXc=";
   stage_8 = mkStage version8 "";
