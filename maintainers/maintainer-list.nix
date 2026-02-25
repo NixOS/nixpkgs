@@ -17914,6 +17914,12 @@
     githubId = 830082;
     name = "Nathan Moos";
   };
+  Mop-u = {
+    email = "moppu@pm.me";
+    github = "Mop-u";
+    githubId = 48605993;
+    name = "Quinn Unger";
+  };
   moraxyc = {
     name = "Moraxyc Xu";
     email = "i@qaq.li";
