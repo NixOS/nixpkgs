@@ -85,7 +85,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-
     assertions = [
       {
         assertion = cfg.wide -> cfg.anglemod;
@@ -97,22 +96,25 @@ in
       }
     ];
 
-    services.kanata =
-      let
-        src = "${cfg.package}/share/arsenik";
-        defsrc = "${if cfg.mac then "mac" else "pc"}${if cfg.wide then "_wide" else ""}${
-          if cfg.anglemod then "_anglemod" else ""
-        }";
-        base = "base${if cfg.lt then "_lt" else ""}${if cfg.hrm then "_hrm" else ""}";
-        symbols = "symbols_${if cfg.lafayette then "lafayette" else "noop"}${
-          if cfg.num then "_num" else ""
-        }";
-        navigation = "navigation${if cfg.vim then "_vim" else ""}";
-        alias = "${cfg.layout}_${if cfg.mac then "mac" else "pc"}";
-      in
-      {
-        enable = true;
-        keyboards.arsenik.config = ''
+    services.kanata.enable = true;
+
+    system.services.arsenik = {
+      imports = [ pkgs.kanata.services.default ];
+
+      kanata.config =
+        let
+          src = "${cfg.package}/share/arsenik";
+          defsrc = "${if cfg.mac then "mac" else "pc"}${if cfg.wide then "_wide" else ""}${
+            if cfg.anglemod then "_anglemod" else ""
+          }";
+          base = "base${if cfg.lt then "_lt" else ""}${if cfg.hrm then "_hrm" else ""}";
+          symbols = "symbols_${if cfg.lafayette then "lafayette" else "noop"}${
+            if cfg.num then "_num" else ""
+          }";
+          navigation = "navigation${if cfg.vim then "_vim" else ""}";
+          alias = "${cfg.layout}_${if cfg.mac then "mac" else "pc"}";
+        in
+        ''
           (defvar
             tap_timeout ${toString cfg.tap_timeout}
             hold_timeout ${toString cfg.hold_timeout}
@@ -125,6 +127,6 @@ in
           (defalias run ${cfg.run})
           (include ${src}/defalias/${alias}.kbd)
         '';
-      };
+    };
   };
 }

@@ -13,6 +13,8 @@
   writeShellApplication,
   writeShellScriptBin,
   withCmd ? false,
+
+  writeTextFile,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanata";
@@ -65,6 +67,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
         })
       else
         null;
+
+    services.default = {
+      imports = [
+        (lib.modules.importApply ./service.nix { inherit writeTextFile; })
+      ];
+      kanata.package = lib.mkDefault finalAttrs.finalPackage;
+    };
   };
 
   meta = {
