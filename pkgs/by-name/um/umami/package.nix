@@ -8,6 +8,7 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   pnpm,
   prisma_6,
   prisma-engines_6,
@@ -79,6 +80,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
   ];
 
@@ -115,16 +117,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines'}/lib/libquery_engine.node";
   env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines'}/bin/schema-engine";
 
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm build-db-client # prisma generate
-
-    pnpm build-tracker
-    pnpm build-app
-
-    runHook postBuild
-  '';
+  env.SKIP_DB_CHECK = 1; # there i sno db avaliable at build time
+  # TODO: Change to SKIP_BUILD_GEO on umami 3.1.0
+  # https://github.com/umami-software/umami/issues/4004
+  env.VERCEL = 1; # skip geo generation, we handle this manually
 
   checkPhase = ''
     runHook preCheck

@@ -226,6 +226,30 @@
   "pkgs.treefmt.withConfig": [
     "index.html#pkgs.treefmt.withConfig"
   ],
+  "pnpm-build-hook": [
+    "index.html#pnpm-build-hook"
+  ],
+  "pnpm-build-hook-build-flags": [
+    "index.html#pnpm-build-hook-build-flags"
+  ],
+  "pnpm-build-hook-code-snippet": [
+    "index.html#pnpm-build-hook-code-snippet"
+  ],
+  "pnpm-build-hook-dont": [
+    "index.html#pnpm-build-hook-dont"
+  ],
+  "pnpm-build-hook-exclusive-variables": [
+    "index.html#pnpm-build-hook-exclusive-variables"
+  ],
+  "pnpm-build-hook-flags": [
+    "index.html#pnpm-build-hook-flags"
+  ],
+  "pnpm-build-hook-script": [
+    "index.html#pnpm-build-hook-script"
+  ],
+  "pnpm-build-hook-variables": [
+    "index.html#pnpm-build-hook-variables"
+  ],
   "preface": [
     "index.html#preface"
   ],
