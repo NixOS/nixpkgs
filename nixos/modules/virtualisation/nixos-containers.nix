@@ -932,7 +932,7 @@ in
       description = ''
         A set of NixOS system configurations to be run as lightweight
         containers.  Each container appears as a service
-        `container-«name»`
+        `container@«name»`
         on the host system, allowing it to be started and stopped via
         {command}`systemctl`.
       '';
