@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     "dev"
     "out"
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+  ++ lib.optionals (!(stdenv.hostPlatform.isMinGW || stdenv.hostPlatform != stdenv.buildPlatform)) [
     "man"
     "devdoc"
   ];
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--enable-ktls"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+    ++ lib.optionals (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform != stdenv.buildPlatform) [
       "--disable-doc"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && tpmSupport) [
