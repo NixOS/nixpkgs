@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "LighghtEeloo";
     repo = "charcoal";
     rev = "v${finalAttrs.version}";
-    hash = lib.fakeHash;
+    hash = "sha256-cEwYyPS3KBZVzeZERI5jT1NR1xYnc/FZPZCi3gwyAeg=";
   };
 
-  cargoHash = lib.fakeHash;
+  cargoHash = "sha256-ySFwL/y1mthVuie77vh9EjVLfVqIezjz0HoQ5CBG6nk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,11 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/charcoal \
       --prefix PATH : ${lib.makeBinPath [ didyoumean ]}
-
-    installShellCompletion --cmd charcoal \
-      --bash completions/charcoal.bash \
-      --fish completions/charcoal.fish \
-      --zsh completions/_charcoal
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -55,5 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gorgeous-patrick ];
     mainProgram = "charcoal";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
