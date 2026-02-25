@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stb";
-  version = "0-unstable-2025-10-26";
+  version = "0-unstable-2023-01-29";
 
   src = fetchFromGitHub {
     owner = "nothings";
     repo = "stb";
-    rev = "f1c79c02822848a9bed4315b12c8c8f3761e1296";
-    hash = "sha256-BlyXJtAI7WqXCTT3ylww8zoG0hBxaojJnQDvdQOXJPE=";
+    rev = "5736b15f7ea0ffb08dd38af21067c314d6a3aae9";
+    hash = "sha256-s2ASdlT3bBNrqvwfhhN6skjbmyEnUgvNOrvhgUSRj98=";
   };
 
   nativeBuildInputs = [ copyPkgconfigItems ];
@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
       unlicense
     ];
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ peng0in ];
+    maintainers = [ ];
   };
 })

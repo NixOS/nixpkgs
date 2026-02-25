@@ -41,7 +41,7 @@
   libinput,
   glslang,
   hwdata,
-  stb,
+  stb_2023,
   wlroots_0_17,
   libdecor,
   lcms,
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "enable_gamescope_wsi_layer" enableWsi)
 
     (lib.mesonOption "glm_include_dir" "${lib.getInclude glm}/include")
-    (lib.mesonOption "stb_include_dir" "${lib.getInclude stb}/include/stb")
+    (lib.mesonOption "stb_include_dir" "${lib.getInclude stb_2023}/include/stb")
   ];
 
   # don't install vendored vkroots etc
