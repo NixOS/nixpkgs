@@ -8,9 +8,17 @@ with haskellLib;
 
 (self: super: {
   # cabal2nix doesn't properly add dependencies conditional on os(windows)
+  digest = addBuildDepends [ self.zlib ] super.digest;
+  echo = addBuildDepends [ self.mintty ] super.echo;
   http-client = addBuildDepends [ self.safe ] super.http-client;
-
+  regex-posix = addBuildDepends [ self.regex-posix-clib ] super.regex-posix;
+  simple-sendfile =
+    with self;
+    addBuildDepends [ conduit conduit-extra resourcet ] super.simple-sendfile;
+  snap-core = addBuildDepends [ self.time-locale-compat ] super.snap-core;
+  tar-conduit = addBuildDepends [ self.unix-compat ] super.tar-conduit;
   unix-time = addBuildDepends [ pkgs.windows.pthreads ] super.unix-time;
+  warp = addBuildDepends [ self.unix-compat ] super.warp;
 
   network = lib.pipe super.network [
     (addBuildDepends [ self.temporary ])
