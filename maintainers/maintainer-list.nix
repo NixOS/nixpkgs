@@ -3860,6 +3860,12 @@
     github = "brancz";
     githubId = 4546722;
   };
+  brandonchinn178 = {
+    email = "brandonchinn178@gmail.com";
+    name = "Brandon Chinn";
+    github = "brandonchinn178";
+    githubId = 6827922;
+  };
   brantes = {
     name = "Pedro Brantes";
     email = "contact@brantes.simplelogin.com";
