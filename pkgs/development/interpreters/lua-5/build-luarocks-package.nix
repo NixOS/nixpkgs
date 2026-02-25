@@ -183,11 +183,43 @@ let
           rockspecFilename="$TMP/$(stripHash ${self.knownRockspec})"
           cp ${self.knownRockspec} "$rockspecFilename"
         ''
+        # bash
         + ''
           LUAROCKS_EXTRA_ARGS=""
           if (( ''${NIX_DEBUG:-0} >= 1 )); then
               LUAROCKS_EXTRA_ARGS=" --verbose"
           fi
+
+          addPathForLuarocksTree() {
+            local luarocks_cmd="$1"
+            local which_path="$2"
+            local tree="$3"
+            if [[ "$tree" != /* ]]; then
+              echo "Error: luarocks tree '$tree' must be an absolute path" >&2
+              return 1
+            fi
+            local pathcmd entry
+            case "$which_path" in
+              LUA_PATH) pathcmd=--lr-path ;;
+              LUA_CPATH) pathcmd=--lr-cpath ;;
+              PATH) pathcmd=--lr-bin ;;
+              *)
+                echo "Error: unsupported second arg '$which_path'. Supported: LUA_PATH, LUA_CPATH, PATH" >&2
+                return 1
+                ;;
+            esac
+            local IFS_split=';'
+            [[ "$which_path" == PATH ]] && IFS_split=':'
+            while IFS="$IFS_split" read -r entry; do
+              if [[ "$entry" == "$tree"* ]]; then
+                if [[ -n "''${!which_path}" ]]; then
+                  export "$which_path=''${!which_path}$IFS_split$entry"
+                else
+                  export "$which_path=$entry"
+                fi
+              fi
+            done <<< "$("$luarocks_cmd" path --tree="$tree" $pathcmd)"
+          }
           runHook postConfigure
         '';
 
@@ -205,7 +237,13 @@ let
           # the sole rockspec in that folder
           # maybe we could reestablish dependency checking via passing --rock-trees
           nix_debug "ROCKSPEC $rockspecFilename"
-          luarocks $LUAROCKS_EXTRA_ARGS make --deps-mode=all --tree=$out ''${rockspecFilename}
+          export LUAROCKS_TREE_PATH="$(mktemp -d)"
+          luarocks $LUAROCKS_EXTRA_ARGS make --deps-mode=all --tree="$LUAROCKS_TREE_PATH" ''${rockspecFilename}
+          # without this, overriding certain luarocks config options via overrideAttrs
+          # can cause it to not find the module for luarocks test
+          addPathForLuarocksTree luarocks LUA_PATH "$LUAROCKS_TREE_PATH"
+          addPathForLuarocksTree luarocks LUA_CPATH "$LUAROCKS_TREE_PATH"
+          addPathForLuarocksTree luarocks PATH "$LUAROCKS_TREE_PATH"
 
           runHook postBuild
         '';
@@ -218,6 +256,8 @@ let
 
         installPhase = ''
           runHook preInstall
+          mkdir -p "$out"
+          cp -r "$LUAROCKS_TREE_PATH"/* "$out"
           runHook postInstall
         '';
 
