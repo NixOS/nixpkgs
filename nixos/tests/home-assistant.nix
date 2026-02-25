@@ -71,6 +71,11 @@ in
           mini-graph-card
         ];
 
+        # test loading themes
+        themes = with pkgs.home-assistant-themes; [
+          material-you-theme
+        ];
+
         config = {
           homeassistant = {
             name = "Home";
@@ -249,6 +254,11 @@ in
       with subtest("Check that lovelace modules are referenced and fetchable"):
           hass.succeed("grep -q 'mini-graph-card-bundle.js' '${configDir}/configuration.yaml'")
           hass.succeed("curl --fail http://localhost:8123/local/nixos-lovelace-modules/mini-graph-card-bundle.js")
+
+      with subtest("Check that themes are referenced and installed"):
+          hass.succeed("grep -q '!include_dir_merge_named.*themes' '${configDir}/configuration.yaml'")
+          themes_dir = hass.succeed("sed -n 's/.*!include_dir_merge_named \\(.*\\)/\\1/p' '${configDir}/configuration.yaml'").strip()
+          hass.succeed(f"test -f {themes_dir}/material_you.yaml")
 
       with subtest("Check that optional dependencies are in the PYTHONPATH"):
           env = get_unit_property("Environment")
