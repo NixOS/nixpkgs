@@ -9,6 +9,9 @@
   poetry-core,
   requests,
   requests-toolbelt,
+  freezegun,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -40,8 +43,26 @@ buildPythonPackage (finalAttrs: {
     requests-toolbelt
   ];
 
-  # Test fixtures require a running keycloak instance
-  doCheck = false;
+  nativeCheckInputs = [
+    freezegun
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  # conftest.py requires these variables to be set,
+  # even if the respective tests are disabled
+  preCheck = ''
+    export KEYCLOAK_{HOST,PORT,ADMIN{,_PASSWORD}}=
+  '';
+
+  disabledTestPaths = [
+    # these tests require a running keycloak instance
+    "tests/test_keycloak_openid.py"
+    "tests/test_keycloak_admin.py"
+    "tests/test_keycloak_uma.py"
+    # requires docker
+    "tests/test_pkce_flow.py"
+  ];
 
   pythonImportsCheck = [ "keycloak" ];
 
