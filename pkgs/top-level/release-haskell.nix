@@ -538,7 +538,6 @@ let
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
-        compilerNames.ghc9103
         compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
@@ -567,7 +566,6 @@ let
         compilerNames.ghc967
       ];
       weeder = lib.subtractLists [
-        compilerNames.ghc9103
         compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
