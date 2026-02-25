@@ -13,7 +13,15 @@
   which,
   yosys,
 }:
-
+let
+  # cocotb should build if it is at at least v2.1 or python is v3.13 or lower
+  # https://github.com/cocotb/cocotb/issues/4708#issuecomment-2923059120
+  cocotbPyVer =
+    (lib.head (lib.filter (x: x.pname == "python3") cocotb.propagatedBuildInputs)).version;
+  cocotbCanBuild =
+    ((lib.compareVersions cocotb.version "2.1.0") != -1)
+    || ((lib.compareVersions cocotbPyVer "3.14.0") == -1);
+in
 buildPythonPackage rec {
   pname = "edalize";
   version = "0.6.4";
@@ -39,7 +47,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jinja2 ];
 
-  dependencies = [ cocotb ];
+  dependencies = lib.optional cocotbCanBuild cocotb;
 
   optional-dependencies = {
     reporting = [
