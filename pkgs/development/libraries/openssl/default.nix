@@ -484,7 +484,7 @@ in
       )
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      ./3.5/fix-mingw-linking.patch
+      ./3.6/fix-mingw-quic-reactor.patch
     ]
     ++
       # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598

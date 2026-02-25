@@ -1,0 +1,39 @@
+From 40d8060c0e8af7c7d3f0d70a7e2d3bf96a15fc10 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alexander=20Hansen=20F=C3=A6r=C3=B8y?= <ahf@torproject.org>
+Date: Wed, 28 Jan 2026 17:55:02 +0100
+Subject: [PATCH] Explicitly define `SIO_UDP_NETRESET` for MinGW builds.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This patch explicitly defines the value `SIO_UDP_NETRESET` according to
+both what Windows and ReactOS does.
+
+Fixes: #29818.
+
+Reviewed-by: Eugene Syromiatnikov <esyr@openssl.org>
+Reviewed-by: Saša Nedvědický <sashan@openssl.org>
+MergeDate: Thu Feb  5 08:54:17 2026
+(Merged from https://github.com/openssl/openssl/pull/29826)
+---
+ ssl/quic/quic_reactor.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/ssl/quic/quic_reactor.c b/ssl/quic/quic_reactor.c
+index a754f285bbe2b..deec428152c58 100644
+--- a/ssl/quic/quic_reactor.c
++++ b/ssl/quic/quic_reactor.c
+@@ -76,6 +76,12 @@ void ossl_quic_reactor_cleanup(QUIC_REACTOR *rtor)
+ }
+ 
+ #if defined(OPENSSL_SYS_WINDOWS)
++
++/* Work around for MinGW builds. */
++#if defined(__MINGW32__) && !defined(SIO_UDP_NETRESET)
++#define SIO_UDP_NETRESET _WSAIOW(IOC_VENDOR, 15)
++#endif
++
+ /*
+  * On Windows recvfrom() may return WSAECONNRESET when destination port
+  * used in preceding call to sendto() is no longer reachable. The reset
+
