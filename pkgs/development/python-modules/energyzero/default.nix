@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "energyzero";
-  version = "5.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-energyzero";
     tag = "v${version}";
-    hash = "sha256-gX8clg0xqIhk8/RYV6P5exnzXPLmYLGUX65Y0Nwt2F8=";
+    hash = "sha256-Yse6JUT7EefSFOjCsI5/WeBmzkV6lh2rhVX121BgKHE=";
   };
 
   postPatch = ''
