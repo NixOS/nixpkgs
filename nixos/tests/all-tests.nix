@@ -1050,6 +1050,10 @@ in
     defaults.services.ncps.cache.storage.local = "/path/to/ncps";
   };
   ncps-ha-pg-redis = runTest ./ncps-ha-pg-redis.nix;
+  ncps-ha-pg-redis-cdc = runTest {
+    imports = [ ./ncps-ha-pg-redis.nix ];
+    defaults.services.ncps.cache.cdc.enabled = true;
+  };
   ndppd = runTest ./ndppd.nix;
   nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
   nebula.connectivity = runTest ./nebula/connectivity.nix;
@@ -1638,7 +1642,7 @@ in
   tomcat = runTest ./tomcat.nix;
   tor = runTest ./tor.nix;
   tpm-ek = handleTest ./tpm-ek { };
-  tpm2 = runTest ./tpm2.nix;
+  tpm2 = import ./tpm2 { inherit runTest; };
   traccar = runTest ./traccar.nix;
   # tracee requires bpf
   tracee = handleTestOn [ "x86_64-linux" ] ./tracee.nix { };

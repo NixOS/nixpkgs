@@ -12453,8 +12453,6 @@ self: super: with self; {
 
   ploomber-core = callPackage ../development/python-modules/ploomber-core { };
 
-  ploomber-extension = callPackage ../development/python-modules/ploomber-extension { };
-
   plopp = callPackage ../development/python-modules/plopp { };
 
   plotext = callPackage ../development/python-modules/plotext { };
@@ -14159,6 +14157,8 @@ self: super: with self; {
   pynecil = callPackage ../development/python-modules/pynecil { };
 
   pynello = callPackage ../development/python-modules/pynello { };
+
+  pynentry = callPackage ../development/python-modules/pynentry { };
 
   pynest2d = callPackage ../development/python-modules/pynest2d { };
 
@@ -17370,6 +17370,13 @@ self: super: with self; {
   shellescape = callPackage ../development/python-modules/shellescape { };
 
   shellingham = callPackage ../development/python-modules/shellingham { };
+
+  sherpa-onnx = callPackage ../development/python-modules/sherpa-onnx {
+    sherpa-onnx = pkgs.sherpa-onnx.override {
+      python3Packages = self;
+      pythonSupport = true;
+    };
+  };
 
   shiboken2 = toPythonModule (
     callPackage ../development/python-modules/shiboken2 { inherit (pkgs) cmake llvmPackages qt5; }

@@ -44,7 +44,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "triton";
-  version = "3.5.1";
+  version = "3.6.0";
   pyproject = true;
 
   # Remember to bump triton-llvm as well!
@@ -52,7 +52,7 @@ buildPythonPackage (finalAttrs: {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dyNRtS1qtU8C/iAf0Udt/1VgtKGSvng1+r2BtvT9RB4=";
+    hash = "sha256-JFSpQn+WsNnh7CAPlcpOcUp0nyKXNbJEANdXqmkt4Tc=";
   };
 
   patches = [
@@ -151,12 +151,6 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals cudaSupport [
-    # Pybind11 started generating strange errors since python 3.12. Observed only in the CUDA branch.
-    # https://gist.github.com/SomeoneSerge/7d390b2b1313957c378e99ed57168219#file-gistfile0-txt-L1042
-    "-Wno-stringop-overread"
-  ];
-
   preConfigure =
     # Ensure that the build process uses the requested number of cores
     ''
@@ -170,6 +164,12 @@ buildPythonPackage (finalAttrs: {
   // lib.optionalAttrs cudaSupport {
     CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
     CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
+
+    NIX_CFLAGS_COMPILE = toString [
+      # Pybind11 started generating strange errors since python 3.12. Observed only in the CUDA branch.
+      # https://gist.github.com/SomeoneSerge/7d390b2b1313957c378e99ed57168219#file-gistfile0-txt-L1042
+      "-Wno-stringop-overread"
+    ];
 
     # TODO: Unused because of how TRITON_OFFLINE_BUILD currently works (subject to change)
     TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)

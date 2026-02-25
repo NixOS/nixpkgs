@@ -19,23 +19,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "navidrome";
-  version = "0.60.0";
+  version = "0.60.3";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-K7Cen0gADYQc0jxd2keBpTJlyQyuYL02j7/yiNtjZvQ=";
+    hash = "sha256-DwVmNJKjwEhTKIVPYFqaUR9SD4HpACkK4XJoFfQVRus=";
   };
 
-  vendorHash = "sha256-DCz/WKZXnZy109WgStCK7NJg8VpR3IJEaQZLMDXdegk=";
+  vendorHash = "sha256-StI4CfWN/OnbYFktRriTJWMHTuJkCinpYk9qgsxMGG8=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/ui";
-    hash = "sha256-Z1kSRNSG1zeLA6rtbcTdLJnNWclsVTS5Xfc4D9M0dl4=";
+    hash = "sha256-EA2WM7xaqP7rS0pjx+yXwpjdauaduvDefmFH73eByxI=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +66,9 @@ buildGoModule (finalAttrs: {
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
     CGO_CFLAGS = toString [ "-Wno-return-local-addr" ];
+    # Workaround for https://github.com/golang/go/issues/77387
+    # Remove when go1.25.8 has been merged
+    CGO_CFLAGS_ALLOW = "--define-prefix";
   };
 
   postPatch = ''

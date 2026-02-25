@@ -3,6 +3,7 @@
   replaceVars,
   pkg-config,
   qtwebengine,
+  kirigami-addons,
   mobile-broadband-provider-info,
   openconnect,
   openvpn,
@@ -22,4 +23,6 @@ mkKdeDerivation {
     mobile-broadband-provider-info
     openconnect
   ];
+
+  extraPropagatedBuildInputs = [ kirigami-addons ];
 }

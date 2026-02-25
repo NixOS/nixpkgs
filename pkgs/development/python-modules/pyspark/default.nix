@@ -2,29 +2,40 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  py4j,
+
+  # optional-dependencies
+  googleapis-common-protos,
+  graphviz,
+  grpcio-status,
+  grpcio,
   numpy,
   pandas,
-  py4j,
   pyarrow,
+  zstandard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyspark";
   version = "4.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-d/eJhKqE++hlxxfdN7SZE7TlyX1272gk+TLxrvpmIew=";
   };
 
   # pypandoc is broken with pandoc2, so we just lose docs.
   postPatch = ''
     sed -i "s/'pypandoc'//" setup.py
-
-    substituteInPlace setup.py \
-      --replace py4j== 'py4j>='
   '';
+
+  build-system = [ setuptools ];
 
   postFixup = ''
     # find_python_home.py has been wrapped as a shell script
@@ -37,13 +48,26 @@ buildPythonPackage rec {
                   'export PYTHONPATH="''${SPARK_HOME}/..:''${SPARK_HOME}/python/:$PYTHONPATH"'
   '';
 
-  propagatedBuildInputs = [ py4j ];
+  dependencies = [ py4j ];
 
   optional-dependencies = {
+    connect = [
+      pandas
+      pyarrow
+      grpcio
+      grpcio-status
+      googleapis-common-protos
+      zstandard
+      graphviz
+    ];
     ml = [ numpy ];
     mllib = [ numpy ];
+    pandas_on_spark = [
+      pandas
+      pyarrow
+    ];
+    pipelines = finalAttrs.optional-dependencies.connect ++ finalAttrs.optional-dependencies.sql;
     sql = [
-      numpy
       pandas
       pyarrow
     ];
@@ -62,6 +86,9 @@ buildPythonPackage rec {
       binaryBytecode
     ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ shlevy ];
+    maintainers = with lib.maintainers; [
+      sarahec
+      shlevy
+    ];
   };
-}
+})

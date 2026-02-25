@@ -10,26 +10,27 @@
   numpy,
   pyside6,
   pyyaml,
+  requests,
   sentencepiece,
   tqdm,
 
-  # check inputs
+  # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gguf";
-  version = "7789";
+  version = "8147";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    tag = "b${version}";
-    hash = "sha256-EQYyRSptjEmhe6AaOs3KV0N4aoGvK8Z+WBKacEYW8Wo=";
+    tag = "b${finalAttrs.version}";
+    hash = "sha256-/r/lWt+G14BsNqTBqeK4Po4QHU0GkpEBbIvt5rqB4jc=";
   };
 
-  sourceRoot = "${src.name}/gguf-py";
+  sourceRoot = "${finalAttrs.src.name}/gguf-py";
 
   build-system = [ poetry-core ];
 
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     numpy
     pyside6
     pyyaml
+    requests
     sentencepiece
     tqdm
   ];
@@ -54,4 +56,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

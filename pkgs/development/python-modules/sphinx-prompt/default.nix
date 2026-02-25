@@ -30,6 +30,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+    # create the old sphinx-prompt directory for compatibility
+    # https://github.com/sbrunner/sphinx-prompt/issues/612
+    cp -r sphinx{_,-}prompt
   '';
 
   build-system = [

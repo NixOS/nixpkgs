@@ -276,11 +276,11 @@ in
         services.udev.extraRules = lib.mkIf cfg.applyUdevRules (udevRules cfg.tssUser cfg.tssGroup);
 
         # Create the tss user and group only if the default value is used
-        users.users.${cfg.tssUser} = lib.mkIf (cfg.tssUser == "tss") {
+        users.users.tss = lib.mkIf (cfg.tssUser == "tss" || cfg.tssGroup == "tss") {
           isSystemUser = true;
           group = "tss";
         };
-        users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") { };
+        users.groups.tss = lib.mkIf (cfg.tssUser == "tss" || cfg.tssGroup == "tss") { };
 
         environment.variables = lib.mkIf cfg.tctiEnvironment.enable (
           lib.attrsets.genAttrs

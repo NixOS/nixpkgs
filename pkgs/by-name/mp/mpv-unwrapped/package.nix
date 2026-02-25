@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonOption "default_library" "shared")
+    (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonBool "libmpv" true)
     (lib.mesonEnable "manpage-build" true)
     (lib.mesonEnable "cdda" cddaSupport)

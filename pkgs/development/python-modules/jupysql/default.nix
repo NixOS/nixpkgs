@@ -38,15 +38,15 @@
 
 buildPythonPackage rec {
   pname = "jupysql";
-  version = "0.38";
+  version = "0.11.1";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "jupysql";
-    tag = "v${version}";
-    hash = "sha256-Z132bGkjXUNPIscIfIM8FKRO0Uc/z4Sl932CVN8f3lc=";
+    tag = version;
+    hash = "sha256-7wfKvKqDf8LlUiLoevNRxmq8x5wLheOgIeWz72oFcuw=";
   };
 
   pythonRelaxDeps = [ "sqlalchemy" ];
@@ -62,7 +62,8 @@ buildPythonPackage rec {
     sqlalchemy
     sqlglot
     sqlparse
-  ];
+  ]
+  ++ pyspark.optional-dependencies.connect;
 
   optional-dependencies.dev = [
     duckdb
@@ -128,10 +129,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sql" ];
 
+  # python-update-script picks up an 11-year old 0.38 over the current version
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Better SQL in Jupyter";
     homepage = "https://github.com/ploomber/jupysql";
-    changelog = "https://github.com/ploomber/jupysql/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ploomber/jupysql/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ euxane ];
   };
