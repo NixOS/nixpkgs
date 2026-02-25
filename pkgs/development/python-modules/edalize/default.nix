@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  cocotb,
   coreutils,
   jinja2,
   pandas,
@@ -37,6 +38,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [ jinja2 ];
+
+  dependencies = [ cocotb ];
 
   optional-dependencies = {
     reporting = [
