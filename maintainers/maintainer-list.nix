@@ -13166,13 +13166,6 @@
     githubId = 1186444;
     name = "James Short";
   };
-  jsierles = {
-    email = "joshua@hey.com";
-    matrix = "@jsierles:matrix.org";
-    name = "Joshua Sierles";
-    github = "jsierles";
-    githubId = 82;
-  };
   jsimonetti = {
     email = "jeroen+nixpkgs@simonetti.nl";
     matrix = "@jeroen:simonetti.nl";
