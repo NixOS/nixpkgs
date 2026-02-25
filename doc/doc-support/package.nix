@@ -69,8 +69,6 @@ stdenvNoCC.mkDerivation (
         || lib.elem path (
           map toString [
             ../style.css
-            ../anchor-use.js
-            ../anchor.min.js
             ../manpage-urls.json
             ../redirects.json
             ../nav.json
@@ -105,7 +103,7 @@ stdenvNoCC.mkDerivation (
         ${documentation-highlighter}/mono-blue.css \
         ${documentation-highlighter}/loader.js
 
-      cp -t out ./style.css ./anchor.min.js ./anchor-use.js
+      cp -t out ./style.css
 
       nixos-render-docs manual html \
         --manpage-urls ./manpage-urls.json \
@@ -115,8 +113,6 @@ stdenvNoCC.mkDerivation (
         --stylesheet highlightjs/mono-blue.css \
         --script ./highlightjs/highlight.pack.js \
         --script ./highlightjs/loader.js \
-        --script ./anchor.min.js \
-        --script ./anchor-use.js \
         --sidebar-depth 3 \
         --experimental-config ./nav.json \
         --header ${./header.html}\
