@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "scspell";
-  version = "2.3.0-unstable-2025-04-06";
+  version = "2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
