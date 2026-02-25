@@ -11,7 +11,7 @@
   requests-toolbelt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-keycloak";
   version = "7.0.2";
   pyproject = true;
@@ -19,14 +19,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marcospereirampj";
     repo = "python-keycloak";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3JHmVfGd5X5aEZt8O7Aj/UfYpLtDsI6MPwWxLo7SGBs=";
   };
 
   postPatch = ''
     # Upstream doesn't set version
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Provides access to the Keycloak API";
     homepage = "https://github.com/marcospereirampj/python-keycloak";
-    changelog = "https://github.com/marcospereirampj/python-keycloak/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/marcospereirampj/python-keycloak/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
