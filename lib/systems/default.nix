@@ -418,7 +418,12 @@ let
       // {
         rust = rust // {
           platform =
-            rust.platform or { }
+            rust.platform or (
+              if lib.hasSuffix ".json" (rust.rustcTargetSpec or "") then
+                lib.importJSON rust.rustcTargetSpec
+              else
+                { }
+            )
 
             # Once args.rustc.platform.target-family is deprecated and
             # removed, there will no longer be any need to modify any
@@ -477,9 +482,10 @@ let
                 .${vendor.name} or vendor.name;
             };
 
-          # The name of the rust target, even if it is custom. Adjustments are
-          # because rust has slightly different naming conventions than we do.
-          rustcTarget =
+          # The name of the rust target if it is standard, or the json file
+          # containing the custom target spec. Adjustments are because rust has
+          # slightly different naming conventions than we do.
+          rustcTargetSpec =
             let
               inherit (final.parsed) cpu kernel abi;
               cpu_ =
@@ -502,27 +508,27 @@ let
                   abi.name;
 
               inferred =
-                # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
-                # We cannot know which subversion does the user want, and
-                # currently use WASI 0.1 as default for compatibility. Custom
-                # users can set `rust.rustcTarget` to override it.
                 if final.isWasi then
+                  # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
+                  # We cannot know which subversion does the user want, and
+                  # currently use WASI 0.1 as default for compatibility. Custom
+                  # users can set `rust.rustcTargetSpec` to override it.
                   "${cpu_}-wasip1"
                 else
                   "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi_}"}";
             in
             # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
-            args.rust.rustcTarget or args.rustc.config or inferred;
-
-          # The name of the rust target if it is standard, or the json file
-          # containing the custom target spec.
-          rustcTargetSpec =
-            rust.rustcTargetSpec or (
+            args.rust.rustcTargetSpec or args.rustc.config or (
               if rust ? platform then
-                builtins.toFile (final.rust.rustcTarget + ".json") (toJSON rust.platform)
+                # TODO: This breaks cc-rs and thus std support, so maybe remove support?
+                builtins.toFile (rust.rustcTarget or inferred + ".json") (toJSON rust.platform)
               else
-                final.rust.rustcTarget
+                args.rust.rustcTarget or inferred
             );
+
+          # Do not use rustcTarget. Use rustcTargetSpec or cargoShortTarget.
+          # TODO: Remove all in-tree usages, and deprecate
+          rustcTarget = rust.rustcTarget or final.rust.cargoShortTarget;
 
           # The name of the rust target if it is standard, or the
           # basename of the file containing the custom target spec,
