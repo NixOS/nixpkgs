@@ -64,12 +64,28 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/protocolbuffers/protobuf/commit/211f52431b9ec30d4d4a1c76aafd64bd78d93c43.patch";
         hash = "sha256-2/vc4anc+kH7otfLHfBtW8dRowPyObiXZn0+HtQktak=";
       })
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "34") [
+      # upb linker-array fix for newer toolchains (notably GCC 15):
+      # `UPB_linkarr_internal_empty_upb_AllExts` can conflict with extension
+      # entries in `linkarr_upb_AllExts` during test builds.
+      # Context: https://github.com/protocolbuffers/protobuf/issues/21021
+      ./fix-upb-linkarr-sentinel-init.patch
     ];
 
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
-    substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
-  '';
+  postPatch =
+    lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
+      substituteInPlace src/google/protobuf/testing/googletest.cc \
+        --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
+    ''
+    # Keep the sentinel macro non-retained for GCC 15+ to match generated
+    # extension objects in linker arrays and avoid section type conflicts.
+    + lib.optionalString (lib.versionAtLeast version "34") ''
+      substituteInPlace upb/port/def.inc \
+        --replace-fail \
+          '#define UPB_LINKARR_SENTINEL UPB_RETAIN __attribute__((weak, used))' \
+          '#define UPB_LINKARR_SENTINEL            __attribute__((weak, used))'
+    '';
 
   preHook = ''
     export build_protobuf=${
