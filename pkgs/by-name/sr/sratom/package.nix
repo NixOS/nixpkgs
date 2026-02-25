@@ -11,7 +11,7 @@
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sratom";
   version = "0.6.20";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
+    url = "https://download.drobilla.net/sratom-${finalAttrs.version}.tar.xz";
     hash = "sha256-OCbpGGyrxDyl41n8w9gjgGAjL1+KIJC+XcmrOQ5bZHc=";
   };
 
@@ -50,15 +50,13 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-sratom" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of 'download.drobilla.net/sratom-0.30.16.tar.xz">'
-      new_version="$(curl -s https://drobilla.net/category/sratom/ |
-          pcregrep -o1 'download.drobilla.net/sratom-([0-9.]+).tar.xz' |
-          head -n1)"
-      update-source-version ${pname} "$new_version"
+      new_version="$(curl -s https://drobilla.net/category/sratom/ | pcre2grep -o1 'Sratom ([0-9]+\.[0-9]+\.[0-9]+)' | sort -V | tail -n1)"
+      update-source-version sratom "$new_version"
     '';
   };
 
@@ -69,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})
