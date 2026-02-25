@@ -1,5 +1,4 @@
 {
-  egl-wayland,
   lib,
   libgbm,
   libjxl,
@@ -23,7 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    egl-wayland
     pango
     libgbm
     libjxl
