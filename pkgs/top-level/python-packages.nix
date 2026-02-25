@@ -20155,6 +20155,8 @@ self: super: with self; {
     inherit (pkgs) libx11 libxext;
   };
 
+  uefi-firmware-parser = callPackage ../development/python-modules/uefi-firmware-parser { };
+
   ufal-chu-liu-edmonds = callPackage ../development/python-modules/ufal-chu-liu-edmonds { };
 
   ufmt = callPackage ../development/python-modules/ufmt { };
