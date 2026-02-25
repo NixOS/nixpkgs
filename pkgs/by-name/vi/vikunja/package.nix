@@ -14,12 +14,12 @@
 }:
 
 let
-  version = "1.1.0";
+  version = "2.0.0";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-xxfn3UoKreRDRC5GR7pLL8gkBLe6VmBYdps9eFc5c3g=";
+    hash = "sha256-EfAhJq2LPuCF8Pwyg0TYqSjNCaG15iZ2paDLfA6JI5w=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +37,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 1;
-      hash = "sha256-NrysokKNmKAUdiC0o4qEPvsHr7KH7mMrcrEjxwmgb+g=";
+      hash = "sha256-ME9sGKGRY3vaOTFwbFyzsDT20HnEnrfq3Z5nrL19k0A=";
     };
 
     nativeBuildInputs = [
@@ -97,7 +97,7 @@ buildGoModule {
       mage
     ];
 
-  vendorHash = "sha256-PV6WlJlG839FtWUR6QONMuuBnmo+AA53xmUNbodQdzk=";
+  vendorHash = "sha256-VLy5yybeueVEjb9SijYPQnXoTz7lxBksHTzBxt+TdG4=";
 
   inherit frontend;
 
