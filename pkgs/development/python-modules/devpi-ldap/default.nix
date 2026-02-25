@@ -17,7 +17,7 @@
 
 buildPythonPackage {
   pname = "devpi-ldap";
-  version = "2.1.1-unstable-2023-11-28";
+  version = "2.1.1";
   pyproject = true;
 
   # build-system broken for 3.14, package incompatible <3.13
