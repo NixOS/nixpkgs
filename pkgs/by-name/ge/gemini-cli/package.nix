@@ -73,39 +73,30 @@ buildNpmPackage (finalAttrs: {
     nodejs_22.python
   ];
 
+  npmBuildScript = "bundle";
+
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,share/gemini-cli}
 
+    mkdir -p $out/{bin,share}
+    cp -r bundle $out/share/gemini-cli
+
+    # We only want to keep optionalDependencies (like @lydell/node-pty) to keep the closure size small,
+    # as regular dependencies are already bundled via esbuild into gemini.js.
+    jq '.dependencies = {} | del(.devDependencies) | del(.workspaces)' package.json > package.json.tmp && mv package.json.tmp package.json
     npm prune --omit=dev
+    rm -rf node_modules/.bin
 
-    # Remove python files to prevent python from getting into the closure
-    find node_modules -name "*.py" -delete
     # keytar/build has gyp-mac-tool with a Python shebang that gets patched,
     # creating a python3 reference in the closure
-    rm -rf node_modules/keytar/build
+    find node_modules -path "*/build/*" -type f -not -name "*.node" -delete
+    find node_modules -type d -empty -delete
 
     cp -r node_modules $out/share/gemini-cli/
 
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-sdk
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-test-utils
-    rm -f $out/share/gemini-cli/node_modules/gemini-cli-vscode-ide-companion
-    cp -r packages/cli $out/share/gemini-cli/node_modules/@google/gemini-cli
-    cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
-    cp -r packages/a2a-server $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
+    rm -f $out/share/gemini-cli/docs/CONTRIBUTING.md
 
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core/dist/docs/CONTRIBUTING.md
-
-    ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
-    chmod +x "$out/bin/gemini"
-
-    # Clean up any remaining references to npmDeps in node_modules metadata
-    find $out/share/gemini-cli/node_modules -name "package-lock.json" -delete
-    find $out/share/gemini-cli/node_modules -name ".package-lock.json" -delete
-    find $out/share/gemini-cli/node_modules -name "config.gypi" -delete
+    ln -s $out/share/gemini-cli/gemini.js $out/bin/gemini
 
     runHook postInstall
   '';
