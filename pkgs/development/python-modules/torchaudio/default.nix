@@ -77,14 +77,14 @@ let
 in
 buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torchaudio";
-  version = "2.10.0";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b1sjHVFXdNFDbdtXWSM2KisSRE/8IbzJI4rvzYQ4UMg=";
+    hash = "sha256-tTilG/haU3OycSWqA5LR3egcxHVRg/yHJ8JB2rz3aKw=";
   };
 
   patches = [
