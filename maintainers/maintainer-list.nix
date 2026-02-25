@@ -2954,6 +2954,14 @@
     githubId = 75235;
     name = "Michael Walker";
   };
+  bartoostveen = {
+    name = "Bart Oostveen";
+    github = "bartoostveen";
+    githubId = 50515369;
+    email = "bart@bartoostveen.nl";
+    matrix = "@bart:bartoostveen.nl";
+    keys = [ { fingerprint = "81FF AB19 BAA5 6FFD 6571  890B 992D 94B5 7AC4 3430"; } ];
+  };
   bartuka = {
     email = "wand@hey.com";
     github = "wandersoncferreira";
