@@ -6,6 +6,7 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  isPy313,
   typing-extensions,
 }:
 
@@ -23,6 +24,15 @@ buildPythonPackage rec {
     hash = "sha256-b3Z1NsYKp0CecUq8kaC/j3xR/ZZHDIw4MhUeadizz88=";
   };
 
+  # CPython fixed https://github.com/python/cpython/issues/141732 in
+  # https://github.com/python/cpython/pull/141736, but exceptiongroup 1.3.1,
+  # including its test suite, still matches the old repr behavior.
+  # The CPython fix has only been backported to 3.13 so far, where it was
+  # first included in version 3.13.12, so we only need to patch for 3.13
+  # and 3.15+.
+  # Upstream issue: https://github.com/agronholm/exceptiongroup/issues/154
+  patches = lib.optional (isPy313 || pythonAtLeast "3.15") ./match-repr-fix.patch;
+
   build-system = [ flit-scm ];
 
   dependencies = lib.optionals (pythonOlder "3.13") [ typing-extensions ];
@@ -30,6 +40,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # RecursionError not raised
+    "test_deep_split"
+    "test_deep_subgroup"
+  ];
 
   pythonImportsCheck = [ "exceptiongroup" ];
 
