@@ -10908,6 +10908,8 @@ self: super: with self; {
 
   newspaper3k = callPackage ../development/python-modules/newspaper3k { };
 
+  newsapi-python = callPackage ../development/python-modules/newsapi-python { };
+
   newversion = callPackage ../development/python-modules/newversion { };
 
   nexia = callPackage ../development/python-modules/nexia { };
@@ -12549,6 +12551,8 @@ self: super: with self; {
 
   polygon3 = callPackage ../development/python-modules/polygon3 { };
 
+  poly-eip712-structs = callPackage ../development/python-modules/poly-eip712-structs { };
+
   polyline = callPackage ../development/python-modules/polyline { };
 
   polyswarm-api = callPackage ../development/python-modules/polyswarm-api { };
@@ -12925,6 +12929,8 @@ self: super: with self; {
 
   py-cid = callPackage ../development/python-modules/py-cid { };
 
+  py-clob-client = callPackage ../development/python-modules/py-clob-client { };
+
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
 
   py-dactyl = callPackage ../development/python-modules/py-dactyl { };
@@ -12988,6 +12994,8 @@ self: super: with self; {
   py-ocsf-models = callPackage ../development/python-modules/py-ocsf-models { };
 
   py-opensonic = callPackage ../development/python-modules/py-opensonic { };
+
+  py-order-utils = callPackage ../development/python-modules/py-order-utils { };
 
   py-partiql-parser = callPackage ../development/python-modules/py-partiql-parser { };
 
@@ -18726,6 +18734,8 @@ self: super: with self; {
   tatsu = callPackage ../development/python-modules/tatsu { };
 
   tatsu-lts = callPackage ../development/python-modules/tatsu-lts { };
+
+  tavily-python = callPackage ../development/python-modules/tavily-python { };
 
   taxi = callPackage ../development/python-modules/taxi { };
 
