@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "edalize";
-  version = "0.6.1";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "olofk";
     repo = "edalize";
     tag = "v${version}";
-    hash = "sha256-5c3Szq0tXQdlyzFTFCla44qB/O6RK8vezVOaFOv8sw4=";
+    hash = "sha256-kcv/n0anQN/7v1KCRtrP91u2nFAJ55E1OxuPwxaHfGA=";
   };
 
   postPatch = ''
@@ -102,6 +102,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/olofk/edalize";
     changelog = "https://github.com/olofk/edalize/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ astro ];
+    maintainers = with lib.maintainers; [
+      astro
+      Mop-u
+    ];
   };
 }
