@@ -51,6 +51,128 @@ python3Packages.buildPythonApplication {
                      "from web3.middleware import ExtraDataToPOAMiddleware" \
       --replace-fail "self.web3.middleware_onion.inject(geth_poa_middleware, layer=0)" \
                      "self.web3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)"
+
+    # Defer client initialization so --help works without API keys
+    cat > scripts/python/cli.py << 'CLIPATCH'
+    import typer
+    from devtools import pprint
+
+    app = typer.Typer()
+
+
+    def _get_polymarket():
+        from agents.polymarket.polymarket import Polymarket
+        return Polymarket()
+
+
+    def _get_news():
+        from agents.connectors.news import News
+        return News()
+
+
+    def _get_rag():
+        from agents.connectors.chroma import PolymarketRAG
+        return PolymarketRAG()
+
+
+    @app.command()
+    def get_all_markets(limit: int = 5, sort_by: str = "spread") -> None:
+        """Query Polymarket's markets"""
+        polymarket = _get_polymarket()
+        markets = polymarket.get_all_markets()
+        markets = polymarket.filter_markets_for_trading(markets)
+        if sort_by == "spread":
+            markets = sorted(markets, key=lambda x: x.spread, reverse=True)
+        markets = markets[:limit]
+        pprint(markets)
+
+
+    @app.command()
+    def get_relevant_news(keywords: str) -> None:
+        """Use NewsAPI to query the internet"""
+        newsapi_client = _get_news()
+        articles = newsapi_client.get_articles_for_cli_keywords(keywords)
+        pprint(articles)
+
+
+    @app.command()
+    def get_all_events(limit: int = 5, sort_by: str = "number_of_markets") -> None:
+        """Query Polymarket's events"""
+        polymarket = _get_polymarket()
+        events = polymarket.get_all_events()
+        events = polymarket.filter_events_for_trading(events)
+        if sort_by == "number_of_markets":
+            events = sorted(events, key=lambda x: len(x.markets), reverse=True)
+        events = events[:limit]
+        pprint(events)
+
+
+    @app.command()
+    def create_local_markets_rag(local_directory: str) -> None:
+        """Create a local markets database for RAG"""
+        polymarket_rag = _get_rag()
+        polymarket_rag.create_local_markets_rag(local_directory=local_directory)
+
+
+    @app.command()
+    def query_local_markets_rag(vector_db_directory: str, query: str) -> None:
+        """RAG over a local database of Polymarket's events"""
+        polymarket_rag = _get_rag()
+        response = polymarket_rag.query_local_markets_rag(
+            local_directory=vector_db_directory, query=query
+        )
+        pprint(response)
+
+
+    @app.command()
+    def ask_superforecaster(event_title: str, market_question: str, outcome: str) -> None:
+        """Ask a superforecaster about a trade"""
+        from agents.application.executor import Executor
+        executor = Executor()
+        response = executor.get_superforecast(
+            event_title=event_title, market_question=market_question, outcome=outcome
+        )
+        print(f"Response:{response}")
+
+
+    @app.command()
+    def create_market() -> None:
+        """Format a request to create a market on Polymarket"""
+        from agents.application.creator import Creator
+        c = Creator()
+        market_description = c.one_best_market()
+        print(f"market_description: str = {market_description}")
+
+
+    @app.command()
+    def ask_llm(user_input: str) -> None:
+        """Ask a question to the LLM and get a response."""
+        from agents.application.executor import Executor
+        executor = Executor()
+        response = executor.get_llm_response(user_input)
+        print(f"LLM Response: {response}")
+
+
+    @app.command()
+    def ask_polymarket_llm(user_input: str) -> None:
+        """What types of markets do you want trade?"""
+        from agents.application.executor import Executor
+        executor = Executor()
+        response = executor.get_polymarket_llm(user_input=user_input)
+        print(f"LLM + current markets&events response: {response}")
+
+
+    @app.command()
+    def run_autonomous_trader() -> None:
+        """Let an autonomous system trade for you."""
+        from agents.application.trade import Trader
+        trader = Trader()
+        trader.one_best_trade()
+
+
+    if __name__ == "__main__":
+        app()
+    CLIPATCH
   '';
 
   preBuild = ''

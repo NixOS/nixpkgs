@@ -10906,9 +10906,9 @@ self: super: with self; {
 
   newick = callPackage ../development/python-modules/newick { };
 
-  newspaper3k = callPackage ../development/python-modules/newspaper3k { };
-
   newsapi-python = callPackage ../development/python-modules/newsapi-python { };
+
+  newspaper3k = callPackage ../development/python-modules/newspaper3k { };
 
   newversion = callPackage ../development/python-modules/newversion { };
 
@@ -12547,11 +12547,11 @@ self: super: with self; {
 
   polling = callPackage ../development/python-modules/polling { };
 
+  poly-eip712-structs = callPackage ../development/python-modules/poly-eip712-structs { };
+
   polyfactory = callPackage ../development/python-modules/polyfactory { };
 
   polygon3 = callPackage ../development/python-modules/polygon3 { };
-
-  poly-eip712-structs = callPackage ../development/python-modules/poly-eip712-structs { };
 
   polyline = callPackage ../development/python-modules/polyline { };
 
