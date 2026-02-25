@@ -4,20 +4,17 @@
   fetchFromGitHub,
   python3Packages,
 }:
-let
-  version = "0.20.39";
-in
-python3Packages.buildPythonApplication {
-  inherit version;
+
+python3Packages.buildPythonApplication rec {
   pname = "legendary-heroic";
-  format = "pyproject";
+  version = "0.20.41";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    inherit version;
     owner = "Heroic-Games-Launcher";
     repo = "legendary";
     tag = version;
-    hash = "sha256-2+9MRbwugBlBdZQQo6BUcLmwCqVdTAv9CZ+sPu5VAxY=";
+    hash = "sha256-zX5Lyj8IDHETFyEpUaFnGaYZVs1hDy9rtwab1+rNlrw=";
   };
 
   build-system = with python3Packages; [

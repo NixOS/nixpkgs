@@ -33,6 +33,9 @@ let
             allowVariants = !attrNamesOnly;
             checkMeta = true;
 
+            # Silence the `x86_64-darwin` deprecation warning.
+            allowDeprecatedx86_64Darwin = true;
+
             handleEvalIssue =
               reason: errormsg:
               let
