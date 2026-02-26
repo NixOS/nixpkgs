@@ -18,6 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp gcc/BASE-VER "$out/gcc"
     cp gcc/DATESTAMP "$out/gcc"
 
+    cp -r include "$out"
     cp -r libquadmath "$out"
 
     cp config.guess "$out"
