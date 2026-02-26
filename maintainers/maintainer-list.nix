@@ -843,6 +843,13 @@
     githubId = 209175;
     name = "Alesya Huzik";
   };
+  Ai-Ya-Ya = {
+    email = "spg2500@gmail.com";
+    github = "Ai-Ya-Ya";
+    githubId = 72513839;
+    matrix = "aiya:catgirl.cloud";
+    name = "aiya";
+  };
   aij = {
     email = "aij+git@mrph.org";
     github = "aij";
