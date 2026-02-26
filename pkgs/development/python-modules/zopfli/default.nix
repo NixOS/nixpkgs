@@ -17,6 +17,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-qO6ZKyVJ4JDNPwF4v2Bt1Bop4GE6BM31BUIkZixy3OY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<72.2.0" "setuptools"
+  '';
+
   build-system = [ setuptools-scm ];
 
   buildInputs = [ zopfli ];
