@@ -1,61 +1,71 @@
 {
-  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  deprecation,
-  h2,
+  lib,
+  uv-build,
   httpx,
-  poetry-core,
   pydantic,
+  yarl,
+  strenum,
+  deprecation,
+  pytest-asyncio,
+  pytest-cov,
   pytestCheckHook,
-  pythonPackages,
+  unasync,
 }:
 
 buildPythonPackage rec {
   pname = "postgrest";
-  version = "1.1.1";
+  version = "2.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
-    repo = "postgrest-py";
+    repo = "supabase-py";
     tag = "v${version}";
-    hash = "sha256-WTS8J8XhHPSe6N1reY3j2QYHaRY1goiVoqQCUKSgbVY=";
+    hash = "sha256-nK+IZRrKjNy84EC8krBvAZll5E0+jV3bLJh8qIVRElI=";
   };
 
-  build-system = [ poetry-core ];
+  sourceRoot = "${src.name}/src/postgrest";
+
+  build-system = [ uv-build ];
 
   dependencies = [
-    deprecation
     httpx
+    deprecation
     pydantic
-  ];
+    strenum
+    yarl
+  ]
+  ++ httpx.optional-dependencies.http2;
+
+  # Upstream pins `uv_build>=0.8.3,<0.9.0`, but nixpkgs ships `uv-build` 0.9.x.
+  # Relax the upper bound to accept the 0.9 series, consistent with uv’s documentation examples:
+  # https://docs.astral.sh/uv/concepts/build-backend/#using-the-uv-build-backend
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-warn 'uv_build>=0.8.3,<0.9.0' 'uv_build>=0.8.3'
+  '';
 
   nativeCheckInputs = [
     pytestCheckHook
-    h2
-  ];
-
-  # Lots of tests fail without network access
-  disabledTestPaths = [
-    "tests/_async/test_client.py"
-    "tests/_async/test_filter_request_builder.py"
-    "tests/_async/test_filter_request_builder_integration.py"
-    "tests/_async/test_query_request_builder.py"
-    "tests/_async/test_request_builder.py"
-    "tests/_sync/test_filter_request_builder_integration.py"
-  ];
-  disabledTests = [
-    "test_params_purged_after_execute"
+    pytest-asyncio
+    pytest-cov
+    unasync
   ];
 
   pythonImportsCheck = [ "postgrest" ];
 
+  disabledTestPaths = [
+    "tests/_sync/"
+    "tests/_async/"
+  ];
+
   meta = {
-    description = "PostgREST client for Python, provides an ORM interface to PostgREST";
-    homepage = "https://github.com/supabase/postgrest-py";
-    changelog = "https://github.com/supabase/postgrest-py/releases/tag/v${version}";
-    license = lib.licenses.mit;
+    description = "Client library for Supabase Functions";
+    homepage = "https://github.com/supabase/supabase-py";
+    changelog = "https://github.com/supabase/supabase-py/blob/v${src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ jherland ];
+    license = lib.licenses.mit;
   };
 }
