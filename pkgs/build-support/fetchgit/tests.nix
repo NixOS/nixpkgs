@@ -241,7 +241,8 @@
   withGitConfig =
     let
       pkgs = import ../../.. {
-        system = stdenv.hostPlatform.system;
+        system = stdenv.buildPlatform.system;
+        crossSystem = stdenv.hostPlatform.system;
         config = config // {
           gitConfig = {
             url."https://github.com".insteadOf = "https://doesntexist.forsure";
