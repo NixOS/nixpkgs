@@ -1,10 +1,10 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "soundfont-generaluser-gs";
   version = "2.0.2-unstable-2025-04-21";
 
@@ -17,11 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 $src/GeneralUser-GS.sf2 $out/share/soundfonts/GeneralUser-GS.sf2
+
+    install -Dm444 GeneralUser-GS.sf2 $out/share/soundfonts/GeneralUser-GS.sf2
+
     runHook postInstall
   '';
 
   meta = {
+    changelog = "https://github.com/mrbumpy409/GeneralUser-GS/blob/main/documentation/CHANGELOG.md";
     description = "General MIDI SoundFont with a low memory footprint";
     homepage = "https://www.schristiancollins.com/generaluser.php";
     license = lib.licenses.generaluser;
