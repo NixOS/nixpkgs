@@ -43,8 +43,8 @@ buildGoModule (finalAttrs: {
     # Fixes interactive CLI usage that needs stty https://github.com/openbao/openbao/pull/2535
     (fetchpatch2 {
       name = "pr2535-fix-interactive-cli.patch";
-      url = "https://github.com/openbao/openbao/commit/e3fec111e3f6fd543c79c08f46d2256cd93f78e7.patch";
-      hash = "sha256-Q/hmJj+JbpWjDhXp+p2qjlAMSUVP279Ca7ihh/9khOQ=";
+      url = "https://github.com/openbao/openbao/commit/e3fec111e3f6fd543c79c08f46d2256cd93f78e7.patch?full_index=1";
+      hash = "sha256-ixpWKfVT1dPAjF7RKS2tBpAr1YAqNkvf4/L7Be/C8Es=";
     })
   ];
 
