@@ -179,6 +179,7 @@ Currently, the following problem kinds are known (with more reserved to be added
 - "removal": The package is planned to be removed some time in the future. Unique.
 - "deprecated": The package relies on software which has reached its end of life.
 - "maintainerless": Automatically generated for packages with `meta.maintainers == []`. Unique, not manually specifiable.
+- "broken": Automatically generated for packages with `meta.broken = true`.
 
 Each problem has a handler that deals with it, which can be one of "error", "warn" or "ignore".
 "error" will disallow evaluating a package, while "warn" will simply print a message to the log.
