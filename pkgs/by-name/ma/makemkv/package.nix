@@ -12,6 +12,7 @@
   rubyPackages,
   writeShellApplication,
   zlib,
+  expat,
 
   withJava ? true,
   jre_headless,
@@ -55,6 +56,7 @@ stdenv.mkDerivation (
       openssl
       qt5.qtbase
       zlib
+      expat
     ];
     runtimeDependencies = [ (lib.getLib curl) ];
 
