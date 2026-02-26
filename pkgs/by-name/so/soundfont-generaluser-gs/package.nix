@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "generaluser";
+  pname = "soundfont-generaluser-gs";
   version = "2.0.2-unstable-2025-04-21";
 
   src = fetchFromGitHub {

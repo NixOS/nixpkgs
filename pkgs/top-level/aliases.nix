@@ -1771,6 +1771,7 @@ mapAliases {
   somatic-sniper = throw "somatic-sniper has been removed as it was archived in 2020 and fails to build."; # Added 2025-10-14
   sonusmix = throw "'sonusmix' has been removed due to lack of maintenance"; # Added 2025-08-27
   soulseekqt = throw "'soulseekqt' has been removed due to lack of maintenance in Nixpkgs in a long time. Consider using 'nicotine-plus' or 'slskd' instead."; # Added 2025-06-07
+  soundfont-generaluser = warnAlias "'soundfont-generaluser' has been renamed to 'soundfont-generaluser-gs'" soundfont-generaluser-gs; # Added 2026-02-26
   soundkonverter = throw "'soundkonverter' has been dropped as it depends on KDE Gear 5, and is unmaintained"; # Added 2025-08-20
   soundmodem = throw "'soundmodem' was removed due to lack of maintenance and relying on gtk2"; # Added 2025-12-02
   soundOfSorting = throw "'soundOfSorting' has been renamed to/replaced by 'sound-of-sorting'"; # Converted to throw 2025-10-27
