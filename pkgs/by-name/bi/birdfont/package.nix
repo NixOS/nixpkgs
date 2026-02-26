@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "birdfont";
-  version = "2.33.6";
+  version = "2.33.6-unstable-2025-11-23";
 
   src = fetchFromGitHub {
     owner = "johanmattssonm";
     repo = "birdfont";
-    tag = "v${finalAttrs.version}";
-    sha256 = "sha256-7xVjY/yH7pMlUBpQc5Gb4t4My24Mx5KkARVp2KSr+Iw=";
+    rev = "9865e6611e0bf00cbc5742ae1aab6eca4d04f072";
+    hash = "sha256-ZKnMBLjjoEHGKWGT3gJZ2BId48rOAYjygv3JeS9VKro=";
   };
 
   nativeBuildInputs = [
