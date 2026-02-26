@@ -40,8 +40,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       patches
       ;
     pnpm = pnpm_10;
-    fetcherVersion = 1;
-    hash = "sha256-ILhAhpY9a50a0KKWs5Y+G3jDyWuySHw8QcOJlYePzmc=";
+    fetcherVersion = 3;
+    hash = "sha256-11ga9j/5QYovpd23MMjnRzdD5Ri19nrFAotHpMV3mgU=";
   };
 
   postPatch = ''
