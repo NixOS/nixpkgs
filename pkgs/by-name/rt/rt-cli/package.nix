@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-LN/5qSLpFZqiZrMPufPbCvjb9dRTewxROb03thPXVhk=";
 
   meta = {
-    description = "Run tasks across different task runners";
+    description = "Run tasks interactively, no matter task runners";
     homepage = "https://github.com/unvalley/rt";
     changelog = "https://github.com/unvalley/rt/releases/tag/v${version}";
     license = lib.licenses.mit;
