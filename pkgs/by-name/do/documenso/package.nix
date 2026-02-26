@@ -34,7 +34,8 @@ buildNpmPackage (finalAttrs: {
     ./turbo.json.patch
   ];
 
-  npmDepsHash = "sha256-ZddRSBDasa3mMAS2dqXgXRMOc1nvspdXsuTZ7c+einw=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-Up/P1ZHW+Drlig8lXKVH1/TFNF48fi46yCboOxfMzsk=";
 
   nativeBuildInputs = [
     pkg-config
