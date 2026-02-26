@@ -118,7 +118,13 @@ rec {
           # TODO: Consider deprecating this or making it generic for all problems
           allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
-          allowBrokenPredicate = config.allowBrokenPredicate or (x: false);
+          allowBrokenPredicate =
+            if config ? allowBrokenPredicate then
+              lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
+                "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
+                config.allowBrokenPredicate
+            else
+              x: false;
         in
         attrs: attrs.meta.broken or false && !allowBroken && !allowBrokenPredicate attrs;
       value.message = "This package is broken.";
