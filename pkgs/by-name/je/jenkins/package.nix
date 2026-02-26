@@ -8,7 +8,7 @@
   gnused,
   makeWrapper,
   nix,
-  jdk21,
+  jdk25,
   writeScript,
   nixosTests,
   jq,
@@ -33,10 +33,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp "$src" "$out/webapps/jenkins.war"
 
     # Create the `jenkins-cli` command.
-    ${jdk21}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
+    ${jdk25}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
       && mv WEB-INF/lib/cli-${finalAttrs.version}.jar "$out/share/jenkins-cli.jar"
 
-    makeWrapper "${jdk21}/bin/java" "$out/bin/jenkins-cli" \
+    makeWrapper "${jdk25}/bin/java" "$out/bin/jenkins-cli" \
       --add-flags "-jar $out/share/jenkins-cli.jar"
   '';
 

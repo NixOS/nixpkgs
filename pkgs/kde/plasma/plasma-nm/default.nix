@@ -1,4 +1,5 @@
 {
+  lib,
   mkKdeDerivation,
   replaceVars,
   pkg-config,
@@ -7,13 +8,15 @@
   mobile-broadband-provider-info,
   openconnect,
   openvpn,
+  strongswan,
 }:
 mkKdeDerivation {
   pname = "plasma-nm";
 
   patches = [
-    (replaceVars ./0002-openvpn-binary-path.patch {
-      inherit openvpn;
+    (replaceVars ./hardcode-paths.patch {
+      openvpn = lib.getExe openvpn;
+      ipsec = lib.getExe' strongswan "ipsec";
     })
   ];
 

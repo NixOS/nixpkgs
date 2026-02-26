@@ -8,6 +8,7 @@
   attrs,
   yarl,
   # optional deps
+  base58,
   python-magic,
   python-olm,
   unpaddedbase64,
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     detect_mimetype = [ python-magic ];
     encryption = [
+      base58
       python-olm
       unpaddedbase64
       pycryptodome

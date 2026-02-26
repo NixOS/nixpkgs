@@ -347,8 +347,8 @@ in
       "sha256-omWYUcr7Aj6r1F1kKAmM32fn9577UeUgqesnIiBIpPQ=";
 
   mypy-boto3-connectcases =
-    buildMypyBoto3Package "connectcases" "1.42.42"
-      "sha256-3L8y44S2aXjc3E6DRz87M0b5zlbI69YBJ+V9F9k71eo=";
+    buildMypyBoto3Package "connectcases" "1.42.55"
+      "sha256-wB3bSavhTTCIvF/5myLyIHItqPvNvudCzoB2tt8g1iM=";
 
   mypy-boto3-connectparticipant =
     buildMypyBoto3Package "connectparticipant" "1.42.3"
@@ -431,8 +431,8 @@ in
       "sha256-VLjmuBf9xHv0qwv2F3l/14KptFqXVE0OmwPF/WC06NI=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.42.41"
-      "sha256-YQLF7PJbHvSFJ0ypxq9563b2YgDNB1UV7dK5ZWX5iS0=";
+    buildMypyBoto3Package "dynamodb" "1.42.55"
+      "sha256-pEX0Oba8RTL9WSy39EREyPyPOXJxwNkIfnEvcfGW0vk=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.42.3"
@@ -886,8 +886,8 @@ in
       "sha256-VBsw9c9B6r3G5vJ0iVUCi4wVoFprYseRLeMWs69KpTQ=";
 
   mypy-boto3-mediatailor =
-    buildMypyBoto3Package "mediatailor" "1.42.10"
-      "sha256-4YmRgBRIz2NtTnU6aSJ+0tPAaOXsMZQY0GFTHjqtF8I=";
+    buildMypyBoto3Package "mediatailor" "1.42.55"
+      "sha256-j3ZEfGrynOyodn/Dl8D986+C/+GNkNgSNoAoXMyPhdQ=";
 
   mypy-boto3-medical-imaging =
     buildMypyBoto3Package "medical-imaging" "1.42.3"
@@ -1070,8 +1070,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.42.39"
-      "sha256-q7GExVZQ4fHaCZ/xcFKUg09DH079zesCaqFB9KMr+eI=";
+    buildMypyBoto3Package "quicksight" "1.42.55"
+      "sha256-N+w9coq6u6F/B69obbL/N/xL/qsEuSJJVd5WYrnD48Q=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.42.43"

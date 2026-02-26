@@ -8,7 +8,6 @@
   librouteros,
   mako,
   packaging,
-  passlib,
   pyyaml,
   requests,
   setuptools,
@@ -19,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bundlewrap";
-  version = "4.24.0";
+  version = "5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bundlewrap";
     repo = "bundlewrap";
     tag = finalAttrs.version;
-    hash = "sha256-ayLceqYZC4cNuz9C6v2+W2TuiGWQeLMssbvwZ0N0n78=";
+    hash = "sha256-kU76WvT4VE/78HTMjByoDHgkrg/5MlS5vnc6z6lAANw=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +36,6 @@ buildPythonPackage (finalAttrs: {
     jinja2
     mako
     packaging
-    passlib
     pyyaml
     requests
     tomlkit

@@ -41,6 +41,7 @@ let
     environment_canada = getComponentDeps "camera";
     esphome = getComponentDeps "camera";
     fan = getComponentDeps "conversation";
+    fish_audio = getComponentDeps "tts";
     foscam = getComponentDeps "camera";
     freebox = getComponentDeps "camera";
     fully_kiosk = getComponentDeps "camera";
