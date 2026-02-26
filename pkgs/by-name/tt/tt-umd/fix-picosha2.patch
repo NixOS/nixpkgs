@@ -1,0 +1,34 @@
+diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
+index 65198db..cad5c56 100644
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -174,17 +174,19 @@ CPMAddPackage(
+ ####################################################################################################################
+ # picosha2
+ ####################################################################################################################
+-CPMAddPackage(
+-    NAME picosha2
+-    GITHUB_REPOSITORY okdshin/PicoSHA2
+-    GIT_TAG v1.0.1
+-    SYSTEM YES
+-    OPTIONS
+-        "CMAKE_MESSAGE_LOG_LEVEL NOTICE"
+-    DOWNLOAD_ONLY YES
+-)
++if(NOT CPM_LOCAL_PACKAGES_ONLY)
++  CPMAddPackage(
++      NAME picosha2
++      GITHUB_REPOSITORY okdshin/PicoSHA2
++      GIT_TAG v1.0.1
++      SYSTEM YES
++      OPTIONS
++          "CMAKE_MESSAGE_LOG_LEVEL NOTICE"
++      DOWNLOAD_ONLY YES
++  )
++endif()
+
+-if(picosha2_ADDED)
++if(picosha2_ADDED OR CPM_LOCAL_PACKAGES_ONLY)
+     # picosha2 is header-only, create an interface library
+     add_library(picosha2 INTERFACE)
+     target_include_directories(picosha2 SYSTEM INTERFACE ${picosha2_SOURCE_DIR})

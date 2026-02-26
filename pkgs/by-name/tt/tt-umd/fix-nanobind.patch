@@ -1,0 +1,11 @@
+--- a/third_party/CMakeLists.txt     2026-02-25 19:15:28.084134394 -0800
++++ b/third_party/CMakeLists.txt  2026-02-25 19:16:44.425343216 -0800
+@@ -162,6 +162,8 @@
+ ####################################################################################################################
+ # nanobind
+ ####################################################################################################################
++find_package(Python COMPONENTS Interpreter Development REQUIRED)
++
+ CPMAddPackage(
+     NAME nanobind
+     GITHUB_REPOSITORY wjakob/nanobind
