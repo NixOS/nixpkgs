@@ -38,15 +38,25 @@ let
 
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" { } ''
-        mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/third-party "$out"
-        cp -r ${monorepoSrc}/llvm "$out"
-        cp -r ${monorepoSrc}/clang "$out"
-        cp -r ${monorepoSrc}/clang-tools-extra "$out"
-        cp -r ${monorepoSrc}/mlir "$out"
-      ''
+      runCommand "${pname}-src-${version}" { } (
+        ''
+          mkdir -p "$out"
+          cp -r ${monorepoSrc}/cmake "$out"
+          cp -r ${monorepoSrc}/third-party "$out"
+          cp -r ${monorepoSrc}/llvm "$out"
+          cp -r ${monorepoSrc}/clang "$out"
+          cp -r ${monorepoSrc}/clang-tools-extra "$out"
+          cp -r ${monorepoSrc}/mlir "$out"
+        ''
+        # OpenCilk's CMakeLists.txt references LICENSE files at the monorepo root
+        + ''
+          for f in LICENSE.TXT MIT_LICENSE.TXT; do
+            if [ -e ${monorepoSrc}/$f ]; then
+              cp ${monorepoSrc}/$f "$out"
+            fi
+          done
+        ''
+      )
     else
       src;
 

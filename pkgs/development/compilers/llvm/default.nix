@@ -32,6 +32,14 @@ let
       rev-version = "23.0.0-unstable-2026-02-23";
       sha256 = "sha256-0ap9AFwouOuhVqeRzLaS7mYkBBCGFIakNbgv/VVrRns=";
     };
+    "opencilk" = {
+      monorepoSrc = callPackage ./common/opencilk-source.nix { };
+      officialRelease.version = "19.1.7";
+      officialRelease.sha256 = null;
+      version = "19.1.7";
+      name = "opencilk";
+      isOpenCilk = true;
+    };
   }
   // llvmVersions;
 
@@ -42,6 +50,7 @@ let
       gitRelease ? null,
       monorepoSrc ? null,
       version ? null,
+      isOpenCilk ? false,
     }@args:
     let
       inherit
@@ -68,6 +77,7 @@ let
               patchesFn
               bootBintools
               bootBintoolsNoLibc
+              isOpenCilk
               ;
 
             otherSplices = generateSplicesForMkScope "llvmPackages_${attrName}";
@@ -77,6 +87,6 @@ let
       )
     );
 
-  llvmPackages = lib.mapAttrs' (version: args: mkPackage (args // { inherit version; })) versions;
+  llvmPackages = lib.mapAttrs' (version: args: mkPackage ({ inherit version; } // args)) versions;
 in
 llvmPackages // { inherit mkPackage versions; }
