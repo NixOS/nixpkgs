@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       dit7ya
       id3v1669
+      Subserial
     ];
     platforms = lib.platforms.linux;
     mainProgram = "wayshot";

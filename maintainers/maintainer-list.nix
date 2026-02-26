@@ -25712,6 +25712,13 @@
     githubId = 12984845;
     name = "Subhrajyoti Sen";
   };
+  Subserial = {
+    email = "me@subserial.website";
+    github = "Subserial";
+    githubId = 25187940;
+    matrix = "@me:subserial.website";
+    name = "Subserial";
+  };
   sudo-mac = {
     email = "dreems2reality@gmail.com";
     github = "sudo-mac";
