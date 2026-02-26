@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "soundfont-generaluser-gs";
-  version = "2.0.2-unstable-2025-04-21";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "mrbumpy409";
     repo = "GeneralUser-GS";
-    rev = "74d4cfe4042a61ddab17d4f86dbccd9d2570eb2a";
-    hash = "sha256-I27l8F/BFAo6YSNbtAV14AKVsPIJTHFG2eGudseWmjo=";
+    rev = "6f2014e815237de02e26e793f8c66c796ba66db5";
+    hash = "sha256-/nWcvaAcXDSd/6HapDEa7rDmQD2Q1w6iYsbckh2vnek=";
   };
 
   installPhase = ''
