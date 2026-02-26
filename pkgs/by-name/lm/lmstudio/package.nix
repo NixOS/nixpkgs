@@ -11,6 +11,8 @@ let
   hash_aarch64-darwin = "sha256-JadulYyHiXK+sQdp7Y6m5lQkkPkzut9O9Lc9kcW7bR4=";
   version_x86_64-linux = "0.4.2-2";
   hash_x86_64-linux = "sha256-JxGlqgsuLcW81mOIcntVFSHv19zSFouIChgz/egc+J0=";
+  version_aarch64-linux = "0.4.2-2";
+  hash_aarch64-linux = "sha256-+mGLFC3w2EPbFM8nV5Ft4QyAeVgCa+856lTaJrvD/IE=";
 
   meta = {
     description = "LM Studio is an easy to use desktop app for experimenting with local and open-source Large Language Models (LLMs)";
@@ -20,6 +22,7 @@ let
     maintainers = with lib.maintainers; [ crertel ];
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -35,6 +38,16 @@ if stdenv.hostPlatform.isDarwin then
       args.url
         or "https://installers.lmstudio.ai/darwin/arm64/${version_aarch64-darwin}/LM-Studio-${version_aarch64-darwin}-arm64.dmg";
     hash = args.hash or hash_aarch64-darwin;
+  }
+else if stdenv.hostPlatform.isAarch64 then
+  callPackage ./linux.nix {
+    inherit pname meta;
+    passthru.updateScript = ./update.sh;
+    version = version_aarch64-linux;
+    url =
+      args.url
+        or "https://installers.lmstudio.ai/linux/arm64/${version_aarch64-linux}/LM-Studio-${version_aarch64-linux}-arm64.AppImage";
+    hash = args.hash or hash_aarch64-linux;
   }
 else
   callPackage ./linux.nix {
