@@ -52,6 +52,19 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail '"hatch", ' "" \
       --replace-fail "jupyter_packaging~=0.10.0" jupyter_packaging
+
+    # pytest 9 removed the legacy `path` (py.path.local) hook parameter;
+    # rename to `collection_path` (pathlib.Path) which works the same way
+    # since the function already calls str() on it.
+    substituteInPlace plotly/conftest.py \
+      --replace-fail "def pytest_ignore_collect(path):" \
+                     "def pytest_ignore_collect(collection_path):" \
+      --replace-fail "os.path.basename(str(path))" \
+                     "os.path.basename(str(collection_path))" \
+      --replace-fail 'or "plotly/plotly/plotly/__init__.py" in str(path)' \
+                     'or "plotly/plotly/plotly/__init__.py" in str(collection_path)' \
+      --replace-fail 'or "plotly/api/utils.py" in str(path)' \
+                     'or "plotly/api/utils.py" in str(collection_path)'
   '';
 
   env.SKIP_NPM = true;
@@ -104,6 +117,10 @@ buildPythonPackage rec {
     "test_acceptance_named"
     # AssertionError: assert '' == 'browser'
     "test_default_renderer"
+    # numpy 2 removed np.in1d and the `interpolation` kwarg from percentile
+    "test_violin_fig"
+    "test_custom_data_scatter"
+    "test_sunburst_treemap_with_path_color"
   ];
 
   __darwinAllowLocalNetworking = true;
