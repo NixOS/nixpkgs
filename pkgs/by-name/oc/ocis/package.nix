@@ -58,8 +58,8 @@ buildGoModule rec {
       ;
     pnpm = pnpm_9;
     sourceRoot = "${src.name}/services/idp";
-    fetcherVersion = 1;
-    hash = "sha256-gNlN+u/bobnTsXrsOmkDcWs67D/trH3inT5AVQs3Brs=";
+    fetcherVersion = 3;
+    hash = "sha256-EsoGio2D8HZmbe+uuzsOhhwaLMSbJcfV4iUJUaqtA0M=";
   };
   pnpmRoot = "services/idp";
 
