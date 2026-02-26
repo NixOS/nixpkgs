@@ -64,7 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = "./install.py";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
+  };
 
   meta = {
     description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";
