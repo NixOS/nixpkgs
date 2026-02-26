@@ -41,7 +41,6 @@
   libgpg-error,
   libidn2,
   curl,
-  gnutar,
   gnupg,
   zlib,
   xz,
@@ -215,6 +214,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lJUX1sWRouhEEPZoA9UjjOy5IUZYGGV8pltAU0E4Dsg=";
   };
 
+  # PATCH POLICY
+  #
+  # There are only two reasons we accept patches on systemd:
+  # 1. systemd functionality is fundamentally incompatible with how NixOS works
+  #    and workarounds are not possible.
+  # 2. Hotfixes that we want to apply before they have reached a systemd branch
+  #    we can use. If we come up with the fixes in Nixpkgs, they need to be
+  #    reported upstream and the upstream issue needs to be linked in the
+  #    commit message of the patch.
+  #
+  # Importantly, patches to improve usability, enable new features on NixOS or
+  # add entirely new features to systemd are not allowed.
+
   # On major changes, or when otherwise required, you *must* :
   # 1. reformat the patches,
   # 2. `git am path/to/00*.patch` them into a systemd worktree,
@@ -224,29 +236,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
-    ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
-    ./0003-Fix-NixOS-containers.patch
-    ./0004-Add-some-NixOS-specific-unit-directories.patch
-    ./0005-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0006-hostnamed-localed-timedated-disable-methods-that-cha.patch
     ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0008-localectl-use-etc-X11-xkb-for-list-x11.patch
     ./0009-add-rootprefix-to-lookup-dir-paths.patch
-    ./0010-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0011-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0013-inherit-systemd-environment-when-calling-generators.patch
     ./0014-core-don-t-taint-on-unmerged-usr.patch
-    ./0015-tpm2_context_init-fix-driver-name-checking.patch
-    ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
+    # This can be dropped when v260 is released
     ./0017-meson.build-do-not-create-systemdstatedir.patch
-
-    # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
-    # if the install prefix is not /usr, but that does not work for us
-    # because we include the config snippet manually
-    ./0018-meson-Don-t-link-ssh-dropins.patch
-
+    # This can be dropped when v260 is released
     ./0019-install-unit_file_exists_full-follow-symlinks.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
@@ -397,7 +394,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "version-tag" finalAttrs.version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
-    (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
 
     # /bin/sh is also the upstream default. Explicitly set this so that we're
@@ -451,7 +447,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "swapoff-path" "${lib.getOutput "swap" util-linux}/sbin/swapoff")
 
     # SSH
-    (lib.mesonOption "sshconfdir" "")
+    (lib.mesonOption "sshconfdir" "${placeholder "out"}/etc/ssh")
     (lib.mesonOption "sshdconfdir" "no")
 
     # RPM
@@ -632,28 +628,6 @@ stdenv.mkDerivation (finalAttrs: {
           replacement = "\\\"${gnupg}/bin/gpg\\\"";
           where = [ "src/import/pull-common.c" ];
         }
-        {
-          search = "\"tar\"";
-          replacement = "\\\"${gnutar}/bin/tar\\\"";
-          where = [
-            "src/import/export-tar.c"
-            "src/import/import-common.c"
-            "src/import/import-tar.c"
-          ];
-          ignore = [
-            # occurrences here refer to the tar sub command
-            "src/sysupdate/sysupdate-resource.c"
-            "src/sysupdate/sysupdate-transfer.c"
-            "src/import/pull.c"
-            "src/import/export.c"
-            "src/import/import.c"
-            "src/import/importd.c"
-            # runs `tar` but also also creates a temporary directory with the string
-            "src/import/pull-tar.c"
-            # tar referenced as file suffix
-            "src/shared/import-util.c"
-          ];
-        }
       ]
       ++ lib.optionals withKmod [
         {
@@ -708,9 +682,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       substituteInPlace src/libsystemd/sd-journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
-
-      substituteInPlace src/import/pull-tar.c \
-        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
     '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
@@ -719,7 +690,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace config.h \
       --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
       --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
-      --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
+      --replace-fail "SYSTEM_SHUTDOWN_PATH" "_SYSTEM_SHUTDOWN_PATH" \
+      --replace-fail "SYSTEM_SLEEP_PATH" "_SYSTEM_SLEEP_PATH"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -728,14 +700,16 @@ stdenv.mkDerivation (finalAttrs: {
     "-UPOLKIT_AGENT_BINARY_PATH"
     "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
-    # Set the release_agent on /sys/fs/cgroup/systemd to the
-    # currently running systemd (/run/current-system/systemd) so
-    # that we don't use an obsolete/garbage-collected release agent.
-    "-USYSTEMD_CGROUP_AGENTS_PATH"
-    "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
-
     "-USYSTEMD_BINARY_PATH"
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+
+    # This path is not exposed via meson
+    "-USYSTEM_SHUTDOWN_PATH"
+    "-DSYSTEM_SHUTDOWN_PATH=\"/etc/systemd/system-shutdown\""
+
+    # This path is not exposed via meson
+    "-USYSTEM_SLEEP_PATH"
+    "-DSYSTEM_SLEEP_PATH=\"/etc/systemd/system-sleep\""
   ];
 
   doCheck = false;
