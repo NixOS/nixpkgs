@@ -20,7 +20,9 @@
   # https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899648638
   fmt_9,
   git,
+  # gnutls,
   libtool,
+  # lksctp-tools,
   makeWrapper,
   nasm,
   pkg-config,
@@ -36,6 +38,7 @@
   # * https://tracker.ceph.com/issues/71269
   # * https://github.com/NixOS/nixpkgs/issues/406306
   ceph-arrow-cpp ? callPackage ./arrow-cpp-19.nix { },
+  libndctl,
   babeltrace,
   # Note when trying to upgrade boost:
   # * When upgrading Ceph, it's recommended to check which boost version Ceph uses on Fedora,
@@ -46,7 +49,7 @@
   # If you want to upgrade to boost >= 1.86, you need a Ceph version that
   # has this PR in:
   #     https://github.com/ceph/ceph/pull/61312
-  boost183,
+  boost187,
   bzip2,
   cryptsetup,
   cunit,
@@ -81,6 +84,7 @@
   sqlite,
   utf8proc,
   xfsprogs,
+  # yaml-cpp,
   zlib,
   zstd,
 
@@ -216,6 +220,7 @@ let
 
       propagatedBuildInputs = [
         pyyaml
+        libndctl.dev
       ];
 
       nativeCheckInputs = [
@@ -324,7 +329,7 @@ let
       };
   };
 
-  boost' = boost183.override {
+  boost' = boost187.override {
     enablePython = true;
     inherit python;
   };
@@ -374,56 +379,15 @@ let
   );
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "19.2.3";
+  version = "20.2.0";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-zlgp28C81SZbaFJ4yvQk4ZgYz4K/aZqtcISTO8LscSU=";
+    hash = "sha256-jeBk1pgx7zJzOVOfIzx47IJ/o1HEDO2amRbwtBdMZoU=";
   };
 in
 stdenv.mkDerivation {
   pname = "ceph";
   inherit src version;
-
-  patches = [
-    ./boost-1.85.patch
-
-    (fetchpatch2 {
-      name = "ceph-boost-1.86-uuid.patch";
-      url = "https://github.com/ceph/ceph/commit/01306208eac492ee0e67bff143fc32d0551a2a6f.patch?full_index=1";
-      hash = "sha256-OnDrr72inzGXXYxPFQevsRZImSvI0uuqFHqtFU2dPQE=";
-    })
-
-    # See:
-    # * <https://github.com/boostorg/python/issues/394>
-    # * <https://aur.archlinux.org/cgit/aur.git/commit/?h=ceph&id=8c5cc7d8deec002f7596b6d0860859a0a718f12b>
-    # * <https://github.com/ceph/ceph/pull/60999>
-    ./boost-1.86-PyModule.patch
-
-    (fetchpatch2 {
-      name = "ceph-cmake-4.patch";
-      url = "https://gitlab.alpinelinux.org/ashpool/aports/-/raw/d22b70eafe33c3daabe4eea6913c5be87d9463ad/community/ceph19/cpp_redis.patch";
-      hash = "sha256-wxPIsYt25CjXhJ6kmr/MXwFD58Sl4y4W+r9jAMND+uw=";
-    })
-
-    # See:
-    # * <https://github.com/ceph/ceph/pull/55560>
-    # * <https://github.com/ceph/ceph/pull/60575>
-    (fetchpatch2 {
-      name = "ceph-systemd-sans-cluster-name.patch";
-      url = "https://github.com/ceph/ceph/commit/5659920c7c128cb8d9552580dbe23dd167a56c31.patch?full_index=1";
-      hash = "sha256-Uch8ZghyTowUvSq0p/RxiVpdG1Yqlww9inpVksO6zyk=";
-    })
-    (fetchpatch2 {
-      name = "ceph-systemd-prefix.patch";
-      url = "https://github.com/ceph/ceph/commit/9b38df488d7101b02afa834ea518fd52076d582a.patch?full_index=1";
-      hash = "sha256-VcbJhCGTUdNISBd6P96Mm5M3fFVmZ8r7pMl+srQmnIQ=";
-    })
-    (fetchpatch2 {
-      name = "ceph-19.2.2-gcc15.patch";
-      url = "https://github.com/ceph/ceph/commit/830925f0dd196f920893b1947ae74171a202e825.patch";
-      hash = "sha256-bs+noyjiyAjwqfgSHDxdZJnZ/kptOOcz75KMqAaROpg=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf # `autoreconf` is called, e.g. for `qatlib_ext`
@@ -449,7 +413,12 @@ stdenv.mkDerivation {
     cryptoLibsMap.${cryptoStr}
     ++ [
       ceph-arrow-cpp
+      # gnutls
       babeltrace
+      libndctl.dev
+      libndctl
+      # lksctp-tools
+      # yaml-cpp
       boost'
       bzip2
       # Adding `ceph-python-env` here adds the env's `site-packages` to `PYTHONPATH` during the build.
@@ -554,9 +523,18 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
-
     "-DWITH_CEPHFS_SHELL:BOOL=ON"
+    "-DWITH_GRAFANA:BOOL=ON"
+    "-DWITH_OCF:BOOL=ON"
+    "-DWITH_RBD_RWL:BOOL=ON"
+    # "-DWITH_RADOSGW_ARROW_FLIGHT:BOOL=ON"
+    "-DWITH_RBD_MIRROR:BOOL=ON"
+    "-DWITH_RBD_SSD_CACHE:BOOL=ON"
+    "-DWITH_BLUESTORE_PMEM:BOOL=ON"
     "-DWITH_SYSTEMD:BOOL=${if withSystemd then "ON" else "OFF"}"
+    # "-DWITH_DPDK:BOOL=ON" # non-functioning
+    # "-DWITH_CRIMSON:BOOL=ON"
+    "-LH"
     "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
     # `WITH_JAEGER` requires `thrift` as a depenedncy (fine), but the build fails with:
     #     CMake Error at src/opentelemetry-cpp-stamp/opentelemetry-cpp-build-Release.cmake:49 (message):
