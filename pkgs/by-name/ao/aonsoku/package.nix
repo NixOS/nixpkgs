@@ -29,8 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_8;
-    fetcherVersion = 1;
-    hash = "sha256-h1rcM+H2c0lk7bpGeQT5ue9bQIggrCFHkj4o7KxnH08=";
+    fetcherVersion = 3;
+    hash = "sha256-gOPjNZCljr8OvU/xLs9ZQ27dl3RatscXddOyPfSVdoE=";
   };
 
   cargoRoot = "src-tauri";
