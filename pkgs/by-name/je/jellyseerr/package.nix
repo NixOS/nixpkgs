@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 1;
-    hash = "sha256-3df72m/ARgfelBLE6Bhi8+ThHytowVOBL2Ndk7auDgg=";
+    fetcherVersion = 3;
+    hash = "sha256-kCM6oNfBlVsjItzBDxSbeLu0+53I5XzxcerpCTEvZ0M=";
   };
 
   buildInputs = [ sqlite ];
