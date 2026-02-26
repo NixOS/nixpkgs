@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
-  version = "4.9.3";
+  version = "4.10.0";
 
   src = fetchurl {
     url = "https://downloads.unidata.ucar.edu/netcdf-c/${finalAttrs.version}/netcdf-c-${finalAttrs.version}.tar.gz";
-    hash = "sha256-pHQUmETmFEVmZz+s8Jf+olPchDw3vAp9PeBH3Irdpd0=";
+    hash = "sha256-vUv6I5OFgCpsvqcaLwONrcq6dWo4xWgE+CntgmLnkS8=";
   };
 
   postPatch = ''
