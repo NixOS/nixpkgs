@@ -27,9 +27,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit (opencode)
     version
     src
-    node_modules
     patches
     ;
+
+  bunWorkspaces = [ "./packages/desktop" ];
+  bunDeps = bun.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      bunWorkspaces
+      ;
+    hash = "sha256-NluoZOsWpt2gdUY69cOnCbmEdve6NoQOTglDDm6GsCM=";
+  };
 
   cargoRoot = "packages/desktop/src-tauri";
   cargoHash = "sha256-6YOygSNNhAAD49ZkhWS03qGwVP2mvwItzJeyg0/ARLg=";
@@ -38,8 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cargo-tauri.hook
-    bun
-    nodejs # for patchShebangs node_modules
+    bun.configHook
     cargo
     rustc
     jq
@@ -70,11 +79,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   preBuild = ''
-    cp -a ${finalAttrs.node_modules}/{node_modules,packages} .
-    chmod -R u+w node_modules packages
-    patchShebangs node_modules
-    patchShebangs packages/desktop/node_modules
-
     mkdir -p packages/desktop/src-tauri/sidecars
     cp ${opencode}/bin/opencode packages/desktop/src-tauri/sidecars/opencode-cli-${stdenv.hostPlatform.rust.rustcTarget}
   '';
