@@ -5,7 +5,6 @@
   fetchurl,
   fetchFromGitHub,
   fetchPypi,
-  fetchpatch2,
   callPackage,
 
   # Build time
@@ -20,9 +19,10 @@
   # https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899648638
   fmt_9,
   git,
-  # gnutls,
+  gnutls,
+  thrift,
   libtool,
-  # lksctp-tools,
+  lksctp-tools,
   makeWrapper,
   nasm,
   pkg-config,
@@ -84,7 +84,7 @@
   sqlite,
   utf8proc,
   xfsprogs,
-  # yaml-cpp,
+  yaml-cpp,
   zlib,
   zstd,
 
@@ -122,6 +122,20 @@
   libxfs ? null,
   liburing ? null,
   zfs ? null,
+  showOptions ? false,
+  withGrafana ? false,
+  withOcf ? false,
+  withRbdRwl ? false,
+  withRbdMirror ? false,
+  withRbdSsdCache ? false,
+  withBluestorePmem ? false,
+  withBlkin ? false,
+  withCrimson ? false,
+  withGssapi ? false,
+  withSpdk ? false,
+  withDpdk ? false,
+  withJaeger ? false,
+  withRadosgwArrowFlight ? false,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
@@ -220,7 +234,6 @@ let
 
       propagatedBuildInputs = [
         pyyaml
-        libndctl.dev
       ];
 
       nativeCheckInputs = [
@@ -384,6 +397,24 @@ let
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
     hash = "sha256-jeBk1pgx7zJzOVOfIzx47IJ/o1HEDO2amRbwtBdMZoU=";
   };
+
+  checkFlag = x: if x then "ON" else "OFF";
+
+  optionalBuildInputs = lib.concatLists [
+    (lib.optionals withBluestorePmem [
+      libndctl.dev
+    ])
+
+    (lib.optionals withCrimson [
+      yaml-cpp
+      gnutls
+      lksctp-tools
+    ])
+
+    (lib.optionals withJaeger [
+      thrift
+    ])
+  ];
 in
 stdenv.mkDerivation {
   pname = "ceph";
@@ -411,14 +442,10 @@ stdenv.mkDerivation {
 
   buildInputs =
     cryptoLibsMap.${cryptoStr}
+    ++ lib.lists.unique optionalBuildInputs
     ++ [
       ceph-arrow-cpp
-      # gnutls
       babeltrace
-      libndctl.dev
-      libndctl
-      # lksctp-tools
-      # yaml-cpp
       boost'
       bzip2
       # Adding `ceph-python-env` here adds the env's `site-packages` to `PYTHONPATH` during the build.
@@ -484,6 +511,10 @@ stdenv.mkDerivation {
     "${placeholder "out"}/${ceph-python-env.sitePackages}"
   ];
 
+  patches = [
+    ./ndctl.patch
+  ];
+
   # * `unset AS` because otherwise the Ceph CMake build errors with
   #       configure: error: No modern nasm or yasm found as required. Nasm should be v2.11.01 or later (v2.13 for AVX512) and yasm should be 1.2.0 or later.
   #   because the code at
@@ -524,19 +555,21 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
     "-DWITH_CEPHFS_SHELL:BOOL=ON"
-    "-DWITH_GRAFANA:BOOL=ON"
-    "-DWITH_OCF:BOOL=ON"
-    "-DWITH_RBD_RWL:BOOL=ON"
-    # "-DWITH_RADOSGW_ARROW_FLIGHT:BOOL=ON"
-    "-DWITH_RBD_MIRROR:BOOL=ON"
-    "-DWITH_RBD_SSD_CACHE:BOOL=ON"
-    "-DWITH_BLUESTORE_PMEM:BOOL=ON"
-    "-DWITH_SYSTEMD:BOOL=${if withSystemd then "ON" else "OFF"}"
-    # "-DWITH_DPDK:BOOL=ON" # non-functioning
-    # "-DWITH_CRIMSON:BOOL=ON"
-    "-LH"
+    "-DWITH_GRAFANA:BOOL=${checkFlag withGrafana}"
+    "-DWITH_OCF:BOOL=${checkFlag withOcf}"
+    "-DWITH_RBD_RWL:BOOL=${checkFlag withRbdRwl}"
+    "-DWITH_RBD_MIRROR:BOOL=${checkFlag withRbdMirror}"
+    "-DWITH_RBD_SSD_CACHE:BOOL=${checkFlag withRbdSsdCache}"
+    "-DWITH_BLUESTORE_PMEM:BOOL=${checkFlag withBluestorePmem}"
+    "-DWITH_CRIMSON:BOOL=${checkFlag withCrimson}"
+    "-DWITH_GSSAPI:BOOL=${checkFlag withGssapi}"
+    "-DWITH_SPDK:BOOL=${checkFlag withSpdk}" # broken
+    "-DWITH_DPDK:BOOL=${checkFlag withDpdk}" # broken
+    "-DWITH_RADOSGW_ARROW_FLIGHT:BOOL=${checkFlag withRadosgwArrowFlight}" # broken
+    "-DWITH_BLKIN:BOOL=${checkFlag withBlkin}" # broken
+    "-DWITH_SYSTEMD:BOOL=${checkFlag withSystemd}"
     "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
-    # `WITH_JAEGER` requires `thrift` as a depenedncy (fine), but the build fails with:
+    # `WITH_JAEGER` requires `thrift` as a dependency (fine), but the build fails with:
     #     CMake Error at src/opentelemetry-cpp-stamp/opentelemetry-cpp-build-Release.cmake:49 (message):
     #     Command failed: 2
     #
@@ -554,7 +587,7 @@ stdenv.mkDerivation {
     # But the relevant code is already removed in `open-telemetry` 1.10: https://github.com/open-telemetry/opentelemetry-cpp/pull/2031
     # So it's probably not worth trying to fix that for this Ceph version,
     # and instead just disable Ceph's Jaeger support.
-    "-DWITH_JAEGER:BOOL=OFF"
+    "-DWITH_JAEGER:BOOL=${checkFlag withJaeger}"
     "-DWITH_TESTS:BOOL=OFF"
 
     # Use our own libraries, where possible
@@ -574,6 +607,7 @@ stdenv.mkDerivation {
     # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
     "-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}"
   ]
+  ++ lib.optional showOptions "-LH"
   ++ lib.optional stdenv.hostPlatform.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
   preBuild =

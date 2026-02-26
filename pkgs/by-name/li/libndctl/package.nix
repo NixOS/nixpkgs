@@ -67,11 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "iniparserdir" "${iniparser}")
   ];
 
-  postInstall = ''
-    ln -s $dev/include/daxctl/* $dev/include/ndctl/
-    ln -s $dev/include/cxl/* $dev/include/ndctl/
-  '';
-
   postPatch = ''
     patchShebangs test
 

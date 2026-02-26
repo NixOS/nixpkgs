@@ -1,0 +1,52 @@
+diff --git a/src/pmdk/src/libpmem2/badblocks_ndctl.c b/src/pmdk/src/libpmem2/badblocks_ndctl.c
+index 76f724c12..b4da3b8ba 100644
+--- a/src/pmdk/src/libpmem2/badblocks_ndctl.c
++++ b/src/pmdk/src/libpmem2/badblocks_ndctl.c
+@@ -16,7 +16,7 @@
+ #include <sys/sysmacros.h>
+ #include <fcntl.h>
+ #include <ndctl/libndctl.h>
+-#include <ndctl/libdaxctl.h>
++#include <daxctl/libdaxctl.h>
+ 
+ #include "libpmem2.h"
+ #include "pmem2_utils.h"
+diff --git a/src/pmdk/src/libpmem2/region_namespace_ndctl.c b/src/pmdk/src/libpmem2/region_namespace_ndctl.c
+index 1383796a9..e31185984 100644
+--- a/src/pmdk/src/libpmem2/region_namespace_ndctl.c
++++ b/src/pmdk/src/libpmem2/region_namespace_ndctl.c
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include <ndctl/libndctl.h>
+-#include <ndctl/libdaxctl.h>
++#include <daxctl/libdaxctl.h>
+ #include <sys/sysmacros.h>
+ #include <fcntl.h>
+ 
+diff --git a/src/pmdk/src/libpmem2/usc_ndctl.c b/src/pmdk/src/libpmem2/usc_ndctl.c
+index be63e879b..c58032a83 100644
+--- a/src/pmdk/src/libpmem2/usc_ndctl.c
++++ b/src/pmdk/src/libpmem2/usc_ndctl.c
+@@ -5,7 +5,7 @@
+  * usc_ndctl.c -- pmem2 usc function for platforms using ndctl
+  */
+ #include <ndctl/libndctl.h>
+-#include <ndctl/libdaxctl.h>
++#include <daxctl/libdaxctl.h>
+ #include <sys/types.h>
+ #include <sys/sysmacros.h>
+ #include <fcntl.h>
+diff --git a/src/pmdk/src/tools/daxio/daxio.c b/src/pmdk/src/tools/daxio/daxio.c
+index 66cd0b7ae..7f2c89d48 100644
+--- a/src/pmdk/src/tools/daxio/daxio.c
++++ b/src/pmdk/src/tools/daxio/daxio.c
+@@ -21,7 +21,7 @@
+ #include <string.h>
+ 
+ #include <ndctl/libndctl.h>
+-#include <ndctl/libdaxctl.h>
++#include <daxctl/libdaxctl.h>
+ #include <libpmem.h>
+ 
+ #include "util.h"
