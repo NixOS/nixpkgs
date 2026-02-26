@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchurl,
   python3,
   pkg-config,
@@ -8,7 +8,9 @@
   glib,
   gobject-introspection,
 }:
-
+let
+stdenv = gccStdenv;
+in
 stdenv.mkDerivation rec {
   pname = "xmlbird";
   version = "1.2.15";
