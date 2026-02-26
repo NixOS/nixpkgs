@@ -48,6 +48,6 @@ buildPythonPackage rec {
     mainProgram = "faker";
     homepage = "http://faker.rtfd.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
   };
 }

@@ -44,11 +44,6 @@ buildPythonPackage rec {
   # a few tests are failing on aarch64
   doCheck = !stdenv.hostPlatform.isAarch64;
 
-  disabledTests = [
-    # test fixtures need to be regenerated after skia-pathops update
-    "test_topicosvg"
-  ];
-
   meta = {
     description = "Tool to simplify SVGs";
     mainProgram = "picosvg";

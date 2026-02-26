@@ -73,9 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "MPEG-4 video codec for PC";
     homepage = "https://www.xvid.com/";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [
-      lovek323
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

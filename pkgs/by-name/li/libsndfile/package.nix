@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libsndfile.github.io/libsndfile/";
     changelog = "https://github.com/libsndfile/libsndfile/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
 
     longDescription = ''

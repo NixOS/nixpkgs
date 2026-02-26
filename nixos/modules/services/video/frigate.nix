@@ -507,7 +507,7 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
-                limit_except GET {
+                limit_except POST {
                     deny  all;
                 }
               '';
@@ -699,6 +699,15 @@ in
       environment = {
         CONFIG_FILE = "/run/frigate/frigate.yml";
         HOME = "/var/lib/frigate";
+        # Extract libavformat version in the same way Docker scripts in frigate directory do. This
+        # environment variable changes the flags given to `ffmpeg` improving compatibility.
+        LIBAVFORMAT_VERSION_MAJOR = lib.strings.trim (
+          builtins.readFile (
+            pkgs.runCommandLocal "libavformat-major-version" { } ''
+              ${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | grep -Po "libavformat\W+\K\d+" > $out
+            ''
+          )
+        );
         PYTHONPATH = cfg.package.pythonPath;
       }
       // optionalAttrs (cfg.vaapiDriver != null) {

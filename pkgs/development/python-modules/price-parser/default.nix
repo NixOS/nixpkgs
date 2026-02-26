@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   gitUpdater,
   pytestCheckHook,
-  setuptools,
   pytest-cov-stub,
   attrs,
 }:
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-1aMWRyrmvilON+crWibrREIN2Rf3hCzewI+vmRppvrg=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ attrs ];
 

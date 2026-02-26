@@ -6,7 +6,8 @@
   fetchFromGitHub,
   hatchling,
   mock,
-  python,
+  pytest-django,
+  pytestCheckHook,
   requests,
   responses,
   urllib3,
@@ -32,20 +33,33 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  nativeCheckInputs = [
-    mock
-    responses
-  ]
-  ++ optional-dependencies.amazon-ses;
-
   optional-dependencies = {
     amazon-ses = [ boto3 ];
   };
 
-  checkPhase = ''
-    runHook preCheck
-    CONTINUOUS_INTEGRATION=1 ${python.interpreter} runtests.py
-    runHook postCheck
+  nativeCheckInputs = [
+    mock
+    responses
+    pytest-django
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.amazon-ses;
+
+  disabledTestMarks = [ "live" ];
+
+  disabledTests = [
+    # misrecognized as a fixture due to function name starting with test_
+    "test_file_content"
+  ];
+
+  disabledTestPaths = [
+    # likely guessed mime type mismatch
+    "tests/test_resend_backend.py::ResendBackendStandardEmailTests::test_attachments"
+  ];
+
+  preCheck = ''
+    export CONTINOUS_INTEGRATION=1
+    export DJANGO_SETTINGS_MODULE=tests.test_settings.settings_${lib.versions.major django.version}_0
   '';
 
   pythonImportsCheck = [ "anymail" ];

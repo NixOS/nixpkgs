@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://glogg.bonnefon.org/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
   };
 }

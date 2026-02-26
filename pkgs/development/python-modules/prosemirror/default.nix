@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "prosemirror";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cZwqoKQ+B7d07R20dXTiDsiBIYYTyaWa2SnGs8o8Hl8=";
+    hash = "sha256-NoytGADhXwn/IrEUcsCh3tUgmk8ldsgpAOFCx1wiQso=";
   };
 
   build-system = [

@@ -56,7 +56,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
       oxzi
-      c0bw3b
     ];
     platforms = lib.platforms.all;
   };

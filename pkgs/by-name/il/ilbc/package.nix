@@ -7,11 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ilbc-rfc3951";
+  pname = "ilbc-rfc3951";
+  version = "0-unstable-2004-12-03";
 
   script = ./extract-cfile.awk;
 
-  rfc3951 = fetchurl {
+  src = fetchurl {
     url = "http://www.ietf.org/rfc/rfc3951.txt";
     sha256 = "0zf4mvi3jzx6zjrfl2rbhl2m68pzbzpf1vbdmn7dqbfpcb67jpdy";
   };
@@ -19,9 +20,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   unpackPhase = ''
-    mkdir -v ${name}
-    cd ${name}
-    ${gawk}/bin/gawk -f ${script} ${rfc3951}
+    mkdir -v ${pname}
+    cd ${pname}
+    ${lib.getExe gawk} -f ${script} $src
     cp -v ${./CMakeLists.txt} CMakeLists.txt
   '';
 
@@ -32,5 +33,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = lib.platforms.unix;
+    license = lib.licenses.free;
   };
 }

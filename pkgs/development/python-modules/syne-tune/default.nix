@@ -36,7 +36,7 @@
   ray,
   writableTmpDirAsHomeHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "syne-tune";
   version = "0.15.0";
   pyproject = true;
@@ -44,16 +44,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "syne-tune";
     repo = "syne-tune";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UNBpfC+aLXhkbyvCG2K00yedJnpYpfldqisZ/wDPtuA=";
   };
-
-  postPatch = ''
-    substituteInPlace syne_tune/optimizer/schedulers/synchronous/hyperband.py \
-     --replace-fail 'metric_val=np.NAN' 'metric_val=np.nan'
-    substituteInPlace syne_tune/optimizer/schedulers/synchronous/dehb.py \
-     --replace-fail 'result_failed.metric_val = np.NAN' 'result_failed.metric_val = np.nan'
-  '';
 
   build-system = [
     setuptools
@@ -108,12 +101,12 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ]
   ++ ray.optional-dependencies.tune
-  ++ optional-dependencies.blackbox-repository
-  ++ optional-dependencies.bore
-  ++ optional-dependencies.botorch
-  ++ optional-dependencies.gpsearchers
-  ++ optional-dependencies.kde
-  ++ optional-dependencies.sklearn;
+  ++ finalAttrs.passthru.optional-dependencies.blackbox-repository
+  ++ finalAttrs.passthru.optional-dependencies.bore
+  ++ finalAttrs.passthru.optional-dependencies.botorch
+  ++ finalAttrs.passthru.optional-dependencies.gpsearchers
+  ++ finalAttrs.passthru.optional-dependencies.kde
+  ++ finalAttrs.passthru.optional-dependencies.sklearn;
 
   disabledTests = [
     # NameError: name 'HV' is not defined
@@ -129,11 +122,6 @@ buildPythonPackage rec {
     "test_cholesky_factorization"
   ];
 
-  disabledTestPaths = [
-    # legacy test
-    "tst/schedulers/test_legacy_schedulers_api.py"
-  ];
-
   pythonImportsCheck = [
     "syne_tune"
   ];
@@ -141,8 +129,8 @@ buildPythonPackage rec {
   meta = {
     description = "Large scale asynchronous hyperparameter and architecture optimization library";
     homepage = "https://github.com/syne-tune/syne-tune";
-    changelog = "https://github.com/syne-tune/syne-tune/releases/tag/${src.tag}";
+    changelog = "https://github.com/syne-tune/syne-tune/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
-}
+})

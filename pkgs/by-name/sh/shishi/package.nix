@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/shishi/";
     description = "Implementation of the Kerberos 5 network security system";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

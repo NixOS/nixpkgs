@@ -111,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://pwsafe.org/";
     maintainers = with lib.maintainers; [
-      c0bw3b
       pjones
     ];
     platforms = lib.platforms.unix;
