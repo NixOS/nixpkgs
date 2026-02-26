@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage {
 
   env = {
     OPENSSL_NO_VENDOR = 1;
+    NODE_OPTIONS = "--max-old-space-size=4096";
   };
 
   patches = [
