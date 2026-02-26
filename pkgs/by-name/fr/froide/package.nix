@@ -121,8 +121,8 @@ python.pkgs.buildPythonApplication rec {
 
   pnpmDeps = fetchPnpmDeps {
     inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-g7YX2fVXGmb3Qq9NNCb294bk4/0khcIZVSskYbE8Mdw=";
+    fetcherVersion = 3;
+    hash = "sha256-NbfCVD+gmtoxuYUCumTKj9P72utK787VdlnuU4lMMGc=";
   };
 
   postBuild = ''
