@@ -9,6 +9,7 @@
   buildGoModule,
   go-bindata,
   versionCheckHook,
+  nixosTests,
 }:
 let
   pname = "fleet";
@@ -88,6 +89,9 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     inherit frontend;
+    tests = {
+      inherit (nixosTests) fleet;
+    };
   };
 
   meta = {
