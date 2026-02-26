@@ -18,6 +18,7 @@
   nix-update-script,
   stdenv,
   vulkan-loader,
+  zlib,
   pname ? "daggerfall-unity",
   includeUnfree ? false,
 }:
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libudev0-shim
     vulkan-loader
+    zlib
   ];
 
   strictDeps = true;
