@@ -3856,6 +3856,8 @@ self: super: with self; {
 
   devpi-ldap = callPackage ../development/python-modules/devpi-ldap { };
 
+  devpi-web = callPackage ../development/python-modules/devpi-web { };
+
   devtools = callPackage ../development/python-modules/devtools { };
 
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
