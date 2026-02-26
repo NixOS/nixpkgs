@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collabora-online";
-  version = "25.04.8-3";
+  version = "25.04.9-2";
 
   src = fetchFromGitHub {
     owner = "CollaboraOnline";
     repo = "online";
     tag = "cp-${finalAttrs.version}";
-    hash = "sha256-kLJ8w2vMyladeOBbz1dhFQODniT82Ao4kani+snCNM8=";
+    hash = "sha256-+Fq5P5c+MhACYeBMNAwxNnn4mHw3sLl/l2EcRid3fQc=";
   };
 
   patches = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
     '';
-    hash = "sha256-SSaXFqGGGIWzBWSEcBXtXwCoQ4S1iQcEYKJe1bLjphw=";
+    hash = "sha256-v3+J+kbYF7921TxLclaritbvJYmr2yqdnGdzODy7oUA=";
   };
 
   npmRoot = "browser";
