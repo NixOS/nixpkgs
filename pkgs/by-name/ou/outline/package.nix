@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "outline";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AxTgD5zqJ9PFdhvfbiHLDjEHzhMLPOsjGtjrzTle4qw=";
+    hash = "sha256-q/T1smxmWotXBbwKXNmKqTYYRNV2ne9PfhVM2Lj7BiE=";
   };
 
   missingHashes = ./missing-hashes.json;
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-GtuiC8/zlhWtXjSIEAIEzMbvUeXN6vUhi2CrRye2rus=";
+    hash = "sha256-R5fRNtMV8K4NJ4MOx49m0RZGIdhtJVAwFaVMaDdPkGQ=";
   };
 
   buildPhase = ''
