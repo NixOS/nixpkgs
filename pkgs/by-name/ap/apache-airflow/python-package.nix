@@ -111,8 +111,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       pname = "airflow-ui";
       inherit sourceRoot src version;
-      fetcherVersion = 1;
-      hash = "sha256-UcEFQkDZ9Ye+VfyJ9rdZKe0wilTgO4dMsULABWfL2Co=";
+      fetcherVersion = 3;
+      hash = "sha256-ccLGYaAYJWSgegO+IfVZv1WdZ5YjhYYTZivqtDjdoOk=";
     };
 
     buildPhase = ''
@@ -140,8 +140,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       pname = "simple-auth-manager-ui";
       inherit sourceRoot src version;
-      fetcherVersion = 1;
-      hash = "sha256-8nZdWnhERUkiaY8USyy/a/j+dMksjmEzCabSkysndSE=";
+      fetcherVersion = 3;
+      hash = "sha256-ccLGYaAYJWSgegO+IfVZv1WdZ5YjhYYTZivqtDjdoOk=";
     };
 
     buildPhase = ''
