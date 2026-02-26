@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm; # may be different than top-level pnpm
-    fetcherVersion = 1;
-    hash = "sha256-regaYG+SDvIgdnHQVR1GG1A1FSBXpzFfLuyTEdMt1kQ=";
+    fetcherVersion = 3;
+    hash = "sha256-/EcPuqTXXGw1dEN6l1x84cUGyx890/rujjT+zJouIvM=";
   };
 
   cargoRoot = "deps/extension";

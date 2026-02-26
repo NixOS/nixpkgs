@@ -72,8 +72,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname src version;
       inherit pnpm;
-      fetcherVersion = 1;
-      hash = "sha256-m/JxsKnVhcya7dUz1MBMQKwEdqoV3xQiGOoT4egh3K4=";
+      fetcherVersion = 3;
+      hash = "sha256-WbdYcI5y01gdS9AIzy4VZZ6eFaTHaVPscTawLSsHzlc=";
     };
 
     strictDeps = true;
@@ -160,12 +160,12 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     inherit pnpm;
-    fetcherVersion = 1;
+    fetcherVersion = 3;
     hash =
       if withAppleEmojis then
-        "sha256-sXDAAbrRFgOT+wRZqHAjEudmcUdBEbpkPWJpiB+MqDw="
+        "sha256-bxV1OUKL5FGriN4zH1iGDdLcQwFJqG/HfCXvSTwseWc="
       else
-        "sha256-uEXm4lFTJ7U9I/I1UiETy1fIHzAPP7tr9SsPQ5lWsFw=";
+        "sha256-hfJ7qt6y6Q8QpBJsdpALd9Yi6uI4Z2MwigyYVvok/rg=";
   };
 
   env = {
