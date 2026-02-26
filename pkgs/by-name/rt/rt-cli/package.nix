@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rt-cli";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "unvalley";
     repo = "rt";
     rev = "v${version}";
-    hash = "sha256-VO3WaKbKwHCZCxKr40oNWRO5+fN0D9JBtKzPuDvoKuU=";
+    hash = "sha256-Y3QWpYrAkWymI+s24YJFtpIXy9QGAksU68OOlgp0DdA=";
   };
 
-  cargoHash = "sha256-GwTJPX60vrWzFfVuwwnO6/s0AvPY2HJSw9rAvW/EIsU=";
+  cargoHash = "sha256-LN/5qSLpFZqiZrMPufPbCvjb9dRTewxROb03thPXVhk=";
 
   meta = {
     description = "Run tasks across different task runners";
