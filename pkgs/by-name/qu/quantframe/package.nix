@@ -19,13 +19,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "quantframe";
-  version = "1.5.9";
+  version = "1.6.14";
 
   src = fetchFromGitHub {
     owner = "Kenya-DK";
     repo = "quantframe-react";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jrGDgK/Z9oLSvtFfC+uIs0vj4Nku4Sp/bdR1MX/SK2E=";
+    hash = "sha256-zRJYlf9eucNcTcVn5D3lt7vYLpzFXmwJy2Srow8eLdk=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
     substituteInPlace src-tauri/tauri.conf.json \
-      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false'
+      --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false'
   '';
 
   patches = [ ./0001-disable-telemetry.patch ];
@@ -42,10 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-2p5o611IQCDk/rzlPSjtigdTCBvkzbpnysuR2GaKdg8=";
+    hash = "sha256-LlOL+hTWS+9DHEmaSmYnnPlvB/Ya30lOh9y/+MzfvyA=";
   };
 
-  cargoHash = "sha256-0IgQK0jMVN6u5i4lBKK8njbMyRQCLguTdDcSBnFnyso=";
+  cargoHash = "sha256-Bet6ve5OiQiMxiovvUbGSWTH1bnB+6Dsqbr1z2Pk+Kw=";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -67,6 +67,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  # Upstream ships mismatched NPM/Rust Tauri package versions (e.g., tauri v2.6.2 vs @tauri-apps/api v2.0.0)
+  tauriBuildFlags = [ "--ignore-version-mismatches" ];
 
   passthru.updateScript = nix-update-script { };
 
