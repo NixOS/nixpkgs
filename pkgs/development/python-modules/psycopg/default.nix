@@ -198,6 +198,9 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    # error connecting in 'pool-35': connection failed: connection to server at "127.0.0.1",
+    # port 53809 failed: server closed the connection unexpectedly
+    "test_stats_connect"
     # don't depend on mypy for tests
     "test_version"
     "test_package_version"
