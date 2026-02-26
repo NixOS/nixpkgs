@@ -6,13 +6,13 @@
   fetchMixDeps,
 }:
 let
-  version = "0.1.0-rc.2";
+  version = "0.1.0-rc.4";
 
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "expert";
     tag = "v${version}";
-    hash = "sha256-5BGI0bLGCvYyMT4GNHLalin1jg9UW6qtFC7B8OssHCc=";
+    hash = "sha256-DghNlNbGUTMX859Y9HYRowCXvAxZKJffodTzy94Mb5Q=";
   };
 
   engineDeps = fetchMixDeps {
