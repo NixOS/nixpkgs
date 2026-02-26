@@ -25234,6 +25234,11 @@
     githubId = 7669898;
     name = "Katharina Fey";
   };
+  spagy = {
+    name = "spagy";
+    github = "spagy";
+    githubId = 5479401;
+  };
   spalf = {
     email = "tom@tombarrett.xyz";
     name = "tom barrett";
