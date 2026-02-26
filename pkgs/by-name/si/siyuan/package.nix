@@ -98,8 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
       postPatch
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-GLwREEnDf3NIbQsX+LA/n6zZYvTlyiJaozfKyk04go8=";
+    fetcherVersion = 3;
+    hash = "sha256-Dp684KKAb8Ge2PyPhBFgIB17Fs6swAF/Fw2z9SN4Aio=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
