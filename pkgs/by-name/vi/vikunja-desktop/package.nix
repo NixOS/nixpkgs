@@ -39,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       pnpmInstallFlags
       ;
-    fetcherVersion = 1;
-    hash = "sha256-9KPQaRLep4n+2b9mk8KQoK22zdlMFrCb1VT6SEHxanQ=";
+    fetcherVersion = 3;
+    hash = "sha256-Auex4GrETKlQ8AONzdLZkroWoQmy+PPF8aMKW27Dlo8=";
   };
 
   env = {
