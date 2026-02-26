@@ -16,13 +16,13 @@
 }:
 
 let
-  version = "2.0.09";
+  version = "2.0.10";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-TRK6fUOLbI3lLdkSXvvuix0sGbpKLvMmYMx5ozViDRE=";
+    hash = "sha256-+HMR5fI5Ho6KyfO/IZab2cZ2N7At4Vz8vKnYXlF9Dvg=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
