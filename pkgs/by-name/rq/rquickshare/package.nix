@@ -50,8 +50,8 @@ rustPlatform.buildRustPackage rec {
       ;
     pnpm = pnpm_9;
     postPatch = "cd ${pnpmRoot}";
-    fetcherVersion = 1;
-    hash = "sha256-VbdMaIEL1e+0U+ny4qbk1Mmkuc3cahKakKKYowCBK5Q=";
+    fetcherVersion = 3;
+    hash = "sha256-ESm7YVVbsfjpgYeNf3aVhJawpWhbeNdo0u7cBzLmEMw=";
   };
 
   cargoRoot = "app/main/src-tauri";
