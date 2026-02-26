@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "supermariowar";
-  version = "2024-unstable-2025-06-18";
+  version = "2025-unstable-2026-02-23";
 
   src = fetchFromGitHub {
     owner = "mmatyas";
     repo = "supermariowar";
-    rev = "71383b07b99a52b57be79cf371ab718337365019";
-    hash = "sha256-PjweE8cGAp8V4LY0/6QzLekQ80Q1qbwDiiSzDirA29s=";
+    rev = "7252b2c81804d0ca54da322314da95d5a7652535";
+    hash = "sha256-57HoR/bG5z4+2WKbvmiJM3nCd1s3n/5yXAiLwin5lgE=";
     fetchSubmodules = true;
   };
 
