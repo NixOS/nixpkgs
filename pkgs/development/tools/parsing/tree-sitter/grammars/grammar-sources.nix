@@ -2994,7 +2994,7 @@
   };
 
   xml = {
-    version = "0-unstable-2023-01-17";
+    version = "rel-0.0.2-unstable-2023-01-17";
     url = "github:RenjiSann/tree-sitter-xml";
     rev = "48a7c2b6fb9d515577e115e6788937e837815651";
     hash = "sha256-8c/XtnffylxiqX3Q7VFWlrk/655FG2pwqYrftGpnVxI=";
