@@ -1,6 +1,6 @@
 {
   lib,
-  nodejs,
+  nodejs_22,
   node-gyp,
   node-pre-gyp,
   pixman,
@@ -18,6 +18,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "documenso";
+  nodejs = nodejs_22;
   version = "1.12.6";
 
   src = fetchFromGitHub {
@@ -84,7 +85,7 @@ buildNpmPackage (finalAttrs: {
     export PRISMA_SCHEMA_ENGINE_BINARY=${prisma-engines_6}
     cd $out/apps/remix
     ${lib.getExe prisma_6} migrate deploy --schema ../../packages/prisma/schema.prisma
-    ${lib.getExe nodejs} build/server/main.js
+    ${lib.getExe nodejs_22} build/server/main.js
     EOF
           chmod +x $out/bin/documenso
 
