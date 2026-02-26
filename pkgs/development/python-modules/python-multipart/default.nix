@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "python-multipart";
-  version = "0.0.21";
+  version = "0.0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "python-multipart";
     tag = version;
-    hash = "sha256-fvqXqQwU0JC4Pkvho5WGe/itlxttk1lKL7R5Vt0oKpA=";
+    hash = "sha256-UegnwGxiXQalbp18t1dl2JOQH6BY975cpBa9uo3SOuk=";
   };
 
   build-system = [ hatchling ];
