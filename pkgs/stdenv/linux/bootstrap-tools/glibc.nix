@@ -24,6 +24,7 @@ derivation (
     langC = true;
     langCC = true;
     isGNU = true;
+    cxxName = "g++";
     hardeningUnsupportedFlags = [
       "fortify3"
       "shadowstack"
