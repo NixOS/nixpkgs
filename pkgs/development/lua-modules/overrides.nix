@@ -452,7 +452,7 @@ in
 
     # ld: symbol(s) not found for architecture arm64
     # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
-    meta.broken = stdenv.hostPlatform.isDarwin;
+    meta.broken = stdenv.hostPlatform.isDarwin || luaAtLeast "5.5";
   });
 
   lua-subprocess = prev.lua-subprocess.overrideAttrs {
@@ -605,12 +605,16 @@ in
     };
   });
 
-  luaposix = prev.luaposix.overrideAttrs (_: {
+  luaposix = prev.luaposix.overrideAttrs (old: {
     externalDeps = [
       {
         name = "CRYPT";
         dep = libxcrypt;
       }
+    ];
+    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
+      final.bit32
+      final.std-normalize
     ];
   });
 
@@ -842,10 +846,6 @@ in
     '';
   });
 
-  nfd = prev.nfd.overrideAttrs {
-    strictDeps = false;
-  };
-
   nlua = prev.nlua.overrideAttrs {
 
     # patchShebang removes the nvim in nlua's shebang so we hardcode one
@@ -1075,6 +1075,10 @@ in
       cargo
       rustPlatform.cargoSetupHook
     ];
+
+    meta = old.meta // {
+      broken = luaAtLeast "5.5";
+    };
   });
 
   tl = prev.tl.overrideAttrs (old: {
@@ -1104,51 +1108,17 @@ in
   });
 
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {
-    strictDeps = false;
-    propagatedBuildInputs =
-      let
-        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
-        # but that doesn't seem to work
-        lua = lib.head old.propagatedBuildInputs;
-      in
-      old.propagatedBuildInputs
-      ++ [
-        lua.pkgs.luarocks-build-treesitter-parser
-        tree-sitter
-      ];
-
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+      tree-sitter
       writableTmpDirAsHomeHook
     ];
   });
 
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (old: {
-    propagatedBuildInputs =
-      let
-        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
-        # but that doesn't seem to work
-        lua = lib.head old.propagatedBuildInputs;
-      in
-      old.propagatedBuildInputs
-      ++ [
-        lua.pkgs.luarocks-build-treesitter-parser-cpp
-      ];
-
     meta.broken = lua.luaversion != "5.1";
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
-    strictDeps = false;
-    propagatedBuildInputs =
-      let
-        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
-        # but that doesn't seem to work
-        lua = lib.head old.propagatedBuildInputs;
-      in
-      old.propagatedBuildInputs
-      ++ [
-        lua.pkgs.luarocks-build-treesitter-parser
-      ];
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       writableTmpDirAsHomeHook
       tree-sitter

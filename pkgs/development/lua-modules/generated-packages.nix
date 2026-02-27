@@ -2593,17 +2593,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luaexpat";
-      version = "1.4.1-1";
+      version = "1.5.2-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luaexpat-1.4.1-1.rockspec";
-          sha256 = "1abwd385x7wnza7qqz5s4aj6m2l1c23pjmbgnpq73q0s17pn1h0c";
+          url = "mirror://luarocks/luaexpat-1.5.2-1.rockspec";
+          sha256 = "0wdbph2c92zmvvyp3q669rbjy1xjm7jy1i13lin8b636vswykw6p";
         }).outPath;
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "luaexpat";
-        tag = "1.4.1";
-        hash = "sha256-SnI+a7555R/EFFdnrvJohP6uzwQiMNQPqgp0jxAI178=";
+        tag = "1.5.2";
+        hash = "sha256-PudxKlN4WKUUK/h6ekVNSa/C453CnLh3TxCncXIOiw8=";
       };
 
       disabled = luaOlder "5.1";
@@ -2811,7 +2811,6 @@ final: prev: {
 
   luaposix = callPackage (
     {
-      bit32,
       buildLuarocksPackage,
       fetchurl,
       fetchzip,
@@ -2820,19 +2819,18 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luaposix";
-      version = "34.1.1-1";
+      version = "36.3-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luaposix-34.1.1-1.rockspec";
-          sha256 = "0hx6my54axjcb3bklr991wji374qq6mwa3ily6dvb72vi2534nwz";
+          url = "mirror://luarocks/luaposix-36.3-1.rockspec";
+          sha256 = "0jwah6b1bxzck29zxbg479zm1sqmg7vafh7rrkfpibdbwnq01yzb";
         }).outPath;
       src = fetchzip {
-        url = "http://github.com/luaposix/luaposix/archive/v34.1.1.zip";
-        sha256 = "0863r8c69yx92lalj174qdhavqmcs2cdimjim6k55qj9yn78v9zl";
+        url = "http://github.com/luaposix/luaposix/archive/v36.3.zip";
+        sha256 = "0k05mpscsqx1yd5vy126brzc35xk55nck0g7m91vrbvvq3bcg824";
       };
 
-      disabled = luaOlder "5.1" || luaAtLeast "5.4";
-      propagatedBuildInputs = [ bit32 ];
+      disabled = luaOlder "5.1" || luaAtLeast "5.5";
 
       meta = {
         homepage = "http://github.com/luaposix/luaposix/";

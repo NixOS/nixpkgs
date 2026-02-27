@@ -36,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags =
     # doing this in configureFlags causes configure to fail
-    lib.optional (!static && stdenv.hostPlatform.isCygwin) "LDFLAGS=-no-undefined";
+    (lib.optional (!static && stdenv.hostPlatform.isCygwin) "LDFLAGS+=-no-undefined")
+    ++ (lib.optionals (!static && stdenv.hostPlatform.isWindows) [
+      "LDFLAGS+=-no-undefined"
+      "LDFLAGS+=-lws2_32"
+    ]);
 
   meta = {
     description = "High-performance event loop/event model with lots of features";

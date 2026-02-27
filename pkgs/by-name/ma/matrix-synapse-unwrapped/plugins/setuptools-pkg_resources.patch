@@ -1,0 +1,24 @@
+From a879613c79861597525cdbab0d53dc4672c9a5a1 Mon Sep 17 00:00:00 2001
+From: Timotheus Pokorra <mailinglists@tpokorra.de>
+Date: Wed, 11 Feb 2026 06:54:10 +0100
+Subject: [PATCH] Replace pkg_resources.parse_version with
+ packaging.version.parse
+
+fixes #199
+---
+ ldap_auth_provider.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ldap_auth_provider.py b/ldap_auth_provider.py
+index 25dd81b..1f1c9ef 100644
+--- a/ldap_auth_provider.py
++++ b/ldap_auth_provider.py
+@@ -21,7 +21,7 @@
+ import ldap3
+ import ldap3.core.exceptions
+ import synapse
+-from pkg_resources import parse_version
++from packaging.version import parse as parse_version
+ from synapse.module_api import ModuleApi
+ from synapse.types import JsonDict
+ from twisted.internet import threads

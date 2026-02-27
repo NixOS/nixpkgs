@@ -12,9 +12,9 @@ rustPlatform.buildRustPackage {
   pname = "switch-to-configuration";
   version = "0.1.0";
 
-  src = ./src;
+  src = builtins.filterSource (name: _: !(lib.hasSuffix ".nix" name)) ./.;
 
-  cargoLock.lockFile = ./src/Cargo.lock;
+  cargoLock.lockFile = ./Cargo.lock;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];

@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
   openssl,
 }:
 
@@ -84,6 +85,10 @@ buildGoModule (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) spire;
+  };
 
   meta = {
     description = "SPIFFE Runtime Environment";

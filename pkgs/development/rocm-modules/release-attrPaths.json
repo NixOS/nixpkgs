@@ -218,7 +218,6 @@
     "python3Packages.curated-transformers",
     "python3Packages.cut-cross-entropy",
     "python3Packages.cvxpy",
-    "python3Packages.dalle-mini",
     "python3Packages.dask-mpi",
     "python3Packages.dctorch",
     "python3Packages.deepdish",

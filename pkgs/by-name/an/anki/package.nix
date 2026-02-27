@@ -153,6 +153,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
+    qt6.qtwebengine
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 

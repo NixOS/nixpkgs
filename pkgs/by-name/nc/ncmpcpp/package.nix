@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  boost,
+  boost187,
   libmpdclient,
   ncurses,
   pkg-config,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature visualizerSupport "fftw")
     (lib.enableFeature clockSupport "clock")
     (lib.withFeature taglibSupport "taglib")
-    (lib.withFeatureAs true "boost" boost.dev)
+    (lib.withFeatureAs true "boost" boost187.dev)
   ];
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost187
     libmpdclient
     ncurses
     readline

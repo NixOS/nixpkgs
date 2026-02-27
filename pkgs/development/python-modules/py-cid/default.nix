@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "py-cid";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ipld";
     repo = "py-cid";
     tag = "v${version}";
-    hash = "sha256-IYjk7sajHFWgsOMxwk1tWvKtTfPN8vHoNeENQed7MiU=";
+    hash = "sha256-ufApwZW+MJHPiiEG/E221KTlOqwNN8icb9fcn/cX1AQ=";
   };
 
   pythonRelaxDeps = [ "base58" ];

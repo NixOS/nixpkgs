@@ -75,12 +75,12 @@
 }:
 
 let
-  version = "0.24.0";
+  version = "0.25.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-dICa/sIFEHI59gJxrvWyI9Uc3rbwXi+Xh60O/hElZh0=";
+    hash = "sha256-ouJHMPcWiHn2p0mFatmC28xUmjzxsoDW9WBX6FzjyDc=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
@@ -90,7 +90,7 @@ let
 
     sourceRoot = "${src.name}/gpu_stats";
 
-    cargoHash = "sha256-iZinowkbBc3nuE0uRS2zLN2y97eCMD1mp/MKVKdnXaE=";
+    cargoHash = "sha256-yzvXJYkQTNOScOI3yfVBH6IGZzcFduuXqW3pI5hEZGw=";
 
     checkFlags = [
       # fails in sandbox

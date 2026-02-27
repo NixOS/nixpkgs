@@ -30,13 +30,13 @@
         "lts": true
     },
     "6.18": {
-        "version": "6.18.13",
-        "hash": "sha256:0zv8qml075jpk2i58cxp61hm3yb74mpkbkjg15n87riqzmakqb7d",
-        "lts": false
+        "version": "6.18.15",
+        "hash": "sha256:0w7iy9mx1b42q4qz6y9rvny7nmvpwq0mf6b9vv84w4y4qcb64wbw",
+        "lts": true
     },
     "6.19": {
-        "version": "6.19.3",
-        "hash": "sha256:1glf369wfr66lmv9wmijin6idlfgijfsh0gx2qly7gpwmml4jiqf",
+        "version": "6.19.5",
+        "hash": "sha256:1yig0i2q7vn7p8g4lmkviddxi62mzhp0fv2hx3057qq9qz40bblm",
         "lts": false
     }
 }

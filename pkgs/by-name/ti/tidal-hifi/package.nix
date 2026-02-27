@@ -219,7 +219,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gerg-l
-      qbit
       spikespaz
     ];
     # `castlabs-electron` doesn't have a distribution for `aarch64-linux`.

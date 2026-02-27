@@ -7,6 +7,27 @@ import nixos_rebuild.models as m
 import nixos_rebuild.process as p
 
 
+def test_remote_shell_script() -> None:
+    assert p._remote_shell_script({"PATH": p.PRESERVE_ENV}) == (
+        '''exec env -i PATH="${PATH-}" "$@"'''
+    )
+    assert p._remote_shell_script(
+        {
+            "PATH": p.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "0",
+        }
+    ) == (
+        """exec env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" """
+        '''NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'''
+    )
+    assert p._remote_shell_script({"PATH": p.PRESERVE_ENV, "FOO": "some value"}) == (
+        '''exec env -i PATH="${PATH-}" FOO='some value' "$@"'''
+    )
+
+
+@patch.dict(p.os.environ, {"PATH": "/path/to/bin"}, clear=True)
 @patch("subprocess.run", autospec=True)
 def test_run(mock_run: Any) -> None:
     p.run_wrapper(["test", "--with", "flags"], check=True)
@@ -19,22 +40,27 @@ def test_run(mock_run: Any) -> None:
         input=None,
     )
 
-    with patch.dict(p.os.environ, {"PATH": "/path/to/bin"}, clear=True):
-        p.run_wrapper(
-            ["test", "--with", "flags"],
-            check=False,
-            sudo=True,
-            extra_env={"FOO": "bar"},
-        )
+    p.run_wrapper(
+        ["test", "--with", "flags"],
+        check=False,
+        sudo=True,
+        env={"FOO": "bar"},
+    )
     mock_run.assert_called_with(
-        ["sudo", "--preserve-env", "test", "--with", "flags"],
+        [
+            "sudo",
+            "env",
+            "-i",
+            "PATH=/path/to/bin",
+            "FOO=bar",
+            "test",
+            "--with",
+            "flags",
+        ],
         check=False,
         text=True,
         errors="surrogateescape",
-        env={
-            "PATH": "/path/to/bin",
-            "FOO": "bar",
-        },
+        env=None,
         input=None,
     )
 
@@ -51,6 +77,10 @@ def test_run(mock_run: Any) -> None:
             *p.SSH_DEFAULT_OPTS,
             "user@localhost",
             "--",
+            "/bin/sh",
+            "-c",
+            """'exec env -i PATH="${PATH-}" "$@"'""",
+            "sh",
             "test",
             "--with",
             "'some flags'",
@@ -66,7 +96,7 @@ def test_run(mock_run: Any) -> None:
         ["test", "--with", "flags"],
         check=True,
         sudo=True,
-        extra_env={"FOO": "bar"},
+        env={"FOO": "bar"},
         remote=m.Remote("user@localhost", ["--ssh", "opt"], "password"),
     )
     mock_run.assert_called_with(
@@ -80,8 +110,10 @@ def test_run(mock_run: Any) -> None:
             "sudo",
             "--prompt=",
             "--stdin",
-            "env",
-            "FOO=bar",
+            "/bin/sh",
+            "-c",
+            """'exec env -i PATH="${PATH-}" FOO=bar "$@"'""",
+            "sh",
             "test",
             "--with",
             "flags",
@@ -164,14 +196,58 @@ def test_ssh_host() -> None:
 
 @patch("subprocess.run", autospec=True)
 def test_custom_sudo_args(mock_run: Any) -> None:
-    with patch.dict(p.os.environ, {"NIX_SUDOOPTS": "--custom foo --args"}):
+    with patch.dict(
+        p.os.environ,
+        {"NIX_SUDOOPTS": "--custom foo --args", "PATH": "/path/to/bin"},
+        clear=True,
+    ):
         p.run_wrapper(
             ["test"],
             check=False,
             sudo=True,
         )
     mock_run.assert_called_with(
-        ["sudo", "--preserve-env", "--custom", "foo", "--args", "test"],
+        [
+            "sudo",
+            "--custom",
+            "foo",
+            "--args",
+            "test",
+        ],
+        check=False,
+        env=None,
+        input=None,
+        text=True,
+        errors="surrogateescape",
+    )
+
+    with patch.dict(
+        p.os.environ,
+        {"NIX_SUDOOPTS": "--custom foo --args", "PATH": "/path/to/bin"},
+        clear=True,
+    ):
+        p.run_wrapper(
+            ["test"],
+            check=False,
+            sudo=True,
+            remote=m.Remote("user@localhost", [], None),
+        )
+    mock_run.assert_called_with(
+        [
+            "ssh",
+            *p.SSH_DEFAULT_OPTS,
+            "user@localhost",
+            "--",
+            "sudo",
+            "--custom",
+            "foo",
+            "--args",
+            "/bin/sh",
+            "-c",
+            """'exec env -i PATH="${PATH-}" "$@"'""",
+            "sh",
+            "test",
+        ],
         check=False,
         env=None,
         input=None,

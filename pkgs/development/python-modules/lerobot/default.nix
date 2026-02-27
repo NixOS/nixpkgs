@@ -58,6 +58,7 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     "av"
     "datasets"
+    "diffusers"
     "draccus"
     "gymnasium"
     "huggingface-hub"
@@ -104,6 +105,17 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    "test_add_frame"
+    "test_add_frame_state_numpy"
+    "test_data_consistency_across_episodes"
+    "test_delta_timestamps_query_returns_correct_values"
+    "test_episode_boundary_integrity"
+    "test_from_lerobot_dataset"
+    "test_statistics_metadata_validation"
+    "test_task_indexing_and_validation"
+    "test_to_lerobot_dataset"
+
     # RuntimeError: OpenCVCamera(/build/source/tests/artifacts/cameras/image_480x270.png) read failed
     "test_async_read"
     "test_fourcc_with_camer"

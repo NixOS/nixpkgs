@@ -10,8 +10,9 @@ let
   # Partition environment variables into regular and file-based (_FILE suffix)
   envVarToCredName = varName: lib.toLower varName;
   partitionEnv =
-    env:
+    allEnv:
     let
+      env = lib.filterAttrs (_name: value: value != null) allEnv;
       regular = lib.filterAttrs (name: _value: !(lib.hasSuffix "_FILE" name)) env;
       fileBased = lib.filterAttrs (name: _value: lib.hasSuffix "_FILE" name) env;
       fileBasedTransformed = lib.mapAttrs' (
@@ -240,14 +241,6 @@ in
               (coercedTo bool builtins.toJSON str)
             ]);
           options = {
-            N8N_RUNNERS_CONFIG_PATH = lib.mkOption {
-              internal = true;
-              type = with lib.types; nullOr path;
-              default = launcherConfigFile;
-              description = ''
-                Path to the configuration file for the task runner launcher.
-              '';
-            };
             N8N_RUNNERS_AUTH_TOKEN_FILE = lib.mkOption {
               type = with lib.types; nullOr path;
               default = cfg.environment.N8N_RUNNERS_AUTH_TOKEN_FILE;
@@ -401,7 +394,11 @@ in
       after = [ "n8n.service" ];
       requires = [ "n8n.service" ];
       wantedBy = [ "multi-user.target" ];
-      environment = runnersEnv.regular // runnersEnv.fileBasedTransformed;
+      environment = {
+        N8N_RUNNERS_CONFIG_PATH = launcherConfigFile;
+      }
+      // runnersEnv.regular
+      // runnersEnv.fileBasedTransformed;
       serviceConfig = {
         Type = "simple";
         ExecStart = "${lib.getExe runnersCfg.launcherPackage} ${lib.concatStringsSep " " runnerTypes}";

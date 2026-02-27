@@ -94,6 +94,11 @@ buildPythonPackage rec {
     "test_json_schema_converter"
   ];
 
+  disabledTestPaths = [
+    # Requires internet access
+    "tests/python/test_structural_tag_converter.py"
+  ];
+
   pythonImportsCheck = [ "xgrammar" ];
 
   meta = {
