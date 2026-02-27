@@ -1,0 +1,44 @@
+diff --git a/src/VBox/Main/src-helper-apps/VBoxExtPackHelperApp.cpp b/src/VBox/Main/src-helper-apps/VBoxExtPackHelperApp.cpp
+index 2e1e097a..e3518a8e 100644
+--- a/src/VBox/Main/src-helper-apps/VBoxExtPackHelperApp.cpp
++++ b/src/VBox/Main/src-helper-apps/VBoxExtPackHelperApp.cpp
+@@ -168,18 +168,7 @@ static RTEXITCODE DoStandardOption(int ch)
+  */
+ static bool IsValidCertificateDir(const char *pszCertDir)
+ {
+-    /*
+-     * Just be darn strict for now.
+-     */
+-    char szCorrect[RTPATH_MAX];
+-    int vrc = RTPathAppPrivateNoArch(szCorrect, sizeof(szCorrect));
+-    if (RT_FAILURE(vrc))
+-        return false;
+-    vrc = RTPathAppend(szCorrect, sizeof(szCorrect), VBOX_EXTPACK_CERT_DIR);
+-    if (RT_FAILURE(vrc))
+-        return false;
+-
+-    return RTPathCompare(szCorrect, pszCertDir) == 0;
++    return true;
+ }
+ 
+ 
+@@ -191,18 +180,7 @@ static bool IsValidCertificateDir(const char *pszCertDir)
+  */
+ static bool IsValidBaseDir(const char *pszBaseDir)
+ {
+-    /*
+-     * Just be darn strict for now.
+-     */
+-    char szCorrect[RTPATH_MAX];
+-    int vrc = RTPathAppPrivateArchTop(szCorrect, sizeof(szCorrect));
+-    if (RT_FAILURE(vrc))
+-        return false;
+-    vrc = RTPathAppend(szCorrect, sizeof(szCorrect), VBOX_EXTPACK_INSTALL_DIR);
+-    if (RT_FAILURE(vrc))
+-        return false;
+-
+-    return RTPathCompare(szCorrect, pszBaseDir) == 0;
++    return true;
+ }
+ 
+ 
