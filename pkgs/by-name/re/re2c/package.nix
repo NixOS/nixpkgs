@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   nix-update-script,
   python3,
@@ -22,6 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-/uQOcbK63le1FsGM7RF8NDRGMk4fs2g+u3hBGX2rBv4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-2903.patch";
+      url = "https://github.com/skvadrik/re2c/commit/febeb977936f9519a25d9fbd10ff8256358cdb97.patch";
+      hash = "sha256-JqnGfK48wpbWHb3aD9Fj3DOyoqHpbjvowppY/Vg5YWA=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
