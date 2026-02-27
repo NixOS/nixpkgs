@@ -6,13 +6,13 @@
   fetchMixDeps,
 }:
 let
-  version = "0.1.0-rc.4";
+  version = "0.1.0-rc.5";
 
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "expert";
     tag = "v${version}";
-    hash = "sha256-DghNlNbGUTMX859Y9HYRowCXvAxZKJffodTzy94Mb5Q=";
+    hash = "sha256-7e8zi3AFHESXyxTA0/YRmzR4L4tl19L0LHKaEM1l0P4=";
   };
 
   engineDeps = fetchMixDeps {
@@ -62,7 +62,7 @@ mixRelease rec {
 
   meta = {
     homepage = "https://github.com/elixir-lang/expert";
-    changelog = "https://github.com/elixir-lang/expert/releases/tag/v${version}";
+    changelog = "https://github.com/elixir-lang/expert/blob/v${version}/CHANGELOG.md";
     description = "Official Elixir Language Server Protocol implementation";
     longDescription = ''
       Expert is the official language server implementation for the Elixir programming language.
