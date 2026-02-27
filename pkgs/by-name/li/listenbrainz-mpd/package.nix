@@ -66,7 +66,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://codeberg.org/elomatreb/listenbrainz-mpd/src/tag/v${finalAttrs.version}/CHANGELOG.md";
     description = "ListenBrainz submission client for MPD";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ DeeUnderscore ];
+    maintainers = with lib.maintainers; [
+      DeeUnderscore
+      Kladki
+    ];
     mainProgram = "listenbrainz-mpd";
   };
 })
