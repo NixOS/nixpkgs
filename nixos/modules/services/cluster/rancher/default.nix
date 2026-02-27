@@ -30,6 +30,7 @@ let
       staticContentChartDir = "/var/lib/rancher/${name}/server/static/charts";
 
       manifestFormat = if jsonManifests then pkgs.formats.json { } else pkgs.formats.yaml { };
+      containerdSettingsFormat = pkgs.formats.toml { };
       # Manifests need a valid suffix to be respected
       mkManifestTarget =
         name:
@@ -639,6 +640,27 @@ let
           '';
         };
 
+        extraContainerdSettings = lib.mkOption {
+          type = lib.types.nullOr containerdSettingsFormat.type;
+          default = null;
+          example = lib.literalExpression ''
+            {
+              plugins."io.containerd.grpc.v1.cri".containerd.runtimes."custom" = {
+                runtime_type = "io.containerd.runc.v2";
+              };
+              plugins."io.containerd.grpc.v1.cri".containerd.runtimes."custom".options = {
+                BinaryName = "/path/to/custom-container-runtime";
+              };
+            }
+          '';
+          description = ''
+            Extra structured settings for containerd, converted to TOML and placed at
+            `/var/lib/rancher/${name}/agent/etc/containerd/config.toml.tmpl`.
+            The base containerd config template is automatically included.
+            See the docs on [configuring containerd](https://docs.${name}.io/advanced#configuring-containerd).
+          '';
+        };
+
         images = lib.mkOption {
           type = with lib.types; listOf package;
           default = [ ];
@@ -829,6 +851,13 @@ let
             cfg.role == "agent" && !(cfg.agentTokenFile != null || cfg.agentToken != "")
           ) "${name}: agentToken and agentToken should not be set if role is 'agent'");
 
+        assertions = [
+          {
+            assertion = !(cfg.containerdConfigTemplate != null && cfg.extraContainerdSettings != null);
+            message = "services.${name}.containerdConfigTemplate and services.${name}.extraContainerdSettings are mutually exclusive.";
+          }
+        ];
+
         environment.systemPackages = [ config.services.${name}.package ];
 
         # Use systemd-tmpfiles to activate content
@@ -871,6 +900,17 @@ let
           // (lib.optionalAttrs (cfg.containerdConfigTemplate != null) {
             ${containerdConfigTemplateFile} = {
               "L+".argument = "${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate}";
+            };
+          })
+          // (lib.optionalAttrs (cfg.extraContainerdSettings != null) {
+            ${containerdConfigTemplateFile} = {
+              "L+".argument = "${
+                pkgs.runCommand "config.toml.tmpl" { } ''
+                  echo '{{ template "base" . }}' > $out
+                  echo >> $out
+                  cat ${containerdSettingsFormat.generate "extra-containerd-settings.toml" cfg.extraContainerdSettings} >> $out
+                ''
+              }";
             };
           })
           // (lib.mapAttrs' mkChartRule helmCharts);

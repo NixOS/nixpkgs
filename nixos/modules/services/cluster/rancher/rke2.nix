@@ -122,11 +122,13 @@ in
 
   config = lib.mkIf cfg.enable (
     lib.recursiveUpdate baseModule.config {
-      warnings = (
+      warnings = baseModule.config.warnings ++ (
         lib.optional (
           cfg.role == "agent" && cfg.cni != null
         ) "rke2: cni should not be set if role is 'agent'"
       );
+
+      assertions = baseModule.config.assertions;
 
       # Configure NetworkManager to ignore CNI network interfaces.
       # See: https://docs.rke2.io/known_issues#networkmanager
