@@ -79,7 +79,6 @@ buildGoModule {
     homepage = "https://github.com/foxglove/mcap";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
-      squalus
       therishidesai
     ];
     mainProgram = "mcap";

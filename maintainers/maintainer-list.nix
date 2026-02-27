@@ -24902,12 +24902,6 @@
     githubId = 8904314;
     name = "Konstantin Nick";
   };
-  squalus = {
-    email = "squalus@squalus.net";
-    github = "squalus";
-    githubId = 36899624;
-    name = "squalus";
-  };
   squarepear = {
     email = "contact@jeffreyharmon.dev";
     github = "SquarePear";
