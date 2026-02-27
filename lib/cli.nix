@@ -167,6 +167,25 @@
     options: attrs: lib.escapeShellArgs (lib.cli.toCommandLineGNU options attrs);
 
   /**
+    Converts the given attributes into a single unescaped and space-separated
+    command-line string.
+
+    This is useful for providing raw shell expressions.
+
+    # Examples
+
+    ::: {.example}
+    ## `lib.cli.toCommandLineStringGNU` usage example
+
+    ```nix
+    lib.cli.toCommandLineStringGNU { } { seed = ''"$(( RANDOM % 256 ))"''; }
+    => "--seed=\"$(( RANDOM % 256 ))\""
+    ```
+    :::
+  */
+  toCommandLineStringGNU = options: attrs: toString (lib.cli.toCommandLineGNU options attrs);
+
+  /**
     Converts an attribute set into a list of GNU-style command-line arguments.
 
     `toCommandLineGNU` returns a list of string arguments.
@@ -250,6 +269,14 @@
   */
   toCommandLineShell =
     optionFormat: attrs: lib.escapeShellArgs (lib.cli.toCommandLine optionFormat attrs);
+
+  /**
+    Converts the given attributes into a single unescaped and space-separated
+    command-line string.
+
+    This is useful for providing raw shell expressions.
+  */
+  toCommandLineString = optionFormat: attrs: toString (lib.cli.toCommandLine optionFormat attrs);
 
   /**
     Converts an attribute set into a list of command-line arguments.
@@ -417,8 +444,10 @@
     # See also
 
     - `lib.cli.toCommandLineShell`
+    - `lib.cli.toCommandLineString`
     - `lib.cli.toCommandLineGNU`
     - `lib.cli.toCommandLineShellGNU`
+    - `lib.cli.toCommandLineStringGNU`
   */
   toCommandLine =
     optionFormat: attrs:
