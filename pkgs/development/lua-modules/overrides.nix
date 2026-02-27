@@ -1151,6 +1151,13 @@ in
     meta.broken = lua.luaversion != "5.1";
   });
 
+  tree-sitter-teal = prev.tree-sitter-teal.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs ++ [
+      tree-sitter
+      writableTmpDirAsHomeHook
+    ];
+  });
+
   vstruct = prev.vstruct.overrideAttrs (_: {
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
