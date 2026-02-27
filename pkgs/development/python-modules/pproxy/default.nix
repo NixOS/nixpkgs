@@ -8,18 +8,19 @@
   aioquic,
   python-daemon,
   setuptools,
+  psycopg,
 }:
 
 buildPythonPackage rec {
   pname = "pproxy";
-  version = "2.7.9";
+  version = "2.7.0"; # Test psycopg on upgrade!
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qwj";
     repo = "python-proxy";
     tag = version;
-    hash = "sha256-DWxbU2LtXzec1T175cMVJuWuhnxWYhe0FH67stMyOTM=";
+    hash = "sha256-2laRO7G85VIpRI5D7J5Z7PhTvmOXhUgWVx3G/Wtpc4I=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -52,6 +53,10 @@ buildPythonPackage rec {
       eval "python $f"
     done
   '';
+
+  passthru.tests = {
+    inherit psycopg;
+  };
 
   meta = {
     description = "Proxy server that can tunnel among remote servers by regex rules";
