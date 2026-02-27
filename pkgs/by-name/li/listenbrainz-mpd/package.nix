@@ -9,6 +9,7 @@
   sqlite,
   installShellFiles,
   asciidoctor,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -60,6 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     asciidoctor --backend=manpage listenbrainz-mpd.adoc -o listenbrainz-mpd.1
     installManPage listenbrainz-mpd.1
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://codeberg.org/elomatreb/listenbrainz-mpd";
