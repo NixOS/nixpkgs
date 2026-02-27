@@ -1,0 +1,10 @@
+{
+  "https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@4/dist/index.js": {
+    "url": "https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@4.3.0/dist/index.js",
+    "hash": "sha256-IOyECYVo8YqD2jYePrrfWGImn6M1FQzJvVDXmaSP31c="
+  },
+  "https://cdn.jsdelivr.net/npm/@inlang/plugin-m-function-matcher@2/dist/index.js": {
+    "url": "https://cdn.jsdelivr.net/npm/@inlang/plugin-m-function-matcher@2.2.1/dist/index.js",
+    "hash": "sha256-hYYvYwV5O1a/2a/lNosJbmP7Kuqzi3eZwFFRe+NJnAs="
+  }
+}

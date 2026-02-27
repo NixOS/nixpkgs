@@ -1,7 +1,8 @@
 {
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   gzip,
+  fetchurl,
   iana-etc,
   lib,
   libredirect,
@@ -13,17 +14,31 @@
   stdenv,
   util-linux,
   makeBinaryWrapper,
+  nix-update-script,
+  _experimental-update-script-combinators,
 }:
 let
   pname = "backrest";
-  version = "1.10.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-8WWs7XEVKAc/XmeL+dsw25azfLjUbHKp2MsB6Be14VE=";
+    hash = "sha256-wtvHIR0Bag8tJVWEwEq8PcT1zHsD670pIidp/OCLk7g=";
   };
+
+  # we need to pin the inlang plugins to specific versions because
+  # the remote ones are not pinned and we can't fetch them in the sandbox.
+  inlang-plugins = lib.mapAttrs (remote: info: fetchurl { inherit (info) url hash; }) (
+    lib.importJSON ./inlang-plugins.json
+  );
+
+  pnpmDepsHash-webui =
+    if stdenv.hostPlatform.isLinux then
+      "sha256-i+mirOEvzo4XvlPxGeNx7Em5k97b3vfRnXact1P1SeY="
+    else
+      "sha256-RzwOmY0NKrmT6Spw+2Ce1xYJoFRJwIvtl4gkDu/+0ck=";
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit version;
@@ -40,8 +55,18 @@ let
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_9;
       fetcherVersion = 1;
-      hash = "sha256-vJgsU0OXyAKjUJsPOyIY8o3zfNW1BUZ5IL814wmJr3o=";
+      hash = pnpmDepsHash-webui;
     };
+
+    postPatch = ''
+      # Replace remote inlang plugins with local ones
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (remote: local: ''
+          substituteInPlace project.inlang/settings.json \
+            --replace-fail "${remote}" "${local}"
+        '') inlang-plugins
+      )}
+    '';
 
     buildPhase = ''
       runHook preBuild
@@ -58,8 +83,13 @@ let
     '';
   });
 in
-buildGoModule {
-  inherit pname src version;
+buildGo125Module (finalAttrs: {
+  inherit
+    pname
+    src
+    version
+    frontend
+    ;
 
   postPatch = ''
     sed -i -e \
@@ -68,7 +98,10 @@ buildGoModule {
       internal/resticinstaller/resticinstaller.go
   '';
 
-  vendorHash = "sha256-cYqK/sddLI38K9bzCpnomcZOYbSRDBOEru4Y26rBLFw=";
+  proxyVendor = true;
+  vendorHash = "sha256-NC2VohNkU5MKUSguY83/j4Fb1CkZajw3gzHm4qnj5gM=";
+
+  subPackages = [ "cmd/backrest" ];
 
   nativeBuildInputs = [
     gzip
@@ -77,7 +110,7 @@ buildGoModule {
 
   preBuild = ''
     mkdir -p ./webui/dist
-    cp -r ${frontend}/* ./webui/dist
+    cp -r ${finalAttrs.frontend}/* ./webui/dist
 
     go generate -skip="npm" ./...
   '';
@@ -87,12 +120,23 @@ buildGoModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
 
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    })
+    ./update-inlang-plugins.sh
+  ];
+
   checkFlags =
     let
       skippedTests = [
         "TestMultihostIndexSnapshots"
         "TestRunCommand"
         "TestSnapshot"
+        "TestServeIndexGzip" # e2e test requires networking
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestBackup" # relies on ionice
@@ -123,8 +167,11 @@ buildGoModule {
     homepage = "https://github.com/garethgeorge/backrest";
     changelog = "https://github.com/garethgeorge/backrest/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = with lib.maintainers; [
+      iedame
+      alexandru0-dev
+    ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };
-}
+})
