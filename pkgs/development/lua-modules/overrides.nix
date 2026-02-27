@@ -403,6 +403,20 @@ in
     ];
   });
 
+  ltreesitter = prev.ltreesitter.overrideAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [
+      tree-sitter
+    ];
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace-fail '"tree-sitter/lib/src/lib.c",' "" \
+        --replace-fail '"tree-sitter/lib/include",' '"${tree-sitter}/include"' \
+        --replace-fail '"tree-sitter/lib/src"' ""
+    '';
+    NIX_CFLAGS_COMPILE = "-I${tree-sitter}/include";
+    NIX_LDFLAGS = "-L${tree-sitter}/lib -ltree-sitter";
+  });
+
   ltreesitter-ts = prev.ltreesitter-ts.overrideAttrs (old: {
     # Upstream package relies on git submodules (ltreesitter + tree-sitter),
     # but the default source fetch misses those files.

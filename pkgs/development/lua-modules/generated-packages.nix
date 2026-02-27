@@ -1608,6 +1608,35 @@ final: prev: {
     }
   ) { };
 
+  ltreesitter = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+    }:
+    buildLuarocksPackage {
+      pname = "ltreesitter";
+      version = "0.2.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/ltreesitter-0.2.0-1.rockspec";
+          sha256 = "0qhmx73hkskzmf5s3yv843234ri8n3gqj4dad79b018j5ilwiria";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "euclidianAce";
+        repo = "ltreesitter";
+        tag = "v0.2.0";
+        hash = "sha256-PYM6UAwp8w0qZxua5G6RFXI78Q6L3Vlc3eolXlNrN8k=";
+      };
+
+      meta = {
+        homepage = "https://github.com/euclidianAce/ltreesitter";
+        description = "Treesitter bindings to Lua";
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
+
   ltreesitter-ts = callPackage (
     {
       buildLuarocksPackage,
