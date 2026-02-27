@@ -174,6 +174,7 @@ assert builtins.elem variant [
   "fresh"
   "still"
   "collabora"
+  "collabora-coda"
 ];
 
 let
@@ -283,7 +284,7 @@ stdenv.mkDerivation (
 
     ''
     + (
-      if (variant != "collabora") then
+      if (variant != "collabora" && variant != "collabora-coda") then
         ''
           ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
           ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
@@ -304,7 +305,7 @@ stdenv.mkDerivation (
       # - the remaining tests have notes in the patches
       # FIXME: get rid of this ASAP
       (
-        if variant == "collabora" then
+        if (variant == "collabora" || variant == "collabora-coda") then
           # For collabora this was fixed upstream in 25.04.8.1-1
           ./skip-broken-tests-without-tdf160386.patch
         else
@@ -315,7 +316,7 @@ stdenv.mkDerivation (
       # Don't detect Qt paths from qmake, so our patched-in onese are used
       ./dont-detect-qt-paths-from-qmake.patch
     ]
-    ++ lib.optionals (variant != "collabora") [
+    ++ lib.optionals (variant != "collabora" && variant != "collabora-coda") [
       # Patch doesn't apply for collabora after 25.04.8.1-1
       # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
       ./readd-explicit-zlib-link.patch
@@ -340,7 +341,7 @@ stdenv.mkDerivation (
         hash = "sha256-KMsjDtRRH8Vy/FXaVwxUo0Ww10PCE0sK8+ZL0Ja2kJQ=";
       })
     ]
-    ++ lib.optionals (variant == "collabora") [
+    ++ lib.optionals (variant == "collabora" || variant == "collabora-coda") [
       # Backport patch to fix build with Poppler 25.05
       #(fetchpatch2 {
       #url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
@@ -356,7 +357,7 @@ stdenv.mkDerivation (
       #  hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
       #})
     ]
-    ++ lib.optionals (variant == "collabora") [
+    ++ lib.optionals (variant == "collabora" || variant == "collabora-coda") [
       ./fix-unpack-collabora.patch
     ];
 
@@ -511,7 +512,7 @@ stdenv.mkDerivation (
       ++ optionals withJava [
         jre'
       ]
-      ++ optionals (variant == "collabora") [
+      ++ optionals (variant == "collabora" || variant == "collabora-coda") [
         md4c
       ];
 
@@ -643,7 +644,7 @@ stdenv.mkDerivation (
       "--with-ant-home=${ant.home}"
       "--with-beanshell-jar=${bsh}"
     ]
-    ++ optionals (variant == "collabora") [
+    ++ optionals (variant == "collabora" || variant == "collabora-coda") [
       "--without-system-fast_float"
     ];
 
@@ -669,7 +670,7 @@ stdenv.mkDerivation (
     preCheck = ''
       export HOME=$(pwd)
     ''
-    + lib.optionalString (variant == "collabora") ''
+    + lib.optionalString (variant == "collabora" || variant == "collabora-coda") ''
       export XDG_RUNTIME_DIR=$(mktemp -d)
 
       # tests try to access x11 and fail
@@ -684,7 +685,7 @@ stdenv.mkDerivation (
       "--keep-going" # easier to debug test failures
     ];
 
-    postInstall = optionalString (variant != "collabora") ''
+    postInstall = optionalString (variant != "collabora" && variant != "collabora-coda") ''
       mkdir -p $out/{include,share/icons}
 
       cp -r include/LibreOfficeKit $out/include/
@@ -797,7 +798,7 @@ stdenv.mkDerivation (
       mainProgram = "libreoffice";
     };
   }
-  // lib.optionalAttrs (variant == "collabora") {
+  // lib.optionalAttrs (variant == "collabora" || variant == "collabora-coda") {
     # fix references to /build in $out/lib/collaboraoffice/program/liborcus-0.18.so.0
     # should be preFixup because auditTmpdir is a fixupOutputHook which runs right after preFixup hook
     preFixup = ''
