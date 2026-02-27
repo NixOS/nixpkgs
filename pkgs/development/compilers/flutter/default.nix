@@ -53,15 +53,20 @@ let
         dart =
           let
             hash =
-              dartHash.${stdenv.hostPlatform.system}
-                or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+              dartHash.${
+                if (stdenv.hostPlatform.isLinux && (lib.versionAtLeast version "3.41")) then
+                  "linux"
+                else
+                  stdenv.hostPlatform.system
+              } or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
           in
           (
             if lib.versionAtLeast version "3.41" then
-              (dart-bin.overrideAttrs (oldAttrs: {
+              (dart.overrideAttrs (oldAttrs: {
                 version = dartVersion;
                 src = oldAttrs.src.overrideAttrs (_: {
-                  inherit hash;
+                  version = dartVersion;
+                  outputHash = hash;
                 });
               }))
             else
