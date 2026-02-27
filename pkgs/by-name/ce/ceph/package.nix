@@ -249,25 +249,6 @@ let
       meta = getMeta "Ceph common module for code shared by manager modules";
     };
 
-  # Watch out for python <> boost compatibility
-  # python = python313.override {
-  #   self = python;
-  #   packageOverrides =
-  #     self: super:
-  #     {
-  #       kubernetes = super.kubernetes.overridePythonAttrs (old: rec {
-  #         version = "18.20.0";
-  #         src = fetchFromGitHub {
-  #           owner = "kubernetes-client";
-  #           repo = "python";
-  #           rev = "v${version}";
-  #           sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
-  #           fetchSubmodules = true;
-  #         };
-  #       });
-  #     };
-  # };
-
   boost' = boost187.override {
     enablePython = true;
     inherit python;
@@ -437,10 +418,6 @@ stdenv.mkDerivation {
     "${placeholder "out"}/${ceph-python-env.sitePackages}"
   ];
 
-  patches = [
-    ./ndctl.patch
-  ];
-
   # * `unset AS` because otherwise the Ceph CMake build errors with
   #       configure: error: No modern nasm or yasm found as required. Nasm should be v2.11.01 or later (v2.13 for AVX512) and yasm should be 1.2.0 or later.
   #   because the code at
@@ -454,6 +431,10 @@ stdenv.mkDerivation {
   # * increase the `command` buffer size since 2 nix store paths cannot fit within 128 characters
   preConfigure = ''
     unset AS
+
+    substituteInPlace src/pmdk/src/libpmem2/{badblocks,region_namespace,usc}_ndctl.c \
+                      src/pmdk/src/tools/daxio/daxio.c \
+      --replace-fail "<ndctl/libdaxctl.h>" "<daxctl/libdaxctl.h>"
 
     substituteInPlace src/common/module.c \
       --replace "char command[128];" "char command[256];" \
