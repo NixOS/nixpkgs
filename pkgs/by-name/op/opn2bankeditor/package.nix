@@ -10,15 +10,15 @@
   rtmidi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opn2bankeditor";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "Wohlstand";
     repo = "opn2bankeditor";
-    rev = "v${version}";
-    sha256 = "0niam6a6y57msbl0xj23g6l7gisv4a670q0k1zqfm34804532a32";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YigxCgGIjOrwDxNgcIwiW8d3qHlDyA7o0vUUb5SpKlo=";
   };
 
   prePatch = ''
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
   meta = {
     mainProgram = "opn2_bank_editor";
     description = "Small cross-platform editor of the OPN2 FM banks of different formats";
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/Wohlstand/opn2bankeditor";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ OPNA2608 ];
   };
-}
+})
