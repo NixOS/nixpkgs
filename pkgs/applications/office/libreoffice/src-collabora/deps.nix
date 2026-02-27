@@ -140,18 +140,18 @@
     md5name = "03e084b994cbeffc8c3dd13303b2cb805f44d8f2c3b79f7690d7e3fc7f6215ad-libepubgen-0.1.1.tar.xz";
   }
   {
-    name = "libetonyek-0.1.12.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/libetonyek-0.1.12.tar.xz";
-    sha256 = "b9fa82fbeb8cb7a701101060e4f3e1e4ef7c38f574b2859d3ecbe43604c21f83";
+    name = "libetonyek-0.1.13.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libetonyek-0.1.13.tar.xz";
+    sha256 = "032b71cb597edd92a0b270b916188281bc35be55296b263f6817b29adbcb1709";
     md5 = "";
-    md5name = "b9fa82fbeb8cb7a701101060e4f3e1e4ef7c38f574b2859d3ecbe43604c21f83-libetonyek-0.1.12.tar.xz";
+    md5name = "032b71cb597edd92a0b270b916188281bc35be55296b263f6817b29adbcb1709-libetonyek-0.1.13.tar.xz";
   }
   {
-    name = "expat-2.7.2.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/expat-2.7.2.tar.xz";
-    sha256 = "21b778b34ec837c2ac285aef340f9fb5fa063a811b21ea4d2412a9702c88995c";
+    name = "expat-2.7.4.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/expat-2.7.4.tar.xz";
+    sha256 = "9e9cabb457c1e09de91db2706d8365645792638eb3be1f94dbb2149301086ac0";
     md5 = "";
-    md5name = "21b778b34ec837c2ac285aef340f9fb5fa063a811b21ea4d2412a9702c88995c-expat-2.7.2.tar.xz";
+    md5name = "9e9cabb457c1e09de91db2706d8365645792638eb3be1f94dbb2149301086ac0-expat-2.7.4.tar.xz";
   }
   {
     name = "Firebird-3.0.7.33374-0.tar.bz2";
@@ -854,11 +854,11 @@
     md5name = "d55495ab3a86544650587de2a72180ddf8bfc6376d14ddfa923992dbc86a06e0-odfvalidator-0.9.0-RC2-SNAPSHOT-jar-with-dependencies-2726ab578664434a545f8379a01a9faffac0ae73.jar";
   }
   {
-    name = "officeotron-0.8.5.jar";
-    url = "https://dev-www.libreoffice.org/src/../extern/officeotron-0.8.5.jar";
-    sha256 = "0c2a4227394ac78147387f1c1ff1063e87f2151ffc91f1eb97bb17c2650fa708";
+    name = "officeotron-0.8.8.jar";
+    url = "https://dev-www.libreoffice.org/src/../extern/officeotron-0.8.8.jar";
+    sha256 = "c72cdcb7fe7cfe917d1fb8766ddbc3f92b6124ecd5fb8c6dc0ddabb74a7e057c";
     md5 = "";
-    md5name = "0c2a4227394ac78147387f1c1ff1063e87f2151ffc91f1eb97bb17c2650fa708-officeotron-0.8.5.jar";
+    md5name = "c72cdcb7fe7cfe917d1fb8766ddbc3f92b6124ecd5fb8c6dc0ddabb74a7e057c-officeotron-0.8.8.jar";
   }
   {
     name = "onlineupdate-c003be8b9727672e7d30972983b375f4c200233f-2.tar.xz";
@@ -924,11 +924,11 @@
     md5name = "ea1480efada2fd948bc75366f7c349e1c96d3297d09a3fe62626e38e234a625e-pixman-0.42.2.tar.gz";
   }
   {
-    name = "libpng-1.6.54.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/libpng-1.6.54.tar.xz";
-    sha256 = "01c9d8a303c941ec2c511c14312a3b1d36cedb41e2f5168ccdaa85d53b887805";
+    name = "libpng-1.6.55.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libpng-1.6.55.tar.xz";
+    sha256 = "d925722864837ad5ae2a82070d4b2e0603dc72af44bd457c3962298258b8e82d";
     md5 = "";
-    md5name = "01c9d8a303c941ec2c511c14312a3b1d36cedb41e2f5168ccdaa85d53b887805-libpng-1.6.54.tar.xz";
+    md5name = "d925722864837ad5ae2a82070d4b2e0603dc72af44bd457c3962298258b8e82d-libpng-1.6.55.tar.xz";
   }
   {
     name = "tiff-4.7.1.tar.xz";
