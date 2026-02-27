@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "haven";
-  version = "1.2.0";
+  version = "1.2.0-unstable-2026-02-27";
 
   src = fetchFromGitHub {
-    owner = "bitvora";
+    owner = "barrydeen";
     repo = "haven";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-1rGOZVzlzijyxqjAnp2uvxy9KPr3uuRD8+48x38lQwg=";
+    rev = "1f81770d3a79f8ebb2f037b37635ab66e02d13d8";
+    hash = "sha256-4N7erObBg613aDFHRmjNE25eyQBPsenSz3JkQbdcki0=";
   };
 
   vendorHash = "sha256-VXx6uoOUKk/BkjDS3Ykf/0Xc2mUPm8dgyRArIb2I8X4=";
@@ -25,8 +25,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "High Availability Vault for Events on Nostr";
-    homepage = "https://github.com/bitvora/haven";
-    changelog = "https://github.com/bitvora/haven/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/barrydeen/haven";
+    changelog = "https://github.com/barrydeen/haven/releases";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felixzieger ];
     mainProgram = "haven";
