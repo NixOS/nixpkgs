@@ -9133,6 +9133,13 @@
     githubId = 77672306;
     name = "Florian Agbuya";
   };
+  fschn90 = {
+    email = "nix@fschn.org";
+    github = "fschn90";
+    githubId = 79014934;
+    name = "Florian Schneider";
+    matrix = "@fschn:matrix.org";
+  };
   fsnkty = {
     name = "fsnkty";
     github = "fsnkty";

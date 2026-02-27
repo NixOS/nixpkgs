@@ -48,6 +48,7 @@ let
   exporterOpts =
     (genAttrs
       [
+        "adguard"
         "apcupsd"
         "artifactory"
         "bind"
