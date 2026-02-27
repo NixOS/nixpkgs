@@ -16,7 +16,7 @@
   mock,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "pyedbglib";
   version = "2.24.2.18";
   pyproject = true;
@@ -24,9 +24,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "microchip-pic-avr-tools";
     repo = "pyedbglib";
-    # the repo currently does not tag releases, so using the
-    # commit ID for now
-    rev = "9bbeceba942772ef31b9c059b761460a782313e";
+    rev = finalAttrs.version;
     hash = "sha256-iZB/+JEBy5n1zfajmJmEqRVQ2hPzJD/U85SvmyFiGhc=";
   };
 
@@ -54,4 +52,4 @@ buildPythonPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prophetofxenu ];
   };
-}
+})
