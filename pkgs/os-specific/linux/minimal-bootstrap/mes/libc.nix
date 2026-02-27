@@ -21,10 +21,7 @@ let
   sources = (import ./sources.nix).${arch}.linux.gcc;
   inherit (sources) libtcc1_SOURCES libc_gnu_SOURCES;
 
-  ldexpl = fetchurl {
-    url = "https://gitlab.com/janneke/mes/-/raw/c837abed8edb341d4e56913729fbe9803b4de47c/lib/math/ldexpl.c";
-    hash = "sha256-3QoFZZIqVmlMUosEqOdYIMEHzYgQ7GJ7Hz0Bf/1iIig=";
-  };
+  ldexpl = ./ldexpl.c;
 
   # Concatenate all source files into a convenient bundle
   # "gcc" variants of source files (eg. "lib/linux/x86-mes-gcc") can also be
