@@ -5,6 +5,7 @@
   nodejs_22,
   inter,
   fira-code,
+  nixosTests,
   pname,
   version,
   src,
@@ -79,6 +80,12 @@ buildNpmPackage {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) unittcms;
+    };
+  };
 
   meta = {
     description = "Frontend of UnitTCMS, an open source test case management system designed for self-hosted use";

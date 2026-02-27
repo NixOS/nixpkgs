@@ -3,6 +3,7 @@
   buildNpmPackage,
   makeBinaryWrapper,
   nodejs_22,
+  nixosTests,
   pname,
   version,
   src,
@@ -49,6 +50,12 @@ buildNpmPackage {
     substituteAll "${./unittcms-sequelize.sh}" "$out/bin/unittcms-sequelize"
     chmod +x "$out/bin/unittcms-sequelize"
   '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) unittcms;
+    };
+  };
 
   meta = {
     description = "Backend of UnitTCMS, an open source test case management system designed for self-hosted use";
