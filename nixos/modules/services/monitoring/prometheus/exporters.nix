@@ -86,6 +86,7 @@ let
         "keylight"
         "klipper"
         "knot"
+        "kvrocks"
         "libvirt"
         "lnd"
         "mail"

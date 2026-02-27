@@ -770,6 +770,22 @@ let
         '';
       };
 
+    kvrocks =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+        };
+        metricProvider.services.kvrocks.enable = true;
+        exporterTest = ''
+          wait_for_unit("kvrocks.service")
+          wait_for_unit("prometheus-kvrocks-exporter.service")
+          wait_for_open_port(6666)
+          wait_for_open_port(9121)
+          wait_until_succeeds("curl -sSf localhost:9121/metrics | grep 'kvrocks_up 1'")
+        '';
+      };
+
     lnd =
       { pkgs, ... }:
       {
