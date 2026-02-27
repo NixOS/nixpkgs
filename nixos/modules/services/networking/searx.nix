@@ -362,11 +362,54 @@ in
         after = [
           "searx-init.service"
           "network.target"
-        ];
+        ]
+        ++ lib.optionals cfg.redisCreateLocally [ "redis-searx.service" ];
         serviceConfig = {
           User = "searx";
+          DynamicUser = true;
           Group = "searx";
           ExecStart = lib.getExe cfg.package;
+
+          CacheDirectory = "searx";
+          CacheDirectoryMode = "0700";
+
+          ReadOnlyPaths = [ cfg.settingsPath ];
+          ReadWritePaths = lib.optional cfg.redisCreateLocally config.services.redis.servers.searx.unixSocket;
+
+          CapabilityBoundingSet = null;
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          PrivateIPC = true;
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallErrorNumber = "EPERM";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged @resources"
+          ];
+          UMask = "0077";
         }
         // optionalAttrs (cfg.environmentFile != null) {
           EnvironmentFile = cfg.environmentFile;
