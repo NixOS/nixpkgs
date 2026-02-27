@@ -123,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "launchd" stdenv.hostPlatform.isDarwin)
     (lib.mesonEnable "systemd" enableSystemd)
     "-Dselinux=disabled"
+    "-Dc_args=-Wno-error=incompatible-pointer-types"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # `launchctl` is only needed at runtime. Lie to `find_program` because it will always be present on a Darwin host.
