@@ -6,13 +6,10 @@
   ldap3,
   mock,
   pytest-cov-stub,
-  pytest-flake8,
   pytestCheckHook,
   pythonOlder,
-  pythonAtLeast,
   pyyaml,
   setuptools,
-  setuptools-changelog-shortener,
   webtest,
 }:
 
@@ -21,8 +18,8 @@ buildPythonPackage (finalAttrs: {
   version = "2.1.1-unstable-2026-01-22";
   pyproject = true;
 
-  # build-system broken for 3.14, package incompatible <3.13
-  disabled = pythonOlder "3.13" || pythonAtLeast "3.14";
+  # some transitive deps incompatible <3.12
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "devpi";
@@ -31,9 +28,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-2LpreWmG6WMRrc5L7ylSej5Ce6VhfNDAW2eoJ76D49o=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools_changelog_shortener"' ""
+  '';
+
   build-system = [
     setuptools
-    setuptools-changelog-shortener
   ];
 
   dependencies = [
@@ -46,7 +47,6 @@ buildPythonPackage (finalAttrs: {
     devpi-server
     mock
     pytest-cov-stub
-    pytest-flake8
     pytestCheckHook
     webtest
   ];

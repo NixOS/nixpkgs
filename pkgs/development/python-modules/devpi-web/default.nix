@@ -8,17 +8,15 @@
   devpi-server,
   docutils,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
   pygments,
   pyramid,
   pyramid-chameleon,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   readme-renderer,
   setuptools,
-  setuptools-changelog-shortener,
   tomli,
   webtest,
   whoosh,
@@ -38,13 +36,17 @@ buildPythonPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/web";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools_changelog_shortener"' ""
+  '';
+
   build-system = [
     setuptools
-    setuptools-changelog-shortener
   ];
 
-  # build-system broken for 3.14, package incompatible <3.13
-  disabled = pythonOlder "3.13" || pythonAtLeast "3.14";
+  # some transitive deps incompatible <3.12
+  disabled = pythonOlder "3.12";
 
   dependencies = [
     attrs
@@ -70,7 +72,10 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "devpi_web" ];
 
-  passthru.updateScript = nix-update-script { };
+  # devpi uses a monorepo for server, common, client and web
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "web-";
+  };
 
   meta = {
     homepage = "https://github.com/devpi/devpi";
