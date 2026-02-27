@@ -207,13 +207,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "258.3";
+  version = "258.5";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wpg/0z7xrB8ysPaa/zNp1mz+yYRCGyXz0ODZcKapovM=";
+    hash = "sha256-3xz8q0R0gMAwRDV2QmYO0r/0Fw+9LOyR3O3XuMrTpgY=";
   };
 
   # On major changes, or when otherwise required, you *must* :
