@@ -1,0 +1,21 @@
+diff --git a/config/fonts.ts b/config/fonts.ts
+index ebf5336..e13fcf3 100644
+--- a/config/fonts.ts
++++ b/config/fonts.ts
+@@ -1,11 +1,11 @@
+-import { Fira_Code as FontMono, Inter as FontSans } from 'next/font/google';
++import localFont from "next/font/local";
+ 
+-export const fontSans = FontSans({
+-  subsets: ['latin'],
++export const fontSans = localFont({
++  src: 'InterVariable.ttf',
+   variable: '--font-sans',
+ });
+ 
+-export const fontMono = FontMono({
+-  subsets: ['latin'],
++export const fontMono = localFont({
++  src: 'FiraCode-VF.ttf',
+   variable: '--font-mono',
+ });
