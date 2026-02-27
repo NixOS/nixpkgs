@@ -161,7 +161,8 @@ in
             ];
             RestrictRealtime = true;
             LockPersonality = true;
-            MemoryDenyWriteExecute = true;
+            # 0.60.0 Taglib introduces WASM JIT that requires this
+            MemoryDenyWriteExecute = false;
             UMask = "0066";
             ProtectHostname = true;
           };

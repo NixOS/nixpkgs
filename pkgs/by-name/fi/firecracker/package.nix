@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firecracker";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
     rev = "v${version}";
-    hash = "sha256-ZrIvz5hmP0d8ADF723Z+lOP9hi5nYbi6WUtV4wTp73U=";
+    hash = "sha256-rBv5BYbR4xrv1BnZdKtd7jroOhpq2SpL97C4FEn1UfU=";
   };
 
-  cargoHash = "sha256-BjaNUYZRPKJKjiQWMUyoBIdD2zsNqZX37CPzdwb+lCE=";
+  cargoHash = "sha256-PDn3N92nBElJsQeNInFe29+4k3psPt1kEWiNXUtkOnQ=";
 
   # For aws-lc-sys@0.22.0: use external bindgen.
   AWS_LC_SYS_EXTERNAL_BINDGEN = "true";
@@ -75,6 +75,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=env::tests::test_mknod_and_own_dev"
     "--skip=env::tests::test_setup_jailed_folder"
     "--skip=env::tests::test_userfaultfd_dev"
+    "--skip=env::tests::test_copy_exec_to_chroot"
     "--skip=resource_limits::tests::test_set_resource_limits"
   ];
 

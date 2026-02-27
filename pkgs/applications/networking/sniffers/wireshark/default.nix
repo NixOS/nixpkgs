@@ -47,6 +47,7 @@
   wrapGAppsHook3,
   zlib-ng,
   zstd,
+  brotli,
 
   withQt ? true,
   qt6 ? null,
@@ -127,6 +128,7 @@ stdenv.mkDerivation rec {
     speexdsp
     zlib-ng
     zstd
+    brotli
   ]
   ++ lib.optionals withQt (
     with qt6;
