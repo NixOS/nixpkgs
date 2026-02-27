@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
-    fetcherVersion = 1;
-    hash = "sha256-jwoSvqE0hqRxu76vDtUOpZxvi4SsmKukfpmp5G6ZV/I=";
+    fetcherVersion = 3;
+    hash = "sha256-a1ym/UpUufUPTGL3dozZ9Jb0eX1XVB7Hahek25eLvc4=";
   };
 
   buildInputs = [ nodejs_20 ];
