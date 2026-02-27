@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nixosTests,
 
   # keep-sorted start
   cmake,
@@ -323,6 +324,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     hook = callPackage ./hook.nix { kvrocks = finalAttrs.finalPackage; };
     tests = {
+      inherit (nixosTests) kvrocks;
       hook = callPackage ./hook-test.nix { kvrocks = finalAttrs.finalPackage; };
     };
   };

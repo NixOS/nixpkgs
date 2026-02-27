@@ -853,6 +853,7 @@ in
     inherit runTest;
     inherit (pkgs) lib;
   };
+  kvrocks = runTest ./kvrocks.nix;
   labgrid = runTest ./labgrid.nix;
   lact = runTest ./lact.nix;
   ladybird = runTest ./ladybird.nix;
