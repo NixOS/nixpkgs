@@ -1689,6 +1689,8 @@ let
 
         ### P ###
 
+        pacomb = callPackage ../development/ocaml-modules/pacomb { };
+
         paf = callPackage ../development/ocaml-modules/paf { };
 
         paf-cohttp = callPackage ../development/ocaml-modules/paf/cohttp.nix {
