@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wgcf";
   version = "2.2.30";
 
   src = fetchFromGitHub {
     owner = "ViRb3";
     repo = "wgcf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZiVSbsudGnwV7IkhUltzeC4EjTxWIaxvmxBiMcMYAfQ=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ yureien ];
     mainProgram = "wgcf";
   };
-}
+})

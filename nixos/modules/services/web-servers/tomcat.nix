@@ -14,7 +14,6 @@ in
 {
   meta = {
     maintainers = with lib.maintainers; [
-      danbst
       anthonyroussel
     ];
   };

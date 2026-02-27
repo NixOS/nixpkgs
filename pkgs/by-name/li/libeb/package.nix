@@ -6,12 +6,12 @@
   zlib,
   fetchpatch,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libeb";
   version = "4.4.3";
 
   src = fetchurl {
-    url = "ftp://ftp.sra.co.jp/pub/misc/eb/eb-${version}.tar.bz2";
+    url = "ftp://ftp.sra.co.jp/pub/misc/eb/eb-${finalAttrs.version}.tar.bz2";
     sha256 = "0psbdzirazfnn02hp3gsx7xxss9f1brv4ywp6a15ihvggjki1rxb";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
-}
+})

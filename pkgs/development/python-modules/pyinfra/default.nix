@@ -16,22 +16,20 @@
   pytest-testinfra,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   typeguard,
-  typing-extensions,
   uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "3.6";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fizzadar";
     repo = "pyinfra";
     tag = "v${version}";
-    hash = "sha256-CTeGn9aN5voyCUL5LuTErLgTgC1Z/qTS7SB9TNfq7mc=";
+    hash = "sha256-SB/V5pV10pBaYyYTp/Ty3J+/NX9oT3u++ZWELCk1qkc=";
   };
 
   patches = [
@@ -63,8 +61,7 @@ buildPythonPackage rec {
     pydantic
     python-dateutil
     typeguard
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     freezegun

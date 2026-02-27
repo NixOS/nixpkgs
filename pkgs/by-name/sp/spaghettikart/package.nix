@@ -18,7 +18,7 @@
   pkg-config,
   libGL,
   libvorbis,
-  libX11,
+  libx11,
   libzip,
   nlohmann_json,
   SDL2,
@@ -173,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Recent builds enabled LTO which won't build with nix
-  NIX_CFLAGS_COMPILE = "-fno-lto";
+  env.NIX_CFLAGS_COMPILE = "-fno-lto";
 
   nativeBuildInputs = [
     cmake
@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libvorbis
-    libX11
+    libx11
     libzip
     nlohmann_json
     SDL2
@@ -252,7 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ../yamls $out/share/spaghettikart/
     cp -r ../meta $out/share/spaghettikart/
     install -Dm644 -t $out/share/spaghettikart {spaghetti.o2r,config.yml,gamecontrollerdb.txt}
-    install -Dm644 ../icon.png $out/share/pixmaps/spaghettikart.png
+    install -Dm644 ../icon.png $out/share/icons/hicolor/256x256/apps/spaghettikart.png
     install -Dm644 -t $out/share/licenses/spaghettikart/libgfxd ${libgfxd}/LICENSE
     install -Dm644 -t $out/share/licenses/spaghettikart/libultraship ../libultraship/LICENSE
     install -Dm644 -t $out/share/licenses/spaghettikart/thread_pool ${thread_pool}/LICENSE.txt

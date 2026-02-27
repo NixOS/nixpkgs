@@ -6,7 +6,7 @@
   runitor,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "runitor";
   version = "1.4.1";
   vendorHash = "sha256-SYYAAtuWt/mTmZPBilYxf2uZ6OcgeTnobYiye47i8mI=";
@@ -14,20 +14,20 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bdd";
     repo = "runitor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-y4wIfal8aiVD5ZoRF6GnYUGRssBLMOPSWa40+3OU4y0=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=v${version}"
+    "-X main.Version=v${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
     package = runitor;
     command = "runitor -version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   # Unit tests require binding to local addresses for listening sockets.
@@ -49,4 +49,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bdd ];
     mainProgram = "runitor";
   };
-}
+})

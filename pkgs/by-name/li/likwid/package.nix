@@ -8,12 +8,12 @@
   gnugrep,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "likwid";
   version = "5.5.1";
 
   src = fetchurl {
-    url = "https://ftp.fau.de/pub/likwid/likwid-${version}.tar.gz";
+    url = "https://ftp.fau.de/pub/likwid/likwid-${finalAttrs.version}.tar.gz";
     hash = "sha256-JceDDmOyA5b8/DsWrnnDm0IgqG03bOt81pSbX/mR23g=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://hpc.fau.de/research/tools/likwid/";
-    changelog = "https://github.com/RRZE-HPC/likwid/releases/tag/v${version}";
+    changelog = "https://github.com/RRZE-HPC/likwid/releases/tag/v${finalAttrs.version}";
     description = "Performance monitoring and benchmarking suite";
     license = lib.licenses.gpl3Only;
     # Might work on ARM by appropriately setting COMPILER in config.mk
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "likwid-perfctr";
   };
-}
+})

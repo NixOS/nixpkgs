@@ -18,7 +18,7 @@
   nix-update-script,
 }:
 
-python313Packages.buildPythonApplication rec {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "high-tide";
   version = "1.2.0";
   pyproject = false;
@@ -26,7 +26,7 @@ python313Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "high-tide";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KaUI0Sa2sYrwv6v8kVbBwaTLaeY/B6tnDMJNNGazn9M=";
   };
 
@@ -83,4 +83,4 @@ python313Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

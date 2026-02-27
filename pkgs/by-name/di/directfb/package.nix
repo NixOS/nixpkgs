@@ -21,14 +21,14 @@
   SDL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "directfb";
   version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "deniskropp";
     repo = "DirectFB";
-    rev = "DIRECTFB_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "DIRECTFB_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "0bs3yzb7hy3mgydrj8ycg7pllrd2b6j0gxj596inyr7ihssr3i0y";
   };
 
@@ -144,4 +144,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

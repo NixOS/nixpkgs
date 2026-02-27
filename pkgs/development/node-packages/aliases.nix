@@ -33,6 +33,7 @@ let
 in
 
 mapAliases {
+  "@angular/cli" = throw "@angular/cli was removed because it was unmaintainable in nixpkgs"; # Added 2026-02-12
   "@antfu/ni" = pkgs.ni; # Added 2025-11-08
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@astrojs/language-server" = pkgs.astro-language-server; # Added 2024-02-12
@@ -51,11 +52,21 @@ mapAliases {
   "@maizzle/cli" = pkgs.maizzle; # added 2023-08-17
   "@medable/mdctl-cli" = throw "@medable/mdctl-cli was removed because it was broken"; # added 2023-08-21
   "@mermaid-js/mermaid-cli" = pkgs.mermaid-cli; # added 2023-10-01
+  "@microsoft/rush" =
+    throw "@microsoft/rush has been removed because it was unmaintainable within nixpkgs"; # Added 2026-02-12
   "@nerdwallet/shepherd" = pkgs.shepherd; # added 2023-09-30
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   "@prisma/language-server" = throw "@prisma/language-server has been removed because it was broken"; # added 2025-03-23
   "@shopify/cli" = throw "@shopify/cli has been removed because it was broken"; # added 2025-03-12
+  "@tailwindcss/aspect-ratio" =
+    throw "@tailwindcss/aspect-ratio has been removed because it is a library and your JS project should lock it instead."; # Added 2026-02-19
+  "@tailwindcss/forms" =
+    throw "@tailwindcss/forms has been removed because it is a library and your JS project should lock it instead."; # Added 2026-02-19
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
+  "@tailwindcss/line-clamp" =
+    throw "@tailwindcss/line-clamp has been removed because it is a library and your JS project should lock it instead."; # Added 2026-02-19
+  "@tailwindcss/typography" =
+    throw "@tailwindcss/typography has been removed because it is a library and your JS project should lock it instead."; # Added 2026-02-19
   "@uppy/companion" = pkgs.uppy-companion; # Added 2025-11-01
   "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@vue/language-server" = pkgs.vue-language-server; # added 2024-06-15
@@ -68,6 +79,7 @@ mapAliases {
   "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
   "@yaegassy/coc-nginx" = pkgs.coc-nginx; # Added 2025-11-08
   "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
+  alex = throw "'alex' has been removed because it was unmaintainable in nixpkgs"; # Added 2026-02-12
   audiosprite = throw "'audiosprite' has been removed because it was abandoned upstream"; # Added 2025-11-14
   inherit (pkgs) autoprefixer; # added 2024-06-25
   inherit (pkgs) asar; # added 2023-08-26
@@ -81,6 +93,7 @@ mapAliases {
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
   bower = throw "bower was removed because it was deprecated"; # added 2025-09-17
   inherit (pkgs) bower2nix; # added 2024-08-23
+  browser-sync = throw "'browser-sync' has been removed because it was unmaintained in nixpkgs"; # Added 2026-01-26
   inherit (pkgs) btc-rpc-explorer; # added 2023-08-17
   inherit (pkgs) carbon-now-cli; # added 2023-08-17
   inherit (pkgs) carto; # added 2023-08-17
@@ -99,6 +112,7 @@ mapAliases {
   inherit (pkgs) coc-explorer; # added 2025-10-01
   inherit (pkgs) coc-flutter; # Added 2025-11-05
   inherit (pkgs) coc-git; # added 2025-10-01
+  coc-go = throw "coc-go has been removed because it was unmaintained in nixpkgs"; # Added 2026-02-14
   inherit (pkgs) coc-haxe; # Added 2025-11-05
   inherit (pkgs) coc-highlight; # Added 2025-11-05
   inherit (pkgs) coc-html; # Added 2025-11-05
@@ -130,6 +144,7 @@ mapAliases {
   inherit (pkgs) coc-toml;
   coc-tslint = throw "coc-tslint was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
   coc-tslint-plugin = throw "coc-tslint-plugin was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
+  coc-tsserver = throw "coc-tsserver has been removed because it was unmaintained in nixpkgs"; # Added 2026-02-14
   coc-ultisnips = throw "'coc-ultisnips' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   coc-vetur = throw "coc-vetur was removed because vetur was deprecated by Vue in favor of volar. Use coc-volar instead, which supports Vue 3"; # added 2025-10-01
   inherit (pkgs) coc-vimlsp; # Added 2025-11-05
@@ -157,6 +172,7 @@ mapAliases {
   inherit (pkgs) diff2html-cli; # Added 2025-11-08
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
   inherit (pkgs) dotenv-cli; # added 2024-06-26
+  dotenv-vault = throw "'dotenv-vault' has been removed because it was unmaintained in nixpkgs"; # Added 2026-02-12
   eask = pkgs.eask; # added 2023-08-17
   elasticdump = throw "'elasticdump' has been removed because it was unmaintained in nixpkgs"; # Added 2025-12-26
   inherit (pkgs.elmPackages) elm-test;
@@ -168,6 +184,7 @@ mapAliases {
   inherit (pkgs) eslint; # Added 2024-08-28
   inherit (pkgs) eslint_d; # Added 2023-05-26
   inherit (pkgs) eas-cli; # added 2025-01-08
+  esy = throw "esy was removed because it was unmaintained within nixpkgs"; # Added 2026-02-12
   expo-cli = throw "expo-cli was removed because it was deprecated upstream. Use `npx expo` or eas-cli instead."; # added 2024-12-02
   fast-cli = throw "'fast-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   inherit (pkgs) fauna-shell; # Added 2025-11-27
@@ -196,6 +213,7 @@ mapAliases {
   inherit (pkgs) grunt-cli; # added 2025-12-29
   gtop = pkgs.gtop; # added 2023-07-31
   gulp = self.gulp-cli; # Added 2025-11-04
+  gulp-cli = throw "gulp-cli has been removed because it was unmaintained in nixpkgs"; # Added 2026-02-12
   he = throw "'he' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   hs-airdrop = throw "'hs-airdrop' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   hs-client = pkgs.hsd; # added 2023-08-20
@@ -216,6 +234,7 @@ mapAliases {
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   inherit (pkgs) js-beautify; # Added 2025-11-06
+  js-yaml = throw "js-yaml was removed because it was unmaintained in nixpkgs"; # Added 2026-02-12
   inherit (pkgs) jsdoc; # Added 2025-11-29
   inherit (pkgs) jshint; # Added 2025-11-06
   json = throw "'json' has been removed because it was unmaintained upstream"; # Added 2025-11-14
@@ -406,6 +425,7 @@ mapAliases {
   inherit (pkgs) uppy-companion; # Added 2025-11-01
   inherit (pkgs) vega-cli; # Added 2025-12-18
   inherit (pkgs) vega-lite; # Added 2025-11-04
+  vercel = throw "vercel has been removed because it was unmaintained in nixpkgs"; # Added 2026-02-12
   inherit (pkgs) vim-language-server; # added 2024-06-25
   vls = throw "vls has been deprecated by upstream as vetur is also deprecated. Upstream suggests migrating to Volar for Vue LSP tooling instead."; # added 2024-12-09
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30

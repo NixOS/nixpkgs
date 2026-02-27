@@ -10,7 +10,7 @@
   libpulseaudio,
   raylib-games,
   libGLU,
-  libX11,
+  libx11,
   platform ? "Desktop", # Note that "Web", "Android" and "Raspberry Pi" do not currently work
   pulseSupport ? stdenv.hostPlatform.isLinux,
   alsaSupport ? false,
@@ -55,7 +55,7 @@ lib.checkListOfEnum "raylib: platform"
 
       propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
         libGLU
-        libX11
+        libx11
       ];
 
       # https://github.com/raysan5/raylib/wiki/CMake-Build-Options

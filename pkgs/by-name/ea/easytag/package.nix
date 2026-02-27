@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "2.4.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/easytag/${lib.versions.majorMinor version}/easytag-${version}.tar.xz";
     hash = "sha256-/FHukqcF48WXnf8WVfdJbv+2i5jxraBUfoy7wDO2fdU=";
   };
 

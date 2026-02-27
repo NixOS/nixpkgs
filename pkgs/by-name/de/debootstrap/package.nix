@@ -44,7 +44,7 @@ let
     zstd
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "debootstrap";
   version = "1.0.140_bpo12+1";
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "debootstrap";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4vINaMRo6IrZ6e2/DAJ06ODy2BWm4COR1JDSY52upUc=";
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${util-linux}/bin/unshare ' \
       --replace /usr/bin/dpkg ${dpkg}/bin/dpkg \
       --replace '#!/bin/sh' '#!/bin/bash' \
-      --subst-var-by VERSION ${version}
+      --subst-var-by VERSION ${finalAttrs.version}
 
     d=$out/share/debootstrap
     mkdir -p $out/{share/debootstrap,bin}
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://salsa.debian.org/installer-team/debootstrap/-/blob/${version}/debian/changelog";
+    changelog = "https://salsa.debian.org/installer-team/debootstrap/-/blob/${finalAttrs.version}/debian/changelog";
     description = "Tool to create a Debian system in a chroot";
     homepage = "https://wiki.debian.org/Debootstrap";
     license = lib.licenses.mit;
@@ -105,4 +105,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "debootstrap";
   };
-}
+})

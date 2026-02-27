@@ -363,6 +363,7 @@ stdenv.mkDerivation (
       platforms = lib.platforms.all;
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
       mainProgram = "perl";
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "perl" finalAttrs.version;
     };
   }
   // lib.optionalAttrs crossCompiling rec {

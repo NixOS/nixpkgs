@@ -25,7 +25,7 @@
   runCommand,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libhandy";
   version = "1.8.3";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libhandy/${lib.versions.majorMinor version}/libhandy-${version}.tar.xz";
+    url = "mirror://gnome/sources/libhandy/${lib.versions.majorMinor finalAttrs.version}/libhandy-${finalAttrs.version}.tar.xz";
     hash = "sha256-BbSXIpBz/1V/ELMm4HTFBm+HQ6MC1IIKuXvLXNLasIc=";
   };
 
@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://gitlab.gnome.org/GNOME/libhandy/-/tags/${version}";
+    changelog = "https://gitlab.gnome.org/GNOME/libhandy/-/tags/${finalAttrs.version}";
     description = "Building blocks for modern adaptive GNOME apps";
     mainProgram = "handy-1-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libhandy";
@@ -148,4 +148,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

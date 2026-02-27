@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.11.12";
+  version = "0.11.13";
 in
 python3Packages.buildPythonApplication {
   pname = "ablog";
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
     owner = "sunpy";
     repo = "ablog";
     tag = "v${version}";
-    hash = "sha256-bPTaxkuIKeypfnZItG9cl51flHBIx/yg0qENuiqQgY4=";
+    hash = "sha256-P1eSN3wqlPNYbYW3Rkz2Y6yFcC379dt/qK8aVNwZRSs=";
   };
 
   build-system = with python3Packages; [
@@ -43,7 +43,6 @@ python3Packages.buildPythonApplication {
 
   pytestFlags = [
     "--rootdir=src/ablog"
-    "-Wignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
   ];
 
   disabledTests = [

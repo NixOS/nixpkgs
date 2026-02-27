@@ -65,6 +65,9 @@ buildPythonPackage rec {
     "tests/test_move.py"
     "tests/test_mirror.py"
     "tests/test_copy.py"
+    # pyftpdlib removed tests from installation in 2.1.0, resulting in
+    #     ModuleNotFoundError: No module named 'pyftpdlib.test'
+    "tests/test_ftpfs.py"
   ];
 
   disabledTests = [
@@ -88,7 +91,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyFilesystem/pyfilesystem2";
     changelog = "https://github.com/PyFilesystem/pyfilesystem2/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

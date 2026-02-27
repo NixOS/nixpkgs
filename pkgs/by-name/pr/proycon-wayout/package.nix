@@ -14,14 +14,14 @@
   wayland-scanner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proycon-wayout";
   version = "0.1.3";
 
   src = fetchFromSourcehut {
     owner = "~proycon";
     repo = "wayout";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-pxHz8y63xX9I425OG0jPvQVx4mAbTYHxVMMkfjZpURo=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wentam ];
     mainProgram = "proycon-wayout";
   };
-}
+})

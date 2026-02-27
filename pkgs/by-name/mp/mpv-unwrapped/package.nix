@@ -13,11 +13,11 @@
   freetype,
   lcms2,
   libGL,
-  libX11,
-  libXScrnSaver,
-  libXext,
-  libXpresent,
-  libXrandr,
+  libx11,
+  libxscrnsaver,
+  libxext,
+  libxpresent,
+  libxrandr,
   libarchive,
   libass,
   libbluray,
@@ -30,7 +30,7 @@
   libdvdnav,
   libjack2,
   libplacebo,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libsixel,
   libuchardet,
@@ -45,7 +45,7 @@
   ninja,
   nixosTests,
   nv-codec-headers-11,
-  openalSoft,
+  openal-soft,
   pipewire,
   pkg-config,
   python3,
@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonOption "default_library" "shared")
+    (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonBool "libmpv" true)
     (lib.mesonEnable "manpage-build" true)
     (lib.mesonEnable "cdda" cddaSupport)
@@ -171,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libass
     libplacebo
-    libpthreadstubs
+    libpthread-stubs
     libuchardet
     luaEnv
     python3
@@ -197,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals jackaudioSupport [ libjack2 ]
   ++ lib.optionals javascriptSupport [ mujs ]
-  ++ lib.optionals openalSupport [ openalSoft ]
+  ++ lib.optionals openalSupport [ openal-soft ]
   ++ lib.optionals pipewireSupport [ pipewire ]
   ++ lib.optionals pulseSupport [ libpulseaudio ]
   ++ lib.optionals rubberbandSupport [ rubberband ]
@@ -217,12 +218,12 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
   ]
   ++ lib.optionals x11Support [
-    libX11
-    libXext
+    libx11
+    libxext
     libGL
-    libXrandr
-    libXpresent
-    libXScrnSaver
+    libxrandr
+    libxpresent
+    libxscrnsaver
   ]
   ++ lib.optionals zimgSupport [ zimg ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];

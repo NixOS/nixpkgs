@@ -3,14 +3,14 @@
   stdenv,
   fetchFromGitHub,
 }:
-stdenv.mkDerivation (finaAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scom";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "crash-systems";
     repo = "scom";
-    tag = finaAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-eFnCXMrks5V6o+0+vMjR8zaCdkc+hC3trSS+pOh4Y6U=";
   };
 

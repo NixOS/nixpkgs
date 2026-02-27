@@ -14,7 +14,7 @@
   libvorbis,
   libopus,
   openal,
-  openalSoft,
+  openal-soft,
   physfs,
   miniupnpc,
   libsodium,
@@ -43,7 +43,7 @@ let
   pname = "warzone2100";
 
   sequences = fetchurl {
-    url = "mirror://sourceforge/${pname}/warzone2100/Videos/high-quality-en/sequences.wz";
+    url = "mirror://sourceforge/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz";
     hash = "sha256-kP9VLKSnDiU34CfiLFCY6k7RvBG7f8lBOMbJQac9Kfo=";
   };
 in
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libopus
     openal
-    openalSoft
+    openal-soft
     physfs
     miniupnpc
     libsodium

@@ -169,7 +169,7 @@ See its [README](./scripts/README.md) for further information.
 
 # nixpkgs-merge-bot
 
-To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in pkgs-by-name, the commenter is among the package maintainers, and the pull request author is @r-ryantm or a Nixpkgs committer.
+To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in `pkgs/by-name`, the commenter is among the package maintainers, and the pull request author is @r-ryantm or a Nixpkgs committer.
 The bot ensures that all ofborg checks, except for darwin, are successfully completed before merging the pull request.
 Should the checks still be underway, the bot patiently waits for ofborg to finish before attempting the merge again.
 

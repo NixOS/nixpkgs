@@ -14,14 +14,14 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bashrun2";
   version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "hbekel";
     repo = "bashrun2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-U2ntplhyv8KAkaMd2D6wRsUIYkhJzxdgHo2xsbNRfqM=";
   };
 
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     description = "Application launcher based on a modified bash session in a small terminal window";
   };
-}
+})

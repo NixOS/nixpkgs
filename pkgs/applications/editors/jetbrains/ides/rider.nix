@@ -10,9 +10,9 @@
   libxcrypt,
   lttng-ust_2_12,
   musl,
-  libICE,
-  libSM,
-  libX11,
+  libice,
+  libsm,
+  libx11,
   dotnetCorePackages,
   libxcb-keysyms,
   expat,
@@ -24,20 +24,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.1.tar.gz";
-      hash = "sha256-uoQPfEjafxGM9Xqowi3zASDRbxdfvOO+xqZVkO2H8ug=";
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.3.tar.gz";
+      hash = "sha256-sBF/XA52oSFD1dEmzhvo7cwf5EGTi0mx1x3PcobQVAs=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.1-aarch64.tar.gz";
-      hash = "sha256-GQgPzcSPoPdD7WCSe3GXWjxHi4BSlhYc/YoKosBMj1I=";
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.3-aarch64.tar.gz";
+      hash = "sha256-QKBzusZRTOq+2Pte+SEggN/odpJoHKaIwBGpLe9jqmU=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.1.dmg";
-      hash = "sha256-rd2Bbb3xMOLvXn3BhNeoCH+L+/brpOMurSRSBppJYH0=";
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.3.dmg";
+      hash = "sha256-BmKP6puShOwnwa6BzhF5mjDEBZM8gew27szQm6WIdCc=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.1-aarch64.dmg";
-      hash = "sha256-1wgDI0EpAPXTcnAjPlpMdzARxoU9YDHOH15jXHdRFCY=";
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2025.3.3-aarch64.dmg";
+      hash = "sha256-6AMcnhZH8h3jUz6+goycMY39vkyoWQh/zm2a/9Kgt1E=";
     };
   };
   # update-script-end: urls
@@ -51,31 +51,32 @@ in
   product = "Rider";
 
   # update-script-start: version
-  version = "2025.3.1";
-  buildNumber = "253.29346.144";
+  version = "2025.3.3";
+  buildNumber = "253.31033.136";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
-  buildInputs = [
-    openssl
-    libxcrypt
-    lttng-ust_2_12
-    musl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libxcb-keysyms
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
-    expat
-    libxml2
-    xz
-  ];
+  # TODO: Some of these dependencies should probably also be added on Darwin - however it seems that JetBrains bundles them all? Unclear.
+  #       Somebody with a Darwin machine should investigate this.
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      openssl
+      libxcrypt
+      lttng-ust_2_12
+      musl
+      libxcb-keysyms
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
+      expat
+      libxml2
+      xz
+    ];
   extraLdPath = lib.optionals (stdenv.hostPlatform.isLinux) [
     # Avalonia dependencies needed for dotMemory
-    libICE
-    libSM
-    libX11
+    libice
+    libsm
+    libx11
   ];
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed

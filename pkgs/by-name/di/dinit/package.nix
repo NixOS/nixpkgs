@@ -7,14 +7,14 @@
   util-linuxMinimal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dinit";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "davmac314";
     repo = "dinit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     # fix for case-insensitive filesystems
     postFetch = ''
       [ -f "$out/BUILD" ] && rm "$out/BUILD"
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

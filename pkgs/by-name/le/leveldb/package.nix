@@ -9,14 +9,14 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "leveldb";
   version = "1.23";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "leveldb";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-RL+dfSFZZzWvUobSqiPbuC4nDiGzjIIukbVJZRacHbI=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     cat <<EOF > $dev/lib/pkgconfig/leveldb.pc
       Name: leveldb
       Description: Fast and lightweight key/value database library by Google.
-      Version: ${version}
+      Version: ${finalAttrs.version}
       Libs: -L$out/lib -lleveldb
       Cflags: -I$dev/include
     EOF
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };
-}
+})

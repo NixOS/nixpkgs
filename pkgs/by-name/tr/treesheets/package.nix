@@ -10,7 +10,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "treesheets";
   version = "0-unstable-2025-07-01";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${
-    builtins.replaceStrings [ "unstable-" ] [ "" ] version
+    builtins.replaceStrings [ "unstable-" ] [ "" ] finalAttrs.version
   }\"";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.zlib;
   };
-}
+})

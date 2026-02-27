@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "sse-starlette";
-  version = "3.0.3";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sysid";
     repo = "sse-starlette";
     tag = "v${version}";
-    hash = "sha256-2QCagK4OIVJJ54uedJFVjcGyRo2j1415iNjDIa67/mo=";
+    hash = "sha256-SqYLwbl+AyeqgYIwAd/Z39BSPXaYSXMnM6DAGUv3vQ8=";
   };
 
   build-system = [ setuptools ];

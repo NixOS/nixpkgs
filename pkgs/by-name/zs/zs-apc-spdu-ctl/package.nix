@@ -9,14 +9,14 @@
 }:
 
 # TODO: add a services entry for the /etc/zs-apc-spdu.conf file
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zs-apc-spdu-ctl";
   version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "fogti";
     repo = "zs-apc-spdu-ctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "TMV9ETWBVeXq6tZ2e0CrvHBXoyKfOLCQurjBdf/iw/M=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "zs-apc-spdu-ctl";
   };
-}
+})

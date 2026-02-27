@@ -20,8 +20,8 @@
   nss,
   nspr,
   libGL,
-  libX11,
-  libXdamage,
+  libx11,
+  libxdamage,
   boost,
   thrift,
   cef-binary,
@@ -112,8 +112,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost
     libGL
-    libX11
-    libXdamage
+    libx11
+    libxdamage
     nss
     nspr
     thrift20

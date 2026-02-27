@@ -9,7 +9,7 @@
   sphinxHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "khal";
   version = "0.13.0";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "khal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pbBdScyYQMdT2NjCk2dKPkR75Zcizzco2IkXpHkgPR8=";
   };
 
@@ -103,8 +103,8 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "CLI calendar application";
     homepage = "https://lostpackets.de/khal/";
-    changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
+    changelog = "https://github.com/pimutils/khal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ antonmosich ];
   };
-}
+})

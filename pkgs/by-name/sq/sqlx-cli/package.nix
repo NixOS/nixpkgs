@@ -12,14 +12,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqlx-cli";
   version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Trnyrc17KWhX8QizKyBvXhTM7HHEqtywWgNqvQNMOAY=";
   };
 
@@ -75,4 +75,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "sqlx";
   };
-}
+})

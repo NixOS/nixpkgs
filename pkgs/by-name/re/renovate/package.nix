@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  nodejs_22,
+  nodejs_24,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -15,17 +15,17 @@
   yq-go,
 }:
 let
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "42.83.1";
+  version = "43.29.2";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-AUGtr1sePGfALOTdalCqos6Iqv8SQsC4BurAuyiwdN0=";
+    hash = "sha256-cVM9nmz6q7PxSpVr0ErtlBMR18nTo0SV1lAjEISKJP4=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-Gw5q7S867OpkANsf3m+Z+TV8FSQkmDXW48hRttUDtQ0=";
+    hash = "sha256-IxlnBoC7AvYgMOH9g8q1GaHWHPloK2XG5ODAFqVlH/8=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -62,8 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     find -name 'node_modules' -type d -exec rm -rf {} \; || true
     pnpm install --offline --prod --ignore-scripts
   ''
-  # The optional dependency re2 is not built by pnpm and needs to be built manually.
+  # The optional dependencies re2 and better-sqlite3 are not built by pnpm and need to be built manually.
   # If re2 is not built, you will get an annoying warning when you run renovate.
+  # better-sqlite3 is required.
   + ''
     pushd node_modules/.pnpm/re2*/node_modules/re2
 
@@ -72,6 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
     export npm_config_nodedir=${nodejs}
     npm run rebuild
+    rm -rf build/Release/{obj.target,.deps} vendor
+
+    popd
+
+    pushd node_modules/.pnpm/better-sqlite3*/node_modules/better-sqlite3
+    npm run build-release
+    rm -rf build/Release/{obj.target,sqlite3.a,.deps} deps
 
     popd
 

@@ -12,13 +12,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shadcn";
-  version = "2.0.3";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "shadcn-ui";
     repo = "ui";
     rev = "shadcn@${finalAttrs.version}";
-    hash = "sha256-OBLKCj+v5KgYslJGuwLgJHjgcrxLPiiyO5/ucrJ14Ws=";
+    hash = "sha256-9dlSAEkl6NgZGT2noVEfstt8TbIy0Fz+/s5L+MWpblg=";
   };
 
   pnpmWorkspaces = [ "shadcn" ];
@@ -30,8 +30,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-/80LJm65ZRqyfhsNqGl83bsI2wjgVkvrA6Ij4v8rtoQ=";
+    fetcherVersion = 2;
+    hash = "sha256-clTcaTar7m2jEX9cMPtSPeBtt17LaMzlwlLXhPKc+kk=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r {packages,node_modules} $out/lib
 
     # cleanup
-    rm -r $out/lib/packages/{cli,shadcn/src}
     find $out/lib/packages/shadcn -name '*.ts' -delete
 
     makeWrapper ${lib.getExe nodejs} $out/bin/shadcn \

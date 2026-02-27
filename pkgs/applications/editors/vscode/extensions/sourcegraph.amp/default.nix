@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "sourcegraph";
     name = "amp";
-    version = "0.0.1769378769";
-    hash = "sha256-IZINJWzQ9/3YWprSYaH4IAksZtNFiTPC9+YDAOde3LU=";
+    version = "0.0.1771217285";
+    hash = "sha256-eTvkYFir8ZNNjWCaQ20WiJe/pJ8Gbtqvx74dq9S9Llw=";
   };
 
   meta = {

@@ -13,19 +13,19 @@
   OVMF,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "minikube";
-  version = "1.37.0";
+  version = "1.38.1";
 
-  vendorHash = "sha256-xPTJMxKnEwZKKCc6QZxeL+03qM0oldOIKY4sPjSw3Ak=";
+  vendorHash = "sha256-Oy8cM/foZKC83PxqkJW+o8vVYJhszKxXs9l2eks7FN4=";
 
   doCheck = false;
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "minikube";
-    rev = "v${version}";
-    sha256 = "sha256-qyeGBL952YIloB/69W+QWosXxwIrazE0OMdVO6LshPk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-1unwbu2pJviHXukQKalJLgrkHpjf0sRR2nCm2gKv2VU=";
   };
   postPatch = ''
     substituteInPlace Makefile \
@@ -54,7 +54,7 @@ buildGoModule rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libvirt ];
 
   buildPhase = ''
-    make COMMIT=${src.rev}
+    make COMMIT=${finalAttrs.src.rev}
   '';
 
   installPhase = ''
@@ -80,4 +80,4 @@ buildGoModule rec {
       Chili-Man
     ];
   };
-}
+})

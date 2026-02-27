@@ -20,6 +20,15 @@
 
 let
   pubSources = fluffychat-web.pubspecLock.dependencySources;
+  pubCache = runCommand "fluffychat-pub-cache" { } ''
+    mkdir -p $out/hosted/pub.dev
+    pushd $out/hosted/pub.dev
+      ${lib.concatMapAttrsStringSep "; " (
+        _: p:
+        "ln -s ${p} ./${if lib.hasPrefix "pub-" p.name then lib.removePrefix "pub-" p.name else p.name}"
+      ) pubSources}
+    popd
+  '';
 
   # wasm-pack doesn't take 'RUST_SRC_PATH' into consideration
   sysroot = symlinkJoin {
@@ -86,6 +95,10 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
+    export PUB_CACHE=$TMPDIR/pub-cache
+    mkdir -p $PUB_CACHE/hosted
+    ln -s ${pubCache}/hosted/pub.dev $PUB_CACHE/hosted/pub.dev
+
     pushd dart
       dart pub get --offline
     popd
@@ -111,18 +124,6 @@ stdenv.mkDerivation {
   '';
 
   env = {
-    # Build a pub cache from fluffychat, as dart-vodozemac should be a subset
-    # This is required because dart-vodozemac, as a pub, doesn't have a pubspec.lock
-    # But flutter_rust_bridge_codegen still requires all dependencies of it
-    PUB_CACHE = runCommand "fluffychat-pub-cache" { } ''
-      mkdir -p $out/hosted/pub.dev
-      pushd $out/hosted/pub.dev
-        ${lib.concatMapAttrsStringSep "; " (
-          _: p:
-          "ln -s ${p} ./${if lib.hasPrefix "pub-" p.name then lib.removePrefix "pub-" p.name else p.name}"
-        ) pubSources}
-      popd
-    '';
     RUSTC_BOOTSTRAP = 1; # `-Z build-std=std,panic_abort` requires nightly toolchain
   };
 

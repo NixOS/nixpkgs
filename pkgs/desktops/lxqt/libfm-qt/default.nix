@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libXdmcp,
+  libxdmcp,
   libexif,
   libfm,
-  libpthreadstubs,
+  libpthread-stubs,
   libxcb,
   lxqt-build-tools,
   lxqt-menu-data,
@@ -44,10 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libXdmcp
+    libxdmcp
     libexif
     libfm
-    libpthreadstubs
+    libpthread-stubs
     libxcb
     lxqt-menu-data
     menu-cache

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "terracognita";
   version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "cycloidio";
     repo = "terracognita";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pPY8y+pQdk9/F7dnUBz/y4lvcR1k/EClywcZATArZVA=";
   };
 
@@ -24,15 +24,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cycloidio/terracognita/cmd.Version=${version}"
+    "-X github.com/cycloidio/terracognita/cmd.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Reads from existing Cloud Providers (reverse Terraform) and generates your infrastructure as code on Terraform configuration";
     mainProgram = "terracognita";
     homepage = "https://github.com/cycloidio/terracognita";
-    changelog = "https://github.com/cycloidio/terracognita/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/cycloidio/terracognita/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

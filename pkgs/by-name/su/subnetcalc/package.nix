@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       type, scope, interface ID, etc.).
     '';
     mainProgram = "subnetcalc";
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

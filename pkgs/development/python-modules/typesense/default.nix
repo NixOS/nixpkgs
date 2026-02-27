@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "typesense";
-  version = "1.1.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "typesense";
     repo = "typesense-python";
     tag = "v${version}";
-    hash = "sha256-vo9DW4kinb00zWW4yX8ibyelQxW3eVabn+oMddPEd18=";
+    hash = "sha256-b3t4l02tOiSMrkqZACV6l5f+Kb5Wfcnq9ZZCld1SKBU=";
   };
 
   patches = [

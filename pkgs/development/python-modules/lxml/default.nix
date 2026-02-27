@@ -7,6 +7,7 @@
   # build-system
   cython,
   setuptools,
+  pkg-config,
 
   # native dependencies
   libxml2,
@@ -40,8 +41,7 @@ buildPythonPackage rec {
 
   # required for build time dependency check
   nativeBuildInputs = [
-    libxml2.dev
-    libxslt.dev
+    pkg-config
   ];
 
   buildInputs = [

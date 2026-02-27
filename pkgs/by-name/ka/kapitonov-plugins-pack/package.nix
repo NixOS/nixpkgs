@@ -12,20 +12,20 @@
   ladspa-sdk,
   libxcb,
   lv2,
-  xcbutilwm,
+  libxcb-wm,
   libxcb-util,
   zita-convolver,
   zita-resampler,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kapitonov-plugins-pack";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "olegkapitonov";
     repo = "kapitonov-plugins-pack";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1mxi7b1vrzg25x85lqk8c77iziqrqyz18mqkfjlz09sxp5wfs9w4";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     ladspa-sdk
     libxcb
     lv2
-    xcbutilwm
+    libxcb-wm
     libxcb-util
     zita-convolver
     zita-resampler
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ magnetophon ];
   };
-}
+})

@@ -4,18 +4,18 @@
   fetchFromGitHub,
   imake,
   gccmakedep,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version_name = "1.2.hanami.6";
   version = "1.2.6";
   pname = "oneko";
   src = fetchFromGitHub {
     owner = "IreneKnapp";
     repo = "oneko";
-    rev = version_name;
+    rev = finalAttrs.version_name;
     sha256 = "0vx12v5fm8ar3f1g6jbpmd3b1q652d32nc67ahkf28djbqjgcbnc";
   };
   nativeBuildInputs = [
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     gccmakedep
   ];
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   makeFlags = [
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "oneko";
   };
-}
+})

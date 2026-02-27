@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "modelscan";
-  version = "0.8.5";
+  version = "0.8.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "protectai";
     repo = "modelscan";
-    tag = "v${version}";
-    hash = "sha256-8VupkPiHebVtOqMdtkBflAI1zPRdDSvHCEq3ghjASaE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mN2X6Zbai7xm8bdr2hi9fwzIsfQtukeGcOIS32G4hA0=";
   };
 
   pythonRelaxDeps = [ "rich" ];
@@ -51,9 +51,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Protection against Model Serialization Attacks";
     homepage = "https://github.com/protectai/modelscan";
-    changelog = "https://github.com/protectai/modelscan/releases/tag/${src.tag}";
+    changelog = "https://github.com/protectai/modelscan/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "modelscan";
   };
-}
+})

@@ -19,14 +19,14 @@
   zbar,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "otpclient";
   version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = "otpclient";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KGtASCc07NGdjvQ8tIrnQIaEeld9H6z3odytKd8c5aQ=";
   };
 
@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Highly secure and easy to use OTP client written in C/GTK that supports both TOTP and HOTP";
     homepage = "https://github.com/paolostivanin/OTPClient";
-    changelog = "https://github.com/paolostivanin/OTPClient/releases/tag/v${version}";
+    changelog = "https://github.com/paolostivanin/OTPClient/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ alexbakker ];
     platforms = lib.platforms.linux;
   };
-}
+})

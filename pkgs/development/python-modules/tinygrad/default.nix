@@ -253,6 +253,15 @@ buildPythonPackage (finalAttrs: {
     # AttributeError: module 'tinygrad.runtime.autogen.libclang' has no attribute 'clang_parseTranslationUnit'
     "test_gen_from_header"
     "test_struct_ordering"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # AssertionError: Expected 1 operations, got 3
+    # assert 3 == 1
+    #  +  where 3 = len([ExecItem(ast=UOp(Ops.SINK, dtypes.void, arg=None, src=...
+    #  +  and   1 = len([{'cnt': 3, 'type': 'graph'}])
+    #
+    # test/test_jit.py:695: AssertionError
+    "TestJitGraphSplit"
   ];
 
   disabledTestPaths = [

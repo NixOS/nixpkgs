@@ -6,12 +6,12 @@
   emacs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cflow";
   version = "1.8";
 
   src = fetchurl {
-    url = "mirror://gnu/cflow/cflow-${version}.tar.bz2";
+    url = "mirror://gnu/cflow/cflow-${finalAttrs.version}.tar.bz2";
     hash = "sha256-gyFie1W2x4d/akP8xvn4RqlLFHaggaA1Rl96eNNJmrg=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

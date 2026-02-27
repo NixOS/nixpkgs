@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Adobe PageMaker import library";
     homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libpagemaker";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

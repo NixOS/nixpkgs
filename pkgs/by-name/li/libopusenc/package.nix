@@ -6,12 +6,12 @@
   libopus,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopusenc";
   version = "0.2.1";
 
   src = fetchurl {
-    url = "mirror://mozilla/opus/libopusenc-${version}.tar.gz";
+    url = "mirror://mozilla/opus/libopusenc-${finalAttrs.version}.tar.gz";
     sha256 = "1ffb0vhlymlsq70pxsjj0ksz77yfm2x0a1x8q50kxmnkm1hxp642";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pmiddend ];
   };
-}
+})

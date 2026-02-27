@@ -86,8 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  RAILS_ENV = "production";
-  BUNDLE_WITHOUT = "development:test";
+  env = {
+    RAILS_ENV = "production";
+    BUNDLE_WITHOUT = "development:test";
+  };
 
   installPhase = ''
     runHook preInstall

@@ -316,6 +316,13 @@
               - nixos/modules/services/x11/desktop-managers/mate.nix
               - nixos/tests/mate.nix
               - pkgs/desktops/mate/**/*
+              - pkgs/by-name/ca/caja/**/*
+              - pkgs/by-name/ca/caja-*/**/*
+              - pkgs/by-name/li/libmatekbd/**/*
+              - pkgs/by-name/li/libmatemixer/**/*
+              - pkgs/by-name/li/libmateweather/**/*
+              - pkgs/by-name/ma/marco/**/*
+              - pkgs/by-name/ma/mate-*/**/*
 
 "6.topic: module system":
   - any:

@@ -47,19 +47,21 @@ stdenv.mkDerivation (
       stackHook
     ];
 
-    STACK_PLATFORM_VARIANT = "nix";
-    STACK_IN_NIX_SHELL = 1;
-    STACK_IN_NIX_EXTRA_ARGS = extraArgs;
+    env = {
+      STACK_PLATFORM_VARIANT = "nix";
+      STACK_IN_NIX_SHELL = 1;
+      STACK_IN_NIX_EXTRA_ARGS = extraArgs;
 
-    # XXX: workaround for https://ghc.haskell.org/trac/ghc/ticket/11042.
-    LD_LIBRARY_PATH = lib.makeLibraryPath (LD_LIBRARY_PATH ++ buildInputs);
-    # ^^^ Internally uses `getOutput "lib"` (equiv. to getLib)
+      # XXX: workaround for https://ghc.haskell.org/trac/ghc/ticket/11042.
+      LD_LIBRARY_PATH = lib.makeLibraryPath (LD_LIBRARY_PATH ++ buildInputs);
+      # ^^^ Internally uses `getOutput "lib"` (equiv. to getLib)
 
-    # Non-NixOS git needs cert
-    GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+      # Non-NixOS git needs cert
+      GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-    # Fixes https://github.com/commercialhaskell/stack/issues/2358 krank:ignore-line
-    LANG = "en_US.UTF-8";
+      # Fixes https://github.com/commercialhaskell/stack/issues/2358 krank:ignore-line
+      LANG = "en_US.UTF-8";
+    };
 
     preferLocalBuild = true;
 

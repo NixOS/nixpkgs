@@ -14,14 +14,14 @@
   libnbd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fio";
   version = "3.41";
 
   src = fetchFromGitHub {
     owner = "axboe";
     repo = "fio";
-    rev = "fio-${version}";
+    rev = "fio-${finalAttrs.version}";
     sha256 = "sha256-m4JskjSc/KHjID+6j/hbhnGzehPxMxA3m2Iyn49bJDU=";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

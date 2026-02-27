@@ -6,14 +6,14 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wl-clipboard-x11";
   version = "5";
 
   src = fetchFromGitHub {
     owner = "brunelli";
     repo = "wl-clipboard-x11";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-i+oF1Mu72O5WPTWzqsvo4l2CERWWp4Jq/U0DffPZ8vg=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xclip";
     platforms = lib.platforms.linux;
   };
-}
+})

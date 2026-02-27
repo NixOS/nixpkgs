@@ -8,12 +8,12 @@
   libkrb5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uw-imap";
   version = "2007f";
 
   src = fetchurl {
-    url = "ftp://ftp.cac.washington.edu/imap/imap-${version}.tar.gz";
+    url = "ftp://ftp.cac.washington.edu/imap/imap-${finalAttrs.version}.tar.gz";
     sha256 = "0a2a00hbakh0640r2wdpnwr8789z59wnk7rfsihh3j0vbhmmmqak";
   };
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
   passthru = {
     withSSL = true;
   };
-}
+})

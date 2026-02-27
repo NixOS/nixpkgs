@@ -6,12 +6,12 @@
   clang,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alglib3";
   version = "4.07.0";
 
   src = fetchurl {
-    url = "https://www.alglib.net/translator/re/alglib-${version}.cpp.gpl.tgz";
+    url = "https://www.alglib.net/translator/re/alglib-${finalAttrs.version}.cpp.gpl.tgz";
     sha256 = "sha256-y4mlU+4gKwqUFgUHKoVxAjdq5EsMzSJeT6Dg4Llwi/A=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
       * Fast Fourier Transform and many other algorithms
     '';
   };
-}
+})

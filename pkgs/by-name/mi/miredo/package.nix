@@ -7,14 +7,14 @@
   judy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.6";
   pname = "miredo";
 
   buildInputs = [ judy ];
 
   src = fetchurl {
-    url = "https://www.remlab.net/files/miredo/miredo-${version}.tar.xz";
+    url = "https://www.remlab.net/files/miredo/miredo-${finalAttrs.version}.tar.xz";
     sha256 = "0j9ilig570snbmj48230hf7ms8kvcwi2wblycqrmhh85lksd49ps";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,10 +6,6 @@
   # build-system
   flit-core,
 
-  # dependencies
-  pythonOlder,
-  typing-extensions,
-
   # optional-dependencies
   azure-storage-blob,
   azure-storage-file-datalake,
@@ -49,10 +45,6 @@ buildPythonPackage rec {
     '';
 
   build-system = [ flit-core ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ];
 
   optional-dependencies = {
     all = optional-dependencies.azure ++ optional-dependencies.gs ++ optional-dependencies.s3;

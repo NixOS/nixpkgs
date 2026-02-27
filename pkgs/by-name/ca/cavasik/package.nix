@@ -15,19 +15,16 @@
   wrapGAppsHook4,
 }:
 
-let
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cavasik";
   version = "3.2.0";
-in
-python3Packages.buildPythonApplication {
-  inherit pname version;
 
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "TheWisker";
     repo = "Cavasik";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-O8rFtqzmDktXKF3219RAo1yxqjfPm1qkHhAyoT7N8AU=";
   };
 
@@ -80,4 +77,4 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ starryreverie ];
   };
-}
+})

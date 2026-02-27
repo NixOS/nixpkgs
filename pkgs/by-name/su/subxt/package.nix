@@ -5,14 +5,14 @@
   cmake,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "subxt";
   version = "0.44.2";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "subxt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3yTX2H4T0nnA0Kh1Lx1/blK/Edd1ZOHQVEXiiOLxino=";
   };
 
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ lib.maintainers.FlorianFranzen ];
   };
-}
+})

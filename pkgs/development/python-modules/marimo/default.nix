@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchpatch2,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   uv-build,
@@ -24,7 +23,6 @@
   ruff,
   starlette,
   tomlkit,
-  typing-extensions,
   uvicorn,
   websockets,
 
@@ -34,13 +32,13 @@
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.15.2";
+  version = "0.19.4";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cmkz/ZyVYfpz4yOxghsXPF4PhRluwqSXo1CcwvwkXFg=";
+    hash = "sha256-7sO3ZcP9mNY+IBfFagJOd5ppI8tW52gueIdtT+SUCbc=";
   };
 
   patches = [
@@ -72,8 +70,7 @@ buildPythonPackage rec {
     tomlkit
     uvicorn
     websockets
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   pythonImportsCheck = [ "marimo" ];
 

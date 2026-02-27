@@ -6,12 +6,12 @@
   libusb-compat-0_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sispmctl";
   version = "4.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sispmctl/sispmctl-${version}.tar.gz";
+    url = "mirror://sourceforge/sispmctl/sispmctl-${finalAttrs.version}.tar.gz";
     hash = "sha256-51eGOkg42m4cpypXrcWspvxH/73ccqaQUtir10PVcII=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers._9R ];
     platforms = lib.platforms.unix;
   };
-}
+})

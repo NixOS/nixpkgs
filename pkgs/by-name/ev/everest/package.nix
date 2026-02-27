@@ -11,7 +11,8 @@
 
 let
   pname = "everest";
-  version = "6129";
+  version = "6170";
+  rev = "62ef4d0c36f433fa3a26502eabe6cda5ff205fbc";
   phome = "$out/lib/Celeste";
 in
 buildDotnetModule {
@@ -20,11 +21,11 @@ buildDotnetModule {
   src = fetchFromGitHub {
     owner = "EverestAPI";
     repo = "Everest";
-    rev = "04aa4228786ba8448455f1962f9714c08ad28383";
+    inherit rev;
     fetchSubmodules = true;
     # TODO: use leaveDotGit = true and modify external/MonoMod in postFetch to please SourceLink
     # Microsoft.SourceLink.Common.targets(53,5): warning : Source control information is not available - the generated source link is empty.
-    hash = "sha256-p/zcqqKOwqumEY6RRH26FV3j7VQ3q2uFWm6IBEtLrgA=";
+    hash = "sha256-OumeSvcWX3/zot7akcQea7jUQH0rL5/E0HzhITGPedA=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -71,8 +72,7 @@ buildDotnetModule {
 
   preBuild = ''
     # See .azure-pipelines/prebuild.ps1
-    sed -i 's|0\.0\.0-dev|1.${version}.0-nixos-'$(git rev-parse --short=5 HEAD)'|' Celeste.Mod.mm/Mod/Everest/Everest.cs
-    cat Celeste.Mod.mm/Mod/Everest/Everest.cs
+    sed -i 's|0\.0\.0-dev|1.${version}.0-nixos-${lib.substring 0 5 rev}|' Celeste.Mod.mm/Mod/Everest/Everest.cs
     cat <<-EOF > Celeste.Mod.mm/Mod/Helpers/EverestVersion.cs
       namespace Celeste.Mod.Helpers {
         internal static class EverestBuild${version} {

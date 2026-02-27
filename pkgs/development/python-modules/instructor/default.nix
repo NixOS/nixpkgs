@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -33,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.11.3";
+  version = "1.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
     tag = "v${version}";
-    hash = "sha256-VWFrMgfe92bHUK1hueqJLHQ7G7ATCgK7wXr+eqrVWcw=";
+    hash = "sha256-6NYS6nY9phIY9fWEp0X3fC90uFedaot2xzZynzGnZSE=";
   };
 
   build-system = [ hatchling ];

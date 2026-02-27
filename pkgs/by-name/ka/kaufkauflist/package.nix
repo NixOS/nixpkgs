@@ -3,7 +3,7 @@
   buildPackages,
   fetchFromGitHub,
   buildNpmPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
 }:
 
@@ -30,8 +30,7 @@ buildNpmPackage rec {
   pname = "kaufkauflist";
   version = "4.0.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "kaufkauflist";
     rev = "v${version}";
@@ -40,7 +39,7 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-HDv6sW6FmKZpUjymrUjz/WG9XrKgLmM6qHMAxP6gBtU=";
 
-  ESBUILD_BINARY_PATH = lib.getExe esbuild';
+  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
   postInstall = ''
     mkdir -p $out/share/kaufkauflist $out/share/pocketbase

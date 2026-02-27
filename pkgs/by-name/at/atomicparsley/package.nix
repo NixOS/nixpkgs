@@ -6,14 +6,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "atomicparsley";
   version = "20240608.083822.1ed9031";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "atomicparsley";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-VhrOMpGNMkNNYjcfCqlHI8gdApWr1ThtcxDwQ6gyV/g=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pjones ];
     mainProgram = "AtomicParsley";
   };
-}
+})

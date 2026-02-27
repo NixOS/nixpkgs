@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ipget";
   version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "ipget";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j8CRJTqZZtZMeGEq8l4YBBXAwhX+EfO2aFMXS8/6Ek4=";
   };
 
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ Luflosi ];
     mainProgram = "ipget";
   };
-}
+})

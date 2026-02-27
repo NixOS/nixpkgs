@@ -10,14 +10,14 @@
   libsamplerate,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ninjas2";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "clearly-broken-software";
     repo = "ninjas2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1kwp6pmnfar2ip9693gprfbcfscklgri1k1ycimxzlqr61nkd2k9";
     fetchSubmodules = true;
   };
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ninjas2";
   };
-}
+})

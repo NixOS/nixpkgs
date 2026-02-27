@@ -6,14 +6,14 @@
   testers,
   zenoh,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh";
   version = "1.4.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-XibcNrT9R8gdOnf4BtOi5Jqu+4XjeWngA3i/MXnkfn8=";
   };
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = {
     version = testers.testVersion {
       package = zenoh;
-      version = "v" + version;
+      version = "v" + finalAttrs.version;
     };
     zenohd = nixosTests.zenohd;
   };
@@ -46,10 +46,10 @@ rustPlatform.buildRustPackage rec {
     description = "Communication protocol that combines pub/sub with key value storage and computation";
     longDescription = "Zenoh unifies data in motion, data in-use, data at rest and computations. It carefully blends traditional pub/sub with geo-distributed storages, queries and computations, while retaining a level of time and space efficiency that is well beyond any of the mainstream stacks";
     homepage = "https://zenoh.io";
-    changelog = "https://github.com/eclipse-zenoh/zenoh/releases/tag/${src.rev}";
+    changelog = "https://github.com/eclipse-zenoh/zenoh/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ck3d ];
     mainProgram = "zenohd";
     platforms = lib.platforms.linux;
   };
-}
+})

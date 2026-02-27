@@ -14,14 +14,14 @@
   xmlrpc_c,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tlf";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "tlf";
     repo = "tlf";
-    rev = "tlf-${version}";
+    rev = "tlf-${finalAttrs.version}";
     sha256 = "1xpgs4k27pjd9mianfknknp6mf34365bcp96wrv5xh4dhph573rj";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

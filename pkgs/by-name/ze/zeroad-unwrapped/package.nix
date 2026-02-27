@@ -3,11 +3,12 @@
   lib,
   perl,
   fetchurl,
+  fetchpatch,
   python3,
   fmt_9,
   libidn,
   pkg-config,
-  spidermonkey_115,
+  spidermonkey_128,
   boost,
   icu,
   libxml2,
@@ -24,8 +25,8 @@
   libGLU,
   libGL,
   xorgproto,
-  libX11,
-  libXcursor,
+  libx11,
+  libxcursor,
   nspr,
   SDL2,
   gloox,
@@ -38,15 +39,30 @@
 }:
 
 # You can find more instructions on how to build 0ad here:
-#    https://trac.wildfiregames.com/wiki/BuildInstructions
+# https://gitea.wildfiregames.com/0ad/0ad/wiki/BuildInstructions
 
-stdenv.mkDerivation rec {
+let
+  # When updating 0 A.D., check for necessary SpiderMonkey patches here:
+  # https://gitea.wildfiregames.com/0ad/0ad/src/branch/main/libraries/source/spidermonkey/patches
+  spidermonkey = spidermonkey_128.overrideAttrs (old: {
+    # Fix segfault during GUI GC (fixed in v140)
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1982134
+    patches = old.patches or [ ] ++ [
+      (fetchpatch {
+        name = "fix-extra-gc-tracing.patch";
+        url = "https://github.com/mozilla-firefox/firefox/commit/bf1994b05baea60f84309475cd544fe89acf82f2.patch";
+        hash = "sha256-3sTcZb34yHheqK7O9aHSwMife3uJnf3us+0sPJ2NzKs=";
+      })
+    ];
+  });
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "0ad";
-  version = "0.27.1";
+  version = "0.28.0";
 
   src = fetchurl {
-    url = "https://releases.wildfiregames.com/0ad-${version}-unix-build.tar.xz";
-    hash = "sha256-oKU1XutZaNJPKDdwc2FQ2XTa/sugd1TUZicH3BcBa/s=";
+    url = "https://releases.wildfiregames.com/0ad-${finalAttrs.version}-unix-build.tar.xz";
+    hash = "sha256-J+IXdV73apIv5Y2/WT2W5Utu0jddI/VIw1YZqmvVpCo=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +72,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    spidermonkey_115
+    spidermonkey
     boost
     icu
     libxml2
@@ -73,8 +89,8 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     xorgproto
-    libX11
-    libXcursor
+    libx11
+    libxcursor
     nspr
     SDL2
     gloox
@@ -89,8 +105,8 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${xorgproto}/include"
-    "-I${libX11.dev}/include"
-    "-I${libXcursor.dev}/include"
+    "-I${libx11.dev}/include"
+    "-I${libxcursor.dev}/include"
     "-I${SDL2}/include/SDL2"
     "-I${fmt_9.dev}/include"
     "-I${nvidia-texture-tools.dev}/include"
@@ -176,4 +192,4 @@ stdenv.mkDerivation rec {
     platforms = lib.subtractLists lib.platforms.i686 lib.platforms.linux;
     mainProgram = "0ad";
   };
-}
+})

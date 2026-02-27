@@ -19,7 +19,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zeitgeist";
   version = "1.0.4";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "zeitgeist";
     repo = "zeitgeist";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "kG1N8DXgjYAJ8fbrGHsp7eTqB20H5smzRnW0PSRUYR0=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

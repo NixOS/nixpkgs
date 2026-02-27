@@ -13,7 +13,8 @@ let
       pkgs = f tclPackages;
       paths = lib.concatMapStringsSep " " (pkg: "${pkg}/lib") pkgs;
       finalPackage = buildEnv {
-        name = "${postgresql.pname}-pltcl-${postgresql.version}";
+        pname = "${postgresql.pname}-pltcl";
+        inherit (postgresql) version;
         paths = [ postgresql.pltcl ];
         passthru = {
           inherit withPackages;

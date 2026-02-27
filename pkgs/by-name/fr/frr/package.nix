@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Without the std explicitly set, we may run into abseil-cpp
   # compilation errors.
-  CXXFLAGS = "-std=gnu++23";
+  env.CXXFLAGS = "-std=gnu++23";
 
   nativeBuildInputs = [
     autoreconfHook

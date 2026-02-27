@@ -3,11 +3,11 @@
   lib,
   fetchurl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtptools";
   version = "1.22";
   src = fetchurl {
-    url = "http://www.cs.columbia.edu/irt/software/rtptools/download/rtptools-${version}.tar.gz";
+    url = "http://www.cs.columbia.edu/irt/software/rtptools/download/rtptools-${finalAttrs.version}.tar.gz";
     sha256 = "0a4c0vmhxibfc58rrxpbav2bsk546chkg50ir4h3i57v4fjb4xic";
   };
   meta = {
@@ -17,4 +17,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
   };
-}
+})

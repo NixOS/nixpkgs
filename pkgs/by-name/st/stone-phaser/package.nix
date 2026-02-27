@@ -11,14 +11,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stone-phaser";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "jpcima";
     repo = "stone-phaser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "180b32z8h9zi8p0q55r1dzxfckamnngm52zjypjjvvy7qdj3mfcd";
     fetchSubmodules = true;
   };
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.boost;
   };
-}
+})

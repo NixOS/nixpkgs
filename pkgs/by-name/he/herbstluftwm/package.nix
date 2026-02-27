@@ -5,18 +5,18 @@
   cmake,
   pkg-config,
   python3,
-  libX11,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXft,
-  libXrender,
-  libXdmcp,
-  libXfixes,
+  libx11,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxft,
+  libxrender,
+  libxdmcp,
+  libxfixes,
   freetype,
   asciidoc,
   xdotool,
-  xorgserver,
+  xorg-server,
   xsetroot,
   xterm,
   runtimeShell,
@@ -24,12 +24,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "herbstluftwm";
   version = "0.9.5";
 
   src = fetchurl {
-    url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
+    url = "https://herbstluftwm.org/tarballs/herbstluftwm-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-stRgCQnlvs5a1jgY37MLsZ/SrJ9ShHsaenStQEBxgQU=";
   };
 
@@ -53,14 +53,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
-    libXext
-    libXinerama
-    libXrandr
-    libXft
-    libXrender
-    libXdmcp
-    libXfixes
+    libx11
+    libxext
+    libxinerama
+    libxrandr
+    libxft
+    libxrender
+    libxdmcp
+    libxfixes
     freetype
   ];
 
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       ]
     ))
     xdotool
-    xorgserver
+    xorg-server
     xsetroot
     xterm
     python3.pkgs.pytestCheckHook
@@ -138,4 +138,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thibautmarty ];
   };
-}
+})

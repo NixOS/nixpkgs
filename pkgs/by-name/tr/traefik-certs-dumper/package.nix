@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "traefik-certs-dumper";
   version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "ldez";
     repo = "traefik-certs-dumper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rjD0zt5kJ7A4TLn3jQBLGvzvHthszP9AvmcILVo5lzk=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "traefik-certs-dumper";
   };
-}
+})

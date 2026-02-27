@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubeshark";
   version = "52.10.3";
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-n7AYUms6fn25UinLd5xFG2DfcpJU0/pR4JF3i1VY1hM=";
   };
 
@@ -29,11 +29,11 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}/misc.GitCommitHash=${src.rev}"
+      "-X ${t}/misc.GitCommitHash=${finalAttrs.src.rev}"
       "-X ${t}/misc.Branch=master"
       "-X ${t}/misc.BuildTimestamp=0"
       "-X ${t}/misc.Platform=unknown"
-      "-X ${t}/misc.Ver=${version}"
+      "-X ${t}/misc.Ver=${finalAttrs.version}"
     ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -54,13 +54,13 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = kubeshark;
       command = "kubeshark version";
-      inherit version;
+      inherit (finalAttrs) version;
     };
     updateScript = nix-update-script { };
   };
 
   meta = {
-    changelog = "https://github.com/kubeshark/kubeshark/releases/tag/v${version}";
+    changelog = "https://github.com/kubeshark/kubeshark/releases/tag/v${finalAttrs.version}";
     description = "API Traffic Viewer for Kubernetes";
     mainProgram = "kubeshark";
     homepage = "https://kubeshark.co/";
@@ -74,4 +74,4 @@ buildGoModule rec {
       qjoly
     ];
   };
-}
+})

@@ -10,14 +10,14 @@
   libraspberrypi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcec";
   version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "Pulse-Eight";
     repo = "libcec";
-    rev = "libcec-${version}";
+    rev = "libcec-${finalAttrs.version}";
     sha256 = "sha256-t8GUQKWTcxjyaAlsTP4C+heYiVYowG7x+fmjHPND7As=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     teams = [ lib.teams.kodi ];
   };
-}
+})

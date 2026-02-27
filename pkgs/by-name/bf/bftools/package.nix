@@ -6,12 +6,12 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bftools";
   version = "7.3.0";
 
   src = fetchzip {
-    url = "http://downloads.openmicroscopy.org/bio-formats/${version}/artifacts/bftools.zip";
+    url = "http://downloads.openmicroscopy.org/bio-formats/${finalAttrs.version}/artifacts/bftools.zip";
     hash = "sha256-EQ7P07d53e6Q/9Wt2Pa1h0TfuYblOZeByGW30oE3i6M=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.openmicroscopy.org/bio-formats/";
     maintainers = [ lib.maintainers.tbenst ];
   };
-}
+})

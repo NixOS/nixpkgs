@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-toolbox";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cool-RR";
     repo = "python_toolbox";
     tag = version;
-    hash = "sha256-pbo4vhypM97OXh6CxK42EbZdrXljvj5rmP9C9RDPo5g=";
+    hash = "sha256-DzrA1c3rAo/8DnYo0DE7Kft0uCBqEwdAaUDjg4K2Mn4=";
   };
 
   build-system = [ setuptools ];

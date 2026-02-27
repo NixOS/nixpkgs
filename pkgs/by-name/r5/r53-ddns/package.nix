@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "r53-ddns";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "fleaz";
     repo = "r53-ddns";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+vJrcRxckAISYjab6kVT2mpChra1D3NflOqNWCch15I=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fleaz ];
     mainProgram = "r53-ddns";
   };
-}
+})

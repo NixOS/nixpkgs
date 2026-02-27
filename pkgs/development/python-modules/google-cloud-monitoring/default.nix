@@ -15,13 +15,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-monitoring";
-  version = "2.29.0";
+  version = "2.29.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_monitoring";
     inherit (finalAttrs) version;
-    hash = "sha256-7tuK/RxOgOjGJDXwXESOnmW+kHJQpm2B5q9ZCXeCZ7Y=";
+    hash = "sha256-hsrFXN0mCFYYGdGVRPs8Epu7fc7MRF2N5CbjTNb6jkk=";
   };
 
   build-system = [ setuptools ];

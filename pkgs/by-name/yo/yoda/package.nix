@@ -11,14 +11,14 @@
   withRootSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yoda";
   version = "2.1.2";
 
   src = fetchFromGitLab {
     owner = "hepcedar";
     repo = "yoda";
-    rev = "yoda-${version}";
+    rev = "yoda-${finalAttrs.version}";
     hash = "sha256-cgThoxqPX6dVyGNTLXatW3uQV+41o38fTfkvHXsDs9A=";
   };
 
@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
     description = "Provides small set of data analysis (specifically histogramming) classes";
     license = lib.licenses.gpl3Only;
     homepage = "https://yoda.hepforge.org";
-    changelog = "https://gitlab.com/hepcedar/yoda/-/blob/yoda-${version}/ChangeLog";
+    changelog = "https://gitlab.com/hepcedar/yoda/-/blob/yoda-${finalAttrs.version}/ChangeLog";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

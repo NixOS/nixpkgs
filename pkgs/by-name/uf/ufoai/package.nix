@@ -17,16 +17,16 @@
   enableEditor ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ufoai";
   version = "2.4";
   src = fetchurl {
-    url = "mirror://sourceforge/ufoai/ufoai-${version}-source.tar.bz2";
+    url = "mirror://sourceforge/ufoai/ufoai-${finalAttrs.version}-source.tar.bz2";
     sha256 = "0kxrbcjrharcwz319s90m789i4my9285ihp5ax6kfhgif2vn2ji5";
   };
 
   srcData = fetchurl {
-    url = "mirror://sourceforge/ufoai/ufoai-${version}-data.tar";
+    url = "mirror://sourceforge/ufoai/ufoai-${finalAttrs.version}-data.tar";
     sha256 = "1drhh08cqqkwv1yz3z4ngkplr23pqqrdx6cp8c3isy320gy25cvb";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   #   https://github.com/ufoai/ufoai/commit/8a3075fffdad294e
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  preConfigure = ''tar xvf "${srcData}"'';
+  preConfigure = ''tar xvf "${finalAttrs.srcData}"'';
 
   configureFlags = [
     "--enable-release"
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
-}
+})

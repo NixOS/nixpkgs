@@ -7,15 +7,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wavemon";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "uoaerg";
     repo = "wavemon";
-    rev = "v${version}";
-    sha256 = "sha256-OnELXlnzXamQflCAWuc4fxwvqHZtl+nrlTpkKK4IGKw=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-PLdlh9xs0bROShpFESvRYy78Hig4/rZ8MkQ4LMcgXTg=";
   };
 
   nativeBuildInputs = [
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "wavemon";
   };
-}
+})

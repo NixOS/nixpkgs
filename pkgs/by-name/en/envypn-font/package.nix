@@ -7,12 +7,12 @@
   fonttosfnt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "envypn-font";
   version = "1.7.1";
 
   src = fetchurl {
-    url = "https://ywstd.fr/files/p/envypn-font/envypn-font-${version}.tar.gz";
+    url = "https://ywstd.fr/files/p/envypn-font/envypn-font-${finalAttrs.version}.tar.gz";
     sha256 = "bda67b6bc6d5d871a4d46565d4126729dfb8a0de9611dae6c68132a7b7db1270";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ erdnaxe ];
   };
-}
+})

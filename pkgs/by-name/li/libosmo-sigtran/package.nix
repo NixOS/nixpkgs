@@ -9,21 +9,21 @@
   libosmo-netif,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libosmo-sigtran";
   version = "2.1.2";
 
   # fetchFromGitea hangs
   src = fetchgit {
     url = "https://gitea.osmocom.org/osmocom/libosmo-sigtran.git";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-/TxD7lc/htm1c24rKfnlYxGsVpxawi3nh7m34mRRhUA=";
   };
 
   configureFlags = [ "--with-systemdsystemunitdir=$out" ];
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
       markuskowa
     ];
   };
-}
+})

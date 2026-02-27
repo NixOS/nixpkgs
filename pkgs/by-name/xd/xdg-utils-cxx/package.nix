@@ -4,14 +4,14 @@
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-utils-cxx";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "azubieta";
     repo = "xdg-utils-cxx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hEN0xqZUNfMOIrw3q+x4kEFhYoqmyn7W3f2w8AGw2wI=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xdg-utils-cxx";
     platforms = lib.platforms.linux;
   };
-}
+})

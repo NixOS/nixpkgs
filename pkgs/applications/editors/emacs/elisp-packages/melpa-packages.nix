@@ -1139,10 +1139,6 @@ let
           # depends on later-do which is not on any ELPA
           emms-player-simple-mpv = ignoreCompilationError super.emms-player-simple-mpv;
 
-          # missing optional dependencies
-          # https://github.com/isamert/empv.el/pull/96
-          empv = addPackageRequires super.empv [ self.hydra ];
-
           enotify = ignoreCompilationError super.enotify; # elisp error
 
           # https://github.com/leathekd/ercn/issues/6

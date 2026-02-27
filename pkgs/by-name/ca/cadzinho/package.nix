@@ -9,14 +9,14 @@
   desktopToDarwinBundle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cadzinho";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "zecruel";
     repo = "CadZinho";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AHojy6lYLEyeBaYiIzo6MdQCM3jX5ENNTKgU+PGSD00=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "cadzinho";
   };
-}
+})

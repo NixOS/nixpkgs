@@ -45,14 +45,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "2.14.4";
+  version = "2.14.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qJdOKLvxjenNCyya+XMrf3NGMaDL9LM9HsaQrhubXIY=";
+    hash = "sha256-j3aUvAKm0rW5X/l1VXoSBc5fCjSLxnyznwzj1D3E7Ck=";
   };
 
   build-system = [

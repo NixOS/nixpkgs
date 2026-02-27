@@ -11,12 +11,12 @@
   tcp_wrappers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tacacsplus";
   version = "4.0.4.28";
 
   src = fetchurl {
-    url = "ftp://ftp.shrubbery.net/pub/tac_plus/tacacs-F${version}.tar.gz";
+    url = "ftp://ftp.shrubbery.net/pub/tac_plus/tacacs-F${finalAttrs.version}.tar.gz";
     hash = "sha256-FH8tyY0m0vk/Crp2yYjO0Zb/4cAB3C6R94ihosdHIZ4=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ _0x4A6F ];
     platforms = with lib.platforms; linux;
   };
-}
+})

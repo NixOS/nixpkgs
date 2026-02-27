@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "millet";
   version = "0.14.9";
 
   src = fetchFromGitHub {
     owner = "azdavis";
     repo = "millet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Ffna9qsCTRHnUstgCDZxHweHteYVA/xiAtOkzCw2ltI=";
   };
 
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Language server for Standard ML";
     homepage = "https://github.com/azdavis/millet";
-    changelog = "https://github.com/azdavis/millet/blob/v${version}/docs/CHANGELOG.md";
+    changelog = "https://github.com/azdavis/millet/blob/v${finalAttrs.version}/docs/CHANGELOG.md";
     license = [
       lib.licenses.mit # or
       lib.licenses.asl20
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "millet-ls";
   };
-}
+})

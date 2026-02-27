@@ -9,14 +9,14 @@
   cmake,
   pkg-config,
   alsa-lib,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrender,
-  libXrandr,
-  libXdmcp,
-  libXtst,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrender,
+  libxrandr,
+  libxdmcp,
+  libxtst,
   xvfb,
   freetype,
   fontconfig,
@@ -35,13 +35,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plugdata";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "plugdata-team";
     repo = "plugdata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3ldLM6M54usqjsM9veEctXVa/G14shOdp7Yi9tQi70Y=";
+    hash = "sha256-GjaJCg9FhsvUWHFfEk1a/Ef5gMglWKqEWaCLqazooto=";
     fetchSubmodules = true;
   };
 
@@ -63,14 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libxkbcommon
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrender
-    libXrandr
-    libXdmcp
-    libXtst
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrender
+    libxrandr
+    libxdmcp
+    libxtst
     xvfb
     libjack2
     expat
@@ -92,18 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcomposite"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-      "-lXtst"
-      "-lXdmcp"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcomposite"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+    "-lXtst"
+    "-lXdmcp"
+  ];
 
   patches = [
     # fiddle~.c prevents building with gcc15. Upstream puredata has fixed this issue,

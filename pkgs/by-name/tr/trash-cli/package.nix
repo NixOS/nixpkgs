@@ -7,7 +7,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "trash-cli";
   version = "0.24.5.26";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ltuMnxtG4jTTSZd6ZHWl8wI0oQMMFqW0HAPetZMfGtc=";
   };
 
@@ -84,4 +84,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "trash";
   };
-}
+})

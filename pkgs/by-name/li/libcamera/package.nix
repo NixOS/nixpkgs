@@ -27,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-zGcbzL1Q2hUaj/s9NjBlp7hVjmSFb0GF8CnCoDS82Tw=";
+    hash = "sha256-W9pRE8/0Cf2EEP5bbvy4FsDSeKKSklfJb6T48ZN4dzE=";
   };
 
   outputs = [
@@ -121,13 +121,19 @@ stdenv.mkDerivation rec {
     # Given that upstream also provides public documentation,
     # we can disable it here.
     "-Ddocumentation=disabled"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # we don't have tensorflow-lite to build this
+    "-Drpi-awb-nn=disabled"
   ];
 
-  # Fixes error on a deprecated declaration
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env = {
+    # Fixes error on a deprecated declaration
+    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-  # Silence fontconfig warnings about missing config
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+    # Silence fontconfig warnings about missing config
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  };
 
   meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";

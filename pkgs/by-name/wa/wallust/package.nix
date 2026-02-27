@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   nix-update-script,
   imagemagick,
@@ -11,8 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wallust";
   version = "3.5.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "explosion-mental";
     repo = "wallust";
     rev = finalAttrs.version;

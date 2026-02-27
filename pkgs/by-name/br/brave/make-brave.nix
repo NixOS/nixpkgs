@@ -21,17 +21,17 @@
   gtk3,
   gtk4,
   qt6,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libdrm,
   libkrb5,
   libuuid,
@@ -64,7 +64,7 @@
   # For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
   libGL,
 
-  # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder,VaapiVideoEncoder)
+  # For video acceleration via VA-API (--enable-features=AcceleratedVideoDecodeLinuxGL,AcceleratedVideoEncoder)
   libvaSupport ? stdenv.hostPlatform.isLinux,
   libva,
   enableVideoAcceleration ? libvaSupport,
@@ -110,20 +110,20 @@ let
     gtk3
     gtk4
     libdrm
-    libX11
+    libx11
     libGL
     libxkbcommon
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
     libxshmfence
-    libXtst
+    libxtst
     libuuid
     libgbm
     nspr
@@ -146,8 +146,8 @@ let
 
   enableFeatures =
     optionals enableVideoAcceleration [
-      "VaapiVideoDecoder"
-      "VaapiVideoEncoder"
+      "AcceleratedVideoDecodeLinuxGL"
+      "AcceleratedVideoEncoder"
     ]
     ++ optional enableVulkan "Vulkan";
 
@@ -303,7 +303,6 @@ stdenv.mkDerivation {
       jefflabonte
       nasirhm
       buckley310
-      matteopacini
     ];
     platforms = [
       "aarch64-linux"

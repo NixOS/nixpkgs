@@ -11,14 +11,14 @@
 assert !blas.isILP64;
 assert !lapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "harminv";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = "harminv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HV8xylK2IOvbONYGgyaqAabp6xA7/uvN4DU7upIlZh0=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

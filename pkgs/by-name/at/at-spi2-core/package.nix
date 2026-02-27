@@ -17,19 +17,19 @@
   dbus,
   glib,
   dconf,
-  libX11,
+  libx11,
   libxml2,
-  libXtst,
-  libXi,
-  libXext,
+  libxtst,
+  libxi,
+  libxext,
   gnome,
   systemdLibs,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "at-spi2-core";
-  version = "2.58.2";
+  version = "2.58.3";
 
   outputs = [
     "out"
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor version}/at-spi2-core-${version}.tar.xz";
-    hash = "sha256-ooI7li7RbN1csfxTZQKf0hg5TYUqzUCYsyGFS9ZpL24=";
+    url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor finalAttrs.version}/at-spi2-core-${finalAttrs.version}.tar.xz";
+    hash = "sha256-sPq+psl0LtqMnGdfm4wdG6u6HagtoD6hEDcQIzcXwbA=";
   };
 
   nativeBuildInputs = [
@@ -55,13 +55,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libxml2
     # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
-    libXtst
-    libXi
-    # libXext is a transitive dependency of libXi
-    libXext
+    libxtst
+    libxi
+    # libxext is a transitive dependency of libxi
+    libxext
   ]
   ++ lib.optionals systemdSupport [
     # libsystemd is a needed for dbus-broker support
@@ -122,4 +122,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

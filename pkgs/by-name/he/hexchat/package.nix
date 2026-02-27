@@ -21,14 +21,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hexchat";
   version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "hexchat";
     repo = "hexchat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
   };
 
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

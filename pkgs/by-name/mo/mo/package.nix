@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mo";
   version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "tests-always-included";
     repo = "mo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-CFAvTpziKzSkdomvCf8PPXYbYcJxjB4EValz2RdD2b0=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sheepforce ];
     mainProgram = "mo";
   };
-}
+})

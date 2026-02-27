@@ -6,24 +6,24 @@
   libjack2,
   liblo,
   alsa-lib,
-  libX11,
+  libx11,
   libsndfile,
-  libSM,
+  libsm,
   libsamplerate,
   libtool,
   autoconf,
   automake,
   xorgproto,
-  libICE,
+  libice,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dssi";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/dssi/dssi/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/dssi/dssi/${finalAttrs.version}/dssi-${finalAttrs.version}.tar.gz";
     sha256 = "0kl1hzhb7cykzkrqcqgq1dk4xcgrcxv0jja251aq4z4l783jpj7j";
   };
 
@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
     libjack2
     liblo
     alsa-lib
-    libX11
+    libx11
     libsndfile
-    libSM
+    libsm
     libsamplerate
     libtool
     xorgproto
-    libICE
+    libice
   ];
 
   meta = {
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     downloadPage = "https://sourceforge.net/projects/dssi/files/dssi/";
   };
-}
+})

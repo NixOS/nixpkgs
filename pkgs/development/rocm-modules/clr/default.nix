@@ -25,7 +25,7 @@
   zlib,
   libGL,
   libxml2,
-  libX11,
+  libx11,
   python3Packages,
   llvm,
   khronos-ocl-icd-loader,
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     numactl
     libGL
     libxml2
-    libX11
+    libx11
     khronos-ocl-icd-loader
     hipClang
     libffi
@@ -205,6 +205,14 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${rocm-core}/.info/ $out/.info
 
     ln -s ${hipClang} $out/llvm
+  '';
+
+  # libamdhip64.so dlopens its own bare name for hipGetProcAddress symbol resolution.
+  # Add its own directory to its RPATH so it can find itself
+  # Must be in postFixup so it runs after patchelf --shrink-rpath which removes
+  # the apparently useless rpath
+  postFixup = ''
+    patchelf --add-rpath "$out/lib" "$out/lib/libamdhip64.so"
   '';
 
   disallowedRequisites = [

@@ -62,10 +62,14 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } rec {
     fetchSubmodules = true;
   };
 
-  env.LDFLAGS = toString [
-    # Fake libcuda.so (the real one is deployed impurely)
-    "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
-  ];
+  env = {
+    LDFLAGS = toString [
+      # Fake libcuda.so (the real one is deployed impurely)
+      "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
+    ];
+    # NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
+    CUDA_PATH = "${cudatoolkit-joined}";
+  };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Setting both
   # CUPY_NUM_BUILD_JOBS and CUPY_NUM_NVCC_THREADS to NIX_BUILD_CORES results in
@@ -94,9 +98,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } rec {
     libcutensor
     nccl
   ];
-
-  # NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
-  CUDA_PATH = "${cudatoolkit-joined}";
 
   dependencies = [
     fastrlock

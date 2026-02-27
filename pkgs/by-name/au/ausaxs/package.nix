@@ -11,6 +11,8 @@
   pkg-config,
   cairo,
   gtk3,
+  catch2_3,
+  backward-cpp,
 }:
 
 let
@@ -33,20 +35,6 @@ let
     repo = "gcem";
     rev = "c5464969d373ed0a763c3562656798d1cc00687f";
     hash = "sha256-bnWakLHl/afpeFm6S32ku0IkniyIs8X+LE1NmV6p0ho=";
-  };
-
-  backward-cpp = fetchFromGitHub {
-    owner = "bombela";
-    repo = "backward-cpp";
-    rev = "0bfd0a07a61551413ccd2ab9a9099af3bad40681";
-    hash = "sha256-nLH8jfdgzmlUTg6zwY/h0HVnDMeC9rvmX1x4Ithu9dI=";
-  };
-
-  catch2 = fetchFromGitHub {
-    owner = "catchorg";
-    repo = "Catch2";
-    rev = "914aeecfe23b1e16af6ea675a4fb5dbd5a5b8d0a";
-    hash = "sha256-2gK+CUpml6AaHcwNoq0tHLr2NwqtMPx+jP80/LLFFr4=";
   };
 
   elements = fetchFromGitHub {
@@ -80,13 +68,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausaxs";
-  version = "1.1.7";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "AUSAXS";
     repo = "AUSAXS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/d6EXDn60ap7dluJZtVP5vGiJTn4ggF7XYZ6ONGipDs=";
+    hash = "sha256-vTuQsg76p0WHPadwqBdDGBSNgNmr5TxuwlNj47P+sa8=";
   };
 
   patches = [ ./cmake-no-fetchcontent.patch ];
@@ -95,23 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
     cp --recursive --no-preserve=mode ${dlib} dlib
     cp --recursive --no-preserve=mode ${thread-pool} thread_pool
     cp --recursive --no-preserve=mode ${gcem} gcem
-    cp --recursive --no-preserve=mode ${backward-cpp} backward
-    cp --recursive --no-preserve=mode ${catch2} catch2
     cp --recursive --no-preserve=mode ${nfd} nfd
     cp --recursive --no-preserve=mode ${elements} elements
     cp --recursive --no-preserve=mode ${asio} asio
     cp --recursive --no-preserve=mode ${cycfi_infra} cycfi_infra
-    substituteInPlace executable/CMakeLists.txt \
-      --replace-fail "FetchContent_MakeAvailable(CLI11)" "find_package(CLI11 CONFIG REQUIRED)"
-    substituteInPlace include/crystal/crystal/miller/MillerGenerationFactory.h \
-      --replace-fail "namespace ausaxs::settings::crystal {enum class MillerGenerationChoice;}" '#include "../core/settings/CrystalSettings.h"'
     patch -p1 -d elements < ${./elements-cmake-no-fetchcontent.patch}
     substituteInPlace CMakeLists.txt \
       --replace-fail "-mavx" "${
         lib.optionalString (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux) "-msse3"
       }"
-    sed -i '/#include <iostream>/a\
-    #include <numbers>' source/crystal/miller/FibonacciMillers.cpp
   '';
 
   nativeBuildInputs = [
@@ -122,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    backward-cpp
+    catch2_3
     curl
     cli11
     cairo
@@ -129,7 +111,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "GUI" true) ];
+  cmakeFlags = [
+    (lib.cmakeBool "GUI" true)
+    (lib.cmakeBool "USE_SYSTEM_CATCH" true)
+    (lib.cmakeBool "USE_SYSTEM_CLI11" true)
+    (lib.cmakeBool "USE_SYSTEM_BACKWARD" true)
+  ];
 
   postInstall = ''
     cp --recursive lib/* $out/lib/

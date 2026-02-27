@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fnotifystat";
   version = "0.03.00";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "fnotifystat";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-UGww0/m+JMftQyAguc8UpPrtIphjCq9TINabFaAKN0A=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ womfoo ];
   };
-}
+})

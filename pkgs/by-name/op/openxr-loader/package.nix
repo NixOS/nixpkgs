@@ -4,9 +4,9 @@
   fetchFromGitHub,
   cmake,
   python3,
-  libX11,
-  libXxf86vm,
-  libXrandr,
+  libx11,
+  libxxf86vm,
+  libxrandr,
   vulkan-headers,
   libGL,
   vulkan-loader,
@@ -14,14 +14,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openxr-loader";
   version = "1.1.54";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenXR-SDK-Source";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-7aip1ymZqQ7XQottD9jVb7SBPAlGaj6e27tH6aXYc2I=";
   };
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     vulkan-loader
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
-    libXxf86vm
-    libXrandr
+    libx11
+    libxxf86vm
+    libxrandr
     wayland
   ];
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ralith ];
   };
-}
+})

@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
 
@@ -25,9 +25,10 @@
   pkg-config,
   wayland-protocols,
   wayland-scanner,
+  wrapQtAppsHook,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "maliit-framework";
   version = "2.3.0-unstable-2024-06-24";
 
@@ -60,6 +61,7 @@ mkDerivation {
     pkg-config
     wayland-protocols
     wayland-scanner
+    wrapQtAppsHook
   ];
 
   cmakeFlags = [

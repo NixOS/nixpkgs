@@ -47,9 +47,6 @@ lib.packagesFromDirectoryRecursive {
 
   zstd = callPackage ./manual-packages/zstd { inherit (pkgs) zstd; };
 
-  # From old emacsPackages (pre emacsPackagesNg)
-  cedille = callPackage ./manual-packages/cedille { inherit (pkgs) cedille; };
-
   # camelCase aliases for some of the kebab-case expressions above
   colorThemeSolarized = self.color-theme-solarized;
   emacsSessionManagement = self.session-management-for-emacs;

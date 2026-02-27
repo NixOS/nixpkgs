@@ -8,14 +8,14 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbview";
   version = "3.1";
 
   src = fetchFromGitHub {
     owner = "gregkh";
     repo = "usbview";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-h+sB83BYsrB2VxwtatPWNiM0WdTCMY289nh+/0o8GOw=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "usbview";
   };
-}
+})

@@ -370,6 +370,7 @@ in
   nix-cmd = callPackage ../src/libcmd/package.nix { };
 
   nix-cli = callPackage ../src/nix/package.nix { };
+  ${whenAtLeast "2.34pre" "nix-nswrapper"} = callPackage ../src/nswrapper/package.nix { };
 
   nix-functional-tests = callPackage ../tests/functional/package.nix { };
 

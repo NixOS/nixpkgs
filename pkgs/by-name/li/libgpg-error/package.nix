@@ -28,12 +28,17 @@ stdenv.mkDerivation (
     version = "1.55";
 
     src = fetchurl {
-      url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
+      url = "mirror://gnupg/libgpg-error/libgpg-error-${version}.tar.bz2";
       hash = "sha256-lbF4FIhj8H1F3wzqZ+iAp5ue9x9dIwut3ABxEoUW73g=";
     };
 
     postPatch = ''
       sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
+    ''
+    # libgpg-error insists on having these generated files. They should be fairly ABI stable,
+    # so add one for FreeBSD.
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-freebsd") ''
+      cp ${./lock-obj-pub.x86_64-unknown-freebsd.h} src/syscfg/lock-obj-pub.freebsd.h
     '';
 
     hardeningDisable = [ "strictflexarrays3" ];

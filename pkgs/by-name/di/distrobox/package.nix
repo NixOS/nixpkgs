@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "distrobox";
-  version = "1.8.2.3";
+  version = "1.8.2.4";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "distrobox";
     tag = finalAttrs.version;
-    hash = "sha256-p/IQ6HWG01UPbiskp3u1UUm8YEnpY9jUGqqODrYS1Ck=";
+    hash = "sha256-bttJFHgmZgN0p6eT7vGzz2DsrrUgB+uGnnPz2Ep+eB4=";
   };
 
   dontConfigure = true;
@@ -43,8 +43,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/distrobox-generate-entry" \
       --prefix PATH ":" ${lib.makeBinPath [ wget ]}
 
-    wrapProgram "$out/bin/${finalAttrs.meta.mainProgram}" \
-      --prefix PATH ":" ${lib.makeBinPath [ gnugrep ]}
+    mv "$out/bin/${finalAttrs.meta.mainProgram}" "$out/bin/.${finalAttrs.meta.mainProgram}-wrapped"
+    makeWrapper "${stdenvNoCC.shell}" "$out/bin/${finalAttrs.meta.mainProgram}" \
+      --prefix PATH ":" "${lib.makeBinPath [ gnugrep ]}" \
+      --add-flags "-c 'source \"$out/bin/.${finalAttrs.meta.mainProgram}-wrapped\"' \"\$0\""
 
     mkdir -p $out/share/distrobox
     echo 'container_additional_volumes="/nix:/nix"' > $out/share/distrobox/distrobox.conf
@@ -67,7 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://distrobox.it/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     mainProgram = "distrobox";
   };
 })

@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.12.1";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nilearn";
     repo = "nilearn";
     tag = version;
-    hash = "sha256-jUP/gUMUVveX8m2VbyilTsx5OppuYVXH1qKeEfEVajQ=";
+    hash = "sha256-q+glPYxnB3Nd1DtaTzdSEJtgRtRhW+RfZmAeAUL6zX4=";
   };
 
   postPatch = ''

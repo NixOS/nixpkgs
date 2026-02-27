@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  async-timeout,
   setuptools,
 }:
 
@@ -23,10 +21,6 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [
     "async_timeout"
-  ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   # only manual tests

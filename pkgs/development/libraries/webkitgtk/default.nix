@@ -29,6 +29,7 @@
   libjxl,
   at-spi2-core,
   cairo,
+  expat,
   libxml2,
   libsoup_3,
   libsecret,
@@ -37,7 +38,7 @@
   hyphen,
   icu,
   libsysprof-capture,
-  libpthreadstubs,
+  libpthread-stubs,
   nettle,
   libtasn1,
   p11-kit,
@@ -84,7 +85,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.4";
+  version = "2.50.5";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -99,7 +100,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-07+kc4Raz6tyY1utpeDRNP2meSxblcXFzRQbRhJb2OQ=";
+    hash = "sha256-hzdjG6w+nHrT5SCPk3DgdsCdnEWzmYACHOVO2tzG+U8=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -142,6 +143,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     at-spi2-core
     cairo # required even when using skia
     enchant
+    expat
     flite
     libavif
     libepoxy
@@ -160,7 +162,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libidn
     libintl
     lcms2
-    libpthreadstubs
+    libpthread-stubs
     libsysprof-capture
     libtasn1
     libwebp

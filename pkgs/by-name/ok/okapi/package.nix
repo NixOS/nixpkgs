@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "okapi";
   version = "1.6.0";
 
   src = fetchurl {
-    url = "https://github.com/trinsic-id/okapi/releases/download/v${version}/okapi-vendor-${version}.tar.gz";
+    url = "https://github.com/trinsic-id/okapi/releases/download/v${finalAttrs.version}/okapi-vendor-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-wszpCzh1VhqBlox7ywWi6WKUmxQUTsf5N5IiJumlEbM=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tmarkovski ];
   };
-}
+})

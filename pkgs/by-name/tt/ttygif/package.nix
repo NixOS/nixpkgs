@@ -7,14 +7,14 @@
   xwd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ttygif";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "icholy";
     repo = "ttygif";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-GsMeVR2wNivQguZ6B/0v39Td9VGHg+m3RtAG9DYkNmU=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ moaxcp ];
     mainProgram = "ttygif";
   };
-}
+})

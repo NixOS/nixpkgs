@@ -4,21 +4,21 @@
   fetchFromGitHub,
   cmark-gfm,
   xxd,
-  fastJson,
+  libfastjson,
   libzip,
   ninja,
   meson,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mmdoc";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "ryantm";
     repo = "mmdoc";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-NS8i5xvCwq0pSdfxnaxnpuwmDAkfH6Tkc4N2F6aGvWY=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmark-gfm
-    fastJson
+    libfastjson
     libzip
   ];
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ryantm ];
     platforms = lib.platforms.unix;
   };
-}
+})

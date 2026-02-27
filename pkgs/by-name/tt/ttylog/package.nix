@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ttylog";
   version = "0.31";
 
   src = fetchFromGitHub {
     owner = "rocasa";
     repo = "ttylog";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0c746bpjpa77vsr88fxk8h1803p5np1di1mpjf4jy5bv5x3zwm07";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ttylog";
   };
-}
+})

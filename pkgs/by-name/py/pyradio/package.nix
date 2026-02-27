@@ -5,16 +5,16 @@
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyradio";
-  version = "0.9.3.11.22";
+  version = "0.9.3.11.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coderholic";
     repo = "pyradio";
-    tag = version;
-    hash = "sha256-JUVlaKKprgnGiZzZ0J6VSePrSdCWuWQzhuTTiCeB12U=";
+    tag = finalAttrs.version;
+    hash = "sha256-0NcVjXkGhWYqgllEsbV+I8RzDgPn8CTPkRWRPUsmw0M=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://www.coderholic.com/pyradio/";
     description = "Curses based internet radio player";
     mainProgram = "pyradio";
-    changelog = "https://github.com/coderholic/pyradio/releases/tag/${src.tag}";
+    changelog = "https://github.com/coderholic/pyradio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       contrun
@@ -64,4 +64,4 @@ python3Packages.buildPythonApplication rec {
       yayayayaka
     ];
   };
-}
+})

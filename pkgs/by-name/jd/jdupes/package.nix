@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   libjodycode,
 }:
 
@@ -9,8 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "jdupes";
   version = "1.31.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jbruchon";
     repo = "jdupes";
     rev = "v${finalAttrs.version}";

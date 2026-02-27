@@ -17,14 +17,14 @@
 assert (!blas.isILP64) && (!lapack.isILP64);
 assert !mumps.mpiSupport;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipopt";
   version = "3.14.19";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Ipopt";
-    rev = "releases/${version}";
+    rev = "releases/${finalAttrs.version}";
     sha256 = "sha256-85fUBMwQtG+RWQYk9YzdZYK3CYcDKgWroo4blhVWBzE=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
       qbisi
     ];
   };
-}
+})

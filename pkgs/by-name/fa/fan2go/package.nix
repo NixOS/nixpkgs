@@ -8,15 +8,15 @@
   enableNVML ? config.cudaSupport,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fan2go";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = "fan2go";
-    tag = version;
-    hash = "sha256-CHBJhG10RD5rQW1SFk7ffV9M4t6LtJR6xQrw47KQzC0=";
+    tag = finalAttrs.version;
+    hash = "sha256-tfIjMUaUMwBiEF9HgWFKm3ChvQJqYUIz/isyXSkptO0=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
@@ -25,7 +25,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-BSZwvD9psXtSmoUPBxMVuvbcpqDSpFEKVskJo05e4fo=";
+  vendorHash = "sha256-JOScGakasPLZnWc2jGvG1rw0riuM3PqLCPkn/ja/P3A=";
 
   nativeBuildInputs = lib.optionals enableNVML [
     autoAddDriverRunpath
@@ -73,4 +73,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mtoohey ];
     platforms = lib.platforms.linux;
   };
-}
+})

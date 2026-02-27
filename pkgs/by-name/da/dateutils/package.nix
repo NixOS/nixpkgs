@@ -6,12 +6,12 @@
   tzdata,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.4.11";
   pname = "dateutils";
 
   src = fetchurl {
-    url = "https://bitbucket.org/hroptatyr/dateutils/downloads/dateutils-${version}.tar.xz";
+    url = "https://bitbucket.org/hroptatyr/dateutils/downloads/dateutils-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-uP6gsJcUu63yArmzQ0zOa1nCgueGkmjQwIuFiA/btEY=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.paperdigits ];
   };
-}
+})

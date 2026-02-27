@@ -84,6 +84,8 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   passthru = {
     inherit frontend;
   };

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "json2tsv";
   version = "1.2";
 
   src = fetchurl {
-    url = "https://codemadness.org/releases/json2tsv/json2tsv-${version}.tar.gz";
+    url = "https://codemadness.org/releases/json2tsv/json2tsv-${finalAttrs.version}.tar.gz";
     hash = "sha256-ET5aeuspXn+BNfIxytkACR+Zrr1smDFvdh03fptQ/YQ=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
   };
-}
+})

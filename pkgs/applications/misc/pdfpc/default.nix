@@ -8,7 +8,7 @@
   gtk3,
   libgee,
   poppler,
-  libpthreadstubs,
+  libpthread-stubs,
   gstreamer,
   gst-plugins-base,
   gst-plugins-good,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
           [ librsvg ]
         else
           [
-            libpthreadstubs
+            libpthread-stubs
             webkitgtk_4_1
           ];
     in

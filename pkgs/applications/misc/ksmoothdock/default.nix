@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  wrapQtAppsHook,
   kactivities,
   qtbase,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "KSmoothDock";
   version = "6.3";
 
@@ -28,6 +29,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [

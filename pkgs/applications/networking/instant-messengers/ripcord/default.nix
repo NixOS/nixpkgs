@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   makeFontsConf,
   appimageTools,
@@ -9,6 +9,7 @@
   qtmultimedia,
   qtwebsockets,
   qtimageformats,
+  wrapQtAppsHook,
   autoPatchelfHook,
   desktop-file-utils,
   imagemagick,
@@ -23,7 +24,7 @@
   alsa-lib,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ripcord";
   version = "0.4.29";
 
@@ -44,6 +45,7 @@ mkDerivation rec {
     autoPatchelfHook
     desktop-file-utils
     imagemagick
+    wrapQtAppsHook
   ];
   buildInputs = [
     libsodium

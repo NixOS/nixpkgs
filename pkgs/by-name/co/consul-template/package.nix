@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "consul-template";
   version = "0.41.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "consul-template";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YZ6PZh9ZFEaanTkvQ6I35ubRxSKB/dMq8JXLPf5Ym4I=";
   };
 
@@ -36,4 +36,4 @@ buildGoModule rec {
     ];
     mainProgram = "consul-template";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpulimit";
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "opsengine";
     repo = "cpulimit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1dz045yhcsw1rdamzpz4bk8mw888in7fyqk1q1b3m1yk4pd1ahkh";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "cpulimit";
     maintainers = [ lib.maintainers.jsoo1 ];
   };
-}
+})

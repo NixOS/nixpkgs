@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pingu";
   version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "CactiChameleon9";
     repo = "pingu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-pXC/y+piLhSWIcJ1/+UaC3sjHPKG3XvTuHzWENsXME0=";
     # Get values that require us to use git, then delete .git
     leaveDotGit = true;
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.appVersion=${version}"
+    "-X main.appVersion=${finalAttrs.version}"
   ];
   preBuild = ''
     ldflags+=" -X main.appRevision=$(cat ldflags_revision)"
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ CactiChameleon9 ];
     mainProgram = "pingu";
   };
-}
+})

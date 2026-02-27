@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "daemon";
   version = "0.8.4";
 
   src = fetchurl {
-    url = "http://libslack.org/daemon/download/daemon-${version}.tar.gz";
+    url = "http://libslack.org/daemon/download/daemon-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-+iiFmtNBywoLASwRwnGBT4cEggE7SfcQYAMh03mIfNE=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "daemon";
   };
-}
+})

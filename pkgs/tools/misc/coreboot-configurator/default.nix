@@ -1,9 +1,9 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   inkscape,
   meson,
-  mkDerivation,
   ninja,
   # We will resolve pkexec from the path because it has a setuid wrapper on
   # NixOS meaning that we cannot just use the path from the nix store.
@@ -19,7 +19,7 @@
   wrapQtAppsHook,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "coreboot-configurator";
   version = "unstable-2023-01-17";
 

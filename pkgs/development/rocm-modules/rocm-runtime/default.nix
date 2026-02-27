@@ -67,6 +67,30 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/ROCR-Runtime/commit/41bfc66aef437a5b349f71105fa4b907cc7e17d5.patch";
       hash = "sha256-A7VhPR3eSsmjq2cTBSjBIz9i//WiNjoXm0EsRKtF+ns=";
     })
+    (fetchpatch {
+      # [PATCH] hsakmt: bump vgpr count for gfx1151 (#1807) (#1986)
+      # We apply only the change that adds a GFX_VERSION_GFX1151 define but
+      # *not* the default vgpr change which causes crashes on old kernels
+      # This was later partially reverted in # [PATCH] Revert "hsakmt: bump vgpr count for gfx1151 (#1807) (#1986)"
+      name = "rocr-runtime-gfx1151-vgpr.patch";
+      url = "https://github.com/ROCm/rocm-systems/commit/09ba45b3f43ec333a84a0ca178fcd1e3ea9400a9.patch";
+      relative = "projects/rocr-runtime";
+      includes = [ "libhsakmt/src/libhsakmt.h" ];
+      hash = "sha256-/V5i+sr88n7fK4yNjR/FpY0ZpiEG5xAD6Oq+9ZOikd4=";
+    })
+    (fetchpatch {
+      # [PATCH] hsakmt: Expose and use CWSR and Control stack sizes (#2200)
+      # Fixes potential mismatches between stack sizes configured in amdgpu kernel module
+      # and userspace by relying on kernel value when available
+      # Falls back to hardcoded size based on ISA if kernel is too old. For gfx1151, also prints:
+      # WARNING: KFD ABI 1.20+ is recommended … This may result in faults, crashes and other application instability
+      # This allows new kernels to work with this runtime detection mechanism
+      # Only gfx1151 warns loudly because only it has had the size updated in kernel…
+      name = "rocr-runtime-kernel-stack-size.patch";
+      url = "https://github.com/ROCm/rocm-systems/commit/7037a71f311c021974fafd13727dfefd8a1cc79d.patch";
+      relative = "projects/rocr-runtime";
+      hash = "sha256-EbDxuEvNu0fyQJZmqq0fbcCdNtaEWUbmyPLvcfqDPjc=";
+    })
     # This causes a circular dependency, aqlprofile relies on hsa-runtime64
     # which is part of rocm-runtime
     # Worked around by having rocprofiler load aqlprofile directly

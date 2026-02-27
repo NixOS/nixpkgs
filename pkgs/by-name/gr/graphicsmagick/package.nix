@@ -8,14 +8,14 @@
   freetype,
   ghostscript,
   graphviz,
-  libX11,
+  libx11,
   libjpeg,
+  libjxl,
   libpng,
   libtiff,
   libtool,
   libwebp,
   libxml2,
-  libheifSupport ? true,
   libheif,
   nukeReferences,
   pkg-config,
@@ -45,16 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     ghostscript
     graphviz
-    libX11
+    libx11
     libjpeg
+    libjxl
+    libheif
     libpng
     libtiff
     libtool
     libwebp
     libxml2
     zlib
-  ]
-  ++ lib.optionals libheifSupport [ libheif ];
+  ];
 
   nativeBuildInputs = [
     nukeReferences
@@ -111,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       PNM, TIFF, and WebP.
     '';
     license = with lib.licenses; [ mit ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ambossmann ];
     mainProgram = "gm";
     platforms = lib.platforms.all;
   };

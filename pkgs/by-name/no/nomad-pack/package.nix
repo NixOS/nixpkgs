@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nomad-pack";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "nomad-pack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-nKhiI7VizNTqB5r+Ayp7tDNd2eWtsFvnoB798W0cRi4=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
-}
+})

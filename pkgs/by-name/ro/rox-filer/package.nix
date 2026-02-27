@@ -7,16 +7,16 @@
   wrapGAppsHook3,
   libxml2,
   gtk2,
-  libSM,
+  libsm,
   shared-mime-info,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rox-filer";
   version = "2.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rox/rox-filer-${version}.tar.bz2";
+    url = "mirror://sourceforge/rox/rox-filer-${finalAttrs.version}.tar.bz2";
     sha256 = "a929bd32ee18ef7a2ed48b971574574592c42e34ae09f36604bf663d7c101ba8";
   };
 
@@ -28,10 +28,13 @@ stdenv.mkDerivation rec {
     libxml2
     gtk2
     shared-mime-info
-    libSM
+    libsm
   ];
-  NIX_LDFLAGS = "-lm";
-  NIX_CFLAGS_COMPILE = " -fpermissive";
+
+  env = {
+    NIX_LDFLAGS = "-lm";
+    NIX_CFLAGS_COMPILE = "-fpermissive";
+  };
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   # go to the source directory after unpacking the sources
-  sourceRoot = "rox-filer-${version}/ROX-Filer";
+  sourceRoot = "rox-filer-${finalAttrs.version}/ROX-Filer";
 
   # account for 'setSourceRoot' offset
   patchFlags = [ "-p2" ];
@@ -105,4 +108,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eleanor ];
   };
-}
+})

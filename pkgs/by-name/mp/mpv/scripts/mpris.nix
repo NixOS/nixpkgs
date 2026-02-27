@@ -9,14 +9,14 @@
   ffmpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpv-mpris";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "hoyon";
     repo = "mpv-mpris";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Q2kNaXZtI6U+x2f00x5CiHZq4o64xFTNC/3W4IiP0+4=";
   };
   passthru.updateScript = gitUpdater { };
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ajs124 ];
-    changelog = "https://github.com/hoyon/mpv-mpris/releases/tag/${version}";
+    changelog = "https://github.com/hoyon/mpv-mpris/releases/tag/${finalAttrs.version}";
   };
-}
+})

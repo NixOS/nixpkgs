@@ -69,8 +69,8 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "9a02925d1ba80bd493b6d4da6e8a777588d57ac4";
-    hash = "sha256-dEFCkeQpQrU61uCwJp/XB2umbQHjXtzado36BGChoc0=";
+    rev = "19dda67f485ffb3ffa92f4c6fa083576ef052d58";
+    hash = "sha256-mna6I/a5ZxMLdWN0QfCsgsre6yMeuSv4syX5ePGLhfg=";
   };
 
   parquet-testing = fetchFromGitHub {
@@ -81,7 +81,7 @@ let
     hash = "sha256-Xd6o3RT6Q0tPutV77J0P1x3F6U3RHdCBOKGUKtkQCKk=";
   };
 
-  version = "22.0.0";
+  version = "23.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-i4Smt43oi4sddUt3qH7ePjensBSfPW+w/ExLVcVNKic=";
+    hash = "sha256-BluUlbtGJwvlrpN/c/KziOfFh5dvzZyuCy4JZkkFea4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
@@ -99,34 +99,66 @@ stdenv.mkDerivation (finalAttrs: {
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
 
-  # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
-  # collisions as well as custom build flags
-  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = fetchurl {
-    url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
-    hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
-  };
+  env =
+    lib.optionalAttrs enableJemalloc {
+      # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
+      # collisions as well as custom build flags
+      ARROW_JEMALLOC_URL = fetchurl {
+        url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
+        hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
+      };
+    }
+    // {
+      # mimalloc: arrow uses custom build flags for mimalloc
+      ARROW_MIMALLOC_URL = fetchFromGitHub {
+        owner = "microsoft";
+        repo = "mimalloc";
+        tag = "v3.1.5";
+        hash = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
+      };
 
-  # mimalloc: arrow uses custom build flags for mimalloc
-  ARROW_MIMALLOC_URL = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    tag = "v3.1.5";
-    hash = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
-  };
+      ARROW_XSIMD_URL = fetchFromGitHub {
+        owner = "xtensor-stack";
+        repo = "xsimd";
+        tag = "14.0.0";
+        hash = "sha256-ijNoHb6xC+OHJbUB4j1PRsoHMzjrnOHVoDRe/nKguDo=";
+      };
 
-  ARROW_XSIMD_URL = fetchFromGitHub {
-    owner = "xtensor-stack";
-    repo = "xsimd";
-    tag = "13.0.0";
-    hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
-  };
+      ARROW_SUBSTRAIT_URL = fetchFromGitHub {
+        owner = "substrait-io";
+        repo = "substrait";
+        tag = "v0.44.0";
+        hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
+      };
 
-  ARROW_SUBSTRAIT_URL = fetchFromGitHub {
-    owner = "substrait-io";
-    repo = "substrait";
-    tag = "v0.44.0";
-    hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
-  };
+      # apache-orc looks for things in caps
+      LZ4_ROOT = lz4;
+      ZSTD_ROOT = zstd.dev;
+    }
+    // lib.optionalAttrs finalAttrs.doInstallCheck {
+      ARROW_TEST_DATA = "${arrow-testing}/data";
+      PARQUET_TEST_DATA = "${parquet-testing}/data";
+      GTEST_FILTER =
+        let
+          # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
+          filteredTests =
+            lib.optionals stdenv.hostPlatform.isAarch64 [
+              "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+              "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+              "TestCompareKernel.PrimitiveRandomTests"
+            ]
+            ++ lib.optionals enableS3 [
+              "S3OptionsTest.FromUri"
+              "S3RegionResolutionTest.NonExistentBucket"
+              "S3RegionResolutionTest.PublicBucket"
+              "S3RegionResolutionTest.RestrictedBucket"
+              "TestMinioServer.Connect"
+              "TestS3FS.*"
+              "TestS3FSGeneric.*"
+            ];
+        in
+        "-${lib.concatStringsSep ":" filteredTests}";
+    };
 
   nativeBuildInputs = [
     cmake
@@ -179,12 +211,6 @@ stdenv.mkDerivation (finalAttrs: {
     azure-sdk-for-cpp.storage-blobs
     azure-sdk-for-cpp.storage-files-datalake
   ];
-
-  # apache-orc looks for things in caps
-  env = {
-    LZ4_ROOT = lz4;
-    ZSTD_ROOT = zstd.dev;
-  };
 
   # fails tests on glibc with this enabled
   hardeningDisable = [ "glibcxxassertions" ];
@@ -254,28 +280,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  ARROW_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${arrow-testing}/data";
-  PARQUET_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${parquet-testing}/data";
-  GTEST_FILTER =
-    let
-      # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
-      filteredTests =
-        lib.optionals stdenv.hostPlatform.isAarch64 [
-          "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
-          "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
-          "TestCompareKernel.PrimitiveRandomTests"
-        ]
-        ++ lib.optionals enableS3 [
-          "S3OptionsTest.FromUri"
-          "S3RegionResolutionTest.NonExistentBucket"
-          "S3RegionResolutionTest.PublicBucket"
-          "S3RegionResolutionTest.RestrictedBucket"
-          "TestMinioServer.Connect"
-          "TestS3FS.*"
-          "TestS3FSGeneric.*"
-        ];
-    in
-    lib.optionalString finalAttrs.doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
 
   __darwinAllowLocalNetworking = true;
 
@@ -304,6 +308,10 @@ stdenv.mkDerivation (finalAttrs: {
         # Failing with "run-test.sh: line 88: 63682 Abort trap: 6"
         "arrow-flight-internals-test"
         "arrow-flight-sql-test"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+        # https://github.com/apache/arrow/issues/41505
+        "TestAzuriteGeneric.Empty"
       ];
     in
     ''

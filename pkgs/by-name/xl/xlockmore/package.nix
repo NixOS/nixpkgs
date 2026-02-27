@@ -3,32 +3,32 @@
   lib,
   fetchurl,
   pam ? null,
-  libX11,
-  libXext,
-  libXinerama,
-  libXdmcp,
-  libXt,
+  libx11,
+  libxext,
+  libxinerama,
+  libxdmcp,
+  libxt,
   autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xlockmore";
-  version = "5.86";
+  version = "5.87";
 
   src = fetchurl {
     url = "http://sillycycle.com/xlock/xlockmore-${version}.tar.xz";
-    sha256 = "sha256-fvsR499tYAlTj9Ld8SpGpAbvh4iT5+USmZllCU3S9Fw=";
+    sha256 = "sha256-Pzu/xN3jCMqA05MHj1FTiSHaKzx11cKmBkIOEpVga3s=";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 
   # Optionally, it can use GTK.
   buildInputs = [
     pam
-    libX11
-    libXext.dev
-    libXinerama
-    libXdmcp
-    libXt
+    libx11
+    libxext.dev
+    libxinerama
+    libxdmcp
+    libxt
   ];
   nativeBuildInputs = [ autoreconfHook ];
 

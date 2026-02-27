@@ -6,14 +6,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmctools";
   version = "0.9";
 
   src = fetchFromGitLab {
     owner = "osm-c-tools";
     repo = "osmctools";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1m8d3r1q1v05pkr8k9czrmb4xjszw6hvgsf3kn9pf0v14gpn4r8f";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.agpl3Only;
   };
-}
+})

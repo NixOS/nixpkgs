@@ -1,9 +1,9 @@
 {
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   lib,
   qttools,
   fribidi,
@@ -11,15 +11,15 @@
   zstd,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coolreader";
-  version = "3.2.58";
+  version = "3.2.59";
 
   src = fetchFromGitHub {
     owner = "buggins";
     repo = "coolreader";
-    rev = "cr${version}";
-    sha256 = "sha256-DUcYUFxPPSPvoEUEbKYEAGxFeFGQCfOFA0+SegoC4oI=";
+    rev = "cr${finalAttrs.version}";
+    sha256 = "sha256-RgVEOaNBaEuPBC75B8PdCkbqMvEzNmnEYmiI1ny/WFQ=";
   };
 
   patches = [ ./cmake_policy_version_3_5.patch ];
@@ -27,6 +27,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -45,4 +46,4 @@ mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

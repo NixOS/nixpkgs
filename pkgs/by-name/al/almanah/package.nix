@@ -25,12 +25,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "almanah";
   version = "0.12.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/almanah/${lib.versions.majorMinor version}/almanah-${version}.tar.xz";
+    url = "mirror://gnome/sources/almanah/${lib.versions.majorMinor finalAttrs.version}/almanah-${finalAttrs.version}.tar.xz";
     sha256 = "DywW6Gkohf0lrX3Mw/UawrS4h2JOaOfqH2SulHkxlFI=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
   };
-}
+})

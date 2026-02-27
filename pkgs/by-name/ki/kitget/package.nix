@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   openssl,
   pkg-config,
@@ -10,8 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kitget";
   version = "0.0.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "koibtw";
     repo = "kitget";
     tag = "v${finalAttrs.version}";

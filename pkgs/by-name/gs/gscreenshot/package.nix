@@ -17,7 +17,7 @@
   x11Support ? true,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gscreenshot";
   version = "3.11.0";
   format = "setuptools";
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "thenaterhood";
     repo = "gscreenshot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-ZdywZhH59L5fk1EB+o6fSj9zCOljS7T/HWpUd2tTl0o=";
   };
 
@@ -92,4 +92,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.davisrichard437 ];
   };
-}
+})

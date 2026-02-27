@@ -8,7 +8,7 @@
   mysql80,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlite3-to-mysql";
   version = "2.5.1";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "techouse";
     repo = "sqlite3-to-mysql";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2SoLiqOLuGcB4IV2CPud+mjc5s8mqobD72kkx0WCwVU=";
   };
 
@@ -24,25 +24,22 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  dependencies =
-    with python3Packages;
-    [
-      click
-      mysql-connector
-      pytimeparse2
-      pymysql
-      pymysqlsa
-      simplejson
-      sqlalchemy
-      sqlalchemy-utils
-      tqdm
-      tabulate
-      unidecode
-      packaging
-      mysql80
-      python-dateutil
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  dependencies = with python3Packages; [
+    click
+    mysql-connector
+    pytimeparse2
+    pymysql
+    pymysqlsa
+    simplejson
+    sqlalchemy
+    sqlalchemy-utils
+    tqdm
+    tabulate
+    unidecode
+    packaging
+    mysql80
+    python-dateutil
+  ];
 
   pythonRelaxDeps = [
     "mysql-connector-python"
@@ -67,4 +64,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ gador ];
     mainProgram = "sqlite3mysql";
   };
-}
+})

@@ -8,18 +8,18 @@
   libloragw-sx1301,
   libloragw-sx1302,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chirpstack-concentratord";
-  version = "4.5.3";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-concentratord";
-    rev = "v${version}";
-    hash = "sha256-D/zp3stjV0EUnUZlEVQ7YwFlczTxG0f0ABPban0JhPM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7wTXotxf9tFSyIrBqn6EVpQJpz5XAPNxJMeaYN7k/so=";
   };
 
-  cargoHash = "sha256-7l/42l1rFX7HXdhgA34FXWpQjksGCnHeARC5YupA2nE=";
+  cargoHash = "sha256-QYmAFJEHLcgFuq34r9XLEwlpbzjAr4CpfluDW5MbfT0=";
 
   buildInputs = [
     libloragw-2g4
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "chirpstack-concentratord";
   };
-}
+})

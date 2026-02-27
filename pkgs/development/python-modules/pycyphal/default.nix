@@ -101,5 +101,6 @@ buildPythonPackage rec {
     homepage = "https://opencyphal.org/";
     changelog = "https://github.com/OpenCyphal/pycyphal/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

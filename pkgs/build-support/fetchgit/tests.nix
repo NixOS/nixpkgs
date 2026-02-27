@@ -1,4 +1,6 @@
 {
+  stdenv,
+  config,
   runCommand,
   testers,
   fetchgit,
@@ -239,8 +241,11 @@
   withGitConfig =
     let
       pkgs = import ../../.. {
-        config.gitConfig = {
-          url."https://github.com".insteadOf = "https://doesntexist.forsure";
+        system = stdenv.hostPlatform.system;
+        config = config // {
+          gitConfig = {
+            url."https://github.com".insteadOf = "https://doesntexist.forsure";
+          };
         };
       };
     in

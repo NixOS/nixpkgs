@@ -65,6 +65,15 @@ let
     "gfx1201"
   ] gpuTargets;
 
+  kdbTargets = lib.intersectLists [
+    "gfx900"
+    "gfx906"
+    "gfx908"
+    "gfx90a"
+    "gfx942"
+    "gfx1030"
+  ] gpuTargets;
+
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIOpen";
@@ -111,25 +120,20 @@ let
     )
   );
 
-  gfx900 = runCommand "miopen-gfx900.kdb" { preferLocalBuild = true; } ''
-    ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/gfx900.kdb.bz2 > $out
-  '';
+  kernelDatabases = lib.genAttrs kdbTargets (
+    target:
+    runCommand "miopen-${target}.kdb" { preferLocalBuild = true; } ''
+      ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/${target}.kdb.bz2 > $out
+    ''
+  );
 
-  gfx906 = runCommand "miopen-gfx906.kdb" { preferLocalBuild = true; } ''
-    ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/gfx906.kdb.bz2 > $out
-  '';
-
-  gfx908 = runCommand "miopen-gfx908.kdb" { preferLocalBuild = true; } ''
-    ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/gfx908.kdb.bz2 > $out
-  '';
-
-  gfx90a = runCommand "miopen-gfx90a.kdb" { preferLocalBuild = true; } ''
-    ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/gfx90a.kdb.bz2 > $out
-  '';
-
-  gfx1030 = runCommand "miopen-gfx1030.kdb" { preferLocalBuild = true; } ''
-    ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/gfx1030.kdb.bz2 > $out
-  '';
+  linkKDBsTo =
+    targetPath:
+    lib.concatStringsSep "" (
+      map (target: ''
+        ln -sf ${kernelDatabases.${target}} ${targetPath}/${target}.kdb
+      '') kdbTargets
+    );
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit version src;
@@ -254,19 +258,12 @@ stdenv.mkDerivation (finalAttrs: {
       return()'
 
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
-
-    ln -sf ${gfx900} src/kernels/gfx900.kdb
-    ln -sf ${gfx906} src/kernels/gfx906.kdb
-    ln -sf ${gfx908} src/kernels/gfx908.kdb
-    ln -sf ${gfx90a} src/kernels/gfx90a.kdb
-    ln -sf ${gfx1030} src/kernels/gfx1030.kdb
+  ''
+  + linkKDBsTo "src/kernels"
+  + ''
     mkdir -p build/share/miopen/db/
-    ln -sf ${gfx900} build/share/miopen/db/gfx900.kdb
-    ln -sf ${gfx906} build/share/miopen/db/gfx906.kdb
-    ln -sf ${gfx908} build/share/miopen/db/gfx908.kdb
-    ln -sf ${gfx90a} build/share/miopen/db/gfx90a.kdb
-    ln -sf ${gfx1030} build/share/miopen/db/gfx1030.kdb
-  '';
+  ''
+  + linkKDBsTo "build/share/miopen/db";
 
   # Unfortunately, it seems like we have to call make on these manually
   postBuild =
@@ -279,12 +276,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     rm $out/libexec/miopen/install_precompiled_kernels.sh
-    ln -sf ${gfx900} $out/share/miopen/db/gfx900.kdb
-    ln -sf ${gfx906} $out/share/miopen/db/gfx906.kdb
-    ln -sf ${gfx908} $out/share/miopen/db/gfx908.kdb
-    ln -sf ${gfx90a} $out/share/miopen/db/gfx90a.kdb
-    ln -sf ${gfx1030} $out/share/miopen/db/gfx1030.kdb
   ''
+  + linkKDBsTo "$out/share/miopen/db"
   + lib.optionalString buildDocs ''
     mv ../doc/html $out/share/doc/miopen-hip
   ''

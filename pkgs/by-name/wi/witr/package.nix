@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "witr";
-  version = "0.2.6";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "pranshuparmar";
     repo = "witr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0OjGVdZ6WZbEtrOmkygsA5UdPya3feGNQ3jdCvxiTM0=";
+    hash = "sha256-HMaFus6sT2+lUauXsADKnCSeQZFEWNUmfRfgYkT3CJY=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;

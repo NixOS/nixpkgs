@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tl-expected";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "TartanLlama";
     repo = "expected";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AuRU8VI5l7Th9fJ5jIc/6mPm0Vqbbt6rY8QCCNDOU50=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

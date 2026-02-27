@@ -6,12 +6,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ucarp";
   version = "1.5.2";
 
   src = fetchurl {
-    url = "https://download.pureftpd.org/pub/ucarp/ucarp-${version}.tar.bz2";
+    url = "https://download.pureftpd.org/pub/ucarp/ucarp-${finalAttrs.version}.tar.bz2";
     sha256 = "0qidz5sr55nxlmnl8kcbjsrff2j97b44h9l1dmhvvjl46iji7q7j";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ oxzi ];
     mainProgram = "ucarp";
   };
-}
+})

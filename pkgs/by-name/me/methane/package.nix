@@ -15,11 +15,11 @@
   openal,
   quesoglc,
   clanlib,
-  libXrender,
+  libxrender,
   libmikmod,
   alsa-lib,
   nix-update-script,
-  libXinerama,
+  libxinerama,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     quesoglc
     clanlib
-    libXrender
-    libXinerama
+    libxrender
+    libxinerama
     libmikmod
     alsa-lib
   ];

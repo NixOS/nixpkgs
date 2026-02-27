@@ -16,14 +16,14 @@
   harfbuzz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "silicon";
   version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "silicon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lwwbjSXW5uonJNZTAqTK14Ib4QDOD4puxY2CsiJk4/Q=";
   };
 
@@ -71,4 +71,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "silicon";
   };
-}
+})

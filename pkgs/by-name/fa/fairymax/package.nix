@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   # errors by default in GCC 14
-  NIX_CFLAGS_COMPILE = "-Wno-error=return-mismatch -Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=return-mismatch -Wno-error=implicit-int";
 
   installPhase = ''
     mkdir -p "$out"/{bin,share/fairymax}

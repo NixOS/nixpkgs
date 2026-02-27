@@ -31,7 +31,7 @@
   libid3tag,
   libopus,
   libuuid,
-  ffmpeg,
+  ffmpeg_7,
   soundtouch,
   portaudio, # given up fighting their portaudio.patch?
   portmidi,
@@ -40,9 +40,9 @@
   at-spi2-core,
   dbus,
   libepoxy,
-  libXdmcp,
-  libXtst,
-  libpthreadstubs,
+  libxdmcp,
+  libxtst,
+  libpthread-stubs,
   libsbsms_2_3_0,
   libselinux,
   libsepol,
@@ -58,6 +58,9 @@
 # TODO
 # 1. detach sbsms
 
+let
+  ffmpeg = ffmpeg_7;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
   version = "3.7.7";
@@ -133,9 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
     at-spi2-core
     dbus
     libepoxy
-    libXdmcp
-    libXtst
-    libpthreadstubs
+    libxdmcp
+    libxtst
+    libpthread-stubs
     libxkbcommon
     libselinux
     libsepol

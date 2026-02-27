@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcfgthread";
-  version = "2.2.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "lhmouse";
     repo = "mcfgthread";
     tag = "v${lib.versions.majorMinor finalAttrs.version}-ga.${lib.versions.patch finalAttrs.version}";
-    hash = "sha256-KI/FweYPKe6mxK+oktIqRN9dltGg7jSgWsoIwDg7xEE=";
+    hash = "sha256-x20wmqm675+pFx+eOu2zWA3BZsG+TXgBTwOoc6+I7WA=";
   };
 
   postPatch = ''

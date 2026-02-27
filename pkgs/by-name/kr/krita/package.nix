@@ -10,7 +10,7 @@
   krita-unwrapped,
 }:
 symlinkJoin {
-  name = lib.replaceStrings [ "-unwrapped" ] [ "" ] krita-unwrapped.name;
+  pname = "krita";
   inherit (krita-unwrapped)
     version
     buildInputs

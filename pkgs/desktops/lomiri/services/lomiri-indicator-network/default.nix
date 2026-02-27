@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-indicator-network";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-indicator-network";
     tag = finalAttrs.version;
-    hash = "sha256-uLqPbbCBahUwj9ZG3Q7x+bXCl0yI6L7jBpg09DTrrpk=";
+    hash = "sha256-BbG48sWlpcaSC0HTDcY+zbzi1O983FzzJ7B1oSlJrGg=";
   };
 
   outputs = [
@@ -93,11 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
-    (lib.cmakeBool "GSETTINGS_COMPILE" true)
-    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # just in case something needs it
     (lib.cmakeBool "BUILD_DOC" true)
+    (lib.cmakeBool "BUILD_LIBCONNECTIVITY_ONLY" false)
+    (lib.cmakeBool "ENABLE_COVERAGE" false)
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" (!lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "GSETTINGS_COMPILE" true)
+    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
+    (lib.cmakeBool "USE_SYSTEMD" true)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

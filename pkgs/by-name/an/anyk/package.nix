@@ -115,6 +115,7 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     cp -r application $out/opt
 
@@ -125,12 +126,12 @@ stdenv.mkDerivation {
     # ÁNYK has some old school dependencies that are no longer bundled with Java, put them on the classpath. The * is resolved by Java at runtime.
     makeWrapper $out/bin/anyk-java $out/bin/anyk --add-flags "-cp '${soapDeps}/share/java/*:${anykSoapPatch}:$out/opt/abevjava.jar' hu.piller.enykp.gui.framework.MainFrame"
 
-    mkdir -p $out/share/applications $out/share/pixmaps $out/share/icons
+    mkdir -p $out/share/applications
 
     copyDesktopItems
 
-    ln -s $out/opt/abevjava.png $out/share/pixmaps/anyk.png
-    ln -s $out/opt/abevjava.png $out/share/icons/anyk.png
+    install -D $out/opt/abevjava.png $out/share/icons/hicolor/32x32/apps/anyk.png
+    runHook postInstall
   '';
 
   meta = {

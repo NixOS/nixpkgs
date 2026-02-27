@@ -54,8 +54,7 @@ flutter335.buildFlutterApplication rec {
     ln -fs "${passthru.helper}/bin/authenticator-helper" "$out/app/$pname/helper/authenticator-helper"
 
     # Move the icon.
-    mkdir $out/share/pixmaps
-    mv $out/app/$pname/linux_support/com.yubico.yubioath.png $out/share/pixmaps
+    install -Dm444 $out/app/$pname/linux_support/com.yubico.yubioath.png $out/share/icons/hicolor/128x128/apps/com.yubico.yubioath.png
 
     # Cleanup.
     rm -rf \

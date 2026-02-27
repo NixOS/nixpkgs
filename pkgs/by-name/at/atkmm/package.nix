@@ -11,12 +11,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "atkmm";
   version = "2.28.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/atkmm/${lib.versions.majorMinor version}/atkmm-${version}.tar.xz";
+    url = "mirror://gnome/sources/atkmm/${lib.versions.majorMinor finalAttrs.version}/atkmm-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-ChQqgSj4PAAe+4AU7kY+mnZgVO+EaGr5UxNeBNKP2rM=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     homepage = "https://gtkmm.org";
     platforms = lib.platforms.unix;
   };
-}
+})

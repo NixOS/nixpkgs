@@ -18,7 +18,7 @@
   wrapGAppsHook4,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "metadata-cleaner";
   version = "2.5.6";
   pyproject = false;
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "rmnvgr";
     repo = "metadata-cleaner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-J+nwgLbAFoh1gq3J4cqQEShZJCSZesyCjT9DfkCWIHs=";
   };
 
@@ -64,11 +64,11 @@ python3.pkgs.buildPythonApplication rec {
     description = "Python GTK application to view and clean metadata in files, using mat2";
     mainProgram = "metadata-cleaner";
     homepage = "https://gitlab.com/rmnvgr/metadata-cleaner";
-    changelog = "https://gitlab.com/rmnvgr/metadata-cleaner/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/rmnvgr/metadata-cleaner/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       gpl3Plus
       cc-by-sa-40
     ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

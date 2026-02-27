@@ -30,12 +30,12 @@
 assert mysqlSupport -> libmysqlclient != null;
 assert postgresSupport -> libpq != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgda";
   version = "6.0.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgda/${lib.versions.majorMinor version}/libgda-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgda/${lib.versions.majorMinor finalAttrs.version}/libgda-${finalAttrs.version}.tar.xz";
     sha256 = "0w564z7krgjk19r39mi5qn4kggpdg9ggbyn9pb4aavb61r14npwr";
   };
 
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

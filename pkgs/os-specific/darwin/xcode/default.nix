@@ -53,7 +53,15 @@ let
       };
 
     in
-    app.overrideAttrs (oldAttrs: oldAttrs // { inherit meta; });
+    app.overrideAttrs (
+      oldAttrs:
+      oldAttrs
+      // {
+        pname = "xcode";
+        inherit version;
+        inherit meta;
+      }
+    );
 
 in
 lib.makeExtensible (self: {

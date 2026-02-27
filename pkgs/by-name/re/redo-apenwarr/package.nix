@@ -10,7 +10,7 @@
   gnumake42,
   doCheck ? true,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "redo-apenwarr";
   version = "0.42d";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub rec {
     owner = "apenwarr";
     repo = "redo";
-    rev = "${repo}-${version}";
+    rev = "${repo}-${finalAttrs.version}";
     sha256 = "/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
   };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = python3.meta.platforms;
   };
-}
+})

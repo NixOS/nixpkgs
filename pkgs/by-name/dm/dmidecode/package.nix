@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dmidecode";
   version = "3.7";
 
   src = fetchurl {
-    url = "mirror://savannah/dmidecode/dmidecode-${version}.tar.xz";
+    url = "mirror://savannah/dmidecode/dmidecode-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-LDrtEshaHmqUENQG1eQXxFVGbcG8fIkni7Ms98rZHoo=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

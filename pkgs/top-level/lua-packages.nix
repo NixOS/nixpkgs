@@ -48,6 +48,7 @@ rec {
   inherit (callPackage ../development/interpreters/lua-5/hooks { })
     luarocksMoveDataFolder
     luarocksCheckHook
+    bustedCheckHook
     ;
 
   inherit lua;
@@ -109,6 +110,8 @@ rec {
       };
     }
   ) { };
+
+  image-nvim = callPackage ../development/lua-modules/image-nvim { };
 
   lua-pam = callPackage (
     {
@@ -250,6 +253,8 @@ rec {
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs) zenity;
   };
+
+  readline = callPackage ../development/lua-modules/readline { inherit (pkgs) readline; };
 
   vicious = callPackage (
     { fetchFromGitHub }:

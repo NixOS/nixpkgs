@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  buildPackages,
   fetchurl,
   gtk3,
   glib,
@@ -10,13 +11,13 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmedcon";
-  version = "0.25.3";
+  version = "0.26.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-9VrTQP614tIrmZRm9bSpmlXqCbMPzqvhv222eFiKS4M=";
+    url = "mirror://sourceforge/xmedcon/xmedcon-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-mf424qgt1FqqnwDQU7b8XLQNJsesLQi07T0LdP1cdPg=";
   };
 
   buildInputs = [
@@ -31,6 +32,13 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
+  # xmedcon looks also for a host c compiler when cross-compiling
+  # otherwise you obtain following error message:
+  # "error: no acceptable C compiler found in $PATH"
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
   meta = {
     description = "Open source toolkit for medical image conversion";
     homepage = "https://xmedcon.sourceforge.net/";
@@ -41,4 +49,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})

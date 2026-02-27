@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizip-ng";
-  version = "4.0.9";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "minizip-ng";
     rev = finalAttrs.version;
-    hash = "sha256-iAiw+ihVfcSNl6UdBad7FjT5Zwa+brndg60v7ceCzC8=";
+    hash = "sha256-H6ttsVBs437lWMBsq5baVDb9e5I6Fh+xggFre/hxGKU=";
   };
 
   nativeBuildInputs = [
@@ -42,12 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DMZ_LIB_SUFFIX='-ng'"
   ]
+  ++ lib.optionals stdenv.hostPlatform.isi686 [
+    # tests fail
+    "-DMZ_PKCRYPT=OFF"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # missing header file
     "-DMZ_LIBCOMP=OFF"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-register";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-register";
 
   postInstall = ''
     # make lib findable as libminizip-ng even if compat is enabled

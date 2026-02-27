@@ -7,12 +7,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jfsutils";
   version = "1.1.15";
 
   src = fetchurl {
-    url = "mirror://sourceforge/jfs/jfsutils-${version}.tar.gz";
+    url = "mirror://sourceforge/jfs/jfsutils-${finalAttrs.version}.tar.gz";
     sha256 = "0kbsy2sk1jv4m82rxyl25gwrlkzvl3hzdga9gshkxkhm83v1aji4";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };
-}
+})

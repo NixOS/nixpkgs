@@ -13,7 +13,7 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ssl-cert-check";
   version = "4.14";
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp $pname $out/bin/$pname
     wrapProgram $out/bin/$pname \
-      --set PATH "${lib.makeBinPath buildInputs}"
+      --set PATH "${lib.makeBinPath finalAttrs.buildInputs}"
   '';
 
   meta = {
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ryantm ];
     platforms = lib.platforms.linux;
   };
-}
+})

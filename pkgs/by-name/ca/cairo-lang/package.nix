@@ -6,14 +6,14 @@
   perl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cairo";
   version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "starkware-libs";
     repo = "cairo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VOyqKeiPJ3/VOqcdQXC/rZnTriC2ScmAQ4IlouHjvpI=";
   };
 
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ raitobezarius ];
   };
-}
+})

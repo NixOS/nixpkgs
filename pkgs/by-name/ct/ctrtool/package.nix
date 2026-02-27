@@ -5,18 +5,18 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctrtool";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "jakcron";
     repo = "Project_CTR";
-    rev = "ctrtool-v${version}";
+    rev = "ctrtool-v${finalAttrs.version}";
     sha256 = "GvEzv97DqCsaDWVqDpajQRWYe+WM8xCYmGE0D3UcSrM=";
   };
 
-  sourceRoot = "${src.name}/ctrtool";
+  sourceRoot = "${finalAttrs.src.name}/ctrtool";
 
   enableParallelBuilding = true;
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ctrtool";
   };
 
-}
+})

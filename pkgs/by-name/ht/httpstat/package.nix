@@ -6,14 +6,14 @@
   glibcLocales,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "httpstat";
   version = "1.3.2";
   pyproject = true;
   src = fetchFromGitHub {
     owner = "reorx";
     repo = "httpstat";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-dOHFLw8suvpuZkcKEzq5HktMYBGE7+vtTD609TkAFfw=";
   };
 
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [ glibcLocales ];
   runtimeDeps = [ curl ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   meta = {
     description = "Curl statistics made simple";
@@ -31,4 +31,4 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/reorx/httpstat";
     license = lib.licenses.mit;
   };
-}
+})

@@ -3,13 +3,13 @@
   python3Packages,
   fetchPypi,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gay";
   version = "1.3.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-pSxRrXnv4tfu7awVnOsQwC2ZOS4qsfCphFR/fpTNdPc=";
   };
 
@@ -22,4 +22,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ CodeLongAndProsper90 ];
     mainProgram = "gay";
   };
-}
+})

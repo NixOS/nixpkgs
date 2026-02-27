@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  patches = lib.optionals stdenv.hostPlatform.isWindows [
+  patches = lib.optionals (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin) [
     ./0001-Add-exe-extension-for-MS-Windows-binaries.patch
   ];
 
@@ -53,9 +53,27 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [
     "CFLAGS+=-DHAVE_DIRECT_H"
+    "CFLAGS+=-DHAVE_FCHMOD=0"
+    "CFLAGS+=-DHAVE_GETEUID=0"
+    "CFLAGS+=-DHAVE_GETRESUID=0"
+    "CFLAGS+=-DHAVE_MEMPCPY=1"
     "CFLAGS+=-DHAVE_SETENV=0"
+    "CFLAGS+=-DHAVE_STRUCT_STAT_ST_CTIM=0"
     "CFLAGS+=-DHAVE_SYMLINK=0"
     "CFLAGS+=-DRESERVE_STD_EXT_IDS"
+    # sys/stat.h does exist on Windows for us
+    "CFLAGS+=-DHAVE_SYS_STAT_H=1"
+    # It is called st_ctime on windows, this forces that
+    # choice
+    "CFLAGS+=-DHAVE_STRUCT_STAT_ST_CTIM=0"
+    "CFLAGS+=-DHAVE_MEMPCPY=1"
+    "CFLAGS+=-DHAVE_GETRESUID=0"
+    "CFLAGS+=-DHAVE_GETEUID=0"
+    "CFLAGS+=-DHAVE_FCHMOD=0"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isCygwin [
+    "CFLAGS+=-DHAVE_GETRESUID=0"
+    "CFLAGS+=-DHAVE_ISSETUGID=1"
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     "CFLAGS+=-DNETBSD_INSPIRED=0"

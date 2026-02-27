@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bashcards";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "rpearce";
     repo = "bashcards";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1rpqrh0022sbrjvd55a0jvpdqhhka5msf8dsz6adbbmxy3xzgdid";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "bashcards";
   };
-}
+})

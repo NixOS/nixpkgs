@@ -8,6 +8,7 @@
 }:
 runCommand "sddm-wrapped"
   {
+    pname = "sddm";
     inherit (sddm-unwrapped) version outputs;
 
     buildInputs = sddm-unwrapped.buildInputs ++ extraPackages;

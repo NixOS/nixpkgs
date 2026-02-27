@@ -11,14 +11,14 @@
   gtk-engine-murrine,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zuki-themes";
   version = "4.0";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "zuki-themes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1q026wa8xgyb6f5k7pqpm5zav30dbnm3b8w59as3sh8rhfgpbf80";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

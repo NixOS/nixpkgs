@@ -9,12 +9,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pg_top";
   version = "4.1.3";
 
   src = fetchurl {
-    url = "https://pg_top.gitlab.io/source/pg_top-${version}.tar.xz";
+    url = "https://pg_top.gitlab.io/source/pg_top-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-4El3GmfP5UDJOsDxyU5z/s3JKw0jlMb8EB/hvtywwVs=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     mainProgram = "pg_top";
   };
-}
+})

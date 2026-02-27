@@ -9,12 +9,12 @@
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sharutils";
   version = "4.15.2";
 
   src = fetchurl {
-    url = "mirror://gnu/sharutils/sharutils-${version}.tar.xz";
+    url = "mirror://gnu/sharutils/sharutils-${finalAttrs.version}.tar.xz";
     sha256 = "16isapn8f39lnffc3dp4dan05b7x6mnc76v6q5nn8ysxvvvwy19b";
   };
 
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -5,14 +5,14 @@
   chez,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chez-srfi";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-srfi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-yBhRNfoEt1LOn3/zd/yOWwfErN/qG/tQZnDRqEf8j/0=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.x11;
   };
 
-}
+})

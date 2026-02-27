@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "xmlformat";
-  version = "1.9-unstable-2021-09-15";
+  version = "1.9-unstable-2026-02-12";
 
   src = fetchFromGitHub {
     owner = "someth2say";
     repo = "xmlformat";
-    rev = "15a22213b341ab2800806f052a32d29898fecaad";
-    hash = "sha256-XCjvGeMerSqyMaVEu6EvLuwgsOxZ/v6ahgFCbzRqC7w=";
+    rev = "172a7db1bde6abe91836048a20afe2805a963e76";
+    hash = "sha256-gtG4PaSqrnRoUWiVtrs8/k3qc8j8++5eJj9pqEo20Bk=";
   };
 
   buildInputs = [ perl ];

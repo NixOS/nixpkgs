@@ -8,12 +8,12 @@
   gnutar,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tla";
   version = "1.3.5";
 
   src = fetchurl {
-    url = "https://ftp.gnu.org/old-gnu/gnu-arch/tla-${version}.tar.gz";
+    url = "https://ftp.gnu.org/old-gnu/gnu-arch/tla-${finalAttrs.version}.tar.gz";
     sha256 = "01mfzj1i6p4s8191cgd5850hds1zls88hkf9rb6qx1vqjv585aj0";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/gnu-arch/";
     license = lib.licenses.gpl2Plus;
   };
-}
+})

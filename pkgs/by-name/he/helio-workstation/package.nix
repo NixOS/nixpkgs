@@ -18,14 +18,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "helio-workstation";
   version = "3.17";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = "helio-workstation";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-uEo4dxwc1HksYGU5ssYp3rLugszSir2kKo4XxgqvSno=";
   };
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.suhr ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tunwg";
   version = "25.11.15+bbd247b";
 
   src = fetchFromGitHub {
     owner = "ntnj";
     repo = "tunwg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1NWxVrah3AJPgFxaWJomEs4SAt0Eql3rXG1AaClJMkY=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "tunwg";
   };
-}
+})

@@ -14,12 +14,12 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgnome-games-support";
   version = "1.8.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgnome-games-support/${lib.versions.majorMinor version}/libgnome-games-support-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgnome-games-support/${lib.versions.majorMinor finalAttrs.version}/libgnome-games-support-${finalAttrs.version}.tar.xz";
     sha256 = "KENGBKewOHMawCMXMTiP8QT1ZbsjMMwk54zaBM/T730=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

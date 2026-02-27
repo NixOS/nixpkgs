@@ -7,14 +7,14 @@
   xz,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clair";
   version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "quay";
     repo = "clair";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YZ2r9hzTvsyTFqlXGcmdABtNuBkKclPLmDfMl5/vCug=";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -48,8 +48,8 @@ buildGoModule rec {
   meta = {
     description = "Vulnerability Static Analysis for Containers";
     homepage = "https://github.com/quay/clair";
-    changelog = "https://github.com/quay/clair/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/quay/clair/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

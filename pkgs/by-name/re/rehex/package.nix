@@ -18,14 +18,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rehex";
   version = "0.63.4";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = "rehex";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Iy87iEadK9fXApeYpJbG0jV437wGJxlOoiJLfaUTkVs=";
   };
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       engineering, and everything else.
     '';
     homepage = "https://github.com/solemnwarning/rehex";
-    changelog = "https://github.com/solemnwarning/rehex/raw/${version}/CHANGES.txt";
+    changelog = "https://github.com/solemnwarning/rehex/raw/${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       markus1189
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "rehex";
   };
-}
+})

@@ -35,8 +35,8 @@
   makeBinaryWrapper,
   nodejs,
   libGL,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   livekit-libwebrtc,
   testers,
   writableTmpDirAsHomeHook,
@@ -49,6 +49,7 @@
 assert withGLES -> stdenv.hostPlatform.isLinux;
 
 let
+  channel = "stable";
   executableName = "zeditor";
   # Based on vscode.fhs
   # Zed allows for users to download and use extensions
@@ -106,7 +107,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.221.4";
+  version = "0.224.11";
 
   outputs = [
     "out"
@@ -119,7 +120,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uiwfs80eCjbd/rnXkOmv85NY05XeY9Qu0vf8I+cDElo=";
+    hash = "sha256-VOPAypHlcr7nY3/wk4ec/Ltv+DUf/v4rHDa5oCsg0aE=";
   };
 
   postPatch = ''
@@ -139,7 +140,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-kwV6tejCUwkFLdBCClm/AOxTieSUXnE/dP2UERlLv7U=";
+  cargoHash = "sha256-V61uZEl6LG/xckOajcWugf/K+mJR8Bn9WjqxvvwBbfw=";
 
   nativeBuildInputs = [
     cmake
@@ -173,8 +174,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxcb
     # required by livekit:
     libGL
-    libX11
-    libXext
+    libx11
+    libxext
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
@@ -192,6 +193,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Required on darwin because we don't have access to the
   # proprietary Metal shader compiler.
   buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui/runtime_shaders" ];
+
+  # Some crates define extra types or enum values in test configuration which then lead
+  # to type checking errors in other crates unless this feature is enabled.
+  # gpui/runtime_shaders is required on darwin for the same reason as buildFeatures above:
+  # without it, build.rs invokes the proprietary Metal shader compiler.
+  checkFeatures = [
+    "visual-tests"
+  ]
+  ++ finalAttrs.buildFeatures;
 
   env = {
     ALLOW_MISSING_LICENSES = true;
@@ -227,6 +237,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useNextest = true;
 
+  remoteServerExecutableName = "zed-remote-server-${channel}-${finalAttrs.version}+${channel}";
   installPhase = ''
     runHook preInstall
 
@@ -284,7 +295,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   ''
   + lib.optionalString buildRemoteServer ''
-    install -Dm755 $release_target/remote_server $remote_server/bin/zed-remote-server-stable-$version
+    install -Dm755 $release_target/remote_server $remote_server/bin/${finalAttrs.remoteServerExecutableName}
   ''
   + ''
     runHook postInstall
@@ -318,7 +329,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = {
       remoteServerVersion = testers.testVersion {
         package = finalAttrs.finalPackage.remote_server;
-        command = "zed-remote-server-stable-${finalAttrs.version} version";
+        command = "${finalAttrs.remoteServerExecutableName} version";
       };
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {

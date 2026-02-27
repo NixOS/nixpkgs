@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   deprecated,
-  fetchFromGitea,
+  fetchFromCodeberg,
   jaconv,
   py-cpuinfo,
   pytest-benchmark,
@@ -15,8 +15,7 @@ buildPythonPackage rec {
   version = "2.3.0";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "miurahr";
     repo = "pykakasi";
     tag = "v${version}";

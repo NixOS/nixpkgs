@@ -21,10 +21,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cron_descriptor" ];
 

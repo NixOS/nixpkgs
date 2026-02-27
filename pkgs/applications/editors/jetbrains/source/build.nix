@@ -231,10 +231,10 @@ let
   };
 
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "${buildType}-oss";
   inherit version buildNumber;
-  name = "${pname}-${version}.tar.gz";
+  name = "${finalAttrs.pname}-${version}.tar.gz";
   inherit src;
   nativeBuildInputs = [
     p7zip
@@ -321,4 +321,4 @@ stdenvNoCC.mkDerivation rec {
       jps-bootstrap
       ;
   };
-}
+})

@@ -16,18 +16,18 @@
   glibc,
   udevCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
-  version = "6.3.2";
+  version = "6.3.3";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
-    tag = version;
-    hash = "sha256-6dZkQ8cPL8dbtvfuc/a5G1BxEaZyNbvy3eRBctFFwVU=";
+    tag = finalAttrs.version;
+    hash = "sha256-nc6pGxLutxKyd4LiI23e7UfWK45aQiLQRKL6zX7rVO0=";
   };
 
-  cargoHash = "sha256-FlEuv/iaNlfXLhHRSmZedPwroCozaEqIvYRqbgJhgEw=";
+  cargoHash = "sha256-LZsSnIGTemu+SvJxszPWkA5EIdu8XzruZXaYIibV31Q=";
 
   postPatch = ''
     files="
@@ -49,14 +49,11 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace data/asusd.service \
       --replace-fail /usr/bin/asusd $out/bin/asusd \
       --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}
-    substituteInPlace data/asusd-user.service \
-      --replace-fail /usr/bin/asusd-user $out/bin/asusd-user \
-      --replace-fail /usr/bin/sleep ${lib.getExe' coreutils "sleep"}
 
     substituteInPlace Makefile \
       --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
 
-    substituteInPlace /build/asusctl-${version}-vendor/sg-0.4.0/build.rs \
+    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/sg-0.4.0/build.rs \
       --replace-fail /usr/include ${lib.getDev glibc}/include
   '';
 
@@ -112,4 +109,4 @@ rustPlatform.buildRustPackage rec {
       yuannan
     ];
   };
-}
+})

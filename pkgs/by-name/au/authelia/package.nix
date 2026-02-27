@@ -33,7 +33,7 @@ let
 
   web = authelia-web;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit
     pname
     version
@@ -53,14 +53,14 @@ buildGoModule rec {
 
   ldflags =
     let
-      p = "github.com/authelia/authelia/v${lib.versions.major version}/internal/utils";
+      p = "github.com/authelia/authelia/v${lib.versions.major finalAttrs.version}/internal/utils";
     in
     [
       "-s"
       "-w"
-      "-X ${p}.BuildTag=v${version}"
+      "-X ${p}.BuildTag=v${finalAttrs.version}"
       "-X '${p}.BuildState=tagged clean'"
-      "-X ${p}.BuildBranch=v${version}"
+      "-X ${p}.BuildBranch=v${finalAttrs.version}"
       "-X ${p}.BuildExtra=nixpkgs"
     ];
 
@@ -88,8 +88,8 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/authelia --help
-    $out/bin/authelia --version | grep "v${version}"
-    $out/bin/authelia build-info | grep 'v${version}\|nixpkgs'
+    $out/bin/authelia --version | grep "v${finalAttrs.version}"
+    $out/bin/authelia build-info | grep 'v${finalAttrs.version}\|nixpkgs'
 
     runHook postInstallCheck
   '';
@@ -103,7 +103,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://www.authelia.com/";
-    changelog = "https://github.com/authelia/authelia/releases/tag/v${version}";
+    changelog = "https://github.com/authelia/authelia/releases/tag/v${finalAttrs.version}";
     description = "Single Sign-On Multi-Factor portal for web apps";
     longDescription = ''
       Authelia is an open-source authentication and authorization server
@@ -121,4 +121,4 @@ buildGoModule rec {
     ];
     mainProgram = "authelia";
   };
-}
+})

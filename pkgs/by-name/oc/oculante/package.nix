@@ -7,10 +7,10 @@
   openssl,
   fontconfig,
   nasm,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXi,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxi,
   libGL,
   libxkbcommon,
   wayland,
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Bn2HxmFiqOeb3oUnUL/K0SahcFWRlY9RrbGU4orQz+Y=";
 
-  SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
+  env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
   nativeBuildInputs = [
     cmake
@@ -51,10 +51,10 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
     gtk3
     libxkbcommon
     wayland

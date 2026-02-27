@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-deadlinks";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "deadlinks";
     repo = "cargo-deadlinks";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0s5q9aghncsk9834azn5cgnn5ms3zzyjan2rq06kaqcgzhld4cjh";
   };
 
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cargo subcommand to check rust documentation for broken links";
     homepage = "https://github.com/deadlinks/cargo-deadlinks";
-    changelog = "https://github.com/deadlinks/cargo-deadlinks/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/deadlinks/cargo-deadlinks/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

@@ -10,7 +10,7 @@
   gio-sharp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-sharp-beans";
   version = "2.14.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "mono";
     repo = "gtk-sharp-beans";
 
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "04sylwdllb6gazzs2m4jjfn14mil9l3cny2q0xf0zkhczzih6ah1";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
   };
-}
+})

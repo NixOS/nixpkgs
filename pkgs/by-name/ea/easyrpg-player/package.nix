@@ -20,14 +20,14 @@
   libsndfile,
   libsysprof-capture,
   libvorbis,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
   libxmp,
-  libXrandr,
-  libXScrnSaver,
-  libXxf86vm,
+  libxrandr,
+  libxscrnsaver,
+  libxxf86vm,
   mpg123,
   nlohmann_json,
   opusfile,
@@ -86,13 +86,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXScrnSaver
-    libXxf86vm
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxscrnsaver
+    libxxf86vm
     libdecor
   ];
 
@@ -126,6 +126,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
-    mainProgram = lib.optionalString stdenv.hostPlatform.isDarwin "EasyRPG Player";
+    mainProgram = if stdenv.hostPlatform.isDarwin then "EasyRPG Player" else "easyrpg-player";
   };
 }

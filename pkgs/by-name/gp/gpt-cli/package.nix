@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gpt-cli";
   version = "0.4.3";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kharvd";
     repo = "gpt-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BNSMxf3rhKieXYnFqVdpiHmNCDjotJUflwa6mAgsVCc=";
   };
 
@@ -54,9 +54,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Command-line interface for ChatGPT, Claude and Bard";
     homepage = "https://github.com/kharvd/gpt-cli";
-    changelog = "https://github.com/kharvd/gpt-cli/releases/tag/${src.tag}";
+    changelog = "https://github.com/kharvd/gpt-cli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _404wolf ];
     mainProgram = "gpt";
   };
-}
+})

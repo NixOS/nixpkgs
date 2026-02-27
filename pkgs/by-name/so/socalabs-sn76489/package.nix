@@ -7,14 +7,14 @@
   alsa-lib,
   copyDesktopItems,
   makeDesktopItem,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXinerama,
-  libXrandr,
-  libXtst,
-  libXdmcp,
-  libXext,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxinerama,
+  libxrandr,
+  libxtst,
+  libxdmcp,
+  libxext,
   xvfb,
   freetype,
   fontconfig,
@@ -74,14 +74,14 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
-    libX11
-    libXcomposite
-    libXcursor
-    libXinerama
-    libXrandr
-    libXtst
-    libXdmcp
-    libXext
+    libx11
+    libxcomposite
+    libxcursor
+    libxinerama
+    libxrandr
+    libxtst
+    libxdmcp
+    libxext
     xvfb
     libGL
     libjack2
@@ -127,18 +127,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcomposite"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-      "-lXtst"
-      "-lXdmcp"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcomposite"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+    "-lXtst"
+    "-lXdmcp"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

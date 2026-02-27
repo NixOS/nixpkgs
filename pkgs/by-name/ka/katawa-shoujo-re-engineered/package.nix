@@ -1,7 +1,7 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitea,
+  fetchFromCodeberg,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -12,9 +12,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "katawa-shoujo-re-engineered";
   version = "2.0.3";
 
-  src = fetchFromGitea {
+  src = fetchFromCodeberg {
     # GitHub mirror at fleetingheart/ksre
-    domain = "codeberg.org";
     owner = "fhs";
     repo = "katawa-shoujo-re-engineered";
     rev = "v${finalAttrs.version}";

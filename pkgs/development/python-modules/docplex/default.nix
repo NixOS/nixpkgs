@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "docplex";
-  version = "2.30.251";
+  version = "2.31.254";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZQMhn1tRJ1p+TnfKQzKQOw+Akl0gUDCkjT9qp8oNvyo=";
+    hash = "sha256-LGMpeN3r9/xIzLhGwtWrTrXs0CUMDGEmspu6vVNpwEY=";
   };
 
   postPatch = ''

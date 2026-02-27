@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "dask-gateway-server";
-  version = "2023.9.0";
+  version = "2025.4.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";
-    rev = version;
-    hash = "sha256-hwNLcuFN6ItH5KhC2gDUsaZT7qTC48fPR/Qx6u8B1+M=";
+    tag = version;
+    hash = "sha256-Ezt5QkA21SDfuCMm+XY8d+xso8SDb4lmK/yd89Guu0Y=";
   };
 
   sourceRoot = "${src.name}/${pname}";

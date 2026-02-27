@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bibclean";
   version = "3.07";
 
   src = fetchurl {
-    url = "http://ftp.math.utah.edu/pub/bibclean/bibclean-${version}.tar.xz";
+    url = "http://ftp.math.utah.edu/pub/bibclean/bibclean-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-kZM2eC6ePCBOYPVkhf0fjdZ562IvyP0fSDNZXuEBkaY=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

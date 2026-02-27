@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tdl";
   version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "iyear";
     repo = "tdl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-EYS4EK0NmNHnvjMkf5AHrYpZeGw+n2ovFDLanbqpF4Y=";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/iyear/tdl/pkg/consts.Version=${version}"
+    "-X=github.com/iyear/tdl/pkg/consts.Version=${finalAttrs.version}"
   ];
 
   # Filter out the main executable
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "tdl";
   };
-}
+})

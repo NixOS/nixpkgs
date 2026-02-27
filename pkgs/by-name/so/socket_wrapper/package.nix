@@ -6,13 +6,13 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "socket_wrapper";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchurl {
-    url = "mirror://samba/cwrap/socket_wrapper-${version}.tar.gz";
-    sha256 = "sha256-miEZA+G3BeORbMUJ0MbV8PjftutYf0SOEdjiAJtHdaU=";
+    url = "mirror://samba/cwrap/socket_wrapper-${finalAttrs.version}.tar.gz";
+    hash = "sha256-iw9NbCrn9fD0dfA/rVSWytuMtXkUqBFhZZkJLNgwtW4=";
   };
 
   nativeBuildInputs = [
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -8,11 +8,11 @@
   jre,
   libGL,
   libpulseaudio,
-  libXxf86vm,
+  libxxf86vm,
   nix-update-script,
 }:
 let
-  version = "4.19.9";
+  version = "4.19.13";
 
   desktopItem = makeDesktopItem {
     name = "unciv";
@@ -32,7 +32,7 @@ let
     lib.optionals stdenv.hostPlatform.isLinux [
       libGL
       libpulseaudio
-      libXxf86vm
+      libxxf86vm
     ]
   );
 in
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-+HVpzm60hyJhD1b7VlDLpa5NY48ffBIPF54SHqDYfF8=";
+    hash = "sha256-8Y7ob7uC1hXESD2QnhbAUZQMCXSyroB9a3xO2o5sogc=";
   };
 
   dontUnpack = true;

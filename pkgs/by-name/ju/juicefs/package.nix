@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "juicefs";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "juicedata";
     repo = "juicefs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FACkhBYlJK3NcgYliqT/18djVB7sAo53oqosdFFkAtI=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/juicedata/juicefs/pkg/version.version=${version}"
+    "-X github.com/juicedata/juicefs/pkg/version.version=${finalAttrs.version}"
   ];
 
   doCheck = false; # requires network access
@@ -37,4 +37,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

@@ -8,14 +8,14 @@
   xapian,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dovecot-fts-flatcurve";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "slusarz";
     repo = "dovecot-fts-flatcurve";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-96sR/pl0G0sSjh/YrXdgVgASJPhrL32xHCbBGrDxzoU=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ euxane ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.17.0";
+  version = "4.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     tag = "v${version}";
-    hash = "sha256-no4yvAjrg6q7L3PrMHSLrbm21myL9rXnKvOYjXrY1lw=";
+    hash = "sha256-aBVtyPgkmSYCDlPcmJKFKqUwKMbxVVy8AVsKBdPNkXI=";
   };
 
   build-system = with python3Packages; [

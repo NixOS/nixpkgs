@@ -1,21 +1,22 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   gcc-arm-embedded,
   python3Packages,
+  qttools,
+  udevCheckHook,
+  wrapQtAppsHook,
   qtbase,
   qtmultimedia,
-  qttools,
   SDL,
   gtest,
   dfu-util,
   avrdude,
-  udevCheckHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "opentx";
   version = "2.3.15";
 
@@ -36,6 +37,7 @@ mkDerivation rec {
     python3Packages.pillow
     qttools
     udevCheckHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [

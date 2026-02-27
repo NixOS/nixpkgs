@@ -7,7 +7,7 @@
   python3,
   m4,
   cairo,
-  libX11,
+  libx11,
   mesa,
   mesa_glu,
   ncurses,
@@ -15,17 +15,18 @@
   tcsh,
   tk,
   fixDarwinDylibNames,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magic-vlsi";
-  version = "8.3.593";
+  version = "8.3.602";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
     tag = finalAttrs.version;
-    hash = "sha256-o9x29CDOtSQpQvTach6RaTJxRd2iTjyYi94ZjffUxVI=";
+    hash = "sha256-jNcuTdBHyVUEvdavIaB2LfMBKhHZkCxFOYyA2kBezqc=";
     leaveDotGit = true;
   };
 
@@ -37,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     (fetchpatch {
-      name = "neuer-fix-name.patch";
-      url = "https://github.com/RTimothyEdwards/magic/commit/a70ca249c3a4e7a256a4482bd887452267c8cd52.patch";
-      hash = "sha256-sNQDz4/hBtwJeDrOCe+LfJkuaB0zRzX7w1aDv8ZD7Pw=";
+      name = "fix_txinput_termbits.patch";
+      url = "https://github.com/RTimothyEdwards/magic/commit/790f0196d4fef21dc8a3f5646ccf87a531c4d6aa.patch";
+      hash = "sha256-zpmFT813USxX3PDpi6TGlWpWX4xfdirVrVtAlBtkSF0=";
     })
   ];
 
@@ -53,9 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    libX11
+    libx11
     m4
-    mesa
     mesa_glu
     ncurses
     tcl
@@ -105,6 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
   # gnu89 is needed for GCC 15 that is more strict about K&R style prototypes
   env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-implicit-function-declaration";
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "VLSI layout tool written in Tcl";

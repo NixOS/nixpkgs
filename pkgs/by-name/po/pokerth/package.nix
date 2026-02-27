@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   qt5,
   fetchFromGitHub,
   fetchpatch,
@@ -21,14 +22,14 @@ let
   protobuf = protobuf_21;
 in
 
-qt5.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pokerth-${target}";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "pokerth";
     repo = "pokerth";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j4E3VMpaPqX7+hE3wYRZZUeRD//F+K2Gp8oPmJqX5FQ=";
   };
 
@@ -93,4 +94,4 @@ qt5.mkDerivation rec {
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -88,7 +88,6 @@ buildFHSEnv {
       kdePackages.wayland
       libxkbcommon
       libgcc
-      mesa
       libdrm
       expat
       alsa-lib

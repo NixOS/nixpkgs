@@ -10,14 +10,14 @@
   ladspaPlugins,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lrdf";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "swh";
     repo = "LRDF";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "00wzkfb8y0aqd519ypz067cq099dpc89w69zw8ln39vl6f9x2pd4";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.unix;
   };
-}
+})

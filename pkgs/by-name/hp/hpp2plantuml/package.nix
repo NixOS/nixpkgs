@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hpp2plantuml";
   version = "0.8.6";
   format = "wheel";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
     hash = "sha256-9FggDDOxWr4z1DBbvYLyvgs3CCguFjq3I4E9ULwL0+Q=";
   };
@@ -31,4 +31,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "hpp2plantuml";
     maintainers = with lib.maintainers; [ eymeric ];
   };
-}
+})

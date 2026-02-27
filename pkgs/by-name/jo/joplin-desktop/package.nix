@@ -20,6 +20,8 @@
   libGL,
   clang_20,
   jq,
+  glib,
+  gsettings-desktop-schemas,
 }:
 
 let
@@ -183,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       makeWrapper "$outdir"/joplin $out/bin/joplin-desktop \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+        --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gsettings-desktop-schemas}" \
         --add-flags "--no-sandbox" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-wayland-ime --ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
         --inherit-argv0

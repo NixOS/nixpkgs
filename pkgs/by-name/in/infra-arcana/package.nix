@@ -10,14 +10,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "infra-arcana";
   version = "23.0.0";
 
   src = fetchFromGitLab {
     owner = "martin-tornqvist";
     repo = "ia";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-b7YRhoQa298fcP4cXlWhLXajjL0M3Mk4Kbb81iH6s5w=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.kenran ];
     license = lib.licenses.agpl3Plus;
   };
-}
+})

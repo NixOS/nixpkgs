@@ -8,7 +8,7 @@
   snippetexpanderx,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit (snippetexpanderd) src version;
 
   pname = "snippetexpander";
@@ -33,7 +33,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'main.version=${src.rev}'"
+    "-X 'main.version=${finalAttrs.src.rev}'"
   ];
 
   postInstall = ''
@@ -60,4 +60,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpander";
   };
-}
+})

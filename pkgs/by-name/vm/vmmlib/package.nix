@@ -8,14 +8,14 @@
   lapack,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.14.0";
   pname = "vmmlib";
 
   src = fetchFromGitHub {
     owner = "Eyescale";
     repo = "vmmlib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QEfeQcE66XbsFTN/Fojgldem5C+RhbOBmRyBX3sfUrg=";
 
     fetchSubmodules = true;
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.adev ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -10,13 +10,13 @@
 }:
 buildNpmPackage rec {
   pname = "flood";
-  version = "4.11.0";
+  version = "4.13.0";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "flood";
     rev = "v${version}";
-    hash = "sha256-RBWDEFhLEZdC7luGFGx3qY0Hk7nM44RZgRyCWXFPh1k=";
+    hash = "sha256-3q9a3WwTHzKbZTptSBTevReu2q4XIkSmFzX0MJQAbc4=";
   };
 
   nativeBuildInputs = [ pnpm_9 ];
@@ -31,7 +31,7 @@ buildNpmPackage rec {
       ;
     pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-MnsUTXcLMT0Q2bQ/rRD4FfJx8XP9TLiv1oTHIgnMZCQ=";
+    hash = "sha256-ukhZ1SCejwi0n3PubBo5qIRE/8snjHSZaGVIbHKvwdI=";
   };
 
   passthru = {
@@ -46,6 +46,7 @@ buildNpmPackage rec {
     homepage = "https://flood.js.org";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+      azahi
       thiagokokada
       winter
       ners

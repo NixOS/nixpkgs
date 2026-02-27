@@ -31,7 +31,7 @@ buildNimPackage {
     })
   ];
 
-  NIX_LDFLAGS = "-lpcre";
+  env.NIX_LDFLAGS = "-lpcre";
 
   postFixup = ''
     wrapProgram $out/bin/nrpl \

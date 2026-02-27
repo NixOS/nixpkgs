@@ -7,14 +7,14 @@
   pkg-config,
   shntool,
   flac,
-  opusTools,
+  opus-tools,
   vorbis-tools,
   mp3gain,
   lame,
   taglib,
   wavpack,
   vorbisgain,
-  monkeysAudio,
+  monkeys-audio,
   sox,
   gtk3,
   libsForQt5,
@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
   bin_path = lib.makeBinPath [
     shntool
     flac
-    opusTools
+    opus-tools
     vorbis-tools
     mp3gain
     lame
     wavpack
-    monkeysAudio
+    monkeys-audio
     vorbisgain
     sox
   ];

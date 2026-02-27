@@ -9,14 +9,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boops";
   version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = "BOops";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0nvpawk58g189z96xnjs4pyri5az3ckdi9mhi0i9s0a7k4gdkarr";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
   };
-}
+})

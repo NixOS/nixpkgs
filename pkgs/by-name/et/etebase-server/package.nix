@@ -8,7 +8,7 @@
   nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "etebase-server";
   version = "0.14.2";
   format = "setuptools";
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W2u/d8X8luOzgy1CLNgujnwaoO1pR1QO1Ma7i4CGkdU=";
   };
 
@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
   passthru.python = python3;
   # PYTHONPATH of all dependencies used by the package
-  passthru.pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
+  passthru.pythonPath = python3.pkgs.makePythonPath finalAttrs.propagatedBuildInputs;
   passthru.tests = {
     nixosTest = nixosTests.etebase-server;
   };
@@ -64,11 +64,11 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/etesync/server";
     description = "Etebase (EteSync 2.0) server so you can run your own";
     mainProgram = "etebase-server";
-    changelog = "https://github.com/etesync/server/blob/${version}/ChangeLog.md";
+    changelog = "https://github.com/etesync/server/blob/${finalAttrs.version}/ChangeLog.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       felschr
       phaer
     ];
   };
-}
+})

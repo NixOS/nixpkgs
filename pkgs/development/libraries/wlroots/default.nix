@@ -27,6 +27,7 @@
   libliftoff,
   libdisplay-info,
   lcms2,
+  evdev-proto,
   nixosTests,
   testers,
 
@@ -79,12 +80,15 @@ let
       ]
       ++ extraNativeBuildInputs;
 
+      propagatedBuildInputs = [
+        # The headers of wlroots #include <libinput.h>, and consumers of `wlroots` need not add it explicitly, hence we propagate it.
+        libinput
+      ];
+
       buildInputs = [
         libliftoff
         libdisplay-info
         libGL
-        libcap
-        libinput
         libxkbcommon
         libgbm
         pixman
@@ -98,10 +102,18 @@ let
         libxcb-render-util
         libxcb-wm
       ]
+      ++ lib.optional stdenv.hostPlatform.isLinux libcap
+      ++ lib.optional stdenv.hostPlatform.isFreeBSD evdev-proto
       ++ lib.optional finalAttrs.enableXWayland xwayland
       ++ extraBuildInputs;
 
-      mesonFlags = lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled";
+      mesonFlags = [
+        (lib.mesonEnable "xwayland" finalAttrs.enableXWayland)
+      ]
+      # The other allocator, udmabuf, is a linux-specific API
+      ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+        (lib.mesonOption "allocators" "gbm")
+      ];
 
       postFixup = ''
         # Install ALL example programs to $examples:
@@ -132,7 +144,7 @@ let
         inherit (finalAttrs.src.meta) homepage;
         changelog = "https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/${version}";
         license = lib.licenses.mit;
-        platforms = lib.platforms.linux;
+        platforms = lib.platforms.linux ++ lib.platforms.freebsd;
         maintainers = with lib.maintainers; [
           synthetica
           wineee

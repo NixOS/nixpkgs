@@ -8,14 +8,14 @@
   libite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uftpd";
   version = "2.15";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "uftpd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+y1eRPUgYf5laRFIDD1XOEfonPP8QMJNCSkmHlXIjdY=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ vifino ];
   };
-}
+})

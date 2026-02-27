@@ -357,7 +357,6 @@ rec {
       license = lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
         veprbl
-        lovek323
         raskin
         jwiegley
       ];

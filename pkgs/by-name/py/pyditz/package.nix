@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyditz";
   version = "0.11";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2gNlrpBk4wxKJ1JvsNeoAv2lyGUc2mmQ0Xvn7eiaJVE=";
   };
 
@@ -30,4 +30,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

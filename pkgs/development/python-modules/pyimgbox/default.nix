@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   beautifulsoup4,
   httpx,
   pytest-asyncio,
@@ -16,8 +16,7 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.7";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "plotski";
     repo = "pyimgbox";
     tag = "v${finalAttrs.version}";

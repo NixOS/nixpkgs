@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "1.2.3";
+  version = "1.2.4";
 in
 flutter338.buildFlutterApplication {
   pname = "proxypin";
@@ -19,7 +19,7 @@ flutter338.buildFlutterApplication {
     owner = "wanghongenpin";
     repo = "proxypin";
     tag = "v${version}";
-    hash = "sha256-0eYfE5ziEMcBpLZ7a48ZPn9pmektdgmMcpDvUz4JrFs=";
+    hash = "sha256-Dhs2b+tjXTPFZOGoi7YUliWkdJ5s1jIJkJsXTQ6w7QY=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

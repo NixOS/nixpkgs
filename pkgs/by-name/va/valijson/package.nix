@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "valijson";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "tristanpenman";
     repo = "valijson";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3hQrCCDOrJx4XwTzJNTRPLghd+uoWKVDISa8rLaGiRM=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -10,15 +10,15 @@
   libnotify,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bleachbit";
-  version = "5.0.0";
+  version = "5.0.2";
 
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-CU5IW8NVWuPl4PHu6mYpD5mOpRiDq6oZk9pDmuz8PjA=";
+    url = "mirror://sourceforge/bleachbit/bleachbit-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-q3iRdrqsR7U+O2LUaf5qDv4DVNsTOcnf9Po+pewzwMs=";
   };
 
   nativeBuildInputs = [
@@ -71,4 +71,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "bleachbit";
   };
-}
+})

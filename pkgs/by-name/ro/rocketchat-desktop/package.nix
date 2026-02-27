@@ -2,12 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  yarn-berry,
+  yarn-berry_4,
   nodejs,
   pkg-config,
   node-gyp,
   python3Packages,
-  electron_39,
+  electron_40,
   vips,
   xvfb-run,
   copyDesktopItems,
@@ -16,17 +16,18 @@
   nix-update-script,
 }:
 let
-  electron = electron_39;
+  yarn-berry = yarn-berry_4;
+  electron = electron_40;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocketchat-desktop";
-  version = "4.11.2";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "RocketChat";
     repo = "Rocket.Chat.Electron";
-    tag = version;
-    hash = "sha256-GTeRrj2zcu36h4z7zPLIYy0pEk94QejTi+6/e3r8XW8=";
+    tag = finalAttrs.version;
+    hash = "sha256-/IzIvPgm18YXSq5RUBXdWsMk45jEs15qkPCnKeMW+E4=";
   };
 
   # This might need to be updated between releases.
@@ -34,8 +35,8 @@ stdenv.mkDerivation rec {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit src missingHashes;
-    hash = "sha256-ZAb8zDdxsJYRD6LRhtFS8XRc8NbstJbUyaQCbvSdKSg=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-3j1lydMNR3kI+G49Sz+LZ2YhwMQWcwKAn09ao4ur0oc=";
   };
 
   nativeBuildInputs = [
@@ -140,9 +141,9 @@ stdenv.mkDerivation rec {
     description = "Official Desktop client for Rocket.Chat";
     mainProgram = "rocketchat-desktop";
     homepage = "https://github.com/RocketChat/Rocket.Chat.Electron";
-    changelog = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/tag/${src.tag}";
+    changelog = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mynacol ];
     platforms = lib.platforms.linux;
   };
-}
+})

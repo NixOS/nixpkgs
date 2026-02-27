@@ -6,14 +6,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qmqtt";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "qmqtt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cIzBnJdMFY25cWf1rBoRQx1G0/5S32igF8vcte+nyHI=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.all;
   };
-}
+})

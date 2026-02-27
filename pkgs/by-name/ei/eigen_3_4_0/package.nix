@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eigen";
   version = "3.4.0";
 
   src = fetchFromGitLab {
     owner = "libeigen";
     repo = "eigen";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-1/4xMetKMDOgZgzz3WMxfHUEpmdAm52RqZvz6i0mLEw=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

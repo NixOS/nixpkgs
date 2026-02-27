@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pwgen";
   version = "2.08";
 
   src = fetchFromGitHub {
     owner = "tytso";
     repo = "pwgen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1j6c6m9fcy24jn8mk989x49yk765xb26lpr8yhpiaqk206wlss2z";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     mainProgram = "pwgen";
     platforms = lib.platforms.all;
   };
-}
+})

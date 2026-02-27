@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rendercv";
   version = "2.6";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rendercv";
     repo = "rendercv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lGeZt/ctNmZu6kSTpH4JTmgOwR9gS6RVkWu0gr4FK4k=";
   };
 
@@ -63,4 +63,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "rendercv";
   };
-}
+})

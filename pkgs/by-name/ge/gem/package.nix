@@ -10,7 +10,7 @@
   glew,
   libglut,
   libv4l,
-  libX11,
+  libx11,
   file,
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     glew
     libglut
     libv4l
-    libX11
+    libx11
   ];
 
   meta = {

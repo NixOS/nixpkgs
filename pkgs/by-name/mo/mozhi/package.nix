@@ -1,15 +1,14 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   unstableGitUpdater,
 }:
 buildGoModule {
   pname = "mozhi";
   version = "0-unstable-2026-01-10";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "aryak";
     repo = "mozhi";
     rev = "6b3f675b8d4c8fb852e88f0696d0c4d72516e618";

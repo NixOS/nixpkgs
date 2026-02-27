@@ -1,6 +1,7 @@
 {
   lib,
   buildDunePackage,
+  fetchpatch,
   get-activity-lib,
   ppx_expect,
   cmdliner,
@@ -14,7 +15,13 @@ buildDunePackage rec {
   pname = "get-activity";
   inherit (get-activity-lib) version src;
 
-  minimalOCamlVersion = "4.08";
+  patches = [
+    # Compatibility with cmdliner ≥ 2.0
+    (fetchpatch {
+      url = "https://github.com/tarides/get-activity/commit/3f1ccbbcf7fc65c69c7752726f6886fc92b986fa.patch";
+      hash = "sha256-6uvkBEI/ZCPrJ3Aus0/L86zUIa+kOBD0k8ADMEi+pkI=";
+    })
+  ];
 
   buildInputs = [
     get-activity-lib

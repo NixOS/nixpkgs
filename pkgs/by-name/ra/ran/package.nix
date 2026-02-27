@@ -7,13 +7,13 @@
   curl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ran";
   version = "0.1.6";
   src = fetchFromGitHub {
     owner = "m3ng9i";
     repo = "ran";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iMvUvzr/jaTNdgHQFuoJNJnnkx2XHIUUlrPWyTlreEw=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   ldflags = [
     "-X"
-    "main._version_=v${version}"
+    "main._version_=v${finalAttrs.version}"
     "-X"
     "main._branch_=master"
   ];
@@ -47,4 +47,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomberek ];
   };
-}
+})

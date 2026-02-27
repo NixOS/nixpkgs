@@ -4,7 +4,7 @@
   fetchurl,
   ncurses,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moon-buggy";
   version = "1.1.0";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://www.seehuhn.de/programs/moon-buggy/moon-buggy-${version}.tar.gz";
+    url = "http://www.seehuhn.de/programs/moon-buggy/moon-buggy-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-JZrm57GDjEBTKvXA8gzXxhc81cVS7eQIEUBkR1vPxbY=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     homepage = "https://www.seehuhn.de/pages/moon-buggy";
   };
-}
+})

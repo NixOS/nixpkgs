@@ -11,12 +11,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rfdump";
   version = "1.6";
 
   src = fetchurl {
-    url = "https://www.rfdump.org/dl/rfdump-${version}.tar.bz2";
+    url = "https://www.rfdump.org/dl/rfdump-${finalAttrs.version}.tar.bz2";
     hash = "sha256-fbEmh7i3ug5GCeyJ2wT45bbDq0ZEOv8yH+MOJwzER4U=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     mainProgram = "rfdump";
     platforms = lib.platforms.all;
   };
-}
+})

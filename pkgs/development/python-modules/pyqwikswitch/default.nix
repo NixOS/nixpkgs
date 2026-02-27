@@ -1,50 +1,56 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
-  fetchPypi,
+  fetchFromGitHub,
   attrs,
-  requests,
-  setuptools,
+  aiohttp,
+  uv-build,
+  aioresponses,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqwikswitch";
-  version = "0.94";
+  version = "1.0.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-IpyWz+3EMr0I+xULBJJhBgdnQHNPJIM1SqKFLpszhQc=";
+  src = fetchFromGitHub {
+    owner = "kellerza";
+    repo = "pyqwikswitch";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yx3rCPVuhsemAtFuEhPvFPHOFm2UWrXmWF3d/ZtPGo8=";
   };
 
-  patches = [
-    # https://github.com/kellerza/pyqwikswitch/pull/7
-    (fetchpatch {
-      name = "replace-async-timeout-with-asyncio.timeout.patch";
-      url = "https://github.com/kellerza/pyqwikswitch/commit/7b3f2211962b30bb6beea9a4fe17cd04cdf8e27f.patch";
-      hash = "sha256-sdO5jzIgKdneNY5dTngIzUFtyRg7HBGaZA1BBeAJxu4=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv-build>=0.8.20,<0.9" uv-build
+  '';
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [
+    aiohttp
     attrs
-    requests
   ];
 
   pythonImportsCheck = [
     "pyqwikswitch"
-    "pyqwikswitch.threaded"
   ];
 
-  doCheck = false; # no tests in sdist
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   meta = {
+    changelog = "https://github.com/kellerza/pyqwikswitch/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "QwikSwitch USB Modem API binding for Python";
     homepage = "https://github.com/kellerza/pyqwikswitch";
     license = lib.licenses.mit;
     teams = [ lib.teams.home-assistant ];
   };
-}
+})

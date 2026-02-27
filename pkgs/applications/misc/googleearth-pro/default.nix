@@ -1,18 +1,17 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
   freetype,
   glib,
   libGL,
   libGLU,
-  libSM,
+  libsm,
 
-  libXcomposite,
-  libXi,
-  libXrender,
-  libX11,
+  libxcomposite,
+  libxi,
+  libxrender,
+  libx11,
 
   libxcb,
   sqlite,
@@ -28,8 +27,9 @@
   cups,
   alsa-lib,
 
-  xkeyboardconfig,
+  xkeyboard-config,
   autoPatchelfHook,
+  wrapQtAppsHook,
 }:
 let
   arch =
@@ -38,7 +38,7 @@ let
     else
       throw "Unsupported system ${stdenv.hostPlatform.system} ";
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "googleearth-pro";
   version = "7.3.6.10201";
 
@@ -51,8 +51,9 @@ mkDerivation rec {
     dpkg
     makeWrapper
     autoPatchelfHook
+    wrapQtAppsHook
   ];
-  propagatedBuildInputs = [ xkeyboardconfig ];
+  propagatedBuildInputs = [ xkeyboard-config ];
   buildInputs = [
     dbus
     cups
@@ -63,11 +64,11 @@ mkDerivation rec {
     gst_all_1.gstreamer
     libGL
     libGLU
-    libSM
-    libX11
-    libXcomposite
-    libXi
-    libXrender
+    libsm
+    libx11
+    libxcomposite
+    libxi
+    libxrender
     libproxy
     libxcb
     libxml2_13
@@ -125,7 +126,7 @@ mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/googleearth-pro \
       --set QT_QPA_PLATFORM xcb \
-      --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb"
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb"
   '';
 
   meta = {

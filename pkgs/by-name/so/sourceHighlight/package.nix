@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnu/src-highlite/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/src-highlite/source-highlight-${version}.tar.gz";
     sha256 = "148w47k3zswbxvhg83z38ifi85f9dqcpg7icvvw1cm6bg21x4zrs";
   };
 

@@ -8,14 +8,14 @@
   targetPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpcsvc-proto";
   version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = "rpcsvc-proto";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-DEXzSSmjMeMsr1PoU/ljaY+6b4COUU2Z8MJkGImsgzk=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  RPCGEN_CPP = "${stdenv.cc.targetPrefix}cpp";
+  env.RPCGEN_CPP = "${stdenv.cc.targetPrefix}cpp";
 
   postPatch = ''
     # replace fallback cpp with the target prefixed cpp
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ma27 ];
     mainProgram = "rpcgen";
   };
-}
+})

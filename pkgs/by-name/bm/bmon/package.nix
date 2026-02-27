@@ -10,14 +10,14 @@
   libnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bmon";
   version = "4.0";
 
   src = fetchFromGitHub {
     owner = "tgraf";
     repo = "bmon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1ilba872c09mnlvylslv4hqv6c9cz36l76q74rr99jvis1dg69gf";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "bmon";
   };
-}
+})

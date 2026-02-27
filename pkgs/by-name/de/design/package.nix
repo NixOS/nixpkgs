@@ -14,14 +14,14 @@
   libadwaita,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "design";
   version = "48-alpha1";
 
   src = fetchFromGitHub {
     owner = "dubstar-04";
     repo = "Design";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-xLARmvqJUxVjHHeak/BrpfIe18KCy9++8HRjOFjwE7I=";
   };
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "io.github.dubstar_04.design";
   };
-}
+})

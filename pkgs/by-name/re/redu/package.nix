@@ -3,6 +3,7 @@
   fetchFromGitHub,
   nix-update-script,
   rustPlatform,
+  restic,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +19,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-JnjXe2CHO9Namp++UI/V6ND2Y0/WQtaVA2EcUyXUnjQ=";
 
+  buildInputs = [ restic ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -25,7 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/drdo/redu";
     changelog = "https://github.com/drdo/redu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alexfmpe ];
+    maintainers = with lib.maintainers; [
+      alexfmpe
+      drdo
+    ];
     mainProgram = "redu";
   };
 })

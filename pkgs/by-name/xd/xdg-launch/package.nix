@@ -12,7 +12,7 @@
   libxrandr,
   libx11,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-launch";
   version = "1.12";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bbidulock";
     repo = "xdg-launch";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-S/0Wn1T5MSOPN6QXkzfmygHL6XTAnnMJr5Z3fBzsHEw=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.ck3d ];
   };
-}
+})

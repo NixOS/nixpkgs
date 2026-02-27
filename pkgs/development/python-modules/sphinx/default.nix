@@ -18,7 +18,7 @@
   packaging,
   pygments,
   requests,
-  roman-numerals-py,
+  roman-numerals,
   snowballstemmer,
   sphinxcontrib-applehelp,
   sphinxcontrib-devhelp,
@@ -27,12 +27,9 @@
   sphinxcontrib-qthelp,
   sphinxcontrib-serializinghtml,
   sphinxcontrib-websupport,
-  tomli,
 
   # check phase
   defusedxml,
-  filelock,
-  html5lib,
   pytestCheckHook,
   pytest-xdist,
   typing-extensions,
@@ -44,10 +41,10 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "8.2.3";
+  version = "9.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
@@ -60,7 +57,7 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-FoyCpDGDKNN2GMhE7gDpJLmWRWhbMCYlcVEaBTfXSEw=";
+    hash = "sha256-PgqjCeyHOhWtZjyzSZyvsPT0Q7yRyNDiW3x1fQq0K+8=";
   };
 
   build-system = [ flit-core ];
@@ -74,7 +71,7 @@ buildPythonPackage rec {
     packaging
     pygments
     requests
-    roman-numerals-py
+    roman-numerals
     snowballstemmer
     sphinxcontrib-applehelp
     sphinxcontrib-devhelp
@@ -84,15 +81,12 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     defusedxml
-    filelock
-    html5lib
     pytestCheckHook
     pytest-xdist
     typing-extensions

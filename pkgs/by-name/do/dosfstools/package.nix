@@ -10,14 +10,14 @@
   xxd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dosfstools";
   version = "4.2";
 
   src = fetchFromGitHub {
     owner = "dosfstools";
     repo = "dosfstools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-2gxB0lQixiHOHw8uTetHekaM57fvUd9zOzSxWnvUz/c=";
   };
 
@@ -51,6 +51,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-compat-symlinks" ];
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   nativeCheckInputs = [ xxd ];
   doCheck = true;
 
@@ -60,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
   };
-}
+})

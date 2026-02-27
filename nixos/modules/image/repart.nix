@@ -228,7 +228,7 @@ in
             contents = {
               "/EFI/BOOT/BOOTX64.EFI".source =
                 "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
-            }
+            };
             repartConfig = {
               Type = "esp";
               Format = "vfat";

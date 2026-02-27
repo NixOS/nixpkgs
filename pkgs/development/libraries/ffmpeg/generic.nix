@@ -144,7 +144,7 @@
   withV4l2 ? withHeadlessDeps && stdenv.hostPlatform.isLinux, # Video 4 Linux support
   withV4l2M2m ? withV4l2,
   withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD), # Vaapi hardware acceleration
-  withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW, # Vdpau hardware acceleration
+  withVdpau ? withSmallDeps && (with stdenv; isLinux || isFreeBSD), # Vdpau hardware acceleration
   withVidStab ? withHeadlessDeps && withGPL, # Video stabilization
   withVmaf ? withFullDeps && lib.versionAtLeast version "5", # Netflix's VMAF (Video Multi-Method Assessment Fusion)
   withVoAmrwbenc ? withFullDeps && withVersion3, # AMR-WB encoder
@@ -310,11 +310,11 @@
   libvpl,
   libvpx,
   libwebp,
-  libX11,
+  libx11,
   libxcb,
-  libXext,
+  libxext,
   libxml2,
-  libXv,
+  libxv,
   nv-codec-headers,
   nv-codec-headers-12,
   ocl-icd, # OpenCL ICD
@@ -495,6 +495,12 @@ stdenv.mkDerivation (
           name = "lcevcdec-4.0.0-compat.patch";
           url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/fa23202cc7baab899894e8d22d82851a84967848.patch";
           hash = "sha256-Ixkf1xzuDGk5t8J/apXKtghY0X9cfqSj/q987zrUuLQ=";
+        })
+      ]
+      ++ optionals (lib.versionAtLeast version "7.1.1" && lib.versionOlder version "7.1.3") [
+        (fetchpatch2 {
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d8ffec5bf9a2803f55cc0822a97b7815f24bee83";
+          hash = "sha256-lmSI5arShb2/W84FMnSNs3lb6rd5vWdUSzfU8oza0Ic=";
         })
       ]
       ++ optionals (lib.versionOlder version "7.1.2") [
@@ -965,9 +971,9 @@ stdenv.mkDerivation (
       ++ optionals withXevd [ xevd ]
       ++ optionals withXeve [ xeve ]
       ++ optionals withXlib [
-        libX11
-        libXv
-        libXext
+        libx11
+        libxv
+        libxext
       ]
       ++ optionals withXml2 [ libxml2 ]
       ++ optionals withXvid [ xvidcore ]

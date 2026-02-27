@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnfc";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "nfc-tools";
     repo = "libnfc";
-    rev = "libnfc-${version}";
+    rev = "libnfc-${finalAttrs.version}";
     sha256 = "5gMv/HajPrUL/vkegEqHgN2d6Yzf01dTMrx4l34KMrQ=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Library for Near Field Communication (NFC)";
     homepage = "https://github.com/nfc-tools/libnfc";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

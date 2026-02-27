@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nitrotpm-tools";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "NitroTPM-Tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZTASHHa+LQ/hNaM0qfsaGdNwkZQQZnR9+f05DHbviLw=";
   };
 
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

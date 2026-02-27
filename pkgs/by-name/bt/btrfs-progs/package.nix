@@ -19,13 +19,13 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "btrfs-progs";
-  version = "6.17.1";
+  version = "6.19";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    hash = "sha256-pL4Kbrs8R2Qn+12Xss8CewzNtrDFX/FjIzIMHoy3dlg=";
+    url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${finalAttrs.version}.tar.xz";
+    hash = "sha256-rWt5GmDrVj0zFLwY48R/awU6AyY5SItbCbnV55Id5rY=";
   };
 
   nativeBuildInputs = [
@@ -109,10 +109,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.readthedocs.io/en/latest/";
-    changelog = "https://github.com/kdave/btrfs-progs/raw/v${version}/CHANGES";
+    changelog = "https://github.com/kdave/btrfs-progs/raw/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.gpl2Only;
     mainProgram = "btrfs";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
   };
-}
+})

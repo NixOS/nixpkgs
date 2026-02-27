@@ -5,7 +5,6 @@
   setuptools,
   pyasyncore,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,16 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck =
-    if (pythonOlder "3.11") then
-      ''
-        substituteInPlace tests/test_asynchat.py \
-          --replace-fail "asynchat = warnings_helper.import_deprecated('asynchat')" 'import asynchat' \
-          --replace-fail "asyncore = warnings_helper.import_deprecated('asyncore')" 'import asyncore' \
-          --replace-fail 'support.requires_working_socket(module=True)' ""
-      ''
-    else
-      null;
+  preCheck = null;
 
   pythonImportsCheck = [
     "asynchat"

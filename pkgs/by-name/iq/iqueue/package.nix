@@ -7,11 +7,11 @@
   microsoft-gsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iqueue";
   version = "0.1.0";
   src = fetchurl {
-    url = "https://github.com/twosigma/iqueue/releases/download/v${version}/iqueue-${version}.tar.gz";
+    url = "https://github.com/twosigma/iqueue/releases/download/v${finalAttrs.version}/iqueue-${finalAttrs.version}.tar.gz";
     sha256 = "0049fnr02k15gr21adav33swrwxrpbananilnrp63vp5zs5v9m4x";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

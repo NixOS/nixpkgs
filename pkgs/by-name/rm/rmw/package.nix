@@ -10,14 +10,14 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rmw";
   version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "theimpossibleastronaut";
     repo = "rmw";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/bE9fFjn3mPfUbtsB6bXfQAxUtbtuZiT4pevi5RCQA4=";
     fetchSubmodules = true;
   };
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Trashcan/ recycle bin utility for the command line";
     homepage = "https://github.com/theimpossibleastronaut/rmw";
-    changelog = "https://github.com/theimpossibleastronaut/rmw/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/theimpossibleastronaut/rmw/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "rmw";
   };
-}
+})

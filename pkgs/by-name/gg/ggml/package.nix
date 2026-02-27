@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ggml";
-  version = "0.9.5";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "ggml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lNrON8vKUJU7cxfpRKsVCIWqZj3xtkaf/Fv8zNZFN6o=";
+    hash = "sha256-xTNDenY+1Tf7Nqr/EnXtYejpqU/guemySKR2WFvY9d0=";
   };
 
   # The cmake package does not handle absolute CMAKE_INSTALL_LIBDIR and CMAKE_INSTALL_INCLUDEDIR

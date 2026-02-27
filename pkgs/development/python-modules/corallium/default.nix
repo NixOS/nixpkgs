@@ -29,9 +29,6 @@ buildPythonPackage rec {
     beartype
     pydantic
     rich
-  ]
-  ++ lib.optionals (python.pythonOlder "3.11") [
-    tomli
   ];
 
   meta = {

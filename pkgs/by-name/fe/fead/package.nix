@@ -6,12 +6,12 @@
   help2man,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fead";
   version = "1.0.0";
 
   src = fetchzip {
-    url = "https://trong.loang.net/~cnx/fead/snapshot/fead-${version}.tar.gz";
+    url = "https://trong.loang.net/~cnx/fead/snapshot/fead-${finalAttrs.version}.tar.gz";
     hash = "sha256-cbU379Zz+mwRqEHiDUlGvWheLkkr0YidHeVs/1Leg38=";
   };
 
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     description = "Advert generator from web feeds";
     homepage = "https://trong.loang.net/~cnx/fead";
     license = lib.licenses.agpl3Plus;
-    changelog = "https://trong.loang.net/~cnx/fead/tag?h=${version}";
+    changelog = "https://trong.loang.net/~cnx/fead/tag?h=${finalAttrs.version}";
     maintainers = with lib.maintainers; [ McSinyx ];
     mainProgram = "fead";
   };
-}
+})

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oboete";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "mariinkys";
     repo = "oboete";
     tag = finalAttrs.version;
-    hash = "sha256-MBWqAQekGdJHQhyObjnR8AUV+yjM++R11ALpE5BuUHc=";
+    hash = "sha256-Ydl6gVlE/6dN/qp348wc626TSG8FIBv2U7H/FVahrOs=";
   };
 
-  cargoHash = "sha256-deQeX1hVwJvzwCmtACiugEpRbzVP4Z2OBi2y2PPLVCM=";
+  cargoHash = "sha256-R8y0UpSY8K5yMZK719eXb+R9ABllpRV/QoAcISV138w=";
 
   nativeBuildInputs = [
     libcosmicAppHook

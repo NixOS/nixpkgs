@@ -17,20 +17,60 @@
   makeWrapper,
   pkg-config,
   nixosTests,
-  supportFlags,
-  wineRelease,
+  pnameSuffix ? "",
   patches,
   moltenvk,
   buildScript ? null,
   configureFlags ? [ ],
   mainProgram ? "wine",
-}:
 
-with import ./util.nix { inherit lib; };
+  # Staging support
+  useStaging ? false,
+  autoconf,
+  hexdump,
+  perl,
+  python3,
+  gitMinimal,
+
+  # Support flags
+  gettextSupport ? false,
+  fontconfigSupport ? false,
+  alsaSupport ? false,
+  gtkSupport ? false,
+  openglSupport ? false,
+  tlsSupport ? false,
+  gstreamerSupport ? false,
+  cupsSupport ? false,
+  dbusSupport ? false,
+  openclSupport ? false,
+  cairoSupport ? false,
+  odbcSupport ? false,
+  netapiSupport ? false,
+  cursesSupport ? false,
+  vaSupport ? false,
+  pcapSupport ? false,
+  v4lSupport ? false,
+  saneSupport ? false,
+  gphoto2Support ? false,
+  krb5Support ? false,
+  pulseaudioSupport ? false,
+  udevSupport ? false,
+  xineramaSupport ? false,
+  vulkanSupport ? false,
+  sdlSupport ? false,
+  usbSupport ? false,
+  mingwSupport ? stdenv.hostPlatform.isDarwin,
+  waylandSupport ? false,
+  x11Support ? false,
+  ffmpegSupport ? false,
+  embedInstallers ? false,
+}:
 
 let
   prevName = pname;
   prevConfigFlags = configureFlags;
+
+  toBuildInputs = pkgArches: archPkgs: lib.concatLists (map archPkgs pkgArches);
 
   setupHookDarwin = makeSetupHook {
     name = "darwin-mingw-hook";
@@ -40,28 +80,33 @@ let
     };
   } ./setup-hook-darwin.sh;
 
-  # Building Wine with these flags isn’t supported on Darwin. Using any of them will result in an evaluation failures
+  # Building Wine with these flags isn't supported on Darwin. Using any of them will result in an evaluation failures
   # because they will put Darwin in `meta.badPlatforms`.
-  darwinUnsupportedFlags = [
-    "alsaSupport"
-    "cairoSupport"
-    "dbusSupport"
-    "fontconfigSupport"
-    "gtkSupport"
-    "netapiSupport"
-    "pulseaudioSupport"
-    "udevSupport"
-    "v4lSupport"
-    "vaSupport"
-    "waylandSupport"
-    "x11Support"
-    "xineramaSupport"
-  ];
-
   badPlatforms = lib.optional (
-    !supportFlags.mingwSupport || lib.any (flag: supportFlags.${flag}) darwinUnsupportedFlags
+    !mingwSupport
+    || alsaSupport
+    || cairoSupport
+    || dbusSupport
+    || fontconfigSupport
+    || gtkSupport
+    || netapiSupport
+    || pulseaudioSupport
+    || udevSupport
+    || v4lSupport
+    || vaSupport
+    || waylandSupport
+    || x11Support
+    || xineramaSupport
   ) "x86_64-darwin";
+
+  # Staging patches (from src.staging when useStaging is true)
+  stagingPatches = src.staging or null;
 in
+assert
+  useStaging
+  ->
+    stagingPatches != null
+    && lib.versions.majorMinor version == lib.versions.majorMinor stagingPatches.version;
 stdenv.mkDerivation (
   finalAttrs:
   lib.optionalAttrs (buildScript != null) { builder = buildScript; }
@@ -80,16 +125,20 @@ stdenv.mkDerivation (
   // {
     inherit version src;
 
-    pname =
-      prevName
-      + lib.optionalString (wineRelease != "stable" && wineRelease != "unstable") "-${wineRelease}";
+    pname = prevName + pnameSuffix;
 
     # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
     strictDeps = true;
 
     nativeBuildInputs =
-      with supportFlags;
-      [
+      lib.optionals useStaging [
+        autoconf
+        hexdump
+        perl
+        python3
+        gitMinimal
+      ]
+      ++ [
         bison
         flex
         fontforge
@@ -101,9 +150,19 @@ stdenv.mkDerivation (
         mingwGccs ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin
       );
 
-    buildInputs = toBuildInputs pkgArches (
-      with supportFlags;
-      (
+    buildInputs =
+      lib.optionals useStaging (
+        toBuildInputs pkgArches (
+          pkgs:
+          [
+            pkgs.perl
+            pkgs.autoconf
+            pkgs.gitMinimal
+          ]
+          ++ lib.optional stdenv.hostPlatform.isLinux pkgs.util-linux
+        )
+      )
+      ++ toBuildInputs pkgArches (
         pkgs:
         [
           pkgs.freetype
@@ -191,18 +250,31 @@ stdenv.mkDerivation (
         ++ lib.optionals ffmpegSupport [
           pkgs.ffmpeg-headless
         ]
-      )
-    );
+      );
 
     inherit patches;
 
+    prePatch =
+      if !useStaging then
+        null
+      else
+        ''
+          patchShebangs tools
+          cp -r ${stagingPatches}/patches ${stagingPatches}/staging .
+          chmod +w patches
+          patchShebangs ./patches/gitapply.sh
+          python3 ./staging/patchinstall.py DESTDIR="$PWD" --all ${
+            lib.concatMapStringsSep " " (ps: "-W ${ps}") stagingPatches.disabledPatchsets
+          }
+        '';
+
     configureFlags =
       prevConfigFlags
-      ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
-      ++ lib.optionals supportFlags.vulkanSupport [ "--with-vulkan" ]
-      ++ lib.optionals (
-        (stdenv.hostPlatform.isDarwin && !supportFlags.xineramaSupport) || !supportFlags.x11Support
-      ) [ "--without-x" ];
+      ++ lib.optionals waylandSupport [ "--with-wayland" ]
+      ++ lib.optionals vulkanSupport [ "--with-vulkan" ]
+      ++ lib.optionals ((stdenv.hostPlatform.isDarwin && !xineramaSupport) || !x11Support) [
+        "--without-x"
+      ];
 
     # Wine locates a lot of libraries dynamically through dlopen().  Add
     # them to the RPATH so that the user doesn't have to set them in
@@ -211,17 +283,18 @@ stdenv.mkDerivation (
       map (path: "-rpath " + path) (
         map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ finalAttrs.buildInputs)
         # libpulsecommon.so is linked but not found otherwise
-        ++ lib.optionals supportFlags.pulseaudioSupport (
+        ++ lib.optionals pulseaudioSupport (
           map (x: "${lib.getLib x}/lib/pulseaudio") (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ]))
         )
-        ++ lib.optionals supportFlags.waylandSupport (
+        ++ lib.optionals waylandSupport (
           map (x: "${lib.getLib x}/share/wayland-protocols") (
             toBuildInputs pkgArches (pkgs: [ pkgs.wayland-protocols ])
           )
         )
       )
     );
-    env.NIX_CFLAGS_COMPILE = lib.optionalString (wineRelease == "yabridge") "-std=gnu17";
+    # Just here to avoid rebuilds for now.
+    env.NIX_CFLAGS_COMPILE = "";
 
     # Don't shrink the ELF RPATHs in order to keep the extra RPATH
     # elements specified above.
@@ -236,13 +309,13 @@ stdenv.mkDerivation (
       let
         links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
       in
-      lib.optionalString supportFlags.embedInstallers ''
+      lib.optionalString embedInstallers ''
         mkdir -p $out/share/wine/gecko $out/share/wine/mono/
         ${lib.strings.concatStringsSep "\n" (
           (map (links "share/wine/gecko") geckos) ++ (map (links "share/wine/mono") monos)
         )}
       ''
-      + lib.optionalString supportFlags.gstreamerSupport ''
+      + lib.optionalString gstreamerSupport ''
         # Wrapping Wine is tricky.
         # https://github.com/NixOS/nixpkgs/issues/63170
         # https://github.com/NixOS/nixpkgs/issues/28486
@@ -275,8 +348,8 @@ stdenv.mkDerivation (
       "bindnow"
       "stackclashprotection"
     ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
-    ++ lib.optional (supportFlags.mingwSupport) "format";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "fortify"
+    ++ lib.optional mingwSupport "format";
 
     passthru = {
       inherit pkgArches;
@@ -291,7 +364,9 @@ stdenv.mkDerivation (
         fromSource
         binaryNativeCode # mono, gecko
       ];
-      description = "Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
+      description =
+        "Open Source implementation of the Windows API on top of X, OpenGL, and Unix"
+        + lib.optionalString useStaging " (with staging patches)";
       inherit badPlatforms platforms;
       maintainers = with lib.maintainers; [
         avnik

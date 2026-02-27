@@ -11,14 +11,14 @@
   mpfr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wcpg";
   version = "0.9";
 
   src = fetchFromGitHub {
     owner = "fixif";
     repo = "wcpg";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-uA/ENjf4urEO+lqebkp/k54199o2434FYgPSmYCG4UA=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

@@ -27,12 +27,12 @@
   libxcb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "publii";
   version = "0.47.3";
 
   src = fetchurl {
-    url = "https://getpublii.com/download/Publii-${version}.deb";
+    url = "https://getpublii.com/download/Publii-${finalAttrs.version}.deb";
     hash = "sha256-1LzjnN0gmzE4JJdgTOUQ3n/BATg+B5Lfi0yR94TU+XE=";
   };
 
@@ -101,11 +101,11 @@ stdenv.mkDerivation rec {
       quickly and easily; perfect for anyone who wants a fast, secure website in a flash.
     '';
     homepage = "https://getpublii.com";
-    changelog = "https://github.com/getpublii/publii/releases/tag/v${version}";
+    changelog = "https://github.com/getpublii/publii/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       sebtm
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

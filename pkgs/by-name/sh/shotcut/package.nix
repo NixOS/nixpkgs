@@ -15,6 +15,7 @@
   cmake,
   gitUpdater,
   ffmpeg,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     cmake
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -60,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  dontWrapGApps = true;
+
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
     "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
@@ -67,6 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
       lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ])
     }"
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications $out/bin

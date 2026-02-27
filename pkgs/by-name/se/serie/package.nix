@@ -7,18 +7,18 @@
   serie,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "serie";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "serie";
-    rev = "v${version}";
-    hash = "sha256-iHhm71z1DH2oDcgl5bwFVO0U5ks0LmoqMrlUZfIQkf4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cnuQ6gAL0YRv0DIjuXstPmFRyfQh7c+MHZkc3lzRcRo=";
   };
 
-  cargoHash = "sha256-9jWXr/43zPe+7VpbRHj5k8eptXnhMKU073KAKJtG5+E=";
+  cargoHash = "sha256-SavJ6OsTxWUWFWxyfq3B/maqqTRIRiBmwIeXAH3+ZCw=";
 
   nativeCheckInputs = [ gitMinimal ];
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "serie";
   };
-}
+})

@@ -28,18 +28,18 @@ let
     name = "hakuneko-desktop";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hakuneko";
   version = "6.1.7";
 
   src =
     {
       "x86_64-linux" = fetchurl {
-        url = "https://github.com/manga-download/hakuneko/releases/download/v${version}/hakuneko-desktop_${version}_linux_amd64.deb";
+        url = "https://github.com/manga-download/hakuneko/releases/download/v${finalAttrs.version}/hakuneko-desktop_${finalAttrs.version}_linux_amd64.deb";
         sha256 = "06bb17d7a06bb0601053eaaf423f9176f06ff3636cc43ffc024438e1962dcd02";
       };
       "i686-linux" = fetchurl {
-        url = "https://github.com/manga-download/hakuneko/releases/download/v${version}/hakuneko-desktop_${version}_linux_i386.deb";
+        url = "https://github.com/manga-download/hakuneko/releases/download/v${finalAttrs.version}/hakuneko-desktop_${finalAttrs.version}_linux_i386.deb";
         sha256 = "32017d26bafffaaf0a83dd6954d3926557014af4022a972371169c56c0e3d98b";
       };
     }
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "hakuneko";
   };
-}
+})

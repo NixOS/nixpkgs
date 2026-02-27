@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "7.3.0";
+  version = "7.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.concurrency";
     tag = version;
-    hash = "sha256-vZWEeyYkdUl9EL4bw6AIbZgVpKXgakvRyFkQAT5GqJ4=";
+    hash = "sha256-i2w3c5/Xuhjc7cAaIiuRNtz5JTG9tjXsrn4IUhuMLxA=";
   };
 
   postPatch = ''

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (finalAttrs) pname version;
     in
     fetchurl {
-      url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+      url = "mirror://savannah/freetype/freetype-${version}.tar.xz";
       sha256 = "sha256-BVA1BmbUJ8dNrrhdWse7NTrLpfdpVjlZlTEanG8GMok=";
     };
 

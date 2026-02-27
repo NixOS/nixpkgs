@@ -507,7 +507,7 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
-                limit_except GET {
+                limit_except POST {
                     deny  all;
                 }
               '';
@@ -724,13 +724,20 @@ in
       serviceConfig = {
         ExecStartPre = [
           (pkgs.writeShellScript "frigate-clear-cache" ''
-            shopt -s extglob
-            rm --recursive --force /var/cache/frigate/!(model_cache)
+            ${lib.getExe pkgs.findutils} /var/cache/frigate -not -path '/var/cache/frigate/model_cache/*' -type f -delete
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
             cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
           '')
+        ]
+        ++ lib.optionals (!config.systemd.services.frigate.environment ? LIBAVFORMAT_VERSION_MAJOR) [
+          # Extract libavformat version to enable version-dependent flags in ffmpeg
+          (pkgs.writeShellScript "frigate-libavformat-major-version" ''
+            echo "LIBAVFORMAT_VERSION_MAJOR=$(${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | grep -Po "libavformat\W+\K\d+")" > /run/frigate/ffmpeg-env
+            echo "Detected $(cat /run/frigate/ffmpeg-env)"
+          '')
         ];
+        EnvironmentFile = [ "-/run/frigate/ffmpeg-env" ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
         Restart = "on-failure";
         SyslogIdentifier = "frigate";
@@ -760,6 +767,9 @@ in
 
         # Sockets/IPC
         RuntimeDirectory = "frigate";
+
+        # Reduce visible process scope to cgroup
+        ProtectProc = "invisible";
       };
     };
   };

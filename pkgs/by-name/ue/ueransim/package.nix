@@ -4,6 +4,7 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
+  fetchpatch,
   lksctp-tools,
   iproute2,
   unstableGitUpdater,
@@ -19,6 +20,16 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "528061fe10389876da58d3bd15e8cba6d7c152a9";
     hash = "sha256-8OxJzEcpFT6e/nQw1VK9kBdw9ulXedCpUEaBxIAN9cA=";
   };
+
+  patches = [
+    # Fix gcc-15 build failure:
+    #   https://github.com/aligungr/UERANSIM/pull/777
+    (fetchpatch {
+      name = "gcc-15.patch";
+      url = "https://github.com/aligungr/UERANSIM/commit/8ffce535a11b63f688552c5c81f7d3ac793f47de.patch";
+      hash = "sha256-w2T7PTR/ELNf9sre/GoHqZQb9A8k54cTKoce/RZ7XCU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

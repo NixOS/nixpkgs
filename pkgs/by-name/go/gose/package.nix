@@ -3,14 +3,13 @@
   buildNpmPackage,
   nix-update-script,
   versionCheckHook,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
 }:
 let
   version = "0.11.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     repo = "gose";
     owner = "stv0g";
     tag = "v${version}";

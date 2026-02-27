@@ -17,7 +17,7 @@
   gsl,
   harminv,
   libctl,
-  libGDSII,
+  libgdsii,
   guile,
   mpb,
   python,
@@ -36,13 +36,13 @@ assert !lapack.isILP64;
 
 buildPythonPackage rec {
   pname = "meep";
-  version = "1.31.0";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = "meep";
     tag = "v${version}";
-    hash = "sha256-x5OMdV/LJfklcK1KlYS0pdotsXP/SYzF7AOW5DlJvq0=";
+    hash = "sha256-XyGs4U8r3ZaqCq2ArMeeI/wFmJEig8iBaPytf7QIehw=";
   };
 
   pyproject = false;
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     hdf5-mpi
     harminv
     libctl
-    libGDSII
+    libgdsii
     guile
     gsl
     mpb

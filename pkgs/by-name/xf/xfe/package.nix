@@ -7,7 +7,7 @@
   freetype,
   pkg-config,
   gettext,
-  xcbutil,
+  libxcb-util,
   gcc,
   intltool,
   file,
@@ -16,12 +16,12 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfe";
   version = "2.1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xfe/xfe-${version}.tar.xz";
+    url = "mirror://sourceforge/xfe/xfe-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-jgDgd/DOB92v19SAGqBnTHIYQE+EohgDvvFCwTNDJlE=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fox_1_6
     gettext
-    xcbutil
+    libxcb-util
     gcc
     file
     libpng
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

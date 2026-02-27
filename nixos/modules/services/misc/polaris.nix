@@ -87,6 +87,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = rec {
+        Type = "notify";
         User = cfg.user;
         Group = cfg.group;
         DynamicUser = true;

@@ -67,10 +67,10 @@ let
       docker-meta = {
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
-          offline
           vdemeester
           teutat3s
         ];
+        identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "docker" version;
       };
 
       docker-runc = runc.overrideAttrs {
@@ -248,6 +248,7 @@ let
           meta = docker-meta // {
             homepage = "https://mobyproject.org/";
             description = "Collaborative project for the container ecosystem to assemble container-based systems";
+            identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mobyproject" version;
           };
         }
       );
@@ -366,6 +367,8 @@ let
           # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
           inherit moby-src;
           tests = lib.optionalAttrs (!clientOnly) { inherit (nixosTests) docker; };
+          # run with: nix-shell ./maintainers/scripts/update.nix --argstr package docker
+          updateScript = ./update.sh;
         };
 
         meta = docker-meta // {
@@ -394,7 +397,7 @@ let
 in
 {
   # Get revisions from
-  # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
+  # https://github.com/moby/moby/tree/${mobyRev}/Dockerfile
   docker_25 =
     let
       version = "25.0.13";
@@ -435,18 +438,18 @@ in
 
   docker_29 =
     let
-      version = "29.1.5";
+      version = "29.2.1";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-fg18lmJsMoy7lpL4hGkIhM0LKnhEY5nl5f0YuW8yg0A=";
+      cliHash = "sha256-9foA1MThtq1sQnwki+cxPuU1dZbukOgdMg99Z1EElxk=";
       mobyRev = "docker-v${version}";
-      mobyHash = "sha256-iUoqJT0lIiVh5WaHzlw71QXxc3sEsSpQpADb0KveXNQ=";
+      mobyHash = "sha256-LN/IVgKdBwpTR2fUq2Syi6zWP4YN7DQS4bfJVk8Agtg=";
       runcRev = "v1.3.4";
       runcHash = "sha256-1IfY08sBoDpbLrwz1AKBRSTuCZyOgQzYPHTDUI6fOZ8=";
-      containerdRev = "v2.2.0";
-      containerdHash = "sha256-LXBGA03FTrrbxlH+DxPBFtp3/AYQf096YE2rpe6A+WM=";
+      containerdRev = "v2.2.1";
+      containerdHash = "sha256-fDOfN0XESrBTDW7Nxj9niqU93BQ5/JaGLwAR3u6Xaik=";
       tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };

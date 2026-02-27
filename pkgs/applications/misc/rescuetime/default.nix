@@ -3,13 +3,13 @@
   lib,
   fetchurl,
   dpkg,
+  wrapQtAppsHook,
   patchelf,
   qt5,
-  libXtst,
-  libXext,
-  libX11,
-  mkDerivation,
-  libXScrnSaver,
+  libxtst,
+  libxext,
+  libx11,
+  libxscrnsaver,
   writeScript,
   common-updater-scripts,
   curl,
@@ -32,12 +32,15 @@ let
         sha256 = "09ng0yal66d533vzfv27k9l2va03rqbqmsni43qi3hgx7w9wx5ii";
       };
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   # https://www.rescuetime.com/updates/linux_release_notes.html
   inherit version;
   pname = "rescuetime";
   inherit src;
-  nativeBuildInputs = [ dpkg ];
+  nativeBuildInputs = [
+    dpkg
+    wrapQtAppsHook
+  ];
   # avoid https://github.com/NixOS/patchelf/issues/99
   dontStrip = true;
 
@@ -50,10 +53,10 @@ mkDerivation rec {
       --set-rpath "${
         lib.makeLibraryPath [
           qt5.qtbase
-          libXtst
-          libXext
-          libX11
-          libXScrnSaver
+          libxtst
+          libxext
+          libx11
+          libxscrnsaver
         ]
       }" \
       $out/bin/rescuetime

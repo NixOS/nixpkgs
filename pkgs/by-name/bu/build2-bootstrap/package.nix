@@ -5,11 +5,11 @@
   buildPackages,
   fixDarwinDylibNames,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "build2-bootstrap";
   version = "0.17.0";
   src = fetchurl {
-    url = "https://download.build2.org/${version}/build2-toolchain-${version}.tar.xz";
+    url = "https://download.build2.org/${finalAttrs.version}/build2-toolchain-${finalAttrs.version}.tar.xz";
     hash = "sha256-NyKonqht90JTnQ+Ru0Qp/Ua79mhVOjUHgKY0EbZIv10=";
   };
   patches = [
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ./nix-ldflags-sysdirs.patch
   ];
 
-  sourceRoot = "build2-toolchain-${version}/build2";
+  sourceRoot = "build2-toolchain-${finalAttrs.version}/build2";
   makefile = "bootstrap.gmake";
   enableParallelBuilding = true;
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
       r-burns
     ];
   };
-}
+})

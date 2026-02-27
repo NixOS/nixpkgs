@@ -9,23 +9,27 @@
   withTcp ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comodoro";
-  version = "0.0.10";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = "comodoro";
-    rev = "v${version}";
-    hash = "sha256-Y9SuxqI8wvoF0+X6CLNDlSFCwlSU8R73NYF/LjACP18=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-FnNNJ6WHR8KCsW+1hPIYddxQlUvpPc+SRbaxAcdVEUk=";
   };
 
-  cargoHash = "sha256-HzutYDphJdhNJ/jwyA5KVYr6fIutf73rYzKxrzVki9k=";
+  cargoHash = "sha256-2Drty/dj9HCG86rPt4RgexU83vKMnGFETbOT11Puy/0=";
 
   nativeBuildInputs = lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildNoDefaultFeatures = true;
-  buildFeatures = lib.optional withTcp "tcp";
+  buildFeatures = [
+    "hook-command"
+    "hook-notify"
+  ]
+  ++ lib.optional withTcp "tcp";
 
   postInstall =
     lib.optionalString installManPages ''
@@ -43,9 +47,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI to manage your time";
     homepage = "https://github.com/pimalaya/comodoro";
-    changelog = "https://github.com/soywod/comodoro/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/soywod/comodoro/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soywod ];
     mainProgram = "comodoro";
   };
-}
+})

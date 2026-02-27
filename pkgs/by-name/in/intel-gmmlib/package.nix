@@ -8,14 +8,14 @@
   intel-media-driver,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-gmmlib";
   version = "22.9.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
-    tag = "intel-gmmlib-${version}";
+    tag = "intel-gmmlib-${finalAttrs.version}";
     hash = "sha256-hgVdUTbPLEKVZpg+73kxpeMQ5gOjBHeRAJgTYds9lYQ=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

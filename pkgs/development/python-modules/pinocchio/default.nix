@@ -9,6 +9,7 @@
   coal,
   casadi,
   matplotlib,
+  pybind11,
   python,
 
   buildStandalone ? true,
@@ -35,6 +36,7 @@ toPythonModule (
 
     checkInputs = super.checkInputs ++ [
       matplotlib
+      pybind11
     ];
 
     nativeCheckInputs = super.nativeCheckInputs ++ [

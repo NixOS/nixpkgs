@@ -13,28 +13,28 @@
   pkg-config,
   gdk-pixbuf,
   libnotify,
-  libICE,
-  libSM,
-  libX11,
+  libice,
+  libsm,
+  libx11,
   libxkbfile,
-  libXi,
-  libXtst,
-  libXrandr,
-  libXinerama,
-  xkeyboardconfig,
+  libxi,
+  libxtst,
+  libxrandr,
+  libxinerama,
+  xkeyboard-config,
   xinput,
   avahi-compat,
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "synergy";
   version = "1.14.6.19-stable";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
     fetchSubmodules = true;
   };
@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
   patches = [
     # Without this OpenSSL from nixpkgs is not detected
     ./darwin-non-static-openssl.patch
+
+    # This missing include broke the build on GCC 15
+    # This can be removed once we switch to a newer version
+    ./include_cstdint.patch
   ];
 
   postPatch = ''
@@ -53,7 +57,7 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
-      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
+      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard-config}/share/X11/xkb/rules/evdev.xml"
   '';
 
   nativeBuildInputs = [
@@ -71,13 +75,13 @@ stdenv.mkDerivation rec {
     util-linux
     libselinux
     libsepol
-    libICE
-    libSM
-    libX11
-    libXi
-    libXtst
-    libXrandr
-    libXinerama
+    libice
+    libsm
+    libx11
+    libxi
+    libxtst
+    libxrandr
+    libxinerama
     libxkbfile
     xinput
     avahi-compat
@@ -138,10 +142,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Share one mouse and keyboard between multiple computers";
     homepage = "https://symless.com/synergy";
-    changelog = "https://github.com/symless/synergy-core/blob/${version}/ChangeLog";
+    changelog = "https://github.com/symless/synergy-core/blob/${finalAttrs.version}/ChangeLog";
     mainProgram = lib.optionalString (!withGUI) "synergyc";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ talyz ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -5,15 +5,15 @@
   meson,
   ninja,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "directx-headers";
-  version = "1.618.2";
+  version = "1.619.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "DirectX-Headers";
-    rev = "v${version}";
-    hash = "sha256-zKlKUnPHUCDYRBIFU2gpOUvx1d5ZoMy1vYMdByaMIyA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WQsK5qk1KzKSJLd6p5MtdSIHKbuORFEq8mhF0hRz6ns=";
   };
 
   nativeBuildInputs = [
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ k900 ];
     platforms = lib.platforms.all;
   };
-}
+})

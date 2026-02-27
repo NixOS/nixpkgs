@@ -11,12 +11,12 @@
   gtk3,
   lib,
   libGL,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   libdatrie,
   libjack2,
   libpsl,
@@ -66,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     gtk3
     libGL
-    libXcursor
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libxcursor
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
     libdatrie
     libjack2
     libpsl
@@ -116,15 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # JUCE dlopens these, make sure they are in rpath
   # Otherwise, segfault will happen
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+  ];
 
   meta = {
     homepage = "https://github.com/jatinchowdhury18/AnalogTapeModel";

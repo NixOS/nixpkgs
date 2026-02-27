@@ -3,8 +3,8 @@
   stdenv,
   fetchgit,
   xorgproto,
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   customConfig ? null,
   patches ? [ ],
 }:
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
-    libXft
+    libx11
+    libxft
   ];
 
   makeFlags = [ "CC:=$(CC)" ];

@@ -16,28 +16,28 @@
   pkg-config,
   protobuf,
   qt6,
-  gcc15Stdenv,
+  stdenv,
   wayland,
   libxml2,
 }:
-gcc15Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.19.2";
+  version = "0.19.9";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YXFSCJ4q1XIom4/CzCy4ASt7RDjxSkIWH6MqrCg+PNY=";
+    hash = "sha256-y4Z5QknWJ18jU8BiZlYvmhhSB0h3A2ZL7hMjQdgGdgk=";
   };
 
   apiDeps = fetchNpmDeps {
-    src = "${finalAttrs.src}/typescript/api";
+    src = "${finalAttrs.src}/src/typescript/api";
     hash = "sha256-UsTpMR23UQBRseRo33nbT6z/UCjZByryWfn2AQSgm6U=";
   };
 
   extensionManagerDeps = fetchNpmDeps {
-    src = "${finalAttrs.src}/typescript/extension-manager";
+    src = "${finalAttrs.src}/src/typescript/extension-manager";
     hash = "sha256-wl8FDFB6Vl1zD0/s2EbU6l1KX4rwUW6dOZof4ebMMO8=";
   };
 
@@ -84,8 +84,8 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     local postPatchHooks=()
     source ${npmHooks.npmConfigHook}/nix-support/setup-hook
-    npmRoot=typescript/api npmDeps=${finalAttrs.apiDeps} npmConfigHook
-    npmRoot=typescript/extension-manager npmDeps=${finalAttrs.extensionManagerDeps} npmConfigHook
+    npmRoot=src/typescript/api npmDeps=${finalAttrs.apiDeps} npmConfigHook
+    npmRoot=src/typescript/extension-manager npmDeps=${finalAttrs.extensionManagerDeps} npmConfigHook
   '';
 
   qtWrapperArgs = [
@@ -99,7 +99,8 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/share/systemd/user/vicinae.service \
-      --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"
+      --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"\
+      --replace-fail "ExecStart=vicinae" "ExecStart=$out/bin/vicinae"
   '';
 
   passthru.updateScript = ./update.sh;

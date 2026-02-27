@@ -26,17 +26,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gala";
-  version = "8.4.0-unstable-2026-01-06";
+  version = "8.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "gala";
-    # Contains crash fixes for mutter 48.
-    # nixpkgs-update: no auto update
-    rev = "8fb60a9c9b04245913733208df1c061d6c353a35";
-    hash = "sha256-GBNrcUAC7UBdyrqoja81bD1oVHjLXWhnDz3gtjMbjII=";
+    tag = finalAttrs.version;
+    hash = "sha256-CBgrHd9euRuOxBR+hut5J1d0S2qZ5hVU3b8pjJuNG7s=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -85,4 +83,4 @@ stdenv.mkDerivation {
     teams = [ lib.teams.pantheon ];
     mainProgram = "gala";
   };
-}
+})

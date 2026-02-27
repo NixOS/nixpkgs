@@ -18,6 +18,7 @@ import ../make-test-python.nix (
           security = {
             admin_user = "testadmin";
             admin_password = "snakeoilpwd";
+            secret_key = "11111111111111111111";
           };
         };
       };

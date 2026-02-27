@@ -16,12 +16,12 @@
   snippetexpanderd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit (snippetexpanderd) src version;
 
   pname = "snippetexpanderx";
 
-  sourceRoot = "${src.name}/cmd/snippetexpanderx";
+  sourceRoot = "${finalAttrs.src.name}/cmd/snippetexpanderx";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     snippetexpanderd
   ];
 
-  makeFlags = [ "VERSION=${src.rev}" ];
+  makeFlags = [ "VERSION=${finalAttrs.src.rev}" ];
 
   installPhase = ''
     runHook preInstall
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderx";
   };
-}
+})

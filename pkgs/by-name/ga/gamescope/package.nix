@@ -42,7 +42,7 @@
   glslang,
   hwdata,
   stb,
-  wlroots_0_17,
+  wlroots_0_18,
   libdecor,
   lcms,
   lib,
@@ -62,14 +62,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.16.19";
+  version = "3.16.20";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-Bwj781MVeQexjYnHfDArgjVjl7eQW+CzbdKrLdcAKkg=";
+    hash = "sha256-o/mzamXrKxhxlGlYy9zW2VfVh4gHL/eNw4PuK138WYc=";
   };
 
   patches = [
@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ]
   ++ lib.optionals enableExecutable (
-    wlroots_0_17.buildInputs
+    wlroots_0_18.buildInputs
     ++ [
       # gamescope uses a custom wlroots branch
       libxcomposite

@@ -7,14 +7,14 @@
   withOpenMP ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsvm";
   version = "333";
 
   src = fetchFromGitHub {
     owner = "cjlin1";
     repo = "libsvm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eM7O/skOcxkKV4utlC7G9FvMO+d2yZm5D0BoIUhAPXo=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

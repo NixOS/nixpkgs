@@ -8,7 +8,6 @@
   pycryptodome,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   requests,
   six,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "python-binance";
-  version = "1.0.29";
+  version = "1.0.34";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "sammchardy";
     repo = "python-binance";
     tag = "v${version}";
-    hash = "sha256-Hqd6228k2j1BPzBBCRpdEp0rAGxZt00XPnzpCPlwIfg=";
+    hash = "sha256-afgEr82emFIiJGNrjGoU8MdiNKhZdn5B/LutmohE48M=";
   };
 
   build-system = [ setuptools ];

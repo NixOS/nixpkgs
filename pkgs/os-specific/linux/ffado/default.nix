@@ -110,7 +110,9 @@ stdenv.mkDerivation rec {
     argp-standalone
   ];
 
-  NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isGnu) "-largp";
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isGnu) {
+    NIX_LDFLAGS = "-largp";
+  };
 
   enableParallelBuilding = true;
   dontWrapQtApps = true;

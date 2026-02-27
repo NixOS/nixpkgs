@@ -5,14 +5,14 @@
   gprolog,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "profetch";
   version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "RustemB";
     repo = "profetch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-JsjpPUXMN0jytRS4yzSjrseqHiEQ+YinklG+tIIy+Zo=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.vel ];
     mainProgram = "profetch";
   };
-}
+})

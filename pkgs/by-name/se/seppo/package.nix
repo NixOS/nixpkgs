@@ -1,6 +1,6 @@
 {
   ocamlPackages,
-  fetchFromGitea,
+  fetchFromCodeberg,
   ocaml-crunch,
   seppo,
   lib,
@@ -14,8 +14,7 @@ ocamlPackages.buildDunePackage {
   pname = "seppo";
   version = "0-unstable-2025-08-07";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "seppo";
     repo = "seppo";
     rev = "d927311cae64883fe2b88f5a1c7e17c8cc525bad";

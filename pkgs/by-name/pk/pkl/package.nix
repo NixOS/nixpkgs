@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     gradleFlagsArray+=(-DcommitId=$(cat .commit-hash))
   '';
 
-  JAVA_TOOL_OPTIONS = "-Dfile.encoding=utf-8";
+  env.JAVA_TOOL_OPTIONS = "-Dfile.encoding=utf-8";
   __darwinAllowLocalNetworking = true;
 
   preCheck = ''

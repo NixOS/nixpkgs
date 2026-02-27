@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "skaffold";
   version = "2.17.1";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Cbpfz0IXFopCeKNDwx8mB/1quhcOO3IWStsFmKeNPYg=";
   };
 
@@ -28,8 +28,8 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}/version.version=v${version}"
-      "-X ${t}/version.gitCommit=${src.rev}"
+      "-X ${t}/version.version=v${finalAttrs.version}"
+      "-X ${t}/version.gitCommit=${finalAttrs.src.rev}"
       "-X ${t}/version.buildDate=unknown"
     ];
 
@@ -40,7 +40,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/skaffold version | grep ${version} > /dev/null
+    $out/bin/skaffold version | grep ${finalAttrs.version} > /dev/null
   '';
 
   postInstall = ''
@@ -53,7 +53,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://skaffold.dev/";
-    changelog = "https://github.com/GoogleContainerTools/skaffold/releases/tag/v${version}";
+    changelog = "https://github.com/GoogleContainerTools/skaffold/releases/tag/v${finalAttrs.version}";
     description = "Easy and Repeatable Kubernetes Development";
     mainProgram = "skaffold";
     longDescription = ''
@@ -67,4 +67,4 @@ buildGoModule rec {
       vdemeester
     ];
   };
-}
+})

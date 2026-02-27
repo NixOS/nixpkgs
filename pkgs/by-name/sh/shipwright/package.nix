@@ -34,7 +34,7 @@
   libogg,
   libvorbis,
   bzip2,
-  libX11,
+  libx11,
   sdl_gamecontrollerdb,
 }:
 
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
     libvorbis
     bzip2
-    libX11
+    libx11
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -239,7 +239,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/bin
       ln -s $out/lib/soh.elf $out/bin/soh
-      install -Dm644 ../soh/macosx/sohIcon.png $out/share/pixmaps/soh.png
+      install -Dm644 ../soh/macosx/sohIcon.png $out/share/icons/hicolor/1024x1024/apps/soh.png
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Recreate the macOS bundle (without using cpack)

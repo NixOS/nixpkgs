@@ -6,15 +6,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "diamond";
-  version = "2.1.14";
+  version = "2.1.16";
 
   src = fetchFromGitHub {
     owner = "bbuchfink";
     repo = "diamond";
-    rev = "v${version}";
-    sha256 = "sha256-nTMfWpXTsdcas0VwZzyU6ix4reNQX7EoyYRZ1wUN2pM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/rSnyOlQ7PWMpoX8vojOmD73jrvIDLjT5LOB7MyTnMo=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

@@ -21,7 +21,7 @@
   libgbm,
   openssl,
   systemd,
-  xcb-util-cursor,
+  libxcb-cursor,
   libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
@@ -29,13 +29,13 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alfaview";
-  version = "9.23.2";
+  version = "9.24.1";
 
   src = fetchurl {
-    url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
-    hash = "sha256-0EGjm/EYozGXDM/IvmopN04kzJfPM+6wjMpJesyW55U=";
+    url = "https://assets.alfaview.com/stable/linux/deb/alfaview_${finalAttrs.version}.deb";
+    hash = "sha256-vRo5ZD3yYTWhR6fbc/HFtBBbYuq3cGbxPuDlSt5D8XM=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     openssl
     stdenv.cc.cc
     systemd
-    xcb-util-cursor
+    libxcb-cursor
     libx11
     libxcb-wm
     libxcb-image
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     libxcb-render-util
   ];
 
-  libPath = lib.makeLibraryPath buildInputs;
+  libPath = lib.makeLibraryPath finalAttrs.buildInputs;
 
   dontBuild = true;
   dontConfigure = true;
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
     mv opt $out
 
     substituteInPlace $out/share/applications/alfaview.desktop \
-      --replace "/opt/alfaview" "$out/bin" \
-      --replace "/usr/share/pixmaps/alfaview_production.png" alfaview_production
+      --replace-fail "/opt/alfaview" "$out/bin" \
+      --replace-fail "/usr/share/pixmaps/alfaview.png" alfaview
 
     makeWrapper $out/opt/alfaview/alfaview $out/bin/alfaview \
-      --prefix LD_LIBRARY_PATH : ${libPath}
+      --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}
 
     runHook postInstall
   '';
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     mainProgram = "alfaview";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

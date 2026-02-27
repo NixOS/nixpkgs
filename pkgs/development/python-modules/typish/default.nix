@@ -19,6 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-LnOg1dVs6lXgPTwRYg7uJ3LCdExYrCxS47UEJxKHhVU=";
   };
 
+  # Tests fail on Python 3.14
+  # TypeError: 'member_descriptor' object is not iterable
+  disabled = pythonAtLeast "3.14";
+
   nativeCheckInputs = [
     numpy
     pytestCheckHook

@@ -32,11 +32,11 @@ assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
 stdenv.mkDerivation rec {
   pname = "mpich";
-  version = "4.3.2";
+  version = "5.0.0";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    hash = "sha256-R9d0WHpxVqU3UiGMgRyFLnCsRNucUC3D85m0y4F+OBg=";
+    hash = "sha256-6TUOMiJCg+lTEfIhNPNsmOPNHGZdF/riCmzJLtPP/hE=";
   };
 
   patches = [

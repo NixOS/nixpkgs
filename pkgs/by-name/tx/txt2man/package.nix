@@ -6,14 +6,14 @@
   gawk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "txt2man";
   version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "mvertes";
     repo = "txt2man";
-    rev = "txt2man-${version}";
+    rev = "txt2man-${finalAttrs.version}";
     hash = "sha256-Aqi5PNNaaM/tr9A/7vKeafYKYIs/kHbwHzE7+R/9r9s=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})

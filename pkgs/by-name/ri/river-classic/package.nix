@@ -2,9 +2,9 @@
   lib,
   stdenv,
   callPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   libGL,
-  libX11,
+  libx11,
   libevdev,
   libinput,
   libxkbcommon,
@@ -29,8 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "river";
     repo = "river-classic";
     hash = "sha256-UhWA7jmBDhktHqHds06C0GY+xzlQZZezYopsLmIAGgI=";
@@ -58,9 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     wlroots_0_19
   ]
-  ++ lib.optional xwaylandSupport libX11;
-
-  dontConfigure = true;
+  ++ lib.optional xwaylandSupport libx11;
 
   zigBuildFlags = [
     "--system"

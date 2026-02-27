@@ -11,14 +11,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "entwine";
   version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "connormanning";
     repo = "entwine";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-K/mR3Js5F6JeS9xvEOhzX4sXGK/Zo+1mHCXDSaBdV2M=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "entwine";
   };
-}
+})

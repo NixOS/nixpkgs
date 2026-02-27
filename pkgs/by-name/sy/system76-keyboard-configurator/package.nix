@@ -16,14 +16,14 @@
 # your system needs a PolicyKit authentication agent running for the
 # configurator to work.
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "system76-keyboard-configurator";
   version = "1.3.12";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "keyboard-configurator";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rnKWzct2k/ObjBnf90uwMar7fjZAUvQ2RPPZVZQsWEA=";
   };
 
@@ -57,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mirrexagon ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   readline,
   guileSupport ? false,
@@ -21,6 +22,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./glibc-2.27-glob.patch
+    (fetchpatch {
+      name = "gcc15-tolerance.patch";
+      url = "https://github.com/Trepan-Debuggers/remake/commit/15f36a69b1a7798fa836d849c68c0fa5cd1dae6f.patch";
+      hash = "sha256-Pau0ho0stPFnJjsHKY6lIag/XV4A0bEKBLPp3XRcxc8=";
+    })
   ];
 
   nativeBuildInputs = [

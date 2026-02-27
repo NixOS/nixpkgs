@@ -7,18 +7,18 @@
   which,
   perl,
   jq,
-  libXrandr,
+  libxrandr,
   coreutils,
   cairo,
   dbus,
   systemd,
   gdk-pixbuf,
   glib,
-  libX11,
-  libXScrnSaver,
+  libx11,
+  libxscrnsaver,
   wayland,
   wayland-protocols,
-  libXinerama,
+  libxinerama,
   libnotify,
   pango,
   xorgproto,
@@ -58,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
   ]
   ++ lib.optionals withX11 [
-    libX11
-    libXScrnSaver
-    libXinerama
+    libx11
+    libxscrnsaver
+    libxinerama
     xorgproto
-    libXrandr
+    libxrandr
   ]
   ++ lib.optionals withWayland [
     wayland

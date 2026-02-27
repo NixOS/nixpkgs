@@ -33,14 +33,14 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "8.5.1";
+  version = "9.2.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-Sqs6xXnh1I8fhrxVS8p5r7PRqI5rxK0pJWhDQ2qddks=";
+    hash = "sha256-/FpeizUrO7WSfcOfBkM0IIdu0rc7UvLXXP2y/tunxeo=";
   };
 
   postPatch = ''
@@ -86,6 +86,8 @@ pythonPackages.buildPythonApplication rec {
       markitdown
       gst-python
       opencv4
+      zstandard
+      pythonPackages.ollama
     ]
     ++ lib.concatAttrValues optional-dependencies;
 

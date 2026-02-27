@@ -28,13 +28,13 @@
   gccmakedep,
   libtirpc,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nx-libs";
   version = "3.5.99.26";
   src = fetchFromGitHub {
     owner = "ArcticaProject";
     repo = "nx-libs";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-qVOdD85sBMxKYx1cSLAGKeODsKKAm9UPBmYzPBbBOzQ=";
   };
 
@@ -75,8 +75,10 @@ stdenv.mkDerivation rec {
     libtirpc
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+    NIX_LDFLAGS = toString [ "-ltirpc" ];
+  };
 
   postPatch = ''
     patchShebangs .
@@ -90,7 +92,7 @@ stdenv.mkDerivation rec {
     substituteInPlace nx-X11/config/cf/Imake.tmpl --replace "clq" "cq"
   '';
 
-  PREFIX = ""; # Don't install to $out/usr/local
+  env.PREFIX = ""; # Don't install to $out/usr/local
   installPhase = ''
     make DESTDIR="$out" install
     # See:
@@ -106,4 +108,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

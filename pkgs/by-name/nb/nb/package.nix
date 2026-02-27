@@ -9,15 +9,15 @@
   bashInteractive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nb";
-  version = "7.24.0";
+  version = "7.25.0";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
-    rev = version;
-    hash = "sha256-oGVuBwnuKQqlhwW8gBWwhR09ZVBYV3vWzJxKu+KTlL8=";
+    rev = finalAttrs.version;
+    hash = "sha256-+QRKv+zKOz8qDD1Ecpavl0ybf4nIcy0flNLHhyR+fxA=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "nb";
   };
-}
+})

@@ -12,14 +12,14 @@
   libmnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openonload";
   version = "9.0.2";
 
   src = fetchFromGitHub {
     owner = "Xilinx-CNS";
     repo = "onload";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wyvTtOjD6fwuT2OGGhr10F0Q7hXE97mGREhq7Ns14hw=";
   };
 
@@ -155,4 +155,4 @@ stdenv.mkDerivation rec {
     # ARM64 build fails, see https://github.com/Xilinx-CNS/onload/issues/253
     platforms = [ "x86_64-linux" ];
   };
-}
+})

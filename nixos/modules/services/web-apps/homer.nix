@@ -41,7 +41,7 @@ in
     settings = lib.mkOption {
       default = { };
       description = ''
-        Settings serialized into `config.yml` before build.
+        Settings serialized into {file}`config.yml` before build.
         If left empty, the default configuration shipped with the package will be used instead.
         For more information, see the [official documentation](https://github.com/bastienwirtz/homer/blob/main/docs/configuration.md).
 

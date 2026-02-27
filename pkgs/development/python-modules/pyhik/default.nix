@@ -7,16 +7,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhik";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mezz64";
     repo = "pyHik";
-    tag = version;
-    hash = "sha256-dDUaNeE0wjKsojeezKVWfMBPO+7O5e2QFOHnh3UoFbY=";
+    tag = finalAttrs.version;
+    hash = "sha256-ree2UbGfmz4Xs0aRiAWcOnCEpnrjR11PBmo/hMnbnlI=";
   };
 
   build-system = [
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

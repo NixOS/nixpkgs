@@ -6,18 +6,18 @@
   gitMinimal,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "krew";
-  version = "0.4.5";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "krew";
-    rev = "v${version}";
-    sha256 = "sha256-3GoC2HEp9XJe853/JYvX9kAAcFf7XxglVEeU9oQ/5Ms=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-KG4/vtEfwWVddfFoNbC4xakxOynDY6jyxek4JAXW5gY=";
   };
 
-  vendorHash = "sha256-r4Dywm0+YxWWD59oaKodkldE2uq8hlt9MwOMYDaj6Gc=";
+  vendorHash = "sha256-z0wiYknXcCx4vqROngn58CRe9TBgya4y3v736VBMhQ8=";
 
   subPackages = [ "cmd/krew" ];
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ vdemeester ];
     license = lib.licenses.asl20;
   };
-}
+})

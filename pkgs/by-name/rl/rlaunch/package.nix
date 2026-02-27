@@ -7,14 +7,14 @@
   libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rlaunch";
   version = "1.3.14";
 
   src = fetchFromGitHub {
     owner = "PonasKovas";
     repo = "rlaunch";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-PyCR/ob947W+6T56y1se74aNy1avJDb2ELyv2aGf1og=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ danc86 ];
     mainProgram = "rlaunch";
   };
-}
+})

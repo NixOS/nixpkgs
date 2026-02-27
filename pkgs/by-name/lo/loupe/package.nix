@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     desktop-file-utils
     itstool
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -57,28 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libglycin.setupHook
+    glycin-loaders
     gtk4
     lcms2
     libadwaita
     libgweather
     libseccomp
   ];
-
-  preConfigure = ''
-    # Dirty approach to add patches after cargoSetupPostUnpackHook
-    # We should eventually use a cargo vendor patch hook instead
-    pushd ../$(stripHash $cargoDeps)/glycin-3.*
-      patch -p3 < ${libglycin.passthru.glycin3PathsPatch}
-    popd
-  '';
-
-  preFixup = ''
-    # Needed for the glycin crate to find loaders.
-    # https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
 
   # For https://gitlab.gnome.org/GNOME/loupe/-/blob/0e6ddb0227ac4f1c55907f8b43eaef4bb1d3ce70/src/meson.build#L34-35
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;

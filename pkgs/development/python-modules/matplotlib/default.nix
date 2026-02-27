@@ -64,7 +64,7 @@
   ipykernel,
 
   # required for headless detection
-  libX11,
+  libx11,
   wayland,
 
   # Reverse dependency
@@ -76,13 +76,13 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.10.5";
+  version = "3.10.8";
   pname = "matplotlib";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NS7WzPt5mKAIgWkvOLTKCDxpHT4nW0FFQjcEw0yQkHY=";
+    hash = "sha256-Ipk3LBnVa801zwWic4MIdY0yuertI3GJjY9b0z8ISqM=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -107,7 +107,7 @@ buildPythonPackage rec {
     + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
       # fix paths to libraries in dlopen calls (headless detection)
       substituteInPlace src/_c_internal_utils.cpp \
-        --replace-fail libX11.so.6 ${libX11}/lib/libX11.so.6 \
+        --replace-fail libX11.so.6 ${libx11}/lib/libX11.so.6 \
         --replace-fail libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
     '';
 
@@ -204,7 +204,6 @@ buildPythonPackage rec {
       bsd0
     ];
     maintainers = with lib.maintainers; [
-      lovek323
       veprbl
     ];
   };

@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tkrzw";
   version = "1.0.32";
   # TODO: defeat multi-output reference cycles
 
   src = fetchurl {
-    url = "https://dbmx.net/tkrzw/pkg/tkrzw-${version}.tar.gz";
+    url = "https://dbmx.net/tkrzw/pkg/tkrzw-${finalAttrs.version}.tar.gz";
     hash = "sha256-00BN+saJhjK2l4DA8JlMX2upYhkaYcmw9LU7qLsncxw=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
   };
-}
+})

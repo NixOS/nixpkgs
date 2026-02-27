@@ -15,7 +15,7 @@
   nix-update-script,
 }:
 buildPythonPackage rec {
-  name = "bezier";
+  pname = "bezier";
   version = "2024.6.20";
   src = fetchFromGitHub {
     owner = "dhermes";

@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wla-dx";
   version = "10.6";
 
   src = fetchFromGitHub {
     owner = "vhelin";
     repo = "wla-dx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t+X1Y1NhAGi4NOPik2fuLZAR3A7NQMAkSgWvqAFaIik=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

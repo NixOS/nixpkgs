@@ -27,13 +27,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "en-croissant";
-  version = "0.12.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "franciscoBSalgueiro";
     repo = "en-croissant";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ef6O8C1PPjCmF5lashpBQXWwjsEEKCl5R98QMOFDIBM=";
+    hash = "sha256-S1ObsGpLxNzr0+bFEuPAe3PCHQc1k0QavgKD6YDffIc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -43,14 +43,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       src
       ;
     inherit pnpm;
-    fetcherVersion = 2;
-    hash = "sha256-p2j886NRBw/8c2UJ94o6w7YtKnOfm7hU9SgEUrzAwco=";
+    fetcherVersion = 3;
+    hash = "sha256-hkI1TQeOHKQdsnq1pYIeeU+GYFMIxbyNoZY5Wuxj4UU=";
   };
-
-  cargoPatches = [
-    # Bump the tauri-utils package to at least 2.1.0, to fix resource path resolution on NixOS.
-    ./en-croissant-update-tauri-utils.patch
-  ];
 
   postPatch = ''
     jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
@@ -58,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "src-tauri";
 
-  cargoHash = "sha256-cTb6nKHlazyOu3cpwAAp20j3QmrDxC507ZRpYT5fgQs=";
+  cargoHash = "sha256-trQzf5x/sIxkEYQOQKAq1y2GrT3VoQ/ZWCFncb2dNvs=";
 
   buildAndTestSubdir = finalAttrs.cargoRoot;
 

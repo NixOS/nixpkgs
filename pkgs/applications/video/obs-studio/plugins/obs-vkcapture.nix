@@ -9,9 +9,9 @@
   wayland-scanner,
   obs-studio,
   libffi,
-  libX11,
-  libXau,
-  libXdmcp,
+  libx11,
+  libxau,
+  libxdmcp,
   libxcb,
   vulkan-headers,
   vulkan-loader,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vkcapture";
-  version = "1.5.3";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = "obs-vkcapture";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zra7fwYnUfPKS4AA6Z9FIPP3p/uR5O1wB6Z76aivtZI=";
+    hash = "sha256-HRqXS+uzSxNzh1m4I4B+nf9EZbMxS8M3bUtGEBIuSXI=";
   };
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isi686 [
@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libffi
-    libX11
-    libXau
-    libXdmcp
+    libx11
+    libxau
+    libxdmcp
     libxcb
     vulkan-headers
     vulkan-loader
@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/glinject.c \
       --replace "libGLX.so.0" "${lib.getLib libGL}/lib/libGLX.so.0" \
-      --replace "libX11.so.6" "${lib.getLib libX11}/lib/libX11.so.6" \
-      --replace "libX11-xcb.so.1" "${lib.getLib libX11}/lib/libX11-xcb.so.1" \
+      --replace "libX11.so.6" "${lib.getLib libx11}/lib/libX11.so.6" \
+      --replace "libX11-xcb.so.1" "${lib.getLib libx11}/lib/libX11-xcb.so.1" \
       --replace "libxcb-dri3.so.0" "${lib.getLib libxcb}/lib/libxcb-dri3.so.0" \
       --replace "libEGL.so.1" "${lib.getLib libGL}/lib/libEGL.so.1" \
       --replace "libvulkan.so.1" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
@@ -85,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nowrep/obs-vkcapture";
     changelog = "https://github.com/nowrep/obs-vkcapture/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
-      atila
       pedrohlc
     ];
     license = lib.licenses.gpl2Only;

@@ -81,11 +81,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.22.6";
+  version = "4.22.7";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-jmvrDM6H+zx2OvlMLcIf1HuP0C1Gs8sd6ypy35JZxCU=";
+    hash = "sha256-EhlYEdRUL2YVNukFW0TVjFMCBBK+r6riBeInv3L2pJc=";
   };
 
   outputs = [
@@ -212,9 +212,17 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +w answers
   '';
 
-  env.NIX_LDFLAGS = lib.optionalString (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  env = {
+    # python-config from build Python gives incorrect values when cross-compiling.
+    # If python-config is not found, the build falls back to using the sysconfig
+    # module, which works correctly in all cases.
+    PYTHON_CONFIG = "/invalid";
+  }
+  //
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
   wafConfigureFlags = [
     "--with-static-modules=NONE"
@@ -260,11 +268,6 @@ stdenv.mkDerivation (finalAttrs: {
     # space.
     "--jobs 1"
   ];
-
-  # python-config from build Python gives incorrect values when cross-compiling.
-  # If python-config is not found, the build falls back to using the sysconfig
-  # module, which works correctly in all cases.
-  PYTHON_CONFIG = "/invalid";
 
   pythonPath = [
     python3Packages.dnspython

@@ -8,14 +8,14 @@
   gdb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.9.18";
   pname = "igprof";
 
   src = fetchFromGitHub {
     owner = "igprof";
     repo = "igprof";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UTrAaH8C79km78Z/7NxvQ6dnl4u4Ki80nORf4bsoSNw=";
   };
 
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     pcre
   ];
   nativeBuildInputs = [ cmake ];
-  CXXFLAGS = [
+
+  env.CXXFLAGS = toString [
     "-fPIC"
     "-O2"
     "-w"
@@ -61,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ktf ];
   };
-}
+})

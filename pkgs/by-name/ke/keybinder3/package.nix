@@ -11,20 +11,20 @@
   gtk3,
   gtk3-x11,
   gtk3' ? (if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3),
-  libX11,
-  libXext,
-  libXrender,
+  libx11,
+  libxext,
+  libxrender,
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keybinder3";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "kupferlauncher";
     repo = "keybinder";
-    rev = "keybinder-3.0-v${version}";
+    rev = "keybinder-3.0-v${finalAttrs.version}";
     sha256 = "196ibn86j54fywfwwgyh89i9wygm4vh7ls19fn20vrnm6ijlzh9r";
   };
 
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3'
-    libX11
-    libXext
-    libXrender
+    libx11
+    libxext
+    libxrender
   ];
 
   preConfigure = ''
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

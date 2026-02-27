@@ -42,7 +42,7 @@ buildDunePackage rec {
 
   doCheck = true;
   checkInputs = [
-    alcotest
+    (alcotest.override { inherit cmdliner; })
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

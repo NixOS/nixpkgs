@@ -12,10 +12,10 @@
   xfce4-exo,
   gtk3,
   gtk-layer-shell,
-  libX11,
-  libXext,
-  libXfixes,
-  libXtst,
+  libx11,
+  libxext,
+  libxfixes,
+  libxtst,
   libxfce4ui,
   libxfce4util,
   wayland,
@@ -57,10 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     xfce4-exo
     gtk3
     gtk-layer-shell
-    libX11
-    libXext
-    libXfixes
-    libXtst
+    libx11
+    libxext
+    libxfixes
+    libxtst
     libxfce4ui
     libxfce4util
     wayland

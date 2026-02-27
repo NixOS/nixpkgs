@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "awatcher";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "2e3s";
     repo = "awatcher";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bxFc6oM+evIQTjrsWmb7dXOUlSjurjc4CzHpxB+667c=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.aikooo7 ];
     platforms = lib.platforms.linux;
   };
-}
+})

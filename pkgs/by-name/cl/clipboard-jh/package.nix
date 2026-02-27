@@ -14,14 +14,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clipboard-jh";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-3SloqijgbX3XIwdO2VBOd61or7tnByi7w45dCBKTkm8=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "cb";
   };
-}
+})

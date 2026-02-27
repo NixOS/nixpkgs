@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
       "libpcre2-16"
       "libpcre2-32"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "pcre" version;
   };
 }

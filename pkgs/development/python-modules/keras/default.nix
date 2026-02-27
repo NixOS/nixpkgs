@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -37,15 +38,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.13.1";
+  version = "3.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oFlEgic6M6ZRqDl6RvAbQccW8RIHC4fEGWJyNPidDHM=";
+    hash = "sha256-7s3bJdkS/G/Ydj9txbtGrqGCE3PjjS1ZiuoGOzk+UIg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "numpy-2.4-compat.patch";
+      url = "https://github.com/keras-team/keras/commit/bc3bc4fc167049eb35136deaf5680cdaacc80371.patch";
+      hash = "sha256-+eN3QVBpHGIv67hbRxzVHeKjFZIz5LCdbNO0AL65OoQ=";
+    })
+  ];
 
   build-system = [
     setuptools

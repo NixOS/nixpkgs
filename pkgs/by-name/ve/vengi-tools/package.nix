@@ -20,7 +20,7 @@
   libjpeg,
   libuuid,
   libuv,
-  libX11,
+  libx11,
   lua5_4,
   lzfse,
   opencl-headers,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     lua5_4
     lzfse
     SDL2
-    libX11
+    libx11
     SDL2_mixer
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols

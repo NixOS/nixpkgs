@@ -18,14 +18,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ideogram";
   version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "ideogram";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1zkr7x022khn5g3sq2dkxzy1hiiz66vl81s3i5sb9qr88znh79p1";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.cassidyjames.ideogram";
   };
 
-}
+})

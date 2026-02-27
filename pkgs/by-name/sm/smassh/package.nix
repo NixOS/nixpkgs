@@ -6,7 +6,7 @@
   testers,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "smassh";
   version = "3.1.7";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = "smassh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-i04DzsurF6sMMBHZjBOrkKKmkn6Nt6uF27QXABE3igg=";
   };
 
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
   passthru.tests.version = testers.testVersion {
     package = smassh;
     command = "HOME=$(mktemp -d) smassh --version";
-    version = "smassh - v${version}";
+    version = "smassh - v${finalAttrs.version}";
   };
 
   meta = {
@@ -52,4 +52,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "smassh";
   };
-}
+})

@@ -21,7 +21,7 @@
   glslang,
   gtest,
   hidapi,
-  libXdmcp,
+  libxdmcp,
   libpulseaudio,
   libspng,
   libusb1,
@@ -40,8 +40,8 @@
   alsa-lib,
   bluez,
   libGL,
-  libXext,
-  libXrandr,
+  libxext,
+  libxrandr,
   libevdev,
   udev,
   vulkan-loader,
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     gtest
     hidapi
-    libXdmcp
+    libxdmcp
     libpulseaudio
     libspng
     libusb1
@@ -117,8 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     bluez
     libGL
-    libXext
-    libXrandr
+    libxext
+    libxrandr
     libevdev
     # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
     #mgba # Derivation doesn't support Darwin

@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tamzen-font";
   version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "sunaku";
     repo = "tamzen-font";
-    rev = "Tamzen-${version}";
+    rev = "Tamzen-${finalAttrs.version}";
     sha256 = "sha256-W5Wqsm5rpzzcbJl2lv6ORAznaAwLcmJ2S6Qo2zIoq9I=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ wishfort36 ];
   };
-}
+})

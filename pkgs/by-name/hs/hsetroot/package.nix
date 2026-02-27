@@ -4,26 +4,26 @@
   fetchFromGitHub,
   pkg-config,
   imlib2,
-  libX11,
-  libXinerama,
+  libx11,
+  libxinerama,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hsetroot";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "himdel";
     repo = "hsetroot";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1jbk5hlxm48zmjzkaq5946s58rqwg1v1ds2sdyd2ba029hmvr722";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     imlib2
-    libX11
-    libXinerama
+    libx11
+    libxinerama
   ];
 
   postPatch = lib.optionalString (!stdenv.cc.isGNU) ''
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

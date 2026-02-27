@@ -21,7 +21,6 @@
   libdbusmenu,
   libglvnd,
   libpulseaudio,
-  mesa,
   nspr,
   nss,
   pango,
@@ -74,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     libdbusmenu
     libglvnd
     libpulseaudio
-    mesa
     nspr
     nss
     pango

@@ -5,7 +5,7 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "friture";
   version = "0.54";
   pyproject = true;
@@ -13,13 +13,14 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = "friture";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KWj2AhPloomjYwd7besX5QIG8snZe1L2hATEfm/HaIE=";
   };
 
   postPatch = ''
-    sed -i -e 's/==.*"/"/' -e '/packages=\[/a "friture.playback",' pyproject.toml
-    sed -i -e 's/tostring/tobytes/' friture/spectrogram_image.py
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy==2.3.2" "numpy" \
+      --replace-fail "Cython==3.1.3" "Cython"
   '';
 
   nativeBuildInputs =
@@ -30,6 +31,12 @@ python3Packages.buildPythonApplication rec {
       setuptools
     ])
     ++ (with qt5; [ wrapQtAppsHook ]);
+
+  # Very strict versions
+  pythonRelaxDeps = true;
+
+  # Not actually used, dropped from nixpkgs
+  pythonRemoveDeps = [ "pyrr" ];
 
   buildInputs = with qt5; [ qtquickcontrols2 ];
 
@@ -43,7 +50,6 @@ python3Packages.buildPythonApplication rec {
     numpy
     pyqt5
     appdirs
-    pyrr
     rtmixer
   ];
 
@@ -52,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    substituteInPlace $out/share/applications/friture.desktop --replace usr/bin/friture friture
+    substituteInPlace $out/share/applications/friture.desktop --replace-fail usr/bin/friture friture
 
     for size in 16 32 128 256 512
     do
@@ -74,4 +80,4 @@ python3Packages.buildPythonApplication rec {
       pentane
     ];
   };
-}
+})

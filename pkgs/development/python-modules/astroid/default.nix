@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
-  typing-extensions,
   pip,
   pylint,
   pytestCheckHook,
@@ -23,8 +21,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   nativeCheckInputs = [
     pip

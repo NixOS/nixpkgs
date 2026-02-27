@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "aocd";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "advent-of-code-data";
     tag = "v${version}";
-    hash = "sha256-xR9CfyOUsKSSA/1zYi6kCK3oAaX6Kd625mKMWI+ZFMA=";
+    hash = "sha256-Oe+9Ur5O2GSRY7qB8oja7quJqEX/0yXKh4R5+N4kv7Q=";
   };
 
   build-system = [ setuptools ];

@@ -41,7 +41,7 @@
     "virtio_rng"
     "ext4"
     "virtiofs"
-    "crc32c_generic"
+    "crc32c"
   ],
 }:
 

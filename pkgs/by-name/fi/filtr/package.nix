@@ -7,15 +7,18 @@
   alsa-lib,
   fontconfig,
   freetype,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   writableTmpDirAsHomeHook,
+
+  buildVST3 ? true,
+  buildLV2 ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,21 +45,24 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.isLinux [
     alsa-lib
-    libX11
-    libXcomposite
-    libXcursor
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libx11
+    libxcomposite
+    libxcursor
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
   ];
 
   enableParallelBuilding = true;
 
   cmakeFlags = [
     (lib.cmakeBool "COPY_PLUGIN_AFTER_BUILD" false)
-    (lib.cmakeFeature "BUILD_STANDALONE" "OFF")
+
+    (lib.cmakeBool "BUILD_STANDALONE" false)
+    (lib.cmakeBool "BUILD_VST3" buildVST3)
+    (lib.cmakeBool "BUILD_LV2" buildLV2)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
@@ -76,10 +82,17 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/vst3 $out/lib/lv2
+    pushd FILTR_artefacts/Release
+      ${lib.optionalString buildVST3 ''
+        mkdir -p $out/lib/vst3
+        cp -r VST3/FILT-R.vst3 $out/lib/vst3
+      ''}
 
-    cp -r "FILTR_artefacts/Release/LV2/FILT-R.lv2" $out/lib/lv2
-    cp -r "FILTR_artefacts/Release/VST3/FILT-R.vst3" $out/lib/vst3
+      ${lib.optionalString buildLV2 ''
+        mkdir -p $out/lib/lv2
+        cp -r LV2/FILT-R.lv2 $out/lib/lv2
+      ''}
+    popd
 
     runHook postInstall
   '';
@@ -89,7 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tiagolr/filtr";
     changelog = "https://github.com/tiagolr/filtr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ magnetophon ];
+    maintainers = with lib.maintainers; [
+      magnetophon
+      mrtnvgr
+    ];
     platforms = lib.platforms.all;
   };
 })

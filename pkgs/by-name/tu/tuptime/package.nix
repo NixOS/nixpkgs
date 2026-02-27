@@ -9,14 +9,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tuptime";
   version = "5.2.4";
 
   src = fetchFromGitHub {
     owner = "rfmoz";
     repo = "tuptime";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-pYGtgv9hPBG/URD2nOWg6qJYYLtlqLW+t5mCLpzKlEc=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "tuptime";
   };
-}
+})

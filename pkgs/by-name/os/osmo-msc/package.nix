@@ -14,19 +14,19 @@
   lksctp-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-msc";
   version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-msc";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+Z49TqXLEeCy7Yj0qVg1hPFOD/x+4HnwDZxZoxoUjqI=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

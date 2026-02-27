@@ -11,12 +11,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-sdl2";
   version = "0.8.0";
 
   src = fetchurl {
-    url = "https://files.dthompson.us/releases/guile-sdl2/guile-sdl2-${version}.tar.gz";
+    url = "https://files.dthompson.us/releases/guile-sdl2/guile-sdl2-${finalAttrs.version}.tar.gz";
     hash = "sha256-V/XrpFrqOxS5mAphtIt2e3ewflK+HdLFEqOmix98p+w=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

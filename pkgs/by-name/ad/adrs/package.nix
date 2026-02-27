@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "adrs";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "joshrotenberg";
     repo = "adrs";
-    tag = "v${version}";
-    hash = "sha256-PAvn1yIptyiVG96BNXHPgc5rYEHyCTo42hh88dwxrhA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D1Tg5ep9ri6fj0fLmKqQeMdlAe/Nc38wKTF5dsWxK3k=";
   };
 
-  cargoHash = "sha256-va6s+nbW4vafnt6SqqdaeAF06Q30NEDqFVWDz9mYdAo=";
+  cargoHash = "sha256-jrKDOLPps/ExGnREQy1yz8Say1bAcvJXHrkLivux4Vg=";
 
   meta = {
     description = "Command-line tool for managing Architectural Decision Records";
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dannixon ];
     mainProgram = "adrs";
   };
-}
+})

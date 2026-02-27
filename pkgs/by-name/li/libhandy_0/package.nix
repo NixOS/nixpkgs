@@ -19,7 +19,7 @@
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libhandy";
   version = "0.0.13";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "libhandy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1y23k623sjkldfrdiwfarpchg5mg58smcy1pkgnwfwca15wm1ra5";
   };
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

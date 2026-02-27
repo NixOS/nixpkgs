@@ -40,14 +40,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.30.3";
+  version = "0.30.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y4RTkGcDCZ9HLyflN0qYhPt/oVOsBhF1mHnKM4n1/ys=";
+    hash = "sha256-SV/3MXt+SuJ69XfLfXycold6KgtXSM7OE0KwMSNw+eE=";
   };
 
   patches = [
@@ -126,7 +126,11 @@ buildPythonPackage (finalAttrs: {
     "python/tests/"
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+  disabledTests = [
+    # brittle memory leak test, see: https://github.com/ml-explore/mlx/pull/3088
+    "test_siblings_without_eval"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # Segmentation fault
     "test_lapack"
     "test_multivariate_normal"

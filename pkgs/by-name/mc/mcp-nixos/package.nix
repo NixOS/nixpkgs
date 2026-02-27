@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-nixos";
-  version = "2.1.1";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
-    tag = "v${version}";
-    hash = "sha256-ZScQ79z7SwjpI5ZnrwXhRNqOnYQTI9MayvPjv00hiyY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/3/MUCjUu4iQOEmgda61ztO2d6e/HPpjsF9Z7hTWYMc=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication rec {
     anthropic
     pytestCheckHook
     pytest-asyncio
+    pytest-cov
     python-dotenv
   ];
 
@@ -47,9 +48,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "MCP server for NixOS";
     homepage = "https://github.com/utensils/mcp-nixos";
-    changelog = "https://github.com/utensils/mcp-nixos/releases/tag/${src.tag}";
+    changelog = "https://github.com/utensils/mcp-nixos/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.amadejkastelic ];
     mainProgram = "mcp-nixos";
   };
-}
+})

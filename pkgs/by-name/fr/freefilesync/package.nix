@@ -110,8 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R FreeFileSync/Build/* $out
     mv $out/{Bin,bin}
 
-    mkdir -p $out/share/pixmaps
-    unzip -j $out/Resources/Icons.zip '*Sync.png' -d $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    unzip -j $out/Resources/Icons.zip '*Sync.png' -d $out/share/icons/hicolor/128x128/apps
 
     runHook postInstall
   '';

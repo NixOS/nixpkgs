@@ -1,10 +1,12 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.7.5";
+  version = "2.7.8";
   providers = {
-    airplay = ps: [
-    ];
+    airplay =
+      ps: with ps; [
+        srptools
+      ];
     airplay_receiver = ps: [
     ];
     alexa =

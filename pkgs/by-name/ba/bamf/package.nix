@@ -15,14 +15,14 @@
   gobject-introspection,
   gtk-doc,
   docbook_xsl,
-  xorgserver,
+  xorg-server,
   dbus,
   python3,
   wrapGAppsHook3,
   withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bamf";
   version = "0.5.6";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.launchpad.net/~unity-team/bamf";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "7U+2GcuDjPU8quZjkd8bLADGlG++tl6wSo0mUQkjAXQ=";
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     vala
     which
     wrapGAppsHook3
-    xorgserver
+    xorg-server
   ];
 
   buildInputs = [
@@ -109,4 +109,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ davidak ];
     teams = [ lib.teams.pantheon ];
   };
-}
+})

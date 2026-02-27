@@ -6,8 +6,8 @@
   dbus,
   fltk_1_3,
   gtk2,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libtiff,
   pkg-config,
 }:
@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     fltk_1_3
     gtk2
-    libICE
-    libSM
+    libice
+    libsm
     libtiff
   ];
 

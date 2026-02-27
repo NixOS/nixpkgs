@@ -49,8 +49,8 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-cUpCkmJmFyd2mTImMKt5Cgi+A4bAWAXLYjJjMnV6haQ=";
-        aarch64-linux = "sha256-f1FbdFDunlF7uhCpkb5AqmKN5uimuKnFYBzXjIcRabk=";
+        x86_64-linux = "sha256-CMd8dIyvuYFoHg1+AdkkyBj5P367ZcklCOgih+7uQIA=";
+        aarch64-linux = "sha256-NJIkiTIJBZFPb+FpTYo6pQQQt8++VuCHHj0Y0AjqWGo=";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -144,14 +144,14 @@ buildBazelPackage rec {
         --replace-fail 'crates_repository(' 'crates_repository(generator="@@cargo_bazel_bootstrap//:cargo-bazel", '
     '';
     preInstall = ''
+      # Envoy uses --noenable_bzlmod so BCR modules are not needed.
+      # Populate the repository cache with entries the build needs from the empty
+      # workspace.  Use `bazel sync` (which fetches WORKSPACE repos) rather than
+      # `bazel fetch` (which requires bzlmod for its --all mode).
       mkdir $NIX_BUILD_TOP/empty
       pushd $NIX_BUILD_TOP/empty
-      touch MODULE.bazel
-      # Unfortunately, we need to fetch a lot of irrelevant junk to make this work.
-      # This really bloats the size of the FOD.
-      # TODO: lukegb - figure out how to make this suck less.
-      bazel fetch --repository_cache="$bazelOut/external/repository_cache"
-      bazel sync --repository_cache="$bazelOut/external/repository_cache"
+      touch MODULE.bazel WORKSPACE
+      bazel sync --noenable_bzlmod --repository_cache="$bazelOut/external/repository_cache"
       popd
 
       # Strip out the path to the build location (by deleting the comment line).

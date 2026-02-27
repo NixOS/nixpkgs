@@ -5,14 +5,14 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpxlab";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "BourgeoisLab";
     repo = "GPXLab";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "080vnwcciqblfrbfyz9gjhl2lqw1hkdpbgr5qfrlyglkd4ynjd84";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,12 +6,12 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vsqlite";
   version = "0.3.13";
 
   src = fetchurl {
-    url = "https://evilissimo.fedorapeople.org/releases/vsqlite--/0.3.13/vsqlite++-${version}.tar.gz";
+    url = "https://evilissimo.fedorapeople.org/releases/vsqlite--/0.3.13/vsqlite++-${finalAttrs.version}.tar.gz";
     sha256 = "17fkj0d2jh0xkjpcayhs1xvbnh1d69f026i7vs1zqnbiwbkpz237";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})

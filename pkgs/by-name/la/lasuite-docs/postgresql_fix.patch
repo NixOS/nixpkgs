@@ -1,12 +1,3 @@
-From 49c6138eab0a37d062c5e7d936535d1832b3e031 Mon Sep 17 00:00:00 2001
-From: soyouzpanda <soyouzpanda@soyouzpanda.fr>
-Date: Tue, 23 Dec 2025 19:43:50 +0100
-Subject: [PATCH] fix: disable postgresql C function creation
-
----
- core/migrations/0027_auto_20251120_0956.py | 5 -----
- 1 file changed, 5 deletions(-)
-
 diff --git a/core/migrations/0027_auto_20251120_0956.py b/core/migrations/0027_auto_20251120_0956.py
 index fe795ff5..0db2090c 100644
 --- a/core/migrations/0027_auto_20251120_0956.py
@@ -23,5 +14,3 @@ index fe795ff5..0db2090c 100644
                  CREATE OR REPLACE FUNCTION public.f_unaccent(text)
                  RETURNS text
                  LANGUAGE sql IMMUTABLE PARALLEL SAFE STRICT
---
-2.50.1

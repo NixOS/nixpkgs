@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
           ++ attrs.nativeBuildInputs or [ ];
           strictDeps = true;
 
-          ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
+          env.${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
 
           prePatch = ''
             rm -rf BaseTools

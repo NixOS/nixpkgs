@@ -38,12 +38,12 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "viking";
   version = "1.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/viking/viking-${version}.tar.bz2";
+    url = "mirror://sourceforge/viking/viking-${finalAttrs.version}.tar.bz2";
     hash = "sha256-/iHVwRHvIId9HNlbGkvDT6rp3ToXuskj9BjhJxo8/JE=";
   };
 
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; unix;
   };
-}
+})

@@ -43,14 +43,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "firewalld";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-P48qdgvcF3BQZ5h+HaylHb70ECa2bmEvYiAi9CeH0qs=";
   };
 
@@ -167,4 +167,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ prince213 ];
     platforms = lib.platforms.linux;
   };
-}
+})

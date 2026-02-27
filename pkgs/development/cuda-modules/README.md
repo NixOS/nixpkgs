@@ -42,7 +42,7 @@ not straightforward to include. These packages are:
   - `libnvidia_nscq`: NVSwitch software
   - `libnvsdm`: NVSwitch software
 - `cublasmp`:
-  - `libcublasmp`: `nvshmem` isnt' packaged.
+  - `libcublasmp`: `nvshmem` isn't packaged.
 - `cudnn`:
   - `cudnn_samples`: requires FreeImage, which is abandoned and not packaged.
 
@@ -91,9 +91,9 @@ sandbox when building, which can't find those (a second minor issue is that
 still take precedence).
 
 The current solution is to do something similar to `addOpenGLRunpathHook`: the
-`addCudaCompatRunpathHook` prepends to the path to `cuda_compat`'s `libcuda.so`
+`addCudaCompatRunpathHook` prepends the path to `cuda_compat`'s `libcuda.so`
 to the `DT_RUNPATH` of whichever package includes the hook as a dependency, and
-we include the hook by default for packages in `cudaPackages` (by adding it as a
-inputs in `genericManifestBuilder`). We also make sure it's included after
+we include the hook by default for packages in `cudaPackages` (by adding it as an
+input in `genericManifestBuilder`). We also make sure it's included after
 `addOpenGLRunpathHook`, so that it appears _before_ in the `DT_RUNPATH` and
 takes precedence.

@@ -7,12 +7,12 @@
   dos2unix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rubiks";
   version = "20070912";
 
   src = fetchurl {
-    url = "mirror://sageupstream/rubiks/rubiks-${version}.tar.bz2";
+    url = "mirror://sageupstream/rubiks/rubiks-${finalAttrs.version}.tar.bz2";
     sha256 = "0zdmkb0j1kyspdpsszzb2k3279xij79jkx0dxd9f3ix1yyyg3yfq";
   };
 
@@ -111,4 +111,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -3,39 +3,42 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "metacubexd";
-  version = "1.192.0";
+  version = "1.241.2";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
     repo = "metacubexd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OZLwKckwiw0FPJYOLgj9bXEm6xq9SmDrDZNQhM0r7dc=";
+    hash = "sha256-quI1DSXHGR0My1SfseIBdTa6t4jr3mKOEMaEYloT+Vo=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     nodejs
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     fetcherVersion = 1;
-    hash = "sha256-v+wuYGK0WEgrPNBLuLnoO/uDEk6AqJTlNJZHTpEb4mc=";
+    hash = "sha256-ItO9/+OU5zWI/J78dZoxmAMVNCb4wnbSjo1JBI8obZA=";
   };
 
   buildPhase = ''
     runHook preBuild
 
-    pnpm build
+    export NUXT_TELEMETRY_DISABLED=1
+    export NUXT_APP_BASE_URL='./'
+
+    pnpm generate
 
     runHook postBuild
   '';
@@ -43,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    cp -r ./dist $out
+    cp -r ./.output/public $out
 
     runHook postInstall
   '';

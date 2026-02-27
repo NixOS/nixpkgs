@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   lib,
   cmake,
   ninja,
@@ -25,7 +24,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unified-memory-framework";
-  version = "1.0.3";
+  version = "1.1.0";
 
   nativeBuildInputs = [
     cmake
@@ -60,16 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "oneapi-src";
     repo = "unified-memory-framework";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j7qQwBetICf1sTz+ssZQLm9P0SiH68lcEvtV1YLuW5s=";
+    hash = "sha256-1Z65rNsUNeaeSJmxwpEHPbiU4KEDvyrWL9LyAWFsR1c=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "gtest-use-find_package.patch";
-      url = "https://github.com/oneapi-src/unified-memory-framework/commit/503d302a72f719a3f11fce0e610f07a3793549d9.patch";
-      hash = "sha256-T29pJuWGcj/Kfw3VNW5lNBG5OrBsB1UAvwroQ+km4Vs=";
-    })
-  ];
 
   postPatch = ''
     # The CMake tries to find out the version via git.
@@ -125,11 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   dontUseNinjaCheck = true;
 
-  NIX_LDFLAGS = lib.optionalString finalAttrs.doCheck "-rpath ${
-    lib.makeLibraryPath [
-      onetbb
-    ]
-  }";
+  env = lib.optionalAttrs finalAttrs.doCheck {
+    NIX_LDFLAGS = "-rpath ${
+      lib.makeLibraryPath [
+        onetbb
+      ]
+    }";
+  };
 
   disabledTests = [
     # These tests try to access sysfs, which is unavailable in the sandbox

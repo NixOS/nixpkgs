@@ -50,6 +50,10 @@ buildPythonPackage rec {
     "test_edges_new"
     "test_edges_old"
     "test_split"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/pympler/pympler/issues/177
+    "test_untracked_containers"
   ];
 
   doCheck = stdenv.hostPlatform.isLinux;

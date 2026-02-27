@@ -1,5 +1,6 @@
 {
-  mkDerivation,
+  stdenv,
+  wrapQtAppsHook,
   makeDesktopItem,
   python3,
   lib,
@@ -21,9 +22,11 @@ let
     startupNotify = false;
   };
 in
-mkDerivation {
+stdenv.mkDerivation {
   pname = "qpaeq";
   inherit (pulseaudio) version src;
+
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   buildInputs = [
 
@@ -57,7 +60,7 @@ mkDerivation {
     mainProgram = "qpaeq";
     homepage = "http://www.pulseaudio.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

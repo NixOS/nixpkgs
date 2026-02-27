@@ -9,6 +9,7 @@
   quickshell,
 
   # runtime deps
+  bluez,
   brightnessctl,
   cava,
   cliphist,
@@ -19,6 +20,7 @@
   wget,
   gpu-screen-recorder,
   python3,
+  wayland-scanner,
 
   # calendar support
   evolution-data-server,
@@ -28,6 +30,7 @@
   json-glib,
   gobject-introspection,
 
+  bluetoothSupport ? true,
   brightnessctlSupport ? true,
   cavaSupport ? true,
   cliphistSupport ? true,
@@ -44,6 +47,7 @@ let
     wget
     (python3.withPackages (pp: lib.optional calendarSupport pp.pygobject3))
   ]
+  ++ lib.optional bluetoothSupport bluez
   ++ lib.optional brightnessctlSupport brightnessctl
   ++ lib.optional cavaSupport cava
   ++ lib.optional cliphistSupport cliphist
@@ -64,13 +68,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noctalia-shell";
-  version = "4.2.5";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia-shell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SHavMqGRv78sND/wQ53OhBBE2VBhgE3bSNRxxo5z7FE=";
+    hash = "sha256-Y5P0RYO9NKxa4UZBoGmmxtz3mEwJrBOfvdLJRGjV2Os=";
   };
 
   nativeBuildInputs = [
@@ -100,6 +104,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preFixup = ''
     qtWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
+      --prefix XDG_DATA_DIRS : ${wayland-scanner}/share
       --add-flags "-p $out/share/noctalia-shell"
       ${lib.optionalString calendarSupport "--prefix GI_TYPELIB_PATH : ${giTypelibPath}"}
     )
@@ -108,6 +113,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/noctalia-dev/noctalia-shell/releases/tag/v${finalAttrs.version}";
     description = "Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell";
     homepage = "https://github.com/noctalia-dev/noctalia-shell";
     license = lib.licenses.mit;

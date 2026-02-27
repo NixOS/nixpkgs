@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cpc";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "probablykasper";
     repo = "cpc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DjJIXV5rJxQOiMH8/0yZQBvDh+jbejzADt4WSGyhozI=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
       s0me1newithhand7s
     ];
   };
-}
+})

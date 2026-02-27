@@ -9,14 +9,14 @@
   fetchpatch,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-trim";
   version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "foriequal0";
     repo = "git-trim";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-XAO3Qg5I2lYZVNx4+Z5jKHRIFdNwBJsUQwJXFb4CbvM=";
   };
 
@@ -54,4 +54,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ cafkafk ];
     mainProgram = "git-trim";
   };
-}
+})

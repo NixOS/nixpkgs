@@ -7,14 +7,14 @@
   asciidoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kimg";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "kimg";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "040782k3rh2a5mhbfgr9gnbfis0wgxvi27vhfn7l35vrr12sw1l3";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.all;
   };
-}
+})

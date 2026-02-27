@@ -13,12 +13,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libev";
   version = "4.33";
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/libev/Attic/${pname}-${version}.tar.gz";
+    url = "http://dist.schmorp.de/libev/Attic/libev-${finalAttrs.version}.tar.gz";
     sha256 = "1sjs4324is7fp21an4aas2z4dwsvs6z4xwrmp72vwpq1s6wbfzjh";
   };
 
@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     # doing this in configureFlags causes configure to fail
-    lib.optional (!static && stdenv.hostPlatform.isCygwin) "LDFLAGS=-no-undefined";
+    (lib.optional (!static && stdenv.hostPlatform.isCygwin) "LDFLAGS+=-no-undefined")
+    ++ (lib.optionals (!static && stdenv.hostPlatform.isWindows) [
+      "LDFLAGS+=-no-undefined"
+      "LDFLAGS+=-lws2_32"
+    ]);
 
   meta = {
     description = "High-performance event loop/event model with lots of features";
@@ -44,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2; # or GPL2+
   };
-}
+})

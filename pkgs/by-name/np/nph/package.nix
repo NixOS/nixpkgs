@@ -6,7 +6,7 @@
 
 buildNimPackage (finalAttrs: {
   pname = "nph";
-  version = "0.6.2";
+  version = "0.7.0";
 
   postPatch = ''
     substituteInPlace src/nph.nim \
@@ -17,7 +17,7 @@ buildNimPackage (finalAttrs: {
     owner = "arnetheduck";
     repo = "nph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rO6nEdW36CoQF30VP+zR+Osw2AuBmkXC+ugPrhDvH4o=";
+    hash = "sha256-mH7yEyveR6cM7CFr93rO2K/5tAtKbawyTgbtU0kk5o8=";
   };
 
   lockFile = ./lock.json;

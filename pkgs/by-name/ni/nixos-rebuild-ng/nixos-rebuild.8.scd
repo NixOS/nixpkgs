@@ -272,6 +272,9 @@ It must be one of the following:
 	When set, *nixos-rebuild* prefixes activation commands with sudo.
 	Setting this option allows deploying as a non-root user.
 
+	You can set sudo options by defining the NIX_SUDOOPTS environment
+	variable.
+
 *--ask-sudo-password*, *-S*
 	When set, *nixos-rebuild* will ask for sudo password for remote
 	activation (i.e.: on *--target-host*) at the start of the build process.
@@ -304,6 +307,14 @@ It must be one of the following:
 	Do not imply *--flake* if _/etc/nixos/flake.nix exists_. With this
 	option, it is possible to build non-flake NixOS configurations even if
 	the current NixOS systems uses flakes.
+
+*--diff*
+	show the diff between the system closure in /run/current-system
+	and the newly built system closure.
+	(avaliable for actions: build, boot, test, switch)
+
+	This is similar to running:
+	"nix store diff-closures /run/current-system result" after build
 
 In addition, *nixos-rebuild* accepts following options from nix commands that
 the tool calls:
@@ -338,6 +349,9 @@ NIX_PATH
 
 NIX_SSHOPTS
 	Additional options to be passed to ssh on the command line.
+
+NIX_SUDOOPTS
+	Additional options to be passed to sudo on the command line.
 
 # FILES
 

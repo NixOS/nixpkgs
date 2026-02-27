@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "route-graph";
   version = "0.2.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "route-graph";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HmfmUeT5vt0yWVs7GhIPVt4NZtTfe7HYPLRqfQE/tZM=";
   };
 
@@ -45,9 +45,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "CLI tool for creating graphs of routes";
     homepage = "https://github.com/audiusGmbH/route-graph";
-    changelog = "https://github.com/audiusGmbH/route-graph/releases/tag/${version}";
+    changelog = "https://github.com/audiusGmbH/route-graph/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "route-graph";
   };
-}
+})

@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bgpq4";
   version = "1.15";
 
   src = fetchFromGitHub {
     owner = "bgp";
     repo = "bgpq4";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-3mfFj9KoQbDe0gH7Le03N1Yds/bTEmY+OiXNaOtHkpY=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     mainProgram = "bgpq4";
   };
-}
+})

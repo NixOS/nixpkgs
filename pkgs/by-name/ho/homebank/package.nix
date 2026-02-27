@@ -11,11 +11,11 @@
   adwaita-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "homebank";
   version = "5.9.7";
   src = fetchurl {
-    url = "https://www.gethomebank.org/public/sources/homebank-${version}.tar.gz";
+    url = "https://www.gethomebank.org/public/sources/homebank-${finalAttrs.version}.tar.gz";
     hash = "sha256-K4/fUSQpow7XpFfPWvR2dWwM/dyfznYA2rlcfwO+JuQ=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

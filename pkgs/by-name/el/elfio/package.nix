@@ -6,14 +6,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elfio";
   version = "3.10";
 
   src = fetchFromGitHub {
     owner = "serge1";
     repo = "elfio";
-    rev = "Release_${version}";
+    rev = "Release_${finalAttrs.version}";
     sha256 = "sha256-DuZhkiHXdCplRiOy1Gsu7voVPdCbFt+4qFqlOeOeWQw=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

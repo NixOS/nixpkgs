@@ -10,14 +10,14 @@
   nix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-bundle";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = "nix-bundle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0js8spwjvw6kjxz1i072scd035fhiyazixvn84ibdnw8dx087gjv";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/bin
     makeWrapper $out/share/nix-bundle/nix-bundle.sh $out/bin/nix-bundle \
-      --prefix PATH : ${lib.makeBinPath buildInputs}
+      --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
     ln -s $out/share/nix-bundle/nix-run.sh $out/bin/nix-run
   '';
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -11,14 +11,14 @@
   autoPatchelfHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aphorme";
   version = "0.1.19";
 
   src = fetchFromGitHub {
     owner = "Iaphetes";
     repo = "aphorme_launcher";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-p1ZIMMDyQWVzoeyHb3sbeV6XQwbIDoQwJU8ynI8hGUI=";
   };
 
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion {
     package = aphorme;
     command = "aphorme --version";
-    version = "aphorme ${version}";
+    version = "aphorme ${finalAttrs.version}";
   };
 
   meta = {
@@ -50,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ anytimetraveler ];
     platforms = lib.platforms.linux;
   };
-}
+})

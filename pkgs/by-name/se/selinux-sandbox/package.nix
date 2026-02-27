@@ -9,7 +9,7 @@
   policycoreutils,
   selinux-python,
   dbus,
-  xorgserver,
+  xorg-server,
   openbox,
   xmodmap,
   libselinux,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libcap_ng
     policycoreutils
     python3
-    xorgserver
+    xorg-server
     openbox
     xmodmap
     dbus
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       --replace "#!/bin/sh" "#!${bash}/bin/sh" \
       --replace "/usr/share/sandbox/start" "${placeholder "out"}/share/sandbox/start" \
       --replace "/usr/bin/cut" "${coreutils}/bin/cut" \
-      --replace "/usr/bin/Xephyr" "${xorgserver}/bin/Xepyhr" \
+      --replace "/usr/bin/Xephyr" "${xorg-server}/bin/Xepyhr" \
       --replace "secon" "${policycoreutils}/bin/secon"
     substituteInPlace sandbox \
       --replace "/usr/sbin/seunshare" "$out/bin/seunshare" \

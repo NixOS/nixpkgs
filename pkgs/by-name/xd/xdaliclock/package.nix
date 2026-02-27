@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdaliclock";
   version = "2.49";
 
   src = fetchurl {
-    url = "https://www.jwz.org/xdaliclock/xdaliclock-${version}.tar.gz";
+    url = "https://www.jwz.org/xdaliclock/xdaliclock-${finalAttrs.version}.tar.gz";
     hash = "sha256-jRTlt8IYZZ6EDLyU7kLQ2bktQztnj15IUpqUBvntXU8=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     downloadPage = "http://www.jwz.org/xdaliclock/";
     mainProgram = "xdaliclock";
   };
-}
+})

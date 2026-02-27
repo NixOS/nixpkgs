@@ -19,7 +19,7 @@
   openal,
   opusfile,
   libogg,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     opusfile
     openal
     libogg
-    libXext
+    libxext
   ];
 
   patches = [

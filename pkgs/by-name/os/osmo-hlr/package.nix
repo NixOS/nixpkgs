@@ -9,19 +9,19 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-hlr";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-hlr";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-yi4sgcX8WOWz7qw/jGvVCtIYe867uBzLps8gdG6ziOA=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "osmo-hlr";
   };
-}
+})

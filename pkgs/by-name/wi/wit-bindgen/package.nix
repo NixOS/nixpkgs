@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wit-bindgen";
-  version = "0.51.0";
+  version = "0.53.1";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wit-bindgen";
-    rev = "v${version}";
-    hash = "sha256-WjcUIIoXgvUi3cVtdZy6QRLdK3Y5xiBPTF48biYofP4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TAM3d3Pg6UhfkqnTCtRuXDnjydCevAXedsOYdjYgvwc=";
   };
 
-  cargoHash = "sha256-Fi7yZVGiZLvSZaGdfK51aAXvpip4wQYQQIjAxDHXVbE=";
+  cargoHash = "sha256-KHggzHa39Oaz2RyEWQDna9KfXtWiVmOd3YYEftylcMQ=";
 
   # Some tests fail because they need network access to install the `wasm32-unknown-unknown` target.
   # However, GitHub Actions ensures a proper build.
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "wit-bindgen";
   };
-}
+})

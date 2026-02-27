@@ -23,14 +23,14 @@
   libva,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight-embedded";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = "moonlight-embedded";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jc706BjIT3rS9zwntNOdgszP4CHuX+qxvPvWeU68Amg=";
     fetchSubmodules = true;
   };
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     mainProgram = "moonlight";
     platforms = lib.platforms.linux;
   };
-}
+})

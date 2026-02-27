@@ -30,15 +30,15 @@
   removeWarningPopup ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "60.1";
+  version = "62.0";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
-    tag = version;
-    hash = "sha256-d9nRT6AvFxnhI/theJtPg79EdmA+9UFS4OWDlkV03sA=";
+    tag = finalAttrs.version;
+    hash = "sha256-UqK5ULFgNPe9r2xFolU1R5LnlD3kLgBK0qGl48elEwM=";
   };
 
   patches = [
@@ -96,6 +96,7 @@ python3Packages.buildPythonApplication rec {
       urllib3
       certifi
       pefile
+      yara-python
     ]
     ++ [
       cabextract
@@ -137,4 +138,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "bottles";
   };
-}
+})

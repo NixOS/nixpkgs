@@ -64,6 +64,10 @@ in
         '';
       };
 
+      package = lib.mkPackageOption pkgs "terraria" {
+        default = "terraria-server";
+      };
+
       port = lib.mkOption {
         type = lib.types.port;
         default = 7777;
@@ -178,7 +182,7 @@ in
         Type = "forking";
         GuessMainPID = true;
         UMask = 7;
-        ExecStart = "${tmuxCmd} new -d ${pkgs.terraria-server}/bin/TerrariaServer ${lib.concatStringsSep " " flags}";
+        ExecStart = "${tmuxCmd} new -d ${lib.getExe cfg.package} ${lib.concatStringsSep " " flags}";
         ExecStop = "${stopScript} $MAINPID";
       };
     };

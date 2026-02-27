@@ -190,14 +190,14 @@ lib.makeExtensible (
 
       nixComponents_2_32 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.32.5";
+          version = "2.32.6";
           inherit (self.nix_2_31.meta) teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-vnlVgJ5VXn2LVvdzf1HUZeGq0pqa6vII11C8u5Q/YgM=";
+            hash = "sha256-5aH3xppfBs8j6P7A2wq8WQ05yJvlL7x0gQbWk4RN5eY=";
           };
         }).appendPatches
           patches_common;
@@ -206,39 +206,30 @@ lib.makeExtensible (
 
       nixComponents_2_33 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.33.1";
+          version = "2.33.3";
           inherit (self.nix_2_32.meta) teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_33";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-TVKn52SoKq8mMyW/x3NPPskGVurFdnGGV0DGvnL0gak=";
+            hash = "sha256-2Mga4e9ZtOPLwYqF4+hcjdsTImcA7TKUvDDfaF7jqEo=";
           };
         }).appendPatches
-          (
-            patches_common
-            ++ [
-              (fetchpatch2 {
-                name = "nix-2.33-15012-missing-include-glibc-2.42.patch";
-                url = "https://github.com/NixOS/nix/commit/c0c13d73233c740b7d278c71b161da7b16217564.patch?full_index=1";
-                hash = "sha256-iRMg36UMs5WmUfNxz4zoZq6mM3dwo2NiR8s1cM/uooU=";
-              })
-            ]
-          );
+          patches_common;
 
       nix_2_33 = addTests "nix_2_33" self.nixComponents_2_33.nix-everything;
 
       nixComponents_git =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.34pre20251217_${lib.substring 0 8 src.rev}";
+          version = "2.34pre20260217_${lib.substring 0 8 src.rev}";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_git";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "b6add8dcc6f4f6feb1ce83aaffe4d7e660e6f616";
-            hash = "sha256-2au7PdQ4HXSuktTPCtOJoD/LNjqMwbHIJmuzEYW1b7I=";
+            rev = "6e725093e6d4dda4f6bdbab20ea3e9e9687225ec";
+            hash = "sha256-dhPINhGyN3N+3zMSdM51DRTEKCPGCNO3+QsbhD0/nFc=";
           };
         }).appendPatches
           patches_common;

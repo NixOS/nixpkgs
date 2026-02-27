@@ -4,7 +4,6 @@
   python,
   buildPythonPackage,
   fetchurl,
-  pythonOlder,
   pythonAtLeast,
 
   # buildInputs
@@ -34,7 +33,7 @@ buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
+  disabled = pythonAtLeast "3.15";
 
   # Note that we don't rely on config.cudaSupport here, because the Linux wheels all come built with CUDA support.
   buildInputs =

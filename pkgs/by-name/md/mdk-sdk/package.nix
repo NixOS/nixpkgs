@@ -5,7 +5,7 @@
   autoPatchelfHook,
   alsa-lib,
   gcc-unwrapped,
-  libX11,
+  libx11,
   libcxx,
   libdrm,
   libgbm,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     gcc-unwrapped
-    libX11
+    libx11
     libcxx
     libdrm
     libgbm

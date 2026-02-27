@@ -7,14 +7,15 @@
   alsa-lib,
   copyDesktopItems,
   makeDesktopItem,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXinerama,
-  libXrandr,
-  libXtst,
-  libXdmcp,
-  libXext,
+  imagemagick,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxinerama,
+  libxrandr,
+  libxtst,
+  libxdmcp,
+  libxext,
   xvfb,
   freetype,
   fontconfig,
@@ -60,19 +61,20 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     copyDesktopItems
+    imagemagick
     ninja
   ];
 
   buildInputs = [
     alsa-lib
-    libX11
-    libXcomposite
-    libXcursor
-    libXinerama
-    libXrandr
-    libXtst
-    libXdmcp
-    libXext
+    libx11
+    libxcomposite
+    libxcursor
+    libxinerama
+    libxrandr
+    libxtst
+    libxdmcp
+    libxext
     xvfb
     libGL
     libjack2
@@ -113,25 +115,24 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm555 PAPU_artefacts/Release/Standalone/PAPU $out/bin
 
-    install -Dm444 $src/plugin/Resources/icon.png $out/share/pixmaps/PAPU.png
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    magick $src/plugin/Resources/icon.png -resize 256x256 $out/share/icons/hicolor/256x256/apps/PAPU.png
 
     runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };
 
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcomposite"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-      "-lXtst"
-      "-lXdmcp"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcomposite"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+    "-lXtst"
+    "-lXdmcp"
+  ];
 
   meta = {
     description = "Socalabs Nintendo Gameboy PAPU Emulation Plugin";

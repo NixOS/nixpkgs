@@ -10,14 +10,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xplugd";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "xplugd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "11vjr69prrs4ir9c267zwq4g9liipzrqi0kmw1zg95dbn7r7zmql";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ akho ];
     mainProgram = "xplugd";
   };
-}
+})

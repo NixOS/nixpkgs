@@ -142,41 +142,43 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  NLOPT = nlopt;
+  env = {
+    NLOPT = nlopt;
 
-  NIX_CFLAGS_COMPILE = toString (
-    [
-      "-Wno-ignored-attributes"
-      "-I${opencv.out}/include/opencv4"
-      "-Wno-error=incompatible-pointer-types"
-      "-Wno-template-id-cdtor"
-      "-Wno-uninitialized"
-      "-Wno-unused-result"
-      "-Wno-deprecated-declarations"
-      "-Wno-use-after-free"
-      "-Wno-format-overflow"
-      "-Wno-stringop-overflow"
-      "-DBOOST_ALLOW_DEPRECATED_HEADERS"
-      "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
-      "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
-      "-DBOOST_MATH_DISABLE_FLOAT128"
-      "-DBOOST_MATH_NO_QUAD_SUPPORT"
-      "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
-      "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
-      "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
-    ]
-    # Making it compatible with GCC 14+, see https://github.com/SoftFever/OrcaSlicer/pull/7710
-    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14") [
-      "-Wno-error=template-id-cdtor"
-    ]
-  );
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        "-Wno-ignored-attributes"
+        "-I${opencv.out}/include/opencv4"
+        "-Wno-error=incompatible-pointer-types"
+        "-Wno-template-id-cdtor"
+        "-Wno-uninitialized"
+        "-Wno-unused-result"
+        "-Wno-deprecated-declarations"
+        "-Wno-use-after-free"
+        "-Wno-format-overflow"
+        "-Wno-stringop-overflow"
+        "-DBOOST_ALLOW_DEPRECATED_HEADERS"
+        "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
+        "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
+        "-DBOOST_MATH_DISABLE_FLOAT128"
+        "-DBOOST_MATH_NO_QUAD_SUPPORT"
+        "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
+        "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
+        "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
+      ]
+      # Making it compatible with GCC 14+, see https://github.com/SoftFever/OrcaSlicer/pull/7710
+      ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14") [
+        "-Wno-error=template-id-cdtor"
+      ]
+    );
 
-  NIX_LDFLAGS = toString [
-    (lib.optionalString withSystemd "-ludev")
-    "-L${boost186}/lib"
-    "-lboost_log"
-    "-lboost_log_setup"
-  ];
+    NIX_LDFLAGS = toString [
+      (lib.optionalString withSystemd "-ludev")
+      "-L${boost186}/lib"
+      "-lboost_log"
+      "-lboost_log_setup"
+    ];
+  };
 
   prePatch = ''
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake

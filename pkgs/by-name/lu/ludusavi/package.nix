@@ -12,10 +12,10 @@
   fontconfig,
   freetype,
   libGL,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXi,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxi,
   libxkbcommon,
   vulkan-loader,
   wayland,
@@ -57,10 +57,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     fontconfig
     freetype
-    libX11
-    libXcursor
-    libXrandr
-    libXi
+    libx11
+    libxcursor
+    libxrandr
+    libxi
     cairo
     pango
     atkmm
@@ -93,10 +93,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         bzip2
         fontconfig
         freetype
-        libX11
-        libXcursor
-        libXrandr
-        libXi
+        libx11
+        libxcursor
+        libxrandr
+        libxi
         libxkbcommon
         vulkan-loader
         wayland

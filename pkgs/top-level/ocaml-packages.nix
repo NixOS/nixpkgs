@@ -91,6 +91,7 @@ let
         backoff = callPackage ../development/ocaml-modules/backoff { };
 
         bap = callPackage ../development/ocaml-modules/bap {
+          cmdliner = cmdliner_1;
           inherit (pkgs.llvmPackages) llvm;
         };
 
@@ -122,7 +123,9 @@ let
 
         biotk = callPackage ../development/ocaml-modules/biotk { };
 
-        bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
+        bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx {
+          cmdliner = cmdliner_1;
+        };
 
         bistro = callPackage ../development/ocaml-modules/bistro { };
 
@@ -220,7 +223,9 @@ let
 
         caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
 
-        carton = callPackage ../development/ocaml-modules/carton { };
+        carton = callPackage ../development/ocaml-modules/carton {
+          cmdliner = cmdliner_1;
+        };
 
         carton-git = callPackage ../development/ocaml-modules/carton/git.nix { };
 
@@ -244,13 +249,11 @@ let
 
         cmarkit = callPackage ../development/ocaml-modules/cmarkit { };
 
-        # The 1.1.0 release broke a lot of packages and is not compatible with
-        # OCaml < 4.08.
-        cmdliner = if lib.versionAtLeast ocaml.version "4.08" then cmdliner_1_1 else cmdliner_1_0;
+        cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
-        cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1_0.nix { };
+        cmdliner_1_0 = cmdliner.override { version = "1.0.4"; };
 
-        cmdliner_1_1 = callPackage ../development/ocaml-modules/cmdliner/1_1.nix { };
+        cmdliner_1 = cmdliner.override { version = "1.3.0"; };
 
         cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
@@ -355,6 +358,9 @@ let
 
         cudf = callPackage ../development/ocaml-modules/cudf { };
 
+        curl = callPackage ../development/ocaml-modules/curl { inherit (pkgs) curl; };
+        curl_lwt = callPackage ../development/ocaml-modules/curl/lwt.nix { };
+
         curly = callPackage ../development/ocaml-modules/curly {
           inherit (pkgs) curl;
         };
@@ -455,6 +461,8 @@ let
         domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
         domain_shims = callPackage ../development/ocaml-modules/domain_shims { };
+
+        domainpc = callPackage ../development/ocaml-modules/domainpc { };
 
         domainslib = callPackage ../development/ocaml-modules/domainslib { };
 
@@ -695,6 +703,8 @@ let
         gapi-ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
         gd = callPackage ../development/ocaml-modules/gd { inherit (pkgs) gd; };
+
+        gdal = callPackage ../development/ocaml-modules/gdal { inherit (pkgs) gdal; };
 
         gen = callPackage ../development/ocaml-modules/gen { };
 
@@ -1019,7 +1029,9 @@ let
 
         kafka = callPackage ../development/ocaml-modules/kafka { };
 
-        kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix { };
+        kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix {
+          cmdliner = cmdliner_1;
+        };
 
         kcas = callPackage ../development/ocaml-modules/kcas { };
 
@@ -1064,6 +1076,7 @@ let
         lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
         lambdapi = callPackage ../development/ocaml-modules/lambdapi {
+          cmdliner = cmdliner_1;
           why3 = pkgs.why3.override { ocamlPackages = self; };
         };
 
@@ -1439,8 +1452,6 @@ let
 
         ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
-        ocaml-freestanding = callPackage ../development/ocaml-modules/ocaml-freestanding { };
-
         ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
 
         ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
@@ -1563,6 +1574,8 @@ let
 
         ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
+        ocplib-simplex_0_4 = callPackage ../development/ocaml-modules/ocplib-simplex/0_4.nix { };
+
         ocsigen-ppx-rpc = callPackage ../development/ocaml-modules/ocsigen-ppx-rpc { };
 
         ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
@@ -1598,7 +1611,7 @@ let
 
         octavius = callPackage ../development/ocaml-modules/octavius { };
 
-        ocurl = callPackage ../development/ocaml-modules/ocurl { };
+        ocurl = callPackage ../development/ocaml-modules/ocurl { inherit (pkgs) curl; };
 
         odate = callPackage ../development/ocaml-modules/odate { };
 
@@ -1606,7 +1619,9 @@ let
 
         odig = callPackage ../development/ocaml-modules/odig { };
 
-        odoc = callPackage ../development/ocaml-modules/odoc { };
+        odoc = callPackage ../development/ocaml-modules/odoc {
+          cmdliner = cmdliner_1;
+        };
 
         odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
 
@@ -1710,6 +1725,14 @@ let
 
         pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
+        pgx = callPackage ../development/ocaml-modules/pgx { };
+
+        pgx_eio = callPackage ../development/ocaml-modules/pgx/eio.nix { };
+
+        pgx_lwt = callPackage ../development/ocaml-modules/pgx/lwt.nix { };
+
+        pgx_lwt_unix = callPackage ../development/ocaml-modules/pgx/lwt_unix.nix { };
+
         phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
         piaf = callPackage ../development/ocaml-modules/piaf { };
@@ -1719,6 +1742,7 @@ let
         piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
         plotkicadsch = callPackage ../development/ocaml-modules/plotkicadsch {
+          cmdliner = cmdliner_1;
           inherit (pkgs) coreutils imagemagick;
         };
 
@@ -1764,7 +1788,9 @@ let
 
         ppx_deriving = callPackage ../development/ocaml-modules/ppx_deriving { };
 
-        ppx_deriving_cmdliner = callPackage ../development/ocaml-modules/ppx_deriving_cmdliner { };
+        ppx_deriving_cmdliner = callPackage ../development/ocaml-modules/ppx_deriving_cmdliner {
+          cmdliner = cmdliner_1;
+        };
 
         ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf { };
 
@@ -2041,6 +2067,8 @@ let
 
         swhid_core = callPackage ../development/ocaml-modules/swhid_core { };
 
+        symex = callPackage ../development/ocaml-modules/symex { };
+
         synchronizer = callPackage ../development/ocaml-modules/synchronizer { };
 
         syslog = callPackage ../development/ocaml-modules/syslog { };
@@ -2112,10 +2140,6 @@ let
         toml = callPackage ../development/ocaml-modules/toml { };
 
         topkg = callPackage ../development/ocaml-modules/topkg { };
-
-        torch = callPackage ../development/ocaml-modules/torch {
-          torch = pkgs.libtorch-bin;
-        };
 
         trace = callPackage ../development/ocaml-modules/trace { };
 
@@ -2317,11 +2341,14 @@ let
       // lib.optionalAttrs config.allowAliases {
         biocaml = throw "biocaml has been removed"; # 2025-06-04
         chacha = throw "chacha has been removed because it has been marked as broken since at least November 2024. It is now vendored inside mirage-crypto, consider using that instead."; # Added 2025-10-11
+        cmdliner_1_1 = cmdliner_1; # Added 2026-01-28
         dune_2 = pkgs.dune_2; # Added 2025-12-08
         dune_3 = pkgs.dune_3; # Added 2025-12-08
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+        ocaml-freestanding = throw "ocamlPackages.ocaml-freestanding has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
         ocaml_lwt = throw "ocamlPackages.ocaml_lwt has been renamed to ocamlPackages.lwt"; # Added 2025-12-05
+        torch = throw "ocamlPackages.torch has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
       }
     )).overrideScope
       liftJaneStreet;
@@ -2357,7 +2384,7 @@ rec {
 
   ocamlPackages_latest = ocamlPackages_5_4;
 
-  ocamlPackages = ocamlPackages_5_3;
+  ocamlPackages = ocamlPackages_5_4;
 
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.

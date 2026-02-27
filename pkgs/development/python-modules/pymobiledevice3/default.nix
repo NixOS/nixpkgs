@@ -31,6 +31,7 @@
   pytest-asyncio,
   pytestCheckHook,
   python-pcapng,
+  pythonOlder,
   pytun-pmd3,
   pyusb,
   qh3,
@@ -49,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "pymobiledevice3";
-  version = "7.3.6";
+  version = "7.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pymobiledevice3";
     tag = "v${version}";
-    hash = "sha256-xvtO+BWtXZxrg1VMoqKhSWJ7edkkZ+myAXtyPD4DXFg=";
+    hash = "sha256-dBzBvwjto0pr0EWOKStEPXbdlX1mOxBFsU1CkmQLhNw=";
   };
 
   build-system = [
@@ -97,7 +98,6 @@ buildPythonPackage rec {
     qh3
     requests
     srptools
-    sslpsk-pmd3
     tqdm
     typer
     typer-injector
@@ -105,7 +105,9 @@ buildPythonPackage rec {
     wsproto
     xonsh
   ]
-  ++ fastapi.optional-dependencies.all;
+  ++ lib.optionals (pythonOlder "3.13") [
+    sslpsk-pmd3
+  ];
 
   pythonImportsCheck = [ "pymobiledevice3" ];
 

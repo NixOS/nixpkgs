@@ -8,18 +8,27 @@
   libkrun-efi,
   moltenvk,
   pkg-config,
+  buildPackages,
   rustc,
   rustPlatform,
   rutabaga_gfx,
   nix-update-script,
   stdenv,
-  buildPackages,
   meson,
   ninja,
   vulkan-headers,
   withGpu ? true,
 }:
 let
+  version = "1.17.4";
+
+  src = fetchFromGitHub {
+    owner = "containers";
+    repo = "libkrun";
+    tag = "v${version}";
+    hash = "sha256-Th4vCg3xHb6lbo26IDZES7tLOUAJTebQK2+h3xSYX7U=";
+  };
+
   virglrenderer = stdenv.mkDerivation (finalAttrs: {
     pname = "virglrenderer";
     version = "0.10.4d-krunkit";
@@ -59,17 +68,30 @@ let
       maintainers = [ lib.maintainers.quinneden ];
     };
   });
+
+  initBinary = buildPackages.pkgsCross.aarch64-multiplatform.pkgsStatic.stdenv.mkDerivation {
+    pname = "libkrun-init";
+    inherit version src;
+
+    dontConfigure = true;
+
+    buildPhase = ''
+      runHook preBuild
+      cd init
+      $CC -O2 -static -Wall -o init init.c
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      install -D init $out/init
+      runHook postInstall
+    '';
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun-efi";
-  version = "1.15.1";
-
-  src = fetchFromGitHub {
-    owner = "containers";
-    repo = "libkrun";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-VhlFyYJ/TH12I3dUq0JTus60rQEJq5H4Pm1puCnJV5A=";
-  };
+  inherit version src;
 
   outputs = [
     "out"
@@ -77,8 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    hash = "sha256-dK3V7HCCvTqmQhB5Op2zmBPa9FO3h9gednU9tpQk+1U=";
+    inherit src;
+    hash = "sha256-0xpAyNe1jF1OMtc7FXMsejqIv0xKc1ktEvm3rj/mVFU=";
   };
 
   nativeBuildInputs = [
@@ -101,6 +123,10 @@ stdenv.mkDerivation (finalAttrs: {
     "EFI=1"
   ]
   ++ lib.optional withGpu "GPU=1";
+
+  preBuild = ''
+    cp ${initBinary}/init init/init
+  '';
 
   passthru = {
     tests.withoutGpu = libkrun-efi.override { withGpu = false; };

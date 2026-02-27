@@ -1,10 +1,10 @@
 {
   lib,
-  flutter329,
+  flutter341,
   fetchFromGitHub,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter341.buildFlutterApplication rec {
   pname = "convertall";
   version = "1.0.2";
 
@@ -22,7 +22,9 @@ flutter329.buildFlutterApplication rec {
     description = "Graphical unit converter";
     mainProgram = "convertall";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      Luflosi
+    ];
     platforms = lib.platforms.linux;
   };
 }

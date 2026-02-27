@@ -26,7 +26,7 @@ let
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "netexec";
   version = "1.5.0";
   pyproject = true;
@@ -34,7 +34,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Pennyw0rth";
     repo = "NetExec";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gGyaEifIveoeVdeviLiQ6ZIHku//h9Hp84ffktAgxDY=";
   };
 
@@ -109,7 +109,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Network service exploitation tool (maintained fork of CrackMapExec)";
     homepage = "https://github.com/Pennyw0rth/NetExec";
-    changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${version}";
+    changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ vncsb ];
     mainProgram = "nxc";
@@ -118,4 +118,4 @@ python.pkgs.buildPythonApplication rec {
     # $ /nix/store/<hash>-wrap-python-hook/nix-support/setup-hook: line 65: 47758 Killed: 9               sed -i "$f" -e "1 s^#!/nix/store/<hash>-python3-3.11.7^#!/nix/store/<hash>-python3-3.11.7^"
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

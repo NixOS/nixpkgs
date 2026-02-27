@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turtle-build";
   version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "raviqqe";
     repo = "turtle-build";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sbYDp4r/M6GvCYEshccJ331mVNeN85wwf9TKHiYFv7I=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "turtle";
   };
-}
+})

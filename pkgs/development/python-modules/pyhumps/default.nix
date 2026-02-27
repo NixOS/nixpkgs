@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyhumps";
-  version = "3.8.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nficano";
     repo = "humps";
-    rev = "v${version}";
-    hash = "sha256-ElL/LY2V2Z3efdV5FnDy9dSoBltULrzxsjaOx+7W9Oo=";
+    tag = "v${version}";
+    hash = "sha256-PvfjW56UVCcjd2jJiQW/goVJ1BC8xQ973xuZ6izwclw=";
   };
 
   nativeBuildInputs = [ poetry-core ];

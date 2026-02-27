@@ -12,14 +12,14 @@
 }:
 
 let
-  version = "1.5.1";
+  version = "1.6.0";
   tag = "v${version}";
   system = lib.replaceStrings [ "darwin" ] [ "macos" ] stdenvNoCC.hostPlatform.system;
   hashes = {
-    aarch64-darwin = "sha256-BHld8Dwwd6fexc05oHOIawa5PtGZAI61wQGWE8T+iMs=";
-    aarch64-linux = "sha256-KM3/y31OdLmEAcc48TSLmXei2GD6FhOHYlD7W/ErP+I=";
-    x86_64-darwin = "sha256-cE0JJK92pTJyGnHEZ7wA6+dpMvVOTMzFM2Mkwfy5kbQ=";
-    x86_64-linux = "sha256-9qSjqPFmUaUnpGQ/ldIpyFSgTWbUYozcckpYxpm5PJU=";
+    aarch64-darwin = "sha256-VI4lvaOXGgfDLXiiSRNc+Mt7Pu3hAeh44G5T4BrC4M4=";
+    aarch64-linux = "sha256-FaGGJQ5o1r/07IOf/yddRakOODppIJ3MEjnrnjrubhs=";
+    x86_64-darwin = "sha256-2FqHXCoHHwwp/lcnZMUsOkmfFXq3+e+siTmkNkOQ4ps=";
+    x86_64-linux = "sha256-Te0nHM9GUDHM0Nw156FA4TTX8wchZxzEqOH/gF1KrWg=";
   };
 in
 stdenvNoCC.mkDerivation {
@@ -60,6 +60,11 @@ stdenvNoCC.mkDerivation {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  # https://github.com/extism/js-pdk/pull/154
+  preInstallCheck = ''
+    version=1.5.1
+  '';
 
   meta = {
     changelog = "https://github.com/extism/js-pdk/releases/tag/${tag}";

@@ -16,14 +16,14 @@ let
   inherit (stdenv.hostPlatform) isLinux;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdmr";
   version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Nw5B0vbYlGkH/8SAAT4DdTp2qiiLst3hWV4n6uF7oUo=";
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString isLinux ''
     mkdir -p "$out/etc/udev/rules.d"
-    cp ${src}/dist/99-qdmr.rules $out/etc/udev/rules.d/
+    cp ${finalAttrs.src}/dist/99-qdmr.rules $out/etc/udev/rules.d/
   '';
 
   doInstallCheck = true;
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

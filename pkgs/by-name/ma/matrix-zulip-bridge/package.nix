@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "MatrixZulipBridge";
   version = "0.4.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "GearKite";
     repo = "MatrixZulipBridge";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5bDqZb8xx5SjThZUSmOcctwo6B15cjkIwA26QNfED2A=";
   };
 
@@ -47,9 +47,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Matrix puppeting appservice bridge for Zulip";
     homepage = "https://github.com/GearKite/MatrixZulipBridge";
-    changelog = "https://github.com/GearKite/MatrixZulipBridge/releases/tag/v${version}";
+    changelog = "https://github.com/GearKite/MatrixZulipBridge/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ robertrichter ];
     mainProgram = "matrix-zulip-bridge";
   };
-}
+})

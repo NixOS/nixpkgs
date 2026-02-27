@@ -28,14 +28,14 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sequeler";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ellie-commons";
     repo = "sequeler";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dFmR5SfzT/1UVwcnB3Y3kB1h0DapwN/2/KQAHiMpk/8=";
   };
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "io.github.ellie_commons.sequeler";
   };
-}
+})

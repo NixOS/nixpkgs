@@ -7,12 +7,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcpdump";
   version = "4.99.6";
 
   src = fetchurl {
-    url = "https://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
+    url = "https://www.tcpdump.org/release/tcpdump-${finalAttrs.version}.tar.gz";
     hash = "sha256-WDmSGg9n19j6PazZzUHkTInMuGfoptshbWJijH/RSwk=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "tcpdump";
   };
-}
+})

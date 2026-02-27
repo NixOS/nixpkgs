@@ -180,7 +180,7 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkradiant";
 
   version = "unstable-2023-04-24";
@@ -242,7 +242,7 @@ stdenv.mkDerivation rec {
       name = "gtkradiant";
       exec = "gtkradiant";
       desktopName = "GtkRadiant";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [ "Development" ];
       icon = "gtkradiant";
       # includes its own splash screen
@@ -283,4 +283,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ astro ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -8,7 +8,7 @@
   json_c,
   zlib,
   docutils,
-  fastJson,
+  libfastjson,
   withKrb5 ? true,
   libkrb5,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -62,11 +62,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2510.0";
+  version = "8.2512.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    hash = "sha256-pwqYNBhoWVOaak0cez9owjiX6AWCm3ZKRekssMyV5mo=";
+    hash = "sha256-k8UAJdkLbHlfo1DVaj2DK/zkUEPqm9aCQNnCqTlLxik=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    fastJson
+    libfastjson
     libestr
     json_c
     zlib
@@ -179,6 +179,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature withCurl "omhttp")
     (lib.enableFeature true "generate-man-pages")
   ];
+
+  NIX_CFLAGS_LINK = "-lz";
 
   passthru.tests = {
     nixos-rsyslogd = nixosTests.rsyslogd;

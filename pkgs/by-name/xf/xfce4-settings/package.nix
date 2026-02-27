@@ -13,8 +13,8 @@
   gtk-layer-shell,
   glib,
   libnotify,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libxfce4ui,
   libxfce4util,
   libxklavier,
@@ -26,7 +26,7 @@
   wlr-protocols,
   xapp,
   xfconf,
-  xf86inputlibinput,
+  xf86-input-libinput,
   colord,
   withColord ? true,
   gitUpdater,
@@ -59,14 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gtk-layer-shell
     libnotify
-    libX11
-    libXext
+    libx11
+    libxext
     libxfce4ui
     libxfce4util
     libxklavier
     wlr-protocols
     xapp # org.x.apps.portal
-    xf86inputlibinput
+    xf86-input-libinput
     xfconf
   ]
   ++ lib.optionals withUpower [ upower ]

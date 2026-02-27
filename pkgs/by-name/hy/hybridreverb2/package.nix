@@ -8,11 +8,11 @@
   alsa-lib,
   libjack2,
   freetype,
-  libX11,
+  libx11,
   gtk3,
   pcre,
-  libpthreadstubs,
-  libXdmcp,
+  libpthread-stubs,
+  libxdmcp,
   libxkbcommon,
   libepoxy,
   at-spi2-core,
@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
     freetype
-    libX11
+    libx11
     gtk3
     pcre
-    libpthreadstubs
-    libXdmcp
+    libpthread-stubs
+    libxdmcp
     libxkbcommon
     libepoxy
     at-spi2-core

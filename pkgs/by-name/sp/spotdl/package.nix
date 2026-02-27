@@ -6,7 +6,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spotdl";
   version = "4.4.3";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-opbbcYjsR+xuo2uQ7Ic/2+BfkiwdEe1xD/whRonDBWo=";
   };
 
@@ -91,9 +91,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Download your Spotify playlists and songs along with album art and metadata";
     homepage = "https://github.com/spotDL/spotify-downloader";
-    changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/${src.tag}";
+    changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "spotdl";
   };
-}
+})

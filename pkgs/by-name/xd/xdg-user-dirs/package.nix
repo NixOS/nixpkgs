@@ -37,7 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-liconv" else null;
+  env = lib.optionalAttrs stdenv.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
 
   preFixup = ''
     # fallback values need to be last

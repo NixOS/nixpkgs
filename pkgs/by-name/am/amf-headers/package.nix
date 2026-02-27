@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amf-headers";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "GPUOpen-LibrariesAndSDKs";
     repo = "AMF";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-ZVC1e4S5CNpfl3ewHR9aVfYwxDBE7/BJ6OyH2kF00fQ=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ devusb ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,13 +4,13 @@
   fetchgit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ministat";
   version = "20150715-1";
 
   src = fetchgit {
     url = "https://git.decadent.org.uk/git/ministat.git";
-    tag = "debian/${version}";
+    tag = "debian/${finalAttrs.version}";
     sha256 = "1p4g0yqgsy4hiqhr8gqp8d38zxzrss5qz70s0bw3i2pg4w668k6f";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "ministat";
   };
-}
+})

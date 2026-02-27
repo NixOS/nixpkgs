@@ -6,14 +6,14 @@
   mpv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ff2mpv";
   version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = "ff2mpv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Xx18EX/MxLrnwZGwMFZJxJURUpjU2P01CQue5XbZ3fw=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "ff2mpv.py";
   };
-}
+})

@@ -9,12 +9,12 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxmlxx5";
   version = "5.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libxml++/${version}/libxml++-${lib.versions.pad 3 version}.tar.xz";
+    url = "mirror://gnome/sources/libxml++/${finalAttrs.version}/libxml++-${lib.versions.pad 3 finalAttrs.version}.tar.xz";
     hash = "sha256-6aI8Q2aGqUaY0hOOa8uvhJEh1jv6D1DcNP77/XlWaEg=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

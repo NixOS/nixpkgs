@@ -17,7 +17,12 @@
 }:
 
 buildPythonPackage {
-  inherit (subunit) name src meta;
+  inherit (subunit)
+    pname
+    version
+    src
+    meta
+    ;
   pyproject = true;
 
   postPatch = ''

@@ -6,7 +6,7 @@
   wrapQtAppsHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "manuskript";
   version = "0.17.0";
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     repo = "manuskript";
     owner = "olivierkes";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jOhbN6lMx04q60S0VOABmSNE/x9Er9exFYvWJe2INlE=";
   };
 
@@ -66,4 +66,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "manuskript";
   };
-}
+})

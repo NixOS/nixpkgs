@@ -15,15 +15,15 @@
   wireshark-cli,
   nukeReferences,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdp-tools";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
-    rev = "v${version}";
-    hash = "sha256-Smu93zwZN2jn9bLkVRpyubqTUh8VnVFMGqzc9myryLU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KIUuAaWmU5BsmLsp8T3S2hSF4p7BJ506luS82RpmOKs=";
   };
 
   outputs = [
@@ -53,15 +53,21 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "zerocallusedregs" ];
-  # When building BPF, the default CC wrapper is interfering a bit too much.
-  BPF_CFLAGS = "-fno-stack-protector -Wno-error=unused-command-line-argument";
-  # When cross compiling, configure prefers the unwrapped clang unless told otherwise.
-  CLANG = lib.getExe buildPackages.llvmPackages.clang;
 
-  PRODUCTION = 1;
-  DYNAMIC_LIBXDP = 1;
-  FORCE_SYSTEM_LIBBPF = 1;
-  FORCE_EMACS = 1;
+  env = {
+    # When building BPF, the default CC wrapper is interfering a bit too much.
+    BPF_CFLAGS = toString [
+      "-fno-stack-protector"
+      "-Wno-error=unused-command-line-argument"
+    ];
+    # When cross compiling, configure prefers the unwrapped clang unless told otherwise.
+    CLANG = lib.getExe buildPackages.llvmPackages.clang;
+
+    PRODUCTION = 1;
+    DYNAMIC_LIBXDP = 1;
+    FORCE_SYSTEM_LIBBPF = 1;
+    FORCE_EMACS = 1;
+  };
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -90,4 +96,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

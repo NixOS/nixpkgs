@@ -25,7 +25,7 @@ makeTest {
           ./common/auto-format-root-device.nix
         ];
 
-        systemd.services.backdoor.conflicts = [ "sleep.target" ];
+        powerManagement.powerDownCommands = "systemctl --no-block stop backdoor.service";
         powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
 
         virtualisation.emptyDiskImages = [ (2 * config.virtualisation.memorySize) ];

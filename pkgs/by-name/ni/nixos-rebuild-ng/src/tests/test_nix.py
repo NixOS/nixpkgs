@@ -1,3 +1,4 @@
+import sys
 import textwrap
 import uuid
 from pathlib import Path
@@ -133,9 +134,7 @@ def test_build_remote(
                     "user@host",
                     Path("/path/to/file"),
                 ],
-                extra_env={
-                    "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS])
-                },
+                env={"NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS])},
             ),
             call(
                 ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"],
@@ -207,9 +206,7 @@ def test_build_remote_flake(
                     "user@host",
                     Path("/path/to/file"),
                 ],
-                extra_env={
-                    "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS])
-                },
+                env={"NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS])},
             ),
             call(
                 [
@@ -240,7 +237,7 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         n.copy_closure(closure, target_host)
         mock_run.assert_called_with(
             ["nix-copy-closure", "--to", "user@target.host", closure],
-            extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
+            env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
         )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-opt")
@@ -248,15 +245,11 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         n.copy_closure(closure, None, build_host, {"copy_flag": True})
         mock_run.assert_called_with(
             ["nix-copy-closure", "--copy-flag", "--from", "user@build.host", closure],
-            extra_env={
-                "NIX_SSHOPTS": " ".join(["--ssh build-opt", *p.SSH_DEFAULT_OPTS])
-            },
+            env={"NIX_SSHOPTS": " ".join(["--ssh build-opt", *p.SSH_DEFAULT_OPTS])},
         )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
-    extra_env = {
-        "NIX_SSHOPTS": " ".join(["--ssh build-target-opt", *p.SSH_DEFAULT_OPTS])
-    }
+    env = {"NIX_SSHOPTS": " ".join(["--ssh build-target-opt", *p.SSH_DEFAULT_OPTS])}
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, target_host, build_host, {"copy_flag": True})
         mock_run.assert_called_with(
@@ -272,7 +265,7 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
                 "ssh://user@target.host",
                 closure,
             ],
-            extra_env=extra_env,
+            env=env,
         )
 
 
@@ -393,6 +386,8 @@ def test_get_build_image_variants_flake(mock_run: Mock) -> None:
     mock_run.assert_called_with(
         [
             "nix",
+            "--extra-experimental-features",
+            "nix-command flakes",
             "eval",
             "--json",
             "/flake.nix#myAttr.config.system.build.images",
@@ -551,6 +546,27 @@ def test_list_generations(mock_get_generations: Mock, tmp_path: Path) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_diff_closures(mock_run: Mock) -> None:
+
+    n.diff_closures(
+        Path("/run/current-system"), Path("/nix/var/nix/profiles/system"), None
+    )
+    mock_run.assert_called_with(
+        [
+            "nix",
+            "--extra-experimental-features",
+            "nix-command flakes",
+            "store",
+            "diff-closures",
+            Path("/run/current-system"),
+            Path("/nix/var/nix/profiles/system"),
+        ],
+        remote=None,
+        stdout=sys.stderr,
+    )
+
+
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_repl(mock_run: Mock) -> None:
     n.repl(m.BuildAttr("<nixpkgs/nixos>", None), {"nix_flag": True})
     mock_run.assert_called_with(
@@ -699,7 +715,11 @@ def test_switch_to_configuration_without_systemd_run(
         )
     mock_run.assert_called_with(
         [profile_path / "bin/switch-to-configuration", "switch"],
-        extra_env={"NIXOS_INSTALL_BOOTLOADER": "0"},
+        env={
+            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "0",
+        },
         sudo=False,
         remote=None,
     )
@@ -736,7 +756,11 @@ def test_switch_to_configuration_without_systemd_run(
             config_path / "specialisation/special/bin/switch-to-configuration",
             "test",
         ],
-        extra_env={"NIXOS_INSTALL_BOOTLOADER": "1"},
+        env={
+            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "1",
+        },
         sudo=True,
         remote=target_host,
     )
@@ -767,7 +791,11 @@ def test_switch_to_configuration_with_systemd_run(
             profile_path / "bin/switch-to-configuration",
             "switch",
         ],
-        extra_env={"NIXOS_INSTALL_BOOTLOADER": "0"},
+        env={
+            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "0",
+        },
         sudo=False,
         remote=None,
     )
@@ -792,7 +820,11 @@ def test_switch_to_configuration_with_systemd_run(
             config_path / "specialisation/special/bin/switch-to-configuration",
             "test",
         ],
-        extra_env={"NIXOS_INSTALL_BOOTLOADER": "1"},
+        env={
+            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "1",
+        },
         sudo=True,
         remote=target_host,
     )

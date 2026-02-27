@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
         --set NIX_ENFORCE_PURITY 0
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Extended version of the Turing programming language with concurrency and systems programming features";
     mainProgram = "tpc";
     platforms = [
@@ -86,8 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/CordyJ/Open-TuringPlus";
     downloadPage = "https://github.com/CordyJ/Open-TuringPlus/releases";
     changelog = "https://github.com/CordyJ/Open-TuringPlus/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ MysteryBlokHed ];
+    license = lib.licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ MysteryBlokHed ];
   };
 })

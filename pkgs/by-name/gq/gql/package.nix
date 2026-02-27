@@ -8,14 +8,14 @@
   cmake,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gql";
   version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "AmrDeveloper";
     repo = "GQL";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-azonwUALsnGuEGu5AxE0uG8KBlN4tq+7VtnXykNLe6E=";
   };
 
@@ -34,9 +34,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "SQL like query language to perform queries on .git files";
     homepage = "https://github.com/AmrDeveloper/GQL";
-    changelog = "https://github.com/AmrDeveloper/GQL/releases/tag/${src.rev}";
+    changelog = "https://github.com/AmrDeveloper/GQL/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "gitql";
   };
-}
+})

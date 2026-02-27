@@ -7,12 +7,12 @@
   gnuplot,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcerf";
   version = "3.2";
 
   src = fetchurl {
-    url = "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v${version}/libcerf-v${version}.tar.gz";
+    url = "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v${finalAttrs.version}/libcerf-v${finalAttrs.version}.tar.gz";
     sha256 = "sha256-6o0RDXPsJKZDBCyjlARhzLsbZUHiExDstwq05NwUSu8=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})
