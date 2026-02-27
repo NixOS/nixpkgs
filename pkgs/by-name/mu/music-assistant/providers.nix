@@ -155,8 +155,10 @@
         defusedxml
         soco
       ];
-    soundcloud = ps: [
-    ]; # missing soundcloudpy
+    soundcloud =
+      ps: with ps; [
+        soundcloudpy
+      ];
     spotify =
       ps: with ps; [
         pkce
