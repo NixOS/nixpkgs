@@ -76,7 +76,7 @@
   oath-toolkit,
   openldap,
   parted,
-  python311, # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
+  python313, # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
   rdkafka,
   rocksdb,
   snappy,
@@ -143,6 +143,7 @@
 assert cryptopp != null || (nss != null && nspr != null);
 
 let
+  python = python313;
   shouldUsePkg =
     pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
@@ -249,98 +250,23 @@ let
     };
 
   # Watch out for python <> boost compatibility
-  python = python311.override {
-    self = python;
-    packageOverrides =
-      self: super:
-      let
-        bcryptOverrideVersion = "4.0.1";
-      in
-      {
-        # Ceph does not support the following yet:
-        # * `bcrypt` > 4.0
-        # * `cryptography` > 40
-        # See:
-        # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
-        # * Upstream issue: https://tracker.ceph.com/issues/63529
-        #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
-        # * Moved to issue: https://tracker.ceph.com/issues/64213
-        #   > MGR modules incompatible with later PyO3 versions - PyO3 modules may only be initialized once per interpreter process
-
-        bcrypt = super.bcrypt.overridePythonAttrs (old: rec {
-          pname = "bcrypt";
-          version = bcryptOverrideVersion;
-          src = fetchPypi {
-            inherit pname version;
-            hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
-          };
-          cargoRoot = "src/_bcrypt";
-          cargoDeps = rustPlatform.fetchCargoVendor {
-            inherit
-              pname
-              version
-              src
-              cargoRoot
-              ;
-            hash = "sha256-8PyCgh/rUO8uynzGdgylAsb5k55dP9fCnf40UOTCR/M=";
-          };
-        });
-
-        # We pin the older `cryptography` 40 here;
-        # this also forces us to pin other packages, see below
-        cryptography = self.callPackage ./old-python-packages/cryptography.nix { };
-
-        # This is the most recent version of `pyopenssl` that's still compatible with `cryptography` 40.
-        # See https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
-        # and https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
-        pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
-          version = "23.1.1";
-          src = fetchPypi {
-            pname = "pyOpenSSL";
-            inherit version;
-            hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
-          };
-          disabledTests = old.disabledTests or [ ] ++ [
-            "test_export_md5_digest"
-          ];
-          disabledTestPaths = old.disabledTestPaths or [ ] ++ [
-            "tests/test_ssl.py"
-          ];
-          propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
-            self.flaky
-          ];
-          # hack: avoid building docs due to incompatibility with current sphinx
-          nativeBuildInputs = [ openssl ]; # old.nativeBuildInputs but without sphinx*
-          outputs = lib.filter (o: o != "doc") old.outputs;
-        });
-
-        # This is the most recent version of `trustme` that's still compatible with `cryptography` 40.
-        # See https://github.com/NixOS/nixpkgs/issues/359723
-        # and https://github.com/python-trio/trustme/commit/586f7759d5c27beb44da60615a71848eb2a5a490
-        trustme = self.callPackage ./old-python-packages/trustme.nix { };
-
-        fastapi = super.fastapi.overridePythonAttrs (old: {
-          # Flaky test:
-          #     ResourceWarning: Unclosed <MemoryObjectSendStream>
-          # Unclear whether it's flaky in general or only in this overridden package set.
-          doCheck = false;
-        });
-
-        # Ceph does not support `kubernetes` >= 19, see:
-        #     https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1900324090
-        kubernetes = super.kubernetes.overridePythonAttrs (old: rec {
-          version = "18.20.0";
-          src = fetchFromGitHub {
-            owner = "kubernetes-client";
-            repo = "python";
-            rev = "v${version}";
-            sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
-            fetchSubmodules = true;
-          };
-        });
-
-      };
-  };
+  # python = python313.override {
+  #   self = python;
+  #   packageOverrides =
+  #     self: super:
+  #     {
+  #       kubernetes = super.kubernetes.overridePythonAttrs (old: rec {
+  #         version = "18.20.0";
+  #         src = fetchFromGitHub {
+  #           owner = "kubernetes-client";
+  #           repo = "python";
+  #           rev = "v${version}";
+  #           sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
+  #           fetchSubmodules = true;
+  #         };
+  #       });
+  #     };
+  # };
 
   boost' = boost187.override {
     enablePython = true;
@@ -353,7 +279,7 @@ let
       ceph-common
 
       # build time
-      cython_0
+      cython
 
       # debian/control
       bcrypt
