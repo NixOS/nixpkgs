@@ -3,7 +3,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
 
   # runPythonCommand
   runCommand,
@@ -17,9 +16,6 @@
   pkg-config,
   pkgsBuildBuild,
 
-  # propagatedBuildInputs
-  json-glib,
-
   # nativeBuildInputs
   ensureNewerSourcesForZipFilesHook,
   gettext,
@@ -27,8 +23,6 @@
   gobject-introspection,
   meson,
   ninja,
-  protobuf,
-  protobufc,
   shared-mime-info,
   vala,
   wrapGAppsNoGuiHook,
@@ -42,7 +36,6 @@
   fwupd-efi,
   gnutls,
   gusb,
-  libarchive,
   libcbor,
   libdrm,
   libgudev,
@@ -135,7 +128,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.19";
+  version = "2.1.1";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -153,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-DjO+7CEOef5KMbYEPtDr3GrnXTDUO/jwwZ4P17o4oDg=";
+    hash = "sha256-pb5BBA+3KTeZZ8WyNDaY9EKNTxp4MT/3G/MEgQ+Nysk=";
   };
 
   patches = [
@@ -197,10 +190,6 @@ stdenv.mkDerivation (finalAttrs: {
     (pkgsBuildBuild.callPackage ./build-time-python.nix { })
   ];
 
-  propagatedBuildInputs = [
-    json-glib
-  ];
-
   nativeBuildInputs = [
     ensureNewerSourcesForZipFilesHook # required for firmware zipping
     gettext
@@ -210,8 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    protobuf # for protoc
-    protobufc # for protoc-gen-c
     shared-mime-info
     vala
     wrapGAppsNoGuiHook
@@ -230,7 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
     fwupd-efi
     gnutls
     gusb
-    libarchive
     libcbor
     libdrm
     libgudev
@@ -243,7 +229,6 @@ stdenv.mkDerivation (finalAttrs: {
     modemmanager
     pango
     polkit
-    protobufc
     readline
     sqlite
     tpm2-tss
@@ -359,12 +344,8 @@ stdenv.mkDerivation (finalAttrs: {
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
       "fwupd/remotes.d/vendor-directory.conf"
-      "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
-      "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd/LVFS-CA-2025PQ.pem"
       "pki/fwupd/LVFS-CA.pem"
-      "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
-      "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA-2025PQ.pem"
       "pki/fwupd-metadata/LVFS-CA.pem"
       "grub.d/35_fwupd"
