@@ -10,15 +10,15 @@
   rtmidi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opl3bankeditor";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Wohlstand";
     repo = "opl3bankeditor";
-    rev = "v${version}";
-    sha256 = "08krbxlxgmc7i2r2k6d6wgi0m6k8hh3j60xf21kz4kp023w613sa";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-So9g+BDgTvJnEK4DIweEaJoK4uOmmSmyiIfV12lfeSI=";
   };
 
   prePatch = ''
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
   meta = {
     mainProgram = "opl3_bank_editor";
     description = "Small cross-platform editor of the OPL3 FM banks of different formats";
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/Wohlstand/opl3bankeditor";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ OPNA2608 ];
   };
-}
+})
