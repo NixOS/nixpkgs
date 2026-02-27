@@ -2260,7 +2260,8 @@
       ];
     "green_planet_energy" =
       ps: with ps; [
-      ]; # missing inputs: greenplanet-energy-api
+        greenplanet-energy-api
+      ];
     "greeneye_monitor" =
       ps: with ps; [
         greeneye-monitor
@@ -7498,6 +7499,7 @@
     "gpslogger"
     "graphite"
     "gree"
+    "green_planet_energy"
     "greeneye_monitor"
     "group"
     "growatt_server"

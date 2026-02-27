@@ -280,6 +280,18 @@
     meta.maintainers = with lib.maintainers; [ obreitwi ];
   };
 
+  redisenterprise = mkAzExtension rec {
+    pname = "redisenterprise";
+    version = "1.4.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/redisenterprise-${version}-py3-none-any.whl";
+    hash = "sha256-vMKLLC/q39SZ2MbqxmcjUiylr01D1olaLujQ1LbFqak=";
+    description = "Microsoft Azure Command-Line Tools RedisEnterprise Extension";
+    propagatedBuildInputs = with python3Packages; [
+      redis
+      pyjwt
+    ];
+  };
+
   serial-console = mkAzExtension {
     pname = "serial-console";
     version = "1.0.0b2";

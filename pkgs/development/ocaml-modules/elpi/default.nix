@@ -18,7 +18,7 @@
   coqPackages,
   version ?
     if lib.versionAtLeast ocaml.version "4.13" then
-      "3.4.2"
+      "3.4.5"
     else if lib.versionAtLeast ocaml.version "4.08" then
       "1.20.0"
     else
@@ -34,6 +34,9 @@ in
 
 let
   fetched = coqPackages.metaFetch {
+    release."3.4.5".sha256 = "sha256-cck6XqC98Z9lb3CYS8K/aB1WOckjAyXzZ14vX41nJvI=";
+    release."3.4.4".sha256 = "sha256-SvNNAyBYIkSMv3rhx0wVu2JjHdGYUOqaFzZKGBMMebs=";
+    release."3.4.3".sha256 = "sha256-2bzUzUO/Ps1uxHHIzQx0pULme9upYxBBggenxaQrd+I=";
     release."3.4.2".sha256 = "sha256-w7GjKYZrVrfezJN0NLmzpVm6CFGVKxXszHADFGCw5cc=";
     release."3.4.1".sha256 = "sha256-3rQPw91dHAqp61KTHk1UOEqh5syWrZZ1V1/1eE8cyI8=";
     release."3.3.0".sha256 = "sha256:963f95eea48b8f853cca9cbe4db49f22343c58e88dc961bc1da303356ef50dcd";

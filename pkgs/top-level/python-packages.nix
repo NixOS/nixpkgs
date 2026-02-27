@@ -538,6 +538,8 @@ self: super: with self; {
 
   aiotedee = callPackage ../development/python-modules/aiotedee { };
 
+  aiotools = callPackage ../development/python-modules/aiotools { };
+
   aiotractive = callPackage ../development/python-modules/aiotractive { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
@@ -6657,6 +6659,8 @@ self: super: with self; {
 
   # built-in for pypi
   greenlet = if isPyPy then null else callPackage ../development/python-modules/greenlet { };
+
+  greenplanet-energy-api = callPackage ../development/python-modules/greenplanet-energy-api { };
 
   greenwavereality = callPackage ../development/python-modules/greenwavereality { };
 
@@ -13254,6 +13258,8 @@ self: super: with self; {
 
   pycdio = callPackage ../development/python-modules/pycdio { };
 
+  pycdlib = callPackage ../development/python-modules/pycdlib { };
+
   pycec = callPackage ../development/python-modules/pycec { };
 
   pycep-parser = callPackage ../development/python-modules/pycep-parser { };
@@ -16551,6 +16557,8 @@ self: super: with self; {
   requests-futures = callPackage ../development/python-modules/requests-futures { };
 
   requests-gssapi = callPackage ../development/python-modules/requests-gssapi { };
+
+  requests-hardened = callPackage ../development/python-modules/requests-hardened { };
 
   requests-hawk = callPackage ../development/python-modules/requests-hawk { };
 

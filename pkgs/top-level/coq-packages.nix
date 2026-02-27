@@ -223,6 +223,11 @@ let
       tlc = callPackage ../development/coq-modules/tlc { };
       topology = callPackage ../development/coq-modules/topology { };
       trakt = callPackage ../development/coq-modules/trakt { };
+      TypedExtraction = callPackage ../development/coq-modules/TypedExtraction { };
+      TypedExtraction-common = self.TypedExtraction.common;
+      TypedExtraction-elm = self.TypedExtraction.elm;
+      TypedExtraction-rust = self.TypedExtraction.rust;
+      TypedExtraction-plugin = self.TypedExtraction.plugin;
       unicoq = callPackage ../development/coq-modules/unicoq { };
       validsdp = callPackage ../development/coq-modules/validsdp { };
       vcfloat = callPackage ../development/coq-modules/vcfloat (

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pycookiecheat";
-  version = "0.11";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "n8henrie";
     repo = "pycookiecheat";
-    tag = version;
-    hash = "sha256-hP4J41ctAkrC6HIeKu6ITzK3W0PB7/tCz0cjP42I/J8=";
+    tag = "v${version}";
+    hash = "sha256-jOyTfh2ZhKW/pMU7T5tfxaM0l/g59N+mirnbc0FLPbQ=";
   };
 
   pythonRelaxDeps = [
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Borrow cookies from your browser's authenticated session for use in Python scripts";
     homepage = "https://github.com/n8henrie/pycookiecheat";
-    changelog = "https://github.com/n8henrie/pycookiecheat/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/n8henrie/pycookiecheat/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab

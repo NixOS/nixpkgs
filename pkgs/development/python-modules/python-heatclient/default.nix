@@ -26,14 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-heatclient";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-heatclient";
     tag = finalAttrs.version;
-    hash = "sha256-BpxUUQTBZLR89ks31q5BcBajIP2vcD3Oot1dsXLalX4=";
+    hash = "sha256-KUFpFqjFtuF9VFQ0Fn9oVQSpwsocZhKY6vWtqpefUJs=";
   };
 
   env.PBR_VERSION = finalAttrs.version;

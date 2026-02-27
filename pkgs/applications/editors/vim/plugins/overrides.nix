@@ -1255,6 +1255,13 @@ assertNoAdditions {
     dependencies = [ self.nvzone-volt ];
   };
 
+  flow-nvim = super.flow-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Optional barbecue integration requires flow.setup() first.
+      "barbecue.theme.flow"
+    ];
+  };
+
   flutter-tools-nvim = super.flutter-tools-nvim.overrideAttrs {
     # Optional dap integration
     checkInputs = [ self.nvim-dap ];

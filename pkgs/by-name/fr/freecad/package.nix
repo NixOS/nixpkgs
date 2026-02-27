@@ -104,6 +104,11 @@ freecad-utils.makeCustomizable (
 
       # https://github.com/FreeCAD/FreeCAD/pull/21710
       ./0003-FreeCad-fix-font-load-crash.patch
+
+      # Fix build for boost 1.89 or later, remove once FreeCad 1.1 is released
+      # based on https://github.com/FreeCAD/FreeCAD/commit/0f6d00d2a547df0f5c2ba5ef0f79044a49b0a2d
+      ./0004-FreeCad-fix-boost-189-build.patch
+
       (fetchpatch {
         url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
         hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";

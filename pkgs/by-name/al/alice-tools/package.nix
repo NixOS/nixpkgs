@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   gitUpdater,
   testers,
   fetchFromGitHub,
@@ -14,35 +14,40 @@
   libjpeg,
   libwebp,
   zlib,
-  withGUI ? true,
-  qtbase ? null,
-  wrapQtAppsHook ? null,
+  withQt5 ? false,
+  qt5,
+  withQt6 ? false,
+  qt6,
 }:
 
-assert withGUI -> qtbase != null && wrapQtAppsHook != null;
+assert !(withQt5 && withQt6);
 
+let
+  qt = if withQt5 then qt5 else qt6;
+  withGUI = withQt5 || withQt6;
+in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "alice-tools" + lib.optionalString withGUI "-qt${lib.versions.major qtbase.version}";
+  pname = "alice-tools" + lib.optionalString withGUI "-qt${lib.versions.major qt.qtbase.version}";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "nunuhara";
     repo = "alice-tools";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-DazWnBeI5XShkIx41GFZLP3BbE0O8T9uflvKIZUXCHo=";
   };
 
-  postPatch = lib.optionalString (withGUI && lib.versionAtLeast qtbase.version "6.0") ''
+  postPatch = lib.optionalString (withGUI && withQt6) ''
     # Use Meson's Qt6 module
     substituteInPlace src/meson.build \
       --replace qt5 qt6
 
     # For some reason Meson uses QMake instead of pkg-config detection method for Qt6 on Darwin, which gives wrong search paths for tools
-    export PATH=${qtbase.dev}/libexec:$PATH
+    export PATH=${qt.qtbase.dev}/libexec:$PATH
   '';
 
-  mesonFlags = lib.optionals (withGUI && lib.versionAtLeast qtbase.version "6.0") [
+  mesonFlags = lib.optionals (withGUI && withQt6) [
     # Qt6 requires at least C++17, project uses compiler's default, default too old on Darwin & aarch64-linux
     "-Dcpp_std=c++17"
   ];
@@ -55,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ]
   ++ lib.optionals withGUI [
-    wrapQtAppsHook
+    qt.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -66,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals withGUI [
-    qtbase
+    qt.qtbase
   ];
 
   dontWrapQtApps = true;
@@ -102,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ OPNA2608 ];
+    changelog = "https://github.com/nunuhara/alice-tools/releases/tag/${finalAttrs.src.tag}";
     mainProgram = if withGUI then "galice" else "alice";
   };
 })

@@ -629,6 +629,9 @@
   "chap-stdenv": [
     "index.html#chap-stdenv"
   ],
+  "sec-problems": [
+    "index.html#sec-problems"
+  ],
   "sec-using-llvm": [
     "index.html#sec-using-llvm"
   ],

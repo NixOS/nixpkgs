@@ -4,6 +4,7 @@
   fetchurl,
   SDL2,
   ftgl,
+  autoreconfHook,
   pkg-config,
   libpng,
   libjpeg,
@@ -31,9 +32,18 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # remove bundled library
     rm -r src/tinyxml
+
+    # Fix build with boost 1.89
+    rm m4/ax_boost_system.m4
+    substituteInPlace configure.ac \
+      --replace-fail "AX_BOOST_SYSTEM" ""
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
   buildInputs = [
     glew
     SDL2
