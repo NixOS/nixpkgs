@@ -53,6 +53,7 @@ lrexlib-posix,,,,,,
 lsp-progress.nvim,,,,,5.1,gepbird
 lsqlite3,,,,,,
 ltreesitter-ts,,,,,,
+ltreesitter,,,,,,
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
 lua-curl,,,,,,
