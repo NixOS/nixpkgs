@@ -142,7 +142,10 @@ buildGoModule {
     description = "Todo-app to organize your life";
     homepage = "https://vikunja.io/";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ leona ];
+    maintainers = with lib.maintainers; [
+      leona
+      adamcstephens
+    ];
     mainProgram = "vikunja";
     platforms = lib.platforms.linux;
   };
