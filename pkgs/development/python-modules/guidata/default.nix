@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
 
   # build-system
@@ -30,15 +31,18 @@
 
 buildPythonPackage rec {
   pname = "guidata";
-  version = "3.13.4";
+  version = "3.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "guidata";
     tag = "v${version}";
-    hash = "sha256-JuYxPkKeOQOzoDiyk50IhAiICUcKptyD5RUx4DaiOOI=";
+    hash = "sha256-iUfZX51Ef1PY7roy9ER8hG34BAhCLs3Sagoasd5BT3E=";
   };
+
+  # https://github.com/PlotPyStack/guidata/issues/97
+  disabled = pythonAtLeast "3.14";
 
   build-system = [
     setuptools

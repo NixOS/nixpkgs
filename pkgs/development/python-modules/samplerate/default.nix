@@ -18,9 +18,10 @@
 
   # tests
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "samplerate";
   version = "0.2.3";
   pyproject = true;
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tuxu";
     repo = "python-samplerate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7FAdIqsYCapmEAYiAuoS5m/jFExXZX3hn3kwxn9NWEc=";
   };
 
@@ -37,8 +38,8 @@ buildPythonPackage rec {
     ./numpy-2.4-compat.patch
   ];
 
+  # unvendor pybind11, libsamplerate
   postPatch = ''
-    # unvendor pybind11, libsamplerate
     rm -r external
     substituteInPlace CMakeLists.txt \
       --replace-fail "add_subdirectory(external)" "find_package(pybind11 REQUIRED)"
@@ -55,7 +56,7 @@ buildPythonPackage rec {
 
   buildInputs = [ libsamplerate ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cffi
     numpy
   ];
@@ -68,11 +69,18 @@ buildPythonPackage rec {
     rm -rf samplerate
   '';
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # ValueError: cannot resize an array that references or is referenced
+    "test_callback_with_2x"
+    "test_process"
+    "test_resize"
+  ];
+
   meta = {
     description = "Python bindings for libsamplerate based on CFFI and NumPy";
     homepage = "https://github.com/tuxu/python-samplerate";
-    changelog = "https://github.com/tuxu/python-samplerate/releases/tag/${src.tag}";
+    changelog = "https://github.com/tuxu/python-samplerate/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

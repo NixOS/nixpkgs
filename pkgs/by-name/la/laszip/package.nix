@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "LASzip";
     repo = "LASzip";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-v/oLU69zqDW1o1HTlay7GDh1Kbmv1rarII2Fz5HWCqg=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Turn quickly bulky LAS files into compact LAZ files without information loss";
     homepage = "https://laszip.org";
-    changelog = "https://github.com/LASzip/LASzip/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/LASzip/LASzip/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl2;
     maintainers = [ ];
     platforms = lib.platforms.unix;

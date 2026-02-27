@@ -2,11 +2,11 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   makeFontsConf,
   testers,
-  # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/issues/5
-  boost186,
+  boost,
   cmake,
   curl,
   doxygen,
@@ -46,11 +46,26 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
-    # Use wrapped python. Removing just the /usr/bin doesn't seem to work?
-    substituteInPlace tests/httpbin.h.in \
-      --replace '/usr/bin/python3' '${lib.getExe pythonEnv}'
-  '';
+  patches = [
+    # Remove when version > 3.2.0
+    (fetchpatch {
+      name = "0001-net-cpp-fix-compatibility-with-Boost-1.88.patch";
+      url = "https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/commit/9ff8651b11eb9dc0f64147001e10a57d1546a626.patch";
+      hash = "sha256-IEa3nhnv0oa5WmhIDG3OMrZmmoAZFeedAzKXAKVTIQg=";
+    })
+  ];
+
+  postPatch =
+    # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/merge_requests/22, too basic to bother with fetchpatch
+    ''
+      substituteInPlace src/CMakeLists.txt \
+        --replace-fail 'find_package(Boost COMPONENTS system' 'find_package(Boost COMPONENTS'
+    ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      # Use wrapped python. Removing just the /usr/bin doesn't seem to work?
+      substituteInPlace tests/httpbin.h.in \
+        --replace '/usr/bin/python3' '${lib.getExe pythonEnv}'
+    '';
 
   strictDeps = true;
 
@@ -63,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost186
+    boost
     curl
   ];
 

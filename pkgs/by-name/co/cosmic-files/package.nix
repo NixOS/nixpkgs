@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   just,
   libcosmicAppHook,
@@ -12,17 +13,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
-  version = "1.0.7";
+  version = "1.0.8";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-kTPPYfga0to19ZC66bGj/ROsMceG8LuELl1OkwKSirU=";
+    hash = "sha256-KXXNYNGun1stXXzY4OWzOVLrLXAs5g7NNaSYajavDvU=";
   };
 
-  cargoHash = "sha256-tkH9BIeTukdVJhN9yUgFdUUhyfqnx3tTqwu+LAAULog=";
+  cargoHash = "sha256-HMHS6HrOUVnrWbyGi9wadl9++onBNNCRw4r4nohvQzI=";
+
+  patches = [
+    (fetchpatch {
+      # patch for fixing build error introduced in `epoch-1.0.7`
+      url = "https://github.com/pop-os/cosmic-files/commit/49e3d95e7a5e02c279f2be1f1f4dfdba2fb532dc.patch";
+      hash = "sha256-Ohf3K+ehFvIurPOReFDML+wfBvdxCi7Ef3eCoSLnXFM=";
+    })
+  ];
 
   nativeBuildInputs = [
     just

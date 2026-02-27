@@ -1,3 +1,5 @@
+# nixpkgs-update: no auto update
+# haxe depends on specific version of luv
 {
   lib,
   buildDunePackage,
