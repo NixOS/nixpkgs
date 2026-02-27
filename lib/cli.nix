@@ -252,6 +252,28 @@
     optionFormat: attrs: lib.escapeShellArgs (lib.cli.toCommandLine optionFormat attrs);
 
   /**
+    Converts the given attributes into a single unescaped and space-separated
+    command-line string.
+
+    This is useful for providing raw shell expressions.
+
+    Unlike [`lib.cli.toCommandLine`](#function-library-lib.cli.toCommandLine),
+    this returns unescaped strings.
+
+    # Examples
+
+    ::: {.example}
+    ## `lib.cli.toCommandLineString` usage example
+
+    ```nix
+    lib.cli.toCommandLineString { } { seed = ''"$(( RANDOM % 256 ))"''; }
+    => "--seed \"$(( RANDOM % 256 ))\""
+    ```
+    :::
+  */
+  toCommandLineString = optionFormat: attrs: toString (lib.cli.toCommandLine optionFormat attrs);
+
+  /**
     Converts an attribute set into a list of command-line arguments.
 
     This is the most general command-line construction helper in `lib.cli`.
