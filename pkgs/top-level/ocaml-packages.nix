@@ -356,6 +356,8 @@ let
 
         ctypes-foreign = callPackage ../development/ocaml-modules/ctypes/foreign.nix { };
 
+        cudd = callPackage ../development/ocaml-modules/cudd { };
+
         cudf = callPackage ../development/ocaml-modules/cudf { };
 
         curl = callPackage ../development/ocaml-modules/curl { inherit (pkgs) curl; };
