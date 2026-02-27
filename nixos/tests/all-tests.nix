@@ -397,6 +397,9 @@ in
   containers-restart_networking = runTest ./containers-restart_networking.nix;
   containers-tmpfs = runTest ./containers-tmpfs.nix;
   containers-unified-hierarchy = runTest ./containers-unified-hierarchy.nix;
+  contracts = import ./contracts {
+    inherit runTest;
+  };
   convos = runTest ./convos.nix;
   coredns = runTest ./coredns.nix;
   corerad = runTest ./corerad.nix;
