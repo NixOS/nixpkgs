@@ -36,11 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
-    substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
-  '';
-
   patches =
     lib.optionals (lib.versionOlder version "22") [
       # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
@@ -70,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-2/vc4anc+kH7otfLHfBtW8dRowPyObiXZn0+HtQktak=";
       })
     ];
+
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
+    substituteInPlace src/google/protobuf/testing/googletest.cc \
+      --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
+  '';
 
   preHook = ''
     export build_protobuf=${
@@ -102,14 +102,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeDir = if lib.versionOlder version "22" then "../cmake" else null;
   cmakeFlags = [
-    "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
-    "-Dprotobuf_ABSL_PROVIDER=package"
+    (lib.cmakeBool "protobuf_USE_EXTERNAL_GTEST" true)
+    (lib.cmakeFeature "protobuf_ABSL_PROVIDER" "package")
+    (lib.cmakeBool "protobuf_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ]
   ++ lib.optionals enableShared [
-    "-Dprotobuf_BUILD_SHARED_LIBS=ON"
-  ]
-  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-    "-Dprotobuf_BUILD_TESTS=OFF"
+    (lib.cmakeBool "protobuf_BUILD_SHARED_LIBS" true)
   ];
 
   doCheck =
@@ -122,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = [ "${placeholder "out"}/bin/protoc" ];
   doInstallCheck = true;
 
   env = lib.optionalAttrs (lib.versions.major version == "29") {
