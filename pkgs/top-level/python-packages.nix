@@ -14200,6 +14200,8 @@ self: super: with self; {
 
   pynordpool = callPackage ../development/python-modules/pynordpool { };
 
+  pynormaliz = callPackage ../development/python-modules/pynormaliz { };
+
   pynotifier = callPackage ../development/python-modules/pynotifier { };
 
   pynput = callPackage ../development/python-modules/pynput { };
