@@ -1092,6 +1092,33 @@ in
     '';
   };
 
+  teal-language-server = prev.teal-language-server.overrideAttrs (old: {
+    strictDeps = false;
+    # Relax lockfile-pinned deps (e.g. luafilesystem 1.8.0-1) so nixpkgs
+    # packaged versions can satisfy dependencies.
+    preConfigure = (old.preConfigure or "") + ''
+      rm -f luarocks.lock
+    '';
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace-fail '"ltreesitter-ts == 0.0.1",' '"ltreesitter >= 0.2.0",' \
+        --replace-fail '"tree-sitter-cli == 0.24.4",' "" \
+        --replace-fail '"tl == 0.24.4",' '"tl >= 0.24.4",' \
+        --replace-fail '"tree-sitter-teal == 0.0.33",' '"tree-sitter-teal >= 0.0.33",'
+    '';
+
+    nativeBuildInputs =
+      (lib.filter (
+        drv:
+        !(lib.elem (lib.getName drv) [
+          "ltreesitter-ts"
+        ])
+      ) old.nativeBuildInputs)
+      ++ [
+        final.ltreesitter
+      ];
+  });
+
   tiktoken_core = prev.tiktoken_core.overrideAttrs (old: {
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;

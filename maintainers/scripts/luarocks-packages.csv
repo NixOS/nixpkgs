@@ -152,7 +152,7 @@ sqlite,,,,,,
 std._debug,,,,,,
 std.normalize,,,,,,
 stdlib,,,,41.2.2,,
-teal-language-server,,,,0.0.5-1,,
+teal-language-server,,,,,,
 telescope-manix,,,,,,
 telescope.nvim,,,,,5.1,
 tiktoken_core,,,,,,natsukium
