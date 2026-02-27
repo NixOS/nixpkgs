@@ -19,7 +19,7 @@ let
     name = pname;
     desktopName = "Digital";
     comment = "Easy-to-use digital logic designer and circuit simulator";
-    exec = pname;
+    exec = meta.mainProgram;
     icon = pname;
     categories = [
       "Education"

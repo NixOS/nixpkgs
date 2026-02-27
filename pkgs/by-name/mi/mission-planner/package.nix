@@ -13,7 +13,7 @@ let
   pname = "mission-planner";
   desktopItem = makeDesktopItem {
     name = pname;
-    exec = pname;
+    exec = meta.mainProgram;
     icon = pname;
     comment = "MissionPlanner GCS & Ardupilot configuration tool";
     desktopName = "MissionPlanner";

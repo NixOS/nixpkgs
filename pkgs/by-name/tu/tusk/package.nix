@@ -16,7 +16,7 @@ let
 
   desktopItem = makeDesktopItem {
     name = pname;
-    exec = pname;
+    exec = meta.mainProgram;
     icon = icon;
     desktopName = pname;
     genericName = "Evernote desktop app";

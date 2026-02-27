@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   desktopItems = [
     (makeDesktopItem {
       name = pname;
-      exec = pname;
+      exec = meta.mainProgram;
       icon = pname;
       desktopName = "ExpressLRS Configurator";
       comment = "Configuration tool for ExpressLRS";

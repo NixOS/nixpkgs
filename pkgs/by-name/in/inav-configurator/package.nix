@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = pname;
-      exec = pname;
+      exec = meta.mainProgram;
       icon = pname;
       comment = "iNavFlight configuration tool";
       desktopName = "iNav Configurator";

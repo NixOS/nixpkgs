@@ -66,7 +66,7 @@ let
 
   desktopItem = makeDesktopItem {
     name = pname;
-    exec = pname;
+    exec = "exact-audio-copy";
     comment = "Audio Grabber for CDs";
     desktopName = "Exact Audio Copy";
     categories = [

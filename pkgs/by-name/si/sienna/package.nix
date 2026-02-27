@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "sienna";
-      exec = pname;
+      exec = meta.mainProgram;
       icon = icon;
       comment = "Fast-paced one button platformer";
       desktopName = "Sienna";

@@ -17,7 +17,7 @@ let
   desktopItem = makeDesktopItem {
     desktopName = pname;
     name = pname;
-    exec = pname;
+    exec = "freenukum";
     icon = pname;
     comment = description;
     categories = [

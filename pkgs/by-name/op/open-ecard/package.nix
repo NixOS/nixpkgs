@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     genericName = "eCard App";
     comment = "Client side implementation of the eCard-API-Framework";
     icon = "oec_logo_bg-transparent.svg";
-    exec = pname;
+    exec = meta.mainProgram;
     categories = [
       "Utility"
       "Security"

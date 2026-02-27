@@ -91,7 +91,7 @@ buildPythonApplication rec {
   desktopItems = [
     (makeDesktopItem {
       name = pname;
-      exec = pname;
+      exec = meta.mainProgram;
       icon = pname;
       desktopName = "Jellyfin MPV Shim";
       categories = [

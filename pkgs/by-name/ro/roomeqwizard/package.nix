@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = pname;
-    exec = pname;
+    exec = meta.mainProgram;
     icon = pname;
     desktopName = "REW";
     genericName = "Software for audio measurements";

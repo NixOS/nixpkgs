@@ -48,7 +48,7 @@ let
     inherit desktopName;
     comment = meta.description;
     icon = pname;
-    exec = pname;
+    exec = meta.mainProgram;
     terminal = false;
     categories = [
       "Game"

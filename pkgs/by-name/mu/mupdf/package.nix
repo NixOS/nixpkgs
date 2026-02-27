@@ -190,7 +190,7 @@ stdenv.mkDerivation rec {
       desktopName = pname;
       comment = meta.description;
       icon = "mupdf";
-      exec = "${pname} %f";
+      exec = "${meta.mainProgram} %f";
       terminal = false;
       mimeTypes = [
         "application/epub+zip"

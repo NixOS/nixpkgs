@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       name = pname;
       genericName = "Backgammon";
       comment = meta.description;
-      exec = pname;
+      exec = "gnubg";
       icon = pname;
       categories = [
         "Game"

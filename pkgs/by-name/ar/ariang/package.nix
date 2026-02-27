@@ -53,7 +53,7 @@ buildNpmPackage rec {
       desktopName = "AriaNg";
       genericName = meta.description;
       comment = meta.description;
-      exec = pname;
+      exec = "ariang";
       icon = pname;
       terminal = false;
       type = "Application";

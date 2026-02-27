@@ -12,29 +12,8 @@
   zip,
 }:
 
-let
-  pname = "90secondportraits";
-
-  icon = fetchurl {
-    url = "http://tangramgames.dk/img/thumb/90secondportraits.png";
-    sha256 = "13k6cq8s7jw77j81xfa5ri41445m778q6iqbfplhwdpja03c6faw";
-  };
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "90secondportraits";
-      exec = pname;
-      icon = icon;
-      comment = "A silly speed painting game";
-      desktopName = "90 Second Portraits";
-      genericName = "90secondportraits";
-      categories = [ "Game" ];
-    })
-  ];
-
-in
 stdenv.mkDerivation rec {
-  inherit pname desktopItems;
+  pname = "90secondportraits";
   version = "1.01b";
 
   src = fetchFromGitHub {
@@ -50,6 +29,21 @@ stdenv.mkDerivation rec {
       # Love 11 support
       url = "https://github.com/SimonLarsen/90-Second-Portraits/commit/0ae7ba046f14cef9857fd6c05d9072455097441f.patch?full_index=true";
       hash = "sha256-/C4gqzwHQqZCuTA/m6WX8mvTxmLxOcHRItVLA3bty3Y=";
+    })
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "90secondportraits";
+      exec = meta.mainProgram;
+      icon = fetchurl {
+        url = "http://tangramgames.dk/img/thumb/90secondportraits.png";
+        sha256 = "13k6cq8s7jw77j81xfa5ri41445m778q6iqbfplhwdpja03c6faw";
+      };
+      comment = "A silly speed painting game";
+      desktopName = "90 Second Portraits";
+      genericName = "90secondportraits";
+      categories = [ "Game" ];
     })
   ];
 
