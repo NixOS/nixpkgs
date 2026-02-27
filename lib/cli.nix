@@ -252,6 +252,24 @@
     optionFormat: attrs: lib.escapeShellArgs (lib.cli.toCommandLine optionFormat attrs);
 
   /**
+    Converts the given attributes into a single shell-escaped and
+    space-separated command-line string as an opinionated and common
+    [`lib.cli.toCommandLineString`](#function-library-lib.cli.toCommandLineString)
+    instantiation.
+  */
+  toCommandLineStandardShell =
+    options: arguments: lib.escapeShellArgs (lib.cli.toCommandLineStandard options arguments);
+
+  /**
+    Converts the given attributes into a single unescaped and space-separated
+    command-line string as an opinionated and common
+    [`lib.cli.toCommandLineString`](#function-library-lib.cli.toCommandLineString)
+    instantiation.
+  */
+  toCommandLineStandardString =
+    options: arguments: toString (lib.cli.toCommandLineStandard options arguments);
+
+  /**
     Converts the given attributes into a single unescaped and space-separated
     command-line string.
 
@@ -272,6 +290,27 @@
     :::
   */
   toCommandLineString = optionFormat: attrs: toString (lib.cli.toCommandLine optionFormat attrs);
+
+  /**
+    Converts an attribute set into a list of command-line arguments as an
+    opinionated and common
+    [`lib.cli.toCommandLine`](#function-library-lib.cli.toCommandLine)
+    instantiation, where single-character keys become short options (`h` becomes
+    `-h`), multi-character keys become long options (`help` becomes `--help`),
+    and values are space-separated.
+    :::
+  */
+  toCommandLineStandard =
+    {
+      explicitBool ? false,
+      formatArg ? lib.generators.mkValueStringDefault { },
+      isLong ? optionName: builtins.stringLength optionName > 1,
+      sep ? null,
+    }:
+    lib.cli.toCommandLine (name: {
+      inherit explicitBool formatArg sep;
+      option = "-${lib.optionalString (isLong name) "-"}${name}";
+    });
 
   /**
     Converts an attribute set into a list of command-line arguments.
