@@ -1,21 +1,21 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo126Module,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "fleet";
-  version = "4.79.1";
+  version = "4.81.0";
   src = fetchFromGitHub {
     owner = "fleetdm";
     repo = "fleet";
     tag = "fleet-v${finalAttrs.version}";
-    hash = "sha256-o/exnUy5vXi+Ey8smd36588M8B7GQlG5ZqtGyYySkxQ=";
+    hash = "sha256-LPbMcaQ3YIfh5qwIBB7BwJFgMPurCJudrOzUPm5+VcM=";
   };
 
-  vendorHash = "sha256-CYqg8kHGUu+wd9l5UYURqmoR8/13HX9t5xHwjzdgJhU=";
+  vendorHash = "sha256-kudomUa5c0OJA2LgqLQ2Az0mDH/s9go3jHdyeALGgs8=";
 
   subPackages = [
     "cmd/fleet"
