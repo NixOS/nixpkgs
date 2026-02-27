@@ -22,6 +22,7 @@
   gnulib,
   gnum4,
   gobject-introspection,
+  icu,
   imagemagick,
   installShellFiles,
   lib,
@@ -400,6 +401,21 @@ in
     buildInputs = old.buildInputs ++ [
       (lib.getDev libc)
     ];
+  });
+
+  ltreesitter-ts = prev.ltreesitter-ts.overrideAttrs (old: {
+    # Upstream package relies on git submodules (ltreesitter + tree-sitter),
+    # but the default source fetch misses those files.
+    src = fetchFromGitHub {
+      owner = "FourierTransformer";
+      repo = "ltreesitter-ts";
+      rev = "0.0.1";
+      fetchSubmodules = true;
+      hash = "sha256-hKM5HQU7A08mA004ZMV7hIVq/2WR3KocMatnTplM8uU=";
+    };
+    nativeBuildInputs = old.nativeBuildInputs ++ [ icu ];
+    NIX_CFLAGS_COMPILE = "-I${lib.getDev icu}/include";
+    NIX_LDFLAGS = "-L${lib.getLib icu}/lib -licuuc -licui18n -licudata";
   });
 
   lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {

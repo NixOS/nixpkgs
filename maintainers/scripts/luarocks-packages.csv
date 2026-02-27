@@ -48,6 +48,7 @@ lrexlib-oniguruma,,,,,,junestepp
 lrexlib-pcre,,,,,,
 lrexlib-posix,,,,,,
 lsp-progress.nvim,,,,,5.1,gepbird
+ltreesitter-ts,,,,,,
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
 lua-curl,,,,,,
