@@ -9,6 +9,8 @@
   perl,
 
   python3,
+  bash,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -35,6 +37,7 @@ stdenv.mkDerivation {
   buildInputs = [
     # used at runtime by term-highlight.py
     (python3.withPackages (ps: [ ps.pygments ]))
+    bash
   ];
 
   configureFlags = [
@@ -42,6 +45,8 @@ stdenv.mkDerivation {
     # for now point to self
     "--with-dbg-main=${placeholder "out"}/share/bashdb/bashdb-main.inc"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://bashdb.sourceforge.net/";
@@ -55,6 +60,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       jk
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
