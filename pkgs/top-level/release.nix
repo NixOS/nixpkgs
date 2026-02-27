@@ -26,7 +26,6 @@
     "aarch64-unknown-linux-gnu"
     "aarch64-unknown-linux-musl"
     "i686-unknown-linux-gnu"
-    "x86_64-apple-darwin"
     "x86_64-unknown-linux-gnu"
     "x86_64-unknown-linux-musl"
     # we can uncomment that once our bootstrap tarballs are fixed
@@ -90,10 +89,7 @@ let
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;
 
-  supportDarwin = genAttrs [
-    "x86_64"
-    "aarch64"
-  ] (arch: elem "${arch}-darwin" supportedSystems);
+  supportDarwin = elem "aarch64-darwin" supportedSystems;
 
   nonPackageJobs = {
     tarball = import ./make-tarball.nix {
@@ -112,7 +108,7 @@ let
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
     darwin-tested =
-      if supportDarwin.x86_64 || supportDarwin.aarch64 then
+      if supportDarwin then
         pkgs.releaseTools.aggregate {
           name = "nixpkgs-darwin-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
@@ -120,50 +116,7 @@ let
             jobs.tarball
             jobs.release-checks
           ]
-          ++ optionals supportDarwin.x86_64 [
-            jobs.cabal2nix.x86_64-darwin
-            jobs.ghc.x86_64-darwin
-            jobs.git.x86_64-darwin
-            jobs.go.x86_64-darwin
-            jobs.mariadb.x86_64-darwin
-            jobs.nix.x86_64-darwin
-            jobs.nixpkgs-review.x86_64-darwin
-            jobs.nix-info.x86_64-darwin
-            jobs.nix-info-tested.x86_64-darwin
-            jobs.openssh.x86_64-darwin
-            jobs.openssl.x86_64-darwin
-            jobs.pandoc.x86_64-darwin
-            jobs.postgresql.x86_64-darwin
-            jobs.python3.x86_64-darwin
-            jobs.ruby.x86_64-darwin
-            jobs.rustc.x86_64-darwin
-            # blocking ofBorg CI 2020-02-28
-            # jobs.stack.x86_64-darwin
-            jobs.stdenv.x86_64-darwin
-            jobs.vim.x86_64-darwin
-            jobs.cachix.x86_64-darwin
-            jobs.darwin.linux-builder.x86_64-darwin
-
-            # UI apps
-            # jobs.firefox-unwrapped.x86_64-darwin
-            jobs.qt5.qtmultimedia.x86_64-darwin
-            jobs.inkscape.x86_64-darwin
-            jobs.gimp2.x86_64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
-            jobs.emacs.x86_64-darwin
-            jobs.wireshark.x86_64-darwin
-            jobs.transmission_4-gtk.x86_64-darwin
-
-            # Tests
-            /*
-              jobs.tests.cc-wrapper.default.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
-              jobs.tests.stdenv-inputs.x86_64-darwin
-              jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
-            */
-          ]
-          ++ optionals supportDarwin.aarch64 [
+          ++ optionals supportDarwin [
             jobs.cabal2nix.aarch64-darwin
             jobs.ghc.aarch64-darwin
             jobs.git.aarch64-darwin
@@ -253,33 +206,7 @@ let
         */
       ]
       ++ collect isDerivation jobs.stdenvBootstrapTools
-      ++ optionals supportDarwin.x86_64 [
-        jobs.stdenv.x86_64-darwin
-        jobs.cargo.x86_64-darwin
-        jobs.cachix.x86_64-darwin
-        jobs.devenv.x86_64-darwin
-        jobs.go.x86_64-darwin
-        jobs.python3.x86_64-darwin
-        jobs.nixpkgs-review.x86_64-darwin
-        jobs.nix.x86_64-darwin
-        jobs.nix-info.x86_64-darwin
-        jobs.nix-info-tested.x86_64-darwin
-        jobs.git.x86_64-darwin
-        jobs.mariadb.x86_64-darwin
-        jobs.vim.x86_64-darwin
-        jobs.inkscape.x86_64-darwin
-        jobs.qt5.qtmultimedia.x86_64-darwin
-        jobs.darwin.linux-builder.x86_64-darwin
-        /*
-          jobs.tests.cc-wrapper.default.x86_64-darwin
-          jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
-          jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
-          jobs.tests.stdenv-inputs.x86_64-darwin
-          jobs.tests.macOSSierraShared.x86_64-darwin
-          jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
-        */
-      ]
-      ++ optionals supportDarwin.aarch64 [
+      ++ optionals supportDarwin [
         jobs.stdenv.aarch64-darwin
         jobs.cargo.aarch64-darwin
         jobs.cachix.aarch64-darwin
@@ -296,7 +223,13 @@ let
         jobs.inkscape.aarch64-darwin
         jobs.qt5.qtmultimedia.aarch64-darwin
         jobs.darwin.linux-builder.aarch64-darwin
-        # consider adding tests, as suggested above for x86_64-darwin
+        /*
+          jobs.tests.cc-wrapper.default.aarch64-darwin
+          jobs.tests.cc-wrapper.llvmPackages.clang.aarch64-darwin
+          jobs.tests.cc-wrapper.llvmPackages.libcxx.aarch64-darwin
+          jobs.tests.stdenv-inputs.aarch64-darwin
+          jobs.tests.stdenv.hooks.patch-shebangs.aarch64-darwin
+        */
       ];
     };
 
