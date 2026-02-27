@@ -9,9 +9,6 @@
   pkg-config,
 }:
 
-let
-  zlib' = zlib.override { static = false; };
-in
 stdenv.mkDerivation {
   pname = "undmg";
   version = "1.1.0-unstable-2024-08-02";
@@ -26,7 +23,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    zlib'
+    zlib
     bzip2
     lzfse
     xz
