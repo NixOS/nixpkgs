@@ -1,13 +1,12 @@
 {
   lib,
-  aiobotocore,
-  boto3,
   buildPythonPackage,
   dvc-objects,
   fetchPypi,
   flatten-dict,
   s3fs,
   setuptools-scm,
+  funcy,
 }:
 
 buildPythonPackage rec {
@@ -24,20 +23,13 @@ buildPythonPackage rec {
   # Prevent circular dependency
   pythonRemoveDeps = [ "dvc" ];
 
-  # dvc-s3 uses boto3 directly, we add in propagatedBuildInputs
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "aiobotocore[boto3]" "aiobotocore"
-  '';
-
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    aiobotocore
-    boto3
     dvc-objects
     flatten-dict
     s3fs
+    funcy
   ];
 
   # Network access is needed for tests
