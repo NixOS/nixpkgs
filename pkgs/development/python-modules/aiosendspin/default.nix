@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "aiosendspin";
-  version = "3.0.1";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
     tag = version;
-    hash = "sha256-Z0hQyJayA/8OR6nkKxd1HfjskX+WBBkBl7l8rleV+fo=";
+    hash = "sha256-sWvgm/NG+BwABQXY2tsF0zh/0gQ65lq1zSfmhF0v6JI=";
   };
 
   # https://github.com/Sendspin/aiosendspin/blob/1.2.0/pyproject.toml#L7
