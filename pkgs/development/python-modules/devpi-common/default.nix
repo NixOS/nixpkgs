@@ -6,7 +6,6 @@
   packaging-legacy,
   pytestCheckHook,
   requests,
-  setuptools-changelog-shortener,
   setuptools,
   tomli,
   nix-update-script,
@@ -26,9 +25,13 @@ buildPythonPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/common";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools_changelog_shortener"' ""
+  '';
+
   build-system = [
     setuptools
-    setuptools-changelog-shortener
   ];
 
   dependencies = [

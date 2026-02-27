@@ -3815,7 +3815,7 @@ with pkgs;
     llvmPackages = crystal.llvmPackages;
   };
 
-  devpi-server = python3Packages.callPackage ../development/tools/devpi-server { };
+  devpi-server = python3Packages.toPythonApplication python3Packages.devpi-server;
 
   dprint-plugins = recurseIntoAttrs (callPackage ../by-name/dp/dprint/plugins { });
 

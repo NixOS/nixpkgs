@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonApplication,
+  buildPythonPackage,
   gitUpdater,
   aiohttp,
   appdirs,
@@ -22,7 +22,6 @@
   pytestCheckHook,
   repoze-lru,
   setuptools,
-  setuptools-changelog-shortener,
   strictyaml,
   waitress,
   webtest,
@@ -31,7 +30,7 @@
   nixosTests,
 }:
 
-buildPythonApplication (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "devpi-server";
   version = "6.19.1";
   pyproject = true;
@@ -45,9 +44,13 @@ buildPythonApplication (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools_changelog_shortener"' ""
+  '';
+
   build-system = [
     setuptools
-    setuptools-changelog-shortener
   ];
 
   dependencies = [
@@ -108,16 +111,16 @@ buildPythonApplication (finalAttrs: {
     "devpi_server"
   ];
 
+  # devpi uses a monorepo for server, common, client and web
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "server-";
+  };
+
   passthru.tests = {
     devpi-server = nixosTests.devpi-server;
     version = testers.testVersion {
       package = devpi-server;
     };
-  };
-
-  # devpi uses a monorepo for server, common, client and web
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "server-";
   };
 
   meta = {
