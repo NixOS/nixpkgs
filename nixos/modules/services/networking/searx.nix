@@ -130,19 +130,19 @@ in
         '';
       };
 
-      settingsFile = mkOption {
+      settingsPath = mkOption {
         type = types.path;
-        default = "${runDir}/settings.yml";
+        default = runDir;
         description = ''
-          The path of the Searx server settings.yml file.
-          If no file is specified, a default file is used (default config file has debug mode enabled).
+          The path of the SearXNG settings directory or the settings.yml file.
+          If no path is specified, a default one is used (default config file has debug mode enabled).
 
           ::: {.note}
           Setting this options overrides [](#opt-services.searx.settings).
           :::
 
           ::: {.warning}
-          This file, along with any secret key it contains, will be copied into the world-readable Nix store.
+          This path, along with any secret keys it contains, will be copied into the world-readable Nix store.
           :::
         '';
       };
@@ -251,6 +251,7 @@ in
   };
 
   imports = [
+    (mkRenamedOptionModule [ "services" "searx" "settingsFile" ] [ "services" "searx" "settingsPath" ])
     (mkRenamedOptionModule [ "services" "searx" "configFile" ] [ "services" "searx" "settingsFile" ])
     (mkRenamedOptionModule [ "services" "searx" "runInUwsgi" ] [ "services" "searx" "configureUwsgi" ])
   ];
@@ -320,7 +321,7 @@ in
           enable-threads = true;
           module = "searx.webapp";
           env = [
-            "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
+            "SEARXNG_SETTINGS_PATH=${cfg.settingsPath}"
           ];
           buffer-size = 32768;
           pythonPackages = _: [ cfg.package ];
@@ -371,7 +372,7 @@ in
           EnvironmentFile = cfg.environmentFile;
         };
         environment = {
-          SEARXNG_SETTINGS_PATH = cfg.settingsFile;
+          SEARXNG_SETTINGS_PATH = cfg.settingsPath;
         };
       };
 
@@ -380,7 +381,7 @@ in
         after = [ "searx-init.service" ];
         restartTriggers = [
           cfg.package
-          cfg.settingsFile
+          cfg.settingsPath
         ]
         ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
       };
