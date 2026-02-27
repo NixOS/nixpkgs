@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pattypan";
-  version = "22.03";
+  version = "26.02";
 
   src = fetchFromGitHub {
     owner = "yarl";
     repo = "pattypan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wMQrBg+rEV1W7NgtWFXZr3pAxpyqdbEBKLNwDDGju2I=";
+    hash = "sha256-d4OF2ayL56R6j2js44e3tOUY5kNqWSM2L4VQw0f6OoY=";
   };
 
   nativeBuildInputs = [
