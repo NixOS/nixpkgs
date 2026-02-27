@@ -25,6 +25,7 @@
   span-lite,
   hat-trie,
   pegtl,
+  nixosTests,
 }:
 
 let
@@ -228,6 +229,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/kvrocks.conf -t $out/etc
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) kvrocks; };
 
   meta = {
     description = "Distributed key value NoSQL database that uses RocksDB as storage engine and is compatible with Redis protocol";
