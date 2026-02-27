@@ -70,6 +70,13 @@ buildPythonPackage {
     "test_eventgrid_domain_auth"
   ];
 
+  disabledTestPaths = [
+    # 2 AssertionErrors... See:
+    # https://github.com/Azure/msrest-for-python/issues/267
+    "tests/asynctests/test_async_client.py::TestServiceClient::test_client_send"
+    "tests/test_client.py::TestServiceClient::test_client_send"
+  ];
+
   pythonImportsCheck = [ "msrest" ];
 
   meta = {
