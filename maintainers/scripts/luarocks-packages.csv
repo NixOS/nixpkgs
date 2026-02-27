@@ -169,6 +169,7 @@ tree-sitter-http,,,,0.0.33-1,,
 tree-sitter-norg,,,,,5.1,mrcjkb
 tree-sitter-orgmode,,,,,5.1,
 utf8,,,,,,
+tree-sitter-teal,,,,,,
 vstruct,,,,,,
 vusted,,,,,,
 xml2lua,,,,,,teto

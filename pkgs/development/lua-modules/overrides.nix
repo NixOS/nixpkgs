@@ -1190,6 +1190,13 @@ in
     meta.broken = lua.luaversion != "5.1";
   });
 
+  tree-sitter-teal = prev.tree-sitter-teal.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs ++ [
+      tree-sitter
+      writableTmpDirAsHomeHook
+    ];
+  });
+
   utf8 = prev.utf8.overrideAttrs {
     postPatch = ''
       sed -i '/#include <assert.h>/a\
