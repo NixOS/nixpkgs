@@ -5183,6 +5183,38 @@ final: prev: {
     }
   ) { };
 
+  tree-sitter-cli = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luarocks-build-tree-sitter-cli,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-cli";
+      version = "0.26.5-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-cli-0.26.5-1.rockspec";
+          sha256 = "1bd9lz72gvi7djzcy0z6yja045ycm4byiyjpwa3m6zgh1h4mp30r";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "FourierTransformer";
+        repo = "tree-sitter-cli";
+        rev = "d8e1eb4ae406b75db0f50fae8be5dff636dbb4da";
+        hash = "sha256-J73buMI+DzrQ4Qx7G6rW2xFxiOYJBy4rGVDsnfNEgzQ=";
+      };
+
+      nativeBuildInputs = [ luarocks-build-tree-sitter-cli ];
+
+      meta = {
+        homepage = "https://github.com/FourierTransformer/tree-sitter-cli";
+        description = "Install tree-sitter CLI binaries";
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
+
   tree-sitter-http = callPackage (
     {
       buildLuarocksPackage,

@@ -1119,6 +1119,17 @@ in
     ];
   });
 
+  tree-sitter-cli = prev.tree-sitter-cli.overrideAttrs (_: {
+    # Keep this package hermetic: provide the already-packaged tree-sitter
+    # binary instead of using the LuaRocks backend that downloads from GitHub.
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/bin
+      ln -s ${lib.getExe tree-sitter} $out/bin/tree-sitter
+      runHook postInstall
+    '';
+  });
+
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       tree-sitter
