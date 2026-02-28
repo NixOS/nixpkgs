@@ -49,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Needs to be set so `dwarfs` does not try to download `gtest`; it is not
     # a submodule, see: https://github.com/mhx/dwarfs/issues/188#issuecomment-1907657083
     "-DPREFER_SYSTEM_GTEST=ON"
+    # Upstream composes DESTDIR + CMAKE_INSTALL_PREFIX + CMAKE_INSTALL_SBINDIR
+    # in a create_link() install script. Keep SBINDIR relative to avoid
+    # nested nix/store path creation in the output.
+    "-DCMAKE_INSTALL_SBINDIR=sbin"
     "-DWITH_LEGACY_FUSE=ON"
     "-DWITH_TESTS=ON"
   ];
@@ -105,14 +109,14 @@ stdenv.mkDerivation (finalAttrs: {
         "dwarfs/tools_test.mutating_and_error_ops/*"
         "dwarfs/tools_test.categorize/*"
         # Requires a working FUSE device and fusermount3, unavailable in sandbox.
-        "dwarfs/tools_test.timestamps_fuse*"
-        "dwarfs/tools_test.dwarfs_automount*"
-        "dwarfs/tools_test.dwarfs_fsname_and_subtype*"
-        "dwarfs/sparse_files_test.random_large_files*"
-        "dwarfs/sparse_files_test.random_small_files_fuse*"
-        "dwarfs/sparse_files_test.huge_holes_fuse*"
+        "tools_test.timestamps_fuse*"
+        "tools_test.dwarfs_automount*"
+        "tools_test.dwarfs_fsname_and_subtype*"
+        "sparse_files_test.random_large_files*"
+        "sparse_files_test.random_small_files_fuse*"
+        "sparse_files_test.huge_holes_fuse*"
         # Requires xattr support unavailable in sandbox.
-        "dwarfs/xattr_test.portable_xattr"
+        "xattr_test.portable_xattr"
       ];
     in
     "-${lib.concatStringsSep ":" disabledTests}";
@@ -120,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/dwarfs";
+  dontMoveSbin = true;
 
   meta = {
     description = "Fast high compression read-only file system";
