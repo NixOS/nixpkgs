@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
@@ -11,23 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfort";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipfort";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-IVLhp8rYtKhkt8K8Mc0qyrp670oKoK0QeclnJjO36pY=";
+    hash = "sha256-XaB4jauCN41tgD1YHHA2td/yckwfMBemBe/iL0SCxQo=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "hipfort-fix-cmake-4.patch";
-      url = "https://github.com/ROCm/hipfort/commit/75552c7ec48e3bd6a914c57c9475ec573ccb37d9.patch";
-      hash = "sha256-S9r1V6cUo9QbKbu/NK4wIvXMV6BFv7+/n9mjCScVk40=";
-      includes = [ "bin/*" ];
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

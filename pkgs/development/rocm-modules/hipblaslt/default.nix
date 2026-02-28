@@ -70,14 +70,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblaslt${clr.gpuArchSuffix}";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    rev = "a676499add42941ff6af1e8d3f0504416dac7429";
-    hash = "sha256-zIYdHFbHyP2V6dkx6Ueb6NBqWu8tJji2hSWF9zWEJa4=";
-    sparseCheckout = [ "projects/hipblaslt" ];
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-I2dGn4Ld5lZeML8GePcLPssplBZ+4weNR6uBEqFdZVg=";
+    sparseCheckout = [
+      "projects/hipblaslt"
+      "shared"
+    ];
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipblaslt";
   env.CXX = compiler;
@@ -203,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Move binaries to appropriate outputs and delete leftover /bin
     + ''
       mkdir -p $benchmark/bin
-      mv $out/bin/hipblaslt-{api-overhead,sequence,bench*} $out/bin/*.yaml $out/bin/*.py $benchmark/bin
+      mv $out/bin/hipblaslt-{api-overhead,bench*} $out/bin/*.yaml $out/bin/*.py $benchmark/bin
       ${lib.optionalString buildTests ''
         mkdir -p $test/bin
         mv $out/bin/hipblas-test $test/bin

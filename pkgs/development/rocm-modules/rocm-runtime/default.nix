@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCR-Runtime";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-gqe1trGc/Cu1XFA4aYjOzFurUgebLbdTHEJi4iw2+kk=";
+    hash = "sha256-6xELKQ/uqAoorsCR/H7d8iNK7LsVNsW2DRRZo5cU7UM=";
   };
 
   cmakeBuildType = "RelWithDebInfo";
@@ -59,24 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       # [PATCH] rocr: Extend HIP ISA compatibility check
       sha256 = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
-      url = "https://github.com/GZGavinZhao/rocm-systems/commit/c13cd118fcc8e0bc9ae8de62897542dca7352b71.patch";
+      url = "https://github.com/GZGavinZhao/rocm-systems/commit/dcef23cf896f4dcbc7ed81abeaa4ec2208dcdd8c.patch";
       relative = "projects/rocr-runtime";
     })
     (fetchpatch {
       # [PATCH] kfd_ioctl: fix UB due to 1 << 31
       url = "https://github.com/ROCm/ROCR-Runtime/commit/41bfc66aef437a5b349f71105fa4b907cc7e17d5.patch";
       hash = "sha256-A7VhPR3eSsmjq2cTBSjBIz9i//WiNjoXm0EsRKtF+ns=";
-    })
-    (fetchpatch {
-      # [PATCH] hsakmt: bump vgpr count for gfx1151 (#1807) (#1986)
-      # We apply only the change that adds a GFX_VERSION_GFX1151 define but
-      # *not* the default vgpr change which causes crashes on old kernels
-      # This was later partially reverted in # [PATCH] Revert "hsakmt: bump vgpr count for gfx1151 (#1807) (#1986)"
-      name = "rocr-runtime-gfx1151-vgpr.patch";
-      url = "https://github.com/ROCm/rocm-systems/commit/09ba45b3f43ec333a84a0ca178fcd1e3ea9400a9.patch";
-      relative = "projects/rocr-runtime";
-      includes = [ "libhsakmt/src/libhsakmt.h" ];
-      hash = "sha256-/V5i+sr88n7fK4yNjR/FpY0ZpiEG5xAD6Oq+9ZOikd4=";
     })
     (fetchpatch {
       # [PATCH] hsakmt: Expose and use CWSR and Control stack sizes (#2200)

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "tensile";
-  version = "7.1.1";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "Tensile";
     rev = "rocm-${version}";
-    hash = "sha256-uYLlbtXrc8m8/RpMbP7WaS7VYGIUm2LHYzv00DZAzvE=";
+    hash = "sha256-pTuEeu+0E+RlpdeFho0mJmx/V/tou/ZRLYX9KoWEPpA=";
   };
 
   # TODO: It should be possible to run asm caps test ONCE for all supported arches
@@ -58,8 +58,9 @@ buildPythonPackage rec {
     ./tensile-create-library-dont-copy-twice.diff
     (fetchpatch {
       # [PATCH] Extend Tensile HIP ISA compatibility
-      sha256 = "sha256-d+fVf/vz+sxGqJ96vuxe0jRMgbC5K6j5FQ5SJ1e3Sl8=";
-      url = "https://github.com/GZGavinZhao/Tensile/commit/855cb15839849addb0816a6dde45772034a3e41f.patch";
+      sha256 = "sha256-ZHXNYSeLkhhNDaIfdqQm68Pxmh1shUL7mAVmh8/I6Xk=";
+      url = "https://github.com/GZGavinZhao/rocm-libraries/commit/1f7135dfc0cdb175c8f0e5eb71b2d24699942873.patch";
+      relative = "shared/tensile";
     })
   ];
 

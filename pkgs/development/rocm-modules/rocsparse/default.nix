@@ -7,6 +7,7 @@
   cmake,
   rocm-cmake,
   rocprim,
+  rocblas,
   clr,
   gfortran,
   gtest,
@@ -19,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse${clr.gpuArchSuffix}";
-  version = "7.1.1";
+  version = "7.2.0";
 
   outputs = [
     "out"
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocSPARSE";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-ZNeFslIQZlFCNqWHmrpcxDuOvVu1cjiEd8b6ZNXcZzo=";
+    hash = "sha256-jmrX1a09DlQTkuXwkrInt9pKX5pk3oCO88S0pKXXhO0=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     rocprim
+    rocblas
   ]
   ++ lib.optionals (buildTests || buildBenchmarks) [
     gtest
