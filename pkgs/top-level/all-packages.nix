@@ -9860,33 +9860,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  imagemagick6_light = imagemagick6.override {
-    bzip2Support = false;
-    zlibSupport = false;
-    libX11Support = false;
-    libXtSupport = false;
-    fontconfigSupport = false;
-    freetypeSupport = false;
-    ghostscriptSupport = false;
-    libjpegSupport = false;
-    djvulibreSupport = false;
-    lcms2Support = false;
-    openexrSupport = false;
-    libpngSupport = false;
-    liblqr1Support = false;
-    librsvgSupport = false;
-    libtiffSupport = false;
-    libxml2Support = false;
-    openjpegSupport = false;
-    libwebpSupport = false;
-    libheifSupport = false;
-    libde265Support = false;
-  };
-
-  imagemagick6Big = imagemagick6.override {
-    ghostscriptSupport = true;
-  };
-
   imagemagick_light = lowPrio (
     imagemagick.override {
       bzip2Support = false;
@@ -12550,6 +12523,8 @@ with pkgs;
   bcompare = libsForQt5.callPackage ../applications/version-management/bcompare { };
 
   xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
+
+  radicle-node-unstable = callPackage ../by-name/ra/radicle-node/unstable.nix { };
 
   newlib-nano = newlib.override {
     nanoizeNewlib = true;

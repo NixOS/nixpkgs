@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylint_odoo" ];
 
-  BUILD_README = true; # Enables more tests
+  env.BUILD_README = true; # Enables more tests
 
   nativeCheckInputs = [ pytestCheckHook ];
 

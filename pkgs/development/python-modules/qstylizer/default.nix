@@ -28,7 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-Is/kYkSX9fOX+pLv5g1ns2OxeLpSkaCfO2jPIbiuIxA=";
   };
 
-  PBR_VERSION = version;
+  env.PBR_VERSION = version;
 
   build-system = [
     pbr

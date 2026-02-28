@@ -46,14 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     bash
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
-  ++ lib.optionals withRemote [ libxcrypt ];
+  ++ lib.optionals withRemote [ libxcrypt ]
+  ++ lib.optionals withBluez [ bluez ];
 
   nativeBuildInputs = [
     flex
     bison
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
-  ++ lib.optionals withBluez [ bluez.dev ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.

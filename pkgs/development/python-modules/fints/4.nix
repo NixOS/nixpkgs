@@ -4,8 +4,8 @@
   setuptools,
   fetchFromGitHub,
   bleach,
-  lxml,
   mt-940,
+  pretix-banktool,
   requests,
   sepaxml,
   pytestCheckHook,
@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "5.0.0";
+  version = "4.2.4";
   pname = "fints";
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "raphaelm";
     repo = "python-fints";
     tag = "v${version}";
-    hash = "sha256-ll2+PtcGQiY5nbQTKVetd2ecDBVSXgzWP4Vzzri1Trs=";
+    hash = "sha256-la5vpWBoZ7hZsAyjjCqHpFfOykDVosI/S9amox1dmzY=";
   };
 
   pythonRemoveDeps = [ "enum-tools" ];
@@ -30,7 +30,6 @@ buildPythonPackage rec {
 
   dependencies = [
     bleach
-    lxml
     mt-940
     requests
     sepaxml
@@ -49,8 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/raphaelm/python-fints/";
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [
-      dotlambda
-    ];
+    inherit (pretix-banktool.meta) maintainers;
   };
 }

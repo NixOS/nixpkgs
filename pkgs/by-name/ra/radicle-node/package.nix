@@ -14,17 +14,23 @@
   stdenv,
   xdg-utils,
   versionCheckHook,
+
+  version ? "1.6.1",
+  srcHash ? "sha256-7kwtWuYdYG3MDHThCkY5OZmx4pWaQXMYoOlJszmV2rM=",
+  cargoHash ? "sha256-59RyfSUJNoQ7EtQK3OSYOIO/YVEjeeM9ovbojHFX4pI=",
+  updateScript ? ./update.sh,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  inherit version cargoHash;
+
   pname = "radicle-node";
-  version = "1.6.1";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-7kwtWuYdYG3MDHThCkY5OZmx4pWaQXMYoOlJszmV2rM=";
+    hash = srcHash;
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -32,8 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm -rf $out/.git
     '';
   };
-
-  cargoHash = "sha256-59RyfSUJNoQ7EtQK3OSYOIO/YVEjeeM9ovbojHFX4pI=";
 
   env.RADICLE_VERSION = finalAttrs.version;
 
@@ -112,34 +116,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
-  passthru.tests = {
-    basic =
-      runCommand "radicle-node-basic-test"
-        {
-          nativeBuildInputs = [
-            jq
-            openssh
-            finalAttrs.finalPackage
-          ];
-        }
-        ''
-          set -e
-          export RAD_HOME="$PWD/.radicle"
-          mkdir -p "$RAD_HOME/keys"
-          ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
-          jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
+  passthru = {
+    inherit updateScript;
+    tests = {
+      basic =
+        runCommand "radicle-node-basic-test"
+          {
+            nativeBuildInputs = [
+              jq
+              openssh
+              finalAttrs.finalPackage
+            ];
+          }
+          ''
+            set -e
+            export RAD_HOME="$PWD/.radicle"
+            mkdir -p "$RAD_HOME/keys"
+            ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
+            jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
 
-          rad config > /dev/null
-          rad debug | jq -e '
-              (.sshVersion | contains("${openssh.version}"))
-            and
-              (.gitVersion | contains("${gitMinimal.version}"))
-          '
+            rad config > /dev/null
+            rad debug | jq -e '
+                (.sshVersion | contains("${openssh.version}"))
+              and
+                (.gitVersion | contains("${gitMinimal.version}"))
+            '
 
-          touch $out
-        '';
-    nixos-run = nixosTests.radicle;
+            touch $out
+          '';
+      nixos-run = nixosTests.radicle.extendNixOS {
+        module = {
+          services.radicle.package = finalAttrs.finalPackage;
+        };
+      };
+    };
   };
 
   meta = {

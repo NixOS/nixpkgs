@@ -48,11 +48,6 @@
   enableXWayland ? true,
   withSystemd ? lib.meta.availableOn gcc15Stdenv.hostPlatform systemd,
   wrapRuntimeDeps ? true,
-  # deprecated flags
-  nvidiaPatches ? false,
-  hidpiXWayland ? false,
-  enableNvidiaPatches ? false,
-  legacyRenderer ? false,
 }:
 let
   inherit (builtins)
@@ -85,24 +80,16 @@ let
 
   customStdenv = foldl' (acc: adapter: adapter acc) gcc15Stdenv adapters;
 in
-assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
-assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
-assert assertMsg (!hidpiXWayland)
-  "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
-assert assertMsg (
-  !legacyRenderer
-) "The option `legacyRenderer` has been removed. Legacy renderer is no longer supported.";
-
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.53.3";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-as2crdrJUVOawO8XkWJEZBUNaFdPS8QuQiccTkM1la0=";
+    hash = "sha256-wfiduannx1mWvsGAfuMk8ipOU3AAFuJYPNV4D++dhPY=";
   };
 
   postPatch = ''
@@ -140,9 +127,6 @@ customStdenv.mkDerivation (finalAttrs: {
     hyprwire
     makeWrapper
     cmake
-    # meson + ninja are used to build the hyprland-protocols submodule
-    meson
-    ninja
     pkg-config
     wayland-scanner
     # for udis86
@@ -166,10 +150,11 @@ customStdenv.mkDerivation (finalAttrs: {
       hyprutils
       libGL
       libdrm
+      libgbm
       libinput
       libuuid
+      libxcursor
       libxkbcommon
-      libgbm
       muparser
       pango
       pciutils
@@ -177,15 +162,14 @@ customStdenv.mkDerivation (finalAttrs: {
       tomlplusplus
       wayland
       wayland-protocols
-      libxcursor
     ]
     (optionals customStdenv.hostPlatform.isBSD [ epoll-shim ])
     (optionals customStdenv.hostPlatform.isMusl [ libexecinfo ])
     (optionals enableXWayland [
       libxcb
-      libxdmcp
       libxcb-errors
       libxcb-wm
+      libxdmcp
       xwayland
     ])
     (optionals withSystemd [ systemd ])
@@ -202,7 +186,6 @@ customStdenv.mkDerivation (finalAttrs: {
     "NO_SYSTEMD" = !withSystemd;
     "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
     "NO_UWSM" = !withSystemd;
-    "NO_HYPRPM" = true;
     "TRACY_ENABLE" = false;
   };
 
