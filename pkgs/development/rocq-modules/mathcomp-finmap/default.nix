@@ -29,11 +29,11 @@ mkRocqDerivation {
     lib.switch
       [ rocq-core.rocq-version mathcomp-boot.version ]
       [
-        (case (range "9.0" "9.1") (range "2.3" "2.5") "2.2.2")
+        (case (range "9.0" "9.1") (range "2.3" "2.5") "2.2.3")
       ]
       null;
   release = {
-    "2.2.2".sha256 = "sha256-G5fSdx4MhOXtQ2H8lpyK5FuIbWAZNc7vRL3hcYmGA2o=";
+    "2.2.3".sha256 = "sha256-zqfMFEyD8RBJbElRjr8nGUx4JCAn5t5Jl0x+gbEuOTU=";
   };
 
   propagatedBuildInputs = [ mathcomp-boot ];
