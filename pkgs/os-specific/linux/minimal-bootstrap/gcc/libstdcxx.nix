@@ -20,10 +20,6 @@
   bzip2,
   xz,
   libc,
-
-  # FIXME: targetPlatform may be a fake platform, until
-  # cross-compilation infrastructure is properly in place.
-  dynamicLinkerOverride ? null,
 }:
 let
   common = import ./common.nix {
@@ -45,11 +41,7 @@ let
     buildPlatform.config != hostPlatform.config
   ) "${hostPlatform.config}-";
 
-  dynamicLinkerGlob = if dynamicLinkerOverride != null then dynamicLinkerOverride else common.dynamicLinkerGlob hostPlatform libc;
-
-  # FIXME: hack until we have a proper cross-compilation setup in minimal-bootstrap
-  fakeBuildPlatform = lib.replaceString "-gnu" "-musl" buildPlatform.config;
-  fakeHostPlatform = lib.replaceString "-gnu" "-musl" hostPlatform.config;
+  dynamicLinkerGlob = common.dynamicLinkerGlob hostPlatform libc;
 in
 bash.runCommand "${pname}-${common.version}"
   {
@@ -134,8 +126,8 @@ bash.runCommand "${pname}-${common.version}"
     export NM="${binutilsTargetPrefix}nm"
     export OBJCOPY="${binutilsTargetPrefix}objcopy"
     ../src/libstdc++-v3/configure \
-      --build=${fakeBuildPlatform} \
-      --host=${fakeHostPlatform} \
+      --build=${buildPlatform.config} \
+      --host=${hostPlatform.config} \
       --prefix="$out" \
       --disable-dependency-tracking \
       gcc_cv_target_thread_file=posix \
@@ -164,7 +156,4 @@ bash.runCommand "${pname}-${common.version}"
       rm -rf "$out/lib64"
       ln -s lib "$out/lib64"
     fi
-
-    # FIXME: hack until we have a proper cross-compilation setup in minimal-bootstrap
-    ln -s "$out/include/c++/${common.version}/${fakeHostPlatform}" "$out/include/c++/${common.version}/${hostPlatform.config}"
   ''

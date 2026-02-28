@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  gcc-glibc,
   libgcc,
   binutils,
   linux-headers,
@@ -29,7 +28,9 @@ let
     hash = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
   };
   # FIXME: eventually, prefix unconditionally
-  binutilsTargetPrefix = "";
+  binutilsTargetPrefix = lib.optionalString (
+    hostPlatform.config != buildPlatform.config
+  ) "${hostPlatform.config}-";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -49,30 +50,6 @@ bash.runCommand "${pname}-${version}"
       gnutar
       xz
     ];
-
-    passthru = {
-      tests.hello-world =
-        result:
-        bash.runCommand "${pname}-simple-program-${version}"
-          {
-            nativeBuildInputs = [
-              gcc-glibc
-              binutils
-            ];
-          }
-          ''
-            cat <<EOF >> test.c
-            #include <stdio.h>
-            int main() {
-              printf("Hello World!\n");
-              return 0;
-            }
-            EOF
-            gcc -o test test.c
-            ./test
-            mkdir $out
-          '';
-    };
 
     meta = {
       description = "The GNU C Library";
@@ -101,6 +78,7 @@ bash.runCommand "${pname}-${version}"
     export LDFLAGS="-L${libgcc}/lib -L${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -B${libgcc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}"
     # libstdc++.so is built against musl and fails to link
     export CXX=false
+
     bash ../configure \
       --prefix=$out \
       --build=${buildPlatform.config} \

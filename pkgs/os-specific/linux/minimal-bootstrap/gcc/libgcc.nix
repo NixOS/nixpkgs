@@ -154,10 +154,8 @@ in
         --disable-libvtv \
         --disable-vtable-verify \
         --with-sysroot=/ \
-        --with-native-system-headers=${libc-headers}/include
-
-      # TODO: pass to ./configure once hostPlatform is no longer a fake platform
-      # ${lib.optionalString hostPlatform.isGnu "--with-glibc-version=${libc-headers.version}"}
+        --with-native-system-headers=${libc-headers}/include \
+        ${lib.optionalString hostPlatform.isGnu "--with-glibc-version=${libc-headers.version}"}
 
 
       sed -i 's,libgcc.mvars:.*$,libgcc.mvars:,' -i Makefile
