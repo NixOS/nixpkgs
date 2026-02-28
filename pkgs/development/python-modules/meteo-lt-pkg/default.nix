@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "meteo-lt-pkg";
-  version = "0.4.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Brunas";
     repo = "meteo_lt-pkg";
     tag = "v${version}";
-    hash = "sha256-JYuWO9w0JHjmx4pnjh/WSKJNxVePkqWzPew0wd06uJ8=";
+    hash = "sha256-qAgXyo7vpehGkOK2NJWX70YPEyO7kdVhQalm/p+jPRU=";
   };
 
   build-system = [ setuptools ];
@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # tests contact api.meteo.lt
+    "test_context_manager"
     "test_get_forecast"
     "test_get_nearest_place"
   ];
