@@ -2,7 +2,6 @@
   localSystem,
   config,
   lib,
-  bootstrapFiles,
 }:
 let
   minbootBuildPlatform = lib.systems.elaborate (
