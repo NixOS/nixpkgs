@@ -19,8 +19,7 @@
   numpy,
   protobuf,
   pillow,
-  decorator,
-  astor,
+  networkx,
   opt-einsum,
   rdma-core,
   safetensors,
@@ -74,15 +73,18 @@ buildPythonPackage {
 
   buildInputs = lib.optionals cudaSupport [ rdma-core ];
 
+  pythonRelaxDeps = [
+    opt-einsum
+  ];
+
   dependencies = [
     setuptools
     httpx
     numpy
     protobuf
     pillow
-    decorator
-    astor
     opt-einsum
+    networkx
     safetensors
     typing-extensions
   ];
