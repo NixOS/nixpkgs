@@ -18,6 +18,8 @@ in
 
   helm-secrets = callPackage ./helm-secrets.nix { };
 
+  helm-schema-dadav = callPackage ./helm-schema-dadav.nix { };
+
   inherit helm-schema-losisin;
 
   # Alias for backwards compatibility, points to the original package
