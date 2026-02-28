@@ -104,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     glslang
+    kdePackages.plasma-integration # Enables theming support in eden
     pkg-config
     python3
     qt6.qttools
