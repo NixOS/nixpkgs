@@ -40,12 +40,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     OPENSSL_NO_VENDOR = 1;
+    NIX_CFLAGS_LINK = toString [
+      "-L${lib.getLib openssl}/lib"
+      "-L${lib.getLib sqlite}/lib"
+    ];
   };
-
-  NIX_CFLAGS_LINK = [
-    "-L${lib.getLib openssl}/lib"
-    "-L${lib.getLib sqlite}/lib"
-  ];
 
   passthru.updateScript = unstableGitUpdater { };
 
