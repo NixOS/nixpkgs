@@ -3279,6 +3279,54 @@ runTests {
     ];
   };
 
+  testToCommandLineGNUWithDetachArg = {
+    expr =
+      cli.toCommandLineGNU
+        {
+          detachArg =
+            optionName:
+            builtins.elem optionName [
+              "n"
+              "s"
+            ];
+        }
+        {
+          v = true;
+          verbose = [
+            true
+            true
+            false
+            null
+          ];
+          i = ".bak";
+          testsuite = [
+            "unit"
+            "integration"
+          ];
+          e = [
+            "s/a/b/"
+            "s/b/c/"
+          ];
+          n = false;
+          data = builtins.toJSON { id = 0; };
+          s = "";
+        };
+
+    expected = [
+      "--data={\"id\":0}"
+      "-es/a/b/"
+      "-es/b/c/"
+      "-i.bak"
+      "-s"
+      ""
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ];
+  };
+
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
     name = "..foo";
     expected = "foo";
