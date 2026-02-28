@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Collection of Alacritty color schemes";
-    homepage = "https://alacritty.org/";
+    homepage = "https://github.com/alacritty/alacritty-theme";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.nicoo ];
     platforms = lib.platforms.all;
