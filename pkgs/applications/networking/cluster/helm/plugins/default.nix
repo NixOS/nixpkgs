@@ -1,5 +1,8 @@
 { callPackage }:
 
+let
+  helm-schema-losisin = callPackage ./helm-schema-losisin.nix { };
+in
 {
   helm-cm-push = callPackage ./helm-cm-push.nix { };
 
@@ -15,7 +18,10 @@
 
   helm-secrets = callPackage ./helm-secrets.nix { };
 
-  helm-schema = callPackage ./helm-schema.nix { };
+  inherit helm-schema-losisin;
+
+  # Alias for backwards compatibility, points to the original package
+  helm-schema = helm-schema-losisin;
 
   helm-unittest = callPackage ./helm-unittest.nix { };
 }
