@@ -197,9 +197,22 @@ let
         rm -rf $out/lib/cmake $out/lib/lib*.a
         mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/linux/
         ln -s $out/lib/linux/libclang_rt.* $out/lib/clang/${llvmMajorVersion}/lib/linux/
+        mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/${stdenv.hostPlatform.config}/
+        for f in $out/lib/linux/*-${stdenv.hostPlatform.parsed.cpu.name}.*; do
+          [ -e "$f" ] || continue
+          base="$(basename "$f" | sed 's/-${stdenv.hostPlatform.parsed.cpu.name}\././')"
+          ln -sf "$f" "$out/lib/clang/${llvmMajorVersion}/lib/${stdenv.hostPlatform.config}/$base"
+        done
 
         find $out -type f -exec sed -i "s|${cc.out}|$out|g" {} +
         find $out -type f -exec sed -i "s|${cc.dev}|$out|g" {} +
+
+        # Clang config file: redirect resource dir to the sysroot (where compiler-rt
+        # lives) and set GCC install prefix for header/library search
+        cat > $out/bin/${stdenv.hostPlatform.config}.cfg <<CFG
+        -resource-dir=$out/lib/clang/${llvmMajorVersion}
+        ${lib.optionalString (!withLibcxx) "--gcc-toolchain=${gcc-prefix}"}
+        CFG
 
         ${lib.getExe rdfind} -makesymlinks true ${
           builtins.concatStringsSep " " (map (x: "${x}/lib") paths)
@@ -376,13 +389,7 @@ overrideLlvmPackagesRocm (s: {
         cmakeFlags =
           # TODO: Remove in followup, tblgen now works correctly but would rebuild
           (builtins.filter tablegenUsage old.cmakeFlags)
-          ++ commonCmakeFlags
-          ++ lib.optionals (!withLibcxx) [
-            # FIXME: Config file in rocm-toolchain instead of GCC_INSTALL_PREFIX?
-            # Expected to be fully removed eventually
-            "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
-            "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
-          ];
+          ++ commonCmakeFlags;
         preFixup = ''
           ${toString old.preFixup or ""}
           moveToOutput "lib/lib*.a" "$dev"
