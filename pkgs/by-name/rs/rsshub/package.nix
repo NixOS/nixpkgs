@@ -8,6 +8,7 @@
   pnpmConfigHook,
   replaceVars,
   stdenv,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
@@ -63,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
       --set "TSX_TSCONFIG_PATH" "$out/lib/rsshub/tsconfig.json" \
       --append-flags "$out/lib/rsshub/dist/index.mjs"
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
 
   meta = {
     description = "RSS feed generator";
