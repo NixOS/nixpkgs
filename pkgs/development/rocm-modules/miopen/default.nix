@@ -285,6 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit frugally-deep nlohmann_json;
     };
   };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Machine intelligence library for ROCm";
