@@ -14,18 +14,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+w4w1cftPSj0gJ23Slw8Oexljmu0N/PZWH4IDjw75rs=";
+    hash = "sha256-huPd4W7Jf4/dZshWElicYpcHhktE83wPs/z5jVYwynM=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-Nkd5Q2ugRqsTqaFbCSniC3Obl++uEjVUmoa8MVT5++8=";
+  npmDepsHash = "sha256-iRlwCSGigRi/ilfXi8rI68vlfkeec3vB5nZWPmTLnK8=";
 
   dontPatchElf = stdenv.isDarwin;
 
@@ -43,6 +43,11 @@ buildNpmPackage (finalAttrs: {
   preConfigure = ''
     mkdir -p packages/generated
     echo "export const GIT_COMMIT_INFO = { commitHash: '${finalAttrs.src.rev}' };" > packages/generated/git-commit.ts
+  '';
+
+  # Build devtools before workspaces since cli dynamically imports it but doesn't declare the dependency
+  preBuild = ''
+    npm run build --workspace=@google/gemini-cli-devtools
   '';
 
   postPatch = ''
@@ -92,10 +97,12 @@ buildNpmPackage (finalAttrs: {
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-sdk
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-test-utils
+    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-devtools
     rm -f $out/share/gemini-cli/node_modules/gemini-cli-vscode-ide-companion
     cp -r packages/cli $out/share/gemini-cli/node_modules/@google/gemini-cli
     cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
     cp -r packages/a2a-server $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
+    cp -r packages/devtools $out/share/gemini-cli/node_modules/@google/gemini-cli-devtools
 
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core/dist/docs/CONTRIBUTING.md
 
@@ -122,6 +129,7 @@ buildNpmPackage (finalAttrs: {
       xiaoxiangmoe
       FlameFlag
       taranarmo
+      jtliang24
     ];
     platforms = lib.platforms.all;
     mainProgram = "gemini";
