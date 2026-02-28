@@ -21,6 +21,7 @@
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation-requests,
+  opentelemetry-instrumentation-threading,
   opentelemetry-sdk,
   mcp,
   packaging,
@@ -32,6 +33,7 @@
   requests,
   rich,
   ruamel-yaml,
+  semantic-version,
   tomli,
   tqdm,
   types-freezegun,
@@ -94,6 +96,7 @@ buildPythonPackage rec {
     requests
     rich
     ruamel-yaml
+    semantic-version
     tqdm
     packaging
     jsonschema
@@ -109,6 +112,7 @@ buildPythonPackage rec {
     opentelemetry-sdk
     opentelemetry-exporter-otlp-proto-http
     opentelemetry-instrumentation-requests
+    opentelemetry-instrumentation-threading
   ];
 
   doCheck = true;
