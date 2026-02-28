@@ -37,7 +37,7 @@ in
       '';
       type = types.attrsOf (
         types.submodule (
-          { ... }:
+          { name, ... }:
           {
             options = {
               enable = mkEnableOption "Wyoming Piper server";
@@ -49,7 +49,7 @@ in
 
                 name = mkOption {
                   type = str;
-                  default = "piper";
+                  default = "piper-${name}";
                   description = ''
                     The advertised name for zeroconf discovery.
                   '';
@@ -205,8 +205,11 @@ in
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"
-              "AF_NETLINK"
               "AF_UNIX"
+            ]
+            ++ lib.optionals options.zeroconf.enable [
+              # Zeroconf support require network interface enumeration
+              "AF_NETLINK"
             ];
             RestrictNamespaces = true;
             RestrictRealtime = true;

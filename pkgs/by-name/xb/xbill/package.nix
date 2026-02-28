@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     motif
   ];
 
-  NIX_CFLAGS_LINK = "-lXpm";
+  env.NIX_CFLAGS_LINK = "-lXpm";
 
   configureFlags = [
     "--with-x"

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   hatchling,
@@ -11,19 +12,19 @@
   langchain-mongodb,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-store-mongodb";
-  version = "0.11.0";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
-    tag = "libs/langchain-mongodb/v${version}";
-    hash = "sha256-dO0dASjyNMxnbxZ/ry8lcJxedPdrv6coYiTjOcaT8/0=";
+    tag = "libs/langgraph-store-mongodb/v${finalAttrs.version}";
+    hash = "sha256-IXISxo3mC0/FkjGdHTmin6z/fk71ecto+L+VZ6VFdeE=";
   };
 
-  sourceRoot = "${src.name}/libs/langgraph-store-mongodb";
+  sourceRoot = "${finalAttrs.src.name}/libs/langgraph-store-mongodb";
 
   build-system = [
     hatchling
@@ -40,11 +41,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langgraph.store.mongodb" ];
 
+  # updater script selects wrong tag
+  passthru = {
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-vr"
+        "libs/langgraph-store-mongodb/v(.*)"
+      ];
+    };
+  };
+
   meta = {
     description = "Integrations between MongoDB, Atlas, LangChain, and LangGraph";
     homepage = "https://github.com/langchain-ai/langchain-mongodb/tree/main/libs/langgraph-store-mongodb";
-    changelog = "https://github.com/langchain-ai/langchain-mongodb/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-mongodb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

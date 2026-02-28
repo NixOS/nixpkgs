@@ -7184,6 +7184,8 @@ self: super: with self; {
 
   huggingface-hub = callPackage ../development/python-modules/huggingface-hub { };
 
+  huggingface-hub_0 = callPackage ../development/python-modules/huggingface-hub/0.nix { };
+
   human-readable = callPackage ../development/python-modules/human-readable { };
 
   humanfriendly = callPackage ../development/python-modules/humanfriendly { };
@@ -19394,6 +19396,8 @@ self: super: with self; {
   transaction = callPackage ../development/python-modules/transaction { };
 
   transformers = callPackage ../development/python-modules/transformers { };
+
+  transformers_4 = callPackage ../development/python-modules/transformers/4.nix { };
 
   transforms3d = callPackage ../development/python-modules/transforms3d { };
 

@@ -41,8 +41,10 @@ let
 
       doCheck = false;
 
-      BUILD_USER = "nix";
-      BUILD_HOST = "nix";
+      env = {
+        BUILD_USER = "nix";
+        BUILD_HOST = "nix";
+      };
 
       buildPhase = ''
         runHook preBuild
