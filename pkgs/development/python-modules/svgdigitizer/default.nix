@@ -59,7 +59,7 @@ buildPythonPackage rec {
     svgwrite
   ];
   # https://github.com/echemdb/svgdigitizer/issues/252
-  MPLBACKEND = "Agg";
+  env.MPLBACKEND = "Agg";
 
   nativeCheckInputs = [
     pytestCheckHook

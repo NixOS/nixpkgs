@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-mrutQCSSiiLPt0KEohZeYcQ8aw2Jhy02bEvn6Of8w6U=";
   };
 
-  LC_ALL = "en_US.utf-8";
+  env.LC_ALL = "en_US.utf-8";
 
   build-system = [ setuptools ];
 

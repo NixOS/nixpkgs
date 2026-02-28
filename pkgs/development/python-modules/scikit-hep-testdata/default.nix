@@ -30,7 +30,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  SKHEP_DATA = 1; # install the actual root files
+  env.SKHEP_DATA = 1; # install the actual root files
 
   doCheck = false; # tests require networking
 

@@ -87,7 +87,7 @@ buildPythonPackage rec {
     export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
-  FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  env.FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
 
   pythonRemoveDeps = [
     "nvidia-cudnn-frontend"
