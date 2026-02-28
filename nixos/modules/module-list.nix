@@ -907,6 +907,7 @@
   ./services/misc/ntfy-sh.nix
   ./services/misc/nzbget.nix
   ./services/misc/nzbhydra2.nix
+  ./services/misc/octoapp.nix
   ./services/misc/octoprint.nix
   ./services/misc/ollama.nix
   ./services/misc/ombi.nix

@@ -1163,6 +1163,7 @@ in
   oci-containers = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./oci-containers.nix { };
   ocis = runTest ./ocis.nix;
   ocsinventory-agent = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./ocsinventory-agent.nix { };
+  octoapp = runTest ./octoapp.nix;
   octoprint = runTest ./octoprint.nix;
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
   odoo = runTest ./odoo.nix;
