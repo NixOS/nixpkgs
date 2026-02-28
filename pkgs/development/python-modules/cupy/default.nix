@@ -130,6 +130,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } rec {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
