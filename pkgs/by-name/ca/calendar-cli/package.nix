@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     tzlocal
     click
     six
+    urllib3
     vobject
   ];
 

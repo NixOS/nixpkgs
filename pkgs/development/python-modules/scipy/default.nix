@@ -243,7 +243,7 @@ buildPythonPackage (finalAttrs: {
     };
   };
 
-  SCIPY_USE_G77_ABI_WRAPPER = 1;
+  env.SCIPY_USE_G77_ABI_WRAPPER = 1;
 
   meta = {
     changelog = "https://github.com/scipy/scipy/releases/tag/v${finalAttrs.version}";

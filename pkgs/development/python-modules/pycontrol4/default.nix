@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pycontrol4";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lawtancool";
     repo = "pyControl4";
     tag = "v${version}";
-    hash = "sha256-CDo2tphWN62ZHz2nWa6oWWfzcPDhSLCu0B2NxEI8yMw=";
+    hash = "sha256-4qgyn2ekxo0pjPixfNpRqHE+jgsNQGk9fbESbUTDxMg=";
   };
 
   build-system = [ setuptools ];

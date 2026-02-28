@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  CMAKE_ARGS = [ "-DEXTERNAL_PYBIND11=ON" ];
+  env.CMAKE_ARGS = toString [ "-DEXTERNAL_PYBIND11=ON" ];
 
   nativeCheckInputs = [
     graphviz

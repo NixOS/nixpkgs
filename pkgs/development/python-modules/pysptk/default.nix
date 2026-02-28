@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-eLHJM4v3laQc3D/wP81GmcQBwyP1RjC7caGXEAeNCz8=";
   };
 
-  PYSPTK_BUILD_VERSION = 0;
+  env.PYSPTK_BUILD_VERSION = 0;
 
   nativeBuildInputs = [ cython ];
 

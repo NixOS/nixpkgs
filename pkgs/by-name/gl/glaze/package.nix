@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals enableSSL [ openssl ];
+  propagatedBuildInputs = lib.optionals enableSSL [ openssl ];
 
   # https://github.com/stephenberry/glaze/blob/main/CMakeLists.txt
   cmakeFlags = [

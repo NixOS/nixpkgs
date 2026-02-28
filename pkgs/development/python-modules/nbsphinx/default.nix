@@ -42,7 +42,7 @@ buildPythonPackage rec {
   # The package has not tests
   doCheck = false;
 
-  JUPYTER_PATH = "${nbconvert}/share/jupyter";
+  env.JUPYTER_PATH = "${nbconvert}/share/jupyter";
 
   pythonImportsCheck = [ "nbsphinx" ];
 

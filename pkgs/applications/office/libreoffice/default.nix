@@ -186,15 +186,6 @@ let
     optionalString
     ;
 
-  notoSubset =
-    suffixes:
-    runCommand "noto-fonts-subset" { } ''
-      mkdir -p "$out/share/fonts/noto/"
-      ${concatMapStrings (x: ''
-        cp "${noto-fonts}/share/fonts/noto/NotoSans${x}["*.[ot]tf "$out/share/fonts/noto/"
-      '') suffixes}
-    '';
-
   fontsConf = makeFontsConf {
     fontDirectories = [
       amiri
@@ -207,9 +198,8 @@ let
       liberation_ttf_v2
       libertine
       linux-libertine-g
-      # Font priority issues in some tests in Still
       noto-fonts-lgc-plus
-      (if variant == "fresh" then noto-fonts else (notoSubset [ "Arabic" ]))
+      noto-fonts
       noto-fonts-cjk-sans
     ];
   };
