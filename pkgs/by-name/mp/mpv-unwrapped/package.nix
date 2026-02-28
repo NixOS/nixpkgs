@@ -45,7 +45,7 @@
   ninja,
   nixosTests,
   nv-codec-headers-11,
-  openalSoft,
+  openal-soft,
   pipewire,
   pkg-config,
   python3,
@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonOption "default_library" "shared")
+    (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonBool "libmpv" true)
     (lib.mesonEnable "manpage-build" true)
     (lib.mesonEnable "cdda" cddaSupport)
@@ -197,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals jackaudioSupport [ libjack2 ]
   ++ lib.optionals javascriptSupport [ mujs ]
-  ++ lib.optionals openalSupport [ openalSoft ]
+  ++ lib.optionals openalSupport [ openal-soft ]
   ++ lib.optionals pipewireSupport [ pipewire ]
   ++ lib.optionals pulseSupport [ libpulseaudio ]
   ++ lib.optionals rubberbandSupport [ rubberband ]

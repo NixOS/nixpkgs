@@ -39,8 +39,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = with python3Packages; [
     pygobject3
     pillow
-    pywal
+    pywal16
   ];
+
+  # use pywal16 fork instead
+  pythonRemoveDeps = [ "pywal" ];
 
   dontWrapGApps = true;
 
@@ -54,7 +57,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     longDescription = ''
       In short, wpgtk is a colorscheme/wallpaper manager with a template system attached which lets you create templates from any textfile and will replace keywords on it on the fly, allowing for great styling and theming possibilities.
 
-      wpgtk uses pywal as its colorscheme generator, but builds upon it with a UI and other features, such as the abilty to mix and edit the colorschemes generated and save them with their respective wallpapers, having light and dark themes, hackable and fast GTK theme made specifically for wpgtk and custom keywords and values to replace in templates.
+      wpgtk uses pywal16 as its colorscheme generator, but builds upon it with a UI and other features, such as the abilty to mix and edit the colorschemes generated and save them with their respective wallpapers, having light and dark themes, hackable and fast GTK theme made specifically for wpgtk and custom keywords and values to replace in templates.
 
       INFO: To work properly, this tool needs "programs.dconf.enable = true" on nixos or dconf installed. A reboot may be required after installing dconf.
     '';

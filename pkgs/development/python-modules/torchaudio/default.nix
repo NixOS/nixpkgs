@@ -3,7 +3,6 @@
   symlinkJoin,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -76,16 +75,16 @@ let
   );
   stdenv = torch.stdenv;
 in
-buildPythonPackage.override { inherit stdenv; } rec {
+buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torchaudio";
-  version = "2.9.1";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
-    tag = "v${version}";
-    hash = "sha256-tTilG/haU3OycSWqA5LR3egcxHVRg/yHJ8JB2rz3aKw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b1sjHVFXdNFDbdtXWSM2KisSRE/8IbzJI4rvzYQ4UMg=";
   };
 
   patches = [
@@ -100,16 +99,19 @@ buildPythonPackage.override { inherit stdenv; } rec {
 
   env = {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
-  };
-
-  # https://github.com/pytorch/audio/blob/v2.1.0/docs/source/build.linux.rst#optional-build-torchaudio-with-a-custom-built-ffmpeg
-  FFMPEG_ROOT = symlinkJoin {
-    name = "ffmpeg";
-    paths = [
-      ffmpeg_6-full.bin
-      ffmpeg_6-full.dev
-      ffmpeg_6-full.lib
-    ];
+    # https://github.com/pytorch/audio/blob/v2.1.0/docs/source/build.linux.rst#optional-build-torchaudio-with-a-custom-built-ffmpeg
+    FFMPEG_ROOT = symlinkJoin {
+      name = "ffmpeg";
+      paths = [
+        ffmpeg_6-full.bin
+        ffmpeg_6-full.dev
+        ffmpeg_6-full.lib
+      ];
+    };
+    BUILD_SOX = 0;
+    BUILD_KALDI = 0;
+    BUILD_RNNT = 0;
+    BUILD_CTC_DECODER = 0;
   };
 
   nativeBuildInputs = [
@@ -137,11 +139,6 @@ buildPythonPackage.override { inherit stdenv; } rec {
 
   dependencies = [ torch ];
 
-  BUILD_SOX = 0;
-  BUILD_KALDI = 0;
-  BUILD_RNNT = 0;
-  BUILD_CTC_DECODER = 0;
-
   preConfigure = lib.optionalString rocmSupport ''
     export ROCM_PATH=${rocmtoolkit_joined}
     export PYTORCH_ROCM_ARCH="${gpuTargetString}"
@@ -156,7 +153,7 @@ buildPythonPackage.override { inherit stdenv; } rec {
   meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
-    changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/audio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     platforms =
       lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
@@ -165,4 +162,4 @@ buildPythonPackage.override { inherit stdenv; } rec {
       junjihashimoto
     ];
   };
-}
+})

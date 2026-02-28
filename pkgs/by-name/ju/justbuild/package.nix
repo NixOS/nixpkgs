@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     tag = "v${version}";
-    hash = "sha256-ZTwe6S0AH1yQt5mABtIeWuMbiVSKeOZWMFI26fthLsM=";
+    hash = "sha256-WJg6zDgDKJjxbR7fdFUY6f2uNHntYPZT8lIt2kAJqAo=";
   };
 
   bazelapi = fetchurl {
@@ -52,14 +52,6 @@ stdenv.mkDerivation rec {
     url = "https://github.com/googleapis/googleapis/archive/fe8ba054ad4f7eca946c2d14a63c3f07c0b586a0.tar.gz";
     hash = "sha256:1r33jj8yipxjgiarddcxr1yc5kmn98rwrjl9qxfx0fzn1bsg04q5";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "blob-tree-add-hash.patch";
-      url = "https://github.com/just-buildsystem/justbuild/commit/c54a46de7df0c6b26b7d8f4a10d380103da634fb.patch?full_index=1";
-      hash = "sha256-hAi4YJmNAwfSl2SWjVCWBhk7VbQeNN1JhmHS9dy2GdU=";
-    })
-  ];
 
   nativeBuildInputs = [
     # Tools for the bootstrap process

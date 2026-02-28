@@ -2,26 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytest-subtests,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tzdata";
-  version = "2025.2";
+  version = "2025.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tgpjj8wNr/rfgv4PV+U9Br3sLzbE32YoCuebzmvW8rk=";
+    hash = "sha256-3jnCyl3HsDRPLrqG9J1hQBnSnwYPxOvIpBeJamILVqc=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-subtests
   ];
 
   pythonImportsCheck = [ "tzdata" ];

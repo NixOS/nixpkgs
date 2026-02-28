@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   name = "tor";
-  meta.maintainers = with lib.maintainers; [ joachifm ];
+  meta.maintainers = [ ];
 
   nodes.client =
     { pkgs, ... }:

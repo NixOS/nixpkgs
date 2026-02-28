@@ -19,14 +19,14 @@
 let
   nbclient = buildPythonPackage rec {
     pname = "nbclient";
-    version = "0.10.2";
+    version = "0.10.4";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "jupyter";
       repo = "nbclient";
       tag = "v${version}";
-      hash = "sha256-+qSed6yy4YVZ25GigNTap+kMaoDiMYSJO85wurbzeDs=";
+      hash = "sha256-D7pgrNRrPT0fGOaHrNt3qeDXdbt1wJk5qfkQeLxsc7g=";
     };
 
     build-system = [ hatchling ];

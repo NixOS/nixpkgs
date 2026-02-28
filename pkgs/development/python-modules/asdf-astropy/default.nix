@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-8atPmtVWb+4Dj1Lf0UIusBtAIW7lF5D+1ay7G7Ay3PA=";
   };
 
+  postPatch = ''
+    # pytest chokes on unhandled options in the [tool.pytest.ini_options] section
+    sed -i "/asdf_schema_/d" pyproject.toml
+  '';
+
   build-system = [
     setuptools
     setuptools-scm

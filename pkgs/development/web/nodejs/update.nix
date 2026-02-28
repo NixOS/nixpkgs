@@ -48,5 +48,5 @@ writeScript "update-nodejs" ''
     gpgv --keyring="${pubring}" --output - | \
     grep -oP "^([0-9a-f]{64})(?=\s+node-v''${version}.tar.xz$)"`
 
-  update-source-version nodejs_${majorVersion} "''${version}" "''${hash_hex}"
+  update-source-version nodejs-slim_${majorVersion} "''${version}" "''${hash_hex}"
 ''

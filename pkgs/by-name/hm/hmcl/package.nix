@@ -32,6 +32,7 @@
   xrandr,
   glib,
   libGL,
+  glfw3,
   glfw3-minecraft,
   openal,
   libglvnd,
@@ -43,15 +44,18 @@
   callPackage,
   gtk3,
 }:
+let
+  glfw3' = if stdenv.hostPlatform.isLinux then glfw3-minecraft else glfw3;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.10.3";
+  version = "3.11.1";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-+xxDACa2ECbWaCUzK0b/rcRS49Hex4GZDcNNK/aEURs=";
+    hash = "sha256-nthmv/xvgQ4JFmtcwn4XkCHcdzC23hJ5McoAIl2g8A4=";
   };
 
   # - HMCL prompts users to download prebuilt Terracotta binary for
@@ -137,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDeps = [
     libGL
-    glfw3-minecraft
+    glfw3'
     glib
     openal
     libglvnd
@@ -188,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xrandr)
       }" \
       --run 'cd $HOME' \
-      --prefix JAVA_TOOL_OPTIONS " " "-Dorg.lwjgl.glfw.libname=${lib.getLib glfw3-minecraft}/lib/libglfw.so" \
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''--prefix JAVA_TOOL_OPTIONS " " "-Dorg.lwjgl.glfw.libname=${lib.getLib glfw3'}/lib/libglfw.so"''} \
       ''${gappsWrapperArgs[@]}
   '';
 

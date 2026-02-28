@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-MtRlZFrTlY7t0n08X0aYN5HRGZUGLHkcU1gaZCtj07Q=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.6,<0.10.0" uv_build
+  '';
+
   build-system = [ uv-build ];
 
   dependencies = [

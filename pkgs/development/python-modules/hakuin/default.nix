@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "hakuin";
-  version = "0.1.10";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pruzko";
     repo = "hakuin";
     tag = version;
-    hash = "sha256-l5YnGRPUZUQqOaRvQd4l4eowWGpuPBignjkDDT9q7fg=";
+    hash = "sha256-97nh+woUsCXcoO2i5KprCwJiE24V3mg91qcNgy7bpgg=";
   };
 
   build-system = [ hatchling ];

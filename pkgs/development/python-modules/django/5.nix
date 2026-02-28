@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   replaceVars,
 
   # build-system
@@ -42,39 +41,27 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.9";
+  version = "5.2.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
     tag = version;
-    hash = "sha256-9URe8hB15WP92AU1YgGGFfZhVxn59gfBRrORZ04L+F0=";
+    hash = "sha256-Ldscb87ts0CPbt5uBiL3DK3qhU6SzTmsEUl90Afko84=";
   };
 
   patches = [
-    (replaceVars ./django_5_set_zoneinfo_dir.patch {
+    (replaceVars ./5.2/zoneinfo.patch {
       zoneinfo = tzdata + "/share/zoneinfo";
     })
     # prevent tests from messing with our pythonpath
-    ./django_5_tests_pythonpath.patch
+    ./5.2/pythonpath.patch
     # disable test that expects timezone issues
-    ./django_5_disable_failing_tests.patch
-
-    # 3.14.1/3.13.10 comapt
-    (fetchpatch {
-      # https://github.com/django/django/pull/20390
-      url = "https://github.com/django/django/commit/5ca0f62213911a77dd4a62e843db7e420cc98b78.patch";
-      hash = "sha256-SpVdbS4S5wqvrrUOoZJ7d2cIbtmgI0mvxwwCveSA068=";
-    })
-    (fetchpatch {
-      # https://github.com/django/django/pull/20392
-      url = "https://github.com/django/django/commit/9cc231e8243091519f5d627cd02ee40bbb853ced.patch";
-      hash = "sha256-/aimmqxurMCCntraxOtybEq8qNgZgQWLD5Gxs/3pkIU=";
-    })
+    ./5.2/disable-failing-test.patch
   ]
   ++ lib.optionals withGdal [
-    (replaceVars ./django_5_set_geos_gdal_lib.patch {
+    (replaceVars ./5.2/gdal.patch {
       geos = geos;
       gdal = gdal;
       extension = stdenv.hostPlatform.extensions.sharedLibrary;

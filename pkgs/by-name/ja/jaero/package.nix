@@ -75,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ noderyos ];
+    mainProgram = "JAERO";
   };
 })

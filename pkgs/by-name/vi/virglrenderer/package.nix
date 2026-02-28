@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "virglrenderer";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "virgl";
     repo = "virglrenderer";
     tag = finalAttrs.version;
-    hash = "sha256-5Ok5ctJ3kcBH05URctvZ0hCZA/o59r2KsAOJYoiWMHs=";
+    hash = "sha256-2RoKIjtxShJCaezbkCrtW+lSaWKnOoUZzpSEPCJHSC8=";
   };
 
   separateDebugInfo = true;

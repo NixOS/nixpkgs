@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [ systemdLibs ];
 
-  CGO_CFLAGS = "-I ${systemdLibs}/include";
+  env.CGO_CFLAGS = "-I ${systemdLibs}/include";
 
   ldflags = [
     "-extldflags='-Wl,-z,lazy'"

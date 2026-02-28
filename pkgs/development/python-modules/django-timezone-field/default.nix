@@ -7,20 +7,20 @@
   djangorestframework,
   pytestCheckHook,
   pytest-django,
-  pytest-lazy-fixture,
+  pytest-lazy-fixtures,
   pytz,
 }:
 
 buildPythonPackage rec {
   pname = "django-timezone-field";
-  version = "7.0";
+  version = "7.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mfogel";
     repo = "django-timezone-field";
-    rev = version;
-    hash = "sha256-q06TuYkBA4z6tJdT3an6Z8o1i/o85XbYa1JYZBHC8lI=";
+    tag = version;
+    hash = "sha256-iOdWgLj6qzMYusfpG/aCBk3ca9Ge7Kx2p9herJtpORs=";
   };
 
   build-system = [ poetry-core ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     djangorestframework
     pytestCheckHook
     pytest-django
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytz
   ];
 

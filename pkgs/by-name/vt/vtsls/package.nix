@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./vtsls-build-patch.patch ];
 
   # Skips manual confirmations during build
-  CI = true;
+  env.CI = true;
 
   buildPhase = ''
     runHook preBuild

@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
   psycopg,
 }:
 
 buildPythonPackage rec {
   pname = "harlequin-postgres";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "harlequin_postgres";
     inherit version;
-    hash = "sha256-u/x8Jx1yfUtFSYX6oyvOZJmdPWbaOkFn3OGQdqxyK8A=";
+    hash = "sha256-01MllGk8dFeWtbpENCGGYs4/nlq7aLLkFZqCXGLrN4s=";
   };
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   dependencies = [

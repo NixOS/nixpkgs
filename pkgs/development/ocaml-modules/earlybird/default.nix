@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
+  ocaml,
   cmdliner,
   dap,
   fmt,
@@ -55,5 +56,6 @@ buildDunePackage (finalAttrs: {
     description = "OCaml debug adapter";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.romildo ];
+    broken = ocaml.version == "4.14.3";
   };
 })

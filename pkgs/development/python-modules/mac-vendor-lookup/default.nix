@@ -2,27 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   aiofiles,
   aiohttp,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "mac-vendor-lookup";
-  version = "0.1.12";
-  format = "setuptools";
+  version = "0.1.15";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bauerj";
     repo = "mac_vendor_lookup";
-    rev = "90dbea48f8a9d567b5f9039ebd151ddfe7d12a19";
-    hash = "sha256-mPPJDrWdyvkTdb4WfeTNYwuC+Ek9vH7ORKRTREg+vK8=";
+    tag = finalAttrs.version;
+    hash = "sha256-RLCEyDalwQUVmcZdVPN1cyKLIPbWcZfjzIkClUZCeJU=";
   };
 
   postPatch = ''
     sed -i '/mac-vendors.txt/d' setup.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiofiles
     aiohttp
   ];
@@ -38,4 +41,4 @@ buildPythonPackage {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

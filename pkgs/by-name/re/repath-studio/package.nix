@@ -17,6 +17,8 @@
   replaceVars,
 
   vulkan-loader,
+
+  nixosTests,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "repath-studio";
@@ -66,53 +68,6 @@ buildNpmPackage (finalAttrs: {
     substituteInPlace shadow-cljs.edn \
       --replace-fail ":shadow-git-inject/version" '"v${finalAttrs.version}"'
   '';
-
-  passthru = {
-    # this was taken and adapted from "logseq" package's nixpkgs derivation
-    mavenRepo = stdenv.mkDerivation {
-      name = "repath-studio-${finalAttrs.version}-maven-deps";
-      inherit (finalAttrs) src patches;
-
-      nativeBuildInputs = [ clojure ];
-
-      buildPhase = ''
-        runHook preBuild
-
-        export HOME="$(mktemp -d)"
-        mkdir -p "$out"
-
-        # -P       -> resolve all normal deps
-        # -M:alias -> resolve extra-deps of the listed aliases
-        clj -Sdeps "{:mvn/local-repo \"$out\"}" -P -M:dev:cljs
-
-        runHook postBuild
-      '';
-
-      # copied from buildMavenPackage
-      # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-      installPhase = ''
-        runHook preInstall
-
-        find $out -type f \( \
-          -name \*.lastUpdated \
-          -o -name resolver-status.properties \
-          -o -name _remote.repositories \) \
-          -delete
-
-        runHook postInstall
-      '';
-
-      dontFixup = true;
-
-      outputHash = "sha256-ytS7JiQUC7U0vxuQddxQfDnm0Pt4stkRBfiIlbOpeTk=";
-      outputHashMode = "recursive";
-      outputHashAlgo = "sha256";
-    };
-
-    clojureWithCache = writeShellScriptBin "clojure" ''
-      exec ${lib.getExe' clojure "clojure"} -Sdeps '{:mvn/local-repo "${finalAttrs.passthru.mavenRepo}"}' "$@"
-    '';
-  };
 
   buildPhase = ''
     runHook preBuild
@@ -189,7 +144,55 @@ buildNpmPackage (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    # this was taken and adapted from "logseq" package's nixpkgs derivation
+    mavenRepo = stdenv.mkDerivation {
+      name = "repath-studio-${finalAttrs.version}-maven-deps";
+      inherit (finalAttrs) src patches;
+
+      nativeBuildInputs = [ clojure ];
+
+      buildPhase = ''
+        runHook preBuild
+
+        export HOME="$(mktemp -d)"
+        mkdir -p "$out"
+
+        # -P       -> resolve all normal deps
+        # -M:alias -> resolve extra-deps of the listed aliases
+        clj -Sdeps "{:mvn/local-repo \"$out\"}" -P -M:dev:cljs
+
+        runHook postBuild
+      '';
+
+      # copied from buildMavenPackage
+      # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
+      installPhase = ''
+        runHook preInstall
+
+        find $out -type f \( \
+          -name \*.lastUpdated \
+          -o -name resolver-status.properties \
+          -o -name _remote.repositories \) \
+          -delete
+
+        runHook postInstall
+      '';
+
+      dontFixup = true;
+
+      outputHash = "sha256-ytS7JiQUC7U0vxuQddxQfDnm0Pt4stkRBfiIlbOpeTk=";
+      outputHashMode = "recursive";
+      outputHashAlgo = "sha256";
+    };
+
+    clojureWithCache = writeShellScriptBin "clojure" ''
+      exec ${lib.getExe' clojure "clojure"} -Sdeps '{:mvn/local-repo "${finalAttrs.passthru.mavenRepo}"}' "$@"
+    '';
+
+    updateScript = ./update.sh;
+    tests = { inherit (nixosTests) repath-studio; };
+  };
 
   meta = {
     changelog = "https://github.com/repath-studio/repath-studio/blob/v${finalAttrs.src.rev}/CHANGELOG.md";

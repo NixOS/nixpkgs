@@ -7,7 +7,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "facetimehd-${version}-${kernel.version}";
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "facetimehd";
   version = "0.6.13";
 
   # Note: When updating this revision:

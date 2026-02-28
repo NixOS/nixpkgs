@@ -30,8 +30,10 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml --replace-fail '"pybind11>=2.13.6", ' ""
   '';
 
-  DUCC0_USE_NANOBIND = "";
-  DUCC0_OPTIMIZATION = "portable";
+  env = {
+    DUCC0_USE_NANOBIND = "";
+    DUCC0_OPTIMIZATION = "portable";
+  };
 
   build-system = [
     cmake

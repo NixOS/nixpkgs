@@ -14,7 +14,7 @@
   libvorbis,
   libopus,
   openal,
-  openalSoft,
+  openal-soft,
   physfs,
   miniupnpc,
   libsodium,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libopus
     openal
-    openalSoft
+    openal-soft
     physfs
     miniupnpc
     libsodium

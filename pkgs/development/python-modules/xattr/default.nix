@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "xattr";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pkyOIe/xvhQ6zPgP07j94+KKR4w32imHQq9kesPl4Kc=";
+    hash = "sha256-MEOfq9feB4eyfppuHVacWVmFTLMi9kznOA/tv6UDUDY=";
   };
 
   nativeBuildInputs = [

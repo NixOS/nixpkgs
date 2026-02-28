@@ -34,16 +34,16 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mame";
-  version = "0.285";
-  srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
+  version = "0.286";
+  srcVersion = builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
-    rev = "mame${srcVersion}";
-    hash = "sha256-vuGQ1VOjIAEopV4X+qP1k+bgH7lJJLZ9RtYevUxgIQg=";
+    rev = "mame${finalAttrs.srcVersion}";
+    hash = "sha256-NsCW8cFSaCW85iXmCro5mj3xTlKUM/nE0nBF92UZAeQ=";
   };
 
   outputs = [
@@ -233,7 +233,7 @@ stdenv.mkDerivation rec {
       calculators, in addition to the arcade video games that were its initial
       focus.
     '';
-    changelog = "https://github.com/mamedev/mame/releases/download/mame${srcVersion}/whatsnew_${srcVersion}.txt";
+    changelog = "https://github.com/mamedev/mame/releases/download/mame${finalAttrs.srcVersion}/whatsnew_${finalAttrs.srcVersion}.txt";
     license = with lib.licenses; [
       bsd3
       gpl2Plus
@@ -245,4 +245,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "mame";
   };
-}
+})

@@ -109,6 +109,9 @@ lib.recursiveUpdate orig rec {
     ))
   ];
   exceltex.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ SpreadsheetParseExcel ])) ];
+  latexdiff.extraBuildInputs = [
+    (perl.withPackages (ps: with ps; [ EncodeLocale ]))
+  ];
   latex-git-log.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ IPCSystemSimple ])) ];
   latexindent.extraBuildInputs = [
     (perl.withPackages (

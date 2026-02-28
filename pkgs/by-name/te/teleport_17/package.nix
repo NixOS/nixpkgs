@@ -7,11 +7,11 @@
 }:
 
 buildTeleport {
-  version = "17.7.16";
-  hash = "sha256-xO1L4MRGf9OF+wm/9P5IccltO+zvijM8vP5JQwmqLSQ=";
-  vendorHash = "sha256-BhQOvjSe8URmKWxKPemn/klgLoBFKfWXCYMp82QzaOE=";
-  cargoHash = "sha256-EnIdf/3idwoQGJd6edQtWaXzVC1Gkwf8X2w2Zq80KGA=";
-  pnpmHash = "sha256-0BOnrrzX33UncHPM6vc8UWP5GoU7xCDV9FGqBLVYTtM=";
+  version = "17.7.19";
+  hash = "sha256-2bQEW3HllZvMofumLSgvZvWqrlRV6fK9uB3QTJD6x3w=";
+  vendorHash = "sha256-GUnX3TnHjZyqNsIDIy5Du6jRURWnYBsNb2zWEGl1tzQ=";
+  cargoHash = "sha256-opLo7UmZzxrVxYZOwn4v4G5lhHFp5GrdOZe7uIb97q0=";
+  pnpmHash = "sha256-mcv9Paybeu9RnNfzj1v0043UX2WhfgMpmWjVxQX7Fzc=";
 
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_95;
   inherit buildGoModule withRdpClient extPatches;

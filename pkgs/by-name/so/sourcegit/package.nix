@@ -8,6 +8,7 @@
   makeDesktopItem,
   libicns,
 
+  libGL,
   libxcursor,
   libxext,
   libxi,
@@ -53,8 +54,10 @@ buildDotnetModule (finalAttrs: {
 
   # these are dlopen-ed at runtime
   # libxi is needed for right-click support
+  # libGL is needed for GPU-accelerated rendering (without it, Avalonia falls back to software rendering)
   # not sure about what the other ones are needed for, but I'll include them anyways
   runtimeDeps = [
+    libGL
     libxcursor
     libxext
     libxi

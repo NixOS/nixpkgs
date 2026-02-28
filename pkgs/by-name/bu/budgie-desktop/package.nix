@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   accountsservice,
   alsa-lib,
   budgie-desktop-services,
@@ -69,6 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./plugins.patch
+
+    # Don't use scaling factors
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/864
+    (fetchpatch {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/03d18336c3d50d14e3e81ef03ef8ebd548d8e00c.patch";
+      hash = "sha256-pO1t3nnyYX2XDqH6wr+00MHsM0fAT0MOSuk+lN+2CNY=";
+    })
   ];
 
   nativeBuildInputs = [

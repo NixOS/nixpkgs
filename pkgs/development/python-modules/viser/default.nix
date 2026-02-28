@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "viser";
-  version = "1.0.4";
+  version = "1.0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nerfstudio-project";
     repo = "viser";
     tag = "v${version}";
-    hash = "sha256-AS5D6pco6wzQ414yxvv0K9FB3tfP1BvqigRLJJXDduU=";
+    hash = "sha256-usnvEvuBNPrqRXV7jh0qw1ppmZgAe1CUhAwd/M5CvC0=";
   };
 
   postPatch = ''

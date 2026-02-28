@@ -40,13 +40,13 @@ let
     coreutils
   ];
 in
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dune-release";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    hash = "sha256-bhDf/zb6mnSB53ibb1yb8Yf1TTmVEu8rb8KUnJieCnY=";
+    url = "https://github.com/ocamllabs/dune-release/releases/download/${finalAttrs.version}/dune-release-${finalAttrs.version}.tbz";
+    hash = "sha256-VxwXtG+n1TeVFp4CsAWmG7X3unbIAK09konm+KTW8G4=";
   };
 
   nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
@@ -98,8 +98,8 @@ buildDunePackage rec {
     description = "Release dune packages in opam";
     mainProgram = "dune-release";
     homepage = "https://github.com/ocamllabs/dune-release";
-    changelog = "https://github.com/tarides/dune-release/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/tarides/dune-release/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

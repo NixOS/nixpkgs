@@ -1,5 +1,6 @@
 {
   lib,
+  stdenvNoCC,
   python3Packages,
   atomicparsley,
   deno,
@@ -13,6 +14,7 @@
   javascriptSupport ? true,
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
+  withSecretStorage ? !stdenvNoCC.hostPlatform.isDarwin,
   nix-update-script,
 }:
 
@@ -21,14 +23,14 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2026.02.04";
+  version = "2026.02.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     tag = version;
-    hash = "sha256-KXnz/ocHBftenDUkCiFoBRBxi6yWt0fNuRX+vKFWDQw=";
+    hash = "sha256-r9I/zLyqGPeIzsHsLxJcfnLC3jpuyKMyX1UaMoM08jk=";
   };
 
   postPatch = ''
@@ -51,7 +53,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # expose optional-dependencies, but provide all features
-  dependencies = lib.concatAttrValues optional-dependencies;
+  dependencies =
+    optional-dependencies.default
+    ++ optional-dependencies.curl-cffi
+    ++ lib.optionals withSecretStorage optional-dependencies.secretstorage;
 
   optional-dependencies = {
     default = with python3Packages; [

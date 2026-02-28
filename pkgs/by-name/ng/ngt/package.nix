@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "NGT";
-  version = "2.5.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "yahoojapan";
     repo = "NGT";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-T+ZFmvak1ZfY7I/9QKpC7qqXLq/tBdy+KUjx/0twceg=";
+    sha256 = "sha256-dAJ8Xz7Cgmajac43G/3JWj1gwlG2z1RaN7R49IsbMnc=";
   };
 
   nativeBuildInputs = [ cmake ];

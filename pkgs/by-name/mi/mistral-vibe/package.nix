@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q79/xP+kaovkch5wXzXumQb9l4wSspXg2cl7mD0Q2f8=";
+    hash = "sha256-aXRceZAW4XUAXfD8HzGnS6qkFAj6VoTwVepZJmvf48Q=";
   };
 
   build-system = with python3Packages; [
@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "agent-client-protocol"
+    "cryptography"
     "gitpython"
     "mistralai"
     "pydantic-settings"
@@ -38,6 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = with python3Packages; [
     agent-client-protocol
     anyio
+    cachetools
     cryptography
     gitpython
     giturlparse
@@ -45,6 +47,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     httpx
     keyring
     mcp
+    markdownify
     mistralai
     packaging
     pexpect
@@ -86,11 +89,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_updates_index_on_file_deletion"
     "test_updates_index_on_file_rename"
     "test_updates_index_on_folder_rename"
+    "test_watcher_toggle_flow_off_on_off"
   ];
 
   disabledTestPaths = [
     # All snapshot tests fail with AssertionError
     "tests/snapshots/"
+
+    # Try to invoke `uv run vibe`
+    "tests/e2e/"
 
     # ACP tests require network access
     "tests/acp/test_acp.py"

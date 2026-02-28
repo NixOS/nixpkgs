@@ -412,7 +412,7 @@ in
     };
 
     environment = {
-      etc."sddm.conf".source = cfgFile;
+      etc."sddm.conf.d/00-nixos.conf".source = cfgFile;
       pathsToLink = [
         "/share/sddm"
       ];

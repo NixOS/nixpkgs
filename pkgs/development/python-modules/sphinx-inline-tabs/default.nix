@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-inline-tabs";
-  version = "2023.04.21";
+  version = "2025.12.21.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pradyunsg";
     repo = "sphinx-inline-tabs";
-    rev = version;
-    hash = "sha256-1oZheHDNOQU0vWL3YClQrJe94WyUJ72bCAF1UKtjJ0w=";
+    tag = version;
+    hash = "sha256-aHsTdCVu/e9uaM4ayOfY3IBjjivZwDiHoWA0W2vyvNA=";
   };
 
   nativeBuildInputs = [ flit-core ];

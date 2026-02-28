@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://rockdaboot.github.io/libpsl/";
     changelog = "https://raw.githubusercontent.com/rockdaboot/libpsl/libpsl-${finalAttrs.version}/NEWS";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.c0bw3b ];
+    maintainers = [ ];
     mainProgram = "psl";
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libpsl" ];

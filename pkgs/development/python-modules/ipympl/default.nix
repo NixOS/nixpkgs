@@ -1,32 +1,63 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  ipykernel,
-  ipython-genutils,
+  fetchFromGitHub,
+
+  # frontend
+  nodejs,
+  yarn-berry_3,
+
+  # build-system
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+  jupyterlab,
+
+  # dependencies
+  ipython,
   ipywidgets,
   matplotlib,
   numpy,
   pillow,
   traitlets,
+
+  # tests
+  importlib-metadata,
+  nbval,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipympl";
-  version = "0.9.7";
-  format = "wheel";
+  version = "0.10.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    format = "wheel";
-    hash = "sha256-NpjufqoLBHp2A1F9eqG3GzIRil9RdUyrRexdmU9nII8=";
-    dist = "py3";
-    python = "py3";
+  src = fetchFromGitHub {
+    owner = "matplotlib";
+    repo = "ipympl";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IJ7tLUE0Ac4biQc9b87adgDcD8pa9XH1bo8rzDl9DCY=";
   };
 
-  propagatedBuildInputs = [
-    ipykernel
-    ipython-genutils
+  yarnOfflineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-tdfrAf2BSz9n83ctWqRxDHZnhnfhKA3BFNhXVr9wvLY=";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ];
+
+  build-system = [
+    hatch-jupyter-builder
+    hatch-nodejs-version
+    hatchling
+    jupyterlab
+  ];
+
+  dependencies = [
+    ipython
     ipywidgets
     matplotlib
     numpy
@@ -34,14 +65,19 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  # There are no unit tests in repository
-  doCheck = false;
+  nativeCheckInputs = [
+    importlib-metadata
+    nbval
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [
     "ipympl"
     "ipympl.backend_nbagg"
   ];
 
   meta = {
+    changelog = "https://github.com/matplotlib/ipympl/releases/tag/${finalAttrs.src.tag}";
     description = "Matplotlib Jupyter Extension";
     homepage = "https://github.com/matplotlib/jupyter-matplotlib";
     maintainers = with lib.maintainers; [
@@ -50,4 +86,4 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.bsd3;
   };
-}
+})

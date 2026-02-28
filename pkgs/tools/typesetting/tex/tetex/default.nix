@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Full-featured (La)TeX distribution";
     homepage = "http://www.tug.org/tetex/";
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     hydraPlatforms = [ ];
   };

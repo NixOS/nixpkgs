@@ -73,12 +73,12 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  version = "1.26.10";
+  version = "1.27.0";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-FlPzW9j72XDwVSPv3H+G5B6XKOJWSjKVKW4Dz1mlFDc=";
+    hash = "sha256-riRCQW3kmRgtN6UmxvorrMejvtWoiNETygSERITf58Y=";
   };
 
   patches = [
@@ -88,19 +88,6 @@ stdenv.mkDerivation rec {
     # Upstream C++ wrap script only defines fixed-sized integers on macOS but
     # this is required on aarch64-linux too.
     ./fix-cpp-build.patch
-  ]
-  # fix compatibility with Clang >= 20
-  ++ lib.optionals enableCxx [
-    (fetchpatch {
-      name = "scripts-wrap-parse.py-get_args-improve-caching-of-re.patch";
-      url = "https://github.com/ArtifexSoftware/mupdf/commit/559e45ac8c134712cd8eaee01536ea3841e3a449.patch";
-      hash = "sha256-gI3hzrNo6jj9eqQ9E/BJ3jxXi/sl1C5WRyYlkG3Gkfg=";
-    })
-    (fetchpatch {
-      name = "scripts-wrap-parse.py-get_args-fix-for-libclang-20.patch";
-      url = "https://github.com/ArtifexSoftware/mupdf/commit/4bbf411898341d3ba30f521a6c137a788793cd45.patch";
-      hash = "sha256-cxKNziAGjpDwEw/9ZQHslMeJbiqYo80899BDkUOIX8g=";
-    })
   ];
 
   postPatch = ''

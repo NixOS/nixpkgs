@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/morrownr/rtl8852bu-20240418";
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    broken = kernel.kernelOlder "6" && kernel.isHardened; # Similar to 79c1cf6
+    broken = (kernel.kernelOlder "6" && kernel.isHardened) || kernel.kernelAtLeast "6.18"; # Similar to 79c1cf6
     maintainers = with lib.maintainers; [
       lonyelon
       thtrf

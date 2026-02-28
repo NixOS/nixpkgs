@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "XD";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "majestrate";
     repo = "XD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bBA2CEeijXg+9ohiMWkQWAsN7OUSyUsFbliNz8gpVMM=";
+    sha256 = "sha256-PKmkBwVedt/PlGo7gPWrVHbv+RPsA1BczRFR+ima0ZA=";
   };
 
-  vendorHash = "sha256-Y2BPGIfIBx/AAzfWK/hjjJqXSTjjN3lxTi+7+66taIY=";
+  vendorHash = "sha256-PhZZzB07BNPuBafWwvUD7pVu31awP6NkZxsO89xYPT0=";
 
   nativeCheckInputs = [ perl ];
 

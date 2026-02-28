@@ -11,7 +11,7 @@ with super;
 
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
-  cffi = disabed super.cffi;
+  cffi = disabled super.cffi;
 
   configparser = disabled super.configparser;
 

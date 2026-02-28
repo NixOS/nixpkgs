@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://cppcheck.sourceforge.net";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ joachifm ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

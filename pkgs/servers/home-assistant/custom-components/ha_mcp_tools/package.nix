@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "homeassistant-ai";
   domain = "ha_mcp_tools";
-  version = "6.7.0";
+  version = "6.7.1";
 
   src = fetchFromGitHub {
     owner = "homeassistant-ai";
     repo = "ha-mcp";
     tag = "v${version}";
-    hash = "sha256-zHa6wfRVmLfKrbAts5Fwe9rCCk57v1GoEIBxQaDAhm0=";
+    hash = "sha256-CQbjPEtCos0Fi6aAaIWSRMCUQKmjYviYkvJZzbCZg6Y=";
   };
 
   passthru.updateScript = nix-update-script {

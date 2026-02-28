@@ -34,18 +34,21 @@ let
   installedPackageRoot = "${placeholder "out"}/${python.sitePackages}";
   self = buildPythonPackage rec {
     pname = "scikit-image";
-    version = "0.25.2";
+    version = "0.26.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "scikit-image";
       repo = "scikit-image";
       tag = "v${version}";
-      hash = "sha256-viRX7Uh9coacueI6gJHBtOay/UIiUQkBfjpmDLJgyZ4=";
+      hash = "sha256-VpvlG2ECbq+FWLZ4RfdbbR3V6Fbw0RIvnVp+w0Rp+8o=";
     };
 
     postPatch = ''
-      patchShebangs skimage/_build_utils/{version,cythoner}.py
+      patchShebangs src/skimage/_build_utils/{version,cythoner}.py
+
+      substituteInPlace src/skimage/_build_utils/version.py \
+        --replace-fail "version = version_from_init()" "version = \"${version}\""
     '';
 
     nativeBuildInputs = [

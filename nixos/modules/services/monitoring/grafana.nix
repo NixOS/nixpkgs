@@ -889,7 +889,8 @@ in
                 to work around that. Look at the documentation for details:
                 <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
               '';
-              type = types.str;
+              type = types.nullOr types.str;
+              default = null;
             };
 
             disable_gravatar = mkOption {
@@ -2059,6 +2060,17 @@ in
           cfg.provision.alerting.muteTimings.settings == null
           || cfg.provision.alerting.muteTimings.path == null;
         message = "Cannot set both mute timings settings and mute timings path";
+      }
+      {
+        assertion = cfg.settings.security.secret_key != null;
+        message = ''
+          Grafana's secret key (services.grafana.settings.security.secret_key) doesn't have a default
+          value anymore. Please generate your own and use a file-provider on this option! See also
+          https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#secret_key
+          for more information.
+
+          See https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-database-encryption/#re-encrypt-secrets on how to re-encrypt.
+        '';
       }
     ];
 

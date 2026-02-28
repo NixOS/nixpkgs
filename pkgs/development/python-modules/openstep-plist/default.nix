@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   cython,
   setuptools,
   setuptools-scm,
@@ -11,27 +10,19 @@
 
 buildPythonPackage rec {
   pname = "openstep-plist";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "openstep_plist";
     inherit version;
-    hash = "sha256-2vOGZSrghrzosYeExZqCUlI/rKOx3th2u/OTWU2GK3g=";
+    hash = "sha256-AGgwTRLOwP4TLE+dIHfHG/pP9DkEmU/SosqX1aB2M44=";
   };
 
   build-system = [
     cython
     setuptools
     setuptools-scm
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "openstep-plist-cpython-3.1-compat.patch";
-      url = "https://github.com/fonttools/openstep-plist/commit/5467a2c3bed3004b79c70b5b288f33293c96742b.patch";
-      hash = "sha256-dKZgthvPgdnCKA0o70TBtvipwnBr4wcayvK8SFqwrbY=";
-    })
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

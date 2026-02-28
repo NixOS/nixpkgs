@@ -21,6 +21,7 @@
   icu75,
   libexttextcat,
   libsodium,
+  libxcrypt,
   libstemmer,
   cyrus_sasl,
   nixosTests,
@@ -67,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu75
     libexttextcat
     libsodium
+    libxcrypt
     libstemmer
     cyrus_sasl.dev
   ]
@@ -179,6 +181,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withSQLite "--with-sqlite";
 
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://dovecot.org/";

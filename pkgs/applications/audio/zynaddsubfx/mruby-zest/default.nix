@@ -11,14 +11,14 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mruby-zest";
   version = "3.0.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = "${pname}-build";
-    tag = version;
+    owner = "mruby-zest";
+    repo = "mruby-zest-build";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     sha256 = "sha256-rIb6tQimwrUj+623IU5zDyKNWsNYYBElLQClOsP+5Dc=";
   };
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.all;
   };
-}
+})

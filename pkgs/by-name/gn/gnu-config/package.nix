@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  runtimeShell,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -52,6 +53,19 @@ stdenv.mkDerivation {
     install -Dm755 ./config.sub $out/config.sub
     runHook postInstall
   '';
+
+  fixupPhase = ''
+    runHook preFixup
+    if [[ -z "''${dontPatchShebangs-}" ]]; then
+      substituteInPlace $out/config.guess \
+        --replace-fail '#! /bin/sh' '#!${runtimeShell}'
+      substituteInPlace $out/config.sub \
+        --replace-fail '#! /bin/sh' '#!${runtimeShell}'
+    fi
+    runHook postFixup
+  '';
+
+  strictDeps = true;
 
   meta = {
     description = "Attempt to guess a canonical system name";

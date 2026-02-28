@@ -99,7 +99,6 @@ stdenv.mkDerivation rec {
     mainProgram = "cider-2";
     maintainers = with lib.maintainers; [
       amadejkastelic
-      itsvic-dev
       l0r3v
     ];
     platforms = [ "x86_64-linux" ];

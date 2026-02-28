@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "doitlive";
-  version = "5.2.0";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-BBu98ZfDaypJfE0KadrFOnd6d1ZLV6wC1Hd9YFjRcPo=";
+    hash = "sha256-dYelfAT6dHGOdstGIvme9rdi8chh0MHC+EOra+xT0GM=";
   };
 
   build-system = with python3Packages; [ flit-core ];

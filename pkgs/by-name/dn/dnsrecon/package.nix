@@ -46,7 +46,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/darkoperator/dnsrecon/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      c0bw3b
       fab
     ];
     mainProgram = "dnsrecon";

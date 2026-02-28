@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pymupdf4llm";
-  version = "0.0.27";
+  version = "0.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "RAG";
-    tag = "v${version}";
-    hash = "sha256-rezdDsjNCDetvrX3uvykYuL/y40MZnr0fFMvQY3JRr0=";
+    tag = version;
+    hash = "sha256-iuffv49voZLiuabwhag+YC3j3Oa2IAevZtcJtMVzX/4=";
   };
 
   sourceRoot = "${src.name}/pymupdf4llm";

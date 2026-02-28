@@ -133,7 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
-      atila
       justanotherariel
     ];
   };

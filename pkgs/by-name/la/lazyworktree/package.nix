@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lazyworktree";
-  version = "1.28.0";
+  version = "1.38.1";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "lazyworktree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-syfhjNsqRz9Gte514NcuP/J8NMGLEdsJrvnuqBHAnCc=";
+    hash = "sha256-rNTzmvfVAToPzOvP+3wnL+zyQzL2mXQCnRY0cLKuQ6c=";
   };
 
-  vendorHash = "sha256-BfQWSogSoD0c71CPMqhfK7F+TzZQt6+wNIzPlFQ2zPU=";
+  vendorHash = "sha256-Y4TZZ7Fhn1YSxG6YH0l0y0iWxgml93gOwKyTXWkjpqg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,8 +33,14 @@ buildGoModule (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm444 shell/functions.shell -t $out/share/lazyworktree
+    install -Dm444 shell/functions.{bash,fish,zsh} -t $out/share/lazyworktree
     installManPage lazyworktree.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd lazyworktree \
+      --bash <($out/bin/lazyworktree completion bash --code) \
+      --zsh <($out/bin/lazyworktree completion zsh --code) \
+      --fish <($out/bin/lazyworktree completion fish --code)
   '';
 
   doInstallCheck = true;

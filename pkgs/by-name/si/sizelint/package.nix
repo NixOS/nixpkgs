@@ -2,20 +2,23 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  git,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sizelint";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "a-kenji";
     repo = "sizelint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-06RJrE0w1Xhj364dUUuYadxleX12mkB8yO+h1QLZhH0=";
+    hash = "sha256-m8Pd7Bnz++5k6J4stbKVd8Y596Y+52xbF0zFJVhdfzI=";
   };
 
-  cargoHash = "sha256-1kg1xfgzqrbZvazRavM4aW7oyRei9jKW0a+a6z2HLnc=";
+  nativeCheckInputs = [ git ];
+
+  cargoHash = "sha256-7cDZrRNTGPdzbvVNt3/HTp7PgoH2txX26RCxdpeo4dM=";
 
   meta = {
     description = "Lint your file tree based on file sizes";

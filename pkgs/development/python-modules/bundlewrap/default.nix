@@ -2,12 +2,12 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  bcrypt,
   cryptography,
   jinja2,
   librouteros,
   mako,
   packaging,
-  passlib,
   pyyaml,
   requests,
   setuptools,
@@ -16,28 +16,26 @@
   versionCheckHook,
 }:
 
-let
-  version = "4.23.1";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "bundlewrap";
-  inherit version;
+  version = "5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bundlewrap";
     repo = "bundlewrap";
-    tag = version;
-    hash = "sha256-Nzfx2L/FlYXQcbKq/cuRZ+PWnjv4HDld9q01nwQ1sA8=";
+    tag = finalAttrs.version;
+    hash = "sha256-kU76WvT4VE/78HTMjByoDHgkrg/5MlS5vnc6z6lAANw=";
   };
 
   build-system = [ setuptools ];
+
   dependencies = [
+    bcrypt
     cryptography
     jinja2
     mako
     packaging
-    passlib
     pyyaml
     requests
     tomlkit
@@ -60,9 +58,9 @@ buildPythonPackage {
   meta = {
     homepage = "https://bundlewrap.org/";
     description = "Easy, Concise and Decentralized Config management with Python";
-    changelog = "https://github.com/bundlewrap/bundlewrap/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bundlewrap/bundlewrap/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "bw";
     license = [ lib.licenses.gpl3 ];
     maintainers = with lib.maintainers; [ wamserma ];
   };
-}
+})

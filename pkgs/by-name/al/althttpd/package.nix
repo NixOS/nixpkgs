@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation {
   pname = "althttpd";
-  version = "0-unstable-2025-08-22";
+  version = "0-unstable-2026-01-27";
 
   src = fetchfossil {
     url = "https://sqlite.org/althttpd/";
-    rev = "e9bf26f78e1f5792";
-    hash = "sha256-Q16tqhnPzYrFkrHTC8NBrdpsbrpjPUkdxLwmyYqUHZo=";
+    rev = "7758535a137da507";
+    hash = "sha256-9yszcoYpbM9/KDn7zpWgDINZF6azkQVxwlOw7BvRo+4=";
   };
 
   buildInputs = [ openssl ];

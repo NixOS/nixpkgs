@@ -11,11 +11,13 @@
   python,
   radicale,
   recurring-ical-events,
-  requests,
+  niquests,
   hatchling,
   hatch-vcs,
   proxy-py,
   pyfakefs,
+  python-dateutil,
+  pyyaml,
   toPythonModule,
   tzlocal,
   vobject,
@@ -25,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "2.2.1";
+  version = "2.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-FsIF4BcwAUyYw8J7o4j4CnSd8eIc1Yd5WtxErC6RZ7Y=";
+    hash = "sha256-xtxWDlYESIwkow/YdjaUAkJ/x2jdUyhqfSRycJVLncY=";
   };
 
   build-system = [
@@ -43,10 +45,12 @@ buildPythonPackage rec {
   dependencies = [
     dnspython
     lxml
-    requests
+    niquests
     icalendar
     icalendar-searcher
     recurring-ical-events
+    python-dateutil
+    pyyaml
   ];
 
   nativeCheckInputs = [

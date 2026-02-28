@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdogs-sdl";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     repo = "cdogs-sdl";
     owner = "cxong";
-    rev = finalAttrs.version;
-    sha256 = "sha256-g1eLFdHsmqnz6zTlmaiLOXgX5dnS94k/PvaFJE3gfLo=";
+    tag = finalAttrs.version;
+    hash = "sha256-588bPis3n9BZnEywLmgouRgpiEvB+sKp6/xhUDhfddQ=";
   };
 
   postPatch = ''

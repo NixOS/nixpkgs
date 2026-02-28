@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "robotsuite";
-  version = "2.3.2";
+  version = "3.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sPmOoR5K+gMfyPk2QMbiDNmWPRcqKrsz6ZPBAKR/3XY=";
+    hash = "sha256-3lKSPeZdq1z9umtiEAEQO7jVL6zRS/rCt76ildDe90U=";
   };
 
   propagatedBuildInputs = [

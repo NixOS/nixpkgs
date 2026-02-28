@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
     description = "Portable command-line driven graphing utility for many platforms";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gnuplot;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     mainProgram = "gnuplot";
   };
 }

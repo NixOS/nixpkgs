@@ -4,6 +4,8 @@ let
 
     argsStdenv@{
       name ? "stdenv",
+      pname ? name,
+      version ? lib.trivial.release + "pre-git",
       preHook ? "",
       initialPath,
 
@@ -102,7 +104,7 @@ let
         outputHashMode = "recursive";
       }
       // {
-        inherit name;
+        inherit name pname version;
         inherit disallowedRequisites;
 
         # Nix itself uses the `system` field of a derivation to decide where to

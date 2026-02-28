@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.51.4";
+  version = "0.54.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     tag = version;
-    hash = "sha256-Qm3dI5ZHkLK3hTsadnzIDdmeiDM/QovGw2FZDVml5tE=";
+    hash = "sha256-EOvZdPMfGfllM57hbc/HMHw1rh9n9uwlA4VSkoY0MWY=";
   };
 
   pythonRelaxDeps = true;

@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.17.3";
+  version = "1.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = "jupytext";
     tag = "v${version}";
-    hash = "sha256-qxQU3b+u9sQD0mtvZz6fw0jYmdfQmwtKaGxUc/qOcTE=";
+    hash = "sha256-D7Ps/lHF3F/7Jm4ozcjO8YsTPA1GQPqZVpPod/riGvA=";
   };
 
   patches = [
@@ -108,7 +108,11 @@ buildPythonPackage rec {
     "tests/external"
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # Fails due to whitespace differences in the outputs
+    "test_async_and_sync_files_are_in_sync"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # requires access to trash
     "test_load_save_rename"
   ];

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.14.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "psygnal";
     tag = "v${version}";
-    hash = "sha256-RQ53elonwvna5UDVell3JI1dcZSMHREyB51r+ddsW2M=";
+    hash = "sha256-7d9ejzdafoH14fKvYJd3OwYS0RGwDmMeLlj74qvsvjE=";
   };
 
   build-system = [

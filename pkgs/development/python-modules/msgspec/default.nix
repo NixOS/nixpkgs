@@ -13,6 +13,7 @@
   pytest,
   pyyaml,
   setuptools,
+  setuptools-scm,
   sphinx,
   sphinx-copybutton,
   sphinx-design,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "msgspec";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -32,10 +33,13 @@ buildPythonPackage rec {
     # use `$Format:%d$` in msgspec/_version.py, and GitHub produces different
     # tarballs depending on whether tagged commit is the last commit, see
     # https://github.com/NixOS/nixpkgs/issues/84312
-    hash = "sha256-CajdPNAkssriY/sie5gR+4k31b3Wd7WzqcsFmrlSoPY=";
+    hash = "sha256-DWDmnSuo12oXl9NVfNhIOtWrQeJ9DMmHxOyHY33Datk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   optional-dependencies = {
     dev = [
@@ -72,7 +76,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module to handle JSON/MessagePack";
     homepage = "https://github.com/jcrist/msgspec";
-    changelog = "https://github.com/jcrist/msgspec/releases/tag/${version}";
+    changelog = "https://github.com/jcrist/msgspec/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };

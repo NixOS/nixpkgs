@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
     "CONF_MODPATH_NVIDIA=${nvidia_x11.bin}/lib/xorg/modules"
   ];
 
-  CFLAGS = [
+  env.CFLAGS = toString [
     "-DX_MODULE_APPENDS=\\\"${xmodules}\\\""
   ];
 

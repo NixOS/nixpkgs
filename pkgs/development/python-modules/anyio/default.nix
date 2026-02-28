@@ -11,14 +11,12 @@
   # dependencies
   exceptiongroup,
   idna,
-  sniffio,
   typing-extensions,
 
   # optionals
   trio,
 
   # tests
-  blockbuster,
   hypothesis,
   psutil,
   pytest-mock,
@@ -47,7 +45,6 @@ buildPythonPackage rec {
 
   dependencies = [
     idna
-    sniffio
   ]
   ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
@@ -58,7 +55,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    blockbuster
     exceptiongroup
     hypothesis
     psutil
@@ -95,10 +91,6 @@ buildPythonPackage rec {
     "test_keyboardinterrupt_during_test"
     # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
     "test_multiple_threads"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
-    "test_is_block_device"
 
     # These tests become flaky under heavy load
     "test_asyncio_run_sync_called"
@@ -106,6 +98,10 @@ buildPythonPackage rec {
     "test_run_in_custom_limiter"
     "test_cancel_from_shielded_scope"
     "test_start_task_soon_cancel_later"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
+    "test_is_block_device"
 
     # AssertionError: assert 'wheel' == 'nixbld'
     "test_group"

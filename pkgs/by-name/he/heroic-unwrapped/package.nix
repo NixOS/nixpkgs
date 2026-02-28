@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.19.1";
+  version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e+/FRvG9u6ZQsMGD5hqY+yLPjsbLSrjC9Wp0xdxVk6w=";
+    hash = "sha256-nXDQxctzXI/kB6o1ShhrhiloWnpYObG66nMAwxijFto=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-uwJYOm+2wGNRHAiIw1UjCBLBW6kjtj6AFLWihCqtL28=";
+    hash = "sha256-3SkCLoH4ZQzKZIdCkWOfBHt83vjxbpTpMvhMZPCysyI=";
   };
 
   nativeBuildInputs = [

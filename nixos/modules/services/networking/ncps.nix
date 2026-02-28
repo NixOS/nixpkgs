@@ -66,6 +66,14 @@ let
         max-open-conns = cfg.cache.database.pool.maxOpenConns;
         max-idle-conns = cfg.cache.database.pool.maxIdleConns;
       };
+      cdc = {
+        inherit (cfg.cache.cdc)
+          enabled
+          min
+          avg
+          max
+          ;
+      };
       max-size = cfg.cache.maxSize;
       lru = {
         schedule = cfg.cache.lru.schedule;
@@ -97,7 +105,6 @@ let
       lock = {
         backend = cfg.cache.lock.backend;
         redis.key-prefix = cfg.cache.lock.redisKeyPrefix;
-        postgres.key-prefix = cfg.cache.lock.postgresKeyPrefix;
         download-lock-ttl = cfg.cache.lock.downloadTTL;
         lru-lock-ttl = cfg.cache.lock.lruTTL;
         retry = {
@@ -151,6 +158,14 @@ in
       "ncps"
       "dbmatePackage"
     ] "dbmate is now wrapped within ncps package, you need to override ncps to change dbmate package")
+
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ncps"
+      "cache"
+      "lock"
+      "postgresKeyPrefix"
+    ] "PostgreSQL lock backend was removed upstream")
   ];
 
   options = {
@@ -207,6 +222,36 @@ in
           Whether to allow the PUT verb to push narinfo and nar files directly
           to the cache.
         '';
+
+        cdc = {
+          enabled = lib.mkEnableOption ''
+            Whether to enable Content-Defined Chunking (CDC) for deduplication (experimental).
+          '';
+
+          min = lib.mkOption {
+            type = lib.types.ints.u32;
+            default = 16384;
+            description = ''
+              The minimum chunk size for CDC in bytes.
+            '';
+          };
+
+          avg = lib.mkOption {
+            type = lib.types.ints.u32;
+            default = 65536;
+            description = ''
+              The average chunk size for CDC in bytes.
+            '';
+          };
+
+          max = lib.mkOption {
+            type = lib.types.ints.u32;
+            default = 262144;
+            description = ''
+              The maximum chunk size for CDC in bytes.
+            '';
+          };
+        };
 
         hostName = lib.mkOption {
           type = lib.types.str;
@@ -285,22 +330,11 @@ in
             type = lib.types.enum [
               "local"
               "redis"
-              "postgres"
             ];
             default = "local";
             description = ''
               Lock backend to use: 'local' (single instance), 'redis'
-              (distributed), 'postgres' (distributed, requires PostgreSQL).
-
-              Advisory Locks and Connection Pools: If you use PostgreSQL as
-              your distributed lock backend, each active lock consumes a
-              dedicated connection from the pool. A single request can consume
-              up to 3 connections simultaneously.
-
-              To avoid deadlocks under concurrent load, ensure
-              {option}`services.ncps.cache.database.pool.maxOpenConns` is
-              significantly higher than your expected concurrency (at least
-              50-100 is recommended).
+              (distributed).
             '';
           };
 
@@ -310,15 +344,6 @@ in
             description = ''
               Prefix for all Redis lock keys (only used when Redis is
               configured).
-            '';
-          };
-
-          postgresKeyPrefix = lib.mkOption {
-            type = lib.types.str;
-            default = "ncps:lock:";
-            description = ''
-              Prefix for all PostgreSQL advisory lock keys (only used when
-              PostgreSQL is configured as lock backend).
             '';
           };
 

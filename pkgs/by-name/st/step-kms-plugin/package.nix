@@ -42,13 +42,13 @@ buildGoModule rec {
     "-X github.com/smallstep/step-kms-plugin/cmd.Version=${version}"
   ];
 
-  CGO_CFLAGS = "-I${lib.getDev pcsclite}/include/PCSC/";
+  env.CGO_CFLAGS = "-I${lib.getDev pcsclite}/include/PCSC/";
 
   meta = {
     description = "Step plugin to manage keys and certificates on cloud KMSs and HSMs";
     homepage = "https://smallstep.com/cli/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ qbit ];
+    maintainers = [ ];
     mainProgram = "step-kms-plugin";
   };
 }
