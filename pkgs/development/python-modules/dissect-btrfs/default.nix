@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "dissect-btrfs";
-  version = "1.9";
+  version = "1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.btrfs";
     tag = version;
-    hash = "sha256-qOyPMDZtudrvZNlyiL16gv513zuTCd2O14Q4QwHMmoc=";
+    hash = "sha256-Uwv8XYSpPE+8MaACp2KrToZnREnKHeza/SD2Cnsp/iI=";
   };
 
   nativeBuildInputs = [
