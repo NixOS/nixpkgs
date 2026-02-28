@@ -3,16 +3,21 @@
   lib,
   pkgs,
   ayatana-indicator-datetime,
+  useQt6 ? false,
   libsForQt5,
+  qt6Packages,
 }:
 
 let
+  qtPackages = if useQt6 then qt6Packages else libsForQt5;
   packages =
     self:
     let
       inherit (self) callPackage;
     in
     {
+    }
+    // lib.optionalAttrs (!useQt6) {
       #### Core Apps
       lomiri = callPackage ./applications/lomiri { };
       lomiri-calculator-app = callPackage ./applications/lomiri-calculator-app { };
@@ -74,8 +79,8 @@ let
       mediascanner2 = callPackage ./services/mediascanner2 { };
     };
 in
-lib.makeScope libsForQt5.newScope packages
-// lib.optionalAttrs config.allowAliases {
+lib.makeScope qtPackages.newScope packages
+// lib.optionalAttrs (config.allowAliases && !useQt6) {
   content-hub = lib.warnOnInstantiate "`content-hub` was renamed to `lomiri-content-hub`." pkgs.lomiri.lomiri-content-hub; # Added on 2024-09-11
   history-service = lib.warnOnInstantiate "`history-service` was renamed to `lomiri-history-service`." pkgs.lomiri.lomiri-history-service; # Added on 2024-11-11
   lomiri-system-settings-security-privacy = lib.warnOnInstantiate "`lomiri-system-settings-security-privacy` upstream was merged into `lomiri-system-settings`. Please use `pkgs.lomiri.lomiri-system-settings-unwrapped` if you need to directly access the plugins that belonged to this project." pkgs.lomiri.lomiri-system-settings-unwrapped; # Added on 2024-08-08
