@@ -16,7 +16,7 @@
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pontos";
   version = "26.2.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tmu4BGjQlYehOg6lucKaeDnWK8v2VMviFwnmKd6IKWE=";
   };
 
@@ -75,8 +75,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
-    changelog = "https://github.com/greenbone/pontos/releases/tag/${src.tag}";
-    license = with lib.licenses; [ gpl3Plus ];
+    changelog = "https://github.com/greenbone/pontos/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
