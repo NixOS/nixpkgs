@@ -128,12 +128,12 @@ freecad-utils.makeCustomizable (
 
     cmakeFlags = [
       "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
-      "-DBUILD_DRAWING=ON"
-      "-DBUILD_FLAT_MESH:BOOL=ON"
-      "-DINSTALL_TO_SITEPACKAGES=OFF"
-      "-DFREECAD_USE_PYBIND11=ON"
-      "-DBUILD_QT5=OFF"
-      "-DBUILD_QT6=ON"
+      (lib.cmakeBool "BUILD_DRAWING" true)
+      (lib.cmakeBool "BUILD_FLAT_MESH" true)
+      (lib.cmakeBool "INSTALL_TO_SITEPACKAGES" false)
+      (lib.cmakeBool "FREECAD_USE_PYBIND11" true)
+      (lib.cmakeBool "BUILD_QT5" false)
+      (lib.cmakeBool "BUILD_QT6" true)
     ];
 
     qtWrapperArgs =

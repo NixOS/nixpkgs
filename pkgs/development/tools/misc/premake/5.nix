@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   # build inputs
   cacert,
@@ -29,7 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  patches = [ ./no-curl-ca.patch ];
+  patches = [
+    # https://github.com/premake/premake-core/issues/2614
+    (fetchpatch {
+      name = "0001-premake5-Fix-filters-using-alias-value.patch";
+      url = "https://github.com/premake/premake-core/commit/d01097bb38da6855beeef7158b8b04ab1e63249b.patch";
+      hash = "sha256-ZGhNUoXZbbW9ioFnAgPwypYhepoChtWF1SOCxs1WLj8=";
+    })
+
+    ./no-curl-ca.patch
+  ];
   postPatch = ''
     substituteInPlace contrib/curl/premake5.lua \
       --replace-fail "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
