@@ -37,14 +37,14 @@ let
       # should contain all args but the binary. Can be either a string or list
       wrapperArgs ? [ ],
       withPython2 ? false,
-      withPython3 ? true,
+      withPython3 ? false,
       # the function you would have passed to python3.withPackages
       extraPython3Packages ? (_: [ ]),
 
       waylandSupport ? lib.meta.availableOn stdenv.hostPlatform wayland,
       withNodeJs ? false,
       withPerl ? false,
-      withRuby ? true,
+      withRuby ? false,
 
       # wether to create symlinks in $out/bin/vi(m) -> $out/bin/nvim
       vimAlias ? false,

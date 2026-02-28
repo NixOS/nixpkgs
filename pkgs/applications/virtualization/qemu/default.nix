@@ -88,6 +88,8 @@
   tpmSupport ? !minimal,
   uringSupport ? stdenv.hostPlatform.isLinux && !userOnly,
   liburing,
+  fuseSupport ? stdenv.hostPlatform.isLinux && !minimal,
+  fuse3,
   canokeySupport ? false,
   canokey-qemu,
   capstoneSupport ? !minimal,
@@ -241,6 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals libiscsiSupport [ libiscsi ]
   ++ lib.optionals smbdSupport [ samba ]
   ++ lib.optionals uringSupport [ liburing ]
+  ++ lib.optionals fuseSupport [ fuse3 ]
   ++ lib.optionals canokeySupport [ canokey-qemu ]
   ++ lib.optionals capstoneSupport [ capstone ]
   ++ lib.optionals valgrindSupport [ valgrind-light ];
@@ -324,6 +327,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional libiscsiSupport "--enable-libiscsi"
   ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
   ++ lib.optional uringSupport "--enable-linux-io-uring"
+  ++ lib.optional fuseSupport "--enable-fuse"
   ++ lib.optional canokeySupport "--enable-canokey"
   ++ lib.optional capstoneSupport "--enable-capstone"
   ++ lib.optional (!pluginsSupport) "--disable-plugins"

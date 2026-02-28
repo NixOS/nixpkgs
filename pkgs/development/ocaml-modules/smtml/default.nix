@@ -5,6 +5,7 @@
   ocaml,
   fetchFromGitHub,
   menhir,
+  bitwuzla-cxx,
   bos,
   cmdliner,
   dolmen_model,
@@ -47,6 +48,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
+    bitwuzla-cxx
     bos
     cmdliner
     dolmen_model

@@ -78,7 +78,7 @@ luadbi-postgresql,,,,,,
 luadbi-sqlite3,,,,,,
 luaepnf,,,,,,
 luaevent,,,,,,
-luaexpat,,,,1.4.1-1,,arobyn flosse
+luaexpat,,,,,,arobyn flosse
 luaffi,,,https://luarocks.org/dev,,,
 luafilesystem,,,,,,flosse
 lualdap,,,,,,aanderse

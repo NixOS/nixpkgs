@@ -24,8 +24,8 @@
   numpy,
   opencolorio,
   openimageio,
+  openshadinglanguage,
   opensubdiv,
-  osl,
   ptex,
   pyopengl,
   pyqt6,
@@ -79,7 +79,7 @@ buildPythonPackage rec {
     })
   ];
 
-  env.OSL_LOCATION = "${osl}";
+  env.OSL_LOCATION = lib.optionalString withOsl "${openshadinglanguage}";
 
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
@@ -131,7 +131,7 @@ buildPythonPackage rec {
     libx11
     libxt
   ]
-  ++ lib.optionals withOsl [ osl ]
+  ++ lib.optionals withOsl [ openshadinglanguage ]
   ++ lib.optionals withUsdView [ qt6.qtbase ]
   ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 

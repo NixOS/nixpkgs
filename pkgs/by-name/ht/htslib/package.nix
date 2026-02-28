@@ -7,6 +7,7 @@
   bzip2,
   xz,
   curl,
+  libdeflate,
   perl,
 }:
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     xz
     curl
+    libdeflate
   ];
 
   configureFlags =

@@ -6053,13 +6053,6 @@
     github = "David-Kopczynski";
     githubId = 53194670;
   };
-  david-r-cox = {
-    email = "david@integrated-reasoning.com";
-    github = "david-r-cox";
-    githubId = 4259949;
-    name = "David Cox";
-    keys = [ { fingerprint = "0056 A3F6 9918 1E0D 8FF0  BCDE 65BB 07FA A4D9 4634"; } ];
-  };
   david-sawatzke = {
     email = "d-nix@sawatzke.dev";
     github = "david-sawatzke";
@@ -6936,6 +6929,12 @@
     github = "dolphindalt";
     githubId = 13937320;
     name = "Dalton Caron";
+  };
+  DomagojAlaber = {
+    email = "a.domagoj@hotmail.com";
+    github = "DomagojAlaber";
+    githubId = 86619082;
+    name = "Domagoj Alaber";
   };
   domenkozar = {
     email = "domen@dev.si";
@@ -12399,6 +12398,13 @@
     github = "jhollowe";
     githubId = 2881268;
     name = "John Hollowell";
+  };
+  jhult = {
+    email = "Jonathan@JonathanHult.com";
+    github = "jhult";
+    githubId = 9849069;
+    name = "Jonathan Hult";
+    keys = [ { fingerprint = "DEE7 054C 5D43 ABEA C0F9  8BE4 3512 C8F8 2E2F 2A16"; } ];
   };
   jiegec = {
     name = "Jiajie Chen";
@@ -18887,6 +18893,12 @@
     githubId = 42888162;
     keys = [ { fingerprint = "A0B9 48C5 A263 55C2 035F  8567 FBB7 2A94 52D9 1A72"; } ];
   };
+  neural-blade = {
+    name = "Carmelo Scaccianoce";
+    email = "6c5bk3syhivc1t5ae2prj6k05p12cj.swifter143@simplelogin.com";
+    github = "neural-blade";
+    githubId = 64137177;
+  };
   neurofibromin = {
     name = "Neurofibromin";
     github = "Neurofibromin";
@@ -21798,7 +21810,6 @@
     email = "aaron@bolddaemon.com";
     github = "qbit";
     githubId = 68368;
-    matrix = "@qbit:tapenet.org";
     keys = [ { fingerprint = "3586 3350 BFEA C101 DB1A 4AF0 1F81 112D 62A9 ADCE"; } ];
   };
   qdlmcfresh = {
@@ -23866,6 +23877,12 @@
     github = "SchahinRohani";
     githubId = 24507823;
     name = "Schahin Rouhanizadeh";
+  };
+  schembriaiden = {
+    email = "aidsch@proton.me";
+    github = "schembriaiden";
+    githubId = 81376423;
+    name = "Aiden Schembri";
   };
   schinmai-akamai = {
     email = "schinmai@akamai.com";
@@ -27258,6 +27275,12 @@
     github = "tonybutt";
     githubId = 38566841;
     name = "Anthony Butt";
+  };
+  toodeluna = {
+    email = "luna@toodeluna.net";
+    github = "toodeluna";
+    githubId = 112084382;
+    name = "Luna Heyman";
   };
   toonn = {
     email = "nixpkgs@toonn.io";

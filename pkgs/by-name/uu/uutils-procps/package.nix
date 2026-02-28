@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-QWz6Hr3nuE4ZIMM81pR4K2bjefWV5mlnu/HYcHDwToE=";
 
+  cargoBuildFlags = [ "--workspace" ];
+
   nativeBuildInputs = [
     pkg-config
     writableTmpDirAsHomeHook

@@ -26,7 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_SHARED_LIB" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "ENABLE_STATIC_LIB" stdenv.hostPlatform.isStatic)
-  ];
+  ]
+  ++ (lib.optional stdenv.hostPlatform.isWindows "-DENABLE_LIB_ONLY=1");
 
   doCheck = true;
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ngtcp2/nghttp3/releases/tag/v${finalAttrs.version}";
     description = "Implementation of HTTP/3 mapping over QUIC and QPACK in C";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 })

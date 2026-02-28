@@ -53,6 +53,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-typify";
     homepage = "https://github.com/oxidecomputer/typify";
     license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ david-r-cox ];
+    maintainers = [ ];
   };
 })

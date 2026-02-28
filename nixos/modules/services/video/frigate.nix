@@ -699,15 +699,6 @@ in
       environment = {
         CONFIG_FILE = "/run/frigate/frigate.yml";
         HOME = "/var/lib/frigate";
-        # Extract libavformat version in the same way Docker scripts in frigate directory do. This
-        # environment variable changes the flags given to `ffmpeg` improving compatibility.
-        LIBAVFORMAT_VERSION_MAJOR = lib.strings.trim (
-          builtins.readFile (
-            pkgs.runCommandLocal "libavformat-major-version" { } ''
-              ${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | grep -Po "libavformat\W+\K\d+" > $out
-            ''
-          )
-        );
         PYTHONPATH = cfg.package.pythonPath;
       }
       // optionalAttrs (cfg.vaapiDriver != null) {
@@ -738,7 +729,15 @@ in
           (pkgs.writeShellScript "frigate-create-writable-config" ''
             cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
           '')
+        ]
+        ++ lib.optionals (!config.systemd.services.frigate.environment ? LIBAVFORMAT_VERSION_MAJOR) [
+          # Extract libavformat version to enable version-dependent flags in ffmpeg
+          (pkgs.writeShellScript "frigate-libavformat-major-version" ''
+            echo "LIBAVFORMAT_VERSION_MAJOR=$(${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | grep -Po "libavformat\W+\K\d+")" > /run/frigate/ffmpeg-env
+            echo "Detected $(cat /run/frigate/ffmpeg-env)"
+          '')
         ];
+        EnvironmentFile = [ "-/run/frigate/ffmpeg-env" ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
         Restart = "on-failure";
         SyslogIdentifier = "frigate";

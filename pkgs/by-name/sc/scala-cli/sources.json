@@ -1,21 +1,21 @@
 {
-  "version": "1.12.2",
+  "version": "1.12.3",
   "assets": {
     "aarch64-darwin": {
       "asset": "scala-cli-aarch64-apple-darwin.gz",
-      "sha256": "1vr9gn70nisyiynglaq29l3rqfxn68lga5x3h5ycwl15ybkmv8wc"
+      "sha256": "036q4jxc0sx01qb7bfm1r1jfimkzjaijkdqh1yxbxc5vvna2pd34"
     },
     "aarch64-linux": {
       "asset": "scala-cli-aarch64-pc-linux.gz",
-      "sha256": "14dmwmf5w7f58bi5hyb607ybjpajh2y37k3d6gw3kri2ww5lg1r6"
+      "sha256": "0avzzyvf59l4d63pl80wqfiw2l8gdfphz85a000ig3mfqqz3hrrg"
     },
     "x86_64-darwin": {
       "asset": "scala-cli-x86_64-apple-darwin.gz",
-      "sha256": "0yf81yd1a9mfyiikyrjqhc8nanr932b1inyxdfwqba9vhc6r29b3"
+      "sha256": "05xrq0gr13l337a7bjrz13f5kjbh1fv2w97lli9fqsyn4sghchrv"
     },
     "x86_64-linux": {
       "asset": "scala-cli-x86_64-pc-linux.gz",
-      "sha256": "00p8i6fb8czy1pfn8yjjzrl9mcn28mx5yjz0k3fc292ag2dly46q"
+      "sha256": "022psrs9xhfpdx52fjygfxkn7mwpdvp8dbsvdn7v1km2gpdmvxdx"
     }
   }
 }

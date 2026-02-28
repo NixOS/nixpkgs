@@ -12,7 +12,7 @@
   libpcap,
   libtins,
   openssl,
-  protobuf,
+  protobuf_21,
   xz,
   zlib,
   catch2,
@@ -25,15 +25,17 @@
   tcpdump,
   wireshark-cli,
 }:
-
-stdenv.mkDerivation rec {
+let
+  protobuf = protobuf_21;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "compactor";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "dns-stats";
     repo = "compactor";
-    rev = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-5Z14suhO5ghhmZsSj4DsSoKm+ct2gQFO6qxhjmx4Xm4=";
   };
@@ -100,9 +102,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tools to capture DNS traffic and record it in C-DNS files";
     homepage = "https://dns-stats.org/";
-    changelog = "https://github.com/dns-stats/compactor/raw/${version}/ChangeLog.txt";
+    changelog = "https://github.com/dns-stats/compactor/raw/${finalAttrs.version}/ChangeLog.txt";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fdns ];
     platforms = lib.platforms.unix;
   };
-}
+})
