@@ -18137,6 +18137,8 @@ self: super: with self; {
 
   sphinxext-rediraffe = callPackage ../development/python-modules/sphinxext-rediraffe { };
 
+  sphinxfeed-lsaffre = callPackage ../development/python-modules/sphinxfeed-lsaffre { };
+
   spiderpy = callPackage ../development/python-modules/spiderpy { };
 
   spidev = callPackage ../development/python-modules/spidev { };
