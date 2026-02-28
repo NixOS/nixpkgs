@@ -5941,6 +5941,12 @@
     githubId = 39523942;
     name = "Alex Clarke";
   };
+  darkjaguar91 = {
+    name = "Brandon Talbot";
+    email = "bjtal91@gmail.com";
+    github = "DarkJaguar91";
+    githubId = 3388903;
+  };
   darkonion0 = {
     name = "Alexandre Peruggia";
     email = "darkgenius1@protonmail.com";
