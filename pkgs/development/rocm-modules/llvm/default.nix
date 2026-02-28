@@ -295,6 +295,16 @@ in
 overrideLlvmPackagesRocm (s: {
   libllvm = (s.prev.libllvm.override { }).overrideAttrs (old: {
     patches = old.patches ++ [
+      (fetchpatch {
+        # Revert of a patch that cause perf regression by pessimising loop unrolling decisions
+        # See PR and issue discussion
+        # https://github.com/ROCm/rocm-systems/issues/2865 https://github.com/ROCm/llvm-project/pull/1349
+        name = "rocm-llvm-revert-unrolling-regression.patch";
+        url = "https://github.com/ROCm/llvm-project/commit/f58b06dce1f9c15707c5f808fd002e18c2accf7e.patch";
+        hash = "sha256-pH+3C7PSDqNfOF014sA5Rvm+sc2IJMQJfysS2bvj/o0=";
+        # stripLen instead of relative to avoid filterdiff mangling /dev/null on the deleted test file
+        stripLen = 1;
+      })
       ./perf-increase-namestring-size.patch
       # TODO: consider reapplying "Don't include aliases in RegisterClassInfo::IgnoreCSRForAllocOrder"
       # it was reverted as it's a pessimization for non-GPU archs, but this compiler
