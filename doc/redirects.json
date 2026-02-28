@@ -20,6 +20,9 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "compiling-wasm32-wasip1-package": [
+    "index.html#compiling-wasm32-wasip1-package"
+  ],
   "coq-withPackages": [
     "index.html#coq-withPackages"
   ],
