@@ -5904,6 +5904,8 @@ self: super: with self; {
 
   fslpy = callPackage ../development/python-modules/fslpy { };
 
+  fspath = callPackage ../development/python-modules/fspath { };
+
   fsspec = callPackage ../development/python-modules/fsspec { };
 
   fsspec-xrootd = callPackage ../development/python-modules/fsspec-xrootd { };
@@ -8910,6 +8912,8 @@ self: super: with self; {
   linode-api = callPackage ../development/python-modules/linode-api { };
 
   linode-metadata = callPackage ../development/python-modules/linode-metadata { };
+
+  linuxdoc = callPackage ../development/python-modules/linuxdoc { };
 
   linuxfd = callPackage ../development/python-modules/linuxfd { };
 
