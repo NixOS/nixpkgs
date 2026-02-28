@@ -1763,6 +1763,7 @@ in
   xfce-wayland = runTest ./xfce-wayland.nix;
   xmonad = runTest ./xmonad.nix;
   xmonad-xdg-autostart = runTest ./xmonad-xdg-autostart.nix;
+  xota = runTest ./xota.nix;
   xpadneo = runTest ./xpadneo.nix;
   xrdp = runTest ./xrdp.nix;
   xrdp-with-audio-pulseaudio = runTest ./xrdp-with-audio-pulseaudio.nix;

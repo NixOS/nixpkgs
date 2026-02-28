@@ -9,6 +9,7 @@
   additionalAwords ? "",
   additionalPatches ? [ ],
   fetchFromGitHub,
+  nixosTests,
 }:
 let
   generated = swiftpm2nix.helpers ./nix;
@@ -69,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) xota; };
 
   meta = {
     description = ''
