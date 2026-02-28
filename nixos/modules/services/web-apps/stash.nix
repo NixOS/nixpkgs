@@ -366,6 +366,69 @@ let
             done
           '';
     };
+
+  secretOptionType =
+    let
+      contractSecretsType = types.submodule {
+        options = {
+          input = mkOption {
+            description = "Input of the contract for file secrets.";
+            default = { };
+            type = types.submodule {
+              options = {
+                mode = mkOption {
+                  description = ''
+                    Mode the secret file must have.
+                  '';
+                  type = types.str;
+                  default = "0400";
+                  readOnly = true;
+                };
+
+                owner = mkOption {
+                  description = ''
+                    Linux user that must own the secret file.
+                  '';
+                  type = types.str;
+                  default = cfg.user;
+                  readOnly = true;
+                };
+
+                group = mkOption {
+                  description = ''
+                    Linux group that must own the secret file.
+                  '';
+                  type = types.str;
+                  default = cfg.group;
+                  readOnly = true;
+                };
+              };
+            };
+          };
+
+          output = mkOption {
+            description = "Output of the contract for file secrets.";
+            type = types.submodule {
+              options = {
+                path = mkOption {
+                  type = types.str;
+                  description = ''
+                    Path to the file containing the secret generated out of band.
+
+                    This path will exist after deploying to a target host,
+                    it is not available through the nix store.
+                  '';
+                };
+              };
+            };
+          };
+        };
+      };
+    in
+    types.oneOf [
+      types.path
+      contractSecretsType
+    ];
 in
 {
   meta = {
@@ -418,7 +481,7 @@ in
       };
 
       passwordFile = mkOption {
-        type = types.nullOr types.path;
+        type = types.nullOr secretOptionType;
         default = null;
         example = "/path/to/password/file";
         description = ''
@@ -431,12 +494,12 @@ in
         '';
       };
 
-      jwtSecretKeyFile = mkOption {
-        type = types.path;
+      jwtSecretKey = mkOption {
+        type = secretOptionType;
         description = "Path to file containing a secret used to sign JWT tokens.";
       };
-      sessionStoreKeyFile = mkOption {
-        type = types.path;
+      sessionStoreKey = mkOption {
+        type = secretOptionType;
         description = "Path to file containing a secret for session store.";
       };
 
@@ -514,9 +577,15 @@ in
               install -d ${cfg.settings.generated}
               if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
                 env \
-                  password=$(< ${cfg.passwordFile}) \
-                  jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \
-                  sessionStoreKeyFile=$(< ${cfg.sessionStoreKeyFile}) \
+                  password=$(< ${
+                    if lib.isPath cfg.passwordFile then cfg.passwordFile else cfg.passwordFile.output.path
+                  }) \
+                  jwtSecretKeyFile=$(< ${
+                    if lib.isPath cfg.jwtSecretKey then cfg.jwtSecretKey else cfg.jwtSecretKey.output.path
+                  }) \
+                  sessionStoreKeyFile=$(< ${
+                    if lib.isPath cfg.sessionStoreKey then cfg.sessionStoreKey else cfg.sessionStoreKey.output.path
+                  }) \
                   ${lib.getExe pkgs.yq-go} '
                     .jwt_secret_key = strenv(jwtSecretKeyFile) |
                     .session_store_key = strenv(sessionStoreKeyFile) |
