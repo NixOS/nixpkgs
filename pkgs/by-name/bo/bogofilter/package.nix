@@ -6,6 +6,7 @@
   db,
   makeWrapper,
   pax,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     flex
     db
+    perl # required by bogoupgrade
   ];
 
   doCheck = false; # needs "y" tool
