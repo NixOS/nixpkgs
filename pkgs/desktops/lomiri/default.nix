@@ -16,6 +16,9 @@ let
       inherit (self) callPackage;
     in
     {
+      #### Data
+      lomiri-schemas = callPackage ./data/lomiri-schemas { };
+
       #### Development tools / libraries
       cmake-extras = callPackage ./development/cmake-extras { };
       deviceinfo = callPackage ./development/deviceinfo { };
@@ -39,7 +42,6 @@ let
       teleports = callPackage ./applications/teleports { };
 
       #### Data
-      lomiri-schemas = callPackage ./data/lomiri-schemas { };
       lomiri-session = callPackage ./data/lomiri-session { };
       lomiri-sounds = callPackage ./data/lomiri-sounds { };
       lomiri-wallpapers = callPackage ./data/lomiri-wallpapers { };
