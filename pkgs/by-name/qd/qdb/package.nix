@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Quick and dirty brainfuck interpreter";
     mainProgram = "qdb";
-    homepage = "https://brainfuck.com/qdb.c";
+    homepage = "https://brainfuck.org/qdb.c";
 
     # Make any use you like of this software. I can't stop you anyway. :)
     license = lib.licenses.publicDomain;
