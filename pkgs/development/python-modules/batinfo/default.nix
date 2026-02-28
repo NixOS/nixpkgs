@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "batinfo";
-  version = "2.0";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "batinfo";
     tag = "v${version}";
-    hash = "sha256-7oR8FRnl6reFHKPf49ZH3zQIjgOX1KTOxb3aCRNYOSg=";
+    hash = "sha256-GgAJJA8bzQJLAU+nxmkDa5LFTHc4NGi+nj9PfKyw8/M=";
   };
 
   postPatch = ''
@@ -35,6 +35,8 @@ buildPythonPackage rec {
     "test_batinfo_charge_now"
     "test_batinfo_name_default"
   ];
+
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Module to retrieve battery information";
