@@ -72,8 +72,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       patches
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-fX48yZKntte4OxLjXqepZQyGdN/bv4o+n+v5ZT5lXMo=";
+    fetcherVersion = 3;
+    hash = "sha256-qSmIyLv8A+JDbTVG+Qcvq3gqBXBGtfbH4/tN+CvEmd8=";
   };
 
   # CMake (webkit extension)

@@ -85,7 +85,7 @@ lualdap,,,,,,aanderse
 lualine.nvim,,,https://luarocks.org/dev,,,
 lualogging,,,,,,
 luaossl,,,,,5.1,
-luaposix,,,,34.1.1-1,,lblasc
+luaposix,,,,,,lblasc
 luaprompt,,,,,,Freed-Wu
 luarepl,,,,,,
 luarocks,,,,,,mrcjkb teto

@@ -123,7 +123,7 @@ let
     }:
     let
       pluginLibDirs = map (p: "${p}/lib/erlang/lib") (lib.unique (plugins ++ globalPlugins));
-      globalPluginNames = lib.unique (map (p: p.packageName) globalPlugins);
+      globalPluginNames = lib.unique (map (p: p.pname) globalPlugins);
       rebar3Patched = (
         rebar3.overrideAttrs (old: {
 

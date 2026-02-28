@@ -35,28 +35,47 @@
   uv,
 
   # tests
-  pytestCheckHook,
+  a2a-sdk,
+  aiocache,
+  anthropic,
+  boto3,
+  google-genai,
   pytest-asyncio,
+  pytest-recording,
   pytest-xdist,
+  pytestCheckHook,
   qdrant-client,
   vcrpy,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crewai";
-  version = "1.8.1";
+  version = "1.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
-    tag = version;
-    hash = "sha256-MQx1FOh2bwbkDbvR6aP5z071xwbGT8bxK9OjhskdVyI=";
+    tag = finalAttrs.version;
+    hash = "sha256-bhpmR8sGDTjHw9JBa5oz4vHEF3gJT/fvvoCvPfYkJEQ=";
   };
 
-  sourceRoot = "${src.name}/lib/crewai";
+  postPatch = ''
+    substituteInPlace ../../conftest.py \
+      --replace-fail \
+        "import vcr.stubs.httpx_stubs as httpx_stubs" \
+        "import vcr.stubs.httpcore_stubs as httpx_stubs" \
+      --replace-fail \
+        "def _patched_make_vcr_request(httpx_request: Any, **kwargs: Any) -> Any:" \
+        "def _patched_make_vcr_request(httpx_request: Any, request_body: Any = None, **kwargs: Any) -> Any:" \
+      --replace-fail \
+        "raw_body = httpx_request.read()" \
+        "raw_body = request_body if request_body is not None else httpx_request.read()"
+  '';
+
+  sourceRoot = "${finalAttrs.src.name}/lib/crewai";
 
   build-system = [ hatchling ];
 
@@ -148,6 +167,16 @@ buildPythonPackage rec {
 
     # Tests requiring crewai-tools
     "tests/agents/test_lite_agent.py"
+
+    # Tests requiring crewai-files
+    "tests/llms/test_multimodal.py"
+    "tests/llms/test_multimodal_integration.py"
+    "tests/test_agent_multimodal.py"
+    "tests/test_crew_multimodal.py"
+    "tests/test_flow_multimodal.py"
+    "tests/tools/agent_tools/test_read_file_tool.py"
+    "tests/utilities/test_file_store.py"
+    "tests/utilities/test_files.py"
   ];
 
   disabledTests = [
@@ -425,16 +454,64 @@ buildPythonPackage rec {
     "test_supports_function_calling_false"
 
     # Tests requiring network
+    "test_agent_events_have_event_ids"
+    "test_agent_kickoff_async_delegates_to_a2a"
+    "test_agent_kickoff_returns_lite_agent_output"
+    "test_agent_kickoff_with_failed_a2a_endpoint"
     "test_agent_max_iterations_stops_loop"
+    "test_agent_without_a2a_works_normally"
+    "test_agent_without_tools_no_thought_in_output"
+    "test_anthropic_agent_with_native_tool_calling"
+    "test_anthropic_streaming_emits_tool_call_events"
+    "test_crew_completed_after_started"
+    "test_crew_events_have_event_ids"
+    "test_crew_memory_with_google_vertex_embedder"
+    "test_crew_parent_is_method"
+    "test_fetch_agent_card"
+    "test_flow_events_have_ids"
+    "test_gemini_agent_with_native_tool_calling"
+    "test_gemini_streaming_emits_tool_call_events"
+    "test_gemini_streaming_multiple_tool_calls_unique_ids"
+    "test_llm_events_have_parent"
+    "test_max_usage_count_limit_enforced_in_native_tool_calling"
+    "test_max_usage_count_tracked_in_native_tool_calling"
+    "test_method_parent_is_flow"
+    "test_native_tool_calling_error_handling"
+    "test_openai_agent_with_native_tool_calling"
+    "test_openai_native_tool_calling_token_usage"
+    "test_openai_streaming_emits_tool_call_events"
+    "test_polling_completes_task"
+    "test_second_crew_after_first"
+    "test_send_message_and_get_response"
+    "test_simple_task_clean_output"
+    "test_streaming_completes_task"
+    "test_streaming_distinguishes_text_and_tool_calls"
     "test_task_output_includes_messages"
+    "test_task_parent_is_crew"
+    "test_tasks_have_correct_crew_parents"
+    "test_tool_call_event_accumulates_arguments"
+    "test_tool_call_events_have_consistent_tool_id"
+    "test_tool_usage_increments_after_successful_execution"
+    "test_two_crews_have_different_ids"
 
     # Not work with nixpkgs-review
     "test_concurrent_ainvoke_calls"
+
+    # Tests requiring missing dependency azure-ai-inference
+    "test_azure_agent_with_native_tool_calling"
+    "test_azure_agent_kickoff_with_tools_mocked"
+    "test_azure_streaming_emits_tool_call_events"
   ];
 
   nativeCheckInputs = [
+    a2a-sdk
+    aiocache
+    anthropic
+    boto3
+    google-genai
     pytestCheckHook
     pytest-asyncio
+    pytest-recording
     pytest-xdist
     qdrant-client
     vcrpy
@@ -449,10 +526,10 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";
     homepage = "https://github.com/crewAIInc/crewAI";
-    changelog = "https://github.com/crewAIInc/crewAI/releases/tag/${src.tag}";
+    changelog = "https://github.com/crewAIInc/crewAI/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux;
     mainProgram = "crewai";
   };
-}
+})

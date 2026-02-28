@@ -16,6 +16,8 @@
   hatch-vcs,
   proxy-py,
   pyfakefs,
+  python-dateutil,
+  pyyaml,
   toPythonModule,
   tzlocal,
   vobject,
@@ -25,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "2.2.3";
+  version = "2.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-v+r52YBrtE/FgUxOQoN0uLDmDOjJM7OvKQE1vZ49F+A=";
+    hash = "sha256-xtxWDlYESIwkow/YdjaUAkJ/x2jdUyhqfSRycJVLncY=";
   };
 
   build-system = [
@@ -47,6 +49,8 @@ buildPythonPackage rec {
     icalendar
     icalendar-searcher
     recurring-ical-events
+    python-dateutil
+    pyyaml
   ];
 
   nativeCheckInputs = [

@@ -14748,12 +14748,6 @@
     githubId = 621759;
     name = "Lassulus";
   };
-  laurent-f1z1 = {
-    email = "laurent.nixpkgs@fainsin.bzh";
-    github = "Laurent2916";
-    githubId = 21087104;
-    name = "Laurent Fainsin";
-  };
   lavafroth = {
     email = "lavafroth@protonmail.com";
     github = "lavafroth";
