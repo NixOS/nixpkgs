@@ -13,6 +13,7 @@
   nixosTests,
   nix-update-script,
   yq-go,
+  cctools,
 }:
 let
   nodejs = nodejs_24;
@@ -41,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     yq-go
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    xcbuild
+    cctools # contains libtool, required by better-sqlite3
+  ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;

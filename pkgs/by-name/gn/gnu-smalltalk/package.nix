@@ -94,6 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2
     ];
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sauricat ];
   };
 })

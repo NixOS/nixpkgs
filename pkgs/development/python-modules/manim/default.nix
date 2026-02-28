@@ -188,13 +188,13 @@ in
 buildPythonPackage (finalAttrs: {
   pname = "manim";
   pyproject = true;
-  version = "0.20.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sn33kI0AswuvE653hWmke+7+qdJo5COzPaL8Y2aGbsU=";
+    hash = "sha256-rfPqKPbxT8UsxSin4DquDjPMAUEYmKixx2fBlr5mz8U=";
   };
 
   build-system = [

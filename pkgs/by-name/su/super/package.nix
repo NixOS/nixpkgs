@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "super";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "brimdata";
     repo = "super";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wgduBXtLnvCTV/8JgCOeD8QutIqW5m9vCJZEbsxKxwY=";
+    hash = "sha256-MAlBVY2O9T1j+N/kSgEw3onnIicrhOoa2vqnGEiXCdg=";
   };
 
-  vendorHash = "sha256-yGmQmxr2RzpOOwS7qpdBJysJpsgeWDNFBOws1FQQoM8=";
+  vendorHash = "sha256-EkQatync50uz4dSVrX0lIAh4FaEMRR6UTsYZATi+kNw=";
 
   ldflags = [
     "-s"

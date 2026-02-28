@@ -11309,6 +11309,8 @@ self: super: with self; {
 
   omemo-dr = callPackage ../development/python-modules/omemo-dr { };
 
+  omitempty = callPackage ../development/python-modules/omitempty { };
+
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
@@ -21189,6 +21191,8 @@ self: super: with self; {
   yara-x = callPackage ../development/python-modules/yara-x { };
 
   yaramod = callPackage ../development/python-modules/yaramod { };
+
+  yardstick = callPackage ../development/python-modules/yardstick { };
 
   yarg = callPackage ../development/python-modules/yarg { };
 
