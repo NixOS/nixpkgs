@@ -171,7 +171,7 @@ let
         license = lib.licenses.asl20;
         homepage = "https://subversion.apache.org/";
         mainProgram = "svn";
-        maintainers = with lib.maintainers; [ lovek323 ];
+        maintainers = [ ];
         platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
     };

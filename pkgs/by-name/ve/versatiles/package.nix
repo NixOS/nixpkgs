@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "versatiles";
-  version = "3.6.2";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "versatiles-org";
     repo = "versatiles-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OK+rcnWxr1s4kGsXJ8u1WK7VWzfGO7LhD/HYg9Cy1u8=";
+    hash = "sha256-EskBVrMBn0km6oWSbgluG+4hdTek4MWDbEoEYdVj6/o=";
   };
 
-  cargoHash = "sha256-/8Nnau4zkEY6oTYh08/XiN2rQ5M/bTMYyZTVD6UjAgU=";
+  cargoHash = "sha256-dStQIMT8+lszEmh8r/mBHgpK5kLeLWlFpkUX9Vqsn2g=";
 
   __darwinAllowLocalNetworking = true;
 

@@ -69,7 +69,7 @@ buildPythonPackage rec {
   meta = {
     description = "Extended commonmark compliant parser, with bridges to docutils/sphinx";
     homepage = "https://github.com/executablebooks/MyST-Parser";
-    changelog = "https://github.com/executablebooks/MyST-Parser/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/executablebooks/MyST-Parser/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
   };
 }

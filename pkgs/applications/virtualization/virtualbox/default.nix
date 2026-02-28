@@ -415,7 +415,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
       friedrichaltheide
-      blitz
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";

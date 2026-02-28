@@ -5,8 +5,8 @@
   pytestCheckHook,
   cython,
   setuptools,
+  setuptools-git-versioning,
   toolz,
-  python,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -30,12 +30,16 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = [
     cython
     setuptools
+    setuptools-git-versioning
   ];
 
-  propagatedBuildInputs = [ toolz ];
+  dependencies = [ toolz ];
 
+  # tests are located in cytoolz/tests, but we need to prevent import from the cytoolz source
   preCheck = ''
-    cd $out/${python.sitePackages}
+    mv cytoolz/tests tests
+    rm -rf cytoolz
+    sed -i "/testpaths/d" pyproject.toml
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

@@ -14,8 +14,10 @@ let
       makeWrapperArgs = [ "--prefix JUPYTER_PATH : ${jupyterPath}" ];
     }).overrideAttrs
       (oldAttrs: {
+        inherit (python3.pkgs.notebook) version;
+        pname = "jupyter";
         meta = oldAttrs.meta // {
-          mainProgram = "jupyter-notebook";
+          mainProgram = "jupyter";
         };
       });
 in

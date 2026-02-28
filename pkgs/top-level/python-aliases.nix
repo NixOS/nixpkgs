@@ -133,6 +133,7 @@ mapAliases {
   configshell = throw "'configshell' has been renamed to/replaced by 'configshell-fb'"; # Converted to throw 2025-10-29
   cx_Freeze = throw "'cx_Freeze' has been renamed to/replaced by 'cx-freeze'"; # Converted to throw 2025-10-29
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
+  dalle-mini = throw "'dalle-mini' has been removed due to lack of upstream maintenance"; # added 2026-02-26
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
   debian = throw "'debian' has been renamed to/replaced by 'python-debian'"; # Converted to throw 2025-10-29
@@ -342,6 +343,7 @@ mapAliases {
   pillow-avif-plugin = throw "'pillow-avif-plugin' has been removed because 'pillow' has native avif support since 11.3"; # added 2025-11-26
   pizzapi = throw "pizzapi was removed because it no longer works"; # added 2025-12-03
   pkuseg = throw "'pkuseg' has been removed because it was not supported on newer versions of Python"; # added 2026-01-20
+  ploomber-extension = throw "'ploomber-extension' has been removed since the upstream repo was archived"; # added 2026-02-16
   plumlightpad = throw "plumlightpad has been removed because the API was shut down"; # added 2025-11-04
   Polygon3 = throw "'Polygon3' has been renamed to/replaced by 'polygon3'"; # Converted to throw 2025-10-29
   posix_ipc = throw "'posix_ipc' has been renamed to/replaced by 'posix-ipc'"; # Converted to throw 2025-10-29
@@ -368,6 +370,7 @@ mapAliases {
   pycrc = throw "'pycrc' has been removed because its source is unavailable"; # Added 2025-12-22
   pydns = throw "'pydns' has been renamed to/replaced by 'py3dns'"; # Converted to throw 2025-10-29
   pyechonest = throw "pyechonest was removed because it was broken and unmaintained"; # added 2025-08-26
+  pyeiscp = throw "'pyeiscp' was removed because it was an unmaintained leaf package."; # added 2026-01-22
   pyezviz = throw "pyeziz has been removed in favor of pyevizapi, where development continues"; # added 2025-06-11
   pyfantom = throw "pyfantom has been removed because it does not work with python3 and has not been updated for 12 years"; # added 2025-03-25
   pyflick = throw "pyflick was removed because Flick Electric no longer exists"; # added 2025-12-03
@@ -418,6 +421,7 @@ mapAliases {
   pytado = throw "'pytado' has been renamed to/replaced by 'python-tado'"; # Converted to throw 2025-10-29
   pytedee-async = aiotedee; # added 2025-07-06
   pytest-pep8 = throw "'pytest-pep8' has been renamed to/replaced by 'pytestpep8'"; # Converted to throw 2025-10-29
+  pytest-subtests = throw "'pytest-subtests' has been integrated into pytest 9."; # Added 2026-01-21
   pytest_6 = throw "'pytest_6' has been renamed to/replaced by 'pytest'"; # Converted to throw 2025-10-29
   pytest_xdist = throw "'pytest_xdist' has been renamed to/replaced by 'pytest-xdist'"; # Converted to throw 2025-10-29
   pytestcov = throw "'pytestcov' has been renamed to/replaced by 'pytest-cov'"; # Converted to throw 2025-10-29
@@ -449,6 +453,8 @@ mapAliases {
   pyvicare-neo = throw "'pyvicare-neo' has been renamed to/replaced by 'pyvicare'"; # Converted to throw 2025-10-29
   PyVirtualDisplay = throw "'PyVirtualDisplay' has been renamed to/replaced by 'pyvirtualdisplay'"; # Converted to throw 2025-10-29
   pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11
+  pywal = pywal16; # added 2026-02-01
+  pywlroots = throw "pywlroots has been removed because it was no longer used by anything"; # added 2026-02-25
   qds_sdk = throw "'qds_sdk' has been renamed to/replaced by 'qds-sdk'"; # Converted to throw 2025-10-29
   qiskit-ibmq-provider = throw "qiskit-imbq-provider has been removed, since it was deprecated upstream"; # added 2025-09-13
   qiskit-ignis = throw "qiskit-ignis has been removed, since it was deprecated upstream"; # added 2025-09-13
@@ -461,6 +467,7 @@ mapAliases {
   radio_beam = throw "'radio_beam' has been renamed to/replaced by 'radio-beam'"; # Converted to throw 2025-10-29
   random-user-agent = throw "random-user-agent has been removed as it was abandoned upstream in 2018; use fake-useragent instead"; # Added 2025-10-17
   readme_renderer = throw "'readme_renderer' has been renamed to/replaced by 'readme-renderer'"; # Converted to throw 2025-10-29
+  readthedocs-sphinx-ext = throw "'readthedocs-sphinx-ext' has been removed because it was archived upstream."; # added 2025-12-03
   recursivePthLoader = throw "'recursivePthLoader' has been renamed to/replaced by 'recursive-pth-loader'"; # Converted to throw 2025-10-29
   repeated_test = throw "'repeated_test' has been renamed to/replaced by 'repeated-test'"; # Converted to throw 2025-10-29
   repoze_lru = throw "'repoze_lru' has been renamed to/replaced by 'repoze-lru'"; # Converted to throw 2025-10-29
@@ -475,6 +482,7 @@ mapAliases {
   retworkx = throw "'retworkx' has been renamed to/replaced by 'rustworkx'"; # Converted to throw 2025-10-29
   rki-covid-parser = throw "rki-covid-parser has been removed because it is unmaintained and broken"; # added 2025-09-20
   robotframework-tools = "'robotframework-tools' has been removed because it is unmaintained"; # Added 2026-01-19
+  roman-numerals-py = roman-numerals; # added 2025-12-03
   ROPGadget = throw "'ROPGadget' has been renamed to/replaced by 'ropgadget'"; # Converted to throw 2025-10-29
   rtslib = throw "'rtslib' has been renamed to/replaced by 'rtslib-fb'"; # Converted to throw 2025-10-29
   rtsp-to-webrtc = throw "rtsp-to-webrtc has been removed because it is unmaintained"; # added 2025-09-20
@@ -505,7 +513,9 @@ mapAliases {
   spark_parser = throw "'spark_parser' has been renamed to/replaced by 'spark-parser'"; # Converted to throw 2025-10-29
   SPARQLWrapper = throw "'SPARQLWrapper' has been renamed to/replaced by 'sparqlwrapper'"; # Converted to throw 2025-10-29
   sparsezoo = throw "sparsezoo has been removed since it is abandonned"; # added 2025-09-01
+  sphinx-hoverxref = throw "'sphinx-hoverxref' has been deprecated upstream. It's functionality was merged into the readthedocs.org admin panel."; # Added 2026-01-18"
   sphinx-jquery = throw "'sphinx-jquery' has been renamed to/replaced by 'sphinxcontrib-jquery'"; # Converted to throw 2025-10-29
+  sphinx-version-warning = throw "'sphinx-version-warning' has been abandoned upstream in 2019"; # Added 2026-01-18
   sphinx_rtd_theme = throw "'sphinx_rtd_theme' has been renamed to/replaced by 'sphinx-rtd-theme'"; # Converted to throw 2025-10-29
   sphinxcontrib-autoapi = throw "'sphinxcontrib-autoapi' has been renamed to/replaced by 'sphinx-autoapi'"; # Converted to throw 2025-10-29
   sphinxcontrib_httpdomain = throw "'sphinxcontrib_httpdomain' has been renamed to/replaced by 'sphinxcontrib-httpdomain'"; # Converted to throw 2025-10-29

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fixup-yarn-lock,
   nodejs_20,
+  node-gyp,
   python3,
   makeBinaryWrapper,
   git,
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     makeBinaryWrapper
     nodejs
+    node-gyp
   ];
 
   buildPhase = ''

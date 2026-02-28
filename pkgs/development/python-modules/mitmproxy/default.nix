@@ -9,6 +9,7 @@
   certifi,
   cryptography,
   fetchFromGitHub,
+  fetchPypi,
   flask,
   h11,
   h2,
@@ -24,9 +25,11 @@
   pyparsing,
   pyperclip,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
+  pythonRelaxDepsHook,
   requests,
   ruamel-yaml,
   setuptools,
@@ -37,6 +40,18 @@
   zstandard,
 }:
 
+let
+  # Workaround for https://github.com/mitmproxy/mitmproxy/pull/7953
+  # nixpkgs' aioquic was updated to 1.3.0, which contains breaking changes that are unpatched in mitmproxy as of right now
+  aioquic' = aioquic.overrideAttrs (old: rec {
+    version = "1.2.0";
+    src = fetchPypi {
+      pname = "aioquic";
+      inherit version;
+      hash = "sha256-+RJjuz9xlIxciRW01Q7jcABPIKQW9n+rPcyQVWx+cZk=";
+    };
+  });
+in
 buildPythonPackage rec {
   pname = "mitmproxy";
   version = "12.2.1";
@@ -50,19 +65,23 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
-    "urwid"
-    "zstandard"
-
     # requested by maintainer
     "brotli"
     # just keep those
     "typing-extensions"
+
+    "urwid"
+    "asgiref"
+    "pyparsing"
+    "ruamel.yaml"
+    "tornado"
+    "wsproto"
   ];
 
   build-system = [ setuptools ];
 
   dependencies = [
-    aioquic
+    aioquic'
     argon2-cffi
     asgiref
     brotli
@@ -92,6 +111,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytest-asyncio
+    pytest-cov-stub
     pytest-timeout
     pytest-xdist
     pytestCheckHook
@@ -99,6 +119,12 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  postPatch = ''
+    # Rename to fix pytest exception
+    substituteInPlace pyproject.toml \
+      --replace-warn "[tool.pytest.individual_coverage]" "[tool.mitmproxy.individual_coverage]"
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)

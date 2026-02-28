@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   glib,
   meson,
   ninja,
@@ -36,6 +37,19 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-aJF2Wqw+lJAXlFw+rr2MyCFt93JFbcn0YJdvvbetojQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "soup-init-use-libdl-instead-of-gmodule-in-soup2_is_loaded.patch";
+      url = "https://gitlab.gnome.org/GNOME/libsoup/-/commit/2316e56a5502ac4c41ef4ff56a3266e680aca129.patch";
+      hash = "sha256-6TOM6sygVPpBWjTNgFG37JFbJDl0t2f9Iwidvh/isa4=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-11021.patch";
+      url = "https://gitlab.gnome.org/GNOME/libsoup/-/commit/9e1a427d2f047439d0320defe1593e6352595788.patch";
+      hash = "sha256-08WiDnqg4//y8uPhIcV6svWdpRo27FmW+6DHy4OEZk8=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config

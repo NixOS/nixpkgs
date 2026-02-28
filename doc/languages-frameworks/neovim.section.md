@@ -20,9 +20,12 @@ You can configure the former via:
 
 ```nix
 neovim.override {
+  withPython3 = true; # see `:h g:python3_host_prog`
+  withNodeJs = false;
+  withRuby = false;
   configure = {
     customRC = ''
-      # here your custom configuration goes!
+      # here your custom viml configuration goes!
     '';
     packages.myVimPackage = with pkgs.vimPlugins; {
       # See examples below on how to use custom packages.
@@ -44,7 +47,7 @@ neovim-qt.override {
   neovim = neovim.override {
     configure = {
       customRC = ''
-        # your custom configuration
+        # your custom viml configuration
       '';
     };
   };
@@ -61,6 +64,8 @@ For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs
 - `wrapRc`: Nix, not being able to write in your `$HOME`, loads the
   generated Neovim configuration via the `$VIMINIT` environment variable, i.e. : `export VIMINIT='lua dofile("/nix/store/…-init.lua")'`. This has side effects like preventing Neovim from sourcing your `init.lua` in `$XDG_CONFIG_HOME/nvim` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#startup) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse the generated vimscript init code via `neovim.passthru.initRc`.
 - `plugins`: A list of plugins to add to the wrapper.
+- `withPython3`, `withNodeJs`, `withRuby` control when to enable neovim
+  providers (see `:h provider`).
 
 ```
 wrapNeovimUnstable neovim-unwrapped {
@@ -85,6 +90,9 @@ wrapNeovimUnstable neovim-unwrapped {
     (nvim-treesitter.withPlugins (p: [ p.nix p.python ]))
     hex-nvim
   ];
+  withPython3 = true;
+  withNodeJs = false;
+  withRuby = false;
 }
 ```
 

@@ -194,7 +194,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "pass";
     maintainers = with lib.maintainers; [
-      lovek323
       fpletz
       tadfisher
       globin

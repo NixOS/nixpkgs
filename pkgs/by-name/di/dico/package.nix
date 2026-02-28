@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Flexible dictionary server and client implementing RFC 2229";
     homepage = "https://www.gnu.org/software/dico/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
 
     longDescription = ''

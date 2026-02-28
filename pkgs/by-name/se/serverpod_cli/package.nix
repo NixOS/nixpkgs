@@ -14,7 +14,7 @@ buildDartApplication rec {
   src = fetchFromGitHub {
     owner = "serverpod";
     repo = "serverpod";
-    rev = version;
+    tag = version;
     hash = "sha256-4vpZiqvzhcAziElfzssw4bLYTO5/dhai3C8LEpn0eAo=";
   };
 
@@ -50,7 +50,7 @@ buildDartApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "serverpod";
     homepage = "https://serverpod.dev";
     description = "Command line tools for Serverpod";
@@ -63,7 +63,7 @@ buildDartApplication rec {
       and you can host your server anywhere.
     '';
     changelog = "https://raw.githubusercontent.com/serverpod/serverpod/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ KristijanZic ];
   };
 }

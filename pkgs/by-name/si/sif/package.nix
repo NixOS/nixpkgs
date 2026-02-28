@@ -7,16 +7,16 @@
 
 buildGoModule {
   pname = "sif";
-  version = "0-unstable-2026-02-13";
+  version = "0-unstable-2026-02-23";
 
   src = fetchFromGitHub {
     owner = "vmfunc";
     repo = "sif";
-    rev = "03bfe70cff2249cef6e52679aba3d411916a4dd1";
-    hash = "sha256-tIV9h5kaXq4CKDDexSxiDXcWD2l510qXt5BBxwFV8Nw=";
+    rev = "fef7806ac22938a480cc35e429f6862b758928a5";
+    hash = "sha256-mLz6CXpxbo7zQTgOxJJ7tvvCi/X2LWS+87iGDKhXeo4=";
   };
 
-  vendorHash = "sha256-kbFNnPf8A4dtTnk/XBArgM6yOE2gbW6mXR5oevkQ6Ms=";
+  vendorHash = "sha256-svuWF0mUfUBKpigY34A7Iio3d4LIR1wj2ks4KGUv0wE=";
 
   subPackages = [ "cmd/sif" ];
 

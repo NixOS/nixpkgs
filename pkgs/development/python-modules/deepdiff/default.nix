@@ -18,12 +18,13 @@
   # tests
   jsonpickle,
   numpy,
+  pandas,
+  polars,
+  pydantic,
   pytestCheckHook,
   python-dateutil,
-  pydantic,
+  pytz,
   tomli-w,
-  polars,
-  pandas,
   uuid6,
 }:
 
@@ -60,12 +61,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     jsonpickle
     numpy
+    pandas
+    polars
+    pydantic
     pytestCheckHook
     python-dateutil
-    pydantic
+    pytz
     tomli-w
-    polars
-    pandas
     uuid6
   ]
   ++ lib.concatAttrValues optional-dependencies;

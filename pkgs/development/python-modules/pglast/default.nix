@@ -1,35 +1,45 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  cython,
+  fetchFromGitHub,
   pytest-cov-stub,
-  pytest,
+  pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "7.10";
+  version = "7.11";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AHJauP7dc0MEfhK8ZimUHKE5V/TC8t88XSri2gUnlsk=";
+  src = fetchFromGitHub {
+    owner = "lelit";
+    repo = "pglast";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-b8NrgfPhneERu3kXrrLmhGUSmcnz44SUuv3tBvZ55rE=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail cython==3.2.3 cython \
+      --replace-fail setuptools==80.9.0 setuptools
+  '';
 
-  dependencies = [ setuptools ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     pytest-cov-stub
   ];
 
-  # pytestCheckHook doesn't work
-  # ImportError: cannot import name 'parse_sql' from 'pglast'
-  checkPhase = ''
-    pytest
+  preCheck = ''
+    # import from $out
+    rm -r pglast
   '';
 
   pythonImportsCheck = [

@@ -26,7 +26,6 @@
   nlohmann_json,
   c-blosc2,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
-  libpqxx,
 }:
 
 let
@@ -46,8 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-wzeWLwwsZXtrKsmlglZG7YvIki/ba7IwsDBq+40ltcg=";
   };
-
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
 
   postPatch = ''
     substituteInPlace tiledb/sm/misc/test/unit_parse_argument.cc \
@@ -85,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     file
     libpng
-    libpqxx
     lz4
     nlohmann_json
     onetbb

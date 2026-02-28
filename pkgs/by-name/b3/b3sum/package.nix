@@ -2,18 +2,24 @@
   lib,
   fetchCrate,
   rustPlatform,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "b3sum";
   version = "1.8.3";
 
   src = fetchCrate {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-mU2r5xbYf6A1RibWqhow/637YxybCFMT3UzYcUMjhdg=";
   };
 
   cargoHash = "sha256-w9l8dn4Ahck3NXuN4Ph9qmGoS767/mQRBgO9AT0CH3Y=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "BLAKE3 cryptographic hash function";
@@ -27,6 +33,6 @@ rustPlatform.buildRustPackage rec {
       cc0
       asl20
     ];
-    changelog = "https://github.com/BLAKE3-team/BLAKE3/releases/tag/${version}";
+    changelog = "https://github.com/BLAKE3-team/BLAKE3/releases/tag/${finalAttrs.version}";
   };
-}
+})

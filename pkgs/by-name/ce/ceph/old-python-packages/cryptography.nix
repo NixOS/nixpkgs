@@ -15,7 +15,6 @@
   cffi,
   pkg-config,
   pytestCheckHook,
-  pytest-subtests,
   pretend,
   libiconv,
   iso8601,
@@ -98,7 +97,6 @@ buildPythonPackage rec {
     pretend
     py
     pytestCheckHook
-    pytest-subtests
     pytz
   ];
 

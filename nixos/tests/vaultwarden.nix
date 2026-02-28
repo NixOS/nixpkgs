@@ -30,6 +30,7 @@ let
               libraries = [ pkgs.python3Packages.selenium ];
               flakeIgnore = [ "E501" ];
             }
+            # python
             ''
 
               from selenium.webdriver.common.by import By
@@ -79,6 +80,13 @@ let
               driver.find_element(By.XPATH, "//button[contains(., 'Create account')]").click()
 
               wait.until_not(EC.title_contains("Set a strong password"))
+
+              wait.until_not(EC.title_contains("Join organization"))
+
+              # NOTE: When testing this locally, the extensions must not be installed, otherwise this screen does not appear
+              click_when_unobstructed((By.XPATH, "//button[contains(., 'Add it later')]"))
+
+              click_when_unobstructed((By.XPATH, "//a[contains(., 'Skip to web app')]"))
 
               click_when_unobstructed((By.XPATH, "//button[contains(., 'New item')]"))
 
@@ -205,7 +213,7 @@ let
             testScript
           else
             ''
-              import json
+              # import json
 
               start_all()
               server.wait_for_unit("vaultwarden.service")
@@ -222,18 +230,20 @@ let
               with subtest("use the web interface to sign up, log in, and save a password"):
                   server.succeed("PYTHONUNBUFFERED=1 systemd-cat -t test-runner test-runner")
 
-              with subtest("log in with the cli"):
-                  key = client.succeed(
-                      "bw --nointeraction --raw login ${userEmail} ${userPassword}"
-                  ).strip()
+              # Upstreams sees offline usage as a new feature...
+              # https://github.com/bitwarden/clients/issues/18110
+              # with subtest("log in with the cli"):
+              #     key = client.succeed(
+              #         "bw --nointeraction --raw login ${userEmail} ${userPassword}"
+              #     ).strip()
 
-              with subtest("sync with the cli"):
-                  client.succeed(f"bw --nointeraction --raw --session {key} sync -f")
+              # with subtest("sync with the cli"):
+              #     client.succeed(f"bw --nointeraction --raw --session {key} sync -f")
 
-              with subtest("get the password with the cli"):
-                  output = json.loads(client.succeed(f"bw --nointeraction --raw --session {key} list items"))
+              # with subtest("get the password with the cli"):
+              #     output = json.loads(client.succeed(f"bw --nointeraction --raw --session {key} list items"))
 
-                  assert output[0]['login']['password'] == "${storedPassword}"
+              #     assert output[0]['login']['password'] == "${storedPassword}"
             '';
       }
     );

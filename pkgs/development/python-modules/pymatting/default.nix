@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pymatting";
-  version = "1.1.13";
+  version = "1.1.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymatting";
     repo = "pymatting";
     tag = "v${version}";
-    hash = "sha256-AzdhRZgcT+gfLPZYKJLQUW7uLyXoRy6SP2raHWd9XUY=";
+    hash = "sha256-rcatlQE+YgppY//ZgGY9jO5KI0ED30fLlqW9N+xRNqk=";
   };
 
   build-system = [ setuptools ];

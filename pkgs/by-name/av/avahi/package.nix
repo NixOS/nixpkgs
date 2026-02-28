@@ -232,8 +232,7 @@ stdenv.mkDerivation rec {
     homepage = "http://avahi.org";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      lovek323
+    maintainers = [
     ];
 
     longDescription = ''

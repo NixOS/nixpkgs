@@ -93,7 +93,7 @@ in
 
 {
   meta = {
-    maintainers = [ lib.maintainers.joachifm ];
+    maintainers = [ ];
   };
 
   options = {

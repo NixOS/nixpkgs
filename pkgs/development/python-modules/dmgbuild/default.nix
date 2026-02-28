@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dmgbuild";
-  version = "1.6.2";
+  version = "1.6.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmgbuild";
     repo = "dmgbuild";
     tag = "v${version}";
-    hash = "sha256-PozYxmXumFnptIgb4FM4b/Q5tx0MIS2bVw2kCuGucA8=";
+    hash = "sha256-dJHUpMPsYTgJdR3FoIzrH6C/VLWXlktW3o8VXeHxey8=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "MacOS command line utility to build disk images";
     homepage = "https://github.com/dmgbuild/dmgbuild";
-    changelog = "https://github.com/dmgbuild/dmgbuild/releases/tag/v${version}";
+    changelog = "https://github.com/dmgbuild/dmgbuild/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "dmgbuild";

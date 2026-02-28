@@ -87,7 +87,7 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.17.0";
+  version = "8.18.0";
 
   src = fetchurl {
     urls = [
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-lV9ucprWs1ZiYOj+9oYg52ujwxrPChhSRBahhaz3eZI=";
+    hash = "sha256-QN95Fm50qiAUk2XhHuTHmKRq1Xw05PaP0TEA4smpGUY=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -283,12 +283,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://curl.se/";
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
-      lovek323
       Scrumplex
     ];
     platforms = lib.platforms.all;
-    # Fails to link against static brotli or gss
-    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
+    # Fails to link against static gss
+    broken = stdenv.hostPlatform.isStatic && gssSupport;
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "haxx" finalAttrs.version;

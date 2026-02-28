@@ -287,7 +287,9 @@ with pkgs;
   updateAutotoolsGnuConfigScriptsHook = makeSetupHook {
     name = "update-autotools-gnu-config-scripts-hook";
     substitutions = {
-      gnu_config = gnu-config;
+      gnu_config = gnu-config.override {
+        runtimeShell = targetPackages.stdenv.shell;
+      };
     };
   } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
 
@@ -708,6 +710,10 @@ with pkgs;
 
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
+  installFonts = makeSetupHook {
+    name = "install-fonts-hook";
+  } ../build-support/setup-hooks/install-fonts.sh;
+
   copyPkgconfigItems = makeSetupHook {
     name = "copy-pkg-config-items-hook";
   } ../build-support/setup-hooks/copy-pkgconfig-items.sh;
@@ -988,13 +994,8 @@ with pkgs;
     akkuPackages
     ;
 
-  alice-tools = callPackage ../tools/games/alice-tools {
-    withGUI = false;
-  };
-
-  alice-tools-qt5 = libsForQt5.callPackage ../tools/games/alice-tools { };
-
-  alice-tools-qt6 = qt6Packages.callPackage ../tools/games/alice-tools { };
+  alice-tools-qt5 = alice-tools.override { withQt5 = true; };
+  alice-tools-qt6 = alice-tools.override { withQt6 = true; };
 
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
@@ -1104,6 +1105,7 @@ with pkgs;
     osxkeychainSupport = false;
     pythonSupport = false;
     perlSupport = false;
+    rustSupport = false; # Needed for bootstrap
     withpcre2 = false;
   };
 
@@ -1618,10 +1620,6 @@ with pkgs;
     extraPackages = [ ffmpeg ];
   };
 
-  compactor = callPackage ../applications/networking/compactor {
-    protobuf = protobuf_21;
-  };
-
   inherit (callPackages ../tools/misc/coreboot-utils { })
     msrtool
     cbmem
@@ -1848,11 +1846,6 @@ with pkgs;
       );
 
   mkspiffs-presets = recurseIntoAttrs (callPackages ../by-name/mk/mkspiffs/presets.nix { });
-
-  mobilizon = callPackage ../servers/mobilizon {
-    beamPackages = beam.packages.erlang_27.extend (self: super: { elixir = self.elixir_1_18; });
-    mobilizon-frontend = callPackage ../servers/mobilizon/frontend.nix { };
-  };
 
   nltk-data = recurseIntoAttrs (callPackage ../tools/text/nltk-data { });
 
@@ -2158,6 +2151,7 @@ with pkgs;
     cudaPackages_12_8
     cudaPackages_12_9
     cudaPackages_13_0
+    cudaPackages_13_1
     ;
 
   cudaPackages_12 = cudaPackages_12_8;
@@ -2177,17 +2171,13 @@ with pkgs;
     websocketSupport = true;
   };
 
-  curl = curlMinimal.override (
-    {
-      idnSupport = true;
-      pslSupport = true;
-      zstdSupport = true;
-      http3Support = true;
-    }
-    // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
-      brotliSupport = true;
-    }
-  );
+  curl = curlMinimal.override {
+    idnSupport = true;
+    pslSupport = true;
+    zstdSupport = true;
+    http3Support = true;
+    brotliSupport = true;
+  };
 
   curlWithGnuTls = curl.override {
     gnutlsSupport = true;
@@ -2365,10 +2355,6 @@ with pkgs;
 
   franz = callPackage ../applications/networking/instant-messengers/franz {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
-  };
-
-  freqtweak = callPackage ../applications/audio/freqtweak {
-    wxGTK = wxGTK32;
   };
 
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
@@ -2779,13 +2765,9 @@ with pkgs;
 
   maubot = with python3Packages; toPythonApplication maubot;
 
-  mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
-
   m2r = with python3Packages; toPythonApplication m2r;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
-
-  md2pdf = with python3Packages; toPythonApplication md2pdf;
 
   mdcat = callPackage ../tools/text/mdcat {
     inherit (python3Packages) ansi2html;
@@ -2823,20 +2805,20 @@ with pkgs;
   nodejs = nodejs_24;
   nodejs-slim = nodejs-slim_24;
 
-  nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
-  nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
-  corepack_20 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; };
+  nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { };
+  nodejs_20 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_20; };
+  corepack_20 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_20; };
 
-  nodejs_22 = callPackage ../development/web/nodejs/v22.nix { };
-  nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { enableNpm = false; };
-  corepack_22 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_22; };
+  nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { };
+  nodejs_22 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_22; };
+  corepack_22 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_22; };
 
-  nodejs_24 = callPackage ../development/web/nodejs/v24.nix { };
-  nodejs-slim_24 = callPackage ../development/web/nodejs/v24.nix { enableNpm = false; };
-  corepack_24 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_24; };
+  nodejs-slim_24 = callPackage ../development/web/nodejs/v24.nix { };
+  nodejs_24 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_24; };
+  corepack_24 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_24; };
 
-  nodejs_25 = callPackage ../development/web/nodejs/v25.nix { };
-  nodejs-slim_25 = callPackage ../development/web/nodejs/v25.nix { enableNpm = false; };
+  nodejs-slim_25 = callPackage ../development/web/nodejs/v25.nix { };
+  nodejs_25 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_25; };
 
   # Update this when adding the newest nodejs major version!
   nodejs_latest = nodejs_25;
@@ -3035,12 +3017,12 @@ with pkgs;
   libnma-gtk4 = libnma.override { withGtk4 = true; };
 
   inherit (callPackages ../servers/nextcloud { })
-    nextcloud31
     nextcloud32
+    nextcloud33
     ;
 
-  nextcloud31Packages = callPackage ../servers/nextcloud/packages { ncVersion = "31"; };
   nextcloud32Packages = callPackage ../servers/nextcloud/packages { ncVersion = "32"; };
+  nextcloud33Packages = callPackage ../servers/nextcloud/packages { ncVersion = "33"; };
 
   nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
 
@@ -3176,6 +3158,12 @@ with pkgs;
 
   update-systemd-resolved = callPackage ../tools/networking/openvpn/update-systemd-resolved.nix { };
 
+  openshadinglanguage = callPackage ../by-name/op/openshadinglanguage/package.nix {
+    libclang = llvmPackages_19.libclang;
+    clang = clang_19;
+    llvm = llvm_19;
+  };
+
   opentelemetry-collector = opentelemetry-collector-releases.otelcol;
   opentelemetry-collector-builder = callPackage ../tools/misc/opentelemetry-collector/builder.nix { };
   opentelemetry-collector-contrib = opentelemetry-collector-releases.otelcol-contrib;
@@ -3191,12 +3179,6 @@ with pkgs;
 
   opl3bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor { };
   opn2bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
-
-  osl = libsForQt5.callPackage ../development/compilers/osl {
-    libclang = llvmPackages_19.libclang;
-    clang = clang_19;
-    llvm = llvm_19;
-  };
 
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf_21;
@@ -3247,8 +3229,6 @@ with pkgs;
     ssh = openssh;
   };
 
-  pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
-
   phosh = callPackage ../applications/window-managers/phosh { };
 
   phosh-mobile-settings =
@@ -3273,15 +3253,9 @@ with pkgs;
 
   platformio = if stdenv.hostPlatform.isLinux then platformio-chrootenv else platformio-core;
 
-  playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
-
   playwright = playwright-driver;
   playwright-driver = (callPackage ../development/web/playwright/driver.nix { }).playwright-core;
   playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
-
-  plex = callPackage ../servers/plex { };
-
-  plexRaw = callPackage ../servers/plex/raw.nix { };
 
   tabview = with python3Packages; toPythonApplication tabview;
 
@@ -3312,8 +3286,6 @@ with pkgs;
   pypass = with python3Packages; toPythonApplication pypass;
 
   pydeps = with python3Packages; toPythonApplication pydeps;
-
-  pywal = with python3Packages; toPythonApplication pywal;
 
   remarshal = with python3Packages; toPythonApplication remarshal;
 
@@ -3662,8 +3634,6 @@ with pkgs;
   # It is also needed to reduce the amount of unnecessary stuff in the Darwin bootstrap.
   xarMinimal = callPackage ../by-name/xa/xar/package.nix { e2fsprogs = null; };
 
-  xdeltaUnstable = callPackage ../tools/compression/xdelta/unstable.nix { };
-
   xdot = with python3Packages; toPythonApplication xdot;
 
   libxfs = xfsprogs.dev;
@@ -3846,6 +3816,8 @@ with pkgs;
   devpi-server = python3Packages.callPackage ../development/tools/devpi-server { };
 
   dprint-plugins = recurseIntoAttrs (callPackage ../by-name/dp/dprint/plugins { });
+
+  reaction-plugins = reaction.passthru.plugins;
 
   elm2nix = haskell.lib.compose.justStaticExecutables haskellPackages.elm2nix;
 
@@ -4337,6 +4309,10 @@ with pkgs;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 
+  heptagon = callPackage ../by-name/he/heptagon/package.nix {
+    ocamlPackages = ocaml-ng.ocamlPackages_5_3;
+  };
+
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { });
 
   gwe = callPackage ../tools/misc/gwe {
@@ -4652,9 +4628,12 @@ with pkgs;
     ocamlformat_0_26_2
     ;
 
+  inherit (ocaml-ng.ocamlPackages_5_3)
+    ocamlformat_0_27_0
+    ;
+
   inherit (ocamlPackages)
     ocamlformat # latest version
-    ocamlformat_0_27_0
     ocamlformat_0_28_1
     ;
 
@@ -4686,15 +4665,15 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_92 = callPackage ../development/compilers/rust/1_92.nix { };
-  rust = rust_1_92;
+  rust_1_93 = callPackage ../development/compilers/rust/1_93.nix { };
+  rust = rust_1_93;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_92 = rust_1_92.packages.stable;
-  rustPackages = rustPackages_1_92;
+  rustPackages_1_93 = rust_1_93.packages.stable;
+  rustPackages = rustPackages_1_93;
 
   inherit (rustPackages)
     cargo
@@ -5325,8 +5304,8 @@ with pkgs;
     ruby_4_0
     ;
 
-  ruby = ruby_3_3;
-  rubyPackages = rubyPackages_3_3;
+  ruby = ruby_3_4;
+  rubyPackages = rubyPackages_3_4;
 
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
@@ -5429,6 +5408,10 @@ with pkgs;
   anybadge = with python3Packages; toPythonApplication anybadge;
 
   ansible = python3Packages.toPythonApplication python3Packages.ansible-core;
+
+  ansible-language-server =
+    callPackage ../development/tools/language-servers/ansible-language-server
+      { };
 
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
 
@@ -6239,7 +6222,7 @@ with pkgs;
     boost190
     ;
 
-  boost = boost187;
+  boost = boost189;
 
   botanEsdm = botan3.override { withEsdm = true; };
 
@@ -6268,10 +6251,6 @@ with pkgs;
   );
 
   clucene-core = clucene-core_2;
-
-  codecserver = callPackage ../applications/audio/codecserver {
-    protobuf = protobuf_21;
-  };
 
   inherit (cosmopolitan) cosmocc;
 
@@ -7181,7 +7160,7 @@ with pkgs;
 
   ogre = ogre_14;
 
-  openal = openalSoft;
+  openal = openal-soft;
 
   opencascade-occt_7_6 = opencascade-occt.overrideAttrs rec {
     pname = "opencascade-occt";
@@ -7320,7 +7299,7 @@ with pkgs;
 
   # this version should align with the static protobuf version linked into python3.pkgs.tensorflow
   # $ nix-shell -I nixpkgs=$(git rev-parse --show-toplevel) -p python3.pkgs.tensorflow --run "python3 -c 'import google.protobuf; print(google.protobuf.__version__)'"
-  protobuf = protobuf_32;
+  protobuf = protobuf_33;
 
   inherit
     ({
@@ -7928,14 +7907,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_5_10 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.10"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_0 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.0"; };
 
@@ -7945,7 +7916,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_0;
+  sbcl_2_6_1 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.1"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_1;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -8123,14 +8102,6 @@ with pkgs;
   };
   cassandra = cassandra_4;
 
-  apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
-    java = jre;
-  };
-
-  apache-jena-fuseki = callPackage ../servers/nosql/apache-jena/fuseki-binary.nix {
-    java = jre;
-  };
-
   inherit (callPackages ../servers/asterisk { })
     asterisk
     asterisk-stable
@@ -8171,7 +8142,6 @@ with pkgs;
   freshrss = callPackage ../servers/web-apps/freshrss { };
   freshrss-extensions = recurseIntoAttrs (callPackage ../servers/web-apps/freshrss/extensions { });
 
-  grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/grafana/plugins { });
 
   inherit (callPackage ../servers/hbase { })
@@ -8188,16 +8158,22 @@ with pkgs;
 
   buildHomeAssistantComponent = callPackage ../servers/home-assistant/build-custom-component { };
   home-assistant-custom-components = recurseIntoAttrs (
-    lib.packagesFromDirectoryRecursive {
-      inherit (home-assistant.python.pkgs) callPackage;
-      directory = ../servers/home-assistant/custom-components;
-    }
+    lib.makeExtensible (
+      self:
+      lib.packagesFromDirectoryRecursive {
+        inherit (home-assistant.python.pkgs) callPackage;
+        directory = ../servers/home-assistant/custom-components;
+      }
+    )
   );
   home-assistant-custom-lovelace-modules = recurseIntoAttrs (
-    lib.packagesFromDirectoryRecursive {
-      inherit callPackage;
-      directory = ../servers/home-assistant/custom-lovelace-modules;
-    }
+    lib.makeExtensible (
+      self:
+      lib.packagesFromDirectoryRecursive {
+        inherit callPackage;
+        directory = ../servers/home-assistant/custom-lovelace-modules;
+      }
+    )
   );
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
@@ -8246,10 +8222,6 @@ with pkgs;
     kanidmWithSecretProvisioning_1_9
     ;
 
-  leafnode = callPackage ../servers/news/leafnode { };
-
-  leafnode1 = callPackage ../servers/news/leafnode/1.nix { };
-
   lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix { };
 
   lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
@@ -8259,13 +8231,6 @@ with pkgs;
   mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
-
-  mastodon = callPackage ../servers/mastodon {
-    nodejs-slim = nodejs-slim_22;
-    python3 = python311;
-    ruby = ruby_3_3;
-    yarn-berry = yarn-berry_4.override { nodejs = nodejs-slim_22; };
-  };
 
   micro-full = micro.wrapper.override {
     extraPackages = [
@@ -8301,7 +8266,7 @@ with pkgs;
     toPythonApplication (
       napalm.overridePythonAttrs (attrs: {
         # add community frontends that depend on the napalm python package
-        propagatedBuildInputs = attrs.propagatedBuildInputs ++ [
+        dependencies = attrs.dependencies ++ [
           napalm-hp-procurve
         ];
       })
@@ -8345,8 +8310,6 @@ with pkgs;
     ];
   };
 
-  nsd = callPackage ../servers/dns/nsd (config.nsd or { });
-
   nsdiff = perlPackages.nsdiff;
 
   openafs = callPackage ../servers/openafs/1.8 { };
@@ -8360,12 +8323,6 @@ with pkgs;
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
-
-  hsphfpd = callPackage ../servers/pulseaudio/hsphfpd.nix { };
-
-  pulseaudio = callPackage ../servers/pulseaudio { };
-
-  qpaeq = libsForQt5.callPackage ../servers/pulseaudio/qpaeq.nix { };
 
   pulseaudioFull = pulseaudio.override {
     x11Support = true;
@@ -8408,16 +8365,6 @@ with pkgs;
     boost = boost179.override { enableShared = false; };
   };
 
-  influxdb = callPackage ../servers/nosql/influxdb { };
-  influxdb2-server = callPackage ../servers/nosql/influxdb2 { };
-  influxdb2-cli = callPackage ../servers/nosql/influxdb2/cli.nix { };
-  influxdb2-token-manipulator = callPackage ../servers/nosql/influxdb2/token-manipulator.nix { };
-  influxdb2-provision = callPackage ../servers/nosql/influxdb2/provision.nix { };
-  # For backwards compatibility with older versions of influxdb2,
-  # which bundled the server and CLI into the same derivation. Will be
-  # removed in a few releases.
-  influxdb2 = callPackage ../servers/nosql/influxdb2/combined.nix { };
-
   mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
     inherit (darwin) developer_cmds DarwinTools;
     boost = boost177; # Configure checks for specific version.
@@ -8432,16 +8379,6 @@ with pkgs;
     mir
     mir_2_15
     ;
-
-  icinga2 = callPackage ../servers/monitoring/icinga2 { };
-
-  icinga2-agent = callPackage ../servers/monitoring/icinga2 {
-    nameSuffix = "-agent";
-    withMysql = false;
-    withNotification = false;
-    withIcingadb = false;
-    withPerfdata = false;
-  };
 
   nagiosPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/nagios-plugins { });
 
@@ -8492,122 +8429,9 @@ with pkgs;
   postgres-websockets = haskellPackages.postgres-websockets.bin;
   postgrest = haskellPackages.postgrest.bin;
 
-  prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
-  prometheus-apcupsd-exporter = callPackage ../servers/monitoring/prometheus/apcupsd-exporter.nix { };
-  prometheus-artifactory-exporter =
-    callPackage ../servers/monitoring/prometheus/artifactory-exporter.nix
-      { };
-  prometheus-atlas-exporter = callPackage ../servers/monitoring/prometheus/atlas-exporter.nix { };
-  prometheus-aws-s3-exporter = callPackage ../servers/monitoring/prometheus/aws-s3-exporter.nix { };
-  prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
-  prometheus-bird-exporter = callPackage ../servers/monitoring/prometheus/bird-exporter.nix { };
-  prometheus-bitcoin-exporter = callPackage ../servers/monitoring/prometheus/bitcoin-exporter.nix { };
-  prometheus-blackbox-exporter =
-    callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix
-      { };
-  prometheus-cloudflare-exporter =
-    callPackage ../servers/monitoring/prometheus/cloudflare-exporter.nix
-      { };
-  prometheus-collectd-exporter =
-    callPackage ../servers/monitoring/prometheus/collectd-exporter.nix
-      { };
-  prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
-  prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
-  prometheus-domain-exporter = callPackage ../servers/monitoring/prometheus/domain-exporter.nix { };
-  prometheus-fastly-exporter = callPackage ../servers/monitoring/prometheus/fastly-exporter.nix { };
-  prometheus-flow-exporter = callPackage ../servers/monitoring/prometheus/flow-exporter.nix { };
-  prometheus-fritzbox-exporter =
-    callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix
-      { };
-  prometheus-gitlab-ci-pipelines-exporter =
-    callPackage ../servers/monitoring/prometheus/gitlab-ci-pipelines-exporter.nix
-      { };
-  prometheus-graphite-exporter =
-    callPackage ../servers/monitoring/prometheus/graphite-exporter.nix
-      { };
-  prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
-  prometheus-idrac-exporter = callPackage ../servers/monitoring/prometheus/idrac-exporter.nix { };
-  prometheus-imap-mailstat-exporter =
-    callPackage ../servers/monitoring/prometheus/imap-mailstat-exporter.nix
-      { };
-  prometheus-influxdb-exporter =
-    callPackage ../servers/monitoring/prometheus/influxdb-exporter.nix
-      { };
-  prometheus-ipmi-exporter = callPackage ../servers/monitoring/prometheus/ipmi-exporter.nix { };
-  prometheus-jitsi-exporter = callPackage ../servers/monitoring/prometheus/jitsi-exporter.nix { };
-  prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix { };
-  prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
-  prometheus-junos-czerwonk-exporter =
-    callPackage ../servers/monitoring/prometheus/junos-czerwonk-exporter.nix
-      { };
-  prometheus-kea-exporter = callPackage ../servers/monitoring/prometheus/kea-exporter.nix { };
-  prometheus-keylight-exporter =
-    callPackage ../servers/monitoring/prometheus/keylight-exporter.nix
-      { };
-  prometheus-knot-exporter = callPackage ../servers/monitoring/prometheus/knot-exporter.nix { };
-  prometheus-lnd-exporter = callPackage ../servers/monitoring/prometheus/lnd-exporter.nix { };
-  prometheus-mail-exporter = callPackage ../servers/monitoring/prometheus/mail-exporter.nix { };
-  prometheus-mikrotik-exporter =
-    callPackage ../servers/monitoring/prometheus/mikrotik-exporter.nix
-      { };
-  prometheus-modemmanager-exporter =
-    callPackage ../servers/monitoring/prometheus/modemmanager-exporter.nix
-      { };
-  prometheus-mongodb-exporter = callPackage ../servers/monitoring/prometheus/mongodb-exporter.nix { };
-  prometheus-nats-exporter = callPackage ../servers/monitoring/prometheus/nats-exporter.nix { };
-  prometheus-nextcloud-exporter =
-    callPackage ../servers/monitoring/prometheus/nextcloud-exporter.nix
-      { };
-  prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
-  prometheus-nginxlog-exporter =
-    callPackage ../servers/monitoring/prometheus/nginxlog-exporter.nix
-      { };
-  prometheus-nut-exporter = callPackage ../servers/monitoring/prometheus/nut-exporter.nix { };
-  prometheus-pgbouncer-exporter =
-    callPackage ../servers/monitoring/prometheus/pgbouncer-exporter.nix
-      { };
-  prometheus-php-fpm-exporter = callPackage ../servers/monitoring/prometheus/php-fpm-exporter.nix { };
-  prometheus-pihole-exporter = callPackage ../servers/monitoring/prometheus/pihole-exporter.nix { };
-  prometheus-ping-exporter = callPackage ../servers/monitoring/prometheus/ping-exporter.nix { };
-  prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
-  prometheus-postgres-exporter =
-    callPackage ../servers/monitoring/prometheus/postgres-exporter.nix
-      { };
-  prometheus-process-exporter = callPackage ../servers/monitoring/prometheus/process-exporter.nix { };
-  prometheus-pve-exporter = callPackage ../servers/monitoring/prometheus/pve-exporter.nix { };
-  prometheus-redis-exporter = callPackage ../servers/monitoring/prometheus/redis-exporter.nix { };
-  prometheus-rabbitmq-exporter =
-    callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix
-      { };
-  prometheus-rtl_433-exporter = callPackage ../servers/monitoring/prometheus/rtl_433-exporter.nix { };
-  prometheus-sabnzbd-exporter = callPackage ../servers/monitoring/prometheus/sabnzbd-exporter.nix { };
-  prometheus-sachet = callPackage ../servers/monitoring/prometheus/sachet.nix { };
-  prometheus-script-exporter = callPackage ../servers/monitoring/prometheus/script-exporter.nix { };
-  prometheus-shelly-exporter = callPackage ../servers/monitoring/prometheus/shelly-exporter.nix { };
-  prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
-  prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
-  prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
-  prometheus-sql-exporter = callPackage ../servers/monitoring/prometheus/sql-exporter.nix { };
-  prometheus-systemd-exporter = callPackage ../servers/monitoring/prometheus/systemd-exporter.nix { };
-  prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix { };
-  prometheus-v2ray-exporter = callPackage ../servers/monitoring/prometheus/v2ray-exporter.nix { };
-  prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
-  prometheus-wireguard-exporter =
-    callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix
-      {
-      };
-  prometheus-zfs-exporter = callPackage ../servers/monitoring/prometheus/zfs-exporter.nix { };
-  prometheus-xmpp-alerts = callPackage ../servers/monitoring/prometheus/xmpp-alerts.nix { };
-
   public-inbox = perlPackages.callPackage ../servers/mail/public-inbox { };
 
   pypiserver = with python3Packages; toPythonApplication pypiserver;
-
-  rethinkdb = callPackage ../servers/nosql/rethinkdb {
-    stdenv = clangStdenv;
-    libtool = cctools;
-    protobuf = protobuf_21;
-  };
 
   samba4 = callPackage ../servers/samba/4.x.nix { };
 
@@ -9032,7 +8856,9 @@ with pkgs;
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
-  sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
+  sgx-sdk = callPackage ../os-specific/linux/sgx/sdk {
+    ocamlPackages = ocaml-ng.ocamlPackages_5_3;
+  };
 
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
     protobuf = protobuf_21;
@@ -9345,10 +9171,6 @@ with pkgs;
     '';
   };
 
-  nullmailer = callPackage ../servers/mail/nullmailer {
-    stdenv = gccStdenv;
-  };
-
   openmoji-color = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf_colr_0" ]; };
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
@@ -9420,8 +9242,6 @@ with pkgs;
     ;
 
   activitywatch = callPackage ../applications/office/activitywatch/wrapper.nix { };
-
-  anilibria-winmaclinux = libsForQt5.callPackage ../applications/video/anilibria-winmaclinux { };
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
@@ -9701,10 +9521,6 @@ with pkgs;
   gqrx-gr-audio = gqrx.override {
     portaudioSupport = false;
     pulseaudioSupport = false;
-  };
-
-  guitarix = callPackage ../applications/audio/guitarix {
-    fftw = fftwSinglePrec;
   };
 
   tshark = wireshark-cli;
@@ -10044,35 +9860,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  imagemagick6_light = imagemagick6.override {
-    bzip2Support = false;
-    zlibSupport = false;
-    libX11Support = false;
-    libXtSupport = false;
-    fontconfigSupport = false;
-    freetypeSupport = false;
-    ghostscriptSupport = false;
-    libjpegSupport = false;
-    djvulibreSupport = false;
-    lcms2Support = false;
-    openexrSupport = false;
-    libpngSupport = false;
-    liblqr1Support = false;
-    librsvgSupport = false;
-    libtiffSupport = false;
-    libxml2Support = false;
-    openjpegSupport = false;
-    libwebpSupport = false;
-    libheifSupport = false;
-    libde265Support = false;
-  };
-
-  imagemagick6 = callPackage ../applications/graphics/ImageMagick/6.x.nix { };
-
-  imagemagick6Big = imagemagick6.override {
-    ghostscriptSupport = true;
-  };
-
   imagemagick_light = lowPrio (
     imagemagick.override {
       bzip2Support = false;
@@ -10098,11 +9885,6 @@ with pkgs;
     }
   );
 
-  imagemagick = lowPrio (
-    callPackage ../applications/graphics/ImageMagick {
-    }
-  );
-
   imagemagickBig = lowPrio (
     imagemagick.override {
       ghostscriptSupport = true;
@@ -10120,10 +9902,6 @@ with pkgs;
   inkscape-extensions = recurseIntoAttrs (
     callPackages ../applications/graphics/inkscape/extensions.nix { }
   );
-
-  ion3 = callPackage ../applications/window-managers/ion-3 {
-    lua = lua5_1;
-  };
 
   jabcode = callPackage ../development/libraries/jabcode { };
 
@@ -10168,8 +9946,6 @@ with pkgs;
   kubectl-view-allocations =
     callPackage ../applications/networking/cluster/kubectl-view-allocations
       { };
-
-  kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix { };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
@@ -10709,10 +10485,6 @@ with pkgs;
     withXineBackend = true;
   };
 
-  rakarrack = callPackage ../applications/audio/rakarrack {
-    fltk = fltk_1_3;
-  };
-
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
   };
@@ -10769,8 +10541,6 @@ with pkgs;
   scantailor-advanced = callPackage ../applications/graphics/scantailor/advanced.nix { };
 
   scantailor-universal = callPackage ../applications/graphics/scantailor/universal.nix { };
-
-  sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
   stag = callPackage ../applications/misc/stag {
     curses = ncurses;
@@ -11212,12 +10982,14 @@ with pkgs;
     demoSupport = false;
     jpegSupport = false;
     lcmsSupport = false;
+    luaSupport = false;
     pangoSupport = false;
     pipewireSupport = false;
     rdpSupport = false;
     remotingSupport = false;
     vaapiSupport = false;
     vncSupport = false;
+    vulkanSupport = false;
     webpSupport = false;
     xwaylandSupport = false;
   };
@@ -11993,14 +11765,6 @@ with pkgs;
 
   ### SCIENCE/PHYSICS
 
-  mcfm = callPackage ../applications/science/physics/MCFM {
-    stdenv = gccStdenv;
-    lhapdf = lhapdf.override {
-      stdenv = gccStdenv;
-      python3 = null;
-    };
-  };
-
   xflr5 = libsForQt5.callPackage ../applications/science/physics/xflr5 { };
 
   ### SCIENCE/LOGIC
@@ -12653,7 +12417,12 @@ with pkgs;
 
   zncModules = recurseIntoAttrs (callPackage ../applications/networking/znc/modules.nix { });
 
-  dart = callPackage ../development/compilers/dart { };
+  inherit
+    ({
+      dart-bin = callPackage ../development/compilers/dart { };
+    })
+    dart-bin
+    ;
 
   inherit
     ({
@@ -12661,6 +12430,8 @@ with pkgs;
     })
     dart-source
     ;
+
+  dart = if stdenv.hostPlatform.isLinux then dart-source else dart-bin;
 
   pub2nix = recurseIntoAttrs (callPackage ../build-support/dart/pub2nix { });
 
@@ -12692,8 +12463,6 @@ with pkgs;
   wrapVdr = callPackage ../applications/video/vdr/wrapper.nix { };
 
   chrome-token-signing = libsForQt5.callPackage ../tools/security/chrome-token-signing { };
-
-  linode-cli = python3Packages.callPackage ../tools/virtualization/linode-cli { };
 
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {
     # https://github.com/AdolfVonKleist/Phonetisaurus/issues/70
@@ -12754,6 +12523,8 @@ with pkgs;
   bcompare = libsForQt5.callPackage ../applications/version-management/bcompare { };
 
   xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
+
+  radicle-node-unstable = callPackage ../by-name/ra/radicle-node/unstable.nix { };
 
   newlib-nano = newlib.override {
     nanoizeNewlib = true;

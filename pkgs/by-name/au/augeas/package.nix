@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://augeas.net/";
     changelog = "https://github.com/hercules-team/augeas/releases/tag/release-${finalAttrs.version}";
     mainProgram = "augtool";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ skyethepinkcat ];
     platforms = lib.platforms.unix;
   };
 })

@@ -209,6 +209,8 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
     "-Wignore::ResourceWarning"
+    # Using `@model_validator` with mode='after' on a classmethod is deprecated
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince212"
   ];
 
   preCheck = ''
@@ -282,6 +284,10 @@ buildPythonPackage (finalAttrs: {
 
     # Hangs forever (from tests/io/test_pyarrow.py)
     "test_getting_length_of_file_gcs"
+
+    # Timing sensitive
+    # AssertionError: assert 8 == 5
+    "test_hive_wait_for_lock"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'

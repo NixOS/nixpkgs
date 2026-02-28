@@ -17,6 +17,7 @@
   fetchurl,
   fzf,
   glib,
+  glibcLocalesUtf8,
   gmp,
   gnulib,
   gnum4,
@@ -50,6 +51,7 @@
   tree-sitter,
   unbound,
   unzip,
+  util-linux,
   versionCheckHook,
   vimPlugins,
   yajl,
@@ -74,14 +76,10 @@ in
   # keep-sorted start block=yes case=no newline_separated=yes
   argparse = prev.argparse.overrideAttrs {
     doCheck = true;
-    nativeCheckInputs = [ final.busted ];
+    nativeCheckInputs = [ final.bustedCheckHook ];
 
-    checkPhase = ''
-      runHook preCheck
-      export LUA_PATH="src/?.lua;$LUA_PATH"
-      busted spec/
-      runHook postCheck
-    '';
+    preCheck = ''LUA_PATH="src/?.lua;$LUA_PATH"'';
+    bustedFlags = [ "spec/" ];
   };
 
   busted = prev.busted.overrideAttrs (old: {
@@ -194,12 +192,8 @@ in
 
   fzy = prev.fzy.overrideAttrs {
     doCheck = true;
-    nativeCheckInputs = [ final.busted ];
-    # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
-    # we have to invoke busted manually
-    checkPhase = ''
-      busted
-    '';
+    nativeCheckInputs = [ final.bustedCheckHook ];
+    # bustedFlags = [ "." ];
   };
 
   grug-far-nvim = prev.grug-far-nvim.overrideAttrs {
@@ -240,14 +234,9 @@ in
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   ldbus = prev.ldbus.overrideAttrs (old: {
@@ -382,6 +371,7 @@ in
   };
 
   lrexlib-gnu = prev.lrexlib-gnu.overrideAttrs (old: {
+    strictDeps = false;
     buildInputs = old.buildInputs ++ [
       gnulib
     ];
@@ -413,6 +403,7 @@ in
   });
 
   lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
+    strictDeps = false;
     meta.broken = isLuaJIT;
   };
 
@@ -447,6 +438,7 @@ in
   };
 
   lua-rtoml = prev.lua-rtoml.overrideAttrs (old: {
+    strictDeps = false;
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
@@ -460,7 +452,7 @@ in
 
     # ld: symbol(s) not found for architecture arm64
     # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
-    meta.broken = stdenv.hostPlatform.isDarwin;
+    meta.broken = stdenv.hostPlatform.isDarwin || luaAtLeast "5.5";
   });
 
   lua-subprocess = prev.lua-subprocess.overrideAttrs {
@@ -580,16 +572,19 @@ in
   lualine-nvim = prev.lualine-nvim.overrideAttrs (_: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
-      final.nlua
-      final.busted
       final.nvim-web-devicons
+      final.bustedCheckHook
+      final.nlua
       gitMinimal
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua --lpath='lua/?.lua' --lpath='lua/?/init.lua' tests/
-      runHook postCheck
+
+    bustedFlags = [
+      "tests/"
+    ];
+
+    preCheck = ''
+      LUA_PATH="lua/?.lua;lua/?/init.lua;$LUA_PATH"
     '';
   });
 
@@ -610,12 +605,16 @@ in
     };
   });
 
-  luaposix = prev.luaposix.overrideAttrs (_: {
+  luaposix = prev.luaposix.overrideAttrs (old: {
     externalDeps = [
       {
         name = "CRYPT";
         dep = libxcrypt;
       }
+    ];
+    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
+      final.bit32
+      final.std-normalize
     ];
   });
 
@@ -760,44 +759,27 @@ in
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   lze = prev.lze.overrideAttrs {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   lzextras = prev.lzextras.overrideAttrs {
     doCheck = lua.luaversion == "5.1";
-    checkInputs = [
-      final.lze
-    ];
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      lua.pkgs.bustedCheckHook
+      final.lze
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   magick = prev.magick.overrideAttrs (old: {
@@ -877,19 +859,28 @@ in
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      # upstream uses PlenaryBusted which is a pain, run busted directly instead
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
 
-    # upstream uses PlenaryBusted which is a pain to setup
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua --lpath='lua/?.lua' --lpath='lua/?/init.lua' tests/
-      runHook postCheck
+    preCheck = ''
+      LUA_PATH="lua/?.lua;lua/?/init.lua;$LUA_PATH"
     '';
+    bustedFlags = [
+      "tests/"
+    ];
   };
 
   orgmode = prev.orgmode.overrideAttrs {
+    doCheck = stdenv.hostPlatform.isLinux;
+    nativeCheckInputs = [
+      neovim-unwrapped
+      glibcLocalesUtf8 # the tests run "vim.cmd.language('en_US.utf-8')"
+      writableTmpDirAsHomeHook
+      util-linux # for uuidgen
+    ];
+
     # Patch in tree-sitter-orgmode dependency
     postPatch = ''
       substituteInPlace lua/orgmode/config/init.lua \
@@ -899,6 +890,32 @@ in
         --replace-fail \
         "require('orgmode.utils.treesitter.install').reinstall()" \
         "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
+    '';
+
+    preCheck = ''LUA_PATH="lua/?.lua;lua/?/init.lua;$LUA_PATH"'';
+
+    checkPhase = ''
+      runHook preCheck
+
+      # bypass the download of plenary
+      substituteInPlace  tests/minimal_init.lua --replace-fail \
+        "plenary = 'https://github.com/nvim-lua/plenary.nvim.git'," \
+        ""
+
+      # remove failing tests
+      rm tests/plenary/colors/colors_spec.lua # colors depend on neovim version usually
+      rm tests/plenary/capture/capture_spec.lua # because clipboard not available
+
+      # not sure why yet
+      rm tests/plenary/ui/mappings/date_spec.lua \
+        tests/plenary/capture/templates_spec.lua
+
+      # bypass upstream launcher that interacts with network
+      nvim --headless -i NONE \
+        -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
+        -c "PlenaryBustedDirectory tests { sequential = true, minimal_init = './tests/minimal_init.lua' }"
+
+      runHook postCheck
     '';
   };
 
@@ -944,6 +961,10 @@ in
     '';
   };
 
+  rest-nvim = prev.rest-nvim.overrideAttrs {
+    strictDeps = false;
+  };
+
   rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs {
 
     # E5113: Error while calling lua chunk [...] pl.path requires LuaFileSystem
@@ -951,13 +972,9 @@ in
     doCheck = luaOlder "5.2" && stdenv.hostPlatform.isLinux;
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted spec
-      runHook postCheck
-    '';
+    bustedFlags = [ "spec" ];
   };
 
   rocks-nvim = prev.rocks-nvim.overrideAttrs (oa: {
@@ -975,39 +992,27 @@ in
       "bootstrap" # tries to install luarocks from network
     ];
 
-    checkPhase = ''
-      runHook preCheck
-      busted --run=offline
-      runHook postCheck
-    '';
+    bustedFlags = [
+      "--run=offline"
+    ];
   });
 
   rtp-nvim = prev.rtp-nvim.overrideAttrs {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   rustaceanvim = prev.rustaceanvim.overrideAttrs {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
-      final.busted
+      final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
-    checkPhase = ''
-      runHook preCheck
-      busted --lua=nlua
-      runHook postCheck
-    '';
   };
 
   sofa = prev.sofa.overrideAttrs (old: {
@@ -1039,9 +1044,11 @@ in
 
     # we override 'luarocks test' because otherwise neovim doesn't find/loldd the plenary plugin
     checkPhase = ''
+      runHook preCheck
       nvim --headless -i NONE \
         -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
         -c "PlenaryBustedDirectory test/auto/ { sequential = true, minimal_init = './test/minimal_init.vim' }"
+      runHook postCheck
     '';
   };
 
@@ -1068,6 +1075,10 @@ in
       cargo
       rustPlatform.cargoSetupHook
     ];
+
+    meta = old.meta // {
+      broken = luaAtLeast "5.5";
+    };
   });
 
   tl = prev.tl.overrideAttrs (old: {
@@ -1097,50 +1108,17 @@ in
   });
 
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {
-    propagatedBuildInputs =
-      let
-        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
-        # but that doesn't seem to work
-        lua = lib.head old.propagatedBuildInputs;
-      in
-      old.propagatedBuildInputs
-      ++ [
-        lua.pkgs.luarocks-build-treesitter-parser
-        tree-sitter
-      ];
-
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+      tree-sitter
       writableTmpDirAsHomeHook
     ];
   });
 
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (old: {
-    propagatedBuildInputs =
-      let
-        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
-        # but that doesn't seem to work
-        lua = lib.head old.propagatedBuildInputs;
-      in
-      old.propagatedBuildInputs
-      ++ [
-        lua.pkgs.luarocks-build-treesitter-parser-cpp
-      ];
-
     meta.broken = lua.luaversion != "5.1";
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
-    strictDeps = true; # can be removed after february 2026
-    propagatedBuildInputs =
-      let
-        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
-        # but that doesn't seem to work
-        lua = lib.head old.propagatedBuildInputs;
-      in
-      old.propagatedBuildInputs
-      ++ [
-        lua.pkgs.luarocks-build-treesitter-parser
-      ];
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       writableTmpDirAsHomeHook
       tree-sitter

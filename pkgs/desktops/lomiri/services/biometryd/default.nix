@@ -2,10 +2,10 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
-  # https://gitlab.com/ubports/development/core/biometryd/-/issues/8
-  boost186,
+  boost,
   cmake,
   cmake-extras,
   dbus,
@@ -39,6 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  patches = [
+    # Remove when version > 0.4.0
+    (fetchpatch {
+      name = "0001-biometryd-Fix-compatibility-with-Boost-1.87.patch";
+      url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/8def6dfb18ee56971f0f64e3622af2a5a39ab0f6.patch";
+      hash = "sha256-PddZRML4Gc+s4aNeOyZwJJjmPSixMGFVFNcrO9dNDSI=";
+    })
+  ];
+
   postPatch = ''
     # Substitute systemd's prefix in pkg-config call
     substituteInPlace data/CMakeLists.txt \
@@ -66,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost186
+    boost
     cmake-extras
     dbus
     dbus-cpp

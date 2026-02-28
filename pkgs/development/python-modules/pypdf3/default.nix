@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-yUbzJzQZ43JY415yJz9JkEqxVyPYenYcERXvmXmfjF8=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
 
   checkPhase = ''

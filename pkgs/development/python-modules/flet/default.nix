@@ -4,12 +4,12 @@
   flet-client-flutter,
 
   # build-system
-  poetry-core,
-  pytestCheckHook,
+  setuptools,
 
-  # propagates
+  # dependencies
   fastapi,
   httpx,
+  msgpack,
   oauthlib,
   packaging,
   qrcode,
@@ -19,6 +19,13 @@
   watchdog,
   websocket-client,
   websockets,
+
+  # tests
+  numpy,
+  pillow,
+  pytest-asyncio,
+  pytestCheckHook,
+  scikit-image,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +35,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/sdk/python/packages/flet";
 
-  build-system = [ poetry-core ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
 
   makeWrapperArgs = [
     "--prefix"
@@ -40,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   _flet_version = ''
-    version = "${version}"
+    flet_version = "${version}"
     def update_version():
       pass
   '';
@@ -56,24 +61,32 @@ buildPythonPackage rec {
   '';
 
   dependencies = [
-    fastapi
-    uvicorn
-    websocket-client
-    watchdog
-    oauthlib
-    websockets
-    httpx
-    packaging
-    repath
-    qrcode
     cookiecutter
     fastapi
+    httpx
+    msgpack
+    oauthlib
+    packaging
+    qrcode
+    repath
     uvicorn
+    watchdog
+    websocket-client
+    websockets
+  ];
+
+  nativeCheckInputs = [
+    numpy
+    pillow
+    pytest-asyncio
+    pytestCheckHook
+    scikit-image
   ];
 
   pythonImportsCheck = [ "flet" ];
 
   meta = {
+    broken = true;
     description = "Framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";

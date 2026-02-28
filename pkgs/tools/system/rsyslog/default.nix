@@ -180,6 +180,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature true "generate-man-pages")
   ];
 
+  NIX_CFLAGS_LINK = "-lz";
+
   passthru.tests = {
     nixos-rsyslogd = nixosTests.rsyslogd;
   };

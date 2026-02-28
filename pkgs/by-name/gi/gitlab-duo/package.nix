@@ -11,7 +11,7 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "gitlab-duo";
-  version = "8.57.1";
+  version = "8.67.0";
 
   # DOCS https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp#node-version
   nodejs = nodejs_22;
@@ -21,7 +21,7 @@ buildNpmPackage (finalAttrs: {
     owner = "editor-extensions";
     repo = "gitlab-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IofCSh9ja3C8WEiksp0pFJ6LZOu86o4VHnwiIUHHgLI=";
+    hash = "sha256-GnL3720MwiWtC7lHA4CrfiZUTeOV+ytWFii16OKGbAM=";
   };
 
   patches = [
@@ -32,14 +32,11 @@ buildNpmPackage (finalAttrs: {
 
   # PATCH: Only build for the current platform, not all targets
   postPatch = ''
-    substituteInPlace packages/cli/scripts/compile_executables.sh \
-      --replace-fail \
-        'SUPPORTED_TARGETS="bun-linux-x64 bun-linux-arm64 bun-windows-x64 bun-darwin-arm64 bun-darwin-x64"' \
-        "SUPPORTED_TARGETS=bun-$TARGET"
+    sed -i 's/SUPPORTED_TARGETS=".\+"/SUPPORTED_TARGETS="bun-$TARGET"/' packages/cli/scripts/compile_executables.sh
   '';
 
   npmFlags = [ "--install-links" ];
-  npmDepsHash = "sha256-dj4TrKMdXgUZr7/0NLT7h8jT3VjobB9KFO8tl/+47rk=";
+  npmDepsHash = "sha256-9b73NGu3GO5Sgus7BZ7WvOaXBvQ3UrW9BUTk6NwH+uY=";
   npmBuildScript = "build:binary";
   npmWorkspace = "@gitlab/duo-cli";
   nativeBuildInputs = [
@@ -79,6 +76,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://about.gitlab.com/gitlab-duo/";
     license = lib.licenses.mit;
     mainProgram = "duo";
-    maintainers = with lib.maintainers; [ yajo ];
+    maintainers = with lib.maintainers; [ afontaine ];
   };
 })

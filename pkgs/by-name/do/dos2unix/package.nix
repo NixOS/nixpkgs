@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://waterlan.home.xs4all.nl/dos2unix.html";
     changelog = "https://sourceforge.net/p/dos2unix/dos2unix/ci/dos2unix-${finalAttrs.version}/tree/dos2unix/NEWS.txt?format=raw";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -9,27 +9,21 @@
   doCheck ? true,
   pytestCheckHook,
   pytest-xdist,
-  python,
   sortedcontainers,
-  stdenv,
   pythonAtLeast,
-  sphinxHook,
-  sphinx-rtd-theme,
-  sphinx-hoverxref,
-  sphinx-codeautolink,
   tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.145.1";
+  version = "6.150.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     tag = "hypothesis-python-${version}";
-    hash = "sha256-xyUR3yY2tmF4LGhZRUlv6fdcfVyVWwukodA0WIW0bXU=";
+    hash = "sha256-5u6/x+sO14N6qiyLcnJbTxqYfoWjpNi/m/lt6PfLFTE=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -133,30 +127,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "hypothesis" ];
-
-  passthru = {
-    doc = stdenv.mkDerivation {
-      # Forge look and feel of multi-output derivation as best as we can.
-      #
-      # Using 'outputs = [ "doc" ];' breaks a lot of assumptions.
-      pname = "${pname}-doc";
-      inherit src version;
-
-      postInstallSphinx = ''
-        mv $out/share/doc/* $out/share/doc/python$pythonVersion-$pname-$version
-      '';
-
-      nativeBuildInputs = [
-        sphinxHook
-        sphinx-rtd-theme
-        sphinx-hoverxref
-        sphinx-codeautolink
-      ];
-
-      inherit (python) pythonVersion;
-      inherit meta;
-    };
-  };
 
   meta = {
     description = "Library for property based testing";

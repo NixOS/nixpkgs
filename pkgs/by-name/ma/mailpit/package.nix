@@ -1,17 +1,19 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   buildGoModule,
+  fetchNpmDeps,
+  npmHooks,
   nodejs,
+
   python3,
   libtool,
   cctools,
-  npmHooks,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  testers,
+
   mailpit,
   nixosTests,
+  testers,
 }:
 
 let
@@ -43,6 +45,9 @@ let
       hash = source.npmDepsHash;
     };
 
+    # error "C++20 or later required." for dependency node_modules/tree-sitter
+    env.NIX_CFLAGS_COMPILE = "-std=c++20";
+
     nativeBuildInputs = [
       nodejs
       python3
@@ -61,7 +66,7 @@ let
 
 in
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "mailpit";
   inherit src version vendorHash;
 
@@ -69,33 +74,44 @@ buildGoModule {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/axllent/mailpit/config.Version=${version}"
   ];
 
   preBuild = ''
-    cp -r ${ui} server/ui/dist
+    cp -r ${finalAttrs.passthru.ui} server/ui/dist
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) mailpit;
-    version = testers.testVersion {
-      package = mailpit;
-      command = "mailpit version --no-release-check";
+  passthru = {
+    tests = {
+      inherit (nixosTests) mailpit;
+      # cannot use versionCheckHook due to the extra --no-release-check flag
+      # for workarounds and other solutions see https://github.com/NixOS/nixpkgs/pull/486143#discussion_r2754533347
+      version = testers.testVersion {
+        package = mailpit;
+        command = "mailpit version --no-release-check";
+      };
     };
+
+    updateScript = {
+      supportedFeatures = [ "commit" ];
+      command = ./update.sh;
+    };
+
+    inherit ui;
   };
 
-  passthru.updateScript = {
-    supportedFeatures = [ "commit" ];
-    command = ./update.sh;
-  };
+  __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "Email and SMTP testing tool with API for developers";
-    homepage = "https://github.com/axllent/mailpit";
     changelog = "https://github.com/axllent/mailpit/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ stephank ];
+    description = "Email and SMTP testing tool with API for developers";
+    downloadPage = "https://github.com/axllent/mailpit";
+    homepage = "https://mailpit.axllent.org";
     license = lib.licenses.mit;
     mainProgram = "mailpit";
+    maintainers = with lib.maintainers; [
+      stephank
+      phanirithvij
+    ];
   };
-}
+})

@@ -32,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "weasyprint";
-  version = "66.0";
+  version = "68.0";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Kozea";
     repo = "WeasyPrint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wmEDVEbikBpOQ5394IBPWQRjWZOLfMzEGxTtq4tt2Tw=";
+    hash = "sha256-kAJgSQz1RKrPwzO7I5xHXyXcXYJtvca9izjrAgTy3ek=";
   };
 
   patches = [
@@ -99,12 +99,14 @@ buildPythonPackage (finalAttrs: {
     "test_woff_simple"
     # AssertionError
     "test_2d_transform"
+    # Reported upstream: https://github.com/Kozea/WeasyPrint/issues/2666
+    "test_text_stroke"
   ];
 
-  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
-  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.FONTCONFIG_FILE}" ];
+  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.env.FONTCONFIG_FILE}" ];
 
   pythonImportsCheck = [ "weasyprint" ];
 

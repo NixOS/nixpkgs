@@ -1,6 +1,5 @@
 {
   lib,
-  fetchpatch2,
   fetchFromGitLab,
   addBinToPathHook,
 
@@ -47,21 +46,17 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-m8c+g9XXbg9OSC+NNoQkw4RKXvNFRIPWkDjAs6oH3kc=";
   };
 
-  patches = [
-    # Remove in the next version
-    # Patch to avoid using pythonRelaxDeps
-    (fetchpatch2 {
-      url = "https://gitlab.com/py3dtiles/py3dtiles/-/commit/0f60691434b9ad4afebec29b2eedfcbbe0b8420d.patch";
-      includes = [ "pyproject.toml" ];
-      hash = "sha256-TLoKeltI1xxSONX0uu56HKl2fXzAp1ufunsBPRr5Pus=";
-    })
-  ];
-
   build-system = [
     setuptools
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "mapbox_earcut"
+    "numba"
+    "numpy"
+    "pyzmq"
+  ];
   dependencies = [
     lz4
     mapbox-earcut

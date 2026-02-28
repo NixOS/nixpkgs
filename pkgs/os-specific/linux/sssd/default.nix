@@ -82,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs ./sbus_generate.sh.in
   '';
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+  separateDebugInfo = true;
+
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
   env.NIX_CFLAGS_COMPILE = toString [
     "-DRENEWAL_PROG_PATH=\"${adcli}/bin/adcli\""

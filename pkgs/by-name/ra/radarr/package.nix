@@ -196,6 +196,7 @@ buildDotnetModule {
     maintainers = with lib.maintainers; [
       purcell
       nyanloutre
+      karaolidis
     ];
     mainProgram = "Radarr";
     # platforms inherited from dotnet-sdk.

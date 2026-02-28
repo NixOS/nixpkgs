@@ -12,7 +12,6 @@
   git,
   libtool,
   linkFarmFromDrvs,
-  ocaml,
   ocamlPackages,
   openssl,
   perl,
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     file
     git
-    ocaml
+    ocamlPackages.ocaml
     ocamlPackages.ocamlbuild
     perl
     python3

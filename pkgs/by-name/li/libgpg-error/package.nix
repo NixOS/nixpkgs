@@ -34,6 +34,11 @@ stdenv.mkDerivation (
 
     postPatch = ''
       sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
+    ''
+    # libgpg-error insists on having these generated files. They should be fairly ABI stable,
+    # so add one for FreeBSD.
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-freebsd") ''
+      cp ${./lock-obj-pub.x86_64-unknown-freebsd.h} src/syscfg/lock-obj-pub.freebsd.h
     '';
 
     hardeningDisable = [ "strictflexarrays3" ];

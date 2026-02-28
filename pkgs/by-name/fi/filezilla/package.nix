@@ -22,12 +22,12 @@
 
 stdenv.mkDerivation {
   pname = "filezilla";
-  version = "3.69.5";
+  version = "3.69.6";
 
   src = fetchsvn {
     url = "https://svn.filezilla-project.org/svn/FileZilla3/trunk";
-    rev = "11338";
-    hash = "sha256-OQZFwowkmiOcIjWoHkIFwsm6nuyMGSaBSn8zwVpCMAs=";
+    rev = "11365";
+    hash = "sha256-KJI+UxKiwmZfVG0CiS3lDnjz+YNjTy7IoTcOmlGkluk=";
   };
 
   configureFlags = [

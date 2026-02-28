@@ -317,7 +317,6 @@
   ./programs/slock.nix
   ./programs/sniffnet.nix
   ./programs/soundmodem.nix
-  ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/starship.nix
   ./programs/steam.nix
@@ -349,6 +348,7 @@
   ./programs/wayland/hyprland.nix
   ./programs/wayland/hyprlock.nix
   ./programs/wayland/labwc.nix
+  ./programs/wayland/mangowc.nix
   ./programs/wayland/miracle-wm.nix
   ./programs/wayland/niri.nix
   ./programs/wayland/river.nix
@@ -1515,6 +1515,8 @@
   ./services/security/reaction.nix
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
+  ./services/security/spire/agent.nix
+  ./services/security/spire/server.nix
   ./services/security/ssh-agent-switcher.nix
   ./services/security/sshguard.nix
   ./services/security/sslmate-agent.nix
@@ -1591,6 +1593,7 @@
   ./services/web-apps/artalk.nix
   ./services/web-apps/audiobookshelf.nix
   ./services/web-apps/baikal.nix
+  ./services/web-apps/bentopdf.nix
   ./services/web-apps/bluemap.nix
   ./services/web-apps/bluesky-pds.nix
   ./services/web-apps/bookstack.nix

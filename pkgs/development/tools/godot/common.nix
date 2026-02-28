@@ -340,7 +340,7 @@ let
           }
         );
 
-      attrs = finalAttrs: rec {
+      attrs = finalAttrs: {
         pname = "godot${suffix}";
         inherit version;
 

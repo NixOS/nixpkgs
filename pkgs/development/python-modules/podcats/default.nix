@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "podcats";
-  version = "0.5.0";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jakubroztocil";
     repo = "podcats";
-    rev = "v${version}";
-    sha256 = "0zjdgry5n209rv19kj9yaxy7c7zq5gxr488izrgs4sc75vdzz8xc";
+    tag = version;
+    sha256 = "sha256-1Jg9bR/3qMim3q5qVwUVbxeLNaXaCU6SplBUaRXeLpo=";
   };
 
   postPatch = ''

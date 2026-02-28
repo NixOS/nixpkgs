@@ -11,23 +11,24 @@
   copyDesktopItems,
   makeDesktopItem,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picgo";
-  version = "2.5.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "Molunerfinn";
     repo = "PicGo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M3cA17DoPXfldvq1vjF3P9HEXGkd+TXFuTr95iqIWsQ=";
+    hash = "sha256-fEj5ymnDBxeJ33GeIrcciQW3Wg7jMQaitwhUHne9a14=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) version src;
     pname = "picgo";
-    hash = "sha256-BfKTZy9NBfBj0MwREoxYmyvhfXP4FlADam2SwNTOJ2U=";
+    hash = "sha256-hYQM1KiKfsQL0AbYpHtmpDHbG3HsdXFbpgGzcZVW7R0=";
     fetcherVersion = 3; # lockfileVersion 9.0 corresponds to fetcherVersion 3
   };
 
@@ -103,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "picgo";
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple tool for uploading pictures";

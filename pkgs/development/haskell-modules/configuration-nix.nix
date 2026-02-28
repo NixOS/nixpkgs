@@ -454,6 +454,9 @@ builtins.intersectAttrs super {
     }))
   ];
 
+  # Wants to execute cabal-install
+  ghci-quickfix = dontCheck super.ghci-quickfix;
+
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
   amqp-conduit = dontCheck super.amqp-conduit;
@@ -495,18 +498,46 @@ builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # Some test cases require network access
+  hpack_0_39_1 = doDistribute (
+    overrideCabal (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        "--skip=/EndToEnd/hpack/defaults/fails if defaults don't exist/"
+        "--skip=/Hpack.Defaults/ensureFile/downloads file if missing/"
+        "--skip=/Hpack.Defaults/ensureFile/with 404/does not create any files/"
+      ];
+    }) super.hpack_0_39_1
+  );
+
   # Tries accessing the GitHub API
   github-app-token = dontCheck super.github-app-token;
 
-  # The curl executable is required for withApplication tests.
-  warp = addTestToolDepend pkgs.curl super.warp;
+  warp = lib.pipe super.warp [
+    # The curl executable is required for withApplication tests.
+    (addTestToolDepend pkgs.curl)
+    # Avoids much closure size of downstream deps on macOS: https://github.com/yesodweb/wai/pull/1044
+    (disableCabalFlag "include-warp-version")
+  ];
 
   lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
 
-  safe-exceptions = overrideCabal (drv: {
-    # Fix strictDeps build error "could not execute: hspec-discover"
-    testToolDepends = drv.testToolDepends or [ ] ++ [ self.hspec-discover ];
-  }) super.safe-exceptions;
+  # Package does not declare tool dependency hspec-discover
+  hspec-wai = addTestToolDepends [ self.hspec-discover ] super.hspec-wai;
+
+  # Package does not declare tool dependency hspec-discover
+  http-date = addTestToolDepends [ self.hspec-discover ] super.http-date;
+
+  # Package does not declare tool dependency hspec-discover
+  http-types = addTestToolDepends [ self.hspec-discover ] super.http-types;
+
+  # Package does not declare tool dependency hspec-discover
+  safe-exceptions = addTestToolDepends [ self.hspec-discover ] super.safe-exceptions;
+
+  # Package does not declare tool dependency hspec-discover
+  unliftio = addTestToolDepends [ self.hspec-discover ] super.unliftio;
+
+  # Package does not declare tool dependency hspec-discover
+  word8 = addTestToolDepends [ self.hspec-discover ] super.word8;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
@@ -897,6 +928,10 @@ builtins.intersectAttrs super {
   splitmix = dontCheck super.splitmix;
   splitmix_0_1_1 = dontCheck super.splitmix_0_1_1;
 
+  # Break infinite recursion
+  # hedgehog (dep)→ async (dep)→ unordered-containers (test)→ nothunks (test)→ hedgehog
+  nothunks = dontCheck super.nothunks;
+
   # Break infinite recursion cycle with OneTuple and quickcheck-instances.
   foldable1-classes-compat = dontCheck super.foldable1-classes-compat;
 
@@ -931,13 +966,17 @@ builtins.intersectAttrs super {
     ];
   }) super.liquid-fixpoint;
 
-  # overrideCabal because the tests need to execute the built executable "liquid"
+  # overrideCabal because
+  # - tests need to execute the built executable "liquid"
+  # - LiquidHaskell needs an SMT solver. We use Z3.
+  # - LiquidHaskell clash with Haddock as of now, see https://github.com/ucsd-progsys/liquidhaskell/issues/2188
   liquidhaskell = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/liquid:$PATH
     ''
     + (drv.preCheck or "");
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.z3 ];
+    doHaddock = false;
   }) super.liquidhaskell;
 
   # Break cyclic reference that results in an infinite recursion.
@@ -1026,6 +1065,8 @@ builtins.intersectAttrs super {
     (disableCabalFlag "no-exe")
     enableSeparateBinOutput
     (addBuildDepend self.optparse-applicative)
+    # Package does not declare tool dependency hspec-discover
+    (addTestToolDepend self.hspec-discover)
   ];
 
   # Compile manpages (which are in RST and are compiled with Sphinx).
@@ -1181,8 +1222,7 @@ builtins.intersectAttrs super {
   http-download = dontCheck super.http-download;
   http-download_0_2_1_0 = doDistribute (dontCheck super.http-download_0_2_1_0);
   pantry = dontCheck super.pantry;
-  pantry_0_9_3_1 = dontCheck super.pantry_0_9_3_1;
-  pantry_0_10_0 = dontCheck super.pantry_0_10_0;
+  pantry_0_11_2 = doDistribute (dontCheck super.pantry_0_11_2);
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
@@ -1328,6 +1368,8 @@ builtins.intersectAttrs super {
     ];
     doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
   }) super.haskell-pgmq;
+  # Needs pgmq available at test time with somehow preinitialized database (?)
+  stakhanov = dontCheck super.stakhanov;
 
   migrant-postgresql-simple = lib.pipe super.migrant-postgresql-simple [
     (overrideCabal {

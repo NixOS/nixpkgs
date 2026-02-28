@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   protobuf,
+  cython,
   grpcio,
   setuptools,
 }:
@@ -12,14 +13,19 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.76.0";
+  version = "1.78.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_tools";
     inherit version;
-    hash = "sha256-zoAWm15q3z6DAvPrtssMOp8ICJEzq8pLdq1n91H1rYg=";
+    hash = "sha256-Sw3YZWAnQxbhVdklFYJ2+FZFCBkwiLxD4g0/Xf+Vays=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython==3.1.1" Cython
+  '';
 
   outputs = [
     "out"
@@ -28,7 +34,10 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  build-system = [ setuptools ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   pythonRelaxDeps = [
     "protobuf"

@@ -9,7 +9,18 @@ let
   # In case it ever shows up in the VM, we could OCR for it instead
   wallpaperText = "Lorem ipsum";
 
-  # tmpfiles setup to make OCRing on terminal output more reliable
+  # setup to make OCRing on terminal output more reliable
+  terminalTextColour = {
+    r = 91;
+    g = 113;
+    b = 102;
+  };
+  terminalTextColourString =
+    lib:
+    let
+      toHex = component: lib.optionalString (component < 16) "0" + lib.trivial.toHexString component;
+    in
+    "#${toHex terminalTextColour.r}${toHex terminalTextColour.g}${toHex terminalTextColour.b}";
   terminalOcrTmpfilesSetup =
     {
       pkgs,
@@ -18,7 +29,7 @@ let
     }:
     let
       white = "255, 255, 255";
-      black = "0, 0, 0";
+      foreground = "${toString terminalTextColour.r}, ${toString terminalTextColour.g}, ${toString terminalTextColour.b}";
       colorSection = color: {
         Color = color;
         Bold = true;
@@ -27,9 +38,9 @@ let
       terminalColors = pkgs.writeText "customized.colorscheme" (
         lib.generators.toINI { } {
           Background = colorSection white;
-          Foreground = colorSection black;
-          Color2 = colorSection black;
-          Color2Intense = colorSection black;
+          Foreground = colorSection foreground;
+          Color2 = colorSection foreground;
+          Color2Intense = colorSection foreground;
         }
       );
       terminalConfig = pkgs.writeText "terminal.ubports.conf" (
@@ -75,7 +86,7 @@ let
     };
   };
 
-  sharedTestFunctions = ''
+  sharedTestFunctions = lib: ''
     from collections.abc import Callable
     import tempfile
     import subprocess
@@ -119,6 +130,17 @@ let
               "color {} has disappeared from the screen!".format(color)
             )
       return check_for_color_continued_presence_retry
+
+    def ensure_terminal_running() -> None:
+      """
+      Ensure that lomiri-terminal-app has finished starting up.
+      """
+
+      terminalTextColor: str = "${terminalTextColourString lib}"
+      with machine.nested("Waiting for the screen to have terminalTextColor {} on it:".format(terminalTextColor)):
+        retry(check_for_color(terminalTextColor))
+      with machine.nested("Ensuring terminalTextColor {} stays present on the screen:".format(terminalTextColor)):
+        retry(fn=check_for_color_continued_presence(terminalTextColor), timeout_seconds=5)
 
     def ensure_lomiri_running() -> None:
       """
@@ -183,7 +205,6 @@ let
 
       # Using the keybind has a chance of instantly closing the menu again? Just click the button
       mouse_click(15, 15)
-
   '';
 
   makeIndicatorTest =
@@ -237,7 +258,7 @@ let
 
         testScript =
           { nodes, ... }:
-          sharedTestFunctions
+          (sharedTestFunctions lib)
           + ''
             start_all()
             machine.wait_for_unit("multi-user.target")
@@ -330,7 +351,7 @@ in
 
       testScript =
         { nodes, ... }:
-        sharedTestFunctions
+        (sharedTestFunctions lib)
         + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
@@ -451,7 +472,7 @@ in
 
       testScript =
         { nodes, ... }:
-        sharedTestFunctions
+        (sharedTestFunctions lib)
         + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
@@ -463,7 +484,7 @@ in
           # Working terminal keybind is good
           with subtest("terminal keybind works"):
               machine.send_key("ctrl-alt-t")
-              wait_for_text(r"(${user}|machine)")
+              ensure_terminal_running()
               machine.screenshot("terminal_opens")
               machine.send_key("alt-f4")
 
@@ -474,7 +495,7 @@ in
 
               # Just try the terminal again, we know that it should work
               machine.send_chars("Terminal\n")
-              wait_for_text(r"(${user}|machine)")
+              ensure_terminal_running()
               machine.send_key("alt-f4")
 
           # We want support for X11 apps
@@ -598,7 +619,7 @@ in
 
       testScript =
         { nodes, ... }:
-        sharedTestFunctions
+        (sharedTestFunctions lib)
         + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
@@ -610,7 +631,7 @@ in
           # Working terminal keybind is good
           with subtest("terminal keybind works"):
               machine.send_key("ctrl-alt-t")
-              wait_for_text(r"(${user}|machine)")
+              ensure_terminal_running()
               machine.screenshot("terminal_opens")
 
               # for the LSS lomiri-content-hub test to work reliably, we need to kick off peer collecting
@@ -744,7 +765,7 @@ in
 
         testScript =
           { nodes, ... }:
-          sharedTestFunctions
+          (sharedTestFunctions lib)
           + ''
             start_all()
             machine.wait_for_unit("multi-user.target")
@@ -773,7 +794,7 @@ in
             # Lomiri in desktop mode should use the correct keymap
             with subtest("lomiri session keymap works"):
                 machine.send_key("ctrl-alt-t")
-                wait_for_text(r"(${user}|machine)")
+                ensure_terminal_running()
                 machine.screenshot("terminal_opens")
 
                 machine.send_chars("touch ${pwInput}\n")

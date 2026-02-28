@@ -41,13 +41,13 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "13";
+  version = "16";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-cnOhyaeoDXPaeRJnJpx1HcegWitcfMJe/vezxZ/zpFQ=";
+    hash = "sha256-2PCa9nP98htK9p5N6QPPZT6aYqaoAEBmag9JGnoujso=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -58,7 +58,7 @@ let
     sourceRoot = "source/Grayjay.Desktop.Web";
 
     npmBuildScript = "build";
-    npmDepsHash = "sha256-3nPzQcDWhPCdLrPvwGY+K0t1OSxWrVwQ3hH7i0eynRU=";
+    npmDepsHash = "sha256-3yJIPkuEvkFL9Wb4y/r0yEULQbXx/wHqicFBLzOPj68=";
 
     installPhase = ''
       runHook preInstall
@@ -114,7 +114,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   testProjectFile = [
-    "Grayjay.Desktop.Tests/Grayjay.Desktop.Tests.csproj"
     "Grayjay.Engine/Grayjay.Engine.Tests/Grayjay.Engine.Tests.csproj"
   ];
 

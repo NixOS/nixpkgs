@@ -10,6 +10,7 @@
   bison,
   boost,
   cairo,
+  catch2_3,
   cgal,
   clipper2,
   double-conversion,
@@ -56,12 +57,13 @@ let
 in
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2021.01-unstable-2025-10-27";
+  unstable_date = "2026-02-18";
+  version = "2021.01-unstable-${unstable_date}";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "aa785fe4ab3d52450a5e51eb73585ac9bbcc8798";
-    hash = "sha256-TngfItArYtm8243DdYkQlkfc/MBTZGYrf08hfloWRWk=";
+    rev = "231f4f8d5e3a0697825455cccbd2edb2fb9491cd";
+    hash = "sha256-YAKXU3z4ZBviGnt0LFgrS6yeEMm3REdkhyfJ4bZ4Vo8=";
     fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
   };
 
@@ -80,6 +82,7 @@ clangStdenv.mkDerivation rec {
     with libsForQt5;
     with qt5;
     [
+      catch2_3
       clipper2
       glm
       onetbb
@@ -121,7 +124,8 @@ clangStdenv.mkDerivation rec {
     "-DUSE_BUILTIN_OPENCSG=OFF"
     "-DUSE_BUILTIN_MANIFOLD=OFF"
     "-DUSE_BUILTIN_CLIPPER2=OFF"
-    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] (lib.strings.getVersion version)}\""
+    # Derive version from our unstable date
+    "-DOPENSCAD_VERSION='${builtins.replaceStrings [ "-" ] [ "." ] unstable_date}-unstable'"
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
@@ -148,6 +152,8 @@ clangStdenv.mkDerivation rec {
   '';
 
   postPatch = ''
+    patchShebangs scripts/
+
     # Take Python3 executable as passed
     sed -e '/set(VENV_DIR /d' -i tests/cmake/ImageCompare.cmake
     sed -e '/find_path(VENV_BIN_PATH /d' -i tests/cmake/ImageCompare.cmake
@@ -193,6 +199,7 @@ clangStdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+      hzeller
       pca006132
       raskin
     ];

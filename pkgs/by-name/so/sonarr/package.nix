@@ -141,39 +141,35 @@ buildDotnetModule {
   ];
 
   # Skip manual, integration, automation and platform-dependent tests.
-  dotnetTestFlags = [
-    "--filter:${
-      lib.concatStringsSep "&" (
-        [
-          "TestCategory!=ManualTest"
-          "TestCategory!=IntegrationTest"
-          "TestCategory!=AutomationTest"
+  testFilters = [
+    "TestCategory!=ManualTest"
+    "TestCategory!=IntegrationTest"
+    "TestCategory!=AutomationTest"
 
-          # setgid tests
-          "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
-          "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
+    # makes real HTTP requests
+    "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
+    "FullyQualifiedName!~NzbDrone.Core.Test.TvTests.RefreshEpisodeServiceFixture"
+  ]
+  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    # fails on macOS
+    "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
+  ];
 
-          # we do not set application data directory during tests (i.e. XDG data directory)
-          "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
+  disabledTests = [
+    # setgid tests
+    "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
+    "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
 
-          # attempts to read /etc/*release and fails since it does not exist
-          "FullyQualifiedName!=NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
+    # we do not set application data directory during tests (i.e. XDG data directory)
+    "NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
+    "NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
 
-          # fails to start test dummy because it cannot locate .NET runtime for some reason
-          "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.Should_be_able_to_start_process"
-          "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
+    # attempts to read /etc/*release and fails since it does not exist
+    "NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
 
-          # makes real HTTP requests
-          "FullyQualifiedName!~NzbDrone.Core.Test.TvTests.RefreshEpisodeServiceFixture"
-          "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
-        ]
-        ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-          # fails on macOS
-          "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
-          "FullyQualifiedName!=NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
-        ]
-      )
-    }"
+    # fails to start test dummy because it cannot locate .NET runtime for some reason
+    "NzbDrone.Common.Test.ProcessProviderFixture.Should_be_able_to_start_process"
+    "NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
   ];
 
   passthru = {
@@ -203,6 +199,7 @@ buildDotnetModule {
       purcell
       tie
       niklaskorz
+      karaolidis
     ];
     mainProgram = "Sonarr";
     # platforms inherited from dotnet-sdk.

@@ -2886,10 +2886,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1cjn1vqnvr3lhbdqfpy88aq7qmvd1j7i08gd8cly91914cd22pi9";
+      sha256 = "1mywc4yvzw7s659r12nhg81kiv1y9lqjrp22ply2nj5zdk8f7qqy";
       type = "gem";
     };
-    version = "1.43.0";
+    version = "1.44.0";
   };
   gitlab-crystalball = {
     dependencies = [
@@ -4334,6 +4334,7 @@ src: {
       "danger"
       "default"
       "development"
+      "monorepo"
       "test"
     ];
     platforms = [ ];
@@ -4436,7 +4437,9 @@ src: {
   influxdb-client = {
     dependencies = [ "csv" ];
     groups = [
+      "default"
       "development"
+      "monorepo"
       "test"
     ];
     platforms = [ ];
@@ -6705,6 +6708,7 @@ src: {
       "coverage"
       "default"
       "development"
+      "monorepo"
       "test"
     ];
     platforms = [ ];

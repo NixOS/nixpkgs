@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInput = [
+  buildInputs = [
     libpng
   ];
 

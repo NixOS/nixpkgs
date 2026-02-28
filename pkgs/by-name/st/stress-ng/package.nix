@@ -95,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${finalAttrs.version}/debian/changelog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      c0bw3b
       dbeley
     ];
     platforms = lib.platforms.unix;

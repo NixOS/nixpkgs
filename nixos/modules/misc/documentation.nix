@@ -282,8 +282,11 @@ in
         default = false;
         description = ''
           Whether to generate the manual page index caches at runtime using
-          a systemd service. Note that this is currently only supported by the
-          man-db module.
+          a systemd service.
+
+          ::: {.note}
+          This is currently only supported by the man-db module.
+          :::
         '';
       };
 

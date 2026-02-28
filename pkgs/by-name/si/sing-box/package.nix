@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sing-box";
-  version = "1.12.21";
+  version = "1.12.23";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-glBNYPgjXt2xd3MehiNe8W0OXEigsuhVVbEZ7QRDhDI=";
+    hash = "sha256-GzZgsRvbSpppTFY7Jm+56nCi5auDzV34i0K7fKOMafk=";
   };
 
   vendorHash = "sha256-CSAXPvXMUwD08fsp66vr1pA4Wxy0rY2cEJU1Pl0mdUA=";
@@ -35,6 +35,8 @@ buildGoModule (finalAttrs: {
   subPackages = [
     "cmd/sing-box"
   ];
+
+  env.CGO_ENABLED = 0;
 
   nativeBuildInputs = [ installShellFiles ];
 

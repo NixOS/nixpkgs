@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   agate,
@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.10.15";
+  version = "1.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
     tag = "v${version}";
-    hash = "sha256-n/tU34XUf/s4m/SbPth/jlfo2xKhQk1hVjP3vLA/67s=";
+    hash = "sha256-+7q332Te3R6g8HvT1Gwa7vHo8OBmT0/E/CzunBYIvZk=";
   };
 
   sourceRoot = "${src.name}/core";
@@ -60,11 +60,12 @@ buildPythonPackage rec {
     "pathspec"
     "protobuf"
     "pydantic"
+    "sqlparse"
     "urllib3"
   ];
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [

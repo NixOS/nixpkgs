@@ -130,7 +130,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ifcopenshell" ];
 
-  PYTHONUSERBASE = ".";
+  env.PYTHONUSERBASE = ".";
 
   # We still build with python to generate ifcopenshell_wrapper.py and ifcopenshell_wrapper.so
   cmakeFlags = [
@@ -163,6 +163,10 @@ buildPythonPackage rec {
     # NOTE: the following is directly inspired by https://github.com/IfcOpenShell/IfcOpenShell/blob/v0.8.0/src/ifcopenshell-python/Makefile#L123
     cp ../../README.md README.md
     popd
+
+    # boost189 compatibility; see https://www.boost.org/releases/1.89.0/
+    substituteInPlace cmake/CMakeLists.txt \
+      --replace-fail 'set(BOOST_COMPONENTS system' 'set(BOOST_COMPONENTS'
   '';
 
   preConfigure = ''

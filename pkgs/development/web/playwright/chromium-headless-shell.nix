@@ -10,6 +10,7 @@
 
   alsa-lib,
   at-spi2-atk,
+  expat,
   glib,
   libxcomposite,
   libxdamage,
@@ -44,6 +45,7 @@ let
     buildInputs = [
       alsa-lib
       at-spi2-atk
+      expat
       glib
       libxcomposite
       libxdamage

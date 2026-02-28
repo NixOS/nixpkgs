@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
             poppler-utils
             finalAttrs.finalPackage
           ];
-          inherit (finalAttrs) FONTCONFIG_FILE;
+          env.FONTCONFIG_FILE = finalAttrs.env.FONTCONFIG_FILE;
         }
         ''
           output=$(mktemp -t selfcheck-XXXXXX.pdf)

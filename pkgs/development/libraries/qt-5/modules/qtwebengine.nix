@@ -20,6 +20,7 @@
   pkgsBuildTarget,
   pkgsBuildBuild,
 
+  expat,
   libxdamage,
   libxcomposite,
   xrandr,
@@ -357,6 +358,7 @@ qtModule (
       harfbuzz
       icu
 
+      expat
       libevent
       ffmpeg_7
     ]

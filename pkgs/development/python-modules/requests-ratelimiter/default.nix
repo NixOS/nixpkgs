@@ -42,7 +42,7 @@ buildPythonPackage rec {
     broken = lib.versionAtLeast pyrate-limiter.version "3";
     description = "Module for rate-limiting for requests";
     homepage = "https://github.com/JWCook/requests-ratelimiter";
-    changelog = "https://github.com/JWCook/requests-ratelimiter/blob/${src.rev}/HISTORY.md";
+    changelog = "https://github.com/JWCook/requests-ratelimiter/blob/${src.tag}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

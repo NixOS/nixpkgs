@@ -5,6 +5,9 @@
   ...
 }:
 
+let
+  cfg = config.programs.nm-applet;
+in
 {
   meta = {
     maintainers = lib.teams.freedesktop.members;
@@ -21,15 +24,19 @@
         It is needed for Appindicator environments, like Enlightenment.
       '';
     };
+
+    package = lib.mkPackageOption pkgs "networkmanagerapplet" { };
   };
 
-  config = lib.mkIf config.programs.nm-applet.enable {
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+
     systemd.user.services.nm-applet = {
       description = "Network manager applet";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];
-      serviceConfig.ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet ${lib.optionalString config.programs.nm-applet.indicator "--indicator"}";
+      serviceConfig.ExecStart = "${cfg.package}/bin/nm-applet ${lib.optionalString cfg.indicator "--indicator"}";
     };
 
     services.dbus.packages = [ pkgs.gcr ];

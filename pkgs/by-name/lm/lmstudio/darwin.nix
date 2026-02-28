@@ -2,6 +2,7 @@
   stdenv,
   fetchurl,
   undmg,
+  darwin,
   meta,
   pname,
   version,
@@ -16,7 +17,10 @@ stdenv.mkDerivation {
     inherit url hash;
   };
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [
+    undmg
+    darwin.sigtool
+  ];
 
   sourceRoot = ".";
 
@@ -24,6 +28,19 @@ stdenv.mkDerivation {
     runHook preInstall
     mkdir -p $out/Applications
     cp -r *.app $out/Applications
+
+    # Bypass the /Applications path check in the main index.js
+    # LM Studio verifies the app is running from /Applications and shows an
+    # error dialog + refuses to auto-update if not. Replace the '/Applications'
+    # string literal with '/' so that any absolute path (e.g. /nix/store/...)
+    # passes the startsWith check. This works across obfuscated versions because
+    # the literal string '/Applications' is stable even when variable names change.
+    local indexJs="$out/Applications/LM Studio.app/Contents/Resources/app/.webpack/main/index.js"
+    substituteInPlace "$indexJs" --replace-quiet "'/Applications'" "'/'"
+
+    # Re-sign the app bundle after patching, otherwise macOS reports it as damaged
+    codesign --force --deep --sign - "$out/Applications/LM Studio.app"
+
     runHook postInstall
   '';
 

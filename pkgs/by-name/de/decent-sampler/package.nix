@@ -56,7 +56,7 @@ let
       install -Dm755 DecentSampler $out/bin/decent-sampler
       install -Dm755 DecentSampler.so -t $out/lib/vst
       install -d "$out/lib/vst3" && cp -r "DecentSampler.vst3" $out/lib/vst3
-      install -Dm444 ${icon} $out/share/pixmaps/decent-sampler.png
+      install -Dm444 ${icon} $out/share/icons/hicolor/512x512/apps/decent-sampler.png
 
       runHook postInstall
     '';

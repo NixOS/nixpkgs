@@ -1,6 +1,6 @@
 {
-  "version": "3.5.12",
-  "hash": "sha256-NUWb2y8sTIzKTURJymb0Bvidz1tl+u3Q7o1UvEnIUtI=",
+  "version": "3.5.13",
+  "hash": "sha256-L+eU+zm6B+y1Rytz6cG50885sPffm5+m+NSAYNbTYa4=",
   "plugins": {
     "io.github.jackgruber.backup": {
       "name": "joplin-plugin-backup",
@@ -9,5 +9,5 @@
       "npmDepsHash": "sha256-xZJ0Oir1A6sLe0ztIyBu39Yy3D6sNrVaciOYG0k85l0="
     }
   },
-  "deps_hash": "sha256-9xJmudcpUw1xmTvJD3TFrfzYEi+LupZGSzsA5zUOemI="
+  "deps_hash": "sha256-iDclcCwzgmKOMxO4ZdmPyTKPoGY24+6gm19E4+pCB50="
 }

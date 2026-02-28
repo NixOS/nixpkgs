@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tusd";
-  version = "2.8.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "tus";
     repo = "tusd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OzXBeLDjaJk4NVgsauR/NUATh7qHbuEfWNdhytZmd0A=";
+    hash = "sha256-xZGGvXLluugPEq6zW25yMG5K+IPKw6PrGOM/GBlox1k=";
   };
 
-  vendorHash = "sha256-YununGyB72zE0tmqO3BREJeMTjCuy/1fhPHC5r8OLjg=";
+  vendorHash = "sha256-V2EPvrTzs31tagVU3kl+8Fcn0xvLBsUuMKEYwPGJHy0=";
 
   ldflags = [
     "-X github.com/tus/tusd/v2/cmd/tusd/cli.VersionName=v${finalAttrs.version}"

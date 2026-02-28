@@ -5,6 +5,7 @@
   fetchFromGitLab,
   git-unroll,
   buildPythonPackage,
+  fetchpatch,
   python,
   runCommand,
   writeShellScript,
@@ -280,7 +281,7 @@ in
 buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.9.1";
+  version = "2.10.0";
   pyproject = true;
 
   outputs = [
@@ -304,15 +305,18 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   patches = [
     ./clang19-template-warning.patch
+    # [CPUBLAS] Fix UB: use vector::resize() instead of reserve() before operator[] access
+    # Merged in https://github.com/pytorch/pytorch/pull/175315
+    # TODO: drop at the next release
+    (fetchpatch {
+      name = "fix-ub-in-cpublas";
+      url = "https://github.com/pytorch/pytorch/commit/f08aafa9e82c5ae142b97dbfcac1ebd5d9ca7fde.patch";
+      hash = "sha256-J9QNKDWytA0nBpKr5q4kVnufyMEJHev0mfmyQCxog/w=";
+    })
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
     ./nvtx3-hpp-path-fix.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # Propagate CUPTI to Kineto by overriding the search path with environment variables.
-    # https://github.com/pytorch/pytorch/pull/108847
-    ./pytorch-pr-108847.patch
   ]
   ++ lib.optionals (lib.getName blas.provider == "mkl") [
     # The CMake install tries to add some hardcoded rpaths, incompatible

@@ -10,6 +10,7 @@
   dbus,
   linuxHeaders,
   systemd,
+  expat,
 }:
 
 let
@@ -146,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     linuxHeaders
     systemd
+    expat
   ];
 
   mesonFlags = [
