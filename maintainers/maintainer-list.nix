@@ -8455,6 +8455,12 @@
     name = "Fang-Pen Lin";
     keys = [ { fingerprint = "7130 3454 A7CD 0F0A 941A  F9A3 2A26 9964 AD29 2131"; } ];
   };
+  farbzen = {
+    name = "Fabian Meier";
+    github = "farbzen";
+    githubId = 60570640;
+    email = "dev@farbzen.de";
+  };
   farcaller = {
     name = "Vladimir Pouzanov";
     email = "farcaller@gmail.com";
