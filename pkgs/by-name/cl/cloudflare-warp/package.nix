@@ -27,7 +27,7 @@
 
 let
   version = "2025.10.186.0";
-  sources = {
+  sources = rec {
     x86_64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}_amd64.deb";
       hash = "sha256-l+csDSBXRAFb2075ciCAlE0bS5F48mAIK/Bv1r3Q8GE=";
@@ -36,14 +36,11 @@ let
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}_arm64.deb";
       hash = "sha256-S6CfWYzcv+1Djj+TX+lrP5eG7oIpM0JrqtSw/UDD9ko=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://downloads.cloudflareclient.com/v1/download/macos/version/${version}";
-      hash = "sha256-nnoOXPSpOJRyNdCC0/YAoBK8SwB+++qVwgZplrjNi2U=";
-    };
     aarch64-darwin = fetchurl {
       url = "https://downloads.cloudflareclient.com/v1/download/macos/version/${version}";
       hash = "sha256-nnoOXPSpOJRyNdCC0/YAoBK8SwB+++qVwgZplrjNi2U=";
     };
+    x86_64-darwin = aarch64-darwin;
   };
 in
 stdenv.mkDerivation (finalAttrs: {

@@ -8,6 +8,7 @@
   yq,
   protobuf,
   installShellFiles,
+  makeBinaryWrapper,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
@@ -29,33 +30,22 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.5.6";
+  version = "2.6.10";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-Ppw2fyfFvSmGO+FcEvclkOU7LATOqkYH3wErBdKgWJY=";
+    hash = "sha256-youaF9YERkGUwN0sg6IzV8OAyahSDbFt0psn/p4iOVY=";
   };
 
-  cargoHash = "sha256-EN87p8wX5QAzf3cWfX8I/+XzYRc9rA5EWj996iUpSPg=";
+  cargoHash = "sha256-goaqxj8Y5Gqo4et4AkyZ3Uv74Q3M3V0VExUA/AMYNMI=";
 
   patches = [
-    # Patch out the remote upgrade (deno update) check.
-    # Not a blocker in the build sandbox, since implementation and tests are
-    # considerately written for no external networking, but removing brings
-    # in-line with common nixpkgs practice.
-    ./patches/0000-remove-deno-upgrade-check.patch
-    # Patch out the upgrade sub-command since that wouldn't correctly upgrade
-    # deno from nixpkgs.
-    ./patches/0001-remove-deno-upgrade.patch
     ./patches/0002-tests-replace-hardcoded-paths.patch
     ./patches/0003-tests-linux-no-chown.patch
     ./patches/0004-tests-darwin-fixes.patch
-    # CVE-2026-22863: prevent cipher operations after finalize
-    # https://github.com/denoland/deno/security/advisories/GHSA-5379-f5hf-w38v
-    ./patches/0005-fix-ext-node-prevent-cipher-operations-after-finalize.patch
   ];
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
@@ -78,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # required by deno_kv crate
     protobuf
     installShellFiles
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
@@ -87,6 +78,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildFlags = [ "--package=cli" ];
+
+  # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "__vendored_zlib_ng"
+  ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
@@ -133,7 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [
     "--lib" # unit tests
-    "--test integration_tests"
+    "--test=integration_test"
     # Test targets not included here:
     # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
     # - specs: this target uses a custom test harness that doesn't implement the --skip flag.
@@ -172,6 +169,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Use of VSOCK, might not be available on all platforms
     "--skip=js_unit_tests::serve_test"
     "--skip=js_unit_tests::fetch_test"
+
+    # We disable the upgrade feature on purpose
+    "--skip=upgrade::upgrade_prompt"
+    "--skip=upgrade::upgrade_invalid_lockfile"
+
+    # Wants to access /etc/group
+    "--skip=node_unit_tests::process_test"
+
+    # sqlite extension tests are in a separate Cargo crate and therefore are not handled by the nixpkgs Cargo tooling
+    "--skip=sqlite_extension_test"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Expects specific shared libraries from macOS to be linked
@@ -210,6 +217,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     # Remove non-essential binaries like denort and test_server
     find $out/bin/* -not -name "deno" -delete
+
+    # Do what `deno x --install-alias` would do (it doesn't work with Nix-packaged Deno)
+    makeBinaryWrapper $out/bin/deno $out/bin/dx --add-flags "x"
   ''
   + lib.optionalString canExecute ''
     installShellCompletion --cmd deno \

@@ -9,11 +9,11 @@ let
   owner = "superseriousbusiness";
   repo = "gotosocial";
 
-  version = "0.20.3";
+  version = "0.21.0";
 
   web-assets = fetchurl {
     url = "https://codeberg.org/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";
-    hash = "sha256-Xh4SgzBG2Cm4SaMb9lebW/gBv94HuVXNSjd8L+bowUg=";
+    hash = "sha256-eExVquNTXkvxg0SAR60kXi5mnROp+tHNO3os1K+rWzU=";
   };
 in
 buildGo124Module rec {
@@ -23,7 +23,7 @@ buildGo124Module rec {
   src = fetchFromCodeberg {
     inherit owner repo;
     tag = "v${version}";
-    hash = "sha256-tWICsPN9r3mJqcs0EHE1+QFhQCzI1pD1eXZXSi2Peo4=";
+    hash = "sha256-ifSm3tV8P435v7WUS2BYXfVS3FHu9Axz3IQWGdTw3Bg=";
   };
 
   vendorHash = null;
