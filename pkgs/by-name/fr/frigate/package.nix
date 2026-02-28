@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  replaceVars,
+  addDriverRunpath,
   callPackage,
   python313Packages,
   fetchFromGitHub,
@@ -9,18 +11,17 @@
   sqlite-vec,
   frigate,
   nixosTests,
-  fetchpatch,
 }:
 
 let
-  version = "0.16.4";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-TPiCT/z0YuoQkQsxyZsRMQa0XwqMLCgwMbrASOKrMjA=";
+    hash = "sha256-K41tWnj0u+Fw+G++aPFfMa0uFYEvvZ0r6xNPQ7J1cYs=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -38,6 +39,9 @@ let
           hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
         };
       });
+
+      huggingface-hub = super.huggingface-hub_0;
+      transformers = super.transformers_4;
     };
   };
   python3Packages = python.pkgs;
@@ -77,27 +81,23 @@ python3Packages.buildPythonApplication rec {
   inherit src;
 
   patches = [
-    ./constants.patch
-    # Fixes hardcoded path /media/frigate/clips/faces. Remove in next version.
-    (fetchpatch {
-      url = "https://github.com/blakeblackshear/frigate/commit/b86e6e484f64bd43b64d7adebe78671a7a426edb.patch";
-      hash = "sha256-1+n0n0yCtjfAHkXzsZdIF0iCVdPGmsG7l8/VTqBVEjU=";
-    })
+    # Always lookup ffmpeg from config setting
     ./ffmpeg.patch
+
+    # Adjust libteflon.so location
+    (replaceVars ./libteflon-driverlink-path.patch {
+      inherit (addDriverRunpath) driverLink;
+    })
+
+    # Use ai-edge-litert as tensorflow interpreter
     # https://github.com/blakeblackshear/frigate/pull/21876
     ./ai-edge-litert.patch
-    (fetchpatch {
-      # peewee-migrate 0.14.x compat
-      url = "https://github.com/blakeblackshear/frigate/commit/dde02cadb2168c44e9eb395ddfbb7b169096bd15.patch";
-      excludes = [
-        "docker/main/requirements-wheels.txt"
-        "migrations/031_create_trigger_table.py"
-        "migrations/032_add_password_changed_at.py"
-      ];
-      hash = "sha256-RrmwjE4SHJIUOYfqcCtMy9Pht7UXhHcoAZlFQv9aQFw=";
-    })
+
+    # Disable failing optimization in onnxruntime
     # https://github.com/microsoft/onnxruntime/issues/26717
     ./onnxruntime-compat.patch
+
+    # Fix excessive trailing whitespaces in process commandlines
     # https://github.com/blakeblackshear/frigate/pull/22089
     ./proc-cmdline-strip.patch
   ];
@@ -107,7 +107,7 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace \
       frigate/app.py \
-      frigate/test/test_{http,storage}.py \
+      frigate/test/test_storage.py \
       frigate/test/http_api/base_http_test.py \
       --replace-fail "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
 
@@ -118,7 +118,13 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "/config" "/var/lib/frigate" \
       --replace-fail "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
 
-    substituteInPlace frigate/comms/{config,embeddings}_updater.py frigate/comms/{zmq_proxy,inter_process}.py \
+    substituteInPlace \
+      frigate/comms/config_updater.py \
+      frigate/comms/embeddings_updater.py \
+      frigate/comms/inter_process.py \
+      frigate/comms/object_detector_signaler.py \
+      frigate/comms/zmq_proxy.py \
+      frigate/detectors/plugins/zmq_ipc.py \
       --replace-fail "ipc:///tmp/cache" "ipc:///run/frigate"
 
     substituteInPlace frigate/db/sqlitevecq.py \
@@ -140,25 +146,27 @@ python3Packages.buildPythonApplication rec {
   dontBuild = true;
 
   dependencies = with python3Packages; [
-    # docker/main/requirements.txt
-    scikit-build
     # docker/main/requirements-wheel.txt
+    # TODO: degirum (no source repo, binary wheels only)
     ai-edge-litert
     aiofiles
     aiohttp
     appdirs
     argcomplete
-    contextlib2
     click
+    contextlib2
+    cryptography
     distlib
     fastapi
+    faster-whisper
     filelock
+    google-genai
     importlib-metadata
     importlib-resources
-    google-generativeai
     joserfc
-    levenshtein
+    librosa
     markupsafe
+    memray
     netaddr
     netifaces
     norfair
@@ -184,14 +192,18 @@ python3Packages.buildPythonApplication rec {
     py-vapid
     pywebpush
     pyzmq
+    rapidfuzz
     requests
     ruamel-yaml
     scipy
     setproctitle
     shapely
+    sherpa-onnx
     slowapi
+    soundfile
     starlette
     starlette-context
+    tensorflow
     titlecase
     transformers
     tzlocal

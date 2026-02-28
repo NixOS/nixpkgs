@@ -1,13 +1,8 @@
-Strip trailing whitespace from process commandlines. This is annoying for exact
-process matches against Prometheus labels.
-
-https://github.com/blakeblackshear/frigate/pull/22089
-
 diff --git a/frigate/util/services.py b/frigate/util/services.py
-index b31a7eea3..f1e8f0f5f 100644
+index 64d83833d..912ce67bd 100644
 --- a/frigate/util/services.py
 +++ b/frigate/util/services.py
-@@ -118,7 +118,7 @@ def get_cpu_stats() -> dict[str, dict]:
+@@ -121,7 +121,7 @@ def get_cpu_stats() -> dict[str, dict]:
          pid = str(process.info["pid"])
          try:
              cpu_percent = process.info["cpu_percent"]
@@ -16,7 +11,7 @@ index b31a7eea3..f1e8f0f5f 100644
  
              with open(f"/proc/{pid}/stat", "r") as f:
                  stats = f.readline().split()
-@@ -152,7 +152,7 @@ def get_cpu_stats() -> dict[str, dict]:
+@@ -155,7 +155,7 @@ def get_cpu_stats() -> dict[str, dict]:
                  "cpu": str(cpu_percent),
                  "cpu_average": str(round(cpu_average_usage, 2)),
                  "mem": f"{mem_pct}",
