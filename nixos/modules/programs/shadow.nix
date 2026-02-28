@@ -22,6 +22,13 @@ in
       '';
     };
 
+    security.shadow.su.package = lib.mkPackageOption pkgs [ "shadow" "su" ] {
+      extraDescription = ''
+        This can be overridden by other modules (e.g. sudo-rs) to provide
+        an alternative `su` implementation.
+      '';
+    };
+
     security.loginDefs = {
       package = lib.mkPackageOption pkgs "shadow" { };
 
@@ -262,7 +269,7 @@ in
           };
         in
         {
-          su = mkSetuidRoot "${cfg.package.su}/bin/su";
+          su = mkSetuidRoot "${config.security.shadow.su.package}/bin/su";
           sg = mkSetuidRoot "${cfg.package.out}/bin/sg";
           newgrp = mkSetuidRoot "${cfg.package.out}/bin/newgrp";
           newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
