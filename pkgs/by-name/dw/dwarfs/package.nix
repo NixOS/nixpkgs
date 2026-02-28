@@ -104,6 +104,15 @@ stdenv.mkDerivation (finalAttrs: {
         "dwarfs/tools_test.end_to_end/*"
         "dwarfs/tools_test.mutating_and_error_ops/*"
         "dwarfs/tools_test.categorize/*"
+        # Requires a working FUSE device and fusermount3, unavailable in sandbox.
+        "dwarfs/tools_test.timestamps_fuse*"
+        "dwarfs/tools_test.dwarfs_automount*"
+        "dwarfs/tools_test.dwarfs_fsname_and_subtype*"
+        "dwarfs/sparse_files_test.random_large_files*"
+        "dwarfs/sparse_files_test.random_small_files_fuse*"
+        "dwarfs/sparse_files_test.huge_holes_fuse*"
+        # Requires xattr support unavailable in sandbox.
+        "dwarfs/xattr_test.portable_xattr"
       ];
     in
     "-${lib.concatStringsSep ":" disabledTests}";
