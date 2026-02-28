@@ -3431,6 +3431,12 @@
     githubId = 1010174;
     name = "Ben Gamari";
   };
+  bgub = {
+    email = "nebrelbug@gmail.com";
+    github = "bgub";
+    githubId = 25597854;
+    name = "Ben Gubler";
+  };
   bhall = {
     email = "brendan.j.hall@bath.edu";
     github = "brendan-hall";
