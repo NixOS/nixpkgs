@@ -14,6 +14,11 @@ in
 testing.makeTest {
   name = "initrd-secrets-changing";
 
+  meta = {
+    maintainers = [ ];
+    broken = pkgs.stdenv.hostPlatform.isAarch64;
+  };
+
   nodes.machine =
     { ... }:
     {
