@@ -18,6 +18,7 @@ let
     {
       #### Data
       lomiri-schemas = callPackage ./data/lomiri-schemas { };
+      suru-icon-theme = callPackage ./data/suru-icon-theme { };
 
       #### Development tools / libraries
       cmake-extras = callPackage ./development/cmake-extras { };
@@ -45,7 +46,6 @@ let
       lomiri-session = callPackage ./data/lomiri-session { };
       lomiri-sounds = callPackage ./data/lomiri-sounds { };
       lomiri-wallpapers = callPackage ./data/lomiri-wallpapers { };
-      suru-icon-theme = callPackage ./data/suru-icon-theme { };
 
       #### Development tools / libraries
       geonames = callPackage ./development/geonames { };
