@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "packvers";
-  version = "22.0";
+  version = "21.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "packvers";
     tag = version;
-    hash = "sha256-19jCW3BK6XIcukDsFd1jERc2+g8Hcs/gdm3+dBzQS14=";
+    hash = "sha256-nCSYL0g7mXi9pGFt24pOXbmmYsaRuB+rRZrygf8DTLE=";
   };
 
   build-system = [ setuptools ];
