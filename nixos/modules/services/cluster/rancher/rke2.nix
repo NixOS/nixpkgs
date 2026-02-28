@@ -122,11 +122,11 @@ in
 
   config = lib.mkIf cfg.enable (
     lib.recursiveUpdate baseModule.config {
-      warnings = baseModule.config.warnings ++ (
-        lib.optional (
+      warnings =
+        baseModule.config.warnings
+        ++ (lib.optional (
           cfg.role == "agent" && cfg.cni != null
-        ) "rke2: cni should not be set if role is 'agent'"
-      );
+        ) "rke2: cni should not be set if role is 'agent'");
 
       assertions = baseModule.config.assertions;
 

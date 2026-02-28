@@ -904,13 +904,11 @@ let
           })
           // (lib.optionalAttrs (cfg.extraContainerdSettings != null) {
             ${containerdConfigTemplateFile} = {
-              "L+".argument = "${
-                pkgs.runCommand "config.toml.tmpl" { } ''
-                  echo '{{ template "base" . }}' > $out
-                  echo >> $out
-                  cat ${containerdSettingsFormat.generate "extra-containerd-settings.toml" cfg.extraContainerdSettings} >> $out
-                ''
-              }";
+              "L+".argument = "${pkgs.runCommand "config.toml.tmpl" { } ''
+                echo '{{ template "base" . }}' > $out
+                echo >> $out
+                cat ${containerdSettingsFormat.generate "extra-containerd-settings.toml" cfg.extraContainerdSettings} >> $out
+              ''}";
             };
           })
           // (lib.mapAttrs' mkChartRule helmCharts);

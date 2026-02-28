@@ -116,11 +116,11 @@ in
 
   config = lib.mkIf cfg.enable (
     lib.recursiveUpdate baseModule.config {
-      warnings = baseModule.config.warnings ++ (
-        lib.optional (
-          cfg.disableAgent && cfg.images != [ ]
-        ) "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node."
-      );
+      warnings =
+        baseModule.config.warnings
+        ++ (lib.optional (cfg.disableAgent && cfg.images != [ ])
+          "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node."
+        );
 
       assertions = baseModule.config.assertions ++ [
         {
