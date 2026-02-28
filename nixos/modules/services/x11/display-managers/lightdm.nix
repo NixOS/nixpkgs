@@ -67,6 +67,9 @@ let
         ${xcfg.displayManager.setupCommands}
       ''}
     ''}
+    ${optionalString cfg.autoNumlock ''
+      greeter-setup-script=${pkgs.numlockx}/bin/numlockx on
+    ''}
     ${cfg.extraSeatDefaults}
   '';
 
@@ -182,6 +185,14 @@ in
         '';
       };
 
+      autoNumlock = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable numlock at login.
+        '';
+      };
+
     };
   };
 
@@ -275,7 +286,7 @@ in
     services.accounts-daemon.enable = true;
 
     # Enable the accounts daemon to find lightdm's dbus interface
-    environment.systemPackages = [ lightdm ];
+    environment.systemPackages = [ lightdm ] ++ lib.optional cfg.autoNumlock pkgs.numlockx;
 
     security.polkit.enable = true;
 
