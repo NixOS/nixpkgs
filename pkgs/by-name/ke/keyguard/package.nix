@@ -22,19 +22,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "2.3.4";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20260201";
-    hash = "sha256-7n6/YgRzte2qsgQEfqppdpp5t8+xBjfOKjvNotAgJB0=";
+    tag = "r20260228.1";
+    hash = "sha256-J8rP+DnbX0ktCiq8W9UsE3tM2V1apQrSLed7sq1gP6w=";
   };
 
   postPatch = ''
-    substituteInPlace desktopLibJvm/build.gradle.kts \
-      --replace-fail 'resources.srcDir(rootDir.resolve("desktopLibNative/build/bin/universal"))' "" \
-      --replace-fail 'resourcesTask.dependsOn(":desktopLibNative:''${Tasks.compileNativeUniversal}")' ""
+    substituteInPlace desktopApp/build.gradle.kts \
+      --replace-fail 'dependsOn(prepareBundledAppResources)' ""
   '';
 
   gradleBuildTask = ":desktopApp:createReleaseDistributable";
