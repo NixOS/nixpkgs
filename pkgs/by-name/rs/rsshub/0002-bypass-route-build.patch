@@ -1,0 +1,30 @@
+From 65a4aca8bb635cde2ffaf8ef1cf071b2a569d310 Mon Sep 17 00:00:00 2001
+From: Vonfry <dev@vonfry.name>
+Date: Sat, 28 Feb 2026 22:27:49 +0800
+Subject: [PATCH] bypass route build
+
+---
+ lib/registry.ts | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/lib/registry.ts b/lib/registry.ts
+index 521cd6c20..9be285330 100644
+--- a/lib/registry.ts
++++ b/lib/registry.ts
+@@ -56,7 +56,12 @@ export type NamespacesType = Record<
+ 
+ let namespaces: NamespacesType = {};
+ 
+-if (config.isPackage) {
++if (process.env.BUILD_ROUTES_MODE) {
++    modules = directoryImport({
++        targetDirectoryPath: path.join(__dirname, "./routes"),
++        importPattern: /\.tsx?$/,
++    }) as typeof modules;
++} else if (config.isPackage) {
+     namespaces = (await import('../assets/build/routes.js')).default;
+ } else {
+     switch (process.env.NODE_ENV || process.env.VERCEL_ENV) {
+-- 
+2.52.0
+
