@@ -235,6 +235,7 @@ mapAliases {
   heif-image-plugin = throw "heif-image-plugin has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
   hglib = throw "'hglib' has been renamed to/replaced by 'python-hglib'"; # Converted to throw 2025-10-29
   hijri-converter = hijridate; # added 2025-08-07
+  holistic-trace-analysis = throw "'holistic-trace-analysis' was removed because there is no such package on PyPI"; # added 2026-02-28
   homeassistant-bring-api = throw "'homeassistant-bring-api' has been renamed to/replaced by 'bring-api'"; # Converted to throw 2025-10-29
   HTSeq = throw "'HTSeq' has been renamed to/replaced by 'htseq'"; # Converted to throw 2025-10-29
   IMAPClient = throw "'IMAPClient' has been renamed to/replaced by 'imapclient'"; # Converted to throw 2025-10-29
