@@ -67,6 +67,9 @@ let
         ${xcfg.displayManager.setupCommands}
       ''}
     ''}
+    ${optionalString cfg.autoNumlock ''
+      greeter-setup-script=${pkgs.numlockx}/bin/numlockx on
+    ''}
     ${cfg.extraSeatDefaults}
   '';
 
@@ -179,6 +182,14 @@ in
         default = 0;
         description = ''
           Show the greeter for this many seconds before automatic login occurs.
+        '';
+      };
+
+      autoNumlock = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable numlock at login.
         '';
       };
 
