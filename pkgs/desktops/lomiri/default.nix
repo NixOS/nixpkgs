@@ -16,6 +16,8 @@ let
       inherit (self) callPackage;
     in
     {
+      #### Development tools / libraries
+      cmake-extras = callPackage ./development/cmake-extras { };
     }
     // lib.optionalAttrs (!useQt6) {
       #### Core Apps
@@ -43,7 +45,6 @@ let
       suru-icon-theme = callPackage ./data/suru-icon-theme { };
 
       #### Development tools / libraries
-      cmake-extras = callPackage ./development/cmake-extras { };
       deviceinfo = callPackage ./development/deviceinfo { };
       geonames = callPackage ./development/geonames { };
       gmenuharness = callPackage ./development/gmenuharness { };
