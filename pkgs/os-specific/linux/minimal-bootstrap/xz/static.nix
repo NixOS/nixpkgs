@@ -12,7 +12,6 @@
   gawk,
   gnutar,
   gzip,
-  musl,
 }:
 let
   pname = "xz";
@@ -30,7 +29,6 @@ bash.runCommand "${pname}-${version}"
     nativeBuildInputs = [
       binutils
       gcc
-      musl
       gnumake
       gnused
       gnugrep
@@ -64,10 +62,6 @@ bash.runCommand "${pname}-${version}"
     cd xz-${version}
 
     # Configure
-    export CC=musl-gcc
-    export CFLAGS=-static
-    export CXXFLAGS=-static
-    export LDFLAGS=-static
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \

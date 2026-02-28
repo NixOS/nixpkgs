@@ -4,8 +4,8 @@
   hostPlatform,
   fetchurl,
   bash,
+  gcc-buildbuild,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnupatch,
@@ -33,15 +33,12 @@ let
   ];
 
   configureFlags = [
-    "CC=musl-gcc"
-    "LDFLAGS=--static"
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
 
     "--disable-dependency-tracking"
 
-    "--with-sysroot=/"
     "--enable-deterministic-archives"
     # depends on bison
     "--disable-gprofng"
@@ -63,7 +60,7 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
+      gcc-buildbuild
       binutils
       gnumake
       gnupatch

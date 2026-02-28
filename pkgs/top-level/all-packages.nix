@@ -8730,17 +8730,32 @@ with pkgs;
   };
 
   mdadm = mdadm4;
-  minimal-bootstrap = recurseIntoAttrs (
-    import ../os-specific/linux/minimal-bootstrap {
-      inherit (stdenv) buildPlatform hostPlatform;
-      inherit lib config;
-      fetchurl = import ../build-support/fetchurl/boot.nix {
-        inherit (stdenv.buildPlatform) system;
-        inherit (config) rewriteURL;
-      };
-      checkMeta = callPackage ../stdenv/generic/check-meta.nix { inherit (stdenv) hostPlatform; };
-    }
-  );
+  minimal-bootstrap =
+    let
+      supportedNatively = stdenv.buildPlatform.isMusl && stdenv.buildPlatform.isx86;
+      minbootBuildPlatform = lib.systems.elaborate (
+        {
+          i686-linux = "i686-unknown-linux-musl";
+          x86_64-linux = "x86_64-unknown-linux-musl";
+        }
+        .${stdenv.buildPlatform.system} or "x86_64-unknown-linux-musl"
+      );
+    in
+    recurseIntoAttrs (
+      import ../os-specific/linux/minimal-bootstrap {
+        inherit (stdenv) hostPlatform;
+        buildPlatform = minbootBuildPlatform;
+        inherit lib config;
+        fetchurl = import ../build-support/fetchurl/boot.nix {
+          inherit (minbootBuildPlatform) system;
+          inherit (config) rewriteURL;
+        };
+        checkMetaBuild = callPackage ../stdenv/generic/check-meta.nix {
+          hostPlatform = minbootBuildPlatform;
+        };
+        checkMetaHost = callPackage ../stdenv/generic/check-meta.nix { inherit (stdenv) hostPlatform; };
+      }
+    );
   minimal-bootstrap-sources =
     callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix
       {
