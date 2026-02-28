@@ -12,7 +12,6 @@
   flac,
   glog,
   gtest,
-  howard-hinnant-date,
   jemalloc,
   libarchive,
   libevent,
@@ -57,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     bison
     cmake
-    howard-hinnant-date # uses only the header-only parts
     pkg-config
     range-v3 # header-only library
     ronn
@@ -118,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast high compression read-only file system";
     homepage = "https://github.com/mhx/dwarfs";
     changelog = "https://github.com/mhx/dwarfs/blob/v${finalAttrs.version}/CHANGES.md";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
     platforms = lib.platforms.linux;
   };
