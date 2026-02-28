@@ -15076,6 +15076,12 @@
     github = "Liamolucko";
     githubId = 43807659;
   };
+  liamthexpl0rer = {
+    name = "Liam";
+    matrix = "@liamthexpl0rer:matrix.org";
+    github = "liamthexpl0rer";
+    githubId = 119797945;
+  };
   liarokapisv = {
     email = "liarokapis.v@gmail.com";
     github = "liarokapisv";
