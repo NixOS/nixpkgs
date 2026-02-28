@@ -2,49 +2,53 @@
   lib,
   fetchFromGitHub,
   makeBinaryWrapper,
+  nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   replaceVars,
   stdenv,
-  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
-  version = "0-unstable-2025-11-28";
+  version = "0-unstable-2026-03-08";
 
   src = fetchFromGitHub {
     owner = "DIYgod";
     repo = "RSSHub";
-    rev = "b6dbafe33e0c3e3a4ba5a1edd2da29b70412389f";
-    hash = "sha256-FsevO2nb6leuuRmzCLIy093FCafl3Y/CsSp1ydJOnKY=";
+    rev = "1ad606f40f512f24ec76462299c46066e495603f";
+    hash = "sha256-hHCId59SazbR96fwAlY3De2hH5woklpALXGf9OzyY3A=";
   };
 
   patches = [
     (replaceVars ./0001-fix-git-hash.patch {
-      "GIT_HASH" = finalAttrs.src.rev;
+      GIT_HASH = finalAttrs.src.rev;
     })
     ./0002-fix-network-call.patch
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-jV+MpdNeaVHut0eUP7F9SmJZuLDGQE8ULR8LsiOE7Ug=";
+    hash = "sha256-aJNc6gY6/OZZp577ZhblRIPBCFXV0rE7w8SbwslQM0k=";
+    pnpm = pnpm_10;
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildPhase = ''
     runHook preBuild
-    pnpm build
+    # First build route metadata using directoryImport (avoids executing
+    # module-level code that would trigger network requests)
+    BUILD_ROUTES_MODE=1 pnpm run build:routes
+    # Then build the application
+    pnpm run build
     runHook postBuild
   '';
 
@@ -58,11 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     makeWrapper ${lib.getExe nodejs} $out/bin/rsshub \
-      --chdir "$out/lib/rsshub" \
       --set "NODE_ENV" "production" \
       --set "NO_LOGFILES" "true" \
-      --set "TSX_TSCONFIG_PATH" "$out/lib/rsshub/tsconfig.json" \
-      --append-flags "$out/lib/rsshub/dist/index.mjs"
+      --add-flags "$out/lib/rsshub/dist/index.mjs"
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
@@ -78,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
       new features and bug fixes.
     '';
     homepage = "https://docs.rsshub.app";
-    license = lib.licenses.mit;
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ xinyangli ];
     mainProgram = "rsshub";
     platforms = lib.platforms.all;
