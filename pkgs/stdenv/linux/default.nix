@@ -4,7 +4,9 @@
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
 #
-# It starts from prebuilt seed bootstrapFiles and creates a series of
+# It starts from a minimal seed (hex0), from which a small package set
+# (minimal-bootstrap) can be compiled on i686-linux and x86_64-linux.
+# This set can in turn generate cross or native compilers, that build
 # nixpkgs instances (stages) to gradually rebuild stdenv, which
 # is used to build all other packages (including the bootstrapFiles).
 #
@@ -60,66 +62,8 @@
   config,
   overlays,
   crossOverlays ? [ ],
-
-  bootstrapFiles ?
-    let
-      table = {
-        glibc = {
-          armv5tel-linux = import ./bootstrap-files/armv5tel-unknown-linux-gnueabi.nix;
-          armv6l-linux = import ./bootstrap-files/armv6l-unknown-linux-gnueabihf.nix;
-          armv7l-linux = import ./bootstrap-files/armv7l-unknown-linux-gnueabihf.nix;
-          aarch64-linux = import ./bootstrap-files/aarch64-unknown-linux-gnu.nix;
-          mipsel-linux = import ./bootstrap-files/mipsel-unknown-linux-gnu.nix;
-          mips64el-linux = import (
-            if localSystem.isMips64n32 then
-              ./bootstrap-files/mips64el-unknown-linux-gnuabin32.nix
-            else
-              ./bootstrap-files/mips64el-unknown-linux-gnuabi64.nix
-          );
-          powerpc64-linux = import (
-            if localSystem.isAbiElfv2 then
-              ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv2.nix
-            else
-              ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv1.nix
-          );
-          powerpc64le-linux = import ./bootstrap-files/powerpc64le-unknown-linux-gnu.nix;
-          riscv64-linux = import ./bootstrap-files/riscv64-unknown-linux-gnu.nix;
-          s390x-linux = import ./bootstrap-files/s390x-unknown-linux-gnu.nix;
-          loongarch64-linux = import ./bootstrap-files/loongarch64-unknown-linux-gnu.nix;
-        };
-        musl = {
-          aarch64-linux = import ./bootstrap-files/aarch64-unknown-linux-musl.nix;
-          armv6l-linux = import ./bootstrap-files/armv6l-unknown-linux-musleabihf.nix;
-        };
-      };
-
-      # Try to find an architecture compatible with our current system. We
-      # just try every bootstrap we’ve got and test to see if it is
-      # compatible with or current architecture.
-      getCompatibleTools = lib.foldl (
-        v: system:
-        if v != null then
-          v
-        else if localSystem.canExecute (lib.systems.elaborate { inherit system; }) then
-          archLookupTable.${system}
-        else
-          null
-      ) null (lib.attrNames archLookupTable);
-
-      archLookupTable = table.${localSystem.libc} or (throw "unsupported libc for the pure Linux stdenv");
-      files =
-        archLookupTable.${localSystem.system} or (
-          if getCompatibleTools != null then
-            getCompatibleTools
-          else
-            (throw "unsupported platform for the pure Linux stdenv")
-        );
-    in
-    (config.replaceBootstrapFiles or lib.id) files,
 }:
-
 assert crossSystem == localSystem;
-
 let
   inherit (localSystem) system;
 
@@ -158,7 +102,6 @@ let
       lib
       config
       localSystem
-      bootstrapFiles
       ;
   };
 
@@ -172,7 +115,6 @@ let
       overrides ? (self: super: { }),
       extraNativeBuildInputs ? [ ],
     }:
-
     let
       thisStdenv = import ../generic {
         name = "${name}-stdenv-linux";
@@ -227,16 +169,13 @@ let
 
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
-
     in
     {
       inherit config overlays;
       stdenv = thisStdenv;
     };
-
 in
 [
-
   (
     { }:
     {
@@ -382,7 +321,6 @@ in
             }
           )).overrideAttrs
             (a: {
-
               # This signals to cc-wrapper (as overridden above in this file) to add `--sysroot`
               # to `$out/nix-support/cc-cflags`.
               passthru = a.passthru // {
@@ -527,7 +465,6 @@ in
             NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or "") + " -static-libstdc++";
           }
         );
-
       };
 
       # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
@@ -710,7 +647,7 @@ in
 
         preHook = commonPreHook;
 
-        initialPath = ((import ../generic/common-path.nix) { pkgs = prevStage; });
+        initialPath = (import ../generic/common-path.nix) { pkgs = prevStage; };
 
         extraNativeBuildInputs = [
           prevStage.patchelf
