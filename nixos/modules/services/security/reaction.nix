@@ -7,10 +7,21 @@
 let
   settingsFormat = pkgs.formats.yaml { };
 
+  cfg = config.services.reaction;
+
   inherit (lib)
-    mkOption
+    concatMapStringsSep
+    filterAttrs
+    getExe
+    mkDefault
     mkEnableOption
+    mkIf
+    mkOption
     mkPackageOption
+    mapAttrs
+    optional
+    optionals
+    optionalString
     types
     ;
 in
@@ -30,7 +41,65 @@ in
       default = { };
       type = types.submodule {
         freeformType = settingsFormat.type;
-        options = { };
+        options = {
+          plugins = mkOption {
+            description = ''
+              Nixpkgs provides a `reaction-plugins` package set which includes both offical and community plugins for reaction.
+
+              To use the plugins in your module configuration, in `settings.plugins` you can use for e.g. `''${lib.getExe reaction-plugins.reaction-plugin-ipset}`
+              See https://reaction.ppom.me/plugins/ to configure plugins.
+            '';
+            default = { };
+            type = types.attrsOf (
+              types.submodule (
+                { name, ... }:
+                {
+                  options = {
+                    enable = mkOption {
+                      description = "enable reaction-plugin-${name}";
+                      type = types.bool;
+                      default = true;
+                    };
+                    path = mkOption {
+                      description = "path to the plugin binary";
+                      type = types.str;
+                      default = "${cfg.package.plugins."reaction-plugin-${name}"}/bin/reaction-plugin-${name}";
+                      defaultText = lib.literalExpression ''''${cfg.package.plugins."reaction-plugin-${name}"}/bin/reaction-plugin-${name}'';
+                    };
+                    check_root = mkOption {
+                      description = "Whether reaction must check that the executable is owned by root";
+                      type = types.bool;
+                      default = true;
+                    };
+                    systemd = mkOption {
+                      description = "Whether reaction must isolate the plugin using systemd's run0";
+                      type = types.bool;
+                      default = cfg.runAsRoot;
+                      defaultText = "config.services.reaction.runAsRoot";
+                    };
+                    systemd_options = mkOption {
+                      description = ''
+                        A key-value map of systemd options.
+                        Keys must be strings and values must be string arrays.
+
+                        See `man systemd.directives` for all supported options, and particularly options in `man systemd.exec`
+                      '';
+                      type = types.attrsOf (types.listOf types.str);
+                      default = { };
+                    };
+                  };
+                }
+              )
+            );
+            # Filter plugins which are disabled
+            apply =
+              self:
+              lib.pipe self [
+                (filterAttrs (name: p: p.enable))
+                (mapAttrs (name: p: removeAttrs p [ "enable" ]))
+              ];
+          };
+        };
       };
     };
 
@@ -113,25 +182,39 @@ in
           services.openssh.settings.LogLevel = lib.mkDefault "VERBOSE";
         }
         ```
+
+        ```nix
+        # core ipset plugin requires these if running as non-root
+        systemd.services.reaction.serviceConfig = {
+          CapabilityBoundingSet = [
+            "CAP_NET_ADMIN"
+            "CAP_NET_RAW"
+            "CAP_DAC_READ_SEARCH" # for journalctl
+          ];
+          AmbientCapabilities = [
+            "CAP_NET_ADMIN"
+            "CAP_NET_RAW"
+            "CAP_DAC_READ_SEARCH"
+          ];
+        };
+        ```
       '';
     };
   };
 
   config =
     let
-      cfg = config.services.reaction;
-
       generatedSettings = settingsFormat.generate "reaction.yml" cfg.settings;
       settingsDir = pkgs.runCommand "reaction-settings-dir" { } ''
         mkdir -p $out
-        ${lib.concatMapStringsSep "\n" (file: ''
+        ${concatMapStringsSep "\n" (file: ''
           filename=$(basename "${file}")
           ln -s "${file}" "$out/$filename"
         '') cfg.settingsFiles}
         ln -s ${generatedSettings} $out/reaction.yml
       '';
     in
-    lib.mkIf cfg.enable {
+    mkIf cfg.enable {
       assertions = [
         {
           assertion = cfg.settings != { } || (builtins.length cfg.settingsFiles) != 0;
@@ -139,7 +222,7 @@ in
         }
       ];
 
-      users = lib.mkIf (!cfg.runAsRoot) {
+      users = mkIf (!cfg.runAsRoot) {
         users.reaction = {
           isSystemUser = true;
           group = "reaction";
@@ -148,27 +231,29 @@ in
       };
 
       system.checks =
-        lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform)
+        optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform)
           (
             pkgs.runCommand "reaction-config-validation" { } ''
-              ${lib.getExe cfg.package} test-config -c ${settingsDir} >/dev/null
+              ${getExe cfg.package} test-config -c ${settingsDir} >/dev/null
               echo "reaction config ${settingsDir} is valid"
               touch $out
             ''
           );
 
       systemd.services.reaction = {
-        description = "Scan logs and take action";
+        description = "A daemon that scans program outputs for repeated patterns, and takes action.";
+        documentation = [ "https://reaction.ppom.me" ];
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        partOf = lib.optionals cfg.stopForFirewall [ "firewall.service" ];
+        partOf = optionals cfg.stopForFirewall [ "firewall.service" ];
         path = [ pkgs.iptables ];
         serviceConfig = {
           Type = "simple";
+          KillMode = "mixed"; # for plugins
           User = if (!cfg.runAsRoot) then "reaction" else "root";
           ExecStart = ''
-            ${lib.getExe cfg.package} start -c ${settingsDir}${
-              lib.optionalString (cfg.loglevel != null) " -l ${cfg.loglevel}"
+            ${getExe cfg.package} start -c ${settingsDir}${
+              optionalString (cfg.loglevel != null) " -l ${cfg.loglevel}"
             }
           '';
 
@@ -195,6 +280,20 @@ in
           ProtectControlGroups = true;
           ProtectKernelLogs = true;
         };
+      };
+
+      # pre-configure official plugins
+      services.reaction.settings.plugins = {
+        ipset = {
+          enable = mkDefault true;
+          systemd_options = {
+            CapabilityBoundingSet = [
+              "~CAP_NET_ADMIN"
+              "~CAP_PERFMON"
+            ];
+          };
+        };
+        virtual.enable = mkDefault true;
       };
 
       environment.systemPackages = [ cfg.package ];

@@ -1,23 +1,23 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
+  bison,
+  boost,
   clang,
+  cmake,
+  fetchFromGitHub,
+  flex,
+  lib,
   libclang,
   libxml2,
-  zlib,
+  llvm,
   openexr,
   openimageio,
-  llvm,
-  boost,
-  flex,
-  bison,
   partio,
   pugixml,
+  python3Packages,
   robin-map,
+  stdenv,
   util-linux,
-  python3,
+  zlib,
 }:
 
 let
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+PNh4xFdH8onxK0OTnQHbdupTaB2hTgDumY0krJiWUE=";
   };
 
@@ -70,13 +70,17 @@ stdenv.mkDerivation (finalAttrs: {
     openimageio
     partio
     pugixml
-    python3.pkgs.pybind11
+    python3Packages.pybind11
     robin-map
     util-linux # needed just for hexdump
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libxml2
+  ];
+
+  propagatedBuildInputs = [
+    python3Packages.openimageio
   ];
 
   postFixup = ''
@@ -86,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Advanced shading language for production GI renderers";
-    homepage = "https://opensource.imageworks.com/osl.html";
+    homepage = "http://openshadinglanguage.org";
     maintainers = with lib.maintainers; [ hodapp ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

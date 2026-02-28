@@ -42,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export NIX_LDFLAGS="$NIX_LDFLAGS -lsmartcols -lmount"
   '';
 
+  cargoBuildFlags = [ "--workspace" ];
+
   checkFlags = [
     # Operation not supported
     "--skip=common::util::tests::test_compare_xattrs"

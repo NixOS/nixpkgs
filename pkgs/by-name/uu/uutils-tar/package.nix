@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-s8BHAfc6L0RyK8xX8C2exjjOUAULt1xnrSkt4T/qruE=";
 
+  cargoBuildFlags = [ "--workspace" ];
+
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
   };

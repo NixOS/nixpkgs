@@ -371,13 +371,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-aiobotocore";
-  version = "3.1.3";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_aiobotocore";
     inherit (finalAttrs) version;
-    hash = "sha256-4Zs7kdnaRsxftMCunlGm8C4WhgjbhMu8vCajxBnPOGo=";
+    hash = "sha256-eRmenLVkNS3J75h/ob/3U6N1f9wcxUOatCHm217pDqY=";
   };
 
   build-system = [ setuptools ];

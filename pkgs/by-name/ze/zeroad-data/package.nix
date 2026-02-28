@@ -11,11 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://releases.wildfiregames.com/0ad-${finalAttrs.version}-unix-data.tar.xz";
-    hash = "sha256-g34tbd8TiwJfwCAXJF11gaS7hP2UtCwOYF0yG3AXqZg=";
+    hash = "sha256-6ESzCuIQLEfgpP/y8ODvBboM67GJCqcidvoSRXw5Um8=";
   };
 
   installPhase = ''
-    rm binaries/data/tools/fontbuilder/fonts/*.txt
     mkdir -p $out/share/0ad
     cp -r binaries/data $out/share/0ad/
   '';

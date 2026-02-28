@@ -2593,17 +2593,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luaexpat";
-      version = "1.4.1-1";
+      version = "1.5.2-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luaexpat-1.4.1-1.rockspec";
-          sha256 = "1abwd385x7wnza7qqz5s4aj6m2l1c23pjmbgnpq73q0s17pn1h0c";
+          url = "mirror://luarocks/luaexpat-1.5.2-1.rockspec";
+          sha256 = "0wdbph2c92zmvvyp3q669rbjy1xjm7jy1i13lin8b636vswykw6p";
         }).outPath;
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "luaexpat";
-        tag = "1.4.1";
-        hash = "sha256-SnI+a7555R/EFFdnrvJohP6uzwQiMNQPqgp0jxAI178=";
+        tag = "1.5.2";
+        hash = "sha256-PudxKlN4WKUUK/h6ekVNSa/C453CnLh3TxCncXIOiw8=";
       };
 
       disabled = luaOlder "5.1";

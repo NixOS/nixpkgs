@@ -10,7 +10,7 @@
     services.reaction = {
       enable = true;
       stopForFirewall = false;
-      # example.jsonnet/example.yml can be copied and modified from ${pkgs.reaction}/share/examples
+      # example.jsonnet or example.yml can be copied and modified from ${pkgs.reaction}/share/examples
       settingsFiles = [ "${pkgs.reaction}/share/examples/example.jsonnet" ];
       runAsRoot = false;
     };
@@ -92,6 +92,7 @@
     {
       # not needed, only for manual interactive debugging
       virtualisation.memorySize = 4096;
+      virtualisation.graphics = false;
       environment.systemPackages = with pkgs; [
         btop
         sysz

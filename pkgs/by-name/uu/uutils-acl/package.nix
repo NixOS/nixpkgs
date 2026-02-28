@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-p0JDeNLKkjmGsZ9fF/9Xm+0pc00pzY8pgWb4B82D6vE=";
 
+  cargoBuildFlags = [ "--workspace" ];
+
   checkFlags = [
     # Operation not supported
     "--skip=common::util::tests::test_compare_xattrs"

@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdp-tools";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KIUuAaWmU5BsmLsp8T3S2hSF4p7BJ506luS82RpmOKs=";
+    hash = "sha256-CtXJAYR4T/4NyJlgvdc1E9JBIVWY7lN5gtyTUfmAkp8=";
   };
 
   outputs = [

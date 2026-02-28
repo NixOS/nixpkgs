@@ -17,6 +17,12 @@
           # "${pkgs.reaction}/share/examples/example.yml" # can't specify both because conflicts
         ];
         runAsRoot = true;
+        settings = {
+          # In the qemu vm `run0 ls` as root prints nothing, so we can't use it
+          # see https://reaction.ppom.me/reference.html#systemd
+          plugins.ipset.systemd = false;
+          plugins.virtual.systemd = false;
+        };
       };
       networking.firewall.enable = true;
     };
@@ -68,6 +74,9 @@
   # - nix run .#nixosTests.reaction-firewall.driverInteractive -L
   # - run_tests()
   interactive.sshBackdoor.enable = true; # ssh -o User=root vsock%3
+  interactive.nodes.machine = _: {
+    virtualisation.graphics = false;
+  };
 
   meta.maintainers =
     with lib.maintainers;

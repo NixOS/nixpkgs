@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "azure-kusto-ingest";
-  version = "6.0.1";
+  version = "6.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-kusto-python";
     tag = "v${version}";
-    hash = "sha256-ZwPF6YLb2w+Thds36UeQdx64SJqKHFXSQVv39YYQOHA=";
+    hash = "sha256-jg8VueMohp7z45va5Z+cF0Hz+RMW4Vd5AchJX/wngLc=";
   };
 
   sourceRoot = "${src.name}/${pname}";

@@ -265,22 +265,21 @@ def parse_args(
     if args.no_build_nix:
         parser_warn("--no-build-nix is deprecated, we do not build nix anymore")
 
-    if args.diff and args.action not in (
-        # case for calling build_and_activate_system
-        # except excluding DRY_BUILD and DRY_ACTIVATE,
-        # in which --diff is uniquely a no-op
-        Action.SWITCH.value,
-        Action.BOOT.value,
-        Action.TEST.value,
-        Action.BUILD.value,
-        Action.BUILD_IMAGE.value,
-        Action.BUILD_VM.value,
-        Action.BUILD_VM_WITH_BOOTLOADER.value,
+    if (
+        args.action
+        in (
+            Action.DRY_BUILD.value,  # --diff breaks dry-build
+            Action.EDIT.value,
+            Action.LIST_GENERATIONS.value,
+            Action.REPL.value,
+        )
+        and args.diff
     ):
         parser_warn(f"--diff is a no-op with '{args.action}'")
+        args.diff = False
 
     if args.action == Action.EDIT.value and (args.file or args.attr):
-        parser.error("--file and --attr are not supported with 'edit'")
+        parser.error(f"--file and --attr are not supported with '{args.action}'")
 
     if (args.target_host or args.build_host) and args.action not in (
         Action.SWITCH.value,
