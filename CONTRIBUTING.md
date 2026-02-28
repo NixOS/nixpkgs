@@ -304,6 +304,8 @@ If you find anything related that could be improved but is not immediately requi
 - Tracking your idea in an issue,
 - Offering to review a follow-up pull request,
 - Making concrete [suggestions](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request) in the same pull request.
+- Especially to new contributors with a very minimal contribution count, consider if the suggestion could be in a followup pr/issue.
+- If it's Excessive/bunch of nitpicks for new contributors, as it causes more harm and complex issues (if they apply your nitpicks) that they can't solve like `error: expected a set but found a function: «lambda @ «string»:1:23»` therefore could be done in another issue/pr.
 
 For example, follow-up changes could involve refactoring code in the affected files.
 
