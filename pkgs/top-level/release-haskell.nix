@@ -10,7 +10,7 @@
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
 */
 {
-  supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
+  supportedSystems ? builtins.fromJSON (builtins.readFile ./release-supported-systems.json),
 }:
 
 let

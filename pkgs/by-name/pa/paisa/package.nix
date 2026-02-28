@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
@@ -91,6 +92,11 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
+    # package is marked as broken on darwin, because due to upgrades to the
+    # darwin clang compiler the native node-addon-api cannot be built anymore.
+    # this can only be fixed by upstream upgrading dependencies (especially
+    # node-gyp and node-addon-api).
+    broken = stdenv.isDarwin;
     homepage = "https://paisa.fyi/";
     changelog = "https://github.com/ananthakumaran/paisa/releases/tag/v${finalAttrs.version}";
     description = "Personal finance manager, building on top of the ledger double entry accounting tool";
