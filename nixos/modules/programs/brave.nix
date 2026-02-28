@@ -9,10 +9,6 @@ let
   cfg = config.programs.brave;
 
   defaultProfile = lib.filterAttrs (_: v: v != null) {
-    HomepageLocation = cfg.homepageLocation;
-    DefaultSearchProviderEnabled = cfg.defaultSearchProviderEnabled;
-    DefaultSearchProviderSearchURL = cfg.defaultSearchProviderSearchURL;
-    DefaultSearchProviderSuggestURL = cfg.defaultSearchProviderSuggestURL;
     ExtensionInstallForcelist = cfg.extensions;
   };
 
@@ -49,30 +45,6 @@ in
       '';
     };
 
-    homepageLocation = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Brave default homepage.";
-    };
-
-    defaultSearchProviderEnabled = lib.mkOption {
-      type = lib.types.nullOr lib.types.bool;
-      default = null;
-      description = "Enable/disable default search provider.";
-    };
-
-    defaultSearchProviderSearchURL = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Search URL Brave should use as the default search provider.";
-    };
-
-    defaultSearchProviderSuggestURL = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Suggestion URL for Brave's default search provider.";
-    };
-
     policies = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -82,9 +54,9 @@ in
         https://support.brave.app/hc/en-us/articles/360039248271-Group-Policy
       '';
       example = {
-        "SyncDisabled" = true;
-        "MetricsReportingEnabled" = false;
-        "BraveRewardsDisabled" = false;
+        SyncDisabled = true;
+        MetricsReportingEnabled = false;
+        BraveRewardsDisabled = false;
       };
     };
   };
