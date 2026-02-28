@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "discord-rich-presence-plex";
-  version = "2.16.0";
+  version = "3.0.0";
   pyproject = false;
   src = fetchFromGitHub {
     owner = "phin05";
     repo = "discord-rich-presence-plex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e1r0w72IOEY5XsjANkAHbfPYEf1B8n6KYVLMWFSLs0g=";
+    hash = "sha256-RvsS47059YdxKSo6sy+zglY1YxzyJmZTmo/DIKX1xqU=";
   };
 
   nativeBuildInputs = [
