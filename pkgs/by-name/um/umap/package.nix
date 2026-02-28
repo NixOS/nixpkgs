@@ -22,6 +22,11 @@ python.pkgs.buildPythonApplication rec {
   version = "3.6.1";
   pyproject = true;
 
+  outputs = [
+    "out"
+    "static"
+  ];
+
   src = fetchFromGitHub {
     owner = "umap-project";
     repo = "umap";
@@ -86,6 +91,10 @@ python.pkgs.buildPythonApplication rec {
       makeWrapper ${start_script} $out/bin/umap-serve \
         --prefix PYTHONPATH : "$out/${python.sitePackages}" \
         --prefix PYTHONPATH : "${python.pkgs.makePythonPath dependencies}";
+
+      mkdir -p $static
+      STATIC_ROOT=$static ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input --clear --link
+      find $static -type l -delete
     '';
 
   nativeCheckInputs =
