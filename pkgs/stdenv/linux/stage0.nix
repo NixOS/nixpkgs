@@ -10,36 +10,32 @@ let
     "x86_64-linux"
   ];
   minbootSupported = builtins.elem localSystem.system minbootSupportedSystems;
+  minbootBuildPlatform = lib.systems.elaborate (
+    {
+      i686-linux = "i686-unknown-linux-musl";
+      x86_64-linux = "x86_64-unknown-linux-musl";
+    }
+    .${localSystem.system} or "x86_64-unknown-linux-musl"
+  );
 in
 if minbootSupported then
   let
     callPackage = lib.callPackageWith { inherit lib config; };
     minimal-bootstrap = lib.recurseIntoAttrs (
       import ../../os-specific/linux/minimal-bootstrap {
-        buildPlatform = localSystem;
+        buildPlatform = minbootBuildPlatform;
         hostPlatform = localSystem;
         inherit lib config;
         fetchurl = import ../../build-support/fetchurl/boot.nix {
           system = localSystem;
           inherit (config) rewriteURL;
         };
-        checkMeta = callPackage ../generic/check-meta.nix { hostPlatform = localSystem; };
+        checkMetaBuild = callPackage ../generic/check-meta.nix { hostPlatform = minbootBuildPlatform; };
+        checkMetaHost = callPackage ../generic/check-meta.nix { hostPlatform = localSystem; };
       }
     );
-    compilerPackage =
-      if localSystem.libc == "glibc" then
-        minimal-bootstrap.gcc-glibc
-      else if localSystem.libc == "musl" then
-        minimal-bootstrap.gcc-latest
-      else
-        throw "Can't bootstrap on ${localSystem.config}";
-    libcPackage =
-      if localSystem.libc == "glibc" then
-        minimal-bootstrap.glibc
-      else if localSystem.libc == "musl" then
-        minimal-bootstrap.musl-static
-      else
-        throw "Can't bootstrap on ${localSystem.config}";
+    compilerPackage = minimal-bootstrap.gcc;
+    libcPackage = minimal-bootstrap.libc;
   in
   assert minimal-bootstrap.bash-static.passthru.isFromMinBootstrap or false; # sanity check
   {

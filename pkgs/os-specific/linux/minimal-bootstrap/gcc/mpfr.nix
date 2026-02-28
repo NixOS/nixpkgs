@@ -14,14 +14,15 @@
   findutils,
   gnutar,
   xz,
+  gmp,
 }:
 let
-  pname = "gnupatch-static";
-  version = "2.8";
+  pname = "mpfr";
+  version = "4.2.2";
 
   src = fetchurl {
-    url = "mirror://gnu/patch/patch-${version}.tar.xz";
-    hash = "sha256-+Hzuae7CtPy/YKOWsDCtaqNBXxkqpffuhMrV4R9/WuM=";
+    url = "mirror://gnu/mpfr/mpfr-${version}.tar.xz";
+    hash = "sha256-tnugOD736KhWNzTi6InvXsPDuJigHQD6CmhprYHGzgE=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -41,33 +42,27 @@ bash.runCommand "${pname}-${version}"
       xz
     ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/patch --version
-        mkdir $out
-      '';
-
     meta = {
-      description = "GNU Patch, a program to apply differences to files";
-      homepage = "https://www.gnu.org/software/patch";
+      description = "GNU Compiler Collection, version ${version}";
+      homepage = "https://gcc.gnu.org";
       license = lib.licenses.gpl3Plus;
-      mainProgram = "patch";
-      platforms = lib.platforms.unix;
       teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
+      mainProgram = "gcc";
     };
   }
   ''
     # Unpack
     tar xf ${src}
-    cd patch-${version}
+    cd mpfr-${version}
 
     # Configure
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --disable-dependency-tracking
+      --disable-dependency-tracking \
+      --with-gmp=${gmp}
 
     # Build
     make -j $NIX_BUILD_CORES
