@@ -5935,6 +5935,12 @@
     github = "dariof4";
     githubId = 9992814;
   };
+  darkjaguar91 = {
+    name = "Brandon Talbot";
+    email = "bjtal91@gmail.com";
+    github = "DarkJaguar91";
+    githubId = 3388903;
+  };
   darkalex = {
     email = "alex.j.tusa@gmail.com";
     github = "Dark-Alex-17";
