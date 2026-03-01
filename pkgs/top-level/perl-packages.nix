@@ -28761,15 +28761,16 @@ with self;
     };
   };
 
-  PlackMiddlewareDeflater = buildPerlPackage {
+  PlackMiddlewareDeflater = buildPerlModule {
     pname = "Plack-Middleware-Deflater";
-    version = "0.12";
+    version = "0.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Plack-Middleware-Deflater-0.12.tar.gz";
-      hash = "sha256-KNqV59pMi1WRrEVFCckhds0IQpYM4HT94w+aEHXcwnU=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Deflater-0.14.tar.gz";
+      hash = "sha256-O+YLOD6eAtxfMkCbqIs3zXWEwnXQKDLardZOcxFnhYY=";
     };
     propagatedBuildInputs = [ Plack ];
     buildInputs = [
+      ModuleBuildTiny
       TestRequires
       TestSharedFork
       TestTCP
