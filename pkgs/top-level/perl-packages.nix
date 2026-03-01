@@ -11978,10 +11978,10 @@ with self;
 
   EmailMIME = buildPerlPackage {
     pname = "Email-MIME";
-    version = "1.953";
+    version = "1.954";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-1.953.tar.gz";
-      hash = "sha256-mPsGeFBpmiJLq8NI8c7+MNdExg2okC56XOnYt+c99zU=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-1.954.tar.gz";
+      hash = "sha256-bdabAUNbZFrsxTVNmFSnDLh2QetEalJeerJBzvo8xNM=";
     };
     propagatedBuildInputs = [
       EmailAddressXS
