@@ -10452,10 +10452,10 @@ with self;
 
   DBIxConnector = buildPerlPackage {
     pname = "DBIx-Connector";
-    version = "0.59";
+    version = "0.60";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AR/ARISTOTLE/DBIx-Connector-0.59.tar.gz";
-      hash = "sha256-eCmU8T9JVVhAU4SU+EBrC/JVj1M8zahsjSuV4jAQh/Q=";
+      url = "mirror://cpan/authors/id/A/AR/ARISTOTLE/DBIx-Connector-0.60.tar.gz";
+      hash = "sha256-6ngxN8VLYM6sBM5aqWJCeyEgnlWTFl7H0d3ny+XSN7Q=";
     };
     buildInputs = [ TestMockModule ];
     propagatedBuildInputs = [ DBI ];
