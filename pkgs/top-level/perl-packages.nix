@@ -15447,17 +15447,13 @@ with self;
 
   GraphicsTIFF = buildPerlPackage {
     pname = "Graphics-TIFF";
-    version = "20";
+    version = "21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-20.tar.gz";
-      hash = "sha256-PlXMIJRl4GQBmiFaUvBf9RBAKX0CA5P+n7PeJ60CDjU=";
+      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-21.tar.gz";
+      hash = "sha256-q6ivzAcUjfQYosUZ6EFd7M729sJgR14KzApBZ7MfERk=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [
-      pkgs.libtiff
-      ExtUtilsDepends
-      ExtUtilsPkgConfig
-    ];
+    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestRequires pkgs.libtiff ];
     propagatedBuildInputs = [ Readonly ];
     nativeCheckInputs = [
       TestRequires
