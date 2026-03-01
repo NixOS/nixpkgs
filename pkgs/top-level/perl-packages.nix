@@ -30909,10 +30909,10 @@ with self;
 
   SeleniumRemoteDriver = buildPerlPackage {
     pname = "Selenium-Remote-Driver";
-    version = "1.49";
+    version = "1.50";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TE/TEODESIAN/Selenium-Remote-Driver-1.49.tar.gz";
-      hash = "sha256-yg7/7s6kK72vOVqI5j5EkoWKAAZAfJTRz8QY1BOX+mI=";
+      url = "mirror://cpan/authors/id/T/TE/TEODESIAN/Selenium-Remote-Driver-1.50.tar.gz";
+      hash = "sha256-P2PnAhV5q0TGK2VKA5glKTZIesk0vrVEHE1TrVsivh0=";
     };
     buildInputs = [
       TestDeep
@@ -30927,12 +30927,12 @@ with self;
       HTTPMessage
       IOString
       JSON
-      LWP
       Moo
       SubInstall
       TestLongString
       TryTiny
       XMLSimple
+      libwwwperl
       namespaceclean
     ];
     meta = {
