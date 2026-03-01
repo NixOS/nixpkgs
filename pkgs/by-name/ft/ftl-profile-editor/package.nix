@@ -23,11 +23,15 @@ maven.buildMavenPackage {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/FTLProfileEditor
     install -Dm644 target/FTLProfileEditor.jar $out/share/FTLProfileEditor
 
     makeWrapper ${lib.getExe' jre "java"} $out/bin/FTLProfileEditor \
       --add-flags "-jar $out/share/FTLProfileEditor/FTLProfileEditor.jar"
+
+    runHook postInstall
   '';
 
   meta = {
