@@ -20951,12 +20951,17 @@ with self;
 
   MailTransport = buildPerlPackage {
     pname = "Mail-Transport";
-    version = "3.005";
+    version = "4.01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Transport-3.005.tar.gz";
-      hash = "sha256-0Ny5P3BcEoXYCONN59htvijR7WaqKn3oMPZlH8NRlqM=";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Transport-4.01.tar.gz";
+      hash = "sha256-T4UUkIlvPcZdnlCMraIqmTnMRdutsVl2EqQGph52JNI=";
     };
-    propagatedBuildInputs = [ MailMessage ];
+    propagatedBuildInputs = [
+      LogReport
+      MailMessage
+      StringPrint
+    ];
+    buildInputs = [ TestPod ];
     meta = {
       description = "Email message exchange";
       homepage = "http://perl.overmeer.net/CPAN";
