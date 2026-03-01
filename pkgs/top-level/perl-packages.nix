@@ -9162,15 +9162,15 @@ with self;
 
   DateTimeFormatFlexible = buildPerlPackage {
     pname = "DateTime-Format-Flexible";
-    version = "0.34";
+    version = "0.37";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TH/THINC/DateTime-Format-Flexible-0.34.tar.gz";
-      hash = "sha256-g2rvXSXm/4gnMIpDv/dBkeXSAiDao9ISAFC8w0FI/PE=";
+      url = "mirror://cpan/authors/id/T/TH/THINC/DateTime-Format-Flexible-0.37.tar.gz";
+      hash = "sha256-0wun8s5RL1gg1t1RxuLQK7wb99PuB6C3KCsc75oucs0=";
     };
     propagatedBuildInputs = [
+      DateTime
       DateTimeFormatBuilder
-      ListMoreUtils
-      ModulePluggable
+      DateTimeTimeZone
     ];
     buildInputs = [
       TestException
