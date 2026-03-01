@@ -8839,10 +8839,10 @@ with self;
 
   DataUUID = buildPerlPackage {
     pname = "Data-UUID";
-    version = "1.226";
+    version = "1.227";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Data-UUID-1.226.tar.gz";
-      hash = "sha256-CT1X/6DUEalLr6+uSVaX2yb1ydAncZj+P3zyviKZZFM=";
+      url = "mirror://cpan/authors/id/G/GT/GTERMARS/Data-UUID-1.227.tar.gz";
+      hash = "sha256-lb2nJ2Jl9XvEj/3t3sXvKM1vdl46GDdX+l8J8M5rmKw=";
     };
     patches = [
       ../development/perl-modules/Data-UUID-CVE-2013-4184.patch
