@@ -474,21 +474,18 @@ with self;
 
   AlienLibxml2 = buildPerlPackage {
     pname = "Alien-Libxml2";
-    version = "0.19";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Libxml2-0.19.tar.gz";
-      hash = "sha256-9KZ0CZu9V0fAw7derYQfOyRJNdnvQro1NoAkvWERdMk=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Libxml2-0.20.tar.gz";
+      hash = "sha256-Vqrnszm76wL3fFgB9XqCG+V5G1H0O/f5Biuzv6REwyg=";
     };
     strictDeps = true;
     nativeBuildInputs = [ pkgs.pkg-config ];
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [
-      pkgs.libxml2
+      AlienBuild
       AlienBuildPluginDownloadGitLab
-      MojoDOM58
-      SortVersions
-      Test2Suite
-      URI
+      pkgs.libxml2
     ];
     meta = {
       description = "Install the C libxml2 library on your system";
