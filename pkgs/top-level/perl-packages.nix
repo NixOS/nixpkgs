@@ -11674,18 +11674,27 @@ with self;
 
   DistZillaPluginTestPortability = buildPerlModule {
     pname = "Dist-Zilla-Plugin-Test-Portability";
-    version = "2.001001";
+    version = "2.001003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Portability-2.001001.tar.gz";
-      hash = "sha256-07kxVx4VoidI6BJwmq/aclEKdMAA/AaiyrWHVYEACyA=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Portability-2.001003.tar.gz";
+      hash = "sha256-796U97heVb7y9N1dMNJZ7RnHVVgtpr8w1D29jO7J9aA=";
     };
     buildInputs = [
+      DistZilla
+      Filepushd
       ModuleBuildTiny
+      PathTiny
       TestDeep
       TestPortabilityFiles
       TestWarnings
     ];
-    propagatedBuildInputs = [ DistZilla ];
+    propagatedBuildInputs = [
+      DataSection
+      DistZilla
+      Moose
+      SubExporterForMethods
+      namespaceautoclean
+    ];
     meta = {
       description = "Author tests for portability";
       homepage = "https://github.com/karenetheridge/Dist-Zilla-Plugin-Test-Portability";
