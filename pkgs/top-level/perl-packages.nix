@@ -34529,10 +34529,10 @@ with self;
 
   TestFatal = buildPerlPackage {
     pname = "Test-Fatal";
-    version = "0.017";
+    version = "0.018";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Fatal-0.017.tar.gz";
-      hash = "sha256-N9//2vuEt2Lv6WsC+yqkHzcCbHPmuDWQ23YilpfzxKY=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Fatal-0.018.tar.gz";
+      hash = "sha256-uNLMz57kZycbxHj5z366SVRUUr6TAq41m8U4uL9ofNY=";
     };
     propagatedBuildInputs = [ TryTiny ];
     meta = {
