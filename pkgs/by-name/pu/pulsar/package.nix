@@ -44,14 +44,14 @@
 
 let
   pname = "pulsar";
-  version = "1.130.1";
+  version = "1.131.1";
 
   sourcesPath =
     {
       x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-      x86_64-linux.hash = "sha256-/s2sjGGDVOJ8cpIlgku+vt7DQI58IvM7jzMo61Vnq+E=";
+      x86_64-linux.hash = "sha256-Is+KAnPuHUrj87KFTjB/v/LMDflq4LbX3VP8Cv7/CNQ=";
       aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-      aarch64-linux.hash = "sha256-Psvx3oefvUtV5+gIt7xpB+k63c0073WejCFwVacV2+E=";
+      aarch64-linux.hash = "sha256-P2ZBV9Al6xw347yUs3BOWnwJGWegRh52oygLFgjoBcw=";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -101,6 +101,16 @@ stdenv.mkDerivation {
       url = "https://github.com/pulsar-edit/pulsar/releases/download/v${version}/${tarname}";
       inherit hash;
     };
+
+  # strip leading `.` from $0.
+  # for .pulsar.sh-wrapped to correctly set ATOM_BASE_NAME
+  # (`--argv0` shenanigans in makeWrapper does not work)
+  postPatch = ''
+    substituteInPlace resources/pulsar.sh \
+      --replace-fail \
+      'ATOM_BASE_NAME=''${ATOM_BASE_NAME%.*}' \
+      'ATOM_BASE_NAME=''${ATOM_BASE_NAME%.*}; ATOM_BASE_NAME=''${ATOM_BASE_NAME#.}'
+  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -181,12 +191,17 @@ stdenv.mkDerivation {
     unlink $dugite/git/libexec/git-core/git-lfs
     ln -s ${git-lfs}/bin/git-lfs $dugite/git/libexec/git-core/git-lfs
   ''
-  + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    # We have to patch a prebuilt binary in the asar archive
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # We have to patch prebuilt binaries in the asar archive
     # But asar complains because the node_gyp unpacked dependency uses a prebuilt Python3 itself
+    (
+      shopt -s globstar
 
-    rm $opt/resources/app.asar.unpacked/node_modules/tree-sitter-bash/build/node_gyp_bins/python3
-    ln -s ${python3.interpreter} $opt/resources/app.asar.unpacked/node_modules/tree-sitter-bash/build/node_gyp_bins/python3
+      for python3_binary in $opt/resources/app.asar.unpacked/node_modules/**/build/node_gyp_bins/python3; do
+        rm -v "$python3_binary"
+        ln -sv ${python3.interpreter} "$python3_binary"
+      done
+    )
   ''
   + ''
     # Patch the bundled node executables
@@ -208,7 +223,7 @@ stdenv.mkDerivation {
       --suffix "PATH" : "${lib.makeBinPath [ coreutils ]}" \
       --set "PULSAR_PATH" "$opt"
     ln -s $opt/resources/pulsar.sh $out/bin/pulsar
-    ln -s $opt/resources/app/ppm/bin/apm $out/bin/ppm
+    ln -s $opt/resources/app/ppm/bin/ppm $out/bin/ppm
 
     # Copy the icons
     mkdir -p $out/share/icons/hicolor/scalable/apps $out/share/icons/hicolor/1024x1024/apps
@@ -255,15 +270,8 @@ stdenv.mkDerivation {
       bryango
       pbsds
     ];
-    knownVulnerabilities = [
-      # electron 12.2.3, efforts are in place to bump it
-      "CVE-2023-5217"
-      "CVE-2022-21718"
-      "CVE-2022-29247"
-      "CVE-2022-29257"
-      "CVE-2022-36077"
-      "CVE-2023-29198"
-      "CVE-2023-39956"
-    ];
+    # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
+    # a bump is expected (pulsar v1.131.0 bumped electron 12.2.3 -> 30.0.9 in february 2026)
+    knownVulnerabilities = [ "Electron version 30 is EOL" ];
   };
 }
