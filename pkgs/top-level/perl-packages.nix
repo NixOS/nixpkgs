@@ -1385,28 +1385,23 @@ with self;
 
   Appperlbrew = buildPerlModule {
     pname = "App-perlbrew";
-    version = "1.00";
+    version = "1.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-1.00.tar.gz";
-      hash = "sha256-PKNFnK6f/VHef2i95CEtBx1hOLZEUo9izJDHikhSyss=";
+      url = "mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-1.02.tar.gz";
+      hash = "sha256-JAZLInSBc3tl2V4tq1tne5DHIPjpoZ0oshUnKGF8JO0=";
     };
     buildInputs = [
-      pkgs.curl
       FileWhich
-      IOAll
       ModuleBuildTiny
       PathClass
-      TestException
-      TestNoWarnings
-      TestOutput
-      TestSpec
-      TestTempDirTiny
+      Test2PluginIOEvents
+      Test2PluginNoWarnings
+      pkgs.curl
     ];
     propagatedBuildInputs = [
       CPANPerlReleases
       CaptureTiny
       DevelPatchPerl
-      PodParser
       locallib
     ];
 
@@ -39778,6 +39773,23 @@ with self;
     meta = {
       description = "help make objects fork safe";
       homepage = "https://github.com/skaji/perl-Proc-ForkSafe";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  Test2PluginIOEvents = buildPerlPackage {
+    pname = "Test2-Plugin-IOEvents";
+    version = "0.001001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Plugin-IOEvents-0.001001.tar.gz";
+      hash = "sha256-oczWHtBdwrs+cGoBpFWWnRjYdE1Ztx4RvunJZck3C3I=";
+    };
+    meta = {
+      description = "Turn STDOUT and STDERR into Test2 events";
+      homepage = "http://github.com/Test-More/Test2-Plugin-IOEvents/";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
