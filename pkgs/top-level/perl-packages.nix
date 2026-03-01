@@ -13920,12 +13920,16 @@ with self;
 
   FileLoadLines = buildPerlPackage {
     pname = "File-LoadLines";
-    version = "1.046";
+    version = "1.047";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-1.046.tar.gz";
-      hash = "sha256-ebmx0HqFLHJaR/YEa3V9HXDKOvrWP6J6CHCHQ23XK8I=";
+      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-1.047.tar.gz";
+      hash = "sha256-Ju/ZaC5Oz5HB7+Pj4nvYvPruqcPF4utDLtT5aWj4Rwc=";
     };
-    buildInputs = [ TestException ];
+    buildInputs = [
+      TestException
+      URI
+    ];
+    propagatedBuildInputs = [ URI ];
     meta = {
       description = "Load lines from file";
       license = with lib.licenses; [
