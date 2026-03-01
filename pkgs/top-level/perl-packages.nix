@@ -21884,10 +21884,10 @@ with self;
 
   MIMELite = buildPerlPackage {
     pname = "MIME-Lite";
-    version = "3.033";
+    version = "3.038";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/MIME-Lite-3.033.tar.gz";
-      hash = "sha256-eKJ58dLiQlUcNH75ehP8Z1dmYCy4TCqAxWlAD082i6s=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/MIME-Lite-3.038.tar.gz";
+      hash = "sha256-ButH23TVlNIlbPR5Tywlnp8/VLn2G5AFRObh2HniRPU=";
     };
     propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
