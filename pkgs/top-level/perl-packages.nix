@@ -9485,10 +9485,10 @@ with self;
 
   DateTimeTimeZone = buildPerlPackage {
     pname = "DateTime-TimeZone";
-    version = "2.60";
+    version = "2.66";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.60.tar.gz";
-      hash = "sha256-8EYNN5MjkFtXm+1E4UEjejN9wl3Sa2qwxgrCuAYpMj0=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.66.tar.gz";
+      hash = "sha256-b71hstXXVjqOc4NBw3kODUMC3/1Kh5ucJogS/kS1TcE=";
     };
     buildInputs = [
       TestFatal
@@ -9496,8 +9496,10 @@ with self;
     ];
     propagatedBuildInputs = [
       ClassSingleton
+      ModuleRuntime
       ParamsValidationCompiler
       Specio
+      TryTiny
       namespaceautoclean
     ];
     meta = {
