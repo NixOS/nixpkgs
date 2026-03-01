@@ -20751,18 +20751,23 @@ with self;
 
   MailMessage = buildPerlPackage {
     pname = "Mail-Message";
-    version = "3.013";
+    version = "4.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Message-3.013.tar.gz";
-      hash = "sha256-yK1YiNsBWkUOti7Cqj6mbcLdwRtwpdtsjKGn+fgg6B8=";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Message-4.04.tar.gz";
+      hash = "sha256-mRXbF8Pg3rT/TJBl3C6vHTgzCWk3oNRuVz9vKnYVjFQ=";
     };
     propagatedBuildInputs = [
+      HashCase
       IOStringy
+      LogReport
       MIMETypes
       MailTools
+      StringPrint
+      TimeDate
       URI
       UserIdentity
     ];
+    buildInputs = [ TestPod ];
     meta = {
       description = "Processing MIME messages";
       homepage = "http://perl.overmeer.net/CPAN";
@@ -40468,6 +40473,24 @@ with self;
     propagatedBuildInputs = [ LogReport ];
     meta = {
       description = "Delayed realization of objects";
+      homepage = "http://perl.overmeer.net/CPAN/";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  HashCase = buildPerlPackage {
+    pname = "Hash-Case";
+    version = "1.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Hash-Case-1.07.tar.gz";
+      hash = "sha256-9ZHbn5qDVcZ/upSuJ+BuYzm4AMp4xSUNdcdojAvDOWk=";
+    };
+    buildInputs = [ TestPod ];
+    meta = {
+      description = "Play trics with HASH keys";
       homepage = "http://perl.overmeer.net/CPAN/";
       license = with lib.licenses; [
         artistic1
