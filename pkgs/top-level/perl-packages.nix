@@ -10184,13 +10184,14 @@ with self;
 
   DBIxClass = buildPerlPackage {
     pname = "DBIx-Class";
-    version = "0.082843";
+    version = "0.082844";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.082843.tar.gz";
-      hash = "sha256-NB4Lbssp2MSRdKbAnXxtvzhym6QBXuf9cDYKT/7h8lE=";
+      url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.082844.tar.gz";
+      hash = "sha256-4HhOOGGhl61aoXOW8YkB8KqourBKQzDLUAODN+wwyn8=";
     };
     buildInputs = [
       DBDSQLite
+      PackageStash
       TestDeep
       TestException
       TestWarn
@@ -10198,17 +10199,21 @@ with self;
     propagatedBuildInputs = [
       ClassAccessorGrouped
       ClassC3Componentised
+      ClassInspector
       ConfigAny
       ContextPreserve
       DBI
       DataDumperConcise
-      DataPage
       DevelGlobalDestruction
+      HashMerge
+      MROCompat
       ModuleFind
+      Moo
       PathClass
       SQLAbstractClassic
       ScopeGuard
       SubName
+      TryTiny
       namespaceclean
     ];
     meta = {
