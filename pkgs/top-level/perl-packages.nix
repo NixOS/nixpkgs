@@ -32945,10 +32945,10 @@ with self;
 
   SysSigAction = buildPerlPackage {
     pname = "Sys-SigAction";
-    version = "0.23";
+    version = "0.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LB/LBAXTER/Sys-SigAction-0.23.tar.gz";
-      hash = "sha256-xO9sk0VTQDH8u+Ktw0f8cZTUevyUXnpE+sfpVjCV01M=";
+      url = "mirror://cpan/authors/id/L/LB/LBAXTER/Sys-SigAction-0.24.tar.gz";
+      hash = "sha256-4Eyaf990XT6c2eiy1aRtgmupWMXh4MSLPNEyuxU5YlU=";
     };
     doCheck = !stdenv.hostPlatform.isAarch64; # it hangs on Aarch64
     meta = {
