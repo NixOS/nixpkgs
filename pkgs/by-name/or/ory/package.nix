@@ -54,6 +54,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       luleyleo
       nicolas-goudry
+      debtquity
     ];
   };
 })
