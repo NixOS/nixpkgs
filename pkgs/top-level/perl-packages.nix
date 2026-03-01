@@ -30023,10 +30023,10 @@ with self;
 
   PodSimple = buildPerlPackage {
     pname = "Pod-Simple";
-    version = "3.45";
+    version = "3.47";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KH/KHW/Pod-Simple-3.45.tar.gz";
-      hash = "sha256-hIO7lc0+QwfWbe8JKjd5+EOvdySCv9wCTj4A0MTbDPo=";
+      url = "mirror://cpan/authors/id/K/KH/KHW/Pod-Simple-3.47.tar.gz";
+      hash = "sha256-qz44RTN7eO4UtQ/bxoGXxx9epm693ghw3uTmQsMFxRQ=";
     };
     meta = {
       description = "Framework for parsing Pod";
