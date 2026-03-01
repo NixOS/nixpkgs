@@ -36434,11 +36434,12 @@ with self;
 
   TextFormat = buildPerlModule {
     pname = "Text-Format";
-    version = "0.62";
+    version = "0.63";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Format-0.62.tar.gz";
-      hash = "sha256-fUKQVzGeEjxZC6B2UzTwreSl656o23wOxNOQLeX5BAQ=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Format-0.63.tar.gz";
+      hash = "sha256-/GRlT32NpwcXYOoBFuESttZhsKe8MYjf8bLVL7amY8s=";
     };
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Various subroutines to format text";
       homepage = "https://github.com/shlomif/perl-Module-Format";
