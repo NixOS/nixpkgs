@@ -33028,12 +33028,13 @@ with self;
 
   TAPParserSourceHandlerpgTAP = buildPerlModule {
     pname = "TAP-Parser-SourceHandler-pgTAP";
-    version = "3.36";
+    version = "3.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/TAP-Parser-SourceHandler-pgTAP-3.37.tar.gz";
       hash = "sha256-bpKFgUQqHmhxMfe11vT/RLf43N95jS0Ha9zQfYt6WX0=";
     };
     doCheck = !stdenv.hostPlatform.isDarwin;
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Stream TAP from pgTAP test scripts";
       homepage = "https://search.cpan.org/dist/Tap-Parser-Sourcehandler-pgTAP";
