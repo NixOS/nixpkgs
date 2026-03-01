@@ -2,14 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   lazy,
+  requests,
+  tomli,
+
+  # tests
   packaging-legacy,
   pytestCheckHook,
-  requests,
-  setuptools-changelog-shortener,
-  setuptools,
-  tomli,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -24,25 +28,29 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-YFY2iLnORzFxnfGYU2kCpJL8CZi+lALIkL1bRpfd4NE=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools_changelog_shortener",' ""
+  '';
+
   sourceRoot = "${finalAttrs.src.name}/common";
 
   build-system = [
     setuptools
-    setuptools-changelog-shortener
   ];
 
   dependencies = [
     lazy
-    packaging-legacy
     requests
     tomli
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    packaging-legacy
+  ];
 
   pythonImportsCheck = [ "devpi_common" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/devpi/devpi";

@@ -56,7 +56,7 @@ in
       description = ''
         Launch Hyprland with the UWSM (Universal Wayland Session Manager) session manager.
         This has improved systemd support and is recommended for most users.
-        This automatically starts appropiate targets like `graphical-session.target`,
+        This automatically starts appropriate targets like `graphical-session.target`,
         and `wayland-session@Hyprland.target`.
 
         ::: {.note}

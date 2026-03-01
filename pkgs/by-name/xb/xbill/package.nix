@@ -10,6 +10,7 @@
   libxpm,
   libxt,
   motif,
+  imagemagick,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook # Fix configure script that fails basic compilation check
     copyDesktopItems
+    imagemagick
   ];
 
   buildInputs = [
@@ -65,7 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = "-B";
 
   postInstall = ''
-    install -Dm644 pixmaps/icon.xpm $out/share/pixmaps/xbill.xpm
+    mkdir -p $out/share/icons/hicolor/48x48/apps
+    magick pixmaps/icon.xpm -resize 48x48 $out/share/icons/hicolor/48x48/apps/xbill.png
   '';
 
   doInstallCheck = true;

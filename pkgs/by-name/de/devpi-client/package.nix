@@ -43,6 +43,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ++ (with python3.pkgs; [
     mercurial
     mock
+    packaging-legacy
     pypitoken
     pytestCheckHook
     sphinx

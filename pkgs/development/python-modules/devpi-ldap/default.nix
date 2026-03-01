@@ -1,17 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  devpi-server,
   fetchFromGitHub,
-  ldap3,
-  mock,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  pythonAtLeast,
-  pyyaml,
+
+  # build-system
   setuptools,
-  setuptools-changelog-shortener,
+
+  # dependencies
+  devpi-server,
+  ldap3,
+  pyyaml,
+
+  # tests
+  packaging-legacy,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
   webtest,
 }:
 
@@ -20,9 +24,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.1.1-unstable-2026-01-22";
   pyproject = true;
 
-  # build-system broken for 3.14, package incompatible <3.13
-  disabled = pythonOlder "3.13" || pythonAtLeast "3.14";
-
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi-ldap";
@@ -30,26 +31,32 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-2LpreWmG6WMRrc5L7ylSej5Ce6VhfNDAW2eoJ76D49o=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools_changelog_shortener",' ""
+  '';
+
   build-system = [
     setuptools
-    setuptools-changelog-shortener
   ];
 
   dependencies = [
     devpi-server
-    pyyaml
     ldap3
+    pyyaml
   ];
 
   nativeCheckInputs = [
-    devpi-server
-    mock
+    packaging-legacy
     pytest-cov-stub
+    pytest-mock
     pytestCheckHook
     webtest
   ];
 
   pythonImportsCheck = [ "devpi_ldap" ];
+
+  passthru.skipBulkUpdate = true; # avoid reversion to previous stable version
 
   meta = {
     description = "LDAP authentication for devpi-server";

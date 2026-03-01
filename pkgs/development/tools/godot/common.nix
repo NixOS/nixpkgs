@@ -373,14 +373,22 @@ let
         ++ lib.optional editor "man";
         separateDebugInfo = true;
 
-        # Set the build name which is part of the version. In official downloads, this
-        # is set to 'official'. When not specified explicitly, it is set to
-        # 'custom_build'. Other platforms packaging Godot (Gentoo, Arch, Flatpack
-        # etc.) usually set this to their name as well.
-        #
-        # See also 'methods.py' in the Godot repo and 'build' in
-        # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
-        BUILD_NAME = "nixpkgs";
+        env = {
+          # Set the build name which is part of the version. In official downloads, this
+          # is set to 'official'. When not specified explicitly, it is set to
+          # 'custom_build'. Other platforms packaging Godot (Gentoo, Arch, Flatpack
+          # etc.) usually set this to their name as well.
+          #
+          # See also 'methods.py' in the Godot repo and 'build' in
+          # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
+          BUILD_NAME = "nixpkgs";
+        }
+        // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+          NIX_CFLAGS_COMPILE = toString [
+            "-I${lib.getDev harfbuzz-icu}/include/harfbuzz"
+            "-I${lib.getDev recastnavigation}/include/recastnavigation"
+          ];
+        };
 
         preConfigure = lib.optionalString (editor && withMono) ''
           # TODO: avoid pulling in dependencies of windows-only project
@@ -552,13 +560,6 @@ let
           buildPackages.stdenv.cc
           pkg-config
         ];
-
-        env.NIX_CFLAGS_COMPILE = toString (
-          lib.optionals stdenv.hostPlatform.isDarwin [
-            "-I${lib.getDev harfbuzz-icu}/include/harfbuzz"
-            "-I${lib.getDev recastnavigation}/include/recastnavigation"
-          ]
-        );
 
         buildInputs =
           lib.optionals (!withBuiltins) (

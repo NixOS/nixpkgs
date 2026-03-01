@@ -1472,21 +1472,12 @@ in
             # NOTE: In contrast to the occ wrapper script running phpCli directly will not
             #       set NEXTCLOUD_CONFIG_DIR by itself currently.
             environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
-            script = ''
-              # NOTE: This early returns the script when nextcloud is in maintenance mode
-              #       or needs `occ upgrade`. Using ExecCondition= is not possible here
-              #       because it doesn't work with systemd credentials.
-              if [[ $(${lib.getExe occ} status --output=json | ${lib.getExe pkgs.jq} '. | if .maintenance or .needsDbUpgrade then "skip" else "" end' --raw-output) == "skip" ]]; then
-                echo "Nextcloud is in maintenance mode or needs DB upgrade, exiting."
-                exit 0
-              fi
-
-              ${phpCli} -f ${webroot}/cron.php
-            '';
             serviceConfig = {
               Type = "exec";
               User = "nextcloud";
               KillMode = "process";
+              ExecCondition = "${phpCli} -f ${webroot}/occ status --exit-code";
+              ExecStart = "${phpCli} -f ${webroot}/cron.php";
               LoadCredential = runtimeSystemdCredentials;
             };
           };
@@ -1503,14 +1494,6 @@ in
           nextcloud-update-db = {
             after = [ "nextcloud-setup.service" ];
             script = ''
-              # NOTE: This early returns the script when nextcloud is in maintenance mode
-              #       or needs `occ upgrade`. Using ExecCondition= is not possible here
-              #       because it doesn't work with systemd credentials.
-              if [[ $(${lib.getExe occ} status --output=json | ${lib.getExe pkgs.jq} '. | if .maintenance or .needsDbUpgrade then "skip" else "" end' --raw-output) == "skip" ]]; then
-                echo "Nextcloud is in maintenance mode or needs DB upgrade, exiting."
-                exit 0
-              fi
-
               ${lib.getExe occ} db:add-missing-columns
               ${lib.getExe occ} db:add-missing-indices
               ${lib.getExe occ} db:add-missing-primary-keys
@@ -1519,6 +1502,7 @@ in
               Type = "exec";
               User = "nextcloud";
               LoadCredential = runtimeSystemdCredentials;
+              ExecCondition = "${phpCli} -f ${webroot}/occ status --exit-code";
             };
           };
 
