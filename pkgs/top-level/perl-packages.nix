@@ -13603,13 +13603,14 @@ with self;
 
   FileFindObject = buildPerlModule {
     pname = "File-Find-Object";
-    version = "0.3.8";
+    version = "0.3.9";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/File-Find-Object-0.3.8.tar.gz";
-      hash = "sha256-TlJRRt6GTt+8kJsIRGKe7O0AY7YdQYuXLu8D+ES7NRQ=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/File-Find-Object-0.3.9.tar.gz";
+      hash = "sha256-fpmv5KnZkvzvHf6kLh+VR1cGrtlPGFBoqJ9ym1EnNfg=";
     };
     buildInputs = [
       FileTreeCreate
+      ModuleBuild
       TestFile
     ];
     propagatedBuildInputs = [ ClassXSAccessor ];
