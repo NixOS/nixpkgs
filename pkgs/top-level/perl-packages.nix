@@ -28590,10 +28590,10 @@ with self;
 
   PkgConfig = buildPerlPackage rec {
     pname = "PkgConfig";
-    version = "0.25026";
+    version = "0.26026";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/PkgConfig-0.25026.tar.gz";
-      hash = "sha256-Tbpe08LWpoG5XF6/FLammVzmmRrkcZutfxqvOOmHwqA=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/PkgConfig-0.26026.tar.gz";
+      hash = "sha256-U1LtFWpLXejFI3ce45n2+M5ei/z4Z08eHb1KjINkO4U=";
     };
     # support cross-compilation by simplifying the way we get version during build
     postPatch = ''
