@@ -36285,10 +36285,10 @@ with self;
 
   TextBalanced = buildPerlPackage {
     pname = "Text-Balanced";
-    version = "2.06";
+    version = "2.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/Text-Balanced-2.06.tar.gz";
-      hash = "sha256-dz4PDyHAyyz2ZM7muij/cCWbq8yJL5tlD5y9oAvgkq0=";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/Text-Balanced-2.07.tar.gz";
+      hash = "sha256-fF2BvY1rLN2/YM72bX+favQXQS5esk6HpaGXwxHjMM8=";
     };
     meta = {
       description = "Extract delimited text sequences from strings";
