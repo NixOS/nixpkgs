@@ -12,15 +12,17 @@
   libpng,
 }:
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: rec {
   pname = "pebl";
   version = "2.3.0";
+
   src = fetchFromGitHub {
     owner = "stmueller";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-5BJUY4HHcWSzkPEuZRY9eguLJT5OTVMMqzzcnB9XSts=";
   };
+
   buildInputs = [
     SDL2
     SDL2_ttf
@@ -31,23 +33,24 @@ clangStdenv.mkDerivation rec {
     curl
     libpng
   ];
+
   env.NIX_CFLAGS_COMPILE = ''
-    -I${SDL2.dev}/include/SDL2
+    -I${lib.getInclude SDL2}/include/SDL2
     -I${SDL2_ttf}/include/SDL2
     -I${SDL2_image}/include/SDL2
-    -I${SDL2_mixer.dev}/include/SDL2
-    -I${SDL2_net.dev}/include/SDL2
-    -I${SDL2_gfx.dev}/include/SDL2
-    -I${curl.dev}/include
+    -I${lib.getInclude SDL2_mixer}/include/SDL2
+    -I${lib.getInclude SDL2_net}/include/SDL2
+    -I${lib.getInclude SDL2_gfx}/include/SDL2
+    -I${lib.getInclude curl}/include
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}/" ];
 
   meta = {
     description = "Psychology Experiment Building Language";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "pebl2";
     maintainers = with lib.maintainers; [ sauricat ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
-}
+})
