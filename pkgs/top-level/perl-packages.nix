@@ -8554,10 +8554,10 @@ with self;
 
   DataPrinter = buildPerlPackage {
     pname = "Data-Printer";
-    version = "1.001001";
+    version = "1.002001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GARU/Data-Printer-1.001001.tar.gz";
-      hash = "sha256-q64DMVUU0rcxxkYrjwZ2SN2ZChA1SyFgbHeM/ZHUe4A=";
+      url = "mirror://cpan/authors/id/G/GA/GARU/Data-Printer-1.002001.tar.gz";
+      hash = "sha256-liktKe34XsoQckoA4K9QnECxe5tWOMADMtcDWZtvO3Q=";
     };
     propagatedBuildInputs = [
       ClonePP
