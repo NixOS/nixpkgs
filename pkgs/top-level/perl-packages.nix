@@ -16504,15 +16504,17 @@ with self;
 
   HTMLParser = buildPerlPackage {
     pname = "HTML-Parser";
-    version = "3.81";
+    version = "3.83";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTML-Parser-3.81.tar.gz";
-      hash = "sha256-wJEKXI+S+IF+3QbM/SJLocLr6MEPVR8DJYeh/IPWL/I=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTML-Parser-3.83.tar.gz";
+      hash = "sha256-cnjOl5ElYTKyanGlcZRRhEcEu5Z0tYMCw0ht9DWE+MA=";
     };
     propagatedBuildInputs = [
       HTMLTagset
       HTTPMessage
+      URI
     ];
+    buildInputs = [ URI ];
     meta = {
       description = "HTML parser class";
       homepage = "https://github.com/libwww-perl/HTML-Parser";
