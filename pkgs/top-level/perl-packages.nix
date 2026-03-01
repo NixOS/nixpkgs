@@ -339,10 +339,10 @@ with self;
 
   AlienBuild = buildPerlPackage {
     pname = "Alien-Build";
-    version = "2.80";
+    version = "2.84";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-2.80.tar.gz";
-      hash = "sha256-2e3JNrBnBbtcte5aLqi89hEaPogVkU8XfhXjwP7TAfM=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-2.84.tar.gz";
+      hash = "sha256-jokf06y6w53Y/cATdrmr/5MeYlvkHgkQyjCtWTY7RHc=";
     };
 
     # override default postPatch to avoid patchShebangs breaking tests
@@ -356,10 +356,7 @@ with self;
       PathTiny
       PkgConfig
     ];
-    buildInputs = [
-      DevelHide
-      Test2Suite
-    ];
+    buildInputs = [ FileWhich ];
     meta = {
       description = "Build external dependencies for use in CPAN";
       homepage = "https://metacpan.org/pod/Alien::Build";
