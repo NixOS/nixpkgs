@@ -32483,13 +32483,14 @@ with self;
 
   SubHandlesVia = buildPerlPackage {
     pname = "Sub-HandlesVia";
-    version = "0.050002";
+    version = "0.053005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.050002.tar.gz";
-      hash = "sha256-PMWPrjBcCOEZziwz44SHBD5odSE4JkRBw1oxATTrUDg=";
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.053005.tar.gz";
+      hash = "sha256-3HBuCUo3ioGfdOsyZq142rwW2UHBxdCHAtHkz0XJhZ4=";
     };
     propagatedBuildInputs = [
       ClassMethodModifiers
+      ExporterTiny
       RoleHooks
       RoleTiny
       TypeTiny
