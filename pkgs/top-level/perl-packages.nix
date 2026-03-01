@@ -18236,10 +18236,10 @@ with self;
 
   IPCRun = buildPerlPackage {
     pname = "IPC-Run";
-    version = "20231003.0";
+    version = "20250809.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-20231003.0.tar.gz";
-      hash = "sha256-6yW731kT0pF5fvG/6ZjxUTC0VdPtAqrN5oVvCyXk/lc=";
+      url = "mirror://cpan/authors/id/N/NJ/NJM/IPC-Run-20250809.0.tar.gz";
+      hash = "sha256-sehaMEBXhu2DeLaN1XFZMVrX3cClXkMqqe7KYWbKU/4=";
     };
     doCheck = false; # attempts a network connection to localhost
     propagatedBuildInputs = [ IOTty ];
