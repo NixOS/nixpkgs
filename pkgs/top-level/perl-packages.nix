@@ -17355,10 +17355,10 @@ with self;
 
   HTTPTinyish = buildPerlPackage {
     pname = "HTTP-Tinyish";
-    version = "0.18";
+    version = "0.19";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Tinyish-0.18.tar.gz";
-      hash = "sha256-gDgLjTPGv6lrsBBPpqQcJ9zE6cg6SN8frTkJf1/c/eU=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Tinyish-0.19.tar.gz";
+      hash = "sha256-6c6UqZE/knXTEt7U3bNPdrrwEba41gKf8ocdW9e65Gg=";
     };
     propagatedBuildInputs = [
       FileWhich
