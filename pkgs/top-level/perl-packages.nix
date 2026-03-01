@@ -32365,12 +32365,12 @@ with self;
     };
   };
 
-  StringUtil = buildPerlModule {
+  StringUtil = buildPerlPackage {
     pname = "String-Util";
-    version = "1.34";
+    version = "1.35";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BA/BAKERSCOT/String-Util-1.34.tar.gz";
-      hash = "sha256-MZzozWZTQeVlIfoVXZYqGTKOkNn3A2dlklzN4mclxGk=";
+      url = "mirror://cpan/authors/id/B/BA/BAKERSCOT/String-Util-1.35.tar.gz";
+      hash = "sha256-4IncSqcUxIAbNZ32VG8mW605LKI4AwnIkA5FtGaLt24=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
