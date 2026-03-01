@@ -4570,10 +4570,10 @@ with self;
 
   CGIFormBuilder = buildPerlPackage {
     pname = "CGI-FormBuilder";
-    version = "3.10";
+    version = "3.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BIGPRESH/CGI-FormBuilder-3.10.tar.gz";
-      hash = "sha256-rsmb4MDwZ6fnJpxTeOWubI1905s2i08SwNhGOxPucZg=";
+      url = "mirror://cpan/authors/id/B/BI/BIGPRESH/CGI-FormBuilder-3.20.tar.gz";
+      hash = "sha256-DY92DkVZkPUdWy9LV+GxRhzynEap4DCJi1mlpc1U09c=";
     };
 
     propagatedBuildInputs = [ CGI ];
