@@ -22136,10 +22136,10 @@ with self;
 
   MockConfig = buildPerlPackage {
     pname = "Mock-Config";
-    version = "0.03";
+    version = "0.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Mock-Config-0.03.tar.gz";
-      hash = "sha256-pbg0V1fKTyuTNfW+FOk+u7UChlIzp1W/U7xxVt7sABs=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Mock-Config-0.05.tar.gz";
+      hash = "sha256-IAFwlsZGT71ZrnVJ+8Zjv7DJAU16w6RXqBp+QIJo9iw=";
     };
     meta = {
       description = "Temporarily set Config or XSConfig values";
