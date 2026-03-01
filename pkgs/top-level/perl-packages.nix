@@ -22493,10 +22493,10 @@ with self;
 
   ModuleFind = buildPerlPackage {
     pname = "Module-Find";
-    version = "0.16";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CR/CRENZ/Module-Find-0.16.tar.gz";
-      hash = "sha256-S8qqN2kVAUco1PUzqYxbWdZlBRzTzbr8lg5aZv0TEJI=";
+      url = "mirror://cpan/authors/id/C/CR/CRENZ/Module-Find-0.17.tar.gz";
+      hash = "sha256-df8cjJjowFN2kmRc1i0qTEirCXsdSl6kKiUwUJjX/Tk=";
     };
     meta = {
       description = "Find and use installed modules in a (sub)category";
