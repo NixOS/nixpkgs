@@ -22311,13 +22311,18 @@ with self;
 
   ModuleBuildTiny = buildPerlModule {
     pname = "Module-Build-Tiny";
-    version = "0.047";
+    version = "0.052";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-Tiny-0.047.tar.gz";
-      hash = "sha256-cSYOlCG5PDPdGz59DPFfdZwMp8dT+oQCeew75w+PjJ0=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-Tiny-0.052.tar.gz";
+      hash = "sha256-vRBFLJ8k1LT+WUEm460jG6ts6/FqzaQKTo3HhJB+uH8=";
     };
-    buildInputs = [ FileShareDir ];
+    buildInputs = [
+      ExtUtilsConfig
+      ExtUtilsHelpers
+      ExtUtilsInstallPaths
+    ];
     propagatedBuildInputs = [
+      ExtUtilsConfig
       ExtUtilsHelpers
       ExtUtilsInstallPaths
     ];
