@@ -1253,6 +1253,7 @@ in
   pass-secret-service = runTest ./pass-secret-service.nix;
   password-option-override-ordering = runTest ./password-option-override-ordering.nix;
   patroni = handleTestOn [ "x86_64-linux" ] ./patroni.nix { };
+  pcp = runTest ./pcp.nix;
   pcsclite = runTest ./pcsclite.nix;
   pdfding = import ./web-apps/pdfding {
     inherit (pkgs) lib;
