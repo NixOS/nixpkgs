@@ -7308,10 +7308,10 @@ with self;
 
   CryptPassphraseBcrypt = buildPerlPackage {
     pname = "Crypt-Passphrase-Bcrypt";
-    version = "0.007";
+    version = "0.009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Bcrypt-0.007.tar.gz";
-      hash = "sha256-/k1NHTm9TxODQaJZUFzhE3EnCnZ8nndH90H7dGH9sA8=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Bcrypt-0.009.tar.gz";
+      hash = "sha256-Qa+kxVSpYhNorSoi4R/2bzuAQA7YHPJ93jTrjAlyu5E=";
     };
     propagatedBuildInputs = [
       CryptBcrypt
