@@ -7119,14 +7119,22 @@ with self;
 
   CryptDSA = buildPerlPackage {
     pname = "Crypt-DSA";
-    version = "1.17";
+    version = "1.19";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADAMK/Crypt-DSA-1.17.tar.gz";
-      hash = "sha256-0bhYX2v3RvduXcXaNkHTJe1la8Ll80S1RRS1XDEAmgM=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-DSA-1.19.tar.gz";
+      hash = "sha256-HRkiQbWH8KQbnxo4u5DC4Q3PMRBOqq811IA7aP9s2pw=";
     };
     propagatedBuildInputs = [
+      ConvertASN1
+      ConvertPEM
+      CryptURandom
       DataBuffer
-      DigestSHA1
+      FileWhich
+    ];
+    buildInputs = [
+      ConvertPEM
+      CryptDES_EDE3
+      DataBuffer
       FileWhich
     ];
     meta = {
@@ -40023,6 +40031,47 @@ with self;
     meta = {
       description = "An interface around different compilers";
       homepage = "git://github.com/Leont/extutils-builder-compiler.git";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  ClassErrorHandler = buildPerlPackage {
+    pname = "Class-ErrorHandler";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Class-ErrorHandler-0.04.tar.gz";
+      hash = "sha256-NC0tz8eXogvugXmxuWuFwK56W0iCc1lSPNjHTD5wRQI=";
+    };
+    meta = {
+      description = "Base class for error handling";
+      homepage = "https://github.com/tokuhirom/Class-ErrorHandler";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  ConvertPEM = buildPerlPackage {
+    pname = "Convert-PEM";
+    version = "0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Convert-PEM-0.13.tar.gz";
+      hash = "sha256-eZ+jLCcAgfTmKSsN31GAlScQqKS+Ey6Qe9oxdqe9HCM=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      ClassErrorHandler
+      ConvertASN1
+      CryptDES_EDE3
+      CryptX
+    ];
+    meta = {
+      description = "Read/write encrypted ASN.1 PEM files";
+      homepage = "https://github.com/perl-Crypt-OpenPGP/Convert-PEM";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
