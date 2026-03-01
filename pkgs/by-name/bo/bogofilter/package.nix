@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "bogofilter";
+    maintainers = with lib.maintainers; [ Stebalien ];
     platforms = lib.platforms.linux;
   };
 })
