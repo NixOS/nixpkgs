@@ -1,0 +1,27 @@
+--- a/internal/cronet/loader_unix.go
++++ b/internal/cronet/loader_unix.go
+@@ -68,10 +68,11 @@
+ 	}
+ 
+ 	var searchPaths []string
+-	executablePath, err := os.Executable()
+-	if err == nil {
+-		searchPaths = append(searchPaths, filepath.Dir(executablePath))
+-	}
++	// executablePath, err := os.Executable()
++	// if err == nil {
++	// 	searchPaths = append(searchPaths, filepath.Dir(executablePath))
++	// }
++	searchPaths = append(searchPaths, "@out@/lib")
+ 
+ 	if ldPath := os.Getenv("LD_LIBRARY_PATH"); ldPath != "" {
+ 		paths := filepath.SplitList(ldPath)
+@@ -85,7 +86,7 @@
+ 		}
+ 	}
+ 
+-	searchPaths = append(searchPaths, "/usr/local/lib", "/usr/lib")
++	// searchPaths = append(searchPaths, "/usr/local/lib", "/usr/lib")
+ 
+ 	for _, searchPath := range searchPaths {
+ 		fullPath := filepath.Join(searchPath, libName)
