@@ -29640,15 +29640,16 @@ with self;
 
   PodAbstract = buildPerlPackage {
     pname = "Pod-Abstract";
-    version = "0.20";
+    version = "0.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BL/BLILBURNE/Pod-Abstract-0.20.tar.gz";
-      hash = "sha256-lW73u4hMVUVuL7bn8in5qH3VCmHXAFAMc4248ronf4c=";
+      url = "mirror://cpan/authors/id/B/BL/BLILBURNE/Pod-Abstract-0.26.tar.gz";
+      hash = "sha256-Ebq0umkd1z1b5sb1CI1iTRKKgSM7db1pCvBBVAIU76Y=";
     };
     propagatedBuildInputs = [
       IOString
-      TaskWeaken
+      ModulePluggable
       PodParser
+      TaskWeaken
     ];
     meta = {
       description = "Abstract, tree-based interface to perl POD documents";
