@@ -6718,11 +6718,17 @@ with self;
 
   CPANChanges = buildPerlPackage {
     pname = "CPAN-Changes";
-    version = "0.400002";
+    version = "0.500005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/CPAN-Changes-0.400002.tar.gz";
-      hash = "sha256-Ae7eqQ0HRoy1jkpQv6O7HU7tqQc1lq3REY/DWRU6vo0=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/CPAN-Changes-0.500005.tar.gz";
+      hash = "sha256-GwIqCmRRgn0GDunL/pstjtusKj1xVcvuM+qTJ0uDD7U=";
     };
+    propagatedBuildInputs = [
+      ModuleRuntime
+      Moo
+      SubQuote
+      TypeTiny
+    ];
     meta = {
       description = "Read and write Changes files";
       license = with lib.licenses; [
