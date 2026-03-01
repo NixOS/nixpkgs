@@ -1629,17 +1629,17 @@ with self;
 
   ArchiveLibarchivePeek = buildPerlPackage {
     pname = "Archive-Libarchive-Peek";
-    version = "0.04";
+    version = "0.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Archive-Libarchive-Peek-0.04.tar.gz";
-      hash = "sha256-DYhJ4xG2RsozWz6gGodTtAIkK5XOgAo7zNXHCC4nJPo=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Archive-Libarchive-Peek-0.05.tar.gz";
+      hash = "sha256-LwdJw1+PuvEN1WBu1tSWrdCiVAWYKmWlZrLTS6mLQKE=";
     };
     buildInputs = [
       Filechdir
-      Test2Suite
       TestScript
     ];
     propagatedBuildInputs = [
+      AliasAny
       ArchiveLibarchive
       PathTiny
       RefUtil
@@ -39790,6 +39790,76 @@ with self;
     meta = {
       description = "Turn STDOUT and STDERR into Test2 events";
       homepage = "http://github.com/Test-More/Test2-Plugin-IOEvents/";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  AliasAny = buildPerlPackage {
+    pname = "Alias-Any";
+    version = "0.000007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/Alias-Any-0.000007.tar.gz";
+      hash = "sha256-fbMklkKnFdmv3lHaKbg1whAL1xu6AMhu6EAU+L9v3/A=";
+    };
+    propagatedBuildInputs = [
+      DataAlias
+      KeywordDeclare
+      KeywordSimple
+    ];
+    meta = {
+      description = "Create lexical aliases under different versions of Perl";
+      license = lib.licenses.artistic2;
+    };
+  };
+
+  DataAlias = buildPerlPackage {
+    pname = "Data-Alias";
+    version = "1.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XM/XMATH/Data-Alias-1.29.tar.gz";
+      hash = "sha256-+iKm2DGwK/cRVMo6BwSf3pqcFfGzlsDPF9azkMHRcPY=";
+    };
+    meta = {
+      description = "Comprehensive set of aliasing operations";
+      homepage = "https://github.com/mvduin/perl-Data-Alias.git";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  KeywordDeclare = buildPerlPackage {
+    pname = "Keyword-Declare";
+    version = "0.001018";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/Keyword-Declare-0.001018.tar.gz";
+      hash = "sha256-9CemYf+6EgMwRV4rRFfZiQk1ZyPL12rKKDP6o4eYF1Q=";
+    };
+    propagatedBuildInputs = [
+      BHooksEndOfScope
+      KeywordSimple
+      PPR
+    ];
+    meta = {
+      description = "Declare new Perl keywords...via a keyword...named keyword";
+      license = lib.licenses.artistic2;
+    };
+  };
+
+  KeywordSimple = buildPerlPackage {
+    pname = "Keyword-Simple";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAUKE/Keyword-Simple-0.04.tar.gz";
+      hash = "sha256-lFXLhrksMAJ9butXEqBKhNijhj05m+br3XI+XoTVEwU=";
+    };
+    meta = {
+      description = "define new keywords in pure Perl";
+      homepage = "git://github.com/mauke/Keyword-Simple";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
