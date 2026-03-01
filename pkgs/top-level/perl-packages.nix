@@ -12847,10 +12847,10 @@ with self;
 
   ExtUtilsDepends = buildPerlPackage {
     pname = "ExtUtils-Depends";
-    version = "0.8001";
+    version = "0.8002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/ExtUtils-Depends-0.8001.tar.gz";
-      hash = "sha256-ZzxDh+eJbBohYJnB+7P6qndj1/X5WhpWpgoqKQbBMcU=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/ExtUtils-Depends-0.8002.tar.gz";
+      hash = "sha256-ArmkZFAFDOGbMlsj5Gu07GRCKdfy2VBE9nqG2O+s3Ck=";
     };
     meta = {
       description = "Easily build XS extensions that depend on XS extensions";
