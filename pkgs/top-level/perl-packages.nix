@@ -21379,10 +21379,10 @@ with self;
 
   MathRandom = buildPerlPackage {
     pname = "Math-Random";
-    version = "0.72";
+    version = "0.75";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GR/GROMMEL/Math-Random-0.72.tar.gz";
-      hash = "sha256-vgUiMogR2W3lBdnrrD0JY1kCb6jVw497uZmnjsW8JUw=";
+      url = "mirror://cpan/authors/id/D/DJ/DJERIUS/Math-Random-0.75.tar.gz";
+      hash = "sha256-cvnJTDL8xtzaFr0qXlD2ViOG0q/FKOXvs2mqLpWWAls=";
     };
     meta = {
       description = "Random Number Generators";
