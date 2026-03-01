@@ -8,10 +8,6 @@
   lapack,
 }:
 
-let
-  mpiDev = lib.getDev mpi;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "hpcc";
   version = "1.5.0";
@@ -21,8 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Cm/vernzNH5Un+1l67mCNP7qnuGK6gyPWbrvvjz3/7g=";
   };
 
-  # HPCC uses old version of MPI: Fix compatibility with MPI-3 (OpenMPI 5.x)
-  # MPI_Address -> MPI_Get_address, MPI_Type_struct -> MPI_Type_create_struct
+  # HPCC uses MPI-1 standard: Fix compatibility with MPI-3.
+  # MPI_Address -> MPI_Get_address, MPI_Type_struct -> MPI_Type_create_struct.
   postPatch = ''
     substituteInPlace hpl/src/comm/HPL_packL.c \
       --replace-fail "MPI_Address" "MPI_Get_address" \
@@ -35,48 +31,45 @@ stdenv.mkDerivation (finalAttrs: {
     mpi
     blas
     lapack
+    gfortran.cc.lib
   ];
 
+  # HPCC bundles HPL 2.0 which does not have autotools, and instead requires a Make.<arch> file.
+  # See the INSTALL readme of HPCC: https://github.com/icl-utk-edu/hpcc/blob/main/hpl/INSTALL .
   postUnpack = ''
-    cat > $sourceRoot/hpl/Make.nix << 'MAKEFILE'
+    cat > $sourceRoot/hpl/Make.nixpkgs << 'MAKEFILE'
     SHELL        = /bin/sh
     CD           = cd
     CP           = cp
     LN_S         = ln -s
-    MKDIR        = mkdir
+    MKDIR        = mkdir -p
     RM           = /bin/rm -f
     TOUCH        = touch
-    ARCH         = nix
+    ARCH         = nixpkgs
     TOPdir       = ../../..
     INCdir       = $(TOPdir)/include
     BINdir       = $(TOPdir)/bin/$(ARCH)
     LIBdir       = $(TOPdir)/lib/$(ARCH)
     HPLlib       = $(LIBdir)/libhpl.a
-    MAKEFILE
-    cat >> $sourceRoot/hpl/Make.nix << EOF
-    MPdir        = ${mpiDev}
-    MPinc        = -I\$(MPdir)/include
-    MPlib        = -L${lib.getLib mpi}/lib -lmpi
-    LAdir        = ${lapack}/lib
-    LAinc        =
-    LAlib        = -L${blas}/lib -L${lapack}/lib -L${gfortran.cc.lib}/lib -lblas -llapack -lgfortran -lm
-    F2CDEFS      =
-    HPL_INCLUDES = -I\$(INCdir) -I\$(INCdir)/\$(ARCH) \$(LAinc) \$(MPinc)
-    HPL_LIBS     = \$(HPLlib) \$(LAlib) \$(MPlib)
+    MPinc        =
+    MPlib        = -lmpi
+    LAlib        = -lblas -llapack -lgfortran -lm
+    HPL_INCLUDES = -I$(INCdir) -I$(INCdir)/$(ARCH) $(MPinc)
+    HPL_LIBS     = $(HPLlib) $(LAlib) $(MPlib)
     HPL_OPTS     = -DHPL_CALL_CBLAS
-    HPL_DEFS     = \$(F2CDEFS) \$(HPL_OPTS) \$(HPL_INCLUDES)
-    CC           = ${mpiDev}/bin/mpicc
-    CCNOOPT      = \$(HPL_DEFS)
-    CCFLAGS      = \$(HPL_DEFS) -O3
-    LINKER       = ${mpiDev}/bin/mpicc
-    LINKFLAGS    = \$(CCFLAGS)
+    HPL_DEFS     = $(HPL_OPTS) $(HPL_INCLUDES)
+    CC           = mpicc
+    CCNOOPT      = $(HPL_DEFS)
+    CCFLAGS      = $(HPL_DEFS) -O3
+    LINKER       = mpicc
+    LINKFLAGS    = $(CCFLAGS)
     ARCHIVER     = ar
     ARFLAGS      = r
     RANLIB       = ranlib
-    EOF
+    MAKEFILE
   '';
 
-  makeFlags = [ "arch=nix" ];
+  makeFlags = [ "arch=nixpkgs" ];
 
   enableParallelBuilding = true;
 
@@ -97,6 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
       STREAM, PTRANS, RandomAccess, FFT, and communication bandwidth
       and latency benchmarks. It is used to stress test and compare
       high performance computing systems.
+
+      Note: HPCC bundles older versions of these benchmarks (HPL 2.0,
+      MPI-1). For new deployments, consider using the
+      standalone packages.
     '';
     homepage = "https://hpcchallenge.org/";
     license = lib.licenses.bsd3;
