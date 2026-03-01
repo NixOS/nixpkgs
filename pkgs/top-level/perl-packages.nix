@@ -8113,14 +8113,18 @@ with self;
     };
   };
 
-  DataClone = buildPerlPackage {
+  DataClone = buildPerlModule {
     pname = "Data-Clone";
-    version = "0.004";
+    version = "0.006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GF/GFUJI/Data-Clone-0.004.tar.gz";
-      hash = "sha256-L+XheYgqa5Jt/vChCLSiyHof+waJK88vuI5Mj0uEODw=";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Data-Clone-0.006.tar.gz";
+      hash = "sha256-uHRZVPDv9h77JVicwTtPKxsmzlrDYX1+iqOYFiZXlik=";
     };
-    buildInputs = [ TestRequires ];
+    buildInputs = [
+      ModuleBuild
+      ModuleBuildXSUtil
+      TestRequires
+    ];
     patches = [
       ../development/perl-modules/Data-Clone-fix-apostrophe-package-separator.patch
     ];
