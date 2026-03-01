@@ -26642,10 +26642,10 @@ with self;
 
   NetSSHPerl = buildPerlPackage {
     pname = "Net-SSH-Perl";
-    version = "2.142";
+    version = "2.144";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Net-SSH-Perl-2.142.tar.gz";
-      hash = "sha256-UAHbPllS/BjYXDF5Uhr2kT0VQ+tP30/ZfcYDpHSMLJY=";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Net-SSH-Perl-2.144.tar.gz";
+      hash = "sha256-K1R7ujM2rjJKaiPEomXgG5sNbur3pFcgXGBTh9cT6T4=";
     };
     propagatedBuildInputs = [
       CryptCurve25519
