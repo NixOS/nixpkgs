@@ -2451,11 +2451,11 @@ with self;
 
   BerkeleyDB = buildPerlPackage {
     pname = "BerkeleyDB";
-    version = "0.65";
+    version = "0.67";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.65.tar.gz";
-      hash = "sha256-QQqonnIylB1JEGyeBI1jN0dVQ+wdIz6nzbcly1uWNQQ=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.67.tar.gz";
+      hash = "sha256-317l3HG+HZQcsZMcet+GatONL8IIJsrst5ckQQLw7u4=";
     };
 
     preConfigure = ''
