@@ -21182,10 +21182,10 @@ with self;
 
   MathGMPz = buildPerlPackage {
     pname = "Math-GMPz";
-    version = "0.59";
+    version = "0.68";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SI/SISYPHUS/Math-GMPz-0.59.tar.gz";
-      hash = "sha256-mmrN45G0Ff5f7HwUyCTVUf/j+W81rycYRWuJ3jpkEaQ=";
+      url = "mirror://cpan/authors/id/S/SI/SISYPHUS/Math-GMPz-0.68.tar.gz";
+      hash = "sha256-Pt3OOJl4a0WCp2f69afLdyOnAZwdg1k7RSDkkm5S5l0=";
     };
     buildInputs = [
       TestWarn
