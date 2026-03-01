@@ -39384,16 +39384,18 @@ with self;
 
   XMLRSS = buildPerlModule {
     pname = "XML-RSS";
-    version = "1.62";
+    version = "1.65";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-RSS-1.62.tar.gz";
-      hash = "sha256-0ycGNELH/3FDmTqgwtFv3lEhSRyXFmHrbLcA0uBDi04=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-RSS-1.65.tar.gz";
+      hash = "sha256-uzsjH1CBRFkS7oZqkEbfrLCFz9MX40Lp2JZjyFymgPA=";
     };
     propagatedBuildInputs = [
       DateTimeFormatMail
       DateTimeFormatW3CDTF
+      HTMLParser
       XMLParser
     ];
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Creates and updates RSS files";
       homepage = "https://metacpan.org/release/XML-RSS";
