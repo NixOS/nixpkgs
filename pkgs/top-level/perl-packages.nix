@@ -32151,10 +32151,10 @@ with self;
 
   StringInterpolateNamed = buildPerlPackage {
     pname = "String-Interpolate-Named";
-    version = "1.03";
+    version = "1.06";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/String-Interpolate-Named-1.03.tar.gz";
-      hash = "sha256-on13VgcnX2jtkqQT85SsAJLn3hzZPWJHnUf7pwF6Jtw=";
+      url = "mirror://cpan/authors/id/J/JV/JV/String-Interpolate-Named-1.06.tar.gz";
+      hash = "sha256-ASzKV7r4M1sWPHNLeJ1ZZt3kfwvYpXlDP0hSymZv/+I=";
     };
     meta = {
       description = "Interpolated named arguments in string";
