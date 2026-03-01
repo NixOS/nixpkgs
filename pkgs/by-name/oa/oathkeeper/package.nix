@@ -40,7 +40,10 @@ buildGoModule {
     description = "Open-source identity and access proxy that authorizes HTTP requests based on sets of rules";
     homepage = "https://www.ory.sh/oathkeeper/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ camcalaquian ];
+    maintainers = with lib.maintainers; [
+      camcalaquian
+      debtquity
+    ];
     mainProgram = "oathkeeper";
   };
 }
