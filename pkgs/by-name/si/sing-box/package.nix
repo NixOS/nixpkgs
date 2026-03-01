@@ -1,17 +1,26 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
+  buildPackages,
   coreutils,
-  nix-update-script,
+  cronet-go,
+  fetchFromGitHub,
+  go,
+  installShellFiles,
   nixosTests,
-}:
+  stdenvNoCC,
 
+  withStaticCronet ? true,
+  withNaiveOutbound ? true,
+}:
+assert lib.assertMsg (
+  withNaiveOutbound -> !withStaticCronet -> stdenvNoCC.hostPlatform.isLinux
+) "Dynamic linking to cronet-go is only available on Linux.";
 buildGoModule (finalAttrs: {
   pname = "sing-box";
   version = "1.13.2";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "sing-box";
@@ -34,21 +43,45 @@ buildGoModule (finalAttrs: {
     "with_ocm"
     "badlinkname"
     "tfogo_checklinkname0"
-  ];
+  ]
+  ++ lib.optional withNaiveOutbound "with_naive_outbound"
+  ++ lib.optional (withNaiveOutbound && !withStaticCronet) "with_purego";
 
   subPackages = [
     "cmd/sing-box"
   ];
 
-  env.CGO_ENABLED = 0;
+  env = {
+    CGO_ENABLED = 0;
+  }
+  // lib.optionalAttrs (withNaiveOutbound && withStaticCronet) {
+    CGO_ENABLED = 1;
+    CGO_LDFLAGS = "-fuse-ld=lld";
+  };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optional (withNaiveOutbound && withStaticCronet) buildPackages.rustc.llvmPackages.bintools;
+
+  buildInputs = lib.optional (withNaiveOutbound && withStaticCronet) cronet-go;
 
   ldflags = [
     "-X=github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
     "-X=internal/godebug.defaultGODEBUG=multipathtcp=0"
     "-checklinkname=0"
   ];
+
+  preBuild = lib.optionalString withNaiveOutbound ''
+    pushd vendor/github.com/sagernet/cronet-go
+    chmod -R u+w .
+    cp -r ${cronet-go}/ .
+    # for !withStaticCronet
+    patch -p1 < ${./cronet-go.patch}
+    substituteInPlace internal/cronet/loader_unix.go \
+      --subst-var out
+    popd
+  '';
 
   postInstall = ''
     installShellCompletion release/completions/sing-box.{bash,fish,zsh}
@@ -60,10 +93,12 @@ buildGoModule (finalAttrs: {
 
     install -Dm444 release/config/sing-box.rules $out/share/polkit-1/rules.d/sing-box.rules
     install -Dm444 release/config/sing-box-split-dns.xml $out/share/dbus-1/system.d/sing-box-split-dns.conf
+  ''
+  + lib.optionalString (withNaiveOutbound && !withStaticCronet) ''
+    ln -s "${cronet-go}/lib/${go.GOOS}_${go.GOARCH}/libcronet.so" "$out/lib/"
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = { inherit (nixosTests) sing-box; };
   };
 

@@ -1,0 +1,20 @@
+--- a/internal/cronet/loader_unix.go
++++ b/internal/cronet/loader_unix.go
+@@ -68,7 +68,7 @@ func findLibrary() string {
+ 	}
+ 
+ 	searchPaths := []string{
+-		filepath.Dir(os.Args[0]),
++		"@out@/lib",
+ 	}
+ 
+ 	if ldPath := os.Getenv("LD_LIBRARY_PATH"); ldPath != "" {
+@@ -83,7 +83,7 @@ func findLibrary() string {
+ 		}
+ 	}
+ 
+-	searchPaths = append(searchPaths, "/usr/local/lib", "/usr/lib")
++	// searchPaths = append(searchPaths, "/usr/local/lib", "/usr/lib")
+ 
+ 	for _, searchPath := range searchPaths {
+ 		fullPath := filepath.Join(searchPath, libName)
