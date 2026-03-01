@@ -10097,11 +10097,11 @@ with self;
 
   DBI = buildPerlPackage {
     pname = "DBI";
-    version = "1.644";
+    version = "1.647";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBI-1.644.tar.gz";
-      hash = "sha256-Ipe5neCeZwhmQLWQaZ4OmC+0adpjqT/ijcFHgtt6U8g=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBI-1.647.tgz";
+      hash = "sha256-DfFq+OWzIlpot7WSq1MQBN2zWpaCtQMAzlAXSthn2ao=";
     };
 
     env = lib.optionalAttrs stdenv.cc.isGNU {
