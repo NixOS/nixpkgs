@@ -11540,18 +11540,27 @@ with self;
 
   DistZillaPluginTestKwalitee = buildPerlModule {
     pname = "Dist-Zilla-Plugin-Test-Kwalitee";
-    version = "2.12";
+    version = "2.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Kwalitee-2.12.tar.gz";
-      hash = "sha256-vdvPzHXo6y0tnIYRVS8AzcGwUfDwB5hiO4aS/1Awry8=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Kwalitee-2.13.tar.gz";
+      hash = "sha256-FoLCqOG10DNboVNKOvkgGCDSqR4mbyQAI73HBmXk0T0=";
     };
     buildInputs = [
+      DistZilla
+      Filepushd
       ModuleBuildTiny
+      PathTiny
       TestDeep
       TestFatal
       TestKwalitee
     ];
-    propagatedBuildInputs = [ DistZilla ];
+    propagatedBuildInputs = [
+      DataSection
+      DistZilla
+      Moose
+      SubExporterForMethods
+      namespaceautoclean
+    ];
     meta = {
       description = "Test the Kwalitee of a distribution before you release it";
       license = with lib.licenses; [
