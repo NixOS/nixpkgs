@@ -19,13 +19,14 @@
   tabulate,
   python,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-toolbox";
   version = "4.1.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "sphinx_toolbox";
     hash = "sha256-wwpPhsTCnpetsOuTN9NfUJPLlqRPScr/z31bxYqIt4E=";
   };
@@ -57,7 +58,7 @@ buildPythonPackage rec {
 
   # Not PEP420 compliant, some variables are imported from within the package.
   postFixup = ''
-    echo '__version__: str = "${version}"' > $out/${python.sitePackages}/sphinx_toolbox/__init__.py
+    echo '__version__: str = "${finalAttrs.version}"' > $out/${python.sitePackages}/sphinx_toolbox/__init__.py
   '';
 
   meta = {
@@ -66,4 +67,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
