@@ -46,16 +46,59 @@ async function checkCommitMessages({ github, context, core, repoPath }) {
     return
   }
 
-  const commits = await getCommitDetailsForPR({
-    core,
-    pr,
-    repoPath,
-  })
+  const commits = await getCommitDetailsForPR({ core, pr, repoPath })
 
   const failures = new Set()
 
+  const conventionalCommitTypes = [
+    'build',
+    'chore',
+    'ci',
+    'doc',
+    'docs',
+    'feat',
+    'feature',
+    'fix',
+    'perf',
+    'refactor',
+    'style',
+    'test',
+  ]
+
+  /**
+   * @param {string[]} types e.g. ["fix", "feat"]
+   * @param {string?} sha commit hash
+   */
+  function makeConventionalCommitRegex(types, sha = null) {
+    core.info(
+      `${
+        sha
+          ? `Conventional commit types for ${sha?.slice(0, 16)}`
+          : 'Default conventional commit types'
+      }: ${JSON.stringify(types)}`,
+    )
+
+    return new RegExp(`^(${types.join('|')})!?(\\(.*\\))?!?:`)
+  }
+
+  // Optimize for the common case that we don't have path segments with the
+  // same name as a conventional commit type.
+  const fullConventionalCommitRegex = makeConventionalCommitRegex(
+    conventionalCommitTypes,
+  )
+
   for (const commit of commits) {
     const logMsgStart = `Commit ${commit.sha}'s message's subject ("${commit.subject}")`
+
+    // If we have a commit `perf: ...`, and we touch a file containing the path
+    // segment "perf", we don't want to flag this.
+    const filteredTypes = conventionalCommitTypes.filter(
+      (type) => !commit.changedPathSegments.has(type),
+    )
+    const conventionalCommitRegex =
+      filteredTypes.length === conventionalCommitTypes.length
+        ? fullConventionalCommitRegex
+        : makeConventionalCommitRegex(filteredTypes, commit.sha)
 
     if (!commit.subject.includes(': ')) {
       core.error(
@@ -80,6 +123,16 @@ async function checkCommitMessages({ github, context, core, repoPath }) {
         `${logMsgStart} was detected as not meeting our guidelines because ` +
           `it begins with "${fixups.find((s) => commit.subject.startsWith(s))}". ` +
           'Did you forget to run `git rebase -i --autosquash`?',
+      )
+      failures.add(commit.sha)
+    }
+
+    if (conventionalCommitRegex.test(commit.subject)) {
+      core.error(
+        `${logMsgStart} was detected as not meeting our guidelines because ` +
+          'it seems to use conventional commit (conventionalcommits.org) ' +
+          'formatting. Nixpkgs has its own, different, commit message ' +
+          'formatting standards.',
       )
       failures.add(commit.sha)
     }
