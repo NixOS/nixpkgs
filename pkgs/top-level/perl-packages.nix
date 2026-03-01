@@ -17465,10 +17465,10 @@ with self;
 
   ImageInfo = buildPerlPackage {
     pname = "Image-Info";
-    version = "1.44";
+    version = "1.45";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SREZIC/Image-Info-1.44.tar.gz";
-      hash = "sha256-y3/GXdHv/gHrR8HHmlLdFlT0KOOpfbHvI7EmzgFjbw0=";
+      url = "mirror://cpan/authors/id/S/SR/SREZIC/Image-Info-1.45.tar.gz";
+      hash = "sha256-nWwdKMKbE3saUVLmKAg9hDdXczbYvqGRYF3aINVbNTk=";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
