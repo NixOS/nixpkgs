@@ -35259,10 +35259,10 @@ with self;
 
   TestOutput = buildPerlPackage {
     pname = "Test-Output";
-    version = "1.034";
+    version = "1.036";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-Output-1.034.tar.gz";
-      hash = "sha256-zULigBwNK0gtGMn7SwbHVwVIGLy7KCTl378zrXo9aaA=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/Test-Output-1.036.tar.gz";
+      hash = "sha256-o6lcuMTTh/4Hmt1EkHV+aZJ+8EiLuxi01V5/xtJfGmM=";
     };
     propagatedBuildInputs = [ CaptureTiny ];
     meta = {
