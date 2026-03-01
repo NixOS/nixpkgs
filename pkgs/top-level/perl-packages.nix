@@ -21731,12 +21731,12 @@ with self;
 
   meta = buildPerlModule {
     pname = "meta";
-    version = "0.012";
+    version = "0.015";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/meta-0.012.tar.gz";
-      hash = "sha256-Fx0J0wn4APVTTQE4tXMDmpYfEDtDaKhBC3dogzFuuFk=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/meta-0.015.tar.gz";
+      hash = "sha256-BOrj4KEk6yR569mhZzGfTbTZIL5l5Z4WrgzWz35Z5qU=";
     };
-    buildInputs = [ Test2Suite ];
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Meta-programming API";
       license = with lib.licenses; [
