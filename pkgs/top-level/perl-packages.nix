@@ -30359,10 +30359,10 @@ with self;
 
   RegexpCommon = buildPerlPackage {
     pname = "Regexp-Common";
-    version = "2017060201";
+    version = "2024080801";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AB/ABIGAIL/Regexp-Common-2017060201.tar.gz";
-      hash = "sha256-7geFOu4G8xDgQLa/GgGZoY2BiW0yGbmzXJYw0OtpCJs=";
+      url = "mirror://cpan/authors/id/A/AB/ABIGAIL/Regexp-Common-2024080801.tar.gz";
+      hash = "sha256-BnevrsjhMAzv4ka02AnnXN9V4swPd8SG0TBztpq0+90=";
     };
     meta = {
       description = "Provide commonly requested regular expressions";
