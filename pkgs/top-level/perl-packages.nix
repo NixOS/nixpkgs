@@ -27990,10 +27990,10 @@ with self;
 
   PathTiny = buildPerlPackage {
     pname = "Path-Tiny";
-    version = "0.144";
+    version = "0.150";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.144.tar.gz";
-      hash = "sha256-9uoJTs6EXJUqAsJ4kzJXk1TejUEKcH+bcEW9JBIGSH0=";
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.150.tar.gz";
+      hash = "sha256-/yBxPRoU0levnHggkAH0DcF35LnRSWEVy9hybVd5Rsc=";
     };
     preConfigure = ''
       substituteInPlace lib/Path/Tiny.pm --replace 'use File::Spec 3.40' \
