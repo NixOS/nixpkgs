@@ -24418,15 +24418,19 @@ with self;
 
   MooseXNonMoose = buildPerlPackage {
     pname = "MooseX-NonMoose";
-    version = "0.26";
+    version = "0.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DO/DOY/MooseX-NonMoose-0.26.tar.gz";
-      hash = "sha256-y75S7PFgOCMfvX8sxrzhZqNWnIyzlq6A7EUXwuCNqn0=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/MooseX-NonMoose-0.27.tar.gz";
+      hash = "sha256-b8eJO0en24EqPB/ou5DZwjUUPGk3JR5XDie9vQ2ETs4=";
     };
-    buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [
-      ListMoreUtils
+    buildInputs = [
       Moose
+      TestFatal
+    ];
+    propagatedBuildInputs = [
+      ModuleRuntime
+      Moose
+      TryTiny
     ];
     meta = {
       description = "Easy subclassing of non-Moose classes";
