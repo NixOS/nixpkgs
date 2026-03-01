@@ -38083,16 +38083,17 @@ with self;
 
   URI = buildPerlPackage {
     pname = "URI";
-    version = "5.21";
+    version = "5.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/URI-5.21.tar.gz";
-      hash = "sha256-liZYYM1hveFuhBXc+/EIBW3hYsqgrDf4HraVydLgq3c=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/URI-5.34.tar.gz";
+      hash = "sha256-3mTHeaIS/xghiWxcortp50dn0mdM7kEed33up6ImBKg=";
     };
     buildInputs = [
       TestFatal
       TestNeeds
       TestWarnings
     ];
+    propagatedBuildInputs = [ MIMEBase32 ];
     meta = {
       description = "Uniform Resource Identifiers (absolute and relative)";
       homepage = "https://github.com/libwww-perl/URI";
@@ -40615,6 +40616,23 @@ with self;
     meta = {
       description = "Play trics with HASH keys";
       homepage = "http://perl.overmeer.net/CPAN/";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  MIMEBase32 = buildPerlPackage {
+    pname = "MIME-Base32";
+    version = "1.303";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/MIME-Base32-1.303.tar.gz";
+      hash = "sha256-qyH6mRMOM6Cv9s21lvZH5eVl0gfWNLou8Gvb71BCTpk=";
+    };
+    meta = {
+      description = "Base32 encoder and decoder";
+      homepage = "https://metacpan.org/release/MIME-Base32";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
