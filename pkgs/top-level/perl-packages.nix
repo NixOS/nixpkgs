@@ -8409,12 +8409,12 @@ with self;
     };
   };
 
-  DataInteger = buildPerlModule {
+  DataInteger = buildPerlPackage {
     pname = "Data-Integer";
-    version = "0.006";
+    version = "0.007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Data-Integer-0.006.tar.gz";
-      hash = "sha256-Y7d+3jtjnONRUlA0hjYpr5iavL/0qwOxT8Tq1GH/o1Q=";
+      url = "mirror://cpan/authors/id/R/RR/RRWO/Data-Integer-0.007.tar.gz";
+      hash = "sha256-zWNezIFBIvEuMQPaqwwKkyMHChMWpfQVLD4mrndFRz0=";
     };
     meta = {
       description = "Details of the native integer data type";
