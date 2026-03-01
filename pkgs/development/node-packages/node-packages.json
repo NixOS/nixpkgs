@@ -1,0 +1,6 @@
+[
+  "browserify",
+  "node2nix",
+  "sass",
+  "semver"
+]

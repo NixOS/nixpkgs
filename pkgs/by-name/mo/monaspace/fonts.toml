@@ -1,0 +1,38 @@
+version = "1.301"
+baseUrl = "https://github.com/githubnext/monaspace/releases/download"
+fontFamily = "monaspace"
+
+[[fonts]]
+hash = "sha256-/A5/zipWaaSpTGUBVZOE0EihJY9tu0JAH+6+gyHbDxo="
+variant = "static"
+destination = "opentype"
+
+[[fonts]]
+hash = "sha256-7O0qRA12ELPNs4919aW5rUdLs/XaLTJNthL+4Gjlx90="
+variant = "frozen"
+destination = "truetype"
+
+[[fonts]]
+hash = "sha256-cPAQBgrxIFXRjBRK9kvt3uYwewi5Lw/ryiwjUeVJWD4="
+variant = "variable"
+destination = "truetype"
+
+[[fonts]]
+hash = "sha256-3/JOe+aSSA2vxnKHjSwkxukqNYMajsIuQ68IJvY07XI="
+variant = "nerdfonts"
+destination = "opentype"
+
+[[fonts]]
+hash = "sha256-1VtGSqDSRaVfyCWP+ZQtiji/076JdZmRSI0nlzqcuHo="
+variant = "webfont-nerdfonts"
+destination = "woff"
+
+[[fonts]]
+hash = "sha256-mlK1kCun8/rUsDpNh3+dD+mDqvNdCMdIe8u9Y8ORhJ0="
+variant = "webfont-static"
+destination = "woff"
+
+[[fonts]]
+hash = "sha256-aHLPmQzPiA8HQFsz9u6UH0b8kINx/fQ74GcPDs+a1ys="
+variant = "webfont-variable"
+destination = "woff"

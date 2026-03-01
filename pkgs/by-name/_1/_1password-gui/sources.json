@@ -1,0 +1,58 @@
+{
+  "stable": {
+    "linux": {
+      "version": "8.12.2",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.12.2.x64.tar.gz",
+          "hash": "sha256-vJ+GwQjlDCn6723q1+/xFUFkN9XjI9/0eCftmYQgS1s="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/linux/tar/stable/aarch64/1password-8.12.2.arm64.tar.gz",
+          "hash": "sha256-V639cHbGZD/Fvaqa4c5jpei3jF9kNPST8LeYogS4fr8="
+        }
+      }
+    },
+    "darwin": {
+      "version": "8.12.2",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.12.2-x86_64.zip",
+          "hash": "sha256-IYxOVYoeKBsuDo5pS/LcjFNZsdyUL7Jb1QORj2BEB3Y="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.12.2-aarch64.zip",
+          "hash": "sha256-Z4h2E8dCNA1O+SZGtguueZ36mHbJ11yxMSYiNTpM25U="
+        }
+      }
+    }
+  },
+  "beta": {
+    "linux": {
+      "version": "8.12.0-11.BETA",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/linux/tar/beta/x86_64/1password-8.12.0-11.BETA.x64.tar.gz",
+          "hash": "sha256-0PDkZAqlY/afocvc/rcly/nwZeSSbXdRyXH57aVPUoQ="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/linux/tar/beta/aarch64/1password-8.12.0-11.BETA.arm64.tar.gz",
+          "hash": "sha256-0YDJKexCdOeU0/KPsJzI5rBUlbDEFW5N33LFXtDo3tg="
+        }
+      }
+    },
+    "darwin": {
+      "version": "8.11.22-25.BETA",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.11.22-25.BETA-x86_64.zip",
+          "hash": "sha256-ZUFlsExUccqIXagggwTFj99Efd1i5Lo07P/XgTZuHBs="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.11.22-25.BETA-aarch64.zip",
+          "hash": "sha256-ALY5Kj/Wt/p3OTCv085q+TWFS5rLXp6MctCBUSG0ZSI="
+        }
+      }
+    }
+  }
+}

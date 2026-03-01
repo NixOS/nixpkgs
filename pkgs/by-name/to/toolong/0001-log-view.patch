@@ -1,0 +1,41 @@
+diff --git a/src/toolong/log_view.py b/src/toolong/log_view.py
+index e8ec302..f9b58b5 100644
+--- a/src/toolong/log_view.py
++++ b/src/toolong/log_view.py
+@@ -30,7 +30,6 @@
+ from toolong.watcher import WatcherBase
+ from toolong.log_lines import LogLines
+ 
+-
+ SPLIT_REGEX = r"[\s/\[\]]"
+ 
+ MAX_DETAIL_LINE_LENGTH = 100_000
+@@ -201,10 +200,10 @@ async def mount_keys(self) -> None:
+             with self.app.batch_update():
+                 key_container = self.query_one(".key-container")
+                 await key_container.query("*").remove()
+-                bindings = [
+-                    binding
+-                    for (_, binding) in self.app.namespace_bindings.values()
+-                    if binding.show
++                bindings: list[Binding] = [
++                    binding.binding
++                    for binding in self.app.active_bindings.values()
++                    if binding.binding.show
+                 ]
+ 
+                 await key_container.mount_all(
+
+diff --git a/src/toolong/log_view.py b/src/toolong/log_view.py
+index f9b58b5..e603805 100644
+--- a/src/toolong/log_view.py
++++ b/src/toolong/log_view.py
+@@ -118,7 +118,7 @@ def render(self) -> str:
+         return f"[reverse]{self.key_display}[/reverse] {self.description}"
+ 
+     async def on_click(self) -> None:
+-        await self.app.check_bindings(self.key)
++        self.app.simulate_key(self.key)
+ 
+ 
+ class MetaLabel(Label):

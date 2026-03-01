@@ -1,0 +1,187 @@
+{
+  lib,
+  aioquic,
+  argon2-cffi,
+  asgiref,
+  bcrypt,
+  brotli,
+  buildPythonPackage,
+  certifi,
+  cryptography,
+  fetchFromGitHub,
+  fetchPypi,
+  flask,
+  h11,
+  h2,
+  hyperframe,
+  hypothesis,
+  kaitaistruct,
+  ldap3,
+  mitmproxy-rs,
+  msgpack,
+  nixosTests,
+  publicsuffix2,
+  pyopenssl,
+  pyparsing,
+  pyperclip,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  requests,
+  ruamel-yaml,
+  setuptools,
+  sortedcontainers,
+  tornado,
+  urwid,
+  wsproto,
+  zstandard,
+}:
+
+let
+  # Workaround for https://github.com/mitmproxy/mitmproxy/pull/7953
+  # nixpkgs' aioquic was updated to 1.3.0, which contains breaking changes that are unpatched in mitmproxy as of right now
+  aioquic' = aioquic.overrideAttrs (old: rec {
+    version = "1.2.0";
+    src = fetchPypi {
+      pname = "aioquic";
+      inherit version;
+      hash = "sha256-+RJjuz9xlIxciRW01Q7jcABPIKQW9n+rPcyQVWx+cZk=";
+    };
+  });
+in
+buildPythonPackage rec {
+  pname = "mitmproxy";
+  version = "12.2.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "mitmproxy";
+    repo = "mitmproxy";
+    tag = "v${version}";
+    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
+  };
+
+  pythonRelaxDeps = [
+    # requested by maintainer
+    "brotli"
+    # just keep those
+    "typing-extensions"
+
+    "urwid"
+    "asgiref"
+    "pyparsing"
+    "ruamel.yaml"
+    "tornado"
+    "wsproto"
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aioquic'
+    argon2-cffi
+    asgiref
+    brotli
+    bcrypt
+    certifi
+    cryptography
+    flask
+    h11
+    h2
+    hyperframe
+    kaitaistruct
+    ldap3
+    mitmproxy-rs
+    msgpack
+    publicsuffix2
+    pyopenssl
+    pyparsing
+    pyperclip
+    ruamel-yaml
+    sortedcontainers
+    tornado
+    urwid
+    wsproto
+    zstandard
+  ];
+
+  nativeCheckInputs = [
+    hypothesis
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
+    requests
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  postPatch = ''
+    # Rename to fix pytest exception
+    substituteInPlace pyproject.toml \
+      --replace-warn "[tool.pytest.individual_coverage]" "[tool.mitmproxy.individual_coverage]"
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTests = [
+    # Tests require a git repository
+    "test_get_version"
+    # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
+    # Tests require terminal
+    "test_commands_exist"
+    "test_contentview_flowview"
+    "test_flowview"
+    "test_get_hex_editor"
+    "test_integration"
+    "test_spawn_editor"
+    "test_statusbar"
+    # FileNotFoundError: [Errno 2] No such file or directory
+    # likely wireguard is also not working in the sandbox
+    "test_tun_mode"
+    "test_wireguard"
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test_errorcheck"
+    "test_errorcheck"
+    "test_dns"
+    "test_order"
+    # fails in pytest asyncio internals
+    "test_decorator"
+    "test_exception_handler"
+  ];
+
+  disabledTestPaths = [
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test/mitmproxy/addons/test_dns_resolver.py"
+    "test/mitmproxy/tools/test_dump.py"
+    "test/mitmproxy/tools/test_main.py"
+    "test/mitmproxy/tools/web/test_app.py"
+    "test/mitmproxy/tools/web/test_app.py" # 2 out of 31 tests work
+    "test/mitmproxy/tools/web/test_master.py"
+  ];
+
+  dontUsePytestXdist = true;
+
+  pythonImportsCheck = [ "mitmproxy" ];
+
+  passthru.tests = {
+    inherit (nixosTests) mitmproxy;
+  };
+
+  meta = {
+    description = "Man-in-the-middle proxy";
+    homepage = "https://mitmproxy.org/";
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    mainProgram = "mitmproxy";
+  };
+}

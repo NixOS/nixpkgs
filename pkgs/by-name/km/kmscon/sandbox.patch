@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index de29a32..e731bbd 100644
+--- a/meson.build
++++ b/meson.build
+@@ -39,7 +39,7 @@ mandir = get_option('mandir')
+ moduledir = get_option('libdir') / meson.project_name()
+ 
+ systemd_deps = dependency('systemd', required: false)
+-systemdsystemunitdir = systemd_deps.get_variable('systemdsystemunitdir', default_value: 'lib/systemd/system')
++systemdsystemunitdir = get_option('libdir') / 'systemd'
+ 
+ #
+ # Required dependencies

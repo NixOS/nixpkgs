@@ -1,0 +1,18 @@
+diff --git a/tests/operations_test.py b/tests/operations_test.py
+index 34bb74c..39f9265 100644
+--- a/tests/operations_test.py
++++ b/tests/operations_test.py
+@@ -51,11 +51,11 @@ def test_cache_clear(actual_operations: Operations) -> None:
+     assert response["success"]
+
+
+-def test_snapshot(actual_operations: Operations) -> None:
++def test_snapshot(actual_operations: Operations, tmp_path) -> None:
+     """Test that the Operations object can perform the snapshot operation."""
+     response = actual_operations.perform(
+         "snapshot",
+-        {"snapshot_path": "/tmp"},  # noqa: S108
++        {"snapshot_path": str(tmp_path)},  # noqa: S108
+     )
+
+     assert response["success"]

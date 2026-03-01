@@ -1,0 +1,67 @@
+From d72475d713a8eecd1476bc5bb4acfb0448d5abad Mon Sep 17 00:00:00 2001
+From: averyv <avery@averyv.me>
+Date: Sat, 6 Sep 2025 18:04:11 +0100
+Subject: [PATCH 2/2] Remove unsupported commands
+
+Remove some unsupported maintenance commands, particularly the ones which
+reinstall, update, and uninstall pihole. This is managed by NixOS, after all.
+---
+ pihole | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/pihole b/pihole
+index b00617e..a3c2e20 100755
+--- a/pihole
++++ b/pihole
+@@ -92,6 +92,7 @@ debugFunc() {
+ }
+ 
+ flushFunc() {
++  unsupportedFunc
+   "${PI_HOLE_SCRIPT_DIR}"/piholeLogFlush.sh "$@"
+   exit 0
+ }
+@@ -102,6 +103,7 @@ arpFunc() {
+ }
+ 
+ updatePiholeFunc() {
++  unsupportedFunc
+   if [ -n "${DOCKER_VERSION}" ]; then
+     unsupportedFunc
+   else
+@@ -137,6 +139,7 @@ chronometerFunc() {
+ 
+ 
+ uninstallFunc() {
++  unsupportedFunc
+   if [ -n "${DOCKER_VERSION}" ]; then
+     unsupportedFunc
+   else
+@@ -405,6 +408,7 @@ tailFunc() {
+ }
+ 
+ piholeCheckoutFunc() {
++  unsupportedFunc
+   if [ -n "${DOCKER_VERSION}" ]; then
+     echo -e "${CROSS} Function not supported in Docker images"
+     echo "Please build a custom image following the steps at"
+@@ -460,13 +464,14 @@ tricorderFunc() {
+ }
+ 
+ updateCheckFunc() {
++  unsupportedFunc
+   "${PI_HOLE_SCRIPT_DIR}"/updatecheck.sh "$@"
+   exit 0
+ }
+ 
+ unsupportedFunc(){
+-  echo "Function not supported in Docker images"
+-  exit 0
++  echo "Function not supported in NixOS"
++  exit 1
+ }
+ 
+ helpFunc() {
+-- 
+2.50.1
+

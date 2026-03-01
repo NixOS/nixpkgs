@@ -1,0 +1,40 @@
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  uv-build,
+  pytestCheckHook,
+  pyyaml,
+}:
+
+buildPythonPackage rec {
+  pname = "cucumber-expressions";
+  version = "18.1.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "cucumber";
+    repo = "cucumber-expressions";
+    tag = "v${version}";
+    hash = "sha256-X/ukgf5+Tn0G9E40W8KsVfo3f0NYEOnYWag4IXmHjY8=";
+  };
+
+  sourceRoot = "${src.name}/python";
+
+  build-system = [ uv-build ];
+
+  pythonImportsCheck = [ "cucumber_expressions" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
+
+  meta = {
+    changelog = "https://github.com/cucumber/cucumber-expressions/blob/${src.tag}/CHANGELOG.md";
+    description = "Human friendly alternative to Regular Expressions";
+    homepage = "https://github.com/cucumber/cucumber-expressions/tree/main/python";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.dotlambda ];
+  };
+}

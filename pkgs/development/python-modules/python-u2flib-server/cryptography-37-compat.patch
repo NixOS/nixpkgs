@@ -1,0 +1,112 @@
+diff --git a/test/soft_u2f_v2.py b/test/soft_u2f_v2.py
+index d011b1f..9a24bb9 100644
+--- a/test/soft_u2f_v2.py
++++ b/test/soft_u2f_v2.py
+@@ -112,9 +112,7 @@ class SoftU2FDevice(object):
+             CERT_PRIV, password=None, backend=default_backend())
+         cert = CERT
+         data = b'\x00' + app_param + client_param + key_handle + pub_key
+-        signer = cert_priv.signer(ec.ECDSA(hashes.SHA256()))
+-        signer.update(data)
+-        signature = signer.finalize()
++        signature = cert_priv.sign(data, ec.ECDSA(hashes.SHA256()))
+ 
+         raw_response = (b'\x05' + pub_key + six.int2byte(len(key_handle)) +
+                         key_handle + cert + signature)
+@@ -163,9 +161,7 @@ class SoftU2FDevice(object):
+         counter = struct.pack('>I', self.counter)
+ 
+         data = app_param + touch + counter + client_param
+-        signer = priv_key.signer(ec.ECDSA(hashes.SHA256()))
+-        signer.update(data)
+-        signature = signer.finalize()
++        signature = priv_key.sign(data, ec.ECDSA(hashes.SHA256()))
+         raw_response = touch + counter + signature
+ 
+         return SignResponse(
+diff --git a/u2flib_server/attestation/resolvers.py b/u2flib_server/attestation/resolvers.py
+index 034549f..cd59b10 100644
+--- a/u2flib_server/attestation/resolvers.py
++++ b/u2flib_server/attestation/resolvers.py
+@@ -86,27 +86,29 @@ class MetadataResolver(object):
+         cert_bytes = cert.tbs_certificate_bytes
+ 
+         if isinstance(pubkey, rsa.RSAPublicKey):
+-            verifier = pubkey.verifier(
+-                cert_signature,
+-                padding.PKCS1v15(),
+-                cert.signature_hash_algorithm
+-            )
++            try:
++                pubkey.verify(
++                    cert_signature,
++                    cert_bytes,
++                    padding.PKCS1v15(),
++                    cert.signature_hash_algorithm
++                )
++                return True
++            except InvalidSignature:
++                return False
+         elif isinstance(pubkey, ec.EllipticCurvePublicKey):
+-            verifier = pubkey.verifier(
+-                cert_signature,
+-                ec.ECDSA(cert.signature_hash_algorithm)
+-            )
++            try:
++                pubkey.verify(
++                    cert_signature,
++                    cert_bytes,
++                    ec.ECDSA(cert.signature_hash_algorithm)
++                )
++                return True
++            except InvalidSignature:
++                return False
+         else:
+             raise ValueError("Unsupported public key value")
+ 
+-        verifier.update(cert_bytes)
+-
+-        try:
+-            verifier.verify()
+-            return True
+-        except InvalidSignature:
+-            return False
+-
+     def resolve(self, cert):
+         if isinstance(cert, bytes):
+             cert = x509.load_der_x509_certificate(cert, default_backend())
+diff --git a/u2flib_server/model.py b/u2flib_server/model.py
+index 481be51..6ec01bb 100644
+--- a/u2flib_server/model.py
++++ b/u2flib_server/model.py
+@@ -175,12 +175,9 @@ class RegistrationData(object):
+         cert = x509.load_der_x509_certificate(self.certificate,
+                                               default_backend())
+         pubkey = cert.public_key()
+-        verifier = pubkey.verifier(self.signature, ec.ECDSA(hashes.SHA256()))
+-
+-        verifier.update(b'\0' + app_param + chal_param + self.key_handle +
+-                        self.pub_key)
++        msg = (b'\0' + app_param + chal_param + self.key_handle + self.pub_key)
+         try:
+-            verifier.verify()
++            pubkey.verify(self.signature, msg, ec.ECDSA(hashes.SHA256()))
+         except InvalidSignature:
+             raise ValueError('Attestation signature is invalid')
+ 
+@@ -207,13 +204,9 @@ class SignatureData(object):
+     def verify(self, app_param, chal_param, der_pubkey):
+         pubkey = load_der_public_key(PUB_KEY_DER_PREFIX + der_pubkey,
+                                      default_backend())
+-        verifier = pubkey.verifier(self.signature, ec.ECDSA(hashes.SHA256()))
+-        verifier.update(app_param +
+-                        six.int2byte(self.user_presence) +
+-                        struct.pack('>I', self.counter) +
+-                        chal_param)
++        msg = app_param + six.int2byte(self.user_presence) + struct.pack('>I', self.counter) + chal_param
+         try:
+-            verifier.verify()
++            pubkey.verify(self.signature, msg, ec.ECDSA(hashes.SHA256()))
+         except InvalidSignature:
+             raise ValueError('U2F signature is invalid')
+ 

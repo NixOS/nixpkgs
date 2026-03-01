@@ -1,0 +1,86 @@
+diff -ru source/CMakeLists.txt source-patched/CMakeLists.txt
+--- source/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ source-patched/CMakeLists.txt	2024-09-03 11:09:48.289053141 +0200
+@@ -39,9 +39,7 @@
+ set(CMAKE_AUTOMOC ON)
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ 
+-if(APPLE)
+-    add_executable(${PROJECT_NAME} MACOSX_BUNDLE)
+-elseif(WIN32)
++if(WIN32)
+     add_executable(${PROJECT_NAME} WIN32)
+ else()
+     add_executable(${PROJECT_NAME})
+@@ -106,33 +104,6 @@
+     list(PREPEND CMAKE_PREFIX_PATH ${QT5_PATH} ${SQLITE3_PATH})
+ endif()
+ 
+-
+-if(APPLE)
+-    # For Intel Mac's
+-    if(EXISTS /usr/local/opt/qt5)
+-        list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
+-    endif()
+-
+-    # For Apple Silicon Mac's
+-    if(EXISTS /opt/homebrew/opt/qt5)
+-        list(APPEND CMAKE_PREFIX_PATH "/opt/homebrew/opt/qt5")
+-    endif()
+-    if(EXISTS /opt/homebrew/opt/sqlitefts5)
+-        list(PREPEND CMAKE_PREFIX_PATH "/opt/homebrew/opt/sqlitefts5")
+-    endif()
+-
+-    # For Apple Silicon Mac's and install dependencies via our Homebrew tap(sqlitebrowser/homebrew-tap)
+-    if(customTap AND EXISTS /opt/homebrew/opt/)
+-        list(PREPEND CMAKE_PREFIX_PATH "/opt/homebrew/opt/sqlb-qt@5")
+-        list(PREPEND CMAKE_PREFIX_PATH "/opt/homebrew/opt/sqlb-sqlite")
+-
+-        if(sqlcipher)
+-            list(APPEND SQLCIPHER_INCLUDE_DIR "/opt/homebrew/include")
+-            list(APPEND SQLCIPHER_LIBRARY "/opt/homebrew/opt/sqlb-sqlcipher/lib/libsqlcipher.0.dylib")
+-        endif()
+-    endif()
+-endif()
+-
+ find_package(Qt5 REQUIRED COMPONENTS Concurrent Gui LinguistTools Network PrintSupport Test Widgets Xml)
+ 
+ if(NOT FORCE_INTERNAL_QSCINTILLA)
+@@ -439,13 +410,6 @@
+     set(LIBSQLITE_NAME SQLite3)
+ endif()
+ 
+-# add extra library path for MacOS and FreeBSD
+-set(EXTRAPATH APPLE OR ${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+-if(EXTRAPATH)
+-    list(PREPEND CMAKE_PREFIX_PATH /usr/local/opt/sqlite/lib)
+-    list(PREPEND CMAKE_PREFIX_PATH /usr/local/opt/sqlitefts5/lib)
+-endif()
+-
+ find_package(${LIBSQLITE_NAME})
+ if (sqlcipher)
+     target_link_libraries(${PROJECT_NAME} SQLCipher::SQLCipher)
+@@ -510,7 +474,7 @@
+     endif()
+ endif()
+ 
+-if((NOT WIN32 AND NOT APPLE) OR MINGW)
++if(NOT WIN32 OR MINGW)
+     install(TARGETS ${PROJECT_NAME}
+         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+@@ -630,14 +594,6 @@
+     )
+ endif()
+ 
+-if(APPLE)
+-    set_target_properties(${PROJECT_NAME} PROPERTIES
+-        BUNDLE True
+-        OUTPUT_NAME "DB Browser for SQLite"
+-        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/src/app.plist
+-    )
+-endif()
+-
+ # CPack configuration
+ set(CPACK_STRIP_FILES ON)
+ set(CPACK_DEBIAN_PACKAGE_PRIORITY optional)
