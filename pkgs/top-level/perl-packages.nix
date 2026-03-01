@@ -18368,10 +18368,10 @@ with self;
 
   Inline = buildPerlPackage {
     pname = "Inline";
-    version = "0.86";
+    version = "0.87";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/Inline-0.86.tar.gz";
-      hash = "sha256-UQp94tARsNuAsIdOjA9zkAEJkQAK4TXP90dN8ebVHjo=";
+      url = "mirror://cpan/authors/id/I/IN/INGY/Inline-0.87.tar.gz";
+      hash = "sha256-EF5CcazhwbWiZNdx/xEdi5KLJWACiIIihix76WhvOcU=";
     };
     buildInputs = [ TestWarn ];
     meta = {
