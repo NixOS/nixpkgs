@@ -13859,12 +13859,15 @@ with self;
 
   Filelchown = buildPerlModule {
     pname = "File-lchown";
-    version = "0.02";
+    version = "0.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/File-lchown-0.02.tar.gz";
-      hash = "sha256-oC+/KFQGqKTZOZKE8DLy1VxWl1FUwuFnS9EJg3uAluw=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/File-lchown-0.03.tar.gz";
+      hash = "sha256-bu664Qp+5N7OrO5REtfuS1bPoaWtjcYX8yDpySdE0Pk=";
     };
-    buildInputs = [ ExtUtilsCChecker ];
+    buildInputs = [
+      ExtUtilsCChecker
+      ModuleBuild
+    ];
     meta = {
       description = "Modify attributes of symlinks without dereferencing them";
       license = with lib.licenses; [
