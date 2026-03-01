@@ -15453,7 +15453,13 @@ with self;
       hash = "sha256-q6ivzAcUjfQYosUZ6EFd7M729sJgR14KzApBZ7MfERk=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestRequires pkgs.libtiff ];
+    buildInputs = [
+      ExtUtilsDepends
+      ExtUtilsPkgConfig
+      TestDeep
+      TestRequires
+      pkgs.libtiff
+    ];
     propagatedBuildInputs = [ Readonly ];
     nativeCheckInputs = [
       TestRequires
@@ -15471,10 +15477,10 @@ with self;
 
   GraphicsToolkitColor = buildPerlPackage {
     pname = "Graphics-Toolkit-Color";
-    version = "1.71";
+    version = "1.972";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LI/LICHTKIND/Graphics-Toolkit-Color-1.71.tar.gz";
-      hash = "sha256-NOiLb2hY9H2ZYQHxWC8esA23+G4Snl8dYb9/m922LvI=";
+      url = "mirror://cpan/authors/id/L/LI/LICHTKIND/Graphics-Toolkit-Color-1.972.tar.gz";
+      hash = "sha256-MqUAEelVrG87eeDOU1bk3Z0EMKsV5WMMc2xv5Y7+JwM=";
     };
     buildInputs = [ TestWarn ];
     meta = {
