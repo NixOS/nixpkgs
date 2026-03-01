@@ -26210,15 +26210,12 @@ with self;
 
   NetNetmask = buildPerlPackage {
     pname = "Net-Netmask";
-    version = "2.0002";
+    version = "2.0003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JM/JMASLAK/Net-Netmask-2.0002.tar.gz";
-      hash = "sha256-JKmy58a8wTAteXROukwCG/PeR/FJqvrM2U+bBC/dv5Q=";
+      url = "mirror://cpan/authors/id/J/JM/JMASLAK/Net-Netmask-2.0003.tar.gz";
+      hash = "sha256-dKICElnLbPe7ufTKomd9yoIP2TyPEyIzb0ikh5MVW9w=";
     };
-    buildInputs = [
-      Test2Suite
-      TestUseAllModules
-    ];
+    buildInputs = [ TestUseAllModules ];
     meta = {
       description = "Understand and manipulate IP netmasks";
       homepage = "https://search.cpan.org/~jmaslak/Net-Netmask";
