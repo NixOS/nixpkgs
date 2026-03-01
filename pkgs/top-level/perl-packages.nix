@@ -9188,15 +9188,16 @@ with self;
 
   DateTimeFormatHTTP = buildPerlModule {
     pname = "DateTime-Format-HTTP";
-    version = "0.42";
+    version = "0.43";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CK/CKRAS/DateTime-Format-HTTP-0.42.tar.gz";
-      hash = "sha256-0E52nfRZaN/S0b3GR6Mlxod2FAaXYnhubxN/H17D2EA=";
+      url = "mirror://cpan/authors/id/C/CK/CKRAS/DateTime-Format-HTTP-0.43.tar.gz";
+      hash = "sha256-Tn6CIR83Sac/byVW9wSM/wclx9flLLgZ/VGxu6n6C1g=";
     };
     propagatedBuildInputs = [
       DateTime
       HTTPDate
     ];
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Date conversion routines";
       license = with lib.licenses; [
