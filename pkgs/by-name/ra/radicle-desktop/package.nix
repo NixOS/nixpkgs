@@ -120,8 +120,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Radicle desktop app";
-    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury/tree/CHANGELOG.md";
+    homepage = finalAttrs.src.homeUrl;
+    changelog = "${finalAttrs.src.homeUrl}/tree/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

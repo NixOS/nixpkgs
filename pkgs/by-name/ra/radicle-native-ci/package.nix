@@ -39,8 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Radicle CI adapter for native CI";
-    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z3qg5TKmN83afz2fj9z3fQjU8vaYE";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z3qg5TKmN83afz2fj9z3fQjU8vaYE/tree/NEWS.md";
+    homepage = finalAttrs.src.homeUrl;
+    changelog = "${finalAttrs.src.homeUrl}/tree/NEWS.md";
     license = with lib.licenses; [
       mit
       asl20

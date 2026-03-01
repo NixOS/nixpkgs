@@ -31,8 +31,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Create, update, and query Radicle Job Collaborative Objects";
-    homepage = "https://app.radicle.xyz/nodes/iris.radicle.xyz/rad:z2UcCU1LgMshWvXj6hXSDDrwB8q8M";
-    changelog = "https://app.radicle.xyz/nodes/iris.radicle.xyz/rad:z2UcCU1LgMshWvXj6hXSDDrwB8q8M/tree/CHANGELOG.md";
+    homepage = finalAttrs.src.homeUrl;
+    changelog = "${finalAttrs.src.homeUrl}/tree/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20

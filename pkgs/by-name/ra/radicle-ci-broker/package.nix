@@ -65,8 +65,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Radicle CI broker";
-    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:zwTxygwuz5LDGBq255RA2CbNGrz8";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/NEWS.md";
+    homepage = finalAttrs.src.homeUrl;
+    changelog = "${finalAttrs.src.homeUrl}/tree/NEWS.md";
     license = with lib.licenses; [
       mit
       asl20

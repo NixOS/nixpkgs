@@ -3,6 +3,7 @@
 lib.makeOverridable (
   {
     seed ? "seed.radicle.xyz",
+    explorer ? "app.radicle.xyz",
     repo,
     node ? null,
     rev ? null,
@@ -17,6 +18,7 @@ lib.makeOverridable (
   let
     namespacePrefix = lib.optionalString (node != null) "refs/namespaces/${node}/";
     rev' = if tag != null then "refs/tags/${tag}" else rev;
+    homeUrl = "https://${explorer}/nodes/${seed}/rad:${repo}";
   in
 
   fetchgit (
@@ -26,6 +28,7 @@ lib.makeOverridable (
     }
     // removeAttrs args [
       "seed"
+      "explorer"
       "repo"
       "node"
       "rev"
@@ -35,10 +38,12 @@ lib.makeOverridable (
   // {
     inherit
       seed
+      explorer
       repo
       node
       rev
       tag
+      homeUrl
       ;
   }
 )

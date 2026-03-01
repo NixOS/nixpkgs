@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       repositories on a Radicle node via their web browser.
     '';
     homepage = "https://radicle.xyz";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/radicle-httpd/CHANGELOG.md";
+    changelog = "${finalAttrs.src.homeUrl}/tree/radicle-httpd/CHANGELOG.md";
     # cargo.toml says MIT and asl20, LICENSE file says GPL3
     license = with lib.licenses; [
       gpl3Only
