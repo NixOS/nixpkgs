@@ -10321,10 +10321,10 @@ with self;
 
   DBIxClassHelpers = buildPerlPackage {
     pname = "DBIx-Class-Helpers";
-    version = "2.036000";
+    version = "2.037000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Helpers-2.036000.tar.gz";
-      hash = "sha256-t7i0iRqYPANO8LRfQRJASgpAVQxOIX2ut6IsoWhh79s=";
+      url = "mirror://cpan/authors/id/W/WE/WESM/DBIx-Class-Helpers-2.037000.tar.gz";
+      hash = "sha256-pCthxChly9sulbKcOVHvJVxNcsXHMypALX7twJ3N66E=";
     };
     buildInputs = [
       DBDSQLite
@@ -10336,10 +10336,17 @@ with self;
     ];
     propagatedBuildInputs = [
       CarpClan
+      DBIxClass
       DBIxClassCandy
       DBIxIntrospector
+      LinguaENInflect
+      ModuleRuntime
+      Moo
       SafeIsa
+      SubExporterProgressive
       TextBrew
+      TryTiny
+      namespaceclean
     ];
     preCheck = ''
       # Remove tests with hardcoded line numbers.
