@@ -11625,17 +11625,24 @@ with self;
 
   DistZillaPluginTestPerlCritic = buildPerlModule {
     pname = "Dist-Zilla-Plugin-Test-Perl-Critic";
-    version = "3.001";
+    version = "3.005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Perl-Critic-3.001.tar.gz";
-      hash = "sha256-klC1nV3Brkxok7p4O9PwUTGxT/npGvtFVTFPVSaKOCU=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Perl-Critic-3.005.tar.gz";
+      hash = "sha256-NRpFW2jF06ssslk9HlglIrshfBGVKihhQlpdhD/E2H0=";
     };
     buildInputs = [
+      DistZilla
       ModuleBuildTiny
       TestDeep
-      TestPerlCritic
     ];
-    propagatedBuildInputs = [ DistZilla ];
+    propagatedBuildInputs = [
+      DataSection
+      DistZilla
+      Moose
+      PathTiny
+      SubExporterForMethods
+      namespaceautoclean
+    ];
     meta = {
       description = "Tests to check your code against best practices";
       license = with lib.licenses; [
