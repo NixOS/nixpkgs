@@ -25099,12 +25099,13 @@ with self;
 
   Mouse = buildPerlModule {
     pname = "Mouse";
-    version = "2.5.11";
+    version = "2.6.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.11.tar.gz";
-      hash = "sha256-4qDQkwGQwhpES5YHk6ouNp7yih3QuPNIKXlfhqGRWVY=";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.6.1.tar.gz";
+      hash = "sha256-qs+6G/xvn4nY7LJtq4aU8lav5E62dQaDGHWWmLtH4po=";
     };
     buildInputs = [
+      ModuleBuild
       ModuleBuildXSUtil
       TestException
       TestFatal
