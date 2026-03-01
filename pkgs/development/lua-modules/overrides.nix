@@ -427,16 +427,6 @@ in
     '';
   };
 
-  lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs {
-    src = fetchFromGitHub {
-      owner = "cdbattags";
-      repo = "lua-resty-jwt";
-      rev = "v0.2.3";
-      hash = "sha256-5lnr0ka6ijfujiRjqwCPb6jzItXx45FIN8CvhR/KiB8=";
-      fetchSubmodules = true;
-    };
-  };
-
   lua-rtoml = prev.lua-rtoml.overrideAttrs (old: {
     strictDeps = false;
 

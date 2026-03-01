@@ -1918,7 +1918,8 @@ final: prev: {
         owner = "cdbattags";
         repo = "lua-resty-jwt";
         tag = "v0.2.3";
-        hash = "sha256-m8UbvKk2DR8yCYX9Uv5HjXcZDVyVeRlUKp7UiaN/SkA=";
+        hash = "sha256-5lnr0ka6ijfujiRjqwCPb6jzItXx45FIN8CvhR/KiB8=";
+        fetchSubmodules = true;
       };
 
       disabled = luaOlder "5.1";

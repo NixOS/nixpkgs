@@ -57,7 +57,7 @@ lua-lsp,,,,,,
 lua-messagepack,,,,,,
 lua-protobuf,,,,,,lockejan
 lua-resty-http,,,,,,
-lua-resty-jwt,,,,,,
+lua-resty-jwt,,,,,,,true
 lua-resty-openidc,,,,,,
 lua-resty-openssl,,,,,,
 lua-resty-session,,,,,,
