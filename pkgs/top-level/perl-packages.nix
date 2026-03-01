@@ -28926,10 +28926,10 @@ with self;
 
   PLS = buildPerlPackage {
     pname = "PLS";
-    version = "0.905";
+    version = "0.906";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MR/MREISNER/PLS-0.905.tar.gz";
-      hash = "sha256-RVW1J5nBZBXDy/5eMB6gLKDrvDQhTH/lLx19ykUwLik=";
+      url = "mirror://cpan/authors/id/M/MR/MREISNER/PLS-0.906.tar.gz";
+      hash = "sha256-BjbKYRoe28ErqhHIob5UWTEQokQYfM7rB5zpe16jn4M=";
     };
     propagatedBuildInputs = [
       Future
