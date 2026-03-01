@@ -2838,12 +2838,12 @@ with self;
 
   BusinessISBN = buildPerlPackage {
     pname = "Business-ISBN";
-    version = "3.008";
+    version = "3.012";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISBN-3.008.tar.gz";
-      hash = "sha256-GcSh1NmaDddpWpAZKxNASg4+7r7fy+l6AgLjayOMDmk=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/Business-ISBN-3.012.tar.gz";
+      hash = "sha256-Vn/s8HPtC6KIm/4JyfPJmWuvIb0tSCmbczCDKAnVAcs=";
     };
-    propagatedBuildInputs = [ BusinessISBNData ];
+    propagatedBuildInputs = [ BusinessISBN ];
     meta = {
       description = "Work with International Standard Book Numbers";
       homepage = "https://github.com/briandfoy/business-isbn";
