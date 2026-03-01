@@ -5596,17 +5596,21 @@ with self;
 
   Clipboard = buildPerlModule {
     pname = "Clipboard";
-    version = "0.28";
+    version = "0.32";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.28.tar.gz";
-      hash = "sha256-no15AVGUJjNXwloPXQlIAP/0O9v5+GAew7DtXrCWbSY=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.32.tar.gz";
+      hash = "sha256-leI0zeR0zWLudi9F+MnYKXQ2xhrFO8avenPCVzWMS9A=";
     };
-    propagatedBuildInputs = [ CGI ];
+    propagatedBuildInputs = [
+      CGI
+      URI
+    ];
     # Disable test on darwin because MacPasteboard fails when not logged in interactively.
     # Mac OS error -4960 (coreFoundationUnknownErr): The unknown error at lib/Clipboard/MacPasteboard.pm line 3.
     # Mac-Pasteboard-0.009.readme: 'NOTE that Mac OS X appears to restrict pasteboard access to processes that are logged in interactively.
     #     Ssh sessions and cron jobs can not create the requisite pasteboard handles, giving coreFoundationUnknownErr (-4960)'
     doCheck = !stdenv.hostPlatform.isDarwin;
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Copy and paste with any OS";
       homepage = "https://metacpan.org/release/Clipboard";
