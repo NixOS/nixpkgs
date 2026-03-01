@@ -57,14 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
           common-updater-scripts
         ]
       }"
-
-      NEW_VERSION=$(curl --silent https://api.github.com/repos/speakeasy-api/speakeasy/releases/latest | jq '.tag_name' | ltrimstr("v") --raw-output)
-      if [[ ${finalAttrs.version} = "$NEW_VERSION"]]; then
+      NEW_VERSION=$(curl --silent https://api.github.com/repos/speakeasy-api/speakeasy/releases/latest | jq --raw-output '.tag_name | ltrimstr("v")')
+      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
         echo "The new version is the same as old"
         exit 0
       fi
-      for platfrom in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+      for platform in ${lib.escapeShellArgs (builtins.attrNames finalAttrs.passthru.sources)}; do
         update-source-version "speakeasy-cli" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+      done
     '';
   };
 
