@@ -15771,15 +15771,25 @@ with self;
 
   Gtk3ImageView = buildPerlPackage rec {
     pname = "Gtk3-ImageView";
-    version = "10";
+    version = "12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AS/ASOKOLOV/Gtk3-ImageView-${version}.tar.gz";
-      hash = "sha256-vHfnBgaeZPK7hBgZcP1KjepG+IvsDE3XwrH9U4xoN+Y=";
+      url = "mirror://cpan/authors/id/A/AS/ASOKOLOV/Gtk3-ImageView-12.tar.gz";
+      hash = "sha256-wE7hD4zlUTPX+ZfMiHaKIak0lrVAiu2Aavz3f8h6n6k=";
     };
-    buildInputs = [ pkgs.gtk3 ];
+    buildInputs = [
+      CarpAlways
+      Glib
+      ImageMagick
+      TestDeep
+      TestMockObject
+      TryTiny
+      pkgs.gtk3
+    ];
     propagatedBuildInputs = [
-      Readonly
+      Cairo
+      Glib
       Gtk3
+      Readonly
     ];
     nativeCheckInputs = [
       TestDifferences
