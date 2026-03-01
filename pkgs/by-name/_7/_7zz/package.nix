@@ -3,9 +3,16 @@
   lib,
   fetchzip,
 
-  # Only useful on Linux x86/x86_64, and brings in non‐free Open Watcom
+  # Free MASM-compatible assembler
+  asmc-linux,
+  useAsmc ? !useUasm && stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux,
+
+  # Unfree Open-Watcom licensed assembler
   uasm,
-  useUasm ? false,
+  useUasm ?
+    enableUnfree
+    && stdenv.hostPlatform.isx86
+    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWindows),
 
   # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
@@ -16,26 +23,34 @@
 }:
 
 let
-  makefile =
-    {
-      aarch64-darwin = "../../cmpl_mac_arm64.mak";
-      x86_64-darwin = "../../cmpl_mac_x64.mak";
-      aarch64-linux = "../../cmpl_gcc_arm64.mak";
-      i686-linux = "../../cmpl_gcc_x86.mak";
-      x86_64-linux = "../../cmpl_gcc_x64.mak";
-    }
-    .${stdenv.hostPlatform.system} or "../../cmpl_gcc.mak"; # generic build
+  makefile = "../../cmpl_${
+    if stdenv.hostPlatform.isDarwin then
+      "mac"
+    else if stdenv.cc.isClang then
+      "clang"
+    else
+      "gcc"
+  }${
+    if stdenv.hostPlatform.isx86_64 then
+      "_x64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "_arm64"
+    else if stdenv.hostPlatform.isi686 then
+      "_x86"
+    else
+      ""
+  }.mak";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "25.01";
+  version = "26.00";
 
   src = fetchzip {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash =
       {
-        free = "sha256-A1BBdSGepobpguzokL1zpjce5EOl0zqABYciv9zCOac=";
-        unfree = "sha256-Jkj6T4tMols33uyJSOCcVmxh5iBYYCO/rq9dF4NDMko=";
+        free = "sha256-p914FrQPb+h1a+7YIL8ms2YoIfoS1hTCeLLeBF4DjwY=";
+        unfree = "sha256-CIgPhjRSE9A0ABQQx1YTZgO+DNb3BDxRo5xOQmuzBuI=";
       }
       .${if enableUnfree then "unfree" else "free"};
     stripRoot = false;
@@ -47,10 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
       rm -r $out/CPP/7zip/Compress/Rar*
     '';
   };
-
-  patches = [
-    ./fix-cross-mingw-build.patch
-  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
@@ -88,8 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
     "CC=${stdenv.cc.targetPrefix}cc"
     "CXX=${stdenv.cc.targetPrefix}c++"
   ]
-  ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
-  ++ lib.optionals (!useUasm && stdenv.hostPlatform.isx86) [ "USE_ASM=" ]
+  ++ lib.optionals useAsmc [
+    "MY_ASM=asmc"
+  ]
+  ++ lib.optionals useUasm [
+    "MY_ASM=uasm"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isx86 && !useAsmc && !useUasm) [
+    "USE_ASM="
+  ]
   # it's the compression code with the restriction, see DOC/License.txt
   ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
   ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
@@ -97,7 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
     "MSYSTEM=1"
   ];
 
-  nativeBuildInputs = lib.optionals useUasm [ uasm ];
+  nativeBuildInputs = lib.optionals useAsmc [ asmc-linux ] ++ lib.optionals useUasm [ uasm ];
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   setupHook = ./setup-hook.sh;
 
@@ -136,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++
         # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
         # the unRAR compression code is disabled by default
-        lib.optionals enableUnfree [ unfree ];
+        lib.optionals enableUnfree [ unfreeRedistributable ];
     maintainers = with lib.maintainers; [
       anna328p
       jk

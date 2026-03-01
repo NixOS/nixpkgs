@@ -231,7 +231,7 @@ in
           after = [ "crowdsec.service" ];
           wants = after;
           script = ''
-            cscli=/run/current-system/sw/bin/cscli
+            cscli=${lib.getExe' config.services.crowdsec.package "cscli"}
             if $cscli bouncers list --output json | ${lib.getExe pkgs.jq} -e -- ${lib.escapeShellArg "any(.[]; .name == \"${cfg.registerBouncer.bouncerName}\")"} >/dev/null; then
               # Bouncer already registered. Verify the API key is still present
               if [ ! -f ${apiKeyFile} ]; then
@@ -257,12 +257,7 @@ in
             User = config.services.crowdsec.user;
             Group = config.services.crowdsec.group;
 
-            StateDirectory = "crowdsec-firewall-bouncer-register";
-
-            ReadWritePaths = [
-              # Needs write permissions to add the bouncer
-              "/var/lib/crowdsec"
-            ];
+            StateDirectory = "crowdsec-firewall-bouncer-register crowdsec";
 
             DynamicUser = true;
             LockPersonality = true;

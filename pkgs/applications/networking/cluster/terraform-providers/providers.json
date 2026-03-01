@@ -526,11 +526,11 @@
     "vendorHash": null
   },
   "hashicorp_azurerm": {
-    "hash": "sha256-eVdx5W4kwC3SxLp3HbAHHKSP6afmqdeUSXwnIeyRw10=",
+    "hash": "sha256-iaPwUzwoyxRrb8K6oqIlZxvJ0qiDmWvdh0pgQeDWn6I=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.61.0",
+    "rev": "v4.62.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1238,13 +1238,13 @@
     "vendorHash": "sha256-E9e4+n12uSc12F428D8Oqe0iquTMywAY4DYWhSC+hmk="
   },
   "splunk-terraform_signalfx": {
-    "hash": "sha256-dPhHzWOkNgIxlHSZm88zKkrgaXaXJ6RFdYeqX5zYSfU=",
+    "hash": "sha256-lDFwuSZdc0gI5LotTSJk0FSBc9jn7WN43hXEsVHiwG0=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v9.24.0",
+    "rev": "v9.25.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-/zsslNR7GDLFrtL4T0GLYhKTBof51ODavb/+PHdziS4="
+    "vendorHash": "sha256-EOr4Ps0IYYOtRq19tt87NFfCEvJTaFBGb5B4mKMll7c="
   },
   "spotinst_spotinst": {
     "hash": "sha256-yDwEtptwNXu/IpoKUK98UkpivTgJaY1FfsshsVpaaOk=",
@@ -1274,11 +1274,11 @@
     "vendorHash": "sha256-IR6KjFW5GbsOIm3EEFyx3ctwhbifZlcNaZeGhbeK/Wo="
   },
   "sysdiglabs_sysdig": {
-    "hash": "sha256-BovhCb+01LJUE62geNJmDwpzV0ucQLpVWjXwfxsClyI=",
+    "hash": "sha256-mzDVPOEu5nIOYykKvudGmByt0sY0Xl+FuSuQruQXTi0=",
     "homepage": "https://registry.terraform.io/providers/sysdiglabs/sysdig",
     "owner": "sysdiglabs",
     "repo": "terraform-provider-sysdig",
-    "rev": "v3.4.0",
+    "rev": "v3.4.3",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-rWiafaFE1RolO9JUN1WoW4EWJjR7kpfeVEOTLf21j50="
   },

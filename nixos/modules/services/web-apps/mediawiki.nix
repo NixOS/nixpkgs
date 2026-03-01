@@ -123,129 +123,141 @@ let
     checkPhase = ''
       ${cfg.phpPackage}/bin/php --syntax-check "$target"
     '';
-    text = ''
-      <?php
-        # Protect against web entry
-        if ( !defined( 'MEDIAWIKI' ) ) {
-          exit;
-        }
+    text =
+      let
+        dbSettings =
+          if cfg.database.type == "sqlite" then
+            ''
+              $wgSQLiteDataDir = "${cfg.database.path}";
+            ''
+          else
+            ''
+              $wgDBserver = "${dbAddr}";
+              $wgDBport = "${toString cfg.database.port}";
+              $wgDBuser = "${cfg.database.user}";
+              ${optionalString (
+                cfg.database.passwordFile != null
+              ) "$wgDBpassword = file_get_contents(\"${cfg.database.passwordFile}\");"}
 
-        $wgSitename = "${cfg.name}";
-        $wgMetaNamespace = false;
+              ${optionalString (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
+                # MySQL specific settings
+                $wgDBprefix = "${cfg.database.tablePrefix}";
+              ''}
 
-        ## The URL base path to the directory containing the wiki;
-        ## defaults for all runtime URL paths are based off of this.
-        ## For more information on customizing the URLs
-        ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
-        ## https://www.mediawiki.org/wiki/Manual:Short_URL
-        $wgScriptPath = "${lib.optionalString (cfg.webserver == "nginx") "/w"}";
+              ${optionalString (cfg.database.type == "mysql") ''
+                # MySQL table options to use during installation or update
+                $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
+              ''}
+            '';
+      in
+      ''
+        <?php
+          # Protect against web entry
+          if ( !defined( 'MEDIAWIKI' ) ) {
+            exit;
+          }
 
-        ## The protocol and server name to use in fully-qualified URLs
-        $wgServer = "${cfg.url}";
+          $wgSitename = "${cfg.name}";
+          $wgMetaNamespace = false;
 
-        ## The URL path to static resources (images, scripts, etc.)
-        $wgResourceBasePath = $wgScriptPath;
+          ## The URL base path to the directory containing the wiki;
+          ## defaults for all runtime URL paths are based off of this.
+          ## For more information on customizing the URLs
+          ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
+          ## https://www.mediawiki.org/wiki/Manual:Short_URL
+          $wgScriptPath = "${lib.optionalString (cfg.webserver == "nginx") "/w"}";
 
-        ${lib.optionalString (cfg.webserver == "nginx") ''
-          $wgArticlePath = "/wiki/$1";
-          $wgUsePathInfo = true;
-        ''}
+          ## The protocol and server name to use in fully-qualified URLs
+          $wgServer = "${cfg.url}";
 
-        ## The URL path to the logo.  Make sure you change this from the default,
-        ## or else you'll overwrite your logo when you upgrade!
-        $wgLogo = "$wgResourceBasePath/resources/assets/wiki.png";
+          ## The URL path to static resources (images, scripts, etc.)
+          $wgResourceBasePath = $wgScriptPath;
 
-        ## UPO means: this is also a user preference option
+          ${lib.optionalString (cfg.webserver == "nginx") ''
+            $wgArticlePath = "/wiki/$1";
+            $wgUsePathInfo = true;
+          ''}
 
-        $wgEnableEmail = true;
-        $wgEnableUserEmail = true; # UPO
+          ## The URL path to the logo.  Make sure you change this from the default,
+          ## or else you'll overwrite your logo when you upgrade!
+          $wgLogo = "$wgResourceBasePath/resources/assets/wiki.png";
 
-        $wgPasswordSender = "${cfg.passwordSender}";
+          ## UPO means: this is also a user preference option
 
-        $wgEnotifUserTalk = false; # UPO
-        $wgEnotifWatchlist = false; # UPO
-        $wgEmailAuthentication = true;
+          $wgEnableEmail = true;
+          $wgEnableUserEmail = true; # UPO
 
-        ## Database settings
-        $wgDBtype = "${cfg.database.type}";
-        $wgDBserver = "${dbAddr}";
-        $wgDBport = "${toString cfg.database.port}";
-        $wgDBname = "${cfg.database.name}";
-        $wgDBuser = "${cfg.database.user}";
-        ${optionalString (
-          cfg.database.passwordFile != null
-        ) "$wgDBpassword = file_get_contents(\"${cfg.database.passwordFile}\");"}
+          $wgPasswordSender = "${cfg.passwordSender}";
 
-        ${optionalString (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
-          # MySQL specific settings
-          $wgDBprefix = "${cfg.database.tablePrefix}";
-        ''}
+          $wgEnotifUserTalk = false; # UPO
+          $wgEnotifWatchlist = false; # UPO
+          $wgEmailAuthentication = true;
 
-        ${optionalString (cfg.database.type == "mysql") ''
-          # MySQL table options to use during installation or update
-          $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
-        ''}
+          ## Database settings
+          $wgDBtype = "${cfg.database.type}";
+          $wgDBname = "${cfg.database.name}";
+          ${dbSettings}
 
-        ## Shared memory settings
-        $wgMainCacheType = CACHE_NONE;
-        $wgMemCachedServers = [];
+          ## Shared memory settings
+          $wgMainCacheType = CACHE_NONE;
+          $wgMemCachedServers = [];
 
-        ${optionalString (cfg.uploadsDir != null) ''
-          $wgEnableUploads = true;
-          $wgUploadDirectory = "${cfg.uploadsDir}";
-        ''}
+          ${optionalString (cfg.uploadsDir != null) ''
+            $wgEnableUploads = true;
+            $wgUploadDirectory = "${cfg.uploadsDir}";
+          ''}
 
-        $wgUseImageMagick = true;
+          $wgUseImageMagick = true;
 
-        # InstantCommons allows wiki to use images from https://commons.wikimedia.org
-        $wgUseInstantCommons = false;
+          # InstantCommons allows wiki to use images from https://commons.wikimedia.org
+          $wgUseInstantCommons = false;
 
-        # Periodically send a pingback to https://www.mediawiki.org/ with basic data
-        # about this MediaWiki instance. The Wikimedia Foundation shares this data
-        # with MediaWiki developers to help guide future development efforts.
-        $wgPingback = true;
+          # Periodically send a pingback to https://www.mediawiki.org/ with basic data
+          # about this MediaWiki instance. The Wikimedia Foundation shares this data
+          # with MediaWiki developers to help guide future development efforts.
+          $wgPingback = true;
 
-        ## If you use ImageMagick (or any other shell command) on a
-        ## Linux server, this will need to be set to the name of an
-        ## available UTF-8 locale
-        $wgShellLocale = "C.UTF-8";
+          ## If you use ImageMagick (or any other shell command) on a
+          ## Linux server, this will need to be set to the name of an
+          ## available UTF-8 locale
+          $wgShellLocale = "C.UTF-8";
 
-        ## Set $wgCacheDirectory to a writable directory on the web server
-        ## to make your wiki go slightly faster. The directory should not
-        ## be publicly accessible from the web.
-        $wgCacheDirectory = "${cacheDir}";
+          ## Set $wgCacheDirectory to a writable directory on the web server
+          ## to make your wiki go slightly faster. The directory should not
+          ## be publicly accessible from the web.
+          $wgCacheDirectory = "${cacheDir}";
 
-        # Site language code, should be one of the list in ./languages/data/Names.php
-        $wgLanguageCode = "en";
+          # Site language code, should be one of the list in ./languages/data/Names.php
+          $wgLanguageCode = "en";
 
-        $wgSecretKey = file_get_contents("${stateDir}/secret.key");
+          $wgSecretKey = file_get_contents("${stateDir}/secret.key");
 
-        # Changing this will log out all existing sessions.
-        $wgAuthenticationTokenVersion = "";
+          # Changing this will log out all existing sessions.
+          $wgAuthenticationTokenVersion = "";
 
-        ## For attaching licensing metadata to pages, and displaying an
-        ## appropriate copyright notice / icon. GNU Free Documentation
-        ## License and Creative Commons licenses are supported so far.
-        $wgRightsPage = ""; # Set to the title of a wiki page that describes your license/copyright
-        $wgRightsUrl = "";
-        $wgRightsText = "";
-        $wgRightsIcon = "";
+          ## For attaching licensing metadata to pages, and displaying an
+          ## appropriate copyright notice / icon. GNU Free Documentation
+          ## License and Creative Commons licenses are supported so far.
+          $wgRightsPage = ""; # Set to the title of a wiki page that describes your license/copyright
+          $wgRightsUrl = "";
+          $wgRightsText = "";
+          $wgRightsIcon = "";
 
-        # Enable APCU caching
-        $wgMainCacheType = CACHE_ACCEL;
+          # Enable APCU caching
+          $wgMainCacheType = CACHE_ACCEL;
 
-        # Enabled skins.
-        ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
+          # Enabled skins.
+          ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
 
-        # Enabled extensions.
-        ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadExtension('${k}');") cfg.extensions)}
+          # Enabled extensions.
+          ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadExtension('${k}');") cfg.extensions)}
 
 
-        # End of automatically generated settings.
-        # Add more configuration options below.
+          # End of automatically generated settings.
+          # Add more configuration options below.
 
-        ${cfg.extraConfig}
-    '';
+          ${cfg.extraConfig}
+      '';
   };
 
   withTrailingSlash = str: if lib.hasSuffix "/" str then str else "${str}/";
@@ -400,22 +412,30 @@ in
             "postgres"
             "mssql"
             "oracle"
+            "sqlite"
           ];
           default = "mysql";
           description = "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
         };
 
         host = mkOption {
-          type = types.str;
-          default = "localhost";
-          description = "Database host address.";
+          type = types.nullOr types.str;
+          default = if cfg.database.type == "sqlite" then null else "localhost";
+          defaultText = ''"localhost"'';
+          description = "Database host address. Used only if database type is not SQLite.";
         };
 
         port = mkOption {
-          type = types.port;
-          default = if cfg.database.type == "mysql" then 3306 else 5432;
+          type = types.nullOr types.port;
+          default =
+            if cfg.database.type == "mysql" then
+              3306
+            else if cfg.database.type != "sqlite" then
+              5432
+            else
+              null;
           defaultText = literalExpression "3306";
-          description = "Database host port.";
+          description = "Database host port. Used only if database type is not SQLite.";
         };
 
         name = mkOption {
@@ -425,9 +445,17 @@ in
         };
 
         user = mkOption {
-          type = types.str;
-          default = "mediawiki";
-          description = "Database user.";
+          type = types.nullOr types.str;
+          default = if cfg.database.type != "sqlite" then "mediawiki" else null;
+          defaultText = literalExpression ''"mediawiki"'';
+          description = "Database user. Used only if database type is not SQLite.";
+        };
+
+        path = mkOption {
+          type = types.nullOr types.path;
+          default = if cfg.database.type == "sqlite" then "${stateDir}/data" else null;
+          defaultText = literalExpression ''"${stateDir}/data"'';
+          description = "Path to store the MediaWiki database in if using SQLite.";
         };
 
         passwordFile = mkOption {
@@ -436,7 +464,7 @@ in
           example = "/run/keys/mediawiki-dbpassword";
           description = ''
             A file containing the password corresponding to
-            {option}`database.user`.
+            {option}`database.user`. Used only if database type is not SQLite.
           '';
         };
 
@@ -447,7 +475,7 @@ in
             If you only have access to a single database and wish to install more than
             one version of MediaWiki, or have other applications that also use the
             database, you can give the table names a unique prefix to stop any naming
-            conflicts or confusion.
+            conflicts or confusion. Only used if database type is MySQL.
             See <https://www.mediawiki.org/wiki/Manual:$wgDBprefix>.
           '';
         };
@@ -462,7 +490,7 @@ in
             else
               null;
           defaultText = literalExpression "/run/mysqld/mysqld.sock";
-          description = "Path to the unix socket file to use for authentication.";
+          description = "Path to the unix socket file to use for authentication. Used only if database type is not SQLite.";
         };
 
         createLocally = mkOption {
@@ -569,6 +597,28 @@ in
         message = "a password cannot be specified if services.mediawiki.database.createLocally is set to true";
       }
     ];
+
+    warnings =
+      lib.optional
+        (
+          cfg.database.type == "sqlite"
+          && (
+            cfg.database.host != null
+            || cfg.database.port != null
+            || cfg.database.user != null
+            || cfg.database.passwordFile != null
+            || cfg.database.socket != null
+          )
+        )
+        ''
+          The services.mediawiki.database options host, port, user, passwordFile, and socket will be ignored because services.mediawiki.database.type is "sqlite".
+        ''
+      ++ lib.optional (cfg.database.type != "sqlite" && cfg.database.path != null) ''
+        The services.mediawiki.database.path option will be ignored because services.mediawiki.database.type is not "sqlite".
+      ''
+      ++ lib.optional (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
+        The services.mediawiki.database.tablePrefix option has no effect when the services.mediawiki.database.type is not "mysql".
+      '';
 
     services.mediawiki = {
       path = with pkgs; [
@@ -728,37 +778,52 @@ in
       after =
         optional (cfg.database.type == "mysql" && cfg.database.createLocally) "mysql.service"
         ++ optional (cfg.database.type == "postgres" && cfg.database.createLocally) "postgresql.target";
-      script = ''
-        if ! test -e "${stateDir}/secret.key"; then
-          tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c 64 > ${stateDir}/secret.key
-        fi
+      script =
+        let
+          dbOptions =
+            if cfg.database.type == "sqlite" then
+              ''
+                --dbpath ${lib.escapeShellArg cfg.database.path} \
+                --dbname ${lib.escapeShellArg cfg.database.name} \
+              ''
+            else
+              ''
+                --dbserver ${lib.escapeShellArg dbAddr} \
+                --dbport ${toString cfg.database.port} \
+                --dbname ${lib.escapeShellArg cfg.database.name} \
+                ${
+                  optionalString (
+                    cfg.database.tablePrefix != null
+                  ) "--dbprefix ${lib.escapeShellArg cfg.database.tablePrefix}"
+                } \
+                --dbuser ${lib.escapeShellArg cfg.database.user} \
+                ${
+                  optionalString (
+                    cfg.database.passwordFile != null
+                  ) "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"
+                } \
+              '';
+        in
+        ''
+          if ! test -e "${stateDir}/secret.key"; then
+            tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c 64 > ${stateDir}/secret.key
+          fi
 
-        echo "exit( \$this->getPrimaryDB()->tableExists( 'user' ) ? 1 : 0 );" | \
-        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
-        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php ${pkg}/share/mediawiki/maintenance/install.php \
-          --confpath /tmp \
-          --scriptpath / \
-          --dbserver ${lib.escapeShellArg dbAddr} \
-          --dbport ${toString cfg.database.port} \
-          --dbname ${lib.escapeShellArg cfg.database.name} \
-          ${
-            optionalString (
-              cfg.database.tablePrefix != null
-            ) "--dbprefix ${lib.escapeShellArg cfg.database.tablePrefix}"
-          } \
-          --dbuser ${lib.escapeShellArg cfg.database.user} \
-          ${
-            optionalString (
-              cfg.database.passwordFile != null
-            ) "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"
-          } \
-          --passfile ${lib.escapeShellArg cfg.passwordFile} \
-          --dbtype ${cfg.database.type} \
-          ${lib.escapeShellArg cfg.name} \
-          admin
+          ${optionalString (cfg.database.type == "sqlite") "mkdir -p ${cfg.database.path}"}
 
-        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick --skip-external-dependencies
-      '';
+          echo "exit( \$this->getPrimaryDB()->tableExists( 'user' ) ? 1 : 0 );" | \
+          ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
+          ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php ${pkg}/share/mediawiki/maintenance/install.php \
+            --confpath /tmp \
+            --scriptpath / \
+            ${dbOptions} \
+            --dbtype ${cfg.database.type} \
+            --passfile ${lib.escapeShellArg cfg.passwordFile} \
+            ${lib.escapeShellArg cfg.name} \
+            admin
+
+          ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick --skip-external-dependencies
+        '';
 
       serviceConfig = {
         Type = "oneshot";
