@@ -32,8 +32,8 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ory/oathkeeper/internal/driver/config.Version=${version}"
-    "-X github.com/ory/oathkeeper/internal/driver/config.Commit=${commit}"
+    "-X github.com/ory/oathkeeper/x.Version=${version}"
+    "-X github.com/ory/oathkeeper/x.Commit=${commit}"
   ];
 
   meta = {
