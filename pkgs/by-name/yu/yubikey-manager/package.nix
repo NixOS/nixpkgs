@@ -5,6 +5,8 @@
   python3Packages,
   installShellFiles,
   procps,
+
+  buildPackages,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -43,12 +45,26 @@ python3Packages.buildPythonPackage rec {
 
   postInstall = ''
     installManPage man/ykman.1
-
-    installShellCompletion --cmd ykman \
-      --bash <(_YKMAN_COMPLETE=bash_source "$out/bin/ykman") \
-      --zsh  <(_YKMAN_COMPLETE=zsh_source  "$out/bin/ykman") \
-      --fish <(_YKMAN_COMPLETE=fish_source "$out/bin/ykman") \
-  '';
+  ''
+  + (
+    let
+      compOpts =
+        x:
+        if stdenv.buildPlatform.canExecute python3Packages.stdenv.hostPlatform then
+          "--${x} <(_YKMAN_COMPLETE=${x}_source ${placeholder "out"}/bin/ykman)"
+        else
+          ''--${x} <(_YKMAN_COMPLETE=${x}_source PYTHONPATH= "${buildPackages.yubikey-manager}/bin/ykman")'';
+    in
+    ''
+      installShellCompletion --cmd ykman ${
+        lib.strings.concatMapStringsSep " " compOpts [
+          "bash"
+          "zsh"
+          "fish"
+        ]
+      }
+    ''
+  );
 
   nativeCheckInputs = with python3Packages; [
     astroid

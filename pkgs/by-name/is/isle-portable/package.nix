@@ -1,110 +1,110 @@
 {
   lib,
-  fetchFromGitHub,
-  stdenv,
-  unstableGitUpdater,
-
-  # Native Build Inputs
-  cmake,
-  python3,
-  pkg-config,
-
-  # Build Inputs
-  libxrender,
-  libxrandr,
-  libxi,
-  libxinerama,
-  libxfixes,
-  libxext,
-  libxcursor,
-  libx11,
-  wayland,
-  libxkbcommon,
-  wayland-protocols,
-  glew,
-  qt6,
-  alsa-lib,
-  sdl3,
-  iniparser,
-
-  # Options
-  imguiDebug ? false,
-  addrSan ? false,
-  emscriptenHost ? "",
+  callPackage,
+  requireFile,
+  runCommand,
+  makeBinaryWrapper,
+  symlinkJoin,
+  isle-portable-unwrapped ? callPackage ./unwrapped.nix { },
+  _7zz,
 }:
-stdenv.mkDerivation (finalAttrs: {
-  strictDeps = true;
-  pname = "isle-portable";
-  version = "0-unstable-2025-11-15";
-
-  src = fetchFromGitHub {
-    owner = "isledecomp";
-    repo = "isle-portable";
-    rev = "d182a8057c5c0827c33639367b7e00e9ab389e78";
-    hash = "sha256-V3jmUUzTkLKUwa/mCtp+UbJNAmHlrrDIKGimKOJOJss=";
-    fetchSubmodules = true;
+let
+  legoIslandIso = requireFile {
+    name = "LEGO_ISLANDI.ISO";
+    hash = "sha256-pefu/XcvGKcWYzaFldWeFEYdc7OUBgbmlgWyH2CnZec=";
+    message = "ISO file of Lego Island 1.1";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace packaging/macos/CMakeLists.txt \
-      --replace-fail "fixup_bundle" "#fixup_bundle"
+  unpackedIso = runCommand "LEGO_ISLANDI-unpacked" { nativeBuildInputs = [ _7zz ]; } ''
+    mkdir "$out"
+    7zz x ${legoIslandIso} -o"$out"
   '';
+in
+symlinkJoin (
+  finalAttrs:
+  let
+    # INI file with the LEGO Island Disk files in it
+    iniWithDisk = lib.recursiveUpdate finalAttrs.passthru.iniConfig {
+      isle = {
+        diskpath = "${unpackedIso}/DATA/disk";
+        cdpath = "${unpackedIso}";
+      };
+    };
 
-  outputs = [
-    "out"
-    "lib"
-  ];
+    # Properly quoted INI file
+    quotedIni = lib.mapAttrsRecursiveCond (as: (!lib.isDerivation as)) (
+      _: value: ''"${toString value}"''
+    ) iniWithDisk;
 
-  nativeBuildInputs = [
-    cmake
-    qt6.wrapQtAppsHook
-    python3
-    pkg-config
-  ];
+    # Make a config ini file
+    iniFile =
+      runCommand "isle.ini"
+        {
+          passAsFile = [ "iniFile" ];
 
-  buildInputs = [
-    qt6.qtbase
-    sdl3
-    iniparser
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libx11
-    libxext
-    libxrandr
-    libxrender
-    libxfixes
-    libxi
-    libxinerama
-    libxcursor
-    wayland
-    libxkbcommon
-    wayland-protocols
-    glew
-    alsa-lib
-  ];
+          # Set the ISO path.
+          iniFile = lib.generators.toINI { } quotedIni;
+        }
+        ''
+          cp "$iniFilePath" "$out"
+        '';
+  in
+  {
+    inherit (isle-portable-unwrapped) version;
+    pname = "isle-portable-wrapped";
 
-  cmakeFlags = [
-    (lib.cmakeBool "DOWNLOAD_DEPENDENCIES" false)
-    (lib.cmakeBool "ISLE_DEBUG" imguiDebug)
-    (lib.cmakeFeature "ISLE_EMSCRIPTEN_HOST" emscriptenHost)
-  ];
-
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
-
-  meta = {
-    description = "Portable decompilation of Lego Island";
-    homepage = "https://github.com/isledecomp/isle-portable";
-    license = with lib.licenses; [
-      # The original code for the portable project
-      lgpl3Plus
-      # The decompilation code
-      mit
-      unfree
+    paths = [
+      isle-portable-unwrapped
     ];
-    platforms = with lib.platforms; windows ++ linux ++ darwin;
-    mainProgram = "isle";
-    maintainers = with lib.maintainers; [
-      RossSmyth
+
+    nativeBuildInputs = [
+      makeBinaryWrapper
     ];
-  };
-})
+
+    postBuild = ''
+      wrapProgram "$out/bin/isle" \
+        --add-flags "--ini ${iniFile}"
+    '';
+
+    passthru.unwrapped = isle-portable-unwrapped;
+
+    passthru.iniConfig = {
+      isle = {
+        diskpath = null;
+        cdpath = null;
+        mediapath = isle-portable-unwrapped;
+        savepath = "~/.local/share/isledecomp/isle";
+        "flip surfaces" = "false";
+        "full screen" = "true";
+        "exclusive full screen" = "true";
+        "wide view angle" = "true";
+        "3dsound" = "true";
+        "music" = "true";
+        "cursor sensitivity" = "4.000000";
+        "back buffers in video ram" = "-1";
+        "island quality" = "2";
+        "island texture" = "1";
+        "max lod" = "3.600000";
+        "max allowed extras" = "20";
+        "transition type" = "3";
+        "touch scheme" = "2";
+        "haptic" = "true";
+        "horizontal resolution" = "640";
+        "vertical resolution" = "480";
+        "exclusive x resolution" = "640";
+        "exclusive y resolution" = "480";
+        "exclusive framerate" = "60";
+        "frame delta" = "10";
+        "msaa" = "0";
+        "anisotropic" = "";
+      };
+
+      extensions = {
+        "texture loader" = "false";
+        "si loader" = "false";
+      };
+    };
+
+    meta = removeAttrs isle-portable-unwrapped.meta [ "position" ];
+  }
+)

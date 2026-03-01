@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
     addDriverRunpath.driverLink
   ];
 
+  autoPatchelfIgnoreMissingDeps = [ "librockchip_mpp.so.1" ];
+
   installPhase = ''
     runHook preInstall
 

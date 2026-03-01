@@ -22,7 +22,6 @@
   fmt,
   libpsl,
   miniupnpc,
-  crc32c,
   dht,
   libnatpmp,
   libiconv,
@@ -48,7 +47,6 @@ let
 
   apparmorRules = apparmorRulesFromClosure { name = "transmission-daemon"; } (
     [
-      crc32c
       curl
       libdeflate
       libevent
@@ -66,13 +64,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
     tag = finalAttrs.version;
-    hash = "sha256-glmwa06+jCyL9G2Rc58Yrvzo+/6Qu3bqwqy02RWgG64=";
+    hash = "sha256-c3BOQ25xWIj4bLDQDnfzw9ZyuPemyHrK2Ua0jbOSuOw=";
     fetchSubmodules = true;
   };
 
@@ -99,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Excluding gtest since it is hardcoded to vendored version. The rest of the listed libraries are not packaged.
     pushd third-party
     for f in *; do
-        if [[ ! $f =~ googletest|wildmat|wide-integer|jsonsl ]]; then
+        if [[ ! $f =~ googletest|wildmat|wide-integer|jsonsl|madler-crcany ]]; then
             rm -r "$f"
         fi
     done
@@ -126,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    crc32c
     dht
     fast-float
     fmt
