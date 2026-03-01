@@ -5485,10 +5485,10 @@ with self;
 
   ClassUnload = buildPerlPackage {
     pname = "Class-Unload";
-    version = "0.11";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILMARI/Class-Unload-0.11.tar.gz";
-      hash = "sha256-UuKXR6fk0uGiicDh3oEHY08QyEJs18nTHsrIOD5KCl8=";
+      url = "mirror://cpan/authors/id/I/IL/ILMARI/Class-Unload-0.12.tar.gz";
+      hash = "sha256-JQgDlXj7VFf9/7Itj6b5C+KVwwQXkB0P2XV0TlWSJpY=";
     };
     propagatedBuildInputs = [ ClassInspector ];
     buildInputs = [ TestRequires ];
