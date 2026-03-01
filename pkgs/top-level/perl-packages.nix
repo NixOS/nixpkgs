@@ -3973,19 +3973,25 @@ with self;
 
   CatalystPluginSession = buildPerlPackage {
     pname = "Catalyst-Plugin-Session";
-    version = "0.43";
+    version = "0.44";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Plugin-Session-0.43.tar.gz";
-      hash = "sha256-Xn180rlbH8IkS8buuPRPg11gPqB/WjkRCIHbYJKLFMQ=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Plugin-Session-0.44.tar.gz";
+      hash = "sha256-CSyNgOA1D5Jdx2XycsDuKPmSMAsU9bhphBIgTmyFfEI=";
     };
     buildInputs = [
+      Plack
       TestDeep
-      TestException
       TestNeeds
     ];
     propagatedBuildInputs = [
       CatalystRuntime
+      CryptSysRandom
+      HTMLParser
+      MROCompat
+      Moose
+      MooseXEmulateClassAccessorFast
       ObjectSignature
+      namespaceclean
     ];
     meta = {
       description = "Generic Session plugin - ties together server side storage and client side state required to maintain session data";
