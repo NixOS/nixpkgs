@@ -36564,10 +36564,10 @@ with self;
 
   TestInter = buildPerlPackage {
     pname = "Test-Inter";
-    version = "1.10";
+    version = "1.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SB/SBECK/Test-Inter-1.10.tar.gz";
-      hash = "sha256-cewRXqwm+2aJGb1mQLQcNzInUuvUjBx222a3O679O10=";
+      url = "mirror://cpan/authors/id/S/SB/SBECK/Test-Inter-1.12.tar.gz";
+      hash = "sha256-8rGYfs759skiPo+6Lo5IhUMziWZQqr6oG9ww4Mlla2M=";
     };
     buildInputs = [
       FileFindRule
