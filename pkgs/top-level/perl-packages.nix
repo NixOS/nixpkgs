@@ -12576,10 +12576,10 @@ with self;
 
   ExcelWriterXLSX = buildPerlPackage {
     pname = "Excel-Writer-XLSX";
-    version = "1.11";
+    version = "1.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/Excel-Writer-XLSX-1.11.tar.gz";
-      hash = "sha256-yzMA0jEZxpiGTvC3PBmnLLpxi/wG7QBzWaUxP5YcwqA=";
+      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/Excel-Writer-XLSX-1.15.tar.gz";
+      hash = "sha256-eTG02OL6i0+AbbS/Ujvjlkg/VfU+T0c4/f9emg2HUzE=";
     };
     propagatedBuildInputs = [ ArchiveZip ];
     meta = {
