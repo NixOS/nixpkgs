@@ -53,7 +53,7 @@ let
   merlin-lib = merlin-lib_v;
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocaml-lsp-server";
   inherit (lsp) version src preBuild;
 
@@ -63,18 +63,18 @@ buildDunePackage rec {
       lsp
       re
     ]
-    ++ lib.optional (lib.versionAtLeast version "1.9") spawn
-    ++ lib.optionals (lib.versionAtLeast version "1.10") [
+    ++ lib.optional (lib.versionAtLeast finalAttrs.version "1.9") spawn
+    ++ lib.optionals (lib.versionAtLeast finalAttrs.version "1.10") [
       fiber
       xdg
     ]
-    ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc
-    ++ lib.optionals (lib.versionAtLeast version "1.17.0") [
+    ++ lib.optional (lib.versionAtLeast finalAttrs.version "1.14.2") ocamlc-loc
+    ++ lib.optionals (lib.versionAtLeast finalAttrs.version "1.17.0") [
       astring
       camlp-streams
       merlin-lib
     ]
-    ++ lib.optional (lib.versionAtLeast version "1.18.0") base;
+    ++ lib.optional (lib.versionAtLeast finalAttrs.version "1.18.0") base;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -87,4 +87,4 @@ buildDunePackage rec {
     mainProgram = "ocamllsp";
     broken = lib.versions.majorMinor ocaml.version == "4.13";
   };
-}
+})

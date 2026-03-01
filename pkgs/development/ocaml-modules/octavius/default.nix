@@ -4,14 +4,14 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "octavius";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "ocaml-doc";
     repo = "octavius";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/S6WpIo1c5J9uM3xgtAM/elhnsl0XimnIFsKy3ootbA=";
   };
 
@@ -25,4 +25,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

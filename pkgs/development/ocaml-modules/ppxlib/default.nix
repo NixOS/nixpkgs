@@ -106,12 +106,12 @@ let
     ."${version}";
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppxlib";
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ocaml-ppx/ppxlib/releases/download/${version}/ppxlib-${version}.tbz";
+    url = "https://github.com/ocaml-ppx/ppxlib/releases/download/${finalAttrs.version}/ppxlib-${finalAttrs.version}.tbz";
     inherit (param) sha256;
   };
 
@@ -134,4 +134,4 @@ buildDunePackage rec {
       param ? max_version && lib.versionAtLeast ocaml.version param.max_version
       || param ? min_version && lib.versionOlder ocaml.version param.min_version;
   };
-}
+})

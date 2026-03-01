@@ -9,14 +9,14 @@
   mirage-device,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-net";
   version = "4.0.0";
 
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-net/releases/download/v${version}/mirage-net-v${version}.tbz";
+    url = "https://github.com/mirage/mirage-net/releases/download/v${finalAttrs.version}/mirage-net-v${finalAttrs.version}.tbz";
     hash = "sha256-Zo7/0Ye4GgqzJFCHDBXbuJ/5ETl/8ziolRgH4lDhlM4=";
   };
 
@@ -34,4 +34,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

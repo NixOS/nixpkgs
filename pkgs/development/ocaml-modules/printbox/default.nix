@@ -7,7 +7,7 @@
   gitUpdater,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "printbox";
   version = "0.12";
 
@@ -15,8 +15,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "c-cube";
-    repo = pname;
-    rev = "v${version}";
+    repo = "printbox";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-PQbr2sjASoWz0OHAMV6buAJERpnUJxVpLAigIVnADIc=";
   };
 
@@ -33,4 +33,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

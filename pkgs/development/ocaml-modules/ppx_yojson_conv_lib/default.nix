@@ -5,7 +5,7 @@
   yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppx_yojson_conv_lib";
   version = "0.17.0";
 
@@ -13,8 +13,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "janestreet";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ppx_yojson_conv_lib";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XGgpcAEemBNEagblBjpK+BiL0OUsU2JPqOq+heHbqVk=";
   };
 
@@ -26,4 +26,4 @@ buildDunePackage rec {
     maintainers = [ ];
     license = lib.licenses.mit;
   };
-}
+})
