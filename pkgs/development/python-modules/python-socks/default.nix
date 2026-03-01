@@ -10,6 +10,7 @@
   pytest-trio,
   pytestCheckHook,
   setuptools,
+  tiny-proxy,
   trio,
   trustme,
   yarl,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "python-socks";
-  version = "2.8.0";
+  version = "2.8.1";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = "python-socks";
     tag = "v${version}";
-    hash = "sha256-b19DfvoJo/9NCjgZ+07WdZGnXNS7/f+FgGdU8s1k2io=";
+    hash = "sha256-Eu4xeBZbZvAGfFArMiUlUQQa4yywKWj+azv+OHiKJfU=";
   };
 
   build-system = [ setuptools ];
@@ -43,14 +44,13 @@ buildPythonPackage rec {
     anyio = [ anyio ];
   };
 
-  doCheck = false; # requires tiny_proxy module
-
   nativeCheckInputs = [
     anyio
     flask
     pytest-asyncio
     pytest-trio
     pytestCheckHook
+    tiny-proxy
     trustme
     yarl
   ];
