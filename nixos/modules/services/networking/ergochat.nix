@@ -145,14 +145,10 @@ in
     systemd.services.ergochat = {
       description = "Ergo IRC daemon";
       wantedBy = [ "multi-user.target" ];
-      # reload is not applying the changed config. further investigation is needed
-      # at some point this should be enabled, since we don't want to restart for
-      # every config change
-      # reloadIfChanged = true;
-      restartTriggers = [ cfg.configFile ];
+      reloadTriggers = [ cfg.configFile ];
       serviceConfig = {
+        Type = "notify-reload";
         ExecStart = "${pkgs.ergochat}/bin/ergo run --conf /etc/ergo.yaml";
-        ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
         DynamicUser = true;
         StateDirectory = "ergo";
         LimitNOFILE = toString cfg.openFilesLimit;
