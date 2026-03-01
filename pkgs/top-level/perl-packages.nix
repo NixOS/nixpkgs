@@ -6292,25 +6292,25 @@ with self;
 
   Connector = buildPerlModule {
     pname = "Connector";
-    version = "1.53";
+    version = "1.55";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.53.tar.gz";
-      hash = "sha256-1D50VEcZ/7lKDgZFhqetRXVbKTZPGJHZ4ncEFqsSTPo=";
+      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.55.tar.gz";
+      hash = "sha256-QWEBYLG+fUJ8+Qmgqag2VwHgMn2WZ6XA1G1NsAeDxI8=";
     };
     buildInputs = [
-      ModuleBuildTiny
       ConfigMerge
       ConfigStd
-      ConfigVersioned
       DBDSQLite
       DBI
       IOSocketSSL
       JSON
-      LWP
-      LWPProtocolHttps
+      LWPProtocolhttps
+      ModuleBuildTiny
       ProcSafeExec
+      SyntaxKeywordTry
       TemplateToolkit
       YAML
+      libwwwperl
     ];
     propagatedBuildInputs = [
       LogLog4perl
