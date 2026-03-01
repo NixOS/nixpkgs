@@ -466,6 +466,7 @@ in
       relatedPackages = [
         "nextcloud31"
         "nextcloud32"
+        "nextcloud33"
       ];
     };
     phpPackage = lib.mkPackageOption pkgs "php" {

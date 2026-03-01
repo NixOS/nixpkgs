@@ -19,7 +19,7 @@
   system ? builtins.currentSystem,
   officialRelease ? false,
   # The platform doubles for which we build Nixpkgs.
-  supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
+  supportedSystems ? builtins.fromJSON (builtins.readFile ./release-supported-systems.json),
   # The platform triples for which we build bootstrap tools.
   bootstrapConfigs ? [
     "arm64-apple-darwin"
