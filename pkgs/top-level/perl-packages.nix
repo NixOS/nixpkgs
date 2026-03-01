@@ -2263,10 +2263,10 @@ with self;
 
   autobox = buildPerlPackage {
     pname = "autobox";
-    version = "3.0.1";
+    version = "3.0.2";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CH/CHOCOLATE/autobox-v3.0.1.tar.gz";
-      hash = "sha256-wwO3/M+qH/TUxCmrPxXlyip3VU74yfw7jGK6hZ6HTJg=";
+      url = "mirror://cpan/authors/id/C/CH/CHOCOLATE/autobox-v3.0.2.tar.gz";
+      hash = "sha256-cHUVMbp412jW9Pd6MrHqLRlZ5243tvieXOaTDAbGC/Y=";
     };
     propagatedBuildInputs = [ ScopeGuard ];
     buildInputs = [
