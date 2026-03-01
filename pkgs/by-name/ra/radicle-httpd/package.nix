@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # You must update the radicle-explorer source hash when changing this.
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
     tag = "releases/${finalAttrs.version}";
     sparseCheckout = [ "radicle-httpd" ];

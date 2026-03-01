@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.8.0";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
     repo = "z4D5UCArafTzTQpDZNQRuqswh3ury";
     rev = "aeb405aaf53b56a426ab8d68c7f89b8953683224";
     hash = "sha256-Z/6GdXf3ag/89H8UMD2GNU4CXA8TWyX8dl8uh0CTem8=";

@@ -2,7 +2,7 @@
 
 lib.makeOverridable (
   {
-    seed,
+    seed ? "seed.radicle.xyz",
     repo,
     node ? null,
     rev ? null,

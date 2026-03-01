@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-node";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
     hash = srcHash;

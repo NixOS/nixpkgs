@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.12.0";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
     repo = "z3qg5TKmN83afz2fj9z3fQjU8vaYE";
     node = "z6MkgEMYod7Hxfy9qCvDv5hYHkZ4ciWmLFgfvm3Wn1b2w2FV";
     tag = "v${finalAttrs.version}";
