@@ -20375,22 +20375,27 @@ with self;
 
   LWPProtocolHttps = buildPerlPackage {
     pname = "LWP-Protocol-https";
-    version = "6.11";
+    version = "6.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/LWP-Protocol-https-6.11.tar.gz";
-      hash = "sha256-ATLdvwNmFWXKhQUPKlCU+5Jjy7w8yxpNnEGsm7CDuRc=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/LWP-Protocol-https-6.15.tar.gz";
+      hash = "sha256-RO7C2hR7oFEQkIcbDKgvaXlDdrwx6MdtEECWG6V/Wbg=";
     };
     patches = [ ../development/perl-modules/lwp-protocol-https-cert-file.patch ];
     propagatedBuildInputs = [
       IOSocketSSL
-      LWP
+      NetHTTP
+      NetHTTPSNB
+      libwwwperl
     ];
     preCheck = ''
       export NO_NETWORK_TESTING=1
     '';
     buildInputs = [
-      TestRequiresInternet
+      IOSocketSSL
       TestNeeds
+      TestRequiresInternet
+      TryTiny
+      libwwwperl
     ];
     meta = {
       description = "Provide https support for LWP::UserAgent";
