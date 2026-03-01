@@ -1,6 +1,10 @@
 {
   lib,
   stdenv,
+  writeShellScript,
+  nix-update,
+  curl,
+  jq,
   git,
   git-lfs,
   fetchurl,
@@ -43,17 +47,6 @@
 }:
 
 let
-  pname = "pulsar";
-  version = "1.131.1";
-
-  sourcesPath =
-    {
-      x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-      x86_64-linux.hash = "sha256-Is+KAnPuHUrj87KFTjB/v/LMDflq4LbX3VP8Cv7/CNQ=";
-      aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-      aarch64-linux.hash = "sha256-P2ZBV9Al6xw347yUs3BOWnwJGWegRh52oygLFgjoBcw=";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
     alsa-lib
@@ -91,16 +84,27 @@ let
   hunspellCopyCommands = lib.concatMapStringsSep "\n" (
     lang: "cp -r ${lang}/* ${hunspellTargetDirs};"
   ) hunspellDirs;
+
 in
-stdenv.mkDerivation {
-  inherit pname version;
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "pulsar";
+  version = "1.131.1";
 
   src =
-    with sourcesPath;
-    fetchurl {
-      url = "https://github.com/pulsar-edit/pulsar/releases/download/v${version}/${tarname}";
-      inherit hash;
+    finalAttrs.passthru.srcs.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  passthru.srcs = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/Linux.pulsar-${finalAttrs.version}.tar.gz";
+      hash = "sha256-Is+KAnPuHUrj87KFTjB/v/LMDflq4LbX3VP8Cv7/CNQ=";
     };
+    aarch64-linux = fetchurl {
+      url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/ARM.Linux.pulsar-${finalAttrs.version}-arm64.tar.gz";
+      hash = "sha256-P2ZBV9Al6xw347yUs3BOWnwJGWegRh52oygLFgjoBcw=";
+    };
+  };
 
   # strip leading `.` from $0.
   # for .pulsar.sh-wrapped to correctly set ATOM_BASE_NAME
@@ -253,7 +257,16 @@ stdenv.mkDerivation {
     })
   ];
 
-  passthru.updateScript = ./update.mjs;
+  passthru.updateScript = writeShellScript "update-pulsar" ''
+    set -euo pipefail
+    PATH="${lib.getBin curl}:$PATH"
+    PATH="${lib.getBin jq}:$PATH"
+    PATH="${lib.getBin coreutils}:$PATH"
+    PATH="${lib.getBin nix-update}:$PATH"
+    version="$(curl https://api.github.com/repos/pulsar-edit/pulsar/releases/latest | jq ".tag_name" -r | tr -d 'v')"
+    nix-update pkgsCross.gnu64.pulsar --version "$version"
+    nix-update pkgsCross.aarch64-multiplatform.pulsar --version skip
+  '';
 
   meta = {
     description = "Community-led Hyper-Hackable Text Editor";
@@ -262,7 +275,7 @@ stdenv.mkDerivation {
       Designed to be deeply customizable, but still approachable using the default configuration.
     '';
     homepage = "https://github.com/pulsar-edit/pulsar";
-    changelog = "https://github.com/pulsar-edit/pulsar/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pulsar-edit/pulsar/blob/v${finalAttrs.version}/CHANGELOG.md";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
@@ -274,4 +287,4 @@ stdenv.mkDerivation {
     # a bump is expected (pulsar v1.131.0 bumped electron 12.2.3 -> 30.0.9 in february 2026)
     knownVulnerabilities = [ "Electron version 30 is EOL" ];
   };
-}
+})
