@@ -12933,11 +12933,12 @@ with self;
 
   ExtUtilsLibBuilder = buildPerlModule {
     pname = "ExtUtils-LibBuilder";
-    version = "0.08";
+    version = "0.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AM/AMBS/ExtUtils-LibBuilder-0.08.tar.gz";
-      hash = "sha256-xRFx4G3lMDnwvKHZemRx7DeUH/Weij0csXDr3SVztdI=";
+      url = "mirror://cpan/authors/id/A/AM/AMBS/ExtUtils-LibBuilder-0.09.tar.gz";
+      hash = "sha256-2/rIXQFYdBiacE+govAB0TtaDH2J82wG/zLVaXIKbPs=";
     };
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Tool to build C libraries";
       license = with lib.licenses; [
