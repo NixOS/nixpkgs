@@ -21607,10 +21607,10 @@ with self;
 
   Memoize = buildPerlPackage {
     pname = "Memoize";
-    version = "1.16";
+    version = "1.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AR/ARISTOTLE/Memoize-1.16.tar.gz";
-      hash = "sha256-CRlSvPSS7O41ueW41ykgxYAjRB15IIwduHg3xcV4B74=";
+      url = "mirror://cpan/authors/id/A/AR/ARISTOTLE/Memoize-1.17.tar.gz";
+      hash = "sha256-K+7wr7JDjlQsWZtUsXooMOM39T1p/OGfKISVV0OEZpY=";
     };
     meta = {
       description = "Make functions faster by trading space for time";
