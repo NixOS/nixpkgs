@@ -20902,15 +20902,15 @@ with self;
 
   MailSPF = buildPerlPackage {
     pname = "Mail-SPF";
-    version = "2.9.0";
+    version = "3.20250505";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JM/JMEHNLE/mail-spf/Mail-SPF-v2.9.0.tar.gz";
-      hash = "sha256-YctZFfHHrMepMf/Bv8EpG9+sVV4qRusjkbmV6p7LYWI=";
+      url = "mirror://cpan/authors/id/A/AD/ADAVIS/Mail-SPF-3.20250505.tar.gz";
+      hash = "sha256-msYNALlX6Em6/pCo3v3u4uX/qxyHrFpKvEUodemQSGM=";
     };
     # remove this patch patches = [ ../development/perl-modules/Mail-SPF.patch ];
 
     buildInputs = [
-      ModuleBuild
+      NetDNS
       NetDNSResolverProgrammable
     ];
     propagatedBuildInputs = [
