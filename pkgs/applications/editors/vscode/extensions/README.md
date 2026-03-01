@@ -15,6 +15,8 @@
 
 * Use `hash` instead of `sha256`.
 
+* Add `signatureHash` to enable cryptographic signature verification (optional). Use `--with-signature` flag with the update script to fetch it automatically.
+
 * On `meta` field:
   - add a `changelog`.
   - `description` should mention it is a Visual Studio Code extension.

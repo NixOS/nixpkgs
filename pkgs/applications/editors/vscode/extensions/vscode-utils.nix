@@ -18,10 +18,18 @@ let
       unzip = "${unzip}/bin/unzip";
     };
   } ./unpack-vsix-setup-hook.sh;
+
+  verifyVsixSignatureSetupHook = makeSetupHook {
+    name = "verify-vsix-signature-setup-hook";
+    substitutions = {
+      vscode = vscode;
+    };
+  } ./verify-vsix-signature-setup-hook.sh;
   buildVscodeExtension = lib.extendMkDerivation {
     constructDrv = stdenv.mkDerivation;
     excludeDrvArgNames = [
       "vscodeExtUniqueId"
+      "signatureArchive"
     ];
     extendDrvArgs =
       finalAttrs:
@@ -32,6 +40,8 @@ let
         vscodeExtPublisher,
         vscodeExtName,
         vscodeExtUniqueId,
+        # Pre-fetched signature archive for cryptographic verification
+        signatureArchive ? null,
         configurePhase ? ''
           runHook preConfigure
           runHook postConfigure
@@ -71,7 +81,14 @@ let
         # This cannot be removed, it is used by some extensions.
         installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
-        nativeBuildInputs = [ unpackVsixSetupHook ] ++ nativeBuildInputs;
+        nativeBuildInputs = [
+          unpackVsixSetupHook
+        ]
+        ++ lib.optional (signatureArchive != null) verifyVsixSignatureSetupHook
+        ++ nativeBuildInputs;
+
+        # Pass signature archive path to the verification hook
+        inherit signatureArchive;
 
         installPhase =
           args.installPhase or ''
@@ -87,6 +104,25 @@ let
 
   fetchVsixFromVscodeMarketplace =
     mktplcExtRef: fetchurl (import ./mktplcExtRefToFetchArgs.nix mktplcExtRef);
+
+  # Fetch signature archive for cryptographic verification
+  fetchSignatureFromVscodeMarketplace =
+    mktplcExtRef:
+    let
+      inherit (mktplcExtRef) publisher name version;
+      arch = mktplcExtRef.arch or "";
+      archurl = if arch == "" then "" else "?targetPlatform=${arch}";
+      baseUrl = "https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${name}/${version}/assetbyname";
+      signatureHash = mktplcExtRef.signatureHash or "";
+    in
+    if signatureHash != "" then
+      fetchurl {
+        url = "${baseUrl}/Microsoft.VisualStudio.Services.VsixSignature${archurl}";
+        name = "${publisher}-${name}.sigzip";
+        hash = signatureHash;
+      }
+    else
+      null;
 
   buildVscodeMarketplaceExtension = lib.extendMkDerivation {
     constructDrv = buildVscodeExtension;
@@ -112,6 +148,7 @@ let
         vscodeExtPublisher = mktplcRef.publisher;
         vscodeExtName = mktplcRef.name;
         vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
+        signatureArchive = fetchSignatureFromVscodeMarketplace mktplcRef;
       };
   };
 
@@ -122,6 +159,7 @@ let
     "sha256"
     "hash"
     "arch"
+    "signatureHash"
   ];
 
   mktplcExtRefToExtDrv =

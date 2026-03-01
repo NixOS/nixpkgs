@@ -39,6 +39,16 @@ class VSCodeExtensionUpdater:
         self.parser.add_argument(
             "--commit", action="store_true", help="commit the updated package"
         )
+        self.parser.add_argument(
+            "--with-signature",
+            action="store_true",
+            help="fetch and add signatureHash for cryptographic verification",
+        )
+        self.parser.add_argument(
+            "--force",
+            action="store_true",
+            help="force update even if version is the same (useful for hash-only updates)",
+        )
         self.args = self.parser.parse_args()
         self.attribute_path = self.args.attribute
         if not self.attribute_path:
@@ -49,6 +59,8 @@ class VSCodeExtensionUpdater:
         self.override_filename = self.args.override_filename
         self.allow_pre_release = self.args.pre_release
         self.commit = self.args.commit
+        self.with_signature = self.args.with_signature
+        self.force = self.args.force
         self.extension_publisher = self._get_nix_vscode_extension_publisher()
         self.extension_name = self._get_nix_vscode_extension_name()
         self.extension_marketplace_id = (
@@ -132,19 +144,10 @@ class VSCodeExtensionUpdater:
         source_url = self._get_nix_attribute(f"{self.attribute_path}.src.url")
         return "targetPlatform=" in source_url
 
-    def _get_nix_vscode_extension_src_hash(self, system: str) -> str:
-        url = self.execute_command([
-            "nix",
-            "--extra-experimental-features",
-            "nix-command",
-            "eval",
-            "--raw",
-            "-f",
-            ".",
-            f"{self.attribute_path}.src.url",
-            "--system",
-            system,
-        ])
+    def _prefetch_url_sri(self, url: str) -> str:
+        """
+        Fetches a URL and returns its SRI hash.
+        """
         sha256 = self.execute_command(["nix-prefetch-url", url])
         return self.execute_command([
             "nix",
@@ -158,6 +161,40 @@ class VSCodeExtensionUpdater:
             "sha256",
             sha256,
         ])
+
+    def _get_nix_vscode_extension_src_hash(self, system: str) -> str:
+        url = self.execute_command([
+            "nix",
+            "--extra-experimental-features",
+            "nix-command",
+            "eval",
+            "--raw",
+            "-f",
+            ".",
+            f"{self.attribute_path}.src.url",
+            "--system",
+            system,
+        ])
+        return self._prefetch_url_sri(url)
+
+    def _fetch_signature_hash(self, version: str, target_platform: Optional[str] = None) -> Optional[str]:
+        """
+        Fetches the signature hash for an extension version from the VS Code Marketplace.
+        Returns the SRI hash or None if fetch fails.
+        """
+        platform_suffix = f"?targetPlatform={target_platform}" if target_platform else ""
+        url = (
+            f"https://{self.extension_publisher}.gallery.vsassets.io/_apis/public/gallery/"
+            f"publisher/{self.extension_publisher}/extension/{self.extension_name}/{version}/"
+            f"assetbyname/Microsoft.VisualStudio.Services.VsixSignature{platform_suffix}"
+        )
+        try:
+            sri_hash = self._prefetch_url_sri(url)
+            logger.info(f"Fetched signature hash: {sri_hash}")
+            return sri_hash
+        except subprocess.CalledProcessError:
+            logger.warning("Failed to fetch signature hash")
+            return None
 
     def get_target_platform(self, nix_system: str) -> str:
         """
@@ -339,6 +376,93 @@ class VSCodeExtensionUpdater:
         )
         Path(self.override_filename).write_text(updated_content, encoding="utf-8")
 
+    def update_signature_hash(self, signature_hash: str) -> None:
+        """
+        Adds or updates signatureHash in the mktplcRef block for this extension.
+        Handles both inline extensions in default.nix and standalone extension files.
+        """
+        if not self.override_filename:
+            logger.warning("No override filename set, cannot update signature hash")
+            return
+
+        content = Path(self.override_filename).read_text(encoding="utf-8")
+        target_name = self.attribute_path.removeprefix("vscode-extensions.")
+
+        # Try to find the extension block by name (inline in default.nix)
+        pattern = re.compile(
+            rf"{re.escape(target_name)}\s*=\s*buildVscodeMarketplaceExtension\s*\{{",
+            re.MULTILINE,
+        )
+        ext_match = pattern.search(content)
+        search_start = ext_match.end() if ext_match else 0
+
+        # If not found as inline, the file is likely a standalone extension file
+        # In that case, search from the beginning for mktplcRef
+        if not ext_match:
+            # Verify this looks like a standalone extension file
+            standalone_pattern = re.compile(
+                r'(vscode-utils\.)?buildVscodeMarketplaceExtension\s*\{',
+                re.MULTILINE,
+            )
+            if not standalone_pattern.search(content):
+                logger.warning(f"Could not find extension block for {target_name}")
+                return
+
+        # Find the mktplcRef block
+        mktplc_pattern = re.compile(r'mktplcRef\s*=\s*\{', re.MULTILINE)
+        mktplc_match = mktplc_pattern.search(content, search_start)
+        if not mktplc_match:
+            logger.warning("Could not find mktplcRef block")
+            return
+
+        # Find the end of mktplcRef block
+        brace_start = mktplc_match.end() - 1
+        count = 0
+        pos = brace_start
+        while pos < len(content):
+            if content[pos] == "{":
+                count += 1
+            elif content[pos] == "}":
+                count -= 1
+                if count == 0:
+                    break
+            pos += 1
+
+        if count != 0:
+            logger.warning("Braces mismatch in mktplcRef block")
+            return
+
+        block_end = pos
+        block_text = content[brace_start:block_end + 1]
+
+        # Check if signatureHash already exists
+        sig_pattern = re.compile(r'(\s*)(signatureHash\s*=\s*")([^"]+)(";)')
+        sig_match = sig_pattern.search(block_text)
+
+        if sig_match:
+            # Update existing signatureHash
+            new_block_text = sig_pattern.sub(
+                rf'\g<1>signatureHash = "{signature_hash}";',
+                block_text
+            )
+            logger.info(f"Updated existing signatureHash")
+        else:
+            # Find the hash line to insert after
+            hash_pattern = re.compile(r'([ \t]*)(hash|sha256)\s*=\s*"[^"]+";')
+            hash_match = hash_pattern.search(block_text)
+            if hash_match:
+                indent = hash_match.group(1)
+                insert_pos = hash_match.end()
+                new_line = f'\n{indent}signatureHash = "{signature_hash}";'
+                new_block_text = block_text[:insert_pos] + new_line + block_text[insert_pos:]
+                logger.info(f"Added signatureHash after hash line")
+            else:
+                logger.warning("Could not find hash line in mktplcRef block")
+                return
+
+        updated_content = content[:brace_start] + new_block_text + content[block_end + 1:]
+        Path(self.override_filename).write_text(updated_content, encoding="utf-8")
+
     def run_nix_update(self, new_version: str, system: str) -> None:
         """
         Builds and executes the nix-update command.
@@ -420,11 +544,25 @@ class VSCodeExtensionUpdater:
                 f"<{self.new_version}",
             ])
         except subprocess.CalledProcessError:
-            logger.info("Already up to date or new version is older!")
-            sys.exit(0)
+            if not self.force:
+                logger.info("Already up to date or new version is older!")
+                sys.exit(0)
+            logger.info(f"Force mode: re-fetching even though version unchanged ({self.current_version})")
         for i, system in enumerate(self.nix_vscode_extension_platforms):
             version = self.new_version if i == 0 else "skip"
             self.run_nix_update(version, system)
+        # Fetch and add signature hash if requested
+        if self.with_signature:
+            logger.info("Fetching signature hash...")
+            # Use the first platform's target platform if extension is platform-specific
+            target_platform = None
+            if self._has_platform_source():
+                target_platform = self.get_target_platform(self.nix_vscode_extension_platforms[0])
+            signature_hash = self._fetch_signature_hash(self.new_version, target_platform)
+            if signature_hash:
+                self.update_signature_hash(signature_hash)
+            else:
+                logger.warning("Could not fetch signature hash, skipping")
         if self.commit:
             self.execute_command(["git", "add", self.override_filename])
             self.execute_command([
