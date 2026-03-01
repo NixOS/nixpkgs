@@ -39988,13 +39988,15 @@ with self;
 
   ZonemasterEngine = buildPerlPackage {
     pname = "Zonemaster-Engine";
-    version = "4.6.1";
+    version = "8.001000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.6.1.tar.gz";
-      hash = "sha256-4AXo3bZTOLnnPjjX5KNb/2O7MRqcAtlqpz5sPwNN9b0=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v8.1.0.tar.gz";
+      hash = "sha256-cLTcBg5uNazlQHhOZQJI7Z4KbmYCIh8DxXdaSMIQ+44=";
     };
     buildInputs = [
+      LocalePO
       PodCoverage
+      SubOverride
       TestDifferences
       TestException
       TestFatal
@@ -40008,16 +40010,18 @@ with self;
       FileShareDir
       FileSlurp
       IOSocketINET6
+      ListCompare
       ListMoreUtils
+      LogAny
+      MailSPF
       ModuleFind
-      Moose
-      MooseXSingleton
-      NetIP
+      NetDNS
       NetIPXS
       Readonly
       TextCSV
+      YAMLLibYAML
       ZonemasterLDNS
-      libintl-perl
+      libintlperl
     ];
 
     meta = {
