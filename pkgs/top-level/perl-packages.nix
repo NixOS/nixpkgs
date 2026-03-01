@@ -10566,10 +10566,10 @@ with self;
 
   DataBuffer = buildPerlPackage {
     pname = "Data-Buffer";
-    version = "0.04";
+    version = "0.06";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BT/BTROTT/Data-Buffer-0.04.tar.gz";
-      hash = "sha256-Kz0Jt7zzifwRYgeyg77iUONI1EycY0YL7mfvq03SG7Q=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Data-Buffer-0.06.tar.gz";
+      hash = "sha256-gVlWJg+EYJXxLhaC2m9taFeiUS3POU28VpKTECuP5K0=";
     };
     meta = {
       description = "Read/write buffer class";
