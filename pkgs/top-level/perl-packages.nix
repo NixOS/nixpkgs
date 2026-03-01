@@ -18745,12 +18745,14 @@ with self;
   };
 
   Later = buildPerlPackage {
-    version = "0.21";
+    version = "4.00";
     pname = "Object-Realize-Later";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKOV/Object-Realize-Later-0.21.tar.gz";
-      hash = "sha256-j3uWQMyONOqSvPbAEEmgPBReDrRuViJ14o3d06jW2Nk=";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Object-Realize-Later-4.00.tar.gz";
+      hash = "sha256-xHU9WjXxR+7eCc29Xm1ifd472qq/6eVvLP9yty0Zl5s=";
     };
+    buildInputs = [ TestPod ];
+    propagatedBuildInputs = [ LogReport ];
     meta = {
       description = "Delayed creation of objects";
       license = with lib.licenses; [
@@ -40365,6 +40367,71 @@ with self;
     };
     meta = {
       description = "Perl extensions for keeping data partially sorted";
+    };
+  };
+
+  LogReport = buildPerlPackage {
+    pname = "Log-Report";
+    version = "1.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Log-Report-1.44.tar.gz";
+      hash = "sha256-90fmV1/Gj1gRtlXuUWdFk/+ekPYBYULydkqM0/DvT8k=";
+    };
+    buildInputs = [ TestPod ];
+    propagatedBuildInputs = [
+      DevelGlobalDestruction
+      LogReportOptional
+      StringPrint
+    ];
+    meta = {
+      description = "report a problem, pluggable handlers and language support";
+      homepage = "http://perl.overmeer.net/CPAN/";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LogReportOptional = buildPerlPackage {
+    pname = "Log-Report-Optional";
+    version = "1.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Log-Report-Optional-1.08.tar.gz";
+      hash = "sha256-d7JI1M9/7Kp+hlkw5y3wudWzMzWNAMW9ReLHHV3xE60=";
+    };
+    buildInputs = [ TestPod ];
+    propagatedBuildInputs = [ StringPrint ];
+    meta = {
+      description = "Log::Report in its lightest form";
+      homepage = "http://perl.overmeer.net/CPAN/";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  StringPrint = buildPerlPackage {
+    pname = "String-Print";
+    version = "1.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/String-Print-1.02.tar.gz";
+      hash = "sha256-MElTZIZFnjjh15HAfOAiMmqRowK+rwHc2w57cDpdpsw=";
+    };
+    buildInputs = [ TestPod ];
+    propagatedBuildInputs = [
+      HTMLParser
+      TimeDate
+      UnicodeLineBreak
+    ];
+    meta = {
+      description = "printf extensions";
+      homepage = "http://perl.overmeer.net/CPAN/";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 }
