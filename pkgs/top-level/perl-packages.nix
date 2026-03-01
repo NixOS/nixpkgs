@@ -21865,10 +21865,10 @@ with self;
 
   MIMEEncWords = buildPerlPackage {
     pname = "MIME-EncWords";
-    version = "1.014.3";
+    version = "1.015.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEZUMI/MIME-EncWords-1.014.3.tar.gz";
-      hash = "sha256-6a+1SGEdTn5sULfwa70rG7KAjjeoEN7vtTfGevVIUjg=";
+      url = "mirror://cpan/authors/id/N/NE/NEZUMI/MIME-EncWords-1.015.0.tar.gz";
+      hash = "sha256-I+8GWJeCEze90WSH5l4qN5g4M0giXHLNdiuzdBrQCbU=";
     };
     propagatedBuildInputs = [ MIMECharset ];
     meta = {
