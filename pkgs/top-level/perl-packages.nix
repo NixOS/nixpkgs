@@ -34371,10 +34371,10 @@ with self;
 
   TestDifferences = buildPerlPackage {
     pname = "Test-Differences";
-    version = "0.70";
+    version = "0.72";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Test-Differences-0.70.tar.gz";
-      hash = "sha256-vuG1GGqpuif+0r8bBnRSDQvQzQUdkTOH+QhsH5SlaFQ=";
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Test-Differences-0.72.tar.gz";
+      hash = "sha256-ZIhEudy32ub5taFck1nQ8J3iR6YktlxGIOv/JJVY+RM=";
     };
     propagatedBuildInputs = [
       CaptureTiny
