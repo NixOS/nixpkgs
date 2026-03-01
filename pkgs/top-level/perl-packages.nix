@@ -15975,16 +15975,15 @@ with self;
 
   HashMergeSimple = buildPerlPackage {
     pname = "Hash-Merge-Simple";
-    version = "0.051";
+    version = "0.052";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RO/ROKR/Hash-Merge-Simple-0.051.tar.gz";
-      hash = "sha256-HFYyeHPS8E1XInd/BEhj2WiRBGaZd0DVWnVAccYoe3M=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Hash-Merge-Simple-0.052.tar.gz";
+      hash = "sha256-wn8giVgUqW4MW9DKMxW/kB15cG47q0qw2UbevCxCnAs=";
     };
     buildInputs = [
       TestDeep
       TestDifferences
       TestException
-      TestMost
       TestWarn
     ];
     propagatedBuildInputs = [ Clone ];
