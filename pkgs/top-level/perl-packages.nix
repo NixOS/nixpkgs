@@ -10229,10 +10229,10 @@ with self;
 
   DBIxClassCandy = buildPerlPackage {
     pname = "DBIx-Class-Candy";
-    version = "0.005003";
+    version = "0.005004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Candy-0.005003.tar.gz";
-      hash = "sha256-uKIpp7FfVZCV1FYc+CIEYBKFQbp/w1Re01hpkj1GVlw=";
+      url = "mirror://cpan/authors/id/W/WE/WESM/DBIx-Class-Candy-0.005004.tar.gz";
+      hash = "sha256-Yx4WHAj/evv5o/ybSdHXlGzIlzDrRA/I7YfFidDgCu4=";
     };
     buildInputs = [
       TestDeep
@@ -10241,7 +10241,9 @@ with self;
     propagatedBuildInputs = [
       DBIxClass
       LinguaENInflect
+      MROCompat
       SubExporter
+      namespaceclean
     ];
     meta = {
       description = "Sugar for your favorite ORM, DBIx::Class";
