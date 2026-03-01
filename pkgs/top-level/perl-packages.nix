@@ -18590,10 +18590,10 @@ with self;
 
   JSONMaybeXS = buildPerlPackage {
     pname = "JSON-MaybeXS";
-    version = "1.004005";
+    version = "1.004008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004005.tar.gz";
-      hash = "sha256-9ba8GfV55mtymfh0i4rD4XGTbcTn/LcqiiV6m9SCozE=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004008.tar.gz";
+      hash = "sha256-zTk3r6eIMfgKKtWrq2xRuegvykwx5YVuogjVmNtdyGc=";
     };
     buildInputs = [ TestNeeds ];
     meta = {
