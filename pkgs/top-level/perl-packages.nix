@@ -38575,25 +38575,32 @@ with self;
 
   WWWMechanize = buildPerlPackage {
     pname = "WWW-Mechanize";
-    version = "2.17";
+    version = "2.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SI/SIMBABQUE/WWW-Mechanize-2.17.tar.gz";
-      hash = "sha256-nAIAPoRiHeoSyYDEEB555PjK5OOCzT2iOfqovRmPBjo=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-2.20.tar.gz";
+      hash = "sha256-WtzmlfOWhWXTyOWXuYhSXuTIn0DssaIezuehZTLbtmg=";
     };
     propagatedBuildInputs = [
+      ApacheTest
       HTMLForm
+      HTMLParser
       HTMLTree
-      LWP
+      HTTPCookies
+      HTTPMessage
+      URI
+      libwwwperl
     ];
     doCheck = false;
     buildInputs = [
-      CGI
-      HTTPServerSimple
+      HTTPDaemon
       PathTiny
       TestDeep
       TestFatal
+      TestMemoryCycle
       TestOutput
       TestWarnings
+      URI
+      libwwwperl
     ];
     meta = {
       description = "Handy web browsing in a Perl object";
