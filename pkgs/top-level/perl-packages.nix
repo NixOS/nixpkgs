@@ -38048,10 +38048,10 @@ with self;
 
   UnicodeUTF8 = buildPerlPackage {
     pname = "Unicode-UTF8";
-    version = "0.62";
+    version = "0.66";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CH/CHANSEN/Unicode-UTF8-0.62.tar.gz";
-      hash = "sha256-+oci0LdGluMy/d1EKZRDbqk9O/x5gtS6vc7f3dZX0PY=";
+      url = "mirror://cpan/authors/id/C/CH/CHANSEN/Unicode-UTF8-0.66.tar.gz";
+      hash = "sha256-hodCOPxP9cSTHtuI7R3NUBFcUZAlc/GAeyfZsTr1wPA=";
     };
     buildInputs = [ TestFatal ];
     meta = {
