@@ -10752,10 +10752,10 @@ with self;
 
   DevelHide = buildPerlPackage {
     pname = "Devel-Hide";
-    version = "0.0015";
+    version = "0.0016";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-Hide-0.0015.tar.gz";
-      hash = "sha256-/I2+t/fXWnjtSWseDgXPyZxorKs6LpLP8VXKXw+l31g=";
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-Hide-0.0016.tar.gz";
+      hash = "sha256-eDC0pX9+x0EGINbAFQGFRJ17TJlkw5p9w5cFYDLDKgg=";
     };
     meta = {
       description = "Forces the unavailability of specified Perl modules (for testing)";
