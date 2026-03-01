@@ -963,6 +963,7 @@ in
 
   rest-nvim = prev.rest-nvim.overrideAttrs {
     strictDeps = false;
+    meta.broken = luaAtLeast "5.5";
   };
 
   rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs {
@@ -1138,6 +1139,10 @@ in
       chmod -x $out/bin/vusted_entry.vim
     '';
   });
+
+  xml2lua = prev.xml2lua.overrideAttrs {
+    meta.broken = luaAtLeast "5.5";
+  };
 
   # keep-sorted end
 }
