@@ -32606,10 +32606,10 @@ with self;
 
   SubQuote = buildPerlPackage {
     pname = "Sub-Quote";
-    version = "2.006008";
+    version = "2.006009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Sub-Quote-2.006008.tar.gz";
-      hash = "sha256-lL69UAr1V2LoPqLyvFlNh6+CgHI3DHEQxgwjioANFbI=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Sub-Quote-2.006009.tar.gz";
+      hash = "sha256-lnKC1U0tUbGYxnk1WU+T5N6j5U0eW87RWMlOKb6Giks=";
     };
     buildInputs = [ TestFatal ];
     meta = {
