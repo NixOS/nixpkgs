@@ -15398,13 +15398,13 @@ with self;
 
   Graph = buildPerlPackage {
     pname = "Graph";
-    version = "0.9727";
+    version = "0.9735";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/Graph-0.9727.tar.gz";
-      hash = "sha256-OSqJFtyVExq+jJE9/Kx2mEhL9IZrQq9fcEPABi50Iik=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Graph-0.9735.tar.gz";
+      hash = "sha256-XJpR+J7+ejbbKIWQv2Z1PyQXr9QbgjY+OfLzEB1JgGU=";
     };
     propagatedBuildInputs = [
-      HeapFibonacci
+      Heap
       SetObject
     ];
     meta = {
@@ -40298,6 +40298,18 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  Heap = buildPerlPackage {
+    pname = "Heap";
+    version = "0.80";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMM/Heap-0.80.tar.gz";
+      hash = "sha256-zNop88kxdq0P3/9N1vXkrJCzcMuksCg4a3NDv2QTm94=";
+    };
+    meta = {
+      description = "Perl extensions for keeping data partially sorted";
     };
   };
 }
