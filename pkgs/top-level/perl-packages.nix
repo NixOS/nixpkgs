@@ -6001,10 +6001,10 @@ with self;
 
   ConfigGeneral = buildPerlPackage {
     pname = "Config-General";
-    version = "2.65";
+    version = "2.67";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TL/TLINDEN/Config-General-2.65.tar.gz";
-      hash = "sha256-TW1XVL46nzCQaDbwzBDlVMiDLhTnoTQe+xWwXXBvxY8=";
+      url = "mirror://cpan/authors/id/T/TL/TLINDEN/Config-General-2.67.tar.gz";
+      hash = "sha256-Rz1lEnsj2sDoA5wB4ovEByy5puk+gaHqSJPOoIxpjbA=";
     };
     meta = {
       description = "Generic Config Module";
