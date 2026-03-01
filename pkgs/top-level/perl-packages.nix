@@ -34634,12 +34634,13 @@ with self;
 
   TestFutureIOImpl = buildPerlModule {
     pname = "Test-Future-IO-Impl";
-    version = "0.14";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-Future-IO-Impl-0.14.tar.gz";
-      hash = "sha256-AH22GdPUljQyXFbvvKDh5Vdt0z95RV8t6llb5u344jU=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-Future-IO-Impl-0.20.tar.gz";
+      hash = "sha256-4McgdF78/r2Fze92wmt5ZEu0L9WMGSpVDtfW2l+2i38=";
     };
     propagatedBuildInputs = [ Test2Suite ];
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Acceptance tests for C<Future::IO> implementations";
       license = with lib.licenses; [
