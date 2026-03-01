@@ -12,7 +12,6 @@
   nettle,
   readline,
   xxd,
-  iproute2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,11 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-OpbBd+HS/gwcWNe/6VB3glout1sifJ8o5EnKuXfyZ/o=";
   };
-
-  patches = [
-    # https://github.com/pi-hole/FTL/pull/2610: Fix authentication redirect when webhome is /
-    ./disable-redirect-root.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -63,10 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/api/action.c \
       --replace-fail "/usr/local/bin/pihole" "pihole" \
       --replace-fail "execv" "execvp"
-
-    substituteInPlace src/database/network-table.c \
-      --replace-fail "ip neigh show" "${lib.getExe' iproute2 "ip"} neigh show" \
-      --replace-fail "ip address show" "${lib.getExe' iproute2 "ip"} address show"
   '';
 
   installPhase = ''
