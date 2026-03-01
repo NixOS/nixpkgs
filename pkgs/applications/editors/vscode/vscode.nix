@@ -112,7 +112,6 @@ buildVscode {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       eadwu
-      synthetica
       bobby285271
       johnrtitor
       jefflabonte

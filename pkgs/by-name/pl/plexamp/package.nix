@@ -43,7 +43,6 @@ appimageTools.wrapType2 {
     maintainers = with lib.maintainers; [
       killercup
       redhawk
-      synthetica
     ];
     platforms = [ "x86_64-linux" ];
   };

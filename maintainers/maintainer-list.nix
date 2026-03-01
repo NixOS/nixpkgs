@@ -26022,12 +26022,6 @@
     githubId = 12595971;
     name = "Guillaume Girol";
   };
-  synthetica = {
-    email = "nix@hilhorst.be";
-    github = "Synthetica9";
-    githubId = 7075751;
-    name = "Patrick Hilhorst";
-  };
   sysedwinistrator = {
     email = "edwin.mowen@gmail.com";
     github = "sysedwinistrator";
