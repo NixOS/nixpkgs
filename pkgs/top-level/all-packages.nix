@@ -1438,7 +1438,7 @@ with pkgs;
         crossSystem = if stdenv.buildPlatform == stdenv.hostPlatform then null else stdenv.hostPlatform;
       }
     else if stdenv.hostPlatform.isLinux then
-      callPackage ../stdenv/linux/make-bootstrap-tools.nix { }
+      make-minimal-bootstrap-sources
     else if stdenv.hostPlatform.isFreeBSD then
       callPackage ../stdenv/freebsd/make-bootstrap-tools.nix { }
     else
