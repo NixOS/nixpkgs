@@ -13,5 +13,6 @@ lib.makeScope newScope (
     hare-ssh = callPackage ../development/hare-third-party/hare-ssh { };
     hare-toml = callPackage ../development/hare-third-party/hare-toml { };
     hare-png = callPackage ../development/hare-third-party/hare-png { };
+    hare-xml = callPackage ../development/hare-third-party/hare-xml { };
   }
 )
