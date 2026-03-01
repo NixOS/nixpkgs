@@ -11013,10 +11013,10 @@ with self;
 
   DigestPerlMD5 = buildPerlPackage {
     pname = "Digest-Perl-MD5";
-    version = "1.9";
+    version = "1.91";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DE/DELTA/Digest-Perl-MD5-1.9.tar.gz";
-      hash = "sha256-cQDLoXEPRfsOkH2LGnvYyu81xkrNMdfyJa/1r/7s2bE=";
+      url = "mirror://cpan/authors/id/D/DE/DELTA/Digest-Perl-MD5-1.91.tar.gz";
+      hash = "sha256-cY5BcX+4Kpqz8ICdIR/dzb3vkdwZiIfYK4hyOqVK/NU=";
     };
     meta = {
       description = "Perl Implementation of Rivest's MD5 algorithm";
