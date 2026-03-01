@@ -9416,21 +9416,22 @@ with self;
 
   DateTimeLocale = buildPerlPackage {
     pname = "DateTime-Locale";
-    version = "1.39";
+    version = "1.45";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Locale-1.39.tar.gz";
-      hash = "sha256-EMFFpsfa9xGIZOl0grSun5T5O5QUIS7uiqMLFqgTUQA=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Locale-1.45.tar.gz";
+      hash = "sha256-G8Vtwv9LMVJhLh1HTKZQca4sAJEuP6S8b1qZ5eeh2mg=";
     };
     buildInputs = [
       CPANMetaCheck
+      DistCheckConflicts
       FileShareDirInstall
       IPCSystemSimple
       PathTiny
       Test2PluginNoWarnings
-      Test2Suite
       TestFileShareDir
     ];
     propagatedBuildInputs = [
+      DistCheckConflicts
       FileShareDir
       ParamsValidationCompiler
       Specio
