@@ -22983,10 +22983,10 @@ with self;
 
   MojoliciousPluginAssetPack = buildPerlPackage {
     pname = "Mojolicious-Plugin-AssetPack";
-    version = "2.14";
+    version = "2.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-AssetPack-2.14.tar.gz";
-      hash = "sha256-jwWMyIw1mb6/ZjeK7GS91uvNkMljGL3m1ov6551j6qM=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-AssetPack-2.15.tar.gz";
+      hash = "sha256-YpepABobKs9qLjTqTYFOKyj/5AExtI/P42OR89hE5w0=";
     };
     propagatedBuildInputs = [
       FileWhich
