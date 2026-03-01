@@ -12721,10 +12721,10 @@ with self;
 
   ExporterTiny = buildPerlPackage {
     pname = "Exporter-Tiny";
-    version = "1.006002";
+    version = "1.006003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Exporter-Tiny-1.006002.tar.gz";
-      hash = "sha256-byleLL/7HbwVvbna3DQWccHgzSvfLTErF1Jic8MiY40=";
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Exporter-Tiny-1.006003.tar.gz";
+      hash = "sha256-ZJnwmmQyz4exM/uVgKipqabFZoITRrH97pX3tkwDF7E=";
     };
     meta = {
       description = "Exporter with the features of Sub::Exporter but only core dependencies";
