@@ -39956,23 +39956,28 @@ with self;
 
   ZonemasterCLI = buildPerlPackage {
     pname = "Zonemaster-CLI";
-    version = "6.000003";
+    version = "8.000001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v6.0.3.tar.gz";
-      hash = "sha256-oYDBYVygvPUZ9vrGX/y5A0MAQ6zgSsrf6AtUdFcZG4Q=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v8.0.1.tar.gz";
+      hash = "sha256-QLUza9M72r/q1W+uhG5pn6YWz7dDJQ0rIq3NyDVUtjU=";
     };
     propagatedBuildInputs = [
       JSONXS
-      MooseXGetopt
-      TextReflow
+      NetIPXS
+      Readonly
+      TryTiny
       ZonemasterEngine
       ZonemasterLDNS
-      libintl-perl
+      libintlperl
     ];
 
     preConfigure = ''
       patchShebangs script/
     '';
+    buildInputs = [
+      JSONValidator
+      TestDifferences
+    ];
 
     meta = {
       description = "Run Zonemaster tests from the command line";
