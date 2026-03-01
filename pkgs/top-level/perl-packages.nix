@@ -23464,29 +23464,31 @@ with self;
 
   Moose = buildPerlPackage {
     pname = "Moose";
-    version = "2.2206";
+    version = "2.4000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Moose-2.2206.tar.gz";
-      hash = "sha256-Z5csTivDn72jhRgXevDme7vrVIVi5OxLdZoaelg+UFs=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Moose-2.4000.tar.gz";
+      hash = "sha256-xL3L5NqutQ3PQOoX37FIPbIsuIMih6vYdipEq5j7Vh8=";
     };
     buildInputs = [
-      DistCheckConflicts
       CPANMetaCheck
-      TestCleanNamespaces
+      DistCheckConflicts
       TestFatal
       TestNeeds
-      TestRequires
     ];
     propagatedBuildInputs = [
+      ClassLoad
       ClassLoadXS
       DataOptList
       DevelGlobalDestruction
       DevelOverloadInfo
       DevelStackTrace
+      DistCheckConflicts
       EvalClosure
       MROCompat
+      ModuleRuntime
       ModuleRuntimeConflicts
       PackageDeprecationManager
+      PackageStash
       PackageStashXS
       ParamsUtil
       SubExporter
