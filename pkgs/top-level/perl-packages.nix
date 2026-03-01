@@ -20549,12 +20549,12 @@ with self;
 
   maatkit = callPackage ../development/perl-modules/maatkit { };
 
-  MacPasteboard = buildPerlPackage {
+  MacPasteboard = buildPerlModule {
     pname = "Mac-Pasteboard";
-    version = "0.103";
+    version = "0.105";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.103.tar.gz";
-      hash = "sha256-L16N0tsNZEVVhITKbULYOcWpfuiqGyUOaU1n1bf2Y0w=";
+      url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.105.tar.gz";
+      hash = "sha256-LVWSq7HwFSc+qm2DLt2SL4aVNovGn+qPQTuCa7HmhjM=";
     };
     meta = {
       description = "Manipulate Mac OS X pasteboards";
