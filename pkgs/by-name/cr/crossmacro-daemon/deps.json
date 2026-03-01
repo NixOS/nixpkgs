@@ -1,5 +1,10 @@
 [
   {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "10.0.3",
+    "hash": "sha256-ShB94jEtsq5X5r6xDZQ+wotZYG3OPKOCHNGy4B7NVFs="
+  },
+  {
     "pname": "Serilog",
     "version": "4.0.0",
     "hash": "sha256-j8hQ5TdL1TjfdGiBO9PyHJFMMPvATHWN1dtrrUZZlNw="
@@ -16,8 +21,8 @@
   },
   {
     "pname": "Serilog",
-    "version": "4.3.0",
-    "hash": "sha256-jyIy4BjsyFXge3aO4GRFAdnX4/rz1MHfBkBDIpCDsTw="
+    "version": "4.3.1",
+    "hash": "sha256-TY+GaQYnyDfOGl0gi67xDyUMOuV/mjz8BU66/UsmStI="
   },
   {
     "pname": "Serilog.Sinks.Async",
@@ -36,7 +41,7 @@
   },
   {
     "pname": "Tmds.DBus",
-    "version": "0.23.0",
-    "hash": "sha256-BwWQSqOOMS+Cf2fM8MIuiHey8QnGH4WvYjOn9haq5e0="
+    "version": "0.90.3",
+    "hash": "sha256-/yBQpjsIqbY4JFBxxVKXPR2S/N1TMLG5QPXvScSCdEk="
   }
 ]

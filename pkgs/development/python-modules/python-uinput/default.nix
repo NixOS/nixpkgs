@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   buildInputs = [ udev ];
 
-  NIX_CFLAGS_LINK = "-ludev";
+  env.NIX_CFLAGS_LINK = "-ludev";
 
   doCheck = false; # no tests
 

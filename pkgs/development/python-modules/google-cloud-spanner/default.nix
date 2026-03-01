@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.62.0";
+  version = "3.58.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-spanner";
     tag = "v${version}";
-    hash = "sha256-3WmfDwbdhYY1xaA5RnrAuD1+EDrJ3KMBsonQkuFkgcA=";
+    hash = "sha256-bIagQjQv+oatIo8mkA8t5wP9igMnorkiudgyWkVnJcg=";
   };
 
   build-system = [ setuptools ];

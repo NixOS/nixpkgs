@@ -42,15 +42,6 @@ type EnvValue = str | Literal[_Env.PRESERVE_ENV]
 
 
 @dataclass(frozen=True)
-class _RawShellArg:
-    value: str
-
-    @override
-    def __str__(self) -> str:
-        return self.value
-
-
-@dataclass(frozen=True)
 class Remote:
     host: str
     opts: list[str]
@@ -144,11 +135,13 @@ def run_wrapper(
     resolved_env = _resolve_env_local(normalized_env)
 
     if remote:
-        # Apply env for the *remote command* (not for ssh itself)
-        remote_run_args: list[Arg | _RawShellArg] = []
-        remote_run_args.extend(run_args)
-        if normalized_env:
-            remote_run_args = _prefix_env_cmd_remote(run_args, normalized_env)
+        remote_run_args: list[Arg] = [
+            "/bin/sh",
+            "-c",
+            _remote_shell_script(normalized_env),
+            "sh",
+            *run_args,
+        ]
 
         if sudo:
             sudo_args = shlex.split(os.getenv("NIX_SUDOOPTS", ""))
@@ -275,30 +268,29 @@ def _prefix_env_cmd(cmd: Sequence[Arg], resolved_env: dict[str, str]) -> list[Ar
     return ["env", "-i", *assigns, *cmd]
 
 
-def _prefix_env_cmd_remote(
-    cmd: Args,
-    env: dict[str, EnvValue],
-) -> list[Arg | _RawShellArg]:
+def _remote_shell_script(env: Mapping[str, EnvValue]) -> str:
     """
-    Prefix remote commands with env assignments. Preserve markers are expanded
-    by the remote shell at execution time.
+    Build the POSIX shell wrapper used for remote execution over SSH.
+
+    SSH sends the remote command as a shell-interpreted command line, so we
+    need a wrapper to establish a clean environment before `exec`-ing the real
+    command. This wrapper is always run under `/bin/sh -c` so preserved
+    variables like `${PATH-}` do not depend on the remote user's login shell.
     """
-    assigns: list[str | _RawShellArg] = []
+    shell_assigns: list[str] = []
     for k, v in env.items():
         if v is PRESERVE_ENV:
-            assigns.append(_RawShellArg(f"{k}=${{{k}-}}"))
+            shell_assigns.append(f'{k}="${{{k}-}}"')
         else:
-            assigns.append(f"{k}={v}")
-    return ["env", "-i", *assigns, *cmd]
+            shell_assigns.append(f"{k}={shlex.quote(v)}")
+    return f'exec env -i {" ".join(shell_assigns)} "$@"'
 
 
-def _quote_remote_arg(arg: Arg | _RawShellArg) -> str:
-    if isinstance(arg, _RawShellArg):
-        return str(arg)
+def _quote_remote_arg(arg: Arg) -> str:
     return shlex.quote(str(arg))
 
 
-def _sanitize_env_run_args(run_args: list[Arg] | list[Arg | _RawShellArg]) -> list[Arg]:
+def _sanitize_env_run_args(run_args: list[Arg]) -> list[Arg]:
     """
     Sanitize long or sensitive environment variables from logs.
     """

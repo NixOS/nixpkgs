@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kaf";
-  version = "0.2.13";
+  version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "birdayz";
     repo = "kaf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tjHRIbTJJ8HPp2Jk7R2rl+ZN+ie6xRlssx4clcGc4U4=";
+    hash = "sha256-gLFUv+4wGH1FOpa4DHHwSV7nSCxo+MzdNmo0I0SD/p0=";
   };
 
-  vendorHash = "sha256-1QcQeeYQFsStK27NVdyCAb1Y40lyifBf0dlSgzocG3Y=";
+  vendorHash = "sha256-U4nmC08z7xtvRdy2xzvBqTmxJhQKI0BjJDkUwDZOQg0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

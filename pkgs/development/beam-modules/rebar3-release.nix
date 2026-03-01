@@ -74,7 +74,9 @@ let
 
         inherit src;
 
-        env.REBAR_IGNORE_DEPS = beamDeps != [ ];
+        env = (attrs.env or { }) // {
+          REBAR_IGNORE_DEPS = beamDeps != [ ];
+        };
 
         configurePhase = ''
           runHook preConfigure

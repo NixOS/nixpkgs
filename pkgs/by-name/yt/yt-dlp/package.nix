@@ -1,5 +1,6 @@
 {
   lib,
+  stdenvNoCC,
   python3Packages,
   atomicparsley,
   deno,
@@ -13,6 +14,7 @@
   javascriptSupport ? true,
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
+  withSecretStorage ? !stdenvNoCC.hostPlatform.isDarwin,
   nix-update-script,
 }:
 
@@ -51,7 +53,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # expose optional-dependencies, but provide all features
-  dependencies = lib.concatAttrValues optional-dependencies;
+  dependencies =
+    optional-dependencies.default
+    ++ optional-dependencies.curl-cffi
+    ++ lib.optionals withSecretStorage optional-dependencies.secretstorage;
 
   optional-dependencies = {
     default = with python3Packages; [

@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isFreeBSD ./include-static-dependencies.patch;
 
-  NIX_CFLAGS_LINK = [ "-lcrypt" ];
+  env.NIX_CFLAGS_LINK = toString [ "-lcrypt" ];
 
   outputs = [
     "out"

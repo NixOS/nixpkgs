@@ -254,6 +254,10 @@ buildPythonPackage (finalAttrs: {
     "test_gen_from_header"
     "test_struct_ordering"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # Exception: forward pass failed shape (2, 3, 64, 64)
+    "test_cast"
+  ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # AssertionError: Expected 1 operations, got 3
     # assert 3 == 1

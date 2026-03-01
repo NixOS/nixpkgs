@@ -10,7 +10,9 @@
   attrNamesOnly ? false,
 
   # Set this to `null` to build for builtins.currentSystem only
-  systems ? builtins.fromJSON (builtins.readFile ../supportedSystems.json),
+  systems ? builtins.fromJSON (
+    builtins.readFile (path + "/pkgs/top-level/release-supported-systems.json")
+  ),
 
   # Customize the config used to evaluate nixpkgs
   extraNixpkgsConfig ? { },

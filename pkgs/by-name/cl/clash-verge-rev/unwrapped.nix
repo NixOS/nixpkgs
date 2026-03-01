@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage {
       src
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
+    fetcherVersion = 3;
     hash = pnpm-hash;
   };
 

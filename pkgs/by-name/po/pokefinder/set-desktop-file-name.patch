@@ -1,7 +1,7 @@
-diff --git a/Source/main.cpp b/Source/main.cpp
+diff --git a/main.cpp b/main.cpp
 index 3e58a381..2e7e4a86 100644
---- a/Source/main.cpp
-+++ b/Source/main.cpp
+--- a/main.cpp
++++ b/main.cpp
 @@ -69,6 +69,7 @@ int main(int argc, char *argv[])
  {
      QApplication a(argc, argv);

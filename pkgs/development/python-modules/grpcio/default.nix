@@ -64,10 +64,12 @@ buildPythonPackage rec {
     unset AR
   '';
 
-  GRPC_BUILD_WITH_BORING_SSL_ASM = "";
-  GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
-  GRPC_PYTHON_BUILD_SYSTEM_ZLIB = 1;
-  GRPC_PYTHON_BUILD_SYSTEM_CARES = 1;
+  env = {
+    GRPC_BUILD_WITH_BORING_SSL_ASM = "";
+    GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
+    GRPC_PYTHON_BUILD_SYSTEM_ZLIB = 1;
+    GRPC_PYTHON_BUILD_SYSTEM_CARES = 1;
+  };
 
   # does not contain any tests
   doCheck = false;

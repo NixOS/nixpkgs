@@ -24,22 +24,23 @@
   fastapi,
   google-genai,
   google-generativeai,
+  jsonref,
   pytest-asyncio,
   pytestCheckHook,
   python-dotenv,
   redis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "instructor";
-  version = "1.14.4";
+  version = "1.14.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
-    tag = "v${version}";
-    hash = "sha256-6NYS6nY9phIY9fWEp0X3fC90uFedaot2xzZynzGnZSE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MxFHCjtIUESuvDkNvEEcZdWXTLAxGFH9ZJ1wx8E4N14=";
   };
 
   build-system = [ hatchling ];
@@ -69,6 +70,7 @@ buildPythonPackage rec {
     fastapi
     google-genai
     google-generativeai
+    jsonref
     pytest-asyncio
     pytestCheckHook
     python-dotenv
@@ -83,6 +85,9 @@ buildPythonPackage rec {
     "test_mode_functions_deprecation_warning"
     "test_partial"
     "test_provider_invalid_type_raises_error"
+
+    # instructor.core.exceptions.ConfigurationError: response_model must be a Pydantic BaseModel subclass, got type
+    "test_openai_schema_raises_error"
 
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"
@@ -113,9 +118,9 @@ buildPythonPackage rec {
   meta = {
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/${src.tag}";
+    changelog = "https://github.com/jxnl/instructor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";
   };
-}
+})

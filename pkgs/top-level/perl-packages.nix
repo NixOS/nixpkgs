@@ -25270,10 +25270,10 @@ with self;
 
   NetCIDR = buildPerlPackage {
     pname = "Net-CIDR";
-    version = "0.21";
+    version = "0.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MR/MRSAM/Net-CIDR-0.21.tar.gz";
-      hash = "sha256-MPMDwHNZSNozNw3sx+h8+mi8QwqkS4HRj42CO20av78=";
+      url = "mirror://cpan/authors/id/M/MR/MRSAM/Net-CIDR-0.27.tar.gz";
+      hash = "sha256-npUP70QiJk3I76sw27084r4SXmGz9cUBEdFVBtO1cOM=";
     };
     meta = {
       description = "Manipulate IPv4/IPv6 netblocks in CIDR notation";

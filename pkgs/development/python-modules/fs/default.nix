@@ -54,7 +54,7 @@ buildPythonPackage rec {
     glibcLocales
   ];
 
-  LC_ALL = "en_US.utf-8";
+  env.LC_ALL = "en_US.utf-8";
 
   preCheck = ''
     HOME=$(mktemp -d)

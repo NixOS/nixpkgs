@@ -103,10 +103,10 @@ buildPythonPackage (finalAttrs: {
     "test_text_stroke"
   ];
 
-  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
-  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.FONTCONFIG_FILE}" ];
+  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.env.FONTCONFIG_FILE}" ];
 
   pythonImportsCheck = [ "weasyprint" ];
 

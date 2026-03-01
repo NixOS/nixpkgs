@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "finit";
-  version = "4.16-rc1";
+  version = "4.16";
 
   src = fetchFromGitHub {
     owner = "finit-project";
     repo = "finit";
     tag = finalAttrs.version;
-    hash = "sha256-hvTTvAxG0FnPpYepkw5Q1Fo59wx7w9MLjOj2h4WZsAo=";
+    hash = "sha256-DtocGgFvt7RLqwjHczwUbsszBD5MQI5fEuq9EB2tFp4=";
   };
 
   postPatch = ''

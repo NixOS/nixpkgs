@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   strictDeps = true;
 
-  CLIPPER_PATH = "${clipper.out}";
+  env.CLIPPER_PATH = clipper.out;
 
   postPatch = ''
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake

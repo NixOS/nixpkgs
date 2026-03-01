@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-hostname";
-  version = "0-unstable-2026-02-17";
+  version = "0-unstable-2026-02-24";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "hostname";
-    rev = "c047799a57c09ee3878d78dc9134248747e6f677";
-    hash = "sha256-41+QCRWJ1kUDkGxuTs8M+l96VhPtq25VPEqI58Arn7A=";
+    rev = "b5efd550762655d4483d70fbc54f5829a8f94a11";
+    hash = "sha256-ipjI6E5x3ORr5H1YQA7NvoTk894fQWLiMdjnb7iaubc=";
   };
 
-  cargoHash = "sha256-gt1cC06Viu0trXL1+0/EToybSAJwFL3KVSltqUtpGj0=";
+  cargoHash = "sha256-wR8nRDljztDLdxVFb2pdy4wfqw3zWj3mHUpKrAPCFrw=";
 
   cargoBuildFlags = [ "--package uu_hostname" ];
 

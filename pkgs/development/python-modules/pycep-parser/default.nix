@@ -4,13 +4,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   lark,
-  poetry-core,
   pytestCheckHook,
   regex,
   typing-extensions,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycep-parser";
   version = "0.7.0";
   pyproject = true;
@@ -18,13 +18,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gruebel";
     repo = "pycep";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pEFgpLfGcJhUWfs/nG1r7GfIS045cfNh7MVQokluXmM=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ uv-build ];
 
-  propagatedBuildInputs = [
+  # We can't use pythonRelaxDeps to relax the build-system
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build~=0.9.0" "uv_build"
+  '';
+
+  pythonRelaxDeps = [ "regex" ];
+
+  dependencies = [
     lark
     regex
     typing-extensions
@@ -40,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python based Bicep parser";
     homepage = "https://github.com/gruebel/pycep";
-    changelog = "https://github.com/gruebel/pycep/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/gruebel/pycep/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

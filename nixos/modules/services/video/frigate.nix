@@ -348,6 +348,10 @@ in
               proxy_set_header X-Forwarded-Groups $http_x_forwarded_groups;
               proxy_set_header X-Forwarded-Email $http_x_forwarded_email;
               proxy_set_header X-Forwarded-Preferred-Username $http_x_forwarded_preferred_username;
+              proxy_set_header X-Auth-Request-User $http_x_auth_request_user;
+              proxy_set_header X-Auth-Request-Groups $http_x_auth_request_groups;
+              proxy_set_header X-Auth-Request-Email $http_x_auth_request_email;
+              proxy_set_header X-Auth-Request-Preferred-Username $http_x_auth_request_preferred_username;
               proxy_set_header X-authentik-username $http_x_authentik_username;
               proxy_set_header X-authentik-groups $http_x_authentik_groups;
               proxy_set_header X-authentik-email $http_x_authentik_email;
@@ -361,6 +365,10 @@ in
             extraConfig = nginxAuthRequest + ''
               aio threads;
               vod hls;
+
+              # Use fMP4 (fragmented MP4) instead of MPEG-TS for better performance
+              # Smaller segments, faster generation, better browser compatibility
+              vod_hls_container_format fmp4;
 
               secure_token $args;
               secure_token_types application/vnd.apple.mpegurl;
@@ -555,6 +563,16 @@ in
                     ${nginxProxySettings}
                 }
 
+                location /api/auth/first_time_login {
+                    auth_request off;
+                    limit_except GET {
+                        deny all;
+                    }
+                    rewrite ^/api(/.*)$ $1 break;
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
+
                 location /api/stats {
                     ${nginxAuthRequest}
                     access_log off;
@@ -575,6 +593,14 @@ in
               '';
           };
           "/assets/" = {
+            root = cfg.package.web;
+            extraConfig = ''
+              access_log off;
+              expires 1y;
+              add_header Cache-Control "public";
+            '';
+          };
+          "/fonts" = {
             root = cfg.package.web;
             extraConfig = ''
               access_log off;
@@ -623,6 +649,8 @@ in
           vod_manifest_segment_durations_mode accurate;
           vod_ignore_edit_list on;
           vod_segment_duration 10000;
+
+          # MPEG-TS settings (not used when fMP4 is enabled, kept for reference)
           vod_hls_mpegts_align_frames off;
           vod_hls_mpegts_interleave_frames on;
 
