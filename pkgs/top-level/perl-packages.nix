@@ -5056,10 +5056,10 @@ with self;
 
   ClassDataInheritable = buildPerlPackage {
     pname = "Class-Data-Inheritable";
-    version = "0.09";
+    version = "0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSHERER/Class-Data-Inheritable-0.09.tar.gz";
-      hash = "sha256-RAiNbpBxLhh7ilsFDKWxxw7+K6oyrhI+m9j1nynwbk0=";
+      url = "mirror://cpan/authors/id/R/RS/RSHERER/Class-Data-Inheritable-0.10.tar.gz";
+      hash = "sha256-qhrmimETV7e/2aL2SQfMGW3dbQR8rmTvnQrQmdmK5Uo=";
     };
     meta = {
       description = "Inheritable, overridable class data";
