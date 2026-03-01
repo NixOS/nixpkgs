@@ -35006,13 +35006,16 @@ with self;
 
   TestMockModule = buildPerlModule {
     pname = "Test-MockModule";
-    version = "0.177.0";
+    version = "0.180.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-v0.177.0.tar.gz";
-      hash = "sha256-G9p6SdzqdgdtQKe2psPz4V5rGchLYXHfRFNNkROPEEU=";
+      url = "mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-v0.180.0.tar.gz";
+      hash = "sha256-OQ5gNh0sHEBEY6RtSWaBsFRY1Q2BHumSgpkrm2HtbPY=";
     };
     propagatedBuildInputs = [ SUPER ];
-    buildInputs = [ TestWarnings ];
+    buildInputs = [
+      ModuleBuild
+      TestWarnings
+    ];
     meta = {
       description = "Override subroutines in a module for unit testing";
       license = with lib.licenses; [
