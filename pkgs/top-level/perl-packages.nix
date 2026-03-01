@@ -26846,14 +26846,18 @@ with self;
 
   NumberFraction = buildPerlModule {
     pname = "Number-Fraction";
-    version = "3.0.4";
+    version = "3.1.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Number-Fraction-v3.0.4.tar.gz";
-      hash = "sha256-xkGcird4/XKbENfmp487ewf8CJV8H3nlZm3Ny01iwIU=";
+      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Number-Fraction-v3.1.0.tar.gz";
+      hash = "sha256-I3rAIVjJ4dL3X7MhGynkrF16ct3U7Aq+VErhlS909+I=";
     };
     propagatedBuildInputs = [
       Moo
-      MooXTypesMooseLike
+      TypeTiny
+    ];
+    buildInputs = [
+      ModuleBuild
+      TestWarn
     ];
     meta = {
       description = "Perl extension to model fractions";
