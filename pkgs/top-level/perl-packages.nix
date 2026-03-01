@@ -20192,19 +20192,24 @@ with self;
 
   LogDispatchouli = buildPerlPackage {
     pname = "Log-Dispatchouli";
-    version = "3.007";
+    version = "3.013";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Log-Dispatchouli-3.007.tar.gz";
-      hash = "sha256-mIEYlllSukmo+nkaZTaIDIkBf0651ywXRe1n0VwNJyw=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Log-Dispatchouli-3.013.tar.gz";
+      hash = "sha256-lVOXBSrylt1p1gW9TdfNEAcn1i53H3dSfDqnYoYBZ5E=";
     };
     buildInputs = [
+      JSONMaybeXS
       TestDeep
       TestFatal
     ];
     propagatedBuildInputs = [
+      LogDispatch
       LogDispatchArray
+      ParamsUtil
       StringFlogger
+      SubExporter
       SubExporterGlobExporter
+      TryTiny
     ];
     meta = {
       description = "Simple wrapper around Log::Dispatch";
