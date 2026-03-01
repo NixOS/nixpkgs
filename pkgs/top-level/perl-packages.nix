@@ -5777,17 +5777,16 @@ with self;
 
   CommandRunner = buildPerlModule {
     pname = "Command-Runner";
-    version = "0.200";
+    version = "0.201";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/Command-Runner-0.200.tar.gz";
-      hash = "sha256-WtJtBhEb/s1TyPW7XeqUvyAl9seOlfbYAS5M+oninyY=";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Command-Runner-0.201.tar.gz";
+      hash = "sha256-OOMpSun/0BViXXdGoIA8wynekvsPDtrpopzYIyz0WNM=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [
       CaptureTiny
       Filepushd
       StringShellQuote
-      Win32ShellQuote
     ];
     meta = {
       description = "Run external commands and Perl code refs";
