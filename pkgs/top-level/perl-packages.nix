@@ -9441,10 +9441,10 @@ with self;
 
   DateTimeFormatRFC3339 = buildPerlPackage rec {
     pname = "DateTime-Format-RFC3339";
-    version = "1.2.0";
+    version = "1.10.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IK/IKEGAMI/DateTime-Format-RFC3339-v${version}.tar.gz";
-      hash = "sha256-E27hIkwxxuAXaSqfXlb9tPcKlfRq7DrYVdN4PeNaDfc=";
+      url = "mirror://cpan/authors/id/I/IK/IKEGAMI/DateTime-Format-RFC3339-v1.10.0.tar.gz";
+      hash = "sha256-Ol5k576q/SxkoSEJ48wP7T2z+JOwMjtDtSlk/CwMhJY=";
     };
     propagatedBuildInputs = [ DateTime ];
     meta = {
