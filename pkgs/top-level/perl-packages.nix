@@ -32404,12 +32404,16 @@ with self;
 
   SubExporter = buildPerlPackage {
     pname = "Sub-Exporter";
-    version = "0.990";
+    version = "0.991";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-0.990.tar.gz";
-      hash = "sha256-vGTsWgaGX5zGdiFcBqlEizoMizl0/7I6JPjirQkFRPw=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-0.991.tar.gz";
+      hash = "sha256-KpVpXTXF0NU3On4UXJa5sBYRO3TpQRaDWsBUUMrk1EU=";
     };
-    propagatedBuildInputs = [ DataOptList ];
+    propagatedBuildInputs = [
+      DataOptList
+      ParamsUtil
+      SubInstall
+    ];
     meta = {
       description = "Sophisticated exporter for custom-built routines";
       homepage = "https://github.com/rjbs/Sub-Exporter";
