@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "1.1.8";
+  version = "1.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "hishel";
     tag = version;
-    hash = "sha256-VuUt1M0+ZztWoFZomAR5s1YQ4suIN3uEq54gLTjBLeY=";
+    hash = "sha256-MQF/xA2PzDeoVhfvTyROBtDSNdT+N+9KoxQjXIThfQw=";
   };
 
   postPatch = ''
