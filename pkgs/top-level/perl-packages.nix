@@ -37139,10 +37139,10 @@ with self;
 
   Testutf8 = buildPerlPackage {
     pname = "Test-utf8";
-    version = "1.02";
+    version = "1.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKF/Test-utf8-1.02.tar.gz";
-      hash = "sha256-34LwnFlAgwslpJ8cgWL6JNNx5gKIDt742aTUv9Zri9c=";
+      url = "mirror://cpan/authors/id/S/SC/SCHWIGON/Test-utf8-1.03.tar.gz";
+      hash = "sha256-okc3sx7AFhiaFsfw5N4v8MvXBcyu9wZjhxlROcW8JDk=";
     };
     meta = {
       description = "Handy utf8 tests";
