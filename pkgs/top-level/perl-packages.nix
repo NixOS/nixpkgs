@@ -23348,10 +23348,10 @@ with self;
 
   MojoPg = buildPerlPackage {
     pname = "Mojo-Pg";
-    version = "4.27";
+    version = "4.28";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojo-Pg-4.27.tar.gz";
-      hash = "sha256-oyLI3wDj5WVf300LernXmSiTIOKfZP6ZrHrxJEhO+dg=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojo-Pg-4.28.tar.gz";
+      hash = "sha256-7YuqMc04jIL9N4rDdVAvGOUnbXgRtukfkDiY7CJ/3yE=";
     };
     propagatedBuildInputs = [
       DBDPg
