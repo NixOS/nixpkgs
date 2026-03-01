@@ -22152,11 +22152,11 @@ with self;
 
   ModernPerl = buildPerlPackage {
     pname = "Modern-Perl";
-    version = "1.20230106";
+    version = "1.20250607";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20230106.tar.gz";
-      hash = "sha256-BFncq4DOgrY0Yf2B7pTgbpplFdmPP7wxmDjdHmAoUfc=";
+      url = "mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20250607.tar.gz";
+      hash = "sha256-OO1+t7ka7tFTiHSD5JqagHouiWKrInzG/bXqTcQd8Sg=";
     };
     meta = {
       description = "Enable all of the features of Modern Perl with one import";
