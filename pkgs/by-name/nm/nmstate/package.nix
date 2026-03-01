@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   fetchurl,
   rustPlatform,
   libfaketime,
@@ -8,22 +7,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nmstate";
-  version = "2.2.57";
+  version = "2.2.59";
 
   srcs = [
-    (fetchFromGitHub {
-      owner = "nmstate";
-      repo = "nmstate";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-7X51XmoSwlIrbsdJFfTQ23bhO3bitkHXOObL6JaGpvI=";
+    (fetchurl {
+      url = "https://github.com/nmstate/nmstate/releases/download/v${finalAttrs.version}/nmstate-${finalAttrs.version}.tar.gz";
+      hash = "sha256-FuvaYE9XbBy5NE2uRgRQSGEzOeiK+ZrntJ5II3k46ko=";
     })
     (fetchurl {
       url = "https://github.com/nmstate/nmstate/releases/download/v${finalAttrs.version}/nmstate-vendor-${finalAttrs.version}.tar.xz";
-      hash = "sha256-stOHNezPLPjSrt/f3HmhqWMxSaSfOh/hYVGB2+l8Pb4=";
+      hash = "sha256-aUlbBJrn6I7AQ3WlV+R8mIO0n2MJ7JHJXHHqJuXilvQ=";
     })
   ];
   sourceRoot = ".";
   postUnpack = ''
+    mv nmstate-* source
     mv vendor source/rust/
     cd source
   '';
@@ -45,6 +43,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
     PREFIX=$out LIBDIR=$out/lib RELEASE=1 SKIP_PYTHON_INSTALL=1 faketime -f "$source_date" make install
   '';
+
+  passthru.updateScript = ./update.py;
 
   meta = {
     description = "Nmstate: A Declarative Network API";
