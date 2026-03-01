@@ -23874,14 +23874,15 @@ with self;
 
   MooXCmd = buildPerlPackage {
     pname = "MooX-Cmd";
-    version = "0.017";
+    version = "1.000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RE/REHSACK/MooX-Cmd-0.017.tar.gz";
-      hash = "sha256-lD/yjaqAiXMnx8X+xacQDPqsktrw+fl8OOOnfQCucPU=";
+      url = "mirror://cpan/authors/id/G/GE/GETTY/MooX-Cmd-1.000.tar.gz";
+      hash = "sha256-2MDmRDHPNEe7XNaXEnfvU+NBIr0yrEKucZvbFfimDxY=";
     };
     propagatedBuildInputs = [
       ListMoreUtils
       ModulePluggable
+      ModuleRuntime
       Moo
       PackageStash
       ParamsUtil
