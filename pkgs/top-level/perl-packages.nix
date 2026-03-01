@@ -27466,10 +27466,10 @@ with self;
 
   ParallelForkManager = buildPerlPackage {
     pname = "Parallel-ForkManager";
-    version = "2.02";
+    version = "2.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YA/YANICK/Parallel-ForkManager-2.02.tar.gz";
-      hash = "sha256-wbKXCou2ZsPefKrEqPTbzAQ6uBm7wzdpLse/J62uRAQ=";
+      url = "mirror://cpan/authors/id/Y/YA/YANICK/Parallel-ForkManager-2.04.tar.gz";
+      hash = "sha256-YGiU/C6ffNE9nsCZqqwQOo8JQ9HYDCxIa64Ucwo5t/w=";
     };
     buildInputs = [ TestWarn ];
     propagatedBuildInputs = [ Moo ];
