@@ -6944,12 +6944,13 @@ with self;
 
   CryptArgon2 = buildPerlModule {
     pname = "Crypt-Argon2";
-    version = "0.019";
+    version = "0.030";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-0.019.tar.gz";
-      hash = "sha256-+Fm+6NL2tAf11EZFwiOu4hL+AFkd/YLlBlrhvnio5Dg=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-0.030.tar.gz";
+      hash = "sha256-IWchvPlYhROmEl/wwX25KTmYdjZTpLFYNxvOe9VyV3o=";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
+    buildInputs = [ DistBuild ];
     meta = {
       description = "Perl interface to the Argon2 key derivation functions";
       license = with lib.licenses; [ cc0 ];
@@ -39948,6 +39949,79 @@ with self;
       description = "the CPAN Security Advisory data as a Perl data structure, mostly for CPAN::Audit";
       homepage = "https://github.com/briandfoy/cpan-security-advisory";
       license = lib.licenses.artistic2;
+    };
+  };
+
+  DistBuild = buildPerlModule {
+    pname = "Dist-Build";
+    version = "0.026";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Dist-Build-0.026.tar.gz";
+      hash = "sha256-gxvHI55FPrzSFnb0f0/4j8/qlVTDBEstwTGedBB8SGw=";
+    };
+    buildInputs = [
+      ExtUtilsBuilder
+      ExtUtilsBuilderCompiler
+      ExtUtilsConfig
+      ExtUtilsHelpers
+      ExtUtilsInstallPaths
+    ];
+    propagatedBuildInputs = [
+      ExtUtilsBuilder
+      ExtUtilsBuilderCompiler
+      ExtUtilsConfig
+      ExtUtilsHelpers
+      ExtUtilsInstallPaths
+    ];
+    meta = {
+      description = "A modern module builder, author tools not included!";
+      homepage = "git://github.com/Leont/dist-build.git";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  ExtUtilsBuilder = buildPerlPackage {
+    pname = "ExtUtils-Builder";
+    version = "0.020";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Builder-0.020.tar.gz";
+      hash = "sha256-UtZR46oDJyUOR5h9Rf9I6cyQtbe9L7D/P3h4PlMq/8w=";
+    };
+    propagatedBuildInputs = [
+      ExtUtilsConfig
+      ExtUtilsHelpers
+    ];
+    meta = {
+      description = "An abstract representation of build processes";
+      homepage = "git://github.com/Leont/extutils-builder-plan.git";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  ExtUtilsBuilderCompiler = buildPerlPackage {
+    pname = "ExtUtils-Builder-Compiler";
+    version = "0.035";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Builder-Compiler-0.035.tar.gz";
+      hash = "sha256-eYkPcuvkR+2L+bSukhag9frkYPQkhF8kZ+LS5O24Wwc=";
+    };
+    propagatedBuildInputs = [
+      ExtUtilsBuilder
+      ExtUtilsConfig
+    ];
+    meta = {
+      description = "An interface around different compilers";
+      homepage = "git://github.com/Leont/extutils-builder-compiler.git";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 }
