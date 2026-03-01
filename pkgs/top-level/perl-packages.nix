@@ -33784,10 +33784,10 @@ with self;
 
   Test2Harness = buildPerlPackage rec {
     pname = "Test2-Harness";
-    version = "1.000161";
+    version = "1.000163";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-${version}.tar.gz";
-      hash = "sha256-SXO3mx7tUwVxXuc9itySNtp5XH1AkNg7FQ6hMc1ltBQ=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000163.tar.gz";
+      hash = "sha256-FoqnRPfvOAxR2M3Xuf4N4rdfxtJdBh+INUEIx95e2r0=";
     };
 
     checkPhase = ''
@@ -33806,10 +33806,8 @@ with self;
       Importer
       LongJump
       ScopeGuard
-      TermTable
       Test2PluginMemUsage
       Test2PluginUUID
-      Test2Suite
       YAMLTiny
       gotofile
     ];
