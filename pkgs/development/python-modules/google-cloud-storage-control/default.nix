@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-storage-control";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-storage-control-v${finalAttrs.version}";
-    hash = "sha256-5xQ4p9xi/6Y8oi7dWo+fdVT8X8U7UGmdKtSsoEanRso=";
+    hash = "sha256-dgQdfHyGHwdEaJllbz97J/xW4Y0LrpE6ad6LRdax1G4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-storage-control";

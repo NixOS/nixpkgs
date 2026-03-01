@@ -34,8 +34,10 @@ buildPythonPackage rec {
     sha256 = "sha256-VyVshIEVp/ep4Ih7Kj66GF02JEZ4nwgJOtgR2DarzdY=";
   };
 
-  KALDI_BRANCH = "foo";
-  KALDIAG_SETUP_RAW = "1";
+  env = {
+    KALDI_BRANCH = "foo";
+    KALDIAG_SETUP_RAW = "1";
+  };
 
   patches = [
     # Makes sure scikit-build doesn't try to build the dependencies for us

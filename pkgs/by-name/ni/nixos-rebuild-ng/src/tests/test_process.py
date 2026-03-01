@@ -7,6 +7,26 @@ import nixos_rebuild.models as m
 import nixos_rebuild.process as p
 
 
+def test_remote_shell_script() -> None:
+    assert p._remote_shell_script({"PATH": p.PRESERVE_ENV}) == (
+        '''exec env -i PATH="${PATH-}" "$@"'''
+    )
+    assert p._remote_shell_script(
+        {
+            "PATH": p.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "0",
+        }
+    ) == (
+        """exec env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" """
+        '''NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'''
+    )
+    assert p._remote_shell_script({"PATH": p.PRESERVE_ENV, "FOO": "some value"}) == (
+        '''exec env -i PATH="${PATH-}" FOO='some value' "$@"'''
+    )
+
+
 @patch.dict(p.os.environ, {"PATH": "/path/to/bin"}, clear=True)
 @patch("subprocess.run", autospec=True)
 def test_run(mock_run: Any) -> None:
@@ -57,9 +77,10 @@ def test_run(mock_run: Any) -> None:
             *p.SSH_DEFAULT_OPTS,
             "user@localhost",
             "--",
-            "env",
-            "-i",
-            "PATH=${PATH-}",
+            "/bin/sh",
+            "-c",
+            """'exec env -i PATH="${PATH-}" "$@"'""",
+            "sh",
             "test",
             "--with",
             "'some flags'",
@@ -89,10 +110,10 @@ def test_run(mock_run: Any) -> None:
             "sudo",
             "--prompt=",
             "--stdin",
-            "env",
-            "-i",
-            "PATH=${PATH-}",
-            "FOO=bar",
+            "/bin/sh",
+            "-c",
+            """'exec env -i PATH="${PATH-}" FOO=bar "$@"'""",
+            "sh",
             "test",
             "--with",
             "flags",
@@ -221,9 +242,10 @@ def test_custom_sudo_args(mock_run: Any) -> None:
             "--custom",
             "foo",
             "--args",
-            "env",
-            "-i",
-            "PATH=${PATH-}",
+            "/bin/sh",
+            "-c",
+            """'exec env -i PATH="${PATH-}" "$@"'""",
+            "sh",
             "test",
         ],
         check=False,

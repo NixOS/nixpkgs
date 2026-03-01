@@ -134,12 +134,6 @@ buildPythonPackage rec {
 
   sphinxRoot = "../docs";
 
-  # Introduce this file necessary for the docs build via environment var
-  LIBPQ_DOCS_FILE = fetchurl {
-    url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
-    hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
-  };
-
   inherit patches;
 
   # only move to sourceRoot after patching, makes patching easier
@@ -185,6 +179,11 @@ buildPythonPackage rec {
   ++ optional-dependencies.pool;
 
   env = {
+    # Introduce this file necessary for the docs build via environment var
+    LIBPQ_DOCS_FILE = fetchurl {
+      url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
+      hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
+    };
     postgresqlEnableTCP = 1;
     PGUSER = "psycopg";
     PGDATABASE = "psycopg";

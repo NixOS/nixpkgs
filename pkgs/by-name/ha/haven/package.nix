@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "haven";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "bitvora";
     repo = "haven";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1rGOZVzlzijyxqjAnp2uvxy9KPr3uuRD8+48x38lQwg=";
+    hash = "sha256-gpfTgaO3VK65GBy/W/rR8181yHlvgTx9UyWReo7s2gQ=";
   };
 
   vendorHash = "sha256-VXx6uoOUKk/BkjDS3Ykf/0Xc2mUPm8dgyRArIb2I8X4=";

@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pyarrow
   ];
 
-  TILEDB_PATH = tiledb;
+  env.TILEDB_PATH = tiledb;
 
   disabled = !isPy3k; # Not bothering with python2 anymore
 

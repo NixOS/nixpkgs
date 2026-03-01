@@ -33,10 +33,12 @@ buildPythonPackage rec {
     "--library-dirs=${zstd}/lib"
   ];
 
-  # Running tests via setup.py triggers an attempt to recompile with the vendored zstd
-  ZSTD_EXTERNAL = 1;
-  VERSION = zstd.version;
-  PKG_VERSION = version;
+  env = {
+    # Running tests via setup.py triggers an attempt to recompile with the vendored zstd
+    ZSTD_EXTERNAL = 1;
+    VERSION = zstd.version;
+    PKG_VERSION = version;
+  };
 
   nativeCheckInputs = [ pytest ];
   checkPhase = ''

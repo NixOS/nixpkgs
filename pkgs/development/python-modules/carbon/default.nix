@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures
   # carbon is installed as a regular Python module.
-  GRAPHITE_NO_PREFIX = "True";
+  env.GRAPHITE_NO_PREFIX = "True";
 
   postPatch = ''
     substituteInPlace setup.py \

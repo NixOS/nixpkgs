@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  DJANGO_SETTINGS_MODULE = "ckeditor_demo.settings";
+  env.DJANGO_SETTINGS_MODULE = "ckeditor_demo.settings";
 
   checkInputs = [
     django-extensions

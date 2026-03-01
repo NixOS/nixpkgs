@@ -33,21 +33,20 @@ let
     };
   };
 in
-with py.pkgs;
-
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "checkov";
-  version = "3.2.504";
+  version = "3.2.506";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
-    tag = version;
-    hash = "sha256-w6U8XW/hSPy/WJy4a6N41Hu+i9OVqiwI5buAE2uFjoI=";
+    tag = finalAttrs.version;
+    hash = "sha256-E2WkVgFx7qAzmpaUOamYcBc5uAlvlnkc/NyhT569vgc=";
   };
 
   pythonRelaxDeps = [
+    "aiodns" # breaking change is that it requires pycares >= 5.0.0, which is fine.
     "asteval"
     "bc-detect-secrets"
     "bc-python-hcl2"
@@ -194,7 +193,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Static code analysis tool for infrastructure-as-code";
     homepage = "https://github.com/bridgecrewio/checkov";
-    changelog = "https://github.com/bridgecrewio/checkov/releases/tag/${version}";
+    changelog = "https://github.com/bridgecrewio/checkov/releases/tag/${finalAttrs.version}";
     longDescription = ''
       Prevent cloud misconfigurations during build-time for Terraform, Cloudformation,
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
@@ -206,4 +205,4 @@ python3.pkgs.buildPythonApplication rec {
       fab
     ];
   };
-}
+})

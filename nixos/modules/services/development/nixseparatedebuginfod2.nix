@@ -87,7 +87,6 @@ in
         ProtectKernelLogs = true; # Prevent access to kernel logs
         ProtectClock = true; # Prevent setting the RTC
         ProtectProc = "noaccess";
-        ProcSubset = "pid";
 
         # Networking
         RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";

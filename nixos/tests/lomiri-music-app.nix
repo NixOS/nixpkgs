@@ -133,6 +133,11 @@ in
     # mediascanner2 needs to have run, is only started automatically by Lomiri
     machine.systemctl("start mediascanner-2.0.service", "root")
 
+    # Need to wait abit to make sure our test file gets scanned & added to the database.
+    # No good feedback on when this is done... Prolly some time after extractor sub-service is started.
+    machine.wait_for_console_text("Successfully activated service 'com.lomiri.MediaScanner2.Extractor'")
+    machine.sleep(10)
+
     with subtest("lomiri music launches"):
         machine.succeed("lomiri-music-app >&2 &")
         machine.wait_for_console_text("Queue is empty")

@@ -1568,12 +1568,6 @@
     githubId = 1358320;
     name = "Arie Middelkoop";
   };
-  amiloradovsky = {
-    email = "miloradovsky@gmail.com";
-    github = "amiloradovsky";
-    githubId = 20530052;
-    name = "Andrew Miloradovsky";
-  };
   aminechikhaoui = {
     email = "amine.chikhaoui91@gmail.com";
     github = "AmineChikhaoui";
@@ -14748,12 +14742,6 @@
     githubId = 621759;
     name = "Lassulus";
   };
-  laurent-f1z1 = {
-    email = "laurent.nixpkgs@fainsin.bzh";
-    github = "Laurent2916";
-    githubId = 21087104;
-    name = "Laurent Fainsin";
-  };
   lavafroth = {
     email = "lavafroth@protonmail.com";
     github = "lavafroth";
@@ -19395,6 +19383,12 @@
     github = "0xnook";
     githubId = 88323754;
   };
+  norbertwnuk = {
+    name = "Norbert Wnuk";
+    email = "norbert.wnuk@gmail.com";
+    github = "norbertwnuk";
+    githubId = 70071;
+  };
   norfair = {
     email = "syd@cs-syd.eu";
     github = "NorfairKing";
@@ -19871,6 +19865,13 @@
     github = "olcai";
     githubId = 20923;
     name = "Erik Timan";
+  };
+  olduser101 = {
+    email = "nathan.j.gill@outlook.com";
+    github = "OldUser101";
+    githubId = 64069240;
+    matrix = "@olduser101:matrix.org";
+    name = "Nathan Gill";
   };
   olebedev = {
     email = "ole6edev@gmail.com";
@@ -23803,6 +23804,12 @@
     github = "saulecabrera";
     githubId = 1423601;
   };
+  sauricat = {
+    email = "linshu1729@protonmail.com";
+    github = "sauricat";
+    githubId = 3533655;
+    name = "Shu";
+  };
   sauyon = {
     email = "s@uyon.co";
     github = "sauyon";
@@ -25257,6 +25264,12 @@
     github = "spacekookie";
     githubId = 7669898;
     name = "Katharina Fey";
+  };
+  spaghetti-stack = {
+    email = "spaghetti_stack@protonmail.com";
+    github = "spaghetti-stack";
+    githubId = 44814450;
+    name = "spaghetti-stack";
   };
   spalf = {
     email = "tom@tombarrett.xyz";

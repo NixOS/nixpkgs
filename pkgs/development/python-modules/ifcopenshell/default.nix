@@ -130,7 +130,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ifcopenshell" ];
 
-  PYTHONUSERBASE = ".";
+  env.PYTHONUSERBASE = ".";
 
   # We still build with python to generate ifcopenshell_wrapper.py and ifcopenshell_wrapper.so
   cmakeFlags = [

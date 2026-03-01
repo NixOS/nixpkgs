@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-wa3refEIYQIPmtl8NGtoyg2PTY3zQt6R4EgXUbcUgrk=";
   };
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   build-system = [ hatchling ];
 

@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vunnel";
-  version = "0.48.0";
+  version = "0.55.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D0/DoYmmLeAvGnr6ljE8p0B6dmFi4UHwcWCQRb85OkM=";
+    hash = "sha256-D3f+r+FGcdetE8kwSddVRE9qQ+LiwUHaJaUqUS086cs=";
     leaveDotGit = true;
   };
 
@@ -55,6 +55,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       sqlalchemy
       xsdata
       xxhash
+      yardstick
       zstandard
     ]
     ++ xsdata.optional-dependencies.cli
