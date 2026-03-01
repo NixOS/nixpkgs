@@ -17880,10 +17880,10 @@ with self;
 
   IOInteractive = buildPerlPackage {
     pname = "IO-Interactive";
-    version = "1.025";
+    version = "1.027";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/IO-Interactive-1.025.tar.gz";
-      hash = "sha256-yh7G+6t6AnXdLpz2e3yw4ARYY/MVMyEMfcVEYxtqqqc=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/IO-Interactive-1.027.tar.gz";
+      hash = "sha256-MKqjRqD2ZPg3dQsbmztRHnjHd5KW+4874xquW3P377c=";
     };
     meta = {
       description = "Utilities for interactive I/O";
