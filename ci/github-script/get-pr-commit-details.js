@@ -23,6 +23,11 @@ async function runGit({ args, repoPath, core, quiet }) {
 }
 
 /**
+ * Gets the SHA, subject and changed files for each commit in the given PR.
+ *
+ * Don't use GitHub API at all: the "list commits on PR" endpoint has a limit
+ * of 250 commits and doesn't return the changed files.
+ *
  * @param {{
  *  core: import('@actions/core'),
  *  pr: Awaited<ReturnType<InstanceType<import('@actions/github/lib/utils').GitHub>["rest"]["pulls"]["get"]>>["data"]
@@ -32,6 +37,8 @@ async function runGit({ args, repoPath, core, quiet }) {
  * @returns {Promise<{
  *  subject: string,
  *  sha: string,
+ *  changedPaths: string[],
+ *  changedPathSegments: Set<string>,
  * }[]>}
  */
 async function getCommitDetailsForPR({ core, pr, repoPath }) {
@@ -63,9 +70,10 @@ async function getCommitDetailsForPR({ core, pr, repoPath }) {
 
   return Promise.all(
     shas.map(async (sha) => {
+      // Subject first, then a blank line, then filenames.
       const result = (
         await runGit({
-          args: ['log', '--format=%s', '--numstat', '-1', sha],
+          args: ['log', '--format=%s', '--name-only', '-1', sha],
           repoPath,
           core,
           quiet: true,
@@ -74,9 +82,17 @@ async function getCommitDetailsForPR({ core, pr, repoPath }) {
 
       const subject = result[0]
 
+      const changedPaths = result.slice(2, -1)
+
+      const changedPathSegments = new Set(
+        changedPaths.flatMap((path) => path.split('/')),
+      )
+
       return {
         sha,
         subject,
+        changedPaths,
+        changedPathSegments,
       }
     }),
   )
