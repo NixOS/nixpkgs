@@ -28560,10 +28560,10 @@ with self;
 
   PerlTidy = buildPerlPackage {
     pname = "Perl-Tidy";
-    version = "20250711";
+    version = "20260204";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20250711.tar.gz";
-      hash = "sha256-NHqpC8773itZDa9I04fvH9m3pzqZawQCafEatvuLpEg=";
+      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20260204.tar.gz";
+      hash = "sha256-VqH8Lx+BPkkCag8oS5IJprKCRiCZPnWYyFsBxET/D2Q=";
     };
     meta = {
       description = "Indent and reformat perl scripts";
