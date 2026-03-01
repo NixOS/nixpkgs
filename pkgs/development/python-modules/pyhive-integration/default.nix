@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pyhive-integration";
-  version = "1.0.7";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Pyhass";
     repo = "Pyhiveapi";
-    tag = "v${version}";
+    tag = version;
     hash = "sha256-9qcRvkRV/3GT66jlnkdKk+J3frEcsJ3C+Oio5gbRi5s=";
   };
 
