@@ -27090,10 +27090,10 @@ with self;
 
   Opcodes = buildPerlPackage {
     pname = "Opcodes";
-    version = "0.14";
+    version = "0.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Opcodes-0.14.tar.gz";
-      hash = "sha256-f3NlRH5NHFuHtDCRRI8EiOZ8nwNrJsAipUCc1z00OJM=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Opcodes-0.16.tar.gz";
+      hash = "sha256-nYv58QARWqjmJJesWU3/kbY66fKazzGV/ksf+Nm1MNA=";
     };
     meta = {
       description = "More Opcodes information from opnames.h and opcode.h";
