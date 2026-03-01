@@ -25045,10 +25045,10 @@ with self;
 
   MockMonkeyPatch = buildPerlModule {
     pname = "Mock-MonkeyPatch";
-    version = "1.02";
+    version = "1.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mock-MonkeyPatch-1.02.tar.gz";
-      hash = "sha256-xbaUTKVP6DVXN2cwYO1OnvhyNyZXfXluHK5eVr8bAYE=";
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mock-MonkeyPatch-1.03.tar.gz";
+      hash = "sha256-rMWGUwy2LoFBZsrPt5K4l3tsPVbHexaearHDDUjh1YU=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
