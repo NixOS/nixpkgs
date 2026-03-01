@@ -5871,10 +5871,10 @@ with self;
 
   CompressRawBzip2 = buildPerlPackage {
     pname = "Compress-Raw-Bzip2";
-    version = "2.206";
+    version = "2.217";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.206.tar.gz";
-      hash = "sha256-ISuB2xwK6CLRmShhmmA70QjLXVxHAPxn3HyxaeDMZSU=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.217.tar.gz";
+      hash = "sha256-qoD1JHO4yjNo6Pg0lvrBsqJdJ3I1BrlMTqbIYfzpYfg=";
     };
 
     # Don't build a private copy of bzip2.
