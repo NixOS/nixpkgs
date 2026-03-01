@@ -32387,12 +32387,12 @@ with self;
 
   StructDumb = buildPerlModule {
     pname = "Struct-Dumb";
-    version = "0.14";
+    version = "0.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.14.tar.gz";
-      hash = "sha256-E8FIU2sQ4oxuC04TLynkym5ptXSQWcRBV6J+hKVFlDY=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.16.tar.gz";
+      hash = "sha256-68kDJkB3elv5AKMN4OVUNWr5zZUQHlEqNP4VU1xoJQg=";
     };
-    buildInputs = [ Test2Suite ];
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Make simple lightweight record-like structures";
       license = with lib.licenses; [
