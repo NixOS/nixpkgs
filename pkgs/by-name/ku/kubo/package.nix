@@ -3,7 +3,9 @@
   buildGoModule,
   fetchurl,
   nixosTests,
+  stdenv,
   callPackage,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -44,6 +46,8 @@ buildGoModule rec {
     "systemd_unit_hardened"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postPatch = ''
     substituteInPlace 'misc/systemd/ipfs.service' \
       --replace-fail '/usr/local/bin/ipfs' "$out/bin/ipfs"
@@ -59,6 +63,12 @@ buildGoModule rec {
     install --mode=444 -D 'misc/systemd/ipfs-api.socket' "$systemd_unit_hardened/etc/systemd/system/ipfs-api.socket"
     install --mode=444 -D 'misc/systemd/ipfs-gateway.socket' "$systemd_unit_hardened/etc/systemd/system/ipfs-gateway.socket"
     install --mode=444 -D 'misc/systemd/ipfs-hardened.service' "$systemd_unit_hardened/etc/systemd/system/ipfs.service"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd ipfs \
+      --bash <($out/bin/ipfs commands completion bash) \
+      --fish <($out/bin/ipfs commands completion fish) \
+      --zsh <($out/bin/ipfs commands completion zsh)
   '';
 
   meta = {

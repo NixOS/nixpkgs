@@ -247,9 +247,11 @@ dart-bin.overrideAttrs (oldAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = writeShellScript "update-dart" ''
-    ${lib.getExe nix-update} --version=$(${lib.getExe curlMinimal} --fail --location --silent https://storage.googleapis.com/dart-archive/channels/stable/release/latest/VERSION | ${lib.getExe jq} --raw-output .version)
-  '';
+  passthru = oldAttrs.passthru // {
+    updateScript = writeShellScript "update-dart" ''
+      ${lib.getExe nix-update} --version=$(${lib.getExe curlMinimal} --fail --location --silent https://storage.googleapis.com/dart-archive/channels/stable/release/latest/VERSION | ${lib.getExe jq} --raw-output .version)
+    '';
+  };
 
   meta = oldAttrs.meta // {
     platforms = [
