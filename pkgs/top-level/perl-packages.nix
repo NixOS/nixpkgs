@@ -116,11 +116,11 @@ with self;
 
   ack = buildPerlPackage rec {
     pname = "ack";
-    version = "3.8.2";
+    version = "3.9.0";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v${version}.tar.gz";
-      hash = "sha256-pSOfWiwS4Me05DL/1+k2/u+UWpYhpBWRx307DPRYVgs=";
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.9.0.tar.gz";
+      hash = "sha256-lO1Hfjs/lNEmzscynw6DmfHQzoLHxNiCqUrbFQ5//JA=";
     };
 
     outputs = [
@@ -132,6 +132,7 @@ with self;
 
     # tests fails on nixos and hydra because of different purity issues
     doCheck = false;
+    buildInputs = [ YAMLPP ];
 
     meta = {
       description = "Grep-like tool tailored to working with large trees of source code";
