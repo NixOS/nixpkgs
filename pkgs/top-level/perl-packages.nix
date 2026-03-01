@@ -11823,16 +11823,17 @@ with self;
 
   Dumbbench = buildPerlPackage {
     pname = "Dumbbench";
-    version = "0.503";
+    version = "0.505";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Dumbbench-0.503.tar.gz";
-      hash = "sha256-0BYBmoGDE+cERk8oDPZB72Dodx0HeRtZuZ4XoeyAH6k=";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Dumbbench-0.505.tar.gz";
+      hash = "sha256-7W8FJf6SE4LMIZ1acavu3O208rY6Q9eMD2X4CsmxH/0=";
     };
     propagatedBuildInputs = [
       CaptureTiny
       ClassXSAccessor
       DevelCheckOS
       NumberWithError
+      ParamsUtil
       StatisticsCaseResampling
     ];
     meta = {
