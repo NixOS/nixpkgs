@@ -28305,10 +28305,10 @@ with self;
 
   PerlCriticPolicyVariablesProhibitLoopOnHash = buildPerlPackage {
     pname = "Perl-Critic-Policy-Variables-ProhibitLoopOnHash";
-    version = "0.008";
+    version = "0.009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XS/XSAWYERX/Perl-Critic-Policy-Variables-ProhibitLoopOnHash-0.008.tar.gz";
-      hash = "sha256-EvXwvpbqG9x4KAWFd70cXGPKI8F/rJw3CUUrPf9bhOA=";
+      url = "mirror://cpan/authors/id/X/XS/XSAWYERX/Perl-Critic-Policy-Variables-ProhibitLoopOnHash-0.009.tar.gz";
+      hash = "sha256-zkozTeCSf8RdyzXt/IG+Y4FSilKBlbL4dzBKqD12HqU=";
     };
     propagatedBuildInputs = [ PerlCritic ];
     meta = {
