@@ -1232,29 +1232,30 @@ with self;
 
   Appcpm = buildPerlModule {
     pname = "App-cpm";
-    version = "0.997018";
+    version = "0.998003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.997018.tar.gz";
-      hash = "sha256-ePvZawR9A4O2p/iJWxk/CziworVQuS8YwH91Lql8Tv0=";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.998003.tar.gz";
+      hash = "sha256-0VsXJBoH/tEe1KkXu+ANIxfpSsUqw47pKpysuzRq2xY=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [
       CPAN02PackagesSearch
-      CPANCommonIndex
       CPANDistnameInfo
-      ClassTiny
       CommandRunner
-      ExtUtilsInstall
+      DarwinInitObjC
+      ExtUtilsConfig
+      ExtUtilsHelpers
       ExtUtilsInstallPaths
       FileCopyRecursive
+      FileWhich
       Filepushd
       HTTPTinyish
-      MenloLegacy
-      Modulecpmfile
       ModuleCPANfile
-      ParsePMFile
+      Modulecpmfile
       ParallelPipes
-      locallib
+      ParseLocalDistribution
+      ParsePMFile
+      ProcForkSafe
     ];
     meta = {
       description = "Fast CPAN module installer";
@@ -39740,6 +39741,42 @@ with self;
     meta = {
       description = "simple lightweight parser for a subset of XML";
       homepage = "https://github.com/DrHyde/perl-modules-XML-Tiny";
+    };
+  };
+
+  DarwinInitObjC = buildPerlModule {
+    pname = "Darwin-InitObjC";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Darwin-InitObjC-0.001.tar.gz";
+      hash = "sha256-ml8oh8sv1CfWSTd0P/4+dI6rOLW2SQYYX8JDhh4Yn5E=";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    meta = {
+      description = "initializes Objective-C runtime";
+      homepage = "https://github.com/skaji/perl-Darwin-InitObjC";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  ProcForkSafe = buildPerlModule {
+    pname = "Proc-ForkSafe";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Proc-ForkSafe-0.001.tar.gz";
+      hash = "sha256-ta8rZeIo0olf21cfggKqimfN6obN+KNbC8mbvYI/Ahc=";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    meta = {
+      description = "help make objects fork safe";
+      homepage = "https://github.com/skaji/perl-Proc-ForkSafe";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 }
