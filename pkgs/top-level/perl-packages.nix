@@ -30168,10 +30168,10 @@ with self;
 
   POSIXstrftimeCompiler = buildPerlModule {
     pname = "POSIX-strftime-Compiler";
-    version = "0.44";
+    version = "0.46";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KA/KAZEBURO/POSIX-strftime-Compiler-0.44.tar.gz";
-      hash = "sha256-39PJc5jc/lHII2uF49woA1Znt2Ux96oKZTXzqlQFs1o=";
+      url = "mirror://cpan/authors/id/K/KA/KAZEBURO/POSIX-strftime-Compiler-0.46.tar.gz";
+      hash = "sha256-v4iHMkjviMxeaO0HRJNJa+aE7DNOESc9RlQwbdna5IU=";
     };
     # We cannot change timezones on the fly.
     prePatch = "rm t/04_tzset.t";
