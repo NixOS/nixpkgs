@@ -3604,10 +3604,10 @@ with self;
 
   CatalystManual = buildPerlPackage {
     pname = "Catalyst-Manual";
-    version = "5.9011";
+    version = "5.9013";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Manual-5.9011.tar.gz";
-      hash = "sha256-s54zllkDwAWD4BgOPdUopUkg9SB83wUmBcoTgoz6wTw=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Catalyst-Manual-5.9013.tar.gz";
+      hash = "sha256-3JtfE+giQDKib4Hrwxuhu1H4yXZS5MVMuPekGYONmz0=";
     };
     meta = {
       description = "Catalyst developer's manual";
