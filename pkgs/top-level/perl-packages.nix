@@ -3718,13 +3718,21 @@ with self;
 
   CatalystPluginAuthentication = buildPerlPackage {
     pname = "Catalyst-Plugin-Authentication";
-    version = "0.10023";
+    version = "0.10024";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Authentication-0.10023.tar.gz";
-      hash = "sha256-NgOaq9rLB+Zoek16i/rHj+nQ+7BM2o1tlm1sHjJZ0Gw=";
+      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Plugin-Authentication-0.10024.tar.gz";
+      hash = "sha256-y4ihoDEVzgUAFv0sZLh64UnJCLNmLXD1NnCyi1YvuBg=";
     };
-    buildInputs = [ TestException ];
-    propagatedBuildInputs = [ CatalystPluginSession ];
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [
+      CatalystRuntime
+      MROCompat
+      Moose
+      MooseXEmulateClassAccessorFast
+      StringRewritePrefix
+      TryTiny
+      namespaceautoclean
+    ];
     meta = {
       description = "Infrastructure plugin for the Catalyst authentication framework";
       license = with lib.licenses; [
