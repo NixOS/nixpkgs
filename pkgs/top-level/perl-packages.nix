@@ -14808,12 +14808,12 @@ with self;
 
   FutureQueue = buildPerlModule {
     pname = "Future-Queue";
-    version = "0.51";
+    version = "0.52";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-Queue-0.51.tar.gz";
-      hash = "sha256-HVAcOpot3/x8YPlvpmlp1AyykuCSBM9t7NHCuLUAPNY=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-Queue-0.52.tar.gz";
+      hash = "sha256-6Y2pKWVLzLZFkqxjVben7575MCq8jNOmwd/WADpX7gU=";
     };
-    buildInputs = [ Test2Suite ];
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ Future ];
     meta = {
       description = "FIFO queue of values that uses L<Future>s";
