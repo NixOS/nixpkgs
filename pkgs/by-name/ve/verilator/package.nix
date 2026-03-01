@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "verilator";
-  version = "5.044";
+  version = "5.046";
 
   src = fetchFromGitHub {
     owner = "verilator";
     repo = "verilator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z3jYNzhnZ+OocDAbmsRBWHNNPXLLvExKK1TLDi9JzPQ=";
+    hash = "sha256-dfZzbQrw/14dFvWnkmCDElwsGm6GdFstNAURujvEIb8=";
   };
 
   enableParallelBuilding = true;
