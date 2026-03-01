@@ -20,7 +20,7 @@ from multiprocessing.dummy import Pool
 from pathlib import Path
 
 import nixpkgs_plugin_update  # type: ignore
-from nixpkgs_plugin_update import FetchConfig, Redirects, commit, retry, update_plugins
+from nixpkgs_plugin_update import FetchConfig, Plugin, Redirects, Repo, commit, retry, update_plugins
 
 
 class ColoredFormatter(logging.Formatter):
@@ -85,10 +85,16 @@ class LuaPlugin:
     """lua version if a package is available only for a specific lua version"""
     maintainers: str | None
     """Optional string listing maintainers separated by spaces"""
+    fetchsubmodules: str | None = None
+    """Set to true-ish values in CSV to force fetchFromGitHub.fetchSubmodules"""
 
     @property
     def normalized_name(self) -> str:
         return self.name.replace(".", "-")
+
+    @property
+    def needs_fetch_submodules(self) -> bool:
+        return (self.fetchsubmodules or "").strip().lower() == "true"
 
 
 def extract_version(nix_expr: str) -> str | None:
@@ -125,7 +131,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                 csvfile,
             )
             for row in reader:
-                # name,server,version,luaversion,maintainers
+                # name, rockspec, ref, server, version, luaversion, maintainers, fetchsubmodules
                 plugin = LuaPlugin(**row)
                 luaPackages.append(plugin)
         return luaPackages
@@ -217,7 +223,16 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
         if not args.add_plugins:
             return
 
-        fieldnames = ["name", "rockspec", "ref", "server", "version", "luaversion", "maintainers"]
+        fieldnames = [
+            "name",
+            "rockspec",
+            "ref",
+            "server",
+            "version",
+            "luaversion",
+            "maintainers",
+            "fetchsubmodules",
+        ]
         fetch_config = FetchConfig(args.proc, args.github_token)
 
         for plugin_name in args.add_plugins:
@@ -236,6 +251,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                 "version": "",
                 "luaversion": "",
                 "maintainers": "",
+                "fetchsubmodules": "",
             }
             existing_entries.append(new_entry)
 
@@ -377,6 +393,56 @@ def run_luarocks(cmd: list[str]) -> str:
     return subprocess.check_output(cmd, text=True)
 
 
+def ensure_fetch_from_github_with_submodules(plug: LuaPlugin, nix_expr: str) -> str:
+    if not plug.needs_fetch_submodules:
+        return nix_expr
+
+    src_pattern = re.compile(
+        r"(?P<indent>^\s*)src\s*=\s*fetchFromGitHub\s*\{\n(?P<body>.*?)(?P=indent)\};",
+        re.MULTILINE | re.DOTALL,
+    )
+    src_match = src_pattern.search(nix_expr)
+    if not src_match:
+        raise ValueError(
+            f"{plug.name}: fetchsubmodules is enabled but no fetchFromGitHub src block was generated"
+        )
+
+    src_body = src_match.group("body")
+    owner_match = re.search(r'(?m)^\s*owner\s*=\s*"([^"]+)";\s*$', src_body)
+    repo_match = re.search(r'(?m)^\s*repo\s*=\s*"([^"]+)";\s*$', src_body)
+    rev_match = re.search(r'(?m)^\s*(?:rev|tag)\s*=\s*"([^"]+)";\s*$', src_body)
+    hash_match = re.search(r'(?m)^(\s*)hash\s*=\s*"[^"]+";\s*$', src_body)
+
+    if not owner_match or not repo_match or not rev_match or not hash_match:
+        raise ValueError(
+            f"{plug.name}: fetchsubmodules is enabled but generated src is missing owner/repo/rev|tag/hash"
+        )
+
+    owner = owner_match.group(1)
+    repo = repo_match.group(1)
+    rev = rev_match.group(1)
+    hash_indent = hash_match.group(1)
+
+    sha256 = Repo(f"https://github.com/{owner}/{repo}.git", rev).prefetch(rev)
+    sri_hash = Plugin(plug.name, rev, True, sha256).to_sri_hash()
+
+    src_body, replaced = re.subn(
+        r'(?m)^\s*hash\s*=\s*"[^"]+";\s*$',
+        f'{hash_indent}hash = "{sri_hash}";\n{hash_indent}fetchSubmodules = true;',
+        src_body,
+        count=1,
+    )
+    if replaced != 1:
+        raise ValueError(f"{plug.name}: fetchsubmodules is enabled but hash line was not found in src block")
+
+    replacement = (
+        f'{src_match.group("indent")}src = fetchFromGitHub {{\n'
+        f"{src_body}"
+        f'{src_match.group("indent")}}};'
+    )
+    return f"{nix_expr[:src_match.start()]}{replacement}{nix_expr[src_match.end():]}"
+
+
 def generate_pkg_nix(plug: LuaPlugin):
     """
     Generate nix expression for a luarocks package
@@ -416,8 +482,9 @@ def generate_pkg_nix(plug: LuaPlugin):
         output = run_luarocks(cmd)
         ## FIXME: luarocks nix command output isn't formatted properly
         output = "callPackage(\n" + output.strip() + ") {};\n\n"
+        output = ensure_fetch_from_github_with_submodules(plug, output)
         return (plug, output, None)
-    except subprocess.CalledProcessError as e:
+    except (subprocess.CalledProcessError, ValueError) as e:
         log.error("Failed to generate nix expression for %s: %s", plug.name, e)
         return (plug, None, str(e))
 

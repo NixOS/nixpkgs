@@ -1,4 +1,4 @@
-name,rockspec,ref,server,version,luaversion,maintainers
+name,rockspec,ref,server,version,luaversion,maintainers,fetchsubmodules
 alt-getopt,,,,,,arobyn
 ansicolors,,,,,,Freed-Wu
 argparse,,,,,,
