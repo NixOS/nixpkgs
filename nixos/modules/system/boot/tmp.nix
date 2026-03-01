@@ -61,6 +61,22 @@ in
         '';
       };
 
+      tmpfsOptions = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "nosuid"
+          "nodev"
+        ];
+        example = [
+          "nosuid"
+          "nodev"
+          "noexec"
+        ];
+        description = ''
+          Extra options to use when mounting {file}`/tmp` as a tmpfs.
+        '';
+      };
+
       # These options are also shared with virtualisation/qemu-vm.nix
       tmpfsFinalOptions = lib.mkOption {
         type = lib.types.listOf lib.types.str;
@@ -79,11 +95,10 @@ in
       "mode=1777"
       "strictatime"
       "rw"
-      "nosuid"
-      "nodev"
       "size=${toString cfg.tmpfsSize}"
       "huge=${cfg.tmpfsHugeMemoryPages}"
-    ];
+    ]
+    ++ cfg.tmpfsOptions;
 
     systemd.mounts = lib.mkIf cfg.useTmpfs [
       {
