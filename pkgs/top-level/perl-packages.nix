@@ -20624,16 +20624,20 @@ with self;
     };
   };
 
-  MailDMARC = buildPerlPackage {
+  MailDMARC = buildPerlModule {
     pname = "Mail-DMARC";
-    version = "1.20230215";
+    version = "1.20260301";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DMARC-1.20230215.tar.gz";
-      hash = "sha256-V9z1R1nLkkSOVukUE0D2E0QnTFjZ3WWqkKqczw5+uQM=";
+      url = "mirror://cpan/authors/id/M/MS/MSIMERSON/Mail-DMARC-1.20260301.tar.gz";
+      hash = "sha256-/H95KSDpP4NIaNL3AL/VoSNFyiBwRTBSj0PDQ28HB1M=";
     };
     buildInputs = [
-      ExtUtilsMakeMaker
       FileShareDirInstall
+      ModuleBuild
+      NetDNSResolverMock
+      TestException
+      TestFileShareDir
+      TestOutput
     ];
     doCheck = false; # uses actual DNS at runtime
     checkInputs = [
@@ -20650,11 +20654,8 @@ with self;
       DBIxSimple
       EmailMIME
       EmailSender
-      Encode
+      EmailSimple
       FileShareDir
-      GetoptLong
-      IOCompress
-      IO
       IOSocketSSL
       NetDNS
       NetIDNEncode
@@ -20662,7 +20663,7 @@ with self;
       NetSSLeay
       RegexpCommon
       Socket6
-      SysSyslog
+      TestFileShareDir
       URI
       XMLLibXML
     ];
