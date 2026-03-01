@@ -3160,12 +3160,6 @@ with pkgs;
 
   update-systemd-resolved = callPackage ../tools/networking/openvpn/update-systemd-resolved.nix { };
 
-  openshadinglanguage = callPackage ../by-name/op/openshadinglanguage/package.nix {
-    libclang = llvmPackages_19.libclang;
-    clang = clang_19;
-    llvm = llvm_19;
-  };
-
   opentelemetry-collector = opentelemetry-collector-releases.otelcol;
   opentelemetry-collector-builder = callPackage ../tools/misc/opentelemetry-collector/builder.nix { };
   opentelemetry-collector-contrib = opentelemetry-collector-releases.otelcol-contrib;
@@ -3819,8 +3813,6 @@ with pkgs;
   crystalline = callPackage ../development/tools/language-servers/crystalline {
     llvmPackages = crystal.llvmPackages;
   };
-
-  devpi-server = python3Packages.callPackage ../development/tools/devpi-server { };
 
   dprint-plugins = recurseIntoAttrs (callPackage ../by-name/dp/dprint/plugins { });
 
@@ -11622,6 +11614,10 @@ with pkgs;
 
   quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso {
     hdf5 = hdf5-fortran;
+  };
+
+  openmolcas = callPackage ../by-name/op/openmolcas/package.nix {
+    boost = boost188;
   };
 
   siesta-mpi = callPackage ../by-name/si/siesta/package.nix { useMpi = true; };

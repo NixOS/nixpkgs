@@ -1,11 +1,16 @@
 {
   lib,
-  pkgs,
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   makeDesktopItem,
   desktopToDarwinBundle,
+  pkg-config,
+  electron,
+  makeWrapper,
+  pixman,
+  cairo,
+  pango,
 }:
 let
   packageName = "filen-desktop";
@@ -54,18 +59,18 @@ buildNpmPackage {
   };
 
   nativeBuildInputs = [
-    pkgs.pkg-config
-    pkgs.electron
-    pkgs.makeWrapper
+    pkg-config
+    electron
+    makeWrapper
   ]
   ++ lib.optionals stdenv.isDarwin [
     desktopToDarwinBundle
   ];
 
   buildInputs = [
-    pkgs.pixman
-    pkgs.cairo
-    pkgs.pango
+    pixman
+    cairo
+    pango
   ];
 
   # Override package-lock.json electron version to use what's given by nixpkgs
@@ -76,18 +81,17 @@ buildNpmPackage {
 
   # Set up icon assets in path required by desktopItem
   preInstall = ''
-    mkdir -p $out/share/pixmaps
-    cp $src/assets/icons/app/${iconPrefix}.${iconSuffix} $out/share/pixmaps/${packageName}.${iconSuffix}
-    cp $src/assets/icons/app/${iconPrefix}Notification.${iconSuffix} $out/share/pixmaps/${packageName}-notification.${iconSuffix}
+    install -D $src/assets/icons/app/${iconPrefix}.${iconSuffix} $out/share/icons/hicolor/128x128/apps/${packageName}.${iconSuffix}
+    install -D $src/assets/icons/app/${iconPrefix}Notification.${iconSuffix} $out/share/icons/hicolor/128x128/apps/${packageName}-notification.${iconSuffix}
   '';
 
   # Create binary wrapper and desktopItem
   # desktopItem auto-creates the .app bundle for Darwin
   postInstall = ''
-    makeWrapper ${pkgs.electron}/bin/electron $out/bin/${packageName} \
+    makeWrapper ${electron}/bin/electron $out/bin/${packageName} \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags $out/lib/node_modules/@filen/desktop/dist/index.js \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.stdenv.cc.cc.lib ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
 
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications/
