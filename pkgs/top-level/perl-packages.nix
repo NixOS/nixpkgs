@@ -10071,11 +10071,11 @@ with self;
 
   DBFile = buildPerlPackage {
     pname = "DB_File";
-    version = "1.859";
+    version = "1.860";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/DB_File-1.859.tar.gz";
-      hash = "sha256-VnTg0s0LBgxNElNnDqAixk2EKlUlf5647bGcD1PiVlw=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/DB_File-1.860.tar.gz";
+      hash = "sha256-y+XpCw5A4NVm9QV4m3MZbpPFZwn2YMoxavUGYiYHSaA=";
     };
 
     preConfigure = ''
