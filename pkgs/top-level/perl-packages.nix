@@ -23622,15 +23622,12 @@ with self;
 
   MooXStrictConstructor = buildPerlPackage {
     pname = "MooX-StrictConstructor";
-    version = "0.011";
+    version = "0.013";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HARTZELL/MooX-StrictConstructor-0.011.tar.gz";
-      hash = "sha256-2jgvgi/8TiKgOqQZpCVydJmdNtiaThI27PT892vGU+I=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/MooX-StrictConstructor-0.013.tar.gz";
+      hash = "sha256-uVakoP7z5Ig3pXO4nZnfs5n/+JASynfn2A19dvBLTps=";
     };
-    propagatedBuildInputs = [
-      Moo
-      strictures
-    ];
+    propagatedBuildInputs = [ Moo ];
     buildInputs = [ TestFatal ];
     meta = {
       description = "Make your Moo-based object constructors blow up on unknown attributes";
