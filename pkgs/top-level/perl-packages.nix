@@ -28047,10 +28047,10 @@ with self;
 
   PDFAPI2 = buildPerlPackage {
     pname = "PDF-API2";
-    version = "2.045";
+    version = "2.048";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.045.tar.gz";
-      hash = "sha256-tr204NDNZSYQP91YwXHgVgw2uEO3/jyk3cm7HkyDJAY=";
+      url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.048.tar.gz";
+      hash = "sha256-Np3hpKVlKJmjmkVZgyYkjZxy8CwWgSpQ6Gi3QB9jTYk=";
     };
     buildInputs = [
       TestException
