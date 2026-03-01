@@ -1284,12 +1284,28 @@ with self;
 
   AppMusicChordPro = buildPerlPackage {
     pname = "App-Music-ChordPro";
-    version = "6.050.7";
+    version = "6.090.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-6.050.7.tar.gz";
-      hash = "sha256-tpNsqhoWOPIwprK3ou5tb9oXKih3HEQjm/2c5F9rOoQ=";
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-6.090.1.tar.gz";
+      hash = "sha256-a0w1tmS932mPRNH0OQDCL1a4+wAESYhHK/Rj8AygE28=";
     };
-    buildInputs = [ ObjectPad ];
+    buildInputs = [
+      DataPrinter
+      FileHomeDir
+      FileLoadLines
+      HarfBuzzShaper
+      IPCRun3
+      ImageInfo
+      JSONXS
+      JavaScriptQuickJS
+      LWPProtocolhttps
+      MozillaCA
+      ObjectPad
+      PDFAPI2
+      RefUtil
+      StringInterpolateNamed
+      TextLayout
+    ];
     propagatedBuildInputs = [
       AppPackager
       DataPrinter
@@ -39654,4 +39670,47 @@ with self;
   MongoDB = throw "MongoDB has been removed"; # 2025-09-12
   pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
   HTTPHeaderParserXS = throw "HTTPHeaderParserXS has been removed"; # Added 2025-11-08
+
+  HarfBuzzShaper = buildPerlPackage {
+    pname = "HarfBuzz-Shaper";
+    version = "0.033";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/HarfBuzz-Shaper-0.033.tar.gz";
+      hash = "sha256-1/PNr0S6Aibz1RY/E+e/a+W8R1NNt3T1FW7uP/qfhOQ=";
+    };
+    meta = {
+      description = "Use HarfBuzz for text shaping";
+      homepage = "https://github.com/sciurius/perl-HarfBuzz-Shaper.git";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  JavaScriptQuickJS = buildPerlPackage {
+    pname = "JavaScript-QuickJS";
+    version = "0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/JavaScript-QuickJS-0.21.tar.gz";
+      hash = "sha256-HP3z+5Uv9IZf8tVaID1Yy+XYy0FXGjWJC4NPHrVEKoQ=";
+    };
+    buildInputs = [
+      ExtUtilsMakeMakerCPANfile
+      FileSlurper
+      FileWhich
+      TestDeep
+      TestFailWarnings
+      TestFatal
+      TypesSerialiser
+    ];
+    meta = {
+      description = "Run JavaScript via QuickJS in Perl";
+      homepage = "git://github.com/FGasper/p5-JavaScript-QuickJS.git";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
 }
