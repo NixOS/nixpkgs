@@ -27793,10 +27793,10 @@ with self;
 
   ParseLocalDistribution = buildPerlPackage {
     pname = "Parse-LocalDistribution";
-    version = "0.19";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Parse-LocalDistribution-0.19.tar.gz";
-      hash = "sha256-awvDLE6NnoHz8qzB0qdMKi+IepHBUisxzkyNSaQV6Z4=";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Parse-LocalDistribution-0.20.tar.gz";
+      hash = "sha256-Zk9DUeVe6Uc8mwEq+H0oMvZSl5y4mt55VObzjNEmqFk=";
     };
     propagatedBuildInputs = [ ParsePMFile ];
     buildInputs = [
