@@ -33196,14 +33196,14 @@ with self;
 
   Tcl = buildPerlPackage {
     pname = "Tcl";
-    version = "1.27";
+    version = "1.53";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VK/VKON/Tcl-1.27.tar.gz";
-      hash = "sha256-+DhYd6Sp7Z89OQPS0PfNcPrDzmgyxg9gCmghzuP7WHI=";
+      url = "mirror://cpan/authors/id/V/VK/VKON/Tcl-1.53.tar.gz";
+      hash = "sha256-VkT4qMIvPPIdcJQQNvJMoaoP4OUAZu8IYzZeOqbyXJ0=";
     };
     propagatedBuildInputs = [
-      pkgs.tclPackages.bwidget
       pkgs.tcl
+      pkgs.tclPackages.bwidget
       pkgs.tclPackages.tix
       pkgs.tk
     ];
