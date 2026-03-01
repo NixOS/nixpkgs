@@ -7693,10 +7693,10 @@ with self;
 
   CryptOpenSSLAES = buildPerlPackage {
     pname = "Crypt-OpenSSL-AES";
-    version = "0.17";
+    version = "0.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-OpenSSL-AES-0.17.tar.gz";
-      hash = "sha256-7+GBsYxtIqc/LlNWOQ6Fdyes5UY2JeIhHdhgIyvtO7c=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-OpenSSL-AES-0.21.tar.gz";
+      hash = "sha256-D2mdc3A69OVERildzjlfZrle/ExrpF1Mae/xLWaHku4=";
     };
     buildInputs = [
       CryptOpenSSLGuess
