@@ -6425,15 +6425,16 @@ with self;
 
   ConvertColor = buildPerlModule {
     pname = "Convert-Color";
-    version = "0.17";
+    version = "0.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Convert-Color-0.17.tar.gz";
-      hash = "sha256-5/jDN8VSXqoDd3xXaD6hGvm5j/HQURojSvH4CkMiTsc=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Convert-Color-0.18.tar.gz";
+      hash = "sha256-EMAcAAtapumq8lnHlZsbGZtckjX0DM2sk+HUq4hfqrk=";
     };
-    buildInputs = [ Test2Suite ];
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [
       ListUtilsBy
       ModulePluggable
+      meta
     ];
     meta = {
       description = "Color space conversions and named lookups";
