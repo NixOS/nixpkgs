@@ -9740,10 +9740,10 @@ with self;
 
   DevelPatchPerl = buildPerlPackage {
     pname = "Devel-PatchPerl";
-    version = "2.08";
+    version = "2.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-2.08.tar.gz";
-      hash = "sha256-acbpcBYmD0COnX5Ej5QrNqbUnfWvBzQPHWXX4jAWdBk=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-2.14.tar.gz";
+      hash = "sha256-JCbSerAPZeze1c3I8sKImwHBmQY6tKtoj8jfOc3emg8=";
     };
     propagatedBuildInputs = [
       Filepushd
