@@ -20874,10 +20874,10 @@ with self;
 
   MailSendmail = buildPerlPackage {
     pname = "Mail-Sendmail";
-    version = "0.80";
+    version = "0.82";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/Mail-Sendmail-0.80.tar.gz";
-      hash = "sha256-W4qYy1zDnYBEGjiqsBCIXd+A5vzY5uAxQ5LLI+fCaOQ=";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Mail-Sendmail-0.82.tar.gz";
+      hash = "sha256-hsBhG+N4iv5ABdBLvAR7OfeLYlPGiZDHp2gO2V6f9RY=";
     };
     # The test suite simply loads the module and attempts to send an email to
     # the module's author, the latter of which is a) more of an integration
@@ -20886,6 +20886,7 @@ with self;
     checkPhase = ''
       perl -I blib/lib -MMail::Sendmail -e 'print "1..1\nok 1\n"'
     '';
+    propagatedBuildInputs = [ SysHostnameLong ];
     meta = {
       description = "Simple platform independent mailer";
       homepage = "https://github.com/neilb/Mail-Sendmail";
