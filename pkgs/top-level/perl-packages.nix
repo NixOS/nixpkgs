@@ -30797,15 +30797,12 @@ with self;
 
   ScalarType = buildPerlPackage {
     pname = "Scalar-Type";
-    version = "0.3.2";
+    version = "1.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Scalar-Type-0.3.2.tar.gz";
-      hash = "sha256-WQyv6gz1RZmSoEiFYsDb1vnfdYtfAH8OQ6uhMLRe7oY=";
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Scalar-Type-1.0.1.tar.gz";
+      hash = "sha256-l62UulpGAF2bPliay4sFGxOZ3/30Yav3/Hx9718BnsU=";
     };
-    propagatedBuildInputs = [
-      CaptureTiny
-      TestException
-    ];
+    propagatedBuildInputs = [ CaptureTiny ];
     meta = {
       description = "Figure out what type a scalar is";
       license = with lib.licenses; [
