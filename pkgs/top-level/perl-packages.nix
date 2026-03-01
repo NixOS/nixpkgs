@@ -37603,11 +37603,17 @@ with self;
 
   TimeOut = buildPerlPackage {
     pname = "Time-Out";
-    version = "0.11";
+    version = "1.0.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PA/PATL/Time-Out-0.11.tar.gz";
-      hash = "sha256-k5baaY/UUtnOYNZCzaIQjxHyDtdsiWF3muEbiXroFdI=";
+      url = "mirror://cpan/authors/id/S/SV/SVW/Time-Out-1.0.0.tar.gz";
+      hash = "sha256-UUmT9VFsFkmbuRjzd6B6eYi8TIdx+Rba/TAUovJKGgY=";
     };
+    buildInputs = [
+      ExtUtilsMakeMakerCPANfile
+      TestFatal
+      TestNeeds
+    ];
+    propagatedBuildInputs = [ TryTiny ];
     meta = {
       description = "Easily timeout long running operations";
       license = with lib.licenses; [
