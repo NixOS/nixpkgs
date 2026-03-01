@@ -20039,10 +20039,10 @@ with self;
 
   Logger = buildPerlPackage {
     pname = "Log-ger";
-    version = "0.040";
+    version = "0.042";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Log-ger-0.040.tar.gz";
-      hash = "sha256-6JEdM4ePoWmeQ+jQpU7V1WEEA4Z/9cM5+TQQPRfsZLA=";
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Log-ger-0.042.tar.gz";
+      hash = "sha256-eZa8pb5ZXj7Q2rbBz+NR7DeE7iRHvA8knhp5Wrg9Etk=";
     };
     meta = {
       description = "Lightweight, flexible logging framework";
