@@ -5234,10 +5234,10 @@ with self;
 
   ClassMethodMaker = buildPerlPackage {
     pname = "Class-MethodMaker";
-    version = "2.24";
+    version = "2.25";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SC/SCHWIGON/class-methodmaker/Class-MethodMaker-2.24.tar.gz";
-      hash = "sha256-Xu9YzLJ+vQG83lsUvMVTtTR6Bpnlw+khx3gMNSaJAyg=";
+      url = "mirror://cpan/authors/id/S/SC/SCHWIGON/class-methodmaker/Class-MethodMaker-2.25.tar.gz";
+      hash = "sha256-cL06ZZXMQOVKlSHq4yR+fWkWbmeD6l+uvVm4RTfhtYg=";
     };
     # Remove unnecessary, non-autoconf, configure script.
     prePatch = "rm configure";
