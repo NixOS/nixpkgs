@@ -29603,10 +29603,10 @@ with self;
 
   PerlVersion = buildPerlPackage {
     pname = "Perl-Version";
-    version = "1.013";
+    version = "1.019";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Perl-Version-1.013.tar.gz";
-      hash = "sha256-GIdBTRyGidhkyEARQQHgQ+mdfdW5zKaTaaYOgh460Pc=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/Perl-Version-1.019.tar.gz";
+      hash = "sha256-pFpuPw2S/LMyFCSKUtRD4rj/1f/9rwm1TLfLnf9YgAQ=";
     };
     propagatedBuildInputs = [ FileSlurpTiny ];
     meta = {
