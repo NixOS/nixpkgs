@@ -41,15 +41,6 @@
   withWayland ? stdenv.hostPlatform.isLinux,
 }:
 
-let
-  # TODO: remove when this is resolved, likely at the next cpptrace bump
-  cpptrace' = cpptrace.overrideAttrs {
-    # tests are failing on darwin
-    # https://hydra.nixos.org/build/310535948
-    doCheck = !stdenv.hostPlatform.isDarwin;
-  };
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "odamex";
   version = "12.1.0";
@@ -77,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_mixer
     SDL2_net
-    cpptrace'
+    cpptrace
     curl
     expat
     fltk

@@ -170,6 +170,7 @@ buildGoModule (finalAttrs: {
       "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
+      "riscv64-linux"
     ];
     mainProgram = "grafana-server";
   };
