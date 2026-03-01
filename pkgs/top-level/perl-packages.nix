@@ -12236,10 +12236,10 @@ with self;
 
   Encode = buildPerlPackage {
     pname = "Encode";
-    version = "3.19";
+    version = "3.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.19.tar.gz";
-      hash = "sha256-kWP4SO72nk1MyIODl/CGH9nqft4AERfb2WlPjZUFLvU=";
+      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.21.tar.gz";
+      hash = "sha256-6s9xxetJ4OWQ3nl/GYLX+5XYSB5NE8POeesy75Nzs9s=";
     };
     meta = {
       description = "Character encodings in Perl";
