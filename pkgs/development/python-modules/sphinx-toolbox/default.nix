@@ -11,6 +11,7 @@
   dict2css,
   filelock,
   html5lib,
+  roman,
   ruamel-yaml,
   sphinx-autodoc-typehints,
   sphinx-jinja2-compat,
@@ -48,6 +49,7 @@ buildPythonPackage (finalAttrs: {
     dict2css
     filelock
     html5lib
+    roman
     ruamel-yaml
     sphinx-autodoc-typehints
     sphinx-jinja2-compat
