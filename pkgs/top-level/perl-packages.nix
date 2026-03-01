@@ -10794,15 +10794,14 @@ with self;
 
   DevelOverloadInfo = buildPerlPackage {
     pname = "Devel-OverloadInfo";
-    version = "0.007";
+    version = "0.008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILMARI/Devel-OverloadInfo-0.007.tar.gz";
-      hash = "sha256-IaGEFjuQ+R8G/8f13guWg1ZUaum0AKnXXFc8lYwkYiI=";
+      url = "mirror://cpan/authors/id/I/IL/ILMARI/Devel-OverloadInfo-0.008.tar.gz";
+      hash = "sha256-kTR9OguaJpGAo+oODUPxLFXew925dGQvDhkJP5B1Q9Q=";
     };
     propagatedBuildInputs = [
       MROCompat
       PackageStash
-      SubIdentify
     ];
     buildInputs = [ TestFatal ];
     meta = {
