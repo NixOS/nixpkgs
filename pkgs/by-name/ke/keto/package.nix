@@ -40,6 +40,9 @@ buildGoModule {
     description = "ORY Keto, the open source access control server";
     homepage = "https://www.ory.sh/keto/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mrmebelman ];
+    maintainers = with lib.maintainers; [
+      mrmebelman
+      debtquity
+    ];
   };
 }
