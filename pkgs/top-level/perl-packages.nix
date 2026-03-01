@@ -16230,14 +16230,19 @@ with self;
 
   HTMLForm = buildPerlPackage {
     pname = "HTML-Form";
-    version = "6.11";
+    version = "6.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SI/SIMBABQUE/HTML-Form-6.11.tar.gz";
-      hash = "sha256-Q7+qcIc5NIfS1RJhoap/b4Gpex2P73pI/PbvMrFtZFQ=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTML-Form-6.13.tar.gz";
+      hash = "sha256-rlrQ9v5wsaOCeJ1eg6m2acxUHunUWeG/qJtDrgwBTN0=";
     };
-    buildInputs = [ TestWarnings ];
+    buildInputs = [
+      HTTPMessage
+      TestWarnings
+    ];
     propagatedBuildInputs = [
+      ApacheTest
       HTMLParser
+      HTTPMessage
       URI
     ];
     meta = {
