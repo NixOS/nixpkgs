@@ -39222,16 +39222,16 @@ with self;
 
   XMLLibXSLT = buildPerlPackage {
     pname = "XML-LibXSLT";
-    version = "2.002001";
+    version = "2.003000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXSLT-2.002001.tar.gz";
-      hash = "sha256-34knxP8ZSfYlgNHB5vAPDNVrU9OpV+5LFxtZv/pjssA=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXSLT-2.003000.tar.gz";
+      hash = "sha256-fKpa7nL1O+Wdi4Tuy2hkoHxhKhLqayfVxwaWDtzVRYc=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
-      pkgs.zlib
       pkgs.libxml2
       pkgs.libxslt
+      pkgs.zlib
     ];
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
