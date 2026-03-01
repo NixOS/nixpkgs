@@ -1,14 +1,14 @@
 diff --git a/Makefile b/Makefile
-index a10eb5214..70e2f720e 100644
+index 2dcc31725..8326df3c1 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -55,7 +55,7 @@ endif
+@@ -80,7 +80,7 @@ endif
  
  ifeq ($(PLAT),linux)
- 	CFLAGS  += -DCC_BUILD_ICON
--	LIBS    =  -lX11 -lXi -lpthread -lGL -ldl
-+	LIBS    =  -lX11 -lXi -lpthread -lGL -ldl -lcurl -lopenal
- 	BUILD_DIR = build-linux
- endif
+ 	# -lm may be needed for __builtin_sqrtf (in cases where it isn't replaced by a CPU instruction intrinsic)
+-	LIBS    =  -lX11 -lXi -lpthread -lGL -ldl -lm
++	LIBS    =  -lX11 -lXi -lpthread -lGL -ldl -lm -lcurl -lopenal
+ 	BUILD_DIR = build/linux
  
+ 	# Detect MCST LCC, where -O3 is about equivalent to -O1
 

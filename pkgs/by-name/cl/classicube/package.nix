@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ClassiCube";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
     rev = version;
-    sha256 = "sha256-ZITyfxkQB4Jpm2ZsQyM+ouPLqCVmGB7UZRXDSU/BX0k=";
+    sha256 = "sha256-AF4cr3ZXCixwiihS+2ayrzVH5eYShkjlfF0myb2PbHM=";
   };
 
   nativeBuildInputs = [
