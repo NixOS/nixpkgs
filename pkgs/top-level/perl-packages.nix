@@ -28322,17 +28322,19 @@ with self;
 
   PerlCriticPulp = buildPerlPackage {
     pname = "Perl-Critic-Pulp";
-    version = "99";
+    version = "100";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KR/KRYDE/Perl-Critic-Pulp-99.tar.gz";
-      hash = "sha256-uP2oQvy+100hAlfAooS23HsdBVSkej3l2X59VC4j5/4=";
+      url = "mirror://cpan/authors/id/K/KR/KRYDE/Perl-Critic-Pulp-100.tar.gz";
+      hash = "sha256-F9M63SJgrEl5ElDM0y2ovKgGO/b89AbdsSs6AHZXjpg=";
     };
     propagatedBuildInputs = [
       IOString
       ListMoreUtils
       PPI
+      PPIxIndexOffsets
       PerlCritic
       PodMinimumVersion
+      PodParser
     ];
     meta = {
       description = "Some add-on policies for Perl::Critic";
