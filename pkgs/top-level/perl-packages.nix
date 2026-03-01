@@ -36601,16 +36601,16 @@ with self;
 
   TextLayout = buildPerlPackage {
     pname = "Text-Layout";
-    version = "0.037";
+    version = "0.045";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/Text-Layout-0.037.tar.gz";
-      hash = "sha256-WCeTQSR8SBh0BIdkAPBq19qm/nFilVgYXfNnPfCbnOo=";
+      url = "mirror://cpan/authors/id/J/JV/JV/Text-Layout-0.045.tar.gz";
+      hash = "sha256-dU/HiJ5LW7Q+4Hqqrq6f8vlW6TmQt731LTQo15V1y2s=";
     };
     buildInputs = [
-      IOString
       ObjectPad
       PDFAPI2
     ];
+    propagatedBuildInputs = [ ObjectPad ];
     meta = {
       description = "Pango style markup formatting";
       license = with lib.licenses; [
