@@ -28065,16 +28065,20 @@ with self;
 
   PDFBuilder = buildPerlPackage {
     pname = "PDF-Builder";
-    version = "3.025";
+    version = "3.028";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.025.tar.gz";
-      hash = "sha256-qb6076DsKXWpFFzvBSEYsgmPRtnBUQ3WV4agPQ2j49U=";
+      url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.028.tar.gz";
+      hash = "sha256-YsXRt0gbezwSxYkkQxaxPlyrF59mhb6AhAtdBIeXWow=";
     };
     nativeCheckInputs = [
       TestException
       TestMemoryCycle
     ];
     propagatedBuildInputs = [ FontTTF ];
+    buildInputs = [
+      TestException
+      TestMemoryCycle
+    ];
     meta = {
       description = "Facilitates the creation and modification of PDF files";
       homepage = "https://metacpan.org/pod/PDF::Builder";
