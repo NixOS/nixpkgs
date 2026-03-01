@@ -33860,14 +33860,14 @@ with self;
 
   Test2PluginNoWarnings = buildPerlPackage {
     pname = "Test2-Plugin-NoWarnings";
-    version = "0.09";
+    version = "0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-0.09.tar.gz";
-      hash = "sha256-vj3YAAQu7zYr8X0gVs+ek03ukczOmOTxeLj7V3Ly+3Q=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-0.10.tar.gz";
+      hash = "sha256-yXyxEizG4+SgeQWdpx4S9ldgv7BnHRnSWn7HxfHyQPs=";
     };
     buildInputs = [
       IPCRun3
-      Test2Suite
+      ModulePluggable
     ];
     meta = {
       description = "Fail if tests warn";
