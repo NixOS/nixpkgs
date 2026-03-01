@@ -39656,14 +39656,14 @@ with self;
 
   XSParseKeyword = buildPerlModule {
     pname = "XS-Parse-Keyword";
-    version = "0.48";
+    version = "0.49";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.48.tar.gz";
-      hash = "sha256-hXoHC6Rlq1uJ1NjTbZI1jt1m5ee0qRWEYR2FElrJqcc=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.49.tar.gz";
+      hash = "sha256-dsXtFCq7ofHfIzWEloHIPYPMCEL+hUr3EIHSxBHvsLs=";
     };
     buildInputs = [
       ExtUtilsCChecker
-      Test2Suite
+      ModuleBuild
     ];
     propagatedBuildInputs = [ FileShareDir ];
     meta = {
