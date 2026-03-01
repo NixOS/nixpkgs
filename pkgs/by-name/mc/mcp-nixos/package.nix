@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     anthropic
     pytestCheckHook
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     python-dotenv
   ];
 
