@@ -27647,10 +27647,10 @@ with self;
 
   PARDist = buildPerlPackage {
     pname = "PAR-Dist";
-    version = "0.52";
+    version = "0.53";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSCHUPP/PAR-Dist-0.52.tar.gz";
-      hash = "sha256-y+ljAJ6nnSRUqF/heU9CW33cHoa3F0nIhNsp1gHqj4g=";
+      url = "mirror://cpan/authors/id/R/RS/RSCHUPP/PAR-Dist-0.53.tar.gz";
+      hash = "sha256-BMvIHnhpaPmkEJrWwvm4HoeawMa2CAqdIXRDth39JJg=";
     };
     meta = {
       description = "Create and manipulate PAR distributions";
