@@ -6630,23 +6630,20 @@ with self;
 
   CPANAudit = buildPerlPackage {
     pname = "CPAN-Audit";
-    version = "20230826.001";
+    version = "20250829.001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/CPAN-Audit-20230826.001.tar.gz";
-      hash = "sha256-DXU7O9fdpXweIKycWScKcKTNkfttfN4mJEPoVUy2Geo=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/CPAN-Audit-20250829.001.tar.gz";
+      hash = "sha256-7HEaInfgHcgTlU38aY/8Lb/Kg8fhYlLP37pzM7Es1QI=";
     };
-    buildInputs = [
-      CaptureTiny
-      YAMLTiny
-    ];
+    buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [
       CPANDistnameInfo
+      CPANSADB
       IOInteractive
       JSON
       ModuleCPANfile
       ModuleExtractVERSION
       PerlIOgzip
-      Mojolicious
     ];
     meta = {
       homepage = "https://github.com/briandfoy/cpan-audit";
@@ -39872,6 +39869,21 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  CPANSADB = buildPerlPackage {
+    pname = "CPANSA-DB";
+    version = "20260301.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/CPANSA-DB-20260301.001.tar.gz";
+      hash = "sha256-F7VgiE77Gkvyy76Mi0Xs+YBTKDBOvUXqnOsvt7dkR9M=";
+    };
+    buildInputs = [ YAMLLibYAML ];
+    meta = {
+      description = "the CPAN Security Advisory data as a Perl data structure, mostly for CPAN::Audit";
+      homepage = "https://github.com/briandfoy/cpan-security-advisory";
+      license = lib.licenses.artistic2;
     };
   };
 }
