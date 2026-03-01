@@ -3,10 +3,9 @@
     {
       "method": "fetchzip",
       "path": "/nix/store/w556rbsnv2fxb229av2iq180ri9x0d9j-source",
-      "rev": "77469f58916369bc3863194cabb05238577fb257",
+      "rev": "77469f5",
       "sha256": "18wjz5yqzr1dz6286p2w02fk2xjr54l477g90bz4pskjcqrqnjbv",
-      "url": "https://github.com/khchen/tinyre/archive/77469f58916369bc3863194cabb05238577fb257.tar.gz",
-      "ref": "1.6.0",
+      "url": "https://github.com/khchen/tinyre/archive/77469f5.tar.gz",
       "packages": [
         "tinyre"
       ],
@@ -14,13 +13,13 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/6aph9sfwcws7pd2725fwjnibdfrv7qmw-source",
-      "rev": "f8f6bd34bfa3fe12c64b919059ad856a96efcba0",
-      "sha256": "11m1rb6rzk70kvskppf97ddzgf5fnh9crjziqc6hib0jgsm5d615",
-      "url": "https://github.com/nim-lang/checksums/archive/f8f6bd34bfa3fe12c64b919059ad856a96efcba0.tar.gz",
-      "ref": "v0.2.1",
+      "path": "/nix/store/63sp165yl6is029c8g5cn3550vq8pp1x-source",
+      "rev": "e9f0c49b234fd4a2038b752ab02703288346ce98",
+      "sha256": "1rwr4d150l0v14ccmwr13zi6fr8din1h8spivmxwkcfa66jm73j1",
+      "url": "https://github.com/WyattBlue/csort/archive/e9f0c49b234fd4a2038b752ab02703288346ce98.tar.gz",
+      "ref": "1.0.0",
       "packages": [
-        "checksums"
+        "csort"
       ],
       "srcDir": "src"
     }
