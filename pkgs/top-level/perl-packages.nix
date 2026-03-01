@@ -27073,10 +27073,10 @@ with self;
 
   OLEStorage_Lite = buildPerlPackage {
     pname = "OLE-Storage_Lite";
-    version = "0.22";
+    version = "0.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/OLE-Storage_Lite-0.22.tar.gz";
-      hash = "sha256-0FZtbCnTl+pzY3ncUVw2hJ9rlxB89wC6glBQXJhM+WU=";
+      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/OLE-Storage_Lite-0.24.tar.gz";
+      hash = "sha256-ccO27wghdslYXmIN1I8PR4LCgr5z8qZT6kthj3V7s/0=";
     };
     meta = {
       description = "Read and write OLE storage files";
