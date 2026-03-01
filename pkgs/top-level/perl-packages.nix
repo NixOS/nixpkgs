@@ -37743,12 +37743,12 @@ with self;
 
   TreeDAGNode = buildPerlPackage {
     pname = "Tree-DAG_Node";
-    version = "1.32";
+    version = "1.35";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-DAG_Node-1.32.tgz";
-      hash = "sha256-ItnePW5vSv2J5tglxmT5SCh4vUninLgTQqcHr0BULT0=";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-DAG_Node-1.35.tgz";
+      hash = "sha256-J0Z+NkTI37sI4m5taYp173wbGoEL2p/KUPki7qVCnrE=";
     };
-    propagatedBuildInputs = [ FileSlurpTiny ];
+    propagatedBuildInputs = [ FileSlurper ];
     meta = {
       description = "N-ary tree";
       license = with lib.licenses; [
