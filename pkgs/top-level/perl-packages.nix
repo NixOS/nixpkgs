@@ -31279,10 +31279,10 @@ with self;
 
   SoftwareLicense = buildPerlPackage {
     pname = "Software-License";
-    version = "0.104004";
+    version = "0.104007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Software-License-0.104004.tar.gz";
-      hash = "sha256-of2iTsh3UhmAlzgPuTAMFLV0gmJwzFgNr3UONYX8Jww=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Software-License-0.104007.tar.gz";
+      hash = "sha256-gUYto82edFkB8p/wBsTIBMydsBfM9FFUs82VWFQLwZE=";
     };
     buildInputs = [ TryTiny ];
     propagatedBuildInputs = [
