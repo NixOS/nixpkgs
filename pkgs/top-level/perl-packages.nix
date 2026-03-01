@@ -6820,10 +6820,10 @@ with self;
 
   CPANPerlReleases = buildPerlPackage {
     pname = "CPAN-Perl-Releases";
-    version = "5.20230920";
+    version = "5.20260222";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/CPAN-Perl-Releases-5.20230920.tar.gz";
-      hash = "sha256-MbyTiJR2uOx1iRjdmSSmKYPgh7BsjN6Sb7mnp+h60cA=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/CPAN-Perl-Releases-5.20260222.tar.gz";
+      hash = "sha256-lnzboTqbFLjuSgZ3PmWcBeF3X/UXIaZP1tHt5ih/Cp4=";
     };
     meta = {
       description = "Mapping Perl releases on CPAN to the location of the tarballs";
