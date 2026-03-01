@@ -29173,10 +29173,10 @@ with self;
 
   PPR = buildPerlPackage {
     pname = "PPR";
-    version = "0.001008";
+    version = "0.001010";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.001008.tar.gz";
-      hash = "sha256-EQ5xwF8uLJDrAfCgaU5VqdvpHIV+SBJeF0LRflzbHkk=";
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.001010.tar.gz";
+      hash = "sha256-ozmCj+xL1gLY9TAdlLG6GBv7f47Rs0VdWrrqImNkpm8=";
     };
     meta = {
       description = "Pattern-based Perl Recognizer";
