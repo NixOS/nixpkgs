@@ -15036,10 +15036,10 @@ with self;
 
   GetoptLongDescriptive = buildPerlPackage {
     pname = "Getopt-Long-Descriptive";
-    version = "0.114";
+    version = "0.117";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Getopt-Long-Descriptive-0.114.tar.gz";
-      hash = "sha256-QQ6EIRSpy/0/06X9JIqWcDwHxdh5sqpfnbAzPyMnYBY=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Getopt-Long-Descriptive-0.117.tar.gz";
+      hash = "sha256-GMuiOSoLdVC7w9fJjG/F2B9mmdMI5KF+GhQ7pFIQBaM=";
     };
     buildInputs = [
       CPANMetaCheck
@@ -15049,7 +15049,6 @@ with self;
     propagatedBuildInputs = [
       ParamsValidate
       SubExporter
-      GetoptLong
     ];
     meta = {
       description = "Getopt::Long, but simpler and more powerful";
