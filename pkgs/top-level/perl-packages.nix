@@ -22479,10 +22479,10 @@ with self;
 
   ModuleExtractVERSION = buildPerlPackage {
     pname = "Module-Extract-VERSION";
-    version = "1.116";
+    version = "1.119";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Module-Extract-VERSION-1.116.tar.gz";
-      hash = "sha256-QZA6BoUXgoU0X12oVdkluUVO5xCpeV48TDJ7ri9Vdpg=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/Module-Extract-VERSION-1.119.tar.gz";
+      hash = "sha256-Fys0XjtlsZaXoKxRP+asHyDvj+XtPYjNQlwrT+vEXfU=";
     };
     meta = {
       homepage = "https://github.com/briandfoy/module-extract-version";
