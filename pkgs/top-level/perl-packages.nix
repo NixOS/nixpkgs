@@ -12196,13 +12196,13 @@ with self;
 
   EmailValid = buildPerlPackage {
     pname = "Email-Valid";
-    version = "1.203";
+    version = "1.204";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Valid-1.203.tar.gz";
-      hash = "sha256-ICG/ux4sJ55evYRoDllvlzRNQphQsjIme3b0kDdSK5M=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Valid-1.204.tar.gz";
+      hash = "sha256-HDepsbx2MEhZVysVCoLCa9TxLsY9LQt2UFrDkhBMtH8=";
     };
     propagatedBuildInputs = [
-      IOCaptureOutput
+      CaptureTiny
       MailTools
       NetDNS
       NetDomainTLD
