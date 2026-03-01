@@ -8255,12 +8255,12 @@ with self;
     };
   };
 
-  DataFloat = buildPerlModule {
+  DataFloat = buildPerlPackage {
     pname = "Data-Float";
-    version = "0.013";
+    version = "0.015";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Data-Float-0.013.tar.gz";
-      hash = "sha256-4rFSPYWJMLi729GW8II19eZ4uEkZuodxLiYxO5wnUYo=";
+      url = "mirror://cpan/authors/id/R/RR/RRWO/Data-Float-0.015.tar.gz";
+      hash = "sha256-imy5euovXPpPrYXYw5wP8ngipZhiarpOf0VuD20f8wo=";
     };
     meta = {
       description = "Details of the floating point data type";
