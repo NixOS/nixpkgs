@@ -7287,15 +7287,16 @@ with self;
 
   CryptPassphraseArgon2 = buildPerlPackage {
     pname = "Crypt-Passphrase-Argon2";
-    version = "0.009";
+    version = "0.010";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Argon2-0.009.tar.gz";
-      hash = "sha256-M39AVZY6EG2bt7tcJvwPSHCGYJ2XKHVgucpEwEPCF1I=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Argon2-0.010.tar.gz";
+      hash = "sha256-Pr8Te643esuw/BKG6SdofrCFASluprqEBfrRxzZfTqE=";
     };
     propagatedBuildInputs = with perlPackages; [
       CryptArgon2
       CryptPassphrase
     ];
+    buildInputs = [ CryptPassphrase ];
     meta = {
       description = "Argon2 encoder for Crypt::Passphrase";
       license = with lib.licenses; [
