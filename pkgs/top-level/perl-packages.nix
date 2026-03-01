@@ -16891,12 +16891,19 @@ with self;
 
   HTTPCookies = buildPerlPackage {
     pname = "HTTP-Cookies";
-    version = "6.10";
+    version = "6.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Cookies-6.10.tar.gz";
-      hash = "sha256-4282Yzxc5rXkuHb/z3R4fMXv4HNt1/SHvdc8FPC9cAc=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Cookies-6.11.tar.gz";
+      hash = "sha256-jJpUGko59sDH49C3ALBd/bgwvUkKGxlCp97dG1DZqMg=";
     };
-    propagatedBuildInputs = [ HTTPMessage ];
+    propagatedBuildInputs = [
+      HTTPDate
+      HTTPMessage
+    ];
+    buildInputs = [
+      HTTPMessage
+      URI
+    ];
     meta = {
       description = "HTTP cookie jars";
       homepage = "https://github.com/libwww-perl/HTTP-Cookies";
