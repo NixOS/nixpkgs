@@ -10856,10 +10856,10 @@ with self;
 
   DevelStackTrace = buildPerlPackage {
     pname = "Devel-StackTrace";
-    version = "2.04";
+    version = "2.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Devel-StackTrace-2.04.tar.gz";
-      hash = "sha256-zTwD7VR9PULGH6WBTJgpYTk5LnlxwJLgmkMfLJ9daFU=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Devel-StackTrace-2.05.tar.gz";
+      hash = "sha256-Y8thlumGp+V4xNKLPHgOcZSDW/x4to7rjwBZnUREiIw=";
     };
     meta = {
       description = "Object representing a stack trace";
