@@ -38709,33 +38709,33 @@ with self;
 
   Workflow = buildPerlPackage {
     pname = "Workflow";
-    version = "1.62";
+    version = "2.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JO/JONASBN/Workflow-1.62.tar.gz";
-      hash = "sha256-WNNokAm4j+Gp2DcWfTKaoe4xTzFZeeVik2OGVFs80pU=";
+      url = "mirror://cpan/authors/id/J/JO/JONASBN/Workflow-2.09.tar.gz";
+      hash = "sha256-WQoHrNrPb67Nt4SsWWwKtU4tAQhV10r2V7g7t03Wx4s=";
     };
     buildInputs = [
       DBDMock
       ListMoreUtils
       MockMonkeyPatch
-      PodCoverageTrustPod
       TestException
-      TestKwalitee
-      TestPod
-      TestPodCoverage
+      TestWithoutModule
     ];
     propagatedBuildInputs = [
       ClassAccessor
       ClassFactory
-      DateTime
       DBI
       DataUUID
+      DateTime
       DateTimeFormatStrptime
       ExceptionClass
       FileSlurp
-      LogLog4perl
+      LogAny
+      ModuleRuntime
       Readonly
+      SyntaxKeywordTry
       XMLSimple
+      YAML
     ];
     meta = {
       description = "Simple, flexible system to implement workflows";
