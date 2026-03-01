@@ -12824,15 +12824,18 @@ with self;
 
   ExtUtilsCppGuess = buildPerlPackage {
     pname = "ExtUtils-CppGuess";
-    version = "0.26";
+    version = "0.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/ExtUtils-CppGuess-0.26.tar.gz";
-      hash = "sha256-yLNiuGAXKkB2rO4AQ49SuGRk8sUAcCz891J4Ef+aaD4=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/ExtUtils-CppGuess-0.27.tar.gz";
+      hash = "sha256-sse1gZAQVKMt/OoSU2/ahiZFftC/vAJgC9NUvefiqbQ=";
     };
     doCheck = !stdenv.hostPlatform.isDarwin;
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     propagatedBuildInputs = [ CaptureTiny ];
-    buildInputs = [ ModuleBuild ];
+    buildInputs = [
+      CaptureTiny
+      ModuleBuild
+    ];
     meta = {
       description = "Guess C++ compiler and flags";
       license = with lib.licenses; [
