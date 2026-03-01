@@ -27015,17 +27015,18 @@ with self;
 
   ObjectPad = buildPerlModule {
     pname = "Object-Pad";
-    version = "0.821";
+    version = "0.823";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.821.tar.gz";
-      hash = "sha256-tdUF+PoWLg5r4q5YsPM0SUxPeRs6BA8va4kBTwSEUgw=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.823.tar.gz";
+      hash = "sha256-I84tZ+qSoe6SmX6hTCYaJNgt+jcYFamE9nionUqtzbI=";
     };
     buildInputs = [
-      Test2Suite
-      TestFatal
-      TestRefcount
+      ModuleBuild
+      XSParseKeyword
+      XSParseSublike
     ];
     propagatedBuildInputs = [
+      FileShareDir
       XSParseKeyword
       XSParseSublike
     ];
