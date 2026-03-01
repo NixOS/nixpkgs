@@ -19363,11 +19363,12 @@ with self;
 
   LinuxDesktopFiles = buildPerlModule {
     pname = "Linux-DesktopFiles";
-    version = "0.25";
+    version = "0.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TR/TRIZEN/Linux-DesktopFiles-0.25.tar.gz";
-      hash = "sha256-YDd6dPupD6RlIA7hx0MNvd5p1FTYX57hAcA5gDoH5fU=";
+      url = "mirror://cpan/authors/id/T/TR/TRIZEN/Linux-DesktopFiles-0.26.tar.gz";
+      hash = "sha256-VZ2rWbsPxW+5kEiAcW5euYY8H71CNjKSOCxp2WiZqMg=";
     };
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Fast parsing of the Linux desktop files";
       homepage = "https://github.com/trizen/Linux-DesktopFiles";
