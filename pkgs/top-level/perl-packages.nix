@@ -31119,10 +31119,10 @@ with self;
 
   SetObject = buildPerlPackage {
     pname = "Set-Object";
-    version = "1.42";
+    version = "1.43";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Set-Object-1.42.tar.gz";
-      hash = "sha256-0YxaiiM+q70CBs89pbAPzdezf+vxKpPcw9HAJub97EU=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Set-Object-1.43.tar.gz";
+      hash = "sha256-47PHx+y5HvbSDrBr9r/3TkHEC3W9I04QfS7PeNPeqdE=";
     };
     meta = {
       description = "Unordered collections (sets) of Perl Objects";
