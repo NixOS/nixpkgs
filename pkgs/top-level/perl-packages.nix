@@ -10870,10 +10870,10 @@ with self;
 
   DevelSize = buildPerlPackage {
     pname = "Devel-Size";
-    version = "0.85";
+    version = "0.86";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NW/NWCLARK/Devel-Size-0.85.tar.gz";
-      hash = "sha256-KS+YsT7dGqSlROOlzx2fLXAZ91xzZNLo+oo16lRR5z4=";
+      url = "mirror://cpan/authors/id/N/NW/NWCLARK/Devel-Size-0.86.tar.gz";
+      hash = "sha256-2y93h/Yu4uUJSy9gI4rXZ+3YdDv9UhXoaetLxR8zmzA=";
     };
     meta = {
       description = "Perl extension for finding the memory usage of Perl variables";
