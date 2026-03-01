@@ -6528,10 +6528,10 @@ with self;
 
   CookieBaker = buildPerlModule {
     pname = "Cookie-Baker";
-    version = "0.11";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Cookie-Baker-0.11.tar.gz";
-      hash = "sha256-WSdfR04HwKo2EePmhLiU59uRMzPYIUQgvmPxLsGM16s=";
+      url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Cookie-Baker-0.12.tar.gz";
+      hash = "sha256-mwTfXUfc1FrEKZYmoQ7JkPtAyU7lpjAMOoi9+zV17Ck=";
     };
     buildInputs = [
       ModuleBuildTiny
