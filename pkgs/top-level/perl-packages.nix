@@ -14737,12 +14737,12 @@ with self;
 
   Future = buildPerlModule {
     pname = "Future";
-    version = "0.50";
+    version = "0.52";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.50.tar.gz";
-      hash = "sha256-wDXj2eaaOvFEszrINN7p5lrTYPKlHbnxWNw0Ls3dX0Q=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.52.tar.gz";
+      hash = "sha256-lnZVYSce4yhb42QcBDqLsmLTQaVkNVNS037ZUS5uoes=";
     };
-    buildInputs = [ Test2Suite ];
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Represent an operation awaiting completion";
       license = with lib.licenses; [
