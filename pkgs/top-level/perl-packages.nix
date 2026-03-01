@@ -6863,16 +6863,18 @@ with self;
 
   CPANUploader = buildPerlPackage {
     pname = "CPAN-Uploader";
-    version = "0.103018";
+    version = "0.103019";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Uploader-0.103018.tar.gz";
-      hash = "sha256-xP/k7enbebOW47/F583w4umCHh8eCH9SO8+nTJ/J4kg=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Uploader-0.103019.tar.gz";
+      hash = "sha256-8a3LVD1aHOWb4IolV4ElmSxtzx1IiP2f9liCO0aSLCQ=";
     };
     propagatedBuildInputs = [
-      FileHomeDir
+      ApacheTest
       GetoptLongDescriptive
-      LWPProtocolHttps
+      HTTPMessage
+      LWPProtocolhttps
       TermReadKey
+      libwwwperl
     ];
     meta = {
       description = "Upload things to the CPAN";
