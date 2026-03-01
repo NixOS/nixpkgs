@@ -27871,10 +27871,10 @@ with self;
 
   ParseSyslog = buildPerlPackage {
     pname = "Parse-Syslog";
-    version = "1.10";
+    version = "1.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DS/DSCHWEI/Parse-Syslog-1.10.tar.gz";
-      hash = "sha256-ZZohRUQe822YNd7K+D2jCPzQP0kTjLPZCSjov8nxOdk=";
+      url = "mirror://cpan/authors/id/D/DS/DSCHWEI/Parse-Syslog-1.11.tar.gz";
+      hash = "sha256-I424Mw/twTuijuU5BQQcwSQVN1mxYrDvZ2PRgB3nnrw=";
     };
     meta = {
       description = "Parse Unix syslog files";
