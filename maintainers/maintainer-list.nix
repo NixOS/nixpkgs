@@ -3686,6 +3686,12 @@
     githubId = 6375609;
     name = "Bob van der Linden";
   };
+  bodier123 = {
+    email = "brubacher.1@gmail.com";
+    github = "bodier123";
+    githubId = 71633864;
+    name = "Bodie";
+  };
   bodil = {
     email = "nix@bodil.org";
     github = "bodil";
