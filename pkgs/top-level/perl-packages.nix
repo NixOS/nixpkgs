@@ -37795,10 +37795,10 @@ with self;
 
   TryTiny = buildPerlPackage {
     pname = "Try-Tiny";
-    version = "0.31";
+    version = "0.32";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Try-Tiny-0.31.tar.gz";
-      hash = "sha256-MwDTHYpAdbJtj0bOhkodkT4OhGfO66ZlXV0rLiBsEb4=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Try-Tiny-0.32.tar.gz";
+      hash = "sha256-7y1sqwutGOOrHE5hJcxfaVx+RZiZ9RJFHI+j74P6f8A=";
     };
     buildInputs = [
       CPANMetaCheck
