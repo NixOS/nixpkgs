@@ -9681,10 +9681,10 @@ with self;
 
   DevelCover = buildPerlPackage {
     pname = "Devel-Cover";
-    version = "1.44";
+    version = "1.51";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PJ/PJCJ/Devel-Cover-1.44.tar.gz";
-      hash = "sha256-9AwVQ5kuXWWm94AD1GLVms15rm0w04BHscadmZ0rH9g=";
+      url = "mirror://cpan/authors/id/P/PJ/PJCJ/Devel-Cover-1.51.tar.gz";
+      hash = "sha256-vxk2l3Anus0kPRcTd4UHFJotomnn5ynPcIsYYN7o9Yo=";
     };
     propagatedBuildInputs = [ HTMLParser ];
     doCheck = false;
