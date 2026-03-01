@@ -9978,18 +9978,19 @@ with self;
 
   DBDOracle = buildPerlPackage {
     pname = "DBD-Oracle";
-    version = "1.83";
+    version = "1.90";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZA/ZARQUON/DBD-Oracle-1.83.tar.gz";
-      hash = "sha256-Uf6cFYlV/aDKkXqAaGPwvFEGi1M/u8dCOzzErVle0VM=";
+      url = "mirror://cpan/authors/id/Z/ZA/ZARQUON/DBD-Oracle-1.90.tar.gz";
+      hash = "sha256-L8/fXxwnddGi5fTYbSqdjc+PSXkvbORluCixbfbRAM8=";
     };
 
     env.ORACLE_HOME = "${pkgs.oracle-instantclient.lib}/lib";
 
     buildInputs = [
-      pkgs.oracle-instantclient
+      DBI
       TestNoWarnings
+      pkgs.oracle-instantclient
     ];
     propagatedBuildInputs = [ DBI ];
 
