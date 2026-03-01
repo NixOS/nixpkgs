@@ -26325,11 +26325,12 @@ with self;
 
   NetPing = buildPerlPackage {
     pname = "Net-Ping";
-    version = "2.75";
+    version = "2.76";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.75.tar.gz";
-      hash = "sha256-tH3zz9lpLM0Aca05/nRxjrwy9ZcBVWpgT9FaCfCeDXQ=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.76.tar.gz";
+      hash = "sha256-B7UhJqUpwyMa6CxOQ5YXE+y9zP9oE+J9V93eiGUGT5s=";
     };
+    buildInputs = [ TestPod ];
     meta = {
       description = "Check a remote host for reachability";
       license = with lib.licenses; [
