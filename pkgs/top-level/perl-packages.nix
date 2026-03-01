@@ -37582,10 +37582,10 @@ with self;
 
   TimeMoment = buildPerlPackage {
     pname = "Time-Moment";
-    version = "0.44";
+    version = "0.46";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CH/CHANSEN/Time-Moment-0.44.tar.gz";
-      hash = "sha256-ZKz6BC9jT8742t9V5/QrpOqriq631SEuuJgVox949v0=";
+      url = "mirror://cpan/authors/id/C/CH/CHANSEN/Time-Moment-0.46.tar.gz";
+      hash = "sha256-4exMC4usRRSQ9g3bIbbkhJ20n+u2geHLBHN+LScx5a0=";
     };
     buildInputs = [
       TestFatal
