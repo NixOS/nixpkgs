@@ -37625,10 +37625,10 @@ with self;
 
   TimeParseDate = buildPerlPackage {
     pname = "Time-ParseDate";
-    version = "2015.103";
+    version = "2026.0219";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MU/MUIR/modules/Time-ParseDate-2015.103.tar.gz";
-      hash = "sha256-LBoGI1v4EYE8qsnqqdqnGvdYZnzfewgstZhjIg/K7tE=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/Time-ParseDate-2026.0219.tar.gz";
+      hash = "sha256-+41PTwomtxJNBL/5cNEDq12mno7FDxQI3axFIhEfey4=";
     };
     doCheck = false;
     meta = {
