@@ -17662,10 +17662,10 @@ with self;
 
   IOAIO = buildPerlPackage {
     pname = "IO-AIO";
-    version = "4.73";
+    version = "4.81";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/IO-AIO-4.73.tar.gz";
-      hash = "sha256-mltHx4Ak+rdmPR5a90ob6rRQ19Y7poV+MbP9gobkrFo=";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/IO-AIO-4.81.tar.gz";
+      hash = "sha256-ZwKfIOm3NKwfSD9xddTORfkkWBx96P30TiDHm+bcByk=";
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
