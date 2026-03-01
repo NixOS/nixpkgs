@@ -37038,14 +37038,17 @@ with self;
     };
   };
 
-  TestVars = buildPerlModule {
+  TestVars = buildPerlPackage {
     pname = "Test-Vars";
-    version = "0.015";
+    version = "0.017";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GF/GFUJI/Test-Vars-0.015.tar.gz";
-      hash = "sha256-4Y3RWCcuTsmTnh37M8dDGrTnXGtAsoDDi16AT9pHGlQ=";
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/Test-Vars-0.017.tar.gz";
+      hash = "sha256-Vt2su2Y89UJnOqZVJe9QmAtT8gd3DnQ6HRhhS9gmgXg=";
     };
-    buildInputs = [ ModuleBuildTiny ];
+    buildInputs = [
+      Moose
+      TestOutput
+    ];
     preCheck = ''
       # Remove tests with hardcoded line numbers.
       rm t/03_warned.t
