@@ -27,6 +27,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    # The built wheel holds an upper bound requirement for the version of this
+    # dependenceis, while pyproject.toml doesn't.
     "defusedxml"
   ];
 
