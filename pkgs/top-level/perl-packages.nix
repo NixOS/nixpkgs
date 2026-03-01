@@ -5623,10 +5623,10 @@ with self;
 
   Clone = buildPerlPackage {
     pname = "Clone";
-    version = "0.46";
+    version = "0.47";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GARU/Clone-0.46.tar.gz";
-      hash = "sha256-qt7tXkyL1rvfaMDdAGbLUT4Wq55bQ4LcSgqv1ViQaXs=";
+      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Clone-0.47.tar.gz";
+      hash = "sha256-TCwMuaSD77+XDLGnWyynWw4Yy4S8tcCWJPhuJrCcIR0=";
     };
     buildInputs = [ BCOW ];
     meta = {
