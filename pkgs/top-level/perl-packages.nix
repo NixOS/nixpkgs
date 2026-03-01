@@ -34547,10 +34547,10 @@ with self;
 
   TestFile = buildPerlPackage {
     pname = "Test-File";
-    version = "1.993";
+    version = "1.995";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-File-1.993.tar.gz";
-      hash = "sha256-7y/+Gq7HtC2HStQR7GR1R7m5vC9fuT5J4zmUiEVq/Ho=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/Test-File-1.995.tar.gz";
+      hash = "sha256-jxzDa4cUk9/awpvaRZdjcRtf2CiJXA8ya2yGVLq9Xwk=";
     };
     meta = {
       description = "Test file attributes";
