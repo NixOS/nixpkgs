@@ -32567,10 +32567,10 @@ with self;
 
   SubName = buildPerlPackage {
     pname = "Sub-Name";
-    version = "0.27";
+    version = "0.28";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Sub-Name-0.27.tar.gz";
-      hash = "sha256-7PNvuhxHypPh2qOUlo7TnEGGhnRZ2c0XPEIeK5cgQ+g=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Sub-Name-0.28.tar.gz";
+      hash = "sha256-OcU/azsCy8cxdlZEE7UdPA83X5dgmD/VecJ/VYsWnPw=";
     };
     buildInputs = [
       BC
