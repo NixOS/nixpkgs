@@ -14689,15 +14689,12 @@ with self;
 
   FunctionParameters = buildPerlPackage {
     pname = "Function-Parameters";
-    version = "2.002004";
+    version = "2.002006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MAUKE/Function-Parameters-2.002004.tar.gz";
-      hash = "sha256-KKvqWODAnOMnmaCMvXr3DaHimXd8KZEZQpygaacYg+g=";
+      url = "mirror://cpan/authors/id/M/MA/MAUKE/Function-Parameters-2.002006.tar.gz";
+      hash = "sha256-7DbF2JHzGpCmttYZjZg6WXRgOtXrT5N2r4B6w3ST+aI=";
     };
-    buildInputs = [
-      DirSelf
-      TestFatal
-    ];
+    buildInputs = [ TestFatal ];
     preCheck = ''
       # Remove tests with hardcoded line numbers.
       rm t/eating_strict_error.t
