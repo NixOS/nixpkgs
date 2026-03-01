@@ -177,13 +177,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd tree-sitter \
       --bash <("$out/bin/tree-sitter" complete --shell bash) \
       --zsh <("$out/bin/tree-sitter" complete --shell zsh) \
-      --fish <("$out/bin/tree-sitter" complete --shell fish)
+      --fish <("$out/bin/tree-sitter" complete --shell fish) \
+      --nushell <("$out/bin/tree-sitter" complete --shell nushell)
   ''
   + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tree-sitter \
       --bash "${buildPackages.tree-sitter}"/share/bash-completion/completions/*.bash \
       --zsh "${buildPackages.tree-sitter}"/share/zsh/site-functions/* \
-      --fish "${buildPackages.tree-sitter}"/share/fish/*/*
+      --fish "${buildPackages.tree-sitter}"/share/fish/*/* \
+      --nushell "${buildPackages.tree-sitter}/share/nushell/vendor/autoload/*.nu"
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
