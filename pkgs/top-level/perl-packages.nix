@@ -20120,10 +20120,10 @@ with self;
 
   MCE = buildPerlPackage {
     pname = "MCE";
-    version = "1.901";
+    version = "1.902";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.901.tar.gz";
-      hash = "sha256-3RRrHpmFPjPBzbtowgJK7nQGeseDlNUbgdH6so9Q0TU=";
+      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.902.tar.gz";
+      hash = "sha256-VZryjVMQMCymNZnlnw3XbDJHtFI0ScJ0XF7xWZaAUaE=";
     };
     meta = {
       description = "Many-Core Engine for Perl providing parallel processing capabilities";
