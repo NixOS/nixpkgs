@@ -24807,18 +24807,23 @@ with self;
 
   MooseXTypesDateTime = buildPerlModule {
     pname = "MooseX-Types-DateTime";
-    version = "0.13";
+    version = "0.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-DateTime-0.13.tar.gz";
-      hash = "sha256-uJ+iZjb2oX6qOGi0UUNARytou9whYaHXmiKhv1sdOcY=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-DateTime-0.14.tar.gz";
+      hash = "sha256-Y9/UXFuQ+6lL6VglS4VFy6Tlp6XeBttiUpzZkNGFY+o=";
     };
     buildInputs = [
       ModuleBuildTiny
+      Moose
       TestFatal
     ];
     propagatedBuildInputs = [
       DateTime
+      DateTimeLocale
+      DateTimeTimeZone
+      Moose
       MooseXTypes
+      namespaceclean
     ];
     meta = {
       description = "DateTime related constraints and coercions for Moose";
