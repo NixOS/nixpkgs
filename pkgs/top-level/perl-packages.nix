@@ -13267,14 +13267,14 @@ with self;
 
   FFIPlatypus = buildPerlPackage {
     pname = "FFI-Platypus";
-    version = "2.10";
+    version = "2.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-2.10.tar.gz";
-      hash = "sha256-ZxFcAjF7I9EZtu4aXm1fJvr4mFlD61PPiGLFcZ54+28=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-2.11.tar.gz";
+      hash = "sha256-9d0zIOkbAfML1pMv07/k83S8QeGQgXmYUXH8ZPlfDPQ=";
     };
     buildInputs = [
       AlienFFI
-      Test2Suite
+      CaptureTiny
     ];
     propagatedBuildInputs = [
       CaptureTiny
