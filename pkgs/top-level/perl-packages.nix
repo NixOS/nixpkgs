@@ -3650,12 +3650,14 @@ with self;
 
   CatalystRuntime = buildPerlPackage {
     pname = "Catalyst-Runtime";
-    version = "5.90131";
+    version = "5.90132";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90131.tar.gz";
-      hash = "sha256-nWQe+s8PmTXm7LmPWjtHbJYbH4Gb0vjyOmR9HYZ+GEk=";
+      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90132.tar.gz";
+      hash = "sha256-u4N1i3vaNg0W4ALlrOacZFnj1HInze5qxLG2WmaF8RA=";
     };
     buildInputs = [
+      ApacheTest
+      HTTPMessage
       TestFatal
       TypeTiny
     ];
@@ -3663,26 +3665,40 @@ with self;
       CGISimple
       CGIStruct
       ClassC3AdoptNEXT
+      ClassLoad
       DataDump
+      DataOptList
+      HTMLParser
       HTTPBody
+      HTTPMessage
+      HashMultiValue
+      JSONMaybeXS
+      MROCompat
       ModulePluggable
+      Moose
       MooseXEmulateClassAccessorFast
       MooseXGetopt
       MooseXMethodAttributes
-      MooseXRoleWithOverloading
       PathClass
       PerlIOutf8_strict
+      Plack
       PlackMiddlewareFixMissingBodyInRedirect
       PlackMiddlewareMethodOverride
       PlackMiddlewareRemoveRedundantBody
       PlackMiddlewareReverseProxy
       PlackTestExternalServer
       SafeIsa
+      StreamBuffered
       StringRewritePrefix
+      SubExporter
       TaskWeaken
       TextSimpleTable
+      TreeSimple
       TreeSimpleVisitorFactory
-      URIws
+      TryTiny
+      URI
+      libwwwperl
+      namespaceclean
     ];
     meta = {
       description = "Catalyst Framework Runtime";
