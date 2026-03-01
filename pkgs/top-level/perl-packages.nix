@@ -8765,12 +8765,12 @@ with self;
 
   DataULID = buildPerlPackage {
     pname = "Data-ULID";
-    version = "1.2.1";
+    version = "1.3";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BA/BALDUR/Data-ULID-1.2.1.tar.gz";
-      hash = "sha256-SbThGyY0inXfNONGF0UuMZ/XpygasJQgYvFieeqKHSc=";
+      url = "mirror://cpan/authors/id/B/BA/BALDUR/Data-ULID-1.3.tar.gz";
+      hash = "sha256-ssIC7gzASMjEloflezp3Xye40F9HOakHvaeZCRFMiFI=";
     };
-    propagatedBuildInputs = [ CryptX ];
+    propagatedBuildInputs = [ BytesRandomSecureTiny ];
     meta = {
       description = "Universally Unique Lexicographically Sortable Identifier";
       homepage = "https://metacpan.org/release/Data-ULID";
