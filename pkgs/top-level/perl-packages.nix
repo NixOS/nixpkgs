@@ -2493,10 +2493,10 @@ with self;
 
   BHooksEndOfScope = buildPerlPackage {
     pname = "B-Hooks-EndOfScope";
-    version = "0.26";
+    version = "0.28";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.26.tar.gz";
-      hash = "sha256-Od8vjAB6dUZyB1+VuQeXuuvpetptlEsZemNScJyzBnE=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.28.tar.gz";
+      hash = "sha256-7ax3oX/DZiDIMkzBlM4frS8C6fy+ctCK0LLEfwx/2O8=";
     };
     propagatedBuildInputs = [
       ModuleImplementation
