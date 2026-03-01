@@ -2657,10 +2657,10 @@ with self;
 
   BKeywords = buildPerlPackage {
     pname = "B-Keywords";
-    version = "1.28";
+    version = "1.29";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.28.tar.gz";
-      hash = "sha256-nn62dpWSlIfGGq8trouvndoa2HYCu1oJTxB0SxJ2Xj4=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.29.tar.gz";
+      hash = "sha256-4KoZ0zkECfDs5zQqsEHFtDLDHXzxq/GCwTS2qreHhLA=";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
