@@ -19946,15 +19946,17 @@ with self;
 
   LogContextual = buildPerlPackage {
     pname = "Log-Contextual";
-    version = "0.008001";
+    version = "0.009001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FR/FREW/Log-Contextual-0.008001.tar.gz";
-      hash = "sha256-uTy8+7h5bVHINuOwAkPNpWMICMFSwU7uXyDKCclFGZM=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Log-Contextual-0.009001.tar.gz";
+      hash = "sha256-51aHKEv+A7Dka/ncUwbmXu1oBwjsg+SgD+KWCLj9zJE=";
     };
-    buildInputs = [ TestFatal ];
+    buildInputs = [
+      TestFatal
+      TestNeeds
+    ];
     propagatedBuildInputs = [
       DataDumperConcise
-      ExporterDeclare
       Moo
     ];
     meta = {
