@@ -14852,26 +14852,27 @@ with self;
 
   GD = buildPerlPackage {
     pname = "GD";
-    version = "2.78";
+    version = "2.84";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/GD-2.78.tar.gz";
-      hash = "sha256-aDEFS/VCS09cI9NifT0UhEgPb5wsZmMiIpFfKFG+buQ=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/GD-2.84.tar.gz";
+      hash = "sha256-PP5Nsgwhjrjj1nDy5bdXHxzIotD9VWEbs8+tOjM1Vk8=";
     };
 
     nativeBuildInputs = [
       pkgs.pkg-config
     ];
     buildInputs = [
-      pkgs.gd
-      pkgs.libjpeg
-      pkgs.zlib
-      pkgs.freetype
-      pkgs.libpng
-      pkgs.fontconfig
-      pkgs.libxpm
       ExtUtilsPkgConfig
+      FileWhich
       TestFork
       TestNoWarnings
+      pkgs.fontconfig
+      pkgs.freetype
+      pkgs.gd
+      pkgs.libjpeg
+      pkgs.libpng
+      pkgs.libxpm
+      pkgs.zlib
     ];
 
     # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
