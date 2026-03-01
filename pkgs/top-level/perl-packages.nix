@@ -2882,10 +2882,10 @@ with self;
 
   BusinessISSN = buildPerlPackage {
     pname = "Business-ISSN";
-    version = "1.005";
+    version = "1.008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISSN-1.005.tar.gz";
-      hash = "sha256-OwmwJn8KZmD7krb1DEx3lu9qJjtirTu+qgcYmgx8ObM=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/Business-ISSN-1.008.tar.gz";
+      hash = "sha256-sWs6Gw5TzUXtMyiQbTOtTVmhO1er80FCRVOuzz5EOqw=";
     };
     meta = {
       description = "Perl extension for International Standard Serial Numbers";
