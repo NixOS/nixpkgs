@@ -32734,10 +32734,10 @@ with self;
 
   SymbolGet = buildPerlPackage {
     pname = "Symbol-Get";
-    version = "0.10";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FE/FELIPE/Symbol-Get-0.10.tar.gz";
-      hash = "sha256-DuVWjFrjVzyodOCeTQUkRmz8Gtmiwk0LyR1MewbyHZw=";
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Symbol-Get-0.12.tar.gz";
+      hash = "sha256-VZXd94dtF/tHDdO7sqie1tjyofV9lFC0n7ogd2FYKl0=";
     };
     buildInputs = [
       TestDeep
