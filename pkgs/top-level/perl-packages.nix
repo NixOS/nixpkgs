@@ -3118,10 +3118,10 @@ with self;
 
   CallContext = buildPerlPackage {
     pname = "Call-Context";
-    version = "0.03";
+    version = "0.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FE/FELIPE/Call-Context-0.03.tar.gz";
-      hash = "sha256-Dua/RrxydVrbemsI550S4gfeX3gJcHs8NTtYyy8LWiY=";
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Call-Context-0.05.tar.gz";
+      hash = "sha256-PTnBQJbsv81nmungwhbmG9QdujUR1OvuJfLy7gCGSsU=";
     };
     meta = {
       description = "Sanity-check calling context";
