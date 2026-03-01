@@ -2116,10 +2116,10 @@ with self;
 
   AuthenRadius = buildPerlPackage {
     pname = "Authen-Radius";
-    version = "0.32";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PO/PORTAONE/Authen-Radius-0.32.tar.gz";
-      hash = "sha256-eyCPmDfIOhhCZyVIklNlh+7Qvd5J577euj1ypmUjF0A=";
+      url = "mirror://cpan/authors/id/P/PO/PORTAONE/Authen-Radius-0.33.tar.gz";
+      hash = "sha256-wVNh/JBdzcFW5RJmhhI+wHnwKtDSTIfCcp6xU9Ar8M4=";
     };
     buildInputs = [ TestNoWarnings ];
     propagatedBuildInputs = [
