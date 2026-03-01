@@ -36640,10 +36640,10 @@ with self;
 
   TestManifest = buildPerlPackage {
     pname = "Test-Manifest";
-    version = "2.023";
+    version = "2.026";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-Manifest-2.023.tar.gz";
-      hash = "sha256-0k5SVT58uc2oH5L/6MkrPkNGcY5HEIAaWzW38lGnceI=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/Test-Manifest-2.026.tar.gz";
+      hash = "sha256-4DVdoKia/hABaKwYUeK8U8g3OPDbOHpTA4sZeIKarSU=";
     };
     meta = {
       description = "Interact with a t/test_manifest file";
