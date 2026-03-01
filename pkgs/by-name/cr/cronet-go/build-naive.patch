@@ -1,0 +1,51 @@
+--- a/cmd/build-naive/cmd_build.go
++++ b/cmd/build-naive/cmd_build.go
+@@ -211,7 +211,7 @@ func runGetClang(t Target) {
+ }
+ 
+ func buildTarget(t Target) {
+-	runGetClang(t)
++	// runGetClang(t)
+ 
+ 	outputDirectory := getOutputDirectory(t)
+ 
+@@ -244,16 +244,15 @@ func buildTarget(t Target) {
+ 		"optimize_for_size=true",
+ 		fmt.Sprintf("target_os=\"%s\"", t.OS),
+ 		fmt.Sprintf("target_cpu=\"%s\"", t.CPU),
++		"clang_base_path=\"@clang_base_path@\"",
++		"clang_use_chrome_plugins=false",
+ 	}
+ 
+ 	switch t.OS {
+ 	case "mac":
+ 		args = append(args, "use_sysroot=false")
+ 	case "linux":
+-		// Sysroot is handled by get-clang.sh, use the naiveproxy path
+-		sysrootPath := getSysrootPath(t)
+-		sysrootDirectory := strings.TrimPrefix(sysrootPath, srcRoot+string(filepath.Separator))
+-		args = append(args, "use_sysroot=true", fmt.Sprintf("target_sysroot=\"//%s\"", sysrootDirectory))
++		args = append(args, "use_sysroot=false")
+ 		if t.CPU == "x64" {
+ 			args = append(args, "use_cfi_icall=false", "is_cfi=false")
+ 		}
+@@ -316,7 +315,7 @@ func buildTarget(t Target) {
+ 
+ 	gnArgs := strings.Join(args, " ")
+ 
+-	gnPath := filepath.Join(srcRoot, "gn", "out", "gn")
++	gnPath := "@gn@"
+ 	if runtime.GOOS == "windows" {
+ 		gnPath += ".exe"
+ 	}
+--- a/cmd/build-naive/cmd_package.go
++++ b/cmd/build-naive/cmd_package.go
+@@ -386,7 +386,7 @@ const Version = "%s"
+ 		// This allows the package to compile in purego mode (user must provide .so/.dylib)
+ 		generatePuregoStubFile(targetDirectory, packageName, chromiumVersion)
+ 
+-		runCommand(targetDirectory, "go", "mod", "tidy")
++		// runCommand(targetDirectory, "go", "mod", "tidy")
+ 
+ 		log.Printf("Generated submodule lib/%s", directoryName)
+ 	}
