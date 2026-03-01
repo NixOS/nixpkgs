@@ -34909,11 +34909,12 @@ with self;
 
   TestMemoryGrowth = buildPerlModule {
     pname = "Test-MemoryGrowth";
-    version = "0.04";
+    version = "0.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-MemoryGrowth-0.04.tar.gz";
-      hash = "sha256-oGWFJ1Kr1J5BFbmPbbRsdSy71ePkjtAUXO45L3k9LtA=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-MemoryGrowth-0.05.tar.gz";
+      hash = "sha256-ZuwIhxsCiJScstAkSiu9/iTY9m1YOWBf7nTlRRHhnTc=";
     };
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Assert that code does not cause growth in memory usage";
       license = with lib.licenses; [
