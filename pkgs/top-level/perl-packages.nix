@@ -6837,13 +6837,14 @@ with self;
 
   CPANPLUS = buildPerlPackage {
     pname = "CPANPLUS";
-    version = "0.9914";
+    version = "0.9916";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/CPANPLUS-0.9914.tar.gz";
-      hash = "sha256-dsPl2mI6SvYP5krexEj7H44Mrp9nmKNraIZZdAROm2c=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/CPANPLUS-0.9916.tar.gz";
+      hash = "sha256-58qLT7jlT1p29MuSDJGRky0zfAde65CdfcNbG7+IxWQ=";
     };
     propagatedBuildInputs = [
       ArchiveExtract
+      LogMessage
       ModulePluggable
       ObjectAccessor
       PackageConstants
