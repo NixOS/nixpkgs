@@ -220,7 +220,6 @@ stdenv.mkDerivation (finalAttrs: {
       lovesegfault
       minijackson
       rodrgz
-      synthetica
       khaneliman
     ];
     platforms = lib.platforms.linux;
