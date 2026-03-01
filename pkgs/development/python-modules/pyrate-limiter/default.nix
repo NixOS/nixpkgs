@@ -80,6 +80,9 @@ buildPythonPackage rec {
     "tests/test_postgres_concurrent.py"
   ];
 
+  # For redisTestHook
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "pyrate_limiter" ];
 
   meta = {
