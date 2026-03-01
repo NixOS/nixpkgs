@@ -27,9 +27,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
-    # The built wheel holds an upper bound requirement for the version of this
-    # dependenceis, while pyproject.toml doesn't.
+    # The built wheel holds an upper bound requirement for the version of these
+    # dependenceis, while pyproject.toml doesn't. Upstream's `uv.lock` even
+    # uses yfinance 1.2.0 . See:
+    # https://github.com/KapJI/capital-gains-calculator/pull/744
     "defusedxml"
+    "yfinance"
   ];
 
   build-system = with python3Packages; [
