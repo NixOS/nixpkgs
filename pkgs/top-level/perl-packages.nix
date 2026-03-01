@@ -21940,11 +21940,12 @@ with self;
 
   MIMETypes = buildPerlPackage {
     pname = "MIME-Types";
-    version = "2.24";
+    version = "2.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKOV/MIME-Types-2.24.tar.gz";
-      hash = "sha256-Yp42HyKyIL5QwtpzVOI8BFF1dwmgPCWiLzFg7blMtl8=";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/MIME-Types-2.30.tar.gz";
+      hash = "sha256-8xsWZr30ILS2XDc84BKe40ndJLq0zRbH8Btpj+RQvm8=";
     };
+    buildInputs = [ TestPod ];
     meta = {
       description = "Definition of MIME types";
       homepage = "http://perl.overmeer.net/CPAN";
