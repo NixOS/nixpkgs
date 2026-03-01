@@ -27688,10 +27688,10 @@ with self;
 
   Parent = buildPerlPackage {
     pname = "parent";
-    version = "0.241";
+    version = "0.244";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CO/CORION/parent-0.241.tar.gz";
-      hash = "sha256-sQs5YKs5l9q3Vx/+l1ukYtl50IZFB0Ch4Is5WedRKP4=";
+      url = "mirror://cpan/authors/id/C/CO/CORION/parent-0.244.tar.gz";
+      hash = "sha256-FJpl8BmQnCiXFLV/tcfK26WT57hszyXLSfflSioa8c4=";
     };
     meta = {
       description = "Establish an ISA relationship with base classes at compile time";
