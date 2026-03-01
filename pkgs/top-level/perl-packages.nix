@@ -1457,47 +1457,63 @@ with self;
   };
 
   AppSqitch = buildPerlModule {
-    version = "1.5.2";
+    version = "1.6.1";
     pname = "App-Sqitch";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.2.tar.gz";
-      hash = "sha256-horqXNSz6uDPrKiXK546ag+PmYiEjVNazstJVbAovNE=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.6.1.tar.gz";
+      hash = "sha256-yC+vmRKOWzMD7jyOhaMZDwC8kVAuORlgDdwfSV9xNHQ=";
     };
     buildInputs = [
       CaptureTiny
-      TestExit
+      DBI
+      IOPager
+      ModuleBuild
+      ModuleRuntime
+      PathClass
       TestDeep
       TestDir
       TestException
+      TestExit
       TestFile
       TestFileContents
       TestMockModule
       TestMockObject
       TestNoWarnings
       TestWarn
+      XMLTiny
+      YAMLTiny
     ];
     propagatedBuildInputs = [
+      AlgorithmBackoff
       Clone
       ConfigGitLike
       DBI
       DateTime
+      DateTimeTimeZone
+      DevelStackTrace
       EncodeLocale
       HashMerge
       IOPager
       IPCRun3
       IPCSystemSimple
       ListMoreUtils
+      Moo
       PathClass
       PerlIOutf8_strict
       PodParser
       StringFormatter
       StringShellQuote
+      SubExporter
       TemplateTiny
       Throwable
+      TryTiny
       TypeTiny
+      URI
       URIdb
-      libintl-perl
-      AlgorithmBackoff
+      XMLTiny
+      YAMLTiny
+      libintlperl
+      namespaceautoclean
     ];
     meta = {
       description = "Sensible database change management";
@@ -39711,6 +39727,19 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  XMLTiny = buildPerlPackage {
+    pname = "XML-Tiny";
+    version = "2.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/XML-Tiny-2.07.tar.gz";
+      hash = "sha256-zjn8tT4P6fHLzYbd8VLh20hWYma3DsB2nvNk7qvdiUE=";
+    };
+    meta = {
+      description = "simple lightweight parser for a subset of XML";
+      homepage = "https://github.com/DrHyde/perl-modules-XML-Tiny";
     };
   };
 }
