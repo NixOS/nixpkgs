@@ -11457,19 +11457,29 @@ with self;
 
   DistZillaPluginTestCompile = buildPerlModule {
     pname = "Dist-Zilla-Plugin-Test-Compile";
-    version = "2.058";
+    version = "2.059";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Compile-2.058.tar.gz";
-      hash = "sha256-0M+T5SXxAuyg9/OWcSTS5Z0KIS9zjOVMHd2R3aJo2Io=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Compile-2.059.tar.gz";
+      hash = "sha256-4eIhLvrAaNYrxeeoEExPGuuXAn9YzzfkqOWJ+eo365s=";
     };
     buildInputs = [
       CPANMetaCheck
+      DistZilla
+      Filepushd
       ModuleBuildTiny
+      PerlPrereqScanner
       TestDeep
       TestMinimumVersion
       TestWarnings
     ];
-    propagatedBuildInputs = [ DistZilla ];
+    propagatedBuildInputs = [
+      DataSection
+      DistZilla
+      Moose
+      PathTiny
+      SubExporterForMethods
+      namespaceautoclean
+    ];
     meta = {
       description = "Assert that your Perl files compile OK";
       homepage = "https://github.com/karenetheridge/Dist-Zilla-Plugin-Test-Compile";
