@@ -34275,10 +34275,10 @@ with self;
 
   TestDeep = buildPerlPackage {
     pname = "Test-Deep";
-    version = "1.204";
+    version = "1.205";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-1.204.tar.gz";
-      hash = "sha256-tlkfbM3YU8fvyf88V1Y3BAMhHP/kYEfwgrHNFhGoTl8=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-1.205.tar.gz";
+      hash = "sha256-QngemUOnohXmYsSXO5/q/cAZ/RZGm9uEmoU37liVYnM=";
     };
     meta = {
       description = "Extremely flexible deep comparison";
