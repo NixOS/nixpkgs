@@ -26022,10 +26022,10 @@ with self;
 
   NetIMAPClient = buildPerlPackage {
     pname = "Net-IMAP-Client";
-    version = "0.9507";
+    version = "0.9511";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GANGLION/Net-IMAP-Client-0.9507.tar.gz";
-      hash = "sha256-QE5vW7xQjPFnxAUqXhRwXv7sb7eTvPm1xCniX0cYNUk=";
+      url = "mirror://cpan/authors/id/G/GA/GANGLION/Net-IMAP-Client-0.9511.tar.gz";
+      hash = "sha256-iDg6OPUDccTxEDHg1Fv+c/+mV5/ascRnWGJTpUkdJOc=";
     };
     propagatedBuildInputs = [
       IOSocketSSL
