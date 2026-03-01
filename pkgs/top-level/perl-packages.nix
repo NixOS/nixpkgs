@@ -5678,10 +5678,10 @@ with self;
 
   CodeTidyAll = buildPerlPackage {
     pname = "Code-TidyAll";
-    version = "0.84";
+    version = "0.85";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Code-TidyAll-0.84.tar.gz";
-      hash = "sha256-s8AU4e3X9EBHkJjkHkeHNhBy9QE6ZqX4j5a05Tyisfc=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Code-TidyAll-0.85.tar.gz";
+      hash = "sha256-uQLWzTujBCbVPFu3hE94YP/FeEm+ol8k/Xr4eoDrY8E=";
     };
     propagatedBuildInputs = [
       CaptureTiny
@@ -5693,12 +5693,16 @@ with self;
       ListCompare
       ListSomeUtils
       LogAny
+      ModuleRuntime
       Moo
+      PathTiny
       ScopeGuard
+      Specio
       SpecioLibraryPathTiny
       TextDiff
       TimeDate
       TimeDurationParse
+      TryTiny
     ];
     buildInputs = [
       TestClass
