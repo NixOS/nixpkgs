@@ -19885,10 +19885,10 @@ with self;
 
   LogAny = buildPerlPackage {
     pname = "Log-Any";
-    version = "1.717";
+    version = "1.718";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PR/PREACTION/Log-Any-1.717.tar.gz";
-      hash = "sha256-VmSdoPOQAjDJ49KSUssKdIBvst3r0igFrNc2iVmmW8o=";
+      url = "mirror://cpan/authors/id/P/PR/PREACTION/Log-Any-1.718.tar.gz";
+      hash = "sha256-tlt90PfSngX0mou6atQQg9lkftfCtg2LARWwbnlu4Zo=";
     };
     # Syslog test fails.
     preCheck = "rm t/syslog.t";
