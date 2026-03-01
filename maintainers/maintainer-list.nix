@@ -13111,6 +13111,12 @@
     githubId = 752510;
     name = "Martin Potier";
   };
+  jpteb = {
+    name = "Jan Philipp Tebernum";
+    github = "jpteb";
+    githubId = 13502853;
+    email = "jpteb@pm.me";
+  };
   jpts = {
     email = "james+nixpkgs@cleverley-prance.uk";
     github = "jpts";
