@@ -9514,17 +9514,21 @@ with self;
 
   DateTimeXEasy = buildPerlPackage {
     pname = "DateTimeX-Easy";
-    version = "0.091";
+    version = "0.092";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/DateTimeX-Easy-0.091.tar.gz";
-      hash = "sha256-pfjbvntpZdUD4VJYIBXaKk+B46WGA9/t1Oc9H92s/II=";
+      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/DateTimeX-Easy-0.092.tar.gz";
+      hash = "sha256-O75v3cCeJ/lJUfSWQdXPpsHRxg9ojwqn/tvjP0oB5l0=";
     };
     buildInputs = [ TestMost ];
     propagatedBuildInputs = [
+      DateTime
+      DateTimeFormatDateManip
       DateTimeFormatFlexible
       DateTimeFormatICal
       DateTimeFormatNatural
+      DateTimeTimeZone
       TimeDate
+      YAML
     ];
     doCheck = false;
     meta = {
@@ -40136,6 +40140,26 @@ with self;
     meta = {
       description = "Read/write encrypted ASN.1 PEM files";
       homepage = "https://github.com/perl-Crypt-OpenPGP/Convert-PEM";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  DateTimeFormatDateManip = buildPerlModule {
+    pname = "DateTime-Format-DateManip";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BB/BBENNETT/dt-fmt-datemanip/DateTime-Format-DateManip-0.04.tar.gz";
+      hash = "sha256-IHfJpCDjwGWbYSmL/07eEmkSDPaQv+s19J9ubGvo7kM=";
+    };
+    propagatedBuildInputs = [
+      DateManip
+      DateTime
+    ];
+    meta = {
+      description = "Perl DateTime extension to convert Date::Manip dates and durations to DateTimes and vice versa";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
