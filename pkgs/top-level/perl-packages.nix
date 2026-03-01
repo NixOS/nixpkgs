@@ -24863,16 +24863,23 @@ with self;
 
   MooseXTypesLoadableClass = buildPerlModule {
     pname = "MooseX-Types-LoadableClass";
-    version = "0.015";
+    version = "0.016";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-LoadableClass-0.015.tar.gz";
-      hash = "sha256-4DfTd4JT3PkpRkNXFbraDmRJwKKAj6P/MqllBk1aO/Q=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-LoadableClass-0.016.tar.gz";
+      hash = "sha256-8QW2m8tEzZhW7f1idT/1jDVRn/qW4Xz8nvML25iZTMw=";
     };
     buildInputs = [
+      ClassLoad
       ModuleBuildTiny
+      Moose
       TestFatal
+      namespaceclean
     ];
-    propagatedBuildInputs = [ MooseXTypes ];
+    propagatedBuildInputs = [
+      ModuleRuntime
+      MooseXTypes
+      namespaceautoclean
+    ];
     meta = {
       description = "ClassName type constraint with coercion to load the class";
       homepage = "https://github.com/moose/MooseX-Types-LoadableClass";
