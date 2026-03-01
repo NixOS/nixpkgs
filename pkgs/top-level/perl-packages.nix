@@ -3252,10 +3252,10 @@ with self;
 
   CarpAssertMore = buildPerlPackage {
     pname = "Carp-Assert-More";
-    version = "2.3.0";
+    version = "2.9.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Carp-Assert-More-2.3.0.tar.gz";
-      hash = "sha256-/2nqCb2maiAPygiK3ZHFww5lcqt7ujF6f58zxRKzzqc=";
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Carp-Assert-More-2.9.0.tar.gz";
+      hash = "sha256-zffURaLK61X/Cj+S87D21Ymgurk1u2AoeS5+EmG0ixQ=";
     };
     propagatedBuildInputs = [ CarpAssert ];
     buildInputs = [ TestException ];
