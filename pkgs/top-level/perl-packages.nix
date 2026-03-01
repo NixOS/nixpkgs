@@ -22754,10 +22754,10 @@ with self;
 
   ModulePluggable = buildPerlPackage {
     pname = "Module-Pluggable";
-    version = "5.2";
+    version = "6.3";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-5.2.tar.gz";
-      hash = "sha256-s/KtReT9ELP7kNkS142LeVqylUgNtW3GToa5+nXFpt8=";
+      url = "mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-6.3.tar.gz";
+      hash = "sha256-WFErucZUdG0JN3cLmLVZswhy2FrCQHNIXlgwiQ3RsqA=";
     };
     patches = [
       # !!! merge this patch into Perl itself (which contains Module::Pluggable as well)
