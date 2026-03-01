@@ -9271,12 +9271,13 @@ with self;
 
   DateTimeFormatNatural = buildPerlModule {
     pname = "DateTime-Format-Natural";
-    version = "1.18";
+    version = "1.25";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SC/SCHUBIGER/DateTime-Format-Natural-1.18.tar.gz";
-      hash = "sha256-2TRqRhUDVFnYvO4PrD1OuuoDj09DsoT2nt9z9u1XUf4=";
+      url = "mirror://cpan/authors/id/S/SC/SCHUBIGER/DateTime-Format-Natural-1.25.tar.gz";
+      hash = "sha256-alpIxYiPTQXGBN8zmnn4oQKNtWrAoMhXVVN/c5+24t4=";
     };
     buildInputs = [
+      ModuleBuild
       ModuleUtil
       TestMockTimeHiRes
     ];
@@ -9285,7 +9286,6 @@ with self;
       DateTime
       DateTimeHiRes
       DateTimeTimeZone
-      ListMoreUtils
       ParamsValidate
       boolean
     ];
