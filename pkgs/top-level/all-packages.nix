@@ -322,7 +322,9 @@ with pkgs;
   chef-cli = callPackage ../tools/misc/chef-cli { };
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
-
+  
+  chronicler = callPackage ../applications/editors/chronicler { };
+  
   cup-docker-noserver = cup-docker.override { withServer = false; };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };

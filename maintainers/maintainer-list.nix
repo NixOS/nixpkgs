@@ -7880,6 +7880,12 @@
     githubId = 36283171;
     name = "Daniel";
   };
+  enderfare = {
+    name = "ender.fare";
+    email = "ender.fare.md@gmail.com";
+    github = "enderfare";
+    githubId = 135335132;
+  };
   endgame = {
     email = "jack@jackkelly.name";
     github = "endgame";
