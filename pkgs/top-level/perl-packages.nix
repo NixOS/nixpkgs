@@ -29151,15 +29151,16 @@ with self;
 
   PPIxUtils = buildPerlPackage {
     pname = "PPIx-Utils";
-    version = "0.003";
+    version = "0.004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/PPIx-Utils-0.003.tar.gz";
-      hash = "sha256-KpvM/I6tA74BtnJI/o4VJSIED3mChvpO9EMrfy79uhE=";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/PPIx-Utils-0.004.tar.gz";
+      hash = "sha256-M2kY1WrJSC0kjSym557X8sxnQD+97N1zqcQUoDSts88=";
     };
     propagatedBuildInputs = [
       BKeywords
       PPI
     ];
+    buildInputs = [ PPI ];
     meta = {
       homepage = "https://github.com/Grinnz/PPIx-Utils";
       description = "Utility functions for PPI";
