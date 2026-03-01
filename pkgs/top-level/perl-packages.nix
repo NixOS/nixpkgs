@@ -26668,10 +26668,10 @@ with self;
 
   NetSSLeay = buildPerlPackage {
     pname = "Net-SSLeay";
-    version = "1.92";
+    version = "1.94";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CH/CHRISN/Net-SSLeay-1.92.tar.gz";
-      hash = "sha256-R8LyswDy5xYtcdaZ9jPdajWwYloAy9qMUKwBFEqTlqk=";
+      url = "mirror://cpan/authors/id/C/CH/CHRISN/Net-SSLeay-1.94.tar.gz";
+      hash = "sha256-nXvopW0b7doFxCUwbMUEuhNDB+DAm9pKeIyYdE682V0=";
     };
     buildInputs = [
       pkgs.openssl
