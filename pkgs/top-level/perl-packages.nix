@@ -26246,10 +26246,10 @@ with self;
 
   NetMQTTSimple = buildPerlPackage {
     pname = "Net-MQTT-Simple";
-    version = "1.28";
+    version = "1.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JU/JUERD/Net-MQTT-Simple-1.28.tar.gz";
-      hash = "sha256-Sp6hB+a8IuJrUzZ4oKPMbEI7N4TsP8ROjjM5t8Vr7gM=";
+      url = "mirror://cpan/authors/id/J/JU/JUERD/Net-MQTT-Simple-1.33.tar.gz";
+      hash = "sha256-WFOcHCeU0lhyZS14omyf0mtie9rRuRNKFZhpwbKCKqc=";
     };
     propagatedBuildInputs = [
       IOSocketSSL
