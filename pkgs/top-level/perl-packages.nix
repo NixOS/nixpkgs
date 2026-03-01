@@ -21244,10 +21244,10 @@ with self;
 
   MathInt64 = buildPerlPackage {
     pname = "Math-Int64";
-    version = "0.54";
+    version = "0.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SA/SALVA/Math-Int64-0.54.tar.gz";
-      hash = "sha256-3PxR5phDfqa5zv4CdiFcVs22p/hePiSitrQYnxlg01E=";
+      url = "mirror://cpan/authors/id/S/SA/SALVA/Math-Int64-0.57.tar.gz";
+      hash = "sha256-EsYBEcHPzrJXrCzMWy4XIYee+gmhsKc+iDavyhB6fXU=";
     };
     meta = {
       description = "Manipulate 64 bits integers in Perl";
