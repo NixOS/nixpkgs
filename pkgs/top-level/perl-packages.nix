@@ -11113,10 +11113,10 @@ with self;
 
   DispatchClass = buildPerlPackage {
     pname = "Dispatch-Class";
-    version = "0.02";
+    version = "0.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MAUKE/Dispatch-Class-0.02.tar.gz";
-      hash = "sha256-1020Oxr56L1G/8Fb/k3x5dgQxCzoWC6TdRDcKiyhZYI=";
+      url = "mirror://cpan/authors/id/M/MA/MAUKE/Dispatch-Class-0.04.tar.gz";
+      hash = "sha256-ZQcMBFMo0Zlj0k0auNoAqMhEUT5WRboHnWcpzvgs7TM=";
     };
     propagatedBuildInputs = [ ExporterTiny ];
     meta = {
