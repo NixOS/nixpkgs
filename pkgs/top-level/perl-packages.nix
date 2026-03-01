@@ -26412,10 +26412,10 @@ with self;
 
   NetServer = buildPerlPackage {
     pname = "Net-Server";
-    version = "2.014";
+    version = "2.018";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RH/RHANDOM/Net-Server-2.014.tar.gz";
-      hash = "sha256-NAa5ylpmKgB17tR/t43hMWtgHJT2Kg7jSlVE25uqNyA=";
+      url = "mirror://cpan/authors/id/B/BB/BBB/Net-Server-2.018.tar.gz";
+      hash = "sha256-TWvRrbDeYA1rRLmoYpuUP+hnALBVGGeR6jl7fPOkVrM=";
     };
     doCheck = false; # seems to hang waiting for connections
     meta = {
