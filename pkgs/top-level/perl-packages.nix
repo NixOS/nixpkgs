@@ -22677,10 +22677,10 @@ with self;
 
   ModuleInstallRepository = buildPerlPackage {
     pname = "Module-Install-Repository";
-    version = "0.06";
+    version = "0.08";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Module-Install-Repository-0.06.tar.gz";
-      hash = "sha256-AOJZDQkznMzL2qMo0SrY7HfoMaOMmtZjcF5Z7LsYcis=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Module-Install-Repository-0.08.tar.gz";
+      hash = "sha256-hJIF0NLAZdkWxcx0OKEBrlDsVh4K3IRMDpCoI0SFlfk=";
     };
     buildInputs = [ PathClass ];
     meta = {
