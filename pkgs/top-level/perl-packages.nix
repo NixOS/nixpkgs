@@ -7149,10 +7149,10 @@ with self;
 
   CryptECB = buildPerlPackage {
     pname = "Crypt-ECB";
-    version = "2.22";
+    version = "2.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AP/APPEL/Crypt-ECB-2.22.tar.gz";
-      hash = "sha256-9a9i6QjNMaNLK4ExNaBxgBb9AD/6ACH/vdhMUBWCZ6o=";
+      url = "mirror://cpan/authors/id/A/AP/APPEL/Crypt-ECB-2.23.tar.gz";
+      hash = "sha256-qMrAcDdNKgItWGC8ps67FG6DUb9na/uvSajtr7bMrVY=";
     };
     meta = {
       description = "Use block ciphers using ECB mode";
