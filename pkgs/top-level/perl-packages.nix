@@ -40032,10 +40032,10 @@ with self;
 
   ZonemasterLDNS = buildPerlPackage {
     pname = "Zonemaster-LDNS";
-    version = "3.2.0";
+    version = "5.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-3.2.0.tar.gz";
-      hash = "sha256-BpsWQRcpX6gtJSlAocqLMIrYsfPocjvk6CaqqX9wbWw=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-5.0.1.tar.gz";
+      hash = "sha256-QSTh8plSzf3LnmyXBmIjp57aQu7ql1MrAI5hzRIAFnk=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
@@ -40044,11 +40044,14 @@ with self;
 
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
-      DevelChecklib
-      ModuleInstall
+      DevelCheckLib
+      ExtUtilsPkgConfig
+      HoneyClientUtil
+      MIMEBase32
       ModuleInstallXSUtil
-      TestFatal
       TestDifferences
+      TestFatal
+      TestNoWarnings
       pkgs.ldns
       pkgs.libidn2
       pkgs.openssl
@@ -40660,6 +40663,18 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  HoneyClientUtil = buildPerlPackage {
+    pname = "HoneyClient-Util";
+    version = "0.98";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MITREHC/HoneyClient-Util-0.98-stable.tar.gz";
+      hash = "sha256-Jwl1fF7pNb5xHnlHm0Exivo9rFrdgnqT+L+wgne1BgI=";
+    };
+    meta = {
+      description = "Perl extension to provide a generic interface to the HoneyClient global configuration file";
     };
   };
 }
