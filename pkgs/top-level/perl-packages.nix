@@ -29663,10 +29663,10 @@ with self;
 
   PodChecker = buildPerlPackage {
     pname = "Pod-Checker";
-    version = "1.75";
+    version = "1.77";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.75.tar.gz";
-      hash = "sha256-82O1dOxmCvbtvT5dTJ/8UVodRsvxx8ytmkbO0oh5wiE=";
+      url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.77.tar.gz";
+      hash = "sha256-Exp8BJvtdYyrKZAXksmZyjFdTogcYw0/k79qrmnp4kI=";
     };
     preCheck = ''
       # Remove tests with hardcoded line numbers.
