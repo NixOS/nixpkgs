@@ -13697,10 +13697,10 @@ with self;
 
   FileFinder = buildPerlPackage {
     pname = "File-Finder";
-    version = "0.53";
+    version = "1.01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ME/MERLYN/File-Finder-0.53.tar.gz";
-      hash = "sha256-LsvBmsZ6nmNchyqAeo0+qv9bq8BU8VoZHUfN/F8XanQ=";
+      url = "mirror://cpan/authors/id/M/ME/MERLYN/File-Finder-1.01.tar.gz";
+      hash = "sha256-K2q9ZDVOdsXC5bN6NCKK8tgH9u1KtwcLEWtrRIJl+4c=";
     };
     propagatedBuildInputs = [ TextGlob ];
     meta = {
