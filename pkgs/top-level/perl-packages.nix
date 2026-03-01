@@ -29446,10 +29446,10 @@ with self;
 
   ProtocolHTTP2 = buildPerlModule {
     pname = "Protocol-HTTP2";
-    version = "1.11";
+    version = "1.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CR/CRUX/Protocol-HTTP2-1.11.tar.gz";
-      hash = "sha256-Vp8Fsavpl7UHyCUVMMyB0e6WvZMsxoJTS2zkhlNQCRM=";
+      url = "mirror://cpan/authors/id/C/CR/CRUX/Protocol-HTTP2-1.12.tar.gz";
+      hash = "sha256-GWhR/tL/+1DGS6WsBDyJ+NvnZjDpWgN3/Gi1eAZYzBk=";
     };
     buildInputs = [
       AnyEvent
