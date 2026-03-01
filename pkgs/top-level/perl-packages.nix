@@ -22865,10 +22865,10 @@ with self;
 
   ModuleSignature = buildPerlPackage {
     pname = "Module-Signature";
-    version = "0.87";
+    version = "0.93";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AU/AUDREYT/Module-Signature-0.87.tar.gz";
-      hash = "sha256-IU6AVcUP7DcalXQ1IP4mlAAE52FpBjsrROyQoNRdaYI=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Module-Signature-0.93.tar.gz";
+      hash = "sha256-0LEo7DQVJUDwUYe4QSgI7TZhqlfoHBz5WdBsNSlbHzo=";
     };
     buildInputs = [ IPCRun ];
     meta = {
