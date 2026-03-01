@@ -9337,16 +9337,23 @@ with self;
 
   DateTimeFormatStrptime = buildPerlPackage {
     pname = "DateTime-Format-Strptime";
-    version = "1.79";
+    version = "1.80";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Strptime-1.79.tar.gz";
-      hash = "sha256-cB5GgCyG7U2IaVwabay76QszkL7reU84fnx5IwADdXk=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Strptime-1.80.tar.gz";
+      hash = "sha256-7+XivnBCXvwSOk5X9LlrLSO+sDIAyDJklbW0M7a3cVg=";
     };
     buildInputs = [
       TestFatal
       TestWarnings
     ];
-    propagatedBuildInputs = [ DateTime ];
+    propagatedBuildInputs = [
+      DateTime
+      DateTimeLocale
+      DateTimeTimeZone
+      ParamsValidationCompiler
+      Specio
+      TryTiny
+    ];
     meta = {
       description = "Parse and format strp and strf time patterns";
       homepage = "https://metacpan.org/release/DateTime-Format-Strptime";
