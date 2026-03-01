@@ -26307,15 +26307,16 @@ with self;
 
   NetPatricia = buildPerlPackage {
     pname = "Net-Patricia";
-    version = "1.22";
+    version = "1.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GR/GRUBER/Net-Patricia-1.22.tar.gz";
-      hash = "sha256-cINakm4cWo0DJMcv/+6C7rfsbBQd7gT9RGggtk9xxVI=";
+      url = "mirror://cpan/authors/id/G/GR/GRUBER/Net-Patricia-1.24.tar.gz";
+      hash = "sha256-2U9SCATiVBsc0g5zNmcgqXPK9d0tJiODj8jWOYr9fts=";
     };
     propagatedBuildInputs = [
       NetCIDRLite
       Socket6
     ];
+    buildInputs = [ TestPod ];
     meta = {
       description = "Patricia Trie perl module for fast IP address lookups";
       license = with lib.licenses; [ gpl2Plus ];
