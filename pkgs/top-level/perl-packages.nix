@@ -32285,10 +32285,10 @@ with self;
 
   ShellGuess = buildPerlPackage {
     pname = "Shell-Guess";
-    version = "0.09";
+    version = "0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Shell-Guess-0.09.tar.gz";
-      hash = "sha256-QGn6JjfkQxGO2VbXECMdFmgj0jsqZOuHuKRocuhloSs=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Shell-Guess-0.10.tar.gz";
+      hash = "sha256-s+hxutqP58yCvLQzVa5B0BSTI0mCEjjKq8gVdsxh9G8=";
     };
     meta = {
       description = "Make an educated guess about the shell in use";
