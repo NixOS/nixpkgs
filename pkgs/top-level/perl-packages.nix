@@ -37513,10 +37513,10 @@ with self;
 
   TimeDate = buildPerlPackage {
     pname = "TimeDate";
-    version = "2.33";
+    version = "2.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/TimeDate-2.33.tar.gz";
-      hash = "sha256-wLacSwOd5vUBsNnxPsWMhrBAwffpsn7ySWUcFD1gXrI=";
+      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/TimeDate-2.34.tar.gz";
+      hash = "sha256-RXHaj61Dk+cFG+AJi9OtAos8YMLXWt+IsfgbkSFU1tI=";
     };
     meta = {
       description = "Miscellaneous timezone manipulations routines";
