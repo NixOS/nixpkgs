@@ -75,7 +75,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "0.24.2";
+  version = "0.26.0";
 
   outputs = [
     "out"
@@ -85,8 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
-    rev = finalAttrs.version;
-    hash = "sha256-61lckI0F+Ez5LR/8g6ftS0W7Q/+EU/1flTDFleBg6pc=";
+    tag = finalAttrs.version;
+    hash = "sha256-3NrhnbAR0VIyr7JkAsY8NIkW8AelPSphzIYu8QMgXsU=";
   };
 
   patches = [
@@ -170,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://harelang.org/";
     description = "Systems programming language designed to be simple, stable, and robust";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "hare";
     inherit (harec.meta) platforms badPlatforms;
   };
