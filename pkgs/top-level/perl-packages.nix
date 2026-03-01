@@ -29395,10 +29395,10 @@ with self;
 
   ProtocolRedis = buildPerlPackage {
     pname = "Protocol-Redis";
-    version = "1.0011";
+    version = "2.0002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/U/UN/UNDEF/Protocol-Redis-1.0011.tar.gz";
-      hash = "sha256-fOtr2ABnyQRGXU/R8XFXJDiMm9w3xsLAA6IM5Wm39Og=";
+      url = "mirror://cpan/authors/id/U/UN/UNDEF/Protocol-Redis-2.0002.tar.gz";
+      hash = "sha256-P/DgtlOSxPaBeyMGzSxi3OimHvSohu3+SdqvMeE5ziE=";
     };
     meta = {
       description = "Redis protocol parser/encoder with asynchronous capabilities";
