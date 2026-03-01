@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Advanced shading language for production GI renderers";
     homepage = "https://opensource.imageworks.com/osl.html";
-    maintainers = with lib.maintainers; [ hodapp ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
