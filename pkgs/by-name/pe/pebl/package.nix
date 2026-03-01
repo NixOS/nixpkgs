@@ -12,14 +12,14 @@
   libpng,
 }:
 
-clangStdenv.mkDerivation (finalAttrs: rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "pebl";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "stmueller";
-    repo = pname;
-    tag = version;
+    repo = "pebl";
+    tag = finalAttrs.version;
     hash = "sha256-5BJUY4HHcWSzkPEuZRY9eguLJT5OTVMMqzzcnB9XSts=";
   };
 
@@ -47,7 +47,7 @@ clangStdenv.mkDerivation (finalAttrs: rec {
   installFlags = [ "PREFIX=${placeholder "out"}/" ];
 
   meta = {
-    description = "Psychology Experiment Building Language";
+    description = "Free cross-platform system for designing psychological experiments";
     license = lib.licenses.gpl2Plus;
     mainProgram = "pebl2";
     maintainers = with lib.maintainers; [ sauricat ];
