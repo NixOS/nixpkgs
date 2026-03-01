@@ -1822,10 +1822,10 @@ with self;
 
   ArchiveTar = buildPerlPackage {
     pname = "Archive-Tar";
-    version = "3.02";
+    version = "3.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/Archive-Tar-3.02.tar.gz";
-      hash = "sha256-gWM8h/c3hGGD01wPTJ1ALalHqEa0iBswzObZ6+PInRk=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Archive-Tar-3.04.tar.gz";
+      hash = "sha256-umuK3b7cQ6Rj7c3fe5Osy3Z2x7ecQPQlthnZlUXEy4w=";
     };
     meta = {
       description = "Manipulates TAR archives";
