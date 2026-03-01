@@ -17416,14 +17416,14 @@ with self;
 
   Imager = buildPerlPackage {
     pname = "Imager";
-    version = "1.025";
+    version = "1.029";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.025.tar.gz";
-      hash = "sha256-TwJ1y7HgEdfz/sYE3GtgwaxvAt78KYs9A31ur3vqcFg=";
+      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.029.tar.gz";
+      hash = "sha256-/4mps2s44kVjxTjvN5LT//3Es4l4Ziw5Tlk+rRypKIc=";
     };
     buildInputs = [
-      pkgs.freetype
       pkgs.fontconfig
+      pkgs.freetype
       pkgs.libjpeg
       pkgs.libpng
     ];
