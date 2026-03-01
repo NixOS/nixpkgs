@@ -13941,16 +13941,21 @@ with self;
 
   FileMimeInfo = buildPerlPackage {
     pname = "File-MimeInfo";
-    version = "0.33";
+    version = "0.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MICHIELB/File-MimeInfo-0.33.tar.gz";
-      hash = "sha256-9r6ms4kGITJeycJ5KvruiOlIoK4dEIcvpyxxELPhscQ=";
+      url = "mirror://cpan/authors/id/M/MI/MICHIELB/File-MimeInfo-0.36.tar.gz";
+      hash = "sha256-qQv/SMrMA/ROjmLyfU23OFxfnHN087l7C1y1wgYXkLg=";
     };
     doCheck = false; # Failed test 'desktop file is the right one'
     buildInputs = [
       FileBaseDir
       FileDesktopEntry
       EncodeLocale
+    ];
+    propagatedBuildInputs = [
+      EncodeLocale
+      FileBaseDir
+      FileDesktopEntry
     ];
     meta = {
       description = "Determine file type from the file name";
