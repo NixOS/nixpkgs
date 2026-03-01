@@ -17645,10 +17645,10 @@ with self;
 
   IO = buildPerlPackage {
     pname = "IO";
-    version = "1.51";
+    version = "1.55";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-1.51.tar.gz";
-      hash = "sha256-VJPqVZmHKM0rfsuCNMWPtdXfJwmNDwet3KIkRNdhbOA=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-1.55.tar.gz";
+      hash = "sha256-BEOv67mkjylhHpsXoBf0MLURZ6SY+kZGwH+NzgO2uV8=";
     };
     doCheck = false;
     meta = {
