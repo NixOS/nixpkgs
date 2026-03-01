@@ -39,11 +39,21 @@ stdenv.mkDerivation (finalAttrs: {
     # several locations so we fix that globally. However, when running inside
     # a container, we actually *want* "/bin/bash". Thus the global fix needs
     # to be reverted for this specific use case.
+    #
+    # Two code paths need the revert:
+    #   1. launcher (the command that invokes .command.run)
+    #   2. trace_cmd (the command inside .command.run's nxf_trace function
+    #      that invokes .command.sh — see command-trace.txt template)
+    # Without the trace_cmd revert, trace+docker fails because the trace
+    # function tries to call /nix/store/.../bash inside the container.
+    # See https://github.com/NixOS/nixpkgs/issues/350183
     substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
       --replace-fail "['/bin/bash'," "['${bash}/bin/bash'," \
       --replace-fail '? "/bin/bash"' '? "'${bash}'/bin/bash"' \
       --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
-                launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
+                launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")" \
+      --replace-fail "binding.trace_cmd = getTraceCommand(interpreter)" \
+        "binding.trace_cmd = containerBuilder != null ? getTraceCommand(interpreter).replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\") : getTraceCommand(interpreter)"
   '';
 
   mitmCache = gradle.fetchDeps {

@@ -18055,6 +18055,12 @@
     githubId = 3073833;
     name = "Massimo Redaelli";
   };
+  mreichardt95 = {
+    email = "mreichardt95@gmail.com";
+    github = "mreichardt95";
+    githubId = 18323490;
+    name = "Milian Reichardt";
+  };
   mrene = {
     email = "mathieu.rene@gmail.com";
     github = "mrene";

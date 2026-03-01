@@ -1,37 +1,45 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonApplication,
-  gitUpdater,
+  buildPythonPackage,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   aiohttp,
   appdirs,
-  beautifulsoup4,
   defusedxml,
   devpi-common,
   execnet,
+  httpx,
   itsdangerous,
-  nginx,
   packaging,
   passlib,
   platformdirs,
   pluggy,
   py,
-  httpx,
   pyramid,
-  pytest-asyncio,
-  pytestCheckHook,
   repoze-lru,
-  setuptools,
-  setuptools-changelog-shortener,
   strictyaml,
   waitress,
+
+  # tests
+  beautifulsoup4,
+  nginx,
+  packaging-legacy,
+  pytest-asyncio,
+  pytestCheckHook,
   webtest,
-  testers,
+
+  # passthru
   devpi-server,
+  gitUpdater,
   nixosTests,
+  testers,
 }:
 
-buildPythonApplication (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "devpi-server";
   version = "6.19.1";
   pyproject = true;
@@ -43,11 +51,15 @@ buildPythonApplication (finalAttrs: {
     hash = "sha256-YFY2iLnORzFxnfGYU2kCpJL8CZi+lALIkL1bRpfd4NE=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools_changelog_shortener",' ""
+  '';
+
   sourceRoot = "${finalAttrs.src.name}/server";
 
   build-system = [
     setuptools
-    setuptools-changelog-shortener
   ];
 
   dependencies = [
@@ -56,25 +68,25 @@ buildPythonApplication (finalAttrs: {
     defusedxml
     devpi-common
     execnet
+    httpx
     itsdangerous
     packaging
     passlib
     platformdirs
     pluggy
+    py
     pyramid
     repoze-lru
     setuptools
     strictyaml
     waitress
-    py
-    httpx
   ]
   ++ passlib.optional-dependencies.argon2;
 
   nativeCheckInputs = [
     beautifulsoup4
     nginx
-    py
+    packaging-legacy
     pytest-asyncio
     pytestCheckHook
     webtest
