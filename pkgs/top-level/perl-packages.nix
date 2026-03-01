@@ -25001,13 +25001,14 @@ with self;
 
   MooseXTypesURI = buildPerlModule {
     pname = "MooseX-Types-URI";
-    version = "0.09";
+    version = "0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-URI-0.09.tar.gz";
-      hash = "sha256-Jxd1Ta25EIbhHSH+oGy6qaEuYBtB0VRDFQ7dfZUI7+g=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-URI-0.10.tar.gz";
+      hash = "sha256-Mwqx0TTu+FQq4raFLwEx61PX2QOgL5B0DMANyY7uCMw=";
     };
     buildInputs = [
       ModuleBuildTiny
+      Moose
       TestNeeds
       TestWithoutModule
     ];
