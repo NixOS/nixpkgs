@@ -14513,10 +14513,10 @@ with self;
 
   Filter = buildPerlPackage {
     pname = "Filter";
-    version = "1.64";
+    version = "1.65";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Filter-1.64.tar.gz";
-      hash = "sha256-E+f7fh0yZZjjZgEDzxl0vun2kKxbQ7M58sAi8rX87yw=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Filter-1.65.tar.gz";
+      hash = "sha256-y3DaeuXhkTigsi+ztjh8OuaXo80/P27N5CUVLpEk0eY=";
     };
     meta = {
       description = "Source Filters";
