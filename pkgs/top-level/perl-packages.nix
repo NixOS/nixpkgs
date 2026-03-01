@@ -33255,10 +33255,10 @@ with self;
 
   TemplatePluginAutoformat = buildPerlPackage {
     pname = "Template-Plugin-Autoformat";
-    version = "2.77";
+    version = "2.79";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KA/KARMAN/Template-Plugin-Autoformat-2.77.tar.gz";
-      hash = "sha256-vd+0kZ8Kuyor56lmUzPg1OCYAy8OOD268ExNiWx0hu0=";
+      url = "mirror://cpan/authors/id/K/KA/KARMAN/Template-Plugin-Autoformat-2.79.tar.gz";
+      hash = "sha256-Ip0mQ+5BGQCM2NUy8qYvi2xApCohRUPO64wq95u5sjI=";
     };
     propagatedBuildInputs = [
       TemplateToolkit
