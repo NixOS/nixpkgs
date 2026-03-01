@@ -4387,42 +4387,57 @@ with self;
 
   Catmandu = buildPerlModule {
     pname = "Catmandu";
-    version = "1.2020";
+    version = "1.2025";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HO/HOCHSTEN/Catmandu-1.2020.tar.gz";
-      hash = "sha256-1jIbR+NkGvkb7vZjNhWZVk88wzwAc5isa7opuO5A4cU=";
+      url = "mirror://cpan/authors/id/N/NI/NICS/Catmandu-1.2025.tar.gz";
+      hash = "sha256-BZWTaQJduyR7qG8bl0IzbGbFUZK5b19SWiJGlJlMp68=";
     };
     propagatedBuildInputs = [
       AnyURIEscape
       AppCmd
       CGIExpand
+      ClassMethodModifiers
+      Clone
       ConfigOnion
       CpanelJSONXS
       DataCompare
       DataUtil
+      HTTPMessage
+      HashMergeSimple
       IOHandleUtil
-      LWP
-      ListMoreUtils
+      ListSomeUtils
       LogAny
       MIMETypes
+      ModuleBuild
       ModuleInfo
+      Moo
       MooXAliases
+      PackageStash
       ParserMGC
       PathIteratorRule
       PathTiny
+      RoleTiny
       StringCamelCase
+      SubExporter
+      SubQuote
       TextCSV
       TextHogan
       Throwable
       TryTinyByClass
+      URI
       URITemplate
       UUIDTiny
       YAMLLibYAML
+      asa
+      libwwwperl
       namespaceclean
     ];
     buildInputs = [
+      CaptureTiny
+      LogAny
       LogAnyAdapterLog4perl
       LogLog4perl
+      ModuleBuild
       TestDeep
       TestException
       TestLWPUserAgent
