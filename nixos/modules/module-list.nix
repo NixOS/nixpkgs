@@ -294,6 +294,7 @@
   ./programs/plotinus.nix
   ./programs/pmount.nix
   ./programs/pqos-wrapper.nix
+  ./programs/probe-rs-tools.nix
   ./programs/projecteur.nix
   ./programs/proxychains.nix
   ./programs/pulseview.nix
