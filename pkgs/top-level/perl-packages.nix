@@ -7026,10 +7026,10 @@ with self;
 
   CryptCurve25519 = buildPerlPackage {
     pname = "Crypt-Curve25519";
-    version = "0.07";
+    version = "0.08";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KA/KARASIK/Crypt-Curve25519-0.07.tar.gz";
-      hash = "sha256-Z6mIcTclIdb34R/dYnyq21wdVAFCag6c9CFnpDxbSx0=";
+      url = "mirror://cpan/authors/id/K/KA/KARASIK/Crypt-Curve25519-0.08.tar.gz";
+      hash = "sha256-QuuQK0TkNKvNxjZDVznE5Dn9CD/dVh+wBc/FdywtF54=";
     };
     meta = {
       description = "Generate shared secret using elliptic-curve Diffie-Hellman function";
