@@ -89,6 +89,18 @@ let
       ];
       commit_date = "2025-06-10";
     };
+    #fsf-16 still not available, use fsf-15
+    "16" = {
+      src = fetchSpark2014 {
+        rev = "22bf1510e0829ba74f9d8d686badb65c7365ee91";
+        hash = "sha256-KjAWMgMT3Tp/s/DQ20ZZajty9Zrv8aPFocwgv5LkjSw=";
+      };
+      patches = [
+        # Disable Coq related targets which are missing in the fsf-15 branch
+        ./0001-fix-install-fsf-15.patch
+      ];
+      commit_date = "2025-06-10";
+    };
   };
 
   thisSpark =
@@ -134,7 +146,7 @@ stdenv.mkDerivation {
   ++ (lib.optionals (gnat_version == "14") [
     gpr2_24_2_next
   ])
-  ++ (lib.optionals (gnat_version == "15") [
+  ++ (lib.optionals (gnat_version == "15" || gnat_version == "16") [
     gpr2
   ]);
 
