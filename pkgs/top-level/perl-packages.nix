@@ -25560,17 +25560,19 @@ with self;
 
   NetAsyncHTTP = buildPerlModule {
     pname = "Net-Async-HTTP";
-    version = "0.49";
+    version = "0.50";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-0.49.tar.gz";
-      hash = "sha256-OSBtBpSV0bhq7jeqitPJM0025ZzObPec04asDPN5jNs=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-0.50.tar.gz";
+      hash = "sha256-koRbj/3S3IHey+inuZID5ONJcd5mJKy1wQqp/weIW4c=";
     };
     buildInputs = [
       HTTPCookies
-      Test2Suite
+      IOAsync
+      ModuleBuild
       TestMetricsAny
     ];
     propagatedBuildInputs = [
+      ApacheTest
       Future
       HTTPMessage
       IOAsync
