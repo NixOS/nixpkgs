@@ -21558,25 +21558,37 @@ with self;
 
   MaxMindDBWriter = buildPerlModule {
     pname = "MaxMind-DB-Writer";
-    version = "0.300003";
+    version = "0.300004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Writer-0.300003.tar.gz";
-      hash = "sha256-ulP1upZfekd/ZxZNl7R1oMESCIcv7fI4mIVQ2SvN6z4=";
+      url = "mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Writer-0.300004.tar.gz";
+      hash = "sha256-mVaTQrXUnerhaFLO3/DONhDiBwHBWKFrg8yZuJCmR+s=";
     };
     propagatedBuildInputs = [
-      DigestSHA1
+      DataDumperConcise
+      DataIEEE754
+      MathInt128
+      MathInt64
+      MaxMindDBCommon
       MaxMindDBReader
+      Moose
       MooseXParamsValidate
       MooseXStrictConstructor
       NetWorks
       SerealDecoder
       SerealEncoder
+      TestDeep
+      namespaceautoclean
     ];
     buildInputs = [
+      DataPrinter
       DevelRefcount
       JSON
+      ListAllUtils
+      MaxMindDBCommon
+      MaxMindDBReader
+      ModuleBuild
+      NetWorks
       TestBits
-      TestDeep
       TestFatal
       TestHexDifferences
       TestRequires
