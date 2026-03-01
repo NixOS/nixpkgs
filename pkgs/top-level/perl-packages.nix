@@ -21765,10 +21765,10 @@ with self;
 
   MetaCPANClient = buildPerlPackage {
     pname = "MetaCPAN-Client";
-    version = "2.030000";
+    version = "2.039000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MICKEY/MetaCPAN-Client-2.030000.tar.gz";
-      hash = "sha256-2bdlxSN3VPFyYmljgqc4XZCy0BmGl5gXhisWZLBt068=";
+      url = "mirror://cpan/authors/id/M/MI/MICKEY/MetaCPAN-Client-2.039000.tar.gz";
+      hash = "sha256-qFWIPzxi/cxrShRAg8SIuqQv7SVGfesZZJnCjS8WbiU=";
     };
 
     # Most tests are online, so we only include offline tests
@@ -21779,7 +21779,7 @@ with self;
     '';
 
     buildInputs = [
-      LWPProtocolHttps
+      LWPProtocolhttps
       TestFatal
       TestNeeds
     ];
@@ -21787,6 +21787,7 @@ with self;
       IOSocketSSL
       JSONMaybeXS
       Moo
+      NetSSLeay
       RefUtil
       SafeIsa
       TypeTiny
