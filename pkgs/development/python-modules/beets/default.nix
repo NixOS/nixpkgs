@@ -29,7 +29,6 @@
   buildPythonPackage,
   pythonAtLeast,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   poetry-core,
