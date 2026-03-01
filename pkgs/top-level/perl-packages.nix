@@ -31666,10 +31666,10 @@ with self;
 
   SQLTranslator = buildPerlPackage {
     pname = "SQL-Translator";
-    version = "1.63";
+    version = "1.66";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VE/VEESH/SQL-Translator-1.63.tar.gz";
-      hash = "sha256-WIWwTJNJi+MqGX3JcjlHUdXeYJNBiTqWZW3oikJgMTM=";
+      url = "mirror://cpan/authors/id/V/VE/VEESH/SQL-Translator-1.66.tar.gz";
+      hash = "sha256-9/9+Np2Ck6OUyzeDtUt0Xn+vREIuioO/zDWTeKblYUU=";
     };
     buildInputs = [
       FileShareDirInstall
@@ -31686,9 +31686,8 @@ with self;
       Moo
       PackageVariant
       ParseRecDescent
+      SubQuote
       TryTiny
-      GraphViz
-      GD
     ];
 
     postPatch = ''
