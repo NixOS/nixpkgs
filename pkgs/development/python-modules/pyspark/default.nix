@@ -66,7 +66,8 @@ buildPythonPackage (finalAttrs: {
       pandas
       pyarrow
     ];
-    pipelines = finalAttrs.optional-dependencies.connect ++ finalAttrs.optional-dependencies.sql;
+    pipelines =
+      finalAttrs.passthru.optional-dependencies.connect ++ finalAttrs.passthru.optional-dependencies.sql;
     sql = [
       pandas
       pyarrow

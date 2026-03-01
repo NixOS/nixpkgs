@@ -14,16 +14,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9tlo7+namWNWrWVQNqaOvtK4NQIdb0p8qvFrrbUamOo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-13BscKZU/wzjstEQ8ffTGFJaDXO+p8IxNqNsyoEjQUc=";
   };
-
-  patches = [ ./qt6_10.patch ];
 
   nativeBuildInputs = [
     cmake

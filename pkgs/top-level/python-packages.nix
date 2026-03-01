@@ -458,6 +458,16 @@ self: super: with self; {
 
   aioquic = callPackage ../development/python-modules/aioquic { };
 
+  aioquic_1_2 = self.aioquic.overrideAttrs rec {
+    version = "1.2.0";
+
+    src = pkgs.fetchPypi {
+      pname = "aioquic";
+      inherit version;
+      hash = "sha256-+RJjuz9xlIxciRW01Q7jcABPIKQW9n+rPcyQVWx+cZk=";
+    };
+  };
+
   aioraven = callPackage ../development/python-modules/aioraven { };
 
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
@@ -5904,6 +5914,8 @@ self: super: with self; {
 
   fslpy = callPackage ../development/python-modules/fslpy { };
 
+  fspath = callPackage ../development/python-modules/fspath { };
+
   fsspec = callPackage ../development/python-modules/fsspec { };
 
   fsspec-xrootd = callPackage ../development/python-modules/fsspec-xrootd { };
@@ -8910,6 +8922,8 @@ self: super: with self; {
   linode-api = callPackage ../development/python-modules/linode-api { };
 
   linode-metadata = callPackage ../development/python-modules/linode-metadata { };
+
+  linuxdoc = callPackage ../development/python-modules/linuxdoc { };
 
   linuxfd = callPackage ../development/python-modules/linuxfd { };
 

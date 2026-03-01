@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21; # essentially...
     # The special exception defined in the file OCCT_LGPL_EXCEPTION.txt
     # are basically about making the license a little less share-alike.
-    maintainers = with lib.maintainers; [ amiloradovsky ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })
