@@ -35169,19 +35169,19 @@ with self;
 
   Testmysqld = buildPerlModule {
     pname = "Test-mysqld";
-    version = "1.0013";
+    version = "1.0030";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SO/SONGMU/Test-mysqld-1.0013.tar.gz";
-      hash = "sha256-V61BoJBXyWO1gsgaB276UPpW664hd9gwd33oOGBePu8=";
+      url = "mirror://cpan/authors/id/S/SO/SONGMU/Test-mysqld-1.0030.tar.gz";
+      hash = "sha256-RdJgiOyilxdStPvNNQ8s8+DlQpX9k7dOETLhYVLQDAM=";
     };
     buildInputs = [
-      pkgs.which
       ModuleBuildTiny
       TestSharedFork
+      pkgs.which
     ];
     propagatedBuildInputs = [
       ClassAccessorLite
-      DBDmysql
+      DBI
       FileCopyRecursive
     ];
     meta = {
