@@ -14782,12 +14782,16 @@ with self;
 
   FutureIO = buildPerlModule {
     pname = "Future-IO";
-    version = "0.14";
+    version = "0.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-IO-0.14.tar.gz";
-      hash = "sha256-a1j++vwwlMJwHwp7mMsUCwmItRaKfV3069Hu6OhyBgo=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-IO-0.22.tar.gz";
+      hash = "sha256-bFJ++Thf1w1OXcKAsCX9QAw78RYUYh/mC6imgPerOgQ=";
     };
-    buildInputs = [ TestFutureIOImpl ];
+    buildInputs = [
+      ModuleBuild
+      TestExpectAndCheck
+      TestFutureIOImpl
+    ];
     propagatedBuildInputs = [
       Future
       StructDumb
@@ -40267,6 +40271,27 @@ with self;
     propagatedBuildInputs = [ PPI ];
     meta = {
       description = "Index offsets for tokens in PPI";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  TestExpectAndCheck = buildPerlModule {
+    pname = "Test-ExpectAndCheck";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-ExpectAndCheck-0.08.tar.gz";
+      hash = "sha256-5jimAfivFENA3sxAQz2X2GeesybUWV4MeCEjUEXmAe0=";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [
+      Future
+      TestDeep
+    ];
+    meta = {
+      description = "expect/check-style unit testing with object methods";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
