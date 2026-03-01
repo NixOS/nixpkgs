@@ -20569,12 +20569,15 @@ with self;
 
   MacPropertyList = buildPerlPackage {
     pname = "Mac-PropertyList";
-    version = "1.504";
+    version = "1.606";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Mac-PropertyList-1.504.tar.gz";
-      hash = "sha256-aIl96Yw2j76c22iF1H3qADxG7Ho3MmNSPvZkVwc7eq4=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/Mac-PropertyList-1.606.tar.gz";
+      hash = "sha256-yA+fsbqHm3lETHMLi65yQkms+ahEvLTSCMcHBpnSCQk=";
     };
-    propagatedBuildInputs = [ XMLEntities ];
+    propagatedBuildInputs = [
+      HTMLParser
+      XMLEntities
+    ];
     meta = {
       description = "Work with Mac plists at a low level";
       homepage = "https://github.com/briandfoy/mac-propertylist";
