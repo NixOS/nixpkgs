@@ -1204,10 +1204,10 @@ with self;
 
   Appcpanminus = buildPerlPackage {
     pname = "App-cpanminus";
-    version = "1.7047";
+    version = "1.7048";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7047.tar.gz";
-      hash = "sha256-lj5jxuGocl/y9iTpCGOWrhUNtR3QozfDeB0JqZSvBaU=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7048.tar.gz";
+      hash = "sha256-WbYJB6ufpPcsogBPvmBUkRQ5rpqQaJC02EKoeyXyDzw=";
     };
     # CVE-2024-45321: Use TLS endpoints for downloads and metadata
     preConfigure = ''
