@@ -39274,10 +39274,10 @@ with self;
 
   XMLParser = buildPerlPackage {
     pname = "XML-Parser";
-    version = "2.46";
+    version = "2.47";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/XML-Parser-2.46.tar.gz";
-      hash = "sha256-0zEzJJHFHMz7TLlP/ET5zXM3jmGEmNSjffngQ2YcUV0=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/XML-Parser-2.47.tar.gz";
+      hash = "sha256-rUquZD7HhPSJuVar6VJDKHGmItTitcYZ6IVazL/E0dg=";
     };
     patches = [ ../development/perl-modules/xml-parser-0001-HACK-Assumes-Expat-paths-are-good.patch ];
     postPatch =
@@ -39291,7 +39291,7 @@ with self;
       "EXPATLIBPATH=${pkgs.expat.out}/lib"
       "EXPATINCPATH=${pkgs.expat.dev}/include"
     ];
-    propagatedBuildInputs = [ LWP ];
+    propagatedBuildInputs = [ libwwwperl ];
     meta = {
       description = "Perl module for parsing XML documents";
       license = with lib.licenses; [
