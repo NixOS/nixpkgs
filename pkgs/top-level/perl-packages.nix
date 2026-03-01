@@ -16676,10 +16676,10 @@ with self;
 
   HTMLTagset = buildPerlPackage {
     pname = "HTML-Tagset";
-    version = "3.20";
+    version = "3.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PETDANCE/HTML-Tagset-3.20.tar.gz";
-      hash = "sha256-rbF9rJ42zQEfUkOIHJc5QX/RAvznYPjeTpvkxxMRCOI=";
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/HTML-Tagset-3.24.tar.gz";
+      hash = "sha256-64nhRaYI7R+PFBpXRy7l9p5nWSpDLc0uix27RF8rIws=";
     };
     meta = {
       description = "Data tables useful in parsing HTML";
