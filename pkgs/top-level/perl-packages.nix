@@ -1116,19 +1116,22 @@ with self;
 
   AppCmd = buildPerlPackage {
     pname = "App-Cmd";
-    version = "0.336";
+    version = "0.339";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/App-Cmd-0.336.tar.gz";
-      hash = "sha256-35ZrV9WauxluADBIheW/EXypWBgq4/Tu3xchjqKDjoE=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/App-Cmd-0.339.tar.gz";
+      hash = "sha256-RQjH5TOh/YoiImFGGDTB+HtjMcay+ZMnVqIr0sPs2lE=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [
       CaptureTiny
       ClassLoad
+      DataOptList
       GetoptLongDescriptive
       IOTieCombine
       ModulePluggable
       StringRewritePrefix
+      SubExporter
+      SubInstall
     ];
     meta = {
       description = "Write command line apps with less suffering";
