@@ -8,17 +8,22 @@
   udev,
   udevCheckHook,
   acl,
+  unstableGitUpdater,
 }:
-
 stdenv.mkDerivation {
   pname = "joycond";
-  version = "unstable-2021-07-30";
+  version = "0.1.0-unstable-2026-02-01";
 
   src = fetchFromGitHub {
     owner = "DanielOgorchock";
     repo = "joycond";
-    rev = "f9a66914622514c13997c2bf7ec20fa98e9dfc1d";
-    sha256 = "sha256-quw7yBHDDZk1+6uHthsfMCej7g5uP0nIAqzvI6436B8=";
+    rev = "0df025ac5dc284b1f31172b6b252321ba788c4de";
+    sha256 = "sha256-2rHSQFQvpNZWZJQenZxPEVkbUFQvhRz1Om1AnnIio4M=";
+  };
+
+  passthru.updateScript = unstableGitUpdater {
+    branch = "master";
+    tagPrefix = "v";
   };
 
   nativeBuildInputs = [
@@ -54,7 +59,7 @@ stdenv.mkDerivation {
     description = "Userspace daemon to combine joy-cons from the hid-nintendo kernel driver";
     mainProgram = "joycond";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ TwoUnderscorez ];
     platforms = lib.platforms.linux;
   };
 }

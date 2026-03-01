@@ -27687,6 +27687,15 @@
     githubId = 131159000;
     name = "Nitin Passa";
   };
+  TwoUnderscorez = {
+    name = "Ron Yutkin";
+    github = "TwoUnderscorez";
+    githubId = 25303006;
+    email = "ron@yutk.in";
+    keys = [
+      { fingerprint = "3014 C3E7 2ED8 427C 6F75  CF51 839A D2F5 88D8 728D"; }
+    ];
+  };
   twz123 = {
     name = "Tom Wieczorek";
     email = "tom@bibbu.net";
