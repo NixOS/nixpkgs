@@ -20591,12 +20591,6 @@
     name = "Michael Bergmeister";
     githubId = 53442728;
   };
-  pawelchcki = {
-    email = "pawel.chcki@gmail.com";
-    github = "pawelchcki";
-    githubId = 812891;
-    name = "Paweł Chojnacki";
-  };
   pawelpacana = {
     email = "pawel.pacana@gmail.com";
     github = "mostlyobvious";
