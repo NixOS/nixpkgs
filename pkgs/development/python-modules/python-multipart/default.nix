@@ -15,7 +15,7 @@
   starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-multipart";
   version = "0.0.22";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "python-multipart";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UegnwGxiXQalbp18t1dl2JOQH6BY975cpBa9uo3SOuk=";
   };
 
@@ -48,10 +48,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/Kludex/python-multipart/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Kludex/python-multipart/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Streaming multipart parser for Python";
     homepage = "https://github.com/Kludex/python-multipart";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})
