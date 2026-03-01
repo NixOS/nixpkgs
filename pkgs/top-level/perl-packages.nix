@@ -3307,14 +3307,15 @@ with self;
 
   CatalystActionRenderView = buildPerlPackage {
     pname = "Catalyst-Action-RenderView";
-    version = "0.16";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Action-RenderView-0.16.tar.gz";
-      hash = "sha256-hWUgOVCgV9Q+zWTpWTcV1WXC+9iwLJH0PFOyERrNOUg=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Action-RenderView-0.17.tar.gz";
+      hash = "sha256-cfbV/Z81hhHRRXwMaz++GCJKQTPjleWNKlrkIy8nYaU=";
     };
     propagatedBuildInputs = [
       CatalystRuntime
       DataVisitor
+      MROCompat
     ];
     buildInputs = [ HTTPRequestAsCGI ];
     meta = {
