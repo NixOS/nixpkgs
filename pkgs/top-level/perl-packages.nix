@@ -21072,10 +21072,10 @@ with self;
 
   MathBigIntGMP = buildPerlPackage {
     pname = "Math-BigInt-GMP";
-    version = "1.6013";
+    version = "1.7003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-GMP-1.6013.tar.gz";
-      hash = "sha256-yxqS4CJn1AUV+OA6TiEvZv0wfJdMu9MT4j3jL98Q9rU=";
+      url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-GMP-1.7003.tar.gz";
+      hash = "sha256-oWViiyd9HoM/W2V8qDbbgbxE4EwQfP6fW4vZR1VkLtU=";
     };
     buildInputs = [ pkgs.gmp ];
     doCheck = false;
