@@ -37429,10 +37429,10 @@ with self;
 
   TieRefHash = buildPerlPackage {
     pname = "Tie-RefHash";
-    version = "1.40";
+    version = "1.41";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Tie-RefHash-1.40.tar.gz";
-      hash = "sha256-Ws8fUY0vtfYgyq16Gy/x9vdRb++PQLprdD7si5aSftc=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Tie-RefHash-1.41.tar.gz";
+      hash = "sha256-SBQ1BbF2ZliWrEJ2Fnwsq+lN21nFnYFhBETxvTaEMTg=";
     };
     meta = {
       description = "Use references as hash keys";
