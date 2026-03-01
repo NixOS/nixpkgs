@@ -17698,10 +17698,10 @@ with self;
 
   IOAsync = buildPerlModule {
     pname = "IO-Async";
-    version = "0.802";
+    version = "0.805";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.802.tar.gz";
-      hash = "sha256-5YJzFXd2fEfqxDXvKQRmPUp1Cw5oAqSmGJo38Mswhzg";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.805.tar.gz";
+      hash = "sha256-d/mXt0lT299jp1D8/0M40b+s2JEA4fsnw0c/CiIqmgw=";
     };
     preCheck = "rm t/50resolver.t"; # this test fails with "Temporary failure in name resolution" in sandbox
     propagatedBuildInputs = [
@@ -17709,11 +17709,9 @@ with self;
       StructDumb
     ];
     buildInputs = [
-      TestFatal
+      ModuleBuild
       TestFutureIOImpl
-      TestIdentity
       TestMetricsAny
-      TestRefcount
     ];
     meta = {
       description = "Asynchronous event-driven programming";
