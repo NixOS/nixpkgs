@@ -17119,14 +17119,15 @@ with self;
 
   HTTPMessage = buildPerlPackage {
     pname = "HTTP-Message";
-    version = "6.45";
+    version = "7.01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-6.45.tar.gz";
-      hash = "sha256-AcuEBmEqP3OIQtHpcxOuTYdIcNG41tZjMfFgAJQ9TL4=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-7.01.tar.gz";
+      hash = "sha256-grec5oAlEEXCRO4Flib+y/mCcL7RRn8Bdf9eqRBxQ34=";
     };
     buildInputs = [
       TestNeeds
       TryTiny
+      URI
     ];
     propagatedBuildInputs = [
       Clone
