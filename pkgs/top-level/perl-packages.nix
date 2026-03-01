@@ -14754,13 +14754,19 @@ with self;
 
   FutureAsyncAwait = buildPerlModule {
     pname = "Future-AsyncAwait";
-    version = "0.70";
+    version = "0.71";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.70.tar.gz";
-      hash = "sha256-hCiZBJyXf7IyaoCWkmRB5XvsqRK7K0kY1c4JDfTUprc=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.71.tar.gz";
+      hash = "sha256-FsqlV6PnqV4Ob/X+OWcqqFgAR8dfp3SOuLHLGDp763A=";
     };
-    buildInputs = [ Test2Suite ];
+    buildInputs = [
+      Future
+      ModuleBuild
+      XSParseKeyword
+      XSParseSublike
+    ];
     propagatedBuildInputs = [
+      FileShareDir
       Future
       XSParseKeyword
       XSParseSublike
