@@ -11172,14 +11172,15 @@ with self;
 
   DistZilla = buildPerlPackage {
     pname = "Dist-Zilla";
-    version = "6.030";
+    version = "6.037";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-6.030.tar.gz";
-      hash = "sha256-xAa75oCelO23DKlDJMMBQz1sij375wsC3xLh3/LzsTA=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-6.037.tar.gz";
+      hash = "sha256-jJDbRL8JsRBBdhUo7a+4IWach8FUp1fdRwYIVFp9x14=";
     };
     buildInputs = [
       CPANMetaCheck
-      TestDeep
+      FileShareDirInstall
+      SoftwareLicense
       TestFailWarnings
       TestFatal
       TestFileShareDir
@@ -11187,22 +11188,44 @@ with self;
     propagatedBuildInputs = [
       AppCmd
       CPANUploader
+      ConfigINI
+      ConfigMVP
       ConfigMVPReaderINI
+      DataSection
       DateTime
       FileCopyRecursive
       FileFindRule
+      FileShareDir
       FileShareDirInstall
       Filepushd
+      JSONMaybeXS
       LogDispatchouli
+      MixinLinewise
+      ModuleRuntime
+      Moose
       MooseXLazyRequire
+      MooseXRoleParameterized
       MooseXSetOnce
+      MooseXTypes
       MooseXTypesPerl
+      PPIxIndexOffsets
+      ParamsUtil
       PathTiny
       PerlPrereqScanner
       SoftwareLicense
+      StringFormatter
+      StringRewritePrefix
+      SubExporter
+      SubExporterForMethods
       TermEncoding
+      TermReadKey
       TermUI
+      TestDeep
+      TextGlob
+      TextTemplate
+      TryTiny
       YAMLTiny
+      namespaceautoclean
     ];
     doCheck = false;
     meta = {
@@ -40163,6 +40186,23 @@ with self;
     ];
     meta = {
       description = "Perl DateTime extension to convert Date::Manip dates and durations to DateTimes and vice versa";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  PPIxIndexOffsets = buildPerlPackage {
+    pname = "PPIx-IndexOffsets";
+    version = "0.32";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LB/LBROCARD/PPIx-IndexOffsets-0.32.tar.gz";
+      hash = "sha256-tF8dpLpVUMeDneJtJqc5hTZ2vJk380uuTpNvnNeYIVM=";
+    };
+    propagatedBuildInputs = [ PPI ];
+    meta = {
+      description = "Index offsets for tokens in PPI";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
