@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
 
   # This package does not include any tests.
   doCheck = false;
