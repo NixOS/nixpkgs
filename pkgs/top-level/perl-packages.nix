@@ -39713,10 +39713,10 @@ with self;
 
   YAML = buildPerlPackage {
     pname = "YAML";
-    version = "1.30";
+    version = "1.31";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-1.30.tar.gz";
-      hash = "sha256-UDCm1sv/rxJYMFC/VSqoANRkbKlnjBh63WSSJ/V0ec0=";
+      url = "mirror://cpan/authors/id/I/IN/INGY/YAML-1.31.tar.gz";
+      hash = "sha256-oM4wOBZX3OjmlN+aCeldgY0TvrA2mP0s950MjVZKm44=";
     };
 
     buildInputs = [
