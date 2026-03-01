@@ -30039,22 +30039,17 @@ with self;
 
   PodSpell = buildPerlPackage {
     pname = "Pod-Spell";
-    version = "1.26";
+    version = "1.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Pod-Spell-1.26.tar.gz";
-      hash = "sha256-LwW/yc+wS5b8v6LIVE0eaukIWW02lsRuDiZVa3UK+78=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Pod-Spell-1.27.tar.gz";
+      hash = "sha256-fvVskinz77xxoEYs5ESQwN1J+/OyH+hbsIse6sb3sGM=";
     };
     propagatedBuildInputs = [
       ClassTiny
       FileShareDir
       LinguaENInflect
-      PathTiny
-      PodParser
     ];
-    buildInputs = [
-      FileShareDirInstall
-      TestDeep
-    ];
+    buildInputs = [ FileShareDirInstall ];
     meta = {
       description = "Formatter for spellchecking Pod";
       homepage = "https://github.com/perl-pod/Pod-Spell";
