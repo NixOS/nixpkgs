@@ -25295,14 +25295,14 @@ with self;
 
   namespaceautoclean = buildPerlPackage {
     pname = "namespace-autoclean";
-    version = "0.29";
+    version = "0.31";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/namespace-autoclean-0.29.tar.gz";
-      hash = "sha256-RevY5kpUqG+I2OAa5VISlnyKqP7VfoFAhd73YIrGWAQ=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/namespace-autoclean-0.31.tar.gz";
+      hash = "sha256-07MsguHSyqnVi4yAdZZSQObKtmq5NQvW9r6kygfpONY=";
     };
     buildInputs = [ TestNeeds ];
     propagatedBuildInputs = [
-      SubIdentify
+      BHooksEndOfScope
       namespaceclean
     ];
     meta = {
