@@ -80,7 +80,6 @@
   torchaudio,
   torchvision,
   transformers,
-  triton-kernels,
   uvicorn,
   xformers,
   xgrammar,
