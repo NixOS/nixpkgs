@@ -4465,10 +4465,10 @@ with self;
 
   CGICompile = buildPerlModule {
     pname = "CGI-Compile";
-    version = "0.26";
+    version = "0.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RK/RKITOVER/CGI-Compile-0.26.tar.gz";
-      hash = "sha256-TzhcEMLJd+tgPzjNFT4OA2jfA3H9vSP1qm7nL0/GXcg=";
+      url = "mirror://cpan/authors/id/R/RK/RKITOVER/CGI-Compile-0.27.tar.gz";
+      hash = "sha256-9rC66EAmDuC0Whpb424lsHypHu3aJkqDzk9BSDy4jd0=";
     };
     propagatedBuildInputs = [
       Filepushd
@@ -4479,7 +4479,6 @@ with self;
       CaptureTiny
       ModuleBuildTiny
       SubIdentify
-      Switch
       TestNoWarnings
       TestRequires
       TryTiny
