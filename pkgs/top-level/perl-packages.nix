@@ -22531,10 +22531,10 @@ with self;
 
   ModuleInfo = buildPerlPackage {
     pname = "Module-Info";
-    version = "0.37";
+    version = "0.39";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/Module-Info-0.37.tar.gz";
-      hash = "sha256-jqgCUpeQsZwfNzoeR9g4FmT5xMH3ao2LvG221zEcJEg=";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Module-Info-0.39.tar.gz";
+      hash = "sha256-fAH6VseKYDaa71X+Zo9GKisdd419EGlmmU9M+vQw7Qc=";
     };
     buildInputs = [
       TestPod
