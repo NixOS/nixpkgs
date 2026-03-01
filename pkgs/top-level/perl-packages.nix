@@ -25232,13 +25232,14 @@ with self;
 
   MusicBrainz = buildPerlModule {
     pname = "WebService-MusicBrainz";
-    version = "1.0.6";
+    version = "1.0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BF/BFAIST/WebService-MusicBrainz-1.0.6.tar.gz";
-      hash = "sha256-XpH1ZZZ3w5CJv28lO0Eoe7zTVh9qJaB5Zc6DsmKIUuE=";
+      url = "mirror://cpan/authors/id/B/BF/BFAIST/WebService-MusicBrainz-1.0.10.tar.gz";
+      hash = "sha256-6vxX8Pw/Cz4to/WtWw/MFVSn+/h9cqBZVtl0VaKuvb8=";
     };
     propagatedBuildInputs = [ Mojolicious ];
     doCheck = false; # Test performs network access.
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "API to search the musicbrainz.org database";
       license = with lib.licenses; [
