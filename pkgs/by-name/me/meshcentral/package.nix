@@ -2,18 +2,17 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "meshcentral";
-  version = "1.1.56";
+  version = "1.1.57";
 
   src = fetchFromGitHub {
     owner = "Ylianst";
     repo = "MeshCentral";
     tag = finalAttrs.version;
-    hash = "sha256-tISK6EmWCIDEkUB6CpIW3+eH2JyTam5URlhYpSkGsrw=";
+    hash = "sha256-tXv4AWFLBoaHraSTYbEuNjdxnB3tYyAYq5xPe4jRcmw=";
   };
 
   npmDepsHash = "sha256-Etpf964Rb4fOty7RdyClQelyLMLVJhSQQB4fLgnf6AE=";
@@ -25,11 +24,6 @@ buildNpmPackage (finalAttrs: {
     # main file as a module, and thus nothing happens when it runs. We remove
     # this conditional since we never use this as a module.
     ./run.patch
-    # Bring back package.json. See: https://github.com/Ylianst/MeshCentral/issues/7643
-    (fetchpatch {
-      url = "https://github.com/Ylianst/MeshCentral/commit/a5d27530eac148c8671bc502bbcdb21efb512079.patch";
-      hash = "sha256-jmH2eVIRhZZ0sElU0o5yhSzVeItNdw4B5mnzGBiFFXM=";
-    })
   ];
 
   dontNpmBuild = true;
