@@ -35,7 +35,7 @@ maven.buildMavenPackage {
   '';
 
   meta = {
-    description = "A 3rd party tool to edit user files for FTL.";
+    description = "3rd party tool to edit user files for FTL.";
     homepage = "https://github.com/Vhati/ftl-profile-editor";
     license = with lib.licenses; gpl2;
     maintainers = with lib.maintainers; [ mib ];
