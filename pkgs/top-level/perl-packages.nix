@@ -20693,11 +20693,11 @@ with self;
   };
 
   MailBox = buildPerlPackage {
-    version = "3.010";
+    version = "4.01";
     pname = "Mail-Box";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Box-3.010.tar.gz";
-      hash = "sha256-rhlPolDFRcm5FT4/tRA8qyn3nPKs1On9dc7FMiAalWQ=";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Box-4.01.tar.gz";
+      hash = "sha256-rWaAfdgwNxJ4x/wx89+QSMFs6dAUMNX7RBT+rgXx/g0=";
     };
 
     doCheck = false;
@@ -20705,9 +20705,15 @@ with self;
     propagatedBuildInputs = [
       DevelGlobalDestruction
       FileRemove
-      Later
+      IOStringy
+      LogReport
+      MailMessage
       MailTransport
+      ObjectRealizeLater
+      StringPrint
+      TimeDate
     ];
+    buildInputs = [ TestPod ];
     meta = {
       description = "Manage a mailbox, a folder with messages";
       license = with lib.licenses; [
@@ -40440,6 +40446,25 @@ with self;
     ];
     meta = {
       description = "printf extensions";
+      homepage = "http://perl.overmeer.net/CPAN/";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  ObjectRealizeLater = buildPerlPackage {
+    pname = "Object-Realize-Later";
+    version = "4.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Object-Realize-Later-4.00.tar.gz";
+      hash = "sha256-xHU9WjXxR+7eCc29Xm1ifd472qq/6eVvLP9yty0Zl5s=";
+    };
+    buildInputs = [ TestPod ];
+    propagatedBuildInputs = [ LogReport ];
+    meta = {
+      description = "Delayed realization of objects";
       homepage = "http://perl.overmeer.net/CPAN/";
       license = with lib.licenses; [
         artistic1
