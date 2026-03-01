@@ -30568,11 +30568,12 @@ with self;
 
   RoleBasic = buildPerlModule {
     pname = "Role-Basic";
-    version = "0.13";
+    version = "0.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OV/OVID/Role-Basic-0.13.tar.gz";
-      hash = "sha256-OKCVnvnxk/925ywyWp6SEbxIaGib0OKwBXePU/i282o=";
+      url = "mirror://cpan/authors/id/O/OV/OVID/Role-Basic-0.16.tar.gz";
+      hash = "sha256-RxfXAMqnv97517TsL0ig3wbs51iv6qnos/BJYbnDaKY=";
     };
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Just roles. Nothing else";
       license = with lib.licenses; [
