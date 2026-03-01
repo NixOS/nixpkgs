@@ -27887,12 +27887,12 @@ with self;
 
   ParserMGC = buildPerlModule {
     pname = "Parser-MGC";
-    version = "0.21";
+    version = "0.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Parser-MGC-0.21.tar.gz";
-      hash = "sha256-DmGIpydqn5B1fGIEc98W08mGGRO6viWvIJz0RhWgKk8=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Parser-MGC-0.23.tar.gz";
+      hash = "sha256-tXXBrwc4fl/6/rOs+1ydJRC7CbD/eUQYAw1lz2U999k=";
     };
-    buildInputs = [ TestFatal ];
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ FeatureCompatTry ];
     meta = {
       description = "Build simple recursive-descent parsers";
