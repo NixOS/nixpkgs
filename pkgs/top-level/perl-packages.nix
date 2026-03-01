@@ -22807,12 +22807,12 @@ with self;
     };
   };
 
-  ModuleRuntime = buildPerlModule {
+  ModuleRuntime = buildPerlPackage {
     pname = "Module-Runtime";
-    version = "0.016";
+    version = "0.018";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Module-Runtime-0.016.tar.gz";
-      hash = "sha256-aDAuxkaDNUfUEL4o4JZ223UAb0qlihHzvbRP/pnw8CQ=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Module-Runtime-0.018.tar.gz";
+      hash = "sha256-C/d+9o5TchkU/1VOraIJc1ljELTizxQB/JWGAYB95Xc=";
     };
     meta = {
       description = "Runtime module handling";
