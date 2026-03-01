@@ -29413,12 +29413,13 @@ with self;
 
   ProtocolRedisFaster = buildPerlPackage {
     pname = "Protocol-Redis-Faster";
-    version = "0.003";
+    version = "0.004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Protocol-Redis-Faster-0.003.tar.gz";
-      hash = "sha256-a5r7PelOwczX20+eai6rolSld5AwHBe8sTuz7f4YULc=";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Protocol-Redis-Faster-0.004.tar.gz";
+      hash = "sha256-OGyxrSm/2k0Ia+tMsDivXD+zM55HsU5eXVcf6wWl2RI=";
     };
     propagatedBuildInputs = [ ProtocolRedis ];
+    buildInputs = [ ProtocolRedis ];
     meta = {
       description = "Optimized pure-perl Redis protocol parser/encoder";
       homepage = "https://github.com/Grinnz/Protocol-Redis-Faster";
