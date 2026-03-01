@@ -29107,12 +29107,17 @@ with self;
 
   PPIxRegexp = buildPerlModule {
     pname = "PPIx-Regexp";
-    version = "0.088";
+    version = "0.091";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.088.tar.gz";
-      hash = "sha256-iFQz+bEC+tT9NrIccyC7A2A2ERyvmYExv0FvfNXul2Q=";
+      url = "mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.091.tar.gz";
+      hash = "sha256-5y7Hnv9kApewhyJ9ancI/Khxxt4JmXFJWFqY/mXtlC8=";
     };
-    propagatedBuildInputs = [ PPI ];
+    propagatedBuildInputs = [
+      PPI
+      PPIxIndexOffsets
+      TaskWeaken
+    ];
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Parse regular expressions";
       license = with lib.licenses; [
