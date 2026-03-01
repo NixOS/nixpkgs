@@ -38400,10 +38400,10 @@ with self;
 
   Version = buildPerlPackage {
     pname = "version";
-    version = "0.9930";
+    version = "0.9933";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/version-0.9930.tar.gz";
-      hash = "sha256-YduVX7yzn1kC+myLlXrrJ0HiPUhA+Eq/hGrx9nCu7jA=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/version-0.9933.tar.gz";
+      hash = "sha256-3AfZOIyj0/ZxRjEpBLzbNf5Ba7MAVhWPgN8ygalPrlg=";
     };
     meta = {
       description = "Structured version objects";
