@@ -35318,17 +35318,17 @@ with self;
 
   TestPerlTidy = buildPerlModule {
     pname = "Test-PerlTidy";
-    version = "20230226";
+    version = "20260110";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-20230226.tar.gz";
-      hash = "sha256-wOJCEQeVeV1Nu2xEFmzlV09cftuninidG8rnZoXYA8E=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-20260110.tar.gz";
+      hash = "sha256-Zx2c+NjrdLagQyVOo7ZEuR6vs6bR5YN3zdOrcOaFwSk=";
     };
     propagatedBuildInputs = [
       PathTiny
       PerlTidy
       TextDiff
     ];
-    buildInputs = [ TestPerlCritic ];
+    buildInputs = [ ModuleBuild ];
     preCheck = ''
       # Remove tests with hardcoded line numbers.
       rm t/perltidy.t
