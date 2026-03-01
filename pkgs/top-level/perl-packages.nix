@@ -12738,10 +12738,10 @@ with self;
 
   Expect = buildPerlPackage {
     pname = "Expect";
-    version = "1.35";
+    version = "1.38";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JA/JACOBY/Expect-1.35.tar.gz";
-      hash = "sha256-CdknYUId7NSVhTEDN5FlqZ779FLHIPMCd2As8jZ5/QY=";
+      url = "mirror://cpan/authors/id/J/JA/JACOBY/Expect-1.38.tar.gz";
+      hash = "sha256-exBIM18yeViQOGfOoHncBy6gf06vrhtAwubyXbIWhsA=";
     };
     propagatedBuildInputs = [ IOTty ];
     meta = {
