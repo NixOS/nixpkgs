@@ -2867,10 +2867,10 @@ with self;
 
   BusinessISMN = buildPerlPackage {
     pname = "Business-ISMN";
-    version = "1.203";
+    version = "1.205";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISMN-1.203.tar.gz";
-      hash = "sha256-T1Ou2rLmh9Th9yhW6vwiFZOQYhEj2q955FBqiX4pPog=";
+      url = "mirror://cpan/authors/id/B/BR/BRIANDFOY/Business-ISMN-1.205.tar.gz";
+      hash = "sha256-HEjpsAvDJXiyF25vecShFxPYdb76j7t/SLepyBcv6L0=";
     };
     propagatedBuildInputs = [ TieCycle ];
     meta = {
