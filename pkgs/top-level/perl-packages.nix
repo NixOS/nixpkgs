@@ -4910,11 +4910,12 @@ with self;
 
   ClassAutouse = buildPerlPackage {
     pname = "Class-Autouse";
-    version = "2.01";
+    version = "2.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADAMK/Class-Autouse-2.01.tar.gz";
-      hash = "sha256-wFsyNsBXGdgZwg2w/ettCVR0fkPXpzgpTu1/vPNuzxs=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Class-Autouse-2.02.tar.gz";
+      hash = "sha256-U46VdUI6gYXYyfG5LnHiHkS7lBTesGCtuUZ6C61JCJg=";
     };
+    propagatedBuildInputs = [ prefork ];
     meta = {
       description = "Run-time load a class the first time you call a method in it";
       license = with lib.licenses; [
