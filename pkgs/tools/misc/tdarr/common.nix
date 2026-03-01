@@ -100,7 +100,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.58.02";
+  version = "2.62.01";
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
@@ -160,9 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     makeWrapper $out/share/${pname}/${componentName} $out/bin/${pname} ${commonWrapperArgs}
-  ''
-  # TODO: Check on each update to see if the Tdarr_Node_tray gets re-added to the aarch64-linux build. Reach out to upstream?
-  + lib.optionalString (stdenv.hostPlatform.system != "aarch64-linux") ''
+
+    # * 4/3/2026: The tray application has been readded to linux arm64.
     makeWrapper $out/share/${pname}/${componentTrayName} $out/bin/${pname}-tray ${commonWrapperArgs}
   ''
   + lib.optionalString installIcons ''
@@ -177,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + "";
 
-  desktopItems = lib.optionals (stdenv.isLinux && stdenv.hostPlatform.system != "aarch64-linux") [
+  desktopItems = lib.optionals stdenv.isLinux [
     (makeDesktopItem {
       desktopName = "Tdarr ${componentUpper} Tray";
       name = "Tdarr ${componentUpper} Tray";
