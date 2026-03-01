@@ -24749,20 +24749,24 @@ with self;
 
   MooseXTypes = buildPerlModule {
     pname = "MooseX-Types";
-    version = "0.50";
+    version = "0.51";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-0.50.tar.gz";
-      hash = "sha256-nNh7NJLL8L6dLfkxeyrfn8MGY3cOaZBmVL6j9BsXywg=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-0.51.tar.gz";
+      hash = "sha256-pTdMewJzIgI5sZ3aiLgk3XO5U5jJE8XJ4wXtvbXgJw8=";
     };
     buildInputs = [
       ModuleBuildTiny
+      Moose
       TestFatal
-      TestRequires
+      TestNeeds
     ];
     propagatedBuildInputs = [
       CarpClan
+      ModuleRuntime
       Moose
+      SubExporter
       SubExporterForMethods
+      SubInstall
       namespaceautoclean
     ];
     meta = {
