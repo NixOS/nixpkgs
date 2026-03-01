@@ -39677,12 +39677,12 @@ with self;
 
   XSParseSublike = buildPerlModule {
     pname = "XS-Parse-Sublike";
-    version = "0.37";
+    version = "0.41";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.37.tar.gz";
-      hash = "sha256-c2UoyIjqe2phkQEeXVp4JOw4pWIFB95u9F5LxuHPDak=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.41.tar.gz";
+      hash = "sha256-oQ9eByc7EF5cC0xufiptLSpor+n/T5icEfONS/OcyG0=";
     };
-    buildInputs = [ Test2Suite ];
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ FileShareDir ];
     meta = {
       description = "XS functions to assist in parsing sub-like syntax";
