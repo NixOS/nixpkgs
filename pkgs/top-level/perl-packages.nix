@@ -5523,10 +5523,10 @@ with self;
 
   CLIHelpers = buildPerlPackage {
     pname = "CLI-Helpers";
-    version = "2.0";
+    version = "2.2";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BL/BLHOTSKY/CLI-Helpers-2.0.tar.gz";
-      hash = "sha256-yhpPFnTzsfMmjyekfJiAszgmrenxI34sEUXnAqfIePY=";
+      url = "mirror://cpan/authors/id/B/BL/BLHOTSKY/CLI-Helpers-2.2.tar.gz";
+      hash = "sha256-68r5zYYQXtc4ELt1YG8SZioVS1VQEGd0MdTntanKpsw=";
     };
     buildInputs = [
       PodCoverageTrustPod
@@ -5535,9 +5535,10 @@ with self;
     propagatedBuildInputs = [
       CaptureTiny
       IOInteractive
+      JSONMaybeXS
       RefUtil
       TermReadKey
-      YAML
+      YAMLLibYAML
     ];
     meta = {
       description = "Subroutines for making simple command line scripts";
