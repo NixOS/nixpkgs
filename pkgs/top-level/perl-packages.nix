@@ -17031,12 +17031,16 @@ with self;
 
   HTTPDAV = buildPerlPackage {
     pname = "HTTP-DAV";
-    version = "0.49";
+    version = "0.50";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CO/COSIMO/HTTP-DAV-0.49.tar.gz";
-      hash = "sha256-MzOd+ewQbeN9hgnP0NPAg8z7sGwWxlG1s4UaVtF6lXw=";
+      url = "mirror://cpan/authors/id/C/CO/COSIMO/HTTP-DAV-0.50.tar.gz";
+      hash = "sha256-qvMVAnwmkEuGxijTIv4tZdWnd9Re+2lqmtCkPGC3mCg=";
     };
-    propagatedBuildInputs = [ XMLDOM ];
+    propagatedBuildInputs = [
+      URI
+      XMLDOM
+      libwwwperl
+    ];
     meta = {
       description = "WebDAV client library";
       license = with lib.licenses; [
