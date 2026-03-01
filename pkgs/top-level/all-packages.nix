@@ -999,6 +999,8 @@ with pkgs;
 
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
+  btrsync = with python3Packages; toPythonApplication btrsync;
+
   davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix {
     studioVariant = true;
   };
@@ -3258,6 +3260,11 @@ with pkgs;
   playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
 
   tabview = with python3Packages; toPythonApplication tabview;
+
+  tdarrPackages = callPackage ../tools/misc/tdarr { };
+
+  tdarr-server = tdarrPackages.server;
+  tdarr-node = tdarrPackages.node;
 
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_8
@@ -6246,6 +6253,7 @@ with pkgs;
       certbot-dns-ovh
       certbot-dns-rfc2136
       certbot-dns-route53
+      certbot-dns-wedos
       certbot-nginx
     ]
   );
