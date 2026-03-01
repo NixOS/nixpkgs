@@ -19398,12 +19398,12 @@ with self;
 
   LinuxFD = buildPerlModule {
     pname = "Linux-FD";
-    version = "0.014";
+    version = "0.017";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Linux-FD-0.014.tar.gz";
-      hash = "sha256-eDHcJkxG2bh/dkNhdNdmFBRSQ2Mwg+CQqrTZo1LwQ60=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Linux-FD-0.017.tar.gz";
+      hash = "sha256-EtvBV/Dp9cjZDfEX+GDL0+2J1D/LD+mQRtqocwNdX5A=";
     };
-    buildInputs = [ TestException ];
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ SubExporter ];
     meta = {
       description = "Linux specific special filehandles";
