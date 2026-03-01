@@ -4438,17 +4438,19 @@ with self;
 
   CGI = buildPerlPackage {
     pname = "CGI";
-    version = "4.59";
+    version = "4.71";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-4.59.tar.gz";
-      hash = "sha256-be5LibiLEOd8lvPAjRm1hq74M7F6Ql1hiq19KMJi+Rw=";
+      url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-4.71.tar.gz";
+      hash = "sha256-nahbMNlATRg9p8p67bg3AssH7XPDB4v282yH8eigGWo=";
     };
     buildInputs = [
-      TestDeep
       TestNoWarnings
       TestWarn
     ];
-    propagatedBuildInputs = [ HTMLParser ];
+    propagatedBuildInputs = [
+      HTMLParser
+      URI
+    ];
     preCheck = ''
       # Remove tests with hardcoded line numbers.
       rm t/rt-84767.t
