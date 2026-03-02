@@ -811,6 +811,16 @@ in
   });
 
   neorg = prev.neorg.overrideAttrs {
+
+    doCheck = false;
+    nativeCheckInputs = [
+      final.nlua
+      # upstream uses PlenaryBusted which is a pain, run busted directly instead
+      # final.busted
+      final.bustedCheckHook
+      writableTmpDirAsHomeHook
+    ];
+
     # Relax dependencies
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
