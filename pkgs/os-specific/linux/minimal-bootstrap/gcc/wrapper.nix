@@ -14,8 +14,19 @@
   bash,
 }:
 let
+  common = import ./common.nix {
+    inherit
+      lib
+      bash
+      fetchurl
+      gnutar
+      xz
+      ;
+  };
   pname = "gcc-wrapper";
   extraFlags = (lib.optionalString (!libgcc.sharedAvailable) "-static-libgcc ");
+  # adapted from bintools-wrapper
+  dynamicLinkerGlob = common.dynamicLinkerGlob targetPlatform libc;
 in
 bash-build.runCommand "${pname}-${gcc-unwrapped.version}"
   {
@@ -26,6 +37,19 @@ bash-build.runCommand "${pname}-${gcc-unwrapped.version}"
     passthru.unwrapped = gcc-unwrapped;
   }
   ''
+    if [[ -z '${dynamicLinkerGlob}' ]]; then
+      echo "Don't know the name of the dynamic linker for platform '${targetPlatform.config}', so guessing instead."
+      dynamicLinker="${libc}/lib/ld*.so.?"
+    else
+      dynamicLinker='${dynamicLinkerGlob}'
+    fi
+    dynamicLinker=($dynamicLinker)
+    case ''${#dynamicLinker[@]} in
+      0) echo "No dynamic linker found for platform '${targetPlatform.config}'.";;
+      1) echo "Using dynamic linker: '$dynamicLinker'";;
+      *) echo "Multiple dynamic linkers found for platform '${targetPlatform.config}'.";;
+    esac
+
     mkdir -p "$out/bin"
     for orig in ${gcc-unwrapped}/bin/*gcc ${gcc-unwrapped}/bin/*gcc-${gcc-unwrapped.version}; do
       sed \
@@ -33,7 +57,7 @@ bash-build.runCommand "${pname}-${gcc-unwrapped.version}"
         -e "s,@gcc@,$orig," \
         -e "s,@origname@,$(basename "$orig")," \
         -e "s,@origdir@,${gcc-unwrapped}/libexec/gcc," \
-        -e 's,@dynlinker@,${libc}/${libc.dynamicLinkerFile},' \
+        -e "s,@dynlinker@,$dynamicLinker," \
         -e 's,@libgcc@,${libgcc}/lib/gcc/${targetPlatform.config}/${libgcc.version},' \
         -e 's,@libc@,${libc}/lib,' \
         -e 's,@gccinc@,${gcc-unwrapped}/lib/gcc/${targetPlatform.config}/${libgcc.version}/include,' \
@@ -48,7 +72,7 @@ bash-build.runCommand "${pname}-${gcc-unwrapped.version}"
         -e "s,@gcc@,$orig," \
         -e "s,@origname@,$(basename "$orig")," \
         -e "s,@origdir@,${gcc-unwrapped}/libexec/gcc," \
-        -e 's,@dynlinker@,${libc}/${libc.dynamicLinkerFile},' \
+        -e "s,@dynlinker@,$dynamicLinker," \
         -e 's,@libgcc@,${libgcc}/lib/gcc/${targetPlatform.config}/${libgcc.version},' \
         -e 's,@libc@,${libc}/lib,' \
         -e 's,@libstdcxx@,${libstdcxx}/lib,' \

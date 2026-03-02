@@ -37,7 +37,6 @@ bash.runCommand "${pname}-${version}"
     ];
 
     passthru = {
-      dynamicLinkerFile = "lib/libc.so";
       tests.hello-world =
         result:
         bash.runCommand "${pname}-simple-program-${version}"

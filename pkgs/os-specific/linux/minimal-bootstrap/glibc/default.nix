@@ -27,15 +27,6 @@ let
     url = "mirror://gnu/libc/glibc-${version}.tar.xz";
     hash = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
   };
-
-  linkerFile =
-    {
-      x86_64-linux = "ld-linux-x86-64.so.2";
-      aarch64-linux = "ld-linux-aarch64.so.1";
-      i686-linux = "ld-linux.so.2";
-    }
-    .${hostPlatform.system};
-
   binutilsTargetPrefix = lib.optionalString (
     hostPlatform.config != buildPlatform.config
   ) "${hostPlatform.config}-";
@@ -60,7 +51,6 @@ bash.runCommand "${pname}-${version}"
     ];
 
     passthru = {
-      dynamicLinkerFile = "lib/${linkerFile}";
       tests.hello-world =
         result:
         bash.runCommand "${pname}-simple-program-${version}"
@@ -78,11 +68,7 @@ bash.runCommand "${pname}-${version}"
               return 0;
             }
             EOF
-            gcc \
-              -Wl,--dynamic-linker=${result}/lib/${linkerFile}.so.2 \
-              -B${result}/lib \
-              -I${result}/include \
-              -o test test.c
+            gcc -o test test.c
             ./test
             mkdir $out
           '';
