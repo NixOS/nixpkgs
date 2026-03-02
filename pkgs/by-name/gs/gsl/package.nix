@@ -44,8 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
   # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isx86_64 "-mno-fma";
 
-  # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
-  doCheck = stdenv.hostPlatform.system != "i686-linux";
+  doCheck =
+    # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
+    stdenv.hostPlatform.system != "i686-linux"
+    # https://lists.gnu.org/archive/html/bug-gsl/2021-10/msg00001.html
+    # https://lists.gnu.org/archive/html/bug-gsl/2025-03/msg00010.html
+    && !stdenv.hostPlatform.isBigEndian;
 
   meta = {
     description = "GNU Scientific Library, a large numerical library";
