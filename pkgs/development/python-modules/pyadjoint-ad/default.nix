@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   scipy,
+  sympy,
   checkpoint-schedules,
   pytestCheckHook,
 }:
@@ -26,6 +27,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     scipy
+    sympy
     checkpoint-schedules
   ];
 
