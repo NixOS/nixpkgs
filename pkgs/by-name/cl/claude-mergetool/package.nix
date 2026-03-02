@@ -6,7 +6,7 @@
   versionCheckHook,
 }:
 let
-  version = "1.1.0";
+  version = "1.2.0";
 in
 rustPlatform.buildRustPackage {
   pname = "claude-mergetool";
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "9999years";
     repo = "claude-mergetool";
     tag = "v${version}";
-    hash = "sha256-MqAtr7SxbarllzDgOWvzUooiRNf08aAVaLdZHJzMnRI=";
+    hash = "sha256-d+tOjybFwWgJyI2YbAn6TF1utb7fNHrTbGp7I4yQ8UQ=";
   };
 
-  cargoHash = "sha256-RawDKKx+O79+TnLZRdatEcNDd4vLzTqHF2w1/D5zPjA=";
+  cargoHash = "sha256-9YDILRyaWxqAmrAdQ2iDvTsn1VTFfFIpv0HMqi9U0q8=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
