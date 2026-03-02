@@ -21,5 +21,14 @@ bundlerEnv {
       zimbatm
       nicknovitski
     ];
+    knownVulnerabilities = [
+      "This package has not recieved updates upstream (from Travis CI) in 2+ years."
+      "Its outdated dependencies are known to have the following security issues:"
+      "CVE-2022-31163"
+      "CVE-2021-32740"
+      "CVE-2023-38037"
+      "CVE-2023-28120"
+      "CVE-2023-22796"
+    ];
   };
 }
