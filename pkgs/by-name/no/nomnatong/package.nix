@@ -4,6 +4,7 @@
   fetchFromGitHub,
   python3Packages,
   nix-update-script,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -18,6 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    installFonts
     python3Packages.afdko
     python3Packages.fonttools
   ];
@@ -32,15 +34,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sfntedit -d DSIG NomNaTong-Regular.otf
 
     runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm444 NomNaTong-Regular.otf -t $out/share/fonts/opentype/
-    install -Dm444 NomNaTong-Regular.ttf -t $out/share/fonts/truetype/
-
-    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };
