@@ -6,19 +6,19 @@
   buildNpmPackage,
   nixosTests,
 }:
-buildGo126Module rec {
+buildGo126Module (finalAttrs: {
   pname = "beszel";
   version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ugxy23bLrKIDclrYRFJc6Nq4Ak2S3OLeyMaxuRkS/tY=";
   };
 
   webui = buildNpmPackage {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -46,7 +46,7 @@ buildGo126Module rec {
       runHook postInstall
     '';
 
-    sourceRoot = "${src.name}/internal/site";
+    sourceRoot = "${finalAttrs.src.name}/internal/site";
 
     npmDepsHash = "sha256-509/n5OH4z6LZH+jlmDLl2DlqKrD7M5ajtalmF/4n1o=";
   };
@@ -55,7 +55,7 @@ buildGo126Module rec {
 
   preBuild = ''
     mkdir -p internal/site/dist
-    cp -r ${webui}/* internal/site/dist
+    cp -r ${finalAttrs.webui}/* internal/site/dist
   '';
 
   postInstall = ''
@@ -75,7 +75,7 @@ buildGo126Module rec {
 
   meta = {
     homepage = "https://github.com/henrygd/beszel";
-    changelog = "https://github.com/henrygd/beszel/releases/tag/v${version}";
+    changelog = "https://github.com/henrygd/beszel/releases/tag/v${finalAttrs.version}";
     description = "Lightweight server monitoring hub with historical data, docker stats, and alerts";
     maintainers = with lib.maintainers; [
       bot-wxt1221
@@ -84,4 +84,4 @@ buildGo126Module rec {
     ];
     license = lib.licenses.mit;
   };
-}
+})
