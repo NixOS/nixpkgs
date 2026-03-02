@@ -2,11 +2,13 @@
   lib,
   buildPythonPackage,
   dramatiq,
-  fetchFromGitLab,
+  fetchFromGitHub,
   flask-migrate,
+  flask-sqlalchemy,
   flask,
+  httpx,
   periodiq,
-  poetry-core,
+  hatchling,
   postgresql,
   postgresqlTestHook,
   psycopg2,
@@ -16,35 +18,33 @@
   requests,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "flask-dramatiq";
-  version = "0.6.0";
+  version = "0.8.0";
   pyproject = true;
 
-  src = fetchFromGitLab {
-    owner = "bersace";
+  src = fetchFromGitHub {
+    owner = "pallets-eco";
     repo = "flask-dramatiq";
-    rev = "840209e9bf582b4dda468e8bba515f248f3f8534";
-    hash = "sha256-qjV1zyVzHPXMt+oUeGBdP9XVlbcSz2MF9Zygj543T4w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Gt9yynbmFWMISP1U0jRjU6oY3ImrLxYa2D0xf0llCEg=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'poetry>=0.12' 'poetry-core' \
-      --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
-
     patchShebangs --build ./example.py
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [ "dramatiq" ];
 
   dependencies = [ dramatiq ];
 
   nativeCheckInputs = [
+    flask-sqlalchemy
     flask
     flask-migrate
+    httpx
     periodiq
     postgresql
     postgresqlTestHook
@@ -54,7 +54,8 @@ buildPythonPackage {
     pytestCheckHook
     requests
   ]
-  ++ dramatiq.optional-dependencies.rabbitmq;
+  ++ dramatiq.optional-dependencies.rabbitmq
+  ++ dramatiq.optional-dependencies.watch;
 
   postgresqlTestSetupPost = ''
     substituteInPlace config.py \
@@ -76,4 +77,4 @@ buildPythonPackage {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ traxys ];
   };
-}
+})
