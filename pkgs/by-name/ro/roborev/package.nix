@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
     description = "Continuous background code review for coding agents";
     homepage = "https://github.com/roborev-dev/roborev";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "roborev";
   };
 })
