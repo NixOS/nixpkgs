@@ -145,5 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "lvim";
+    broken = true; # Incompatible with Neovim >= 0.10; upstream is unmaintained
   };
 })
