@@ -10,13 +10,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "202407";
-  build_nr = "1";
+  version = "202507";
+  build_nr = "0";
   pname = "mcrl2";
 
   src = fetchurl {
     url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
-    hash = "sha256-VhP9BFSujxYMcQVu6P6k6yiH2UUhCB3P+Pj+9Ir7x6s=";
+    hash = "sha256-Ur7GGXbYvVmrEUq/CTRyuVNLDHKfFrYHJibo0JvYhyM=";
   };
 
   nativeBuildInputs = [ cmake ];
