@@ -17,19 +17,19 @@ let
   vsix = stdenv.mkDerivation (finalAttrs: {
     name = "vscode-js-debug-${finalAttrs.version}.vsix";
     pname = "vscode-js-debug-vsix";
-    version = "1.105.0";
+    version = "1.110.0";
 
     src = fetchFromGitHub {
       owner = "microsoft";
       repo = "vscode-js-debug";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-dYEINhJGrJFEq5422BEp3ups6vK0lpVW34GaYPMdfXk=";
+      hash = "sha256-R724IHIl0K01Gv4DbOYOI9djlhI2BYMhtMjwSMtXQzY=";
     };
 
     npmDeps = fetchNpmDeps {
       name = "${finalAttrs.pname}-npm-deps";
       inherit (finalAttrs) src;
-      hash = "sha256-bBy0u6NaOAkX6vRJrRYYWUxCG6HM3h0PrzN6tZj5pVY=";
+      hash = "sha256-ezjoDgI1czFCIjQXJy+sxVDpbOLuc9AvWzLfTTqfKjY=";
     };
     makeCacheWritable = true;
 
