@@ -115,7 +115,6 @@ stdenv.mkDerivation {
     description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";
     homepage = "https://libfive.com/";
     maintainers = with lib.maintainers; [
-      hodapp
       kovirobi
       wulfsta
     ];

@@ -302,7 +302,7 @@ in
       freebsdTools = import ../stdenv/freebsd/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
       cygwinTools = import ../stdenv/cygwin/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
       linuxMeta = {
-        maintainers = [ maintainers.dezgeg ];
+        maintainers = [ ];
       };
       freebsdMeta = {
         maintainers = [ maintainers.rhelmot ];

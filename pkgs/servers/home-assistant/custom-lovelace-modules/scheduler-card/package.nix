@@ -39,6 +39,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/nielsfaber/scheduler-card";
     changelog = "https://github.com/nielsfaber/scheduler-card/releases/tag/v${version}";
     maintainers = with maintainers; [ SuperSandro2000 ];
-    license = licenses.isc;
+    license = licenses.gpl3Plus;
   };
 }

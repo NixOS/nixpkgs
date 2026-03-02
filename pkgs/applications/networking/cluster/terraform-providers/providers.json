@@ -128,13 +128,13 @@
     "vendorHash": "sha256-/dOiXO2aPkuZaFiwv/6AXJdIADgx8T7eOwvJfBBoqg8="
   },
   "buildkite_buildkite": {
-    "hash": "sha256-05OXB9YrV4ciNmISd41aJ4IPpSDeIqWZqv4K3Bp50mA=",
+    "hash": "sha256-kQ0uFyRdhZYNVTd1YdzyZZVdQrZVpnZeYeThhiML5ng=",
     "homepage": "https://registry.terraform.io/providers/buildkite/buildkite",
     "owner": "buildkite",
     "repo": "terraform-provider-buildkite",
-    "rev": "v1.30.0",
+    "rev": "v1.31.1",
     "spdx": "MIT",
-    "vendorHash": "sha256-/KuTuHvwI/37OYG2NlEjYy0hJ8i1zVupz8Eq5SBoGQA="
+    "vendorHash": "sha256-XyM6C5OL/xRJ2oVhANQQBmm2eT0Pj5RrEqe7ld2un70="
   },
   "camptocamp_pass": {
     "hash": "sha256-GQ2g7VyK+eeBqW3LMR4U0gMYsvQnG3y+KEKKkvnmfsk=",
@@ -400,11 +400,11 @@
     "vendorHash": null
   },
   "fastly_fastly": {
-    "hash": "sha256-KPEgLMxKyiepNb5A9uJmcOEDDbE+L0k6Cz3hAVg0H08=",
+    "hash": "sha256-EQlK21yB1PcM74NBKnslB/Q4Y9JO1SOzvmpGZkJ74HQ=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v8.7.0",
+    "rev": "v8.7.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-xgIAmxi9VvPsWqBtQHchv5UvwALkayxmoMsUp0aYJVs="
   },
@@ -724,13 +724,13 @@
     "vendorHash": null
   },
   "ibm-cloud_ibm": {
-    "hash": "sha256-Bd4iCThAVw0VAO8EiJ9R2fLLW7XkjFj5oxwzZnqEf/Y=",
+    "hash": "sha256-xdQk+11X4q8xrLmkWOd0dqx38C/RscybdBqaTLDntP8=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.88.2",
+    "rev": "v1.88.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-KjhTp/Sjf4pxbsrWc4EZAD/NAtr0U7yieYd6s2NQHHc="
+    "vendorHash": "sha256-rZ8SgbLQTpZWd6DfPZOzagqepQsnNxqVNUTFPafU870="
   },
   "icinga_icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",

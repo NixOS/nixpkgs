@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication {
     homepage = "https://aajanki.github.io/yle-dl/";
     changelog = "https://github.com/aajanki/yle-dl/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "yle-dl";
   };

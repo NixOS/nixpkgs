@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Client interface library for NIS(YP) and NIS+";
     homepage = "https://github.com/thkukuk/libnsl";
     license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

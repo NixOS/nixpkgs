@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchPypi,
+  fetchpatch,
   sassc,
   hyperkitty,
   postorius,
@@ -19,6 +20,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-3wnduej6xMQzrjGhGXQznfJud/Uoy3BDduukRJeahL8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "django-5.2.patch";
+      url = "https://gitlab.com/mailman/mailman-web/-/commit/bf3eae03ba6ed416ff58e63ea30dd4b95f310e46.patch";
+      includes = [ "pyproject.toml" ];
+      hash = "sha256-NcXFXYJe3ve4qAGzOVZv9hBx4MTwxRtIYp1GRD1g0qw=";
+    })
+  ];
 
   postPatch = ''
     # Upstream seems to mostly target installing on top of existing

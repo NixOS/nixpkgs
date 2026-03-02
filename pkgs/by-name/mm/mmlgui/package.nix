@@ -11,7 +11,15 @@
   libxdmcp,
   cppunit,
 }:
-
+let
+  libvgm' = libvgm.override {
+    withAllEmulators = false;
+    emulators = [
+      "_PRESET_SMD"
+    ];
+    enableLibplayer = false;
+  };
+in
 stdenv.mkDerivation {
   pname = "mmlgui";
   version = "210420-preview-unstable-2026-01-09";
@@ -52,7 +60,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     glfw
-    libvgm
+    libvgm'
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11

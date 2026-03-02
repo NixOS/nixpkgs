@@ -104,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]; # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      dezgeg
       ajs124
     ];
   };
