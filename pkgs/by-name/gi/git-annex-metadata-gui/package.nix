@@ -1,13 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  pyqt5,
   qt5,
-  git-annex-adapter,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-annex-metadata-gui";
   version = "0.2.0";
   format = "setuptools";
@@ -30,8 +28,8 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    pyqt5
-    git-annex-adapter
+    python3Packages.pyqt5
+    python3Packages.git-annex-adapter
   ];
 
   meta = {

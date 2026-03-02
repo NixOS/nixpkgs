@@ -1123,12 +1123,6 @@ with pkgs;
 
   github-cli = gh;
 
-  git-annex-metadata-gui =
-    libsForQt5.callPackage ../applications/version-management/git-annex-metadata-gui
-      {
-        inherit (python3Packages) buildPythonApplication pyqt5 git-annex-adapter;
-      };
-
   git-annex-remote-dbx = callPackage ../applications/version-management/git-annex-remote-dbx {
     inherit (python3Packages)
       buildPythonApplication
