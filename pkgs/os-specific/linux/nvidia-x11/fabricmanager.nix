@@ -47,10 +47,17 @@ stdenv.mkDerivation rec {
       mv $d $out/.
     done
     patchShebangs $out/bin
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
 
     for b in $out/bin/*;do
       ${ldd} $b | grep -vqz "not found"
     done
+
+    runHook postCheck
   '';
   # Default stdenv fixup shrinkings cause undefined symbols when trying to run
   # meta.mainProgram
