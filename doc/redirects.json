@@ -134,17 +134,20 @@
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
+  "installfonts": [
+    "index.html#installfonts"
+  ],
+  "installfonts-installfont": [
+    "index.html#installfonts-installfont"
+  ],
+  "installfonts-installfont-exampleusage": [
+    "index.html#installfonts-installfont-exampleusage"
+  ],
   "javascript-buildNpmPackage-npmFlags": [
     "index.html#javascript-buildNpmPackage-npmFlags"
   ],
   "javascript-buildNpmPackage-npmWorkspace": [
     "index.html#javascript-buildNpmPackage-npmWorkspace"
-  ],
-  "libcxxhardeningextensive": [
-    "index.html#libcxxhardeningextensive"
-  ],
-  "libcxxhardeningfast": [
-    "index.html#libcxxhardeningfast"
   ],
   "julec-hook": [
     "index.html#julec-hook"
@@ -181,6 +184,12 @@
   ],
   "julec-hook-variables": [
     "index.html#julec-hook-variables"
+  ],
+  "libcxxhardeningextensive": [
+    "index.html#libcxxhardeningextensive"
+  ],
+  "libcxxhardeningfast": [
+    "index.html#libcxxhardeningfast"
   ],
   "major-ghc-deprecation": [
     "index.html#major-ghc-deprecation"
