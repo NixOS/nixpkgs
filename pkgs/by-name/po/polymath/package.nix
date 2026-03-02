@@ -11,6 +11,7 @@
   coreutils,
   glib,
   gnugrep,
+  xprop,
   libayatana-appindicator,
   libusb1,
   mpv,
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
           lib.makeBinPath [
             coreutils
             gnugrep
+            xprop
           ]
         }
 
