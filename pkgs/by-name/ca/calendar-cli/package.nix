@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "calendar-cli";
-  version = "1.0.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tobixen";
     repo = "calendar-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-w35ySLnfxXZR/a7BrPLYqXs2kqkuYhh5PcgNxJqjDtE=";
+    hash = "sha256-P6ClvX6C5VargAvudgSvBwObIUouTRg7SQ62KxhcKiE=";
   };
 
   postPatch = ''
