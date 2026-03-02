@@ -30,7 +30,9 @@
   openssl,
   pkg-config,
   speexdsp,
+  versionCheckHook,
   zlib,
+
   withDiscordRpc ? false,
   # Paths to RCT1 and RCT2 installs can be specified to have them added as a wrapped argument
   rct1Path ? null,
@@ -38,21 +40,17 @@
 }:
 
 let
-  openrct2-version = "0.4.31";
-
-  # Those versions MUST match the pinned versions within the CMakeLists.txt
-  # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.7.6";
-  openmsx-version = "1.6.1";
+  objects-version = "1.7.9";
+  openmusic-version = "1.6.1";
   opensfx-version = "1.0.6";
   title-sequences-version = "0.4.26";
 
   objects = fetchurl {
     url = "https://github.com/OpenRCT2/objects/releases/download/v${objects-version}/objects.zip";
-    hash = "sha256-asoutEH76MAi/4TVn7Ue1+pXd1ZkCXDcmJ6raF/0VpY=";
+    hash = "sha256-VUYe0gxugvFOmiec2ERlSwJkmZu5QDTVj6kS/e4m6tY=";
   };
-  openmsx = fetchurl {
-    url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmsx-version}/openmusic.zip";
+  openmusic = fetchurl {
+    url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmusic-version}/openmusic.zip";
     hash = "sha256-mUs1DTsYDuHLlhn+J/frrjoaUjKEDEvUeonzP6id4aE=";
   };
   opensfx = fetchurl {
@@ -66,13 +64,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrct2";
-  version = openrct2-version;
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
-    tag = "v${openrct2-version}";
-    hash = "sha256-jXcB2lwf/2O+TMSakp32it6T8Fg0e5QFcbMU89WoMjU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sGdtiEUmZux6FCXuxefRulfIEO8FY7wYfIBOhdSYtF8=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     unzip
     makeWrapper
+    versionCheckHook
   ];
 
   buildInputs = [
@@ -110,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_OBJECTS" false)
-    (lib.cmakeBool "DOWNLOAD_OPENMSX" false)
+    (lib.cmakeBool "DOWNLOAD_OPENMUSIC" false)
     (lib.cmakeBool "DOWNLOAD_OPENSFX" false)
     (lib.cmakeBool "DOWNLOAD_TITLE_SEQUENCES" false)
     (lib.cmakeBool "DISABLE_DISCORD_RPC" (!withDiscordRpc))
@@ -119,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     mkdir -p $sourceRoot/data/{object,sequence}
     unzip -o ${objects} -d $sourceRoot/data/object
-    unzip -o ${openmsx} -d $sourceRoot/data
+    unzip -o ${openmusic} -d $sourceRoot/data
     unzip -o ${opensfx} -d $sourceRoot/data
     unzip -o ${title-sequences} -d $sourceRoot/data/sequence
   '';
@@ -134,16 +133,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Verify that the correct version of each third party repository is used.
     (
       let
-        versionCheck = cmakeKey: version: ''
-          grep -q '^set(${cmakeKey}_VERSION "${version}")$' CMakeLists.txt \
-            || (echo "${cmakeKey} differs from expected version!"; exit 1)
+        versionCheck = assetKey: url: ''
+          grep -qF '"${url}"' assets.json \
+            || (echo "${assetKey} differs from expected version!"; exit 1)
         '';
       in
-      (versionCheck "OBJECTS" objects-version)
-      + (versionCheck "OPENMSX" openmsx-version)
-      + (versionCheck "OPENSFX" opensfx-version)
-      + (versionCheck "TITLE_SEQUENCE" title-sequences-version)
+      (versionCheck "objects" objects.url)
+      + (versionCheck "openmusic" openmusic.url)
+      + (versionCheck "opensfx" opensfx.url)
+      + (versionCheck "title-sequences" title-sequences.url)
     );
+
+  doInstallCheck = true;
 
   postInstall = ''
     wrapProgram $out/bin/openrct2 \
@@ -151,15 +152,39 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.optionalString (rct2Path != null) "--add-flags '--rct2-data-path=\"${rct2Path}\"'"}
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
-    homepage = "https://openrct2.io/";
+    description = "Open source re-implementation of RollerCoaster Tycoon 2";
+    longDescription = ''
+      OpenRCT2 is an open source re-implementation of RollerCoaster Tycoon 2, a
+      construction and management simulation video game that simulates amusement
+      park management.
+
+      The original RCT2 game data is required to play.
+
+      The path to an existing RCT1 or RCT2 installation can be provided at
+      build time via the rct1Path and rct2Path arguments respectively:
+
+        openrct2.override {
+          rct1Path = "/path/to/rct1";
+          rct2Path = "/path/to/rct2";
+        };
+
+      Alternatively, if no paths are provided, the game will prompt for the
+      RCT2 data on first launch. For RCT1, you will then need to go to
+      the game settings and specify the path to the data directory.
+    '';
+    homepage = "https://openrct2.io";
+    changelog = "https://github.com/OpenRCT2/OpenRCT2/releases/tag/v${finalAttrs.version}";
     downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       keenanweaver
       kylerisse
     ];
+    mainProgram = "openrct2";
+    platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })
