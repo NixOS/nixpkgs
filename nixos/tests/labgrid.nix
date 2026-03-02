@@ -57,5 +57,10 @@
           coordinator.wait_for_open_port(20408)
           out = client.succeed("labgrid-client places")
           assert_contains(out, "testplace")
+
+      with subtest("Check systemd hardening does not degrade unnoticed"):
+          exact_threshold = 11
+          out = coordinator.fail(f"systemd-analyze security labgrid-coordinator.service --threshold={exact_threshold-1}")
+          out = coordinator.succeed(f"systemd-analyze security labgrid-coordinator.service --threshold={exact_threshold}")
     '';
 }
