@@ -9383,6 +9383,8 @@ self: super: with self; {
 
   mahotas = callPackage ../development/python-modules/mahotas { };
 
+  maidenhead = callPackage ../development/python-modules/maidenhead { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   mailcap-fix = callPackage ../development/python-modules/mailcap-fix { };
