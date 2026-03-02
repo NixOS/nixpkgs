@@ -484,74 +484,14 @@ makeScopeWithSplicing' {
         inherit (self.flang-unwrapped) passthru meta;
 
         buildCommand = ''
-            mkdir -p $out/bin
-            cat > $out/bin/flang-new <<'EOF'
-            #!${stdenv.shell}
+          mkdir -p $out/bin
 
-            declare -a final_args=()
-            TEMP_RSP=""
-            cleanup() { [ -n "$TEMP_RSP" ] && rm -f "$TEMP_RSP"; }
-            trap cleanup EXIT
-            emit() {
-              local mode="$1"
-              local val="$2"
-              if [[ "$mode" == "CLI" ]]; then
-                final_args+=("$val")
-              else
-                echo "$val" >> "$TEMP_RSP"
-              fi
-            }
+          substitute ${./flang/wrapper.sh} $out/bin/flang-new \
+            --subst-var-by shell ${pkgs.runtimeShell} \
+            --subst-var-by flang_unwrapped ${self.flang-unwrapped}
 
-            process_stream() {
-              local mode="$1"; shift
-              while (($# > 0)); do
-                local arg="$1"
-
-                if [[ "$arg" == "-nostdlibinc" ]] || \
-                  [[ "$arg" == -frandom-seed=* ]] || \
-                  [[ "$arg" == -fmacro-prefix-map=* ]] || \
-                  [[ "$arg" == "-mno-omit-leaf-frame-pointer" ]] || \
-                  [[ "$arg" == "-Werror=unguarded-availability" ]]; then
-                  shift
-                  continue
-                fi
-                if [[ "$arg" == "-isystem" ]] || [[ "$arg" == "-idirafter" ]]; then
-                  emit "$mode" "-I"
-                  shift
-                  if (($# > 0)); then
-                    emit "$mode" "$1"
-                    shift
-                  fi
-                  continue
-                fi
-
-                emit "$mode" "$arg"
-                shift
-              done
-            }
-
-            for arg in "$@"; do
-              if [[ "$arg" == @* ]]; then
-                [ -z "$TEMP_RSP" ] && TEMP_RSP=$(mktemp /tmp/flang_args.XXXXXX.rsp)
-
-                declare -a file_content=()
-                while IFS= read -r line || [ -n "$line" ]; do
-                  for word in $line; do
-                    file_content+=("$word")
-                  done
-                done < "''${arg:1}"
-
-                process_stream "FILE" "''${file_content[@]}"
-                final_args+=("@$TEMP_RSP")
-              else
-                process_stream "CLI" "$arg"
-              fi
-            done
-            exec -a "$0" "${self.flang-unwrapped}/bin/flang-new" "''${final_args[@]}"
-          EOF
-
-            chmod +x $out/bin/flang-new
-            ln -s flang-new $out/bin/flang
+          chmod +x $out/bin/flang-new
+          ln -s flang-new $out/bin/flang
         '';
       };
       flang = wrapCCWith rec {

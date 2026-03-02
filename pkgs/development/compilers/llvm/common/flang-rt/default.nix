@@ -17,7 +17,7 @@ let
 
   minDarwinVersion = "10.12";
   effectiveDarwinVersion =
-    if stdenv.isDarwin && (lib.versionOlder stdenv.hostPlatform.darwinMinVersion minDarwinVersion) then
+    if stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion minDarwinVersion then
       minDarwinVersion
     else
       stdenv.hostPlatform.darwinMinVersion;
