@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   pkg-config,
-  qt5,
+  qt6,
   cmake,
   ninja,
   avahi,
@@ -38,6 +38,7 @@
   nlohmann_json,
   xar,
   makeBinaryWrapper,
+  serverSqliteSupport ? true,
 }:
 
 let
@@ -55,8 +56,8 @@ let
           ninja
           pkg-config
           python3
-          qt5.wrapQtAppsHook
-          qt5.qttools
+          qt6.wrapQtAppsHook
+          qt6.qttools
           makeBinaryWrapper
         ]
         ++ (overrides.nativeBuildInputs or [ ]);
@@ -78,6 +79,7 @@ let
           "-D CMAKE_UNITY_BUILD=ON" # Upstream uses this in their build pipeline to speed up builds
           "-D bundled-gsl=OFF"
           "-D bundled-json=OFF"
+          "-D use-timestamps=OFF"
         ]
         ++ (overrides.cmakeFlags or [ ]);
 
@@ -107,7 +109,7 @@ let
 
       platforms = lib.platforms.darwin;
       nativeBuildInputs = [
-        qt5.qttools
+        qt6.qttools
       ];
 
       buildInputs = [
@@ -117,7 +119,7 @@ let
         libsndfile
         libvorbis
         speexdsp
-        qt5.qtsvg
+        qt6.qtsvg
         rnnoise
       ]
       ++ lib.optional (!jackSupport && alsaSupport) alsa-lib
@@ -132,6 +134,7 @@ let
       cmakeFlags = [
         "-D server=OFF"
         "-D bundled-speex=OFF"
+        "-D bundled-rnnoise=OFF"
         "-D bundle-qt-translations=OFF"
         "-D update=OFF"
         "-D overlay-xcompile=OFF"
@@ -151,8 +154,8 @@ let
       env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
       patches = [
-        ./disable-overlay-build.patch
-        ./fix-plugin-copy.patch
+        #./disable-overlay-build.patch
+        #./fix-plugin-copy.patch
       ];
 
       postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -193,6 +196,9 @@ let
       cmakeFlags = [
         "-D client=OFF"
         (lib.cmakeBool "ice" iceSupport)
+        (lib.cmakeBool "enable-mysql" false)
+        (lib.cmakeBool "enable-postgresql" false)
+        (lib.cmakeBool "enable-sqlite" serverSqliteSupport)
       ]
       ++ lib.optionals iceSupport [
         "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
@@ -216,14 +222,14 @@ let
     } source;
 
   source = rec {
-    version = "1.5.857";
+    version = "1.6.870";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
       tag = "v${version}";
-      hash = "sha256-4ySak2nzT8p48waMgBc9kLrvFB8716e7p0G4trzuh1k=";
+      hash = "sha256-FpZbFY/RvQOEDQAXkm1f5Oy00UUG11Az7LJnWfoinOM=";
       fetchSubmodules = true;
     };
   };
