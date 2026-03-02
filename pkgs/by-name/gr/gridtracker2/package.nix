@@ -85,7 +85,7 @@ buildNpmPackage (finalAttrs: {
     install -Dvm644 -t "$out/share/gridtracker2/locales" \
       ./dist/linux*/locales/*
     install -Dvm644 ./resources/icon.png \
-      "$out/share/pixmaps/gridtracker2.png"
+      "$out/share/icons/hicolor/256x256/apps/gridtracker2.png"
 
     makeWrapper ${lib.getExe electron} $out/bin/gridtracker2 \
       --add-flags $out/share/gridtracker2/resources/app.asar \
