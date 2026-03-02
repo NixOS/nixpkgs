@@ -525,3 +525,6 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor
 # Radicle
 /pkgs/build-support/fetchradicle/      @NixOS/radicle
 /pkgs/build-support/fetchradiclepatch/ @NixOS/radicle
+
+# Zellij plugins
+/pkgs/by-name/ze/zellij/plugins/   @PerchunPak

@@ -10,11 +10,10 @@
   openssl,
   writableTmpDirAsHomeHook,
   versionCheckHook,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "zellij";
+  pname = "zellij-unwrapped";
   version = "0.44.1";
 
   src = fetchFromGitHub {
@@ -70,13 +69,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage zellij.1
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd $pname \
+    installShellCompletion --cmd zellij \
       --bash <($out/bin/zellij setup --generate-completion bash) \
       --fish <($out/bin/zellij setup --generate-completion fish) \
       --zsh <($out/bin/zellij setup --generate-completion zsh)
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal workspace with batteries included";
