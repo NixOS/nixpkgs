@@ -2693,6 +2693,8 @@ self: super: with self; {
 
   chispa = callPackage ../development/python-modules/chispa { };
 
+  choreographer = callPackage ../development/python-modules/choreographer { };
+
   chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib { };
 
   chromadb = callPackage ../development/python-modules/chromadb { zstd-c = pkgs.zstd; };
@@ -9238,6 +9240,8 @@ self: super: with self; {
   };
 
   logilab-constraint = callPackage ../development/python-modules/logilab/constraint.nix { };
+
+  logistro = callPackage ../development/python-modules/logistro { };
 
   logmatic-python = callPackage ../development/python-modules/logmatic-python { };
 
