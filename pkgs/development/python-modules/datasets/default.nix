@@ -13,6 +13,7 @@
   huggingface-hub,
   multiprocess,
   numpy,
+  packaging,
   pandas,
   pyarrow,
   pyyaml,
@@ -22,14 +23,14 @@
 }:
 buildPythonPackage rec {
   pname = "datasets";
-  version = "4.5.0";
+  version = "4.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "datasets";
     tag = version;
-    hash = "sha256-K8JqIbYz3ZfT1t1h5dRGCo9kBQp0E+kElqzaw2InaOI=";
+    hash = "sha256-qMPs0su89/6fl2su8/FPJpOlbVpxndJdESt3b7etWmQ=";
   };
 
   build-system = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     huggingface-hub
     multiprocess
     numpy
+    packaging
     pandas
     pyarrow
     pyyaml
