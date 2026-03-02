@@ -17,13 +17,13 @@
   django,
   django-filter,
   django-modelcluster,
-  django-modelsearch,
   django-taggit,
   django-tasks,
   django-treebeard,
   djangorestframework,
   draftjs-exporter,
   laces,
+  modelsearch,
   openpyxl,
   permissionedforms,
   pillow,
@@ -78,13 +78,13 @@ buildPythonPackage (finalAttrs: {
     django
     django-filter
     django-modelcluster
-    django-modelsearch
     django-taggit
     django-tasks
     django-treebeard
     djangorestframework
     draftjs-exporter
     laces
+    modelsearch
     openpyxl
     permissionedforms
     pillow
