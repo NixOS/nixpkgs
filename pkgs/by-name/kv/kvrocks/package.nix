@@ -33,6 +33,18 @@ let
     url = "https://github.com/RocksLabs/LuaJIT/archive/c0a8e68325ec261a77bde1c8eabad398168ffe74.zip";
     hash = "sha256-Wjh14d0JR5ecAwdYVBjQYIHb2vJ1I61oR0N0LMmtq4E=";
   };
+
+  rocksdb' =
+    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
+      rocksdb.overrideAttrs (oldAttrs: {
+        # On aarch64-darwin, libc++ hardening can trigger a SIGTRAP in
+        # RocksDB's startup path via unique_ptr<T[]> bounds checks.
+        hardeningDisable = (oldAttrs.hardeningDisable or [ ]) ++ [
+          "libcxxhardeningfast"
+        ];
+      })
+    else
+      rocksdb;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kvrocks";
@@ -183,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocksdb
+    rocksdb'
     libevent
     fmt
     spdlog
