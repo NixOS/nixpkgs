@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       prince213
       HeitorAugustoLN
+      nttis
     ];
     mainProgram = "luau";
   };
