@@ -26,6 +26,16 @@ in
       description = "Group under which Tvheadend runs.";
     };
 
+    extraGroups = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ "video" ];
+      example = [
+        "video"
+        "dvb"
+      ];
+      description = "Additional groups for the systemd service.";
+    };
+
     dataDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/tvheadend";
@@ -92,6 +102,7 @@ in
         description = "Tvheadend service user";
         isSystemUser = true;
         group = cfg.group;
+        inherit (cfg) extraGroups;
         home = cfg.dataDir;
         createHome = true;
       };
@@ -119,7 +130,7 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        SupplementaryGroups = [ "video" ];
+        SupplementaryGroups = lib.mkIf (cfg.user != "tvheadend") cfg.extraGroups;
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
         RestartSec = 5;
