@@ -82,6 +82,9 @@ buildPythonPackage rec {
 
   env = {
     JUPYTER_PLATFORM_DIRS = 1;
+    # prevent lerna from spamming output with progress
+    # has the side-effect of killing colour but not the end of the world
+    CI = true;
   };
 
   # Some of the tests use localhost networking.
