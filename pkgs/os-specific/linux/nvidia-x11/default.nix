@@ -61,6 +61,11 @@ let
     stripLen = 1;
     extraPrefix = "kernel/";
   };
+
+  kernel_6_19_patch = fetchpatch {
+    url = "https://github.com/CachyOS/CachyOS-PKGBUILDS/raw/d5629d64ac1f9e298c503e407225b528760ffd37/nvidia/nvidia-utils/kernel-6.19.patch";
+    hash = "sha256-YuJjSUXE6jYSuZySYGnWSNG5sfVei7vvxDcHx3K+IN4=";
+  };
 in
 rec {
   mkDriver = generic;
@@ -87,6 +92,7 @@ rec {
     openSha256 = "sha256-hECHfguzwduEfPo5pCDjWE/MjtRDhINVr4b1awFdP44=";
     settingsSha256 = "sha256-NWsqUciPa4f1ZX6f0By3yScz3pqKJV1ei9GvOF8qIEE=";
     persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
+    patchesOpen = [ kernel_6_19_patch ];
   });
 
   beta = selectHighestVersion latest (generic {
