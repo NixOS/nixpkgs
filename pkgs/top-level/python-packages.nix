@@ -3870,7 +3870,7 @@ self: super: with self; {
 
   devpi-ldap = callPackage ../development/python-modules/devpi-ldap { };
 
-  devpi-server = callPackage ../development/python-modules/devpi-server { };
+  devpi-server = callPackage ../by-name/de/devpi-server/unwrapped.nix { };
 
   devpi-web = callPackage ../development/python-modules/devpi-web { };
 
