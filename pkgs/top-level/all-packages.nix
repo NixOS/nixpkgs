@@ -3397,6 +3397,8 @@ with pkgs;
     nvidiaSupport = true;
   };
 
+  zellijPlugins = recurseIntoAttrs (callPackage ../by-name/ze/zellij/plugins { });
+
   zstd = callPackage ../tools/compression/zstd {
     cmake = buildPackages.cmakeMinimal;
   };
