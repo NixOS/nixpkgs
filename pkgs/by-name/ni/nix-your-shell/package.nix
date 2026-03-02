@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-your-shell";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = "nix-your-shell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2KiqDqKKT28yjCEtU0vFd+dFktGd6Xp+yxSSI/R7fjc=";
+    hash = "sha256-mpgVlM3mFbjugEcWyhayEwSQvgj64jlAiy/RLgSTlyw=";
   };
 
-  cargoHash = "sha256-BBKnA/QX37qEtWw69+nS1NjurI2GXASUrfY1E0iL/0Q=";
+  cargoHash = "sha256-ReK85FRyl+4Epr11XsIiPUR3wFl6/HJ5MmYDX9Impes=";
 
   passthru = {
     generate-config =

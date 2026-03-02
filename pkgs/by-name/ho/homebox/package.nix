@@ -41,8 +41,8 @@ buildGoModule {
     inherit pname version;
     src = "${src}/frontend";
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-MG2IzSOjdGIjuKOtbDlI6UY+67+6/AAsnBscFvs2V4o=";
+    fetcherVersion = 3;
+    hash = "sha256-105HgNiC7QCsUn6mcYyRCqhOuMl8bZQlwoaOavi3dkk=";
   };
   pnpmRoot = "../frontend";
 

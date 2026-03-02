@@ -28,8 +28,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/client";
-      fetcherVersion = 1;
-      hash = "sha256-cJLJMJNDPr73w5IiB1/zIloIdsUhqI+o/JqoKNwNweI=";
+      fetcherVersion = 3;
+      hash = "sha256-1YZf32lDwX3e9EC0Uixyo+yDczfU4/ZSlG+jFZwf+38=";
     };
 
     pnpmRoot = "client";
