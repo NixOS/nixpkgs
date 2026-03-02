@@ -105,12 +105,12 @@ let
   version = {
     # day of the snapshot being taken
     year = "2026";
-    month = "02";
-    day = "02";
+    month = "03";
+    day = "01";
     # TeX Live version
     texliveYear = 2025;
     # final (historic) release or snapshot
-    final = false;
+    final = true;
   };
 
   # The tarballs on CTAN mirrors for the current release are constantly
@@ -148,7 +148,7 @@ let
         # use last mirror for daily snapshots as texlive.tlpdb.xz changes every day
         # TODO make this less hacky
         (if version.final then mirrors else [ (lib.last mirrors) ]);
-    hash = "sha256-GxJXqY6plT3wngKiuqiZUst4eTZIylUdhN2ojUApIpU=";
+    hash = "sha256-Vt8DjpBwo9WH7s613vPxVLLKzM7zbUKVu0ngYYl3w0o=";
   };
 
   tlpdbNix =
