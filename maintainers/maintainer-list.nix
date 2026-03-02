@@ -17344,6 +17344,14 @@
     github = "michaelvanstraten";
     githubId = 50352631;
   };
+  michailik = {
+    name = "Michail Konstantinidis";
+    github = "MichailiK";
+    githubId = 39029839;
+    email = "git@michaili.dev";
+    matrix = "@michailik:matrix.org";
+    keys = [ { fingerprint = "BF68 0E5D 6D55 01B3 17EF  B7D6 8704 07F9 D274 E6BA"; } ];
+  };
   michalrus = {
     email = "m@michalrus.com";
     github = "michalrus";
