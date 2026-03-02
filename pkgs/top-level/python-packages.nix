@@ -3072,6 +3072,8 @@ self: super: with self; {
 
   cometx = callPackage ../development/python-modules/cometx { };
 
+  comfy-aimdo = callPackage ../development/python-modules/comfy-aimdo { };
+
   comfyui-embedded-docs = callPackage ../development/python-modules/comfyui-embedded-docs { };
 
   comfyui-frontend-package = callPackage ../development/python-modules/comfyui-frontend-package { };
