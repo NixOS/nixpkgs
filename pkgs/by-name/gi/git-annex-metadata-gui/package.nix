@@ -5,16 +5,16 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-annex-metadata-gui";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alpernebbi";
     repo = "git-annex-metadata-gui";
-    rev = "v${version}";
-    sha256 = "03kch67k0q9lcs817906g864wwabkn208aiqvbiyqp1qbg99skam";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VU2d0ls4XOzj2jgqBISdS3FODHoGpBOQZjRhMI+BbA4=";
   };
 
   prePatch = ''
@@ -27,7 +27,11 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = [
     python3Packages.pyqt5
     python3Packages.git-annex-adapter
   ];
@@ -43,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux;
   };
-}
+})
