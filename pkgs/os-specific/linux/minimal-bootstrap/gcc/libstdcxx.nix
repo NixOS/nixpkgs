@@ -40,6 +40,7 @@ let
   binutilsTargetPrefix = lib.optionalString (
     buildPlatform.config != hostPlatform.config
   ) "${hostPlatform.config}-";
+  dynamicLinkerGlob = common.dynamicLinkerGlob hostPlatform libc;
 in
 bash.runCommand "${pname}-${common.version}"
   {
@@ -98,14 +99,27 @@ bash.runCommand "${pname}-${common.version}"
     popd
 
     # Configure
+    if [[ -z '${dynamicLinkerGlob}' ]]; then
+      echo "Don't know the name of the dynamic linker for platform '${hostPlatform.config}', so guessing instead."
+      dynamicLinker="${libc}/lib/ld*.so.?"
+    else
+      dynamicLinker='${dynamicLinkerGlob}'
+    fi
+    dynamicLinker=($dynamicLinker)
+    case ''${#dynamicLinker[@]} in
+      0) echo "No dynamic linker found for platform '${hostPlatform.config}'.";;
+      1) echo "Using dynamic linker: '$dynamicLinker'";;
+      *) echo "Multiple dynamic linkers found for platform '${hostPlatform.config}'.";;
+    esac
+
     mkdir build; cd build
-    export CFLAGS="-B${binutils}/bin -B${libc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -Wl,-dynamic-linker=${libc}/${libc.dynamicLinkerFile}"
-    export CXXFLAGS="-B${binutils}/bin -B${libc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -Wl,-dynamic-linker=${libc}/${libc.dynamicLinkerFile}${
+    export CFLAGS="-B${binutils}/bin -B${libc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -Wl,-dynamic-linker=$dynamicLinker"
+    export CXXFLAGS="-B${binutils}/bin -B${libc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}${
       lib.optionalString (!libgcc.sharedAvailable) " -static-libgcc"
-    }"
-    export LDFLAGS="-B${binutils}/bin -B${libc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -Wl,-dynamic-linker=${libc}/${libc.dynamicLinkerFile}${
+    } -Wl,-dynamic-linker=$dynamicLinker"
+    export LDFLAGS="-B${binutils}/bin -B${libc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}${
       lib.optionalString (!libgcc.sharedAvailable) " -static-libgcc"
-    }"
+    } -Wl,-dynamic-linker=$dynamicLinker"
     export AR="${binutilsTargetPrefix}ar"
     export LD="${binutilsTargetPrefix}ld"
     export NM="${binutilsTargetPrefix}nm"
