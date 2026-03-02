@@ -315,7 +315,7 @@ in
                 options.sttLibrary == "onnx-asr" || options.sttLibrary == "auto" && options.language == "ru"
               ) oldAttrs.optional-dependencies.onnx_asr
               ++ optionals (
-                options.sttLibrary == "sherpa-onnx" || options.sttLibrary == "auto" && options.language == "en"
+                options.sttLibrary == "sherpa" || options.sttLibrary == "auto" && options.language == "en"
               ) oldAttrs.optional-dependencies.sherpa
               ++ optionals (options.sttLibrary == "transformers") oldAttrs.optional-dependencies.transformers;
           });

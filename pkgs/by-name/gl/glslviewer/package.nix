@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Live GLSL coding renderer";
     homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.hodapp ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "glslViewer";
     # never built on aarch64-darwin since first introduction in nixpkgs

@@ -3,22 +3,18 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  qmake,
-  qttools,
-  wrapQtAppsHook,
   boost,
-  kirigami2,
+  libsForQt5,
   kyotocabinet,
   libmicrohttpd,
   libosmscout,
   libpostal,
   marisa,
   osrm-backend,
-  protobuf,
-  qtquickcontrols2,
-  qtlocation,
+  protobuf_21,
   sqlite,
   valhalla,
+  abseil-cpp_202103,
 }:
 
 let
@@ -27,6 +23,11 @@ let
     repo = "date";
     rev = "a45ea7c17b4a7f320e199b71436074bd624c9e15";
     hash = "sha256-Mq7Yd+y8M3JNG9BEScwVEmxGWYEy6gaNNSlTGgR9LB4=";
+  };
+  protobuf' = protobuf_21.override {
+    abseil-cpp = abseil-cpp_202103.override {
+      cxxStandard = "17";
+    };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -42,16 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    kirigami2
-    qtquickcontrols2
-    qtlocation
+    libsForQt5.kirigami2
+    libsForQt5.qtquickcontrols2
+    libsForQt5.qtlocation
     valhalla
     libosmscout
     osrm-backend
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     marisa
     kyotocabinet
     boost
-    protobuf
+    protobuf'
     date
   ];
 

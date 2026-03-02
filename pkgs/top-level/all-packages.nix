@@ -3543,6 +3543,9 @@ with pkgs;
     vkbasalt32 = pkgsi686Linux.vkbasalt;
   };
 
+  voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix { vulkanSupport = true; };
+  voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix { onnxSupport = true; };
+
   vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
 
   vpWithSixel = vp.override {
@@ -10076,16 +10079,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  mmlgui = callPackage ../applications/audio/mmlgui {
-    libvgm = libvgm.override {
-      withAllEmulators = false;
-      emulators = [
-        "_PRESET_SMD"
-      ];
-      enableLibplayer = false;
-    };
-  };
-
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
   };
@@ -10299,14 +10292,6 @@ with pkgs;
 
   orpie = callPackage ../applications/misc/orpie {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
-  osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server {
-    protobuf = protobuf_21.override {
-      abseil-cpp = abseil-cpp_202103.override {
-        cxxStandard = "17";
-      };
-    };
   };
 
   pantalaimon = callPackage ../applications/networking/instant-messengers/pantalaimon { };
@@ -11832,13 +11817,6 @@ with pkgs;
 
   cubicle = callPackage ../applications/science/logic/cubicle {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
-  cvc3 = callPackage ../applications/science/logic/cvc3 {
-    gmp = lib.overrideDerivation gmp (_: {
-      dontDisableStatic = true;
-    });
-    stdenv = gccStdenv;
   };
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {

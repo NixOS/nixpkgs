@@ -136,7 +136,7 @@ in
             BindReadOnlyPaths = [ "/dev/null:/etc/man_db.conf" ]; # mandb will still read /etc/man_db.conf if it exists, even when setting -C path/to/config.conf
             ProtectSystem = "strict";
           };
-          wantedBy = [ "default.target" ];
+          wantedBy = [ "multi-user.target" ];
         };
       })
     ]

@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Advanced shading language for production GI renderers";
     homepage = "http://openshadinglanguage.org";
-    maintainers = with lib.maintainers; [ hodapp ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
