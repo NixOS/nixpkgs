@@ -26,19 +26,19 @@
 }:
 
 let
-  version = "2025.10.186.0";
+  version = "2026.1.150.0";
   sources = rec {
     x86_64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}_amd64.deb";
-      hash = "sha256-l+csDSBXRAFb2075ciCAlE0bS5F48mAIK/Bv1r3Q8GE=";
+      hash = "sha256-LjiOR0biyxkYIn+E2jh4bePd7Yg/6qOtT7W+EKcLwwo=";
     };
     aarch64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}_arm64.deb";
-      hash = "sha256-S6CfWYzcv+1Djj+TX+lrP5eG7oIpM0JrqtSw/UDD9ko=";
+      hash = "sha256-HnuRQtSv176ZaIOswd9f0gwfo6BguKXgszzxwizDCig=";
     };
     aarch64-darwin = fetchurl {
       url = "https://downloads.cloudflareclient.com/v1/download/macos/version/${version}";
-      hash = "sha256-nnoOXPSpOJRyNdCC0/YAoBK8SwB+++qVwgZplrjNi2U=";
+      hash = "sha256-pBpkvnzsg7ZdHcmD4Lp75Ag65nypRlmdn22+qzub6t4=";
     };
     x86_64-darwin = aarch64-darwin;
   };
