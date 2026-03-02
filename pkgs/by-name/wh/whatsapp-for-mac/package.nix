@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       common-updater-scripts
     ];
     text = ''
-      url=$(curl --silent "https://web.whatsapp.com/desktop/mac_native/updates/?branch=relbranch&configuration=Release")
+      url=$(curl --silent "https://web.whatsapp.com/desktop/mac_native/updates/?branch=master&configuration=Release")
       version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
       update-source-version whatsapp-for-mac "$version" --file=./pkgs/by-name/wh/whatsapp-for-mac/package.nix
     '';
