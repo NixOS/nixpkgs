@@ -26,7 +26,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'poetry>=0.12' 'poetry-core' \
-      --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
+      --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api' \
+      --replace-fail 'dramatiq = "^1.5"' 'dramatiq = ">=1.5, <3"'
   '';
 
   pythonRelaxDeps = [ "dramatiq" ];
