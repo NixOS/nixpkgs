@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "birdfont";
-  version = "2.33.6-unstable-2025-11-23";
+  version = "2.33.6-unstable-2025-11-23"; # For gcc15 error fix, remove unstable versioning in next release
 
   src = fetchFromGitHub {
     owner = "johanmattssonm";
