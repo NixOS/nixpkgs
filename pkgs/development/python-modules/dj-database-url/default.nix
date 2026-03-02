@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "dj-database-url";
-  version = "3.1.0";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "dj-database-url";
     tag = "v${version}";
-    hash = "sha256-zQiyEtDTFZHwuEIfRZHdgszyfsRSayFqPv9MIS4Ip6s=";
+    hash = "sha256-d9wkxe7xJSTufc2La4W/etPAaW6YF47y0IqPa5YWknY=";
   };
 
   postPatch = ''
