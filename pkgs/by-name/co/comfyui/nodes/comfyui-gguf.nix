@@ -7,18 +7,22 @@
 
 mkComfyuiNode rec {
   pname = "comfyui-gguf";
-  version = "2.0.0-unstable-2025-09-14";
+  version = "2.0.0-unstable-2026-01-12";
 
   src = fetchFromGitHub {
     owner = "city96";
     repo = "ComfyUI-GGUF";
-    rev = "be2a08330d7ec232d684e50ab938870d7529471e";
-    hash = "sha256-NtpoLwlcMXeVCffZmQeHKDl9hM6gCBprdnhHblrWQ20=";
+    rev = "6ea2651e7df66d7585f6ffee804b20e92fb38b8a";
+    hash = "sha256-/ZwecgxTTMo9J1whdEJci8lEkOy/yP+UmjbpOAA3BvU=";
   };
 
   banditSkipChecks = [
     # LOW - some basic asserts for object types
     "B101"
+    # LOW - try_except_continue
+    "B112"
+    # LOW - hardcoded_password_string - several false positives
+    "B105"
   ];
 
   propagatedBuildInputs = [
