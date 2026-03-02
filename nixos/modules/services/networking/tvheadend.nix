@@ -87,14 +87,18 @@ in
       cfg.htspPort
     ];
 
-    users.groups.tvheadend = lib.mkIf (cfg.group == "tvheadend") { };
+    users.users = lib.mkIf (cfg.user == "tvheadend") {
+      tvheadend = {
+        description = "Tvheadend service user";
+        isSystemUser = true;
+        group = cfg.group;
+        home = cfg.dataDir;
+        createHome = true;
+      };
+    };
 
-    users.users.tvheadend = lib.mkIf (cfg.user == "tvheadend") {
-      description = "Tvheadend service user";
-      isSystemUser = true;
-      group = cfg.group;
-      home = cfg.dataDir;
-      createHome = true;
+    users.groups = lib.mkIf (cfg.group == "tvheadend") {
+      tvheadend = { };
     };
 
     systemd.tmpfiles.settings.tvheadend = {
@@ -117,7 +121,6 @@ in
         Group = cfg.group;
         SupplementaryGroups = [ "video" ];
         WorkingDirectory = cfg.dataDir;
-        Environment = [ "HOME=${toString cfg.dataDir}" ];
         Restart = "on-failure";
         RestartSec = 5;
 
