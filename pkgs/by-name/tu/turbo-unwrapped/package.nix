@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.7.6";
+  version = "2.8.12";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-skpTDC27F2S+rKB+24+I1OxgDX6AmdI9QwnUAr0Ps4o=";
+    hash = "sha256-qVkKv3Odpx2KRVPztGhr+8AhxpYRmCF5XRCew957yJA=";
   };
 
-  cargoHash = "sha256-47ATXzlArTT+QsQvCQ7AfnFOXxTbPfXqmMS3zIimkEc=";
+  cargoHash = "sha256-P6lujI0NCfmcJfa1Lw4xyzbP5jzQD5Ghyjhp8s3JpjY=";
 
   nativeBuildInputs = [
     capnproto

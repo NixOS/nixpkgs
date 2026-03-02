@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -50,6 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-u9wswlFkGpPgJaBwSddnpv49wBAmkKRwWFO5jQ9/twA=";
   };
+
+  # Fix boost 1.89 compatibility
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        "find_package(Boost COMPONENTS thread filesystem system program_options date_time chrono timer serialization REQUIRED)" \
+        "find_package(Boost COMPONENTS thread filesystem program_options date_time chrono timer serialization REQUIRED)"
+  '';
 
   nativeBuildInputs = [
     cmake

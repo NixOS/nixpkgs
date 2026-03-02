@@ -1167,6 +1167,13 @@ in
     meta.mainProgram = "tt";
   };
 
+  trilogy = attrs: {
+    postInstall = ''
+      installPath=$(cat "$out/nix-support/gem-meta/install-path")
+      ln -s contrib/ruby/trilogy.gemspec "$installPath/trilogy.gemspec"
+    '';
+  };
+
   typhoeus = attrs: {
     buildInputs = [ curl ];
   };

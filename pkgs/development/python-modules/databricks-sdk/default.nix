@@ -20,16 +20,16 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "databricks-sdk";
-  version = "0.78.0";
+  version = "0.94.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
-    tag = "v${version}";
-    hash = "sha256-hoY4YuKIa7LmoW2MxUWKhLLsuTyO2b6qtpxr36hjP20=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hRQmx33RxN099OXzllgkeC0bvFFbxbPd35GokCO7ZMw=";
   };
 
   build-system = [
@@ -84,8 +84,8 @@ buildPythonPackage rec {
   meta = {
     description = "Databricks SDK for Python";
     homepage = "https://github.com/databricks/databricks-sdk-py";
-    changelog = "https://github.com/databricks/databricks-sdk-py/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/databricks/databricks-sdk-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

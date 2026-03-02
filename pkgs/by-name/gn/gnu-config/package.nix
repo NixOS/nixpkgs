@@ -78,7 +78,6 @@ stdenv.mkDerivation {
     #   the same distribution terms that you use for the rest of that
     #   program.
     maintainers = with lib.maintainers; [
-      dezgeg
       emilytrau
     ];
     platforms = lib.platforms.all;

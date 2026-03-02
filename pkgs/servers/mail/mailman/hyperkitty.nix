@@ -30,7 +30,18 @@ buildPythonPackage rec {
       url = "https://gitlab.com/mailman/hyperkitty/-/commit/6c3d402dc0981e545081a3baf13db7e491356e75.patch";
       hash = "sha256-ep9cFZe9/sIfIP80pLBOMYkJKWvNT7DRqg80DQSdRFw=";
     })
+    # Fix test with Django 5.2
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/e815be11752ac6a3e839b155f0c43808619c56b0.patch";
+      hash = "sha256-fsJyNsh3l5iR9WgsiEsHlptkN+nlWoop0m2STyucDEc=";
+    })
   ];
+
+  prePatch = ''
+    # Upstream: https://gitlab.com/mailman/hyperkitty/-/commit/b8b7536c2cb7380ec55ed62140617cff8ae36b1d
+    substituteInPlace pyproject.toml \
+      --replace-fail '"django>=4.2,<5.1"' '"django>=4.2,<5.3"'
+  '';
 
   build-system = [
     pdm-backend

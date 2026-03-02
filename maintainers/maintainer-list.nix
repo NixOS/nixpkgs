@@ -3582,12 +3582,6 @@
     githubId = 124877155;
     name = "Benjamin Lemouzy";
   };
-  blenderfreaky = {
-    name = "blenderfreaky";
-    email = "nix@blenderfreaky.de";
-    github = "blenderfreaky";
-    githubId = 14351657;
-  };
   blghnks = {
     email = "bilgehankuch@gmail.com";
     name = "Bilgehan Kuş";
@@ -6600,12 +6594,6 @@
     github = "devusb";
     githubId = 4951663;
     name = "Morgan Helton";
-  };
-  dezgeg = {
-    email = "tuomas.tynkkynen@iki.fi";
-    github = "dezgeg";
-    githubId = 579369;
-    name = "Tuomas Tynkkynen";
   };
   dezren39 = {
     email = "drewrypope@gmail.com";
@@ -10689,12 +10677,6 @@
     githubId = 1903556;
     keys = [ { fingerprint = "F1C5 760E 45B9 9A44 72E9  6BFB D65C 9AFB 4C22 4DA3"; } ];
   };
-  hodapp = {
-    email = "hodapp87@gmail.com";
-    github = "Hodapp87";
-    githubId = 896431;
-    name = "Chris Hodapp";
-  };
   hogcycle = {
     email = "nate@gysli.ng";
     github = "hogcycle";
@@ -11846,6 +11828,12 @@
     name = "James Atkins";
     github = "james-atkins";
     githubId = 9221409;
+  };
+  jamespeapen = {
+    name = "James Eapen";
+    email = "james.eapen@vai.org";
+    github = "jamespeapen";
+    githubId = 39574560;
   };
   jamesward = {
     email = "james@jamesward.com";
@@ -13926,6 +13914,12 @@
     github = "killercup";
     githubId = 20063;
     name = "Pascal Hertleif";
+  };
+  kilyanni = {
+    name = "Nikolas Kilian";
+    email = "nix@nkilian.org";
+    github = "kilyanni";
+    githubId = 14351657;
   };
   kim0 = {
     email = "email.ahmedkamal@googlemail.com";

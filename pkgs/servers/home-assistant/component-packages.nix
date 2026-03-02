@@ -2291,7 +2291,8 @@
       ];
     "hanna" =
       ps: with ps; [
-      ]; # missing inputs: hanna-cloud
+        hanna-cloud
+      ];
     "hardkernel" =
       ps: with ps; [
         aiohasupervisor
@@ -4000,7 +4001,8 @@
       ];
     "mvglive" =
       ps: with ps; [
-      ]; # missing inputs: mvg
+        mvg
+      ];
     "my" =
       ps: with ps; [
         home-assistant-frontend
@@ -4388,8 +4390,9 @@
     "openevse" =
       ps: with ps; [
         ifaddr
+        python-openevse-http
         zeroconf
-      ]; # missing inputs: python-openevse-http
+      ];
     "openexchangerates" =
       ps: with ps; [
         aioopenexchangerates
@@ -6495,7 +6498,8 @@
       ];
     "uhoo" =
       ps: with ps; [
-      ]; # missing inputs: uhooapi
+        uhooapi
+      ];
     "uk_transport" =
       ps: with ps; [
       ];
@@ -7801,6 +7805,7 @@
     "openai_conversation"
     "openalpr_cloud"
     "openerz"
+    "openevse"
     "openexchangerates"
     "opengarage"
     "openhardwaremonitor"
@@ -8103,6 +8108,7 @@
     "twilio"
     "twinkly"
     "twitch"
+    "uhoo"
     "uk_transport"
     "ukraine_alarm"
     "unifi"

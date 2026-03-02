@@ -1,24 +1,29 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchurl,
   flex,
   bison,
   gmp,
   perl,
 }:
-
-stdenv.mkDerivation rec {
+let
+  gmp' = lib.overrideDerivation gmp (_: {
+    dontDisableStatic = true;
+  });
+  stdenv = gccStdenv;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "cvc3";
   version = "2.4.1";
 
   src = fetchurl {
-    url = "https://cs.nyu.edu/acsys/cvc3/releases/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1xxcwhz3y6djrycw8sm6xz83wb4hb12rd1n0skvc7fng0rh1snym";
+    url = "https://cs.nyu.edu/acsys/cvc3/releases/${finalAttrs.version}/cvc3-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1VsdYAbPusP21MCGlkVYkCw+0O+masSZz7IZPz7krPc=";
   };
 
   buildInputs = [
-    gmp
+    gmp'
     flex
     bison
     perl
@@ -28,8 +33,8 @@ stdenv.mkDerivation rec {
 
   # fails to configure on darwin due to gmp not found
   configureFlags = [
-    "LIBS=-L${gmp}/lib"
-    "CXXFLAGS=-I${gmp.dev}/include"
+    "LIBS=-L${gmp'}/lib"
+    "CXXFLAGS=-I${gmp'.dev}/include"
   ];
 
   postPatch = ''
@@ -55,4 +60,4 @@ stdenv.mkDerivation rec {
       downloadPage = "https://cs.nyu.edu/acsys/cvc3/download.html";
     };
   };
-}
+})
