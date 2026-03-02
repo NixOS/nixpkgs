@@ -37,6 +37,8 @@ python3Packages.buildPythonApplication rec {
     aiohttp
     alembic
     av
+    comfy-aimdo
+    comfy-kitchen
     comfyui-embedded-docs
     comfyui-frontend-package
     comfyui-workflow-templates
