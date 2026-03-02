@@ -12,7 +12,7 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aws-encryption-sdk";
   version = "4.0.4";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-encryption-sdk-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-u0Fu6ikUJ70RQgptsAGbzmx3+FpXGTpN4Y2rKOSgO2o=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the AWS Encryption SDK";
     homepage = "https://aws-encryption-sdk-python.readthedocs.io/";
-    changelog = "https://github.com/aws/aws-encryption-sdk-python/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/aws/aws-encryption-sdk-python/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
-}
+})
