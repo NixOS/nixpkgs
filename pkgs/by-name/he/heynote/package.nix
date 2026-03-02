@@ -25,8 +25,8 @@ appimageTools.wrapType2 {
   nativeBuildInputs = [ desktop-file-utils ];
 
   extraInstallCommands = ''
-    mkdir -p $out/share/pixmaps $out/share/licenses/heynote
-    cp ${appimageContents}/heynote.png $out/share/pixmaps/
+    mkdir -p $out/share/licenses/heynote
+    install -D ${appimageContents}/heynote.png -t $out/share/icons/hicolor/512x512/apps
     cp ${appimageContents}/heynote.desktop $out
     # verify binary is present
     stat $out/bin/heynote
