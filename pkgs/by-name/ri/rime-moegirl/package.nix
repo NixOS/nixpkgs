@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "RIME dictionary file for entries from zh.moegirl.org.cn";
     homepage = "https://github.com/outloudvi/mw2fcitx/releases";
     license = with lib.licenses; [
-      unlicense # the tool packaging dictionary
+      mit # the tool packaging dictionary
       cc-by-nc-sa-30 # moegirl wiki itself
     ];
   };
