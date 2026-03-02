@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "jaconv";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ikegami-yukino";
     repo = "jaconv";
     tag = "v${version}";
-    hash = "sha256-43sziwJ/SDdpLHJyGXyI5nXEofbos2W+NV7DlOpWWa8=";
+    hash = "sha256-W8vQsMcpsozPdYGFXZyka/8f9XXF3r+yR7qHkNZOhVI=";
   };
 
   build-system = [ setuptools ];
