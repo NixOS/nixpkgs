@@ -37,11 +37,6 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pyparsing>=2.4*" "pyparsing>=2.4"
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
