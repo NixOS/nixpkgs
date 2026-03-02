@@ -33,25 +33,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-huggingface";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-huggingface==${version}";
-    hash = "sha256-ucKhuu8J6XudIyjCniJixFq79wPfoCnNBUd6r1U2ieI=";
+    hash = "sha256-I6n7UNEbGqlyzT663k7+YpcaB/+rE9RlkqIToupoEyY=";
   };
 
   sourceRoot = "${src.name}/libs/partners/huggingface";
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
 
   dependencies = [
     huggingface-hub
