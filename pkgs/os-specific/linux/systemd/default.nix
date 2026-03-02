@@ -942,6 +942,7 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-misc
             systemd-userdbd
             systemd-homed
+            pam-lastlog
             ;
         };
 
