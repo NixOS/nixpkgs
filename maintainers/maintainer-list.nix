@@ -13699,6 +13699,13 @@
     matrix = "@katexochen:matrix.org";
     name = "Paul Meyer";
   };
+  katok = {
+    name = "katok";
+    email = "kat.ok.timofey@gmail.com";
+    matrix = "@kat.ok:matrix.org";
+    github = "Hi-Timofey";
+    githubId = 43324422;
+  };
   katrinafyi = {
     name = "katrinafyi";
     github = "katrinafyi";
