@@ -362,7 +362,7 @@ in
         PIDFile = lib.mkIf forking "/run/murmur/murmurd.pid";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStartPre = "${pkgs.envsubst}/bin/envsubst -i '${configFile}' -o /run/murmur/murmurd.ini";
-        ExecStart = "${cfg.package}/bin/mumble-server -ini /run/murmur/murmurd.ini";
+        ExecStart = "${cfg.package}/bin/mumble-server --ini /run/murmur/murmurd.ini";
         Restart = "always";
         LogsDirectory = lib.mkIf cfg.logToFile "murmur";
         LogsDirectoryMode = "0750";
