@@ -11601,10 +11601,6 @@ with pkgs;
     hdf5 = hdf5-fortran;
   };
 
-  openmolcas = callPackage ../by-name/op/openmolcas/package.nix {
-    boost = boost188;
-  };
-
   siesta-mpi = callPackage ../by-name/si/siesta/package.nix { useMpi = true; };
 
   ### SCIENCE/BIOLOGY
