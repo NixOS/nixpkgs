@@ -150,6 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.licenses.asl20
       lib.licenses.llvm-exception
     ];
-    maintainers = [ lib.maintainers.blenderfreaky ];
+    maintainers = [ lib.maintainers.kilyanni ];
   };
 })

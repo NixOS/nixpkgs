@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
       from it).
     '';
     license = lib.licenses.lsof;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

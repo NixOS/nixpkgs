@@ -2337,6 +2337,8 @@ self: super: with self; {
 
   btrfsutil = callPackage ../development/python-modules/btrfsutil { };
 
+  btrsync = callPackage ../development/python-modules/btrsync { };
+
   btsmarthub-devicelist = callPackage ../development/python-modules/btsmarthub-devicelist { };
 
   btsocket = callPackage ../development/python-modules/btsocket { };
@@ -2584,6 +2586,8 @@ self: super: with self; {
   certbot-dns-rfc2136 = callPackage ../development/python-modules/certbot-dns-rfc2136 { };
 
   certbot-dns-route53 = callPackage ../development/python-modules/certbot-dns-route53 { };
+
+  certbot-dns-wedos = callPackage ../development/python-modules/certbot-dns-wedos { };
 
   certbot-nginx = callPackage ../development/python-modules/certbot-nginx { };
 
@@ -3865,6 +3869,8 @@ self: super: with self; {
   devpi-common = callPackage ../development/python-modules/devpi-common { };
 
   devpi-ldap = callPackage ../development/python-modules/devpi-ldap { };
+
+  devpi-server = callPackage ../development/python-modules/devpi-server { };
 
   devtools = callPackage ../development/python-modules/devtools { };
 
@@ -6848,6 +6854,8 @@ self: super: with self; {
 
   hankel = callPackage ../development/python-modules/hankel { };
 
+  hanna-cloud = callPackage ../development/python-modules/hanna-cloud { };
+
   hanzidentifier = callPackage ../development/python-modules/hanzidentifier { };
 
   hap-python = callPackage ../development/python-modules/hap-python { };
@@ -8937,6 +8945,8 @@ self: super: with self; {
 
   lit = callPackage ../development/python-modules/lit { };
 
+  litecli = callPackage ../development/python-modules/litecli { };
+
   litellm = callPackage ../development/python-modules/litellm { };
 
   litemapy = callPackage ../development/python-modules/litemapy { };
@@ -10305,6 +10315,8 @@ self: super: with self; {
   mutesync = callPackage ../development/python-modules/mutesync { };
 
   mutf8 = callPackage ../development/python-modules/mutf8 { };
+
+  mvg = callPackage ../development/python-modules/mvg { };
 
   mwcli = callPackage ../development/python-modules/mwcli { };
 
@@ -15415,6 +15427,8 @@ self: super: with self; {
 
   python-clementine-remote = callPackage ../development/python-modules/python-clementine-remote { };
 
+  python-code-minimap = callPackage ../development/python-modules/python-code-minimap { };
+
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-coinmarketcap = callPackage ../development/python-modules/python-coinmarketcap { };
@@ -15686,6 +15700,8 @@ self: super: with self; {
   python-opendata-transport = callPackage ../development/python-modules/python-opendata-transport { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
+
+  python-openevse-http = callPackage ../development/python-modules/python-openevse-http { };
 
   python-opensky = callPackage ../development/python-modules/python-opensky { };
 
@@ -20231,6 +20247,8 @@ self: super: with self; {
   uhashring = callPackage ../development/python-modules/uhashring { };
 
   uhi = callPackage ../development/python-modules/uhi { };
+
+  uhooapi = callPackage ../development/python-modules/uhooapi { };
 
   uiprotect = callPackage ../development/python-modules/uiprotect { };
 

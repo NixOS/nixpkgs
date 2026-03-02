@@ -116,7 +116,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/espressif/esptool";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      dezgeg
       dotlambda
     ];
     platforms = with lib.platforms; linux ++ darwin;

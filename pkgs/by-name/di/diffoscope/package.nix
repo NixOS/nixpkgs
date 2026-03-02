@@ -343,7 +343,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://diffoscope.org/news/diffoscope-${version}-released/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      dezgeg
       danielfullmer
       raitobezarius
     ];

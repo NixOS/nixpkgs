@@ -100,7 +100,7 @@ buildPythonPackage rec {
     homepage = "https://ezdxf.mozman.at/";
     changelog = "https://github.com/mozman/ezdxf/blob/${src.rev}/notes/pages/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hodapp ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

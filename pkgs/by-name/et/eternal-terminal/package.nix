@@ -57,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      dezgeg
       jshort
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

@@ -81,7 +81,7 @@ let
             SizeMaxBytes = "2G";
           };
           description = ''
-            Specify the repart options for a partiton as a structural setting.
+            Specify the repart options for a partition as a structural setting.
             See {manpage}`repart.d(5)`
             for all available options.
           '';
@@ -385,7 +385,7 @@ in
               defined for '${fileName}' is ${toString labelLength} characters long.
               The suggested maximum label length is ${toString suggestedMaxLabelLength}.
 
-              If you use sytemd-sysupdate style A/B updates, this might
+              If you use systemd-sysupdate style A/B updates, this might
               not leave enough space to increment the version number included in
               the label in a future release. For example, if your label is
               ${toString GPTMaxLabelLength} characters long (the maximum enforced by UEFI) and

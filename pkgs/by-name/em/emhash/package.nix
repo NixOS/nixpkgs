@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ktprime/emhash/releases/tag/v${finalAttrs.version}";
     description = "Fast and memory efficient c++ flat hash map/set";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
     platforms = lib.platforms.all;
   };
 })

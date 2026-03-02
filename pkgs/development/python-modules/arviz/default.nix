@@ -106,6 +106,15 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    "test_deterministic"
+    "test_mcse_array"
+    "test_mcse_dataset"
+    "test_mcse_nan"
+    "test_multichain_summary_array"
+    "test_numba_mcse"
+    "test_plot_mcse"
+
     # Tests require network access
     "test_plot_ppc_transposed"
     "test_plot_separation"

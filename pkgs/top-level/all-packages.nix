@@ -999,6 +999,8 @@ with pkgs;
 
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
+  btrsync = with python3Packages; toPythonApplication btrsync;
+
   davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix {
     studioVariant = true;
   };
@@ -3158,12 +3160,6 @@ with pkgs;
 
   update-systemd-resolved = callPackage ../tools/networking/openvpn/update-systemd-resolved.nix { };
 
-  openshadinglanguage = callPackage ../by-name/op/openshadinglanguage/package.nix {
-    libclang = llvmPackages_19.libclang;
-    clang = clang_19;
-    llvm = llvm_19;
-  };
-
   opentelemetry-collector = opentelemetry-collector-releases.otelcol;
   opentelemetry-collector-builder = callPackage ../tools/misc/opentelemetry-collector/builder.nix { };
   opentelemetry-collector-contrib = opentelemetry-collector-releases.otelcol-contrib;
@@ -3258,6 +3254,11 @@ with pkgs;
   playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
 
   tabview = with python3Packages; toPythonApplication tabview;
+
+  tdarrPackages = callPackage ../tools/misc/tdarr { };
+
+  tdarr-server = tdarrPackages.server;
+  tdarr-node = tdarrPackages.node;
 
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_8
@@ -3547,6 +3548,9 @@ with pkgs;
     vkbasalt32 = pkgsi686Linux.vkbasalt;
   };
 
+  voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix { vulkanSupport = true; };
+  voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix { onnxSupport = true; };
+
   vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
 
   vpWithSixel = vp.override {
@@ -3812,8 +3816,6 @@ with pkgs;
   crystalline = callPackage ../development/tools/language-servers/crystalline {
     llvmPackages = crystal.llvmPackages;
   };
-
-  devpi-server = python3Packages.callPackage ../development/tools/devpi-server { };
 
   dprint-plugins = recurseIntoAttrs (callPackage ../by-name/dp/dprint/plugins { });
 
@@ -6246,6 +6248,7 @@ with pkgs;
       certbot-dns-ovh
       certbot-dns-rfc2136
       certbot-dns-route53
+      certbot-dns-wedos
       certbot-nginx
     ]
   );
@@ -10096,16 +10099,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  mmlgui = callPackage ../applications/audio/mmlgui {
-    libvgm = libvgm.override {
-      withAllEmulators = false;
-      emulators = [
-        "_PRESET_SMD"
-      ];
-      enableLibplayer = false;
-    };
-  };
-
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
   };
@@ -10319,14 +10312,6 @@ with pkgs;
 
   orpie = callPackage ../applications/misc/orpie {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
-  osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server {
-    protobuf = protobuf_21.override {
-      abseil-cpp = abseil-cpp_202103.override {
-        cxxStandard = "17";
-      };
-    };
   };
 
   pantalaimon = callPackage ../applications/networking/instant-messengers/pantalaimon { };
@@ -11616,6 +11601,10 @@ with pkgs;
     hdf5 = hdf5-fortran;
   };
 
+  openmolcas = callPackage ../by-name/op/openmolcas/package.nix {
+    boost = boost188;
+  };
+
   siesta-mpi = callPackage ../by-name/si/siesta/package.nix { useMpi = true; };
 
   ### SCIENCE/BIOLOGY
@@ -11848,13 +11837,6 @@ with pkgs;
 
   cubicle = callPackage ../applications/science/logic/cubicle {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
-  cvc3 = callPackage ../applications/science/logic/cvc3 {
-    gmp = lib.overrideDerivation gmp (_: {
-      dontDisableStatic = true;
-    });
-    stdenv = gccStdenv;
   };
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {

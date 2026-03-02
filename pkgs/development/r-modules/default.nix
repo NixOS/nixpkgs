@@ -385,6 +385,7 @@ let
     data_table = [ jbedo ];
     BiocManager = [ jbedo ];
     ggplot2 = [ jbedo ];
+    iscream = [ jamespeapen ];
     svaNUMT = [ jbedo ];
     svaRetro = [ jbedo ];
     StructuralVariantAnnotation = [ jbedo ];
@@ -3136,19 +3137,13 @@ let
       '';
     });
 
-    iscream =
-      let
-        # https://huishenlab.github.io/iscream/articles/htslib.html
-        htslib-deflate = pkgs.htslib.overrideAttrs (attrs: {
-          buildInputs = attrs.buildInputs ++ [ pkgs.libdeflate ];
-        });
-      in
-      old.iscream.overrideAttrs (attrs: {
-        # Rhtslib (in LinkingTo) is not needed if we provide a proper htslib
-        propagatedBuildInputs =
-          builtins.filter (el: el != pkgs.rPackages.Rhtslib) attrs.propagatedBuildInputs
-          ++ [ htslib-deflate ];
-      });
+    iscream = old.iscream.overrideAttrs (attrs: {
+      # https://huishenlab.github.io/iscream/articles/htslib.html
+      # Rhtslib (in LinkingTo) is not needed if we provide a proper htslib
+      propagatedBuildInputs =
+        builtins.filter (el: el != pkgs.rPackages.Rhtslib) attrs.propagatedBuildInputs
+        ++ [ pkgs.htslib ];
+    });
 
     torch = old.torch.overrideAttrs (attrs: {
       preConfigure = ''

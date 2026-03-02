@@ -686,6 +686,7 @@ with lib.maintainers;
     members = [
       b-rodrigues
       bcdarwin
+      jamespeapen
       jbedo
       kupac
     ];

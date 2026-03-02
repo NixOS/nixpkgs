@@ -71,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "sidplayfp";
     maintainers = with lib.maintainers; [
-      dezgeg
       OPNA2608
     ];
     platforms = lib.platforms.all;

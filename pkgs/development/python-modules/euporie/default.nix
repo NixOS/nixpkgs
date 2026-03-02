@@ -2,96 +2,100 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+
+  # build-system
   hatchling,
+  setuptools,
+
+  # dependencies
   aenum,
   aiohttp,
+  fastjsonschema,
+  flatlatex,
+  fsspec,
+  imagesize,
+  ipykernel,
+  jupyter-client,
+  jupytext,
+  linkify-it-py,
+  markdown-it-py,
+  mdit-py-plugins,
+  nbformat,
+  pillow,
+  platformdirs,
   prompt-toolkit,
   pygments,
-  nbformat,
-  jupyter-client,
-  typing-extensions,
-  fastjsonschema,
-  platformdirs,
   pyperclip,
-  imagesize,
-  markdown-it-py,
-  linkify-it-py,
-  mdit-py-plugins,
-  flatlatex,
-  timg,
-  pillow,
+  python-code-minimap,
   sixelcrop,
+  timg,
+  typing-extensions,
   universal-pathlib,
-  fsspec,
-  jupytext,
-  ipykernel,
-  pytestCheckHook,
+
+  # tests
+  html2text,
   pytest-asyncio,
   pytest-cov-stub,
+  pytestCheckHook,
   python-magic,
-  html2text,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "euporie";
-  version = "2.10.3";
+  version = "2.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joouha";
     repo = "euporie";
-    tag = "v${version}";
-    hash = "sha256-wXHhv5vK17XDGh+2GTaw7hoSi4tC9jGVoyrfw1yt6Zo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JzCVpI1O+KM+V4fLw+vwAsFbUK5SXZvAZWffzojU0u0=";
   };
 
   build-system = [
-    setuptools
     hatchling
-  ];
-
-  dependencies = [
-    aenum
-    aiohttp
-    prompt-toolkit
-    pygments
-    nbformat
-    jupyter-client
-    typing-extensions
-    fastjsonschema
-    platformdirs
-    pyperclip
-    imagesize
-    markdown-it-py
-    linkify-it-py
-    mdit-py-plugins
-    flatlatex
-    timg
-    pillow
-    sixelcrop
-    universal-pathlib
-    fsspec
-    jupytext
-    ipykernel
+    setuptools
   ];
 
   pythonRelaxDeps = [
-    "aenum"
-    "linkify-it-py"
     "markdown-it-py"
     "mdit-py-plugins"
     "platformdirs"
+    "universal-pathlib"
+  ];
+  dependencies = [
+    aenum
+    aiohttp
+    fastjsonschema
+    flatlatex
+    fsspec
+    imagesize
+    ipykernel
+    jupyter-client
+    jupytext
+    linkify-it-py
+    markdown-it-py
+    mdit-py-plugins
+    nbformat
+    pillow
+    platformdirs
+    prompt-toolkit
+    pygments
+    pyperclip
+    python-code-minimap
+    sixelcrop
+    timg
+    typing-extensions
+    universal-pathlib
   ];
 
-  doCheck = true;
-
   nativeCheckInputs = [
-    pytestCheckHook
+    html2text
     pytest-asyncio
     pytest-cov-stub
+    pytestCheckHook
     python-magic
-    html2text
     writableTmpDirAsHomeHook
   ];
 
@@ -106,6 +110,8 @@ buildPythonPackage rec {
       ```
     '';
     homepage = "https://euporie.readthedocs.io/";
+    downloadPage = "https://github.com/joouha/euporie";
+    changelog = "https://github.com/joouha/euporie/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     mainProgram = "euporie";
     maintainers = with lib.maintainers; [
@@ -113,4 +119,4 @@ buildPythonPackage rec {
       renesat
     ];
   };
-}
+})

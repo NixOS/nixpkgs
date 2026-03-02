@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast-paced, polished OpenGL demonstration by Excess (data files)";
     homepage = "https://packages.qa.debian.org/a/amoeba-data.html";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })
