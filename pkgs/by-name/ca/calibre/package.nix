@@ -50,17 +50,18 @@ stdenv.mkDerivation (finalAttrs: {
   patches =
     let
       debian-source = "ds+_0.10.5-1";
+      debian-tag = "${finalAttrs.version}+${debian-source}";
     in
     [
       #  allow for plugin update check, but no calibre version check
       (fetchpatch {
-        name = "0001-only-plugin-update.patch";
-        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/0001-only-plugin-update.patch";
+        name = "0001-only-plugin-update-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/0001-only-plugin-update.patch";
         hash = "sha256-/Hz8DSL1VC/wwQPOssM54MInLidfo7kJoR69yi2wAP4=";
       })
       (fetchpatch {
-        name = "0007-Hardening-Qt-code.patch";
-        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
+        name = "0007-Hardening-Qt-code-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
         hash = "sha256-lKp/omNicSBiQUIK+6OOc8ysM6LImn5GxWhpXr4iX+U=";
       })
     ]
