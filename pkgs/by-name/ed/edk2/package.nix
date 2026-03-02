@@ -57,10 +57,31 @@ stdenv.mkDerivation (finalAttrs: {
       ./fix-cross-compilation-antlr-dlg.patch
     ];
 
-    # FIXME: unvendor OpenSSL again once upstream updates
-    # to a compatible version.
-    # Upstream PR: https://github.com/tianocore/edk2/pull/10946
     postPatch = ''
+      # de-vendor OpenSSL
+      rm -r CryptoPkg/Library/OpensslLib/openssl
+      mkdir -p CryptoPkg/Library/OpensslLib/openssl
+      (
+      cd CryptoPkg/Library/OpensslLib/openssl
+      tar --strip-components=1 -xf ${buildPackages.openssl_3_5.src}
+
+      # Apply OpenSSL patches.
+      ${lib.pipe buildPackages.openssl_3_5.patches [
+        (builtins.filter (
+          patch:
+          !builtins.elem (baseNameOf patch) [
+            # Exclude patches not required in this context.
+            "nix-ssl-cert-file.patch"
+            "openssl-disable-kernel-detection.patch"
+            "use-etc-ssl-certs-darwin.patch"
+            "use-etc-ssl-certs.patch"
+          ]
+        ))
+        (map (patch: "patch -p1 < ${patch}\n"))
+        lib.concatStrings
+      ]}
+      )
+
       # enable compilation using Clang
       # https://bugzilla.tianocore.org/show_bug.cgi?id=4620
       substituteInPlace BaseTools/Conf/tools_def.template --replace-fail \
