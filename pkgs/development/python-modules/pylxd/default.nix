@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pylxd";
-  version = "2.3.7";
+  version = "2.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "pylxd";
     tag = version;
-    hash = "sha256-UbDkau3TLwFxWZxJGNF5hgtGn6JgVq5L2CvUgnb4IC8=";
+    hash = "sha256-AWRpMXjmdfG8y57W7M7eJvVJTlstNxmf4YvR+GSBxeY=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];
