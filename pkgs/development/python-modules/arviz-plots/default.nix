@@ -41,14 +41,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz-plots";
-  version = "0.8.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz-plots";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x4UoUSKz+MAI082afnGhfoy2ad/hPK89Y1B2oEnxhsg=";
+    hash = "sha256-ti1wD/aPNCk59wkad+xkvIKTB2Wkupovlo0Hg0YqK1o=";
   };
 
   build-system = [
