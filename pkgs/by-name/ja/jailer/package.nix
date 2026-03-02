@@ -53,9 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     mkdir -p $out/share
-    mkdir -p $out/share/pixmaps
     cp driverlist.csv $out/share
-    cp admin/jailer.png $out/share/pixmaps
+    install -D admin/jailer.png -t $out/share/icons/hicolor/256x256/apps
 
     # On first run, create a local configuration folder and copy driverlist.csv there.
     cat << EOF > $out/bin/jailer
