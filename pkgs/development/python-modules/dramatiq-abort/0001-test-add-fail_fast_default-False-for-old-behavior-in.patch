@@ -1,0 +1,26 @@
+From a5d86b326f2c06fe9efeb378ac95e101bafec74a Mon Sep 17 00:00:00 2001
+From: Chris Moultrie <821688+tebriel@users.noreply.github.com>
+Date: Mon, 2 Mar 2026 10:56:27 -0500
+Subject: [PATCH] test: add fail_fast_default=False for old behavior in
+ stub_broker
+
+---
+ tests/conftest.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/conftest.py b/tests/conftest.py
+index c64ac56..f353917 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -32,7 +32,7 @@ def check_redis(client: Any) -> None:
+ 
+ @pytest.fixture()
+ def stub_broker() -> Generator[dramatiq.Broker, None, None]:
+-    broker = StubBroker()
++    broker = StubBroker(fail_fast_default=False)
+     broker.emit_after("process_boot")
+     dramatiq.set_broker(broker)
+     yield broker
+-- 
+2.51.2
+
