@@ -1901,24 +1901,23 @@ let
               # testing the NixOS module.
               (pkgs.writeText "allow-running-without-credentials" ''
                 diff --git a/cmd/tailscale-exporter/root.go b/cmd/tailscale-exporter/root.go
-                index 2ff11cb..2fb576f 100644
+                index 14089f9..2bb9a25 100644
                 --- a/cmd/tailscale-exporter/root.go
                 +++ b/cmd/tailscale-exporter/root.go
-                @@ -137,14 +137,6 @@ func runExporter(cmd *cobra.Command, args []string) error {
-                ''\t// Create HTTP client that automatically handles token refresh
-                ''\thttpClient := oauthConfig.Client(context.Background())
+                @@ -162,13 +162,6 @@ func runExporter(cmd *cobra.Command, args []string) error {
+                ''\t''\t}
 
-                -''\t// Test OAuth token generation
-                -''\ttoken, err := oauthConfig.Token(context.Background())
-                -''\tif err != nil {
-                -''\t''\treturn fmt.Errorf("failed to obtain OAuth token: %w", err)
-                -''\t}
-                -''\tlogger.Info("OAuth token obtained", "token_type", token.TokenType)
-                -''\tlogger.Info("Successfully obtained OAuth token", "expires", token.Expiry)
+                ''\t''\thttpClient := oauthConfig.Client(context.Background())
+                -''\t''\ttoken, err := oauthConfig.Token(context.Background())
+                -''\t''\tif err != nil {
+                -''\t''\t''\treturn fmt.Errorf("failed to obtain OAuth token: %w", err)
+                -''\t''\t}
+                -''\t''\tlogger.Info("OAuth token obtained", "token_type", token.TokenType)
+                -''\t''\tlogger.Info("Successfully obtained OAuth token", "expires", token.Expiry)
                 -
-                ''\t// Default labels for all metrics
-                ''\tdefaultLabels := prometheus.Labels{"tailnet": tailnet}
-                ''\treg := prometheus.WrapRegistererWith(
+                ''\t''\ttsCollector, err := tailscale.NewTailscaleCollector(
+                ''\t''\t''\tlogger,
+                ''\t''\t''\thttpClient,
               '')
             ];
           };

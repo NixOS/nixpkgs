@@ -7,14 +7,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-gs";
   version = "3.0.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "dvc_gs";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-c5aTwNglCjkHS6Fsfc51K7Wn/5NEQtYIH/z9ftkxO5o=";
   };
 
@@ -39,7 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "gs plugin for dvc";
     homepage = "https://pypi.org/project/dvc-gs/version";
-    changelog = "https://github.com/iterative/dvc-gs/releases/tag/${version}";
+    changelog = "https://github.com/iterative/dvc-gs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

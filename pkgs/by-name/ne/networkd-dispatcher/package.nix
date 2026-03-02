@@ -16,7 +16,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.2.4";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "craftyguy";
     repo = "networkd-dispatcher";
     rev = finalAttrs.version;

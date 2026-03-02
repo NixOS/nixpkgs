@@ -26,7 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.18.4";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     tag = finalAttrs.version;
