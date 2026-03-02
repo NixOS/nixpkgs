@@ -8,6 +8,7 @@
   makeWrapper,
   unzip,
   xdg-utils,
+  imagemagick,
   writeScript,
 }:
 
@@ -40,13 +41,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     unzip
     makeWrapper
     copyDesktopItems
+    imagemagick
   ];
 
   desktopItems = [
     (makeDesktopItem {
       name = "irpf";
       exec = "irpf";
-      icon = "rfb64";
+      icon = "rfb";
       desktopName = "Imposto de Renda Pessoa Física";
       comment = "Programa Oficial da Receita para elaboração do IRPF";
       categories = [ "Office" ];
@@ -72,9 +74,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --set _JAVA_AWT_WM_NONREPARENTING 1 \
       --set AWT_TOOLKIT MToolkit
 
-    mkdir -p $out/share/pixmaps
-    unzip -j lib/ppgd-icones-4.0.jar icones/rfb64.png -d $out/share/pixmaps
-
+    mkdir -p $out/share/icons/hicolor/{96x96,72x72,32x32}/apps
+    unzip -jp lib/ppgd-icones-4.0.jar icones/rfb64.png | magick - -background none -gravity center -extent 96x96 $out/share/icons/hicolor/96x96/apps/rfb.png
+    unzip -jp lib/ppgd-icones-4.0.jar icones/rfb48.png | magick - -background none -gravity center -extent 72x72 $out/share/icons/hicolor/72x72/apps/rfb.png
+    unzip -j lib/ppgd-icones-4.0.jar icones/rfb.png -d $out/share/icons/hicolor/32x32/apps
     runHook postInstall
   '';
 
