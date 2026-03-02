@@ -1,4 +1,10 @@
-{ callPackage, fetchurl, ... }@args:
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+  ...
+}@args:
 
 callPackage ./generic.nix (
   args
@@ -12,5 +18,7 @@ callPackage ./generic.nix (
       url = "mirror://sourceforge/tcl/tcl${version}-src.tar.gz";
       hash = "sha256-kcuPphdxxjwmLvtVMFm3x61nV6+lhXr2Jl5LC9wqFKU=";
     };
+
+    patches = lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
   }
 )

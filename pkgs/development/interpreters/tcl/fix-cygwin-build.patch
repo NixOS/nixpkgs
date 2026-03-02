@@ -1,0 +1,79 @@
+diff --git a/generic/tcl.h b/generic/tcl.h
+index fc772d5b3c..3227398c57 100644
+--- a/generic/tcl.h
++++ b/generic/tcl.h
+@@ -462,22 +462,6 @@ typedef unsigned TCL_WIDE_INT_TYPE	Tcl_WideUInt;
+ #   else
+ 	typedef struct _stat32i64 Tcl_StatBuf;
+ #   endif /* _MSC_VER < 1400 */
+-#elif defined(__CYGWIN__)
+-    typedef struct {
+-	unsigned st_dev;
+-	unsigned short st_ino;
+-	unsigned short st_mode;
+-	short st_nlink;
+-	short st_uid;
+-	short st_gid;
+-	/* Here is a 2-byte gap */
+-	unsigned st_rdev;
+-	/* Here is a 4-byte gap */
+-	long long st_size;
+-	struct {long tv_sec;} st_atim;
+-	struct {long tv_sec;} st_mtim;
+-	struct {long tv_sec;} st_ctim;
+-    } Tcl_StatBuf;
+ #elif defined(HAVE_STRUCT_STAT64) && !defined(__APPLE__)
+     typedef struct stat64 Tcl_StatBuf;
+ #else
+diff --git a/unix/Makefile.in b/unix/Makefile.in
+index bc743b3892..be0a207c93 100644
+--- a/unix/Makefile.in
++++ b/unix/Makefile.in
+@@ -637,9 +637,6 @@ ${LIB_FILE}: ${STUB_LIB_FILE} ${OBJS}
+ 	@MAKE_LIB@
+ 
+ ${STUB_LIB_FILE}: ${STUB_LIB_OBJS}
+-	@if test "x${LIB_FILE}" = "xlibtcl${MAJOR_VERSION}.${MINOR_VERSION}.dll"; then \
+-	    (cd ${TOP_DIR}/win; ${MAKE} winextensions); \
+-	fi
+ 	rm -f $@
+ 	@MAKE_STUB_LIB@
+ 
+diff --git a/unix/tcl.m4 b/unix/tcl.m4
+index 7f5464e651..88bcd93c52 100644
+--- a/unix/tcl.m4
++++ b/unix/tcl.m4
+@@ -1185,7 +1185,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
+ 	    ;;
+ 	CYGWIN_*|MINGW32_*|MSYS_*)
+ 	    SHLIB_CFLAGS="-fno-common"
+-	    SHLIB_LD='${CC} -shared'
++	    SHLIB_LD='${CC} -shared -Wl,--out-implib,$(patsubst %.dll,%.dll.a,[$]@)'
+ 	    SHLIB_SUFFIX=".dll"
+ 	    DL_OBJS="tclLoadDl.o"
+ 	    PLAT_OBJS='${CYGWIN_OBJS}'
+@@ -1210,15 +1210,6 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
+ 		AC_MSG_ERROR([CYGWIN compile is only supported with --enable-threads])
+ 	    fi
+ 	    do64bit_ok=yes
+-	    if test "x${SHARED_BUILD}" = "x1"; then
+-		echo "running cd ../win; ${CONFIG_SHELL-/bin/sh} ./configure $ac_configure_args --enable-64bit --host=x86_64-w64-mingw32"
+-		# The eval makes quoting arguments work.
+-		if cd ../win; eval ${CONFIG_SHELL-/bin/sh} ./configure $ac_configure_args --enable-64bit --host=x86_64-w64-mingw32; cd ../unix
+-		then :
+-		else
+-		    { echo "configure: error: configure failed for ../win" 1>&2; exit 1; }
+-		fi
+-	    fi
+ 	    ;;
+ 	dgux*)
+ 	    SHLIB_CFLAGS="-K PIC"
+@@ -2002,7 +1993,7 @@ dnl # preprocessing tests use only CPPFLAGS.
+ 	LIB_SUFFIX=${SHARED_LIB_SUFFIX}
+ 	MAKE_LIB='${SHLIB_LD} -o [$]@ ${OBJS} ${LDFLAGS} ${SHLIB_LD_LIBS} ${TCL_SHLIB_LD_EXTRAS} ${TK_SHLIB_LD_EXTRAS} ${LD_SEARCH_FLAGS}'
+ 	AS_IF([test "${SHLIB_SUFFIX}" = ".dll"], [
+-	    INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(BIN_INSTALL_DIR)/$(LIB_FILE)"'
++	    INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(BIN_INSTALL_DIR)/$(LIB_FILE)" && $(INSTALL_LIBRARY) $(LIB_FILE).a "$(LIB_INSTALL_DIR)/$(LIB_FILE).a"'
+ 	    DLL_INSTALL_DIR="\$(BIN_INSTALL_DIR)"
+ 	], [
+ 	    INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(LIB_INSTALL_DIR)/$(LIB_FILE)"'
