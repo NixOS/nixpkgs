@@ -12,7 +12,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-apfs";
   version = "1.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.apfs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DCLaDXLE3WkWUNOhZpROaTxMrSF+of30G8D2ZXivJEg=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing a parser for APFS";
     homepage = "https://github.com/fox-it/dissect.apfs";
-    changelog = "https://github.com/fox-it/dissect.apfs/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.apfs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
