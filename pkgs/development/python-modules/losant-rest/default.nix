@@ -29,9 +29,9 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  enabledTestPaths = [ "tests/platformrest_tests.py" ];
+  enabledTestPaths = [ "tests/losant_rest_test.py" ];
 
-  pythonImportsCheck = [ "platformrest" ];
+  pythonImportsCheck = [ "losant_rest" ];
 
   meta = {
     description = "Python module for consuming the Losant IoT Platform API";
