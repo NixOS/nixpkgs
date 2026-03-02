@@ -1,0 +1,6 @@
+source 'https://rubygems.org' do
+  gem 'gitlab-triage'
+  # Extra dependencies
+  gem 'csv'
+  gem 'racc'
+end

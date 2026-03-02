@@ -1,0 +1,10 @@
+--- a/kill.c
++++ b/kill.c
+@@ -175,7 +175,7 @@ static void notify_dbus(const char* body)
+         body2,
+         NULL
+     };
+-    const char* dbus_send_path = "/usr/bin/dbus-send";
++    const char* dbus_send_path = "dbus-send";
+     notify_spawn_subprocess(dbus_send_path, argv, NULL, 0);
+ }

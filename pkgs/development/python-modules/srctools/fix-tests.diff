@@ -1,0 +1,13 @@
+diff --git a/src/pythoncapi-compat/tests/test_pythoncapi_compat.py b/src/pythoncapi-compat/tests/test_pythoncapi_compat.py
+index 8480415..4137489 100644
+--- a/src/pythoncapi-compat/tests/test_pythoncapi_compat.py
++++ b/src/pythoncapi-compat/tests/test_pythoncapi_compat.py
+@@ -21,7 +21,7 @@ except ImportError:
+     faulthandler = None
+ 
+ # test.utils
+-from utils import run_command, command_stdout
++from .utils import run_command, command_stdout
+ 
+ 
+ # Windows uses MSVC compiler

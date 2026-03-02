@@ -1,0 +1,22 @@
+From bb6caca50f67dbe93983c8e0bf8d6c75f48b2d21 Mon Sep 17 00:00:00 2001
+From: Luminar Leaf <80571430+LuminarLeaf@users.noreply.github.com>
+Date: Tue, 20 Jan 2026 16:49:29 +0530
+Subject: [PATCH] Fix emit function call
+
+Upstream function name changed
+---
+ main.lua | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/main.lua b/main.lua
+index 1c737b2..87be707 100644
+--- a/main.lua
++++ b/main.lua
+@@ -13,7 +13,7 @@ end)
+
+ return {
+ 	entry = function()
+-		ya.manager_emit("escape", { visual = true })
++		ya.emit("escape", { visual = true })
+
+ 		local urls = selected_or_hovered()

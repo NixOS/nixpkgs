@@ -1,0 +1,31 @@
+diff --git a/pkcs7-modified.js b/pkcs7-modified.js
+index 661904a6..932a41ad 100644
+--- a/pkcs7-modified.js
++++ b/pkcs7-modified.js
+@@ -31,16 +31,16 @@ try {
+ } catch (ex) { }
+ 
+ if (forge == null) {
+-    forge = require('./node_modules/node-forge/lib/forge');
+-    require('./node_modules/node-forge/lib/aes');
+-    require('./node_modules/node-forge/lib/asn1');
+-    require('./node_modules/node-forge/lib/des');
+-    require('./node_modules/node-forge/lib/oids');
+-    require('./node_modules/node-forge/lib/pem');
+-    require('./node_modules/node-forge/lib/pkcs7asn1');
+-    require('./node_modules/node-forge/lib/random');
+-    require('./node_modules/node-forge/lib/util');
+-    require('./node_modules/node-forge/lib/x509');
++    forge = require('node-forge/lib/forge');
++    require('node-forge/lib/aes');
++    require('node-forge/lib/asn1');
++    require('node-forge/lib/des');
++    require('node-forge/lib/oids');
++    require('node-forge/lib/pem');
++    require('node-forge/lib/pkcs7asn1');
++    require('node-forge/lib/random');
++    require('node-forge/lib/util');
++    require('node-forge/lib/x509');
+ }
+ 
+ // shortcut for ASN.1 API

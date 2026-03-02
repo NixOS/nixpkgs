@@ -1,0 +1,14 @@
+diff --git a/cmd/root.go b/cmd/root.go
+index c47518dd..9ae886eb 100644
+--- a/cmd/root.go
++++ b/cmd/root.go
+@@ -147,6 +147,9 @@ func createApp(cmd *cobra.Command, _ []string) error {
+ 		return err
+ 	}
+ 	if err := version.CheckCLIVersionIsOverMin(app, app.GetVersion()); err != nil {
++		if strings.Contains(cmd.CommandPath(), "completion") {
++			return nil
++		}
+ 		return err
+ 	}
+ 	return nil

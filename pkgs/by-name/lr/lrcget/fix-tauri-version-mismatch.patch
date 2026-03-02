@@ -1,0 +1,254 @@
+diff --git a/package-lock.json b/package-lock.json
+index 5ddd914..8d4a12a 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -9,11 +9,11 @@
+       "version": "0.0.0",
+       "dependencies": {
+         "@tanstack/vue-virtual": "^3.1.2",
+-        "@tauri-apps/api": "^2.1.1",
+-        "@tauri-apps/plugin-dialog": "^2.2.0",
+-        "@tauri-apps/plugin-global-shortcut": "^2.2.0",
+-        "@tauri-apps/plugin-os": "^2.2.0",
+-        "@tauri-apps/plugin-shell": "^2.2.0",
++        "@tauri-apps/api": "2.8.0",
++        "@tauri-apps/plugin-dialog": "2.4.0",
++        "@tauri-apps/plugin-global-shortcut": "^2.3.0",
++        "@tauri-apps/plugin-os": "^2.3.0",
++        "@tauri-apps/plugin-shell": "^2.3.0",
+         "codemirror": "^6.0.1",
+         "floating-vue": "^5.2.2",
+         "lodash": "^4.17.21",
+@@ -381,9 +381,9 @@
+       }
+     },
+     "node_modules/@tauri-apps/api": {
+-      "version": "2.1.1",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/api/-/api-2.1.1.tgz",
+-      "integrity": "sha512-fzUfFFKo4lknXGJq8qrCidkUcKcH2UHhfaaCNt4GzgzGaW2iS26uFOg4tS3H4P8D6ZEeUxtiD5z0nwFF0UN30A==",
++      "version": "2.8.0",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/api/-/api-2.8.0.tgz",
++      "integrity": "sha512-ga7zdhbS2GXOMTIZRT0mYjKJtR9fivsXzsyq5U3vjDL0s6DTMwYRm0UHNjzTY5dh4+LSC68Sm/7WEiimbQNYlw==",
+       "license": "Apache-2.0 OR MIT",
+       "funding": {
+         "type": "opencollective",
+@@ -590,39 +590,39 @@
+       }
+     },
+     "node_modules/@tauri-apps/plugin-dialog": {
+-      "version": "2.2.0",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-dialog/-/plugin-dialog-2.2.0.tgz",
+-      "integrity": "sha512-6bLkYK68zyK31418AK5fNccCdVuRnNpbxquCl8IqgFByOgWFivbiIlvb79wpSXi0O+8k8RCSsIpOquebusRVSg==",
++      "version": "2.4.0",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-dialog/-/plugin-dialog-2.4.0.tgz",
++      "integrity": "sha512-OvXkrEBfWwtd8tzVCEXIvRfNEX87qs2jv6SqmVPiHcJjBhSF/GUvjqUNIDmKByb5N8nvDqVUM7+g1sXwdC/S9w==",
+       "license": "MIT OR Apache-2.0",
+       "dependencies": {
+-        "@tauri-apps/api": "^2.0.0"
++        "@tauri-apps/api": "^2.8.0"
+       }
+     },
+     "node_modules/@tauri-apps/plugin-global-shortcut": {
+-      "version": "2.2.0",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-global-shortcut/-/plugin-global-shortcut-2.2.0.tgz",
+-      "integrity": "sha512-clI9Bg/BcxWXNDK+ij601o1qC2WxMEy8ovhGgEW5Ai17oPy0KK8uwzmc59KiVnOYKpBWHCUPqBxG+KBNUFXgzw==",
++      "version": "2.3.1",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-global-shortcut/-/plugin-global-shortcut-2.3.1.tgz",
++      "integrity": "sha512-vr40W2N6G63dmBPaha1TsBQLLURXG538RQbH5vAm0G/ovVZyXJrmZR1HF1W+WneNloQvwn4dm8xzwpEXRW560g==",
+       "license": "MIT OR Apache-2.0",
+       "dependencies": {
+-        "@tauri-apps/api": "^2.0.0"
++        "@tauri-apps/api": "^2.8.0"
+       }
+     },
+     "node_modules/@tauri-apps/plugin-os": {
+-      "version": "2.2.0",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-os/-/plugin-os-2.2.0.tgz",
+-      "integrity": "sha512-HszbCdbisMlu5QhCNAN8YIWyz2v33abAWha6+uvV2CKX8P5VSct/y+kEe22JeyqrxCnWlQ3DRx7s49Byg7/0EA==",
++      "version": "2.3.2",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-os/-/plugin-os-2.3.2.tgz",
++      "integrity": "sha512-n+nXWeuSeF9wcEsSPmRnBEGrRgOy6jjkSU+UVCOV8YUGKb2erhDOxis7IqRXiRVHhY8XMKks00BJ0OAdkpf6+A==",
+       "license": "MIT OR Apache-2.0",
+       "dependencies": {
+-        "@tauri-apps/api": "^2.0.0"
++        "@tauri-apps/api": "^2.8.0"
+       }
+     },
+     "node_modules/@tauri-apps/plugin-shell": {
+-      "version": "2.2.0",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-shell/-/plugin-shell-2.2.0.tgz",
+-      "integrity": "sha512-iC3Ic1hLmasoboG7BO+7p+AriSoqAwKrIk+Hpk+S/bjTQdXqbl2GbdclghI4gM32X0bls7xHzIFqhRdrlvJeaA==",
++      "version": "2.3.4",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-shell/-/plugin-shell-2.3.4.tgz",
++      "integrity": "sha512-ktsRWf8wHLD17aZEyqE8c5x98eNAuTizR1FSX475zQ4TxaiJnhwksLygQz+AGwckJL5bfEP13nWrlTNQJUpKpA==",
+       "license": "MIT OR Apache-2.0",
+       "dependencies": {
+-        "@tauri-apps/api": "^2.0.0"
++        "@tauri-apps/api": "^2.8.0"
+       }
+     },
+     "node_modules/@types/web-bluetooth": {
+@@ -1043,6 +1043,7 @@
+           "url": "https://tidelift.com/funding/github/npm/browserslist"
+         }
+       ],
++      "peer": true,
+       "dependencies": {
+         "caniuse-lite": "^1.0.30001400",
+         "electron-to-chromium": "^1.4.251",
+@@ -1124,6 +1125,7 @@
+       "version": "6.0.1",
+       "resolved": "https://registry.npmjs.org/codemirror/-/codemirror-6.0.1.tgz",
+       "integrity": "sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==",
++      "peer": true,
+       "dependencies": {
+         "@codemirror/autocomplete": "^6.0.0",
+         "@codemirror/commands": "^6.0.0",
+@@ -1681,6 +1683,7 @@
+       "version": "7.6.2",
+       "resolved": "https://registry.npmjs.org/focus-trap/-/focus-trap-7.6.2.tgz",
+       "integrity": "sha512-9FhUxK1hVju2+AiQIDJ5Dd//9R2n2RAfJ0qfhF4IHGHgcoEUTMpbTeG/zbEuwaiYXfuAH6XE0/aCyxDdRM+W5w==",
++      "peer": true,
+       "dependencies": {
+         "tabbable": "^6.2.0"
+       }
+@@ -2147,6 +2150,7 @@
+           "url": "https://github.com/sponsors/ai"
+         }
+       ],
++      "peer": true,
+       "dependencies": {
+         "nanoid": "^3.3.7",
+         "picocolors": "^1.1.0",
+@@ -2721,6 +2725,7 @@
+       "resolved": "https://registry.npmjs.org/vite/-/vite-3.1.8.tgz",
+       "integrity": "sha512-m7jJe3nufUbuOfotkntGFupinL/fmuTNuQmiVE7cH2IZMuf4UbfbGYMUT3jVWgGYuRVLY9j8NnrRqgw5rr5QTg==",
+       "dev": true,
++      "peer": true,
+       "dependencies": {
+         "esbuild": "^0.15.9",
+         "postcss": "^8.4.16",
+@@ -2761,6 +2766,7 @@
+       "version": "3.5.10",
+       "resolved": "https://registry.npmjs.org/vue/-/vue-3.5.10.tgz",
+       "integrity": "sha512-Vy2kmJwHPlouC/tSnIgXVg03SG+9wSqT1xu1Vehc+ChsXsRd7jLkKgMltVEFOzUdBr3uFwBCG+41LJtfAcBRng==",
++      "peer": true,
+       "dependencies": {
+         "@vue/compiler-dom": "3.5.10",
+         "@vue/compiler-sfc": "3.5.10",
+@@ -3221,9 +3227,9 @@
+       }
+     },
+     "@tauri-apps/api": {
+-      "version": "2.1.1",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/api/-/api-2.1.1.tgz",
+-      "integrity": "sha512-fzUfFFKo4lknXGJq8qrCidkUcKcH2UHhfaaCNt4GzgzGaW2iS26uFOg4tS3H4P8D6ZEeUxtiD5z0nwFF0UN30A=="
++      "version": "2.8.0",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/api/-/api-2.8.0.tgz",
++      "integrity": "sha512-ga7zdhbS2GXOMTIZRT0mYjKJtR9fivsXzsyq5U3vjDL0s6DTMwYRm0UHNjzTY5dh4+LSC68Sm/7WEiimbQNYlw=="
+     },
+     "@tauri-apps/cli": {
+       "version": "2.1.0",
+@@ -3314,35 +3320,35 @@
+       "optional": true
+     },
+     "@tauri-apps/plugin-dialog": {
+-      "version": "2.2.0",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-dialog/-/plugin-dialog-2.2.0.tgz",
+-      "integrity": "sha512-6bLkYK68zyK31418AK5fNccCdVuRnNpbxquCl8IqgFByOgWFivbiIlvb79wpSXi0O+8k8RCSsIpOquebusRVSg==",
++      "version": "2.4.0",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-dialog/-/plugin-dialog-2.4.0.tgz",
++      "integrity": "sha512-OvXkrEBfWwtd8tzVCEXIvRfNEX87qs2jv6SqmVPiHcJjBhSF/GUvjqUNIDmKByb5N8nvDqVUM7+g1sXwdC/S9w==",
+       "requires": {
+-        "@tauri-apps/api": "^2.0.0"
++        "@tauri-apps/api": "^2.8.0"
+       }
+     },
+     "@tauri-apps/plugin-global-shortcut": {
+-      "version": "2.2.0",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-global-shortcut/-/plugin-global-shortcut-2.2.0.tgz",
+-      "integrity": "sha512-clI9Bg/BcxWXNDK+ij601o1qC2WxMEy8ovhGgEW5Ai17oPy0KK8uwzmc59KiVnOYKpBWHCUPqBxG+KBNUFXgzw==",
++      "version": "2.3.1",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-global-shortcut/-/plugin-global-shortcut-2.3.1.tgz",
++      "integrity": "sha512-vr40W2N6G63dmBPaha1TsBQLLURXG538RQbH5vAm0G/ovVZyXJrmZR1HF1W+WneNloQvwn4dm8xzwpEXRW560g==",
+       "requires": {
+-        "@tauri-apps/api": "^2.0.0"
++        "@tauri-apps/api": "^2.8.0"
+       }
+     },
+     "@tauri-apps/plugin-os": {
+-      "version": "2.2.0",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-os/-/plugin-os-2.2.0.tgz",
+-      "integrity": "sha512-HszbCdbisMlu5QhCNAN8YIWyz2v33abAWha6+uvV2CKX8P5VSct/y+kEe22JeyqrxCnWlQ3DRx7s49Byg7/0EA==",
++      "version": "2.3.2",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-os/-/plugin-os-2.3.2.tgz",
++      "integrity": "sha512-n+nXWeuSeF9wcEsSPmRnBEGrRgOy6jjkSU+UVCOV8YUGKb2erhDOxis7IqRXiRVHhY8XMKks00BJ0OAdkpf6+A==",
+       "requires": {
+-        "@tauri-apps/api": "^2.0.0"
++        "@tauri-apps/api": "^2.8.0"
+       }
+     },
+     "@tauri-apps/plugin-shell": {
+-      "version": "2.2.0",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-shell/-/plugin-shell-2.2.0.tgz",
+-      "integrity": "sha512-iC3Ic1hLmasoboG7BO+7p+AriSoqAwKrIk+Hpk+S/bjTQdXqbl2GbdclghI4gM32X0bls7xHzIFqhRdrlvJeaA==",
++      "version": "2.3.4",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-shell/-/plugin-shell-2.3.4.tgz",
++      "integrity": "sha512-ktsRWf8wHLD17aZEyqE8c5x98eNAuTizR1FSX475zQ4TxaiJnhwksLygQz+AGwckJL5bfEP13nWrlTNQJUpKpA==",
+       "requires": {
+-        "@tauri-apps/api": "^2.0.0"
++        "@tauri-apps/api": "^2.8.0"
+       }
+     },
+     "@types/web-bluetooth": {
+@@ -3586,6 +3592,7 @@
+       "resolved": "https://registry.npmjs.org/browserslist/-/browserslist-4.21.4.tgz",
+       "integrity": "sha512-CBHJJdDmgjl3daYjN5Cp5kbTf1mUhZoS+beLklHIvkOWscs83YAhLlF3Wsh/lciQYAcbBJgTOD44VtG31ZM4Hw==",
+       "dev": true,
++      "peer": true,
+       "requires": {
+         "caniuse-lite": "^1.0.30001400",
+         "electron-to-chromium": "^1.4.251",
+@@ -3636,6 +3643,7 @@
+       "version": "6.0.1",
+       "resolved": "https://registry.npmjs.org/codemirror/-/codemirror-6.0.1.tgz",
+       "integrity": "sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==",
++      "peer": true,
+       "requires": {
+         "@codemirror/autocomplete": "^6.0.0",
+         "@codemirror/commands": "^6.0.0",
+@@ -3965,6 +3973,7 @@
+       "version": "7.6.2",
+       "resolved": "https://registry.npmjs.org/focus-trap/-/focus-trap-7.6.2.tgz",
+       "integrity": "sha512-9FhUxK1hVju2+AiQIDJ5Dd//9R2n2RAfJ0qfhF4IHGHgcoEUTMpbTeG/zbEuwaiYXfuAH6XE0/aCyxDdRM+W5w==",
++      "peer": true,
+       "requires": {
+         "tabbable": "^6.2.0"
+       }
+@@ -4285,6 +4294,7 @@
+       "version": "8.4.47",
+       "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.4.47.tgz",
+       "integrity": "sha512-56rxCq7G/XfB4EkXq9Egn5GCqugWvDFjafDOThIdMBsI15iqPqR5r15TfSr1YPYeEI19YeaXMCbY6u88Y76GLQ==",
++      "peer": true,
+       "requires": {
+         "nanoid": "^3.3.7",
+         "picocolors": "^1.1.0",
+@@ -4638,6 +4648,7 @@
+       "resolved": "https://registry.npmjs.org/vite/-/vite-3.1.8.tgz",
+       "integrity": "sha512-m7jJe3nufUbuOfotkntGFupinL/fmuTNuQmiVE7cH2IZMuf4UbfbGYMUT3jVWgGYuRVLY9j8NnrRqgw5rr5QTg==",
+       "dev": true,
++      "peer": true,
+       "requires": {
+         "esbuild": "^0.15.9",
+         "fsevents": "~2.3.2",
+@@ -4650,6 +4661,7 @@
+       "version": "3.5.10",
+       "resolved": "https://registry.npmjs.org/vue/-/vue-3.5.10.tgz",
+       "integrity": "sha512-Vy2kmJwHPlouC/tSnIgXVg03SG+9wSqT1xu1Vehc+ChsXsRd7jLkKgMltVEFOzUdBr3uFwBCG+41LJtfAcBRng==",
++      "peer": true,
+       "requires": {
+         "@vue/compiler-dom": "3.5.10",
+         "@vue/compiler-sfc": "3.5.10",
+-- 
+2.51.2
+

@@ -1,0 +1,35 @@
+diff --git a/LuaRenamer/LuaRenamer.csproj b/LuaRenamer/LuaRenamer.csproj
+index c4f0508..b9e001c 100644
+--- a/LuaRenamer/LuaRenamer.csproj
++++ b/LuaRenamer/LuaRenamer.csproj
+@@ -33,30 +33,4 @@
+         </None>
+     </ItemGroup>
+ 
+-    <Target Name="GetGitAssemblyVersion" BeforeTargets="GetAssemblyVersion">
+-        <Exec Command="git describe --match &quot;v[0-9]*.[0-9]*.[0-9]*&quot; --tags --abbrev=7 --long --dirty --always" ConsoleToMsBuild="true">
+-            <Output TaskParameter="ConsoleOutput" PropertyName="GitInfo" />
+-        </Exec>
+-
+-        <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(GitInfo)', '\d+\.\d+\.\d+'))">
+-            <Version>$([System.Text.RegularExpressions.Regex]::Match('$(GitInfo)', '\d+\.\d+\.\d+'))</Version>
+-            <InformationalVersion>$(GitInfo)</InformationalVersion>
+-        </PropertyGroup>
+-    </Target>
+-
+-    <Target Name="PackageForRelease" AfterTargets="Publish">
+-        <PropertyGroup>
+-            <ZipDir>$(PublishDir)ZipDir/</ZipDir>
+-            <ZipDestination>$(PublishDir)../$(ProjectName)_$([MSBuild]::ValueOrDefault("$(RuntimeIdentifier)","Portable"))_$(GitInfo).zip</ZipDestination>
+-        </PropertyGroup>
+-
+-        <ItemGroup>
+-            <ZipOut Include="$(PublishDir)**/*" />
+-        </ItemGroup>
+-
+-        <Copy SourceFiles="@(ZipOut)" DestinationFolder="$(ZipDir)$(ProjectName)/%(RecursiveDir)" />
+-        <ZipDirectory SourceDirectory="$(ZipDir)" DestinationFile="$(ZipDestination)" Overwrite="true" />
+-        <RemoveDir Directories="$(ZipDir)" />
+-    </Target>
+-
+ </Project>

@@ -1,0 +1,18 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 37fb8d0c..21571714 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -730,10 +730,9 @@ volume_transfer_request_show = "openstackclient.volume.v3.volume_transfer_reques
+ volume_summary = "openstackclient.volume.v3.volume:VolumeSummary"
+ volume_revert = "openstackclient.volume.v3.volume:VolumeRevertToSnapshot"
+ 
+-[tool.setuptools]
+-packages = [
+-    "openstackclient"
+-]
++[tool.setuptools.packages.find]
++where = ["."]
++include = ["openstackclient*"]
+ 
+ [tool.mypy]
+ python_version = "3.10"

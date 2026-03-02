@@ -1,0 +1,19 @@
+diff --git a/Makefile b/Makefile
+index e75c22e80b..f702da6f80 100644
+--- a/Makefile
++++ b/Makefile
+@@ -757,12 +757,8 @@
+ # otherwise try to rebuild all targets depending on it whenever we build
+ # something else. We thus depend on the Makefile instead.
+ ${DEPENDENCY_DIR}/git-%/Makefile: ${DEPENDENCY_DIR}/git-%.version
+-	${Q}${GIT} -c init.defaultBranch=master init ${GIT_QUIET} "${@D}"
+-	${Q}${GIT} -C "${@D}" config remote.origin.url ${GIT_REPO_URL}
+-	${Q}${GIT} -C "${@D}" config remote.origin.tagOpt --no-tags
+-	${Q}${GIT} -C "${@D}" fetch --depth 1 ${GIT_QUIET} origin ${GIT_VERSION}
+-	${Q}${GIT} -C "${@D}" reset --hard
+-	${Q}${GIT} -C "${@D}" checkout ${GIT_QUIET} --detach FETCH_HEAD
++	cp -r ${GIT_REPO_PATH} "${@D}"
++	chmod -R oga+rw "${@D}"
+ ifeq ($(OVERRIDE_GIT_VERSION),)
+ 	${Q}rm -f "${@D}"/version
+ else

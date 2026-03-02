@@ -1,0 +1,20 @@
+--- a/utils/gammu-config
++++ b/utils/gammu-config
+@@ -59,16 +59,7 @@
+     shift
+ done
+ 
+-if type dialog > /dev/null 2>&1 ; then
+-    DIALOG=dialog
+-elif type cdialog > /dev/null 2>&1 ; then
+-    DIALOG=cdialog
+-elif type whiptail > /dev/null 2>&1 ; then
+-    DIALOG=whiptail
+-else
+-    echo "You need dialog, cdialog or whiptail installed to make this work"
+-    exit 1
+-fi
++DIALOG=@dialog@
+ 
+ if [ -f "$CONFIG" ] ; then
+     if [ ! -w "$CONFIG" ] ; then

@@ -1,0 +1,86 @@
+{
+  python3Packages,
+  fetchFromGitHub,
+  ffmpeg_7,
+  lib,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+}:
+
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "ytdl-sub";
+  version = "2026.02.04";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "jmbannon";
+    repo = "ytdl-sub";
+    tag = finalAttrs.version;
+    hash = "sha256-c6TQMWp7vlC5T5ZjS+uLVS2vfoSk1+g/4LS+bRYilSc=";
+  };
+
+  postPatch = ''
+    echo '__pypi_version__ = "${finalAttrs.version}"; __local_version__ = "${finalAttrs.version}"' > src/ytdl_sub/__init__.py
+  '';
+
+  pythonRelaxDeps = [ "yt-dlp" ];
+
+  build-system = with python3Packages; [
+    setuptools
+    wheel
+  ];
+
+  dependencies = with python3Packages; [
+    yt-dlp
+    colorama
+    mergedeep
+    mediafile
+    pyyaml
+  ];
+
+  makeWrapperArgs = [
+    "--set YTDL_SUB_FFMPEG_PATH ${lib.getExe' ffmpeg_7 "ffmpeg"}"
+    "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg_7 "ffprobe"}"
+  ];
+
+  nativeCheckInputs = [
+    versionCheckHook
+    python3Packages.pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  env = {
+    YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg_7 "ffmpeg"}";
+    YTDL_SUB_FFPROBE_PATH = "${lib.getExe' ffmpeg_7 "ffprobe"}";
+  };
+
+  disabledTests = [
+    "test_logger_can_be_cleaned_during_execution"
+    "test_no_config_works"
+    "test_presets_run"
+    "test_thumbnail"
+  ];
+
+  disabledTestPaths = [
+    # According to documentation, e2e tests can be flaky:
+    # "This checksum can be inaccurate for end-to-end tests"
+    "tests/e2e"
+  ];
+
+  passthru.updateScript = ./update.sh;
+
+  meta = {
+    homepage = "https://github.com/jmbannon/ytdl-sub";
+    description = "Lightweight tool to automate downloading and metadata generation with yt-dlp";
+    longDescription = ''
+      ytdl-sub is a command-line tool that downloads media via yt-dlp and prepares it for your favorite media player, including Kodi, Jellyfin, Plex, Emby, and modern music players. No additional plugins or external scrapers are needed.
+    '';
+    changelog = "https://github.com/jmbannon/ytdl-sub/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      loc
+      defelo
+    ];
+    mainProgram = "ytdl-sub";
+  };
+})

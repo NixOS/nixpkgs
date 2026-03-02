@@ -1,0 +1,75 @@
+{
+  lib,
+  aiounittest,
+  buildPythonPackage,
+  fetchPypi,
+  freezegun,
+  google-api-core,
+  google-cloud-core,
+  google-cloud-testutils,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+}:
+
+buildPythonPackage rec {
+  pname = "google-cloud-firestore";
+  version = "2.23.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    pname = "google_cloud_firestore";
+    inherit version;
+    hash = "sha256-qc/7p83GEBER1tVM3iLVIcmPnn1BXmdIaxN/oW8GqgM=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    google-api-core
+    google-cloud-core
+    proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
+    aiounittest
+    freezegun
+    google-cloud-testutils
+    mock
+    pytest-asyncio
+    pytestCheckHook
+    pyyaml
+  ];
+
+  preCheck = ''
+    # do not shadow imports
+    rm -r google
+  '';
+
+  disabledTestPaths = [
+    # Tests are broken
+    "tests/system/test_system.py"
+    "tests/system/test_system_async.py"
+    # Test requires credentials
+    "tests/system/test_pipeline_acceptance.py"
+  ];
+
+  pythonImportsCheck = [
+    "google.cloud.firestore_v1"
+    "google.cloud.firestore_admin_v1"
+  ];
+
+  meta = {
+    description = "Google Cloud Firestore API client library";
+    homepage = "https://github.com/googleapis/python-firestore";
+    changelog = "https://github.com/googleapis/python-firestore/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+  };
+}

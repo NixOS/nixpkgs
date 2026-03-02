@@ -1,0 +1,11 @@
+index 897f59f530..c94a4a804f 100644
+--- a/library/core/src/os/mod.rs
++++ b/library/core/src/os/mod.rs
+@@ -1,6 +1,7 @@
+ //! OS-specific functionality.
+
+ #![unstable(feature = "darwin_objc", issue = "145496")]
++#[allow(missing_docs)]
+
+ #[cfg(all(
+     doc,

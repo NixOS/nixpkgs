@@ -1,0 +1,34 @@
+From c60a9658fe2ca429327680fbffb86f609d98c52c Mon Sep 17 00:00:00 2001
+From: Flakebi <flakebi@t-online.de>
+Date: Sat, 2 Dec 2023 16:27:49 +0100
+Subject: [PATCH 2/6] Remove cssrewrite filter
+
+---
+ powerdnsadmin/assets.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/powerdnsadmin/assets.py b/powerdnsadmin/assets.py
+index d46d431..3c582be 100644
+--- a/powerdnsadmin/assets.py
++++ b/powerdnsadmin/assets.py
+@@ -13,7 +13,7 @@ css_login = Bundle(
+     'node_modules/@fortawesome/fontawesome-free/css/all.css',
+     'node_modules/icheck/skins/square/blue.css',
+     'node_modules/admin-lte/dist/css/adminlte.css',
+-    filters=('rcssmin', 'cssrewrite'),
++    filters=('rcssmin'),
+     output='generated/login.css')
+ 
+ js_login = Bundle(
+@@ -37,7 +37,7 @@ css_main = Bundle(
+     'node_modules/admin-lte/dist/css/adminlte.css',
+     'custom/css/custom.css',
+     'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.css',
+-    filters=('rcssmin', 'cssrewrite'),
++    filters=('rcssmin'),
+     output='generated/main.css')
+ 
+ js_main = Bundle(
+-- 
+2.42.0
+

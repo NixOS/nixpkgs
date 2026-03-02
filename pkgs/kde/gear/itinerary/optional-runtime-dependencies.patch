@@ -1,0 +1,13 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -80,8 +80,8 @@ ecm_find_qmlmodule(QtPositioning 6.0)
+ ecm_find_qmlmodule(org.kde.kitemmodels ${KF_MIN_VERSION})
+ ecm_find_qmlmodule(org.kde.prison ${KF_MIN_VERSION})
+ ecm_find_qmlmodule(org.kde.prison.scanner ${KF_MIN_VERSION})
+-ecm_find_qmlmodule(org.kde.kosmindoormap ${GEAR_MIN_VERSION} REQUIRED)
+-ecm_find_qmlmodule(org.kde.kopeninghours ${GEAR_MIN_VERSION} REQUIRED)
++ecm_find_qmlmodule(org.kde.kosmindoormap ${GEAR_MIN_VERSION})
++ecm_find_qmlmodule(org.kde.kopeninghours ${GEAR_MIN_VERSION})
+ 
+ # runtime dependencies are build-time dependencies on Android
+ if (ANDROID)

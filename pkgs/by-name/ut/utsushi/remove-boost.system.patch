@@ -1,0 +1,31 @@
+diff --git a/configure.ac.original b/configure.ac
+index 8997eb9..8613429 100644
++++ b/configure.ac
+--- a/configure.ac.original
+@@ -245,8 +245,7 @@ AM_CONDITIONAL([with_static_enabled], [test xyes = x$enable_static])
+                                 dnl  cross-platform C++ extensions
+ AS_IF([test xyes != x$with_included_boost],
+   [AX_BOOST_BASE([1.49.0],
+-     [AX_BOOST_SYSTEM
+-      AX_BOOST_FILESYSTEM
++     [AX_BOOST_FILESYSTEM
+       AX_BOOST_IOSTREAMS
+       AX_BOOST_PROGRAM_OPTIONS
+       AS_IF([test $__cplusplus -lt 201103], [AX_BOOST_REGEX])
+@@ -270,7 +269,6 @@ AS_IF([test xyes = x$with_included_boost],
+       aux_dir=`echo $ac_aux_dir | sed "s,^$srcdir/,,"`
+       BOOST_CPPFLAGS="-I\$(top_srcdir)/$aux_dir/boost"
+       BOOST_LDFLAGS="-L\$(top_builddir)/$aux_dir/boost/lib"
+-      BOOST_SYSTEM_LIB=-lboost_system
+       BOOST_FILESYSTEM_LIB=-lboost_filesystem
+       BOOST_IOSTREAMS_LIB=-lboost_iostreams
+       BOOST_PROGRAM_OPTIONS_LIB=-lboost_program_options
+@@ -324,7 +322,7 @@ AS_IF([test xyes = x$with_boost_unit_test_framework],
+ #  Work around implicit dependencies on Boost.System through the use
+ #  of Boost.Filesystem in several locations.
+ 
+-BOOST_FILESYSTEM_LIB="$BOOST_FILESYSTEM_LIB $BOOST_SYSTEM_LIB"
++BOOST_FILESYSTEM_LIB="$BOOST_FILESYSTEM_LIB"
+ 
+                                 dnl  documentation generation tools
+ AC_CHECK_PROGS([DOXYGEN], [doxygen])

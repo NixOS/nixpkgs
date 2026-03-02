@@ -1,0 +1,215 @@
+diff -ur a/generic/tixDItem.c b/generic/tixDItem.c
+--- a/generic/tixDItem.c	2004-03-27 19:44:56.000000000 -0700
++++ b/generic/tixDItem.c	2023-07-11 14:49:51.583894242 -0600
+@@ -30,7 +30,7 @@
+ 		Tcl_Interp *interp, Tk_Window tkwin, CONST84 char *value,
+ 		char *widRec, int offset));
+ 
+-static char *DItemPrintProc _ANSI_ARGS_((
++static const char *DItemPrintProc _ANSI_ARGS_((
+ 		ClientData clientData, Tk_Window tkwin, char *widRec,
+ 		int offset, Tcl_FreeProc **freeProcPtr));
+ 
+@@ -548,7 +548,7 @@
+     return TCL_OK;
+ }
+ 
+-static char *DItemPrintProc(clientData, tkwin, widRec,offset, freeProcPtr)
++static const char *DItemPrintProc(clientData, tkwin, widRec,offset, freeProcPtr)
+     ClientData clientData;
+     Tk_Window tkwin;
+     char *widRec;
+diff -ur a/generic/tixDiStyle.c b/generic/tixDiStyle.c
+--- a/generic/tixDiStyle.c	2004-03-27 19:44:56.000000000 -0700
++++ b/generic/tixDiStyle.c	2023-07-11 15:02:45.245210252 -0600
+@@ -31,7 +31,7 @@
+ static int   		DItemStyleParseProc _ANSI_ARGS_((ClientData clientData,
+ 			    Tcl_Interp *interp, Tk_Window tkwin,
+ 			    CONST84 char *value,char *widRec, int offset));
+-static char *		DItemStylePrintProc _ANSI_ARGS_((
++static const char *		DItemStylePrintProc _ANSI_ARGS_((
+ 			    ClientData clientData, Tk_Window tkwin, 
+ 			    char *widRec, int offset,
+ 			    Tcl_FreeProc **freeProcPtr));
+@@ -785,7 +785,7 @@
+ 
+     hashPtr = Tcl_CreateHashEntry(&stylePtr->base.items, (char*)iPtr, &isNew);
+     if (!isNew) {
+-	panic("DItem is already associated with style");
++	Tcl_Panic("DItem is already associated with style");
+     } else {
+ 	Tcl_SetHashValue(hashPtr, (char*)iPtr);
+     }
+@@ -801,7 +801,7 @@
+ 
+     hashPtr = Tcl_FindHashEntry(&stylePtr->base.items, (char*)iPtr);
+     if (hashPtr == NULL) {
+-	panic("DItem is not associated with style");
++	Tcl_Panic("DItem is not associated with style");
+     }
+     Tcl_DeleteHashEntry(hashPtr);
+     stylePtr->base.refCount--;
+@@ -998,7 +998,7 @@
+     return TCL_ERROR;
+ }
+ 
+-static char *DItemStylePrintProc(clientData, tkwin, widRec,offset, freeProcPtr)
++static const char *DItemStylePrintProc(clientData, tkwin, widRec,offset, freeProcPtr)
+     ClientData clientData;
+     Tk_Window tkwin;
+     char *widRec;
+diff -ur a/generic/tixForm.c b/generic/tixForm.c
+--- a/generic/tixForm.c	2004-03-27 19:44:56.000000000 -0700
++++ b/generic/tixForm.c	2023-07-11 14:53:45.695753419 -0600
+@@ -802,7 +802,7 @@
+      * Now set all the client's geometry
+      */
+     if (PlaceAllClients(masterPtr) != TCL_OK) {
+-	panic("circular dependency");
++	Tcl_Panic("circular dependency");
+     }
+ 
+     for (clientPtr = masterPtr->client; clientPtr; clientPtr=clientPtr->next) {
+diff -ur a/generic/tixGrData.c b/generic/tixGrData.c
+--- a/generic/tixGrData.c	2004-03-27 19:44:56.000000000 -0700
++++ b/generic/tixGrData.c	2023-07-11 14:54:19.644741199 -0600
+@@ -296,7 +296,7 @@
+ 	Tcl_DeleteHashEntry(cy);
+     }
+     else {
+-	panic("Inconsistent grid dataset: (%d,%d) : %x %x", x, y, cx, cy);
++	Tcl_Panic("Inconsistent grid dataset: (%d,%d) : %x %x", x, y, cx, cy);
+     }
+ 
+     return 1;
+diff -ur a/generic/tixGrid.c b/generic/tixGrid.c
+--- a/generic/tixGrid.c	2008-02-27 21:10:43.000000000 -0700
++++ b/generic/tixGrid.c	2023-07-11 14:53:59.283841038 -0600
+@@ -831,7 +831,7 @@
+ 	 * All mapped windows should have been unmapped when the
+ 	 * the entries were deleted
+ 	 */
+-	panic("tixGrid: mappedWindows not NULL");
++	Tcl_Panic("tixGrid: mappedWindows not NULL");
+     }
+ 
+     Tk_FreeOptions(configSpecs, (char *) wPtr, wPtr->dispData.display, 0);
+diff -ur a/generic/tixHList.c b/generic/tixHList.c
+--- a/generic/tixHList.c	2008-02-27 21:05:29.000000000 -0700
++++ b/generic/tixHList.c	2023-07-11 14:55:20.699375202 -0600
+@@ -2036,7 +2036,7 @@
+ 	    break;
+ 	}
+ 	if (wPtr->headerWin != NULL) {
+-	    panic("HList: header subwindow deleted illegally\n");
++	    Tcl_Panic("HList: header subwindow deleted illegally\n");
+ 	}
+ #endif
+ 	break;
+@@ -2117,7 +2117,7 @@
+ 	 * All mapped windows should have been unmapped when the
+ 	 * the entries were deleted
+ 	 */
+-	panic("tixHList: mappedWindows not NULL");
++	Tcl_Panic("tixHList: mappedWindows not NULL");
+     }
+     if (wPtr->headerWin) {
+ 	wPtr->headerWin = NULL;
+diff -ur a/generic/tixImgCmp.c b/generic/tixImgCmp.c
+--- a/generic/tixImgCmp.c	2008-02-27 21:05:29.000000000 -0700
++++ b/generic/tixImgCmp.c	2023-07-11 14:59:16.429640785 -0600
+@@ -142,8 +142,8 @@
+  * The type record for bitmap images:
+  */
+ static int		ImgCmpCreate _ANSI_ARGS_((Tcl_Interp *interp,
+-			    char *name, int argc, Tcl_Obj *CONST objv[],
+-			    Tk_ImageType *typePtr, Tk_ImageMaster master,
++			    const char *name, int argc, Tcl_Obj *CONST objv[],
++			    const Tk_ImageType *typePtr, Tk_ImageMaster master,
+ 			    ClientData *clientDataPtr));
+ static ClientData	ImgCmpGet _ANSI_ARGS_((Tk_Window tkwin,
+ 			    ClientData clientData));
+@@ -378,11 +378,11 @@
+ ImgCmpCreate(interp, name, argc, objv, typePtr, master, clientDataPtr)
+     Tcl_Interp *interp;		/* Interpreter for application containing
+ 				 * image. */
+-    char *name;			/* Name to use for image. */
++    const char *name;		/* Name to use for image. */
+     int argc;			/* Number of arguments. */
+     Tcl_Obj *CONST objv[];	/* Argument strings for options (doesn't
+ 				 * include image name or type). */
+-    Tk_ImageType *typePtr;	/* Pointer to our type record (not used). */
++    const Tk_ImageType *typePtr;/* Pointer to our type record (not used). */
+     Tk_ImageMaster master;	/* Token for image, to be used by us in
+ 				 * later callbacks. */
+     ClientData *clientDataPtr;	/* Store manager's token for image here;
+diff -ur a/generic/tixImgXpm.c b/generic/tixImgXpm.c
+--- a/generic/tixImgXpm.c	2023-07-11 15:01:05.887387236 -0600
++++ b/generic/tixImgXpm.c	2023-07-11 15:00:37.209042328 -0600
+@@ -22,8 +22,8 @@
+  */
+ 
+ static int		ImgXpmCreate _ANSI_ARGS_((Tcl_Interp *interp,
+-			    char *name, int argc, Tcl_Obj *CONST objv[],
+-			    Tk_ImageType *typePtr, Tk_ImageMaster master,
++			    const char *name, int argc, Tcl_Obj *CONST objv[],
++			    const Tk_ImageType *typePtr, Tk_ImageMaster master,
+ 			    ClientData *clientDataPtr));
+ static ClientData	ImgXpmGet _ANSI_ARGS_((Tk_Window tkwin,
+ 			    ClientData clientData));
+@@ -115,11 +115,11 @@
+ ImgXpmCreate(interp, name, argc, objv, typePtr, master, clientDataPtr)
+     Tcl_Interp *interp;		/* Interpreter for application containing
+ 				 * image. */
+-    char *name;			/* Name to use for image. */
++    const char *name;		/* Name to use for image. */
+     int argc;			/* Number of arguments. */
+     Tcl_Obj *CONST objv[];	/* Argument strings for options (doesn't
+ 				 * include image name or type). */
+-    Tk_ImageType *typePtr;	/* Pointer to our type record (not used). */
++    const Tk_ImageType *typePtr;/* Pointer to our type record (not used). */
+     Tk_ImageMaster master;	/* Token for image, to be used by us in
+ 				 * later callbacks. */
+     ClientData *clientDataPtr;	/* Store manager's token for image here;
+@@ -1213,7 +1213,7 @@
+     PixmapMaster *masterPtr = (PixmapMaster *) masterData;
+ 
+     if (masterPtr->instancePtr != NULL) {
+-	panic("tried to delete pixmap image when instances still exist");
++	Tcl_Panic("tried to delete pixmap image when instances still exist");
+     }
+     masterPtr->tkMaster = NULL;
+     if (masterPtr->imageCmd != NULL) {
+diff -ur a/generic/tixTList.c b/generic/tixTList.c
+--- a/generic/tixTList.c	2008-02-27 21:05:29.000000000 -0700
++++ b/generic/tixTList.c	2023-07-11 14:55:35.960761327 -0600
+@@ -1208,7 +1208,7 @@
+ 	    sprintf(buff, "%d", i);
+ 	    Tcl_AppendResult(interp, buff, NULL);
+ 	} else {
+-	    panic("TList list entry is invalid");
++	    Tcl_Panic("TList list entry is invalid");
+ 	}
+     } else {
+ 	Tcl_ResetResult(interp);
+diff -ur a/generic/tixUtils.c b/generic/tixUtils.c
+--- a/generic/tixUtils.c	2008-02-27 21:29:17.000000000 -0700
++++ b/generic/tixUtils.c	2023-07-11 15:01:43.718202631 -0600
+@@ -24,7 +24,7 @@
+ static int	ReliefParseProc(ClientData clientData,
+ 	Tcl_Interp *interp, Tk_Window tkwin, CONST84 char *value,
+ 	char *widRec, int offset);
+-static char *	ReliefPrintProc(ClientData clientData,
++static const char *	ReliefPrintProc(ClientData clientData,
+ 	Tk_Window tkwin, char *widRec, int offset,
+ 	Tix_FreeProc **freeProcPtr);
+ 
+@@ -637,7 +637,7 @@
+     return TCL_ERROR;
+ }
+ 
+-static char *
++static const char *
+ ReliefPrintProc(clientData, tkwin, widRec,offset, freeProcPtr)
+     ClientData clientData;
+     Tk_Window tkwin;

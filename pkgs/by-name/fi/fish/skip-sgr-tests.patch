@@ -1,0 +1,19 @@
+diff --git a/src/terminal.rs b/src/terminal.rs
+--- a/src/terminal.rs
++++ b/src/terminal.rs
+@@ -787,6 +787,7 @@
+         SgrTerminalCommand::ExitAttributeMode,
+     };
+
++    #[ignore]
+     #[test]
+     fn sgr_combining() {
+         // No style, no content
+@@ -823,6 +824,7 @@
+         assert_eq!(String::from_utf8_lossy(outp.contents()), "\u{1b}[30;40m");
+     }
+
++    #[ignore]
+     #[test]
+     fn sgr_max_length() {
+         // Cut at max length

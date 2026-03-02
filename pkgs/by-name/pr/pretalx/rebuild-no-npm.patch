@@ -1,0 +1,21 @@
+diff --git a/src/pretalx/common/management/commands/rebuild.py b/src/pretalx/common/management/commands/rebuild.py
+index 45c83aab3..8c8c1e590 100644
+--- a/src/pretalx/common/management/commands/rebuild.py
++++ b/src/pretalx/common/management/commands/rebuild.py
+@@ -45,16 +45,6 @@ def handle(self, *args, **options):
+         call_command(
+             "collectstatic", verbosity=silent, interactive=False, clear=options["clear"]
+         )
+-        with override_settings(VITE_IGNORE=True):
+-            frontend_dir = (
+-                Path(__file__).parent.parent.parent.parent / "frontend/schedule-editor/"
+-            )
+-            env = os.environ.copy()
+-            env["OUT_DIR"] = str(settings.STATIC_ROOT)
+-            env["BASE_URL"] = settings.STATIC_URL
+-            if options["npm_install"] or not (frontend_dir / "node_modules").exists():
+-                subprocess.check_call(["npm", "ci"], cwd=frontend_dir)
+-            subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)
+ 
+         # This fails if we don't have db access, which is fine
+         with suppress(Exception):

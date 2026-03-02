@@ -1,0 +1,18 @@
+diff --git a/Gemfile.lock b/Gemfile.lock
+index d45a7657..d0a7b750 100644
+--- a/Gemfile.lock
++++ b/Gemfile.lock
+@@ -172,12 +172,7 @@ GEM
+       railties (>= 6.1.0)
+     fakeredis (0.1.4)
+     ffaker (2.25.0)
+-    ffi (1.17.2-aarch64-linux-gnu)
+-    ffi (1.17.2-arm-linux-gnu)
+-    ffi (1.17.2-arm64-darwin)
+-    ffi (1.17.2-x86-linux-gnu)
+-    ffi (1.17.2-x86_64-darwin)
+-    ffi (1.17.2-x86_64-linux-gnu)
++    ffi (1.17.2)
+     foreman (0.90.0)
+       thor (~> 1.4)
+     fugit (1.11.1)

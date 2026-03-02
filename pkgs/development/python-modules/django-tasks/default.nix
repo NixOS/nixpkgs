@@ -1,0 +1,91 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  django,
+  django-stubs-ext,
+  typing-extensions,
+  mysqlclient,
+  psycopg,
+  dj-database-url,
+  django-rq,
+  fakeredis,
+  pytestCheckHook,
+  pytest-django,
+  redisTestHook,
+}:
+
+buildPythonPackage rec {
+  pname = "django-tasks";
+  version = "0.11.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "RealOrangeOne";
+    repo = "django-tasks";
+    tag = version;
+    hash = "sha256-WU2TQa4FMEqtNtetH4qAyXqkrP/9PTw/K63MfUWEWGw=";
+  };
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    django
+    django-stubs-ext
+    typing-extensions
+  ];
+
+  optional-dependencies = {
+    mysql = [
+      mysqlclient
+    ];
+    postgres = [
+      psycopg
+    ];
+  };
+
+  pythonImportsCheck = [ "django_tasks" ];
+
+  # redis hook does not support darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  nativeCheckInputs = [
+    django-rq
+    dj-database-url
+    fakeredis
+    pytestCheckHook
+    pytest-django
+    redisTestHook
+  ];
+
+  disabledTests = [
+    # AssertionError: Lists differ: [] != ['Starting worker for queues=default', ...
+    "test_verbose_logging"
+    # AssertionError: '' != 'Deleted 0 task result(s)'
+    "test_doesnt_prune_new_task"
+    # AssertionError: '' != 'Would delete 1 task result(s)'
+    "test_dry_run"
+    # AssertionError: '' != 'Deleted 1 task result(s)'
+    "test_prunes_tasks"
+    # AssertionError: 'Run maximum tasks (2)' not found in ''
+    "test_max_tasks"
+    # AssertionError: <django_tasks.backends.database.backend.DatabaseBackend object at 0x7ffff3fa3cd0> is not an instance of <class 'django_tasks.backends.immediate.ImmediateBackend'>
+    "test_uses_lib_tasks_by_default"
+  ];
+
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE="tests.settings"
+  '';
+
+  meta = {
+    description = "Reference implementation and backport of background workers and tasks in Django";
+    homepage = "https://github.com/RealOrangeOne/django-tasks";
+    changelog = "https://github.com/RealOrangeOne/django-tasks/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+  };
+}

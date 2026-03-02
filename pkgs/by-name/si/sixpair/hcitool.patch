@@ -1,0 +1,19 @@
+diff --git a/sixpair.c b/sixpair.c
+index b009a6f..78b7ef0 100644
+--- a/sixpair.c
++++ b/sixpair.c
+@@ -76,11 +76,11 @@ void process_device(int argc, char **argv, struct usb_device *dev,
+       exit(1);
+     }
+   } else {
+-    FILE *f = popen("hcitool dev", "r");
++    FILE *f = popen("bluetoothctl list", "r");
+     if ( !f ||
+-	 fscanf(f, "%*s\n%*s %x:%x:%x:%x:%x:%x",
++	 fscanf(f, "%*s %x:%x:%x:%x:%x:%x",
+ 		&mac[0],&mac[1],&mac[2],&mac[3],&mac[4],&mac[5]) != 6 ) {
+-      printf("Unable to retrieve local bd_addr from `hcitool dev`.\n");
++      printf("Unable to retrieve local bd_addr from `bluetoothctl list`.\n");
+       printf("Please enable Bluetooth or specify an address manually.\n");
+       exit(1);
+     }

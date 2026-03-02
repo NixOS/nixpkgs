@@ -1,0 +1,14 @@
+diff --git a/extras/CMakeLists.txt b/extras/CMakeLists.txt
+index 21f61d0d18..db359dbbec 100644
+--- a/extras/CMakeLists.txt
++++ b/extras/CMakeLists.txt
+@@ -31,9 +31,4 @@
+ # ==============================================================================
+ 
+ set(CMAKE_FOLDER extras)
+-add_subdirectory(AudioPerformanceTest)
+-add_subdirectory(AudioPluginHost)
+-add_subdirectory(BinaryBuilder)
+-add_subdirectory(NetworkGraphicsDemo)
+ add_subdirectory(Projucer)
+-add_subdirectory(UnitTestRunner)
