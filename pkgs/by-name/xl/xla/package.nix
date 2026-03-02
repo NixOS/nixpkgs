@@ -1,6 +1,7 @@
 {
   bazel_7,
   buildBazelPackage,
+  cctools,
   curl,
   double-conversion,
   fetchFromGitHub,
@@ -18,6 +19,7 @@
   python3,
   snappy,
   sqlite,
+  stdenv,
   which,
   zlib,
 }:
@@ -71,7 +73,8 @@ in
     gitMinimal
     pythonEnv # necessary for some patchShebang'ing
     which
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
   buildInputs = [
     curl
@@ -136,6 +139,14 @@ in
     "--host_cxxopt=cstdint"
     # Exclude mobile/iOS targets that have Bazel incompatibilities
     "--build_tag_filters=-mobile,-ios"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Set macOS deployment target to suppress availability errors (e.g.
+    # futimens requires 10.13+) in both target and host-tool builds.
+    "--copt=-mmacosx-version-min=11.0"
+    "--host_copt=-mmacosx-version-min=11.0"
+    "--linkopt=-mmacosx-version-min=11.0"
+    "--host_linkopt=-mmacosx-version-min=11.0"
   ];
 
   removeRulesCC = false;
@@ -146,10 +157,16 @@ in
   removeLocal = false;
 
   fetchAttrs = {
-    sha256 = "sha256-OJfSqDlEC+yhWwwMwaD5HGvuHm8OWk+yQxmbH0/gZ88=";
+    sha256 =
+      {
+        x86_64-linux = "sha256-OJfSqDlEC+yhWwwMwaD5HGvuHm8OWk+yQxmbH0/gZ88=";
+        aarch64-darwin = "sha256-sKxtdgozCV1on1gd+bm8FKyFxP0u70Hs24OdLNA3jh0=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
     preInstall = ''
       rm -rf $bazelOut/external/{local_config_python,\@local_config_python.marker}
       rm -rf $bazelOut/external/{local_config_sh,\@local_config_sh.marker}
+      rm -rf $bazelOut/external/{local_config_xcode,\@local_config_xcode.marker}
       rm -rf $bazelOut/external/{local_execution_config_python,\@local_execution_config_python.marker}
       rm -rf $bazelOut/external/{local_jdk,\@local_jdk.marker}
     '';
@@ -187,18 +204,9 @@ in
     homepage = "https://github.com/openxla/xla";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
-    platforms = lib.platforms.unix;
-    badPlatforms = [
-      # ERROR: /build/output/external/local_config_cc/BUILD: no such target
-      # '@@local_config_cc//:cc-compiler-k8': target 'cc-compiler-k8' not declared in package ''
-      # defined by /build/output/external/local_config_cc/BUILD
-      "aarch64-linux"
-
-      # Bazel fails to build on darwin:
-      # ERROR: no such package '@@bazel_tools~xcode_configure_extension~local_config_xcode//':
-      # BUILD file not found in directory '' of external repository @@bazel_tools~xcode_configure_extension~local_config_xcode.
-      # Add a BUILD file to a directory to mark it as a package.
-      lib.systems.inspect.patterns.isDarwin
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
     ];
   };
 }
