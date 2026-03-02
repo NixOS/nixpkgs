@@ -1064,7 +1064,6 @@ let
         lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
         lambdapi = callPackage ../development/ocaml-modules/lambdapi {
-          cmdliner = cmdliner_1;
           why3 = pkgs.why3.override { ocamlPackages = self; };
         };
 

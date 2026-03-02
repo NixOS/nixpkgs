@@ -6,7 +6,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "stanc";
-  version = "2.37.0";
+  version = "2.38.0";
 
   minimalOCamlVersion = "4.12";
 
@@ -14,10 +14,13 @@ ocamlPackages.buildDunePackage rec {
     owner = "stan-dev";
     repo = "stanc3";
     tag = "v${version}";
-    hash = "sha256-d+sInQfnlT1gLbtIRPD+LUZgIdl519OrfvgSNYdYeII=";
+    hash = "sha256-j05PMQKIqkM9UWJzSVnkYWe6d+iUnmFOh1W8pZ7Fdyk=";
   };
 
-  nativeBuildInputs = with ocamlPackages; [ menhir ];
+  nativeBuildInputs = with ocamlPackages; [
+    cmdliner
+    menhir
+  ];
 
   buildInputs = with ocamlPackages; [
     core_unix
@@ -25,7 +28,7 @@ ocamlPackages.buildDunePackage rec {
     ppx_deriving
     fmt
     yojson
-    cmdliner_1
+    cmdliner
   ];
 
   meta = {

@@ -24,8 +24,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/web";
-      fetcherVersion = 1;
-      hash = "sha256-k+pykzAiZ72cMMH+6qtnNxjaq4m4QyCQuWvQPbZSZho=";
+      fetcherVersion = 3;
+      hash = "sha256-xEOnxCgBD4uLypcZzCO+31S4r0sSfz8PpgEmZASeRZ4=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
