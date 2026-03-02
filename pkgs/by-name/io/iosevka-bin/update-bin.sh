@@ -22,7 +22,7 @@ sed -i "s/$oldVersion/$version/" package.nix
     for asset in $(echo "$release" | jq -r '.assets[].name | select(startswith("PkgTTC"))'); do
         printf '  %s = "%s";\n' \
             $(echo "$asset" | sed -r "s/^PkgTTC-(.*)-$version.zip$/\1/") \
-            $(nix-prefetch-url "https://github.com/be5invis/Iosevka/releases/download/v$version/$asset")
+            $(nix-prefetch-url --unpack "https://github.com/be5invis/Iosevka/releases/download/v$version/$asset" | xargs nix hash convert --hash-algo sha256 --to sri)
     done
     echo '}'
 } >variants.nix

@@ -1,9 +1,9 @@
 {
-  stdenv,
   lib,
-  fetchurl,
+  stdenvNoCC,
+  fetchzip,
+  installFonts,
   iosevka,
-  unzip,
   variant ? "",
 }:
 
@@ -15,27 +15,23 @@ let
     builtins.attrNames (removeAttrs variantHashes [ "Iosevka" ])
   );
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "${name}-bin";
-  version = "34.1.0";
+  version = "34.2.1";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/be5invis/Iosevka/releases/download/v${finalAttrs.version}/PkgTTC-${name}-${finalAttrs.version}.zip";
-    sha256 =
+    hash =
       variantHashes.${name} or (throw ''
         No such variant "${variant}" for package iosevka-bin.
         Valid variants are: ${lib.concatStringsSep ", " validVariants}.
       '');
+    stripRoot = false;
   };
 
-  nativeBuildInputs = [ unzip ];
-
-  dontInstall = true;
-
-  unpackPhase = ''
-    mkdir -p $out/share/fonts
-    unzip -d $out/share/fonts/truetype $src
-  '';
+  nativeBuildInputs = [
+    installFonts
+  ];
 
   meta = {
     inherit (iosevka.meta)
