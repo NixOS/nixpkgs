@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "labelle";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labelle-org";
     repo = "labelle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yYhtA7Rxg95HCOIKTak172tcuTnWlCbSDlPQ9VOpoWE=";
+    hash = "sha256-dQHNkotSqCg5LJz9dDOTeIqNgP2D78A6aWFTc9LIFzA=";
   };
 
   postPatch = ''

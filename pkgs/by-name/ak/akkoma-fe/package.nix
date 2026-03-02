@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "akkoma-fe";
-  version = "3.12.0";
+  version = "3.12.0-unstable-2025-12-07";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-DK+KLAcT/10qhwmB+GoHN/7nOKJEJ32zSao8/fjgW7E=";
+    rev = "0da97ce1ea0255ddabe18537cfd78a4935237859";
+    hash = "sha256-fVItooES2PNoWGP8RfRo5Ibqi6d/ZyuRXUfud2uHg5Y=";
 
     # upstream repository archive fetching is broken
     forceFetchGit = true;
@@ -65,10 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      ''^v(\d+\.\d+\.\d+)$''
-    ];
+    extraArgs = [ "--version=branch=stable" ];
   };
 
   meta = {
