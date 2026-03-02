@@ -56,7 +56,7 @@ let
       }
     ))
     # No need to match up packages without maintainers with their files.
-    # This also filters out attributes where `packge = null`, which is the
+    # This also filters out attributes where `package = null`, which is the
     # case for libintl, for example.
     (lib.filter (pkg: pkg.users != [ ] || pkg.teams != [ ]))
   ];
