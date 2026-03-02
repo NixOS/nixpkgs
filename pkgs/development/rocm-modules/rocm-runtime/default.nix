@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./queue-failure.patch
     (fetchpatch {
       # [PATCH] rocr: Extend HIP ISA compatibility check
-      sha256 = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
+      hash = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
       url = "https://github.com/GZGavinZhao/rocm-systems/commit/dcef23cf896f4dcbc7ed81abeaa4ec2208dcdd8c.patch";
       relative = "projects/rocr-runtime";
     })

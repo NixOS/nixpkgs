@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-find-x11-libgl.patch
     (fetchpatch {
       # [PATCH] rocclr: Extend HIP ISA compatibility checks
-      sha256 = "sha256-3MsDL+OQg24wH1RDhbao74RuIbzEAmduwla9KOPzQ/M=";
+      hash = "sha256-3MsDL+OQg24wH1RDhbao74RuIbzEAmduwla9KOPzQ/M=";
       url = "https://github.com/GZGavinZhao/rocm-systems/commit/039cb23b24d739adb8c0f9de8b550d9f557de031.patch";
       relative = "projects/clr";
     })

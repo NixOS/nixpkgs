@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocminfo";
     rev = "rocm-${finalAttrs.version}";
-    sha256 = "sha256-Md91iH2YWU7ziNE//xxKuk2RrXdujO9mY6SZY5R9TqA=";
+    hash = "sha256-Md91iH2YWU7ziNE//xxKuk2RrXdujO9mY6SZY5R9TqA=";
   };
 
   strictDeps = true;

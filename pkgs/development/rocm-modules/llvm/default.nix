@@ -385,7 +385,7 @@ overrideLlvmPackagesRocm (s: {
           ./perf-shorten-gcclib-include-paths.patch
           (fetchpatch {
             # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
-            sha256 = "sha256-OsarDZXuJ5vAXTP4i0NBUeK/r6tQPumaqmMWkf29UtM=";
+            hash = "sha256-OsarDZXuJ5vAXTP4i0NBUeK/r6tQPumaqmMWkf29UtM=";
             url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/c7de294b0d1d25f277f9d1cbb2c9e09c7600e210.patch";
             relative = "clang";
           })

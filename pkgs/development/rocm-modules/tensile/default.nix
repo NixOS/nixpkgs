@@ -58,7 +58,7 @@ buildPythonPackage rec {
     ./tensile-create-library-dont-copy-twice.diff
     (fetchpatch {
       # [PATCH] Extend Tensile HIP ISA compatibility
-      sha256 = "sha256-ZHXNYSeLkhhNDaIfdqQm68Pxmh1shUL7mAVmh8/I6Xk=";
+      hash = "sha256-ZHXNYSeLkhhNDaIfdqQm68Pxmh1shUL7mAVmh8/I6Xk=";
       url = "https://github.com/GZGavinZhao/rocm-libraries/commit/1f7135dfc0cdb175c8f0e5eb71b2d24699942873.patch";
       relative = "shared/tensile";
     })
