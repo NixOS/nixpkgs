@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,13 +16,9 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-H03GTKRVPiwU4edkr4x5upW4JCy6320Lo+cKK9FRMQs=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/shabnam-fonts {} \;
-
-    runHook postInstall
-  '';
+  dontInstallWebfonts = true;
 
   meta = {
     homepage = "https://github.com/rastikerdar/shabnam-font";
