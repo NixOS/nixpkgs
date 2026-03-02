@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "dissect-apfs";
-  version = "1.0.1";
+  version = "1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.apfs";
     tag = version;
-    hash = "sha256-w8R8hoj3pqP0cKCd2S8jz8IRwxRp6eVN0xb0/6E2aKw=";
+    hash = "sha256-DCLaDXLE3WkWUNOhZpROaTxMrSF+of30G8D2ZXivJEg=";
   };
 
   build-system = [
