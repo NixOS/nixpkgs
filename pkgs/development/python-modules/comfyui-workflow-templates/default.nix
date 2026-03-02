@@ -57,7 +57,11 @@ buildPythonPackage rec {
     hash = "sha256-d78HMrQtKzUHGsYfaaJbIrIe/FhV3VBxFR4g8cQC5vE=";
   };
 
-  build-system = [ setuptools ] ++ lib.attrValues subPackages;
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = lib.attrValues subPackages;
 
   pythonImportsCheck = [ "comfyui_workflow_templates" ];
 
