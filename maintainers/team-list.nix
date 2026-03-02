@@ -719,6 +719,10 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  security-review = {
+    github = "security-review";
+  };
+
   stdenv = {
     enableFeatureFreezePing = true;
     github = "stdenv";
