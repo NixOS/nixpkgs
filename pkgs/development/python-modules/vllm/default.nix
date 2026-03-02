@@ -590,6 +590,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       happysalada
       lach
       daniel-fahey
+      LunNova # esp. for ROCm
     ];
     badPlatforms = [
       # CMake Error at cmake/cpu_extension.cmake:188 (message):
