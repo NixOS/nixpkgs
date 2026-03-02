@@ -21,9 +21,17 @@ let
     inherit version src;
     pyproject = true;
 
-    build-system = [ setuptools ];
+    build-system = [
+      setuptools
+    ];
 
     sourceRoot = "${src.name}/packages/${subdir}";
+
+  # TODO: just copying all templates to all subpackages for now
+  # don't really want to provide nx javascript tool and faff about
+  postInstall = ''
+    cp -r ../../templates $out/${python.sitePackages}/comfyui_workflow_templates_${subdir}/
+  '';
 
     pythonImportsCheck = [ "comfyui_workflow_templates_${subdir}" ];
 
@@ -67,7 +75,7 @@ buildPythonPackage rec {
 
   # TODO: identify why this isn't already included by setuptools
   postInstall = ''
-    mv ./templates $out/${python.sitePackages}/comfyui_workflow_templates/
+    cp -r ./templates $out/${python.sitePackages}/comfyui_workflow_templates/
   '';
 
   meta = {
