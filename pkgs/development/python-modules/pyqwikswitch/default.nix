@@ -13,19 +13,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyqwikswitch";
-  version = "1.0.2";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kellerza";
     repo = "pyqwikswitch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yx3rCPVuhsemAtFuEhPvFPHOFm2UWrXmWF3d/ZtPGo8=";
+    hash = "sha256-QSwXr7qHTjSJeWBm/DhnFohzcSQvfdhpWIydHYUWf34=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv-build>=0.8.20,<0.9" uv-build
+      --replace-fail "uv-build>=0.8.20,<0.11" uv-build
   '';
 
   build-system = [ uv-build ];
