@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     install -m755 -D hterm $out/bin/hterm
-    install -m644 -D desktop/hterm.png $out/share/pixmaps/hterm.png
+    install -m644 -D desktop/hterm.png -t $out/share/icons/hicolor/32x32/apps
     install -m644 -D desktop/hterm.desktop $out/share/applications/hterm.desktop
     runHook postInstall
   '';
