@@ -92,7 +92,7 @@ else
       ''
         # Install .desktop files
         install -Dm444 ${appimageContents}/Hoppscotch.desktop $out/share/applications/hoppscotch.desktop
-        install -Dm444 ${appimageContents}/Hoppscotch.png $out/share/pixmaps/hoppscotch.png
+        install -Dm444 ${appimageContents}/Hoppscotch.png $out/share/icons/hicolor/256x256/apps/hoppscotch.png
         substituteInPlace $out/share/applications/hoppscotch.desktop \
           --replace-fail "hoppscotch-desktop" "hoppscotch"
       '';
