@@ -28,21 +28,6 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    # Linux: Use struct kiocb * for aops write_begin/end
-    (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/a765a9ddd412c8d1e5cb0f5cf497a8606251811e.patch";
-      hash = "sha256-RkIAdXMvelnWs4YB3OMj6AIQlUbSqdKJpwc6wiSZzrM=";
-    })
-    # linux: remove implied def HAVE_LINUX_FILEMAP_GET_FOLIO
-    (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/c379ff006d8b7db425f7648321c549ab24919d92.patch";
-      hash = "sha256-fDtX3NhWIWupTArEauCM2rEaO3l8jWBVC5mAMil2+nU=";
-    })
-    # LINUX: Zero code on EEXIST in afs_linux_read_cache
-    (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/eb6753d93b930ad7d65772a9751117f6969a5e92.patch";
-      hash = "sha256-97/MdG9DrHEtOKCRLCTgl6ZEtqLUsaNs9LcAzcyrTF4=";
-    })
     # Linux: Use get_tree_nodev
     (fetchpatch {
       url = "https://gerrit.openafs.org/changes/16646/revisions/d8202bcd24c90cfef138e54264355d242d8f2f2a/patch";
