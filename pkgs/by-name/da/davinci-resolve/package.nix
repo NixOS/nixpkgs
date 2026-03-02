@@ -326,6 +326,7 @@ buildFHSEnv {
     maintainers = with lib.maintainers; [
       amarshall
       XBagon
+      toXel
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
