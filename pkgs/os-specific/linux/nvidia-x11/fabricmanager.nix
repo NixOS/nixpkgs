@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/nvidia-fabricmanager}
     for bin in nv{-fabricmanager,switch-audit};do
       ${patchelf}/bin/patchelf \
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
       mv $d $out/.
     done
     patchShebangs $out/bin
+
+    runHook postInstall
   '';
 
   doCheck = true;
