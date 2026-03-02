@@ -4459,6 +4459,12 @@
     githubId = 495429;
     name = "Claas Augner";
   };
+  caulagi = {
+    email = "caulagi@gmail.com";
+    github = "caulagi";
+    githubId = 222507;
+    name = "Pradip Caulagi";
+  };
   cawilliamson = {
     email = "home@chrisaw.com";
     github = "cawilliamson";
