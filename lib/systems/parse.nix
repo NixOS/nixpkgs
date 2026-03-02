@@ -634,6 +634,10 @@ rec {
         execFormat = unknown;
         families = { };
       };
+      uefi = {
+        execFormat = pe;
+        families = { };
+      };
     }
     // {
       # aliases
@@ -849,6 +853,7 @@ rec {
             "mmixware"
             "ghcjs"
             "mingw32"
+            "uefi"
           ]
           || hasPrefix "freebsd" (elemAt l 2)
           || hasPrefix "netbsd" (elemAt l 2)
