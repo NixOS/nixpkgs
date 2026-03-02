@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,10 +16,16 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-GR1KHiQ1lTOmU8eAPR2pxUlMpWiW2EDMG78VDjELxDU=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
+  # Same fonts as fonts/OTF, so install only the OTF versions
+  preInstall = ''
+    rm -r fonts/TTF
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    install -m444 -Dt $out/share/fonts/opentype */OTF/*.otf
     install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
 
     runHook postInstall
