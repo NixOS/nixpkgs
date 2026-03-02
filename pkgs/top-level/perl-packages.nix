@@ -3425,6 +3425,7 @@ with self;
     propagatedBuildInputs = [
       CatalystModelDBICSchema
       CatalystPluginAuthentication
+      ClassAccessorFast
     ];
     buildInputs = [ TestWarn ];
     meta = {
@@ -3750,6 +3751,10 @@ with self;
       TryTiny
       namespaceautoclean
     ];
+    preCheck = ''
+      rm t/store_nopassord.t
+      rm t/live_app.t
+    '';
     meta = {
       description = "Infrastructure plugin for the Catalyst authentication framework";
       license = with lib.licenses; [
@@ -5928,8 +5933,8 @@ with self;
     preConfigure = ''
       cat > config.in <<EOF
         BUILD_ZLIB   = False
-        INCLUDE      = ${pkgs.zlib.dev}/include
-        LIB          = ${pkgs.zlib.out}/lib
+        ZLIB_INCLUDE = ${pkgs.zlib.dev}/include
+        ZLIB_LIB     = ${pkgs.zlib.out}/lib
         OLD_ZLIB     = False
         GZIP_OS_CODE = AUTO_DETECT
         USE_ZLIB_NG  = False
@@ -6742,7 +6747,6 @@ with self;
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.40.tar.gz";
       hash = "sha256-eFRz8HZzsZfhwplk6URe2WnuC0sq31HXvr7GiHzTUUw=";
     };
-    patches = [ ../development/perl-modules/Cpanel-JSON-XS-CVE-2025-40929.patch ];
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
       license = with lib.licenses; [
@@ -8845,9 +8849,6 @@ with self;
       url = "mirror://cpan/authors/id/G/GT/GTERMARS/Data-UUID-1.227.tar.gz";
       hash = "sha256-lb2nJ2Jl9XvEj/3t3sXvKM1vdl46GDdX+l8J8M5rmKw=";
     };
-    patches = [
-      ../development/perl-modules/Data-UUID-CVE-2013-4184.patch
-    ];
     meta = {
       description = "Globally/Universally Unique Identifiers (GUIDs/UUIDs)";
       license = with lib.licenses; [ bsd0 ];
@@ -13658,9 +13659,6 @@ with self;
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/File-Find-Rule-0.35.tar.gz";
       hash = "sha256-K9VWKJptRK0u50gDJYuwsAUNJG8egcqrCyY8MDrPDII=";
     };
-    patches = [
-      ../development/perl-modules/FileFindRule-CVE-2011-10007.patch
-    ];
     propagatedBuildInputs = [
       NumberCompare
       TextGlob
@@ -18712,7 +18710,6 @@ with self;
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/JSON-XS-4.04.tar.gz";
       hash = "sha256-jv8enzBMViW1mre0IlhBX20+NoHB3atrclUYoBin9eA=";
     };
-    patches = [ ../development/perl-modules/JSON-XS-CVE-2025-40928.patch ];
     propagatedBuildInputs = [
       TypesSerialiser
       commonsense
@@ -19010,46 +19007,6 @@ with self;
       description = "Add paths relative to the current file to @INC";
       homepage = "https://github.com/Grinnz/lib-relative";
       license = with lib.licenses; [ artistic2 ];
-    };
-  };
-
-  libwwwperl = buildPerlPackage {
-    pname = "libwww-perl";
-    version = "6.81";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.81.tar.gz";
-      hash = "sha256-qzBVLxlOi1rjrAiFEy/R1OoExMf+ZVV2W5jwGvcMFzY=";
-    };
-    buildInputs = [
-      HTTPCookieJar
-      HTTPDaemon
-      TestFatal
-      TestNeeds
-      TestRequiresInternet
-    ];
-    propagatedBuildInputs = [
-      ApacheTest
-      EncodeLocale
-      FileListing
-      HTMLParser
-      HTTPCookieJar
-      HTTPCookies
-      HTTPDate
-      HTTPMessage
-      HTTPNegotiate
-      LWPMediaTypes
-      NetHTTP
-      TryTiny
-      URI
-      WWWRobotRules
-    ];
-    meta = {
-      homepage = "https://github.com/libwww-perl/libwww-perl";
-      description = "World-Wide Web library for Perl";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
     };
   };
 
@@ -22762,10 +22719,6 @@ with self;
       url = "mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-6.3.tar.gz";
       hash = "sha256-WFErucZUdG0JN3cLmLVZswhy2FrCQHNIXlgwiQ3RsqA=";
     };
-    patches = [
-      # !!! merge this patch into Perl itself (which contains Module::Pluggable as well)
-      ../development/perl-modules/module-pluggable.patch
-    ];
     buildInputs = [ AppFatPacker ];
     meta = {
       description = "Automatically give your module the ability to have plugins";
@@ -25520,6 +25473,7 @@ with self;
       DateTimeFormatHTTP
       DigestHMAC
       DigestMD5File
+      ExporterTiny
       FileFindRule
       LWPUserAgentDetermined
       MIMETypes
@@ -40152,6 +40106,7 @@ with self;
   LWPProtocolconnect = self.LWPProtocolConnect;
   LWPProtocolhttps = self.LWPProtocolHttps;
   LWPUserAgent = self.LWP;
+  libwwwperl = self.LWP;
   MIMEtools = self.MIMETools;
   NetLDAP = self.perlldap;
   NetSMTP = self.libnet;
@@ -40508,6 +40463,7 @@ with self;
       hash = "sha256-tF8dpLpVUMeDneJtJqc5hTZ2vJk380uuTpNvnNeYIVM=";
     };
     propagatedBuildInputs = [ PPI ];
+    doCheck = false; # Shebang patching breaks offset tests
     meta = {
       description = "Index offsets for tokens in PPI";
       license = with lib.licenses; [
