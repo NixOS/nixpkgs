@@ -3074,6 +3074,8 @@ self: super: with self; {
 
   comfy-aimdo = callPackage ../development/python-modules/comfy-aimdo { };
 
+  comfy-kitchen = callPackage ../development/python-modules/comfy-kitchen { };
+
   comfyui-embedded-docs = callPackage ../development/python-modules/comfyui-embedded-docs { };
 
   comfyui-frontend-package = callPackage ../development/python-modules/comfyui-frontend-package { };
