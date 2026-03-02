@@ -5,7 +5,13 @@
   cmake,
   llvmPackages,
   nix-update-script,
+  enableVector4 ? false,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableExternC ? !enableStatic,
 }:
+
+# extern C is required when building as shared libraries
+assert (!enableStatic) -> enableExternC;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luau";
@@ -28,8 +34,38 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 -t $out/bin luau
     install -Dm755 -t $out/bin luau-analyze
     install -Dm755 -t $out/bin luau-compile
+    install -Dm755 -t $out/bin luau-reduce
+    install -Dm755 -t $out/bin luau-ast
+    install -Dm755 -t $out/bin luau-bytecode
+
+    mkdir -p $out/lib
+    cp *.{so,a} $out/lib
+
+    mkdir -p $dev
+    cp -r ../{Analysis,Ast,Common,Config,CLI,Compiler,Require,VM,CodeGen}/include $dev
 
     runHook postInstall
+  '';
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  cmakeFlags = [
+    (lib.optionalString enableVector4 "-DCMAKE_CXX_FLAGS=-DLUA_VECTOR_SIZE=4")
+
+    (lib.cmakeBool "LUAU_BUILD_SHARED" (!enableStatic))
+    (lib.cmakeBool "LUAU_EXTERN_C" enableExternC)
+
+    # To avoid /build/ leaking into RPATH
+    (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
+  ];
+
+  # Without this the linking step fails due to undefined references
+  postPatch = lib.optionalString (!enableStatic) ''
+    substituteInPlace VM/include/luaconf.h \
+      --replace-fail "#define LUAI_FUNC __attribute__((visibility(\"hidden\"))) extern" "#define LUAI_FUNC extern"
   '';
 
   doCheck = true;
