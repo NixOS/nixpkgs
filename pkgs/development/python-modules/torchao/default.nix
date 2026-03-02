@@ -153,6 +153,12 @@ buildPythonPackage (finalAttrs: {
     "test_qdq_per_channel"
     "test_reentrant"
     "test_static_linear"
+
+    # AttributeError: 'list' object has no attribute 'keys'
+    "test_tied_weights_quantization"
+
+    # execnet.gateway_base.DumpError: can't serialize <class 'torch.dtype'>
+    "test_numerical_consistency_per_tensor"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # AssertionError: tensor(False) is not true

@@ -16,6 +16,8 @@
   withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
   libutempter,
   withSixel ? true,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tmux";
     repo = "tmux";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-VwOyR9YYhA/uyVRJbspNrKkJWJGYFFktwPnnwnIJ97s=";
   };
 
@@ -64,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
+
   passthru = {
     terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (
       if stdenv.hostPlatform.isDarwin then
@@ -81,10 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
           ln -sv ${ncurses}/share/terminfo/t/{tmux,tmux-256color,tmux-direct} $out/share/terminfo/t
         ''
     );
+    updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://tmux.github.io/";
+    downloadPage = "https://github.com/tmux/tmux";
     description = "Terminal multiplexer";
     longDescription = ''
       tmux is intended to be a modern, BSD-licensed alternative to programs such as GNU screen. Major features include:
@@ -103,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "tmux";
     maintainers = with lib.maintainers; [
+      ethancedwards8
       fpletz
     ];
   };

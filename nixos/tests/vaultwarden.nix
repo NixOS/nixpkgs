@@ -83,7 +83,7 @@ let
 
               wait.until_not(EC.title_contains("Join organization"))
 
-              # NOTE: When testing this locally, the extensions must not be installed, otherwise this screen does not appear
+              # NOTE: When testing this locally, the Bitwarden browser extension must not be installed, otherwise this screen does not appear
               click_when_unobstructed((By.XPATH, "//button[contains(., 'Add it later')]"))
 
               click_when_unobstructed((By.XPATH, "//a[contains(., 'Skip to web app')]"))
@@ -198,7 +198,6 @@ let
             {
               nodes,
               pkgs,
-              config,
               ...
             }:
             {

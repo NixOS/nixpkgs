@@ -75,10 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 YARG "$out/bin/yarg"
     install -Dm644 UnityPlayer.so "$out/libexec/yarg/UnityPlayer.so"
 
-    mkdir -p "$out/share/pixmaps"
+    mkdir -p "$out/share/icons/hicolor/128x128/apps"
     cp -r YARG_Data "$out/share/yarg"
     ln -s "$out/share/yarg" "$out/bin/yarg_Data"
-    ln -s "$out/share/yarg/Resources/UnityPlayer.png" "$out/share/pixmaps/yarg.png"
+    ln -s "$out/share/yarg/Resources/UnityPlayer.png" "$out/share/icons/hicolor/128x128/apps/yarg.png"
     install -Dm644 "$desktopItem/share/applications/yarg.desktop" "$out/share/applications/yarg.desktop"
 
     runHook postInstall

@@ -23,16 +23,16 @@
   numpydoc,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nilearn";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nilearn";
     repo = "nilearn";
-    tag = version;
-    hash = "sha256-q+glPYxnB3Nd1DtaTzdSEJtgRtRhW+RfZmAeAUL6zX4=";
+    tag = finalAttrs.version;
+    hash = "sha256-AStjr+rQoUU4WjKbn+OgT+T+xQ3cTjkKxgF6jX3SX64=";
   };
 
   postPatch = ''
@@ -69,8 +69,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for statistical learning on neuroimaging data";
     homepage = "https://nilearn.github.io";
-    changelog = "https://github.com/nilearn/nilearn/releases/tag/${src.tag}";
+    changelog = "https://github.com/nilearn/nilearn/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -46,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ gtest ];
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    dsymutil unittest
+  '';
+
   doCheck = true;
 
   passthru = {

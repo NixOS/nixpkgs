@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://sourceforge.net/projects/yad-dialog/";
+    homepage = "https://github.com/v1cont/yad";
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
       Yad (yet another dialog) is a GUI dialog tool for shell scripts. It is a

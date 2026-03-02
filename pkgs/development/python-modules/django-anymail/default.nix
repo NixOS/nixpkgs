@@ -2,9 +2,11 @@
   lib,
   boto3,
   buildPythonPackage,
+  cryptography,
   django,
   fetchFromGitHub,
   hatchling,
+  idna,
   mock,
   pytest-django,
   pytestCheckHook,
@@ -29,12 +31,18 @@ buildPythonPackage rec {
 
   dependencies = [
     django
+    idna
     requests
     urllib3
   ];
 
   optional-dependencies = {
     amazon-ses = [ boto3 ];
+    postal = [ cryptography ];
+    sendgrid = [ cryptography ];
+    # not packaged
+    # resend = [ svix ];
+    # uts46 = [ uts46 ];
   };
 
   nativeCheckInputs = [

@@ -57,13 +57,13 @@ let
 in
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  unstable_date = "2026-02-18";
+  unstable_date = "2026-02-25";
   version = "2021.01-unstable-${unstable_date}";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "231f4f8d5e3a0697825455cccbd2edb2fb9491cd";
-    hash = "sha256-YAKXU3z4ZBviGnt0LFgrS6yeEMm3REdkhyfJ4bZ4Vo8=";
+    rev = "ae3a780de777bcb96d41631818551650bc79650d";
+    hash = "sha256-jCiCB3tbM0dyIC2gvQarzwjfYI9mnREkMI+0R3EaGPM=";
     fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
   };
 

@@ -122,6 +122,31 @@ in
   };
 
   config = lib.mkIf (cfg.provider != "libc") {
+    # Legacy (LLVM < 13) Scudo uses CamelCase options.
+    # Standalone (LLVM >= 13) Scudo uses snake_case options.
+    # NixOS switched in 25.11: https://github.com/NixOS/nixpkgs/pull/444605
+    warnings =
+      let
+        scudoOpts = config.environment.variables.SCUDO_OPTIONS;
+
+        legacyOptionNames = [
+          "QuarantineSizeKb"
+          "QuarantineChunksUpToSize"
+          "ThreadLocalQuarantineSizeKb"
+          "DeallocationTypeMismatch"
+          "DeleteSizeMismatch"
+          "ZeroContents"
+        ];
+
+        # Check which legacy options are in SCUDO_OPTIONS,
+        # so we can warn the user about the change.
+        legacyOptionsUsed = lib.lists.filter (opt: lib.strings.hasInfix opt scudoOpts) legacyOptionNames;
+      in
+      lib.optional (cfg.provider == "scudo" && legacyOptionsUsed != [ ]) ''
+        environment.variables.SCUDO_OPTIONS: ${lib.concatStringsSep ", " legacyOptionsUsed} is/are no longer valid Scudo options.
+        Use snake_case instead of CamelCase: https://llvm.org/docs/ScudoHardenedAllocator.html#options
+      '';
+
     environment.etc."ld-nix.so.preload".text = ''
       ${providerLibPath}
     '';

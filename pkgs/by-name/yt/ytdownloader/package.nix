@@ -70,7 +70,7 @@ buildNpmPackage rec {
         --add-flags $out/lib/node_modules/ytdownloader/main.js \
         --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
 
-    install -Dm444 assets/images/icon.png $out/share/pixmaps/ytdownloader.png
+    install -Dm444 assets/images/icon.png $out/share/icons/hicolor/512x512/apps/ytdownloader.png
   '';
 
   meta = {

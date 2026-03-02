@@ -1,25 +1,33 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nix-zsh-completions";
-  version = "0.5.1";
+  version = "0.5.1-unstable-2025-12-12";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-zsh-completions";
-    tag = finalAttrs.version;
-    hash = "sha256-bgbMc4HqigqgdkvUe/CWbUclwxpl17ESLzCIP8Sz+F8=";
+    rev = "d4ae06bedb9a353ac894862d1d83f60ab4e2ccce";
+    hash = "sha256-ogDhANf4MpVZn5sWZymT0EIjDMTLSHRGzNjHsw/dX8o=";
   };
 
   strictDeps = true;
+
+  dontConfigure = true;
+  dontBuild = true;
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/zsh/{site-functions,plugins/nix}
     cp _* $out/share/zsh/site-functions
     cp *.zsh $out/share/zsh/plugins/nix
+
+    runHook postInstall
   '';
 
   meta = {

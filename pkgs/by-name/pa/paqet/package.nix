@@ -9,15 +9,15 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "paqet";
-  version = "1.0.0-alpha.15";
+  version = "1.0.0-alpha.18";
   src = fetchFromGitHub {
     owner = "hanselime";
     repo = "paqet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ryspYKbnDT7emEftRWCZLVNFDEOvAv7IhdM4VBRQjKc=";
+    hash = "sha256-FuCbQz+Lhbw/xHJYhZo4uxH2ODV/uVFR7XDOK5DKZkU=";
   };
 
-  vendorHash = "sha256-Vf3bKdhlM4vqzBv5RAwHeShGHudEh1VNTCFxAL/cwLw=";
+  vendorHash = "sha256-olyjpzHZKgD5fhXSyCmEuwYmcJGMUS+b+Hglm2JF1NY=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ libpcap ];
