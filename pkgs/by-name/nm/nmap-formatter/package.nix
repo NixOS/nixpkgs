@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "nmap-formatter";
-  version = "3.1.2";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "vdjagilev";
     repo = "nmap-formatter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8RDrLGNVa63tz+3WupDg5Jw+9R+NrclFvO8rsMJ7/1w=";
+    hash = "sha256-sh/OsDdwgKl4l3RZwtGbEGC1DU8qsO550Up0pqUKj5U=";
   };
 
   vendorHash = "sha256-fHT1FxrUmDv7YG0Kin8jZkolFAvnaEhLhgAvA8tzxkI=";
