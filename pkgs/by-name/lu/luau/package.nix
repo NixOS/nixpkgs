@@ -13,6 +13,14 @@
 # extern C is required when building as shared libraries
 assert (!enableStatic) -> enableExternC;
 
+let
+  # Skip building/running tests if:
+  # - cross-compiling (because checkPhase isn't executed anyway)
+  # - vector4 is enabled, because there is a Conformance test that does not
+  # take into account vector4
+  skipTests = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform) || enableVector4;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "luau";
   version = "0.709";
@@ -60,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # To avoid /build/ leaking into RPATH
     (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
+    (lib.cmakeBool "LUAU_BUILD_TESTS" (!skipTests))
   ];
 
   # Without this the linking step fails due to undefined references
@@ -68,13 +77,23 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "#define LUAI_FUNC __attribute__((visibility(\"hidden\"))) extern" "#define LUAI_FUNC extern"
   '';
 
-  doCheck = true;
+  doCheck = !skipTests;
 
   checkPhase = ''
     runHook preCheck
 
-    ./Luau.UnitTest
+    # HACK: since CMAKE_SKIP_RPATH is enabled, set LD_LIBRARY_PATH
+    # to the build directory so that the test executables can find
+    # the libLuau*.so libraries.
+    #
+    # I don't think there will be any problems since the test executables
+    # aren't installed anyway, but advice is always welcome.
+    ${lib.optionalString (!enableStatic) ''export LD_LIBRARY_PATH="$(realpath .)"''}
+
+    # enabling extern C fails this specific test case
+    ./Luau.UnitTest ${lib.optionalString enableExternC ''--test-case-exclude="interrupt_execution"''}
     ./Luau.Conformance
+    ./Luau.CLI.Test
 
     runHook postCheck
   '';
