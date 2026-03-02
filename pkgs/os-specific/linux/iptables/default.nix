@@ -170,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "iptables";
     maintainers = with lib.maintainers; [ fpletz ];
+    teams = [ lib.teams.security-review ];
     license = lib.licenses.gpl2Plus;
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "netfilter" finalAttrs.version;

@@ -311,6 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = extraMeta.maintainers or [ ];
+    teams = [ lib.teams.security-review ];
     mainProgram = "ssh";
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openbsd" finalAttrs.version;
   }

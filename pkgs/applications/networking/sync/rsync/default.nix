@@ -92,6 +92,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       ivan
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix;
     identifiers.cpeParts = {
       vendor = "samba";

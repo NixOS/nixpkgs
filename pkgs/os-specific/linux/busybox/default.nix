@@ -193,6 +193,7 @@ stdenv.mkDerivation rec {
       TethysSvensson
       qyliss
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "busybox" version;

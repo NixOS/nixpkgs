@@ -283,6 +283,7 @@ lib.warnIf (withDocs != null)
       # https://github.com/NixOS/nixpkgs/issues/333338
       badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
       maintainers = with lib.maintainers; [ infinisil ];
+      teams = [ lib.teams.security-review ];
       mainProgram = "bash";
       identifiers.cpeParts =
         let

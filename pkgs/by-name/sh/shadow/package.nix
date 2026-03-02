@@ -132,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Suite containing authentication-related tools such as passwd and su";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.linux;
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "shadow_project" finalAttrs.version;
   };

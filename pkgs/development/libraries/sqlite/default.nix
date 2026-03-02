@@ -161,6 +161,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.publicDomain;
     mainProgram = "sqlite3";
     maintainers = with lib.maintainers; [ np ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "sqlite" version;
