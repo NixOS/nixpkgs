@@ -8,12 +8,12 @@
 
 buildNpmPackage rec {
   pname = "ares-cli";
-  version = "3.2.1";
+  version = "3.2.2";
   src = fetchFromGitHub {
     owner = "webos-tools";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-L8suZDtXVchVyvp7KCv0UaceJqqGBdfopd5tZzwj3MY=";
+    hash = "sha256-VRLzrqY/Hmike5BdtvPeBywn4nIr5Uta2YxL6pLnvpQ=";
   };
 
   nodejs = nodejs_22;
