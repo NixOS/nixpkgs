@@ -39,6 +39,12 @@ rec {
 
     : 2\. Function argument
 
+    # Type
+
+    ```
+    addMetaAttrs :: attrs -> Derivation -> Derivation
+    ```
+
     # Examples
     :::{.example}
     ## `lib.meta.addMetaAttrs` usage example
@@ -66,6 +72,12 @@ rec {
     `drv`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    dontDistribute :: Derivation -> Derivation
+    ```
   */
   dontDistribute = drv: addMetaAttrs { hydraPlatforms = [ ]; } drv;
 
@@ -85,6 +97,12 @@ rec {
     `drv`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    setName :: string -> Derivation -> Derivation
+    ```
   */
   setName = name: drv: drv // { inherit name; };
 
@@ -100,6 +118,12 @@ rec {
     `drv`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    updateName :: (string -> string) -> Derivation -> Derivation
+    ```
 
     # Examples
     :::{.example}
@@ -122,6 +146,12 @@ rec {
     `suffix`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    appendToName :: string -> Derivation -> Derivation
+    ```
   */
   appendToName =
     suffix:
@@ -145,6 +175,12 @@ rec {
     `set`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    mapDerivationAttrset :: (Derivation -> a) -> attrs -> attrs
+    ```
   */
   mapDerivationAttrset =
     f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
@@ -164,6 +200,12 @@ rec {
 
     `drv`
     : 2\. Function argument
+
+    # Type
+
+    ```
+    setPrio :: int -> Derivation -> Derivation
+    ```
   */
   setPrio = priority: addMetaAttrs { inherit priority; };
 
@@ -176,6 +218,12 @@ rec {
     `drv`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    lowPrio :: Derivation -> Derivation
+    ```
   */
   lowPrio = setPrio 10;
 
@@ -187,6 +235,12 @@ rec {
     `set`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    lowPrioSet :: (Map string Derivation) -> (Map string Derivation)
+    ```
   */
   lowPrioSet = set: mapDerivationAttrset lowPrio set;
 
@@ -199,6 +253,12 @@ rec {
     `drv`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    hiPrio :: Derivation -> Derivation
+    ```
   */
   hiPrio = setPrio (-10);
 
@@ -210,6 +270,12 @@ rec {
     `set`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    hiPrioSet :: (Map string Derivation) -> (Map string Derivation)
+    ```
   */
   hiPrioSet = set: mapDerivationAttrset hiPrio set;
 

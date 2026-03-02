@@ -302,16 +302,6 @@ in
       - Other files are ignored, including symbolic links to directories and to regular `.nix`
         files; this is because nixlang code cannot distinguish the type of a link's target.
 
-    # Type
-
-    ```
-    packagesFromDirectoryRecursive :: {
-      callPackage :: Path -> {} -> a,
-      newScope? :: AttrSet -> scope,
-      directory :: Path,
-    } -> AttrSet
-    ```
-
     # Inputs
 
     `callPackage`
@@ -325,6 +315,16 @@ in
 
     `directory`
     : The directory to read package files from.
+
+    # Type
+
+    ```
+    packagesFromDirectoryRecursive :: {
+      callPackage :: Path -> {} -> a,
+      newScope? :: AttrSet -> scope,
+      directory :: Path,
+    } -> AttrSet
+    ```
 
     # Examples
     :::{.example}
@@ -450,12 +450,6 @@ in
   /**
     Append `/default.nix` if the passed path is a directory.
 
-    # Type
-
-    ```
-    resolveDefaultNix :: (Path | String) -> (Path | String)
-    ```
-
     # Inputs
 
     A single argument which can be a [path](https://nix.dev/manual/nix/stable/language/types#type-path) value or a string containing an absolute path.
@@ -465,6 +459,12 @@ in
     If the input refers to a directory that exists, the output is that same path with `/default.nix` appended.
     Furthermore, if the input is a string that ends with `/`, `default.nix` is appended to it.
     Otherwise, the input is returned unchanged.
+
+    # Type
+
+    ```
+    resolveDefaultNix :: (Path | String) -> (Path | String)
+    ```
 
     # Examples
     :::{.example}

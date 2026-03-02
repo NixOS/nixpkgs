@@ -8,6 +8,12 @@ rec {
   /**
     Break a version string into its component parts.
 
+    # Type
+
+    ```
+    splitVersion :: string -> [string]
+    ```
+
     # Examples
     :::{.example}
     ## `splitVersion` usage example
@@ -29,6 +35,12 @@ rec {
     `v`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    major :: string -> string
+    ```
 
     # Examples
     :::{.example}
@@ -52,6 +64,12 @@ rec {
 
     : 1\. Function argument
 
+    # Type
+
+    ```
+    minor :: string -> string
+    ```
+
     # Examples
     :::{.example}
     ## `minor` usage example
@@ -73,6 +91,12 @@ rec {
     `v`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    patch :: string -> string
+    ```
 
     # Examples
     :::{.example}
@@ -96,6 +120,12 @@ rec {
     `v`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    mmajorMinor :: string -> string
+    ```
 
     # Examples
     :::{.example}
@@ -122,6 +152,12 @@ rec {
     `version`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    pad :: int -> string -> string
+    ```
 
     # Examples
     :::{.example}

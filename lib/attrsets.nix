@@ -201,7 +201,7 @@ rec {
     # Type
 
     ```
-    attrsets.longestValidPathPrefix :: [String] -> Value -> [String]
+    longestValidPathPrefix :: [String] -> Value -> [String]
     ```
 
     # Examples

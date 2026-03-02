@@ -423,6 +423,12 @@ rec {
 
     : 1\. Function argument
 
+    # Type
+
+    ```
+    flatten :: [a | [a | [a | ...]]] -> [a]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.flatten` usage example
@@ -823,6 +829,12 @@ rec {
 
     : 1\. Function argument
 
+    # Type
+
+    ```
+    toList :: (a | [a]) -> [a]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.toList` usage example
@@ -961,6 +973,12 @@ rec {
     `lst`
 
     : 4\. Function argument
+
+    # Type
+
+    ```
+    groupBy' :: (b -> a -> b) -> b -> (a -> string) -> [a] -> Map string b
+    ```
 
     # Examples
     :::{.example}
@@ -1128,6 +1146,12 @@ rec {
 
     : 3\. Function argument
 
+    # Type
+
+    ```
+    listDfs :: bool -> (a -> a -> bool) -> [a] -> attrs
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.listDfs` usage example
@@ -1192,6 +1216,12 @@ rec {
     `list`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    toposort :: (a -> a -> bool) -> [a] -> attrs
+    ```
 
     # Examples
     :::{.example}
@@ -1364,6 +1394,12 @@ rec {
 
     : The second list
 
+    # Type
+
+    ```
+    compareLists :: (a -> a -> int) -> [a] -> [a] -> int
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.compareLists` usage examples
@@ -1402,6 +1438,12 @@ rec {
     `lst`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    naturalSort :: [str] -> [str]
+    ```
 
     # Examples
     :::{.example}
@@ -1940,6 +1982,12 @@ rec {
 
     : Second list
 
+    # Type
+
+    ```
+    intersectLists :: [a] -> [a] -> [a]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.intersectLists` usage example
@@ -1968,6 +2016,12 @@ rec {
 
     : Second list
 
+    # Type
+
+    ```
+    subtractLists :: [a] -> [a] -> [a]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.subtractLists` usage example
@@ -1994,6 +2048,12 @@ rec {
     `b`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    mutuallyExclusive :: [a] -> [a] -> bool
+    ```
   */
   mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
 
@@ -2006,6 +2066,12 @@ rec {
     `set`
 
     : Attribute set with attributes that are lists
+
+    # Type
+
+    ```
+    concatAttrValues :: (Map string a) -> [a]
+    ```
 
     # Examples
     :::{.example}

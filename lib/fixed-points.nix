@@ -108,6 +108,12 @@ rec {
     `f`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    fix' :: (a -> a) -> a
+    ```
   */
   fix' =
     f:

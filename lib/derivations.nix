@@ -233,6 +233,12 @@ in
     `drv`
     : The derivation to wrap.
 
+    # Type
+
+    ```
+    warnOnInstantiate :: string -> Derivation -> Derivation
+    ```
+
     # Examples
     :::{.example}
     ## `lib.derivations.warnOnInstantiate` usage example

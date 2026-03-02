@@ -200,6 +200,12 @@ in
     `y`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    or :: bool -> bool -> bool
+    ```
   */
   "or" = x: y: x || y;
 
@@ -215,6 +221,12 @@ in
     `y`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    and :: bool -> bool -> bool
+    ```
   */
   and = x: y: x && y;
 
@@ -230,6 +242,12 @@ in
     `y`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    xor :: bool -> bool -> bool
+    ```
   */
   # We explicitly invert the arguments purely as a type assertion.
   # This is invariant under XOR, so it does not affect the result.
@@ -237,6 +255,12 @@ in
 
   /**
     bitwise “not”
+
+    # Type
+
+    ```
+    bitNot :: number -> number
+    ```
   */
   bitNot = builtins.sub (-1);
 
@@ -284,12 +308,6 @@ in
   /**
     Merge two attribute sets shallowly, right side trumps left
 
-    # Type
-
-    ```
-    mergeAttrs :: attrs -> attrs -> attrs
-    ```
-
     # Inputs
 
     `x`
@@ -299,6 +317,12 @@ in
     `y`
 
     : Right attribute set (higher precedence for equal keys)
+
+    # Type
+
+    ```
+    mergeAttrs :: attrs -> attrs -> attrs
+    ```
 
     # Examples
     :::{.example}
@@ -364,6 +388,12 @@ in
 
     : 2\. Function argument
 
+    # Type
+
+    ```
+    defaultTo :: a -> Nullable b -> (a | b)
+    ```
+
     # Examples
     :::{.example}
     ## `lib.trivial.defaultTo` usage example
@@ -393,6 +423,12 @@ in
     `a`
 
     : Argument to check for null before passing it to `f`
+
+    # Type
+
+    ```
+    mapNullable :: (a -> b) -> Nullable a -> Nullable b
+    ```
 
     # Examples
     :::{.example}
@@ -547,6 +583,12 @@ in
     `y`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    min :: number -> number -> number
+    ```
   */
   min = x: y: if x < y then x else y;
 
@@ -562,6 +604,12 @@ in
     `y`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    max :: number -> number -> number
+    ```
   */
   max = x: y: if x > y then x else y;
 
@@ -577,6 +625,12 @@ in
     `int`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    mod :: int -> int -> int
+    ```
 
     # Examples
     :::{.example}
@@ -611,6 +665,12 @@ in
     `b`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    compare :: a -> a -> int
+    ```
   */
   compare =
     a: b:
@@ -1000,12 +1060,6 @@ in
     function of the `{ a, b ? foo, ... }:` format, but some facilities
     like `callPackage` expect to be able to query expected arguments.
 
-    # Type
-
-    ```
-    setFunctionArgs : (a -> b) -> Map String Bool -> (a -> b)
-    ```
-
     # Inputs
 
     `f`
@@ -1015,6 +1069,12 @@ in
     `args`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    setFunctionArgs : (a -> b) -> (Map String Bool) -> (a -> b)
+    ```
   */
   setFunctionArgs = f: args: {
     # TODO: Should we add call-time "type" checking like built in?
@@ -1028,17 +1088,17 @@ in
     functions and functions with args set with `setFunctionArgs`. It
     has the same return type and semantics as `builtins.functionArgs`.
 
-    # Type
-
-    ```
-    functionArgs : (a -> b) -> Map String Bool
-    ```
-
     # Inputs
 
     `f`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    functionArgs : (a -> b) -> Map String Bool
+    ```
   */
   functionArgs =
     f:
@@ -1056,6 +1116,12 @@ in
     `f`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    isFunction : a -> bool
+    ```
   */
   isFunction = f: builtins.isFunction f || (f ? __functor && isFunction (f.__functor f));
 
@@ -1178,6 +1244,12 @@ in
     Convert the given positive integer to a string of its hexadecimal
     representation.
 
+    # Type
+
+    ```
+    toHexString :: int -> string
+    ```
+
     # Examples
     :::{.example}
     ## `lib.trivial.toHexString` usage example
@@ -1218,6 +1290,12 @@ in
     `i`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    toBaseDigits :: int -> int -> [int]
+    ```
 
     # Examples
     :::{.example}
