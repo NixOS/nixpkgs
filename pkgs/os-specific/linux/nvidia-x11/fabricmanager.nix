@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
       ${ldd} $b | grep -vqz "not found"
     done
   '';
+  # Default stdenv fixup shrinkings cause undefined symbols when trying to run
+  # meta.mainProgram
+  dontFixup = true;
 
   meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
