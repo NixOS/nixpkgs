@@ -41,7 +41,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "optuna";
   version = "4.7.0";
   pyproject = true;
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SbEmJ4V4pyxMUx3GPMqBUDLq4AslwichbZNmNwmNm0o=";
   };
 
@@ -105,7 +105,7 @@ buildPythonPackage rec {
     versionCheckHook
   ]
   ++ fakeredis.optional-dependencies.lua
-  ++ optional-dependencies.optional;
+  ++ finalAttrs.passthru.optional-dependencies.optional;
 
   disabledTests = [
     # ValueError: Transform failed with error code 525: error creating static canvas/context for image server
@@ -143,9 +143,9 @@ buildPythonPackage rec {
   meta = {
     description = "Hyperparameter optimization framework";
     homepage = "https://optuna.org/";
-    changelog = "https://github.com/optuna/optuna/releases/tag/${src.tag}";
+    changelog = "https://github.com/optuna/optuna/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "optuna";
   };
-}
+})

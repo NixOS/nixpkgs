@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
       "Makefile-Linux-GCC-64.mak";
 
   # Needed for compiling with GCC > 13
-  env.NIX_CFLAGS_COMPILE = lib.escapeShellArgs [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-std=c99"
     "-Wno-incompatible-pointer-types"
     "-Wno-int-conversion"

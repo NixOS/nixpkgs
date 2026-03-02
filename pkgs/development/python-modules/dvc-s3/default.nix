@@ -1,42 +1,40 @@
 {
   lib,
-  aiobotocore,
-  boto3,
+  botocore,
   buildPythonPackage,
   dvc-objects,
   fetchPypi,
   flatten-dict,
+  funcy,
   s3fs,
   setuptools-scm,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-s3";
   version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "dvc_s3";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-8dcYpE3O5Rkb60bkSt9LsiiCy46czdjyZAB4q8VkV9Q=";
   };
 
   # Prevent circular dependency
   pythonRemoveDeps = [ "dvc" ];
 
-  # dvc-s3 uses boto3 directly, we add in propagatedBuildInputs
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "aiobotocore[boto3]" "aiobotocore"
-  '';
-
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
-    aiobotocore
-    boto3
+    botocore
     dvc-objects
     flatten-dict
+    funcy
     s3fs
   ];
 
@@ -50,8 +48,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "S3 plugin for dvc";
-    homepage = "https://pypi.org/project/dvc-s3/${version}";
-    changelog = "https://github.com/iterative/dvc-s3/releases/tag/${version}";
+    homepage = "https://pypi.org/project/dvc-s3";
+    changelog = "https://github.com/iterative/dvc-s3/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})
