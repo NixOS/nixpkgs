@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aws-encryption-sdk";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-encryption-sdk-python";
     tag = "v${version}";
-    hash = "sha256-SlYXob61YLl96NKnmsGZTIU10bfwKYbhLsHjC/tXGI4=";
+    hash = "sha256-u0Fu6ikUJ70RQgptsAGbzmx3+FpXGTpN4Y2rKOSgO2o=";
   };
 
   build-system = [ setuptools ];
