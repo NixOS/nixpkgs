@@ -1,6 +1,7 @@
 const { classify } = require('../supportedBranches.js')
 const { postReview, dismissReviews } = require('./reviews.js')
 const reviewKey = 'prepare'
+const supportedSystems = require('./supportedSystems.js')
 
 module.exports = async ({ github, context, core, dry }) => {
   const pull_number = context.payload.pull_request.number
@@ -209,7 +210,8 @@ module.exports = async ({ github, context, core, dry }) => {
     core.setOutput('mergedSha', mergedSha)
     core.setOutput('targetSha', targetSha)
 
-    core.setOutput('systems', require('../supportedSystems.json'))
+    const systems = await supportedSystems({ github, context, targetSha })
+    core.setOutput('systems', systems)
 
     const files = (
       await github.paginate(github.rest.pulls.listFiles, {

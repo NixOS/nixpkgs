@@ -195,7 +195,7 @@ async function handleMerge({
         `:heavy_check_mark: [Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge (#306934)`,
       ]
     } catch (e) {
-      log('Enqueing failed', e.response.errors[0].message)
+      log('Enqueuing failed', e.response.errors[0].message)
     }
 
     // If required status checks are not satisfied, yet, the above will fail. In this case
