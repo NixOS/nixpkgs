@@ -43,13 +43,16 @@ python3Packages.buildPythonApplication rec {
     comfyui-frontend-package
     comfyui-workflow-templates
     einops
+    glfw
     kornia
     numpy
     pillow
     psutil
     pydantic
     pydantic-settings
+    pyopengl
     pyyaml
+    requests
     safetensors
     scipy
     sentencepiece
