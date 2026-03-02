@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       darkjaguar91
+      michailik
     ];
     platforms = [ "x86_64-linux" ];
   };
