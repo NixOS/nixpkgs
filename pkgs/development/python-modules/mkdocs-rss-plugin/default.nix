@@ -10,6 +10,7 @@
   pytest-cov-stub,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
   validator-collection,
 }:
 
@@ -25,7 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-rUMjS0+895SsU7qNckLL3BprUQa/3lJDjpwhMkF0jYg=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     cachecontrol
