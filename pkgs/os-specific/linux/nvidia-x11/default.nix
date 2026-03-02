@@ -119,7 +119,7 @@ rec {
     url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
     sha256_64bit = "sha256-8gwy/W7NH3BcbfJ5fAwIQlPs9/9I8sNH+Co5YZiC7OE=";
     persistencedSha256 = "sha256-q061VN6om3UzbpWD7+tJJVgU/e2YCJF4IgEv53qx9ZA=";
-    fabricmanagerSha256 = "sha256-mIFlY4JHPIkTH18mpciU+ueH8Nj6Ts+2g2xv+BfyUEI=";
+    fabricmanagerSha256 = "sha256-bVOnPmAa2ADGC1FCIz0TAyS9lccNPa3K5pJQhgX45pQ=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
