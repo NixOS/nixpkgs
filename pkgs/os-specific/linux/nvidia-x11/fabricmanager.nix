@@ -7,6 +7,7 @@ nvidia_x11: sha256:
   patchelf,
   zlib,
   glibc,
+  versionCheckHook,
 }:
 
 let
@@ -63,6 +64,12 @@ stdenv.mkDerivation rec {
 
     runHook postCheck
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   # Default stdenv fixup shrinkings cause undefined symbols when trying to run
   # meta.mainProgram
   dontFixup = true;
