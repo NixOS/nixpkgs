@@ -46,7 +46,7 @@
   p11-kit,
   nss_wrapper,
   ncurses,
-  Po4a,
+  perlPackages,
   jansson,
   jose,
   docbook_xsl,
@@ -60,6 +60,8 @@
 
 let
   docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
+  # NOTE: freeipa and sssd need to be built with the same version of python
+  inherit (perlPackages) Po4a;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
