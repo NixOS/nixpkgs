@@ -28,8 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     installManPage httm.1
 
-    for script in scripts/*.bash; do
-      install -Dm755 "$script" "$out/bin/$(basename "$script" .bash)"
+    for script in bowie equine nicotine ounce; do
+      install -Dm755 "scripts/$script.bash" "$out/bin/$script"
     done
 
     install -Dm644 README.md $out/share/doc/README.md
