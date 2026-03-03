@@ -87,6 +87,24 @@ let
           # https://github.com/NixOS/nix/blob/959c244a1265f4048390f3ad21679219d7b27a99/src/libstore/unix/build/linux-derivation-builder.cc#L63
           services.openssh.settings.UsePAM = false;
 
+          # Networking for tests is statically configured by default.
+          # dhcpcd times out after blocking for a long time, which slows down tests.
+          # See https://github.com/NixOS/nixpkgs/pull/478109#discussion_r2867570799
+          networking.useDHCP = lib.mkDefault false;
+
+          # Disable Info manual directory generation to prevent build failures.
+          #
+          # Context: 'install-info' (from texinfo) is triggered during system-path
+          # generation to index manuals, but it requires 'gzip' in the $PATH to
+          # decompress them.
+          # When 'networking.useDHCP' is set to false, transitive dependencies
+          # (like dhcpcd or other network tools) that normally pull 'gzip' into
+          # the system environment are removed. This leaves 'install-info'
+          # stranded without 'gzip', causing the 'system-path' derivation to fail.
+          # Since nspawn containers are typically minimal, disabling 'info'
+          # is a cleaner fix than explicitly adding 'gzip' to systemPackages.
+          documentation.info.enable = lib.mkDefault false;
+
           # Gross, insecure hack to make login work. See above.
           security.pam.services.login = {
             text = ''
