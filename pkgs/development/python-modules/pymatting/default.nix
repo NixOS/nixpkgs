@@ -16,7 +16,9 @@
   pyopencl,
 
   # tests
+  pocl,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 
   config,
   cudaSupport ? config.cudaSupport,
@@ -49,7 +51,16 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "pymatting" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.optionals cudaSupport [
+    # Provides a CPU-based OpenCL ICD so that pyopencl's module-level
+    # cl.create_some_context() succeeds without GPU hardware.
+    pocl
+    # pocl needs a writable $HOME for its kernel cache directory.
+    writableTmpDirAsHomeHook
+  ];
 
   disabledTests = [
     # no access to input data set
@@ -61,7 +72,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = lib.optionals cudaSupport [
-    # pyopencl._cl.LogicError: clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR
+    # Requires a CUDA driver for cupy GPU operations
     "tests/test_foreground.py"
   ];
 
