@@ -1,47 +1,41 @@
 {
   stdenv,
   lib,
-  python311Packages,
+  python3Packages,
   gettext,
   qt5,
   fetchFromGitHub,
 }:
-let
-  python3Packages = python311Packages;
-in
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
-  version = "4.3.1";
+  version = "4.3.1-unstable-2026-01-06";
 
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "arsenetar";
     repo = "dupeguru";
-    rev = version;
-    hash = "sha256-/jkZiCapmCLMp7WfgUmpsR8aNCfb3gBELlMYaC4e7zI=";
+    rev = "16aa6c21ffc2c33d44ff4a47bfa1a623c16ed626";
+    hash = "sha256-0x2ZpjaxpWVhm9vimDA06y1BOvpoU6KZYz5MPAoWAts=";
   };
-
-  patches = [
-    ./remove-setuptools-sandbox.patch
-  ];
 
   nativeBuildInputs = [
     gettext
     python3Packages.pyqt5
     python3Packages.setuptools
+    python3Packages.sphinx
     qt5.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    hsaudiotag3k
+    distro
     mutagen
     polib
     pyqt5
     pyqt5-sip
     semantic-version
     send2trash
-    sphinx
+    xxhash
   ];
 
   makeFlags = [
