@@ -1,0 +1,62 @@
+From 4adec98b00d7d815aecfe4c338e19ce0b82694b5 Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Mon, 23 Feb 2026 14:01:31 -0600
+Subject: [PATCH] fix build on darwin
+
+---
+ deps/llvm.mk                       |  2 ++
+ deps/patches/llvm-libcxx-fix.patch | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+ create mode 100644 deps/patches/llvm-libcxx-fix.patch
+
+diff --git a/deps/llvm.mk b/deps/llvm.mk
+index 8a6f9b7c8e..87f21294d9 100644
+--- a/deps/llvm.mk
++++ b/deps/llvm.mk
+@@ -231,6 +231,8 @@ endef
+ 
+ $(eval $(call LLVM_PATCH,llvm-ittapi-cmake))
+ 
++$(eval $(call LLVM_PATCH,llvm-libcxx-fix))
++
+ ifeq ($(USE_SYSTEM_ZLIB), 0)
+ $(LLVM_BUILDDIR_withtype)/build-configured: | $(build_prefix)/manifest/zlib
+ endif
+diff --git a/deps/patches/llvm-libcxx-fix.patch b/deps/patches/llvm-libcxx-fix.patch
+new file mode 100644
+index 0000000000..4afef3d66a
+--- /dev/null
++++ b/deps/patches/llvm-libcxx-fix.patch
+@@ -0,0 +1,29 @@
++From dfcbae4bd175e9e9235e1c38c4a3f5e5de1dce2d Mon Sep 17 00:00:00 2001
++From: George Huebner <george@feyor.sh>
++Date: Mon, 23 Feb 2026 16:43:42 -0600
++Subject: [PATCH] fix build with libcxx
++
++---
++ tools/sancov/sancov.cpp | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/llvm/tools/sancov/sancov.cpp b/llvm/tools/sancov/sancov.cpp
++index e7c985c558b5..0fefaa5d44bf 100644
++--- a/tools/sancov/sancov.cpp
+++++ b/tools/sancov/sancov.cpp
++@@ -529,10 +529,10 @@ private:
++       return std::unique_ptr<SpecialCaseList>();
++ 
++     if (!ClBlacklist.empty())
++-      return SpecialCaseList::createOrDie({{ClBlacklist}},
+++      return SpecialCaseList::createOrDie({std::string{ClBlacklist}},
++                                           *vfs::getRealFileSystem());
++ 
++-    return SpecialCaseList::createOrDie({{ClIgnorelist}},
+++    return SpecialCaseList::createOrDie({std::string{ClIgnorelist}},
++                                         *vfs::getRealFileSystem());
++   }
++   std::unique_ptr<SpecialCaseList> DefaultIgnorelist;
++-- 
++2.52.0
++
+-- 
+2.52.0
+
