@@ -28,9 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     installManPage httm.1
 
-    installShellCompletion --cmd httm \
-      --zsh scripts/httm-key-bindings.zsh
-
     for script in scripts/*.bash; do
       install -Dm755 "$script" "$out/bin/$(basename "$script" .bash)"
     done
