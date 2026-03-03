@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pdm-backend,
   anyio,
+  sniffio,
   typing-extensions,
   pytestCheckHook,
 }:
@@ -24,6 +25,7 @@ buildPythonPackage rec {
 
   dependencies = [
     anyio
+    sniffio
     typing-extensions
   ];
 

@@ -310,11 +310,11 @@
     "vendorHash": null
   },
   "digitalocean_digitalocean": {
-    "hash": "sha256-6zKZPB8W4YtY67cbeuFQRnax/5NpCq5tKNw4JFkAJjU=",
+    "hash": "sha256-lXPCwwGlGgddoCxTS5IgcZe26uSluNk+PZjopDY1jbc=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.76.0",
+    "rev": "v2.78.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -715,11 +715,11 @@
     "vendorHash": "sha256-rd7QuDdq7xRMyaQIDyXY1DI2Tt/wy3oXan/nE0HIyT0="
   },
   "huaweicloud_huaweicloud": {
-    "hash": "sha256-vDGr0g/yhLTr+oyXxbM7v2TyecYRAvx40crCi3ug5Lk=",
+    "hash": "sha256-uhhtNjVd4Jp8xYdwWX7XCepFcqZZ0ya/ekadmPvqgMU=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.86.0",
+    "rev": "v1.87.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -923,13 +923,13 @@
     "vendorHash": "sha256-5cqj1O57snU+NoVqmWc/KIGnowQNMww+rJxYfIPvHWU="
   },
   "mongodb_mongodbatlas": {
-    "hash": "sha256-UenW1c/lrER0851yBWS1XEFz7IdhqEsOg9fqcN2TT5s=",
+    "hash": "sha256-ACrBRB5QVn6LGnNtZFFG74wF4zJubZo7ryrfWdt7aFY=",
     "homepage": "https://registry.terraform.io/providers/mongodb/mongodbatlas",
     "owner": "mongodb",
     "repo": "terraform-provider-mongodbatlas",
-    "rev": "v2.6.0",
+    "rev": "v2.7.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-yKP93HPevmZER1oPSRx0xFajksMqEPYW4hvMlpC75u4="
+    "vendorHash": "sha256-DNCA+qN/aQOYYmDJ/jt0Scn58e27nonLfjkqJCRkBro="
   },
   "namecheap_namecheap": {
     "hash": "sha256-fHH9sHI1mqQ9q9nX9DHJ0qfEfmDB4/2uzyVvUuIAF18=",
