@@ -20,7 +20,6 @@ let
     take
     length
     filterAttrs
-    optionalString
     flip
     head
     pipe

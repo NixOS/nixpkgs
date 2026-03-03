@@ -4,9 +4,8 @@
 { lib }:
 
 let
-  inherit (builtins) head length typeOf;
-  inherit (lib.asserts) assertMsg;
-  inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs;
+  inherit (builtins) head length;
+  inherit (lib.trivial) mergeAttrs;
   inherit (lib.strings)
     concatStringsSep
     concatMapStringsSep

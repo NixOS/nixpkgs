@@ -12,7 +12,6 @@ let
     concatMap
     concatStringsSep
     elem
-    elemAt
     filter
     foldl'
     functionArgs

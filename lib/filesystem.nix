@@ -7,14 +7,12 @@
 # Tested in lib/tests/filesystem.sh
 let
   inherit (builtins)
-    readDir
     pathExists
     toString
     ;
 
   inherit (lib.filesystem)
     pathIsDirectory
-    pathIsRegularFile
     pathType
     packagesFromDirectoryRecursive
     ;
