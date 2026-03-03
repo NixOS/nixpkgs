@@ -2,7 +2,6 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchpatch2,
   makeWrapper,
   nixosTests,
 
@@ -13,30 +12,18 @@ let
 in
 python.pkgs.buildPythonPackage (finalAttrs: {
   pname = "pdfding";
-  version = "1.5.1";
+  version = "1.6.3";
   src = fetchFromGitHub {
     owner = "mrmn2";
     repo = "PdfDing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PXkD+2k8/LmMWzZAj8qEK4mLoOKS4mDWcqe8AgoCdBU=";
+    hash = "sha256-Qfw5urcUsVMxaVeVQeZkG8x5aK29y1HrcRY69AbdUXA=";
   };
   pyproject = true;
-
-  patches = [
-    # fixes two tests, remove patch in the next version
-    # https://github.com/mrmn2/PdfDing/pull/248
-    (fetchpatch2 {
-      url = "https://github.com/mrmn2/PdfDing/commit/24df5a82ffb1d60162978791b716f67d20128a22.patch?full_index=1";
-      hash = "sha256-N3FtPQGSOFeUbVcinXK9kJM6hZOn4YdJJVWe4VXb8pE=";
-    })
-  ];
 
   # remove supervisor from dependencies
   postPatch = ''
     sed -i 's/supervisor.*$//' pyproject.toml
-
-    substituteInPlace pdfding/backup/tests/test_management.py pdfding/backup/tests/test_tasks.py \
-      --replace-fail "Path(__file__).parents[2]" "Path('$PDFDING_OUT_DIR')"
   '';
 
   dependencies =
@@ -68,6 +55,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
       requests
     ]
     ++ qrcode.optional-dependencies.pil
+    ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount;
 
   build-system = with python.pkgs; [ poetry-core ];
@@ -139,35 +127,30 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     "django"
     "django-allauth"
-    "django-htmx"
+    "gunicorn"
+    "markdown"
+    "nh3"
     "pypdf"
-    "ruamel-yaml"
+    "whitenoise"
+  ];
+
+  checkInputs = with python.pkgs; [
+    fido2
+    pytest-django
   ];
 
   nativeCheckInputs = with python.pkgs; [
-    pytest-django
     pytestCheckHook
   ];
 
   # from .github/workflows/tests.yaml
-  pytestFlags = [
-    "--ignore=e2e"
-  ];
+  pytestFlags = [ "--ignore=e2e" ];
 
-  disabledTests = [
-    # broken tests in 1.5.0
-    "test_adjust_file_paths_to_ws_collection"
-    "test_oidc_callback" # AssertionError: 200 != 401
-  ];
-
-  /*
-    fix two breaking tests by providing full out path
-    AssertionError: Calls not found
-    AssertionError: 'add_file_to_minio' does not contain all of ...
-  */
   preCheck = ''
     # dev.py is required for tests, restore it
     mv dev.py.bak $PDFDING_OUT_DIR/core/settings/dev.py
+
+    export DATA_DIR=$PWD/pdfding
 
     # tests should run in pdfding directory
     pushd pdfding
@@ -176,6 +159,8 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   postCheck = ''
     # come out of the pdfding directory
     popd
+
+    unset DATA_DIR
 
     # remove dev.py
     rm $PDFDING_OUT_DIR/core/settings/dev.py
@@ -199,7 +184,6 @@ python.pkgs.buildPythonPackage (finalAttrs: {
     homepage = "https://pdfding.com";
     license = lib.licenses.agpl3Only;
     mainProgram = "pdfding-manage";
-    maintainers = with lib.maintainers; [ phanirithvij ];
     platforms = lib.platforms.unix;
     teams = with lib.teams; [ ngi ];
   };

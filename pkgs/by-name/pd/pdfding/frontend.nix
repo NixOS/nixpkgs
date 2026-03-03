@@ -1,6 +1,5 @@
 {
   stdenv,
-  fetchpatch2,
   fetchNpmDeps,
   fetchzip,
   fetchFromGitHub,
@@ -28,18 +27,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdfding-frontend";
-  version = "1.5.1";
+  version = "1.6.3";
   src = fetchFromGitHub {
     owner = "mrmn2";
     repo = "PdfDing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PXkD+2k8/LmMWzZAj8qEK4mLoOKS4mDWcqe8AgoCdBU=";
+    hash = "sha256-Qfw5urcUsVMxaVeVQeZkG8x5aK29y1HrcRY69AbdUXA=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "pdfding-frontend-${finalAttrs.version}-npm-deps";
-    hash = "sha256-SgL8QhRGONGhJBu6b8HSVqZPzJ+NojhVClBEH5ajCcc=";
+    hash = "sha256-XsaVnl7JNitRVDVxk82jy3/P81TgVK4EoXIrWSBPDVQ=";
   };
 
   nativeBuildInputs = [
