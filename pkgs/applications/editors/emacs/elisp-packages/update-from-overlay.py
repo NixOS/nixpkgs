@@ -1,6 +1,8 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i python3 -p nix git
 
+# linter: ruff check update-from-overlay.py
+
 import argparse
 import contextlib
 import dataclasses
@@ -15,8 +17,8 @@ import urllib.request
 
 @dataclasses.dataclass
 class EmacsOverlay:
-    git_url : str = f'https://github.com/nix-community/emacs-overlay'
-    raw_url : str = f'https://raw.githubusercontent.com/nix-community/emacs-overlay'
+    git_url : str = 'https://github.com/nix-community/emacs-overlay'
+    raw_url : str = 'https://raw.githubusercontent.com/nix-community/emacs-overlay'
     # The field declaration here is a hack around the error:
     # ValueError: mutable default <class 'dict'> for field elisp_packages_set is not allowed: use default_factory
     # See more at https://peps.python.org/pep-0557/#mutable-default-values
@@ -73,7 +75,7 @@ def main (emacs_overlay : EmacsOverlay,
 
     args = argument_parser.parse_args()
 
-    if args.commit == None:
+    if args.commit is None:
         sha = emacs_overlay.master_sha()
     else:
         sha = args.commit
@@ -217,7 +219,7 @@ def commit_fileset (name: str, sha: str, datestring : str | None,
     nix_attrs = emacs_overlay.elisp_packages_set[name]['nix_attrs']
     basename = emacs_overlay.elisp_packages_set[name]['basename']
 
-    if datestring == None:
+    if datestring is None:
         datestring = datetime.datetime.today().strftime('%Y-%m-%d')
         logger.debug(f'Date string not provided, using {datestring}')
     else:
