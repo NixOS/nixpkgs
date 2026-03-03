@@ -4124,6 +4124,10 @@ assertNoAdditions {
     buildInputs = [ vim ];
   };
 
+  vim-hypr-nav = super.vim-hypr-nav.overrideAttrs {
+    runtimeDeps = [ jq ];
+  };
+
   vim-isort = super.vim-isort.overrideAttrs {
     postPatch = ''
       substituteInPlace autoload/vimisort.vim \
