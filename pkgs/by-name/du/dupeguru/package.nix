@@ -1,12 +1,14 @@
 {
   stdenv,
   lib,
-  python3Packages,
+  python311Packages,
   gettext,
   qt5,
   fetchFromGitHub,
 }:
-
+let
+  python3Packages = python311Packages;
+in
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
   version = "4.3.1";
