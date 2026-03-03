@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "dissect-volume";
-  version = "3.17";
+  version = "3.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.volume";
     tag = version;
-    hash = "sha256-z7DH96c0uxOOE71m+P+QGds7ZHm1/yyE2FTilZt1OdA=";
+    hash = "sha256-2ivRkA4OLFntS2CtnXIr+/sLlcDVpmz6eINbejeH/3s=";
   };
 
   build-system = [

@@ -8,8 +8,6 @@
   fetchFromGitHub,
   packaging,
   pytest,
-  pytest-plus,
-  pytest-sugar,
   pytest-xdist,
   pytestCheckHook,
   setuptools,
@@ -18,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "26.1.0";
+  version = "26.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "pytest-ansible";
     tag = "v${version}";
-    hash = "sha256-uCuGDAEIiVAB9lfYf2X60nIA8IsmEJ9Dola0eFBNC+U=";
+    hash = "sha256-3pppBAgAfkwJNPRsI6CH4UDMqyZ45+mFNejlQwX5bCg=";
   };
 
   postPatch = ''
@@ -44,8 +42,6 @@ buildPythonPackage rec {
     ansible-core
     ansible-compat
     packaging
-    pytest-plus
-    pytest-sugar
     pytest-xdist
   ];
 

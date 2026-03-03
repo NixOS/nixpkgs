@@ -3,7 +3,7 @@
   lib,
   guile-lib,
   akkuPackages,
-  nodePackages,
+  katex,
   perlPackages,
   python3Packages,
   runCommand,
@@ -148,13 +148,14 @@ recurseIntoAttrs {
     );
 
     js = expectSuccessBin (
-      writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
-        var semver = require('semver');
+      writeJSBin "test-writers-js-bin" { libraries = [ katex ]; } ''
+        var katex = require('katex');
 
-        if (semver.valid('1.2.3')) {
-          console.log('success')
+        var html = katex.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
+        if (html instanceof katex.ParseError) {
+          console.log("fail")
         } else {
-          console.log('fail')
+          console.log("success")
         }
       ''
     );
@@ -319,13 +320,14 @@ recurseIntoAttrs {
     );
 
     js = expectSuccess (
-      writeJS "test-writers-js" { libraries = [ nodePackages.semver ]; } ''
-        var semver = require('semver');
+      writeJS "test-writers-js" { libraries = [ katex ]; } ''
+        var katex = require('katex');
 
-        if (semver.valid('1.2.3')) {
-          console.log('success')
+        var html = katex.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
+        if (html instanceof katex.ParseError) {
+          console.log("fail")
         } else {
-          console.log('fail')
+          console.log("success")
         }
       ''
     );

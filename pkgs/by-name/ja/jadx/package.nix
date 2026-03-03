@@ -6,7 +6,7 @@
   jdk,
   quark-engine,
   makeBinaryWrapper,
-  imagemagick,
+  librsvg,
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gradle
     jdk
-    imagemagick
+    librsvg
     makeBinaryWrapper
     copyDesktopItems
   ]
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
     for size in 64 128 256; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -resize "$size"x"$size" jadx-gui/src/main/resources/logos/jadx-logo.png $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
+      rsvg-convert --width "$size" jadx-gui/src/main/resources/logos/jadx-logo.svg > $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
     done
 
     runHook postInstall

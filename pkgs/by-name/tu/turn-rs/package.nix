@@ -2,6 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  # Dependencies
+  protobuf,
+  # Tests
   versionCheckHook,
   nix-update-script,
   nixosTests,
@@ -9,20 +12,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turn-rs";
-  version = "3.4.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "mycrl";
     repo = "turn-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BW5dNPkf/JGrf00BI41rEoZRmqftoz+RMGiP6ECVEec=";
+    hash = "sha256-HYrFnwxj4BRk2PGK52il5Bh5hxvWHJNQ/5Y0u5FSTwY=";
   };
 
-  cargoHash = "sha256-wnbovuxh3wc1TU8BYZEOG/8SO9bCUd0eWRC81MtAdqo=";
+  cargoHash = "sha256-q1kq2ISzKZfJfKTRkMrVMQqngAqG2INfej9lGoll5c0=";
 
   # By default, no features are enabled
   # https://github.com/mycrl/turn-rs?tab=readme-ov-file#features-1
   cargoBuildFlags = [ "--all-features" ];
+
+  nativeBuildInputs = [
+    protobuf
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

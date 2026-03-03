@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkiwix";
-  version = "14.0.0";
+  version = "14.1.1";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "libkiwix";
     rev = finalAttrs.version;
-    hash = "sha256-QP23ZS0FJsMVtnWOofywaAPIU0GJ2L+hLP/x0LXMKiU=";
+    hash = "sha256-yZWzzu0LLUxg0CbdeKARuaFsf3UxvJJbqPRDGXWDjLI=";
   };
 
   nativeBuildInputs = [
@@ -56,9 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs scripts
-    substituteInPlace meson.build \
-        --replace-fail "libicu_dep = dependency('icu-i18n', static:static_deps)" \
-                       "libicu_dep = [dependency('icu-i18n', static:static_deps), dependency('icu-uc', static:static_deps)]"
   '';
 
   passthru.updateScript = nix-update-script { };

@@ -3,21 +3,24 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-fullykiosk";
-  version = "0.0.14";
-  format = "setuptools";
+  version = "0.0.15";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgarwood";
     repo = "python-fullykiosk";
     tag = version;
-    hash = "sha256-+JBgBi05zNgIt2cXlHjFPI6nBFR7SpMCWIQHKtnZeX4=";
+    hash = "sha256-t/o4yRIh/r6cocEJ7c9oOa/C7RE3ZltkpzsCKS/dJHY=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;

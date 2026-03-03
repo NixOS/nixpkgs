@@ -49,8 +49,8 @@ buildGoModule (finalAttrs: {
         sourceRoot
         ;
       pnpm = pnpm_9;
-      fetcherVersion = 1;
-      hash = "sha256-Gg4nOxqWb692GvvwE7AJKQzGrrLLW7haaooEkUZW7FQ=";
+      fetcherVersion = 3;
+      hash = "sha256-hRMHvfzfjOzvcCHFhDLxuq2qZ3mi4/333nEcQANbJ/o=";
     };
 
     nativeBuildInputs = [

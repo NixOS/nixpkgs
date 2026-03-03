@@ -46,10 +46,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/applications $out/share/pixmaps
-
-    cp assets/gpustat.desktop $out/share/applications
-    cp assets/gpustat_icon_* $out/share/pixmaps
+    install -D assets/gpustat.desktop -t $out/share/applications
+    install -D assets/gpustat_icon_16px.png $out/share/icons/hicolor/16x16/apps/gpustat.png
+    install -D assets/gpustat_icon_32px.png $out/share/icons/hicolor/32x32/apps/gpustat.png
+    install -D assets/gpustat_icon_64px.png $out/share/icons/hicolor/64x64/apps/gpustat.png
+    substituteInPlace $out/share/applications/gpustat.desktop \
+      --replace-fail "Icon=gpustat_icon_64px" "Icon=gpustat"
   '';
 
   # Wrap the program in a script that sets the LD_LIBRARY_PATH environment variable

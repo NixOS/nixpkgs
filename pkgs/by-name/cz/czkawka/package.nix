@@ -49,9 +49,11 @@ let
       gdk-pixbuf
       glib
       gtk4
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libglvnd
       libxkbcommon
-      pango
       wayland
     ];
 
@@ -78,7 +80,8 @@ let
 
     postFixup = ''
       wrapGApp $out/bin/czkawka_gui
-
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       patchelf --add-rpath "${
         lib.makeLibraryPath [
           fontconfig

@@ -2693,6 +2693,8 @@ self: super: with self; {
 
   chispa = callPackage ../development/python-modules/chispa { };
 
+  choreographer = callPackage ../development/python-modules/choreographer { };
+
   chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib { };
 
   chromadb = callPackage ../development/python-modules/chromadb { zstd-c = pkgs.zstd; };
@@ -4253,8 +4255,6 @@ self: super: with self; {
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
 
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
-
-  django-modelsearch = callPackage ../development/python-modules/django-modelsearch { };
 
   django-modeltranslation = callPackage ../development/python-modules/django-modeltranslation { };
 
@@ -9239,6 +9239,8 @@ self: super: with self; {
 
   logilab-constraint = callPackage ../development/python-modules/logilab/constraint.nix { };
 
+  logistro = callPackage ../development/python-modules/logistro { };
+
   logmatic-python = callPackage ../development/python-modules/logmatic-python { };
 
   logster = callPackage ../development/python-modules/logster { };
@@ -10063,6 +10065,8 @@ self: super: with self; {
   modelcif = callPackage ../development/python-modules/modelcif { };
 
   modelscope = callPackage ../development/python-modules/modelscope { };
+
+  modelsearch = callPackage ../development/python-modules/modelsearch { };
 
   modern-colorthief = callPackage ../development/python-modules/modern-colorthief { };
 

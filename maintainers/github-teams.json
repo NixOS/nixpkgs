@@ -196,7 +196,6 @@
       "Moraxyc": 69713071,
       "Prince213": 25235514,
       "Samasaur1": 30577766,
-      "Sciencentistguy": 4983935,
       "Steven0351": 24440751,
       "afh": 16507,
       "azuwis": 9315,
@@ -220,6 +219,7 @@
       "gshpychka": 23005347,
       "hexagonal-sun": 222664,
       "heywoodlh": 18178614,
+      "iamanaws": 78835633,
       "isabelroses": 71222764,
       "jonhermansen": 660911,
       "juliusrickert": 5007494,
@@ -248,6 +248,7 @@
       "samrose": 115821,
       "sarahec": 11277967,
       "shaunsingh": 71196912,
+      "shunueda": 62182668,
       "sikmir": 688044,
       "siraben": 8219659,
       "siriobalmelli": 23038812,
@@ -636,6 +637,7 @@
       "djacu": 7043297
     },
     "members": {
+      "Sigmanificient": 53050011,
       "flyfloh": 74379,
       "thilobillerbeck": 7442383
     },
@@ -915,6 +917,16 @@
       "marcin-serwin": 12128106
     },
     "name": "SDL"
+  },
+  "security-review": {
+    "description": "Reviews changes to core packages for Nixpkgs security vulnerabilities: https://github.com/NixOS/nixpkgs/issues/494349",
+    "id": 16430758,
+    "maintainers": {
+      "balsoft": 18467667,
+      "infinisil": 20525370
+    },
+    "members": {},
+    "name": "Security review"
   },
   "static": {
     "description": "People interested in static builds (creation of `.a` files, fully static executables, etc.) and keeping them working",

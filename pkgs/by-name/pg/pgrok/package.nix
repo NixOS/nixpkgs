@@ -41,8 +41,8 @@ buildGoModule {
       src
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-o6wxO8EGRmhcYggJnfxDkH+nbt+isc8bfHji8Hu9YKg=";
+    fetcherVersion = 3;
+    hash = "sha256-gVwwLTOA8rXsy8xg4uGPJyBdQ8yUqkiul9W5oKw6kGI=";
   };
 
   vendorHash = "sha256-l/tUO7fevi+zUmUp6CQoVNrzMF7LIzbo2Qsa/ez6LiA=";

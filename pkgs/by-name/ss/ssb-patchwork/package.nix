@@ -42,8 +42,8 @@ symlinkJoin {
   paths = [ binary ];
 
   postBuild = ''
-    mkdir -p $out/share/pixmaps/ $out/share/applications
-    cp ${appimage-contents}/ssb-patchwork.png $out/share/pixmaps
+    mkdir -p $out/share/applications
+    install -D ${appimage-contents}/ssb-patchwork.png -t $out/share/icons/hicolor/512x512/apps
     cp ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
