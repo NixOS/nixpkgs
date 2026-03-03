@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tracearr";
-  version = "1.4.12";
+  version = "1.4.20";
 
   src = fetchFromGitHub {
     owner = "connorgallopo";
@@ -73,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe nodejs} $out/bin/tracearr \
       --add-flags $out/lib/tracearr/apps/server/dist/index.js \
       --set NODE_PATH "$out/lib/tracearr/node_modules:$out/lib/tracearr/apps/server/node_modules:$out/lib/tracearr/apps/web/node_modules" \
+      --set-default APP_VERSION ${finalAttrs.version} \
+      --set-default APP_TAG v${finalAttrs.version} \
       --set-default NODE_ENV production
 
     runHook postInstall
