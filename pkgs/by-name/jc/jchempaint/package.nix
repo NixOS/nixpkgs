@@ -13,7 +13,7 @@
 
 maven.buildMavenPackage {
   pname = "jchempaint";
-  version = "3.4-SNAPSHOT-2025-10-15"; # "3.4-SNAPSHOT" is the version given in the pom.xml
+  version = "3.4b"; # "3.4-SNAPSHOT" is the version given in the pom.xml
 
   src = fetchFromGitHub {
     owner = "JChemPaint";
@@ -22,7 +22,7 @@ maven.buildMavenPackage {
     hash = "sha256-1wcJ1qP8yZg1qe4YkpCRGidHUXc1/1eUabR3NoM6kjc=";
   };
 
-  mvnHash = "sha256-AGDyXyEEDMjPHMlbcxninkciZ7V/ALMUS/OkgBnni18=";
+  mvnHash = "sha256-/UUKeVnD/LloM+BwVn+XJNGq5QGkC9x+wneeUq7WoHA=";
 
   nativeBuildInputs = [
     makeWrapper
