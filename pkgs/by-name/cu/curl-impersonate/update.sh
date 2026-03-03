@@ -50,7 +50,7 @@ evalvar() {
     echo $out
 }
 
-attr="${UPDATE_NIX_ATTR_PATH:-curl-impersonate-chrome}"
+attr="${UPDATE_NIX_ATTR_PATH:-curl-impersonate}"
 version="$(curl -sSL "https://api.github.com/repos/lexiforest/curl-impersonate/releases/latest" | jq -r .tag_name | sed -e 's/^v//')"
 
 pkgpath="$(findpath "$attr")"
@@ -98,6 +98,26 @@ cat >"$(dirname "$pkgpath")"/deps.nix <<EOF
   "nghttp3-$(getvar NGHTTP3_VERSION "$vars").tar.bz2" = fetchurl {
     url = "$(evalvar NGHTTP3_URL "$vars")";
     hash = "$(narhash "$(evalvar NGHTTP3_URL "$vars")")";
+  };
+
+  "zlib-$(getvar ZLIB_VERSION "$vars").tar.gz" = fetchurl {
+    url = "$(evalvar ZLIB_URL "$vars")";
+    hash = "$(narhash "$(evalvar ZLIB_URL "$vars")")";
+  };
+
+  "zstd-$(getvar ZSTD_VERSION "$vars").tar.gz" = fetchurl {
+    url = "$(evalvar ZSTD_URL "$vars")";
+    hash = "$(narhash "$(evalvar ZSTD_URL "$vars")")";
+  };
+
+  "libunistring-$(getvar LIBUNISTRING_VERSION "$vars").tar.gz" = fetchurl {
+    url = "$(evalvar LIBUNISTRING_URL "$vars")";
+    hash = "$(narhash "$(evalvar LIBUNISTRING_URL "$vars")")";
+  };
+
+  "libidn2-$(getvar LIBIDN2_VERSION "$vars").tar.gz" = fetchurl {
+    url = "$(evalvar LIBIDN2_URL "$vars")";
+    hash = "$(narhash "$(evalvar LIBIDN2_URL "$vars")")";
   };
 }
 EOF
