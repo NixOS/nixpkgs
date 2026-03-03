@@ -3,6 +3,7 @@
   stdenv,
   autoPatchelfHook,
   fetchurl,
+  makeBinaryWrapper,
   versionCheckHook,
 }:
 
@@ -21,7 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (srcConfig) hash;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
   sourceRoot = ".";
   dontStrip = true;
@@ -32,8 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postInstall = ''
+    wrapProgram $out/bin/copilot \
+      --add-flags "--no-auto-update"
+  '';
+
   nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin; # skip on Darwin - OpenSSL errors in sandbox
 
   passthru.updateScript = ./update.sh;
 

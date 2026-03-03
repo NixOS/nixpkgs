@@ -15,7 +15,7 @@
   libxc,
   makeWrapper,
   gsl,
-  boost,
+  boost188,
   autoPatchelfHook,
   enableQcmaquis ? true,
   # Note that the CASPT2 module is broken with MPI
@@ -29,6 +29,7 @@ assert blas-ilp64.isILP64;
 assert lapack-ilp64.isILP64;
 
 let
+  boost = boost188;
   python = python3.withPackages (
     ps: with ps; [
       six

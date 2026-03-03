@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -68,9 +69,13 @@ buildPythonPackage (finalAttrs: {
   # Most tests require downloading models from Hugging Face
   doCheck = false;
 
-  pythonImportsCheck = [
-    "onnx_asr"
-  ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  pythonImportsCheck =
+    lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64))
+      [
+        "onnx_asr"
+      ];
 
   meta = {
     description = "Lightweight Automatic Speech Recognition using ONNX models";

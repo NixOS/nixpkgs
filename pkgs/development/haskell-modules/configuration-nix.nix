@@ -352,7 +352,7 @@ builtins.intersectAttrs super {
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
   # These require postgres and pass the connection string manually via the CLI in tests.
-  consumers = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+  consumers = dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook) (
     overrideCabal (drv: {
       preCheck = ''
         export postgresqlTestUserOptions="LOGIN SUPERUSER"
@@ -368,23 +368,25 @@ builtins.intersectAttrs super {
       ];
     }) super.consumers
   );
-  hpqtypes-extras = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
-    overrideCabal (drv: {
-      preCheck = ''
-        export postgresqlTestUserOptions="LOGIN SUPERUSER"
-        export PGDATABASE=hpqtypes-extras
-      '';
-      testToolDepends = drv.testToolDepends or [ ] ++ [
-        pkgs.postgresql
-        pkgs.postgresqlTestHook
-      ];
-      testTargets = [
-        "hpqtypes-extras-tests"
-        "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
-      ];
-    }) super.hpqtypes-extras
-  );
-  hpqtypes = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+  hpqtypes-extras =
+    dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook)
+      (
+        overrideCabal (drv: {
+          preCheck = ''
+            export postgresqlTestUserOptions="LOGIN SUPERUSER"
+            export PGDATABASE=hpqtypes-extras
+          '';
+          testToolDepends = drv.testToolDepends or [ ] ++ [
+            pkgs.postgresql
+            pkgs.postgresqlTestHook
+          ];
+          testTargets = [
+            "hpqtypes-extras-tests"
+            "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+          ];
+        }) super.hpqtypes-extras
+      );
+  hpqtypes = dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook) (
     overrideCabal (drv: {
       preCheck = ''
         export postgresqlTestUserOptions="LOGIN SUPERUSER"
@@ -400,26 +402,28 @@ builtins.intersectAttrs super {
       ];
     }) (super.hpqtypes.override { libpq = pkgs.libpq; })
   );
-  hpqtypes-effectful = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
-    overrideCabal
-      (drv: {
-        preCheck = ''
-          export postgresqlTestUserOptions="LOGIN SUPERUSER"
-          export PGDATABASE=hpqtypes-effectful
-        '';
-        testToolDepends = drv.testToolDepends or [ ] ++ [
-          pkgs.postgresql
-          pkgs.postgresqlTestHook
-        ];
-      })
+  hpqtypes-effectful =
+    dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook)
       (
-        super.hpqtypes-effectful.overrideAttrs (drv: {
-          postgresqlTestSetupPost = ''
-            export DATABASE_URL="host=$PGHOST user=$PGUSER dbname=$PGDATABASE"
-          '';
-        })
-      )
-  );
+        overrideCabal
+          (drv: {
+            preCheck = ''
+              export postgresqlTestUserOptions="LOGIN SUPERUSER"
+              export PGDATABASE=hpqtypes-effectful
+            '';
+            testToolDepends = drv.testToolDepends or [ ] ++ [
+              pkgs.postgresql
+              pkgs.postgresqlTestHook
+            ];
+          })
+          (
+            super.hpqtypes-effectful.overrideAttrs (drv: {
+              postgresqlTestSetupPost = ''
+                export DATABASE_URL="host=$PGHOST user=$PGUSER dbname=$PGDATABASE"
+              '';
+            })
+          )
+      );
 
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
@@ -570,7 +574,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ])
-    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+    (dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook))
   ];
 
   # Test suite requires a running postgresql server,
@@ -1353,7 +1357,8 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ];
-    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
+    doCheck =
+      drv.doCheck or true && lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook;
   }) super.relocant;
 
   # https://gitlab.iscpif.fr/gargantext/haskell-pgmq/blob/9a869df2842eccc86a0f31a69fb8dc5e5ca218a8/README.md#running-test-cases
@@ -1366,7 +1371,8 @@ builtins.intersectAttrs super {
       (lib.getBin (pkgs.postgresql.withPackages (ps: [ ps.pgmq ])))
       pkgs.postgresqlTestHook
     ];
-    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
+    doCheck =
+      drv.doCheck or true && lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook;
   }) super.haskell-pgmq;
   # Needs pgmq available at test time with somehow preinitialized database (?)
   stakhanov = dontCheck super.stakhanov;
@@ -1381,7 +1387,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ])
-    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+    (dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook))
   ];
 
   postgresql-simple-migration = overrideCabal (drv: {
@@ -1394,7 +1400,8 @@ builtins.intersectAttrs super {
       pkgs.postgresqlTestHook
     ];
     jailbreak = true;
-    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
+    doCheck =
+      drv.doCheck or true && lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook;
   }) super.postgresql-simple-migration;
 
   postgresql-simple = lib.pipe super.postgresql-simple [
@@ -1402,7 +1409,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ])
-    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+    (dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook))
   ];
 
   beam-postgres = lib.pipe super.beam-postgres [
@@ -1416,7 +1423,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ])
-    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+    (dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook))
   ];
 
   esqueleto =
@@ -1442,7 +1449,11 @@ builtins.intersectAttrs super {
         ];
       })
       # https://github.com/NixOS/nixpkgs/issues/198495
-      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.esqueleto);
+      (
+        dontCheckIf (
+          !lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook
+        ) super.esqueleto
+      );
 
   persistent-postgresql =
     # TODO: move this override to configuration-nix.nix
@@ -1464,7 +1475,11 @@ builtins.intersectAttrs super {
         ];
       })
       # https://github.com/NixOS/nixpkgs/issues/198495
-      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
+      (
+        dontCheckIf (
+          !lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook
+        ) super.persistent-postgresql
+      );
 
   # https://gitlab.iscpif.fr/gargantext/haskell-bee/blob/19c8775f0d960c669235bf91131053cb6f69a1c1/README.md#redis
   haskell-bee-redis = overrideCabal (drv: {

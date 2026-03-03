@@ -17,7 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.16.20";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "drobilla";
     repo = "sord";
     tag = "v${finalAttrs.version}";

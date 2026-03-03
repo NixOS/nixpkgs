@@ -46,7 +46,7 @@ flutter335.buildFlutterApplication rec {
 
   postInstall = ''
     install -Dm644 snap/gui/musicpod.desktop -t $out/share/applications
-    install -Dm644 snap/gui/musicpod.png -t $out/share/pixmaps
+    install -Dm644 snap/gui/musicpod.png -t $out/share/icons/hicolor/256x256/apps
   '';
 
   passthru = {

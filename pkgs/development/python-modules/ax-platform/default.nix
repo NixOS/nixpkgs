@@ -10,6 +10,7 @@
 
   # dependencies
   botorch,
+  graphviz,
   ipywidgets,
   jinja2,
   markdown,
@@ -27,16 +28,16 @@
   tabulate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ax-platform";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
-    tag = version;
-    hash = "sha256-9aZxliG7687OBhaQDG6SoN7paSfVB5prxB3KgiOod0Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-zIK3D7QSkfzAxySumdxsA3tiPWYbP9E6SS21837H4ZY=";
   };
 
   env.ALLOW_BOTORCH_LATEST = "1";
@@ -48,6 +49,7 @@ buildPythonPackage rec {
 
   dependencies = [
     botorch
+    graphviz
     ipywidgets
     jinja2
     markdown
@@ -74,23 +76,38 @@ buildPythonPackage rec {
     # broken with sqlalchemy 2
     "ax/core/tests/test_experiment.py"
     "ax/service/tests/test_ax_client.py"
-    "ax/service/tests/test_orchestrator.py"
-    "ax/service/tests/test_with_db_settings_base.py"
 
     # Hangs forever
     "ax/analysis/plotly/tests/test_top_surfaces.py::TestTopSurfacesAnalysis::test_online"
+
+    # ValueError: `db_settings` argument should be of type ax.storage.sqa_store
+    "ax/storage/sqa_store/tests/test_with_db_settings_base.py"
   ];
 
   disabledTests = [
     # sqlalchemy.exc.ArgumentError: Strings are not accepted for attribute names in loader options; please use class-bound attributes directly.
-    "SQAStoreUtilsTest"
     "SQAStoreTest"
+    "SQAStoreUtilsTest"
+    "test_load_experiment_with_aux_exp_and_custom_metric_in_gen_metadata"
+    "test_resave_experiment_with_aux_exp_loses_custom_metrics_and_runner"
 
     # ValueError: Expected dim to be an integer greater than or equal to 2. Found dim=1.
     "test_get_model"
 
     # ValueError: `db_settings` argument should be of type ax.storage.sqa_store
+    "test_from_stored_experiment"
+    "test_generate_candidates_can_remove_stale_candidates"
+    "test_generate_candidates_can_remove_stale_candidates_with_ttl"
+    "test_generate_candidates_does_not_fail_stale_candidates_if_fails_to_gen"
+    "test_generate_candidates_updates_experiment_status"
+    "test_generate_candidates_works_for_sobol"
     "test_get_next_trials_with_db"
+    "test_orchestrator_with_metric_with_new_data_after_completion"
+    "test_sqa_storage_map_metric_experiment"
+    "test_sqa_storage_with_experiment_name"
+    "test_sqa_storage_without_experiment_name"
+    "test_suppress_all_storage_errors"
+    "test_suppress_all_storage_errors"
 
     # exact comparison of floating points
     "test_optimize_l0_homotopy"
@@ -113,8 +130,8 @@ buildPythonPackage rec {
   meta = {
     description = "Platform for understanding, managing, deploying, and automating adaptive experiments";
     homepage = "https://ax.dev/";
-    changelog = "https://github.com/facebook/Ax/releases/tag/${src.tag}";
+    changelog = "https://github.com/facebook/Ax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

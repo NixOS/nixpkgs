@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-SiJJxRzmKQxqw3UESN7q+3qkU1nK+7z6K5RpIMRRces=";
+    fetcherVersion = 3;
+    hash = "sha256-xx45vudeW6OnUgyH0N+gQI5GPT8k5B4x0HdCvHF+f9A=";
   };
 
   passthru.updateScript = nix-update-script {

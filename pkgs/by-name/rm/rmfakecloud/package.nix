@@ -34,8 +34,8 @@ buildGoModule rec {
     sourceRoot = "${src.name}/ui";
     pnpmLock = "${src}/ui/pnpm-lock.yaml";
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-uywmHN9HWKi0CaqTg9uEio2XCu6ap9v2xtbodW/6b4Q=";
+    fetcherVersion = 3;
+    hash = "sha256-YhcPR7aObZiV0FibcogjrOGNo2+syUuusaW+yx1HRv8=";
   };
   preBuild = lib.optionals enableWebui ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart

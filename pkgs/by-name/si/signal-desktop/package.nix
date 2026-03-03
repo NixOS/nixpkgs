@@ -316,7 +316,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Private, simple, and secure messenger (nixpkgs build)";
+    description = "Private, simple, and secure messenger";
     longDescription = ''
       Signal Desktop is an Electron application that links with your
       "Signal Android" or "Signal iOS" app.
