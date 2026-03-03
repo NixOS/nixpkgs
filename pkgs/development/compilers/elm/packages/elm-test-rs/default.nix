@@ -81,6 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/mpizenberg/elm-test-rs";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      phanirithvij
       jpagex
       zupo
     ];
