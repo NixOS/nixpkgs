@@ -3,6 +3,7 @@
   stdenv,
   mkDerivation,
   fetchgit,
+  fetchpatch,
   gnuradio,
   cmake,
   pkg-config,
@@ -33,6 +34,15 @@ mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-jCUzBY1pYiEtcRQ97t9F6uEMVYw2NU0eoB5Xc2H6pGQ=";
   };
+
+  patches = [
+    # Fixes build with boost 1.89, see:
+    # https://github.com/osmocom/gr-osmosdr/pull/29
+    (fetchpatch {
+      url = "https://github.com/osmocom/gr-osmosdr/commit/06249f1f0930aa553ef8877b50503b9f5c77b4a0.patch";
+      hash = "sha256-ofjuDvTT2PzRTR6UWchTQzmr9a83ka5TfUdlCBe4Is0=";
+    })
+  ];
 
   disabled = gnuradioAtLeast "3.11";
 
