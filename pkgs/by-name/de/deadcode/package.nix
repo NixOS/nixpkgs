@@ -23,6 +23,7 @@ buildGoModule (finalAttrs: {
     description = "Find unreachable functions in Go programs";
     homepage = "https://pkg.go.dev/golang.org/x/tools/cmd/deadcode";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "deadcode";
   };
 })
