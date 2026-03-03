@@ -8,10 +8,7 @@
   glibc,
   pango,
   gtk2,
-  kcoreaddons,
-  ki18n,
-  kio,
-  kservice,
+  libsForQt5,
   stdenv,
   runtimeShell,
   unzip,
@@ -75,10 +72,10 @@ let
       gtk2
       pango
       cairo
-      kio
-      kservice
-      ki18n
-      kcoreaddons
+      libsForQt5.kio
+      libsForQt5.kservice
+      libsForQt5.ki18n
+      libsForQt5.kcoreaddons
       gdk-pixbuf
       bzip2
     ];
