@@ -238,7 +238,7 @@ Output:
 def commit_fileset(
     name: str,
     sha: str,
-    datestring: str | None,
+    datestring: str,
     emacs_overlay: EmacsOverlay,
     here_directory: HereDirectory,
     logger: logging.Logger,
@@ -248,18 +248,14 @@ def commit_fileset(
     Arguments:
     name -- The name of fileset.
     sha -- The commit SHA of emacs-overlay from which the files are retrieved.
-    datestring -- The date to be written on commit message. If None, use the current time.
+    datestring -- The date to be written on commit message.
     """
     logger.debug("BEGIN")
 
     nix_attrs = emacs_overlay.elisp_packages_set[name]["nix_attrs"]
     basename = emacs_overlay.elisp_packages_set[name]["basename"]
 
-    if datestring is None:
-        datestring = datetime.datetime.today().strftime("%Y-%m-%d")
-        logger.debug(f"Date string not provided, using {datestring}")
-    else:
-        logger.debug(f"Date string was provided: {datestring}")
+    logging.debug(f"Date: {datestring}")
 
     cmdline_verify = ["git", "diff", "--exit-code", "--quiet", "--", basename]
     result_verify = subprocess.run(cmdline_verify)
