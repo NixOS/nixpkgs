@@ -902,13 +902,6 @@
     "hash": "sha256-i0w0dd8MNUTbzCjkh161sWPXK0Cv9CUKr9rZQYDD+ZU=",
     "description": "Microsoft Azure Command-Line Tools AzureQuotaExtensionAPI Extension"
   },
-  "redisenterprise": {
-    "pname": "redisenterprise",
-    "version": "1.3.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/redisenterprise-1.3.0-py3-none-any.whl",
-    "hash": "sha256-53kvBZJxKFcjFnGu6VzALidEx2MexVaoZDLW/4tsckY=",
-    "description": "Microsoft Azure Command-Line Tools RedisEnterprise Extension"
-  },
   "reservation": {
     "pname": "reservation",
     "version": "0.3.1",
