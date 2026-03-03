@@ -15,9 +15,11 @@ echoerr "Working on $fname"
 shift
 
 # Fetch latest tags from the repo, leave only stable and lts, use version sort in reverse order.
-all_tags=$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} https://api.github.com/repos/ClickHouse/ClickHouse/tags \
+all_tags=$({ for page in 1 2 3; do
+               curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/ClickHouse/ClickHouse/tags?per_page=100&page=$page"
+             done; } \
            | jq -r '.[].name | select(test("-(stable|lts)$"))' \
-           | sort -Vr)
+           | sort -Vr | uniq)
 
 # Fail if no tags found
 if [[ -z "$all_tags" ]]; then
