@@ -126,7 +126,6 @@ def main(
             sha,
             datestring=datestring,
             emacs_overlay=emacs_overlay,
-            here_directory=here_directory,
         )
 
 
@@ -203,7 +202,6 @@ def check_fileset(
         env["NIXPKGS_ALLOW_BROKEN"] = "1"
 
         logging.info(f"Testing {nix_attr}")
-        # TODO: capture the output (to put it in the logfile).
         result = subprocess.run(
             cmdline, capture_output=True, text=True, check=True, env=env
         )
@@ -220,7 +218,6 @@ def commit_fileset(
     sha: str,
     datestring: str,
     emacs_overlay: EmacsOverlay,
-    here_directory: HereDirectory,
 ) -> None:
     """Commit the fileset.
 
