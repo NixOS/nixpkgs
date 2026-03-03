@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "whosthere";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ramonvermeulen";
     repo = "whosthere";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EuEq3HG7j5kz0GomJELcVy+POtbA+NtIM/Y/G3kGZn4=";
+    hash = "sha256-ZvbAwOrVg77H0WifK7Rmp4ArRbLJ/POvo+E9HCEbWYM=";
   };
 
-  vendorHash = "sha256-YVPsWpIXC5SLm+T2jEGqF4MBcKOAAk0Vpc7zCIFkNw8=";
+  vendorHash = "sha256-N/yfy1IbxD16WpBSZBurDZWasibef/wxF+/05yEbHuA=";
 
   nativeBuildInputs = [
     installShellFiles
