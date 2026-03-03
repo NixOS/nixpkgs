@@ -14,7 +14,6 @@ import os
 import pathlib
 import shutil
 import subprocess
-import sys
 import urllib.request
 
 
@@ -96,7 +95,11 @@ def main(
         case _:
             loglevel = logging.INFO
 
-    logger = get_logger(loglevel=loglevel)
+    logging.basicConfig(
+        level=loglevel,
+        format="%(asctime)s - %(levelname)s - %(funcName)s - %(message)s",
+        datefmt="[%Y-%m-%d %H:%M:%S]",
+    )
 
     datestring = datetime.datetime.today().strftime("%Y-%m-%d")
 
@@ -108,7 +111,6 @@ def main(
             name,
             sha,
             emacs_overlay=emacs_overlay,
-            logger=logger,
         )
 
     for name in emacs_overlay.elisp_packages_set:
@@ -116,7 +118,6 @@ def main(
             name,
             emacs_overlay=emacs_overlay,
             here_directory=here_directory,
-            logger=logger,
         )
 
     for name in emacs_overlay.elisp_packages_set:
@@ -126,7 +127,6 @@ def main(
             datestring=datestring,
             emacs_overlay=emacs_overlay,
             here_directory=here_directory,
-            logger=logger,
         )
 
 
@@ -150,32 +150,10 @@ def get_argument_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def get_logger(loglevel: int) -> logging.Logger:
-    """Return a basic logging facility to emit messages over console (stdout)."""
-    logger = logging.getLogger("update-from-overlay")
-    # Set the lowest level here, so that it does not clobber the one provided by
-    # the function argument
-    logger.setLevel(logging.DEBUG)
-
-    console_formatter = logging.Formatter(
-        fmt="%(asctime)s - %(levelname)s - %(funcName)s - %(message)s",
-        datefmt="[%Y-%m-%d %H:%M:%S]",
-    )
-
-    console_handler = logging.StreamHandler(stream=sys.stdout)
-    console_handler.setLevel(loglevel)
-    console_handler.setFormatter(console_formatter)
-
-    logger.addHandler(console_handler)
-
-    return logger
-
-
 def fetch_fileset(
     name: str,
     sha: str,
     emacs_overlay: EmacsOverlay,
-    logger: logging.Logger,
 ) -> None:
     """Fetch a fileset from emacs overlay.
 
@@ -183,36 +161,35 @@ def fetch_fileset(
     name -- The name of fileset.
     sha -- The commit SHA of emacs-overlay from which the files are retrieved.
     """
-    logger.debug("BEGIN")
+    logging.debug("BEGIN")
 
     location = emacs_overlay.elisp_packages_set[name]["location"]
     basename = emacs_overlay.elisp_packages_set[name]["basename"]
     url = f"{emacs_overlay.raw_url}/{sha}/{location}/{basename}"
 
-    logger.debug(f"Getting {url}")
+    logging.debug(f"Getting {url}")
 
     with (
         urllib.request.urlopen(url) as input_stream,
         open(basename, "wb") as output_file,
     ):
-        logger.info(f"Installing {basename}")
+        logging.info(f"Installing {basename}")
         shutil.copyfileobj(input_stream, output_file)
 
-    logger.debug("END")
+    logging.debug("END")
 
 
 def check_fileset(
     name: str,
     emacs_overlay: EmacsOverlay,
     here_directory: HereDirectory,
-    logger: logging.Logger,
 ) -> None:
     """Smoke-test the fileset.
 
     Arguments:
     name -- The name of fileset.
     """
-    logger.debug("BEGIN")
+    logging.debug("BEGIN")
 
     for nix_attr in emacs_overlay.elisp_packages_set[name]["nix_attrs"]:
         cmdline = [
@@ -225,15 +202,15 @@ def check_fileset(
         environment = os.environ
         environment["NIXPKGS_ALLOW_BROKEN"] = "1"
 
-        logger.info(f"Testing {nix_attr}")
+        logging.info(f"Testing {nix_attr}")
         # TODO: capture the output (to put it in the logfile).
         result = subprocess.run(cmdline, capture_output=True, text=True, check=True)
-        logger.debug(f"""
+        logging.debug(f"""
 Shell Command: {result.args}
 Output:
 {result.stdout}""")
 
-    logger.debug("END")
+    logging.debug("END")
 
 
 def commit_fileset(
@@ -242,7 +219,6 @@ def commit_fileset(
     datestring: str,
     emacs_overlay: EmacsOverlay,
     here_directory: HereDirectory,
-    logger: logging.Logger,
 ) -> None:
     """Commit the fileset.
 
@@ -251,7 +227,7 @@ def commit_fileset(
     sha -- The commit SHA of emacs-overlay from which the files are retrieved.
     datestring -- The date to be written on commit message.
     """
-    logger.debug("BEGIN")
+    logging.debug("BEGIN")
 
     nix_attrs = emacs_overlay.elisp_packages_set[name]["nix_attrs"]
     basename = emacs_overlay.elisp_packages_set[name]["basename"]
@@ -271,15 +247,15 @@ emacs-overlay commit: {sha}
         result_commit = subprocess.run(
             cmdline_commit, capture_output=True, text=True, check=True
         )
-        logger.info(f"File {basename} committed")
-        logger.debug(f"""
+        logging.info(f"File {basename} committed")
+        logging.debug(f"""
 Shell Command: {result_commit.args}
 Output:
 {result_commit.stdout}""")
     else:
-        logger.info(f"File {basename} not modified, skipping")
+        logging.info(f"File {basename} not modified, skipping")
 
-    logger.debug("END")
+    logging.debug("END")
 
 
 if __name__ == "__main__":
