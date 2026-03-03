@@ -19,7 +19,6 @@
   netbird-ui,
   netbird-upload,
   componentName ? "client",
-  needsUpdateScript ? componentName == "client",
 }:
 let
   /*
@@ -152,8 +151,6 @@ buildGoModule (finalAttrs: {
         netbird-upload
         ;
     };
-  }
-  // lib.attrsets.optionalAttrs needsUpdateScript {
     updateScript = nix-update-script { };
   };
 
