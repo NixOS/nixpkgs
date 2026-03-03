@@ -78,6 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Add mandb locations for the above
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
+
+    # As per 2024-08-14 gnulib's "verror.h" include file is changed to <error.h>
+    substituteInPlace lib/fatal.c \
+      --replace-fail '#include "verror.h"' '#include <error.h>'
   '';
 
   configureFlags = [
