@@ -451,8 +451,8 @@ let
         Silence the warning for the upcoming deprecation of the
         `x86_64-darwin` platform in Nixpkgs 26.11.
 
-        This does nothing in 25.11, and is provided there for forward
-        compatibility of configurations with 26.05.
+        See the [release notes](#x86_64-darwin-26.05) for more
+        information.
       '';
     };
 
