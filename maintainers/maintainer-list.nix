@@ -29646,6 +29646,11 @@
     github = "thiloho";
     githubId = 123883702;
   };
+  ThinkChaos = {
+    name = "ThinkChaos";
+    github = "ThinkChaos";
+    githubId = 4761135;
+  };
   thled = {
     name = "Thomas Le Duc";
     email = "dev@tleduc.de";
