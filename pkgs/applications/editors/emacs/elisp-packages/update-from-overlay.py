@@ -3,6 +3,7 @@
 
 # linter: ruff check update-from-overlay.py
 # formatter: ruff format update-from-overlay.py
+# type-checker: mypy update-from-overlay.py
 
 import argparse
 import contextlib
@@ -220,7 +221,7 @@ def check_fileset(
         cmdline = [
             "nix-instantiate",
             "--show-trace",
-            here_directory.git_root(),
+            str(here_directory.git_root()),
             "-A",
             f"emacsPackages.{nix_attr}",
         ]
