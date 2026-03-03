@@ -4,7 +4,7 @@
   buildPythonPackage,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # native
   beets-minimal,
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    hatchling
+    uv-build
   ];
 
   nativeBuildInputs = [
