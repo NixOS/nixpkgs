@@ -262,7 +262,7 @@ def commit_fileset(
 
     if result_verify.returncode != 0:
         attrs = ", ".join(nix_attrs)
-        commit_message = f"""{attrs}: Updated at {datestring} (from emacs-overlay)
+        commit_message = f"""{attrs}: update on {datestring} (from emacs-overlay)
 
 emacs-overlay commit: {sha}
 """
