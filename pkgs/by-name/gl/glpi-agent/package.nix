@@ -1,6 +1,7 @@
 {
   lib,
   perlPackages,
+  libiec61850,
   nix,
   dmidecode,
   pciutils,
@@ -15,13 +16,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "glpi-agent";
-  version = "1.15";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "glpi-project";
     repo = "glpi-agent";
     tag = version;
-    hash = "sha256-+zHTlxfkZ1x21ePZUni7lbRJQ/NUDeoZnvOzM+yzG3M=";
+    hash = "sha256-JocNClbFH6fSZJDAVQCPaRvHrkLboNbQVTpyHjOV7go=";
   };
 
   postPatch = ''
@@ -101,6 +102,7 @@ perlPackages.buildPerlPackage rec {
         sed -e "s|./lib|$out/lib|" -i "$cur"
         wrapProgram "$cur" --prefix PATH : ${
           lib.makeBinPath [
+            libiec61850
             nix
             dmidecode
             pciutils
