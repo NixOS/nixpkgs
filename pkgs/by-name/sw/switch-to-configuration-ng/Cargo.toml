@@ -19,7 +19,7 @@ libsystemd = "0.7.2"
 log = "0.4.21"
 nix = { version = "0.31.1", features = ["fs", "signal"] }
 regex = "1.12.3"
-rust-ini = { version = "0.21.2", features = ["inline-comment"] }
+rust-ini = { version = "0.21.3", features = ["inline-comment"] }
 syslog = "7.0.0"
 
 [build-dependencies]

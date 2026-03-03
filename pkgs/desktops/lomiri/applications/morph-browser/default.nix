@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.99.2";
+  version = "1.99.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
     tag = finalAttrs.version;
-    hash = "sha256-pi9tot6F9Kfpv4AN2kDnkVZRo310w/iEWJ5f7aJl1iE=";
+    hash = "sha256-zSpgcOiudt1UIsW5tRGA5AmguJn2q4+XR/G8UCqxePk=";
   };
 
   outputs = [
@@ -49,20 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/Morph/CMakeLists.txt \
       --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt''${QT_VERSION_MAJOR}/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
-    substituteInPlace src/Ubuntu/CMakeLists.txt \
-      --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-
     substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
       --replace-fail 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=morph-browser' \
       --replace-fail 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
 
     substituteInPlace doc/CMakeLists.txt \
       --replace-fail 'COMMAND ''${QDOC_BIN} -qt5' 'COMMAND ''${QDOC_BIN}'
-  ''
-  # Being worked on upstream and temporarily disabled, but they still mostly work fine right now
-  + lib.optionalString (finalAttrs.finalPackage.doCheck) ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail '#add_subdirectory(tests)' 'add_subdirectory(tests)'
   '';
 
   strictDeps = true;
@@ -110,9 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't care about linter failures
     "flake8"
 
-    # Temporarily broken while upstream is working on porting to Qt6
-    "tst_QmlTests"
-
     # Flaky
     "tst_HistoryModelTests"
   ];
@@ -139,17 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s $out/share/{morph-browser,icons/hicolor/scalable/apps}/morph-browser.svg
     ln -s $out/share/{morph-browser/morph-browser-splash.svg,lomiri-app-launch/splash/morph-browser.svg}
-  ''
-  # This got broken when QML files got duplicated & split into Qt version-specific subdirs in source tree
-  # Symlinks get installed as-is, and they currently point relatively to the versioned subdirs
-  + ''
-    for link in $(find $out/${qtbase.qtQmlPrefix}/Ubuntu -type l); do
-      ln -vfs "$(readlink "$link" | sed -e 's|/qml-qt5||g')" "$link"
-    done
-  ''
-  # Link target for this one just doesn't get installed ever it seems, yeet it
-  + ''
-    rm -v $out/${qtbase.qtQmlPrefix}/Ubuntu/Web/handle@27.png
   '';
 
   passthru = {
