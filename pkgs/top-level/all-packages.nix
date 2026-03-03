@@ -4313,10 +4313,6 @@ with pkgs;
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { });
 
-  gwe = callPackage ../tools/misc/gwe {
-    nvidia_x11 = linuxPackages.nvidia_x11;
-  };
-
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
   idrisPackages = recurseIntoAttrs (
