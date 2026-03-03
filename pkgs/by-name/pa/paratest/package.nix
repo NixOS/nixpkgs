@@ -20,6 +20,8 @@
     composerLock = ./composer.lock;
     vendorHash = "sha256-VdJVbAKkbWKZEJ16ZbJ/lmc6ZzPmztXjZ/LAEmRI93o=";
 
+    passthru.updateScript = ./update.sh;
+
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
