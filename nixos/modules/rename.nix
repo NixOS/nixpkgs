@@ -319,6 +319,9 @@ in
       the program being unmaintained. The options `programs.msmtp.*` can be
       used instead.
     '')
+    (mkRemovedOptionModule [ "services" "statsd" ] ''
+      The statsd module was removed because the packages it uses have been removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "sourcehut" ] ''
       The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
     '')
