@@ -328,6 +328,10 @@ in
     (mkRemovedOptionModule [ "services" "unifi-video" ]
       "The unifi-video package and the corresponding module have been removed as the software has been unsupported since 2021 and requires a MongoDB version that has reached end of life."
     )
+    (mkRemovedOptionModule [
+      "services"
+      "uptime"
+    ] "The package for services.uptime has been removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "services"
