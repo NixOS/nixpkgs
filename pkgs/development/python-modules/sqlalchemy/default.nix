@@ -43,14 +43,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy";
-  version = "2.0.47";
+  version = "2.0.48";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-YtOun5R+4+NdEUacOCLFf3raFKTuTpu7kxywrfSG2s0=";
+    hash = "sha256-0MHxHcQr7XvRZ3j1wj/PMIk94TVhyixDAgeAYKd1nGk=";
   };
 
   postPatch = ''
