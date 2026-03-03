@@ -27,7 +27,7 @@
   libverto,
   libpwquality,
   systemd,
-  python3,
+  python3Packages,
   bind,
   sssd,
   jre,
@@ -39,7 +39,7 @@
 }:
 
 let
-  pythonInputs = with python3.pkgs; [
+  pythonInputs = with python3Packages; [
     distutils
     six
     python-ldap
@@ -73,12 +73,12 @@ let
     enableLDAP = true;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeipa";
   version = "4.12.5";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/freeipa/freeipa-${version}.tar.gz";
+    url = "https://releases.pagure.org/freeipa/freeipa-${finalAttrs.version}.tar.gz";
     hash = "sha256-jvXS9Hx9VGFccFL19HogfH15JVIW7pc3/TY1pOvJglM=";
   };
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    python3.pkgs.wrapPython
+    python3Packages.wrapPython
     jre
     rhino
     lesscpy
@@ -115,7 +115,6 @@ stdenv.mkDerivation rec {
     xmlrpc_c
     ding-libs
     p11-kit
-    python3
     nspr
     nss
     _389-ds-base
@@ -178,7 +177,7 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/ipa";
   doInstallCheck = true;
 
   meta = {
@@ -199,4 +198,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ipa";
   };
-}
+})
