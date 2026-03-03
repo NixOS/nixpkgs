@@ -148,13 +148,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta =  {
     description = "Digital signature application with smart card support";
     homepage = "https://websigner.softplan.com.br/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ daviaaze ];
+    maintainers = with lib.maintainers; [ daviaaze ];
     mainProgram = "websigner";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
