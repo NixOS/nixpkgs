@@ -1468,10 +1468,23 @@ class NspawnMachine(BaseMachine):
         container_pid: int | None = None
         is_ready = False
 
+        start_time = time.monotonic()
+        last_warning = start_time
+        delay = 0.01
+        max_delay = 0.5
+
         while not is_ready or container_pid is None:
             # Poll the socket until we have the container leader PID
             if self.process.poll() is not None:
                 raise MachineError("systemd-nspawn process exited unexpectedly")
+
+            # Print periodic warnings every 10s so the user knows we aren't deadlocked
+            now = time.monotonic()
+            if now - last_warning > 10.0:
+                self.log(
+                    f"still waiting for container '{self.name}' to reach ready state..."
+                )
+                last_warning = now
 
             # Poll and update our local tracking variables
             ready_now, pid_now = self._poll_socket()
@@ -1481,7 +1494,8 @@ class NspawnMachine(BaseMachine):
                 container_pid = pid_now
 
             if not (is_ready and container_pid):
-                time.sleep(0.05)
+                time.sleep(delay)
+                delay = min(delay * 2, max_delay)
 
         return container_pid
 
