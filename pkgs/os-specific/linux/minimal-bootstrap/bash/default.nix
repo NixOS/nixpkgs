@@ -58,6 +58,11 @@ bootBash.runCommand "${pname}-${version}"
           args = [
             "-e"
             (builtins.toFile "bash-builder.sh" ''
+              for pathComponent in $pathComponents; do
+                PATH="$PATH:$pathComponent/bin"
+              done
+              export PATH
+
               export CONFIG_SHELL=$SHELL
 
               # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
@@ -76,13 +81,13 @@ bootBash.runCommand "${pname}-${version}"
           passAsFile = [ "buildCommand" ];
 
           SHELL = "${bash}/bin/bash";
-          PATH = lib.makeBinPath (
+          pathComponents = 
             (env.nativeBuildInputs or [ ])
             ++ [
               bash
               coreutils
             ]
-          );
+          ;
           passthru = (env.passthru or { }) // {
             isFromMinBootstrap = true;
           };

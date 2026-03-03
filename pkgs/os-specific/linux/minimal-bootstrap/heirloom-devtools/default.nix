@@ -37,12 +37,7 @@ kaem.runCommand "${pname}-${version}"
   {
     inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnupatch
-      coreutils
-    ];
+    extraPath = "${tinycc.compiler}/bin:${gnumake}/bin:${gnupatch}/bin:${coreutils}/bin";
 
     meta = {
       description = "Portable yacc and lex derived from OpenSolaris";

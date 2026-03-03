@@ -14,18 +14,19 @@ in
 if minbootSupported then
   let
     callPackage = lib.callPackageWith { inherit lib config; };
-    minimal-bootstrap = lib.recurseIntoAttrs (
+    checkMeta = callPackage ../generic/check-meta.nix { hostPlatform = localSystem; };
+    minboot =
       import ../../os-specific/linux/minimal-bootstrap {
         buildPlatform = localSystem;
         hostPlatform = localSystem;
-        inherit lib config;
-        fetchurl = import ../../build-support/fetchurl/boot.nix {
-          system = localSystem;
-          inherit (config) rewriteURL;
-        };
-        checkMeta = callPackage ../generic/check-meta.nix { hostPlatform = localSystem; };
+        inherit lib config checkMeta fetchurl;
       }
-    );
+    ;
+    fetchurl = import ../../build-support/fetchurl/boot.nix {
+      system = localSystem;
+      inherit (config) rewriteURL;
+    };
+    minimal-bootstrap = lib.recurseIntoAttrs minboot;
     compilerPackage =
       if localSystem.libc == "glibc" then
         minimal-bootstrap.gcc-glibc
@@ -40,6 +41,35 @@ if minbootSupported then
         minimal-bootstrap.musl-static
       else
         throw "Can't bootstrap on ${localSystem.config}";
+
+    initialPath = with minimal-bootstrap; [
+      bash-static
+      binutils-static
+      bzip2-static
+      compilerPackage
+      coreutils-static
+      diffutils-static
+      findutils-static
+      gawk-static
+      gnugrep-static
+      gnumake-static
+      gnupatch-static
+      gnused-static
+      gnutar-static
+      gzip-static
+      patchelf-static
+      xz-static
+    ];
+    initialPathLinkFarm = minimal-bootstrap.bash.runCommand "stage0-path" {
+      inherit initialPath;
+    } ''
+      mkdir -p "$out"
+      for pathComponent in $initialPath; do
+        for bin in $pathComponent/bin/*; do
+          ln -s "$bin" "$out/bin/
+        done
+      done
+    '';
   in
   assert minimal-bootstrap.bash-static.passthru.isFromMinBootstrap or false; # sanity check
   {
@@ -93,24 +123,7 @@ if minbootSupported then
       };
     };
     bash = minimal-bootstrap.bash-static;
-    initialPath = with minimal-bootstrap; [
-      bash-static
-      binutils-static
-      bzip2-static
-      compilerPackage
-      coreutils-static
-      diffutils-static
-      findutils-static
-      gawk-static
-      gnugrep-static
-      gnumake-static
-      gnupatch-static
-      gnused-static
-      gnutar-static
-      gzip-static
-      patchelf-static
-      xz-static
-    ];
+    initialPath = [ initialPathLinkFarm ];
     disallowedInFinalStdenv = lib.attrsets.catAttrs "out" (
       builtins.filter (drv: lib.attrsets.isDerivation drv) (builtins.attrValues minimal-bootstrap)
     );

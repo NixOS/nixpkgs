@@ -159,10 +159,7 @@ kaem.runCommand "${pname}-${version}"
   {
     inherit pname version meta;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnupatch
-    ];
+    extraPath = "${tinycc.compiler}/bin:${gnupatch}/bin";
   }
   ''
     # Unpack
