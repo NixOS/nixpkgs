@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   meta = {
-    description = "A keyboard-driven Git TUI based on Magit";
+    description = "Keyboard-driven Git TUI based on Magit";
     homepage = "https://github.com/anddani/magi";
     changelog = "https://github.com/anddani/magi/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
