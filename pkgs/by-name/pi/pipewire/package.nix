@@ -225,7 +225,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "pipewire-v4l2" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "libsystemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
-    (lib.mesonEnable "udev" (!enableSystemd && stdenv.hostPlatform.isLinux))
+    (lib.mesonEnable "udev" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "ffmpeg" true)
     (lib.mesonEnable "pw-cat-ffmpeg" true)
     (lib.mesonEnable "bluez5" bluezSupport)
