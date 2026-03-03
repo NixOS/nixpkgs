@@ -32,6 +32,7 @@
   testScript =
     { nodes, ... }:
     let
+      inherit (nodes.machine.services.pdfding) port;
       stateDir = "/var/lib/pdfding";
     in
     # py
@@ -41,6 +42,7 @@
 
       # create admin
       machine.wait_for_unit("multi-user.target")
+      machine.wait_for_open_port(${toString port})
 
       machine.succeed("DJANGO_SUPERUSER_PASSWORD=admin pdfding-manage createsuperuser --no-input --username admin --email admin@localhost")
 
@@ -74,7 +76,7 @@
   interactive.nodes.machine =
     { config, ... }:
     let
-      port = config.services.pdfding.port;
+      inherit (config.services.pdfding) port;
     in
     {
       # not needed, only for manual interactive debugging
