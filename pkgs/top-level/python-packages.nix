@@ -4256,8 +4256,6 @@ self: super: with self; {
 
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
 
-  django-modelsearch = callPackage ../development/python-modules/django-modelsearch { };
-
   django-modeltranslation = callPackage ../development/python-modules/django-modeltranslation { };
 
   django-mptt = callPackage ../development/python-modules/django-mptt { };
@@ -10067,6 +10065,8 @@ self: super: with self; {
   modelcif = callPackage ../development/python-modules/modelcif { };
 
   modelscope = callPackage ../development/python-modules/modelscope { };
+
+  modelsearch = callPackage ../development/python-modules/modelsearch { };
 
   modern-colorthief = callPackage ../development/python-modules/modern-colorthief { };
 

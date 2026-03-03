@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  pypdf,
   requests,
   selenium,
   versionCheckHook,
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    pypdf
     requests
     selenium
     webdriver-manager

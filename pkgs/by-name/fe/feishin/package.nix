@@ -5,7 +5,7 @@
   fetchFromGitHub,
   electron_39,
   dart-sass,
-  mpv,
+  mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
@@ -99,7 +99,7 @@ buildNpmPackage {
     mkdir -p $out/{Applications,bin}
     cp -r dist/**/Feishin.app $out/Applications/
     makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
-      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
+      --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
       --set DISABLE_AUTO_UPDATES 1
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -113,7 +113,7 @@ buildNpmPackage {
     # Set ELECTRON_FORCE_IS_PACKAGED=1.
     # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
     makeWrapper ${lib.getExe electron} $out/bin/feishin \
-      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
+      --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
       --add-flags $out/share/feishin/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
