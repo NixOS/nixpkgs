@@ -887,6 +887,7 @@ in
   libvirtd = runTest ./libvirtd.nix;
   lidarr = runTest ./lidarr.nix;
   lightdm = runTest ./lightdm.nix;
+  lightdm-sway = runTest ./lightdm-sway.nix;
   lighttpd = runTest ./lighttpd.nix;
   limesurvey = runTest ./limesurvey.nix;
   limine = import ./limine { inherit runTest; };

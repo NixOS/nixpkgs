@@ -16059,6 +16059,12 @@
     githubId = 1433367;
     name = "Marc Fontaine";
   };
+  magic_rb = {
+    name = "Richard Brežák";
+    matrix = "@magic_rb:redalder.org";
+    github = "magic_rb";
+    githubId = 8005463;
+  };
   magicquark = {
     name = "magicquark";
     github = "magicquark";

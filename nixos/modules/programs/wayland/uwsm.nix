@@ -18,6 +18,7 @@ let
         Comment=${opts.comment}
         Exec=${lib.getExe cfg.package} start -F -- ${opts.binPath} ${lib.strings.escapeShellArgs opts.extraArgs}
         Type=Application
+        X-LightDM-Session-Type=wayland
       '';
       destination = "/share/wayland-sessions/${opts.name}-uwsm.desktop";
       derivationArgs = {
@@ -148,5 +149,6 @@ in
   meta.maintainers = with lib.maintainers; [
     johnrtitor
     kai-tub
+    magic_rb
   ];
 }

@@ -46,9 +46,9 @@ let
   fakeSession = action: ''
     session_is_systemd_aware=$(
       IFS=:
-      for i in $XDG_CURRENT_DESKTOP; do
+      for i in $XDG_CURRENT_DESKTOP $XDG_SESSION_DESKTOP; do
         case $i in
-          KDE|GNOME|Pantheon|X-NIXOS-SYSTEMD-AWARE) echo "1"; exit; ;;
+          ${lib.concatStringsSep "|" cfg.displayManager.extraSystemdAwareSessions}) echo "1"; exit; ;;
           *) ;;
         esac
       done
@@ -88,12 +88,14 @@ let
       exec &> >(tee ~/.xsession-errors)
     ''}
 
-    # Load X defaults. This should probably be safe on wayland too.
-    ${pkgs.xrdb}/bin/xrdb -merge ${xresourcesXft}
-    if test -e ~/.Xresources; then
-        ${pkgs.xrdb}/bin/xrdb -merge ~/.Xresources
-    elif test -e ~/.Xdefaults; then
-        ${pkgs.xrdb}/bin/xrdb -merge ~/.Xdefaults
+    if [ -z "$_WAYLAND_SESSION" ] ; then
+      # Load X defaults. This should probably be safe on wayland too.
+      ${pkgs.xrdb}/bin/xrdb -merge ${xresourcesXft}
+      if test -e ~/.Xresources; then
+          ${pkgs.xrdb}/bin/xrdb -merge ~/.Xresources
+      elif test -e ~/.Xdefaults; then
+          ${pkgs.xrdb}/bin/xrdb -merge ~/.Xdefaults
+      fi
     fi
 
     # Import environment variables into the systemd user environment.
@@ -123,9 +125,11 @@ let
 
     ${fakeSession "start"}
 
-    # Allow the user to setup a custom session type.
-    if test -x ~/.xsession; then
-        eval exec ~/.xsession "$@"
+    if [ -z "$_WAYLAND_SESSION" ] ; then
+        # Allow the user to setup a custom session type.
+        if test -x ~/.xsession; then
+            eval exec ~/.xsession "$@"
+        fi
     fi
 
     if test "$1"; then
@@ -228,6 +232,14 @@ in
         '';
       };
 
+      extraSystemdAwareSessions = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          A list of sessions that are systemd aware and don't need the
+          systemd awareness workaround. This list will be checked against
+          `$XDG_SESSION_DESKTOP` and `$XDG_CURRENT_DESKTOP`.
+        '';
+      };
     };
 
   };
@@ -236,6 +248,13 @@ in
     services.displayManager.sessionData.wrapper = xsessionWrapper;
 
     services.xserver.displayManager.xserverBin = "${pkgs.xorg-server.out}/bin/X";
+
+    services.xserver.displayManager.extraSystemdAwareSessions = [
+      "KDE"
+      "GNOME"
+      "Pantheon"
+      "X-NIXOS-SYSTEMD-AWARE"
+    ];
 
     services.xserver.displayManager.importedVariables = [
       # This is required by user units using the session bus.
