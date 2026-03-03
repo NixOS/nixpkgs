@@ -28,6 +28,12 @@
       # a targetPlatform to them).
       ccForTarget = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc";
       cxxForTarget = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++";
+      linkerForTarget =
+        if stdenv.targetPlatform.isUefi then
+          # UEFI linking uses Windows-style arguments (/arg, not -arg) which our cc wrapper doesn't support
+          "${pkgsTargetTarget.stdenv.cc.targetPrefix}lld-link"
+        else
+          ccForTarget;
 
       rustBuildPlatform = stdenv.buildPlatform.rust.rustcTarget;
       rustBuildPlatformSpec = stdenv.buildPlatform.rust.rustcTargetSpec;
@@ -77,7 +83,7 @@
       + lib.optionalString (rustTargetPlatform != rustHostPlatform) ''
         "CC_${stdenv.targetPlatform.rust.cargoEnvVarTarget}=${ccForTarget}" \
         "CXX_${stdenv.targetPlatform.rust.cargoEnvVarTarget}=${cxxForTarget}" \
-        "CARGO_TARGET_${stdenv.targetPlatform.rust.cargoEnvVarTarget}_LINKER=${ccForTarget}" \
+        "CARGO_TARGET_${stdenv.targetPlatform.rust.cargoEnvVarTarget}_LINKER=${linkerForTarget}" \
       '';
     };
 }

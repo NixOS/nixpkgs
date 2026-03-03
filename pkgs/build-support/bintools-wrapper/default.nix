@@ -80,7 +80,6 @@ let
     optionalAttrs
     optionals
     optionalString
-    platforms
     removePrefix
     replaceStrings
     ;
@@ -257,7 +256,7 @@ stdenvNoCC.mkDerivation {
   # Create symlinks for rest of the binaries.
   + ''
     for binary in objdump objcopy size strings as ar nm gprof dwp c++filt addr2line \
-        ranlib readelf elfedit dlltool dllwrap windmc windres; do
+        ranlib readelf elfedit lld lld-link wasm-ld dlltool dllwrap windmc windres; do
       if [ -e $ldPath/${targetPrefix}''${binary}${exeSuffix} ]; then
         ln -s $ldPath/${targetPrefix}''${binary}${exeSuffix} $out/bin/${targetPrefix}''${binary}${exeSuffix}
       fi
@@ -381,7 +380,7 @@ stdenvNoCC.mkDerivation {
       hardening_unsupported_flags+=" pic"
     ''
 
-    + optionalString (targetPlatform.isAvr || targetPlatform.isWindows) ''
+    + optionalString (targetPlatform.isAvr || targetPlatform.isPE) ''
       hardening_unsupported_flags+=" relro bindnow"
     ''
 
