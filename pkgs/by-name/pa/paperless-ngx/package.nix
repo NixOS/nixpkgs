@@ -29,13 +29,13 @@
   lndir,
 }:
 let
-  version = "2.20.8";
+  version = "2.20.9";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-P+yZfCEdSDwThE48loJ234scTjfZ+wlgqO8Ecl503BI=";
+    hash = "sha256-BSRhvrbvalSBBjPNCQIyPu1S62m7oS1uqBtmVjUjwk4=";
   };
 
   python = python3.override {
