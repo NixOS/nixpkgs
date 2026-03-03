@@ -6,10 +6,10 @@
   pkg-config,
   autoconf,
   automake,
-  kerberos,
+  krb5,
   openldap,
   popt,
-  sasl,
+  cyrus_sasl,
   curl,
   xmlrpc_c,
   ding-libs,
@@ -22,7 +22,7 @@
   libuuid,
   talloc,
   tevent,
-  samba,
+  samba4,
   libunistring,
   libverto,
   libpwquality,
@@ -64,6 +64,14 @@ let
     samba
     ifaddr
   ];
+  # NOTE: freeipa and sssd need to be built with the same version of python
+  kerberos = krb5.override {
+    withVerto = true;
+  };
+  sasl = cyrus_sasl;
+  samba = samba4.override {
+    enableLDAP = true;
+  };
 in
 stdenv.mkDerivation rec {
   pname = "freeipa";

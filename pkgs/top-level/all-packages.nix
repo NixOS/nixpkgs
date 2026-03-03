@@ -6362,17 +6362,6 @@ with pkgs;
 
   fmt = fmt_12;
 
-  freeipa = callPackage ../os-specific/linux/freeipa {
-    # NOTE: freeipa and sssd need to be built with the same version of python
-    kerberos = krb5.override {
-      withVerto = true;
-    };
-    sasl = cyrus_sasl;
-    samba = samba4.override {
-      enableLDAP = true;
-    };
-  };
-
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
   makeFontsConf = callPackage ../development/libraries/fontconfig/make-fonts-conf.nix { };
