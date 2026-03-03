@@ -547,9 +547,9 @@
   },
   "healthbot": {
     "pname": "healthbot",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/healthbot-1.0.0-py3-none-any.whl",
-    "hash": "sha256-X6M+iVNShC9YBliy2Ynf5TVUDKo3ZTaqu1yvFn6v6Ew=",
+    "version": "1.1.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/healthbot-1.1.0-py3-none-any.whl",
+    "hash": "sha256-AV0TETMADekkqTcPNFMg+4pt4RCMtPCnGb0pd/wr01A=",
     "description": "Microsoft Azure Command-Line Tools HealthbotClient Extension"
   },
   "healthcareapis": {
