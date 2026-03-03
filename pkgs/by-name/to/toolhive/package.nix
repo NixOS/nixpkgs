@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "toolhive";
-  version = "0.6.9";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "stacklok";
     repo = "toolhive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qeUeRcxMo2hgsYcydQjTA9N125gpfC0ts7h7axLES24=";
+    hash = "sha256-DFVFS9uiejdmzmHpllRAdiIjR0qn3ne+7o1dC8ducjk=";
   };
 
-  vendorHash = "sha256-k7dPbHqsQVUL0pJoduq4clFG/q1i6gsTaQtES28xTKU=";
+  vendorHash = "sha256-vIAH1s+NLwT0Be6Tm0kvzgqmh5xkuWSsQXILy4/P1S0=";
 
   # Build only the main CLI and operator binaries
   subPackages = [
