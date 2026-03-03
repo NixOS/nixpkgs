@@ -97,28 +97,28 @@ linkFarm name [
     };
   }
   {
-    name = "zigini-0.3.2-BSkB7WJJAADybd5DGd9MLCp6ikGGUq9wicxsjv0HF1Qc";
+    name = "zigini-0.3.3-36M0FRJJAADZVq5HPm-hYKMpFFTr0OgjbEYcK2ijKZ5n";
     path = fetchZigArtifact {
       name = "zigini";
-      url = "https://github.com/AnErrupTion/zigini/archive/96ca1d9f1a7ec741f07ceb104dae2b3a7bdfd48a.tar.gz";
-      hash = "sha256-Hhc/+a8ToHI9RAJTIQ6Z3KZKQFvoPvd5ODz7HRbytdw=";
+      url = "https://github.com/AnErrupTion/zigini/archive/9281f47702b57779e831d7618e158abb8eb4d4a2.tar.gz";
+      hash = "sha256-/g0az0MRQOmww0DhZQo/1YH2qkJcscoCpaoW4pWGVIk=";
     };
   }
   {
-    name = "ini-0.1.0-YCQ9YkUnAAA7SjpLwvomwrngMn3TConSAlNgo7Q8ibMZ";
+    name = "ini-0.1.0-YCQ9Ys0pAABixEvvQvhVXAdqRE3wrZk_wiL9TPNHhB8d";
     path = fetchZigArtifact {
       name = "ini";
-      url = "https://github.com/AnErrupTion/ini/archive/ac6e656157b2ac6c98392283a139b47c44a85d54.tar.gz";
-      hash = "sha256-rOXuHsd4WiLDODruQioADMWQ7UkNtx5LUdTcK2dve40=";
+      url = "https://github.com/AnErrupTion/ini/archive/918f16d0dcf893d0c1cdffe204faa08bb3584e04.tar.gz";
+      hash = "sha256-z2IMS0grfnf33h6tz1ERv2i6gfnS6p8oMWFz+AmGoA8=";
     };
   }
   {
-    name = "N-V-__8AAGcUBQAa5vov1Yi_9AXEffFQ1e2KsXaK4dgygRKq";
+    name = "N-V-__8AAOEWBQDt5tNdIzIFY6n8DdZsCP-6MyLoNS20wgpA";
     path = fetchZigArtifact {
       name = "termbox2";
-      url = "git+https://github.com/AnErrupTion/termbox2?ref=master#290ac6b8225aacfd16851224682b851b65fcb918";
-      hash = "sha256-of95/wJeCTWI3p7NxvnUlb618qffUZv2YxgBgzp+crs=";
-      rev = "290ac6b8225aacfd16851224682b851b65fcb918";
+      url = "git+https://github.com/AnErrupTion/termbox2?ref=master#496730697c662893eec43192f48ff616c2539da6";
+      hash = "sha256-8XAPH1f1qQuOROBw/duF3Q7HNRgHbEDsKOgeEpG9ScY=";
+      rev = "496730697c662893eec43192f48ff616c2539da6";
     };
   }
 ]
