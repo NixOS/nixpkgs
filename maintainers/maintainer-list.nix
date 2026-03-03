@@ -2994,15 +2994,15 @@
     githubId = 127523;
     name = "Herman Fries";
   };
-  BarrOff = {
-    name = "BarrOff";
-    github = "BarrOff";
-    githubId = 58253563;
-  };
   barrettruth = {
     name = "Barrett Ruth";
     github = "barrettruth";
     githubId = 62671086;
+  };
+  BarrOff = {
+    name = "BarrOff";
+    github = "BarrOff";
+    githubId = 58253563;
   };
   barrucadu = {
     email = "mike@barrucadu.co.uk";
