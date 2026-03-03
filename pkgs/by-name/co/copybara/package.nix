@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/google/copybara";
     changelog = "https://github.com/google/copybara/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cameroncuttingedge ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "copybara";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
