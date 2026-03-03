@@ -22,6 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6S3rkpwQ1LKTKTl6+KJYUQEkf35hd6xvHSjoITDtjBk=";
   };
 
+  outputs = [
+    "out"
+    "lib"
+    "man"
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
