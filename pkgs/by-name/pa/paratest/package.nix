@@ -33,6 +33,9 @@
       homepage = "https://github.com/paratestphp/paratest";
       license = lib.licenses.mit;
       mainProgram = "paratest";
-      maintainers = [ lib.maintainers.patka ];
+      maintainers = [
+        lib.maintainers.patka
+        lib.maintainers.piotrkwiecinski
+      ];
     };
   })
