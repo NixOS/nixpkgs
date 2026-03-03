@@ -372,9 +372,12 @@ stdenv.mkDerivation (
     // {
       # TODO Remove obsolete and useless flags once the build will be totally mastered
       configureFlags = [
-        "-plugindir $(out)/$(qtPluginPrefix)"
-        "-qmldir $(out)/$(qtQmlPrefix)"
-        "-docdir $(out)/$(qtDocPrefix)"
+        "-plugindir"
+        "${placeholder "out"}/${qtPluginPrefix}"
+        "-qmldir"
+        "${placeholder "out"}/${qtQmlPrefix}"
+        "-docdir"
+        "${placeholder "out"}/${qtDocPrefix}"
 
         "-verbose"
         "-confirm-license"
@@ -391,7 +394,8 @@ stdenv.mkDerivation (
 
         "-gui"
         "-widgets"
-        "-opengl desktop"
+        "-opengl"
+        "desktop"
         "-icu"
         "-L"
         "${icu.out}/lib"
@@ -400,8 +404,10 @@ stdenv.mkDerivation (
         "-pch"
       ]
       ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "-device ${qtPlatformCross stdenv.hostPlatform}"
-        "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+        "-device"
+        (qtPlatformCross stdenv.hostPlatform)
+        "-device-option"
+        "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
       ]
       ++ lib.optionals debugSymbols [
         "-debug"
@@ -460,10 +466,14 @@ stdenv.mkDerivation (
         "-${if libpq != null then "plugin" else "no"}-sql-psql"
         "-system-libpng"
 
-        "-make libs"
-        "-make tools"
-        "-${lib.optionalString (!buildExamples) "no"}make examples"
-        "-${lib.optionalString (!buildTests) "no"}make tests"
+        "-make"
+        "libs"
+        "-make"
+        "tools"
+        "-${lib.optionalString (!buildExamples) "no"}make"
+        "examples"
+        "-${lib.optionalString (!buildTests) "no"}make"
+        "tests"
       ]
       ++ (
         if stdenv.hostPlatform.isDarwin then
@@ -478,7 +488,8 @@ stdenv.mkDerivation (
           ]
           ++ [
             "-xcb"
-            "-qpa xcb"
+            "-qpa"
+            "xcb"
             "-L"
             "${libx11.out}/lib"
             "-I"
