@@ -856,12 +856,19 @@ with haskellLib;
   ];
 
   pandoc = appendPatches [
-    # Adjust text fixtures for djot >= 0.1.2.3, patch extracted from unrelated change.
+    # Adjust test fixtures for djot >= 0.1.2.3, patch extracted from unrelated change.
     (pkgs.fetchpatch {
       name = "pandoc-djot-0.1.2.3.patch";
       url = "https://github.com/jgm/pandoc/commit/643712ca70b924c0edcc059699aa1ee42234be34.patch";
       hash = "sha256-khDkb1PzC0fTaWTq3T04UvgoI+XefOJMaTV1d3Du8BU=";
       includes = [ "test/djot-reader.native" ];
+    })
+    # Adjust tests for skylighting-format-blaze-html >= 0.1.2
+    (pkgs.fetchpatch {
+      name = "pandoc-skylighting-format-blaze-html-0.1.2.patch";
+      url = "https://github.com/jgm/pandoc/commit/cab682ba58f2eb7e940d1af508e196ff6b1c1112.patch";
+      hash = "sha256-lpddKGa8xs+Lhi62HhBgV04fUq2kkippA1xX2/b2ukM=";
+      includes = [ "test/Tests/Writers/HTML.hs" ];
     })
   ] super.pandoc;
 
