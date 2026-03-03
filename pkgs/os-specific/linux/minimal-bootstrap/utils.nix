@@ -12,7 +12,7 @@ rec {
     let
       passthru = attrs.passthru or { };
       validity = checkMeta.assertValidity { inherit meta attrs; };
-      meta = checkMeta.commonMeta { inherit validity attrs; };
+      meta = checkMeta.commonMeta { inherit validity attrs; } // { platforms = ["i686-linux" "x86_64-linux"]; };
       baseDrv = derivation (
         {
           inherit (buildPlatform) system;

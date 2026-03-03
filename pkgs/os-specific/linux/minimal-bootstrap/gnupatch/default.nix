@@ -73,7 +73,7 @@ kaem.runCommand "${pname}-${version}"
   {
     inherit pname version;
 
-    nativeBuildInputs = [ tinycc.compiler ];
+    extraPath = "${tinycc.compiler}/bin";
 
     meta = {
       description = "GNU Patch, a program to apply differences to files";

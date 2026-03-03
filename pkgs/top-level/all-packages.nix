@@ -8755,7 +8755,8 @@ with pkgs;
   mdadm = mdadm4;
   minimal-bootstrap = recurseIntoAttrs (
     import ../os-specific/linux/minimal-bootstrap {
-      inherit (stdenv) buildPlatform hostPlatform;
+      buildPlatform = lib.systems.elaborate "x86_64-linux";
+      hostPlatform = lib.systems.elaborate "x86_64-linux";
       inherit lib config;
       fetchurl = import ../build-support/fetchurl/boot.nix {
         inherit (stdenv.buildPlatform) system;

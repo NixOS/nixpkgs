@@ -72,12 +72,7 @@ kaem.runCommand "${pname}-${version}"
   {
     inherit pname version meta;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnupatch
-      coreutils
-    ];
+    extraPath = "${tinycc.compiler}/bin:${gnumake}/bin:${gnupatch}/bin:${coreutils}/bin";
 
     passthru.runCommand =
       name: env: buildCommand:
@@ -88,6 +83,11 @@ kaem.runCommand "${pname}-${version}"
           args = [
             "-e"
             (builtins.toFile "bash-builder.sh" ''
+              for pathComponent in $pathComponents; do
+                PATH="$PATH:$pathComponent/bin"
+              done
+              export PATH
+
               export CONFIG_SHELL=$SHELL
 
               # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
@@ -106,7 +106,7 @@ kaem.runCommand "${pname}-${version}"
           passAsFile = [ "buildCommand" ];
 
           SHELL = "${bash_2_05}/bin/bash";
-          PATH = lib.makeBinPath (
+          pathComponents =
             (env.nativeBuildInputs or [ ])
             ++ [
               bash_2_05
@@ -114,7 +114,7 @@ kaem.runCommand "${pname}-${version}"
               # provides untar, ungz, and unbz2
               mescc-tools-extra
             ]
-          );
+          ;
         }
         // (removeAttrs env [ "nativeBuildInputs" ])
       );
