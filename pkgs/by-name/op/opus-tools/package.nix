@@ -8,6 +8,7 @@
   flac,
   opusfile,
   libopusenc,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     opusfile
     libopusenc
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/opusenc";
 
   meta = {
     description = "Tools to work with opus encoded audio streams";
