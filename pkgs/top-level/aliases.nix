@@ -1458,6 +1458,9 @@ mapAliases {
   nixosTest = throw "'nixosTest' has been renamed to/replaced by 'testers.nixosTest'"; # Converted to throw 2025-10-27
   nixStable = throw "'nixStable' has been renamed to/replaced by 'nixVersions.stable'"; # Converted to throw 2025-10-27
   nm-tray = throw "'nm-tray' has been removed, as it only works with Plasma 5"; # Added 2025-08-30
+  node2nix = throw "node2nix has been removed because it was only used to maintain the now-removed nodePackages set. Use the newer builders in nixpkgs instead, such as buildNpmPackage"; # Added 2026-03-03
+  nodePackages = throw "nodePackages has been removed because it was unmaintainable within nixpkgs"; # Added 2026-03-03
+  nodePackages_latest = throw "nodePackages has been removed because it was unmaintainable within nixpkgs"; # Added 2026-03-03
   nofi = throw "'nofi' has been removed due to being archived upstream."; # Added 2026-01-16
   nomacs-qt6 = nomacs; # Added 2025-08-30
   norouter = throw "norouter has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-29
