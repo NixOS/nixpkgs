@@ -20,6 +20,7 @@ let
     mkOrder
     mkRenamedOptionModule
     mkRemovedOptionModule
+    optional
     optionalAttrs
     types
     ;
@@ -46,7 +47,13 @@ let
         value
     ) settings;
 
-  resolvedConf = settingsToSections (transformSettings cfg.settings);
+  ## since [Resolve] is the only possible section in settings
+  ## and extraConfig is deprecated, this should be good enough
+  resolvedConf = ''
+    ${settingsToSections (transformSettings cfg.settings)}
+    ${cfg.extraConfig}
+  '';
+
 in
 {
   imports = [
@@ -70,11 +77,6 @@ in
       [ "services" "resolved" "dnsovertls" ]
       [ "services" "resolved" "settings" "Resolve" "DNSOverTLS" ]
     )
-    (mkRemovedOptionModule [
-      "services"
-      "resolved"
-      "extraConfig"
-    ] "Use services.resolved.settings instead")
   ];
 
   options = {
@@ -132,6 +134,14 @@ in
         };
       };
 
+      extraConfig = mkOption {
+        default = "";
+        type = types.lines;
+        description = ''
+          DEPRECATED: use 'services.resolved.settings.Resolve' instead
+          Extra config to append to resolved.conf.
+        '';
+      };
     };
 
     boot.initrd.services.resolved.enable = mkOption {
@@ -154,6 +164,10 @@ in
           message = "Using host resolv.conf is not supported with systemd-resolved";
         }
       ];
+
+      warnings = optional (
+        cfg.extraConfig != ""
+      ) "services.resolved.extraConfig is deprecated; use services.resolved.settings.Resolve";
 
       users.users.systemd-resolve.group = "systemd-resolve";
 
