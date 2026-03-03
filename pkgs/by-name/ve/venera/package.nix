@@ -53,7 +53,7 @@ flutter338.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -D --mode=0644 debian/gui/venera.png $out/share/icons/hicolor/1024x1024/apps/venera.png
+    install -D --mode=0644 debian/gui/venera.png $out/share/pixmaps/venera.png
   '';
 
   extraWrapProgramArgs = ''
