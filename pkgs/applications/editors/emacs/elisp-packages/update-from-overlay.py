@@ -58,7 +58,7 @@ class EmacsOverlay:
     def master_sha(self) -> str:
         """Return the SHA of current master tip."""
         cmdline = ["git", "ls-remote", "--branches", self.git_url, "refs/heads/master"]
-        result = subprocess.run(cmdline, capture_output=True, text=True)
+        result = subprocess.run(cmdline, capture_output=True, text=True, check=True)
         return result.stdout.split()[0]
 
 
@@ -69,7 +69,7 @@ class HereDirectory:
     def git_root(self) -> pathlib.Path:
         """Returns the root directory of Git repository."""
         cmdline = ["git", "rev-parse", "--show-toplevel"]
-        result = subprocess.run(cmdline, capture_output=True, text=True)
+        result = subprocess.run(cmdline, capture_output=True, text=True, check=True)
 
         return pathlib.Path(result.stdout.rstrip()).resolve()
 
@@ -230,7 +230,7 @@ def check_fileset(
 
         logger.info(f"Testing {nix_attr}")
         # TODO: capture the output (to put it in the logfile).
-        result = subprocess.run(cmdline, capture_output=True, text=True)
+        result = subprocess.run(cmdline, capture_output=True, text=True, check=True)
         logger.debug(f"""
 Shell Command: {result.args}
 Output:
@@ -275,7 +275,9 @@ def commit_fileset(
 emacs-overlay commit: {sha}
 """
         cmdline_commit = ["git", "commit", "--message", commit_message, "--", basename]
-        result_commit = subprocess.run(cmdline_commit, capture_output=True, text=True)
+        result_commit = subprocess.run(
+            cmdline_commit, capture_output=True, text=True, check=True
+        )
         logger.info(f"File {basename} committed")
         logger.debug(f"""
 Shell Command: {result_commit.args}
