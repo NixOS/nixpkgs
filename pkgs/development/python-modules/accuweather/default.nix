@@ -10,6 +10,7 @@
   pytestCheckHook,
   setuptools,
   syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     orjson
+    yarl
   ];
 
   nativeCheckInputs = [
