@@ -75,7 +75,7 @@ class HereDirectory:
 
 def main(
     emacs_overlay: EmacsOverlay,
-    here_directory: HereDirectory,
+    git_root: pathlib.Path,
     argument_parser: argparse.ArgumentParser,
 ) -> None:
     """The entry point."""
@@ -117,7 +117,7 @@ def main(
         check_fileset(
             name,
             emacs_overlay=emacs_overlay,
-            here_directory=here_directory,
+            git_root=git_root,
         )
 
     for name in emacs_overlay.elisp_packages_set:
@@ -181,7 +181,7 @@ def fetch_fileset(
 def check_fileset(
     name: str,
     emacs_overlay: EmacsOverlay,
-    here_directory: HereDirectory,
+    git_root: pathlib.Path,
 ) -> None:
     """Smoke-test the fileset.
 
@@ -194,7 +194,7 @@ def check_fileset(
         cmdline = [
             "nix-instantiate",
             "--show-trace",
-            str(here_directory.git_root()),
+            str(git_root),
             "-A",
             f"emacsPackages.{nix_attr}",
         ]
@@ -264,6 +264,6 @@ if __name__ == "__main__":
     with contextlib.chdir(here_directory.path):
         main(
             emacs_overlay=emacs_overlay,
-            here_directory=here_directory,
+            git_root=here_directory.git_root(),
             argument_parser=argument_parser,
         )
