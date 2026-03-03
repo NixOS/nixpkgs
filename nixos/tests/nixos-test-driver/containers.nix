@@ -5,11 +5,9 @@
 
   nodes = {
     n1 = {
-      networking.firewall.enable = false;
       virtualisation.vlans = [ 1 ];
     };
     n2 = {
-      networking.firewall.enable = false;
       virtualisation.vlans = [
         2
       ];
@@ -18,15 +16,12 @@
 
   containers = {
     c1 = {
-      networking.firewall.enable = false;
       virtualisation.vlans = [ 1 ];
     };
     c2 = {
-      networking.firewall.enable = false;
       virtualisation.vlans = [ 2 ];
     };
     c12 = {
-      networking.firewall.enable = false;
       virtualisation.vlans = [
         1
         2
