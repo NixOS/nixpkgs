@@ -3303,6 +3303,14 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  screensaver-nvim = super.screensaver-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      description = "Screensaver plugin for Neovim";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ m3l6h ];
+    };
+  });
+
   scretch-nvim = super.scretch-nvim.overrideAttrs {
   };
 
