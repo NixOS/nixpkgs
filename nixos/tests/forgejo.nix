@@ -60,28 +60,47 @@ let
             ];
             services.openssh.enable = true;
 
-            specialisation.runner = {
-              inheritParentConfig = true;
-              configuration.services.gitea-actions-runner = {
-                package = pkgs.forgejo-runner;
-                instances."test" = {
-                  enable = true;
-                  name = "ci";
-                  url = "http://localhost:3000";
-                  labels = [
-                    # type ":host" does not depend on docker/podman/lxc
-                    "native:host"
-                  ];
-                  tokenFile = "/var/lib/forgejo/runner_token";
+            specialisation = {
+              runner = {
+                inheritParentConfig = true;
+                configuration.services.forgejo.runner = {
+                  package = pkgs.forgejo-runner;
+                  instances."test" = {
+                    enable = true;
+                    url = "http://localhost:3000";
+                    labels = [
+                      # type ":host" does not depend on docker/podman/lxc
+                      "native:host"
+                    ];
+                    tokenFile = "/var/lib/forgejo/runner_token";
+                  };
                 };
               };
-            };
-            specialisation.dump = {
-              inheritParentConfig = true;
-              configuration.services.forgejo.dump = {
-                enable = true;
-                type = "tar.zst";
-                file = "dump.tar.zst";
+
+              giteaRunner = {
+                inheritParentConfig = true;
+                configuration.services.gitea-actions-runner = {
+                  package = pkgs.forgejo-runner;
+                  instances."test" = {
+                    enable = true;
+                    name = "ci";
+                    url = "http://localhost:3000";
+                    labels = [
+                      # type ":host" does not depend on docker/podman/lxc
+                      "native:host"
+                    ];
+                    tokenFile = "/var/lib/forgejo/gitea_runner_token";
+                  };
+                };
+              };
+
+              dump = {
+                inheritParentConfig = true;
+                configuration.services.forgejo.dump = {
+                  enable = true;
+                  type = "tar.zst";
+                  file = "dump.tar.zst";
+                };
               };
             };
           };
@@ -172,7 +191,7 @@ let
               + "Please contact your site administrator.'"
           )
           server.succeed(
-              "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo forgejo admin user create "
+              "su -l forgejo -c 'FORGEJO_WORK_DIR=/var/lib/forgejo forgejo admin user create "
               + "--username test --password totallysafe --email test@localhost --must-change-password=false'"
           )
 
@@ -217,13 +236,33 @@ let
               server.fail("curl --fail http://localhost:3000/metrics")
               server.succeed('curl --fail http://localhost:3000/metrics -H "Authorization: Bearer ${metricSecret}"')
 
-          with subtest("Testing runner registration and action workflow"):
+          def wait_for_workflow_id(id):
+              def poll_workflow_action_status(_) -> bool:
+                  try:
+                      response = server.succeed("curl --fail http://localhost:3000/api/v1/repos/test/repo/actions/tasks")
+                      status = json.loads(response).get("workflow_runs")[id].get("status")
+
+                  except IndexError:
+                      status = "???"
+
+                  server.log(f"Workflow status: {status}")
+
+                  if status == "failure":
+                      raise Exception("Workflow failed")
+
+                  return status == "success"
+
+              with server.nested("Waiting for the workflow run to be successful"):
+                  retry(poll_workflow_action_status, 60)
+
+          with subtest("Testing forgejo runner registration and action workflow"):
               server.succeed(
-                  "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo forgejo actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
+                  "su -l forgejo -c 'FORGEJO_WORK_DIR=/var/lib/forgejo forgejo actions generate-runner-token' | tee /var/lib/forgejo/runner_token"
               )
+
               server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
-              server.wait_for_unit("gitea-runner-test.service")
-              server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
+              server.wait_for_unit("forgejo-runner@test.service")
+              server.succeed("journalctl -o cat -u forgejo-runner@test.service | grep -q 'Runner registered successfully'")
 
               # enable actions feature for this repository, defaults to disabled
               server.succeed(
@@ -248,23 +287,25 @@ let
               client.succeed("git -C /tmp/repo commit -m 'Add dummy workflow'")
               client.succeed("git -C /tmp/repo push origin main")
 
-              def poll_workflow_action_status(_) -> bool:
-                  try:
-                      response = server.succeed("curl --fail http://localhost:3000/api/v1/repos/test/repo/actions/tasks")
-                      status = json.loads(response).get("workflow_runs")[0].get("status")
+              wait_for_workflow_id(0)
 
-                  except IndexError:
-                      status = "???"
 
-                  server.log(f"Workflow status: {status}")
+          with subtest("Testing gitea runner registration and action workflow"):
+              server.succeed(
+                  "su -l forgejo -c 'FORGEJO_WORK_DIR=/var/lib/forgejo forgejo actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/gitea_runner_token"
+              )
 
-                  if status == "failure":
-                      raise Exception("Workflow failed")
+              server.succeed("${serverSystem}/specialisation/giteaRunner/bin/switch-to-configuration test")
+              server.wait_for_unit("gitea-runner-test.service")
+              server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
 
-                  return status == "success"
+              # push workflow to initial repo
+              client.succeed("touch /tmp/repo/gitea-change-file")
+              client.succeed("git -C /tmp/repo add gitea-change-file")
+              client.succeed("git -C /tmp/repo commit -m 'Add gitea-change-file'")
+              client.succeed("git -C /tmp/repo push origin main")
 
-              with server.nested("Waiting for the workflow run to be successful"):
-                  retry(poll_workflow_action_status, 60)
+              wait_for_workflow_id(1)
 
           with subtest("Testing backup service"):
               server.succeed("${serverSystem}/specialisation/dump/bin/switch-to-configuration test")
