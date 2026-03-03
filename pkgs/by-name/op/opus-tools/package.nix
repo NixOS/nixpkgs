@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   libogg,
   libao,
+  autoreconfHook,
   pkg-config,
   flac,
   opusfile,
@@ -15,12 +16,21 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "opus-tools";
   version = "0.2";
 
-  src = fetchurl {
-    url = "https://downloads.xiph.org/releases/opus/opus-tools-${finalAttrs.version}.tar.gz";
-    sha256 = "11pzl27s4vcz4m18ch72nivbhww2zmzn56wspb7rll1y1nq6rrdl";
+  src = fetchFromGitLab {
+    domain = "gitlab.xiph.org";
+    owner = "xiph";
+    repo = "opus-tools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Tr+xvZKu1nuachgN7GXwqFyJYPQ/sWqaVJQHWhLAt+k=";
   };
+  postPatch = ''
+    echo 'PACKAGE_VERSION="${finalAttrs.version}"' > package_version
+  '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [
     libogg
     libao
