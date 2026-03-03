@@ -30,11 +30,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-6Z5YhEqRzThQM5nHG0o+q4Rm/+A/ss3N6RDRz6mPJm4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools >= 77.0,< 80.10" setuptools
-  '';
-
   build-system = [
     setuptools
     setuptools-scm

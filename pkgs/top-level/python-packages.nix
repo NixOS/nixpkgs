@@ -17899,6 +17899,8 @@ self: super: with self; {
 
   soundcloud-v2 = callPackage ../development/python-modules/soundcloud-v2 { };
 
+  soundcloudpy = callPackage ../development/python-modules/soundcloudpy { };
+
   sounddevice = callPackage ../development/python-modules/sounddevice { };
 
   soundfile = callPackage ../development/python-modules/soundfile { };

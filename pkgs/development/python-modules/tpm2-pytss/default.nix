@@ -70,6 +70,7 @@ buildPythonPackage rec {
     # when cross-compiling is turned on.
     # This patch changes the call to pycparser.preprocess_file to provide the name
     # of the cross-compiling cpp
+    # NOTE: This patch could be dropped after next release. 3.0.0-rc0 already have proper `$CC -E` invocation
     (replaceVars ./cross.patch {
       crossPrefix = stdenv.hostPlatform.config;
     })
