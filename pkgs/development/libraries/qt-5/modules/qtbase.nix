@@ -223,8 +223,8 @@ stdenv.mkDerivation (
                 --subst-var qtDocPrefix
         done
 
-        substituteInPlace configure --replace /bin/pwd pwd
-        substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+        substituteInPlace configure --replace-fail /bin/pwd pwd
+        substituteInPlace src/corelib/global/global.pri --replace-fail /bin/ls ${coreutils}/bin/ls
         sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i mkspecs/*/*.conf
 
         sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5Config.cmake.in
