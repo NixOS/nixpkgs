@@ -5,13 +5,11 @@
   setuptools,
   # runtime dependencies
   accelerate,
-  detectron2,
   huggingface-hub,
   layoutparser,
   onnx,
   onnxruntime,
   opencv-python,
-  paddleocr,
   python-multipart,
   rapidfuzz,
   transformers,
@@ -38,6 +36,11 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    # Wants >= 4.13.0.90 but the latest release is 4.13.0
+    "opencv-python"
+  ];
 
   dependencies = [
     accelerate
