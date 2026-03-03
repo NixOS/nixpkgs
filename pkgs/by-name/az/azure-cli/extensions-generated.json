@@ -967,9 +967,9 @@
   },
   "sftp": {
     "pname": "sftp",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/sftp-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-cE8b2ZgoG9DO64ekT3FpcRuTAOYX94pzESYJ9lUe7LI=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/sftp-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-3ugWIeKK9U8vKgFMbQfMKXxbgW+zO9IB6lPYJFHZm/E=",
     "description": "Secure access to Azure Storage blob data via SFTP with SSH certificates"
   },
   "site": {
