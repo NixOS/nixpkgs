@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
     libipuz
   ];
 
+  postInstall = ''
+    wrapProgram $out/bin/crosswords \
+      --unset XDG_DATA_DIRS
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
