@@ -257,7 +257,7 @@ def commit_fileset(
 
     logging.debug(f"Date: {datestring}")
 
-    cmdline_verify = ["git", "diff", "--exit-code", "--quiet", "--", basename]
+    cmdline_verify = ["git", "diff", "--quiet", "--", basename]
     result_verify = subprocess.run(cmdline_verify)
 
     if result_verify.returncode != 0:
