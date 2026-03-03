@@ -64,7 +64,7 @@ class EmacsOverlay:
 
 @dataclasses.dataclass
 class HereDirectory:
-    path: pathlib.Path = pathlib.Path(".").resolve()
+    path: pathlib.Path = pathlib.Path(__file__).resolve().parent
 
     def git_root(self) -> pathlib.Path:
         """Returns the root directory of Git repository."""
