@@ -108,7 +108,6 @@ def main(
             name,
             sha,
             emacs_overlay=emacs_overlay,
-            here_directory=here_directory,
             logger=logger,
         )
 
@@ -175,7 +174,6 @@ def fetch_fileset(
     name: str,
     sha: str,
     emacs_overlay: EmacsOverlay,
-    here_directory: HereDirectory,
     logger: logging.Logger,
 ) -> None:
     """Fetch a fileset from emacs overlay.
@@ -190,15 +188,13 @@ def fetch_fileset(
     basename = emacs_overlay.elisp_packages_set[name]["basename"]
     url = f"{emacs_overlay.raw_url}/{sha}/{location}/{basename}"
 
-    destination = here_directory.path / basename
-
     logger.debug(f"Getting {url}")
 
     with (
         urllib.request.urlopen(url) as input_stream,
-        open(destination, "wb") as output_file,
+        open(basename, "wb") as output_file,
     ):
-        logger.info(f"Installing {destination}")
+        logger.info(f"Installing {basename}")
         shutil.copyfileobj(input_stream, output_file)
 
     logger.debug("END")
