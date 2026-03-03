@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    ./link-boost-dynamically.patch
+    ./boost.patch # link boost dynamically, don't try to link removed system stub library
     ./disable-module-install-logic.patch # don't try to install modules via cmake
     ./disable-renv-logic.patch
     ./dont-check-for-module-deps.patch # dont't check for dependencies required for building modules
