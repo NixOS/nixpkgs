@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -13,10 +14,11 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-VIp+vk1IYbEHW15wMrfGVOPqg1zBZDpgFx+jlypOHCg=";
   };
 
-  installPhase = ''
+  nativeBuildInputs = [ installFonts ];
+
+  InstallPhase = ''
     runHook preInstall
 
-    install -m444 -Dt $out/share/fonts/opentype *.otf
     install -m444 -Dt $out/share/doc/${pname}-${version}    README FontLog.txt
 
     runHook postInstall
