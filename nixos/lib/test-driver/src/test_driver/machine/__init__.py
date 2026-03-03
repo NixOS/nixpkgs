@@ -1546,6 +1546,10 @@ class NspawnMachine(BaseMachine):
         assert self.process is not None, "Container not started"
         journal_path = self.state_dir / "var/log/journal"
 
+        # Grab a reference to the process here so we can continue polling
+        # the container process to see if it has exited.
+        proc = self.process
+
         # 1. Wait for the directory to actually be created by the container
         self.log(f"Waiting for journal at {journal_path}...")
         max_attempts = 10
@@ -1560,7 +1564,7 @@ class NspawnMachine(BaseMachine):
 
         # 2. Start the journalctl process
         # Using a loop here handles cases where journalctl might exit unexpectedly
-        while self.process.poll() is None:  # While the container is still running
+        while proc.poll() is None:  # While the container is still running
             with subprocess.Popen(
                 [
                     "journalctl",
@@ -1581,7 +1585,7 @@ class NspawnMachine(BaseMachine):
                     for line in iter(log_proc.stdout.readline, ""):
                         if line:
                             self.log_serial(line.rstrip())
-                        if self.process.poll() is not None:
+                        if proc.poll() is not None:
                             break
                 except Exception as e:
                     self.log(f"Error while reading journalctl output: {e}")
@@ -1591,7 +1595,7 @@ class NspawnMachine(BaseMachine):
 
             # If we reach here, journalctl stopped while the container is still running.
             # Wait a moment before retrying to avoid CPU pegging if something is wrong.
-            if self.process.poll() is None:
+            if proc.poll() is None:
                 time.sleep(1)
 
     def start(self) -> None:
