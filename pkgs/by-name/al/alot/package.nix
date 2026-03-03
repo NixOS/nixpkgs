@@ -102,6 +102,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "alot";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ milibopp ];
+    maintainers = [ ];
   };
 })

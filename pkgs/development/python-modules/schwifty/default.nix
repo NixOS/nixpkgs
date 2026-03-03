@@ -59,6 +59,6 @@ buildPythonPackage rec {
     description = "Validate/generate IBANs and BICs";
     homepage = "https://github.com/mdomke/schwifty";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ milibopp ];
+    maintainers = [ ];
   };
 }

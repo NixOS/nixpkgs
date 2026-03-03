@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Typing stubs for python-dateutil";
     homepage = "https://github.com/python/typeshed";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ milibopp ];
+    maintainers = [ ];
   };
 }

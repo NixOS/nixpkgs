@@ -29,6 +29,6 @@ buildPythonPackage (finalAttrs: {
     description = "Easy-to-use parser combinators, for parsing in pure Python";
     changelog = "https://github.com/python-parsy/parsy/blob/${finalAttrs.src.tag}/docs/history.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ milibopp ];
+    maintainers = [ ];
   };
 })

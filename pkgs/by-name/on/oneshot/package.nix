@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
     description = "First-come first-served single-fire HTTP server";
     homepage = "https://www.oneshot.uno/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ milibopp ];
+    maintainers = [ ];
     mainProgram = "oneshot";
   };
 })

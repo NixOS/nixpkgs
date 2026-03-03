@@ -17511,12 +17511,6 @@
     githubId = 7593028;
     name = "Miles Cranmer";
   };
-  milibopp = {
-    email = "contact@ebopp.de";
-    github = "milibopp";
-    githubId = 3098430;
-    name = "Emilia Bopp";
-  };
   millerjason = {
     email = "mailings-github@millerjason.com";
     github = "millerjason";
