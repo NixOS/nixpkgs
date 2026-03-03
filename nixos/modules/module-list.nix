@@ -1069,7 +1069,6 @@
   ./services/monitoring/unpoller.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime-kuma.nix
-  ./services/monitoring/uptime.nix
   ./services/monitoring/vlagent.nix
   ./services/monitoring/vmagent.nix
   ./services/monitoring/vmalert.nix
