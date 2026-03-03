@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
     (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
     (cmakeBool "INSTALL_LIB" installLib)
+    (cmakeBool "RUN_CLANG_TIDY" false)
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
