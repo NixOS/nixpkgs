@@ -190,7 +190,7 @@ def fetch_fileset(
     basename = emacs_overlay.elisp_packages_set[name]["basename"]
     url = f"{emacs_overlay.raw_url}/{sha}/{location}/{basename}"
 
-    destination = pathlib.Path(here_directory.path, basename).resolve()
+    destination = here_directory.path / basename
 
     logger.debug(f"Getting {url}")
 
