@@ -6497,7 +6497,7 @@ with pkgs;
     else if libc == "wasilibc" then
       wasilibc
     else if libc == "relibc" then
-      relibc
+      redox.libc
     else if libc == "llvm" then
       llvmPackages_20.libc
     else
@@ -8852,6 +8852,8 @@ with pkgs;
 
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi { };
   raspberrypi-armstubs = callPackage ../os-specific/linux/firmware/raspberrypi/armstubs.nix { };
+
+  redox = recurseIntoAttrs (callPackages ../os-specific/redox-os { });
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
