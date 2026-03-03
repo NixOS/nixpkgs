@@ -199,12 +199,14 @@ def check_fileset(
             "-A",
             f"emacsPackages.{nix_attr}",
         ]
-        environment = os.environ
-        environment["NIXPKGS_ALLOW_BROKEN"] = "1"
+        env = os.environ.copy()
+        env["NIXPKGS_ALLOW_BROKEN"] = "1"
 
         logging.info(f"Testing {nix_attr}")
         # TODO: capture the output (to put it in the logfile).
-        result = subprocess.run(cmdline, capture_output=True, text=True, check=True)
+        result = subprocess.run(
+            cmdline, capture_output=True, text=True, check=True, env=env
+        )
         logging.debug(f"""
 Shell Command: {result.args}
 Output:
