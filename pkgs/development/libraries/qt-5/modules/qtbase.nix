@@ -136,7 +136,9 @@ stdenv.mkDerivation (
           libxcb-render-util
           libxcb-wm
         ]
-        ++ lib.optional libGLSupported libGL
+        ++ lib.optionals libGLSupported [
+          libGL
+        ]
       );
 
       buildInputs = [
@@ -146,10 +148,18 @@ stdenv.mkDerivation (
       ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
         lib.optional withLibinput libinput ++ lib.optional withGtk3 gtk3
       )
-      ++ lib.optional developerBuild gdb
-      ++ lib.optional (cups != null) cups
-      ++ lib.optional mysqlSupport libmysqlclient
-      ++ lib.optional (libpq != null) libpq;
+      ++ lib.optionals developerBuild [
+        gdb
+      ]
+      ++ lib.optionals (cups != null) [
+        cups
+      ]
+      ++ lib.optionals mysqlSupport [
+        libmysqlclient
+      ]
+      ++ lib.optionals (libpq != null) [
+        libpq
+      ];
 
       nativeBuildInputs = [
         bison
@@ -160,8 +170,12 @@ stdenv.mkDerivation (
         pkg-config
         which
       ]
-      ++ lib.optionals mysqlSupport [ libmysqlclient ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+      ++ lib.optionals mysqlSupport [
+        libmysqlclient
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        xcbuild
+      ];
 
     }
     // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
@@ -321,13 +335,19 @@ stdenv.mkDerivation (
             ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
             ''-DNIXPKGS_LIBXCURSOR="${libxcursor.out}/lib/libXcursor"''
           ]
-          ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
-          ++ lib.optional stdenv.hostPlatform.isLinux "-DUSE_X11"
+          ++ lib.optionals libGLSupported [
+            ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            "-DUSE_X11"
+          ]
           ++ lib.optionals withGtk3 [
             ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
             ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
           ]
-          ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC"
+          ++ lib.optionals decryptSslTraffic [
+            "-DQT_DECRYPT_SSL_TRAFFIC"
+          ]
         );
       }
       // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
@@ -383,7 +403,9 @@ stdenv.mkDerivation (
         "-device ${qtPlatformCross stdenv.hostPlatform}"
         "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
       ]
-      ++ lib.optional debugSymbols "-debug"
+      ++ lib.optionals debugSymbols [
+        "-debug"
+      ]
       ++ lib.optionals developerBuild [
         "-developer-build"
         "-no-warnings-are-errors"
@@ -474,8 +496,12 @@ stdenv.mkDerivation (
             "-dbus-linked"
             "-glib"
           ]
-          ++ lib.optional withGtk3 "-gtk"
-          ++ lib.optional withLibinput "-libinput"
+          ++ lib.optionals withGtk3 [
+            "-gtk"
+          ]
+          ++ lib.optionals withLibinput [
+            "-libinput"
+          ]
           ++ [
             "-inotify"
           ]
