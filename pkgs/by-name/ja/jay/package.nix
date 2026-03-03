@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
@@ -13,6 +14,7 @@
   libglvnd,
   vulkan-loader,
   autoPatchelfHook,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -33,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     pkgconf
+    installShellFiles
   ];
 
   buildInputs = [
@@ -53,6 +56,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -D etc/jay.portal $out/share/xdg-desktop-portal/portals/jay.portal
     install -D etc/jay-portals.conf $out/share/xdg-desktop-portal/jay-portals.conf
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd jay --$shell <($out/bin/jay generate-completion $shell)
+    done
   '';
 
   meta = {
