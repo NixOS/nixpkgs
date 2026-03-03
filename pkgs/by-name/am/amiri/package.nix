@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,11 +14,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-BsYPMBlRdzlkvyleZIxGDuGjmqhDlEJ4udj8zoKUSzA=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/fonts/truetype
-    mv *.ttf $out/share/fonts/truetype/
     mkdir -p $out/share/doc/amiri-${finalAttrs.version}
     mv {*.html,*.txt,*.md} $out/share/doc/amiri-${finalAttrs.version}/
 
