@@ -2,10 +2,17 @@
 
 let
   secretA = pkgs.writeText "secretA" "AAAAA";
-  secretJSON = pkgs.writeText "secretA" (
+  secretB = pkgs.writeText "secretB" ''AAA"BB'CC"\n $1 $a $$ \"\\" \\ ''${value} DD'EE'';
+  secretJSON = pkgs.writeText "secretJSON" (
     builtins.toJSON [
       { "a" = "topsecretpassword1234"; }
       { "b" = "topsecretpassword5678"; }
+    ]
+  );
+  secretJSONB = pkgs.writeText "secretJSONB" (
+    builtins.toJSON [
+      { "my \\ super \" '' \n secret" = "topsecretpassword1234"; }
+      { "b" = ''AAA"BB'CC"\n $1 $a $$ \"\\" \\ ''${value} DD'EE''; }
     ]
   );
 
@@ -36,6 +43,29 @@ let
             relevant = {
               secret = "AAAAA";
             };
+          }
+        ];
+      };
+    };
+
+    simpleWithQuotes = {
+      set = {
+        example = [
+          {
+            "my \\ super \" '' \n secret" = {
+              _secret = secretA;
+            };
+            secret2 = {
+              _secret = secretB;
+            };
+          }
+        ];
+      };
+      expect = {
+        example = [
+          {
+            "my \\ super \" '' \n secret" = "AAAAA";
+            secret2 = ''AAA"BB'CC"\n $1 $a $$ \"\\" \\ ''${value} DD'EE'';
           }
         ];
       };
@@ -72,6 +102,21 @@ let
               ];
             };
           }
+        ];
+      };
+    };
+
+    structuredWithQuotes = {
+      set = {
+        secret = {
+          _secret = secretJSONB;
+          quote = false;
+        };
+      };
+      expect = {
+        secret = [
+          { "my \\ super \" '' \n secret" = "topsecretpassword1234"; }
+          { "b" = ''AAA"BB'CC"\n $1 $a $$ \"\\" \\ ''${value} DD'EE''; }
         ];
       };
     };
@@ -165,6 +210,7 @@ in
             except Exception:
                 print(f"raw file: {gotRaw}")
                 raise
+            print(gotRaw)
             print(got)
             with open("${expect}", "r") as file:
                 expect = json.loads(file.read())
