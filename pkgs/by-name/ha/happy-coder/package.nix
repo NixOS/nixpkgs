@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "happy-coder";
-  version = "0-unstable-2026-02-14";
+  version = "0-unstable-2026-02-26";
 
   src = fetchFromGitHub {
     owner = "slopus";
     repo = "happy";
-    rev = "bb7a1173c39f6db07963d4a3adc38be5ea2493fd";
-    hash = "sha256-RL1ZEkYOAkA/gRGAtOBRMySacFlla+Tu5APHE9UjVps=";
+    rev = "d343330c86ab966969aecd82be4aecbad7ec4238";
+    hash = "sha256-D7ESVYNQxOTpjgNflSbxKKrcwnIt/8FeRANc4T1zaFA=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
