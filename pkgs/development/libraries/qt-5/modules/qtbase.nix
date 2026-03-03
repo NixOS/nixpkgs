@@ -356,15 +356,15 @@ stdenv.mkDerivation (
           "-Wno-free-nonheap-object"
           "-w"
         ];
+      }
+      // lib.optionalAttrs (libpq != null) {
+        # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
+        # if dependency paths contain the string "pq", which can occur in the hash.
+        # To prevent these failures, we need to override PostgreSQL detection.
+        PSQL_LIBS = "-L${libpq}/lib -lpq";
       };
 
       prefixKey = "-prefix ";
-
-      # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
-      # if dependency paths contain the string "pq", which can occur in the hash.
-      # To prevent these failures, we need to override PostgreSQL detection.
-      PSQL_LIBS = lib.optionalString (libpq != null) "-L${libpq}/lib -lpq";
-
     }
     // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
       configurePlatforms = [ ];
