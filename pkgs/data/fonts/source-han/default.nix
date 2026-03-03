@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   unzip,
+  installFonts,
 }:
 
 let
@@ -27,7 +28,7 @@ let
         inherit hash;
       };
 
-      nativeBuildInputs = lib.optionals (zip == ".zip") [ unzip ];
+      nativeBuildInputs = [ installFonts ] ++ lib.optionals (zip == ".zip") [ unzip ];
 
       unpackPhase =
         lib.optionalString (zip == "") ''
@@ -36,14 +37,6 @@ let
         + lib.optionalString (zip == ".zip") ''
           unzip $src
         '';
-
-      installPhase = ''
-        runHook preInstall
-
-        install -Dm444 *.ttc -t $out/share/fonts/opentype/${pname}
-
-        runHook postInstall
-      '';
 
       meta = {
         description = "Open source Pan-CJK ${description} typeface";
