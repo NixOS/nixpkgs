@@ -60,7 +60,7 @@ rec {
     # Type
 
     ```
-    traceIf :: bool -> string -> a -> a
+    traceIf :: Bool -> String -> a -> a
     ```
 
     # Examples
@@ -327,7 +327,7 @@ rec {
     # Type
 
     ```
-    traceValSeqNFn :: (a -> b) -> int -> a -> a
+    traceValSeqNFn :: (a -> b) -> Int -> a -> a
     ```
 
     # Examples
@@ -362,7 +362,7 @@ rec {
     # Type
 
     ```
-    traceValSeqN :: int -> a -> a
+    traceValSeqN :: Int -> a -> a
     ```
 
     # Examples
@@ -407,7 +407,7 @@ rec {
     # Type
 
     ```
-    traceFnSeqN :: int -> string -> (a -> b) -> a -> b
+    traceFnSeqN :: Int -> String -> (a -> b) -> a -> b
     ```
 
     # Examples
@@ -466,7 +466,7 @@ rec {
 
     ```
     runTests :: {
-      tests = [ String ];
+      tests :: [String];
       ${testName} :: {
         expr :: a;
         expected :: a;
@@ -566,7 +566,7 @@ rec {
       ];
     }
     ->
-    null
+    Null
     ```
 
     # Examples

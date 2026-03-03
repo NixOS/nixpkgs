@@ -139,8 +139,15 @@ rec {
     _noEval = throw _noEvalMessage;
   };
 
-  # Create a fileset, see ./README.md#fileset
-  # Type: path -> filesetTree -> fileset
+  /**
+    Create a fileset, see ./README.md#fileset
+
+    # Type
+
+    ```
+    _create :: Path -> FileSetTree -> FileSet
+    ```
+  */
   _create =
     base: tree:
     let
@@ -165,12 +172,18 @@ rec {
       _noEval = throw _noEvalMessage;
     };
 
-  # Coerce a value to a fileset. Return a set containing the attribute `success`
-  # indicating whether coercing succeeded, and either `value` when `success ==
-  # true`, or an error `message` when `success == false`. The string gives the
-  # context for error messages.
-  #
-  # Type: String -> (fileset | Path) -> { success :: Bool, value :: fileset } ] -> { success :: Bool, message :: String }
+  /**
+    Coerce a value to a fileset. Return a set containing the attribute `success`
+    indicating whether coercing succeeded, and either `value` when `success ==
+    true`, or an error `message` when `success == false`. The string gives the
+    context for error messages.
+
+    # Type
+
+    ```
+    _coerceResult :: String -> (FileSet | Path) -> ({ success :: Bool; value :: FileSet; } | { success :: Bool; message :: String; })
+    ```
+  */
   _coerceResult =
     let
       ok = value: {
@@ -219,9 +232,16 @@ rec {
     else
       ok (_singleton value);
 
-  # Coerce a value to a fileset, erroring when the value cannot be coerced.
-  # The string gives the context for error messages.
-  # Type: String -> (fileset | Path) -> fileset
+  /**
+    Coerce a value to a fileset, erroring when the value cannot be coerced.
+    The string gives the context for error messages.
+
+    # Type
+
+    ```
+    _coerce :: String -> (FileSet | Path) -> FileSet
+    ```
+  */
   _coerce =
     context: value:
     let
@@ -229,9 +249,16 @@ rec {
     in
     if result.success then result.value else throw result.message;
 
-  # Coerce many values to filesets, erroring when any value cannot be coerced,
-  # or if the filesystem root of the values doesn't match.
-  # Type: String -> [ { context :: String, value :: fileset | Path } ] -> [ fileset ]
+  /**
+    Coerce many values to filesets, erroring when any value cannot be coerced,
+    or if the filesystem root of the values doesn't match.
+
+    # Type
+
+    ```
+    _coerceMany :: String -> [{ context :: String; value :: FileSet | Path; }] -> [FileSet]
+    ```
+  */
   _coerceMany =
     functionContext: list:
     let
@@ -259,8 +286,15 @@ rec {
     else
       filesets;
 
-  # Create a file set from a path.
-  # Type: Path -> fileset
+  /**
+    Create a file set from a path.
+
+    # Type
+
+    ```
+    _singleton :: Path -> FileSet
+    ```
+  */
   _singleton =
     path:
     let
@@ -279,9 +313,16 @@ rec {
         ${baseNameOf path} = type;
       };
 
-  # Expand a directory representation to an equivalent one in attribute set form.
-  # All directory entries are included in the result.
-  # Type: Path -> filesetTree -> { <name> = filesetTree; }
+  /**
+    Expand a directory representation to an equivalent one in attribute set form.
+    All directory entries are included in the result.
+
+    # Type
+
+    ```
+    _directoryEntries :: Path -> FileSetTree -> { [String] :: FileSetTree }
+    ```
+  */
   _directoryEntries =
     path: value:
     if value == "directory" then
@@ -312,7 +353,7 @@ rec {
     # Type
 
     ```
-    Path -> filesetTree -> filesetTree
+    _normaliseTreeFilter :: Path -> FileSetTree -> FileSetTree
     ```
   */
   _normaliseTreeFilter =
@@ -357,7 +398,7 @@ rec {
     # Type
 
     ```
-    Path -> filesetTree -> filesetTree (with "emptyDir"'s)
+    _normaliseTreeMinimal :: Path -> FileSetTree -> FileSetTree (with "emptyDir"'s)
     ```
   */
   _normaliseTreeMinimal =
@@ -391,9 +432,16 @@ rec {
     else
       tree;
 
-  # Trace a filesetTree in a pretty way when the resulting value is evaluated.
-  # This can handle both normal filesetTree's, and ones returned from _normaliseTreeMinimal
-  # Type: Path -> filesetTree (with "emptyDir"'s) -> Null
+  /**
+    Trace a filesetTree in a pretty way when the resulting value is evaluated.
+    This can handle both normal filesetTree's, and ones returned from _normaliseTreeMinimal
+
+    # Type
+
+    ```
+    _printMinimalTree :: Path -> FileSetTree (with "emptyDir"'s) -> Null
+    ```
+  */
   _printMinimalTree =
     base: tree:
     let
@@ -443,8 +491,15 @@ rec {
     in
     if isAttrs tree then traceTreeAttrs firstLine "" tree else firstLine;
 
-  # Pretty-print a file set in a pretty way when the resulting value is evaluated
-  # Type: fileset -> Null
+  /**
+    Pretty-print a file set in a pretty way when the resulting value is evaluated
+
+    # Type
+
+    ```
+    _printFileset :: FileSet -> Null
+    ```
+  */
   _printFileset =
     fileset:
     if fileset._internalIsEmptyWithoutBase then
@@ -454,9 +509,16 @@ rec {
         _normaliseTreeMinimal fileset._internalBase fileset._internalTree
       );
 
-  # Turn a fileset into a source filter function suitable for `builtins.path`
-  # Only directories recursively containing at least one files are recursed into
-  # Type: fileset -> (String -> String -> Bool)
+  /**
+    Turn a fileset into a source filter function suitable for `builtins.path`
+    Only directories recursively containing at least one files are recursed into
+
+    # Type
+
+    ```
+    _toSourceFilter :: FileSet -> (String -> String -> Bool)
+    ```
+  */
   _toSourceFilter =
     fileset:
     let
@@ -476,7 +538,7 @@ rec {
 
       # Check whether a list of path components under the base path exists in the tree.
       # This function is called often, so it should be fast.
-      # Type: [ String ] -> Bool
+      # Type: [String] -> Bool
       inTree =
         components:
         let
@@ -551,10 +613,17 @@ rec {
     # This also forces the tree before returning the filter, leads to earlier error messages
     if fileset._internalIsEmptyWithoutBase || tree == null then empty else nonEmpty;
 
-  # Turn a builtins.filterSource-based source filter on a root path into a file set
-  # containing only files included by the filter.
-  # The filter is lazily called as necessary to determine whether paths are included
-  # Type: Path -> (String -> String -> Bool) -> fileset
+  /**
+    Turn a builtins.filterSource-based source filter on a root path into a file set
+    containing only files included by the filter.
+    The filter is lazily called as necessary to determine whether paths are included
+
+    # Type
+
+    ```
+    _fromSourceFilter :: Path -> (String -> String -> Bool) -> FileSet
+    ```
+  */
   _fromSourceFilter =
     root: sourceFilter:
     let
@@ -606,8 +675,15 @@ rec {
         ${baseNameOf root} = rootPathType;
       };
 
-  # Turns a file set into the list of file paths it includes.
-  # Type: fileset -> [ Path ]
+  /**
+    Turns a file set into the list of file paths it includes.
+
+    # Type
+
+    ```
+    _toList :: FileSet -> [Path]
+    ```
+  */
   _toList =
     fileset:
     let
@@ -668,9 +744,16 @@ rec {
     in
     recurse (length fileset._internalBaseComponents) fileset._internalTree;
 
-  # Computes the union of a list of filesets.
-  # The filesets must already be coerced and validated to be in the same filesystem root
-  # Type: [ Fileset ] -> Fileset
+  /**
+    Computes the union of a list of filesets.
+    The filesets must already be coerced and validated to be in the same filesystem root
+
+    # Type
+
+    ```
+    _unionMany :: [FileSet] -> FileSet
+    ```
+  */
   _unionMany =
     filesets:
     let
@@ -715,9 +798,16 @@ rec {
     # If there's no values with a base, we have no files
     if filesetsWithBase == [ ] then _emptyWithoutBase else _create commonBase resultTree;
 
-  # The union of multiple filesetTree's with the same base path.
-  # Later elements are only evaluated if necessary.
-  # Type: [ filesetTree ] -> filesetTree
+  /**
+    The union of multiple filesetTree's with the same base path.
+    Later elements are only evaluated if necessary.
+
+    # Type
+
+    ```
+    _unionTrees :: [FileSetTree] -> FileSetTree
+    ```
+  */
   _unionTrees =
     trees:
     let
@@ -736,9 +826,16 @@ rec {
       # We need to recurse into those
       zipAttrsWith (name: _unionTrees) withoutNull;
 
-  # Computes the intersection of a list of filesets.
-  # The filesets must already be coerced and validated to be in the same filesystem root
-  # Type: Fileset -> Fileset -> Fileset
+  /**
+    Computes the intersection of two filesets.
+    The filesets must already be coerced and validated to be in the same filesystem root
+
+    # Type
+
+    ```
+    _intersection :: FileSet -> FileSet -> FileSet
+    ```
+  */
   _intersection =
     fileset1: fileset2:
     let
@@ -787,9 +884,16 @@ rec {
     else
       _create longestBaseFileset._internalBase resultTree;
 
-  # The intersection of two filesetTree's with the same base path
-  # The second element is only evaluated as much as necessary.
-  # Type: filesetTree -> filesetTree -> filesetTree
+  /**
+    The intersection of two filesetTree's with the same base path
+    The second element is only evaluated as much as necessary.
+
+    # Type
+
+    ```
+    _intersectTree :: FileSetTree -> FileSetTree -> FileSetTree
+    ```
+  */
   _intersectTree =
     lhs: rhs:
     if isAttrs lhs && isAttrs rhs then
@@ -804,9 +908,16 @@ rec {
       # In all other cases it's the rhs
       rhs;
 
-  # Compute the set difference between two file sets.
-  # The filesets must already be coerced and validated to be in the same filesystem root.
-  # Type: Fileset -> Fileset -> Fileset
+  /**
+    Compute the set difference between two file sets.
+    The filesets must already be coerced and validated to be in the same filesystem root.
+
+    # Type
+
+    ```
+    _difference :: FileSet -> FileSet -> FileSet
+    ```
+  */
   _difference =
     positive: negative:
     let
@@ -862,8 +973,15 @@ rec {
       # which is what base path is for
       _create positive._internalBase resultingTree;
 
-  # Computes the set difference of two filesetTree's
-  # Type: Path -> filesetTree -> filesetTree
+  /**
+    Computes the set difference of two filesetTree's
+
+    # Type
+
+    ```
+    _differenceTree :: Path -> FileSetTree -> FileSetTree -> FileSetTree
+    ```
+  */
   _differenceTree =
     path: lhs: rhs:
     # If the lhs doesn't have any files, or the right hand side includes all files
@@ -880,13 +998,20 @@ rec {
         _directoryEntries path lhs
       );
 
-  # Filters all files in a path based on a predicate
-  # Type: ({ name, type, ... } -> Bool) -> Path -> FileSet
+  /**
+    Filters all files in a path based on a predicate
+
+    # Type
+
+    ```
+    _fileFilter :: ({ name :: String; type :: String; hasExt :: String -> Bool; ... } -> Bool) -> Path -> FileSet
+    ```
+  */
   _fileFilter =
     predicate: root:
     let
       # Check the predicate for a single file
-      # Type: String -> String -> filesetTree
+      # Type: String -> String -> FileSetTree
       fromFile =
         name: type:
         if
@@ -905,7 +1030,7 @@ rec {
           null;
 
       # Check the predicate for all files in a directory
-      # Type: Path -> filesetTree
+      # Type: Path -> FileSetTree
       fromDir =
         path:
         mapAttrs (
@@ -922,12 +1047,18 @@ rec {
         ${baseNameOf root} = fromFile (baseNameOf root) rootType;
       };
 
-  # Mirrors the contents of a Nix store path relative to a local path as a file set.
-  # Some notes:
-  # - The store path is read at evaluation time.
-  # - The store path must not include files that don't exist in the respective local path.
-  #
-  # Type: Path -> String -> FileSet
+  /**
+    Mirrors the contents of a Nix store path relative to a local path as a file set.
+    Some notes:
+    - The store path is read at evaluation time.
+    - The store path must not include files that don't exist in the respective local path.
+
+    # Type
+
+    ```
+    _mirrorStorePath :: Path -> String -> FileSet
+    ```
+  */
   _mirrorStorePath =
     localPath: storePath:
     let
@@ -939,8 +1070,15 @@ rec {
     in
     _create localPath (recurse storePath);
 
-  # Create a file set from the files included in the result of a fetchGit call
-  # Type: String -> String -> Path -> Attrs -> FileSet
+  /**
+    Create a file set from the files included in the result of a fetchGit call
+
+    # Type
+
+    ```
+    _fromFetchGit :: String -> String -> Path -> AttrSet -> FileSet
+    ```
+  */
   _fromFetchGit =
     function: argument: path: extraFetchGitAttrs:
     let

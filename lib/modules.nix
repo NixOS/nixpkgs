@@ -1461,7 +1461,7 @@ let
     # Type
 
     ```
-    option -> attrsOf { highestPrio, value }
+    mergeAttrDefinitionsWithPrio :: Option -> { [String] :: { highestPrio :: Int; value :: Any; } }
     ```
   */
   mergeAttrDefinitionsWithPrio =

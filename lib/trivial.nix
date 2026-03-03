@@ -111,7 +111,7 @@ in
     # Type
 
     ```
-    pipe :: a -> [<functions>] -> <return type of last function>
+    pipe :: a -> [(a -> b) (b -> c) ... (x -> y) (y -> z)] -> z
     ```
 
     # Examples
@@ -204,7 +204,7 @@ in
     # Type
 
     ```
-    or :: bool -> bool -> bool
+    or :: Bool -> Bool -> Bool
     ```
   */
   "or" = x: y: x || y;
@@ -225,7 +225,7 @@ in
     # Type
 
     ```
-    and :: bool -> bool -> bool
+    and :: Bool -> Bool -> Bool
     ```
   */
   and = x: y: x && y;
@@ -259,7 +259,7 @@ in
     # Type
 
     ```
-    bitNot :: number -> number
+    bitNot :: Number -> Number
     ```
   */
   bitNot = builtins.sub (-1);
@@ -280,7 +280,7 @@ in
     # Type
 
     ```
-    boolToString :: bool -> string
+    boolToString :: Bool -> String
     ```
   */
   boolToString = b: if b then "true" else "false";
@@ -300,7 +300,7 @@ in
     # Type
 
     ```
-    boolToYesNo :: bool -> string
+    boolToYesNo :: Bool -> String
     ```
   */
   boolToYesNo = b: if b then "yes" else "no";
@@ -321,7 +321,7 @@ in
     # Type
 
     ```
-    mergeAttrs :: attrs -> attrs -> attrs
+    mergeAttrs :: AttrSet -> AttrSet -> AttrSet
     ```
 
     # Examples
@@ -391,7 +391,7 @@ in
     # Type
 
     ```
-    defaultTo :: a -> Nullable b -> (a | b)
+    defaultTo :: a -> (b | Null) -> (b | a)
     ```
 
     # Examples
@@ -427,7 +427,7 @@ in
     # Type
 
     ```
-    mapNullable :: (a -> b) -> Nullable a -> Nullable b
+    mapNullable :: (a -> b) -> (a | Null) -> (b | Null)
     ```
 
     # Examples
@@ -526,7 +526,7 @@ in
     # Type
 
     ```
-    revisionWithDefault :: string -> string
+    revisionWithDefault :: String -> String
     ```
   */
   revisionWithDefault =
@@ -551,7 +551,7 @@ in
     # Type
 
     ```
-    inNixShell :: bool
+    inNixShell :: Bool
     ```
   */
   inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
@@ -564,7 +564,7 @@ in
     # Type
 
     ```
-    inPureEvalMode :: bool
+    inPureEvalMode :: Bool
     ```
   */
   inPureEvalMode = !builtins ? currentSystem;
@@ -587,7 +587,7 @@ in
     # Type
 
     ```
-    min :: number -> number -> number
+    min :: Number -> Number -> Number
     ```
   */
   min = x: y: if x < y then x else y;
@@ -608,7 +608,7 @@ in
     # Type
 
     ```
-    max :: number -> number -> number
+    max :: Number -> Number -> Number
     ```
   */
   max = x: y: if x > y then x else y;
@@ -629,7 +629,7 @@ in
     # Type
 
     ```
-    mod :: int -> int -> int
+    mod :: Int -> Int -> Int
     ```
 
     # Examples
@@ -669,7 +669,7 @@ in
     # Type
 
     ```
-    compare :: a -> a -> int
+    compare :: a -> a -> Int
     ```
   */
   compare =
@@ -712,7 +712,7 @@ in
     # Type
 
     ```
-    (a -> bool) -> (a -> a -> int) -> (a -> a -> int) -> (a -> a -> int)
+    splitByAndCompare :: (a -> Bool) -> (a -> a -> Int) -> (a -> a -> Int) -> (a -> a -> Int)
     ```
 
     # Examples
@@ -786,7 +786,7 @@ in
     # Type
 
     ```
-    importJSON :: path -> any
+    importJSON :: Path -> Any
     ```
   */
   importJSON = path: builtins.fromJSON (builtins.readFile path);
@@ -833,7 +833,7 @@ in
     # Type
 
     ```
-    importTOML :: path -> any
+    importTOML :: Path -> Any
     ```
   */
   importTOML = path: fromTOML (builtins.readFile path);
@@ -859,7 +859,7 @@ in
     # Type
 
     ```
-    String -> a -> a
+    warn :: String -> a -> a
     ```
   */
   warn =
@@ -906,7 +906,7 @@ in
     # Type
 
     ```
-    Bool -> String -> a -> a
+    warnIf :: Bool -> String -> a -> a
     ```
   */
   warnIf = cond: msg: if cond then warn msg else x: x;
@@ -933,7 +933,7 @@ in
     # Type
 
     ```
-    Boolean -> String -> a -> a
+    warnIfNot :: Bool -> String -> a -> a
     ```
   */
   warnIfNot = cond: msg: if cond then x: x else warn msg;
@@ -962,7 +962,7 @@ in
     # Type
 
     ```
-    bool -> string -> a -> a
+    throwIfNot :: Bool -> String -> a -> (a | Never)
     ```
 
     # Examples
@@ -995,7 +995,7 @@ in
     # Type
 
     ```
-    bool -> string -> a -> a
+    throwIf :: Bool -> String -> a -> (a | Never)
     ```
   */
   throwIf = cond: msg: if cond then throw msg else x: x;
@@ -1020,7 +1020,7 @@ in
     # Type
 
     ```
-    String -> List ComparableVal -> List ComparableVal -> a -> a
+    checkListOfEnum :: String -> [a] -> [a] -> ((b -> b) | Never)
     ```
 
     # Examples
@@ -1073,7 +1073,7 @@ in
     # Type
 
     ```
-    setFunctionArgs : (a -> b) -> (Map String Bool) -> (a -> b)
+    setFunctionArgs : (a -> b) -> { [String] :: Bool } -> (a -> b)
     ```
   */
   setFunctionArgs = f: args: {
@@ -1097,7 +1097,7 @@ in
     # Type
 
     ```
-    functionArgs : (a -> b) -> Map String Bool
+    functionArgs : (a -> b) -> { [String] :: Bool }
     ```
   */
   functionArgs =
@@ -1120,7 +1120,7 @@ in
     # Type
 
     ```
-    isFunction : a -> bool
+    isFunction : Any -> Bool
     ```
   */
   isFunction = f: builtins.isFunction f || (f ? __functor && isFunction (f.__functor f));
@@ -1247,7 +1247,7 @@ in
     # Type
 
     ```
-    toHexString :: int -> string
+    toHexString :: Int -> String
     ```
 
     # Examples
@@ -1294,7 +1294,7 @@ in
     # Type
 
     ```
-    toBaseDigits :: int -> int -> [int]
+    toBaseDigits :: Int -> Int -> [Int]
     ```
 
     # Examples

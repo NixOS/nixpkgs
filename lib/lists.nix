@@ -261,7 +261,7 @@ rec {
     # Type
 
     ```
-    foldl' :: (acc -> x -> acc) -> acc -> [x] -> acc
+    foldl' :: (a -> b -> a) -> a -> [b] -> a
     ```
 
     # Examples
@@ -298,7 +298,7 @@ rec {
     # Type
 
     ```
-    imap0 :: (int -> a -> b) -> [a] -> [b]
+    imap0 :: (Int -> a -> b) -> [a] -> [b]
     ```
 
     # Examples
@@ -330,7 +330,7 @@ rec {
     # Type
 
     ```
-    imap1 :: (int -> a -> b) -> [a] -> [b]
+    imap1 :: (Int -> a -> b) -> [a] -> [b]
     ```
 
     # Examples
@@ -372,7 +372,7 @@ rec {
 
     # Type
     ```
-    ifilter0 :: (int -> a -> bool) -> [a] -> [a]
+    ifilter0 :: (Int -> a -> Bool) -> [a] -> [a]
     ```
 
     # Examples
@@ -504,7 +504,7 @@ rec {
     # Type
 
     ```
-    findSingle :: (a -> bool) -> a -> a -> [a] -> a
+    findSingle :: (a -> Bool) -> a -> a -> [a] -> a
     ```
 
     # Examples
@@ -626,7 +626,7 @@ rec {
     # Type
 
     ```
-    findFirst :: (a -> bool) -> a -> [a] -> a
+    findFirst :: (a -> Bool) -> a -> [a] -> a
     ```
 
     # Examples
@@ -666,7 +666,7 @@ rec {
     # Type
 
     ```
-    any :: (a -> bool) -> [a] -> bool
+    any :: (a -> Bool) -> [a] -> Bool
     ```
 
     # Examples
@@ -701,7 +701,7 @@ rec {
     # Type
 
     ```
-    all :: (a -> bool) -> [a] -> bool
+    all :: (a -> Bool) -> [a] -> Bool
     ```
 
     # Examples
@@ -732,7 +732,7 @@ rec {
     # Type
 
     ```
-    count :: (a -> bool) -> [a] -> int
+    count :: (a -> Bool) -> [a] -> Int
     ```
 
     # Examples
@@ -766,7 +766,7 @@ rec {
     # Type
 
     ```
-    optional :: bool -> a -> [a]
+    optional :: Bool -> a -> [a]
     ```
 
     # Examples
@@ -800,7 +800,7 @@ rec {
     # Type
 
     ```
-    optionals :: bool -> [a] -> [a]
+    optionals :: Bool -> [a] -> [a]
     ```
 
     # Examples
@@ -866,7 +866,7 @@ rec {
     # Type
 
     ```
-    range :: int -> int -> [int]
+    range :: Int -> Int -> [Int]
     ```
 
     # Examples
@@ -900,7 +900,7 @@ rec {
     # Type
 
     ```
-    replicate :: int -> a -> [a]
+    replicate :: Int -> a -> [a]
     ```
 
     # Examples
@@ -935,7 +935,7 @@ rec {
     # Type
 
     ```
-    (a -> bool) -> [a] -> { right :: [a]; wrong :: [a]; }
+    partition :: (a -> Bool) -> [a] -> { right :: [a]; wrong :: [a]; }
     ```
 
     # Examples
@@ -977,7 +977,7 @@ rec {
     # Type
 
     ```
-    groupBy' :: (b -> a -> b) -> b -> (a -> string) -> [a] -> Map string b
+    groupBy' :: (a -> b -> a) -> a -> (b -> String) -> [b] -> { [String] :: a }
     ```
 
     # Examples
@@ -1149,7 +1149,7 @@ rec {
     # Type
 
     ```
-    listDfs :: bool -> (a -> a -> bool) -> [a] -> attrs
+    listDfs :: Bool -> (a -> a -> Bool) -> [a] -> ({ minimal :: a; visited :: [a]; rest :: [a]; } | { cycle :: a; loops :: [a]; visited :: [a]; rest :: [a]; })
     ```
 
     # Examples
@@ -1220,7 +1220,7 @@ rec {
     # Type
 
     ```
-    toposort :: (a -> a -> bool) -> [a] -> attrs
+    toposort :: (a -> a -> Bool) -> [a] -> ({ result :: [a]; } | { cycle :: [a]; loops :: [a]; })
     ```
 
     # Examples
@@ -1397,7 +1397,7 @@ rec {
     # Type
 
     ```
-    compareLists :: (a -> a -> int) -> [a] -> [a] -> int
+    compareLists :: (a -> a -> Int) -> [a] -> [a] -> Int
     ```
 
     # Examples
@@ -1442,7 +1442,7 @@ rec {
     # Type
 
     ```
-    naturalSort :: [str] -> [str]
+    naturalSort :: [String] -> [String]
     ```
 
     # Examples
@@ -1488,7 +1488,7 @@ rec {
     # Type
 
     ```
-    take :: int -> [a] -> [a]
+    take :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1522,7 +1522,7 @@ rec {
     # Type
 
     ```
-    takeEnd :: int -> [a] -> [a]
+    takeEnd :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1556,7 +1556,7 @@ rec {
     # Type
 
     ```
-    drop :: int -> [a] -> [a]
+    drop :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1624,7 +1624,7 @@ rec {
     # Type
 
     ```
-    hasPrefix :: [a] -> [a] -> bool
+    hasPrefix :: [a] -> [a] -> Bool
     ```
 
     # Examples
@@ -1703,7 +1703,7 @@ rec {
     # Type
 
     ```
-    sublist :: int -> int -> [a] -> [a]
+    sublist :: Int -> Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1921,7 +1921,7 @@ rec {
     # Type
 
     ```
-    uniqueStrings :: [ String ] -> [ String ]
+    uniqueStrings :: [String] -> [String]
     ```
 
     # Examples
@@ -1949,7 +1949,7 @@ rec {
     # Type
 
     ```
-    allUnique :: [a] -> bool
+    allUnique :: [a] -> Bool
     ```
 
     # Examples
@@ -2052,7 +2052,7 @@ rec {
     # Type
 
     ```
-    mutuallyExclusive :: [a] -> [a] -> bool
+    mutuallyExclusive :: [a] -> [a] -> Bool
     ```
   */
   mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
@@ -2070,7 +2070,7 @@ rec {
     # Type
 
     ```
-    concatAttrValues :: (Map string a) -> [a]
+    concatAttrValues :: { [String] :: [a] } -> [a]
     ```
 
     # Examples
@@ -2103,7 +2103,7 @@ rec {
     # Type
 
     ```
-    replaceElemAt :: [a] -> int - b -> [a]
+    replaceElemAt :: [a] -> Int -> a -> [a]
     ```
 
     # Examples

@@ -195,7 +195,7 @@ in
     # Type
 
     ```
-    optionalDrvAttr :: Bool -> a -> a | Null
+    optionalDrvAttr :: Bool -> a -> (a | Null)
     ```
 
     # Examples
@@ -236,7 +236,7 @@ in
     # Type
 
     ```
-    warnOnInstantiate :: string -> Derivation -> Derivation
+    warnOnInstantiate :: String -> Derivation -> Derivation
     ```
 
     # Examples

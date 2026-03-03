@@ -42,7 +42,7 @@ rec {
     # Type
 
     ```
-    addMetaAttrs :: attrs -> Derivation -> Derivation
+    addMetaAttrs :: AttrSet -> Derivation -> Derivation
     ```
 
     # Examples
@@ -101,7 +101,7 @@ rec {
     # Type
 
     ```
-    setName :: string -> Derivation -> Derivation
+    setName :: String -> Derivation -> Derivation
     ```
   */
   setName = name: drv: drv // { inherit name; };
@@ -122,7 +122,7 @@ rec {
     # Type
 
     ```
-    updateName :: (string -> string) -> Derivation -> Derivation
+    updateName :: (String -> String) -> Derivation -> Derivation
     ```
 
     # Examples
@@ -150,7 +150,7 @@ rec {
     # Type
 
     ```
-    appendToName :: string -> Derivation -> Derivation
+    appendToName :: String -> Derivation -> Derivation
     ```
   */
   appendToName =
@@ -179,7 +179,7 @@ rec {
     # Type
 
     ```
-    mapDerivationAttrset :: (Derivation -> a) -> attrs -> attrs
+    mapDerivationAttrset :: (Derivation -> a) -> AttrSet -> AttrSet
     ```
   */
   mapDerivationAttrset =
@@ -204,7 +204,7 @@ rec {
     # Type
 
     ```
-    setPrio :: int -> Derivation -> Derivation
+    setPrio :: Int -> Derivation -> Derivation
     ```
   */
   setPrio = priority: addMetaAttrs { inherit priority; };
@@ -239,7 +239,7 @@ rec {
     # Type
 
     ```
-    lowPrioSet :: (Map string Derivation) -> (Map string Derivation)
+    lowPrioSet :: { [String] :: Derivation } -> { [String] :: Derivation }
     ```
   */
   lowPrioSet = set: mapDerivationAttrset lowPrio set;
@@ -274,7 +274,7 @@ rec {
     # Type
 
     ```
-    hiPrioSet :: (Map string Derivation) -> (Map string Derivation)
+    hiPrioSet :: { [String] :: Derivation } -> { [String] :: Derivation }
     ```
   */
   hiPrioSet = set: mapDerivationAttrset hiPrio set;
@@ -404,7 +404,15 @@ rec {
     # Type
 
     ```
-    getLicenseFromSpdxId :: str -> AttrSet
+    getLicenseFromSpdxId :: String -> {
+      deprecated :: Bool;
+      free :: Bool;
+      fullName :: String;
+      redistributable :: Bool;
+      shortName :: String;
+      spdxId :: String;
+      url :: String;
+    }
     ```
 
     # Examples
@@ -449,7 +457,15 @@ rec {
     # Type
 
     ```
-    getLicenseFromSpdxIdOr :: str -> Any -> Any
+    getLicenseFromSpdxIdOr :: String -> a -> ({
+      deprecated :: Bool;
+      free :: Bool;
+      fullName :: String;
+      redistributable :: Bool;
+      shortName :: String;
+      spdxId :: String;
+      url :: String;
+    } | a)
     ```
 
     # Examples
@@ -491,7 +507,7 @@ rec {
     # Type
 
     ```
-    getExe :: package -> string
+    getExe :: Derivation -> StorePath
     ```
 
     # Examples
@@ -537,7 +553,7 @@ rec {
     # Type
 
     ```
-    getExe' :: derivation -> string -> string
+    getExe' :: Derivation -> String -> StorePath
     ```
 
     # Examples
@@ -579,7 +595,7 @@ rec {
     # Type
 
     ```
-    cpeFullVersionWithVendor :: string -> string -> AttrSet
+    cpeFullVersionWithVendor :: String -> String -> { update :: String; vendor :: String; version :: String; }
     ```
 
     # Examples
@@ -634,7 +650,7 @@ rec {
     # Type
 
     ```
-    tryCPEPatchVersionInUpdateWithVendor :: string -> string -> AttrSet
+    tryCPEPatchVersionInUpdateWithVendor :: String -> String -> ({ success = true; value :: { update :: String; vendor :: String; version :: String; }; } | { success = false; error :: String; })
     ```
 
     # Examples
@@ -705,7 +721,7 @@ rec {
     # Type
 
     ```
-    cpePatchVersionInUpdateWithVendor :: string -> string -> AttrSet
+    cpePatchVersionInUpdateWithVendor :: String -> String -> { update :: String; vendor :: String; version :: String; }
     ```
 
     # Examples

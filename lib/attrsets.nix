@@ -201,7 +201,7 @@ rec {
     # Type
 
     ```
-    longestValidPathPrefix :: [String] -> Value -> [String]
+    longestValidPathPrefix :: [String] -> AttrSet -> [String]
     ```
 
     # Examples
@@ -352,7 +352,7 @@ rec {
     # Type
 
     ```
-    concatMapAttrs :: (String -> a -> AttrSet) -> AttrSet -> AttrSet
+    concatMapAttrs :: (String -> Any -> AttrSet) -> AttrSet -> AttrSet
     ```
 
     # Examples
@@ -514,7 +514,7 @@ rec {
     # Type
 
     ```
-    attrVals :: [String] -> AttrSet -> [Any]
+    attrVals :: [String] -> { [String] :: a } -> [a]
     ```
 
     # Examples
@@ -537,7 +537,7 @@ rec {
     # Type
 
     ```
-    attrValues :: AttrSet -> [Any]
+    attrValues :: { [String] :: a } -> [a]
     ```
 
     # Examples
@@ -570,7 +570,7 @@ rec {
     # Type
 
     ```
-    getAttrs :: [String] -> AttrSet -> AttrSet
+    getAttrs :: [String] -> { [String] :: a } -> { [String] :: a }
     ```
 
     # Examples
@@ -603,7 +603,7 @@ rec {
     # Type
 
     ```
-    catAttrs :: String -> [AttrSet] -> [Any]
+    catAttrs :: String -> [{ [String] :: a }] -> [a]
     ```
 
     # Examples
@@ -646,7 +646,7 @@ rec {
     # Type
 
     ```
-    filterAttrs :: (String -> Any -> Bool) -> AttrSet -> AttrSet
+    filterAttrs :: (String -> a -> Bool) -> { [String] :: a } -> { [String] :: a }
     ```
 
     # Examples
@@ -737,7 +737,7 @@ rec {
     # Type
 
     ```
-    foldlAttrs :: ( a -> String -> b -> a ) -> a -> { ... :: b } -> a
+    foldlAttrs :: ( a -> String -> b -> a ) -> a -> { [String] :: b } -> a
     ```
 
     # Examples
@@ -812,7 +812,7 @@ rec {
     # Type
 
     ```
-    foldAttrs :: (Any -> Any -> Any) -> Any -> [AttrSets] -> Any
+    foldAttrs :: (a -> b -> b) -> b -> [{ [String] :: a }] -> { [String] :: b }
     ```
 
     # Examples
@@ -850,7 +850,7 @@ rec {
     # Type
 
     ```
-    collect :: (AttrSet -> Bool) -> AttrSet -> [x]
+    collect :: (AttrSet -> Bool) -> AttrSet -> [Any]
     ```
 
     # Examples
@@ -889,7 +889,7 @@ rec {
     # Type
 
     ```
-    cartesianProduct :: AttrSet -> [AttrSet]
+    cartesianProduct :: { [String] :: [a] } -> [{ [String] :: a }]
     ```
 
     # Examples
@@ -934,7 +934,7 @@ rec {
     # Type
 
     ```
-    mapCartesianProduct :: (AttrSet -> a) -> AttrSet -> [a]
+    mapCartesianProduct :: ({ [String] :: a } -> b) -> { [String] :: a } -> [b]
     ```
 
     # Examples
@@ -966,7 +966,7 @@ rec {
     # Type
 
     ```
-    nameValuePair :: String -> Any -> { name :: String; value :: Any; }
+    nameValuePair :: String -> a -> { name :: String; value :: a; }
     ```
 
     # Examples
@@ -998,7 +998,7 @@ rec {
     # Type
 
     ```
-    mapAttrs :: (String -> Any -> Any) -> AttrSet -> AttrSet
+    mapAttrs :: (String -> a -> b) -> { [String] :: a } -> { [String] :: b }
     ```
 
     # Examples
@@ -1033,7 +1033,7 @@ rec {
     # Type
 
     ```
-    mapAttrs' :: (String -> Any -> { name :: String; value :: Any; }) -> AttrSet -> AttrSet
+    mapAttrs' :: (String -> a -> { name :: String; value :: b; }) -> { [String] :: a } -> { [String] :: b }
     ```
 
     # Examples
@@ -1067,7 +1067,7 @@ rec {
     # Type
 
     ```
-    mapAttrsToList :: (String -> a -> b) -> AttrSet -> [b]
+    mapAttrsToList :: (String -> a -> b) -> { [String] :: a } -> [b]
     ```
 
     # Examples
@@ -1113,7 +1113,7 @@ rec {
     # Type
 
     ```
-    attrsToList :: AttrSet -> [ { name :: String; value :: Any; } ]
+    attrsToList :: { [String] :: a } -> [{ name :: String; value :: a; }]
     ```
 
     # Examples
@@ -1327,7 +1327,7 @@ rec {
     # Type
 
     ```
-    genAttrs :: [ String ] -> (String -> Any) -> AttrSet
+    genAttrs :: [String] -> (String -> a) -> { [String] :: a }
     ```
 
     # Examples
@@ -1364,7 +1364,7 @@ rec {
     # Type
 
     ```
-    genAttrs' :: [ Any ] -> (Any -> { name :: String; value :: Any; }) -> AttrSet
+    genAttrs' :: [a] -> (a -> { name :: String; value :: b; }) -> { [String] :: b }
     ```
 
     # Examples
@@ -1498,7 +1498,7 @@ rec {
     # Type
 
     ```
-    zipAttrsWithNames :: [ String ] -> (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet
+    zipAttrsWithNames :: [String] -> (String -> [a] -> b) -> [{ [String] :: a }] -> { [String] :: b }
     ```
 
     # Examples
@@ -1533,7 +1533,7 @@ rec {
     # Type
 
     ```
-    zipAttrsWith :: (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet
+    zipAttrsWith :: (String -> [a] -> b) -> [{ [String] :: a }] -> { [String] :: b }
     ```
 
     # Examples
@@ -1558,7 +1558,7 @@ rec {
     # Type
 
     ```
-    zipAttrs :: [ AttrSet ] -> AttrSet
+    zipAttrs :: [{ [String] :: a }] -> { [String] :: [a] }
     ```
 
     # Examples
@@ -1589,7 +1589,7 @@ rec {
     # Type
 
     ```
-    mergeAttrsList :: [ Attrs ] -> Attrs
+    mergeAttrsList :: [AttrSet] -> AttrSet
     ```
 
     # Examples
@@ -1609,7 +1609,7 @@ rec {
     list:
     let
       # `binaryMerge start end` merges the elements at indices `index` of `list` such that `start <= index < end`
-      # Type: Int -> Int -> Attrs
+      # Type: Int -> Int -> AttrSet
       binaryMerge =
         start: end:
         # assert start < end; # Invariant
@@ -1669,7 +1669,7 @@ rec {
     # Type
 
     ```
-    recursiveUpdateUntil :: ( [ String ] -> AttrSet -> AttrSet -> Bool ) -> AttrSet -> AttrSet -> AttrSet
+    recursiveUpdateUntil :: ([String] -> AttrSet -> AttrSet -> Bool) -> AttrSet -> AttrSet -> AttrSet
     ```
 
     # Examples

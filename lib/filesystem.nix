@@ -152,7 +152,7 @@ in
     # Type
 
     ```
-    Path -> Map String Path
+    haskellPathsInDir :: Path -> { [String] :: Path }
     ```
   */
   haskellPathsInDir =
@@ -189,7 +189,7 @@ in
     # Type
 
     ```
-    RegExp -> Path -> Nullable { path : Path; matches : [ MatchResults ]; }
+    locateDominatingFile :: RegExp -> Path -> ({ path :: Path; matches :: [MatchResults]; } | Null)
     ```
   */
   locateDominatingFile =
@@ -229,7 +229,7 @@ in
     # Type
 
     ```
-    Path -> [ Path ]
+    listFilesRecursive :: Path -> [Path]
     ```
   */
   listFilesRecursive =
@@ -320,9 +320,9 @@ in
 
     ```
     packagesFromDirectoryRecursive :: {
-      callPackage :: Path -> {} -> a,
-      newScope? :: AttrSet -> scope,
-      directory :: Path,
+      callPackage :: Path -> AttrSet -> Any;
+      newScope? :: AttrSet -> Scope;
+      directory :: Path;
     } -> AttrSet
     ```
 

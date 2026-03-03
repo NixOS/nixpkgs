@@ -11,7 +11,7 @@ rec {
     # Type
 
     ```
-    splitVersion :: string -> [string]
+    splitVersion :: String -> [String]
     ```
 
     # Examples
@@ -39,7 +39,7 @@ rec {
     # Type
 
     ```
-    major :: string -> string
+    major :: String -> String
     ```
 
     # Examples
@@ -67,7 +67,7 @@ rec {
     # Type
 
     ```
-    minor :: string -> string
+    minor :: String -> String
     ```
 
     # Examples
@@ -95,7 +95,7 @@ rec {
     # Type
 
     ```
-    patch :: string -> string
+    patch :: String -> String
     ```
 
     # Examples
@@ -124,7 +124,7 @@ rec {
     # Type
 
     ```
-    mmajorMinor :: string -> string
+    majorMinor :: String -> String
     ```
 
     # Examples
@@ -156,7 +156,7 @@ rec {
     # Type
 
     ```
-    pad :: int -> string -> string
+    pad :: Int -> String -> String
     ```
 
     # Examples
