@@ -134,16 +134,17 @@ def get_argument_parser() -> argparse.ArgumentParser:
     """Return a getopt-style parser for command-line arguments."""
     parser = argparse.ArgumentParser(
         description="Fetch and commit Elisp package sets from nix-community/emacs-overlay",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
         "--commit",
         help="Commit to be fetched, in SHA format. If not specified, retrieve the master tip.",
-        default=None,
     )
     parser.add_argument(
         "--loglevel",
-        help="Level of noisiness of logging messages. Values currently supported: INFO (default), DEBUG.",
-        default="InFo",
+        help="Level of noisiness of logging messages.",
+        default="INFO",
+        choices=["INFO", "DEBUG"],
     )
 
     return parser
