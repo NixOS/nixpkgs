@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,12 +15,10 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-ytoTTrnwN1lMw/gTxS4DRAq+tV5WzB2xHP4vVxLZ1ZI=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 'Helvetica Neue LT Std'/*.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
+  preInstall = ''
+    rm -r __MACOSX
   '';
 
   meta = {
