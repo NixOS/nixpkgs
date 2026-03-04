@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Minimal CGI and FastCGI library for C/C++";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ chillcicada ];
     mainProgram = "kfcgi";
   };
 })
