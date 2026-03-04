@@ -1,5 +1,6 @@
 {
   aiohttp,
+  anyio,
   beautifulsoup4,
   buildPythonPackage,
   colorlog,
@@ -15,20 +16,21 @@
 
 buildPythonPackage rec {
   pname = "aioamazondevices";
-  version = "12.0.1";
+  version = "13.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aioamazondevices";
     tag = "v${version}";
-    hash = "sha256-QLIn5pI6Mol+dPDGZpAnCfG3dMoxzKLJ6d77uyn8Cvk=";
+    hash = "sha256-ZqGRUxEKaqTO5V5KP75mT9BeOZVir9618Mi+1/GxHEM=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
+    anyio
     beautifulsoup4
     colorlog
     langcodes
