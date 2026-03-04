@@ -37,12 +37,12 @@ skawarePackages.buildPackage {
     "--dynlibdir=\${out}/lib"
     "--bindir=\${out}/bin"
     "--includedir=\${dev}/include"
-    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+    "--with-sysdeps=${lib.getLib skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
     "--with-include=${execline.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
+    "--with-lib=${lib.getLib skalibs}/lib"
     "--with-lib=${execline.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
+    "--with-dynlib=${lib.getLib skalibs}/lib"
     "--with-dynlib=${execline.lib}/lib"
   ];
 
