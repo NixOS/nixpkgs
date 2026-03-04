@@ -142,7 +142,7 @@ let
       inherit stdenv stdenvNoCC;
     };
 
-  splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
+  splice = self: super: import ./splice.nix lib config self (adjacentPackages != null);
 
   allPackages =
     self: super:
