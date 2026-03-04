@@ -21,19 +21,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "logstalgia";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchurl {
     url = "https://github.com/acaudwell/Logstalgia/releases/download/logstalgia-${finalAttrs.version}/logstalgia-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wEnv9AXpJANSIu2ya8xse18AoIkmq9t7Rn4kSSQnkKk=";
+    hash = "sha256-Aok26fZjyHfWlprSXxRce0IHl+mj4BxsGEgV7YMJ9IE=";
   };
-
-  postPatch = ''
-    # Fix build with boost 1.89
-    rm m4/ax_boost_system.m4
-    substituteInPlace configure.ac \
-      --replace-fail "AX_BOOST_SYSTEM" ""
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -57,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--with-boost-system=boost_system"
     "--with-boost-filesystem=boost_filesystem"
   ];
 
