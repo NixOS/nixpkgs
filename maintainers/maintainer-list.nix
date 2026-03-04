@@ -9936,6 +9936,11 @@
     githubId = 6179496;
     name = "Grayson Head";
   };
+  graysontinker = {
+    github = "GraysonTinker";
+    githubId = 146041509;
+    name = "Grayson Tinker";
+  };
   greaka = {
     email = "git@greaka.de";
     github = "greaka";
@@ -17305,6 +17310,12 @@
     github = "Mic92";
     githubId = 96200;
     name = "Jörg Thalheim";
+  };
+  michael-k-williams = {
+    name = "Michael Williams";
+    email = "michael.williams@brighter-applications.com";
+    github = "Michael-K-Williams";
+    githubId = 74472864;
   };
   michaeladler = {
     email = "therisen06@gmail.com";
