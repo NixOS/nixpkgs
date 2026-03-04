@@ -10236,6 +10236,11 @@
     githubId = 33062605;
     name = "Hannes Hattenbach";
   };
+  hanabelmengistu = {
+    name = "hanabel.mengistu@circleci.com";
+    github = "hanabel1";
+    githubId = 224660613;
+  };
   hansjoergschurr = {
     email = "commits@schurr.at";
     github = "hansjoergschurr";
