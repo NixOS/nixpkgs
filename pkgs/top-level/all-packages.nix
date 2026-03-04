@@ -7225,7 +7225,7 @@ with pkgs;
     libressl_4_2
     ;
 
-  openssl = openssl_3_6;
+  openssl = callPackage ../development/libraries/openssl { };
 
   openssl_oqs = openssl.override {
     providers = [
@@ -7247,12 +7247,11 @@ with pkgs;
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
   };
 
-  inherit (callPackages ../development/libraries/openssl { })
-    openssl_1_1
-    openssl_3
-    openssl_3_5
-    openssl_3_6
-    ;
+  # Backward-compat aliases — prefer openssl.v1_1, openssl.v3, openssl.v3_5, openssl.v3_6
+  openssl_1_1 = openssl.v1_1;
+  openssl_3 = openssl.v3;
+  openssl_3_5 = openssl.v3_5;
+  openssl_3_6 = openssl.v3_6;
 
   pcre = callPackage ../development/libraries/pcre { };
   # pcre32 seems unused
