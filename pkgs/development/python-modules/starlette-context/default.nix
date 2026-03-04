@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   httpx,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
   starlette,
@@ -11,17 +11,17 @@
 
 buildPythonPackage rec {
   pname = "starlette-context";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomwojcik";
     repo = "starlette-context";
     tag = "v${version}";
-    hash = "sha256-PzVZ458TdBLdbFJDN+X8hVU5zsRxcesihoDB+jRaKAg=";
+    hash = "sha256-cxhTrLLIjlqaR07VVgHmvYctk7+7fDjbGb39PbJbGgk=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [ starlette ];
 
