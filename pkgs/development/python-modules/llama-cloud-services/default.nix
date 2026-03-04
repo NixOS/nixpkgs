@@ -2,22 +2,20 @@
   lib,
   buildPythonPackage,
   click,
-  deepdiff,
   eval-type-backport,
   fetchFromGitHub,
+  gitUpdater,
   llama-cloud,
   llama-index-core,
   platformdirs,
   hatchling,
   pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
   python-dotenv,
 }:
 
 buildPythonPackage rec {
   pname = "llama-cloud-services";
-  version = "0.6.79";
+  version = "0.6.94";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -47,6 +45,14 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "llama_cloud_services" ];
+
+  # update script sets wrong version
+  passthru = {
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "llama-cloud-services-py@";
+    };
+  };
 
   meta = {
     description = "Knowledge Agents and Management in the Cloud";
