@@ -16,7 +16,6 @@
   jiter,
   pydantic,
   sniffio,
-  tokenizers,
   typing-extensions,
 
   # optional dependencies
@@ -28,6 +27,7 @@
 
   # test
   dirty-equals,
+  http-snapshot,
   inline-snapshot,
   nest-asyncio,
   pytest-asyncio,
@@ -66,7 +66,6 @@ buildPythonPackage (finalAttrs: {
     jiter
     pydantic
     sniffio
-    tokenizers
     typing-extensions
   ];
 
@@ -84,6 +83,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     dirty-equals
+    http-snapshot
     inline-snapshot
     nest-asyncio
     pytest-asyncio
