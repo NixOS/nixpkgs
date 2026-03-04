@@ -4,6 +4,7 @@
   buildGoModule,
   makeBinaryWrapper,
   nix-update-script,
+  nixosTests,
 }:
 buildGoModule (finalAttrs: {
   pname = "hysteria";
@@ -42,7 +43,10 @@ buildGoModule (finalAttrs: {
   # Network required
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) hysteria; };
+  };
 
   meta = {
     description = "Feature-packed proxy & relay utility optimized for lossy, unstable connections";
