@@ -104,7 +104,10 @@ flutter341.buildFlutterApplication rec {
     mainProgram = "yubioath-flutter";
     homepage = "https://github.com/Yubico/yubioath-flutter";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lukegb ];
+    maintainers = with lib.maintainers; [
+      lukegb
+      ryand56
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
