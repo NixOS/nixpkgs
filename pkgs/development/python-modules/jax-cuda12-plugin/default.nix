@@ -39,42 +39,42 @@ let
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp311";
-      hash = "sha256-0uHOs02KZ+MS2F5A5pqaI0Z1KffcagwsTRoY6x68tCk=";
+      hash = "sha256-qN7q6sJFY5tNyN5h4JYO+kMv9bDpXPda0ujWuAyayiU=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp311";
-      hash = "sha256-oAxosFJqTpbx9tzJrwy+PkwwlpBq9+VLbY3JBkjAubs=";
+      hash = "sha256-OeCtsKTL0nwK35hweMYp+gR1QqJlgPuLJT8Ni6A7wdk=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp312";
-      hash = "sha256-BE8rr9OR6CTQvt9AbVcpQ6zd8p3AZZw4T69Kim0HKsg=";
+      hash = "sha256-9MId5FB7HEQvThC+sSPkuRYFW/9MAQJymqKkny7Q/Ig=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp312";
-      hash = "sha256-TkEvqionVUPOFMn2AMRzOxvFHysNdlBgyF0EtV8hcFg=";
+      hash = "sha256-KEPKQnhhehmfnwo9mS2GhPq+i+r5iP95PsGdg2vcrcQ=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp313";
-      hash = "sha256-3LeOJhu5Efvxds8xGBdsAwz5aqqlKO7HViEGJseO9oM=";
+      hash = "sha256-OJyJYham1K94cJqPTKdZFqtP97v0sa9cCdzpgjwAO3M=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp313";
-      hash = "sha256-r1Jg0LnX1y+IvZGc7VR3+lEwUImbFvgQN35K5Oh2feg=";
+      hash = "sha256-0b8zdIGciofpDfBLcUQnLlrAcnpeH8SHJTHFLjh8Djg=";
     };
     "3.14-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp314";
-      hash = "sha256-mq3bsTWgPJ6CbUfMoz+4rmHWi6wZyIGkM3TOqEIGNw8=";
+      hash = "sha256-VYiCVcMl+Yr5Yc9fZlyoIj0ONjY+tUT8AoYne+IyTo8=";
     };
     "3.14-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp314";
-      hash = "sha256-t6cxqMF7nwpkD5TEI3k1ZdSK/m4of8nZ4K97Ei5CesE=";
+      hash = "sha256-0ErFz/SNGPhJfZnCWibxW7LfO6KHpOXrhsYcifBYwvk=";
     };
   };
 in
