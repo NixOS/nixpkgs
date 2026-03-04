@@ -17,6 +17,7 @@
   xdg-utils,
   xdotool,
   which,
+  openssl,
 
   jackSupport ? stdenv.hostPlatform.isLinux,
   jackLibrary,
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     which
     autoPatchelfHook
-    xdg-utils # Required for desktop integration
+    xdg-utils # Required for install script
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     undmg
@@ -112,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
         # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
         # Note that libcurl and libxml2_13 are needed for ReaPack to run.
         wrapProgram $out/opt/REAPER/reaper \
+          --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath [
               curl
@@ -121,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
               vlc
               xdotool
               stdenv.cc.cc
+              openssl
             ]
           }"
 
