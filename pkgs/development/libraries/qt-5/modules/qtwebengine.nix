@@ -115,7 +115,7 @@ qtModule (
       (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
       pkg-config-wrapped-without-prefix
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       bootstrap_cmds
       xcbuild
     ];
