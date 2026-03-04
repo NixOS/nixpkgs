@@ -102,7 +102,7 @@ in
             {option}`services.meilisearch.settings.experimental_dumpless_upgrade`
             overrides this option if set explicitly.
 
-            More information at https://www.meilisearch.com/docs/learn/update_and_migration/updating#dumpless-upgrade
+            More information at <https://www.meilisearch.com/docs/learn/update_and_migration/updating#dumpless-upgrade>.
           '';
           type = lib.types.bool;
         };
