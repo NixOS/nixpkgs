@@ -470,13 +470,17 @@ in
       '';
     };
 
-    sleep.extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "HibernateDelaySec=1h";
+    sleep.settings.Sleep = mkOption {
+      default = { };
+      type = lib.types.submodule {
+        freeformType = types.attrsOf unitOption;
+      };
+      example = {
+        HibernateDelaySec = "1h";
+      };
       description = ''
-        Extra config options for systemd sleep state logic.
-        See {manpage}`sleep.conf.d(5)` man page for available options.
+        Options for systemd sleep state logic. See {manpage}`sleep.conf.d(5)` man page
+        for available options.
       '';
     };
 
@@ -637,10 +641,7 @@ in
 
         "systemd/system.conf".text = settingsToSections cfg.settings;
 
-        "systemd/sleep.conf".text = ''
-          [Sleep]
-          ${cfg.sleep.extraConfig}
-        '';
+        "systemd/sleep.conf".text = settingsToSections cfg.sleep.settings;
 
         "systemd/user-generators" = {
           source = hooks "user-generators" cfg.user.generators;
@@ -878,6 +879,11 @@ in
       NixOS does not officially support this configuration and might cause your system to be unbootable in future versions. You are on your own.
     '')
     (mkRemovedOptionModule [ "systemd" "extraConfig" ] "Use systemd.settings.Manager instead.")
+    (mkRemovedOptionModule [
+      "systemd"
+      "sleep"
+      "extraConfig"
+    ] "Use systemd.sleep.settings.Sleep instead.")
     (lib.mkRenamedOptionModule
       [ "systemd" "watchdog" "device" ]
       [ "systemd" "settings" "Manager" "WatchdogDevice" ]

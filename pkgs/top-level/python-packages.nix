@@ -7054,8 +7054,6 @@ self: super: with self; {
 
   holidays = callPackage ../development/python-modules/holidays { };
 
-  holistic-trace-analysis = callPackage ../development/python-modules/holistic-trace-analysis { };
-
   hologram = callPackage ../development/python-modules/hologram { };
 
   holoviews = callPackage ../development/python-modules/holoviews { };
@@ -17899,6 +17897,8 @@ self: super: with self; {
 
   soundcloud-v2 = callPackage ../development/python-modules/soundcloud-v2 { };
 
+  soundcloudpy = callPackage ../development/python-modules/soundcloudpy { };
+
   sounddevice = callPackage ../development/python-modules/sounddevice { };
 
   soundfile = callPackage ../development/python-modules/soundfile { };
@@ -19684,6 +19684,8 @@ self: super: with self; {
   txtorcon = callPackage ../development/python-modules/txtorcon { };
 
   txzmq = callPackage ../development/python-modules/txzmq { };
+
+  ty = callPackage ../development/python-modules/ty { inherit (pkgs) ty; };
 
   type-infer = callPackage ../development/python-modules/type-infer { };
 
