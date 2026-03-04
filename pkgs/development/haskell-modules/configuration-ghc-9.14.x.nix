@@ -121,6 +121,9 @@ with haskellLib;
   # https://github.com/sjakobi/newtype-generics/pull/28/files
   newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
 
+  # haskell-debugger only works with ghc 9.14+
+  haskell-debugger-view = doDistribute (unmarkBroken super.haskell-debugger-view);
+
   #
   # Test suite issues
   #
