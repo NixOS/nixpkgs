@@ -43,6 +43,6 @@ buildOctavePackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Provides COM interface and additional functionality on Windows";
-    broken = true;
+    platforms = lib.platforms.windows;
   };
 }
