@@ -415,6 +415,7 @@ let
         makeScopeWithSplicing
         makeScopeWithSplicing'
         extendMkDerivation
+        mkPackageVariants
         renameCrossIndexFrom
         renameCrossIndexTo
         mapCrossIndex

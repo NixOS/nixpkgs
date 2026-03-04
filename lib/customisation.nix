@@ -1047,4 +1047,248 @@ rec {
       hostTarget = f hostTarget;
       targetTarget = f targetTarget;
     };
+
+  /**
+    Create a package with multiple variants (versions) managed uniformly.
+
+    `mkPackageVariants` standardizes the pattern of maintaining multiple versions
+    of a single package (e.g., openssl 1.1/3.0/3.6). It takes variant metadata,
+    a generic builder, and produces a default derivation with all variants
+    accessible via passthru attributes.
+
+    The generic builder follows a curried pattern: it first receives variant-specific
+    arguments (version, hash, patches, plus helper functions like `packageOlder`,
+    `packageAtLeast`, and `packageBetween`), then package arguments (resolved by
+    `callPackage`), and returns derivation attributes.
+
+    Each variant's passthru includes references to all other variants, enabling
+    access patterns like `pkg.v1_1`, `pkg.v3`, etc. A `pkg.variants` attribute
+    set is also available, containing all built variants as an attrset.
+    Additionally, each variant exposes `pkg.variantArgs` in passthru, containing
+    the variant's version, hash, and all helper functions.
+
+    The builder's own passthru (e.g., tests) is preserved and merged with
+    the variant passthru injected by `mkPackageVariants`. The builder's passthru
+    has the lowest priority — variant passthru (other variants, `variantArgs`)
+    is merged on top of it.
+
+    This function is curried in three stages:
+
+    1. Scope arguments (`callPackage`, `allowAliases`) — typically pre-bound in
+       the package scope (see `pkgs.mkPackageVariants` in `splice.nix`).
+
+    2. Override arguments (`outerArgs`) — captured via `@args` in the package's
+       `default.nix`. Infrastructure args (`mkPackageVariants`, `override`, etc.)
+       are filtered out; the rest are forwarded to the generic builder via
+       `callPackage`, enabling `pkg.override { withZlib = true; }` to flow
+       through without per-package boilerplate.
+
+    3. Package configuration (`params`) — variant selection, paths, aliases.
+
+    # Inputs
+
+    `scopeArgs` (`AttrSet`)
+    : Pre-bound scope arguments. Typically provided by `splice.nix`:
+
+      `callPackage` (`Function`)
+      : The `callPackage` function from the package scope, used to resolve
+        both variant metadata and the generic builder's package arguments.
+
+      `allowAliases` (`Bool`)
+      : Whether to include deprecated alias variants.
+        Typically `config.allowAliases`.
+
+    `outerArgs` (`AttrSet`)
+    : The full `args` from the outer `callPackage`'d function (captured via
+      `{ mkPackageVariants, ... }@args`). Infrastructure args
+      (`mkPackageVariants` and `makeOverridable`-injected attrs) are filtered
+      out; the remaining args are forwarded to the generic builder via
+      `callPackage`. This enables `pkg.override { withZlib = true; }` to flow
+      through to the generic builder without per-package boilerplate.
+
+    Structured function argument (`params`):
+
+    `defaultVariant` (`AttrSet -> AttrSet`)
+    : A function that selects the default variant from the variants set.
+      Example: `p: p.v3_6`
+
+    `variants` (`AttrSet | Path | Function`)
+    : Variant metadata. An attribute set mapping variant names to their
+      configuration (must include at least `version`). Can be a path to
+      import or a function to be resolved via `callPackage`.
+      Each variant may also include an `overrideArgs` attrset that gets
+      forwarded to `callPackage` as override arguments, merged on top of
+      the global `outerArgs`. This is how feature variants (e.g., `oqs`,
+      `legacy`) can inject variant-specific dependencies.
+      Defaults to `variants.nix` in the caller's directory.
+
+    `genericBuilder` (`Path | Function`)
+    : The package expression. When given a path, it is imported. The expression
+      must be a curried function: `variantArgs -> packageArgs -> derivation-attrs`.
+      The first argument receives variant metadata plus helper functions
+      (`packageOlder`, `packageAtLeast`, `packageBetween`);
+      the second is resolved by `callPackage`.
+      Variant passthru (other variants, `variantArgs`) is automatically
+      injected by `mkPackageVariants` — the generic builder only needs to
+      set its own passthru (e.g., tests).
+      Defaults to `generic.nix` in the caller's directory.
+
+    :::{.note}
+    Auto-detection of `variants` and `genericBuilder` paths relies on
+    `builtins.unsafeGetAttrPos` to determine the caller's directory. If
+    source positions are unavailable (e.g., in `builtins.toFile` or
+    certain eval contexts), both `variants` and `genericBuilder` must be
+    provided explicitly.
+    :::
+
+    `aliases` (`AttrSet | Path | Function`)
+    : Optional deprecated variant names. When a function, receives
+      `{ lib, variants }` and should return an attribute set.
+
+    # Type
+
+    ```
+    mkPackageVariants :: {
+      callPackage :: (AttrSet -> a) -> AttrSet -> a,
+      allowAliases? :: Bool,
+    } -> AttrSet -> {
+      defaultVariant :: AttrSet -> AttrSet,
+      variants? :: AttrSet | Path | (AttrSet -> AttrSet),
+      genericBuilder? :: Path | (AttrSet -> AttrSet -> AttrSet),
+      aliases? :: AttrSet | Path | ({ lib, variants } -> AttrSet),
+    } -> Derivation
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.customisation.mkPackageVariants` usage example
+
+    ```nix
+    # variants.nix
+    {
+      v1 = { version = "1.0"; hash = "sha256-..."; };
+      v2 = { version = "2.0"; hash = "sha256-..."; };
+    }
+
+    # generic.nix — curried: variantArgs -> packageArgs -> derivation-attrs
+    # Variant passthru is injected automatically by mkPackageVariants.
+    { version, hash, packageOlder, packageAtLeast, ... }:
+    { lib, stdenv, fetchurl }:
+    stdenv.mkDerivation {
+      pname = "my-package";
+      inherit version;
+      src = fetchurl { url = "https://example.com/pkg-${version}.tar.gz"; inherit hash; };
+    }
+
+    # default.nix — variants.nix and generic.nix auto-detected in same directory
+    # mkPackageVariants is pre-bound in the package scope (splice.nix)
+    { mkPackageVariants, ... }@args:
+    mkPackageVariants args {
+      defaultVariant = p: p.v2;
+    }
+
+    # Result: default derivation (v2) with passthru.v1, passthru.v2,
+    # passthru.variants (attrset of all variants), passthru.variantArgs
+    # pkg.override { ... } flows through to the generic builder
+    ```
+    :::
+  */
+  mkPackageVariants =
+    {
+      callPackage,
+      allowAliases,
+    }:
+    outerArgs:
+    {
+      defaultVariant,
+      variants ? null,
+      genericBuilder ? null,
+      aliases ? _: { },
+    }@params:
+    assert isFunction defaultVariant;
+    let
+      # Detect the caller's directory from source position of `defaultVariant`.
+      # This allows `variants` and `genericBuilder` to default to files in the
+      # same directory as the caller without requiring an explicit path.
+      callerDir =
+        let
+          pos = builtins.unsafeGetAttrPos "defaultVariant" params;
+        in
+        if pos != null then
+          /. + dirOf pos.file
+        else
+          throw "mkPackageVariants: cannot determine caller directory; provide 'variants' and 'genericBuilder' explicitly";
+
+      variants' = if variants != null then variants else callerDir + "/variants.nix";
+      genericBuilder' = if genericBuilder != null then genericBuilder else callerDir + "/generic.nix";
+
+      importIfPath = x: if builtins.isPath x then import x else x;
+      callIfFunction = x: if builtins.isFunction x then callPackage x { } else x;
+
+      # Extract package-level override args from the outer callPackage scope.
+      # These are args like `providers`, `withZlib`, etc. that were passed via
+      # .override on the top-level package. Infrastructure args from callPackage
+      # and makeOverridable are filtered out.
+      overrideArgs = removeAttrs outerArgs [
+        "mkPackageVariants"
+        "override"
+        "overrideDerivation"
+        "overrideAttrs"
+      ];
+
+      variantsRaw = callIfFunction (importIfPath variants');
+      aliasesExpr = importIfPath aliases;
+      # Do not use callPackage as the genericExpr should get called from package scope later
+      genericExpr = importIfPath genericBuilder';
+
+      resolvedAliases =
+        if isFunction aliasesExpr then
+          aliasesExpr {
+            inherit lib;
+            variants = variantsRaw;
+          }
+        else
+          aliasesExpr;
+
+      allVariants = if allowAliases then variantsRaw // resolvedAliases else variantsRaw;
+
+      selectedVariant = defaultVariant allVariants;
+
+      mkVariantPassthru =
+        variantArgs:
+        let
+          builtVariants = mapAttrs (_: v: mkPackage (variantArgs // v)) allVariants;
+        in
+        builtVariants // { variants = builtVariants; };
+
+      mkVariantArgs =
+        { version, ... }@args:
+        args
+        // rec {
+          packageOlder = lib.versionOlder version;
+          packageAtLeast = lib.versionAtLeast version;
+          packageBetween = lower: higher: packageAtLeast lower && packageOlder higher;
+          inherit mkVariantPassthru;
+        };
+
+      mkPackage =
+        variant:
+        let
+          variantOverrideArgs = variant.overrideArgs or { };
+          cleanVariant = removeAttrs (selectedVariant // variant) [ "overrideArgs" ];
+          variantArgs = mkVariantArgs cleanVariant;
+          pkg = callPackage (genericExpr variantArgs) (overrideArgs // variantOverrideArgs);
+        in
+        pkg.overrideAttrs (o: {
+          passthru =
+            o.passthru or { }
+            // mkVariantPassthru variantArgs
+            // {
+              inherit variantArgs;
+            };
+        });
+
+      defaultPackage = defaultVariant (mkVariantPassthru allVariants);
+    in
+    defaultPackage;
 }

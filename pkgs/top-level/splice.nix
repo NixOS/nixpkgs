@@ -14,7 +14,7 @@
 # For performance reasons, rather than uniformally splice in all cases, we only
 # do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
 # parameter there the boolean value of that equality check.
-lib: pkgs: actuallySplice:
+lib: config: pkgs: actuallySplice:
 
 let
   inherit (lib.customisation) mapCrossIndex renameCrossIndexFrom;
@@ -119,6 +119,14 @@ in
   callPackage = pkgs.newScope { };
 
   callPackages = lib.callPackagesWith pkgsForCall;
+
+  # Pre-bind callPackage and config into mkPackageVariants so that
+  # package expressions only need `{ mkPackageVariants, ... }@args:` in
+  # their formals — no need to declare callPackage or config explicitly.
+  mkPackageVariants = lib.mkPackageVariants {
+    callPackage = pkgs.newScope { };
+    allowAliases = config.allowAliases;
+  };
 
   newScope = extra: lib.callPackageWith (pkgsForCall // extra);
 
