@@ -59,6 +59,8 @@ let
       strings = callLibs ./strings.nix;
       stringsWithDeps = callLibs ./strings-with-deps.nix;
 
+      systems = callLibs ./systems;
+
       # packaging
       customisation = callLibs ./customisation.nix;
       derivations = callLibs ./derivations.nix;
@@ -75,7 +77,6 @@ let
       # constants
       licenses = callLibs ./licenses.nix;
       sourceTypes = callLibs ./source-types.nix;
-      systems = callLibs ./systems;
 
       # serialization
       cli = callLibs ./cli.nix;
