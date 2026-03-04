@@ -107,6 +107,10 @@ buildPythonPackage rec {
     # Our mailcap database has a different mime type name for xml documentations
     # AssertionError: assert 'text/xml; charset=utf-8' == 'application/xml'
     "test_guess_content_type"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # KeyError: "getgrnam(): name not found: 'root'"
+    "test_validate_group_sets_gid"
   ];
 
   disabledTestPaths = [

@@ -32,7 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
-      ivan
       matthiasbeyer
     ];
   };

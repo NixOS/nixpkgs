@@ -8,14 +8,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-shell";
-  version = "14.45.5";
+  version = "14.45.6";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D3keb81A7gyZbmJmCZJpyYFC1+JijwwbMngurAPTSKs=";
+    hash = "sha256-Z7Vw7d70+RAG60aXuYRFMFZHpX/eU0+2FUPoAsWe8dI=";
   };
 
   buildInputs = [
@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
     ./remove-hardcoded-locations.patch
   ];
 
-  vendorHash = "sha256-e8AXSryVZeVG+0cG7M3QAVCLSTdJEXLH8ZkLvCtWatU=";
+  vendorHash = "sha256-pfKRPZl6xw93rNBDUNJihQQ+3ZnoOOUVJpHZw68pztQ=";
 
   subPackages = [
     "cmd/gitlab-shell"

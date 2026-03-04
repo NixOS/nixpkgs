@@ -27,6 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.dkrz.de/k202009/libaec";
     description = "Adaptive Entropy Coding library";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 })
