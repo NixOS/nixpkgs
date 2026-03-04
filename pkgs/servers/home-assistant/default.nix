@@ -162,6 +162,23 @@ let
         };
       });
 
+      # Pinned due to API changes in psutil 7.2.x that removed named tuples from psutil._common
+      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
+        version = "7.1.2";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = "release-${version}";
+          hash = "sha256-LyGnLrq+SzCQmz8/P5DOugoNEyuH0IC7uIp8UAPwH0U=";
+        };
+        # Restore test configuration compatible with 7.1.x
+        # (psutil 7.2.x moved tests from psutil/tests/ to tests/)
+        nativeCheckInputs = [ super.pytestCheckHook ];
+        enabledTestPaths = [
+          "${placeholder "out"}/${super.python.sitePackages}/psutil/tests/test_system.py"
+        ];
+        preCheck = "";
+      });
+
       py-madvr2 = super.py-madvr2.overridePythonAttrs (oldAttrs: rec {
         version = "1.6.40";
         src = fetchFromGitHub {
