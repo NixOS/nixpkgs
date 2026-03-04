@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.54.2";
+  version = "0.53.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     tag = version;
-    hash = "sha256-EOvZdPMfGfllM57hbc/HMHw1rh9n9uwlA4VSkoY0MWY=";
+    hash = "sha256-j7Dw6PLGt955wfQNriRHGtsJzCd50xpHJK0fqVvzIY4=";
   };
 
   pythonRelaxDeps = true;
@@ -29,10 +29,12 @@ python3.pkgs.buildPythonApplication rec {
       brotli
       chardet
       cryptography
+      diff-match-patch
       elementpath
       extruct
       feedgen
       flask
+      flask-babel
       flask-compress
       flask-cors
       flask-expects-json
