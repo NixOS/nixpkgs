@@ -2,7 +2,9 @@
   stdenv,
   lib,
   fetchzip,
-  jdk,
+  pkgs,
+  jbangJdk ? jdk25,
+  jdk25,
   makeWrapper,
   coreutils,
   curl,
@@ -24,12 +26,12 @@ stdenv.mkDerivation rec {
     rm bin/jbang.{cmd,ps1}
     cp -r . $out
     wrapProgram $out/bin/jbang \
-      --set JAVA_HOME ${jdk} \
+      --set JAVA_HOME ${jbangJdk} \
       --set PATH ${
         lib.makeBinPath [
           (placeholder "out")
           coreutils
-          jdk
+          jbangJdk
           curl
         ]
       }
