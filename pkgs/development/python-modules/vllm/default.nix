@@ -27,12 +27,14 @@
 
   # dependencies
   aioprometheus,
+  amdsmi,
   anthropic,
   bitsandbytes,
   blake3,
   cachetools,
   cbor2,
   compressed-tensors,
+  datasets,
   depyf,
   einops,
   fastapi,
@@ -58,6 +60,7 @@
   outlines,
   pandas,
   partial-json-parser,
+  peft,
   prometheus-fastapi-instrumentator,
   py-cpuinfo,
   pyarrow,
@@ -70,6 +73,7 @@
   sentencepiece,
   setproctitle,
   tiktoken,
+  timm,
   tokenizers,
   torch,
   torchaudio,
@@ -294,7 +298,7 @@ let
     else if cudaSupport then
       gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
     else if rocmSupport then
-      rocmPackages.clr.gpuTargets
+      rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets
     else
       throw "No GPU targets specified"
   );
@@ -309,6 +313,13 @@ let
     cuda_nvrtc
     # cusparselt # cusparseLt.h
     libcublas
+  ];
+
+  # header path ends up missing rocthrust & its deps
+  rocmExtraIncludeFlags = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
+    rocmPackages.rocthrust
+    rocmPackages.rocprim
+    rocmPackages.hipcub
   ];
 
   # Some packages are not available on all platforms
@@ -338,6 +349,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
+    ./0006-drop-rocm-extra-reqs.patch
   ];
 
   postPatch = ''
@@ -413,6 +425,16 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
         rocprim
         hipsparse
         hipblas
+        rocrand
+        hiprand
+        rocblas
+        miopen-hip
+        hipfft
+        hipcub
+        hipsolver
+        rocsolver
+        hipblaslt
+        rocm-runtime
       ]
     )
     ++ lib.optionals stdenv.cc.isClang [
@@ -485,6 +507,13 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     cupy
     flashinfer
     nvidia-ml-py
+  ]
+  ++ lib.optionals rocmSupport [
+    rocmPackages.rocminfo
+    amdsmi
+    datasets
+    peft
+    timm
   ];
 
   optional-dependencies = {
@@ -523,9 +552,12 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     }
     // lib.optionalAttrs rocmSupport {
       VLLM_TARGET_DEVICE = "rocm";
-      # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
-      PYTORCH_ROCM_ARCH = lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets;
-      ROCM_HOME = "${rocmPackages.clr}";
+      PYTORCH_ROCM_ARCH = gpuTargetString;
+      # vLLM's CMake logic checks `ROCM_PATH` to decide whether HIP/ROCm is available.
+      ROCM_PATH = "${rocmPackages.clr}";
+      TRITON_KERNELS_SRC_DIR = "${lib.getDev triton-kernels}/python/triton_kernels/triton_kernels";
+      HIPFLAGS = rocmExtraIncludeFlags;
+      CXXFLAGS = rocmExtraIncludeFlags;
     }
     // lib.optionalAttrs cpuSupport {
       VLLM_TARGET_DEVICE = "cpu";
@@ -558,6 +590,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       happysalada
       lach
       daniel-fahey
+      LunNova # esp. for ROCm
     ];
     badPlatforms = [
       # CMake Error at cmake/cpu_extension.cmake:188 (message):

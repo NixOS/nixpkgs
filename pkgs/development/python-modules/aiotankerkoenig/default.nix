@@ -6,7 +6,7 @@
   fetchFromGitHub,
   mashumaro,
   orjson,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aiotankerkoenig";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aiotankerkoenig";
     tag = "v${version}";
-    hash = "sha256-5rxK6K10kUWEq3RMN8ojQhoy+w7NNbh/9+v8Jl7w4Ak=";
+    hash = "sha256-TpSVRo8FWltZF5ZQx9kZ3mlJ1bEHVWmIdLVSyaKjj04=";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ buildPythonPackage rec {
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

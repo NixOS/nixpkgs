@@ -13,13 +13,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.25.1";
+  version = "2.25.2";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb";
     tag = finalAttrs.version;
-    hash = "sha256-/Pjv8YnUBVu3lIymYQf2ILXjiO3yNSalPca3/p1t9R4=";
+    hash = "sha256-PtkeGuBWGYMiacVUnJcM+jDDNxis9IQTcwQuaaUqMvE=";
   };
 
   nativeBuildInputs = [ cmake ];
