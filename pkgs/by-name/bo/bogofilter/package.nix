@@ -6,10 +6,15 @@
   db,
   makeWrapper,
   pax,
+  perl,
+  database ? db,
 }:
 
+let
+  dbName = lib.getName database;
+in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "bogofilter";
+  pname = "bogofilter-${dbName}";
   version = "1.2.5";
 
   src = fetchurl {
@@ -21,13 +26,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     flex
-    db
+    database
+  ]
+  ++ lib.optional (dbName == "db") perl; # required by bogoupgrade
+
+  configureFlags = [
+    "--with-database=${dbName}"
   ];
 
   doCheck = false; # needs "y" tool
 
   postInstall = ''
     wrapProgram "$out/bin/bf_tar" --prefix PATH : "${lib.makeBinPath [ pax ]}"
+  ''
+  # Only supports upgrading through various db versions, not useful for
+  # other database types.
+  + lib.optionalString (dbName != "db") ''
+    rm "$out/bin/bogoupgrade"
   '';
 
   meta = {
@@ -40,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       filter.
     '';
     license = lib.licenses.gpl2Plus;
+    mainProgram = "bogofilter";
     platforms = lib.platforms.linux;
   };
 })
