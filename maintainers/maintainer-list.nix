@@ -7822,6 +7822,13 @@
     githubId = 18535642;
     name = "Emily";
   };
+  emily-lavender = {
+    email = "emily@foggy.city";
+    github = "emily-lavender";
+    githubId = 253398252;
+    name = "Emily Lavender";
+    keys = [ { fingerprint = "3572 DE50 D71C 7DD7 1B48 8831 A7EF 615A 2AB9 1EE7"; } ];
+  };
   emilylange = {
     email = "nix@emilylange.de";
     github = "emilylange";
@@ -9928,6 +9935,11 @@
     github = "graysonhead";
     githubId = 6179496;
     name = "Grayson Head";
+  };
+  graysontinker = {
+    github = "GraysonTinker";
+    githubId = 146041509;
+    name = "Grayson Tinker";
   };
   greaka = {
     email = "git@greaka.de";
@@ -17299,6 +17311,12 @@
     githubId = 96200;
     name = "Jörg Thalheim";
   };
+  michael-k-williams = {
+    name = "Michael Williams";
+    email = "michael.williams@brighter-applications.com";
+    github = "Michael-K-Williams";
+    githubId = 74472864;
+  };
   michaeladler = {
     email = "therisen06@gmail.com";
     github = "michaeladler";
@@ -22206,6 +22224,11 @@
     email = "randomdude16671@proton.me";
     github = "randomdude16671";
     githubId = 210965013;
+  };
+  randomizedcoder = {
+    name = "randomizedcoder";
+    github = "randomizedcoder";
+    githubId = 64496590;
   };
   randoneering = {
     name = "randoneering";

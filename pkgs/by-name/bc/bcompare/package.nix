@@ -8,10 +8,7 @@
   glibc,
   pango,
   gtk2,
-  kcoreaddons,
-  ki18n,
-  kio,
-  kservice,
+  libsForQt5,
   stdenv,
   runtimeShell,
   unzip,
@@ -25,7 +22,7 @@ let
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
+      url = "https://www.scootersoftware.com/bcompare-${version}_amd64.deb";
       sha256 = "sha256-4AWTSoYpVhGmBBxcwHXdg1CGd/04+8yL9pu+gHrsj6U";
     };
 
@@ -59,7 +56,7 @@ let
       # Remove library that refuses to be autoPatchelf'ed
       rm $out/lib/beyondcompare/ext/bcompare_ext_kde.amd64.so
 
-      substituteInPlace $out/bin/${pname} \
+      substituteInPlace $out/bin/bcompare \
         --replace "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
         --replace "ldd" "${glibc.bin}/bin/ldd" \
         --replace "/bin/bash" "${runtimeShell}"
@@ -75,10 +72,10 @@ let
       gtk2
       pango
       cairo
-      kio
-      kservice
-      ki18n
-      kcoreaddons
+      libsForQt5.kio
+      libsForQt5.kservice
+      libsForQt5.ki18n
+      libsForQt5.kcoreaddons
       gdk-pixbuf
       bzip2
     ];
