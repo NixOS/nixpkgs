@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 stdenvNoCC.mkDerivation {
   pname = "cooper";
@@ -14,14 +15,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-4WaRFvAn32IfeCCDszOsmDxFuKnnADOXj/vj8SZB2mU=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp fonts/*/*.otf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://indestructibletype.com/Cooper/index.html";

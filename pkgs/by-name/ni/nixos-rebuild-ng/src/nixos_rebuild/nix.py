@@ -192,7 +192,13 @@ def copy_closure(
     Also supports copying a closure from a remote to another remote."""
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
-    env = {"NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))}
+    # This command is always run locally and needs to keep its own environent
+    # while merging NIX_SSHOPTS and SSH_DEFAULT_OPTS together.
+    # E.g.: to preserve SSH_AUTH_SOCK
+    env = {
+        **os.environ,
+        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS])),
+    }
 
     def nix_copy_closure(host: Remote, to: bool) -> None:
         run_wrapper(
