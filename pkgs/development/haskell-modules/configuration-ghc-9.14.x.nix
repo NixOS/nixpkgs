@@ -74,6 +74,7 @@ with haskellLib;
   # Version upgrades
   #
 
+  ghc-exactprint = doDistribute self.ghc-exactprint_1_14_0_0;
   parallel = doDistribute self.parallel_3_3_0_0;
   tagged = doDistribute self.tagged_0_8_10;
   unordered-containers = doDistribute self.unordered-containers_0_2_21;
@@ -123,6 +124,16 @@ with haskellLib;
 
   # haskell-debugger only works with ghc 9.14+
   haskell-debugger-view = doDistribute (unmarkBroken super.haskell-debugger-view);
+
+  ghc-exactprint_1_14_0_0 = addBuildDepends [
+    # cabal2nix drops conditional block: impl (ghc >= 9.14)
+    self.Diff
+    self.extra
+    self.ghc-paths
+    self.silently
+    self.syb
+    self.HUnit
+  ] super.ghc-exactprint_1_14_0_0;
 
   #
   # Test suite issues
