@@ -90,6 +90,10 @@ def ensure_vlan_bridge(vlan: int) -> typing.Generator[str, None, None]:
                 logger.warning(
                     f"TAP {tap_name} not found; container will be isolated from VDE"
                 )
+                if not Path("/dev/net").exists():
+                    logger.warning(
+                        "A common reason for this is that /dev/net is not available in the Nix sandbox. Try adding /dev/net to extra-sandbox-paths."
+                    )
 
         yield bridge_name
     finally:
