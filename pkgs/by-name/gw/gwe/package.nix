@@ -14,7 +14,7 @@
   libdazzle,
   libappindicator-gtk3,
   libnotify,
-  nvidia_x11,
+  linuxPackages,
 }:
 
 let
@@ -34,15 +34,16 @@ let
       setuptools
     ]
   );
+  nvidia_x11 = linuxPackages.nvidia_x11;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gwe";
   version = "0.15.9";
 
   src = fetchFromGitLab {
     owner = "leinardi";
-    repo = pname;
-    rev = version;
+    repo = "gwe";
+    tag = finalAttrs.version;
     hash = "sha256-agq967QN1nsAOn+1Ce64+id7UlSS/K3XGsUUihWOztk=";
   };
 
@@ -100,4 +101,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "gwe";
   };
-}
+})
