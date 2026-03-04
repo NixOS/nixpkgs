@@ -35,7 +35,7 @@ let
     name = "${pname}-${version}.vsix";
     version = lib.trim (lib.readFile ./version.txt);
     src = "${src}/editors/code";
-    npmDepsHash = "sha256-fV4Z3jj+v56A7wbIEYhVAPVuAMqMds5xSe3OetWAsbw=";
+    npmDepsHash = "sha256-rg4ARGB9NzI8rxEOONWq+mwSG9hd3yyFRhOUomMLN6w=";
     buildInputs = [
       pkgsBuildBuild.libsecret
     ];
