@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, grim
-, slurp
-, wl-clipboard
-, makeWrapper
-, click
-, pillow
-, toml
-, pyyaml
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  grim,
+  slurp,
+  wl-clipboard,
+  makeWrapper,
+  click,
+  pillow,
+  toml,
+  pyyaml,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage {
@@ -40,7 +41,13 @@ buildPythonPackage {
 
   postInstall = ''
     wrapProgram $out/bin/better-screenshots \
-      --prefix PATH : "${lib.makeBinPath [ grim slurp wl-clipboard ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          grim
+          slurp
+          wl-clipboard
+        ]
+      }"
   '';
 
   meta = with lib; {
