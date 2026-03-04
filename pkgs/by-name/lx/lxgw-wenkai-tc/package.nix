@@ -2,6 +2,7 @@
   stdenvNoCC,
   fetchurl,
   lib,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -12,14 +13,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-secUl91sR6AgHD1ac96ka4BtaMjdQYUPnzVM7jgv5n4=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    mv *.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://github.com/lxgw/LxgwWenKaiTC";

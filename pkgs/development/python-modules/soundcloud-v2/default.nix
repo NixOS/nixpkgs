@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "soundcloud-v2";
-  version = "1.6.1";
+  version = "1.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "7x11x13";
     repo = "soundcloud.py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xx5F5xscPCbuN7T03zL5V9LLrTbpJnTF4lmUVEqBJA4=";
+    hash = "sha256-V+eEBMlzHbNM3dd+vBNkIvjwc+DdV8RZTasSggCv/jY=";
   };
 
   build-system = [ setuptools ];

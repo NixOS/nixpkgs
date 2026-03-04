@@ -60,14 +60,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "iceberg-python";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
     tag = "pyiceberg-${finalAttrs.version}";
-    hash = "sha256-sej0RJuoTnpX0DXC54RTacZNJIxzorcG4xlxByNUxc4=";
+    hash = "sha256-MjBvLJOnjtpIwBMkI+81S6aipye+PnbrC8T317Qj6rY=";
   };
 
   build-system = [

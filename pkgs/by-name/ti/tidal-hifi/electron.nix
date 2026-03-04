@@ -8,11 +8,11 @@ let
     https://github.com/Mastermindzh/tidal-hifi/blob/master/build/electron-builder.base.yml
      for the expected version
   */
-  version = "39.2.4";
+  version = "40.1.0";
 in
 (fetchzip {
   url = "https://github.com/castlabs/electron-releases/releases/download/v${version}+wvcus/electron-v${version}+wvcus-linux-x64.zip";
-  hash = "sha256-i2uoX8RkzHN+j0JjZxmWIP2euJMp8Lv9IUYrrmwP7ww=";
+  hash = "sha256-V9XakjxnfWWu7xZrw45NbOP86FuJjHOuzNBlnxuTzCE=";
   stripRoot = false;
 
 }).overrideAttrs

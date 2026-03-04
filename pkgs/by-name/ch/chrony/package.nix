@@ -5,7 +5,6 @@
   pkg-config,
   gnutls,
   libedit,
-  texinfo,
   libcap,
   libseccomp,
   pps-tools,
@@ -31,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gnutls
     libedit
-    texinfo
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap

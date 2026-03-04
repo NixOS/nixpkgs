@@ -19,18 +19,9 @@ buildNpmPackage {
 
   sourceRoot = "${terminusdb.src.name}/tests";
 
-  npmDepsHash = "sha256-vNafxS19++AszhcYTw1jnfI4HMUyy5lOgKvjHHcGpWg=";
+  npmDepsHash = "sha256-R2kbwHhlja5mH2AGpyiiVCz3YmSWF9cWptOTdcZb0PM=";
 
   # Test-only JS adjustments live here so the runtime package stays untouched
-  patches = [
-    # TODO: remove if/when merged upstream https://github.com/terminusdb/terminusdb/pull/2362
-    # Prefer an injected TerminusDB binary path in tests
-    (fetchpatch2 {
-      url = "https://github.com/terminusdb/terminusdb/commit/8ffe22b3e20bff8fe8efb1a2b8236bb8b40c0bc3.patch?full_index=1";
-      relative = "tests";
-      hash = "sha256-NrFQknjdrRJjHvkOrutSkzxkUwcC6S+S0kHuK/xQTj0=";
-    })
-  ];
   postPatch = ''
     # Read git hash from the COMMIT file in the source
     substituteInPlace lib/info.js --replace-fail \

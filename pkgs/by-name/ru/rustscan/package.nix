@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/RustScan/RustScan";
     changelog = "https://github.com/RustScan/RustScan/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bodier123 ];
     mainProgram = "rustscan";
   };
 })

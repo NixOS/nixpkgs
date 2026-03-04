@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   unzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -18,16 +19,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttc $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [
+    unzip
+    installFonts
+  ];
 
   meta = {
     description = "CJK programming font based on Iosevka and Source Han Sans";

@@ -10,13 +10,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "drasl";
-  version = "3.4.2";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner = "unmojang";
     repo = "drasl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SOH6WXhBBx5JShr18Q0SyDFYVE7LMRUONdCJ1NB2HRQ=";
+    hash = "sha256-kisClBALEESxuGh2gtwCyB02/SrYvabouaApho7z7GY=";
   };
 
   nativeBuildInputs = [

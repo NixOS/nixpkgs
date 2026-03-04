@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
   nix-update-script,
-  hatchling,
+  uv-build,
   pypng,
   unidata-blocks,
   pyyaml,
@@ -18,13 +18,14 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.12";
 
-  src = fetchPypi {
-    pname = "pixel_font_knife";
-    inherit version;
-    hash = "sha256-QTwrxXn5uAp44D/rgbZiCaFP+rDU4H4LGw75n2hQJGs=";
+  src = fetchFromGitHub {
+    owner = "TakWolf";
+    repo = "pixel-font-knife";
+    tag = version;
+    hash = "sha256-f4jaLEPXl8oo1olWBeymMn5a8Tyl07h1TW4pZ5OItZU=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
     pypng

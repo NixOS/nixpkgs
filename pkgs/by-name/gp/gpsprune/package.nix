@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${jre}/bin/java $out/bin/gpsprune \
       --add-flags "-jar $out/share/java/gpsprune.jar"
     mkdir -p $out/share/pixmaps
-    ${unzip}/bin/unzip -p $src tim/prune/gui/images/window_icon_64.png > $out/share/pixmaps/gpsprune.png
+    ${unzip}/bin/unzip -p $src tim/prune/gui/images/window_icon_64.png > $out/share/icons/hicolor/64x64/apps/gpsprune.png
 
     runHook postInstall
   '';

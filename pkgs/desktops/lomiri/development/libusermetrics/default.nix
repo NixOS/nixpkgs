@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libusermetrics";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libusermetrics";
     rev = finalAttrs.version;
-    hash = "sha256-Zh6a+laSsdZMyoaGoZAKTo5ShJ1NyPZrqR/zBjlOdbk=";
+    hash = "sha256-NXwOdKII7Bvjnk2xUEYRCP7r7Woj7DOh8BOO8yuS9kk=";
   };
 
   outputs = [
@@ -49,10 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace doc/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_FULL_DATAROOTDIR}/doc/libusermetrics-doc" "\''${CMAKE_INSTALL_DOCDIR}"
-
-    # https://gitlab.com/ubports/development/core/libusermetrics/-/merge_requests/22
-    substituteInPlace src/libusermetricsoutput/GSettingsColorThemeProvider.h \
-      --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
   '';
 
   strictDeps = true;

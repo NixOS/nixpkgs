@@ -7,6 +7,7 @@
   cinny,
   desktop-file-utils,
   wrapGAppsHook3,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
   glib-networking,
@@ -53,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p "$out/bin"
-      ln -sf "$out/Applications/Cinny.app/Contents/MacOS/Cinny" "$out/bin/cinny"
+      makeWrapper "$out/Applications/Cinny.app/Contents/MacOS/Cinny" "$out/bin/cinny"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       desktop-file-edit \
@@ -75,6 +76,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     desktop-file-utils
     pkg-config
     wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [

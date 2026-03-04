@@ -3684,6 +3684,12 @@
     githubId = 6375609;
     name = "Bob van der Linden";
   };
+  bodier123 = {
+    email = "brubacher.1@gmail.com";
+    github = "bodier123";
+    githubId = 71633864;
+    name = "Bodie";
+  };
   bodil = {
     email = "nix@bodil.org";
     github = "bodil";
@@ -4291,12 +4297,6 @@
       }
     ];
   };
-  cameroncuttingedge = {
-    email = "buckets-taxiway5l@icloud.com";
-    github = "cameroncuttingedge";
-    githubId = 109548666;
-    name = "Cameron Byte";
-  };
   camerondugan = {
     email = "cameron.dugan@protonmail.com";
     github = "camerondugan";
@@ -4835,6 +4835,12 @@
     github = "chrispickard";
     githubId = 1438690;
     name = "Chris Pickard";
+  };
+  chrisportela = {
+    email = "chris@chrisportela.com";
+    github = "chrisportela";
+    githubId = 505649;
+    name = "Chris Portela";
   };
   chrispwill = {
     email = "chris@chrispwill.com";

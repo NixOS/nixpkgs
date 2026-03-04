@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   nix-update-script,
-  hatchling,
+  uv-build,
   langcodes,
 }:
 
@@ -13,13 +13,14 @@ buildPythonPackage rec {
   version = "0.0.24";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "unidata_blocks";
-    inherit version;
-    hash = "sha256-yQJW4u0v9TrYNPOeEqhOnCcuyrgpj4Qy1ayLBeCgp2E=";
+  src = fetchFromGitHub {
+    owner = "TakWolf";
+    repo = "unidata-blocks";
+    tag = version;
+    hash = "sha256-WGo7Sn2lubsOWfLglBAEx/2PQ1YCrF/wI7/pDwoHMRk=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
     langcodes

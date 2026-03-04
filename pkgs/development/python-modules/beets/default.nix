@@ -29,7 +29,6 @@
   buildPythonPackage,
   pythonAtLeast,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   poetry-core,
@@ -53,11 +52,6 @@
 
   # native
   gobject-introspection,
-  sphinxHook,
-  sphinx-design,
-  sphinx-copybutton,
-  sphinx-toolbox,
-  pydata-sphinx-theme,
 
   # buildInputs
   gst_all_1,
@@ -162,11 +156,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     gobject-introspection
-    sphinxHook
-    sphinx-design
-    sphinx-copybutton
-    sphinx-toolbox
-    pydata-sphinx-theme
   ]
   ++ extraNativeBuildInputs;
 
@@ -178,19 +167,7 @@ buildPythonPackage (finalAttrs: {
 
   outputs = [
     "out"
-    "doc"
-    "man"
   ];
-  sphinxBuilders = [
-    "html"
-    "man"
-  ];
-  # Causes an installManPage error. Not clear why this directory gets generated
-  # with the manpages. The same directory is observed correctly in
-  # $doc/share/doc/beets-${version}/html
-  preInstallSphinx = ''
-    rm -r .sphinx/man/man/_sphinx_design_static
-  '';
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions

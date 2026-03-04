@@ -48,7 +48,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   postPatch = ''
-    jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+    # disable updater and disable mac codesigning
+    jq '
+      .plugins.updater.endpoints = [ ] |
+      .bundle.createUpdaterArtifacts = false |
+      .bundle.macOS.signingIdentity = null
+    ' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
 
   cargoRoot = "src-tauri";

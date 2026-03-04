@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,22 +16,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-owzoM0zfKYxLJCQbL1eUE0cdSLVmm+QNRUGxbsNJ37I=";
   };
 
-  sourceRoot = "fonts";
+  sourceRoot = "source/fonts";
 
-  setSourceRoot = "sourceRoot=$(pwd)";
-
-  installPhase = ''
-    runHook preInstall
-    find . -type f -iname '*.ttf' | while read f; do
-      d="$out/share/fonts/truetype/figtree/$(basename "$f")"
-      install -Dm644 -D "$f" "$d"
-    done
-    find . -type f -iname '*.otf' | while read f; do
-      d="$out/share/fonts/opentype/figtree/$(basename "$f")"
-      install -Dm644 -D "$f" "$d"
-    done
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://github.com/erikdkennedy/figtree";

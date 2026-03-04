@@ -16,14 +16,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zluda";
-  version = "6-preview.45";
+  version = "6-preview.55";
 
   src = fetchFromGitHub {
     owner = "vosen";
     repo = "ZLUDA";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-796OuIM5a0saE0v1QHHAGRjUPT+YAIfUuEtAruMn8Mk=";
+    hash = "sha256-yhWEzoDjNk1GefSqOVwowNky36ahmH/gTMdq1YTOhfE=";
     fetchSubmodules = true;
+    fetchLFS = true;
   };
 
   buildInputs = [

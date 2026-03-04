@@ -80,7 +80,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     platforms = builtins.attrNames supported;
     maintainers = [
       lib.maintainers.jraygauthier
-      lib.maintainers.jfchevrette
     ];
   };
 }

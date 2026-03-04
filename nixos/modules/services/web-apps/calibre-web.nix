@@ -187,6 +187,9 @@ in
 
           NoNewPrivileges = true;
           ProtectSystem = "strict";
+          ReadWritePaths =
+            lib.optional (lib.hasPrefix "/" cfg.dataDir) cfg.dataDir
+            ++ lib.optional (cfg.options.calibreLibrary != null) cfg.options.calibreLibrary;
           PrivateTmp = true;
           PrivateDevices = true;
           PrivateIPC = true;

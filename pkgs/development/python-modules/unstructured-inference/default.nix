@@ -5,13 +5,11 @@
   setuptools,
   # runtime dependencies
   accelerate,
-  detectron2,
   huggingface-hub,
   layoutparser,
   onnx,
   onnxruntime,
   opencv-python,
-  paddleocr,
   python-multipart,
   rapidfuzz,
   transformers,
@@ -25,7 +23,7 @@
   pdf2image,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unstructured-inference";
   version = "1.1.7";
   pyproject = true;
@@ -33,11 +31,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-inference";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RY+acfyAGP2r8axfifQkTSkbwkrZ0u6KvFwds24IkMc=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    # Wants >= 4.13.0.90 but the latest release is 4.13.0
+    "opencv-python"
+  ];
 
   dependencies = [
     accelerate
@@ -98,7 +101,7 @@ buildPythonPackage rec {
   meta = {
     description = "Hosted model inference code for layout parsing models";
     homepage = "https://github.com/Unstructured-IO/unstructured-inference";
-    changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = [
@@ -107,4 +110,4 @@ buildPythonPackage rec {
       "aarch64-darwin"
     ];
   };
-}
+})

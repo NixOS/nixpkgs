@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "yesoreyeram-infinity-datasource";
-  version = "3.7.1";
-  zipHash = "sha256-jXK5Rw6IpX1ZCc1TZ0oU9RbmwDM2lxAxbfHIq00WZhU=";
+  version = "3.7.3";
+  zipHash = "sha256-fsBbEbb8Uys/w/vnMN15WDpYbw4heztH5G30ol2uD0g=";
   meta = {
     description = "Visualize data from JSON, CSV, XML, GraphQL and HTML endpoints in Grafana";
     license = lib.licenses.asl20;

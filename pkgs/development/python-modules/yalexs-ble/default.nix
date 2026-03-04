@@ -1,7 +1,6 @@
 {
   lib,
   async-interrupt,
-  async-timeout,
   bleak,
   bleak-retry-connector,
   buildPythonPackage,
@@ -16,21 +15,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yalexs-ble";
-  version = "3.2.6";
+  version = "3.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Yale-Libs";
     repo = "yalexs-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kk9D6433xh4MRbpdJpep7XdEEO0rsEUS3I94iBjQ6kM=";
+    hash = "sha256-8Y2ix5ikrWC9taCHJhg8Irt3PGOiH+OzqLRSVW/q8Gs=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     async-interrupt
-    async-timeout
     bleak
     bleak-retry-connector
     cryptography
@@ -47,8 +45,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Library for Yale BLE devices";
-    homepage = "https://github.com/bdraco/yalexs-ble";
-    changelog = "https://github.com/bdraco/yalexs-ble/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/Yale-Libs/yalexs-ble";
+    changelog = "https://github.com/Yale-Libs/yalexs-ble/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };

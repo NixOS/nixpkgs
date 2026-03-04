@@ -31,5 +31,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/Chilipp/autodocsumm";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    # https://github.com/Chilipp/autodocsumm/issues/108
+    broken = lib.versionAtLeast sphinx.version "9.0";
   };
 }
