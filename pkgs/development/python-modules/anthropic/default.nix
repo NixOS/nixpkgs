@@ -16,7 +16,6 @@
   jiter,
   pydantic,
   sniffio,
-  tokenizers,
   typing-extensions,
 
   # optional dependencies
@@ -28,6 +27,7 @@
 
   # test
   dirty-equals,
+  http-snapshot,
   inline-snapshot,
   nest-asyncio,
   pytest-asyncio,
@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anthropic";
-  version = "0.79.0";
+  version = "0.84.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-//VKkn9M2uOj8PBoWTY872ZOyTc+OjBgEUGtKsYDWpk=";
+    hash = "sha256-03nvs97JNQrOu2rxOXWpJiUj+DCI5I/PTcKLuZUZ3t0=";
   };
 
   postPatch = ''
@@ -66,7 +66,6 @@ buildPythonPackage (finalAttrs: {
     jiter
     pydantic
     sniffio
-    tokenizers
     typing-extensions
   ];
 
@@ -84,6 +83,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     dirty-equals
+    http-snapshot
     inline-snapshot
     nest-asyncio
     pytest-asyncio
