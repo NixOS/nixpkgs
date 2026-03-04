@@ -15,6 +15,8 @@
   perl,
   pkg-config,
   python3,
+  copyPathToStore,
+  makeSetupHook,
   which,
   # darwin support
   xcbuild,
@@ -84,6 +86,23 @@ let
       "linux-generic-g++"
     else
       throw "Please add a qtPlatformCross entry for ${plat.config}";
+  qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
+  qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
+  qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
+  fix_qt_builtin_paths = copyPathToStore ../hooks/fix-qt-builtin-paths.sh;
+  fix_qt_module_paths = copyPathToStore ../hooks/fix-qt-module-paths.sh;
+
+  devTools = [
+    "bin/fixqt4headers.pl"
+    "bin/moc"
+    "bin/qdbuscpp2xml"
+    "bin/qdbusxml2cpp"
+    "bin/qlalr"
+    "bin/qmake"
+    "bin/rcc"
+    "bin/syncqt.pl"
+    "bin/uic"
+  ];
 in
 
 stdenv.mkDerivation (
@@ -92,7 +111,6 @@ stdenv.mkDerivation (
     {
       pname = "qtbase";
       inherit qtCompatVersion src version;
-      debug = debugSymbols;
 
       propagatedBuildInputs = [
         libxml2
@@ -206,11 +224,9 @@ stdenv.mkDerivation (
 
       inherit patches;
 
-      fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
-      fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
       preHook = ''
-        . "$fix_qt_builtin_paths"
-        . "$fix_qt_module_paths"
+        . ${fix_qt_builtin_paths}
+        . ${fix_qt_module_paths}
         . ${../hooks/move-qt-dev-tools.sh}
         . ${../hooks/fix-qmake-libtool.sh}
       '';
@@ -218,9 +234,9 @@ stdenv.mkDerivation (
       postPatch = ''
         for prf in qml_plugin.prf qt_plugin.prf qt_docs.prf qml_module.prf create_cmake.prf; do
             substituteInPlace "mkspecs/features/$prf" \
-                --subst-var qtPluginPrefix \
-                --subst-var qtQmlPrefix \
-                --subst-var qtDocPrefix
+                --subst-var-by qtPluginPrefix ${qtPluginPrefix} \
+                --subst-var-by qtQmlPrefix ${qtQmlPrefix} \
+                --subst-var-by qtDocPrefix ${qtDocPrefix}
         done
 
         substituteInPlace configure --replace-fail /bin/pwd pwd
@@ -274,20 +290,16 @@ stdenv.mkDerivation (
           ''
       );
 
-      qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
-      qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
-      qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
-
       setOutputFlags = false;
       preConfigure = ''
         export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
 
-        NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+        NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\""
 
         # paralellize compilation of qtmake, which happens within ./configure
         export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
 
-        ./bin/syncqt.pl -version $version
+        ./bin/syncqt.pl -version ${version}
       ''
       + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         # QT's configure script will refuse to use pkg-config unless these two environment variables are set
@@ -309,9 +321,9 @@ stdenv.mkDerivation (
         NIX_OUTPUT_BIN = $bin
         NIX_OUTPUT_DEV = $dev
         NIX_OUTPUT_OUT = $out
-        NIX_OUTPUT_DOC = $dev/$qtDocPrefix
-        NIX_OUTPUT_QML = $bin/$qtQmlPrefix
-        NIX_OUTPUT_PLUGIN = $bin/$qtPluginPrefix
+        NIX_OUTPUT_DOC = $dev/${qtDocPrefix}
+        NIX_OUTPUT_QML = $bin/${qtQmlPrefix}
+        NIX_OUTPUT_PLUGIN = $bin/${qtPluginPrefix}
         EOF
         }
 
@@ -539,18 +551,6 @@ stdenv.mkDerivation (
         moveToOutput "mkspecs" "$dev"
       '';
 
-      devTools = [
-        "bin/fixqt4headers.pl"
-        "bin/moc"
-        "bin/qdbuscpp2xml"
-        "bin/qdbusxml2cpp"
-        "bin/qlalr"
-        "bin/qmake"
-        "bin/rcc"
-        "bin/syncqt.pl"
-        "bin/uic"
-      ];
-
       postFixup = ''
         # Don't retain build-time dependencies like gdb.
         sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
@@ -558,6 +558,7 @@ stdenv.mkDerivation (
         fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
 
         # Move development tools to $dev
+        devTools="${lib.concatStringsSep " " devTools}"
         moveQtDevTools
         moveToOutput bin "$dev"
 
@@ -568,9 +569,34 @@ stdenv.mkDerivation (
 
       dontStrip = debugSymbols;
 
-      setupHook = ../hooks/qtbase-setup-hook.sh;
+      setupHook =
+        let
+          hook = makeSetupHook {
+            name = "qtbase5-setup-hook";
+            substitutions = {
+              inherit
+                qtPluginPrefix
+                qtQmlPrefix
+                qtDocPrefix
+                fix_qt_builtin_paths
+                fix_qt_module_paths
+                ;
+              debug = debugSymbols;
+            };
+          } ../hooks/qtbase-setup-hook.sh;
+        in
+        "${hook}/nix-support/setup-hook";
 
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      passthru = {
+        inherit
+          qtPluginPrefix
+          qtQmlPrefix
+          qtDocPrefix
+          ;
+        tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      };
+
+      __structuredAttrs = true;
 
       meta = {
         homepage = "https://www.qt.io/";
