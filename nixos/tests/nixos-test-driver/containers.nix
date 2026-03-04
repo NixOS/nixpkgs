@@ -49,7 +49,7 @@
     c12.succeed("ping -c 1 c1")
 
     # Confirm containers in vlan 2 can talk to each other.
-    # <<< c2.succeed("ping -c 1 c12")  # <<< TODO: this doesn't work because c12's "primary ip" is for vlan 1
+    c2.succeed("ping -c 1 c12")
     c12.succeed("ping -c 1 c2")
 
     # Confirm containers in separate vlans cannot talk to each other.

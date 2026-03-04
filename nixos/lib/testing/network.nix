@@ -64,29 +64,42 @@ let
           optionalString (ipInterfaces != [ ])
             (head (head ipInterfaces).value.ipv6.addresses).address;
 
-        # Put the IP addresses of all VMs in this machine's
-        # /etc/hosts file.  If a machine has multiple
-        # interfaces, use the IP address corresponding to
-        # the first interface (i.e. the first network in its
-        # virtualisation.vlans option).
-        networking.extraHosts = concatMapAttrsStringSep "" (
-          m': config:
+        # Generate /etc/hosts by only including IP addresses from VLANs that
+        # both the local machine and the remote machine share. This prevents
+        # machines from trying to connect via unreachable interfaces (e.g.,
+        # a Management VLAN) and ensures name resolution matches the
+        # actual network topology of the test.
+        networking.extraHosts =
           let
-            hostnames =
-              optionalString (
-                config.networking.domain != null
-              ) "${config.networking.hostName}.${config.networking.domain} "
-              + "${config.networking.hostName}\n";
+            localVlans = config.virtualisation.vlans;
           in
-          optionalString (
-            config.networking.primaryIPAddress != ""
-          ) "${config.networking.primaryIPAddress} ${hostnames}"
-          + optionalString (
-            config.networking.primaryIPv6Address != ""
-          ) "${config.networking.primaryIPv6Address} ${hostnames}"
-        ) testModuleArgs.config.allMachines;
+          concatMapAttrsStringSep "" (
+            mName: remoteConfig:
+            let
+              remoteInterfaces = remoteConfig.networking.interfaces;
+              sharedIps = lib.flatten (
+                lib.mapAttrsToList (
+                  ifaceName: ifaceCfg:
+                  let
+                    remoteIfaceMeta = remoteConfig.virtualisation.allInterfaces."${ifaceName}" or { };
+                    vlanId = remoteIfaceMeta.vlan or null;
+                  in
+                  if vlanId != null && builtins.elem vlanId localVlans then
+                    builtins.map (addr: addr.address) ifaceCfg.ipv4.addresses
+                    ++ builtins.map (addr: addr.address) ifaceCfg.ipv6.addresses
+                  else
+                    [ ]
+                ) remoteInterfaces
+              );
+              hostnames =
+                optionalString (
+                  remoteConfig.networking.domain != null
+                ) "${remoteConfig.networking.hostName}.${remoteConfig.networking.domain} "
+                + "${remoteConfig.networking.hostName}\n";
+            in
+            builtins.concatStringsSep "" (map (ip: "${ip} ${hostnames}") sharedIps)
+          ) testModuleArgs.config.allMachines;
       };
-
     in
     {
       key = "network-interfaces";
