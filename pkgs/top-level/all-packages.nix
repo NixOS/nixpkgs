@@ -7087,8 +7087,6 @@ with pkgs;
     libressl_4_2
     ;
 
-  openssl = callPackage ../development/libraries/openssl { };
-
   openssl_oqs = openssl.override {
     providers = [
       {
@@ -7106,7 +7104,7 @@ with pkgs;
   };
 
   openssl_legacy = openssl.override {
-    conf = ../development/libraries/openssl/3.0/legacy.cnf;
+    conf = ../by-name/op/openssl/3.0/legacy.cnf;
   };
 
   # Backward-compat aliases — prefer openssl.v1_1, openssl.v3, openssl.v3_5, openssl.v3_6, openssl.v4_0
