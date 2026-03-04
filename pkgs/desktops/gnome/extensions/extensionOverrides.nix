@@ -258,4 +258,11 @@ lib.trivial.pipe super [
       rm utilities-teatime.svg
     '';
   })
+
+  (patchExtension "named-workspaces@a31.at" {
+    postPatch = ''
+      # remove duplicate schema file
+      rm schemas/org.gnome.shell.extensions.workspace-name.gschema.xml
+    '';
+  })
 ]

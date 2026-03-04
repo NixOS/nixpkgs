@@ -17723,6 +17723,8 @@ self: super: with self; {
 
   smhi-pkg = callPackage ../development/python-modules/smhi-pkg { };
 
+  smllib = callPackage ../development/python-modules/smllib { };
+
   smmap = callPackage ../development/python-modules/smmap { };
 
   smoke-zephyr = callPackage ../development/python-modules/smoke-zephyr { };
