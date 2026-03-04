@@ -886,6 +886,7 @@ in
           "internal_hashed"
           "cyrus"
           "anonymous"
+          "ldap"
         ];
         default = "internal_hashed";
         example = "internal_plain";
