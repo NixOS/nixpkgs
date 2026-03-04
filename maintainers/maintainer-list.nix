@@ -10512,6 +10512,11 @@
     githubId = 982322;
     name = "Henrik Olsson";
   };
+  henrikvtcodes = {
+    github = "henrikvtcodes";
+    githubId = 22358337;
+    name = "Henrik VT";
+  };
   henrirosten = {
     email = "henri.rosten@unikie.com";
     github = "henrirosten";
