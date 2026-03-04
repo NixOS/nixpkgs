@@ -8,7 +8,6 @@
   gnumake,
   installShellFiles,
   testers,
-  kubebuilder,
 }:
 
 buildGoModule (finalAttrs: {
@@ -59,8 +58,8 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    command = "${kubebuilder}/bin/kubebuilder version";
-    package = kubebuilder;
+    command = "${finalAttrs.finalPackage}/bin/kubebuilder version";
+    package = finalAttrs.finalPackage;
     version = "v${finalAttrs.version}";
   };
 
