@@ -2448,6 +2448,8 @@ self: super: with self; {
 
   camelot = callPackage ../development/python-modules/camelot { };
 
+  camtrap-package = callPackage ../development/python-modules/camtrap-package { };
+
   can-isotp = callPackage ../development/python-modules/can-isotp { };
 
   canals = callPackage ../development/python-modules/canals { };
