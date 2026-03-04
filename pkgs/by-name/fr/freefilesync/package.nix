@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   replaceVars,
+  fetchFromGitHub,
   fetchDebianPatch,
   copyDesktopItems,
   pkg-config,
@@ -19,8 +20,16 @@
 }:
 
 let
-  wxwidgets_3_3' = wxwidgets_3_3.overrideAttrs (
+  wxwidgets_3_3_1 = wxwidgets_3_3.overrideAttrs (
     finalAttrs: previousAttrs: {
+      version = "3.3.1";
+      src = fetchFromGitHub {
+        owner = "wxWidgets";
+        repo = "wxWidgets";
+        tag = "v${finalAttrs.version}";
+        fetchSubmodules = true;
+        hash = "sha256-eYmZrh9lvDnJ3VAS+TllT21emtKBPAOhqIULw1dTPhk=";
+      };
       patches = [
         ./wxcolorhook.patch
       ];
@@ -78,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libssh2
     openssl
-    wxwidgets_3_3'
+    wxwidgets_3_3_1
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
