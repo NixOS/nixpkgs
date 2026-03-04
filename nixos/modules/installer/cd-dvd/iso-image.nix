@@ -1054,16 +1054,33 @@ in
       }
     );
 
-    boot.postBootCommands = ''
-      # After booting, register the contents of the Nix store on the
-      # CD in the Nix database in the tmpfs.
-      ${config.nix.package.out}/bin/nix-store --load-db < /nix/store/nix-path-registration
+    systemd.services.register-nix-paths = {
+      description = "Register Nix Store Paths";
+      unitConfig.DefaultDependencies = false;
+      wantedBy = [ "sysinit.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+        "nix-daemon.socket"
+        "nix-daemon.service"
+      ];
+      after = [ "local-fs.target" ];
+      conflicts = [ "shutdown.target" ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        # After booting, register the contents of the Nix store on the
+        # CD in the Nix database in the tmpfs.
+        ${lib.getExe' config.nix.package.out "nix-store"} --load-db < /nix/store/nix-path-registration
 
-      # nixos-rebuild also requires a "system" profile and an
-      # /etc/NIXOS tag.
-      touch /etc/NIXOS
-      ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-    '';
+        # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
+        touch /etc/NIXOS
+        ${lib.getExe' config.nix.package.out "nix-env"} -p /nix/var/nix/profiles/system --set /run/current-system
+      '';
+    };
 
     # Add vfat support to the initrd to enable people to copy the
     # contents of the CD to a bootable USB stick.
