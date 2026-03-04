@@ -84,7 +84,7 @@ let
       wrapProgram $out/bin/notesnook \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps
+      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/icons/hicolor/1024x1024/apps
       substituteInPlace $out/share/applications/notesnook.desktop \
         --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
     '';
