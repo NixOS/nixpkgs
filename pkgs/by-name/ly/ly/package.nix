@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.2.0";
+  version = "1.3.2";
 
   src = fetchFromCodeberg {
     owner = "fairyglade";
     repo = "ly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2JOpC70uBvGk17edXDNeNhNqn2hHZBpOoQaUxN0IlLk=";
+    hash = "sha256-P0yLiRIA0bDMiYfL6Kz2/OXh+nmnbHZnsCbcYGIGnbc=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "TUI display manager";
     license = lib.licenses.wtfpl;
     homepage = "https://codeberg.org/fairyglade/ly";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      zacharyarnaise
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "ly";
   };

@@ -106,7 +106,7 @@ in
       };
       service = {
         interface = ":${toString cfg.port}";
-        frontendurl = "${cfg.frontendScheme}://${cfg.frontendHostname}/";
+        publicurl = "${cfg.frontendScheme}://${cfg.frontendHostname}/";
       };
       files = {
         basepath = "/var/lib/vikunja/files";
