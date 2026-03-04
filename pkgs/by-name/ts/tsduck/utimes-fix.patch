@@ -1,0 +1,10 @@
+--- a/src/libtscore/system/tsFileUtils.cpp
++++ b/src/libtscore/system/tsFileUtils.cpp
+@@ -25,6 +25,7 @@
+ #else
+     #include "tsBeforeStandardHeaders.h"
+     #include <sys/ioctl.h>
++    #include <sys/time.h>
+     #include <sys/types.h>
+     #include <sys/stat.h>
+     #include <unistd.h>
