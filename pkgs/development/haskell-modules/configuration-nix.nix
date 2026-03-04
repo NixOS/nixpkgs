@@ -1966,6 +1966,9 @@ builtins.intersectAttrs super {
     broken = false;
   }) super.cabal-install;
 
+  # lots of errors
+  haskell-debugger = dontCheck super.haskell-debugger;
+
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
   # Disable checks to break dependency loop with SCalendar
