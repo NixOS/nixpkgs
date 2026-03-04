@@ -47,13 +47,9 @@ let
 
   inherit (lib.types)
     enum
-    float
     isType
     mkOptionType
-    number
     setType
-    string
-    types
     ;
 
   setTypes =
