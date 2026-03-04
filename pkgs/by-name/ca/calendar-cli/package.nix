@@ -5,6 +5,7 @@
   nixosTests,
   perl,
   radicale,
+  versionCheckHook,
   which,
   xandikos,
 }:
@@ -51,18 +52,21 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     perl
     (python3.pkgs.toPythonModule (radicale.override { inherit python3; }))
+    versionCheckHook
     which
     xandikos
   ];
 
   checkPhase = ''
     runHook preCheck
+    runHook preInstallCheck
 
     pushd tests
     ./test_calendar-cli.sh
     popd
 
     runHook postCheck
+    runHook postInstallCheck
   '';
 
   passthru.tests = {
