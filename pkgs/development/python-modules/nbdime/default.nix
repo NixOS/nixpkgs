@@ -94,6 +94,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jupyter/nbdime/blob/${version}/CHANGELOG.md";
     description = "Tools for diffing and merging of Jupyter notebooks";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 }

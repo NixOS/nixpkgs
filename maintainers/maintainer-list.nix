@@ -11530,12 +11530,6 @@
     github = "ivalery111";
     githubId = 37245535;
   };
-  ivan = {
-    email = "ivan@ludios.org";
-    github = "ivan";
-    githubId = 4458;
-    name = "Ivan Kozik";
-  };
   ivan-babrou = {
     email = "nixpkgs@ivan.computer";
     name = "Ivan Babrou";
@@ -26316,12 +26310,6 @@
     githubId = 220447215;
     name = "Trent Baldwin";
     keys = [ { fingerprint = "930C 3A61 F911 1296 7DA5  56D1 665A 9E2A FCDD 68AA"; } ];
-  };
-  tbenst = {
-    email = "nix@tylerbenster.com";
-    github = "tbenst";
-    githubId = 863327;
-    name = "Tyler Benster";
   };
   tbidne = {
     email = "tbidne@protonmail.com";
