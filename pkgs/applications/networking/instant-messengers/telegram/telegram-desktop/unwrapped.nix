@@ -28,6 +28,9 @@
   microsoft-gsl,
   boost,
   ada,
+  libavif,
+  libheif,
+  libjxl,
   libicns,
   apple-sdk_15,
   nix-update-script,
@@ -90,6 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
     libicns
+    libavif
+    libheif
+    libjxl
   ];
 
   dontWrapQtApps = true;
