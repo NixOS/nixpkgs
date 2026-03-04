@@ -2,29 +2,36 @@
   lib,
   autoPatchelfHook,
   bzip2,
+  cairo,
   fetchurl,
+  gdk-pixbuf,
   glibc,
-  kdePackages,
-  qt6,
-  runtimeShell,
+  pango,
+  gtk2,
+  kcoreaddons,
+  ki18n,
+  kio,
+  kservice,
   stdenv,
+  runtimeShell,
   unzip,
 }:
+
 let
   pname = "bcompare";
-  version = "5.2.0.31950";
+  version = "4.4.7.28397";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://www.scootersoftware.com/files/bcompare-${version}_amd64.deb";
-      sha256 = "sha256-CCSRNGWIYVKAoQVVJ8McDUtc45nK0S4CdamcT5uVlQM=";
+      url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
+      sha256 = "sha256-4AWTSoYpVhGmBBxcwHXdg1CGd/04+8yL9pu+gHrsj6U";
     };
 
     x86_64-darwin = fetchurl {
-      url = "https://www.scootersoftware.com/files/BCompareOSX-${version}.zip";
-      sha256 = "sha256-R+G2Zlr074i2W4GaEDweK0c0q8tnzjs6M0N106WVAlg=";
+      url = "https://www.scootersoftware.com/BCompareOSX-${version}.zip";
+      sha256 = "sha256-qbpM6hJbv+APo+ed45k3GXrl1HnZRxD1uT2lvaN3oM4=";
     };
 
     aarch64-darwin = srcs.x86_64-darwin;
@@ -49,29 +56,31 @@ let
 
       cp -R usr/{bin,lib,share} $out/
 
-      # Remove non Qt5 libs
+      # Remove library that refuses to be autoPatchelf'ed
       rm $out/lib/beyondcompare/ext/bcompare_ext_kde.amd64.so
-      rm $out/lib/beyondcompare/ext/bcompare_ext_kde5.amd64.so
 
       substituteInPlace $out/bin/${pname} \
         --replace "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
         --replace "ldd" "${glibc.bin}/bin/ldd" \
         --replace "/bin/bash" "${runtimeShell}"
+
+      # Create symlink bzip2 library
+      ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/beyondcompare/libbz2.so.1.0
     '';
 
     nativeBuildInputs = [ autoPatchelfHook ];
 
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
+      gtk2
+      pango
+      cairo
+      kio
+      kservice
+      ki18n
+      kcoreaddons
+      gdk-pixbuf
       bzip2
-      kdePackages.kconfig
-      kdePackages.kconfigwidgets
-      kdePackages.kcoreaddons
-      kdePackages.ki18n
-      kdePackages.kio
-      kdePackages.kservice
-      qt6.qtbase
-      qt6.qtsvg
     ];
 
     dontBuild = true;
@@ -94,7 +103,7 @@ let
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "GUI application that allows to quickly and easily compare files and folders";
     longDescription = ''
       Beyond Compare is focused. Beyond Compare allows you to quickly and easily compare your files and folders.
@@ -102,9 +111,9 @@ let
       You can then merge the changes, synchronize your files, and generate reports for your records.
     '';
     homepage = "https://www.scootersoftware.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       ktor
       arkivm
     ];
