@@ -4,9 +4,10 @@
   python3Packages,
   gettext,
   qt5,
+  writableTmpDirAsHomeHook,
   fetchFromGitHub,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dupeguru";
   version = "4.3.1-unstable-2026-01-06";
 
@@ -25,6 +26,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools
     python3Packages.sphinx
     qt5.wrapQtAppsHook
+    writableTmpDirAsHomeHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -47,10 +49,6 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
-
   # Avoid double wrapping Python programs.
   dontWrapQtApps = true;
 
@@ -70,9 +68,10 @@ python3Packages.buildPythonApplication rec {
     broken = stdenv.hostPlatform.isDarwin;
     description = "GUI tool to find duplicate files in a system";
     homepage = "https://github.com/arsenetar/dupeguru";
+    changelog = "https://github.com/arsenetar/dupeguru/releases/tag/${builtins.head (lib.strings.splitString "-" finalAttrs.version)}";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ novoxd ];
     mainProgram = "dupeguru";
   };
-}
+})
