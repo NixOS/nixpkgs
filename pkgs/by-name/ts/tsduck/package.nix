@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+  testers,
   # build and doc tooling
   asciidoctor-with-extensions,
   doxygen,
@@ -22,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsduck";
-  version = "3.42-4421";
+  version = "3.43-4549";
 
   src = fetchFromGitHub {
     owner = "tsduck";
     repo = "tsduck";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-d37ugMBw9TeCMeQBQsfxUD20YurEDY3wOIjZAXqwPzE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N+ZqPj16IJZdO/Kdj0Cff0JL6OhZBqTA7riPQrv28lo=";
   };
 
   nativeBuildInputs = [
@@ -74,8 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
   # if the maintainer has chosen to release it, our job is just to build it.
   NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
-  # remove tests which break the sandbox
-  patches = [ ./tests.patch ];
+  patches = [
+    # remove tests which break the sandbox
+    ./tests.patch
+    # add missing <sys/time.h> for utimes() on Darwin;
+    # fixed upstream on master, drop after next tagged release
+    ./utimes-fix.patch
+  ];
   checkTarget = "test";
   doCheck = true;
   doInstallCheck = true;
@@ -84,6 +91,19 @@ stdenv.mkDerivation (finalAttrs: {
     "install-tools"
     "install-devel"
   ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "tsversion";
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(.+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "MPEG Transport Stream Toolkit";

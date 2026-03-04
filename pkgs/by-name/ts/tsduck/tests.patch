@@ -1,5 +1,3 @@
-diff --git a/src/utest/utestHLS.cpp b/src/utest/utestHLS.cpp
-index ebfe67f3d..dc023b636 100644
 --- a/src/utest/utestHLS.cpp
 +++ b/src/utest/utestHLS.cpp
 @@ -20,9 +20,6 @@
@@ -12,7 +10,7 @@ index ebfe67f3d..dc023b636 100644
      TSUNIT_DECLARE_TEST(BuildMasterPlaylist);
      TSUNIT_DECLARE_TEST(BuildMediaPlaylist);
  
-@@ -61,176 +58,6 @@ void HLSTest::afterTest()
+@@ -61,176 +58,6 @@
  // Unitary tests.
  //----------------------------------------------------------------------------
  
@@ -23,17 +21,17 @@ index ebfe67f3d..dc023b636 100644
 -    // https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8
 -
 -    ts::hls::PlayList pl;
--    TSUNIT_ASSERT(pl.loadURL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/master.m3u8", true));
+-    TSUNIT_ASSERT(pl.loadURL(u"https://tsduck.io/teststreams/hls/img_bipbop_adv_example_ts/master.m3u8", true));
 -    TSUNIT_ASSERT(pl.isValid());
 -    TSUNIT_EQUAL(ts::hls::PlayListType::MASTER, pl.type());
 -    TSUNIT_EQUAL(6, pl.version());
--    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/master.m3u8", pl.url());
+-    TSUNIT_EQUAL(u"https://tsduck.io/teststreams/hls/img_bipbop_adv_example_ts/master.m3u8", pl.url());
 -    ts::hls::MediaElement media;
 -    pl.buildURL(media, u"foo.bar");
 -    TSUNIT_EQUAL(u"foo.bar", media.relative_uri);
--    TSUNIT_EQUAL(u"/download/test/hls/img_bipbop_adv_example_ts/foo.bar", media.file_path);
--    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/foo.bar", media.url.toString());
--    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/foo.bar", media.urlString());
+-    TSUNIT_EQUAL(u"/teststreams/hls/img_bipbop_adv_example_ts/foo.bar", media.file_path);
+-    TSUNIT_EQUAL(u"https://tsduck.io/teststreams/hls/img_bipbop_adv_example_ts/foo.bar", media.url.toString());
+-    TSUNIT_EQUAL(u"https://tsduck.io/teststreams/hls/img_bipbop_adv_example_ts/foo.bar", media.urlString());
 -    TSUNIT_EQUAL(0, pl.segmentCount());
 -    TSUNIT_EQUAL(24, pl.playListCount());
 -    TSUNIT_EQUAL(5, pl.altPlayListCount());
@@ -85,11 +83,11 @@ index ebfe67f3d..dc023b636 100644
 -    // Test file downloaded from TSDuck web site.
 -
 -    ts::hls::PlayList pl;
--    TSUNIT_ASSERT(pl.loadURL(u"https://tsduck.io/download/test/hls/alternative/index_hd.m3u8", true));
+-    TSUNIT_ASSERT(pl.loadURL(u"https://tsduck.io/teststreams/hls/alternative/index_hd.m3u8", true));
 -    TSUNIT_ASSERT(pl.isValid());
 -    TSUNIT_EQUAL(ts::hls::PlayListType::MASTER, pl.type());
 -    TSUNIT_EQUAL(4, pl.version());
--    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/alternative/index_hd.m3u8", pl.url());
+-    TSUNIT_EQUAL(u"https://tsduck.io/teststreams/hls/alternative/index_hd.m3u8", pl.url());
 -    TSUNIT_EQUAL(0, pl.segmentCount());
 -    TSUNIT_EQUAL(7, pl.playListCount());
 -    TSUNIT_EQUAL(2, pl.altPlayListCount());
@@ -148,14 +146,14 @@ index ebfe67f3d..dc023b636 100644
 -    // https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/v5/prog_index.m3u8
 -
 -    ts::hls::PlayList pl;
--    TSUNIT_ASSERT(pl.loadURL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/v5/prog_index.m3u8", true));
+-    TSUNIT_ASSERT(pl.loadURL(u"https://tsduck.io/teststreams/hls/img_bipbop_adv_example_ts/v5/prog_index.m3u8", true));
 -    TSUNIT_ASSERT(pl.isValid());
 -    TSUNIT_EQUAL(ts::hls::PlayListType::VOD, pl.type());
 -    TSUNIT_EQUAL(3, pl.version());
--    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/v5/prog_index.m3u8", pl.url());
+-    TSUNIT_EQUAL(u"https://tsduck.io/teststreams/hls/img_bipbop_adv_example_ts/v5/prog_index.m3u8", pl.url());
 -    ts::hls::MediaElement media;
 -    pl.buildURL(media, u"foo.bar");
--    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/v5/foo.bar", media.urlString());
+-    TSUNIT_EQUAL(u"https://tsduck.io/teststreams/hls/img_bipbop_adv_example_ts/v5/foo.bar", media.urlString());
 -    TSUNIT_EQUAL(100, pl.segmentCount());
 -    TSUNIT_EQUAL(0, pl.playListCount());
 -    TSUNIT_EQUAL(0, pl.altPlayListCount());
@@ -189,8 +187,6 @@ index ebfe67f3d..dc023b636 100644
  TSUNIT_DEFINE_TEST(BuildMasterPlaylist)
  {
      ts::hls::PlayList pl;
-diff --git a/src/utest/utestNetworking.cpp b/src/utest/utestNetworking.cpp
-index 058d5eb4c..90abbff9e 100644
 --- a/src/utest/utestNetworking.cpp
 +++ b/src/utest/utestNetworking.cpp
 @@ -33,19 +33,11 @@
@@ -213,7 +209,7 @@ index 058d5eb4c..90abbff9e 100644
      TSUNIT_DECLARE_TEST(IPHeader);
      TSUNIT_DECLARE_TEST(IPProtocol);
      TSUNIT_DECLARE_TEST(TCPPacket);
-@@ -96,183 +88,6 @@ TSUNIT_DEFINE_TEST(SystemStructures)
+@@ -96,183 +88,6 @@
              << "NetworkingTest::SystemStructures: sizeof(::sockaddr_storage) = " << sizeof(::sockaddr_storage) << std::endl;
  }
  
@@ -397,7 +393,7 @@ index 058d5eb4c..90abbff9e 100644
  TSUNIT_DEFINE_TEST(Conversion)
  {
      ts::IPAddress a1(0x12345678);
-@@ -376,162 +191,6 @@ TSUNIT_DEFINE_TEST(MACAddress)
+@@ -376,162 +191,6 @@
      TSUNIT_ASSERT(!a1.isMulticast());
  }
  
@@ -560,7 +556,7 @@ index 058d5eb4c..90abbff9e 100644
  TSUNIT_DEFINE_TEST(IPv4SocketAddress)
  {
      TSUNIT_ASSERT(ts::IPInitialize());
-@@ -739,56 +398,6 @@ namespace {
+@@ -739,56 +398,6 @@
      };
  }
  
@@ -617,7 +613,7 @@ index 058d5eb4c..90abbff9e 100644
  // A thread class which sends one UDP message and wait from the same message to be replied.
  namespace {
      class UDPClient: public utest::TSUnitThread
-@@ -848,41 +457,6 @@ namespace {
+@@ -848,41 +457,6 @@
      };
  }
  
@@ -659,11 +655,9 @@ index 058d5eb4c..90abbff9e 100644
  TSUNIT_DEFINE_TEST(IPHeader)
  {
      static const uint8_t reference_header[] = {
-diff --git a/src/utest/utestSysUtils.cpp b/src/utest/utestSysUtils.cpp
-index fc5240313..442c86e18 100644
 --- a/src/utest/utestSysUtils.cpp
 +++ b/src/utest/utestSysUtils.cpp
-@@ -48,7 +48,6 @@ class SysUtilsTest: public tsunit::Test
+@@ -48,7 +48,6 @@
      TSUNIT_DECLARE_TEST(FileTime);
      TSUNIT_DECLARE_TEST(Wildcard);
      TSUNIT_DECLARE_TEST(SearchWildcard);
@@ -671,7 +665,7 @@ index fc5240313..442c86e18 100644
      TSUNIT_DECLARE_TEST(ProcessCpuTime);
      TSUNIT_DECLARE_TEST(ProcessVirtualSize);
      TSUNIT_DECLARE_TEST(IsTerminal);
-@@ -572,16 +571,6 @@ TSUNIT_DEFINE_TEST(SearchWildcard)
+@@ -599,16 +598,6 @@
  #endif
  }
  
@@ -688,8 +682,6 @@ index fc5240313..442c86e18 100644
  TSUNIT_DEFINE_TEST(ProcessCpuTime)
  {
      const cn::milliseconds t1 = ts::GetProcessCpuTime();
-diff --git a/src/utest/utestSystemRandomGenerator.cpp b/src/utest/utestSystemRandomGenerator.cpp
-index 0d7ff13dd..7e9d5b6ef 100644
 --- a/src/utest/utestSystemRandomGenerator.cpp
 +++ b/src/utest/utestSystemRandomGenerator.cpp
 @@ -23,7 +23,6 @@
@@ -700,7 +692,7 @@ index 0d7ff13dd..7e9d5b6ef 100644
      TSUNIT_DECLARE_TEST(Range);
  
  private:
-@@ -87,11 +86,6 @@ TSUNIT_DEFINE_TEST(SystemRandomGenerator)
+@@ -87,11 +86,6 @@
      testRandom(gen);
  }
  
@@ -712,11 +704,9 @@ index 0d7ff13dd..7e9d5b6ef 100644
  void SystemRandomGeneratorTest::testRandomRange(ts::RandomGenerator& prng, int64_t min, int64_t max)
  {
      TSUNIT_ASSERT(prng.ready());
-diff --git a/src/utest/utestWebRequest.cpp b/src/utest/utestWebRequest.cpp
-index d496c8eca..a691910ca 100644
 --- a/src/utest/utestWebRequest.cpp
 +++ b/src/utest/utestWebRequest.cpp
-@@ -28,10 +28,6 @@
+@@ -30,13 +30,8 @@
  
  class WebRequestTest: public tsunit::Test
  {
@@ -726,8 +716,11 @@ index d496c8eca..a691910ca 100644
 -    TSUNIT_DECLARE_TEST(NoRedirection);
      TSUNIT_DECLARE_TEST(NonExistentHost);
      TSUNIT_DECLARE_TEST(InvalidURL);
+-    TSUNIT_DECLARE_TEST(Post);
  
-@@ -89,7 +85,6 @@ void WebRequestTest::testURL(const ts::UString& url, bool expectRedirection, boo
+ public:
+     virtual void beforeTest() override;
+@@ -92,7 +87,6 @@
  
      // Test binary download
      ts::ByteBlock data;
@@ -735,7 +728,7 @@ index d496c8eca..a691910ca 100644
  
      debug() << "WebRequestTest::testURL:" << std::endl
              << "    Original URL: " << request.originalURL() << std::endl
-@@ -155,59 +150,12 @@ void WebRequestTest::testURL(const ts::UString& url, bool expectRedirection, boo
+@@ -158,59 +152,12 @@
  // Test cases
  //----------------------------------------------------------------------------
  
@@ -795,7 +788,7 @@ index d496c8eca..a691910ca 100644
  
      debug() << "WebRequestTest::testNonExistentHost: " << rep.messages() << std::endl;
  }
-@@ -218,7 +166,6 @@ TSUNIT_DEFINE_TEST(InvalidURL)
+@@ -221,40 +168,8 @@
      ts::WebRequest request(rep);
  
      ts::ByteBlock data;
@@ -803,3 +796,36 @@ index d496c8eca..a691910ca 100644
  
      debug() << "WebRequestTest::testInvalidURL: " << rep.messages() << std::endl;
  }
+ 
+-TSUNIT_DEFINE_TEST(Post)
+-{
+-    // These servers are known to return POST data into a JSON string.
+-    // 1. https://httpbin.org/post
+-    // 2. https://postman-echo.com/post
+-    const ts::UString url(u"https://httpbin.org/post");
+-    const ts::UString post(u"foo bar\nqsdf=tif,dft=ty ryhrh=12,af\nfoo bar");
+-
+-    ts::WebRequest request(report());
+-    request.setPostData(post);
+-
+-    // Use assumption instead of assertion because we do not fully trust the reliability to that site.
+-    ts::UString response;
+-    TSUNIT_ASSUME(request.downloadTextContent(url, response));
+-
+-    debug() << "WebRequestTest::testPost:" << std::endl
+-            << "    Original URL: " << request.originalURL() << std::endl
+-            << "    Final URL: " << request.finalURL() << std::endl
+-            << "    HTTP status: " << request.httpStatus() << std::endl
+-            << "    Content size: " << request.contentSize() << std::endl
+-            << "    Content text: \"" << response << "\"" << std::endl;
+ 
+-    ts::json::ValuePtr jv;
+-    bool success = true;
+-    TSUNIT_ASSUME(success = ts::json::Parse(jv, response, CERR));
+-    if (success) {
+-        TSUNIT_ASSERT(jv != nullptr);
+-        TSUNIT_ASSERT(jv->isObject());
+-        TSUNIT_ASSERT(jv->value(u"data").isString());
+-        TSUNIT_EQUAL(post, jv->value(u"data").toString());
+-    }
+-}
