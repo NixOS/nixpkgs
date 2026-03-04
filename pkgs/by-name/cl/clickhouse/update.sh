@@ -29,7 +29,11 @@ fi
 
 pname="clickhouse"
 if [[ "$fname" == *lts.nix ]]; then
-    all_tags=$(echo "$all_tags" | grep -- "-lts$")
+    all_tags=$(echo "$all_tags" | grep -- "-lts$" || true)
+    if [[ -z "$all_tags" ]]; then
+        echoerr "Error: no LTS tags found in fetched tags"
+        exit 1
+    fi
     pname="clickhouse-lts"
 fi
 
