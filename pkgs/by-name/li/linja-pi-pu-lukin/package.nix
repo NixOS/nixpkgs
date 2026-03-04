@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "linja-pi-pu-lukin";
-  version = "unstable-2021-10-29";
+  version = "0-unstable-2021-10-29";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20211029000000/https://jansa-tp.github.io/linja-pi-pu-lukin/PuLukin.otf";
