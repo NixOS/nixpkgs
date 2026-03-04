@@ -76,7 +76,7 @@ python3Packages.buildPythonApplication rec {
     broken = stdenv.hostPlatform.isDarwin;
     description = "GUI tool to find duplicate files in a system";
     homepage = "https://github.com/arsenetar/dupeguru";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ novoxd ];
     mainProgram = "dupeguru";
