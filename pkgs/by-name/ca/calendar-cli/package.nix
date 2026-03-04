@@ -11,17 +11,21 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "calendar-cli";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tobixen";
     repo = "calendar-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-w35ySLnfxXZR/a7BrPLYqXs2kqkuYhh5PcgNxJqjDtE=";
+    # https://github.com/tobixen/calendar-cli/pull/113#issuecomment-3977892432
+    tag = "v0.15.0";
+    hash = "sha256-P6ClvX6C5VargAvudgSvBwObIUouTRg7SQ62KxhcKiE=";
   };
 
   postPatch = ''
+    substituteInPlace calendar_cli/metadata.py \
+      --replace-fail '"version": "1.0.1"' '"version": "${finalAttrs.version}"'
+
     patchShebangs tests
     substituteInPlace tests/test_calendar-cli.sh \
       --replace-fail "../bin/calendar-cli.py" "$out/bin/calendar-cli" \
@@ -66,6 +70,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/tobixen/calendar-cli/releases/tag/${finalAttrs.src.tag}";
     description = "Simple command-line CalDav client";
     homepage = "https://github.com/tobixen/calendar-cli";
     license = lib.licenses.gpl3Plus;
