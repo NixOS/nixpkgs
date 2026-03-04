@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "ocl";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-g/HLE0qjnzYkq3t3OhxFBpL250JWbWjHJBP0SYJSOZU=";
+    sha256 = "sha256-ymahtzdCX4D3rBMThUmhWOY238yckP0bmNE0xFhK0No=";
   };
 
   meta = {
@@ -23,7 +23,5 @@ buildOctavePackage rec {
       Single-Instruction-Multiple-Data (SIMD) computations, selectively
       using available OpenCL hardware and drivers.
     '';
-    # https://savannah.gnu.org/bugs/?66964
-    broken = true;
   };
 }
