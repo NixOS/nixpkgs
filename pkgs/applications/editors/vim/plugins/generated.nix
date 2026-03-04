@@ -16529,6 +16529,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  unclash-nvim = buildVimPlugin {
+    pname = "unclash.nvim";
+    version = "0-unstable-2026-01-28";
+    src = fetchFromGitHub {
+      owner = "madmaxieee";
+      repo = "unclash.nvim";
+      rev = "04f6aba5e2eea8b665cba88f21082e33a7cb6e59";
+      hash = "sha256-Rd+U0WtVCV2D0rsL8Sm5B4NRK2t4W5M7n/CH1I0w6s4=";
+    };
+    meta.homepage = "https://github.com/madmaxieee/unclash.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   undotree = buildVimPlugin {
     pname = "undotree";
     version = "0-unstable-2026-02-12";
