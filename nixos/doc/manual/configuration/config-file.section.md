@@ -127,7 +127,7 @@ Integers
 
     ```nix
     {
-      boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
+      boot.kernel.sysctl.net.ipv4.tcp_keepalive_time = 60;
     }
     ```
 

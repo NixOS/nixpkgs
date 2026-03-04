@@ -15,8 +15,8 @@ in
           trustedInterfaces = [ "dns0" ];
         };
         boot.kernel.sysctl = {
-          "net.ipv4.ip_forward" = 1;
-          "net.ipv6.ip_forward" = 1;
+          net.ipv4.ip_forward = true;
+          net.ipv6.ip_forward = true;
         };
 
         services.iodine.server = {

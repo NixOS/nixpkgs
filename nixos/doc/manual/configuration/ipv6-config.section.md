@@ -16,7 +16,7 @@ You can disable IPv6 on a single interface using a normal sysctl (in
 this example, we use interface `eth0`):
 
 ```nix
-{ boot.kernel.sysctl."net.ipv6.conf.eth0.disable_ipv6" = true; }
+{ boot.kernel.sysctl.net.ipv6.conf.eth0.disable_ipv6 = true; }
 ```
 
 As with IPv4 networking interfaces are automatically configured via

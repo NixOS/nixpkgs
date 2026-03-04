@@ -63,7 +63,7 @@ in
     };
   };
 
-  boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
+  boot.kernel.sysctl.net.ipv6.conf.all.forwarding = true;
   # Forward traffic under the prefix.
 
   networking.interfaces.${eth0}.ipv6.addresses = [
@@ -102,7 +102,7 @@ let
   # Again, taken from the output of "yggdrasilctl getself".
 in
 {
-  boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
+  boot.kernel.sysctl.net.ipv6.conf.all.forwarding = true;
   # Enable IPv6 forwarding.
 
   networking = {

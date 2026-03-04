@@ -111,7 +111,7 @@
       # Setting the number of allowed user namespaces to 0 effectively disables
       # the feature at runtime.  Note that root may raise the limit again
       # at any time.
-      boot.kernel.sysctl."user.max_user_namespaces" = 0;
+      boot.kernel.sysctl.user.max_user_namespaces = 0;
 
       assertions = [
         {
@@ -122,14 +122,14 @@
     })
 
     (lib.mkIf config.security.unprivilegedUsernsClone {
-      boot.kernel.sysctl."kernel.unprivileged_userns_clone" = lib.mkDefault true;
+      boot.kernel.sysctl.kernel.unprivileged_userns_clone = lib.mkDefault true;
     })
 
     (lib.mkIf config.security.protectKernelImage {
       # Disable hibernation (allows replacing the running kernel)
       boot.kernelParams = [ "nohibernate" ];
       # Prevent replacing the running kernel image w/o reboot
-      boot.kernel.sysctl."kernel.kexec_load_disabled" = lib.mkDefault true;
+      boot.kernel.sysctl.kernel.kexec_load_disabled = lib.mkDefault true;
     })
 
     (lib.mkIf (!config.security.allowSimultaneousMultithreading) {

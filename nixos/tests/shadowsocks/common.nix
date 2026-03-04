@@ -14,7 +14,7 @@ import ../make-test-python.nix (
 
     nodes = {
       server = {
-        boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
+        boot.kernel.sysctl.net.ipv4.ip_forward = "1";
         networking.useDHCP = false;
         networking.interfaces.eth1.ipv4.addresses = [
           {
