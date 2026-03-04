@@ -123,7 +123,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/{bin,opt/PreMiD,share/pixmaps}
+    runHook preInstall
+    mkdir -p $out/{bin,opt/PreMiD,share/icons/hicolor/1024x1024/apps}
     mv * $out/opt/PreMiD
 
     chmod +x $out/opt/PreMiD/${pname}
@@ -136,11 +137,12 @@ stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${pname}
 
     ln -s $out/opt/PreMiD/${pname} $out/bin/
+    runHook postInstall
   '';
 
   # This is the icon used by the desktop file
   postInstall = ''
-    ln -s $out/opt/PreMiD/assets/appIcon.png $out/share/pixmaps/${pname}.png
+    ln -s $out/opt/PreMiD/assets/appIcon.png $out/share/icons/hicolor/1024x1024/apps/premid.png
   '';
 
   desktopItems = [
