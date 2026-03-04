@@ -66,7 +66,6 @@ let
   serverExec = concatStringsSep " " (
     [
       serverPackageExe
-      "--systemd"
       enabledConfig
     ]
     ++ cfg.extraServerFlags
@@ -126,24 +125,29 @@ in
             Like upstream, the application option is a list including the application and it's flags. In the case of the NixOS module however, the first element of the list must be a package. The module will assert otherwise.
             The application can be set to a single package because it gets passed to lib.toList, though this will not allow for flags to be passed.
 
+            WiVRn has good default configurations and most options can be configured at runtime so it is recommended to leave this empty and try the defaults before attempting manual configuration.
+
             See <https://github.com/WiVRn/WiVRn/blob/master/docs/configuration.md>
           '';
           default = { };
           example = literalExpression ''
             {
-              scale = 0.5;
-              bitrate = 100000000;
-              encoders = [
+              # left eye, hardware; right eye, software; transparency, hardware
+              encoder = [
                 {
-                  encoder = "nvenc";
+                  encoder = "vulkan";
+                  codec = "h265";
+                }
+                {
+                  encoder = "x264";
                   codec = "h264";
-                  width = 1.0;
-                  height = 1.0;
-                  offset_x = 0.0;
-                  offset_y = 0.0;
+                }
+                {
+                  encoder = "vulkan";
+                  codec = "h265";
                 }
               ];
-              application = [ pkgs.wlx-overlay-s ];
+              application = [ pkgs.wayvr ];
             }
           '';
         };
@@ -206,6 +210,7 @@ in
                 RestrictSUIDSGID = true;
               }
           );
+          # Needs Steam in the PATH to allow launching games from the headset
           path = [ cfg.steam.package ];
           wantedBy = mkIf cfg.autoStart [ "default.target" ];
           restartTriggers = [
