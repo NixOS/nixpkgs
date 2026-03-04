@@ -54,19 +54,49 @@ in
     };
 
     # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
-    # for nixos-install.
-    boot.postBootCommands = lib.mkAfter ''
-      if ! [ -e /var/lib/nixos/did-channel-init ]; then
-        echo "unpacking the NixOS/Nixpkgs sources..."
-        mkdir -p /nix/var/nix/profiles/per-user/root
-        ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/per-user/root/channels \
-          -i ${channelSources} --quiet --option build-use-substitutes false \
-          ${lib.optionalString config.boot.initrd.systemd.enable "--option sandbox false"} # There's an issue with pivot_root
-        mkdir -m 0700 -p /root/.nix-defexpr
-        ln -s /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
-        mkdir -m 0755 -p /var/lib/nixos
-        touch /var/lib/nixos/did-channel-init
-      fi
-    '';
+    # for nixos-install.  We use a systemd service rather than
+    # boot.postBootCommands so that ordering relative to other
+    # early-boot services (e.g. register-nix-paths in QEMU VMs) is
+    # explicit.
+    systemd.services.nix-channel-init = {
+      description = "Initialize NixOS Channel";
+      # Run early so the channel is available before regular services.
+      # nix-env is invoked before nix-daemon.socket is up, so it
+      # accesses the store directly (we are root).
+      unitConfig.DefaultDependencies = false;
+      wantedBy = [ "sysinit.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+        "nix-daemon.socket"
+        "nix-daemon.service"
+      ];
+      after = [
+        "local-fs.target"
+        # In QEMU VMs the store DB is populated by register-nix-paths.
+        # On real hardware this unit does not exist and the dependency
+        # is silently ignored by systemd.
+        "register-nix-paths.service"
+      ];
+      conflicts = [ "shutdown.target" ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        if ! [ -e /var/lib/nixos/did-channel-init ]; then
+          echo "unpacking the NixOS/Nixpkgs sources..."
+          mkdir -p /nix/var/nix/profiles/per-user/root
+          ${lib.getExe' config.nix.package.out "nix-env"} -p /nix/var/nix/profiles/per-user/root/channels \
+            -i ${channelSources} --quiet --option build-use-substitutes false \
+            ${lib.optionalString config.boot.initrd.systemd.enable "--option sandbox false"} # There's an issue with pivot_root
+          mkdir -m 0700 -p /root/.nix-defexpr
+          ln -s /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
+          mkdir -m 0755 -p /var/lib/nixos
+          touch /var/lib/nixos/did-channel-init
+        fi
+      '';
+    };
   };
 }
