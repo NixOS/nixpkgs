@@ -1,36 +1,36 @@
 {
-  lib,
-  fetchCrate,
-  rustPlatform,
-  pkg-config,
-  installShellFiles,
-  openssl,
   dbus,
+  fetchCrate,
+  installShellFiles,
+  lib,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  rustPlatform,
   sqlite,
   stdenv,
-  testers,
-  leetcode-cli,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leetcode-cli";
   version = "0.5.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-EafEz5MhY9f56N1LCPaW+ktYrV01r9vHCbublDnfAKg=";
   };
 
   cargoHash = "sha256-8bHpNckEsJ4VWlmEaDTeMW+Txi9SQh30lK5CKKperC8=";
 
   nativeBuildInputs = [
-    pkg-config
     installShellFiles
+    pkg-config
   ];
 
   buildInputs = [
-    openssl
     dbus
+    openssl
     sqlite
   ];
 
@@ -41,11 +41,10 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/leetcode completions zsh)
   '';
 
-  passthru.tests = testers.testVersion {
-    package = leetcode-cli;
-    command = "leetcode -V";
-    version = "leetcode ${version}";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Leetcode CLI utility";
@@ -54,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ congee ];
     mainProgram = "leetcode";
   };
-}
+})
