@@ -128,6 +128,7 @@ with haskellLib;
 
   # haskell-debugger only works with ghc 9.14+
   haskell-debugger-view = doDistribute (unmarkBroken super.haskell-debugger-view);
+  haskell-debugger = doJailbreak super.haskell-debugger; # hie-bios < 0.18, random >=1.3.1
 
   ghc-exactprint_1_14_0_0 = addBuildDepends [
     # cabal2nix drops conditional block: impl (ghc >= 9.14)
