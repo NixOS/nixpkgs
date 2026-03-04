@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://headsetapp.co/";
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ muscaln ];
+    maintainers = [ ];
     mainProgram = "headset";
   };
 })

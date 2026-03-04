@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.freedesktop.org/mesa/adriconf/-/releases/v${finalAttrs.version}";
     description = "GUI tool used to configure open source graphics drivers";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ muscaln ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "adriconf";
   };

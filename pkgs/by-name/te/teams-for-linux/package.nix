@@ -127,7 +127,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      muscaln
       qjoly
       chvp
       khaneliman

@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool for flashing images to Qualcomm devices";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      muscaln
       anas
       numinit
     ];

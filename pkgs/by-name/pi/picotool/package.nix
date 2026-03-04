@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/raspberrypi/picotool/releases/tag/${finalAttrs.version}";
     mainProgram = "picotool";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ muscaln ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

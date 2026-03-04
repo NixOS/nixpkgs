@@ -131,7 +131,6 @@ stdenv.mkDerivation {
     ];
     maintainers = with lib.maintainers; [
       robberer
-      muscaln
     ];
     platforms = lib.platforms.unix;
     mainProgram = "Fritzing";

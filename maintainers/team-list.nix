@@ -783,7 +783,6 @@ with lib.maintainers;
     members = [
       bobby285271
       romildo
-      muscaln
     ];
     scope = "Maintain Xfce desktop environment and related packages.";
     shortName = "Xfce";

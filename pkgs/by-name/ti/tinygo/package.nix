@@ -143,8 +143,7 @@ buildGoModule rec {
     homepage = "https://tinygo.org/";
     description = "Go compiler for small places";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      muscaln
+    maintainers = [
     ];
   };
 }
