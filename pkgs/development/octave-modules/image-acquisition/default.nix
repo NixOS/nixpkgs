@@ -1,18 +1,21 @@
 {
   buildOctavePackage,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   libv4l,
   fltk,
+  nix-update-script,
 }:
 
 buildOctavePackage rec {
   pname = "image-acquisition";
-  version = "0.3.0";
+  version = "0.3.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-vgLDbqFGlbXjDaxRtaBHAYYJ+wUjtB0NYYkQFIqTOgU=";
+  src = fetchFromGitHub {
+    owner = "Andy1978";
+    repo = "octave-image-acquisition";
+    tag = "image-acquisition-${version}";
+    sha256 = "sha256-vS1i0PNAyfkxuMSfm+OGvFXkpbD4H6VJrs4eb+LxYBA=";
   };
 
   buildInputs = [
@@ -22,6 +25,13 @@ buildOctavePackage rec {
   propagatedBuildInputs = [
     libv4l
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "image-acquisition-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/image-acquisition/";
