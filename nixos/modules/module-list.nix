@@ -1037,6 +1037,7 @@
   ./services/monitoring/opentelemetry-collector.nix
   ./services/monitoring/osquery.nix
   ./services/monitoring/parsedmarc.nix
+  ./services/monitoring/perses.nix
   ./services/monitoring/pgscv.nix
   ./services/monitoring/prometheus/alertmanager-gotify-bridge.nix
   ./services/monitoring/prometheus/alertmanager-irc-relay.nix
@@ -1056,7 +1057,6 @@
   ./services/monitoring/scrutiny.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/snmpd.nix
-  ./services/monitoring/statsd.nix
   ./services/monitoring/sysstat.nix
   ./services/monitoring/teamviewer.nix
   ./services/monitoring/telegraf.nix
@@ -1068,7 +1068,6 @@
   ./services/monitoring/unpoller.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime-kuma.nix
-  ./services/monitoring/uptime.nix
   ./services/monitoring/vlagent.nix
   ./services/monitoring/vmagent.nix
   ./services/monitoring/vmalert.nix
@@ -1624,7 +1623,6 @@
   ./services/web-apps/drasl.nix
   ./services/web-apps/drupal.nix
   ./services/web-apps/echoip.nix
-  ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ente.nix
   ./services/web-apps/fediwall.nix
@@ -1679,6 +1677,7 @@
   ./services/web-apps/lanraragi.nix
   ./services/web-apps/lasuite-docs.nix
   ./services/web-apps/lasuite-meet.nix
+  ./services/web-apps/lauti.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/librechat.nix
   ./services/web-apps/librespeed.nix

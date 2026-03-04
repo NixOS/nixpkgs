@@ -151,7 +151,7 @@ flutter338.buildFlutterApplication {
   extraWrapProgramArgs = "--chdir $out/app/intiface-central";
 
   postInstall = ''
-    install -Dm644 $out/app/intiface-central/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/pixmaps/intiface-central.png
+    install -Dm644 $out/app/intiface-central/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/icons/hicolor/512x512/apps/intiface-central.png
   '';
 
   desktopItems = [

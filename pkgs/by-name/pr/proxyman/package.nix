@@ -37,7 +37,7 @@ appimageTools.wrapAppImage {
 
   extraInstallCommands = ''
     install -Dm444 ${appimageContents}/proxyman.desktop -t $out/share/applications
-    install -Dm444 ${appimageContents}/proxyman.png -t $out/share/pixmaps
+    install -Dm444 ${appimageContents}/proxyman.png -t $out/share/icons/hicolor/256x256/apps
     substituteInPlace $out/share/applications/proxyman.desktop \
       --replace-fail "Exec=AppRun" "Exec=proxyman --"
   '';

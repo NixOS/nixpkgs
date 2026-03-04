@@ -14139,6 +14139,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  screensaver-nvim = buildVimPlugin {
+    pname = "screensaver.nvim";
+    version = "0-unstable-2026-03-02";
+    src = fetchFromGitHub {
+      owner = "Root-lee";
+      repo = "screensaver.nvim";
+      rev = "38cf0b8a96b5f4a5e765ce32d43a416441462179";
+      hash = "sha256-4eiGIhy/J7wZm++wMx4zAKp5qeDQCApwPSVm8P5w5O0=";
+    };
+    meta.homepage = "https://github.com/Root-lee/screensaver.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   scretch-nvim = buildVimPlugin {
     pname = "scretch.nvim";
     version = "1.2.3-unstable-2025-09-11";
