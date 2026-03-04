@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -14,6 +13,7 @@
   requests,
   requests-toolbelt,
   uuid-utils,
+  xxhash,
   zstandard,
 
   # tests
@@ -23,6 +23,7 @@
   multipart,
   opentelemetry-sdk,
   pytest-asyncio,
+  pytest-httpx,
   pytest-socket,
   pytest-vcr,
   pytestCheckHook,
@@ -30,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.6.4";
+  version = "0.7.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-325A2kEx2UrykxVRzp6WQCPrg92Vy+6R1CfgnCLV2V8=";
+    hash = "sha256-5BVQYlp/RMFN1Ja75gz9iFneqkSuoDpqXilHbyEAPdA=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     requests
     requests-toolbelt
     uuid-utils
+    xxhash
     zstandard
   ];
 
@@ -60,9 +62,10 @@ buildPythonPackage rec {
     anthropic
     attrs
     dataclasses-json
+    multipart
     opentelemetry-sdk
     pytest-asyncio
-    multipart
+    pytest-httpx
     pytest-socket
     pytest-vcr
     pytestCheckHook
@@ -93,6 +96,8 @@ buildPythonPackage rec {
     # flaky time comparisons
     # https://github.com/langchain-ai/langsmith-sdk/issues/2245
     "tests/unit_tests/test_uuid_v7.py"
+    # google-adk isn't packaged (and has an enormous number of dependencies)
+    "tests/unit_tests/wrappers/test_google_adk.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];
