@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  makeBinaryWrapper,
   nix-update-script,
 }:
 buildGoModule (finalAttrs: {
@@ -29,8 +30,13 @@ buildGoModule (finalAttrs: {
       "-X ${cmd}.appType=release"
     ];
 
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
   postInstall = ''
     mv $out/bin/app $out/bin/hysteria
+
+    wrapProgram $out/bin/hysteria \
+      --add-flags "--disable-update-check"
   '';
 
   # Network required
