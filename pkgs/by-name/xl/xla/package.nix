@@ -161,6 +161,7 @@ in
       {
         x86_64-linux = "sha256-OJfSqDlEC+yhWwwMwaD5HGvuHm8OWk+yQxmbH0/gZ88=";
         aarch64-darwin = "sha256-sKxtdgozCV1on1gd+bm8FKyFxP0u70Hs24OdLNA3jh0=";
+        aarch64-linux = "sha256-Ex0tbTF+EdISPKvy6K2zas8A+MofLmaLDN0Xvz7JI/o=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
     preInstall = ''
@@ -206,6 +207,7 @@ in
     maintainers = with lib.maintainers; [ samuela ];
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "aarch64-darwin"
     ];
   };

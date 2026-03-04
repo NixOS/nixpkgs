@@ -9,13 +9,30 @@ with lib;
 
 let
 
-  cfg = config.services.eintopf;
+  cfg = config.services.lauti;
+  useLegacyDefault = lib.versionOlder config.system.stateVersion "26.05";
+  default = if useLegacyDefault then "eintopf" else "lauti";
 
 in
 {
-  options.services.eintopf = {
 
-    enable = mkEnableOption "Lauti (Eintopf) community event calendar web app";
+  imports = [
+    # since 0.12.0 (2025-05-26) release, upstream re-branded project to 'stalwart' due to inclusion of collaboration features (CalDAV, CardDAV, and WebDAV)
+    #  https://github.com/stalwartlabs/stalwart/releases/tag/v0.12.0
+    (lib.mkRenamedOptionModule [ "services" "eintopf" ] [ "services" "lauti" ])
+  ];
+
+  options.services.lauti = {
+
+    enable = mkEnableOption "Lauti community event calendar web app";
+
+    dataDir = lib.mkOption {
+      type = lib.types.path;
+      default = if useLegacyDefault then "/var/lib/eintopf" else "/var/lib/lauti";
+      description = ''
+        Data directory for Lauti
+      '';
+    };
 
     settings = mkOption {
       type = types.attrsOf types.str;
@@ -27,9 +44,9 @@ in
       '';
       example = literalExpression ''
         {
-          EINTOPF_ADDR = ":1234";
-          EINTOPF_ADMIN_EMAIL = "admin@example.org";
-          EINTOPF_TIMEZONE = "Europe/Berlin";
+          LAUTI_ADDR = ":1234";
+          LAUTI_ADMIN_EMAIL = "admin@example.org";
+          LAUTI_TIMEZONE = "Europe/Berlin";
         }
       '';
     };
@@ -47,7 +64,7 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.services.eintopf = {
+    systemd.services.lauti = {
       description = "Community event calendar web app";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
@@ -55,8 +72,8 @@ in
       environment = cfg.settings;
       serviceConfig = {
         ExecStart = lib.getExe pkgs.lauti;
-        WorkingDirectory = "/var/lib/eintopf";
-        StateDirectory = "eintopf";
+        WorkingDirectory = cfg.dataDir;
+        StateDirectory = default;
         EnvironmentFile = [ cfg.secrets ];
 
         # hardening
