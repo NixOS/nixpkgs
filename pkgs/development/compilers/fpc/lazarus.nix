@@ -27,7 +27,7 @@
 #  1. the build date is embedded in the binary through `$I %DATE%` - we should dump that
 
 let
-  version = "4.4-0";
+  version = "4.6-0";
 
   # as of 2.0.10 a suffix is being added. That may or may not disappear and then
   # come back, so just leave this here.
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${majorMinorPatch version}/lazarus-${version}.tar.gz";
-    hash = "sha256-GQ7ce3p7GEMFAslkpF399UGP8Wu8rVwEQjszoJ0izAY=";
+    hash = "sha256-MHGuGA/6PCYhaaY7by1X2qbx/r48hK6Nn5A8CGwaAlo=";
   };
 
   postPatch = ''
