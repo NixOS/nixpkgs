@@ -86,6 +86,8 @@ with haskellLib;
   primitive = doJailbreak (dontCheck super.primitive); # base <4.22 and a lot of dependencies on packages not yet working.
   splitmix = doJailbreak super.splitmix; # base <4.22
 
+  # https://github.com/phadej/boring/issues/48
+  boring = doJailbreak super.boring;
   # https://github.com/haskellari/indexed-traversable/issues/49
   indexed-traversable = doJailbreak super.indexed-traversable;
   # https://github.com/haskellari/indexed-traversable/issues/50
