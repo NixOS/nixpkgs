@@ -52,6 +52,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # Avoid double wrapping Python programs.
   dontWrapQtApps = true;
 
+  installTargets = "install installdocs";
+
   # TODO: A bug in python wrapper
   # see https://github.com/NixOS/nixpkgs/pull/75054#discussion_r357656916
   preFixup = ''
