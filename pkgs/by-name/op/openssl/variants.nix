@@ -1,8 +1,34 @@
 {
   lib,
   stdenv,
+  oqs-provider,
 }:
 
+let
+  v3_6 = {
+    version = "3.6.1";
+    hash = "sha256-sb/tzVson/Iq7ofJ1gD1FXZ+v0X3cWjLbWTyMfUYqC4=";
+    patches = [
+      ./3.0/nix-ssl-cert-file.patch
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      (
+        if stdenv.hostPlatform.isDarwin then
+          ./3.5/use-etc-ssl-certs-darwin.patch
+        else
+          ./3.5/use-etc-ssl-certs.patch
+      )
+
+      # Don't cause ELF ABI mismatch on powerpc64
+      # https://github.com/openssl/openssl/issues/29815
+      ./3.5/openssl-aes-gcm-ppc-remove-localentry-directive.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      ./3.6/mingw-define-netreset.patch
+    ]
+    ++ lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
+  };
+in
 {
   v1_1 = {
     version = "1.1.1w";
@@ -54,31 +80,7 @@
     ++ lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
   };
 
-  v3_6 = {
-    version = "3.6.1";
-    hash = "sha256-sb/tzVson/Iq7ofJ1gD1FXZ+v0X3cWjLbWTyMfUYqC4=";
-    patches =
-      [
-        ./3.0/nix-ssl-cert-file.patch
-        ./3.0/openssl-disable-kernel-detection.patch
-
-        (
-          if stdenv.hostPlatform.isDarwin then
-            ./3.5/use-etc-ssl-certs-darwin.patch
-          else
-            ./3.5/use-etc-ssl-certs.patch
-        )
-
-        # Don't cause ELF ABI mismatch on powerpc64
-        # https://github.com/openssl/openssl/issues/29815
-        ./3.5/openssl-aes-gcm-ppc-remove-localentry-directive.patch
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isMinGW [
-        ./3.6/mingw-define-netreset.patch
-      ]
-      ++
-        lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
-  };
+  inherit v3_6;
 
   v4_0 = {
     version = "4.0.0";
@@ -94,5 +96,28 @@
           ./3.5/use-etc-ssl-certs.patch
       )
     ];
+  };
+
+  oqs = v3_6 // {
+    overrideArgs = {
+      providers = [
+        {
+          name = "oqsprovider";
+          package = oqs-provider;
+        }
+      ];
+      autoloadProviders = true;
+      extraINIConfig = {
+        tls_system_default = {
+          Groups = "X25519MLKEM768:X25519:P-256:X448:P-521:ffdhe2048:ffdhe3072";
+        };
+      };
+    };
+  };
+
+  legacy = v3_6 // {
+    overrideArgs = {
+      conf = ./3.0/legacy.cnf;
+    };
   };
 }
