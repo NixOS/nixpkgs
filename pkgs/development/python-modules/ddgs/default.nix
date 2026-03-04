@@ -7,6 +7,9 @@
   lxml,
   versionCheckHook,
   primp,
+  fastapi,
+  mcp,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +31,14 @@ buildPythonPackage rec {
     lxml
     primp
   ];
+
+  optional-dependencies = {
+    api = [
+      fastapi
+      mcp
+      uvicorn
+    ];
+  };
 
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
