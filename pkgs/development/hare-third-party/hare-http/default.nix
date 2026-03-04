@@ -1,32 +1,34 @@
 {
   fetchFromSourcehut,
   hareHook,
+  hareThirdParty,
   lib,
   stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "hare-json";
+  pname = "hare-http";
   version = "0.26.0.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
-    repo = "hare-json";
+    repo = "hare-http";
     tag = finalAttrs.version;
-    hash = "sha256-vAT10QGFwazM5PYLQpW0ebFGa2sScXWM87jzI+m4/eM=";
+    hash = "sha256-0NPLYuoAVvIiDH7d0KtJnmKX/C1ShdBZIo9w3EPsmkA=";
   };
 
   nativeBuildInputs = [ hareHook ];
+  propagatedBuildInputs = [ hareThirdParty.hare-ev ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   doCheck = true;
 
   meta = {
-    homepage = "https://git.sr.ht/~sircmpwn/hare-json/";
-    description = "This package provides JSON support for Hare";
+    homepage = "https://git.sr.ht/~sircmpwn/hare-http/";
+    description = "HTTP(s) support for Hare";
     license = with lib.licenses; [ mpl20 ];
-    maintainers = with lib.maintainers; [ starzation ];
+    maintainers = with lib.maintainers; [ sikmir ];
     inherit (hareHook.meta) platforms badPlatforms;
   };
 })

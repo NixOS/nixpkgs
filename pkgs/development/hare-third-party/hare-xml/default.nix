@@ -1,19 +1,19 @@
 {
+  fetchFromSourcehut,
+  hareHook,
   lib,
   stdenv,
-  hareHook,
-  fetchFromSourcehut,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "hare-compress";
+  pname = "hare-xml";
   version = "0.25.2.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
-    repo = "hare-compress";
+    repo = "hare-xml";
     tag = finalAttrs.version;
-    hash = "sha256-s5K6xnzQeQ/lncpfZpxHx1FBdrjgnuhOih/YGJXCjkc=";
+    hash = "sha256-YAXUt/gLtGgT/4XXwaVaFEkeWMTBxwjUeeHHm8o3QcA=";
   };
 
   nativeBuildInputs = [ hareHook ];
@@ -23,10 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    homepage = "https://git.sr.ht/~sircmpwn/hare-compress/";
-    description = "Compression algorithms for Hare";
+    homepage = "https://git.sr.ht/~sircmpwn/hare-xml/";
+    description = "This package provides XML support for Hare";
     license = with lib.licenses; [ mpl20 ];
-    maintainers = with lib.maintainers; [ starzation ];
+    maintainers = with lib.maintainers; [ sikmir ];
     inherit (hareHook.meta) platforms badPlatforms;
   };
 })
