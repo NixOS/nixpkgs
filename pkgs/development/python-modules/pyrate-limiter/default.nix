@@ -78,6 +78,7 @@ buildPythonPackage rec {
     "tests/test_limiter.py"
     "tests/test_multiprocessing.py"
     "tests/test_postgres_concurrent.py"
+    "tests/test_multi_bucket.py"
   ];
 
   # For redisTestHook
