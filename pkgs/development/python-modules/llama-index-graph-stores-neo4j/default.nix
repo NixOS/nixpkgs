@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-graph-stores-neo4j";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_graph_stores_neo4j";
     inherit (finalAttrs) version;
-    hash = "sha256-TPPZyKD6sFX/qsHSTiidT6idXnW1edSv1ZbOXopa3lI=";
+    hash = "sha256-iLK5DLsctmoQ9dDXYSraZtwVycs5GxzEtjJLuyOYRuw=";
   };
 
   pythonRelaxDeps = [ "neo4j" ];
