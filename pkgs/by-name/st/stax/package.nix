@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+  perl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +19,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     sha256 = "sha256-HHunRVDoijBOcIzj0xknj2O+m+A1nmkkxu97XZcvmJw=";
   };
+
+  nativeBuildInputs = [perl];
 
   cargoHash = "sha256-cJmK5uX3HCz4own2UtXFkHdGFETjina2/UW18f/g/bA=";
 
