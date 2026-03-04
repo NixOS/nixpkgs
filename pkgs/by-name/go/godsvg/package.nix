@@ -75,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
     ];
     mainProgram = "godsvg";
-    maintainers = [ lib.maintainers.mochienya ];
+    maintainers = with lib.maintainers; [
+      mochienya
+      CodeF53
+    ];
   };
 })

@@ -6,8 +6,6 @@
   pkg-config,
   makeWrapper,
   cmake,
-  meson,
-  ninja,
   aquamarine,
   binutils,
   cairo,
@@ -82,14 +80,14 @@ let
 in
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.54.0";
+  version = "0.54.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wfiduannx1mWvsGAfuMk8ipOU3AAFuJYPNV4D++dhPY=";
+    hash = "sha256-dBp+WAfAGkqavjM77Ki7/wi/Bn23Bg7uHPI06OeHk4c=";
   };
 
   postPatch = ''

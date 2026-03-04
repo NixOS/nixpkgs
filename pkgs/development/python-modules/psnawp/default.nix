@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "psnawp";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "YoshikageKira";
     repo = "psnawp";
     tag = "v${version}";
-    hash = "sha256-qENKZC5U4jedl2RvmIGk52r0Vd/oMLEcp6DERYLctAs=";
+    hash = "sha256-RpJYQNG9+N5XUOIySOZvVLCT6kiLYGaq0Lt8CTLRvBA=";
   };
 
   build-system = [ poetry-core ];
