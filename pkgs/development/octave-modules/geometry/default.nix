@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   matgeom,
+  gsl,
 }:
 
 buildOctavePackage rec {
@@ -16,6 +17,10 @@ buildOctavePackage rec {
 
   requiredOctavePackages = [
     matgeom
+  ];
+
+  buildInputs = [
+    gsl
   ];
 
   meta = {
