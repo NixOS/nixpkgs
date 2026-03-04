@@ -25080,12 +25080,6 @@
     githubId = 12636891;
     name = "Akhil Indurti";
   };
-  smironov = {
-    email = "grrwlf@gmail.com";
-    github = "sergei-mironov";
-    githubId = 4477729;
-    name = "Sergey Mironov";
-  };
   smissingham = {
     email = "sean@missingham.com";
     github = "smissingham";
