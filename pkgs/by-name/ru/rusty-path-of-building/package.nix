@@ -19,16 +19,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rusty-path-of-building";
-  version = "0.2.10";
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "meehl";
     repo = "rusty-path-of-building";
     rev = "v${version}";
-    hash = "sha256-odiiYWoBfcnPNfXsxj0gt/ra6Z3zeBQdWRjF7BazffY=";
+    hash = "sha256-oDhapNQ5yiZFolI7ChDC7SjPkmkeUAutRmQt/AorStA=";
   };
 
-  cargoHash = "sha256-OX4L8EmgMJVT6sFZRdhPl36ZUcXq2JEFpb/PJml2YE8=";
+  cargoHash = "sha256-GEHsHxGAzD7UEte1XsoqOXLkFaquNUCMqTO5j+lVguA=";
 
   nativeBuildInputs = [
     pkg-config
