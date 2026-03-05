@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.33";
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/libev/Attic/libev-${finalAttrs.version}.tar.gz";
+    url = "https://dist.schmorp.de/libev/Attic/libev-${finalAttrs.version}.tar.gz";
     sha256 = "1sjs4324is7fp21an4aas2z4dwsvs6z4xwrmp72vwpq1s6wbfzjh";
   };
 
