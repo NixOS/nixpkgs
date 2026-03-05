@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.290.1";
+  version = "0.291.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KSwgEju6RRFV0B0dbnutZ/xgnBeSnPW6pyIQwBYg8Ew=";
+    hash = "sha256-sYDJBYhJ5TeNu45HR0aMxsr3YfxxqhjckC+g+sF+XTc=";
   };
 
   # Otherwise these tests fail asserting that the version is 0.0.0-dev
@@ -63,6 +63,7 @@ buildGoModule (finalAttrs: {
       "TestPatchWheel"
       # Requires HOME to be set
       "TestCacheDirEnvVar"
+      "TestClearWorkspaceClient"
     ]);
 
   nativeCheckInputs = [
