@@ -272,7 +272,7 @@ let
                   If it does, write the ignore patterns to the rest API.
                 */
                 + lib.optionalString ((conf_type == "dirs") && (new_cfg.ignorePatterns != null)) ''
-                  curl -d '{"ignore": ${builtins.toJSON new_cfg.ignorePatterns}}' -X POST ${s.ignoreAddress}?folder=${new_cfg.id}
+                  curl -d '{"ignore": ${builtins.toJSON new_cfg.ignorePatterns}}' -X POST ${s.ignoreAddress}?folder=${lib.strings.escapeURL new_cfg.id}
                 ''
               ))
               (lib.concatStringsSep "\n")
