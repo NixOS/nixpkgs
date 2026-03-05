@@ -22,7 +22,7 @@ let
   libreoffice' = "${libreoffice}/lib/libreoffice/program/soffice.bin";
   inherit (lib) getExe;
 in
-buildGo126Module rec {
+buildGo126Module (finalAttrs: {
   pname = "gotenberg";
   version = "8.27.0";
 
@@ -34,14 +34,14 @@ buildGo126Module rec {
   src = fetchFromGitHub {
     owner = "gotenberg";
     repo = "gotenberg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TLfIsvxKrlqNTJtdnASlGCA1XrOx7huMJ11aohVyuKI=";
   };
 
   vendorHash = "sha256-AzaN0xpQWw+Nfw22G7xgww8UsgpTIHpTPK3Bicf6gMY=";
 
   postPatch = ''
-    find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${src}#g' {} \;
+    find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${finalAttrs.src}#g' {} \;
   '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -49,7 +49,7 @@ buildGo126Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/gotenberg/gotenberg/v8/cmd.Version=${version}"
+    "-X github.com/gotenberg/gotenberg/v8/cmd.Version=${finalAttrs.version}"
   ];
 
   checkInputs = [
@@ -114,8 +114,8 @@ buildGo126Module rec {
     description = "Converts numerous document formats into PDF files";
     mainProgram = "gotenberg";
     homepage = "https://gotenberg.dev";
-    changelog = "https://github.com/gotenberg/gotenberg/releases/tag/v${version}";
+    changelog = "https://github.com/gotenberg/gotenberg/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
