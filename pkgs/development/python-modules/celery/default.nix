@@ -4,33 +4,48 @@
   azure-identity,
   azure-storage-blob,
   billiard,
+  boto3,
+  brotli,
+  brotlipy,
   buildPythonPackage,
+  cassandra-driver,
+  click,
   click-didyoumean,
   click-plugins,
   click-repl,
-  click,
   cryptography,
   exceptiongroup,
+  django,
+  elastic-transport,
+  elasticsearch,
+  ephem,
   fetchFromGitHub,
   gevent,
   google-cloud-firestore,
   google-cloud-storage,
+  grpcio,
+  isPyPy,
+  kazoo,
   kombu,
   moto,
-  msgpack,
-  pymongo,
-  redis,
   pydantic,
+  pydocumentdb,
+  pylibmc,
   pytest-celery,
   pytest-click,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pyyaml,
+  python-memcached,
+  pyzmq,
   setuptools,
   tzlocal,
+  sphinx-autobuild,
+  tblib,
+  urllib3,
   vine,
+  zstandard,
   # The AMQP REPL depends on click-repl, which is incompatible with our version
   # of click.
   withAmqpRepl ? false,
@@ -70,21 +85,68 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    # Everything commented is not packaged
+    # see https://github.com/celery/celery/tree/main/requirements/extras
+    arangodb = [
+      # pyarango
+    ];
     auth = [ cryptography ];
     azureblockblob = [
       azure-identity
       azure-storage-blob
     ];
-    gevent = [ gevent ];
+    brotli = if isPyPy then [ brotlipy ] else [ brotli ];
+    cassandra = [ cassandra-driver ];
+    consul = [
+      # python-consul2
+    ];
+    cosmosdbsql = [ pydocumentdb ];
+    couchbase = [ ];
+    couchdb = [
+      # pycouchdb
+    ];
+    django = [ django ];
+    dynamodb = [ boto3 ];
+    elasticsearch = [
+      elasticsearch
+      elastic-transport
+    ];
+    eventlet = [ ];
     gcs = [
       google-cloud-firestore
       google-cloud-storage
+      grpcio
     ];
-    mongodb = [ pymongo ];
-    msgpack = [ msgpack ];
-    yaml = [ pyyaml ];
-    redis = [ redis ];
+    gevent = [ gevent ];
+    memcache = [ pylibmc ];
+    mongodb = kombu.optional-dependencies.mongodb;
+    msgpack = kombu.optional-dependencies.msgpack;
     pydantic = [ pydantic ];
+    pymemcache = [ python-memcached ];
+    pyro = [ ];
+    pytest = [
+      pytest-celery
+    ]
+    ++ pytest-celery.optional-dependencies.all;
+    redis = kombu.optional-dependencies.redis;
+    s3 = [ boto3 ];
+    slmq = [
+      # softlayer-messaging
+    ];
+    solar = lib.optionals isPyPy [ ephem ];
+    sphinxautobuild = [ sphinx-autobuild ];
+    sqlalchemy = kombu.optional-dependencies.sqlalchemy;
+    sqs = [
+      boto3
+      urllib3
+    ]
+    ++ kombu.optional-dependencies.sqs;
+    tblib = [ tblib ];
+    thread = [ ];
+    yaml = kombu.optional-dependencies.yaml;
+    zeromq = [ pyzmq ];
+    zookeeper = [ kazoo ];
+    zsdt = [ zstandard ];
   };
 
   nativeCheckInputs = [
