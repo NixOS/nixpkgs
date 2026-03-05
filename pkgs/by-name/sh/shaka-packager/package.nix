@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaka-packager";
-  version = "3.4.2";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "shaka-project";
     repo = "shaka-packager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Syty10LHGIlP5Jw+UneQMN+wBz/ggvV0xV8+3ThU8SM=";
+    hash = "sha256-stUHCUuapUQWgmXxuejD/LXbgjB7D2oSNpDhKiYzoGw=";
   };
 
   patches = [
@@ -47,15 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     # The last step is necessary to keep the patch size to a minimum, otherwise we'd have
     # to add the namespace identifiers everywhere a dependency is used.
     ./0002-Unvendor-dependencies.patch
-    # GCC15 build fixes
-    # Taken from https://github.com/shaka-project/shaka-packager/pull/1506,
-    # but excludes the changes to the shell script as we do not use it.
-    (fetchpatch {
-      name = "GCC15-cstdint-includes";
-      url = "https://github.com/shaka-project/shaka-packager/commit/b1c79e50521b8725117dfe0a45fe44c2f2dbd4fb.patch";
-      excludes = [ "packager/testing/test_dockers.sh" ];
-      hash = "sha256-8dBQ+eENZKFB9ONjmPBlxy8P/iinyeUS8zhlxz6rnQ4=";
-    })
   ];
 
   nativeBuildInputs = [
