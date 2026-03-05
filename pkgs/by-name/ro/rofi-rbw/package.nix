@@ -64,6 +64,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [
       equirosa
       dit7ya
+      nim65s
     ];
     platforms = lib.platforms.linux;
     mainProgram = "rofi-rbw";
