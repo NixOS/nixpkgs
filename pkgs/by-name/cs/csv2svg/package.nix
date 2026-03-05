@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchCrate,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,6 +17,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-RwpRxSD/oRAYD1udrHt3fy/SrrNUTVdGf+CdzQnJZ2U=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Take a csv as input and outputs svg";
