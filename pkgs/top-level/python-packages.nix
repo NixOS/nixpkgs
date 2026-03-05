@@ -4246,6 +4246,8 @@ self: super: with self; {
 
   django-mfa3 = callPackage ../development/python-modules/django-mfa3 { };
 
+  django-migration-linter = callPackage ../development/python-modules/django-migration-linter { };
+
   django-minify-html = callPackage ../development/python-modules/django-minify-html { };
 
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
@@ -4316,6 +4318,10 @@ self: super: with self; {
 
   django-q2 = callPackage ../development/python-modules/django-q2 { };
 
+  django-ranged-fileresponse =
+    callPackage ../development/python-modules/django-ranged-fileresponse
+      { };
+
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
 
   django-raster = callPackage ../development/python-modules/django-raster { };
@@ -4327,6 +4333,8 @@ self: super: with self; {
   django-registration = callPackage ../development/python-modules/django-registration { };
 
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
+
+  django-rest-framework = callPackage ../development/python-modules/django-rest-framework { };
 
   django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
 
@@ -4399,6 +4407,8 @@ self: super: with self; {
   django-two-factor-auth = callPackage ../development/python-modules/django-two-factor-auth { };
 
   django-types = callPackage ../development/python-modules/django-types { };
+
+  django-user-agents = callPackage ../development/python-modules/django-user-agents { };
 
   django-versatileimagefield =
     callPackage ../development/python-modules/django-versatileimagefield
@@ -4653,9 +4663,13 @@ self: super: with self; {
 
   dremel3dpy = callPackage ../development/python-modules/dremel3dpy { };
 
+  drf-dynamic-fields = callPackage ../development/python-modules/drf-dynamic-fields { };
+
   drf-extra-fields = callPackage ../development/python-modules/drf-extra-fields { };
 
   drf-flex-fields = callPackage ../development/python-modules/drf-flex-fields { };
+
+  drf-generators = callPackage ../development/python-modules/drf-generators { };
 
   drf-jwt = callPackage ../development/python-modules/drf-jwt { };
 
@@ -7879,6 +7893,8 @@ self: super: with self; {
 
   jschon = callPackage ../development/python-modules/jschon { };
 
+  jsf = callPackage ../development/python-modules/jsf { };
+
   jsmin = callPackage ../development/python-modules/jsmin { };
 
   json-api-doc = callPackage ../development/python-modules/json-api-doc { };
@@ -8324,6 +8340,8 @@ self: super: with self; {
 
   la-panic = callPackage ../development/python-modules/la-panic { };
 
+  label-studio-sdk = callPackage ../development/python-modules/label-studio-sdk { };
+
   labelbox = callPackage ../development/python-modules/labelbox { };
 
   labgrid = callPackage ../development/python-modules/labgrid { };
@@ -8460,6 +8478,10 @@ self: super: with self; {
   latexify-py = callPackage ../development/python-modules/latexify-py { };
 
   latexrestricted = callPackage ../development/python-modules/latexrestricted { };
+
+  launchdarkly-eventsource = callPackage ../development/python-modules/launchdarkly-eventsource { };
+
+  launchdarkly-server-sdk = callPackage ../development/python-modules/launchdarkly-server-sdk { };
 
   launchpadlib = callPackage ../development/python-modules/launchpadlib { };
 
@@ -13256,6 +13278,8 @@ self: super: with self; {
   pybotvac = callPackage ../development/python-modules/pybotvac { };
 
   pybox2d = callPackage ../development/python-modules/pybox2d { };
+
+  pyboxen = callPackage ../development/python-modules/pyboxen { };
 
   pybravia = callPackage ../development/python-modules/pybravia { };
 
