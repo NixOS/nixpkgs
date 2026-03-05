@@ -1131,17 +1131,17 @@
     githubId = 2545644;
     name = "Alessandro Di Federico";
   };
+  alejandroqh = {
+    github = "alejandroqh";
+    githubId = 40313108;
+    name = "Alejandro Quintanar";
+  };
   alejandrosame = {
     email = "alejandrosanchzmedina@gmail.com";
     matrix = "@alejandrosame:matrix.org";
     github = "alejandrosame";
     githubId = 1078000;
     name = "Alejandro Sánchez Medina";
-  };
-  alejandroqh = {
-    github = "alejandroqh";
-    githubId = 40313108;
-    name = "Alejandro Quintanar";
   };
   alejo7797 = {
     email = "alex@epelde.net";
