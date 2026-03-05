@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/dmcg310/Rust-Traverse";
     changelog = "https://github.com/dmcg310/Rust-Traverse/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "rt";
   };
 })
