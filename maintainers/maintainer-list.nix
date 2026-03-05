@@ -17668,6 +17668,12 @@
     githubId = 54669781;
     keys = [ { fingerprint = "293B 93D8 A471 059F 85D7  16A6 5BA9 2099 D9BE 2DAA"; } ];
   };
+  misaka18931 = {
+    name = "misaka18931";
+    email = "miruku@miruku.moe";
+    github = "misaka18931";
+    githubId = 69910468;
+  };
   misilelab = {
     name = "misilelab";
     email = "misileminecord@gmail.com";
