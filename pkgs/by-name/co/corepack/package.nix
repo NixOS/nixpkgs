@@ -8,6 +8,7 @@
   nix-update-script,
   versionCheckHook,
   fetchpatch2,
+  writeScriptBin,
 }:
 
 let
@@ -94,6 +95,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     cacert
     versionCheckHook
+    (writeScriptBin "corepack" "") # Some tests expect to find a `corepack` in the PATH
   ];
   # Built-in SQLite support is only available in Node.js 22+, and required to run the tests.
   preInstallCheck = lib.optional (lib.versionAtLeast nodejs.version "22") ''
