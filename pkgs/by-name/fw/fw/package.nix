@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Workspace productivity booster";
     homepage = "https://github.com/brocode/fw";
     license = lib.licenses.wtfpl;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "fw";
   };
 })
