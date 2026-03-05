@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./use-system-dependencies.patch
+    # https://github.com/ROCm/rocm-systems/pull/3800
+    ./fix-test-dependency.patch
   ];
 
   strictDeps = true;
@@ -59,11 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkPhase =
     let
-      # - Sanitize tests fail because the UBSan runtime (__ubsan_vptr_type_cache) is not available for
-      #   LD_PRELOAD in the sandbox.
-      # - Validate tests fail because they depend on execute tests producing output files first, but
-      #   CTest runs them concurrently without proper ordering.
-      skipPattern = "_(sanitize|validate)$";
+      # Sanitize tests fail because the UBSan runtime (__ubsan_vptr_type_cache) is not available for
+      # LD_PRELOAD in the sandbox.
+      skipPattern = "_sanitize$";
     in
     ''
       runHook preCheck
