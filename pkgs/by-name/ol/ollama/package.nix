@@ -297,7 +297,6 @@ goBuild (finalAttrs: {
       if (rocmRequested || cudaRequested || vulkanRequested) then platforms.linux else platforms.unix;
     mainProgram = "ollama";
     maintainers = with maintainers; [
-      abysssol
       dit7ya
       prusnak
     ];
