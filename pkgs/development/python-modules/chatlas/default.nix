@@ -29,16 +29,16 @@
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chatlas";
-  version = "0.15.0";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "chatlas";
-    tag = "v${version}";
-    hash = "sha256-+muekY7WhnVFmZXWS4MuZO9ttEXfqx9mPw1t/1CSsmc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BHqF60JTGlnP20BLQkcofkJUs7sAZAwhtr46y2HeNxY=";
   };
 
   build-system = [
@@ -169,8 +169,8 @@ buildPythonPackage rec {
     description = "Friendly guide to building LLM chat apps in Python with less effort and more clarity";
     homepage = "https://posit-dev.github.io/chatlas";
     downloadPage = "https://github.com/posit-dev/chatlas";
-    changelog = "https://github.com/posit-dev/chatlas/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/posit-dev/chatlas/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
