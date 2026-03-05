@@ -1138,6 +1138,11 @@
     githubId = 1078000;
     name = "Alejandro Sánchez Medina";
   };
+  alejandroqh = {
+    github = "alejandroqh";
+    githubId = 40313108;
+    name = "Alejandro Quintanar";
+  };
   alejo7797 = {
     email = "alex@epelde.net";
     matrix = "@alex:epelde.net";
