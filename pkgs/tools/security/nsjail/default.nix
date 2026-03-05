@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nsjail";
-  version = "3.4";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "nsjail";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-/K+qJV5Dq+my45Cpw6czdsWLtO9lnJwZTsOIRt4Iijk=";
+    hash = "sha256-95qm2zMXmD8CAZp8CXPNnX9KTWzoh2hEOXvoJkk7tm8=";
   };
 
   nativeBuildInputs = [
