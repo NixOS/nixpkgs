@@ -69,8 +69,8 @@ rec {
         abi = "elfv1";
       };
     };
-    # This ABI is the default in NixOS PowerPC64 BE, but not on mainline GCC,
-    # so it sometimes causes issues in certain packages that makes the wrong
+    # This ABI is not the default when building mainline GCC against glibc,
+    # so it sometimes causes issues in certain packages that make the wrong
     # assumption on the used ABI.
     isAbiElfv2 = [
       {

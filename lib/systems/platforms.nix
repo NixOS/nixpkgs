@@ -6,6 +6,21 @@
 # optional fields; currently these are: linux-kernel, gcc, and rustc.
 
 { lib }:
+let
+  ppc64ForAbi = abi: {
+    linux-kernel = {
+      name = "powerpc64";
+
+      baseConfig = "ppc64_defconfig";
+      target = "vmlinux";
+      autoModules = true;
+    };
+
+    gcc = {
+      inherit abi;
+    };
+  };
+in
 rec {
   pc = {
     linux-kernel = {
@@ -36,15 +51,8 @@ rec {
     };
   };
 
-  ppc64 = {
-    linux-kernel = {
-      name = "powerpc64";
-
-      baseConfig = "ppc64_defconfig";
-      target = "vmlinux";
-      autoModules = true;
-    };
-  };
+  ppc64-elfv1 = ppc64ForAbi "elfv1";
+  ppc64-elfv2 = ppc64ForAbi "elfv2";
 
   ##
   ## ARM
@@ -630,7 +638,12 @@ rec {
       (import ./examples.nix { inherit lib; }).mipsel-linux-gnu
 
     else if platform.isPower64 then
-      if platform.isLittleEndian then powernv else ppc64
+      if platform.isLittleEndian then
+        powernv
+      else if platform.isAbiElfv2 then
+        ppc64-elfv2
+      else
+        ppc64-elfv1
 
     else if platform.isLoongArch64 then
       loongarch64-multiplatform

@@ -22,10 +22,12 @@ rec {
   };
 
   ppc64-elfv1 = {
-    config = "powerpc64-unknown-linux-gnuabielfv1";
+    # system instead of config, need environment to get parsed during pkgsCross
+    system = "powerpc64-unknown-linux-gnuabielfv1";
   };
   ppc64-elfv2 = {
-    config = "powerpc64-unknown-linux-gnuabielfv2";
+    # system instead of config, need environment to get parsed during pkgsCross
+    system = "powerpc64-unknown-linux-gnuabielfv2";
   };
   ppc64 = ppc64-elfv2;
   ppc64-musl = {

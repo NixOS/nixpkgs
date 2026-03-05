@@ -727,10 +727,13 @@ rec {
       abi = "n32";
     };
 
+    # Clang does not understand these, ABI set via <platform>.gcc.abi & cc-wrapper
     gnuabielfv2 = {
+      name = "gnu";
       abi = "elfv2";
     };
     gnuabielfv1 = {
+      name = "gnu";
       abi = "elfv1";
     };
 
