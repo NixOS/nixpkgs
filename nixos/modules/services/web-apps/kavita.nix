@@ -15,12 +15,12 @@ in
 {
   imports = [
     (lib.mkChangedOptionModule
-      [ "services" "kavita" "ipAddresses" ]
+      [ "services" "kavita" "ipAdresses" ]
       [ "services" "kavita" "settings" "IpAddresses" ]
       (
         config:
         let
-          value = lib.getAttrFromPath [ "services" "kavita" "ipAddresses" ] config;
+          value = lib.getAttrFromPath [ "services" "kavita" "ipAdresses" ] config;
         in
         lib.concatStringsSep "," value
       )
