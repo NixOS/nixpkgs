@@ -196,6 +196,8 @@ stdenv.mkDerivation (finalAttrs: {
       buildGhidraScripts
       ;
 
+    jdk = openjdk21;
+
     withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
   };
 
