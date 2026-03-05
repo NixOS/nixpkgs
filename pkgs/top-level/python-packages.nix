@@ -9909,6 +9909,8 @@ self: super: with self; {
 
   mkdocs-drawio-file = callPackage ../development/python-modules/mkdocs-drawio-file { };
 
+  mkdocs-embed-file-plugin = callPackage ../development/python-modules/mkdocs-embed-file-plugin { };
+
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
 
   mkdocs-gen-files = callPackage ../development/python-modules/mkdocs-gen-files { };
