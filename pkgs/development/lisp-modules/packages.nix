@@ -246,7 +246,7 @@ let
         pname = "clx-truetype";
         version = "20160825-git";
         src = pkgs.fetchzip {
-          url = "http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
+          url = "https://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
           sha256 = "079hyp92cjkdfn6bhkxsrwnibiqbz4y4af6nl31lzw6nm91j5j37";
         };
         lispLibs = with self; [
