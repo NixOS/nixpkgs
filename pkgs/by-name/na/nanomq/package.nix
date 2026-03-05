@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.24.5";
+  version = "0.24.10";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
     tag = finalAttrs.version;
-    hash = "sha256-tyhAEYdYCO0Tur7HDXXbBSQ8tzTHCbW9B8aBu0sMEEI=";
+    hash = "sha256-2laH4qJo4sQtjsUDEljUoipAXs+LRH+xmOP4a0zz1Y8=";
     fetchSubmodules = true;
   };
 
@@ -132,5 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
+    knownVulnerabilities = [
+      "CVE-2026-22040"
+      "CVE-2025-68699"
+    ];
   };
 })
