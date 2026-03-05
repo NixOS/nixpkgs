@@ -895,6 +895,12 @@
     githubId = 37664775;
     name = "Yuto Oguchi";
   };
+  airone01 = {
+    name = "Erwann Lagouche";
+    github = "airone01";
+    githubId = 21955960;
+    email = "airone01@proton.me";
+  };
   airrnot = {
     name = "airRnot";
     github = "airRnot1106";
