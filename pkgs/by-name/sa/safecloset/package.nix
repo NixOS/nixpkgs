@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/Canop/safecloset";
     changelog = "https://github.com/Canop/safecloset/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "safecloset";
   };
 })
