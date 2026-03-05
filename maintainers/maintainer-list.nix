@@ -13134,6 +13134,12 @@
     githubId = 752510;
     name = "Martin Potier";
   };
+  jpteb = {
+    name = "Jan Philipp Tebernum";
+    github = "jpteb";
+    githubId = 13502853;
+    email = "jpteb@pm.me";
+  };
   jpts = {
     email = "james+nixpkgs@cleverley-prance.uk";
     github = "jpts";
@@ -13188,13 +13194,6 @@
     github = "jshort";
     githubId = 1186444;
     name = "James Short";
-  };
-  jsierles = {
-    email = "joshua@hey.com";
-    matrix = "@jsierles:matrix.org";
-    name = "Joshua Sierles";
-    github = "jsierles";
-    githubId = 82;
   };
   jsimonetti = {
     email = "jeroen+nixpkgs@simonetti.nl";
@@ -27918,12 +27917,6 @@
     github = "urbas";
     githubId = 771193;
     name = "Matej Urbas";
-  };
-  urlordjames = {
-    email = "urlordjames@gmail.com";
-    github = "urlordjames";
-    githubId = 32751441;
-    name = "urlordjames";
   };
   ursi = {
     email = "masondeanm@aol.com";
