@@ -137,7 +137,15 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      environment = cfg.environment;
+      environment =
+        {
+          # LiteLLM will try to "restructure" (rewrite) its packaged UI files on startup
+          # to support extensionless routes (e.g. `/ui/login`). In Nix builds the packaged
+          # UI lives in the read-only Nix store, so point it at a writable runtime path.
+          LITELLM_NON_ROOT = "true";
+          LITELLM_UI_PATH = "${cfg.stateDir}/ui";
+        }
+        // cfg.environment;
 
       serviceConfig =
         let
@@ -147,7 +155,7 @@ in
           ExecStart = "${lib.getExe cfg.package} --host \"${cfg.host}\" --port ${toString cfg.port} --config ${configFile}";
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           WorkingDirectory = cfg.stateDir;
-          StateDirectory = "litellm";
+          StateDirectory = [ "litellm" "litellm/ui" ];
           RuntimeDirectory = "litellm";
           RuntimeDirectoryMode = "0755";
           PrivateTmp = true;
