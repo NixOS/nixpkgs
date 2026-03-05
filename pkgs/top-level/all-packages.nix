@@ -3234,7 +3234,7 @@ with pkgs;
     callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix
       { };
 
-  inherit (callPackages ../tools/security/pinentry { })
+  inherit (callPackages ../by-name/pi/pinentry/package.nix { })
     pinentry-curses
     pinentry-emacs
     pinentry-gtk2
