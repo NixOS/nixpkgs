@@ -10079,6 +10079,12 @@
     githubId = 28863828;
     name = "guserav";
   };
+  gustlik501 = {
+    email = "sevcnikar.gregor2@gmail.com";
+    github = "Gustlik501";
+    githubId = 36334538;
+    name = "Gustlik501";
+  };
   guttermonk = {
     github = "guttermonk";
     githubId = 4753752;
