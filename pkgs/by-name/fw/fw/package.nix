@@ -6,6 +6,8 @@
   libgit2,
   openssl,
   zlib,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "brocode";
     repo = "fw";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tqtiAw4+bnCJMF37SluAE9NM55MAjBGkJTvGLcmYFnA=";
   };
 
@@ -34,6 +36,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     OPENSSL_NO_VENDOR = true;
   };
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Workspace productivity booster";
