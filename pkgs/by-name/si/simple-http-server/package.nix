@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,6 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple HTTP server in Rust";
