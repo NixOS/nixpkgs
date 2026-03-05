@@ -30,8 +30,8 @@ concurrency:
 # This is used as fallback without app only.
 # This happens when testing in forks without setting up that app.
 permissions:
-  issues: write
-  pull-requests: write
+  issues: write # managing issue labels and comments
+  pull-requests: write # managing pull request labels and comments
 
 defaults:
   run:
