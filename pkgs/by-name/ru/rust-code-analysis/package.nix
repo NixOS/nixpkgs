@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit # grammars
       mpl20 # code
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "rust-code-analysis-cli";
   };
 })
