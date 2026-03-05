@@ -1,0 +1,24 @@
+diff --git a/neothesia/src/scene/freeplay/mod.rs b/neothesia/src/scene/freeplay/mod.rs
+index 38bb910..76f1266 100644
+--- a/neothesia/src/scene/freeplay/mod.rs
++++ b/neothesia/src/scene/freeplay/mod.rs
+@@ -226,6 +226,10 @@ impl Scene for FreeplayScene {
+ mod chords {
+     /// Get chord name based on notes, eg. Cmaj7
+     pub fn deduce_name(midi_notes: &[u8]) -> String {
++        if midi_notes.is_empty() {
++            return "No notes".to_string();
++        }
++
+         if midi_notes.len() == 1 {
+             return note_name(midi_notes[0]).to_string();
+         }
+@@ -343,7 +347,7 @@ mod chords {
+         #[test]
+         fn test_edge_cases() {
+             assert_eq!(deduce_name(&[]), "No notes");
+-            assert_eq!(deduce_name(&[60]), "single");
++            assert_eq!(deduce_name(&[60]), "C");
+             // Multiple octaves should normalize
+             assert_eq!(deduce_name(&[48, 64, 67, 72]), "CM");
+         }

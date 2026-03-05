@@ -16,14 +16,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neothesia";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "PolyMeilex";
     repo = "Neothesia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qYwBSye6RYClSlWmHwuy/rxq9w5932tR33Z+o2S1l8k=";
+    hash = "sha256-5DuyWuDJ08S12C3OWhC9mLhQvPCfWMdJCRUOWtKq/+k=";
   };
+
+  patches = [
+    ./neothesia-fix-edge-case-test.patch
+  ];
 
   buildInputs = [
     ffmpeg_7
@@ -36,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  cargoHash = "sha256-mXeNAVYqPsBWiUZFV/atx/xjLgFNarm2HwI7k/NaAbc=";
+  cargoHash = "sha256-gX9DlgPgrM8KukX3auxbBKpJq7QG4+kRhHSUk3eQjAQ=";
 
   cargoBuildFlags = [
     "-p neothesia -p neothesia-cli"
