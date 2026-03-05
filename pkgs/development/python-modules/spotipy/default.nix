@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "spotipy";
-  version = "2.25.2";
+  version = "2.26.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XtRcBEFWylUYmX4lArHyweczZAfLH7j+ES0US01Sgsg=";
+    hash = "sha256-32ol2CCQcu+ozqFlYI7mRIhOOAT4dittjgbKGlx/imM=";
   };
 
   propagatedBuildInputs = [
