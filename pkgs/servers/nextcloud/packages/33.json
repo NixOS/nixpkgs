@@ -19,10 +19,20 @@
       "agpl"
     ]
   },
+  "checksum": {
+    "hash": "sha256-xA+BdtbAJVtM6YO5vdW7lfOGlyAkEhHlaCMvHmoHYX4=",
+    "url": "https://github.com/westberliner/checksum/releases/download/v2.0.3/checksum.tar.gz",
+    "version": "2.0.3",
+    "description": "Allows users to create a hash checksum of a file.\n        Possible algorithms are md5, sha1, sha256, sha384, sha512, sha3-256, sha3-512 and crc32.\n\n        Just open the details view of the file (Sidebar). There should be a new tab called \"Checksum\".\n        Select a algorithm and it will try to generate a hash.\n        If you want an other algorithm, just click on the reload button.",
+    "homepage": "https://github.com/westberliner/checksum/",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "collectives": {
-    "hash": "sha256-E40twWESLa11AuIfTjpqE2RF3WT9cZB4PgSyJDJFmeQ=",
-    "url": "https://github.com/nextcloud/collectives/releases/download/v3.6.1/collectives-3.6.1.tar.gz",
-    "version": "3.6.1",
+    "hash": "sha256-a8sMBDFa6FEZV60WjyApx/qF9Vv8WUcQnhz9GFtvfEg=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v4.0.0/collectives-4.0.0.tar.gz",
+    "version": "4.0.0",
     "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
     "homepage": "https://github.com/nextcloud/collectives",
     "licenses": [
@@ -135,6 +145,16 @@
     "version": "21.0.6",
     "description": "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared folders that are accessible\n\t\t\tto selected teams within Nextcloud.\n\n\t\t\tAdmins can configure folders from the Team Folders section in the admin settings, where they can grant access to one\n\t\t\tor more teams, set custom permissions (such as read, write, and sharing rights), and assign storage quotas to each\n\t\t\tfolder.\n\n\t\t\tAs of Hub 10/Nextcloud 31, admins must be members of a team to assign it a Team Folder. The app supports advanced\n\t\t\tfeatures such as quota management, granular access control, and integration with Nextcloud’s trash and versioning\n\t\t\tsystems.",
     "homepage": "https://github.com/nextcloud/groupfolders",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "guests": {
+    "hash": "sha256-P0RToE38jA/dB/B3N3q9RFlZlH1earzDMc7q0qp8tjM=",
+    "url": "https://github.com/nextcloud-releases/guests/releases/download/v4.6.0/guests-v4.6.0.tar.gz",
+    "version": "4.6.0",
+    "description": "👥 Allows for better collaboration with external users by allowing users to create guests account.\n\nGuests accounts can be created from the share menu by entering either the recipients email or name and choosing \"create guest account\", once the share is created the guest user will receive an email notification about the mail with a link to set their password.\n\nGuests users can only access files shared to them and cannot create any files outside of shares, additionally, the apps accessible to guest accounts are whitelisted.",
+    "homepage": "https://github.com/nextcloud/guests/",
     "licenses": [
       "agpl"
     ]
@@ -260,9 +280,9 @@
     ]
   },
   "previewgenerator": {
-    "hash": "sha256-KZP/MK4JbqbTKAL5VllC8tcPB9HD/suLB0MxqpdUvq8=",
-    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.12.1/previewgenerator-v5.12.1.tar.gz",
-    "version": "5.12.1",
+    "hash": "sha256-i2Z/kOEi1e3SoNj5zs3CyDHeRTAGYpuCzH5zybDQ38A=",
+    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.13.0/previewgenerator-v5.13.0.tar.gz",
+    "version": "5.13.0",
     "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**occ preview:generate-all -vvv**\n\nThe preview queue will be processed automatically by a background job if the system cron background job mode is configured in Nextcloud. Additionally, you may run **occ preview:pre-generate -vvv** to a process the queue of pending previews immediately.",
     "homepage": "https://github.com/nextcloud/previewgenerator",
     "licenses": [

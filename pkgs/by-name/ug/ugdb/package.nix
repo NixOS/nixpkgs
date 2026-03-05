@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-+J4gwjQXB905yk4b2GwpamXO/bHpwqMxw6GsnusbJKU=";
 
-  RUSTONIG_SYSTEM_LIBONIG = 1;
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   # Upstream has a failing test :<
   doCheck = false;

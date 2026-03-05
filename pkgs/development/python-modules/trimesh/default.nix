@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.11.1";
+  version = "4.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-N9loKQ+xcUtug98K2nsCs5kXUnLLtxCqNH8L8wStb74=";
+    hash = "sha256-E78gIZ+lzobEt5xckiCZoA6+FomhSxFjnbjchPLYNio=";
   };
 
   build-system = [ setuptools ];

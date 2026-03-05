@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchpatch2,
   git,
   testers,
   aws-sam-cli,
@@ -11,14 +12,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.153.1";
+  version = "1.154.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
     tag = "v${version}";
-    hash = "sha256-502Ca/oHAIG/9G25G8xEJEJPWwDKeGrpRN1ZcEY+1LE=";
+    hash = "sha256-wy6LZbWmK5rb0foFttPOvDOsFtrQNFc8mGBP9WTzVyw=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -82,6 +83,14 @@ python3.pkgs.buildPythonApplication rec {
       sts
       xray
     ]);
+
+  patches = [
+    # Remove after aws-sam-cli > 1.154.0
+    (fetchpatch2 {
+      url = "https://github.com/aws/aws-sam-cli/commit/1e1664faae8ff799cbb03fe16ef1650689803587.patch";
+      hash = "sha256-HnOBrKkE/sIGZrgRq8G+ef1wnGvtALV4wma8J5eZfLc=";
+    })
+  ];
 
   # Remove after upstream bumps click > 8.1.8
   postPatch = ''

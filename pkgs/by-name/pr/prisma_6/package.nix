@@ -35,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 1;
-    hash = "sha256-y0gxeOeQNZZu3/UEI/DmdhVD8kSrUnK5G/n/WLhiLZ4=";
+    fetcherVersion = 3;
+    hash = "sha256-BnluGYEVQbhVdEL/RvJTTGEQT1XrLjaTm2iI7Sqd3ZE=";
   };
 
   patchPhase = ''
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fetch CLI workspace dependencies
     deps_json=$(pnpm list --filter ./packages/cli --prod --depth Infinity --json)
-    deps=$(jq -r '[.. | strings | select(startswith("link:../")) | sub("^link:../"; "")] | unique[]' <<< "$deps_json")
+    deps=$(jq -r '[del(.. | .unsavedDependencies?) | .. | strings | select(startswith("link:../")) | sub("^link:../"; "")] | unique[]' <<< "$deps_json")
 
     # Remove unnecessary external dependencies
     find . -name node_modules -type d -prune -exec rm -rf {} +

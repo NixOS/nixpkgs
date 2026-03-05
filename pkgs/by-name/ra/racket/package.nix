@@ -128,7 +128,6 @@ minimal.overrideAttrs (
         GUIs and charts.
       '';
       platforms = lib.platforms.unix;
-      badPlatforms = lib.platforms.darwin;
     };
   }
 )

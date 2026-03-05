@@ -95,6 +95,9 @@
   makeFontsConf,
   noto-fonts-cjk-sans,
   noto-fonts-cjk-serif,
+
+  # Create a symlink at $out/bin/microsoft-edge-stable
+  withSymlink ? true,
 }:
 let
   opusWithCustomModes = libopus.override { withCustomModes = true; };
@@ -268,6 +271,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       patchelf --set-rpath $rpath $elf
       patchelf --set-interpreter ${bintools.dynamicLinker} $elf
     done
+
+    ${lib.optionalString withSymlink ''
+      ln -s $out/bin/microsoft-edge $out/bin/microsoft-edge-stable
+    ''}
 
     runHook postInstall
   '';

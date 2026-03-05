@@ -1,14 +1,12 @@
 {
   bison,
   boost,
-  clang,
   cmake,
   fetchFromGitHub,
   flex,
   lib,
-  libclang,
   libxml2,
-  llvm,
+  llvmPackages_19,
   openexr,
   openimageio,
   partio,
@@ -22,6 +20,7 @@
 
 let
   boost_static = boost.override { enableStatic = true; };
+  inherit (llvmPackages_19) clang libclang llvm;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openshadinglanguage";
@@ -91,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Advanced shading language for production GI renderers";
     homepage = "http://openshadinglanguage.org";
-    maintainers = with lib.maintainers; [ hodapp ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };

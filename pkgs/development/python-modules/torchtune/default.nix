@@ -128,7 +128,13 @@ buildPythonPackage (finalAttrs: {
     "test_init_from_env_dup"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # TypeError: HfHubHTTPError.__init__() missing 1 required keyword-only argument: 'response'
+    "tests/torchtune/_cli/test_download.py::TestTuneDownloadCommand::test_download_calls_snapshot"
+    "tests/torchtune/_cli/test_download.py::TestTuneDownloadCommand::test_gated_repo_error_no_token"
+    "tests/torchtune/_cli/test_download.py::TestTuneDownloadCommand::test_gated_repo_error_with_token"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fail due to floating-point precision differences
     "tests/torchtune/models/flux/test_flux_autoencoder.py::TestFluxAutoencoder::test_encode"
     "tests/torchtune/modules/peft/test_dora.py::TestDoRALinear::test_qdora_parity[True-dtype1]"

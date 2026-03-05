@@ -26,6 +26,6 @@ buildHomeAssistantComponent rec {
     homepage = "https://github.com/nielsfaber/scheduler-component";
     changelog = "https://github.com/nielsfaber/scheduler-component/releases/tag/v${version}";
     maintainers = with maintainers; [ SuperSandro2000 ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

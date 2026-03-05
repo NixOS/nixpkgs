@@ -1,6 +1,6 @@
 {
   lib,
-  aioquic,
+  aioquic_1_2,
   argon2-cffi,
   asgiref,
   bcrypt,
@@ -9,7 +9,6 @@
   certifi,
   cryptography,
   fetchFromGitHub,
-  fetchPypi,
   flask,
   h11,
   h2,
@@ -29,7 +28,6 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   requests,
   ruamel-yaml,
   setuptools,
@@ -40,18 +38,6 @@
   zstandard,
 }:
 
-let
-  # Workaround for https://github.com/mitmproxy/mitmproxy/pull/7953
-  # nixpkgs' aioquic was updated to 1.3.0, which contains breaking changes that are unpatched in mitmproxy as of right now
-  aioquic' = aioquic.overrideAttrs (old: rec {
-    version = "1.2.0";
-    src = fetchPypi {
-      pname = "aioquic";
-      inherit version;
-      hash = "sha256-+RJjuz9xlIxciRW01Q7jcABPIKQW9n+rPcyQVWx+cZk=";
-    };
-  });
-in
 buildPythonPackage rec {
   pname = "mitmproxy";
   version = "12.2.1";
@@ -81,7 +67,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    aioquic'
+    aioquic_1_2
     argon2-cffi
     asgiref
     brotli

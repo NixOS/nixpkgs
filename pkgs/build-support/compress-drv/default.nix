@@ -31,7 +31,7 @@
   # Type
 
   ```
-  compressDrv :: Derivation -> { formats :: [ String ]; compressors :: { ${fileExtension} :: String; } } -> Derivation
+  compressDrv :: Derivation -> { formats :: [String]; compressors :: { ${fileExtension} :: String; } } -> Derivation
   ```
 
   # Examples

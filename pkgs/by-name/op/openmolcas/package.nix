@@ -15,7 +15,7 @@
   libxc,
   makeWrapper,
   gsl,
-  boost,
+  boost188,
   autoPatchelfHook,
   enableQcmaquis ? true,
   # Note that the CASPT2 module is broken with MPI
@@ -29,6 +29,7 @@ assert blas-ilp64.isILP64;
 assert lapack-ilp64.isILP64;
 
 let
+  boost = boost188;
   python = python3.withPackages (
     ps: with ps; [
       six
@@ -40,8 +41,8 @@ let
   qcmaquisSrc = fetchFromGitHub {
     owner = "qcscine";
     repo = "qcmaquis";
-    rev = "release-3.1.4"; # Must match tag in cmake/custom/qcmaquis.cmake
-    hash = "sha256-vhC5k+91IPFxdCi5oYt1NtF9W08RxonJjPpA0ls4I+o=";
+    rev = "9ff551fecbdbad43d17600c441a9c9bfb9811d3e"; # Current head of "nag-compiler-fix-internal" as pinned in OpenMolcas' Cmake
+    hash = "sha256-+EtfgYg6apREDOltXu8zfUbpuiV56k4RvuPAYO0fbsM=";
   };
 
   # NEVPT2 sources must be patched to be valid C code in gctime.c
@@ -64,13 +65,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmolcas";
-  version = "25.10";
+  version = "26.02";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-z5RNLUP1DjvQ+LvNzOBwiPrYqGeZoPPbtaJv9gIefuM=";
+    hash = "sha256-+DU651GiGZRHdkLuGLCPU/95uOhG+kENCTi1T+8Hz1g=";
   };
 
   patches = [
@@ -158,6 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
   # DMRG executables contain references to /build, however, they are properly
   # removed by autopatchelf
   noAuditTmpdir = true;
+
+  enableParallelBuilding = true;
 
   # Wrong store path in shebang (bare Python, no Python pkgs), force manual re-patching
   postFixup = ''

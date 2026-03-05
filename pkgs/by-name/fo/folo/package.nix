@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       src
       ;
     pnpm = pnpm_10;
-    fetcherVersion = 1;
-    hash = "sha256-6I10NSmTDd/wmL/HfAgLH+G2MDfuPmrTePNDDy08nRA=";
+    fetcherVersion = 3;
+    hash = "sha256-EP7bpbJUcKmHm7KMlKc0Fz2u0niQ3jC7YN/9pp7vucE=";
   };
 
   env = {

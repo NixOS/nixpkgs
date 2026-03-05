@@ -16,7 +16,7 @@
 }:
 
 let
-  version = "3.26.0";
+  version = "3.27.0";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "PDWJFSe8xEUwHcN10PUz6c5EWZLIrKTVqM0xExk9nJs=";
+      sha256 = "+va3wHlAfVtl3aK6+DVkN/EgpiMxwAGUyNywaWiKTJQ=";
     };
 
     buildInputs = [ erlang ];

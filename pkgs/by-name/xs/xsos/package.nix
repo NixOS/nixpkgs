@@ -55,6 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = [ lib.maintainers.nixinator ];
+    maintainers = [ ];
   };
 })

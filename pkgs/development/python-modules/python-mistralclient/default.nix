@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "python-mistralclient";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-mistralclient";
     tag = version;
-    hash = "sha256-8tB1QPaxdLdti96gOzaXuqLftmTJVM0bosJiKs+0CFs=";
+    hash = "sha256-FNfee7d8gTcsTdv7lxqDbniUiKQvUXHRSkAlNOCn/k4=";
   };
 
   env.PBR_VERSION = version;

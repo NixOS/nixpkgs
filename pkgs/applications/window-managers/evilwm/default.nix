@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       url = "http://www.6809.org.uk/evilwm/";
       free = true;
     }; # like BSD/MIT, but Share-Alike'y; See README.
-    maintainers = with lib.maintainers; [ amiloradovsky ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "evilwm";
   };

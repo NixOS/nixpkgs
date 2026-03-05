@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scikit-survival";
-  version = "0.26.0";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sebp";
     repo = "scikit-survival";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xtrGFNRHF8bL8Q82gIQLayuCSDFMrBBkQ63F+Nmbdes=";
+    hash = "sha256-BP4kfYt4W9QCklkJ5DDE6Zquca2LhRZGFsKmD9qb7vk=";
   };
 
   postPatch = ''

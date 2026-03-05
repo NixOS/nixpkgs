@@ -7,6 +7,8 @@
   pcre2,
   zlib,
   git,
+  meson,
+  ninja,
   pkg-config,
   openssl,
 }:
@@ -44,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     git # clones our repo from the store
+    meson
+    ninja
     pkg-config
   ];
   # git inputs
@@ -53,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     curl
   ];
+
+  # Meson and ninja are required to build git, but gitaly doesn't use them
+  dontUseMesonConfigure = true;
+  dontUseNinjaBuild = true;
 
   # required to support pthread_cancel()
   NIX_LDFLAGS =

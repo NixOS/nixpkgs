@@ -152,7 +152,6 @@ let
             description = "Boot loader for embedded systems";
             license = lib.licenses.gpl2Plus;
             maintainers = with lib.maintainers; [
-              dezgeg
               lopsided98
             ];
           }

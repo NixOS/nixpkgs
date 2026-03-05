@@ -93,6 +93,15 @@ in
           Kerberos will be configured to cache credentials in SSS.
         '';
       };
+
+      subIDsIntegration = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to use SSS as a source for subuid and subgid.
+        '';
+      };
+
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -158,18 +167,9 @@ in
           NotifyAccess = "main";
           PIDFile = "/run/sssd.pid";
           CapabilityBoundingSet = [
-            "CAP_IPC_LOCK"
-            "CAP_CHOWN"
             "CAP_DAC_READ_SEARCH"
-            "CAP_KILL"
-            "CAP_NET_ADMIN"
-            "CAP_SYS_NICE"
-            "CAP_FOWNER"
             "CAP_SETGID"
             "CAP_SETUID"
-            "CAP_SYS_ADMIN"
-            "CAP_SYS_RESOURCE"
-            "CAP_BLOCK_SUSPEND"
           ];
           Restart = "on-abnormal";
           StateDirectory = baseNameOf dataDir;
@@ -208,8 +208,7 @@ in
         description = "SSSD Kerberos Cache Manager";
         requires = [ "sssd-kcm.socket" ];
         serviceConfig = {
-          ExecStartPre = "-${pkgs.sssd}/bin/sssd --genconf-section=kcm";
-          ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm --uid 0 --gid 0";
+          ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm";
           CapabilityBoundingSet = [
             "CAP_IPC_LOCK"
             "CAP_CHOWN"
@@ -245,6 +244,11 @@ in
       };
       services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
       services.openssh.authorizedKeysCommandUser = "nobody";
+    })
+
+    (lib.mkIf cfg.subIDsIntegration {
+      system.nssDatabases.subuid = [ "sss" ];
+      system.nssDatabases.subgid = [ "sss" ];
     })
   ];
 

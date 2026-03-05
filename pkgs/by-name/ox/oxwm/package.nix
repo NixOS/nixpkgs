@@ -1,34 +1,38 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
   fetchFromGitHub,
+  zig,
   pkg-config,
   libx11,
   libxft,
-  libxrender,
+  libxinerama,
+  lua5_4,
   freetype,
   fontconfig,
-  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oxwm";
-  version = "0.9.0";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "tonybanters";
     repo = "oxwm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zVYYRGe5ZIR1AJgKZi9s403NKM7hKAqhEbNWYSkgpT0=";
+    hash = "sha256-W6muqajSk9UR646ZmLkx/wWfiaWLo+d1lJMiLm82NC8=";
   };
 
-  cargoHash = "sha256-Rs8eGR8WY7qOPM0rfu6lTNDl6TVMR+rrIc6Ub+M7vfs=";
-
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    zig.hook
+    pkg-config
+  ];
 
   buildInputs = [
     libx11
     libxft
-    libxrender
+    libxinerama
+    lua5_4
     freetype
     fontconfig
   ];
@@ -36,8 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # tests require a running X server
   doCheck = false;
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   postInstall = ''
     install -Dm644 resources/oxwm.desktop -t $out/share/xsessions
@@ -48,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.providedSessions = [ "oxwm" ];
 
   meta = {
-    description = "Dynamic window manager written in Rust, inspired by dwm";
+    description = "Dynamic window manager written in Zig, inspired by dwm";
     homepage = "https://github.com/tonybanters/oxwm";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tonybanters ];

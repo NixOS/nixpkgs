@@ -84,7 +84,6 @@ stdenv.mkDerivation rec {
   # compatibility with OpenPGP.
   #
   freepgPatches = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "freepg";
     repo = "gnupg";
     tag = "source-2.4.9-freepg";

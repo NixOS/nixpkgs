@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cameradar";
-  version = "6.0.2";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "Ullaakut";
     repo = "cameradar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XmCpd7ptPU26EMn+WDH2Y9hKRsYV0GdbU4T26TUsp6U=";
+    hash = "sha256-C1GScKbOgHAU57B3q7A8Rv37Ny+7p+/L3ZwyiDN0kA0=";
   };
 
-  vendorHash = "sha256-A8SJRky4dQHJoYpOaUBae89kHXwbdA+gnF/p7oRxcYo=";
+  vendorHash = "sha256-jIOQwVnlXbvzqGLPv/zTuSg5GaEWpmTyXEZO73jFGxM=";
 
   nativeBuildInputs = [ pkg-config ];
 

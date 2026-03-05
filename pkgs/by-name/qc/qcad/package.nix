@@ -79,8 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm555 release/qcad-bin $out/bin/qcad
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
-    mkdir -p $out/lib
+    mkdir -p $out/{Applications,bin,lib}
+    mv release/QCAD.app $out/Applications
+    ln -s $out/Applications/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
   ''
   + ''
     install -Dm555 -t $out/lib release/libspatialindexnavel${stdenv.hostPlatform.extensions.sharedLibrary}

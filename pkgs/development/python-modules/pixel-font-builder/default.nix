@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   nix-update-script,
-  hatchling,
+  uv-build,
   fonttools,
   brotli,
   bdffont,
@@ -17,13 +17,14 @@ buildPythonPackage rec {
   version = "0.0.47";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pixel_font_builder";
-    inherit version;
-    hash = "sha256-O3HtwoZUp89mUgVMMcAd4CCPFqQpsyqlmug+QgNpgNQ=";
+  src = fetchFromGitHub {
+    owner = "TakWolf";
+    repo = "pixel-font-builder";
+    tag = version;
+    hash = "sha256-a25JKZy5XaBfpeFwH7YnSTY28hQF8dLa/AGEOXHN94I=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
     fonttools

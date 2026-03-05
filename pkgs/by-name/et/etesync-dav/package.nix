@@ -18,6 +18,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-y4BhU2kSn+RWqc5+pJQFhbwfat9cMWD0ED0EXJp25cY=";
   };
 
+  patches = [
+    # https://github.com/etesync/etesync-dav/pull/365
+    ./radicale-3-6-compat.patch
+  ];
+
   build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [ "radicale" ];

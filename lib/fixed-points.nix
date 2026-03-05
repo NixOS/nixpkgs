@@ -108,6 +108,12 @@ rec {
     `f`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    fix' :: (a -> a) -> a
+    ```
   */
   fix' =
     f:
@@ -140,7 +146,7 @@ rec {
     # Type
 
     ```
-    (a -> a) -> a -> a
+    converge :: (a -> a) -> a -> a
     ```
   */
   converge =
@@ -289,9 +295,9 @@ rec {
     # Type
 
     ```
-    extends :: (Attrs -> Attrs -> Attrs) # The overlay to apply to the fixed-point function
-            -> (Attrs -> Attrs) # A fixed-point function
-            -> (Attrs -> Attrs) # The resulting fixed-point function
+    extends :: (AttrSet -> AttrSet -> AttrSet) # The overlay to apply to the fixed-point function
+            -> (AttrSet -> AttrSet) # A fixed-point function
+            -> (AttrSet -> AttrSet) # The resulting fixed-point function
     ```
 
     # Examples
@@ -370,7 +376,7 @@ rec {
       #                 ↓          ↓
       OverlayFn = { ... } -> { ... } -> { ... };
     in
-      composeManyExtensions :: ListOf OverlayFn -> OverlayFn
+    composeManyExtensions :: [OverlayFn] -> OverlayFn
     ```
 
     # Examples
@@ -474,14 +480,11 @@ rec {
     # Type
 
     ```
-    toExtension ::
-      b' -> Any -> Any -> b'
+    toExtension :: b' -> Any -> Any -> b'
     or
-    toExtension ::
-      (a -> b') -> Any -> a -> b'
+    toExtension :: (a -> b') -> Any -> a -> b'
     or
-    toExtension ::
-      (a -> a -> b) -> a -> a -> b
+    toExtension :: (a -> a -> b) -> a -> a -> b
     where b' = ! Callable
 
     Set a = b = b' = AttrSet & ! Callable to make toExtension return an extending function.

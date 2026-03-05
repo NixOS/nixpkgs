@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   replaceVars,
+  fetchFromGitHub,
   fetchDebianPatch,
   copyDesktopItems,
   pkg-config,
@@ -19,8 +20,16 @@
 }:
 
 let
-  wxwidgets_3_3' = wxwidgets_3_3.overrideAttrs (
+  wxwidgets_3_3_1 = wxwidgets_3_3.overrideAttrs (
     finalAttrs: previousAttrs: {
+      version = "3.3.1";
+      src = fetchFromGitHub {
+        owner = "wxWidgets";
+        repo = "wxWidgets";
+        tag = "v${finalAttrs.version}";
+        fetchSubmodules = true;
+        hash = "sha256-eYmZrh9lvDnJ3VAS+TllT21emtKBPAOhqIULw1dTPhk=";
+      };
       patches = [
         ./wxcolorhook.patch
       ];
@@ -29,7 +38,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.7";
+  version = "14.8";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -38,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f "$out"
       tryDownload "$url" "$out"
     '';
-    hash = "sha256-WMSaKA3OA63V6Vis83vXa+y0ZRE0YxgXiB8YAyTSTc8=";
+    hash = "sha256-vIvM6j4gDQcsRjgczQqxbV4XvDQECCLvuTflkebMFU8=";
   };
 
   sourceRoot = ".";
@@ -78,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libssh2
     openssl
-    wxwidgets_3_3'
+    wxwidgets_3_3_1
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

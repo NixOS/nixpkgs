@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation {
   pname = "sigrok-cli";
-  version = "0.7.2-unstable-2023-04-10";
+  version = "0.8.0-unstable-2024-08-26";
 
   src = fetchgit {
     url = "git://sigrok.org/sigrok-cli";
-    rev = "9d9f7b82008e3b3665bda12a63a3339e9f7aabc3";
-    hash = "sha256-B2FJxRkfKELrtqxZDv5QTvntpu9zJnTK15CAUYbf+5M=";
+    rev = "f44dd91347e7ac797cefc23162b9fcf0b7329f1f";
+    hash = "sha256-LJ+32XiQYfjMLYze/zICVKvqmhtyc85zvxAXXi2HIi0=";
   };
 
   nativeBuildInputs = [

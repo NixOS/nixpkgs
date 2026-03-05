@@ -134,8 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
       # apache-orc looks for things in caps
       LZ4_ROOT = lz4;
       ZSTD_ROOT = zstd.dev;
-    }
-    // lib.optionalAttrs finalAttrs.doInstallCheck {
       ARROW_TEST_DATA = "${arrow-testing}/data";
       PARQUET_TEST_DATA = "${parquet-testing}/data";
       GTEST_FILTER =

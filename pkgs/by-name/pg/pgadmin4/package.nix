@@ -217,7 +217,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = !postgresqlTestHook.meta.broken;
+  doCheck = lib.meta.availableOn stdenv.buildPlatform postgresqlTestHook;
 
   # for replication testing in regression tests for PostgreSql >= 17
   env.postgresqlExtraSettings = "wal_level = logical";

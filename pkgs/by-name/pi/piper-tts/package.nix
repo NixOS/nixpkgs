@@ -75,12 +75,15 @@ python3Packages.buildPythonApplication rec {
     cythonize --inplace src/piper/train/vits/monotonic_align/core.pyx
   '';
 
-  dependencies = [
-    python3Packages.onnxruntime
-  ]
-  ++ lib.optionals withTrain optional-dependencies.train
-  ++ lib.optionals withHTTP optional-dependencies.http
-  ++ lib.optionals withAlignment optional-dependencies.alignment;
+  dependencies =
+    with python3Packages;
+    [
+      onnxruntime
+      pathvalidate
+    ]
+    ++ lib.optionals withTrain optional-dependencies.train
+    ++ lib.optionals withHTTP optional-dependencies.http
+    ++ lib.optionals withAlignment optional-dependencies.alignment;
 
   optional-dependencies = {
     train =
@@ -89,7 +92,6 @@ python3Packages.buildPythonApplication rec {
         jsonargparse
         librosa
         lightning
-        pathvalidate
         pysilero-vad
         tensorboard
         tensorboardx

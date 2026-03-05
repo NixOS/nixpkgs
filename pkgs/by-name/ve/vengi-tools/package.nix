@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.1.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "vengi-voxel";
     repo = "vengi";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-YSqMhwgCdJNf8sehwgPHhr/Nu6jKXCeszuRp3hPqz7g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2ZiRN+59oJL0Bgd0D78w8FLoBCwzVTlo0SgsMJY8Jxk=";
   };
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -132,5 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+    # Segfaults when building shaders
+    broken = stdenv.isLinux;
   };
 })

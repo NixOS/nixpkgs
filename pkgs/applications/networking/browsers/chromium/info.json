@@ -1,10 +1,10 @@
 {
   "chromium": {
-    "version": "145.0.7632.116",
+    "version": "145.0.7632.159",
     "chromedriver": {
-      "version": "145.0.7632.110",
-      "hash_darwin": "sha256-wa8s3PwS5G1TopGYheyLD7wlxxTZWPYwU90TLFpBMZw=",
-      "hash_darwin_aarch64": "sha256-/J4A4DrERlHdlI0Pv9hHCnBGoeUIB6G43fS0Y8taLFs="
+      "version": "145.0.7632.160",
+      "hash_darwin": "sha256-JQpTpNyI50HuUFtM70JUqm/JVCZeXxojp54kJqjrrYg=",
+      "hash_darwin_aarch64": "sha256-eXip9I36nZw8PvzrA3+0/yMt+XmX5TNvVgQ2XaSlYzY="
     },
     "deps": {
       "depot_tools": {
@@ -21,8 +21,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "7d28075c6a9ba147e6df449209001258bb82a122",
-        "hash": "sha256-ljqK297kBByDGHKwH+yz6XcLO7l0+GDIrR0Hznh6X8c=",
+        "rev": "838c69b2e5b8cd00a916e35097249bc20eb25a0a",
+        "hash": "sha256-lWw909vzUiAo0yzx3sZqEEWf9fpZkIxArP6G7+6ImXM=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -92,8 +92,8 @@
       },
       "src/third_party/angle": {
         "url": "https://chromium.googlesource.com/angle/angle.git",
-        "rev": "4c0ae3917d4feab6ae1c99d7b750a69cdf3cc96c",
-        "hash": "sha256-Gq2hzttb5x6DyzeU6bXxEZ9QpZgfGODhiUFCivqSjZ4="
+        "rev": "2d051d9cef02bca69a97749a995b138e3dec0e1f",
+        "hash": "sha256-m/9vp7BAhRvVVOyRT6jCoNKP5PbiAZlCpqUHvFu1byA="
       },
       "src/third_party/angle/third_party/glmark2/src": {
         "url": "https://chromium.googlesource.com/external/github.com/glmark2/glmark2",
@@ -257,8 +257,8 @@
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "8eb35b80efbc72ffb3aff36c3c1106fe9269df88",
-        "hash": "sha256-fzcXSU0kaIZVTQx1L5A0Xmn3HEzUE35mzfsU0YEaxw0="
+        "rev": "b1eec47965f0f0bed968133496c5c097fb41cc0e",
+        "hash": "sha256-Ol7VWhAxk95jQE8umtvZxhJNtYIQDNj9DHSoEWs765I="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -652,8 +652,8 @@
       },
       "src/third_party/skia": {
         "url": "https://skia.googlesource.com/skia.git",
-        "rev": "2ab8add5be2c46eb6238f4c217f6d6dbc9bccd23",
-        "hash": "sha256-pxFlBc6nGkfWsvSYgy5WuNjTEA/BomYHCvT+1yC2bQg="
+        "rev": "fba326b8829e469ac02e5a68a0d36982ef1975bc",
+        "hash": "sha256-nh7zr1piXYNMyVcqswRqhepF89TF0rKASYM0QuJIof0="
       },
       "src/third_party/smhasher/src": {
         "url": "https://chromium.googlesource.com/external/smhasher.git",
@@ -817,13 +817,13 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "ce21eb288e9b86bf6a294968a5113a2646d7b8dd",
-        "hash": "sha256-ayAzZOrJYOLqGunDs9t/x6HBUy32y+0ISjaGkEUK+hk="
+        "rev": "1e1e0c88c55414e3ab7f98629a0233d3dc77fca0",
+        "hash": "sha256-iIrMXGer1CBX4MxOi56fKdzohiyv4bGKKnKOE3GZC1Y="
       }
     }
   },
   "ungoogled-chromium": {
-    "version": "145.0.7632.116",
+    "version": "145.0.7632.159",
     "deps": {
       "depot_tools": {
         "rev": "fb0b652edba70f5c4ac867f3beca9e535f905b4c",
@@ -835,16 +835,16 @@
         "hash": "sha256-SoXVnpCuNee80N4YdsTEHQd3jZNoHOwKVP6O8a67Ym0="
       },
       "ungoogled-patches": {
-        "rev": "145.0.7632.116-1",
-        "hash": "sha256-5rixK6Hp5Czz0I+UISyhi2hPgPhgt+f4JFqd8ERvCV0="
+        "rev": "145.0.7632.159-1",
+        "hash": "sha256-RrVYjqeP/0pko3LCQSe0uejENSdd4MFu4UQuwKYNS+k="
       },
       "npmHash": "sha256-13sgV/5BD7QvDLBAEmoLN5vongw+S5v5znvZcctxhWc="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "7d28075c6a9ba147e6df449209001258bb82a122",
-        "hash": "sha256-ljqK297kBByDGHKwH+yz6XcLO7l0+GDIrR0Hznh6X8c=",
+        "rev": "838c69b2e5b8cd00a916e35097249bc20eb25a0a",
+        "hash": "sha256-lWw909vzUiAo0yzx3sZqEEWf9fpZkIxArP6G7+6ImXM=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -914,8 +914,8 @@
       },
       "src/third_party/angle": {
         "url": "https://chromium.googlesource.com/angle/angle.git",
-        "rev": "4c0ae3917d4feab6ae1c99d7b750a69cdf3cc96c",
-        "hash": "sha256-Gq2hzttb5x6DyzeU6bXxEZ9QpZgfGODhiUFCivqSjZ4="
+        "rev": "2d051d9cef02bca69a97749a995b138e3dec0e1f",
+        "hash": "sha256-m/9vp7BAhRvVVOyRT6jCoNKP5PbiAZlCpqUHvFu1byA="
       },
       "src/third_party/angle/third_party/glmark2/src": {
         "url": "https://chromium.googlesource.com/external/github.com/glmark2/glmark2",
@@ -1079,8 +1079,8 @@
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "8eb35b80efbc72ffb3aff36c3c1106fe9269df88",
-        "hash": "sha256-fzcXSU0kaIZVTQx1L5A0Xmn3HEzUE35mzfsU0YEaxw0="
+        "rev": "b1eec47965f0f0bed968133496c5c097fb41cc0e",
+        "hash": "sha256-Ol7VWhAxk95jQE8umtvZxhJNtYIQDNj9DHSoEWs765I="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -1474,8 +1474,8 @@
       },
       "src/third_party/skia": {
         "url": "https://skia.googlesource.com/skia.git",
-        "rev": "2ab8add5be2c46eb6238f4c217f6d6dbc9bccd23",
-        "hash": "sha256-pxFlBc6nGkfWsvSYgy5WuNjTEA/BomYHCvT+1yC2bQg="
+        "rev": "fba326b8829e469ac02e5a68a0d36982ef1975bc",
+        "hash": "sha256-nh7zr1piXYNMyVcqswRqhepF89TF0rKASYM0QuJIof0="
       },
       "src/third_party/smhasher/src": {
         "url": "https://chromium.googlesource.com/external/smhasher.git",
@@ -1639,8 +1639,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "ce21eb288e9b86bf6a294968a5113a2646d7b8dd",
-        "hash": "sha256-ayAzZOrJYOLqGunDs9t/x6HBUy32y+0ISjaGkEUK+hk="
+        "rev": "1e1e0c88c55414e3ab7f98629a0233d3dc77fca0",
+        "hash": "sha256-iIrMXGer1CBX4MxOi56fKdzohiyv4bGKKnKOE3GZC1Y="
       }
     }
   }
