@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchCrate,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,6 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-ygz9uYwuDI892kwYwJPTsTAkBfsnRN2unOgqv8VHXSA=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line tool to extract the dependency trees embedded in binaries by cargo-auditable";
