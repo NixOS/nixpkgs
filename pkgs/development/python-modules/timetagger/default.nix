@@ -4,11 +4,13 @@
   bcrypt,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   iptools,
   itemdb,
   jinja2,
   markdown,
   nodejs,
+  platformdirs,
   pscript,
   pyjwt,
   pytestCheckHook,
@@ -31,6 +33,19 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-X82Ai6E844deRGs6KcJATEid3X6IlDq4+LCEU4lc4hM=";
   };
 
+  patches = [
+    # PR https://github.com/almarklein/timetagger/pull/605
+    (fetchpatch2 {
+      url = "https://github.com/almarklein/timetagger/commit/9d4cb5937c52a6cc72e786e5411515737ad3f242.patch?full_index=1";
+      hash = "sha256-n0KluJ3wNA4SDISwJ6KC5PoguJLOMDFt/o2cPBb91Wc=";
+    })
+  ];
+
+  # NOTE: fetchpatch2 doesn't handle new empty files in the patches properly
+  postPatch = ''
+    touch timetagger/migrations/__init__.py
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -40,6 +55,7 @@ buildPythonPackage (finalAttrs: {
     itemdb
     jinja2
     markdown
+    platformdirs
     pscript
     pyjwt
     uvicorn
