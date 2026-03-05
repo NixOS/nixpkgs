@@ -10,13 +10,13 @@
 }:
 buildGo124Module (finalAttrs: {
   pname = "gotosocial";
-  version = "0.21.0";
+  version = "0.21.1";
 
   src = fetchFromCodeberg {
     owner = "superseriousbusiness";
     repo = "gotosocial";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ifSm3tV8P435v7WUS2BYXfVS3FHu9Axz3IQWGdTw3Bg=";
+    hash = "sha256-LnxEvOLv+NBjdAbxxtilegW/xqBvMzy3CGM75yJsW0s=";
   };
 
   vendorHash = null;
