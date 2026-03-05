@@ -41,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
+  # Tarball has no top-level directory (single binary), so extract into one
+  unpackCmd = "mkdir -p chunk-cli && tar xf $curSrc -C chunk-cli";
+  sourceRoot = "chunk-cli";
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
