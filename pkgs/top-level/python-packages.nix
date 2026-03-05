@@ -14420,6 +14420,8 @@ self: super: with self; {
 
   pypck = callPackage ../development/python-modules/pypck { };
 
+  pypcode = callPackage ../development/python-modules/pypcode { };
+
   pypdf = callPackage ../development/python-modules/pypdf { };
 
   pypdf2 = callPackage ../development/python-modules/pypdf2 { };
