@@ -11267,6 +11267,8 @@ self: super: with self; {
 
   obsidian-callouts = callPackage ../development/python-modules/obsidian-callouts { };
 
+  obsidian-media = callPackage ../development/python-modules/obsidian-media { };
+
   obspy = callPackage ../development/python-modules/obspy { };
 
   oca-port = callPackage ../development/python-modules/oca-port { };
