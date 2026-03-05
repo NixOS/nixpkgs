@@ -3244,8 +3244,6 @@ with pkgs;
     pinentry-all
     ;
 
-  pinentry_mac = callPackage ../tools/security/pinentry/mac.nix { };
-
   plan9port = callPackage ../tools/system/plan9port {
     inherit (darwin) DarwinTools;
   };
