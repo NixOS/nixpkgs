@@ -12800,7 +12800,7 @@ self: super: with self; {
   proto-plus = callPackage ../development/python-modules/proto-plus { };
 
   # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
-  protobuf = protobuf6;
+  protobuf = protobuf7;
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
@@ -12816,6 +12816,11 @@ self: super: with self; {
 
   # Protobuf 6.x
   protobuf6 = callPackage ../development/python-modules/protobuf/6.nix {
+    inherit (pkgs.__splicedPackages) protobuf;
+  };
+
+  # Protobuf 7.x
+  protobuf7 = callPackage ../development/python-modules/protobuf/7.nix {
     inherit (pkgs.__splicedPackages) protobuf;
   };
 
