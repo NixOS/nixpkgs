@@ -31,7 +31,7 @@ rec {
       : the [interpreter](https://en.wikipedia.org/wiki/Shebang_(Unix)) to use for the script.
     : `check` (String)
       : A command to check the script. For example, this could be a linting check.
-    : `makeWrapperArgs` (Optional, [ String ], Default: [])
+    : `makeWrapperArgs` (Optional, [String], Default: [])
       : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper].
 
     `nameOrPath` (String)
@@ -195,7 +195,7 @@ rec {
     : `strip` (Boolean, Default: true)
       : Whether to [strip](https://nixos.org/manual/nixpkgs/stable/#ssec-fixup-phase) the executable or not.
 
-    : `makeWrapperArgs` (Optional, [ String ], Default: [])
+    : `makeWrapperArgs` (Optional, [String], Default: [])
       : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper]
 
     `nameOrPath` (String)

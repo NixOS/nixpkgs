@@ -7,6 +7,10 @@
     "Applications_Menu@rmy.pobox.com",
     "apps-menu@gnome-shell-extensions.gcampax.github.com"
   ],
+  "auto-select-headset": [
+    "autoselectheadset@Anduril97.github.com",
+    "autoselectheadset@josephlbarnett.github.com"
+  ],
   "battery-time": [
     "batime@martin.zurowietz.de",
     "battery-time@eetumos.github.com",
@@ -24,6 +28,10 @@
     "lockkeys@febueldo.test",
     "lockkeys@vaina.lt"
   ],
+  "memento-mori": [
+    "memento-mori@paveloom",
+    "memento-mori@vedeshpadal"
+  ],
   "mouse-follows-focus": [
     "mouse-follows-focus@crisidev.org",
     "mousefollowsfocus@matthes.biz"
@@ -31,6 +39,14 @@
   "nepali-calendar": [
     "nepali-calendar-gs-extension@subashghimire.info.np",
     "nepali-date@biplab"
+  ],
+  "net-speed": [
+    "netspeed@alynx.one",
+    "netspeed@shivamksharma.github.io"
+  ],
+  "night-light-toggle": [
+    "night-light-toggle@egoistpizza.github.com",
+    "nightlighttoggle@sam"
   ],
   "persian-calendar": [
     "PersianCalendar@oxygenws.com",

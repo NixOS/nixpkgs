@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-text-splitters==${version}";
-    hash = "sha256-/mhgWYmnzzCnAlBzPFHo4yZLxgHIzmvxjS2BilGxww8=";
+    hash = "sha256-I5eMc/E7sCxEQG8+jw3E/M4uB7adKU5IMHRsS6pacsA=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";

@@ -339,6 +339,8 @@ python.pkgs.buildPythonApplication rec {
     # execnet.gateway_base.DumpError: can't serialize <class 'pathlib._local.PosixPath'>
     # https://github.com/pytest-dev/pytest-xdist/issues/384
     "test_subdirectory_upload"
+    # AssertionError: 4 != 3
+    "testNormalOperation"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;

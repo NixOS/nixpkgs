@@ -373,13 +373,13 @@
     "vendorHash": "sha256-dzgI9WOABHVv8bJ1p36RAty4/2UAqDHagVJFPdEAnRU="
   },
   "equinix_equinix": {
-    "hash": "sha256-F9WKIO8msltYTmxVjbF5FXkUX1jLK91zecOIq6xrGqY=",
+    "hash": "sha256-92GuIkgzCbH3A/oRsjblE7Efk95FBjEaTaIBBm2BZdg=",
     "homepage": "https://registry.terraform.io/providers/equinix/equinix",
     "owner": "equinix",
     "repo": "terraform-provider-equinix",
-    "rev": "v4.12.1",
+    "rev": "v4.13.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-M5cX70GwfdEJ22V8CwoaNEdEWb1CX7wsBgvj3GvjE0Q="
+    "vendorHash": "sha256-WFlKj1IO9ylXn5frdnLcctQawjUXBTqcoMhQUQTU06A="
   },
   "exoscale_exoscale": {
     "hash": "sha256-qjevix8bIRY3MKLlTZK/uUHS8nmKgjPk/rgqNWRdKes=",
@@ -1049,11 +1049,11 @@
     "vendorHash": null
   },
   "oracle_oci": {
-    "hash": "sha256-fBHwWw8NtjzgQISUuLB6eY6S3SlMbwyXPmt+suMezHA=",
+    "hash": "sha256-3gDOKRaZzsqFj8DOK8rug43nvU3kE6KAGcYy/ky4o0o=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v8.2.0",
+    "rev": "v8.3.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

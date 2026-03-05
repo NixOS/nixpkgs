@@ -1,3 +1,4 @@
+import os
 import sys
 import textwrap
 import uuid
@@ -78,6 +79,11 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
     )
 
 
+@patch.dict(
+    os.environ,
+    {"NIX_SSHOPTS": "--ssh opts", "SSH_ASKPASS": "/run/user/1000/ssh-agent"},
+    clear=True,
+)
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 @patch("uuid.uuid4", autospec=True)
 def test_build_remote(
@@ -134,7 +140,10 @@ def test_build_remote(
                     "user@host",
                     Path("/path/to/file"),
                 ],
-                env={"NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS])},
+                env={
+                    "SSH_ASKPASS": "/run/user/1000/ssh-agent",
+                    "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
+                },
             ),
             call(
                 ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"],
@@ -163,18 +172,24 @@ def test_build_remote(
     )
 
 
+@patch.dict(
+    os.environ,
+    {"NIX_SSHOPTS": "--ssh opts", "SSH_ASKPASS": "/run/user/1000/ssh-agent"},
+    clear=True,
+)
 @patch(
     get_qualified_name(n.run_wrapper, n),
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
 def test_build_remote_flake(
-    mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path
+    mock_run: Mock,
+    monkeypatch: MonkeyPatch,
+    tmpdir: Path,
 ) -> None:
     monkeypatch.chdir(tmpdir)
     flake = m.Flake.parse("/flake.nix#hostname")
     build_host = m.Remote("user@host", [], None)
-    monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
     assert n.build_remote_flake(
         "config.system.build.toplevel",
@@ -206,7 +221,10 @@ def test_build_remote_flake(
                     "user@host",
                     Path("/path/to/file"),
                 ],
-                env={"NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS])},
+                env={
+                    "SSH_ASKPASS": "/run/user/1000/ssh-agent",
+                    "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
+                },
             ),
             call(
                 [
@@ -225,6 +243,7 @@ def test_build_remote_flake(
     )
 
 
+@patch.dict(os.environ, {}, clear=True)
 def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
     closure = Path("/path/to/closure")
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:

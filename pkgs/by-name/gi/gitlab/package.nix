@@ -83,7 +83,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-x97e5fg11IU63VZd1n3CHduVC7GQagI8MFiFwR+p0wk=";
+          hash = "sha256-ikizLu1B+stdk+HDGjrACOpgptg0jfbHcoqfrJtUpEY=";
         };
 
         dontBuild = false;
@@ -123,7 +123,7 @@ let
               cp Cargo.* $out
             '';
           };
-          hash = "sha256-XGeFht5QRYb4Cu3n9nt4euUeNXHh1kJ6pQ5LJjnVhzc=";
+          hash = "sha256-XnNIcEoAs/cSIsd3BdEtTAPNbiyfdVmlO7tSIL/9d3w=";
         };
 
         dontBuild = false;
@@ -151,6 +151,53 @@ let
           gzip data.tar
           tar -cf $gempkg data.tar.gz metadata.gz
         '';
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+
+      prometheus-client-mmap = attrs: {
+        dontBuild = false;
+        postPatch =
+          let
+            getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
+          in
+          ''
+            substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
+          '';
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          src = stdenv.mkDerivation {
+            inherit (buildRubyGem { inherit (attrs) gemName version source; })
+              name
+              src
+              unpackPhase
+              nativeBuildInputs
+              ;
+            dontBuilt = true;
+            installPhase = ''
+              cp -R ext/fast_mmaped_file_rs $out
+              rm $out/Cargo.lock
+              cp Cargo.lock $out
+            '';
+          };
+          hash = "sha256-7jqaf5RIsc9gq98WBCe3Dd3Fv2X+4echdXU1FSK/xnE=";
+        };
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+
         postInstall = ''
           find $out -type f -name .rustc_info.json -delete
         '';
@@ -195,8 +242,7 @@ let
     };
     frontendIslandsYarnOfflineCache = fetchYarnDeps {
       # Revert to this when GitLab fixes their frontend_islands yarn.lock
-      # yarnLock = src + "/ee/frontend_islands/yarn.lock";
-      yarnLock = ./ee-frontend-islands-yarn.lock;
+      yarnLock = src + "/ee/frontend_islands/yarn.lock";
       hash = data.frontend_islands_yarn_hash;
     };
 
@@ -220,13 +266,6 @@ let
       # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
       ./Remove-unsupported-database-names.patch
     ];
-
-    # Remove once GitLab fixed their frontend_islands yarn.lock
-    postPatch = ''
-      rm ee/frontend_islands/yarn.lock
-      cp ${./ee-frontend-islands-yarn.lock} ee/frontend_islands/yarn.lock
-      chmod 777 ee/frontend_islands/yarn.lock
-    '';
 
     env = {
       # One of the patches uses this variable - if it's unset, execution

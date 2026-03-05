@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  deprecated,
   hatchling,
   llama-cloud,
   llama-index-core,
@@ -18,11 +19,15 @@ buildPythonPackage rec {
     hash = "sha256-teAHUqswVkq/GcV1laIQf1aXw7A7CFgXtPyoSjjrvVk=";
   };
 
-  pythonRelaxDeps = [ "llama-cloud" ];
+  pythonRelaxDeps = [
+    "deprecated"
+    "llama-cloud"
+  ];
 
   build-system = [ hatchling ];
 
   dependencies = [
+    deprecated
     llama-cloud
     llama-index-core
   ];

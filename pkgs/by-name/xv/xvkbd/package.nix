@@ -9,7 +9,7 @@
   libxpm,
   pkg-config,
   xorgproto,
-  Xaw3d,
+  libxaw3d,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxtst
     xorgproto
     libxi
-    Xaw3d
+    libxaw3d
     libxpm
   ];
 

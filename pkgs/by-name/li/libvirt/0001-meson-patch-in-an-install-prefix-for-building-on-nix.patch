@@ -1,7 +1,7 @@
-From 58c07f1d59ef683faf8b747e40bd75401306acf4 Mon Sep 17 00:00:00 2001
-From: Euan Kemp <euank@euank.com>
-Date: Mon, 24 Jun 2024 15:59:48 +0200
-Subject: [PATCH] meson: patch in an install prefix for building on nix
+From 35b73ea944dea02983e0b891b760528adfa84839 Mon Sep 17 00:00:00 2001
+From: Stefan Kober <stefan.kober@cyberus-technology.de>
+Date: Tue, 3 Mar 2026 16:37:24 +0100
+Subject: [PATCH 1/2] meson: patch in an install prefix for building on nix
 
 Used in the nixpkgs version of libvirt so that we can install things in
 the nix store, but read them from the root filesystem.
@@ -10,28 +10,28 @@ the nix store, but read them from the root filesystem.
  meson_options.txt                 |  2 ++
  src/ch/meson.build                |  6 ++---
  src/interface/meson.build         |  2 +-
- src/libxl/meson.build             | 18 +++++++-------
- src/locking/meson.build           |  8 +++----
+ src/libxl/meson.build             | 18 ++++++-------
+ src/locking/meson.build           |  8 +++---
  src/lxc/meson.build               | 10 ++++----
- src/meson.build                   | 18 +++++++-------
+ src/meson.build                   | 18 ++++++-------
  src/network/meson.build           | 14 +++++------
  src/node_device/meson.build       |  2 +-
  src/nwfilter/meson.build          |  6 ++---
  src/nwfilter/xml/meson.build      |  2 +-
- src/qemu/meson.build              | 40 +++++++++++++++----------------
+ src/qemu/meson.build              | 42 +++++++++++++++----------------
  src/remote/meson.build            | 10 ++++----
- src/secret/meson.build            |  4 ++--
- src/security/apparmor/meson.build |  8 +++----
+ src/secret/meson.build            |  6 ++---
+ src/security/apparmor/meson.build |  6 ++---
  src/storage/meson.build           |  6 ++---
  tools/meson.build                 |  2 +-
  tools/ssh-proxy/meson.build       |  2 +-
- 19 files changed, 90 insertions(+), 79 deletions(-)
+ 19 files changed, 91 insertions(+), 80 deletions(-)
 
 diff --git a/meson.build b/meson.build
-index e98ab0d5ac..376f241c07 100644
+index 4478efd613..defba3869d 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -47,6 +47,8 @@ if host_machine.system() == 'windows'
+@@ -69,6 +69,8 @@ if host_machine.system() == 'windows'
    conf.set('WINVER', '0x0600') # Win Vista / Server 2008
  endif
  
@@ -40,7 +40,7 @@ index e98ab0d5ac..376f241c07 100644
  
  # set various paths
  
-@@ -65,6 +67,13 @@ else
+@@ -87,6 +89,13 @@ else
    sysconfdir = prefix / get_option('sysconfdir')
  endif
  
@@ -55,7 +55,7 @@ index e98ab0d5ac..376f241c07 100644
  # sysconfdir as this makes a lot of things break in testing situations
  if prefix == '/usr'
 diff --git a/meson_options.txt b/meson_options.txt
-index cdc8687795..c2b6da140c 100644
+index 32009ce710..17641414c0 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -1,3 +1,5 @@
@@ -65,10 +65,10 @@ index cdc8687795..c2b6da140c 100644
  option('packager', type: 'string', value: '', description: 'Extra packager name')
  option('packager_version', type: 'string', value: '', description: 'Extra packager version')
 diff --git a/src/ch/meson.build b/src/ch/meson.build
-index 633966aac7..c0ce823345 100644
+index 5ab3798cf8..39be032cc6 100644
 --- a/src/ch/meson.build
 +++ b/src/ch/meson.build
-@@ -74,8 +74,8 @@ if conf.has('WITH_CH')
+@@ -84,8 +84,8 @@ if conf.has('WITH_CH')
    }
  
    virt_install_dirs += [
@@ -121,10 +121,10 @@ index e75a8f2fdb..d1800b4ea5 100644
    ]
  endif
 diff --git a/src/locking/meson.build b/src/locking/meson.build
-index c3dfcf2961..cdc1442775 100644
+index f8d12c481f..f622fc9201 100644
 --- a/src/locking/meson.build
 +++ b/src/locking/meson.build
-@@ -249,14 +249,14 @@ if conf.has('WITH_LIBVIRTD')
+@@ -247,14 +247,14 @@ if conf.has('WITH_LIBVIRTD')
    }
  
    virt_install_dirs += [
@@ -164,10 +164,10 @@ index bf9afabc0f..6e9547000a 100644
    ]
  endif
 diff --git a/src/meson.build b/src/meson.build
-index dd2682ec19..b330d1159e 100644
+index cab52ce7a3..308462a2da 100644
 --- a/src/meson.build
 +++ b/src/meson.build
-@@ -220,7 +220,7 @@ openrc_init_files = []
+@@ -222,7 +222,7 @@ openrc_init_files = []
  
  # virt_install_dirs:
  #   list of directories to create during installation
@@ -176,7 +176,7 @@ index dd2682ec19..b330d1159e 100644
  
  # driver_source_files:
  #   driver source files to check
-@@ -697,7 +697,7 @@ endforeach
+@@ -699,7 +699,7 @@ endforeach
  
  virt_conf_files += 'libvirt.conf'
  
@@ -185,7 +185,7 @@ index dd2682ec19..b330d1159e 100644
  install_data(virt_aug_files, install_dir: virt_aug_dir)
  
  # augeas_test_data:
-@@ -760,7 +760,7 @@ foreach data : virt_daemon_confs
+@@ -762,7 +762,7 @@ foreach data : virt_daemon_confs
      output: '@0@.conf'.format(data['name']),
      configuration: daemon_conf,
      install: true,
@@ -194,7 +194,7 @@ index dd2682ec19..b330d1159e 100644
    )
  
    if data.get('with_ip', false)
-@@ -910,7 +910,7 @@ if conf.has('WITH_LIBVIRTD')
+@@ -911,7 +911,7 @@ if conf.has('WITH_LIBVIRTD')
  
        install_data(
          init_file,
@@ -203,7 +203,7 @@ index dd2682ec19..b330d1159e 100644
          install_mode: 'rwxr-xr-x',
          rename: [ init['name'] ],
        )
-@@ -918,7 +918,7 @@ if conf.has('WITH_LIBVIRTD')
+@@ -919,7 +919,7 @@ if conf.has('WITH_LIBVIRTD')
        if init.has_key('confd')
          install_data(
            init['confd'],
@@ -212,7 +212,7 @@ index dd2682ec19..b330d1159e 100644
            rename: [ init['name'] ],
          )
        endif
-@@ -945,10 +945,10 @@ endif
+@@ -946,10 +946,10 @@ endif
  # Install empty directories
  
  virt_install_dirs += [
@@ -226,12 +226,12 @@ index dd2682ec19..b330d1159e 100644
 +  install_prefix + localstatedir / 'lib' / 'libvirt' / 'boot',
  ]
  
- meson.add_install_script(
+ if conf.has('WITH_LIBVIRTD')
 diff --git a/src/network/meson.build b/src/network/meson.build
-index 07cd5cda55..699309bb66 100644
+index 7a98974852..3a285d4084 100644
 --- a/src/network/meson.build
 +++ b/src/network/meson.build
-@@ -115,11 +115,11 @@ if conf.has('WITH_NETWORK')
+@@ -120,11 +120,11 @@ if conf.has('WITH_NETWORK')
    }
  
    virt_install_dirs += [
@@ -248,7 +248,7 @@ index 07cd5cda55..699309bb66 100644
    ]
  
    configure_file(
-@@ -127,12 +127,12 @@ if conf.has('WITH_NETWORK')
+@@ -132,12 +132,12 @@ if conf.has('WITH_NETWORK')
      output: '@BASENAME@',
      configuration: configmake_conf,
      install: true,
@@ -276,10 +276,10 @@ index d66c02a0e2..f883b65431 100644
    ]
  endif
 diff --git a/src/nwfilter/meson.build b/src/nwfilter/meson.build
-index de3d202267..346c435ee7 100644
+index 9e8a4797c5..e0782a8fad 100644
 --- a/src/nwfilter/meson.build
 +++ b/src/nwfilter/meson.build
-@@ -65,9 +65,9 @@ if conf.has('WITH_NWFILTER')
+@@ -66,9 +66,9 @@ if conf.has('WITH_NWFILTER')
    }
  
    virt_install_dirs += [
@@ -303,11 +303,11 @@ index 0d96c54ebe..66c92a1016 100644
 -install_data(nwfilter_xml_files, install_dir: sysconfdir / 'libvirt' / 'nwfilter')
 +install_data(nwfilter_xml_files, install_dir: install_prefix + sysconfdir / 'libvirt' / 'nwfilter')
 diff --git a/src/qemu/meson.build b/src/qemu/meson.build
-index 907893d431..99b62c8955 100644
+index b4fb62f14f..421aa94561 100644
 --- a/src/qemu/meson.build
 +++ b/src/qemu/meson.build
-@@ -218,25 +218,25 @@ if conf.has('WITH_QEMU')
-   endif
+@@ -211,26 +211,26 @@ if conf.has('WITH_QEMU')
+   }
  
    virt_install_dirs += [
 -    confdir / 'qemu',
@@ -322,6 +322,7 @@ index 907893d431..99b62c8955 100644
 -    localstatedir / 'lib' / 'libvirt' / 'qemu' / 'ram',
 -    localstatedir / 'lib' / 'libvirt' / 'qemu' / 'save',
 -    localstatedir / 'lib' / 'libvirt' / 'qemu' / 'snapshot',
+-    localstatedir / 'lib' / 'libvirt' / 'qemu' / 'varstore',
 -    localstatedir / 'lib' / 'libvirt' / 'swtpm',
 -    localstatedir / 'log' / 'libvirt' / 'qemu',
 -    localstatedir / 'log' / 'swtpm' / 'libvirt' / 'qemu',
@@ -342,6 +343,7 @@ index 907893d431..99b62c8955 100644
 +    install_prefix + localstatedir / 'lib' / 'libvirt' / 'qemu' / 'ram',
 +    install_prefix + localstatedir / 'lib' / 'libvirt' / 'qemu' / 'save',
 +    install_prefix + localstatedir / 'lib' / 'libvirt' / 'qemu' / 'snapshot',
++    install_prefix + localstatedir / 'lib' / 'libvirt' / 'qemu' / 'varstore',
 +    install_prefix + localstatedir / 'lib' / 'libvirt' / 'swtpm',
 +    install_prefix + localstatedir / 'log' / 'libvirt' / 'qemu',
 +    install_prefix + localstatedir / 'log' / 'swtpm' / 'libvirt' / 'qemu',
@@ -353,7 +355,7 @@ index 907893d431..99b62c8955 100644
    ]
  endif
 diff --git a/src/remote/meson.build b/src/remote/meson.build
-index 831acaaa01..0ba34d3bad 100644
+index e503263266..e0c660d8c9 100644
 --- a/src/remote/meson.build
 +++ b/src/remote/meson.build
 @@ -261,9 +261,9 @@ if conf.has('WITH_REMOTE')
@@ -378,7 +380,7 @@ index 831acaaa01..0ba34d3bad 100644
          rename: [ name ],
        )
      endforeach
-@@ -328,7 +328,7 @@ endif
+@@ -338,7 +338,7 @@ endif
  if conf.has('WITH_SASL')
    install_data(
      'libvirtd.sasl',
@@ -388,17 +390,19 @@ index 831acaaa01..0ba34d3bad 100644
    )
  endif
 diff --git a/src/secret/meson.build b/src/secret/meson.build
-index 3b859ea7b4..ccddb3e805 100644
+index cfcc861f4f..85b67a6e89 100644
 --- a/src/secret/meson.build
 +++ b/src/secret/meson.build
-@@ -48,7 +48,7 @@ if conf.has('WITH_SECRETS')
+@@ -79,8 +79,8 @@ if conf.has('WITH_SECRETS')
    }
  
    virt_install_dirs += [
 -    confdir / 'secrets',
 -    runstatedir / 'libvirt' / 'secrets',
+-    localstatedir / 'lib' / 'libvirt' / 'secrets',
 +    install_prefix + confdir / 'secrets',
 +    install_prefix + runstatedir / 'libvirt' / 'secrets',
++    install_prefix + localstatedir / 'lib' / 'libvirt' / 'secrets',
    ]
  endif
 diff --git a/src/security/apparmor/meson.build b/src/security/apparmor/meson.build
@@ -413,25 +417,25 @@ index 09d9fac02c..ee0c74ceec 100644
 +    install_dir: install_prefix + apparmor_dir,
    )
  endforeach
-
+ 
  install_data(
    [ 'libvirt-qemu', 'libvirt-lxc' ],
 -  install_dir: apparmor_dir / 'abstractions',
 +  install_dir: install_prefix + apparmor_dir / 'abstractions',
  )
-
+ 
  install_data(
    [ 'TEMPLATE.qemu', 'TEMPLATE.lxc' ],
 -  install_dir: apparmor_dir / 'libvirt',
 +  install_dir: install_prefix + apparmor_dir / 'libvirt',
  )
 diff --git a/src/storage/meson.build b/src/storage/meson.build
-index 404d6a6941..fb4e67a0a8 100644
+index f6f28757ef..2bf815fd03 100644
 --- a/src/storage/meson.build
 +++ b/src/storage/meson.build
-@@ -126,9 +126,9 @@ if conf.has('WITH_STORAGE')
+@@ -124,9 +124,9 @@ if conf.has('WITH_STORAGE')
    }
-
+ 
    virt_install_dirs += [
 -    confdir / 'storage',
 -    confdir / 'storage' / 'autostart',
@@ -441,27 +445,20 @@ index 404d6a6941..fb4e67a0a8 100644
 +    install_prefix + runstatedir / 'libvirt' / 'storage',
    ]
  endif
-
+ 
 diff --git a/tools/meson.build b/tools/meson.build
-index a099148d3c..d0d6510f17 100644
+index a099148d3c..bb39ad8ca8 100644
 --- a/tools/meson.build
 +++ b/tools/meson.build
-@@ -123,12 +123,12 @@ if conf.has('WITH_LOGIN_SHELL')
+@@ -123,7 +123,7 @@ if conf.has('WITH_LOGIN_SHELL')
      install_rpath: libvirt_rpath,
    )
-
+ 
 -  install_data('virt-login-shell.conf', install_dir: sysconfdir / 'libvirt')
 +  install_data('virt-login-shell.conf', install_dir: install_prefix + sysconfdir / 'libvirt')
-
+ 
    # Install the sysuser config for the setgid binary
    install_data(
-     'libvirt-login-shell.sysusers.conf',
--    install_dir: sysusersdir,
-+    install_dir: install_prefix + sysusersdir,
-     rename: [ 'libvirt-login-shell.conf' ],
-   )
- endif
-
 diff --git a/tools/ssh-proxy/meson.build b/tools/ssh-proxy/meson.build
 index e9f312fa25..95d5d8fe0b 100644
 --- a/tools/ssh-proxy/meson.build
@@ -475,5 +472,5 @@ index e9f312fa25..95d5d8fe0b 100644
    )
  endif
 -- 
-2.45.1
+2.53.0
 

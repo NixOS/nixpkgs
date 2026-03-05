@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter341,
   python3Packages,
   fetchFromGitHub,
   pcre2,
@@ -14,15 +14,15 @@
   nix-update-script,
 }:
 
-flutter335.buildFlutterApplication rec {
+flutter341.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.3.1";
+  version = "7.3.2";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     tag = version;
-    hash = "sha256-jfWLj5pN1NGfnmYQ0lYeKwlc0v7pCdvAjmmWX5GP7aM=";
+    hash = "sha256-UN3wWM3wa4c+qv5czn1z0bWlJPc4nUIPgF0HHi+9Muc=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -104,7 +104,10 @@ flutter335.buildFlutterApplication rec {
     mainProgram = "yubioath-flutter";
     homepage = "https://github.com/Yubico/yubioath-flutter";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lukegb ];
+    maintainers = with lib.maintainers; [
+      lukegb
+      ryand56
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

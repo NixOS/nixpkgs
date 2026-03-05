@@ -8,14 +8,15 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.25";
+  version = "0.6.26-unstable-2026-03-01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
-    tag = version;
-    hash = "sha256-tmSp6ABQ4KnNdUHYZPnXGfhhyhM6aczEUPd57APZnLA=";
+    # remember changing this back (and changelog below) to tag after new release come out
+    rev = "6157f5027c979aa05f8d97a09f1388ceb3085ac5";
+    hash = "sha256-1ljMsf8Puvq4ELUSi8Vl3T7EHcd7MO3zGgT4j5PYsT0=";
   };
 
   patches = [
@@ -148,7 +149,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
     homepage = "https://github.com/janeczku/calibre-web";
-    changelog = "https://github.com/janeczku/calibre-web/releases/tag/${src.tag}";
+    # revert back to tag based changelog
+    # changelog = "https://github.com/janeczku/calibre-web/releases/tag/${src.tag}";
+    changelog = "https://github.com/janeczku/calibre-web/compare/0.6.26...${src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pborzenkov ];
     mainProgram = "calibre-web";

@@ -98,8 +98,8 @@ ps.buildPythonApplication (finalAttrs: {
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p $out/share/pixmaps
-    ln -s $out/${python3.sitePackages}/normcap/resources/icons/normcap.png $out/share/pixmaps/
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    ln -s $out/${python3.sitePackages}/normcap/resources/icons/normcap.png $out/share/icons/hicolor/256x256/apps
   '';
 
   nativeCheckInputs =

@@ -21,6 +21,9 @@ buildPythonPackage rec {
 
   dependencies = [ llama-cloud-services ];
 
+  # llama-cloud-services fails to read
+  pythonRelaxDeps = [ "llama-cloud-services" ];
+
   pythonImportsCheck = [ "llama_parse" ];
 
   meta = {

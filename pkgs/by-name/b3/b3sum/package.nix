@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/BLAKE3-team/BLAKE3/";
     maintainers = with lib.maintainers; [
       fpletz
-      ivan
     ];
     license = with lib.licenses; [
       cc0

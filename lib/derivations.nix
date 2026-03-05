@@ -195,7 +195,7 @@ in
     # Type
 
     ```
-    optionalDrvAttr :: Bool -> a -> a | Null
+    optionalDrvAttr :: Bool -> a -> (a | Null)
     ```
 
     # Examples
@@ -232,6 +232,12 @@ in
 
     `drv`
     : The derivation to wrap.
+
+    # Type
+
+    ```
+    warnOnInstantiate :: String -> Derivation -> Derivation
+    ```
 
     # Examples
     :::{.example}

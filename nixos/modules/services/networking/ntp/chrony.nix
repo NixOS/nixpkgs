@@ -264,11 +264,6 @@ in
 
     services.timesyncd.enable = lib.mkForce false;
 
-    # If chrony controls and tracks the RTC, writing it externally causes clock error.
-    systemd.services.save-hwclock = lib.mkIf cfg.enableRTCTrimming {
-      enable = lib.mkForce false;
-    };
-
     systemd.services.systemd-timedated.environment = {
       SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service";
     };

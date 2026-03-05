@@ -12,7 +12,6 @@ let
     concatMap
     concatStringsSep
     elem
-    elemAt
     filter
     foldl'
     functionArgs
@@ -1461,7 +1460,7 @@ let
     # Type
 
     ```
-    option -> attrsOf { highestPrio, value }
+    mergeAttrDefinitionsWithPrio :: Option -> { [String] :: { highestPrio :: Int; value :: Any; } }
     ```
   */
   mergeAttrDefinitionsWithPrio =

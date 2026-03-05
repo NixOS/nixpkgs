@@ -7,21 +7,23 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyprland";
-  version = "2.6.2";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "pyprland";
     tag = finalAttrs.version;
-    hash = "sha256-jvdXytMnNrINNkSNljYFS9uomPmQ0g2Bnje/8YbsAv8=";
+    hash = "sha256-qayntjpE3WYBl6idfpwtvkEo61oHtc80uNEm0m4XA2o=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs = with python3Packages; [
     aiofiles
+    aiohttp
     pillow
+    questionary
   ];
   pythonRelaxDeps = [
     "aiofiles"
@@ -51,7 +53,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "pyprland.plugins.lost_windows"
     "pyprland.plugins.magnify"
     "pyprland.plugins.monitors"
-    "pyprland.plugins.monitors_v0"
     "pyprland.plugins.pyprland"
     "pyprland.plugins.scratchpads"
     "pyprland.plugins.shift_monitors"

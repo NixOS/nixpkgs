@@ -10,7 +10,7 @@
 {
   lib,
   stdenv,
-  Xaw3d,
+  libxaw3d,
   acl,
   alsa-lib,
   apple-sdk,
@@ -333,7 +333,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
   ]
   ++ lib.optionals withX [
-    Xaw3d
+    libxaw3d
     giflib
     libxaw
     libxpm

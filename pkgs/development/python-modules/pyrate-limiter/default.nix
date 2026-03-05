@@ -4,7 +4,8 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
+  uv-dynamic-versioning,
 
   # optional dependencies
   filelock,
@@ -21,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pyrate-limiter";
-  version = "3.9.0";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
     tag = "v${version}";
-    hash = "sha256-CAN3OWxXQaAzrh2q6z0OxPs4i02L/g2ISYFdUMHsHpg=";
+    hash = "sha256-xWxe70J69g9Tq35GjdJeT7MjUdoSEGj8w1cIKvLxJss=";
   };
 
   postPatch = ''
@@ -36,7 +37,10 @@ buildPythonPackage rec {
     sed -i "/create_postgres_bucket,/d" tests/conftest.py
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   optional-dependencies = {
     all = [
@@ -73,7 +77,12 @@ buildPythonPackage rec {
     "tests/test_bucket_factory.py"
     "tests/test_limiter.py"
     "tests/test_multiprocessing.py"
+    "tests/test_postgres_concurrent.py"
+    "tests/test_multi_bucket.py"
   ];
+
+  # For redisTestHook
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pyrate_limiter" ];
 

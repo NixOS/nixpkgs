@@ -25,7 +25,7 @@
   pkg-config,
   podofo_0_10,
   poppler-utils,
-  python3Packages,
+  python314Packages,
   qt6,
   speechd-minimal,
   sqlite,
@@ -35,65 +35,34 @@
   speechSupport ? true,
   unrarSupport ? false,
 }:
-
+let
+  python3Packages = python314Packages; # Calibre 9.0+ requires python3.14+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.16.2";
+  version = "9.4.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AYfQQ1T1PMB0EUHaAml37jCnfvoMN7GDm94FiCIsHGw=";
+    hash = "sha256-3anPEeVB5C7RuS5ZCFMvow5WhkIopgCpxpmcstsIgX4=";
   };
 
   patches =
     let
       debian-source = "ds+_0.10.5-1";
+      debian-tag = "${finalAttrs.version}+${debian-source}";
     in
     [
       #  allow for plugin update check, but no calibre version check
       (fetchpatch {
-        name = "0001-only-plugin-update.patch";
-        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/0001-only-plugin-update.patch";
-        hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
+        name = "0001-only-plugin-update-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/0001-only-plugin-update.patch";
+        hash = "sha256-/Hz8DSL1VC/wwQPOssM54MInLidfo7kJoR69yi2wAP4=";
       })
       (fetchpatch {
-        name = "0007-Hardening-Qt-code.patch";
-        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
+        name = "0007-Hardening-Qt-code-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
         hash = "sha256-lKp/omNicSBiQUIK+6OOc8ysM6LImn5GxWhpXr4iX+U=";
-      })
-      # Fix CVE-2026-25635
-      # http://tracker.security.nixos.org/issues/NIXPKGS-2026-0156
-      # https://github.com/NixOS/nixpkgs/issues/488046
-      # Fixed upstream in 9.2.0.
-      (fetchpatch {
-        name = "CVE-2026-25635.patch";
-        url = "https://github.com/kovidgoyal/calibre/commit/9739232fcb029ac15dfe52ccd4fdb4a07ebb6ce9.patch";
-        hash = "sha256-fzotxhfMF/DCMvpIfMSOGY8iVOybsYymRQvhXf7jQyc=";
-      })
-      # Fix CVE-2026-25636
-      # http://tracker.security.nixos.org/issues/NIXPKGS-2026-0160
-      # https://github.com/NixOS/nixpkgs/issues/488052
-      # Fixed upstream in 9.1.0.
-      #
-      # Both patches appear to be needed to fix the CVE.
-      (fetchpatch {
-        name = "CVE-2026-25636.1.patch";
-        url = "https://github.com/kovidgoyal/calibre/commit/267bfd34020a4f297c2de9cc0cde50ebe5d024d4.patch";
-        hash = "sha256-5CKlJG0e0v/VXiIeAqiByThRgMs+gwRdgOzPHupB8A8=";
-      })
-      (fetchpatch {
-        name = "CVE-2026-25636.2.patch";
-        url = "https://github.com/kovidgoyal/calibre/commit/9484ea82c6ab226c18e6ca5aa000fa16de598726.patch";
-        hash = "sha256-hpWFSQXyOAVRqou0v+5oT5zIrBbyP2Uv2z1Vg811ZG0=";
-      })
-      # Fix CVE-2026-25731
-      # http://tracker.security.nixos.org/issues/NIXPKGS-2026-0155
-      # https://github.com/NixOS/nixpkgs/issues/488045
-      # Fixed upstream in 9.2.0.
-      (fetchpatch {
-        name = "CVE-2026-25731.patch";
-        url = "https://github.com/kovidgoyal/calibre/commit/f0649b27512e987b95fcab2e1e0a3bcdafc23379.patch";
-        hash = "sha256-G9H6hEN5cyFIqDmJZv+bgt+6ZF6/K2t9npYjksjcxTo=";
       })
     ]
     ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
@@ -113,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3Packages.python
     qt6.qmake
     qt6.wrapQtAppsHook
     wrapGAppsHook3
@@ -190,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals speechSupport [
     piper-tts
-    speechd-minimal
+    (speechd-minimal.override { inherit python3Packages; })
   ];
 
   env = {
@@ -214,6 +184,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+
+    # Work around #493843 until #493988 lands on master.
+    export QMAKE="${qt6.qtbase}/bin/qmake"
 
     python setup.py install --root=$out \
       --prefix=$out \

@@ -1,6 +1,6 @@
 {
   version,
-  sha256,
+  hash,
   platforms,
   patches ? [ ],
 }:
@@ -23,7 +23,7 @@
 }:
 
 let
-  fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse3;
+  fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs.override { isFuse3 = true; } else fuse3;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sshfs-fuse";
@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
-    rev = "sshfs-${finalAttrs.version}";
-    inherit sha256;
+    tag = "sshfs-${finalAttrs.version}";
+    inherit hash;
   };
 
   inherit patches;
