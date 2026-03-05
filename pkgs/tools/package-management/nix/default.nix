@@ -252,7 +252,7 @@ lib.makeExtensible (
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_33;
+      latest = self.nix_2_34;
 
       # Read ./README.md before bumping a major release
       stable = addFallbackPathsCheck self.nix_2_31;
