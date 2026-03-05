@@ -32,6 +32,7 @@ let
     listToAttrs
     filter
     versionAtLeast
+    versionOlder
     ;
   inherit (lib.strings) match;
 
@@ -44,7 +45,7 @@ let
   sieveScriptSettings = mapAttrs' (
     to: _: nameValuePair "sieve_${to}" "${stateDir}/sieve/${to}"
   ) cfg.sieve.scripts;
-  imapSieveMailboxSettings = listToAttrs (
+  imapSieveMailboxSettings23 = listToAttrs (
     flatten (
       imap1 (
         idx: el:
@@ -90,7 +91,9 @@ let
     "sieve_pipe_bin_dir"
   ]
   ++ (builtins.attrNames sieveScriptSettings)
-  ++ (builtins.attrNames imapSieveMailboxSettings);
+  ++ lib.optionals (versionOlder cfg.package.version "2.4") (
+    builtins.attrNames imapSieveMailboxSettings23
+  );
 
   # The idea is to match everything that looks like `$term =`
   # but not `# $term something something`
@@ -204,6 +207,52 @@ let
         (concatMapAttrsStringSep "\n" (key: value: ''
           ${key} = ${value}
         '') cfg.pluginSettings)
+
+        (concatStringsSep "\n" (
+          imap1 (
+            idx: el:
+            let
+              before = ''
+                cause = ${concatStringsSep "," el.causes}
+                driver = file
+                path = ${stateDir}/imapsieve/before/${baseNameOf el.before}
+                type = before
+              '';
+              after = ''
+                cause = ${concatStringsSep "," el.causes}
+                driver = file
+                path = ${stateDir}/imapsieve/after/${baseNameOf el.after}
+                type = after
+              '';
+            in
+            ''
+              mailbox ${el.name} {
+                ${lib.optionalString (el.before != null) ''
+                  sieve_script script-${toString idx}-before {
+                    ${lib.optionalString (el.from == null) before}
+                  }
+                ''}
+                ${lib.optionalString (el.after != null) ''
+                  sieve_script script-${toString idx}-after {
+                    ${lib.optionalString (el.from == null) after}
+                  }
+                ''}
+              }
+              ${lib.optionalString (el.from != null) ''
+                ${lib.optionalString (el.before != null) ''
+                  sieve_script script-${toString idx}-before {
+                    ${before}
+                  }
+                ''}
+                ${lib.optionalString (el.after != null) ''
+                  sieve_script script-${toString idx}-after {
+                    ${after}
+                  }
+                ''}
+              ''}
+            ''
+          ) cfg.imapsieve.mailbox
+        ))
 
         cfg.extraConfig
       ]
@@ -796,7 +845,6 @@ in
           })
           // (optionalAttrs (cfg.sieve.pipeBins != [ ]) { sieve_pipe_bin_dir = sievePipeBinScriptDirectory; })
           // sieveScriptSettings
-          // imapSieveMailboxSettings
         else
           {
             sieve_plugins = concatStringsSep " " cfg.sieve.plugins;
@@ -805,7 +853,7 @@ in
             sieve_pipe_bin_dir = sievePipeBinScriptDirectory;
           }
           // sieveScriptSettings
-          // imapSieveMailboxSettings
+          // imapSieveMailboxSettings23
       );
     };
 
