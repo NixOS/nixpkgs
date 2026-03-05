@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/nik012003/ripdrag";
     changelog = "https://github.com/nik012003/ripdrag/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "ripdrag";
   };
 })
