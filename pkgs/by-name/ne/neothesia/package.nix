@@ -14,20 +14,16 @@
   libxcursor,
   libx11,
 }:
-let
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "neothesia";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "PolyMeilex";
     repo = "Neothesia";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qYwBSye6RYClSlWmHwuy/rxq9w5932tR33Z+o2S1l8k=";
   };
-in
-rustPlatform.buildRustPackage {
-  pname = "neothesia";
-
-  inherit src version;
 
   buildInputs = [
     ffmpeg_7
@@ -74,4 +70,4 @@ rustPlatform.buildRustPackage {
       lib.maintainers.naxdy
     ];
   };
-}
+})
