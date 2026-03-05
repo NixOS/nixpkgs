@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   script = ./extract-cfile.awk;
 
   src = fetchurl {
-    url = "http://www.ietf.org/rfc/rfc3951.txt";
+    url = "https://www.ietf.org/rfc/rfc3951.txt";
     sha256 = "0zf4mvi3jzx6zjrfl2rbhl2m68pzbzpf1vbdmn7dqbfpcb67jpdy";
   };
 
