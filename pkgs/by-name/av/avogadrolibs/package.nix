@@ -14,6 +14,7 @@
   libmsym,
   jkqtplotter,
   qt6,
+  nix-update-script,
 }:
 
 let
@@ -84,11 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Fix the broken CMake files to use the correct paths
   postInstall = ''
     substituteInPlace $out/lib/cmake/avogadrolibs/AvogadroLibsConfig.cmake \
-      --replace "$out/" ""
+      --replace-fail "$out/" ""
 
     substituteInPlace $out/lib/cmake/avogadrolibs/AvogadroLibsTargets.cmake \
-      --replace "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
+      --replace-fail '_IMPORT_PREFIX $out' '_IMPORT_PREFIX /'
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Molecule editor and visualizer";
