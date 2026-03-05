@@ -11404,8 +11404,6 @@ with pkgs;
 
   ### SCIENCE/CHEMISTY
 
-  avogadro2 = callPackage ../applications/science/chemistry/avogadro2 { };
-
   libxc_7 = pkgs.libxc.override { version = "7.0.0"; };
 
   molbar = with python3Packages; toPythonApplication molbar;
