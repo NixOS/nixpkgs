@@ -82,6 +82,7 @@ buildGoModule.override { go = go_1_26; } rec {
     maintainers = with lib.maintainers; [
       jlesquembre
       ryan4yin
+      SchahinRohani
     ];
     mainProgram = "flux";
   };
