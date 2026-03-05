@@ -314,6 +314,7 @@
       oras
       oschmod
     ];
+    pythonRelaxDeps = true;
     meta = {
       maintainers = with lib.maintainers; [ gordon-bp ];
       changelog = "https://github.com/Azure/azure-cli-extensions/blob/ssh-${version}/src/ssh/HISTORY.md";
