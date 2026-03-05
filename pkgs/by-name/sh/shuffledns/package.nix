@@ -3,6 +3,8 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  makeWrapper,  
+  massdns,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,7 +22,15 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/shuffledns" ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+   nativeBuildInputs = [
+    makeWrapper
+    versionCheckHook
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/shuffledns \
+      --prefix PATH : ${lib.makeBinPath [ massdns ]}
+  '';
 
   ldflags = [
     "-s"
