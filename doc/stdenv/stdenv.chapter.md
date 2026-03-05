@@ -1631,6 +1631,12 @@ Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the gener
 
 This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
 
+#### `libcxxhardeningfast` {#libcxxhardeningfast}
+
+Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "fast" mode contains a set of security-critical checks that can be done with relatively little overhead in constant time.
+
+Disabling `libcxxhardeningfast` implies disablement of checks from `libcxxhardeningextensive`.
+
 #### `strictflexarrays1` {#strictflexarrays1}
 
 This flag adds the `-fstrict-flex-arrays=1` compiler option, which reduces the cases the compiler treats as "flexible arrays" to those declared with length `[1]`, `[0]` or (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
@@ -1682,12 +1688,6 @@ sorry, unimplemented: __builtin_clear_padding not supported for variable length 
 Adds the `-D_GLIBCXX_ASSERTIONS` compiler flag. This flag only has an effect on libstdc++ targets, and when defined, enables extra error checking in the form of precondition assertions, such as bounds checking in c++ strings and null pointer checks when dereferencing c++ smart pointers.
 
 These checks may have an impact on performance in some cases.
-
-#### `libcxxhardeningfast` {#libcxxhardeningfast}
-
-Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "fast" mode contains a set of security-critical checks that can be done with relatively little overhead in constant time.
-
-Disabling `libcxxhardeningfast` implies disablement of checks from `libcxxhardeningextensive`.
 
 #### `libcxxhardeningextensive` {#libcxxhardeningextensive}
 

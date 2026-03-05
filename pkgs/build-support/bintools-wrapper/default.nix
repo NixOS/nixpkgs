@@ -49,7 +49,6 @@
     "format"
     "fortify"
     "fortify3"
-    "libcxxhardeningextensive"
     "libcxxhardeningfast"
     "pic"
     "relro"

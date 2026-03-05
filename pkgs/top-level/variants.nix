@@ -164,7 +164,7 @@ self: super: {
               "nostrictaliasing"
               "pacret"
               "glibcxxassertions"
-              "libcxxhardeningfast"
+              "libcxxhardeningextensive"
               "trivialautovarinit"
             ]
           ) super'.stdenv;
