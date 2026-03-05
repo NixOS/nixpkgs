@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "doge";
-  version = "3.9.0";
+  version = "3.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Olivia5k";
     repo = "doge";
     tag = finalAttrs.version;
-    hash = "sha256-aJ1SFehjKiSc7osf5BOB1xjDnrkVXp37PQ5bNpbv1Mk=";
+    hash = "sha256-Bvk6LZT4H5ge+n/CuUI42d3OXOxZfHp+kGG74o10yac=";
   };
 
   build-system = [ python3Packages.hatchling ];
