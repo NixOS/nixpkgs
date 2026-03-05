@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.8.2";
 
   src = fetchurl {
-    url = "http://www.ergoscf.org/source/tarfiles/ergo-${finalAttrs.version}.tar.gz";
+    url = "https://www.ergoscf.org/source/tarfiles/ergo-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-U0NVREEZ8HI0Q0ZcbwvZsYA76PWMh7bqgDG1uaUc01c=";
   };
 
