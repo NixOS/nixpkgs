@@ -10,25 +10,28 @@
   openbabel,
   qt6,
   mesa,
+  nix-update-script,
 }:
 
 let
+  version = "1.103.0";
+
   avogadroI18N = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadro-i18n";
-    tag = "1.103.0";
+    tag = version;
     hash = "sha256-gdr0Ed0UWjQB0LQq+6RvlAb8ZNFQAjV9mrgFLePG+CM=";
   };
 
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
+  inherit version;
   pname = "avogadro2";
-  version = "1.103.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
-    rev = finalAttrs.version;
+    tag = version;
     hash = "sha256-nmvK3R966Xv2Xs5wXDh/8itIZLIRqbXHFe8dffFiI+s=";
   };
 
@@ -53,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = [ "--prefix PATH : ${lib.getBin openbabel}/bin" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Molecule editor and visualizer";
     mainProgram = "avogadro2";
@@ -61,4 +66,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (mesa.meta) platforms;
     license = lib.licenses.bsd3;
   };
-})
+}
