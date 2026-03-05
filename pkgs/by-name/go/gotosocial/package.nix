@@ -7,6 +7,7 @@
   yarn,
   yarnConfigHook,
   nixosTests,
+  nix-update-script,
 }:
 buildGo124Module (finalAttrs: {
   pname = "gotosocial";
@@ -82,6 +83,7 @@ buildGo124Module (finalAttrs: {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.gotosocial = nixosTests.gotosocial;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gotosocial.org";
