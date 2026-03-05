@@ -9,7 +9,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.1.9";
 
   src = fetchCrate {
-    inherit (finalAttrs) pname version;
+    pname = "csv2svg";
+    inherit (finalAttrs) version;
     hash = "sha256-3VebLFkeJLK97jqoPXt4Wt6QTR0Zyu+eQV9oaLBSeHE=";
   };
 
