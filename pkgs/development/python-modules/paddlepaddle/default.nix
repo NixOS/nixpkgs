@@ -135,6 +135,7 @@ buildPythonPackage {
   passthru.updateScript = ./update.sh;
 
   meta = {
+    broken = true;
     description = "Machine Learning Framework from Industrial Practice";
     homepage = "https://github.com/PaddlePaddle/Paddle";
     license = lib.licenses.asl20;
