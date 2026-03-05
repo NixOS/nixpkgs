@@ -9,7 +9,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.5.4";
 
   src = fetchCrate {
-    inherit (finalAttrs) pname version;
+    pname = "rust-audit-info";
+    inherit (finalAttrs) version;
     hash = "sha256-zxdF65/9cgdDLM7HA30NCEZj1S5SogH+oM3aq55K0os=";
   };
 
