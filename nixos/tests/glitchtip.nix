@@ -16,7 +16,7 @@ in
     {
       services.glitchtip = {
         enable = true;
-        port = 8000;
+        settings.GRANIAN_PORT = 8000;
         settings.GLITCHTIP_DOMAIN = domain;
         environmentFiles = [
           (builtins.toFile "glitchtip.env" ''
@@ -31,7 +31,7 @@ in
     };
 
   interactive.nodes.machine = {
-    services.glitchtip.listenAddress = "0.0.0.0";
+    services.glitchtip.settings.GRANIAN_HOST = "0.0.0.0";
     networking.firewall.allowedTCPPorts = [ 8000 ];
     virtualisation.forwardPorts = [
       {
