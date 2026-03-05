@@ -4,6 +4,8 @@
   ...
 }:
 {
+  meta.maintainers = with lib.maintainers; [ efficacy38 ];
+
   imports = [
     ./repository-service.nix
     ./policy-service.nix
