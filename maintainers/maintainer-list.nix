@@ -4457,6 +4457,12 @@
     githubId = 495429;
     name = "Claas Augner";
   };
+  caverav = {
+    email = "camilo@fvv.cl";
+    github = "caverav";
+    githubId = 66751764;
+    name = "Camilo Vera Vidales";
+  };
   cawilliamson = {
     email = "home@chrisaw.com";
     github = "cawilliamson";
