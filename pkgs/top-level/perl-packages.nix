@@ -18496,6 +18496,14 @@ with self;
     nativeBuildInputs = [
       pkgs.makeWrapper
     ];
+    patches = [
+      # backport LaTeXML 0.9 fix for Unicode 16.0 change
+      (fetchpatch {
+        url = "https://github.com/brucemiller/latexml/commit/4175d31afc8da61039adffaf8e42657196bff071.patch";
+        hash = "sha256-QimM8F9Jz8xYT/5q5C+YcGyVyNmDeQPE6/qVHaFfevE=";
+        includes = [ "lib/LaTeXML/Common/Font.pm" ];
+      })
+    ];
     makeMakerFlags = [
       "TEXMF=\${tex}"
       "NOMKTEXLSR"
@@ -32531,12 +32539,12 @@ with self;
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "11.6.0";
+    version = "12.1.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       tag = "v${version}";
-      hash = "sha256-a3c+ESUkpfaxJ6wuwgCRUoX5+N2KmpqXBgNNVqYZ/T0=";
+      hash = "sha256-WjTDvmnj1i1hoC6dska1VEJOiKi+obPjGlO7T2Now+U=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [

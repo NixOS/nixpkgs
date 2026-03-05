@@ -261,7 +261,7 @@ rec {
     # Type
 
     ```
-    foldl' :: (acc -> x -> acc) -> acc -> [x] -> acc
+    foldl' :: (a -> b -> a) -> a -> [b] -> a
     ```
 
     # Examples
@@ -298,7 +298,7 @@ rec {
     # Type
 
     ```
-    imap0 :: (int -> a -> b) -> [a] -> [b]
+    imap0 :: (Int -> a -> b) -> [a] -> [b]
     ```
 
     # Examples
@@ -330,7 +330,7 @@ rec {
     # Type
 
     ```
-    imap1 :: (int -> a -> b) -> [a] -> [b]
+    imap1 :: (Int -> a -> b) -> [a] -> [b]
     ```
 
     # Examples
@@ -372,7 +372,7 @@ rec {
 
     # Type
     ```
-    ifilter0 :: (int -> a -> bool) -> [a] -> [a]
+    ifilter0 :: (Int -> a -> Bool) -> [a] -> [a]
     ```
 
     # Examples
@@ -422,6 +422,12 @@ rec {
     `x`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    flatten :: [a | [a | [a | ...]]] -> [a]
+    ```
 
     # Examples
     :::{.example}
@@ -498,7 +504,7 @@ rec {
     # Type
 
     ```
-    findSingle :: (a -> bool) -> a -> a -> [a] -> a
+    findSingle :: (a -> Bool) -> a -> a -> [a] -> a
     ```
 
     # Examples
@@ -620,7 +626,7 @@ rec {
     # Type
 
     ```
-    findFirst :: (a -> bool) -> a -> [a] -> a
+    findFirst :: (a -> Bool) -> a -> [a] -> a
     ```
 
     # Examples
@@ -660,7 +666,7 @@ rec {
     # Type
 
     ```
-    any :: (a -> bool) -> [a] -> bool
+    any :: (a -> Bool) -> [a] -> Bool
     ```
 
     # Examples
@@ -695,7 +701,7 @@ rec {
     # Type
 
     ```
-    all :: (a -> bool) -> [a] -> bool
+    all :: (a -> Bool) -> [a] -> Bool
     ```
 
     # Examples
@@ -726,7 +732,7 @@ rec {
     # Type
 
     ```
-    count :: (a -> bool) -> [a] -> int
+    count :: (a -> Bool) -> [a] -> Int
     ```
 
     # Examples
@@ -760,7 +766,7 @@ rec {
     # Type
 
     ```
-    optional :: bool -> a -> [a]
+    optional :: Bool -> a -> [a]
     ```
 
     # Examples
@@ -794,7 +800,7 @@ rec {
     # Type
 
     ```
-    optionals :: bool -> [a] -> [a]
+    optionals :: Bool -> [a] -> [a]
     ```
 
     # Examples
@@ -822,6 +828,12 @@ rec {
     `x`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    toList :: (a | [a]) -> [a]
+    ```
 
     # Examples
     :::{.example}
@@ -854,7 +866,7 @@ rec {
     # Type
 
     ```
-    range :: int -> int -> [int]
+    range :: Int -> Int -> [Int]
     ```
 
     # Examples
@@ -888,7 +900,7 @@ rec {
     # Type
 
     ```
-    replicate :: int -> a -> [a]
+    replicate :: Int -> a -> [a]
     ```
 
     # Examples
@@ -923,7 +935,7 @@ rec {
     # Type
 
     ```
-    (a -> bool) -> [a] -> { right :: [a]; wrong :: [a]; }
+    partition :: (a -> Bool) -> [a] -> { right :: [a]; wrong :: [a]; }
     ```
 
     # Examples
@@ -961,6 +973,12 @@ rec {
     `lst`
 
     : 4\. Function argument
+
+    # Type
+
+    ```
+    groupBy' :: (a -> b -> a) -> a -> (b -> String) -> [b] -> { [String] :: a }
+    ```
 
     # Examples
     :::{.example}
@@ -1128,6 +1146,12 @@ rec {
 
     : 3\. Function argument
 
+    # Type
+
+    ```
+    listDfs :: Bool -> (a -> a -> Bool) -> [a] -> ({ minimal :: a; visited :: [a]; rest :: [a]; } | { cycle :: a; loops :: [a]; visited :: [a]; rest :: [a]; })
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.listDfs` usage example
@@ -1192,6 +1216,12 @@ rec {
     `list`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    toposort :: (a -> a -> Bool) -> [a] -> ({ result :: [a]; } | { cycle :: [a]; loops :: [a]; })
+    ```
 
     # Examples
     :::{.example}
@@ -1364,6 +1394,12 @@ rec {
 
     : The second list
 
+    # Type
+
+    ```
+    compareLists :: (a -> a -> Int) -> [a] -> [a] -> Int
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.compareLists` usage examples
@@ -1402,6 +1438,12 @@ rec {
     `lst`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    naturalSort :: [String] -> [String]
+    ```
 
     # Examples
     :::{.example}
@@ -1446,7 +1488,7 @@ rec {
     # Type
 
     ```
-    take :: int -> [a] -> [a]
+    take :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1480,7 +1522,7 @@ rec {
     # Type
 
     ```
-    takeEnd :: int -> [a] -> [a]
+    takeEnd :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1514,7 +1556,7 @@ rec {
     # Type
 
     ```
-    drop :: int -> [a] -> [a]
+    drop :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1582,7 +1624,7 @@ rec {
     # Type
 
     ```
-    hasPrefix :: [a] -> [a] -> bool
+    hasPrefix :: [a] -> [a] -> Bool
     ```
 
     # Examples
@@ -1661,7 +1703,7 @@ rec {
     # Type
 
     ```
-    sublist :: int -> int -> [a] -> [a]
+    sublist :: Int -> Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1879,7 +1921,7 @@ rec {
     # Type
 
     ```
-    uniqueStrings :: [ String ] -> [ String ]
+    uniqueStrings :: [String] -> [String]
     ```
 
     # Examples
@@ -1907,7 +1949,7 @@ rec {
     # Type
 
     ```
-    allUnique :: [a] -> bool
+    allUnique :: [a] -> Bool
     ```
 
     # Examples
@@ -1940,6 +1982,12 @@ rec {
 
     : Second list
 
+    # Type
+
+    ```
+    intersectLists :: [a] -> [a] -> [a]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.intersectLists` usage example
@@ -1968,6 +2016,12 @@ rec {
 
     : Second list
 
+    # Type
+
+    ```
+    subtractLists :: [a] -> [a] -> [a]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.subtractLists` usage example
@@ -1994,6 +2048,12 @@ rec {
     `b`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    mutuallyExclusive :: [a] -> [a] -> Bool
+    ```
   */
   mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
 
@@ -2006,6 +2066,12 @@ rec {
     `set`
 
     : Attribute set with attributes that are lists
+
+    # Type
+
+    ```
+    concatAttrValues :: { [String] :: [a] } -> [a]
+    ```
 
     # Examples
     :::{.example}
@@ -2037,7 +2103,7 @@ rec {
     # Type
 
     ```
-    replaceElemAt :: [a] -> int - b -> [a]
+    replaceElemAt :: [a] -> Int -> a -> [a]
     ```
 
     # Examples

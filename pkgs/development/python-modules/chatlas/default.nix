@@ -24,6 +24,7 @@
   pillow,
   pytest-asyncio,
   pytest-snapshot,
+  pytest-vcr,
   pytestCheckHook,
   tenacity,
 }:
@@ -64,6 +65,7 @@ buildPythonPackage rec {
     pillow
     pytest-asyncio
     pytest-snapshot
+    pytest-vcr
     pytestCheckHook
     tenacity
   ];
