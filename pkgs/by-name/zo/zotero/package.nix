@@ -26,13 +26,13 @@ let
   nodejs = nodejs_22;
 
   pname = "zotero";
-  version = "8.0.2";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
-    hash = "sha256-zGcTZjrbFYbE4qJH5g3betnSLCdxYU2nZBOU55HunYU=";
+    hash = "sha256-I6s6m8CG1b1BXQK2qIdOqmsNyxzwj3fAfFFuHK7t6ec=";
     fetchSubmodules = true;
   };
 
