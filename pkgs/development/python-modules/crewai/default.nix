@@ -15,6 +15,7 @@
   json-repair,
   json5,
   jsonref,
+  lancedb,
   litellm,
   mcp,
   openai,
@@ -29,6 +30,7 @@
   pyjwt,
   python-dotenv,
   regex,
+  textual,
   tokenizers,
   tomli,
   tomli-w,
@@ -52,14 +54,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai";
-  version = "1.9.3";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = finalAttrs.version;
-    hash = "sha256-bhpmR8sGDTjHw9JBa5oz4vHEF3gJT/fvvoCvPfYkJEQ=";
+    hash = "sha256-oHDGn77rmjKKH4t+5xSy+r6m/GaI+q6RDwrTpWfIrxs=";
   };
 
   postPatch = ''
@@ -84,6 +86,7 @@ buildPythonPackage (finalAttrs: {
     "click"
     "json-repair"
     "json5"
+    "lancedb"
     "litellm"
     "mcp"
     "openai"
@@ -112,6 +115,7 @@ buildPythonPackage (finalAttrs: {
     json-repair
     json5
     jsonref
+    lancedb
     litellm
     mcp
     openai
@@ -126,6 +130,7 @@ buildPythonPackage (finalAttrs: {
     pyjwt
     python-dotenv
     regex
+    textual
     tokenizers
     tomli
     tomli-w
@@ -135,11 +140,8 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "crewai" ];
 
   disabledTestPaths = [
-    # Ignore tests that require {mem0, chromadb, telemetry, security, test_agent}
-    "tests/memory/test_external_memory.py" # require mem0ai
-    "tests/storage/test_mem0_storage.py" # require mem0ai
+    # Ignore tests that require {chromadb, telemetry, security, test_agent}
     "tests/cli/test_git.py" # require git
-    "tests/memory/test_short_term_memory.py" # require require API keys
     "tests/test_crew.py" # require require API keys
     "tests/rag/chromadb/test_client.py" # issue with chromadb
     "tests/telemetry/test_telemetry.py" # telemetry need network access
@@ -155,6 +157,7 @@ buildPythonPackage (finalAttrs: {
     "tests/llms/litellm"
     "tests/llms/hooks/test_anthropic_interceptor.py"
     "tests/llms/hooks/test_unsupported_providers.py"
+    "tests/mcp/test_amp_mcp.py" # require crewai-tools
 
     # Tests requiring network/API access
     "tests/llms/openai"
@@ -164,6 +167,10 @@ buildPythonPackage (finalAttrs: {
     "tests/hooks"
     "tests/llms/hooks/test_openai_interceptor.py"
     "tests/test_llm.py"
+    "tests/agents/test_native_tool_calling.py"
+    "tests/utilities/test_agent_utils.py"
+    "tests/utilities/test_events.py"
+    "tests/utilities/test_summarize_integration.py"
 
     # Tests requiring crewai-tools
     "tests/agents/test_lite_agent.py"
