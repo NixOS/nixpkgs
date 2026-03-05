@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mephistophiles
+      progrm_jarvis
     ];
     mainProgram = "simple-http-server";
   };
