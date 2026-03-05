@@ -13,7 +13,7 @@
   libGL,
   libx11,
   hwdata,
-  mangohud32,
+  pkgsi686Linux,
   addDriverRunpath,
   appstream,
   glslang,
@@ -23,14 +23,14 @@
   pkg-config,
   unzip,
   wayland,
-  libXNVCtrl,
+  linuxPackages,
   spdlog,
   libxkbcommon,
   glfw,
   libxrandr,
   x11Support ? true,
   waylandSupport ? true,
-  nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform libXNVCtrl,
+  nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform linuxPackages.nvidia_x11.settings.libXNVCtrl,
   gamescopeSupport ? true,
   mangoappSupport ? gamescopeSupport,
   mangohudctlSupport ? gamescopeSupport,
@@ -90,6 +90,9 @@ let
       hash = "sha256-hgNYz15z9FjNHoj4w4EW0SOrQh1c4uQSnsOOrt2CDhc=";
     };
   };
+  libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  mangohud32 = pkgsi686Linux.mangohud;
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
