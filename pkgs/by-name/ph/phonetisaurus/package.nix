@@ -2,41 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
+  openfst,
   pkg-config,
   python3,
-  openfst,
 }:
 
-let
-  openfst' = openfst.overrideAttrs (old: rec {
-    version = "1.7.9";
-    src = fetchurl {
-      url = "http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-${version}.tar.gz";
-      hash = "sha256-kxmusx0eKVCuJUSYhOJVzCvJ36+Yf2AVkHY+YaEPvd4=";
-    };
-
-    postPatch = (old.postPatch or "") + ''
-      # Fix the 's_' typo that breaks modern GCC
-      substituteInPlace src/include/fst/bi-table.h \
-        --replace-fail "selector_(table.s_)" "selector_(table.selector_)"
-
-      # Fix invalid unique_ptr assignments for modern C++ standards
-      substituteInPlace src/include/fst/fst.h \
-        --replace-fail "isymbols_ = impl.isymbols_ ? impl.isymbols_->Copy() : nullptr;" "isymbols_.reset(impl.isymbols_ ? impl.isymbols_->Copy() : nullptr);" \
-        --replace-fail "osymbols_ = impl.osymbols_ ? impl.osymbols_->Copy() : nullptr;" "osymbols_.reset(impl.osymbols_ ? impl.osymbols_->Copy() : nullptr);"
-    '';
-  });
-in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "phonetisaurus";
-  version = "0.9.1";
+  version = "0.9.1-unstable-2026-01-05";
 
   src = fetchFromGitHub {
-    owner = "AdolfVonKleist";
-    repo = "phonetisaurus";
-    tag = finalAttrs.version;
-    hash = "sha256-Lt7xKLrpcLw8ouLfCJZdWDb0XfrmW+LM+fe8st3B8ow=";
+    owner = "danijel3";
+    repo = "Phonetisaurus";
+    tag = "kaldi";
+    sha256 = "sha256-dPAVasGSD2j8xmUQsWE0tjAXvCBNOuXLq+ayttA5r2Q=";
   };
 
   strictDeps = true;
@@ -48,14 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     python3
-    openfst'
+    openfst
   ];
 
   meta = {
     description = "Framework for Grapheme-to-phoneme models for speech recognition using the OpenFst framework";
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = "https://github.com/AdolfVonKleist/Phonetisaurus";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.unix;
   };
-})
+}
