@@ -2116,6 +2116,7 @@ with pkgs;
   gnused = callPackage ../tools/text/gnused { };
 
   inherit (callPackage ../development/tools/godot { })
+    buildGodotModule
     godot3
     godot3-export-templates
     godot3-headless
