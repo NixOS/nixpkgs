@@ -192,6 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
       daemons.
     '';
 
+    changelog = "https://www.kernel.org/pub/linux/utils/nfs-utils/${finalAttrs.version}/${finalAttrs.version}-Changelog";
     homepage = "https://linux-nfs.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
