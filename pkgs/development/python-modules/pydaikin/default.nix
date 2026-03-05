@@ -13,7 +13,7 @@
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydaikin";
   version = "2.18.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pydaikin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sTcdgbthDAyyWLxPtS344xR8a7UoN+zrfes6FXSo9g4=";
   };
 
@@ -54,9 +54,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python Daikin HVAC appliances interface";
     homepage = "https://github.com/fredrike/pydaikin";
-    changelog = "https://github.com/fredrike/pydaikin/releases/tag/${src.tag}";
-    license = with lib.licenses; [ gpl3Only ];
+    changelog = "https://github.com/fredrike/pydaikin/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pydaikin";
   };
-}
+})
