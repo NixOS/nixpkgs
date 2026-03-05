@@ -303,6 +303,8 @@ in
 
         amdgpu-i2c = callPackage ../os-specific/linux/amdgpu-i2c { };
 
+        amdxdna = callPackage ../os-specific/linux/amdxdna { };
+
         amneziawg = callPackage ../os-specific/linux/amneziawg { };
 
         apfs = callPackage ../os-specific/linux/apfs { };
