@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Take a csv as input and outputs svg";
     homepage = "https://github.com/Canop/csv2svg";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "csv2svg";
   };
 })
