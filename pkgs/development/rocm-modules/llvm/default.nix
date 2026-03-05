@@ -2,7 +2,7 @@
   lib,
   stdenv,
   # LLVM version closest to ROCm fork to override
-  llvmPackages_20,
+  llvmPackages_22,
   overrideCC,
   lndir,
   rocm-device-libs,
@@ -22,23 +22,27 @@
   # leaving compressed line tables (-g1 -gz) unstripped
   # TODO: Should also apply to downstream packages which use rocmClangStdenv?
   profilableStdenv ? false,
+  # FIXME: proper two-stage bootstrap & PGO/BOLT/LTO
+  # LTO currently disabled due to llvm 22 vs 22.1 bitcode mismatch between
+  # llvmPackages_22 (22.1) and ROCm LLVM (22.0). Uses new bitcode attr
+  # 105 nocreateundeforpoison fails to link hipify.
   # Whether to use LTO when building the ROCm toolchain
   # Slows down this toolchain's build, for typical ROCm usecase
   # time saved building composable_kernel and other heavy packages
   # will outweight that. ~3-4% speedup multiplied by thousands
   # of corehours.
-  withLto ? true,
+  withLto ? false,
   # whether rocm stdenv uses libcxx (clang c++ stdlib) instead of gcc stdlibc++
   withLibcxx ? false,
 }:
 
 let
-  version = "7.1.1";
+  version = "7.2.0";
   # major version of this should be the clang version ROCm forked from
-  rocmLlvmVersion = "20.0.0-rocm";
+  rocmLlvmVersion = "22.0.0-rocm";
   # llvmPackages_base version should match rocmLlvmVersion
   # so libllvm's bitcode is compatible with the built toolchain
-  llvmPackages_base = llvmPackages_20;
+  llvmPackages_base = llvmPackages_22;
   llvmPackagesNoBintools = llvmPackages_base.override {
     bootBintools = null;
     bootBintoolsNoLibc = null;
@@ -115,7 +119,7 @@ let
     owner = "ROCm";
     repo = "llvm-project";
     rev = "rocm-${version}";
-    hash = "sha256-CfknIRVeR1bCKh1xzXKl3ehVp0kWT0uGrI9C1HTSKVo=";
+    hash = "sha256-I/Bxq1JjU9N4h3vXj/tbD3xPYY4+N7QzYA8UTIq1EL0=";
   };
   llvmMajorVersion = lib.versions.major rocmLlvmVersion;
   # An llvmPackages (pkgs/development/compilers/llvm/) built from ROCm LLVM's source tree
@@ -197,9 +201,22 @@ let
         rm -rf $out/lib/cmake $out/lib/lib*.a
         mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/linux/
         ln -s $out/lib/linux/libclang_rt.* $out/lib/clang/${llvmMajorVersion}/lib/linux/
+        mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/${stdenv.hostPlatform.config}/
+        for f in $out/lib/linux/*-${stdenv.hostPlatform.parsed.cpu.name}.*; do
+          [ -e "$f" ] || continue
+          base="$(basename "$f" | sed 's/-${stdenv.hostPlatform.parsed.cpu.name}\././')"
+          ln -sf "$f" "$out/lib/clang/${llvmMajorVersion}/lib/${stdenv.hostPlatform.config}/$base"
+        done
 
         find $out -type f -exec sed -i "s|${cc.out}|$out|g" {} +
         find $out -type f -exec sed -i "s|${cc.dev}|$out|g" {} +
+
+        # Clang config file: redirect resource dir to the sysroot (where compiler-rt
+        # lives) and set GCC install prefix for header/library search
+        cat > $out/bin/${stdenv.hostPlatform.config}.cfg <<CFG
+        -resource-dir=$out/lib/clang/${llvmMajorVersion}
+        ${lib.optionalString (!withLibcxx) "--gcc-toolchain=${gcc-prefix}"}
+        CFG
 
         ${lib.getExe rdfind} -makesymlinks true ${
           builtins.concatStringsSep " " (map (x: "${x}/lib") paths)
@@ -233,6 +250,9 @@ let
     (lib.cmakeFeature "LLVM_ENABLE_ZSTD" "FORCE_ON")
     # required for threaded ThinLTO to work
     (lib.cmakeBool "LLVM_ENABLE_THREADS" true)
+    # third-party/benchmark is broken in rocm-7.2.0
+    # error: '__COUNTER__' is a C2y extension [-Werror,-Wc2y-extensions]
+    (lib.cmakeBool "LLVM_INCLUDE_BENCHMARKS" false)
     # LLVM tries to call git to embed VCS info if FORCE_VC_ aren't set
     (lib.cmakeFeature "LLVM_FORCE_VC_REVISION" "rocm-${version}")
     (lib.cmakeFeature "LLVM_FORCE_VC_REPOSITORY" "https://github.com/ROCm/llvm-project")
@@ -276,11 +296,14 @@ overrideLlvmPackagesRocm (s: {
   libllvm = (s.prev.libllvm.override { }).overrideAttrs (old: {
     patches = old.patches ++ [
       (fetchpatch {
-        # fix compile error in tools/gold/gold-plugin.cpp
-        name = "gold-plugin-fix.patch";
-        url = "https://github.com/llvm/llvm-project/commit/b0baa1d8bd68a2ce2f7c5f2b62333e410e9122a1.patch";
-        hash = "sha256-yly93PvGIXOnFeDGZ2W+W6SyhdWFM6iwA+qOeaptrh0=";
-        relative = "llvm";
+        # Revert of a patch that cause perf regression by pessimising loop unrolling decisions
+        # See PR and issue discussion
+        # https://github.com/ROCm/rocm-systems/issues/2865 https://github.com/ROCm/llvm-project/pull/1349
+        name = "rocm-llvm-revert-unrolling-regression.patch";
+        url = "https://github.com/ROCm/llvm-project/commit/f58b06dce1f9c15707c5f808fd002e18c2accf7e.patch";
+        hash = "sha256-pH+3C7PSDqNfOF014sA5Rvm+sc2IJMQJfysS2bvj/o0=";
+        # stripLen instead of relative to avoid filterdiff mangling /dev/null on the deleted test file
+        stripLen = 1;
       })
       ./perf-increase-namestring-size.patch
       # TODO: consider reapplying "Don't include aliases in RegisterClassInfo::IgnoreCSRForAllocOrder"
@@ -342,7 +365,17 @@ overrideLlvmPackagesRocm (s: {
         passthru = old.passthru // {
           inherit gcc-prefix;
         };
-        patches = old.patches ++ [
+        patches = [
+          (fetchpatch {
+            # [clang][cmake] Add option to control scan-build-py installation (#172727)
+            name = "clang-scan-build-py-configurable.patch";
+            url = "https://github.com/llvm/llvm-project/commit/f5759eeb63a3a5ce7d555c13c3126cea84e0c7b1.patch";
+            relative = "clang";
+            hash = "sha256-73IDPGZWKX4vny3x5FJ3/NQw8XRad9UNwfYkvQdMB4s=";
+          })
+        ]
+        ++ old.patches
+        ++ [
           # Never add FHS include paths
           ./clang-bodge-ignore-systemwide-incls.diff
           # Prevents builds timing out if a single compiler invocation is very slow but
@@ -352,11 +385,23 @@ overrideLlvmPackagesRocm (s: {
           ./perf-shorten-gcclib-include-paths.patch
           (fetchpatch {
             # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
-            sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
-            url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
+            hash = "sha256-OsarDZXuJ5vAXTP4i0NBUeK/r6tQPumaqmMWkf29UtM=";
+            url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/c7de294b0d1d25f277f9d1cbb2c9e09c7600e210.patch";
             relative = "clang";
           })
         ];
+        # ROCm 7.2 commits 4dda51261a6 "Replace hostexec with upstream rpc"
+        # and 2ca1509d6d2 "Put the RTL, Back!", added CGEmitEmissaryExec.cpp which
+        # includes ../../openmp/device/include/EmissaryIds.h, breaking
+        # standalone clang builds. The upstream PR llvm/llvm-project#175265
+        # ("[OpenMP] support for Emissary APIs") moves EmissaryIds.h into
+        # clang/lib/Headers/ so this should not be needed once that lands
+        # and ROCm rebases onto it.
+        postUnpack = ''
+          ${old.postUnpack or ""}
+          mkdir -p "''${sourceRoot}/openmp/device/include"
+          ln -s "${llvmSrc}/openmp/device/include/EmissaryIds.h" "''${sourceRoot}/openmp/device/include/"
+        '';
         hardeningDisable = [ "all" ];
         nativeBuildInputs = old.nativeBuildInputs ++ [
           removeReferencesTo
@@ -375,14 +420,7 @@ overrideLlvmPackagesRocm (s: {
         # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
         cmakeFlags =
           # TODO: Remove in followup, tblgen now works correctly but would rebuild
-          (builtins.filter tablegenUsage old.cmakeFlags)
-          ++ commonCmakeFlags
-          ++ lib.optionals (!withLibcxx) [
-            # FIXME: Config file in rocm-toolchain instead of GCC_INSTALL_PREFIX?
-            # Expected to be fully removed eventually
-            "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
-            "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
-          ];
+          (builtins.filter tablegenUsage old.cmakeFlags) ++ commonCmakeFlags;
         preFixup = ''
           ${toString old.preFixup or ""}
           moveToOutput "lib/lib*.a" "$dev"
@@ -437,14 +475,6 @@ overrideLlvmPackagesRocm (s: {
       isGNU = false;
     };
   compiler-rt-libc = s.prev.compiler-rt-libc.overrideAttrs (old: {
-    patches = old.patches ++ [
-      # fix build with glibc >= 2.42
-      (fetchpatch {
-        url = "https://github.com/llvm/llvm-project/commit/59978b21ad9c65276ee8e14f26759691b8a65763.patch";
-        hash = "sha256-ys5SMLfO3Ay9nCX9GV5yRCQ6pLsseFu/ZY6Xd6OL4p0=";
-        relative = "compiler-rt";
-      })
-    ];
     meta = old.meta // llvmMeta;
   });
   compiler-rt = s.final.compiler-rt-libc;

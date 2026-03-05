@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "7.1.1";
+  version = "7.2.0";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocPRIM";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-/O6aEF23IaUSVzEDRqIlpYpxNCSTa/CwVDgXOhvTrQc=";
+    hash = "sha256-/6x4S8W4MbWY+M2b46Tmebj2echBIs31OnKq+50M21M=";
   };
 
   nativeBuildInputs = [

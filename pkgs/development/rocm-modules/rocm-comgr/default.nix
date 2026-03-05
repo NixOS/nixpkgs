@@ -30,20 +30,20 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # [Comgr] Extend ISA compatibility
     (fetchpatch {
-      sha256 = "sha256-dgow0kwSWM1TnkqWOZDRQrh5nuF8p5jbYyOLCpQsH4k=";
-      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/a439e4f37ce71de48d4a979594276e3be0e6278f.patch";
+      hash = "sha256-X2VPGigK582J+a/u2Kg74w25/+CTpVWU9D3Eqgnb2PU=";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/7002dc04863d38c57cfd2e6fc60a1cf5a613fd8e.patch";
       relative = "amd/comgr";
     })
-    #[Comgr] Extend ISA compatibility for CCOB
+    # [Comgr] Extend ISA compatibility for CCOB
     (fetchpatch {
-      sha256 = "sha256-PCi0QHLiEQCTIYRtSSbhOjXANJ3zC3VLdMED1BEfQeg=";
-      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/fa80abb77d5ae6f8d89ab956e7ebda9c802a804f.patch";
+      hash = "sha256-/50I+PqxL3oaQMqg5vR7+ibUcXO1SvfXBdw/sybRt1o=";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/2c1e44fc3eacadcafdd4ada3e3184a092b6f26c5.patch";
       relative = "amd/comgr";
     })
   ];
 
   postPatch = ''
-    substituteInPlace cmake/opencl_pch.cmake \
+    substituteInPlace cmake/opencl_header.cmake \
       --replace-fail "\''${CLANG_CMAKE_DIR}/../../../" "${llvm.clang-unwrapped.lib}"
   '';
 

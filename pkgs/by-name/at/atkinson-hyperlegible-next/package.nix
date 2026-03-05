@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -17,12 +18,11 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
+  nativeBuildInputs = [ installFonts ];
+
+  # default installPhase invokes python, but we still want the font hook to run
   installPhase = ''
     runHook preInstall
-
-    install -Dm644 -t $out/share/fonts/opentype fonts/otf/*
-    install -Dm644 -t $out/share/fonts/variable fonts/variable/*
-
     runHook postInstall
   '';
 
