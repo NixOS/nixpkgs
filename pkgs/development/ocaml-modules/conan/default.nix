@@ -2,7 +2,7 @@
   lib,
   fetchurl,
   buildDunePackage,
-  version ? "0.0.6",
+  version ? "0.0.7",
   ptime,
   re,
   uutf,
@@ -18,7 +18,7 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/mirage/conan/releases/download/v${version}/conan-${version}.tbz";
-    hash = "sha256-shAle4gXFf+53L+IZ4yFWewq7yZ5WlMEr9WotLvxHhY=";
+    hash = "sha256-4ZbyGLnPRImRQ8vO71i+jlEWYB/FJCSelY7uBuH4dBU=";
   };
 
   propagatedBuildInputs = [
