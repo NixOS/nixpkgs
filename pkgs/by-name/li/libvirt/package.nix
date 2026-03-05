@@ -33,11 +33,13 @@
   python3,
   readline,
   rpcsvc-proto,
+  runtimeShell,
   stdenv,
   replaceVars,
   xhtml1,
   json_c,
   writeScript,
+  writeShellApplication,
   nixosTests,
 
   # Linux
@@ -179,7 +181,23 @@ stdenv.mkDerivation rec {
     sed -i '/libxlxml2domconfigtest/d' tests/meson.build
     substituteInPlace src/libxl/libxl_capabilities.h \
      --replace-fail /usr/lib/xen ${xen}/libexec/xen
-  '';
+  ''
+  + lib.optionalString isLinux (
+    let
+      script = writeShellApplication {
+        name = "virt-secret-init-encryption-sh";
+        runtimeInputs = [
+          coreutils
+          systemd
+        ];
+        text = ''exec ${runtimeShell} "$@"'';
+      };
+    in
+    ''
+      substituteInPlace src/secret/virt-secret-init-encryption.service.in \
+        --replace-fail /usr/bin/sh ${lib.getExe script}
+    ''
+  );
 
   strictDeps = true;
 
