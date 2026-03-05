@@ -77,6 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  # fixes:
+  # sawfish.h:52:13: error: 'bool' cannot be defined via 'typedef'
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
