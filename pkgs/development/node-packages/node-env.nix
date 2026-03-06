@@ -540,7 +540,8 @@ let
     in
     stdenv.mkDerivation (
       {
-        name = "${name}${if version == null then "" else "-${version}"}";
+        pname = name;
+
         buildInputs = [
           tarWrapper
           python

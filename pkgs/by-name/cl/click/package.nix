@@ -7,14 +7,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "click";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "click";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tYSbyDipZg6Qj/CWk1QVUT5AG8ncTt+5V1+ekpmsKXA=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "click";
   };
-}
+})

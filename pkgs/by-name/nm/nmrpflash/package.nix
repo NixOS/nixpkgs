@@ -6,15 +6,15 @@
   pkg-config,
   stdenv,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nmrpflash";
-  version = "0.9.26";
+  version = "0.9.27";
 
   src = fetchFromGitHub {
     owner = "jclehner";
     repo = "nmrpflash";
-    rev = "v${version}";
-    hash = "sha256-I+6bZtiwR1DbZ8ykIBVBqo1LdQftUaU301aMh01StqU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YkkDvr/wgUFpJ8kp15hlU9iHdfefxQCbyrpT2jAjJro=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -24,8 +24,10 @@ stdenv.mkDerivation rec {
     libpcap
   ];
 
-  PREFIX = "${placeholder "out"}";
-  STANDALONE_VERSION = version;
+  env = {
+    PREFIX = "${placeholder "out"}";
+    STANDALONE_VERSION = finalAttrs.version;
+  };
 
   preInstall = ''
     mkdir -p $out/bin
@@ -39,4 +41,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nmrpflash";
     platforms = lib.platforms.unix;
   };
-}
+})

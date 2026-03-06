@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   docutils,
-  importlib-metadata,
   oset,
   pybtex,
   pybtex-docutils,
@@ -34,9 +32,6 @@ buildPythonPackage rec {
     pybtex
     pybtex-docutils
     sphinx
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [

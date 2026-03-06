@@ -2,25 +2,28 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "reproxy";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "reproxy";
-    tag = "v${version}";
-    hash = "sha256-pnmm/JEMcQ5UQUwUqGdzC/BphrH4tBz79Bq3c13GqbA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nJAE2oEoIzuRFRlgypRROXZYfQy3y2m14QbBUUGQBSg=";
   };
 
   vendorHash = null;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   ldflags = [
     "-s"
     "-w"
-    "-X main.revision=${version}"
+    "-X main.revision=${finalAttrs.version}"
   ];
 
   checkFlags = [
@@ -30,6 +33,7 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/{app,reproxy}
+    installShellCompletion completions/*
   '';
 
   __darwinAllowLocalNetworking = true;
@@ -37,9 +41,9 @@ buildGoModule rec {
   meta = {
     description = "Simple edge server / reverse proxy";
     homepage = "https://reproxy.io/";
-    changelog = "https://github.com/umputun/reproxy/releases/tag/${src.rev}";
+    changelog = "https://github.com/umputun/reproxy/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "reproxy";
   };
-}
+})

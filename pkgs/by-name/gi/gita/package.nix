@@ -7,7 +7,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gita";
   version = "0.16.8.2";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     repo = "gita";
     owner = "nosarthur";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JzfGj17YCYXmpGV2jSsGLsG1oqO5ynj7r3u/mkSBRBg=";
   };
 
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   enabledTestPaths = [
-    "${src}/tests"
+    "${finalAttrs.src}/tests"
   ];
 
   disabledTests = [
@@ -57,9 +57,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Command-line tool to manage multiple git repos";
     homepage = "https://github.com/nosarthur/gita";
-    changelog = "https://github.com/nosarthur/gita/releases/tag/${src.tag}";
+    changelog = "https://github.com/nosarthur/gita/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ seqizz ];
     mainProgram = "gita";
   };
-}
+})

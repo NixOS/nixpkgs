@@ -14,14 +14,14 @@
   udevCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tiny-dfr";
   version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "tiny-dfr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-G4OeYZH3VF6fKWxHYLTmwzQmQ4JupgYNH/6aJSgINvg=";
   };
 
@@ -66,4 +66,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.qyliss ];
     platforms = lib.platforms.linux;
   };
-}
+})

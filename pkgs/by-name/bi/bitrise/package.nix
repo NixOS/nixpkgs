@@ -4,15 +4,15 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bitrise";
-  version = "2.36.1";
+  version = "2.39.1";
 
   src = fetchFromGitHub {
     owner = "bitrise-io";
     repo = "bitrise";
-    rev = "v${version}";
-    hash = "sha256-U5885dS5C+AOF7DbiALy42rVcvr+2T3yE6E1mXrC49Y=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/jD4FZTeT+RgNEJZqNZaSIsL1lSECdE6/fNyg1DJDYE=";
   };
 
   # many tests rely on writable $HOME/.bitrise and require network access
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   vendorHash = null;
   ldflags = [
-    "-X github.com/bitrise-io/bitrise/version.Commit=${src.rev}"
+    "-X github.com/bitrise-io/bitrise/version.Commit=${finalAttrs.src.rev}"
     "-X github.com/bitrise-io/bitrise/version.BuildNumber=0"
   ];
   env.CGO_ENABLED = 0;
@@ -41,4 +41,4 @@ buildGoModule rec {
     mainProgram = "bitrise";
     maintainers = with lib.maintainers; [ ofalvai ];
   };
-}
+})

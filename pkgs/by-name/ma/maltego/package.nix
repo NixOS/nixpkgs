@@ -82,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "maltego";
     maintainers = with lib.maintainers; [
       emilytrau
-      d3vil0p3r
     ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];

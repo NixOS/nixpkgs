@@ -5,7 +5,7 @@
   pre-commit,
   versionCheckHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-smi";
   version = "3.0.30";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-smi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-C6CfcS0H3rFew/Y1uhmzICdFp1UYU7H9h3YPeAKlcbE=";
   };
 
@@ -49,4 +49,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = with lib.licenses; [ asl20 ];
   };
-}
+})

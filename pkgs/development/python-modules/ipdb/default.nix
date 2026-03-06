@@ -3,12 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   pythonAtLeast,
-  pythonOlder,
   decorator,
   ipython,
   isPyPy,
-  exceptiongroup,
-  tomli,
   setuptools,
   pytestCheckHook,
   pytest-timeout,
@@ -31,10 +28,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ipython
     decorator
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

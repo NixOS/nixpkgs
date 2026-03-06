@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leaf";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "IogaMaster";
     repo = "leaf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-y0NO9YcOO7T7Cqc+/WeactwBAkeUqdCca87afOlO1Bk=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "leaf";
   };
-}
+})

@@ -13,10 +13,8 @@
   pyright,
   pytest-freezer,
   pytest-mock,
-  pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rich,
   time-machine,
   toml,
@@ -24,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.28.0";
+  version = "0.31.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-f572H7jeolv9nONuRBtZR/pcVDs5oX/dOiEjXlJyiio=";
+    hash = "sha256-45e3M7WjGLhmn1Tdf7fD04jSA32TvB0QmFzvywJc3Ac=";
   };
 
   build-system = [ hatchling ];
@@ -40,9 +38,6 @@ buildPythonPackage rec {
     asttokens
     executing
     rich
-    toml
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
     toml
   ];
 
@@ -53,7 +48,6 @@ buildPythonPackage rec {
     pyright
     pytest-freezer
     pytest-mock
-    pytest-subtests
     pytest-xdist
     pytestCheckHook
     time-machine

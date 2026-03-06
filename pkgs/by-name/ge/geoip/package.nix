@@ -15,14 +15,14 @@ let
     if lib.isDerivation geoipDatabase then "${toString geoipDatabase}/share/GeoIP" else geoipDatabase;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = drvName;
   version = "1.6.12";
 
   src = fetchFromGitHub {
     owner = "maxmind";
     repo = "geoip-api-c";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0ixyp3h51alnncr17hqp1p0rlqz9w69nlhm60rbzjjz3vjx52ajv";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "https://www.maxmind.com";
   };
-}
+})

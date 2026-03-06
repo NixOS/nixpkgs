@@ -363,6 +363,13 @@ originalAttrs:
           fi
       done
     ''
+    + lib.optionalString stdenv.targetPlatform.isCygwin ''
+      targetBinDir="''${targetConfig+$targetConfig/}bin"
+      for i in "''${!outputBin}/$targetLibDir"/cyg*.dll; do
+        mkdir -p "''${!outputLib}/$targetBinDir"
+        mv "$i" "''${!outputLib}/$targetBinDir"/
+      done
+    ''
     # if cross-compiling, link from $lib/lib to $lib/${targetConfig}.
     # since native-compiles have $lib/lib as a directory (not a
     # symlink), this ensures that in every case we can assume that

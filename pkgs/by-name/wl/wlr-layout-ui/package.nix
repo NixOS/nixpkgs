@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "wlr-layout-ui";
   version = "1.6.16";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fdev31";
     repo = "wlr-layout-ui";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CghOj5fQnuHd6PMeLOX4NKdVw7+pueZXahzYcAMwNOA=";
   };
 
@@ -38,4 +38,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "wlrlui";
     platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
   };
-}
+})

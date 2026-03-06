@@ -40,7 +40,7 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
 
     nativeBuildInputs = [ zig_0_14 ];
 
-    postPatch = ''
+    postConfigure = ''
       ln -s ${callPackage ./deps_0_14.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
     '';
   };
@@ -58,7 +58,7 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
 
     nativeBuildInputs = [ zig_0_15 ];
 
-    postPatch = ''
+    postConfigure = ''
       ln -s ${callPackage ./deps_0_15.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
     '';
   };

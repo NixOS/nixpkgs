@@ -749,8 +749,8 @@
     },
     "CTCF": {
       "name": "CTCF",
-      "version": "0.99.12",
-      "sha256": "0c9s6hb7vac0yirqfyf7k9xnf45qpcj39q37jzsmxdvj2xf7cwd4",
+      "version": "0.99.13",
+      "sha256": "097w2rad5fxyg2dkghz6ws93q1l7hlc6f9dnw1n30gs2bdv5hbyb",
       "depends": []
     },
     "ChemmineDrugs": {
@@ -1521,6 +1521,12 @@
       "sha256": "0bmbp7kydvviczw8axgxq2wdlwq6fdas90jk9bg56avjq5syws2g",
       "depends": ["AnnotationDbi", "GenomicFeatures"]
     },
+    "TxDb_Hsapiens_UCSC_hg19_refGene": {
+      "name": "TxDb.Hsapiens.UCSC.hg19.refGene",
+      "version": "3.22.0",
+      "sha256": "0l2fpmyacyf644pkrrf35gsdpfplk4i9009miqbfg6p09gm5815p",
+      "depends": ["AnnotationDbi", "GenomicFeatures"]
+    },
     "TxDb_Hsapiens_UCSC_hg38_knownGene": {
       "name": "TxDb.Hsapiens.UCSC.hg38.knownGene",
       "version": "3.22.0",
@@ -1561,6 +1567,12 @@
       "name": "TxDb.Mmusculus.UCSC.mm10.knownGene",
       "version": "3.10.0",
       "sha256": "0xs9npnhbwll7p62hibs02y4ac23jchdcr25i6a7qwq1kms82qk9",
+      "depends": ["AnnotationDbi", "GenomicFeatures"]
+    },
+    "TxDb_Mmusculus_UCSC_mm39_knownGene": {
+      "name": "TxDb.Mmusculus.UCSC.mm39.knownGene",
+      "version": "3.22.0",
+      "sha256": "1apn7prr57njqdc61y1zkw6l4f151dixq1k458gbmgg4pyvlk4jy",
       "depends": ["AnnotationDbi", "GenomicFeatures"]
     },
     "TxDb_Mmusculus_UCSC_mm39_refGene": {
@@ -5099,8 +5111,8 @@
     },
     "reactome_db": {
       "name": "reactome.db",
-      "version": "1.94.0",
-      "sha256": "0a6gx6iss43innhkhydqmv4jpnwkkjfdl32zxr4kjvm57xb2k4p0",
+      "version": "1.95.0",
+      "sha256": "1b87byr45cmqa7jyd5fw3askmrzfhdljjp2d7jcmm88baf45mfg6",
       "depends": ["AnnotationDbi"]
     },
     "rgu34a_db": {
@@ -6397,13 +6409,6 @@
       "version": "0.99.21",
       "sha256": "19j5h0dgxd2iw35p6fblj8b3z2d92zmmp60khw5zs70scd5fs9pb",
       "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"],
-      "broken": true
-    },
-    "TxDb_Mmusculus_UCSC_mm39_knownGene": {
-      "name": "TxDb.Mmusculus.UCSC.mm39.knownGene",
-      "version": "3.21.0",
-      "sha256": "18ckr0sn8ff6ga2rzaxicbbfynvbpx56kl4949fnrgaygxgnlf9p",
-      "depends": ["AnnotationDbi", "GenomicFeatures"],
       "broken": true
     },
     "XtraSNPlocs_Hsapiens_dbSNP141_GRCh38": {

@@ -21,14 +21,14 @@
   itstool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xed-editor";
   version = "3.8.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZTrTCyyyUDbt+/kjb1+I/bOjwXcsYGYd5K9ebPjJTA8=";
   };
 
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "xed";
   };
-}
+})

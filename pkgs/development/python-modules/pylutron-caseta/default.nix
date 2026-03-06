@@ -1,6 +1,5 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   click,
   cryptography,
@@ -10,7 +9,6 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   xdg,
   zeroconf,
 }:
@@ -32,8 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     orjson
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   optional-dependencies = {
     cli = [
@@ -47,8 +44,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   pytestFlags = [ "--asyncio-mode=auto" ];
 

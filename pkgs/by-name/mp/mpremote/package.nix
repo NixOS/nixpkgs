@@ -3,17 +3,17 @@
   python3Packages,
   fetchFromGitHub,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mpremote";
   version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Hk/DHMb9U/mLLVRKe+K3u5snxzW5BW3+bYRPFEAmUBQ=";
   };
-  sourceRoot = "${src.name}/tools/mpremote";
+  sourceRoot = "${finalAttrs.src.name}/tools/mpremote";
   pyproject = true;
 
   nativeBuildInputs = with python3Packages; [
@@ -36,4 +36,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ _999eagle ];
     mainProgram = "mpremote";
   };
-}
+})

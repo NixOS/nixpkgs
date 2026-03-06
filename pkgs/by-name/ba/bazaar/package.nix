@@ -9,7 +9,6 @@
   pkg-config,
   wrapGAppsHook4,
   appstream,
-  bubblewrap,
   flatpak,
   glib-networking,
   glycin-loaders,
@@ -18,22 +17,25 @@
   libadwaita,
   libdex,
   libglycin,
+  libglycin-gtk4,
   libsoup_3,
   libxmlb,
   libyaml,
   md4c,
+  webkitgtk_6_0,
+  libsecret,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bazaar";
-  version = "0.6.3";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "kolunmi";
     repo = "bazaar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fiSCRBbS6vNyLWRnaeyQE48NO/LYCk5OdAX8f85H2YM=";
+    hash = "sha256-s3NKRh1xUcLXVGWm0oYY4fVX7t7+bZIZ2jAYe1W0LKA=";
   };
 
   nativeBuildInputs = [
@@ -54,21 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libdex
     libglycin
+    libglycin-gtk4
+    glycin-loaders
     libsoup_3
     libxmlb
     libyaml
     md4c
+    webkitgtk_6_0
+    libsecret
   ];
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "$out/bin:${lib.makeBinPath [ bubblewrap ]}"
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
-
   passthru = {
-    inherit (libglycin) glycinPathsPatch;
     updateScript = nix-update-script { };
   };
 
@@ -78,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dtomvan
-      normalcea
     ];
     mainProgram = "bazaar";
     platforms = lib.platforms.linux;

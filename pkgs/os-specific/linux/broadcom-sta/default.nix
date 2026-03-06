@@ -65,8 +65,10 @@ let
     "wl-kmod-035_kernel_6.17_adaptation_fix_functions_prototypes.patch"
   ];
 in
-stdenv.mkDerivation {
-  name = "broadcom-sta-${version}-${release}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${release}-${kernel.version}";
+  pname = "broadcom-sta";
+  inherit version;
 
   src = fetchurl {
     url = "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
@@ -123,4 +125,4 @@ stdenv.mkDerivation {
       )
     ];
   };
-}
+})

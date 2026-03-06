@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "getjump";
-  version = "2.8.0";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FfAwPCbj+0wL+Lgk17peco/ogrsaa6Js+Ay5fqgPUPw=";
+    hash = "sha256-AX8WffzcqBYqo8DzXXbhfqOMd7U5VpWx4MTKhUXLJeQ=";
   };
 
   pythonRelaxDeps = [

@@ -9,7 +9,7 @@
 
 beamPackages.mixRelease rec {
   pname = "livebook";
-  version = "0.18.3";
+  version = "0.18.6";
 
   inherit (beamPackages) elixir;
 
@@ -21,7 +21,7 @@ beamPackages.mixRelease rec {
     owner = "livebook-dev";
     repo = "livebook";
     tag = "v${version}";
-    hash = "sha256-/FAHBSOmVoNj1YRaxLjZMoDhUTMcV7Zi/TsSwxS1SHo=";
+    hash = "sha256-8pFvY86ht2NMUtknjt5M7QasOKnoHvQdYJrOlgTyueU=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {

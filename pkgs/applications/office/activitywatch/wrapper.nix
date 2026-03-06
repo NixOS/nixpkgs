@@ -10,7 +10,9 @@
 }:
 
 symlinkJoin {
-  name = "activitywatch-${aw-server-rust.version}";
+  pname = "activitywatch";
+  inherit (aw-server-rust) version;
+
   paths = [
     aw-server-rust.out
     aw-qt.out

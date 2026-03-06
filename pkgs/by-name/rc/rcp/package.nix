@@ -5,14 +5,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
   version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ayT8lp8XqkvtUaff2Iy+5IVyJ/ukKl0qruEWjBlgAvo=";
   };
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/wykurz/rcp/releases/tag/v${version}";
+    changelog = "https://github.com/wykurz/rcp/releases/tag/v${finalAttrs.version}";
     description = "Tools to efficiently copy, remove and link large filesets";
     homepage = "https://github.com/wykurz/rcp";
     license = with lib.licenses; [ mit ];
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     # (Your current target_os is macos)
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

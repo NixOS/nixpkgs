@@ -6,15 +6,12 @@
   fetchFromGitHub,
   poetry-core,
   pyserial-asyncio-fast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysml";
   version = "0.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "mtdcr";

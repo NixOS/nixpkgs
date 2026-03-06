@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ymGAVOkfHtXvBD/MQ1ALutcByVnDGETUaI/yKEmsJS0=";
   };
 
-  CFLAGS = "-std=gnu99";
+  env.CFLAGS = "-std=gnu99";
 
   nativeBuildInputs = [ makeWrapper ];
 

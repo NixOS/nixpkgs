@@ -5,13 +5,13 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "graph-cli";
   version = "0.1.19";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "graph_cli";
     hash = "sha256-AOfUgeVgcTtuf5IuLYy1zFTBCjWZxu0OiZzUVXDIaSc=";
   };
@@ -45,4 +45,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ leungbk ];
     mainProgram = "graph";
   };
-}
+})

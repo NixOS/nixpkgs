@@ -8,24 +8,24 @@
   pkg-config,
   perl,
   wasm-pack,
-  wasm-bindgen-cli_0_2_106,
+  wasm-bindgen-cli_0_2_108,
   binaryen,
   lld,
 }:
 let
-  version = "0.33.4";
+  version = "0.34.3";
   pname = "rauthy";
 
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
     tag = "v${version}";
-    hash = "sha256-MhurQyfB+ydIdnCAu5+h6EeKwPHyQix0dDYIvaV3Juk=";
+    hash = "sha256-ey6y/EGmz/80s0nbxsk6li9KCJV5IAtBp5QqAj7a6R0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src pname version;
-    hash = "sha256-rFJHXWr50dLHILSgAHLCzgiD543r6xctjw60MOOR7HU=";
+    hash = "sha256-mkIHup/6aA9QDPlekhdZiXWryhetsJMxl3HAXsabACQ=";
   };
 
   # Wasm modules are needed to build the frontend and are part of the main Rust repo.
@@ -40,7 +40,7 @@ let
     nativeBuildInputs = [
       writableTmpDirAsHomeHook
       wasm-pack
-      wasm-bindgen-cli_0_2_106
+      wasm-bindgen-cli_0_2_108
       binaryen
       lld
     ];
@@ -77,7 +77,7 @@ let
       "-p2"
     ];
 
-    npmDepsHash = "sha256-rTN+CbwnX157qqPLpUfjoCofFiwKYJJH9Oy0MeRFWXE=";
+    npmDepsHash = "sha256-N/tFwQNWMudFtetIKfirXDvWH3CfRwjdpBcxkXZsVig=";
 
     preBuild = ''
       mkdir -p ./src/wasm/

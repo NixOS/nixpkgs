@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydocket";
-  version = "0.16.6";
+  version = "0.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chrisguidry";
     repo = "docket";
     tag = finalAttrs.version;
-    hash = "sha256-elndLtFcPpXPSOCsXdmvspbTJoRBEjkPegkkk0bw2xw=";
+    hash = "sha256-p3FqIHulsBxI7oyiahEruARXBuA2QAYdQeVh83OFHbg=";
   };
 
   build-system = [

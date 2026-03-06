@@ -74,7 +74,7 @@ stdenv.mkDerivation {
   '';
 
   # This fixes tests that fail because of missing fonts
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   installPhase = ''
     mkdir -p $out/share/applications $out/share/pixmaps $out/bin

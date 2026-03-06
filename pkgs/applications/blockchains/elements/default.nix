@@ -24,24 +24,16 @@
   withWallet ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "elements" else "elementsd";
-  version = "23.2.4";
+  version = "23.3.2";
 
   src = fetchFromGitHub {
     owner = "ElementsProject";
     repo = "elements";
-    rev = "elements-${version}";
-    sha256 = "sha256-UNjYkEZBjGuhkwBxSkNXjBBcLQqoan/afCLhoR2lOY4=";
+    rev = "elements-${finalAttrs.version}";
+    sha256 = "sha256-NLLM+stYOXcnAjEfXRerjvgMXM8jFSOyZhu/A0ZTnRw=";
   };
-
-  patches = [
-    # upnp: fix build with miniupnpc 2.2.8
-    (fetchpatch2 {
-      url = "https://github.com/bitcoin/bitcoin/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1";
-      hash = "sha256-oDvHUvwAEp0LJCf6QBESn38Bu359TcPpLhvuLX3sm6M=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -75,7 +67,7 @@ stdenv.mkDerivation rec {
     "--with-boost-libdir=${boost.out}/lib"
     "--disable-bench"
   ]
-  ++ lib.optionals (!doCheck) [
+  ++ lib.optionals (!finalAttrs.doCheck) [
     "--disable-tests"
     "--disable-gui-tests"
   ]
@@ -120,4 +112,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

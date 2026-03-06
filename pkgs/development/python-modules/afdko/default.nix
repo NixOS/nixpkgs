@@ -21,6 +21,9 @@
   tqdm,
   ufonormalizer,
   ufoprocessor,
+
+  # passthru
+  afdko,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -67,10 +70,16 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
-    "-Wno-error=incompatible-function-pointer-types"
-    "-Wno-error=int-conversion"
-  ]);
+  env = {
+    # Use system libxml2
+    FORCE_SYSTEM_LIBXML2 = true;
+  }
+  // lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-function-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
+  };
 
   # setup.py will always (re-)execute cmake in buildPhase
   dontConfigure = true;
@@ -91,9 +100,6 @@ buildPythonPackage (finalAttrs: {
   ++ fonttools.optional-dependencies.ufo
   ++ fonttools.optional-dependencies.unicode
   ++ fonttools.optional-dependencies.woff;
-
-  # Use system libxml2
-  FORCE_SYSTEM_LIBXML2 = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -139,7 +145,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru.tests = {
-    fullTestsuite = finalAttrs.finalPackage.override { runAllTests = true; };
+    fullTestsuite = afdko.override { runAllTests = true; };
   };
 
   meta = {

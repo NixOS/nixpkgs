@@ -7,27 +7,30 @@
   alsa-lib,
   fontconfig,
   freetype,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   writableTmpDirAsHomeHook,
+
+  buildVST3 ? true,
+  buildLV2 ? stdenv.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdelay";
-  version = "1.0.6";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "tiagolr";
     repo = "qdelay";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-2fu2eF1SjM1qSwKx/oEAx6EWNbNZ8VeJrtnmvxm/0yU=";
+    hash = "sha256-hGUZhnA+aix17hTJZ9hE+W+5HEhI9IMYk05avzFaKAg=";
   };
 
   nativeBuildInputs = [
@@ -42,20 +45,24 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.isLinux [
     alsa-lib
-    libX11
-    libXcomposite
-    libXcursor
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libx11
+    libxcomposite
+    libxcursor
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
   ];
 
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DCOPY_PLUGIN_AFTER_BUILD=FALSE"
+    (lib.cmakeBool "COPY_PLUGIN_AFTER_BUILD" false)
+
+    (lib.cmakeBool "BUILD_STANDALONE" false)
+    (lib.cmakeBool "BUILD_VST3" buildVST3)
+    (lib.cmakeBool "BUILD_LV2" buildLV2)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
@@ -75,31 +82,17 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/lib/vst3
+    pushd QDelay_artefacts/Release
+      ${lib.optionalString buildVST3 ''
+        mkdir -p $out/lib/vst3
+        cp -r VST3/QDelay.vst3 $out/lib/vst3
+      ''}
 
-  ''
-  + (
-    if stdenv.hostPlatform.isDarwin then
-      ''
-        mkdir -p $out/Applications
-        cp -R QDelay_artefacts/Release/Standalone/QDelay.app \
-          $out/Applications/QDelay.app
-        ln -s \
-          $out/Applications/QDelay.app/Contents/MacOS/QDelay \
-          $out/bin/QDelay
-      ''
-    else
-      ''
-        install -Dm755 \
-          QDelay_artefacts/Release/Standalone/QDelay \
-          $out/bin/QDelay
-
-        mkdir -p $out/bin $out/lib/lv2
-        cp -r "QDelay_artefacts/Release/LV2/QDelay.lv2" $out/lib/lv2
-      ''
-  )
-  + ''
-    cp -r "QDelay_artefacts/Release/VST3/QDelay.vst3" $out/lib/vst3
+      ${lib.optionalString buildLV2 ''
+        mkdir -p $out/lib/lv2
+        cp -r LV2/QDelay.lv2 $out/lib/lv2
+      ''}
+    popd
 
     runHook postInstall
   '';
@@ -109,8 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tiagolr/qdelay";
     changelog = "https://github.com/tiagolr/qdelay/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ magnetophon ];
-    mainProgram = "QDelay";
+    maintainers = with lib.maintainers; [
+      magnetophon
+      mrtnvgr
+    ];
     platforms = lib.platforms.all;
   };
 })

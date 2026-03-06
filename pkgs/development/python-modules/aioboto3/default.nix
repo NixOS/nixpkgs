@@ -1,33 +1,41 @@
 {
   lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   aiobotocore,
   aiofiles,
-  buildPythonPackage,
+
+  # optional-dependencies
+  # chalice
   chalice,
+  # s3cse
   cryptography,
+
+  # tests
   dill,
-  fetchFromGitHub,
   moto,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools,
-  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioboto3";
-  version = "15.1.0";
+  version = "15.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terricain";
     repo = "aioboto3";
-    tag = "v${version}";
-    hash = "sha256-H/hAfFyBfeBoR6nW0sv3/AzFPATUl2uJ+JbzNB5xemo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yGKjcZlXs1f72OGX5rUWvfDKZAYU3ZV2RVQnd0InxBQ=";
   };
-
-  # https://github.com/terricain/aioboto3/pull/377
-  patches = [ ./boto3-compat.patch ];
 
   pythonRelaxDeps = [
     "aiobotocore"
@@ -56,10 +64,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ moto.optional-dependencies.server
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     "test_patches"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky: PermissionError: [Errno 13] Permission denied: '/tmp/somefile'
+    "test_s3_copy"
+    "test_s3_copy_multipart"
+    "test_s3_download_file_404"
+    "test_s3_upload_file"
   ];
 
   pythonImportsCheck = [ "aioboto3" ];
@@ -67,8 +82,8 @@ buildPythonPackage rec {
   meta = {
     description = "Wrapper to use boto3 resources with the aiobotocore async backend";
     homepage = "https://github.com/terricain/aioboto3";
-    changelog = "https://github.com/terricain/aioboto3/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/terricain/aioboto3/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

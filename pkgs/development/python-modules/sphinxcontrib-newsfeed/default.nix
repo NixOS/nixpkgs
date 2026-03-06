@@ -16,6 +16,11 @@ buildPythonPackage rec {
     sha256 = "1d7gam3mn8v4in4p16yn3v10vps7nnaz6ilw99j4klij39dqd37p";
   };
 
+  patches = [
+    # reference: https://github.com/prometheusresearch/sphinxcontrib-newsfeed/pull/7
+    ./fix-for-sphinx-9.1.patch
+  ];
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ sphinx ];

@@ -196,7 +196,6 @@ stdenv.mkDerivation {
       roconnor
       numinit
       shazow
-      ncfavier
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

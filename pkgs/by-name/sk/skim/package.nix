@@ -1,6 +1,7 @@
 {
   lib,
-  stdenv,
+  tmux,
+  hexdump,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
@@ -9,10 +10,9 @@
   skim,
   testers,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
-  version = "0.20.5";
+  version = "3.5.0";
 
   outputs = [
     "out"
@@ -23,17 +23,21 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "skim-rs";
     repo = "skim";
-    tag = "v${version}";
-    hash = "sha256-BX0WW7dNpNLwxlclFCxj0QnrQ58lchKiEnmethzceqk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Jm0mrxhjjggnfgp0mnau/LI0HwA8A9NkLIwm/ongI/s=";
   };
 
   postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
   '';
 
-  cargoHash = "sha256-t2hkWTb/GhesNCWe2/YunZFo26xcXMjoNCiaKaFLOBk=";
+  cargoHash = "sha256-AU7Mkyjq3I6RmVlYz6A/AEgEyL0q1LwmagYT9v3j60U=";
 
   nativeBuildInputs = [ installShellFiles ];
+  nativeCheckInputs = [
+    tmux
+    hexdump
+  ];
 
   postBuild = ''
     cat <<SCRIPT > sk-share
@@ -58,9 +62,11 @@ rustPlatform.buildRustPackage rec {
       --zsh shell/completion.zsh
   '';
 
-  # Doc tests are broken on aarch64
-  # https://github.com/lotabout/skim/issues/440
-  cargoTestFlags = lib.optional stdenv.hostPlatform.isAarch64 "--all-targets";
+  useNextest = true;
+
+  checkPhase = ''
+    cargo nextest run --features test-utils --release --offline --lib --bins --examples --tests
+  '';
 
   passthru = {
     tests.version = testers.testVersion { package = skim; };
@@ -70,7 +76,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/skim-rs/skim";
-    changelog = "https://github.com/skim-rs/skim/releases/tag/v${version}";
+    changelog = "https://github.com/skim-rs/skim/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dywedir
@@ -79,4 +85,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "sk";
   };
-}
+})

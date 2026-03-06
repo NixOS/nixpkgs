@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXtst,
-  libXi,
+  libx11,
+  libxtst,
+  libxi,
 }:
 
 stdenv.mkDerivation {
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
-    libXtst
-    libXi
+    libx11
+    libxtst
+    libxi
   ];
 
   makeFlags = [

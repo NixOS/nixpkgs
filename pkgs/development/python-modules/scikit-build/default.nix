@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   fetchpatch2,
   hatch-fancy-pypi-readme,
@@ -11,7 +10,6 @@
   packaging,
   setuptools,
   wheel,
-  tomli,
   # Test Inputs
   cmake,
   cython,
@@ -61,8 +59,7 @@ buildPythonPackage rec {
     packaging
     setuptools
     wheel
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     cmake

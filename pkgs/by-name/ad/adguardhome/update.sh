@@ -1,5 +1,5 @@
-#! /usr/bin/env nix-shell
-#! nix-shell -i bash -p curl gnugrep jq nix-prefetch nix-update
+#!/usr/bin/env nix-shell
+#!nix-shell --pure -I nixpkgs=. -i bash -p bash cacert common-updater-scripts curl gnugrep jq nix nix-prefetch nix-update
 
 # This file is based on /pkgs/servers/gotify/update.sh
 
@@ -13,7 +13,7 @@ version=$(jq -r '.tag_name' <<<"$latest_release")
 echo "got version $version"
 
 schema_version=$(curl --silent "https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/${version}/internal/configmigrate/configmigrate.go" \
-    | grep -Po '(?<=const LastSchemaVersion uint = )[[:digit:]]+$')
+  | grep -Po '(?<=const LastSchemaVersion uint = )[[:digit:]]+$')
 
 echo "got schema_version $schema_version"
 

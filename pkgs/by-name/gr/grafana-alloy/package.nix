@@ -15,7 +15,7 @@
   useLLD ? stdenv.hostPlatform.isArmv7,
 }:
 
-buildGoModule (finalAttrs: rec {
+buildGoModule (finalAttrs: {
   pname = "grafana-alloy";
   version = "1.12.2";
   src = fetchFromGitHub {
@@ -32,10 +32,10 @@ buildGoModule (finalAttrs: rec {
 
   frontend = buildNpmPackage {
     pname = "alloy-frontend";
-    inherit version src;
+    inherit (finalAttrs) version src;
 
-    inherit npmDeps;
-    sourceRoot = "${src.name}/internal/web/ui";
+    inherit (finalAttrs) npmDeps;
+    sourceRoot = "${finalAttrs.src.name}/internal/web/ui";
 
     installPhase = ''
       runHook preInstall
@@ -55,7 +55,15 @@ buildGoModule (finalAttrs: rec {
   ]
   ++ lib.optionals useLLD [ lld ];
 
-  env = lib.optionalAttrs useLLD { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
+  env =
+    lib.optionalAttrs useLLD {
+      NIX_CFLAGS_LINK = "-fuse-ld=lld";
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
+      # uses go-systemd, which uses libsystemd headers
+      # https://github.com/coreos/go-systemd/issues/351
+      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemd}/include";
+    };
 
   ldflags =
     let
@@ -80,22 +88,18 @@ buildGoModule (finalAttrs: rec {
 
   patchPhase = ''
     # Copy frontend build in
-    cp -va "${frontend}/share" "internal/web/ui/dist"
+    cp -va "${finalAttrs.frontend}/share" "internal/web/ui/dist"
   '';
 
   subPackages = [
     "."
   ];
 
-  # uses go-systemd, which uses libsystemd headers
-  # https://github.com/coreos/go-systemd/issues/351
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isLinux [
-    "-I${lib.getDev systemd}/include"
-  ];
-
   checkFlags = [
-    "-tags nonetwork" # disable network tests
-    "-tags nodocker" # disable docker tests
+    "-tags"
+    "nonetwork" # disable network tests
+    "-tags"
+    "nodocker" # disable docker tests
   ];
 
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
@@ -131,7 +135,7 @@ buildGoModule (finalAttrs: rec {
       ];
     };
     # for nix-update to be able to find and update the hash
-    inherit npmDeps;
+    inherit (finalAttrs) npmDeps;
   };
 
   meta = {

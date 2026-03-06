@@ -20,7 +20,6 @@
   f2fs-tools,
   ntfs3g,
   btrfs-progs,
-  reiserfsprogs,
   mdadm,
   lvm2,
   gfs2-utils,
@@ -35,14 +34,14 @@ let
 in
 buildPythonPackage rec {
   pname = "blivet";
-  version = "3.12.1";
+  version = "3.13.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "blivet";
     tag = "blivet-${version}";
-    hash = "sha256-ppX2rd1rFkRhca7F56JVQUDEQzW7Cg8ifV60URs2IMY=";
+    hash = "sha256-5uhiCnwj5DyffsI2XEaLdvHMepjGWt2JlDmyZExSNRI=";
   };
 
   postPatch = ''
@@ -76,7 +75,6 @@ buildPythonPackage rec {
     f2fs-tools
     ntfs3g
     btrfs-progs
-    reiserfsprogs
     mdadm
     lvm2
     gfs2-utils

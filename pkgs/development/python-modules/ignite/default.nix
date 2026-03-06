@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   pytest-xdist,
@@ -16,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ignite";
     tag = "v${version}";
-    hash = "sha256-aWm+rj/9A7oNBW5jkMg/BRuEw2gQUJ88At1wB75FgNQ=";
+    hash = "sha256-0lQe5fWR4t3uAJVfGVebkxiWHx8TvgNQzJylKNmjjo0=";
   };
 
   build-system = [ setuptools ];
@@ -41,8 +39,8 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  # runs successfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
-  doCheck = pythonOlder "3.9";
+  # async isn't correctly closed so it will fail after test suite.
+  doCheck = false;
 
   enabledTestPaths = [
     "tests/"

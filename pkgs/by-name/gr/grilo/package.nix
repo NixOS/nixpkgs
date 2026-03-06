@@ -22,7 +22,7 @@
   totem-pl-parser,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grilo";
   version = "0.3.19"; # if you change minor, also change ./setup-hook.sh
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/grilo/${lib.versions.majorMinor version}/grilo-${version}.tar.xz";
+    url = "mirror://gnome/sources/grilo/${lib.versions.majorMinor finalAttrs.version}/grilo-${finalAttrs.version}.tar.xz";
     sha256 = "CGnIHRmrE5xmfXlWfBTdy2y1y/wBCNBMreKH6ylTZwY=";
   };
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

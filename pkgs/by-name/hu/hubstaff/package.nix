@@ -4,20 +4,20 @@
   fetchurl,
   unzip,
   makeWrapper,
-  libX11,
+  libx11,
   zlib,
-  libSM,
-  libICE,
-  libXext,
+  libsm,
+  libice,
+  libxext,
   freetype,
-  libXrender,
+  libxrender,
   fontconfig,
-  libXft,
-  libXinerama,
-  libXcursor,
+  libxft,
+  libxinerama,
+  libxcursor,
   cairo,
-  libXfixes,
-  libXScrnSaver,
+  libxfixes,
+  libxscrnsaver,
   libnotify,
   glib,
   gtk3,
@@ -26,6 +26,8 @@
   writeShellScript,
   common-updater-scripts,
   xmlstarlet,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 let
@@ -34,25 +36,25 @@ let
   sha256 = "sha256:0cv6b5rx1bjizwa22xlzmljwgcvm1mqyng79qqrdzmd0xy7c02pi";
 
   rpath = lib.makeLibraryPath [
-    libX11
+    libx11
     zlib
-    libSM
-    libICE
-    libXext
+    libsm
+    libice
+    libxext
     freetype
-    libXrender
+    libxrender
     fontconfig
-    libXft
-    libXinerama
+    libxft
+    libxinerama
     stdenv.cc.cc
     libnotify
     glib
     gtk3
     libappindicator-gtk3
     curl
-    libXfixes
-    libXScrnSaver
-    libXcursor
+    libxfixes
+    libxscrnsaver
+    libxcursor
     cairo
   ];
 
@@ -67,6 +69,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     unzip
     makeWrapper
+    copyDesktopItems
   ];
 
   unpackCmd = ''
@@ -81,7 +84,23 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
+  # Upstream doesn't seem to have a desktop item out of the box
+  desktopItems = [
+    (makeDesktopItem {
+      name = "netsoft-com.netsoft.hubstaff";
+      desktopName = "Hubstaff";
+      exec = "HubstaffClient";
+      icon = "hubstaff";
+      comment = "Time tracking software";
+      categories = [
+        "Office"
+        "ProjectManagement"
+      ];
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
     # remove files for 32-bit arch to skip building for this arch
     # but add -f flag to not fail if files were not found (new versions dont provide 32-bit arch)
     rm -rf x86 x86_64/lib64
@@ -100,6 +119,7 @@ stdenv.mkDerivation {
 
     # Why is this needed? SEGV otherwise.
     ln -s $opt/data/resources $opt/x86_64/resources
+    runHook postInstall
   '';
 
   # to test run:

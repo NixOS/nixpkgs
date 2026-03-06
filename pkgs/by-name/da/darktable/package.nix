@@ -53,7 +53,7 @@
   libtiff,
   libwebp,
   libxml2,
-  lua,
+  lua5_4,
   util-linux,
   openexr,
   openjpeg,
@@ -67,10 +67,10 @@
   colord-gtk,
   libselinux,
   libsepol,
-  libX11,
-  libXdmcp,
+  libx11,
+  libxdmcp,
   libxkbcommon,
-  libXtst,
+  libxtst,
   ocl-icd,
   # Darwin only
   gtk-mac-integration,
@@ -78,14 +78,16 @@
   versionCheckHook,
   gitUpdater,
 }:
-
+let
+  pugixml-shared = pugixml.override { shared = true; };
+in
 stdenv.mkDerivation rec {
-  version = "5.4.0";
+  version = "5.4.1";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-K/C66njSeUXPCcM9iATxeeA6g+4Z0ukn/WYOpGrKOxY=";
+    hash = "sha256-r9x8iKM4qM0vrDHIRQ0Hbtv3PpVuQwcmDIPrwZX4ReQ=";
   };
 
   nativeBuildInputs = [
@@ -138,13 +140,13 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     libxml2
-    lua
+    lua5_4
     openexr
     openjpeg
     osm-gps-map
     pcre2
     portmidi
-    pugixml
+    pugixml-shared
     sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -153,10 +155,10 @@ stdenv.mkDerivation rec {
     colord-gtk
     libselinux
     libsepol
-    libX11
-    libXdmcp
+    libx11
+    libxdmcp
     libxkbcommon
-    libXtst
+    libxtst
     ocl-icd
     util-linux
   ]

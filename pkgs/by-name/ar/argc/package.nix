@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (!canExecuteHost) buildPackages.argc;
 
   postInstall = ''
-    ARGC=${if canExecuteHost then ''''${!outputBin}/bin/argc'' else "argc"}
+    ARGC=${if canExecuteHost then "\${!outputBin}/bin/argc" else "argc"}
 
     installShellCompletion --cmd argc \
       --bash <("$ARGC" --argc-completions bash) \

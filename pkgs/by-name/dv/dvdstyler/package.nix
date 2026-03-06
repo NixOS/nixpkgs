@@ -18,8 +18,8 @@
   libjpeg,
   pkg-config,
   wrapGAppsHook3,
-  wxGTK32,
-  wxSVG,
+  wxwidgets_3_2,
+  wxsvg,
   xine-ui,
   xmlto,
   zip,
@@ -35,12 +35,12 @@
 let
   inherit (lib) optionals makeBinPath;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dvdstyler";
   version = "3.3b4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/dvdstyler/dvdstyler-devel/${version}/DVDStyler-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/dvdstyler/dvdstyler-devel/${finalAttrs.version}/DVDStyler-${finalAttrs.version}.tar.bz2";
     hash = "sha256-JCaKcE7jkTxT57KKePs8gmgQedoOcP5NEQ2FwIDS2Ho=";
   };
 
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
     glib
     libexif
     libjpeg
-    wxSVG
-    wxGTK32
+    wxsvg
+    wxwidgets_3_2
     xine-ui
   ]
   ++ optionals dvdisasterSupport [ dvdisaster ]
@@ -131,4 +131,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "dvdstyler";
   };
-}
+})

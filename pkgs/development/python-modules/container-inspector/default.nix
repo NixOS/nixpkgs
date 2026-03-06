@@ -10,23 +10,23 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "container-inspector";
-  version = "33.0.1";
+  version = "33.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "container-inspector";
-    tag = "v${version}";
-    hash = "sha256-bXJ4UIDVhiU0DurEeRiyLlSUrNRgwoMqAxXxGb/CcJs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uwfqPh4e5zNO0K5rKZ2pxgOkX/KF9pzCsKdYbQuw9MA=";
   };
 
   dontConfigure = true;
 
   build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     click
     dockerfile-parse
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Suite of analysis utilities and command line tools for container images";
     homepage = "https://github.com/nexB/container-inspector";
-    changelog = "https://github.com/nexB/container-inspector/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/nexB/container-inspector/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

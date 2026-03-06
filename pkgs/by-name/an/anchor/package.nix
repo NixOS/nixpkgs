@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anchor";
   version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "coral-xyz";
     repo = "anchor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pvD0v4y7DilqCrhT8iQnAj5kBxGQVqNvObJUBzFLqzA=";
     fetchSubmodules = true;
   };
@@ -28,9 +28,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Solana Sealevel Framework";
     homepage = "https://github.com/coral-xyz/anchor";
-    changelog = "https://github.com/coral-xyz/anchor/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/coral-xyz/anchor/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Denommus ];
     mainProgram = "anchor";
   };
-}
+})

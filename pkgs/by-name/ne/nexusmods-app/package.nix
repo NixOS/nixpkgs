@@ -230,5 +230,8 @@ buildDotnetModule (finalAttrs: {
           ''
       }
     '';
+    knownVulnerabilities = [
+      "NexusMods.App has been discontinued upstream: https://www.nexusmods.com/news/15424"
+    ];
   };
 })

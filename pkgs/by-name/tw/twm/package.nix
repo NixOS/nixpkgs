@@ -9,18 +9,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "twm";
-  version = "0.12.3";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "vinnymeller";
     repo = "twm";
-    tag = "v${version}";
-    hash = "sha256-Hta9IvPViZFEiR+RXRmlPRwIu10D9B5dbXzhflxzBhY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GJTy0uIYALp3tp/ZO+zEQoQk8fF/5R8jbWBy92ID7aU=";
   };
 
-  cargoHash = "sha256-buiU+umHqyZ/3YoW2+5QpmF9AGEuNUihro5PFuWFSH4=";
+  cargoHash = "sha256-ctpYZCVGGrnS7eHeia0NnK1uc0rLi8GpmmBhAIz5WzY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,9 +45,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Customizable workspace manager for tmux";
     homepage = "https://github.com/vinnymeller/twm";
-    changelog = "https://github.com/vinnymeller/twm/releases/tag/v${version}";
+    changelog = "https://github.com/vinnymeller/twm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vinnymeller ];
     mainProgram = "twm";
   };
-}
+})

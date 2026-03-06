@@ -11,6 +11,7 @@
   mbedtls,
   symlinkJoin,
   qt6Packages,
+  autoAddDriverRunpath,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    autoAddDriverRunpath
   ]
   ++ (with qt6Packages; [
     qmake

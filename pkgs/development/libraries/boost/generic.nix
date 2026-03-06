@@ -170,7 +170,16 @@ stdenv.mkDerivation {
     ++ lib.optional (
       lib.versionOlder version "1.88" && stdenv.hostPlatform.isDarwin
     ) ./darwin-no-system-python.patch
-    ++ lib.optional (lib.versionOlder version "1.88") ./cmake-paths-173.patch
+    ++ lib.optionals (lib.versionOlder version "1.88") [
+      ./cmake-paths-173.patch
+      # A typo in a template fails with clang >= 19 and gcc >= 15
+      (fetchpatch {
+        url = "https://github.com/boostorg/thread/commit/49ccf9c30a0ca556873dbf64b12b0d741d1b3e66.patch";
+        relative = "include";
+        sha256 = "sha256-O1dH8H1kPZvj4ol47TvlW7+MIejy7uggcIOnZ2t8/UI=";
+      })
+    ]
+
     ++ lib.optional (lib.versionAtLeast version "1.88") ./cmake-paths-188.patch
     ++ lib.optional (version == "1.77.0") (fetchpatch {
       url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";

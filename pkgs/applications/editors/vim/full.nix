@@ -16,16 +16,16 @@
   perl,
   tcl,
   ruby,
-  libX11,
-  libXext,
-  libSM,
-  libXpm,
-  libXt,
-  libXaw,
-  libXau,
-  libXmu,
+  libx11,
+  libxext,
+  libsm,
+  libxpm,
+  libxt,
+  libxaw,
+  libxau,
+  libxmu,
   libsodium,
-  libICE,
+  libice,
   wayland-scanner,
   vimPlugins,
   makeWrapper,
@@ -177,15 +177,15 @@ stdenv.mkDerivation {
   ]
   # All X related dependencies
   ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
-    libSM
-    libICE
-    libX11
-    libXext
-    libXpm
-    libXt
-    libXaw
-    libXau
-    libXmu
+    libsm
+    libice
+    libx11
+    libxext
+    libxpm
+    libxt
+    libxaw
+    libxau
+    libxmu
   ]
   ++ lib.optional (guiSupport == "gtk2") gtk2-x11
   ++ lib.optional (guiSupport == "gtk3") gtk3-x11

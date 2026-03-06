@@ -113,7 +113,10 @@ lib.makeOverridable (
       inherit dontBuild;
       inherit dontStrip;
       inherit suffix;
+      inherit version;
       gemType = type;
+      pname = gemName;
+      name = attrs.name or "${namePrefix}${gemName}-${suffix}";
 
       nativeBuildInputs = [
         ruby
@@ -127,9 +130,6 @@ lib.makeOverridable (
         ruby
       ]
       ++ buildInputs;
-
-      #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
-      name = attrs.name or "${namePrefix}${gemName}-${suffix}";
 
       inherit src;
 

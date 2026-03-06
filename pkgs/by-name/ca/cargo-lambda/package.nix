@@ -12,18 +12,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-lambda";
-  version = "1.8.6";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "cargo-lambda";
     repo = "cargo-lambda";
-    tag = "v${version}";
-    hash = "sha256-ocFD2FK1nlEJ8xXhDSxpSKYU8oZk/QwfojveypVt1GU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Fbrt5zUC5dIfQO6UI0GnZxxLlI4q6tYoDw6ucKR+ouM=";
   };
 
-  cargoHash = "sha256-yE0pr7RZb015d51QtwVNfqXd8yEETvDdKJ5M7Oqc4Ds=";
+  cargoHash = "sha256-AlKty5tpb9plk/rmFso6kWKKbhuxcsH5zDX/xvK5oao=";
 
   nativeCheckInputs = [ cacert ];
 
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/cargo-lambda --prefix PATH : ${lib.makeBinPath [ zig_0_13 ]}
   '';
 
-  CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
+  env.CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
 
   cargoBuildFlags = [ "--features=skip-build-banner" ];
   cargoCheckFlags = [ "--features=skip-build-banner" ];
@@ -77,4 +77,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

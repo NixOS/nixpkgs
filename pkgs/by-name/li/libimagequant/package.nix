@@ -13,14 +13,14 @@
   libimagequant,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libimagequant";
   version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "libimagequant";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-A7idjAAJ+syqIahyU+LPZBF+MLxVDymY+M3HM7d/qk0=";
   };
 
@@ -65,4 +65,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ma9e ];
   };
-}
+})

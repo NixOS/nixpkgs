@@ -8,19 +8,20 @@
 
 buildPythonPackage rec {
   pname = "port-for";
-  version = "0.7.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kmike";
     repo = "port-for";
     tag = "v${version}";
-    hash = "sha256-/45TQ2crmTupRgL9hgZGw5IvFKywezSIHqHFbeAkMoo=";
+    hash = "sha256-vv2xjXyUh6g7T0zGDAlOs3K+YM18wSE8rEvgSP1ZBL4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "port_for" ];
 
   meta = {

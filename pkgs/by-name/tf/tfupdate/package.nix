@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tfupdate";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = "tfupdate";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Df6imS3JCtMOMCNJd/3cFqK5JsGpIkF/yab7B7YgILI=";
   };
 
@@ -25,11 +25,11 @@ buildGoModule rec {
     description = "Update version constraints in your Terraform configurations";
     mainProgram = "tfupdate";
     homepage = "https://github.com/minamijoyo/tfupdate";
-    changelog = "https://github.com/minamijoyo/tfupdate/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/minamijoyo/tfupdate/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Intuinewin
       qjoly
     ];
   };
-}
+})

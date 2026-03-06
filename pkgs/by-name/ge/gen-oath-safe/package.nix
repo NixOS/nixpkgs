@@ -12,14 +12,14 @@
   yubikey-manager,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gen-oath-safe";
   version = "0.11.0";
 
   src = fetchFromSourcehut {
     owner = "~mcepl";
     repo = "gen-oath-safe";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1914z0jgj7lni0nf3hslkjgkv87mhxdr92cmhmbzhpjgjgr23ydp";
   };
   nativeBuildInputs = [ makeWrapper ];
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     mainProgram = "gen-oath-safe";
   };
 
-}
+})

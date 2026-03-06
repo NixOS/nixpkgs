@@ -2,29 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXi,
-  libXt,
-  libXfixes,
-  libXext,
+  libx11,
+  libxi,
+  libxt,
+  libxfixes,
+  libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.8";
   pname = "xbanish";
 
   buildInputs = [
-    libX11
-    libXi
-    libXt
-    libXfixes
-    libXext
+    libx11
+    libxi
+    libxt
+    libxfixes
+    libxext
   ];
 
   src = fetchFromGitHub {
     owner = "jcs";
     repo = "xbanish";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-jwCoJ2shFGuJHhmXmlw/paFpMl5ARD6e5zDnDZHlsoo=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xbanish";
   };
-}
+})

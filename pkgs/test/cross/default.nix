@@ -1,4 +1,8 @@
-{ pkgs, lib }:
+{
+  pkgs,
+  config,
+  lib,
+}:
 
 let
 
@@ -78,6 +82,7 @@ let
           crossPkgs = import pkgs.path {
             localSystem = { inherit (pkgs.stdenv.hostPlatform) config; };
             crossSystem = crossSystemFun system;
+            inherit config;
           };
 
           emulator = crossPkgs.stdenv.hostPlatform.emulator pkgs;

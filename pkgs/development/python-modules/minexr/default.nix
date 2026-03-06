@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "minexr";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cheind";
     repo = "py-minexr";
-    rev = "v${version}";
-    hash = "sha256-Om67ttAHxu7C3IwPB+JHYi78E9qBi1E6layMVg4+S3M=";
+    tag = version;
+    hash = "sha256-p42rlhaHq0A9+zk6c0evRDjNR1H/ruWJqPF5+nCTR8o=";
   };
 
   propagatedBuildInputs = [ numpy ];

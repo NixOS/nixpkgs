@@ -5,14 +5,14 @@
   guile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fetch-scm";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "KikyTokamuro";
     repo = "fetch.scm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WdYi8EVxQ6xPtld8JyZlUmgpxroevBehtkRANovMh2E=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ vel ];
     mainProgram = "fetch-scm";
   };
-}
+})

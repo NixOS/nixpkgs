@@ -4,7 +4,9 @@
   stdenv,
   pkg-config,
   SDL2,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
   libGL,
   roboto,
   imagemagick,
@@ -57,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    xorg.libX11
-    xorg.libXi
-    xorg.libXcursor
+    libx11
+    libxi
+    libxcursor
     libGL
   ];
 

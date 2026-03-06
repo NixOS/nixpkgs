@@ -50,6 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.hpndSellVariant;
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosuncg6.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xf86-video-suncg6.x86_64-darwin
   };
 })

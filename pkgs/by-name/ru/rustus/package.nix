@@ -8,17 +8,14 @@
   rdkafka,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustus";
   version = "1.1.3";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "s3rius";
     repo = "rustus";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ALnb6ICg+TZRuHayhozwJ5+imabgjBYX4W42ydhkzv0=";
   };
 
@@ -67,4 +64,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.all;
   };
-}
+})

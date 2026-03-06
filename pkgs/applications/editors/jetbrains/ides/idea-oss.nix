@@ -8,11 +8,11 @@
 let
   src = mkJetBrainsSource {
     # update-script-start: source-args
-    version = "2025.3.1.1";
-    buildNumber = "253.29346.240";
+    version = "2025.3.2";
+    buildNumber = "253.30387.90";
     buildType = "idea";
-    ideaHash = "sha256-L5O6QjDY3SqSQ1DnQTjIez7pIvPAdtOXP/+B05bAV+Q=";
-    androidHash = "sha256-quMCzrjCKIo1pkzw4PWewAs5tz7A2aq7TI5zd+QaaUY=";
+    ideaHash = "sha256-0WuTG1wQThWQv4Pzfw+48LDm4dvlfii/B+bwWdeGNTI=";
+    androidHash = "sha256-USadXfyPu5boaCB+5rP+40Kd53LTRrrkRwgcbaxDgXg=";
     jpsHash = "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=";
     restarterHash = "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=";
     mvnDeps = ../source/idea_maven_artefacts.json;

@@ -17,14 +17,14 @@
   gst_all_1,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pithos";
   version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "pithos";
     repo = "pithos";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3j6IoMi30BQ8WHK4BxbsW+/3XZx7rBFd47EBENa2GiQ=";
   };
 
@@ -74,4 +74,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ obadz ];
   };
-}
+})

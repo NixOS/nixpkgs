@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "cli-helpers";
-  version = "2.7.0";
+  version = "2.10.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "cli_helpers";
     inherit version;
-    hash = "sha256-YtEXENvrwvxGAAPeEhVogyXYY2hZBW1oizhBm9QEi8A=";
+    hash = "sha256-Dgk2F5t4bADGtzhjtbklKIn3pUUl8UAU7HJ+Qf8iryg=";
   };
 
   propagatedBuildInputs = [

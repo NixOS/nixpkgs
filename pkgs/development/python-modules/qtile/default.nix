@@ -29,8 +29,8 @@
   wayland-protocols,
   wayland-scanner,
   wlroots,
-  xcbutilcursor,
-  xcbutilwm,
+  libxcb-cursor,
+  libxcb-wm,
   xcffib,
   nixosTests,
   extraPackages ? [ ],
@@ -39,6 +39,9 @@
 buildPythonPackage (finalAttrs: {
   pname = "qtile";
   version = "0.34.1";
+  # nixpkgs-update: no auto update
+  # should be updated alongside with `qtile-extras`
+
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -86,7 +89,7 @@ buildPythonPackage (finalAttrs: {
     "--config-setting=GOBJECT=${lib.getLib glib}/lib/libgobject-2.0.so"
     "--config-setting=PANGO=${lib.getLib pango}/lib/libpango-1.0.so"
     "--config-setting=PANGOCAIRO=${lib.getLib pango}/lib/libpangocairo-1.0.so"
-    "--config-setting=XCBCURSOR=${lib.getLib xcbutilcursor}/lib/libxcb-cursor.so"
+    "--config-setting=XCBCURSOR=${lib.getLib libxcb-cursor}/lib/libxcb-cursor.so"
   ];
 
   dependencies = extraPackages ++ [
@@ -109,7 +112,7 @@ buildPythonPackage (finalAttrs: {
     libxkbcommon
     wayland
     wlroots
-    xcbutilwm
+    libxcb-wm
   ];
 
   propagatedBuildInputs = [

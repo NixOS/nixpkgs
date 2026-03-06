@@ -54,7 +54,8 @@ stdenvNoCC.mkDerivation (
     };
   in
   {
-    name = "nixpkgs-manual";
+    version = lib.trivial.release;
+    pname = "nixpkgs-manual";
 
     nativeBuildInputs = [ nixos-render-docs ];
 
@@ -168,6 +169,7 @@ stdenvNoCC.mkDerivation (
         };
 
       tests = {
+        # Don't run this in CI because it's not reproducible
         manpage-urls = callPackage ../tests/manpage-urls.nix { };
       };
     };

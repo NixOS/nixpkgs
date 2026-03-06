@@ -27,7 +27,7 @@ buildPythonApplication rec {
   buildInputs = [ m2r ];
 
   # setup.py reads its version from the TRAVIS_TAG environment variable
-  TRAVIS_TAG = version;
+  env.TRAVIS_TAG = version;
 
   checkPhase = ''
     ${python.interpreter} -m doctest pylint_exit.py

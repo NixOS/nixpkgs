@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dex";
-  version = "2.44.0";
+  version = "2.45.0";
 
   src = fetchFromGitHub {
     owner = "dexidp";
     repo = "dex";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-wpy7pZBpqAaPjWbnsqtnE+65a58IGg0pyp4CEUnmmc4=";
+    sha256 = "sha256-qBVrOFb/Nb2CRuMwSoy5QXN5EAuKyTEGVocnEtvZdgE=";
   };
 
-  vendorHash = "sha256-3ef2G4+UlLGsBW09ZM20qU82uj/hVlMAnujcd2BulGg=";
+  vendorHash = "sha256-1D20aZhNUi7MUPfRTmSV4CZjLr0lUzbX4TI2LFcPY3U=";
 
   subPackages = [
     "cmd/dex"

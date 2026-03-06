@@ -1,7 +1,7 @@
 {
   lib,
   buildHomeAssistantComponent,
-  fetchFromGitea,
+  fetchFromCodeberg,
   libgpiod,
 }:
 
@@ -10,8 +10,7 @@ buildHomeAssistantComponent rec {
   domain = "gpio";
   version = "0.0.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "raboof";
     repo = "ha-gpio";
     rev = "v${version}";

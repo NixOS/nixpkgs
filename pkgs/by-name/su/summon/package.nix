@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "summon";
   version = "0.10.10";
 
   src = fetchFromGitHub {
     owner = "cyberark";
     repo = "summon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zPzRsfNN75AZ1qsL/VZUkFxzt3blp8eQPXQsMmis3Cs=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ quentini ];
   };
-}
+})

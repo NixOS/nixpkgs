@@ -6,6 +6,7 @@
   jansson,
   pcre2,
   libxcrypt,
+  openssl,
   expat,
   zlib,
   # plugins: list of strings, eg. [ "python3" ]
@@ -64,6 +65,12 @@ let
       ]
       ++ php-embed.unwrapped.buildInputs;
     })
+    (lib.nameValuePair "http" {
+      # usage: https://uwsgi-docs.readthedocs.io/en/latest/HTTP.html
+      # usage: https://uwsgi-docs.readthedocs.io/en/latest/HTTPS.html
+      path = "plugins/http";
+      inputs = [ openssl.dev ];
+    })
   ];
 
   getPlugin =
@@ -119,7 +126,23 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optional withPAM "pam" ++ lib.optional withSystemd "systemd_logger"
   );
 
-  UWSGI_INCLUDES = lib.optionalString withCap "${libcap.dev}/include";
+  env = {
+    # UWSGI_INCLUDES environment variable required for "auto" plugins
+    # to be detected. See uwsgiconfig.py for more details.
+    UWSGI_INCLUDES = lib.concatStringsSep "," (
+      map (p: "${lib.getDev p}/include") finalAttrs.buildInputs
+    );
+  }
+  // lib.optionalAttrs (lib.any (x: x.name == "php") needed) {
+    # this is a hack to make the php plugin link with session.so (which on nixos is a separate package)
+    # the hack works in coordination with ./additional-php-ldflags.patch
+    UWSGICONFIG_PHP_LDFLAGS = lib.concatStringsSep "," [
+      "-Wl"
+      "-rpath=${php-embed.extensions.session}/lib/php/extensions/"
+      "--library-path=${php-embed.extensions.session}/lib/php/extensions/"
+      "-l:session.so"
+    ];
+  };
 
   passthru = {
     inherit python3;
@@ -142,17 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postConfigure
   '';
-
-  # this is a hack to make the php plugin link with session.so (which on nixos is a separate package)
-  # the hack works in coordination with ./additional-php-ldflags.patch
-  UWSGICONFIG_PHP_LDFLAGS = lib.optionalString (lib.any (x: x.name == "php") needed) (
-    lib.concatStringsSep "," [
-      "-Wl"
-      "-rpath=${php-embed.extensions.session}/lib/php/extensions/"
-      "--library-path=${php-embed.extensions.session}/lib/php/extensions/"
-      "-l:session.so"
-    ]
-  );
 
   buildPhase = ''
     runHook preBuild

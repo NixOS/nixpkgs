@@ -4,24 +4,22 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "objsize";
-  version = "0.7.1";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liran-funaro";
     repo = "objsize";
     tag = version;
-    hash = "sha256-l0l80dMVWZqWBK4z53NCU+rKOQl6jRZ1zb2SmMnhs1k=";
+    hash = "sha256-u4PTUk3K3ZCNZ87xM+PoCabsw+EjOoDgNySDWWB7yho=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

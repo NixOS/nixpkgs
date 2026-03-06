@@ -25,7 +25,7 @@ in
           The set of NTP servers from which to synchronise.
 
           Setting this option to an empty list will write `NTP=` to the
-          `timesyncd.conf` file as opposed to setting this option to null which
+          {file}`timesyncd.conf` file as opposed to setting this option to null which
           will remove `NTP=` entirely.
 
           See {manpage}`timesyncd.conf(5)` for details.
@@ -39,7 +39,7 @@ in
           The set of fallback NTP servers from which to synchronise.
 
           Setting this option to an empty list will write `FallbackNTP=` to the
-          `timesyncd.conf` file as opposed to setting this option to null which
+          {file}`timesyncd.conf` file as opposed to setting this option to null which
           will remove `FallbackNTP=` entirely.
 
           See {manpage}`timesyncd.conf(5)` for details.

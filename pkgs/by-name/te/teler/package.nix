@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "teler";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = "teler";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3+A1QloZQlH31snWfwYa6rprpKUf3fQc/HQgmKQgV9c=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=ktbs.dev/teler/common.Version=${version}"
+    "-X=ktbs.dev/teler/common.Version=${finalAttrs.version}"
   ];
 
   # test require internet access
@@ -34,9 +34,9 @@ buildGoModule rec {
       we collect and provide by the community.
     '';
     homepage = "https://github.com/kitabisa/teler";
-    changelog = "https://github.com/kitabisa/teler/releases/tag/v${version}";
+    changelog = "https://github.com/kitabisa/teler/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "teler.app";
   };
-}
+})

@@ -17,14 +17,14 @@ let
     hash = "sha256-shGNdgOOydgGBtl/JCbTJ0AYgl+2xWvCgHBL+bEoTaE=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "materialyoucolor";
   version = "2.0.10";
   pyproject = true;
 
   # PyPI sources contain additional vendored sources
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-MbTUB7mk/UtUswVZsNAxP21tofnRm3VUbtZdpSZx6nY=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

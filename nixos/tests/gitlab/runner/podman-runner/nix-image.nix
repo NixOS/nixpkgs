@@ -219,7 +219,7 @@ let
         cat > $out <<EOF
         [
         ${lib.concatStringsSep "\n" (
-          builtins.map (
+          map (
             drv:
             let
               outputs = drv.outputsToInstall or [ "out" ];
@@ -227,11 +227,11 @@ let
             ''
               {
                 ${lib.concatStringsSep "\n" (
-                  builtins.map (output: ''
+                  map (output: ''
                     ${output} = { outPath = "${lib.getOutput output drv}"; };
                   '') outputs
                 )}
-                outputs = [ ${lib.concatStringsSep " " (builtins.map (x: "\"${x}\"") outputs)} ];
+                outputs = [ ${lib.concatStringsSep " " (map (x: "\"${x}\"") outputs)} ];
                 name = "${drv.name}";
                 outPath = "${drv}";
                 system = "${drv.system}";

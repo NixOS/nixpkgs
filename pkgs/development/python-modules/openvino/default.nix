@@ -26,7 +26,6 @@ buildPythonPackage {
 
   pythonImportsCheck = [
     "openvino"
-    "openvino.runtime"
   ];
 
   meta = {

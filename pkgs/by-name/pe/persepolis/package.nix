@@ -8,7 +8,7 @@
   meson,
   ninja,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "persepolis";
   version = "5.2.0";
   pyproject = false;
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-E295Y76EmG6H1nwu7d4+OVPRtoCthROqYY5sIsBvUPI=";
   };
 
@@ -64,4 +64,4 @@ python3.pkgs.buildPythonApplication rec {
       L0L1P0P
     ];
   };
-}
+})

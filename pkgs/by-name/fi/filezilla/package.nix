@@ -15,19 +15,19 @@
   tinyxml,
   boost,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   xdg-utils,
 }:
 
 stdenv.mkDerivation {
   pname = "filezilla";
-  version = "3.69.3";
+  version = "3.69.6";
 
   src = fetchsvn {
     url = "https://svn.filezilla-project.org/svn/FileZilla3/trunk";
-    rev = "11309";
-    hash = "sha256-+wvdQnsYUsLS4pHoa3JVzkgTVxbeck/c7IaDt0VqU+8=";
+    rev = "11365";
+    hash = "sha256-KJI+UxKiwmZfVG0CiS3lDnjz+YNjTy7IoTcOmlGkluk=";
   };
 
   configureFlags = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     pugixml
     sqlite
     tinyxml
-    wxGTK32
+    wxwidgets_3_2
     gtk3
     xdg-utils
   ];
@@ -70,6 +70,9 @@ stdenv.mkDerivation {
     '';
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [
+      iedame
+      pSub
+    ];
   };
 }

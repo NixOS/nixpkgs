@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   glib,
-  xorg,
+  libxcb,
   nspr,
   nss,
   autoPatchelfHook,
@@ -65,7 +65,7 @@ let
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       glib
-      xorg.libxcb
+      libxcb
       nspr
       nss
     ];

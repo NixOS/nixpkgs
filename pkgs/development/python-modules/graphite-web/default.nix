@@ -125,7 +125,6 @@ buildPythonPackage {
     homepage = "http://graphiteapp.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      offline
       basvandijk
     ];
   };

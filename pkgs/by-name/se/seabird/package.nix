@@ -13,14 +13,14 @@
   vte-gtk4,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "seabird";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "getseabird";
     repo = "seabird";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-z+XEOqr7JX376AyGr0zx3AV3P+YqFbyspXMoxidCWY0=";
   };
 
@@ -49,7 +49,7 @@ buildGoModule rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${version}"'
+    substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${finalAttrs.version}"'
   '';
 
   preBuild = ''
@@ -57,7 +57,7 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    install -Dm644 internal/icon/seabird.svg $out/share/pixmaps/dev.skynomads.Seabird.svg
+    install -Dm644 internal/icon/seabird.svg $out/share/icons/hicolor/scalable/dev.skynomads.Seabird.svg
   '';
 
   desktopItems = [ "dev.skynomads.Seabird.desktop" ];
@@ -69,4 +69,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ nicolas-goudry ];
     mainProgram = "seabird";
   };
-}
+})

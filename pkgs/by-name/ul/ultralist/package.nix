@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ultralist";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ultralist";
     repo = "ultralist";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-GGBW6rpwv1bVbLTD//cU8jNbq/27Ls0su7DymCJTSmY=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ uvnikita ];
     mainProgram = "ultralist";
   };
-}
+})

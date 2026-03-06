@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "terraformer";
   version = "0.8.30";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "terraformer";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-xbZm0FOa/W6/qXMnJHuGgJhgu2NWtKrMoP0Ttd+hhdw=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ryan4yin ];
   };
-}
+})

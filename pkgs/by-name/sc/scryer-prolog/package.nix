@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scryer-prolog";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mthom";
     repo = "scryer-prolog";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RCz4zLbmWgSRR6Y5YbhidIZ1+LNR6FHyk/G0ifSDOx4=";
   };
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  CARGO_FEATURE_USE_SYSTEM_LIBS = true;
+  env.CARGO_FEATURE_USE_SYSTEM_LIBS = true;
 
   meta = {
     description = "Modern Prolog implementation written mostly in Rust";
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
       wkral
     ];
   };
-}
+})

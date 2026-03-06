@@ -38,7 +38,6 @@ let
       fileset = unions (
         map (lib.path.append ../..) [
           ".version"
-          "ci/supportedSystems.json"
           "ci/eval/attrpaths.nix"
           "ci/eval/chunk.nix"
           "ci/eval/outpaths.nix"
@@ -53,7 +52,9 @@ let
       );
     };
 
-  supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
+  supportedSystems = builtins.fromJSON (
+    builtins.readFile ../../pkgs/top-level/release-supported-systems.json
+  );
 
   attrpathsSuperset =
     {

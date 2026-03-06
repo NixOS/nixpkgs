@@ -13,7 +13,7 @@
   libxml2,
   wingpanel,
   libgee,
-  xorg,
+  xkeyboard-config,
   libgnomekbd,
   ibus,
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ibus
     libgee
     wingpanel
-    xorg.xkeyboardconfig
+    xkeyboard-config
   ];
 
   passthru = {

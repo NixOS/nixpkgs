@@ -6,7 +6,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "keychron-udev-rules";
-  version = "23-10-2025";
+  version = "0-unstable-2026-01-07";
 
   nativeBuildInputs = [ udevCheckHook ];
 
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Keychron Keyboard Udev Rules, fixes issues with keyboard detection on Linux";
+    description = "Keychron Keyboard Udev Rules, fixes issues with keyboard detection on Linux & permissions on Keychron Launcher";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ kruziikrel13 ];

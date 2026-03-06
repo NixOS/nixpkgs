@@ -2,8 +2,8 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  python311,
-  python311Packages,
+  python3,
+  python3Packages,
   glibcLocales,
   gobject-introspection,
   wrapGAppsHook3,
@@ -17,18 +17,22 @@
   nixosTests,
 }:
 
-python311Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "guake";
-  version = "3.10";
+  version = "3.10.1";
 
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Guake";
     repo = "guake";
-    tag = version;
-    hash = "sha256-e6Bf4HDftHBxFPcw9z02CqgZhSIvt6wlLF6dnIh9fEc=";
+    tag = finalAttrs.version;
+    hash = "sha256-TTDVJeM37SbpWucJGYoeYX9t4r1k3ldru9Cd02hBrU4=";
   };
+
+  build-system = with python3Packages; [
+    distutils
+  ];
 
   patches = [
     # Avoid trying to recompile schema at runtime,
@@ -57,7 +61,7 @@ python311Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook3
-    python311Packages.pip
+    python3Packages.pip
   ];
 
   buildInputs = [
@@ -66,18 +70,19 @@ python311Packages.buildPythonApplication rec {
     keybinder3
     libnotify
     libwnck
-    python311
+    python3
     vte
   ];
 
   makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
 
-  propagatedBuildInputs = with python311Packages; [
+  propagatedBuildInputs = with python3Packages; [
     dbus-python
     pycairo
     pygobject3
     setuptools-scm
     pyyaml
+    distutils
   ];
 
   makeFlags = [
@@ -104,4 +109,4 @@ python311Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

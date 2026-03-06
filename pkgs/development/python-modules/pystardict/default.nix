@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pystardict";
-  version = "0.8";
+  version = "0.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lig";
     repo = "pystardict";
-    rev = version;
-    hash = "sha256-YrZpIhyxfA3G7rP0SJ+EvzGwAXlne80AYilkj6cIDnA=";
+    tag = "v${version}";
+    hash = "sha256-VWOxggAKifN5f6nSN1xsSbg0hpKzrHDw+UqnAOzsXj0=";
   };
 
   propagatedBuildInputs = [ six ];

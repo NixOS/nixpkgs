@@ -28,7 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_mixer
   ];
 
-  NIX_LDFLAGS = "-lm";
+  patches = [ ./fix-c23-prototypes.patch ];
+
+  env.NIX_LDFLAGS = "-lm";
 
   desktopItems = [
     (makeDesktopItem {

@@ -12,9 +12,9 @@
   wrapGAppsHook4,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "powersupply";
-  version = "0.10.1";
+  version = "0.10.2";
 
   pyproject = false;
 
@@ -22,8 +22,8 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "powersupply";
-    rev = version;
-    hash = "sha256-sPdtrm2WQYjPu+1bb0ltBiqS9t8FFvbgRdGe1PEthy0=";
+    rev = finalAttrs.version;
+    hash = "sha256-i0AZfxYWj8ct2jiXl2GnCGMU3xBSRRny4H0G/5Qs14Y=";
   };
 
   postPatch = ''
@@ -60,4 +60,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

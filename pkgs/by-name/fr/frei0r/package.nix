@@ -11,14 +11,14 @@
   cudaPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "frei0r-plugins";
   version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "frei0r";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3gUWvO5izOrJt+XwcNBNiLfu+iMqo4nuPbx++TYzao0=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

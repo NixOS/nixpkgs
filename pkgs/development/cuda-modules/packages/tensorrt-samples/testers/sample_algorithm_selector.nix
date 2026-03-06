@@ -1,4 +1,5 @@
 {
+  atLeast,
   backendStdenv,
   lib,
   mkTester,
@@ -26,15 +27,16 @@ lib.optionalAttrs (older "10.8") (
       "--datadir=${sample-data.outPath + "/mnist"}"
       "--fp16"
     ];
-
+  }
+  // lib.optionalAttrs (atLeast "10") {
     bf16 = mkTester "sample_algorithm_selector-bf16" [
       "sample_algorithm_selector"
       "--datadir=${sample-data.outPath + "/mnist"}"
       "--bf16"
     ];
   }
-  # Only Orin has a DLA
-  // lib.optionalAttrs (lib.elem "8.7" backendStdenv.cudaCapabilities) {
+  # Only Xavier and Orin have a DLA
+  // lib.optionalAttrs (lib.subtractLists [ "7.2" "8.7" ] backendStdenv.cudaCapabilities == [ ]) {
     dla = mkTester "sample_algorithm_selector-dla" [
       "sample_algorithm_selector"
       "--datadir=${sample-data.outPath + "/mnist"}"

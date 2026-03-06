@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   python,
 
   # build-system
@@ -41,15 +41,14 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.13.1";
+  version = "65.14.3";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "allauth";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-tmCOJ15l8UnvFZFCiqH2ACBeIEDqYKNwf9gkCUHTKPE=";
+    hash = "sha256-Kr6iYN+qM1ZdtQAJ9Ks+zC70AiiUi2IY2O/G9S+tTmI=";
   };
 
   nativeBuildInputs = [ gettext ];

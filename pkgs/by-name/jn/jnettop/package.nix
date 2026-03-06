@@ -10,12 +10,12 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jnettop";
   version = "0.13.0";
 
   src = fetchurl {
-    url = "http://jnettop.kubs.info/dist/jnettop-${version}.tar.gz";
+    url = "http://jnettop.kubs.info/dist/jnettop-${finalAttrs.version}.tar.gz";
     sha256 = "1855np7c4b0bqzhf1l1dyzxb90fpnvrirdisajhci5am6als31z9";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "jnettop";
   };
-}
+})

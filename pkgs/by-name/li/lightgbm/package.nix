@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # set the R package buildPhase to null because lightgbm has a
   # custom builder script that builds and installs in one step
-  buildPhase = lib.optionals rLibrary '''';
+  buildPhase = lib.optionals rLibrary "";
 
   inherit doCheck;
 
@@ -180,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r com $out
     cp -r lightgbmlib.jar $out
   ''
-  + ''''
+  + ""
   + lib.optionalString rLibrary ''
     mkdir $out
     mkdir $out/tmp

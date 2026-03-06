@@ -63,7 +63,7 @@ in
         "${pkgs.prometheus-mysqld-exporter}/bin/mysqld_exporter"
         "--web.listen-address=${cfg.listenAddress}:${toString cfg.port}"
         "--web.telemetry-path=${cfg.telemetryPath}"
-        (optionalString (cfg.configFile != null) ''--config.my-cnf=''${CREDENTIALS_DIRECTORY}/config'')
+        (optionalString (cfg.configFile != null) "--config.my-cnf=\${CREDENTIALS_DIRECTORY}/config")
         (escapeShellArgs cfg.extraFlags)
       ];
       RestrictAddressFamilies = [

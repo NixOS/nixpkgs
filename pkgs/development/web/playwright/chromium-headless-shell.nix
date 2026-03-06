@@ -10,11 +10,12 @@
 
   alsa-lib,
   at-spi2-atk,
+  expat,
   glib,
-  libXcomposite,
-  libXdamage,
-  libXfixes,
-  libXrandr,
+  libxcomposite,
+  libxdamage,
+  libxfixes,
+  libxrandr,
   libgbm,
   libgcc,
   libxkbcommon,
@@ -44,11 +45,12 @@ let
     buildInputs = [
       alsa-lib
       at-spi2-atk
+      expat
       glib
-      libXcomposite
-      libXdamage
-      libXfixes
-      libXrandr
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxrandr
       libgbm
       libgcc.lib
       libxkbcommon

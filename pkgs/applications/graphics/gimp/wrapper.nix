@@ -24,7 +24,9 @@ let
 
 in
 symlinkJoin {
-  name = "gimp-with-plugins-${gimp.version}";
+  pname = "gimp-with-plugins";
+  inherit (gimp) version;
+
   outputs = [
     "out"
     "man"

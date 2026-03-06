@@ -2,12 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   pytestCheckHook,
   typing-extensions,
-  importlib-metadata,
   mypy,
   sphinxHook,
   sphinx-autodoc-typehints,
@@ -41,8 +39,7 @@ buildPythonPackage rec {
 
   dependencies = [
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   env.LC_ALL = "en_US.utf-8";
 

@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kreya";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchurl {
     url = "https://stable-downloads.kreya.app/${finalAttrs.version}/Kreya-linux-x64.tar.gz";
-    hash = "sha256-oXDR1vwU0ikDq4eHFOXTlDgpODH6kVQu/2Ghed9c508=";
+    hash = "sha256-JyUdTLW6dYwYTVlyhCph7LDuCF4mdrQTnhcv/qmeuIc=";
   };
 
   nativeBuildInputs = [

@@ -143,7 +143,7 @@ let
       # tests need writable $HOME
       HOME=$PWD/.home
 
-      wrapPythonProgramsIn "$PWD/testing/overrides/bin" "$pythonPath"
+      wrapPythonProgramsIn "$PWD/testing/overrides/bin" "''${pythonPath[*]}"
     '';
 
     doCheck = true;

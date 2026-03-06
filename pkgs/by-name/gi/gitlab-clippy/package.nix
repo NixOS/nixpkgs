@@ -4,23 +4,23 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitlab-clippy";
   version = "1.0.3";
 
   src = fetchFromGitLab {
     owner = "dlalic";
     repo = "gitlab-clippy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-d7SmlAWIV4SngJhIvlud90ZUSF55FWIrzFpkfSXIy2Y=";
   };
 
   cargoHash = "sha256-O3Pey0XwZITePTiVHrG5EVZpIp96sRWjUf1vzZ/JnCw=";
 
-  # TODO re-add theses tests once they get fixed in upstream
+  # TODO re-add these tests once they get fixed in upstream
   checkFlags = [
-    "--skip cli::converts_error_from_pipe"
-    "--skip cli::converts_warnings_from_pipe"
+    "--skip=cli::converts_error_from_pipe"
+    "--skip=cli::converts_warnings_from_pipe"
   ];
 
   meta = {
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wucke13 ];
   };
-}
+})

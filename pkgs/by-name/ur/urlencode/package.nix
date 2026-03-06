@@ -3,14 +3,14 @@
   lib,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "urlencode";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "dead10ck";
     repo = "urlencode";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-LvLUbtMPVbYZMUb9vWhTscYfZPtEM5GrZme3azvVlPE=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ l0b0 ];
     mainProgram = "urlencode";
   };
-}
+})

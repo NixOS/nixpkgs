@@ -36,14 +36,14 @@
 }:
 buildPythonPackage rec {
   pname = "manim-slides";
-  version = "5.5.3";
+  version = "5.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeertmans";
     repo = "manim-slides";
     tag = "v${version}";
-    hash = "sha256-BZyvnjRjWSgfbnLPgZbaTp0auDBXZawDlrr9jZfWohA=";
+    hash = "sha256-Izr7nCDn3BQ3j27KlWzM1Z1DTVaAS+YfR0yxt00VkeE=";
   };
 
   build-system = [

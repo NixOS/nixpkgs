@@ -19,17 +19,17 @@
   pkcs11helper,
   uriparser,
   zlib,
-  libX11,
-  libXcursor,
-  libXdamage,
-  libXdmcp,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libXtst,
-  libXv,
+  libx11,
+  libxcursor,
+  libxdamage,
+  libxdmcp,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
+  libxtst,
+  libxv,
   libxkbcommon,
   libxkbfile,
   wayland,
@@ -70,13 +70,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.20.0";
+  version = "3.23.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-/v6M3r0qELpKvDmM8p3SnOmstyqfYNzyS7gw6HBOSd0=";
+    hash = "sha256-WGuRnNwcvxwIudSzPoJB4BmaTLHKU7bsZkgWmzJPLSQ=";
   };
 
   postPatch = ''
@@ -117,17 +117,17 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     glib
     icu
-    libX11
-    libXcursor
-    libXdamage
-    libXdmcp
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
-    libXtst
-    libXv
+    libx11
+    libxcursor
+    libxdamage
+    libxdmcp
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxtst
+    libxv
     libjpeg_turbo
     libkrb5
     libopus

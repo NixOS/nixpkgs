@@ -5,8 +5,6 @@
   pytestCheckHook,
   click,
   setuptools-scm,
-  pythonOlder,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +19,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ click ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  propagatedBuildInputs = [ click ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

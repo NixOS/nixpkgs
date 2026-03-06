@@ -22,13 +22,13 @@ let
   inherit (stdenv.hostPlatform) system;
   platformInfo = platformInfos.${system} or (throw "Unsupported platform ${system}");
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sourcery";
   version = "1.37.0";
   format = "wheel";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
     inherit (platformInfo) platform hash;
   };
@@ -50,4 +50,4 @@ python3Packages.buildPythonApplication rec {
       "x86_64-darwin"
     ];
   };
-}
+})

@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   utils,
   ...
 }:
@@ -10,14 +9,19 @@ let
   inherit (utils.systemdUtils.unitOptions) unitOption;
 
   inherit (lib)
+    concatStringsSep
+    elem
+    isList
     literalExpression
+    mapAttrs'
+    mapAttrsToList
     mkIf
     mkMerge
     mkOption
-    mkOptionDefault
     mkOrder
     mkRenamedOptionModule
     mkRemovedOptionModule
+    nameValuePair
     optionalAttrs
     types
     ;
@@ -26,7 +30,25 @@ let
 
   dnsmasqResolve = config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries;
 
-  resolvedConf = settingsToSections cfg.settings;
+  transformSettings =
+    settings:
+    lib.mapAttrs (
+      key: value:
+      # concat lists for options that should result in space-separated values
+      if
+        elem key [
+          "DNS"
+          "Domains"
+          "FallbackDNS"
+        ]
+        && isList value
+      then
+        concatStringsSep " " value
+      else
+        value
+    ) settings;
+
+  resolvedConf = settingsToSections (transformSettings cfg.settings);
 in
 {
   imports = [
@@ -60,22 +82,77 @@ in
   options = {
     services.resolved = {
       enable = lib.mkEnableOption "the Systemd DNS resolver daemon (systemd-resolved)";
+
       settings.Resolve = mkOption {
         description = ''
           Settings option for systemd-resolved.
           See {manpage}`resolved.conf(5)` for all available options.
         '';
-        # Remember to keep this in sync to the actual settings at the bottom of the page.
-        defaultText = literalExpression ''
-          {
-            DNS = config.networking.nameservers;
-            DNSOverTLS = false;
-            DNSSEC = false;
-            Domains = config.networking.search;
-            LLMNR = true;
-          }
+        default = { };
+        type = types.submodule {
+          freeformType = types.attrsOf unitOption;
+          options = {
+            DNS = mkOption {
+              type = unitOption;
+              default = config.networking.nameservers;
+              defaultText = literalExpression "config.networking.nameservers";
+              description = ''
+                List of IP addresses to query as recursive DNS resolvers.
+              '';
+            };
+
+            DNSOverTLS = mkOption {
+              type = unitOption;
+              default = false;
+              description = ''
+                Whether to use TLS encryption for DNS queries. Requires
+                nameservers that support DNS-over-TLS.
+              '';
+            };
+
+            DNSSEC = mkOption {
+              type = unitOption;
+              default = false;
+              description = ''
+                Whether to validate DNSSEC for DNS lookups.
+              '';
+            };
+
+            Domains = mkOption {
+              type = unitOption;
+              default = config.networking.search;
+              defaultText = literalExpression "config.networking.search";
+              example = [
+                "scope.example.com"
+                "example.com"
+              ];
+              description = ''
+                List of search domains used to complete unqualified name lookups.
+              '';
+            };
+          };
+        };
+      };
+
+      dnsDelegates = mkOption {
+        description = ''
+          dns-delegate files to be created.
+          See {manpage}`systemd.dns-delegate(5)` for more info.
         '';
-        type = types.attrsOf unitOption;
+        default = { };
+        type = types.attrsOf (
+          types.submodule {
+            options.Delegate = mkOption {
+              description = ''
+                Settings option for systemd dns-delegate files.
+                See {manpage}`systemd.dns-delegate(5)` for all available options.
+              '';
+              type = types.submodule {
+                freeformType = types.attrsOf unitOption;
+              };
+            };
+          }
+        );
       };
 
     };
@@ -101,15 +178,6 @@ in
         }
       ];
 
-      # If updating any of these attrs, also update the defaultText above.
-      services.resolved.settings.Resolve = {
-        DNS = config.networking.nameservers;
-        DNSOverTLS = mkOptionDefault false;
-        DNSSEC = mkOptionDefault false;
-        Domains = mkOptionDefault config.networking.search;
-        LLMNR = mkOptionDefault true;
-      };
-
       users.users.systemd-resolve.group = "systemd-resolve";
 
       # add resolve to nss hosts database if enabled and nscd enabled
@@ -122,7 +190,12 @@ in
       systemd.services.systemd-resolved = {
         wantedBy = [ "sysinit.target" ];
         aliases = [ "dbus-org.freedesktop.resolve1.service" ];
-        reloadTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
+        reloadTriggers = [
+          config.environment.etc."systemd/resolved.conf".source
+        ]
+        ++ mapAttrsToList (
+          name: _: config.environment.etc."systemd/dns-delegate.d/${name}.dns-delegate".source
+        ) cfg.dnsDelegates;
         stopIfChanged = false;
       };
 
@@ -135,12 +208,18 @@ in
       }
       // optionalAttrs dnsmasqResolve {
         "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-      };
+      }
+      // mapAttrs' (
+        name: value:
+        nameValuePair "systemd/dns-delegate.d/${name}.dns-delegate" {
+          text = settingsToSections (transformSettings value);
+        }
+      ) cfg.dnsDelegates;
 
       # If networkmanager is enabled, ask it to interface with resolved.
       networking.networkmanager.dns = "systemd-resolved";
 
-      networking.resolvconf.package = pkgs.systemd;
+      networking.resolvconf.package = config.systemd.package;
 
       nix.firewall.extraNftablesRules = [
         "ip daddr { 127.0.0.53, 127.0.0.54 } udp dport 53 accept comment \"systemd-resolved listening IPs\""

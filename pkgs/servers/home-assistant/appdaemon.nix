@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "4.5.12";
+  version = "4.5.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AppDaemon";
     repo = "appdaemon";
-    rev = "refs/tags/${version}";
-    hash = "sha256-lcGQQz+kPefHSyc2RNQ4gHgraRJPvn/FcgMJGvCtC48=";
+    tag = version;
+    hash = "sha256-uVlrLyj8GZo1T8AKBxpVTPPqUrwxmyMbgaopmEGZiR4=";
   };
 
   pythonRelaxDeps = true;

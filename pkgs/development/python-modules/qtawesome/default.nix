@@ -2,25 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyqt5,
+  pyqt6,
   pytestCheckHook,
   qtpy,
 }:
 
 buildPythonPackage rec {
   pname = "qtawesome";
-  version = "1.4.0";
+  version = "1.4.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = "qtawesome";
     tag = "v${version}";
-    hash = "sha256-VjUlP+5QU9ApD09UNvF48b0gepCUpVO6U6zYaKm0KoE=";
+    hash = "sha256-CdELoMML7j9m1HrAY8MhKcYx5Q4xuEMZIBeyzQnRQtk=";
   };
 
   propagatedBuildInputs = [
-    pyqt5
+    pyqt6
     qtpy
   ];
 

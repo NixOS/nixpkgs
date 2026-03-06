@@ -15,14 +15,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "kicad-python";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "kicad/code";
     repo = "kicad-python";
     tag = finalAttrs.version;
-    hash = "sha256-M2vJ/lSwc1XjrG661ayNIOZKJitmy/UPM2SesQI1xYE=";
+    hash = "sha256-FIWTYBUauq4yUdnijjPgxaXynh/U03ppnLU8YVkKYHw=";
     fetchSubmodules = true;
   };
 

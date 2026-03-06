@@ -12,20 +12,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/go/goland-2025.3.1.tar.gz";
-      hash = "sha256-FhhHHmKbil4YZ2TdHPQBor2arTui/3j92Jb1Gncn+Uo=";
+      url = "https://download.jetbrains.com/go/goland-2025.3.1.1.tar.gz";
+      hash = "sha256-+4A+rTMwiXjKuBI2dUf90F9KUFaGlB2xgO+BX09WnWw=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/go/goland-2025.3.1-aarch64.tar.gz";
-      hash = "sha256-5lsXviK9nwHogCCwVTkeqIBe1G/ZWDUzD3z7Hyx6y0Y=";
+      url = "https://download.jetbrains.com/go/goland-2025.3.1.1-aarch64.tar.gz";
+      hash = "sha256-zGPly+ELyQYGrq5eoOqeujDptL7aIOY0KK5FVaSFZ8k=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/go/goland-2025.3.1.dmg";
-      hash = "sha256-QBsP0ar6550uZpj1JEutHSRHMrgfDZI8fZ7sZ7uoulk=";
+      url = "https://download.jetbrains.com/go/goland-2025.3.1.1.dmg";
+      hash = "sha256-xZeuUIyqPUoOPWzuwuCS0nkasvuwLSc43tcSSGZrHS0=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/go/goland-2025.3.1-aarch64.dmg";
-      hash = "sha256-yVmu/WfRsERQkySjCWW3PB4p/XCOAHF8/g6Op1ibsFA=";
+      url = "https://download.jetbrains.com/go/goland-2025.3.1.1-aarch64.dmg";
+      hash = "sha256-vV8TxLG/KEUuAcN1lsCKT6v4tg6UmbUU7U5OCJ8rhXQ=";
     };
   };
   # update-script-end: urls
@@ -39,8 +39,8 @@ in
   product = "Goland";
 
   # update-script-start: version
-  version = "2025.3.1";
-  buildNumber = "253.29346.255";
+  version = "2025.3.1.1";
+  buildNumber = "253.29346.379";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

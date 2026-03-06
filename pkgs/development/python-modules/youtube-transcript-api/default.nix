@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "youtube-transcript-api";
-  version = "1.2.3";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jdepoix";
     repo = "youtube-transcript-api";
     tag = "v${version}";
-    hash = "sha256-UtKAT7BTWmG2wWnpK5OT/NeVksz6N8sLnRq9IpAm7D4=";
+    hash = "sha256-FFLbDiZJR+xqaMMjcBQFYgrdJEofTiBdSNmmlMlrNfY=";
   };
 
   build-system = [ poetry-core ];

@@ -43,7 +43,6 @@ stdenv.mkDerivation {
     description = "Templatized C++ Command Line Parser Library (v1.4)";
     homepage = "https://tclap.sourceforge.net/";
     license = lib.licenses.mit;
-    teams = [ lib.teams.deshaw ];
     platforms = lib.platforms.all;
   };
 }

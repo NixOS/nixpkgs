@@ -536,7 +536,7 @@ See [](#chap-pkgs-fetchers-caveats) for more details on how to work with the `ha
 Returns a [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation) which downloads an archive from a given URL and decompresses it.
 
 Despite its name, `fetchzip` is not limited to `.zip` files but can also be used with [various compressed tarball formats](#tar-files) by default.
-This can extended by specifying additional attributes, see [](#ex-fetchers-fetchzip-rar-archive) to understand how to do that.
+This can be extended by specifying additional attributes, see [](#ex-fetchers-fetchzip-rar-archive) to understand how to do that.
 
 ### Inputs {#sec-pkgs-fetchers-fetchzip-inputs}
 
@@ -765,7 +765,7 @@ Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`
 
 ## `fetchgit` {#fetchgit}
 
-Used with Git. Expects `url` to a Git repo, `rev` or `tag`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash), or use `tag` for a tag name like `refs/tags/v1.0`.
+Used with Git. Expects `url` to a Git repo, `rev` or `tag`, and `hash`. `rev` in this case can be the full git commit id (SHA1 hash), or use `tag` for a tag name like `refs/tags/v1.0`.
 
 If you want to fetch a tag you should pass the `tag` parameter instead of `rev` which has the same effect as setting `rev = "refs/tags"/${version}"`.
 This is safer than just setting `rev = version` w.r.t. possible branch and tag name conflicts.
@@ -799,7 +799,7 @@ Additionally, the following optional arguments can be given:
 
 *`deepClone`* (Boolean)
 
-: Clone the entire repository as opposing to just creating a shallow clone.
+: Clone the entire repository as opposed to just creating a shallow clone.
   This implies `leaveDotGit`.
 
 *`fetchTags`* (Boolean)
@@ -855,9 +855,11 @@ Used with Mercurial. Expects `url`, `rev`, `hash`, overridable with [`<pkg>.over
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 
-## `fetchFromGitea` {#fetchfromgitea}
+## `fetchFromGitea`, `fetchFromForgejo` and `fetchFromCodeberg` {#fetchfromgitea}
 
-`fetchFromGitea` expects five arguments. `domain` is the gitea server name. `owner` is a string corresponding to the Gitea user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every Gitea HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `hash` is currently preferred.
+`fetchFromGitea`, also aliased to `fetchFromForgejo`, expects five arguments. `domain` is the Gitea/Forgejo server name. `owner` is a string corresponding to the user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every Gitea/Forgejo HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `hash` is currently preferred.
+
+As <codeberg.org> is currently the most popular public Forgejo server, the `fetchFromCodeberg` fetcher is also available, which pre-fills the `domain` attribute.
 
 ## `fetchFromGitHub` {#fetchfromgithub}
 
@@ -1001,3 +1003,27 @@ fetchtorrent {
 
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
+
+## `fetchItchIo` {#fetchitchio}
+
+`fetchItchIo` is a fetcher for downloading game assets from [itch.io](https://itch.io/). It accepts these arguments:
+
+- `gameUrl`: The store page URL of the game.
+- `upload`: The numerical ID of the asset to download. To find the upload ID of an asset, check the basename of the request URL when you download the asset using a browser.
+- `hash`.
+- `name` (optional): The derivation name, often the filename of the asset.
+- `extraMessage` (optional): Extra message printed if the API key is not provided or if the account did not purchase the game.
+
+For this fetcher to work, the environment variable `NIX_ITCHIO_API_KEY` must be set for the nix building process (which is nix-daemon in multi-user mode), and it must belong to an account that has bought the game if it is behind a paywall.
+To get your API key, go to the ["API key" section](https://itch.io/user/settings/api-keys) of your account settings on itch.io.
+
+```nix
+{ fetchItchIo }:
+
+fetchItchIo {
+  name = "DungeonDuelMonsters-linux-x64.zip";
+  hash = "sha256-gq2nGwpaStqaVI1pL63xygxOI/z53o+zLwiKizG98Ks=";
+  gameUrl = "https://mikaygo.itch.io/ddm";
+  upload = "13371354";
+}
+```

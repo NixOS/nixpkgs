@@ -24,7 +24,7 @@
   pkg-config,
   stdenv,
   udev,
-  xorg,
+  libxscrnsaver,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -56,8 +56,10 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ openssl ];
 
-  FFPWA_EXECUTABLES = ""; # .desktop entries generated without any store path references
-  FFPWA_SYSDATA = "${placeholder "out"}/share/firefoxpwa";
+  env = {
+    FFPWA_EXECUTABLES = ""; # .desktop entries generated without any store path references
+    FFPWA_SYSDATA = "${placeholder "out"}/share/firefoxpwa";
+  };
   completions = "target/${stdenv.targetPlatform.config}/release/completions";
 
   gtk_modules = map (x: x + x.gtkModule) [ libcanberra-gtk3 ];
@@ -74,7 +76,7 @@ rustPlatform.buildRustPackage rec {
         pciutils
         pipewire
         udev
-        xorg.libXScrnSaver
+        libxscrnsaver
       ]
       ++ gtk_modules
       ++ extraLibs;

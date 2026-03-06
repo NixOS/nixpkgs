@@ -18,7 +18,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ julec.hook ];
 
-  JULE_OUT_NAME = "juledoc";
+  env.JULE_OUT_NAME = "juledoc";
 
   meta = {
     description = "Official documentation generator for the Jule programming language";

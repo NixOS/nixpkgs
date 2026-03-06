@@ -25,6 +25,7 @@
   colmena,
   nix-update,
   nix-init,
+  nurl,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
@@ -64,24 +65,10 @@ let
             confDir
             ;
 
-          boehmgc =
-            # TODO: Why is this called `boehmgc-nix_2_3`?
-            let
-              boehmgc-nix_2_3 = boehmgc.override {
-                enableLargeConfig = true;
-                initialMarkStackSize = 1048576;
-              };
-            in
-            # Since Lix 2.91 does not use boost coroutines, it does not need boehmgc patches either.
-            if lib.versionOlder lix-args.version "2.91" then
-              boehmgc-nix_2_3.overrideAttrs (drv: {
-                patches = (drv.patches or [ ]) ++ [
-                  # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-                  ../nix/patches/boehmgc-coroutine-sp-fallback.patch
-                ];
-              })
-            else
-              boehmgc-nix_2_3;
+          boehmgc = boehmgc.override {
+            enableLargeConfig = true;
+            initialMarkStackSize = 1048576;
+          };
 
           aws-sdk-cpp =
             (aws-sdk-cpp.override {
@@ -156,6 +143,11 @@ let
           };
 
           nix-init = nix-init.override {
+            nix = self.lix;
+            inherit (self) nurl;
+          };
+
+          nurl = nurl.override {
             nix = self.lix;
           };
         };
@@ -285,7 +277,7 @@ lib.makeExtensible (
 
     latest = self.lix_2_94;
 
-    stable = self.lix_2_93;
+    stable = self.lix_2_94;
 
     # Previously, `nix-eval-jobs` was not packaged here, so we export an
     # attribute with the previously-expected structure for compatibility. This

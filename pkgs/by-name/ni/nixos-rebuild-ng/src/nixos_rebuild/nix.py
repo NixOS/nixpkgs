@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import sys
 import textwrap
 import uuid
 from concurrent.futures import ThreadPoolExecutor
@@ -24,7 +25,7 @@ from .models import (
     Profile,
     Remote,
 )
-from .process import SSH_DEFAULT_OPTS, run_wrapper
+from .process import PRESERVE_ENV, SSH_DEFAULT_OPTS, run_wrapper
 from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
@@ -191,8 +192,12 @@ def copy_closure(
     Also supports copying a closure from a remote to another remote."""
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
-    extra_env = {
-        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))
+    # This command is always run locally and needs to keep its own environent
+    # while merging NIX_SSHOPTS and SSH_DEFAULT_OPTS together.
+    # E.g.: to preserve SSH_AUTH_SOCK
+    env = {
+        **os.environ,
+        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS])),
     }
 
     def nix_copy_closure(host: Remote, to: bool) -> None:
@@ -204,7 +209,7 @@ def copy_closure(
                 host.host,
                 closure,
             ],
-            extra_env=extra_env,
+            env=env,
         )
 
     def nix_copy(to_host: Remote, from_host: Remote) -> None:
@@ -220,11 +225,11 @@ def copy_closure(
                 f"ssh://{to_host.host}",
                 closure,
             ],
-            extra_env=extra_env,
+            env=env,
         )
 
     match (to_host, from_host):
-        case (None, None):
+        case (x, y) if x == y:
             return
         case (Remote(_) as host, None) | (None, Remote(_) as host):
             nix_copy_closure(host, to=bool(to_host))
@@ -313,6 +318,7 @@ def get_build_image_name_flake(
     r = run_wrapper(
         [
             "nix",
+            *FLAKE_FLAGS,
             "eval",
             "--json",
             flake.to_attr(
@@ -364,6 +370,7 @@ def get_build_image_variants_flake(
     r = run_wrapper(
         [
             "nix",
+            *FLAKE_FLAGS,
             "eval",
             "--json",
             flake.to_attr("config.system.build.images"),
@@ -538,6 +545,26 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         )
 
 
+def diff_closures(
+    current_config: Path,
+    new_config: Path,
+    target_host: Remote | None = None,
+) -> None:
+    print(f"<<< {current_config}\n>>> {new_config}", file=sys.stderr)
+    run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "store",
+            "diff-closures",
+            current_config,
+            new_config,
+        ],
+        remote=target_host,
+        stdout=sys.stderr,
+    )
+
+
 def repl(build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
     run_args = ["nix", "repl", "--file", build_attr.path]
     if build_attr.attr:
@@ -680,7 +707,11 @@ def switch_to_configuration(
 
     run_wrapper(
         [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
-        extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
+        env={
+            "LOCALE_ARCHIVE": PRESERVE_ENV,
+            "NIXOS_NO_CHECK": PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0",
+        },
         remote=target_host,
         sudo=sudo,
     )

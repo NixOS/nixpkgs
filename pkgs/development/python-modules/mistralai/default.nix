@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   eval-type-backport,
@@ -13,7 +13,6 @@
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-sdk,
-  opentelemetry-semantic-conventions,
   pydantic,
   python-dateutil,
   pyyaml,
@@ -30,16 +29,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "1.10.0";
+  version = "1.12.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
-    tag = "v${version}";
-    hash = "sha256-B7ZJTwykFnOibTJL5AP3eKT15rLgAJ1hc53BL9TR0CM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DaCAO4/DoskFuRgNcoLWBuRdnxXfYhsgY/WZu/s1wk0=";
   };
 
   preBuild = ''
@@ -47,12 +46,11 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   pythonRelaxDeps = [
     "opentelemetry-exporter-otlp-proto-http"
-    "opentelemetry-semantic-conventions"
   ];
   dependencies = [
     eval-type-backport
@@ -61,7 +59,6 @@ buildPythonPackage rec {
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-http
     opentelemetry-sdk
-    opentelemetry-semantic-conventions
     pydantic
     python-dateutil
     pyyaml
@@ -89,8 +86,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for Mistral AI platform";
     homepage = "https://github.com/mistralai/client-python";
-    changelog = "https://github.com/mistralai/client-python/blob/${src.tag}/RELEASES.md";
+    changelog = "https://github.com/mistralai/client-python/blob/${finalAttrs.src.tag}/RELEASES.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      mana-byte
+    ];
   };
-}
+})

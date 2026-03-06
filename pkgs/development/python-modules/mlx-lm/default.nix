@@ -15,22 +15,23 @@
   transformers,
 
   # tests
+  aiohttp,
   lm-eval,
-  sentencepiece,
   pytestCheckHook,
+  sentencepiece,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mlx-lm";
-  version = "0.30.2";
+  version = "0.30.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx-lm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6WlKAchze5B724XYwzpVHy+17HlMcGSYjJw0aOdm5yw=";
+    hash = "sha256-Jc+JyReOH8Wja8sh9BvOO6X090xutKrVSbv+lEODPls=";
   };
 
   build-system = [
@@ -50,6 +51,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    aiohttp
     lm-eval
     pytestCheckHook
     sentencepiece

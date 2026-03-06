@@ -28,15 +28,15 @@ let
     chmod +w -R plugins/*
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librime";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "librime";
-    rev = version;
-    sha256 = "sha256-zKc9Xxv+DHOfwpMaXeG34NwdGbXH6XP3ua+LrivQvBU=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-Jbo6Svt/d00ZJwtYkWMKFeKzpFFYhbnm3m2alDxRGvU=";
   };
 
   nativeBuildInputs = [
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ vonfry ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

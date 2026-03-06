@@ -6,14 +6,14 @@
   cli53,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cli53";
   version = "0.8.22";
 
   src = fetchFromGitHub {
     owner = "barnybug";
     repo = "cli53";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-wfb3lK/WB/B8gd4BOqh+Ol10cNZdsoCoQ+hM33+goM8=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/barnybug/cli53.version=${version}"
+    "-X github.com/barnybug/cli53.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ benley ];
     mainProgram = "cli53";
   };
-}
+})

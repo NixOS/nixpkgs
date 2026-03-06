@@ -188,7 +188,7 @@ addCFlagsToList() {
             # Pass through using -Xcc, but also convert to Swift -I.
             # These have slightly different meaning for Clang, but Swift
             # doesn't have exact equivalents.
-            -isystem | -idirafter)
+            -isystem | -cxx-isystem | -idirafter)
                 i=$((i + 1))
                 list+=("-Xcc" "$val" "-Xcc" "${!i}" "-I" "${!i}")
                 ;;

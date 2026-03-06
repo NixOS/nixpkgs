@@ -5,12 +5,12 @@
   mpi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hpcg";
   version = "3.1";
 
   src = fetchurl {
-    url = "http://www.hpcg-benchmark.org/downloads/hpcg-${version}.tar.gz";
+    url = "http://www.hpcg-benchmark.org/downloads/hpcg-${finalAttrs.version}.tar.gz";
     sha256 = "197lw2nwmzsmfsbvgvi8z7kj69n374kgfzzp8pkmk7mp2vkk991k";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.markuskowa ];
     mainProgram = "xhpcg";
   };
-}
+})

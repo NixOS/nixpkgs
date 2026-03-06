@@ -10,6 +10,7 @@
   xz,
   zlib,
   mpi,
+  mpiCheckPhaseHook,
   withPtScotch ? false,
   testers,
   pkgsMusl ? { }, # default to empty set to avoid CI fails with allowVariants = false
@@ -18,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scotch";
-  version = "7.0.10";
+  version = "7.0.11";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "scotch";
     repo = "scotch";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-qeMgTkoM/RDsZa0T6hmrDLbLuSeR8WNxllyHSlkMVzA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ljz4Xu3ztxhx8c+gRYABG85T9SuauQc4UsVHPmREvkk=";
   };
 
   outputs = [
@@ -39,8 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_PTSCOTCH" withPtScotch)
     # Prefix Scotch version of MeTiS routines
     (lib.cmakeBool "SCOTCH_METIS_PREFIX" true)
-    # building tests is broken with SCOTCH_METIS_PREFIX enabled, at least since 7.0.9
-    (lib.cmakeBool "ENABLE_TESTS" false)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [
@@ -59,6 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = lib.optionals withPtScotch [
     mpi
   ];
+
+  nativeCheckInputs = lib.optionals withPtScotch [
+    mpiCheckPhaseHook
+  ];
+
+  __darwinAllowLocalNetworking = withPtScotch;
+
+  doCheck = true;
 
   # SCOTCH provide compatibility with Metis/Parmetis interface.
   # We install the metis compatible headers to subdirectory to

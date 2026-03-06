@@ -33,7 +33,7 @@
   # An attribute set of settings to override in data/init/*.txt.
   # For example, `init.FOO = true;` is translated to `[FOO:YES]` in init.txt
   settings ? { },
-# TODO world-gen.txt, interface.txt require special logic
+  # TODO world-gen.txt, interface.txt require special logic
 }:
 
 let

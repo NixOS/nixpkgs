@@ -2,55 +2,65 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
-  attrs,
-  argon2-cffi,
-  cbor2,
+
+  # build-system
   cffi,
+  hatchling,
+  setuptools,
+
+  # dependencies
   cryptography,
-  flatbuffers,
   hyperlink,
-  mock,
-  msgpack,
-  passlib,
-  py-ubjson,
   pynacl,
-  pygobject3,
+  txaio,
+
+  # optional-dependencies
+  # compress
+  python-snappy,
+  # encryption
+  base58,
   pyopenssl,
   qrcode,
-  pytest-asyncio_0,
-  python-snappy,
-  pytestCheckHook,
-  pythonOlder,
   service-identity,
-  setuptools,
-  twisted,
-  txaio,
+  # scram
+  argon2-cffi,
+  passlib,
+  # serialization
+  cbor2,
+  flatbuffers,
+  msgpack,
   ujson,
+  py-ubjson,
+  # twisted
+  attrs,
+  twisted,
   zope-interface,
+  # ui
+  pygobject3,
+
+  # tests
+  mock,
+  pytest-asyncio_0,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "autobahn";
-  version = "24.4.2";
+  version = "25.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crossbario";
     repo = "autobahn-python";
-    tag = "v${version}";
-    hash = "sha256-aeTE4a37zr83KZ+v947XikzFrHAhkZ4mj4tXdkQnB84=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vSS7DpfGfNwQT8OsgEXJaP5J40QFIopdAD94/y7/jFY=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      # removal of broken pytest-asyncio markers
-      url = "https://github.com/crossbario/autobahn-python/commit/7bc85b34e200640ab98a41cfddb38267f39bc92e.patch";
-      hash = "sha256-JbuYWQhvjlXuHde8Z3ZSJAyrMOdIcE1GOq+Eh2HTz8c=";
-    })
+  build-system = [
+    cffi
+    hatchling
+    setuptools
   ];
-
-  build-system = [ setuptools ];
 
   dependencies = [
     cryptography
@@ -58,29 +68,6 @@ buildPythonPackage rec {
     pynacl
     txaio
   ];
-
-  nativeCheckInputs = [
-    mock
-    pytest-asyncio_0
-    pytestCheckHook
-  ]
-  ++ optional-dependencies.scram
-  ++ optional-dependencies.serialization;
-
-  preCheck = ''
-    # Run asyncio tests (requires twisted)
-    export USE_ASYNCIO=1
-  '';
-
-  enabledTestPaths = [
-    "./autobahn"
-  ];
-
-  disabledTestPaths = [
-    "./autobahn/twisted"
-  ];
-
-  pythonImportsCheck = [ "autobahn" ];
 
   optional-dependencies = lib.fix (self: {
     all =
@@ -97,6 +84,8 @@ buildPythonPackage rec {
     ];
     compress = [ python-snappy ];
     encryption = [
+      base58
+      # ecdsa (marked as insecure)
       pynacl
       pyopenssl
       qrcode # pytrie
@@ -123,11 +112,40 @@ buildPythonPackage rec {
     ui = [ pygobject3 ];
   });
 
+  pythonImportsCheck = [ "autobahn" ];
+
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio_0
+    pytestCheckHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.encryption
+  ++ finalAttrs.passthru.optional-dependencies.scram
+  ++ finalAttrs.passthru.optional-dependencies.serialization;
+
+  preCheck = ''
+    # Run asyncio tests (requires twisted)
+    export USE_ASYNCIO=1
+    rm src/autobahn/__init__.py
+  '';
+
+  enabledTestPaths = [
+    "src/autobahn"
+  ];
+
+  disabledTestPaths = [
+    "src/autobahn/twisted"
+
+    # Requires insecure ecdsa library
+    "src/autobahn/wamp/test/test_wamp_cryptosign.py"
+  ];
+
   meta = {
-    changelog = "https://github.com/crossbario/autobahn-python/blob/${src.rev}/docs/changelog.rst";
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
     homepage = "https://crossbar.io/autobahn";
+    downloadPage = "https://github.com/crossbario/autobahn-python";
+    changelog = "https://github.com/crossbario/autobahn-python/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

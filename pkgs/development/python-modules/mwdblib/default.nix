@@ -12,16 +12,16 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mwdblib";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "mwdblib";
-    tag = "v${version}";
-    hash = "sha256-1oz//6rQiuV/WAv+6qs12ULPhB5nmf7ntcHSAKnRT8E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eP8q5G97vfe7eN3+/+UF7Qda5/xzwC/GRrTorucjEGo=";
   };
 
   build-system = [ setuptools ];
@@ -42,9 +42,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for the mwdb service";
     homepage = "https://github.com/CERT-Polska/mwdblib";
-    changelog = "https://github.com/CERT-Polska/mwdblib/releases/tag/${src.tag}";
+    changelog = "https://github.com/CERT-Polska/mwdblib/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mwdb";
   };
-}
+})

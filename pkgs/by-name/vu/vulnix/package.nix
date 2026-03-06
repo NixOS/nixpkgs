@@ -6,16 +6,16 @@
   ronn,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vulnix";
-  version = "1.12.2";
+  version = "1.12.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "vulnix";
-    tag = version;
-    hash = "sha256-RHYiwIWV7gf4Ty70ECY3RLouNZAEG5uxjq0+K4LK5QU=";
+    tag = finalAttrs.version;
+    hash = "sha256-q6Mktt9tuX4uDk3hNvDT1928tf+Kb6gBIgwy7w2N8nk=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -66,4 +66,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ henrirosten ];
   };
-}
+})

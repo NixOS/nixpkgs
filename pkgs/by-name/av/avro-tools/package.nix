@@ -5,31 +5,29 @@
   jre,
   lib,
 }:
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "avro-tools";
   version = "1.12.0";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchurl {
-    url = "mirror://maven/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
+    url = "mirror://maven/org/apache/avro/avro-tools/${finalAttrs.version}/avro-tools-${finalAttrs.version}.jar";
     sha256 = "sha256-+OTQ2UWFLcL5HDv4j33LjKvADg/ClbuS6JPlSUXggIU=";
   };
+  sourceRoot = ".";
 
-  dontUnpack = true;
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ jre ];
-  nativeBuildInputs = [ makeWrapper ];
-  sourceRoot = ".";
+
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/libexec/avro-tools
-    cp $src $out/libexec/avro-tools/${pname}.jar
+    cp $src $out/libexec/avro-tools/avro-tools.jar
 
     makeWrapper ${jre}/bin/java $out/bin/avro-tools \
-    --add-flags "-jar $out/libexec/avro-tools/${pname}.jar"
+    --add-flags "-jar $out/libexec/avro-tools/avro-tools.jar"
   '';
 
   meta = {
@@ -40,4 +38,4 @@ stdenv.mkDerivation {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ momeemt ];
   };
-}
+})

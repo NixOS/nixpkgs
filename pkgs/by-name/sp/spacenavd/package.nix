@@ -2,8 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libXext,
-  libX11,
+  libxext,
+  libx11,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "spacenavd";
@@ -17,8 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   configureFlags = [ "--disable-debug" ];

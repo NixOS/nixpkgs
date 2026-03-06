@@ -11,12 +11,13 @@
   curl,
   gtk3,
   lame,
-  libxml2,
+  libxml2_13,
   ffmpeg,
   vlc,
   xdg-utils,
   xdotool,
   which,
+  openssl,
 
   jackSupport ? stdenv.hostPlatform.isLinux,
   jackLibrary,
@@ -36,19 +37,19 @@ let
         builtins.replaceStrings [ "." ] [ "" ] version
       }_linux_${arch}.tar.xz";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "reaper";
-  version = "7.55";
+  version = "7.59";
 
   src = fetchurl {
-    url = url_for_platform version stdenv.hostPlatform.qemuArch;
+    url = url_for_platform finalAttrs.version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-meTuaGH9zwx/sT+h0I7JRSCRPD8AryGPvoHUKbyzpHA="
+        "sha256-S4RAXWss1tPzmO0zzKfkXPrcgBqwNN5EE1jpjEZ5mYk="
       else
         {
-          x86_64-linux = "sha256-BOjS39GySB6ptiEJvwlShL4ZcDot2nsKXCAU/CeMEIc=";
-          aarch64-linux = "sha256-oqEwEQKFhpaFMqzcSc28v0njuiMi5CAGjP3fLDECUXU=";
+          x86_64-linux = "sha256-II2QOv7eHD4JtE5We1uuEuCt5RZmK6VFtZFyLEArUSc=";
+          aarch64-linux = "sha256-/iDQBnYf+1xYJ+JFFT5ikGWDmQdhe2L1o+lZr8pB+Q0=";
         }
         .${stdenv.hostPlatform.system};
   };
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     which
     autoPatchelfHook
-    xdg-utils # Required for desktop integration
+    xdg-utils # Required for install script
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     undmg
@@ -110,17 +111,19 @@ stdenv.mkDerivation rec {
         # Setting the rpath of the plugin shared object files does not
         # seem to have an effect for some plugins.
         # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
-        # Note that libcurl and libxml2 are needed for ReaPack to run.
+        # Note that libcurl and libxml2_13 are needed for ReaPack to run.
         wrapProgram $out/opt/REAPER/reaper \
+          --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath [
               curl
               lame
-              libxml2
+              libxml2_13
               ffmpeg
               vlc
               xdotool
               stdenv.cc.cc
+              openssl
             ]
           }"
 
@@ -148,9 +151,9 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [
-      atinba
       ilian
       viraptor
+      pancaek
     ];
   };
-}
+})

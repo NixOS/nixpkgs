@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
     description = "WebDriver server for running Selenium tests on the HtmlUnit headless browser";
     maintainers = with lib.maintainers; [
       coconnor
-      offline
     ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];

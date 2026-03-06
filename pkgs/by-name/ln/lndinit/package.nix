@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lndinit";
   version = "0.1.22-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lndinit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KXCObRUhXTEeb48hnQYrnb55g+nJomr52IIVpFDn+nY=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aldoborrero ];
   };
-}
+})

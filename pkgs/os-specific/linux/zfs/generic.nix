@@ -198,7 +198,7 @@ let
         ++ optional (buildUser && enablePython) python3;
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
-      NIX_CFLAGS_LINK = "-lgcc_s";
+      env.NIX_CFLAGS_LINK = "-lgcc_s";
 
       hardeningDisable = [
         "fortify"
@@ -300,7 +300,15 @@ let
           done
         '';
 
-      outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
+      outputs = [
+        "out"
+      ]
+      ++ optionals buildUser [
+        "dev"
+      ]
+      ++ optionals (!buildKernel) [
+        "man"
+      ];
 
       passthru = {
         inherit kernel;

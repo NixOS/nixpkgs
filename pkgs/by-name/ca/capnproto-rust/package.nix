@@ -6,13 +6,13 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "capnproto-rust";
   version = "0.25.0";
 
   src = fetchCrate {
     crateName = "capnpc";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-2+GSM9oIT/he/Ra3SJH5YSrNUU/Jc+PE1N5TjK7OX28=";
   };
 
@@ -38,4 +38,4 @@ rustPlatform.buildRustPackage rec {
       solson
     ];
   };
-}
+})

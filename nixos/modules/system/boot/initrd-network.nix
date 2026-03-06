@@ -89,7 +89,7 @@ in
 
     boot.initrd.network.udhcpc.enable = mkOption {
       default = config.networking.useDHCP && !config.boot.initrd.systemd.enable;
-      defaultText = "networking.useDHCP";
+      defaultText = lib.literalExpression "config.networking.useDHCP";
       type = types.bool;
       description = ''
         Enables the udhcpc service during stage 1 of the boot process. This

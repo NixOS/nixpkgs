@@ -4,18 +4,18 @@
   makeWrapper,
   nextflow,
   nf-test,
-  openjdk11,
+  openjdk17,
   stdenv,
   testers,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "nf-test";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchurl {
-    url = "https://github.com/askimed/nf-test/releases/download/v${version}/nf-test-${version}.tar.gz";
-    hash = "sha256-LLylgv34HiMXg+sjBbMdeLVPMV5+h+Z2xEWCiBqbNEY=";
+    url = "https://github.com/askimed/nf-test/releases/download/v${finalAttrs.version}/nf-test-${finalAttrs.version}.tar.gz";
+    hash = "sha256-A9k8HVIPqbfHZKqSY2wqOhgvZ9aSb3K4SdoLOypB2j8=";
   };
   sourceRoot = ".";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     install -Dm644 nf-test.jar $out/share/nf-test
 
     mkdir -p $out/bin
-    makeWrapper ${openjdk11}/bin/java $out/bin/nf-test \
+    makeWrapper ${openjdk17}/bin/java $out/bin/nf-test \
       --add-flags "-jar $out/share/nf-test/nf-test.jar" \
       --prefix PATH : ${lib.makeBinPath [ nextflow ]} \
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nf-test";
     platforms = lib.platforms.unix;
   };
-}
+})

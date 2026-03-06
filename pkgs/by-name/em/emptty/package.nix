@@ -2,25 +2,25 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
-  libX11,
+  libx11,
   pam,
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "emptty";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "tvrzna";
     repo = "emptty";
-    rev = "v${version}";
-    hash = "sha256-AsIt7EI5RkSchhaMGKofOsfPNROhX8f5gDaqZ7Q2394=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7RYzj+LcxK9i2RM8NFfKjz2DiD9CjCTNSJe7wVnYzdM=";
   };
 
   buildInputs = [
     pam
-    libX11
+    libx11
   ];
 
   vendorHash = "sha256-PLyemAUcCz9H7+nAxftki3G7rQoEeyPzY3YUEj2RFn4=";
@@ -34,4 +34,4 @@ buildGoModule rec {
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "emptty";
   };
-}
+})

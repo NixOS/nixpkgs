@@ -11,6 +11,9 @@ let
   callPackageWithScope =
     scope: drv: args:
     lib.callPackageWith scope drv args;
+  callPackagesWithScope =
+    scope: drv: args:
+    lib.callPackagesWith scope drv args;
   mkScope = scope: pkgs // scope;
 
   packages =
@@ -18,6 +21,7 @@ let
     let
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
+      callPackages = drv: args: callPackagesWithScope defaultScope drv args;
     in
     rec {
       inherit callPackage erlang;
@@ -36,7 +40,6 @@ let
       rebar3Relx = callPackage ./rebar3-release.nix { };
 
       buildRebar3 = callPackage ./build-rebar3.nix { };
-      buildHex = callPackage ./build-hex.nix { };
       buildErlangMk = callPackage ./build-erlang-mk.nix { };
       buildMix = callPackage ./build-mix.nix { };
       fetchMixDeps = callPackage ./fetch-mix-deps.nix { };
@@ -86,8 +89,9 @@ let
       };
 
       elixir-ls = callPackage ./elixir-ls { inherit elixir; };
+      expert = callPackage ./expert { };
 
-      lfe = callPackage ../interpreters/lfe { inherit erlang buildRebar3 buildHex; };
+      lfe = callPackage ../interpreters/lfe { inherit erlang buildRebar3 fetchHex; };
 
       livebook = callPackage ./livebook { inherit beamPackages; };
 
@@ -95,6 +99,16 @@ let
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
       webdriver = callPackage ./webdriver { };
+
+      inherit (callPackages ./hooks { })
+        beamCopySourceHook
+        beamModuleInstallHook
+        mixBuildDirHook
+        mixCompileHook
+        mixAppConfigPatchHook
+        rebar3CompileHook
+        rebarDevendorPatchHook
+        ;
     };
 in
 makeExtensible packages

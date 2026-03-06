@@ -9,7 +9,7 @@ on:
 # This is used as fallback without app only.
 # This happens when testing in forks without setting up that app.
 permissions:
-  pull-requests: write
+  pull-requests: write # minimizing dismissed reviews and adding reactions
 
 defaults:
   run:
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-slim
     timeout-minutes: 2
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           sparse-checkout: |

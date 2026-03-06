@@ -11,6 +11,7 @@
   xdotool,
   makeDesktopItem,
   libayatana-appindicator,
+  imagemagick,
   nix-update-script,
 }:
 
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
+    imagemagick
   ];
 
   buildInputs = [
@@ -52,7 +54,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm644 icon-192.png $out/share/pixmaps/windsend-rs.png
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    magick icon-192.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/windsend-rs.png
   '';
 
   postFixup = ''

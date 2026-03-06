@@ -5,9 +5,7 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  typing-extensions,
   zeroconf,
 }:
 
@@ -28,8 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     zeroconf
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

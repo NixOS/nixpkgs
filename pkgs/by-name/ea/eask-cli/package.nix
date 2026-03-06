@@ -2,25 +2,32 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "eask-cli";
-  version = "0.12.1";
+  version = "0.12.9";
 
   src = fetchFromGitHub {
     owner = "emacs-eask";
     repo = "cli";
-    rev = version;
-    hash = "sha256-GUOimlbArD1GbeBPfIgcIcGKGHx+fEp6+CMYsqHB0t8=";
+    tag = finalAttrs.version;
+    hash = "sha256-jYdx+MYgUop01MzcKPxtm+ZW6lsy9eCqH00uQd8imRw=";
   };
 
-  npmDepsHash = "sha256-69yGfQuIot0gKZIvLbMqJ0C3qxjqg3TnRDJl4qYHGrQ=";
+  npmDepsHash = "sha256-Xj68un97I8xtAY3RXEq8PNC8ZOZ+NWg6SblnmKzHGMo=";
 
   dontBuild = true;
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
+
   meta = {
-    changelog = "https://github.com/emacs-eask/cli/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/emacs-eask/cli/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "CLI for building, runing, testing, and managing your Emacs Lisp dependencies";
     homepage = "https://emacs-eask.github.io/";
     license = lib.licenses.gpl3Plus;
@@ -30,4 +37,4 @@ buildNpmPackage rec {
       piotrkwiecinski
     ];
   };
-}
+})

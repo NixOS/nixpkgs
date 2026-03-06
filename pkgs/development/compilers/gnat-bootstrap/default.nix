@@ -209,6 +209,12 @@ stdenv.mkDerivation (
         fi
       done
 
+    ''
+
+    # x86_64-darwin needs this for the reason above, and aarch64-linux needs it
+    # to avoid https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118009,
+    # but x86_64-linux doesn't seem to need it.
+    + lib.optionalString (stdenv.hostPlatform.system != "x86_64-linux") ''
       "$out"/libexec/gcc/${upstreamTriplet}/${gccVersion}/install-tools/mkheaders -v -v \
         "$out" "${stdenv.cc.libc}"
     '';

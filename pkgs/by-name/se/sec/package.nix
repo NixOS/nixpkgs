@@ -5,15 +5,15 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sec";
-  version = "2.9.3";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "simple-evcorr";
     repo = "sec";
-    rev = version;
-    sha256 = "sha256-iK2v/qCWw4jdSEpx6cwSB98n5iFmbCyJH0lIpUG8pAU=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-XF4Wc1uRz1PrIwDGh9AUsR4s5nij1G+DgZUY8ey2ZJA=";
   };
 
   buildInputs = [ perl ];
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "sec";
   };
-}
+})

@@ -6,14 +6,14 @@
   kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencloud-desktop-shell-integration-resources";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "desktop-shell-integration-resources";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TqJanrAKD3aNQu5jL1Dt0bn84dYBNGImAKBGsAY2xeU=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ k900 ];
     platforms = lib.platforms.all;
   };
-}
+})

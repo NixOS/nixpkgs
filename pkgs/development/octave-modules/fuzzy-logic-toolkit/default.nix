@@ -6,13 +6,13 @@
 
 buildOctavePackage rec {
   pname = "fuzzy-logic-toolkit";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "lmarkowsky";
     repo = "fuzzy-logic-toolkit";
     tag = version;
-    sha256 = "sha256-lnYzX4rq3j7rrbD8m0EnrWpbMJD6tqtMVCYu4mlLFCM=";
+    sha256 = "sha256-cNzUjhJgx6SVfy8QrKUr02HvNsAh5ItQN3+hapA5eq0=";
   };
 
   meta = {

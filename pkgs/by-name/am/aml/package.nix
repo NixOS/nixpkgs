@@ -7,14 +7,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aml";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "aml";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-BX+MRqvnwwLPhz22m0gfJ2EkW31KQEi/YTgOCMcQk2Q=";
   };
 
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Another main loop";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

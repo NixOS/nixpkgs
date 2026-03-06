@@ -8,14 +8,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmrig-proxy";
   version = "6.24.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig-proxy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4Kqxf9i5OTplWg72ihTJ4QHvwWC8r73EACErYNZ7wjc=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aij ];
   };
-}
+})

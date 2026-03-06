@@ -2,27 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   lxml,
   fastapi,
   httpx,
   pytestCheckHook,
+  pytest-cov-stub,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "inscriptis";
-  version = "2.6.0";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "weblyzard";
     repo = "inscriptis";
     tag = version;
-    hash = "sha256-+qLHdQ4i/PYSUCZLYV3BguXjacjs7aB3MP0rJegv+dI=";
+    hash = "sha256-m1LZiGu79I9fMQXtL1MuzHxUd6KSwuc87Edkt9sp0DE=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     lxml
@@ -33,7 +34,10 @@ buildPythonPackage rec {
     fastapi
     httpx
     pytestCheckHook
+    pytest-cov-stub
   ];
+
+  pythonRelaxDeps = [ "lxml" ];
 
   pythonImportsCheck = [ "inscriptis" ];
 

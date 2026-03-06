@@ -40,6 +40,6 @@ buildNpmPackage (finalAttrs: {
     description = "Elm offline documentation previewer";
     homepage = "https://github.com/dmy/elm-doc-preview";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

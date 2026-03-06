@@ -95,7 +95,7 @@ in
         ]
         ++ lib.optionals useYTMusic [
           deno
-          ffmpeg
+          ffmpeg-headless
         ];
 
       serviceConfig = {

@@ -11,15 +11,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.12.0";
+  version = "5.3.0";
   pname = "pynest2d";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "pynest2d";
-    rev = version;
-    hash = "sha256-QQdTDhO4i9NVhegGTmdEQSNv3gooaZzTX/Rv86h3GEo=";
+    tag = version;
+    hash = "sha256-J7QFzWvqOaUx4Gfi5VLLWi0hJIyfYc0Htu2CM7ze6xA=";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   strictDeps = true;
 
-  CLIPPER_PATH = "${clipper.out}";
+  env.CLIPPER_PATH = clipper.out;
 
   postPatch = ''
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake

@@ -1,20 +1,21 @@
 {
   lib,
-  appdirs,
   buildPythonPackage,
-  cryptography,
   fetchFromGitHub,
+
+  # build-system
   flit-core,
+
+  # dependencies
+  appdirs,
+  cryptography,
   id,
   importlib-resources,
-  nix-update-script,
   platformdirs,
-  pretend,
   pyasn1,
   pydantic,
   pyjwt,
   pyopenssl,
-  pytestCheckHook,
   requests,
   rfc3161-client,
   rfc8785,
@@ -24,10 +25,17 @@
   sigstore-protobuf-specs,
   sigstore-rekor-types,
   tuf,
+
+  # tests
+  pretend,
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
+
+  # passthru
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sigstore";
   version = "4.1.0";
   pyproject = true;
@@ -35,32 +43,29 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "sigstore-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Wt9ZoMHTiMlbAab9p8/WF38/OiyCaqHPS5R7/fTAfxw=";
   };
 
+  build-system = [ flit-core ];
+
   pythonRelaxDeps = [
     "sigstore-models"
-    "sigstore-rekor-types"
-    "rfc3161-client"
-    "cryptography"
   ];
-
-  build-system = [ flit-core ];
 
   dependencies = [
     appdirs
     cryptography
     id
     importlib-resources
+    platformdirs
+    pyasn1
     pydantic
     pyjwt
     pyopenssl
-    pyasn1
-    rfc8785
-    rfc3161-client
-    platformdirs
     requests
+    rfc3161-client
+    rfc8785
     rich
     securesystemslib
     sigstore-models
@@ -100,9 +105,9 @@ buildPythonPackage rec {
   meta = {
     description = "Codesigning tool for Python packages";
     homepage = "https://github.com/sigstore/sigstore-python";
-    changelog = "https://github.com/sigstore/sigstore-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sigstore/sigstore-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "sigstore";
   };
-}
+})

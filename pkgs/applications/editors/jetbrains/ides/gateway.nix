@@ -12,20 +12,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2025.3.1.tar.gz";
-      hash = "sha256-j/WgB1G/b1x8RIXT1LWdcgISCCqHOmqLatfOzpV4T8Y=";
+      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2025.3.2.tar.gz";
+      hash = "sha256-6FaCc3Kqq0jjDdmSARGk4KPIU5xrUzkSINhXcY/Gs4M=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2025.3.1-aarch64.tar.gz";
-      hash = "sha256-7UKtan4cuM7svjWayM2SThGemASTSrAxKVk0TUwEgbg=";
+      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2025.3.2-aarch64.tar.gz";
+      hash = "sha256-W7OuGrk8vab0GwCTdzKZ/sWvnYQZEDNEyEQsnM3SMqU=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2025.3.1.dmg";
-      hash = "sha256-5Dnb9xwtAid63j6ntU5YIZN+oVLzZsXNJexGpL8m9sM=";
+      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2025.3.2.dmg";
+      hash = "sha256-uPkK+UkAUMC+JYiGnQZmdt1DKtTqHrjpE/ghpnuGb/w=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2025.3.1-aarch64.dmg";
-      hash = "sha256-24ZD2GpM4pGrJyqxyEJSQsERINR6/dNhLtd3WtzmNaU=";
+      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2025.3.2-aarch64.dmg";
+      hash = "sha256-5LPKKtCOreiYIEWFbQNPITktjORGA8v+22tbZhUc+Uk=";
     };
   };
   # update-script-end: urls
@@ -40,8 +40,8 @@ mkJetBrainsProduct {
   productShort = "Gateway";
 
   # update-script-start: version
-  version = "2025.3.1";
-  buildNumber = "253.29346.239";
+  version = "2025.3.2";
+  buildNumber = "253.30387.104";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

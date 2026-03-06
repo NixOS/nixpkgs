@@ -3,17 +3,18 @@
   lib,
   fetchFromBitbucket,
   proj, # >= 6.3.0
+  nix-update-script,
 }:
 
 buildOctavePackage rec {
   pname = "octproj";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchFromBitbucket {
     owner = "jgpallero";
-    repo = pname;
+    repo = "octproj";
     rev = "OctPROJ-${version}";
-    sha256 = "sha256-d/Zf172Etj+GA0cnGsQaKMjOmirE7Hwyj4UECpg7QFM=";
+    sha256 = "sha256-0QDlpfqFTSndUPkOslugDBM0UBKiusZwKGFuDrco7X4=";
   };
 
   # The sed changes below allow for the package to be compiled.
@@ -25,6 +26,13 @@ buildOctavePackage rec {
   propagatedBuildInputs = [
     proj
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "OctPROJ-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/octproj/";

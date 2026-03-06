@@ -26,14 +26,14 @@ assert builtins.elem gpuBackend [
   "rocm"
 ];
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spla";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
     repo = "spla";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fNH1IOKV1Re8G7GH9Xfn3itR80eonTbEGKQRRD16/2k=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

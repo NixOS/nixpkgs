@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     rm -rf libpng zlib zopfli
   '';
 
-  NIX_CFLAGS_LINK = "-lzopfli";
+  env.NIX_CFLAGS_LINK = "-lzopfli";
 
   installPhase = ''
     install -Dt $out/bin apngasm

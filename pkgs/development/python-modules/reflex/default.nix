@@ -49,14 +49,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "reflex";
-  version = "0.8.24";
+  version = "0.8.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l78pXsaPl6F7C850HD8/as/eJPaH1vOmnbNmuos7Yio=";
+    hash = "sha256-pV7J+O7WaD7hzrjvqOFtrj8CKT+SX6KWHot/VxEMtZQ=";
   };
 
   # For some reason, pre_commit is supposedly missing when python>=3.14

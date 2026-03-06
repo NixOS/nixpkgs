@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.13";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "pynndescent";
     tag = "release-${version}";
-    hash = "sha256-oE/oy5doHduESHlRPuPHruiw1yUZmuUTe6PrgQlT6O8=";
+    hash = "sha256-RfIbPPyx+Y7niuFrLjA02cUDHTSv9s5E4JiXv4ZBNEc=";
   };
 
   build-system = [ setuptools ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Nearest Neighbor Descent";
     homepage = "https://github.com/lmcinnes/pynndescent";
-    changelog = "https://github.com/lmcinnes/pynndescent/releases/tag/release-${version}";
+    changelog = "https://github.com/lmcinnes/pynndescent/releases/tag/release-${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mic92 ];
     badPlatforms = [

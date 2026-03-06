@@ -25,7 +25,12 @@
   symlinkJoin,
   udev,
   wrapGAppsHook3,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxext,
+  libxcursor,
+  libx11,
+  xrandr,
 }:
 
 symlinkJoin {
@@ -52,11 +57,11 @@ symlinkJoin {
 
       # glfw
       libGL
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXrandr
-      xorg.libXxf86vm
+      libx11
+      libxcursor
+      libxext
+      libxrandr
+      libxxf86vm
 
       # lwjgl
       (lib.getLib stdenv.cc.cc)
@@ -79,7 +84,7 @@ symlinkJoin {
     gappsWrapperArgs+=(
       --prefix PATH : ${lib.makeSearchPath "bin/java" jdks}
       ${lib.optionalString stdenv.hostPlatform.isLinux ''
-        --prefix PATH : ${lib.makeBinPath [ xorg.xrandr ]}
+        --prefix PATH : ${lib.makeBinPath [ xrandr ]}
         --set LD_LIBRARY_PATH $runtimeDependencies
       ''}
     )

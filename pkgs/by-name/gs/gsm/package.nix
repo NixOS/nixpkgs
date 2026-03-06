@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.0.23";
 
   src = fetchurl {
-    url = "https://www.quut.com/gsm/${pname}-${version}.tar.gz";
+    url = "https://www.quut.com/gsm/gsm-${version}.tar.gz";
     sha256 = "sha256-i3WRqFrJrc6FjyBTAF5rLrIMI7i4qGjf+ylpZF+jI8A=";
   };
 
@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.quut.com/gsm/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      codyopel
       raskin
     ];
     platforms = lib.platforms.unix;

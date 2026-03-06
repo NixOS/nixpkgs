@@ -5,7 +5,7 @@
   fetchurl,
   rustPlatform,
   dbus,
-  xorg,
+  libxcb,
   pkg-config,
   protobuf,
   openssl,
@@ -28,16 +28,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.16.1";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lMlpgsLkPQsvc5Ad8sRrwO27ytb5hpF3doUR18DUrvw=";
+    hash = "sha256-Zwb3y9XhtmKxJG6XOIHl49YVZMBsYtOPePM7heJfEvE=";
   };
 
-  cargoHash = "sha256-WPrCwvGVOuTKXEHLR0WRV+YXr4r10fQf9t/Sfs/2bNI=";
+  cargoHash = "sha256-G6Jok2OfSlOVlkF62gxivrKM0VlGqWFNdR0pQh79A0Q=";
 
   cargoBuildFlags = [
     "--bin"
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     openssl
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libxcb ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
   env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
 
@@ -113,6 +113,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_basic"
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_with_additional_sub_recipes"
     "--skip=recipes::recipe::tests::load_recipe::test_load_recipe_success"
+    "--skip=test_session_id_matches_across_calls"
+    "--skip=test_session_id_propagation_to_llm"
   ];
 
   passthru.updateScript = nix-update-script { };

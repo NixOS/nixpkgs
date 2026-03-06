@@ -10,6 +10,7 @@
   withVpx ? true,
   withSvtAv1 ? true,
   withCuda ? false,
+  withVpl ? stdenv.hostPlatform.isLinux,
 
   ffmpeg-full,
   yt-dlp,
@@ -29,13 +30,13 @@
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "29.6.1";
+  version = "29.7.0";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-7/ey7nZdy1SnGdW5LjX7dtxyqqvrTuIvtJXMXYVYB6k=";
+    hash = "sha256-R1GnvFjC/nq/gIiX6rUxP7qR3IfpGfc4Ci28AIk4CfQ=";
   };
 
   lockFile = ./lock.json;
@@ -51,14 +52,15 @@ buildNimPackage rec {
   ++ lib.optionals withWhisper [ whisper-cpp ]
   ++ lib.optionals withVpx [ libvpx ]
   ++ lib.optionals withSvtAv1 [ svt-av1 ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libvpl ];
+  ++ lib.optionals withVpl [ libvpl ];
 
   nimFlags =
     lib.optionals withHEVC [ "-d:enable_hevc" ]
     ++ lib.optionals withWhisper [ "-d:enable_whisper" ]
     ++ lib.optionals withVpx [ "-d:enable_vpx" ]
     ++ lib.optionals withSvtAv1 [ "-d:enable_svtav1" ]
-    ++ lib.optionals withCuda [ "-d:enable_cuda" ];
+    ++ lib.optionals withCuda [ "-d:enable_cuda" ]
+    ++ lib.optionals withVpl [ "-d:enable_vpl" ];
 
   postPatch = ''
     substituteInPlace src/log.nim \

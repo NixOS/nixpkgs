@@ -15,13 +15,13 @@
   zxing-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "photoqt";
-  version = "5.0";
+  version = "5.2";
 
   src = fetchurl {
-    url = "https://photoqt.org/downloads/source/photoqt-${version}.tar.gz";
-    hash = "sha256-BSe95dwzBCVp5jHIX6xh9BZ4OgPl88YUxt0iTSTnx18=";
+    url = "https://photoqt.org/downloads/source/photoqt-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ufgDXKN7LY8Uy0uwL+QKvjH3O/F1EIAx2MPYYS1/els=";
   };
 
   nativeBuildInputs = [
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
-}
+})

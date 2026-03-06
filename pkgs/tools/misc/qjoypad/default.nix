@@ -1,16 +1,17 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   pkg-config,
   cmake,
-  libX11,
-  libXtst,
-  qtbase,
   qttools,
+  wrapQtAppsHook,
+  libx11,
+  libxtst,
+  qtbase,
   qtx11extras,
 }:
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qjoypad";
   version = "4.3.1";
 
@@ -30,10 +31,11 @@ mkDerivation rec {
     pkg-config
     cmake
     qttools
+    wrapQtAppsHook
   ];
   buildInputs = [
-    libX11
-    libXtst
+    libx11
+    libxtst
     qtbase
     qtx11extras
   ];

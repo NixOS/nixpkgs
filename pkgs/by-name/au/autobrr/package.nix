@@ -6,7 +6,7 @@
   stdenvNoCC,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   typescript,
@@ -15,12 +15,12 @@
 
 let
   pname = "autobrr";
-  version = "1.71.0";
+  version = "1.73.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-JAWnH0S7gDBwmQXpogiTCIWWfQkrI5wOjWkV6+ANcnc=";
+    hash = "sha256-wBD44lkh+OX0x6eZmPMAMJDpKOzrdheXo8Ar+iyTXOw=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -30,7 +30,7 @@ let
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
       typescript
     ];
 
@@ -43,9 +43,9 @@ let
         src
         sourceRoot
         ;
-      pnpm = pnpm_9;
-      fetcherVersion = 1;
-      hash = "sha256-LOY8fLGsX966MyH4w+pa9tm/5HS6LnGwd51cj8TG6Mk=";
+      pnpm = pnpm_10;
+      fetcherVersion = 3;
+      hash = "sha256-2medzt9mraxB+ZmyHL3cSyFEQh3k2NnMookHqE1S51o=";
     };
 
     postBuild = ''
@@ -57,7 +57,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit
     autobrr-web
     pname
@@ -65,14 +65,14 @@ buildGoModule rec {
     src
     ;
 
-  vendorHash = "sha256-avgMRD5WSjXVVJ8r0Rq0IhfwPvxc/Sq9JxzX0rQimWI=";
+  vendorHash = "sha256-ENxUQz2Pn7dgRzZc86AUNkm9Gvi0+CJKxYNI4j6xPxg=";
 
   preBuild = ''
     cp -r ${autobrr-web}/* web/dist
   '';
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.commit=${src.tag}"
   ];
 
@@ -97,9 +97,9 @@ buildGoModule rec {
     description = "Modern, easy to use download automation for torrents and usenet";
     license = lib.licenses.gpl2Plus;
     homepage = "https://autobrr.com/";
-    changelog = "https://autobrr.com/release-notes/v${version}";
+    changelog = "https://autobrr.com/release-notes/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ av-gal ];
     mainProgram = "autobrr";
     platforms = with lib.platforms; darwin ++ freebsd ++ linux;
   };
-}
+})

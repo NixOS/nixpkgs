@@ -9,14 +9,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "virter";
   version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "LINBIT";
     repo = "virter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zEdG1n+tsDzyMTHBCikZaMalEhqdQiQvcsbElrbd1H4=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/LINBIT/virter/cmd.version=${version}"
+    "-X github.com/LINBIT/virter/cmd.version=${finalAttrs.version}"
     "-X github.com/LINBIT/virter/cmd.builddate=builtByNix"
     "-X github.com/LINBIT/virter/cmd.githash=builtByNix"
   ];
@@ -57,4 +57,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "virter";
   };
-}
+})

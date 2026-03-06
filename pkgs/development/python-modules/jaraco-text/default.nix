@@ -2,13 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   autocommand,
-  importlib-resources,
   jaraco-functools,
   jaraco-context,
   inflect,
-  pathlib2,
   pytestCheckHook,
   setuptools-scm,
 }:
@@ -33,10 +30,9 @@ buildPythonPackage rec {
     jaraco-context
     jaraco-functools
     inflect
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.optionals (pythonOlder "3.10") [ pathlib2 ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jaraco.text" ];
 

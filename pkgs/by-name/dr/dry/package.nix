@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dry";
   version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "moncho";
     repo = "dry";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JGtPX6BrB3q2EQyF6x2A5Wsn5DudOSVt3IxBAjjwlC8=";
   };
 
@@ -21,9 +21,9 @@ buildGoModule rec {
   meta = {
     description = "Terminal application to manage Docker and Docker Swarm";
     homepage = "https://moncho.github.io/dry/";
-    changelog = "https://github.com/moncho/dry/releases/tag/v${version}";
+    changelog = "https://github.com/moncho/dry/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dump_stack ];
     mainProgram = "dry";
   };
-}
+})

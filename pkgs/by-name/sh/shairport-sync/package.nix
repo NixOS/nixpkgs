@@ -51,15 +51,15 @@ let
   inherit (lib) optional optionals;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "4.3.7";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
-    tag = version;
-    hash = "sha256-bfOgUeUCxQeCmKKBlvIXptM5lJxgZiH4lOhLJSNih8g=";
+    tag = finalAttrs.version;
+    hash = "sha256-/VvAGoS4tpYvnie0jkJvNwuLmLoMy+vOVcQs8K/Qi/0=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     "${glib.dev}"
   ]
   ++ optional enableAirplay2 [
+    libplist.bin
     unixtools.xxd
   ];
 
@@ -149,4 +150,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

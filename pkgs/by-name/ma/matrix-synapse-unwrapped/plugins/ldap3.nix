@@ -5,6 +5,7 @@
   ldap3,
   ldaptor,
   matrix-synapse-unwrapped,
+  packaging,
   pytestCheckHook,
   service-identity,
   setuptools,
@@ -21,11 +22,17 @@ buildPythonPackage rec {
     hash = "sha256-i7ZRcXMWTUucxE9J3kEdjOvbLnBdXdHqHzhzPEoAnh0=";
   };
 
+  patches = [
+    # https://github.com/matrix-org/matrix-synapse-ldap3/pull/200
+    ./setuptools-pkg_resources.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
     service-identity
     ldap3
+    packaging
     twisted
   ];
 

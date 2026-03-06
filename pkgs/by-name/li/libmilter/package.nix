@@ -6,12 +6,12 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmilter";
   version = "8.18.2";
 
   src = fetchurl {
-    url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.${version}.tar.gz";
+    url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.${finalAttrs.version}.tar.gz";
     sha256 = "sha256-GghfqorOUs/94vXpvGEb21+BSByqq/RvBDe3GcoInS8=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.sendmail;
   };
-}
+})

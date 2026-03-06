@@ -1,5 +1,5 @@
 {
-  fetchFromGitea,
+  fetchFromCodeberg,
   meson,
   ninja,
   pkg-config,
@@ -17,16 +17,15 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "caffeine-ng";
   version = "4.2.0";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "WhyNotHugo";
     repo = "caffeine-ng";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uYzLRZ+6ZgIwhSuJWRBpLYHgonX7sFXgUZid0V26V0Q=";
   };
 
@@ -60,7 +59,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    echo "${version}" > version
+    echo "${finalAttrs.version}" > version
   '';
 
   postInstall = ''
@@ -87,8 +86,8 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ marzipankaiser ];
     description = "Status bar application to temporarily inhibit screensaver and sleep mode";
     homepage = "https://codeberg.org/WhyNotHugo/caffeine-ng";
-    changelog = "https://codeberg.org/WhyNotHugo/caffeine-ng/src/tag/v${version}/CHANGELOG.rst";
+    changelog = "https://codeberg.org/WhyNotHugo/caffeine-ng/src/tag/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };
-}
+})

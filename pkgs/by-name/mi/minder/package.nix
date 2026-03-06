@@ -21,15 +21,15 @@
   pantheon,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minder";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = "minder";
-    tag = version;
-    hash = "sha256-gqTVRICPI6XlJmrBT6b5cONmBQ9LhsEuHUf/19NmXPo=";
+    tag = finalAttrs.version;
+    hash = "sha256-g1rz7yihbMtSvL3B9XTqtOEjjLP+DczOTCp47Cp9GHs=";
   };
 
   nativeBuildInputs = [
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.pantheon ];
     mainProgram = "com.github.phase1geo.minder";
   };
-}
+})

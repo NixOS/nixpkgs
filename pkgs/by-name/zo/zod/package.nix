@@ -8,7 +8,7 @@
   SDL_ttf,
   SDL_mixer,
   libmysqlclient,
-  wxGTK32,
+  wxwidgets_3_2,
   symlinkJoin,
   runCommandLocal,
   makeWrapper,
@@ -35,7 +35,7 @@ let
     SDL_ttf
     SDL_mixer
     libmysqlclient
-    wxGTK32
+    wxwidgets_3_2
     coreutils
   ];
   hardeningDisable = [ "format" ];

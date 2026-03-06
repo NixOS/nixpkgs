@@ -1,16 +1,16 @@
-commit 3052c2c8be6a44aab2d4c5fa0d560a8109c5ed5e
-Author: 06kellyjac <dev@j-k.io>
-Date:   Mon Sep 22 13:17:14 2025 +0100
+commit b13576b678280ebaff56010ceb67b2ca83ddd7e8
+Author: kuflierl <41301536+kuflierl@users.noreply.github.com>
+Date:   Tue Jan 27 12:19:11 2026 +0100
 
     fix(tests): add support for nix-build-system for tests
-
-    Co-authored-by: kuflierl <41301536+kuflierl@users.noreply.github.com>
+    
+    Co-authored-by: 06kellyjac <dev@j-k.io>
 
 diff --git a/src/systemd/resolver.rs b/src/systemd/resolver.rs
-index 989f378..0629fb5 100644
+index 901ebf3..aa51708 100644
 --- a/src/systemd/resolver.rs
 +++ b/src/systemd/resolver.rs
-@@ -650,17 +650,14 @@ mod tests {
+@@ -651,17 +651,14 @@ mod tests {
          let OptionValue::List(opt_list) = &candidates[0].value else {
              panic!();
          };
@@ -34,10 +34,10 @@ index 989f378..0629fb5 100644
          let actions = vec![ProgramAction::Read("/var/data".into())];
          let candidates = resolve(&opts, &actions, &hardening_opts);
 diff --git a/tests/options.rs b/tests/options.rs
-index cf20ea0..ab9f389 100644
+index 815b413..00bf21e 100644
 --- a/tests/options.rs
 +++ b/tests/options.rs
-@@ -24,7 +24,7 @@ fn run_true() {
+@@ -23,7 +23,7 @@ fn run_true() {
          .assert()
          .success()
          .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
@@ -46,7 +46,7 @@ index cf20ea0..ab9f389 100644
              BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
          } else {
              BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
-@@ -50,7 +50,7 @@ fn run_true() {
+@@ -49,7 +49,7 @@ fn run_true() {
          .stdout(predicate::str::contains("LockPersonality=true\n").count(1))
          .stdout(predicate::str::contains("RestrictRealtime=true\n").count(1))
          .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
@@ -55,19 +55,19 @@ index cf20ea0..ab9f389 100644
          .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
  }
  
-@@ -97,7 +97,7 @@ fn run_ls_dev() {
+@@ -94,7 +94,7 @@ fn run_ls_dev() {
          .assert()
          .success()
          .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
 -        .stdout(if Uid::effective().is_root() {
-+        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
++        .stdout(if !env::current_exe().unwrap().starts_with("/home") {
              BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
          } else {
              BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
-@@ -130,12 +130,12 @@ fn run_ls_dev() {
+@@ -126,12 +126,12 @@ fn run_ls_dev() {
+ #[test]
  fn run_ls_proc() {
-     Command::cargo_bin("shh")
-         .unwrap()
+     cargo_bin_cmd!("shh")
 -        .args(["run", "--", "busybox", "ls", "/proc/1/"])
 +        .args(["run", "--", "ls", "/proc/1/"])
          .unwrap()
@@ -75,20 +75,20 @@ index cf20ea0..ab9f389 100644
          .success()
          .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
 -        .stdout(if Uid::effective().is_root() {
-+        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
++        .stdout(if !env::current_exe().unwrap().starts_with("/home") {
              BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
          } else {
              BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
-@@ -166,7 +166,7 @@ fn run_ls_proc() {
+@@ -161,7 +161,7 @@ fn run_ls_proc() {
          .assert()
          .success()
          .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
 -        .stdout(if Uid::effective().is_root() {
-+        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
++        .stdout(if !env::current_exe().unwrap().starts_with("/home") {
              BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
          } else {
              BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
-@@ -188,7 +188,7 @@ fn run_ls_proc() {
+@@ -183,7 +183,7 @@ fn run_ls_proc() {
          .stdout(predicate::str::contains("LockPersonality=true\n").count(1))
          .stdout(predicate::str::contains("RestrictRealtime=true\n").count(1))
          .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
@@ -97,16 +97,16 @@ index cf20ea0..ab9f389 100644
          .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
  }
  
-@@ -201,7 +201,7 @@ fn run_read_kallsyms() {
+@@ -195,7 +195,7 @@ fn run_read_kallsyms() {
          .assert()
          .success()
          .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
 -        .stdout(if Uid::effective().is_root() {
-+        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
++        .stdout(if !env::current_exe().unwrap().starts_with("/home") {
              BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
          } else {
              BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
-@@ -227,7 +227,7 @@ fn run_read_kallsyms() {
+@@ -221,7 +221,7 @@ fn run_read_kallsyms() {
          .stdout(predicate::str::contains("LockPersonality=true\n").count(1))
          .stdout(predicate::str::contains("RestrictRealtime=true\n").count(1))
          .stdout(predicate::str::contains("ProtectClock=true\n").count(1))
@@ -115,33 +115,32 @@ index cf20ea0..ab9f389 100644
          .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
  }
  
-@@ -344,6 +344,7 @@ fn run_systemctl() {
+@@ -338,6 +338,7 @@ fn run_systemctl() {
          .stdout(predicate::str::contains("CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_BPF CAP_CHOWN CAP_IPC_LOCK CAP_KILL CAP_MKNOD CAP_NET_RAW CAP_PERFMON CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_NICE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_TIME CAP_SYS_TTY_CONFIG CAP_SYSLOG CAP_WAKE_ALARM\n").count(1));
  }
  
 +// patched due to nix build isolation
  #[test]
  fn run_ss() {
-     Command::cargo_bin("shh")
-@@ -353,7 +354,7 @@ fn run_ss() {
+     cargo_bin_cmd!("shh")
+@@ -346,7 +347,7 @@ fn run_ss() {
          .assert()
          .success()
          .stdout(predicate::str::contains("ProtectSystem=strict\n").count(1))
 -        .stdout(if Uid::effective().is_root() {
-+        .stdout(if Uid::effective().is_root() || !env::current_exe().unwrap().starts_with("/home") {
++        .stdout(if !env::current_exe().unwrap().starts_with("/home") {
              BoxPredicate::new(predicate::str::contains("ProtectHome=true\n").count(1))
          } else {
              BoxPredicate::new(predicate::str::contains("ProtectHome=").not())
-@@ -369,7 +370,7 @@ fn run_ss() {
+@@ -362,7 +363,6 @@ fn run_ss() {
          .stdout(predicate::str::contains("ProtectKernelModules=true\n").count(1))
          .stdout(predicate::str::contains("ProtectKernelLogs=true\n").count(1))
          .stdout(predicate::str::contains("ProtectControlGroups=true\n").count(1))
 -        .stdout(predicate::str::contains("ProtectProc=").not())
-+        //.stdout(predicate::str::contains("ProtectProc=").not())
          .stdout(predicate::str::contains("MemoryDenyWriteExecute=true\n").count(1))
          .stdout(predicate::str::contains("RestrictAddressFamilies=AF_NETLINK AF_UNIX\n").count(1).or(predicate::str::contains("RestrictAddressFamilies=AF_NETLINK\n").count(1)))
          .stdout(predicate::str::contains("SocketBindDeny=ipv4:tcp\n").count(1))
-@@ -379,7 +380,7 @@ fn run_ss() {
+@@ -372,7 +372,7 @@ fn run_ss() {
          .stdout(predicate::str::contains("LockPersonality=true\n").count(1))
          .stdout(predicate::str::contains("RestrictRealtime=true\n").count(1))
          .stdout(predicate::str::contains("ProtectClock=true\n").count(1))

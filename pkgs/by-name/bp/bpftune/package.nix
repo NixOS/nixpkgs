@@ -9,29 +9,27 @@
   libcap,
   libnl,
   nixosTests,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpftune";
-  version = "0-unstable-2025-03-20";
+  version = "0.4-2";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "bpftune";
-    rev = "8c6a3ffc09265bd44ed89b75c400ef97959d1aff";
-    hash = "sha256-TQ8WaGvMcvyeZC4B9gSjJ2k5NOxpTaV4n7Qi36aA78Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-clfR2nZKB9ztfUEw+znr9/Rdefv4K+mTeRCSBLIBmVY=";
   };
 
   postPatch = ''
     # otherwise shrink rpath would drop $out/lib from rpath
     substituteInPlace src/Makefile \
-      --replace-fail /sbin    /bin \
+      --replace-fail /sbin /bin \
       --replace-fail ldconfig true
     substituteInPlace src/bpftune.service \
       --replace-fail /usr/sbin/bpftune "$out/bin/bpftune"
-    substituteInPlace src/libbpftune.c \
-      --replace-fail /lib/modules /run/booted-system/kernel-modules/lib/modules
   '';
 
   nativeBuildInputs = [
@@ -50,13 +48,12 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
     "confprefix=${placeholder "out"}/etc"
     "libdir=lib"
-    "BPFTUNE_VERSION=${version}"
+    "BPFTUNE_VERSION=${finalAttrs.version}"
     "NL_INCLUDE=${lib.getDev libnl}/include/libnl3"
     "BPF_INCLUDE=${lib.getDev libbpf}/include"
   ];
 
   hardeningDisable = [
-    "stackprotector"
     "zerocallusedregs"
   ];
 
@@ -64,7 +61,7 @@ stdenv.mkDerivation rec {
     tests = {
       inherit (nixosTests) bpftune;
     };
-    updateScript = unstableGitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   enableParallelBuilding = true;
@@ -76,4 +73,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

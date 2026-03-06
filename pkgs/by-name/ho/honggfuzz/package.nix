@@ -12,14 +12,14 @@
   libblocksruntime,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "honggfuzz";
   version = "2.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "honggfuzz";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/ra6g0qjjC8Lo8/n2XEbwnZ95yDHcGhYd5+TTvQ6FAc=";
   };
 
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
       chivay
     ];
   };
-}
+})

@@ -2,9 +2,10 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gokrazy";
   version = "0-unstable-2026-01-09";
 
@@ -20,10 +21,19 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/gok" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd gok \
+      --bash <($out/bin/gok completion bash) \
+      --fish <($out/bin/gok completion fish) \
+      --zsh <($out/bin/gok completion zsh)
+  '';
 
   meta = {
     description = "Turn your Go program(s) into an appliance running on the Raspberry Pi 3, Pi 4, Pi Zero 2 W, or amd64 PCs";
@@ -32,4 +42,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ shayne ];
     mainProgram = "gok";
   };
-}
+})

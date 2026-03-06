@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "otel-cli";
   version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "equinix-labs";
     repo = "otel-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JYi9CbP4mUhX0zNjhi6QlBzLKcj2zdPwlyBSIYKp6vk=";
   };
 
@@ -41,11 +41,11 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/equinix-labs/otel-cli";
     description = "Command-line tool for sending OpenTelemetry traces";
-    changelog = "https://github.com/equinix-labs/otel-cli/releases/tag/v${version}";
+    changelog = "https://github.com/equinix-labs/otel-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       emattiza
     ];
     mainProgram = "otel-cli";
   };
-}
+})

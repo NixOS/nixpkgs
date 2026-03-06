@@ -21,7 +21,6 @@ buildGoModule {
     homepage = "https://github.com/hashicorp/damon";
     license = lib.licenses.mpl20;
     description = "Terminal UI (TUI) for HashiCorp Nomad";
-    teams = [ lib.teams.iog ];
     mainProgram = "damon";
   };
 }

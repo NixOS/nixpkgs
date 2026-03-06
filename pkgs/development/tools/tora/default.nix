@@ -1,10 +1,12 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
   makeWrapper,
+  qttools,
+  wrapQtAppsHook,
   boost,
   doxygen,
   openssl,
@@ -14,10 +16,9 @@
   loki,
   qscintilla,
   qtbase,
-  qttools,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "tora";
   version = "3.2.176";
 
@@ -33,6 +34,7 @@ mkDerivation {
     extra-cmake-modules
     makeWrapper
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -68,10 +70,16 @@ mkDerivation {
   ];
 
   # these libraries are only searched for at runtime so we need to force-link them
-  NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl -L${libmysqlclient}/lib/mariadb";
+  env.NIX_LDFLAGS = toString [
+    "-lgvc"
+    "-lmysqlclient"
+    "-lecpg"
+    "-lssl"
+    "-L${libmysqlclient}/lib/mariadb"
+  ];
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${lib.getBin graphviz}/bin''
+    "--prefix PATH : ${lib.getBin graphviz}/bin"
   ];
 
   postPatch = ''

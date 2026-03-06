@@ -4,8 +4,8 @@
   fetchFromGitHub,
   fontconfig,
   harfbuzz,
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   ncurses,
   gd,
   glib,
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   buildInputs = [
     fontconfig
     harfbuzz
-    libX11
-    libXft
+    libx11
+    libxft
     ncurses
     gd
     glib

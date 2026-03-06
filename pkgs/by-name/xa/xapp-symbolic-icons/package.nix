@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xapp-symbolic-icons";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "xapp-symbolic-icons";
     tag = finalAttrs.version;
-    hash = "sha256-4Q+FHD3kYJGI4kZThb/ZVheaz8dMze9ZTgz8AFKy3HY=";
+    hash = "sha256-BcatNzhtPZW9EDPZ9FPU+fPDC8l1CVAjcBYJJUNCRZo=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/xapp-project/xapp-symbolic-icons";
     description = "Set of symbolic icons for GTK applications and projects";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };

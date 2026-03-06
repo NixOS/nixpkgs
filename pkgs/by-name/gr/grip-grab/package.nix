@@ -3,17 +3,15 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "grip-grab";
   version = "0.6.7";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "alexpasmantier";
     repo = "grip-grab";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-e7duLL4tjW+11jXUqU6sqoKTAPGkH81iDCfjtNcnd4I=";
   };
 
@@ -29,4 +27,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "gg";
   };
-}
+})

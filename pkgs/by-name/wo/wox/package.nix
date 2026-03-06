@@ -13,7 +13,8 @@
   buildGoModule,
   pkg-config,
   autoPatchelfHook,
-  xorg,
+  libxtst,
+  libx11,
   libxkbcommon,
   libayatana-appindicator,
   gtk3,
@@ -24,13 +25,13 @@
 }:
 
 let
-  version = "2.0.0-beta.7";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-uKnuzuR+Qd5yP45kPJELBz8v+LrZEMIHl9I07nNPZpE=";
+    hash = "sha256-6QJCv1geDff4noSaurVsO0Gz0g5+cdobG9DpKBcrMkA=";
   };
 
   metaCommon = {
@@ -79,7 +80,7 @@ let
         ;
       pnpm = pnpm_9;
       fetcherVersion = 2;
-      hash = "sha256-BO3QsybMxbyBhwM6XVmS6s5jGJljyxE1PRUSAreE17Y=";
+      hash = "sha256-8EovIVJ+uAo9XJIIgRrpkQrcmNkKC2Ruja2md7NFZ4A=";
     };
 
     buildPhase = ''
@@ -159,7 +160,7 @@ buildGoModule {
     sed -i '/^	"path"$/d' plugin/host/host_python.go
   '';
 
-  vendorHash = "sha256-UMbhTV6fm9a2SVDsvwV1w9e4pPUhCdTi5FNVf8Rl3XM=";
+  vendorHash = "sha256-JA6D0i6lgWYGz8jS4m5yO4JCawbEaVpGGFoQ1QnNqpg=";
 
   proxyVendor = true;
 
@@ -170,8 +171,8 @@ buildGoModule {
   ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXtst
+    libx11
+    libxtst
     libxkbcommon
     libayatana-appindicator
     gtk3

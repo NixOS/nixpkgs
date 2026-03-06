@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "flashinfer";
-  version = "0.3.1";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     repo = "flashinfer";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-e9PfLfU0DdoLKlXiHylCbGd125c7Iw9y4NDIOAP0xHs=";
+    hash = "sha256-NRjas11VvvCY6MZiZaYtxG5MXEaFqfbhJxflUT/uraE=";
   };
 
   patches = [
@@ -87,7 +87,7 @@ buildPythonPackage rec {
     export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
-  FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  env.FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
 
   pythonRemoveDeps = [
     "nvidia-cudnn-frontend"

@@ -34,6 +34,6 @@ python3.pkgs.buildPythonApplication {
     description = "Set of interactive command line tools for Dungeons and Dragons 5th Edition";
     mainProgram = "dnd-tools";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.urlordjames ];
+    maintainers = [ ];
   };
 }

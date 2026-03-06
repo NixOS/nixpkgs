@@ -11,7 +11,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "angsd";
   version = "0.940";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "ANGSD";
     repo = "angsd";
     sha256 = "sha256-Ppxgy54pAnqJUzNX5c12NHjKTQyEEcPSpCEEVOyZ/LA=";
-    tag = version;
+    tag = finalAttrs.version;
   };
 
   patches = [
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bzizou ];
     license = lib.licenses.gpl2;
   };
-}
+})

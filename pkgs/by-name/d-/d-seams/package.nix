@@ -21,6 +21,8 @@ clangStdenv.mkDerivation rec {
   version = "1.0.1";
   pname = "d-SEAMS";
 
+  strictDeps = false;
+
   src = fetchFromGitHub {
     owner = "d-SEAMS";
     repo = "seams-core";

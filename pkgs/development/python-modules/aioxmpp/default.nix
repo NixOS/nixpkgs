@@ -5,7 +5,7 @@
   babel,
   buildPythonPackage,
   dnspython,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lxml,
   multidict,
   pyasn1-modules,
@@ -24,8 +24,7 @@ buildPythonPackage rec {
   version = "0.13.3";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jssfr";
     repo = "aioxmpp";
     tag = "v${version}";

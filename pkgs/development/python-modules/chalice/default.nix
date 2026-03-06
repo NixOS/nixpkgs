@@ -50,6 +50,8 @@ buildPythonPackage rec {
     six
   ];
 
+  pythonRelaxDeps = [ "pip" ];
+
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook

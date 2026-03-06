@@ -16,7 +16,14 @@
   libappindicator,
   cairo,
   pango,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
+  libxcb,
   libxkbcommon,
   vulkan-loader,
   libjpeg,
@@ -35,13 +42,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.4.5";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WG9Dlo7yRt+QZGA5112+BX3HHhjV0XW5nrj7PUORUFE=";
+    hash = "sha256-PzPw7TJQK6ojsdw8cypS/drtc/ec93IYGIjTEdpIraI=";
     fetchSubmodules = true;
 
     # darwin/linux hash mismatch in rawler submodule
@@ -51,11 +58,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-6oI88cvlCR6TBiAAUka+Q8bkoYyTXvpMDNMfwlPjtIU=";
+  cargoHash = "sha256-cgqNGft6LK5XNGv1CDLw5v+m8a9xmu7albfoGJnkE34=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-w806JHqy2ZLFcfYVm09VKnLd7BpLI1houfMYbY3sHe0=";
+    hash = "sha256-4PbNSM4BIMOpmPcys/Vt5gzy/Pu9L6rPcG0lGnTDvGo=";
   };
 
   nativeBuildInputs = [
@@ -77,14 +84,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gdk-pixbuf
     cairo
     pango
-    xorg.libX11
-    xorg.libXi
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libxcb
-    xorg.libXfixes
+    libx11
+    libxi
+    libxcursor
+    libxext
+    libxrandr
+    libxrender
+    libxcb
+    libxfixes
     libxkbcommon
     vulkan-loader
     libjpeg
@@ -118,10 +125,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'if !is_valid' 'if false'
   '';
 
+  # Fix dyld error about onnxruntime not being loaded on darwin during cargo test
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DYLD_LIBRARY_PATH="${onnxruntime}/lib:$DYLD_LIBRARY_PATH"
+  '';
+
   dontWrapGApps = true;
 
-  # needs to be declared twice annoyingly
-  ORT_STRATEGY = "system";
+  env = {
+    ORT_STRATEGY = "system";
+  };
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Patch the .desktop file to set the Categories field
@@ -132,16 +145,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # link the .so file
     ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
-
-    # remove the .dylib file
-    rm -rf $out/lib/RapidRAW/resources/libonnxruntime.dylib
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapGApp $out/bin/rapidraw \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
-      --set ORT_STRATEGY "system" \
-      --set ORT_DYLIB_PATH "${onnxruntime}/lib/libonnxruntime.so"
+      --set ORT_STRATEGY "system"
   '';
 
   meta = {

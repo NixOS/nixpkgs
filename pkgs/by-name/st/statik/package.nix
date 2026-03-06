@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "statik";
   version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "rakyll";
     repo = "statik";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-GfXYlkzPESu9Szl+g90oB2ldrCS5aAOt9m+WPOOXhIE=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     mainProgram = "statik";
     license = lib.licenses.asl20;
   };
-}
+})

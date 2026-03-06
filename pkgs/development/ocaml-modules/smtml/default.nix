@@ -5,6 +5,7 @@
   ocaml,
   fetchFromGitHub,
   menhir,
+  bitwuzla-cxx,
   bos,
   cmdliner,
   dolmen_model,
@@ -27,13 +28,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.18.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s72m7N9Ovd2Vl4F+hb2MsNmnF1hFQGkf2s7TrJ9IWI8=";
+    hash = "sha256-VnkF+bZXeqaj9LSpyzqH5AM9EQsrW4Rlj5kvyTfYTKE=";
   };
 
   minimalOCamlVersion = "4.14";
@@ -47,6 +48,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
+    bitwuzla-cxx
     bos
     cmdliner
     dolmen_model
@@ -73,7 +75,9 @@ buildDunePackage (finalAttrs: {
   ];
 
   doCheck =
-    !(
+    # Checks fail with cmdliner ≥ 2.0
+    false
+    && !(
       lib.versions.majorMinor ocaml.version == "5.0"
       || lib.versions.majorMinor ocaml.version == "5.4"
       || stdenv.hostPlatform.isDarwin
@@ -85,6 +89,7 @@ buildDunePackage (finalAttrs: {
     downloadPage = "https://github.com/formalsec/smtml";
     changelog = "https://github.com/formalsec/smtml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
+    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [
       ethancedwards8
       redianthus

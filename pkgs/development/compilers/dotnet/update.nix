@@ -138,17 +138,24 @@ writeScript "update-dotnet-vmr.sh" ''
           artifactVar=$(grep ^defaultArtifactsRid= prep-source-build.sh)
           eval "$artifactVar"
 
+          artifactsFile=Private.SourceBuilt.Artifacts.$artifactsVersion.$defaultArtifactsRid.tar.gz
           artifactsUrl=https://builds.dotnet.microsoft.com/${
             if lib.versionAtLeast channel "10" then "dotnet/source-build" else "source-built-artifacts/assets"
-          }/Private.SourceBuilt.Artifacts.$artifactsVersion.$defaultArtifactsRid.tar.gz
+          }/$artifactsFile
+
+          curl -fsSL "$artifactsUrl" --head || {
+            [[ $? == 22 ]]
+            artifactsUrl=https://ci.dot.net/public/source-build/$artifactsFile
+          }
       else
           artifactsUrl=$(xq -r '.Project.PropertyGroup |
               map(select(.PrivateSourceBuiltArtifactsUrl))
               | .[] | .PrivateSourceBuiltArtifactsUrl' eng/Versions.props)
+          artifactsUrl="''${artifactsUrl/dotnetcli.azureedge.net/builds.dotnet.microsoft.com}"
       fi
-      artifactsUrl="''${artifactsUrl/dotnetcli.azureedge.net/builds.dotnet.microsoft.com}"
 
-      artifactsHash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$artifactsUrl")")
+      artifactsHash=$(nix-prefetch-url "$artifactsUrl")
+      artifactsHash=$(nix-hash --to-sri --type sha256 "$artifactsHash")
 
       sdkVersion=$(jq -er .tools.dotnet global.json)
 

@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "slidev-cli";
-  version = "52.11.2";
+  version = "52.13.0";
 
   src = fetchFromGitHub {
     owner = "slidevjs";
     repo = "slidev";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dAGHcnHNSYtIQvcrn/jRbA2GF7YBJkYXbQbjkGtTUa0=";
+    hash = "sha256-k2brtG7vpcfZx4E/zu+yiD98F4RdX9oyksCFbvLGzyk=";
   };
 
   pnpmWorkspaces = [ "@slidev/cli..." ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     fetcherVersion = 3;
-    hash = "sha256-rHqrtK6eIqQ6SoZA1CtuUwDbHSZ9HSHikMdNrTtojHs=";
+    hash = "sha256-t1ZqOqIp2jmIGRr/FyG3X1jfMF01k1YaObzj7oNXoJg=";
   };
 
   nativeBuildInputs = [

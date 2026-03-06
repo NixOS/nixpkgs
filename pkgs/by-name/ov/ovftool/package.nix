@@ -95,7 +95,7 @@ let
     };
   });
 in
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ovftool";
   inherit (ovftoolSystem) version;
 
@@ -109,7 +109,7 @@ stdenv.mkDerivation (final: {
         See the following URL for terms of using this software:
         ${mkBaseUrl ovftoolId}
 
-        Use `${final.pname}.override { acceptBroadcomEula = true; }` if you accept Broadcom's terms
+        Use `${finalAttrs.pname}.override { acceptBroadcomEula = true; }` if you accept Broadcom's terms
         and would like to use this package.
       '';
 

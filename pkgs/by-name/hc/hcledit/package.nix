@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hcledit";
   version = "0.2.17";
 
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = "hcledit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4PBEcOK16YXQhrQ6Yrtcb6vTE6h6sSY3Ymuxi+mEUt8=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

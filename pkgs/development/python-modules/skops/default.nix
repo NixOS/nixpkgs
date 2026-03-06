@@ -12,7 +12,6 @@
   prettytable,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rich,
   scikit-learn,

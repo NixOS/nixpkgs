@@ -13,7 +13,6 @@ let
     bool
     listOf
     str
-    attrs
     submodule
     ;
   cfg = config.services.yggdrasil;
@@ -50,10 +49,7 @@ let
   cleanSettings = lib.filterAttrs (n: v: v != null) baseSettings;
 
   # Generate configuration file from user settings
-  configFile = pkgs.writeTextFile {
-    name = "yggdrasil.conf";
-    text = builtins.toJSON cleanSettings;
-  };
+  configFile = pkgs.writers.writeJSON "yggdrasil.conf" cleanSettings;
 in
 {
   imports = [
@@ -69,7 +65,7 @@ in
 
       settings = mkOption {
         type = submodule {
-          freeformType = attrs;
+          freeformType = (pkgs.formats.json { }).type;
           options = {
             PrivateKeyPath = mkOption {
               type = nullOr path;

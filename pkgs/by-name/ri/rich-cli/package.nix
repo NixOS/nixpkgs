@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rich-cli";
   version = "1.8.0";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "rich-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mV5b/J9wX9niiYtlmAUouaAm9mY2zTtDmex7FNWcezQ=";
   };
 
@@ -64,9 +64,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Command Line Interface to Rich";
     homepage = "https://github.com/Textualize/rich-cli";
-    changelog = "https://github.com/Textualize/rich-cli/releases/tag/v${version}";
+    changelog = "https://github.com/Textualize/rich-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "rich";
   };
-}
+})

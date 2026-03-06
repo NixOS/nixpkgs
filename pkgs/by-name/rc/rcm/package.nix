@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rcm";
   version = "1.3.6";
 
   src = fetchurl {
-    url = "https://thoughtbot.github.io/rcm/dist/rcm-${version}.tar.gz";
+    url = "https://thoughtbot.github.io/rcm/dist/rcm-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-9P37xFHR+1dkUxKQogKgqHH2uBujwBprdsSUNchQgKU=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; unix;
   };
-}
+})

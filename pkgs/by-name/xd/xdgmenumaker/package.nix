@@ -11,14 +11,14 @@
   gitUpdater,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "xdgmenumaker";
   version = "2.4";
 
   src = fetchFromGitHub {
     owner = "gapan";
     repo = "xdgmenumaker";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "rh1rRgbw8uqii4oN3XXNNKsWam1d8TY0qGceHERlG1k=";
   };
 
@@ -64,4 +64,4 @@ python3Packages.buildPythonApplication rec {
     platforms = with lib.platforms; lib.filter (x: !(lib.elem x darwin)) unix;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

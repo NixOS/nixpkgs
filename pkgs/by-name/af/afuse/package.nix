@@ -7,14 +7,14 @@
   fuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "afuse";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "pcarrier";
     repo = "afuse";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-KpysJRvDx+12BSl9pIGRqbJAM4W1NbzxMgDycGCr2RM=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.unix;
   };
-}
+})

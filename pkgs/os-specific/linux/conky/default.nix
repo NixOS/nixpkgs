@@ -10,7 +10,7 @@
   # dependencies
   glib,
   libxfixes,
-  libXinerama,
+  libxinerama,
   catch2,
   gperf,
 
@@ -29,14 +29,18 @@
   ncurses ? null,
   x11Support ? true,
   freetype,
-  xorg,
+  libxft,
+  libxext,
+  libx11,
+  libsm,
+  libice,
   waylandSupport ? true,
   pango,
   wayland,
   wayland-protocols,
   wayland-scanner,
   xdamageSupport ? x11Support,
-  libXdamage ? null,
+  libxdamage ? null,
   doubleBufferSupport ? x11Support,
   imlib2Support ? x11Support,
   imlib2 ? null,
@@ -72,7 +76,7 @@ assert docsSupport -> pandoc != null && python3 != null;
 
 assert ncursesSupport -> ncurses != null;
 
-assert xdamageSupport -> x11Support && libXdamage != null;
+assert xdamageSupport -> x11Support && libxdamage != null;
 assert imlib2Support -> x11Support && imlib2 != null;
 assert luaSupport -> lua != null;
 assert luaImlib2Support -> luaSupport && imlib2Support && toluapp != null;
@@ -126,18 +130,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    libXinerama
+    libxinerama
   ]
   ++ lib.optional ncursesSupport ncurses
   ++ lib.optionals x11Support [
     freetype
     libxfixes
-    xorg.libICE
-    xorg.libX11
-    xorg.libXext
-    xorg.libXft
-    xorg.libXfixes
-    xorg.libSM
+    libice
+    libx11
+    libxext
+    libxft
+    libxfixes
+    libsm
     expat
   ]
   ++ lib.optionals waylandSupport [
@@ -145,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
   ]
-  ++ lib.optional xdamageSupport libXdamage
+  ++ lib.optional xdamageSupport libxdamage
   ++ lib.optional imlib2Support imlib2
   ++ lib.optional luaSupport lua
   ++ lib.optional luaImlib2Support imlib2

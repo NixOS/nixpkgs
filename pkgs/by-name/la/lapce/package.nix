@@ -17,40 +17,45 @@
   wrapGAppsHook3,
   wayland,
   gobject-introspection,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
 }:
 let
   rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libxkbcommon
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXxf86vm
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxxf86vm
+    libxcb
     wayland
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lapce";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = "lapce";
-    tag = "v${version}";
-    sha256 = "sha256-0mF8JusW/oMjkAaCtL6ySazlWoR+76vRydyVXHbxNRM=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-D5DEmMkCAkMiMMzYP8FoVIUeT2CDOepUWUlUqWSaUnM=";
   };
 
-  cargoHash = "sha256-Jjul26YTcMSf8szuetX3rU4b1eVsD/SBe1UanIAS1Ew=";
+  cargoHash = "sha256-BFaR8jWdET2nInBkKZhnoqLCB1dnXH3pywkD1Cv5SuE=";
 
   env = {
     # Get openssl-sys to use pkg-config
     OPENSSL_NO_VENDOR = 1;
 
     # This variable is read by build script, so that Lapce editor knows its version
-    RELEASE_TAG_NAME = "v${version}";
+    RELEASE_TAG_NAME = "v${finalAttrs.version}";
   };
 
   postPatch = ''
@@ -101,8 +106,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Lightning-fast and Powerful Code Editor written in Rust";
     homepage = "https://github.com/lapce/lapce";
-    changelog = "https://github.com/lapce/lapce/releases/tag/v${version}";
+    changelog = "https://github.com/lapce/lapce/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ asl20 ];
     mainProgram = "lapce";
   };
-}
+})

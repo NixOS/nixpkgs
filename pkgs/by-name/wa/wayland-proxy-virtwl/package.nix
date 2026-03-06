@@ -32,7 +32,7 @@ ocamlPackages.buildDunePackage {
     eio_main
     ppx_cstruct
     wayland
-    cmdliner
+    cmdliner_1
     logs
     ppx_cstruct
   ]);

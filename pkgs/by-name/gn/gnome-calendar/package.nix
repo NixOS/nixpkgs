@@ -22,12 +22,12 @@
   libadwaita,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-calendar";
   version = "49.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-calendar/${lib.versions.major version}/gnome-calendar-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-calendar/${lib.versions.major finalAttrs.version}/gnome-calendar-${finalAttrs.version}.tar.xz";
     hash = "sha256-DBEVqylNUyxMGfVs4Neu5T+OoysUMCCd0dntpHqD0sI=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "myst-docutils";
-  version = "4.0.1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "MyST-Parser";
     tag = "v${version}";
-    hash = "sha256-/Prauz4zuJY39EK2BmgBbH1uwjF4K38e5X5hPYwRBl0=";
+    hash = "sha256-0lGejdGVVvZar3sPBbvThXzJML7PcR5+shyDHTTtVEY=";
   };
 
   build-system = [ flit-core ];
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   meta = {
     description = "Extended commonmark compliant parser, with bridges to docutils/sphinx";
     homepage = "https://github.com/executablebooks/MyST-Parser";
-    changelog = "https://github.com/executablebooks/MyST-Parser/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/executablebooks/MyST-Parser/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
   };
 }

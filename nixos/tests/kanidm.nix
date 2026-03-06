@@ -17,25 +17,28 @@ in
 {
   name = "kanidm-${kanidmPackage.version}";
   meta.maintainers = with pkgs.lib.maintainers; [
+    adamcstephens
     Flakebi
     oddlama
   ];
 
-  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm;
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm_1_8;
 
   nodes.server =
     { pkgs, ... }:
     {
       services.kanidm = {
         package = kanidmPackage;
-        enableServer = true;
-        serverSettings = {
-          origin = "https://${serverDomain}";
-          domain = serverDomain;
-          bindaddress = "[::]:443";
-          ldapbindaddress = "[::1]:636";
-          tls_chain = "${certsPath}/snakeoil.crt";
-          tls_key = "${certsPath}/snakeoil.key";
+        server = {
+          enable = true;
+          settings = {
+            origin = "https://${serverDomain}";
+            domain = serverDomain;
+            bindaddress = "[::]:443";
+            ldapbindaddress = "[::1]:636";
+            tls_chain = "${certsPath}/snakeoil.crt";
+            tls_key = "${certsPath}/snakeoil.key";
+          };
         };
       };
 
@@ -58,15 +61,17 @@ in
     {
       services.kanidm = {
         package = kanidmPackage;
-        enableClient = true;
-        clientSettings = {
-          uri = "https://${serverDomain}";
-          verify_ca = true;
-          verify_hostnames = true;
+        client = {
+          enable = true;
+          settings = {
+            uri = "https://${serverDomain}";
+            verify_ca = true;
+            verify_hostnames = true;
+          };
         };
-        enablePam = true;
-        unixSettings = {
-          kanidm.pam_allowed_login_groups = [ "shell" ];
+        unix = {
+          enable = true;
+          settings.kanidm.pam_allowed_login_groups = [ "shell" ];
         };
       };
 
@@ -85,7 +90,7 @@ in
       # We need access to the config file in the test script.
       filteredConfig = pkgs.lib.converge (pkgs.lib.filterAttrsRecursive (
         _: v: v != null
-      )) nodes.server.services.kanidm.serverSettings;
+      )) nodes.server.services.kanidm.server.settings;
       serverConfigFile = (pkgs.formats.toml { }).generate "server.toml" filteredConfig;
     in
     ''

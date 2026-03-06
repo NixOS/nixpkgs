@@ -13,14 +13,14 @@
   withAMDOpt ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amd-libflame";
   version = "5.1";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "libflame";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9Z0e6RCJfqQlq3oT4fBu8rwPH1OWEKQ52rVDa0Y0rJU=";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

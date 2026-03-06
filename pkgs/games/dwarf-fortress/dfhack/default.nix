@@ -262,7 +262,6 @@ stdenv.mkDerivation {
       robbinch
       a1russell
       numinit
-      ncfavier
     ];
   };
 }

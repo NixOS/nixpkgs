@@ -13,19 +13,19 @@
   yarnInstallHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "overseerr";
   version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "sct";
     repo = "overseerr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4332XsupUGjkFo0+4wn2fUyK5/y6EQoPaAuayBH/myk=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-f30P+/DxDz9uBmdgvaYK4YOAUmVce8MUnNHBXr8/yKc=";
   };
 
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
       # FileNotFoundError: [Errno 2] No such file or directory: 'xcodebuild'
       lib.systems.inspect.patterns.isDarwin
     ];
-    changelog = "https://github.com/sct/overseerr/releases/tag/v${version}";
+    changelog = "https://github.com/sct/overseerr/releases/tag/v${finalAttrs.version}";
     description = "Request management and media discovery tool for the Plex ecosystem";
     homepage = "https://github.com/sct/overseerr";
     license = lib.licenses.mit;
     mainProgram = "overseerr";
     maintainers = with lib.maintainers; [ jf-uu ];
   };
-}
+})

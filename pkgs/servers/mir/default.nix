@@ -8,6 +8,15 @@ in
     version = "2.25.2";
     hash = "sha256-+nahWuAcGWgxBM6/a2HWwDw5DkQpUt5i/CEGzTLwNQw=";
     cargoHash = "sha256-fVD+RGU/2UGVihIktKg2+eDWmlWomDOAcrY6k2XwF1c=";
+    patches = [
+      # Fix leftover boost_system references when linking miracle-wm (library no longer exists)
+      # https://github.com/canonical/mir/pull/4721
+      (fetchpatch {
+        name = "mir-tests-mirtest.pc.in-Drop-remaining-references-to-boost_system.patch";
+        url = "https://github.com/canonical/mir/commit/14d396ecef4611e9182d78890a2d908439478799.patch";
+        hash = "sha256-IpX/7lkuYwoITzOz/gF5q7TAFUg4YH0IY2fWkorIEiM=";
+      })
+    ];
   };
 
   mir_2_15 = common {
@@ -109,6 +118,23 @@ in
           "tests/unit-tests/input/test_default_input_device_hub.cpp"
         ];
         hash = "sha256-gzLVQW9Z6y+s2D7pKtp0ondQrjkzZ5iUYhGDPqFXD5M=";
+      })
+
+      # Drop deprecated & removed Boost.System
+      # Remove when version > 2.22.2
+      (fetchpatch {
+        name = "0301-mir-Disable-boost_system.patch";
+        url = "https://github.com/canonical/mir/commit/0261aa6ce700311ee2b8723294451cdade1bc219.patch";
+        excludes = [
+          # hunk errors
+          "tests/CMakeLists.txt"
+          "tests/mir_test_framework/CMakeLists.txt"
+          "tests/unit-tests/CMakeLists.txt"
+
+          # doesn't exist
+          "tests/window_management_tests/CMakeLists.txt"
+        ];
+        hash = "sha256-UqClQFHzA1th2P7NH67dMJtncw8n/ey9RlPD5Z3VPk0=";
       })
     ];
   };

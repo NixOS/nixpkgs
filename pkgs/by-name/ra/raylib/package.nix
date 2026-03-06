@@ -10,7 +10,7 @@
   libpulseaudio,
   raylib-games,
   libGLU,
-  libX11,
+  libx11,
   platform ? "Desktop", # Note that "Web", "Android" and "Raspberry Pi" do not currently work
   pulseSupport ? stdenv.hostPlatform.isLinux,
   alsaSupport ? false,
@@ -36,13 +36,13 @@ lib.checkListOfEnum "raylib: platform"
       __structuredAttrs = true;
 
       pname = "raylib";
-      version = "5.5";
+      version = "5.5-unstable-2026-01-20";
 
       src = fetchFromGitHub {
         owner = "raysan5";
         repo = "raylib";
-        rev = finalAttrs.version;
-        hash = "sha256-J99i4z4JF7d6mJNuJIB0rHNDhXJ5AEkG0eBvvuBLHrY=";
+        rev = "c610d228a244f930ad53492604640f39584c66da";
+        hash = "sha256-7Lhgqb7QJwz94M1ZxWgueTwIgSVclGCvHklZXGzoJgQ=";
       };
 
       # autoPatchelfHook is needed for appendRunpaths
@@ -55,7 +55,7 @@ lib.checkListOfEnum "raylib: platform"
 
       propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
         libGLU
-        libX11
+        libx11
       ];
 
       # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
@@ -83,7 +83,7 @@ lib.checkListOfEnum "raylib: platform"
         maintainers = [ lib.maintainers.diniamo ];
         teams = [ lib.teams.ngi ];
         platforms = lib.platforms.all;
-        changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
+        changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.src.rev}/CHANGELOG";
       };
     })
   )

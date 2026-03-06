@@ -18,13 +18,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pax-utils";
   version = "1.3.10";
 
   src = fetchgit {
     url = "https://anongit.gentoo.org/git/proj/pax-utils.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qoFXQ/RqvdjsVhXVZZjWKnE0khak9HjOGi/UrfTLS8M=";
   };
 
@@ -67,7 +67,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      joachifm
     ];
   };
-}
+})

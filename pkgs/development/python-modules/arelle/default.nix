@@ -50,16 +50,16 @@
   boto3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "2.38.4";
+  version = "2.38.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
-    tag = version;
-    hash = "sha256-ngFhY6yngr2OVQ6gsdpk5UAhzIpIrwiw+S+HK3oqfec=";
+    tag = finalAttrs.version;
+    hash = "sha256-9ARMEXqoiBuAnj8hRrA1PqArmTMmRMP1BwASekOTQoc=";
   };
 
   outputs = [
@@ -145,7 +145,7 @@ buildPythonPackage rec {
     pytestCheckHook
     boto3
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     "tests/integration_tests"
@@ -171,4 +171,4 @@ buildPythonPackage rec {
       roberth
     ];
   };
-}
+})

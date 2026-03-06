@@ -8,18 +8,21 @@
 
 buildPythonPackage rec {
   pname = "llama-parse";
-  version = "0.6.79";
+  version = "0.6.90";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_parse";
     inherit version;
-    hash = "sha256-QT2tN24GUhkKPAzjx9IIBVnufW28yBKVw5cMZvE8B7g=";
+    hash = "sha256-7OqBGrj6lKe4Y90NNYQRPGMFRRM2i64ix6LYtnzPOu0=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [ llama-cloud-services ];
+
+  # llama-cloud-services fails to read
+  pythonRelaxDeps = [ "llama-cloud-services" ];
 
   pythonImportsCheck = [ "llama_parse" ];
 

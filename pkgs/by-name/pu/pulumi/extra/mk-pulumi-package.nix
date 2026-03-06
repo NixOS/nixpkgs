@@ -1,4 +1,5 @@
 {
+  lib,
   buildGoModule,
   fetchFromGitHub,
   python3Packages,
@@ -16,15 +17,7 @@ let
       ...
     }@args:
     buildGoModule (
-      rec {
-        inherit
-          pname
-          src
-          vendorHash
-          version
-          env
-          ;
-
+      {
         sourceRoot = "${src.name}/provider";
 
         subPackages = [ "cmd/${cmd}" ];
@@ -47,7 +40,7 @@ let
       src,
       version,
       ...
-    }:
+    }@args:
     python3Packages.callPackage (
       {
         buildPythonPackage,
@@ -57,52 +50,55 @@ let
         semver,
         setuptools,
       }:
-      buildPythonPackage {
-        inherit
-          pname
-          meta
-          src
-          version
-          ;
-        pyproject = true;
+      buildPythonPackage (
+        {
+          inherit
+            pname
+            meta
+            src
+            version
+            ;
+          pyproject = true;
 
-        sourceRoot = "${src.name}/sdk/python";
+          sourceRoot = "${src.name}/sdk/python";
 
-        propagatedBuildInputs = [
-          parver
-          pulumi
-          semver
-          setuptools
-        ];
+          propagatedBuildInputs = [
+            parver
+            pulumi
+            semver
+            setuptools
+          ];
 
-        postPatch = ''
-          if [[ -e "pyproject.toml" ]]; then
-            sed -i \
-              -e 's/^  version = .*/  version = "${version}"/g' \
-              pyproject.toml
-          else
-            sed -i \
-               -e 's/^VERSION = .*/VERSION = "${version}"/g' \
-               -e 's/^PLUGIN_VERSION = .*/PLUGIN_VERSION = "${version}"/g' \
-               setup.py
-          fi
-        '';
+          postPatch = ''
+            if [[ -e "pyproject.toml" ]]; then
+              sed -i \
+                -e 's/^  version = .*/  version = "${version}"/g' \
+                pyproject.toml
+            else
+              sed -i \
+                 -e 's/^VERSION = .*/VERSION = "${version}"/g' \
+                 -e 's/^PLUGIN_VERSION = .*/PLUGIN_VERSION = "${version}"/g' \
+                 setup.py
+            fi
+          '';
 
-        # Auto-generated; upstream does not have any tests.
-        # Verify that the version substitution works
-        checkPhase = ''
-          runHook preCheck
+          # Auto-generated; upstream does not have any tests.
+          # Verify that the version substitution works
+          checkPhase = ''
+            runHook preCheck
 
-          ${pip}/bin/pip show "${pname}" | grep "Version: ${version}" > /dev/null \
-            || (echo "ERROR: Version substitution seems to be broken"; exit 1)
+            ${pip}/bin/pip show "${pname}" | grep "Version: ${version}" > /dev/null \
+              || (echo "ERROR: Version substitution seems to be broken"; exit 1)
 
-          runHook postCheck
-        '';
+            runHook postCheck
+          '';
 
-        pythonImportsCheck = [
-          (builtins.replaceStrings [ "-" ] [ "_" ] pname)
-        ];
-      }
+          pythonImportsCheck = [
+            (builtins.replaceStrings [ "-" ] [ "_" ] pname)
+          ];
+        }
+        // args
+      )
     ) { };
 in
 {
@@ -118,6 +114,7 @@ in
   env ? { },
   meta,
   fetchSubmodules ? false,
+  pythonArgs ? { },
   ...
 }@args:
 let
@@ -147,16 +144,8 @@ let
 in
 mkBasePackage (
   {
-    inherit
-      meta
-      src
-      version
-      vendorHash
-      extraLdflags
-      env
-      ;
-
     pname = repo;
+    inherit env src;
 
     nativeBuildInputs = [
       pulumi-gen
@@ -175,11 +164,14 @@ mkBasePackage (
       VERSION=v${version} go generate cmd/${cmdRes}/main.go
     '';
 
-    passthru.sdks.python = mkPythonPackage {
-      inherit meta src version;
+    passthru.sdks.python = mkPythonPackage (
+      {
+        inherit meta src version;
 
-      pname = repo;
-    };
+        pname = repo;
+      }
+      // pythonArgs
+    );
   }
-  // args
+  // (lib.removeAttrs args [ "pythonArgs" ])
 )

@@ -38,8 +38,15 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutilkeysyms,
-  xorg,
+  libxcb-keysyms,
+  libxxf86vm,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libx11,
+  xorgproto,
+  libxshmfence,
+  libxcb,
   zstd,
   enablePatentEncumberedCodecs ? true,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
@@ -147,7 +154,6 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-    ./musl.patch
   ];
 
   postPatch = ''
@@ -255,45 +261,43 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  buildInputs =
-    with xorg;
-    [
-      directx-headers
-      elfutils
-      expat
-      spirv-tools
-      libdisplay-info
-      libdrm
-      libgbm
-      libglvnd
-      libpng
-      libunwind
-      libva-minimal
-      libX11
-      libxcb
-      libXext
-      libXfixes
-      libXrandr
-      libxshmfence
-      libXxf86vm
-      llvmPackages.clang
-      llvmPackages.clang-unwrapped
-      llvmPackages.libclc
-      llvmPackages.libllvm
-      lm_sensors
-      python3Packages.python # for shebang
-      spirv-llvm-translator
-      udev
-      vulkan-loader
-      wayland
-      wayland-protocols
-      xcbutilkeysyms
-      xorgproto
-      zstd
-    ]
-    ++ lib.optionals withValgrind [
-      valgrind-light
-    ];
+  buildInputs = [
+    directx-headers
+    elfutils
+    expat
+    spirv-tools
+    libdisplay-info
+    libdrm
+    libgbm
+    libglvnd
+    libpng
+    libunwind
+    libva-minimal
+    libx11
+    libxcb
+    libxext
+    libxfixes
+    libxrandr
+    libxshmfence
+    libxxf86vm
+    llvmPackages.clang
+    llvmPackages.clang-unwrapped
+    llvmPackages.libclc
+    llvmPackages.libllvm
+    lm_sensors
+    python3Packages.python # for shebang
+    spirv-llvm-translator
+    udev
+    vulkan-loader
+    wayland
+    wayland-protocols
+    libxcb-keysyms
+    xorgproto
+    zstd
+  ]
+  ++ lib.optionals withValgrind [
+    valgrind-light
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -382,7 +386,7 @@ stdenv.mkDerivation {
     jdupes --hard-links --link-soft --recurse "$out"
 
     # add RPATH here so Zink can find libvulkan.so
-    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so
+    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so $opencl/lib/libRusticlOpenCL.so
   '';
 
   passthru = {

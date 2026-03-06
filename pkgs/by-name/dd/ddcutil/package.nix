@@ -10,15 +10,16 @@
   libgudev,
   libusb1,
   libdrm,
-  xorg,
+  libxrandr,
+  libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ddcutil";
   version = "2.2.3";
 
   src = fetchurl {
-    url = "https://www.ddcutil.com/tarballs/ddcutil-${version}.tar.gz";
+    url = "https://www.ddcutil.com/tarballs/ddcutil-${finalAttrs.version}.tar.gz";
     hash = "sha256-4XvAUqYvnqhS2eOLpPHtfnNmVnoOGdvhpDnuca2+BqA=";
   };
 
@@ -34,8 +35,8 @@ stdenv.mkDerivation rec {
     libgudev
     libusb1
     udev
-    xorg.libXext
-    xorg.libXrandr
+    libxext
+    libxrandr
   ];
 
   enableParallelBuilding = true;
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rnhmjoj ];
-    changelog = "https://github.com/rockowitz/ddcutil/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rockowitz/ddcutil/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "ddcutil";
   };
-}
+})

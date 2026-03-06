@@ -5,8 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
-  typing-extensions,
   msrest,
 }:
 
@@ -25,8 +23,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     msrest
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

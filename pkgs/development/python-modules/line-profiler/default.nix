@@ -7,7 +7,6 @@
   ipython,
   scikit-build,
   cmake,
-  pythonOlder,
   pytestCheckHook,
   ubelt,
 }:
@@ -17,7 +16,7 @@ buildPythonPackage rec {
   version = "5.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8" || isPyPy;
+  disabled = isPyPy;
 
   src = fetchPypi {
     pname = "line_profiler";

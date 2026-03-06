@@ -37,12 +37,12 @@ let
     ;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "refind";
   version = "0.14.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/refind-src-${version}.tar.gz";
+    url = "mirror://sourceforge/project/refind/${finalAttrs.version}/refind-src-${finalAttrs.version}.tar.gz";
     hash = "sha256-99k86A2na4bFZygeoiW2qHkHzob/dyM8k1elIsEVyPA=";
   };
 
@@ -196,4 +196,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
   };
 
-}
+})

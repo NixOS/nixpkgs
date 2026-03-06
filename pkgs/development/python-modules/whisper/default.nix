@@ -43,7 +43,6 @@ buildPythonPackage rec {
       builtins.replaceStrings [ "." ] [ "_" ] version
     }.html";
     maintainers = with lib.maintainers; [
-      offline
       basvandijk
     ];
     license = lib.licenses.asl20;

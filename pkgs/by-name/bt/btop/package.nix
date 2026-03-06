@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       khaneliman
       rmcgibbo
       ryan4yin
+      sigmasquadron
     ];
     mainProgram = "btop";
   };

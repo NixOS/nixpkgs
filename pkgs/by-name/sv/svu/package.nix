@@ -8,23 +8,23 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "svu";
-  version = "3.2.4";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "svu";
-    rev = "v${version}";
-    sha256 = "sha256-NzhVEChNsUkzGe1/M8gl1K0SD5nAQ/PrYUxGQKQUAtU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KSNf4FQ7Shh0ggdoy9oFuM6AIoDKMaAO2NlvCFWHW8c=";
   };
 
-  vendorHash = "sha256-xhNJsARuZZx9nhmTNDMB51VC0QgjZgOYFKLhLf+3b3A=";
+  vendorHash = "sha256-SWS8P2eJ1lPjPQ4GmvPcHg4II3Dv72b7UbyFg2uRj6g=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
     "-X=main.builtBy=nixpkgs"
   ];
 
@@ -50,4 +50,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "svu";
   };
-}
+})

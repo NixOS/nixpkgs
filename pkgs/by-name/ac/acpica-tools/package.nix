@@ -34,20 +34,22 @@ stdenv.mkDerivation (finalAttrs: {
     "iasl"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-O3"
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-O3"
+    ];
+
+    # i686 builds fail with hardening enabled (due to -Wformat-overflow). Disable
+    # -Werror altogether to make this derivation less fragile to toolchain
+    # updates.
+    NOWERROR = "TRUE";
+
+    # We can handle stripping ourselves.
+    # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
+    INSTALLFLAGS = lib.optionals (!stdenv.hostPlatform.isDarwin) "-m 555";
+  };
 
   enableParallelBuilding = true;
-
-  # i686 builds fail with hardening enabled (due to -Wformat-overflow). Disable
-  # -Werror altogether to make this derivation less fragile to toolchain
-  # updates.
-  NOWERROR = "TRUE";
-
-  # We can handle stripping ourselves.
-  # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
-  INSTALLFLAGS = lib.optionals (!stdenv.hostPlatform.isDarwin) "-m 555";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 

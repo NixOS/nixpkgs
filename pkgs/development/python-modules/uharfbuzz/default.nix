@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "uharfbuzz";
-  version = "0.51.1";
+  version = "0.53.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -19,13 +19,8 @@ buildPythonPackage rec {
     repo = "uharfbuzz";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-mVxG0unTjMjb0/6w58Py+TARw8YmOWljTlQQwUEdMpg=";
+    hash = "sha256-EY5jAzcAHY4lmGsitVFtFMijEfAaSCifCjkdJhU2N1g=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools >= 36.4, < 72.2" setuptools
-  '';
 
   build-system = [
     cython

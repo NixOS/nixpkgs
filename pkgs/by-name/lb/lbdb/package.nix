@@ -26,12 +26,12 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lbdb";
   version = "0.57";
 
   src = fetchurl {
-    url = "https://www.spinnaker.de/lbdb/download/lbdb-${version}.tar.gz";
+    url = "https://www.spinnaker.de/lbdb/download/lbdb-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-IS/i5A317T5Ulrxegh5LBoOmyVI7iIXn6HtjS8+SOog=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

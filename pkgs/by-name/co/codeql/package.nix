@@ -3,7 +3,11 @@
   stdenv,
   fetchzip,
   zlib,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
   freetype,
   jdk17,
   curl,
@@ -11,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "codeql";
-  version = "2.23.3";
+  version = "2.24.2";
 
   dontConfigure = true;
   dontBuild = true;
@@ -19,16 +23,16 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
-    hash = "sha256-Y6E3itwm/BZuNAs4b1roynEEdpOArfKPh+vNQidu+y8=";
+    hash = "sha256-P0yJ6uYtOvKRS6WAQOvAPBkGrunyhjMq5ulPdCPYZiI=";
   };
 
   nativeBuildInputs = [
     zlib
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
-    xorg.libXtst
-    xorg.libXrender
+    libx11
+    libxext
+    libxi
+    libxtst
+    libxrender
     freetype
     jdk17
     (lib.getLib stdenv.cc.cc)

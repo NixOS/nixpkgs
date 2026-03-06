@@ -1,8 +1,12 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
-  fetchpatch2,
+  installShellFiles,
+
+  withPrecommit ? true,
+  pre-commit,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -17,13 +21,29 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-dZrZjzygT6Q7jIPkasYgJ2uN3eyPQXsg0opksookLYI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "typer-slim" "typer"
+  '';
+
   build-system = [
     python3Packages.uv-build
   ];
 
-  dependencies = with python3Packages; [
-    typer-slim
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      typer
+    ]
+    ++ lib.optionals withPrecommit [ pre-commit ];
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd jj-pre-push \
+      --bash <($out/bin/jj-pre-push --show-completion bash) \
+      --fish <($out/bin/jj-pre-push --show-completion fish) \
+      --zsh <($out/bin/jj-pre-push --show-completion zsh)
+  '';
 
   pythonImportsCheck = [
     "jj_pre_push"

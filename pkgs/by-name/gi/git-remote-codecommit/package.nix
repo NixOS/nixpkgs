@@ -2,10 +2,10 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  awscli,
+  awscli2,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-remote-codecommit";
   version = "1.17";
   pyproject = true;
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "git-remote-codecommit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8heI0Oyfhuvshedw+Eqmwd+e9cOHdDt4O588dplqv/k=";
   };
 
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [ botocore ];
 
   nativeCheckInputs = [
-    awscli
+    awscli2
   ]
   ++ (with python3Packages; [
     pytestCheckHook
@@ -46,4 +46,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     mainProgram = "git-remote-codecommit";
   };
-}
+})

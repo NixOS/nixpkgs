@@ -9,7 +9,7 @@
   xandikos,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "calendar-cli";
   version = "1.0.1";
   pyproject = true;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tobixen";
     repo = "calendar-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-w35ySLnfxXZR/a7BrPLYqXs2kqkuYhh5PcgNxJqjDtE=";
   };
 
@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     tzlocal
     click
     six
+    urllib3
     vobject
   ];
 
@@ -71,4 +72,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "calendar-cli";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

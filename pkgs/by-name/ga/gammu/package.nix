@@ -15,19 +15,19 @@
   dialog,
   dbiSupport ? false,
   libdbi ? null,
-  libdbiDrivers ? null,
+  libdbi-drivers ? null,
   postgresSupport ? false,
   libpq ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gammu";
   version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = "gammu";
     repo = "gammu";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-aeaGHVxOMiXRU6RHws+oAnzdO9RY1jw/X/xuGfSt76I=";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals dbiSupport [
     libdbi
-    libdbiDrivers
+    libdbi-drivers
   ]
   ++ lib.optionals postgresSupport [ libpq ];
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

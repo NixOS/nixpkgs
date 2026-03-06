@@ -121,7 +121,7 @@ buildPythonPackage rec {
         version = "0.21.2";
         src = fetchFromGitHub {
           inherit (prev.src) owner repo;
-          rev = "refs/tags/v${final.version}";
+          tag = "v${final.version}";
           hash = "sha256-AVVvdo/CDF9IU6l779sLc7wKz5h3kzMttdDNTPLYxtQ=";
         };
       }

@@ -10,7 +10,8 @@
   fastapi,
   fetchPypi,
   logging-journald,
-  poetry-core,
+  setuptools,
+  setuptools-scm,
   pytestCheckHook,
   raven,
   rich,
@@ -18,17 +19,20 @@
   uvloop,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiomisc";
-  version = "17.9.9";
+  version = "17.10.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-c9dlFc6XFahTbg6EEBb1OiKpFJ/zlzIp34UQJc8CXKY=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-24ka982Wx4Bk2TlWuw6pvfRLh47l8QJvHD+sc+LOxVY=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     colorlog
@@ -42,7 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
     setproctitle
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   optional-dependencies = {
     aiohttp = [ aiohttp ];
@@ -75,4 +79,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

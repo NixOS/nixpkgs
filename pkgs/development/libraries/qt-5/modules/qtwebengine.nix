@@ -20,11 +20,16 @@
   pkgsBuildTarget,
   pkgsBuildBuild,
 
-  xorg,
-  libXcursor,
-  libXScrnSaver,
-  libXrandr,
-  libXtst,
+  expat,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
+  libxcursor,
+  libxscrnsaver,
+  libxrandr,
+  libxtst,
   fontconfig,
   freetype,
   harfbuzz,
@@ -353,6 +358,7 @@ qtModule (
       harfbuzz
       icu
 
+      expat
       libevent
       ffmpeg_7
     ]
@@ -377,16 +383,16 @@ qtModule (
       pciutils
 
       # X11 libs
-      xorg.xrandr
-      libXScrnSaver
-      libXcursor
-      libXrandr
-      xorg.libpciaccess
-      libXtst
-      xorg.libXcomposite
-      xorg.libXdamage
+      xrandr
+      libxscrnsaver
+      libxcursor
+      libxrandr
+      libpciaccess
+      libxtst
+      libxcomposite
+      libxdamage
       libdrm
-      xorg.libxkbfile
+      libxkbfile
 
     ]
     ++ lib.optionals pipewireSupport [

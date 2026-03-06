@@ -56,7 +56,7 @@ let
     }
   );
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "basicswap";
   version = "0.14.4";
   pyproject = true;
@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "basicswap";
     repo = "basicswap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UhuBTbGULImqRSsbg0QNb3yvnN7rnSzycweDLbqrW+8=";
   };
 
@@ -107,4 +107,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "basicswap-run";
   };
-}
+})

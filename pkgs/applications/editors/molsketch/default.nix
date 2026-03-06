@@ -11,12 +11,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "molsketch";
   version = "0.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/molsketch/Molsketch-${version}-src.tar.gz";
+    url = "mirror://sourceforge/molsketch/Molsketch-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-6wFvl3Aktv8RgEdI2ENsKallKlYy/f8Tsm5C0FB/igI=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     mainProgram = "molsketch";
     platforms = lib.platforms.unix;
   };
-}
+})

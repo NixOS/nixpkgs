@@ -14,7 +14,7 @@
   gst_all_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kana";
   version = "1.4";
 
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "fkinoshita";
     repo = "Kana";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/Ri723ub8LMlhbPObC83bay63JuWIQpgxAT5UUYuwZI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "kana-${version}";
+    inherit (finalAttrs) src;
+    name = "kana-${finalAttrs.version}";
     hash = "sha256-3ODkAstBZQE3eqGmRUdm3xyCoBXV41hK4ndxeDK8+Yc=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

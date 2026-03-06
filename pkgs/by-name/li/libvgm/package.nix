@@ -38,13 +38,13 @@ assert enableTools -> enableAudio && enableEmulation && enableLibplayer;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvgm";
-  version = "0-unstable-2026-01-12";
+  version = "0-unstable-2026-02-19";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "libvgm";
-    rev = "c9b52727946f3a41ddf78d11b817e109eebf6171";
-    hash = "sha256-PhRfdUILkDu39WBH3N5Nu2Qd6g8yA093W8AKocbZAWM=";
+    rev = "a16858c4b92e297eaf9ddd602ecb790a5b980b69";
+    hash = "sha256-oFxrWt8Mznr9vrAnGRZKGv0vKetOp5RO1a3bG538Uog=";
   };
 
   outputs = [

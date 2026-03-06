@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gdlv";
   version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "aarzilli";
     repo = "gdlv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YHv/PfkQh0detM3p62oDWhEG8PWCupaBhwbxz8rHRdI=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mmlb ];
     license = lib.licenses.gpl3;
   };
-}
+})

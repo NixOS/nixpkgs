@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  clang-tools,
   cmake,
   cython,
   ninja,
@@ -35,6 +36,12 @@ buildPythonPackage rec {
       url = "https://github.com/rapidfuzz/RapidFuzz/commit/0ef2a4980c41b852283e6db7a747a1632307c75e.patch";
       hash = "sha256-xb+J3PXwD51lZqIJcTzPJWrT/oqrIXxh1cLp91DhIPg=";
     })
+    # https://github.com/rapidfuzz/RapidFuzz/pull/470
+    (fetchpatch {
+      name = "support-taskflow-4.0.0.patch";
+      url = "https://github.com/rapidfuzz/RapidFuzz/commit/4b794e6168d98fff4c518a64c4d809238b17d8fe.patch";
+      hash = "sha256-F4gwV4ewcHfR7ptcEVAvbiNFIvXqFCIM/Qk8giv4jAc=";
+    })
   ];
 
   postPatch = ''
@@ -47,6 +54,9 @@ buildPythonPackage rec {
     cython
     ninja
     scikit-build-core
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    clang-tools # provides wrapped clang-scan-deps
   ];
 
   dontUseCmakeConfigure = true;

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   version = "1.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/network-manager-applet/${lib.versions.majorMinor version}/network-manager-applet-${version}.tar.xz";
     sha256 = "sha256-qEcESH6jr+FIXEf7KrWYuPd59UCuDcvwocX4XmSn4lM=";
   };
 

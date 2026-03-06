@@ -26,14 +26,14 @@
 
 assert withGtkFileSelector -> stdenv.hostPlatform.isLinux;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if withWayland then "tracy-wayland" else "tracy-glfw";
   version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HofqYJT1srDJ6Y1f18h7xtAbI/Gvvz0t9f0wBNnOZK8=";
   };
 
@@ -127,4 +127,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.optionals (!withWayland) lib.platforms.darwin;
   };
-}
+})

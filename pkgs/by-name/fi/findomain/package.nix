@@ -7,14 +7,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "findomain";
   version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = "findomain";
     repo = "findomain";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qMSVj+qhrx1LPuXWXKzo0v4yirNW2x/o/blNkSVU3Tg=";
   };
 
@@ -40,9 +40,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fastest and cross-platform subdomain enumerator";
     homepage = "https://github.com/Findomain/Findomain";
-    changelog = "https://github.com/Findomain/Findomain/releases/tag/${version}";
+    changelog = "https://github.com/Findomain/Findomain/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "findomain";
   };
-}
+})

@@ -56,6 +56,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/open-telemetry/opentelemetry-python-contrib/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.natsukium ];
-    teams = [ lib.teams.deshaw ];
   };
 }

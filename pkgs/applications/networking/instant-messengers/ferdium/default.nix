@@ -2,7 +2,7 @@
   lib,
   mkFranzDerivation,
   fetchurl,
-  xorg,
+  libxshmfence,
   stdenv,
 }:
 
@@ -29,7 +29,7 @@ mkFranzDerivation rec {
     inherit hash;
   };
 
-  extraBuildInputs = [ xorg.libxshmfence ];
+  extraBuildInputs = [ libxshmfence ];
 
   passthru = {
     updateScript = ./update.sh;

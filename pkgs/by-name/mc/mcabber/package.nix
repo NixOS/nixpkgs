@@ -12,12 +12,12 @@
   gpgme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mcabber";
   version = "1.1.2";
 
   src = fetchurl {
-    url = "https://mcabber.com/files/mcabber-${version}.tar.bz2";
+    url = "https://mcabber.com/files/mcabber-${finalAttrs.version}.tar.bz2";
     sha256 = "0q1i5acyghsmzas88qswvki8kkk2nfpr8zapgnxbcd3lwcxl38f4";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     downloadPage = "http://mcabber.com/files/";
   };
-}
+})

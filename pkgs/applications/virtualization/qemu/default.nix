@@ -88,6 +88,8 @@
   tpmSupport ? !minimal,
   uringSupport ? stdenv.hostPlatform.isLinux && !userOnly,
   liburing,
+  fuseSupport ? stdenv.hostPlatform.isLinux && !minimal,
+  fuse3,
   canokeySupport ? false,
   canokey-qemu,
   capstoneSupport ? !minimal,
@@ -136,11 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.1.2";
+  version = "10.2.1";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nXXzMcGly5tuuP2fZPVj7C6rNGyCLLl/izXNgtPxFHk=";
+    hash = "sha256-o3F0d9jiyE1jC//7wg9s0yk+tFqh5trG0MwnaJmRyeE=";
   };
 
   depsBuildBuild = [
@@ -241,6 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals libiscsiSupport [ libiscsi ]
   ++ lib.optionals smbdSupport [ samba ]
   ++ lib.optionals uringSupport [ liburing ]
+  ++ lib.optionals fuseSupport [ fuse3 ]
   ++ lib.optionals canokeySupport [ canokey-qemu ]
   ++ lib.optionals capstoneSupport [ capstone ]
   ++ lib.optionals valgrindSupport [ valgrind-light ];
@@ -249,8 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontAddStaticConfigureFlags = true;
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc" ++ lib.optional guestAgentSupport "ga";
-  # On aarch64-linux we would shoot over the Hydra's 2G output limit.
-  separateDebugInfo = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
+  separateDebugInfo = true;
 
   patches = [
     ./fix-qemu-ga.patch
@@ -325,6 +327,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional libiscsiSupport "--enable-libiscsi"
   ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
   ++ lib.optional uringSupport "--enable-linux-io-uring"
+  ++ lib.optional fuseSupport "--enable-fuse"
   ++ lib.optional canokeySupport "--enable-canokey"
   ++ lib.optional capstoneSupport "--enable-capstone"
   ++ lib.optional (!pluginsSupport) "--disable-plugins"

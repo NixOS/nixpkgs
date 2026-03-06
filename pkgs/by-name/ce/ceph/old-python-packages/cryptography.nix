@@ -11,16 +11,12 @@
   rustc,
   setuptools-rust,
   openssl,
-  Security ? null,
   isPyPy,
   cffi,
   pkg-config,
   pytestCheckHook,
-  pytest-subtests,
-  pythonOlder,
   pretend,
   libiconv,
-  libxcrypt,
   iso8601,
   py,
   pytz,
@@ -90,8 +86,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 
@@ -102,7 +97,6 @@ buildPythonPackage rec {
     pretend
     py
     pytestCheckHook
-    pytest-subtests
     pytz
   ];
 

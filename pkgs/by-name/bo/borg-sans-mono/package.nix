@@ -27,6 +27,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/marnen/borg-sans-mono";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
   };
 }

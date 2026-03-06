@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "certigo";
   version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "certigo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dn2GqEiSzlcqNPoAZhPESRsl3LOUBlaPs59rUjf2c5k=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "certigo";
   };
-}
+})

@@ -15,12 +15,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dico";
   version = "2.12";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/dico/dico-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-couJxQ4JC/+Dno97MEO1xwI/hhqSEckwSLQqtFWGavc=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "Flexible dictionary server and client implementing RFC 2229";
     homepage = "https://www.gnu.org/software/dico/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
 
     longDescription = ''
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
       remote dictionary servers.
     '';
   };
-}
+})

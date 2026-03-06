@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fenics-ufl";
-  version = "2025.2.0";
+  version = "2025.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "ufl";
     tag = finalAttrs.version;
-    hash = "sha256-REDjNiUM3bd166Pq92P9Yl4Ff9C9hFNjTWWO1FElHrU=";
+    hash = "sha256-7hibe/oVueK5YORhA81641b5UcE4MVyQvgVD0Fngje4=";
   };
 
   build-system = [

@@ -12,12 +12,12 @@
   libunistring,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgnurl";
   version = "7.72.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/gnurl-${version}.tar.gz";
+    url = "mirror://gnu/gnunet/gnurl-${finalAttrs.version}.tar.gz";
     sha256 = "1y4laraq37kw8hc8jlzgcw7y37bfd0n71q0sy3d3z6yg7zh2prxi";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.curl;
   };
-}
+})

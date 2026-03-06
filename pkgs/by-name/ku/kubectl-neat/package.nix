@@ -5,14 +5,14 @@
   bash,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-neat";
   version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "itaysk";
     repo = "kubectl-neat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j8v0zJDBqHzmLamIZPW9UvMe9bv/m3JUQKY+wsgMTFk=";
   };
 
@@ -28,8 +28,8 @@ buildGoModule rec {
     description = "Clean up Kubernetes yaml and json output to make it readable";
     mainProgram = "kubectl-neat";
     homepage = "https://github.com/itaysk/kubectl-neat";
-    changelog = "https://github.com/itaysk/kubectl-neat/releases/tag/v${version}";
+    changelog = "https://github.com/itaysk/kubectl-neat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.koralowiec ];
   };
-}
+})

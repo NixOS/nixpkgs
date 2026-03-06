@@ -9,12 +9,12 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wchisp";
   version = "0.3.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-6WNXsRvbldEjAykMn1DCiuKctBrsTHGv1fJuRXBblu0=";
   };
 
@@ -36,11 +36,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line implementation of WCHISPTool, for flashing ch32 MCUs";
     homepage = "https://ch32-rs.github.io/wchisp/";
-    changelog = "https://github.com/ch32-rs/wchisp/releases/tag/v${version}";
+    changelog = "https://github.com/ch32-rs/wchisp/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ gpl2Only ];
     platforms = with lib.platforms; linux ++ darwin ++ windows;
     broken = !stdenv.hostPlatform.isLinux;
     maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "wchisp";
   };
-}
+})

@@ -12,14 +12,14 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghr";
   version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "siketyan";
     repo = "ghr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-L9+rcdt+MGZSCOJyCE4t/TT6Fjtxvfr9LBJYyRrx208=";
   };
 
@@ -59,4 +59,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ sei40kr ];
     mainProgram = "ghr";
   };
-}
+})

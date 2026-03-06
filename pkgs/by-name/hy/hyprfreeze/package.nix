@@ -9,14 +9,14 @@
   libnotify,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprfreeze";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Zerodya";
     repo = "hyprfreeze";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-omwAWBEnb14ZBux7bvXSJyi7FI1LZ5GaZFn46/bWJA4=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "hyprfreeze";
   };
-}
+})

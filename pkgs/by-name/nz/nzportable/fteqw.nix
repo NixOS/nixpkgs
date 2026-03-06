@@ -14,7 +14,14 @@
   zlib,
   gnutls,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxxf86dga,
+  libxscrnsaver,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   alsa-lib,
   libjpeg,
   libogg,
@@ -61,11 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXcursor
-    xorg.libXScrnSaver
+    libxcb
+    libx11
+    libxrandr
+    libxcursor
+    libxscrnsaver
     dbus
     fontconfig
     libjpeg
@@ -114,12 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
         addDriverRunpath.driverLink
 
         # gl/gl_vidlinuxglx.c
-        xorg.libX11
-        xorg.libXrandr
-        xorg.libXxf86vm
-        xorg.libXxf86dga
-        xorg.libXi
-        xorg.libXcursor
+        libx11
+        libxrandr
+        libxxf86vm
+        libxxf86dga
+        libxi
+        libxcursor
         libGL
 
         libvorbis

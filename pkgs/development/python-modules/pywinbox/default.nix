@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "PyWinBox";
-    tag = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Z/gedrIFNpQvzRWqGxMEl5MoEIo9znZz/FZLMVl0Eb4=";
   };
 

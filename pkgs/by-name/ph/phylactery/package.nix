@@ -5,12 +5,12 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "phylactery";
   version = "0.2.0";
 
   src = fetchzip {
-    url = "https://trong.loang.net/phylactery/snapshot/phylactery-${version}.tar.gz";
+    url = "https://trong.loang.net/phylactery/snapshot/phylactery-${finalAttrs.version}.tar.gz";
     hash = "sha256-UokK6rVjpzbcKOkZteo5kU7rFMm1meBUM4bkYAYM8rI=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ McSinyx ];
     platforms = lib.platforms.all;
   };
-}
+})

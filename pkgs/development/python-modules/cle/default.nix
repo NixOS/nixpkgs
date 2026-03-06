@@ -8,7 +8,6 @@
   pefile,
   pyelftools,
   pytestCheckHook,
-  pythonOlder,
   pyvex,
   setuptools,
   sortedcontainers,
@@ -23,7 +22,7 @@ let
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XXJBySIT3ylK1nd3suP2bq4bVSVah/1XhOmkEONbCoY=";
   };
 in
@@ -32,12 +31,10 @@ buildPythonPackage rec {
   inherit version;
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "angr";
     repo = "cle";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rWbZzm5hWi/C+te8zeQChxqYHO0S795tJ6Znocq9TTs=";
   };
 

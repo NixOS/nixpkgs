@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "zmqpp";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-UZyJpBEOf/Ys+i2tiBTjv4PlM5fHjjNLWuGhpgcmYyM=";
   };
 

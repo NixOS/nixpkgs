@@ -1,10 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   fetchPypi,
-  typing-extensions,
   pytest7CheckHook,
 }:
 
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [ pytest7CheckHook ];
 

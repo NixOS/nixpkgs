@@ -33,7 +33,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  PBR_VERSION = version;
+  env.PBR_VERSION = version;
 
   dependencies = [
     httpx

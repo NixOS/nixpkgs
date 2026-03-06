@@ -12,7 +12,7 @@
   expat,
   extra-cmake-modules,
   glog,
-  libXdmcp,
+  libxdmcp,
   python312,
   wayland,
 }:
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     wayland
     glog
     ceres-solver
-    libXdmcp
+    libxdmcp
   ];
 
   postInstall = ''

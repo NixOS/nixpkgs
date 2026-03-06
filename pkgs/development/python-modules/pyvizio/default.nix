@@ -14,12 +14,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvizio";
-  version = "0.1.63";
+  version = "0.1.64";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-bRdxIqU3euzrtMvD00nPxOD69VWP2vkGZHxUe3O/YP8=";
+    hash = "sha256-P31vxmpaaPYxpKZPXoXDmNi4iNycTJdlXLGa7XjRLeY=";
   };
 
   build-system = [ setuptools ];

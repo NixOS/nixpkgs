@@ -7,17 +7,17 @@
   qtvirtualkeyboard,
   qtwayland,
   libinput,
-  xorg,
+  libxcvt,
   xwayland,
   libcanberra,
   libdisplay-info,
   libei,
+  libevdev,
   libgbm,
   lcms2,
   pipewire,
   krunner,
   python3,
-  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "kwin";
@@ -56,11 +56,15 @@ mkKdeDerivation {
     libcanberra
     libdisplay-info
     libei
+    libevdev
     libinput
     pipewire
 
-    xorg.libxcvt
+    libxcvt
     # we need to provide this so it knows our xwayland supports new features
     xwayland
   ];
+
+  # plugin QML relies on non-global imports
+  dontQmlLint = true;
 }

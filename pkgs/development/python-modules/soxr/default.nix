@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cmake,
@@ -11,7 +10,6 @@
   scikit-build-core,
   setuptools,
   setuptools-scm,
-  typing-extensions,
 
   # native dependencies
   libsoxr,
@@ -53,9 +51,6 @@ buildPythonPackage rec {
     nanobind
     setuptools
     setuptools-scm
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   buildInputs = [ libsoxr ];

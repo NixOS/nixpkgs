@@ -24,9 +24,9 @@ let
 
 in
 rec {
-  driver = pkgsi686Linux.stdenv.mkDerivation rec {
+  driver = pkgsi686Linux.stdenv.mkDerivation {
     inherit src version;
-    name = "${model}drv-${version}";
+    pname = "${model}drv";
 
     nativeBuildInputs = [
       dpkg
@@ -69,9 +69,9 @@ rec {
     };
   };
 
-  cupswrapper = stdenv.mkDerivation rec {
+  cupswrapper = stdenv.mkDerivation {
     inherit version src;
-    name = "${model}cupswrapper-${version}";
+    pname = "${model}cupswrapper";
 
     nativeBuildInputs = [
       dpkg

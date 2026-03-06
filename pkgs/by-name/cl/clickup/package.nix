@@ -17,7 +17,7 @@ let
 
   appimage = appimageTools.wrapType2 {
     inherit pname version src;
-    extraPkgs = pkgs: [ pkgs.xorg.libxkbfile ];
+    extraPkgs = pkgs: [ pkgs.libxkbfile ];
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation {
       --replace-fail 'Icon=desktop' 'Icon=clickup'
 
     wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}} --no-update"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}} --no-update"
 
     runHook postInstall
   '';

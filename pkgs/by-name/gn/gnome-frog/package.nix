@@ -22,14 +22,14 @@
   gst_all_1,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gnome-frog";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "TenderOwl";
     repo = "Frog";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-p1gqom9saNEIm6FXinEuIJtMGwjGfQx9uLpR2kb46Uw=";
   };
 
@@ -93,7 +93,7 @@ python3Packages.buildPythonApplication rec {
     description = "Intuitive text extraction tool (OCR) for GNOME desktop";
     license = lib.licenses.mit;
     mainProgram = "frog";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.axodentally ];
     platforms = lib.platforms.linux;
   };
-}
+})

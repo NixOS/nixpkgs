@@ -18,16 +18,16 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dropbear";
   version = "2025.89";
 
   src = fetchurl {
-    url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${version}.tar.bz2";
+    url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-DR98pxHPwzbcioXmcsq5z9giOgL+LaCkp661jJ4RNjQ=";
   };
 
-  CFLAGS = lib.pipe (lib.attrNames dflags) [
+  env.CFLAGS = lib.pipe (lib.attrNames dflags) [
     (map (name: "-D${name}=\\\"${dflags.${name}}\\\""))
     (lib.concatStringsSep " ")
   ];
@@ -73,9 +73,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Small footprint implementation of the SSH 2 protocol";
     homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";
-    changelog = "https://github.com/mkj/dropbear/raw/DROPBEAR_${version}/CHANGES";
+    changelog = "https://github.com/mkj/dropbear/raw/DROPBEAR_${finalAttrs.version}/CHANGES";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

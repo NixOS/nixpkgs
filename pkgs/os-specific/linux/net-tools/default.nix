@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
     "BASEDIR=$(out)"
+    # multiple-outputs.sh will move these manpages to $man automatically
     "mandir=/share/man"
     "HAVE_ARP_TOOLS=1"
     "HAVE_PLIP_TOOLS=1"
@@ -37,6 +38,10 @@ stdenv.mkDerivation rec {
     "HAVE_HOSTNAME_TOOLS=1"
     "HAVE_HOSTNAME_SYMLINKS=1"
     "HAVE_MII=1"
+  ];
+  outputs = [
+    "out"
+    "man"
   ];
 
   meta = {

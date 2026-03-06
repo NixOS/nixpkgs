@@ -4,6 +4,7 @@
   factory-boy,
   faker,
   fetchFromGitHub,
+  model-bakery,
   numpy,
   pytest,
   pytest-xdist,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-randomly";
-  version = "3.13.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "pytest-randomly";
     owner = "pytest-dev";
     tag = version;
-    hash = "sha256-bxbW22Nf/0hfJYSiz3xdrNCzrb7vZwuVvSIrWl0Bkv4=";
+    hash = "sha256-UQ1G9o4dsVEEo4y2u1TYYurJPfih7QlbilkwPqi39H0=";
   };
 
   build-system = [ setuptools ];
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     factory-boy
     faker
+    model-bakery
     numpy
     pytest-xdist
     pytestCheckHook

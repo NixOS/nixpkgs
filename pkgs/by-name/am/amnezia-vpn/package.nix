@@ -151,11 +151,11 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/libexec $out/share/applications $out/share/pixmaps $out/lib/systemd/system
+    mkdir -p $out/bin $out/libexec $out/share/applications $out/lib/systemd/system
     install -m555 client/AmneziaVPN service/server/AmneziaVPN-service $out/bin/
     install -m555 ../deploy/data/linux/client/bin/update-resolv-conf.sh $out/libexec/
     install -m444 ../AppDir/AmneziaVPN.desktop $out/share/applications/
-    install -m444 ../deploy/data/linux/AmneziaVPN.png $out/share/pixmaps/
+    install -Dm444 ../deploy/data/linux/AmneziaVPN.png -t $out/share/icons/hicolor/512x512/apps
     install -m444 ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
 
     runHook postInstall

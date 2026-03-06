@@ -9,7 +9,8 @@
   libxfce4util,
   libxml2,
   menu-cache,
-  xorg,
+  libxrandr,
+  libxinerama,
   makeWrapper,
   enableXfcePanelApplet ? false,
   xfce4-panel,
@@ -17,14 +18,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jgmenu";
   version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "johanmalm";
     repo = "jgmenu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-vuSpiZZYe0l5va9dHM54gaoI9x8qXH1gJORUS5489jQ=";
   };
 
@@ -39,8 +40,8 @@ stdenv.mkDerivation rec {
     librsvg
     libxml2
     menu-cache
-    xorg.libXinerama
-    xorg.libXrandr
+    libxinerama
+    libxrandr
     python3Packages.python
   ]
   ++ lib.optionals enableXfcePanelApplet [
@@ -71,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

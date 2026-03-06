@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dtool";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "guoxbin";
     repo = "dtool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-m4H+ANwEbK6vGW3oIVZqnqvMiAKxNJf2TLIGh/G6AU4=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ linuxissuper ];
     mainProgram = "dtool";
   };
-}
+})

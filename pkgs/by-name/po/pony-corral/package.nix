@@ -8,14 +8,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corral";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "corral";
     rev = finalAttrs.version;
-    hash = "sha256-zbOlk92oyy17VyUalYnUZPxAO+8wjRMCqcwLx0lLL1g=";
+    hash = "sha256-pJ6/+PYxMpJcj1e9v2Al8vIWFizJnLMIw7LlVU9ogS0=";
   };
+
+  env.arch =
+    if stdenv.hostPlatform.isx86_64 then
+      "x86-64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "armv8-a"
+    else
+      lib.warn ''
+        architecture '${stdenv.hostPlatform.system}' compiles with native optimizations,
+        this may result in crashes on incompatible CPUs!
+      '' "native";
 
   strictDeps = true;
 

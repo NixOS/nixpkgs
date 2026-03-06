@@ -10,14 +10,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncpamixer";
   version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "fulhax";
     repo = "ncpamixer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uafjAaXtn97NNmRPxeHmbAaMeHIR/nrQKsTqDX5NRGU=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ncpamixer";
   };
-}
+})

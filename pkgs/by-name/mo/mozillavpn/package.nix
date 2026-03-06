@@ -13,6 +13,7 @@
   libsecret,
   nix-update-script,
   pkg-config,
+  polkit,
   python3,
   qt6,
   rustPlatform,
@@ -23,20 +24,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.32.0";
+  version = "2.33.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-STp/BCh3gELF0UgkMF2uUV9U5JgTNsqoh+Cog8fQy2c=";
+    hash = "sha256-DsartzFmJFmG++seImaZXnCKZurFXtxTGmSX7DeK3M8=";
   };
   patches = [
-    # VPN-7309: Qt 6.10 QML loading fixes (#10832)
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/5e7a26efd5acc3cdeeda8d1954459bff1a7e373e.patch";
-      hash = "sha256-CdvEuASPNYzQwyCMKXWZObOHH55WRFsxGYlEP8b20Mc=";
-    })
   ];
 
   netfilter = buildGoModule {
@@ -52,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-bJTOTHlCYSrlhy6GewpK8qhBGRH49xNkFqOXZug5lNA=";
+    hash = "sha256-yEZBW1Jc4GUx4eZ3CVlNVKF+MNUtR6qvcOJZz2TgTO4=";
   };
 
   buildInputs = [
@@ -60,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgpg-error
     libsecret
+    polkit
     qt6.qt5compat
     qt6.qtbase
     qt6.qtnetworkauth
@@ -87,14 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'set(ADDON_BUILD_ARGS ' 'set(ADDON_BUILD_ARGS -q ${qt6.qttools.dev}/bin '
 
     substituteInPlace src/cmake/linux.cmake \
-      --replace-fail '/usr/share/dbus-1' "$out/share/dbus-1" \
-      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
+      --replace-fail '/usr/share/dbus-1' '${"$"}{CMAKE_INSTALL_DATADIR}/dbus-1' \
+      --replace-fail '${"$"}{POLKIT_POLICY_DIR}' '${"$"}{CMAKE_INSTALL_DATADIR}/polkit-1/actions' \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' '${"$"}{CMAKE_INSTALL_LIBDIR}/systemd/system'
 
     substituteInPlace extension/CMakeLists.txt \
-      --replace-fail '/etc' "$out/etc"
+      --replace-fail '/etc' '${"$"}{CMAKE_INSTALL_SYSCONFDIR}'
 
     substituteInPlace extension/socks5proxy/bin/CMakeLists.txt \
-      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' '${"$"}{CMAKE_INSTALL_LIBDIR}/systemd/system'
 
     ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
 
@@ -113,6 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     ":"
     (lib.makeBinPath [ wireguard-tools ])
   ];
+
+  postInstall = ''
+    mkdir "$out/share/polkit-1/rules.d"
+    cp ../linux/org.mozilla.vpn.rules-others "$out/share/polkit-1/rules.d/org.mozilla.vpn.rules"
+  '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })

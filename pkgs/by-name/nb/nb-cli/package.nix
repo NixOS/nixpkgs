@@ -6,14 +6,14 @@
   testers,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nb-cli";
   version = "1.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "nb_cli";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-IbYyPZuhTkr4RInIR1lpMzl2+VYzu4IFQt2pOko92ZQ=";
   };
 
@@ -68,9 +68,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "CLI for nonebot2";
     homepage = "https://cli.nonebot.dev";
-    changelog = "https://github.com/nonebot/nb-cli/releases/tag/v${version}";
+    changelog = "https://github.com/nonebot/nb-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nb";
   };
-}
+})

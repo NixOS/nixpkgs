@@ -6,7 +6,7 @@
   postgresqlTestHook,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fittrackee";
   version = "0.11.2";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A9gebHxNCpYUUIm7IjyySojIIyuTxfYCUeUufpUM1iA=";
   };
 
@@ -106,11 +106,11 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Self-hosted outdoor activity tracker";
     homepage = "https://github.com/SamR1/FitTrackee";
-    changelog = "https://github.com/SamR1/FitTrackee/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/SamR1/FitTrackee/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       tebriel
       traxys
     ];
   };
-}
+})

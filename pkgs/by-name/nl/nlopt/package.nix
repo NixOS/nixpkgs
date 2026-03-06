@@ -19,6 +19,10 @@
   swig,
   # Optionally exclude Luksan solvers to allow licensing under MIT
   withoutLuksanSolvers ? false,
+
+  # Builds docs on-demand
+  withDocs ? false,
+
   # Build static on-demand
   withStatic ? stdenv.hostPlatform.isStatic,
 
@@ -37,49 +41,16 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "nlopt";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "stevengj";
     repo = "nlopt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mZRmhXrApxfiJedk+L/poIP2DR/BkV04c5fiwPGAyjI=";
+    hash = "sha256-i+Cd2VLMbI4PUSXennR8jgF+/ZkzKX9WkVTPtayr8vs=";
   };
 
-  outputs = [
-    "out"
-    "doc"
-  ];
-
-  patches = [
-    # 26-03-2025: `mkdocs.yml` is missing a link for the subpage related to the Java bindings.
-    # 26-03-2025: This commit was merged after v2.10.0 was released, and has not been made
-    # 26-03-2025: part of a release.
-    (fetchpatch {
-      name = "missing-java-reference-mkdocs";
-      url = "https://github.com/stevengj/nlopt/commit/7e34f1a6fe82ed27daa6111d83c4d5629555454b.patch";
-      hash = "sha256-XivfZtgIGLyTtU+Zo2jSQAx2mVdGLJ8PD7VSSvGR/5Q=";
-    })
-
-    # 26-03-2025: The docs pages still list v2.7.1 as the newest version.
-    # 26-03-2025: This commit was merged after v2.10.0 was released, and has not been made
-    # 26-03-2025: part of a release.
-    (fetchpatch {
-      name = "update-index-md";
-      url = "https://github.com/stevengj/nlopt/commit/2c4147832eff7ea15d0536c82351a9e169f85e43.patch";
-      hash = "sha256-BXcbNUyu20f3N146v6v9cpjSj5CwuDtesp6lAqOK2KY=";
-    })
-
-    # 26-03-2025: There is an off-by-one error in the test/CMakeLists.txt
-    # 26-03-2025: that causes the tests to attempt to run disabled Luksan solver code,
-    # 26-03-2025: which in turn causes the test suite to fail.
-    # 26-03-2025: See https://github.com/stevengj/nlopt/pull/605
-    (fetchpatch {
-      name = "fix-nondisabled-luksan-algorithm";
-      url = "https://github.com/stevengj/nlopt/commit/7817ec19f21be6877a4b79777fc5315a52c6850b.patch";
-      hash = "sha256-KgdAMSYKOQuraun4HNr9GOx48yjyeQk6W3IgWRA44oo=";
-    })
-  ];
+  outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
   postPatch = ''
     substituteInPlace nlopt.pc.in \
@@ -123,7 +94,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     lib.cmakeFeature "Python_EXECUTABLE" "${buildPythonBindingsEnv.interpreter}"
   );
 
-  postBuild = ''
+  postBuild = lib.optionalString withDocs ''
     ${buildDocsEnv.interpreter} -m mkdocs build \
       --config-file ../mkdocs.yml \
       --site-dir $doc \

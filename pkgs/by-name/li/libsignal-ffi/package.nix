@@ -17,18 +17,18 @@ let
     ln -s ${boringssl.dev}/include include
   '';
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
-  version = "0.86.8";
+  version = "0.87.1";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "signalapp";
     repo = "libsignal";
-    tag = "v${version}";
-    hash = "sha256-+GFuwS4y8yr86ETVIjlz/6HocAamASmBOIjkTLtCIag=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yr2+yM7RmUQ7mNDMCcaM5cCpudof14JuO5J6D944k0U=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
   env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
-  cargoHash = "sha256-uiMct9ygg1c1rQb6RsM2AoibuKCExPy9P75C7jDX8Cs=";
+  cargoHash = "sha256-rqxp+RZuuT+nFudNeCgA8g04C9KT1Qi59K4b2avL5u4=";
 
   cargoBuildFlags = [
     "-p"
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
       SchweGELBin
     ];
   };
-}
+})

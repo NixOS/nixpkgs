@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "djenrandom";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "dj-on-github";
     repo = "djenrandom";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-r5UT8z8vvFZDffsl6CqBXuvBaZ/sl1WLxJi26CxkpAw=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "djenrandom";
   };
-}
+})

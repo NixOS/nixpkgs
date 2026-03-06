@@ -23,7 +23,7 @@
   sphinx,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdnf";
   version = "0.75.0";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "libdnf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ujkJVeI6wgapTW1DBIhj4F/rXJFBb+KdREpc5jfU124=";
   };
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Package management library";
     homepage = "https://github.com/rpm-software-management/libdnf";
-    changelog = "https://github.com/rpm-software-management/libdnf/releases/tag/${version}";
+    changelog = "https://github.com/rpm-software-management/libdnf/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
       katexochen
     ];
   };
-}
+})

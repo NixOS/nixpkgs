@@ -10,6 +10,7 @@
   cvs,
   darcs,
   findutils,
+  fossil,
   gawk,
   gitMinimal,
   git-lfs,
@@ -25,7 +26,8 @@ let
   mkPrefetchScript =
     tool: src: deps:
     stdenv.mkDerivation {
-      name = "nix-prefetch-${tool}";
+      version = lib.trivial.release;
+      pname = "nix-prefetch-${tool}";
 
       strictDeps = true;
       nativeBuildInputs = [ makeWrapper ];
@@ -34,8 +36,8 @@ let
       dontUnpack = true;
 
       installPhase = ''
-        install -vD ${src} $out/bin/$name;
-        wrapProgram $out/bin/$name \
+        install -vD ${src} $out/bin/$pname;
+        wrapProgram $out/bin/$pname \
           --prefix PATH : ${lib.makeBinPath (deps ++ [ coreutils ])} \
           --set HOME /homeless-shelter
       '';
@@ -65,6 +67,13 @@ rec {
     gawk
     jq
   ];
+  nix-prefetch-fossil =
+    mkPrefetchScript "fossil" ../../../build-support/fetchfossil/nix-prefetch-fossil
+      [
+        fossil
+        gnugrep
+        gnused
+      ];
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [
     findutils
     gawk
@@ -94,6 +103,7 @@ rec {
       nix-prefetch-bzr
       nix-prefetch-cvs
       nix-prefetch-darcs
+      nix-prefetch-fossil
       nix-prefetch-git
       nix-prefetch-hg
       nix-prefetch-svn

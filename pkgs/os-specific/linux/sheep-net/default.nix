@@ -6,7 +6,8 @@
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "sheep_net";
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "sheep_net";
   version = basiliskii.version;
   src = basiliskii.src;
   sourceRoot = "${finalAttrs.src.name}/BasiliskII/src/Unix/Linux/NetDriver";

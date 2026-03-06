@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pg8000,
@@ -7,7 +8,6 @@
   pytest-asyncio,
   pytest-postgresql,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   sphinx-rtd-theme,
@@ -49,6 +49,14 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "aiosql" ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests that require port binding fail in darwin sandbox
+    # port_for.exceptions.PortForException: Can't select a port
+    "tests/test_pg8000.py"
+    "tests/test_apsycopg3.py"
+    "tests/test_psycopg3.py"
+  ];
 
   meta = {
     description = "Simple SQL in Python";

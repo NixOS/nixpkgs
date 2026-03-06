@@ -13,14 +13,14 @@
   xapp-symbolic-icons,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bulky";
   version = "4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rUQ4GN8Pj7dXLbQBt99RmFk4rs+mFL/1taFJiTTVC2A=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       --replace-fail "/usr/share/locale" "$out/share/locale" \
       --replace-fail /usr/share/bulky "$out/share/bulky" \
       --replace-fail /usr/share/common-licenses "${common-licenses}/share/common-licenses" \
-      --replace-fail __DEB_VERSION__  "${version}"
+      --replace-fail __DEB_VERSION__  "${finalAttrs.version}"
   '';
 
   installPhase = ''
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})
