@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for sr25519 library";
     homepage = "https://github.com/polkascan/py-sr25519-bindings";
+    changelog = "https://github.com/JAMdotTech/py-sr25519/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       onny
