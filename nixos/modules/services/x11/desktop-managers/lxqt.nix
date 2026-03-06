@@ -15,7 +15,7 @@ in
 
 {
   meta = {
-    teams = [ teams.lxqt ];
+    maintainers = teams.lxqt.members;
   };
 
   options = {

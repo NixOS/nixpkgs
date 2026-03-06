@@ -44,7 +44,7 @@ let
     ];
 in
 {
-  meta.teams = [ lib.teams.cosmic ];
+  meta.maintainers = lib.teams.cosmic.members;
 
   options = {
     services.desktopManager.cosmic = {

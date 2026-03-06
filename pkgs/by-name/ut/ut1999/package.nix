@@ -11,7 +11,7 @@
   imagemagick,
   runCommand,
   libgcc,
-  wxGTK32,
+  wxwidgets_3_2,
   libGL,
   SDL2,
   openal,
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libgcc
-    wxGTK32
+    wxwidgets_3_2
     SDL2
     libGL
     openal

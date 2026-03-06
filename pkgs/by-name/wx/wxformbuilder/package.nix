@@ -7,7 +7,7 @@
   makeWrapper,
   shared-mime-info,
   boost,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

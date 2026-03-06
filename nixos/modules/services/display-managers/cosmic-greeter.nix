@@ -16,7 +16,7 @@ let
 in
 
 {
-  meta.teams = [ lib.teams.cosmic ];
+  meta.maintainers = lib.teams.cosmic.members;
 
   options.services.displayManager.cosmic-greeter = {
     enable = lib.mkEnableOption "COSMIC greeter";

@@ -15,7 +15,7 @@ let
 in
 {
   meta = {
-    teams = [ teams.xfce ];
+    maintainers = teams.xfce.members;
   };
 
   imports = [

@@ -13,7 +13,7 @@ let
 
 in
 {
-  meta.teams = [ lib.teams.lomiri ];
+  meta.maintainers = lib.teams.lomiri.members;
 
   options = {
     services.xserver.displayManager.lightdm.greeters.lomiri = {

@@ -171,7 +171,7 @@ in
 
   meta = {
     buildDocsInSandbox = false;
-    teams = [ lib.teams.home-assistant ];
+    maintainers = lib.teams.home-assistant.members;
   };
 
   options.services.home-assistant = {

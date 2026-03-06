@@ -313,5 +313,5 @@ in
     '')
   ];
 
-  meta.teams = [ lib.teams.buildbot ];
+  meta.maintainers = lib.teams.buildbot.members;
 }

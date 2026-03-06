@@ -25,7 +25,7 @@ in
 
   meta = {
     doc = ./pantheon.md;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
   };
 
   imports = [

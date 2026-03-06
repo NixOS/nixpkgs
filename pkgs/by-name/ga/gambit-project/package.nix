@@ -3,7 +3,7 @@
   autoreconfHook,
   fetchFromGitHub,
   stdenv,
-  wxGTK31,
+  wxwidgets_3_1,
   withGui ? true,
 }:
 
@@ -18,9 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xoFtqPUC/qLrlEewIPeDmOH7rWMB+ak5CdVlH5t84MY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withGui wxGTK31;
+  nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withGui wxwidgets_3_1;
 
-  buildInputs = lib.optional withGui wxGTK31;
+  buildInputs = lib.optional withGui wxwidgets_3_1;
 
   strictDeps = true;
 
