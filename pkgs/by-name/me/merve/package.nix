@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "merve";
-  version = "1.0.1";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "merve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IqUpvnrbnsXlI//xRLbcseMFVLQrwdDCyW1oud3+Ekk=";
+    hash = "sha256-pooaNUdrzFqUvJJ8abhGnPMViu/rs3wNuDLC74spb6Y=";
   };
 
   doCheck = true;
