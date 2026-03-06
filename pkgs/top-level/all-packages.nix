@@ -11941,12 +11941,6 @@ with pkgs;
     lisp-compiler = ecl;
   };
 
-  wxmaxima = callPackage ../applications/science/math/wxmaxima {
-    wxGTK = wxwidgets_3_2.override {
-      withWebKit = true;
-    };
-  };
-
   yacas-gui = yacas.override {
     enableGui = true;
     enableJupyter = false;
