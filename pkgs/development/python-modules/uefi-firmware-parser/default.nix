@@ -6,7 +6,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uefi-firmware-parser";
   version = "1.13";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "theopolis";
     repo = "uefi-firmware-parser";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Yiw9idmvSpx4CcVrXHznR8vK/xl7DTL+L7k4Nvql2B8=";
   };
 
@@ -30,8 +30,10 @@ buildPythonPackage rec {
   meta = {
     description = "Tool for parsing, extracting, and recreating UEFI firmware volumes";
     homepage = "https://github.com/theopolis/uefi-firmware-parser";
+    changelog = "https://github.com/theopolis/uefi-firmware-parser/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
     mainProgram = "uefi-firmware-parser";
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})
