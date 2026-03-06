@@ -1,56 +1,75 @@
 {
   lib,
   stdenv,
-  bitstring,
   buildPythonPackage,
-  buildPackages,
+  fetchFromGitHub,
+  cmake,
+  ninja,
   cffi,
-  fetchPypi,
-  pycparser,
-  setuptools,
+  scikit-build-core,
+  bitstring,
+  pytestCheckHook,
+  pytest-xdist,
+  sphinxHook,
+  furo,
+  myst-parser,
+  sphinx-autodoc-typehints,
 }:
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.154";
+  version = "9.2.204";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-a3ei2w66v18QKAofpPvDUoM42zHRHPrNQic+FE+rLKY=";
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "angr";
+    repo = pname;
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-FzvJrAWPqKb0nrk6Y2iAu8TMRx81/BbUlrjf86gvySo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    cmake
+    ninja
+    scikit-build-core
+    cffi
+  ];
 
   dependencies = [
     bitstring
     cffi
-    pycparser
   ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [
+    sphinxHook
+    furo
+    myst-parser
+    sphinx-autodoc-typehints
+  ];
+
+  sphinxBuilders = [
+    "html"
+    "man"
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace vex/Makefile-gcc \
       --replace-fail '/usr/bin/ar' 'ar'
   '';
 
-  setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
-    "--plat-name"
-    "linux"
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
   ];
-
-  preBuild = ''
-    export CC=${stdenv.cc.targetPrefix}cc
-    substituteInPlace pyvex_c/Makefile \
-      --replace-fail 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
-  '';
-
-  # No tests are available on PyPI, GitHub release has tests
-  # Switch to GitHub release after all angr parts are present
-  doCheck = false;
 
   pythonImportsCheck = [ "pyvex" ];
 
@@ -59,9 +78,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/angr/pyvex";
     license = with lib.licenses; [
       bsd2
-      gpl3Plus
-      lgpl3Plus
+      gpl2Only
     ];
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      misaka18931
+    ];
   };
 }

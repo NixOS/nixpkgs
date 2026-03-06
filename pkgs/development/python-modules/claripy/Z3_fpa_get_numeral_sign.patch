@@ -1,0 +1,40 @@
+From 4f77533f73bcb1e58413e1a0710489e151dd8a82 Mon Sep 17 00:00:00 2001
+From: miruku <miruku@miruku.moe>
+Date: Thu, 5 Mar 2026 17:53:50 +0800
+Subject: [PATCH] fix: api change in Z3_fpa_get_numeral_sign
+
+---
+ claripy/backends/backend_z3.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/claripy/backends/backend_z3.py b/claripy/backends/backend_z3.py
+index 5d71b45..93b225a 100644
+--- a/claripy/backends/backend_z3.py
++++ b/claripy/backends/backend_z3.py
+@@ -702,9 +702,9 @@ class BackendZ3(Backend):
+             # TODO: do better than this
+             fp_mantissa = float(z3.Z3_fpa_get_numeral_significand_string(ctx, ast))
+             fp_exp = int(z3.Z3_fpa_get_numeral_exponent_string(ctx, ast, False))
+-            fp_sign_c = ctypes.c_int()  # pylint: disable=no-value-for-parameter
++            fp_sign_c = ctypes.c_bool()  # pylint: disable=no-value-for-parameter
+             z3.Z3_fpa_get_numeral_sign(ctx, ast, ctypes.byref(fp_sign_c))
+-            fp_sign = -1 if fp_sign_c.value != 0 else 1
++            fp_sign = -1 if fp_sign_c.value else 1
+             return fp_sign * fp_mantissa * (2**fp_exp)
+         if op_name == "MinusZero":
+             return -0.0
+@@ -731,9 +731,9 @@ class BackendZ3(Backend):
+             # TODO: do better than this
+             fp_mantissa = int(z3.Z3_fpa_get_numeral_significand_string(ctx, ast))
+             fp_exp = int(z3.Z3_fpa_get_numeral_exponent_string(ctx, ast, True))
+-            fp_sign_c = ctypes.c_int()  # pylint: disable=no-value-for-parameter
++            fp_sign_c = ctypes.c_bool()  # pylint: disable=no-value-for-parameter
+             z3.Z3_fpa_get_numeral_sign(ctx, ast, ctypes.byref(fp_sign_c))
+-            fp_sign = 1 if fp_sign_c.value != 0 else 0
++            fp_sign = 1 if fp_sign_c.value else 0
+         elif op_name == "MinusZero":
+             fp_sign = 1
+             fp_exp = 0
+-- 
+2.52.0
+

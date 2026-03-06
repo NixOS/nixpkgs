@@ -1,29 +1,43 @@
 {
   lib,
-  archinfo,
   buildPythonPackage,
-  cart,
-  cffi,
   fetchFromGitHub,
+  # build inputs
+  setuptools,
+  # dependencies
+  archinfo,
+  arpy,
+  cart,
+  minidump,
   pefile,
   pyelftools,
-  pytestCheckHook,
   pyvex,
-  setuptools,
+  pyxbe,
+  pyxdia,
   sortedcontainers,
-  nix-update-script,
+  uefi-firmware-parser,
+  # check inputs
+  pytestCheckHook,
+  cffi,
+  pypcode,
+  pytest-xdist,
+  # docs
+  sphinxHook,
+  furo,
+  myst-parser,
+  sphinx-autodoc-typehints,
 }:
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.154";
+  version = "9.2.204";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
     tag = "v${version}";
-    hash = "sha256-XXJBySIT3ylK1nd3suP2bq4bVSVah/1XhOmkEONbCoY=";
+    hash = "sha256-c6weHSSGhGmjjhkotELxCXhV+ACe5ub7T28hoVWM3aE=";
   };
 in
 buildPythonPackage rec {
@@ -31,50 +45,68 @@ buildPythonPackage rec {
   inherit version;
   pyproject = true;
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   src = fetchFromGitHub {
     owner = "angr";
     repo = "cle";
     tag = "v${version}";
-    hash = "sha256-rWbZzm5hWi/C+te8zeQChxqYHO0S795tJ6Znocq9TTs=";
+    hash = "sha256-1a/zbQJReCaZxP3VpBI+5RRihthkYf0jtlA6thGRozc=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     archinfo
+    arpy
     cart
-    cffi
+    minidump
     pefile
     pyelftools
     pyvex
+    pyxbe
+    pyxdia
     sortedcontainers
+    uefi-firmware-parser
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    pcode = [ pypcode ];
+  };
+
+  pythonRelaxDeps = [
+    "arpy"
+  ];
+
+  nativeBuildInputs = [
+    sphinxHook
+    furo
+    myst-parser
+    sphinx-autodoc-typehints
+  ];
+
+  sphinxBuilders = [
+    "html"
+    "man"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    cffi
+    pytest-xdist
+  ]
+  ++ optional-dependencies.pcode;
 
   # Place test binaries in the right location (location is hard-coded in the tests)
   preCheck = ''
-    export HOME=$TMPDIR
-    cp -r ${binaries} $HOME/binaries
+    cp -r ${binaries} $TMPDIR/binaries
   '';
 
-  disabledTests = [
-    # PPC tests seems to fails
-    "test_ppc_rel24_relocation"
-    "test_ppc_addr16_ha_relocation"
-    "test_ppc_addr16_lo_relocation"
-    "test_plt_full_relro"
-    # Test fails
-    "test_tls_pe_incorrect_tls_data_start"
-    "test_x86"
-    "test_x86_64"
-    # The required parts is not present on Nix
-    "test_remote_file_map"
-  ];
-
   pythonImportsCheck = [ "cle" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python loader for many binary formats";
