@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiovodafone";
-  version = "3.1.2";
+  version = "3.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovodafone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ip3bvK8p9BUs1t2BEwNdoqcDlATu39zIxRjvJCqfNHE=";
+    hash = "sha256-wgoPL/G9wPshhydHSFpSAFKiiFy/UacVbQ7mdcEuit0=";
   };
 
   build-system = [ poetry-core ];
