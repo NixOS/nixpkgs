@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/j178/prek";
-    description = "Better `pre-commit`, re-engineered in Rust ";
+    description = "Reimagined version of pre-commit, built in Rust";
     mainProgram = "prek";
     changelog = "https://github.com/j178/prek/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = [ lib.licenses.mit ];
