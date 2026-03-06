@@ -18,11 +18,11 @@ maven.buildMavenPackage {
   src = fetchFromGitHub {
     owner = "JChemPaint";
     repo = "jchempaint";
-    rev = "de023b6ddc1a13f5af48fa2acc8a2633c36a30fa";
+    rev = "de023b6ddc1a13f5af48fa2acc8a2633c36a30fa"; # this commit was previously a "nightly" release tag
     hash = "sha256-1wcJ1qP8yZg1qe4YkpCRGidHUXc1/1eUabR3NoM6kjc=";
   };
 
-  mvnHash = "sha256-AGDyXyEEDMjPHMlbcxninkciZ7V/ALMUS/OkgBnni18=";
+  mvnHash = "sha256-goISSdlFng1PDrotnZGwLVbXpBB3w1CFYysvLW78bDE=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -71,12 +71,11 @@ maven.buildMavenPackage {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=skip" ]; }; # only update hash
 
   meta = {
     description = "Chemical 2D structure editor application/applet based on the Chemistry Development Kit";
     homepage = "https://jchempaint.github.io";
-    changelog = "https://github.com/JChemPaint/jchempaint/releases/tag/nightly";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ZZBaron ];
