@@ -30,8 +30,8 @@ skawarePackages.buildPackage {
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-networking-man-pages";
-    version = "2.7.0.4.1";
-    sha256 = "sha256-ocYUZVnkuhO/1qgW3mSooZRoqqch1SgIRoygS3AjeZI=";
+    version = "2.7.2.1.4";
+    sha256 = "sha256-N5BXi21JEgF3X5FKg5SzKNKfzYS5uTRqbUvbsrEZ2xg=";
     description = "Port of the documentation for the s6-networking suite to mdoc";
     maintainers = [ lib.maintainers.sternenseemann ];
   };
