@@ -1190,6 +1190,15 @@ class Machine:
         self.send_key("ctrl-alt-delete")
         self.connected = False
 
+    def disconnect(self) -> None:
+        """Reset connection but don't send reboot key.
+        This is used in soft-reboot test to prevent EOF from polluting
+        the command output byte stream, resulting in errors like
+        "Invalid base64-encoded string: number of data characters (25)
+        cannot be 1 more than a multiple of 4"
+        """
+        self.connected = False
+
     def wait_for_x(self, timeout: int = 900) -> None:
         """
         Wait until it is possible to connect to the X server.
