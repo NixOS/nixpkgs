@@ -1,39 +1,71 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "buildkite-cli";
-  version = "3.13.0";
+  version = "3.31.1";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "cli";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-SX80Hw9iaYvdrprI/Y1lYXTaKeGTkeVIBk2UujB//cs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rWJU29v+3neb1d0Hdajxbq4v/QLE22sqjWeDaonIjdo=";
   };
 
-  vendorHash = "sha256-9doJSApHYYU9GrXi++WIqtUP743mZeRUCuy2xqO/kGo=";
-
-  doCheck = false;
-
-  postPatch = ''
-    patchShebangs .buildkite/steps/{lint,run-local}.sh
-  '';
-
-  subPackages = [ "cmd/bk" ];
+  vendorHash = "sha256-pYdo9jAJldAwGmWup27BDZ9Wd9BpK6ILTXioAGWOERo=";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X main.VERSION=${finalAttrs.version}"
+    "-X github.com/buildkite/cli/v3/cmd/version.Version=${finalAttrs.version}"
   ];
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Require internet access
+        "TestConversionAPIEndpoint"
+
+        # Requires a git repository (which is removed by nix after fetching the source)
+        "TestResolvePipelinesFromPath"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+        # Expected timeout error but got none
+        "TestPollJobStatus"
+        "TestPollJobStatusTimeout"
+      ];
+    in
+    [
+      "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
+    ];
+
+  __darwinAllowLocalNetworking = true;
+
+  postInstall = ''
+    mv $out/bin/cli $out/bin/bk
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command line interface for Buildkite";
     homepage = "https://github.com/buildkite/cli";
+    changelog = "https://github.com/buildkite/cli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ groodt ];
     mainProgram = "bk";

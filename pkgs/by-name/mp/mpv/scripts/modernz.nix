@@ -2,6 +2,7 @@
   lib,
   buildLua,
   fetchFromGitHub,
+  installFonts,
   makeFontsConf,
   nix-update-script,
 }:
@@ -17,9 +18,7 @@ buildLua (finalAttrs: {
     hash = "sha256-9jth8TCAx/cmbAfO8s+1WPpMDuF79gQtVlC4OG2adrA=";
   };
 
-  postInstall = ''
-    install -Dt $out/share/fonts *.ttf
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.extraWrapperArgs = [
     "--set"

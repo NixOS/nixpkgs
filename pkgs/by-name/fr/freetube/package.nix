@@ -20,13 +20,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.23.13";
+  version = "0.23.14";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
     tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-vnqrl/2hxL0RQbLHkgRntyTRSWmhMM7hOi31r4pKCgs=";
+    hash = "sha256-9CO5/EcFPO50awY1QNutbAqDG2rhOv3DYk97/9YNVWI=";
   };
 
   # Darwin requires writable Electron dist

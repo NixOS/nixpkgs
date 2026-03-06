@@ -8508,7 +8508,6 @@ with pkgs;
   };
 
   zabbix74 = recurseIntoAttrs (zabbixFor "v74");
-  zabbix72 = recurseIntoAttrs (zabbixFor "v72");
   zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
 
@@ -10719,7 +10718,6 @@ with pkgs;
   trustedqsl = tqsl; # Alias added 2019-02-10
 
   transmission_4 = callPackage ../applications/networking/p2p/transmission/4.nix {
-    fmt = fmt_9;
     libutp = libutp_3_4;
   };
   libtransmission_4 = transmission_4.override {

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  celery,
   debugpy,
   docker,
   fetchFromGitHub,
@@ -11,6 +10,13 @@
   pytest-docker-tools,
   pytest,
   tenacity,
+
+  # optional dependencies
+  redis,
+  python-memcached,
+  boto3,
+  botocore,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -52,6 +58,23 @@ buildPythonPackage rec {
     pytest-docker-tools
     tenacity
   ];
+
+  optional-dependencies = {
+    all = [
+      redis
+      python-memcached
+      boto3
+      botocore
+      urllib3
+    ];
+    redis = [ redis ];
+    memcached = [ python-memcached ];
+    sqs = [
+      boto3
+      botocore
+      urllib3
+    ];
+  };
 
   # Infinite recursion with celery
   doCheck = false;

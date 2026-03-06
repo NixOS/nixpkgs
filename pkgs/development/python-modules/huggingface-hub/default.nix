@@ -13,7 +13,6 @@
   httpx,
   packaging,
   pyyaml,
-  shellingham,
   tqdm,
   typer,
   typing-extensions,
@@ -35,20 +34,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.4.1";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-At3FN+dplQ3L9B4vDZrEvREdwgepUvzWC7yeU6L5XY8=";
+    hash = "sha256-XuqZvTu3DuncGpRWXipxtDLY2alY7QVm89ZmpgTdfVo=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "typer-slim" "typer"
-  '';
 
   build-system = [ setuptools ];
 
@@ -59,7 +53,6 @@ buildPythonPackage (finalAttrs: {
     httpx
     packaging
     pyyaml
-    shellingham
     tqdm
     typer
     typing-extensions

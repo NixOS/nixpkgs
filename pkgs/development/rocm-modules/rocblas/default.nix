@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas${clr.gpuArchSuffix}";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocBLAS";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-obKypbYmnSeOtOr7g0pxOz02YfzZ0bGugTtznkeHz14=";
+    hash = "sha256-oY6yELFnpnDDksu63Go88TGLAgC64tUaPIbaRgD2qus=";
   };
 
   outputs = [ "out" ] ++ lib.optional buildBenchmarks "benchmark" ++ lib.optional buildTests "test";
@@ -137,9 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (fetchpatch {
       name = "Extend-rocBLAS-HIP-ISA-compatibility.patch";
-      url = "https://github.com/GZGavinZhao/rocm-libraries/commit/2850f22f80f90c9e498f520608a82989a4932ec3.patch";
-      hash = "sha256-SPsdEwGe+r8bQudkChRzBDAgu3tPQWFweZCgzh+4nOE=";
-      stripLen = 2;
+      url = "https://github.com/GZGavinZhao/rocm-libraries/commit/49f21f3cfe7eb4b8ac724eef81fa2cae97a3c22e.patch";
+      hash = "sha256-vAVVpTwt49lGHu2YopR1X68v5LwFOjUYuSC4ucBpFGg=";
+      relative = "projects/rocblas";
     })
   ];
 

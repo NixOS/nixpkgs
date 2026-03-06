@@ -300,11 +300,6 @@
     "hash": "sha256-Nn3imJvnqLe02gR1GyUHYH4+XkrNnhLy9dyCjJCkB7M="
   },
   {
-    "pname": "managed-midi",
-    "version": "1.10.1",
-    "hash": "sha256-iuqpyp8vM7ZjtcM9KNqx9se/UhQHsYrQ+lxL4EntyXU="
-  },
-  {
     "pname": "Markdig",
     "version": "0.23.0",
     "hash": "sha256-4Kjeb54eyas0pCMbTHGPK13vW9zEnFyZ5VStwwtClq8="
@@ -605,6 +600,11 @@
     "hash": "sha256-diVAckS1zNyVE1UGkbiu9jH/25j/c+Ad5XC3EjdLDsg="
   },
   {
+    "pname": "ppy.managed-midi",
+    "version": "1.10.2",
+    "hash": "sha256-JqKDea1yCsMIlQGu8OUxw+6J0ZxmHz+VysVzcsZBd4w="
+  },
+  {
     "pname": "ppy.ManagedBass",
     "version": "2022.1216.0",
     "hash": "sha256-yG3IWNixzv+kFgYw6yAkjw9PWMpyR0tvrkFsgWGQ1qY="
@@ -626,8 +626,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2026.108.0",
-    "hash": "sha256-3xYUwhcZJKT446AX3Vvbb2kQaNDTGGR/efGy/E32NP8="
+    "version": "2026.303.0",
+    "hash": "sha256-wkbRfNuatxkweNe+62I3gkq9KYBbT/mVOPXOK7LRhPw="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
@@ -641,8 +641,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2026.108.0",
-    "hash": "sha256-1kM2v5AqHXS2G8xD++28tcHZe9QPB4946wpG7s6dVeo="
+    "version": "2026.305.0",
+    "hash": "sha256-f79dXDjW5AH+T77mP1s36kuMZ+ukjjCnn/3Wfd7d6ys="
   },
   {
     "pname": "ppy.osuTK.NS20",
@@ -656,8 +656,8 @@
   },
   {
     "pname": "ppy.SDL3-CS",
-    "version": "2025.1205.0",
-    "hash": "sha256-Mu5kn/yC7afo3+Nz755UzspUmOOEKtZ6/N4ENCzshtM="
+    "version": "2026.302.0",
+    "hash": "sha256-7e+HN9StGkK4je1QITNT2Fsk/wrPVDEXb97xjlZx6yY="
   },
   {
     "pname": "ppy.Veldrid",

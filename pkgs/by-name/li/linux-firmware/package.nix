@@ -1,6 +1,7 @@
 {
   stdenvNoCC,
   fetchFromGitLab,
+  fetchpatch,
   lib,
   python3,
   rdfind,
@@ -30,6 +31,15 @@ stdenvNoCC.mkDerivation rec {
     tag = version;
     hash = "sha256-QHoS9+WS9IjRVhTJEFF/X8+4ZKjKwpJAvf7EqsV+qEY=";
   };
+
+  patches = [
+    # amdnpu: Restore old NPU firmware for compatibility
+    # https://gitlab.com/kernel-firmware/linux-firmware/-/merge_requests/935
+    (fetchpatch {
+      url = "https://gitlab.com/kernel-firmware/linux-firmware/-/commit/58cf579b98c0c4878deeda1acb5db70e699875b5.patch";
+      hash = "sha256-2UO9CxGM2Asb/fRAST4zRlMBSVjM+N/87NzSkSoQrQ0=";
+    })
+  ];
 
   postUnpack = ''
     patchShebangs .

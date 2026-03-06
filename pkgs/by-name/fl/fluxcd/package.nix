@@ -6,13 +6,14 @@
   lib,
   stdenv,
   writableTmpDirAsHomeHook,
+  go_1_26,
 }:
 
 let
-  version = "2.7.5";
-  srcHash = "sha256-vTb1YE73xxCC4GlR6UW5Ibu+ck+N+KKYUg50csb7eUA=";
-  vendorHash = "sha256-AgWDvlXVZXXprWCeoNeAMDb6LeYfa9yG5afc7TNISQs=";
-  manifestsHash = "sha256-CmYuHhEiKxkSRtN+fri2/4ILxpwRy2xGwGqCqcfsQwU=";
+  version = "2.8.1";
+  srcHash = "sha256-TuXkG54ohsfHMw1VXsYnepZkMx1ZbMHaog+XPxN5F+8=";
+  vendorHash = "sha256-nzNVH4Vm1p7PwtOqej+RfgjpONpxCrZdqjY6x3f/uog=";
+  manifestsHash = "sha256-qo0szujGP2eL48KYjnft2Iu95Y/uH2/bSNETvnpVGYE=";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
@@ -21,7 +22,7 @@ let
   };
 in
 
-buildGoModule rec {
+buildGoModule.override { go = go_1_26; } rec {
   pname = "fluxcd";
   inherit vendorHash version;
 
@@ -81,6 +82,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       jlesquembre
       ryan4yin
+      SchahinRohani
     ];
     mainProgram = "flux";
   };

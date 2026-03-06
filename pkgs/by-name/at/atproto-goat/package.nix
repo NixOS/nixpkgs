@@ -33,7 +33,10 @@ buildGoModule (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with lib.maintainers; [
+      pyrox0
+      isabelroses
+    ];
     mainProgram = "goat";
   };
 })

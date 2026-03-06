@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/parallel/parallel-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-OmLPeawkiLQed4HVT/H9qhxSa3Lgl90efWLverudbDs=";
+    hash = "sha256-gx944B8/KKwkQeZrEBcVYscaAwA1OJOqBbvCd/E8xZY=";
   };
 
   outputs = [

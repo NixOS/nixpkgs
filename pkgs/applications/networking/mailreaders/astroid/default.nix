@@ -19,6 +19,7 @@
   gsettings-desktop-schemas,
   gobject-introspection,
   python3,
+  fetchpatch,
 
   # vim to be used, should support the GUI mode.
   vim,
@@ -37,6 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-FDStUt989sQXX6kpqStrdjOdAMlLAepcDba9ul9tcps=";
   };
+
+  patches = [
+    # Until next version, patch to build with boost 1.89
+    (fetchpatch {
+      url = "https://github.com/astroidmail/astroid/commit/b84962a7920aaa9b0cc4a85a0c9fd1802495b1bc.patch";
+      hash = "sha256-QO5hoWscSMcxWLjPn/NT2MaIKrgMvTJeutitm4GaKZY=";
+    })
+  ];
 
   postPatch = ''
     sed -i "s~gvim ~${vim}/bin/vim -g ~g" src/config.cc

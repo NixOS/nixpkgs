@@ -93,20 +93,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "transformers";
-  version = "5.2.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vus4Y+1QXUNqwBO1ZK0gWd+sJBPwrqWW7O2sn0EBvno=";
+    hash = "sha256-5FzsPIG4dFTR2WgcZbdmVwwwY9Dkqu5aprl5uIIalD0=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "typer-slim" "typer"
-  '';
 
   build-system = [ setuptools ];
 

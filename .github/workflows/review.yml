@@ -9,7 +9,7 @@ on:
 # This is used as fallback without app only.
 # This happens when testing in forks without setting up that app.
 permissions:
-  pull-requests: write
+  pull-requests: write # minimizing dismissed reviews and adding reactions
 
 defaults:
   run:

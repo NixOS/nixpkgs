@@ -148,9 +148,9 @@
   },
   "azure-firewall": {
     "pname": "azure-firewall",
-    "version": "2.0.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/azure_firewall-2.0.1-py2.py3-none-any.whl",
-    "hash": "sha256-SLnSVacJ47P96ICUt33/6cRz+0YRY+FrkwhowtTMD68=",
+    "version": "2.1.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/azure_firewall-2.1.0-py2.py3-none-any.whl",
+    "hash": "sha256-b7ciHJ/BDta4xZXkzrOslTNqyEUH+fKxlQ0p5SwOmBw=",
     "description": "Manage Azure Firewall resources"
   },
   "azurelargeinstance": {
@@ -449,9 +449,9 @@
   },
   "elastic-san": {
     "pname": "elastic-san",
-    "version": "1.3.1b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/elastic_san-1.3.1b1-py3-none-any.whl",
-    "hash": "sha256-L0ps/X+laOJO2aj3kqE7PVntTPxuY30BYeCmN/VWC44=",
+    "version": "1.3.2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/elastic_san-1.3.2-py3-none-any.whl",
+    "hash": "sha256-SrOk7ueB2cG2K4ZRHYwSxPbjJvbGZ0sNT/OQfcKmgFA=",
     "description": "Microsoft Azure Command-Line Tools ElasticSan Extension"
   },
   "eventgrid": {
@@ -477,9 +477,9 @@
   },
   "fleet": {
     "pname": "fleet",
-    "version": "1.8.3",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/fleet-1.8.3-py3-none-any.whl",
-    "hash": "sha256-KY4lXsFf1Rxhcblyfxw904dWHxdWR17L864qiIpYYOQ=",
+    "version": "1.9.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/fleet-1.9.0-py3-none-any.whl",
+    "hash": "sha256-5CsWYP0r2UfUTekKDsqWBNonDOPaR5TrhxZDF7hAtXI=",
     "description": "Microsoft Azure Command-Line Tools Fleet Extension"
   },
   "fluid-relay": {
@@ -547,9 +547,9 @@
   },
   "healthbot": {
     "pname": "healthbot",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/healthbot-1.0.0-py3-none-any.whl",
-    "hash": "sha256-X6M+iVNShC9YBliy2Ynf5TVUDKo3ZTaqu1yvFn6v6Ew=",
+    "version": "1.1.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/healthbot-1.1.0-py3-none-any.whl",
+    "hash": "sha256-AV0TETMADekkqTcPNFMg+4pt4RCMtPCnGb0pd/wr01A=",
     "description": "Microsoft Azure Command-Line Tools HealthbotClient Extension"
   },
   "healthcareapis": {
@@ -883,9 +883,9 @@
   },
   "quantum": {
     "pname": "quantum",
-    "version": "1.0.0b11",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/quantum-1.0.0b11-py3-none-any.whl",
-    "hash": "sha256-LcfF4Rmfr4L4R0n41g4RngDyfTeRZheZuNqGP4kI5Yk=",
+    "version": "1.0.0b12",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/quantum-1.0.0b12-py3-none-any.whl",
+    "hash": "sha256-9tjBvpu1F2/2JYKUD2IbxUckYofUH0rEnimkpRXF2wY=",
     "description": "Microsoft Azure Command-Line Tools Quantum Extension"
   },
   "qumulo": {
@@ -901,13 +901,6 @@
     "url": "https://azcliprod.blob.core.windows.net/cli-extensions/quota-1.0.0-py3-none-any.whl",
     "hash": "sha256-i0w0dd8MNUTbzCjkh161sWPXK0Cv9CUKr9rZQYDD+ZU=",
     "description": "Microsoft Azure Command-Line Tools AzureQuotaExtensionAPI Extension"
-  },
-  "redisenterprise": {
-    "pname": "redisenterprise",
-    "version": "1.3.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/redisenterprise-1.3.0-py3-none-any.whl",
-    "hash": "sha256-53kvBZJxKFcjFnGu6VzALidEx2MexVaoZDLW/4tsckY=",
-    "description": "Microsoft Azure Command-Line Tools RedisEnterprise Extension"
   },
   "reservation": {
     "pname": "reservation",
@@ -967,9 +960,9 @@
   },
   "sftp": {
     "pname": "sftp",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/sftp-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-cE8b2ZgoG9DO64ekT3FpcRuTAOYX94pzESYJ9lUe7LI=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/sftp-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-3ugWIeKK9U8vKgFMbQfMKXxbgW+zO9IB6lPYJFHZm/E=",
     "description": "Secure access to Azure Storage blob data via SFTP with SSH certificates"
   },
   "site": {
@@ -1142,9 +1135,9 @@
   },
   "workload-orchestration": {
     "pname": "workload-orchestration",
-    "version": "5.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/workload_orchestration-5.0.0-py3-none-any.whl",
-    "hash": "sha256-Hp8Y50FHwR7L+2MXTEW1QXLMZJa8eUqwQCi+B0FPooU=",
+    "version": "5.1.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/workload_orchestration-5.1.0-py3-none-any.whl",
+    "hash": "sha256-/9MGhiqQpEUPJ9AgVM0tZ/SQiRdVvOsXVgdnqAtfSMw=",
     "description": "Microsoft Azure Command-Line Tools WorkloadOperations Extension"
   },
   "workloads": {

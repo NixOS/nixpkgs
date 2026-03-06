@@ -9,6 +9,7 @@
   lib,
   stdenv,
   llvmPackages_19,
+  llvmPackages_21,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -30,7 +31,8 @@
   versionCheckHook,
 }:
 let
-  llvmStdenv = llvmPackages_19.stdenv;
+  llvmPackages = if lib.versionAtLeast version "26" then llvmPackages_21 else llvmPackages_19;
+  llvmStdenv = llvmPackages.stdenv;
 in
 llvmStdenv.mkDerivation (finalAttrs: {
   pname = "clickhouse";
@@ -99,7 +101,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     ninja
     python3
     perl
-    llvmPackages_19.lld
+    llvmPackages.lld
     removeReferencesTo
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
@@ -107,7 +109,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     yasm
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages_19.bintools
+    llvmPackages.bintools
     findutils
     darwin.bootstrap_cmds
   ]
@@ -193,6 +195,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     "-DENABLE_CHDIG=OFF"
     "-DENABLE_TESTS=OFF"
     "-DENABLE_DELTA_KERNEL_RS=0"
+    "-DENABLE_XRAY=OFF"
     "-DCOMPILER_CACHE=disabled"
   ]
   ++ lib.optional (
@@ -212,7 +215,10 @@ llvmStdenv.mkDerivation (finalAttrs: {
   };
 
   # https://github.com/ClickHouse/ClickHouse/issues/49988
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = [
+    "fortify"
+    "libcxxhardeningfast"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kontainer";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "DenysMb";
     repo = "Kontainer";
     tag = finalAttrs.version;
-    hash = "sha256-fHXpbQyNEX7jO+v81dVhGodlJ4OrbPn53mgAJbCiyWw=";
+    hash = "sha256-15H4fTZ4Tja+nt0iKtFuULj/4g/0UK+W79R4kH7BFcs=";
   };
 
   postPatch = ''

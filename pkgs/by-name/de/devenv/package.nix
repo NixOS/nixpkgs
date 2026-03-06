@@ -53,11 +53,18 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-dzho5gZmfji4n+zHwr2uCqOijCFpVj9loYr8VQNil3g=";
 
-  RUSTFLAGS = "--cfg tracing_unstable";
-  LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
-  VERGEN_IDEMPOTENT = "1";
+  env = {
+    RUSTFLAGS = "--cfg tracing_unstable";
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
+    VERGEN_IDEMPOTENT = "1";
+  };
 
-  cargoBuildFlags = [ "-p devenv -p devenv-run-tests" ];
+  cargoBuildFlags = [
+    "-p"
+    "devenv"
+    "-p"
+    "devenv-run-tests"
+  ];
 
   nativeBuildInputs = [
     installShellFiles

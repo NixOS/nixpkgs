@@ -65,8 +65,7 @@ jobs:
     needs: [prepare]
     uses: ./.github/workflows/check.yml
     permissions:
-      # cherry-picks; formality right now, but unused
-      pull-requests: write
+      pull-requests: write # cherry-picks: unused in merge queue but required for check workflow
     secrets:
       CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
@@ -90,9 +89,8 @@ jobs:
     # The eval workflow requests these permissions so we must explicitly allow them,
     # even though they are unused when working with the merge queue.
     permissions:
-      # compare
-      pull-requests: write
-      statuses: write
+      pull-requests: write # compare: unused in merge queue but required by eval workflow
+      statuses: write # compare: unused in merge queue but required by eval workflow
     secrets:
       CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
@@ -125,7 +123,7 @@ jobs:
       - build
     runs-on: ubuntu-slim
     permissions:
-      statuses: write
+      statuses: write # creating 'no PR failures' commit status
     steps:
       - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:

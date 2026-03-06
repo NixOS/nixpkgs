@@ -90,6 +90,8 @@ let
         inherit (llvm) clang;
       };
 
+      rocprof-trace-decoder = self.callPackage ./rocprof-trace-decoder { };
+
       roctracer = self.callPackage ./roctracer { };
 
       rocgdb = self.callPackage ./rocgdb { };

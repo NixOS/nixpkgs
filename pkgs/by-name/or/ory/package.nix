@@ -25,6 +25,11 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 1;
 
+  ldflags = [
+    "-X=github.com/ory/cli/buildinfo.Version=v${finalAttrs.version}"
+    "-X=github.com/ory/cli/buildinfo.GitHash=${finalAttrs.src.rev}"
+  ];
+
   tags = [
     "sqlite"
   ];
@@ -49,6 +54,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       luleyleo
       nicolas-goudry
+      debtquity
     ];
   };
 })

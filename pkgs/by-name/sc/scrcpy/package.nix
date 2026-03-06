@@ -35,14 +35,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-5yd4YHVJH5+iBN5z0SYdTB0ay6vY4XwM/CCDjbEux74=";
   };
 
-  #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
-  #   This can happen when running on non-NixOS because then scrcpy seems to have a hard time using the host OpenGL-supporting hardware.
-  #   It would be better to fix the OpenGL problem, but that seems much more intrusive.
-  postPatch = ''
-    substituteInPlace app/src/display.c \
-      --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
-  '';
-
   nativeBuildInputs = [
     makeWrapper
     meson

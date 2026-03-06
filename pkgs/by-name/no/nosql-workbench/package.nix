@@ -91,7 +91,7 @@ else
       ''
         # Install XDG Desktop file and its icon
         install -Dm444 ${appimageContents}/${internal_filename}.desktop -t $out/share/applications
-        install -Dm444 ${appimageContents}/${internal_filename}.png -t $out/share/pixmaps
+        install -Dm444 ${appimageContents}/${internal_filename}.png -t $out/share/icons/hicolor/512x512/apps
 
         # Replace wrong exec statement in XDG Desktop file
         substituteInPlace $out/share/applications/${internal_filename}.desktop \

@@ -16,10 +16,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ installFonts ];
 
-  InstallPhase = ''
+  installPhase = ''
     runHook preInstall
 
-    install -m444 -Dt $out/share/doc/$cm-unicode-${finalAttrs.version}    README FontLog.txt
+    install -m444 -Dt $out/share/doc/cm-unicode-${finalAttrs.version}    README FontLog.txt
 
     runHook postInstall
   '';

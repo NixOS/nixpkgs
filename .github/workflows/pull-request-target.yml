@@ -21,8 +21,7 @@ jobs:
   prepare:
     runs-on: ubuntu-slim
     permissions:
-      # wrong branch review comment
-      pull-requests: write
+      pull-requests: write # submitting 'wrong branch' reviews
     outputs:
       baseBranch: ${{ steps.prepare.outputs.base }}
       headBranch: ${{ steps.prepare.outputs.head }}

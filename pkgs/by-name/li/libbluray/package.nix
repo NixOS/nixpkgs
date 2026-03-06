@@ -22,9 +22,6 @@
   libbluray-full, # Used for tests
 }:
 
-# Info on how to use:
-# https://wiki.archlinux.org/index.php/BluRay
-
 let
   jre = jre21_minimal.override {
     modules = [
@@ -93,6 +90,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.videolan.org/developers/libbluray.html";
     description = "Library to access Blu-Ray disks for video playback";
+    longDescription = "See <https://wiki.archlinux.org/title/Blu-ray> how to use";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.amarshall ];
     platforms = lib.platforms.unix;
