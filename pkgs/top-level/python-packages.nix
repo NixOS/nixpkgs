@@ -13383,6 +13383,8 @@ self: super: with self; {
 
   pycparser = callPackage ../development/python-modules/pycparser { };
 
+  pycparser-fake-libc = callPackage ../development/python-modules/pycparser-fake-libc { };
+
   pycrashreport = callPackage ../development/python-modules/pycrashreport { };
 
   pycrdt = callPackage ../development/python-modules/pycrdt { };
