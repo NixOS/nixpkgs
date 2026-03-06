@@ -151,6 +151,9 @@ in
           configFile = settingsFormat.generate "config.yaml" cfg.settings;
         in
         {
+          ExecStartPre = [
+            "${pkgs.runtimeShell} -euc 'mkdir -p ${cfg.stateDir}/ui; chmod -R u+rwX ${cfg.stateDir}/ui'"
+          ];
           ExecStart = "${lib.getExe cfg.package} --host \"${cfg.host}\" --port ${toString cfg.port} --config ${configFile}";
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           WorkingDirectory = cfg.stateDir;
