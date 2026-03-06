@@ -10232,10 +10232,6 @@ with pkgs;
 
   diffpdf = libsForQt5.callPackage ../applications/misc/diffpdf { };
 
-  diff-pdf = callPackage ../applications/misc/diff-pdf {
-    wxGTK = wxwidgets_3_2;
-  };
-
   mypaint-brushes1 = callPackage ../development/libraries/mypaint-brushes/1.0.nix { };
 
   mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
