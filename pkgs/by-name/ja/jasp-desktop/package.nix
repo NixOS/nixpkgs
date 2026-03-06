@@ -6,6 +6,7 @@
 
   buildEnv,
   linkFarm,
+  writers,
 
   cmake,
   ninja,
@@ -23,17 +24,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasp-desktop";
-  version = "0.95.4";
+  version = "0.96.0";
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-n7lXedICK+sAuSW6hODy+TngAZpDIObWDhTtOjiTXgc=";
+    hash = "sha256-5yvnlhPHssWfO9xxgBRULAMe6e5EyAWr8JVY0BQxKog=";
   };
 
   patches = [
-    ./boost.patch # link boost dynamically, don't try to link removed system stub library
+    ./boost.patch # link boost dynamically, don't try to find removed system stub library
     ./disable-module-install-logic.patch # don't try to install modules via cmake
     ./disable-renv-logic.patch
     ./dont-check-for-module-deps.patch # dont't check for dependencies required for building modules
@@ -80,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # symlink modules from the store
     ln -s ${finalAttrs.passthru.moduleLibs} $out/Modules/module_libs
+    ln -s ${finalAttrs.passthru.moduleManifests} $out/Modules/manifests
   '';
 
   passthru = {
@@ -108,6 +110,16 @@ stdenv.mkDerivation (finalAttrs: {
       lib.mapAttrsToList (name: drv: {
         name = name;
         path = "${drv}/library";
+      }) finalAttrs.passthru.modules
+    );
+
+    moduleManifests = linkFarm "jasp-desktop-${finalAttrs.version}-module-manifests" (
+      lib.mapAttrsToList (name: drv: {
+        name = "${name}_manifest.json";
+        path = writers.writeJSON "${name}_manifest.json" {
+          name = name;
+          version = drv.version;
+        };
       }) finalAttrs.passthru.modules
     );
   };

@@ -12,7 +12,7 @@
   wrapGAppsHook3,
   curl,
   sqlite,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   lua,
   wxsqlite3,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     wrapGAppsHook3
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     lsb-release
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     sqlite
-    wxGTK32
+    wxwidgets_3_2
     gtk3
     lua
     wxsqlite3

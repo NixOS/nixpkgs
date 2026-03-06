@@ -16,7 +16,7 @@ in
 
 {
   meta = {
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 
   options = {

@@ -1774,5 +1774,5 @@ in
   );
 
   meta.doc = ./nextcloud.md;
-  meta.teams = [ lib.teams.nextcloud ];
+  meta.maintainers = lib.teams.nextcloud.members;
 }

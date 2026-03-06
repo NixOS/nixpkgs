@@ -893,5 +893,5 @@ in
     )
   ];
 
-  meta.teams = [ teams.gitlab ];
+  meta.maintainers = teams.gitlab.members;
 }

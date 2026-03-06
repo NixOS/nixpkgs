@@ -12,7 +12,7 @@ let
 in
 {
   meta = {
-    teams = [ lib.teams.lxc ];
+    maintainers = lib.teams.lxc.members;
   };
 
   ###### interface
