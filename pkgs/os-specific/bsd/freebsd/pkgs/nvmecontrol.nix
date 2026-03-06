@@ -1,17 +1,23 @@
 {
-  lib,
-  libsbuf,
   mkDerivation,
+  libnvmf,
+  libnv,
+  libsbuf,
 }:
 mkDerivation {
-  path = "lib/libcam";
+  path = "sbin/nvmecontrol";
   extraPaths = [
-    "sys/cam"
     "sys/dev/nvme"
   ];
+  outputs = [
+    "out"
+    "debug"
+  ];
   buildInputs = [
+    libnvmf
+    libnv
     libsbuf
   ];
+
   MK_TESTS = "no";
-  meta.platforms = lib.platforms.freebsd;
 }
