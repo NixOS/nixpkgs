@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter338,
+  flutter341,
   mpv-unwrapped,
   patchelf,
   fetchFromGitHub,
@@ -15,16 +15,16 @@
   dart,
 }:
 let
-  version = "0.9.22-beta";
+  version = "0.9.23-beta";
 in
-flutter338.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
-    owner = "jmshrv";
+    owner = "UnicornsOnLSD";
     repo = "finamp";
     rev = version;
-    hash = "sha256-SPt1p9+uyvfSry8Ry2BJyLC7HyWZe43wfAPK9BVkcnc=";
+    hash = "sha256-N1+6rB16geFMYMbfiF7eppnXfXC/pqv90I9aY/57lKI=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -98,10 +98,10 @@ flutter338.buildFlutterApplication {
   };
 
   meta = {
-    # Finamp depends on `ìsar`, which for Linux is only compiled for x86_64. https://github.com/jmshrv/finamp/issues/766
+    # Finamp depends on `ìsar`, which for Linux is only compiled for x86_64. https://github.com/UnicornsOnLSD/finamp/issues/766
     broken = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isx86_64;
     description = "Open source Jellyfin music player";
-    homepage = "https://github.com/jmshrv/finamp";
+    homepage = "https://github.com/UnicornsOnLSD/finamp";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ dseelp ];
     mainProgram = "finamp";
