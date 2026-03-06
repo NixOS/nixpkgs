@@ -61,6 +61,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     longDescription = "Groovy Language Server";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = [ maintainers.guilvareux ];
   };
 })
