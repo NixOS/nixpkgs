@@ -38,6 +38,9 @@
   nlohmann_json,
   xar,
   makeBinaryWrapper,
+  postgresql,
+  serverMysqlSupport ? false,
+  serverPostgresqlSupport ? true,
   serverSqliteSupport ? true,
 }:
 
@@ -196,8 +199,8 @@ let
       cmakeFlags = [
         "-D client=OFF"
         (lib.cmakeBool "ice" iceSupport)
-        (lib.cmakeBool "enable-mysql" false)
-        (lib.cmakeBool "enable-postgresql" false)
+        (lib.cmakeBool "enable-mysql" serverMysqlSupport)
+        (lib.cmakeBool "enable-postgresql" serverPostgresqlSupport)
         (lib.cmakeBool "enable-sqlite" serverSqliteSupport)
       ]
       ++ lib.optionals iceSupport [
@@ -205,7 +208,11 @@ let
         "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
       ];
 
-      buildInputs = [ libcap ] ++ lib.optional iceSupport zeroc-ice;
+      buildInputs = [
+        libcap
+      ]
+      ++ lib.optional iceSupport zeroc-ice
+      ++ lib.optional serverPostgresqlSupport postgresql;
     } source;
 
   overlay =
