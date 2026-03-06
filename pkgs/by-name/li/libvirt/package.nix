@@ -151,18 +151,16 @@ stdenv.mkDerivation rec {
         --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
     done
 
+    sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
+      src/storage/storage_backend_disk.c \
+      src/storage/storage_util.c
   ''
   + ''
     substituteInPlace meson.build \
       --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
   ''
-  + lib.optionalString isLinux ''
-    sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
-      src/storage/storage_backend_disk.c \
-      src/storage/storage_util.c
-  ''
   + lib.optionalString isDarwin ''
-    # Darwin doesn’t support -fsemantic-interposition, but the problem doesn’t seem to affect Mach-O.
+    # Darwin doesn't support -fsemantic-interposition, but the problem doesn't seem to affect Mach-O.
     # See https://gitlab.com/libvirt/libvirt/-/merge_requests/235
     sed -i "s/not supported_cc_flags.contains('-fsemantic-interposition')/false/" meson.build
     sed -i '/qemufirmwaretest/d' tests/meson.build
@@ -384,6 +382,10 @@ stdenv.mkDerivation rec {
     for f in $out/lib/systemd/system/*.service ; do
       substituteInPlace $f --replace /bin/kill ${coreutils}/bin/kill
     done
+    substituteInPlace $out/lib/systemd/system/virt-secret-init-encryption.service \
+      --replace '/usr/bin/sh' '${bash}/bin/sh' \
+      --replace 'dd ' '${coreutils}/bin/dd ' \
+      --replace 'systemd-creds' '${systemd}/bin/systemd-creds'
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
       --prefix PATH : /run/libvirt/nix-emulators:${binPath}
