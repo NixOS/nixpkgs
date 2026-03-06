@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "shira";
-  version = "1.7.1-unstable-2025-08-31";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
