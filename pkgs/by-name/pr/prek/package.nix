@@ -1,14 +1,14 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
   git,
-  uv,
-  python312,
-  versionCheckHook,
+  installShellFiles,
+  lib,
   nix-update-script,
+  python312,
+  rustPlatform,
+  stdenv,
+  uv,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
