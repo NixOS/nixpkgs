@@ -11078,6 +11078,8 @@ with pkgs;
 
   zed-editor-fhs = zed-editor.fhs;
 
+  zen-browser = wrapFirefox zen-browser-unwrapped { };
+
   zgv = callPackage ../applications/graphics/zgv {
     # Enable the below line for terminal display. Note
     # that it requires sixel graphics compatible terminals like mlterm
