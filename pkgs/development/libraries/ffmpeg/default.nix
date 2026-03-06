@@ -54,6 +54,7 @@ rec {
   ffmpeg_8 = mkFFmpeg v8 "small";
   ffmpeg_8-headless = mkFFmpeg v8 "headless";
   ffmpeg_8-full = mkFFmpeg v8 "full";
+  ffmpeg_8-bare = mkFFmpeg v8 "bare";
 
   # Please make sure this is updated to new major versions once they
   # build and work on all the major platforms. If absolutely necessary
@@ -68,4 +69,5 @@ rec {
   ffmpeg = ffmpeg_8;
   ffmpeg-headless = ffmpeg_8-headless;
   ffmpeg-full = ffmpeg_8-full;
+  ffmpeg-bare = ffmpeg_8-bare;
 }
