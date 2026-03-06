@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-native-ci";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z3qg5TKmN83afz2fj9z3fQjU8vaYE";
     node = "z6MkgEMYod7Hxfy9qCvDv5hYHkZ4ciWmLFgfvm3Wn1b2w2FV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hi5QdYVFSvP8AEKcH7yIA7PpaTSe0hBcF3vgCNilCKg=";
+    hash = "sha256-FCuyOgBjwK4GNOFku0loNRwjrQ8emvhHWq1pOE/QL3s=";
   };
 
-  cargoHash = "sha256-N1XyMarKCctor5r7AePMuV/BzWiQwXphJFqye0cqO3k=";
+  cargoHash = "sha256-zA71hm5/8Pu9aUgBq8PetSnE8Ah1wu1ItOoGE8YfQR0=";
 
   preCheck = ''
     git config --global user.name nixbld
