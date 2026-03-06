@@ -19,6 +19,7 @@
   wrapGAppsHook3,
   nix-update-script,
   xvfb-run,
+  makeBinaryWrapper,
   doCheck ? false,
 }:
 let
@@ -174,6 +175,11 @@ buildNpmPackage (finalAttrs: {
     gawk
     rsync
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.targetPlatform.isDarwin [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals (!stdenv.targetPlatform.isDarwin) [
     wrapGAppsHook3
   ];
 
@@ -308,6 +314,11 @@ buildNpmPackage (finalAttrs: {
         pciutils
       ]
     })
+  '';
+
+  postFixup = lib.optionalString stdenv.targetPlatform.isDarwin ''
+    mkdir -p $out/bin
+    makeWrapper $out/Applications/Zotero.app/Contents/MacOS/zotero $out/bin/zotero
   '';
 
   passthru.updateScript = nix-update-script { };
