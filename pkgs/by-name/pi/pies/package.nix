@@ -8,16 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pies";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchurl {
     url = "mirror://gnu/pies/pies-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-ZSi00WmC6il4+aSohqFKrKjtp6xFXYE7IIRGVwFmHWw=";
+    hash = "sha256-O9mTdS+kefqvGaLgP2E6Z+mJybKkCYDs7WGiW7MdDPM=";
   };
 
   buildInputs = [ libxcrypt ];
-
-  patches = [ ./stdlib.patch ];
 
   postPatch = ''
     substituteInPlace configure \
