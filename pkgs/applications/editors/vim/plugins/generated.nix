@@ -4666,6 +4666,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  diffs-nvim = buildVimPlugin {
+    pname = "diffs.nvim";
+    version = "0.3.0-unstable-2026-03-05";
+    src = fetchFromGitHub {
+      owner = "barrettruth";
+      repo = "diffs.nvim";
+      rev = "7a3c4ea01e2ad53c6b54136bc19b7f0ad977da7d";
+      hash = "sha256-rsgboDQ7s9pIc+pDOJgwTA6c950CDY7gLsyn5oycsGI=";
+    };
+    meta.homepage = "https://github.com/barrettruth/diffs.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   diffview-nvim = buildVimPlugin {
     pname = "diffview.nvim";
     version = "0-unstable-2024-06-13";
