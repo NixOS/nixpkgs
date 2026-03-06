@@ -249,7 +249,16 @@ lib.makeExtensible (
           hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
         };
 
-        patches = [ lixMdbookPatch ];
+        patches = [
+          lixMdbookPatch
+
+          # Fix incorrect Requires.private entry in lix-store.pc, https://gerrit.lix.systems/c/lix/+/4680
+          (fetchpatch {
+            name = "lix-2.94-lix-store-pc-typo-fix.patch";
+            url = "https://git.lix.systems/lix-project/lix/commit/06f987fb0c8f96730edc15599dd62705a37cfca5.patch";
+            hash = "sha256-PUDOthOhAZpggmd0JHPOGR09P0D+33xO2SCU4UTB9eE=";
+          })
+        ];
       };
     };
 
