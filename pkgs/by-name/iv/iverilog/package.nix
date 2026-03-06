@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoconf,
   bison,
   bzip2,
@@ -19,23 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iverilog";
-  version = "12.0";
+  version = "13.0";
 
   src = fetchFromGitHub {
     owner = "steveicarus";
     repo = "iverilog";
     tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
+    hash = "sha256-SfODx7K3UrDHMoKCbMFpxo4t9j9vG1oWF0RFS3dSUm4=";
   };
-
-  patches = [
-    # NOTE(jleightcap): `-Werror=format-security` warning patched shortly after release, backport the upstream fix
-    (fetchpatch {
-      name = "format-security";
-      url = "https://github.com/steveicarus/iverilog/commit/23e51ef7a8e8e4ba42208936e0a6a25901f58c65.patch";
-      hash = "sha256-fMWfBsCl2fuXe+6AR10ytb8QpC84bXlP5RSdrqsWzEk=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf
@@ -84,7 +74,18 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    sh .github/test.sh
+    # Bypassing .github/test.sh because it does not forward command-line flags.
+    # We need to pass -B and -M directly to the test drivers to ensure they find
+    # local build artifacts silently without polluting stderr (which breaks gold files).
+    export PATH="$(pwd)/driver:$(pwd)/vvp:$(pwd)/ivlpp:$PATH"
+    export TMPDIR=$NIX_BUILD_TOP
+    cd ivtest
+    status=0
+    perl vvp_reg.pl -B$(pwd)/.. || status=1
+    perl vpi_reg.pl --with-pli1 -B$(pwd)/.. -M$(pwd)/../vpi || status=1
+    unset IVL_ROOT
+    unset IVERILOG_ICONFIG
+    python3 vvp_reg.py || status=1
 
     runHook postInstallCheck
   '';
