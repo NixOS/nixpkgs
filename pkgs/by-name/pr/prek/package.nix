@@ -53,6 +53,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/j178/prek";
     description = "Reimagined version of pre-commit, built in Rust";
+    longDescription = ''
+      [pre-commit](https://pre-commit.com/) is a framework to run hooks written
+      in many languages, and it manages the language toolchain and dependencies
+      for running the hooks.
+
+      `prek` is a reimagined version of pre-commit, built in Rust. It is
+      designed to be a faster, dependency-free and drop-in alternative for it,
+      while also providing some additional long-requested features.
+    '';
     mainProgram = "prek";
     changelog = "https://github.com/j178/prek/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = [ lib.licenses.mit ];
