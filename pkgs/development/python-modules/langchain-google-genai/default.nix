@@ -27,7 +27,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-google-genai";
   version = "4.2.1";
   pyproject = true;
@@ -35,11 +35,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
-    tag = "libs/genai/v${version}";
+    tag = "libs/genai/v${finalAttrs.version}";
     hash = "sha256-aNmYj5eOWDgHYlSLElwQXQByQg8gHqiybM19JQlkluk=";
   };
 
-  sourceRoot = "${src.name}/libs/genai";
+  sourceRoot = "${finalAttrs.src.name}/libs/genai";
 
   build-system = [ hatchling ];
 
@@ -86,7 +86,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-google/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-google/releases/tag/${finalAttrs.src.tag}";
     description = "LangChain integrations for Google Gemini";
     homepage = "https://github.com/langchain-ai/langchain-google/tree/main/libs/genai";
     license = lib.licenses.mit;
@@ -95,4 +95,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})
