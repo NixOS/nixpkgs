@@ -20,10 +20,13 @@
   jq,
 }:
 
+let
+  source = callPackage ./source.nix { };
+in
 buildGoModule (finalAttrs: {
   pname = "lima";
 
-  inherit (callPackage ./source.nix { }) version src vendorHash;
+  inherit (source) version src vendorHash;
 
   nativeBuildInputs = [
     makeWrapper
@@ -158,13 +161,7 @@ buildGoModule (finalAttrs: {
     };
   };
 
-  meta = {
-    homepage = "https://github.com/lima-vm/lima";
+  meta = source.meta // {
     description = "Linux virtual machines with automatic file sharing and port forwarding";
-    changelog = "https://github.com/lima-vm/lima/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      anhduy
-    ];
   };
 })

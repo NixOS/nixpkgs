@@ -7,12 +7,15 @@
   findutils,
 }:
 
+let
+  source = callPackage ./source.nix { };
+in
 buildGoModule (finalAttrs: {
   pname = "lima-additional-guestagents";
 
   # Because agents must use the same version as lima, lima's updateScript should also update the shared src.
   # nixpkgs-update: no auto update
-  inherit (callPackage ./source.nix { }) version src vendorHash;
+  inherit (source) version src vendorHash;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
@@ -56,8 +59,7 @@ buildGoModule (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  meta = {
-    homepage = "https://github.com/lima-vm/lima";
+  meta = source.meta // {
     description = "Lima Guest Agents for emulating non-native architectures";
     longDescription = ''
       This package should only be used when your guest's architecture differs from the host's.
@@ -71,8 +73,5 @@ buildGoModule (finalAttrs: {
 
       Typically, you won't need to directly add this package to your *.nix files.
     '';
-    changelog = "https://github.com/lima-vm/lima/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
-    maintainers = [ ];
   };
 })
