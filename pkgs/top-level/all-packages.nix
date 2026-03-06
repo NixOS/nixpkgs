@@ -3561,11 +3561,6 @@ with pkgs;
     libsForQt5.callPackage ../tools/networking/globalprotect-openconnect
       { };
 
-  sssd = callPackage ../os-specific/linux/sssd {
-    # NOTE: freeipa and sssd need to be built with the same version of python
-    inherit (perlPackages) Po4a;
-  };
-
   buildWasmBindgenCli = callPackage ../build-support/wasm-bindgen-cli { };
 
   woodpecker-agent = callPackage ../development/tools/continuous-integration/woodpecker/agent.nix { };
@@ -6350,17 +6345,6 @@ with pkgs;
     ;
 
   fmt = fmt_12;
-
-  freeipa = callPackage ../os-specific/linux/freeipa {
-    # NOTE: freeipa and sssd need to be built with the same version of python
-    kerberos = krb5.override {
-      withVerto = true;
-    };
-    sasl = cyrus_sasl;
-    samba = samba4.override {
-      enableLDAP = true;
-    };
-  };
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
