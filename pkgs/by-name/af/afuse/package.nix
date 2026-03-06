@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Automounter in userspace";
     homepage = "https://github.com/pcarrier/afuse";
     license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })
