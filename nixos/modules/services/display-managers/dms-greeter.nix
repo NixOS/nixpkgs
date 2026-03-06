@@ -321,5 +321,5 @@ in
     services.libinput.enable = mkDefault true;
   };
 
-  meta.maintainers = lib.teams.danklinux.members;
+  meta.teams = [ lib.teams.danklinux ];
 }

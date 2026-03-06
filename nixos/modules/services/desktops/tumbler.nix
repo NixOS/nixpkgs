@@ -18,7 +18,7 @@ in
   ];
 
   meta = {
-    maintainers = [ ] ++ lib.teams.pantheon.members;
+    teams = [ lib.teams.pantheon ];
   };
 
   ###### interface
