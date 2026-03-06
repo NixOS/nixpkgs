@@ -14519,6 +14519,12 @@
     github = "kulczwoj";
     githubId = 58049191;
   };
+  kumpelinus = {
+    name = "Kumpelinus";
+    email = "linus@kump.dev";
+    github = "kumpelinus";
+    githubId = 174106140;
+  };
   KunyaKud = {
     name = "KunyaKud";
     email = "wafuu@posteo.net";
@@ -16241,6 +16247,12 @@
     github = "mandos";
     githubId = 115060;
     name = "Marek Maksimczyk";
+  };
+  manfredmacx = {
+    email = "mfmacx@proton.me";
+    github = "manfredmacx";
+    githubId = 222261305;
+    name = "Manfred Macx";
   };
   Mange = {
     name = "Magnus Bergmark";
@@ -30095,6 +30107,12 @@
     github = "znewman01";
     githubId = 873857;
     name = "Zack Newman";
+  };
+  zodman = {
+    github = "zodman";
+    githubId = 44167;
+    name = "Andres Vargas";
+    email = "zodman@gmail.com";
   };
   zoedsoupe = {
     github = "zoedsoupe";

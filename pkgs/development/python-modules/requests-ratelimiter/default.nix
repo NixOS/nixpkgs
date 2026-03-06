@@ -10,16 +10,16 @@
   requests-cache,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-ratelimiter";
-  version = "0.9.0";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JWCook";
     repo = "requests-ratelimiter";
-    tag = "v${version}";
-    hash = "sha256-jmHXD3UJwzZSLXS7NXvCM/+lOFreSqb1QIl/jvO8lWc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6Uw6JPArOzKD7va6mthumCDW/G0Yn/C1d+1VflrJ/JY=";
   };
 
   build-system = [ hatchling ];
@@ -42,8 +42,8 @@ buildPythonPackage rec {
     broken = lib.versionOlder pyrate-limiter.version "4";
     description = "Module for rate-limiting for requests";
     homepage = "https://github.com/JWCook/requests-ratelimiter";
-    changelog = "https://github.com/JWCook/requests-ratelimiter/blob/${src.tag}/HISTORY.md";
+    changelog = "https://github.com/JWCook/requests-ratelimiter/blob/${finalAttrs.src.tag}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
