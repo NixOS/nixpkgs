@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "uefi-firmware-parser";
-  version = "1.12";
+  version = "1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
