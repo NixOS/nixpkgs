@@ -6,11 +6,11 @@
 
 let
   pname = "arduino-ide";
-  version = "2.3.7";
+  version = "2.3.8";
 
   src = fetchurl {
     url = "https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.AppImage";
-    hash = "sha256-m4RYtjJMZ01M1qwKc70Gkey9QLQ4Gk59rwpunm4TY2g=";
+    hash = "sha256-JkaOHyX2F0W2/+PWy++MbeIv5qS0YJYYW1RO2RX0KQE=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
