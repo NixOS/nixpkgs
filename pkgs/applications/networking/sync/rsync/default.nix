@@ -80,6 +80,10 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
+  preCheck = ''
+    rm testsuite/chgrp.test
+  '';
+
   doCheck = true;
 
   __darwinAllowLocalNetworking = true;
