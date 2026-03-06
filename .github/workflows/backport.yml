@@ -11,8 +11,8 @@ on:
 
 permissions:
   contents: read
-  issues: write
-  pull-requests: write
+  issues: write # adding the 'has: port to stable' label
+  pull-requests: write # creating backport pull requests
 
 defaults:
   run:

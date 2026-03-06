@@ -142,7 +142,7 @@ buildPythonPackage (finalAttrs: {
         #pytest
       ]
       ++ mkdocs-material.optional-dependencies.imaging
-      ++ markdown-exec.optional-dependencies.ansi
+      ++ lib.optionals (markdown-exec != null) markdown-exec.optional-dependencies.ansi
       ++ numcodecs.optional-dependencies.msgpack;
     };
   };

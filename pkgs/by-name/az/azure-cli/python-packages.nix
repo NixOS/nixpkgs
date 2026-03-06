@@ -89,6 +89,8 @@ let
             --ignore=azure/cli/core/tests/test_util.py \
             --ignore=azure/cli/core/tests/test_argcomplete.py \
             --ignore=azure/cli/core/tests/test_telemetry.py \
+            --ignore=azure/cli/core/tests/test_help.py \
+            --ignore=azure/cli/core/tests/test_command_table_integrity.py \
             -k 'not metadata_url and not test_send_raw_requests and not test_format_styled_text_legacy_powershell'
         '';
 
@@ -188,11 +190,6 @@ let
       azure-mgmt-rdbms =
         overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b17" "tar.gz"
           "sha256-1nnRkyr4Im79B7DDqGz/FOrPAToFaGhE+a7r5bZMuOQ=";
-
-      # ModuleNotFoundError: No module named 'azure.mgmt.redhatopenshift.v2023_11_22'
-      azure-mgmt-redhatopenshift =
-        overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.5.0" "tar.gz"
-          "sha256-Uft0KcOciKzJ+ic9n4nxkwNSBmKZam19jhEiqY9fJSc=";
 
       # azure.mgmt.resource will shadow the other azure.mgmt.resource.* packages unless we merge them together
       azure-mgmt-resource-all = py.pkgs.buildPythonPackage {

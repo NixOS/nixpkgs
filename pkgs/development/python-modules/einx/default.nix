@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "einx";
-  version = "0.3.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fferflo";
     repo = "einx";
     rev = "v${version}";
-    hash = "sha256-lbcf47h1tW1fj94NLG4iJPEs6ziGPkcX1Q+wn59PvS8=";
+    hash = "sha256-n+39RMmdMPsfSufa7rHas2cbRa0SQMTaU5oRksHlDr0=";
   };
 
   build-system = [

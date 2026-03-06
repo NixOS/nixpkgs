@@ -29,13 +29,13 @@
 
 buildDotnetModule rec {
   pname = "crossmacro";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "alper-han";
     repo = "CrossMacro";
     tag = "v${version}";
-    hash = "sha256-CRP3u3ChP587yHgoi49yPiozcPB6juVNZLVVknkqvKo=";
+    hash = "sha256-kca7MTv3KXygLuRoYHuOFJOMKVYny0f9mpWwWhzgqHg=";
   };
 
   projectFile = "src/CrossMacro.UI.Linux/CrossMacro.UI.Linux.csproj";

@@ -266,6 +266,11 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME=$TMP # The build fails if home is not set
     setup_name=$(basename contrib/isabelle_setup*)
 
+    # Stop Isabelle trying to use `/tmp`.
+    user_home="$(bin/isabelle getenv -b ISABELLE_HOME_USER)"
+    mkdir -p "$user_home/etc"
+    echo 'ISABELLE_TMP_PREFIX="$TMPDIR/isabelle"' > "$user_home/etc/settings"
+
     #The following is adapted from https://isabelle.sketis.net/repos/isabelle/file/Isabelle2021-1/Admin/lib/Tools/build_setup
     TARGET_DIR="contrib/$setup_name/lib"
     rm -rf "$TARGET_DIR"

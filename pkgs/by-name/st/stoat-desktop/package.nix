@@ -145,8 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/stoatchat/for-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      heyimnova
-      magistau
       v3rm1n0
       RossSmyth
     ];
