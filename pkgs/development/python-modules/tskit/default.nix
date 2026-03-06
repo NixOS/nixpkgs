@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "tskit";
-  version = "1.0.0";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d6XzOSPVh1jsRg1A49aMWFyWVN29naYyYVXs82KQ0OA=";
+    hash = "sha256-hxMQhXTyeO3EKFjlhr18Ex8ohon2KDWG/bI/mQaR3LM=";
   };
 
   postPatch = ''
