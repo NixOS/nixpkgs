@@ -27716,7 +27716,7 @@
     email = "twicefoldampersands@tutamail.com";
     github = "twicefoldampersands";
     githubId = 265906589;
-    keys = [ { fingerprint = "2607 5DDB 15E8 2415 1B89  4B0C 13E6 8B8C 55F6 850F" } ];
+    keys = [ { fingerprint = "2607 5DDB 15E8 2415 1B89  4B0C 13E6 8B8C 55F6 850F"; } ];
   };
   twitchy0 = {
     email = "code@nitinpassa.com";
