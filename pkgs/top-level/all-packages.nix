@@ -10774,10 +10774,6 @@ with pkgs;
   };
   neovim = wrapNeovim neovim-unwrapped { };
 
-  gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim { };
-
-  gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
-
   virt-top = callPackage ../applications/virtualization/virt-top {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
