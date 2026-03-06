@@ -57,7 +57,7 @@ buildDotnetModule rec {
     description = "Update utility for the openFPGA cores, firmware, and other stuff on your Analogue Pocket";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ p-rintz ];
+    maintainers = [ ];
     mainProgram = "pupdate";
   };
 }

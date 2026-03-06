@@ -20340,13 +20340,6 @@
     githubId = 645664;
     name = "Philippe Hürlimann";
   };
-  p-rintz = {
-    email = "nix@rintz.net";
-    github = "p-rintz";
-    githubId = 13933258;
-    name = "Philipp Rintz";
-    matrix = "@philipp:srv.icu";
-  };
   p0lyw0lf = {
     email = "p0lyw0lf@protonmail.com";
     name = "PolyWolf";
