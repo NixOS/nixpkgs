@@ -6296,11 +6296,9 @@ with pkgs;
     ffmpeg_8
     ffmpeg_8-headless
     ffmpeg_8-full
-    ffmpeg_8-bare
     ffmpeg
     ffmpeg-headless
     ffmpeg-full
-    ffmpeg-bare
     ;
 
   fftwSinglePrec = fftw.override { precision = "single"; };
