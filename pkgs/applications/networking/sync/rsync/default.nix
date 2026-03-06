@@ -80,6 +80,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
+  # Test fails when built in a chroot store
+  preCheck = ''
+    rm testsuite/chgrp.test
+  '';
+
   doCheck = true;
 
   __darwinAllowLocalNetworking = true;
