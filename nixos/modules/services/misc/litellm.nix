@@ -132,6 +132,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}/ui' 0700 - - - -"
+    ];
+
     systemd.services.litellm = {
       description = "LLM Gateway to provide model access, fallbacks and spend tracking across 100+ LLMs.";
       wantedBy = [ "multi-user.target" ];
@@ -152,7 +156,9 @@ in
         in
         {
           ExecStartPre = [
-            "${pkgs.runtimeShell} -euc 'mkdir -p ${cfg.stateDir}/ui; chmod -R u+rwX ${cfg.stateDir}/ui'"
+            # LiteLLM may rewrite/copy UI assets with read-only permissions
+            # during previous runs; normalize writability on each start.
+            "${pkgs.runtimeShell} -euc 'chmod -R u+rwX ${cfg.stateDir}/ui'"
           ];
           ExecStart = "${lib.getExe cfg.package} --host \"${cfg.host}\" --port ${toString cfg.port} --config ${configFile}";
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
