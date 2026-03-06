@@ -22,11 +22,6 @@
 
   ffmpegVariant ? "small", # Decides which dependencies are enabled by default
 
-  # Build nothing by default. Enable all features that are needed.
-  # To be used for purposes that don't require external dependencies, like `unpaper`
-  # that uses ffmpeg for image processing.
-  withBareDeps ? ffmpegVariant == "bare" || withHeadlessDeps,
-
   # Build with headless deps; excludes dependencies that are only necessary for
   # GUI applications. To be used for purposes that don't generally need such
   # components and i.e. only depend on libav
@@ -57,7 +52,7 @@
   withAvisynth ? withFullDeps, # AviSynth script files reading
   withBluray ? withHeadlessDeps, # BluRay reading
   withBs2b ? withFullDeps, # bs2b DSP library
-  withBzlib ? withBareDeps,
+  withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
   withCelt ? withFullDeps, # CELT decoder
@@ -174,7 +169,7 @@
   withXml2 ? withHeadlessDeps, # libxml2 support, for IMF and DASH demuxers
   withXvid ? withHeadlessDeps && withGPL, # Xvid encoder, native encoder exists
   withZimg ? withHeadlessDeps,
-  withZlib ? withBareDeps,
+  withZlib ? withHeadlessDeps,
   withZmq ? withFullDeps, # Message passing
   withZvbi ? withHeadlessDeps, # Teletext support
 
@@ -206,14 +201,14 @@
   buildQtFaststart ? withFullDeps, # Build qt-faststart executable
   withBin ? buildFfmpeg || buildFfplay || buildFfprobe || buildQtFaststart,
   # Library options
-  buildAvcodec ? withBareDeps, # Build avcodec library
+  buildAvcodec ? withHeadlessDeps, # Build avcodec library
   buildAvdevice ? withHeadlessDeps, # Build avdevice library
   buildAvfilter ? withHeadlessDeps, # Build avfilter library
-  buildAvformat ? withBareDeps, # Build avformat library
+  buildAvformat ? withHeadlessDeps, # Build avformat library
   # Deprecated but depended upon by some packages.
   # https://github.com/NixOS/nixpkgs/pull/211834#issuecomment-1417435991)
   buildAvresample ? withHeadlessDeps && lib.versionOlder version "5", # Build avresample library
-  buildAvutil ? withBareDeps, # Build avutil library
+  buildAvutil ? withHeadlessDeps, # Build avutil library
   # Libpostproc is only available on versions lower than 8.0
   # https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/8c920c4c396163e3b9a0b428dd550d3c986236aa
   buildPostproc ? withHeadlessDeps && lib.versionOlder version "8.0", # Build postproc library
@@ -399,7 +394,6 @@ let
 in
 
 assert lib.elem ffmpegVariant [
-  "bare"
   "headless"
   "small"
   "full"
@@ -998,8 +992,7 @@ stdenv.mkDerivation (
     };
 
     # tests linking broken with shaderc after https://github.com/NixOS/nixpkgs/pull/477464/changes/5a47b12dfcd1b909ba35778a866394430054319a
-    # tests need at least the headless deps to compile
-    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !withShaderc && withHeadlessDeps;
+    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !withShaderc;
 
     # Fails with SIGABRT otherwise FIXME: Why?
     checkPhase =
