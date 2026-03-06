@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmysofa";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "hoene";
     repo = "libmysofa";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jvib1hGPJEY2w/KjlD7iTtRy1s8LFG+Qhb2d6xdpUyc=";
+    hash = "sha256-gP/RjKzMx8JIYcyiivBGvy3kIdwHMEKY6abssyVUKNQ=";
   };
 
   outputs = [
