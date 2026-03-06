@@ -6,7 +6,7 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron,
+  electron_40,
   python3Packages,
   pipewire,
   libpulseaudio,
@@ -16,6 +16,9 @@
   withTTS ? true,
   withMiddleClickScroll ? false,
 }:
+let
+  electron = electron_40;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
   version = "3.1.8";
