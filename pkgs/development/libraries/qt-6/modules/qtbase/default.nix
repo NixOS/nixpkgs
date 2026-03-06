@@ -65,8 +65,8 @@
   libxcb-wm,
   zlib,
   at-spi2-core,
-  unixODBC,
-  unixODBCDrivers,
+  unixodbc,
+  unixodbcDrivers,
   libGL,
   # darwin
   moltenvk,
@@ -127,11 +127,11 @@ stdenv.mkDerivation {
     libproxy
     dbus
     glib
-    # unixODBC drivers
-    unixODBC
-    unixODBCDrivers.psql
-    unixODBCDrivers.sqlite
-    unixODBCDrivers.mariadb
+    # unixodbc drivers
+    unixodbc
+    unixodbcDrivers.psql
+    unixodbcDrivers.sqlite
+    unixodbcDrivers.mariadb
   ]
   ++ lib.optionals systemdSupport [
     systemd

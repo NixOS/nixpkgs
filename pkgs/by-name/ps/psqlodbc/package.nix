@@ -11,7 +11,7 @@
   libiodbc,
 
   withUnixODBC ? true,
-  unixODBC,
+  unixodbc,
 }:
 
 assert lib.xor withLibiodbc withUnixODBC;
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optional withLibiodbc libiodbc
-  ++ lib.optional withUnixODBC unixODBC;
+  ++ lib.optional withUnixODBC unixodbc;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libpq=${lib.getDev libpq}"
   ]
   ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
-  ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
+  ++ lib.optional withUnixODBC "--with-unixodbc=${unixodbc}";
 
   passthru = {
     updateScript = nix-update-script {
