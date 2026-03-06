@@ -4,24 +4,24 @@
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
-  python3Packages,
+  python312Packages,
   nltk-data,
   writeShellScript,
   nix-update-script,
 }:
 
 let
-  version = "3.9.2";
+  version = "3.11.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-jR9NGguxobUenjnvh6vhZztntxNM2rkwkWcq/DeB4JY=";
+    hash = "sha256-JZ1NGhL/cDj4EOIPttmh0o1oipaL3mcMUNdj8SlTQAA=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
 
-  pythonpkgs = python3Packages;
+  pythonpkgs = python312Packages;
   python = pythonpkgs.python;
 in
 pythonpkgs.buildPythonApplication rec {
@@ -62,7 +62,7 @@ pythonpkgs.buildPythonApplication rec {
       paho-mqtt
       pillow
       pillow-heif
-      psycopg2 # pgsql optional-dependencies
+      psycopg2
       pydantic
       pydantic-settings
       pyhumps
@@ -81,6 +81,7 @@ pythonpkgs.buildPythonApplication rec {
       typing-extensions
       tzdata
       uvicorn
+      freezegun
     ]
     ++ uvicorn.optional-dependencies.standard;
 
@@ -88,7 +89,7 @@ pythonpkgs.buildPythonApplication rec {
     rm -rf dev # Do not need dev scripts & code
 
     substituteInPlace pyproject.toml \
-     --replace-fail '"setuptools==80.9.0"' '"setuptools"'
+     --replace-fail '"setuptools==82.0.0"' '"setuptools"'
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
