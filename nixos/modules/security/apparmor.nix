@@ -272,5 +272,5 @@ in
     };
   };
 
-  meta.teams = [ lib.teams.apparmor ];
+  meta.maintainers = lib.teams.apparmor.members;
 }

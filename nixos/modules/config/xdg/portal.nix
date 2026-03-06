@@ -32,7 +32,7 @@ in
   ];
 
   meta = {
-    teams = [ teams.freedesktop ];
+    maintainers = teams.freedesktop.members;
   };
 
   options.xdg.portal = {

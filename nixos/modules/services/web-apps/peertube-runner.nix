@@ -252,5 +252,5 @@ in
     };
   };
 
-  meta.teams = [ lib.teams.ngi ];
+  meta.maintainers = lib.teams.ngi.members;
 }
