@@ -82,6 +82,19 @@
 
 let
   inherit (stdenv.hostPlatform) isDarwin isLinux isx86_64;
+  virtSecretInitEncryptionSh =
+    if isLinux then
+      writeShellApplication {
+        name = "virt-secret-init-encryption-sh";
+        runtimeInputs = [
+          coreutils
+          systemd
+        ];
+        text = ''exec ${runtimeShell} "$@"'';
+      }
+    else
+      null;
+
   binPath = lib.makeBinPath (
     [
       dnsmasq
@@ -183,22 +196,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/libxl/libxl_capabilities.h \
      --replace-fail /usr/lib/xen ${xen}/libexec/xen
   ''
-  + lib.optionalString isLinux (
-    let
-      script = writeShellApplication {
-        name = "virt-secret-init-encryption-sh";
-        runtimeInputs = [
-          coreutils
-          systemd
-        ];
-        text = ''exec ${runtimeShell} "$@"'';
-      };
-    in
-    ''
-      substituteInPlace src/secret/virt-secret-init-encryption.service.in \
-        --replace-fail /usr/bin/sh ${lib.getExe script}
-    ''
-  );
+  + lib.optionalString isLinux ''
+    substituteInPlace src/secret/virt-secret-init-encryption.service.in \
+      --replace-fail /usr/bin/sh ${lib.getExe virtSecretInitEncryptionSh}
+  '';
 
   strictDeps = true;
 
@@ -403,6 +404,8 @@ stdenv.mkDerivation rec {
     for f in $out/lib/systemd/system/*.service ; do
       substituteInPlace $f --replace /bin/kill ${coreutils}/bin/kill
     done
+    substituteInPlace $out/lib/systemd/system/virt-secret-init-encryption.service \
+      --replace-fail /usr/bin/sh ${lib.getExe virtSecretInitEncryptionSh}
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
       --prefix PATH : /run/libvirt/nix-emulators:${binPath}
