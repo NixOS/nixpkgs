@@ -6,7 +6,7 @@
   pkg-config,
   file,
   zip,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   contribPlugins ? false,
   hunspell,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     gtk3
   ]
   ++ lib.optionals contribPlugins [

@@ -18,7 +18,7 @@
   libappindicator-gtk3,
   libnotify,
   libxdg_basedir,
-  wxGTK32,
+  wxwidgets_3_2,
   # GStreamer
   glib-networking,
   gst_all_1,
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     libxdg_basedir
     lsb-release
-    wxGTK32
+    wxwidgets_3_2
     # for https gstreamer / libsoup
     glib-networking
   ]

@@ -10233,7 +10233,7 @@ with pkgs;
   diffpdf = libsForQt5.callPackage ../applications/misc/diffpdf { };
 
   diff-pdf = callPackage ../applications/misc/diff-pdf {
-    wxGTK = wxGTK32;
+    wxGTK = wxwidgets_3_2;
   };
 
   mypaint-brushes1 = callPackage ../development/libraries/mypaint-brushes/1.0.nix { };
@@ -11942,7 +11942,7 @@ with pkgs;
   };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima {
-    wxGTK = wxGTK32.override {
+    wxGTK = wxwidgets_3_2.override {
       withWebKit = true;
     };
   };
