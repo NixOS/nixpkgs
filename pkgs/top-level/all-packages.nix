@@ -2939,11 +2939,6 @@ with pkgs;
 
   man = man-db;
 
-  mangohud = callPackage ../tools/graphics/mangohud {
-    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
-    mangohud32 = pkgsi686Linux.mangohud;
-  };
-
   marimo = with python3Packages; toPythonApplication marimo;
 
   mcstatus = with python3Packages; toPythonApplication mcstatus;
