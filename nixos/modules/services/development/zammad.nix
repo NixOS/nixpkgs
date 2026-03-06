@@ -423,5 +423,6 @@ in
   meta.maintainers = with lib.maintainers; [
     taeer
     netali
+    meenzen
   ];
 }
