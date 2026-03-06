@@ -47,9 +47,7 @@ async function checkCommitMessages({ github, context, core, repoPath }) {
   }
 
   const commits = await getCommitDetailsForPR({
-    context,
     core,
-    github,
     pr,
     repoPath,
   })
@@ -57,21 +55,18 @@ async function checkCommitMessages({ github, context, core, repoPath }) {
   const failures = new Set()
 
   for (const commit of commits) {
-    const message = commit.message
-    const firstLine = message.split('\n')[0]
+    const logMsgStart = `Commit ${commit.sha}'s message's subject ("${commit.subject}")`
 
-    const logMsgStart = `Commit ${commit.sha}'s message's subject ("${firstLine}")`
-
-    if (!firstLine.includes(': ')) {
+    if (!commit.subject.includes(': ')) {
       core.error(
         `${logMsgStart} was detected as not meeting our guidelines because ` +
-          'it does not contain a colon followed by a whitespace.' +
+          'it does not contain a colon followed by a whitespace. ' +
           'There are likely other issues as well.',
       )
       failures.add(commit.sha)
     }
 
-    if (firstLine.endsWith('.')) {
+    if (commit.subject.endsWith('.')) {
       core.error(
         `${logMsgStart} was detected as not meeting our guidelines because ` +
           'it ends in a period. There may be other issues as well.',
@@ -80,10 +75,10 @@ async function checkCommitMessages({ github, context, core, repoPath }) {
     }
 
     const fixups = ['amend!', 'fixup!', 'squash!']
-    if (fixups.some((s) => firstLine.startsWith(s))) {
+    if (fixups.some((s) => commit.subject.startsWith(s))) {
       core.error(
         `${logMsgStart} was detected as not meeting our guidelines because ` +
-          `it begins with "${fixups.find((s) => firstLine.startsWith(s))}". ` +
+          `it begins with "${fixups.find((s) => commit.subject.startsWith(s))}". ` +
           'Did you forget to run `git rebase -i --autosquash`?',
       )
       failures.add(commit.sha)
