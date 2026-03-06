@@ -382,8 +382,6 @@ with pkgs;
   ollama-cuda = callPackage ../by-name/ol/ollama/package.nix { acceleration = "cuda"; };
   ollama-vulkan = callPackage ../by-name/ol/ollama/package.nix { acceleration = "vulkan"; };
 
-  device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix { };
-
   diffPlugins = (callPackage ../build-support/plugins.nix { }).diffPlugins;
 
   dieHook = makeSetupHook {
