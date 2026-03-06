@@ -4410,6 +4410,8 @@ self: super: with self; {
 
   django-vite = callPackage ../development/python-modules/django-vite { };
 
+  django-vtasks = callPackage ../development/python-modules/django-vtasks { };
+
   django-weasyprint = callPackage ../development/python-modules/django-weasyprint { };
 
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
