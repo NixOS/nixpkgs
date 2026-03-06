@@ -35,6 +35,5 @@ in
 
   };
 
-  meta.teams = [ lib.teams.podman ];
-  meta.maintainers = [ lib.maintainers.roberth ];
+  meta.maintainers = lib.teams.podman.members ++ [ lib.maintainers.roberth ];
 }

@@ -22,7 +22,7 @@ in
 {
 
   meta = {
-    teams = [ lib.teams.gnome ];
+    maintainers = lib.teams.gnome.members;
   };
 
   options = {

@@ -962,6 +962,5 @@ in
       (import ./rke2.nix args)
     ];
 
-  meta.teams = [ lib.teams.k3s ];
-  meta.maintainers = pkgs.rke2.meta.maintainers;
+  meta.maintainers = pkgs.rke2.meta.maintainers ++ lib.teams.k3s.members;
 }

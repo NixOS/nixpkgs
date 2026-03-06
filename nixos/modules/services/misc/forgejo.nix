@@ -849,5 +849,5 @@ in
   };
 
   meta.doc = ./forgejo.md;
-  meta.teams = [ lib.teams.forgejo ];
+  meta.maintainers = lib.teams.forgejo.members;
 }

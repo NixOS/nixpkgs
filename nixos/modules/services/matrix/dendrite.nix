@@ -341,5 +341,5 @@ in
       };
     };
   };
-  meta.teams = [ lib.teams.matrix ];
+  meta.maintainers = lib.teams.matrix.members;
 }

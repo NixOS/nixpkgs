@@ -937,6 +937,6 @@ in
   };
   meta = {
     doc = ./xen.md;
-    teams = [ teams.xen ];
+    maintainers = teams.xen.members;
   };
 }
