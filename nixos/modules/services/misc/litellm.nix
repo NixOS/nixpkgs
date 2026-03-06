@@ -140,8 +140,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    warnings = lib.optional (!lib.hasPrefix "/var/lib/" (toString cfg.stateDir))
-      "services.litellm.stateDir is set to '${toString cfg.stateDir}', but the module provisions state under /var/lib via systemd StateDirectory while using DynamicUser. Paths outside /var/lib may not be writable for the service.";
+    warnings =
+      lib.optional (!lib.hasPrefix "/var/lib/" (toString cfg.stateDir))
+        "services.litellm.stateDir is set to '${toString cfg.stateDir}', but the module provisions state under /var/lib via systemd StateDirectory while using DynamicUser. Paths outside /var/lib may not be writable for the service.";
 
     systemd.services.litellm = {
       description = "LLM Gateway to provide model access, fallbacks and spend tracking across 100+ LLMs.";
