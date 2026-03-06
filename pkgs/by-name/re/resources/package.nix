@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lukas-heiligenbrunner
       ewuuwe
+      graysontinker
     ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
