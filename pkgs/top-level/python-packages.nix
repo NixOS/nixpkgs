@@ -4426,6 +4426,8 @@ self: super: with self; {
 
   django-valkey = callPackage ../development/python-modules/django-valkey { };
 
+  django-vcache = callPackage ../development/python-modules/django-vcache { };
+
   django-versatileimagefield =
     callPackage ../development/python-modules/django-versatileimagefield
       { };
