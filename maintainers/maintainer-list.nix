@@ -30096,6 +30096,12 @@
     githubId = 873857;
     name = "Zack Newman";
   };
+  zodman = {
+    github = "zodman";
+    githubId = 44167;
+    name = "Andres Vargas";
+    email = "zodman@gmail.com";
+  };
   zoedsoupe = {
     github = "zoedsoupe";
     githubId = 44469426;
