@@ -8,7 +8,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "camel-converter";
   version = "5.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanders41";
     repo = "camel-converter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7CqwpmRGHK7mkYoIS+3NwMtEqtdtnLB463OO2Dp0Ut0=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
   ]
-  ++ optional-dependencies.pydantic;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "camel_converter" ];
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to convert strings from snake case to camel case or camel case to snake case";
     homepage = "https://github.com/sanders41/camel-converter";
-    changelog = "https://github.com/sanders41/camel-converter/releases/tag/${src.tag}";
+    changelog = "https://github.com/sanders41/camel-converter/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
