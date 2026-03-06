@@ -33,7 +33,10 @@ rustPlatform.buildRustPackage rec {
       mit
       asl20
     ];
-    maintainers = [ lib.maintainers.axka ];
+    maintainers = [
+      lib.maintainers.axka
+      lib.maintainers.flokli
+    ];
     mainProgram = "addr2line";
   };
 }
