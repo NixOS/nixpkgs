@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   linux-pam,
@@ -18,16 +19,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-r1bYcf5SPHbrPgxCvfbZNVhGj/gX8K5ucd8PH0WMgb8=";
   };
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace systemd/shpool.service \
       --replace-fail '/usr/bin/shpool' "$out/bin/shpool"
   '';
 
   cargoHash = "sha256-BeMIasnEFqeoHhNAlj/uBMtMoZvrLjyWDKi0n8BaSnU=";
 
-  buildInputs = [
-    linux-pam
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ];
 
   # The majority of tests rely on impure environment
   # (such as systemd socket, ssh socket), and some of them
@@ -35,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # tried skipping them but failed
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm444 systemd/shpool.service -t $out/lib/systemd/user
     install -Dm444 systemd/shpool.socket -t $out/lib/systemd/user
   '';
@@ -51,6 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "shpool";
     maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
