@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "pillow";
-  version = "12.1.0";
+  version = "12.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-pillow";
     repo = "pillow";
     tag = version;
-    hash = "sha256-QGtuxKpkx2FScQHj9lH4mhEAo6jE+NAR2sR5/zvHUuA=";
+    hash = "sha256-NlmNabyoHiakwvomjivTA7N304ovNCMDSaBLSmcmZ7w=";
   };
 
   build-system = [

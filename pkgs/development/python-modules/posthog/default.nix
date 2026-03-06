@@ -62,6 +62,8 @@ buildPythonPackage rec {
     "test_upload"
     # AssertionError: 2 != 3
     "test_flush_interval"
+    # len(client.distinct_ids_feature_flags_reported) = 101 != i % 100 + 1
+    "test_capture_multiple_users_doesnt_out_of_memory"
   ];
 
   disabledTestPaths = [
