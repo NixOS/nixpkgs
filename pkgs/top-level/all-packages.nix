@@ -3077,10 +3077,6 @@ with pkgs;
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  nvfancontrol = callPackage ../tools/misc/nvfancontrol {
-    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
-  };
-
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
   ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim { };
