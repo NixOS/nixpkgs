@@ -2,6 +2,7 @@
   stdenv,
   virtualbox,
   kernel,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation {
@@ -12,6 +13,17 @@ stdenv.mkDerivation {
     "fortify"
     "pic"
     "stackprotector"
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/rpmfusion/VirtualBox-kmod/ec4795b376212b9361c2554c249886c62008c3f8/kernel-6.19.patch";
+      sha256 = "sha256-HhJ/2dnJQIXGv86Avlb42+gRzAgNx3eq81gfDwmqjeU=";
+      excludes = [
+        "vboxsf/**/*"
+        "vboxguest/**/*"
+      ];
+    })
   ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
