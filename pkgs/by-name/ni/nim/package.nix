@@ -18,7 +18,7 @@ let
       targetPlatformConfig = stdenv.targetPlatform.config;
     in
     stdenv.mkDerivation (finalAttrs: {
-      name = "${targetPlatformConfig}-nim-wrapper";
+      pname = "${targetPlatformConfig}-nim-wrapper";
       inherit (nimUnwrapped) version;
       preferLocalBuild = true;
       strictDeps = true;
