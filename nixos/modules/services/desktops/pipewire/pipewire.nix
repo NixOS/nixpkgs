@@ -85,8 +85,7 @@ let
   };
 in
 {
-  meta.teams = [ teams.freedesktop ];
-  meta.maintainers = [ maintainers.k900 ];
+  meta.maintainers = teams.freedesktop.members ++ [ maintainers.k900 ];
 
   ###### interface
   options = {

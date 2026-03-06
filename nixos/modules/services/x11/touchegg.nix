@@ -13,7 +13,7 @@ let
 in
 {
   meta = {
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
   };
 
   ###### interface

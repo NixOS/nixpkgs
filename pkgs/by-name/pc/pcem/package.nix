@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchzip,
-  wxGTK32,
+  wxwidgets_3_2,
   coreutils,
   SDL2,
   openal,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     coreutils
     SDL2
     openal

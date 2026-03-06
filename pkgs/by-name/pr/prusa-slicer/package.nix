@@ -29,7 +29,7 @@
   openvdb,
   qhull,
   onetbb,
-  wxGTK32,
+  wxwidgets_3_2,
   libx11,
   libbgcode,
   heatshrink,
@@ -56,7 +56,7 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  wxGTK-override' = if wxGTK-override == null then wxGTK32 else wxGTK-override;
+  wxGTK-override' = if wxGTK-override == null then wxwidgets_3_2 else wxGTK-override;
   opencascade-override' =
     if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
 in

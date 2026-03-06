@@ -16,7 +16,7 @@ in
 
 {
   meta = {
-    teams = [ teams.lumina ];
+    maintainers = teams.lumina.members;
   };
 
   options = {

@@ -1911,5 +1911,5 @@ in
   };
 
   meta.doc = ./gitlab.md;
-  meta.teams = [ teams.gitlab ];
+  meta.maintainers = teams.gitlab.members;
 }

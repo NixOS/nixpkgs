@@ -49,5 +49,5 @@ in
     systemd.user.services.dsearch.wantedBy = mkIf cfg.systemd.enable [ cfg.systemd.target ];
   };
 
-  meta.teams = [ lib.teams.danklinux ];
+  meta.maintainers = lib.teams.danklinux.members;
 }

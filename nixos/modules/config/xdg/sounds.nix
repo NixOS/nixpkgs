@@ -6,7 +6,7 @@
 }:
 {
   meta = {
-    teams = [ lib.teams.freedesktop ];
+    maintainers = lib.teams.freedesktop.members;
   };
 
   options = {

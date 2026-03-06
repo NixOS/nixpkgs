@@ -25,7 +25,7 @@ in
 
 {
   meta = {
-    teams = [ teams.enlightenment ];
+    maintainers = teams.enlightenment.members;
   };
 
   imports = [

@@ -13,7 +13,7 @@ in
 
 {
   meta = {
-    teams = [ lib.teams.lxc ];
+    maintainers = lib.teams.lxc.members;
   };
 
   options.virtualisation.lxc = {

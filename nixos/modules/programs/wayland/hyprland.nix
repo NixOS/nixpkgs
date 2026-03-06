@@ -130,5 +130,5 @@ in
     ] "Nvidia patches are no longer needed")
   ];
 
-  meta.teams = [ lib.teams.hyprland ];
+  meta.maintainers = lib.teams.hyprland.members;
 }

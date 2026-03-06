@@ -444,5 +444,5 @@ in
     };
   };
 
-  meta.teams = [ lib.teams.jitsi ];
+  meta.maintainers = lib.teams.jitsi.members;
 }

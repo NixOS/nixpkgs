@@ -14,17 +14,9 @@ let
   };
 in
 rec {
-  # Inject ghost into lib.maintainers so it passes the addCheck validation
-  lib = (import ../../../lib).extend (
-    final: prev: {
-      maintainers = prev.maintainers // {
-        inherit ghost;
-      };
-    }
-  );
+  lib = import ../../../lib;
 
   example = lib.evalModules {
-    specialArgs.lib = lib;
     modules = [
       ../meta-maintainers.nix
       {

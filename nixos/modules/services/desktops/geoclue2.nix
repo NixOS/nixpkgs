@@ -373,6 +373,6 @@ in
   };
 
   meta = {
-    teams = [ lib.teams.pantheon ];
+    maintainers = [ ] ++ lib.teams.pantheon.members;
   };
 }
