@@ -49,6 +49,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     INSTA_UPDATE = "no";
   };
 
+  postInstall = ''
+    # Installs biome schema aside with the package
+    install -Dm644 packages/@biomejs/biome/configuration_schema.json $out/share/schema.json
+  '';
+
   preCheck = ''
     # tests assume git repository
     git init
@@ -65,6 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       isabelroses
       wrbbz
+      eveeifyeve # Schema
     ];
     mainProgram = "biome";
   };
