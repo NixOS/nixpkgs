@@ -8582,8 +8582,6 @@ with pkgs;
 
   error-inject = recurseIntoAttrs (callPackages ../os-specific/linux/error-inject { });
 
-  ffado = callPackage ../os-specific/linux/ffado { };
-  ffado-mixer = callPackage ../os-specific/linux/ffado { withMixer = true; };
   libffado = ffado;
 
   freefall = callPackage ../os-specific/linux/freefall {
