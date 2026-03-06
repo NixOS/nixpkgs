@@ -318,6 +318,8 @@ self: super: with self; {
 
   aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
 
+  aiohttp-asgi-connector = callPackage ../development/python-modules/aiohttp-asgi-connector { };
+
   aiohttp-asyncmdnsresolver = callPackage ../development/python-modules/aiohttp-asyncmdnsresolver { };
 
   aiohttp-basicauth = callPackage ../development/python-modules/aiohttp-basicauth { };
