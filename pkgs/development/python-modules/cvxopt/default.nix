@@ -5,6 +5,7 @@
   isPyPy,
   blas,
   lapack,
+  setuptools,
   setuptools-scm,
   suitesparse,
   unittestCheckHook,
@@ -18,15 +19,15 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cvxopt";
   version = "1.3.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = isPyPy; # hangs at [translation:info]
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gFnO9B8fEVyHvJt1/sn4bblefwr88DpS1hm6Qz5EO8s=";
   };
 
@@ -35,7 +36,10 @@ buildPythonPackage rec {
     lapack
   ];
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   # similar to Gsl, glpk, fftw there is also a dsdp interface
   # but dsdp is not yet packaged in nixpkgs
@@ -45,7 +49,7 @@ buildPythonPackage rec {
     CVXOPT_BUILD_DSDP = "0";
     CVXOPT_SUITESPARSE_LIB_DIR = "${lib.getLib suitesparse}/lib";
     CVXOPT_SUITESPARSE_INC_DIR = "${lib.getDev suitesparse}/include";
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
+    SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
   }
   // lib.optionalAttrs withGsl {
     CVXOPT_BUILD_GSL = "1";
@@ -86,4 +90,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ edwtjo ];
     license = lib.licenses.gpl3Plus;
   };
-}
+})
