@@ -6,12 +6,12 @@
   libusb1,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-hf2";
   version = "0.3.3";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0o3j7YfgNNnfbrv9Gppo24DqYlDCxhtsJHIhAV214DU=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ astrobeastie ];
   };
-}
+})

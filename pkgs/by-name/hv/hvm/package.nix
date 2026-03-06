@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hvm";
   version = "2.0.22";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-AD8mv47m4E6H8BVkxTExyhrR7VEnuB/KxnRl2puPnX4=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
