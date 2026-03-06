@@ -663,6 +663,10 @@ in
             foo = "bar";
             qux = "baz";
           };
+
+          dbusBroker.configuration = {
+            services.dbus.implementation = "broker";
+          };
         };
       };
 
@@ -757,6 +761,30 @@ in
       )
 
       boot_loader_text = "Warning: do not know how to make this configuration bootable; please enable a boot loader."
+
+
+      # TODO: REMOVE THIS BEFORE MERGING
+      with subtest("soft-reboot"):
+          switch_to_specialisation("${machine}", "")
+          # To prove soft-reboot works and is more powerful than switch,
+          # we try to change the dbus implementation, and perform soft-reboot
+          # Initially we have classic dbus instead of broker
+          machine.succeed("systemctl show -p Id dbus.service | grep dbus.service")
+          machine.fail("systemctl show -p Id dbus.service | grep dbus-broker.service")
+          # TODO
+          machine.log(machine.execute("cat /proc/self/mountinfo | grep '/nix/.ro-store'")[1])
+          # Prepare next-system to be dbus-broker
+          out = switch_to_specialisation("${machine}", "dbusBroker", action="boot")
+          assert_contains(out, boot_loader_text)
+          machine.execute("systemctl soft-reboot &")
+          # Reset connection before actual soft-reboot to avoid EOF
+          # polluting output byte stream
+          machine.disconnect()
+          machine.wait_for_unit("multi-user.target")
+          # Should now be dbus-broker
+          machine.log(machine.execute("cat /proc/self/mountinfo | grep '/nix/.ro-store'")[1])
+          machine.succeed("systemctl show -p Id dbus.service | grep dbus-broker.service")
+
 
       with subtest("pre-switch checks"):
           machine.succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration check")
@@ -1612,5 +1640,23 @@ in
           out = switch_to_specialisation("${machine}", "")
           # Assert switching to a different generation doesn't touch units created by generators
           machine.succeed("systemctl is-active simple-generated.service")
+
+      with subtest("soft-reboot"):
+          switch_to_specialisation("${machine}", "")
+          # To prove soft-reboot works and is more powerful than switch,
+          # we try to change the dbus implementation, and perform soft-reboot
+          # Initially we have classic dbus instead of broker
+          machine.succeed("systemctl show -p Id dbus.service | grep dbus.service")
+          machine.fail("systemctl show -p Id dbus.service | grep dbus-broker.service")
+          # Prepare next-system to be dbus-broker
+          out = switch_to_specialisation("${machine}", "dbusBroker", action="boot")
+          assert_contains(out, boot_loader_text)
+          machine.execute("systemctl soft-reboot &")
+          # Reset connection before actual soft-reboot to avoid EOF
+          # polluting output byte stream
+          machine.disconnect()
+          machine.wait_for_unit("multi-user.target")
+          # Should now be dbus-broker
+          machine.succeed("systemctl show -p Id dbus.service | grep dbus-broker.service")
     '';
 }
