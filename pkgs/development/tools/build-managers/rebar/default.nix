@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   erlang,
+  pkgsBuildHost,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ erlang ];
 
-  buildPhase = "escript bootstrap";
+  buildPhase = "${pkgsBuildHost.beam_minimal.interpreters.erlang}/bin/escript bootstrap";
+
   installPhase = ''
     mkdir -p $out/bin
     cp rebar $out/bin/rebar
