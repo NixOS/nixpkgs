@@ -24,7 +24,7 @@ let
   source = callPackage ./source.nix { };
 in
 buildGoModule (finalAttrs: {
-  pname = "lima";
+  pname = "lima" + lib.optionalString withAdditionalGuestAgents "-full";
 
   inherit (source) version src vendorHash;
 
