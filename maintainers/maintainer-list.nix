@@ -16248,6 +16248,12 @@
     githubId = 115060;
     name = "Marek Maksimczyk";
   };
+  manfredmacx = {
+    email = "mfmacx@proton.me";
+    github = "manfredmacx";
+    githubId = 222261305;
+    name = "Manfred Macx";
+  };
   Mange = {
     name = "Magnus Bergmark";
     email = "me@mange.dev";
