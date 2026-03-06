@@ -15,7 +15,7 @@
   trustme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiounifi";
   version = "89";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "aiounifi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SkvT2rwKbdQkuKunWzp439k4sTTBSLjEtYbR1cHhLKc=";
   };
 
@@ -57,9 +57,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for communicating with Unifi Controller API";
     homepage = "https://github.com/Kane610/aiounifi";
-    changelog = "https://github.com/Kane610/aiounifi/releases/tag/${src.tag}";
+    changelog = "https://github.com/Kane610/aiounifi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "aiounifi";
   };
-}
+})
