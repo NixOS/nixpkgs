@@ -40,15 +40,6 @@
   livekit-libwebrtc,
   testers,
   writableTmpDirAsHomeHook,
-  glib,
-  libdrm,
-  libgbm,
-  libva,
-  libxcomposite,
-  libxdamage,
-  libxext,
-  libxfixes,
-  libxrandr,
 
   withGLES ? false,
   buildRemoteServer ? true,
@@ -115,7 +106,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.219.4-dev";
+  version = "0.219.4";
 
   outputs = [
     "out"
@@ -125,10 +116,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "Be-ing";
+    owner = "zed-industries";
     repo = "zed";
-    rev = "71ca6c4d47e3815f07fbc6d4c7557a36a4f9f1ae";
-    hash = "sha256-ENdcTFBscvuA3AOlFVJk8SEMydL+Imp2HsgYC2/2Btk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x0N+xGoWNQOXI/b6hityYy6ZbcAPTrzGKMbgCxDcHhM=";
   };
 
   postPatch = ''
@@ -148,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-Z0dk63hvuXXPKh82mAb1PRRErXBgRp8XWwjMy4BrUos=";
+  cargoHash = "sha256-adHfP57EpqCOo8HSpuG1JTV6qNljz282PYgR32cCuxE=";
 
   nativeBuildInputs = [
     cmake
@@ -184,15 +175,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libX11
     libXext
-    glib
-    libdrm
-    libgbm
-    libva
-    libxcomposite
-    libxdamage
-    libxext
-    libxfixes
-    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
