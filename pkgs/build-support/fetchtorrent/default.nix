@@ -116,8 +116,8 @@ runCommand name
     if (backend == "transmission") then
       ''
         export HOME=$TMP
-        export downloadedDirectory=$out/downloadedDirectory
-        mkdir -p $downloadedDirectory
+        mkdir -p $out
+        export downloadedDirectory=$(mktemp -d $out/downloadedDirectory.XXXXXXXXXX)
         mkdir -p $HOME/.config/transmission
         cp ${jsonConfig} $HOME/.config/transmission/settings.json
         port="$(shuf -n 1 -i 49152-65535)"
@@ -139,8 +139,8 @@ runCommand name
         export HOME=$TMP
       ''
       + lib.optionalString flatten' ''
-        downloadedDirectory=$out/downloadedDirectory
-        mkdir -p $downloadedDirectory
+        mkdir -p $out
+        downloadedDirectory=$(mktemp -d $out/downloadedDirectory.XXXXXXXXXX)
       ''
       + lib.optionalString (!flatten') ''
         downloadedDirectory=$out
