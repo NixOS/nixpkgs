@@ -36,6 +36,12 @@ buildPythonPackage rec {
     hash = "sha256-WgO/bDe4anQCc1q2Gdq3W70yDqDgmsvn39Qf9ZNVXuE=";
   };
 
+  patches = lib.optionals (lib.versionAtLeast django.version "6.0") [
+    # Fix some tests when run with DJango 6
+    # see https://github.com/django-extensions/django-extensions/pull/1977
+    ./django_6-compat.diff
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -57,6 +63,13 @@ buildPythonPackage rec {
     shortuuid
     vobject
     werkzeug
+  ];
+
+  disabledTests = lib.optionals (lib.versionAtLeast django.version "6.0") [
+    # Some remaining tests where not easy to fix, so we disabled them for Django 6
+    # see https://github.com/django-extensions/django-extensions/issues/1978
+    "testRandomCharTestModelDuplicate"
+    "test_should_print_all_signals"
   ];
 
   disabledTestPaths = [
