@@ -20,14 +20,14 @@
   libayatana-appindicator,
   udevCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slimevr";
   version = "18.1.0";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vU/dcKRlNsixr3TaCrqNkCd2ewAb38fLymb+ZslAum4=";
     # solarxr
     fetchSubmodules = true;
@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-X5IgWZlkvsstMN3YS4r+NJl6RVfREfZqKUrfsrUPQuU=";
 
   pnpmDeps = fetchPnpmDeps {
-    pname = "${pname}-pnpm-deps";
-    inherit version src;
+    pname = "${finalAttrs.pname}-pnpm-deps";
+    inherit (finalAttrs) version src;
     pnpm = pnpm_9;
     fetcherVersion = 3;
     hash = "sha256-deVfRZcMFkOVWXmNUiixmd5WBfIFKxG2Gw3CfshspYo=";
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # Upstream code uses Git to find the program version.
     (replaceVars ./gui-no-git.patch {
-      version = src.tag;
+      version = finalAttrs.src.tag;
     })
     # By default, SlimeVR will give a big warning about our `JAVA_TOOL_OPTIONS` changes.
     ./no-java-tool-options-warning.patch
@@ -121,7 +121,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://slimevr.dev";
-    changelog = "https://github.com/SlimeVR/SlimeVR-Server/releases/tag/v${version}";
+    changelog = "https://github.com/SlimeVR/SlimeVR-Server/releases/tag/v${finalAttrs.version}";
     description = "App for facilitating full-body tracking in virtual reality";
     longDescription = ''
       App for SlimeVR ecosystem. It orchestrates communication between multiple sensors and integrations, like SteamVR.
@@ -153,4 +153,4 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "slimevr";
   };
-}
+})

@@ -97,7 +97,6 @@ stdenv.mkDerivation rec {
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      asppsa
       willcohen
     ];
     license = lib.licenses.asl20;

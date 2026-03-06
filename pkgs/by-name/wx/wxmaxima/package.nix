@@ -6,7 +6,7 @@
   cmake,
   gettext,
   maxima,
-  wxGTK,
+  wxwidgets_3_2,
   adwaita-icon-theme,
   glib,
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    wxGTK
+    wxwidgets_3_2
     maxima
     # So it won't embed svg files into headers.
     adwaita-icon-theme
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
+    "-DwxWidgets_LIBRARIES=${wxwidgets_3_2}/lib"
   ];
 
   preConfigure = ''

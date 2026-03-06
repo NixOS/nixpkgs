@@ -7,7 +7,7 @@
   pkg-config,
   cairo,
   poppler,
-  wxGTK,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     poppler
-    wxGTK
+    wxwidgets_3_2
   ];
 
   preConfigure = "./bootstrap";

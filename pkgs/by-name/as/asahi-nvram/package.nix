@@ -4,17 +4,17 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asahi-nvram";
   version = "0.2.3";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-zfUvPHAPrYhzgeiirGuqZaWnLBH0PHsqOUy2e972bWM=";
   };
 
   cargoHash = "sha256-NW/puo/Xoum7DjSQjBgilQcKbY3mAfVgXxUK6+1H1JI=";
-  cargoDepsName = pname;
+  cargoDepsName = finalAttrs.pname;
 
   meta = {
     description = "Tool to read and write nvram variables on ARM Macs";
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "asahi-nvram";
     platforms = lib.platforms.linux;
   };
-}
+})
