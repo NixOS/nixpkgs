@@ -110,11 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multiplayer-focused engine for iD software's Quake";
     homepage = "https://qssm.quakeone.com/";
     longDescription = ''
-            QSS-M is an open source port of the original ID Software Quake.
-            Over 30 years Quake 1.09 became Fitzquake to Quakespasm that led to Quakespasm
-            Spiked and now Quakespasm Spiked Multiplayer (QSS-M). NetQuake competitive
-            multiplayer clients started with ProQuake, transitioned to Qrack or Mark V,
-            and now QSS-M made possible by all those voluntary efforts.
+      QSS-M is an open source port of the original ID Software Quake.
+      Over 30 years Quake 1.09 became Fitzquake to Quakespasm that led to Quakespasm
+      Spiked and now Quakespasm Spiked Multiplayer (QSS-M). NetQuake competitive
+      multiplayer clients started with ProQuake, transitioned to Qrack or Mark V,
+      and now QSS-M made possible by all those voluntary efforts.
     '';
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ twicefoldampersands ];
