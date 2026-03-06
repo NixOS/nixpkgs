@@ -15,8 +15,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "polkascan";
-    repo = "py-sr25519-bindings";
+    owner = "JAMdotTech";
+    repo = "py-sr25519";
     tag = "v${version}";
     hash = "sha256-lia0hA3EayeJN4hf1dE5ezuitknIIQirnWwVjGtdMoo=";
   };
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for sr25519 library";
-    homepage = "https://github.com/polkascan/py-sr25519-bindings";
+    homepage = "https://github.com/JAMdotTech/py-sr25519";
     changelog = "https://github.com/JAMdotTech/py-sr25519/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
