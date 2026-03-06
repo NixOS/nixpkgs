@@ -8,6 +8,7 @@
   binutils,
   gnumake,
   gnugrep,
+  gnupatch,
   gnused,
   gnutar,
   gzip,
@@ -20,6 +21,19 @@ let
     url = "https://musl.libc.org/releases/musl-${version}.tar.gz";
     hash = "sha256-qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
   };
+
+  patches = [
+    (fetchurl {
+      name = "locale-fix-1.patch";
+      url = "https://www.openwall.com/lists/musl/2025/02/13/1/1";
+      hash = "sha256-CJb821El2dByP04WXxPCCYMOcEWnXLpOhYBgg3y3KS4=";
+    })
+    (fetchurl {
+      name = "locale-fix-2.patch";
+      url = "https://www.openwall.com/lists/musl/2025/02/13/1/2";
+      hash = "sha256-BiD87k6KTlLr4ep14rUdIZfr2iQkicBYaSTq+p6WBqE=";
+    })
+  ];
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -31,6 +45,7 @@ bash.runCommand "${pname}-${version}"
       gnumake
       gnused
       gnugrep
+      gnupatch
       gnutar
       gzip
     ];
@@ -64,6 +79,7 @@ bash.runCommand "${pname}-${version}"
     cd musl-${version}
 
     # Patch
+    ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
     # https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a3-intermediate-musl.nix
     sed -i 's|/bin/sh|${bash}/bin/bash|' \
       tools/*.sh
