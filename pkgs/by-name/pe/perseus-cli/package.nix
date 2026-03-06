@@ -6,12 +6,12 @@
   wasm-pack,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "perseus-cli";
   version = "0.3.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-IYjLx9/4oWSXa4jhOtGw1GOHmrR7LQ6bWyN5zbOuEFs=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     mainProgram = "perseus";
   };
-}
+})
