@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://mpir.org/mpir-${finalAttrs.version}.tar.bz2";
-    sha256 = "1fvmhrqdjs925hzr2i8bszm50h00gwsh17p2kn2pi51zrxck9xjj";
+    sha256 = "sha256-eerJcapTwvVSPhExL8wWq4y46Y7zPm6ll5j5BHRwZOU=";
   };
 
   patches = [
