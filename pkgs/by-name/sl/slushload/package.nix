@@ -3,8 +3,11 @@
   stdenvNoCC,
   fetchzip,
   makeWrapper,
-  wineWow64Packages,
+  winePackages_stable,
 }:
+let
+  wine = winePackages_stable.wineWow64;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "slushload";
   version = "3";
@@ -25,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/{bin,share}
-    makeWrapper ${wineWow64Packages.stable}/bin/wine $out/bin/slushload \
+    makeWrapper ${wine}/bin/wine $out/bin/slushload \
       --set WINEDEBUG "-all" \
       --run "export WINEPREFIX=''${XDG_DATA_HOME:-\$HOME/.local/share}/slushload" \
       --add-flags $src/slushload_v3.exe
@@ -42,7 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     mainProgram = "slushload";
-    platforms = wineWow64Packages.stable.meta.platforms;
+    platforms = wine.meta.platforms;
     maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 })

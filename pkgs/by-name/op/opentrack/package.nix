@@ -15,7 +15,7 @@
   libxdmcp,
   libevdev,
   makeDesktopItem,
-  wineWow64Packages,
+  winePackages_stable,
   onnxruntime,
   nix-update-script,
   v4l-utils,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.wrapQtAppsHook
   ]
-  ++ lib.optionals withWine [ wineWow64Packages.stable ];
+  ++ lib.optionals withWine [ winePackages_stable.wineWow64 ];
 
   buildInputs = [
     finalAttrs.aruco

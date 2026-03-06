@@ -18,8 +18,8 @@ let
   hello32 = "${pkgs.pkgsCross.mingw32.hello}/bin/hello.exe";
   hello64 = "${pkgs.pkgsCross.mingwW64.hello}/bin/hello.exe";
 
-  makeWineTest = packageSet: exes: variant: rec {
-    name = "${packageSet}-${variant}";
+  makeWineTest = packageSet: wineBuild: exes: variant: rec {
+    name = "${packageSet}-${wineBuild}-${variant}";
     value = makeTest {
       inherit name;
       meta = with pkgs.lib.maintainers; {
@@ -29,7 +29,7 @@ let
       nodes.machine =
         { pkgs, ... }:
         {
-          environment.systemPackages = [ pkgs."${packageSet}"."${variant}" ];
+          environment.systemPackages = [ pkgs."${packageSet}"."${variant}"."${wineBuild}" ];
           virtualisation.diskSize = 800;
         };
 
@@ -65,10 +65,10 @@ let
 
 in
 listToAttrs (
-  map (makeWineTest "winePackages" [ hello32 ]) variants
+  map (makeWineTest "winePackages" "wine32" [ hello32 ]) variants
   ++ optionals pkgs.stdenv.hostPlatform.is64bit (
     map
-      (makeWineTest "wineWow64Packages" [
+      (makeWineTest "winePackages" "wineWow64" [
         hello32
         hello64
       ])

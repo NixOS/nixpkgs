@@ -7,11 +7,11 @@
 
   copyDesktopItems,
   makeWrapper,
-  wineWow64Packages,
+  winePackages,
   winetricks,
 }:
 let
-  wine = wineWow64Packages.staging;
+  wine = winePackages.staging.wineWow64;
 in
 stdenv.mkDerivation rec {
   pname = "vtfedit";

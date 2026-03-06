@@ -2,7 +2,7 @@
   lib,
   multiStdenv,
   fetchFromGitHub,
-  wineWow64Packages,
+  winePackages,
   cmake,
   makeWrapper,
   file,
@@ -12,7 +12,7 @@
 }:
 
 let
-  wine-wow64 = wineWow64Packages.stableFull;
+  wine-wow64 = winePackages.stableFull.wineWow64;
 in
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "airwave";
