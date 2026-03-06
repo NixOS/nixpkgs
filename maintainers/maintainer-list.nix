@@ -23952,6 +23952,12 @@
     githubId = 15986681;
     name = "Simon Bruder";
   };
+  scandiravian = {
+    email = "nixos@scandiravian.com";
+    github = "scandiravian";
+    githubId = 13556969;
+    name = "Scandiravian";
+  };
   scd31 = {
     name = "scd31";
     github = "scd31";
