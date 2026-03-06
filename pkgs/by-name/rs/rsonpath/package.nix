@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsonpath";
   version = "0.9.1-unstable-2024-11-15";
 
@@ -23,14 +23,14 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-9pSn0f0VWsBg1z1UYGRtMb1z23htRm7qLmO80zvSjN8=";
 
   cargoBuildFlags = [ "-p=rsonpath" ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   meta = {
     description = "Experimental JSONPath engine for querying massive streamed datasets";
     homepage = "https://github.com/v0ldek/rsonpath";
-    changelog = "https://github.com/v0ldek/rsonpath/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/v0ldek/rsonpath/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "rq";
   };
-}
+})
