@@ -1,10 +1,11 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   m4,
   which,
   yasm,
+  texinfo,
   autoreconfHook,
   fetchpatch,
   buildPackages,
@@ -20,12 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
     m4
     which
     yasm
+    texinfo
     autoreconfHook
   ];
 
-  src = fetchurl {
-    url = "https://mpir.org/mpir-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-eerJcapTwvVSPhExL8wWq4y46Y7zPm6ll5j5BHRwZOU=";
+  src = fetchFromGitHub {
+    owner = "wbhart";
+    repo = "mpir";
+    tag = "mpir-${finalAttrs.version}";
+    hash = "sha256-Q5P3N2w6NX+s5Fu3obTDOg+tEAWnAMDgbRlzFTpolmg=";
   };
 
   patches = [
