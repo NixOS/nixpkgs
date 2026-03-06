@@ -1,24 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "crush";
-  version = "0.43.2";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VyV57ASsn2t1zaW7L6o7sVc+H+tHf4AP1HaKgrdXrtk=";
+    hash = "sha256-Gv1Z2Drtl9zFgGsAvr2YBRP/M4AN7wpr062zz6jCFJA=";
   };
 
-  vendorHash = "sha256-qFqFyPdAqh2BXeE2tkLmn88Z8qHFeSlTA2Ols8H7iaQ=";
+  vendorHash = "sha256-EpuGHLFi3B+8ZkQiJYGAUjHELz86YDuSE5OCRdie2B4=";
 
   ldflags = [
     "-s"
