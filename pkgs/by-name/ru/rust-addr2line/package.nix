@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-addr2line";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "gimli-rs";
     repo = "addr2line";
     tag = version;
-    hash = "sha256-1kjFrDHfvGdU5FfSaLE+EFN83XjF0iSpydwsucjV7NQ=";
+    hash = "sha256-+GrX5/AgKlU0rNIKkt4XAQFab6G6F4DN4Qkol8Jd5DQ=";
   };
 
   cargoBuildFlags = "--bin addr2line --features bin";
 
-  cargoHash = "sha256-IJ+hZ36QL5Awq4vI+ajTTHwbRU4paG+bnB/TZU9bCCk=";
+  cargoHash = "sha256-aC69kyyMNwifIsjRPCgKxqguKtU7zSN8Mn9tChXykNo=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
