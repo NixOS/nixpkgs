@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "middledrag";
-  version = "1.4.2.4";
+  version = "1.4.2.5";
 
   src = fetchurl {
     url = "https://github.com/NullPointerDepressiveDisorder/MiddleDrag/releases/download/v${finalAttrs.version}/MiddleDrag-${finalAttrs.version}.pkg";
-    hash = "sha256-1p81RpfbVz9d+1Utx7LiMoK8cn0pKOndOWDl8nUyr7w=";
+    hash = "sha256-Q7/Js6lqArHcftJCuTcvWofY1aYNdJSWeIxvsG+sqEc=";
   };
 
   strictDeps = true;
