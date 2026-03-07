@@ -31,6 +31,8 @@ buildGoModule (finalAttrs: {
 
   versionCheckProgramArg = "--version";
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Terminal-based monitoring tool 'top' designed to display real-time metrics for Apple Silicon chips";
     homepage = "https://github.com/metaspartan/mactop";
