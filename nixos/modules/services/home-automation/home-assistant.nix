@@ -620,7 +620,15 @@ in
       }
     ];
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall (
+      [ cfg.config.http.server_port ]
+      ++
+        # https://www.home-assistant.io/integrations/sonos/#network-requirements
+        optionals (elem useComponent "sonos") [
+          1400
+          1443
+        ]
+    );
 
     # symlink the configuration to /etc/home-assistant
     environment.etc = mkMerge [
