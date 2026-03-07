@@ -21,9 +21,6 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   webUISupport ? false,
-
-  # tests
-  lunarvim,
 }:
 
 let
@@ -213,8 +210,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = {
       # make sure all grammars build
       builtGrammars = lib.recurseIntoAttrs builtGrammars;
-
-      inherit lunarvim;
     };
   };
 

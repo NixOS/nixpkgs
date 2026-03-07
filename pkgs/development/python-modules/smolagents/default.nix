@@ -66,6 +66,9 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "huggingface-hub"
+  ];
   dependencies = [
     huggingface-hub
     jinja2
@@ -146,18 +149,23 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
     "tests/test_types.py"
+
+    # Requires unpackaged 'helium'
+    "tests/test_vision_web_browser.py"
   ];
 
   disabledTests = [
     # Missing dependencies
+    "TestBlaxelExecutorUnit"
+    "TestModalExecutorUnit"
+    "mcp"
     "test_cleanup"
     "test_ddgs_with_kwargs"
     "test_e2b_executor_instantiation"
     "test_flatten_messages_as_text_for_all_models"
-    "mcp"
     "test_import_smolagents_without_extras"
-    "test_vision_web_browser_main"
     "test_multiple_servers"
+    "test_vision_web_browser_main"
     # Tests require network access
     "test_agent_type_output"
     "test_call_different_providers_without_key"
@@ -184,6 +192,9 @@ buildPythonPackage (finalAttrs: {
     "test_multiagents_save"
     "test_new_instance"
 
+    # Flaky: assert 0.9858949184417725 <= 0.73
+    "test_retry_on_rate_limit_error"
+
     # Requires optional "blaxel" dependencies
     "test_blaxel_executor_instantiation_with_blaxel_sdk"
     "test_blaxel_executor_custom_parameters"
@@ -192,7 +203,6 @@ buildPythonPackage (finalAttrs: {
     "test_sandbox_lifecycle"
     # TypeError: 'function' object is not subscriptable
     "test_stream_to_gradio_memory_step"
-
   ];
 
   __darwinAllowLocalNetworking = true;

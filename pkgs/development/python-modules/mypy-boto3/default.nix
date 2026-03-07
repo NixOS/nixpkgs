@@ -335,8 +335,8 @@ in
       "sha256-HQUL0R1NWP6DXQ26iS9k6lIAVdwK899fwLGH4/Z4U8Q=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.42.59"
-      "sha256-Emsl+UKfvHGf0KKvTdTIZ5gw+NJMEom5zz+AfcJZWD8=";
+    buildMypyBoto3Package "connect" "1.42.61"
+      "sha256-8e1DNRsPNsPAMWYA2wlDGyLySvX7ow5QkZu/i0F4FJk=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.42.3"
@@ -443,8 +443,8 @@ in
       "sha256-92qhSUqTiLgbtvCdi/Mmgve18mcYR00ABL+bNy7/OnY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.42.58"
-      "sha256-6UyKkBJa2ZnDaWK7u3KFrDX5hntWPlR7+L6LqZbmA7I=";
+    buildMypyBoto3Package "ec2" "1.42.62"
+      "sha256-WvlACL91YcF9F3JJhG96wSfCKCgMbv1XI3xLqATrqiQ=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.42.3"
@@ -479,8 +479,8 @@ in
       "sha256-4+ujCgzi4N92QEhsBbE8RSsKA1JAu4oJtlAlQ4uwXcU=";
 
   mypy-boto3-elasticbeanstalk =
-    buildMypyBoto3Package "elasticbeanstalk" "1.42.3"
-      "sha256-bdkMl7lZNe9af/V77qmSRP9vUFq8emG/i6lfb5c/bkk=";
+    buildMypyBoto3Package "elasticbeanstalk" "1.42.61"
+      "sha256-bhwGh02NXqxOs+Pm1PtJUPZrZPM7MC9KsW0sBnx434g=";
 
   mypy-boto3-elastictranscoder =
     buildMypyBoto3Package "elastictranscoder" "1.42.3"
@@ -511,8 +511,8 @@ in
       "sha256-DyAxO4HPA98ON9Q2Sp5HF1lQNp8yecGiEaV12m0E7zM=";
 
   mypy-boto3-es =
-    buildMypyBoto3Package "es" "1.42.56"
-      "sha256-52bnvdPDRbC/di9xSwDaoOqyNQIPXjqooUXVbypevaw=";
+    buildMypyBoto3Package "es" "1.42.61"
+      "sha256-bA+O4kGsDPQC+dn5+izZCKnI0mN7k5wBBC5Bs6ZGhRo=";
 
   mypy-boto3-events =
     buildMypyBoto3Package "events" "1.42.3"
@@ -559,8 +559,8 @@ in
       "sha256-NqNGcL3HfJgx2ScPLKMNNwpVS3bO4Cu7JpYlenSJwJg=";
 
   mypy-boto3-gamelift =
-    buildMypyBoto3Package "gamelift" "1.42.38"
-      "sha256-z9RuMA2e/L1mGm59JhrIM+tDCQqQ7pRm2L5luhQSdoM=";
+    buildMypyBoto3Package "gamelift" "1.42.61"
+      "sha256-4xETNlpx9vi3WzW1f8F6E1KLioIpS99L1J873cRwsuc=";
 
   mypy-boto3-glacier =
     buildMypyBoto3Package "glacier" "1.42.30"
@@ -590,8 +590,8 @@ in
       "sha256-UIxD9R+oQjVmR90OfD8Dp7GW3E73zny6LFTkxrSdmNU=";
 
   mypy-boto3-guardduty =
-    buildMypyBoto3Package "guardduty" "1.42.33"
-      "sha256-Xo4t/M+9Kly33WHxtXSgww0cbNyF59k4LBeyyFSbSMw=";
+    buildMypyBoto3Package "guardduty" "1.42.62"
+      "sha256-0L/ftXNBYly8b13Z1OGkdqAQWkSoaKzW4sYZE+oTXJE=";
 
   mypy-boto3-health =
     buildMypyBoto3Package "health" "1.42.59"
@@ -966,8 +966,8 @@ in
       "sha256-o2X4h4K/Cf/TnZG3P5uDjdVmYJRcwPlv6DnSwdzOgc0=";
 
   mypy-boto3-opensearch =
-    buildMypyBoto3Package "opensearch" "1.42.56"
-      "sha256-yGLOtl1C0Y4F/Q1yDUEx0nR5VcqFFpdt80Eix/DZ5ts=";
+    buildMypyBoto3Package "opensearch" "1.42.61"
+      "sha256-Nyx0ukN2bJZ78a6QdtqO42oJah9eADn0xkhSGSt+Qsk=";
 
   mypy-boto3-opensearchserverless =
     buildMypyBoto3Package "opensearchserverless" "1.42.29"
@@ -1070,8 +1070,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.42.55"
-      "sha256-N+w9coq6u6F/B69obbL/N/xL/qsEuSJJVd5WYrnD48Q=";
+    buildMypyBoto3Package "quicksight" "1.42.61"
+      "sha256-3ZA5BRq6lgqNM8tt02E7fXSrwf0gfF4JE6lfaw6cYWo=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.42.59"
@@ -1170,8 +1170,8 @@ in
       "sha256-juVfwdjPDNPaT5tvyXpzDtomugqxeu++AERLkVtFIxw=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.42.60"
-      "sha256-YSUncXOtyOaOCp46gXsLD8MyOm01fVjqlVZBDNthE94=";
+    buildMypyBoto3Package "sagemaker" "1.42.62"
+      "sha256-8wdpOmtLYDYQG8Ac5RA62tuEqCpNDbCzaODy1TaGSVg=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.42.3"
@@ -1198,8 +1198,8 @@ in
       "sha256-Y3kJS5tHq/aBkvWs3PJCuI0AcfYa8aa2hogo+CC9uPE=";
 
   mypy-boto3-savingsplans =
-    buildMypyBoto3Package "savingsplans" "1.42.3"
-      "sha256-91gIxXdxKevS9es3dQamxTCBjI3B3lJMHQUZrkrfXxQ=";
+    buildMypyBoto3Package "savingsplans" "1.42.62"
+      "sha256-ah5aNvlMpjEz/nec9LBb8eb/WVUT8hw12sQzTA/Wu0s=";
 
   mypy-boto3-scheduler =
     buildMypyBoto3Package "scheduler" "1.42.3"

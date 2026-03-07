@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "jx";
-  version = "3.16.45";
+  version = "3.16.56";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "sha256-xPbGRi4Z4M1mnvCyriG6h2n6IILq131JYNug2rESGhQ=";
+    sha256 = "sha256-boCljgzKLtCuLsgUwrDidKjZYvDnqnJYRnERMzN6Dgw=";
   };
 
   vendorHash = "sha256-1ErjD+1MdbKN4EPaQX0jxNzoN9dB8beH1csdx1IPKl8=";

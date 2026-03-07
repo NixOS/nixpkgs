@@ -1,46 +1,48 @@
 {
   lib,
   stdenv,
+  fetchurl,
   fetchFromGitHub,
   buildDotnetModule,
-  buildGoModule,
   dotnetCorePackages,
-  versionCheckHook,
+  go,
 }:
 let
-  version = "4.0.7030";
+  version = "4.7.0";
+  templatesVersion = "3.1.1648";
+
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-functions-core-tools";
     tag = version;
-    hash = "sha256-ibbXUg2VHN2yJk6qwLwDbxcO0XArFFb7XMUCfKH0Tkw=";
+    hash = "sha256-2Bs1jxJmZzzShSrUK3XP+cNdXlczPEr6UCnh4oQRaoA=";
   };
-  gozip = buildGoModule {
-    pname = "gozip";
-    inherit version;
-    src = src + "/tools/go/gozip";
-    vendorHash = null;
+
+  templates = fetchurl {
+    url = "https://cdn.functions.azure.com/public/TemplatesApi/${templatesVersion}.zip";
+    hash = "sha256-YYKBwd69TIHQKF1r8BzlzIyDLJBcCqtAbK3FhNvA+5s=";
   };
 in
 buildDotnetModule {
   pname = "azure-functions-core-tools";
   inherit src version;
-
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.sdk_8_0;
-  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
-  nugetDeps = ./deps.json;
-  useDotnetFromEnv = true;
+  projectFile = "src/Cli/func/Azure.Functions.Cli.csproj";
   executables = [ "func" ];
 
-  postPatch = ''
-    substituteInPlace src/Azure.Functions.Cli/Common/CommandChecker.cs \
-      --replace-fail "CheckExitCode(\"/bin/bash" "CheckExitCode(\"${stdenv.shell}"
-  '';
+  nugetDeps = ./deps.json;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  nativeBuildInputs = [ go ];
 
-  postInstall = ''
-    mkdir -p $out/bin
-    ln -s ${gozip}/bin/gozip $out/bin/gozip
+  linkNuGetPackagesAndSources = true;
+  useDotnetFromEnv = true;
+
+  postPatch = ''
+    templates_path="./out/obj/Azure.Functions.Cli/templates-staging"
+    mkdir -p "$templates_path"
+    cp "${templates}" "$templates_path/templates.zip"
+
+    substituteInPlace src/Cli/func/Common/CommandChecker.cs \
+      --replace-fail "CheckExitCode(\"/bin/bash" "CheckExitCode(\"${stdenv.shell}"
   '';
 
   meta = {
