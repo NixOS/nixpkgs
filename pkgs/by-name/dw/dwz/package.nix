@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   elfutils,
-  xxHash,
+  xxhash,
   dejagnu,
   gdb,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ elfutils ];
 
   buildInputs = [
-    xxHash
+    xxhash
     elfutils
   ];
 

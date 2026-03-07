@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "xxHash";
+  pname = "xxhash";
   version = "0.8.3";
 
   src = fetchFromGitHub {

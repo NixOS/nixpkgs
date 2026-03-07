@@ -48,7 +48,7 @@
   vulkan-loader,
   vulkan-memory-allocator,
   xbyak,
-  xxHash,
+  xxhash,
   zlib-ng,
   zydis,
   nix-update-script,
@@ -127,7 +127,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
     vulkan-memory-allocator
     xbyak
-    xxHash
+    xxhash
     zlib-ng
     zydis
   ];
