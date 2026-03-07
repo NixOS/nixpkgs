@@ -12,7 +12,7 @@
 
 let
   version = "0.23a";
-  debianRevision = "12";
+  debianRevision = "15";
   debianPatch =
     patchname: hash:
     fetchpatch {
@@ -41,6 +41,7 @@ stdenv.mkDerivation {
     (debianPatch "08_windowed_mode" "0knx4g445ngilsz4dvdkq69f5f8i2xv2fnmdmq037xd5rhfg0b23")
     (debianPatch "09_rootage_make_highres_default" "1zqz8s54rl8jmqmvdi9c3ayfcma6qkbfkx5vw0fzyn268wcs022p")
     (debianPatch "10_deg_out_of_range" "1wr76az4rlv1gaj9xdknzqcjazw6h8myqw6y3753q259hxbq4cah")
+    (debianPatch "11_gcc_15" "sha256-CQSZh+7u8yocn7hn18u9FCFHARhuGeY3YDR13vNPW+A=")
   ];
   postPatch = ''
     substituteInPlace "src/screen.c" --replace "/usr/share/games/rrootage" "$out/share/games/rrootage"
