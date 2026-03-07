@@ -35,6 +35,7 @@ let
     mkOption
     mkRemovedOptionModule
     mkRenamedOptionModule
+    optional
     optionals
     optionalString
     recursiveUpdate
@@ -569,7 +570,13 @@ in
     openFirewall = mkOption {
       default = false;
       type = types.bool;
-      description = "Whether to open the firewall for the specified port.";
+      description = "Whether to open the firewall for the specified frontend port. For components specific ports see openFirewallForComponents.";
+    };
+
+    openFirewallForComponents = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Whether to open required firewall ports for enabled components. For the frontend see openFirewall.";
     };
 
     blueprints = mergeAttrsList (
@@ -620,7 +627,13 @@ in
       }
     ];
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
+    networking.firewall.allowedTCPPorts = mkMerge [
+      (mkIf cfg.openFirewall [ cfg.config.http.server_port ])
+      (lib.mkIf cfg.openFirewallForComponents
+        # https://www.home-assistant.io/integrations/sonos/#network-requirements
+        (optional (useComponent "sonos") 1400)
+      )
+    ];
 
     # symlink the configuration to /etc/home-assistant
     environment.etc = mkMerge [
