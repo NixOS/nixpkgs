@@ -131,6 +131,7 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
           "-B${targetGccPackages.libgomp}/lib"
+          "-B${targetGccPackages.libquadmath}/lib/"
           "-B${targetGccPackages.libgfortran}/lib/"
         ];
       };
@@ -148,6 +149,7 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libatomic}/lib"
           "-B${targetGccPackages.libgomp}/lib"
           "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
+          "-B${targetGccPackages.libquadmath}/lib/"
         ];
       };
 
@@ -164,6 +166,8 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libatomic}/lib"
           "-B${targetGccPackages.libgomp}/lib"
           "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
+          "-B${targetGccPackages.libquadmath}/lib/"
+          "-I${targetGccPackages.libquadmath}/lib/gcc/${metadata.release_version}/include"
         ];
       };
 
