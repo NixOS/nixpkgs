@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mactop";
   version = "2.0.6";
 
