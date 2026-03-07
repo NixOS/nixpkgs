@@ -5,6 +5,7 @@
   cudaPackages,
   cudaSupport ? config.cudaSupport,
   fetchFromGitHub,
+  fetchpatch,
   gfortran,
   gpuTargets ? [ ], # Non-CUDA targets, that is HIP
   rocmPackages,
@@ -121,6 +122,17 @@ stdenv.mkDerivation (finalAttrs: {
     "test"
   ];
 
+  patches = lib.optionals cudaSupport [
+    # Split CUDA kernels into separate libraries to avoid relocation overflow
+    # when building for many CUDA architectures.
+    # https://github.com/icl-utk-edu/magma/pull/82
+    (fetchpatch {
+      name = "magma-split-cuda-libs.patch";
+      url = "https://github.com/icl-utk-edu/magma/commit/9bc78f5250c23582d2a5c5ff1fddc7deea0d42b0.patch";
+      hash = "sha256-iRh4MszeLEeHwtU1mcbLUASUUlboqi1JyGmXj10AlAk=";
+    })
+  ];
+
   postPatch = ''
     # For rocm version script invoked by cmake
     patchShebangs tools/
@@ -195,6 +207,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lists.optionals cudaSupport [
     (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+    # Split CUDA kernels into separate libraries to avoid relocation overflow
+    # when building for many CUDA architectures.
+    (strings.cmakeBool "MAGMA_BUILD_SPLIT_CUDA" true)
   ]
   ++ lists.optionals rocmSupport [
     (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clang}/bin/clang")
@@ -389,9 +404,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Cf. https://github.com/icl-utk-edu/magma/blob/v2.10.0/CMakeLists.txt#L24-L31
     broken =
-      # dynamic CUDA support is broken https://github.com/NixOS/nixpkgs/issues/239237
-      (cudaSupport && !static)
-      || !(cudaSupport || rocmSupport) # At least one back-end enabled
+      !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport); # Mutually exclusive
   };
 })
