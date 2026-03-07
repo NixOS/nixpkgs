@@ -29,14 +29,9 @@ buildNpmPackage (finalAttrs: {
     # Also, we set the `bin` property to the server script to benefit from the
     # auto-generated wrapper.
     ./0001-npm-pack.patch
-    # LibreChat tries writing logs to the package directory, which is immutable
-    # in our case. We patch the log directory to target the current working directory
-    # instead, which in case of NixOS will be the service's data directory.
-    ./0002-logs.patch
-    # Similarly to the logs, user uploads are by default written to the package
-    # directory as well. Again, we patch this to be relative to the current working
-    # directory instead.
-    ./0003-upload-paths.patch
+    # User uploads are by default written to the package directory as well.
+    # We patch this to be relative to the current working directory instead.
+    ./0002-upload-paths.patch
   ];
 
   npmDepsFetcherVersion = 2;
@@ -56,6 +51,13 @@ buildNpmPackage (finalAttrs: {
 
   npmBuildScript = "frontend";
   npmPruneFlags = [ "--production" ];
+
+  makeWrapperArgs = [
+    # Upstream defaults to the immutable package directory.
+    # As a functioning default, we set this to the current working directory (through a relative logs path),
+    # but make it easy for the module to override.
+    "--set-default LIBRECHAT_LOG_DIR ./logs"
+  ];
 
   # npmConfigHook only patches the root node_modules
   postConfigure = ''
