@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "metaspartan";
     repo = "mactop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-J+ebxVV5aNTz0qtBkd8G4NX0EB7wWkWIIzS0h/jvQWI=";
   };
 
