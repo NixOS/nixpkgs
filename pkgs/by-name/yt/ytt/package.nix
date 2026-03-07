@@ -5,7 +5,6 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  ytt,
 }:
 buildGoModule (finalAttrs: {
   pname = "ytt";
@@ -14,8 +13,8 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "ytt";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-QGb3lTeMiYN4+uml1x0tIGRf7EF96gXIsXgkxyWxL1Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QGb3lTeMiYN4+uml1x0tIGRf7EF96gXIsXgkxyWxL1Q=";
   };
 
   vendorHash = null;
@@ -42,8 +41,8 @@ buildGoModule (finalAttrs: {
   doCheck = false;
 
   passthru.tests.version = testers.testVersion {
-    package = ytt;
-    command = "ytt --version";
+    package = finalAttrs.finalPackage;
+    command = "${finalAttrs.meta.mainProgram} --version";
     inherit (finalAttrs) version;
   };
 
