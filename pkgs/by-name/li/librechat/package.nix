@@ -10,14 +10,14 @@
   nixosTests,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "librechat";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "danny-avila";
     repo = "LibreChat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DTmb9J2nsMy6f+V6BgRtFgpTwOi9OQnvikSx4QZQ0HI=";
   };
 
@@ -87,4 +87,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ niklaskorz ];
     mainProgram = "librechat-server";
   };
-}
+})
