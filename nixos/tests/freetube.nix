@@ -35,8 +35,6 @@ let
           "${name}" = machine;
         };
         meta.maintainers = with pkgs.lib.maintainers; [ kirillrdy ];
-        # time-out on ofborg
-        meta.broken = pkgs.stdenv.hostPlatform.isAarch64;
         enableOCR = true;
 
         testScript = ''
