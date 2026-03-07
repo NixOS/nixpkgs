@@ -10769,9 +10769,6 @@ with pkgs;
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
 
-  neovimUtils = callPackage ../applications/editors/neovim/utils.nix {
-    lua = lua5_1;
-  };
   neovim = wrapNeovim neovim-unwrapped { };
 
   virt-top = callPackage ../applications/virtualization/virt-top {

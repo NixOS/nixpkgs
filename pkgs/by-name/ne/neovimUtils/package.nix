@@ -10,11 +10,13 @@
   neovim-unwrapped,
   bundlerEnv,
   ruby,
-  lua,
+  lua5_1,
   python3Packages,
   wrapNeovimUnstable,
 }:
 let
+  lua = lua5_1;
+
   inherit (vimUtils) toVimPlugin;
 
   /*
@@ -379,17 +381,32 @@ let
     };
 
 in
-{
-  inherit makeNeovimConfig;
-  inherit makeVimPackageInfo;
-  inherit generateProviderRc;
-  inherit legacyWrapper;
-  inherit grammarToPlugin;
-  inherit packDir;
-  inherit normalizePlugins normalizedPluginsToVimPackage;
+stdenv.mkDerivation {
+  pname = "neovimUtils";
+  version = "unstable-2026-03-07";
 
-  inherit buildNeovimPlugin;
-}
-// lib.optionalAttrs config.allowAliases {
-  buildNeovimPluginFrom2Nix = throw "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin; # converted to throw on 2025-12-30
+  dontUnpack = true;
+  dontBuild = true;
+  installPhase = ''
+    mkdir -p $out
+  '';
+
+  passthru = {
+    inherit
+      makeNeovimConfig
+      makeVimPackageInfo
+      generateProviderRc
+      legacyWrapper
+      grammarToPlugin
+      packDir
+      normalizePlugins
+      normalizedPluginsToVimPackage
+      buildNeovimPlugin
+      ;
+  };
+
+  meta = {
+    description = "Utility functions for building and configuring Neovim in Nixpkgs";
+    platforms = lib.platforms.all;
+  };
 }
