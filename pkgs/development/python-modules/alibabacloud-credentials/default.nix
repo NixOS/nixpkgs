@@ -20,6 +20,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-gEKCgLS8+VRh1B0UkKIjYLi2fRgpvx6zj3T6vMaT8bM=";
   };
 
+  pythonRelaxDeps = [ "aiofiles" ];
+
   build-system = [ setuptools ];
 
   dependencies = [
