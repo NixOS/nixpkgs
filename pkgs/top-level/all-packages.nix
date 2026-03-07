@@ -11601,10 +11601,6 @@ with pkgs;
     rocmSupport = false;
   };
 
-  magma-cuda-static = magma-cuda.override {
-    static = true;
-  };
-
   magma-hip = magma.override {
     cudaSupport = false;
     rocmSupport = true;

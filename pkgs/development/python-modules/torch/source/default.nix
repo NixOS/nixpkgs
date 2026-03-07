@@ -15,14 +15,14 @@
   autoAddDriverRunpath,
   effectiveMagma ?
     if cudaSupport then
-      magma-cuda-static
+      magma-cuda
     else if rocmSupport then
       magma-hip
     else
       magma,
   magma,
   magma-hip,
-  magma-cuda-static,
+  magma-cuda,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
   useSystemNccl ? (cudaSupport && cudaPackages.nccl.meta.available || rocmSupport),
   MPISupport ? false,
