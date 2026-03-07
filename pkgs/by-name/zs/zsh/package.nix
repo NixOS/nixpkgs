@@ -162,7 +162,7 @@ stdenv.mkDerivation {
         }
         mv $out/etc/zshenv $out/etc/zshenv_zwc_is_used
 
-        rm $out/bin/zsh-${version}
+        rm $out/bin/zsh-$version
         mkdir -p $out/share/doc/
         mv $out/share/zsh/htmldoc $out/share/doc/zsh-$version
   '';
