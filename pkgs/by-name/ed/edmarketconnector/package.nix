@@ -5,23 +5,6 @@
   python3,
   makeWrapper,
 }:
-let
-  pythonEnv = python3.buildEnv.override {
-    extraLibs = with python3.pkgs; [
-      tkinter
-      requests
-      pillow
-      (watchdog.overrideAttrs {
-        disabledTests = [
-          "test_select_fd" # Avoid `Too many open files` error. See https://github.com/gorakhargosh/watchdog/issues/1095
-        ];
-      })
-      semantic-version
-      psutil
-      tomli-w
-    ];
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "edmarketconnector";
   version = "6.1.2";
@@ -35,20 +18,43 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
+  addonLibs = [ ];
 
-    mkdir -p $out/share/icons/hicolor/512x512/apps/
-    ln -s ${finalAttrs.src}/io.edcd.EDMarketConnector.png $out/share/icons/hicolor/512x512/apps/io.edcd.EDMarketConnector.png
+  installPhase =
+    let
+      pythonEnv = python3.buildEnv.override {
+        extraLibs =
+          with python3.pkgs;
+          [
+            tkinter
+            requests
+            pillow
+            (watchdog.overrideAttrs {
+              disabledTests = [
+                "test_select_fd" # Avoid `Too many open files` error. See https://github.com/gorakhargosh/watchdog/issues/1095
+              ];
+            })
+            semantic-version
+            psutil
+            tomli-w
+          ]
+          ++ finalAttrs.addonLibs;
+      };
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p "$out/share/applications/"
-    ln -s "${finalAttrs.src}/io.edcd.EDMarketConnector.desktop" "$out/share/applications/"
+      mkdir -p $out/share/icons/hicolor/512x512/apps/
+      ln -s ${finalAttrs.src}/io.edcd.EDMarketConnector.png $out/share/icons/hicolor/512x512/apps/io.edcd.EDMarketConnector.png
 
-    makeWrapper ${pythonEnv}/bin/python $out/bin/edmarketconnector \
-      --add-flags "${finalAttrs.src}/EDMarketConnector.py"
+      mkdir -p "$out/share/applications/"
+      ln -s "${finalAttrs.src}/io.edcd.EDMarketConnector.desktop" "$out/share/applications/"
 
-    runHook postInstall
-  '';
+      makeWrapper ${pythonEnv}/bin/python $out/bin/edmarketconnector \
+        --add-flags "${finalAttrs.src}/EDMarketConnector.py"
+
+      runHook postInstall
+    '';
 
   meta = {
     homepage = "https://github.com/EDCD/EDMarketConnector";
