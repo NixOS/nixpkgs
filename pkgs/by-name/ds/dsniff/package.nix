@@ -114,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     NIX_CFLAGS_COMPILE = toString [
       "-I${libtirpc.dev}/include/tirpc"
+      "-std=gnu17"
     ];
   };
   postPatch = ''

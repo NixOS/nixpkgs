@@ -28,6 +28,8 @@ mkDerivation {
 
   MK_TESTS = "no";
   MK_AUTOFS = "yes";
+  MK_ACPI = "yes";
+  MK_SOUND = "yes";
   MK_BLUETOOTH = "yes";
   MK_HYPERV = "yes";
   MK_USB = "yes";

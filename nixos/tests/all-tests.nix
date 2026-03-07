@@ -840,6 +840,7 @@ in
   keymap = handleTest ./keymap.nix { };
   kimai = runTest ./kimai.nix;
   kismet = runTest ./kismet.nix;
+  kiwix-serve = runTest ./kiwix-serve;
   kmonad = runTest ./kmonad.nix;
   kmscon = runTest ./kmscon.nix;
   knot = runTest ./knot.nix;

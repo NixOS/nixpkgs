@@ -765,6 +765,7 @@ mapAliases {
   fx_cast_bridge = throw "'fx_cast_bridge' has been renamed to/replaced by 'fx-cast-bridge'"; # Converted to throw 2025-10-27
   fzf-zsh = throw "'fzf-zsh' has been removed because it was superseed by its builtin equivalent and archived upstream."; # Added 2026-01-17
   g4music = throw "'g4music' has been renamed to/replaced by 'gapless'"; # Converted to throw 2025-10-27
+  galene-stt = throw "'galene-stt' has been removed as it is unmaintained and broken"; # Added 2026-01-27
   gamecube-tools = throw "gamecube-tools was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   gandi-cli = throw "'gandi-cli' has been removed as it is unmaintained upstream"; # Added 2026-01-11
   garage_0_8 = throw "'garage_0_8' has been removed as it is unmaintained upstream"; # Added 2025-06-23
@@ -1236,6 +1237,7 @@ mapAliases {
   lowPrio = warnAlias "'lowPrio' has been removed from pkgs, use `lib.lowPrio` instead" lib.lowPrio; # Added 2025-10-30
   LPCNet = throw "'LPCNet' has been renamed to/replaced by 'lpcnet'"; # Converted to throw 2025-10-27
   luci-go = throw "luci-go has been removed since it was unused and failing to build for 5 months"; # Added 2025-08-27
+  lunarvim = throw "'lunarvim' has been removed since it was abandoned upstream and relied on an older version of 'neovim' to work properly"; # Added 2026-02-05
   lxd = throw "
     LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
     Consider migrating or switching to Incus, or remove from your configuration.
