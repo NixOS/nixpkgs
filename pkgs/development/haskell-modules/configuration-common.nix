@@ -143,6 +143,8 @@ with haskellLib;
 
         cabal-install-solver = super.cabal-install-solver.overrideScope cabalInstallOverlay;
 
+        cabal2nix-unstable = super.cabal2nix-unstable.overrideScope cabalInstallOverlay;
+
         # Needs cabal-install >= 3.8 /as well as/ matching Cabal
         guardian = lib.pipe (super.guardian.overrideScope cabalInstallOverlay) [
           # Tests need internet access (run stack)
@@ -156,25 +158,6 @@ with haskellLib;
     cabal-install-solver
     guardian
     ;
-
-  # cabal2nix depends on hpack which doesn't support Cabal >= 3.16
-  cabal2nix-unstable = super.cabal2nix-unstable.override (
-    prev:
-    # Manually override the relevant dependencies to reduce rebuild amount
-    let
-      cabalOverride = {
-        Cabal = self.Cabal_3_14_2_0;
-      };
-    in
-    cabalOverride
-    // lib.mapAttrs (_: drv: drv.override cabalOverride) {
-      inherit (prev)
-        distribution-nixpkgs
-        hackage-db
-        hpack
-        ;
-    }
-  );
 
   # Extensions wants a specific version of Cabal for its list of Haskell
   # language extensions.
