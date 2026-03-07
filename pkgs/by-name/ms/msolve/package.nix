@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+    badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
   };
 })
