@@ -4,6 +4,7 @@
 # depend on a dependency marked as broken.
 dont-distribute-packages:
 
+ - 4Blocks
  - a50
  - abcBridge
  - AbortT-monadstf
@@ -600,7 +601,6 @@ dont-distribute-packages:
  - cprng-aes
  - cprng-aes-effect
  - cql-io-tinylog
- - cql_4_1_0_0
  - cqrs-example
  - cqrs-memory
  - cqrs-postgresql
@@ -763,7 +763,6 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_2_2
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -943,7 +942,6 @@ dont-distribute-packages:
  - fay-uri
  - fay-websockets
  - fbrnch
- - fbrnch_1_8
  - fcd
  - FComp
  - feature-flipper-postgres
@@ -1773,7 +1771,6 @@ dont-distribute-packages:
  - hylotab
  - hyloutils
  - hyperbole
- - hyperbole_0_6_0
  - hyperpublic
  - ide-backend
  - ide-backend-server
@@ -2588,7 +2585,6 @@ dont-distribute-packages:
  - persistent-hssqlppp
  - persistent-iproute
  - persistent-map
- - persistent-postgresql_2_14_3_0
  - persistent-protobuf
  - persona-idp
  - peyotls
@@ -3027,7 +3023,6 @@ dont-distribute-packages:
  - sandwich-contexts-kubernetes
  - sandwich-contexts-minio
  - sandwich-webdriver
- - sandwich-webdriver_0_4_0_2
  - sarsi
  - sasl
  - sat-micro-hs
@@ -3199,7 +3194,6 @@ dont-distribute-packages:
  - SimpleLog
  - SimpleServer
  - simseq
- - singletons-base_3_5_1
  - singletons-presburger
  - siphon
  - siren-json
@@ -3735,7 +3729,6 @@ dont-distribute-packages:
  - WebCont
  - webcrank-wai
  - webdriver-w3c
- - webdriver_0_14_0_0
  - webify
  - webserver
  - websnap
@@ -3900,4 +3893,3 @@ dont-distribute-packages:
  - zoovisitor
  - zuramaru
  - zwirn
- - _4Blocks
