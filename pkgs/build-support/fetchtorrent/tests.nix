@@ -94,16 +94,22 @@ builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash
     backend = "transmission";
     inherit (flattened) postFetch;
   };
-  http-link-rqbit = {
-    inherit (http) url;
-    backend = "rqbit";
-    inherit (flattened) postFetch;
-  };
-  magnet-link-rqbit = {
-    inherit (magnet) url;
-    backend = "rqbit";
-    inherit (flattened) postFetch;
-  };
+  #
+  # Disabled because these warn that flatten hasn't been explicitly
+  # set to true, and warnings are treated as failures in tests.
+  #
+  # Re-enable these tests when flatten defaults to true.
+  #
+  #http-link-rqbit = {
+  #  inherit (http) url;
+  #  backend = "rqbit";
+  #  inherit (flattened) postFetch;
+  #};
+  #magnet-link-rqbit = {
+  #  inherit (magnet) url;
+  #  backend = "rqbit";
+  #  inherit (flattened) postFetch;
+  #};
   http-link-rqbit-flattened = {
     inherit (http) url;
     backend = "rqbit";
@@ -116,16 +122,22 @@ builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash
     flatten = true;
     inherit (flattened) postFetch;
   };
-  http-link-rqbit-unflattened = {
-    inherit (http) url;
-    backend = "rqbit";
-    flatten = false;
-    inherit (unflattened) postFetch;
-  };
-  magnet-link-rqbit-unflattened = {
-    inherit (magnet) url;
-    backend = "rqbit";
-    flatten = false;
-    inherit (unflattened) postFetch;
-  };
+  #
+  # Disabled because these warn that `flatten = false` is deprecated
+  # and will be removed.
+  #
+  # Remove these when support for `flatten = false` is completely removed.
+  #
+  #http-link-rqbit-unflattened = {
+  #  inherit (http) url;
+  #  backend = "rqbit";
+  #  flatten = false;
+  #  inherit (unflattened) postFetch;
+  #};
+  #magnet-link-rqbit-unflattened = {
+  #  inherit (magnet) url;
+  #  backend = "rqbit";
+  #  flatten = false;
+  #  inherit (unflattened) postFetch;
+  #};
 }
