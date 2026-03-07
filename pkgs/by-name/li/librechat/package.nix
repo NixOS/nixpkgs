@@ -54,9 +54,6 @@ buildNpmPackage rec {
     vips
   ];
 
-  # required for sharp
-  makeCacheWritable = true;
-
   npmBuildScript = "frontend";
   npmPruneFlags = [ "--production" ];
 
