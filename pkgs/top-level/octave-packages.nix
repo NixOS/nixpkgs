@@ -165,6 +165,8 @@ makeScope newScope (
 
     ocl = callPackage ../development/octave-modules/ocl { };
 
+    octave_tar = callPackage ../development/octave-modules/octave_tar { };
+
     octclip = callPackage ../development/octave-modules/octclip { };
 
     octproj = callPackage ../development/octave-modules/octproj { };
