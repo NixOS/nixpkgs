@@ -129,9 +129,11 @@ in
       type = lib.types.submodule {
         freeformType = format.type;
       };
-      default = { };
+      default = {
+        version = "1.2.1";
+      };
       example = {
-        version = "1.0.8";
+        version = "1.2.1";
         cache = true;
         interface = {
           privacyPolicy = {
