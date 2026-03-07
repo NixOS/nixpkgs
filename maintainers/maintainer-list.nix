@@ -24503,6 +24503,11 @@
     githubId = 46294732;
     name = "Sharzy";
   };
+  shaunren = {
+    name = "Shaun Ren";
+    github = "shaunren";
+    githubId = 388428;
+  };
   shavyn = {
     name = "Marco Desiderati";
     email = "desideratimarco@gmail.com";
