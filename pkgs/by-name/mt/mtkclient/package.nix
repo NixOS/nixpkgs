@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   gcc-arm-embedded,
+  makeDesktopItem,
   python3Packages,
   udevCheckHook,
 }:
@@ -50,6 +51,13 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     install -Dm444 Setup/Linux/52-mtk.rules -t $out/lib/udev/rules.d
   '';
+
+  desktopItem = makeDesktopItem {
+    name = "mtkclient";
+    desktopName = "MTKClient";
+    comment = "Mediatek Flash and Repair Utility";
+    exec = "mtk_gui";
+  };
 
   meta = {
     description = "MTK reverse engineering and flash tool";
