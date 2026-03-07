@@ -42,7 +42,7 @@
   sqlite,
   tinyxml,
   util-linux,
-  wxGTK32,
+  wxwidgets_3_2,
   libxtst,
   libxdmcp,
   xz,
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     sqlite
     tinyxml
-    wxGTK32
+    wxwidgets_3_2
     xz
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

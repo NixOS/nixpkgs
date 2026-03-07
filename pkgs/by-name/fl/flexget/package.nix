@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flexget";
-  version = "3.17.11";
+  version = "3.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qfq6TXSNAnIq8m3I7noFe6pIq6PmUTQKUjN+ZC4NxyU=";
+    hash = "sha256-77jGAju6ZKSsJWHgqJ7aC4xG7Iycwr3mGfRCNDPknEY=";
   };
 
   pythonRelaxDeps = true;
@@ -68,10 +68,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     transmission-rpc
     qbittorrent-api
     deluge-client
-    cloudscraper
     python-telegram-bot
     boto3
-    libtorrent-rasterbar
+    matrix-nio
+    subliminal
   ];
 
   pythonImportsCheck = [
@@ -156,6 +156,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # others
     "TestRegexp"
     "TestYamlLists"
+  ];
+
+  disabledTestPaths = [
+    # FIXME package pytest-ftpserver
+    "tests/ftp/test_ftp_download.py"
+    "tests/ftp/test_ftp_list.py"
   ];
 
   meta = {

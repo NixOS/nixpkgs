@@ -35,7 +35,7 @@
   cxxtest,
   freetype,
   withEditor ? true,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 # You can find more instructions on how to build 0ad here:
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     premake5
     cxxtest
   ]
-  ++ lib.optional withEditor wxGTK32;
+  ++ lib.optional withEditor wxwidgets_3_2;
 
   env = {
     NIX_CFLAGS_COMPILE = toString [

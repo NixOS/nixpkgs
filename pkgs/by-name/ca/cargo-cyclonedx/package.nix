@@ -8,14 +8,14 @@
   curl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-cyclonedx";
   version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-rust-cargo";
-    rev = "${pname}-${version}";
+    rev = "cargo-cyclonedx-${finalAttrs.version}";
     hash = "sha256-T/9eHI2P8eCZAqMTeZz1yEi5nljQWfHrdNiU3h3h74U=";
   };
 
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nikstur ];
   };
-}
+})

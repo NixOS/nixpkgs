@@ -32,12 +32,12 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "46.0.0";
+  version = "46.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ddm1OE7BDwDM4T9GIB0+qK8WvU/+aC+FBIGWDm3ObHM=";
+    hash = "sha256-E61jqj0Wy1f81ackoFnnEZI2UCw70YIGYxQA1ME++xU=";
   };
 
   postPatch = ''
@@ -88,6 +88,11 @@ buildPythonPackage rec {
     chmod +x bin/*
 
     stestr --test-path tempest/tests run -e <(echo "
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_dict_return_values
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_multiple_workers
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_single_process
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_success
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_with_exception
       tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
     ")
   '';

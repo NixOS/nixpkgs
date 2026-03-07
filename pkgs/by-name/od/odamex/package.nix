@@ -30,7 +30,7 @@
   portmidi,
   wayland-scanner,
   waylandpp,
-  wxGTK32,
+  wxwidgets_3_2,
   libx11,
   xorgproto,
   zstd,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsysprof-capture
     pcre2
     portmidi
-    wxGTK32
+    wxwidgets_3_2
     zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

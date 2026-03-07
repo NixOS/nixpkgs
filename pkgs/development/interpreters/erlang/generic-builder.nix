@@ -40,7 +40,7 @@
   systemd,
   unixODBC,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   libx11,
   zlib,
 }:
@@ -53,12 +53,12 @@ let
 
   wxPackages2 =
     if stdenv.hostPlatform.isDarwin then
-      [ wxGTK32 ]
+      [ wxwidgets_3_2 ]
     else
       [
         libGL
         libGLU
-        wxGTK32
+        wxwidgets_3_2
         libx11
         wrapGAppsHook3
       ];

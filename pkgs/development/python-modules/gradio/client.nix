@@ -30,9 +30,9 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gradio-client";
-  version = "2.0.1";
+  version = "2.2.0";
   pyproject = true;
 
   # no tests on pypi
@@ -40,31 +40,24 @@ buildPythonPackage rec {
     owner = "gradio-app";
     repo = "gradio";
     # not to be confused with @gradio/client@${version}
-    # tag = "gradio_client@${version}";
+    # tag = "gradio_client@${finalAttrs.version}";
     # TODO: switch back to a tag next release, if they tag it.
-    rev = "7a8894d7249ee20c2f7a896237e290e99661fd43"; # 2.0.1
+    rev = "8b03393a51e1e03fb04cb0a41b9a5dc3266a58aa"; # 2.2.0
     sparseCheckout = [
       "client/python"
       "gradio/media_assets"
     ];
-    hash = "sha256-p3okK48DJjjyvUzedNR60r5P8aKUxjE+ocb3EplZ6Uk=";
+    hash = "sha256-LkTZwPyHe1w8D5unEMW7dBGKNHxM7gWJ7I+4HwiexKk=";
   };
 
-  sourceRoot = "${src.name}/client/python";
+  sourceRoot = "${finalAttrs.src.name}/client/python";
 
+  # Because we set sourceRoot above, the folders "client/python"
+  # don't exist, as far as this is concerned.
   postPatch = ''
-    # Because we set sourceRoot above, the folders "client/python"
-    # don't exist, as far as this is concerned.
     substituteInPlace test/conftest.py \
       --replace-fail 'from client.python.test import media_data' 'import media_data'
   '';
-
-  # upstream adds upper constraints because they can, not because the need to
-  # https://github.com/gradio-app/gradio/pull/4885
-  pythonRelaxDeps = [
-    # only backward incompat is dropping py3.7 support
-    "websockets"
-  ];
 
   build-system = [
     hatchling
@@ -105,10 +98,6 @@ buildPythonPackage rec {
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
 
-  pytestFlags = [
-    #"-x" "-Wignore" # uncomment for debugging help
-  ];
-
   enabledTestPaths = [
     "test/"
   ];
@@ -135,10 +124,11 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = "https://www.gradio.app/";
-    changelog = "https://github.com/gradio-app/gradio/releases/tag/gradio_client@${version}";
     description = "Lightweight library to use any Gradio app as an API";
+    homepage = "https://www.gradio.app/";
+    downloadPage = "https://github.com/gradio-app/gradio/tree/main/client/python";
+    # changelog = "https://github.com/gradio-app/gradio/releases/tag/${finalAttrs.src.tag}"; TODO: uncomment if the tag exists
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

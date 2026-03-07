@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "toml2json";
   version = "1.4.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ZqHXtk6bPYm/20DjFhVmrc9+wYAmSEBLxqNgyzPGO2c=";
   };
 
@@ -22,4 +22,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ rvarago ];
   };
-}
+})

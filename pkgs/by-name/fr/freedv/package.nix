@@ -20,7 +20,7 @@
   portaudio,
   speexdsp,
   hamlib_4,
-  wxGTK32,
+  wxwidgets_3_2,
   dbus,
   apple-sdk_15,
   nix-update-script,
@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     lpcnet
     speexdsp
     hamlib_4
-    wxGTK32
+    wxwidgets_3_2
     python3.pkgs.numpy
   ]
   ++ (
