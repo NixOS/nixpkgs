@@ -892,6 +892,7 @@
   ./services/misc/klipper.nix
   ./services/misc/languagetool.nix
   ./services/misc/leaps.nix
+  ./services/misc/lemonade-ai.nix
   ./services/misc/lifecycled.nix
   ./services/misc/linux-enable-ir-emitter.nix
   ./services/misc/litellm.nix
