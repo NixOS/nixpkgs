@@ -31,6 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  patches = [ ./hicolor-1024-dirs.patch ];
+
   setupHook = ./setup-hook.sh;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
