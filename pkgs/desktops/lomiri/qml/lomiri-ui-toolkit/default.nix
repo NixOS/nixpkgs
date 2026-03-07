@@ -136,11 +136,19 @@ stdenv.mkDerivation (finalAttrs: {
     # Causes redefinition error with our own fortify hardening
     sed -i '/DEFINES += _FORTIFY_SOURCE/d' features/lomiri_common.prf
   ''
-  + lib.optionalString withQt6 ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/plugins" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}"
-  '';
+  + lib.optionalString withQt6 (
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
+        --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/plugins" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}"
+    ''
+    # https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/66
+    # Disable theming for now. Doesn't seem to affect Morph much.
+    + ''
+      substituteInPlace src/LomiriToolkit/uctheme.cpp \
+        --replace-fail 'engine->addImportPath(path);' '//engine->addImportPath(path);'
+    ''
+  );
 
   # With strictDeps
   # - QMake only picks up Qt dependencies from nativeBuildInputs
