@@ -8,7 +8,7 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: rec {
   pname = "pytest-insta";
   version = "0.4.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vberlier";
     repo = pname;
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zOhWDaCGkE/Ke2MLRyttDH85t+I9kfBZZwVDRN1sprs=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin for snapshot testing";
     homepage = "https://github.com/vberlier/pytest-insta";
-    changelog = "https://github.com/vberlier/pytest-insta/blob/v${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/vberlier/pytest-insta/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
