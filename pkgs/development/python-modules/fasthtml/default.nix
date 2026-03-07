@@ -31,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fasthtml";
-  version = "0.12.47";
+  version = "0.12.48";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AnswerDotAI";
     repo = "fasthtml";
     tag = finalAttrs.version;
-    hash = "sha256-dlG6pOVsd9RSmy/rgr7lUANRllND4tZDnsOecsI4bh8=";
+    hash = "sha256-lMAuIw4sMkS3XSG/0Bs0iQPSjMusbmjUKv0w4cINwas=";
   };
 
   build-system = [

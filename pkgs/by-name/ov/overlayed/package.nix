@@ -17,14 +17,14 @@
   openssl,
   webkitgtk_4_1,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "overlayed";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "overlayeddev";
     repo = "overlayed";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3GFg8czBf1csojXUNC51xFXJnGuXltP6D46fCt6q24I=";
   };
 
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-6wN4nZQWrY0J5E+auj17B3iJ/84hzBXYA/bJsX/N5pk=";
 
   pnpmDeps = fetchPnpmDeps {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
     fetcherVersion = 3;
     hash = "sha256-KJZuucXB7BEMnqPmgytveG/IBEzq4mgMo9ZJHPe/gVs=";
@@ -73,10 +73,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Modern discord voice chat overlay";
     homepage = "https://github.com/overlayeddev/overlayed";
-    changelog = "https://github.com/overlayeddev/overlayed/releases/tag/v${version}";
+    changelog = "https://github.com/overlayeddev/overlayed/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     license = lib.licenses.agpl3Plus;
     mainProgram = "overlayed";
   };
-}
+})

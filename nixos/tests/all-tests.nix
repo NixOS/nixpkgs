@@ -840,6 +840,7 @@ in
   keymap = handleTest ./keymap.nix { };
   kimai = runTest ./kimai.nix;
   kismet = runTest ./kismet.nix;
+  kiwix-serve = runTest ./kiwix-serve;
   kmonad = runTest ./kmonad.nix;
   kmscon = runTest ./kmscon.nix;
   knot = runTest ./knot.nix;
@@ -853,6 +854,7 @@ in
     inherit runTest;
     inherit (pkgs) lib;
   };
+  labgrid = runTest ./labgrid.nix;
   lact = runTest ./lact.nix;
   ladybird = runTest ./ladybird.nix;
   languagetool = runTest ./languagetool.nix;
@@ -1493,6 +1495,7 @@ in
   sonic-server = runTest ./sonic-server.nix;
   spacecookie = runTest ./spacecookie.nix;
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark { };
+  speedtest-tracker = runTest ./speedtest-tracker.nix;
   spiped = runTest ./spiped.nix;
   spire = runTest ./spire.nix;
   sqlite3-to-mysql = runTest ./sqlite3-to-mysql.nix;

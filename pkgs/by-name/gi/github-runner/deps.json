@@ -30,6 +30,11 @@
     "hash": "sha256-9aWmiwMJKrKr9ohD1KSuol37y+jdDxPGJct3m2/Bknw="
   },
   {
+    "pname": "Microsoft.Bcl.Cryptography",
+    "version": "10.0.2",
+    "hash": "sha256-+OYtcWsd1qZcEXadYeA4t6+pyADg1APQCxpKUtP002M="
+  },
+  {
     "pname": "Microsoft.CodeCoverage",
     "version": "17.14.1",
     "hash": "sha256-f8QytG8GvRoP47rO2KEmnDLxIpyesaq26TFjDdW40Gs="
@@ -506,8 +511,8 @@
   },
   {
     "pname": "System.Formats.Asn1",
-    "version": "8.0.1",
-    "hash": "sha256-may/Wg+esmm1N14kQTG4ESMBi+GQKPp0ZrrBo/o6OXM="
+    "version": "10.0.2",
+    "hash": "sha256-PY875Po9vWaGTNbyZaxo9AbKFc8pg1eKf9akGQnJ5cc="
   },
   {
     "pname": "System.Globalization",
@@ -796,8 +801,8 @@
   },
   {
     "pname": "System.Security.Cryptography.Pkcs",
-    "version": "8.0.0",
-    "hash": "sha256-yqfIIeZchsII2KdcxJyApZNzxM/VKknjs25gDWlweBI="
+    "version": "10.0.2",
+    "hash": "sha256-B33jrdvy1mvc8CnZJvnGp438K8wBI/d9x2IGxijefuU="
   },
   {
     "pname": "System.Security.Cryptography.Primitives",

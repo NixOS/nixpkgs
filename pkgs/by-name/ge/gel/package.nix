@@ -14,19 +14,19 @@
   gel,
   testers,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gel";
   version = "7.10.2";
 
   src = fetchFromGitHub {
     owner = "geldata";
     repo = "gel-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Fy4J7puunqB5TeUsafnOotoWNvtTGiMJZ06YII14zIM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-VRZjI8C0u+6MkQgzt0PApeUtrGR5UqvnLZxityMGnDo=";
   };
 
@@ -80,4 +80,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "gel";
   };
-}
+})

@@ -92,7 +92,6 @@ buildGoModule rec {
     homepage = "https://fly.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      adtya
       techknowlogick
       RaghavSood
       SchahinRohani

@@ -5,7 +5,7 @@
   fetchpatch,
   cmake,
   sqlite,
-  wxGTK32,
+  wxwidgets_3_2,
   libusb1,
   soapysdr,
   mesa_glu,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     fltk
     libx11
     mesa_glu
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   doInstallCheck = true;

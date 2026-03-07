@@ -13,6 +13,7 @@
   google-cloud-testutils,
   grpc-google-iam-v1,
   grpc-interceptor,
+  opentelemetry-resourcedetector-gcp,
   proto-plus,
   protobuf,
   sqlparse,
@@ -31,16 +32,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-spanner";
-  version = "3.58.0";
+  version = "3.63.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-spanner";
-    tag = "v${version}";
-    hash = "sha256-bIagQjQv+oatIo8mkA8t5wP9igMnorkiudgyWkVnJcg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QWBl7X/cKGds617IrHKaIteOnqgwB83jgfi8j/ESUws=";
   };
 
   build-system = [ setuptools ];
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     google-cloud-core
     grpc-google-iam-v1
     grpc-interceptor
+    opentelemetry-resourcedetector-gcp
     proto-plus
     protobuf
     sqlparse
@@ -79,7 +81,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     # prevent google directory from shadowing google imports
@@ -97,6 +99,9 @@ buildPythonPackage rec {
     "test_snapshot_read_concurrent"
     # Flaky, can retry too quickly and fail
     "test_retry_helper"
+    # Flaky, system speed sensitive
+    "test_transaction_for_concurrent_statement_should_begin_one_transaction_with_query"
+    "test_transaction_for_concurrent_statement_should_begin_one_transaction_with_read"
   ];
 
   disabledTestPaths = [
@@ -130,8 +135,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cloud Spanner API client library";
     homepage = "https://github.com/googleapis/python-spanner";
-    changelog = "https://github.com/googleapis/python-spanner/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-spanner/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

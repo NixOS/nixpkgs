@@ -36,16 +36,16 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plotly";
-  version = "6.5.2";
+  version = "6.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
-    tag = "v${version}";
-    hash = "sha256-7rMatpaZvHuNPpiXR5eUHultqNnLER1iW+GR3dwgkyo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t1IYu3PL/B71fhX5LVQrjAKkQSjPC+wZjMnBp4kPTNY=";
   };
 
   patches = [
@@ -108,7 +108,7 @@ buildPythonPackage rec {
     which
     xarray
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # failed pinning test, sensitive to dep versions
@@ -169,4 +169,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

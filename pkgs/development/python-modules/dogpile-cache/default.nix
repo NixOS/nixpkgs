@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytest-xdist,
   pytestCheckHook,
   mako,
   decorator,
@@ -31,8 +32,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mako
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isLinux [
+    # flaky
+    "tests/cache/test_dbm_backend.py"
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -44,6 +51,8 @@ buildPythonPackage rec {
     "test_get_value_plus_created_registry_safe_cache_slow"
     "test_get_value_plus_created_registry_unsafe_cache"
     "test_quick"
+    "test_region_set_get_value"
+    "test_region_set_multiple_values"
     "test_return_while_in_progress"
     "test_slow"
   ];

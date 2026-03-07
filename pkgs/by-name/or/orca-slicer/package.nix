@@ -37,14 +37,14 @@
   systemd,
   onetbb,
   webkitgtk_4_1,
-  wxGTK31,
+  wxwidgets_3_1,
   libx11,
   libnoise,
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
   wxGTK' =
-    (wxGTK31.override {
+    (wxwidgets_3_1.override {
       withCurl = true;
       withPrivateFonts = true;
       withWebKit = true;

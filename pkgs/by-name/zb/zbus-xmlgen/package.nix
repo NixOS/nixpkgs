@@ -6,12 +6,12 @@
   rustfmt,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zbus_xmlgen";
   version = "5.2.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CFXOPUWjbzNkE8mb+AC4ZtdvV0MSb/eBr1C0WyreAoU=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.mit;
   };
-}
+})

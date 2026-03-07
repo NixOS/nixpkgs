@@ -8,7 +8,7 @@
   pkg-config,
   openal-soft,
   freealut,
-  wxGTK32,
+  wxwidgets_3_2,
   libogg,
   freetype,
   libvorbis,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     openal-soft
     freealut
-    wxGTK32
+    wxwidgets_3_2
     libogg
     freetype
     libvorbis

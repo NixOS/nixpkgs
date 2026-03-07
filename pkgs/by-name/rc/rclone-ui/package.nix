@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src-tauri/tauri.conf.json \
-      --replace-fail '"mainBinaryName": "Rclone UI"' '"mainBinaryName": "${finalAttrs.pname}"'
+      --replace-fail '"mainBinaryName": "Rclone UI"' '"mainBinaryName": "${finalAttrs.meta.mainProgram}"'
     substituteInPlace src-tauri/Cargo.toml \
        --replace-fail 'name = "app"' 'name = "${finalAttrs.pname}"'
   '';

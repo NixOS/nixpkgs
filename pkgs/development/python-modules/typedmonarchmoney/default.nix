@@ -2,28 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  monarchmoney,
+  hatchling,
+  monarchmoneycommunity,
   rich,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typedmonarchmoney";
-  version = "0.4.4";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "monarchmoney-typed";
-    tag = "v${version}";
-    hash = "sha256-AM6d7oecKf5aG8zO3I6BGY3/rgtrdzNabCwX8AOlEs4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pe/j6UnW9N3x/TYp4VyyVTwk2hTGHLTlnEYL6MNziuw=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
-    monarchmoney
+    monarchmoneycommunity
     rich
   ];
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Typed wrapper around the Monarch Money API";
     homepage = "https://github.com/jeeftor/monarchmoney-typed";
-    changelog = "https://github.com/jeeftor/monarchmoney-typed/releases/tag/v${version}";
+    changelog = "https://github.com/jeeftor/monarchmoney-typed/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

@@ -382,8 +382,6 @@ with pkgs;
   ollama-cuda = callPackage ../by-name/ol/ollama/package.nix { acceleration = "cuda"; };
   ollama-vulkan = callPackage ../by-name/ol/ollama/package.nix { acceleration = "vulkan"; };
 
-  device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix { };
-
   diffPlugins = (callPackage ../build-support/plugins.nix { }).diffPlugins;
 
   dieHook = makeSetupHook {
@@ -1122,12 +1120,6 @@ with pkgs;
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
   github-cli = gh;
-
-  git-annex-metadata-gui =
-    libsForQt5.callPackage ../applications/version-management/git-annex-metadata-gui
-      {
-        inherit (python3Packages) buildPythonApplication pyqt5 git-annex-adapter;
-      };
 
   git-annex-remote-dbx = callPackage ../applications/version-management/git-annex-remote-dbx {
     inherit (python3Packages)
@@ -2939,11 +2931,6 @@ with pkgs;
 
   man = man-db;
 
-  mangohud = callPackage ../tools/graphics/mangohud {
-    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
-    mangohud32 = pkgsi686Linux.mangohud;
-  };
-
   marimo = with python3Packages; toPythonApplication marimo;
 
   mcstatus = with python3Packages; toPythonApplication mcstatus;
@@ -3081,10 +3068,6 @@ with pkgs;
 
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
-
-  nvfancontrol = callPackage ../tools/misc/nvfancontrol {
-    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
-  };
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
@@ -3564,13 +3547,6 @@ with pkgs;
 
   vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
 
-  vpWithSixel = vp.override {
-    # Enable next line for console graphics. Note that it requires `sixel`
-    # enabled terminals such as mlterm or xterm -ti 340
-    SDL = SDL_sixel;
-    SDL_image = SDL_image.override { SDL = SDL_sixel; };
-  };
-
   openconnectPackages = callPackage ../tools/networking/openconnect { };
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
@@ -3578,11 +3554,6 @@ with pkgs;
   globalprotect-openconnect =
     libsForQt5.callPackage ../tools/networking/globalprotect-openconnect
       { };
-
-  sssd = callPackage ../os-specific/linux/sssd {
-    # NOTE: freeipa and sssd need to be built with the same version of python
-    inherit (perlPackages) Po4a;
-  };
 
   buildWasmBindgenCli = callPackage ../build-support/wasm-bindgen-cli { };
 
@@ -4555,10 +4526,6 @@ with pkgs;
     flang_22
     mkLLVMPackages
     ;
-
-  mercury = callPackage ../development/compilers/mercury {
-    jdk_headless = openjdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
 
   mitschemeX11 = mitscheme.override {
     enableX11 = true;
@@ -6368,17 +6335,6 @@ with pkgs;
     ;
 
   fmt = fmt_12;
-
-  freeipa = callPackage ../os-specific/linux/freeipa {
-    # NOTE: freeipa and sssd need to be built with the same version of python
-    kerberos = krb5.override {
-      withVerto = true;
-    };
-    sasl = cyrus_sasl;
-    samba = samba4.override {
-      enableLDAP = true;
-    };
-  };
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
@@ -8600,8 +8556,6 @@ with pkgs;
 
   error-inject = recurseIntoAttrs (callPackages ../os-specific/linux/error-inject { });
 
-  ffado = callPackage ../os-specific/linux/ffado { };
-  ffado-mixer = callPackage ../os-specific/linux/ffado { withMixer = true; };
   libffado = ffado;
 
   freefall = callPackage ../os-specific/linux/freefall {
@@ -10238,10 +10192,6 @@ with pkgs;
   };
 
   diffpdf = libsForQt5.callPackage ../applications/misc/diffpdf { };
-
-  diff-pdf = callPackage ../applications/misc/diff-pdf {
-    wxGTK = wxGTK32;
-  };
 
   mypaint-brushes1 = callPackage ../development/libraries/mypaint-brushes/1.0.nix { };
 
@@ -11946,12 +11896,6 @@ with pkgs;
   };
   maxima-ecl = maxima.override {
     lisp-compiler = ecl;
-  };
-
-  wxmaxima = callPackage ../applications/science/math/wxmaxima {
-    wxGTK = wxGTK32.override {
-      withWebKit = true;
-    };
   };
 
   yacas-gui = yacas.override {

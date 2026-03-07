@@ -8,14 +8,14 @@
   shtk,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ssh-agent-switcher";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "jmmv";
     repo = "ssh-agent-switcher";
-    tag = "ssh-agent-switcher-${version}";
+    tag = "ssh-agent-switcher-${finalAttrs.version}";
     hash = "sha256-p9W0H25pWDB+GCrwLwuVruX9p8b8kICpp+6I11ym1aw=";
   };
 
@@ -56,10 +56,10 @@ rustPlatform.buildRustPackage rec {
       connection-specific forwarded agents.
     '';
     homepage = "https://github.com/jmmv/ssh-agent-switcher";
-    changelog = "https://github.com/jmmv/ssh-agent-switcher/blob/ssh-agent-switcher-${version}/NEWS.md";
+    changelog = "https://github.com/jmmv/ssh-agent-switcher/blob/ssh-agent-switcher-${finalAttrs.version}/NEWS.md";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.jmmv ];
     mainProgram = "ssh-agent-switcher";
     platforms = lib.platforms.unix;
   };
-}
+})

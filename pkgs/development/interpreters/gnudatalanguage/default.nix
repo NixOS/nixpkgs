@@ -60,7 +60,7 @@
   # wxWidgets is preferred over X11 for this project but we only have it on Linux
   # and Darwin.
   enableWX ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  wxGTK32,
+  wxwidgets_3_2,
   # X11: OFF by default for platform consistency. Use X where WX is not available
   enableXWin ? (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin),
 }:
@@ -170,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableXWin plplot-with-drivers.libx11
   ++ lib.optional enableGRIB eccodes
   ++ lib.optional enableGLPK glpk
-  ++ lib.optional enableWX wxGTK32
+  ++ lib.optional enableWX wxwidgets_3_2
   ++ lib.optional enableMPI mpi
   ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
   ++ lib.optional enableSzip szip;

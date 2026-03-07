@@ -14,14 +14,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amdgpu_top";
   version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "Umio-Yasuno";
     repo = "amdgpu_top";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yw73bKO91O05WBQNwjcQ+AqxYgGXXC7XJzUnMx5/IWc=";
   };
 
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/${pname}
+    patchelf --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}" $out/bin/${finalAttrs.meta.mainProgram}
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -62,4 +62,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "amdgpu_top";
   };
-}
+})

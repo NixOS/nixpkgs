@@ -6,12 +6,12 @@
   pipewire,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wiremix";
   version = "0.9.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gs6KqluASHTf4fURZKEmNvERguQEH5UDc4044uJddrU=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tsowell ];
     platforms = lib.platforms.linux;
   };
-}
+})

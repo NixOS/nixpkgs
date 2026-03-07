@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   zlib,
   libjpeg,
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     gtk3
-    wxGTK32
+    wxwidgets_3_2
     zlib
     libjpeg
     libvncserver-patched

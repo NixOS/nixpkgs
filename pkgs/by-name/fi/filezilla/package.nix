@@ -15,7 +15,7 @@
   tinyxml,
   boost,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   xdg-utils,
 }:
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     pugixml
     sqlite
     tinyxml
-    wxGTK32
+    wxwidgets_3_2
     gtk3
     xdg-utils
   ];

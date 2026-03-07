@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://git.mills.io/prologic/zs";
     changelog = "https://git.mills.io/prologic/zs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ adtya ];
+    maintainers = [ ];
     mainProgram = "zs";
   };
 })

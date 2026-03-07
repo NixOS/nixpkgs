@@ -14,7 +14,7 @@
   libglut,
   libjpeg,
   libtool,
-  wxGTK32,
+  wxwidgets_3_2,
   libxcb-util,
   sqlite,
   gtk3,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libxi
     libglut
     libjpeg
-    wxGTK32
+    wxwidgets_3_2
     gtk3
     libxscrnsaver
     libnotify

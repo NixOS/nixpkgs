@@ -3,6 +3,7 @@
   docopt_cpp,
   fetchFromGitHub,
   gitUpdater,
+  nixosTests,
   icu,
   libkiwix,
   meson,
@@ -33,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     libkiwix
   ];
+
+  passthru.tests.kiwix-serve = nixosTests.kiwix-serve;
 
   passthru.updateScript = gitUpdater { };
 

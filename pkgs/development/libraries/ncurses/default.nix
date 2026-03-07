@@ -26,7 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
+    urls = [
+      "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz"
+      # invisible-island.net may be firewall blocked on some networks
+      "https://invisible-mirror.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz"
+    ];
     hash = "sha256-NVtMu+2ICwOBoExGYXt2VuNiWF1S6c+Epn4gCbdJ/xE=";
   };
 

@@ -530,7 +530,10 @@ in
           "nix-helpers"
           "nix-ovmf"
         ];
-        StateDirectory = subDirs [ "dnsmasq" ];
+        StateDirectory = subDirs [
+          "dnsmasq"
+          "secrets"
+        ];
       };
     };
 

@@ -580,7 +580,7 @@ in
         signNarinfo = lib.mkOption {
           type = lib.types.bool;
           default = true;
-          example = "false";
+          example = false;
           description = ''
             Whether to sign narInfo files or passthru as-is from upstream
           '';

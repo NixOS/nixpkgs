@@ -79,40 +79,32 @@ let
   nodejs = nodejs_24;
   pnpm = pnpm_10.override { inherit nodejs; };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gradio";
-  version = "6.5.1";
+  version = "6.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
-    tag = "gradio@${version}";
-    hash = "sha256-pIcliKcb1eVVMk0ARzWcZGXc6pmI8mGVAvCJZ0JHXUw=";
+    tag = "gradio@${finalAttrs.version}";
+    hash = "sha256-ZHglnRs0AXCu9HlVoSO0h5p6SE4al/OLPn0jwZgKVR8=";
   };
 
+  patches = [
+    ./fix-transformers-pipelines-imports.patch
+  ];
+
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
-      pnpm
       version
       src
       ;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-6Cx0hdVd0srhArvck2Kn9U2fT7aKtTZjgV5b/Usrnoo=";
   };
-
-  pythonRelaxDeps = [
-    "aiofiles"
-    "gradio-client"
-    "markupsafe"
-    "pydantic" # Requests >=2.11.10,<=2.12.4. Staging has it, master doesn't.
-  ];
-
-  pythonRemoveDeps = [
-    # this isn't a real runtime dependency
-    "ruff"
-  ];
 
   nativeBuildInputs = [
     zip
@@ -128,6 +120,10 @@ buildPythonPackage rec {
     hatch-fancy-pypi-readme
   ];
 
+  pythonRelaxDeps = [
+    "aiofiles"
+    "tomlkit"
+  ];
   dependencies = [
     aiofiles
     anyio
@@ -191,7 +187,7 @@ buildPythonPackage rec {
     # mock calls to `shutil.which(...)`
     (writeShellScriptBin "npm" "false")
   ]
-  ++ optional-dependencies.oauth
+  ++ finalAttrs.passthru.optional-dependencies.oauth
   ++ pydantic.optional-dependencies.email;
 
   preBuild = ''
@@ -216,6 +212,7 @@ buildPythonPackage rec {
 
     # requires network, it caught our xfail exception
     "test_error_analytics_successful"
+    "TestSnippetExecution"
 
     # Flaky, tries to pin dependency behaviour. Sensitive to dep versions
     # These error only affect downstream use of the check dependencies.
@@ -441,9 +438,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://www.gradio.app/";
-    changelog = "https://github.com/gradio-app/gradio/releases/tag/gradio@${version}";
+    changelog = "https://github.com/gradio-app/gradio/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for easily interacting with trained machine learning models";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

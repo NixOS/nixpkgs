@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llm-anthropic";
-  version = "0.23";
+  version = "0.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-anthropic";
     tag = finalAttrs.version;
-    hash = "sha256-ZO9hoDv3YLl8ZCcd5UEDdD5VNPa83N639z1ZxJaFt7Y=";
+    hash = "sha256-0nI/J7gGTUyrvluez9H8WD4kCuMFgWR5zFHRMxh9DXQ=";
   };
 
   build-system = [

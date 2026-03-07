@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustycli";
   version = "0.1.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-4Txw6Cmwwgu7K8VIVoX9GR76VUqAEw6uYptmczbjqg0=";
   };
 
@@ -22,8 +22,8 @@ rustPlatform.buildRustPackage rec {
     description = "Access the rust playground right in terminal";
     mainProgram = "rustycli";
     homepage = "https://github.com/pwnwriter/rustycli";
-    changelog = "https://github.com/pwnwriter/rustycli/releases/tag/v${version}";
+    changelog = "https://github.com/pwnwriter/rustycli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
   };
-}
+})

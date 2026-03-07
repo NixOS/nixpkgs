@@ -3,25 +3,25 @@
   buildPythonPackage,
   fetchFromGitHub,
   httpx,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
   starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "starlette-context";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomwojcik";
     repo = "starlette-context";
-    tag = "v${version}";
-    hash = "sha256-PzVZ458TdBLdbFJDN+X8hVU5zsRxcesihoDB+jRaKAg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cxhTrLLIjlqaR07VVgHmvYctk7+7fDjbGb39PbJbGgk=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [ starlette ];
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Middleware for Starlette that allows you to store and access the context data of a request";
     homepage = "https://github.com/tomwojcik/starlette-context";
-    changelog = "https://github.com/tomwojcik/starlette-context/releases/tag/v${version}";
+    changelog = "https://github.com/tomwojcik/starlette-context/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "3.1.5";
+  version = "3.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioslimproto";
     tag = version;
-    hash = "sha256-A5BAMEtyyDoQzl+eRt4XMo1vOyyNZ2D+YLQ64xHfYkk=";
+    hash = "sha256-mbzc3Td9XkxDrtPeIbrZdxn8YLV6yjQ+KXgaRC1GdFc=";
   };
 
   postPatch = ''

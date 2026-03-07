@@ -11,7 +11,7 @@
   versionCheckHook,
 }:
 let
-  version = "2.11.1";
+  version = "2.11.2";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
@@ -27,10 +27,10 @@ buildGo125Module (finalAttrs: {
     owner = "caddyserver";
     repo = "caddy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8NvRodMtq9Yrock7QRvF6ZOjuqpiK0KS3UeJzYcIbsg=";
+    hash = "sha256-QoGq8+lhaSQuC1VwIYE8h8N/ZC1ozfmIwmsIPk29Jos=";
   };
 
-  vendorHash = "sha256-jZ/oxAVBedbFEnqXrQnya2vLQZjXubAc1vUKwpUL66M=";
+  vendorHash = "sha256-zlwVgSEr01bbgV7N9szwqa9cPjBU34Cu7vqj4/MoSuU=";
 
   ldflags = [
     "-s"

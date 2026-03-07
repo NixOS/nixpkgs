@@ -121,6 +121,9 @@ in
         Path to file which contains the master key.
         By doing so, all routes will be protected and will require a key to be accessed.
         If no master key is provided, all routes can be accessed without requiring any key.
+
+        You can generate a master key by running `openssl rand -base64 36`.
+        Alternatively, you can start Meilisearch without a master key and use the pre-generated key from the service's logs that can be obtained by `journalctl -u meilisearch | grep -- --master-key`.
       '';
       default = null;
       type = lib.types.nullOr lib.types.path;

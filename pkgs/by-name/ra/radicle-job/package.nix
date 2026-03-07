@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-job";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromRadicle {
     seed = "iris.radicle.xyz";
     repo = "z2UcCU1LgMshWvXj6hXSDDrwB8q8M";
     tag = "releases/v${finalAttrs.version}";
-    hash = "sha256-EGNs0IOJSp5SMJ3tdGCxIAN6hvVFwWWUmXoB914jw3k=";
+    hash = "sha256-1gvOpdgnug46PUD+4LZF8u73L3XpQGMGZyQCvnYvkgE=";
   };
 
-  cargoHash = "sha256-+DD2cGfxN0rmFhCazEuRiv3JfLXIC4FjaYHmugCmk+g=";
+  cargoHash = "sha256-nRif/ab+7r9ODuZVXOnYbEDHiipFg91XjezS1OBYYb4=";
 
   nativeCheckInputs = [
     radicle-node

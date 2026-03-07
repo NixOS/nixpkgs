@@ -6,12 +6,12 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "apkeep";
   version = "0.18.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Sk8CQaMXtPPJh2nGgGthyzuvkVViQ0jtqPjAqo2dtpg=";
   };
 
@@ -32,9 +32,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line tool for downloading APK files from various sources";
     homepage = "https://github.com/EFForg/apkeep";
-    changelog = "https://github.com/EFForg/apkeep/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/EFForg/apkeep/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "apkeep";
   };
-}
+})

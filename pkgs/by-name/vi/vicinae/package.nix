@@ -19,16 +19,17 @@
   stdenv,
   wayland,
   libxml2,
+  udevCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.20.2";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mUHV5wFbtNt00XnghklltvJ/LRi+17fluGuFebQ0HEw=";
+    hash = "sha256-9xE2izQakApB+cgibErwyY3KAlc6F26UhgCw/Tak43c=";
   };
 
   apiDeps = fetchNpmDeps {
@@ -103,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"\
       --replace-fail "ExecStart=vicinae" "ExecStart=$out/bin/vicinae"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ udevCheckHook ];
 
   passthru.updateScript = ./update.sh;
 

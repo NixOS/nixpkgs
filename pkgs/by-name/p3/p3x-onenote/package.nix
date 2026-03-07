@@ -39,14 +39,14 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mkdir -p $out/share/pixmaps $out/share/licenses/p3x-onenote
-    cp ${appimageContents}/p3x-onenote.png $out/share/pixmaps/
+    mkdir -p $out/share/licenses/p3x-onenote
+    install -D ${appimageContents}/p3x-onenote.png -t $out/share/icons/hicolor/512x512/apps/
     cp ${appimageContents}/p3x-onenote.desktop $out
     cp ${appimageContents}/LICENSE.electron.txt $out/share/licenses/p3x-onenote/LICENSE
 
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value $out/bin/p3x-onenote \
       --set-key Comment --set-value "P3X OneNote Linux" \
+      --set-key Exec --set-value "p3x-onenote" \
       --delete-original $out/p3x-onenote.desktop
   '';
 

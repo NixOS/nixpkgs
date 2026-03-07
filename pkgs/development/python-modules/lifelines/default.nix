@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "lifelines";
-  version = "0.30.1";
+  version = "0.30.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
     repo = "lifelines";
     tag = "v${version}";
-    hash = "sha256-zEkXuv0GmYvvDntgVVHHZdjE04uCKKp2ia+p0zAVB9s=";
+    hash = "sha256-g7XgUxKBn5T0RTOXYFwL1Jum4QelhDJ9bZTafboxjtA=";
   };
 
   build-system = [ setuptools ];

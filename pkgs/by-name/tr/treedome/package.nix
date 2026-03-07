@@ -17,13 +17,13 @@
   sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "treedome";
   version = "0.6.1";
 
   src = fetchgit {
     url = "https://codeberg.org/solver-orgz/treedome";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-qa87pgNHGRhP1G4TEFHYrkiJ9AHWG7PUdgxEF4X9EM8=";
     fetchLFS = true;
   };
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-Rg65BiHQF7bBBCtc5F+gY31yhcuI0+IDfxr3pFmxT+w=";
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-Q0xsi1xymQne6qN0oxm4YkaDLnGL17iuj70CTdQlxzM=";
   };
 
@@ -59,10 +59,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoRoot = "src-tauri";
-  buildAndTestSubdir = cargoRoot;
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
   env = {
-    VERGEN_GIT_DESCRIBE = version;
+    VERGEN_GIT_DESCRIBE = finalAttrs.version;
   };
 
   # WEBKIT_DISABLE_COMPOSITING_MODE essential in NVIDIA + compositor https://github.com/NixOS/nixpkgs/issues/212064#issuecomment-1400202079
@@ -78,6 +78,6 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "treedome";
     maintainers = with lib.maintainers; [ tengkuizdihar ];
-    changelog = "https://codeberg.org/solver-orgz/treedome/releases/tag/${version}";
+    changelog = "https://codeberg.org/solver-orgz/treedome/releases/tag/${finalAttrs.version}";
   };
-}
+})

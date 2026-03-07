@@ -85,9 +85,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     installManPage target/mangen/*
 
-    installShellCompletion --cmd ${finalAttrs.pname} \
-      target/shellcomplete/${finalAttrs.pname}.{bash,fish} \
-      --zsh target/shellcomplete/_${finalAttrs.pname}
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      target/shellcomplete/${finalAttrs.meta.mainProgram}.{bash,fish} \
+      --zsh target/shellcomplete/_${finalAttrs.meta.mainProgram}
   '';
 
   # RUST_BACKTRACE = 1;

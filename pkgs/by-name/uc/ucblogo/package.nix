@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  wxGTK32,
+  wxwidgets_3_2,
   texinfo,
   tetex,
   wrapGAppsHook3,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   meta = {

@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "csv2svg";
   version = "0.1.9";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-3VebLFkeJLK97jqoPXt4Wt6QTR0Zyu+eQV9oaLBSeHE=";
   };
 
@@ -22,4 +22,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "csv2svg";
   };
-}
+})

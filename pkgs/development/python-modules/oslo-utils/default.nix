@@ -16,7 +16,6 @@
   psutil,
   pyparsing,
   pytz,
-  tzdata,
 
   # tests
   ddt,
@@ -31,17 +30,18 @@
   stdenv,
   stestr,
   testscenarios,
+  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "9.2.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_utils";
     inherit version;
-    hash = "sha256-H0IAbea5KRoDBQJfXM24kHEg2I7X68N4ShRyozKASKs=";
+    hash = "sha256-u0ZxPnYNlERqCE9elMHPJzk1NpMIrYjuW1OReSPZw5M=";
   };
 
   postPatch =
@@ -71,7 +71,6 @@ buildPythonPackage rec {
     psutil
     pyparsing
     pytz
-    tzdata
   ];
 
   nativeCheckInputs = [
@@ -84,6 +83,7 @@ buildPythonPackage rec {
     qemu-utils
     stestr
     testscenarios
+    tzdata
   ];
 
   # disabled tests:

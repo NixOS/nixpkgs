@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "coinlive";
-  version = "0.2.2";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "mayeranalytics";
     repo = "coinlive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-llw97jjfPsDd4nYi6lb9ug6sApPoD54WlzpJswvdbRs=";
+    hash = "sha256-FQAxY0ZiC8bkp1s2CIpQeC6ZBNKm5/qmaebPuDcHtd4=";
   };
 
-  cargoHash = "sha256-OswilwabVfoKIeHxo7sxCvgGH5dRfyTmnKED+TcxSV8=";
+  cargoHash = "sha256-1mzfuH5988PDKBsbKl0R1v/3/3Hk3LJtklqMA83tEOY=";
 
   nativeBuildInputs = [ pkg-config ];
 

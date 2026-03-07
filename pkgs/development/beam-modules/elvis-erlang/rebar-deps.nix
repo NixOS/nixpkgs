@@ -44,11 +44,11 @@ let
     };
     elvis_core = builder {
       name = "elvis_core";
-      version = "4.2.1";
+      version = "4.2.3";
       src = fetchHex {
         pkg = "elvis_core";
-        version = "4.2.1";
-        sha256 = "sha256-D3dLiR5kqMuZSf9PVUhclgjBFEFIEDqDOhAUk7l8J7I=";
+        version = "4.2.3";
+        sha256 = "sha256-xy4xinPab51p3uDxh/h5dHH57kbPTdrO36LJ+byxjqA=";
       };
       beamDeps = [
         katana_code

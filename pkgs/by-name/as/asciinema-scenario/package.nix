@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asciinema-scenario";
   version = "0.3.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-fnX5CIYLdFqi04PQPVIAYDGn+xXi016l8pPcIrYIhmQ=";
   };
 
@@ -21,4 +21,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     mainProgram = "asciinema-scenario";
   };
-}
+})

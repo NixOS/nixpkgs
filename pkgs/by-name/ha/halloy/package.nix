@@ -19,14 +19,14 @@
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "halloy";
   version = "2026.2";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xx4r6vdUeh0yr986+Z67xtViQA7mMpsXmTohu3jIwMs=";
   };
 
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
       desktopName = "Halloy";
       comment = "IRC client written in Rust";
       icon = "org.squidowl.halloy";
-      exec = pname;
+      exec = finalAttrs.meta.mainProgram;
       terminal = false;
       mimeTypes = [
         "x-scheme-handler/irc"
@@ -99,11 +99,11 @@ rustPlatform.buildRustPackage rec {
     APP_DIR="$out/Applications/Halloy.app/Contents"
 
     mkdir -p "$APP_DIR/MacOS"
-    cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
+    cp -r ${finalAttrs.src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
 
     substituteInPlace "$APP_DIR/Info.plist" \
-      --replace-fail "{{ VERSION }}" "${version}" \
-      --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
+      --replace-fail "{{ VERSION }}" "${finalAttrs.version}" \
+      --replace-fail "{{ BUILD }}" "${finalAttrs.version}-nixpkgs"
 
     makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
   '';
@@ -113,7 +113,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "IRC application";
     homepage = "https://github.com/squidowl/halloy";
-    changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/squidowl/halloy/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       fab
@@ -122,4 +122,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "halloy";
   };
-}
+})

@@ -6,12 +6,12 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfinity";
   version = "0.3.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5UhKL6lXli1mGorThv3SFclVKDATmxklZQ+S5hwqQgc=";
   };
 
@@ -38,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "rustfinity";
   };
-}
+})

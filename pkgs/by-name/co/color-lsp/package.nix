@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "color-lsp";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "huacnlee";
     repo = "color-lsp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-p58rAVznBzhBv7gVvaEjMpCrk9kFuEjUvY6U4uMXUE8=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "color-lsp";
   };
-}
+})

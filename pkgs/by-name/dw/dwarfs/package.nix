@@ -12,7 +12,6 @@
   flac,
   glog,
   gtest,
-  howard-hinnant-date,
   jemalloc,
   libarchive,
   libevent,
@@ -34,14 +33,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwarfs";
-  version = "0.12.4";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-EYNnmv0QKdWddIRFRsuwsazHep3nrJ8lInlR4S67rME=";
+    hash = "sha256-4Ec1AqumTSPZpPEi528OaO3bOU1Soc8ZHuuKXIDvCUA=";
   };
 
   cmakeFlags = [
@@ -50,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Needs to be set so `dwarfs` does not try to download `gtest`; it is not
     # a submodule, see: https://github.com/mhx/dwarfs/issues/188#issuecomment-1907657083
     "-DPREFER_SYSTEM_GTEST=ON"
+    # Upstream composes DESTDIR + CMAKE_INSTALL_PREFIX + CMAKE_INSTALL_SBINDIR
+    # in a create_link() install script. Keep SBINDIR relative to avoid
+    # nested nix/store path creation in the output.
+    "-DCMAKE_INSTALL_SBINDIR=sbin"
     "-DWITH_LEGACY_FUSE=ON"
     "-DWITH_TESTS=ON"
   ];
@@ -57,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     bison
     cmake
-    howard-hinnant-date # uses only the header-only parts
     pkg-config
     range-v3 # header-only library
     ronn
@@ -106,6 +108,15 @@ stdenv.mkDerivation (finalAttrs: {
         "dwarfs/tools_test.end_to_end/*"
         "dwarfs/tools_test.mutating_and_error_ops/*"
         "dwarfs/tools_test.categorize/*"
+        # Requires a working FUSE device and fusermount3, unavailable in sandbox.
+        "tools_test.timestamps_fuse*"
+        "tools_test.dwarfs_automount*"
+        "tools_test.dwarfs_fsname_and_subtype*"
+        "sparse_files_test.random_large_files*"
+        "sparse_files_test.random_small_files_fuse*"
+        "sparse_files_test.huge_holes_fuse*"
+        # Requires xattr support unavailable in sandbox.
+        "xattr_test.portable_xattr"
       ];
     in
     "-${lib.concatStringsSep ":" disabledTests}";
@@ -113,12 +124,13 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/dwarfs";
+  dontMoveSbin = true;
 
   meta = {
     description = "Fast high compression read-only file system";
     homepage = "https://github.com/mhx/dwarfs";
     changelog = "https://github.com/mhx/dwarfs/blob/v${finalAttrs.version}/CHANGES.md";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
     platforms = lib.platforms.linux;
   };

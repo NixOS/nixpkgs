@@ -55,10 +55,14 @@ jobs:
             })).map(file => file.filename)
 
             if (files.some(file => [
+              '.github/workflows/build.yml',
+              '.github/workflows/check.yml',
               '.github/workflows/eval.yml',
               '.github/workflows/lint.yml',
               '.github/workflows/merge-group.yml',
               '.github/workflows/test.yml',
+              'ci/github-script/supportedSystems.js',
+              'ci/supportedBranches.js',
             ].includes(file))) core.setOutput('merge-group', true)
 
             if (files.some(file => [
@@ -71,8 +75,16 @@ jobs:
               '.github/workflows/pull-request-target.yml',
               '.github/workflows/test.yml',
               'ci/github-script/bot.js',
+              'ci/github-script/check-target-branch.js',
+              'ci/github-script/commits.js',
+              'ci/github-script/lint-commits.js',
               'ci/github-script/merge.js',
+              'ci/github-script/prepare.js',
+              'ci/github-script/reviewers.js',
+              'ci/github-script/reviews.js',
+              'ci/github-script/supportedSystems.js',
               'ci/github-script/withRateLimit.js',
+              'ci/supportedBranches.js',
             ].includes(file))) core.setOutput('pr', true)
 
   merge-group:

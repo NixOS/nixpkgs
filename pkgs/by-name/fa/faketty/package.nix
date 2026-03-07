@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "faketty";
   version = "1.0.20";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-1AX2DBFOSUcORSQCo/5Vd8puE4hJU9VDfVqxcZDKrrY=";
   };
 
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Wrapper to execute a command in a pty, even if redirecting the output";
     homepage = "https://github.com/dtolnay/faketty";
-    changelog = "https://github.com/dtolnay/faketty/releases/tag/${version}";
+    changelog = "https://github.com/dtolnay/faketty/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "faketty";
   };
-}
+})

@@ -11,16 +11,16 @@
 }:
 buildGoModule rec {
   pname = "rmfakecloud";
-  version = "0.0.26";
+  version = "0.0.27";
 
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = "rmfakecloud";
     rev = "v${version}";
-    hash = "sha256-QV8RFg6gATyjIESwO3r5M3Yd9qWFsA6X6bYLmNpLek0=";
+    hash = "sha256-Umh5MwFCKJ8Nr0uhPEvlTAn7SpMmvAh6N2l74bS6BYw=";
   };
 
-  vendorHash = "sha256-ColOCdKa/sKoLnF/3idBIEyFB2JWYM+1y5TdC/LZT4A=";
+  vendorHash = "sha256-XksCJ9b5NDIutwqnWP63R2udp/Y5qkkgo2a4TPUi0Z4=";
 
   # if using webUI build it
   # use env because of https://github.com/NixOS/nixpkgs/issues/358844
@@ -35,7 +35,7 @@ buildGoModule rec {
     pnpmLock = "${src}/ui/pnpm-lock.yaml";
     pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-YhcPR7aObZiV0FibcogjrOGNo2+syUuusaW+yx1HRv8=";
+    hash = "sha256-5dsrf6Iff8z4ujzUccuNFwChChbWzXeXDilh8uZyl+U=";
   };
   preBuild = lib.optionals enableWebui ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart

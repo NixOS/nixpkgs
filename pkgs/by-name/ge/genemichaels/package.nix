@@ -5,12 +5,12 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "genemichaels";
   version = "0.9.5";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KaGG2amPk/+fL7xLAfZw4SmCzXc+hS/9IkBG7G6sngI=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ djacu ];
     mainProgram = "genemichaels";
   };
-}
+})

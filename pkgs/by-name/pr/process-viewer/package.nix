@@ -6,12 +6,12 @@
   gtk4,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "process-viewer";
   version = "0.5.8";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-mEmtLCtHlrCurjKKJ3vEtEkLBik4LwuUED5UeQ1QLws=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "process_viewer";
   };
-}
+})

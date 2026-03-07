@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-chef";
   version = "0.1.75";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FETYJrx5+yNOzMVIgJQ0yNLi2PB7cA128n8hAXIhx3E=";
   };
 
@@ -22,4 +22,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kkharji ];
   };
-}
+})

@@ -16,6 +16,7 @@
   libtool,
   miniupnpc,
   hexdump,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "${finalAttrs.version}";
     hash = "sha256-nupZB4nNbitpf5EBCNy0e+ovjayAszup/r7qxbxA5jI=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/gridcoin-community/Gridcoin-Research/commit/bab91e95ca8c83f06dcc505e6b3f8b44dc6d50d4.patch";
+      sha256 = "sha256-GzurVlR7Tk3pmQfgO9WtHXjX6xHqNzdYqOdbJND7MpA=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

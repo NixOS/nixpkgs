@@ -10,7 +10,6 @@
   stdenv,
   nixpkgsFun,
   overlays,
-  makeMuslParsedPlatform,
 }:
 let
   makeLLVMParsedPlatform =
@@ -84,7 +83,9 @@ self: super: {
         ]
         ++ overlays;
         ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
-          config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
+          config = lib.systems.parse.tripleFromSystem (
+            lib.systems.parse.makeMuslParsedPlatform stdenv.hostPlatform.parsed
+          );
         };
       }
     else

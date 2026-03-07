@@ -5,7 +5,7 @@
   pkg-config,
   unzip,
   portaudio,
-  wxGTK32,
+  wxwidgets_3_2,
   sox,
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     portaudio
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   # TODO:

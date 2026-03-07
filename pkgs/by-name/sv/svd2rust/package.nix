@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "svd2rust";
   version = "0.37.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-50g5YVmVYTLYJdaWXk91OYdlghDchkyHXS9j2Z7IXSw=";
   };
 
@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     description = "Generate Rust register maps (`struct`s) from SVD files";
     mainProgram = "svd2rust";
     homepage = "https://github.com/rust-embedded/svd2rust";
-    changelog = "https://github.com/rust-embedded/svd2rust/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rust-embedded/svd2rust/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
     ];
     maintainers = with lib.maintainers; [ newam ];
   };
-}
+})

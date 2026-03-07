@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   setuptools,
   cython,
 }:
@@ -28,6 +29,10 @@ buildPythonPackage rec {
   # May be fixable by skipping certain tests? TODO.
 
   pythonImportsCheck = [ "buildstream_plugins" ];
+
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "dev";
+  };
 
   meta = {
     description = "BuildStream plugins";

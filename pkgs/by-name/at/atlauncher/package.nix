@@ -27,13 +27,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.40.2";
+  version = "3.4.40.3";
 
   src = fetchFromGitHub {
     owner = "ATLauncher";
     repo = "ATLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sV6eWIgx/0e+uUCbbRwAPPqNcFWUQWyuHnzrwcYJkqA=";
+    hash = "sha256-QFPdEH3V9Krwy/cWCbY+IMtW0ydVCqKr/OZfttZGCss=";
   };
 
   nativeBuildInputs = [
