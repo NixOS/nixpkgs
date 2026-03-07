@@ -5,7 +5,7 @@
   cmake,
   git,
   pkg-config,
-  boost,
+  boost188,
   eigen_5,
   glm,
   gcc,
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost
+    boost188
     eigen_5
     glm
     libGL
