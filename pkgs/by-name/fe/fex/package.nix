@@ -149,6 +149,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt \
       --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags) "
 
+    # Disable including current date in manpages
+    substituteInPlace FEXCore/Scripts/config_generator.py \
+      --replace-fail ".Dd {0}" ".Dd" \
+      --replace-fail "output_man.write(header.format(" "output_man.write(header) #"
+
     # Patch any references to library wrapper paths
     substituteInPlace FEXCore/Source/Interface/Config/Config.json.in \
       --replace-fail "ThunkGuestLibs" "UnusedThunkGuestLibs" \
