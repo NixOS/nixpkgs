@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchCrate,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -9,11 +10,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.5.4";
 
   src = fetchCrate {
-    inherit (finalAttrs) pname version;
+    pname = "rust-audit-info";
+    inherit (finalAttrs) version;
     hash = "sha256-zxdF65/9cgdDLM7HA30NCEZj1S5SogH+oM3aq55K0os=";
   };
 
   cargoHash = "sha256-ygz9uYwuDI892kwYwJPTsTAkBfsnRN2unOgqv8VHXSA=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line tool to extract the dependency trees embedded in binaries by cargo-auditable";
@@ -23,6 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit # or
       asl20
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })
