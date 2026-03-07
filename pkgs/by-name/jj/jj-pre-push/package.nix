@@ -24,11 +24,11 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "typer-slim" "typer"
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.2,<0.10.0" "uv_build"
   '';
 
-  build-system = [
-    python3Packages.uv-build
-  ];
+  build-system = with python3Packages; [ uv-build ];
 
   dependencies =
     with python3Packages;
