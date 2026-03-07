@@ -27,7 +27,10 @@ let
           imports = [ ./common/wayland-cage.nix ];
           services.cage.program = "${pkgs.drawterm-wayland}/bin/drawterm";
         };
-      systems = [ "x86_64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
     };
   };
 
