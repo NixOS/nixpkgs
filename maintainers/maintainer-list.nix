@@ -703,13 +703,6 @@
     githubId = 315003;
     name = "Adam Saponara";
   };
-  adtya = {
-    email = "adtya@adtya.xyz";
-    github = "adtya";
-    githubId = 22346805;
-    name = "Adithya Nair";
-    keys = [ { fingerprint = "51E4 F5AB 1B82 BE45 B422  9CC2 43A5 E25A A5A2 7849"; } ];
-  };
   aduh95 = {
     email = "duhamelantoine1995@gmail.com";
     github = "aduh95";
@@ -10089,6 +10082,12 @@
     githubId = 1949438;
     name = "Guillaume Matheron";
   };
+  guilvareux = {
+    email = "paul@alcock.dev";
+    github = "guilvareux";
+    githubId = 25768075;
+    name = "Paul Alcock";
+  };
   guitargeek = {
     email = "jonas.rembser@cern.ch";
     github = "guitargeek";
@@ -15114,6 +15113,12 @@
     email = "liampm32@gmail.com";
     github = "Liamolucko";
     githubId = 43807659;
+  };
+  liamthexpl0rer = {
+    name = "Liam";
+    matrix = "@liamthexpl0rer:matrix.org";
+    github = "liamthexpl0rer";
+    githubId = 119797945;
   };
   liarokapisv = {
     email = "liarokapis.v@gmail.com";
@@ -20340,13 +20345,6 @@
     github = "p-h";
     githubId = 645664;
     name = "Philippe Hürlimann";
-  };
-  p-rintz = {
-    email = "nix@rintz.net";
-    github = "p-rintz";
-    githubId = 13933258;
-    name = "Philipp Rintz";
-    matrix = "@philipp:srv.icu";
   };
   p0lyw0lf = {
     email = "p0lyw0lf@protonmail.com";
