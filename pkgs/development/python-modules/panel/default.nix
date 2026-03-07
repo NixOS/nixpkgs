@@ -4,9 +4,14 @@
   fetchPypi,
   bleach,
   bokeh,
+  linkify-it-py,
+  markdown,
+  markdown-it-py,
+  mdit-py-plugins,
+  narwhals,
+  pandas,
   param,
   pyviz-comms,
-  markdown,
   pyct,
   requests,
   setuptools,
@@ -36,7 +41,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     bleach
     bokeh
+    linkify-it-py
     markdown
+    markdown-it-py
+    mdit-py-plugins
+    narwhals
+    pandas
     param
     pyct
     pyviz-comms
