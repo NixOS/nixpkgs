@@ -31,7 +31,7 @@ in
         mountHostNixStore = true;
         useEFIBoot = true;
         qemu.options = [
-          "-vga virtio"
+          "-vga none -device virtio-gpu-pci"
         ];
       };
       boot.loader.systemd-boot.enable = true;
