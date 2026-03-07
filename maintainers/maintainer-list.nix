@@ -20181,7 +20181,6 @@
     githubId = 357005;
     name = "Marco Orovecchia";
   };
-nvim maintainers/maintainer-list.nix
   orthros = {
     github = "orthros";
     githubId = 7820716;
