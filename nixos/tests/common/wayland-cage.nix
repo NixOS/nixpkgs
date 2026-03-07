@@ -8,6 +8,6 @@
   };
 
   virtualisation = {
-    qemu.options = [ "-vga virtio" ];
+    qemu.options = [ "-vga none -device virtio-gpu-pci" ];
   };
 }
