@@ -41,7 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./fetch-pufferfish.patch
   ];
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+    sed -i '1a cmake_policy(SET CMP0167 NEW)' CMakeLists.txt
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=template-body";
 
   buildInputs = [
     (boost.override {
