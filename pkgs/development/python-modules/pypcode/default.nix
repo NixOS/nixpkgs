@@ -1,23 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
   cmake,
-  setuptools,
+  fetchFromGitHub,
   nanobind,
   pytest-cov-stub,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypcode";
   version = "3.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
-    tag = "v${version}";
+    repo = "pypcode";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m3Ee1n6TIbcihTwz1ihpn10gC1YsSlFO17Gj0QVya2A=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ feyorsh ];
   };
-}
+})
