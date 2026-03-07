@@ -35,8 +35,9 @@ let
           "${name}" = machine;
         };
         meta.maintainers = with pkgs.lib.maintainers; [ kirillrdy ];
-        # time-out on ofborg
-        meta.broken = pkgs.stdenv.hostPlatform.isAarch64;
+        # 'Your Subscription list is currently empty' never appears on screen on wayland
+        # on either x86_64 or aarch64.
+        meta.broken = name == "wayland";
         enableOCR = true;
 
         testScript = ''
