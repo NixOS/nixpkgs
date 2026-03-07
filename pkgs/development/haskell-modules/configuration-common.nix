@@ -2965,12 +2965,6 @@ with haskellLib;
     })
   ] (doJailbreak super.http2-client);
 
-  # Needs tls >= 2.1.10
-  http2-tls =
-    lib.warnIf (lib.versionAtLeast self.tls.version "2.1.10")
-      "haskellPackages.http2-tls: tls override can be removed"
-      (super.http2-tls.override { tls = self.tls_2_2_1; });
-
   # Relax http2 version bound (5.3.9 -> 5.3.10)
   # https://github.com/well-typed/grapesy/issues/297
   # Tests fail with duplicate IsLabel instance error
