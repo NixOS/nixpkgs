@@ -288,7 +288,7 @@ let
         isStatic = true;
         config = lib.systems.parse.tripleFromSystem (
           if stdenv.hostPlatform.isLinux then
-            lib.systems.parse.makeMuslParsedPlatform stdenv.hostPlatform.parsed
+            lib.systems.parse.mkMuslSystem stdenv.hostPlatform.parsed
           else
             stdenv.hostPlatform.parsed
         );
