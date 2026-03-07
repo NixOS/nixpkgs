@@ -54,7 +54,7 @@ let
       "--prefix"
       "GST_PLUGIN_SYSTEM_PATH_1_0"
       ":"
-      "${lib.makeSearchPath "lib/girepository-1.0" unwrapped.gst_packages}"
+      "${lib.makeSearchPath "lib/gstreamer-1.0" unwrapped.gst_packages}"
       "--suffix"
       "PATH"
       ":"
