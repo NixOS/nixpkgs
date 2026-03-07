@@ -54,14 +54,14 @@ buildGoModule (
       '';
 
       outputHashMode = "recursive";
-      outputHash = "sha256-wHqXsSV18mF/CfLQ0S4rGtT3QRcLnneYXAa8nXZaHpQ=";
+      outputHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     };
 
     webui = buildNpmPackage {
       pname = "olivetin-webui";
       inherit (finalAttrs) version src;
 
-      npmDepsHash = "sha256-a1BBNlGusdMlmDXgclGqkO8AywSd4DTQKkuBVzuzAfE=";
+      npmDepsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
       sourceRoot = "${finalAttrs.src.name}/webui.dev";
 
@@ -86,20 +86,18 @@ buildGoModule (
 
   {
     pname = "olivetin";
-    version = "2025.11.25";
+    version = "3000.11.1";
 
     src = fetchFromGitHub {
       owner = "OliveTin";
       repo = "OliveTin";
       tag = finalAttrs.version;
-      hash = "sha256-HQLInEVXowWpDaSW/4bduUMdYsvQ0Rju1Rl2l9jupYA=";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     };
-
-    patches = [ ./update-go-sum.patch ];
 
     modRoot = "service";
 
-    vendorHash = "sha256-xSroaS6fwHrQ0s09uD3bkBZWWxbIndiOGL2JPvKzC6E=";
+    vendorHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
     ldflags = [
       "-s"
@@ -115,8 +113,6 @@ buildGoModule (
       ln -s ${gen} gen
       substituteInPlace internal/config/config.go \
         --replace-fail 'config.WebUIDir = "./webui"' 'config.WebUIDir = "${webui}"'
-      substituteInPlace internal/httpservers/webuiServer_test.go \
-        --replace-fail '"../webui/"' '"${webui}"'
     '';
 
     postInstall = ''
