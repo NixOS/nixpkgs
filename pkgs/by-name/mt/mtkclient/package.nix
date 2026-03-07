@@ -1,7 +1,9 @@
 {
   lib,
+  copyDesktopItems,
   fetchFromGitHub,
   gcc-arm-embedded,
+  makeDesktopItem,
   python3Packages,
   udevCheckHook,
 }:
@@ -33,6 +35,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     udevCheckHook
+    copyDesktopItems
 
     # Dependencies for stage1 kamakiri payloads
     gcc-arm-embedded
@@ -50,6 +53,18 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     install -Dm444 Setup/Linux/52-mtk.rules -t $out/lib/udev/rules.d
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "mtkclient";
+      desktopName = "MTKClient";
+      comment = "Mediatek Flash and Repair Utility";
+      exec = "mtk_gui";
+      categories = [
+        "Development"
+      ];
+    })
+  ];
 
   meta = {
     description = "MTK reverse engineering and flash tool";
