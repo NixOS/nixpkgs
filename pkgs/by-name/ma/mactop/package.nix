@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Terminal-based monitoring tool 'top' designed to display real-time metrics for Apple Silicon chips";
     homepage = "https://github.com/metaspartan/mactop";
-    changelog = "https://github.com/metaspartan/mactop/releases/tag/${src.tag}";
+    changelog = "https://github.com/metaspartan/mactop/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
