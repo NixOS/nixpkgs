@@ -4,23 +4,30 @@
   fetchFromGitHub,
   pytest,
   pytestCheckHook,
+  uv-build,
   wrapt,
-  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-insta";
-  version = "0.3.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vberlier";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-kXsKM84yXdGE89KxUtxT2mINmS2lXkuEqB6a9oXZqGo=";
+    hash = "sha256-zOhWDaCGkE/Ke2MLRyttDH85t+I9kfBZZwVDRN1sprs=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.8,<0.10.0" "uv_build"
+  '';
+
+  pythonRelaxDeps = [ "wrapt" ];
+
+  build-system = [ uv-build ];
 
   buildInputs = [ pytest ];
 
