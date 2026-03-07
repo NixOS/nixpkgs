@@ -16,7 +16,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-mN2X6Zbai7xm8bdr2hi9fwzIsfQtukeGcOIS32G4hA0=";
   };
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [
+    "rich"
+    "tomlkit"
+  ];
 
   build-system = with python3.pkgs; [
     poetry-core
