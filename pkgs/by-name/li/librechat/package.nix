@@ -10,13 +10,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "librechat";
-  version = "0.8.0";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "danny-avila";
     repo = "LibreChat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DTmb9J2nsMy6f+V6BgRtFgpTwOi9OQnvikSx4QZQ0HI=";
+    hash = "sha256-XiPnTKiSOMezUZuhkaGJ0xHiT7jrz8OYbZrvq5gb/V8=";
   };
 
   patches = [
@@ -38,7 +38,7 @@ buildNpmPackage (finalAttrs: {
   ];
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-JXXOJDkh+do8ZOf4KHyiH7igMeC8WkwflMNx1rZRY3g=";
+  npmDepsHash = "sha256-h15rNYl2QYnh7/cJvA7lrRqmXw8Ri2QKTfTr7w7+mMo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,6 +51,11 @@ buildNpmPackage (finalAttrs: {
 
   npmBuildScript = "frontend";
   npmPruneFlags = [ "--production" ];
+
+  # npmConfigHook only patches the root node_modules
+  postConfigure = ''
+    patchShebangs client/node_modules
+  '';
 
   # For reasons beyond my understanding, the api and client directory disappears after the build finishes.
   # Hence, the build fails with broken symlinks and if the symlink is removed,
