@@ -88,11 +88,11 @@ in
 
 buildPerlPackage rec {
   pname = "public-inbox";
-  version = "1.9.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://public-inbox.org/public-inbox.git/snapshot/public-inbox-${version}.tar.gz";
-    sha256 = "sha256-ENnT2YK7rpODII9TqiEYSCp5mpWOnxskeSuAf8Ilqro=";
+    sha256 = "sha256-A9qHiOYuJOUjDqu46gpyBule43FsgQEH0F7maZUjbes=";
   };
 
   outputs = [
@@ -104,8 +104,8 @@ buildPerlPackage rec {
   postConfigure = ''
     substituteInPlace Makefile --replace 'TEST_FILES = t/*.t' \
         'TEST_FILES = $(shell find t -name *.t ${testConditions})'
-    substituteInPlace lib/PublicInbox/TestCommon.pm \
-      --replace /bin/cp ${coreutils}/bin/cp
+    substituteInPlace lib/PublicInbox/TestCommon.pm t/clone-coderepo.t \
+      --replace-fail /bin/cp ${coreutils}/bin/cp
   '';
 
   nativeBuildInputs = [ makeWrapper ];
