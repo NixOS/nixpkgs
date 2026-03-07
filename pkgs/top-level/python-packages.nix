@@ -15207,6 +15207,8 @@ self: super: with self; {
 
   pytest-image-diff = callPackage ../development/python-modules/pytest-image-diff { };
 
+  pytest-insta = callPackage ../development/python-modules/pytest-insta { };
+
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
   pytest-integration = callPackage ../development/python-modules/pytest-integration { };
