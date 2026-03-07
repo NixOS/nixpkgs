@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  gcc-arm-embedded,
   python3Packages,
   udevCheckHook,
 }:
@@ -32,9 +33,17 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     udevCheckHook
+
+    # Dependencies for stage1 kamakiri payloads
+    gcc-arm-embedded
   ];
 
   pythonImportsCheck = [ "mtkclient" ];
+
+  # Build on-device payloads from source before assembling into a python package.
+  preBuild = ''
+    make -C src/stage1
+  '';
 
   # Note: No need to install other mtkclient udev rules, 50-android.rules is covered by
   #       systemd 258 or newer and 51-edl.rules only applies to Qualcomm (i.e. not MTK).
