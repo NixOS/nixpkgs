@@ -25,7 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.libc.static
   ];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CFLAGS=-std=gnu99"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
