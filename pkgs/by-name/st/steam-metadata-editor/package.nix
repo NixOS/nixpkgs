@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 let
   python = python3.withPackages (ps: [ ps.tkinter ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "steam-metadata-editor";
   version = "unstable-2025-03-07";
 
@@ -21,7 +22,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-+80NYqzTjWA7JZxHx0N1R96/B/XKtvnILhJ06JMwcX4=";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
   buildInputs = [ python ];
 
   dontBuild = true;
