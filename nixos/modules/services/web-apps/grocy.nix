@@ -149,11 +149,8 @@ in
       user = "grocy";
       group = "nginx";
 
-      # PHP 8.2 and 8.3 are the only version which are supported/tested by upstream:
-      # https://github.com/grocy/grocy/blob/v4.5.0/README.md#platform-support
-      phpPackage = pkgs.php83;
-
       inherit (cfg.phpfpm) settings;
+      inherit (cfg.package.passthru) phpPackage;
 
       phpEnv = {
         GROCY_CONFIG_FILE = "/etc/grocy/config.php";
