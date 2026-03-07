@@ -38,7 +38,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Aliyun Credentials Library for Python";
-    homepage = "https://pypi.org/project/alibabacloud-credentials/";
+    homepage = "https://github.com/aliyun/credentials-python";
+    changelog = "https://github.com/aliyun/credentials-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
