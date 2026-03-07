@@ -35,6 +35,7 @@ default-package-overrides:
   # 2026-01-30: Needs to match hasql from Stackage LTS 24
   - hasql-notifications < 0.2.5.0
   # 2026-02-04: as requested by ghcide >= 2.13
+  - hie-bios < 0.18.0
   - hiedb < 0.8.0
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
@@ -47,6 +48,10 @@ default-package-overrides:
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
   - liquidhaskell == 0.9.10.*
   - liquidhaskell-boot == 0.9.10.*
+  # 2025-03-07: HLS and many other pkgs don't support lsp >= 2.8 (yet)
+  - lsp < 2.8
+  - lsp-test < 0.18
+  - lsp-types < 2.4
   # Needs to match microlens == 0.4.* in Stackage LTS 24
   - microlens-pro < 0.2.0.4
   # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
