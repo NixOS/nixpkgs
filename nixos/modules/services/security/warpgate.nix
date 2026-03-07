@@ -282,6 +282,38 @@ in
                 type = str;
               };
             };
+            kubernetes = {
+              enable = mkOption {
+                description = "Whether to enable Kubernetes listener.";
+                default = false;
+                type = bool;
+              };
+              listen = mkOption {
+                description = "Listen endpoint of Kubernetes listener.";
+                default = "[::]:8443";
+                type = str;
+              };
+              external_port = mkOption {
+                description = "The Kubernetes listener is reachable via this port externally.";
+                default = null;
+                type = nullOr str;
+              };
+              certificate = mkOption {
+                description = "Path to Kubernetes listener certificate.";
+                default = "/var/lib/warpgate/tls.certificate.pem";
+                type = str;
+              };
+              key = mkOption {
+                description = "Path to Kubernetes listener private key.";
+                default = "/var/lib/warpgate/tls.key.pem";
+                type = str;
+              };
+              session_max_age = mkOption {
+                description = "How long until a logged in session expires.";
+                default = "30m";
+                type = str;
+              };
+            };
             log = {
               format = mkOption {
                 description = "The format Warpgate emits logs in.";
