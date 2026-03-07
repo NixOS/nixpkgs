@@ -10737,7 +10737,7 @@
   email = "SavaneFofana@proton.me";
   github = "HoneySlatt";
   githubId = 170786304;
-  name = "Savané Fofana"
+  name = "Savané Fofana";
 };
   hongchangwu = {
     email = "wuhc85@gmail.com";
