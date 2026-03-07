@@ -3,8 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  reflex,
   pytestCheckHook,
+  reflex,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,9 @@ buildPythonPackage rec {
 
   build-system = [
     hatchling
+    uv-dynamic-versioning
   ];
+
   dependencies = [ reflex ];
 
   pythonImportsCheck = [ "reflex_chakra" ];
