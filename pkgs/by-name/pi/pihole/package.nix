@@ -32,7 +32,7 @@
 
 (resholve.mkDerivation rec {
   pname = "pihole";
-  version = "6.1.4";
+  version = "6.4";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
@@ -241,9 +241,7 @@
 
   passthru.tests = nixosTests.pihole-ftl;
 
-  passthru = {
-    inherit stateDir;
-  };
+  passthru = { inherit stateDir; };
 }).overrideAttrs
   (old: {
     # Resholve can't fix the hardcoded absolute paths, so substitute them before resholving
