@@ -21,33 +21,25 @@
 # A pure Rust build would lack the Prettier plugin functionality.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxfmt";
-  version = "0.27.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxfmt_v${finalAttrs.version}";
-    hash = "sha256-EAM1DxA/TqnIRN5Tlvg5/jvbyOUtSuwQ4RCBeO9esCw=";
+    hash = "sha256-J5EChGADug+SEvhjStyS1s5kek5QNc2VrjEa5MEWTpA=";
   };
-
-  # Remove patchedDependencies from both workspace and lockfile
-  # to avoid LOCKFILE_CONFIG_MISMATCH error
-  postPatch = ''
-    substituteInPlace pnpm-workspace.yaml pnpm-lock.yaml \
-      --replace-fail "patchedDependencies:" "_patchedDependencies:"
-  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-okwkhcT6mekIvo52T8eSrXUcp/LQhcEYvHyIc5CLdrE=";
+    hash = "sha256-chNxYraN9upILXCqDQ/TrN3xiKhxKhZlN2HGrPF4qT8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-GOsSTfM93VgGhVlgzXhJIJG9MSf306cEnRru/aTA+oY=";
-    prePnpmInstall = finalAttrs.postPatch;
+    hash = "sha256-VT+0joML1z5k8lP5stQe7Xmsfw4MfkJmocv/qzhk93I=";
   };
 
   nativeBuildInputs = [
@@ -106,7 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/oxc-project/oxc";
     changelog = "https://github.com/oxc-project/oxc/blob/${finalAttrs.src.tag}/apps/oxfmt/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      macalinao
+      natsukium
+    ];
     mainProgram = "oxfmt";
     inherit (nodejs-slim.meta) platforms;
   };
