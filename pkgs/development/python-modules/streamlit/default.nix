@@ -27,12 +27,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "streamlit";
-  version = "1.53.1";
+  version = "1.55.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-rmVq87aLS7LWafqXdgYJbyAhvLqhSkVKKQ+OCje6snc=";
+    hash = "sha256-AV5RK70C0AD0BH5REY3AhrcOfZxGtKEaM8JQlzE3liY=";
   };
 
   build-system = [ setuptools ];
@@ -65,10 +65,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "streamlit" ];
-
-  postInstall = ''
-    rm $out/bin/streamlit.cmd # remove windows helper
-  '';
 
   meta = {
     homepage = "https://streamlit.io/";
