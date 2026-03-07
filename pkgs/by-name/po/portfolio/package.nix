@@ -11,6 +11,7 @@
   stdenvNoCC,
   webkitgtk_4_1,
   wrapGAppsHook3,
+  imagemagick,
   gitUpdater,
 }:
 let
@@ -44,6 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     wrapGAppsHook3
+    imagemagick
   ];
 
   dontConfigure = true;
@@ -94,8 +96,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Create desktop item
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
-    mkdir -p $out/share/pixmaps
-    ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    magick $out/portfolio/icon.xpm $out/share/icons/hicolor/256x256/apps/portfolio.png
 
     runHook postInstall
   '';

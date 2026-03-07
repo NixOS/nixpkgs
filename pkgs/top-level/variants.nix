@@ -84,7 +84,7 @@ self: super: {
         ++ overlays;
         ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
           config = lib.systems.parse.tripleFromSystem (
-            lib.systems.parse.makeMuslParsedPlatform stdenv.hostPlatform.parsed
+            lib.systems.parse.mkMuslSystem stdenv.hostPlatform.parsed
           );
         };
       }
